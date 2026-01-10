@@ -1,124 +1,125 @@
+import { ReactNode } from "react";
 import { Link, useLocation } from "wouter";
+import { motion } from "framer-motion";
+import NeonBrain from "./NeonBrain";
 import { 
-  Brain, 
   LayoutDashboard, 
-  Activity, 
-  Users, 
   Settings, 
-  Command, 
+  LogOut, 
+  Bell,
   Search,
-  Zap
+  Library,
+  FolderOpen,
+  FileText,
+  Clock
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { useEffect } from "react";
+import { Button } from "./ui/button";
 
-export default function DesktopLayout({ children }: { children: React.ReactNode }) {
+interface DesktopLayoutProps {
+  children: ReactNode;
+}
+
+export default function DesktopLayout({ children }: DesktopLayoutProps) {
   const [location] = useLocation();
 
-  // Keyboard shortcuts listener
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
-        e.preventDefault();
-        // Trigger command palette (to be implemented)
-        console.log("Command palette triggered");
-      }
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, []);
-
   const navItems = [
-    { icon: Brain, label: "The Brain", path: "/" },
-    { icon: Activity, label: "Wellbeing", path: "/wellbeing" },
-    { icon: Users, label: "Leads", path: "/leads" },
     { icon: LayoutDashboard, label: "Dashboard", path: "/dashboard" },
+    { icon: Library, label: "Library", path: "/library" },
+    { icon: Settings, label: "Settings", path: "/settings" },
   ];
 
   return (
-    <div className="min-h-screen flex bg-background text-foreground font-sans overflow-hidden selection:bg-primary/30">
-      {/* Sidebar - Superhuman Style */}
-      <aside className="w-64 border-r border-white/5 bg-sidebar flex flex-col z-20">
-        <div className="h-16 flex items-center px-6 border-b border-white/5">
-          <div className="flex items-center gap-3 group cursor-pointer">
-            <div className="relative w-8 h-8 flex items-center justify-center">
-              <div className="absolute inset-0 bg-primary/20 rounded-full blur-md group-hover:bg-primary/40 transition-all duration-500"></div>
-              <Brain className="w-6 h-6 text-primary relative z-10" />
-            </div>
-            <span className="font-display font-bold text-xl tracking-wider text-foreground">THE BRAIN</span>
-          </div>
+    <div className="min-h-screen bg-background flex overflow-hidden">
+      {/* Sidebar */}
+      <aside className="w-20 lg:w-64 border-r border-white/5 bg-black/20 backdrop-blur-xl flex flex-col z-20">
+        <div className="p-6 flex items-center gap-3">
+          <NeonBrain className="w-8 h-8" state="idle" />
+          <span className="font-display font-bold text-xl tracking-wider hidden lg:block neon-text">BRAIN</span>
         </div>
 
-        <div className="p-4">
-          <Button 
-            variant="outline" 
-            className="w-full justify-between bg-white/5 border-white/10 hover:bg-white/10 hover:border-primary/50 text-muted-foreground hover:text-primary transition-all group mb-6"
-          >
-            <span className="flex items-center gap-2"><Search className="w-4 h-4" /> Search...</span>
-            <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border border-white/10 bg-black px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100 group-hover:text-primary">
-              <span className="text-xs">⌘</span>K
-            </kbd>
+        <nav className="flex-1 px-4 py-6 space-y-2">
+          {navItems.map((item) => (
+            <Link key={item.path} href={item.path}>
+              <a className={`
+                flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-300 group relative
+                ${location === item.path 
+                  ? "bg-primary/10 text-primary border border-primary/20" 
+                  : "text-muted-foreground hover:text-white hover:bg-white/5"}
+              `}>
+                <item.icon className="w-5 h-5" />
+                <span className="hidden lg:block font-medium">{item.label}</span>
+                
+                {location === item.path && (
+                  <motion.div
+                    layoutId="activeNav"
+                    className="absolute left-0 top-0 bottom-0 w-1 bg-primary rounded-r-full"
+                  />
+                )}
+              </a>
+            </Link>
+          ))}
+
+          {/* Library Quick Access (Visual Only) */}
+          <div className="mt-8 px-4 hidden lg:block">
+            <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-4">Recent Blueprints</h3>
+            <div className="space-y-3">
+              <div className="flex items-center gap-3 text-sm text-muted-foreground hover:text-white cursor-pointer group">
+                <FolderOpen className="w-4 h-4 group-hover:text-primary transition-colors" />
+                <span className="truncate">Project Alpha Merger</span>
+              </div>
+              <div className="flex items-center gap-3 text-sm text-muted-foreground hover:text-white cursor-pointer group">
+                <FileText className="w-4 h-4 group-hover:text-cyan-400 transition-colors" />
+                <span className="truncate">Mars Colony Legal...</span>
+              </div>
+              <div className="flex items-center gap-3 text-sm text-muted-foreground hover:text-white cursor-pointer group">
+                <Clock className="w-4 h-4 group-hover:text-orange-400 transition-colors" />
+                <span className="truncate">Q3 Strategy Review</span>
+              </div>
+            </div>
+          </div>
+        </nav>
+
+        <div className="p-4 border-t border-white/5 space-y-2">
+          <Button variant="ghost" className="w-full justify-start text-muted-foreground hover:text-white">
+            <LogOut className="w-5 h-5 lg:mr-2" />
+            <span className="hidden lg:block">Disconnect</span>
           </Button>
-
-          <nav className="space-y-1">
-            {navItems.map((item) => {
-              const isActive = location === item.path;
-              return (
-                <Link key={item.path} href={item.path}>
-                  <div className={`
-                    flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all cursor-pointer
-                    ${isActive 
-                      ? "bg-primary/10 text-primary border-l-2 border-primary" 
-                      : "text-muted-foreground hover:text-foreground hover:bg-white/5 border-l-2 border-transparent"}
-                  `}>
-                    <item.icon className={`w-4 h-4 ${isActive ? "text-primary" : "text-muted-foreground"}`} />
-                    {item.label}
-                  </div>
-                </Link>
-              );
-            })}
-          </nav>
-        </div>
-
-        <div className="mt-auto p-4 border-t border-white/5">
-          <div className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-white/5 cursor-pointer transition-colors">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-primary to-purple-500 flex items-center justify-center text-xs font-bold text-white">
-              JD
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-foreground truncate">John Doe</p>
-              <p className="text-xs text-muted-foreground truncate">john@company.com</p>
-            </div>
-            <Settings className="w-4 h-4 text-muted-foreground" />
-          </div>
         </div>
       </aside>
 
       {/* Main Content */}
       <main className="flex-1 flex flex-col relative overflow-hidden">
+        {/* Background Ambient Light */}
+        <div className="absolute top-0 left-0 w-full h-full pointer-events-none z-0">
+          <div className="absolute top-[-20%] right-[-10%] w-[800px] h-[800px] bg-primary/5 rounded-full blur-[150px]"></div>
+        </div>
+
         {/* Top Bar */}
-        <header className="h-16 border-b border-white/5 flex items-center justify-between px-8 bg-background/50 backdrop-blur-sm z-10">
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20">
-              <Zap className="w-3 h-3 text-primary animate-pulse" />
-              <span className="text-xs font-medium text-primary tracking-wide">EDGE COMPUTE ACTIVE</span>
-            </div>
+        <header className="h-16 border-b border-white/5 bg-black/10 backdrop-blur-sm flex items-center justify-between px-8 z-10">
+          <div className="flex items-center gap-4 text-sm text-muted-foreground">
+            <span className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+              System Online
+            </span>
+            <span className="text-white/20">|</span>
+            <span>v2.4.0 (Neural Core)</span>
           </div>
+
           <div className="flex items-center gap-4">
-            <span className="text-xs text-muted-foreground font-mono">v2.0.1-beta</span>
+            <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-white">
+              <Search className="w-5 h-5" />
+            </Button>
+            <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-white relative">
+              <Bell className="w-5 h-5" />
+              <span className="absolute top-2 right-2 w-2 h-2 bg-primary rounded-full"></span>
+            </Button>
+            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-purple-600 border border-white/20"></div>
           </div>
         </header>
 
-        {/* Content Area */}
-        <div className="flex-1 overflow-y-auto p-8 relative z-10">
+        {/* Page Content */}
+        <div className="flex-1 overflow-y-auto p-8 z-10">
           {children}
-        </div>
-
-        {/* Background Effects */}
-        <div className="absolute inset-0 pointer-events-none z-0">
-          <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[120px] opacity-50"></div>
-          <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-purple-500/5 rounded-full blur-[120px] opacity-30"></div>
         </div>
       </main>
     </div>

@@ -382,16 +382,69 @@ export default function Dashboard() {
                     key="active"
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    className="text-center py-12"
+                    className="flex flex-col h-[500px]"
                   >
-                    <div className="w-24 h-24 mx-auto bg-primary/20 rounded-full flex items-center justify-center mb-6 animate-pulse">
-                      <Sparkles className="w-12 h-12 text-primary" />
+                    <div className="flex items-center justify-between mb-6 border-b border-white/10 pb-4">
+                      <div>
+                        <h3 className="font-display font-bold text-2xl">BLUEPRINT GENERATION</h3>
+                        <p className="text-xs text-muted-foreground">Mission: {expertGoal}</p>
+                      </div>
+                      <div className="flex gap-2">
+                        <Button variant="outline" size="sm" className="border-white/10 text-xs">
+                          <Calendar className="w-3 h-3 mr-2" />
+                          BOOK REVIEW (1 HR)
+                        </Button>
+                      </div>
                     </div>
-                    <h3 className="font-display font-bold text-2xl mb-2">TEAM ACTIVATED</h3>
-                    <p className="text-muted-foreground mb-8">The board is now in session. Initial strategy generation in progress...</p>
-                    <Button variant="outline" onClick={() => setShowExperts(false)} className="border-white/10">
-                      RETURN TO DASHBOARD
-                    </Button>
+
+                    <div className="flex-1 overflow-y-auto space-y-4 pr-2">
+                      {/* Expert 1: Legal */}
+                      <div className="p-4 rounded-lg bg-white/5 border-l-2 border-purple-400">
+                        <div className="flex items-center gap-2 mb-2">
+                          <div className="w-6 h-6 rounded-full bg-purple-400/20 flex items-center justify-center text-xs font-bold text-purple-400">L</div>
+                          <span className="font-bold text-sm">Legal Advisor</span>
+                          <span className="text-[10px] text-muted-foreground ml-auto">Just now</span>
+                        </div>
+                        <p className="text-sm text-muted-foreground">
+                          <span className="text-white font-semibold">Risk Assessment:</span> Regulatory compliance for Mars colonization requires adherence to the Outer Space Treaty. We need to draft a liability waiver for early settlers immediately.
+                        </p>
+                      </div>
+
+                      {/* Expert 2: IT/Tech */}
+                      <div className="p-4 rounded-lg bg-white/5 border-l-2 border-cyan-400">
+                        <div className="flex items-center gap-2 mb-2">
+                          <div className="w-6 h-6 rounded-full bg-cyan-400/20 flex items-center justify-center text-xs font-bold text-cyan-400">T</div>
+                          <span className="font-bold text-sm">Tech Lead (Margaret H.)</span>
+                          <span className="text-[10px] text-muted-foreground ml-auto">1 min ago</span>
+                        </div>
+                        <p className="text-sm text-muted-foreground">
+                          <span className="text-white font-semibold">System Architecture:</span> The guidance computer needs redundancy. I'm proposing a distributed edge-compute network to handle latency. Blueprint for the navigation module is ready for review.
+                        </p>
+                      </div>
+
+                      {/* Expert 3: Strategy */}
+                      <div className="p-4 rounded-lg bg-white/5 border-l-2 border-orange-400">
+                        <div className="flex items-center gap-2 mb-2">
+                          <div className="w-6 h-6 rounded-full bg-orange-400/20 flex items-center justify-center text-xs font-bold text-orange-400">S</div>
+                          <span className="font-bold text-sm">Strategy (Elon M.)</span>
+                          <span className="text-[10px] text-muted-foreground ml-auto">2 mins ago</span>
+                        </div>
+                        <p className="text-sm text-muted-foreground">
+                          <span className="text-white font-semibold">Cost Analysis:</span> We need to reduce cost-per-ton to orbit. I've outlined a reusable rocket architecture. The financial model suggests a break-even point after 12 launches.
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="mt-4 pt-4 border-t border-white/10">
+                      <div className="flex items-center gap-2 mb-2">
+                        <Sparkles className="w-4 h-4 text-primary" />
+                        <span className="text-xs font-bold uppercase tracking-wider text-primary">Blueprint Status</span>
+                      </div>
+                      <div className="h-2 bg-white/5 rounded-full overflow-hidden">
+                        <div className="h-full bg-primary w-[65%] animate-pulse"></div>
+                      </div>
+                      <p className="text-[10px] text-muted-foreground mt-1 text-right">Compiling Expert Viewpoints... 65%</p>
+                    </div>
                   </motion.div>
                 )}
               </AnimatePresence>
