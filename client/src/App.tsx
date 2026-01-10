@@ -12,6 +12,7 @@ import Workflow from "@/pages/Workflow";
 import Library from "./pages/Library";
 import Statistics from "./pages/Statistics";
 import Vault from "./pages/Vault";
+import DailyBrief from "./pages/DailyBrief";
 
 // Wrapper component for pages that need the sidebar layout
 function WithLayout({ children }: { children: React.ReactNode }) {
@@ -42,6 +43,9 @@ function Router() {
       </Route>
       <Route path="/vault">
         <WithLayout><Vault /></WithLayout>
+      </Route>
+      <Route path="/daily-brief">
+        <WithLayout><DailyBrief /></WithLayout>
       </Route>
       
       {/* Fallback */}

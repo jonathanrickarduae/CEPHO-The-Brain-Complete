@@ -88,7 +88,7 @@ export default function Dashboard() {
       icon: Sun, 
       color: "#3b82f6", // Bright Blue
       colSpan: "col-span-2 md:col-span-1",
-      action: () => setShowDailyBrief(true)
+      action: () => window.location.href = "/daily-brief"
     },
     { 
       id: 2, 
