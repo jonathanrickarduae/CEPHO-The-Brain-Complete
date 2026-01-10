@@ -1,6 +1,7 @@
 import DesktopLayout from "@/components/DesktopLayout";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 import { 
   Mic, 
   FileText, 
@@ -17,17 +18,31 @@ import {
   Download,
   Calendar,
   Mail,
-  Lock
+  Lock,
+  Sparkles,
+  CheckCircle2,
+  UserPlus
 } from "lucide-react";
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function Dashboard() {
   const [isRecording, setIsRecording] = useState(false);
   const [showDailyBrief, setShowDailyBrief] = useState(false);
+  const [showExperts, setShowExperts] = useState(false);
+  const [expertGoal, setExpertGoal] = useState("");
+  const [expertStep, setExpertStep] = useState<"input" | "proposal" | "active">("input");
 
   const toggleRecording = () => {
     setIsRecording(!isRecording);
+  };
+
+  const handleExpertSubmit = () => {
+    setExpertStep("proposal");
+  };
+
+  const handleExpertConfirm = () => {
+    setExpertStep("active");
   };
 
   const dashboardButtons = [
@@ -42,11 +57,12 @@ export default function Dashboard() {
     },
     { 
       id: 2, 
-      label: "GLOBAL INTEL", 
-      sub: "Market Insights", 
-      icon: Globe, 
+      label: "AI EXPERTS", 
+      sub: "Community & Teams", 
+      icon: Sparkles, 
       color: "var(--color-chart-2)", // Cyan
-      colSpan: "col-span-1" 
+      colSpan: "col-span-1",
+      action: () => setShowExperts(true)
     },
     { 
       id: 3, 
@@ -273,6 +289,112 @@ export default function Dashboard() {
                   </div>
                 </div>
               </div>
+            </div>
+          </DialogContent>
+        </Dialog>
+
+        {/* AI Experts Modal */}
+        <Dialog open={showExperts} onOpenChange={setShowExperts}>
+          <DialogContent className="max-w-3xl bg-background/95 backdrop-blur-xl border-white/10 p-8">
+            <DialogHeader>
+              <DialogTitle className="font-display font-bold text-3xl tracking-wide mb-2">AI EXPERT ASSEMBLY</DialogTitle>
+              <p className="text-muted-foreground">Define your objective. The Brain will recruit the optimal intelligence team.</p>
+            </DialogHeader>
+
+            <div className="mt-6">
+              <AnimatePresence mode="wait">
+                {expertStep === "input" && (
+                  <motion.div
+                    key="input"
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 20 }}
+                    className="space-y-6"
+                  >
+                    <div className="space-y-2">
+                      <label className="text-sm font-bold text-muted-foreground uppercase tracking-wider">Mission Objective</label>
+                      <Input 
+                        value={expertGoal}
+                        onChange={(e) => setExpertGoal(e.target.value)}
+                        placeholder="e.g., Build a reusable rocket capable of reaching Mars..."
+                        className="bg-white/5 border-white/10 h-14 text-lg"
+                      />
+                    </div>
+                    <Button 
+                      onClick={handleExpertSubmit}
+                      disabled={!expertGoal}
+                      className="w-full py-6 bg-primary hover:bg-primary/90 text-primary-foreground font-bold tracking-widest"
+                    >
+                      ANALYZE & ASSEMBLE TEAM
+                    </Button>
+                  </motion.div>
+                )}
+
+                {expertStep === "proposal" && (
+                  <motion.div
+                    key="proposal"
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 20 }}
+                    className="space-y-6"
+                  >
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-lg font-bold text-white">Proposed Dream Team</h3>
+                      <span className="text-xs font-mono text-primary border border-primary/30 px-2 py-1 rounded">MATCH SCORE: 98%</span>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {[
+                        { name: "Elon Musk (AI Persona)", role: "Propulsion & Strategy", color: "text-purple-400" },
+                        { name: "Margaret Hamilton (AI Persona)", role: "Software Engineering", color: "text-cyan-400" },
+                        { name: "Wernher von Braun (AI Persona)", role: "Aerospace Architecture", color: "text-orange-400" },
+                        { name: "Richard Feynman (AI Persona)", role: "Problem Solving & Physics", color: "text-green-400" }
+                      ].map((expert, i) => (
+                        <div key={i} className="p-4 rounded-lg bg-white/5 border border-white/10 flex items-center gap-4">
+                          <div className={`w-10 h-10 rounded-full bg-white/10 flex items-center justify-center font-bold ${expert.color}`}>
+                            {expert.name[0]}
+                          </div>
+                          <div>
+                            <p className="font-bold text-sm">{expert.name}</p>
+                            <p className="text-xs text-muted-foreground">{expert.role}</p>
+                          </div>
+                          <CheckCircle2 className="w-5 h-5 text-primary ml-auto" />
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className="flex gap-4">
+                      <Button variant="outline" className="flex-1 py-6 border-white/10 hover:bg-white/5">
+                        <UserPlus className="w-4 h-4 mr-2" /> MODIFY TEAM
+                      </Button>
+                      <Button 
+                        onClick={handleExpertConfirm}
+                        className="flex-[2] py-6 bg-primary hover:bg-primary/90 text-primary-foreground font-bold tracking-widest"
+                      >
+                        CONFIRM & ACTIVATE
+                      </Button>
+                    </div>
+                  </motion.div>
+                )}
+
+                {expertStep === "active" && (
+                  <motion.div
+                    key="active"
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="text-center py-12"
+                  >
+                    <div className="w-24 h-24 mx-auto bg-primary/20 rounded-full flex items-center justify-center mb-6 animate-pulse">
+                      <Sparkles className="w-12 h-12 text-primary" />
+                    </div>
+                    <h3 className="font-display font-bold text-2xl mb-2">TEAM ACTIVATED</h3>
+                    <p className="text-muted-foreground mb-8">The board is now in session. Initial strategy generation in progress...</p>
+                    <Button variant="outline" onClick={() => setShowExperts(false)} className="border-white/10">
+                      RETURN TO DASHBOARD
+                    </Button>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
           </DialogContent>
         </Dialog>
