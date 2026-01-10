@@ -21,7 +21,11 @@ import {
   Lock,
   Sparkles,
   CheckCircle2,
-  UserPlus
+  UserPlus,
+  Brain,
+  BarChart3,
+  Lightbulb,
+  ArrowRight
 } from "lucide-react";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -30,6 +34,7 @@ export default function Dashboard() {
   const [isRecording, setIsRecording] = useState(false);
   const [showDailyBrief, setShowDailyBrief] = useState(false);
   const [showExperts, setShowExperts] = useState(false);
+  const [showInsights, setShowInsights] = useState(false);
   const [expertGoal, setExpertGoal] = useState("");
   const [expertStep, setExpertStep] = useState<"input" | "proposal" | "active">("input");
 
@@ -45,6 +50,13 @@ export default function Dashboard() {
     setExpertStep("active");
   };
 
+  const handleInvestigateInsight = (topic: string) => {
+    setExpertGoal(topic);
+    setShowInsights(false);
+    setShowExperts(true);
+    setExpertStep("input");
+  };
+
   const dashboardButtons = [
     { 
       id: 1, 
@@ -58,7 +70,7 @@ export default function Dashboard() {
     { 
       id: 2, 
       label: "AI EXPERTS", 
-      sub: "Community & Teams", 
+      sub: "250+ World-Class Experts", 
       icon: Sparkles, 
       color: "var(--color-chart-2)", // Cyan
       colSpan: "col-span-1",
@@ -66,34 +78,35 @@ export default function Dashboard() {
     },
     { 
       id: 3, 
-      label: "PIPELINE", 
-      sub: "Lead Management", 
-      icon: TrendingUp, 
+      label: "WORKFORCE", 
+      sub: "Team Optimization", 
+      icon: Users, 
       color: "var(--color-chart-4)", // Green
       colSpan: "col-span-1" 
     },
     { 
       id: 4, 
-      label: "SECURITY", 
-      sub: "Threat Analysis", 
-      icon: Shield, 
-      color: "var(--color-chart-5)", // Orange
-      colSpan: "col-span-1" 
+      label: "INSIGHTS", 
+      sub: "Proactive Learning", 
+      icon: Brain, 
+      color: "var(--color-chart-1)", // Pink
+      colSpan: "col-span-1",
+      action: () => setShowInsights(true)
     },
     { 
       id: 5, 
-      label: "TEAM", 
-      sub: "Workforce Optimization", 
-      icon: Users, 
-      color: "var(--color-chart-3)", // Purple
+      label: "DATA INTEL", 
+      sub: "Deep Science Reports", 
+      icon: BarChart3, 
+      color: "var(--color-chart-2)", // Cyan
       colSpan: "col-span-1" 
     },
     { 
       id: 6, 
-      label: "COMMUNICATIONS", 
-      sub: "Secure Channels", 
-      icon: MessageSquare, 
-      color: "var(--color-chart-2)", // Cyan
+      label: "THE VAULT", 
+      sub: "Secure Credentials", 
+      icon: Lock, 
+      color: "var(--color-chart-5)", // Orange
       colSpan: "col-span-2 md:col-span-1" 
     },
   ];
@@ -255,38 +268,92 @@ export default function Dashboard() {
                       <Globe className="w-4 h-4 text-blue-400" /> Global Intel
                     </h3>
                     <p className="text-sm text-muted-foreground">
-                      Competitor X has announced a delay in their Q3 rollout. Opportunity to capture market share in the logistics sector is elevated by 15%.
+                      New regulations on AI safety proposed in EU. Competitor X launched a new sustainability initiative.
                     </p>
                   </div>
                 </div>
               </div>
 
               {/* Right: Media & Actions */}
-              <div className="w-80 bg-black/20 p-6 flex flex-col">
-                <div className="mb-8">
-                  <h3 className="text-xs font-bold text-muted-foreground mb-4 uppercase tracking-wider">Media Formats</h3>
-                  <div className="space-y-3">
-                    <Button className="w-full justify-between bg-white/5 hover:bg-white/10 border border-white/10 group">
-                      <span className="flex items-center gap-2"><Headphones className="w-4 h-4 text-primary" /> Podcast Mode</span>
-                      <Download className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
-                    </Button>
-                    <Button className="w-full justify-between bg-white/5 hover:bg-white/10 border border-white/10 group">
-                      <span className="flex items-center gap-2"><Video className="w-4 h-4 text-purple-400" /> Video Brief</span>
-                      <Play className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
+              <div className="w-80 bg-black/20 p-8 flex flex-col">
+                <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-6">Brief Formats</h3>
+                
+                <div className="space-y-4 mb-8">
+                  <Button variant="outline" className="w-full justify-start h-12 border-white/10 hover:bg-white/5 group">
+                    <div className="w-8 h-8 rounded bg-primary/20 flex items-center justify-center mr-3 group-hover:bg-primary/30 transition-colors">
+                      <Headphones className="w-4 h-4 text-primary" />
+                    </div>
+                    <div className="text-left">
+                      <div className="text-sm font-bold">Podcast Mode</div>
+                      <div className="text-[10px] text-muted-foreground">Listen on the go (5m)</div>
+                    </div>
+                  </Button>
+
+                  <Button variant="outline" className="w-full justify-start h-12 border-white/10 hover:bg-white/5 group">
+                    <div className="w-8 h-8 rounded bg-purple-500/20 flex items-center justify-center mr-3 group-hover:bg-purple-500/30 transition-colors">
+                      <Video className="w-4 h-4 text-purple-400" />
+                    </div>
+                    <div className="text-left">
+                      <div className="text-sm font-bold">Video Brief</div>
+                      <div className="text-[10px] text-muted-foreground">Visual presentation</div>
+                    </div>
+                  </Button>
+                </div>
+
+                <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-4">Quick Actions</h3>
+                <div className="space-y-2">
+                  <Button className="w-full bg-white text-black hover:bg-white/90">
+                    <Play className="w-4 h-4 mr-2" /> Start Day
+                  </Button>
+                  <Button variant="ghost" className="w-full text-muted-foreground hover:text-white">
+                    <Download className="w-4 h-4 mr-2" /> Export PDF
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
+
+        {/* Insights Modal */}
+        <Dialog open={showInsights} onOpenChange={setShowInsights}>
+          <DialogContent className="max-w-3xl bg-background/95 backdrop-blur-xl border-white/10">
+            <DialogHeader>
+              <DialogTitle className="font-display font-bold text-2xl flex items-center gap-3">
+                <Brain className="w-6 h-6 text-pink-500" />
+                THE BRAIN LEARNING
+              </DialogTitle>
+            </DialogHeader>
+            
+            <div className="py-6 space-y-6">
+              <div className="p-6 rounded-xl bg-gradient-to-br from-pink-500/10 to-purple-500/10 border border-pink-500/20">
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 rounded-full bg-pink-500/20 flex items-center justify-center shrink-0 animate-pulse">
+                    <Lightbulb className="w-6 h-6 text-pink-500" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-bold text-white mb-2">Proactive Suggestion: Automate Bid Process</h3>
+                    <p className="text-muted-foreground mb-4">
+                      Based on recent workflow analysis, your team spends 15 hours/week on manual bid entry. 
+                      We've identified a new AI-driven automation pattern used by top competitors.
+                    </p>
+                    <Button 
+                      onClick={() => handleInvestigateInsight("Automate Bid Process")}
+                      className="bg-pink-500 hover:bg-pink-600 text-white"
+                    >
+                      Investigate with AI Experts <ArrowRight className="w-4 h-4 ml-2" />
                     </Button>
                   </div>
                 </div>
+              </div>
 
-                <div className="mt-auto">
-                  <h3 className="text-xs font-bold text-muted-foreground mb-4 uppercase tracking-wider">Quick Actions</h3>
-                  <div className="space-y-3">
-                    <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
-                      <Mic className="w-4 h-4 mr-2" /> Dictate Actions
-                    </Button>
-                    <p className="text-[10px] text-muted-foreground text-center">
-                      "Draft email to Sarah..."
-                    </p>
-                  </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="p-4 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 transition-colors cursor-pointer">
+                  <h4 className="font-bold text-sm mb-2 text-cyan-400">Corporate Solutions</h4>
+                  <p className="text-xs text-muted-foreground">New framework for cross-departmental synergy detected in Q3 reports.</p>
+                </div>
+                <div className="p-4 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 transition-colors cursor-pointer">
+                  <h4 className="font-bold text-sm mb-2 text-green-400">Financial Optimization</h4>
+                  <p className="text-xs text-muted-foreground">Tax efficiency strategies for the upcoming fiscal year.</p>
                 </div>
               </div>
             </div>
@@ -295,13 +362,15 @@ export default function Dashboard() {
 
         {/* AI Experts Modal */}
         <Dialog open={showExperts} onOpenChange={setShowExperts}>
-          <DialogContent className="max-w-3xl bg-background/95 backdrop-blur-xl border-white/10 p-8">
+          <DialogContent className="max-w-2xl bg-background/95 backdrop-blur-xl border-white/10">
             <DialogHeader>
-              <DialogTitle className="font-display font-bold text-3xl tracking-wide mb-2">AI EXPERT ASSEMBLY</DialogTitle>
-              <p className="text-muted-foreground">Define your objective. The Brain will recruit the optimal intelligence team.</p>
+              <DialogTitle className="font-display font-bold text-2xl flex items-center gap-2">
+                <Sparkles className="w-6 h-6 text-primary" />
+                AI EXPERT ASSEMBLY
+              </DialogTitle>
             </DialogHeader>
-
-            <div className="mt-6">
+            
+            <div className="py-6">
               <AnimatePresence mode="wait">
                 {expertStep === "input" && (
                   <motion.div
@@ -309,24 +378,22 @@ export default function Dashboard() {
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: 20 }}
-                    className="space-y-6"
+                    className="space-y-4"
                   >
-                    <div className="space-y-2">
-                      <label className="text-sm font-bold text-muted-foreground uppercase tracking-wider">Mission Objective</label>
-                      <Input 
-                        value={expertGoal}
-                        onChange={(e) => setExpertGoal(e.target.value)}
-                        placeholder="e.g., Build a reusable rocket capable of reaching Mars..."
-                        className="bg-white/5 border-white/10 h-14 text-lg"
-                      />
+                    <p className="text-lg text-muted-foreground">
+                      What is your mission? I will assemble the perfect team of experts.
+                    </p>
+                    <Input 
+                      value={expertGoal}
+                      onChange={(e) => setExpertGoal(e.target.value)}
+                      placeholder="e.g., Build a spaceship to Mars..."
+                      className="bg-white/5 border-white/10 text-lg p-6 h-auto"
+                    />
+                    <div className="flex justify-end">
+                      <Button onClick={handleExpertSubmit} size="lg" className="bg-primary hover:bg-primary/90">
+                        Analyze & Assemble Team
+                      </Button>
                     </div>
-                    <Button 
-                      onClick={handleExpertSubmit}
-                      disabled={!expertGoal}
-                      className="w-full py-6 bg-primary hover:bg-primary/90 text-primary-foreground font-bold tracking-widest"
-                    >
-                      ANALYZE & ASSEMBLE TEAM
-                    </Button>
                   </motion.div>
                 )}
 
@@ -338,40 +405,37 @@ export default function Dashboard() {
                     exit={{ opacity: 0, x: 20 }}
                     className="space-y-6"
                   >
-                    <div className="flex items-center justify-between">
-                      <h3 className="text-lg font-bold text-white">Proposed Dream Team</h3>
-                      <span className="text-xs font-mono text-primary border border-primary/30 px-2 py-1 rounded">MATCH SCORE: 98%</span>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {[
-                        { name: "Elon Musk (AI Persona)", role: "Propulsion & Strategy", color: "text-purple-400" },
-                        { name: "Margaret Hamilton (AI Persona)", role: "Software Engineering", color: "text-cyan-400" },
-                        { name: "Wernher von Braun (AI Persona)", role: "Aerospace Architecture", color: "text-orange-400" },
-                        { name: "Richard Feynman (AI Persona)", role: "Problem Solving & Physics", color: "text-green-400" }
-                      ].map((expert, i) => (
-                        <div key={i} className="p-4 rounded-lg bg-white/5 border border-white/10 flex items-center gap-4">
-                          <div className={`w-10 h-10 rounded-full bg-white/10 flex items-center justify-center font-bold ${expert.color}`}>
-                            {expert.name[0]}
-                          </div>
+                    <div>
+                      <h3 className="text-lg font-bold mb-4">Proposed Dream Team</h3>
+                      <div className="grid grid-cols-1 gap-3">
+                        <div className="flex items-center gap-4 p-3 rounded-lg bg-white/5 border border-white/10">
+                          <div className="w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center font-bold text-purple-500">EM</div>
                           <div>
-                            <p className="font-bold text-sm">{expert.name}</p>
-                            <p className="text-xs text-muted-foreground">{expert.role}</p>
+                            <div className="font-bold">Elon Musk (Persona)</div>
+                            <div className="text-xs text-muted-foreground">Role: Visionary & Engineering Lead</div>
                           </div>
-                          <CheckCircle2 className="w-5 h-5 text-primary ml-auto" />
+                          <CheckCircle2 className="w-5 h-5 text-green-500 ml-auto" />
                         </div>
-                      ))}
+                        <div className="flex items-center gap-4 p-3 rounded-lg bg-white/5 border border-white/10">
+                          <div className="w-10 h-10 rounded-full bg-cyan-500/20 flex items-center justify-center font-bold text-cyan-500">MH</div>
+                          <div>
+                            <div className="font-bold">Margaret Hamilton (Persona)</div>
+                            <div className="text-xs text-muted-foreground">Role: Software & Systems Architecture</div>
+                          </div>
+                          <CheckCircle2 className="w-5 h-5 text-green-500 ml-auto" />
+                        </div>
+                        <div className="flex items-center gap-4 p-3 rounded-lg bg-white/5 border border-white/10 border-dashed opacity-50 hover:opacity-100 cursor-pointer transition-opacity">
+                          <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">
+                            <UserPlus className="w-5 h-5" />
+                          </div>
+                          <div className="text-sm font-medium">Add another expert...</div>
+                        </div>
+                      </div>
                     </div>
-
-                    <div className="flex gap-4">
-                      <Button variant="outline" className="flex-1 py-6 border-white/10 hover:bg-white/5">
-                        <UserPlus className="w-4 h-4 mr-2" /> MODIFY TEAM
-                      </Button>
-                      <Button 
-                        onClick={handleExpertConfirm}
-                        className="flex-[2] py-6 bg-primary hover:bg-primary/90 text-primary-foreground font-bold tracking-widest"
-                      >
-                        CONFIRM & ACTIVATE
+                    <div className="flex justify-end gap-3">
+                      <Button variant="ghost" onClick={() => setExpertStep("input")}>Back</Button>
+                      <Button onClick={handleExpertConfirm} size="lg" className="bg-green-500 hover:bg-green-600 text-black">
+                        Confirm & Activate Team
                       </Button>
                     </div>
                   </motion.div>
@@ -451,7 +515,6 @@ export default function Dashboard() {
             </div>
           </DialogContent>
         </Dialog>
-
       </div>
     </DesktopLayout>
   );
