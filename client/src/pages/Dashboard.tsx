@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { 
   Sun, Users, Lightbulb, BarChart3, Lock, 
   Mic, Paperclip, Send, ArrowRight, X, 
@@ -12,6 +12,51 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
+
+// Daily rotating quotes - one for each day
+const QUOTES = [
+  { quote: "The best way to predict the future is to create it.", author: "Peter Drucker" },
+  { quote: "Success is not final, failure is not fatal: it is the courage to continue that counts.", author: "Winston Churchill" },
+  { quote: "The only way to do great work is to love what you do.", author: "Steve Jobs" },
+  { quote: "Innovation distinguishes between a leader and a follower.", author: "Steve Jobs" },
+  { quote: "Your time is limited, don't waste it living someone else's life.", author: "Steve Jobs" },
+  { quote: "The greatest glory in living lies not in never falling, but in rising every time we fall.", author: "Nelson Mandela" },
+  { quote: "In the middle of difficulty lies opportunity.", author: "Albert Einstein" },
+  { quote: "It is during our darkest moments that we must focus to see the light.", author: "Aristotle" },
+  { quote: "The future belongs to those who believe in the beauty of their dreams.", author: "Eleanor Roosevelt" },
+  { quote: "Do not go where the path may lead, go instead where there is no path and leave a trail.", author: "Ralph Waldo Emerson" },
+  { quote: "The only impossible journey is the one you never begin.", author: "Tony Robbins" },
+  { quote: "Act as if what you do makes a difference. It does.", author: "William James" },
+  { quote: "What you get by achieving your goals is not as important as what you become by achieving your goals.", author: "Zig Ziglar" },
+  { quote: "Believe you can and you're halfway there.", author: "Theodore Roosevelt" },
+  { quote: "The secret of getting ahead is getting started.", author: "Mark Twain" },
+  { quote: "I have not failed. I've just found 10,000 ways that won't work.", author: "Thomas Edison" },
+  { quote: "Everything you've ever wanted is on the other side of fear.", author: "George Addair" },
+  { quote: "The mind is everything. What you think you become.", author: "Buddha" },
+  { quote: "Strive not to be a success, but rather to be of value.", author: "Albert Einstein" },
+  { quote: "The best time to plant a tree was 20 years ago. The second best time is now.", author: "Chinese Proverb" },
+  { quote: "Your limitation—it's only your imagination.", author: "Unknown" },
+  { quote: "Push yourself, because no one else is going to do it for you.", author: "Unknown" },
+  { quote: "Great things never come from comfort zones.", author: "Unknown" },
+  { quote: "Dream it. Wish it. Do it.", author: "Unknown" },
+  { quote: "Success doesn't just find you. You have to go out and get it.", author: "Unknown" },
+  { quote: "The harder you work for something, the greater you'll feel when you achieve it.", author: "Unknown" },
+  { quote: "Don't stop when you're tired. Stop when you're done.", author: "Unknown" },
+  { quote: "Wake up with determination. Go to bed with satisfaction.", author: "Unknown" },
+  { quote: "Do something today that your future self will thank you for.", author: "Sean Patrick Flanery" },
+  { quote: "Little things make big days.", author: "Unknown" },
+  { quote: "It's going to be hard, but hard does not mean impossible.", author: "Unknown" },
+];
+
+// Get quote based on day of year for daily rotation
+function getDailyQuote() {
+  const now = new Date();
+  const start = new Date(now.getFullYear(), 0, 0);
+  const diff = now.getTime() - start.getTime();
+  const oneDay = 1000 * 60 * 60 * 24;
+  const dayOfYear = Math.floor(diff / oneDay);
+  return QUOTES[dayOfYear % QUOTES.length];
+}
 
 export default function Dashboard() {
   const [showDailyBrief, setShowDailyBrief] = useState(false);
@@ -32,11 +77,8 @@ export default function Dashboard() {
   const [teamAssembled, setTeamAssembled] = useState(false);
   const [blueprintReady, setBlueprintReady] = useState(false);
 
-  // Inspiration Engine
-  const [inspiration, setInspiration] = useState({
-    quote: "The best way to predict the future is to create it.",
-    author: "Peter Drucker"
-  });
+  // Daily rotating inspiration - memoized to only change on day change
+  const inspiration = useMemo(() => getDailyQuote(), []);
 
   const buttons = [
     { 
