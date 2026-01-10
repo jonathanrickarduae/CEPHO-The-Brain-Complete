@@ -117,16 +117,44 @@ export default function Dashboard() {
       <div className="max-w-6xl mx-auto h-full flex flex-col">
         
         {/* Header Section */}
-        <div className="mb-8 flex justify-between items-end">
-          <div>
-            <h1 className="font-display font-bold text-4xl mb-2">Command Center</h1>
-            <p className="text-muted-foreground">System Status: <span className="text-primary">OPTIMAL</span> • Edge Nodes: <span className="text-primary">12 ACTIVE</span></p>
-          </div>
-          <div className="flex gap-2">
-             <Button variant="outline" className="bg-white/5 border-white/10 hover:bg-white/10 text-xs font-mono">
-               <Lock className="w-3 h-3 mr-2 text-primary" />
-               VAULT LOCKED
-             </Button>
+        <div className="mb-8 space-y-6">
+          {/* Inspiration Engine */}
+          <motion.div 
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="p-6 rounded-xl bg-gradient-to-r from-purple-900/20 to-pink-900/20 border border-white/10 relative overflow-hidden"
+          >
+            <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-purple-500 to-pink-500"></div>
+            <div className="flex items-start gap-4">
+              <div className="p-3 rounded-full bg-white/5">
+                <Sparkles className="w-6 h-6 text-yellow-400" />
+              </div>
+              <div>
+                <h3 className="text-xl font-display font-medium text-white/90 italic">
+                  "The best way to predict the future is to create it."
+                </h3>
+                <p className="text-sm text-muted-foreground mt-2">— Peter Drucker</p>
+              </div>
+            </div>
+          </motion.div>
+
+          <div className="flex justify-between items-end">
+            <div>
+              <h1 className="font-display font-bold text-5xl mb-2 tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white to-white/60">
+                GETTING YOU TO A 10
+              </h1>
+              <p className="text-muted-foreground flex items-center gap-2">
+                Current State: <span className="text-primary font-bold">OPTIMIZING</span> 
+                <span className="w-1 h-1 rounded-full bg-white/20"></span>
+                Focus: <span className="text-white">High Performance</span>
+              </p>
+            </div>
+            <div className="flex gap-2">
+               <Button variant="outline" className="bg-white/5 border-white/10 hover:bg-white/10 text-xs font-mono">
+                 <Lock className="w-3 h-3 mr-2 text-primary" />
+                 VAULT LOCKED
+               </Button>
+            </div>
           </div>
         </div>
 
