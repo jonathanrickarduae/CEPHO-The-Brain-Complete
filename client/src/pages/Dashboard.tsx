@@ -1,5 +1,6 @@
 import DesktopLayout from "@/components/DesktopLayout";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { 
   Mic, 
   FileText, 
@@ -9,13 +10,21 @@ import {
   TrendingUp, 
   Shield, 
   Users, 
-  MessageSquare 
+  MessageSquare,
+  Headphones,
+  Video,
+  Play,
+  Download,
+  Calendar,
+  Mail,
+  Lock
 } from "lucide-react";
 import { useState } from "react";
 import { motion } from "framer-motion";
 
 export default function Dashboard() {
   const [isRecording, setIsRecording] = useState(false);
+  const [showDailyBrief, setShowDailyBrief] = useState(false);
 
   const toggleRecording = () => {
     setIsRecording(!isRecording);
@@ -28,7 +37,8 @@ export default function Dashboard() {
       sub: "Intelligence & Focus", 
       icon: Zap, 
       color: "var(--color-chart-1)", // AI Pink
-      colSpan: "col-span-2 md:col-span-1" 
+      colSpan: "col-span-2 md:col-span-1",
+      action: () => setShowDailyBrief(true)
     },
     { 
       id: 2, 
@@ -77,9 +87,17 @@ export default function Dashboard() {
       <div className="max-w-6xl mx-auto h-full flex flex-col">
         
         {/* Header Section */}
-        <div className="mb-8">
-          <h1 className="font-display font-bold text-4xl mb-2">Command Center</h1>
-          <p className="text-muted-foreground">System Status: <span className="text-primary">OPTIMAL</span> • Edge Nodes: <span className="text-primary">12 ACTIVE</span></p>
+        <div className="mb-8 flex justify-between items-end">
+          <div>
+            <h1 className="font-display font-bold text-4xl mb-2">Command Center</h1>
+            <p className="text-muted-foreground">System Status: <span className="text-primary">OPTIMAL</span> • Edge Nodes: <span className="text-primary">12 ACTIVE</span></p>
+          </div>
+          <div className="flex gap-2">
+             <Button variant="outline" className="bg-white/5 border-white/10 hover:bg-white/10 text-xs font-mono">
+               <Lock className="w-3 h-3 mr-2 text-primary" />
+               VAULT LOCKED
+             </Button>
+          </div>
         </div>
 
         {/* 6-Button Grid */}
@@ -87,6 +105,7 @@ export default function Dashboard() {
           {dashboardButtons.map((btn, index) => (
             <motion.button
               key={btn.id}
+              onClick={btn.action}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
@@ -160,6 +179,103 @@ export default function Dashboard() {
             </p>
           </div>
         </div>
+
+        {/* Daily Brief Modal */}
+        <Dialog open={showDailyBrief} onOpenChange={setShowDailyBrief}>
+          <DialogContent className="max-w-4xl bg-background/95 backdrop-blur-xl border-white/10 p-0 overflow-hidden">
+            <div className="flex h-[600px]">
+              {/* Left: Brief Content */}
+              <div className="flex-1 p-8 overflow-y-auto border-r border-white/10">
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="font-display font-bold text-3xl tracking-wide">DAILY BRIEF</h2>
+                  <span className="text-xs font-mono text-primary border border-primary/30 px-2 py-1 rounded">07:00 AM GENERATED</span>
+                </div>
+
+                <div className="space-y-6">
+                  <div className="p-4 rounded-lg bg-white/5 border border-white/10">
+                    <h3 className="text-sm font-bold text-muted-foreground mb-3 uppercase tracking-wider flex items-center gap-2">
+                      <Zap className="w-4 h-4 text-primary" /> Focus of the Day
+                    </h3>
+                    <p className="text-lg leading-relaxed">
+                      Prioritize the <span className="text-white font-semibold">Project Alpha merger</span> discussions. Market sentiment is shifting favorably in the APAC region.
+                    </p>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="p-4 rounded-lg bg-white/5 border border-white/10">
+                      <h3 className="text-xs font-bold text-muted-foreground mb-3 uppercase tracking-wider flex items-center gap-2">
+                        <Calendar className="w-3 h-3" /> Key Meetings
+                      </h3>
+                      <ul className="space-y-2 text-sm">
+                        <li className="flex justify-between">
+                          <span>Board Review</span>
+                          <span className="text-muted-foreground">10:00 AM</span>
+                        </li>
+                        <li className="flex justify-between">
+                          <span>Investor Call</span>
+                          <span className="text-muted-foreground">02:30 PM</span>
+                        </li>
+                      </ul>
+                    </div>
+                    <div className="p-4 rounded-lg bg-white/5 border border-white/10">
+                      <h3 className="text-xs font-bold text-muted-foreground mb-3 uppercase tracking-wider flex items-center gap-2">
+                        <Mail className="w-3 h-3" /> Critical Comms
+                      </h3>
+                      <ul className="space-y-2 text-sm">
+                        <li className="flex justify-between">
+                          <span>From: Sarah J.</span>
+                          <span className="text-red-400 text-[10px] border border-red-400/30 px-1 rounded">URGENT</span>
+                        </li>
+                        <li className="flex justify-between">
+                          <span>From: Legal Team</span>
+                          <span className="text-muted-foreground text-[10px]">Review</span>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div className="p-4 rounded-lg bg-white/5 border border-white/10">
+                    <h3 className="text-sm font-bold text-muted-foreground mb-3 uppercase tracking-wider flex items-center gap-2">
+                      <Globe className="w-4 h-4 text-blue-400" /> Global Intel
+                    </h3>
+                    <p className="text-sm text-muted-foreground">
+                      Competitor X has announced a delay in their Q3 rollout. Opportunity to capture market share in the logistics sector is elevated by 15%.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Right: Media & Actions */}
+              <div className="w-80 bg-black/20 p-6 flex flex-col">
+                <div className="mb-8">
+                  <h3 className="text-xs font-bold text-muted-foreground mb-4 uppercase tracking-wider">Media Formats</h3>
+                  <div className="space-y-3">
+                    <Button className="w-full justify-between bg-white/5 hover:bg-white/10 border border-white/10 group">
+                      <span className="flex items-center gap-2"><Headphones className="w-4 h-4 text-primary" /> Podcast Mode</span>
+                      <Download className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    </Button>
+                    <Button className="w-full justify-between bg-white/5 hover:bg-white/10 border border-white/10 group">
+                      <span className="flex items-center gap-2"><Video className="w-4 h-4 text-purple-400" /> Video Brief</span>
+                      <Play className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    </Button>
+                  </div>
+                </div>
+
+                <div className="mt-auto">
+                  <h3 className="text-xs font-bold text-muted-foreground mb-4 uppercase tracking-wider">Quick Actions</h3>
+                  <div className="space-y-3">
+                    <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
+                      <Mic className="w-4 h-4 mr-2" /> Dictate Actions
+                    </Button>
+                    <p className="text-[10px] text-muted-foreground text-center">
+                      "Draft email to Sarah..."
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
 
       </div>
     </DesktopLayout>
