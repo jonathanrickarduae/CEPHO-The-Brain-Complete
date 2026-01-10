@@ -97,7 +97,7 @@ export default function Dashboard() {
       icon: Users, 
       color: "#06b6d4", // Bright Cyan
       colSpan: "col-span-2 md:col-span-1",
-      action: () => setShowExperts(true)
+      action: () => window.location.href = "/ai-experts"
     },
     { 
       id: 3, 

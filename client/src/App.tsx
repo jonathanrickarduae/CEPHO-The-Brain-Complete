@@ -13,6 +13,7 @@ import Library from "./pages/Library";
 import Statistics from "./pages/Statistics";
 import Vault from "./pages/Vault";
 import DailyBrief from "./pages/DailyBrief";
+import AIExperts from "./pages/AIExperts";
 
 // Wrapper component for pages that need the sidebar layout
 function WithLayout({ children }: { children: React.ReactNode }) {
@@ -46,6 +47,9 @@ function Router() {
       </Route>
       <Route path="/daily-brief">
         <WithLayout><DailyBrief /></WithLayout>
+      </Route>
+      <Route path="/ai-experts">
+        <WithLayout><AIExperts /></WithLayout>
       </Route>
       
       {/* Fallback */}
