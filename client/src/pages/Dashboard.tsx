@@ -107,7 +107,8 @@ export default function Dashboard() {
       sub: "Secure Credentials", 
       icon: Lock, 
       color: "var(--color-chart-5)", // Orange
-      colSpan: "col-span-2 md:col-span-1" 
+      colSpan: "col-span-2 md:col-span-1",
+      action: () => window.location.href = "/vault"
     },
   ];
 

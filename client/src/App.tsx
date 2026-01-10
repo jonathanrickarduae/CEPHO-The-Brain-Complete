@@ -8,6 +8,7 @@ import Landing from "./pages/Landing";
 import Dashboard from "./pages/Dashboard";
 import Library from "./pages/Library";
 import Statistics from "./pages/Statistics";
+import Vault from "./pages/Vault";
 
 
 function Router() {
@@ -17,6 +18,7 @@ function Router() {
       <Route path={"/dashboard"} component={Dashboard} />
       <Route path={"/library"} component={Library} />
       <Route path={"/statistics"} component={Statistics} />
+      <Route path={"/vault"} component={Vault} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />
