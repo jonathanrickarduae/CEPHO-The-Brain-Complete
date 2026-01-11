@@ -4,12 +4,14 @@ import { motion, AnimatePresence } from "framer-motion";
 import NeonBrain from "@/components/NeonBrain";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
-import { ArrowRight, Brain } from "lucide-react";
+import { ArrowRight, Sun, Moon, Blend } from "lucide-react";
+import { useTheme } from "@/contexts/ThemeContext";
 
 export default function Landing() {
   const [_, setLocation] = useLocation();
   const [step, setStep] = useState<"intro" | "mood">("intro");
   const [mood, setMood] = useState([5]);
+  const { theme, setTheme } = useTheme();
 
   const handleStart = () => {
     setStep("mood");
@@ -20,12 +22,44 @@ export default function Landing() {
     setLocation("/dashboard");
   };
 
+  const themeOptions = [
+    { id: "light" as const, label: "Light", icon: Sun },
+    { id: "dark" as const, label: "Dark", icon: Moon },
+    { id: "mix" as const, label: "Mix", icon: Blend },
+  ];
+
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-background relative overflow-hidden">
       {/* Background Effects */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-primary/5 rounded-full blur-[150px] animate-pulse"></div>
         <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-purple-500/5 rounded-full blur-[120px] animate-pulse delay-1000"></div>
+      </div>
+
+      {/* Theme Selector - Top Right */}
+      <div className="absolute top-6 right-6 z-20">
+        <div className="flex items-center gap-1 p-1 bg-white/5 backdrop-blur-sm border border-white/10 rounded-full">
+          {themeOptions.map((option) => {
+            const Icon = option.icon;
+            const isActive = theme === option.id;
+            return (
+              <button
+                key={option.id}
+                onClick={() => setTheme(option.id)}
+                className={`
+                  flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-300
+                  ${isActive 
+                    ? "bg-primary text-primary-foreground shadow-[0_0_15px_rgba(255,16,240,0.4)]" 
+                    : "text-muted-foreground hover:text-foreground hover:bg-white/5"
+                  }
+                `}
+              >
+                <Icon className="w-4 h-4" />
+                <span className="text-sm font-medium tracking-wide">{option.label}</span>
+              </button>
+            );
+          })}
+        </div>
       </div>
 
       <AnimatePresence mode="wait">
@@ -43,8 +77,9 @@ export default function Landing() {
               THE BRAIN
             </h1>
             
-            <p className="text-xl text-muted-foreground mb-12 font-light tracking-wide max-w-lg">
-              Your collective intelligence hub. Optimized for speed, insight, and clarity.
+            <p className="text-xl text-muted-foreground mb-12 font-light tracking-wide max-w-lg text-center">
+              Your collective intelligence hub.<br />
+              Optimized for speed, insight, and clarity.
             </p>
 
             <Button 

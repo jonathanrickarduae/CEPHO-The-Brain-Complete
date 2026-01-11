@@ -28,3 +28,4 @@
 - [x] Add Live Action Engine with status updates
 - [x] Add Digital Twin integration for autonomous responses
 - [x] Add scheduled check-in feature
+- [x] Add Light/Dark/Mix theme options on landing page
