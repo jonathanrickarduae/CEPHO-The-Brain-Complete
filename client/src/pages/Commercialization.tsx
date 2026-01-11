@@ -131,7 +131,31 @@ export default function Commercialization() {
 
       {/* Tab Content */}
       {activeTab === 'overview' && (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="space-y-6">
+          {/* Strategic Partners */}
+          <div className="bg-gradient-to-r from-cyan-500/10 to-purple-500/10 rounded-xl p-6 border border-cyan-500/30">
+            <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+              <Users className="w-5 h-5 text-cyan-400" />
+              Strategic Partners
+            </h3>
+            <div className="flex flex-wrap gap-6">
+              <div className="flex items-center gap-4 bg-gray-900/50 rounded-xl p-4">
+                <div className="w-16 h-16 rounded-xl bg-white/5 flex items-center justify-center p-2">
+                  <svg viewBox="0 0 100 100" className="w-full h-full">
+                    <path d="M50 5 L95 30 L95 70 L50 95 L5 70 L5 30 Z" fill="none" stroke="#00A3E0" strokeWidth="3"/>
+                    <text x="50" y="55" textAnchor="middle" fill="#00A3E0" fontSize="10" fontWeight="bold">Cambridge</text>
+                  </svg>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-white">Cambridge University</h4>
+                  <p className="text-sm text-cyan-400">Research Partner</p>
+                  <p className="text-xs text-gray-400 mt-1">AI-human collaboration research</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Quick Stats */}
           <div className="bg-gray-800 rounded-xl p-6 border border-gray-700">
             <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
@@ -250,6 +274,7 @@ export default function Commercialization() {
                 <span className="px-2 py-1 bg-green-500/20 text-green-400 text-xs rounded-full">Active</span>
               </div>
             </div>
+          </div>
           </div>
         </div>
       )}

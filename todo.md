@@ -611,3 +611,51 @@
 - [x] Update flow: Splash → Mood Check → Onboarding (for new users) → Dashboard
 - [x] Mood check should be first interaction before any onboarding
 - [x] Reinforces "Getting you to a 10" USP from first moment
+
+
+## UX Enhancements Round 3
+
+### Corporate Partner
+- [ ] Add Cambridge University as corporate partner on About, Commercialization, Waitlist pages
+
+### Immediate Impact
+- [ ] Contextual tooltips for first-time users on key features
+- [ ] Progress indicators showing Digital Twin training completion
+- [ ] Quick-switch dropdown for recent conversations in Digital Twin
+
+### Visual Polish
+- [ ] Subtle page transitions (fade/slide animations)
+- [ ] Status pulse on sidebar icons (Review Queue pending, Digital Twin thinking)
+- [ ] Dark/light mode toggle
+
+### Mobile Experience
+- [ ] Swipe gestures on Review Queue (left=reject, right=approve)
+- [ ] Pull-to-refresh on Dashboard and Review Queue
+- [ ] Collapsible sections on Statistics and Settings
+
+### Engagement
+- [ ] Daily streak counter on Dashboard
+- [ ] Celebration micro-animations (confetti on completions)
+- [ ] "What's new" changelog modal after updates
+
+
+## UX Enhancements Phase 3 (January 2026)
+
+### Cambridge University Partnership
+- [x] Add Cambridge University as corporate partner on About page
+- [x] Add Cambridge University as research partner on Waitlist page
+- [x] Add Cambridge University as strategic partner on Commercialization page
+
+### 12 UX Enhancement Features
+- [x] Contextual Tooltips: First-time user guidance with helpful tooltips (Tooltip.tsx)
+- [x] Progress Indicators: Digital Twin training progress visualization (ProgressIndicator.tsx)
+- [x] Quick-Switch Conversations: Dropdown for recent conversation history (ConversationSwitcher.tsx)
+- [x] Page Transitions: Smooth animations when navigating between pages (PageTransition.tsx)
+- [x] Status Pulses: Real-time status indicators on sidebar icons (StatusPulse.tsx)
+- [x] Dark/Light Mode Toggle: Theme switcher with system preference support (ThemeToggle.tsx)
+- [x] Swipe Gestures: Mobile approve/reject actions with haptic feedback (SwipeGestures.tsx)
+- [x] Pull-to-Refresh: Dashboard and Review Queue refresh functionality (PullToRefresh.tsx)
+- [x] Collapsible Sections: Expandable sections on Statistics/Settings (CollapsibleSection.tsx)
+- [x] Daily Streak Counter: Track consecutive usage with milestones (DailyStreak.tsx)
+- [x] Celebration Animations: Confetti and achievement toasts (CelebrationAnimations.tsx)
+- [x] Changelog Modal: "What's New" feature with version history (ChangelogModal.tsx)

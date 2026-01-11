@@ -164,6 +164,30 @@ export default function About() {
         </div>
       </div>
 
+      {/* Corporate Partners */}
+      <h2 className="text-2xl font-bold text-center mb-6 text-foreground">
+        Trusted By
+      </h2>
+      <div className="bg-card/60 rounded-xl p-6 border border-border mb-10">
+        <div className="flex flex-wrap justify-center items-center gap-8">
+          <div className="flex flex-col items-center gap-3">
+            <div className="w-20 h-20 rounded-xl bg-white/10 flex items-center justify-center p-3">
+              <svg viewBox="0 0 100 100" className="w-full h-full">
+                <path d="M50 5 L95 30 L95 70 L50 95 L5 70 L5 30 Z" fill="none" stroke="#00A3E0" strokeWidth="3"/>
+                <text x="50" y="55" textAnchor="middle" fill="#00A3E0" fontSize="12" fontWeight="bold">Cambridge</text>
+              </svg>
+            </div>
+            <div className="text-center">
+              <p className="font-semibold text-foreground">Cambridge University</p>
+              <p className="text-xs text-muted-foreground">Research Partner</p>
+            </div>
+          </div>
+        </div>
+        <p className="text-center text-sm text-muted-foreground mt-6">
+          Collaborating with world-leading institutions to advance AI-human collaboration research.
+        </p>
+      </div>
+
       {/* CTA */}
       <div className="text-center">
         <button

@@ -191,6 +191,28 @@ export default function Waitlist() {
             </div>
           </div>
 
+          {/* Partners */}
+          <div className="mb-20">
+            <h2 className="text-2xl font-bold text-white text-center mb-8">
+              Research Partners
+            </h2>
+            <div className="flex justify-center">
+              <div className="bg-gray-900/50 border border-gray-800 rounded-2xl p-8 flex flex-col items-center">
+                <div className="w-24 h-24 rounded-xl bg-white/5 flex items-center justify-center p-4 mb-4">
+                  <svg viewBox="0 0 100 100" className="w-full h-full">
+                    <path d="M50 5 L95 30 L95 70 L50 95 L5 70 L5 30 Z" fill="none" stroke="#00A3E0" strokeWidth="3"/>
+                    <text x="50" y="55" textAnchor="middle" fill="#00A3E0" fontSize="12" fontWeight="bold">Cambridge</text>
+                  </svg>
+                </div>
+                <h3 className="text-lg font-semibold text-white mb-1">Cambridge University</h3>
+                <p className="text-cyan-400 text-sm mb-3">Research Partner</p>
+                <p className="text-gray-400 text-sm text-center max-w-xs">
+                  Collaborating on AI-human collaboration research and cognitive enhancement studies.
+                </p>
+              </div>
+            </div>
+          </div>
+
           {/* CTA */}
           {!position && (
             <div className="text-center">
