@@ -15,6 +15,8 @@ import { WellnessScoreDashboard } from "@/components/WellnessScoreDashboard";
 import { Share2 } from "lucide-react";
 import { MobileInputSheet, QuickInputTrigger } from "@/components/MobileInputSheet";
 import { useIsMobile } from "@/hooks/useMobile";
+import { PullToRefresh } from "@/components/PullToRefresh";
+import { GettingStartedChecklist, useOnboardingStatus } from "@/components/GettingStartedChecklist";
 
 // Daily rotating quotes - one for each day
 const QUOTES = [
@@ -168,7 +170,14 @@ export default function Dashboard() {
     }
   };
 
+  const handleRefresh = async () => {
+    // Simulate data refresh
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    // In production, this would refetch dashboard data
+  };
+
   return (
+    <PullToRefresh onRefresh={handleRefresh} disabled={!isMobile}>
     <div className="h-full flex flex-col p-4 md:p-6 overflow-hidden">
       
       {/* Quick Action Input - Manus Style - Front and Center */}
@@ -347,7 +356,12 @@ export default function Dashboard() {
               </div>
             </button>
           </Tooltip>
-        ))}
+       ))})
+      </div>
+
+      {/* Getting Started Checklist for new users */}
+      <div className="max-w-3xl mx-auto w-full mb-6">
+        <GettingStartedChecklist />
       </div>
 
       {/* Voice Input - Manus Style with Mic on Right */}
@@ -391,5 +405,6 @@ export default function Dashboard() {
         </p>
       </div>
     </div>
+    </PullToRefresh>
   );
 }

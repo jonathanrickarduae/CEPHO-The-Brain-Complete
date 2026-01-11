@@ -23,10 +23,18 @@ import GoLive from "./pages/GoLive";
 import About from "./pages/About";
 import ReviewQueue from "./pages/ReviewQueue";
 import { GovernanceProvider, GovernanceModeChangeModal } from "./hooks/useGovernance";
+import { CelebrationProvider } from "./components/CelebrationAnimations";
+import { PageTransition } from "./components/PageTransition";
 
-// Wrapper component for pages that need the sidebar layout
+// Wrapper component for pages that need the sidebar layout with page transitions
 function WithLayout({ children }: { children: React.ReactNode }) {
-  return <BrainLayout>{children}</BrainLayout>;
+  return (
+    <BrainLayout>
+      <PageTransition className="h-full">
+        {children}
+      </PageTransition>
+    </BrainLayout>
+  );
 }
 
 function Router() {
@@ -99,11 +107,13 @@ function App() {
     <ErrorBoundary>
       <ThemeProvider defaultTheme="dark" switchable>
         <GovernanceProvider>
-          <TooltipProvider>
-            <Toaster />
-            <Router />
-            <GovernanceModeChangeModal />
-          </TooltipProvider>
+          <CelebrationProvider>
+            <TooltipProvider>
+              <Toaster />
+              <Router />
+              <GovernanceModeChangeModal />
+            </TooltipProvider>
+          </CelebrationProvider>
         </GovernanceProvider>
       </ThemeProvider>
     </ErrorBoundary>

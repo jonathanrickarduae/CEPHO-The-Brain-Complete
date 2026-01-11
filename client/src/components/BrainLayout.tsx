@@ -41,16 +41,17 @@ import { Accessibility, Command } from "lucide-react";
 import { CommandPalette, useCommandPalette } from "./CommandPalette";
 import { useGovernance, GovernanceModeIndicator } from "@/hooks/useGovernance";
 import { ChangelogModal, useChangelog, WhatsNewButton } from "./ChangelogModal";
+import { StatusPulse } from "./StatusPulse";
 
 const menuItems = [
-  { icon: LayoutDashboard, label: "Command Center", path: "/dashboard" },
-  { icon: Sun, label: "Daily Brief", path: "/daily-brief" },
+  { icon: LayoutDashboard, label: "Command Center", path: "/dashboard", status: 'active' as const },
+  { icon: Sun, label: "Daily Brief", path: "/daily-brief", status: 'warning' as const, count: 3 },
   { icon: Users, label: "AI Experts", path: "/ai-experts" },
-  { icon: Clock, label: "Review Queue", path: "/review-queue" },
+  { icon: Clock, label: "Review Queue", path: "/review-queue", status: 'warning' as const, count: 5 },
   { icon: BookOpen, label: "Library", path: "/library" },
   { icon: BarChart3, label: "Statistics", path: "/statistics" },
-  { icon: Fingerprint, label: "Digital Twin", path: "/digital-twin" },
-  { icon: Activity, label: "Workflow", path: "/workflow" },
+  { icon: Fingerprint, label: "Digital Twin", path: "/digital-twin", status: 'success' as const },
+  { icon: Activity, label: "Workflow", path: "/workflow", status: 'active' as const, count: 2 },
   { icon: Lock, label: "The Vault", path: "/vault" },
   { icon: Moon, label: "Evening Review", path: "/evening-review" },
   { icon: Settings, label: "Settings", path: "/settings" },
@@ -246,10 +247,22 @@ function BrainLayoutContent({
                       tooltip={item.label}
                       className={`h-11 transition-all font-normal rounded-xl mb-1 ${isActive ? 'bg-sidebar-primary/20 text-sidebar-primary border border-sidebar-primary/30' : 'text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent'}`}
                     >
-                      <item.icon
-                        className={`h-5 w-5 ${isActive ? "text-primary" : ""}`}
-                      />
+                      <StatusPulse 
+                        status={item.status || 'idle'} 
+                        count={item.count}
+                        showPulse={!!item.status}
+                        size="sm"
+                      >
+                        <item.icon
+                          className={`h-5 w-5 ${isActive ? "text-primary" : ""}`}
+                        />
+                      </StatusPulse>
                       <span className="font-medium">{item.label}</span>
+                      {item.count && item.count > 0 && (
+                        <span className="ml-auto text-xs bg-primary/20 text-primary px-1.5 py-0.5 rounded-full">
+                          {item.count}
+                        </span>
+                      )}
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 );

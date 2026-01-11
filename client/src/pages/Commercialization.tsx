@@ -140,14 +140,15 @@ export default function Commercialization() {
             </h3>
             <div className="flex flex-wrap gap-6">
               <div className="flex items-center gap-4 bg-gray-900/50 rounded-xl p-4">
-                <div className="w-16 h-16 rounded-xl bg-white/5 flex items-center justify-center p-2">
-                  <svg viewBox="0 0 100 100" className="w-full h-full">
-                    <path d="M50 5 L95 30 L95 70 L50 95 L5 70 L5 30 Z" fill="none" stroke="#00A3E0" strokeWidth="3"/>
-                    <text x="50" y="55" textAnchor="middle" fill="#00A3E0" fontSize="10" fontWeight="bold">Cambridge</text>
-                  </svg>
+                <div className="w-16 h-16 rounded-xl bg-white flex items-center justify-center p-2">
+                  <img 
+                    src="/logos/cambridge-university.png" 
+                    alt="University of Cambridge" 
+                    className="w-full h-full object-contain"
+                  />
                 </div>
                 <div>
-                  <h4 className="font-semibold text-white">Cambridge University</h4>
+                  <h4 className="font-semibold text-white">University of Cambridge</h4>
                   <p className="text-sm text-cyan-400">Research Partner</p>
                   <p className="text-xs text-gray-400 mt-1">AI-human collaboration research</p>
                 </div>

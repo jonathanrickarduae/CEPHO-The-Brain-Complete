@@ -668,3 +668,125 @@
 - [x] Add ChangelogModal trigger (WhatsNewButton) to sidebar navigation
 - [x] Wire SwipeGestures to Review Queue page for mobile approve/reject
 - [x] Add first-time tooltips to Dashboard 6 command boxes
+
+
+## UX Enhancements Phase 4 (January 2026)
+
+- [ ] Add PullToRefresh to Dashboard and Review Queue for mobile data refresh
+- [ ] Integrate CelebrationAnimations for milestone achievements (streaks, tasks)
+- [ ] Add CollapsibleSections to Statistics page for organized metrics
+- [ ] Wire ProgressIndicator to Digital Twin page for training progress
+- [ ] Add ConversationSwitcher to Digital Twin page for quick conversation switching
+- [ ] Integrate StatusPulse on sidebar icons for real-time activity indicators
+- [ ] Add PageTransition animations to App.tsx for smooth page navigation
+- [ ] Add streak milestone rewards - unlock themes/badges at 7, 30, 100-day streaks
+- [ ] Create Getting Started checklist on Dashboard for new users with progress tracking
+
+
+## Asana Integration (January 2026)
+
+- [ ] Build Asana OAuth2 sign-in flow
+- [ ] Create Asana API service for fetching projects, tasks, and updates
+- [ ] Build multi-project dashboard aggregation view
+- [ ] Implement real-time webhook sync for Asana updates
+- [ ] Connect Digital Twin to learn from Asana project data
+- [ ] Support multiple workspaces (Celadon, Boundless, etc.)
+
+## Corporate Partner Logos
+
+- [ ] Verify Cambridge University logo is displayed
+- [ ] Verify Oxford University logo is displayed
+- [ ] Add logos to About page partner section
+- [ ] Add logos to Waitlist page partner section
+- [ ] Add logos to Commercialization page partner section
+
+## Standing Rules
+
+- [ ] Always add new AI experts to the AI Experts team page with avatar
+
+
+## Integration Wizard (January 2026)
+
+- [ ] Create IntegrationWizard component with step-by-step guidance
+- [ ] Add tiered integration levels (Basic, Standard, Advanced)
+- [ ] Basic tier: Calendar, Email, Notes integrations
+- [ ] Standard tier: Zoom, Teams, Slack, Asana integrations
+- [ ] Advanced tier: API keys, Custom webhooks, Copilot
+- [ ] Secure credential storage in Vault for all passwords/API keys
+- [ ] Governance-aware approval workflow for corporate users
+- [ ] "Requires Approval" badges on sensitive integrations
+- [ ] Integration suggestions for new users based on common needs
+
+
+## Digital Twin Training Accelerator (January 2026)
+
+- [ ] Create DigitalTwinAccelerator component with interview mode
+- [ ] Build quick-fire yes/no question system (15-minute sessions)
+- [ ] Add multiple choice scenario questions
+- [ ] Create document upload for training (emails, texts, files)
+- [ ] Build training hour calculator (5,000 hours target)
+- [ ] Show training acceleration from uploads (email = X hours, etc.)
+- [ ] Add avatar/appearance customization
+- [ ] Add voice tone selection (formal, casual, adaptive)
+- [ ] Create daily micro-training check-ins (2-minute sessions)
+- [ ] Build feedback loop for AI response improvement
+
+
+## Digital Twin Active Learning Mode (January 2026)
+
+- [ ] Create ActiveLearningMode component with toggle on/off
+- [ ] Build screen observation tracking UI (requires desktop app)
+- [ ] Add integration efficiency analyzer
+- [ ] Create "You're not using X efficiently" insights
+- [ ] Build privacy controls (exclude apps, auto-pause, incognito mode)
+- [ ] Add scheduled observation mode (work hours only)
+- [ ] Create workflow pattern detection
+- [ ] Build app usage analytics dashboard
+- [ ] Add optimization suggestions based on observed behavior
+
+
+## Subscription Intelligence (January 2026)
+
+- [ ] Create SubscriptionManager component with cost tracking
+- [ ] Add monthly/annual spend dashboard
+- [ ] Build usage analytics per integration (% of features used)
+- [ ] Create cost optimization suggestions engine
+- [ ] Add alternative service recommendations with cost comparison
+- [ ] Integrate subscription credentials with Vault
+- [ ] Add renewal date tracking and alerts
+- [ ] Build ROI calculator (time saved vs cost)
+- [ ] Create subscription categories (Essential vs Nice-to-Have)
+- [ ] Add overlapping tools detection
+
+
+## Mission Statement & Messaging (January 2026)
+
+- [x] Add refined mission statement to About page hero section
+- [x] Emphasize security/insurance messaging across key pages
+- [x] Add "Operating at a 10" value proposition to About page
+- [x] Update tagline: "One interface to manage your life, amplified by AI that thinks like you"
+
+
+## Future Development Roadmap
+
+### Health & Wellness Integrations (Post-Launch)
+- [ ] Whoop integration - sleep quality, recovery score, strain data
+- [ ] Oura Ring integration - sleep stages, readiness, activity
+- [ ] Apple Health / Google Fit - steps, heart rate, workouts
+- [ ] Fitbit integration - activity, sleep, stress management
+- [ ] Garmin integration - training load, body battery
+- [ ] Morning Brief to include biometric insights ("Recovery at 68% - lighter workload recommended")
+- [ ] Digital Twin learns performance patterns from health data
+- [ ] Wellness score factors in real biometric data, not just self-reported mood
+- [ ] AI Experts can reference health data for contextual advice
+
+
+## Signature Management (January 2026)
+
+- [x] Add signature upload/capture to onboarding wizard
+- [x] Store signature securely in The Vault
+- [x] Support multiple signature styles (formal, initials, digital)
+- [ ] Integrate signature with document signing workflows
+- [ ] Digital Twin can apply signature with explicit approval
+- [ ] Auto-approval option for pre-authorized document types
+- [ ] Add signature to Library/Image assets section

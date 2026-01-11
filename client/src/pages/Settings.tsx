@@ -10,14 +10,23 @@ import { CalendarIntegration } from '@/components/CalendarIntegration';
 import { TrainingDataPipeline } from '@/components/TrainingDataPipeline';
 import { ReferralDashboard } from '@/components/WaitlistReferral';
 import { AccessibilitySettingsPanel } from '@/components/AccessibilitySettingsPanel';
+import { StreakRewards } from '@/components/StreakRewards';
+import { useStreak } from '@/components/DailyStreak';
+import { IntegrationWizard } from '@/components/IntegrationWizard';
+import { SubscriptionManager } from '@/components/SubscriptionManager';
+import { SignatureManager } from '@/components/SignatureManager';
+import { Plug, Wallet, FileSignature } from 'lucide-react';
 
-type SettingsTab = 'profile' | 'calendar' | 'training' | 'referrals' | 'notifications' | 'privacy' | 'appearance' | 'accessibility';
+type SettingsTab = 'profile' | 'integrations' | 'subscriptions' | 'signatures' | 'calendar' | 'training' | 'referrals' | 'notifications' | 'privacy' | 'appearance' | 'accessibility';
 
 export default function Settings() {
   const [activeTab, setActiveTab] = useState<SettingsTab>('profile');
 
   const tabs = [
     { id: 'profile' as const, label: 'Profile', icon: User },
+    { id: 'integrations' as const, label: 'Integrations', icon: Plug },
+    { id: 'subscriptions' as const, label: 'Subscriptions', icon: Wallet },
+    { id: 'signatures' as const, label: 'Signatures', icon: FileSignature },
     { id: 'calendar' as const, label: 'Calendar', icon: Calendar },
     { id: 'training' as const, label: 'Training Data', icon: Database },
     { id: 'referrals' as const, label: 'Referrals', icon: Users },
@@ -67,6 +76,7 @@ export default function Settings() {
           {/* Content */}
           <div className="flex-1">
             {activeTab === 'profile' && (
+              <>
               <div className="bg-gray-800 rounded-xl border border-gray-700 p-6">
                 <h3 className="text-lg font-semibold text-white mb-6">Profile Settings</h3>
                 
@@ -115,7 +125,19 @@ export default function Settings() {
                   </button>
                 </div>
               </div>
+
+              {/* Streak Rewards Section */}
+              <div className="mt-6">
+                <StreakRewards currentStreak={7} />
+              </div>
+              </>
             )}
+
+            {activeTab === 'integrations' && <IntegrationWizard />}
+
+            {activeTab === 'subscriptions' && <SubscriptionManager />}
+
+            {activeTab === 'signatures' && <SignatureManager />}
 
             {activeTab === 'calendar' && <CalendarIntegration />}
 

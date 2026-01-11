@@ -20,6 +20,7 @@ import { useMoodCheck } from "@/hooks/useMoodCheck";
 import { MoodTimeline } from "@/components/MoodTimeline";
 import { WellnessScoreDashboard } from "@/components/WellnessScoreDashboard";
 import { ShareableInsight, generateProductivityInsight } from "@/components/ShareableInsight";
+import { CollapsibleSection } from "@/components/CollapsibleSection";
 
 export default function Statistics() {
   const { todaysMoods } = useMoodCheck();
@@ -49,20 +50,36 @@ export default function Statistics() {
         />
 
         {/* Personal Analytics Section */}
-        <div className="mb-8">
+        <CollapsibleSection 
+          title="Personal Analytics" 
+          icon={<Activity className="w-5 h-5" />}
+          defaultOpen={true}
+          className="mb-6"
+        >
           <PersonalAnalytics variant="full" />
-        </div>
+        </CollapsibleSection>
 
         {/* Wellness Score Dashboard */}
-        <div className="mb-8">
+        <CollapsibleSection 
+          title="Wellness Score" 
+          icon={<Target className="w-5 h-5" />}
+          defaultOpen={true}
+          className="mb-6"
+        >
           <WellnessScoreDashboard />
-        </div>
+        </CollapsibleSection>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left Column: KPIs */}
           <div className="lg:col-span-2 space-y-8">
             
             {/* KPI Grid */}
+            <CollapsibleSection 
+              title="Key Performance Indicators" 
+              icon={<TrendingUp className="w-5 h-5" />}
+              defaultOpen={true}
+              className="mb-6"
+            >
             <div className="grid grid-cols-2 gap-4">
               {kpis.map((kpi) => (
                 <div key={kpi.id} className="p-6 rounded-xl bg-card/60 border border-white/10 relative overflow-hidden group">
@@ -83,11 +100,24 @@ export default function Statistics() {
                 </div>
               ))}
             </div>
+            </CollapsibleSection>
 
             {/* Mood Timeline - Real Data */}
-            <MoodTimeline days={7} />
+            <CollapsibleSection 
+              title="Mood Timeline" 
+              icon={<Calendar className="w-5 h-5" />}
+              defaultOpen={true}
+              className="mb-6"
+            >
+              <MoodTimeline days={7} />
+            </CollapsibleSection>
 
             {/* Digital Twin Training Progress */}
+            <CollapsibleSection 
+              title="Digital Twin Training" 
+              icon={<Brain className="w-5 h-5" />}
+              defaultOpen={true}
+            >
             <div className="p-6 rounded-xl bg-card/60 border border-white/10">
               <div className="flex items-center gap-2 mb-4">
                 <Brain className="w-5 h-5 text-cyan-400" />
@@ -120,6 +150,7 @@ export default function Statistics() {
                 </div>
               </div>
             </div>
+            </CollapsibleSection>
           </div>
 
           {/* Right Column: Self-Evolution */}

@@ -69,8 +69,11 @@ export default function About() {
         <h1 className="font-display font-bold text-4xl md:text-5xl tracking-wider text-pink-500 drop-shadow-[0_0_25px_rgba(236,72,153,0.5)] mb-4">
           THE BRAIN
         </h1>
-        <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-          Your personal AI ecosystem for peak performance, continuous learning, and intelligent decision-making.
+        <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-4">
+          One interface to manage your life, amplified by AI that thinks like you.
+        </p>
+        <p className="text-lg text-muted-foreground max-w-xl mx-auto">
+          <span className="text-primary font-semibold">Highly secure.</span> Freeing you to focus on what matters most. Keeping you operating at a <span className="text-primary font-semibold">10</span>.
         </p>
       </div>
 
@@ -82,12 +85,14 @@ export default function About() {
           </div>
           <div>
             <h2 className="text-xl font-bold text-white mb-2">The Vision</h2>
+            <p className="text-muted-foreground leading-relaxed mb-3">
+              The Brain is your personal AI command center that creates a <strong className="text-white">Digital Twin</strong> of you—learning your patterns, decisions, and communication style—so it can eventually act autonomously on your behalf.
+            </p>
+            <p className="text-muted-foreground leading-relaxed mb-3">
+              It consolidates all your tools (Asana, email, calendar, health data), provides access to <strong className="text-white">250+ AI Experts</strong>, and optimizes your daily performance through structured workflows.
+            </p>
             <p className="text-muted-foreground leading-relaxed">
-              The Brain is building toward a future where everyone has access to a personal AI that truly understands them. 
-              Not just an assistant that follows commands, but a <strong className="text-white">Digital Twin</strong> that learns 
-              your values, anticipates your needs, and helps you become the best version of yourself. 
-              Combined with an army of <strong className="text-white">AI Experts</strong>, you gain the collective wisdom 
-              of specialists across every domain—available 24/7, personalized to your context.
+              Everything stays <strong className="text-green-400">highly secure in The Vault</strong>. Your data, your control, your Digital Twin—working to free you up for what truly matters in life.
             </p>
           </div>
         </div>
@@ -171,14 +176,15 @@ export default function About() {
       <div className="bg-card/60 rounded-xl p-6 border border-border mb-10">
         <div className="flex flex-wrap justify-center items-center gap-8">
           <div className="flex flex-col items-center gap-3">
-            <div className="w-20 h-20 rounded-xl bg-white/10 flex items-center justify-center p-3">
-              <svg viewBox="0 0 100 100" className="w-full h-full">
-                <path d="M50 5 L95 30 L95 70 L50 95 L5 70 L5 30 Z" fill="none" stroke="#00A3E0" strokeWidth="3"/>
-                <text x="50" y="55" textAnchor="middle" fill="#00A3E0" fontSize="12" fontWeight="bold">Cambridge</text>
-              </svg>
+            <div className="w-20 h-20 rounded-xl bg-white flex items-center justify-center p-2">
+              <img 
+                src="/logos/cambridge-university.png" 
+                alt="University of Cambridge" 
+                className="w-full h-full object-contain"
+              />
             </div>
             <div className="text-center">
-              <p className="font-semibold text-foreground">Cambridge University</p>
+              <p className="font-semibold text-foreground">University of Cambridge</p>
               <p className="text-xs text-muted-foreground">Research Partner</p>
             </div>
           </div>

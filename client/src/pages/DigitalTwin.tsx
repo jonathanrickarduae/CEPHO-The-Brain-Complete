@@ -9,6 +9,9 @@ import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { LearningPanel, LearningToast, useLearningNotifications } from "@/components/LearningIndicator";
 import { ActivityLog } from "@/components/ActivityLog";
+import { ProgressBar, CircularProgress, DigitalTwinTrainingProgress } from "@/components/ProgressIndicator";
+import { ConversationSwitcher } from "@/components/ConversationSwitcher";
+import { DigitalTwinAccelerator } from "@/components/DigitalTwinAccelerator";
 import { useDigitalTwinChat } from "@/hooks/useDigitalTwinChat";
 import { useVoiceInput } from "@/hooks/useVoiceInput";
 
@@ -19,7 +22,17 @@ export default function DigitalTwin() {
   
   const [messageInput, setMessageInput] = useState(initialMessage || "");
   const [showRightPanel, setShowRightPanel] = useState(false);
-  const [rightPanelTab, setRightPanelTab] = useState<'learning' | 'activity'>('learning');
+  const [rightPanelTab, setRightPanelTab] = useState<'learning' | 'activity' | 'training'>('learning');
+  const [showTrainingModal, setShowTrainingModal] = useState(false);
+  const [currentConversationId, setCurrentConversationId] = useState('current');
+  
+  // Mock conversation history for ConversationSwitcher
+  const mockConversations = [
+    { id: 'current', title: 'Current Session', lastMessage: 'How can I help you today?', timestamp: new Date(), starred: true },
+    { id: 'conv-1', title: 'Project Planning', lastMessage: 'Let me break down the timeline...', timestamp: new Date(Date.now() - 3600000) },
+    { id: 'conv-2', title: 'Email Drafts', lastMessage: 'Here\'s the revised version...', timestamp: new Date(Date.now() - 86400000), starred: true },
+    { id: 'conv-3', title: 'Meeting Prep', lastMessage: 'Key points to cover...', timestamp: new Date(Date.now() - 172800000) },
+  ];
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   
@@ -133,8 +146,29 @@ export default function DigitalTwin() {
                 <h1 className="text-lg font-semibold text-foreground">Digital Twin</h1>
                 <p className="text-xs text-muted-foreground">Online • AI-Powered • Learning from you</p>
               </div>
+              {/* Conversation Switcher */}
+              <div className="hidden md:block ml-4">
+                <ConversationSwitcher
+                  conversations={mockConversations}
+                  currentConversationId={currentConversationId}
+                  onSelect={(id) => {
+                    setCurrentConversationId(id);
+                    toast.info(`Switched to: ${mockConversations.find(c => c.id === id)?.title}`);
+                  }}
+                  onNewConversation={() => {
+                    clearHistory();
+                    setCurrentConversationId('new-' + Date.now());
+                    toast.success('Started new conversation');
+                  }}
+                />
+              </div>
             </div>
             <div className="flex items-center gap-2">
+              {/* Training Progress Mini Badge */}
+              <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-gradient-to-r from-cyan-500/10 to-purple-500/10 border border-cyan-500/20">
+                <CircularProgress value={25} max={100} size={24} strokeWidth={3} showValue={false} />
+                <span className="text-xs text-muted-foreground">12.5h trained</span>
+              </div>
               <Badge variant="outline" className="bg-purple-500/10 text-purple-400 border-purple-500/30">
                 <Sparkles className="w-3 h-3 mr-1" />
                 {messages.length} messages
@@ -318,14 +352,42 @@ export default function DigitalTwin() {
             >
               Activity
             </button>
+            <button
+              onClick={() => setRightPanelTab('training')}
+              className={`flex-1 px-4 py-3 text-sm font-medium transition-colors ${
+                rightPanelTab === 'training' 
+                  ? 'text-purple-400 border-b-2 border-purple-400' 
+                  : 'text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              Train
+            </button>
           </div>
           
           {/* Panel Content */}
           <div className="flex-1 overflow-y-auto p-4">
-            {rightPanelTab === 'learning' ? (
+            {rightPanelTab === 'learning' && (
               <LearningPanel learningItems={notifications} />
-            ) : (
+            )}
+            {rightPanelTab === 'activity' && (
               <ActivityLog />
+            )}
+            {rightPanelTab === 'training' && (
+              <div className="space-y-4">
+                <button
+                  onClick={() => setShowTrainingModal(true)}
+                  className="w-full p-4 bg-gradient-to-br from-purple-500/10 to-pink-500/10 border border-purple-500/30 rounded-xl text-left hover:border-purple-500/50 transition-all"
+                >
+                  <h4 className="font-medium text-foreground mb-1">Training Accelerator</h4>
+                  <p className="text-xs text-muted-foreground">Speed up your Digital Twin's learning</p>
+                </button>
+                <DigitalTwinTrainingProgress 
+                  hoursLogged={127}
+                  conversationsCount={45}
+                  feedbackCount={23}
+                  accuracyScore={78}
+                />
+              </div>
             )}
           </div>
         </div>
@@ -334,6 +396,23 @@ export default function DigitalTwin() {
       {/* Learning Toast */}
       {currentToast && (
         <LearningToast message={currentToast.message} type={currentToast.type} onClose={dismissToast} />
+      )}
+
+      {/* Training Accelerator Modal */}
+      {showTrainingModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+          <div className="w-full max-w-4xl max-h-[90vh] overflow-y-auto m-4">
+            <div className="relative">
+              <button
+                onClick={() => setShowTrainingModal(false)}
+                className="absolute top-4 right-4 z-10 p-2 bg-gray-800 rounded-full hover:bg-gray-700 transition-colors"
+              >
+                <span className="text-xl text-muted-foreground">×</span>
+              </button>
+              <DigitalTwinAccelerator onComplete={() => setShowTrainingModal(false)} />
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Flame, Calendar, Trophy, Star, Zap } from 'lucide-react';
+import { useCelebration } from './CelebrationAnimations';
 
 interface DailyStreakProps {
   currentStreak: number;
@@ -203,6 +204,7 @@ export function WeeklyActivity({ activities }: WeeklyActivityProps) {
 
 // Hook for managing streak data
 export function useStreak() {
+  const { celebrate, showAchievement } = useCelebration();
   const [streak, setStreak] = useState({
     current: 0,
     longest: 0,
@@ -261,6 +263,32 @@ export function useStreak() {
 
     setStreak(newStreak);
     localStorage.setItem('brain_streak_data', JSON.stringify(newStreak));
+
+    // Trigger celebration for milestones
+    const milestones = [7, 14, 30, 60, 90, 180, 365];
+    if (milestones.includes(newCurrent)) {
+      const milestoneNames: Record<number, string> = {
+        7: 'Week Warrior',
+        14: 'Fortnight Fighter',
+        30: 'Monthly Master',
+        60: 'Two Month Titan',
+        90: 'Quarter Champion',
+        180: 'Half Year Hero',
+        365: 'Annual Legend',
+      };
+      showAchievement({
+        title: milestoneNames[newCurrent] || `${newCurrent} Day Streak!`,
+        description: `You've maintained a ${newCurrent}-day streak! Keep it up!`,
+        icon: '🔥',
+      });
+    } else if (newCurrent === 1) {
+      // First day of new streak
+      showAchievement({
+        title: 'Streak Started!',
+        description: 'You\'ve started a new streak. Come back tomorrow!',
+        icon: '✨',
+      });
+    }
   };
 
   return { ...streak, markTodayComplete };

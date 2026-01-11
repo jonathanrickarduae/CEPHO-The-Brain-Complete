@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { SwipeableItem, SwipeHint } from '@/components/SwipeGestures';
 import { useIsMobile } from '@/hooks/useMobile';
+import { PullToRefresh } from '@/components/PullToRefresh';
 
 interface ReviewItem {
   id: string;
@@ -137,7 +138,14 @@ export default function ReviewQueue() {
     return date.toLocaleDateString();
   };
 
+  const handleRefresh = async () => {
+    // Simulate data refresh - in production would refetch review items
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    setItems(mockReviewItems); // Reset to mock data for demo
+  };
+
   return (
+    <PullToRefresh onRefresh={handleRefresh} disabled={!isMobile}>
     <div className="h-full flex flex-col p-4 md:p-6 overflow-auto">
       {/* Header */}
       <div className="mb-6">
@@ -360,5 +368,6 @@ export default function ReviewQueue() {
         )}
       </div>
     </div>
+    </PullToRefresh>
   );
 }
