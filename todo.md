@@ -1325,3 +1325,38 @@
 - [x] Add floating voice record button to Dashboard
 - [x] Quick-access recording from anywhere
 - [x] Slide-up recording panel
+
+
+## Pre-Test Polish (January 2026)
+
+### Functional Improvements (1-12)
+- [ ] 1. Sample data & demo mode with realistic projects/tasks
+- [ ] 2. Error handling with proper error states and fallback UI
+- [ ] 3. Onboarding completion flow - auto-create sample Project Genesis
+- [ ] 4. Digital Twin personality preview - test conversation
+- [ ] 5. Visual Blueprint export to PNG/PDF
+- [x] 6. Keyboard shortcuts and command palette (Cmd+K)
+- [x] 7. Offline indicator with action queuing
+- [x] 8. Session persistence for drafts and scroll positions
+- [x] 9. Toast notifications for all actions
+- [x] 10. Confirmation dialogs for destructive actions
+- [ ] 11. Better empty states with helpful prompts
+- [x] 12. Loading states on all buttons during API calls
+
+### Design Polish (13-28)
+- [ ] 13. Micro-animations on hover and click feedback
+- [ ] 14. Glassmorphism refinement - consistent blur effects
+- [ ] 15. Gradient accents - animated gradient borders
+- [ ] 16. Icon consistency audit
+- [ ] 17. Typography hierarchy improvements
+- [x] 18. Skeleton loaders (animated placeholders)
+- [ ] 19. Progress indicators for multi-step flows
+- [ ] 20. Rich hover states with tooltips
+- [ ] 21. Accessible focus rings for keyboard navigation
+- [x] 22. Mini charts/sparklines for dashboard metrics
+- [x] 23. Consistent status badges (pill badges)
+- [ ] 24. AI Expert avatar system
+- [ ] 25. Card depth with layered shadows
+- [ ] 26. NeonBrain as loading/thinking indicator
+- [ ] 27. Color system audit (cyan/magenta/purple consistency)
+- [ ] 28. Dark mode contrast refinement for accessibility
