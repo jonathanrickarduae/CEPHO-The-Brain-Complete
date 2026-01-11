@@ -304,3 +304,545 @@ export async function clearConversationHistory(userId: number): Promise<void> {
 }
 
 // TODO: add more feature queries here as your schema grows.
+
+
+// ==================== INTEGRATIONS ====================
+
+import { 
+  integrations, InsertIntegration, Integration,
+  notifications, InsertNotification, Notification,
+  projects, InsertProject, Project,
+  projectGenesis, InsertProjectGenesis, ProjectGenesisRecord,
+  userSettings, InsertUserSettings, UserSettings,
+  trainingDocuments, InsertTrainingDocument, TrainingDocument,
+  memoryBank, InsertMemoryBank, MemoryBank,
+  decisionPatterns, InsertDecisionPattern, DecisionPattern,
+  feedbackHistory, InsertFeedbackHistory, FeedbackHistory,
+  tasks, InsertTask, Task,
+  universalInbox, InsertUniversalInboxItem, UniversalInboxItem,
+  auditLog, InsertAuditLog, AuditLog,
+} from "../drizzle/schema";
+
+// ==================== INTEGRATIONS ====================
+
+export async function createIntegration(data: InsertIntegration): Promise<Integration | null> {
+  const db = await getDb();
+  if (!db) return null;
+
+  try {
+    const result = await db.insert(integrations).values(data);
+    const insertId = result[0].insertId;
+    const [newEntry] = await db.select().from(integrations).where(eq(integrations.id, insertId));
+    return newEntry;
+  } catch (error) {
+    console.error("[Database] Failed to create integration:", error);
+    throw error;
+  }
+}
+
+export async function getIntegrations(userId: number): Promise<Integration[]> {
+  const db = await getDb();
+  if (!db) return [];
+
+  try {
+    return await db.select()
+      .from(integrations)
+      .where(eq(integrations.userId, userId))
+      .orderBy(desc(integrations.updatedAt));
+  } catch (error) {
+    console.error("[Database] Failed to get integrations:", error);
+    return [];
+  }
+}
+
+export async function updateIntegration(id: number, data: Partial<InsertIntegration>): Promise<void> {
+  const db = await getDb();
+  if (!db) return;
+
+  try {
+    await db.update(integrations).set(data).where(eq(integrations.id, id));
+  } catch (error) {
+    console.error("[Database] Failed to update integration:", error);
+    throw error;
+  }
+}
+
+export async function deleteIntegration(id: number): Promise<void> {
+  const db = await getDb();
+  if (!db) return;
+
+  try {
+    await db.delete(integrations).where(eq(integrations.id, id));
+  } catch (error) {
+    console.error("[Database] Failed to delete integration:", error);
+    throw error;
+  }
+}
+
+// ==================== NOTIFICATIONS ====================
+
+export async function createNotification(data: InsertNotification): Promise<Notification | null> {
+  const db = await getDb();
+  if (!db) return null;
+
+  try {
+    const result = await db.insert(notifications).values(data);
+    const insertId = result[0].insertId;
+    const [newEntry] = await db.select().from(notifications).where(eq(notifications.id, insertId));
+    return newEntry;
+  } catch (error) {
+    console.error("[Database] Failed to create notification:", error);
+    throw error;
+  }
+}
+
+export async function getNotifications(userId: number, options?: { unreadOnly?: boolean; limit?: number }): Promise<Notification[]> {
+  const db = await getDb();
+  if (!db) return [];
+
+  try {
+    const conditions = [eq(notifications.userId, userId)];
+    if (options?.unreadOnly) {
+      conditions.push(eq(notifications.read, false));
+    }
+
+    return await db.select()
+      .from(notifications)
+      .where(and(...conditions))
+      .orderBy(desc(notifications.createdAt))
+      .limit(options?.limit || 50);
+  } catch (error) {
+    console.error("[Database] Failed to get notifications:", error);
+    return [];
+  }
+}
+
+export async function markNotificationRead(id: number): Promise<void> {
+  const db = await getDb();
+  if (!db) return;
+
+  try {
+    await db.update(notifications).set({ read: true, readAt: new Date() }).where(eq(notifications.id, id));
+  } catch (error) {
+    console.error("[Database] Failed to mark notification read:", error);
+  }
+}
+
+export async function markAllNotificationsRead(userId: number): Promise<void> {
+  const db = await getDb();
+  if (!db) return;
+
+  try {
+    await db.update(notifications)
+      .set({ read: true, readAt: new Date() })
+      .where(and(eq(notifications.userId, userId), eq(notifications.read, false)));
+  } catch (error) {
+    console.error("[Database] Failed to mark all notifications read:", error);
+  }
+}
+
+// ==================== PROJECTS ====================
+
+export async function createProject(data: InsertProject): Promise<Project | null> {
+  const db = await getDb();
+  if (!db) return null;
+
+  try {
+    const result = await db.insert(projects).values(data);
+    const insertId = result[0].insertId;
+    const [newEntry] = await db.select().from(projects).where(eq(projects.id, insertId));
+    return newEntry;
+  } catch (error) {
+    console.error("[Database] Failed to create project:", error);
+    throw error;
+  }
+}
+
+export async function getProjects(userId: number, options?: { status?: string; limit?: number }): Promise<Project[]> {
+  const db = await getDb();
+  if (!db) return [];
+
+  try {
+    const conditions = [eq(projects.userId, userId)];
+    // Note: status filter would need type casting, simplified for now
+
+    return await db.select()
+      .from(projects)
+      .where(and(...conditions))
+      .orderBy(desc(projects.updatedAt))
+      .limit(options?.limit || 100);
+  } catch (error) {
+    console.error("[Database] Failed to get projects:", error);
+    return [];
+  }
+}
+
+export async function updateProject(id: number, data: Partial<InsertProject>): Promise<void> {
+  const db = await getDb();
+  if (!db) return;
+
+  try {
+    await db.update(projects).set(data).where(eq(projects.id, id));
+  } catch (error) {
+    console.error("[Database] Failed to update project:", error);
+    throw error;
+  }
+}
+
+// ==================== PROJECT GENESIS ====================
+
+export async function createProjectGenesis(data: InsertProjectGenesis): Promise<ProjectGenesisRecord | null> {
+  const db = await getDb();
+  if (!db) return null;
+
+  try {
+    const result = await db.insert(projectGenesis).values(data);
+    const insertId = result[0].insertId;
+    const [newEntry] = await db.select().from(projectGenesis).where(eq(projectGenesis.id, insertId));
+    return newEntry;
+  } catch (error) {
+    console.error("[Database] Failed to create project genesis:", error);
+    throw error;
+  }
+}
+
+export async function getProjectGenesisRecords(userId: number): Promise<ProjectGenesisRecord[]> {
+  const db = await getDb();
+  if (!db) return [];
+
+  try {
+    return await db.select()
+      .from(projectGenesis)
+      .where(eq(projectGenesis.userId, userId))
+      .orderBy(desc(projectGenesis.updatedAt));
+  } catch (error) {
+    console.error("[Database] Failed to get project genesis records:", error);
+    return [];
+  }
+}
+
+export async function updateProjectGenesis(id: number, data: Partial<InsertProjectGenesis>): Promise<void> {
+  const db = await getDb();
+  if (!db) return;
+
+  try {
+    await db.update(projectGenesis).set(data).where(eq(projectGenesis.id, id));
+  } catch (error) {
+    console.error("[Database] Failed to update project genesis:", error);
+    throw error;
+  }
+}
+
+// ==================== USER SETTINGS ====================
+
+export async function getUserSettings(userId: number): Promise<UserSettings | null> {
+  const db = await getDb();
+  if (!db) return null;
+
+  try {
+    const [settings] = await db.select()
+      .from(userSettings)
+      .where(eq(userSettings.userId, userId))
+      .limit(1);
+    return settings || null;
+  } catch (error) {
+    console.error("[Database] Failed to get user settings:", error);
+    return null;
+  }
+}
+
+export async function upsertUserSettings(data: InsertUserSettings): Promise<UserSettings | null> {
+  const db = await getDb();
+  if (!db) return null;
+
+  try {
+    await db.insert(userSettings).values(data).onDuplicateKeyUpdate({
+      set: { ...data, updatedAt: new Date() },
+    });
+    return getUserSettings(data.userId);
+  } catch (error) {
+    console.error("[Database] Failed to upsert user settings:", error);
+    throw error;
+  }
+}
+
+// ==================== TRAINING DOCUMENTS ====================
+
+export async function createTrainingDocument(data: InsertTrainingDocument): Promise<TrainingDocument | null> {
+  const db = await getDb();
+  if (!db) return null;
+
+  try {
+    const result = await db.insert(trainingDocuments).values(data);
+    const insertId = result[0].insertId;
+    const [newEntry] = await db.select().from(trainingDocuments).where(eq(trainingDocuments.id, insertId));
+    return newEntry;
+  } catch (error) {
+    console.error("[Database] Failed to create training document:", error);
+    throw error;
+  }
+}
+
+export async function getTrainingDocuments(userId: number): Promise<TrainingDocument[]> {
+  const db = await getDb();
+  if (!db) return [];
+
+  try {
+    return await db.select()
+      .from(trainingDocuments)
+      .where(eq(trainingDocuments.userId, userId))
+      .orderBy(desc(trainingDocuments.createdAt));
+  } catch (error) {
+    console.error("[Database] Failed to get training documents:", error);
+    return [];
+  }
+}
+
+// ==================== MEMORY BANK ====================
+
+export async function createMemory(data: InsertMemoryBank): Promise<MemoryBank | null> {
+  const db = await getDb();
+  if (!db) return null;
+
+  try {
+    const result = await db.insert(memoryBank).values(data);
+    const insertId = result[0].insertId;
+    const [newEntry] = await db.select().from(memoryBank).where(eq(memoryBank.id, insertId));
+    return newEntry;
+  } catch (error) {
+    console.error("[Database] Failed to create memory:", error);
+    throw error;
+  }
+}
+
+export async function getMemories(userId: number, category?: string): Promise<MemoryBank[]> {
+  const db = await getDb();
+  if (!db) return [];
+
+  try {
+    const conditions = [eq(memoryBank.userId, userId)];
+    // Category filter would need type casting
+
+    return await db.select()
+      .from(memoryBank)
+      .where(and(...conditions))
+      .orderBy(desc(memoryBank.updatedAt));
+  } catch (error) {
+    console.error("[Database] Failed to get memories:", error);
+    return [];
+  }
+}
+
+export async function updateMemory(id: number, data: Partial<InsertMemoryBank>): Promise<void> {
+  const db = await getDb();
+  if (!db) return;
+
+  try {
+    await db.update(memoryBank).set({ ...data, lastAccessed: new Date() }).where(eq(memoryBank.id, id));
+  } catch (error) {
+    console.error("[Database] Failed to update memory:", error);
+  }
+}
+
+// ==================== DECISION PATTERNS ====================
+
+export async function recordDecision(data: InsertDecisionPattern): Promise<DecisionPattern | null> {
+  const db = await getDb();
+  if (!db) return null;
+
+  try {
+    const result = await db.insert(decisionPatterns).values(data);
+    const insertId = result[0].insertId;
+    const [newEntry] = await db.select().from(decisionPatterns).where(eq(decisionPatterns.id, insertId));
+    return newEntry;
+  } catch (error) {
+    console.error("[Database] Failed to record decision:", error);
+    throw error;
+  }
+}
+
+export async function getDecisionPatterns(userId: number, limit: number = 100): Promise<DecisionPattern[]> {
+  const db = await getDb();
+  if (!db) return [];
+
+  try {
+    return await db.select()
+      .from(decisionPatterns)
+      .where(eq(decisionPatterns.userId, userId))
+      .orderBy(desc(decisionPatterns.createdAt))
+      .limit(limit);
+  } catch (error) {
+    console.error("[Database] Failed to get decision patterns:", error);
+    return [];
+  }
+}
+
+// ==================== FEEDBACK HISTORY ====================
+
+export async function recordFeedback(data: InsertFeedbackHistory): Promise<FeedbackHistory | null> {
+  const db = await getDb();
+  if (!db) return null;
+
+  try {
+    const result = await db.insert(feedbackHistory).values(data);
+    const insertId = result[0].insertId;
+    const [newEntry] = await db.select().from(feedbackHistory).where(eq(feedbackHistory.id, insertId));
+    return newEntry;
+  } catch (error) {
+    console.error("[Database] Failed to record feedback:", error);
+    throw error;
+  }
+}
+
+export async function getFeedbackHistory(userId: number, options?: { expertId?: string; limit?: number }): Promise<FeedbackHistory[]> {
+  const db = await getDb();
+  if (!db) return [];
+
+  try {
+    const conditions = [eq(feedbackHistory.userId, userId)];
+    if (options?.expertId) {
+      conditions.push(eq(feedbackHistory.expertId, options.expertId));
+    }
+
+    return await db.select()
+      .from(feedbackHistory)
+      .where(and(...conditions))
+      .orderBy(desc(feedbackHistory.createdAt))
+      .limit(options?.limit || 100);
+  } catch (error) {
+    console.error("[Database] Failed to get feedback history:", error);
+    return [];
+  }
+}
+
+// ==================== TASKS ====================
+
+export async function createTask(data: InsertTask): Promise<Task | null> {
+  const db = await getDb();
+  if (!db) return null;
+
+  try {
+    const result = await db.insert(tasks).values(data);
+    const insertId = result[0].insertId;
+    const [newEntry] = await db.select().from(tasks).where(eq(tasks.id, insertId));
+    return newEntry;
+  } catch (error) {
+    console.error("[Database] Failed to create task:", error);
+    throw error;
+  }
+}
+
+export async function getTasks(userId: number, options?: { projectId?: number; status?: string; limit?: number }): Promise<Task[]> {
+  const db = await getDb();
+  if (!db) return [];
+
+  try {
+    const conditions = [eq(tasks.userId, userId)];
+    if (options?.projectId) {
+      conditions.push(eq(tasks.projectId, options.projectId));
+    }
+
+    return await db.select()
+      .from(tasks)
+      .where(and(...conditions))
+      .orderBy(desc(tasks.updatedAt))
+      .limit(options?.limit || 100);
+  } catch (error) {
+    console.error("[Database] Failed to get tasks:", error);
+    return [];
+  }
+}
+
+export async function updateTask(id: number, data: Partial<InsertTask>): Promise<void> {
+  const db = await getDb();
+  if (!db) return;
+
+  try {
+    await db.update(tasks).set(data).where(eq(tasks.id, id));
+  } catch (error) {
+    console.error("[Database] Failed to update task:", error);
+    throw error;
+  }
+}
+
+// ==================== UNIVERSAL INBOX ====================
+
+export async function createInboxItem(data: InsertUniversalInboxItem): Promise<UniversalInboxItem | null> {
+  const db = await getDb();
+  if (!db) return null;
+
+  try {
+    const result = await db.insert(universalInbox).values(data);
+    const insertId = result[0].insertId;
+    const [newEntry] = await db.select().from(universalInbox).where(eq(universalInbox.id, insertId));
+    return newEntry;
+  } catch (error) {
+    console.error("[Database] Failed to create inbox item:", error);
+    throw error;
+  }
+}
+
+export async function getInboxItems(userId: number, options?: { status?: string; limit?: number }): Promise<UniversalInboxItem[]> {
+  const db = await getDb();
+  if (!db) return [];
+
+  try {
+    const conditions = [eq(universalInbox.userId, userId)];
+
+    return await db.select()
+      .from(universalInbox)
+      .where(and(...conditions))
+      .orderBy(desc(universalInbox.receivedAt))
+      .limit(options?.limit || 100);
+  } catch (error) {
+    console.error("[Database] Failed to get inbox items:", error);
+    return [];
+  }
+}
+
+export async function updateInboxItem(id: number, data: Partial<InsertUniversalInboxItem>): Promise<void> {
+  const db = await getDb();
+  if (!db) return;
+
+  try {
+    await db.update(universalInbox).set(data).where(eq(universalInbox.id, id));
+  } catch (error) {
+    console.error("[Database] Failed to update inbox item:", error);
+    throw error;
+  }
+}
+
+// ==================== AUDIT LOG ====================
+
+export async function createAuditEntry(data: InsertAuditLog): Promise<void> {
+  const db = await getDb();
+  if (!db) return;
+
+  try {
+    await db.insert(auditLog).values(data);
+  } catch (error) {
+    console.error("[Database] Failed to create audit entry:", error);
+    // Don't throw - audit logging should not break main flow
+  }
+}
+
+export async function getAuditLog(userId: number, options?: { limit?: number; action?: string }): Promise<AuditLog[]> {
+  const db = await getDb();
+  if (!db) return [];
+
+  try {
+    const conditions = [eq(auditLog.userId, userId)];
+    if (options?.action) {
+      conditions.push(eq(auditLog.action, options.action));
+    }
+
+    return await db.select()
+      .from(auditLog)
+      .where(and(...conditions))
+      .orderBy(desc(auditLog.createdAt))
+      .limit(options?.limit || 100);
+  } catch (error) {
+    console.error("[Database] Failed to get audit log:", error);
+    return [];
+  }
+}

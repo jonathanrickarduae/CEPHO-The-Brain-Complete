@@ -18,6 +18,7 @@ import { useIsMobile } from "@/hooks/useMobile";
 import { PullToRefresh } from "@/components/PullToRefresh";
 import { GettingStartedChecklist, useOnboardingStatus } from "@/components/GettingStartedChecklist";
 import { InsightsPanel, InlineNudge, useNudgeEngine } from "@/components/IntelligentNudges";
+import { VoiceInterfaceToggle } from "@/components/VoiceInterfaceToggle";
 
 // Daily rotating quotes - one for each day
 const QUOTES = [
@@ -284,6 +285,9 @@ export default function Dashboard() {
               <span className="text-xs text-muted-foreground hidden sm:inline">Mood: {latestMood.mood}/10</span>
             </div>
           )}
+          
+          {/* Voice Interface Toggle */}
+          <VoiceInterfaceToggle />
           
           <div className="flex items-center gap-2 text-muted-foreground">
             <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></div>

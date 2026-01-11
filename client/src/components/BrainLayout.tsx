@@ -23,7 +23,7 @@ import { getLoginUrl } from "@/const";
 import { useIsMobile } from "@/hooks/useMobile";
 import { 
   LayoutDashboard, LogOut, PanelLeft, 
-  BookOpen, BarChart3, Lock, Fingerprint, Activity, Brain, Sun, Users, Moon, Keyboard, Settings, TrendingUp, Info, Clock, Sparkles, Rocket, Inbox, Search, Video
+  BookOpen, BarChart3, Lock, Fingerprint, Activity, Brain, Sun, Users, Moon, Keyboard, Settings, TrendingUp, Info, Clock, Sparkles, Rocket, Inbox, Search, Video, Bell
 } from "lucide-react";
 import { CSSProperties, useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
@@ -44,6 +44,7 @@ import { ChangelogModal, useChangelog, WhatsNewButton } from "./ChangelogModal";
 import { StatusPulse } from "./StatusPulse";
 import { GlobalSearch } from "./GlobalSearch";
 import NeonBrain from "./NeonBrain";
+import { NotificationBell } from "./NotificationCenter";
 
 const menuItems = [
   { icon: LayoutDashboard, label: "Command Center", path: "/dashboard", status: 'active' as const },
@@ -367,13 +368,16 @@ function BrainLayoutContent({
                 </span>
               </div>
             </div>
-            <button 
-              onClick={() => setShowGlobalSearch(true)}
-              className="flex items-center gap-2 px-3 py-1.5 text-sm text-gray-400 bg-white/5 rounded-lg hover:bg-white/10 transition-colors"
-            >
-              <Search className="w-4 h-4" />
-              <span className="hidden sm:inline">Search...</span>
-            </button>
+            <div className="flex items-center gap-2">
+              <button 
+                onClick={() => setShowGlobalSearch(true)}
+                className="flex items-center gap-2 px-3 py-1.5 text-sm text-gray-400 bg-white/5 rounded-lg hover:bg-white/10 transition-colors"
+              >
+                <Search className="w-4 h-4" />
+                <span className="hidden sm:inline">Search...</span>
+              </button>
+              <NotificationBell />
+            </div>
           </div>
         )}
         

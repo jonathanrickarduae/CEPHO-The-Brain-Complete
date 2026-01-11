@@ -43,6 +43,13 @@
       "when": 1768129991563,
       "tag": "0005_greedy_lady_mastermind",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1768140633800,
+      "tag": "0006_mysterious_blazing_skull",
+      "breakpoints": true
     }
   ]
 }

@@ -2,7 +2,22 @@ import { COOKIE_NAME } from "@shared/const";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, protectedProcedure, router } from "./_core/trpc";
-import { createMoodEntry, getMoodHistory, getMoodTrends, getLastMoodCheck, saveConversation, getConversationHistory, clearConversationHistory } from "./db";
+import { 
+  createMoodEntry, getMoodHistory, getMoodTrends, getLastMoodCheck, 
+  saveConversation, getConversationHistory, clearConversationHistory,
+  createIntegration, getIntegrations, updateIntegration, deleteIntegration,
+  createNotification, getNotifications, markNotificationRead, markAllNotificationsRead,
+  createProject, getProjects, updateProject,
+  createProjectGenesis, getProjectGenesisRecords, updateProjectGenesis,
+  getUserSettings, upsertUserSettings,
+  createTrainingDocument, getTrainingDocuments,
+  createMemory, getMemories, updateMemory,
+  recordDecision, getDecisionPatterns,
+  recordFeedback, getFeedbackHistory,
+  createTask, getTasks, updateTask,
+  createInboxItem, getInboxItems, updateInboxItem,
+  createAuditEntry, getAuditLog
+} from "./db";
 import { invokeLLM } from "./_core/llm";
 import { z } from "zod";
 
@@ -169,6 +184,455 @@ Always be direct and efficient. The user is busy and values their time.`;
     clear: protectedProcedure
       .mutation(async ({ ctx }) => {
         await clearConversationHistory(ctx.user.id);
+        return { success: true };
+      }),
+  }),
+
+  // Integrations API
+  integrations: router({
+    list: protectedProcedure.query(async ({ ctx }) => {
+      return getIntegrations(ctx.user.id);
+    }),
+
+    create: protectedProcedure
+      .input(z.object({
+        provider: z.string(),
+        providerAccountId: z.string().optional(),
+        accessToken: z.string().optional(),
+        refreshToken: z.string().optional(),
+        scopes: z.array(z.string()).optional(),
+        metadata: z.record(z.string(), z.any()).optional(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        return createIntegration({
+          userId: ctx.user.id,
+          provider: input.provider,
+          providerAccountId: input.providerAccountId,
+          accessToken: input.accessToken,
+          refreshToken: input.refreshToken,
+          scopes: input.scopes,
+          metadata: input.metadata,
+          status: 'active',
+        });
+      }),
+
+    update: protectedProcedure
+      .input(z.object({
+        id: z.number(),
+        status: z.enum(['active', 'expired', 'revoked', 'error']).optional(),
+        accessToken: z.string().optional(),
+        refreshToken: z.string().optional(),
+        syncError: z.string().optional(),
+      }))
+      .mutation(async ({ input }) => {
+        await updateIntegration(input.id, input);
+        return { success: true };
+      }),
+
+    delete: protectedProcedure
+      .input(z.object({ id: z.number() }))
+      .mutation(async ({ input }) => {
+        await deleteIntegration(input.id);
+        return { success: true };
+      }),
+  }),
+
+  // Notifications API
+  notifications: router({
+    list: protectedProcedure
+      .input(z.object({
+        unreadOnly: z.boolean().optional(),
+        limit: z.number().optional(),
+      }).optional())
+      .query(async ({ ctx, input }) => {
+        return getNotifications(ctx.user.id, input);
+      }),
+
+    markRead: protectedProcedure
+      .input(z.object({ id: z.number() }))
+      .mutation(async ({ input }) => {
+        await markNotificationRead(input.id);
+        return { success: true };
+      }),
+
+    markAllRead: protectedProcedure
+      .mutation(async ({ ctx }) => {
+        await markAllNotificationsRead(ctx.user.id);
+        return { success: true };
+      }),
+
+    create: protectedProcedure
+      .input(z.object({
+        type: z.enum(['info', 'success', 'warning', 'error', 'task_assigned', 'task_completed', 'project_update', 'integration_alert', 'security_alert', 'digital_twin', 'daily_brief', 'reminder', 'achievement']),
+        title: z.string(),
+        message: z.string(),
+        actionUrl: z.string().optional(),
+        actionLabel: z.string().optional(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        return createNotification({
+          userId: ctx.user.id,
+          ...input,
+        });
+      }),
+  }),
+
+  // Projects API
+  projects: router({
+    list: protectedProcedure
+      .input(z.object({
+        status: z.string().optional(),
+        limit: z.number().optional(),
+      }).optional())
+      .query(async ({ ctx, input }) => {
+        return getProjects(ctx.user.id, input);
+      }),
+
+    create: protectedProcedure
+      .input(z.object({
+        name: z.string(),
+        description: z.string().optional(),
+        priority: z.enum(['low', 'medium', 'high', 'critical']).optional(),
+        dueDate: z.date().optional(),
+        assignedExperts: z.array(z.string()).optional(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        return createProject({
+          userId: ctx.user.id,
+          name: input.name,
+          description: input.description,
+          priority: input.priority || 'medium',
+          dueDate: input.dueDate,
+          assignedExperts: input.assignedExperts,
+          status: 'not_started',
+          progress: 0,
+        });
+      }),
+
+    update: protectedProcedure
+      .input(z.object({
+        id: z.number(),
+        name: z.string().optional(),
+        description: z.string().optional(),
+        status: z.enum(['not_started', 'in_progress', 'blocked', 'review', 'complete']).optional(),
+        priority: z.enum(['low', 'medium', 'high', 'critical']).optional(),
+        progress: z.number().min(0).max(100).optional(),
+        blockerDescription: z.string().optional(),
+      }))
+      .mutation(async ({ input }) => {
+        const { id, ...data } = input;
+        await updateProject(id, data);
+        return { success: true };
+      }),
+  }),
+
+  // Project Genesis API
+  genesis: router({
+    list: protectedProcedure.query(async ({ ctx }) => {
+      return getProjectGenesisRecords(ctx.user.id);
+    }),
+
+    create: protectedProcedure
+      .input(z.object({
+        name: z.string(),
+        type: z.enum(['investment', 'partnership', 'acquisition', 'joint_venture', 'other']),
+        counterparty: z.string().optional(),
+        dealValue: z.number().optional(),
+        currency: z.string().optional(),
+        description: z.string().optional(),
+        expectedCloseDate: z.date().optional(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        return createProjectGenesis({
+          userId: ctx.user.id,
+          name: input.name,
+          type: input.type,
+          counterparty: input.counterparty,
+          dealValue: input.dealValue,
+          currency: input.currency || 'USD',
+          description: input.description,
+          expectedCloseDate: input.expectedCloseDate,
+          stage: 'discovery',
+          status: 'active',
+          probability: 50,
+        });
+      }),
+
+    update: protectedProcedure
+      .input(z.object({
+        id: z.number(),
+        stage: z.enum(['discovery', 'qualification', 'due_diligence', 'negotiation', 'documentation', 'closing', 'post_deal']).optional(),
+        status: z.enum(['active', 'on_hold', 'won', 'lost', 'abandoned']).optional(),
+        probability: z.number().min(0).max(100).optional(),
+        notes: z.string().optional(),
+      }))
+      .mutation(async ({ input }) => {
+        const { id, ...data } = input;
+        await updateProjectGenesis(id, data);
+        return { success: true };
+      }),
+  }),
+
+  // User Settings API
+  settings: router({
+    get: protectedProcedure.query(async ({ ctx }) => {
+      return getUserSettings(ctx.user.id);
+    }),
+
+    update: protectedProcedure
+      .input(z.object({
+        theme: z.enum(['light', 'dark', 'mix']).optional(),
+        governanceMode: z.enum(['omni', 'governed']).optional(),
+        dailyBriefTime: z.string().optional(),
+        eveningReviewTime: z.string().optional(),
+        twinAutonomyLevel: z.number().min(1).max(10).optional(),
+        notificationsEnabled: z.boolean().optional(),
+        sidebarCollapsed: z.boolean().optional(),
+        onboardingComplete: z.boolean().optional(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        return upsertUserSettings({
+          userId: ctx.user.id,
+          ...input,
+        });
+      }),
+  }),
+
+  // Training Documents API
+  training: router({
+    documents: protectedProcedure.query(async ({ ctx }) => {
+      return getTrainingDocuments(ctx.user.id);
+    }),
+
+    upload: protectedProcedure
+      .input(z.object({
+        name: z.string(),
+        type: z.enum(['document', 'conversation', 'preference', 'memory']),
+        content: z.string().optional(),
+        fileUrl: z.string().optional(),
+        fileSize: z.number().optional(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        return createTrainingDocument({
+          userId: ctx.user.id,
+          name: input.name,
+          type: input.type,
+          content: input.content,
+          fileUrl: input.fileUrl,
+          fileSize: input.fileSize,
+          processed: false,
+        });
+      }),
+  }),
+
+  // Memory Bank API
+  memory: router({
+    list: protectedProcedure
+      .input(z.object({ category: z.string().optional() }).optional())
+      .query(async ({ ctx, input }) => {
+        return getMemories(ctx.user.id, input?.category);
+      }),
+
+    create: protectedProcedure
+      .input(z.object({
+        category: z.enum(['personal', 'work', 'preference', 'relationship', 'fact']),
+        key: z.string(),
+        value: z.string(),
+        confidence: z.number().optional(),
+        source: z.string().optional(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        return createMemory({
+          userId: ctx.user.id,
+          ...input,
+        });
+      }),
+
+    update: protectedProcedure
+      .input(z.object({
+        id: z.number(),
+        value: z.string().optional(),
+        confidence: z.number().optional(),
+      }))
+      .mutation(async ({ input }) => {
+        const { id, ...data } = input;
+        await updateMemory(id, data);
+        return { success: true };
+      }),
+  }),
+
+  // Decision Patterns API
+  decisions: router({
+    list: protectedProcedure
+      .input(z.object({ limit: z.number().optional() }).optional())
+      .query(async ({ ctx, input }) => {
+        return getDecisionPatterns(ctx.user.id, input?.limit);
+      }),
+
+    record: protectedProcedure
+      .input(z.object({
+        decisionType: z.string(),
+        itemType: z.string(),
+        itemDescription: z.string().optional(),
+        context: z.string().optional(),
+        timeOfDay: z.string().optional(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        return recordDecision({
+          userId: ctx.user.id,
+          ...input,
+        });
+      }),
+  }),
+
+  // Feedback API
+  feedback: router({
+    list: protectedProcedure
+      .input(z.object({
+        expertId: z.string().optional(),
+        limit: z.number().optional(),
+      }).optional())
+      .query(async ({ ctx, input }) => {
+        return getFeedbackHistory(ctx.user.id, input);
+      }),
+
+    record: protectedProcedure
+      .input(z.object({
+        expertId: z.string().optional(),
+        projectId: z.string().optional(),
+        rating: z.number().min(1).max(5).optional(),
+        feedbackType: z.enum(['positive', 'negative', 'neutral', 'correction']),
+        feedbackText: z.string().optional(),
+        originalOutput: z.string().optional(),
+        correctedOutput: z.string().optional(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        return recordFeedback({
+          userId: ctx.user.id,
+          ...input,
+        });
+      }),
+  }),
+
+  // Tasks API
+  tasks: router({
+    list: protectedProcedure
+      .input(z.object({
+        projectId: z.number().optional(),
+        status: z.string().optional(),
+        limit: z.number().optional(),
+      }).optional())
+      .query(async ({ ctx, input }) => {
+        return getTasks(ctx.user.id, input);
+      }),
+
+    create: protectedProcedure
+      .input(z.object({
+        title: z.string(),
+        description: z.string().optional(),
+        projectId: z.number().optional(),
+        priority: z.enum(['low', 'medium', 'high', 'critical']).optional(),
+        dueDate: z.date().optional(),
+        assignedTo: z.string().optional(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        return createTask({
+          userId: ctx.user.id,
+          title: input.title,
+          description: input.description,
+          projectId: input.projectId,
+          priority: input.priority || 'medium',
+          dueDate: input.dueDate,
+          assignedTo: input.assignedTo,
+          status: 'not_started',
+        });
+      }),
+
+    update: protectedProcedure
+      .input(z.object({
+        id: z.number(),
+        title: z.string().optional(),
+        description: z.string().optional(),
+        status: z.enum(['not_started', 'in_progress', 'blocked', 'review', 'completed', 'cancelled']).optional(),
+        priority: z.enum(['low', 'medium', 'high', 'critical']).optional(),
+        blockerDescription: z.string().optional(),
+        completedAt: z.date().optional(),
+      }))
+      .mutation(async ({ input }) => {
+        const { id, ...data } = input;
+        await updateTask(id, data);
+        return { success: true };
+      }),
+  }),
+
+  // Universal Inbox API
+  inbox: router({
+    list: protectedProcedure
+      .input(z.object({
+        status: z.string().optional(),
+        limit: z.number().optional(),
+      }).optional())
+      .query(async ({ ctx, input }) => {
+        return getInboxItems(ctx.user.id, input);
+      }),
+
+    create: protectedProcedure
+      .input(z.object({
+        source: z.enum(['email', 'document', 'voice_note', 'whatsapp', 'slack', 'asana', 'calendar', 'manual', 'webhook']),
+        type: z.enum(['email', 'document', 'task', 'meeting', 'note', 'attachment', 'message', 'reminder', 'other']),
+        title: z.string(),
+        preview: z.string().optional(),
+        content: z.string().optional(),
+        sender: z.string().optional(),
+        priority: z.enum(['low', 'medium', 'high', 'urgent']).optional(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        return createInboxItem({
+          userId: ctx.user.id,
+          ...input,
+          status: 'unread',
+        });
+      }),
+
+    update: protectedProcedure
+      .input(z.object({
+        id: z.number(),
+        status: z.enum(['unread', 'read', 'processing', 'processed', 'archived', 'deleted', 'action_required']).optional(),
+        processedBy: z.string().optional(),
+        processedResult: z.string().optional(),
+      }))
+      .mutation(async ({ input }) => {
+        const { id, ...data } = input;
+        await updateInboxItem(id, data);
+        return { success: true };
+      }),
+  }),
+
+  // Audit Log API
+  audit: router({
+    list: protectedProcedure
+      .input(z.object({
+        action: z.string().optional(),
+        limit: z.number().optional(),
+      }).optional())
+      .query(async ({ ctx, input }) => {
+        return getAuditLog(ctx.user.id, input);
+      }),
+
+    log: protectedProcedure
+      .input(z.object({
+        action: z.string(),
+        resource: z.string().optional(),
+        resourceId: z.string().optional(),
+        details: z.record(z.string(), z.any()).optional(),
+        success: z.boolean().optional(),
+        errorMessage: z.string().optional(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        await createAuditEntry({
+          userId: ctx.user.id,
+          ...input,
+        });
         return { success: true };
       }),
   }),

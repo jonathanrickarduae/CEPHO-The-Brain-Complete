@@ -638,3 +638,367 @@ export const vaultSessions = mysqlTable("vault_sessions", {
 
 export type VaultSession = typeof vaultSessions.$inferSelect;
 export type InsertVaultSession = typeof vaultSessions.$inferInsert;
+
+// ==================== INTEGRATIONS ====================
+
+/**
+ * External integrations - OAuth connections to third-party services
+ */
+export const integrations = mysqlTable("integrations", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  provider: varchar("provider", { length: 50 }).notNull(), // "asana", "google", "outlook", "slack", etc.
+  providerAccountId: varchar("providerAccountId", { length: 200 }), // External account ID
+  accessToken: text("accessToken"), // Encrypted
+  refreshToken: text("refreshToken"), // Encrypted
+  tokenExpiresAt: timestamp("tokenExpiresAt"),
+  scopes: json("scopes"), // Array of granted scopes
+  status: mysqlEnum("status", ["active", "expired", "revoked", "error"]).default("active").notNull(),
+  lastSyncAt: timestamp("lastSyncAt"),
+  syncError: text("syncError"),
+  metadata: json("metadata"), // Provider-specific data
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type Integration = typeof integrations.$inferSelect;
+export type InsertIntegration = typeof integrations.$inferInsert;
+
+/**
+ * Notifications - in-app notification system
+ */
+export const notifications = mysqlTable("notifications", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  type: mysqlEnum("type", [
+    "info", "success", "warning", "error",
+    "task_assigned", "task_completed", "project_update",
+    "integration_alert", "security_alert", "digital_twin",
+    "daily_brief", "reminder", "achievement"
+  ]).notNull(),
+  title: varchar("title", { length: 200 }).notNull(),
+  message: text("message").notNull(),
+  actionUrl: varchar("actionUrl", { length: 500 }), // Link to relevant page
+  actionLabel: varchar("actionLabel", { length: 100 }), // Button text
+  read: boolean("read").default(false),
+  readAt: timestamp("readAt"),
+  metadata: json("metadata"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type Notification = typeof notifications.$inferSelect;
+export type InsertNotification = typeof notifications.$inferInsert;
+
+/**
+ * Audit log - comprehensive activity tracking
+ */
+export const auditLog = mysqlTable("audit_log", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId"),
+  action: varchar("action", { length: 100 }).notNull(), // "login", "create_project", "update_settings", etc.
+  resource: varchar("resource", { length: 100 }), // "project", "document", "integration", etc.
+  resourceId: varchar("resourceId", { length: 100 }),
+  details: json("details"), // Action-specific data
+  ipAddress: varchar("ipAddress", { length: 45 }),
+  userAgent: text("userAgent"),
+  success: boolean("success").default(true),
+  errorMessage: text("errorMessage"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type AuditLog = typeof auditLog.$inferSelect;
+export type InsertAuditLog = typeof auditLog.$inferInsert;
+
+/**
+ * Subscriptions - SaaS subscription tracking
+ */
+export const subscriptions = mysqlTable("subscriptions", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  name: varchar("name", { length: 200 }).notNull(), // "Asana", "Slack", "Zoom", etc.
+  category: varchar("category", { length: 100 }), // "productivity", "communication", "storage", etc.
+  cost: float("cost"), // Monthly cost in USD
+  billingCycle: mysqlEnum("billingCycle", ["monthly", "annual", "one_time"]).default("monthly"),
+  renewalDate: timestamp("renewalDate"),
+  status: mysqlEnum("status", ["active", "cancelled", "paused", "trial"]).default("active"),
+  usagePercent: int("usagePercent"), // 0-100, how much of the subscription is used
+  notes: text("notes"),
+  metadata: json("metadata"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type Subscription = typeof subscriptions.$inferSelect;
+export type InsertSubscription = typeof subscriptions.$inferInsert;
+
+/**
+ * Project Genesis - new opportunity/deal tracking
+ */
+export const projectGenesis = mysqlTable("project_genesis", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  name: varchar("name", { length: 300 }).notNull(),
+  type: mysqlEnum("type", ["investment", "partnership", "acquisition", "joint_venture", "other"]).notNull(),
+  stage: mysqlEnum("stage", [
+    "discovery", "qualification", "due_diligence", 
+    "negotiation", "documentation", "closing", "post_deal"
+  ]).default("discovery").notNull(),
+  status: mysqlEnum("status", ["active", "on_hold", "won", "lost", "abandoned"]).default("active").notNull(),
+  counterparty: varchar("counterparty", { length: 300 }),
+  dealValue: float("dealValue"),
+  currency: varchar("currency", { length: 3 }).default("USD"),
+  probability: int("probability").default(50), // 0-100
+  expectedCloseDate: timestamp("expectedCloseDate"),
+  description: text("description"),
+  keyContacts: json("keyContacts"), // Array of contact info
+  documents: json("documents"), // Array of document references
+  tasks: json("tasks"), // Array of task IDs
+  notes: text("notes"),
+  metadata: json("metadata"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type ProjectGenesisRecord = typeof projectGenesis.$inferSelect;
+export type InsertProjectGenesis = typeof projectGenesis.$inferInsert;
+
+/**
+ * Universal Inbox - centralized intake for all incoming items
+ */
+export const universalInbox = mysqlTable("universal_inbox", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  source: mysqlEnum("source", [
+    "email", "document", "voice_note", "whatsapp", 
+    "slack", "asana", "calendar", "manual", "webhook"
+  ]).notNull(),
+  sourceId: varchar("sourceId", { length: 200 }), // External ID from source
+  type: mysqlEnum("type", [
+    "email", "document", "task", "meeting", "note", 
+    "attachment", "message", "reminder", "other"
+  ]).notNull(),
+  title: varchar("title", { length: 500 }).notNull(),
+  preview: text("preview"), // First 500 chars or summary
+  content: text("content"), // Full content
+  sender: varchar("sender", { length: 300 }),
+  priority: mysqlEnum("priority", ["low", "medium", "high", "urgent"]).default("medium"),
+  status: mysqlEnum("status", [
+    "unread", "read", "processing", "processed", 
+    "archived", "deleted", "action_required"
+  ]).default("unread").notNull(),
+  processedBy: varchar("processedBy", { length: 100 }), // "digital_twin", "ai_expert", "user"
+  processedResult: text("processedResult"),
+  attachments: json("attachments"), // Array of attachment URLs
+  metadata: json("metadata"),
+  receivedAt: timestamp("receivedAt").defaultNow().notNull(),
+  processedAt: timestamp("processedAt"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type UniversalInboxItem = typeof universalInbox.$inferSelect;
+export type InsertUniversalInboxItem = typeof universalInbox.$inferInsert;
+
+/**
+ * Brand Kit - company branding assets
+ */
+export const brandKit = mysqlTable("brand_kit", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  companyName: varchar("companyName", { length: 200 }).notNull(),
+  isDefault: boolean("isDefault").default(false),
+  logoUrl: text("logoUrl"),
+  logoLightUrl: text("logoLightUrl"), // For dark backgrounds
+  primaryColor: varchar("primaryColor", { length: 20 }),
+  secondaryColor: varchar("secondaryColor", { length: 20 }),
+  accentColor: varchar("accentColor", { length: 20 }),
+  fontFamily: varchar("fontFamily", { length: 100 }),
+  tagline: varchar("tagline", { length: 500 }),
+  description: text("description"),
+  website: varchar("website", { length: 500 }),
+  socialLinks: json("socialLinks"), // { linkedin, twitter, etc. }
+  templates: json("templates"), // Document template settings
+  metadata: json("metadata"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type BrandKitRecord = typeof brandKit.$inferSelect;
+export type InsertBrandKit = typeof brandKit.$inferInsert;
+
+/**
+ * Signatures - stored signatures for document signing
+ */
+export const signatures = mysqlTable("signatures", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  name: varchar("name", { length: 200 }).notNull(), // "Main Signature", "Initials", etc.
+  type: mysqlEnum("type", ["drawn", "typed", "uploaded"]).notNull(),
+  imageUrl: text("imageUrl").notNull(), // S3 URL of signature image
+  fontFamily: varchar("fontFamily", { length: 100 }), // For typed signatures
+  isDefault: boolean("isDefault").default(false),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type Signature = typeof signatures.$inferSelect;
+export type InsertSignature = typeof signatures.$inferInsert;
+
+/**
+ * AI Provider settings - API keys and routing preferences
+ */
+export const aiProviderSettings = mysqlTable("ai_provider_settings", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  provider: varchar("provider", { length: 50 }).notNull(), // "openai", "anthropic", "perplexity", etc.
+  apiKey: text("apiKey"), // Encrypted
+  isEnabled: boolean("isEnabled").default(true),
+  priority: int("priority").default(1), // Lower = higher priority
+  usageLimit: int("usageLimit"), // Monthly token limit
+  currentUsage: int("currentUsage").default(0),
+  domains: json("domains"), // Array of domains this provider handles
+  metadata: json("metadata"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type AIProviderSetting = typeof aiProviderSettings.$inferSelect;
+export type InsertAIProviderSetting = typeof aiProviderSettings.$inferInsert;
+
+/**
+ * Reminders - scheduled reminders and follow-ups
+ */
+export const reminders = mysqlTable("reminders", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  title: varchar("title", { length: 300 }).notNull(),
+  description: text("description"),
+  dueAt: timestamp("dueAt").notNull(),
+  repeatType: mysqlEnum("repeatType", ["none", "daily", "weekly", "monthly", "custom"]).default("none"),
+  repeatInterval: int("repeatInterval"), // For custom repeats
+  status: mysqlEnum("status", ["pending", "triggered", "snoozed", "completed", "cancelled"]).default("pending"),
+  snoozedUntil: timestamp("snoozedUntil"),
+  relatedType: varchar("relatedType", { length: 50 }), // "project", "task", "inbox_item", etc.
+  relatedId: int("relatedId"),
+  notificationSent: boolean("notificationSent").default(false),
+  metadata: json("metadata"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type Reminder = typeof reminders.$inferSelect;
+export type InsertReminder = typeof reminders.$inferInsert;
+
+/**
+ * Tasks - granular task tracking within projects
+ */
+export const tasks = mysqlTable("tasks", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  projectId: int("projectId"),
+  parentTaskId: int("parentTaskId"), // For subtasks
+  title: varchar("title", { length: 500 }).notNull(),
+  description: text("description"),
+  status: mysqlEnum("status", [
+    "not_started", "in_progress", "blocked", 
+    "review", "completed", "cancelled"
+  ]).default("not_started").notNull(),
+  priority: mysqlEnum("priority", ["low", "medium", "high", "critical"]).default("medium"),
+  dueDate: timestamp("dueDate"),
+  estimatedHours: float("estimatedHours"),
+  actualHours: float("actualHours"),
+  assignedTo: varchar("assignedTo", { length: 100 }), // "digital_twin", expert ID, or "user"
+  dependencies: json("dependencies"), // Array of task IDs this depends on
+  blockerDescription: text("blockerDescription"),
+  completedAt: timestamp("completedAt"),
+  metadata: json("metadata"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type Task = typeof tasks.$inferSelect;
+export type InsertTask = typeof tasks.$inferInsert;
+
+/**
+ * Activity feed - project and system activity
+ */
+export const activityFeed = mysqlTable("activity_feed", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  projectId: int("projectId"),
+  actorType: mysqlEnum("actorType", ["user", "digital_twin", "ai_expert", "system"]).notNull(),
+  actorId: varchar("actorId", { length: 100 }), // Expert ID or "system"
+  actorName: varchar("actorName", { length: 200 }),
+  action: varchar("action", { length: 100 }).notNull(), // "created", "updated", "completed", etc.
+  targetType: varchar("targetType", { length: 50 }), // "task", "document", "project", etc.
+  targetId: int("targetId"),
+  targetName: varchar("targetName", { length: 300 }),
+  description: text("description"),
+  metadata: json("metadata"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type ActivityFeedItem = typeof activityFeed.$inferSelect;
+export type InsertActivityFeedItem = typeof activityFeed.$inferInsert;
+
+/**
+ * Data retention policies - compliance tracking
+ */
+export const dataRetentionPolicies = mysqlTable("data_retention_policies", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  dataType: varchar("dataType", { length: 100 }).notNull(), // "conversations", "documents", "audit_logs", etc.
+  retentionDays: int("retentionDays").notNull(),
+  autoDelete: boolean("autoDelete").default(false),
+  lastPurgeAt: timestamp("lastPurgeAt"),
+  nextPurgeAt: timestamp("nextPurgeAt"),
+  itemsDeleted: int("itemsDeleted").default(0),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type DataRetentionPolicy = typeof dataRetentionPolicies.$inferSelect;
+export type InsertDataRetentionPolicy = typeof dataRetentionPolicies.$inferInsert;
+
+/**
+ * PII detection log - flagged sensitive data
+ */
+export const piiDetectionLog = mysqlTable("pii_detection_log", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  sourceType: varchar("sourceType", { length: 50 }).notNull(), // "document", "conversation", "inbox", etc.
+  sourceId: int("sourceId").notNull(),
+  piiType: varchar("piiType", { length: 50 }).notNull(), // "email", "phone", "ssn", "credit_card", etc.
+  detectedText: text("detectedText"), // The flagged content (may be redacted)
+  confidence: float("confidence"), // 0-1 confidence score
+  status: mysqlEnum("status", ["detected", "reviewed", "false_positive", "redacted"]).default("detected"),
+  reviewedBy: varchar("reviewedBy", { length: 100 }),
+  reviewedAt: timestamp("reviewedAt"),
+  metadata: json("metadata"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type PIIDetectionLog = typeof piiDetectionLog.$inferSelect;
+export type InsertPIIDetectionLog = typeof piiDetectionLog.$inferInsert;
+
+/**
+ * Compliance checklists - project-specific compliance tracking
+ */
+export const complianceChecklists = mysqlTable("compliance_checklists", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  projectId: int("projectId"),
+  projectType: varchar("projectType", { length: 100 }).notNull(), // "investment", "partnership", etc.
+  checklistName: varchar("checklistName", { length: 200 }).notNull(),
+  items: json("items").notNull(), // Array of { id, title, required, completed, completedAt, notes }
+  completedCount: int("completedCount").default(0),
+  totalCount: int("totalCount").notNull(),
+  status: mysqlEnum("status", ["not_started", "in_progress", "completed", "blocked"]).default("not_started"),
+  dueDate: timestamp("dueDate"),
+  completedAt: timestamp("completedAt"),
+  metadata: json("metadata"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type ComplianceChecklist = typeof complianceChecklists.$inferSelect;
+export type InsertComplianceChecklist = typeof complianceChecklists.$inferInsert;
