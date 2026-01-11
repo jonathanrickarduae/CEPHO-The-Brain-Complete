@@ -129,7 +129,7 @@ export default function Landing() {
             exit={{ opacity: 0, scale: 1.1 }}
             className="z-10 flex flex-col items-center text-center"
           >
-            <NeonBrain className="w-48 h-48 md:w-64 md:h-64 mb-6" state="idle" />
+            <NeonBrain size="xl" className="w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 mb-8" state="thinking" />
             
             <h1 className="font-display font-bold text-5xl md:text-7xl tracking-wider text-transparent bg-clip-text bg-gradient-to-b from-white to-white/50 neon-text">
               THE BRAIN
@@ -150,7 +150,7 @@ export default function Landing() {
             exit={{ opacity: 0, scale: 1.1 }}
             className="z-10 flex flex-col items-center text-center max-w-xl px-6 w-full"
           >
-            <NeonBrain className="w-32 h-32 md:w-48 md:h-48 mb-6" mood={mood[0]} state="thinking" />
+            <NeonBrain size="lg" className="w-48 h-48 md:w-56 md:h-56 mb-6" mood={mood[0]} state="thinking" />
             
             <h2 className="font-display font-bold text-3xl md:text-4xl mb-2">How are you feeling?</h2>
             <p className="text-muted-foreground mb-8 text-sm">Quick check-in to calibrate your day</p>

@@ -459,3 +459,36 @@
 - [x] Explain Digital Twin and how it learns
 - [x] Explain AI Experts and their role
 - [x] Add to sidebar navigation
+
+
+## UX Improvements - Quick Wins
+
+- [x] Disable onboarding modal for returning users (localStorage flag) - already implemented via useOnboarding hook
+- [x] Move input field to top of Dashboard for immediate action
+- [x] Create mobile bottom sheet for quick task entry
+
+
+## UX Improvements - Animation & Audit
+
+- [x] NeonBrain: Always animate nodes/particles (never static)
+- [x] NeonBrain: Made larger across all pages (Landing, About)
+- [ ] Comprehensive UX audit of all recent additions
+- [ ] Identify and fix UX inconsistencies
+
+
+## UX Audit - Recent Additions
+
+### Issues Identified & Fixed
+- [x] NeonBrain animation: Made always-active with continuous particle flow
+- [x] NeonBrain size: Increased across Landing, About pages
+- [x] Mobile input: Created bottom sheet for easier task capture
+- [x] Dashboard input: Moved to top for immediate action
+- [x] Landing flow: Auto-proceed after splash, no manual "Enter" button
+
+### Remaining UX Improvements
+- [ ] Sidebar: Add visual indicator for current active page
+- [ ] Mobile: Ensure all modals are swipe-to-dismiss
+- [ ] Loading states: Add skeleton loaders to Commercialization page
+- [ ] Empty states: Add to Training Studio, Agent Builder
+- [ ] Consistency: Standardize card border radius across all pages
+- [ ] Touch targets: Ensure all buttons are at least 44px on mobile
