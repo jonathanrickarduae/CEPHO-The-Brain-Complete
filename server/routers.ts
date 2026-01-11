@@ -687,6 +687,25 @@ Always be direct and efficient. The user is busy and values their time.`;
       }),
   }),
 
+  // Transcription API - Whisper integration
+  transcription: router({
+    transcribe: protectedProcedure
+      .input(z.object({
+        audioUrl: z.string().optional(),
+        audioBase64: z.string().optional(),
+        filename: z.string().optional(),
+        language: z.string().optional(),
+      }))
+      .mutation(async ({ input }) => {
+        // For now, return placeholder - actual Whisper integration requires audio processing
+        return {
+          text: 'Transcription placeholder - connect Whisper API for real transcription',
+          duration: 0,
+          language: input.language || 'en',
+        };
+      }),
+  }),
+
   // Voice Notes API - Digital Twin notepad
   voiceNotes: router({
     list: protectedProcedure

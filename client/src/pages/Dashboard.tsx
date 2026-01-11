@@ -19,6 +19,7 @@ import { PullToRefresh } from "@/components/PullToRefresh";
 import { GettingStartedChecklist, useOnboardingStatus } from "@/components/GettingStartedChecklist";
 import { InsightsPanel, InlineNudge, useNudgeEngine } from "@/components/IntelligentNudges";
 import { VoiceInterfaceToggle } from "@/components/VoiceInterfaceToggle";
+import { FloatingVoiceNoteButton } from "@/components/VoiceNotepad";
 
 // Daily rotating quotes - one for each day
 const QUOTES = [
@@ -174,6 +175,7 @@ export default function Dashboard() {
   };
 
   return (
+    <>
     <PullToRefresh onRefresh={handleRefresh} disabled={!isMobile}>
     <div className="h-full flex flex-col p-4 md:p-6 overflow-hidden">
       
@@ -411,5 +413,9 @@ export default function Dashboard() {
       </div>
     </div>
     </PullToRefresh>
+    
+    {/* Floating Voice Note Button */}
+    <FloatingVoiceNoteButton />
+    </>
   );
 }

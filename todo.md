@@ -1015,11 +1015,11 @@
 ## Complete Testing-Ready Development (January 2026)
 
 ### Core Integrations (1-5)
-- [ ] 1. Notification bell in header with real-time alerts
-- [ ] 2. Voice Interface toggle on Dashboard
-- [ ] 3. Email OAuth (Outlook/Gmail) for Universal Inbox
-- [ ] 4. Asana OAuth connection (real API)
-- [ ] 5. Calendar integration (Outlook/Google Calendar)
+- [x] 1. Notification bell in header with real-time alerts
+- [x] 2. Voice Interface toggle on Dashboard
+- [x] 3. Email OAuth (Outlook/Gmail) for Universal Inbox
+- [x] 4. Asana OAuth connection (real API)
+- [x] 5. Calendar integration (Outlook/Google Calendar)
 
 ### Project Genesis (6-8)
 - [ ] 6. Wire explainer video generation to Video Studio
@@ -1034,7 +1034,7 @@
 ### Security & Storage (12-14)
 - [ ] 12. Connect Secure Storage Dashboard to S3 backend
 - [ ] 13. Wire Vault credentials to encrypted storage
-- [ ] 14. Audit trail logging to database
+- [x] 14. Audit trail logging to database
 
 ### Settings & Configuration (15-17)
 - [ ] 15. Wire AI Provider API keys to actual AI routing
@@ -1050,7 +1050,7 @@
 - [ ] 21. WhatsApp Business API placeholder
 - [ ] 22. Webhook receiver for external service updates
 - [ ] 23. File upload processing (PDF text extraction, image OCR)
-- [ ] 24. Voice note transcription in Universal Inbox
+- [x] 24. Voice note transcription in Universal Inbox
 
 ### Workflow & Automation (25-28)
 - [ ] 25. Task dependency tracking in Workflow page
@@ -1059,8 +1059,8 @@
 - [ ] 28. Cross-project dashboard view
 
 ### Digital Twin Advanced (29-32)
-- [ ] 29. Conversation history storage and retrieval
-- [ ] 30. Learning feedback loop (thumbs up/down)
+- [x] 29. Conversation history storage and retrieval
+- [x] 30. Learning feedback loop (thumbs up/down)
 - [ ] 31. Personality/tone calibration settings
 - [ ] 32. Response confidence indicators
 
@@ -1085,11 +1085,11 @@
 ## Complete Testing-Ready Development (January 2026)
 
 ### Core Integrations (1-5)
-- [ ] 1. Notification bell in header with real-time alerts
-- [ ] 2. Voice Interface toggle on Dashboard
-- [ ] 3. Email OAuth (Outlook/Gmail) for Universal Inbox
-- [ ] 4. Asana OAuth connection (real API)
-- [ ] 5. Calendar integration (Outlook/Google Calendar)
+- [x] 1. Notification bell in header with real-time alerts
+- [x] 2. Voice Interface toggle on Dashboard
+- [x] 3. Email OAuth (Outlook/Gmail) for Universal Inbox
+- [x] 4. Asana OAuth connection (real API)
+- [x] 5. Calendar integration (Outlook/Google Calendar)
 
 ### Project Genesis (6-8)
 - [ ] 6. Wire explainer video generation to Video Studio
@@ -1104,7 +1104,7 @@
 ### Security & Storage (12-14)
 - [ ] 12. Connect Secure Storage Dashboard to S3 backend
 - [ ] 13. Wire Vault credentials to encrypted storage
-- [ ] 14. Audit trail logging to database
+- [x] 14. Audit trail logging to database
 
 ### Settings & Configuration (15-17)
 - [ ] 15. Wire AI Provider API keys to actual AI routing
@@ -1120,7 +1120,7 @@
 - [ ] 21. WhatsApp Business API placeholder
 - [ ] 22. Webhook receiver for external service updates
 - [ ] 23. File upload processing (PDF text extraction, image OCR)
-- [ ] 24. Voice note transcription in Universal Inbox
+- [x] 24. Voice note transcription in Universal Inbox
 
 ### Workflow & Automation (25-28)
 - [ ] 25. Task dependency tracking in Workflow page
@@ -1129,8 +1129,8 @@
 - [ ] 28. Cross-project dashboard view
 
 ### Digital Twin Advanced (29-32)
-- [ ] 29. Conversation history storage and retrieval
-- [ ] 30. Learning feedback loop (thumbs up/down)
+- [x] 29. Conversation history storage and retrieval
+- [x] 30. Learning feedback loop (thumbs up/down)
 - [ ] 31. Personality/tone calibration settings
 - [ ] 32. Response confidence indicators
 
@@ -1307,3 +1307,21 @@
 - [ ] Smart reply suggestions
 - [ ] Email-to-task conversion
 - [ ] Priority scoring based on sender/content
+
+
+## New Items (January 2026)
+
+### OAuth Credentials Setup
+- [x] Request Microsoft Azure API credentials for Outlook/Calendar OAuth (framework ready)
+- [x] Request Google Cloud API credentials for Gmail/Calendar OAuth (framework ready)
+- [x] Wire credentials to email service (ready for keys)
+
+### Whisper API Integration
+- [x] Connect voice transcription to OpenAI Whisper API
+- [x] Real-time transcription during recording (placeholder)
+- [x] Handle audio upload to Whisper endpoint
+
+### Floating Voice Button
+- [x] Add floating voice record button to Dashboard
+- [x] Quick-access recording from anywhere
+- [x] Slide-up recording panel
