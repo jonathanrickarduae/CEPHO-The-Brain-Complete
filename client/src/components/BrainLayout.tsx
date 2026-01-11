@@ -37,7 +37,8 @@ import { useMoodCheck } from "@/hooks/useMoodCheck";
 import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
 import { OnboardingModal, useOnboarding } from "./Onboarding";
 import { AccessibilitySettings, SkipLink } from "./AccessibilitySettings";
-import { Accessibility } from "lucide-react";
+import { Accessibility, Command } from "lucide-react";
+import { CommandPalette, useCommandPalette } from "./CommandPalette";
 
 const menuItems = [
   { icon: LayoutDashboard, label: "Command Center", path: "/dashboard" },
@@ -149,6 +150,7 @@ function BrainLayoutContent({
   
   // Keyboard shortcuts
   const keyboardHelp = useKeyboardShortcutsHelp();
+  const commandPalette = useCommandPalette();
   useKeyboardShortcuts([
     { key: '?', shift: true, action: keyboardHelp.toggle, description: 'Show keyboard shortcuts' },
   ]);
@@ -366,6 +368,12 @@ function BrainLayoutContent({
       <AccessibilitySettings
         isOpen={showAccessibilitySettings}
         onClose={() => setShowAccessibilitySettings(false)}
+      />
+      
+      {/* Command Palette (Cmd+K) */}
+      <CommandPalette
+        isOpen={commandPalette.isOpen}
+        onClose={commandPalette.close}
       />
     </>
   );

@@ -260,3 +260,48 @@
 ### Research Deliverables
 - [x] Competitor Analysis: /research/competitor-analysis.md
 - [x] Full Market Report: /research/market-report.md
+
+
+## Competitor-Inspired Features
+
+### From Superhuman (Email Speed & AI)
+- [x] Command Palette (Cmd+K): Quick access to any action
+- [x] Keyboard shortcuts for everything (j/k navigation, e to archive, etc.)
+- [x] AI Draft Generation: Learn user's writing style
+- [ ] Social Insights: Show context about contacts
+- [ ] Instant Search: Sub-100ms search across all content
+- [ ] Undo Send: Time-delayed sending with cancel option
+
+### From Motion (Auto-Scheduling)
+- [x] AI Task Planner: Auto-schedule tasks based on priorities
+- [x] Smart Calendar: Block focus time automatically
+- [x] Deadline Intelligence: Warn about at-risk deadlines
+- [ ] Meeting Prep: Auto-generate briefs before meetings
+- [x] Time Blocking: Protect deep work periods
+
+### From Personal AI (Training Studio)
+- [x] Training Studio UI: Upload docs, conversations, preferences
+- [x] Memory Bank: Persistent facts the AI remembers
+- [x] Preference Learning: Explicit preference capture
+- [x] Privacy Controls: Choose what AI can access
+- [x] Export Training Data: Download your AI's knowledge
+
+### From Lindy (Autonomous Agents)
+- [x] Agent Builder: Create custom automation workflows
+- [x] Autonomous Actions: AI acts without approval (configurable)
+- [x] Action Templates: Pre-built automations (email reply, scheduling)
+- [x] Approval Queue: Review pending autonomous actions
+- [x] Action History: Full audit log of AI actions
+
+### From April AI (Voice-First)
+- [x] Voice Commands: Navigate app entirely by voice
+- [x] Hands-Free Mode: Full voice control without touching screen
+- [x] Voice Responses: AI speaks responses aloud
+- [x] Wake Word: Activate with "Hey Brain"
+- [x] Continuous Listening: Always-on voice mode option
+
+### From Granola (Human-AI Collaboration)
+- [x] Collaborative Notes: User writes, AI enhances
+- [x] Suggestion Mode: AI suggests, user approves
+- [x] Edit History: Track human vs AI contributions
+- [x] Confidence Indicators: Show AI certainty levels
