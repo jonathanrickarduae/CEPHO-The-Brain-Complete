@@ -8,6 +8,13 @@
       "when": 1768040529888,
       "tag": "0000_bizarre_stryfe",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1768123104738,
+      "tag": "0001_sloppy_giant_girl",
+      "breakpoints": true
     }
   ]
 }

@@ -1,11 +1,14 @@
 import { useState, useMemo } from "react";
+import { useLocation } from "wouter";
 import { 
-  Sun, Users, Lightbulb, Lock, 
+  Sun, Users, Lock, 
   Mic, Send, 
-  Fingerprint, Activity, Shield, ShieldCheck, FolderKanban, BookOpen
+  Fingerprint, Shield, ShieldCheck, FolderKanban, BookOpen, Brain, Sparkles
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { LearningBadge } from "@/components/LearningIndicator";
+import { useMoodCheck } from "@/hooks/useMoodCheck";
 
 // Daily rotating quotes - one for each day
 const QUOTES = [
@@ -53,9 +56,15 @@ function getDailyQuote() {
 }
 
 export default function Dashboard() {
+  const [, setLocation] = useLocation();
   // Governance State
   const [governanceMode, setGovernanceMode] = useState<"omni" | "governed">("omni");
   const [inputValue, setInputValue] = useState("");
+  const [isRecording, setIsRecording] = useState(false);
+  
+  // Mood tracking
+  const { todaysMoods } = useMoodCheck();
+  const latestMood = todaysMoods.length > 0 ? todaysMoods[todaysMoods.length - 1] : null;
 
   // Daily rotating inspiration - memoized to only change on day change
   const inspiration = useMemo(() => getDailyQuote(), []);
@@ -70,32 +79,33 @@ export default function Dashboard() {
       sub: "Briefing & Actions", 
       icon: Sun, 
       color: "#f59e0b",
-      action: () => window.location.href = "/daily-brief"
+      path: "/daily-brief"
     },
     { 
       id: 2, 
       label: "AI EXPERT ENGINE", 
-      sub: "Task Execution", 
+      sub: "287 Experts Ready", 
       icon: Users, 
       color: "#06b6d4",
-      action: () => window.location.href = "/ai-experts"
+      path: "/ai-experts"
     },
     { 
       id: 3, 
       label: "WORKFLOW", 
-      sub: "Projects & Outputs", 
+      sub: "6 Active Projects", 
       icon: FolderKanban, 
       color: "#10b981",
-      action: () => window.location.href = "/workflow"
+      path: "/workflow"
     },
     // BOTTOM ROW - Support
     { 
       id: 4, 
       label: "DIGITAL TWIN", 
-      sub: "Training & Autonomy • 12.5h", 
+      sub: "12.5h Training", 
       icon: Fingerprint, 
       color: "#a855f7",
-      action: () => window.location.href = "/digital-twin"
+      path: "/digital-twin",
+      badge: <LearningBadge className="absolute top-2 right-2" />
     },
     { 
       id: 5, 
@@ -103,7 +113,7 @@ export default function Dashboard() {
       sub: "Knowledge Base", 
       icon: BookOpen, 
       color: "#ec4899",
-      action: () => window.location.href = "/library"
+      path: "/library"
     },
     { 
       id: 6, 
@@ -111,9 +121,23 @@ export default function Dashboard() {
       sub: "Secure Storage", 
       icon: Lock, 
       color: "#64748b",
-      action: () => window.location.href = "/vault"
+      path: "/vault"
     },
   ];
+
+  const handleSubmit = () => {
+    if (inputValue.trim()) {
+      // Navigate to Digital Twin with the message
+      setLocation(`/digital-twin?message=${encodeURIComponent(inputValue)}`);
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSubmit();
+    }
+  };
 
   return (
     <div className="h-full flex flex-col p-4 md:p-6 overflow-hidden">
@@ -127,13 +151,13 @@ export default function Dashboard() {
             <div className="flex items-center gap-1">
               <button 
                 onClick={() => setGovernanceMode("omni")}
-                className={`px-2 py-0.5 rounded-full text-xs font-bold transition-all ${governanceMode === 'omni' ? 'bg-purple-500 text-white shadow-[0_0_10px_rgba(168,85,247,0.5)]' : 'text-muted-foreground hover:text-foreground'}`}
+                className={`px-2 py-0.5 rounded-full text-xs font-bold transition-all min-h-0 min-w-0 ${governanceMode === 'omni' ? 'bg-purple-500 text-white shadow-[0_0_10px_rgba(168,85,247,0.5)]' : 'text-muted-foreground hover:text-foreground'}`}
               >
                 OMNI
               </button>
               <button 
                 onClick={() => setGovernanceMode("governed")}
-                className={`px-2 py-0.5 rounded-full text-xs font-bold transition-all ${governanceMode === 'governed' ? 'bg-blue-500 text-white shadow-[0_0_10px_rgba(59,130,246,0.5)]' : 'text-muted-foreground hover:text-foreground'}`}
+                className={`px-2 py-0.5 rounded-full text-xs font-bold transition-all min-h-0 min-w-0 ${governanceMode === 'governed' ? 'bg-blue-500 text-white shadow-[0_0_10px_rgba(59,130,246,0.5)]' : 'text-muted-foreground hover:text-foreground'}`}
               >
                 GOVERNED
               </button>
@@ -146,19 +170,36 @@ export default function Dashboard() {
           )}
         </div>
         
-        <div className="flex items-center gap-2 text-muted-foreground">
-          <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></div>
-          <span className="text-xs font-mono tracking-wider">ONLINE</span>
+        <div className="flex items-center gap-3">
+          {/* Today's mood indicator */}
+          {latestMood && (
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-card/60 border border-border">
+              <span className="text-lg">{['😫','😔','😐','🙂','😊','😄','🤩','🔥','💪','🚀'][latestMood.mood - 1]}</span>
+              <span className="text-xs text-muted-foreground hidden sm:inline">Mood: {latestMood.mood}/10</span>
+            </div>
+          )}
+          
+          <div className="flex items-center gap-2 text-muted-foreground">
+            <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></div>
+            <span className="text-xs font-mono tracking-wider">ONLINE</span>
+          </div>
         </div>
       </div>
 
       {/* Compact Header & Inspiration */}
       <div className="mb-4 text-center">
-        <h1 className="text-2xl md:text-4xl font-display font-bold tracking-tight text-foreground mb-2">
-          GETTING YOU TO A 10
-        </h1>
+        <div className="flex items-center justify-center gap-2 mb-2">
+          <Brain className="w-6 h-6 text-primary" />
+          <h1 className="text-2xl md:text-4xl font-display font-bold tracking-tight text-foreground">
+            GETTING YOU TO A 10
+          </h1>
+        </div>
         <div className="flex flex-col items-center gap-1">
-          <p className="text-sm md:text-base font-light text-muted-foreground italic max-w-xl">"{inspiration.quote}"</p>
+          <div className="flex items-center gap-2">
+            <Sparkles className="w-4 h-4 text-primary/60" />
+            <p className="text-sm md:text-base font-light text-muted-foreground italic max-w-xl">"{inspiration.quote}"</p>
+            <Sparkles className="w-4 h-4 text-primary/60" />
+          </div>
           <p className="text-xs font-bold text-primary tracking-widest uppercase">— {inspiration.author}</p>
         </div>
       </div>
@@ -166,11 +207,14 @@ export default function Dashboard() {
       {/* 6-Button Grid - Reorganized for Flow */}
       <div className="flex-1 grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4 mb-4 max-w-5xl mx-auto w-full">
         {buttons.map((btn) => (
-          <div 
+          <button 
             key={btn.id}
-            onClick={btn.action}
-            className="group relative p-4 md:p-5 rounded-xl bg-card/60 border border-border hover:border-primary/50 hover:bg-card/80 transition-all duration-300 cursor-pointer overflow-hidden"
+            onClick={() => setLocation(btn.path)}
+            className="group relative p-4 md:p-5 rounded-xl bg-card/60 border border-border hover:border-primary/50 hover:bg-card/80 transition-all duration-300 cursor-pointer overflow-hidden text-left min-h-0"
           >
+            {/* Learning badge for Digital Twin */}
+            {btn.badge}
+            
             {/* Glow on Hover */}
             <div 
               className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
@@ -194,7 +238,7 @@ export default function Dashboard() {
                 <p className="text-xs text-muted-foreground">{btn.sub}</p>
               </div>
             </div>
-          </div>
+          </button>
         ))}
       </div>
 
@@ -205,25 +249,38 @@ export default function Dashboard() {
             type="text" 
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
+            onKeyDown={handleKeyDown}
             placeholder="What's on your mind? Type or speak..." 
-            className="flex-1 bg-transparent border-none outline-none text-base text-foreground placeholder:text-muted-foreground"
+            className="flex-1 bg-transparent border-none outline-none text-base text-foreground placeholder:text-muted-foreground min-h-0"
           />
           <div className="flex items-center gap-2">
             <Button 
               size="icon" 
               variant="ghost" 
-              className="h-10 w-10 rounded-full hover:bg-secondary text-muted-foreground hover:text-foreground"
+              onClick={handleSubmit}
+              disabled={!inputValue.trim()}
+              className="h-10 w-10 rounded-full hover:bg-secondary text-muted-foreground hover:text-foreground disabled:opacity-50"
             >
               <Send className="w-5 h-5" />
             </Button>
             <Button 
               size="icon" 
-              className="h-12 w-12 rounded-full bg-primary text-primary-foreground hover:bg-primary/90 shadow-[0_0_15px_rgba(255,16,240,0.3)] transition-all hover:scale-105"
+              onClick={() => setIsRecording(!isRecording)}
+              className={`h-12 w-12 rounded-full transition-all hover:scale-105 ${
+                isRecording 
+                  ? 'bg-red-500 hover:bg-red-600 animate-pulse shadow-[0_0_15px_rgba(239,68,68,0.5)]' 
+                  : 'bg-primary text-primary-foreground hover:bg-primary/90 shadow-[0_0_15px_rgba(255,16,240,0.3)]'
+              }`}
             >
               <Mic className="w-6 h-6" />
             </Button>
           </div>
         </div>
+        
+        {/* Keyboard shortcut hint */}
+        <p className="text-center text-xs text-muted-foreground/60 mt-2">
+          Press <kbd className="px-1.5 py-0.5 bg-secondary/50 rounded text-[10px]">Enter</kbd> to send • <kbd className="px-1.5 py-0.5 bg-secondary/50 rounded text-[10px]">?</kbd> for shortcuts
+        </p>
       </div>
     </div>
   );

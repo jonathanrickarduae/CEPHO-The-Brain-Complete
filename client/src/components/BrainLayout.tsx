@@ -23,12 +23,18 @@ import { getLoginUrl } from "@/const";
 import { useIsMobile } from "@/hooks/useMobile";
 import { 
   LayoutDashboard, LogOut, PanelLeft, 
-  BookOpen, BarChart3, Lock, Fingerprint, Activity, Settings, Brain, Sun, Users, Moon
+  BookOpen, BarChart3, Lock, Fingerprint, Activity, Brain, Sun, Users, Moon, Keyboard
 } from "lucide-react";
 import { CSSProperties, useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
 import { DashboardLayoutSkeleton } from './DashboardLayoutSkeleton';
 import { Button } from "./ui/button";
+import { BottomTabBar, MoreMenuSheet } from "./BottomTabBar";
+import { QuickActionsBar } from "./QuickActionsBar";
+import { MoodCheckModal } from "./MoodCheckModal";
+import { KeyboardShortcutsHelp, useKeyboardShortcutsHelp } from "./KeyboardShortcutsHelp";
+import { useMoodCheck } from "@/hooks/useMoodCheck";
+import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
 
 const menuItems = [
   { icon: LayoutDashboard, label: "Command Center", path: "/dashboard" },
@@ -125,6 +131,18 @@ function BrainLayoutContent({
   const sidebarRef = useRef<HTMLDivElement>(null);
   const activeMenuItem = menuItems.find(item => item.path === location);
   const isMobile = useIsMobile();
+  
+  // Mood check state (3x daily)
+  const { shouldShowMoodCheck, currentPeriod, recordMoodCheck, dismissMoodCheck } = useMoodCheck();
+  
+  // Mobile more menu state
+  const [showMoreMenu, setShowMoreMenu] = useState(false);
+  
+  // Keyboard shortcuts
+  const keyboardHelp = useKeyboardShortcutsHelp();
+  useKeyboardShortcuts([
+    { key: '?', shift: true, action: keyboardHelp.toggle, description: 'Show keyboard shortcuts' },
+  ]);
 
   useEffect(() => {
     if (isCollapsed) {
@@ -161,6 +179,12 @@ function BrainLayoutContent({
       document.body.style.userSelect = "";
     };
   }, [isResizing, setSidebarWidth]);
+
+  // Handle voice input from quick actions
+  const handleVoiceInput = (transcript: string) => {
+    console.log('Voice input:', transcript);
+    // TODO: Process voice input through Digital Twin
+  };
 
   return (
     <>
@@ -214,6 +238,17 @@ function BrainLayoutContent({
           </SidebarContent>
 
           <SidebarFooter className="p-3 border-t border-sidebar-border">
+            {/* Keyboard shortcuts hint */}
+            {!isCollapsed && (
+              <button
+                onClick={keyboardHelp.open}
+                className="flex items-center gap-2 px-2 py-1.5 mb-2 text-xs text-sidebar-foreground/50 hover:text-sidebar-foreground/70 transition-colors rounded-lg hover:bg-sidebar-accent"
+              >
+                <Keyboard className="w-3.5 h-3.5" />
+                <span>Press <kbd className="px-1 py-0.5 bg-sidebar-accent rounded text-[10px]">?</kbd> for shortcuts</span>
+              </button>
+            )}
+            
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                   <button className="flex items-center gap-3 rounded-xl px-2 py-2 hover:bg-sidebar-accent transition-colors w-full text-left group-data-[collapsible=icon]:justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring">
@@ -268,8 +303,39 @@ function BrainLayoutContent({
             </div>
           </div>
         )}
-        <main className="flex-1">{children}</main>
+        
+        {/* Main content with bottom padding for mobile nav */}
+        <main className={`flex-1 ${isMobile ? 'pb-20' : ''}`}>{children}</main>
+        
+        {/* Mobile bottom tab bar */}
+        {isMobile && (
+          <>
+            <BottomTabBar onMorePress={() => setShowMoreMenu(true)} />
+            <MoreMenuSheet isOpen={showMoreMenu} onClose={() => setShowMoreMenu(false)} />
+          </>
+        )}
+        
+        {/* Quick Actions FAB - always visible */}
+        <QuickActionsBar 
+          onVoiceInput={handleVoiceInput}
+          position={isMobile ? 'bottom-right' : 'bottom-right'}
+          className={isMobile ? 'bottom-24' : ''}
+        />
       </SidebarInset>
+      
+      {/* Mood Check Modal (3x daily) */}
+      <MoodCheckModal
+        isOpen={shouldShowMoodCheck}
+        onClose={dismissMoodCheck}
+        onSubmit={recordMoodCheck}
+        period={currentPeriod}
+      />
+      
+      {/* Keyboard Shortcuts Help */}
+      <KeyboardShortcutsHelp
+        isOpen={keyboardHelp.isOpen}
+        onClose={keyboardHelp.close}
+      />
     </>
   );
 }
