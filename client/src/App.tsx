@@ -28,6 +28,8 @@ import VideoStudioPage from "./pages/VideoStudioPage";
 import QADashboardPage from "./pages/QADashboardPage";
 import VoiceNotepadPage from "./pages/VoiceNotepadPage";
 import IntegrationsPage from "./pages/IntegrationsPage";
+import PodcastPage from "./pages/PodcastPage";
+import WellnessPage from "./pages/WellnessPage";
 import { GovernanceProvider, GovernanceModeChangeModal } from "./hooks/useGovernance";
 import { CelebrationProvider } from "./components/CelebrationAnimations";
 import { PageTransition } from "./components/PageTransition";
@@ -118,6 +120,12 @@ function Router() {
       </Route>
       <Route path="/integrations">
         <WithLayout><IntegrationsPage /></WithLayout>
+      </Route>
+      <Route path="/podcast">
+        <WithLayout><PodcastPage /></WithLayout>
+      </Route>
+      <Route path="/wellness">
+        <WithLayout><WellnessPage /></WithLayout>
       </Route>
       
       {/* Fallback */}

@@ -1367,3 +1367,77 @@
 - [ ] Project type: Social Media Optimization
 - [ ] Tasks: Take control of socials, fix issues, optimize content
 - [ ] Show as active project in Workflow
+
+
+## Amporah-Inspired Features (January 2026)
+
+### Neural Network Visualization
+- [ ] Interactive diagram showing Core AI, Analytics, User Insights, Wellness AI, Expert Network
+- [ ] Animated connections between components
+- [ ] Click to explore each component
+- [ ] Shows how unified intelligence works together
+
+### Digital Twin Activity Dashboard
+- [ ] "Here's what your Digital Twin has been working on" section
+- [ ] Time filters: Today, This Week, This Month, All Time
+- [ ] Activity feed with timestamps
+- [ ] Toggle between brain view and chart view
+
+### Feature Cards
+- [ ] "One Brain, Many Minds" - collective intelligence messaging
+- [ ] "Privacy-Preserved Learning" - security messaging
+- [ ] "Contextual Expert Assembly" - expert network messaging
+- [ ] Clean card design with icons
+
+### AI Podcast Hub
+- [ ] Curated podcasts page
+- [ ] AI-curated recommendations
+- [ ] Create custom podcasts feature
+- [ ] Category filters (Business, Technology, Leadership)
+- [ ] Match percentage for relevance
+- [ ] Search podcasts
+- [ ] My Library section
+
+### Tour & Demo Mode
+- [ ] "New to The Brain? Take a quick tour" prompt
+- [ ] "Viewing Demo Data" indicator with sign-in CTA
+- [ ] Feature tour walkthrough
+
+### Additional Items
+- [ ] Wire NeonBrain loader throughout app
+- [ ] Add sample GTM project to Workflow
+- [ ] Test Go-To-Market flow in Project Genesis
+
+
+## Personal Wellness Module (January 2026)
+
+### Health Pillar (Physical)
+- [ ] Sleep tracking integration
+- [ ] Exercise/activity logging
+- [ ] Nutrition awareness
+- [ ] Energy levels throughout day
+- [ ] Health goals and streaks
+- [ ] Wearable device integration placeholder
+
+### Mental Pillar (Wellbeing)
+- [ ] Enhanced mood tracking with trends
+- [ ] Stress indicators and alerts
+- [ ] Work-life balance score
+- [ ] Mindfulness/meditation prompts
+- [ ] Cognitive load monitoring
+- [ ] Burnout prevention alerts
+
+### Wealth Pillar (Financial)
+- [ ] Net worth tracking
+- [ ] Investment portfolio overview
+- [ ] Income vs expenses visualization
+- [ ] Financial goals progress
+- [ ] Passive income monitoring
+- [ ] Financial health score
+
+### Personal Dashboard
+- [ ] Daily wellness score (1-10 across all pillars)
+- [ ] Trend lines for Health/Mental/Wealth
+- [ ] AI recommendations based on patterns
+- [ ] "Getting you to a 10" goal tracking
+- [ ] Digital Twin coaching integration
