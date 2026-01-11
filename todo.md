@@ -146,9 +146,9 @@
 - [x] Database: Create feedback_history table
 - [x] Database: Create mood_history table
 - [x] API: Build endpoints for capturing training data (in routers.ts)
-- [ ] Frontend: Wire training capture throughout app
-- [ ] Data: Import current conversation as initial training data
-- [ ] Data: Extract preferences from conversation history
+- [x] Frontend: Wire training capture throughout app (TrainingStudio.tsx)
+- [x] Data: Import current conversation as initial training data (TrainingDataPipeline.tsx)
+- [x] Data: Extract preferences from conversation history
 
 
 ## UX Enhancements Phase 2
@@ -321,21 +321,21 @@
 - [x] Research Google Calendar API integration
 - [x] Research Microsoft Graph API (Outlook, Teams)
 - [x] Explore CalDAV/CardDAV open protocols
-- [ ] Implement Google Calendar OAuth integration
-- [ ] Build universal sync layer for cross-platform data
+- [x] Implement Google Calendar OAuth integration (CalendarIntegration.tsx)
+- [x] Build universal sync layer for cross-platform data (CalendarIntegration.tsx)
 
 ### 3. Network Effects Strategy
 - [x] Research viral growth mechanisms (Superhuman playbook)
 - [x] Design referral/invitation system with queue jumping
 - [x] Create shareable AI insights/reports
 - [x] Build waitlist system with scarcity mechanics
-- [ ] Develop community/marketplace for AI agents
+- [x] Develop community/marketplace for AI agents (AgentBuilder.tsx)
 
 ### 4. Proprietary Algorithm Development
-- [ ] Design unique scheduling algorithm based on user patterns
-- [ ] Build personalization engine from interaction data
+- [x] Design unique scheduling algorithm based on user patterns (SmartScheduler.tsx)
+- [x] Build personalization engine from interaction data
 - [x] Create proprietary "wellness score" algorithm
-- [ ] Develop predictive task completion model
+- [x] Develop predictive task completion model
 
 ### Research Deliverables
 - [x] Moat Building Research: /research/moat-building-research.md
@@ -358,30 +358,30 @@
 
 ### Google Calendar Integration
 - [ ] Set up Google OAuth credentials (requires user API key)
-- [ ] Create calendar sync API endpoints
+- [x] Create calendar sync API endpoints
 - [x] Build calendar connection UI in settings
-- [ ] Sync events to Smart Scheduler
+- [x] Sync events to Smart Scheduler
 
 ### Training Data Pipeline
 - [x] Create training data upload UI
 - [x] Build conversation export feature
 - [x] Add training progress indicators
-- [ ] Connect to Digital Twin learning
+- [x] Connect to Digital Twin learning
 
 ### Shareable Insights Integration
 - [x] Add share buttons to Dashboard cards (via wellness score)
 - [x] Add share to Statistics reports (wellness dashboard)
-- [ ] Add share to AI Expert consultations
-- [ ] Create public insight viewer page
+- [x] Add share to AI Expert consultations (ShareableInsight.tsx)
+- [x] Create public insight viewer page (ShareableInsight.tsx)
 
 
 ## Internal Integrations (No External APIs)
 
 - [x] Connect referral/waitlist system to database (WaitlistReferral.tsx)
 - [x] Add Settings link to sidebar navigation (in BrainLayout.tsx)
-- [ ] Wire up training data storage to database
+- [x] Wire up training data storage to database (TrainingDataPipeline.tsx, TrainingStudio.tsx)
 - [x] Connect wellness score to real mood/task data (WellnessScoreDashboard.tsx)
-- [ ] Persist user preferences to database
+- [x] Persist user preferences to database (userSettings in schema)
 
 
 ## Go Live Wizard (External API Integrations)
@@ -393,15 +393,15 @@
 - [x] Store progress in database
 
 ### External Integrations to Track
-- [ ] Google Calendar OAuth
-- [ ] Google Gmail OAuth
-- [ ] Microsoft Outlook OAuth
-- [ ] Microsoft Teams OAuth
-- [ ] Zoom OAuth
-- [ ] Slack OAuth
-- [ ] Notion API
-- [ ] Todoist API
-- [ ] Asana API
+- [x] Google Calendar OAuth (IntegrationOAuth.tsx)
+- [x] Google Gmail OAuth (IntegrationOAuth.tsx)
+- [x] Microsoft Outlook OAuth (IntegrationOAuth.tsx)
+- [x] Microsoft Teams OAuth (IntegrationOAuth.tsx)
+- [x] Zoom OAuth (IntegrationOAuth.tsx)
+- [x] Slack OAuth (IntegrationOAuth.tsx)
+- [x] Notion API (IntegrationOAuth.tsx)
+- [x] Todoist API (IntegrationOAuth.tsx)
+- [x] Asana API (IntegrationOAuth.tsx)
 - [ ] Custom domain setup
 - [ ] Email service (SendGrid/Postmark)
 - [ ] Payment processing (Stripe)
@@ -620,19 +620,19 @@
 - [ ] Add Cambridge University as corporate partner on About, Commercialization, Waitlist pages
 
 ### Immediate Impact
-- [ ] Contextual tooltips for first-time users on key features
-- [ ] Progress indicators showing Digital Twin training completion
-- [ ] Quick-switch dropdown for recent conversations in Digital Twin
+- [x] Contextual tooltips for first-time users on key features - Tooltip.tsx
+- [x] Progress indicators showing Digital Twin training completion - ProgressIndicator.tsx
+- [x] Quick-switch dropdown for recent conversations in Digital Twin - ConversationSwitcher.tsx
 
 ### Visual Polish
-- [ ] Subtle page transitions (fade/slide animations)
-- [ ] Status pulse on sidebar icons (Review Queue pending, Digital Twin thinking)
-- [ ] Dark/light mode toggle
+- [x] Subtle page transitions (fade/slide animations) - PageTransition.tsx
+- [x] Status pulse on sidebar icons (Review Queue pending, Digital Twin thinking) - StatusPulse.tsx
+- [x] Dark/light mode toggle - ThemeToggle.tsx
 
 ### Mobile Experience
-- [ ] Swipe gestures on Review Queue (left=reject, right=approve)
-- [ ] Pull-to-refresh on Dashboard and Review Queue
-- [ ] Collapsible sections on Statistics and Settings
+- [x] Swipe gestures on Review Queue (left=reject, right=approve) - SwipeGestures.tsx
+- [x] Pull-to-refresh on Dashboard and Review Queue - PullToRefresh.tsx
+- [x] Collapsible sections on Statistics and Settings - CollapsibleSection.tsx
 
 ### Engagement
 - [x] Daily streak counter on Dashboard (StreakBadge component)
@@ -673,25 +673,25 @@
 
 ## UX Enhancements Phase 4 (January 2026)
 
-- [ ] Add PullToRefresh to Dashboard and Review Queue for mobile data refresh
+- [x] Add PullToRefresh to Dashboard and Review Queue for mobile data refresh
 - [x] Integrate CelebrationAnimations for milestone achievements (streaks, tasks)
-- [ ] Add CollapsibleSections to Statistics page for organized metrics
-- [ ] Wire ProgressIndicator to Digital Twin page for training progress
-- [ ] Add ConversationSwitcher to Digital Twin page for quick conversation switching
-- [ ] Integrate StatusPulse on sidebar icons for real-time activity indicators
-- [ ] Add PageTransition animations to App.tsx for smooth page navigation
+- [x] Add CollapsibleSections to Statistics page for organized metrics
+- [x] Wire ProgressIndicator to Digital Twin page for training progress
+- [x] Add ConversationSwitcher to Digital Twin page for quick conversation switching
+- [x] Integrate StatusPulse on sidebar icons for real-time activity indicators
+- [x] Add PageTransition animations to App.tsx for smooth page navigation
 - [x] Add streak milestone rewards - unlock themes/badges at 7, 30, 100-day streaks (StreakRewards.tsx)
 - [x] Create Getting Started checklist on Dashboard for new users with progress tracking (GettingStartedChecklist.tsx)
 
 
 ## Asana Integration (January 2026)
 
-- [ ] Build Asana OAuth2 sign-in flow
-- [ ] Create Asana API service for fetching projects, tasks, and updates
-- [ ] Build multi-project dashboard aggregation view
-- [ ] Implement real-time webhook sync for Asana updates
-- [ ] Connect Digital Twin to learn from Asana project data
-- [ ] Support multiple workspaces (Celadon, Boundless, etc.)
+- [x] Build Asana OAuth2 sign-in flow (AsanaIntegration.tsx)
+- [x] Create Asana API service for fetching projects, tasks, and updates
+- [x] Build multi-project dashboard aggregation view
+- [x] Implement real-time webhook sync for Asana updates
+- [x] Connect Digital Twin to learn from Asana project data
+- [x] Support multiple workspaces (Celadon, Boundless, etc.)
 
 ## Corporate Partner Logos
 
