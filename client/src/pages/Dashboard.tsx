@@ -238,7 +238,7 @@ export default function Dashboard() {
   return (
     <>
     <PullToRefresh onRefresh={handleRefresh} disabled={!isMobile}>
-    <div className="h-full flex flex-col p-4 md:p-6 overflow-hidden">
+    <div className="h-full flex flex-col p-3 sm:p-4 md:p-6 overflow-y-auto md:overflow-hidden">
       
       {/* Quick Action Input - Manus Style - Front and Center */}
       <div className="max-w-3xl mx-auto w-full mb-6">
@@ -377,8 +377,8 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* 6-Button Grid - Reorganized for Flow */}
-      <div className="flex-1 grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4 mb-4 max-w-5xl mx-auto w-full">
+      {/* 6-Button Grid - Reorganized for Flow - Mobile Optimized */}
+      <div className="flex-1 grid grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3 md:gap-4 mb-4 max-w-5xl mx-auto w-full auto-rows-fr">
         {buttons.map((btn) => (
           <Tooltip 
             key={btn.id}
@@ -389,7 +389,7 @@ export default function Dashboard() {
           >
             <button 
               onClick={() => setLocation(btn.path)}
-              className="group relative p-4 md:p-5 rounded-xl bg-card/60 border border-border hover:border-primary/50 hover:bg-card/80 transition-all duration-300 cursor-pointer overflow-hidden text-left min-h-0 w-full h-full hover:scale-[1.02] active:scale-[0.98] hover:shadow-lg hover:shadow-primary/10"
+              className="group relative p-3 sm:p-4 md:p-5 rounded-xl bg-card/60 border border-border hover:border-primary/50 hover:bg-card/80 transition-all duration-300 cursor-pointer overflow-hidden text-left min-h-[100px] sm:min-h-[120px] w-full h-full hover:scale-[1.02] active:scale-[0.98] hover:shadow-lg hover:shadow-primary/10 touch-manipulation"
             >
               {/* Learning badge for Digital Twin */}
               {btn.badge}
@@ -401,7 +401,7 @@ export default function Dashboard() {
               ></div>
 
               <div className="absolute top-0 right-0 p-2 opacity-10 group-hover:opacity-20 transition-opacity" style={{ color: btn.color }}>
-                <btn.icon className="w-12 h-12 md:w-16 md:h-16" />
+                <btn.icon className="w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16" />
               </div>
 
               <div className="relative z-10 flex flex-col h-full">
@@ -409,12 +409,12 @@ export default function Dashboard() {
                   className="p-2 w-fit rounded-lg bg-secondary/50 mb-2 group-hover:scale-105 transition-transform duration-300" 
                   style={{ color: btn.color, border: `1px solid ${btn.color}30` }}
                 >
-                  <btn.icon className="w-5 h-5 md:w-6 md:h-6" />
+                  <btn.icon className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
                 </div>
                 
                 <div>
-                  <h3 className="font-display font-bold text-sm md:text-base mb-0.5 tracking-wide text-foreground">{btn.label}</h3>
-                  <p className="text-xs text-muted-foreground">{btn.sub}</p>
+                  <h3 className="font-display font-bold text-xs sm:text-sm md:text-base mb-0.5 tracking-wide text-foreground leading-tight">{btn.label}</h3>
+                  <p className="text-[10px] sm:text-xs text-muted-foreground leading-tight">{btn.sub}</p>
                 </div>
               </div>
             </button>

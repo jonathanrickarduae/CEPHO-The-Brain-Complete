@@ -129,11 +129,11 @@ export default function DigitalTwin() {
   ];
 
   return (
-    <div className="h-[calc(100vh-64px)] flex bg-background">
+    <div className="h-[calc(100vh-64px)] flex flex-col md:flex-row bg-background">
       {/* Main Chat Area */}
       <div className="flex-1 flex flex-col">
         {/* Header - Compact */}
-        <div className="shrink-0 border-b border-white/10 bg-card/80 backdrop-blur-xl px-4 py-3">
+        <div className="shrink-0 border-b border-white/10 bg-card/80 backdrop-blur-xl px-3 sm:px-4 py-2 sm:py-3">
           <div className="max-w-3xl mx-auto flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="relative">
@@ -143,7 +143,7 @@ export default function DigitalTwin() {
                 <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-background" />
               </div>
               <div>
-                <h1 className="text-lg font-semibold text-foreground">Digital Twin</h1>
+                <h1 className="text-base sm:text-lg font-semibold text-foreground">Digital Twin</h1>
                 <p className="text-xs text-muted-foreground">Online • AI-Powered • Learning from you</p>
               </div>
               {/* Conversation Switcher */}
@@ -197,7 +197,7 @@ export default function DigitalTwin() {
 
         {/* Messages Area - Scrollable */}
         <div className="flex-1 overflow-y-auto">
-          <div className="max-w-3xl mx-auto px-4 py-6 space-y-6">
+          <div className="max-w-3xl mx-auto px-3 sm:px-4 py-4 sm:py-6 space-y-4 sm:space-y-6">
             {messages.map((msg) => (
               <div key={msg.id} className={`flex gap-3 ${msg.from === "user" ? "flex-row-reverse" : ""}`}>
                 {/* Avatar */}
@@ -214,7 +214,7 @@ export default function DigitalTwin() {
                 </div>
                 
                 {/* Message */}
-                <div className={`flex-1 max-w-[85%] ${msg.from === "user" ? "flex flex-col items-end" : ""}`}>
+                <div className={`flex-1 max-w-[90%] sm:max-w-[85%] ${msg.from === "user" ? "flex flex-col items-end" : ""}`}>
                   <div className={`inline-block px-4 py-3 rounded-2xl ${
                     msg.from === "twin" 
                       ? "bg-card/60 border border-white/10 rounded-tl-sm" 

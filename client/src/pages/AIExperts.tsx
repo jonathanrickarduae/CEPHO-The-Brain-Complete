@@ -507,13 +507,13 @@ export default function AIExperts() {
       </div>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 md:px-6 py-6">
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 py-4 sm:py-6">
         
         {/* Queue Phase - Show all pending tasks */}
         {phase === "queue" && (
           <div className="space-y-6">
             {/* Quick Actions */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
               {MISSION_TEMPLATES.map((template) => (
                 <Card 
                   key={template.id}

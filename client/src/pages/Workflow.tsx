@@ -153,15 +153,15 @@ export default function Workflow() {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white p-6">
+    <div className="min-h-screen bg-black text-white p-3 sm:p-4 md:p-6">
       {/* Header */}
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6 sm:mb-8">
         <div className="flex items-center gap-4">
           <div className="p-3 rounded-2xl bg-gradient-to-br from-red-500/20 to-orange-500/20 border border-red-500/30">
             <Activity className="w-8 h-8 text-red-400" />
           </div>
           <div>
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-red-400 to-orange-500 bg-clip-text text-transparent">
+            <h1 className="text-xl sm:text-2xl md:text-3xl font-bold bg-gradient-to-r from-red-400 to-orange-500 bg-clip-text text-transparent">
               Workflow Dashboard
             </h1>
             <p className="text-gray-400">ERP-style project visibility across all initiatives</p>
@@ -186,25 +186,25 @@ export default function Workflow() {
       </div>
 
       {/* Stats Overview */}
-      <div className="grid grid-cols-5 gap-4 mb-8">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 sm:gap-3 md:gap-4 mb-6 sm:mb-8">
         <div className="bg-white/5 border border-white/10 rounded-xl p-4">
-          <div className="text-3xl font-bold text-white">{stats.total}</div>
+          <div className="text-xl sm:text-2xl md:text-3xl font-bold text-white">{stats.total}</div>
           <div className="text-sm text-gray-400">Total Projects</div>
         </div>
         <div className="bg-green-500/10 border border-green-500/20 rounded-xl p-4">
-          <div className="text-3xl font-bold text-green-400">{stats.onTrack}</div>
+          <div className="text-xl sm:text-2xl md:text-3xl font-bold text-green-400">{stats.onTrack}</div>
           <div className="text-sm text-green-400/70">On Track</div>
         </div>
         <div className="bg-amber-500/10 border border-amber-500/20 rounded-xl p-4">
-          <div className="text-3xl font-bold text-amber-400">{stats.atRisk}</div>
+          <div className="text-xl sm:text-2xl md:text-3xl font-bold text-amber-400">{stats.atRisk}</div>
           <div className="text-sm text-amber-400/70">At Risk</div>
         </div>
         <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-4">
-          <div className="text-3xl font-bold text-red-400">{stats.blocked}</div>
+          <div className="text-xl sm:text-2xl md:text-3xl font-bold text-red-400">{stats.blocked}</div>
           <div className="text-sm text-red-400/70">Blocked</div>
         </div>
         <div className="bg-purple-500/10 border border-purple-500/20 rounded-xl p-4">
-          <div className="text-3xl font-bold text-purple-400">{stats.totalBlockers}</div>
+          <div className="text-xl sm:text-2xl md:text-3xl font-bold text-purple-400">{stats.totalBlockers}</div>
           <div className="text-sm text-purple-400/70">Active Blockers</div>
         </div>
       </div>
