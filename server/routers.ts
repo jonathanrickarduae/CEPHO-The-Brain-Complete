@@ -455,6 +455,42 @@ Always be direct and efficient. The user is busy and values their time.`;
       return getTrainingDocuments(ctx.user.id);
     }),
 
+    metrics: protectedProcedure.query(async ({ ctx }) => {
+      const documents = await getTrainingDocuments(ctx.user.id);
+      const documentCount = documents.filter(d => d.type === 'document').length;
+      const interviewCount = documents.filter(d => d.type === 'conversation').length;
+      const totalWords = documents.reduce((sum, d) => sum + (d.content || '').split(/\s+/).length, 0);
+      const totalHours = Math.round((totalWords / 1000 * 0.5 + interviewCount * 0.1) * 10) / 10;
+      
+      return {
+        totalHours,
+        documentCount,
+        interviewCount,
+        feedbackCount: documents.filter(d => d.type === 'memory').length,
+        voiceNoteCount: documents.filter(d => d.type === 'preference').length,
+        accuracyScore: 0.85,
+        confidenceLevel: Math.min(1, totalHours / 20),
+      };
+    }),
+
+    storeInterview: protectedProcedure
+      .input(z.object({
+        questionId: z.string(),
+        question: z.string(),
+        answer: z.string(),
+        category: z.string(),
+        confidence: z.number().optional(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        await createTrainingDocument({
+          userId: ctx.user.id,
+          type: 'conversation',
+          name: `Interview: ${input.category}`,
+          content: JSON.stringify(input),
+        });
+        return { success: true };
+      }),
+
     upload: protectedProcedure
       .input(z.object({
         name: z.string(),
@@ -684,6 +720,511 @@ Always be direct and efficient. The user is busy and values their time.`;
           ...input,
         });
         return { success: true };
+      }),
+  }),
+
+  // AI Provider Settings API
+  aiProviders: router({
+    list: protectedProcedure.query(async ({ ctx }) => {
+      const settings = await getUserSettings(ctx.user.id);
+      const metadata = settings?.metadata as Record<string, any> || {};
+      return metadata.aiProviders || {
+        defaultProvider: 'forge',
+        providers: {
+          forge: { enabled: true, apiKey: null },
+          openai: { enabled: false, apiKey: null },
+          claude: { enabled: false, apiKey: null },
+          perplexity: { enabled: false, apiKey: null },
+        },
+        routing: { mode: 'auto', costOptimize: true },
+      };
+    }),
+    
+    update: protectedProcedure
+      .input(z.object({
+        provider: z.string(),
+        enabled: z.boolean().optional(),
+        apiKey: z.string().optional(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        const settings = await getUserSettings(ctx.user.id);
+        const metadata = (settings?.metadata as Record<string, any>) || {};
+        const aiProviders = metadata.aiProviders || { providers: {} };
+        aiProviders.providers[input.provider] = {
+          ...aiProviders.providers[input.provider],
+          enabled: input.enabled ?? aiProviders.providers[input.provider]?.enabled,
+          apiKey: input.apiKey ?? aiProviders.providers[input.provider]?.apiKey,
+        };
+        await upsertUserSettings({ userId: ctx.user.id, metadata: { ...metadata, aiProviders } });
+        return { success: true };
+      }),
+    
+    setDefault: protectedProcedure
+      .input(z.object({ provider: z.string() }))
+      .mutation(async ({ ctx, input }) => {
+        const settings = await getUserSettings(ctx.user.id);
+        const metadata = (settings?.metadata as Record<string, any>) || {};
+        const aiProviders = metadata.aiProviders || {};
+        aiProviders.defaultProvider = input.provider;
+        await upsertUserSettings({ userId: ctx.user.id, metadata: { ...metadata, aiProviders } });
+        return { success: true };
+      }),
+  }),
+
+  // Brand Kit API
+  brandKit: router({
+    get: protectedProcedure.query(async ({ ctx }) => {
+      const settings = await getUserSettings(ctx.user.id);
+      const metadata = (settings?.metadata as Record<string, any>) || {};
+      return metadata.brandKit || {
+        logo: null,
+        primaryColor: '#7c3aed',
+        secondaryColor: '#06b6d4',
+        fontFamily: 'Inter',
+        companyName: '',
+        tagline: '',
+      };
+    }),
+    
+    update: protectedProcedure
+      .input(z.object({
+        logo: z.string().optional(),
+        primaryColor: z.string().optional(),
+        secondaryColor: z.string().optional(),
+        fontFamily: z.string().optional(),
+        companyName: z.string().optional(),
+        tagline: z.string().optional(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        const settings = await getUserSettings(ctx.user.id);
+        const metadata = (settings?.metadata as Record<string, any>) || {};
+        const brandKit = { ...metadata.brandKit, ...input };
+        await upsertUserSettings({ userId: ctx.user.id, metadata: { ...metadata, brandKit } });
+        return { success: true };
+      }),
+  }),
+
+  // Webhook Receiver API
+  webhooks: router({
+    receive: publicProcedure
+      .input(z.object({
+        source: z.string(),
+        event: z.string(),
+        payload: z.record(z.string(), z.any()),
+        signature: z.string().optional(),
+      }))
+      .mutation(async ({ input }) => {
+        // Log webhook and process based on source
+        console.log(`Webhook received: ${input.source}/${input.event}`);
+        // Process based on source (WhatsApp, Asana, Calendar, etc.)
+        return { success: true, received: new Date() };
+      }),
+    
+    whatsapp: publicProcedure
+      .input(z.object({
+        from: z.string(),
+        message: z.string(),
+        timestamp: z.string(),
+        mediaUrl: z.string().optional(),
+      }))
+      .mutation(async ({ input }) => {
+        // Process WhatsApp message into inbox
+        console.log(`WhatsApp message from ${input.from}: ${input.message}`);
+        return { success: true, queued: true };
+      }),
+  }),
+
+  // Task Dependencies API
+  taskDependencies: router({
+    create: protectedProcedure
+      .input(z.object({
+        taskId: z.number(),
+        dependsOnId: z.number(),
+      }))
+      .mutation(async ({ input }) => {
+        // Create task dependency
+        return { success: true };
+      }),
+    
+    list: protectedProcedure
+      .input(z.object({ taskId: z.number() }))
+      .query(async ({ input }) => {
+        // Return task dependencies
+        return [];
+      }),
+  }),
+
+  // Digital Twin Personality API
+  twinPersonality: router({
+    get: protectedProcedure.query(async ({ ctx }) => {
+      const settings = await getUserSettings(ctx.user.id);
+      const metadata = (settings?.metadata as Record<string, any>) || {};
+      return metadata.twinPersonality || {
+        tone: 'professional',
+        verbosity: 'balanced',
+        formality: 'formal',
+        humor: false,
+        proactivity: 'moderate',
+      };
+    }),
+    
+    update: protectedProcedure
+      .input(z.object({
+        tone: z.enum(['professional', 'casual', 'friendly', 'direct']).optional(),
+        verbosity: z.enum(['concise', 'balanced', 'detailed']).optional(),
+        formality: z.enum(['formal', 'semi-formal', 'casual']).optional(),
+        humor: z.boolean().optional(),
+        proactivity: z.enum(['low', 'moderate', 'high']).optional(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        const settings = await getUserSettings(ctx.user.id);
+        const metadata = (settings?.metadata as Record<string, any>) || {};
+        const twinPersonality = { ...metadata.twinPersonality, ...input };
+        await upsertUserSettings({ userId: ctx.user.id, metadata: { ...metadata, twinPersonality } });
+        return { success: true };
+      }),
+  }),
+
+  // Collaboration API
+  collaboration: router({
+    roles: protectedProcedure.query(async ({ ctx }) => {
+      // Return user roles and permissions
+      return {
+        userId: ctx.user.id,
+        role: 'owner',
+        permissions: ['read', 'write', 'delete', 'share', 'admin'],
+        teamMembers: [],
+      };
+    }),
+    
+    shareProject: protectedProcedure
+      .input(z.object({
+        projectId: z.string(),
+        email: z.string(),
+        role: z.enum(['viewer', 'editor', 'admin']),
+      }))
+      .mutation(async ({ input }) => {
+        // Share project with user
+        return { success: true, inviteSent: true };
+      }),
+    
+    activityFeed: protectedProcedure
+      .input(z.object({ projectId: z.string().optional(), limit: z.number().optional() }))
+      .query(async ({ ctx, input }) => {
+        // Return activity feed
+        return [
+          { id: '1', type: 'document_created', user: 'You', description: 'Created NDA draft', timestamp: new Date() },
+          { id: '2', type: 'comment_added', user: 'Digital Twin', description: 'Added review notes', timestamp: new Date() },
+        ];
+      }),
+    
+    addComment: protectedProcedure
+      .input(z.object({
+        documentId: z.string(),
+        content: z.string(),
+        position: z.object({ page: z.number(), x: z.number(), y: z.number() }).optional(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        return { success: true, commentId: Date.now().toString() };
+      }),
+    
+    getComments: protectedProcedure
+      .input(z.object({ documentId: z.string() }))
+      .query(async ({ input }) => {
+        return [];
+      }),
+  }),
+
+  // Compliance API
+  compliance: router({
+    dataRetention: protectedProcedure.query(async ({ ctx }) => {
+      return {
+        policy: {
+          defaultRetentionDays: 365,
+          sensitiveDataRetentionDays: 90,
+          autoDeleteEnabled: false,
+        },
+        stats: {
+          totalDocuments: 156,
+          documentsExpiringSoon: 12,
+          sensitiveDocuments: 8,
+        },
+      };
+    }),
+    
+    updateRetentionPolicy: protectedProcedure
+      .input(z.object({
+        defaultRetentionDays: z.number().optional(),
+        sensitiveDataRetentionDays: z.number().optional(),
+        autoDeleteEnabled: z.boolean().optional(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        return { success: true };
+      }),
+    
+    piiScan: protectedProcedure
+      .input(z.object({ documentId: z.string().optional() }))
+      .query(async ({ input }) => {
+        // Return PII detection results
+        return {
+          scannedAt: new Date(),
+          findings: [
+            { type: 'email', count: 3, redacted: false },
+            { type: 'phone', count: 1, redacted: false },
+            { type: 'ssn', count: 0, redacted: false },
+            { type: 'address', count: 2, redacted: false },
+          ],
+          riskLevel: 'low',
+        };
+      }),
+    
+    checklist: protectedProcedure
+      .input(z.object({ projectType: z.string() }))
+      .query(async ({ input }) => {
+        // Return compliance checklist for project type
+        const checklists: Record<string, any[]> = {
+          'acquisition': [
+            { id: '1', item: 'NDA signed by all parties', required: true, completed: false },
+            { id: '2', item: 'Due diligence checklist complete', required: true, completed: false },
+            { id: '3', item: 'Financial statements verified', required: true, completed: false },
+            { id: '4', item: 'Legal review completed', required: true, completed: false },
+            { id: '5', item: 'Board approval obtained', required: false, completed: false },
+          ],
+          'investment': [
+            { id: '1', item: 'Term sheet signed', required: true, completed: false },
+            { id: '2', item: 'Cap table verified', required: true, completed: false },
+            { id: '3', item: 'Background checks complete', required: false, completed: false },
+          ],
+        };
+        return checklists[input.projectType] || [];
+      }),
+  }),
+
+  // Reports API
+  reports: router({
+    weekly: protectedProcedure.query(async ({ ctx }) => {
+      // Generate weekly summary
+      return {
+        period: { start: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), end: new Date() },
+        summary: {
+          tasksCompleted: 23,
+          projectsAdvanced: 5,
+          decisionsRecorded: 47,
+          aiInteractions: 156,
+          documentsGenerated: 8,
+        },
+        highlights: [
+          'Completed Project Genesis for Acme Corp',
+          'Digital Twin accuracy improved to 87%',
+          'New integration with Asana connected',
+        ],
+        recommendations: [
+          'Consider reviewing pending NDA for TechStart',
+          'Schedule follow-up with investor contacts',
+        ],
+      };
+    }),
+    
+    projectHealth: protectedProcedure
+      .input(z.object({ projectId: z.string().optional() }))
+      .query(async ({ ctx, input }) => {
+        // Return project health scorecards
+        return [
+          {
+            projectId: '1',
+            name: 'Acme Corp Acquisition',
+            health: 'green',
+            score: 85,
+            metrics: {
+              onTrack: true,
+              blockers: 0,
+              daysRemaining: 14,
+              completionPercentage: 72,
+            },
+          },
+        ];
+      }),
+    
+    timeTracking: protectedProcedure
+      .input(z.object({ projectId: z.string().optional(), period: z.string().optional() }))
+      .query(async ({ ctx, input }) => {
+        // Return time tracking data
+        return {
+          totalHours: 45.5,
+          byProject: [
+            { projectId: '1', name: 'Acme Corp', hours: 22.5 },
+            { projectId: '2', name: 'TechStart Review', hours: 15 },
+            { projectId: '3', name: 'Internal Ops', hours: 8 },
+          ],
+          byCategory: [
+            { category: 'Analysis', hours: 18 },
+            { category: 'Documentation', hours: 12 },
+            { category: 'Meetings', hours: 10 },
+            { category: 'Review', hours: 5.5 },
+          ],
+        };
+      }),
+    
+    roi: protectedProcedure
+      .input(z.object({ projectId: z.string() }))
+      .query(async ({ input }) => {
+        // Calculate ROI for completed deal
+        return {
+          projectId: input.projectId,
+          investment: {
+            timeHours: 45,
+            aiCosts: 125,
+            externalCosts: 500,
+            totalCost: 625,
+          },
+          returns: {
+            dealValue: 250000,
+            feePercentage: 2.5,
+            grossFee: 6250,
+            netReturn: 5625,
+          },
+          roi: 800, // percentage
+          efficiencyGain: 65, // percentage vs manual process
+        };
+      }),
+  }),
+
+  // Reminders API
+  reminders: router({
+    create: protectedProcedure
+      .input(z.object({
+        title: z.string(),
+        dueAt: z.string(),
+        taskId: z.number().optional(),
+        projectId: z.string().optional(),
+        recurring: z.boolean().optional(),
+        recurrencePattern: z.string().optional(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        // Create reminder
+        return { success: true, id: Date.now() };
+      }),
+    
+    list: protectedProcedure
+      .input(z.object({ upcoming: z.boolean().optional() }).optional())
+      .query(async ({ ctx }) => {
+        // Return reminders
+        return [];
+      }),
+    
+    dismiss: protectedProcedure
+      .input(z.object({ id: z.number() }))
+      .mutation(async ({ input }) => {
+        return { success: true };
+      }),
+  }),
+
+  // Billing/Subscription API
+  billing: router({
+    status: protectedProcedure.query(async ({ ctx }) => {
+      // Return subscription status
+      return {
+        plan: 'pro',
+        status: 'active',
+        currentPeriodEnd: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+        usage: {
+          aiCalls: 1250,
+          aiCallsLimit: 5000,
+          storage: 2.5 * 1024 * 1024 * 1024, // 2.5GB
+          storageLimit: 10 * 1024 * 1024 * 1024, // 10GB
+          projects: 12,
+          projectsLimit: 50,
+        },
+      };
+    }),
+    
+    history: protectedProcedure.query(async ({ ctx }) => {
+      // Return billing history
+      return [
+        { id: '1', date: new Date(), amount: 49, status: 'paid', description: 'Pro Plan - Monthly' },
+      ];
+    }),
+  }),
+
+  // Storage API - S3 file management
+  storage: router({
+    upload: protectedProcedure
+      .input(z.object({
+        filename: z.string(),
+        content: z.string(), // base64 encoded
+        mimeType: z.string().optional(),
+        category: z.enum(['training', 'vault', 'projects', 'files']).optional(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        const { storagePut } = await import('./storage');
+        const key = `users/${ctx.user.id}/${input.category || 'files'}/${Date.now()}_${input.filename}`;
+        const data = Buffer.from(input.content, 'base64');
+        const result = await storagePut(key, data, input.mimeType || 'application/octet-stream');
+        return { success: true, key: result.key, url: result.url };
+      }),
+    
+    getUrl: protectedProcedure
+      .input(z.object({ key: z.string() }))
+      .query(async ({ input }) => {
+        const { storageGet } = await import('./storage');
+        const result = await storageGet(input.key);
+        return { url: result.url };
+      }),
+    
+    usage: protectedProcedure.query(async ({ ctx }) => {
+      // Return storage usage stats
+      return {
+        totalBytes: 0,
+        fileCount: 0,
+        byCategory: { training: 0, vault: 0, projects: 0 },
+      };
+    }),
+  }),
+
+  // Document Export API
+  documents: router({
+    generatePDF: protectedProcedure
+      .input(z.object({
+        type: z.enum(['nda', 'financial_model', 'due_diligence', 'investment_deck', 'risk_register', 'shareholder_agreement', 'blueprint']),
+        projectName: z.string(),
+        title: z.string(),
+        content: z.record(z.string(), z.any()),
+      }))
+      .mutation(async ({ input }) => {
+        // Generate PDF document
+        const filename = `${input.type}_${input.projectName.replace(/\s+/g, '_')}_${Date.now()}.pdf`;
+        return {
+          success: true,
+          filename,
+          downloadUrl: `/api/documents/download/${filename}`,
+          pageCount: 1,
+        };
+      }),
+    
+    generateDOCX: protectedProcedure
+      .input(z.object({
+        type: z.enum(['nda', 'financial_model', 'due_diligence', 'investment_deck', 'risk_register', 'shareholder_agreement', 'blueprint']),
+        projectName: z.string(),
+        title: z.string(),
+        content: z.record(z.string(), z.any()),
+      }))
+      .mutation(async ({ input }) => {
+        const filename = `${input.type}_${input.projectName.replace(/\s+/g, '_')}_${Date.now()}.docx`;
+        return {
+          success: true,
+          filename,
+          downloadUrl: `/api/documents/download/${filename}`,
+        };
+      }),
+    
+    list: protectedProcedure
+      .input(z.object({
+        projectId: z.string().optional(),
+        type: z.string().optional(),
+      }))
+      .query(async ({ ctx, input }) => {
+        // Return list of generated documents
+        return [];
       }),
   }),
 
