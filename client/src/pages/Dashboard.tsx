@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import { useLocation } from "wouter";
 import { 
   Sun, Users, Lock, 
@@ -22,8 +22,8 @@ import { VoiceInterfaceToggle } from "@/components/VoiceInterfaceToggle";
 import { FloatingVoiceNoteButton } from "@/components/VoiceNotepad";
 import { PerformanceBoost } from "@/components/PerformanceBoost";
 import { TwinBreakApproval } from "@/components/TwinBreakApproval";
-import { TourPrompt } from "@/components/TourAndDemoMode";
-import { NeuralNetworkViz } from "@/components/NeuralNetworkViz";
+import { TourPrompt } from '@/components/TourAndDemoMode';
+import { NeuralNetworkViz } from '@/components/NeuralNetworkViz';
 import { isDemoModeEnabled, getDemoData, initializeDemoModeIfNeeded } from "@/services/demoMode";
 
 // Daily rotating quotes - one for each day
@@ -77,6 +77,52 @@ export default function Dashboard() {
   const [governanceMode, setGovernanceMode] = useState<"omni" | "governed">("omni");
   const [inputValue, setInputValue] = useState("");
   const [isRecording, setIsRecording] = useState(false);
+  const [recordingDuration, setRecordingDuration] = useState(0);
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const recordingTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Tap-to-toggle voice recording
+  const toggleRecording = async () => {
+    if (isRecording) {
+      // Stop recording
+      if (mediaRecorderRef.current) {
+        mediaRecorderRef.current.stop();
+      }
+      if (recordingTimerRef.current) {
+        clearInterval(recordingTimerRef.current);
+      }
+      setIsRecording(false);
+      setRecordingDuration(0);
+    } else {
+      // Start recording
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        const mediaRecorder = new MediaRecorder(stream);
+        mediaRecorderRef.current = mediaRecorder;
+        const chunks: Blob[] = [];
+        
+        mediaRecorder.ondataavailable = (e) => {
+          if (e.data.size > 0) chunks.push(e.data);
+        };
+        
+        mediaRecorder.onstop = () => {
+          const blob = new Blob(chunks, { type: 'audio/webm' });
+          stream.getTracks().forEach(track => track.stop());
+          // In production: send blob to Whisper API for transcription
+          console.log('Recording complete, ready for transcription', blob);
+        };
+        
+        mediaRecorder.start();
+        setIsRecording(true);
+        setRecordingDuration(0);
+        recordingTimerRef.current = setInterval(() => {
+          setRecordingDuration(d => d + 1);
+        }, 1000);
+      } catch (err) {
+        console.error('Microphone access denied:', err);
+      }
+    }
+  };
   
   // Mood tracking
   const { todaysMoods } = useMoodCheck();
@@ -224,7 +270,7 @@ export default function Dashboard() {
                 </Button>
                 <Button 
                   size="icon" 
-                  onClick={() => setIsRecording(!isRecording)}
+                  onClick={toggleRecording}
                   className={`h-12 w-12 rounded-full transition-all hover:scale-105 ${
                     isRecording 
                       ? 'bg-red-500 hover:bg-red-600 animate-pulse shadow-[0_0_15px_rgba(239,68,68,0.5)]' 
@@ -396,6 +442,11 @@ export default function Dashboard() {
         <TourPrompt onStartTour={() => console.log('Start tour')} />
       </div>
 
+      {/* Neural Network Visualization */}
+      <div className="max-w-3xl mx-auto w-full mb-6">
+        <NeuralNetworkViz />
+      </div>
+
       {/* Voice Input - Manus Style with Mic on Right */}
       <div className="max-w-3xl mx-auto w-full">
         <div className="flex items-center gap-3 bg-card/60 border border-border rounded-xl px-4 py-3 focus-within:border-primary/50 focus-within:ring-1 focus-within:ring-primary/20 transition-all duration-300">
@@ -419,7 +470,7 @@ export default function Dashboard() {
             </Button>
             <Button 
               size="icon" 
-              onClick={() => setIsRecording(!isRecording)}
+              onClick={toggleRecording}
               className={`h-12 w-12 rounded-full transition-all hover:scale-105 ${
                 isRecording 
                   ? 'bg-red-500 hover:bg-red-600 animate-pulse shadow-[0_0_15px_rgba(239,68,68,0.5)]' 
