@@ -974,3 +974,14 @@
 - [x] Add Storage & Security tab to Settings page
 
 - [x] Add Universal Inbox to sidebar navigation
+
+
+## Biometric Security (Future - Mobile App)
+
+- [ ] Face ID / Touch ID re-authentication after 1 hour inactivity
+- [ ] Biometric prompt when app backgrounded for extended period
+- [ ] Require biometrics for sensitive areas (Vault, Signatures, AI Providers)
+- [ ] Device trust verification
+- [ ] Configurable timeout settings (15min, 30min, 1hr, 4hr)
+- [ ] PIN/password fallback if biometrics unavailable
+- [ ] Session lock on device change detection
