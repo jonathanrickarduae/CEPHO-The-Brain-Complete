@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState, useRef } from 'react';
 import { 
   Download, Share2, ZoomIn, ZoomOut, Maximize2, 
   FileText, Users, TrendingUp, Scale, Shield, 
@@ -84,6 +84,46 @@ export function VisualBlueprint({ projectName, projectType, data }: VisualBluepr
   const [zoom, setZoom] = useState(1);
   const [selectedNode, setSelectedNode] = useState<string | null>(null);
   const [showLegend, setShowLegend] = useState(true);
+  const [isExporting, setIsExporting] = useState(false);
+  const blueprintRef = useRef<HTMLDivElement>(null);
+
+  // Export blueprint as PNG
+  const handleExportPNG = async () => {
+    if (!blueprintRef.current) return;
+    setIsExporting(true);
+    try {
+      // Use html2canvas for PNG export
+      const html2canvas = (await import('html2canvas')).default;
+      const canvas = await html2canvas(blueprintRef.current, {
+        backgroundColor: '#0a0a0a',
+        scale: 2,
+      });
+      const link = document.createElement('a');
+      link.download = `${blueprint.projectName.replace(/\s+/g, '_')}_blueprint.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    } catch (error) {
+      console.error('Export failed:', error);
+      alert('Export failed. Please try again.');
+    } finally {
+      setIsExporting(false);
+    }
+  };
+
+  // Export blueprint as SVG
+  const handleExportSVG = () => {
+    const svgElement = blueprintRef.current?.querySelector('svg');
+    if (!svgElement) return;
+    
+    const svgData = new XMLSerializer().serializeToString(svgElement);
+    const blob = new Blob([svgData], { type: 'image/svg+xml' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.download = `${blueprint.projectName.replace(/\s+/g, '_')}_blueprint.svg`;
+    link.href = url;
+    link.click();
+    URL.revokeObjectURL(url);
+  };
   
   const blueprint = data?.nodes ? data as BlueprintData : {
     ...SAMPLE_BLUEPRINT,
@@ -213,10 +253,33 @@ export function VisualBlueprint({ projectName, projectType, data }: VisualBluepr
           <button className="p-1.5 hover:bg-secondary rounded border border-border">
             <Maximize2 className="w-4 h-4" />
           </button>
-          <button className="px-3 py-1.5 text-sm bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 flex items-center gap-1">
-            <Download className="w-4 h-4" />
-            Export
-          </button>
+          <div className="relative group">
+            <button 
+              className="px-3 py-1.5 text-sm bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 flex items-center gap-1"
+              disabled={isExporting}
+            >
+              {isExporting ? (
+                <span className="animate-spin">⏳</span>
+              ) : (
+                <Download className="w-4 h-4" />
+              )}
+              Export
+            </button>
+            <div className="absolute right-0 top-full mt-1 bg-card border border-border rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-10">
+              <button
+                onClick={handleExportPNG}
+                className="w-full px-4 py-2 text-sm text-left hover:bg-secondary flex items-center gap-2"
+              >
+                📷 Export as PNG
+              </button>
+              <button
+                onClick={handleExportSVG}
+                className="w-full px-4 py-2 text-sm text-left hover:bg-secondary flex items-center gap-2"
+              >
+                🎨 Export as SVG
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 

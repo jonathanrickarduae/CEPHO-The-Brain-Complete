@@ -1332,15 +1332,15 @@
 ### Functional Improvements (1-12)
 - [x] 1. Sample data & demo mode with realistic projects/tasks
 - [ ] 2. Error handling with proper error states and fallback UI
-- [ ] 3. Onboarding completion flow - auto-create sample Project Genesis
-- [ ] 4. Digital Twin personality preview - test conversation
+- [x] 3. Onboarding completion flow - auto-create sample Project Genesis
+- [x] 4. Digital Twin personality preview - test conversation
 - [ ] 5. Visual Blueprint export to PNG/PDF
 - [x] 6. Keyboard shortcuts and command palette (Cmd+K)
 - [x] 7. Offline indicator with action queuing
 - [x] 8. Session persistence for drafts and scroll positions
 - [x] 9. Toast notifications for all actions
 - [x] 10. Confirmation dialogs for destructive actions
-- [ ] 11. Better empty states with helpful prompts
+- [x] 11. Better empty states with helpful prompts
 - [x] 12. Loading states on all buttons during API calls
 
 ### Design Polish (13-28)
