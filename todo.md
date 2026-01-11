@@ -305,3 +305,37 @@
 - [x] Suggestion Mode: AI suggests, user approves
 - [x] Edit History: Track human vs AI contributions
 - [x] Confidence Indicators: Show AI certainty levels
+
+
+## Competitive Moat Building Strategy
+
+### 1. AI Training Data (Open Source)
+- [x] Research open-source conversation datasets (OASST2, HH-RLHF, ShareGPT)
+- [x] Identify public dialogue/assistant training corpora
+- [ ] Download and integrate OASST2 dataset (135K messages)
+- [ ] Design data pipeline for continuous learning from user interactions
+- [ ] Build proprietary dataset from anonymized user patterns
+
+### 2. Deep Integrations (Calendar/Task)
+- [x] Research Google Calendar API integration
+- [x] Research Microsoft Graph API (Outlook, Teams)
+- [x] Explore CalDAV/CardDAV open protocols
+- [ ] Implement Google Calendar OAuth integration
+- [ ] Build universal sync layer for cross-platform data
+
+### 3. Network Effects Strategy
+- [x] Research viral growth mechanisms (Superhuman playbook)
+- [x] Design referral/invitation system with queue jumping
+- [x] Create shareable AI insights/reports
+- [x] Build waitlist system with scarcity mechanics
+- [ ] Develop community/marketplace for AI agents
+
+### 4. Proprietary Algorithm Development
+- [ ] Design unique scheduling algorithm based on user patterns
+- [ ] Build personalization engine from interaction data
+- [x] Create proprietary "wellness score" algorithm
+- [ ] Develop predictive task completion model
+
+### Research Deliverables
+- [x] Moat Building Research: /research/moat-building-research.md
+- [x] Full Strategy Document: /research/moat-building-strategy.md

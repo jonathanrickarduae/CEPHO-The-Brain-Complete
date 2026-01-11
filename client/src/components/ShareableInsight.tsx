@@ -1,0 +1,257 @@
+import { useState } from 'react';
+import { Share2, Copy, Check, Twitter, Linkedin, Download, Eye } from 'lucide-react';
+
+interface ShareableInsightProps {
+  type: 'productivity' | 'mood' | 'wellness' | 'achievement' | 'consultation';
+  title: string;
+  data: {
+    score?: number;
+    trend?: string;
+    highlights?: string[];
+    period?: string;
+    expertName?: string;
+  };
+  onShare?: (platform: string) => void;
+}
+
+export function ShareableInsight({ type, title, data, onShare }: ShareableInsightProps) {
+  const [copied, setCopied] = useState(false);
+  const [showShareMenu, setShowShareMenu] = useState(false);
+
+  const generateShareUrl = () => {
+    // In production, this would create a unique shareable link
+    const shareCode = Math.random().toString(36).substring(7);
+    return `https://thebrain.app/shared/${shareCode}`;
+  };
+
+  const generateShareText = () => {
+    switch (type) {
+      case 'productivity':
+        return `📊 My productivity score this ${data.period || 'week'}: ${data.score}/10\n\n${data.highlights?.join('\n') || ''}\n\nPowered by The Brain 🧠`;
+      case 'mood':
+        return `😊 My mood trend is ${data.trend}!\n\n${data.highlights?.join('\n') || ''}\n\nTracking my wellness with The Brain 🧠`;
+      case 'wellness':
+        return `🌟 Wellness Score: ${data.score}/10\n\n${data.highlights?.join('\n') || ''}\n\nGetting to a 10 with The Brain 🧠`;
+      case 'achievement':
+        return `🏆 ${title}\n\n${data.highlights?.join('\n') || ''}\n\nAchieved with The Brain 🧠`;
+      case 'consultation':
+        return `💡 Just consulted with ${data.expertName} on The Brain\n\nKey insight: ${data.highlights?.[0] || ''}\n\nAI Experts at thebrain.app 🧠`;
+      default:
+        return `${title}\n\nPowered by The Brain 🧠`;
+    }
+  };
+
+  const copyToClipboard = async () => {
+    const text = generateShareText();
+    await navigator.clipboard.writeText(text);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+    onShare?.('copy');
+  };
+
+  const shareToTwitter = () => {
+    const text = encodeURIComponent(generateShareText());
+    const url = encodeURIComponent(generateShareUrl());
+    window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank');
+    onShare?.('twitter');
+  };
+
+  const shareToLinkedIn = () => {
+    const url = encodeURIComponent(generateShareUrl());
+    const title = encodeURIComponent(generateShareText().split('\n')[0]);
+    window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${url}&title=${title}`, '_blank');
+    onShare?.('linkedin');
+  };
+
+  const downloadAsImage = () => {
+    // In production, this would generate an image of the insight card
+    onShare?.('download');
+  };
+
+  const getTypeIcon = () => {
+    switch (type) {
+      case 'productivity': return '📊';
+      case 'mood': return '😊';
+      case 'wellness': return '🌟';
+      case 'achievement': return '🏆';
+      case 'consultation': return '💡';
+      default: return '🧠';
+    }
+  };
+
+  const getTypeColor = () => {
+    switch (type) {
+      case 'productivity': return 'from-blue-500 to-cyan-500';
+      case 'mood': return 'from-pink-500 to-rose-500';
+      case 'wellness': return 'from-green-500 to-emerald-500';
+      case 'achievement': return 'from-yellow-500 to-orange-500';
+      case 'consultation': return 'from-purple-500 to-violet-500';
+      default: return 'from-gray-500 to-slate-500';
+    }
+  };
+
+  return (
+    <div className="relative">
+      {/* Insight Card */}
+      <div className={`rounded-2xl bg-gradient-to-br ${getTypeColor()} p-1`}>
+        <div className="bg-gray-900 rounded-xl p-6">
+          {/* Header */}
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-3">
+              <span className="text-3xl">{getTypeIcon()}</span>
+              <div>
+                <h3 className="text-lg font-semibold text-white">{title}</h3>
+                {data.period && (
+                  <p className="text-sm text-gray-400">{data.period}</p>
+                )}
+              </div>
+            </div>
+            <button
+              onClick={() => setShowShareMenu(!showShareMenu)}
+              className="p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors"
+            >
+              <Share2 className="w-5 h-5 text-white" />
+            </button>
+          </div>
+
+          {/* Score Display */}
+          {data.score !== undefined && (
+            <div className="flex items-center gap-4 mb-4">
+              <div className="text-5xl font-bold text-white">
+                {data.score}
+                <span className="text-2xl text-gray-400">/10</span>
+              </div>
+              {data.trend && (
+                <div className={`px-3 py-1 rounded-full text-sm font-medium ${
+                  data.trend === 'improving' ? 'bg-green-500/20 text-green-400' :
+                  data.trend === 'declining' ? 'bg-red-500/20 text-red-400' :
+                  'bg-gray-500/20 text-gray-400'
+                }`}>
+                  {data.trend === 'improving' ? '↑ Improving' :
+                   data.trend === 'declining' ? '↓ Declining' :
+                   '→ Stable'}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Highlights */}
+          {data.highlights && data.highlights.length > 0 && (
+            <div className="space-y-2 mb-4">
+              {data.highlights.map((highlight, index) => (
+                <div key={index} className="flex items-start gap-2">
+                  <span className="text-green-400 mt-0.5">✓</span>
+                  <p className="text-gray-300 text-sm">{highlight}</p>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Branding */}
+          <div className="flex items-center justify-between pt-4 border-t border-gray-700">
+            <div className="flex items-center gap-2">
+              <span className="text-xl">🧠</span>
+              <span className="text-sm text-gray-400">Powered by The Brain</span>
+            </div>
+            <div className="flex items-center gap-1 text-sm text-gray-500">
+              <Eye className="w-4 h-4" />
+              <span>Public insight</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Share Menu */}
+      {showShareMenu && (
+        <div className="absolute top-full right-0 mt-2 w-48 bg-gray-800 rounded-lg shadow-xl border border-gray-700 overflow-hidden z-50">
+          <button
+            onClick={copyToClipboard}
+            className="w-full flex items-center gap-3 px-4 py-3 text-left text-gray-300 hover:bg-gray-700 transition-colors"
+          >
+            {copied ? <Check className="w-5 h-5 text-green-400" /> : <Copy className="w-5 h-5" />}
+            <span>{copied ? 'Copied!' : 'Copy text'}</span>
+          </button>
+          <button
+            onClick={shareToTwitter}
+            className="w-full flex items-center gap-3 px-4 py-3 text-left text-gray-300 hover:bg-gray-700 transition-colors"
+          >
+            <Twitter className="w-5 h-5" />
+            <span>Share on X</span>
+          </button>
+          <button
+            onClick={shareToLinkedIn}
+            className="w-full flex items-center gap-3 px-4 py-3 text-left text-gray-300 hover:bg-gray-700 transition-colors"
+          >
+            <Linkedin className="w-5 h-5" />
+            <span>Share on LinkedIn</span>
+          </button>
+          <button
+            onClick={downloadAsImage}
+            className="w-full flex items-center gap-3 px-4 py-3 text-left text-gray-300 hover:bg-gray-700 transition-colors"
+          >
+            <Download className="w-5 h-5" />
+            <span>Download image</span>
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// Compact version for embedding in other components
+export function ShareButton({ onClick }: { onClick: () => void }) {
+  return (
+    <button
+      onClick={onClick}
+      className="flex items-center gap-2 px-3 py-1.5 text-sm text-gray-400 hover:text-white bg-gray-800 hover:bg-gray-700 rounded-lg transition-colors"
+    >
+      <Share2 className="w-4 h-4" />
+      <span>Share</span>
+    </button>
+  );
+}
+
+// Generate shareable card data
+export function generateProductivityInsight(data: {
+  tasksCompleted: number;
+  focusHours: number;
+  streak: number;
+  period: string;
+}): ShareableInsightProps {
+  const score = Math.min(10, Math.round((data.tasksCompleted / 10 + data.focusHours / 4 + data.streak / 7) * 3.3));
+  
+  return {
+    type: 'productivity',
+    title: 'Productivity Report',
+    data: {
+      score,
+      period: data.period,
+      trend: score >= 7 ? 'improving' : score >= 5 ? 'stable' : 'declining',
+      highlights: [
+        `Completed ${data.tasksCompleted} tasks`,
+        `${data.focusHours} hours of deep focus`,
+        `${data.streak}-day streak`,
+      ],
+    },
+  };
+}
+
+export function generateWellnessInsight(data: {
+  score: number;
+  trend: string;
+  moodAverage: number;
+  recommendations: string[];
+}): ShareableInsightProps {
+  return {
+    type: 'wellness',
+    title: 'Wellness Score',
+    data: {
+      score: data.score,
+      trend: data.trend as 'improving' | 'stable' | 'declining',
+      highlights: [
+        `Average mood: ${data.moodAverage.toFixed(1)}/10`,
+        ...data.recommendations.slice(0, 2),
+      ],
+    },
+  };
+}
