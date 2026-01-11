@@ -1002,3 +1002,26 @@ export const complianceChecklists = mysqlTable("compliance_checklists", {
 
 export type ComplianceChecklist = typeof complianceChecklists.$inferSelect;
 export type InsertComplianceChecklist = typeof complianceChecklists.$inferInsert;
+
+
+/**
+ * Voice notes - captured throughout the day for Digital Twin context
+ */
+export const voiceNotes = mysqlTable("voice_notes", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  content: text("content").notNull(), // Transcribed text
+  category: mysqlEnum("category", ["task", "idea", "reminder", "observation", "question", "follow_up"]).default("observation").notNull(),
+  audioUrl: varchar("audioUrl", { length: 500 }), // S3 URL to original audio
+  duration: int("duration"), // Duration in seconds
+  projectId: int("projectId"), // Optional link to project
+  projectName: varchar("projectName", { length: 300 }),
+  isActionItem: boolean("isActionItem").default(false),
+  isProcessed: boolean("isProcessed").default(false), // Has Digital Twin processed this?
+  extractedTasks: json("extractedTasks"), // Array of task strings extracted
+  metadata: json("metadata"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type VoiceNote = typeof voiceNotes.$inferSelect;
+export type InsertVoiceNote = typeof voiceNotes.$inferInsert;

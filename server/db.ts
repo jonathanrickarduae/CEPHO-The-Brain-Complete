@@ -846,3 +846,72 @@ export async function getAuditLog(userId: number, options?: { limit?: number; ac
     return [];
   }
 }
+
+
+// ==================== VOICE NOTES ====================
+import { voiceNotes, InsertVoiceNote, VoiceNote } from "../drizzle/schema";
+
+export async function createVoiceNote(data: InsertVoiceNote) {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const result = await db.insert(voiceNotes).values(data);
+  return { id: result[0].insertId, ...data };
+}
+
+export async function getVoiceNotes(userId: number, options?: { 
+  category?: string; 
+  search?: string;
+  limit?: number;
+  projectId?: number;
+}) {
+  const db = await getDb();
+  if (!db) return [];
+  
+  // Build conditions array
+  const conditions = [eq(voiceNotes.userId, userId)];
+  
+  if (options?.category) {
+    conditions.push(eq(voiceNotes.category, options.category as any));
+  }
+  
+  if (options?.projectId) {
+    conditions.push(eq(voiceNotes.projectId, options.projectId));
+  }
+  
+  const results = await db.select().from(voiceNotes)
+    .where(and(...conditions))
+    .orderBy(desc(voiceNotes.createdAt))
+    .limit(options?.limit || 100);
+  
+  // Filter by search if provided (client-side for now)
+  if (options?.search) {
+    const searchLower = options.search.toLowerCase();
+    return results.filter(n => n.content.toLowerCase().includes(searchLower));
+  }
+  
+  return results;
+}
+
+export async function updateVoiceNote(id: number, data: Partial<InsertVoiceNote>) {
+  const db = await getDb();
+  if (!db) return;
+  
+  await db.update(voiceNotes).set(data).where(eq(voiceNotes.id, id));
+}
+
+export async function deleteVoiceNote(id: number) {
+  const db = await getDb();
+  if (!db) return;
+  
+  await db.delete(voiceNotes).where(eq(voiceNotes.id, id));
+}
+
+export async function getUnprocessedVoiceNotes(userId: number) {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return db.select().from(voiceNotes)
+    .where(and(eq(voiceNotes.userId, userId), eq(voiceNotes.isProcessed, false)))
+    .orderBy(desc(voiceNotes.createdAt));
+}

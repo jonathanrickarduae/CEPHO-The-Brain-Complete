@@ -1257,3 +1257,53 @@
 - [x] Calculate confidence scores for autonomous approval
 - [x] Display learning progress over time
 - [x] Recommendations for increasing autonomy
+
+
+## Voice Notes Notepad (January 2026)
+
+### Voice Note Capture
+- [x] Voice note recording button accessible from Dashboard
+- [x] Real-time transcription of voice notes
+- [x] Store transcribed notes in running notepad list
+- [x] Timestamp each note with date/time
+- [x] Auto-categorize notes (task, idea, reminder, observation)
+
+### Digital Twin Notepad Integration
+- [x] Digital Twin can access all voice notes as context
+- [x] Notepad view showing all captured notes chronologically
+- [x] Search and filter notes by date, category, keyword
+- [x] Convert notes to tasks or calendar items
+- [ ] Digital Twin summarizes daily notes in Evening Review
+
+### Voice Note Processing
+- [ ] Background transcription processing
+- [ ] Extract action items from voice notes
+- [ ] Link notes to relevant projects automatically
+- [ ] Flag important notes for follow-up
+
+
+## OAuth Email Integration (January 2026)
+
+### Microsoft Outlook OAuth
+- [ ] Register app in Azure AD for Microsoft Graph API
+- [ ] OAuth flow for Outlook connection
+- [ ] Fetch emails via Microsoft Graph API
+- [ ] Two-way sync (read and send)
+- [ ] Real-time webhook for new emails
+- [ ] Attachment handling
+
+### Gmail OAuth
+- [ ] Register app in Google Cloud Console
+- [ ] OAuth flow for Gmail connection
+- [ ] Fetch emails via Gmail API
+- [ ] Two-way sync (read and send)
+- [ ] Push notifications for new emails
+- [ ] Label and thread management
+
+### Universal Inbox Email Processing
+- [ ] Auto-categorize incoming emails with AI
+- [ ] Extract action items from emails
+- [ ] Link emails to relevant projects
+- [ ] Smart reply suggestions
+- [ ] Email-to-task conversion
+- [ ] Priority scoring based on sender/content

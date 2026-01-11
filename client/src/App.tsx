@@ -26,6 +26,8 @@ import ProjectGenesisPage from "./pages/ProjectGenesisPage";
 import InboxPage from "./pages/InboxPage";
 import VideoStudioPage from "./pages/VideoStudioPage";
 import QADashboardPage from "./pages/QADashboardPage";
+import VoiceNotepadPage from "./pages/VoiceNotepadPage";
+import IntegrationsPage from "./pages/IntegrationsPage";
 import { GovernanceProvider, GovernanceModeChangeModal } from "./hooks/useGovernance";
 import { CelebrationProvider } from "./components/CelebrationAnimations";
 import { PageTransition } from "./components/PageTransition";
@@ -110,6 +112,12 @@ function Router() {
       </Route>
       <Route path="/qa-dashboard">
         <WithLayout><QADashboardPage /></WithLayout>
+      </Route>
+      <Route path="/voice-notepad">
+        <WithLayout><VoiceNotepadPage /></WithLayout>
+      </Route>
+      <Route path="/integrations">
+        <WithLayout><IntegrationsPage /></WithLayout>
       </Route>
       
       {/* Fallback */}

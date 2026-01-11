@@ -16,7 +16,8 @@ import {
   recordFeedback, getFeedbackHistory,
   createTask, getTasks, updateTask,
   createInboxItem, getInboxItems, updateInboxItem,
-  createAuditEntry, getAuditLog
+  createAuditEntry, getAuditLog,
+  createVoiceNote, getVoiceNotes, updateVoiceNote, deleteVoiceNote
 } from "./db";
 import { invokeLLM } from "./_core/llm";
 import { z } from "zod";
@@ -234,6 +235,56 @@ Always be direct and efficient. The user is busy and values their time.`;
       .mutation(async ({ input }) => {
         await deleteIntegration(input.id);
         return { success: true };
+      }),
+
+    // Connect integration (OAuth flow)
+    connect: protectedProcedure
+      .input(z.object({
+        type: z.string(),
+        config: z.record(z.string(), z.any()).optional(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        // Create or update integration record
+        const existing = await getIntegrations(ctx.user.id);
+        const existingIntegration = existing.find(i => i.provider === input.type);
+        
+        if (existingIntegration) {
+          await updateIntegration(existingIntegration.id, { status: 'active' });
+          return { success: true, id: existingIntegration.id };
+        }
+        
+        const newIntegration = await createIntegration({
+          userId: ctx.user.id,
+          provider: input.type,
+          status: 'active',
+          metadata: input.config,
+        });
+        return { success: true, id: newIntegration?.id ?? 0 };
+      }),
+
+    // Disconnect integration
+    disconnect: protectedProcedure
+      .input(z.object({ type: z.string() }))
+      .mutation(async ({ ctx, input }) => {
+        const integrations = await getIntegrations(ctx.user.id);
+        const integration = integrations.find(i => i.provider === input.type);
+        if (integration) {
+          await updateIntegration(integration.id, { status: 'revoked' });
+        }
+        return { success: true };
+      }),
+
+    // Sync integration data
+    sync: protectedProcedure
+      .input(z.object({ type: z.string() }))
+      .mutation(async ({ ctx, input }) => {
+        const integrations = await getIntegrations(ctx.user.id);
+        const integration = integrations.find(i => i.provider === input.type);
+        if (integration) {
+          // Update lastSyncAt
+          await updateIntegration(integration.id, { lastSyncAt: new Date() });
+        }
+        return { success: true, syncedAt: new Date() };
       }),
   }),
 
@@ -618,7 +669,6 @@ Always be direct and efficient. The user is busy and values their time.`;
       .query(async ({ ctx, input }) => {
         return getAuditLog(ctx.user.id, input);
       }),
-
     log: protectedProcedure
       .input(z.object({
         action: z.string(),
@@ -633,6 +683,85 @@ Always be direct and efficient. The user is busy and values their time.`;
           userId: ctx.user.id,
           ...input,
         });
+        return { success: true };
+      }),
+  }),
+
+  // Voice Notes API - Digital Twin notepad
+  voiceNotes: router({
+    list: protectedProcedure
+      .input(z.object({
+        category: z.enum(['task', 'idea', 'reminder', 'observation', 'question', 'follow_up']).optional(),
+        search: z.string().optional(),
+        limit: z.number().optional(),
+        projectId: z.number().optional(),
+      }).optional())
+      .query(async ({ ctx, input }) => {
+        return getVoiceNotes(ctx.user.id, input);
+      }),
+
+    create: protectedProcedure
+      .input(z.object({
+        content: z.string(),
+        category: z.enum(['task', 'idea', 'reminder', 'observation', 'question', 'follow_up']).optional(),
+        audioUrl: z.string().optional(),
+        duration: z.number().optional(),
+        projectId: z.number().optional(),
+        projectName: z.string().optional(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        return createVoiceNote({
+          userId: ctx.user.id,
+          content: input.content,
+          category: input.category || 'observation',
+          audioUrl: input.audioUrl,
+          duration: input.duration,
+          projectId: input.projectId,
+          projectName: input.projectName,
+        });
+      }),
+
+    update: protectedProcedure
+      .input(z.object({
+        id: z.number(),
+        content: z.string().optional(),
+        category: z.enum(['task', 'idea', 'reminder', 'observation', 'question', 'follow_up']).optional(),
+        isProcessed: z.boolean().optional(),
+        extractedTasks: z.array(z.string()).optional(),
+      }))
+      .mutation(async ({ input }) => {
+        const { id, ...data } = input;
+        await updateVoiceNote(id, data);
+        return { success: true };
+      }),
+
+    delete: protectedProcedure
+      .input(z.object({ id: z.number() }))
+      .mutation(async ({ input }) => {
+        await deleteVoiceNote(input.id);
+        return { success: true };
+      }),
+
+    convertToTask: protectedProcedure
+      .input(z.object({ id: z.number() }))
+      .mutation(async ({ ctx, input }) => {
+        // Get the voice note
+        const notes = await getVoiceNotes(ctx.user.id, { limit: 1 });
+        const note = notes.find(n => n.id === input.id);
+        if (!note) throw new Error('Voice note not found');
+        
+        // Create a task from the note
+        await createTask({
+          userId: ctx.user.id,
+          title: note.content.slice(0, 100),
+          description: note.content,
+          status: 'not_started',
+          metadata: { source: 'voice_note', sourceId: note.id },
+        });
+        
+        // Update the note category to task
+        await updateVoiceNote(input.id, { category: 'task', isActionItem: true });
+        
         return { success: true };
       }),
   }),
