@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
-import { Mic, Camera, CheckCircle2, Bell, X, MicOff, Loader2 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Mic, Camera, CheckCircle2, Bell, X, MicOff, Loader2, AlertCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useVoiceInput, useVoiceWaveform } from '@/hooks/useVoiceInput';
+import { haptics } from '@/lib/haptics';
 
 interface QuickActionsBarProps {
   onVoiceInput?: (transcript: string) => void;
@@ -21,34 +22,62 @@ export function QuickActionsBar({
   position = 'bottom-right',
 }: QuickActionsBarProps) {
   const [isExpanded, setIsExpanded] = useState(false);
-  const [isRecording, setIsRecording] = useState(false);
-  const [transcript, setTranscript] = useState('');
+  const [showTranscript, setShowTranscript] = useState(false);
 
-  // Voice recording state
-  const startRecording = async () => {
-    setIsRecording(true);
-    // Web Speech API implementation would go here
-    // For now, simulate recording
-    setTimeout(() => {
-      setIsRecording(false);
-      const mockTranscript = "Sample voice input captured";
-      setTranscript(mockTranscript);
-      onVoiceInput?.(mockTranscript);
-    }, 2000);
-  };
+  // Real voice input using Web Speech API
+  const {
+    isListening,
+    isSupported,
+    transcript,
+    interimTranscript,
+    error,
+    startListening,
+    stopListening,
+    resetTranscript,
+  } = useVoiceInput({
+    continuous: false,
+    onResult: (text, isFinal) => {
+      if (isFinal && text.trim()) {
+        onVoiceInput?.(text);
+        setShowTranscript(true);
+        setTimeout(() => {
+          setShowTranscript(false);
+          resetTranscript();
+        }, 3000);
+      }
+    },
+    onStart: () => {
+      haptics.tap();
+    },
+    onEnd: () => {
+      haptics.success();
+    },
+    onError: () => {
+      haptics.error();
+    },
+  });
 
-  const stopRecording = () => {
-    setIsRecording(false);
+  // Waveform visualization
+  const { waveformData, startWaveform, stopWaveform } = useVoiceWaveform();
+
+  // Sync waveform with listening state
+  useEffect(() => {
+    if (isListening) {
+      startWaveform();
+    } else {
+      stopWaveform();
+    }
+  }, [isListening, startWaveform, stopWaveform]);
+
+  const handleVoiceToggle = () => {
+    if (isListening) {
+      stopListening();
+    } else {
+      startListening();
+    }
   };
 
   const actions = [
-    {
-      id: 'voice',
-      icon: isRecording ? MicOff : Mic,
-      label: isRecording ? 'Stop' : 'Voice',
-      color: isRecording ? 'bg-red-500 hover:bg-red-600' : 'bg-primary hover:bg-primary/90',
-      onClick: isRecording ? stopRecording : startRecording,
-    },
     {
       id: 'capture',
       icon: Camera,
@@ -100,15 +129,60 @@ export function QuickActionsBar({
         className
       )}
     >
+      {/* Transcript display */}
+      {(showTranscript || isListening) && (transcript || interimTranscript) && (
+        <div className="absolute bottom-full mb-3 right-0 bg-card/95 backdrop-blur-xl rounded-xl px-4 py-3 shadow-lg border border-white/10 max-w-xs animate-in fade-in slide-in-from-bottom-2">
+          <p className="text-sm text-foreground">
+            {transcript}
+            {interimTranscript && (
+              <span className="text-muted-foreground">{interimTranscript}</span>
+            )}
+          </p>
+          {isListening && (
+            <div className="flex items-center gap-1 mt-2">
+              <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
+              <span className="text-xs text-muted-foreground">Listening...</span>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Error display */}
+      {error && (
+        <div className="absolute bottom-full mb-3 right-0 bg-destructive/90 backdrop-blur-xl rounded-xl px-4 py-2 shadow-lg max-w-xs animate-in fade-in">
+          <p className="text-sm text-white flex items-center gap-2">
+            <AlertCircle className="w-4 h-4" />
+            {error}
+          </p>
+        </div>
+      )}
+
+      {/* Waveform visualization */}
+      {isListening && (
+        <div className="absolute bottom-full mb-16 right-0 flex items-end justify-center gap-1 h-12 px-4">
+          {waveformData.slice(0, 12).map((level, i) => (
+            <div
+              key={i}
+              className="w-1.5 bg-primary rounded-full transition-all duration-75"
+              style={{
+                height: `${Math.max(8, level * 100)}%`,
+                opacity: 0.5 + level * 0.5,
+              }}
+            />
+          ))}
+        </div>
+      )}
+
       {/* Expanded Actions */}
-      {isExpanded && (
+      {isExpanded && !isListening && (
         <div className="flex flex-col gap-2 mb-2 animate-in fade-in slide-in-from-bottom-2 duration-200">
-          {actions.slice(1).map((action) => (
+          {actions.map((action) => (
             <button
               key={action.id}
               onClick={() => {
+                haptics.tap();
                 action.onClick?.();
-                if (action.id !== 'voice') setIsExpanded(false);
+                setIsExpanded(false);
               }}
               className={cn(
                 'flex items-center gap-2 px-4 py-2 rounded-full text-white text-sm font-medium shadow-lg transition-all duration-200 hover:scale-105',
@@ -125,72 +199,124 @@ export function QuickActionsBar({
       {/* Main FAB - Voice Button */}
       <button
         onClick={() => {
-          if (isRecording) {
-            stopRecording();
+          if (!isSupported) {
+            // Show not supported message
+            return;
+          }
+          if (isListening) {
+            stopListening();
           } else if (isExpanded) {
-            startRecording();
+            handleVoiceToggle();
+            setIsExpanded(false);
           } else {
             setIsExpanded(true);
           }
         }}
+        disabled={!isSupported}
         className={cn(
           'flex items-center justify-center w-14 h-14 rounded-full text-white shadow-lg transition-all duration-200',
-          isRecording
-            ? 'bg-red-500 animate-pulse shadow-red-500/50'
-            : 'bg-primary hover:bg-primary/90 hover:scale-110 shadow-primary/40',
-          isExpanded && !isRecording && 'ring-2 ring-white/30'
+          isListening
+            ? 'bg-red-500 shadow-red-500/50 scale-110'
+            : isSupported
+              ? 'bg-primary hover:bg-primary/90 hover:scale-110 shadow-primary/40'
+              : 'bg-muted cursor-not-allowed',
+          isExpanded && !isListening && 'ring-2 ring-white/30'
         )}
+        title={!isSupported ? 'Voice input not supported in this browser' : undefined}
       >
-        {isRecording ? (
-          <Loader2 className="w-6 h-6 animate-spin" />
-        ) : isExpanded ? (
-          <Mic className="w-6 h-6" />
+        {isListening ? (
+          <div className="relative">
+            <Mic className="w-6 h-6 animate-pulse" />
+            <span className="absolute -top-1 -right-1 w-3 h-3 bg-white rounded-full animate-ping" />
+          </div>
+        ) : !isSupported ? (
+          <MicOff className="w-6 h-6" />
         ) : (
           <Mic className="w-6 h-6" />
         )}
       </button>
 
       {/* Recording indicator */}
-      {isRecording && (
-        <div className="absolute -top-8 right-0 bg-red-500 text-white text-xs px-3 py-1 rounded-full animate-pulse">
-          Recording...
+      {isListening && (
+        <div className="absolute -top-2 right-0 bg-red-500 text-white text-xs px-3 py-1 rounded-full animate-pulse shadow-lg">
+          Tap to stop
         </div>
       )}
     </div>
   );
 }
 
-// Floating Mic Button for mobile - simplified version
+// Floating Mic Button for mobile - simplified version with real voice input
 export function FloatingMicButton({
-  onPress,
-  isRecording = false,
+  onTranscript,
   className,
 }: {
-  onPress: () => void;
-  isRecording?: boolean;
+  onTranscript: (transcript: string) => void;
   className?: string;
 }) {
+  const {
+    isListening,
+    isSupported,
+    transcript,
+    interimTranscript,
+    startListening,
+    stopListening,
+    resetTranscript,
+  } = useVoiceInput({
+    continuous: false,
+    onResult: (text, isFinal) => {
+      if (isFinal && text.trim()) {
+        onTranscript(text);
+        setTimeout(resetTranscript, 1000);
+      }
+    },
+  });
+
+  const handlePress = () => {
+    if (isListening) {
+      stopListening();
+    } else {
+      startListening();
+    }
+  };
+
+  if (!isSupported) {
+    return null;
+  }
+
   return (
-    <button
-      onClick={onPress}
-      className={cn(
-        'fixed z-50 flex items-center justify-center w-16 h-16 rounded-full text-white shadow-lg transition-all duration-200',
-        'right-4 bottom-20',
-        isRecording
-          ? 'bg-red-500 animate-pulse shadow-red-500/50'
-          : 'bg-primary hover:bg-primary/90 hover:scale-110 shadow-primary/40',
-        className
-      )}
-      aria-label={isRecording ? 'Stop recording' : 'Start voice input'}
-    >
-      {isRecording ? (
-        <div className="relative">
-          <Mic className="w-7 h-7" />
-          <span className="absolute -top-1 -right-1 w-3 h-3 bg-white rounded-full animate-ping" />
+    <>
+      {/* Transcript bubble */}
+      {isListening && (transcript || interimTranscript) && (
+        <div className="fixed z-50 right-4 bottom-40 bg-card/95 backdrop-blur-xl rounded-xl px-4 py-3 shadow-lg border border-white/10 max-w-xs animate-in fade-in">
+          <p className="text-sm text-foreground">
+            {transcript}
+            <span className="text-muted-foreground">{interimTranscript}</span>
+          </p>
         </div>
-      ) : (
-        <Mic className="w-7 h-7" />
       )}
-    </button>
+
+      <button
+        onClick={handlePress}
+        className={cn(
+          'fixed z-50 flex items-center justify-center w-16 h-16 rounded-full text-white shadow-lg transition-all duration-200',
+          'right-4 bottom-20',
+          isListening
+            ? 'bg-red-500 scale-110 shadow-red-500/50'
+            : 'bg-primary hover:bg-primary/90 hover:scale-110 shadow-primary/40',
+          className
+        )}
+        aria-label={isListening ? 'Stop recording' : 'Start voice input'}
+      >
+        {isListening ? (
+          <div className="relative">
+            <Mic className="w-7 h-7 animate-pulse" />
+            <span className="absolute -top-1 -right-1 w-3 h-3 bg-white rounded-full animate-ping" />
+          </div>
+        ) : (
+          <Mic className="w-7 h-7" />
+        )}
+      </button>
+    </>
   );
 }

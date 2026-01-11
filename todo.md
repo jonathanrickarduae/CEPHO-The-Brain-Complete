@@ -171,3 +171,70 @@
 - [x] Streaks & Gamification: Visual streak counters for consecutive usage
 - [x] Progress Celebrations: Confetti/animations for milestones
 - [x] Smart Notifications: Gentle nudges at optimal times based on patterns
+
+
+## Critical Production Features
+
+### Data Persistence Layer
+- [ ] Database schema: user_stats table (xp, level, streak, etc.)
+- [ ] Database schema: achievements table (unlocked achievements)
+- [ ] Database schema: mood_entries table (mood check history)
+- [ ] Database schema: notifications table (notification history)
+- [ ] Database schema: conversations table (Digital Twin chat history)
+- [ ] API endpoints: GET/POST user stats
+- [ ] API endpoints: GET/POST achievements
+- [ ] API endpoints: GET/POST mood entries
+- [ ] API endpoints: GET/POST conversations
+- [ ] Migrate localStorage hooks to use API
+
+### AI Integration (Digital Twin)
+- [ ] Connect to Forge API for chat completions
+- [ ] System prompt for Digital Twin persona
+- [ ] Conversation context management
+- [ ] Store conversation history in database
+- [ ] Training data collection from interactions
+
+### PWA Setup
+- [ ] Web app manifest (name, icons, theme)
+- [ ] Service worker for offline caching
+- [ ] Install prompt component
+- [ ] Offline fallback page
+
+### Error Boundaries & Fallbacks
+- [ ] React error boundary component
+- [ ] API error handling with retry logic
+- [ ] Offline detection and UI feedback
+- [ ] Graceful degradation for failed features
+
+### Rate Limiting & Security
+- [ ] Rate limiting middleware for API routes
+- [ ] Input validation on all endpoints
+- [ ] CSRF protection
+- [ ] Sanitize user inputs
+
+
+## Requested Features (Priority)
+
+### 1. Mood Data Backend
+- [x] Database schema: mood_entries table
+- [x] API: POST /api/mood - save mood entry
+- [x] API: GET /api/mood - get mood history
+- [x] API: GET /api/mood/trends - get mood trends/analytics
+- [x] Update useMoodCheck hook to use API
+- [ ] Mood timeline visualization with real data
+
+### 2. Voice Input (Web Speech API)
+- [x] Create useVoiceInput hook with Web Speech API
+- [x] Voice recording UI with waveform visualization
+- [x] Speech-to-text transcription
+- [ ] Integrate with Digital Twin chat
+- [x] Integrate with Quick Actions FAB
+- [x] Error handling for unsupported browsers
+
+### 3. AI Expert Personas (250+)
+- [x] Define expert categories (Business, Tech, Health, Creative, etc.) - 16 categories
+- [x] Create expert data structure (name, avatar, bio, specialization, personality)
+- [x] Generate 287 unique expert profiles (already existed)
+- [x] Expert selection UI in AI Experts page
+- [x] Expert-specific system prompts for chat (generateExpertSystemPrompt function)
+- [x] Expert avatars/icons (emoji-based)

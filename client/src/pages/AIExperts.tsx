@@ -7,8 +7,17 @@ import {
   ThumbsDown, RotateCcw, Sparkles, Timer, 
   FileText, Mail, Code, Search, Mic, MicOff,
   Fingerprint, Eye, ChevronRight, AlertCircle,
-  ListChecks, RefreshCw
+  ListChecks, RefreshCw, Star
 } from "lucide-react";
+import { 
+  AI_EXPERTS, 
+  categories, 
+  searchExperts, 
+  getTopPerformers,
+  getExpertsByCategory,
+  generateExpertSystemPrompt,
+  TOTAL_EXPERTS 
+} from "@/data/aiExperts";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";

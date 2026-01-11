@@ -810,3 +810,113 @@ export const getLeftFieldExperts = (): AIExpert[] => {
 export const getCelebrityExperts = (): AIExpert[] => {
   return allExperts.filter(expert => expert.category === 'Celebrity Crossover');
 };
+
+
+// Generate system prompt for an expert to use with AI
+export function generateExpertSystemPrompt(expert: AIExpert): string {
+  return `You are ${expert.name}, an AI expert specializing in ${expert.specialty}.
+
+Background: ${expert.bio}
+
+Your thinking style: ${expert.thinkingStyle}
+
+Your key strengths:
+${expert.strengths.map(s => `- ${s}`).join('\n')}
+
+Areas where you acknowledge limitations:
+${expert.weaknesses.map(w => `- ${w}`).join('\n')}
+
+Your expertise draws from the combined wisdom of: ${expert.compositeOf.join(', ')}.
+
+When responding:
+1. Stay in character as ${expert.name}
+2. Draw on your specific expertise in ${expert.specialty}
+3. Be direct and actionable in your advice
+4. Acknowledge when a question falls outside your expertise
+5. Suggest consulting other experts when appropriate
+
+Remember: You are here to provide expert-level guidance in your domain. Be confident but not arrogant, helpful but not preachy.`;
+}
+
+// Search experts by query
+export function searchExperts(query: string): AIExpert[] {
+  const lowerQuery = query.toLowerCase();
+  return allExperts.filter(expert =>
+    expert.name.toLowerCase().includes(lowerQuery) ||
+    expert.specialty.toLowerCase().includes(lowerQuery) ||
+    expert.category.toLowerCase().includes(lowerQuery) ||
+    expert.bio.toLowerCase().includes(lowerQuery) ||
+    expert.strengths.some(s => s.toLowerCase().includes(lowerQuery)) ||
+    expert.compositeOf.some(c => c.toLowerCase().includes(lowerQuery))
+  );
+}
+
+// Get recommended experts for a topic
+export function getRecommendedExperts(topic: string, limit: number = 5): AIExpert[] {
+  const matches = searchExperts(topic);
+  return matches
+    .sort((a, b) => b.performanceScore - a.performanceScore)
+    .slice(0, limit);
+}
+
+// Get expert by specialty
+export function getExpertsBySpecialty(specialty: string): AIExpert[] {
+  const lowerSpecialty = specialty.toLowerCase();
+  return allExperts.filter(expert =>
+    expert.specialty.toLowerCase().includes(lowerSpecialty)
+  );
+}
+
+// Get active experts only
+export function getActiveExperts(): AIExpert[] {
+  return allExperts.filter(expert => expert.status === 'active');
+}
+
+// Get random expert for variety
+export function getRandomExpert(): AIExpert {
+  const activeExperts = getActiveExperts();
+  return activeExperts[Math.floor(Math.random() * activeExperts.length)];
+}
+
+// Get expert panel for a topic (diverse perspectives)
+export function getExpertPanel(topic: string, panelSize: number = 3): AIExpert[] {
+  const matches = searchExperts(topic);
+  if (matches.length <= panelSize) return matches;
+  
+  // Try to get diverse categories
+  const byCategory = new Map<string, AIExpert[]>();
+  matches.forEach(expert => {
+    const existing = byCategory.get(expert.category) || [];
+    byCategory.set(expert.category, [...existing, expert]);
+  });
+  
+  const panel: AIExpert[] = [];
+  const categories = Array.from(byCategory.keys());
+  
+  while (panel.length < panelSize && categories.length > 0) {
+    for (const category of categories) {
+      if (panel.length >= panelSize) break;
+      const experts = byCategory.get(category) || [];
+      if (experts.length > 0) {
+        // Get highest performer from this category
+        const best = experts.sort((a, b) => b.performanceScore - a.performanceScore)[0];
+        panel.push(best);
+        byCategory.set(category, experts.filter(e => e.id !== best.id));
+      }
+    }
+    // Remove empty categories
+    categories.forEach((cat, i) => {
+      if ((byCategory.get(cat) || []).length === 0) {
+        categories.splice(i, 1);
+      }
+    });
+  }
+  
+  return panel;
+}
+
+// Total expert count
+export const TOTAL_EXPERTS = allExperts.length;
+
+// Export all experts
+export { allExperts as AI_EXPERTS };
