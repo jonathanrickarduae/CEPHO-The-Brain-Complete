@@ -17,6 +17,7 @@ import { MobileInputSheet, QuickInputTrigger } from "@/components/MobileInputShe
 import { useIsMobile } from "@/hooks/useMobile";
 import { PullToRefresh } from "@/components/PullToRefresh";
 import { GettingStartedChecklist, useOnboardingStatus } from "@/components/GettingStartedChecklist";
+import { InsightsPanel, InlineNudge, useNudgeEngine } from "@/components/IntelligentNudges";
 
 // Daily rotating quotes - one for each day
 const QUOTES = [
@@ -357,6 +358,11 @@ export default function Dashboard() {
       {/* Getting Started Checklist for new users */}
       <div className="max-w-3xl mx-auto w-full mb-6">
         <GettingStartedChecklist />
+      </div>
+
+      {/* Intelligent Nudges - Contextual Suggestions */}
+      <div className="max-w-3xl mx-auto w-full mb-6">
+        <InsightsPanel />
       </div>
 
       {/* Voice Input - Manus Style with Mic on Right */}

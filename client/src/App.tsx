@@ -24,6 +24,7 @@ import About from "./pages/About";
 import ReviewQueue from "./pages/ReviewQueue";
 import ProjectGenesisPage from "./pages/ProjectGenesisPage";
 import InboxPage from "./pages/InboxPage";
+import VideoStudioPage from "./pages/VideoStudioPage";
 import { GovernanceProvider, GovernanceModeChangeModal } from "./hooks/useGovernance";
 import { CelebrationProvider } from "./components/CelebrationAnimations";
 import { PageTransition } from "./components/PageTransition";
@@ -101,6 +102,10 @@ function Router() {
       </Route>
       <Route path="/inbox">
         <WithLayout><InboxPage /></WithLayout>
+      </Route>
+      
+      <Route path="/video-studio">
+        <WithLayout><VideoStudioPage /></WithLayout>
       </Route>
       
       {/* Fallback */}

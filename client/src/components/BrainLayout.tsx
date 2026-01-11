@@ -23,7 +23,7 @@ import { getLoginUrl } from "@/const";
 import { useIsMobile } from "@/hooks/useMobile";
 import { 
   LayoutDashboard, LogOut, PanelLeft, 
-  BookOpen, BarChart3, Lock, Fingerprint, Activity, Brain, Sun, Users, Moon, Keyboard, Settings, TrendingUp, Info, Clock, Sparkles, Rocket, Inbox, Search
+  BookOpen, BarChart3, Lock, Fingerprint, Activity, Brain, Sun, Users, Moon, Keyboard, Settings, TrendingUp, Info, Clock, Sparkles, Rocket, Inbox, Search, Video
 } from "lucide-react";
 import { CSSProperties, useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
@@ -43,11 +43,13 @@ import { useGovernance, GovernanceModeIndicator } from "@/hooks/useGovernance";
 import { ChangelogModal, useChangelog, WhatsNewButton } from "./ChangelogModal";
 import { StatusPulse } from "./StatusPulse";
 import { GlobalSearch } from "./GlobalSearch";
+import NeonBrain from "./NeonBrain";
 
 const menuItems = [
   { icon: LayoutDashboard, label: "Command Center", path: "/dashboard", status: 'active' as const },
   { icon: Inbox, label: "Inbox", path: "/inbox", status: 'warning' as const, count: 8 },
   { icon: Rocket, label: "Project Genesis", path: "/project-genesis", status: 'success' as const },
+  { icon: Video, label: "Video Studio", path: "/video-studio" },
   { icon: Sun, label: "Daily Brief", path: "/daily-brief", status: 'warning' as const, count: 3 },
   { icon: Users, label: "AI Experts", path: "/ai-experts" },
   { icon: Clock, label: "Review Queue", path: "/review-queue", status: 'warning' as const, count: 5 },
@@ -89,22 +91,25 @@ export default function BrainLayout({
   if (!user) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-black">
-        <div className="flex flex-col items-center gap-8 p-8 max-w-md w-full">
-          <div className="flex flex-col items-center gap-6">
-            <Brain className="w-16 h-16 text-primary animate-pulse" />
-            <h1 className="text-3xl font-display font-bold tracking-tight text-center text-white">
+        <div className="flex flex-col items-center gap-6 p-8 max-w-md w-full">
+          {/* Animated Brain Logo with Neural Nodes */}
+          <NeonBrain size="xl" state="thinking" mood={8} />
+          
+          <div className="flex flex-col items-center gap-4 mt-4">
+            <h1 className="text-4xl font-display font-bold tracking-tight text-center text-white">
               Welcome to The Brain
             </h1>
-            <p className="text-sm text-white/60 text-center max-w-sm">
+            <p className="text-base text-white/60 text-center max-w-sm">
               Your AI-powered command center. Sign in to access your personalized intelligence hub.
             </p>
           </div>
+          
           <Button
             onClick={() => {
               window.location.href = getLoginUrl();
             }}
             size="lg"
-            className="w-full bg-primary hover:bg-primary/90 text-white shadow-[0_0_20px_rgba(255,16,240,0.3)] hover:shadow-[0_0_30px_rgba(255,16,240,0.5)] transition-all"
+            className="w-full mt-4 bg-primary hover:bg-primary/90 text-white shadow-[0_0_20px_rgba(255,16,240,0.3)] hover:shadow-[0_0_30px_rgba(255,16,240,0.5)] transition-all"
           >
             Sign in to Continue
           </Button>
