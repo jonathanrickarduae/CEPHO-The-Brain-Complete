@@ -2,7 +2,8 @@ import { COOKIE_NAME } from "@shared/const";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, protectedProcedure, router } from "./_core/trpc";
-import { createMoodEntry, getMoodHistory, getMoodTrends, getLastMoodCheck } from "./db";
+import { createMoodEntry, getMoodHistory, getMoodTrends, getLastMoodCheck, saveConversation, getConversationHistory, clearConversationHistory } from "./db";
+import { invokeLLM } from "./_core/llm";
 import { z } from "zod";
 
 export const appRouter = router({
@@ -71,6 +72,104 @@ export const appRouter = router({
       }))
       .query(async ({ ctx, input }) => {
         return getLastMoodCheck(ctx.user.id, input.timeOfDay);
+      }),
+  }),
+
+  // Digital Twin Chat API
+  chat: router({
+    // Send a message and get AI response
+    send: protectedProcedure
+      .input(z.object({
+        message: z.string().min(1),
+        context: z.string().optional(), // Optional context like "daily_brief", "workflow"
+      }))
+      .mutation(async ({ ctx, input }) => {
+        // Save user message
+        await saveConversation({
+          userId: ctx.user.id,
+          role: 'user',
+          content: input.message,
+          metadata: input.context ? { context: input.context } : null,
+        });
+
+        // Get conversation history for context
+        const history = await getConversationHistory(ctx.user.id, 20);
+
+        // Build messages for LLM
+        const systemPrompt = `You are the Digital Twin for ${ctx.user.name || 'the user'} - a highly capable AI executive assistant that learns and adapts to their preferences, communication style, and work patterns.
+
+Your role:
+- Act as a proactive personal assistant who anticipates needs
+- Provide concise, actionable responses
+- Remember context from previous conversations
+- Suggest next steps and offer to take action
+- Be professional but warm and personable
+- When appropriate, ask clarifying questions before taking action
+- Reference relevant past conversations and learned preferences
+
+Capabilities you can help with:
+- Email drafting and management
+- Meeting scheduling and preparation
+- Task prioritization and project management
+- Research and analysis
+- Decision support
+- Daily briefings and evening reviews
+
+Always be direct and efficient. The user is busy and values their time.`;
+
+        const messages = [
+          { role: 'system' as const, content: systemPrompt },
+          ...history.map(h => ({
+            role: h.role as 'user' | 'assistant',
+            content: h.content,
+          })),
+          { role: 'user' as const, content: input.message },
+        ];
+
+        try {
+          // Call LLM
+          const result = await invokeLLM({ messages });
+          const assistantMessage = result.choices[0]?.message?.content || 'I apologize, but I was unable to generate a response. Please try again.';
+          
+          // Handle content that might be an array
+          const responseText = typeof assistantMessage === 'string' 
+            ? assistantMessage 
+            : Array.isArray(assistantMessage) 
+              ? assistantMessage.map(c => c.type === 'text' ? c.text : '').join('')
+              : String(assistantMessage);
+
+          // Save assistant response
+          await saveConversation({
+            userId: ctx.user.id,
+            role: 'assistant',
+            content: responseText,
+            metadata: null,
+          });
+
+          return {
+            message: responseText,
+            timestamp: new Date().toISOString(),
+          };
+        } catch (error) {
+          console.error('[Chat] LLM invocation failed:', error);
+          throw new Error('Failed to get response from Digital Twin');
+        }
+      }),
+
+    // Get conversation history
+    history: protectedProcedure
+      .input(z.object({
+        limit: z.number().optional(),
+      }).optional())
+      .query(async ({ ctx, input }) => {
+        return getConversationHistory(ctx.user.id, input?.limit || 50);
+      }),
+
+    // Clear conversation history
+    clear: protectedProcedure
+      .mutation(async ({ ctx }) => {
+        await clearConversationHistory(ctx.user.id);
+        return { success: true };
       }),
   }),
 });

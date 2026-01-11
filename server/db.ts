@@ -1,6 +1,6 @@
 import { eq, desc, and, gte, lte, sql } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users, moodHistory, InsertMoodHistory, MoodHistory } from "../drizzle/schema";
+import { InsertUser, users, moodHistory, InsertMoodHistory, MoodHistory, conversations, InsertConversation, Conversation } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -244,6 +244,62 @@ export async function getLastMoodCheck(
   } catch (error) {
     console.error("[Database] Failed to get last mood check:", error);
     return null;
+  }
+}
+
+// ==================== CONVERSATIONS ====================
+
+export async function saveConversation(entry: InsertConversation): Promise<Conversation | null> {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot save conversation: database not available");
+    return null;
+  }
+
+  try {
+    const result = await db.insert(conversations).values(entry);
+    const insertId = result[0].insertId;
+    const [newEntry] = await db.select().from(conversations).where(eq(conversations.id, insertId));
+    return newEntry;
+  } catch (error) {
+    console.error("[Database] Failed to save conversation:", error);
+    throw error;
+  }
+}
+
+export async function getConversationHistory(
+  userId: number,
+  limit: number = 50
+): Promise<Conversation[]> {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot get conversation history: database not available");
+    return [];
+  }
+
+  try {
+    const results = await db.select()
+      .from(conversations)
+      .where(eq(conversations.userId, userId))
+      .orderBy(desc(conversations.createdAt))
+      .limit(limit);
+    
+    // Return in chronological order
+    return results.reverse();
+  } catch (error) {
+    console.error("[Database] Failed to get conversation history:", error);
+    return [];
+  }
+}
+
+export async function clearConversationHistory(userId: number): Promise<void> {
+  const db = await getDb();
+  if (!db) return;
+
+  try {
+    await db.delete(conversations).where(eq(conversations.userId, userId));
+  } catch (error) {
+    console.error("[Database] Failed to clear conversation history:", error);
   }
 }
 

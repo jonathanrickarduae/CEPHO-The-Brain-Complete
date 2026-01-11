@@ -245,3 +245,18 @@ export const libraryDocuments = mysqlTable("library_documents", {
 
 export type LibraryDocument = typeof libraryDocuments.$inferSelect;
 export type InsertLibraryDocument = typeof libraryDocuments.$inferInsert;
+
+/**
+ * Digital Twin conversation history
+ */
+export const conversations = mysqlTable("conversations", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  role: mysqlEnum("role", ["user", "assistant", "system"]).notNull(),
+  content: text("content").notNull(),
+  metadata: json("metadata"), // Store additional context like mood, voice input, etc.
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type Conversation = typeof conversations.$inferSelect;
+export type InsertConversation = typeof conversations.$inferInsert;

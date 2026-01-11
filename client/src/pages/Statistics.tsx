@@ -17,6 +17,7 @@ import {
 import { PersonalAnalytics, ProductivityRing } from "@/components/PersonalAnalytics";
 import { PageHeader } from "@/components/Breadcrumbs";
 import { useMoodCheck } from "@/hooks/useMoodCheck";
+import { MoodTimeline } from "@/components/MoodTimeline";
 
 export default function Statistics() {
   const { todaysMoods } = useMoodCheck();
@@ -76,51 +77,8 @@ export default function Statistics() {
               ))}
             </div>
 
-            {/* Mood Timeline */}
-            <div className="p-6 rounded-xl bg-card/60 border border-white/10">
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-2">
-                  <Sparkles className="w-5 h-5 text-primary" />
-                  <h3 className="font-display font-bold">Mood Timeline</h3>
-                </div>
-                <span className="text-xs text-muted-foreground">This Week</span>
-              </div>
-              
-              <div className="flex items-end gap-3 h-32">
-                {weeklyMoods.map((mood, i) => {
-                  const isToday = i === weeklyMoods.length - 1;
-                  return (
-                    <div key={i} className="flex-1 flex flex-col items-center gap-2">
-                      <div className="w-full flex flex-col items-center">
-                        <span className="text-xs text-muted-foreground mb-1">{mood}/10</span>
-                        <div 
-                          className={`w-full rounded-t transition-all ${
-                            isToday ? 'bg-primary' : 'bg-primary/40'
-                          }`}
-                          style={{ height: `${mood * 10}%` }}
-                        />
-                      </div>
-                      <span className={`text-xs ${isToday ? 'text-primary font-bold' : 'text-muted-foreground'}`}>
-                        {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'][i]}
-                      </span>
-                    </div>
-                  );
-                })}
-              </div>
-              
-              <div className="mt-4 pt-4 border-t border-white/10 flex items-center justify-between">
-                <div className="text-sm">
-                  <span className="text-muted-foreground">Weekly Average: </span>
-                  <span className="font-bold text-foreground">
-                    {(weeklyMoods.reduce((a, b) => a + b, 0) / weeklyMoods.length).toFixed(1)}/10
-                  </span>
-                </div>
-                <div className="flex items-center gap-1 text-green-400 text-xs">
-                  <TrendingUp className="w-3 h-3" />
-                  <span>+0.5 from last week</span>
-                </div>
-              </div>
-            </div>
+            {/* Mood Timeline - Real Data */}
+            <MoodTimeline days={7} />
 
             {/* Digital Twin Training Progress */}
             <div className="p-6 rounded-xl bg-card/60 border border-white/10">
