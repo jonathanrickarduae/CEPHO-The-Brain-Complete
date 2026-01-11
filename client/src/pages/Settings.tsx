@@ -1,0 +1,263 @@
+import { useState } from 'react';
+import { 
+  Settings as SettingsIcon, User, Calendar, Database, 
+  Bell, Shield, Palette, CreditCard, Users,
+  ChevronRight, Check
+} from 'lucide-react';
+import { PageHeader } from '@/components/Breadcrumbs';
+import { CalendarIntegration } from '@/components/CalendarIntegration';
+import { TrainingDataPipeline } from '@/components/TrainingDataPipeline';
+import { ReferralDashboard } from '@/components/WaitlistReferral';
+import { AccessibilitySettingsPanel } from '@/components/AccessibilitySettingsPanel';
+
+type SettingsTab = 'profile' | 'calendar' | 'training' | 'referrals' | 'notifications' | 'privacy' | 'appearance' | 'accessibility';
+
+export default function Settings() {
+  const [activeTab, setActiveTab] = useState<SettingsTab>('profile');
+
+  const tabs = [
+    { id: 'profile' as const, label: 'Profile', icon: User },
+    { id: 'calendar' as const, label: 'Calendar', icon: Calendar },
+    { id: 'training' as const, label: 'Training Data', icon: Database },
+    { id: 'referrals' as const, label: 'Referrals', icon: Users },
+    { id: 'notifications' as const, label: 'Notifications', icon: Bell },
+    { id: 'privacy' as const, label: 'Privacy', icon: Shield },
+    { id: 'appearance' as const, label: 'Appearance', icon: Palette },
+    { id: 'accessibility' as const, label: 'Accessibility', icon: SettingsIcon },
+  ];
+
+  const mockReferralStats = {
+    totalReferrals: 12,
+    pendingReferrals: 5,
+    convertedReferrals: 7,
+    creditsEarned: 850,
+    referralCode: 'BRAIN-ABC123',
+  };
+
+  return (
+    <div className="p-4 md:p-6 overflow-auto">
+      <div className="max-w-6xl mx-auto">
+        <PageHeader 
+          title="Settings" 
+          subtitle="Manage your account and preferences"
+        />
+
+        <div className="flex flex-col lg:flex-row gap-6">
+          {/* Sidebar */}
+          <div className="lg:w-64 flex-shrink-0">
+            <nav className="bg-gray-800 rounded-xl border border-gray-700 overflow-hidden">
+              {tabs.map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`w-full flex items-center gap-3 px-4 py-3 text-left transition-colors ${
+                    activeTab === tab.id
+                      ? 'bg-cyan-500/10 text-cyan-400 border-l-2 border-cyan-400'
+                      : 'text-gray-400 hover:bg-gray-700/50 hover:text-gray-300'
+                  }`}
+                >
+                  <tab.icon className="w-5 h-5" />
+                  <span>{tab.label}</span>
+                </button>
+              ))}
+            </nav>
+          </div>
+
+          {/* Content */}
+          <div className="flex-1">
+            {activeTab === 'profile' && (
+              <div className="bg-gray-800 rounded-xl border border-gray-700 p-6">
+                <h3 className="text-lg font-semibold text-white mb-6">Profile Settings</h3>
+                
+                <div className="space-y-6">
+                  <div className="flex items-center gap-4">
+                    <div className="w-20 h-20 rounded-full bg-gradient-to-br from-cyan-500 to-purple-600 flex items-center justify-center">
+                      <span className="text-3xl">🧠</span>
+                    </div>
+                    <div>
+                      <button className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg text-sm transition-colors">
+                        Change Avatar
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="grid gap-4">
+                    <div>
+                      <label className="block text-sm text-gray-400 mb-2">Display Name</label>
+                      <input
+                        type="text"
+                        defaultValue="User"
+                        className="w-full px-4 py-2 bg-gray-900 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-cyan-500"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm text-gray-400 mb-2">Email</label>
+                      <input
+                        type="email"
+                        defaultValue="user@example.com"
+                        className="w-full px-4 py-2 bg-gray-900 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-cyan-500"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm text-gray-400 mb-2">Timezone</label>
+                      <select className="w-full px-4 py-2 bg-gray-900 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-cyan-500">
+                        <option>UTC-8 (Pacific Time)</option>
+                        <option>UTC-5 (Eastern Time)</option>
+                        <option>UTC+0 (GMT)</option>
+                        <option>UTC+1 (Central European)</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <button className="px-6 py-2 bg-cyan-500 hover:bg-cyan-600 text-white rounded-lg transition-colors">
+                    Save Changes
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'calendar' && <CalendarIntegration />}
+
+            {activeTab === 'training' && <TrainingDataPipeline />}
+
+            {activeTab === 'referrals' && <ReferralDashboard stats={mockReferralStats} />}
+
+            {activeTab === 'notifications' && (
+              <div className="bg-gray-800 rounded-xl border border-gray-700 p-6">
+                <h3 className="text-lg font-semibold text-white mb-6">Notification Preferences</h3>
+                
+                <div className="space-y-4">
+                  {[
+                    { label: 'Daily Brief Reminder', description: 'Get reminded to check your daily brief each morning', enabled: true },
+                    { label: 'Mood Check Prompts', description: 'Receive prompts to log your mood 3x daily', enabled: true },
+                    { label: 'Task Deadlines', description: 'Get notified before task deadlines', enabled: true },
+                    { label: 'AI Insights', description: 'Receive insights from your Digital Twin', enabled: false },
+                    { label: 'Weekly Summary', description: 'Get a weekly productivity summary', enabled: true },
+                  ].map((item, index) => (
+                    <div key={index} className="flex items-center justify-between p-4 bg-gray-900 rounded-xl">
+                      <div>
+                        <div className="font-medium text-white">{item.label}</div>
+                        <div className="text-sm text-gray-500">{item.description}</div>
+                      </div>
+                      <button
+                        className={`w-12 h-6 rounded-full transition-colors ${
+                          item.enabled ? 'bg-cyan-500' : 'bg-gray-700'
+                        }`}
+                      >
+                        <div
+                          className={`w-5 h-5 rounded-full bg-white transition-transform ${
+                            item.enabled ? 'translate-x-6' : 'translate-x-0.5'
+                          }`}
+                        />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'privacy' && (
+              <div className="bg-gray-800 rounded-xl border border-gray-700 p-6">
+                <h3 className="text-lg font-semibold text-white mb-6">Privacy Settings</h3>
+                
+                <div className="space-y-6">
+                  <div className="p-4 bg-gray-900 rounded-xl">
+                    <h4 className="font-medium text-white mb-2">Data Collection</h4>
+                    <p className="text-sm text-gray-400 mb-4">
+                      Control what data your Digital Twin can access and learn from.
+                    </p>
+                    <div className="space-y-3">
+                      {[
+                        { label: 'Learn from conversations', enabled: true },
+                        { label: 'Analyze calendar patterns', enabled: true },
+                        { label: 'Track mood over time', enabled: true },
+                        { label: 'Share anonymized insights', enabled: false },
+                      ].map((item, index) => (
+                        <label key={index} className="flex items-center gap-3 cursor-pointer">
+                          <input
+                            type="checkbox"
+                            defaultChecked={item.enabled}
+                            className="w-4 h-4 rounded border-gray-600 bg-gray-700 text-cyan-500 focus:ring-cyan-500"
+                          />
+                          <span className="text-gray-300">{item.label}</span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="p-4 bg-gray-900 rounded-xl">
+                    <h4 className="font-medium text-white mb-2">Data Retention</h4>
+                    <p className="text-sm text-gray-400 mb-4">
+                      Choose how long to keep your data.
+                    </p>
+                    <select className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-cyan-500">
+                      <option>Keep forever</option>
+                      <option>1 year</option>
+                      <option>6 months</option>
+                      <option>3 months</option>
+                    </select>
+                  </div>
+
+                  <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl">
+                    <h4 className="font-medium text-red-400 mb-2">Danger Zone</h4>
+                    <p className="text-sm text-gray-400 mb-4">
+                      Permanently delete your account and all associated data.
+                    </p>
+                    <button className="px-4 py-2 bg-red-500/20 hover:bg-red-500/30 text-red-400 rounded-lg transition-colors">
+                      Delete Account
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'appearance' && (
+              <div className="bg-gray-800 rounded-xl border border-gray-700 p-6">
+                <h3 className="text-lg font-semibold text-white mb-6">Appearance</h3>
+                
+                <div className="space-y-6">
+                  <div>
+                    <label className="block text-sm text-gray-400 mb-3">Theme</label>
+                    <div className="grid grid-cols-3 gap-3">
+                      {[
+                        { id: 'dark', label: 'Dark', color: 'bg-gray-900' },
+                        { id: 'light', label: 'Light', color: 'bg-white' },
+                        { id: 'system', label: 'System', color: 'bg-gradient-to-r from-gray-900 to-white' },
+                      ].map((theme) => (
+                        <button
+                          key={theme.id}
+                          className={`p-4 rounded-xl border-2 transition-colors ${
+                            theme.id === 'dark' ? 'border-cyan-500' : 'border-gray-700 hover:border-gray-600'
+                          }`}
+                        >
+                          <div className={`w-full h-12 rounded-lg ${theme.color} mb-2`} />
+                          <span className="text-sm text-gray-300">{theme.label}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm text-gray-400 mb-3">Accent Color</label>
+                    <div className="flex gap-3">
+                      {['cyan', 'purple', 'pink', 'green', 'orange'].map((color) => (
+                        <button
+                          key={color}
+                          className={`w-10 h-10 rounded-full bg-${color}-500 ${
+                            color === 'cyan' ? 'ring-2 ring-white ring-offset-2 ring-offset-gray-800' : ''
+                          }`}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'accessibility' && <AccessibilitySettingsPanel />}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

@@ -18,6 +18,8 @@ import { PersonalAnalytics, ProductivityRing } from "@/components/PersonalAnalyt
 import { PageHeader } from "@/components/Breadcrumbs";
 import { useMoodCheck } from "@/hooks/useMoodCheck";
 import { MoodTimeline } from "@/components/MoodTimeline";
+import { WellnessScoreDashboard } from "@/components/WellnessScoreDashboard";
+import { ShareableInsight, generateProductivityInsight } from "@/components/ShareableInsight";
 
 export default function Statistics() {
   const { todaysMoods } = useMoodCheck();
@@ -49,6 +51,11 @@ export default function Statistics() {
         {/* Personal Analytics Section */}
         <div className="mb-8">
           <PersonalAnalytics variant="full" />
+        </div>
+
+        {/* Wellness Score Dashboard */}
+        <div className="mb-8">
+          <WellnessScoreDashboard />
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">

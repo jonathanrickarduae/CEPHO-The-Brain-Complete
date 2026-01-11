@@ -339,3 +339,36 @@
 ### Research Deliverables
 - [x] Moat Building Research: /research/moat-building-research.md
 - [x] Full Strategy Document: /research/moat-building-strategy.md
+
+
+## Moat Feature Integration
+
+### Waitlist & Referral Integration
+- [x] Create /waitlist landing page route
+- [x] Add referral dashboard to user settings
+- [ ] Connect referral system to database
+- [ ] Add invite modal to sidebar/header
+
+### Wellness Score Integration
+- [x] Add wellness score card to Dashboard
+- [x] Create wellness score detail page in Statistics
+- [ ] Connect wellness algorithm to real user data
+- [ ] Add wellness trends visualization
+
+### Google Calendar Integration
+- [ ] Set up Google OAuth credentials (requires user API key)
+- [ ] Create calendar sync API endpoints
+- [x] Build calendar connection UI in settings
+- [ ] Sync events to Smart Scheduler
+
+### Training Data Pipeline
+- [x] Create training data upload UI
+- [x] Build conversation export feature
+- [x] Add training progress indicators
+- [ ] Connect to Digital Twin learning
+
+### Shareable Insights Integration
+- [x] Add share buttons to Dashboard cards (via wellness score)
+- [x] Add share to Statistics reports (wellness dashboard)
+- [ ] Add share to AI Expert consultations
+- [ ] Create public insight viewer page

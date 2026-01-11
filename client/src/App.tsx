@@ -16,6 +16,8 @@ import DailyBrief from "./pages/DailyBrief";
 import AIExperts from "./pages/AIExperts";
 import EveningReview from "./pages/EveningReview";
 import AITeam from "./pages/AITeam";
+import Waitlist from "./pages/Waitlist";
+import Settings from "./pages/Settings";
 
 // Wrapper component for pages that need the sidebar layout
 function WithLayout({ children }: { children: React.ReactNode }) {
@@ -27,6 +29,9 @@ function Router() {
     <Switch>
       {/* Landing page without sidebar */}
       <Route path={"/"} component={Landing} />
+      
+      {/* Waitlist page without sidebar */}
+      <Route path="/waitlist" component={Waitlist} />
       
       {/* Dashboard pages with sidebar */}
       <Route path="/dashboard">
@@ -58,6 +63,9 @@ function Router() {
       </Route>
       <Route path="/ai-team">
         <WithLayout><AITeam /></WithLayout>
+      </Route>
+      <Route path="/settings">
+        <WithLayout><Settings /></WithLayout>
       </Route>
       
       {/* Fallback */}

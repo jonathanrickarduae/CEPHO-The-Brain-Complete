@@ -9,6 +9,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { LearningBadge } from "@/components/LearningIndicator";
 import { useMoodCheck } from "@/hooks/useMoodCheck";
+import { WellnessScoreDashboard } from "@/components/WellnessScoreDashboard";
+import { Share2 } from "lucide-react";
 
 // Daily rotating quotes - one for each day
 const QUOTES = [
@@ -171,6 +173,17 @@ export default function Dashboard() {
         </div>
         
         <div className="flex items-center gap-3">
+          {/* Wellness Score Mini */}
+          <button 
+            onClick={() => setLocation('/statistics')}
+            className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-gradient-to-r from-cyan-500/10 to-purple-500/10 border border-cyan-500/20 hover:border-cyan-500/40 transition-colors"
+          >
+            <div className="w-6 h-6 rounded-full bg-gradient-to-br from-cyan-500 to-purple-600 flex items-center justify-center">
+              <span className="text-xs font-bold text-white">7.8</span>
+            </div>
+            <span className="text-xs text-muted-foreground hidden sm:inline">Wellness</span>
+          </button>
+          
           {/* Today's mood indicator */}
           {latestMood && (
             <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-card/60 border border-border">
