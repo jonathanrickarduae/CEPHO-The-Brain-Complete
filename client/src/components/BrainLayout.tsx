@@ -35,6 +35,9 @@ import { MoodCheckModal } from "./MoodCheckModal";
 import { KeyboardShortcutsHelp, useKeyboardShortcutsHelp } from "./KeyboardShortcutsHelp";
 import { useMoodCheck } from "@/hooks/useMoodCheck";
 import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
+import { OnboardingModal, useOnboarding } from "./Onboarding";
+import { AccessibilitySettings, SkipLink } from "./AccessibilitySettings";
+import { Accessibility } from "lucide-react";
 
 const menuItems = [
   { icon: LayoutDashboard, label: "Command Center", path: "/dashboard" },
@@ -134,6 +137,12 @@ function BrainLayoutContent({
   
   // Mood check state (3x daily)
   const { shouldShowMoodCheck, currentPeriod, recordMoodCheck, dismissMoodCheck } = useMoodCheck();
+  
+  // Onboarding state
+  const { shouldShowOnboarding, completeOnboarding } = useOnboarding();
+  
+  // Accessibility settings state
+  const [showAccessibilitySettings, setShowAccessibilitySettings] = useState(false);
   
   // Mobile more menu state
   const [showMoreMenu, setShowMoreMenu] = useState(false);
@@ -240,13 +249,22 @@ function BrainLayoutContent({
           <SidebarFooter className="p-3 border-t border-sidebar-border">
             {/* Keyboard shortcuts hint */}
             {!isCollapsed && (
-              <button
-                onClick={keyboardHelp.open}
-                className="flex items-center gap-2 px-2 py-1.5 mb-2 text-xs text-sidebar-foreground/50 hover:text-sidebar-foreground/70 transition-colors rounded-lg hover:bg-sidebar-accent"
-              >
-                <Keyboard className="w-3.5 h-3.5" />
-                <span>Press <kbd className="px-1 py-0.5 bg-sidebar-accent rounded text-[10px]">?</kbd> for shortcuts</span>
-              </button>
+              <div className="flex flex-col gap-1 mb-2">
+                <button
+                  onClick={keyboardHelp.open}
+                  className="flex items-center gap-2 px-2 py-1.5 text-xs text-sidebar-foreground/50 hover:text-sidebar-foreground/70 transition-colors rounded-lg hover:bg-sidebar-accent"
+                >
+                  <Keyboard className="w-3.5 h-3.5" />
+                  <span>Press <kbd className="px-1 py-0.5 bg-sidebar-accent rounded text-[10px]">?</kbd> for shortcuts</span>
+                </button>
+                <button
+                  onClick={() => setShowAccessibilitySettings(true)}
+                  className="flex items-center gap-2 px-2 py-1.5 text-xs text-sidebar-foreground/50 hover:text-sidebar-foreground/70 transition-colors rounded-lg hover:bg-sidebar-accent"
+                >
+                  <Accessibility className="w-3.5 h-3.5" />
+                  <span>Accessibility settings</span>
+                </button>
+              </div>
             )}
             
             <DropdownMenu>
@@ -335,6 +353,19 @@ function BrainLayoutContent({
       <KeyboardShortcutsHelp
         isOpen={keyboardHelp.isOpen}
         onClose={keyboardHelp.close}
+      />
+      
+      {/* Onboarding Modal */}
+      <OnboardingModal
+        isOpen={shouldShowOnboarding}
+        onComplete={completeOnboarding}
+        onSkip={completeOnboarding}
+      />
+      
+      {/* Accessibility Settings */}
+      <AccessibilitySettings
+        isOpen={showAccessibilitySettings}
+        onClose={() => setShowAccessibilitySettings(false)}
       />
     </>
   );
