@@ -2,7 +2,7 @@ import { useState, useMemo } from "react";
 import { 
   Sun, Users, Lightbulb, Lock, 
   Mic, Send, 
-  Fingerprint, Activity, Shield, ShieldCheck
+  Fingerprint, Activity, Shield, ShieldCheck, FolderKanban, BookOpen
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -60,53 +60,57 @@ export default function Dashboard() {
   // Daily rotating inspiration - memoized to only change on day change
   const inspiration = useMemo(() => getDailyQuote(), []);
 
+  // Top Row - The Flow (Daily Brief → AI Expert Engine → Workflow)
+  // Bottom Row - Support (Digital Twin Training, Library, Vault)
   const buttons = [
+    // TOP ROW - The Flow
     { 
       id: 1, 
       label: "DAILY BRIEF", 
-      sub: "7:00 AM • Ready", 
+      sub: "Briefing & Actions", 
       icon: Sun, 
-      color: "#3b82f6",
+      color: "#f59e0b",
       action: () => window.location.href = "/daily-brief"
     },
     { 
       id: 2, 
-      label: "AI EXPERTS", 
-      sub: "250+ World-Class Experts", 
+      label: "AI EXPERT ENGINE", 
+      sub: "Task Execution", 
       icon: Users, 
       color: "#06b6d4",
       action: () => window.location.href = "/ai-experts"
     },
     { 
       id: 3, 
+      label: "WORKFLOW", 
+      sub: "Projects & Outputs", 
+      icon: FolderKanban, 
+      color: "#10b981",
+      action: () => window.location.href = "/workflow"
+    },
+    // BOTTOM ROW - Support
+    { 
+      id: 4, 
       label: "DIGITAL TWIN", 
-      sub: "Training & Autonomy", 
+      sub: "Training & Autonomy • 12.5h", 
       icon: Fingerprint, 
       color: "#a855f7",
       action: () => window.location.href = "/digital-twin"
     },
     { 
-      id: 4, 
-      label: "WORKFLOW", 
-      sub: "Project Risk Radar", 
-      icon: Activity, 
-      color: "#ef4444",
-      action: () => window.location.href = "/workflow"
-    },
-    { 
       id: 5, 
-      label: "INSIGHTS", 
-      sub: "Proactive Learning", 
-      icon: Lightbulb, 
-      color: "#10b981",
-      action: () => window.location.href = "/statistics"
+      label: "LIBRARY", 
+      sub: "Knowledge Base", 
+      icon: BookOpen, 
+      color: "#ec4899",
+      action: () => window.location.href = "/library"
     },
     { 
       id: 6, 
       label: "THE VAULT", 
-      sub: "Secure Credentials", 
+      sub: "Secure Storage", 
       icon: Lock, 
-      color: "#f59e0b",
+      color: "#64748b",
       action: () => window.location.href = "/vault"
     },
   ];
@@ -159,7 +163,7 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* 6-Button Grid - More Compact */}
+      {/* 6-Button Grid - Reorganized for Flow */}
       <div className="flex-1 grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4 mb-4 max-w-5xl mx-auto w-full">
         {buttons.map((btn) => (
           <div 

@@ -41,3 +41,16 @@
 - [x] Add 4th action button: Assign to Digital Twin
 - [x] Update Action Engine tab to show all actioned items for final review
 - [x] Overview tab should be high-level listening summary
+- [ ] AI Action Engine: Pull in actioned items from Daily Brief automatically
+- [ ] AI Action Engine: Distinguish Digital Twin tasks (emails) vs Expert Team tasks (projects)
+- [ ] AI Action Engine: Replace text input with voice note button
+- [ ] AI Action Engine: Add task tracking with dialogue view (Twin ↔ Expert Team conversation)
+- [ ] AI Action Engine: Add QA Review phase with Digital Twin feedback before final approval
+- [ ] AI Action Engine: Show progress for each active task
+- [x] Revert dashboard to larger/sexier design with bigger quote section
+- [x] Reorganize 6 boxes: Daily Brief, AI Expert Engine, Workflow (top) / Digital Twin, Library, Vault (bottom)
+- [x] Ensure dashboard fits on one screen without scrolling
+- [ ] Digital Twin box: Show training progress (hours logged)
+- [ ] Digital Twin box: Quick 15-min training modules
+- [ ] Digital Twin box: Calendar reminders for training sessions
+- [ ] Digital Twin box: Training log (active + passive learning)

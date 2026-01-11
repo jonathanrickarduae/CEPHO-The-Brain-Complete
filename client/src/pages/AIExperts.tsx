@@ -5,13 +5,16 @@ import {
   ArrowRight, MessageSquare, Play, Pause, 
   Calendar, Target, Lightbulb, Send, ThumbsUp,
   ThumbsDown, RotateCcw, Sparkles, Timer, 
-  FileText, Mail, Code, Presentation, Search
+  FileText, Mail, Code, Search, Mic, MicOff,
+  Fingerprint, Eye, ChevronRight, AlertCircle,
+  ListChecks, RefreshCw
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 // Expert profiles database
 const EXPERT_PROFILES = {
@@ -25,455 +28,646 @@ const EXPERT_PROFILES = {
   research: { name: "Dr. Priya Sharma", role: "Research Lead", avatar: "PS", specialty: "Market Research & Data Analysis" },
 };
 
-// Mission templates for quick selection
-const MISSION_TEMPLATES = [
-  { id: 1, title: "Launch a Product", description: "Go-to-market strategy for a new product or service", icon: Target },
-  { id: 2, title: "Build a Company", description: "Start a new business from scratch", icon: Sparkles },
-  { id: 3, title: "Draft Communications", description: "Emails, presentations, or reports", icon: Mail },
-  { id: 4, title: "Technical Project", description: "Software development or technical implementation", icon: Code },
-  { id: 5, title: "Research & Analysis", description: "Deep dive into a topic or market", icon: Search },
-  { id: 6, title: "Custom Mission", description: "Define your own objective", icon: Lightbulb },
+// Task types
+type TaskType = "twin" | "team";
+type TaskStatus = "pending" | "active" | "review" | "completed";
+
+interface PendingTask {
+  id: string;
+  title: string;
+  description: string;
+  category: string;
+  source: "daily-brief" | "manual";
+  type: TaskType;
+  status: TaskStatus;
+  progress: number;
+  assignedTo?: string[];
+  dialogue: DialogueMessage[];
+  deliverable?: string;
+}
+
+interface DialogueMessage {
+  id: number;
+  from: "twin" | "expert" | "user";
+  name: string;
+  message: string;
+  timestamp: Date;
+  needsResponse?: boolean;
+}
+
+// Mock pending tasks from Daily Brief
+const MOCK_PENDING_TASKS: PendingTask[] = [
+  {
+    id: "task-1",
+    title: "Draft email responses",
+    description: "5 emails need responses based on overnight communications",
+    category: "Communications",
+    source: "daily-brief",
+    type: "twin",
+    status: "pending",
+    progress: 0,
+    dialogue: []
+  },
+  {
+    id: "task-2", 
+    title: "Q3 Budget Analysis",
+    description: "Review and prepare summary for 2 PM sign-off deadline",
+    category: "Finance",
+    source: "daily-brief",
+    type: "team",
+    status: "pending",
+    progress: 0,
+    dialogue: []
+  },
+  {
+    id: "task-3",
+    title: "Competitor AI Bid Tool Research",
+    description: "Deep dive into Competitor X's new AI bid tool - verify 15% efficiency claims",
+    category: "Research",
+    source: "daily-brief",
+    type: "team",
+    status: "pending",
+    progress: 0,
+    dialogue: []
+  },
+  {
+    id: "task-4",
+    title: "Investor Meeting Prep",
+    description: "Prepare talking points and 3 key metrics for lunch meeting",
+    category: "Strategy",
+    source: "daily-brief",
+    type: "twin",
+    status: "pending",
+    progress: 0,
+    dialogue: []
+  },
 ];
 
-type Phase = "mission" | "team" | "kickoff" | "timeline" | "active" | "review";
+// Mission templates
+const MISSION_TEMPLATES = [
+  { id: 1, title: "Draft Communications", description: "Emails, presentations, or reports", icon: Mail, type: "twin" as TaskType },
+  { id: 2, title: "Research & Analysis", description: "Deep dive into a topic or market", icon: Search, type: "team" as TaskType },
+  { id: 3, title: "Custom Mission", description: "Define your own objective", icon: Lightbulb, type: "team" as TaskType },
+];
+
+type Phase = "queue" | "mission" | "team" | "kickoff" | "timeline" | "active" | "review";
 type Expert = keyof typeof EXPERT_PROFILES;
 
 interface KickoffQuestion {
   id: number;
   question: string;
   answered?: boolean;
-  answer?: "yes" | "no" | "skip";
+  answer?: "yes" | "no";
   expertFrom: Expert;
-}
-
-interface ActionItem {
-  id: number;
-  title: string;
-  status: "pending" | "in-progress" | "completed" | "needs-input";
-  assignee: Expert;
-  progress: number;
-  question?: string;
 }
 
 export default function AIExperts() {
   const searchString = useSearch();
-  const [phase, setPhase] = useState<Phase>("mission");
+  const [phase, setPhase] = useState<Phase>("queue");
+  const [tasks, setTasks] = useState<PendingTask[]>(MOCK_PENDING_TASKS);
+  const [activeTask, setActiveTask] = useState<PendingTask | null>(null);
   const [mission, setMission] = useState("");
-  
-  // Check for pre-populated mission from URL (e.g., from Daily Brief)
-  useEffect(() => {
-    const params = new URLSearchParams(searchString);
-    const missionParam = params.get("mission");
-    if (missionParam) {
-      setMission(missionParam);
-      // Auto-select custom mission template
-      setSelectedTemplate(6);
-    }
-  }, [searchString]);
   const [selectedTemplate, setSelectedTemplate] = useState<number | null>(null);
   const [recommendedTeam, setRecommendedTeam] = useState<Expert[]>([]);
   const [approvedTeam, setApprovedTeam] = useState<Expert[]>([]);
   const [kickoffQuestions, setKickoffQuestions] = useState<KickoffQuestion[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [deliverableTime, setDeliverableTime] = useState<number | null>(null);
-  const [actionItems, setActionItems] = useState<ActionItem[]>([]);
   const [timeRemaining, setTimeRemaining] = useState<number>(0);
   const [isRunning, setIsRunning] = useState(false);
-  const [chatInput, setChatInput] = useState("");
+  const [isRecording, setIsRecording] = useState(false);
 
-  // Simulate team recommendation based on mission
-  const analyzeAndRecommendTeam = () => {
-    const missionLower = mission.toLowerCase();
-    const team: Expert[] = [];
-    
-    // Always include strategy
-    team.push("strategy");
-    
-    if (missionLower.includes("social media") || missionLower.includes("marketing") || missionLower.includes("brand")) {
-      team.push("marketing");
+  // Check for pre-populated mission from URL
+  useEffect(() => {
+    const params = new URLSearchParams(searchString);
+    const missionParam = params.get("mission");
+    if (missionParam) {
+      setMission(missionParam);
+      setSelectedTemplate(3); // Custom mission
+      setPhase("mission");
     }
-    if (missionLower.includes("build") || missionLower.includes("develop") || missionLower.includes("app") || missionLower.includes("software")) {
-      team.push("engineering");
-      team.push("design");
-    }
-    if (missionLower.includes("company") || missionLower.includes("business") || missionLower.includes("startup")) {
-      team.push("legal");
-      team.push("finance");
-    }
-    if (missionLower.includes("research") || missionLower.includes("analyze") || missionLower.includes("market")) {
-      team.push("research");
-    }
-    if (missionLower.includes("scale") || missionLower.includes("operations") || missionLower.includes("process")) {
-      team.push("operations");
-    }
-    
-    // Ensure at least 3 experts
-    if (team.length < 3) {
-      if (!team.includes("research")) team.push("research");
-      if (!team.includes("operations") && team.length < 3) team.push("operations");
-    }
-    
-    setRecommendedTeam(Array.from(new Set(team)).slice(0, 5));
-    setPhase("team");
-  };
-
-  // Generate kickoff questions based on mission and team
-  const generateKickoffQuestions = () => {
-    const questions: KickoffQuestion[] = [
-      { id: 1, question: "Do you have an existing budget allocated for this project?", expertFrom: "finance" },
-      { id: 2, question: "Is there a specific deadline or event driving this timeline?", expertFrom: "strategy" },
-      { id: 3, question: "Do you have existing brand guidelines we should follow?", expertFrom: "marketing" },
-      { id: 4, question: "Should we prioritize speed over perfection for the first deliverable?", expertFrom: "strategy" },
-      { id: 5, question: "Do you want us to proceed with our best recommendations, or wait for your approval on each step?", expertFrom: "strategy" },
-    ];
-    
-    // Filter questions based on approved team
-    const relevantQuestions = questions.filter(q => 
-      approvedTeam.includes(q.expertFrom) || q.expertFrom === "strategy"
-    ).slice(0, 5);
-    
-    setKickoffQuestions(relevantQuestions);
-    setPhase("kickoff");
-  };
-
-  // Handle kickoff question answer
-  const answerQuestion = (answer: "yes" | "no" | "skip") => {
-    const updated = [...kickoffQuestions];
-    updated[currentQuestionIndex] = {
-      ...updated[currentQuestionIndex],
-      answered: true,
-      answer
-    };
-    setKickoffQuestions(updated);
-    
-    if (currentQuestionIndex < kickoffQuestions.length - 1) {
-      setCurrentQuestionIndex(currentQuestionIndex + 1);
-    } else {
-      setPhase("timeline");
-    }
-  };
-
-  // Start the action engine
-  const startActionEngine = () => {
-    if (!deliverableTime) return;
-    
-    // Generate action items based on mission
-    const items: ActionItem[] = [
-      { id: 1, title: "Initial research and competitive analysis", status: "in-progress", assignee: "research", progress: 0 },
-      { id: 2, title: "Draft strategic framework", status: "pending", assignee: "strategy", progress: 0 },
-      { id: 3, title: "Create preliminary recommendations", status: "pending", assignee: "strategy", progress: 0 },
-      { id: 4, title: "Prepare first deliverable document", status: "pending", assignee: "strategy", progress: 0 },
-    ];
-    
-    setActionItems(items);
-    setTimeRemaining(deliverableTime * 60); // Convert to seconds
-    setIsRunning(true);
-    setPhase("active");
-  };
+  }, [searchString]);
 
   // Timer effect
   useEffect(() => {
     let interval: NodeJS.Timeout;
-    
     if (isRunning && timeRemaining > 0) {
       interval = setInterval(() => {
         setTimeRemaining(prev => prev - 1);
-        
-        // Simulate progress updates
-        setActionItems(prev => prev.map(item => {
-          if (item.status === "in-progress" && item.progress < 100) {
-            const newProgress = Math.min(item.progress + Math.random() * 5, 100);
-            if (newProgress >= 100) {
-              return { ...item, progress: 100, status: "completed" };
-            }
-            return { ...item, progress: newProgress };
-          }
-          if (item.status === "pending" && prev.find(i => i.id === item.id - 1)?.status === "completed") {
-            return { ...item, status: "in-progress" };
-          }
-          return item;
-        }));
+        // Simulate progress
+        if (activeTask) {
+          setActiveTask(prev => prev ? { ...prev, progress: Math.min(prev.progress + 0.5, 95) } : null);
+        }
       }, 1000);
     }
-    
     return () => clearInterval(interval);
-  }, [isRunning, timeRemaining]);
+  }, [isRunning, timeRemaining, activeTask]);
 
-  // Format time remaining
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
-  // Handle chat input
-  const handleChatSend = () => {
-    if (!chatInput.trim()) return;
-    toast.success("Message sent to the expert team");
-    setChatInput("");
+  // Start a task
+  const startTask = (task: PendingTask) => {
+    setActiveTask(task);
+    if (task.type === "twin") {
+      // Digital Twin handles directly - skip to active phase
+      setPhase("active");
+      setDeliverableTime(30); // 30 minutes for twin tasks
+      setTimeRemaining(30 * 60);
+      setIsRunning(true);
+      
+      // Add initial dialogue
+      const updatedTask = {
+        ...task,
+        status: "active" as TaskStatus,
+        dialogue: [{
+          id: 1,
+          from: "twin" as const,
+          name: "Digital Twin",
+          message: `Starting work on "${task.title}". I'll analyze the context and prepare the deliverable based on your patterns and preferences.`,
+          timestamp: new Date()
+        }]
+      };
+      setActiveTask(updatedTask);
+      updateTaskInList(updatedTask);
+      
+      toast.success("Digital Twin is now working on this task");
+    } else {
+      // Expert team needed - go through team assembly
+      setMission(task.title + ": " + task.description);
+      setPhase("team");
+      analyzeAndRecommendTeam(task);
+    }
+  };
+
+  // Update task in the list
+  const updateTaskInList = (updatedTask: PendingTask) => {
+    setTasks(prev => prev.map(t => t.id === updatedTask.id ? updatedTask : t));
+  };
+
+  // Analyze and recommend team
+  const analyzeAndRecommendTeam = (task?: PendingTask) => {
+    const missionText = task ? task.title + " " + task.description : mission;
+    const missionLower = missionText.toLowerCase();
+    const team: Expert[] = [];
+    
+    team.push("strategy");
+    
+    if (missionLower.includes("marketing") || missionLower.includes("brand") || missionLower.includes("social")) {
+      team.push("marketing");
+    }
+    if (missionLower.includes("build") || missionLower.includes("develop") || missionLower.includes("technical")) {
+      team.push("engineering");
+      team.push("design");
+    }
+    if (missionLower.includes("budget") || missionLower.includes("finance") || missionLower.includes("investor")) {
+      team.push("finance");
+    }
+    if (missionLower.includes("research") || missionLower.includes("analyze") || missionLower.includes("competitor")) {
+      team.push("research");
+    }
+    if (missionLower.includes("legal") || missionLower.includes("contract") || missionLower.includes("compliance")) {
+      team.push("legal");
+    }
+    
+    if (team.length < 3) {
+      if (!team.includes("research")) team.push("research");
+      if (!team.includes("operations") && team.length < 3) team.push("operations");
+    }
+    
+    setRecommendedTeam(Array.from(new Set(team)).slice(0, 5));
+  };
+
+  // Generate kickoff questions
+  const generateKickoffQuestions = () => {
+    const questions: KickoffQuestion[] = [
+      { id: 1, question: "Do you have specific requirements or constraints we should know about?", expertFrom: "strategy" },
+      { id: 2, question: "Should we prioritize speed over comprehensiveness?", expertFrom: "strategy" },
+      { id: 3, question: "Can we proceed with our recommendations if you're unavailable?", expertFrom: "strategy" },
+    ];
+    
+    if (approvedTeam.includes("research")) {
+      questions.push({ id: 4, question: "Should we include competitor analysis in our research?", expertFrom: "research" });
+    }
+    if (approvedTeam.includes("finance")) {
+      questions.push({ id: 5, question: "Do you need detailed financial projections?", expertFrom: "finance" });
+    }
+    
+    setKickoffQuestions(questions);
+    setCurrentQuestionIndex(0);
+    setPhase("kickoff");
+  };
+
+  // Answer kickoff question
+  const answerQuestion = (answer: "yes" | "no") => {
+    const updated = [...kickoffQuestions];
+    updated[currentQuestionIndex] = { ...updated[currentQuestionIndex], answered: true, answer };
+    setKickoffQuestions(updated);
+    
+    if (currentQuestionIndex < kickoffQuestions.length - 1) {
+      setCurrentQuestionIndex(prev => prev + 1);
+    } else {
+      setPhase("timeline");
+    }
+  };
+
+  // Start active work
+  const startActiveWork = () => {
+    if (!deliverableTime || !activeTask) return;
+    
+    setTimeRemaining(deliverableTime * 60);
+    setIsRunning(true);
+    setPhase("active");
+    
+    // Add initial dialogue from team
+    const initialDialogue: DialogueMessage[] = [
+      {
+        id: 1,
+        from: "twin",
+        name: "Digital Twin",
+        message: `I'm coordinating the team for "${activeTask.title}". Here's the plan based on your kickoff answers.`,
+        timestamp: new Date()
+      },
+      {
+        id: 2,
+        from: "expert",
+        name: EXPERT_PROFILES[approvedTeam[0]]?.name || "Team Lead",
+        message: "Team is assembled and ready. We'll deliver the first draft within the timeline.",
+        timestamp: new Date()
+      }
+    ];
+    
+    const updatedTask = {
+      ...activeTask,
+      status: "active" as TaskStatus,
+      assignedTo: approvedTeam,
+      dialogue: initialDialogue
+    };
+    setActiveTask(updatedTask);
+    updateTaskInList(updatedTask);
+    
+    toast.success("Expert team is now working!");
+  };
+
+  // Send message to team
+  const sendMessage = (message: string) => {
+    if (!activeTask || !message.trim()) return;
+    
+    const newMessage: DialogueMessage = {
+      id: activeTask.dialogue.length + 1,
+      from: "user",
+      name: "You",
+      message: message.trim(),
+      timestamp: new Date()
+    };
+    
+    const updatedTask = {
+      ...activeTask,
+      dialogue: [...activeTask.dialogue, newMessage]
+    };
+    setActiveTask(updatedTask);
+    updateTaskInList(updatedTask);
+    
+    // Simulate response
+    setTimeout(() => {
+      const response: DialogueMessage = {
+        id: updatedTask.dialogue.length + 1,
+        from: activeTask.type === "twin" ? "twin" : "expert",
+        name: activeTask.type === "twin" ? "Digital Twin" : EXPERT_PROFILES[approvedTeam[0]]?.name || "Team",
+        message: "Understood. I'll incorporate that feedback into the deliverable.",
+        timestamp: new Date()
+      };
+      
+      const withResponse = {
+        ...updatedTask,
+        dialogue: [...updatedTask.dialogue, response]
+      };
+      setActiveTask(withResponse);
+      updateTaskInList(withResponse);
+    }, 1500);
+  };
+
+  // Move to review phase
+  const moveToReview = () => {
+    if (!activeTask) return;
+    
+    setIsRunning(false);
+    setPhase("review");
+    
+    const reviewDialogue: DialogueMessage = {
+      id: activeTask.dialogue.length + 1,
+      from: "twin",
+      name: "Digital Twin",
+      message: "The deliverable is ready for your review. I've conducted a quality check and have some recommendations.",
+      timestamp: new Date(),
+      needsResponse: true
+    };
+    
+    const updatedTask = {
+      ...activeTask,
+      status: "review" as TaskStatus,
+      progress: 100,
+      dialogue: [...activeTask.dialogue, reviewDialogue],
+      deliverable: "Draft deliverable ready for review..."
+    };
+    setActiveTask(updatedTask);
+    updateTaskInList(updatedTask);
+  };
+
+  // Complete task
+  const completeTask = () => {
+    if (!activeTask) return;
+    
+    const updatedTask = {
+      ...activeTask,
+      status: "completed" as TaskStatus
+    };
+    updateTaskInList(updatedTask);
+    
+    toast.success("Task completed successfully!");
+    setActiveTask(null);
+    setPhase("queue");
+    setApprovedTeam([]);
+    setRecommendedTeam([]);
+    setKickoffQuestions([]);
+  };
+
+  // Voice recording toggle
+  const toggleRecording = () => {
+    setIsRecording(!isRecording);
+    if (!isRecording) {
+      toast.info("Voice recording started...");
+    } else {
+      toast.success("Voice note captured");
+    }
+  };
+
+  // Create new task from voice/template
+  const createNewTask = () => {
+    if (!mission.trim()) return;
+    
+    const newTask: PendingTask = {
+      id: `task-${Date.now()}`,
+      title: mission,
+      description: "Custom task created from Action Engine",
+      category: selectedTemplate === 1 ? "Communications" : selectedTemplate === 2 ? "Research" : "Custom",
+      source: "manual",
+      type: selectedTemplate === 1 ? "twin" : "team",
+      status: "pending",
+      progress: 0,
+      dialogue: []
+    };
+    
+    setTasks(prev => [newTask, ...prev]);
+    setMission("");
+    setSelectedTemplate(null);
+    setPhase("queue");
+    toast.success("Task added to queue");
   };
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="h-full bg-background text-foreground overflow-auto">
       {/* Header */}
-      <div className="border-b border-white/10 bg-black/80 backdrop-blur-xl sticky top-0 z-10">
-        <div className="max-w-7xl mx-auto px-6 py-4">
+      <div className="border-b border-border bg-card/80 backdrop-blur-xl sticky top-0 z-10">
+        <div className="max-w-7xl mx-auto px-4 md:px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <div className="p-3 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border border-cyan-500/30">
-                <Users className="w-8 h-8 text-cyan-400" />
+              <div className="p-3 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-purple-500/20 border border-cyan-500/30">
+                <Zap className="w-6 h-6 md:w-8 md:h-8 text-cyan-400" />
               </div>
               <div>
-                <h1 className="text-2xl md:text-3xl font-display font-bold">AI Action Engine</h1>
-                <p className="text-white/60 text-sm">Assemble your expert team and get things done</p>
+                <h1 className="text-xl md:text-2xl font-display font-bold">AI Action Engine</h1>
+                <p className="text-muted-foreground text-sm">
+                  {phase === "queue" ? "Your task queue" : 
+                   phase === "active" ? "Task in progress" :
+                   phase === "review" ? "Quality review" :
+                   "Configure your mission"}
+                </p>
               </div>
             </div>
             
-            {phase === "active" && (
-              <div className="flex items-center gap-4">
-                <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-500/10 border border-cyan-500/30">
-                  <Timer className="w-5 h-5 text-cyan-400" />
-                  <span className="font-mono text-xl text-cyan-400">{formatTime(timeRemaining)}</span>
-                </div>
-                <Button 
-                  variant="outline" 
-                  size="sm"
-                  onClick={() => setIsRunning(!isRunning)}
-                  className="border-white/20"
-                >
-                  {isRunning ? <Pause className="w-4 h-4 mr-2" /> : <Play className="w-4 h-4 mr-2" />}
-                  {isRunning ? "Pause" : "Resume"}
-                </Button>
-              </div>
-            )}
-          </div>
-
-          {/* Progress Steps */}
-          <div className="flex items-center gap-2 mt-6 overflow-x-auto pb-2">
-            {[
-              { id: "mission", label: "Mission" },
-              { id: "team", label: "Team" },
-              { id: "kickoff", label: "Kickoff" },
-              { id: "timeline", label: "Timeline" },
-              { id: "active", label: "Active" },
-            ].map((step, index) => {
-              const phases: Phase[] = ["mission", "team", "kickoff", "timeline", "active"];
-              const currentIndex = phases.indexOf(phase);
-              const stepIndex = phases.indexOf(step.id as Phase);
-              const isComplete = stepIndex < currentIndex;
-              const isCurrent = step.id === phase;
-              
-              return (
-                <div key={step.id} className="flex items-center">
-                  <div className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
-                    isComplete ? "bg-green-500/20 text-green-400" :
-                    isCurrent ? "bg-cyan-500/20 text-cyan-400 border border-cyan-500/30" :
-                    "bg-white/5 text-white/40"
+            {/* Phase indicator */}
+            <div className="hidden md:flex items-center gap-2">
+              {["queue", "team", "kickoff", "timeline", "active", "review"].map((p, idx) => (
+                <div key={p} className="flex items-center">
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${
+                    phase === p ? "bg-primary text-primary-foreground" :
+                    ["queue", "team", "kickoff", "timeline", "active", "review"].indexOf(phase) > idx ? "bg-primary/20 text-primary" :
+                    "bg-secondary text-muted-foreground"
                   }`}>
-                    {isComplete ? <CheckCircle2 className="w-4 h-4" /> : <span className="w-4 h-4 flex items-center justify-center text-xs">{index + 1}</span>}
-                    {step.label}
+                    {idx + 1}
                   </div>
-                  {index < 4 && <ArrowRight className="w-4 h-4 mx-2 text-white/20" />}
+                  {idx < 5 && <div className="w-4 h-px bg-border mx-1" />}
                 </div>
-              );
-            })}
+              ))}
+            </div>
           </div>
         </div>
       </div>
 
       {/* Main Content */}
-      <div className="max-w-5xl mx-auto px-6 py-8">
+      <div className="max-w-7xl mx-auto px-4 md:px-6 py-6">
         
-        {/* Phase 1: Mission Input */}
-        {phase === "mission" && (
-          <div className="space-y-8">
-            <div className="text-center mb-8">
-              <h2 className="text-3xl font-bold mb-2">What do you want to achieve?</h2>
-              <p className="text-white/60">Describe your mission and we'll assemble the perfect expert team</p>
-            </div>
-
-            {/* Quick Templates */}
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
+        {/* Queue Phase - Show all pending tasks */}
+        {phase === "queue" && (
+          <div className="space-y-6">
+            {/* Quick Actions */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {MISSION_TEMPLATES.map((template) => (
-                <button
+                <Card 
                   key={template.id}
+                  className={`cursor-pointer transition-all hover:border-primary/50 ${
+                    selectedTemplate === template.id ? "border-primary bg-primary/5" : "bg-card/60 border-border"
+                  }`}
                   onClick={() => {
                     setSelectedTemplate(template.id);
-                    if (template.id !== 6) {
-                      setMission(template.title + ": ");
-                    }
+                    setPhase("mission");
                   }}
-                  className={`p-4 rounded-xl border text-left transition-all ${
-                    selectedTemplate === template.id 
-                      ? "bg-cyan-500/10 border-cyan-500/50" 
-                      : "bg-white/5 border-white/10 hover:bg-white/10"
-                  }`}
                 >
-                  <template.icon className={`w-6 h-6 mb-2 ${selectedTemplate === template.id ? "text-cyan-400" : "text-white/60"}`} />
-                  <h3 className="font-bold text-white">{template.title}</h3>
-                  <p className="text-xs text-white/50 mt-1">{template.description}</p>
-                </button>
+                  <CardContent className="p-4 flex items-center gap-4">
+                    <div className={`p-3 rounded-xl ${
+                      template.type === "twin" ? "bg-purple-500/20" : "bg-cyan-500/20"
+                    }`}>
+                      <template.icon className={`w-5 h-5 ${
+                        template.type === "twin" ? "text-purple-400" : "text-cyan-400"
+                      }`} />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="font-bold text-foreground">{template.title}</h3>
+                      <p className="text-sm text-muted-foreground">{template.description}</p>
+                    </div>
+                    <Badge className={template.type === "twin" ? "bg-purple-500/20 text-purple-400" : "bg-cyan-500/20 text-cyan-400"}>
+                      {template.type === "twin" ? "Digital Twin" : "Expert Team"}
+                    </Badge>
+                  </CardContent>
+                </Card>
               ))}
             </div>
 
-            {/* Mission Input */}
-            <div className="relative">
-              <textarea
-                value={mission}
-                onChange={(e) => setMission(e.target.value)}
-                placeholder="e.g., Build a social media company focused on professional networking for creative industries..."
-                className="w-full h-32 bg-white/5 border border-white/20 rounded-2xl px-6 py-4 text-lg text-white placeholder:text-white/30 outline-none focus:border-cyan-500/50 resize-none"
-              />
-              <div className="absolute bottom-4 right-4 text-xs text-white/30">
-                {mission.length} characters
-              </div>
-            </div>
-
-            <Button 
-              onClick={analyzeAndRecommendTeam}
-              disabled={mission.length < 10}
-              className="w-full h-14 bg-cyan-600 hover:bg-cyan-700 text-lg font-bold"
-            >
-              <Zap className="w-5 h-5 mr-2" />
-              Analyze & Recommend Team
-            </Button>
-          </div>
-        )}
-
-        {/* Phase 2: Team Assembly */}
-        {phase === "team" && (
-          <div className="space-y-8">
-            <div className="text-center mb-8">
-              <h2 className="text-3xl font-bold mb-2">Your Recommended Expert Team</h2>
-              <p className="text-white/60">Based on your mission: "{mission.slice(0, 50)}..."</p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {recommendedTeam.map((expertKey) => {
-                const expert = EXPERT_PROFILES[expertKey];
-                const isApproved = approvedTeam.includes(expertKey);
-                
-                return (
-                  <div
-                    key={expertKey}
-                    className={`p-5 rounded-xl border transition-all ${
-                      isApproved 
-                        ? "bg-green-500/10 border-green-500/30" 
-                        : "bg-white/5 border-white/10"
-                    }`}
-                  >
-                    <div className="flex items-start justify-between">
-                      <div className="flex items-center gap-4">
-                        <div className={`w-14 h-14 rounded-full flex items-center justify-center text-lg font-bold ${
-                          isApproved ? "bg-green-500/20 text-green-400" : "bg-cyan-500/20 text-cyan-400"
-                        }`}>
-                          {expert.avatar}
+            {/* Task Queue */}
+            <Card className="bg-card/60 border-border">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-foreground">
+                  <ListChecks className="w-5 h-5 text-primary" />
+                  Task Queue
+                  <Badge className="ml-2">{tasks.filter(t => t.status === "pending").length} pending</Badge>
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                {tasks.filter(t => t.status !== "completed").length === 0 ? (
+                  <div className="text-center py-8 text-muted-foreground">
+                    <Zap className="w-12 h-12 mx-auto mb-4 opacity-30" />
+                    <p>No pending tasks. Create a new mission above or action items from Daily Brief.</p>
+                  </div>
+                ) : (
+                  tasks.filter(t => t.status !== "completed").map((task) => (
+                    <div 
+                      key={task.id}
+                      className={`p-4 rounded-xl border transition-all ${
+                        task.status === "active" ? "bg-cyan-500/5 border-cyan-500/30" :
+                        task.status === "review" ? "bg-yellow-500/5 border-yellow-500/30" :
+                        "bg-secondary/30 border-border hover:border-primary/30"
+                      }`}
+                    >
+                      <div className="flex items-start justify-between gap-4">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-1">
+                            <Badge variant="outline" className="text-xs">{task.category}</Badge>
+                            <Badge className={task.type === "twin" ? "bg-purple-500/20 text-purple-400 border-0" : "bg-cyan-500/20 text-cyan-400 border-0"}>
+                              {task.type === "twin" ? <><Fingerprint className="w-3 h-3 mr-1" /> Digital Twin</> : <><Users className="w-3 h-3 mr-1" /> Expert Team</>}
+                            </Badge>
+                            {task.status === "active" && (
+                              <Badge className="bg-green-500/20 text-green-400 border-0">
+                                <Play className="w-3 h-3 mr-1" /> Active
+                              </Badge>
+                            )}
+                            {task.status === "review" && (
+                              <Badge className="bg-yellow-500/20 text-yellow-400 border-0">
+                                <Eye className="w-3 h-3 mr-1" /> Review
+                              </Badge>
+                            )}
+                          </div>
+                          <h3 className="font-bold text-foreground">{task.title}</h3>
+                          <p className="text-sm text-muted-foreground">{task.description}</p>
+                          
+                          {task.status !== "pending" && (
+                            <div className="mt-3">
+                              <div className="flex items-center justify-between text-xs text-muted-foreground mb-1">
+                                <span>Progress</span>
+                                <span>{Math.round(task.progress)}%</span>
+                              </div>
+                              <Progress value={task.progress} className="h-2" />
+                            </div>
+                          )}
                         </div>
-                        <div>
-                          <h3 className="font-bold text-white">{expert.name}</h3>
-                          <p className="text-sm text-cyan-400">{expert.role}</p>
-                          <p className="text-xs text-white/50 mt-1">{expert.specialty}</p>
+                        
+                        <div className="flex gap-2">
+                          {task.status === "pending" && (
+                            <Button 
+                              onClick={() => startTask(task)}
+                              className="bg-primary hover:bg-primary/90"
+                            >
+                              <Play className="w-4 h-4 mr-2" /> Start
+                            </Button>
+                          )}
+                          {(task.status === "active" || task.status === "review") && (
+                            <Button 
+                              variant="outline"
+                              onClick={() => {
+                                setActiveTask(task);
+                                setPhase(task.status === "review" ? "review" : "active");
+                                if (task.status === "active") {
+                                  setIsRunning(true);
+                                  setTimeRemaining(Math.max(0, (deliverableTime || 30) * 60 - Math.floor(task.progress * 0.6 * 60)));
+                                }
+                              }}
+                            >
+                              <Eye className="w-4 h-4 mr-2" /> View
+                            </Button>
+                          )}
                         </div>
                       </div>
-                      <Button
-                        size="sm"
-                        variant={isApproved ? "default" : "outline"}
-                        onClick={() => {
-                          if (isApproved) {
-                            setApprovedTeam(approvedTeam.filter(e => e !== expertKey));
-                          } else {
-                            setApprovedTeam([...approvedTeam, expertKey]);
-                          }
-                        }}
-                        className={isApproved ? "bg-green-600 hover:bg-green-700" : "border-white/20"}
-                      >
-                        {isApproved ? <CheckCircle2 className="w-4 h-4 mr-1" /> : null}
-                        {isApproved ? "Approved" : "Add"}
-                      </Button>
                     </div>
-                  </div>
-                );
-              })}
-            </div>
+                  ))
+                )}
+              </CardContent>
+            </Card>
 
-            <div className="flex gap-4">
-              <Button 
-                variant="outline" 
-                onClick={() => setPhase("mission")}
-                className="flex-1 border-white/20"
-              >
-                Back to Mission
-              </Button>
-              <Button 
-                onClick={generateKickoffQuestions}
-                disabled={approvedTeam.length === 0}
-                className="flex-1 bg-cyan-600 hover:bg-cyan-700"
-              >
-                Start Kickoff ({approvedTeam.length} experts)
-                <ArrowRight className="w-4 h-4 ml-2" />
-              </Button>
-            </div>
+            {/* Voice Input */}
+            <Card className="bg-card/60 border-border">
+              <CardContent className="p-4">
+                <div className="flex items-center gap-4">
+                  <Button
+                    size="lg"
+                    className={`h-14 w-14 rounded-full ${isRecording ? "bg-red-500 hover:bg-red-600" : "bg-primary hover:bg-primary/90"}`}
+                    onClick={toggleRecording}
+                  >
+                    {isRecording ? <MicOff className="w-6 h-6" /> : <Mic className="w-6 h-6" />}
+                  </Button>
+                  <div className="flex-1">
+                    <p className="font-medium text-foreground">
+                      {isRecording ? "Recording... tap to stop" : "Tap to add a task by voice"}
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      Describe what you need done and I'll route it appropriately
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         )}
 
-        {/* Phase 3: Kickoff Questions */}
-        {phase === "kickoff" && kickoffQuestions.length > 0 && (
-          <div className="max-w-2xl mx-auto space-y-8">
-            <div className="text-center mb-8">
-              <h2 className="text-3xl font-bold mb-2">Quick Kickoff</h2>
-              <p className="text-white/60">Answer a few quick questions to align the team</p>
-              <div className="flex justify-center gap-2 mt-4">
-                {kickoffQuestions.map((_, index) => (
-                  <div 
-                    key={index}
-                    className={`w-3 h-3 rounded-full ${
-                      index < currentQuestionIndex ? "bg-green-500" :
-                      index === currentQuestionIndex ? "bg-cyan-500" :
-                      "bg-white/20"
-                    }`}
-                  />
-                ))}
-              </div>
-            </div>
-
-            <Card className="bg-white/5 border-white/10">
-              <CardContent className="p-8">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="w-10 h-10 rounded-full bg-cyan-500/20 flex items-center justify-center text-sm font-bold text-cyan-400">
-                    {EXPERT_PROFILES[kickoffQuestions[currentQuestionIndex].expertFrom].avatar}
-                  </div>
-                  <div>
-                    <p className="text-sm text-cyan-400">{EXPERT_PROFILES[kickoffQuestions[currentQuestionIndex].expertFrom].name}</p>
-                    <p className="text-xs text-white/40">{EXPERT_PROFILES[kickoffQuestions[currentQuestionIndex].expertFrom].role}</p>
-                  </div>
-                </div>
-
-                <h3 className="text-2xl font-bold text-white mb-8">
-                  {kickoffQuestions[currentQuestionIndex].question}
-                </h3>
-
-                <div className="grid grid-cols-3 gap-4">
-                  <Button 
-                    onClick={() => answerQuestion("yes")}
-                    className="h-16 bg-green-600 hover:bg-green-700 text-lg"
-                  >
-                    <ThumbsUp className="w-5 h-5 mr-2" />
-                    Yes
+        {/* Mission Phase - Define the task */}
+        {phase === "mission" && (
+          <div className="max-w-2xl mx-auto space-y-6">
+            <Card className="bg-card/60 border-border">
+              <CardHeader>
+                <CardTitle className="text-foreground">What do you need done?</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <textarea
+                  value={mission}
+                  onChange={(e) => setMission(e.target.value)}
+                  placeholder="Describe your task..."
+                  className="w-full h-32 p-4 rounded-xl bg-secondary/50 border border-border focus:border-primary focus:outline-none resize-none text-foreground placeholder:text-muted-foreground"
+                />
+                
+                <div className="flex gap-3">
+                  <Button variant="outline" onClick={() => { setPhase("queue"); setMission(""); setSelectedTemplate(null); }}>
+                    Cancel
                   </Button>
                   <Button 
-                    onClick={() => answerQuestion("no")}
-                    className="h-16 bg-red-600 hover:bg-red-700 text-lg"
+                    className="flex-1 bg-primary hover:bg-primary/90"
+                    onClick={() => {
+                      if (selectedTemplate === 1) {
+                        // Communications - Digital Twin
+                        const newTask: PendingTask = {
+                          id: `task-${Date.now()}`,
+                          title: mission || "Draft Communications",
+                          description: "Email or document drafting",
+                          category: "Communications",
+                          source: "manual",
+                          type: "twin",
+                          status: "pending",
+                          progress: 0,
+                          dialogue: []
+                        };
+                        setTasks(prev => [newTask, ...prev]);
+                        startTask(newTask);
+                      } else {
+                        // Research or Custom - Expert Team
+                        analyzeAndRecommendTeam();
+                        setPhase("team");
+                      }
+                    }}
+                    disabled={!mission.trim()}
                   >
-                    <ThumbsDown className="w-5 h-5 mr-2" />
-                    No
-                  </Button>
-                  <Button 
-                    onClick={() => answerQuestion("skip")}
-                    variant="outline"
-                    className="h-16 border-white/20 text-lg"
-                  >
-                    <RotateCcw className="w-5 h-5 mr-2" />
-                    Skip
+                    <ArrowRight className="w-4 h-4 mr-2" />
+                    {selectedTemplate === 1 ? "Start with Digital Twin" : "Assemble Expert Team"}
                   </Button>
                 </div>
               </CardContent>
@@ -481,119 +675,277 @@ export default function AIExperts() {
           </div>
         )}
 
-        {/* Phase 4: Timeline Selection */}
-        {phase === "timeline" && (
-          <div className="max-w-2xl mx-auto space-y-8">
-            <div className="text-center mb-8">
-              <h2 className="text-3xl font-bold mb-2">When do you want the first deliverable?</h2>
-              <p className="text-white/60">Your team is ready to start working</p>
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              {[
-                { minutes: 30, label: "30 Minutes", description: "Quick initial findings" },
-                { minutes: 60, label: "1 Hour", description: "Detailed first draft" },
-                { minutes: 120, label: "2 Hours", description: "Comprehensive analysis" },
-                { minutes: 240, label: "4 Hours", description: "Full deliverable" },
-              ].map((option) => (
-                <button
-                  key={option.minutes}
-                  onClick={() => setDeliverableTime(option.minutes)}
-                  className={`p-6 rounded-xl border text-left transition-all ${
-                    deliverableTime === option.minutes 
-                      ? "bg-cyan-500/10 border-cyan-500/50" 
-                      : "bg-white/5 border-white/10 hover:bg-white/10"
-                  }`}
-                >
-                  <Clock className={`w-8 h-8 mb-3 ${deliverableTime === option.minutes ? "text-cyan-400" : "text-white/60"}`} />
-                  <h3 className="text-xl font-bold text-white">{option.label}</h3>
-                  <p className="text-sm text-white/50 mt-1">{option.description}</p>
-                </button>
-              ))}
-            </div>
-
-            <Button 
-              onClick={startActionEngine}
-              disabled={!deliverableTime}
-              className="w-full h-14 bg-cyan-600 hover:bg-cyan-700 text-lg font-bold"
-            >
-              <Play className="w-5 h-5 mr-2" />
-              Start Action Engine
-            </Button>
+        {/* Team Phase */}
+        {phase === "team" && (
+          <div className="max-w-3xl mx-auto space-y-6">
+            <Card className="bg-card/60 border-border">
+              <CardHeader>
+                <CardTitle className="text-foreground">Recommended Expert Team</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <p className="text-muted-foreground mb-4">
+                  Based on your mission, I recommend these experts. Tap to add or remove.
+                </p>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  {(Object.keys(EXPERT_PROFILES) as Expert[]).map((key) => {
+                    const expert = EXPERT_PROFILES[key];
+                    const isRecommended = recommendedTeam.includes(key);
+                    const isApproved = approvedTeam.includes(key);
+                    
+                    return (
+                      <div
+                        key={key}
+                        onClick={() => {
+                          if (isApproved) {
+                            setApprovedTeam(prev => prev.filter(e => e !== key));
+                          } else {
+                            setApprovedTeam(prev => [...prev, key]);
+                          }
+                        }}
+                        className={`p-4 rounded-xl border cursor-pointer transition-all ${
+                          isApproved ? "bg-primary/10 border-primary" :
+                          isRecommended ? "bg-cyan-500/5 border-cyan-500/30 hover:border-primary" :
+                          "bg-secondary/30 border-border hover:border-primary/30"
+                        }`}
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm ${
+                            isApproved ? "bg-primary text-primary-foreground" : "bg-secondary text-muted-foreground"
+                          }`}>
+                            {expert.avatar}
+                          </div>
+                          <div className="flex-1">
+                            <p className="font-medium text-foreground">{expert.name}</p>
+                            <p className="text-xs text-muted-foreground">{expert.role}</p>
+                          </div>
+                          {isRecommended && !isApproved && (
+                            <Badge className="bg-cyan-500/20 text-cyan-400 border-0 text-xs">Recommended</Badge>
+                          )}
+                          {isApproved && (
+                            <CheckCircle2 className="w-5 h-5 text-primary" />
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+                
+                <div className="flex gap-3 pt-4">
+                  <Button variant="outline" onClick={() => setPhase("queue")}>
+                    Cancel
+                  </Button>
+                  <Button 
+                    className="flex-1 bg-primary hover:bg-primary/90"
+                    onClick={() => {
+                      if (approvedTeam.length === 0) {
+                        setApprovedTeam(recommendedTeam);
+                      }
+                      generateKickoffQuestions();
+                    }}
+                    disabled={approvedTeam.length === 0 && recommendedTeam.length === 0}
+                  >
+                    <ArrowRight className="w-4 h-4 mr-2" />
+                    Start Kickoff ({approvedTeam.length || recommendedTeam.length} experts)
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         )}
 
-        {/* Phase 5: Active Engine */}
-        {phase === "active" && (
+        {/* Kickoff Phase */}
+        {phase === "kickoff" && kickoffQuestions.length > 0 && (
+          <div className="max-w-2xl mx-auto space-y-6">
+            <Card className="bg-card/60 border-border">
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-foreground">Quick Kickoff</CardTitle>
+                  <Badge>{currentQuestionIndex + 1} / {kickoffQuestions.length}</Badge>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <Progress value={((currentQuestionIndex + 1) / kickoffQuestions.length) * 100} className="h-2" />
+                
+                <div className="p-6 rounded-xl bg-secondary/30 border border-border">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center font-bold text-sm text-primary">
+                      {EXPERT_PROFILES[kickoffQuestions[currentQuestionIndex].expertFrom]?.avatar}
+                    </div>
+                    <div>
+                      <p className="font-medium text-foreground">
+                        {EXPERT_PROFILES[kickoffQuestions[currentQuestionIndex].expertFrom]?.name}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        {EXPERT_PROFILES[kickoffQuestions[currentQuestionIndex].expertFrom]?.role}
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <p className="text-lg text-foreground mb-6">
+                    {kickoffQuestions[currentQuestionIndex].question}
+                  </p>
+                  
+                  <div className="flex gap-4">
+                    <Button 
+                      size="lg"
+                      className="flex-1 bg-green-500 hover:bg-green-600"
+                      onClick={() => answerQuestion("yes")}
+                    >
+                      <ThumbsUp className="w-5 h-5 mr-2" /> Yes
+                    </Button>
+                    <Button 
+                      size="lg"
+                      className="flex-1 bg-red-500 hover:bg-red-600"
+                      onClick={() => answerQuestion("no")}
+                    >
+                      <ThumbsDown className="w-5 h-5 mr-2" /> No
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        )}
+
+        {/* Timeline Phase */}
+        {phase === "timeline" && (
+          <div className="max-w-2xl mx-auto space-y-6">
+            <Card className="bg-card/60 border-border">
+              <CardHeader>
+                <CardTitle className="text-foreground">When do you need the first deliverable?</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                  {[
+                    { value: 30, label: "30 min" },
+                    { value: 60, label: "1 hour" },
+                    { value: 120, label: "2 hours" },
+                    { value: 240, label: "4 hours" },
+                  ].map((option) => (
+                    <Button
+                      key={option.value}
+                      variant={deliverableTime === option.value ? "default" : "outline"}
+                      className={`h-16 ${deliverableTime === option.value ? "bg-primary" : ""}`}
+                      onClick={() => setDeliverableTime(option.value)}
+                    >
+                      <Clock className="w-4 h-4 mr-2" />
+                      {option.label}
+                    </Button>
+                  ))}
+                </div>
+                
+                <Button 
+                  className="w-full h-12 bg-primary hover:bg-primary/90 mt-4"
+                  onClick={startActiveWork}
+                  disabled={!deliverableTime}
+                >
+                  <Zap className="w-5 h-5 mr-2" />
+                  Start Action Engine
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+        )}
+
+        {/* Active Phase */}
+        {phase === "active" && activeTask && (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Main Progress */}
             <div className="lg:col-span-2 space-y-6">
-              <Card className="bg-white/5 border-white/10">
+              <Card className="bg-card/60 border-border">
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2 text-white">
-                    <Zap className="w-5 h-5 text-cyan-400" />
-                    Action Progress
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  {actionItems.map((item) => (
-                    <div key={item.id} className="p-4 rounded-xl bg-white/5 border border-white/10">
-                      <div className="flex items-center justify-between mb-2">
-                        <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 rounded-full bg-cyan-500/20 flex items-center justify-center text-xs font-bold text-cyan-400">
-                            {EXPERT_PROFILES[item.assignee].avatar}
-                          </div>
-                          <div>
-                            <h4 className="font-medium text-white">{item.title}</h4>
-                            <p className="text-xs text-white/40">{EXPERT_PROFILES[item.assignee].name}</p>
-                          </div>
-                        </div>
-                        <Badge 
-                          variant="outline" 
-                          className={
-                            item.status === "completed" ? "border-green-500/30 text-green-400" :
-                            item.status === "in-progress" ? "border-cyan-500/30 text-cyan-400" :
-                            item.status === "needs-input" ? "border-yellow-500/30 text-yellow-400" :
-                            "border-white/20 text-white/40"
-                          }
-                        >
-                          {item.status}
-                        </Badge>
+                  <div className="flex items-center justify-between">
+                    <CardTitle className="text-foreground">{activeTask.title}</CardTitle>
+                    <div className="flex items-center gap-4">
+                      <div className="text-2xl font-mono font-bold text-primary">
+                        {formatTime(timeRemaining)}
                       </div>
-                      <Progress value={item.progress} className="h-2" />
-                      {item.question && (
-                        <div className="mt-3 p-3 rounded-lg bg-yellow-500/10 border border-yellow-500/20">
-                          <p className="text-sm text-yellow-400">{item.question}</p>
-                          <div className="flex gap-2 mt-2">
-                            <Button size="sm" className="bg-green-600 hover:bg-green-700">Yes</Button>
-                            <Button size="sm" variant="outline" className="border-white/20">No</Button>
-                          </div>
-                        </div>
-                      )}
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setIsRunning(!isRunning)}
+                      >
+                        {isRunning ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
+                      </Button>
                     </div>
-                  ))}
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="mb-4">
+                    <div className="flex items-center justify-between text-sm text-muted-foreground mb-2">
+                      <span>Progress</span>
+                      <span>{Math.round(activeTask.progress)}%</span>
+                    </div>
+                    <Progress value={activeTask.progress} className="h-3" />
+                  </div>
+                  
+                  {activeTask.progress >= 90 && (
+                    <Button 
+                      className="w-full bg-yellow-500 hover:bg-yellow-600 text-black"
+                      onClick={moveToReview}
+                    >
+                      <Eye className="w-4 h-4 mr-2" /> Move to Review
+                    </Button>
+                  )}
                 </CardContent>
               </Card>
 
-              {/* Chat with Team */}
-              <Card className="bg-white/5 border-white/10">
+              {/* Dialogue */}
+              <Card className="bg-card/60 border-border">
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2 text-white">
-                    <MessageSquare className="w-5 h-5 text-cyan-400" />
-                    Message Your Team
+                  <CardTitle className="flex items-center gap-2 text-foreground">
+                    <MessageSquare className="w-5 h-5" />
+                    Activity & Dialogue
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="flex gap-2">
+                  <ScrollArea className="h-64 pr-4">
+                    <div className="space-y-4">
+                      {activeTask.dialogue.map((msg) => (
+                        <div key={msg.id} className={`flex gap-3 ${msg.from === "user" ? "flex-row-reverse" : ""}`}>
+                          <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold shrink-0 ${
+                            msg.from === "twin" ? "bg-purple-500/20 text-purple-400" :
+                            msg.from === "user" ? "bg-primary text-primary-foreground" :
+                            "bg-cyan-500/20 text-cyan-400"
+                          }`}>
+                            {msg.from === "twin" ? <Fingerprint className="w-4 h-4" /> :
+                             msg.from === "user" ? "Y" :
+                             msg.name.charAt(0)}
+                          </div>
+                          <div className={`flex-1 p-3 rounded-xl ${
+                            msg.from === "user" ? "bg-primary/10" : "bg-secondary/50"
+                          }`}>
+                            <p className="text-xs text-muted-foreground mb-1">{msg.name}</p>
+                            <p className="text-sm text-foreground">{msg.message}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </ScrollArea>
+                  
+                  {/* Message input */}
+                  <div className="flex gap-2 mt-4 pt-4 border-t border-border">
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      className={isRecording ? "bg-red-500 text-white" : ""}
+                      onClick={toggleRecording}
+                    >
+                      {isRecording ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
+                    </Button>
                     <input
                       type="text"
-                      value={chatInput}
-                      onChange={(e) => setChatInput(e.target.value)}
-                      placeholder="Ask a question or provide guidance..."
-                      className="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-white/30 outline-none focus:border-cyan-500/50"
-                      onKeyDown={(e) => e.key === "Enter" && handleChatSend()}
+                      placeholder="Send a message to the team..."
+                      className="flex-1 px-4 py-2 rounded-lg bg-secondary/50 border border-border focus:border-primary focus:outline-none text-foreground"
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" && e.currentTarget.value) {
+                          sendMessage(e.currentTarget.value);
+                          e.currentTarget.value = "";
+                        }
+                      }}
                     />
-                    <Button onClick={handleChatSend} className="bg-cyan-600 hover:bg-cyan-700">
+                    <Button size="icon">
                       <Send className="w-4 h-4" />
                     </Button>
                   </div>
@@ -601,62 +953,152 @@ export default function AIExperts() {
               </Card>
             </div>
 
-            {/* Team Status Sidebar */}
+            {/* Sidebar */}
             <div className="space-y-6">
-              <Card className="bg-gradient-to-br from-cyan-500/10 to-blue-500/10 border-cyan-500/30">
-                <CardHeader>
-                  <CardTitle className="text-white">Active Team</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  {approvedTeam.map((expertKey) => {
-                    const expert = EXPERT_PROFILES[expertKey];
-                    const isWorking = actionItems.some(i => i.assignee === expertKey && i.status === "in-progress");
-                    
-                    return (
-                      <div key={expertKey} className="flex items-center gap-3 p-2 rounded-lg bg-white/5">
-                        <div className="relative">
-                          <div className="w-10 h-10 rounded-full bg-cyan-500/20 flex items-center justify-center text-sm font-bold text-cyan-400">
+              {/* Team */}
+              {activeTask.type === "team" && approvedTeam.length > 0 && (
+                <Card className="bg-card/60 border-border">
+                  <CardHeader>
+                    <CardTitle className="text-sm text-foreground">Active Team</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-2">
+                    {approvedTeam.map((key) => {
+                      const expert = EXPERT_PROFILES[key];
+                      return (
+                        <div key={key} className="flex items-center gap-2 p-2 rounded-lg bg-secondary/30">
+                          <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-xs font-bold text-primary">
                             {expert.avatar}
                           </div>
-                          {isWorking && (
-                            <div className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-green-500 border-2 border-black animate-pulse" />
-                          )}
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm font-medium text-foreground truncate">{expert.name}</p>
+                            <p className="text-xs text-muted-foreground truncate">{expert.role}</p>
+                          </div>
+                          <div className="w-2 h-2 rounded-full bg-green-500" />
                         </div>
-                        <div className="flex-1 min-w-0">
-                          <p className="font-medium text-white text-sm truncate">{expert.name}</p>
-                          <p className="text-xs text-white/40">{isWorking ? "Working..." : "Standby"}</p>
-                        </div>
+                      );
+                    })}
+                  </CardContent>
+                </Card>
+              )}
+
+              {/* Digital Twin Status */}
+              {activeTask.type === "twin" && (
+                <Card className="bg-purple-500/5 border-purple-500/30">
+                  <CardContent className="p-4">
+                    <div className="flex items-center gap-3">
+                      <div className="p-3 rounded-xl bg-purple-500/20">
+                        <Fingerprint className="w-6 h-6 text-purple-400" />
                       </div>
-                    );
-                  })}
-                </CardContent>
-              </Card>
+                      <div>
+                        <p className="font-medium text-foreground">Digital Twin</p>
+                        <p className="text-sm text-purple-400">Working autonomously</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
 
-              <Card className="bg-white/5 border-white/10">
-                <CardContent className="p-4 text-center">
-                  <Calendar className="w-8 h-8 mx-auto mb-2 text-cyan-400" />
-                  <p className="text-sm text-white/60">First deliverable ready at</p>
-                  <p className="text-xl font-bold text-white">
-                    {new Date(Date.now() + timeRemaining * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card className="bg-purple-500/10 border-purple-500/30">
-                <CardContent className="p-4">
-                  <div className="flex items-center gap-2 mb-2">
-                    <Brain className="w-5 h-5 text-purple-400" />
-                    <span className="font-medium text-white">Digital Twin</span>
-                  </div>
-                  <p className="text-xs text-white/60">
-                    Your Digital Twin is learning from this session. Over time, it will start answering routine questions automatically.
-                  </p>
-                </CardContent>
-              </Card>
+              {/* Back to Queue */}
+              <Button 
+                variant="outline" 
+                className="w-full"
+                onClick={() => setPhase("queue")}
+              >
+                <ArrowRight className="w-4 h-4 mr-2 rotate-180" /> Back to Queue
+              </Button>
             </div>
           </div>
         )}
 
+        {/* Review Phase */}
+        {phase === "review" && activeTask && (
+          <div className="max-w-3xl mx-auto space-y-6">
+            <Card className="bg-yellow-500/5 border-yellow-500/30">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-foreground">
+                  <Eye className="w-5 h-5 text-yellow-400" />
+                  Quality Review
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="p-4 rounded-xl bg-secondary/30 border border-border">
+                  <h3 className="font-bold text-foreground mb-2">{activeTask.title}</h3>
+                  <p className="text-muted-foreground">{activeTask.deliverable || "Deliverable content here..."}</p>
+                </div>
+
+                {/* Digital Twin Feedback */}
+                <div className="p-4 rounded-xl bg-purple-500/10 border border-purple-500/30">
+                  <div className="flex items-center gap-3 mb-3">
+                    <Fingerprint className="w-5 h-5 text-purple-400" />
+                    <span className="font-medium text-foreground">Digital Twin Review</span>
+                  </div>
+                  <ul className="space-y-2 text-sm text-muted-foreground">
+                    <li className="flex items-start gap-2">
+                      <CheckCircle2 className="w-4 h-4 text-green-400 mt-0.5" />
+                      <span>Content aligns with your communication style</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <CheckCircle2 className="w-4 h-4 text-green-400 mt-0.5" />
+                      <span>Key points are addressed</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <AlertCircle className="w-4 h-4 text-yellow-400 mt-0.5" />
+                      <span>Consider adding more specific metrics (optional)</span>
+                    </li>
+                  </ul>
+                </div>
+
+                <div className="flex gap-3">
+                  <Button 
+                    variant="outline"
+                    className="flex-1"
+                    onClick={() => {
+                      toast.info("Sending back for revision...");
+                      setPhase("active");
+                      setIsRunning(true);
+                    }}
+                  >
+                    <RefreshCw className="w-4 h-4 mr-2" /> Request Revision
+                  </Button>
+                  <Button 
+                    className="flex-1 bg-green-500 hover:bg-green-600"
+                    onClick={completeTask}
+                  >
+                    <CheckCircle2 className="w-4 h-4 mr-2" /> Approve & Complete
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Dialogue History */}
+            <Card className="bg-card/60 border-border">
+              <CardHeader>
+                <CardTitle className="text-foreground">Full Dialogue History</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ScrollArea className="h-48">
+                  <div className="space-y-3">
+                    {activeTask.dialogue.map((msg) => (
+                      <div key={msg.id} className="flex gap-3">
+                        <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold shrink-0 ${
+                          msg.from === "twin" ? "bg-purple-500/20 text-purple-400" :
+                          msg.from === "user" ? "bg-primary/20 text-primary" :
+                          "bg-cyan-500/20 text-cyan-400"
+                        }`}>
+                          {msg.name.charAt(0)}
+                        </div>
+                        <div>
+                          <p className="text-xs text-muted-foreground">{msg.name}</p>
+                          <p className="text-sm text-foreground">{msg.message}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </ScrollArea>
+              </CardContent>
+            </Card>
+          </div>
+        )}
       </div>
     </div>
   );
