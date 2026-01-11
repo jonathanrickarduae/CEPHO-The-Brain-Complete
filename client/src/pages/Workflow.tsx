@@ -13,6 +13,8 @@ import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 // Project data matching Library structure
+// This will be connected to real data from Project Genesis and Review Queue
+// For now, includes standard projects plus dynamic Project Genesis entries
 const projects = [
   {
     id: 'celadon',

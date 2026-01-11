@@ -17,9 +17,11 @@ import { SubscriptionManager } from '@/components/SubscriptionManager';
 import { SignatureManager } from '@/components/SignatureManager';
 import { AIProviderSettings } from '@/components/AIRouter';
 import { SecureStorageDashboard } from '@/components/SecureStorageDashboard';
-import { Plug, Wallet, FileSignature, Cpu, HardDrive } from 'lucide-react';
+import { BrandKitManager } from '@/components/BrandKit';
+import { DataGovernanceDashboard } from '@/components/DataGovernanceDashboard';
+import { Plug, Wallet, FileSignature, Cpu, HardDrive, Paintbrush, ShieldCheck } from 'lucide-react';
 
-type SettingsTab = 'profile' | 'integrations' | 'subscriptions' | 'signatures' | 'ai-providers' | 'storage' | 'calendar' | 'training' | 'referrals' | 'notifications' | 'privacy' | 'appearance' | 'accessibility';
+type SettingsTab = 'profile' | 'integrations' | 'subscriptions' | 'signatures' | 'ai-providers' | 'storage' | 'brand-kit' | 'data-governance' | 'calendar' | 'training' | 'referrals' | 'notifications' | 'privacy' | 'appearance' | 'accessibility';
 
 export default function Settings() {
   const [activeTab, setActiveTab] = useState<SettingsTab>('profile');
@@ -31,6 +33,8 @@ export default function Settings() {
     { id: 'signatures' as const, label: 'Signatures', icon: FileSignature },
     { id: 'ai-providers' as const, label: 'AI Providers', icon: Cpu },
     { id: 'storage' as const, label: 'Storage & Security', icon: HardDrive },
+    { id: 'brand-kit' as const, label: 'Brand Kit', icon: Paintbrush },
+    { id: 'data-governance' as const, label: 'Data Governance', icon: ShieldCheck },
     { id: 'calendar' as const, label: 'Calendar', icon: Calendar },
     { id: 'training' as const, label: 'Training Data', icon: Database },
     { id: 'referrals' as const, label: 'Referrals', icon: Users },
@@ -152,6 +156,18 @@ export default function Settings() {
             {activeTab === 'storage' && (
               <div className="bg-gray-800 rounded-xl border border-gray-700 p-6">
                 <SecureStorageDashboard />
+              </div>
+            )}
+
+            {activeTab === 'brand-kit' && (
+              <div className="bg-gray-800 rounded-xl border border-gray-700 p-6">
+                <BrandKitManager />
+              </div>
+            )}
+
+            {activeTab === 'data-governance' && (
+              <div className="bg-gray-800 rounded-xl border border-gray-700 p-6">
+                <DataGovernanceDashboard />
               </div>
             )}
 

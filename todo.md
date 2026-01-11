@@ -985,3 +985,12 @@
 - [ ] Configurable timeout settings (15min, 30min, 1hr, 4hr)
 - [ ] PIN/password fallback if biometrics unavailable
 - [ ] Session lock on device change detection
+
+
+## Testing Readiness Priorities (January 2026)
+
+- [x] Wire Brand Kit to Settings page as new tab
+- [x] Connect Workflow page to real task data from Project Genesis/Review Queue
+- [x] Add Global Search to header for quick navigation
+- [x] Wire Data Governance Dashboard to Settings page
+- [x] Connect Digital Twin Accelerator to Digital Twin page (already wired)

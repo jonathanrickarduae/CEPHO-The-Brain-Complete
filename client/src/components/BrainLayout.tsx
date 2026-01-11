@@ -23,7 +23,7 @@ import { getLoginUrl } from "@/const";
 import { useIsMobile } from "@/hooks/useMobile";
 import { 
   LayoutDashboard, LogOut, PanelLeft, 
-  BookOpen, BarChart3, Lock, Fingerprint, Activity, Brain, Sun, Users, Moon, Keyboard, Settings, TrendingUp, Info, Clock, Sparkles, Rocket, Inbox
+  BookOpen, BarChart3, Lock, Fingerprint, Activity, Brain, Sun, Users, Moon, Keyboard, Settings, TrendingUp, Info, Clock, Sparkles, Rocket, Inbox, Search
 } from "lucide-react";
 import { CSSProperties, useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
@@ -42,6 +42,7 @@ import { CommandPalette, useCommandPalette } from "./CommandPalette";
 import { useGovernance, GovernanceModeIndicator } from "@/hooks/useGovernance";
 import { ChangelogModal, useChangelog, WhatsNewButton } from "./ChangelogModal";
 import { StatusPulse } from "./StatusPulse";
+import { GlobalSearch } from "./GlobalSearch";
 
 const menuItems = [
   { icon: LayoutDashboard, label: "Command Center", path: "/dashboard", status: 'active' as const },
@@ -163,6 +164,9 @@ function BrainLayoutContent({
   
   // Changelog modal
   const changelog = useChangelog();
+  
+  // Global search state
+  const [showGlobalSearch, setShowGlobalSearch] = useState(false);
   useKeyboardShortcuts([
     { key: '?', shift: true, action: keyboardHelp.toggle, description: 'Show keyboard shortcuts' },
   ]);
@@ -358,6 +362,13 @@ function BrainLayoutContent({
                 </span>
               </div>
             </div>
+            <button 
+              onClick={() => setShowGlobalSearch(true)}
+              className="flex items-center gap-2 px-3 py-1.5 text-sm text-gray-400 bg-white/5 rounded-lg hover:bg-white/10 transition-colors"
+            >
+              <Search className="w-4 h-4" />
+              <span className="hidden sm:inline">Search...</span>
+            </button>
           </div>
         )}
         
@@ -417,6 +428,12 @@ function BrainLayoutContent({
       <ChangelogModal
         isOpen={changelog.isOpen}
         onClose={changelog.close}
+      />
+      
+      {/* Global Search Modal */}
+      <GlobalSearch
+        isOpen={showGlobalSearch}
+        onClose={() => setShowGlobalSearch(false)}
       />
     </>
   );
