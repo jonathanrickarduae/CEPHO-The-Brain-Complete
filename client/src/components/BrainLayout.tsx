@@ -164,24 +164,24 @@ function BrainLayoutContent({
   return (
     <>
       <div className="relative" ref={sidebarRef}>
-        <Sidebar
-          collapsible="icon"
-          className="border-r border-white/10 bg-black/80 backdrop-blur-xl"
+          <Sidebar
+            collapsible="icon"
+            className="border-r border-sidebar-border bg-sidebar backdrop-blur-xl"
           disableTransition={isResizing}
         >
-          <SidebarHeader className="h-16 justify-center border-b border-white/5">
+          <SidebarHeader className="h-16 justify-center border-b border-sidebar-border">
             <div className="flex items-center gap-3 px-2 transition-all w-full">
               <button
                 onClick={toggleSidebar}
-                className="h-8 w-8 flex items-center justify-center hover:bg-white/10 rounded-lg transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary shrink-0"
+                className="h-8 w-8 flex items-center justify-center hover:bg-sidebar-accent rounded-lg transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring shrink-0"
                 aria-label="Toggle navigation"
               >
-                <PanelLeft className="h-4 w-4 text-white/60" />
+                <PanelLeft className="h-4 w-4 text-sidebar-foreground/60" />
               </button>
               {!isCollapsed ? (
                 <div className="flex items-center gap-2 min-w-0">
                   <Brain className="w-6 h-6 text-primary" />
-                  <span className="font-display font-bold tracking-tight truncate text-white">
+                      <span className="font-display font-bold tracking-tight truncate text-sidebar-foreground">
                     THE BRAIN
                   </span>
                 </div>
@@ -199,7 +199,7 @@ function BrainLayoutContent({
                       isActive={isActive}
                       onClick={() => setLocation(item.path)}
                       tooltip={item.label}
-                      className={`h-11 transition-all font-normal rounded-xl mb-1 ${isActive ? 'bg-primary/20 text-primary border border-primary/30' : 'text-white/70 hover:text-white hover:bg-white/5'}`}
+                      className={`h-11 transition-all font-normal rounded-xl mb-1 ${isActive ? 'bg-sidebar-primary/20 text-sidebar-primary border border-sidebar-primary/30' : 'text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent'}`}
                     >
                       <item.icon
                         className={`h-5 w-5 ${isActive ? "text-primary" : ""}`}
@@ -212,26 +212,26 @@ function BrainLayoutContent({
             </SidebarMenu>
           </SidebarContent>
 
-          <SidebarFooter className="p-3 border-t border-white/5">
+          <SidebarFooter className="p-3 border-t border-sidebar-border">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <button className="flex items-center gap-3 rounded-xl px-2 py-2 hover:bg-white/5 transition-colors w-full text-left group-data-[collapsible=icon]:justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-primary">
+                  <button className="flex items-center gap-3 rounded-xl px-2 py-2 hover:bg-sidebar-accent transition-colors w-full text-left group-data-[collapsible=icon]:justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring">
                   <Avatar className="h-9 w-9 border border-primary/30 shrink-0">
                     <AvatarFallback className="text-xs font-bold bg-primary/20 text-primary">
                       {user?.name?.charAt(0).toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
                   <div className="flex-1 min-w-0 group-data-[collapsible=icon]:hidden">
-                    <p className="text-sm font-medium truncate leading-none text-white">
+                    <p className="text-sm font-medium truncate leading-none text-sidebar-foreground">
                       {user?.name || "-"}
                     </p>
-                    <p className="text-xs text-white/40 truncate mt-1.5">
+                    <p className="text-xs text-sidebar-foreground/50 truncate mt-1.5">
                       {user?.email || "-"}
                     </p>
                   </div>
                 </button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-48 bg-black/90 border-white/10">
+              <DropdownMenuContent align="end" className="w-48 bg-popover border-border">
                 <DropdownMenuItem
                   onClick={logout}
                   className="cursor-pointer text-red-400 focus:text-red-400 focus:bg-red-500/10"
@@ -253,9 +253,9 @@ function BrainLayoutContent({
         />
       </div>
 
-      <SidebarInset className="bg-black">
+      <SidebarInset className="bg-background">
         {isMobile && (
-          <div className="flex border-b border-white/10 h-14 items-center justify-between bg-black/95 px-2 backdrop-blur supports-[backdrop-filter]:backdrop-blur sticky top-0 z-40">
+            <div className="flex border-b border-border h-14 items-center justify-between bg-background/95 px-2 backdrop-blur supports-[backdrop-filter]:backdrop-blur sticky top-0 z-40">
             <div className="flex items-center gap-2">
               <SidebarTrigger className="h-9 w-9 rounded-lg bg-white/5 text-white" />
               <div className="flex items-center gap-3">

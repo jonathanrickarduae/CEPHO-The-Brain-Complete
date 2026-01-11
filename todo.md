@@ -29,3 +29,11 @@
 - [x] Add Digital Twin integration for autonomous responses
 - [x] Add scheduled check-in feature
 - [x] Add Light/Dark/Mix theme options on landing page
+- [x] Shrink headline/quote section on dashboard for compact view
+- [x] Reposition 6 command boxes higher on page
+- [x] Move microphone to right side (Manus-style) for thumb access
+- [x] Ensure dashboard fits on single page without scrolling
+- [x] Apply Light/Dark/Mix theme to all dashboard pages
+- [x] Make Daily Brief action items clickable to launch AI Experts
+- [x] Pre-populate AI Experts mission from Daily Brief item clicked
+- [x] Create seamless morning workflow: Brief → Action → Team starts working

@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useSearch } from "wouter";
 import { 
   Users, Brain, Zap, Clock, CheckCircle2, 
   ArrowRight, MessageSquare, Play, Pause, 
@@ -55,8 +56,20 @@ interface ActionItem {
 }
 
 export default function AIExperts() {
+  const searchString = useSearch();
   const [phase, setPhase] = useState<Phase>("mission");
   const [mission, setMission] = useState("");
+  
+  // Check for pre-populated mission from URL (e.g., from Daily Brief)
+  useEffect(() => {
+    const params = new URLSearchParams(searchString);
+    const missionParam = params.get("mission");
+    if (missionParam) {
+      setMission(missionParam);
+      // Auto-select custom mission template
+      setSelectedTemplate(6);
+    }
+  }, [searchString]);
   const [selectedTemplate, setSelectedTemplate] = useState<number | null>(null);
   const [recommendedTeam, setRecommendedTeam] = useState<Expert[]>([]);
   const [approvedTeam, setApprovedTeam] = useState<Expert[]>([]);

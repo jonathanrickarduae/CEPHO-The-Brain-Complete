@@ -171,7 +171,8 @@ export default function DailyBrief() {
                   {BRIEF_DATA.keyThings.map((item) => (
                     <div 
                       key={item.id}
-                      className={`p-4 rounded-xl border ${getPriorityColor(item.priority)} ${actionedItems.has(`key-${item.id}`) ? 'opacity-50' : ''}`}
+                      className={`group p-4 rounded-xl border ${getPriorityColor(item.priority)} ${actionedItems.has(`key-${item.id}`) ? 'opacity-50' : ''} hover:border-primary/50 transition-all cursor-pointer`}
+                      onClick={() => window.location.href = `/ai-experts?mission=${encodeURIComponent(item.title + ': ' + item.description)}`}
                     >
                       <div className="flex items-start justify-between gap-4">
                         <div className="flex-1">
@@ -180,7 +181,12 @@ export default function DailyBrief() {
                               {item.category}
                             </Badge>
                           </div>
-                          <h3 className="font-bold text-white mb-1">{item.title}</h3>
+                          <h3 
+                            className="font-bold text-white mb-1 cursor-pointer hover:text-primary transition-colors"
+                            onClick={() => window.location.href = `/ai-experts?mission=${encodeURIComponent(item.title + ': ' + item.description)}`}
+                          >
+                            {item.title} <ArrowRight className="w-4 h-4 inline ml-1 opacity-0 group-hover:opacity-100" />
+                          </h3>
                           <p className="text-sm text-white/70">{item.description}</p>
                         </div>
                         {!actionedItems.has(`key-${item.id}`) && (
