@@ -3,18 +3,40 @@ import {
   Sun, Calendar, Users, TrendingUp, Brain, Zap, 
   CheckCircle2, Clock, ArrowRight, Download, Play, 
   Headphones, ChevronRight, AlertTriangle, Lightbulb,
-  Mail, Phone, Video, FileText, ThumbsUp, RotateCcw, UserPlus
+  Video, FileText, ThumbsUp, RotateCcw, UserPlus, Fingerprint,
+  ListChecks, Eye
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 
+// Types for actioned items
+interface ActionedItem {
+  id: string;
+  title: string;
+  description: string;
+  action: "gotit" | "defer" | "delegate" | "twin";
+  category: string;
+  source: "key" | "intelligence" | "recommendation";
+}
+
 // Mock data for the daily brief
 const BRIEF_DATA = {
   date: new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }),
-  moodTarget: 10,
-  currentMood: 7,
+  
+  // Overview summary points
+  overviewSummary: {
+    headline: "Busy day ahead with key decision points",
+    highlights: [
+      "5 meetings scheduled, including investor lunch",
+      "Q3 Budget requires your sign-off by 2 PM",
+      "Market conditions favorable - renewable stocks up 12%",
+      "Competitor activity detected - AI bid tool launch"
+    ],
+    moodTarget: 10,
+    energyFocus: "High-stakes decisions in morning, creative work in afternoon"
+  },
   
   keyThings: [
     { id: 1, priority: "high", title: "Q3 Budget Approval Deadline", description: "Finance team needs sign-off by 2:00 PM today", category: "Urgent" },
@@ -28,34 +50,50 @@ const BRIEF_DATA = {
     { id: 3, time: "12:00", duration: "1h", title: "Lunch with Investor", type: "external", attendees: ["James K. (VC Partner)"], location: "The Capital Grille" },
     { id: 4, time: "14:00", duration: "30m", title: "Budget Sign-off", type: "deadline", attendees: [], location: "Finance Portal" },
     { id: 5, time: "15:30", duration: "45m", title: "Product Roadmap Discussion", type: "meeting", attendees: ["Product Team"], location: "Teams" },
+    { id: 6, time: "16:30", duration: "2h", title: "Focus Time (Protected)", type: "focus", attendees: [], location: "Office" },
   ],
   
   intelligence: [
-    { id: 1, source: "Market Watch", title: "Renewable Energy Stocks Up 12%", summary: "Overnight surge driven by policy announcements. Your portfolio exposure: 23%.", sentiment: "positive" },
-    { id: 2, source: "Industry Alert", title: "New AI Regulations Proposed", summary: "Draft legislation could impact autonomous systems. Review by legal recommended.", sentiment: "neutral" },
-    { id: 3, source: "Competitor Intel", title: "Competitor Y Hiring Spree", summary: "50+ engineering roles posted. Possible new product launch in 6 months.", sentiment: "warning" },
+    { id: 1, source: "Market Watch", title: "Renewable Energy Stocks Up 12%", summary: "Overnight surge driven by policy announcements. Your portfolio exposure: 23%.", sentiment: "positive", actionable: true },
+    { id: 2, source: "Industry Alert", title: "New AI Regulations Proposed", summary: "Draft legislation could impact autonomous systems. Review by legal recommended.", sentiment: "neutral", actionable: true },
+    { id: 3, source: "Competitor Intel", title: "Competitor Y Hiring Spree", summary: "50+ engineering roles posted. Possible new product launch in 6 months.", sentiment: "warning", actionable: true },
+    { id: 4, source: "Internal", title: "Q4 Pipeline Looking Strong", summary: "Sales team reports 3 new enterprise leads from last week's conference.", sentiment: "positive", actionable: false },
   ],
   
   twinRecommendations: [
-    { id: 1, confidence: 92, title: "Delegate Budget Review Details", reason: "Based on your pattern, you typically delegate financial details to CFO. Suggest same approach today." },
-    { id: 2, confidence: 87, title: "Prepare Investor Talking Points", reason: "Your successful investor meetings include 3 key metrics. I've drafted talking points." },
-    { id: 3, confidence: 78, title: "Block Focus Time After 4 PM", reason: "Your productivity peaks in late afternoon. No meetings scheduled - protect this time." },
+    { id: 1, confidence: 92, title: "Delegate Budget Review Details", reason: "Based on your pattern, you typically delegate financial details to CFO. Suggest same approach today.", autoAction: "delegate" },
+    { id: 2, confidence: 87, title: "Prepare Investor Talking Points", reason: "Your successful investor meetings include 3 key metrics. I've drafted talking points.", autoAction: "twin" },
+    { id: 3, confidence: 78, title: "Block Focus Time After 4 PM", reason: "Your productivity peaks in late afternoon. No meetings scheduled - protect this time.", autoAction: "gotit" },
   ],
 };
 
 export default function DailyBrief() {
-  const [actionedItems, setActionedItems] = useState<Set<string>>(new Set());
+  const [actionedItems, setActionedItems] = useState<ActionedItem[]>([]);
   const [activeTab, setActiveTab] = useState<"overview" | "schedule" | "intelligence" | "actions">("overview");
 
-  const handleAction = (itemId: string, action: "gotit" | "defer" | "delegate") => {
-    setActionedItems(prev => new Set(prev).add(itemId));
+  const handleAction = (
+    itemId: string, 
+    action: "gotit" | "defer" | "delegate" | "twin",
+    title: string,
+    description: string,
+    category: string,
+    source: "key" | "intelligence" | "recommendation"
+  ) => {
+    // Check if already actioned
+    if (actionedItems.find(item => item.id === itemId)) return;
+    
+    setActionedItems(prev => [...prev, { id: itemId, title, description, action, category, source }]);
+    
     const messages = {
       gotit: "Got it! Added to your focus list.",
       defer: "Deferred to tomorrow's brief.",
-      delegate: "Delegation request sent."
+      delegate: "Delegation request sent to team.",
+      twin: "Assigned to Digital Twin - will handle autonomously."
     };
     toast.success(messages[action]);
   };
+
+  const isActioned = (itemId: string) => actionedItems.some(item => item.id === itemId);
 
   const handleExport = (format: "pdf" | "video" | "audio") => {
     const messages = {
@@ -74,36 +112,122 @@ export default function DailyBrief() {
     }
   };
 
+  const getSentimentColor = (sentiment: string) => {
+    switch (sentiment) {
+      case "positive": return "text-green-400 bg-green-500/10 border-green-500/30";
+      case "warning": return "text-orange-400 bg-orange-500/10 border-orange-500/30";
+      default: return "text-blue-400 bg-blue-500/10 border-blue-500/30";
+    }
+  };
+
   const getTypeIcon = (type: string) => {
     switch (type) {
       case "meeting": return <Video className="w-4 h-4" />;
       case "external": return <Users className="w-4 h-4" />;
       case "deadline": return <AlertTriangle className="w-4 h-4" />;
+      case "focus": return <Brain className="w-4 h-4" />;
       default: return <Calendar className="w-4 h-4" />;
     }
   };
 
+  const getActionLabel = (action: string) => {
+    switch (action) {
+      case "gotit": return { label: "You'll Handle", color: "text-green-400 bg-green-500/20" };
+      case "defer": return { label: "Deferred", color: "text-yellow-400 bg-yellow-500/20" };
+      case "delegate": return { label: "Delegated", color: "text-blue-400 bg-blue-500/20" };
+      case "twin": return { label: "Digital Twin", color: "text-purple-400 bg-purple-500/20" };
+      default: return { label: "Pending", color: "text-gray-400 bg-gray-500/20" };
+    }
+  };
+
+  // Action buttons component for reuse
+  const ActionButtons = ({ 
+    itemId, 
+    title, 
+    description, 
+    category, 
+    source 
+  }: { 
+    itemId: string; 
+    title: string; 
+    description: string; 
+    category: string; 
+    source: "key" | "intelligence" | "recommendation";
+  }) => {
+    if (isActioned(itemId)) {
+      const item = actionedItems.find(i => i.id === itemId);
+      const actionInfo = getActionLabel(item?.action || "");
+      return (
+        <Badge className={`${actionInfo.color} border-0`}>
+          <CheckCircle2 className="w-3 h-3 mr-1" />
+          {actionInfo.label}
+        </Badge>
+      );
+    }
+    
+    return (
+      <div className="flex gap-1">
+        <Button 
+          size="sm" 
+          variant="ghost" 
+          className="h-8 px-2 hover:bg-green-500/20 hover:text-green-400"
+          onClick={(e) => { e.stopPropagation(); handleAction(itemId, "gotit", title, description, category, source); }}
+          title="Got it - I'll handle this"
+        >
+          <ThumbsUp className="w-4 h-4" />
+        </Button>
+        <Button 
+          size="sm" 
+          variant="ghost" 
+          className="h-8 px-2 hover:bg-yellow-500/20 hover:text-yellow-400"
+          onClick={(e) => { e.stopPropagation(); handleAction(itemId, "defer", title, description, category, source); }}
+          title="Defer to tomorrow"
+        >
+          <RotateCcw className="w-4 h-4" />
+        </Button>
+        <Button 
+          size="sm" 
+          variant="ghost" 
+          className="h-8 px-2 hover:bg-blue-500/20 hover:text-blue-400"
+          onClick={(e) => { e.stopPropagation(); handleAction(itemId, "delegate", title, description, category, source); }}
+          title="Delegate to team"
+        >
+          <UserPlus className="w-4 h-4" />
+        </Button>
+        <Button 
+          size="sm" 
+          variant="ghost" 
+          className="h-8 px-2 hover:bg-purple-500/20 hover:text-purple-400"
+          onClick={(e) => { e.stopPropagation(); handleAction(itemId, "twin", title, description, category, source); }}
+          title="Assign to Digital Twin"
+        >
+          <Fingerprint className="w-4 h-4" />
+        </Button>
+      </div>
+    );
+  };
+
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="h-full bg-background text-foreground overflow-auto">
       {/* Header */}
-      <div className="border-b border-white/10 bg-black/80 backdrop-blur-xl sticky top-0 z-10">
-        <div className="max-w-7xl mx-auto px-6 py-4">
+      <div className="border-b border-border bg-card/80 backdrop-blur-xl sticky top-0 z-10">
+        <div className="max-w-7xl mx-auto px-4 md:px-6 py-4">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div className="flex items-center gap-4">
               <div className="p-3 rounded-2xl bg-gradient-to-br from-blue-500/20 to-purple-500/20 border border-blue-500/30">
-                <Sun className="w-8 h-8 text-blue-400" />
+                <Sun className="w-6 h-6 md:w-8 md:h-8 text-blue-400" />
               </div>
               <div>
-                <h1 className="text-2xl md:text-3xl font-display font-bold">Daily Brief</h1>
-                <p className="text-white/60 text-sm">{BRIEF_DATA.date} • 5 min read</p>
+                <h1 className="text-xl md:text-2xl font-display font-bold">Daily Brief</h1>
+                <p className="text-muted-foreground text-sm">{BRIEF_DATA.date} • 5 min read</p>
               </div>
             </div>
             
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
               <Button 
                 variant="outline" 
                 size="sm" 
-                className="border-white/20 hover:bg-white/10"
+                className="border-border hover:bg-secondary"
                 onClick={() => handleExport("pdf")}
               >
                 <Download className="w-4 h-4 mr-2" /> PDF
@@ -111,7 +235,7 @@ export default function DailyBrief() {
               <Button 
                 variant="outline" 
                 size="sm" 
-                className="border-white/20 hover:bg-white/10"
+                className="border-border hover:bg-secondary"
                 onClick={() => handleExport("video")}
               >
                 <Play className="w-4 h-4 mr-2" /> Video
@@ -119,7 +243,7 @@ export default function DailyBrief() {
               <Button 
                 variant="outline" 
                 size="sm" 
-                className="border-white/20 hover:bg-white/10"
+                className="border-border hover:bg-secondary"
                 onClick={() => handleExport("audio")}
               >
                 <Headphones className="w-4 h-4 mr-2" /> Podcast
@@ -127,10 +251,10 @@ export default function DailyBrief() {
             </div>
           </div>
 
-          {/* Tab Navigation */}
-          <div className="flex gap-1 mt-4 border-b border-white/10 -mb-px">
+          {/* Tab Navigation - Reordered */}
+          <div className="flex gap-1 mt-4 border-b border-border -mb-px overflow-x-auto">
             {[
-              { id: "overview", label: "Overview", icon: FileText },
+              { id: "overview", label: "Overview", icon: Eye },
               { id: "schedule", label: "Schedule", icon: Calendar },
               { id: "intelligence", label: "Intelligence", icon: TrendingUp },
               { id: "actions", label: "Action Engine", icon: Zap },
@@ -138,14 +262,19 @@ export default function DailyBrief() {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as typeof activeTab)}
-                className={`flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 transition-colors ${
+                className={`flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
                   activeTab === tab.id 
                     ? "border-primary text-primary" 
-                    : "border-transparent text-white/60 hover:text-white"
+                    : "border-transparent text-muted-foreground hover:text-foreground"
                 }`}
               >
                 <tab.icon className="w-4 h-4" />
                 {tab.label}
+                {tab.id === "actions" && actionedItems.length > 0 && (
+                  <Badge variant="secondary" className="ml-1 h-5 px-1.5 text-xs">
+                    {actionedItems.length}
+                  </Badge>
+                )}
               </button>
             ))}
           </div>
@@ -153,276 +282,108 @@ export default function DailyBrief() {
       </div>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-6 py-8">
+      <div className="max-w-7xl mx-auto px-4 md:px-6 py-6">
         
-        {/* Overview Tab */}
+        {/* Overview Tab - High-level listening summary */}
         {activeTab === "overview" && (
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Key Things to Know - Main Column */}
-            <div className="lg:col-span-2 space-y-6">
-              <Card className="bg-white/5 border-white/10">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2 text-white">
-                    <AlertTriangle className="w-5 h-5 text-yellow-400" />
-                    Key Things You Need to Know
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  {BRIEF_DATA.keyThings.map((item) => (
-                    <div 
-                      key={item.id}
-                      className={`group p-4 rounded-xl border ${getPriorityColor(item.priority)} ${actionedItems.has(`key-${item.id}`) ? 'opacity-50' : ''} hover:border-primary/50 transition-all cursor-pointer`}
-                      onClick={() => window.location.href = `/ai-experts?mission=${encodeURIComponent(item.title + ': ' + item.description)}`}
-                    >
-                      <div className="flex items-start justify-between gap-4">
-                        <div className="flex-1">
-                          <div className="flex items-center gap-2 mb-1">
-                            <Badge variant="outline" className={getPriorityColor(item.priority)}>
-                              {item.category}
-                            </Badge>
-                          </div>
-                          <h3 
-                            className="font-bold text-white mb-1 cursor-pointer hover:text-primary transition-colors"
-                            onClick={() => window.location.href = `/ai-experts?mission=${encodeURIComponent(item.title + ': ' + item.description)}`}
-                          >
-                            {item.title} <ArrowRight className="w-4 h-4 inline ml-1 opacity-0 group-hover:opacity-100" />
-                          </h3>
-                          <p className="text-sm text-white/70">{item.description}</p>
-                        </div>
-                        {!actionedItems.has(`key-${item.id}`) && (
-                          <div className="flex gap-2">
-                            <Button 
-                              size="sm" 
-                              variant="ghost" 
-                              className="h-8 px-2 hover:bg-green-500/20 hover:text-green-400"
-                              onClick={() => handleAction(`key-${item.id}`, "gotit")}
-                            >
-                              <ThumbsUp className="w-4 h-4" />
-                            </Button>
-                            <Button 
-                              size="sm" 
-                              variant="ghost" 
-                              className="h-8 px-2 hover:bg-yellow-500/20 hover:text-yellow-400"
-                              onClick={() => handleAction(`key-${item.id}`, "defer")}
-                            >
-                              <RotateCcw className="w-4 h-4" />
-                            </Button>
-                            <Button 
-                              size="sm" 
-                              variant="ghost" 
-                              className="h-8 px-2 hover:bg-blue-500/20 hover:text-blue-400"
-                              onClick={() => handleAction(`key-${item.id}`, "delegate")}
-                            >
-                              <UserPlus className="w-4 h-4" />
-                            </Button>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                </CardContent>
-              </Card>
-
-              {/* Quick Schedule Preview */}
-              <Card className="bg-white/5 border-white/10">
-                <CardHeader>
-                  <div className="flex items-center justify-between">
-                    <CardTitle className="flex items-center gap-2 text-white">
-                      <Calendar className="w-5 h-5 text-blue-400" />
-                      Today's Schedule
-                    </CardTitle>
-                    <Button variant="ghost" size="sm" onClick={() => setActiveTab("schedule")}>
-                      View All <ChevronRight className="w-4 h-4 ml-1" />
-                    </Button>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-3">
-                    {BRIEF_DATA.schedule.slice(0, 3).map((item) => (
-                      <div key={item.id} className="flex items-center gap-4 p-3 rounded-lg bg-white/5 hover:bg-white/10 transition-colors">
-                        <div className="text-center min-w-[60px]">
-                          <div className="text-lg font-bold text-white">{item.time}</div>
-                          <div className="text-xs text-white/40">{item.duration}</div>
-                        </div>
-                        <div className="flex-1">
-                          <div className="flex items-center gap-2">
-                            {getTypeIcon(item.type)}
-                            <span className="font-medium text-white">{item.title}</span>
-                          </div>
-                          <div className="text-xs text-white/50 mt-1">{item.location}</div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-
-            {/* Sidebar - Digital Twin Recommendations */}
-            <div className="space-y-6">
-              <Card className="bg-gradient-to-br from-purple-500/10 to-pink-500/10 border-purple-500/30">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2 text-white">
-                    <Brain className="w-5 h-5 text-purple-400" />
-                    Digital Twin Insights
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  {BRIEF_DATA.twinRecommendations.map((rec) => (
-                    <div key={rec.id} className="p-4 rounded-xl bg-white/5 border border-white/10">
-                      <div className="flex items-center justify-between mb-2">
-                        <Lightbulb className="w-4 h-4 text-yellow-400" />
-                        <Badge variant="outline" className="text-purple-400 border-purple-400/30 text-xs">
-                          {rec.confidence}% confidence
-                        </Badge>
-                      </div>
-                      <h4 className="font-bold text-white text-sm mb-1">{rec.title}</h4>
-                      <p className="text-xs text-white/60">{rec.reason}</p>
-                      {!actionedItems.has(`rec-${rec.id}`) && (
-                        <div className="flex gap-2 mt-3">
-                          <Button 
-                            size="sm" 
-                            className="flex-1 h-8 bg-purple-600 hover:bg-purple-700 text-xs"
-                            onClick={() => handleAction(`rec-${rec.id}`, "gotit")}
-                          >
-                            Got it
-                          </Button>
-                          <Button 
-                            size="sm" 
-                            variant="outline" 
-                            className="flex-1 h-8 border-white/20 text-xs"
-                            onClick={() => handleAction(`rec-${rec.id}`, "defer")}
-                          >
-                            Later
-                          </Button>
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </CardContent>
-              </Card>
-
-              {/* Quick Stats */}
-              <Card className="bg-white/5 border-white/10">
-                <CardContent className="p-4">
-                  <div className="text-center">
-                    <div className="text-4xl font-bold text-primary mb-1">
-                      {BRIEF_DATA.schedule.length}
-                    </div>
-                    <div className="text-sm text-white/60">Events Today</div>
-                  </div>
-                  <div className="grid grid-cols-2 gap-4 mt-4 pt-4 border-t border-white/10">
-                    <div className="text-center">
-                      <div className="text-2xl font-bold text-green-400">{BRIEF_DATA.keyThings.filter(k => k.priority === "high").length}</div>
-                      <div className="text-xs text-white/40">High Priority</div>
-                    </div>
-                    <div className="text-center">
-                      <div className="text-2xl font-bold text-blue-400">{BRIEF_DATA.intelligence.length}</div>
-                      <div className="text-xs text-white/40">Intel Updates</div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-        )}
-
-        {/* Schedule Tab */}
-        {activeTab === "schedule" && (
-          <div className="max-w-4xl mx-auto">
-            <Card className="bg-white/5 border-white/10">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-white">
-                  <Calendar className="w-5 h-5 text-blue-400" />
-                  Full Schedule
+          <div className="space-y-6">
+            {/* Executive Summary */}
+            <Card className="bg-card/60 border-border">
+              <CardHeader className="pb-3">
+                <CardTitle className="flex items-center gap-2 text-foreground">
+                  <Eye className="w-5 h-5 text-primary" />
+                  Today at a Glance
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="relative">
-                  <div className="absolute left-[30px] top-0 bottom-0 w-px bg-white/10"></div>
-                  <div className="space-y-6">
-                    {BRIEF_DATA.schedule.map((item, index) => (
-                      <div key={item.id} className="relative flex gap-6 pl-16">
-                        <div className="absolute left-0 top-0 w-[60px] text-right pr-4">
-                          <div className="text-lg font-bold text-white">{item.time}</div>
-                          <div className="text-xs text-white/40">{item.duration}</div>
-                        </div>
-                        <div className="absolute left-[26px] top-2 w-3 h-3 rounded-full bg-primary border-2 border-black"></div>
-                        <div className="flex-1 p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors">
-                          <div className="flex items-start justify-between">
-                            <div>
-                              <div className="flex items-center gap-2 mb-1">
-                                {getTypeIcon(item.type)}
-                                <h3 className="font-bold text-white">{item.title}</h3>
-                              </div>
-                              <div className="text-sm text-white/60 mb-2">{item.location}</div>
-                              {item.attendees.length > 0 && (
-                                <div className="flex items-center gap-2 text-xs text-white/40">
-                                  <Users className="w-3 h-3" />
-                                  {item.attendees.join(", ")}
-                                </div>
-                              )}
-                            </div>
-                            <Badge 
-                              variant="outline" 
-                              className={
-                                item.type === "deadline" 
-                                  ? "border-red-500/30 text-red-400" 
-                                  : "border-white/20 text-white/60"
-                              }
-                            >
-                              {item.type}
-                            </Badge>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
+                <div className="p-4 rounded-xl bg-primary/10 border border-primary/20 mb-4">
+                  <p className="text-lg font-medium text-foreground">{BRIEF_DATA.overviewSummary.headline}</p>
+                  <p className="text-sm text-muted-foreground mt-1">{BRIEF_DATA.overviewSummary.energyFocus}</p>
                 </div>
+                <ul className="space-y-2">
+                  {BRIEF_DATA.overviewSummary.highlights.map((highlight, idx) => (
+                    <li key={idx} className="flex items-start gap-3 text-muted-foreground">
+                      <CheckCircle2 className="w-4 h-4 text-primary mt-0.5 shrink-0" />
+                      <span>{highlight}</span>
+                    </li>
+                  ))}
+                </ul>
               </CardContent>
             </Card>
-          </div>
-        )}
 
-        {/* Intelligence Tab */}
-        {activeTab === "intelligence" && (
-          <div className="max-w-4xl mx-auto">
-            <Card className="bg-white/5 border-white/10">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-white">
-                  <TrendingUp className="w-5 h-5 text-green-400" />
-                  Intelligence Feed
+            {/* Key Things to Know */}
+            <Card className="bg-card/60 border-border">
+              <CardHeader className="pb-3">
+                <CardTitle className="flex items-center gap-2 text-foreground">
+                  <AlertTriangle className="w-5 h-5 text-yellow-400" />
+                  Key Things You Need to Know
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
-                {BRIEF_DATA.intelligence.map((item) => (
+              <CardContent className="space-y-3">
+                {BRIEF_DATA.keyThings.map((item) => (
                   <div 
-                    key={item.id} 
-                    className={`p-5 rounded-xl border ${
-                      item.sentiment === "positive" ? "bg-green-500/5 border-green-500/20" :
-                      item.sentiment === "warning" ? "bg-yellow-500/5 border-yellow-500/20" :
-                      "bg-white/5 border-white/10"
-                    }`}
+                    key={item.id}
+                    className={`group p-4 rounded-xl border ${getPriorityColor(item.priority)} ${isActioned(`key-${item.id}`) ? 'opacity-60' : ''} hover:border-primary/50 transition-all cursor-pointer`}
+                    onClick={() => window.location.href = `/ai-experts?mission=${encodeURIComponent(item.title + ': ' + item.description)}`}
                   >
-                    <div className="flex items-start justify-between mb-2">
-                      <Badge variant="outline" className="text-xs text-white/60 border-white/20">
-                        {item.source}
-                      </Badge>
-                      <div className={`w-2 h-2 rounded-full ${
-                        item.sentiment === "positive" ? "bg-green-500" :
-                        item.sentiment === "warning" ? "bg-yellow-500" :
-                        "bg-blue-500"
-                      }`}></div>
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-1">
+                          <Badge variant="outline" className={getPriorityColor(item.priority)}>
+                            {item.category}
+                          </Badge>
+                        </div>
+                        <h3 className="font-bold text-foreground mb-1 group-hover:text-primary transition-colors">
+                          {item.title}
+                          <ArrowRight className="w-4 h-4 inline ml-2 opacity-0 group-hover:opacity-100 transition-opacity" />
+                        </h3>
+                        <p className="text-sm text-muted-foreground">{item.description}</p>
+                      </div>
+                      <ActionButtons 
+                        itemId={`key-${item.id}`}
+                        title={item.title}
+                        description={item.description}
+                        category={item.category}
+                        source="key"
+                      />
                     </div>
-                    <h3 className="font-bold text-white text-lg mb-2">{item.title}</h3>
-                    <p className="text-white/70">{item.summary}</p>
-                    <div className="flex gap-2 mt-4">
-                      <Button size="sm" variant="outline" className="border-white/20 text-xs">
-                        Read More
-                      </Button>
-                      <Button size="sm" variant="ghost" className="text-xs">
-                        Investigate with AI Experts
-                      </Button>
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+
+            {/* Digital Twin Insights */}
+            <Card className="bg-card/60 border-border">
+              <CardHeader className="pb-3">
+                <CardTitle className="flex items-center gap-2 text-foreground">
+                  <Brain className="w-5 h-5 text-purple-400" />
+                  Digital Twin Recommendations
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                {BRIEF_DATA.twinRecommendations.map((rec) => (
+                  <div 
+                    key={rec.id}
+                    className={`p-4 rounded-xl bg-purple-500/5 border border-purple-500/20 ${isActioned(`rec-${rec.id}`) ? 'opacity-60' : ''}`}
+                  >
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-2">
+                          <Lightbulb className="w-4 h-4 text-purple-400" />
+                          <Badge className="bg-purple-500/20 text-purple-400 border-0">
+                            {rec.confidence}% confidence
+                          </Badge>
+                        </div>
+                        <h4 className="font-bold text-foreground mb-1">{rec.title}</h4>
+                        <p className="text-sm text-muted-foreground">{rec.reason}</p>
+                      </div>
+                      <ActionButtons 
+                        itemId={`rec-${rec.id}`}
+                        title={rec.title}
+                        description={rec.reason}
+                        category="Recommendation"
+                        source="recommendation"
+                      />
                     </div>
                   </div>
                 ))}
@@ -431,88 +392,199 @@ export default function DailyBrief() {
           </div>
         )}
 
-        {/* Action Engine Tab */}
-        {activeTab === "actions" && (
-          <div className="max-w-4xl mx-auto">
-            <Card className="bg-gradient-to-br from-primary/10 to-purple-500/10 border-primary/30">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-white">
-                  <Zap className="w-5 h-5 text-primary" />
-                  Action Engine
-                </CardTitle>
-                <p className="text-white/60 text-sm mt-1">
-                  Quick-action your way through today's priorities. Your responses train your Digital Twin.
-                </p>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                {[...BRIEF_DATA.keyThings, ...BRIEF_DATA.twinRecommendations.map(r => ({
-                  id: `rec-${r.id}`,
-                  priority: "medium",
-                  title: r.title,
-                  description: r.reason,
-                  category: "AI Recommendation"
-                }))].map((item) => {
-                  const itemKey = typeof item.id === 'number' ? `action-${item.id}` : item.id;
-                  const isActioned = actionedItems.has(itemKey);
-                  
-                  return (
-                    <div 
-                      key={itemKey}
-                      className={`p-5 rounded-xl bg-white/5 border border-white/10 transition-all ${isActioned ? 'opacity-50 scale-98' : ''}`}
-                    >
-                      <div className="flex items-start justify-between gap-4">
-                        <div className="flex-1">
-                          <Badge variant="outline" className="text-xs mb-2 border-white/20">
-                            {item.category}
-                          </Badge>
-                          <h3 className="font-bold text-white mb-1">{item.title}</h3>
-                          <p className="text-sm text-white/60">{item.description}</p>
+        {/* Schedule Tab */}
+        {activeTab === "schedule" && (
+          <Card className="bg-card/60 border-border">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-foreground">
+                <Calendar className="w-5 h-5 text-blue-400" />
+                Today's Schedule
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="relative">
+                {/* Timeline line */}
+                <div className="absolute left-[76px] top-0 bottom-0 w-px bg-border"></div>
+                
+                <div className="space-y-4">
+                  {BRIEF_DATA.schedule.map((item, idx) => (
+                    <div key={item.id} className="flex items-start gap-4 relative">
+                      <div className="text-center min-w-[60px] shrink-0">
+                        <div className="text-lg font-bold text-foreground">{item.time}</div>
+                        <div className="text-xs text-muted-foreground">{item.duration}</div>
+                      </div>
+                      
+                      {/* Timeline dot */}
+                      <div className={`w-3 h-3 rounded-full mt-2 shrink-0 z-10 ${
+                        item.type === "deadline" ? "bg-red-500" :
+                        item.type === "external" ? "bg-green-500" :
+                        item.type === "focus" ? "bg-purple-500" :
+                        "bg-blue-500"
+                      }`}></div>
+                      
+                      <div className={`flex-1 p-4 rounded-xl border transition-colors ${
+                        item.type === "deadline" ? "bg-red-500/5 border-red-500/20" :
+                        item.type === "external" ? "bg-green-500/5 border-green-500/20" :
+                        item.type === "focus" ? "bg-purple-500/5 border-purple-500/20" :
+                        "bg-card border-border hover:border-primary/30"
+                      }`}>
+                        <div className="flex items-center gap-2 mb-1">
+                          {getTypeIcon(item.type)}
+                          <span className="font-medium text-foreground">{item.title}</span>
                         </div>
-                        {!isActioned ? (
-                          <div className="flex flex-col gap-2">
-                            <Button 
-                              size="sm" 
-                              className="bg-green-600 hover:bg-green-700 w-24"
-                              onClick={() => handleAction(itemKey, "gotit")}
-                            >
-                              <ThumbsUp className="w-4 h-4 mr-1" /> Got it
-                            </Button>
-                            <Button 
-                              size="sm" 
-                              variant="outline"
-                              className="border-yellow-500/30 text-yellow-400 hover:bg-yellow-500/10 w-24"
-                              onClick={() => handleAction(itemKey, "defer")}
-                            >
-                              <RotateCcw className="w-4 h-4 mr-1" /> Defer
-                            </Button>
-                            <Button 
-                              size="sm" 
-                              variant="outline"
-                              className="border-blue-500/30 text-blue-400 hover:bg-blue-500/10 w-24"
-                              onClick={() => handleAction(itemKey, "delegate")}
-                            >
-                              <UserPlus className="w-4 h-4 mr-1" /> Delegate
-                            </Button>
+                        <div className="text-xs text-muted-foreground">{item.location}</div>
+                        {item.attendees.length > 0 && (
+                          <div className="flex items-center gap-1 mt-2">
+                            <Users className="w-3 h-3 text-muted-foreground" />
+                            <span className="text-xs text-muted-foreground">{item.attendees.join(", ")}</span>
                           </div>
-                        ) : (
-                          <CheckCircle2 className="w-6 h-6 text-green-500" />
                         )}
                       </div>
                     </div>
-                  );
-                })}
-
-                <div className="p-4 rounded-xl bg-primary/10 border border-primary/30 text-center mt-6">
-                  <p className="text-white/80 mb-2">
-                    <span className="font-bold text-primary">{actionedItems.size}</span> of {BRIEF_DATA.keyThings.length + BRIEF_DATA.twinRecommendations.length} items actioned
-                  </p>
-                  <p className="text-xs text-white/50">Your responses are training your Digital Twin</p>
+                  ))}
                 </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Intelligence Tab */}
+        {activeTab === "intelligence" && (
+          <Card className="bg-card/60 border-border">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-foreground">
+                <TrendingUp className="w-5 h-5 text-cyan-400" />
+                Intelligence Feed
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {BRIEF_DATA.intelligence.map((item) => (
+                <div 
+                  key={item.id}
+                  className={`p-4 rounded-xl border ${getSentimentColor(item.sentiment)} ${isActioned(`intel-${item.id}`) ? 'opacity-60' : ''}`}
+                >
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-2">
+                        <Badge variant="outline" className="text-xs">
+                          {item.source}
+                        </Badge>
+                        <Badge className={getSentimentColor(item.sentiment)}>
+                          {item.sentiment}
+                        </Badge>
+                      </div>
+                      <h3 className="font-bold text-foreground mb-1">{item.title}</h3>
+                      <p className="text-sm text-muted-foreground">{item.summary}</p>
+                    </div>
+                    {item.actionable && (
+                      <ActionButtons 
+                        itemId={`intel-${item.id}`}
+                        title={item.title}
+                        description={item.summary}
+                        category={item.source}
+                        source="intelligence"
+                      />
+                    )}
+                  </div>
+                </div>
+              ))}
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Action Engine Tab - Final Review */}
+        {activeTab === "actions" && (
+          <div className="space-y-6">
+            {/* Summary Stats */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {[
+                { label: "You'll Handle", count: actionedItems.filter(i => i.action === "gotit").length, color: "text-green-400", bg: "bg-green-500/10" },
+                { label: "Deferred", count: actionedItems.filter(i => i.action === "defer").length, color: "text-yellow-400", bg: "bg-yellow-500/10" },
+                { label: "Delegated", count: actionedItems.filter(i => i.action === "delegate").length, color: "text-blue-400", bg: "bg-blue-500/10" },
+                { label: "Digital Twin", count: actionedItems.filter(i => i.action === "twin").length, color: "text-purple-400", bg: "bg-purple-500/10" },
+              ].map((stat) => (
+                <Card key={stat.label} className={`${stat.bg} border-border`}>
+                  <CardContent className="p-4 text-center">
+                    <div className={`text-3xl font-bold ${stat.color}`}>{stat.count}</div>
+                    <div className="text-sm text-muted-foreground">{stat.label}</div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+
+            {/* Actioned Items List */}
+            <Card className="bg-card/60 border-border">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-foreground">
+                  <ListChecks className="w-5 h-5 text-primary" />
+                  Today's Action Plan
+                  {actionedItems.length > 0 && (
+                    <Badge className="ml-2">{actionedItems.length} items</Badge>
+                  )}
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                {actionedItems.length === 0 ? (
+                  <div className="text-center py-12 text-muted-foreground">
+                    <Zap className="w-12 h-12 mx-auto mb-4 opacity-30" />
+                    <p className="text-lg font-medium">No items actioned yet</p>
+                    <p className="text-sm mt-1">Review the Overview, Schedule, and Intelligence tabs to action items</p>
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    {actionedItems.map((item) => {
+                      const actionInfo = getActionLabel(item.action);
+                      return (
+                        <div 
+                          key={item.id}
+                          className="flex items-center gap-4 p-4 rounded-xl bg-secondary/30 border border-border"
+                        >
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2 mb-1">
+                              <Badge variant="outline" className="text-xs">{item.category}</Badge>
+                              <Badge className={`${actionInfo.color} border-0`}>
+                                {actionInfo.label}
+                              </Badge>
+                            </div>
+                            <h4 className="font-medium text-foreground">{item.title}</h4>
+                            <p className="text-sm text-muted-foreground">{item.description}</p>
+                          </div>
+                          <Button 
+                            variant="ghost" 
+                            size="sm"
+                            onClick={() => setActionedItems(prev => prev.filter(i => i.id !== item.id))}
+                            className="text-muted-foreground hover:text-destructive"
+                          >
+                            Undo
+                          </Button>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+
+                {/* Confirm and Start Day Button */}
+                {actionedItems.length > 0 && (
+                  <div className="mt-6 pt-6 border-t border-border">
+                    <Button 
+                      className="w-full bg-primary hover:bg-primary/90 text-primary-foreground h-12 text-lg"
+                      onClick={() => {
+                        toast.success("Day plan confirmed! Your Digital Twin and team are now working on assigned tasks.");
+                        // Could navigate to dashboard or show confirmation
+                      }}
+                    >
+                      <CheckCircle2 className="w-5 h-5 mr-2" />
+                      Confirm & Start Day
+                    </Button>
+                    <p className="text-center text-sm text-muted-foreground mt-2">
+                      This will notify your team and activate your Digital Twin for assigned tasks
+                    </p>
+                  </div>
+                )}
               </CardContent>
             </Card>
           </div>
         )}
-
       </div>
     </div>
   );

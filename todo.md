@@ -37,3 +37,7 @@
 - [x] Make Daily Brief action items clickable to launch AI Experts
 - [x] Pre-populate AI Experts mission from Daily Brief item clicked
 - [x] Create seamless morning workflow: Brief → Action → Team starts working
+- [x] Restructure Daily Brief tabs: Overview → Schedule → Intelligence → Action Engine
+- [x] Add 4th action button: Assign to Digital Twin
+- [x] Update Action Engine tab to show all actioned items for final review
+- [x] Overview tab should be high-level listening summary
