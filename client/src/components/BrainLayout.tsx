@@ -57,6 +57,7 @@ const menuItems = [
   { icon: BookOpen, label: "Library", path: "/library" },
   { icon: BarChart3, label: "Statistics", path: "/statistics" },
   { icon: Fingerprint, label: "Digital Twin", path: "/digital-twin", status: 'success' as const },
+  { icon: Brain, label: "QA Dashboard", path: "/qa-dashboard" },
   { icon: Activity, label: "Workflow", path: "/workflow", status: 'active' as const, count: 2 },
   { icon: Lock, label: "The Vault", path: "/vault" },
   { icon: Moon, label: "Evening Review", path: "/evening-review" },

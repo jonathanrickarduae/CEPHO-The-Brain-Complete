@@ -378,7 +378,7 @@ export function ProjectGenesis() {
         };
       }
     }));
-  };
+   };
 
   const allDeliverablesApproved = deliverables.every(d => d.status === 'approved');
 

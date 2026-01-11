@@ -25,6 +25,7 @@ import ReviewQueue from "./pages/ReviewQueue";
 import ProjectGenesisPage from "./pages/ProjectGenesisPage";
 import InboxPage from "./pages/InboxPage";
 import VideoStudioPage from "./pages/VideoStudioPage";
+import QADashboardPage from "./pages/QADashboardPage";
 import { GovernanceProvider, GovernanceModeChangeModal } from "./hooks/useGovernance";
 import { CelebrationProvider } from "./components/CelebrationAnimations";
 import { PageTransition } from "./components/PageTransition";
@@ -106,6 +107,9 @@ function Router() {
       
       <Route path="/video-studio">
         <WithLayout><VideoStudioPage /></WithLayout>
+      </Route>
+      <Route path="/qa-dashboard">
+        <WithLayout><QADashboardPage /></WithLayout>
       </Route>
       
       {/* Fallback */}

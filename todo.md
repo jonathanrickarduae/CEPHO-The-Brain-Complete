@@ -1232,3 +1232,28 @@
 - [ ] Solid architectural foundations
 - [ ] Anyone picking it up is impressed
 - [ ] Proactive suggestions for things not yet considered
+
+
+## Visual Blueprint & Document Generation (January 2026)
+
+### Mermaid Diagram Generation
+- [x] Create Mermaid diagram generator from project data
+- [x] Generate flowcharts for process architecture
+- [x] Generate entity relationship diagrams for data structure
+- [x] Export diagrams as PNG/SVG
+- [x] Interactive diagram viewer with zoom/pan
+
+### AI Expert Document Generation
+- [x] Create document generation service using LLM
+- [x] NDA template generation with project variables
+- [x] Financial model structure generation
+- [x] Due diligence checklist generation
+- [x] Investment deck outline generation
+- [ ] Wire AI Experts to generate actual content
+
+### QA Accuracy Dashboard
+- [x] Track Digital Twin approval rates by deliverable type
+- [x] Track user correction patterns
+- [x] Calculate confidence scores for autonomous approval
+- [x] Display learning progress over time
+- [x] Recommendations for increasing autonomy
