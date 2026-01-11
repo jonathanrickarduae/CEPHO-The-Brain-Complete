@@ -18,6 +18,9 @@ import EveningReview from "./pages/EveningReview";
 import AITeam from "./pages/AITeam";
 import Waitlist from "./pages/Waitlist";
 import Settings from "./pages/Settings";
+import Commercialization from "./pages/Commercialization";
+import GoLive from "./pages/GoLive";
+import About from "./pages/About";
 
 // Wrapper component for pages that need the sidebar layout
 function WithLayout({ children }: { children: React.ReactNode }) {
@@ -27,8 +30,10 @@ function WithLayout({ children }: { children: React.ReactNode }) {
 function Router() {
   return (
     <Switch>
-      {/* Landing page without sidebar */}
-      <Route path={"/"} component={Landing} />
+      {/* Root goes directly to Dashboard - no landing page friction */}
+      <Route path="/">
+        <WithLayout><Dashboard /></WithLayout>
+      </Route>
       
       {/* Waitlist page without sidebar */}
       <Route path="/waitlist" component={Waitlist} />
@@ -66,6 +71,15 @@ function Router() {
       </Route>
       <Route path="/settings">
         <WithLayout><Settings /></WithLayout>
+      </Route>
+      <Route path="/commercialization">
+        <WithLayout><Commercialization /></WithLayout>
+      </Route>
+      <Route path="/go-live">
+        <WithLayout><GoLive /></WithLayout>
+      </Route>
+      <Route path="/about">
+        <WithLayout><About /></WithLayout>
       </Route>
       
       {/* Fallback */}

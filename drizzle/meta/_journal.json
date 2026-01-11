@@ -22,6 +22,20 @@
       "when": 1768126010745,
       "tag": "0002_nasty_risque",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1768128497891,
+      "tag": "0003_nebulous_swarm",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1768128629234,
+      "tag": "0004_majestic_reaper",
+      "breakpoints": true
     }
   ]
 }

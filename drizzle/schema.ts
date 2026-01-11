@@ -260,3 +260,303 @@ export const conversations = mysqlTable("conversations", {
 
 export type Conversation = typeof conversations.$inferSelect;
 export type InsertConversation = typeof conversations.$inferInsert;
+
+
+/**
+ * Waitlist - users waiting for access
+ */
+export const waitlist = mysqlTable("waitlist", {
+  id: int("id").autoincrement().primaryKey(),
+  email: varchar("email", { length: 320 }).notNull().unique(),
+  name: varchar("name", { length: 200 }),
+  referralCode: varchar("referralCode", { length: 20 }).notNull().unique(),
+  referredBy: varchar("referredBy", { length: 20 }), // Referral code of who referred them
+  position: int("position").notNull(),
+  status: mysqlEnum("status", ["waiting", "invited", "joined", "churned"]).default("waiting").notNull(),
+  invitedAt: timestamp("invitedAt"),
+  joinedAt: timestamp("joinedAt"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type Waitlist = typeof waitlist.$inferSelect;
+export type InsertWaitlist = typeof waitlist.$inferInsert;
+
+/**
+ * Referrals - track referral relationships and rewards
+ */
+export const referrals = mysqlTable("referrals", {
+  id: int("id").autoincrement().primaryKey(),
+  referrerId: int("referrerId").notNull(), // User who referred
+  referredEmail: varchar("referredEmail", { length: 320 }).notNull(),
+  referredUserId: int("referredUserId"), // Filled when they join
+  status: mysqlEnum("status", ["pending", "signed_up", "active", "churned"]).default("pending").notNull(),
+  creditsAwarded: int("creditsAwarded").default(0),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  convertedAt: timestamp("convertedAt"),
+});
+
+export type Referral = typeof referrals.$inferSelect;
+export type InsertReferral = typeof referrals.$inferInsert;
+
+/**
+ * User credits - earned through referrals and achievements
+ */
+export const userCredits = mysqlTable("user_credits", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  balance: int("balance").default(0).notNull(),
+  lifetimeEarned: int("lifetimeEarned").default(0).notNull(),
+  lifetimeSpent: int("lifetimeSpent").default(0).notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type UserCredits = typeof userCredits.$inferSelect;
+export type InsertUserCredits = typeof userCredits.$inferInsert;
+
+/**
+ * Credit transactions - audit log of credit changes
+ */
+export const creditTransactions = mysqlTable("credit_transactions", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  amount: int("amount").notNull(), // Positive for earn, negative for spend
+  type: mysqlEnum("type", ["referral", "achievement", "purchase", "spend", "bonus"]).notNull(),
+  description: varchar("description", { length: 500 }),
+  referenceId: varchar("referenceId", { length: 100 }), // ID of related entity
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type CreditTransaction = typeof creditTransactions.$inferSelect;
+export type InsertCreditTransaction = typeof creditTransactions.$inferInsert;
+
+/**
+ * Training documents - uploaded files for Digital Twin training
+ */
+export const trainingDocuments = mysqlTable("training_documents", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  name: varchar("name", { length: 300 }).notNull(),
+  type: mysqlEnum("type", ["document", "conversation", "preference", "memory"]).notNull(),
+  content: text("content"), // Text content or extracted text
+  fileUrl: text("fileUrl"), // S3 URL if file uploaded
+  fileSize: int("fileSize"),
+  tokenCount: int("tokenCount"),
+  processed: boolean("processed").default(false),
+  processedAt: timestamp("processedAt"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type TrainingDocument = typeof trainingDocuments.$inferSelect;
+export type InsertTrainingDocument = typeof trainingDocuments.$inferInsert;
+
+/**
+ * Memory bank - persistent facts the Digital Twin remembers
+ */
+export const memoryBank = mysqlTable("memory_bank", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  category: mysqlEnum("category", ["personal", "work", "preference", "relationship", "fact"]).notNull(),
+  key: varchar("key", { length: 200 }).notNull(),
+  value: text("value").notNull(),
+  confidence: float("confidence").default(1.0),
+  source: varchar("source", { length: 100 }), // Where this memory came from
+  lastAccessed: timestamp("lastAccessed"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type MemoryBank = typeof memoryBank.$inferSelect;
+export type InsertMemoryBank = typeof memoryBank.$inferInsert;
+
+/**
+ * Wellness scores - daily calculated wellness metrics
+ */
+export const wellnessScores = mysqlTable("wellness_scores", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  date: timestamp("date").notNull(),
+  overallScore: float("overallScore").notNull(), // 0-10
+  moodScore: float("moodScore"),
+  productivityScore: float("productivityScore"),
+  balanceScore: float("balanceScore"),
+  momentumScore: float("momentumScore"),
+  factors: json("factors"), // Breakdown of contributing factors
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type WellnessScore = typeof wellnessScores.$inferSelect;
+export type InsertWellnessScore = typeof wellnessScores.$inferInsert;
+
+/**
+ * Streaks - gamification tracking
+ */
+export const streaks = mysqlTable("streaks", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  type: varchar("type", { length: 50 }).notNull(), // "daily_login", "mood_check", "task_complete"
+  currentStreak: int("currentStreak").default(0).notNull(),
+  longestStreak: int("longestStreak").default(0).notNull(),
+  lastActivityDate: timestamp("lastActivityDate"),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type Streak = typeof streaks.$inferSelect;
+export type InsertStreak = typeof streaks.$inferInsert;
+
+/**
+ * Achievements - unlocked achievements
+ */
+export const achievements = mysqlTable("achievements", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  achievementId: varchar("achievementId", { length: 100 }).notNull(),
+  unlockedAt: timestamp("unlockedAt").defaultNow().notNull(),
+});
+
+export type Achievement = typeof achievements.$inferSelect;
+export type InsertAchievement = typeof achievements.$inferInsert;
+
+
+/**
+ * Competitors - tracked competitive landscape
+ */
+export const competitors = mysqlTable("competitors", {
+  id: int("id").autoincrement().primaryKey(),
+  name: varchar("name", { length: 200 }).notNull(),
+  website: varchar("website", { length: 500 }),
+  description: text("description"),
+  category: varchar("category", { length: 100 }), // "ai_assistant", "productivity", "calendar", etc.
+  pricing: varchar("pricing", { length: 100 }), // "free", "$10/mo", "$30/mo", etc.
+  targetMarket: varchar("targetMarket", { length: 200 }),
+  strengths: json("strengths"), // Array of strength descriptions
+  weaknesses: json("weaknesses"), // Array of weakness descriptions
+  threatLevel: mysqlEnum("threatLevel", ["low", "medium", "high", "critical"]).default("medium"),
+  lastAnalyzed: timestamp("lastAnalyzed"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type Competitor = typeof competitors.$inferSelect;
+export type InsertCompetitor = typeof competitors.$inferInsert;
+
+/**
+ * Feature comparison - track features across competitors
+ */
+export const featureComparison = mysqlTable("feature_comparison", {
+  id: int("id").autoincrement().primaryKey(),
+  featureName: varchar("featureName", { length: 200 }).notNull(),
+  category: varchar("category", { length: 100 }).notNull(), // "ai", "productivity", "integration", etc.
+  description: text("description"),
+  theBrainStatus: mysqlEnum("theBrainStatus", ["not_started", "in_progress", "launched", "superior"]).default("not_started"),
+  theBrainScore: int("theBrainScore").default(0), // 0-100
+  competitorData: json("competitorData"), // { competitorId: score, ... }
+  importance: mysqlEnum("importance", ["low", "medium", "high", "critical"]).default("medium"),
+  notes: text("notes"),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type FeatureComparison = typeof featureComparison.$inferSelect;
+export type InsertFeatureComparison = typeof featureComparison.$inferInsert;
+
+/**
+ * Market position history - track competitive position over time
+ */
+export const marketPositionHistory = mysqlTable("market_position_history", {
+  id: int("id").autoincrement().primaryKey(),
+  date: timestamp("date").notNull(),
+  overallScore: float("overallScore").notNull(), // 0-100
+  featureParityScore: float("featureParityScore"),
+  uniqueValueScore: float("uniqueValueScore"),
+  marketShareEstimate: float("marketShareEstimate"),
+  competitorScores: json("competitorScores"), // { competitorId: score, ... }
+  factors: json("factors"), // Breakdown of what contributed to score
+  analysis: text("analysis"), // AI-generated analysis
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type MarketPositionHistory = typeof marketPositionHistory.$inferSelect;
+export type InsertMarketPositionHistory = typeof marketPositionHistory.$inferInsert;
+
+/**
+ * Competitive threats - detected threats and opportunities
+ */
+export const competitiveThreats = mysqlTable("competitive_threats", {
+  id: int("id").autoincrement().primaryKey(),
+  type: mysqlEnum("type", ["threat", "opportunity"]).notNull(),
+  severity: mysqlEnum("severity", ["low", "medium", "high", "critical"]).default("medium"),
+  competitorId: int("competitorId"),
+  title: varchar("title", { length: 300 }).notNull(),
+  description: text("description").notNull(),
+  impact: text("impact"), // How this affects The Brain
+  recommendedAction: text("recommendedAction"),
+  status: mysqlEnum("status", ["new", "analyzing", "action_required", "addressed", "monitoring"]).default("new"),
+  detectedAt: timestamp("detectedAt").defaultNow().notNull(),
+  addressedAt: timestamp("addressedAt"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type CompetitiveThreat = typeof competitiveThreats.$inferSelect;
+export type InsertCompetitiveThreat = typeof competitiveThreats.$inferInsert;
+
+/**
+ * Regulatory landscape - track regulations and compliance
+ */
+export const regulatoryLandscape = mysqlTable("regulatory_landscape", {
+  id: int("id").autoincrement().primaryKey(),
+  region: varchar("region", { length: 100 }).notNull(), // "US", "EU", "UK", "Global"
+  regulation: varchar("regulation", { length: 300 }).notNull(), // "GDPR", "AI Act", "CCPA"
+  category: varchar("category", { length: 100 }), // "data_privacy", "ai_governance", "consumer_protection"
+  status: mysqlEnum("status", ["proposed", "enacted", "enforced"]).default("proposed"),
+  effectiveDate: timestamp("effectiveDate"),
+  complianceStatus: mysqlEnum("complianceStatus", ["not_applicable", "non_compliant", "partial", "compliant"]).default("not_applicable"),
+  moatPotential: mysqlEnum("moatPotential", ["none", "low", "medium", "high"]).default("none"),
+  description: text("description"),
+  requirements: json("requirements"), // Array of specific requirements
+  notes: text("notes"),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type RegulatoryLandscape = typeof regulatoryLandscape.$inferSelect;
+export type InsertRegulatoryLandscape = typeof regulatoryLandscape.$inferInsert;
+
+/**
+ * Strategy recommendations - AI-generated strategic advice
+ */
+export const strategyRecommendations = mysqlTable("strategy_recommendations", {
+  id: int("id").autoincrement().primaryKey(),
+  category: mysqlEnum("category", ["product", "pricing", "marketing", "partnership", "regulatory", "technical"]).notNull(),
+  priority: mysqlEnum("priority", ["low", "medium", "high", "critical"]).default("medium"),
+  title: varchar("title", { length: 300 }).notNull(),
+  recommendation: text("recommendation").notNull(),
+  rationale: text("rationale"),
+  expectedImpact: text("expectedImpact"),
+  effort: mysqlEnum("effort", ["low", "medium", "high"]).default("medium"),
+  timeframe: varchar("timeframe", { length: 100 }), // "immediate", "1-2 weeks", "1-3 months"
+  status: mysqlEnum("status", ["proposed", "approved", "in_progress", "completed", "rejected"]).default("proposed"),
+  generatedBy: varchar("generatedBy", { length: 100 }), // AI expert who generated it
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type StrategyRecommendation = typeof strategyRecommendations.$inferSelect;
+export type InsertStrategyRecommendation = typeof strategyRecommendations.$inferInsert;
+
+/**
+ * Commercialization tasks - Digital Twin's strategy work
+ */
+export const commercializationTasks = mysqlTable("commercialization_tasks", {
+  id: int("id").autoincrement().primaryKey(),
+  taskType: mysqlEnum("taskType", ["competitor_analysis", "feature_gap", "market_research", "pricing_review", "regulatory_check", "strategy_update"]).notNull(),
+  title: varchar("title", { length: 300 }).notNull(),
+  description: text("description"),
+  status: mysqlEnum("status", ["pending", "in_progress", "completed", "failed"]).default("pending"),
+  priority: mysqlEnum("priority", ["low", "medium", "high"]).default("medium"),
+  assignedExpert: varchar("assignedExpert", { length: 100 }), // AI expert handling this
+  result: text("result"), // Outcome of the task
+  scheduledFor: timestamp("scheduledFor"),
+  completedAt: timestamp("completedAt"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type CommercializationTask = typeof commercializationTasks.$inferSelect;
+export type InsertCommercializationTask = typeof commercializationTasks.$inferInsert;

@@ -23,7 +23,7 @@ import { getLoginUrl } from "@/const";
 import { useIsMobile } from "@/hooks/useMobile";
 import { 
   LayoutDashboard, LogOut, PanelLeft, 
-  BookOpen, BarChart3, Lock, Fingerprint, Activity, Brain, Sun, Users, Moon, Keyboard
+  BookOpen, BarChart3, Lock, Fingerprint, Activity, Brain, Sun, Users, Moon, Keyboard, Settings, TrendingUp, Info
 } from "lucide-react";
 import { CSSProperties, useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
@@ -50,6 +50,9 @@ const menuItems = [
   { icon: Activity, label: "Workflow", path: "/workflow" },
   { icon: Lock, label: "The Vault", path: "/vault" },
   { icon: Moon, label: "Evening Review", path: "/evening-review" },
+  { icon: Settings, label: "Settings", path: "/settings" },
+  { icon: Info, label: "About The Brain", path: "/about" },
+  { icon: TrendingUp, label: "Commercialization", path: "/commercialization" },
 ];
 
 const SIDEBAR_WIDTH_KEY = "brain-sidebar-width";

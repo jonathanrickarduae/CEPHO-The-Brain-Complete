@@ -144,6 +144,46 @@ export default function Dashboard() {
   return (
     <div className="h-full flex flex-col p-4 md:p-6 overflow-hidden">
       
+      {/* Quick Action Input - Manus Style - Front and Center */}
+      <div className="max-w-3xl mx-auto w-full mb-6">
+        <div className="flex items-center gap-3 bg-card/80 border-2 border-primary/30 rounded-2xl px-4 py-4 focus-within:border-primary/60 focus-within:ring-2 focus-within:ring-primary/20 transition-all duration-300 shadow-lg shadow-primary/5">
+          <input 
+            type="text" 
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            onKeyDown={handleKeyDown}
+            placeholder="What do you need? Capture a task, ask a question, or just think out loud..." 
+            className="flex-1 bg-transparent border-none outline-none text-lg text-foreground placeholder:text-muted-foreground/70 min-h-0"
+            autoFocus
+          />
+          <div className="flex items-center gap-2">
+            <Button 
+              size="icon" 
+              variant="ghost" 
+              onClick={handleSubmit}
+              disabled={!inputValue.trim()}
+              className="h-10 w-10 rounded-full hover:bg-secondary text-muted-foreground hover:text-foreground disabled:opacity-50"
+            >
+              <Send className="w-5 h-5" />
+            </Button>
+            <Button 
+              size="icon" 
+              onClick={() => setIsRecording(!isRecording)}
+              className={`h-12 w-12 rounded-full transition-all hover:scale-105 ${
+                isRecording 
+                  ? 'bg-red-500 hover:bg-red-600 animate-pulse shadow-[0_0_15px_rgba(239,68,68,0.5)]' 
+                  : 'bg-primary text-primary-foreground hover:bg-primary/90 shadow-[0_0_15px_rgba(255,16,240,0.3)]'
+              }`}
+            >
+              <Mic className="w-6 h-6" />
+            </Button>
+          </div>
+        </div>
+        <p className="text-center text-xs text-muted-foreground/60 mt-2">
+          Press <kbd className="px-1.5 py-0.5 bg-secondary/50 rounded text-[10px]">Enter</kbd> to send • <kbd className="px-1.5 py-0.5 bg-secondary/50 rounded text-[10px]">?</kbd> for shortcuts • <kbd className="px-1.5 py-0.5 bg-secondary/50 rounded text-[10px]">Cmd+K</kbd> command palette
+        </p>
+      </div>
+
       {/* Compact Header Row */}
       <div className="flex justify-between items-center mb-4">
         <div className="flex items-center gap-3">

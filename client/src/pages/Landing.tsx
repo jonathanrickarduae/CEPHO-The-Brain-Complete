@@ -1,24 +1,82 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLocation } from "wouter";
 import { motion, AnimatePresence } from "framer-motion";
 import NeonBrain from "@/components/NeonBrain";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
-import { ArrowRight, Sun, Moon, Blend } from "lucide-react";
+import { Sun, Moon, Blend } from "lucide-react";
 import { useTheme } from "@/contexts/ThemeContext";
+
+// Check if mood was already captured today for this time period
+function shouldShowMoodCheck(): boolean {
+  const now = new Date();
+  const hour = now.getHours();
+  const today = now.toDateString();
+  
+  // Determine current period
+  let period: string;
+  if (hour >= 5 && hour < 12) {
+    period = 'morning';
+  } else if (hour >= 12 && hour < 17) {
+    period = 'afternoon';
+  } else {
+    period = 'evening';
+  }
+  
+  const key = `mood_${today}_${period}`;
+  return !localStorage.getItem(key);
+}
+
+function saveMoodCheck(mood: number): void {
+  const now = new Date();
+  const hour = now.getHours();
+  const today = now.toDateString();
+  
+  let period: string;
+  if (hour >= 5 && hour < 12) {
+    period = 'morning';
+  } else if (hour >= 12 && hour < 17) {
+    period = 'afternoon';
+  } else {
+    period = 'evening';
+  }
+  
+  const key = `mood_${today}_${period}`;
+  localStorage.setItem(key, JSON.stringify({ mood, timestamp: now.toISOString() }));
+}
 
 export default function Landing() {
   const [_, setLocation] = useLocation();
-  const [step, setStep] = useState<"intro" | "mood">("intro");
+  const [step, setStep] = useState<"splash" | "mood">("splash");
   const [mood, setMood] = useState([5]);
   const { theme, setTheme } = useTheme();
+  const [showMood, setShowMood] = useState(false);
 
-  const handleStart = () => {
-    setStep("mood");
-  };
+  // Check on mount if we need mood check
+  useEffect(() => {
+    setShowMood(shouldShowMoodCheck());
+  }, []);
+
+  // Auto-advance from splash after brief delay
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (showMood) {
+        setStep("mood");
+      } else {
+        // Skip straight to dashboard if mood already captured
+        setLocation("/dashboard");
+      }
+    }, 1500); // 1.5 second splash showing The Brain
+
+    return () => clearTimeout(timer);
+  }, [showMood, setLocation]);
 
   const handleMoodSubmit = () => {
-    // In a real app, we'd save the mood here
+    saveMoodCheck(mood[0]);
+    setLocation("/dashboard");
+  };
+
+  const handleSkip = () => {
     setLocation("/dashboard");
   };
 
@@ -63,35 +121,26 @@ export default function Landing() {
       </div>
 
       <AnimatePresence mode="wait">
-        {step === "intro" ? (
+        {step === "splash" ? (
           <motion.div
-            key="intro"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="z-10 flex flex-col items-center text-center max-w-2xl px-6"
+            key="splash"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 1.1 }}
+            className="z-10 flex flex-col items-center text-center"
           >
-            <NeonBrain className="w-64 h-64 mb-8" state="idle" />
+            <NeonBrain className="w-48 h-48 md:w-64 md:h-64 mb-6" state="idle" />
             
-            <h1 className="font-display font-bold text-6xl md:text-8xl tracking-wider text-transparent bg-clip-text bg-gradient-to-b from-white to-white/50 mb-6 neon-text">
+            <h1 className="font-display font-bold text-5xl md:text-7xl tracking-wider text-transparent bg-clip-text bg-gradient-to-b from-white to-white/50 neon-text">
               THE BRAIN
             </h1>
             
-            <p className="text-xl text-muted-foreground mb-12 font-light tracking-wide max-w-lg text-center">
-              Your collective intelligence hub.<br />
-              Optimized for speed, insight, and clarity.
-            </p>
-
-            <Button 
-              onClick={handleStart}
-              className="group relative px-8 py-6 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-primary/50 rounded-full transition-all duration-500"
-            >
-              <span className="font-display font-bold text-lg tracking-widest mr-2 group-hover:text-primary transition-colors">ENTER SYSTEM</span>
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 group-hover:text-primary transition-all" />
-              
-              {/* Button Glow */}
-              <div className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 shadow-[0_0_30px_rgba(255,16,240,0.3)]"></div>
-            </Button>
+            {/* Loading indicator */}
+            <div className="mt-8 flex items-center gap-2">
+              <div className="w-2 h-2 rounded-full bg-primary animate-bounce" style={{ animationDelay: '0ms' }}></div>
+              <div className="w-2 h-2 rounded-full bg-primary animate-bounce" style={{ animationDelay: '150ms' }}></div>
+              <div className="w-2 h-2 rounded-full bg-primary animate-bounce" style={{ animationDelay: '300ms' }}></div>
+            </div>
           </motion.div>
         ) : (
           <motion.div
@@ -101,15 +150,15 @@ export default function Landing() {
             exit={{ opacity: 0, scale: 1.1 }}
             className="z-10 flex flex-col items-center text-center max-w-xl px-6 w-full"
           >
-            <NeonBrain className="w-48 h-48 mb-8" mood={mood[0]} state="thinking" />
+            <NeonBrain className="w-32 h-32 md:w-48 md:h-48 mb-6" mood={mood[0]} state="thinking" />
             
-            <h2 className="font-display font-bold text-4xl mb-2">How are you feeling today?</h2>
-            <p className="text-muted-foreground mb-12">Let's calibrate your cognitive state.</p>
+            <h2 className="font-display font-bold text-3xl md:text-4xl mb-2">How are you feeling?</h2>
+            <p className="text-muted-foreground mb-8 text-sm">Quick check-in to calibrate your day</p>
 
-            <div className="w-full max-w-md mb-12 relative">
+            <div className="w-full max-w-md mb-8 relative">
               <div className="flex justify-between text-xs font-mono text-muted-foreground mb-4 uppercase tracking-widest">
-                <span>Drained (1)</span>
-                <span>Peak (10)</span>
+                <span>1</span>
+                <span>10</span>
               </div>
               
               <Slider
@@ -121,19 +170,31 @@ export default function Landing() {
                 className="py-4"
               />
               
-              <div className="mt-6 text-center">
-                <span className="font-display font-bold text-6xl text-primary neon-text">
+              <div className="mt-4 text-center">
+                <span className="font-display font-bold text-5xl text-primary neon-text">
                   {mood[0]}
+                </span>
+                <span className="block text-sm text-muted-foreground mt-1">
+                  {mood[0] <= 3 ? "Let's work on that" : mood[0] <= 6 ? "Room to grow" : mood[0] <= 8 ? "Looking good" : "Peak state!"}
                 </span>
               </div>
             </div>
 
-            <Button 
-              onClick={handleMoodSubmit}
-              className="w-full max-w-xs py-6 bg-primary hover:bg-primary/90 text-primary-foreground font-bold tracking-widest rounded-lg shadow-[0_0_20px_rgba(255,16,240,0.4)] hover:shadow-[0_0_40px_rgba(255,16,240,0.6)] transition-all duration-300"
-            >
-              {mood[0] < 6 ? "LET'S GET YOU TO A 10" : "MAINTAIN MOMENTUM"}
-            </Button>
+            <div className="flex flex-col gap-3 w-full max-w-xs">
+              <Button 
+                onClick={handleMoodSubmit}
+                className="w-full py-5 bg-primary hover:bg-primary/90 text-primary-foreground font-bold tracking-widest rounded-xl shadow-[0_0_20px_rgba(255,16,240,0.4)] hover:shadow-[0_0_40px_rgba(255,16,240,0.6)] transition-all duration-300"
+              >
+                {mood[0] < 6 ? "LET'S GET YOU TO A 10" : "LET'S GO"}
+              </Button>
+              
+              <button 
+                onClick={handleSkip}
+                className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+              >
+                Skip for now
+              </button>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

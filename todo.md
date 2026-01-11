@@ -372,3 +372,90 @@
 - [x] Add share to Statistics reports (wellness dashboard)
 - [ ] Add share to AI Expert consultations
 - [ ] Create public insight viewer page
+
+
+## Internal Integrations (No External APIs)
+
+- [ ] Connect referral/waitlist system to database
+- [ ] Add Settings link to sidebar navigation
+- [ ] Wire up training data storage to database
+- [ ] Connect wellness score to real mood/task data
+- [ ] Persist user preferences to database
+
+
+## Go Live Wizard (External API Integrations)
+
+### Wizard Features
+- [ ] Create GoLiveWizard component with step-by-step flow
+- [ ] Track completion status of each integration
+- [ ] Provide direct links to signup/setup pages
+- [ ] Store progress in database
+
+### External Integrations to Track
+- [ ] Google Calendar OAuth
+- [ ] Google Gmail OAuth
+- [ ] Microsoft Outlook OAuth
+- [ ] Microsoft Teams OAuth
+- [ ] Zoom OAuth
+- [ ] Slack OAuth
+- [ ] Notion API
+- [ ] Todoist API
+- [ ] Asana API
+- [ ] Custom domain setup
+- [ ] Email service (SendGrid/Postmark)
+- [ ] Payment processing (Stripe)
+
+
+## Commercialization Intelligence System
+
+### Core Features
+- [x] Commercialization page in sidebar (left tab)
+- [x] Competitive position tracker (value score 0-100%)
+- [x] Competitor monitoring dashboard
+- [x] Threat detection alerts (when competitors launch similar features)
+- [x] Regulatory moat assessment
+- [x] Strategic recommendations engine
+
+### Digital Twin Integration
+- [x] Add commercialization as daily Digital Twin task (shown in overview)
+- [x] AI Expert panel for strategy (Maxwell Patent, Marcus Macro, Strategic Advisor)
+- [ ] Automated competitor research via AI (needs API connection)
+- [x] Value score calculation based on feature parity
+- [ ] Daily strategy briefing in Daily Brief
+
+### Data Tracking
+- [x] Competitor database table
+- [x] Feature comparison matrix
+- [x] Market position history
+- [x] Threat/opportunity log
+- [x] Regulatory landscape tracker
+
+### Go Live Wizard
+- [x] Created Go Live Wizard page
+- [x] Integration checklist with progress tracking
+- [x] Step-by-step setup instructions
+- [x] External links to API consoles
+- [x] Mark complete/skip functionality
+
+
+## AI Expert Additions
+- [x] Add Patent & IP Lawyer expert to AI Experts roster (Maxwell Patent - leg-021)
+
+
+## UX Flow Improvements
+
+### Remove Landing Page Friction
+- [x] Remove "Enter System" button - auto-proceed after splash
+- [x] Keep The Brain logo and branding on splash
+- [x] Keep mood check as first interaction (3x daily)
+- [x] Auto-skip to Dashboard if mood already captured
+- [ ] Make conversation interface front and center
+- [ ] Mobile-first quick action capture
+
+
+### About The Brain Page
+- [x] Create "About" page explaining the concept
+- [x] Describe the ecosystem and pillars (Four Pillars section)
+- [x] Explain Digital Twin and how it learns
+- [x] Explain AI Experts and their role
+- [x] Add to sidebar navigation
