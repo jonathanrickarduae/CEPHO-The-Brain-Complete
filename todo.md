@@ -82,3 +82,41 @@
 - [ ] Brain Dump: Quick capture for ideas and research requests
 - [ ] Daily Cycle: Morning Brief → Day Activity → Evening Review → Overnight Processing
 - [ ] Goal tracking: "Getting you to a 10" - track daily wellness score
+- [ ] AI Expert Team: Create persona system with names, avatars, bios
+- [ ] AI Expert Team: Add iconic personas (Warren Buffett, Richard Branson, Elon Musk, etc.)
+- [ ] AI Expert Team: Add diverse global experts (Emirati, Medical Cannabis, Tax, Law, etc.)
+- [ ] AI Expert Team: Each expert has strengths, weaknesses, thinking style
+- [ ] AI Expert Team: Performance scoring and Digital Twin review system
+- [ ] AI Expert Team: Ability to "fire" underperforming experts
+- [ ] AI Expert Team: Build initial 30 personas with framework for 250
+- [ ] AI Expert Team: Expert profile cards with click-to-expand bio
+- [ ] Corporate Digital Twins: Add company personas (McKinsey, PwC, Netflix, NASA, Meta, NVIDIA, Tesla)
+- [ ] Corporate Digital Twins: Each company has thinking frameworks and methodologies
+- [ ] Corporate Digital Twins: Can be assigned to projects alongside individual experts
+- [ ] Corporate Digital Twins: Performance comparison - company vs your team
+- [ ] AI Expert Team: Two tabs - Individual Experts (250) and Corporate Partners
+- [ ] Digital Twin: Conversational chat interface (like Manus)
+- [ ] Digital Twin: Voice-first input with transcription
+- [ ] Digital Twin: Conversation history thread view
+- [ ] Digital Twin: Twin responds with LLM-powered insights
+- [ ] Digital Twin: Mobile-optimized with thumb-accessible mic
+- [ ] Digital Twin: Context-aware responses remembering past conversations
+- [ ] Library: Restructure with project folders (Celadon, Boundless, Perfect DXB, Ampora, Project 5, Project 6)
+- [ ] Library: Personal section (Holiday Planner, To-Do, Quick reminders)
+- [ ] Library: Working documents vs signed-off documents
+- [ ] Digital Twin: Manus-style conversational interface
+- [ ] Digital Twin: Mobile-first with voice box at bottom
+- [ ] Digital Twin: Conversation scrolls up naturally
+- [ ] Digital Twin: Asks clarifying questions before action
+- [ ] Digital Twin: Learns patterns for autonomous handling
+- [ ] Dashboard: Fix box design (larger, sexier styling)
+- [ ] Library: Store AI-generated images in project folders
+- [ ] Library: Archive charts, graphs, dashboards per project
+- [ ] Library: Sub-sections (Documents, AI Images, Charts, Data, Presentations)
+- [ ] Workflow: ERP-style project visibility dashboard
+- [ ] Workflow: Status pipeline (Not Started → In Progress → Blocked → Review → Complete)
+- [ ] Workflow: Blockers highlighted with red flags
+- [ ] Workflow: Delivery timeline and due dates
+- [ ] Workflow: Cross-project view (all 6 projects side by side)
+- [ ] Workflow: Digital Twin alerts for blocked/at-risk items
+- [ ] Workflow: Visual indicators (Green/Amber/Red status)

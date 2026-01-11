@@ -1,163 +1,387 @@
-import DesktopLayout from "@/components/DesktopLayout";
-import { Button } from "@/components/ui/button";
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
+import { Progress } from '@/components/ui/progress';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
-  Folder, 
-  FileText, 
-  MoreVertical, 
-  Search, 
-  Plus, 
-  Clock, 
-  Star, 
-  ChevronRight,
-  Download,
-  Share2
-} from "lucide-react";
-import { useState } from "react";
+  FolderOpen, FileText, Image, BarChart3, Presentation, Search,
+  Plus, Upload, Download, Star, Clock, Filter, Grid3X3, List,
+  ChevronRight, X, File, Calendar, User, Briefcase, Home
+} from 'lucide-react';
+
+// Project data
+const projects = [
+  {
+    id: 'celadon',
+    name: 'Celadon Pharmaceuticals',
+    icon: '💊',
+    color: 'from-emerald-500/20 to-emerald-500/5',
+    borderColor: 'border-emerald-500/30',
+    documents: 24,
+    images: 12,
+    charts: 8,
+    lastUpdated: '2024-01-10',
+    status: 'active'
+  },
+  {
+    id: 'boundless',
+    name: 'Boundless Telecom',
+    icon: '📡',
+    color: 'from-blue-500/20 to-blue-500/5',
+    borderColor: 'border-blue-500/30',
+    documents: 18,
+    images: 6,
+    charts: 15,
+    lastUpdated: '2024-01-09',
+    status: 'active'
+  },
+  {
+    id: 'perfect-dxb',
+    name: 'Perfect DXB',
+    icon: '🏗️',
+    color: 'from-amber-500/20 to-amber-500/5',
+    borderColor: 'border-amber-500/30',
+    documents: 31,
+    images: 22,
+    charts: 11,
+    lastUpdated: '2024-01-10',
+    status: 'active',
+    subtitle: 'Perfect Technical Works, LLC'
+  },
+  {
+    id: 'ampora',
+    name: 'Ampora',
+    icon: '🌊',
+    color: 'from-cyan-500/20 to-cyan-500/5',
+    borderColor: 'border-cyan-500/30',
+    documents: 15,
+    images: 8,
+    charts: 6,
+    lastUpdated: '2024-01-08',
+    status: 'active'
+  },
+  {
+    id: 'project-5',
+    name: 'Project 5',
+    icon: '🚀',
+    color: 'from-purple-500/20 to-purple-500/5',
+    borderColor: 'border-purple-500/30',
+    documents: 9,
+    images: 4,
+    charts: 3,
+    lastUpdated: '2024-01-07',
+    status: 'active'
+  },
+  {
+    id: 'project-6',
+    name: 'Project 6',
+    icon: '⚡',
+    color: 'from-fuchsia-500/20 to-fuchsia-500/5',
+    borderColor: 'border-fuchsia-500/30',
+    documents: 7,
+    images: 2,
+    charts: 4,
+    lastUpdated: '2024-01-06',
+    status: 'active'
+  }
+];
+
+// Personal items
+const personalItems = [
+  { id: 'holiday', name: 'Holiday Planner', icon: '🏖️', type: 'calendar', items: 5 },
+  { id: 'todo', name: 'Personal To-Do', icon: '✅', type: 'list', items: 12 },
+  { id: 'reminders', name: 'Quick Reminders', icon: '🔔', type: 'reminders', items: 3 },
+  { id: 'notes', name: 'Personal Notes', icon: '📝', type: 'notes', items: 8 }
+];
+
+// Sample files for a project
+const sampleFiles = {
+  documents: [
+    { name: 'Q4 Strategy Report.pdf', size: '2.4 MB', date: '2024-01-10', status: 'signed' },
+    { name: 'Investment Proposal v3.docx', size: '1.8 MB', date: '2024-01-09', status: 'draft' },
+    { name: 'Board Presentation.pptx', size: '5.2 MB', date: '2024-01-08', status: 'signed' },
+    { name: 'Due Diligence Checklist.xlsx', size: '890 KB', date: '2024-01-07', status: 'working' },
+    { name: 'Legal Review Notes.pdf', size: '1.1 MB', date: '2024-01-06', status: 'signed' },
+  ],
+  images: [
+    { name: 'Market Analysis Chart.png', size: '450 KB', date: '2024-01-10', source: 'AI Generated' },
+    { name: 'Competitor Landscape.png', size: '380 KB', date: '2024-01-09', source: 'AI Generated' },
+    { name: 'Brand Mockup v2.png', size: '1.2 MB', date: '2024-01-08', source: 'AI Generated' },
+    { name: 'Office Photos.jpg', size: '2.8 MB', date: '2024-01-07', source: 'Uploaded' },
+  ],
+  charts: [
+    { name: 'Revenue Projections', type: 'Line Chart', date: '2024-01-10' },
+    { name: 'Market Share Analysis', type: 'Pie Chart', date: '2024-01-09' },
+    { name: 'Growth Trajectory', type: 'Area Chart', date: '2024-01-08' },
+    { name: 'Competitive Positioning', type: 'Scatter Plot', date: '2024-01-07' },
+  ],
+  presentations: [
+    { name: 'Investor Deck Q4', slides: 24, date: '2024-01-10' },
+    { name: 'Team Update', slides: 12, date: '2024-01-08' },
+  ]
+};
 
 export default function Library() {
-  const [activeFolder, setActiveFolder] = useState("All Files");
-
-  const folders = [
-    { id: "all", name: "All Files", icon: Folder },
-    { id: "blueprints", name: "Blueprints", icon: FileText },
-    { id: "contracts", name: "Contracts", icon: FileText },
-    { id: "research", name: "Research", icon: FileText },
-    { id: "media", name: "Media Assets", icon: FileText },
-  ];
-
-  const files = [
-    { id: 1, name: "Mars Colony Blueprint v2.pdf", type: "PDF", size: "2.4 MB", date: "2 hours ago", tag: "Blueprint" },
-    { id: 2, name: "Q3 Financial Strategy.docx", type: "DOCX", size: "1.1 MB", date: "Yesterday", tag: "Strategy" },
-    { id: 3, name: "Competitor Analysis - SpaceX.pptx", type: "PPTX", size: "5.8 MB", date: "2 days ago", tag: "Research" },
-    { id: 4, name: "Legal Risk Assessment.pdf", type: "PDF", size: "845 KB", date: "3 days ago", tag: "Legal" },
-    { id: 5, name: "Project Alpha Merger Terms.pdf", type: "PDF", size: "3.2 MB", date: "1 week ago", tag: "Contract" },
-  ];
+  const [selectedProject, setSelectedProject] = useState<typeof projects[0] | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
 
   return (
-    <DesktopLayout>
-      <div className="max-w-6xl mx-auto h-full flex flex-col">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="font-display font-bold text-3xl mb-2">Knowledge Library</h1>
-            <p className="text-muted-foreground">Central Repository • <span className="text-primary">524 Files</span></p>
-          </div>
-          <div className="flex gap-3">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-              <input 
-                type="text" 
-                placeholder="Search files..." 
-                className="bg-white/5 border border-white/10 rounded-lg pl-10 pr-4 py-2 text-sm w-64 focus:outline-none focus:border-primary/50 transition-colors"
-              />
-            </div>
-            <Button className="bg-primary hover:bg-primary/90 text-white">
-              <Plus className="w-4 h-4 mr-2" /> Upload
-            </Button>
-          </div>
+    <div className="min-h-screen bg-black text-white p-6">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-8">
+        <div>
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-cyan-400 to-fuchsia-500 bg-clip-text text-transparent">
+            Library
+          </h1>
+          <p className="text-gray-400 mt-1">All your documents, images, charts, and data organized by project</p>
         </div>
+        <div className="flex items-center gap-3">
+          <Button variant="outline" className="border-white/20">
+            <Upload className="w-4 h-4 mr-2" />
+            Upload
+          </Button>
+          <Button className="bg-gradient-to-r from-cyan-500 to-fuchsia-500">
+            <Plus className="w-4 h-4 mr-2" />
+            New Project
+          </Button>
+        </div>
+      </div>
 
-        <div className="flex flex-1 gap-8 overflow-hidden">
-          {/* Sidebar */}
-          <div className="w-64 flex flex-col gap-6">
-            <div className="space-y-1">
-              {folders.map((folder) => (
-                <button
-                  key={folder.id}
-                  onClick={() => setActiveFolder(folder.name)}
-                  className={`
-                    w-full flex items-center gap-3 px-4 py-2 rounded-lg text-sm font-medium transition-colors
-                    ${activeFolder === folder.name 
-                      ? "bg-white/10 text-white" 
-                      : "text-muted-foreground hover:text-white hover:bg-white/5"}
-                  `}
-                >
-                  <folder.icon className="w-4 h-4" />
-                  {folder.name}
-                </button>
-              ))}
-            </div>
+      {/* Search */}
+      <div className="relative mb-8">
+        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+        <Input
+          placeholder="Search across all projects and files..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="pl-12 py-6 text-lg bg-white/5 border-white/10"
+        />
+      </div>
 
-            <div className="pt-6 border-t border-white/10">
-              <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-4 px-4">Tags</h3>
-              <div className="space-y-1">
-                {["Blueprint", "Strategy", "Legal", "Research", "Contract"].map((tag) => (
-                  <button key={tag} className="w-full flex items-center gap-3 px-4 py-2 rounded-lg text-sm text-muted-foreground hover:text-white hover:bg-white/5 transition-colors">
-                    <div className={`w-2 h-2 rounded-full ${
-                      tag === "Blueprint" ? "bg-cyan-400" :
-                      tag === "Strategy" ? "bg-purple-400" :
-                      tag === "Legal" ? "bg-red-400" :
-                      "bg-gray-400"
-                    }`} />
-                    {tag}
-                  </button>
-                ))}
+      {selectedProject ? (
+        // Project Detail View
+        <div>
+          {/* Breadcrumb */}
+          <button 
+            onClick={() => setSelectedProject(null)}
+            className="flex items-center gap-2 text-gray-400 hover:text-white mb-6 transition-colors"
+          >
+            <ChevronRight className="w-4 h-4 rotate-180" />
+            Back to Projects
+          </button>
+
+          {/* Project Header */}
+          <div className={`bg-gradient-to-br ${selectedProject.color} border ${selectedProject.borderColor} rounded-2xl p-6 mb-8`}>
+            <div className="flex items-center gap-4">
+              <span className="text-5xl">{selectedProject.icon}</span>
+              <div>
+                <h2 className="text-2xl font-bold text-white">{selectedProject.name}</h2>
+                {selectedProject.subtitle && (
+                  <p className="text-gray-400">{selectedProject.subtitle}</p>
+                )}
+                <div className="flex items-center gap-4 mt-2 text-sm text-gray-400">
+                  <span>{selectedProject.documents} documents</span>
+                  <span>•</span>
+                  <span>{selectedProject.images} images</span>
+                  <span>•</span>
+                  <span>{selectedProject.charts} charts</span>
+                </div>
               </div>
             </div>
           </div>
 
-          {/* File Grid */}
-          <div className="flex-1 bg-white/5 rounded-xl border border-white/10 overflow-hidden flex flex-col">
-            <div className="p-4 border-b border-white/10 flex items-center gap-4 text-sm text-muted-foreground">
-              <span className="flex items-center gap-2 hover:text-white cursor-pointer">Library <ChevronRight className="w-4 h-4" /></span>
-              <span className="text-white font-medium">{activeFolder}</span>
-            </div>
+          {/* Content Tabs */}
+          <Tabs defaultValue="documents" className="space-y-6">
+            <TabsList className="bg-white/5 border border-white/10">
+              <TabsTrigger value="documents" className="data-[state=active]:bg-fuchsia-500/20">
+                <FileText className="w-4 h-4 mr-2" />
+                Documents ({sampleFiles.documents.length})
+              </TabsTrigger>
+              <TabsTrigger value="images" className="data-[state=active]:bg-fuchsia-500/20">
+                <Image className="w-4 h-4 mr-2" />
+                AI Images ({sampleFiles.images.length})
+              </TabsTrigger>
+              <TabsTrigger value="charts" className="data-[state=active]:bg-fuchsia-500/20">
+                <BarChart3 className="w-4 h-4 mr-2" />
+                Charts ({sampleFiles.charts.length})
+              </TabsTrigger>
+              <TabsTrigger value="presentations" className="data-[state=active]:bg-fuchsia-500/20">
+                <Presentation className="w-4 h-4 mr-2" />
+                Presentations ({sampleFiles.presentations.length})
+              </TabsTrigger>
+            </TabsList>
 
-            <div className="flex-1 overflow-y-auto p-4">
-              <table className="w-full text-left border-collapse">
-                <thead>
-                  <tr className="text-xs text-muted-foreground border-b border-white/10">
-                    <th className="font-medium py-3 pl-4">Name</th>
-                    <th className="font-medium py-3">Tag</th>
-                    <th className="font-medium py-3">Size</th>
-                    <th className="font-medium py-3">Modified</th>
-                    <th className="font-medium py-3 pr-4"></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {files.map((file) => (
-                    <tr key={file.id} className="group hover:bg-white/5 transition-colors border-b border-white/5 last:border-0">
-                      <td className="py-3 pl-4">
-                        <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 rounded bg-white/10 flex items-center justify-center">
-                            <FileText className="w-4 h-4 text-primary" />
-                          </div>
-                          <span className="font-medium text-sm group-hover:text-primary transition-colors">{file.name}</span>
-                        </div>
-                      </td>
-                      <td className="py-3">
-                        <span className={`
-                          text-[10px] px-2 py-1 rounded border
-                          ${file.tag === "Blueprint" ? "bg-cyan-400/10 text-cyan-400 border-cyan-400/20" :
-                            file.tag === "Strategy" ? "bg-purple-400/10 text-purple-400 border-purple-400/20" :
-                            file.tag === "Legal" ? "bg-red-400/10 text-red-400 border-red-400/20" :
-                            "bg-gray-400/10 text-gray-400 border-gray-400/20"}
-                        `}>
-                          {file.tag}
-                        </span>
-                      </td>
-                      <td className="py-3 text-sm text-muted-foreground">{file.size}</td>
-                      <td className="py-3 text-sm text-muted-foreground">{file.date}</td>
-                      <td className="py-3 pr-4 text-right">
-                        <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                          <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-white">
-                            <Download className="w-4 h-4" />
-                          </Button>
-                          <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-white">
-                            <Share2 className="w-4 h-4" />
-                          </Button>
-                          <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-white">
-                            <MoreVertical className="w-4 h-4" />
-                          </Button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+            <TabsContent value="documents" className="space-y-4">
+              {sampleFiles.documents.map((doc, index) => (
+                <div key={index} className="flex items-center gap-4 bg-white/5 border border-white/10 rounded-xl p-4 hover:border-fuchsia-500/50 transition-all cursor-pointer">
+                  <div className="p-3 bg-blue-500/20 rounded-lg">
+                    <FileText className="w-6 h-6 text-blue-400" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="font-medium text-white">{doc.name}</h3>
+                    <p className="text-sm text-gray-400">{doc.size} • {doc.date}</p>
+                  </div>
+                  <Badge 
+                    variant="outline" 
+                    className={
+                      doc.status === 'signed' ? 'bg-green-500/20 text-green-400 border-green-500/30' :
+                      doc.status === 'draft' ? 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30' :
+                      'bg-blue-500/20 text-blue-400 border-blue-500/30'
+                    }
+                  >
+                    {doc.status}
+                  </Badge>
+                  <Button variant="ghost" size="icon">
+                    <Download className="w-4 h-4" />
+                  </Button>
+                </div>
+              ))}
+            </TabsContent>
+
+            <TabsContent value="images" className="grid grid-cols-4 gap-4">
+              {sampleFiles.images.map((img, index) => (
+                <div key={index} className="bg-white/5 border border-white/10 rounded-xl overflow-hidden hover:border-fuchsia-500/50 transition-all cursor-pointer">
+                  <div className="aspect-video bg-gradient-to-br from-fuchsia-500/20 to-cyan-500/20 flex items-center justify-center">
+                    <Image className="w-12 h-12 text-white/30" />
+                  </div>
+                  <div className="p-3">
+                    <h3 className="font-medium text-white text-sm truncate">{img.name}</h3>
+                    <p className="text-xs text-gray-400">{img.source} • {img.date}</p>
+                  </div>
+                </div>
+              ))}
+            </TabsContent>
+
+            <TabsContent value="charts" className="grid grid-cols-3 gap-4">
+              {sampleFiles.charts.map((chart, index) => (
+                <div key={index} className="bg-white/5 border border-white/10 rounded-xl p-4 hover:border-fuchsia-500/50 transition-all cursor-pointer">
+                  <div className="aspect-video bg-gradient-to-br from-cyan-500/10 to-fuchsia-500/10 rounded-lg flex items-center justify-center mb-3">
+                    <BarChart3 className="w-12 h-12 text-cyan-400/50" />
+                  </div>
+                  <h3 className="font-medium text-white">{chart.name}</h3>
+                  <p className="text-sm text-gray-400">{chart.type} • {chart.date}</p>
+                </div>
+              ))}
+            </TabsContent>
+
+            <TabsContent value="presentations" className="grid grid-cols-2 gap-4">
+              {sampleFiles.presentations.map((pres, index) => (
+                <div key={index} className="bg-white/5 border border-white/10 rounded-xl p-6 hover:border-fuchsia-500/50 transition-all cursor-pointer">
+                  <div className="flex items-center gap-4">
+                    <div className="p-4 bg-fuchsia-500/20 rounded-xl">
+                      <Presentation className="w-8 h-8 text-fuchsia-400" />
+                    </div>
+                    <div>
+                      <h3 className="font-medium text-white text-lg">{pres.name}</h3>
+                      <p className="text-sm text-gray-400">{pres.slides} slides • {pres.date}</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </TabsContent>
+          </Tabs>
+        </div>
+      ) : (
+        // Projects Overview
+        <div className="space-y-8">
+          {/* Project Folders */}
+          <div>
+            <h2 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
+              <Briefcase className="w-5 h-5 text-fuchsia-400" />
+              Projects
+            </h2>
+            <div className="grid grid-cols-3 gap-4">
+              {projects.map(project => (
+                <div
+                  key={project.id}
+                  onClick={() => setSelectedProject(project)}
+                  className={`bg-gradient-to-br ${project.color} border ${project.borderColor} rounded-xl p-6 cursor-pointer hover:scale-[1.02] transition-all`}
+                >
+                  <div className="flex items-start justify-between mb-4">
+                    <span className="text-4xl">{project.icon}</span>
+                    <Badge variant="outline" className="bg-white/10 text-white border-white/20">
+                      {project.status}
+                    </Badge>
+                  </div>
+                  <h3 className="text-lg font-semibold text-white">{project.name}</h3>
+                  {project.subtitle && (
+                    <p className="text-sm text-gray-400">{project.subtitle}</p>
+                  )}
+                  <div className="mt-4 flex items-center gap-4 text-sm text-gray-400">
+                    <span className="flex items-center gap-1">
+                      <FileText className="w-4 h-4" />
+                      {project.documents}
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <Image className="w-4 h-4" />
+                      {project.images}
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <BarChart3 className="w-4 h-4" />
+                      {project.charts}
+                    </span>
+                  </div>
+                  <p className="text-xs text-gray-500 mt-3">
+                    Updated {project.lastUpdated}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Personal Section */}
+          <div>
+            <h2 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
+              <Home className="w-5 h-5 text-cyan-400" />
+              Personal
+            </h2>
+            <div className="grid grid-cols-4 gap-4">
+              {personalItems.map(item => (
+                <div
+                  key={item.id}
+                  className="bg-white/5 border border-white/10 rounded-xl p-4 cursor-pointer hover:border-cyan-500/50 transition-all"
+                >
+                  <div className="flex items-center gap-3 mb-3">
+                    <span className="text-2xl">{item.icon}</span>
+                    <div>
+                      <h3 className="font-medium text-white">{item.name}</h3>
+                      <p className="text-xs text-gray-400">{item.items} items</p>
+                    </div>
+                  </div>
+                  <Progress value={Math.random() * 100} className="h-1" />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Recent Files */}
+          <div>
+            <h2 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
+              <Clock className="w-5 h-5 text-amber-400" />
+              Recent Files
+            </h2>
+            <div className="bg-white/5 border border-white/10 rounded-xl divide-y divide-white/10">
+              {[...sampleFiles.documents.slice(0, 3), ...sampleFiles.images.slice(0, 2)].map((file, index) => (
+                <div key={index} className="flex items-center gap-4 p-4 hover:bg-white/5 cursor-pointer">
+                  <div className={`p-2 rounded-lg ${'size' in file ? 'bg-blue-500/20' : 'bg-fuchsia-500/20'}`}>
+                    {'size' in file ? (
+                      <FileText className="w-5 h-5 text-blue-400" />
+                    ) : (
+                      <Image className="w-5 h-5 text-fuchsia-400" />
+                    )}
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="font-medium text-white">{file.name}</h3>
+                    <p className="text-sm text-gray-400">{'size' in file ? file.size : 'AI Generated'} • {file.date}</p>
+                  </div>
+                  <ChevronRight className="w-5 h-5 text-gray-400" />
+                </div>
+              ))}
             </div>
           </div>
         </div>
-      </div>
-    </DesktopLayout>
+      )}
+    </div>
   );
 }

@@ -15,6 +15,7 @@ import Vault from "./pages/Vault";
 import DailyBrief from "./pages/DailyBrief";
 import AIExperts from "./pages/AIExperts";
 import EveningReview from "./pages/EveningReview";
+import AITeam from "./pages/AITeam";
 
 // Wrapper component for pages that need the sidebar layout
 function WithLayout({ children }: { children: React.ReactNode }) {
@@ -54,6 +55,9 @@ function Router() {
       </Route>
       <Route path="/evening-review">
         <WithLayout><EveningReview /></WithLayout>
+      </Route>
+      <Route path="/ai-team">
+        <WithLayout><AITeam /></WithLayout>
       </Route>
       
       {/* Fallback */}
