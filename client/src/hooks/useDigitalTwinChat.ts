@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { trpc } from '@/lib/trpc';
 
 export interface ChatMessage {
@@ -6,12 +6,14 @@ export interface ChatMessage {
   from: 'user' | 'twin';
   message: string;
   time: string;
-  isLoading?: boolean;
+  isStreaming?: boolean;
 }
 
 export function useDigitalTwinChat() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isTyping, setIsTyping] = useState(false);
+  const [streamingText, setStreamingText] = useState('');
+  const streamingRef = useRef<boolean>(false);
   
   const utils = trpc.useUtils();
   
@@ -40,6 +42,51 @@ export function useDigitalTwinChat() {
     }
   }, [history]);
 
+  // Simulate streaming effect for a message
+  const streamMessage = useCallback((fullMessage: string, messageId: number) => {
+    streamingRef.current = true;
+    setStreamingText('');
+    
+    const words = fullMessage.split(' ');
+    let currentIndex = 0;
+    
+    const streamInterval = setInterval(() => {
+      if (!streamingRef.current || currentIndex >= words.length) {
+        clearInterval(streamInterval);
+        streamingRef.current = false;
+        
+        // Replace streaming message with final message
+        setMessages(prev => prev.map(msg => 
+          msg.id === messageId 
+            ? { ...msg, message: fullMessage, isStreaming: false }
+            : msg
+        ));
+        setStreamingText('');
+        setIsTyping(false);
+        return;
+      }
+      
+      // Add next word(s) - vary speed for natural feel
+      const wordsToAdd = Math.random() > 0.7 ? 2 : 1;
+      const newWords = words.slice(currentIndex, currentIndex + wordsToAdd).join(' ');
+      currentIndex += wordsToAdd;
+      
+      setStreamingText(prev => prev + (prev ? ' ' : '') + newWords);
+      
+      // Update the message in state
+      setMessages(prev => prev.map(msg => 
+        msg.id === messageId 
+          ? { ...msg, message: words.slice(0, currentIndex).join(' ') }
+          : msg
+      ));
+    }, 30 + Math.random() * 40); // Variable speed: 30-70ms per word chunk
+    
+    return () => {
+      clearInterval(streamInterval);
+      streamingRef.current = false;
+    };
+  }, []);
+
   // Send message mutation
   const sendMutation = trpc.chat.send.useMutation({
     onMutate: async ({ message }) => {
@@ -54,18 +101,22 @@ export function useDigitalTwinChat() {
       setIsTyping(true);
     },
     onSuccess: (data) => {
-      // Add assistant response
+      // Add assistant response with streaming
+      const twinMessageId = messages.length + 2;
       const twinMessage: ChatMessage = {
-        id: messages.length + 2,
+        id: twinMessageId,
         from: 'twin',
-        message: data.message,
+        message: '', // Start empty for streaming
         time: new Date(data.timestamp).toLocaleTimeString([], { 
           hour: '2-digit', 
           minute: '2-digit' 
         }),
+        isStreaming: true,
       };
       setMessages(prev => [...prev, twinMessage]);
-      setIsTyping(false);
+      
+      // Start streaming the response
+      streamMessage(data.message, twinMessageId);
     },
     onError: (error) => {
       console.error('Chat error:', error);
@@ -98,6 +149,11 @@ export function useDigitalTwinChat() {
     clearMutation.mutate();
   }, [clearMutation]);
 
+  // Stop streaming
+  const stopStreaming = useCallback(() => {
+    streamingRef.current = false;
+  }, []);
+
   // Add a welcome message if no history
   useEffect(() => {
     if (history && history.length === 0 && messages.length === 0) {
@@ -114,9 +170,12 @@ export function useDigitalTwinChat() {
   return {
     messages,
     isTyping,
+    streamingText,
     sendMessage,
     clearHistory,
+    stopStreaming,
     isLoading: sendMutation.isPending,
     isClearingHistory: clearMutation.isPending,
+    isStreaming: streamingRef.current,
   };
 }

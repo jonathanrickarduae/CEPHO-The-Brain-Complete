@@ -21,6 +21,7 @@ import Settings from "./pages/Settings";
 import Commercialization from "./pages/Commercialization";
 import GoLive from "./pages/GoLive";
 import About from "./pages/About";
+import ReviewQueue from "./pages/ReviewQueue";
 import { GovernanceProvider, GovernanceModeChangeModal } from "./hooks/useGovernance";
 
 // Wrapper component for pages that need the sidebar layout
@@ -81,6 +82,9 @@ function Router() {
       </Route>
       <Route path="/about">
         <WithLayout><About /></WithLayout>
+      </Route>
+      <Route path="/review-queue">
+        <WithLayout><ReviewQueue /></WithLayout>
       </Route>
       
       {/* Fallback */}

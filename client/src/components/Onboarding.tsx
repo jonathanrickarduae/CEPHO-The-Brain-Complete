@@ -243,8 +243,8 @@ export function OnboardingModal({ isOpen, onComplete, onSkip }: OnboardingModalP
               {/* Text */}
               <div className="text-center mb-10">
                 <h2 className={cn(
-                  'font-display font-bold text-foreground mb-4 tracking-wider',
-                  step.useBrain ? 'text-4xl md:text-5xl neon-text' : 'text-3xl md:text-4xl'
+                  'font-display font-bold mb-4 tracking-wider',
+                  step.useBrain ? 'text-4xl md:text-5xl text-pink-500 drop-shadow-[0_0_25px_rgba(236,72,153,0.5)]' : 'text-3xl md:text-4xl text-foreground'
                 )}>
                   {step.title}
                 </h2>

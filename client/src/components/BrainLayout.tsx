@@ -23,7 +23,7 @@ import { getLoginUrl } from "@/const";
 import { useIsMobile } from "@/hooks/useMobile";
 import { 
   LayoutDashboard, LogOut, PanelLeft, 
-  BookOpen, BarChart3, Lock, Fingerprint, Activity, Brain, Sun, Users, Moon, Keyboard, Settings, TrendingUp, Info
+  BookOpen, BarChart3, Lock, Fingerprint, Activity, Brain, Sun, Users, Moon, Keyboard, Settings, TrendingUp, Info, Clock
 } from "lucide-react";
 import { CSSProperties, useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
@@ -45,6 +45,7 @@ const menuItems = [
   { icon: LayoutDashboard, label: "Command Center", path: "/dashboard" },
   { icon: Sun, label: "Daily Brief", path: "/daily-brief" },
   { icon: Users, label: "AI Experts", path: "/ai-experts" },
+  { icon: Clock, label: "Review Queue", path: "/review-queue" },
   { icon: BookOpen, label: "Library", path: "/library" },
   { icon: BarChart3, label: "Statistics", path: "/statistics" },
   { icon: Fingerprint, label: "Digital Twin", path: "/digital-twin" },

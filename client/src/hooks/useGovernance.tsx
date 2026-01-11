@@ -80,13 +80,47 @@ const GOVERNED_FEATURES: FeatureAvailability = {
 // Create context
 const GovernanceContext = createContext<GovernanceContextType | undefined>(undefined);
 
+// Audit log entry type
+export interface GovernanceAuditEntry {
+  id: string;
+  timestamp: Date;
+  action: 'mode_change' | 'terms_accepted' | 'feature_accessed' | 'integration_connected';
+  fromMode?: GovernanceMode;
+  toMode?: GovernanceMode;
+  featureName?: string;
+  integrationId?: string;
+  userId?: string;
+  userAgent?: string;
+  ipAddress?: string;
+}
+
 // Provider component
 export function GovernanceProvider({ children }: { children: ReactNode }) {
   const [mode, setModeState] = useState<GovernanceMode>('omni');
   const [acceptedTerms, setAcceptedTerms] = useState<Set<string>>(new Set());
   const [pendingModeChange, setPendingModeChange] = useState<GovernanceMode | null>(null);
+  const [auditLog, setAuditLog] = useState<GovernanceAuditEntry[]>([]);
 
-  // Load saved mode from localStorage
+  // Add entry to audit log
+  const addAuditEntry = (entry: Omit<GovernanceAuditEntry, 'id' | 'timestamp' | 'userAgent'>) => {
+    const newEntry: GovernanceAuditEntry = {
+      ...entry,
+      id: `audit_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      timestamp: new Date(),
+      userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : undefined,
+    };
+    
+    setAuditLog(prev => {
+      const updated = [newEntry, ...prev].slice(0, 100); // Keep last 100 entries
+      localStorage.setItem('governance_audit_log', JSON.stringify(updated));
+      return updated;
+    });
+    
+    // In production, this would also send to server for compliance reporting
+    console.log('[Governance Audit]', newEntry);
+  };
+
+  // Load saved mode and audit log from localStorage
   useEffect(() => {
     const savedMode = localStorage.getItem('governance_mode') as GovernanceMode;
     if (savedMode === 'omni' || savedMode === 'governed') {
@@ -96,6 +130,19 @@ export function GovernanceProvider({ children }: { children: ReactNode }) {
     const savedTerms = localStorage.getItem('accepted_terms');
     if (savedTerms) {
       setAcceptedTerms(new Set(JSON.parse(savedTerms)));
+    }
+    
+    const savedAuditLog = localStorage.getItem('governance_audit_log');
+    if (savedAuditLog) {
+      try {
+        const parsed = JSON.parse(savedAuditLog);
+        setAuditLog(parsed.map((e: GovernanceAuditEntry) => ({
+          ...e,
+          timestamp: new Date(e.timestamp)
+        })));
+      } catch (e) {
+        console.error('Failed to parse audit log', e);
+      }
     }
   }, []);
 
@@ -120,18 +167,32 @@ export function GovernanceProvider({ children }: { children: ReactNode }) {
     return mode === 'governed' && !acceptedTerms.has(integrationId);
   };
 
-  // Accept terms for an integration
+  // Accept terms for an integration with audit logging
   const acceptTerms = (integrationId: string) => {
     const newTerms = new Set(acceptedTerms);
     newTerms.add(integrationId);
     setAcceptedTerms(newTerms);
     localStorage.setItem('accepted_terms', JSON.stringify(Array.from(newTerms)));
+    
+    // Log terms acceptance for compliance
+    addAuditEntry({
+      action: 'terms_accepted',
+      integrationId,
+    });
   };
 
-  // Set mode with persistence
+  // Set mode with persistence and audit logging
   const setMode = (newMode: GovernanceMode) => {
+    const previousMode = mode;
     setModeState(newMode);
     localStorage.setItem('governance_mode', newMode);
+    
+    // Log the mode change for compliance
+    addAuditEntry({
+      action: 'mode_change',
+      fromMode: previousMode,
+      toMode: newMode,
+    });
   };
 
   // Request mode change (requires confirmation)

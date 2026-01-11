@@ -66,7 +66,7 @@ export default function About() {
         <div className="flex justify-center mb-6">
           <NeonBrain size="xl" className="w-48 h-48 md:w-64 md:h-64" state="thinking" />
         </div>
-        <h1 className="font-display font-bold text-4xl md:text-5xl tracking-wider text-transparent bg-clip-text bg-gradient-to-b from-white to-white/60 mb-4">
+        <h1 className="font-display font-bold text-4xl md:text-5xl tracking-wider text-pink-500 drop-shadow-[0_0_25px_rgba(236,72,153,0.5)] mb-4">
           THE BRAIN
         </h1>
         <p className="text-xl text-muted-foreground max-w-2xl mx-auto">

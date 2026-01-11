@@ -50,33 +50,38 @@ export default function Landing() {
   const [step, setStep] = useState<"splash" | "mood">("splash");
   const [mood, setMood] = useState([5]);
   const { theme, setTheme } = useTheme();
-  const [showMood, setShowMood] = useState(false);
+  const [needsMoodCheck, setNeedsMoodCheck] = useState(false);
 
   // Check on mount if we need mood check
   useEffect(() => {
-    setShowMood(shouldShowMoodCheck());
+    setNeedsMoodCheck(shouldShowMoodCheck());
   }, []);
 
   // Auto-advance from splash after brief delay
+  // ALWAYS show mood check first for new users - this is the first interaction
+  // The "Getting you to a 10" USP starts from the very first moment
   useEffect(() => {
     const timer = setTimeout(() => {
-      if (showMood) {
+      if (needsMoodCheck) {
+        // Always show mood check first - it's the core USP
         setStep("mood");
       } else {
-        // Skip straight to dashboard if mood already captured
+        // Skip straight to dashboard if mood already captured today
         setLocation("/dashboard");
       }
     }, 1500); // 1.5 second splash showing The Brain
 
     return () => clearTimeout(timer);
-  }, [showMood, setLocation]);
+  }, [needsMoodCheck, setLocation]);
 
   const handleMoodSubmit = () => {
     saveMoodCheck(mood[0]);
+    // After mood check, go to dashboard (onboarding will show there if needed)
     setLocation("/dashboard");
   };
 
   const handleSkip = () => {
+    // Even if skipped, mark that we asked
     setLocation("/dashboard");
   };
 
@@ -131,7 +136,7 @@ export default function Landing() {
           >
             <NeonBrain size="xl" className="w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 mb-8" state="thinking" />
             
-            <h1 className="font-display font-bold text-5xl md:text-7xl tracking-wider text-transparent bg-clip-text bg-gradient-to-b from-white to-white/50 neon-text">
+            <h1 className="font-display font-bold text-5xl md:text-7xl tracking-wider text-pink-500 drop-shadow-[0_0_30px_rgba(236,72,153,0.6)]">
               THE BRAIN
             </h1>
             

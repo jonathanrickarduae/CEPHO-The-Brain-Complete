@@ -581,3 +581,33 @@
 - [x] Greyed out cards with lock icon for blocked features
 - [x] Tooltip explaining why feature is restricted
 - [x] Link to request access or switch modes (via mode indicator)
+
+
+## Branding & Feature Updates
+
+### Pink Branding
+- [x] Update "THE BRAIN" text to pink color throughout app
+- [x] Ensure consistent branding on Landing, Onboarding, About pages
+
+### Digital Twin Streaming
+- [x] Add streaming responses to Digital Twin chat
+- [x] Word-by-word response appearance for natural feel
+
+### Review Queue Page
+- [x] Create Review Queue page for pending approvals
+- [x] Show items from Digital Twin and AI Experts awaiting approval
+- [x] Add approve/reject actions
+- [x] Added to sidebar navigation
+
+### Governance Audit Logging
+- [x] Add audit logging for governance mode changes
+- [x] Track when users switch between Omni and Governed modes
+- [x] Log terms acceptance for compliance
+- [x] Store last 100 entries in localStorage (production would send to server)
+- [ ] Store audit logs in database for compliance reporting
+
+
+### Mood-First Flow
+- [x] Update flow: Splash → Mood Check → Onboarding (for new users) → Dashboard
+- [x] Mood check should be first interaction before any onboarding
+- [x] Reinforces "Getting you to a 10" USP from first moment
