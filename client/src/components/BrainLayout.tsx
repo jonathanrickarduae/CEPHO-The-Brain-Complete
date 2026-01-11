@@ -39,6 +39,7 @@ import { OnboardingModal, useOnboarding } from "./Onboarding";
 import { AccessibilitySettings, SkipLink } from "./AccessibilitySettings";
 import { Accessibility, Command } from "lucide-react";
 import { CommandPalette, useCommandPalette } from "./CommandPalette";
+import { useGovernance, GovernanceModeIndicator } from "@/hooks/useGovernance";
 
 const menuItems = [
   { icon: LayoutDashboard, label: "Command Center", path: "/dashboard" },
@@ -269,6 +270,9 @@ function BrainLayoutContent({
                   <Accessibility className="w-3.5 h-3.5" />
                   <span>Accessibility settings</span>
                 </button>
+                <div className="pt-2 border-t border-sidebar-border mt-2">
+                  <GovernanceModeIndicator className="w-full justify-center" />
+                </div>
               </div>
             )}
             

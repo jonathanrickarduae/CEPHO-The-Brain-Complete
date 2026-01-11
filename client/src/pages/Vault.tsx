@@ -28,21 +28,44 @@ import {
   XCircle,
   Activity
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "sonner";
+import { VaultSecurityGate, useVaultSecurity, SecurityBadges } from "@/components/VaultSecurityGate";
+import { useGovernance, GovernanceModeIndicator } from "@/hooks/useGovernance";
 
 export default function Vault() {
   const [activeTab, setActiveTab] = useState("integrations");
   const [showPasswords, setShowPasswords] = useState(false);
+  const { mode } = useGovernance();
+  
+  // Vault security - requires 2FA on every access
+  const {
+    isVaultUnlocked,
+    showSecurityGate,
+    requestVaultAccess,
+    handleVerified,
+    handleCancel,
+    lockVault,
+  } = useVaultSecurity();
 
-  // Integration health data
+  // Show security gate on initial load if not unlocked
+  useEffect(() => {
+    if (!isVaultUnlocked) {
+      requestVaultAccess();
+    }
+  }, []);
+
+  // Integration health data with governance status
   const integrations = [
-    { id: 1, name: "Outlook 365", status: "healthy", health: 100, lastSync: "2 mins ago", icon: Mail, color: "text-blue-400", category: "Communication" },
-    { id: 2, name: "Microsoft Teams", status: "healthy", health: 100, lastSync: "5 mins ago", icon: MessageSquare, color: "text-purple-400", category: "Communication" },
-    { id: 3, name: "Gamma App", status: "warning", health: 85, lastSync: "1 hour ago", icon: Zap, color: "text-amber-400", category: "Productivity", alert: "Consider switching to Pitch.com for better API integration." },
-    { id: 4, name: "Manus Sound", status: "healthy", health: 100, lastSync: "Just now", icon: Globe, color: "text-green-400", category: "AI Tools" },
-    { id: 5, name: "Salesforce", status: "broken", health: 0, lastSync: "Failed", icon: Globe, color: "text-red-400", category: "CRM", alert: "API Token Expired. Re-authenticate now." },
-    { id: 6, name: "Slack", status: "healthy", health: 98, lastSync: "10 mins ago", icon: MessageSquare, color: "text-pink-400", category: "Communication" },
+    { id: 1, name: "Outlook 365", status: "healthy", health: 100, lastSync: "2 mins ago", icon: Mail, color: "text-blue-400", category: "Communication", governedApproved: true, omniApproved: true, complianceLevel: "high" as const },
+    { id: 2, name: "Microsoft Teams", status: "healthy", health: 100, lastSync: "5 mins ago", icon: MessageSquare, color: "text-purple-400", category: "Communication", governedApproved: true, omniApproved: true, complianceLevel: "high" as const },
+    { id: 3, name: "Gamma App", status: "warning", health: 85, lastSync: "1 hour ago", icon: Zap, color: "text-amber-400", category: "Productivity", alert: "Consider switching to Pitch.com for better API integration.", governedApproved: false, omniApproved: true, complianceLevel: "low" as const },
+    { id: 4, name: "Manus AI", status: "healthy", health: 100, lastSync: "Just now", icon: Globe, color: "text-green-400", category: "AI Tools", governedApproved: false, omniApproved: true, complianceLevel: "medium" as const },
+    { id: 5, name: "Microsoft Copilot", status: "healthy", health: 100, lastSync: "Just now", icon: Globe, color: "text-cyan-400", category: "AI Tools", governedApproved: true, omniApproved: true, complianceLevel: "high" as const },
+    { id: 6, name: "Salesforce", status: "broken", health: 0, lastSync: "Failed", icon: Globe, color: "text-red-400", category: "CRM", alert: "API Token Expired. Re-authenticate now.", governedApproved: true, omniApproved: true, complianceLevel: "high" as const },
+    { id: 7, name: "Slack", status: "healthy", health: 98, lastSync: "10 mins ago", icon: MessageSquare, color: "text-pink-400", category: "Communication", governedApproved: true, omniApproved: true, complianceLevel: "high" as const },
+    { id: 8, name: "OpenAI API", status: "healthy", health: 100, lastSync: "Just now", icon: Globe, color: "text-emerald-400", category: "AI Tools", governedApproved: false, omniApproved: true, complianceLevel: "low" as const },
+    { id: 9, name: "ChatGPT", status: "healthy", health: 100, lastSync: "5 mins ago", icon: Globe, color: "text-teal-400", category: "AI Tools", governedApproved: false, omniApproved: true, complianceLevel: "low" as const },
   ];
 
   // Security threats and monitoring
@@ -75,7 +98,16 @@ export default function Vault() {
   const blockedThreats = securityEvents.filter(e => e.type === "blocked").length;
 
   return (
-    <div className="h-full bg-background text-foreground overflow-auto">
+    <>
+      {/* Security Gate Modal */}
+      <VaultSecurityGate
+        isOpen={showSecurityGate || !isVaultUnlocked}
+        onVerified={handleVerified}
+        onCancel={handleCancel}
+        userEmail="user@example.com"
+      />
+      
+      <div className="h-full bg-background text-foreground overflow-auto">
       {/* Header */}
       <div className="border-b border-border bg-card/80 backdrop-blur-xl sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 md:px-6 py-4">
@@ -402,5 +434,6 @@ export default function Vault() {
         </Tabs>
       </div>
     </div>
+    </>
   );
 }

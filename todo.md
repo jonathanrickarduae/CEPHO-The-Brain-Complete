@@ -492,3 +492,92 @@
 - [ ] Empty states: Add to Training Studio, Agent Builder
 - [ ] Consistency: Standardize card border radius across all pages
 - [ ] Touch targets: Ensure all buttons are at least 44px on mobile
+
+
+## Security Layer Implementation
+
+### Vault Security Gate
+- [ ] PIN authentication for Vault access
+- [ ] Biometric authentication (Face ID / Touch ID) option
+- [ ] Security gate modal before Vault content loads
+- [ ] Remember device option with secure token
+- [ ] Failed attempt lockout protection
+
+### Security Credentials Display
+- [ ] Encryption status badges throughout app
+- [ ] 2FA status indicators
+- [ ] Compliance badges (SOC2, GDPR ready)
+- [ ] Security level indicators on sensitive pages
+- [ ] Trust seals on landing/onboarding
+
+### Digital Twin Training Data Protection
+- [ ] Store training data in Vault with encryption
+- [ ] Access logging for training data
+- [ ] Export controls with authentication
+- [ ] Data retention policies display
+
+### Integration Security Panel
+- [ ] Per-connection security status
+- [ ] OAuth token health monitoring
+- [ ] Permission scope display
+- [ ] Revoke access functionality
+- [ ] Security alerts for compromised connections
+
+## Feature Additions
+
+### Streaming Responses (Digital Twin)
+- [ ] Implement streaming API endpoint
+- [ ] Word-by-word response rendering
+- [ ] Typing indicator animation
+- [ ] Cancel mid-stream option
+
+### Review Queue Page
+- [ ] Central approval dashboard
+- [ ] Items from Digital Twin actions
+- [ ] Items from AI Expert deliverables
+- [ ] Approve/Reject/Request Changes actions
+- [ ] Priority sorting
+
+### Library Project Folders
+- [ ] Project folder structure (Celadon, Boundless, etc.)
+- [ ] Sub-sections (Documents, AI Images, Charts, Data)
+- [ ] Working vs Signed-off document status
+- [ ] Folder-level permissions
+
+
+### Two-Factor Authentication (2FA) for Vault
+- [ ] Email verification code (6-digit) on every Vault access
+- [ ] SMS verification option (future enhancement)
+- [ ] Session timeout with auto-lock after inactivity
+- [ ] Trusted device option (remember for 24 hours)
+- [ ] Verification code expiry (5 minutes)
+- [ ] Rate limiting on verification attempts
+- [ ] Audit log of all Vault access attempts
+
+
+## Omni/Governed Mode Governance System
+
+### Core Governance Features
+- [x] Create governance context/hook to manage Omni vs Governed mode
+- [x] Store governance mode in user settings (localStorage for now)
+- [x] Visual mode indicator in sidebar showing current mode
+- [x] Mode switching with confirmation modal
+
+### Governed Mode Restrictions
+- [x] AI Experts: Grey out/block external LLM-powered experts (FeatureGate)
+- [x] Show "Governed - Not Available" overlay on restricted features
+- [x] Only allow Microsoft Copilot, company-approved AI in Governed mode
+- [ ] Block Digital Twin features that use external AI
+- [ ] Terms & conditions acceptance for each tool
+
+### Vault Integration
+- [x] Show Omni vs Governed badge on each integration
+- [x] Filter integrations by governance approval status
+- [ ] Require T&C acceptance for Governed integrations
+- [ ] Audit log for governance mode changes
+
+### Visual Design
+- [x] Clear "GOVERNED" badge when in restricted mode
+- [x] Greyed out cards with lock icon for blocked features
+- [x] Tooltip explaining why feature is restricted
+- [x] Link to request access or switch modes (via mode indicator)

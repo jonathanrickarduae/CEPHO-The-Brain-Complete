@@ -21,6 +21,7 @@ import Settings from "./pages/Settings";
 import Commercialization from "./pages/Commercialization";
 import GoLive from "./pages/GoLive";
 import About from "./pages/About";
+import { GovernanceProvider, GovernanceModeChangeModal } from "./hooks/useGovernance";
 
 // Wrapper component for pages that need the sidebar layout
 function WithLayout({ children }: { children: React.ReactNode }) {
@@ -93,10 +94,13 @@ function App() {
   return (
     <ErrorBoundary>
       <ThemeProvider defaultTheme="dark" switchable>
-        <TooltipProvider>
-          <Toaster />
-          <Router />
-        </TooltipProvider>
+        <GovernanceProvider>
+          <TooltipProvider>
+            <Toaster />
+            <Router />
+            <GovernanceModeChangeModal />
+          </TooltipProvider>
+        </GovernanceProvider>
       </ThemeProvider>
     </ErrorBoundary>
   );

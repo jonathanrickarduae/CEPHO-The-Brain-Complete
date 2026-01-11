@@ -5,6 +5,7 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import NeonBrain from './NeonBrain';
 
 interface OnboardingStep {
   id: number;
@@ -13,19 +14,21 @@ interface OnboardingStep {
   icon: React.ComponentType<{ className?: string }>;
   color: string;
   highlight?: string; // CSS selector to highlight
+  useBrain?: boolean; // Use NeonBrain instead of icon
 }
 
 const ONBOARDING_STEPS: OnboardingStep[] = [
   {
     id: 1,
-    title: 'Welcome to The Brain',
-    description: 'Your AI-powered command center that learns from you and works alongside you. Let me show you how it works.',
+    title: 'THE BRAIN',
+    description: 'Your AI-powered command center that learns from you and works alongside you. A living ecosystem of intelligence at your fingertips.',
     icon: Brain,
     color: 'text-primary',
+    useBrain: true,
   },
   {
     id: 2,
-    title: 'Start with Daily Brief',
+    title: 'Daily Brief',
     description: 'Every morning, your Digital Twin prepares a personalized briefing with priorities, insights, and action items ready for your review.',
     icon: Sun,
     color: 'text-amber-400',
@@ -33,7 +36,7 @@ const ONBOARDING_STEPS: OnboardingStep[] = [
   },
   {
     id: 3,
-    title: 'Deploy AI Experts',
+    title: 'AI Expert Engine',
     description: 'Need help with a task? Assemble a team of 287 AI experts - from strategists to analysts - who work together on your projects.',
     icon: Users,
     color: 'text-cyan-400',
@@ -41,7 +44,7 @@ const ONBOARDING_STEPS: OnboardingStep[] = [
   },
   {
     id: 4,
-    title: 'Track in Workflow',
+    title: 'Workflow',
     description: 'Monitor all your active projects, see what\'s blocked, and track deliverables. Your AI team updates progress in real-time.',
     icon: FolderKanban,
     color: 'text-green-400',
@@ -49,7 +52,7 @@ const ONBOARDING_STEPS: OnboardingStep[] = [
   },
   {
     id: 5,
-    title: 'Train Your Digital Twin',
+    title: 'Digital Twin',
     description: 'The more you interact, the smarter your Twin becomes. It learns your preferences, communication style, and decision patterns.',
     icon: Fingerprint,
     color: 'text-purple-400',
@@ -61,6 +64,7 @@ const ONBOARDING_STEPS: OnboardingStep[] = [
     description: 'Start by checking your Daily Brief, or ask your Digital Twin anything. The Brain is here to get you to a 10 every day.',
     icon: Sparkles,
     color: 'text-primary',
+    useBrain: true,
   },
 ];
 
@@ -148,105 +152,156 @@ export function OnboardingModal({ isOpen, onComplete, onSkip }: OnboardingModalP
 
   return (
     <>
-      {/* Backdrop */}
-      <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm" />
+      {/* Backdrop with animated gradient */}
+      <div className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md">
+        {/* Background Effects */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-primary/10 rounded-full blur-[150px] animate-pulse"></div>
+          <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-purple-500/10 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '1s' }}></div>
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-cyan-500/5 rounded-full blur-[100px] animate-pulse" style={{ animationDelay: '0.5s' }}></div>
+        </div>
+      </div>
 
       {/* Modal */}
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-        <div className="relative w-full max-w-lg bg-card border border-white/10 rounded-2xl shadow-2xl overflow-hidden">
-          {/* Skip button */}
+        <div className="relative w-full max-w-2xl">
+          {/* Skip button - outside modal */}
           <button
             onClick={onSkip}
-            className="absolute top-4 right-4 p-2 text-muted-foreground hover:text-foreground transition-colors rounded-lg hover:bg-secondary/50 z-10"
+            className="absolute -top-12 right-0 px-4 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors rounded-lg hover:bg-white/5 z-10"
             aria-label="Skip onboarding"
           >
-            <X className="w-5 h-5" />
+            Skip intro
           </button>
 
-          {/* Progress dots */}
-          <div className="absolute top-4 left-1/2 -translate-x-1/2 flex gap-1.5">
-            {ONBOARDING_STEPS.map((_, index) => (
-              <div
-                key={index}
-                className={cn(
-                  'w-2 h-2 rounded-full transition-all duration-300',
-                  index === currentStep
-                    ? 'bg-primary w-6'
-                    : index < currentStep
-                    ? 'bg-primary/60'
-                    : 'bg-white/20'
-                )}
-              />
-            ))}
-          </div>
+          {/* Main Card */}
+          <div className="relative bg-gradient-to-b from-card/95 to-card/80 border border-white/10 rounded-3xl shadow-2xl shadow-primary/10 overflow-hidden backdrop-blur-xl">
+            {/* Top glow line */}
+            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
+            
+            {/* Progress dots - top */}
+            <div className="absolute top-6 left-1/2 -translate-x-1/2 flex gap-2">
+              {ONBOARDING_STEPS.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => {
+                    setIsAnimating(true);
+                    setTimeout(() => {
+                      setCurrentStep(index);
+                      setIsAnimating(false);
+                    }, 150);
+                  }}
+                  className={cn(
+                    'h-2 rounded-full transition-all duration-500',
+                    index === currentStep
+                      ? 'bg-primary w-8 shadow-[0_0_10px_rgba(255,16,240,0.5)]'
+                      : index < currentStep
+                      ? 'bg-primary/60 w-2 hover:bg-primary/80'
+                      : 'bg-white/20 w-2 hover:bg-white/30'
+                  )}
+                />
+              ))}
+            </div>
 
-          {/* Content */}
-          <div className={cn(
-            'p-8 pt-14 transition-opacity duration-150',
-            isAnimating ? 'opacity-0' : 'opacity-100'
-          )}>
-            {/* Icon */}
-            <div className="flex justify-center mb-6">
-              <div className={cn(
-                'w-20 h-20 rounded-2xl flex items-center justify-center',
-                'bg-gradient-to-br from-white/10 to-white/5 border border-white/10',
-                'animate-in zoom-in-50 duration-500'
-              )}>
-                <Icon className={cn('w-10 h-10', step.color)} />
+            {/* Content */}
+            <div className={cn(
+              'px-8 md:px-12 pt-16 pb-10 transition-all duration-200',
+              isAnimating ? 'opacity-0 scale-95' : 'opacity-100 scale-100'
+            )}>
+              {/* Icon / Brain */}
+              <div className="flex justify-center mb-8">
+                {step.useBrain ? (
+                  <div className="relative">
+                    <NeonBrain 
+                      size="xl" 
+                      className="w-40 h-40 md:w-48 md:h-48" 
+                      state="thinking" 
+                    />
+                    {/* Glow ring */}
+                    <div className="absolute inset-0 rounded-full bg-primary/20 blur-3xl -z-10 animate-pulse" />
+                  </div>
+                ) : (
+                  <div className={cn(
+                    'relative w-28 h-28 md:w-32 md:h-32 rounded-3xl flex items-center justify-center',
+                    'bg-gradient-to-br from-white/10 to-white/5 border border-white/10',
+                    'shadow-2xl'
+                  )}>
+                    <Icon className={cn('w-14 h-14 md:w-16 md:h-16', step.color)} />
+                    {/* Glow effect */}
+                    <div className={cn(
+                      'absolute inset-0 rounded-3xl blur-2xl -z-10 opacity-30',
+                      step.color === 'text-amber-400' && 'bg-amber-400',
+                      step.color === 'text-cyan-400' && 'bg-cyan-400',
+                      step.color === 'text-green-400' && 'bg-green-400',
+                      step.color === 'text-purple-400' && 'bg-purple-400',
+                      step.color === 'text-primary' && 'bg-primary',
+                    )} />
+                  </div>
+                )}
+              </div>
+
+              {/* Text */}
+              <div className="text-center mb-10">
+                <h2 className={cn(
+                  'font-display font-bold text-foreground mb-4 tracking-wider',
+                  step.useBrain ? 'text-4xl md:text-5xl neon-text' : 'text-3xl md:text-4xl'
+                )}>
+                  {step.title}
+                </h2>
+                <p className="text-lg text-muted-foreground leading-relaxed max-w-md mx-auto">
+                  {step.description}
+                </p>
+              </div>
+
+              {/* Step indicator */}
+              <p className="text-center text-sm text-muted-foreground/60 mb-8 font-mono tracking-wider">
+                {currentStep + 1} / {ONBOARDING_STEPS.length}
+              </p>
+
+              {/* Navigation */}
+              <div className="flex items-center justify-center gap-4">
+                <Button
+                  variant="ghost"
+                  size="lg"
+                  onClick={goToPrev}
+                  disabled={isFirstStep}
+                  className={cn(
+                    'flex items-center gap-2 px-6 rounded-xl',
+                    isFirstStep && 'invisible'
+                  )}
+                >
+                  <ChevronLeft className="w-5 h-5" />
+                  Back
+                </Button>
+
+                <Button
+                  size="lg"
+                  onClick={goToNext}
+                  className={cn(
+                    'flex items-center gap-2 px-8 py-6 rounded-xl text-lg font-bold tracking-wide',
+                    'bg-primary hover:bg-primary/90 text-primary-foreground',
+                    'shadow-[0_0_30px_rgba(255,16,240,0.4)] hover:shadow-[0_0_50px_rgba(255,16,240,0.6)]',
+                    'transition-all duration-300'
+                  )}
+                >
+                  {isLastStep ? (
+                    <>
+                      Enter The Brain
+                      <Sparkles className="w-5 h-5" />
+                    </>
+                  ) : (
+                    <>
+                      Next
+                      <ChevronRight className="w-5 h-5" />
+                    </>
+                  )}
+                </Button>
               </div>
             </div>
 
-            {/* Text */}
-            <div className="text-center mb-8">
-              <h2 className="text-2xl font-display font-bold text-foreground mb-3">
-                {step.title}
-              </h2>
-              <p className="text-muted-foreground leading-relaxed">
-                {step.description}
-              </p>
-            </div>
-
-            {/* Step indicator */}
-            <p className="text-center text-xs text-muted-foreground mb-6">
-              Step {currentStep + 1} of {ONBOARDING_STEPS.length}
-            </p>
-
-            {/* Navigation */}
-            <div className="flex items-center justify-between gap-4">
-              <Button
-                variant="ghost"
-                onClick={goToPrev}
-                disabled={isFirstStep}
-                className={cn(
-                  'flex items-center gap-2',
-                  isFirstStep && 'invisible'
-                )}
-              >
-                <ChevronLeft className="w-4 h-4" />
-                Back
-              </Button>
-
-              <Button
-                onClick={goToNext}
-                className="flex items-center gap-2 bg-primary hover:bg-primary/90 min-w-[120px]"
-              >
-                {isLastStep ? (
-                  <>
-                    Get Started
-                    <Check className="w-4 h-4" />
-                  </>
-                ) : (
-                  <>
-                    Next
-                    <ChevronRight className="w-4 h-4" />
-                  </>
-                )}
-              </Button>
-            </div>
+            {/* Bottom gradient line */}
+            <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-cyan-400 to-purple-400" />
           </div>
-
-          {/* Decorative gradient */}
-          <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-cyan-400 to-purple-400" />
         </div>
       </div>
     </>

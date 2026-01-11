@@ -560,3 +560,81 @@ export const commercializationTasks = mysqlTable("commercialization_tasks", {
 
 export type CommercializationTask = typeof commercializationTasks.$inferSelect;
 export type InsertCommercializationTask = typeof commercializationTasks.$inferInsert;
+
+
+/**
+ * Two-Factor Authentication - Verification codes for Vault access
+ */
+export const vaultVerificationCodes = mysqlTable("vault_verification_codes", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  code: varchar("code", { length: 6 }).notNull(), // 6-digit code
+  method: mysqlEnum("method", ["email", "sms"]).default("email").notNull(),
+  expiresAt: timestamp("expiresAt").notNull(),
+  used: boolean("used").default(false),
+  attempts: int("attempts").default(0), // Failed verification attempts
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type VaultVerificationCode = typeof vaultVerificationCodes.$inferSelect;
+export type InsertVaultVerificationCode = typeof vaultVerificationCodes.$inferInsert;
+
+/**
+ * Trusted devices - devices that can skip 2FA temporarily
+ */
+export const trustedDevices = mysqlTable("trusted_devices", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  deviceToken: varchar("deviceToken", { length: 64 }).notNull().unique(),
+  deviceName: varchar("deviceName", { length: 200 }),
+  userAgent: text("userAgent"),
+  ipAddress: varchar("ipAddress", { length: 45 }),
+  expiresAt: timestamp("expiresAt").notNull(),
+  lastUsed: timestamp("lastUsed"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type TrustedDevice = typeof trustedDevices.$inferSelect;
+export type InsertTrustedDevice = typeof trustedDevices.$inferInsert;
+
+/**
+ * Vault access log - audit trail of all Vault access attempts
+ */
+export const vaultAccessLog = mysqlTable("vault_access_log", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  action: mysqlEnum("action", [
+    "access_attempt", 
+    "access_granted", 
+    "access_denied", 
+    "code_sent", 
+    "code_verified",
+    "code_failed",
+    "session_expired",
+    "device_trusted",
+    "device_revoked"
+  ]).notNull(),
+  ipAddress: varchar("ipAddress", { length: 45 }),
+  userAgent: text("userAgent"),
+  success: boolean("success").default(false),
+  metadata: json("metadata"), // Additional info like device, location
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type VaultAccessLog = typeof vaultAccessLog.$inferSelect;
+export type InsertVaultAccessLog = typeof vaultAccessLog.$inferInsert;
+
+/**
+ * Vault sessions - active authenticated sessions
+ */
+export const vaultSessions = mysqlTable("vault_sessions", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  sessionToken: varchar("sessionToken", { length: 64 }).notNull().unique(),
+  expiresAt: timestamp("expiresAt").notNull(), // Session timeout (e.g., 30 minutes)
+  lastActivity: timestamp("lastActivity"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type VaultSession = typeof vaultSessions.$inferSelect;
+export type InsertVaultSession = typeof vaultSessions.$inferInsert;

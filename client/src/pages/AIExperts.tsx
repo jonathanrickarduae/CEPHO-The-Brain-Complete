@@ -24,6 +24,7 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { useGovernance, FeatureGate, RestrictedBadge } from "@/hooks/useGovernance";
 
 // Expert profiles database
 const EXPERT_PROFILES = {
@@ -131,6 +132,7 @@ interface KickoffQuestion {
 }
 
 export default function AIExperts() {
+  const { mode, isFeatureAvailable } = useGovernance();
   const searchString = useSearch();
   const [phase, setPhase] = useState<Phase>("queue");
   const [tasks, setTasks] = useState<PendingTask[]>(MOCK_PENDING_TASKS);
@@ -438,11 +440,13 @@ export default function AIExperts() {
   };
 
   return (
+    <FeatureGate feature="aiExperts" showOverlay={true}>
     <div className="h-full bg-background text-foreground overflow-auto">
       {/* Header */}
       <div className="border-b border-border bg-card/80 backdrop-blur-xl sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 md:px-6 py-4">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between gap-4">
+            {mode === 'governed' && <RestrictedBadge />}
             <div className="flex items-center gap-4">
               <div className="p-3 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-purple-500/20 border border-cyan-500/30">
                 <Zap className="w-6 h-6 md:w-8 md:h-8 text-cyan-400" />
@@ -1110,5 +1114,6 @@ export default function AIExperts() {
         )}
       </div>
     </div>
+    </FeatureGate>
   );
 }
