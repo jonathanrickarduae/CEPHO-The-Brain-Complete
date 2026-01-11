@@ -196,22 +196,22 @@
 - [x] Training data collection from interactions
 
 ### PWA Setup
-- [ ] Web app manifest (name, icons, theme)
-- [ ] Service worker for offline caching
-- [ ] Install prompt component
-- [ ] Offline fallback page
+- [x] Web app manifest (name, icons, theme)
+- [x] Service worker for offline caching
+- [x] Install prompt component
+- [x] Offline fallback page
 
 ### Error Boundaries & Fallbacks
 - [x] React error boundary component (ErrorBoundary.tsx)
-- [ ] API error handling with retry logic
+- [x] API error handling with retry logic
 - [x] Offline detection and UI feedback - OfflineIndicator.tsx
 - [x] Graceful degradation for failed features - OfflineIndicator.tsx
 
 ### Rate Limiting & Security
-- [ ] Rate limiting middleware for API routes
-- [ ] Input validation on all endpoints
+- [x] Rate limiting middleware for API routes
+- [x] Input validation on all endpoints
 - [ ] CSRF protection
-- [ ] Sanitize user inputs
+- [x] Sanitize user inputs
 
 
 ## Requested Features (Priority)
@@ -488,11 +488,11 @@
 
 ### Remaining UX Improvements
 - [x] Sidebar: Add visual indicator for current active page (isActive in BrainLayout)
-- [ ] Mobile: Ensure all modals are swipe-to-dismiss
+- [x] Mobile: Ensure all modals are swipe-to-dismiss
 - [x] Loading states: Add skeleton loaders to Commercialization page - Skeleton.tsx
 - [x] Empty states: Add to Training Studio, Agent Builder - EmptyState.tsx
 - [ ] Consistency: Standardize card border radius across all pages
-- [ ] Touch targets: Ensure all buttons are at least 44px on mobile
+- [x] Touch targets: Ensure all buttons are at least 44px on mobile
 
 
 ## Security Layer Implementation
@@ -512,24 +512,24 @@
 - [x] Trust seals on landing/onboarding
 
 ### Digital Twin Training Data Protection
-- [ ] Store training data in Vault with encryption
-- [ ] Access logging for training data
-- [ ] Export controls with authentication
-- [ ] Data retention policies display
+- [x] Store training data in Vault with encryption
+- [x] Access logging for training data
+- [x] Export controls with authentication
+- [x] Data retention policies display
 
 ### Integration Security Panel
-- [ ] Per-connection security status
-- [ ] OAuth token health monitoring
-- [ ] Permission scope display
-- [ ] Revoke access functionality
-- [ ] Security alerts for compromised connections
+- [x] Per-connection security status
+- [x] OAuth token health monitoring
+- [x] Permission scope display
+- [x] Revoke access functionality
+- [x] Security alerts for compromised connections
 
 ## Feature Additions
 
 ### Streaming Responses (Digital Twin)
 - [ ] Implement streaming API endpoint
 - [ ] Word-by-word response rendering
-- [ ] Typing indicator animation
+- [x] Typing indicator animation
 - [ ] Cancel mid-stream option
 
 ### Review Queue Page
@@ -575,7 +575,7 @@
 - [x] Show Omni vs Governed badge on each integration
 - [x] Filter integrations by governance approval status
 - [ ] Require T&C acceptance for Governed integrations
-- [ ] Audit log for governance mode changes
+- [x] Audit log for governance mode changes
 
 ### Visual Design
 - [x] Clear "GOVERNED" badge when in restricted mode
@@ -605,7 +605,7 @@
 - [x] Track when users switch between Omni and Governed modes
 - [x] Log terms acceptance for compliance
 - [x] Store last 100 entries in localStorage (production would send to server)
-- [ ] Store audit logs in database for compliance reporting
+- [x] Store audit logs in database for compliance reporting
 
 
 ### Mood-First Flow
@@ -617,7 +617,7 @@
 ## UX Enhancements Round 3
 
 ### Corporate Partner
-- [ ] Add Cambridge University as corporate partner on About, Commercialization, Waitlist pages
+- [x] Add Cambridge University as corporate partner on About, Commercialization, Waitlist pages
 
 ### Immediate Impact
 - [x] Contextual tooltips for first-time users on key features - Tooltip.tsx
@@ -695,7 +695,7 @@
 
 ## Corporate Partner Logos
 
-- [ ] Verify Cambridge University logo is displayed
+- [x] Verify Cambridge University logo is displayed
 - [ ] Verify Oxford University logo is displayed
 - [ ] Add logos to About page partner section
 - [ ] Add logos to Waitlist page partner section
@@ -714,8 +714,8 @@
 - [x] Standard tier: Zoom, Teams, Slack, Asana integrations
 - [x] Advanced tier: API keys, Custom webhooks, Copilot
 - [ ] Secure credential storage in Vault for all passwords/API keys
-- [ ] Governance-aware approval workflow for corporate users
-- [ ] "Requires Approval" badges on sensitive integrations
+- [x] Governance-aware approval workflow for corporate users
+- [x] "Requires Approval" badges on sensitive integrations
 - [ ] Integration suggestions for new users based on common needs
 
 
@@ -1045,7 +1045,7 @@
 ### UI Polish (18-20)
 - [x] 18. Remove/defer gamification elements from onboarding (already clean)
 - [x] 19. Ensure consistent animated brain on all entry points (NeonBrain used)
-- [ ] 20. Mobile responsiveness check across all pages
+- [x] 20. Mobile responsiveness check across all pages
 
 ### Intake & Data Flow (21-24)
 - [x] 21. WhatsApp Business API placeholder
@@ -1462,10 +1462,10 @@
 ### AI Action Engine Enhancements
 - [ ] Pull actioned items from Daily Brief automatically
 - [ ] Distinguish Digital Twin tasks vs Expert Team tasks
-- [ ] Voice input for task creation
+- [x] Voice input for task creation
 - [ ] Dialogue tracking (Twin ↔ Expert Team conversation)
 - [ ] QA Review phase before final approval
-- [ ] Progress tracking for each active task
+- [x] Progress tracking for each active task
 
 ### 250 AI Expert Personas
 - [ ] Expand expert profiles with full bios
@@ -1658,3 +1658,40 @@
 - [ ] Real-time updates via polling or websocket
 - [ ] Sound/vibration option for new notifications
 - [ ] Notification preferences link
+
+
+### Email OAuth Integration (Requires User Credentials)
+- [ ] Register app in Azure AD for Microsoft Graph API
+- [ ] OAuth flow for Outlook connection
+- [ ] Fetch emails via Microsoft Graph API
+- [ ] Two-way sync (read and send)
+- [ ] Real-time webhook for new emails
+- [ ] Register app in Google Cloud Console
+- [ ] OAuth flow for Gmail connection
+- [ ] Fetch emails via Gmail API
+- [ ] Push notifications for new emails
+- [ ] Label and thread management
+
+### Wearable Device Integration (Requires API Keys)
+- [ ] Whoop integration - sleep quality, recovery score, strain data
+- [ ] Oura Ring integration - sleep stages, readiness, activity
+- [ ] Apple Health / Google Fit - steps, heart rate, workouts
+- [ ] Fitbit integration - activity, sleep, stress management
+- [ ] Garmin integration - training load, body battery
+- [ ] Morning Brief biometric insights
+- [ ] Digital Twin learns from health data patterns
+
+### Payment & Document Signing (Requires Setup)
+- [ ] Stripe payment processing integration
+- [ ] SignNow/DocuSign integration for NDA signatures
+- [ ] SendGrid/Postmark email service setup
+
+### External API Integrations (Requires Credentials)
+- [ ] Google OAuth credentials setup
+- [ ] Custom domain configuration
+- [ ] SMS verification service (Twilio)
+
+### Desktop App Features (Future Phase)
+- [ ] Screen observation tracking (requires desktop app)
+- [ ] Biometric authentication (Face ID / Touch ID)
+- [ ] Active learning mode with screen observation
