@@ -1345,18 +1345,25 @@
 
 ### Design Polish (13-28)
 - [x] 13. Micro-animations on hover and click feedback
-- [ ] 14. Glassmorphism refinement - consistent blur effects
-- [ ] 15. Gradient accents - animated gradient borders
-- [ ] 16. Icon consistency audit
-- [ ] 17. Typography hierarchy improvements
+- [x] 14. Glassmorphism refinement - consistent blur effects
+- [x] 15. Gradient accents - animated gradient borders
+- [x] 16. Icon consistency audit
+- [x] 17. Typography hierarchy improvements
 - [x] 18. Skeleton loaders (animated placeholders)
-- [ ] 19. Progress indicators for multi-step flows
-- [ ] 20. Rich hover states with tooltips
-- [ ] 21. Accessible focus rings for keyboard navigation
+- [x] 19. Progress indicators for multi-step flows
+- [x] 20. Rich hover states with tooltips
+- [x] 21. Accessible focus rings for keyboard navigation
 - [x] 22. Mini charts/sparklines for dashboard metrics
 - [x] 23. Consistent status badges (pill badges)
-- [ ] 24. AI Expert avatar system
-- [ ] 25. Card depth with layered shadows
-- [ ] 26. NeonBrain as loading/thinking indicator
-- [ ] 27. Color system audit (cyan/magenta/purple consistency)
-- [ ] 28. Dark mode contrast refinement for accessibility
+- [x] 24. AI Expert avatar system
+- [x] 25. Card depth with layered shadows
+- [x] 26. NeonBrain as loading/thinking indicator
+- [x] 27. Color system audit (cyan/magenta/purple consistency)
+- [x] 28. Dark mode contrast refinement for accessibility
+
+
+## Sample Project: Anne's Business Social Media (January 2026)
+- [ ] Add Anne's business project to demo data
+- [ ] Project type: Social Media Optimization
+- [ ] Tasks: Take control of socials, fix issues, optimize content
+- [ ] Show as active project in Workflow

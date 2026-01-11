@@ -15,6 +15,7 @@ type EngagementType =
   | 'due_diligence'     // DD package
   | 'legal_docs'        // Legal documentation
   | 'strategic_review'  // Strategy and positioning
+  | 'go_to_market'      // Brand building & market launch
   | 'custom';           // User selects specific deliverables
 
 type ProjectStage = 'scoping' | 'questionnaire' | 'blueprint' | 'generation' | 'qa_review' | 'complete';
@@ -150,6 +151,14 @@ const ENGAGEMENT_TYPES: Array<{
     icon: <Target className="w-6 h-6" />,
     estimatedTime: '1-2 hours',
     deliverableCount: '5-8 deliverables'
+  },
+  {
+    type: 'go_to_market',
+    title: 'Go-To-Market Launch',
+    description: 'Brand building, social media setup, content strategy, and market launch plan',
+    icon: <Globe className="w-6 h-6" />,
+    estimatedTime: '2-4 hours',
+    deliverableCount: '12-18 deliverables'
   },
   {
     type: 'custom',
@@ -317,6 +326,31 @@ export function ProjectGenesis() {
         { id: 'qms', name: 'Quality Management Framework', type: 'document', category: 'Governance', status: 'pending', estimatedTime: '15 mins', qaStatus: { twinReviewed: false, twinApproved: false, userApproved: false, revisionCount: 0 } },
         { id: 'org_chart', name: 'Organizational Chart', type: 'visual', category: 'Operations', status: 'pending', estimatedTime: '10 mins', qaStatus: { twinReviewed: false, twinApproved: false, userApproved: false, revisionCount: 0 } },
         { id: 'action_plan', name: 'Next 90 Days Action Plan', type: 'checklist', category: 'Operations', status: 'pending', estimatedTime: '15 mins', qaStatus: { twinReviewed: false, twinApproved: false, userApproved: false, revisionCount: 0 } },
+      );
+    }
+
+    // Go-To-Market deliverables
+    if (type === 'go_to_market' || type === 'full_genesis') {
+      base.push(
+        { id: 'brand_audit', name: 'Brand & Social Media Audit', type: 'document', category: 'Brand', status: 'pending', estimatedTime: '20 mins', qaStatus: { twinReviewed: false, twinApproved: false, userApproved: false, revisionCount: 0 } },
+        { id: 'brand_identity', name: 'Brand Identity Guidelines', type: 'document', category: 'Brand', status: 'pending', estimatedTime: '25 mins', qaStatus: { twinReviewed: false, twinApproved: false, userApproved: false, revisionCount: 0 } },
+        { id: 'messaging', name: 'Brand Voice & Messaging Framework', type: 'document', category: 'Brand', status: 'pending', estimatedTime: '20 mins', qaStatus: { twinReviewed: false, twinApproved: false, userApproved: false, revisionCount: 0 } },
+      );
+    }
+
+    if (type === 'go_to_market') {
+      base.push(
+        { id: 'social_strategy', name: 'Social Media Strategy', type: 'document', category: 'Social', status: 'pending', estimatedTime: '30 mins', qaStatus: { twinReviewed: false, twinApproved: false, userApproved: false, revisionCount: 0 } },
+        { id: 'content_calendar', name: 'Content Calendar (90 Days)', type: 'checklist', category: 'Social', status: 'pending', estimatedTime: '25 mins', qaStatus: { twinReviewed: false, twinApproved: false, userApproved: false, revisionCount: 0 } },
+        { id: 'platform_setup', name: 'Platform Optimization Guide', type: 'checklist', category: 'Social', status: 'pending', estimatedTime: '20 mins', qaStatus: { twinReviewed: false, twinApproved: false, userApproved: false, revisionCount: 0 } },
+        { id: 'bio_copy', name: 'Bio & Profile Copy (All Platforms)', type: 'document', category: 'Social', status: 'pending', estimatedTime: '15 mins', qaStatus: { twinReviewed: false, twinApproved: false, userApproved: false, revisionCount: 0 } },
+        { id: 'hashtag_strategy', name: 'Hashtag & SEO Strategy', type: 'document', category: 'Social', status: 'pending', estimatedTime: '15 mins', qaStatus: { twinReviewed: false, twinApproved: false, userApproved: false, revisionCount: 0 } },
+        { id: 'growth_playbook', name: 'Follower Growth Playbook', type: 'document', category: 'Growth', status: 'pending', estimatedTime: '25 mins', qaStatus: { twinReviewed: false, twinApproved: false, userApproved: false, revisionCount: 0 } },
+        { id: 'launch_plan', name: 'Launch Campaign Plan', type: 'document', category: 'Launch', status: 'pending', estimatedTime: '30 mins', qaStatus: { twinReviewed: false, twinApproved: false, userApproved: false, revisionCount: 0 } },
+        { id: 'pr_outreach', name: 'PR & Media Outreach List', type: 'checklist', category: 'Launch', status: 'pending', estimatedTime: '20 mins', qaStatus: { twinReviewed: false, twinApproved: false, userApproved: false, revisionCount: 0 } },
+        { id: 'influencer_list', name: 'Influencer & Partner Targets', type: 'checklist', category: 'Growth', status: 'pending', estimatedTime: '15 mins', qaStatus: { twinReviewed: false, twinApproved: false, userApproved: false, revisionCount: 0 } },
+        { id: 'kpi_dashboard', name: 'KPI & Analytics Dashboard Setup', type: 'checklist', category: 'Analytics', status: 'pending', estimatedTime: '15 mins', qaStatus: { twinReviewed: false, twinApproved: false, userApproved: false, revisionCount: 0 } },
+        { id: 'automation', name: 'Posting & Automation Setup Guide', type: 'checklist', category: 'Operations', status: 'pending', estimatedTime: '15 mins', qaStatus: { twinReviewed: false, twinApproved: false, userApproved: false, revisionCount: 0 } },
       );
     }
 
