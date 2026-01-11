@@ -210,7 +210,7 @@
 ### Rate Limiting & Security
 - [x] Rate limiting middleware for API routes
 - [x] Input validation on all endpoints
-- [ ] CSRF protection
+- [x] CSRF protection
 - [x] Sanitize user inputs
 
 
@@ -269,15 +269,15 @@
 - [x] Command Palette (Cmd+K): Quick access to any action
 - [x] Keyboard shortcuts for everything (j/k navigation, e to archive, etc.)
 - [x] AI Draft Generation: Learn user's writing style
-- [ ] Social Insights: Show context about contacts
+- [x] Social Insights: Show context about contacts
 - [x] Instant Search: Sub-100ms search across all content (CommandPalette.tsx)
-- [ ] Undo Send: Time-delayed sending with cancel option
+- [x] Undo Send: Time-delayed sending with cancel option
 
 ### From Motion (Auto-Scheduling)
 - [x] AI Task Planner: Auto-schedule tasks based on priorities
 - [x] Smart Calendar: Block focus time automatically
 - [x] Deadline Intelligence: Warn about at-risk deadlines
-- [ ] Meeting Prep: Auto-generate briefs before meetings
+- [x] Meeting Prep: Auto-generate briefs before meetings
 - [x] Time Blocking: Protect deep work periods
 
 ### From Personal AI (Training Studio)
@@ -543,14 +543,14 @@
 - [x] Project folder structure (Celadon, Boundless, etc.) - in Library.tsx
 - [x] Sub-sections (Documents, AI Images, Charts, Data) - in Library.tsx
 - [x] Working vs Signed-off document status - in Library.tsx
-- [ ] Folder-level permissions
+- [x] Folder-level permissions
 
 
 ### Two-Factor Authentication (2FA) for Vault
 - [x] Email verification code (6-digit) on every Vault access (VaultSecurityGate.tsx)
 - [ ] SMS verification option (future enhancement)
 - [x] Session timeout with auto-lock after inactivity
-- [ ] Trusted device option (remember for 24 hours)
+- [x] Trusted device option (remember for 24 hours)
 - [x] Verification code expiry (5 minutes)
 - [x] Rate limiting on verification attempts
 - [x] Audit log of all Vault access attempts
@@ -568,13 +568,13 @@
 - [x] AI Experts: Grey out/block external LLM-powered experts (FeatureGate)
 - [x] Show "Governed - Not Available" overlay on restricted features
 - [x] Only allow Microsoft Copilot, company-approved AI in Governed mode
-- [ ] Block Digital Twin features that use external AI
-- [ ] Terms & conditions acceptance for each tool
+- [x] Block Digital Twin features that use external AI
+- [x] Terms & conditions acceptance for each tool
 
 ### Vault Integration
 - [x] Show Omni vs Governed badge on each integration
 - [x] Filter integrations by governance approval status
-- [ ] Require T&C acceptance for Governed integrations
+- [x] Require T&C acceptance for Governed integrations
 - [x] Audit log for governance mode changes
 
 ### Visual Design
@@ -716,7 +716,7 @@
 - [x] Secure credential storage in Vault for all passwords/API keys
 - [x] Governance-aware approval workflow for corporate users
 - [x] "Requires Approval" badges on sensitive integrations
-- [ ] Integration suggestions for new users based on common needs
+- [x] Integration suggestions for new users based on common needs
 
 
 ## Digital Twin Training Accelerator (January 2026)
@@ -741,9 +741,9 @@
 - [ ] Create "You're not using X efficiently" insights
 - [ ] Build privacy controls (exclude apps, auto-pause, incognito mode)
 - [ ] Add scheduled observation mode (work hours only)
-- [ ] Create workflow pattern detection
+- [x] Create workflow pattern detection
 - [ ] Build app usage analytics dashboard
-- [ ] Add optimization suggestions based on observed behavior
+- [x] Add optimization suggestions based on observed behavior
 
 
 ## Subscription Intelligence (January 2026)
@@ -982,10 +982,10 @@
 - [ ] Face ID / Touch ID re-authentication after 1 hour inactivity
 - [ ] Biometric prompt when app backgrounded for extended period
 - [ ] Require biometrics for sensitive areas (Vault, Signatures, AI Providers)
-- [ ] Device trust verification
+- [x] Device trust verification
 - [x] Configurable timeout settings (15min, 30min, 1hr, 4hr)
 - [ ] PIN/password fallback if biometrics unavailable
-- [ ] Session lock on device change detection
+- [x] Session lock on device change detection
 
 
 ## Testing Readiness Priorities (January 2026)
@@ -1205,7 +1205,7 @@
 - [x] Mermaid/D2 diagram generation for architectural views - MermaidDiagram.tsx
 
 ### Proactive Best Practice Engine
-- [ ] AI identifies ALL things that should be considered (not just user suggestions)
+- [x] AI identifies ALL things that should be considered (not just user suggestions)
 - [ ] Best practices from multiple disciplines:
   - Legal requirements and compliance
   - Financial structure and reporting
@@ -1232,7 +1232,7 @@
 - [ ] Professional quality exceeding expectations
 - [ ] Solid architectural foundations
 - [ ] Anyone picking it up is impressed
-- [ ] Proactive suggestions for things not yet considered
+- [x] Proactive suggestions for things not yet considered
 
 
 ## Visual Blueprint & Document Generation (January 2026)
@@ -1305,7 +1305,7 @@
 - [ ] Auto-categorize incoming emails with AI
 - [ ] Extract action items from emails
 - [ ] Link emails to relevant projects
-- [ ] Smart reply suggestions
+- [x] Smart reply suggestions
 - [ ] Email-to-task conversion
 - [ ] Priority scoring based on sender/content
 
@@ -1618,21 +1618,21 @@
 
 ### Data Scientist AI Expert
 - [ ] Add specialized Data Scientist expert to AI Expert team
-- [ ] Configure for pattern recognition and anomaly detection
+- [x] Configure for pattern recognition and anomaly detection
 - [ ] Enable cross-project data queries
 - [ ] Build statistical analysis capabilities
 - [x] Add visualization generation for insights
 
 ### Insight Discovery Engine
 - [ ] Automated scanning for weaknesses and risks
-- [ ] Pattern detection across project timelines
+- [x] Pattern detection across project timelines
 - [ ] Correlation analysis between projects
 - [ ] Strategic opportunity identification
 - [ ] Competitive intelligence extraction from documents
 
 ### Cross-Project Analysis
-- [ ] Compare patterns across Celadon, Boundless, Perfect DXB, Ampora
-- [ ] Identify common blockers and success factors
+- [x] Compare patterns across Celadon, Boundless, Perfect DXB, Ampora
+- [x] Identify common blockers and success factors
 - [ ] Resource allocation optimization suggestions
 - [ ] Timeline risk analysis across portfolio
 - [ ] Financial trend analysis across projects
@@ -1641,7 +1641,7 @@
 - [ ] Twin can delegate "Find insights in X" tasks to data science expert
 - [ ] Automated daily/weekly insight reports
 - [ ] Risk alerts from data analysis
-- [ ] Strategic recommendations based on data patterns
+- [x] Strategic recommendations based on data patterns
 - [ ] Integration with Daily Brief for key findings
 
 
