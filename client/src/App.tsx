@@ -22,6 +22,7 @@ import Commercialization from "./pages/Commercialization";
 import GoLive from "./pages/GoLive";
 import About from "./pages/About";
 import ReviewQueue from "./pages/ReviewQueue";
+import ProjectGenesisPage from "./pages/ProjectGenesisPage";
 import { GovernanceProvider, GovernanceModeChangeModal } from "./hooks/useGovernance";
 import { CelebrationProvider } from "./components/CelebrationAnimations";
 import { PageTransition } from "./components/PageTransition";
@@ -93,6 +94,9 @@ function Router() {
       </Route>
       <Route path="/review-queue">
         <WithLayout><ReviewQueue /></WithLayout>
+      </Route>
+      <Route path="/project-genesis">
+        <WithLayout><ProjectGenesisPage /></WithLayout>
       </Route>
       
       {/* Fallback */}

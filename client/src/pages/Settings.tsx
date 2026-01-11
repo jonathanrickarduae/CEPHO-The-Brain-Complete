@@ -15,9 +15,11 @@ import { useStreak } from '@/components/DailyStreak';
 import { IntegrationWizard } from '@/components/IntegrationWizard';
 import { SubscriptionManager } from '@/components/SubscriptionManager';
 import { SignatureManager } from '@/components/SignatureManager';
-import { Plug, Wallet, FileSignature } from 'lucide-react';
+import { AIProviderSettings } from '@/components/AIRouter';
+import { SecureStorageDashboard } from '@/components/SecureStorageDashboard';
+import { Plug, Wallet, FileSignature, Cpu, HardDrive } from 'lucide-react';
 
-type SettingsTab = 'profile' | 'integrations' | 'subscriptions' | 'signatures' | 'calendar' | 'training' | 'referrals' | 'notifications' | 'privacy' | 'appearance' | 'accessibility';
+type SettingsTab = 'profile' | 'integrations' | 'subscriptions' | 'signatures' | 'ai-providers' | 'storage' | 'calendar' | 'training' | 'referrals' | 'notifications' | 'privacy' | 'appearance' | 'accessibility';
 
 export default function Settings() {
   const [activeTab, setActiveTab] = useState<SettingsTab>('profile');
@@ -27,6 +29,8 @@ export default function Settings() {
     { id: 'integrations' as const, label: 'Integrations', icon: Plug },
     { id: 'subscriptions' as const, label: 'Subscriptions', icon: Wallet },
     { id: 'signatures' as const, label: 'Signatures', icon: FileSignature },
+    { id: 'ai-providers' as const, label: 'AI Providers', icon: Cpu },
+    { id: 'storage' as const, label: 'Storage & Security', icon: HardDrive },
     { id: 'calendar' as const, label: 'Calendar', icon: Calendar },
     { id: 'training' as const, label: 'Training Data', icon: Database },
     { id: 'referrals' as const, label: 'Referrals', icon: Users },
@@ -138,6 +142,18 @@ export default function Settings() {
             {activeTab === 'subscriptions' && <SubscriptionManager />}
 
             {activeTab === 'signatures' && <SignatureManager />}
+
+            {activeTab === 'ai-providers' && (
+              <div className="bg-gray-800 rounded-xl border border-gray-700 p-6">
+                <AIProviderSettings />
+              </div>
+            )}
+
+            {activeTab === 'storage' && (
+              <div className="bg-gray-800 rounded-xl border border-gray-700 p-6">
+                <SecureStorageDashboard />
+              </div>
+            )}
 
             {activeTab === 'calendar' && <CalendarIntegration />}
 

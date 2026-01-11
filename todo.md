@@ -965,3 +965,10 @@
 - [ ] Provider health monitoring and auto-switch
 - [ ] Usage tracking per provider (cost management)
 - [ ] Enterprise support (Azure OpenAI for governed users)
+
+
+## Component Wiring (January 2026)
+
+- [x] Add Project Genesis to sidebar as "New Project" button
+- [x] Add AI Providers tab to Settings page
+- [x] Add Storage & Security tab to Settings page
