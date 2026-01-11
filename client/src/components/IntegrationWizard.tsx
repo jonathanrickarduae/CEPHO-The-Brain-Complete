@@ -188,6 +188,66 @@ const INTEGRATIONS: Integration[] = [
     ],
   },
   
+  // Security - NordVPN
+  {
+    id: 'nordvpn',
+    name: 'NordVPN',
+    description: 'Secure your connections with NordVPN for enhanced privacy and security',
+    icon: <Shield className="w-6 h-6" />,
+    tier: 'standard',
+    category: 'productivity',
+    requiresApproval: true,
+    logo: '🔒',
+    setupSteps: [
+      { id: 'intro', title: 'Connect NordVPN', description: 'Enhance your security by routing sensitive API calls through NordVPN. This protects your data and masks your location.', type: 'info' },
+      { id: 'apikey', title: 'NordVPN Credentials', description: 'Enter your NordVPN service credentials. Get these from your NordVPN account dashboard.', type: 'apikey', fields: [
+        { id: 'nord_token', label: 'NordVPN Access Token', type: 'password', required: true, sensitive: true, placeholder: 'Enter your access token' },
+      ]},
+      { id: 'config', title: 'Security Settings', description: 'Configure when to use VPN protection.', type: 'config', fields: [
+        { id: 'auto_connect', label: 'Auto-connect on sensitive operations', type: 'checkbox' },
+        { id: 'api_routing', label: 'Route all API calls through VPN', type: 'checkbox' },
+        { id: 'preferred_region', label: 'Preferred Region', type: 'select', options: [
+          { value: 'auto', label: 'Auto (fastest)' },
+          { value: 'uk', label: 'United Kingdom' },
+          { value: 'eu', label: 'Europe (Netherlands)' },
+          { value: 'us', label: 'United States' },
+          { value: 'ch', label: 'Switzerland' },
+        ]},
+        { id: 'kill_switch', label: 'Enable kill switch (block if VPN drops)', type: 'checkbox' },
+      ]},
+    ],
+  },
+
+  // Project Management - iDeals Dataroom
+  {
+    id: 'ideals-dataroom',
+    name: 'iDeals Virtual Data Room',
+    description: 'Connect to your investor dataroom for seamless document management',
+    icon: <Briefcase className="w-6 h-6" />,
+    tier: 'standard',
+    category: 'project',
+    requiresApproval: true,
+    logo: '🏦',
+    setupSteps: [
+      { id: 'intro', title: 'Connect iDeals VDR', description: 'Securely connect to your iDeals Virtual Data Room for automatic document sync with investors.', type: 'info' },
+      { id: 'apikey', title: 'API Configuration', description: 'Enter your iDeals API key. Get it from iDeals VDR Settings > API Keys.', type: 'apikey', fields: [
+        { id: 'api_key', label: 'iDeals API Key', type: 'password', required: true, sensitive: true, placeholder: 'Enter your API key' },
+      ]},
+      { id: 'project', title: 'Select Project', description: 'Choose which dataroom project to connect.', type: 'config', fields: [
+        { id: 'project_id', label: 'Dataroom Project', type: 'select', options: [
+          { value: 'auto', label: 'Auto-detect from API key' },
+        ]},
+      ]},
+      { id: 'folders', title: 'Folder Mapping', description: 'Map Brain Library folders to iDeals dataroom folders.', type: 'config', fields: [
+        { id: 'map_contracts', label: 'Sync Contracts folder', type: 'checkbox' },
+        { id: 'map_financials', label: 'Sync Financial Models folder', type: 'checkbox' },
+        { id: 'map_legal', label: 'Sync Legal Documents folder', type: 'checkbox' },
+        { id: 'map_presentations', label: 'Sync Investor Presentations folder', type: 'checkbox' },
+        { id: 'auto_publish', label: 'Auto-publish uploaded documents', type: 'checkbox' },
+      ]},
+    ],
+  },
+
   // Advanced Tier
   {
     id: 'copilot',

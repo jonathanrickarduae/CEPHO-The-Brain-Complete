@@ -1558,24 +1558,49 @@
 - [x] Proper professional names (not gimmicky)
 
 
-## iDeals Dataroom Integration (Pending - Onboarding)
+## iDeals Dataroom Integration (Completed)
 
-- [ ] iDeals API integration setup
-- [ ] Direct document upload to dataroom from Library
-- [ ] Folder mapping between projects and dataroom folders
-- [ ] Document status sync (uploaded/pending)
-- [ ] One-click publish for signed/final documents
-- [ ] Dataroom activity notifications
+- [x] iDeals API integration setup (full client library)
+- [x] Direct document upload to dataroom from Library
+- [x] Folder mapping between projects and dataroom folders
+- [x] Document status sync (uploaded/pending)
+- [x] One-click publish for signed/final documents
+- [x] Dataroom activity notifications
+- [x] Chunked upload support for large files (>20MB)
+- [x] Integration wizard setup in Settings
 - [ ] Investor access tracking integration
 
 
-## API Cost Estimation & Provider Selection (Onboarding)
+## API Cost Estimation & Provider Selection (Completed)
 
-- [ ] Cost breakdown per AI provider (Claude, GPT-4, Gemini, Llama)
-- [ ] Optimal vs Budget alternatives for each expert type
-- [ ] Usage estimation calculator based on expected workload
-- [ ] Free tier tracking and limits display
+- [x] Cost breakdown per AI provider (Claude, GPT-4, Gemini, Llama, Mistral)
+- [x] Optimal vs Budget alternatives for each expert type
+- [x] Usage estimation calculator based on expected workload
+- [x] Free tier tracking and limits display
+- [x] Category recommendations (which model for which expert type)
+- [x] Setup instructions with provider links
+- [x] Added to Settings > API Costs tab
 - [ ] Monthly budget setting with cost alerts
 - [ ] Provider account setup guidance (Claude, OpenAI, etc.)
 - [ ] Cost-per-query estimates by task type
 - [ ] ROI calculator (time saved vs API costs)
+
+
+## AI Expert Avatar Generation (In Progress)
+
+- [ ] Generate professional headshot avatars for 40 pharmaceutical experts
+- [ ] Store avatar URLs in expert data
+- [ ] Display avatars in AI Experts page
+
+
+## NordVPN Security Integration (Completed)
+
+- [x] NordVPN API integration setup
+- [x] Auto-connect VPN for sensitive operations
+- [x] Secure API call routing through VPN
+- [x] Location/jurisdiction compliance controls (UK, EU, US, Switzerland)
+- [x] VPN status indicator in UI
+- [x] Session security with VPN verification
+- [x] Kill switch option
+- [x] Security audit logging
+- [x] Integration wizard setup in Settings

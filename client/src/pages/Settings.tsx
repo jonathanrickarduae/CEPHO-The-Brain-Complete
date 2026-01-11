@@ -16,12 +16,13 @@ import { IntegrationWizard } from '@/components/IntegrationWizard';
 import { SubscriptionManager } from '@/components/SubscriptionManager';
 import { SignatureManager } from '@/components/SignatureManager';
 import { AIProviderSettings } from '@/components/AIRouter';
+import { APICostCalculator } from '@/components/APICostCalculator';
 import { SecureStorageDashboard } from '@/components/SecureStorageDashboard';
 import { BrandKitManager } from '@/components/BrandKit';
 import { DataGovernanceDashboard } from '@/components/DataGovernanceDashboard';
 import { Plug, Wallet, FileSignature, Cpu, HardDrive, Paintbrush, ShieldCheck } from 'lucide-react';
 
-type SettingsTab = 'profile' | 'integrations' | 'subscriptions' | 'signatures' | 'ai-providers' | 'storage' | 'brand-kit' | 'data-governance' | 'calendar' | 'training' | 'referrals' | 'notifications' | 'privacy' | 'appearance' | 'accessibility';
+type SettingsTab = 'profile' | 'integrations' | 'subscriptions' | 'signatures' | 'ai-providers' | 'api-costs' | 'storage' | 'brand-kit' | 'data-governance' | 'calendar' | 'training' | 'referrals' | 'notifications' | 'privacy' | 'appearance' | 'accessibility';
 
 export default function Settings() {
   const [activeTab, setActiveTab] = useState<SettingsTab>('profile');
@@ -32,6 +33,7 @@ export default function Settings() {
     { id: 'subscriptions' as const, label: 'Subscriptions', icon: Wallet },
     { id: 'signatures' as const, label: 'Signatures', icon: FileSignature },
     { id: 'ai-providers' as const, label: 'AI Providers', icon: Cpu },
+    { id: 'api-costs' as const, label: 'API Costs', icon: CreditCard },
     { id: 'storage' as const, label: 'Storage & Security', icon: HardDrive },
     { id: 'brand-kit' as const, label: 'Brand Kit', icon: Paintbrush },
     { id: 'data-governance' as const, label: 'Data Governance', icon: ShieldCheck },
@@ -150,6 +152,12 @@ export default function Settings() {
             {activeTab === 'ai-providers' && (
               <div className="bg-gray-800 rounded-xl border border-gray-700 p-6">
                 <AIProviderSettings />
+              </div>
+            )}
+
+            {activeTab === 'api-costs' && (
+              <div className="bg-gray-800 rounded-xl border border-gray-700 p-6">
+                <APICostCalculator />
               </div>
             )}
 
