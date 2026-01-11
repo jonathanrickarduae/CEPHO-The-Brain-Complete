@@ -23,6 +23,7 @@ import GoLive from "./pages/GoLive";
 import About from "./pages/About";
 import ReviewQueue from "./pages/ReviewQueue";
 import ProjectGenesisPage from "./pages/ProjectGenesisPage";
+import InboxPage from "./pages/InboxPage";
 import { GovernanceProvider, GovernanceModeChangeModal } from "./hooks/useGovernance";
 import { CelebrationProvider } from "./components/CelebrationAnimations";
 import { PageTransition } from "./components/PageTransition";
@@ -97,6 +98,9 @@ function Router() {
       </Route>
       <Route path="/project-genesis">
         <WithLayout><ProjectGenesisPage /></WithLayout>
+      </Route>
+      <Route path="/inbox">
+        <WithLayout><InboxPage /></WithLayout>
       </Route>
       
       {/* Fallback */}

@@ -972,3 +972,5 @@
 - [x] Add Project Genesis to sidebar as "New Project" button
 - [x] Add AI Providers tab to Settings page
 - [x] Add Storage & Security tab to Settings page
+
+- [x] Add Universal Inbox to sidebar navigation
