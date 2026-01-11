@@ -1521,3 +1521,61 @@
 - [x] Source type classification (Primary/Secondary/Expert Opinion)
 - [x] Hallucination detection prompts
 - [x] Verification status badges on all insights
+
+
+## Reference Library & Citation Integration (In Progress)
+
+### Reference Library Integration
+- [ ] Connect Reference Library to project folders in Library
+- [ ] Display documents from each project as potential sources
+- [ ] Allow linking references to specific Library documents
+- [ ] Show document preview when selecting reference source
+
+### Automated Citation Extraction
+- [ ] Detect numeric claims in expert outputs
+- [ ] Auto-prompt experts to cite source for claims
+- [ ] Extract citation metadata from Library documents
+- [ ] Generate citation suggestions based on content
+
+### Mobile Optimization
+- [ ] Optimize Dashboard layout for mobile screens
+- [ ] Optimize Digital Twin page for mobile
+- [ ] Optimize AI Experts page for mobile
+- [ ] Touch-friendly interactions throughout
+- [ ] Bottom navigation for mobile
+
+
+## Pharmaceutical & Medical Experts Expansion (Completed)
+
+- [x] Add 40 pharmaceutical/medical experts (expanded from 15)
+- [x] Medical Cannabis specialists (regulatory, clinical, cultivation) - 4 experts
+- [x] Drug Testing experts (clinical trials, toxicology, bioequivalence) - 6 experts
+- [x] MHRA regulatory specialists - 2 experts
+- [x] NHS healthcare system experts (NICE, SMC, AWMSG) - 4 experts
+- [x] Configure Claude backend for medical/scientific reasoning
+- [x] Add expert preferredBackend and backendRationale fields
+- [x] Add avatarUrl field for AI-generated professional headshots
+- [x] Proper professional names (not gimmicky)
+
+
+## iDeals Dataroom Integration (Pending - Onboarding)
+
+- [ ] iDeals API integration setup
+- [ ] Direct document upload to dataroom from Library
+- [ ] Folder mapping between projects and dataroom folders
+- [ ] Document status sync (uploaded/pending)
+- [ ] One-click publish for signed/final documents
+- [ ] Dataroom activity notifications
+- [ ] Investor access tracking integration
+
+
+## API Cost Estimation & Provider Selection (Onboarding)
+
+- [ ] Cost breakdown per AI provider (Claude, GPT-4, Gemini, Llama)
+- [ ] Optimal vs Budget alternatives for each expert type
+- [ ] Usage estimation calculator based on expected workload
+- [ ] Free tier tracking and limits display
+- [ ] Monthly budget setting with cost alerts
+- [ ] Provider account setup guidance (Claude, OpenAI, etc.)
+- [ ] Cost-per-query estimates by task type
+- [ ] ROI calculator (time saved vs API costs)
