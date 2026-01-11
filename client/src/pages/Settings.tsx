@@ -5,6 +5,7 @@ import {
   ChevronRight, Check
 } from 'lucide-react';
 import { PageHeader } from '@/components/Breadcrumbs';
+import { ThemeSelector, ThemeProvider } from '@/components/ThemeToggle';
 import { CalendarIntegration } from '@/components/CalendarIntegration';
 import { TrainingDataPipeline } from '@/components/TrainingDataPipeline';
 import { ReferralDashboard } from '@/components/WaitlistReferral';
@@ -215,39 +216,43 @@ export default function Settings() {
               <div className="bg-gray-800 rounded-xl border border-gray-700 p-6">
                 <h3 className="text-lg font-semibold text-white mb-6">Appearance</h3>
                 
-                <div className="space-y-6">
-                  <div>
-                    <label className="block text-sm text-gray-400 mb-3">Theme</label>
-                    <div className="grid grid-cols-3 gap-3">
+                <div className="space-y-8">
+                  {/* Theme Selector Component */}
+                  <ThemeSelector />
+
+                  <div className="border-t border-gray-700 pt-6">
+                    <label className="block text-sm font-medium text-foreground mb-3">Accent Color</label>
+                    <div className="flex gap-3">
                       {[
-                        { id: 'dark', label: 'Dark', color: 'bg-gray-900' },
-                        { id: 'light', label: 'Light', color: 'bg-white' },
-                        { id: 'system', label: 'System', color: 'bg-gradient-to-r from-gray-900 to-white' },
-                      ].map((theme) => (
+                        { color: 'cyan', class: 'bg-cyan-500' },
+                        { color: 'purple', class: 'bg-purple-500' },
+                        { color: 'pink', class: 'bg-pink-500' },
+                        { color: 'green', class: 'bg-green-500' },
+                        { color: 'orange', class: 'bg-orange-500' },
+                      ].map((item) => (
                         <button
-                          key={theme.id}
-                          className={`p-4 rounded-xl border-2 transition-colors ${
-                            theme.id === 'dark' ? 'border-cyan-500' : 'border-gray-700 hover:border-gray-600'
+                          key={item.color}
+                          className={`w-10 h-10 rounded-full ${item.class} transition-transform hover:scale-110 ${
+                            item.color === 'cyan' ? 'ring-2 ring-white ring-offset-2 ring-offset-gray-800' : ''
                           }`}
-                        >
-                          <div className={`w-full h-12 rounded-lg ${theme.color} mb-2`} />
-                          <span className="text-sm text-gray-300">{theme.label}</span>
-                        </button>
+                          title={item.color.charAt(0).toUpperCase() + item.color.slice(1)}
+                        />
                       ))}
                     </div>
                   </div>
 
-                  <div>
-                    <label className="block text-sm text-gray-400 mb-3">Accent Color</label>
-                    <div className="flex gap-3">
-                      {['cyan', 'purple', 'pink', 'green', 'orange'].map((color) => (
-                        <button
-                          key={color}
-                          className={`w-10 h-10 rounded-full bg-${color}-500 ${
-                            color === 'cyan' ? 'ring-2 ring-white ring-offset-2 ring-offset-gray-800' : ''
-                          }`}
-                        />
-                      ))}
+                  <div className="border-t border-gray-700 pt-6">
+                    <label className="block text-sm font-medium text-foreground mb-3">Font Size</label>
+                    <div className="flex items-center gap-4">
+                      <span className="text-sm text-muted-foreground">A</span>
+                      <input
+                        type="range"
+                        min="12"
+                        max="20"
+                        defaultValue="16"
+                        className="flex-1 h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer"
+                      />
+                      <span className="text-lg text-muted-foreground">A</span>
                     </div>
                   </div>
                 </div>

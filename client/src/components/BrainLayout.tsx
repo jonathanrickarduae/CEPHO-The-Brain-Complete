@@ -23,7 +23,7 @@ import { getLoginUrl } from "@/const";
 import { useIsMobile } from "@/hooks/useMobile";
 import { 
   LayoutDashboard, LogOut, PanelLeft, 
-  BookOpen, BarChart3, Lock, Fingerprint, Activity, Brain, Sun, Users, Moon, Keyboard, Settings, TrendingUp, Info, Clock
+  BookOpen, BarChart3, Lock, Fingerprint, Activity, Brain, Sun, Users, Moon, Keyboard, Settings, TrendingUp, Info, Clock, Sparkles
 } from "lucide-react";
 import { CSSProperties, useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
@@ -40,6 +40,7 @@ import { AccessibilitySettings, SkipLink } from "./AccessibilitySettings";
 import { Accessibility, Command } from "lucide-react";
 import { CommandPalette, useCommandPalette } from "./CommandPalette";
 import { useGovernance, GovernanceModeIndicator } from "@/hooks/useGovernance";
+import { ChangelogModal, useChangelog, WhatsNewButton } from "./ChangelogModal";
 
 const menuItems = [
   { icon: LayoutDashboard, label: "Command Center", path: "/dashboard" },
@@ -156,6 +157,9 @@ function BrainLayoutContent({
   // Keyboard shortcuts
   const keyboardHelp = useKeyboardShortcutsHelp();
   const commandPalette = useCommandPalette();
+  
+  // Changelog modal
+  const changelog = useChangelog();
   useKeyboardShortcuts([
     { key: '?', shift: true, action: keyboardHelp.toggle, description: 'Show keyboard shortcuts' },
   ]);
@@ -271,6 +275,16 @@ function BrainLayoutContent({
                   <Accessibility className="w-3.5 h-3.5" />
                   <span>Accessibility settings</span>
                 </button>
+                <button
+                  onClick={changelog.open}
+                  className="relative flex items-center gap-2 px-2 py-1.5 text-xs text-sidebar-foreground/50 hover:text-sidebar-foreground/70 transition-colors rounded-lg hover:bg-sidebar-accent"
+                >
+                  <Sparkles className="w-3.5 h-3.5" />
+                  <span>What's New</span>
+                  {changelog.hasNewUpdates && (
+                    <span className="absolute top-1 right-1 w-2 h-2 bg-primary rounded-full animate-pulse" />
+                  )}
+                </button>
                 <div className="pt-2 border-t border-sidebar-border mt-2">
                   <GovernanceModeIndicator className="w-full justify-center" />
                 </div>
@@ -382,6 +396,12 @@ function BrainLayoutContent({
       <CommandPalette
         isOpen={commandPalette.isOpen}
         onClose={commandPalette.close}
+      />
+      
+      {/* Changelog / What's New Modal */}
+      <ChangelogModal
+        isOpen={changelog.isOpen}
+        onClose={changelog.close}
       />
     </>
   );

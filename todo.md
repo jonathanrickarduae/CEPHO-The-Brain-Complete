@@ -659,3 +659,12 @@
 - [x] Daily Streak Counter: Track consecutive usage with milestones (DailyStreak.tsx)
 - [x] Celebration Animations: Confetti and achievement toasts (CelebrationAnimations.tsx)
 - [x] Changelog Modal: "What's New" feature with version history (ChangelogModal.tsx)
+
+
+## UX Component Integration (January 2026)
+
+- [x] Add ThemeToggle (ThemeSelector) to Settings page appearance tab
+- [x] Add DailyStreak component to Dashboard header
+- [x] Add ChangelogModal trigger (WhatsNewButton) to sidebar navigation
+- [x] Wire SwipeGestures to Review Queue page for mobile approve/reject
+- [x] Add first-time tooltips to Dashboard 6 command boxes

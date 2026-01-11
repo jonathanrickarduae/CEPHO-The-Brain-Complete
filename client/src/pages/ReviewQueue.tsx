@@ -6,6 +6,8 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { SwipeableItem, SwipeHint } from '@/components/SwipeGestures';
+import { useIsMobile } from '@/hooks/useMobile';
 
 interface ReviewItem {
   id: string;
@@ -108,6 +110,7 @@ export default function ReviewQueue() {
   const [items, setItems] = useState<ReviewItem[]>(mockReviewItems);
   const [filter, setFilter] = useState<'all' | 'digital_twin' | 'ai_expert'>('all');
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const isMobile = useIsMobile();
 
   const filteredItems = items.filter(item => 
     filter === 'all' || item.source === filter
@@ -188,6 +191,11 @@ export default function ReviewQueue() {
         </div>
       </div>
 
+      {/* Swipe hint for mobile */}
+      {isMobile && filteredItems.length > 0 && (
+        <SwipeHint className="mb-4" />
+      )}
+
       {/* Review Items */}
       <div className="space-y-4">
         {filteredItems.length === 0 ? (
@@ -201,9 +209,8 @@ export default function ReviewQueue() {
             const Icon = typeIcons[item.type];
             const isExpanded = expandedId === item.id;
             
-            return (
+            const itemContent = (
               <div
-                key={item.id}
                 className={cn(
                   'bg-card/50 rounded-xl border border-border/50 overflow-hidden transition-all',
                   isExpanded && 'ring-1 ring-primary/30'
@@ -323,6 +330,32 @@ export default function ReviewQueue() {
                 )}
               </div>
             );
+            
+            // Wrap with SwipeableItem on mobile
+            if (isMobile) {
+              return (
+                <SwipeableItem
+                  key={item.id}
+                  onSwipeRight={() => handleApprove(item.id)}
+                  onSwipeLeft={() => handleReject(item.id)}
+                  leftAction={{
+                    icon: <CheckCircle className="w-5 h-5" />,
+                    color: 'bg-green-500',
+                    label: 'Approve',
+                  }}
+                  rightAction={{
+                    icon: <XCircle className="w-5 h-5" />,
+                    color: 'bg-red-500',
+                    label: 'Reject',
+                  }}
+                  threshold={80}
+                >
+                  {itemContent}
+                </SwipeableItem>
+              );
+            }
+            
+            return <div key={item.id}>{itemContent}</div>;
           })
         )}
       </div>

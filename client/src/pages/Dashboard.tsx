@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useLocation } from "wouter";
 import { 
   Sun, Users, Lock, 
@@ -8,6 +8,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { LearningBadge } from "@/components/LearningIndicator";
+import { StreakBadge, useStreak } from "@/components/DailyStreak";
+import { Tooltip } from "@/components/Tooltip";
 import { useMoodCheck } from "@/hooks/useMoodCheck";
 import { WellnessScoreDashboard } from "@/components/WellnessScoreDashboard";
 import { Share2 } from "lucide-react";
@@ -68,6 +70,14 @@ export default function Dashboard() {
   
   // Mood tracking
   const { todaysMoods } = useMoodCheck();
+  
+  // Daily streak tracking
+  const { current: streakDays, markTodayComplete } = useStreak();
+  
+  // Mark today complete when user visits dashboard
+  useEffect(() => {
+    markTodayComplete();
+  }, []);
   const latestMood = todaysMoods.length > 0 ? todaysMoods[todaysMoods.length - 1] : null;
   
   // Mobile detection and bottom sheet
@@ -92,7 +102,8 @@ export default function Dashboard() {
       sub: "Briefing & Actions", 
       icon: Sun, 
       color: "#f59e0b",
-      path: "/daily-brief"
+      path: "/daily-brief",
+      tooltip: "Start your day here! Get personalized briefings, action items, and intelligence updates."
     },
     { 
       id: 2, 
@@ -100,7 +111,8 @@ export default function Dashboard() {
       sub: "287 Experts Ready", 
       icon: Users, 
       color: "#06b6d4",
-      path: "/ai-experts"
+      path: "/ai-experts",
+      tooltip: "Access 287+ AI specialists. Assemble expert teams for any project or challenge."
     },
     { 
       id: 3, 
@@ -108,7 +120,8 @@ export default function Dashboard() {
       sub: "6 Active Projects", 
       icon: FolderKanban, 
       color: "#10b981",
-      path: "/workflow"
+      path: "/workflow",
+      tooltip: "Track all your projects in one place. See status, blockers, and delivery timelines."
     },
     // BOTTOM ROW - Support
     { 
@@ -118,7 +131,8 @@ export default function Dashboard() {
       icon: Fingerprint, 
       color: "#a855f7",
       path: "/digital-twin",
-      badge: <LearningBadge className="absolute top-2 right-2" />
+      badge: <LearningBadge className="absolute top-2 right-2" />,
+      tooltip: "Your AI counterpart that learns from you. Train it to handle tasks autonomously."
     },
     { 
       id: 5, 
@@ -126,7 +140,8 @@ export default function Dashboard() {
       sub: "Knowledge Base", 
       icon: BookOpen, 
       color: "#ec4899",
-      path: "/library"
+      path: "/library",
+      tooltip: "Your knowledge repository. Store documents, AI images, charts, and project files."
     },
     { 
       id: 6, 
@@ -134,6 +149,7 @@ export default function Dashboard() {
       sub: "Secure Storage", 
       icon: Lock, 
       color: "#64748b",
+      tooltip: "Secure, encrypted storage for sensitive data. Connect integrations and manage security.",
       path: "/vault"
     },
   ];
@@ -251,6 +267,11 @@ export default function Dashboard() {
             <span className="text-xs text-muted-foreground hidden sm:inline">Wellness</span>
           </button>
           
+          {/* Daily Streak Badge */}
+          {streakDays > 0 && (
+            <StreakBadge streak={streakDays} size="md" showLabel={true} />
+          )}
+          
           {/* Today's mood indicator */}
           {latestMood && (
             <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-card/60 border border-border">
@@ -287,38 +308,45 @@ export default function Dashboard() {
       {/* 6-Button Grid - Reorganized for Flow */}
       <div className="flex-1 grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4 mb-4 max-w-5xl mx-auto w-full">
         {buttons.map((btn) => (
-          <button 
+          <Tooltip 
             key={btn.id}
-            onClick={() => setLocation(btn.path)}
-            className="group relative p-4 md:p-5 rounded-xl bg-card/60 border border-border hover:border-primary/50 hover:bg-card/80 transition-all duration-300 cursor-pointer overflow-hidden text-left min-h-0"
+            content={btn.tooltip}
+            position="bottom"
+            showOnFirstVisit={true}
+            tooltipKey={`dashboard_${btn.label.toLowerCase().replace(/\s+/g, '_')}`}
           >
-            {/* Learning badge for Digital Twin */}
-            {btn.badge}
-            
-            {/* Glow on Hover */}
-            <div 
-              className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
-              style={{ boxShadow: `inset 0 0 15px ${btn.color}15, 0 0 10px ${btn.color}20` }}
-            ></div>
-
-            <div className="absolute top-0 right-0 p-2 opacity-10 group-hover:opacity-20 transition-opacity" style={{ color: btn.color }}>
-              <btn.icon className="w-12 h-12 md:w-16 md:h-16" />
-            </div>
-
-            <div className="relative z-10 flex flex-col h-full">
-              <div 
-                className="p-2 w-fit rounded-lg bg-secondary/50 mb-2 group-hover:scale-105 transition-transform duration-300" 
-                style={{ color: btn.color, border: `1px solid ${btn.color}30` }}
-              >
-                <btn.icon className="w-5 h-5 md:w-6 md:h-6" />
-              </div>
+            <button 
+              onClick={() => setLocation(btn.path)}
+              className="group relative p-4 md:p-5 rounded-xl bg-card/60 border border-border hover:border-primary/50 hover:bg-card/80 transition-all duration-300 cursor-pointer overflow-hidden text-left min-h-0 w-full h-full"
+            >
+              {/* Learning badge for Digital Twin */}
+              {btn.badge}
               
-              <div>
-                <h3 className="font-display font-bold text-sm md:text-base mb-0.5 tracking-wide text-foreground">{btn.label}</h3>
-                <p className="text-xs text-muted-foreground">{btn.sub}</p>
+              {/* Glow on Hover */}
+              <div 
+                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+                style={{ boxShadow: `inset 0 0 15px ${btn.color}15, 0 0 10px ${btn.color}20` }}
+              ></div>
+
+              <div className="absolute top-0 right-0 p-2 opacity-10 group-hover:opacity-20 transition-opacity" style={{ color: btn.color }}>
+                <btn.icon className="w-12 h-12 md:w-16 md:h-16" />
               </div>
-            </div>
-          </button>
+
+              <div className="relative z-10 flex flex-col h-full">
+                <div 
+                  className="p-2 w-fit rounded-lg bg-secondary/50 mb-2 group-hover:scale-105 transition-transform duration-300" 
+                  style={{ color: btn.color, border: `1px solid ${btn.color}30` }}
+                >
+                  <btn.icon className="w-5 h-5 md:w-6 md:h-6" />
+                </div>
+                
+                <div>
+                  <h3 className="font-display font-bold text-sm md:text-base mb-0.5 tracking-wide text-foreground">{btn.label}</h3>
+                  <p className="text-xs text-muted-foreground">{btn.sub}</p>
+                </div>
+              </div>
+            </button>
+          </Tooltip>
         ))}
       </div>
 
