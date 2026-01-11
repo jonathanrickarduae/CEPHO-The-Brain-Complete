@@ -188,6 +188,19 @@ export default function About() {
               <p className="text-xs text-muted-foreground">Research Partner</p>
             </div>
           </div>
+          <div className="flex flex-col items-center gap-3">
+            <div className="w-20 h-20 rounded-xl bg-white flex items-center justify-center p-2">
+              <img 
+                src="/logos/oxford-university.png" 
+                alt="University of Oxford" 
+                className="w-full h-full object-contain"
+              />
+            </div>
+            <div className="text-center">
+              <p className="font-semibold text-foreground">University of Oxford</p>
+              <p className="text-xs text-muted-foreground">Strategic Partner</p>
+            </div>
+          </div>
         </div>
         <p className="text-center text-sm text-muted-foreground mt-6">
           Collaborating with world-leading institutions to advance AI-human collaboration research.

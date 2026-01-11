@@ -186,35 +186,103 @@ export default function Settings() {
             {activeTab === 'referrals' && <ReferralDashboard stats={mockReferralStats} />}
 
             {activeTab === 'notifications' && (
-              <div className="bg-gray-800 rounded-xl border border-gray-700 p-6">
-                <h3 className="text-lg font-semibold text-white mb-6">Notification Preferences</h3>
-                
-                <div className="space-y-4">
-                  {[
-                    { label: 'Daily Brief Reminder', description: 'Get reminded to check your daily brief each morning', enabled: true },
-                    { label: 'Mood Check Prompts', description: 'Receive prompts to log your mood 3x daily', enabled: true },
-                    { label: 'Task Deadlines', description: 'Get notified before task deadlines', enabled: true },
-                    { label: 'AI Insights', description: 'Receive insights from your Digital Twin', enabled: false },
-                    { label: 'Weekly Summary', description: 'Get a weekly productivity summary', enabled: true },
-                  ].map((item, index) => (
-                    <div key={index} className="flex items-center justify-between p-4 bg-gray-900 rounded-xl">
+              <div className="space-y-6">
+                {/* Do Not Disturb */}
+                <div className="bg-gray-800 rounded-xl border border-gray-700 p-6">
+                  <h3 className="text-lg font-semibold text-white mb-4">Do Not Disturb</h3>
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between p-4 bg-gray-900 rounded-xl">
                       <div>
-                        <div className="font-medium text-white">{item.label}</div>
-                        <div className="text-sm text-gray-500">{item.description}</div>
+                        <div className="font-medium text-white">Enable Do Not Disturb</div>
+                        <div className="text-sm text-gray-500">Pause all notifications</div>
                       </div>
-                      <button
-                        className={`w-12 h-6 rounded-full transition-colors ${
-                          item.enabled ? 'bg-cyan-500' : 'bg-gray-700'
-                        }`}
-                      >
-                        <div
-                          className={`w-5 h-5 rounded-full bg-white transition-transform ${
-                            item.enabled ? 'translate-x-6' : 'translate-x-0.5'
-                          }`}
-                        />
+                      <button className="w-12 h-6 rounded-full transition-colors bg-gray-700">
+                        <div className="w-5 h-5 rounded-full bg-white transition-transform translate-x-0.5" />
                       </button>
                     </div>
-                  ))}
+                    <div className="p-4 bg-gray-900 rounded-xl">
+                      <div className="font-medium text-white mb-3">Schedule Quiet Hours</div>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <label className="text-sm text-gray-400 block mb-1">Start Time</label>
+                          <select className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white">
+                            <option>10:00 PM</option>
+                            <option>11:00 PM</option>
+                            <option>12:00 AM</option>
+                          </select>
+                        </div>
+                        <div>
+                          <label className="text-sm text-gray-400 block mb-1">End Time</label>
+                          <select className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white">
+                            <option>6:00 AM</option>
+                            <option>7:00 AM</option>
+                            <option>8:00 AM</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Email Digest Options */}
+                <div className="bg-gray-800 rounded-xl border border-gray-700 p-6">
+                  <h3 className="text-lg font-semibold text-white mb-4">Email Digest</h3>
+                  <div className="space-y-3">
+                    {[
+                      { label: 'Daily Digest', description: 'Receive a summary email every morning', selected: true },
+                      { label: 'Weekly Digest', description: 'Get a weekly roundup on Mondays', selected: false },
+                      { label: 'Urgent Only', description: 'Only receive emails for critical alerts', selected: false },
+                      { label: 'No Emails', description: 'Disable all email notifications', selected: false },
+                    ].map((option, index) => (
+                      <label key={index} className="flex items-center gap-3 p-3 bg-gray-900 rounded-lg cursor-pointer hover:bg-gray-850 transition-colors">
+                        <input
+                          type="radio"
+                          name="emailDigest"
+                          defaultChecked={option.selected}
+                          className="w-4 h-4 text-cyan-500 bg-gray-800 border-gray-600 focus:ring-cyan-500"
+                        />
+                        <div>
+                          <div className="font-medium text-white">{option.label}</div>
+                          <div className="text-sm text-gray-500">{option.description}</div>
+                        </div>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Notification Preferences */}
+                <div className="bg-gray-800 rounded-xl border border-gray-700 p-6">
+                  <h3 className="text-lg font-semibold text-white mb-6">Notification Preferences</h3>
+                  
+                  <div className="space-y-4">
+                    {[
+                      { label: 'Daily Brief Reminder', description: 'Get reminded to check your daily brief each morning', enabled: true },
+                      { label: 'Mood Check Prompts', description: 'Receive prompts to log your mood 3x daily', enabled: true },
+                      { label: 'Task Deadlines', description: 'Get notified before task deadlines', enabled: true },
+                      { label: 'AI Insights', description: 'Receive insights from your Digital Twin', enabled: false },
+                      { label: 'Weekly Summary', description: 'Get a weekly productivity summary', enabled: true },
+                      { label: 'Security Alerts', description: 'Get notified of security events in The Vault', enabled: true },
+                      { label: 'Integration Status', description: 'Alerts when connected services have issues', enabled: true },
+                    ].map((item, index) => (
+                      <div key={index} className="flex items-center justify-between p-4 bg-gray-900 rounded-xl">
+                        <div>
+                          <div className="font-medium text-white">{item.label}</div>
+                          <div className="text-sm text-gray-500">{item.description}</div>
+                        </div>
+                        <button
+                          className={`w-12 h-6 rounded-full transition-colors ${
+                            item.enabled ? 'bg-cyan-500' : 'bg-gray-700'
+                          }`}
+                        >
+                          <div
+                            className={`w-5 h-5 rounded-full bg-white transition-transform ${
+                              item.enabled ? 'translate-x-6' : 'translate-x-0.5'
+                            }`}
+                          />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             )}

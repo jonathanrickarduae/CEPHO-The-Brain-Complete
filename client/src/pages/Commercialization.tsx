@@ -153,6 +153,20 @@ export default function Commercialization() {
                   <p className="text-xs text-gray-400 mt-1">AI-human collaboration research</p>
                 </div>
               </div>
+              <div className="flex items-center gap-4 bg-gray-900/50 rounded-xl p-4">
+                <div className="w-16 h-16 rounded-xl bg-white flex items-center justify-center p-2">
+                  <img 
+                    src="/logos/oxford-university.png" 
+                    alt="University of Oxford" 
+                    className="w-full h-full object-contain"
+                  />
+                </div>
+                <div>
+                  <h4 className="font-semibold text-white">University of Oxford</h4>
+                  <p className="text-sm text-purple-400">Strategic Partner</p>
+                  <p className="text-xs text-gray-400 mt-1">Ethical AI development</p>
+                </div>
+              </div>
             </div>
           </div>
 

@@ -196,7 +196,7 @@ export default function Waitlist() {
             <h2 className="text-2xl font-bold text-white text-center mb-8">
               Research Partners
             </h2>
-            <div className="flex justify-center">
+            <div className="flex flex-wrap justify-center gap-6">
               <div className="bg-gray-900/50 border border-gray-800 rounded-2xl p-8 flex flex-col items-center">
                 <div className="w-24 h-24 rounded-xl bg-white flex items-center justify-center p-3 mb-4">
                   <img 
@@ -209,6 +209,20 @@ export default function Waitlist() {
                 <p className="text-cyan-400 text-sm mb-3">Research Partner</p>
                 <p className="text-gray-400 text-sm text-center max-w-xs">
                   Collaborating on AI-human collaboration research and cognitive enhancement studies.
+                </p>
+              </div>
+              <div className="bg-gray-900/50 border border-gray-800 rounded-2xl p-8 flex flex-col items-center">
+                <div className="w-24 h-24 rounded-xl bg-white flex items-center justify-center p-3 mb-4">
+                  <img 
+                    src="/logos/oxford-university.png" 
+                    alt="University of Oxford" 
+                    className="w-full h-full object-contain"
+                  />
+                </div>
+                <h3 className="text-lg font-semibold text-white mb-1">University of Oxford</h3>
+                <p className="text-purple-400 text-sm mb-3">Strategic Partner</p>
+                <p className="text-gray-400 text-sm text-center max-w-xs">
+                  Advancing ethical AI development and human-machine interface research.
                 </p>
               </div>
             </div>

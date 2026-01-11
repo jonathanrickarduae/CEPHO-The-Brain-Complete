@@ -65,11 +65,34 @@ const BRIEF_DATA = {
     { id: 2, confidence: 87, title: "Prepare Investor Talking Points", reason: "Your successful investor meetings include 3 key metrics. I've drafted talking points.", autoAction: "twin" },
     { id: 3, confidence: 78, title: "Block Focus Time After 4 PM", reason: "Your productivity peaks in late afternoon. No meetings scheduled - protect this time.", autoAction: "gotit" },
   ],
+  
+  strategyBriefing: {
+    marketPosition: {
+      status: "Strong",
+      trend: "up",
+      summary: "Market share increased 2.3% this quarter. Competitor activity stable."
+    },
+    keyMetrics: [
+      { label: "Revenue Run Rate", value: "$4.2M ARR", change: "+12%", trend: "up" },
+      { label: "Customer Acquisition", value: "23 new", change: "+8%", trend: "up" },
+      { label: "Churn Rate", value: "2.1%", change: "-0.3%", trend: "down" },
+      { label: "NPS Score", value: "72", change: "+5", trend: "up" },
+    ],
+    competitorAlerts: [
+      { competitor: "Competitor X", alert: "Launched AI bid tool", impact: "medium", recommendation: "Accelerate our AI roadmap" },
+      { competitor: "Competitor Y", alert: "Hiring spree (50+ roles)", impact: "low", recommendation: "Monitor for product launch" },
+    ],
+    strategicPriorities: [
+      { priority: "Enterprise expansion", progress: 68, status: "on-track" },
+      { priority: "AI feature rollout", progress: 45, status: "at-risk" },
+      { priority: "International launch", progress: 82, status: "ahead" },
+    ]
+  }
 };
 
 export default function DailyBrief() {
   const [actionedItems, setActionedItems] = useState<ActionedItem[]>([]);
-  const [activeTab, setActiveTab] = useState<"overview" | "schedule" | "intelligence" | "actions">("overview");
+  const [activeTab, setActiveTab] = useState<"overview" | "schedule" | "intelligence" | "strategy" | "actions">("overview");
 
   const handleAction = (
     itemId: string, 
@@ -257,6 +280,7 @@ export default function DailyBrief() {
               { id: "overview", label: "Overview", icon: Eye },
               { id: "schedule", label: "Schedule", icon: Calendar },
               { id: "intelligence", label: "Intelligence", icon: TrendingUp },
+              { id: "strategy", label: "Strategy", icon: Brain },
               { id: "actions", label: "Action Engine", icon: Zap },
             ].map((tab) => (
               <button
@@ -490,6 +514,101 @@ export default function DailyBrief() {
               ))}
             </CardContent>
           </Card>
+        )}
+
+        {/* Strategy Tab */}
+        {activeTab === "strategy" && (
+          <div className="space-y-6">
+            {/* Market Position */}
+            <Card className="bg-card/60 border-border">
+              <CardHeader className="pb-3">
+                <CardTitle className="flex items-center gap-2 text-foreground">
+                  <TrendingUp className="w-5 h-5 text-primary" />
+                  Market Position
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="flex items-center gap-2">
+                    <span className="text-2xl font-bold text-green-400">{BRIEF_DATA.strategyBriefing.marketPosition.status}</span>
+                    <TrendingUp className="w-5 h-5 text-green-400" />
+                  </div>
+                  <p className="text-muted-foreground">{BRIEF_DATA.strategyBriefing.marketPosition.summary}</p>
+                </div>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  {BRIEF_DATA.strategyBriefing.keyMetrics.map((metric, i) => (
+                    <div key={i} className="bg-background/50 rounded-lg p-4">
+                      <div className="text-sm text-muted-foreground mb-1">{metric.label}</div>
+                      <div className="text-xl font-bold text-foreground">{metric.value}</div>
+                      <div className={`text-sm ${metric.trend === 'up' ? 'text-green-400' : metric.trend === 'down' ? 'text-red-400' : 'text-muted-foreground'}`}>
+                        {metric.change}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Competitor Alerts */}
+            <Card className="bg-card/60 border-border">
+              <CardHeader className="pb-3">
+                <CardTitle className="flex items-center gap-2 text-foreground">
+                  <AlertTriangle className="w-5 h-5 text-orange-400" />
+                  Competitor Activity
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  {BRIEF_DATA.strategyBriefing.competitorAlerts.map((alert, i) => (
+                    <div key={i} className="flex items-start justify-between p-4 bg-background/50 rounded-lg">
+                      <div>
+                        <div className="font-medium text-foreground">{alert.competitor}</div>
+                        <div className="text-sm text-muted-foreground">{alert.alert}</div>
+                        <div className="text-sm text-primary mt-1">→ {alert.recommendation}</div>
+                      </div>
+                      <Badge variant={alert.impact === 'high' ? 'destructive' : alert.impact === 'medium' ? 'default' : 'secondary'}>
+                        {alert.impact} impact
+                      </Badge>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Strategic Priorities */}
+            <Card className="bg-card/60 border-border">
+              <CardHeader className="pb-3">
+                <CardTitle className="flex items-center gap-2 text-foreground">
+                  <Lightbulb className="w-5 h-5 text-yellow-400" />
+                  Strategic Priorities
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {BRIEF_DATA.strategyBriefing.strategicPriorities.map((priority, i) => (
+                    <div key={i} className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="font-medium text-foreground">{priority.priority}</span>
+                        <Badge variant={priority.status === 'ahead' ? 'default' : priority.status === 'on-track' ? 'secondary' : 'destructive'}>
+                          {priority.status}
+                        </Badge>
+                      </div>
+                      <div className="h-2 bg-background rounded-full overflow-hidden">
+                        <div 
+                          className={`h-full rounded-full ${
+                            priority.status === 'ahead' ? 'bg-green-500' : 
+                            priority.status === 'on-track' ? 'bg-blue-500' : 'bg-orange-500'
+                          }`}
+                          style={{ width: `${priority.progress}%` }}
+                        />
+                      </div>
+                      <div className="text-sm text-muted-foreground text-right">{priority.progress}% complete</div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
         )}
 
         {/* Action Engine Tab - Final Review */}
