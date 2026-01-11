@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { isDemoModeEnabled, getDemoData } from "@/services/demoMode";
 
 // Project data matching Library structure
 // This will be connected to real data from Project Genesis and Review Queue

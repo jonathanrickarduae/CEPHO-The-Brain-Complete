@@ -20,6 +20,7 @@ import { GettingStartedChecklist, useOnboardingStatus } from "@/components/Getti
 import { InsightsPanel, InlineNudge, useNudgeEngine } from "@/components/IntelligentNudges";
 import { VoiceInterfaceToggle } from "@/components/VoiceInterfaceToggle";
 import { FloatingVoiceNoteButton } from "@/components/VoiceNotepad";
+import { isDemoModeEnabled, getDemoData, initializeDemoModeIfNeeded } from "@/services/demoMode";
 
 // Daily rotating quotes - one for each day
 const QUOTES = [
@@ -78,6 +79,16 @@ export default function Dashboard() {
   
   // Daily streak tracking - only show, don't auto-mark on load
   const { current: streakDays } = useStreak();
+  
+  // Demo mode initialization
+  useEffect(() => {
+    initializeDemoModeIfNeeded();
+  }, []);
+  
+  // Get demo data if in demo mode
+  const demoData = isDemoModeEnabled() ? getDemoData() : null;
+  const activeProjects = demoData?.projects.filter(p => p.status === 'active').length || 0;
+  const pendingTasks = demoData?.tasks.filter(t => t.status === 'pending').length || 0;
   const latestMood = todaysMoods.length > 0 ? todaysMoods[todaysMoods.length - 1] : null;
   
   // Mobile detection and bottom sheet
@@ -117,7 +128,7 @@ export default function Dashboard() {
     { 
       id: 3, 
       label: "WORKFLOW", 
-      sub: "6 Active Projects", 
+      sub: activeProjects > 0 ? `${activeProjects} Active Projects` : "6 Active Projects", 
       icon: FolderKanban, 
       color: "#10b981",
       path: "/workflow",
@@ -328,7 +339,7 @@ export default function Dashboard() {
           >
             <button 
               onClick={() => setLocation(btn.path)}
-              className="group relative p-4 md:p-5 rounded-xl bg-card/60 border border-border hover:border-primary/50 hover:bg-card/80 transition-all duration-300 cursor-pointer overflow-hidden text-left min-h-0 w-full h-full"
+              className="group relative p-4 md:p-5 rounded-xl bg-card/60 border border-border hover:border-primary/50 hover:bg-card/80 transition-all duration-300 cursor-pointer overflow-hidden text-left min-h-0 w-full h-full hover:scale-[1.02] active:scale-[0.98] hover:shadow-lg hover:shadow-primary/10"
             >
               {/* Learning badge for Digital Twin */}
               {btn.badge}

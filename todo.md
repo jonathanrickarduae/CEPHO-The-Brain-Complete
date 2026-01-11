@@ -1330,7 +1330,7 @@
 ## Pre-Test Polish (January 2026)
 
 ### Functional Improvements (1-12)
-- [ ] 1. Sample data & demo mode with realistic projects/tasks
+- [x] 1. Sample data & demo mode with realistic projects/tasks
 - [ ] 2. Error handling with proper error states and fallback UI
 - [ ] 3. Onboarding completion flow - auto-create sample Project Genesis
 - [ ] 4. Digital Twin personality preview - test conversation
@@ -1344,7 +1344,7 @@
 - [x] 12. Loading states on all buttons during API calls
 
 ### Design Polish (13-28)
-- [ ] 13. Micro-animations on hover and click feedback
+- [x] 13. Micro-animations on hover and click feedback
 - [ ] 14. Glassmorphism refinement - consistent blur effects
 - [ ] 15. Gradient accents - animated gradient borders
 - [ ] 16. Icon consistency audit
