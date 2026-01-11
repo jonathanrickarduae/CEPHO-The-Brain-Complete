@@ -23,7 +23,7 @@ import { getLoginUrl } from "@/const";
 import { useIsMobile } from "@/hooks/useMobile";
 import { 
   LayoutDashboard, LogOut, PanelLeft, 
-  BookOpen, BarChart3, Lock, Fingerprint, Activity, Settings, Brain, Sun, Users
+  BookOpen, BarChart3, Lock, Fingerprint, Activity, Settings, Brain, Sun, Users, Moon
 } from "lucide-react";
 import { CSSProperties, useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
@@ -39,6 +39,7 @@ const menuItems = [
   { icon: Fingerprint, label: "Digital Twin", path: "/digital-twin" },
   { icon: Activity, label: "Workflow", path: "/workflow" },
   { icon: Lock, label: "The Vault", path: "/vault" },
+  { icon: Moon, label: "Evening Review", path: "/evening-review" },
 ];
 
 const SIDEBAR_WIDTH_KEY = "brain-sidebar-width";

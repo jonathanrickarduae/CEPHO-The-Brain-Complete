@@ -73,3 +73,12 @@
 - [ ] Digital Twin: Suggest ways to strengthen business
 - [ ] Digital Twin: Monitor integrations and flag issues proactively
 - [ ] The Brain: Living ecosystem with interconnected learning
+- [x] Evening Review: Create 6 PM daily wash-up page
+- [x] Evening Review: Emotion timeline showing mood throughout day
+- [x] Evening Review: What went well / What didn't sections
+- [x] Evening Review: Feedback to Digital Twin input
+- [x] Evening Review: Set overnight priorities for AI to work on
+- [x] Evening Review: Digital Twin suggestions for tomorrow adjustments
+- [ ] Brain Dump: Quick capture for ideas and research requests
+- [ ] Daily Cycle: Morning Brief → Day Activity → Evening Review → Overnight Processing
+- [ ] Goal tracking: "Getting you to a 10" - track daily wellness score
