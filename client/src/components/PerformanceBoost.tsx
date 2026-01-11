@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { TwinBreakApproval } from './TwinBreakApproval';
 import { Headphones, Coffee, Wind, Brain, Zap, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -25,9 +26,11 @@ export function PerformanceBoost() {
   const [currentScore] = useState(6);
   const [selectedBoost, setSelectedBoost] = useState<string | null>(null);
 
+  const [showTwinApproval, setShowTwinApproval] = useState(false);
+
   const handleBoost = (id: string) => {
     setSelectedBoost(id);
-    // In production: trigger the boost action, update calendar, etc.
+    setShowTwinApproval(true);
   };
 
   return (
@@ -74,10 +77,21 @@ export function PerformanceBoost() {
         })}
       </div>
 
-      {selectedBoost && (
-        <p className="text-xs text-center text-green-500 mt-3">
-          ✓ Added to your schedule
-        </p>
+      {/* Twin Break Approval Modal */}
+      {showTwinApproval && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+          <div className="w-full max-w-md">
+            <TwinBreakApproval
+              onApprove={() => {
+                setShowTwinApproval(false);
+              }}
+              onCancel={() => {
+                setShowTwinApproval(false);
+                setSelectedBoost(null);
+              }}
+            />
+          </div>
+        </div>
       )}
     </div>
   );

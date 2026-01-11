@@ -20,6 +20,10 @@ import { GettingStartedChecklist, useOnboardingStatus } from "@/components/Getti
 import { InsightsPanel, InlineNudge, useNudgeEngine } from "@/components/IntelligentNudges";
 import { VoiceInterfaceToggle } from "@/components/VoiceInterfaceToggle";
 import { FloatingVoiceNoteButton } from "@/components/VoiceNotepad";
+import { PerformanceBoost } from "@/components/PerformanceBoost";
+import { TwinBreakApproval } from "@/components/TwinBreakApproval";
+import { TourPrompt } from "@/components/TourAndDemoMode";
+import { NeuralNetworkViz } from "@/components/NeuralNetworkViz";
 import { isDemoModeEnabled, getDemoData, initializeDemoModeIfNeeded } from "@/services/demoMode";
 
 // Daily rotating quotes - one for each day
@@ -204,8 +208,8 @@ export default function Dashboard() {
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyDown={handleKeyDown}
-                placeholder="What do you need? Capture a task, ask a question, or just think out loud..." 
-                className="flex-1 bg-transparent border-none outline-none text-lg text-foreground placeholder:text-muted-foreground/70 min-h-0"
+                placeholder="Message Digital Twin..." 
+                className="flex-1 bg-transparent border-none outline-none text-lg text-foreground placeholder:text-muted-foreground/50 min-h-0"
                 autoFocus
               />
               <div className="flex items-center gap-2">
@@ -369,7 +373,7 @@ export default function Dashboard() {
               </div>
             </button>
           </Tooltip>
-       ))})
+         ))}
       </div>
 
       {/* Getting Started Checklist for new users */}
@@ -382,6 +386,16 @@ export default function Dashboard() {
         <InsightsPanel />
       </div>
 
+      {/* Performance Boost - Quick 15-min interventions */}
+      <div className="max-w-3xl mx-auto w-full mb-6">
+        <PerformanceBoost />
+      </div>
+
+      {/* Tour Prompt for new users */}
+      <div className="max-w-3xl mx-auto w-full mb-6">
+        <TourPrompt onStartTour={() => console.log('Start tour')} />
+      </div>
+
       {/* Voice Input - Manus Style with Mic on Right */}
       <div className="max-w-3xl mx-auto w-full">
         <div className="flex items-center gap-3 bg-card/60 border border-border rounded-xl px-4 py-3 focus-within:border-primary/50 focus-within:ring-1 focus-within:ring-primary/20 transition-all duration-300">
@@ -390,8 +404,8 @@ export default function Dashboard() {
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="What's on your mind? Type or speak..." 
-            className="flex-1 bg-transparent border-none outline-none text-base text-foreground placeholder:text-muted-foreground min-h-0"
+            placeholder="Message Digital Twin..." 
+            className="flex-1 bg-transparent border-none outline-none text-base text-foreground placeholder:text-muted-foreground/50 min-h-0"
           />
           <div className="flex items-center gap-2">
             <Button 
