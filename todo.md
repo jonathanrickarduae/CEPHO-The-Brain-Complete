@@ -846,7 +846,7 @@
 - [x] Voice input throughout the app (not just Digital Twin) - VoiceCommands.tsx
 - [x] Voice commands for navigation ("Go to Library") - VoiceCommands.tsx
 - [x] Voice-to-text for quick capture - VoiceNotepad.tsx
-- [ ] Text-to-speech for reading content back
+- [x] Text-to-speech for reading content back
 - [x] Wake word option for hands-free use - VoiceCommands.tsx
 
 ## Global Search (January 2026)
@@ -915,9 +915,9 @@
 - [x] Auto-categorisation by type, sender, detected topic
 - [x] "Create project from selection" - group items into new project
 - [x] Digital Twin initial assessment trigger on new project
-- [ ] Research repository builder (offline docs + online research)
+- [x] Research repository builder (offline docs + online research)
 - [ ] WhatsApp Business API integration (future)
-- [ ] Intake processing pipeline: Receive → Extract → Categorise → Project → Analysis
+- [x] Intake processing pipeline: Receive → Extract → Categorise → Project → Analysis
 
 
 ## Secure Cloud Storage System (January 2026)
@@ -929,7 +929,7 @@
 - [x] Encryption status per file/folder
 - [x] Access audit log viewer
 - [x] Digital Twin backup management
-- [ ] Kill switch / remote wipe capability
+- [x] Kill switch / remote wipe capability
 - [x] Anomaly detection alerts
 - [x] Storage quota management
 
@@ -1422,19 +1422,19 @@
 
 ### Mental Pillar (Wellbeing)
 - [x] Enhanced mood tracking with trends - PersonalWellness.tsx
-- [ ] Stress indicators and alerts
+- [x] Stress indicators and alerts
 - [x] Work-life balance score - PersonalWellness.tsx
 - [ ] Mindfulness/meditation prompts
 - [ ] Cognitive load monitoring
-- [ ] Burnout prevention alerts
+- [x] Burnout prevention alerts
 
 ### Wealth Pillar (Financial)
 - [ ] Net worth tracking
 - [ ] Investment portfolio overview
 - [x] Income vs expenses visualization
-- [ ] Financial goals progress
+- [x] Financial goals progress
 - [ ] Passive income monitoring
-- [ ] Financial health score
+- [x] Financial health score
 
 ### Personal Dashboard
 - [x] Daily wellness score (1-10 across all pillars) - PersonalWellness.tsx
@@ -1581,9 +1581,9 @@
 - [x] Category recommendations (which model for which expert type)
 - [x] Setup instructions with provider links
 - [x] Added to Settings > API Costs tab
-- [ ] Monthly budget setting with cost alerts
+- [x] Monthly budget setting with cost alerts
 - [ ] Provider account setup guidance (Claude, OpenAI, etc.)
-- [ ] Cost-per-query estimates by task type
+- [x] Cost-per-query estimates by task type
 - [x] ROI calculator (time saved vs API costs)
 
 
@@ -1635,7 +1635,7 @@
 - [x] Identify common blockers and success factors
 - [ ] Resource allocation optimization suggestions
 - [ ] Timeline risk analysis across portfolio
-- [ ] Financial trend analysis across projects
+- [x] Financial trend analysis across projects
 
 ### Digital Twin Data Science Tasks
 - [ ] Twin can delegate "Find insights in X" tasks to data science expert
