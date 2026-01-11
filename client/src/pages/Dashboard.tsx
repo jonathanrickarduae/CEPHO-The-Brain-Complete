@@ -73,13 +73,8 @@ export default function Dashboard() {
   // Mood tracking
   const { todaysMoods } = useMoodCheck();
   
-  // Daily streak tracking
-  const { current: streakDays, markTodayComplete } = useStreak();
-  
-  // Mark today complete when user visits dashboard
-  useEffect(() => {
-    markTodayComplete();
-  }, []);
+  // Daily streak tracking - only show, don't auto-mark on load
+  const { current: streakDays } = useStreak();
   const latestMood = todaysMoods.length > 0 ? todaysMoods[todaysMoods.length - 1] : null;
   
   // Mobile detection and bottom sheet

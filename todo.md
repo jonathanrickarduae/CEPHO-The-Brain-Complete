@@ -790,3 +790,178 @@
 - [ ] Digital Twin can apply signature with explicit approval
 - [ ] Auto-approval option for pre-authorized document types
 - [ ] Add signature to Library/Image assets section
+
+
+## UX Cleanup - Onboarding Simplification (January 2026)
+
+- [ ] Remove streak achievement toast from onboarding flow
+- [ ] Defer gamification elements to post-onboarding experience
+- [ ] Clean up intro wizard screens - remove unnecessary elements
+- [ ] Review and simplify first-time user experience
+- [ ] Ensure onboarding focuses on essential setup only
+
+
+## Video Creation Pipeline (January 2026)
+
+- [ ] Video project workspace with timeline view
+- [ ] AI video generation integration (script to video)
+- [ ] Video templates for common content types
+- [ ] Storyboard creation tool
+- [ ] Voice-over generation and sync
+- [ ] Export options (MP4, social media formats)
+- [ ] Video asset library management
+
+## Intelligent Nudges System (January 2026)
+
+- [ ] Contextual insight engine - analyzes patterns and surfaces relevant info
+- [ ] Subtle notification cards (not pop-ups) in Dashboard
+- [ ] Project staleness detection ("Celadon hasn't been updated in 3 days")
+- [ ] Calendar-aware suggestions ("Prepare for tomorrow's meeting")
+- [ ] Integration efficiency insights ("You're not using Zoom's AI notes")
+- [ ] Configurable nudge frequency and types
+- [ ] "Insights" section in Dashboard for accumulated suggestions
+
+## Data Governance Dashboard (January 2026)
+
+- [ ] Data ownership visualization - what data exists where
+- [ ] Access hierarchy display (You only / Digital Twin / Shared)
+- [ ] Audit trail viewer - who accessed what, when
+- [ ] Data deletion controls with confirmation
+- [ ] Export all data functionality (GDPR compliant)
+- [ ] Data retention policy settings
+- [ ] Encryption status indicators
+- [ ] Third-party data sharing controls
+
+## Digital Twin Testing Mode (January 2026)
+
+- [ ] Sandbox environment to test Digital Twin responses
+- [ ] Simulated scenarios without affecting real data
+- [ ] A/B comparison of twin responses
+- [ ] Training feedback loop (approve/reject twin actions)
+- [ ] Confidence score display for twin decisions
+
+## Voice Interface (January 2026)
+
+- [ ] Voice input throughout the app (not just Digital Twin)
+- [ ] Voice commands for navigation ("Go to Library")
+- [ ] Voice-to-text for quick capture
+- [ ] Text-to-speech for reading content back
+- [ ] Wake word option for hands-free use
+
+## Global Search (January 2026)
+
+- [ ] Search across all modules (Library, Vault, conversations, projects)
+- [ ] Filters by type, date, source
+- [ ] Recent searches history
+- [ ] Quick actions from search results
+- [ ] Keyboard shortcut (Cmd+K already exists, enhance it)
+
+## Notification & Alert System (January 2026)
+
+- [ ] In-app notification center
+- [ ] Email digest options (daily, weekly, urgent only)
+- [ ] Push notification support (PWA)
+- [ ] Notification preferences per category
+- [ ] Do Not Disturb scheduling
+
+## Brand Kit & Templates (January 2026)
+
+- [ ] Brand colors, fonts, logos storage
+- [ ] Document templates library
+- [ ] Consistent output styling based on brand kit
+- [ ] Template creation wizard
+- [ ] Export brand guidelines
+
+
+## Communication Style Guidelines (January 2026)
+
+- [x] Digital Twin: No personality, no name, no avatar
+- [x] Direct, professional, functional communication only
+- [x] No friendly openers ("Hey!", "Hope you're well!")
+- [x] No emojis or casual language
+- [x] Clear, actionable information only
+- [ ] Review and update all nudge/notification copy to be direct
+- [ ] Update Digital Twin responses to be concise and professional
+- [ ] Remove any "friendly" language from system messages
+
+
+## Brand Kit & Company Templates (January 2026)
+
+- [ ] Create Brand Kit storage system per company (Celadon, Boundless, etc.)
+- [ ] Store colours, fonts, logos for each company
+- [ ] Auto-load correct template when company selected
+- [ ] PowerPoint/Slide template generation per brand
+- [ ] Document template generation per brand
+- [ ] Video template generation per brand
+
+## Interactive Presentation Builder (January 2026)
+
+- [ ] Iterative slide-by-slide creation (not bulk generation)
+- [ ] Slide 1 preview → user feedback → adjust → next slide
+- [ ] Learn user's narrative style from feedback
+- [ ] Store presentation structure preferences
+- [ ] Digital Twin learns storytelling patterns
+- [ ] Remember: opening style, data presentation, conclusion format
+- [ ] Company-specific presentation templates
+
+
+## Universal Inbox / Intake Funnel (January 2026)
+
+- [ ] Create Universal Inbox component - single entry point for all incoming items
+- [ ] Email integration (Outlook/Gmail via IMAP or API)
+- [ ] Manual upload: documents, voice notes, images, links
+- [ ] Auto-extraction: PDF text, image OCR, voice transcription
+- [ ] Auto-categorisation by type, sender, detected topic
+- [ ] "Create project from selection" - group items into new project
+- [ ] Digital Twin initial assessment trigger on new project
+- [ ] Research repository builder (offline docs + online research)
+- [ ] WhatsApp Business API integration (future)
+- [ ] Intake processing pipeline: Receive → Extract → Categorise → Project → Analysis
+
+
+## Secure Cloud Storage System (January 2026)
+
+- [ ] Create Secure Storage Dashboard component
+- [ ] Storage usage visualization (hot/warm/cold tiers)
+- [ ] Backup status and history display
+- [ ] Security health indicators
+- [ ] Encryption status per file/folder
+- [ ] Access audit log viewer
+- [ ] Digital Twin backup management
+- [ ] Kill switch / remote wipe capability
+- [ ] Anomaly detection alerts
+- [ ] Storage quota management
+
+
+## Project Genesis - Opportunity Engine (January 2026)
+
+- [ ] Create Project Bible template system - master document per project
+- [ ] Standard sections: Executive Summary, Legal Review, Corporate Structure, Financials, Data Room, Strategy, Actions, Questions, Recommendations
+- [ ] Auto-generate outputs from Bible: 2-pager, investment deck, Series A materials
+- [ ] Financial model templates: Cash flow, DCF, valuation
+- [ ] Legal document drafts: NDAs, contracts (with auto logo insertion)
+- [ ] Data room checklist tracker (documents needed/received)
+- [ ] Validation questions workflow before document generation
+- [ ] Digital Twin learns from each project to improve future generations
+- [ ] Risk/concerns flagging and tracking
+- [ ] Line-by-line review interface with approve/revise actions
+- [ ] Project status dashboard showing Bible completion percentage
+- [ ] Cross-project comparison and insights
+
+
+## AI Router & Provider System (January 2026)
+
+- [ ] Create AI Provider configuration in Settings
+- [ ] Support multiple providers: Forge, OpenAI, Claude, Azure, Gemini, Perplexity
+- [ ] Secure API key storage in The Vault
+- [ ] AI Router - assign optimal model per AI Expert domain
+- [ ] Medical experts → Claude (nuanced reasoning)
+- [ ] Legal experts → GPT-4 (contract analysis)
+- [ ] Financial experts → GPT-4o (calculations)
+- [ ] Research tasks → Perplexity (real-time web)
+- [ ] Technical/code → Claude (debugging)
+- [ ] Fallback provider configuration
+- [ ] Task-type routing (document gen, research, conversation)
+- [ ] Provider health monitoring and auto-switch
+- [ ] Usage tracking per provider (cost management)
+- [ ] Enterprise support (Azure OpenAI for governed users)

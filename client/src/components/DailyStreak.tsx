@@ -264,7 +264,7 @@ export function useStreak() {
     setStreak(newStreak);
     localStorage.setItem('brain_streak_data', JSON.stringify(newStreak));
 
-    // Trigger celebration for milestones
+    // Trigger celebration only for meaningful milestones (not first day)
     const milestones = [7, 14, 30, 60, 90, 180, 365];
     if (milestones.includes(newCurrent)) {
       const milestoneNames: Record<number, string> = {
@@ -281,14 +281,8 @@ export function useStreak() {
         description: `You've maintained a ${newCurrent}-day streak! Keep it up!`,
         icon: '🔥',
       });
-    } else if (newCurrent === 1) {
-      // First day of new streak
-      showAchievement({
-        title: 'Streak Started!',
-        description: 'You\'ve started a new streak. Come back tomorrow!',
-        icon: '✨',
-      });
     }
+    // Note: Removed "Streak Started" toast for day 1 - too early in user journey
   };
 
   return { ...streak, markTodayComplete };
