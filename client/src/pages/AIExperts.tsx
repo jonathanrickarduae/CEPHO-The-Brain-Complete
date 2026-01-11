@@ -25,6 +25,26 @@ import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useGovernance, FeatureGate, RestrictedBadge } from "@/hooks/useGovernance";
+import { 
+  InsightCard, 
+  ValidationSummary, 
+  DigitalTwinQA,
+  ConfidenceBadge,
+  VerificationBadge 
+} from "@/components/InsightValidation";
+import { 
+  BatchVerificationPanel,
+  TruthVerificationSummary,
+  ClassificationBadge,
+  type ClassifiedStatement,
+  type StatementClassification
+} from "@/components/TruthVerification";
+import { 
+  type Insight,
+  type ConfidenceLevel,
+  type VerificationStatus,
+  QA_CHALLENGE_PROMPTS 
+} from "@/lib/insightValidation";
 
 // Expert profiles database
 const EXPERT_PROFILES = {
@@ -147,6 +167,11 @@ export default function AIExperts() {
   const [timeRemaining, setTimeRemaining] = useState<number>(0);
   const [isRunning, setIsRunning] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
+  
+  // Insight Validation State
+  const [validationMode, setValidationMode] = useState<'off' | 'review' | 'challenge'>('off');
+  const [pendingInsights, setPendingInsights] = useState<ClassifiedStatement[]>([]);
+  const [validatedInsights, setValidatedInsights] = useState<ClassifiedStatement[]>([]);
 
   // Check for pre-populated mission from URL
   useEffect(() => {
@@ -1025,65 +1050,233 @@ export default function AIExperts() {
 
         {/* Review Phase */}
         {phase === "review" && activeTask && (
-          <div className="max-w-3xl mx-auto space-y-6">
-            <Card className="bg-yellow-500/5 border-yellow-500/30">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-foreground">
-                  <Eye className="w-5 h-5 text-yellow-400" />
-                  Quality Review
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="p-4 rounded-xl bg-secondary/30 border border-border">
-                  <h3 className="font-bold text-foreground mb-2">{activeTask.title}</h3>
-                  <p className="text-muted-foreground">{activeTask.deliverable || "Deliverable content here..."}</p>
-                </div>
+          <div className="max-w-4xl mx-auto space-y-6">
+            {/* Review Mode Tabs */}
+            <div className="flex gap-2 mb-4">
+              <Button
+                variant={validationMode === 'off' ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setValidationMode('off')}
+              >
+                <Eye className="w-4 h-4 mr-2" />
+                Standard Review
+              </Button>
+              <Button
+                variant={validationMode === 'review' ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setValidationMode('review')}
+                className={validationMode === 'review' ? 'bg-amber-500 hover:bg-amber-600' : ''}
+              >
+                <FileText className="w-4 h-4 mr-2" />
+                Truth Verification
+              </Button>
+              <Button
+                variant={validationMode === 'challenge' ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setValidationMode('challenge')}
+                className={validationMode === 'challenge' ? 'bg-purple-500 hover:bg-purple-600' : ''}
+              >
+                <Fingerprint className="w-4 h-4 mr-2" />
+                Digital Twin QA
+              </Button>
+            </div>
 
-                {/* Digital Twin Feedback */}
-                <div className="p-4 rounded-xl bg-purple-500/10 border border-purple-500/30">
-                  <div className="flex items-center gap-3 mb-3">
-                    <Fingerprint className="w-5 h-5 text-purple-400" />
-                    <span className="font-medium text-foreground">Digital Twin Review</span>
-                  </div>
-                  <ul className="space-y-2 text-sm text-muted-foreground">
-                    <li className="flex items-start gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-green-400 mt-0.5" />
-                      <span>Content aligns with your communication style</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-green-400 mt-0.5" />
-                      <span>Key points are addressed</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <AlertCircle className="w-4 h-4 text-yellow-400 mt-0.5" />
-                      <span>Consider adding more specific metrics (optional)</span>
-                    </li>
-                  </ul>
-                </div>
+            {/* Standard Review Mode */}
+            {validationMode === 'off' && (
+              <>
+                <Card className="bg-yellow-500/5 border-yellow-500/30">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2 text-foreground">
+                      <Eye className="w-5 h-5 text-yellow-400" />
+                      Quality Review
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="p-4 rounded-xl bg-secondary/30 border border-border">
+                      <h3 className="font-bold text-foreground mb-2">{activeTask.title}</h3>
+                      <p className="text-muted-foreground">{activeTask.deliverable || "Deliverable content here..."}</p>
+                    </div>
 
-                <div className="flex gap-3">
-                  <Button 
-                    variant="outline"
-                    className="flex-1"
-                    onClick={() => {
-                      toast.info("Sending back for revision...");
-                      setPhase("active");
-                      setIsRunning(true);
-                    }}
-                  >
-                    <RefreshCw className="w-4 h-4 mr-2" /> Request Revision
-                  </Button>
-                  <Button 
-                    className="flex-1 bg-green-500 hover:bg-green-600"
-                    onClick={completeTask}
-                  >
-                    <CheckCircle2 className="w-4 h-4 mr-2" /> Approve & Complete
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
+                    {/* Digital Twin Feedback */}
+                    <div className="p-4 rounded-xl bg-purple-500/10 border border-purple-500/30">
+                      <div className="flex items-center gap-3 mb-3">
+                        <Fingerprint className="w-5 h-5 text-purple-400" />
+                        <span className="font-medium text-foreground">Digital Twin Review</span>
+                      </div>
+                      <ul className="space-y-2 text-sm text-muted-foreground">
+                        <li className="flex items-start gap-2">
+                          <CheckCircle2 className="w-4 h-4 text-green-400 mt-0.5" />
+                          <span>Content aligns with your communication style</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <CheckCircle2 className="w-4 h-4 text-green-400 mt-0.5" />
+                          <span>Key points are addressed</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <AlertCircle className="w-4 h-4 text-yellow-400 mt-0.5" />
+                          <span>Consider adding more specific metrics (optional)</span>
+                        </li>
+                      </ul>
+                    </div>
 
-            {/* Dialogue History */}
+                    <div className="flex gap-3">
+                      <Button 
+                        variant="outline"
+                        className="flex-1"
+                        onClick={() => {
+                          toast.info("Sending back for revision...");
+                          setPhase("active");
+                          setIsRunning(true);
+                        }}
+                      >
+                        <RefreshCw className="w-4 h-4 mr-2" /> Request Revision
+                      </Button>
+                      <Button 
+                        className="flex-1 bg-green-500 hover:bg-green-600"
+                        onClick={completeTask}
+                      >
+                        <CheckCircle2 className="w-4 h-4 mr-2" /> Approve & Complete
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              </>
+            )}
+
+            {/* Truth Verification Mode */}
+            {validationMode === 'review' && (
+              <>
+                <Card className="bg-amber-500/5 border-amber-500/30">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2 text-foreground">
+                      <FileText className="w-5 h-5 text-amber-400" />
+                      Truth Verification & Citation Check
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <p className="text-sm text-muted-foreground">
+                      Each statement is classified as Fact, Analysis, Opinion, or Speculation. 
+                      Facts require source citations. All claims must be verifiable.
+                    </p>
+                    
+                    {/* Sample statements for verification */}
+                    <div className="space-y-3">
+                      {[
+                        { content: "Market size is projected to reach $50B by 2027", classification: 'fact' as StatementClassification, confidence: 'high' as ConfidenceLevel, needsSource: true },
+                        { content: "Based on the data, we recommend focusing on enterprise clients", classification: 'analysis' as StatementClassification, confidence: 'medium' as ConfidenceLevel, needsSource: false },
+                        { content: "The competitor's approach seems less efficient", classification: 'opinion' as StatementClassification, confidence: 'low' as ConfidenceLevel, needsSource: false },
+                      ].map((stmt, idx) => (
+                        <div key={idx} className="p-4 rounded-xl bg-secondary/30 border border-border">
+                          <div className="flex items-start justify-between gap-3 mb-2">
+                            <p className="text-foreground flex-1">{stmt.content}</p>
+                            <div className="flex items-center gap-2">
+                              <ClassificationBadge classification={stmt.classification} size="sm" />
+                              <ConfidenceBadge confidence={stmt.confidence} size="sm" showLabel={false} />
+                            </div>
+                          </div>
+                          {stmt.needsSource && (
+                            <div className="flex items-center gap-2 text-xs text-orange-400">
+                              <AlertCircle className="w-3 h-3" />
+                              <span>Requires source citation</span>
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className="flex gap-3">
+                      <Button 
+                        variant="outline"
+                        className="flex-1"
+                        onClick={() => {
+                          toast.info("Requesting source citations...");
+                        }}
+                      >
+                        <FileText className="w-4 h-4 mr-2" /> Request Citations
+                      </Button>
+                      <Button 
+                        className="flex-1 bg-green-500 hover:bg-green-600"
+                        onClick={completeTask}
+                      >
+                        <CheckCircle2 className="w-4 h-4 mr-2" /> All Verified
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              </>
+            )}
+
+            {/* Digital Twin QA Mode */}
+            {validationMode === 'challenge' && (
+              <>
+                <Card className="bg-purple-500/5 border-purple-500/30">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2 text-foreground">
+                      <Fingerprint className="w-5 h-5 text-purple-400" />
+                      Digital Twin QA Challenge
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <p className="text-sm text-muted-foreground">
+                      Your Digital Twin will challenge each expert's statements to verify accuracy 
+                      and identify potential hallucinations or unsupported claims.
+                    </p>
+                    
+                    {/* QA Challenge Questions */}
+                    <div className="space-y-3">
+                      {QA_CHALLENGE_PROMPTS.hallucination_detection.slice(0, 3).map((question, idx) => (
+                        <div key={idx} className="p-4 rounded-xl bg-purple-500/10 border border-purple-500/30">
+                          <div className="flex items-center gap-2 mb-2">
+                            <Fingerprint className="w-4 h-4 text-purple-400" />
+                            <span className="text-sm font-medium text-purple-400">Digital Twin Challenge #{idx + 1}</span>
+                          </div>
+                          <p className="text-foreground text-sm">{question}</p>
+                          <div className="flex gap-2 mt-3">
+                            <Button size="sm" variant="outline" className="text-xs">
+                              <ThumbsUp className="w-3 h-3 mr-1" /> Verified
+                            </Button>
+                            <Button size="sm" variant="outline" className="text-xs text-orange-500">
+                              <AlertCircle className="w-3 h-3 mr-1" /> Needs Revision
+                            </Button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className="p-4 rounded-xl bg-secondary/30 border border-border">
+                      <div className="flex items-center gap-2 mb-2">
+                        <Brain className="w-4 h-4 text-cyan-400" />
+                        <span className="text-sm font-medium text-foreground">Expert Response Required</span>
+                      </div>
+                      <p className="text-sm text-muted-foreground">
+                        The expert must respond to each challenge with evidence or clarification. 
+                        Unsubstantiated claims will be flagged for revision.
+                      </p>
+                    </div>
+
+                    <div className="flex gap-3">
+                      <Button 
+                        variant="outline"
+                        className="flex-1"
+                        onClick={() => {
+                          toast.info("Running full QA challenge sequence...");
+                        }}
+                      >
+                        <Fingerprint className="w-4 h-4 mr-2" /> Run Full QA
+                      </Button>
+                      <Button 
+                        className="flex-1 bg-green-500 hover:bg-green-600"
+                        onClick={completeTask}
+                      >
+                        <CheckCircle2 className="w-4 h-4 mr-2" /> QA Passed
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              </>
+            )}
+
+            {/* Dialogue History - Always visible */}
             <Card className="bg-card/60 border-border">
               <CardHeader>
                 <CardTitle className="text-foreground">Full Dialogue History</CardTitle>

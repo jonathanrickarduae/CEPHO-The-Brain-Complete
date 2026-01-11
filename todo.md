@@ -1441,3 +1441,83 @@
 - [ ] AI recommendations based on patterns
 - [ ] "Getting you to a 10" goal tracking
 - [ ] Digital Twin coaching integration
+
+
+## Daily Cycle System (Completed)
+- [x] Morning Daily Brief (7am) component with overnight summary
+- [x] End of Day Wash-Up (8pm) component with slick fast flow
+- [x] DailyCycleProvider with time-based triggers
+- [x] WhatsApp reminder integration (placeholder)
+- [x] Voice input for tomorrow's priorities
+- [x] 1-10 day rating to train Digital Twin
+- [x] "Goodnight." message with dimming animation
+- [x] Ready-for-review items section
+- [x] Carry-forward task selection
+- [x] Security status in Morning Brief
+
+
+## Major Feature Sprint (In Progress)
+
+### AI Action Engine Enhancements
+- [ ] Pull actioned items from Daily Brief automatically
+- [ ] Distinguish Digital Twin tasks vs Expert Team tasks
+- [ ] Voice input for task creation
+- [ ] Dialogue tracking (Twin ↔ Expert Team conversation)
+- [ ] QA Review phase before final approval
+- [ ] Progress tracking for each active task
+
+### 250 AI Expert Personas
+- [ ] Expand expert profiles with full bios
+- [ ] Add personality traits and thinking styles
+- [ ] Create expert-specific system prompts
+- [ ] Add expert avatars/icons
+- [ ] Expert performance scoring system
+- [ ] Expert profile cards with expandable details
+
+### Corporate Digital Twins
+- [ ] McKinsey consulting methodology
+- [ ] PwC audit and advisory approach
+- [ ] Netflix innovation culture
+- [ ] NASA engineering rigor
+- [ ] Meta/Facebook growth hacking
+- [ ] NVIDIA AI/computing expertise
+- [ ] Tesla manufacturing innovation
+- [ ] Corporate Twin selection UI
+
+### Mobile Optimization
+- [ ] Dashboard responsive layout
+- [ ] Digital Twin mobile-first chat
+- [ ] Workflow mobile view
+- [ ] Touch-friendly interactions
+- [ ] Bottom navigation for mobile
+
+
+## Insight Validation Engine (Completed)
+
+### Digital Twin QA Validation
+- [x] Digital Twin challenges expert insights with skeptical questions
+- [x] "What's your source?" validation prompts
+- [x] "Is this verifiable fact or opinion?" classification
+- [x] "Are you certain or speculating?" confidence levels
+- [x] Cross-validation between multiple experts on same topic
+
+### Reference Table System
+- [x] Central reference table per project in Library
+- [x] Link every statement to source document
+- [x] Support for: financial models, quotes, contracts, research papers
+- [x] Auto-generate reference IDs for tracking
+- [x] Reference status: verified, pending, unverified
+
+### Citation Tracking
+- [x] Automatic footnotes in written deliverables
+- [x] Citation format for presentations (slide notes)
+- [x] Trace-back to source documents in Library
+- [x] Citation confidence score (primary source vs derived)
+- [x] Export citation list for compliance
+
+### Truth Verification Prompts
+- [x] Structured prompts forcing fact vs opinion distinction
+- [x] Confidence level indicators (High/Medium/Low/Speculative)
+- [x] Source type classification (Primary/Secondary/Expert Opinion)
+- [x] Hallucination detection prompts
+- [x] Verification status badges on all insights

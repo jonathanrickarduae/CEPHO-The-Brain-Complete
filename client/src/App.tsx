@@ -30,6 +30,7 @@ import VoiceNotepadPage from "./pages/VoiceNotepadPage";
 import IntegrationsPage from "./pages/IntegrationsPage";
 import PodcastPage from "./pages/PodcastPage";
 import WellnessPage from "./pages/WellnessPage";
+import ReferenceLibrary from "./pages/ReferenceLibrary";
 import { GovernanceProvider, GovernanceModeChangeModal } from "./hooks/useGovernance";
 import { CelebrationProvider } from "./components/CelebrationAnimations";
 import { DailyCycleProvider } from "./components/DailyCycleProvider";
@@ -127,6 +128,9 @@ function Router() {
       </Route>
       <Route path="/wellness">
         <WithLayout><WellnessPage /></WithLayout>
+      </Route>
+      <Route path="/reference-library">
+        <WithLayout><ReferenceLibrary /></WithLayout>
       </Route>
       
       {/* Fallback */}
