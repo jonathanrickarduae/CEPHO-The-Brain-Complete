@@ -32,6 +32,7 @@ import PodcastPage from "./pages/PodcastPage";
 import WellnessPage from "./pages/WellnessPage";
 import { GovernanceProvider, GovernanceModeChangeModal } from "./hooks/useGovernance";
 import { CelebrationProvider } from "./components/CelebrationAnimations";
+import { DailyCycleProvider } from "./components/DailyCycleProvider";
 import { PageTransition } from "./components/PageTransition";
 
 // Wrapper component for pages that need the sidebar layout with page transitions
@@ -140,6 +141,7 @@ function App() {
     <ErrorBoundary>
       <ThemeProvider defaultTheme="dark" switchable>
         <GovernanceProvider>
+          <DailyCycleProvider>
           <CelebrationProvider>
             <TooltipProvider>
               <Toaster />
@@ -147,6 +149,7 @@ function App() {
               <GovernanceModeChangeModal />
             </TooltipProvider>
           </CelebrationProvider>
+          </DailyCycleProvider>
         </GovernanceProvider>
       </ThemeProvider>
     </ErrorBoundary>
