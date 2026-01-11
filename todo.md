@@ -50,7 +50,26 @@
 - [x] Revert dashboard to larger/sexier design with bigger quote section
 - [x] Reorganize 6 boxes: Daily Brief, AI Expert Engine, Workflow (top) / Digital Twin, Library, Vault (bottom)
 - [x] Ensure dashboard fits on one screen without scrolling
-- [ ] Digital Twin box: Show training progress (hours logged)
-- [ ] Digital Twin box: Quick 15-min training modules
-- [ ] Digital Twin box: Calendar reminders for training sessions
-- [ ] Digital Twin box: Training log (active + passive learning)
+- [x] Digital Twin box: Show training progress (hours logged)
+- [x] Digital Twin box: Quick 15-min training modules
+- [x] Digital Twin box: Calendar reminders for training sessions
+- [x] Digital Twin box: Training log (active + passive learning)
+- [x] Digital Twin: Voice conversation capability for training
+- [x] Digital Twin: Proactive project suggestions based on patterns
+- [x] Digital Twin: 30-min coaching sessions with AI Experts
+- [x] Digital Twin: Track proactivity scores for each AI Expert
+- [x] Digital Twin: Activity log showing conversations with team
+- [ ] Daily Brief: Frame as coming from Digital Twin (personal assistant)
+- [ ] Daily Brief: Include "Items ready for your review" section
+- [ ] Daily Brief: Show what Digital Twin has already done overnight
+- [ ] AI Experts: Allow experts to suggest ideas to Digital Twin
+- [ ] Review Queue: Central place for items awaiting your approval
+- [x] Vault: Integration health dashboard (connected, broken, needs attention)
+- [x] Vault: Security status with real-time threat monitoring
+- [x] Vault: App recommendations from AI based on usage patterns
+- [ ] Daily Brief: Security section (all secure / issues flagged)
+- [ ] Daily Brief: Overnight threat summary (blocked attempts)
+- [ ] Digital Twin: Business guardian mode (scan for threats & opportunities)
+- [ ] Digital Twin: Suggest ways to strengthen business
+- [ ] Digital Twin: Monitor integrations and flag issues proactively
+- [ ] The Brain: Living ecosystem with interconnected learning
