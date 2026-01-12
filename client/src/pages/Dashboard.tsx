@@ -10,7 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { LearningBadge } from "@/components/LearningIndicator";
 
 import { Tooltip } from "@/components/Tooltip";
-import { useMoodCheck } from "@/hooks/useMoodCheck";
+
 import { WellnessScoreDashboard } from "@/components/WellnessScoreDashboard";
 import { Share2 } from "lucide-react";
 import { MobileInputSheet, QuickInputTrigger } from "@/components/MobileInputSheet";
@@ -125,9 +125,6 @@ export default function Dashboard() {
     }
   };
   
-  // Mood tracking
-  const { todaysMoods } = useMoodCheck();
-  
 
   
   // Demo mode initialization
@@ -139,7 +136,7 @@ export default function Dashboard() {
   const demoData = isDemoModeEnabled() ? getDemoData() : null;
   const activeProjects = demoData?.projects.filter(p => p.status === 'active').length || 0;
   const pendingTasks = demoData?.tasks.filter(t => t.status === 'pending').length || 0;
-  const latestMood = todaysMoods.length > 0 ? todaysMoods[todaysMoods.length - 1] : null;
+
   
   // Mobile detection and bottom sheet
   const isMobile = useIsMobile();
@@ -336,16 +333,7 @@ export default function Dashboard() {
             <span className="text-xs text-muted-foreground hidden sm:inline">Wellness</span>
           </button>
           
-          
-          {/* Today's mood indicator */}
-          {latestMood && (
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-card/60 border border-border">
-              <div className="w-6 h-6 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">
-                <span className="text-xs font-bold text-white">{latestMood.mood}</span>
-              </div>
-              <span className="text-xs text-muted-foreground hidden sm:inline">Mood</span>
-            </div>
-          )}
+
           
           {/* Voice Interface Toggle */}
           <VoiceInterfaceToggle />
