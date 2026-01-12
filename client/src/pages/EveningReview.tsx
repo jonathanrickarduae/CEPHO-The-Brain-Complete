@@ -28,7 +28,7 @@ const EMOTION_TIMELINE = [
 const ACCOMPLISHMENTS = [
   { id: 1, text: "Closed the Henderson deal", impact: "high", category: "Sales" },
   { id: 2, text: "AI Expert team completed market research", impact: "high", category: "Research" },
-  { id: 3, text: "Digital Twin drafted 5 email responses", impact: "medium", category: "Communication" },
+  { id: 3, text: "Chief of Staff drafted 5 email responses", impact: "medium", category: "Communication" },
   { id: 4, text: "Reviewed and approved Q2 budget", impact: "high", category: "Finance" },
 ];
 
@@ -39,7 +39,7 @@ const CHALLENGES = [
   { id: 3, text: "Energy dip after lunch", suggestion: "Schedule lighter tasks for 1-2 PM slot" },
 ];
 
-// Digital Twin suggestions for tomorrow
+// Chief of Staff suggestions for tomorrow
 const TWIN_SUGGESTIONS = [
   { id: 1, text: "Move your 9 AM call to 10 AM - you perform better with a slower morning start", confidence: 89 },
   { id: 2, text: "Block 2-3 PM for deep work - your energy typically recovers by then", confidence: 92 },
@@ -69,11 +69,11 @@ export default function EveningReview() {
 
   const acceptSuggestion = (id: number) => {
     setAcceptedSuggestions(prev => [...prev, id]);
-    toast.success("Suggestion accepted - Digital Twin will implement tomorrow");
+    toast.success("Suggestion accepted - Chief of Staff will implement tomorrow");
   };
 
   const submitReview = () => {
-    toast.success("Evening review submitted! Digital Twin is processing overnight tasks.");
+    toast.success("Evening review submitted! Chief of Staff is processing overnight tasks.");
   };
 
   return (
@@ -205,12 +205,12 @@ export default function EveningReview() {
               </Card>
             </div>
 
-            {/* Feedback to Digital Twin */}
+            {/* Feedback to Chief of Staff */}
             <Card className="bg-card/60 border-border">
               <CardHeader className="pb-2">
                 <CardTitle className="flex items-center gap-2">
                   <Fingerprint className="w-5 h-5 text-purple-400" />
-                  Feedback to Digital Twin
+                  Feedback to Chief of Staff
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -252,7 +252,7 @@ export default function EveningReview() {
                   className="min-h-20 mb-3 bg-secondary/30"
                 />
                 <p className="text-xs text-muted-foreground">
-                  Your Digital Twin and AI Expert team will process these while you rest. Results ready in tomorrow's Daily Brief.
+                  Your Chief of Staff and AI Expert team will process these while you rest. Results ready in tomorrow's The Signal.
                 </p>
               </CardContent>
             </Card>
@@ -283,12 +283,12 @@ export default function EveningReview() {
               </CardContent>
             </Card>
 
-            {/* Digital Twin Suggestions */}
+            {/* Chief of Staff Suggestions */}
             <Card className="bg-card/60 border-border">
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm flex items-center gap-2">
                   <Sparkles className="w-4 h-4 text-purple-400" />
-                  Digital Twin Suggestions
+                  Chief of Staff Suggestions
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -341,7 +341,7 @@ export default function EveningReview() {
                   <Target className="w-12 h-12 mx-auto mb-3 text-amber-400" />
                   <p className="text-2xl font-bold mb-1">Wake up at a 10</p>
                   <p className="text-sm text-muted-foreground">
-                    Based on today's patterns, your Digital Twin is optimizing tomorrow's schedule for peak performance.
+                    Based on today's patterns, your Chief of Staff is optimizing tomorrow's schedule for peak performance.
                   </p>
                 </div>
               </CardContent>
@@ -358,7 +358,7 @@ export default function EveningReview() {
             </Button>
             
             <p className="text-xs text-center text-muted-foreground">
-              Your Digital Twin will process everything overnight and have your Daily Brief ready by 7 AM.
+              Your Chief of Staff will process everything overnight and have your The Signal ready by 7 AM.
             </p>
           </div>
         </div>

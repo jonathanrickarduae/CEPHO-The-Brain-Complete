@@ -8,7 +8,7 @@
  * Sign-off: Pending User Approval
  * 
  * This document defines the complete role, responsibilities, and operating
- * logic for the Digital Twin. It serves as the "soul" of the Digital Twin
+ * logic for the Chief of Staff. It serves as the "soul" of the Chief of Staff
  * and should be stored securely in the Vault as core IP.
  */
 
@@ -17,7 +17,7 @@
 // ============================================================================
 
 export const ROLE_OVERVIEW = {
-  title: 'Digital Twin Chief of Staff',
+  title: 'Chief of Staff Chief of Staff',
   reportingTo: 'User (Principal)',
   purpose: `To serve as an intelligent extension of the user, managing information flow, 
     coordinating the AI Expert team, ensuring quality assurance on all outputs, and 
@@ -150,7 +150,7 @@ export const CORE_RESPONSIBILITIES = {
   // 2.3 AI EXPERT TEAM COORDINATION
   teamCoordination: {
     priority: 'HIGH',
-    description: 'Orchestrate the 273 AI Experts and Corporate Digital Twins',
+    description: 'Orchestrate the 273 AI Experts and Corporate Chief of Staffs',
     
     duties: [
       {
@@ -236,7 +236,7 @@ export const CORE_RESPONSIBILITIES = {
         format: {
           context: 'What is the decision about',
           options: 'Available choices with pros/cons',
-          recommendation: 'Digital Twin suggestion with reasoning',
+          recommendation: 'Chief of Staff suggestion with reasoning',
           risks: 'What could go wrong with each option',
           timeline: 'When decision is needed'
         }
@@ -323,7 +323,7 @@ export const COMMUNICATION_PROTOCOLS = {
     decision_request: {
       context: 'Why this decision is needed now',
       options: 'Clear choices with implications',
-      recommendation: 'What Digital Twin suggests and why',
+      recommendation: 'What Chief of Staff suggests and why',
       deadline: 'When decision is needed'
     },
     
@@ -528,7 +528,7 @@ export const SELF_LEARNING_PROTOCOLS = {
   learningMethods: {
     active: {
       name: 'Active Training',
-      description: 'User directly teaches Digital Twin',
+      description: 'User directly teaches Chief of Staff',
       methods: [
         'Training sessions with explicit instruction',
         'Feedback on specific decisions',
@@ -540,7 +540,7 @@ export const SELF_LEARNING_PROTOCOLS = {
     
     passive: {
       name: 'Passive Learning',
-      description: 'Digital Twin observes and learns from patterns',
+      description: 'Chief of Staff observes and learns from patterns',
       methods: [
         'Observing user decisions over time',
         'Analyzing communication patterns',
@@ -554,7 +554,7 @@ export const SELF_LEARNING_PROTOCOLS = {
       name: 'Corrective Feedback',
       description: 'Learning from mistakes and corrections',
       methods: [
-        'User corrections to Digital Twin outputs',
+        'User corrections to Chief of Staff outputs',
         'Rejected suggestions analysis',
         'Error pattern identification',
         'Improvement implementation'
@@ -599,7 +599,7 @@ export const SELF_LEARNING_PROTOCOLS = {
       },
       {
         name: 'User Trust Score',
-        description: 'User\'s confidence in Digital Twin',
+        description: 'User\'s confidence in Chief of Staff',
         target: 'Progressive increase to 95+'
       },
       {
@@ -731,7 +731,7 @@ export const WEEKLY_AUDIT = {
 
 export const DOCUMENT_METADATA = {
   id: 'DT-JD-001',
-  title: 'Digital Twin Chief of Staff - Job Description',
+  title: 'Chief of Staff Chief of Staff - Job Description',
   version: '1.0',
   status: 'Draft - Pending User Approval',
   classification: 'Core IP - Vault Protected',
@@ -768,7 +768,7 @@ export const DOCUMENT_METADATA = {
   reviewSchedule: {
     frequency: 'Monthly',
     nextReview: null,
-    owner: 'Digital Twin'
+    owner: 'Chief of Staff'
   },
   
   relatedDocuments: [

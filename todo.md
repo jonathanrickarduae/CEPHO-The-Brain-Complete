@@ -2138,3 +2138,145 @@
 - [x] Add Private Equity Partner (deal structuring, valuation, portfolio management, exit strategies)
 - [x] Add Business Transformation Director (change management, digital transformation, operational excellence)
 
+
+
+## Presentation Blueprint (In Progress)
+
+- [ ] Create PresentationBlueprint wizard component
+- [ ] Inherit business info, value proposition, objectives from Genesis Master
+- [ ] Slide structure generator (title, problem, solution, market, traction, team, financials, ask)
+- [ ] AI-powered content suggestions for each slide
+- [ ] Design theme selection (professional, bold, minimal, creative)
+- [ ] Export options (PowerPoint, PDF, Google Slides)
+- [ ] SME review integration for investor-ready content
+- [ ] Version control for presentation iterations
+
+## Digital Twin QA Validation Integration
+
+- [ ] Create QAValidationService to classify all AI outputs
+- [ ] Add classification badges to Digital Twin chat responses
+- [ ] Add classification to AI Expert outputs
+- [ ] Add classification to Business Guardian insights
+- [ ] Implement source reference tracking for verified facts
+- [ ] Add "Request Verification" button for assumptions
+- [ ] Create QA Dashboard showing classification breakdown
+- [ ] Alert user when high percentage of outputs are assumptions
+
+## Weekly Audit Scheduler
+
+- [ ] Create WeeklyAuditScheduler component
+- [ ] Automatic blueprint review every Sunday
+- [ ] Generate audit report with enhancement suggestions
+- [ ] Track changes since last audit
+- [ ] Flag outdated or stale documents
+- [ ] Send notification when audit is complete
+- [ ] Store audit history in Digital Twin development log
+- [ ] Allow manual trigger of audit anytime
+
+
+## Jim Short - Key Stakeholder AI Expert
+
+- [ ] Create Jim Short as special AI Expert persona (key stakeholder/boss)
+- [ ] Add placeholder for Jim's photo (to be uploaded)
+- [ ] Build learning profile that captures his feedback patterns
+- [ ] Create "What would Jim think?" validation layer
+- [ ] Voice note/message ingestion to refine his persona
+- [ ] Track his preferences, expectations, and decision patterns
+- [ ] Integrate Jim's perspective into QA review process
+- [ ] Allow Jim's persona to evolve based on real feedback
+
+## Project Genesis - Governance Layer Enhancement
+
+- [ ] Add corporate structure section to Genesis wizard
+- [ ] Define roles and responsibilities upfront
+- [ ] Job description templates for key positions
+- [ ] RACI matrix (Responsible, Accountable, Consulted, Informed)
+- [ ] Decision-making authority levels
+- [ ] Approval workflows and sign-off requirements
+- [ ] Stakeholder mapping and communication plan
+- [ ] Governance dashboard showing who owns what
+
+## Neural Branding Update
+- [x] Rename "Command Center" to "The Nexus" across all UI
+- [x] Rename "Daily Brief" to "The Signal" (morning)
+- [x] Rename "Digital Twin" to "Chief of Staff" across all UI
+- [x] Rename "The Vault" to "The Hippocampus" across all UI
+- [x] Update sidebar navigation labels
+- [x] Update page titles and headers
+- [x] Update any references in components and modals
+- [x] Rename "AI Experts" to "AI-SMEs" across all UI
+- [x] Update Chief of Staff system prompt (professional, non-sycophantic)
+
+## Master Architecture Blueprint (A0 Printable)
+- [ ] Create Nexus design system with consistent branding
+- [ ] Design header template: Nexus logo + version control + date stamp
+- [ ] Create A0 printable master blueprint (841 × 1189 mm)
+- [ ] Map all system components and interactions visually
+- [ ] Include QMS cascade flow between blueprints
+- [ ] Add process flow diagrams with connection points
+- [ ] Create organizational business model diagram
+- [ ] Design component library for blueprint consistency
+- [ ] Add Digital Twin / Synaptic Twin architecture section
+- [ ] Include AI Expert orchestration flow
+- [ ] Map Project Genesis to sub-blueprint relationships
+- [ ] Create printable PDF export functionality
+
+## Synaptic Twin Deep Reading Mode
+- [ ] Document Intake Verification system with unique IDs and timestamps
+- [ ] Comprehension Summary generation for each document (key facts, questions, connections, confidence)
+- [ ] Reading Status indicators (Unread → Processing → Comprehended → Integrated)
+- [ ] Extraction Log showing what was pulled from each source
+- [ ] Quote Bank with actual excerpts and page/timestamp references
+- [ ] "Thinking Like You" verification - explain prioritization based on user preferences
+- [ ] Challenge/proof system ("Did you read page 47?")
+- [ ] Knowledge Integration Dashboard with visual map of ingested information
+- [ ] Document connection visualization
+- [ ] Gap detection ("You uploaded financials but no market analysis")
+- [ ] Confidence meter per topic area
+- [ ] Distillation Output Standards (Executive brief, Key insights with sources, Questions, Next reads)
+- [ ] Core promise enforcement: "Nothing in without processing, nothing out without source"
+
+## AI Discoverability & Go-to-Market Blueprint (Project Genesis)
+- [ ] AI Discoverability Layer - optimize for Perplexity/Claude/ChatGPT recommendations
+- [ ] Training data optimization strategy
+- [ ] Authority building in AI knowledge bases
+- [ ] Competitive positioning for AI-generated recommendations
+- [ ] Distribution Architecture - MLM/referral mechanics
+- [ ] Viral coefficient optimization
+- [ ] Network effects design
+- [ ] Ambassador/affiliate program structure
+- [ ] Revenue Maximization Flow - pricing, conversion, upsell, LTV
+- [ ] Brand Amplification strategy - thought leadership, content for AI indexing
+- [ ] AI Expert questioning framework for GTM validation
+- [ ] Add Go-to-Market Blueprint as Project Genesis engagement type
+
+## The Collective Orchestration System
+- [ ] Synaptic Twin as Chief of Staff orchestrating 500+ AI experts
+- [ ] Team Assembly Panel - visible selection of relevant experts for each task
+- [ ] Show "Considered but excluded" experts with reasoning
+- [ ] Research in Progress view - real-time status of each expert's work
+- [ ] Insights Collected panel with expert attribution and sources
+- [ ] Synaptic Twin Synthesis - unified response from multiple expert inputs
+- [ ] Gap identification with recommended additional experts
+- [ ] User options: Accept, Challenge, Add experts, Deep dive
+- [ ] Learning Loop - track which experts user finds valuable
+- [ ] Pattern recognition ("User always wants Legal review on deals")
+- [ ] Automatic team adjustment based on user preferences
+- [ ] Expert authority weighting based on domain relevance
+- [ ] Conflict resolution when experts disagree
+- [ ] Output standards: Reference docs, Expert statements, Synthesized insights
+- [ ] Potential customer/partner identification from research
+- [ ] Full conversation trail visibility
+- [ ] Rename AI Experts section to "The Collective" in UI
+
+## Chief of Staff Communication Protocol
+- [ ] Implement professional, non-sycophantic tone in all Chief of Staff responses
+- [ ] Remove all empty validation phrases ("Great idea!", "You're right!")
+- [ ] Add challenging/questioning behavior ("Have you considered...", "The data suggests...")
+- [ ] Enforce evidence-based recommendations over opinions
+- [ ] Use crisp, business English - no casual chat
+- [ ] Build in pushback mechanism when reasoning is weak
+- [ ] Add "Devil's advocate" mode for stress-testing decisions
+- [ ] Track when user overrides Chief of Staff advice (learning opportunity)
+- [ ] McKinsey consultant tone, not personal assistant
+- [ ] Respectful but not deferential communication style

@@ -28,16 +28,16 @@ const ONBOARDING_STEPS: OnboardingStep[] = [
   },
   {
     id: 2,
-    title: 'Daily Brief',
-    description: 'Every morning, your Digital Twin prepares a personalized briefing with priorities, insights, and action items ready for your review.',
+    title: 'The Signal',
+    description: 'Every morning, your Chief of Staff prepares a personalized briefing with priorities, insights, and action items ready for your review.',
     icon: Sun,
     color: 'text-amber-400',
     highlight: '[data-tour="daily-brief"]',
   },
   {
     id: 3,
-    title: 'AI Expert Engine',
-    description: 'Need help with a task? Assemble a team of 287 AI experts - from strategists to analysts - who work together on your projects.',
+    title: 'AI-SMEs',
+    description: 'Need help with a task? Access 273+ AI-SMEs across every domain - strategists, analysts, legal, finance, marketing - your Chief of Staff assembles the right team for each task.',
     icon: Users,
     color: 'text-cyan-400',
     highlight: '[data-tour="ai-experts"]',
@@ -52,7 +52,7 @@ const ONBOARDING_STEPS: OnboardingStep[] = [
   },
   {
     id: 5,
-    title: 'Digital Twin',
+    title: 'Chief of Staff',
     description: 'The more you interact, the smarter your Twin becomes. It learns your preferences, communication style, and decision patterns.',
     icon: Fingerprint,
     color: 'text-purple-400',
@@ -61,7 +61,7 @@ const ONBOARDING_STEPS: OnboardingStep[] = [
   {
     id: 6,
     title: 'You\'re Ready!',
-    description: 'Start by checking your Daily Brief, or ask your Digital Twin anything. The Brain is here to get you to a 10 every day.',
+    description: 'Start by checking The Signal, or ask your Chief of Staff anything. The Brain is here to get you to a 10 every day.',
     icon: Sparkles,
     color: 'text-primary',
     useBrain: true,

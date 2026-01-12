@@ -146,15 +146,15 @@ export default function Dashboard() {
   const [showMobileInput, setShowMobileInput] = useState(false);
   
   const handleMobileSubmit = (value: string, type?: 'task' | 'question' | 'note') => {
-    // Navigate to Digital Twin with the message
+    // Navigate to Chief of Staff with the message
     setLocation(`/digital-twin?message=${encodeURIComponent(value)}`);
   };
 
   // Daily rotating inspiration - memoized to only change on day change
   const inspiration = useMemo(() => getDailyQuote(), []);
 
-  // Top Row - The Flow (Daily Brief → AI Expert Engine → Workflow)
-  // Bottom Row - Support (Digital Twin Training, Library, Vault)
+  // Top Row - The Flow (The Signal → AI Expert Engine → Workflow)
+  // Bottom Row - Support (Chief of Staff Training, Library, Vault)
   const buttons = [
     // TOP ROW - The Flow
     { 
@@ -217,7 +217,7 @@ export default function Dashboard() {
 
   const handleSubmit = () => {
     if (inputValue.trim()) {
-      // Navigate to Digital Twin with the message
+      // Navigate to Chief of Staff with the message
       setLocation(`/digital-twin?message=${encodeURIComponent(inputValue)}`);
     }
   };
@@ -254,7 +254,7 @@ export default function Dashboard() {
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyDown={handleKeyDown}
-                placeholder="Message Digital Twin..." 
+                placeholder="Message Chief of Staff..." 
                 className="flex-1 bg-transparent border-none outline-none text-lg text-foreground placeholder:text-muted-foreground/50 min-h-0"
                 autoFocus
               />
@@ -391,7 +391,7 @@ export default function Dashboard() {
               onClick={() => setLocation(btn.path)}
               className="group relative p-3 sm:p-4 md:p-5 rounded-xl bg-card/60 border border-border hover:border-primary/50 hover:bg-card/80 transition-all duration-300 cursor-pointer overflow-hidden text-left min-h-[100px] sm:min-h-[120px] w-full h-full hover:scale-[1.02] active:scale-[0.98] hover:shadow-lg hover:shadow-primary/10 touch-manipulation"
             >
-              {/* Learning badge for Digital Twin */}
+              {/* Learning badge for Chief of Staff */}
               {btn.badge}
               
               {/* Glow on Hover */}
@@ -455,7 +455,7 @@ export default function Dashboard() {
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Message Digital Twin..." 
+            placeholder="Message Chief of Staff..." 
             className="flex-1 bg-transparent border-none outline-none text-base text-foreground placeholder:text-muted-foreground/50 min-h-0"
           />
           <div className="flex items-center gap-2">

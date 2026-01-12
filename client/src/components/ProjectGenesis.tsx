@@ -370,7 +370,7 @@ export function ProjectGenesis() {
       
       await new Promise(resolve => setTimeout(resolve, 800));
       
-      // Move to QA review (Digital Twin reviews first)
+      // Move to QA review (Chief of Staff reviews first)
       setDeliverables(prev => prev.map((d, idx) => 
         idx === i ? { 
           ...d, 
@@ -803,7 +803,7 @@ export function ProjectGenesis() {
 
       <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4">
         <p className="text-sm text-blue-200">
-          <strong>QA Workflow:</strong> Your Digital Twin has reviewed each deliverable first. 
+          <strong>QA Workflow:</strong> Your Chief of Staff has reviewed each deliverable first. 
           Review the Twin's notes, then approve or request revisions. Your feedback trains the Twin 
           to improve future quality assessments.
         </p>
@@ -856,14 +856,14 @@ export function ProjectGenesis() {
               </div>
             </div>
 
-            {/* Digital Twin Review */}
+            {/* Chief of Staff Review */}
             {d.qaStatus?.twinReviewed && (
               <div className="mt-4 p-3 rounded-lg bg-purple-500/10 border border-purple-500/30">
                 <div className="flex items-center gap-2 mb-2">
                   <div className="w-6 h-6 rounded-full bg-purple-500 flex items-center justify-center">
                     <span className="text-xs">🧠</span>
                   </div>
-                  <span className="text-sm font-medium text-purple-300">Digital Twin Review</span>
+                  <span className="text-sm font-medium text-purple-300">Chief of Staff Review</span>
                   {d.qaStatus.twinApproved ? (
                     <span className="text-xs px-2 py-0.5 rounded bg-green-500/20 text-green-400">Approved</span>
                   ) : (
@@ -879,7 +879,7 @@ export function ProjectGenesis() {
               <div className="mt-4 space-y-3">
                 <div>
                   <label className="block text-sm font-medium text-muted-foreground mb-1">
-                    Your feedback (optional - helps train the Digital Twin)
+                    Your feedback (optional - helps train the Chief of Staff)
                   </label>
                   <textarea
                     value={qaFeedback[d.id] || ''}
@@ -942,7 +942,7 @@ export function ProjectGenesis() {
         </div>
         <h3 className="text-xl font-semibold text-foreground">Generating Deliverables</h3>
         <p className="text-muted-foreground mt-2">
-          AI Experts are creating your documents. Digital Twin will review each one.
+          AI Experts are creating your documents. Chief of Staff will review each one.
         </p>
       </div>
 

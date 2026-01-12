@@ -160,7 +160,7 @@ export function useDigitalTwinChat() {
       const welcomeMessage: ChatMessage = {
         id: 1,
         from: 'twin',
-        message: "Good morning! I'm your Digital Twin, ready to help you stay on top of everything.\n\nI can help you with:\n• **Email drafting** and inbox management\n• **Meeting preparation** and scheduling\n• **Task prioritization** and project updates\n• **Research** and analysis\n• **Daily briefings** and evening reviews\n\nWhat would you like to work on today?",
+        message: "Good morning! I'm your Chief of Staff, ready to help you stay on top of everything.\n\nI can help you with:\n• **Email drafting** and inbox management\n• **Meeting preparation** and scheduling\n• **Task prioritization** and project updates\n• **Research** and analysis\n• **Daily briefings** and evening reviews\n\nWhat would you like to work on today?",
         time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       };
       setMessages([welcomeMessage]);

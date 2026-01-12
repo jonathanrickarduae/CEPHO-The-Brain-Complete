@@ -102,7 +102,7 @@ function getSampleNotifications(): Notification[] {
     {
       id: 2,
       type: 'daily_brief',
-      title: 'Daily Brief Ready',
+      title: 'The Signal Ready',
       message: 'Your morning briefing is ready. 5 action items for today.',
       createdAt: new Date(Date.now() - 1000 * 60 * 15),
       read: false,
@@ -121,7 +121,7 @@ function getSampleNotifications(): Notification[] {
       id: 4,
       type: 'digital_twin',
       title: 'Training Milestone',
-      message: 'Digital Twin has reached 85% confidence on NDA reviews.',
+      message: 'Chief of Staff has reached 85% confidence on NDA reviews.',
       createdAt: new Date(Date.now() - 1000 * 60 * 120),
       read: false,
       actionUrl: '/qa-dashboard',

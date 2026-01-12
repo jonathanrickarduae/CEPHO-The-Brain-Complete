@@ -67,7 +67,7 @@ const sampleDocuments: ProcessDocument[] = [
     lastUpdated: '2024-01-12 14:30',
     lastReviewedBy: 'both',
     nextReviewDate: '2024-01-19',
-    owner: 'Digital Twin',
+    owner: 'Chief of Staff',
     description: 'Master document defining the Project Genesis methodology and all sub-processes'
   },
   {
@@ -86,7 +86,7 @@ const sampleDocuments: ProcessDocument[] = [
     lastUpdated: '2024-01-12 16:00',
     lastReviewedBy: 'digital_twin',
     nextReviewDate: '2024-01-13',
-    owner: 'Digital Twin',
+    owner: 'Chief of Staff',
     description: 'End-to-end social media strategy and content generation process'
   },
   {
@@ -104,7 +104,7 @@ const sampleDocuments: ProcessDocument[] = [
     lastUpdated: '2024-01-12 10:00',
     lastReviewedBy: 'digital_twin',
     nextReviewDate: '2024-01-14',
-    owner: 'Digital Twin',
+    owner: 'Chief of Staff',
     description: 'Investor presentation and pitch deck creation process'
   },
   {
@@ -122,15 +122,15 @@ const sampleDocuments: ProcessDocument[] = [
     lastUpdated: '2024-01-11 18:00',
     lastReviewedBy: 'digital_twin',
     nextReviewDate: '2024-01-15',
-    owner: 'Digital Twin',
+    owner: 'Chief of Staff',
     description: 'Financial modeling and projections process'
   },
   {
     id: 'dt-job-desc',
     code: 'DT-POL-001',
-    name: 'Digital Twin Job Description',
+    name: 'Chief of Staff Job Description',
     type: 'policy',
-    category: 'Digital Twin',
+    category: 'Chief of Staff',
     status: 'published',
     currentVersion: '1.0.0',
     versions: [
@@ -141,7 +141,7 @@ const sampleDocuments: ProcessDocument[] = [
     lastReviewedBy: 'both',
     nextReviewDate: '2024-01-19',
     owner: 'User',
-    description: 'Defines all responsibilities, communication protocols, and QA duties of the Digital Twin'
+    description: 'Defines all responsibilities, communication protocols, and QA duties of the Chief of Staff'
   },
 ];
 
@@ -162,7 +162,7 @@ const statusConfig: Record<DocumentStatus, { label: string; color: string; bgCol
 };
 
 const actorLabels: Record<SignOffType, string> = {
-  digital_twin: 'Digital Twin',
+  digital_twin: 'Chief of Staff',
   user: 'You',
   both: 'Both',
   sme: 'SME',

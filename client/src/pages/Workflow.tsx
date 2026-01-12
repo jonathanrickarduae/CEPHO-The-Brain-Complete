@@ -108,7 +108,7 @@ const projects = [
   }
 ];
 
-// Digital Twin alerts
+// Chief of Staff alerts
 const twinAlerts = [
   { id: 1, project: 'Celadon Pharmaceuticals', message: 'Legal review has been pending for 3 days. Recommend escalation.', priority: 'critical', time: '7:00 AM' },
   { id: 2, project: 'Perfect DXB', message: 'Budget approval delay may impact timeline. Finance team notified.', priority: 'warning', time: '6:45 AM' },
@@ -209,12 +209,12 @@ export default function Workflow() {
         </div>
       </div>
 
-      {/* Digital Twin Alerts */}
+      {/* Chief of Staff Alerts */}
       {twinAlerts.length > 0 && (
         <div className="mb-8">
           <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
             <Zap className="w-5 h-5 text-purple-400" />
-            Digital Twin Alerts
+            Chief of Staff Alerts
           </h2>
           <div className="space-y-2">
             {twinAlerts.map(alert => (

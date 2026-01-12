@@ -433,7 +433,7 @@ export function VoiceNotepad() {
             Voice Notepad
           </h2>
           <p className="text-muted-foreground mt-1">
-            Capture thoughts throughout the day. Your Digital Twin uses these for context.
+            Capture thoughts throughout the day. Your Chief of Staff uses these for context.
           </p>
         </div>
       </div>

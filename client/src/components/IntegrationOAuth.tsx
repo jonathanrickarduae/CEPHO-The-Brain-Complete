@@ -272,7 +272,7 @@ export function CalendarIntegrationPanel() {
       accountName: integrations.find(i => i.provider === 'calendar_outlook')?.providerAccountId ?? undefined,
       lastSync: integrations.find(i => i.provider === 'calendar_outlook')?.lastSyncAt ?? undefined,
       features: [
-        'View all calendar events in Daily Brief',
+        'View all calendar events in The Signal',
         'Auto-schedule meetings from emails',
         'Meeting prep reminders',
         'Conflict detection',
@@ -288,7 +288,7 @@ export function CalendarIntegrationPanel() {
       accountName: integrations.find(i => i.provider === 'calendar_google')?.providerAccountId ?? undefined,
       lastSync: integrations.find(i => i.provider === 'calendar_google')?.lastSyncAt ?? undefined,
       features: [
-        'View all calendar events in Daily Brief',
+        'View all calendar events in The Signal',
         'Auto-schedule meetings from emails',
         'Meeting prep reminders',
         'Multi-calendar support',
@@ -312,7 +312,7 @@ export function CalendarIntegrationPanel() {
         <h3 className="text-lg font-semibold text-foreground">Calendar Integrations</h3>
       </div>
       <p className="text-sm text-muted-foreground mb-4">
-        Connect your calendars to see events in your Daily Brief and enable smart scheduling.
+        Connect your calendars to see events in your The Signal and enable smart scheduling.
       </p>
       <div className="space-y-3">
         {calendarIntegrations.map(integration => (

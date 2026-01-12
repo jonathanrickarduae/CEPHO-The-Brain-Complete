@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 
 /**
  * Twin Break Approval
- * Digital Twin proposes what it will do while you take a break
+ * Chief of Staff proposes what it will do while you take a break
  * You approve, reject, or add tasks
  */
 

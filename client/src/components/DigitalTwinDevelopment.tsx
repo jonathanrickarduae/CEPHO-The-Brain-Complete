@@ -76,7 +76,7 @@ export function DigitalTwinDevelopment() {
     {
       id: '4',
       type: 'expert',
-      description: 'Learned market analysis framework from McKinsey Digital Twin',
+      description: 'Learned market analysis framework from McKinsey Chief of Staff',
       timestamp: new Date(Date.now() - 48 * 60 * 60 * 1000),
       impact: 'medium'
     }
@@ -134,7 +134,7 @@ export function DigitalTwinDevelopment() {
               <Brain className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h2 className="text-xl font-semibold text-white">Digital Twin Development</h2>
+              <h2 className="text-xl font-semibold text-white">Chief of Staff Development</h2>
               <p className="text-sm text-gray-400">Track growth from Infant to Autonomous</p>
             </div>
           </div>

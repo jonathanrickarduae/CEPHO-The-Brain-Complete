@@ -138,7 +138,7 @@ export function GenesisBlueprintWizard({ onComplete, existingBlueprint }: Genesi
     }
   }, [answers['industry']]);
 
-  // Digital Twin proactive messaging
+  // Chief of Staff proactive messaging
   useEffect(() => {
     if (currentQuestion && !digitalTwinMessages.find(m => m.id === `q-${currentQuestion.id}`)) {
       // Add contextual help
@@ -658,7 +658,7 @@ export function GenesisBlueprintWizard({ onComplete, existingBlueprint }: Genesi
             </div>
           </div>
 
-          {/* Right Sidebar - SME Panel & Digital Twin */}
+          {/* Right Sidebar - SME Panel & Chief of Staff */}
           <div className="space-y-6">
             {/* Active SMEs */}
             <div className="bg-white/5 border border-white/10 rounded-2xl p-5">
@@ -723,12 +723,12 @@ export function GenesisBlueprintWizard({ onComplete, existingBlueprint }: Genesi
               )}
             </div>
 
-            {/* Digital Twin Chat */}
+            {/* Chief of Staff Chat */}
             <div className="bg-white/5 border border-white/10 rounded-2xl p-5">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2">
                   <Brain className="w-5 h-5 text-cyan-400" />
-                  <h3 className="font-semibold text-white">Digital Twin</h3>
+                  <h3 className="font-semibold text-white">Chief of Staff</h3>
                 </div>
                 <button 
                   onClick={() => setShowTwinChat(!showTwinChat)}

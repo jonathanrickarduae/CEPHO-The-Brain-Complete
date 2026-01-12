@@ -38,7 +38,7 @@ export default function DigitalTwin() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   
-  // Digital Twin chat hook with real API
+  // Chief of Staff chat hook with real API
   const { messages, isTyping, sendMessage, clearHistory, isLoading } = useDigitalTwinChat();
   
   // Voice input hook
@@ -89,7 +89,7 @@ export default function DigitalTwin() {
         return;
       }
       startListening();
-      toast.info("Listening... speak to your Digital Twin");
+      toast.info("Listening... speak to your Chief of Staff");
     }
   };
 
@@ -124,7 +124,7 @@ export default function DigitalTwin() {
 
   // Quick action buttons
   const quickActions = [
-    { label: "Show Daily Brief", action: () => toast.info("Opening Daily Brief...") },
+    { label: "Show The Signal", action: () => toast.info("Opening The Signal...") },
     { label: "Check pending items", action: () => toast.info("5 items pending your review") },
     { label: "Schedule training", action: () => toast.info("Training session scheduled for 2:30 PM") },
     { label: "View activity log", action: () => { setShowRightPanel(true); setRightPanelTab('activity'); } },
@@ -145,7 +145,7 @@ export default function DigitalTwin() {
                 <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-background" />
               </div>
               <div>
-                <h1 className="text-base sm:text-lg font-semibold text-foreground">Digital Twin</h1>
+                <h1 className="text-base sm:text-lg font-semibold text-foreground">Chief of Staff</h1>
                 <p className="text-xs text-muted-foreground">Online • AI-Powered • Learning from you</p>
               </div>
               {/* Conversation Switcher */}
@@ -295,7 +295,7 @@ export default function DigitalTwin() {
                   value={messageInput}
                   onChange={handleInputChange}
                   onKeyDown={handleKeyDown}
-                  placeholder="Message your Digital Twin..."
+                  placeholder="Message your Chief of Staff..."
                   rows={1}
                   className="w-full px-4 py-3 pr-12 bg-secondary/50 border border-white/10 rounded-2xl resize-none focus:outline-none focus:ring-2 focus:ring-purple-500/50 text-sm placeholder:text-muted-foreground"
                   style={{ maxHeight: '120px' }}
@@ -401,7 +401,7 @@ export default function DigitalTwin() {
                   className="w-full p-4 bg-gradient-to-br from-purple-500/10 to-pink-500/10 border border-purple-500/30 rounded-xl text-left hover:border-purple-500/50 transition-all"
                 >
                   <h4 className="font-medium text-foreground mb-1">Training Accelerator</h4>
-                  <p className="text-xs text-muted-foreground">Speed up your Digital Twin's learning</p>
+                  <p className="text-xs text-muted-foreground">Speed up your Chief of Staff's learning</p>
                 </button>
                 <DigitalTwinTrainingProgress 
                   hoursLogged={127}

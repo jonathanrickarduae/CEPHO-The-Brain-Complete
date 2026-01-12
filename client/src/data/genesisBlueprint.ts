@@ -118,7 +118,7 @@ export interface GenesisBlueprint {
   // Decision Log
   decisions: Decision[];
 
-  // Digital Twin Learning
+  // Chief of Staff Learning
   learnings: Learning[];
 }
 

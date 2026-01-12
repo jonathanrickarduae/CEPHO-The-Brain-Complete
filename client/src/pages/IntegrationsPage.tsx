@@ -38,7 +38,7 @@ export default function IntegrationsPage() {
               You can read, reply, and manage emails without leaving The Brain.
             </p>
             <p>
-              <strong className="text-foreground">Calendar:</strong> Your events appear in Daily Brief and can be used for 
+              <strong className="text-foreground">Calendar:</strong> Your events appear in The Signal and can be used for 
               smart scheduling and meeting prep.
             </p>
             <p>

@@ -56,7 +56,7 @@ export function ProgressBar({
   );
 }
 
-// Circular progress for Digital Twin training
+// Circular progress for Chief of Staff training
 interface CircularProgressProps {
   value: number;
   max?: number;
@@ -128,7 +128,7 @@ export function CircularProgress({
   );
 }
 
-// Digital Twin Training Progress Card
+// Chief of Staff Training Progress Card
 interface TrainingProgressProps {
   hoursLogged: number;
   targetHours?: number;
@@ -173,7 +173,7 @@ export function DigitalTwinTrainingProgress({
             <Brain className="w-6 h-6 text-primary" />
           </div>
           <div>
-            <h3 className="font-semibold text-foreground">Digital Twin Training</h3>
+            <h3 className="font-semibold text-foreground">Chief of Staff Training</h3>
             <p className="text-sm text-muted-foreground">
               {currentMilestone.icon} {currentMilestone.label} Level
             </p>

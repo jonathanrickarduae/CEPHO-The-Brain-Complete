@@ -470,7 +470,7 @@ export function SignatureManager({ onSave, compact = false }: SignatureManagerPr
             <div>
               <h4 className="font-medium text-blue-400 mb-1">How signatures are used</h4>
               <p className="text-sm text-muted-foreground">
-                Your Digital Twin can apply your signature to documents with your explicit approval. 
+                Your Chief of Staff can apply your signature to documents with your explicit approval. 
                 For pre-authorized document types (e.g., routine approvals), you can enable auto-signing 
                 in governance settings.
               </p>

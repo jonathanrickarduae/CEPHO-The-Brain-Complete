@@ -196,7 +196,7 @@ export function QADataClassification({
             <div className="mt-2 flex items-center gap-2 text-xs text-muted-foreground">
               <Shield className="w-3 h-3" />
               <span>
-                Verified by {data.verifiedBy === 'digital_twin' ? 'Digital Twin' : 
+                Verified by {data.verifiedBy === 'digital_twin' ? 'Chief of Staff' : 
                             data.verifiedBy === 'user' ? 'You' : 
                             data.verifiedBy === 'sme' ? 'SME' : 'External Source'}
               </span>

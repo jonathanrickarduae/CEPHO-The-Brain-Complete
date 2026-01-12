@@ -202,7 +202,7 @@ export function TimelineSkeleton({ items = 4 }: { items?: number }) {
   );
 }
 
-// Brief card skeleton (for Daily Brief)
+// Brief card skeleton (for The Signal)
 export function BriefCardSkeleton() {
   return (
     <div className="p-4 rounded-xl bg-card/60 border border-white/10 space-y-3">

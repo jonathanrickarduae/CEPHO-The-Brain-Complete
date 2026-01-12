@@ -47,16 +47,16 @@ import NeonBrain from "./NeonBrain";
 import { NotificationBell } from "./NotificationCenter";
 
 const menuItems = [
-  { icon: LayoutDashboard, label: "Command Center", path: "/dashboard", status: 'active' as const },
+  { icon: LayoutDashboard, label: "The Nexus", path: "/dashboard", status: 'active' as const },
   { icon: Inbox, label: "Inbox", path: "/inbox", status: 'warning' as const, count: 8 },
   { icon: Rocket, label: "Project Genesis", path: "/project-genesis", status: 'success' as const },
   { icon: Video, label: "Video Studio", path: "/video-studio" },
-  { icon: Sun, label: "Daily Brief", path: "/daily-brief", status: 'warning' as const, count: 3 },
-  { icon: Users, label: "AI Experts", path: "/ai-experts" },
+  { icon: Sun, label: "The Signal", path: "/daily-brief", status: 'warning' as const, count: 3 },
+  { icon: Users, label: "AI-SMEs", path: "/ai-experts" },
   { icon: Clock, label: "Review Queue", path: "/review-queue", status: 'warning' as const, count: 5 },
   { icon: BookOpen, label: "Library", path: "/library" },
   { icon: BarChart3, label: "Statistics", path: "/statistics" },
-  { icon: Fingerprint, label: "Digital Twin", path: "/digital-twin", status: 'success' as const },
+  { icon: Fingerprint, label: "Chief of Staff", path: "/digital-twin", status: 'success' as const },
   { icon: Brain, label: "QA Dashboard", path: "/qa-dashboard" },
   { icon: Mic, label: "Voice Notepad", path: "/voice-notepad" },
   { icon: Podcast, label: "Podcast Hub", path: "/podcast" },
@@ -220,7 +220,7 @@ function BrainLayoutContent({
   // Handle voice input from quick actions
   const handleVoiceInput = (transcript: string) => {
     console.log('Voice input:', transcript);
-    // TODO: Process voice input through Digital Twin
+    // TODO: Process voice input through Chief of Staff
   };
 
   return (

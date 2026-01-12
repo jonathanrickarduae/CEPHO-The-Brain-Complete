@@ -84,7 +84,7 @@ export function GlobalSearch({ isOpen, onClose }: { isOpen: boolean; onClose: ()
       const mockResults: SearchResult[] = [
         { id: '1', type: 'project' as const, title: 'Celadon Project', excerpt: 'Main development project - 67% complete', relevance: 95 },
         { id: '2', type: 'document' as const, title: 'Board Meeting Notes - Jan 2026', excerpt: 'Q4 review and 2026 planning discussion...', date: new Date(Date.now() - 86400000), relevance: 88 },
-        { id: '3', type: 'conversation' as const, title: 'Strategy discussion', excerpt: 'Digital Twin training approach and timeline...', date: new Date(Date.now() - 172800000), relevance: 82 },
+        { id: '3', type: 'conversation' as const, title: 'Strategy discussion', excerpt: 'Chief of Staff training approach and timeline...', date: new Date(Date.now() - 172800000), relevance: 82 },
         { id: '4', type: 'expert' as const, title: 'Dr. Sarah Chen - Strategy', excerpt: 'AI Expert specialising in business strategy', relevance: 75 },
         { id: '5', type: 'task' as const, title: 'Review legal documents', excerpt: 'Pending approval - Celadon contract', date: new Date(), relevance: 70 },
         { id: '6', type: 'vault' as const, title: 'API Credentials', excerpt: 'Asana, Zoom, Teams integration keys', relevance: 65 },
@@ -254,7 +254,7 @@ export function GlobalSearch({ isOpen, onClose }: { isOpen: boolean; onClose: ()
                 <div className="grid grid-cols-2 gap-2">
                   {[
                     { label: 'New task', icon: Hash, path: '/review-queue' },
-                    { label: 'Ask Digital Twin', icon: Sparkles, path: '/digital-twin' },
+                    { label: 'Ask Chief of Staff', icon: Sparkles, path: '/digital-twin' },
                     { label: 'View calendar', icon: Calendar, path: '/daily-brief' },
                     { label: 'Open vault', icon: Lock, path: '/vault' },
                   ].map(action => (

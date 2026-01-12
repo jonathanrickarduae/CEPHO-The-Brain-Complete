@@ -310,11 +310,11 @@ export default function AITeam() {
             </div>
           </div>
 
-          {/* Digital Twin Assessment */}
+          {/* Chief of Staff Assessment */}
           <div className="bg-gradient-to-br from-fuchsia-500/10 to-cyan-500/10 border border-fuchsia-500/20 rounded-xl p-6">
             <h3 className="text-lg font-semibold text-fuchsia-400 flex items-center gap-2 mb-4">
               <Brain className="w-5 h-5" />
-              Digital Twin Team Assessment
+              Chief of Staff Team Assessment
             </h3>
             <div className="grid grid-cols-3 gap-4">
               <div className="bg-black/20 rounded-lg p-4">
@@ -339,7 +339,7 @@ export default function AITeam() {
             </div>
             <div className="mt-4 p-4 bg-black/20 rounded-lg">
               <p className="text-sm text-gray-300">
-                <span className="text-fuchsia-400 font-medium">Digital Twin Assessment:</span> Your team is performing well overall. 
+                <span className="text-fuchsia-400 font-medium">Chief of Staff Assessment:</span> Your team is performing well overall. 
                 {needsReview.length > 0 && ` ${needsReview.length} experts need attention - consider sending them for overnight training.`}
                 {' '}Top performers are excelling in Investment & Finance and Technology categories.
               </p>
