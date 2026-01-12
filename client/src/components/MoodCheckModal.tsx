@@ -31,18 +31,7 @@ const PERIOD_CONFIG = {
   },
 };
 
-const MOOD_LABELS: Record<number, string> = {
-  1: 'Very Low',
-  2: 'Low',
-  3: 'Below Average',
-  4: 'Slightly Low',
-  5: 'Neutral',
-  6: 'Good',
-  7: 'Very Good',
-  8: 'Great',
-  9: 'Excellent',
-  10: 'Peak Performance',
-};
+// No labels - just the number
 
 export function MoodCheckModal({ isOpen, onClose, onSubmit, period }: MoodCheckModalProps) {
   const [selectedMood, setSelectedMood] = useState<number>(5);
@@ -87,22 +76,16 @@ export function MoodCheckModal({ isOpen, onClose, onSubmit, period }: MoodCheckM
               <span className="text-lg font-display font-bold">{config.greeting}</span>
             </div>
             <h2 className="text-xl font-bold text-foreground mb-2">
-              Wellness Check
+              How are you today?
             </h2>
-            <p className="text-muted-foreground text-sm">
-              {config.question}
-            </p>
           </div>
 
           {/* Mood Slider */}
           <div className="px-8 pb-6">
             {/* Current Value Display */}
             <div className="text-center mb-6">
-              <div className="text-5xl font-bold text-foreground mb-1">
+              <div className="text-6xl font-bold text-foreground">
                 {selectedMood}
-              </div>
-              <div className="text-sm text-muted-foreground font-medium">
-                {MOOD_LABELS[selectedMood]}
               </div>
             </div>
 

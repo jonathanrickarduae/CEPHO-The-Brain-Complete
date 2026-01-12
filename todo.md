@@ -2570,3 +2570,7 @@
 - [ ] Ensure Project Genesis is visible and accessible in navigation
 - [x] Replace emoji icons on projects with professional coloured logo badges
 - [x] Make chat input bar taller/more prominent like Manus style
+- [x] Redesign Library page to match Workflow design principles
+- [x] Fix landing page animation - Cepho should transition to "The Brain" and back
+- [x] Remove "mood" terminology from wellness check - just show number, no labels
+- [x] Change wellness check to "How are you today?" - remove mood/wellness labels

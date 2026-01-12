@@ -78,11 +78,11 @@ export function CephoLandingPage() {
           transition={{ delay: 0.5 }}
         >
           <p className="text-xl text-white/80 font-medium">
-            Your AI-powered Chief of Staff
+            Get you operating at a 10
           </p>
           <p className="text-sm text-white/50 max-w-md mx-auto leading-relaxed">
-            One interface to manage your life, amplified by AI that learns from you, 
-            thinks like you, and works alongside you.
+            Your AI-powered Chief of Staff. One interface to manage your life, 
+            amplified by intelligence that learns from you and works alongside you.
           </p>
         </motion.div>
         
