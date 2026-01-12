@@ -66,7 +66,6 @@ const menuItems = [
   { icon: Moon, label: "Evening Review", path: "/evening-review" },
   { icon: Settings, label: "Settings", path: "/settings" },
   { icon: Info, label: "About The Brain", path: "/about" },
-  { icon: TrendingUp, label: "Commercialization", path: "/commercialization" },
 ];
 
 const SIDEBAR_WIDTH_KEY = "brain-sidebar-width";

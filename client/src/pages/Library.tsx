@@ -7,7 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
   FolderOpen, FileText, Image, BarChart3, Presentation, Search,
   Plus, Upload, Download, Star, Clock, Filter, Grid3X3, List,
-  ChevronRight, X, File, Calendar, User, Briefcase, Home
+  ChevronRight, X, File, Calendar, User, Briefcase, Home, Lock, Shield
 } from 'lucide-react';
 
 // Project data
@@ -84,6 +84,25 @@ const projects = [
     charts: 4,
     lastUpdated: '2024-01-06',
     status: 'active'
+  }
+];
+
+// Secret/Locked Projects (only visible to owner)
+const secretProjects = [
+  {
+    id: 'project-x',
+    name: 'Project X',
+    subtitle: 'Nexus Commercialization Strategy',
+    icon: '🔐',
+    color: 'from-red-500/20 to-red-500/5',
+    borderColor: 'border-red-500/30',
+    documents: 3,
+    images: 0,
+    charts: 2,
+    lastUpdated: '2024-01-12',
+    status: 'secret',
+    isLocked: true,
+    description: 'Three-tier corporate partnership model, revenue strategies, and investor materials'
   }
 ];
 
@@ -325,6 +344,59 @@ export default function Library() {
                   <p className="text-xs text-gray-500 mt-3">
                     Updated {project.lastUpdated}
                   </p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Secret Projects - Vault Level Security */}
+          <div>
+            <h2 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
+              <Shield className="w-5 h-5 text-red-400" />
+              Secure Projects
+              <Badge variant="outline" className="bg-red-500/10 text-red-400 border-red-500/30 text-xs">
+                <Lock className="w-3 h-3 mr-1" />
+                Vault Protected
+              </Badge>
+            </h2>
+            <div className="grid grid-cols-3 gap-4">
+              {secretProjects.map(project => (
+                <div
+                  key={project.id}
+                  onClick={() => setSelectedProject(project)}
+                  className={`bg-gradient-to-br ${project.color} border ${project.borderColor} rounded-xl p-6 cursor-pointer hover:scale-[1.02] transition-all relative overflow-hidden`}
+                >
+                  {/* Security overlay pattern */}
+                  <div className="absolute inset-0 opacity-5">
+                    <div className="absolute inset-0" style={{ backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,0.1) 10px, rgba(255,255,255,0.1) 20px)' }} />
+                  </div>
+                  <div className="relative">
+                    <div className="flex items-start justify-between mb-4">
+                      <span className="text-4xl">{project.icon}</span>
+                      <Badge variant="outline" className="bg-red-500/20 text-red-400 border-red-500/30">
+                        <Lock className="w-3 h-3 mr-1" />
+                        Secret
+                      </Badge>
+                    </div>
+                    <h3 className="text-lg font-semibold text-white">{project.name}</h3>
+                    {project.subtitle && (
+                      <p className="text-sm text-gray-400">{project.subtitle}</p>
+                    )}
+                    <p className="text-xs text-gray-500 mt-2">{project.description}</p>
+                    <div className="mt-4 flex items-center gap-4 text-sm text-gray-400">
+                      <span className="flex items-center gap-1">
+                        <FileText className="w-4 h-4" />
+                        {project.documents}
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <BarChart3 className="w-4 h-4" />
+                        {project.charts}
+                      </span>
+                    </div>
+                    <p className="text-xs text-gray-500 mt-3">
+                      Updated {project.lastUpdated}
+                    </p>
+                  </div>
                 </div>
               ))}
             </div>

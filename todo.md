@@ -2295,3 +2295,34 @@
 - [ ] Push notification when task needs attention
 - [ ] Historical tracking to improve future estimates
 - [ ] Break recommendations based on task queue
+
+## Project X - Secure Commercialization Project
+- [ ] Create Project X as hidden/locked project (not visible in main Library)
+- [ ] Move Commercialization page from sidebar to Project X
+- [ ] Vault-level security with encryption and password protection
+- [ ] Project Genesis integration for building commercialization streams
+- [ ] Document the Three-Tier Corporate Partnership Model
+- [ ] Tier 1: Algorithm Access (company thinking models, subscription)
+- [ ] Tier 2: Expert Review (project feedback, per-project fee)
+- [ ] Tier 3: Dedicated Team (live access to humans, retainer)
+- [ ] Partnership value proposition documentation
+- [ ] Revenue model and split structures
+- [ ] Sales funnel visualization (Tier 1 → Tier 2 → Tier 3)
+- [ ] Target partner company list (McKinsey, PwC, etc.)
+- [ ] Investor-ready blueprint export capability
+- [ ] Continuous thinking/notes capture within project
+- [ ] Restrict Project X visibility to owner only
+
+## Project X - Hybrid SME Model (AI-First, Human-When-Needed)
+- [ ] Document the four-layer SME model in Project X
+- [ ] Layer 1: AI-SMEs (free) - default for research, analysis, strategy
+- [ ] Layer 2: Corporate AI (subscription) - validated company methodologies
+- [ ] Layer 3: Live Expert Calls (per-call fee) - 1-hour with real human SME
+- [ ] Layer 4: Freelancer Handoff (pass-through) - integration for execution work
+- [ ] AI recognition of limits ("This needs human expertise")
+- [ ] Warm handoff flow to expert calls or freelancer platforms
+- [ ] Partnership exploration with Freelancer/Upwork for referral model
+- [ ] Revenue model: Free AI-SMEs → Corporate subs → Call fees → Referral fees
+- [ ] Keep Nexus as intelligence layer, not execution platform
+- [ ] Build prompts that guide users through the escalation path
+- [ ] Celebrity/leader SMEs as premium tier (Jay-Z, etc.)
