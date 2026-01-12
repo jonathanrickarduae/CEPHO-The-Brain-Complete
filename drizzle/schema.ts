@@ -1210,3 +1210,24 @@ export const expertDomainKnowledge = mysqlTable("expert_domain_knowledge", {
 
 export type ExpertDomainKnowledge = typeof expertDomainKnowledge.$inferSelect;
 export type InsertExpertDomainKnowledge = typeof expertDomainKnowledge.$inferInsert;
+
+
+/**
+ * Favorite contacts - quick access to frequently messaged contacts
+ * Allows users to star/favorite contacts for quick access in the Message Chief of Staff section
+ */
+export const favoriteContacts = mysqlTable("favorite_contacts", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  contactType: mysqlEnum("contactType", ["expert", "corporate_partner", "ai_expert", "colleague"]).notNull(),
+  contactId: varchar("contactId", { length: 100 }).notNull(), // ID of the expert, partner, or colleague
+  contactName: varchar("contactName", { length: 200 }).notNull(), // Display name
+  contactAvatar: varchar("contactAvatar", { length: 500 }), // Avatar URL
+  order: int("order").default(0), // For custom ordering
+  isFavorited: boolean("isFavorited").default(true).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type FavoriteContact = typeof favoriteContacts.$inferSelect;
+export type InsertFavoriteContact = typeof favoriteContacts.$inferInsert;

@@ -1,6 +1,7 @@
 import { COOKIE_NAME } from "@shared/const";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
+import { favoritesRouter } from "./routers/favorites";
 import { publicProcedure, protectedProcedure, router } from "./_core/trpc";
 import { 
   createMoodEntry, getMoodHistory, getMoodTrends, getLastMoodCheck, 
@@ -1847,6 +1848,7 @@ You are not a yes-man. You are a trusted advisor who respects the principal enou
         };
       }),
   }),
+  favorites: favoritesRouter,
 });
 
 export type AppRouter = typeof appRouter;

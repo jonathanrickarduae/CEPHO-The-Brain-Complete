@@ -24,6 +24,7 @@ import { TwinBreakApproval } from "@/components/TwinBreakApproval";
 import { TourPrompt } from '@/components/TourAndDemoMode';
 import { NeuralNetworkViz } from '@/components/NeuralNetworkViz';
 import { TaskProgressTracker } from '@/components/TaskProgressTracker';
+import { FavoriteContacts } from '@/components/FavoriteContacts';
 import { isDemoModeEnabled, getDemoData, initializeDemoModeIfNeeded } from "@/services/demoMode";
 
 // Daily rotating quotes - one for each day
@@ -247,6 +248,11 @@ export default function Dashboard() {
             </div>
           </>
         )}
+      </div>
+
+      {/* Favorite Contacts Quick Access */}
+      <div className="max-w-3xl mx-auto w-full mb-6">
+        <FavoriteContacts maxDisplay={6} />
       </div>
 
       {/* Header with Protocol Toggle and Status */}

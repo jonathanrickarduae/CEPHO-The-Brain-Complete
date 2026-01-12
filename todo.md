@@ -2820,3 +2820,12 @@
 ## Quick Fixes (Jan 2026)
 - [x] Change Nexus dashboard placeholder text to "Message Chief of Staff"
 - [x] Add Voice Capture label/feature at the top of the input area
+
+
+## Favorites Feature (Jan 2026)
+- [x] Add favorites table to database schema
+- [x] Create tRPC endpoints for managing favorites (add, remove, list)
+- [x] Build FavoriteContacts UI component
+- [x] Integrate favorites into Dashboard input area
+- [x] Add star icon to favorite/unfavorite contacts
+- [x] Display favorites in quick access panel
