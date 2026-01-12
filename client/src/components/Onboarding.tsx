@@ -20,7 +20,7 @@ interface OnboardingStep {
 const ONBOARDING_STEPS: OnboardingStep[] = [
   {
     id: 1,
-    title: 'THE BRAIN',
+    title: 'CEPHO',
     description: 'Your AI-powered command center that learns from you and works alongside you. A living ecosystem of intelligence at your fingertips.',
     icon: Brain,
     color: 'text-primary',
@@ -61,14 +61,14 @@ const ONBOARDING_STEPS: OnboardingStep[] = [
   {
     id: 6,
     title: 'You\'re Ready!',
-    description: 'Start by checking The Signal, or ask your Chief of Staff anything. The Brain is here to get you to a 10 every day.',
+    description: 'Start by checking The Signal, or ask your Chief of Staff anything. Cepho is here to get you to a 10 every day.',
     icon: Sparkles,
     color: 'text-primary',
     useBrain: true,
   },
 ];
 
-const ONBOARDING_KEY = 'brain-onboarding-completed';
+const ONBOARDING_KEY = 'cepho-onboarding-completed';
 
 export function useOnboarding() {
   const [hasCompletedOnboarding, setHasCompletedOnboarding] = useState(() => {
@@ -286,7 +286,7 @@ export function OnboardingModal({ isOpen, onComplete, onSkip }: OnboardingModalP
                 >
                   {isLastStep ? (
                     <>
-                      Enter The Brain
+                      Enter Cepho
                       <Sparkles className="w-5 h-5" />
                     </>
                   ) : (

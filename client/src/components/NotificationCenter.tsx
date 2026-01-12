@@ -130,7 +130,7 @@ function getSampleNotifications(): Notification[] {
       id: 5,
       type: 'achievement',
       title: 'Achievement Unlocked',
-      message: 'You\'ve completed 10 projects with The Brain!',
+      message: 'You\'ve completed 10 projects with Cepho!',
       createdAt: new Date(Date.now() - 1000 * 60 * 180),
       read: true,
     },

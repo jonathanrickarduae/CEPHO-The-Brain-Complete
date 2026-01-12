@@ -21,23 +21,23 @@ export function ShareableInsight({ type, title, data, onShare }: ShareableInsigh
   const generateShareUrl = () => {
     // In production, this would create a unique shareable link
     const shareCode = Math.random().toString(36).substring(7);
-    return `https://thebrain.app/shared/${shareCode}`;
+    return `https://cepho.ai/shared/${shareCode}`;
   };
 
   const generateShareText = () => {
     switch (type) {
       case 'productivity':
-        return `📊 My productivity score this ${data.period || 'week'}: ${data.score}/10\n\n${data.highlights?.join('\n') || ''}\n\nPowered by The Brain 🧠`;
+        return `📊 My productivity score this ${data.period || 'week'}: ${data.score}/10\n\n${data.highlights?.join('\n') || ''}\n\nPowered by Cepho 🧠`;
       case 'mood':
-        return `😊 My mood trend is ${data.trend}!\n\n${data.highlights?.join('\n') || ''}\n\nTracking my wellness with The Brain 🧠`;
+        return `😊 My mood trend is ${data.trend}!\n\n${data.highlights?.join('\n') || ''}\n\nTracking my wellness with Cepho 🧠`;
       case 'wellness':
-        return `🌟 Wellness Score: ${data.score}/10\n\n${data.highlights?.join('\n') || ''}\n\nGetting to a 10 with The Brain 🧠`;
+        return `🌟 Wellness Score: ${data.score}/10\n\n${data.highlights?.join('\n') || ''}\n\nGetting to a 10 with Cepho 🧠`;
       case 'achievement':
-        return `🏆 ${title}\n\n${data.highlights?.join('\n') || ''}\n\nAchieved with The Brain 🧠`;
+        return `🏆 ${title}\n\n${data.highlights?.join('\n') || ''}\n\nAchieved with Cepho 🧠`;
       case 'consultation':
-        return `💡 Just consulted with ${data.expertName} on The Brain\n\nKey insight: ${data.highlights?.[0] || ''}\n\nAI Experts at thebrain.app 🧠`;
+        return `💡 Just consulted with ${data.expertName} on Cepho\n\nKey insight: ${data.highlights?.[0] || ''}\n\nAI Experts at cepho.ai 🧠`;
       default:
-        return `${title}\n\nPowered by The Brain 🧠`;
+        return `${title}\n\nPowered by Cepho 🧠`;
     }
   };
 
@@ -151,7 +151,7 @@ export function ShareableInsight({ type, title, data, onShare }: ShareableInsigh
           <div className="flex items-center justify-between pt-4 border-t border-gray-700">
             <div className="flex items-center gap-2">
               <span className="text-xl">🧠</span>
-              <span className="text-sm text-gray-400">Powered by The Brain</span>
+              <span className="text-sm text-gray-400">Powered by Cepho</span>
             </div>
             <div className="flex items-center gap-1 text-sm text-gray-500">
               <Eye className="w-4 h-4" />

@@ -73,7 +73,7 @@ export default function Commercialization() {
               </div>
             </div>
             <div>
-              <h2 className="text-2xl font-bold text-white mb-1">The Brain's Competitive Position</h2>
+              <h2 className="text-2xl font-bold text-white mb-1">Cepho's Competitive Position</h2>
               <p className="text-gray-400 mb-3">Based on feature parity, unique value, and market dynamics</p>
               <div className="flex gap-4">
                 <div className="text-center">

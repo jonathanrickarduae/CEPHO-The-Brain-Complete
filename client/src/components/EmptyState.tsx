@@ -81,7 +81,7 @@ const EMPTY_STATE_CONFIGS: Record<EmptyStateType, EmptyStateConfig> = {
   insights: {
     icon: Sparkles,
     title: 'Insights coming soon',
-    description: 'As you use The Brain more, your Chief of Staff will surface personalized insights here.',
+    description: 'As you use Cepho more, your Chief of Staff will surface personalized insights here.',
     color: 'text-primary',
     bgGradient: 'from-primary/10 to-primary/5',
   },
@@ -105,7 +105,7 @@ const EMPTY_STATE_CONFIGS: Record<EmptyStateType, EmptyStateConfig> = {
   goals: {
     icon: Target,
     title: 'Set your first goal',
-    description: 'Define what success looks like and let The Brain help you get there.',
+    description: 'Define what success looks like and let Cepho help you get there.',
     actionLabel: 'Create Goal',
     color: 'text-green-400',
     bgGradient: 'from-green-500/10 to-green-500/5',

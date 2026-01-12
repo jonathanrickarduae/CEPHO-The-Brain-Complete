@@ -90,7 +90,7 @@ const INTEGRATIONS: Integration[] = [
     requiresApproval: false,
     logo: '✉️',
     setupSteps: [
-      { id: 'intro', title: 'Connect Gmail', description: 'Allow The Brain to read and draft emails on your behalf.', type: 'info' },
+      { id: 'intro', title: 'Connect Gmail', description: 'Allow Cepho to read and draft emails on your behalf.', type: 'info' },
       { id: 'oauth', title: 'Sign in with Google', description: 'Authorize Gmail access.', type: 'oauth' },
     ],
   },
@@ -152,7 +152,7 @@ const INTEGRATIONS: Integration[] = [
     requiresApproval: true,
     logo: '💬',
     setupSteps: [
-      { id: 'intro', title: 'Connect Slack', description: 'Add The Brain to your Slack workspace.', type: 'info' },
+      { id: 'intro', title: 'Connect Slack', description: 'Add Cepho to your Slack workspace.', type: 'info' },
       { id: 'oauth', title: 'Add to Slack', description: 'Click to install the Slack app.', type: 'oauth' },
       { id: 'config', title: 'Channel Settings', description: 'Choose notification channels.', type: 'config', fields: [
         { id: 'channel', label: 'Default channel', type: 'text', placeholder: '#general' },
@@ -277,7 +277,7 @@ const INTEGRATIONS: Integration[] = [
     requiresApproval: true,
     logo: '🔑',
     setupSteps: [
-      { id: 'intro', title: 'Custom API Integration', description: 'Connect any REST API to The Brain.', type: 'info' },
+      { id: 'intro', title: 'Custom API Integration', description: 'Connect any REST API to Cepho.', type: 'info' },
       { id: 'apikey', title: 'API Details', description: 'Enter your API configuration.', type: 'apikey', fields: [
         { id: 'api_name', label: 'Integration Name', type: 'text', required: true },
         { id: 'base_url', label: 'Base URL', type: 'text', placeholder: 'https://api.example.com', required: true },
@@ -737,7 +737,7 @@ export function IntegrationWizard({ onComplete, initialIntegration }: Integratio
           </div>
           <h3 className="text-xl font-semibold text-foreground mb-2">Successfully Connected!</h3>
           <p className="text-muted-foreground mb-6">
-            <strong>{selectedIntegration.name}</strong> is now connected to The Brain.
+            <strong>{selectedIntegration.name}</strong> is now connected to Cepho.
             Your credentials are securely stored in the Vault.
           </p>
           

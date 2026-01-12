@@ -57,7 +57,7 @@ export function WaitlistSignup({ onJoin }: { onJoin?: (email: string, referralCo
         <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-cyan-500 to-purple-600 mb-4">
           <span className="text-3xl">🧠</span>
         </div>
-        <h2 className="text-2xl font-bold text-white mb-2">Join The Brain Waitlist</h2>
+        <h2 className="text-2xl font-bold text-white mb-2">Join the Cepho Waitlist</h2>
         <p className="text-gray-400">
           Get early access to your AI-powered Chief of Staff. 
           <span className="text-cyan-400"> 15,000+ people</span> are already waiting.
@@ -120,20 +120,20 @@ export function WaitlistStatus({ position }: { position: WaitlistPosition }) {
   const [copied, setCopied] = useState(false);
 
   const copyReferralLink = async () => {
-    const link = `https://thebrain.app/join?ref=${position.referralCode}`;
+    const link = `https://cepho.ai/join?ref=${position.referralCode}`;
     await navigator.clipboard.writeText(link);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
   const shareToTwitter = () => {
-    const text = encodeURIComponent(`I just joined The Brain waitlist! 🧠 Get early access to your AI-powered Chief of Staff. Use my referral link to skip ahead:`);
-    const url = encodeURIComponent(`https://thebrain.app/join?ref=${position.referralCode}`);
+    const text = encodeURIComponent(`I just joined the Cepho waitlist! 🧠 Get early access to your AI-powered Chief of Staff. Use my referral link to skip ahead:`);
+    const url = encodeURIComponent(`https://cepho.ai/join?ref=${position.referralCode}`);
     window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank');
   };
 
   const shareToLinkedIn = () => {
-    const url = encodeURIComponent(`https://thebrain.app/join?ref=${position.referralCode}`);
+    const url = encodeURIComponent(`https://cepho.ai/join?ref=${position.referralCode}`);
     window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${url}`, '_blank');
   };
 
@@ -263,7 +263,7 @@ export function ReferralDashboard({ stats }: { stats: ReferralStats }) {
   const [copied, setCopied] = useState(false);
 
   const copyReferralLink = async () => {
-    const link = `https://thebrain.app/join?ref=${stats.referralCode}`;
+    const link = `https://cepho.ai/join?ref=${stats.referralCode}`;
     await navigator.clipboard.writeText(link);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
@@ -319,7 +319,7 @@ export function ReferralDashboard({ stats }: { stats: ReferralStats }) {
         <div className="text-sm text-gray-400 mb-2">Your referral link</div>
         <div className="flex gap-2">
           <div className="flex-1 px-4 py-2 bg-gray-900 rounded-lg text-sm text-gray-300 truncate">
-            https://thebrain.app/join?ref={stats.referralCode}
+            https://cepho.ai/join?ref={stats.referralCode}
           </div>
           <button
             onClick={copyReferralLink}
@@ -366,7 +366,7 @@ export function InviteModal({
       <div className="bg-gray-800 rounded-2xl p-6 max-w-md w-full">
         <h3 className="text-xl font-semibold text-white mb-2">Invite Friends</h3>
         <p className="text-gray-400 text-sm mb-6">
-          Share The Brain with friends and earn rewards when they join.
+          Share Cepho with friends and earn rewards when they join.
         </p>
 
         <div className="mb-4">

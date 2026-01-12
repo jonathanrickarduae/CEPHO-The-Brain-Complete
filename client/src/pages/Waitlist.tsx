@@ -72,7 +72,7 @@ export default function Waitlist() {
 
   const testimonials = [
     {
-      quote: "The Brain has completely transformed how I manage my day. It's like having a chief of staff.",
+      quote: "Cepho has completely transformed how I manage my day. It's like having a chief of staff.",
       author: "Sarah K.",
       role: "Startup Founder",
       rating: 5,
@@ -107,7 +107,7 @@ export default function Waitlist() {
               <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-500 to-purple-600 flex items-center justify-center">
                 <span className="text-2xl">🧠</span>
               </div>
-              <span className="text-2xl font-bold text-white">The Brain</span>
+              <span className="text-2xl font-bold text-white">Cepho</span>
             </div>
           </div>
 
@@ -232,7 +232,7 @@ export default function Waitlist() {
           {!position && (
             <div className="text-center">
               <p className="text-gray-400 mb-4">
-                Join the waitlist today and be among the first to experience The Brain.
+                Join the waitlist today and be among the first to experience Cepho.
               </p>
               <button
                 onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
@@ -250,7 +250,7 @@ export default function Waitlist() {
         <div className="max-w-6xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2 text-gray-400">
             <span className="text-xl">🧠</span>
-            <span>The Brain © 2026</span>
+            <span>Cepho © 2026</span>
           </div>
           <div className="flex gap-6 text-sm text-gray-500">
             <a href="#" className="hover:text-gray-300">Privacy</a>

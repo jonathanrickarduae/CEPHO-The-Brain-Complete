@@ -2432,3 +2432,32 @@
 - [ ] Auto-actions based on ratings: Enhance, Retrain, Demote, Fire, Promote
 - [ ] Morning brief reports expert changes made overnight
 - [ ] Expert prompt/personality adjustment based on feedback
+
+## Cepho Rebrand (Jan 12, 2026)
+- [ ] Create animated landing page with Cepho ↔ The Brain morphing transition
+- [ ] Add soft pulsing neural animation between brand names
+- [ ] Update About section with full Cepho brand story (Greek etymology, cephalisation)
+- [ ] Add tagline: "From the Greek for brain. Where intelligence begins."
+- [ ] Rebrand all internal references from "The Brain" to "Cepho"
+- [ ] Update sidebar header to show "Cepho" instead of "The Brain"
+- [ ] Update page titles and meta tags to "Cepho"
+- [ ] Keep landing page animation as the only place showing both names
+- [ ] Update Waitlist page with Cepho branding
+- [ ] Update Settings/About pages with Cepho brand story
+
+
+## Cepho Rebrand (Jan 12, 2026)
+
+- [x] Create animated landing page with Cepho ↔ The Brain transition
+- [x] Update About section with full Cepho brand story
+- [x] Rebrand sidebar header from THE BRAIN to CEPHO
+- [x] Update menu item "About The Brain" to "About Cepho"
+- [x] Update all share text and URLs to cepho.ai
+- [x] Update onboarding flow with Cepho branding
+- [x] Update integration descriptions to reference Cepho
+- [x] Update tooltips and help text
+- [x] Update waitlist page branding
+- [x] Update loader messages
+- [x] Update all component references from The Brain to Cepho
+- [x] Create CephoLandingPage component with animated name transition
+- [x] Update Landing.tsx with CephoNameAnimation component

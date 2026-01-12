@@ -45,6 +45,7 @@ import { StatusPulse } from "./StatusPulse";
 import { GlobalSearch } from "./GlobalSearch";
 import NeonBrain from "./NeonBrain";
 import { NotificationBell } from "./NotificationCenter";
+import { CephoLandingPage } from "./CephoLandingPage";
 
 const menuItems = [
   { icon: LayoutDashboard, label: "The Nexus", path: "/dashboard", status: 'active' as const },
@@ -65,10 +66,10 @@ const menuItems = [
   { icon: Lock, label: "The Vault", path: "/vault" },
   { icon: Moon, label: "Evening Review", path: "/evening-review" },
   { icon: Settings, label: "Settings", path: "/settings" },
-  { icon: Info, label: "About The Brain", path: "/about" },
+  { icon: Info, label: "About Cepho", path: "/about" },
 ];
 
-const SIDEBAR_WIDTH_KEY = "brain-sidebar-width";
+const SIDEBAR_WIDTH_KEY = "cepho-sidebar-width";
 const DEFAULT_WIDTH = 260;
 const MIN_WIDTH = 200;
 const MAX_WIDTH = 400;
@@ -93,33 +94,7 @@ export default function BrainLayout({
   }
 
   if (!user) {
-    return (
-      <div className="flex items-center justify-center min-h-screen bg-black">
-        <div className="flex flex-col items-center gap-6 p-8 max-w-md w-full">
-          {/* Animated Brain Logo with Neural Nodes */}
-          <NeonBrain size="xl" state="thinking" mood={8} />
-          
-          <div className="flex flex-col items-center gap-4 mt-4">
-            <h1 className="text-4xl font-display font-bold tracking-tight text-center text-white">
-              Welcome to The Brain
-            </h1>
-            <p className="text-base text-white/60 text-center max-w-sm">
-              Your AI-powered command center. Sign in to access your personalized intelligence hub.
-            </p>
-          </div>
-          
-          <Button
-            onClick={() => {
-              window.location.href = getLoginUrl();
-            }}
-            size="lg"
-            className="w-full mt-4 bg-primary hover:bg-primary/90 text-white shadow-[0_0_20px_rgba(255,16,240,0.3)] hover:shadow-[0_0_30px_rgba(255,16,240,0.5)] transition-all"
-          >
-            Sign in to Continue
-          </Button>
-        </div>
-      </div>
-    );
+    return <CephoLandingPage />;
   }
 
   return (
@@ -243,7 +218,7 @@ function BrainLayoutContent({
                 <div className="flex items-center gap-2 min-w-0">
                   <Brain className="w-6 h-6 text-primary" />
                       <span className="font-display font-bold tracking-tight truncate text-sidebar-foreground">
-                    THE BRAIN
+                    CEPHO
                   </span>
                 </div>
               ) : null}
@@ -367,7 +342,7 @@ function BrainLayoutContent({
               <div className="flex items-center gap-3">
                 <Brain className="w-5 h-5 text-primary" />
                 <span className="tracking-tight text-white font-medium">
-                  {activeMenuItem?.label ?? "The Brain"}
+                  {activeMenuItem?.label ?? "Cepho"}
                 </span>
               </div>
             </div>
