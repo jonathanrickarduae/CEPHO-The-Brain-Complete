@@ -219,13 +219,17 @@ export default function Dashboard() {
         ) : (
           /* Desktop: Full inline input */
           <>
+            <div className="mb-2 flex items-center gap-2">
+              <Mic className="w-4 h-4 text-primary" />
+              <span className="text-xs font-semibold text-primary">VOICE CAPTURE</span>
+            </div>
             <div className="flex items-center gap-3 bg-card/80 border-2 border-primary/30 rounded-2xl px-4 py-4 focus-within:border-primary/60 focus-within:ring-2 focus-within:ring-primary/20 transition-all duration-300 shadow-lg shadow-primary/5">
               <input 
                 type="text"
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyDown={handleKeyDown}
-                placeholder="Ask your Chief of Staff anything..."
+                placeholder="Message Chief of Staff..."
                 className="flex-1 bg-transparent text-foreground placeholder-muted-foreground outline-none text-sm md:text-base"
               />
               <button 

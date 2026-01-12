@@ -2815,3 +2815,8 @@
 - [x] Replace training indicator with toggle button (cross/tick) for on/off
 - [x] Make all tabs consistent in styling (Chief of Staff differs from others)
 - [x] Fix Vault positioning - move content higher on page
+
+
+## Quick Fixes (Jan 2026)
+- [x] Change Nexus dashboard placeholder text to "Message Chief of Staff"
+- [x] Add Voice Capture label/feature at the top of the input area
