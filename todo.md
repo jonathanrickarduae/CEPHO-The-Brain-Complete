@@ -2087,3 +2087,10 @@
 - [ ] Remove all gamification - No streaks, scores, badges
 - [ ] Dashboard boxes - Fix labels (AI Expert Engine → AI SMEs, Digital Twin → Chief of Staff)
 - [ ] Dashboard boxes - Make clickable to navigate to pages
+
+
+## UI Fixes (User Request - Jan 12)
+- [ ] Mood display - just number, not X/10
+- [ ] Message placeholder - "Message Chief of Staff..." not "Message Digital Twin..."
+- [ ] Tighten protocol toggle (OMNI/GOVERNED) design
+- [ ] Keep Evening Review as is

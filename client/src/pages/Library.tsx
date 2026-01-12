@@ -291,40 +291,38 @@ export default function Library() {
               <Briefcase className="w-5 h-5 text-fuchsia-400" />
               Projects
             </h2>
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
               {projects.map(project => (
                 <div
                   key={project.id}
                   onClick={() => setSelectedProject(project)}
-                  className={`bg-gradient-to-br ${project.color} border ${project.borderColor} rounded-xl p-6 cursor-pointer hover:scale-[1.02] transition-all`}
+                  className="group relative p-4 md:p-5 rounded-xl bg-card/60 border border-border hover:border-primary/50 hover:bg-card/80 transition-all duration-300 cursor-pointer overflow-hidden hover:scale-[1.02] active:scale-[0.98] hover:shadow-lg hover:shadow-primary/10"
                 >
-                  <div className="flex items-start justify-between mb-4">
-                    <span className="text-4xl">{project.icon}</span>
-                    <Badge variant="outline" className="bg-white/10 text-white border-white/20">
-                      {project.status}
-                    </Badge>
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="p-2 rounded-lg bg-primary/10">
+                      <FolderOpen className="w-5 h-5 text-primary" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-semibold text-foreground truncate">{project.name}</h3>
+                      {project.subtitle && (
+                        <p className="text-xs text-muted-foreground truncate">{project.subtitle}</p>
+                      )}
+                    </div>
                   </div>
-                  <h3 className="text-lg font-semibold text-white">{project.name}</h3>
-                  {project.subtitle && (
-                    <p className="text-sm text-gray-400">{project.subtitle}</p>
-                  )}
-                  <div className="mt-4 flex items-center gap-4 text-sm text-gray-400">
+                  <div className="flex items-center gap-3 text-xs text-muted-foreground">
                     <span className="flex items-center gap-1">
-                      <FileText className="w-4 h-4" />
+                      <FileText className="w-3 h-3" />
                       {project.documents}
                     </span>
                     <span className="flex items-center gap-1">
-                      <Image className="w-4 h-4" />
+                      <Image className="w-3 h-3" />
                       {project.images}
                     </span>
                     <span className="flex items-center gap-1">
-                      <BarChart3 className="w-4 h-4" />
+                      <BarChart3 className="w-3 h-3" />
                       {project.charts}
                     </span>
                   </div>
-                  <p className="text-xs text-gray-500 mt-3">
-                    Updated {project.lastUpdated}
-                  </p>
                 </div>
               ))}
             </div>
@@ -332,24 +330,25 @@ export default function Library() {
 
           {/* Personal Section */}
           <div>
-            <h2 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
-              <Home className="w-5 h-5 text-cyan-400" />
+            <h2 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
+              <Home className="w-5 h-5 text-primary" />
               Personal
             </h2>
-            <div className="grid grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
               {personalItems.map(item => (
                 <div
                   key={item.id}
-                  className="bg-white/5 border border-white/10 rounded-xl p-4 cursor-pointer hover:border-cyan-500/50 transition-all"
+                  className="group relative p-4 rounded-xl bg-card/60 border border-border hover:border-primary/50 hover:bg-card/80 transition-all duration-300 cursor-pointer hover:scale-[1.02] active:scale-[0.98]"
                 >
-                  <div className="flex items-center gap-3 mb-3">
-                    <span className="text-2xl">{item.icon}</span>
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 rounded-lg bg-primary/10">
+                      <Home className="w-4 h-4 text-primary" />
+                    </div>
                     <div>
-                      <h3 className="font-medium text-white">{item.name}</h3>
-                      <p className="text-xs text-gray-400">{item.items} items</p>
+                      <h3 className="font-medium text-foreground">{item.name}</h3>
+                      <p className="text-xs text-muted-foreground">{item.items} items</p>
                     </div>
                   </div>
-                  <Progress value={Math.random() * 100} className="h-1" />
                 </div>
               ))}
             </div>

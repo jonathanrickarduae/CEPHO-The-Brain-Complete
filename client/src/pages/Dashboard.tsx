@@ -252,7 +252,7 @@ export default function Dashboard() {
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyDown={handleKeyDown}
-                placeholder="Message Digital Twin..." 
+                placeholder="Message Chief of Staff..." 
                 className="flex-1 bg-transparent border-none outline-none text-lg text-foreground placeholder:text-muted-foreground/50 min-h-0"
                 autoFocus
               />
@@ -338,7 +338,6 @@ export default function Dashboard() {
           {latestMood && (
             <div className="flex items-center gap-1 px-3 py-1.5 rounded-full bg-card/60 border border-border">
               <span className="text-sm font-medium text-foreground">{latestMood.mood}</span>
-              <span className="text-xs text-muted-foreground">/10</span>
             </div>
           )}
           
@@ -349,14 +348,6 @@ export default function Dashboard() {
             <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></div>
             <span className="text-xs font-mono tracking-wider">ONLINE</span>
           </div>
-        </div>
-      </div>
-
-      {/* Daily Quote */}
-      <div className="mb-4 text-center">
-        <div className="flex flex-col items-center gap-1">
-          <p className="text-sm md:text-base font-light text-muted-foreground italic max-w-xl">"{inspiration.quote}"</p>
-          <p className="text-xs text-muted-foreground">— {inspiration.author}</p>
         </div>
       </div>
 
@@ -437,7 +428,7 @@ export default function Dashboard() {
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Message Digital Twin..." 
+            placeholder="Message Chief of Staff..." 
             className="flex-1 bg-transparent border-none outline-none text-base text-foreground placeholder:text-muted-foreground/50 min-h-0"
           />
           <div className="flex items-center gap-2">

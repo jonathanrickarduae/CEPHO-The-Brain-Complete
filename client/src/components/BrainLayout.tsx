@@ -45,10 +45,10 @@ import { StatusPulse } from "./StatusPulse";
 import { GlobalSearch } from "./GlobalSearch";
 import NeonBrain from "./NeonBrain";
 import { NotificationBell } from "./NotificationCenter";
-import BrainBanner from "./BrainBanner";
+// BrainBanner removed
 
 const menuItems = [
-  { icon: LayoutDashboard, label: "Dashboard", path: "/dashboard" },
+  { icon: LayoutDashboard, label: "The Nexus", path: "/dashboard" },
   { icon: Sun, label: "The Signal", path: "/daily-brief", count: 3 },
   { icon: Rocket, label: "Project Genesis", path: "/project-genesis", highlight: true },
   { icon: Users, label: "AI-SMEs", path: "/ai-experts" },
@@ -354,14 +354,6 @@ function BrainLayoutContent({
       </div>
 
       <SidebarInset className="bg-background">
-        {/* Desktop Brain Banner */}
-        {!isMobile && (
-          <BrainBanner 
-            pageTitle={activeMenuItem?.label?.replace('The ', '')} 
-            compact={false}
-          />
-        )}
-        
         {/* Mobile Header */}
         {isMobile && (
           <div className="flex border-b border-border h-14 items-center justify-between bg-background/95 px-2 backdrop-blur supports-[backdrop-filter]:backdrop-blur sticky top-0 z-40">
