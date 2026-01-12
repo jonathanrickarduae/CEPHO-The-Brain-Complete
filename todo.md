@@ -1978,3 +1978,41 @@
 - [x] Add brand story elements throughout
 - [x] Consistent visual identity with BrainBanner
 - [x] Clear articulation of what The Brain does
+
+
+## Video Pitch Studio Analytics Integration
+
+- [ ] Wire InvestorAnalyticsDashboard into VideoPitchStudio page
+- [ ] Add tab navigation between Studio and Analytics views
+- [ ] Connect analytics to pitch pack selection
+
+## Onboarding Flow Testing
+
+- [ ] Test 6-step onboarding flow end-to-end
+- [ ] Verify brand story messaging resonates
+- [ ] Check visual consistency with BrainBanner
+
+## Investor Database Connection
+
+- [ ] Create API routes for investor CRUD operations
+- [ ] Add investor creation/import functionality
+- [ ] Connect capital matching engine to live data
+- [ ] Build investor list management UI
+
+
+## Video Pitch Studio Analytics Integration (Completed)
+- [x] Wire Analytics Dashboard to Video Pitch Studio
+- [x] Add tab navigation (Studio / Analytics)
+- [x] Pass pitch pack data to analytics component
+
+## Onboarding Flow Testing (Completed)
+- [x] Test onboarding flow end-to-end
+- [x] Verify brand story messaging in all 6 steps
+- [x] Check visual consistency
+
+## Investor Database API (Completed)
+- [x] Create investor CRUD API routes
+- [x] Add capital matching endpoint
+- [x] Add interaction recording endpoint
+- [x] Add commitment tracking endpoint
+- [x] Write unit tests for investor matching logic (13 tests passing)

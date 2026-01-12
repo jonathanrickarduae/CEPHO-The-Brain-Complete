@@ -26,6 +26,11 @@ import {
   recordLearningEvent, getLearningEvents,
   getAutonomyLevel, upsertAutonomyLevel, getAllAutonomyLevels,
   getOnboardingProgress,
+  // Investor Database
+  createInvestor, getInvestors, getInvestorById, updateInvestor, deleteInvestor,
+  getInvestorsByType, matchInvestorsForRaise,
+  recordInvestorInteraction, getInvestorInteractions,
+  recordInvestorCommitment, getCommitmentsForRaise,
 } from "./db";
 import { invokeLLM } from "./_core/llm";
 import { z } from "zod";
@@ -1515,8 +1520,147 @@ Always be direct and efficient. The user is busy and values their time.`;
           currentLevel: input.currentLevel,
           targetLevel: input.targetLevel,
         });
+       }),
+  }),
+
+  // ==================== INVESTOR DATABASE ====================
+  investors: router({
+    // Create a new investor
+    create: protectedProcedure
+      .input(z.object({
+        name: z.string(),
+        type: z.enum(['angel', 'hnwi', 'family_office', 'vc', 'pe', 'bank', 'government', 'strategic']),
+        organization: z.string().optional(),
+        ticketSizeMin: z.number().optional(),
+        ticketSizeMax: z.number().optional(),
+        currency: z.string().optional(),
+        sectors: z.array(z.string()).optional(),
+        stages: z.array(z.string()).optional(),
+        geographies: z.array(z.string()).optional(),
+        dealTypes: z.array(z.string()).optional(),
+        email: z.string().optional(),
+        phone: z.string().optional(),
+        linkedin: z.string().optional(),
+        website: z.string().optional(),
+        relationshipStatus: z.enum(['cold', 'warm', 'hot', 'active', 'invested', 'passed']).optional(),
+        notes: z.string().optional(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        return createInvestor({
+          userId: ctx.user.id,
+          ...input,
+        });
+      }),
+
+    // Get all investors
+    list: protectedProcedure.query(async ({ ctx }) => {
+      return getInvestors(ctx.user.id);
+    }),
+
+    // Get investor by ID
+    get: protectedProcedure
+      .input(z.object({ id: z.number() }))
+      .query(async ({ ctx, input }) => {
+        return getInvestorById(input.id, ctx.user.id);
+      }),
+
+    // Update investor
+    update: protectedProcedure
+      .input(z.object({
+        id: z.number(),
+        name: z.string().optional(),
+        type: z.enum(['angel', 'hnwi', 'family_office', 'vc', 'pe', 'bank', 'government', 'strategic']).optional(),
+        organization: z.string().optional(),
+        ticketSizeMin: z.number().optional(),
+        ticketSizeMax: z.number().optional(),
+        currency: z.string().optional(),
+        sectors: z.array(z.string()).optional(),
+        stages: z.array(z.string()).optional(),
+        geographies: z.array(z.string()).optional(),
+        dealTypes: z.array(z.string()).optional(),
+        email: z.string().optional(),
+        phone: z.string().optional(),
+        linkedin: z.string().optional(),
+        website: z.string().optional(),
+        relationshipStatus: z.enum(['cold', 'warm', 'hot', 'active', 'invested', 'passed']).optional(),
+        notes: z.string().optional(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        const { id, ...data } = input;
+        return updateInvestor(id, ctx.user.id, data);
+      }),
+
+    // Delete investor
+    delete: protectedProcedure
+      .input(z.object({ id: z.number() }))
+      .mutation(async ({ ctx, input }) => {
+        return deleteInvestor(input.id, ctx.user.id);
+      }),
+
+    // Get investors by type
+    byType: protectedProcedure
+      .input(z.object({ type: z.string() }))
+      .query(async ({ ctx, input }) => {
+        return getInvestorsByType(ctx.user.id, input.type);
+      }),
+
+    // Match investors for a capital raise
+    match: protectedProcedure
+      .input(z.object({
+        amount: z.number(),
+        sector: z.string().optional(),
+        stage: z.string().optional(),
+      }))
+      .query(async ({ ctx, input }) => {
+        return matchInvestorsForRaise(ctx.user.id, input.amount, input.sector, input.stage);
+      }),
+
+    // Record interaction with investor
+    recordInteraction: protectedProcedure
+      .input(z.object({
+        investorId: z.number(),
+        interactionType: z.enum(['email', 'call', 'meeting', 'pitch', 'follow_up', 'intro', 'other']),
+        subject: z.string().optional(),
+        notes: z.string().optional(),
+        outcome: z.string().optional(),
+        nextSteps: z.string().optional(),
+        interactionDate: z.date().optional(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        return recordInvestorInteraction({
+          ...input,
+          interactionDate: input.interactionDate || new Date(),
+        });
+      }),
+
+    // Get interactions for an investor
+    getInteractions: protectedProcedure
+      .input(z.object({ investorId: z.number() }))
+      .query(async ({ input }) => {
+        return getInvestorInteractions(input.investorId);
+      }),
+
+    // Record commitment
+    recordCommitment: protectedProcedure
+      .input(z.object({
+        investorId: z.number(),
+        capitalRaiseId: z.number(),
+        commitmentType: z.enum(['soft', 'hard', 'signed', 'funded']),
+        amount: z.number(),
+        currency: z.string().optional(),
+        terms: z.string().optional(),
+        notes: z.string().optional(),
+      }))
+      .mutation(async ({ input }) => {
+        return recordInvestorCommitment(input);
+      }),
+
+    // Get commitments for a raise
+    getCommitments: protectedProcedure
+      .input(z.object({ capitalRaiseId: z.number() }))
+      .query(async ({ input }) => {
+        return getCommitmentsForRaise(input.capitalRaiseId);
       }),
   }),
 });
-
 export type AppRouter = typeof appRouter;

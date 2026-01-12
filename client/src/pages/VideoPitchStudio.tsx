@@ -3,8 +3,9 @@ import {
   Video, FileText, Users, BarChart3, Rocket, Plus, Settings,
   Play, Eye, Share2, Download, Copy, ExternalLink, Trash2,
   ChevronRight, Clock, CheckCircle, AlertCircle, Sparkles,
-  Wand2, Edit3, Save, X, Link2, Lock, Globe
+  Wand2, Edit3, Save, X, Link2, Lock, Globe, TrendingUp
 } from 'lucide-react';
+import InvestorAnalyticsDashboard from '@/components/InvestorAnalyticsDashboard';
 import {
   generateOverviewScript,
   generateProductScript,
@@ -346,6 +347,7 @@ function ScriptViewerModal({
 // ============================================================================
 
 export default function VideoPitchStudio() {
+  const [activeTab, setActiveTab] = useState<'studio' | 'analytics'>('studio');
   const [scripts, setScripts] = useState<{
     overview?: GeneratedScript;
     product?: GeneratedScript;
@@ -401,13 +403,51 @@ export default function VideoPitchStudio() {
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900/10 to-gray-900 p-6">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex items-center justify-between mb-6">
           <div>
             <h1 className="text-3xl font-bold text-white mb-2">Video Pitch Studio</h1>
             <p className="text-gray-400">
               Generate compelling 2-minute video scripts for investor outreach
             </p>
           </div>
+          
+          {/* Tab Navigation */}
+          <div className="flex items-center gap-2 bg-gray-800/50 p-1 rounded-xl">
+            <button
+              onClick={() => setActiveTab('studio')}
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2 ${
+                activeTab === 'studio'
+                  ? 'bg-purple-600 text-white shadow-lg'
+                  : 'text-gray-400 hover:text-white hover:bg-gray-700/50'
+              }`}
+            >
+              <Video className="w-4 h-4" />
+              Studio
+            </button>
+            <button
+              onClick={() => setActiveTab('analytics')}
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2 ${
+                activeTab === 'analytics'
+                  ? 'bg-purple-600 text-white shadow-lg'
+                  : 'text-gray-400 hover:text-white hover:bg-gray-700/50'
+              }`}
+            >
+              <TrendingUp className="w-4 h-4" />
+              Analytics
+            </button>
+          </div>
+        </div>
+        
+        {/* Analytics Tab */}
+        {activeTab === 'analytics' && (
+          <InvestorAnalyticsDashboard />
+        )}
+        
+        {/* Studio Tab */}
+        {activeTab === 'studio' && (
+          <>
+        {/* Generate All Button */}
+        <div className="flex justify-end mb-6">
           
           <button
             onClick={handleGenerateAll}
@@ -542,6 +582,8 @@ export default function VideoPitchStudio() {
               </div>
             </div>
           </div>
+        )}
+        </>
         )}
       </div>
       

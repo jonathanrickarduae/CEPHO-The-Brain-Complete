@@ -1297,3 +1297,223 @@ export async function getOnboardingProgress(userId: number): Promise<{
     return { profileComplete: false, answersCount: 0, trainingHours: 0, maturityLevel: 1 };
   }
 }
+
+
+// ==================== INVESTOR DATABASE ====================
+
+import { 
+  investors, capitalRaises, investorInteractions, investorCommitments,
+  type Investor, type InsertInvestor,
+  type InvestorInteraction, type InsertInvestorInteraction,
+  type InvestorCommitment, type InsertInvestorCommitment
+} from "../drizzle/schema";
+
+// Create a new investor
+export async function createInvestor(data: InsertInvestor): Promise<Investor | null> {
+  const db = await getDb();
+  if (!db) return null;
+
+  try {
+    const result = await db.insert(investors).values(data);
+    const insertId = result[0].insertId;
+    const [newInvestor] = await db.select()
+      .from(investors)
+      .where(eq(investors.id, insertId));
+    return newInvestor;
+  } catch (error) {
+    console.error("[Database] Failed to create investor:", error);
+    return null;
+  }
+}
+
+// Get all investors for a user
+export async function getInvestors(userId: number): Promise<Investor[]> {
+  const db = await getDb();
+  if (!db) return [];
+
+  try {
+    return db.select()
+      .from(investors)
+      .where(eq(investors.userId, userId))
+      .orderBy(desc(investors.createdAt));
+  } catch (error) {
+    console.error("[Database] Failed to get investors:", error);
+    return [];
+  }
+}
+
+// Get investor by ID
+export async function getInvestorById(id: number, userId: number): Promise<Investor | null> {
+  const db = await getDb();
+  if (!db) return null;
+
+  try {
+    const [investor] = await db.select()
+      .from(investors)
+      .where(and(eq(investors.id, id), eq(investors.userId, userId)))
+      .limit(1);
+    return investor || null;
+  } catch (error) {
+    console.error("[Database] Failed to get investor:", error);
+    return null;
+  }
+}
+
+// Update investor
+export async function updateInvestor(id: number, userId: number, data: Partial<InsertInvestor>): Promise<Investor | null> {
+  const db = await getDb();
+  if (!db) return null;
+
+  try {
+    await db.update(investors)
+      .set({ ...data, updatedAt: new Date() })
+      .where(and(eq(investors.id, id), eq(investors.userId, userId)));
+    return getInvestorById(id, userId);
+  } catch (error) {
+    console.error("[Database] Failed to update investor:", error);
+    return null;
+  }
+}
+
+// Delete investor
+export async function deleteInvestor(id: number, userId: number): Promise<boolean> {
+  const db = await getDb();
+  if (!db) return false;
+
+  try {
+    await db.delete(investors)
+      .where(and(eq(investors.id, id), eq(investors.userId, userId)));
+    return true;
+  } catch (error) {
+    console.error("[Database] Failed to delete investor:", error);
+    return false;
+  }
+}
+
+// Get investors by type
+export async function getInvestorsByType(userId: number, type: string): Promise<Investor[]> {
+  const db = await getDb();
+  if (!db) return [];
+
+  try {
+    return db.select()
+      .from(investors)
+      .where(and(
+        eq(investors.userId, userId),
+        eq(investors.type, type as any)
+      ))
+      .orderBy(desc(investors.createdAt));
+  } catch (error) {
+    console.error("[Database] Failed to get investors by type:", error);
+    return [];
+  }
+}
+
+// Get investors matching capital raise criteria
+export async function matchInvestorsForRaise(
+  userId: number, 
+  amount: number, 
+  sector?: string,
+  stage?: string
+): Promise<Investor[]> {
+  const db = await getDb();
+  if (!db) return [];
+
+  try {
+    // Get all investors for user
+    const allInvestors = await getInvestors(userId);
+    
+    // Filter by ticket size
+    return allInvestors.filter(inv => {
+      const minOk = !inv.ticketSizeMin || inv.ticketSizeMin <= amount;
+      const maxOk = !inv.ticketSizeMax || inv.ticketSizeMax >= amount;
+      
+      // Check sector match if provided
+      let sectorOk = true;
+      if (sector && inv.sectors) {
+        const sectors = inv.sectors as string[];
+        sectorOk = sectors.includes(sector) || sectors.includes('all');
+      }
+      
+      // Check stage match if provided
+      let stageOk = true;
+      if (stage && inv.stages) {
+        const stages = inv.stages as string[];
+        stageOk = stages.includes(stage) || stages.includes('all');
+      }
+      
+      return minOk && maxOk && sectorOk && stageOk;
+    });
+  } catch (error) {
+    console.error("[Database] Failed to match investors:", error);
+    return [];
+  }
+}
+
+// Record investor interaction
+export async function recordInvestorInteraction(data: InsertInvestorInteraction): Promise<InvestorInteraction | null> {
+  const db = await getDb();
+  if (!db) return null;
+
+  try {
+    const result = await db.insert(investorInteractions).values(data);
+    const insertId = result[0].insertId;
+    const [interaction] = await db.select()
+      .from(investorInteractions)
+      .where(eq(investorInteractions.id, insertId));
+    return interaction;
+  } catch (error) {
+    console.error("[Database] Failed to record investor interaction:", error);
+    return null;
+  }
+}
+
+// Get interactions for an investor
+export async function getInvestorInteractions(investorId: number): Promise<InvestorInteraction[]> {
+  const db = await getDb();
+  if (!db) return [];
+
+  try {
+    return db.select()
+      .from(investorInteractions)
+      .where(eq(investorInteractions.investorId, investorId))
+      .orderBy(desc(investorInteractions.interactionDate));
+  } catch (error) {
+    console.error("[Database] Failed to get investor interactions:", error);
+    return [];
+  }
+}
+
+// Record investor commitment
+export async function recordInvestorCommitment(data: InsertInvestorCommitment): Promise<InvestorCommitment | null> {
+  const db = await getDb();
+  if (!db) return null;
+
+  try {
+    const result = await db.insert(investorCommitments).values(data);
+    const insertId = result[0].insertId;
+    const [commitment] = await db.select()
+      .from(investorCommitments)
+      .where(eq(investorCommitments.id, insertId));
+    return commitment;
+  } catch (error) {
+    console.error("[Database] Failed to record investor commitment:", error);
+    return null;
+  }
+}
+
+// Get commitments for a capital raise
+export async function getCommitmentsForRaise(capitalRaiseId: number): Promise<InvestorCommitment[]> {
+  const db = await getDb();
+  if (!db) return [];
+
+  try {
+    return db.select()
+      .from(investorCommitments)
+      .where(eq(investorCommitments.capitalRaiseId, capitalRaiseId))
+      .orderBy(desc(investorCommitments.createdAt));
+  } catch (error) {
+    console.error("[Database] Failed to get commitments:", error);
+    return [];
+  }
+}
