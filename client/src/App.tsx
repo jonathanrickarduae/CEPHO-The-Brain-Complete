@@ -34,6 +34,7 @@ import ChiefOfStaffRole from "./pages/ChiefOfStaffRole";
 import ReferenceLibrary from "./pages/ReferenceLibrary";
 import DueDiligencePage from "./pages/DueDiligencePage";
 import { GovernanceProvider, GovernanceModeChangeModal } from "./hooks/useGovernance";
+import { AIRouterProvider } from "./components/AIRouter";
 import { CelebrationProvider } from "./components/CelebrationAnimations";
 import { DailyCycleProvider } from "./components/DailyCycleProvider";
 import { PageTransition } from "./components/PageTransition";
@@ -153,15 +154,17 @@ function App() {
     <ErrorBoundary>
       <ThemeProvider defaultTheme="dark" switchable>
         <GovernanceProvider>
-          <DailyCycleProvider>
-          <CelebrationProvider>
-            <TooltipProvider>
-              <Toaster />
-              <Router />
-              <GovernanceModeChangeModal />
-            </TooltipProvider>
-          </CelebrationProvider>
-          </DailyCycleProvider>
+          <AIRouterProvider>
+            <DailyCycleProvider>
+              <CelebrationProvider>
+                <TooltipProvider>
+                  <Toaster />
+                  <Router />
+                  <GovernanceModeChangeModal />
+                </TooltipProvider>
+              </CelebrationProvider>
+            </DailyCycleProvider>
+          </AIRouterProvider>
         </GovernanceProvider>
       </ThemeProvider>
     </ErrorBoundary>

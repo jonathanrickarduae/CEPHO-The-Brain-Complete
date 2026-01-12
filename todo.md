@@ -2693,3 +2693,7 @@
 - [x] Connect Corporate Partner chat to real AI backend with persona prompts
 - [x] Add featured Corporate Partners banner in Expert Directory
 - [x] Support search filtering for Corporate Partners
+
+
+## Bug Fixes (Jan 2026)
+- [x] Fix AIProviderSettings error: useAIRouter must be used within AIRouterProvider
