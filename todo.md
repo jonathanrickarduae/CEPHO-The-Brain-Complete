@@ -2474,3 +2474,82 @@
 - [x] Remove unnecessary visual clutter throughout UI
 - [x] Design review with luxury/tech design perspectives (Gucci, Tesla aesthetic)
 - [x] Enhance UI for cutting-edge professional look and feel
+
+
+## Expert Evolution System (Jan 12, 2026)
+
+### Expert Memory & Persistence
+- [ ] Database: expert_conversations table (store all expert interactions)
+- [ ] Database: expert_memory table (key learnings, preferences per expert)
+- [ ] Database: expert_performance table (ratings, feedback, improvement areas)
+- [ ] API: Store conversation after each expert interaction
+- [ ] API: Retrieve expert memory context for personalized responses
+
+### Expert Self-Improvement Loop
+- [ ] Chief of Staff reviews expert performance daily
+- [ ] Auto-adjust expert prompts based on user feedback
+- [ ] Track communication style effectiveness per expert
+- [ ] Expert "coaching" - Chief of Staff trains experts on succinctness
+- [ ] Feedback-driven prompt refinement system
+
+### Collective Knowledge Base
+- [ ] Database: expert_insights table (shared knowledge repository)
+- [ ] Experts contribute insights after each meaningful conversation
+- [ ] Cross-expert knowledge sharing (experts can reference others' insights)
+- [ ] Knowledge tagging and categorization system
+- [ ] Expert collaboration on complex problems
+
+### Scheduled Research & Updates
+- [ ] Background research tasks for each expert's domain
+- [ ] Knowledge freshness tracking (when was domain last updated)
+- [ ] Expert briefings on new developments in their field
+- [ ] Chief of Staff coordinates research priorities
+- [ ] Integration with external data sources for updates
+
+
+### Expert Persona Integration
+- [ ] Wire expert bios/thinking styles into prompt system
+- [ ] Create ExpertPromptBuilder service that combines persona + memory + context
+- [ ] Inject learned preferences into every expert call
+- [ ] Include past corrections to avoid repeated mistakes
+
+### Auto-Memory Extraction
+- [ ] Chief of Staff extracts key learnings after each conversation
+- [ ] Identify preferences, facts, style notes from conversations
+- [ ] Store extracted memories with confidence scores
+- [ ] Update existing memories when reinforced
+
+### Feedback-to-Improvement Loop
+- [ ] User ratings directly adjust expert prompts
+- [ ] Track communication effectiveness per expert
+- [ ] Auto-generate prompt improvements based on feedback patterns
+- [ ] Chief of Staff reviews and applies improvements
+
+### Cross-Expert Knowledge Sharing
+- [ ] Insights flow between experts on same project
+- [ ] Experts can reference each other's validated insights
+- [ ] Collaboration patterns tracked and optimized
+- [ ] Chief of Staff orchestrates based on learned patterns
+
+
+### Expert Feedback & QA System
+- [ ] Yes/No feedback buttons after each expert interaction
+- [ ] Evening wash-up: surface underperforming experts with their outputs
+- [ ] Feedback capture: "What was wrong with this?" modal
+- [ ] Chief of Staff learning loop from feedback patterns
+- [ ] Inject corrections into expert prompts on next call
+- [ ] Track expert performance trends over time
+
+- [x] Ensure Chief of Staff is gender-neutral throughout (no him/her, use "it" or just "Chief of Staff")
+
+
+## Cepho Architecture Blueprint
+- [x] Create A0-style architecture diagram with all system components
+- [x] Show interaction flows between modules
+- [x] Include proper branding (logo, version, date, description)
+- [x] Highlight automation opportunities
+- [x] Export as visual document
+
+- [x] Remove all emojis from Evening Review page
+- [x] Apply pink neon professional styling throughout
+- [x] Ensure efficiency-focused UI - no gamification

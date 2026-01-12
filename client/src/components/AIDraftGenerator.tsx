@@ -13,11 +13,11 @@ interface AIDraftGeneratorProps {
 }
 
 const TONE_OPTIONS = [
-  { id: 'professional', label: 'Professional', emoji: '👔' },
-  { id: 'friendly', label: 'Friendly', emoji: '😊' },
-  { id: 'concise', label: 'Concise', emoji: '⚡' },
-  { id: 'detailed', label: 'Detailed', emoji: '📝' },
-  { id: 'persuasive', label: 'Persuasive', emoji: '🎯' },
+  { id: 'professional', label: 'Professional' },
+  { id: 'friendly', label: 'Friendly' },
+  { id: 'concise', label: 'Concise' },
+  { id: 'detailed', label: 'Detailed' },
+  { id: 'persuasive', label: 'Persuasive' },
 ];
 
 const LENGTH_OPTIONS = [
@@ -123,7 +123,7 @@ Please write only the ${type} content, no explanations or meta-commentary.`;
                       : 'bg-secondary/50 text-muted-foreground hover:bg-secondary'
                   )}
                 >
-                  {option.emoji} {option.label}
+                  {option.label}
                 </button>
               ))}
             </div>

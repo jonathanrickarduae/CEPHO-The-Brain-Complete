@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Users, Gift, ArrowUp, Copy, Check, Share2, Mail, Twitter, Linkedin } from 'lucide-react';
+import { Users, Gift, ArrowUp, Copy, Check, Share2, Mail, Twitter, Linkedin, Brain } from 'lucide-react';
 
 interface WaitlistPosition {
   position: number;
@@ -55,7 +55,7 @@ export function WaitlistSignup({ onJoin }: { onJoin?: (email: string, referralCo
     <div className="max-w-md mx-auto">
       <div className="text-center mb-8">
         <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-cyan-500 to-purple-600 mb-4">
-          <span className="text-3xl">🧠</span>
+          <Brain className="w-8 h-8 text-white" />
         </div>
         <h2 className="text-2xl font-bold text-white mb-2">Join the Cepho Waitlist</h2>
         <p className="text-gray-400">
@@ -127,7 +127,7 @@ export function WaitlistStatus({ position }: { position: WaitlistPosition }) {
   };
 
   const shareToTwitter = () => {
-    const text = encodeURIComponent(`I just joined the Cepho waitlist! 🧠 Get early access to your AI-powered Chief of Staff. Use my referral link to skip ahead:`);
+    const text = encodeURIComponent(`I just joined the Cepho waitlist. Get early access to your AI-powered Chief of Staff. Use my referral link to skip ahead:`);
     const url = encodeURIComponent(`${window.location.origin}/join?ref=${position.referralCode}`);
     window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank');
   };

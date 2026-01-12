@@ -1,6 +1,15 @@
 import { eq, desc, and, gte, lte, sql } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users, moodHistory, InsertMoodHistory, MoodHistory, conversations, InsertConversation, Conversation } from "../drizzle/schema";
+import { InsertUser, users, moodHistory, InsertMoodHistory, MoodHistory, conversations, InsertConversation, Conversation,
+  expertConversations, InsertExpertConversation, ExpertConversation,
+  expertMemory, InsertExpertMemory, ExpertMemory,
+  expertPromptEvolution, InsertExpertPromptEvolution, ExpertPromptEvolution,
+  expertInsights, InsertExpertInsight, ExpertInsight,
+  expertResearchTasks, InsertExpertResearchTask, ExpertResearchTask,
+  expertCollaboration, InsertExpertCollaboration, ExpertCollaboration,
+  expertCoachingSessions, InsertExpertCoachingSession, ExpertCoachingSession,
+  expertDomainKnowledge, InsertExpertDomainKnowledge, ExpertDomainKnowledge
+} from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -914,4 +923,376 @@ export async function getUnprocessedVoiceNotes(userId: number) {
   return db.select().from(voiceNotes)
     .where(and(eq(voiceNotes.userId, userId), eq(voiceNotes.isProcessed, false)))
     .orderBy(desc(voiceNotes.createdAt));
+}
+
+
+// ==================== EXPERT EVOLUTION SYSTEM ====================
+
+// Expert Conversations - persistent memory for each expert
+export async function createExpertConversation(entry: InsertExpertConversation): Promise<ExpertConversation | null> {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const result = await db.insert(expertConversations).values(entry);
+  const id = result[0].insertId;
+  const created = await db.select().from(expertConversations).where(eq(expertConversations.id, id)).limit(1);
+  return created[0] || null;
+}
+
+export async function getExpertConversations(
+  userId: number, 
+  expertId: string, 
+  options?: { limit?: number; projectId?: number }
+): Promise<ExpertConversation[]> {
+  const db = await getDb();
+  if (!db) return [];
+  
+  const conditions = [
+    eq(expertConversations.userId, userId),
+    eq(expertConversations.expertId, expertId)
+  ];
+  
+  if (options?.projectId) {
+    conditions.push(eq(expertConversations.projectId, options.projectId));
+  }
+  
+  return db.select().from(expertConversations)
+    .where(and(...conditions))
+    .orderBy(desc(expertConversations.createdAt))
+    .limit(options?.limit || 50);
+}
+
+export async function getExpertConversationContext(
+  userId: number, 
+  expertId: string, 
+  limit: number = 20
+): Promise<string> {
+  const conversations = await getExpertConversations(userId, expertId, { limit });
+  
+  // Format conversations for context injection
+  return conversations
+    .reverse()
+    .map(c => `${c.role === 'user' ? 'User' : 'Expert'}: ${c.content}`)
+    .join('\n');
+}
+
+// Expert Memory - key learnings per expert
+export async function createExpertMemory(entry: InsertExpertMemory): Promise<ExpertMemory | null> {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const result = await db.insert(expertMemory).values(entry);
+  const id = result[0].insertId;
+  const created = await db.select().from(expertMemory).where(eq(expertMemory.id, id)).limit(1);
+  return created[0] || null;
+}
+
+export async function getExpertMemories(
+  userId: number, 
+  expertId: string, 
+  options?: { memoryType?: string; limit?: number }
+): Promise<ExpertMemory[]> {
+  const db = await getDb();
+  if (!db) return [];
+  
+  const conditions = [
+    eq(expertMemory.userId, userId),
+    eq(expertMemory.expertId, expertId)
+  ];
+  
+  return db.select().from(expertMemory)
+    .where(and(...conditions))
+    .orderBy(desc(expertMemory.confidence), desc(expertMemory.usageCount))
+    .limit(options?.limit || 100);
+}
+
+export async function updateExpertMemory(id: number, data: Partial<InsertExpertMemory>) {
+  const db = await getDb();
+  if (!db) return;
+  
+  await db.update(expertMemory).set({
+    ...data,
+    usageCount: sql`${expertMemory.usageCount} + 1`,
+    lastUsed: new Date()
+  }).where(eq(expertMemory.id, id));
+}
+
+export async function getExpertMemoryContext(userId: number, expertId: string): Promise<string> {
+  const memories = await getExpertMemories(userId, expertId, { limit: 30 });
+  
+  if (memories.length === 0) return '';
+  
+  // Group by type for organized context
+  const grouped: Record<string, ExpertMemory[]> = {};
+  memories.forEach(m => {
+    if (!grouped[m.memoryType]) grouped[m.memoryType] = [];
+    grouped[m.memoryType].push(m);
+  });
+  
+  let context = '## What I Know About You:\n';
+  
+  if (grouped.preference) {
+    context += '\n### Preferences:\n';
+    grouped.preference.forEach(m => {
+      context += `- ${m.key}: ${m.value}\n`;
+    });
+  }
+  
+  if (grouped.style) {
+    context += '\n### Communication Style:\n';
+    grouped.style.forEach(m => {
+      context += `- ${m.key}: ${m.value}\n`;
+    });
+  }
+  
+  if (grouped.fact) {
+    context += '\n### Key Facts:\n';
+    grouped.fact.forEach(m => {
+      context += `- ${m.key}: ${m.value}\n`;
+    });
+  }
+  
+  if (grouped.correction) {
+    context += '\n### Past Corrections (avoid these mistakes):\n';
+    grouped.correction.forEach(m => {
+      context += `- ${m.key}: ${m.value}\n`;
+    });
+  }
+  
+  return context;
+}
+
+// Expert Prompt Evolution - track how prompts improve
+export async function createExpertPromptEvolution(entry: InsertExpertPromptEvolution): Promise<ExpertPromptEvolution | null> {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const result = await db.insert(expertPromptEvolution).values(entry);
+  const id = result[0].insertId;
+  const created = await db.select().from(expertPromptEvolution).where(eq(expertPromptEvolution.id, id)).limit(1);
+  return created[0] || null;
+}
+
+export async function getLatestExpertPromptEvolution(expertId: string): Promise<ExpertPromptEvolution | null> {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const results = await db.select().from(expertPromptEvolution)
+    .where(eq(expertPromptEvolution.expertId, expertId))
+    .orderBy(desc(expertPromptEvolution.version))
+    .limit(1);
+  
+  return results[0] || null;
+}
+
+export async function getExpertPromptHistory(expertId: string, limit: number = 10): Promise<ExpertPromptEvolution[]> {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return db.select().from(expertPromptEvolution)
+    .where(eq(expertPromptEvolution.expertId, expertId))
+    .orderBy(desc(expertPromptEvolution.version))
+    .limit(limit);
+}
+
+// Expert Insights - shared knowledge repository
+export async function createExpertInsight(entry: InsertExpertInsight): Promise<ExpertInsight | null> {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const result = await db.insert(expertInsights).values(entry);
+  const id = result[0].insertId;
+  const created = await db.select().from(expertInsights).where(eq(expertInsights.id, id)).limit(1);
+  return created[0] || null;
+}
+
+export async function getExpertInsights(
+  userId: number,
+  options?: { expertId?: string; category?: string; projectId?: number; limit?: number }
+): Promise<ExpertInsight[]> {
+  const db = await getDb();
+  if (!db) return [];
+  
+  const conditions = [eq(expertInsights.userId, userId)];
+  
+  if (options?.expertId) {
+    conditions.push(eq(expertInsights.expertId, options.expertId));
+  }
+  
+  if (options?.projectId) {
+    conditions.push(eq(expertInsights.projectId, options.projectId));
+  }
+  
+  return db.select().from(expertInsights)
+    .where(and(...conditions))
+    .orderBy(desc(expertInsights.confidence), desc(expertInsights.usageCount))
+    .limit(options?.limit || 50);
+}
+
+export async function updateExpertInsight(id: number, data: Partial<InsertExpertInsight>) {
+  const db = await getDb();
+  if (!db) return;
+  
+  await db.update(expertInsights).set(data).where(eq(expertInsights.id, id));
+}
+
+export async function incrementInsightUsage(id: number) {
+  const db = await getDb();
+  if (!db) return;
+  
+  await db.update(expertInsights).set({
+    usageCount: sql`${expertInsights.usageCount} + 1`
+  }).where(eq(expertInsights.id, id));
+}
+
+// Expert Research Tasks - scheduled research
+export async function createExpertResearchTask(entry: InsertExpertResearchTask): Promise<ExpertResearchTask | null> {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const result = await db.insert(expertResearchTasks).values(entry);
+  const id = result[0].insertId;
+  const created = await db.select().from(expertResearchTasks).where(eq(expertResearchTasks.id, id)).limit(1);
+  return created[0] || null;
+}
+
+export async function getExpertResearchTasks(
+  expertId: string,
+  options?: { status?: string; limit?: number }
+): Promise<ExpertResearchTask[]> {
+  const db = await getDb();
+  if (!db) return [];
+  
+  const conditions = [eq(expertResearchTasks.expertId, expertId)];
+  
+  return db.select().from(expertResearchTasks)
+    .where(and(...conditions))
+    .orderBy(desc(expertResearchTasks.scheduledFor))
+    .limit(options?.limit || 20);
+}
+
+export async function updateExpertResearchTask(id: number, data: Partial<InsertExpertResearchTask>) {
+  const db = await getDb();
+  if (!db) return;
+  
+  await db.update(expertResearchTasks).set(data).where(eq(expertResearchTasks.id, id));
+}
+
+export async function getPendingResearchTasks(limit: number = 10): Promise<ExpertResearchTask[]> {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return db.select().from(expertResearchTasks)
+    .where(eq(expertResearchTasks.status, 'pending'))
+    .orderBy(expertResearchTasks.scheduledFor)
+    .limit(limit);
+}
+
+// Expert Collaboration - track how experts work together
+export async function createExpertCollaboration(entry: InsertExpertCollaboration): Promise<ExpertCollaboration | null> {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const result = await db.insert(expertCollaboration).values(entry);
+  const id = result[0].insertId;
+  const created = await db.select().from(expertCollaboration).where(eq(expertCollaboration.id, id)).limit(1);
+  return created[0] || null;
+}
+
+export async function getExpertCollaborations(
+  userId: number,
+  options?: { expertId?: string; projectId?: number; limit?: number }
+): Promise<ExpertCollaboration[]> {
+  const db = await getDb();
+  if (!db) return [];
+  
+  const conditions = [eq(expertCollaboration.userId, userId)];
+  
+  if (options?.expertId) {
+    conditions.push(eq(expertCollaboration.initiatorExpertId, options.expertId));
+  }
+  
+  if (options?.projectId) {
+    conditions.push(eq(expertCollaboration.projectId, options.projectId));
+  }
+  
+  return db.select().from(expertCollaboration)
+    .where(and(...conditions))
+    .orderBy(desc(expertCollaboration.createdAt))
+    .limit(options?.limit || 20);
+}
+
+// Expert Coaching Sessions - Chief of Staff training experts
+export async function createExpertCoachingSession(entry: InsertExpertCoachingSession): Promise<ExpertCoachingSession | null> {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const result = await db.insert(expertCoachingSessions).values(entry);
+  const id = result[0].insertId;
+  const created = await db.select().from(expertCoachingSessions).where(eq(expertCoachingSessions.id, id)).limit(1);
+  return created[0] || null;
+}
+
+export async function getExpertCoachingSessions(
+  expertId: string,
+  options?: { status?: string; limit?: number }
+): Promise<ExpertCoachingSession[]> {
+  const db = await getDb();
+  if (!db) return [];
+  
+  const conditions = [eq(expertCoachingSessions.expertId, expertId)];
+  
+  return db.select().from(expertCoachingSessions)
+    .where(and(...conditions))
+    .orderBy(desc(expertCoachingSessions.createdAt))
+    .limit(options?.limit || 10);
+}
+
+export async function updateExpertCoachingSession(id: number, data: Partial<InsertExpertCoachingSession>) {
+  const db = await getDb();
+  if (!db) return;
+  
+  await db.update(expertCoachingSessions).set(data).where(eq(expertCoachingSessions.id, id));
+}
+
+// Expert Domain Knowledge - track expertise areas
+export async function createExpertDomainKnowledge(entry: InsertExpertDomainKnowledge): Promise<ExpertDomainKnowledge | null> {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const result = await db.insert(expertDomainKnowledge).values(entry);
+  const id = result[0].insertId;
+  const created = await db.select().from(expertDomainKnowledge).where(eq(expertDomainKnowledge.id, id)).limit(1);
+  return created[0] || null;
+}
+
+export async function getExpertDomainKnowledge(expertId: string): Promise<ExpertDomainKnowledge[]> {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return db.select().from(expertDomainKnowledge)
+    .where(eq(expertDomainKnowledge.expertId, expertId))
+    .orderBy(desc(expertDomainKnowledge.lastUpdated));
+}
+
+export async function updateExpertDomainKnowledge(id: number, data: Partial<InsertExpertDomainKnowledge>) {
+  const db = await getDb();
+  if (!db) return;
+  
+  await db.update(expertDomainKnowledge).set({
+    ...data,
+    lastUpdated: new Date()
+  }).where(eq(expertDomainKnowledge.id, id));
+}
+
+export async function getStaleExpertDomains(daysOld: number = 7): Promise<ExpertDomainKnowledge[]> {
+  const db = await getDb();
+  if (!db) return [];
+  
+  const cutoffDate = new Date();
+  cutoffDate.setDate(cutoffDate.getDate() - daysOld);
+  
+  return db.select().from(expertDomainKnowledge)
+    .where(lte(expertDomainKnowledge.lastUpdated, cutoffDate))
+    .orderBy(expertDomainKnowledge.lastUpdated);
 }

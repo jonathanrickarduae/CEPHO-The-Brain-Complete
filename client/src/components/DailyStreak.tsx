@@ -110,7 +110,7 @@ export function DailyStreak({
       {/* Milestone celebration */}
       {isAtMilestone && isAnimating && (
         <div className="mt-4 p-3 bg-gradient-to-r from-yellow-500/20 to-orange-500/20 rounded-lg border border-yellow-500/30 text-center">
-          <span className="text-2xl">🎉</span>
+          <Trophy className="w-6 h-6 text-yellow-400 mx-auto" />
           <p className="text-sm font-medium text-yellow-400 mt-1">
             Amazing! {currentStreak} day streak!
           </p>
@@ -279,7 +279,7 @@ export function useStreak() {
       showAchievement({
         title: milestoneNames[newCurrent] || `${newCurrent} Day Streak!`,
         description: `You've maintained a ${newCurrent}-day streak! Keep it up!`,
-        icon: '🔥',
+        icon: 'streak',
       });
     }
     // Note: Removed "Streak Started" toast for day 1 - too early in user journey
