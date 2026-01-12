@@ -2280,3 +2280,18 @@
 - [ ] Track when user overrides Chief of Staff advice (learning opportunity)
 - [ ] McKinsey consultant tone, not personal assistant
 - [ ] Respectful but not deferential communication style
+
+## Real-Time Progress & Time Management System
+- [ ] Visual progress bar for every active task (0-100%)
+- [ ] Estimated time remaining display ("~12 minutes left")
+- [ ] Confidence level on time estimates based on similar past tasks
+- [ ] Stage indicator (Researching → Drafting → QA Review → Complete)
+- [ ] Chief of Staff proactive time advice ("This will take 15 min, recommend you...")
+- [ ] Parallel task tracking with earliest completion time
+- [ ] "Nothing requires attention for X minutes" notifications
+- [ ] Revised estimates when tasks take longer than expected
+- [ ] Dashboard sorted by completion time
+- [ ] "Next item ready for review in: X min" indicator
+- [ ] Push notification when task needs attention
+- [ ] Historical tracking to improve future estimates
+- [ ] Break recommendations based on task queue
