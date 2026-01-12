@@ -4,8 +4,9 @@ import {
   CheckCircle2, Clock, AlertTriangle, ChevronRight, ChevronDown,
   Eye, ThumbsUp, ThumbsDown, MessageSquare, Download, Share2,
   Lightbulb, Shield, TrendingUp, Palette, Globe, Building2,
-  FileCheck, GitBranch, LayoutDashboard, Sparkles
+  FileCheck, GitBranch, LayoutDashboard, Sparkles, Video
 } from 'lucide-react';
+import { useLocation } from 'wouter';
 
 // ==================== TYPES ====================
 
@@ -986,7 +987,7 @@ export function ProjectGenesis() {
         </p>
       </div>
       
-      <div className="flex justify-center gap-4">
+      <div className="flex flex-wrap justify-center gap-4">
         <button className="px-6 py-3 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 flex items-center gap-2">
           <Download className="w-4 h-4" />
           Download All
@@ -999,6 +1000,28 @@ export function ProjectGenesis() {
           <Eye className="w-4 h-4" />
           View Blueprint
         </button>
+      </div>
+      
+      {/* Video Pitch Pack CTA */}
+      <div className="mt-8 p-6 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-xl border border-purple-500/30">
+        <div className="flex items-center gap-4">
+          <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-purple-600 to-pink-600 flex items-center justify-center flex-shrink-0">
+            <Video className="w-7 h-7 text-white" />
+          </div>
+          <div className="flex-1">
+            <h4 className="text-lg font-semibold text-foreground">Create Video Pitch Pack</h4>
+            <p className="text-sm text-muted-foreground">
+              Generate compelling 2-minute video scripts and a secure investor landing page from your project data
+            </p>
+          </div>
+          <a
+            href={`/video-pitch-studio?project=${encodeURIComponent(projectData.projectName || 'New Project')}&prefill=true`}
+            className="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg font-medium hover:opacity-90 transition-opacity flex items-center gap-2 whitespace-nowrap"
+          >
+            <Video className="w-4 h-4" />
+            Create Video Pitch
+          </a>
+        </div>
       </div>
     </div>
   );

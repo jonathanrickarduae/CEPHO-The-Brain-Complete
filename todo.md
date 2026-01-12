@@ -1920,3 +1920,61 @@
 - [ ] Add Video Pitch Pack to Project Genesis deliverables
 - [ ] Connect to investor database for targeted sharing
 - [ ] Track investor engagement with videos
+
+
+## Video Pitch Studio Enhancements
+
+### Project Genesis Integration
+- [ ] Add "Create Video Pitch Pack" button in Project Genesis
+- [ ] Auto-populate business data from project intake to script generator
+- [ ] Link pitch packs to Project Genesis projects
+- [ ] Show pitch pack status in project dashboard
+
+### Video Upload/Embed Functionality
+- [ ] S3 storage integration for video uploads
+- [ ] YouTube/Vimeo embed support
+- [ ] Video thumbnail generation
+- [ ] Upload progress indicator
+- [ ] Video preview in studio
+
+### Investor Engagement Analytics Dashboard
+- [x] Total views and unique visitors tracking
+- [x] Watch time analytics per video
+- [x] Document download tracking
+- [x] Investor engagement scoring
+- [x] Investor pipeline (hot/warm/cold status)
+- [x] Export engagement reports button
+
+
+## Unified Brain Banner System
+
+### Design Consistency
+- [x] Extract animated brain/neural network from landing page
+- [x] Create reusable BrainBanner component
+- [x] Thick header banner with animated brain on every page
+- [x] Pink page title text (e.g., "THE VAULT", "THE LIBRARY")
+- [x] Subtle neuron pulsing animation while working
+- [x] Consistent black background with cyan/pink glow
+- [x] "Operating at a 10" premium feel throughout
+
+### Implementation
+- [x] Add BrainBanner to main BrainLayout component
+- [x] Page-specific titles passed as props
+- [x] Responsive design for mobile (mobile uses existing header)
+- [x] Performance optimization for animations
+
+
+## Onboarding Brand Story Enhancement
+
+### Core Value Proposition Messaging
+- [x] "Getting you to a 10" tagline prominently featured
+- [x] Secure single point of contact messaging
+- [x] Chief of Staff / Digital Twin working for you
+- [x] Freeing you up to focus on what matters
+- [x] All integrations in one secure place
+
+### Onboarding Flow Updates
+- [x] Review and enhance onboarding copy
+- [x] Add brand story elements throughout
+- [x] Consistent visual identity with BrainBanner
+- [x] Clear articulation of what The Brain does

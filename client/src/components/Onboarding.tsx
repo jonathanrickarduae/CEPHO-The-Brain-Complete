@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { 
   Sun, Users, FolderKanban, Fingerprint, Brain, 
-  ChevronRight, ChevronLeft, X, Sparkles, Check
+  ChevronRight, ChevronLeft, X, Sparkles, Check, Lock, Shield
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -21,47 +21,47 @@ const ONBOARDING_STEPS: OnboardingStep[] = [
   {
     id: 1,
     title: 'THE BRAIN',
-    description: 'Your AI-powered command center that learns from you and works alongside you. A living ecosystem of intelligence at your fingertips.',
+    description: 'Your secure, AI-powered command center. One single point of contact for everything - integrations, data, decisions. All protected, all connected, all working for you.',
     icon: Brain,
     color: 'text-primary',
     useBrain: true,
   },
   {
     id: 2,
-    title: 'Daily Brief',
-    description: 'Every morning, your Digital Twin prepares a personalized briefing with priorities, insights, and action items ready for your review.',
-    icon: Sun,
-    color: 'text-amber-400',
-    highlight: '[data-tour="daily-brief"]',
-  },
-  {
-    id: 3,
-    title: 'AI Expert Engine',
-    description: 'Need help with a task? Assemble a team of 287 AI experts - from strategists to analysts - who work together on your projects.',
-    icon: Users,
-    color: 'text-cyan-400',
-    highlight: '[data-tour="ai-experts"]',
-  },
-  {
-    id: 4,
-    title: 'Workflow',
-    description: 'Monitor all your active projects, see what\'s blocked, and track deliverables. Your AI team updates progress in real-time.',
-    icon: FolderKanban,
-    color: 'text-green-400',
-    highlight: '[data-tour="workflow"]',
-  },
-  {
-    id: 5,
-    title: 'Digital Twin',
-    description: 'The more you interact, the smarter your Twin becomes. It learns your preferences, communication style, and decision patterns.',
+    title: 'Your Chief of Staff',
+    description: 'Meet your Digital Twin - a Chief of Staff that never sleeps. It learns how you think, handles your communications, and makes decisions on your behalf. You review, it executes.',
     icon: Fingerprint,
     color: 'text-purple-400',
     highlight: '[data-tour="digital-twin"]',
   },
   {
+    id: 3,
+    title: 'Daily Brief',
+    description: 'Every morning, your Chief of Staff prepares everything you need: priorities sorted, threats flagged, opportunities identified. Start each day informed and in control.',
+    icon: Sun,
+    color: 'text-amber-400',
+    highlight: '[data-tour="daily-brief"]',
+  },
+  {
+    id: 4,
+    title: '273 AI Experts',
+    description: 'Need a McKinsey strategist? A tax specialist? A creative director? Assemble world-class teams instantly. They work while you focus on what matters.',
+    icon: Users,
+    color: 'text-cyan-400',
+    highlight: '[data-tour="ai-experts"]',
+  },
+  {
+    id: 5,
+    title: 'Secure Vault',
+    description: 'Bank-grade security for all your integrations, credentials, and sensitive data. Biometric login, encrypted storage, real-time threat monitoring. Your digital fortress.',
+    icon: Shield,
+    color: 'text-emerald-400',
+    highlight: '[data-tour="vault"]',
+  },
+  {
     id: 6,
-    title: 'You\'re Ready!',
-    description: 'Start by checking your Daily Brief, or ask your Digital Twin anything. The Brain is here to get you to a 10 every day.',
+    title: 'Getting You to a 10',
+    description: 'The Brain exists for one purpose: to free you up. Less admin, more impact. Less stress, more clarity. Every day, operating at your absolute best.',
     icon: Sparkles,
     color: 'text-primary',
     useBrain: true,
@@ -233,6 +233,7 @@ export function OnboardingModal({ isOpen, onComplete, onSkip }: OnboardingModalP
                       step.color === 'text-amber-400' && 'bg-amber-400',
                       step.color === 'text-cyan-400' && 'bg-cyan-400',
                       step.color === 'text-green-400' && 'bg-green-400',
+                      step.color === 'text-emerald-400' && 'bg-emerald-400',
                       step.color === 'text-purple-400' && 'bg-purple-400',
                       step.color === 'text-primary' && 'bg-primary',
                     )} />

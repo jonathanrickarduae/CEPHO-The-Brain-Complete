@@ -45,6 +45,7 @@ import { StatusPulse } from "./StatusPulse";
 import { GlobalSearch } from "./GlobalSearch";
 import NeonBrain from "./NeonBrain";
 import { NotificationBell } from "./NotificationCenter";
+import BrainBanner from "./BrainBanner";
 
 const menuItems = [
   { icon: LayoutDashboard, label: "Dashboard", path: "/dashboard" },
@@ -353,8 +354,17 @@ function BrainLayoutContent({
       </div>
 
       <SidebarInset className="bg-background">
+        {/* Desktop Brain Banner */}
+        {!isMobile && (
+          <BrainBanner 
+            pageTitle={activeMenuItem?.label?.replace('The ', '')} 
+            compact={false}
+          />
+        )}
+        
+        {/* Mobile Header */}
         {isMobile && (
-            <div className="flex border-b border-border h-14 items-center justify-between bg-background/95 px-2 backdrop-blur supports-[backdrop-filter]:backdrop-blur sticky top-0 z-40">
+          <div className="flex border-b border-border h-14 items-center justify-between bg-background/95 px-2 backdrop-blur supports-[backdrop-filter]:backdrop-blur sticky top-0 z-40">
             <div className="flex items-center gap-2">
               <SidebarTrigger className="h-9 w-9 rounded-lg bg-white/5 text-white" />
               <div className="flex items-center gap-3">
