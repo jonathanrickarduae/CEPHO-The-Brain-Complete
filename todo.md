@@ -2282,11 +2282,11 @@
 - [ ] Respectful but not deferential communication style
 
 ## Real-Time Progress & Time Management System
-- [ ] Visual progress bar for every active task (0-100%)
-- [ ] Estimated time remaining display ("~12 minutes left")
-- [ ] Confidence level on time estimates based on similar past tasks
-- [ ] Stage indicator (Researching → Drafting → QA Review → Complete)
-- [ ] Chief of Staff proactive time advice ("This will take 15 min, recommend you...")
+- [x] Visual progress bar for every active task (0-100%)
+- [x] Estimated time remaining display ("~12 minutes left")
+- [x] Confidence level on time estimates based on similar past tasks
+- [x] Stage indicator (Researching → Drafting → QA Review → Complete)
+- [x] Chief of Staff proactive time advice ("This will take 15 min, recommend you...")
 - [ ] Parallel task tracking with earliest completion time
 - [ ] "Nothing requires attention for X minutes" notifications
 - [ ] Revised estimates when tasks take longer than expected
@@ -2326,3 +2326,19 @@
 - [ ] Keep Nexus as intelligence layer, not execution platform
 - [ ] Build prompts that guide users through the escalation path
 - [ ] Celebrity/leader SMEs as premium tier (Jay-Z, etc.)
+
+## Project X - Brain Validated Expert Network
+- [ ] Design curated expert network (not open marketplace)
+- [ ] Invitation + interview only access (no self-signup)
+- [ ] ~10 experts per specialty (globally, best-in-class, English-speaking)
+- [ ] Expert categories: Strategy, CFO, COO, Chief of Staff, Technical specialists
+- [ ] Freelancer partnership portal for application intake
+- [ ] Interview/validation process to confirm world-class expertise
+- [ ] "Brain Validated Expert" badge for approved experts
+- [ ] Knowledge contribution agreement - insights feed AI-SME pool
+- [ ] 1-hour call booking system through The Brain
+- [ ] Larger project work handoff capability
+- [ ] Value proposition for experts: premium positioning, qualified leads, higher rates
+- [ ] Value proposition for users: guaranteed quality, trust, top 10 in world
+- [ ] Expert profile pages showing credentials, AI-SME contribution stats
+- [ ] Exclusivity as differentiator vs open platforms

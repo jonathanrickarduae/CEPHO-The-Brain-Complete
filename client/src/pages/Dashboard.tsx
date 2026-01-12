@@ -24,6 +24,7 @@ import { PerformanceBoost } from "@/components/PerformanceBoost";
 import { TwinBreakApproval } from "@/components/TwinBreakApproval";
 import { TourPrompt } from '@/components/TourAndDemoMode';
 import { NeuralNetworkViz } from '@/components/NeuralNetworkViz';
+import { TaskProgressTracker } from '@/components/TaskProgressTracker';
 import { isDemoModeEnabled, getDemoData, initializeDemoModeIfNeeded } from "@/services/demoMode";
 
 // Daily rotating quotes - one for each day
@@ -420,6 +421,11 @@ export default function Dashboard() {
             </button>
           </Tooltip>
          ))}
+      </div>
+
+      {/* Active Tasks Progress Tracker */}
+      <div className="max-w-3xl mx-auto w-full mb-6">
+        <TaskProgressTracker />
       </div>
 
       {/* Getting Started Checklist for new users */}

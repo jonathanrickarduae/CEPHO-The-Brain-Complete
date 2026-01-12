@@ -30,6 +30,7 @@ import VoiceNotepadPage from "./pages/VoiceNotepadPage";
 import IntegrationsPage from "./pages/IntegrationsPage";
 import PodcastPage from "./pages/PodcastPage";
 import WellnessPage from "./pages/WellnessPage";
+import ChiefOfStaffRole from "./pages/ChiefOfStaffRole";
 import ReferenceLibrary from "./pages/ReferenceLibrary";
 import { GovernanceProvider, GovernanceModeChangeModal } from "./hooks/useGovernance";
 import { CelebrationProvider } from "./components/CelebrationAnimations";
@@ -64,6 +65,9 @@ function Router() {
       </Route>
       <Route path="/digital-twin">
         <WithLayout><DigitalTwin /></WithLayout>
+      </Route>
+      <Route path="/chief-of-staff-role">
+        <WithLayout><ChiefOfStaffRole /></WithLayout>
       </Route>
       <Route path="/workflow">
         <WithLayout><Workflow /></WithLayout>
