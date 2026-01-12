@@ -33,6 +33,7 @@ import WellnessPage from "./pages/WellnessPage";
 import ChiefOfStaffRole from "./pages/ChiefOfStaffRole";
 import ReferenceLibrary from "./pages/ReferenceLibrary";
 import DueDiligencePage from "./pages/DueDiligencePage";
+import CentralHub from "./pages/CentralHub";
 import { GovernanceProvider, GovernanceModeChangeModal } from "./hooks/useGovernance";
 import { AIRouterProvider } from "./components/AIRouter";
 import { CelebrationProvider } from "./components/CelebrationAnimations";
@@ -131,6 +132,9 @@ function Router() {
       </Route>
       <Route path="/integrations">
         <WithLayout><IntegrationsPage /></WithLayout>
+      </Route>
+      <Route path="/central-hub">
+        <WithLayout><CentralHub /></WithLayout>
       </Route>
       <Route path="/podcast">
         <WithLayout><PodcastPage /></WithLayout>

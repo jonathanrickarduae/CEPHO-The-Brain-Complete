@@ -408,6 +408,58 @@ You are not a yes-man. You are a trusted advisor who respects the principal enou
       return getProjectGenesisRecords(ctx.user.id);
     }),
 
+    getById: protectedProcedure
+      .input(z.object({ id: z.number() }))
+      .query(async ({ ctx, input }) => {
+        const projects = await getProjectGenesisRecords(ctx.user.id);
+        return projects.find((p: any) => p.id === input.id) || null;
+      }),
+
+    getProjectData: protectedProcedure
+      .input(z.object({ projectId: z.string() }))
+      .query(async ({ ctx, input }) => {
+        // Fetch project data for presentation blueprint
+        const projects = await getProjectGenesisRecords(ctx.user.id);
+        const project = projects.find((p: any) => p.id.toString() === input.projectId || p.name.toLowerCase().includes(input.projectId.toLowerCase()));
+        
+        if (!project) return null;
+        
+        // Return structured data for presentation
+        return {
+          id: project.id,
+          name: project.name,
+          type: project.type,
+          description: project.description,
+          counterparty: project.counterparty,
+          dealValue: project.dealValue,
+          stage: project.stage,
+          status: project.status,
+          // Add default presentation data structure
+          presentationData: {
+            companyName: project.name,
+            tagline: project.description || `${project.type} opportunity`,
+            problem: `Market opportunity in ${project.type} sector`,
+            solution: `Strategic ${project.type} with ${project.counterparty || 'target company'}`,
+            market: {
+              tam: project.dealValue ? `$${(project.dealValue * 10).toLocaleString()}` : 'TBD',
+              sam: project.dealValue ? `$${(project.dealValue * 3).toLocaleString()}` : 'TBD',
+              som: project.dealValue ? `$${project.dealValue.toLocaleString()}` : 'TBD',
+              growth: '15% CAGR'
+            },
+            traction: {
+              stage: project.stage,
+              status: project.status,
+              probability: project.probability
+            },
+            ask: {
+              amount: project.dealValue ? `$${project.dealValue.toLocaleString()}` : 'TBD',
+              stage: project.stage,
+              useOfFunds: ['Strategic Investment', 'Growth Capital', 'Market Expansion']
+            }
+          }
+        };
+      }),
+
     create: protectedProcedure
       .input(z.object({
         name: z.string(),

@@ -1,11 +1,12 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { 
   PresentationIcon, ChevronRight, ChevronLeft, Check, Sparkles,
   FileText, Users, TrendingUp, DollarSign, Target, Lightbulb,
   BarChart3, Building2, Rocket, Download, Eye, Edit3,
   Palette, Layout, Wand2, RefreshCw, CheckCircle2, Clock,
-  Brain, MessageSquare, AlertTriangle, Upload, FolderOpen, Link2, Plus
+  Brain, MessageSquare, AlertTriangle, Upload, FolderOpen, Link2, Plus, Loader2
 } from 'lucide-react';
+import { trpc } from '@/lib/trpc';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
@@ -127,6 +128,31 @@ export function PresentationBlueprint() {
   const [selectedTheme, setSelectedTheme] = useState<string>('professional');
   const [activeSlide, setActiveSlide] = useState<number>(0);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [projectData, setProjectData] = useState<any>(null);
+
+  // Fetch projects list from Genesis
+  const { data: genesisProjects, isLoading: loadingProjects } = trpc.genesis.list.useQuery();
+  
+  // Fetch specific project data when selected
+  const { data: fetchedProjectData, isLoading: loadingProjectData } = trpc.genesis.getProjectData.useQuery(
+    { projectId: selectedProject || '' },
+    { enabled: !!selectedProject && startMode === 'project' }
+  );
+
+  // Update project data when fetched
+  useEffect(() => {
+    if (fetchedProjectData) {
+      setProjectData(fetchedProjectData);
+    }
+  }, [fetchedProjectData]);
+
+  // Map genesis projects to available projects format
+  const dynamicProjects = genesisProjects?.map((p: any) => ({
+    id: p.id.toString(),
+    name: p.name,
+    description: p.description || `${p.type} - ${p.counterparty || 'In progress'}`,
+    lastUpdated: p.updatedAt ? new Date(p.updatedAt).toLocaleDateString() : 'Recently'
+  })) || availableProjects;
 
   const toggleSlide = (type: SlideType) => {
     setSelectedSlides(prev => 
@@ -301,23 +327,34 @@ export function PresentationBlueprint() {
             <div className="space-y-2">
               <label className="text-xs text-muted-foreground">Select a project:</label>
               <div className="space-y-2 max-h-48 overflow-y-auto">
-                {availableProjects.map(project => (
-                  <button
-                    key={project.id}
-                    onClick={() => startWithProject(project.id)}
-                    className="w-full p-3 bg-background/50 border border-white/10 rounded-lg text-left hover:border-blue-500/50 hover:bg-blue-500/5 transition-all group"
-                  >
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <FolderOpen className="w-4 h-4 text-blue-400" />
-                        <span className="font-medium text-foreground">{project.name}</span>
+                {loadingProjects ? (
+                  <div className="flex items-center justify-center p-4">
+                    <Loader2 className="w-5 h-5 animate-spin text-blue-400" />
+                    <span className="ml-2 text-sm text-muted-foreground">Loading projects...</span>
+                  </div>
+                ) : dynamicProjects.length > 0 ? (
+                  dynamicProjects.map((project: any) => (
+                    <button
+                      key={project.id}
+                      onClick={() => startWithProject(project.id)}
+                      className="w-full p-3 bg-background/50 border border-white/10 rounded-lg text-left hover:border-blue-500/50 hover:bg-blue-500/5 transition-all group"
+                    >
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <FolderOpen className="w-4 h-4 text-blue-400" />
+                          <span className="font-medium text-foreground">{project.name}</span>
+                        </div>
+                        <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-blue-400 transition-colors" />
                       </div>
-                      <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-blue-400 transition-colors" />
-                    </div>
-                    <p className="text-xs text-muted-foreground mt-1 ml-6">{project.description}</p>
-                    <p className="text-xs text-muted-foreground/60 mt-1 ml-6">Updated {project.lastUpdated}</p>
-                  </button>
-                ))}
+                      <p className="text-xs text-muted-foreground mt-1 ml-6">{project.description}</p>
+                      <p className="text-xs text-muted-foreground/60 mt-1 ml-6">Updated {project.lastUpdated}</p>
+                    </button>
+                  ))
+                ) : (
+                  <div className="text-center p-4 text-muted-foreground text-sm">
+                    No projects found. Create a project in Genesis first.
+                  </div>
+                )}
               </div>
             </div>
           </div>

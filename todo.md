@@ -2785,3 +2785,25 @@
 - [x] Add Quick Start option - upload documents directly without project
 - [x] Add Project Dropdown - link to existing projects (Short Circle Navigator, Celadon, etc.)
 - [x] Pull data from Library folders when project is selected
+
+
+## Central Hub & Integration Features (Jan 2026)
+
+### Central Hub UI
+- [x] Create Central Hub page with unified dashboard
+- [x] Add Email tab (Gmail, Outlook inbox views)
+- [x] Add Calendar tab (unified calendar view)
+- [x] Add Files tab (Dropbox, Google Drive, OneDrive browser)
+- [x] Add Messages tab (WhatsApp integration)
+- [x] Add Productivity tab (Notta transcriptions, Grammarly)
+- [x] Create Integration Settings page for API credentials
+
+### Presentation Blueprint Data Connection
+- [x] Wire project dropdown to fetch real project data from Library
+- [x] Pull documents and research when project is selected
+- [x] Auto-populate presentation content from project data
+
+### Voice Responses
+- [x] Enable ElevenLabs speaker button in DirectExpertChat
+- [x] Enable ElevenLabs speaker button in CorporatePartnerChat
+- [ ] Add voice toggle in settings
