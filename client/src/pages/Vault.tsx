@@ -107,7 +107,7 @@ export default function Vault() {
         userEmail="user@example.com"
       />
       
-      <div className="h-full bg-background text-foreground overflow-auto">
+      <div className="min-h-full bg-background text-foreground overflow-auto">
       {/* Header */}
       <div className="border-b border-border bg-card/80 backdrop-blur-xl sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 md:px-6 py-4">
@@ -137,7 +137,7 @@ export default function Vault() {
       </div>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 md:px-6 py-6">
+      <div className="max-w-7xl mx-auto px-4 md:px-6 py-4">
         
         {/* Quick Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">

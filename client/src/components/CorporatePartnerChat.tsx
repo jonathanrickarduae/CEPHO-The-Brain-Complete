@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { trpc } from '@/lib/trpc';
 import { 
   Send, X, ArrowLeft, Building2, Sparkles,
-  Lightbulb, Target, FileText, ChevronRight
+  Lightbulb, Target, FileText, ChevronRight, History, Trash2
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,6 +15,7 @@ interface Message {
   role: 'user' | 'partner';
   content: string;
   timestamp: Date;
+  dbId?: number;
 }
 
 interface CorporatePartnerChatProps {
@@ -26,9 +27,37 @@ export function CorporatePartnerChat({ partnerId, onClose }: CorporatePartnerCha
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  const [isLoadingHistory, setIsLoadingHistory] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   
   const partner = corporatePartners.find(p => p.id === partnerId);
+
+  // Load conversation history from database
+  const { data: conversationHistory } = trpc.expertEvolution.getConversations.useQuery(
+    { expertId: partnerId, limit: 50 },
+    { enabled: !!partnerId }
+  );
+
+  // Store conversation mutation
+  const storeConversationMutation = trpc.expertEvolution.storeConversation.useMutation();
+
+  // Load history on mount
+  useEffect(() => {
+    if (conversationHistory && isLoadingHistory) {
+      const loadedMessages: Message[] = conversationHistory.map((conv: { id: number; role: string; content: string; createdAt: Date }) => ({
+        id: `db-${conv.id}`,
+        role: conv.role === 'user' ? 'user' as const : 'partner' as const,
+        content: conv.content,
+        timestamp: new Date(conv.createdAt),
+        dbId: conv.id,
+      }));
+      
+      if (loadedMessages.length > 0) {
+        setMessages(loadedMessages);
+      }
+      setIsLoadingHistory(false);
+    }
+  }, [conversationHistory, isLoadingHistory]);
 
   // Scroll to bottom when messages change
   useEffect(() => {
@@ -94,9 +123,15 @@ export function CorporatePartnerChat({ partnerId, onClose }: CorporatePartnerCha
       };
       setMessages(prev => [...prev, partnerMessage]);
       setIsTyping(false);
+      
+      // Store partner response in database
+      storeConversationMutation.mutate({
+        expertId: partnerId,
+        role: 'expert',
+        content: data.response,
+      });
     },
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    onError: (error: any) => {
+    onError: (error: unknown) => {
       console.error('Partner chat error:', error);
       // Fallback to local response on error
       if (partner) {
@@ -108,6 +143,13 @@ export function CorporatePartnerChat({ partnerId, onClose }: CorporatePartnerCha
           timestamp: new Date()
         };
         setMessages(prev => [...prev, partnerMessage]);
+        
+        // Store fallback response in database
+        storeConversationMutation.mutate({
+          expertId: partnerId,
+          role: 'expert',
+          content: fallbackResponse,
+        });
       }
       setIsTyping(false);
     }
@@ -127,6 +169,13 @@ export function CorporatePartnerChat({ partnerId, onClose }: CorporatePartnerCha
     const messageContent = inputValue;
     setInputValue('');
     setIsTyping(true);
+
+    // Store user message in database
+    storeConversationMutation.mutate({
+      expertId: partnerId,
+      role: 'user',
+      content: messageContent,
+    });
 
     // Build conversation history
     const conversationHistory = messages.map(m => ({
@@ -167,6 +216,11 @@ export function CorporatePartnerChat({ partnerId, onClose }: CorporatePartnerCha
     });
   };
 
+  // Clear conversation history
+  const clearHistory = () => {
+    setMessages([]);
+  };
+
   if (!partner) {
     return (
       <div className="h-full flex items-center justify-center bg-background">
@@ -195,9 +249,20 @@ export function CorporatePartnerChat({ partnerId, onClose }: CorporatePartnerCha
             </h2>
             <p className="text-sm text-muted-foreground">{partner.industry}</p>
           </div>
-          <Button variant="ghost" size="icon" onClick={onClose}>
-            <X className="w-5 h-5" />
-          </Button>
+          <div className="flex items-center gap-1">
+            {conversationHistory && conversationHistory.length > 0 && (
+              <div className="flex items-center gap-1 text-xs text-muted-foreground bg-secondary/50 px-2 py-1 rounded-full mr-2">
+                <History className="w-3 h-3" />
+                <span>{conversationHistory.length}</span>
+              </div>
+            )}
+            <Button variant="ghost" size="icon" onClick={clearHistory} title="Clear History">
+              <Trash2 className="w-5 h-5" />
+            </Button>
+            <Button variant="ghost" size="icon" onClick={onClose}>
+              <X className="w-5 h-5" />
+            </Button>
+          </div>
         </div>
         
         {/* Partner Info Bar */}
@@ -213,8 +278,19 @@ export function CorporatePartnerChat({ partnerId, onClose }: CorporatePartnerCha
       {/* Messages */}
       <ScrollArea className="flex-1 p-4">
         <div className="space-y-4 max-w-3xl mx-auto">
+          {/* Loading indicator */}
+          {isLoadingHistory && (
+            <div className="flex items-center justify-center py-8">
+              <div className="flex gap-1">
+                <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+              </div>
+            </div>
+          )}
+
           {/* Welcome Message */}
-          {messages.length === 0 && (
+          {!isLoadingHistory && messages.length === 0 && (
             <div className="bg-gradient-to-br from-blue-500/10 to-cyan-500/10 rounded-2xl p-6 border border-blue-500/20">
               <div className="flex items-start gap-4">
                 <div className="w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center text-xl">

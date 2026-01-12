@@ -1,11 +1,11 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { trpc } from '@/lib/trpc';
 import { useLocation } from 'wouter';
 import { 
   Send, Mic, MicOff, X, ArrowLeft, 
   Video, Phone, MoreVertical, Paperclip,
   Image, Smile, ThumbsUp, Copy, Share2,
-  Volume2, VolumeX, Pause, Play
+  Volume2, VolumeX, Pause, Play, History, Trash2, Loader2
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -19,6 +19,9 @@ interface Message {
   type: 'text' | 'voice';
   voiceDuration?: number;
   isPlaying?: boolean;
+  isGeneratingVoice?: boolean;
+  audioUrl?: string;
+  dbId?: number;
 }
 
 interface DirectExpertChatProps {
@@ -34,11 +37,140 @@ export function DirectExpertChat({ expertId, onClose }: DirectExpertChatProps) {
   const [recordingTime, setRecordingTime] = useState(0);
   const [isTyping, setIsTyping] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
+  const [isLoadingHistory, setIsLoadingHistory] = useState(true);
+  const [currentlyPlayingId, setCurrentlyPlayingId] = useState<string | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const recordingInterval = useRef<NodeJS.Timeout | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const expert = allExperts.find(e => e.id === expertId);
+
+  // Load conversation history from database
+  const { data: conversationHistory } = trpc.expertEvolution.getConversations.useQuery(
+    { expertId, limit: 50 },
+    { enabled: !!expertId }
+  );
+
+  // Store conversation mutation
+  const storeConversationMutation = trpc.expertEvolution.storeConversation.useMutation();
+
+  // Voice generation mutation
+  const generateVoiceMutation = trpc.expertEvolution.generateVoice.useMutation({
+    onSuccess: (data, variables) => {
+      // Create audio URL from base64
+      const audioBlob = new Blob(
+        [Uint8Array.from(atob(data.audio), c => c.charCodeAt(0))],
+        { type: data.contentType }
+      );
+      const audioUrl = URL.createObjectURL(audioBlob);
+      
+      // Update message with audio URL
+      setMessages(prev => prev.map(msg => {
+        if (msg.content === variables.text && msg.role === 'expert') {
+          return { ...msg, audioUrl, isGeneratingVoice: false };
+        }
+        return msg;
+      }));
+      
+      // Auto-play if not muted
+      if (!isMuted) {
+        playAudio(audioUrl, variables.text);
+      }
+    },
+    onError: (error) => {
+      console.error('Voice generation error:', error);
+      // Remove generating state on error
+      setMessages(prev => prev.map(msg => ({
+        ...msg,
+        isGeneratingVoice: false
+      })));
+    }
+  });
+
+  // Play audio
+  const playAudio = useCallback((audioUrl: string, messageContent: string) => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+    }
+    
+    const audio = new Audio(audioUrl);
+    audioRef.current = audio;
+    
+    // Find message ID by content
+    const messageId = messages.find(m => m.content === messageContent)?.id;
+    if (messageId) {
+      setCurrentlyPlayingId(messageId);
+    }
+    
+    audio.onended = () => {
+      setCurrentlyPlayingId(null);
+    };
+    
+    audio.play().catch(err => {
+      console.error('Audio playback error:', err);
+      setCurrentlyPlayingId(null);
+    });
+  }, [messages]);
+
+  // Stop audio
+  const stopAudio = useCallback(() => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+    }
+    setCurrentlyPlayingId(null);
+  }, []);
+
+  // Generate voice for a message
+  const generateVoice = useCallback((messageId: string, content: string) => {
+    if (!expert) return;
+    
+    // Mark message as generating voice
+    setMessages(prev => prev.map(msg => 
+      msg.id === messageId ? { ...msg, isGeneratingVoice: true } : msg
+    ));
+    
+    generateVoiceMutation.mutate({
+      text: content,
+      expertId: expert.id,
+    });
+  }, [expert, generateVoiceMutation]);
+
+  // Load history on mount
+  useEffect(() => {
+    if (conversationHistory && isLoadingHistory) {
+      const loadedMessages: Message[] = conversationHistory.map((conv: { id: number; role: string; content: string; createdAt: Date }) => ({
+        id: `db-${conv.id}`,
+        role: conv.role === 'user' ? 'user' as const : 'expert' as const,
+        content: conv.content,
+        timestamp: new Date(conv.createdAt),
+        type: 'text' as const,
+        dbId: conv.id,
+      }));
+      
+      if (loadedMessages.length > 0) {
+        setMessages(loadedMessages);
+      } else if (expert) {
+        // No history, show greeting
+        const greeting = getExpertGreeting(expert);
+        setMessages([{
+          id: `greeting-${Date.now()}`,
+          role: 'expert',
+          content: greeting,
+          timestamp: new Date(),
+          type: 'text'
+        }]);
+        // Store greeting in database
+        storeConversationMutation.mutate({
+          expertId,
+          role: 'expert',
+          content: greeting,
+        });
+      }
+      setIsLoadingHistory(false);
+    }
+  }, [conversationHistory, isLoadingHistory, expert, expertId, storeConversationMutation]);
 
   // Auto-scroll to bottom on new messages
   useEffect(() => {
@@ -47,21 +179,14 @@ export function DirectExpertChat({ expertId, onClose }: DirectExpertChatProps) {
     }
   }, [messages]);
 
-  // Initial greeting
+  // Cleanup audio on unmount
   useEffect(() => {
-    if (expert && messages.length === 0) {
-      const greeting = getExpertGreeting(expert);
-      setTimeout(() => {
-        setMessages([{
-          id: `greeting-${Date.now()}`,
-          role: 'expert',
-          content: greeting,
-          timestamp: new Date(),
-          type: 'text'
-        }]);
-      }, 500);
-    }
-  }, [expert]);
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+      }
+    };
+  }, []);
 
   // Get expert-specific greeting
   const getExpertGreeting = (expert: AIExpert): string => {
@@ -73,7 +198,7 @@ export function DirectExpertChat({ expertId, onClose }: DirectExpertChatProps) {
     return greetings[expert.id] || `Hey, I'm ${expert.name}. ${expert.bio.split('.')[0]}. What would you like to discuss?`;
   };
 
-  // Generate expert response based on their personality
+  // Generate expert response based on their personality (fallback)
   const generateExpertResponse = (expert: AIExpert, userMessage: string): string => {
     const lowerMessage = userMessage.toLowerCase();
     
@@ -135,9 +260,25 @@ export function DirectExpertChat({ expertId, onClose }: DirectExpertChatProps) {
       };
       setMessages(prev => [...prev, expertMessage]);
       setIsTyping(false);
+      
+      // Store expert response in database
+      storeConversationMutation.mutate({
+        expertId,
+        role: 'expert',
+        content: data.response,
+      });
+
+      // Auto-generate voice if not muted
+      if (!isMuted && expert) {
+        setTimeout(() => {
+          generateVoiceMutation.mutate({
+            text: data.response,
+            expertId: expert.id,
+          });
+        }, 500);
+      }
     },
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    onError: (error: any) => {
+    onError: (error: unknown) => {
       console.error('Expert chat error:', error);
       // Fallback to local response on error
       if (expert) {
@@ -150,6 +291,13 @@ export function DirectExpertChat({ expertId, onClose }: DirectExpertChatProps) {
           type: 'text'
         };
         setMessages(prev => [...prev, expertMessage]);
+        
+        // Store fallback response in database
+        storeConversationMutation.mutate({
+          expertId,
+          role: 'expert',
+          content: fallbackResponse,
+        });
       }
       setIsTyping(false);
     }
@@ -172,6 +320,13 @@ export function DirectExpertChat({ expertId, onClose }: DirectExpertChatProps) {
     setInputValue('');
     setIsTyping(true);
 
+    // Store user message in database
+    storeConversationMutation.mutate({
+      expertId,
+      role: 'user',
+      content,
+    });
+
     // Build conversation history for context
     const conversationHistory = messages.map(m => ({
       role: m.role === 'user' ? 'user' as const : 'assistant' as const,
@@ -193,6 +348,30 @@ export function DirectExpertChat({ expertId, onClose }: DirectExpertChatProps) {
       },
       conversationHistory,
     });
+  };
+
+  // Clear conversation history
+  const clearHistory = () => {
+    if (expert) {
+      setMessages([]);
+      stopAudio();
+      // Show new greeting
+      const greeting = getExpertGreeting(expert);
+      setTimeout(() => {
+        setMessages([{
+          id: `greeting-${Date.now()}`,
+          role: 'expert',
+          content: greeting,
+          timestamp: new Date(),
+          type: 'text'
+        }]);
+        storeConversationMutation.mutate({
+          expertId,
+          role: 'expert',
+          content: greeting,
+        });
+      }, 300);
+    }
   };
 
   // Handle voice recording
@@ -272,16 +451,30 @@ export function DirectExpertChat({ expertId, onClose }: DirectExpertChatProps) {
             size="icon"
             onClick={startVideoCall}
             className="rounded-full"
+            title="Video Call"
           >
             <Video className="w-5 h-5" />
           </Button>
           <Button
             variant="ghost"
             size="icon"
-            onClick={() => setIsMuted(!isMuted)}
-            className="rounded-full"
+            onClick={() => {
+              setIsMuted(!isMuted);
+              if (!isMuted) stopAudio();
+            }}
+            className={`rounded-full ${isMuted ? 'text-red-500' : ''}`}
+            title={isMuted ? "Unmute Voice" : "Mute Voice"}
           >
             {isMuted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={clearHistory}
+            className="rounded-full"
+            title="Clear History"
+          >
+            <Trash2 className="w-5 h-5" />
           </Button>
           <Button variant="ghost" size="icon" className="rounded-full">
             <MoreVertical className="w-5 h-5" />
@@ -291,65 +484,131 @@ export function DirectExpertChat({ expertId, onClose }: DirectExpertChatProps) {
 
       {/* Expert Info Banner */}
       <div className="px-4 py-3 bg-gradient-to-r from-primary/10 to-transparent border-b border-border">
-        <div className="flex items-center gap-2 text-sm">
-          <span className="text-muted-foreground">Inspired by:</span>
-          <span className="font-medium">{expert.compositeOf.join(', ')}</span>
+        <div className="flex items-center justify-between">
+          <div>
+            <div className="flex items-center gap-2 text-sm">
+              <span className="text-muted-foreground">Inspired by:</span>
+              <span className="font-medium">{expert.compositeOf.join(', ')}</span>
+            </div>
+            <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{expert.bio}</p>
+          </div>
+          <div className="flex items-center gap-2">
+            {!isMuted && (
+              <div className="flex items-center gap-1 text-xs text-green-400 bg-green-500/10 px-2 py-1 rounded-full">
+                <Volume2 className="w-3 h-3" />
+                <span>Voice On</span>
+              </div>
+            )}
+            {conversationHistory && conversationHistory.length > 0 && (
+              <div className="flex items-center gap-1 text-xs text-muted-foreground bg-secondary/50 px-2 py-1 rounded-full">
+                <History className="w-3 h-3" />
+                <span>{conversationHistory.length} messages</span>
+              </div>
+            )}
+          </div>
         </div>
-        <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{expert.bio}</p>
       </div>
 
       {/* Messages */}
       <ScrollArea className="flex-1 p-4" ref={scrollRef}>
         <div className="space-y-4 max-w-2xl mx-auto">
-          {messages.map(message => (
-            <div
-              key={message.id}
-              className={`flex gap-3 ${message.role === 'user' ? 'flex-row-reverse' : ''}`}
-            >
-              {message.role === 'expert' && (
-                <div className="flex-shrink-0">
-                  {expert.avatarUrl ? (
-                    <img
-                      src={expert.avatarUrl}
-                      alt={expert.name}
-                      className="w-8 h-8 rounded-full object-cover"
-                    />
-                  ) : (
-                    <div className="w-8 h-8 rounded-full bg-secondary flex items-center justify-center">
-                      {expert.avatar}
-                    </div>
-                  )}
-                </div>
-              )}
-              
-              <div className={`max-w-[75%] ${message.role === 'user' ? 'text-right' : ''}`}>
-                <div
-                  className={`inline-block px-4 py-2 rounded-2xl ${
-                    message.role === 'user'
-                      ? 'bg-primary text-primary-foreground rounded-br-md'
-                      : 'bg-secondary rounded-bl-md'
-                  }`}
-                >
-                  {message.type === 'voice' ? (
-                    <div className="flex items-center gap-2">
-                      <button className="p-1 hover:bg-white/10 rounded-full">
-                        <Play className="w-4 h-4" />
-                      </button>
-                      <div className="w-24 h-1 bg-white/30 rounded-full">
-                        <div className="w-1/3 h-full bg-white rounded-full" />
-                      </div>
-                      <span className="text-xs">{formatTime(message.voiceDuration || 0)}</span>
-                    </div>
-                  ) : (
-                    <p className="text-sm whitespace-pre-wrap">{message.content}</p>
-                  )}
-                </div>
-                <p className="text-xs text-muted-foreground mt-1">
-                  {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                </p>
+          {isLoadingHistory ? (
+            <div className="flex items-center justify-center py-8">
+              <div className="flex gap-1">
+                <div className="w-2 h-2 bg-muted-foreground/50 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                <div className="w-2 h-2 bg-muted-foreground/50 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                <div className="w-2 h-2 bg-muted-foreground/50 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
               </div>
             </div>
-          ))}
+          ) : (
+            <>
+              {messages.map(message => (
+                <div
+                  key={message.id}
+                  className={`flex gap-3 ${message.role === 'user' ? 'flex-row-reverse' : ''}`}
+                >
+                  {message.role === 'expert' && (
+                    <div className="flex-shrink-0">
+                      {expert.avatarUrl ? (
+                        <img
+                          src={expert.avatarUrl}
+                          alt={expert.name}
+                          className="w-8 h-8 rounded-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-8 h-8 rounded-full bg-secondary flex items-center justify-center">
+                          {expert.avatar}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                  
+                  <div className={`max-w-[75%] ${message.role === 'user' ? 'text-right' : ''}`}>
+                    <div
+                      className={`inline-block px-4 py-2 rounded-2xl ${
+                        message.role === 'user'
+                          ? 'bg-primary text-primary-foreground rounded-br-md'
+                          : 'bg-secondary rounded-bl-md'
+                      }`}
+                    >
+                      {message.type === 'voice' ? (
+                        <div className="flex items-center gap-2">
+                          <button className="p-1 hover:bg-white/10 rounded-full">
+                            <Play className="w-4 h-4" />
+                          </button>
+                          <div className="w-24 h-1 bg-white/30 rounded-full">
+                            <div className="w-1/3 h-full bg-white rounded-full" />
+                          </div>
+                          <span className="text-xs">{formatTime(message.voiceDuration || 0)}</span>
+                        </div>
+                      ) : (
+                        <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+                      )}
+                    </div>
+                    
+                    {/* Voice controls for expert messages */}
+                    {message.role === 'expert' && message.type === 'text' && (
+                      <div className="flex items-center gap-2 mt-1">
+                        <p className="text-xs text-muted-foreground">
+                          {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                        </p>
+                        {!isMuted && (
+                          <button
+                            onClick={() => {
+                              if (currentlyPlayingId === message.id) {
+                                stopAudio();
+                              } else if (message.audioUrl) {
+                                playAudio(message.audioUrl, message.content);
+                              } else {
+                                generateVoice(message.id, message.content);
+                              }
+                            }}
+                            className="p-1 hover:bg-secondary rounded-full transition-colors"
+                            title={currentlyPlayingId === message.id ? "Stop" : "Play Voice"}
+                            disabled={message.isGeneratingVoice}
+                          >
+                            {message.isGeneratingVoice ? (
+                              <Loader2 className="w-3 h-3 animate-spin text-muted-foreground" />
+                            ) : currentlyPlayingId === message.id ? (
+                              <Pause className="w-3 h-3 text-primary" />
+                            ) : (
+                              <Volume2 className="w-3 h-3 text-muted-foreground hover:text-foreground" />
+                            )}
+                          </button>
+                        )}
+                      </div>
+                    )}
+                    
+                    {message.role === 'user' && (
+                      <p className="text-xs text-muted-foreground mt-1">
+                        {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </>
+          )}
           
           {isTyping && (
             <div className="flex gap-3">

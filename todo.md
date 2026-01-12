@@ -2697,3 +2697,78 @@
 
 ## Bug Fixes (Jan 2026)
 - [x] Fix AIProviderSettings error: useAIRouter must be used within AIRouterProvider
+
+
+## Chat & Voice Enhancements (Jan 2026)
+- [x] Add conversation history persistence for Corporate Partners
+- [x] Add conversation history persistence for AI Experts
+- [x] Implement ElevenLabs text-to-speech for voice responses
+- [x] Add real avatar for Jay-Z
+- [x] Add real avatar for Ryan Reynolds
+- [x] Add real avatar for Jessica Alba
+
+
+## Central Communications Hub (Jan 2026)
+### Email Integrations
+- [ ] Gmail integration (OAuth + Gmail API)
+- [ ] Outlook/Microsoft 365 integration (OAuth + Graph API)
+- [ ] IMAP/SMTP support for other email providers
+- [ ] Unified inbox view across all accounts
+
+### Calendar Integrations
+- [ ] Google Calendar integration
+- [ ] Outlook Calendar integration
+- [ ] Unified calendar view across all accounts
+- [ ] Event creation/editing from The Brain
+
+### Messaging Integrations
+- [ ] WhatsApp integration (WhatsApp Business API)
+- [ ] Unified messaging view
+
+### UI Components
+- [ ] Communications Hub page/dashboard
+- [ ] Email compose/reply interface
+- [ ] Calendar event management interface
+- [ ] WhatsApp chat interface
+
+
+## Central Hub - Communications & Storage (Jan 2026)
+
+### Email Integrations
+- [ ] Gmail integration (OAuth + Gmail API)
+- [ ] Outlook/Microsoft 365 integration (OAuth + Graph API)
+- [ ] IMAP/SMTP support for other email providers
+- [ ] Unified inbox view across all accounts
+
+### Calendar Integrations
+- [ ] Google Calendar integration
+- [ ] Outlook Calendar integration
+- [ ] Unified calendar view across all accounts
+- [ ] Event creation/editing from The Brain
+
+### Messaging Integrations
+- [ ] WhatsApp integration (WhatsApp Business API)
+- [ ] Unified messaging view
+
+### Cloud Storage Integrations
+- [ ] Dropbox integration (OAuth + Dropbox API)
+- [ ] Google Drive integration
+- [ ] OneDrive integration (Microsoft Graph API)
+- [ ] Unified file browser across all storage providers
+
+### Productivity Tool Integrations
+- [ ] Notta integration (AI meeting transcription)
+- [ ] Grammarly integration (writing assistant)
+
+
+### UI Components
+- [ ] Communications Hub dashboard
+- [ ] Email compose/reply interface
+- [ ] Calendar event management interface
+- [ ] WhatsApp chat interface
+- [ ] File browser with multi-provider support
+
+
+## Bug Fixes (Jan 2026)
+- [x] Fix Vault design - content too far down on page
+- [x] Improve ChiefOfStaffRole page layout design

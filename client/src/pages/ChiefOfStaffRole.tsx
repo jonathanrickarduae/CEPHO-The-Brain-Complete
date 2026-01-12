@@ -92,39 +92,39 @@ export default function ChiefOfStaffRole() {
   const categories = Array.from(new Set(responsibilities.map(r => r.category)));
 
   return (
-    <div className="min-h-screen bg-background p-6">
-      <div className="max-w-6xl mx-auto space-y-6">
+    <div className="min-h-screen bg-background">
+      <div className="max-w-6xl mx-auto px-4 md:px-6 py-4 space-y-4">
         {/* Header */}
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-white flex items-center gap-3">
-              <Brain className="w-8 h-8 text-fuchsia-400" />
-              Chief of Staff Role Definition
-            </h1>
-            <p className="text-gray-400 mt-1">
-              Configure responsibilities, boundaries, and autonomy levels
-            </p>
+        <div className="flex items-center justify-between py-2">
+          <div className="flex items-center gap-3">
+            <div className="p-2.5 rounded-xl bg-gradient-to-br from-fuchsia-500/20 to-purple-500/20 border border-fuchsia-500/30">
+              <Brain className="w-6 h-6 text-fuchsia-400" />
+            </div>
+            <div>
+              <h1 className="text-xl md:text-2xl font-bold text-white">Chief of Staff Role</h1>
+              <p className="text-muted-foreground text-sm">Configure responsibilities, boundaries & autonomy</p>
+            </div>
           </div>
-          <Button className="bg-fuchsia-600 hover:bg-fuchsia-700">
+          <Button size="sm" className="bg-fuchsia-600 hover:bg-fuchsia-700">
             <Save className="w-4 h-4 mr-2" />
-            Save Configuration
+            Save
           </Button>
         </div>
 
         {/* Maturity Level Card */}
-        <div className="bg-gradient-to-br from-fuchsia-500/10 to-purple-500/10 border border-fuchsia-500/30 rounded-xl p-6">
-          <div className="flex items-center justify-between mb-4">
+        <div className="bg-gradient-to-br from-fuchsia-500/10 to-purple-500/10 border border-fuchsia-500/30 rounded-xl p-4">
+          <div className="flex items-center justify-between mb-3">
             <div>
-              <h2 className="text-xl font-semibold text-white">Maturity Level</h2>
-              <p className="text-gray-400 text-sm">Based on training hours and interaction patterns</p>
+              <h2 className="text-lg font-semibold text-white">Maturity Level</h2>
+              <p className="text-gray-400 text-xs">Based on training hours and interaction patterns</p>
             </div>
-            <Badge className="bg-fuchsia-500/20 text-fuchsia-400 border-fuchsia-500/30 text-lg px-4 py-2">
+            <Badge className="bg-fuchsia-500/20 text-fuchsia-400 border-fuchsia-500/30 text-sm px-3 py-1">
               Level {currentLevel}: {MATURITY_LEVELS[currentLevel - 1].name}
             </Badge>
           </div>
 
           {/* Progress through levels */}
-          <div className="grid grid-cols-5 gap-2 mb-4">
+          <div className="grid grid-cols-5 gap-2 mb-3">
             {MATURITY_LEVELS.map((level, index) => (
               <div 
                 key={level.level}
@@ -165,7 +165,7 @@ export default function ChiefOfStaffRole() {
         </div>
 
         {/* Tabs */}
-        <Tabs defaultValue="responsibilities" className="space-y-4">
+        <Tabs defaultValue="responsibilities" className="space-y-3">
           <TabsList className="bg-white/5 border border-white/10">
             <TabsTrigger value="responsibilities" className="data-[state=active]:bg-fuchsia-500/20">
               <Target className="w-4 h-4 mr-2" />
