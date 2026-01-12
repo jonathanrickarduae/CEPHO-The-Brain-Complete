@@ -1875,3 +1875,48 @@
 - [ ] Add voice input to intake questions
 - [ ] Connect to database for project creation
 - [ ] Add file upload for data dump functionality
+
+
+## Video-First Investor Pitch System
+
+### Core Concept
+- [x] Video Pitch Pack as new deliverable type in Project Genesis
+- [x] 2-3 minute video snapshots replacing traditional pitch decks
+- [x] Secure, shareable landing pages for investor outreach
+- [x] Modern engagement approach respecting attention spans
+
+### Video Script Generator
+- [x] AI-powered script writing from business intake data
+- [x] 2-minute overview script template
+- [x] Product deep-dive script template
+- [x] Team/vision script template
+- [x] Key messaging extraction from Project Genesis data
+- [x] Tone and style customization options
+
+### Video Production Workflow
+- [ ] Script review and approval stage
+- [ ] Imagery and b-roll suggestions
+- [ ] Graphics and visual asset generation
+- [ ] Video upload and management
+- [ ] Multiple video slots (Overview, Product, Team, Traction)
+
+### Secure Landing Page
+- [x] Password/link protection for investor access
+- [x] Embedded video player(s)
+- [x] Social links integration
+- [x] Contact information display
+- [x] Optional downloadable materials (deck, one-pager)
+- [ ] Analytics tracking (views, watch time, clicks)
+- [ ] Expiry date option for time-limited access
+
+### Database Schema
+- [x] video_pitch_packs table
+- [x] pitch_videos table (multiple per pack)
+- [x] pitch_landing_pages table
+- [x] landing_page_access_logs table
+- [x] video_scripts table
+
+### Integration
+- [ ] Add Video Pitch Pack to Project Genesis deliverables
+- [ ] Connect to investor database for targeted sharing
+- [ ] Track investor engagement with videos

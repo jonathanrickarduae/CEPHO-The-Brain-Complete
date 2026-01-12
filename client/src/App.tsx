@@ -32,6 +32,8 @@ import IntegrationsPage from "./pages/IntegrationsPage";
 import PodcastPage from "./pages/PodcastPage";
 import WellnessPage from "./pages/WellnessPage";
 import ReferenceLibrary from "./pages/ReferenceLibrary";
+import InvestorPitchPage from "./pages/InvestorPitchPage";
+import VideoPitchStudio from "./pages/VideoPitchStudio";
 import { GovernanceProvider, GovernanceModeChangeModal } from "./hooks/useGovernance";
 import { CelebrationProvider } from "./components/CelebrationAnimations";
 import { DailyCycleProvider } from "./components/DailyCycleProvider";
@@ -135,6 +137,16 @@ function Router() {
       </Route>
       <Route path="/reference-library">
         <WithLayout><ReferenceLibrary /></WithLayout>
+      </Route>
+      
+      {/* Video Pitch Studio */}
+      <Route path="/video-pitch-studio">
+        <WithLayout><VideoPitchStudio /></WithLayout>
+      </Route>
+      
+      {/* Investor Pitch Pages - No layout wrapper for clean presentation */}
+      <Route path="/pitch/:slug">
+        <InvestorPitchPage />
       </Route>
       
       {/* Fallback */}

@@ -71,6 +71,13 @@
       "when": 1768212133078,
       "tag": "0009_nifty_solo",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "5",
+      "when": 1768213179563,
+      "tag": "0010_same_speed",
+      "breakpoints": true
     }
   ]
 }

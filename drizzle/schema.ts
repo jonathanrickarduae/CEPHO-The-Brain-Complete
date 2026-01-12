@@ -1,4 +1,4 @@
-import { int, mysqlEnum, mysqlTable, text, timestamp, varchar, json, boolean, float } from "drizzle-orm/mysql-core";
+import { int, mysqlEnum, mysqlTable, text, timestamp, varchar, json, boolean, float, decimal } from "drizzle-orm/mysql-core";
 
 /**
  * Core user table backing auth flow.
@@ -1712,3 +1712,244 @@ export const securitySettings = mysqlTable("security_settings", {
 });
 export type SecuritySetting = typeof securitySettings.$inferSelect;
 export type InsertSecuritySetting = typeof securitySettings.$inferInsert;
+
+
+// ============================================================================
+// VIDEO-FIRST INVESTOR PITCH SYSTEM
+// ============================================================================
+
+/**
+ * Video Pitch Packs - Container for investor video presentations
+ */
+export const videoPitchPacks = mysqlTable("video_pitch_packs", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  projectId: int("projectId"), // Links to a Project Genesis project
+  
+  // Pack Info
+  name: varchar("name", { length: 255 }).notNull(),
+  companyName: varchar("companyName", { length: 255 }).notNull(),
+  tagline: varchar("tagline", { length: 500 }),
+  description: text("description"),
+  
+  // Branding
+  logoUrl: varchar("logoUrl", { length: 500 }),
+  primaryColor: varchar("primaryColor", { length: 20 }).default("#8B5CF6"),
+  secondaryColor: varchar("secondaryColor", { length: 20 }).default("#EC4899"),
+  
+  // Social Links
+  websiteUrl: varchar("websiteUrl", { length: 500 }),
+  linkedinUrl: varchar("linkedinUrl", { length: 500 }),
+  twitterUrl: varchar("twitterUrl", { length: 500 }),
+  instagramUrl: varchar("instagramUrl", { length: 500 }),
+  youtubeUrl: varchar("youtubeUrl", { length: 500 }),
+  
+  // Contact
+  contactName: varchar("contactName", { length: 255 }),
+  contactEmail: varchar("contactEmail", { length: 255 }),
+  contactPhone: varchar("contactPhone", { length: 50 }),
+  
+  // Status
+  status: varchar("status", { length: 50 }).default("draft"), // draft, active, archived
+  
+  // Analytics
+  totalViews: int("totalViews").default(0),
+  uniqueViews: int("uniqueViews").default(0),
+  totalWatchTime: int("totalWatchTime").default(0), // Seconds
+  
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+export type VideoPitchPack = typeof videoPitchPacks.$inferSelect;
+export type InsertVideoPitchPack = typeof videoPitchPacks.$inferInsert;
+
+/**
+ * Pitch Videos - Individual videos within a pitch pack
+ */
+export const pitchVideos = mysqlTable("pitch_videos", {
+  id: int("id").autoincrement().primaryKey(),
+  packId: int("packId").notNull(),
+  
+  // Video Info
+  title: varchar("title", { length: 255 }).notNull(),
+  type: varchar("type", { length: 50 }).notNull(), // overview, product, team, traction, custom
+  description: text("description"),
+  duration: int("duration"), // Seconds
+  
+  // Video Source
+  videoUrl: varchar("videoUrl", { length: 500 }),
+  thumbnailUrl: varchar("thumbnailUrl", { length: 500 }),
+  videoProvider: varchar("videoProvider", { length: 50 }), // youtube, vimeo, s3, custom
+  videoId: varchar("videoId", { length: 100 }), // External video ID
+  
+  // Script
+  scriptId: int("scriptId"), // Links to video_scripts
+  
+  // Display
+  displayOrder: int("displayOrder").default(0),
+  isPublished: boolean("isPublished").default(false),
+  
+  // Analytics
+  views: int("views").default(0),
+  completionRate: decimal("completionRate", { precision: 5, scale: 2 }).default("0"), // Percentage
+  avgWatchTime: int("avgWatchTime").default(0), // Seconds
+  
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+export type PitchVideo = typeof pitchVideos.$inferSelect;
+export type InsertPitchVideo = typeof pitchVideos.$inferInsert;
+
+/**
+ * Video Scripts - AI-generated scripts for pitch videos
+ */
+export const videoScripts = mysqlTable("video_scripts", {
+  id: int("id").autoincrement().primaryKey(),
+  packId: int("packId").notNull(),
+  videoType: varchar("videoType", { length: 50 }).notNull(), // overview, product, team, traction
+  
+  // Script Content
+  title: varchar("title", { length: 255 }).notNull(),
+  targetDuration: int("targetDuration").default(120), // Target duration in seconds
+  
+  // Script Sections
+  hook: text("hook"), // Opening hook (first 5-10 seconds)
+  introduction: text("introduction"),
+  mainContent: text("mainContent"),
+  keyPoints: json("keyPoints"), // Array of key points to cover
+  callToAction: text("callToAction"),
+  fullScript: text("fullScript"), // Complete script
+  
+  // Visual Suggestions
+  visualSuggestions: json("visualSuggestions"), // Array of visual/b-roll suggestions
+  graphicsSuggestions: json("graphicsSuggestions"), // Text overlays, graphics
+  
+  // Tone & Style
+  tone: varchar("tone", { length: 50 }).default("professional"), // professional, casual, energetic, inspirational
+  speakingPace: varchar("speakingPace", { length: 50 }).default("moderate"), // slow, moderate, fast
+  
+  // Source Data
+  sourceData: json("sourceData"), // Business data used to generate script
+  
+  // Versioning
+  version: int("version").default(1),
+  status: varchar("status", { length: 50 }).default("draft"), // draft, approved, in_production, complete
+  
+  // Feedback
+  feedback: text("feedback"),
+  revisionNotes: text("revisionNotes"),
+  
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+export type VideoScript = typeof videoScripts.$inferSelect;
+export type InsertVideoScript = typeof videoScripts.$inferInsert;
+
+/**
+ * Pitch Landing Pages - Secure shareable pages for investor access
+ */
+export const pitchLandingPages = mysqlTable("pitch_landing_pages", {
+  id: int("id").autoincrement().primaryKey(),
+  packId: int("packId").notNull(),
+  
+  // Access Control
+  slug: varchar("slug", { length: 100 }).notNull().unique(), // URL slug
+  accessType: varchar("accessType", { length: 50 }).default("link"), // public, link, password, invite
+  password: varchar("password", { length: 255 }), // Hashed password if password-protected
+  
+  // Time-Limited Access
+  expiresAt: timestamp("expiresAt"),
+  maxViews: int("maxViews"), // Null = unlimited
+  
+  // Customization
+  customTitle: varchar("customTitle", { length: 255 }),
+  customMessage: text("customMessage"), // Welcome message for this link
+  showDownloads: boolean("showDownloads").default(true),
+  showSocials: boolean("showSocials").default(true),
+  showContact: boolean("showContact").default(true),
+  
+  // Downloadable Materials
+  pitchDeckUrl: varchar("pitchDeckUrl", { length: 500 }),
+  onePagerUrl: varchar("onePagerUrl", { length: 500 }),
+  financialsUrl: varchar("financialsUrl", { length: 500 }),
+  additionalDocs: json("additionalDocs"), // Array of {name, url}
+  
+  // Tracking
+  isActive: boolean("isActive").default(true),
+  
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+export type PitchLandingPage = typeof pitchLandingPages.$inferSelect;
+export type InsertPitchLandingPage = typeof pitchLandingPages.$inferInsert;
+
+/**
+ * Landing Page Access Logs - Track who views the pitch
+ */
+export const landingPageAccessLogs = mysqlTable("landing_page_access_logs", {
+  id: int("id").autoincrement().primaryKey(),
+  landingPageId: int("landingPageId").notNull(),
+  
+  // Visitor Info
+  visitorEmail: varchar("visitorEmail", { length: 255 }), // If captured
+  visitorName: varchar("visitorName", { length: 255 }),
+  investorId: int("investorId"), // Links to investors table if known
+  
+  // Session Info
+  sessionId: varchar("sessionId", { length: 100 }).notNull(),
+  ipAddress: varchar("ipAddress", { length: 50 }),
+  userAgent: text("userAgent"),
+  referrer: varchar("referrer", { length: 500 }),
+  
+  // Device Info
+  deviceType: varchar("deviceType", { length: 50 }), // desktop, mobile, tablet
+  browser: varchar("browser", { length: 100 }),
+  os: varchar("os", { length: 100 }),
+  country: varchar("country", { length: 100 }),
+  city: varchar("city", { length: 100 }),
+  
+  // Engagement
+  videosWatched: json("videosWatched"), // Array of {videoId, watchTime, completed}
+  totalWatchTime: int("totalWatchTime").default(0), // Seconds
+  documentsDownloaded: json("documentsDownloaded"), // Array of document names
+  socialClicks: json("socialClicks"), // Array of social platforms clicked
+  
+  // Timestamps
+  accessedAt: timestamp("accessedAt").defaultNow().notNull(),
+  lastActivityAt: timestamp("lastActivityAt").defaultNow().notNull(),
+});
+export type LandingPageAccessLog = typeof landingPageAccessLogs.$inferSelect;
+export type InsertLandingPageAccessLog = typeof landingPageAccessLogs.$inferInsert;
+
+/**
+ * Investor Invites - Track specific investor invitations
+ */
+export const investorInvites = mysqlTable("investor_invites", {
+  id: int("id").autoincrement().primaryKey(),
+  landingPageId: int("landingPageId").notNull(),
+  investorId: int("investorId"), // Links to investors table
+  
+  // Invite Details
+  email: varchar("email", { length: 255 }).notNull(),
+  name: varchar("name", { length: 255 }),
+  personalMessage: text("personalMessage"),
+  
+  // Unique Access
+  inviteToken: varchar("inviteToken", { length: 100 }).notNull().unique(),
+  
+  // Status
+  status: varchar("status", { length: 50 }).default("sent"), // sent, opened, viewed, engaged, expired
+  sentAt: timestamp("sentAt").defaultNow().notNull(),
+  openedAt: timestamp("openedAt"),
+  firstViewedAt: timestamp("firstViewedAt"),
+  lastViewedAt: timestamp("lastViewedAt"),
+  
+  // Engagement Metrics
+  totalViews: int("totalViews").default(0),
+  totalWatchTime: int("totalWatchTime").default(0),
+  
+  // Expiry
+  expiresAt: timestamp("expiresAt"),
+});
+export type InvestorInvite = typeof investorInvites.$inferSelect;
+export type InsertInvestorInvite = typeof investorInvites.$inferInsert;
