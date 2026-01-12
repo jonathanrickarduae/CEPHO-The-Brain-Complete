@@ -2094,3 +2094,17 @@
 - [ ] Message placeholder - "Message Chief of Staff..." not "Message Digital Twin..."
 - [ ] Tighten protocol toggle (OMNI/GOVERNED) design
 - [ ] Keep Evening Review as is
+
+
+## Branding & UI Fixes (User Request - Priority)
+- [ ] Change "THE BRAIN" to "CEPHO" with brand explanation
+- [ ] Add CEPHO meaning: Chief Executive Personal Headquarters Operations
+- [ ] Blend between CEPHO and The Brain naming throughout
+- [ ] Update onboarding to explain the naming and value proposition
+- [ ] Move Getting Started checklist to Chief of Staff section
+- [ ] Add Learning module to Chief of Staff page
+- [ ] Add Behaviour module to Chief of Staff page
+- [ ] Add Pattern module to Chief of Staff page
+- [ ] Update all remaining "Digital Twin" references to "Chief of Staff"
+- [ ] Tighten OMNI/GOVERNED protocol toggle design
+- [ ] Remove Getting Started from main Nexus page

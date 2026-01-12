@@ -23,7 +23,7 @@ export default function DigitalTwin() {
   
   const [messageInput, setMessageInput] = useState(initialMessage || "");
   const [showRightPanel, setShowRightPanel] = useState(false);
-  const [rightPanelTab, setRightPanelTab] = useState<'learning' | 'activity' | 'training' | 'guardian'>('learning');
+  const [rightPanelTab, setRightPanelTab] = useState<'learning' | 'behaviour' | 'patterns' | 'activity' | 'training' | 'guardian'>('learning');
   const [showTrainingModal, setShowTrainingModal] = useState(false);
   const [currentConversationId, setCurrentConversationId] = useState('current');
   
@@ -144,7 +144,7 @@ export default function DigitalTwin() {
                 <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-background" />
               </div>
               <div>
-                <h1 className="text-base sm:text-lg font-semibold text-foreground">Digital Twin</h1>
+                <h1 className="text-base sm:text-lg font-semibold text-foreground">Chief of Staff</h1>
                 <p className="text-xs text-muted-foreground">Online • AI-Powered • Learning from you</p>
               </div>
               {/* Conversation Switcher */}
@@ -332,10 +332,10 @@ export default function DigitalTwin() {
       {showRightPanel && (
         <div className="w-80 border-l border-white/10 bg-card/50 hidden md:flex flex-col">
           {/* Panel Tabs */}
-          <div className="flex border-b border-white/10">
+          <div className="flex flex-wrap border-b border-white/10">
             <button
               onClick={() => setRightPanelTab('learning')}
-              className={`flex-1 px-4 py-3 text-sm font-medium transition-colors ${
+              className={`flex-1 px-2 py-2 text-xs font-medium transition-colors ${
                 rightPanelTab === 'learning' 
                   ? 'text-purple-400 border-b-2 border-purple-400' 
                   : 'text-muted-foreground hover:text-foreground'
@@ -344,8 +344,28 @@ export default function DigitalTwin() {
               Learning
             </button>
             <button
+              onClick={() => setRightPanelTab('behaviour')}
+              className={`flex-1 px-2 py-2 text-xs font-medium transition-colors ${
+                rightPanelTab === 'behaviour' 
+                  ? 'text-cyan-400 border-b-2 border-cyan-400' 
+                  : 'text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              Behaviour
+            </button>
+            <button
+              onClick={() => setRightPanelTab('patterns')}
+              className={`flex-1 px-2 py-2 text-xs font-medium transition-colors ${
+                rightPanelTab === 'patterns' 
+                  ? 'text-amber-400 border-b-2 border-amber-400' 
+                  : 'text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              Patterns
+            </button>
+            <button
               onClick={() => setRightPanelTab('activity')}
-              className={`flex-1 px-4 py-3 text-sm font-medium transition-colors ${
+              className={`flex-1 px-2 py-2 text-xs font-medium transition-colors ${
                 rightPanelTab === 'activity' 
                   ? 'text-purple-400 border-b-2 border-purple-400' 
                   : 'text-muted-foreground hover:text-foreground'
@@ -355,7 +375,7 @@ export default function DigitalTwin() {
             </button>
             <button
               onClick={() => setRightPanelTab('training')}
-              className={`flex-1 px-4 py-3 text-sm font-medium transition-colors ${
+              className={`flex-1 px-2 py-2 text-xs font-medium transition-colors ${
                 rightPanelTab === 'training' 
                   ? 'text-purple-400 border-b-2 border-purple-400' 
                   : 'text-muted-foreground hover:text-foreground'
@@ -365,7 +385,7 @@ export default function DigitalTwin() {
             </button>
             <button
               onClick={() => setRightPanelTab('guardian')}
-              className={`flex-1 px-4 py-3 text-sm font-medium transition-colors ${
+              className={`flex-1 px-2 py-2 text-xs font-medium transition-colors ${
                 rightPanelTab === 'guardian' 
                   ? 'text-fuchsia-400 border-b-2 border-fuchsia-400' 
                   : 'text-muted-foreground hover:text-foreground'
@@ -380,6 +400,87 @@ export default function DigitalTwin() {
             {rightPanelTab === 'learning' && (
               <LearningPanel learningItems={notifications} />
             )}
+            {rightPanelTab === 'behaviour' && (
+              <div className="space-y-4">
+                <div className="p-4 bg-gradient-to-br from-cyan-500/10 to-blue-500/10 border border-cyan-500/30 rounded-xl">
+                  <h4 className="font-medium text-foreground mb-2">Communication Style</h4>
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-sm">
+                      <span className="text-muted-foreground">Tone</span>
+                      <span className="text-cyan-400">Professional, Direct</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-muted-foreground">Response Length</span>
+                      <span className="text-cyan-400">Concise</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-muted-foreground">Formality</span>
+                      <span className="text-cyan-400">Business Casual</span>
+                    </div>
+                  </div>
+                </div>
+                <div className="p-4 bg-gradient-to-br from-cyan-500/10 to-blue-500/10 border border-cyan-500/30 rounded-xl">
+                  <h4 className="font-medium text-foreground mb-2">Decision Making</h4>
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-sm">
+                      <span className="text-muted-foreground">Risk Tolerance</span>
+                      <span className="text-cyan-400">Moderate</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-muted-foreground">Speed vs Accuracy</span>
+                      <span className="text-cyan-400">Balanced</span>
+                    </div>
+                  </div>
+                </div>
+                <div className="p-4 bg-gradient-to-br from-cyan-500/10 to-blue-500/10 border border-cyan-500/30 rounded-xl">
+                  <h4 className="font-medium text-foreground mb-2">Work Preferences</h4>
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-sm">
+                      <span className="text-muted-foreground">Peak Hours</span>
+                      <span className="text-cyan-400">9am - 12pm</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-muted-foreground">Focus Time</span>
+                      <span className="text-cyan-400">Mornings</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+            {rightPanelTab === 'patterns' && (
+              <div className="space-y-4">
+                <div className="p-4 bg-gradient-to-br from-amber-500/10 to-orange-500/10 border border-amber-500/30 rounded-xl">
+                  <h4 className="font-medium text-foreground mb-2">Detected Patterns</h4>
+                  <div className="space-y-3">
+                    <div className="p-2 bg-background/50 rounded-lg">
+                      <p className="text-sm text-foreground">Email triage priority</p>
+                      <p className="text-xs text-muted-foreground">Investor emails flagged as urgent</p>
+                    </div>
+                    <div className="p-2 bg-background/50 rounded-lg">
+                      <p className="text-sm text-foreground">Meeting scheduling</p>
+                      <p className="text-xs text-muted-foreground">Prefers afternoon calls</p>
+                    </div>
+                    <div className="p-2 bg-background/50 rounded-lg">
+                      <p className="text-sm text-foreground">Document review</p>
+                      <p className="text-xs text-muted-foreground">Legal docs require extra attention</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="p-4 bg-gradient-to-br from-amber-500/10 to-orange-500/10 border border-amber-500/30 rounded-xl">
+                  <h4 className="font-medium text-foreground mb-2">Response Templates</h4>
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-sm">
+                      <span className="text-muted-foreground">Active Templates</span>
+                      <span className="text-amber-400">12</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-muted-foreground">Auto-applied</span>
+                      <span className="text-amber-400">8</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
             {rightPanelTab === 'activity' && (
               <ActivityLog />
             )}
@@ -390,7 +491,7 @@ export default function DigitalTwin() {
                   className="w-full p-4 bg-gradient-to-br from-purple-500/10 to-pink-500/10 border border-purple-500/30 rounded-xl text-left hover:border-purple-500/50 transition-all"
                 >
                   <h4 className="font-medium text-foreground mb-1">Training Accelerator</h4>
-                  <p className="text-xs text-muted-foreground">Speed up your Digital Twin's learning</p>
+                  <p className="text-xs text-muted-foreground">Speed up your Chief of Staff's learning</p>
                 </button>
                 <DigitalTwinTrainingProgress 
                   hoursLogged={127}

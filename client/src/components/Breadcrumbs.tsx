@@ -18,7 +18,7 @@ const ROUTE_LABELS: Record<string, string> = {
   '/dashboard': 'Command Center',
   '/daily-brief': 'Daily Brief',
   '/ai-experts': 'AI Experts',
-  '/digital-twin': 'Digital Twin',
+  '/digital-twin': 'Chief of Staff',
   '/workflow': 'Workflow',
   '/library': 'Library',
   '/vault': 'The Vault',

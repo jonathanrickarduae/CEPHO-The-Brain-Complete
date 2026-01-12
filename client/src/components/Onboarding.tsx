@@ -20,8 +20,8 @@ interface OnboardingStep {
 const ONBOARDING_STEPS: OnboardingStep[] = [
   {
     id: 1,
-    title: 'THE BRAIN',
-    description: 'Your secure, AI-powered command center. One single point of contact for everything - integrations, data, decisions. All protected, all connected, all working for you.',
+    title: 'CEPHO',
+    description: 'Chief Executive Personal Headquarters Operations. Your AI-powered command center - where The Brain thinks, and Cepho executes. One system, infinite possibilities.',
     icon: Brain,
     color: 'text-primary',
     useBrain: true,
@@ -29,30 +29,30 @@ const ONBOARDING_STEPS: OnboardingStep[] = [
   {
     id: 2,
     title: 'Your Chief of Staff',
-    description: 'Meet your Digital Twin - a Chief of Staff that never sleeps. It learns how you think, handles your communications, and makes decisions on your behalf. You review, it executes.',
+    description: 'Your tireless executive assistant that never sleeps. It learns how you think, handles your communications, and makes decisions on your behalf. You review, it executes.',
     icon: Fingerprint,
     color: 'text-purple-400',
     highlight: '[data-tour="digital-twin"]',
   },
   {
     id: 3,
-    title: 'Daily Brief',
-    description: 'Every morning, your Chief of Staff prepares everything you need: priorities sorted, threats flagged, opportunities identified. Start each day informed and in control.',
+    title: 'The Signal',
+    description: 'Every morning, your Chief of Staff prepares your briefing: priorities sorted, threats flagged, opportunities identified. Start each day informed and in control.',
     icon: Sun,
     color: 'text-amber-400',
     highlight: '[data-tour="daily-brief"]',
   },
   {
     id: 4,
-    title: '273 AI Experts',
-    description: 'Need a McKinsey strategist? A tax specialist? A creative director? Assemble world-class teams instantly. They work while you focus on what matters.',
+    title: 'AI SMEs',
+    description: 'Need a McKinsey strategist? A tax specialist? A creative director? 273 subject matter experts ready to assemble. They work while you focus on what matters.',
     icon: Users,
     color: 'text-cyan-400',
     highlight: '[data-tour="ai-experts"]',
   },
   {
     id: 5,
-    title: 'Secure Vault',
+    title: 'The Vault',
     description: 'Bank-grade security for all your integrations, credentials, and sensitive data. Biometric login, encrypted storage, real-time threat monitoring. Your digital fortress.',
     icon: Shield,
     color: 'text-emerald-400',
@@ -60,8 +60,8 @@ const ONBOARDING_STEPS: OnboardingStep[] = [
   },
   {
     id: 6,
-    title: 'Getting You to a 10',
-    description: 'The Brain exists for one purpose: to free you up. Less admin, more impact. Less stress, more clarity. Every day, operating at your absolute best.',
+    title: 'Welcome to Cepho',
+    description: 'The Brain powers the intelligence. Cepho is your interface. Together, they exist for one purpose: to free you up. Less admin, more impact. Every day, operating at your best.',
     icon: Sparkles,
     color: 'text-primary',
     useBrain: true,
@@ -287,7 +287,7 @@ export function OnboardingModal({ isOpen, onComplete, onSkip }: OnboardingModalP
                 >
                   {isLastStep ? (
                     <>
-                      Enter The Brain
+                      Enter Cepho
                       <Sparkles className="w-5 h-5" />
                     </>
                   ) : (

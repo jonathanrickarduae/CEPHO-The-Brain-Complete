@@ -296,30 +296,24 @@ export default function Dashboard() {
 
       {/* Compact Header Row */}
       <div className="flex justify-between items-center mb-4">
-        <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-card/60 border border-border">
-            <Shield className={`w-4 h-4 ${governanceMode === 'omni' ? 'text-purple-500' : 'text-blue-500'}`} />
-            <span className="text-xs font-medium text-muted-foreground hidden sm:inline">PROTOCOL:</span>
-            <div className="flex items-center gap-1">
+        <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1 px-2 py-1 rounded-lg bg-card/60 border border-border">
+            <Shield className={`w-3 h-3 ${governanceMode === 'omni' ? 'text-purple-500' : 'text-blue-500'}`} />
+            <div className="flex items-center">
               <button 
                 onClick={() => setGovernanceMode("omni")}
-                className={`px-2 py-0.5 rounded-full text-xs font-bold transition-all min-h-0 min-w-0 ${governanceMode === 'omni' ? 'bg-purple-500 text-white shadow-[0_0_10px_rgba(168,85,247,0.5)]' : 'text-muted-foreground hover:text-foreground'}`}
+                className={`px-2 py-0.5 rounded text-[10px] font-bold transition-all ${governanceMode === 'omni' ? 'bg-purple-500 text-white' : 'text-muted-foreground hover:text-foreground'}`}
               >
                 OMNI
               </button>
               <button 
                 onClick={() => setGovernanceMode("governed")}
-                className={`px-2 py-0.5 rounded-full text-xs font-bold transition-all min-h-0 min-w-0 ${governanceMode === 'governed' ? 'bg-blue-500 text-white shadow-[0_0_10px_rgba(59,130,246,0.5)]' : 'text-muted-foreground hover:text-foreground'}`}
+                className={`px-2 py-0.5 rounded text-[10px] font-bold transition-all ${governanceMode === 'governed' ? 'bg-blue-500 text-white' : 'text-muted-foreground hover:text-foreground'}`}
               >
-                GOVERNED
+                GOV
               </button>
             </div>
           </div>
-          {governanceMode === 'governed' && (
-            <Badge variant="outline" className="border-blue-500/50 text-blue-400 bg-blue-500/10 text-xs hidden md:flex">
-              <ShieldCheck className="w-3 h-3 mr-1" /> COMPLIANCE
-            </Badge>
-          )}
         </div>
         
         <div className="flex items-center gap-3">
@@ -393,11 +387,6 @@ export default function Dashboard() {
             </button>
           </Tooltip>
          ))}
-      </div>
-
-      {/* Getting Started Checklist for new users */}
-      <div className="max-w-3xl mx-auto w-full mb-6">
-        <GettingStartedChecklist />
       </div>
 
       {/* Intelligent Nudges - Contextual Suggestions */}

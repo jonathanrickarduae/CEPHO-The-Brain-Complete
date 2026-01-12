@@ -13,7 +13,7 @@ const SHORTCUTS: ShortcutItem[] = [
   { keys: ['⌘/Ctrl', 'D'], description: 'Go to Dashboard', category: 'Navigation' },
   { keys: ['⌘/Ctrl', 'B'], description: 'Go to Daily Brief', category: 'Navigation' },
   { keys: ['⌘/Ctrl', 'E'], description: 'Go to AI Experts', category: 'Navigation' },
-  { keys: ['⌘/Ctrl', 'T'], description: 'Go to Digital Twin', category: 'Navigation' },
+  { keys: ['⌘/Ctrl', 'T'], description: 'Go to Chief of Staff', category: 'Navigation' },
   { keys: ['⌘/Ctrl', 'W'], description: 'Go to Workflow', category: 'Navigation' },
   { keys: ['⌘/Ctrl', 'L'], description: 'Go to Library', category: 'Navigation' },
   { keys: ['⌘/Ctrl', 'V'], description: 'Go to Vault', category: 'Navigation' },

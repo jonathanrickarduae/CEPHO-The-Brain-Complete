@@ -34,7 +34,7 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
     // Navigation
     { id: 'nav-dashboard', title: 'Go to Dashboard', icon: Home, category: 'navigation', shortcut: 'G D', action: () => { setLocation('/dashboard'); onClose(); } },
     { id: 'nav-daily-brief', title: 'Go to Daily Brief', icon: Calendar, category: 'navigation', shortcut: 'G B', action: () => { setLocation('/daily-brief'); onClose(); } },
-    { id: 'nav-digital-twin', title: 'Go to Digital Twin', icon: Brain, category: 'navigation', shortcut: 'G T', action: () => { setLocation('/digital-twin'); onClose(); } },
+    { id: 'nav-digital-twin', title: 'Go to Chief of Staff', icon: Brain, category: 'navigation', shortcut: 'G T', action: () => { setLocation('/digital-twin'); onClose(); } },
     { id: 'nav-ai-experts', title: 'Go to AI Experts', icon: Users, category: 'navigation', shortcut: 'G E', action: () => { setLocation('/ai-experts'); onClose(); } },
     { id: 'nav-workflow', title: 'Go to Workflow', icon: Target, category: 'navigation', shortcut: 'G W', action: () => { setLocation('/workflow'); onClose(); } },
     { id: 'nav-library', title: 'Go to Library', icon: BookOpen, category: 'navigation', shortcut: 'G L', action: () => { setLocation('/library'); onClose(); } },
@@ -43,11 +43,11 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
     { id: 'nav-settings', title: 'Go to Settings', icon: Settings, category: 'navigation', shortcut: 'G ,', action: () => { setLocation('/settings'); onClose(); } },
     
     // AI Actions
-    { id: 'ai-ask', title: 'Ask Digital Twin', description: 'Start a conversation with your AI assistant', icon: Brain, category: 'ai', shortcut: 'A T', action: () => { setLocation('/digital-twin?focus=input'); onClose(); } },
+    { id: 'ai-ask', title: 'Ask Chief of Staff', description: 'Start a conversation with your AI assistant', icon: Brain, category: 'ai', shortcut: 'A T', action: () => { setLocation('/digital-twin?focus=input'); onClose(); } },
     { id: 'ai-draft', title: 'Draft with AI', description: 'Generate content using AI', icon: Sparkles, category: 'ai', shortcut: 'A D', action: () => { setLocation('/digital-twin?message=Help me draft'); onClose(); } },
     { id: 'ai-summarize', title: 'Summarize', description: 'Get AI summary of current context', icon: FileText, category: 'ai', shortcut: 'A S', action: () => { setLocation('/digital-twin?message=Summarize my day so far'); onClose(); } },
     { id: 'ai-schedule', title: 'Smart Schedule', description: 'Let AI optimize your schedule', icon: Calendar, category: 'ai', shortcut: 'A C', action: () => { setLocation('/digital-twin?message=Help me plan my schedule'); onClose(); } },
-    { id: 'ai-voice', title: 'Voice Input', description: 'Speak to your Digital Twin', icon: Mic, category: 'ai', shortcut: 'V', action: () => { setLocation('/digital-twin?voice=true'); onClose(); } },
+    { id: 'ai-voice', title: 'Voice Input', description: 'Speak to your Chief of Staff', icon: Mic, category: 'ai', shortcut: 'V', action: () => { setLocation('/digital-twin?voice=true'); onClose(); } },
     
     // Quick Actions
     { id: 'action-task', title: 'Create Task', description: 'Add a new task to your workflow', icon: CheckCircle2, category: 'action', shortcut: 'C T', action: () => { setLocation('/workflow?action=new-task'); onClose(); } },

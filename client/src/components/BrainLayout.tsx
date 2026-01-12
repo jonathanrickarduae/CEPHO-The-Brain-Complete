@@ -213,7 +213,7 @@ function BrainLayoutContent({
   // Handle voice input from quick actions
   const handleVoiceInput = (transcript: string) => {
     console.log('Voice input:', transcript);
-    // TODO: Process voice input through Digital Twin
+    // TODO: Process voice input through Chief of Staff
   };
 
   return (

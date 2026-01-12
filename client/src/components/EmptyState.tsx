@@ -57,7 +57,7 @@ const EMPTY_STATE_CONFIGS: Record<EmptyStateType, EmptyStateConfig> = {
   inbox: {
     icon: Inbox,
     title: 'All caught up!',
-    description: 'No pending items require your attention. Your Digital Twin is on it.',
+    description: 'No pending items require your attention. Your Chief of Staff is on it.',
     color: 'text-purple-400',
     bgGradient: 'from-purple-500/10 to-purple-500/5',
   },
@@ -81,14 +81,14 @@ const EMPTY_STATE_CONFIGS: Record<EmptyStateType, EmptyStateConfig> = {
   insights: {
     icon: Sparkles,
     title: 'Insights coming soon',
-    description: 'As you use The Brain more, your Digital Twin will surface personalized insights here.',
+    description: 'As you use The Brain more, your Chief of Staff will surface personalized insights here.',
     color: 'text-primary',
     bgGradient: 'from-primary/10 to-primary/5',
   },
   training: {
     icon: Brain,
     title: 'Start training your Twin',
-    description: 'The more you interact, the smarter your Digital Twin becomes. Start a conversation!',
+    description: 'The more you interact, the smarter your Chief of Staff becomes. Start a conversation!',
     actionLabel: 'Talk to Twin',
     color: 'text-purple-400',
     bgGradient: 'from-purple-500/10 to-purple-500/5',
