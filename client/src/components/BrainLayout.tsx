@@ -47,26 +47,17 @@ import NeonBrain from "./NeonBrain";
 import { NotificationBell } from "./NotificationCenter";
 import { CephoLandingPage } from "./CephoLandingPage";
 
+// Core navigation - streamlined for professional use
 const menuItems = [
-  { icon: LayoutDashboard, label: "The Nexus", path: "/dashboard", status: 'active' as const },
-  { icon: Inbox, label: "Inbox", path: "/inbox", status: 'warning' as const, count: 8 },
-  { icon: Rocket, label: "Project Genesis", path: "/project-genesis", status: 'success' as const },
-  { icon: Video, label: "Video Studio", path: "/video-studio" },
-  { icon: Sun, label: "The Signal", path: "/daily-brief", status: 'warning' as const, count: 3 },
+  { icon: LayoutDashboard, label: "Dashboard", path: "/dashboard" },
+  { icon: Sun, label: "Daily Brief", path: "/daily-brief", count: 3 },
   { icon: Users, label: "AI-SMEs", path: "/ai-experts" },
-  { icon: Clock, label: "Review Queue", path: "/review-queue", status: 'warning' as const, count: 5 },
+  { icon: Fingerprint, label: "Chief of Staff", path: "/digital-twin" },
+  { icon: Activity, label: "Workflow", path: "/workflow", count: 2 },
   { icon: BookOpen, label: "Library", path: "/library" },
-  { icon: BarChart3, label: "Statistics", path: "/statistics" },
-  { icon: Fingerprint, label: "Chief of Staff", path: "/digital-twin", status: 'success' as const },
-  { icon: Brain, label: "QA Dashboard", path: "/qa-dashboard" },
-  { icon: Mic, label: "Voice Notepad", path: "/voice-notepad" },
-  { icon: Podcast, label: "Podcast Hub", path: "/podcast" },
-  { icon: Heart, label: "Wellness", path: "/wellness" },
-  { icon: Activity, label: "Workflow", path: "/workflow", status: 'active' as const, count: 2 },
-  { icon: Lock, label: "The Vault", path: "/vault" },
-  { icon: Moon, label: "Evening Review", path: "/evening-review" },
+  { icon: Lock, label: "Vault", path: "/vault" },
+  { icon: BarChart3, label: "Analytics", path: "/statistics" },
   { icon: Settings, label: "Settings", path: "/settings" },
-  { icon: Info, label: "About Cepho", path: "/about" },
 ];
 
 const SIDEBAR_WIDTH_KEY = "cepho-sidebar-width";
@@ -235,21 +226,14 @@ function BrainLayoutContent({
                       isActive={isActive}
                       onClick={() => setLocation(item.path)}
                       tooltip={item.label}
-                      className={`h-11 transition-all font-normal rounded-xl mb-1 ${isActive ? 'bg-sidebar-primary/20 text-sidebar-primary border border-sidebar-primary/30' : 'text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent'}`}
+                      className={`h-10 transition-all font-normal rounded-lg mb-0.5 ${isActive ? 'bg-primary/10 text-primary' : 'text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent/50'}`}
                     >
-                      <StatusPulse 
-                        status={item.status || 'idle'} 
-                        count={item.count}
-                        showPulse={!!item.status}
-                        size="sm"
-                      >
-                        <item.icon
-                          className={`h-5 w-5 ${isActive ? "text-primary" : ""}`}
-                        />
-                      </StatusPulse>
-                      <span className="font-medium">{item.label}</span>
+                      <item.icon
+                        className={`h-4 w-4 ${isActive ? "text-primary" : "text-sidebar-foreground/50"}`}
+                      />
+                      <span className="text-sm">{item.label}</span>
                       {item.count && item.count > 0 && (
-                        <span className="ml-auto text-xs bg-primary/20 text-primary px-1.5 py-0.5 rounded-full">
+                        <span className="ml-auto text-[10px] bg-primary/20 text-primary px-1.5 py-0.5 rounded-full font-medium">
                           {item.count}
                         </span>
                       )}
@@ -261,38 +245,7 @@ function BrainLayoutContent({
           </SidebarContent>
 
           <SidebarFooter className="p-3 border-t border-sidebar-border">
-            {/* Keyboard shortcuts hint */}
-            {!isCollapsed && (
-              <div className="flex flex-col gap-1 mb-2">
-                <button
-                  onClick={keyboardHelp.open}
-                  className="flex items-center gap-2 px-2 py-1.5 text-xs text-sidebar-foreground/50 hover:text-sidebar-foreground/70 transition-colors rounded-lg hover:bg-sidebar-accent"
-                >
-                  <Keyboard className="w-3.5 h-3.5" />
-                  <span>Press <kbd className="px-1 py-0.5 bg-sidebar-accent rounded text-[10px]">?</kbd> for shortcuts</span>
-                </button>
-                <button
-                  onClick={() => setShowAccessibilitySettings(true)}
-                  className="flex items-center gap-2 px-2 py-1.5 text-xs text-sidebar-foreground/50 hover:text-sidebar-foreground/70 transition-colors rounded-lg hover:bg-sidebar-accent"
-                >
-                  <Accessibility className="w-3.5 h-3.5" />
-                  <span>Accessibility settings</span>
-                </button>
-                <button
-                  onClick={changelog.open}
-                  className="relative flex items-center gap-2 px-2 py-1.5 text-xs text-sidebar-foreground/50 hover:text-sidebar-foreground/70 transition-colors rounded-lg hover:bg-sidebar-accent"
-                >
-                  <Sparkles className="w-3.5 h-3.5" />
-                  <span>What's New</span>
-                  {changelog.hasNewUpdates && (
-                    <span className="absolute top-1 right-1 w-2 h-2 bg-primary rounded-full animate-pulse" />
-                  )}
-                </button>
-                <div className="pt-2 border-t border-sidebar-border mt-2">
-                  <GovernanceModeIndicator className="w-full justify-center" />
-                </div>
-              </div>
-            )}
+            {/* Minimal footer - just user profile */}
             
             <DropdownMenu>
               <DropdownMenuTrigger asChild>

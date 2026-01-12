@@ -108,7 +108,7 @@ const MOCK_PROJECTS: AsanaProject[] = [
     completedCount: 67,
     overdueCount: 2,
     teamMembers: [
-      { id: 'u6', name: 'Dev Team', email: 'dev@cepho.ai', tasksAssigned: 45, tasksCompleted: 38 },
+      { id: 'u6', name: 'Dev Team', email: 'dev@company.com', tasksAssigned: 45, tasksCompleted: 38 },
     ],
     dueDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
     status: 'on_track',

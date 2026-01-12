@@ -120,7 +120,7 @@ export function WaitlistStatus({ position }: { position: WaitlistPosition }) {
   const [copied, setCopied] = useState(false);
 
   const copyReferralLink = async () => {
-    const link = `https://cepho.ai/join?ref=${position.referralCode}`;
+    const link = `${window.location.origin}/join?ref=${position.referralCode}`;
     await navigator.clipboard.writeText(link);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
@@ -128,12 +128,12 @@ export function WaitlistStatus({ position }: { position: WaitlistPosition }) {
 
   const shareToTwitter = () => {
     const text = encodeURIComponent(`I just joined the Cepho waitlist! 🧠 Get early access to your AI-powered Chief of Staff. Use my referral link to skip ahead:`);
-    const url = encodeURIComponent(`https://cepho.ai/join?ref=${position.referralCode}`);
+    const url = encodeURIComponent(`${window.location.origin}/join?ref=${position.referralCode}`);
     window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank');
   };
 
   const shareToLinkedIn = () => {
-    const url = encodeURIComponent(`https://cepho.ai/join?ref=${position.referralCode}`);
+    const url = encodeURIComponent(`${window.location.origin}/join?ref=${position.referralCode}`);
     window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${url}`, '_blank');
   };
 
@@ -263,7 +263,7 @@ export function ReferralDashboard({ stats }: { stats: ReferralStats }) {
   const [copied, setCopied] = useState(false);
 
   const copyReferralLink = async () => {
-    const link = `https://cepho.ai/join?ref=${stats.referralCode}`;
+    const link = `${window.location.origin}/join?ref=${stats.referralCode}`;
     await navigator.clipboard.writeText(link);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
@@ -319,7 +319,7 @@ export function ReferralDashboard({ stats }: { stats: ReferralStats }) {
         <div className="text-sm text-gray-400 mb-2">Your referral link</div>
         <div className="flex gap-2">
           <div className="flex-1 px-4 py-2 bg-gray-900 rounded-lg text-sm text-gray-300 truncate">
-            https://cepho.ai/join?ref={stats.referralCode}
+            {window.location.host}/join?ref={stats.referralCode}
           </div>
           <button
             onClick={copyReferralLink}

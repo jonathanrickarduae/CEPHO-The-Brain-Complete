@@ -45,7 +45,7 @@ export async function transcribeAudio(
   // Convert Buffer to Blob if needed
   const audioBlob = audioData instanceof Blob 
     ? audioData 
-    : new Blob([audioData], { type: 'audio/webm' });
+    : new Blob([new Uint8Array(audioData)], { type: 'audio/webm' });
   
   formData.append('file', audioBlob, filename);
   formData.append('model', 'whisper-1');

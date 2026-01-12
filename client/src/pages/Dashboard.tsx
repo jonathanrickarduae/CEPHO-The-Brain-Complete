@@ -345,8 +345,10 @@ export default function Dashboard() {
           {/* Today's mood indicator */}
           {latestMood && (
             <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-card/60 border border-border">
-              <span className="text-lg">{['😫','😔','😐','🙂','😊','😄','🤩','🔥','💪','🚀'][latestMood.mood - 1]}</span>
-              <span className="text-xs text-muted-foreground hidden sm:inline">Mood: {latestMood.mood}/10</span>
+              <div className="w-6 h-6 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">
+                <span className="text-xs font-bold text-white">{latestMood.mood}</span>
+              </div>
+              <span className="text-xs text-muted-foreground hidden sm:inline">Mood</span>
             </div>
           )}
           

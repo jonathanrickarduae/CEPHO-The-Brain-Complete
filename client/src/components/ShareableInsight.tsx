@@ -21,7 +21,7 @@ export function ShareableInsight({ type, title, data, onShare }: ShareableInsigh
   const generateShareUrl = () => {
     // In production, this would create a unique shareable link
     const shareCode = Math.random().toString(36).substring(7);
-    return `https://cepho.ai/shared/${shareCode}`;
+    return `${window.location.origin}/shared/${shareCode}`;
   };
 
   const generateShareText = () => {
@@ -35,7 +35,7 @@ export function ShareableInsight({ type, title, data, onShare }: ShareableInsigh
       case 'achievement':
         return `🏆 ${title}\n\n${data.highlights?.join('\n') || ''}\n\nAchieved with Cepho 🧠`;
       case 'consultation':
-        return `💡 Just consulted with ${data.expertName} on Cepho\n\nKey insight: ${data.highlights?.[0] || ''}\n\nAI Experts at cepho.ai 🧠`;
+        return `💡 Just consulted with ${data.expertName} on Cepho\n\nKey insight: ${data.highlights?.[0] || ''}\n\nAI-SMEs at Cepho 🧠`;
       default:
         return `${title}\n\nPowered by Cepho 🧠`;
     }

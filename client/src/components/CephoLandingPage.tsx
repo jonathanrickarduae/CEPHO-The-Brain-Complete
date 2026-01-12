@@ -27,12 +27,12 @@ export function CephoLandingPage() {
         <div className="absolute inset-0 bg-gradient-radial from-primary/20 via-transparent to-transparent" />
       </div>
       
-      <div className="flex flex-col items-center gap-6 p-8 max-w-md w-full relative z-10">
+      <div className="flex flex-col items-center gap-6 p-8 max-w-xl w-full relative z-10">
         {/* Animated Brain Logo with Neural Nodes */}
         <NeonBrain size="xl" state="thinking" mood={8} />
         
         {/* Animated Brand Name Transition */}
-        <div className="flex flex-col items-center gap-2 mt-4 min-h-[120px]">
+        <div className="flex flex-col items-center gap-2 mt-4 min-h-[140px]">
           <AnimatePresence mode="wait">
             {showBrain ? (
               <motion.div
@@ -43,10 +43,10 @@ export function CephoLandingPage() {
                 transition={{ duration: 0.5, ease: "easeInOut" }}
                 className="flex flex-col items-center"
               >
-                <h1 className="text-5xl font-display font-bold tracking-tight text-center text-white">
+                <h1 className="text-6xl md:text-7xl font-display font-bold tracking-tight text-center text-white">
                   The Brain
                 </h1>
-                <p className="text-sm text-white/40 mt-2 italic">
+                <p className="text-sm text-white/40 mt-3 italic">
                   English
                 </p>
               </motion.div>
@@ -59,10 +59,10 @@ export function CephoLandingPage() {
                 transition={{ duration: 0.5, ease: "easeInOut" }}
                 className="flex flex-col items-center"
               >
-                <h1 className="text-5xl font-display font-bold tracking-tight text-center bg-gradient-to-r from-primary via-pink-400 to-primary bg-clip-text text-transparent">
+                <h1 className="text-6xl md:text-7xl font-display font-bold tracking-tight text-center bg-gradient-to-r from-primary via-pink-400 to-primary bg-clip-text text-transparent">
                   Cepho
                 </h1>
-                <p className="text-sm text-white/40 mt-2 italic">
+                <p className="text-sm text-white/40 mt-3 italic">
                   From the Greek for brain
                 </p>
               </motion.div>
@@ -70,15 +70,21 @@ export function CephoLandingPage() {
           </AnimatePresence>
         </div>
 
-        {/* Tagline */}
-        <motion.p 
-          className="text-base text-white/60 text-center max-w-sm"
+        {/* Main Tagline */}
+        <motion.div 
+          className="text-center space-y-4 mt-2"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5 }}
         >
-          Where intelligence begins.
-        </motion.p>
+          <p className="text-xl text-white/80 font-medium">
+            Your AI-powered Chief of Staff
+          </p>
+          <p className="text-sm text-white/50 max-w-md mx-auto leading-relaxed">
+            One interface to manage your life, amplified by AI that learns from you, 
+            thinks like you, and works alongside you.
+          </p>
+        </motion.div>
         
         {/* Sign In Button */}
         <Button
@@ -86,13 +92,13 @@ export function CephoLandingPage() {
             window.location.href = getLoginUrl();
           }}
           size="lg"
-          className="w-full mt-4 bg-primary hover:bg-primary/90 text-white shadow-[0_0_20px_rgba(255,16,240,0.3)] hover:shadow-[0_0_30px_rgba(255,16,240,0.5)] transition-all"
+          className="w-full max-w-xs mt-6 bg-primary hover:bg-primary/90 text-white shadow-[0_0_20px_rgba(255,16,240,0.3)] hover:shadow-[0_0_30px_rgba(255,16,240,0.5)] transition-all text-base py-6"
         >
           Sign in to Continue
         </Button>
 
-        {/* Brand Story Link */}
-        <p className="text-xs text-white/30 text-center mt-4">
+        {/* Brand Story */}
+        <p className="text-xs text-white/30 text-center mt-4 max-w-sm">
           Cepho derives from the Greek root that gives us "encephalon" — the scientific word for the brain itself.
         </p>
       </div>
