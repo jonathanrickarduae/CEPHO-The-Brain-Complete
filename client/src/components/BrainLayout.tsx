@@ -23,7 +23,7 @@ import { getLoginUrl } from "@/const";
 import { useIsMobile } from "@/hooks/useMobile";
 import { 
   LayoutDashboard, LogOut, PanelLeft, 
-  BookOpen, BarChart3, Lock, Fingerprint, Activity, Brain, Sun, Users, Moon, Keyboard, Settings, TrendingUp, Info, Clock, Sparkles, Rocket, Inbox, Search, Video, Bell, Mic, Podcast, Heart
+  BookOpen, BarChart3, Lock, Briefcase, Activity, Brain, Sun, Users, Moon, Keyboard, Settings, TrendingUp, Info, Clock, Sparkles, Rocket, Inbox, Search, Video, Bell, Mic, Podcast, Heart
 } from "lucide-react";
 import { CSSProperties, useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
@@ -52,7 +52,7 @@ const menuItems = [
   { icon: Sun, label: "The Signal", path: "/daily-brief", count: 3 },
   { icon: Rocket, label: "Project Genesis", path: "/project-genesis", highlight: true },
   { icon: Users, label: "AI-SMEs", path: "/ai-experts" },
-  { icon: Fingerprint, label: "Chief of Staff", path: "/digital-twin" },
+  { icon: Briefcase, label: "Chief of Staff", path: "/digital-twin" },
   { icon: Activity, label: "Workflow", path: "/workflow", count: 2 },
   { icon: BookOpen, label: "Library", path: "/library" },
   { icon: Lock, label: "Vault", path: "/vault" },
@@ -95,10 +95,13 @@ export default function BrainLayout({
           
           <div className="flex flex-col items-center gap-4 mt-4">
             <h1 className="text-4xl font-display font-bold tracking-tight text-center text-white">
-              Welcome to The Brain
+              Welcome to CEPHO
             </h1>
-            <p className="text-base text-white/60 text-center max-w-sm">
-              Your AI-powered command center. Sign in to access your personalized intelligence hub.
+            <p className="text-sm text-white/50 text-center">
+              Chief Executive Personal Headquarters Operations
+            </p>
+            <p className="text-base text-white/60 text-center max-w-sm mt-2">
+              Your AI-powered command center. Where The Brain thinks, and Cepho executes.
             </p>
           </div>
           
@@ -236,8 +239,8 @@ function BrainLayoutContent({
               {!isCollapsed ? (
                 <div className="flex items-center gap-2 min-w-0">
                   <Brain className="w-6 h-6 text-primary" />
-                      <span className="font-display font-bold tracking-tight truncate text-sidebar-foreground">
-                    THE BRAIN
+                  <span className="font-display font-bold tracking-tight truncate text-sidebar-foreground">
+                    CEPHO
                   </span>
                 </div>
               ) : null}

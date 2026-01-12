@@ -2108,3 +2108,9 @@
 - [ ] Update all remaining "Digital Twin" references to "Chief of Staff"
 - [ ] Tighten OMNI/GOVERNED protocol toggle design
 - [ ] Remove Getting Started from main Nexus page
+
+## UI Improvements - Jan 12 2026
+- [x] Update sidebar icon for Chief of Staff (change from Brain to Briefcase/User icon)
+- [x] Add Getting Started checklist to Chief of Staff page
+- [x] Update landing page with Cepho branding blend
+

@@ -136,9 +136,17 @@ export default function Landing() {
           >
             <NeonBrain size="xl" className="w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 mb-8" state="thinking" />
             
-            <h1 className="font-display font-bold text-5xl md:text-7xl tracking-wider text-pink-500 drop-shadow-[0_0_30px_rgba(236,72,153,0.6)]">
-              THE BRAIN
-            </h1>
+            <div className="flex flex-col items-center gap-2">
+              <h1 className="font-display font-bold text-5xl md:text-7xl tracking-wider text-pink-500 drop-shadow-[0_0_30px_rgba(236,72,153,0.6)]">
+                CEPHO
+              </h1>
+              <p className="text-sm md:text-base text-muted-foreground max-w-md">
+                Chief Executive Personal Headquarters Operations
+              </p>
+              <p className="text-xs text-muted-foreground/70 italic">
+                Where The Brain thinks, and Cepho executes
+              </p>
+            </div>
             
             {/* Loading indicator */}
             <div className="mt-8 flex items-center gap-2">

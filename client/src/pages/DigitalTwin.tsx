@@ -13,6 +13,7 @@ import { ProgressBar, CircularProgress, DigitalTwinTrainingProgress } from "@/co
 import { ConversationSwitcher } from "@/components/ConversationSwitcher";
 import { DigitalTwinAccelerator } from "@/components/DigitalTwinAccelerator";
 import { BusinessGuardian } from "@/components/BusinessGuardian";
+import { GettingStartedChecklist } from "@/components/GettingStartedChecklist";
 import { useDigitalTwinChat } from "@/hooks/useDigitalTwinChat";
 import { useVoiceInput } from "@/hooks/useVoiceInput";
 
@@ -22,8 +23,8 @@ export default function DigitalTwin() {
   const initialMessage = searchParams.get('message');
   
   const [messageInput, setMessageInput] = useState(initialMessage || "");
-  const [showRightPanel, setShowRightPanel] = useState(false);
-  const [rightPanelTab, setRightPanelTab] = useState<'learning' | 'behaviour' | 'patterns' | 'activity' | 'training' | 'guardian'>('learning');
+  const [showRightPanel, setShowRightPanel] = useState(true);
+  const [rightPanelTab, setRightPanelTab] = useState<'learning' | 'behaviour' | 'patterns' | 'activity' | 'training' | 'guardian' | 'setup'>('setup');
   const [showTrainingModal, setShowTrainingModal] = useState(false);
   const [currentConversationId, setCurrentConversationId] = useState('current');
   
@@ -393,6 +394,16 @@ export default function DigitalTwin() {
             >
               Guardian
             </button>
+            <button
+              onClick={() => setRightPanelTab('setup')}
+              className={`flex-1 px-2 py-2 text-xs font-medium transition-colors ${
+                rightPanelTab === 'setup' 
+                  ? 'text-green-400 border-b-2 border-green-400' 
+                  : 'text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              Setup
+            </button>
           </div>
           
           {/* Panel Content */}
@@ -503,6 +514,11 @@ export default function DigitalTwin() {
             )}
             {rightPanelTab === 'guardian' && (
               <BusinessGuardian />
+            )}
+            {rightPanelTab === 'setup' && (
+              <div className="space-y-4">
+                <GettingStartedChecklist />
+              </div>
             )}
           </div>
         </div>
