@@ -1,4 +1,4 @@
-import { int, mysqlEnum, mysqlTable, text, timestamp, varchar, json, boolean, float, decimal } from "drizzle-orm/mysql-core";
+import { int, mysqlEnum, mysqlTable, text, timestamp, varchar, json, boolean, float } from "drizzle-orm/mysql-core";
 
 /**
  * Core user table backing auth flow.
@@ -1028,928 +1028,185 @@ export type InsertVoiceNote = typeof voiceNotes.$inferInsert;
 
 
 // ============================================
-// DIGITAL TWIN CORE - Profile Vault & Learning Engine
+// EXPERT EVOLUTION SYSTEM
 // ============================================
 
 /**
- * Digital Twin Profile - Core identity and personality model
- * This is the central vault storing who you are
+ * Expert conversations - full conversation history with each AI expert
+ * Enables persistent memory and context for each expert
  */
-export const digitalTwinProfile = mysqlTable("digital_twin_profile", {
-  id: int("id").autoincrement().primaryKey(),
-  userId: int("userId").notNull().unique(),
-  
-  // Core Identity
-  communicationStyle: mysqlEnum("communicationStyle", ["direct", "diplomatic", "analytical", "collaborative"]).default("direct"),
-  decisionSpeed: mysqlEnum("decisionSpeed", ["fast", "measured", "deliberate"]).default("measured"),
-  riskTolerance: mysqlEnum("riskTolerance", ["conservative", "moderate", "aggressive"]).default("moderate"),
-  
-  // Work Preferences
-  preferredWorkHours: varchar("preferredWorkHours", { length: 50 }), // e.g., "6am-2pm"
-  focusAreas: json("focusAreas"), // Array of priority areas
-  delegationStyle: mysqlEnum("delegationStyle", ["hands-on", "trust-verify", "full-autonomy"]).default("trust-verify"),
-  
-  // Personality Traits (1-10 scale stored as JSON)
-  personalityTraits: json("personalityTraits"), // { analytical: 8, creative: 6, detail_oriented: 7, ... }
-  
-  // Values & Priorities
-  coreValues: json("coreValues"), // Array of key values
-  priorities: json("priorities"), // Ranked list of what matters most
-  
-  // Thinking Frameworks
-  thinkingFrameworks: json("thinkingFrameworks"), // Preferred mental models
-  
-  // Profile Completeness
-  profileCompleteness: int("profileCompleteness").default(0), // 0-100%
-  lastProfileUpdate: timestamp("lastProfileUpdate").defaultNow(),
-  
-  createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
-});
-
-export type DigitalTwinProfile = typeof digitalTwinProfile.$inferSelect;
-export type InsertDigitalTwinProfile = typeof digitalTwinProfile.$inferInsert;
-
-/**
- * Digital Twin Decision Patterns - Deep patterns of how you make decisions
- * Learned from observing your choices over time
- */
-export const dtDecisionPatterns = mysqlTable("dt_decision_patterns", {
+export const expertConversations = mysqlTable("expert_conversations", {
   id: int("id").autoincrement().primaryKey(),
   userId: int("userId").notNull(),
-  
-  // Pattern Classification
-  category: mysqlEnum("category", [
-    "strategic", "financial", "operational", "people", "risk", "creative", "technical"
-  ]).notNull(),
-  
-  // The Pattern
-  patternName: varchar("patternName", { length: 200 }).notNull(),
-  patternDescription: text("patternDescription"),
-  
-  // When this pattern applies
-  triggerConditions: json("triggerConditions"), // What situations trigger this pattern
-  
-  // The typical decision/response
-  typicalResponse: text("typicalResponse"),
-  
-  // Confidence and frequency
-  confidence: int("confidence").default(50), // 0-100 how confident we are in this pattern
-  occurrences: int("occurrences").default(1), // How many times observed
-  
-  // Learning metadata
-  learnedFrom: json("learnedFrom"), // Array of conversation/interaction IDs
-  lastObserved: timestamp("lastObserved").defaultNow(),
-  
-  createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
-});
-
-export type DTDecisionPattern = typeof dtDecisionPatterns.$inferSelect;
-export type InsertDTDecisionPattern = typeof dtDecisionPatterns.$inferInsert;
-
-/**
- * Communication Preferences - How you like to communicate
- */
-export const communicationPreferences = mysqlTable("communication_preferences", {
-  id: int("id").autoincrement().primaryKey(),
-  userId: int("userId").notNull(),
-  
-  // Preference Type
-  preferenceType: mysqlEnum("preferenceType", [
-    "tone", "length", "format", "timing", "channel", "frequency"
-  ]).notNull(),
-  
-  // Context where this applies
-  context: varchar("context", { length: 100 }), // e.g., "daily_brief", "urgent", "reports"
-  
-  // The preference
-  preference: varchar("preference", { length: 200 }).notNull(),
-  preferenceDetails: text("preferenceDetails"),
-  
-  // Examples
-  examples: json("examples"), // Array of example phrases/formats you've used
-  
-  // Confidence
-  confidence: int("confidence").default(50),
-  
-  createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
-});
-
-export type CommunicationPreference = typeof communicationPreferences.$inferSelect;
-export type InsertCommunicationPreference = typeof communicationPreferences.$inferInsert;
-
-/**
- * Learning Events - Every interaction that teaches the Digital Twin
- */
-export const learningEvents = mysqlTable("learning_events", {
-  id: int("id").autoincrement().primaryKey(),
-  userId: int("userId").notNull(),
-  
-  // Event Type
-  eventType: mysqlEnum("eventType", [
-    "conversation", "decision", "feedback", "correction", "preference", "behaviour"
-  ]).notNull(),
-  
-  // Source
-  source: varchar("source", { length: 100 }).notNull(), // e.g., "chief_of_staff", "project_genesis", "sme_chat"
-  sourceId: varchar("sourceId", { length: 100 }), // Reference to the source record
-  
-  // What was learned
-  learningType: mysqlEnum("learningType", [
-    "pattern_new", "pattern_reinforced", "pattern_contradicted", 
-    "preference_discovered", "value_expressed", "style_observed"
-  ]).notNull(),
-  
-  // The learning content
+  expertId: varchar("expertId", { length: 50 }).notNull(),
+  role: mysqlEnum("role", ["user", "expert", "system"]).notNull(),
   content: text("content").notNull(),
-  extractedInsights: json("extractedInsights"), // Structured insights extracted
-  
-  // Impact
-  impactedPatterns: json("impactedPatterns"), // Array of pattern IDs affected
-  impactedPreferences: json("impactedPreferences"), // Array of preference IDs affected
-  
-  // Processing status
-  isProcessed: boolean("isProcessed").default(false),
-  processedAt: timestamp("processedAt"),
-  
+  projectId: int("projectId"), // Optional link to project
+  taskId: varchar("taskId", { length: 100 }), // Task this conversation relates to
+  sentiment: mysqlEnum("sentiment", ["positive", "neutral", "negative"]),
+  qualityScore: int("qualityScore"), // 1-10 rating of this response
+  metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 
-export type LearningEvent = typeof learningEvents.$inferSelect;
-export type InsertLearningEvent = typeof learningEvents.$inferInsert;
+export type ExpertConversation = typeof expertConversations.$inferSelect;
+export type InsertExpertConversation = typeof expertConversations.$inferInsert;
 
 /**
- * Autonomy Levels - Track progression toward autonomous operation
+ * Expert memory - key learnings and preferences per expert
+ * What each expert has learned about the user and their work
  */
-export const autonomyLevels = mysqlTable("autonomy_levels", {
+export const expertMemory = mysqlTable("expert_memory", {
   id: int("id").autoincrement().primaryKey(),
   userId: int("userId").notNull(),
-  
-  // Domain
-  domain: varchar("domain", { length: 100 }).notNull(), // e.g., "email_drafting", "scheduling", "research"
-  
-  // Current Level (1-5)
-  // 1: Always ask, 2: Ask for important, 3: Do and report, 4: Do silently, 5: Full autonomy
-  currentLevel: int("currentLevel").default(1).notNull(),
-  targetLevel: int("targetLevel").default(3),
-  
-  // Trust metrics
-  successfulActions: int("successfulActions").default(0),
-  correctedActions: int("correctedActions").default(0),
-  trustScore: int("trustScore").default(0), // 0-100
-  
-  // Progression
-  levelHistory: json("levelHistory"), // Array of { level, date, reason }
-  lastLevelChange: timestamp("lastLevelChange"),
-  
+  expertId: varchar("expertId", { length: 50 }).notNull(),
+  memoryType: mysqlEnum("memoryType", ["preference", "fact", "style", "context", "correction"]).notNull(),
+  key: varchar("key", { length: 200 }).notNull(),
+  value: text("value").notNull(),
+  confidence: float("confidence").default(0.8), // 0-1 confidence in this memory
+  source: varchar("source", { length: 100 }), // "conversation", "feedback", "inferred"
+  usageCount: int("usageCount").default(0), // How often this memory has been used
+  lastUsed: timestamp("lastUsed"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });
 
-export type AutonomyLevel = typeof autonomyLevels.$inferSelect;
-export type InsertAutonomyLevel = typeof autonomyLevels.$inferInsert;
+export type ExpertMemory = typeof expertMemory.$inferSelect;
+export type InsertExpertMemory = typeof expertMemory.$inferInsert;
 
 /**
- * Profile Questions - Structured onboarding questions for initial profile capture
+ * Expert prompt evolution - track how expert prompts change over time
+ * Enables self-improvement based on feedback
  */
-export const profileQuestions = mysqlTable("profile_questions", {
+export const expertPromptEvolution = mysqlTable("expert_prompt_evolution", {
   id: int("id").autoincrement().primaryKey(),
-  
-  // Question details
-  category: mysqlEnum("category", [
-    "identity", "work_style", "communication", "decision_making", "values", "preferences"
-  ]).notNull(),
-  
-  question: text("question").notNull(),
-  questionType: mysqlEnum("questionType", ["choice", "scale", "text", "voice"]).notNull(),
-  options: json("options"), // For choice questions
-  
-  // Mapping
-  profileField: varchar("profileField", { length: 100 }), // Which profile field this updates
-  patternCategory: varchar("patternCategory", { length: 100 }), // Which pattern category this informs
-  
-  // Ordering
-  displayOrder: int("displayOrder").default(0),
-  isRequired: boolean("isRequired").default(false),
-  
-  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  expertId: varchar("expertId", { length: 50 }).notNull(),
+  version: int("version").notNull(),
+  promptAdditions: text("promptAdditions"), // Additional instructions added
+  communicationStyle: text("communicationStyle"), // Learned communication preferences
+  strengthAdjustments: json("strengthAdjustments"), // Adjusted strength scores
+  weaknessAdjustments: json("weaknessAdjustments"), // Adjusted weakness areas
+  reason: text("reason"), // Why this change was made
+  performanceBefore: float("performanceBefore"),
+  performanceAfter: float("performanceAfter"),
+  appliedAt: timestamp("appliedAt").defaultNow().notNull(),
+  createdBy: varchar("createdBy", { length: 50 }), // "chief_of_staff", "user_feedback", "auto"
 });
 
-export type ProfileQuestion = typeof profileQuestions.$inferSelect;
-export type InsertProfileQuestion = typeof profileQuestions.$inferInsert;
+export type ExpertPromptEvolution = typeof expertPromptEvolution.$inferSelect;
+export type InsertExpertPromptEvolution = typeof expertPromptEvolution.$inferInsert;
 
 /**
- * Profile Answers - User responses to profile questions
+ * Expert insights - shared knowledge repository
+ * Insights generated by experts that can be referenced by others
  */
-export const profileAnswers = mysqlTable("profile_answers", {
+export const expertInsights = mysqlTable("expert_insights", {
   id: int("id").autoincrement().primaryKey(),
   userId: int("userId").notNull(),
-  questionId: int("questionId").notNull(),
-  
-  // The answer
-  answer: text("answer").notNull(),
-  answerMetadata: json("answerMetadata"), // Additional context
-  
-  // Processing
-  isProcessed: boolean("isProcessed").default(false),
-  extractedPatterns: json("extractedPatterns"),
-  
-  createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
-});
-
-export type ProfileAnswer = typeof profileAnswers.$inferSelect;
-export type InsertProfileAnswer = typeof profileAnswers.$inferInsert;
-
-
-// ============================================================================
-// INVESTOR DATABASE & CAPITAL MATCHING
-// ============================================================================
-
-/**
- * Investors - Database of potential investors (angels, HNWIs, VCs, etc.)
- */
-export const investors = mysqlTable("investors", {
-  id: int("id").autoincrement().primaryKey(),
-  userId: int("userId").notNull(), // Owner of this contact
-  
-  // Basic Info
-  name: varchar("name", { length: 200 }).notNull(),
-  type: mysqlEnum("type", [
-    "angel", "hnwi", "family_office", "vc", "pe", "bank", "government", "strategic"
-  ]).notNull(),
-  organization: varchar("organization", { length: 200 }),
-  
-  // Investment Parameters
-  ticketSizeMin: int("ticketSizeMin"),
-  ticketSizeMax: int("ticketSizeMax"),
-  currency: varchar("currency", { length: 3 }).default("GBP"),
-  
-  // Focus Areas
-  sectors: json("sectors"),
-  stages: json("stages"),
-  geographies: json("geographies"),
-  dealTypes: json("dealTypes"),
-  
-  // Contact Information
-  email: varchar("email", { length: 200 }),
-  phone: varchar("phone", { length: 50 }),
-  linkedin: varchar("linkedin", { length: 300 }),
-  website: varchar("website", { length: 300 }),
-  
-  // Relationship
-  relationshipStatus: mysqlEnum("relationshipStatus", [
-    "cold", "warm", "hot", "active", "invested", "passed"
-  ]).default("cold"),
-  introducedBy: varchar("introducedBy", { length: 200 }),
-  lastContactDate: timestamp("lastContactDate"),
-  
-  // Notes & Tags
-  notes: text("notes"),
-  tags: json("tags"),
-  
-  // Metadata
-  source: varchar("source", { length: 100 }),
-  isVerified: boolean("isVerified").default(false),
-  
-  createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
-});
-export type Investor = typeof investors.$inferSelect;
-export type InsertInvestor = typeof investors.$inferInsert;
-
-/**
- * Capital Raises - Track fundraising rounds
- */
-export const capitalRaises = mysqlTable("capital_raises", {
-  id: int("id").autoincrement().primaryKey(),
-  userId: int("userId").notNull(),
+  expertId: varchar("expertId", { length: 50 }).notNull(),
+  category: varchar("category", { length: 100 }).notNull(), // "market", "strategy", "operations", etc.
+  title: varchar("title", { length: 300 }).notNull(),
+  insight: text("insight").notNull(),
+  evidence: text("evidence"), // Supporting data/reasoning
+  confidence: float("confidence").default(0.7),
+  tags: json("tags"), // Array of tags for searchability
   projectId: int("projectId"),
-  
-  // Round Details
-  name: varchar("name", { length: 200 }).notNull(),
-  roundType: mysqlEnum("roundType", [
-    "pre_seed", "seed", "series_a", "series_b", "series_c", "growth", 
-    "bridge", "debt", "grant", "convertible"
-  ]).notNull(),
-  
-  // Target
-  targetAmount: int("targetAmount").notNull(),
-  currency: varchar("currency", { length: 3 }).default("GBP"),
-  minTicket: int("minTicket"),
-  maxTicket: int("maxTicket"),
-  
-  // Valuation
-  preMoneyValuation: int("preMoneyValuation"),
-  equityOffered: int("equityOffered"),
-  
-  // Timeline
-  targetCloseDate: timestamp("targetCloseDate"),
-  actualCloseDate: timestamp("actualCloseDate"),
-  
-  // Status
-  status: mysqlEnum("status", [
-    "planning", "preparing", "active", "closing", "closed", "cancelled"
-  ]).default("planning"),
-  
-  // Progress
-  amountRaised: int("amountRaised").default(0),
-  investorCount: int("investorCount").default(0),
-  
-  // Materials
-  pitchDeckUrl: varchar("pitchDeckUrl", { length: 500 }),
-  dataRoomUrl: varchar("dataRoomUrl", { length: 500 }),
-  termSheetUrl: varchar("termSheetUrl", { length: 500 }),
-  
-  // Notes
-  notes: text("notes"),
-  
+  relatedExpertIds: json("relatedExpertIds"), // Other experts who contributed
+  usageCount: int("usageCount").default(0), // How often referenced by other experts
+  validatedBy: json("validatedBy"), // Array of expert IDs who validated this
+  status: mysqlEnum("status", ["draft", "validated", "outdated", "archived"]).default("draft"),
+  expiresAt: timestamp("expiresAt"), // When this insight should be reviewed
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });
-export type CapitalRaise = typeof capitalRaises.$inferSelect;
-export type InsertCapitalRaise = typeof capitalRaises.$inferInsert;
+
+export type ExpertInsight = typeof expertInsights.$inferSelect;
+export type InsertExpertInsight = typeof expertInsights.$inferInsert;
 
 /**
- * Investor Interactions - Track all touchpoints with investors
+ * Expert research tasks - scheduled research for domain updates
+ * Keeps experts current in their field
  */
-export const investorInteractions = mysqlTable("investor_interactions", {
+export const expertResearchTasks = mysqlTable("expert_research_tasks", {
   id: int("id").autoincrement().primaryKey(),
-  userId: int("userId").notNull(),
-  investorId: int("investorId").notNull(),
-  capitalRaiseId: int("capitalRaiseId"),
-  
-  // Interaction Details
-  interactionType: mysqlEnum("interactionType", [
-    "intro_email", "intro_call", "pitch_meeting", "follow_up", 
-    "due_diligence", "term_sheet", "negotiation", "closing", "rejection"
-  ]).notNull(),
-  
-  interactionDate: timestamp("interactionDate").notNull(),
-  
-  // Content
-  subject: varchar("subject", { length: 300 }),
-  notes: text("notes"),
-  outcome: mysqlEnum("outcome", [
-    "positive", "neutral", "negative", "pending"
-  ]).default("pending"),
-  
-  // Next Steps
-  nextAction: varchar("nextAction", { length: 300 }),
-  nextActionDate: timestamp("nextActionDate"),
-  
-  // Attachments
-  attachments: json("attachments"),
-  
+  expertId: varchar("expertId", { length: 50 }).notNull(),
+  topic: varchar("topic", { length: 300 }).notNull(),
+  description: text("description"),
+  priority: mysqlEnum("priority", ["low", "medium", "high", "critical"]).default("medium"),
+  status: mysqlEnum("status", ["pending", "in_progress", "completed", "failed"]).default("pending"),
+  scheduledFor: timestamp("scheduledFor"),
+  completedAt: timestamp("completedAt"),
+  findings: text("findings"), // Research results
+  sourcesUsed: json("sourcesUsed"), // Array of sources consulted
+  insightsGenerated: json("insightsGenerated"), // IDs of insights created from this research
+  assignedBy: varchar("assignedBy", { length: 50 }), // "chief_of_staff", "user", "auto"
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
-export type InvestorInteraction = typeof investorInteractions.$inferSelect;
-export type InsertInvestorInteraction = typeof investorInteractions.$inferInsert;
+
+export type ExpertResearchTask = typeof expertResearchTasks.$inferSelect;
+export type InsertExpertResearchTask = typeof expertResearchTasks.$inferInsert;
 
 /**
- * Investor Commitments - Track soft and hard commitments
+ * Expert collaboration log - track how experts work together
+ * Records cross-expert interactions and knowledge sharing
  */
-export const investorCommitments = mysqlTable("investor_commitments", {
+export const expertCollaboration = mysqlTable("expert_collaboration", {
   id: int("id").autoincrement().primaryKey(),
   userId: int("userId").notNull(),
-  investorId: int("investorId").notNull(),
-  capitalRaiseId: int("capitalRaiseId").notNull(),
-  
-  // Commitment Details
-  commitmentType: mysqlEnum("commitmentType", [
-    "interest", "soft_commit", "hard_commit", "signed", "funded"
-  ]).notNull(),
-  
-  amount: int("amount").notNull(),
-  currency: varchar("currency", { length: 3 }).default("GBP"),
-  
-  // Terms
-  terms: text("terms"),
-  specialConditions: text("specialConditions"),
-  
-  // Status
-  status: mysqlEnum("status", [
-    "pending", "confirmed", "cancelled", "completed"
-  ]).default("pending"),
-  
-  // Dates
-  commitmentDate: timestamp("commitmentDate"),
-  fundingDate: timestamp("fundingDate"),
-  
-  // Notes
-  notes: text("notes"),
-  
-  createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
-});
-export type InvestorCommitment = typeof investorCommitments.$inferSelect;
-export type InsertInvestorCommitment = typeof investorCommitments.$inferInsert;
-
-// ============================================================================
-// PROJECT GENESIS BLUEPRINTS
-// ============================================================================
-
-/**
- * Project Blueprints - Store project configurations and progress
- */
-export const projectBlueprints = mysqlTable("project_blueprints", {
-  id: int("id").autoincrement().primaryKey(),
-  userId: int("userId").notNull(),
+  initiatorExpertId: varchar("initiatorExpertId", { length: 50 }).notNull(),
+  collaboratorExpertIds: json("collaboratorExpertIds").notNull(), // Array of expert IDs
   projectId: int("projectId"),
-  
-  // Blueprint Info
-  blueprintType: varchar("blueprintType", { length: 50 }).notNull(),
-  name: varchar("name", { length: 200 }).notNull(),
-  description: text("description"),
-  
-  // Intake Responses
-  intakeResponses: json("intakeResponses"),
-  intakeCompletedAt: timestamp("intakeCompletedAt"),
-  
-  // Progress Tracking
-  currentStepId: varchar("currentStepId", { length: 100 }),
-  completedSteps: json("completedSteps"),
-  
-  // QA Gates
-  passedGates: json("passedGates"),
-  pendingGates: json("pendingGates"),
-  
-  // Deliverables
-  deliverables: json("deliverables"),
-  
-  // Team Assignment
-  assignedSMEs: json("assignedSMEs"),
-  
-  // Status
-  status: mysqlEnum("status", [
-    "intake", "in_progress", "review", "completed", "on_hold", "cancelled"
-  ]).default("intake"),
-  
-  // Timeline
-  startedAt: timestamp("startedAt"),
-  targetCompletionDate: timestamp("targetCompletionDate"),
+  taskDescription: text("taskDescription").notNull(),
+  outcome: text("outcome"),
+  qualityScore: int("qualityScore"), // 1-10 rating of collaboration
+  lessonsLearned: text("lessonsLearned"), // What was learned from this collaboration
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type ExpertCollaboration = typeof expertCollaboration.$inferSelect;
+export type InsertExpertCollaboration = typeof expertCollaboration.$inferInsert;
+
+/**
+ * Expert coaching sessions - Chief of Staff training experts
+ * Records coaching interactions to improve expert performance
+ */
+export const expertCoachingSessions = mysqlTable("expert_coaching_sessions", {
+  id: int("id").autoincrement().primaryKey(),
+  expertId: varchar("expertId", { length: 50 }).notNull(),
+  coachType: mysqlEnum("coachType", ["chief_of_staff", "peer_expert", "user"]).notNull(),
+  coachId: varchar("coachId", { length: 50 }), // ID of coaching expert if peer
+  focusArea: varchar("focusArea", { length: 200 }).notNull(), // "communication", "accuracy", "speed", etc.
+  feedbackGiven: text("feedbackGiven").notNull(),
+  improvementPlan: text("improvementPlan"),
+  metricsBeforeCoaching: json("metricsBeforeCoaching"),
+  metricsAfterCoaching: json("metricsAfterCoaching"),
+  status: mysqlEnum("status", ["scheduled", "in_progress", "completed", "follow_up_needed"]).default("scheduled"),
+  scheduledAt: timestamp("scheduledAt"),
   completedAt: timestamp("completedAt"),
-  
-  // Notes
-  notes: text("notes"),
-  
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type ExpertCoachingSession = typeof expertCoachingSessions.$inferSelect;
+export type InsertExpertCoachingSession = typeof expertCoachingSessions.$inferInsert;
+
+/**
+ * Expert domain knowledge - structured knowledge per expert domain
+ * Tracks what each expert knows and when it was last updated
+ */
+export const expertDomainKnowledge = mysqlTable("expert_domain_knowledge", {
+  id: int("id").autoincrement().primaryKey(),
+  expertId: varchar("expertId", { length: 50 }).notNull(),
+  domain: varchar("domain", { length: 200 }).notNull(), // "private_equity", "strategy", "marketing", etc.
+  subDomain: varchar("subDomain", { length: 200 }), // More specific area
+  knowledgeLevel: mysqlEnum("knowledgeLevel", ["basic", "intermediate", "advanced", "expert"]).default("advanced"),
+  lastUpdated: timestamp("lastUpdated").defaultNow().notNull(),
+  updateFrequency: varchar("updateFrequency", { length: 50 }).default("weekly"), // How often to refresh
+  sources: json("sources"), // Preferred sources for this domain
+  keyFrameworks: json("keyFrameworks"), // Frameworks this expert uses
+  recentDevelopments: text("recentDevelopments"), // Latest updates in this domain
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });
-export type ProjectBlueprintRecord = typeof projectBlueprints.$inferSelect;
-export type InsertProjectBlueprintRecord = typeof projectBlueprints.$inferInsert;
 
-/**
- * Blueprint Step Progress - Track individual step completion
- */
-export const blueprintStepProgress = mysqlTable("blueprint_step_progress", {
-  id: int("id").autoincrement().primaryKey(),
-  blueprintId: int("blueprintId").notNull(),
-  stepId: varchar("stepId", { length: 100 }).notNull(),
-  
-  // Status
-  status: mysqlEnum("status", [
-    "not_started", "in_progress", "review", "completed", "blocked"
-  ]).default("not_started"),
-  
-  // Progress
-  progressPercent: int("progressPercent").default(0),
-  
-  // Assigned SMEs
-  assignedSMEs: json("assignedSMEs"),
-  
-  // Outputs
-  outputs: json("outputs"),
-  
-  // QA
-  qaStatus: mysqlEnum("qaStatus", [
-    "pending", "in_review", "approved", "rejected"
-  ]).default("pending"),
-  qaFeedback: text("qaFeedback"),
-  qaApprovedBy: varchar("qaApprovedBy", { length: 100 }),
-  qaApprovedAt: timestamp("qaApprovedAt"),
-  
-  // Timing
-  startedAt: timestamp("startedAt"),
-  completedAt: timestamp("completedAt"),
-  
-  // Notes
-  notes: text("notes"),
-  blockerReason: text("blockerReason"),
-  
-  createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
-});
-export type BlueprintStepProgress = typeof blueprintStepProgress.$inferSelect;
-export type InsertBlueprintStepProgress = typeof blueprintStepProgress.$inferInsert;
-
-/**
- * Triple AI Validation - Track AI validation results
- */
-export const tripleAIValidation = mysqlTable("triple_ai_validation", {
-  id: int("id").autoincrement().primaryKey(),
-  blueprintId: int("blueprintId").notNull(),
-  stepId: varchar("stepId", { length: 100 }),
-  gateId: varchar("gateId", { length: 100 }),
-  deliverableId: varchar("deliverableId", { length: 100 }),
-  
-  // Validation Type
-  validationType: mysqlEnum("validationType", [
-    "step_output", "qa_gate", "deliverable", "final_review"
-  ]).notNull(),
-  
-  // AI Validators
-  validator1: varchar("validator1", { length: 100 }).notNull(),
-  validator1Result: mysqlEnum("validator1Result", ["pass", "fail", "conditional"]),
-  validator1Feedback: text("validator1Feedback"),
-  validator1Score: int("validator1Score"),
-  
-  validator2: varchar("validator2", { length: 100 }).notNull(),
-  validator2Result: mysqlEnum("validator2Result", ["pass", "fail", "conditional"]),
-  validator2Feedback: text("validator2Feedback"),
-  validator2Score: int("validator2Score"),
-  
-  validator3: varchar("validator3", { length: 100 }).notNull(),
-  validator3Result: mysqlEnum("validator3Result", ["pass", "fail", "conditional"]),
-  validator3Feedback: text("validator3Feedback"),
-  validator3Score: int("validator3Score"),
-  
-  // Overall Result
-  overallResult: mysqlEnum("overallResult", ["pass", "fail", "conditional"]),
-  consensusScore: int("consensusScore"),
-  consolidatedFeedback: text("consolidatedFeedback"),
-  
-  // User Override
-  userOverride: boolean("userOverride").default(false),
-  userOverrideReason: text("userOverrideReason"),
-  
-  createdAt: timestamp("createdAt").defaultNow().notNull(),
-});
-export type TripleAIValidationRecord = typeof tripleAIValidation.$inferSelect;
-export type InsertTripleAIValidationRecord = typeof tripleAIValidation.$inferInsert;
-
-// ============================================================================
-// ENHANCED VAULT SECURITY
-// ============================================================================
-
-/**
- * Vault Credentials - Encrypted storage for sensitive credentials
- */
-export const vaultCredentials = mysqlTable("vault_credentials", {
-  id: int("id").autoincrement().primaryKey(),
-  userId: int("userId").notNull(),
-  
-  // Credential Info
-  name: varchar("name", { length: 200 }).notNull(),
-  category: mysqlEnum("category", [
-    "api_key", "oauth_token", "password", "certificate", "ssh_key", "other"
-  ]).notNull(),
-  
-  // Encrypted Data (encrypted client-side before storage)
-  encryptedData: text("encryptedData").notNull(),
-  encryptionVersion: int("encryptionVersion").default(1),
-  
-  // Metadata (not encrypted)
-  service: varchar("service", { length: 100 }),
-  username: varchar("username", { length: 200 }),
-  url: varchar("url", { length: 500 }),
-  
-  // Expiry
-  expiresAt: timestamp("expiresAt"),
-  rotationReminder: boolean("rotationReminder").default(false),
-  lastRotated: timestamp("lastRotated"),
-  
-  // Access Control
-  accessLevel: mysqlEnum("accessLevel", ["personal", "shared", "system"]).default("personal"),
-  
-  // Audit
-  lastAccessedAt: timestamp("lastAccessedAt"),
-  accessCount: int("accessCount").default(0),
-  
-  // Notes
-  notes: text("notes"),
-  
-  createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
-});
-export type VaultCredential = typeof vaultCredentials.$inferSelect;
-export type InsertVaultCredential = typeof vaultCredentials.$inferInsert;
-
-/**
- * Registered Devices - Devices authorized to access vault with WebAuthn
- */
-export const registeredDevices = mysqlTable("registered_devices", {
-  id: int("id").autoincrement().primaryKey(),
-  userId: int("userId").notNull(),
-  
-  // Device Info
-  deviceId: varchar("deviceId", { length: 100 }).notNull(),
-  deviceName: varchar("deviceName", { length: 200 }).notNull(),
-  deviceType: mysqlEnum("deviceType", ["desktop", "mobile", "tablet"]).notNull(),
-  
-  // Browser/OS
-  browser: varchar("browser", { length: 100 }),
-  os: varchar("os", { length: 100 }),
-  
-  // WebAuthn Credential (for biometric/passkey)
-  webauthnCredentialId: text("webauthnCredentialId"),
-  webauthnPublicKey: text("webauthnPublicKey"),
-  
-  // Status
-  status: mysqlEnum("status", ["active", "suspended", "revoked"]).default("active"),
-  
-  // Trust
-  isTrusted: boolean("isTrusted").default(false),
-  trustExpiresAt: timestamp("trustExpiresAt"),
-  
-  // Last Activity
-  lastUsedAt: timestamp("lastUsedAt"),
-  lastIpAddress: varchar("lastIpAddress", { length: 50 }),
-  
-  createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
-});
-export type RegisteredDevice = typeof registeredDevices.$inferSelect;
-export type InsertRegisteredDevice = typeof registeredDevices.$inferInsert;
-
-/**
- * Security Settings - User security preferences
- */
-export const securitySettings = mysqlTable("security_settings", {
-  id: int("id").autoincrement().primaryKey(),
-  userId: int("userId").notNull().unique(),
-  
-  // Authentication Methods Enabled
-  passwordEnabled: boolean("passwordEnabled").default(true),
-  biometricEnabled: boolean("biometricEnabled").default(false),
-  hardwareKeyEnabled: boolean("hardwareKeyEnabled").default(false),
-  totpEnabled: boolean("totpEnabled").default(false),
-  
-  // TOTP Secret (encrypted)
-  totpSecret: text("totpSecret"),
-  
-  // Session Settings
-  sessionTimeout: int("sessionTimeout").default(30), // Minutes
-  vaultTimeout: int("vaultTimeout").default(5), // Minutes before vault locks
-  
-  // Security Preferences
-  requireReauthForVault: boolean("requireReauthForVault").default(true),
-  allowRememberDevice: boolean("allowRememberDevice").default(true),
-  maxTrustedDevices: int("maxTrustedDevices").default(5),
-  
-  // Alerts
-  alertOnNewDevice: boolean("alertOnNewDevice").default(true),
-  alertOnFailedAttempts: boolean("alertOnFailedAttempts").default(true),
-  failedAttemptThreshold: int("failedAttemptThreshold").default(3),
-  
-  // Emergency
-  emergencyLockEnabled: boolean("emergencyLockEnabled").default(false),
-  emergencyLockCode: varchar("emergencyLockCode", { length: 100 }),
-  
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
-});
-export type SecuritySetting = typeof securitySettings.$inferSelect;
-export type InsertSecuritySetting = typeof securitySettings.$inferInsert;
-
-
-// ============================================================================
-// VIDEO-FIRST INVESTOR PITCH SYSTEM
-// ============================================================================
-
-/**
- * Video Pitch Packs - Container for investor video presentations
- */
-export const videoPitchPacks = mysqlTable("video_pitch_packs", {
-  id: int("id").autoincrement().primaryKey(),
-  userId: int("userId").notNull(),
-  projectId: int("projectId"), // Links to a Project Genesis project
-  
-  // Pack Info
-  name: varchar("name", { length: 255 }).notNull(),
-  companyName: varchar("companyName", { length: 255 }).notNull(),
-  tagline: varchar("tagline", { length: 500 }),
-  description: text("description"),
-  
-  // Branding
-  logoUrl: varchar("logoUrl", { length: 500 }),
-  primaryColor: varchar("primaryColor", { length: 20 }).default("#8B5CF6"),
-  secondaryColor: varchar("secondaryColor", { length: 20 }).default("#EC4899"),
-  
-  // Social Links
-  websiteUrl: varchar("websiteUrl", { length: 500 }),
-  linkedinUrl: varchar("linkedinUrl", { length: 500 }),
-  twitterUrl: varchar("twitterUrl", { length: 500 }),
-  instagramUrl: varchar("instagramUrl", { length: 500 }),
-  youtubeUrl: varchar("youtubeUrl", { length: 500 }),
-  
-  // Contact
-  contactName: varchar("contactName", { length: 255 }),
-  contactEmail: varchar("contactEmail", { length: 255 }),
-  contactPhone: varchar("contactPhone", { length: 50 }),
-  
-  // Status
-  status: varchar("status", { length: 50 }).default("draft"), // draft, active, archived
-  
-  // Analytics
-  totalViews: int("totalViews").default(0),
-  uniqueViews: int("uniqueViews").default(0),
-  totalWatchTime: int("totalWatchTime").default(0), // Seconds
-  
-  createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
-});
-export type VideoPitchPack = typeof videoPitchPacks.$inferSelect;
-export type InsertVideoPitchPack = typeof videoPitchPacks.$inferInsert;
-
-/**
- * Pitch Videos - Individual videos within a pitch pack
- */
-export const pitchVideos = mysqlTable("pitch_videos", {
-  id: int("id").autoincrement().primaryKey(),
-  packId: int("packId").notNull(),
-  
-  // Video Info
-  title: varchar("title", { length: 255 }).notNull(),
-  type: varchar("type", { length: 50 }).notNull(), // overview, product, team, traction, custom
-  description: text("description"),
-  duration: int("duration"), // Seconds
-  
-  // Video Source
-  videoUrl: varchar("videoUrl", { length: 500 }),
-  thumbnailUrl: varchar("thumbnailUrl", { length: 500 }),
-  videoProvider: varchar("videoProvider", { length: 50 }), // youtube, vimeo, s3, custom
-  videoId: varchar("videoId", { length: 100 }), // External video ID
-  
-  // Script
-  scriptId: int("scriptId"), // Links to video_scripts
-  
-  // Display
-  displayOrder: int("displayOrder").default(0),
-  isPublished: boolean("isPublished").default(false),
-  
-  // Analytics
-  views: int("views").default(0),
-  completionRate: decimal("completionRate", { precision: 5, scale: 2 }).default("0"), // Percentage
-  avgWatchTime: int("avgWatchTime").default(0), // Seconds
-  
-  createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
-});
-export type PitchVideo = typeof pitchVideos.$inferSelect;
-export type InsertPitchVideo = typeof pitchVideos.$inferInsert;
-
-/**
- * Video Scripts - AI-generated scripts for pitch videos
- */
-export const videoScripts = mysqlTable("video_scripts", {
-  id: int("id").autoincrement().primaryKey(),
-  packId: int("packId").notNull(),
-  videoType: varchar("videoType", { length: 50 }).notNull(), // overview, product, team, traction
-  
-  // Script Content
-  title: varchar("title", { length: 255 }).notNull(),
-  targetDuration: int("targetDuration").default(120), // Target duration in seconds
-  
-  // Script Sections
-  hook: text("hook"), // Opening hook (first 5-10 seconds)
-  introduction: text("introduction"),
-  mainContent: text("mainContent"),
-  keyPoints: json("keyPoints"), // Array of key points to cover
-  callToAction: text("callToAction"),
-  fullScript: text("fullScript"), // Complete script
-  
-  // Visual Suggestions
-  visualSuggestions: json("visualSuggestions"), // Array of visual/b-roll suggestions
-  graphicsSuggestions: json("graphicsSuggestions"), // Text overlays, graphics
-  
-  // Tone & Style
-  tone: varchar("tone", { length: 50 }).default("professional"), // professional, casual, energetic, inspirational
-  speakingPace: varchar("speakingPace", { length: 50 }).default("moderate"), // slow, moderate, fast
-  
-  // Source Data
-  sourceData: json("sourceData"), // Business data used to generate script
-  
-  // Versioning
-  version: int("version").default(1),
-  status: varchar("status", { length: 50 }).default("draft"), // draft, approved, in_production, complete
-  
-  // Feedback
-  feedback: text("feedback"),
-  revisionNotes: text("revisionNotes"),
-  
-  createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
-});
-export type VideoScript = typeof videoScripts.$inferSelect;
-export type InsertVideoScript = typeof videoScripts.$inferInsert;
-
-/**
- * Pitch Landing Pages - Secure shareable pages for investor access
- */
-export const pitchLandingPages = mysqlTable("pitch_landing_pages", {
-  id: int("id").autoincrement().primaryKey(),
-  packId: int("packId").notNull(),
-  
-  // Access Control
-  slug: varchar("slug", { length: 100 }).notNull().unique(), // URL slug
-  accessType: varchar("accessType", { length: 50 }).default("link"), // public, link, password, invite
-  password: varchar("password", { length: 255 }), // Hashed password if password-protected
-  
-  // Time-Limited Access
-  expiresAt: timestamp("expiresAt"),
-  maxViews: int("maxViews"), // Null = unlimited
-  
-  // Customization
-  customTitle: varchar("customTitle", { length: 255 }),
-  customMessage: text("customMessage"), // Welcome message for this link
-  showDownloads: boolean("showDownloads").default(true),
-  showSocials: boolean("showSocials").default(true),
-  showContact: boolean("showContact").default(true),
-  
-  // Downloadable Materials
-  pitchDeckUrl: varchar("pitchDeckUrl", { length: 500 }),
-  onePagerUrl: varchar("onePagerUrl", { length: 500 }),
-  financialsUrl: varchar("financialsUrl", { length: 500 }),
-  additionalDocs: json("additionalDocs"), // Array of {name, url}
-  
-  // Tracking
-  isActive: boolean("isActive").default(true),
-  
-  createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
-});
-export type PitchLandingPage = typeof pitchLandingPages.$inferSelect;
-export type InsertPitchLandingPage = typeof pitchLandingPages.$inferInsert;
-
-/**
- * Landing Page Access Logs - Track who views the pitch
- */
-export const landingPageAccessLogs = mysqlTable("landing_page_access_logs", {
-  id: int("id").autoincrement().primaryKey(),
-  landingPageId: int("landingPageId").notNull(),
-  
-  // Visitor Info
-  visitorEmail: varchar("visitorEmail", { length: 255 }), // If captured
-  visitorName: varchar("visitorName", { length: 255 }),
-  investorId: int("investorId"), // Links to investors table if known
-  
-  // Session Info
-  sessionId: varchar("sessionId", { length: 100 }).notNull(),
-  ipAddress: varchar("ipAddress", { length: 50 }),
-  userAgent: text("userAgent"),
-  referrer: varchar("referrer", { length: 500 }),
-  
-  // Device Info
-  deviceType: varchar("deviceType", { length: 50 }), // desktop, mobile, tablet
-  browser: varchar("browser", { length: 100 }),
-  os: varchar("os", { length: 100 }),
-  country: varchar("country", { length: 100 }),
-  city: varchar("city", { length: 100 }),
-  
-  // Engagement
-  videosWatched: json("videosWatched"), // Array of {videoId, watchTime, completed}
-  totalWatchTime: int("totalWatchTime").default(0), // Seconds
-  documentsDownloaded: json("documentsDownloaded"), // Array of document names
-  socialClicks: json("socialClicks"), // Array of social platforms clicked
-  
-  // Timestamps
-  accessedAt: timestamp("accessedAt").defaultNow().notNull(),
-  lastActivityAt: timestamp("lastActivityAt").defaultNow().notNull(),
-});
-export type LandingPageAccessLog = typeof landingPageAccessLogs.$inferSelect;
-export type InsertLandingPageAccessLog = typeof landingPageAccessLogs.$inferInsert;
-
-/**
- * Investor Invites - Track specific investor invitations
- */
-export const investorInvites = mysqlTable("investor_invites", {
-  id: int("id").autoincrement().primaryKey(),
-  landingPageId: int("landingPageId").notNull(),
-  investorId: int("investorId"), // Links to investors table
-  
-  // Invite Details
-  email: varchar("email", { length: 255 }).notNull(),
-  name: varchar("name", { length: 255 }),
-  personalMessage: text("personalMessage"),
-  
-  // Unique Access
-  inviteToken: varchar("inviteToken", { length: 100 }).notNull().unique(),
-  
-  // Status
-  status: varchar("status", { length: 50 }).default("sent"), // sent, opened, viewed, engaged, expired
-  sentAt: timestamp("sentAt").defaultNow().notNull(),
-  openedAt: timestamp("openedAt"),
-  firstViewedAt: timestamp("firstViewedAt"),
-  lastViewedAt: timestamp("lastViewedAt"),
-  
-  // Engagement Metrics
-  totalViews: int("totalViews").default(0),
-  totalWatchTime: int("totalWatchTime").default(0),
-  
-  // Expiry
-  expiresAt: timestamp("expiresAt"),
-});
-export type InvestorInvite = typeof investorInvites.$inferSelect;
-export type InsertInvestorInvite = typeof investorInvites.$inferInsert;
+export type ExpertDomainKnowledge = typeof expertDomainKnowledge.$inferSelect;
+export type InsertExpertDomainKnowledge = typeof expertDomainKnowledge.$inferInsert;

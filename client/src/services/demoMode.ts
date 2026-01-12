@@ -115,7 +115,7 @@ export const sampleTasks: DemoTask[] = [
   },
   {
     id: 'task-4',
-    title: 'Train Digital Twin on negotiation patterns',
+    title: 'Train Chief of Staff on negotiation patterns',
     description: 'Upload past negotiation transcripts for learning',
     priority: 'low',
     status: 'pending',
@@ -132,7 +132,7 @@ export const sampleTasks: DemoTask[] = [
   },
 ];
 
-// Sample Digital Twin Conversations
+// Sample Chief of Staff Conversations
 export const sampleConversations: DemoConversation[] = [
   {
     id: 'conv-1',
@@ -181,7 +181,7 @@ export const sampleNotifications = [
   {
     id: 'notif-3',
     type: 'twin',
-    title: 'Digital Twin Suggestion',
+    title: 'Chief of Staff Suggestion',
     message: 'Based on patterns, I recommend scheduling a weekly project sync',
     timestamp: new Date(Date.now() - 4 * 60 * 60 * 1000),
     read: true,

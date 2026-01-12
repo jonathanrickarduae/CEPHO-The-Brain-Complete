@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, createContext, useContext, ReactNode } from 'react';
 import { createPortal } from 'react-dom';
+import { Trophy, Flame, Star, Award } from 'lucide-react';
 
 // Confetti particle
 interface Particle {
@@ -186,13 +187,21 @@ interface AchievementToastProps {
   onClose: () => void;
 }
 
-function AchievementToast({ title, description, icon = '🏆', onClose }: AchievementToastProps) {
+function AchievementToast({ title, description, icon = 'trophy', onClose }: AchievementToastProps) {
+  const getIcon = () => {
+    switch (icon) {
+      case 'streak': return <Flame className="w-7 h-7 text-white" />;
+      case 'star': return <Star className="w-7 h-7 text-white" />;
+      case 'award': return <Award className="w-7 h-7 text-white" />;
+      default: return <Trophy className="w-7 h-7 text-white" />;
+    }
+  };
   return createPortal(
     <div className="fixed top-4 left-1/2 -translate-x-1/2 z-[9998] animate-in slide-in-from-top-4 duration-500">
       <div className="bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border border-yellow-500/50 rounded-2xl p-4 shadow-xl backdrop-blur-sm">
         <div className="flex items-center gap-4">
-          <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-yellow-500 to-orange-500 flex items-center justify-center text-2xl animate-bounce">
-            {icon}
+          <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-yellow-500 to-orange-500 flex items-center justify-center animate-bounce">
+            {getIcon()}
           </div>
           <div>
             <div className="text-xs text-yellow-400 uppercase tracking-wider mb-1">

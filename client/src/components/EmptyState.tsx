@@ -72,8 +72,8 @@ const EMPTY_STATE_CONFIGS: Record<EmptyStateType, EmptyStateConfig> = {
   tasks: {
     icon: Zap,
     title: 'No tasks for today',
-    description: 'Check your Daily Brief for new priorities, or create a task.',
-    actionLabel: 'View Daily Brief',
+    description: 'Check your The Signal for new priorities, or create a task.',
+    actionLabel: 'View The Signal',
     secondaryActionLabel: 'Add Task',
     color: 'text-amber-400',
     bgGradient: 'from-amber-500/10 to-amber-500/5',
@@ -81,7 +81,7 @@ const EMPTY_STATE_CONFIGS: Record<EmptyStateType, EmptyStateConfig> = {
   insights: {
     icon: Sparkles,
     title: 'Insights coming soon',
-    description: 'As you use The Brain more, your Chief of Staff will surface personalized insights here.',
+    description: 'As you use Cepho more, your Chief of Staff will surface personalized insights here.',
     color: 'text-primary',
     bgGradient: 'from-primary/10 to-primary/5',
   },
@@ -105,7 +105,7 @@ const EMPTY_STATE_CONFIGS: Record<EmptyStateType, EmptyStateConfig> = {
   goals: {
     icon: Target,
     title: 'Set your first goal',
-    description: 'Define what success looks like and let The Brain help you get there.',
+    description: 'Define what success looks like and let Cepho help you get there.',
     actionLabel: 'Create Goal',
     color: 'text-green-400',
     bgGradient: 'from-green-500/10 to-green-500/5',

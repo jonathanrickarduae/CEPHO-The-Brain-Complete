@@ -11,7 +11,7 @@ interface ShortcutItem {
 const SHORTCUTS: ShortcutItem[] = [
   // Navigation
   { keys: ['⌘/Ctrl', 'D'], description: 'Go to Dashboard', category: 'Navigation' },
-  { keys: ['⌘/Ctrl', 'B'], description: 'Go to Daily Brief', category: 'Navigation' },
+  { keys: ['⌘/Ctrl', 'B'], description: 'Go to The Signal', category: 'Navigation' },
   { keys: ['⌘/Ctrl', 'E'], description: 'Go to AI Experts', category: 'Navigation' },
   { keys: ['⌘/Ctrl', 'T'], description: 'Go to Chief of Staff', category: 'Navigation' },
   { keys: ['⌘/Ctrl', 'W'], description: 'Go to Workflow', category: 'Navigation' },

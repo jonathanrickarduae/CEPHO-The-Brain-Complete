@@ -85,7 +85,7 @@ export const sampleTasks = [
     priority: 'high',
     status: 'pending',
     dueDate: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000),
-    assignedTo: 'Digital Twin',
+    assignedTo: 'Chief of Staff',
     estimatedHours: 0.5,
   },
   {
@@ -105,7 +105,7 @@ export const sampleTasks = [
     priority: 'low',
     status: 'pending',
     dueDate: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
-    assignedTo: 'Digital Twin',
+    assignedTo: 'Chief of Staff',
     estimatedHours: 0.5,
   },
 ];
@@ -213,7 +213,7 @@ export const sampleNotifications = [
   {
     id: 'notif-3',
     type: 'info',
-    title: 'Digital Twin Learning',
+    title: 'Chief of Staff Learning',
     message: 'Your feedback has improved accuracy by 2%',
     timestamp: new Date(Date.now() - 5 * 60 * 60 * 1000),
     read: true,

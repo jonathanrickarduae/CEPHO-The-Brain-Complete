@@ -1,6 +1,12 @@
 /**
  * Project Genesis Blueprint System
+ * 
  * Standardised blueprints for each project type and deliverable.
+ * Each blueprint includes:
+ * - Pre-assigned SME teams
+ * - Process flow with QA checkpoints
+ * - Standard deliverables
+ * - Quality gates
  */
 
 export interface SMEAssignment {
@@ -56,6 +62,7 @@ export interface ProjectType {
   }[];
 }
 
+// Project Types for Genesis Wizard
 export const PROJECT_TYPES: ProjectType[] = [
   {
     id: 'revenue-business',
@@ -124,6 +131,7 @@ export const PROJECT_TYPES: ProjectType[] = [
   }
 ];
 
+// Standard Blueprints
 export const BLUEPRINTS: Blueprint[] = [
   {
     id: 'pitch-deck',
@@ -233,249 +241,28 @@ export const BLUEPRINTS: Blueprint[] = [
     ],
     standardDeliverables: ['DD summary report', 'Financial analysis', 'Legal review', 'Operations assessment', 'Risk matrix', 'Recommendation memo'],
     estimatedDuration: '2-4 weeks'
-  },
-  {
-    id: 'deep-research',
-    name: 'Deep Research Report',
-    category: 'business',
-    description: 'In-depth research and analysis on a specific topic',
-    projectTypes: ['strategic-initiative', 'due-diligence'],
-    smeTeam: [
-      { role: 'Lead', expertId: 'research-001', expertName: 'Research Analyst', responsibility: 'Research design and synthesis' },
-      { role: 'Data', expertId: 'data-001', expertName: 'Data Analyst', responsibility: 'Data collection and analysis' },
-      { role: 'Subject Expert', expertId: 'sme-001', expertName: 'Domain Expert', responsibility: 'Subject matter expertise' },
-    ],
-    processSteps: [
-      { id: 'dr-1', order: 1, name: 'Research Brief', description: 'Define research questions and scope', duration: '1-2 hours', assignedTo: 'Lead', deliverables: ['Research brief'], qaCheckpoint: 'qa-brief' },
-      { id: 'dr-2', order: 2, name: 'Data Collection', description: 'Gather primary and secondary data', duration: '4-8 hours', assignedTo: 'Data', deliverables: ['Data set', 'Source log'] },
-      { id: 'dr-3', order: 3, name: 'Analysis', description: 'Analyse data and identify insights', duration: '4-6 hours', assignedTo: 'Lead', deliverables: ['Analysis notes'], qaCheckpoint: 'qa-analysis' },
-      { id: 'dr-4', order: 4, name: 'Expert Review', description: 'Validate findings with domain expert', duration: '2-3 hours', assignedTo: 'Subject Expert', deliverables: ['Expert feedback'] },
-      { id: 'dr-5', order: 5, name: 'Report Writing', description: 'Compile final research report', duration: '3-4 hours', assignedTo: 'Lead', deliverables: ['Research report'], qaCheckpoint: 'qa-report' },
-    ],
-    qaCheckpoints: [
-      { id: 'qa-brief', phase: 'Brief', name: 'Brief Approval', criteria: ['Questions clear', 'Scope defined', 'Sources identified'], approver: 'user', required: true },
-      { id: 'qa-analysis', phase: 'Analysis', name: 'Analysis Review', criteria: ['Data validated', 'Methodology sound', 'Insights actionable'], approver: 'chief-of-staff', required: true },
-      { id: 'qa-report', phase: 'Report', name: 'Report Approval', criteria: ['Findings clear', 'Recommendations actionable', 'Sources cited'], approver: 'user', required: true },
-    ],
-    standardDeliverables: ['Research report', 'Executive summary', 'Data appendix', 'Source bibliography'],
-    estimatedDuration: '3-5 days'
-  },
-  {
-    id: 'social-media',
-    name: 'Social Media Campaign',
-    category: 'marketing',
-    description: 'Social media content strategy and campaign execution',
-    projectTypes: ['product-launch', 'revenue-business'],
-    smeTeam: [
-      { role: 'Lead', expertId: 'social-001', expertName: 'Social Media Strategist', responsibility: 'Campaign strategy and oversight' },
-      { role: 'Content', expertId: 'content-001', expertName: 'Content Creator', responsibility: 'Content creation and copywriting' },
-      { role: 'Design', expertId: 'lf-design-001', expertName: 'Alessandro Luxe', responsibility: 'Visual content and brand consistency' },
-      { role: 'Analytics', expertId: 'analytics-001', expertName: 'Analytics SME', responsibility: 'Performance tracking and optimisation' },
-    ],
-    processSteps: [
-      { id: 'sm-1', order: 1, name: 'Audience Analysis', description: 'Define target audience and platforms', duration: '2-3 hours', assignedTo: 'Lead', deliverables: ['Audience personas', 'Platform strategy'], qaCheckpoint: 'qa-audience' },
-      { id: 'sm-2', order: 2, name: 'Content Calendar', description: 'Plan content themes and schedule', duration: '2-3 hours', assignedTo: 'Content', deliverables: ['Content calendar'] },
-      { id: 'sm-3', order: 3, name: 'Content Creation', description: 'Create posts, graphics, and copy', duration: '6-8 hours', assignedTo: 'Content', deliverables: ['Content assets'], qaCheckpoint: 'qa-content' },
-      { id: 'sm-4', order: 4, name: 'Visual Design', description: 'Design graphics and templates', duration: '4-6 hours', assignedTo: 'Design', deliverables: ['Design assets', 'Templates'] },
-      { id: 'sm-5', order: 5, name: 'Launch & Monitor', description: 'Execute campaign and track performance', duration: 'Ongoing', assignedTo: 'Analytics', deliverables: ['Performance reports'], qaCheckpoint: 'qa-performance' },
-    ],
-    qaCheckpoints: [
-      { id: 'qa-audience', phase: 'Planning', name: 'Strategy Approval', criteria: ['Audience defined', 'Platforms selected', 'Goals set'], approver: 'user', required: true },
-      { id: 'qa-content', phase: 'Content', name: 'Content Review', criteria: ['On brand', 'Engaging', 'Compliant'], approver: 'user', required: true },
-      { id: 'qa-performance', phase: 'Execution', name: 'Performance Review', criteria: ['KPIs met', 'Engagement positive', 'ROI tracked'], approver: 'chief-of-staff', required: false },
-    ],
-    standardDeliverables: ['Content calendar', 'Post templates', 'Graphics pack', 'Performance dashboard', 'Monthly reports'],
-    estimatedDuration: 'Ongoing (setup: 1 week)'
   }
 ];
 
+/**
+ * Get blueprint by ID
+ */
 export function getBlueprint(id: string): Blueprint | undefined {
   return BLUEPRINTS.find(b => b.id === id);
 }
 
+/**
+ * Get blueprints for a project type
+ */
 export function getBlueprintsForProjectType(projectTypeId: string): Blueprint[] {
   const projectType = PROJECT_TYPES.find(pt => pt.id === projectTypeId);
   if (!projectType) return [];
-  return BLUEPRINTS.filter(b => projectType.blueprints.includes(b.id) || b.projectTypes.includes(projectTypeId));
+  return BLUEPRINTS.filter(b => projectType.blueprints.includes(b.id));
 }
 
+/**
+ * Get project type by ID
+ */
 export function getProjectType(id: string): ProjectType | undefined {
   return PROJECT_TYPES.find(pt => pt.id === id);
-}
-
-
-// Additional Blueprints for comprehensive coverage
-
-export const ADDITIONAL_BLUEPRINTS: Blueprint[] = [
-  {
-    id: 'business-plan',
-    name: 'Business Plan',
-    category: 'business',
-    description: 'Comprehensive business plan document',
-    projectTypes: ['revenue-business', 'funding-seeking'],
-    smeTeam: [
-      { role: 'Lead', expertId: 'strat-001', expertName: 'Strategy SME', responsibility: 'Overall strategy and structure' },
-      { role: 'Financial', expertId: 'inv-003', expertName: 'Ray Dalio Composite', responsibility: 'Financial planning and projections' },
-      { role: 'Operations', expertId: 'ops-001', expertName: 'Operations SME', responsibility: 'Operational planning' },
-      { role: 'Market', expertId: 'mkt-001', expertName: 'Marketing Strategist', responsibility: 'Market analysis and go-to-market' },
-    ],
-    processSteps: [
-      { id: 'bp-1', order: 1, name: 'Executive Summary', description: 'Draft executive summary and vision', duration: '2-3 hours', assignedTo: 'Lead', deliverables: ['Executive summary draft'], qaCheckpoint: 'qa-exec' },
-      { id: 'bp-2', order: 2, name: 'Market Analysis', description: 'Research market size, trends, competition', duration: '4-6 hours', assignedTo: 'Market', deliverables: ['Market analysis section'] },
-      { id: 'bp-3', order: 3, name: 'Business Model', description: 'Define revenue model and unit economics', duration: '3-4 hours', assignedTo: 'Financial', deliverables: ['Business model canvas', 'Unit economics'], qaCheckpoint: 'qa-model' },
-      { id: 'bp-4', order: 4, name: 'Operations Plan', description: 'Define operational requirements', duration: '3-4 hours', assignedTo: 'Operations', deliverables: ['Operations plan'] },
-      { id: 'bp-5', order: 5, name: 'Financial Projections', description: 'Build 3-5 year financial projections', duration: '4-6 hours', assignedTo: 'Financial', deliverables: ['Financial projections'], qaCheckpoint: 'qa-financials' },
-      { id: 'bp-6', order: 6, name: 'Final Assembly', description: 'Compile and polish final document', duration: '2-3 hours', assignedTo: 'Lead', deliverables: ['Complete business plan'], qaCheckpoint: 'qa-final' },
-    ],
-    qaCheckpoints: [
-      { id: 'qa-exec', phase: 'Executive', name: 'Vision Alignment', criteria: ['Vision clear', 'Value proposition defined', 'Target market identified'], approver: 'user', required: true },
-      { id: 'qa-model', phase: 'Model', name: 'Business Model Review', criteria: ['Revenue model viable', 'Unit economics positive', 'Scalability clear'], approver: 'chief-of-staff', required: true },
-      { id: 'qa-financials', phase: 'Financial', name: 'Financial Review', criteria: ['Assumptions documented', 'Projections realistic', 'Funding needs clear'], approver: 'user', required: true },
-      { id: 'qa-final', phase: 'Final', name: 'Final Approval', criteria: ['All sections complete', 'Narrative coherent', 'Professional quality'], approver: 'user', required: true },
-    ],
-    standardDeliverables: ['Business plan document', 'Executive summary', 'Financial model', 'Appendices'],
-    estimatedDuration: '1-2 weeks'
-  },
-  {
-    id: 'website-build',
-    name: 'Website Build',
-    category: 'marketing',
-    description: 'Design and build a professional website',
-    projectTypes: ['revenue-business', 'product-launch'],
-    smeTeam: [
-      { role: 'Lead', expertId: 'tech-001', expertName: 'Technical Lead', responsibility: 'Technical architecture and build' },
-      { role: 'Design', expertId: 'lf-design-001', expertName: 'Alessandro Luxe', responsibility: 'Visual design and UX' },
-      { role: 'Content', expertId: 'content-001', expertName: 'Content Strategist', responsibility: 'Copywriting and content' },
-      { role: 'SEO', expertId: 'seo-001', expertName: 'SEO Specialist', responsibility: 'Search optimisation' },
-    ],
-    processSteps: [
-      { id: 'wb-1', order: 1, name: 'Requirements & Sitemap', description: 'Define requirements and site structure', duration: '2-3 hours', assignedTo: 'Lead', deliverables: ['Requirements doc', 'Sitemap'], qaCheckpoint: 'qa-req' },
-      { id: 'wb-2', order: 2, name: 'Wireframes', description: 'Create page wireframes', duration: '3-4 hours', assignedTo: 'Design', deliverables: ['Wireframes'], qaCheckpoint: 'qa-wireframes' },
-      { id: 'wb-3', order: 3, name: 'Visual Design', description: 'Design visual mockups', duration: '4-6 hours', assignedTo: 'Design', deliverables: ['Design mockups'], qaCheckpoint: 'qa-design' },
-      { id: 'wb-4', order: 4, name: 'Content Creation', description: 'Write all page content', duration: '4-6 hours', assignedTo: 'Content', deliverables: ['Page content'] },
-      { id: 'wb-5', order: 5, name: 'Development', description: 'Build the website', duration: '8-16 hours', assignedTo: 'Lead', deliverables: ['Working website'] },
-      { id: 'wb-6', order: 6, name: 'SEO & Launch', description: 'Optimise and launch', duration: '2-3 hours', assignedTo: 'SEO', deliverables: ['SEO report', 'Live website'], qaCheckpoint: 'qa-launch' },
-    ],
-    qaCheckpoints: [
-      { id: 'qa-req', phase: 'Planning', name: 'Requirements Approval', criteria: ['Goals clear', 'Pages defined', 'Features listed'], approver: 'user', required: true },
-      { id: 'qa-wireframes', phase: 'Design', name: 'Wireframe Review', criteria: ['User flow logical', 'Key pages covered', 'Mobile considered'], approver: 'user', required: true },
-      { id: 'qa-design', phase: 'Design', name: 'Design Approval', criteria: ['Brand consistent', 'Visually appealing', 'Responsive design'], approver: 'user', required: true },
-      { id: 'qa-launch', phase: 'Launch', name: 'Launch Checklist', criteria: ['All pages working', 'Forms tested', 'SEO implemented', 'Analytics installed'], approver: 'user', required: true },
-    ],
-    standardDeliverables: ['Live website', 'Design files', 'Content document', 'SEO report', 'Analytics setup'],
-    estimatedDuration: '2-4 weeks'
-  },
-  {
-    id: 'legal-documents',
-    name: 'Legal Document Pack',
-    category: 'operations',
-    description: 'Standard legal documents and contracts',
-    projectTypes: ['revenue-business', 'funding-seeking'],
-    smeTeam: [
-      { role: 'Lead', expertId: 'legal-001', expertName: 'Legal SME', responsibility: 'Legal review and drafting' },
-      { role: 'Commercial', expertId: 'strat-001', expertName: 'Strategy SME', responsibility: 'Commercial terms alignment' },
-    ],
-    processSteps: [
-      { id: 'ld-1', order: 1, name: 'Requirements', description: 'Identify required documents', duration: '1-2 hours', assignedTo: 'Lead', deliverables: ['Document list'], qaCheckpoint: 'qa-req' },
-      { id: 'ld-2', order: 2, name: 'Drafting', description: 'Draft all documents', duration: '4-8 hours', assignedTo: 'Lead', deliverables: ['Draft documents'] },
-      { id: 'ld-3', order: 3, name: 'Commercial Review', description: 'Review commercial terms', duration: '2-3 hours', assignedTo: 'Commercial', deliverables: ['Reviewed documents'], qaCheckpoint: 'qa-commercial' },
-      { id: 'ld-4', order: 4, name: 'Final Review', description: 'Legal final review', duration: '2-3 hours', assignedTo: 'Lead', deliverables: ['Final documents'], qaCheckpoint: 'qa-final' },
-    ],
-    qaCheckpoints: [
-      { id: 'qa-req', phase: 'Planning', name: 'Scope Approval', criteria: ['Documents identified', 'Jurisdictions confirmed', 'Timeline agreed'], approver: 'user', required: true },
-      { id: 'qa-commercial', phase: 'Review', name: 'Commercial Terms Review', criteria: ['Terms competitive', 'Risks acceptable', 'Aligned with strategy'], approver: 'user', required: true },
-      { id: 'qa-final', phase: 'Final', name: 'Legal Sign-off', criteria: ['Legally sound', 'Compliant', 'Ready for use'], approver: 'user', required: true },
-    ],
-    standardDeliverables: ['Terms of Service', 'Privacy Policy', 'NDA template', 'Service Agreement', 'Employment contracts'],
-    estimatedDuration: '1-2 weeks'
-  },
-  {
-    id: 'investor-deck',
-    name: 'Investor Data Room',
-    category: 'investment',
-    description: 'Complete investor data room setup',
-    projectTypes: ['funding-seeking'],
-    smeTeam: [
-      { role: 'Lead', expertId: 'inv-001', expertName: 'Warren Buffett Composite', responsibility: 'Data room structure and narrative' },
-      { role: 'Financial', expertId: 'inv-003', expertName: 'Ray Dalio Composite', responsibility: 'Financial documentation' },
-      { role: 'Legal', expertId: 'legal-001', expertName: 'Legal SME', responsibility: 'Legal documentation' },
-      { role: 'Operations', expertId: 'ops-001', expertName: 'Operations SME', responsibility: 'Operational documentation' },
-    ],
-    processSteps: [
-      { id: 'dr-1', order: 1, name: 'Structure Setup', description: 'Create data room structure', duration: '1-2 hours', assignedTo: 'Lead', deliverables: ['Folder structure', 'Index'], qaCheckpoint: 'qa-structure' },
-      { id: 'dr-2', order: 2, name: 'Financial Docs', description: 'Prepare financial documentation', duration: '4-6 hours', assignedTo: 'Financial', deliverables: ['Financial statements', 'Projections', 'Cap table'] },
-      { id: 'dr-3', order: 3, name: 'Legal Docs', description: 'Prepare legal documentation', duration: '3-4 hours', assignedTo: 'Legal', deliverables: ['Corporate docs', 'Contracts', 'IP docs'] },
-      { id: 'dr-4', order: 4, name: 'Operations Docs', description: 'Prepare operational documentation', duration: '3-4 hours', assignedTo: 'Operations', deliverables: ['Team bios', 'Product docs', 'Customer data'] },
-      { id: 'dr-5', order: 5, name: 'Final Assembly', description: 'Assemble and quality check', duration: '2-3 hours', assignedTo: 'Lead', deliverables: ['Complete data room'], qaCheckpoint: 'qa-final' },
-    ],
-    qaCheckpoints: [
-      { id: 'qa-structure', phase: 'Setup', name: 'Structure Approval', criteria: ['Logical organisation', 'All sections covered', 'Access controls set'], approver: 'user', required: true },
-      { id: 'qa-final', phase: 'Final', name: 'Data Room Review', criteria: ['All documents uploaded', 'Quality checked', 'Ready for investors'], approver: 'user', required: true },
-    ],
-    standardDeliverables: ['Complete data room', 'Document index', 'Executive summary', 'FAQ document'],
-    estimatedDuration: '1-2 weeks'
-  },
-  {
-    id: 'go-to-market',
-    name: 'Go-to-Market Strategy',
-    category: 'marketing',
-    description: 'Comprehensive go-to-market plan for product launch',
-    projectTypes: ['product-launch', 'revenue-business'],
-    smeTeam: [
-      { role: 'Lead', expertId: 'strat-001', expertName: 'Strategy SME', responsibility: 'Overall GTM strategy' },
-      { role: 'Sales', expertId: 'sales-001', expertName: 'Sales Strategist', responsibility: 'Sales strategy and enablement' },
-      { role: 'Marketing', expertId: 'mkt-001', expertName: 'Marketing Strategist', responsibility: 'Marketing and demand gen' },
-      { role: 'Product', expertId: 'prod-001', expertName: 'Product Manager', responsibility: 'Product positioning' },
-    ],
-    processSteps: [
-      { id: 'gtm-1', order: 1, name: 'Market Segmentation', description: 'Define target segments and ICP', duration: '3-4 hours', assignedTo: 'Lead', deliverables: ['Segment analysis', 'ICP document'], qaCheckpoint: 'qa-segments' },
-      { id: 'gtm-2', order: 2, name: 'Positioning', description: 'Define product positioning', duration: '2-3 hours', assignedTo: 'Product', deliverables: ['Positioning statement', 'Messaging framework'] },
-      { id: 'gtm-3', order: 3, name: 'Channel Strategy', description: 'Define sales and marketing channels', duration: '3-4 hours', assignedTo: 'Sales', deliverables: ['Channel plan'], qaCheckpoint: 'qa-channels' },
-      { id: 'gtm-4', order: 4, name: 'Demand Gen Plan', description: 'Create demand generation plan', duration: '3-4 hours', assignedTo: 'Marketing', deliverables: ['Demand gen plan', 'Campaign calendar'] },
-      { id: 'gtm-5', order: 5, name: 'Sales Enablement', description: 'Create sales materials', duration: '4-6 hours', assignedTo: 'Sales', deliverables: ['Sales deck', 'Battle cards', 'Objection handling'] },
-      { id: 'gtm-6', order: 6, name: 'Launch Plan', description: 'Finalise launch timeline', duration: '2-3 hours', assignedTo: 'Lead', deliverables: ['Launch plan', 'Success metrics'], qaCheckpoint: 'qa-launch' },
-    ],
-    qaCheckpoints: [
-      { id: 'qa-segments', phase: 'Strategy', name: 'Segment Approval', criteria: ['Segments validated', 'ICP clear', 'TAM/SAM/SOM defined'], approver: 'user', required: true },
-      { id: 'qa-channels', phase: 'Channels', name: 'Channel Review', criteria: ['Channels appropriate', 'Budget allocated', 'Resources identified'], approver: 'user', required: true },
-      { id: 'qa-launch', phase: 'Launch', name: 'Launch Approval', criteria: ['Timeline realistic', 'Dependencies mapped', 'Success metrics defined'], approver: 'user', required: true },
-    ],
-    standardDeliverables: ['GTM strategy document', 'Sales playbook', 'Marketing plan', 'Launch checklist', 'Success metrics dashboard'],
-    estimatedDuration: '2-3 weeks'
-  },
-  {
-    id: 'board-presentation',
-    name: 'Board Presentation',
-    category: 'business',
-    description: 'Professional board meeting presentation',
-    projectTypes: ['strategic-initiative', 'revenue-business'],
-    smeTeam: [
-      { role: 'Lead', expertId: 'strat-001', expertName: 'Strategy SME', responsibility: 'Narrative and structure' },
-      { role: 'Financial', expertId: 'inv-003', expertName: 'Ray Dalio Composite', responsibility: 'Financial reporting' },
-      { role: 'Design', expertId: 'lf-design-001', expertName: 'Alessandro Luxe', responsibility: 'Visual presentation' },
-    ],
-    processSteps: [
-      { id: 'board-1', order: 1, name: 'Agenda Setting', description: 'Define board meeting agenda', duration: '1-2 hours', assignedTo: 'Lead', deliverables: ['Agenda'], qaCheckpoint: 'qa-agenda' },
-      { id: 'board-2', order: 2, name: 'Financial Pack', description: 'Prepare financial reporting', duration: '3-4 hours', assignedTo: 'Financial', deliverables: ['Financial pack'] },
-      { id: 'board-3', order: 3, name: 'Strategic Updates', description: 'Compile strategic updates', duration: '2-3 hours', assignedTo: 'Lead', deliverables: ['Strategic update'] },
-      { id: 'board-4', order: 4, name: 'Design & Polish', description: 'Design presentation', duration: '2-3 hours', assignedTo: 'Design', deliverables: ['Board deck'], qaCheckpoint: 'qa-final' },
-    ],
-    qaCheckpoints: [
-      { id: 'qa-agenda', phase: 'Planning', name: 'Agenda Approval', criteria: ['Key topics covered', 'Time allocated', 'Materials identified'], approver: 'user', required: true },
-      { id: 'qa-final', phase: 'Final', name: 'Board Pack Review', criteria: ['All sections complete', 'Data accurate', 'Professionally presented'], approver: 'user', required: true },
-    ],
-    standardDeliverables: ['Board presentation', 'Financial pack', 'Appendix materials', 'Pre-read document'],
-    estimatedDuration: '3-5 days'
-  },
-];
-
-// Merge all blueprints
-export const ALL_BLUEPRINTS = [...BLUEPRINTS, ...ADDITIONAL_BLUEPRINTS];
-
-export function getAllBlueprints(): Blueprint[] {
-  return ALL_BLUEPRINTS;
-}
-
-export function getBlueprintsByCategory(category: Blueprint['category']): Blueprint[] {
-  return ALL_BLUEPRINTS.filter(b => b.category === category);
 }

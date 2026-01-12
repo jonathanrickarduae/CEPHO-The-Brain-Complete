@@ -118,7 +118,7 @@ export default function Vault() {
               </div>
               <div>
                 <h1 className="text-xl md:text-2xl font-display font-bold">The Vault</h1>
-                <p className="text-muted-foreground text-sm">Security Command Center</p>
+                <p className="text-muted-foreground text-sm">Security The Nexus</p>
               </div>
             </div>
             

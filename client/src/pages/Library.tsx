@@ -2,383 +2,351 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
   FolderOpen, FileText, Image, BarChart3, Presentation, Search,
-  Plus, Upload, Download, Star, Clock, Filter, Grid3X3, List,
-  ChevronRight, X, File, Calendar, User, Briefcase, Home
+  Plus, Upload, Download, Clock, LayoutGrid, List,
+  ChevronRight, ChevronLeft, File, ArrowUpRight
 } from 'lucide-react';
 
-// Project data
+// Project data with brand colours (matching Workflow)
 const projects = [
   {
     id: 'celadon',
     name: 'Celadon Pharmaceuticals',
-    icon: '💊',
-    color: 'from-emerald-500/20 to-emerald-500/5',
-    borderColor: 'border-emerald-500/30',
+    color: '#10B981',
     documents: 24,
     images: 12,
     charts: 8,
-    lastUpdated: '2024-01-10',
-    status: 'active'
+    lastUpdated: 'Jan 10',
   },
   {
     id: 'boundless',
     name: 'Boundless Telecom',
-    icon: '📡',
-    color: 'from-blue-500/20 to-blue-500/5',
-    borderColor: 'border-blue-500/30',
+    color: '#3B82F6',
     documents: 18,
     images: 6,
     charts: 15,
-    lastUpdated: '2024-01-09',
-    status: 'active'
+    lastUpdated: 'Jan 9',
   },
   {
     id: 'perfect-dxb',
     name: 'Perfect DXB',
-    icon: '🏗️',
-    color: 'from-amber-500/20 to-amber-500/5',
-    borderColor: 'border-amber-500/30',
+    color: '#F59E0B',
     documents: 31,
     images: 22,
     charts: 11,
-    lastUpdated: '2024-01-10',
-    status: 'active',
-    subtitle: 'Perfect Technical Works, LLC'
+    lastUpdated: 'Jan 10',
   },
   {
     id: 'ampora',
     name: 'Ampora',
-    icon: '🌊',
-    color: 'from-cyan-500/20 to-cyan-500/5',
-    borderColor: 'border-cyan-500/30',
+    color: '#06B6D4',
     documents: 15,
     images: 8,
     charts: 6,
-    lastUpdated: '2024-01-08',
-    status: 'active'
+    lastUpdated: 'Jan 8',
   },
   {
     id: 'project-5',
     name: 'Project 5',
-    icon: '🚀',
-    color: 'from-purple-500/20 to-purple-500/5',
-    borderColor: 'border-purple-500/30',
+    color: '#8B5CF6',
     documents: 9,
     images: 4,
     charts: 3,
-    lastUpdated: '2024-01-07',
-    status: 'active'
+    lastUpdated: 'Jan 7',
   },
   {
     id: 'project-6',
     name: 'Project 6',
-    icon: '⚡',
-    color: 'from-fuchsia-500/20 to-fuchsia-500/5',
-    borderColor: 'border-fuchsia-500/30',
+    color: '#EC4899',
     documents: 7,
     images: 2,
     charts: 4,
-    lastUpdated: '2024-01-06',
-    status: 'active'
+    lastUpdated: 'Jan 6',
   }
 ];
 
-// Personal items
-const personalItems = [
-  { id: 'holiday', name: 'Holiday Planner', icon: '🏖️', type: 'calendar', items: 5 },
-  { id: 'todo', name: 'Personal To-Do', icon: '✅', type: 'list', items: 12 },
-  { id: 'reminders', name: 'Quick Reminders', icon: '🔔', type: 'reminders', items: 3 },
-  { id: 'notes', name: 'Personal Notes', icon: '📝', type: 'notes', items: 8 }
-];
-
-// Sample files for a project
+// Sample files for project detail view
 const sampleFiles = {
   documents: [
-    { name: 'Q4 Strategy Report.pdf', size: '2.4 MB', date: '2024-01-10', status: 'signed' },
-    { name: 'Investment Proposal v3.docx', size: '1.8 MB', date: '2024-01-09', status: 'draft' },
-    { name: 'Board Presentation.pptx', size: '5.2 MB', date: '2024-01-08', status: 'signed' },
-    { name: 'Due Diligence Checklist.xlsx', size: '890 KB', date: '2024-01-07', status: 'working' },
-    { name: 'Legal Review Notes.pdf', size: '1.1 MB', date: '2024-01-06', status: 'signed' },
+    { name: 'Investment Memo v3.docx', size: '2.4 MB', date: 'Jan 10', status: 'final' },
+    { name: 'Due Diligence Report.pdf', size: '5.1 MB', date: 'Jan 8', status: 'draft' },
+    { name: 'Financial Model.xlsx', size: '1.8 MB', date: 'Jan 6', status: 'final' },
+    { name: 'Board Presentation.pptx', size: '12.3 MB', date: 'Jan 4', status: 'draft' },
   ],
   images: [
-    { name: 'Market Analysis Chart.png', size: '450 KB', date: '2024-01-10', source: 'AI Generated' },
-    { name: 'Competitor Landscape.png', size: '380 KB', date: '2024-01-09', source: 'AI Generated' },
-    { name: 'Brand Mockup v2.png', size: '1.2 MB', date: '2024-01-08', source: 'AI Generated' },
-    { name: 'Office Photos.jpg', size: '2.8 MB', date: '2024-01-07', source: 'Uploaded' },
+    { name: 'Market Analysis Chart.png', source: 'AI Generated', date: 'Jan 9' },
+    { name: 'Competitive Landscape.png', source: 'AI Generated', date: 'Jan 7' },
+    { name: 'Growth Projections.png', source: 'AI Generated', date: 'Jan 5' },
   ],
   charts: [
-    { name: 'Revenue Projections', type: 'Line Chart', date: '2024-01-10' },
-    { name: 'Market Share Analysis', type: 'Pie Chart', date: '2024-01-09' },
-    { name: 'Growth Trajectory', type: 'Area Chart', date: '2024-01-08' },
-    { name: 'Competitive Positioning', type: 'Scatter Plot', date: '2024-01-07' },
+    { name: 'Revenue Forecast', type: 'Line Chart', date: 'Jan 10' },
+    { name: 'Market Share', type: 'Pie Chart', date: 'Jan 8' },
+    { name: 'Cost Breakdown', type: 'Bar Chart', date: 'Jan 6' },
   ],
-  presentations: [
-    { name: 'Investor Deck Q4', slides: 24, date: '2024-01-10' },
-    { name: 'Team Update', slides: 12, date: '2024-01-08' },
-  ]
 };
 
 export default function Library() {
-  const [selectedProject, setSelectedProject] = useState<typeof projects[0] | null>(null);
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [selectedProject, setSelectedProject] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
 
-  return (
-    <div className="min-h-screen bg-black text-white p-6">
-      {/* Header */}
-      <div className="flex items-center justify-between mb-8">
-        <div>
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-cyan-400 to-fuchsia-500 bg-clip-text text-transparent">
-            Library
-          </h1>
-          <p className="text-gray-400 mt-1">All your documents, images, charts, and data organized by project</p>
-        </div>
-        <div className="flex items-center gap-3">
-          <Button variant="outline" className="border-white/20">
-            <Upload className="w-4 h-4 mr-2" />
-            Upload
-          </Button>
-          <Button className="bg-gradient-to-r from-cyan-500 to-fuchsia-500">
-            <Plus className="w-4 h-4 mr-2" />
-            New Project
-          </Button>
-        </div>
-      </div>
+  const currentProject = projects.find(p => p.id === selectedProject);
+  const totalFiles = projects.reduce((acc, p) => acc + p.documents + p.images + p.charts, 0);
 
-      {/* Search */}
-      <div className="relative mb-8">
-        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-        <Input
-          placeholder="Search across all projects and files..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="pl-12 py-6 text-lg bg-white/5 border-white/10"
-        />
-      </div>
+  // Project detail view
+  if (selectedProject && currentProject) {
+    return (
+      <div className="min-h-screen bg-background p-6">
+        {/* Back button */}
+        <button
+          onClick={() => setSelectedProject(null)}
+          className="flex items-center gap-2 text-muted-foreground hover:text-foreground mb-6 transition-colors"
+        >
+          <ChevronLeft className="w-4 h-4" />
+          Back to Library
+        </button>
 
-      {selectedProject ? (
-        // Project Detail View
-        <div>
-          {/* Breadcrumb */}
-          <button 
-            onClick={() => setSelectedProject(null)}
-            className="flex items-center gap-2 text-gray-400 hover:text-white mb-6 transition-colors"
-          >
-            <ChevronRight className="w-4 h-4 rotate-180" />
-            Back to Projects
-          </button>
-
-          {/* Project Header */}
-          <div className={`bg-gradient-to-br ${selectedProject.color} border ${selectedProject.borderColor} rounded-2xl p-6 mb-8`}>
-            <div className="flex items-center gap-4">
-              <span className="text-5xl">{selectedProject.icon}</span>
-              <div>
-                <h2 className="text-2xl font-bold text-white">{selectedProject.name}</h2>
-                {selectedProject.subtitle && (
-                  <p className="text-gray-400">{selectedProject.subtitle}</p>
-                )}
-                <div className="flex items-center gap-4 mt-2 text-sm text-gray-400">
-                  <span>{selectedProject.documents} documents</span>
-                  <span>•</span>
-                  <span>{selectedProject.images} images</span>
-                  <span>•</span>
-                  <span>{selectedProject.charts} charts</span>
-                </div>
+        {/* Project Header */}
+        <div className="bg-card border border-border rounded-xl p-6 mb-6">
+          <div className="flex items-center gap-4">
+            <div 
+              className="w-14 h-14 rounded-xl flex items-center justify-center text-white font-bold text-lg"
+              style={{ backgroundColor: currentProject.color }}
+            >
+              {currentProject.name.split(' ').map(w => w[0]).join('').slice(0, 2)}
+            </div>
+            <div>
+              <h2 className="text-2xl font-semibold text-foreground">{currentProject.name}</h2>
+              <div className="flex items-center gap-4 mt-1 text-sm text-muted-foreground">
+                <span>{currentProject.documents} documents</span>
+                <span>{currentProject.images} images</span>
+                <span>{currentProject.charts} charts</span>
               </div>
             </div>
           </div>
+        </div>
 
-          {/* Content Tabs */}
-          <Tabs defaultValue="documents" className="space-y-6">
-            <TabsList className="bg-white/5 border border-white/10">
-              <TabsTrigger value="documents" className="data-[state=active]:bg-fuchsia-500/20">
-                <FileText className="w-4 h-4 mr-2" />
-                Documents ({sampleFiles.documents.length})
-              </TabsTrigger>
-              <TabsTrigger value="images" className="data-[state=active]:bg-fuchsia-500/20">
-                <Image className="w-4 h-4 mr-2" />
-                AI Images ({sampleFiles.images.length})
-              </TabsTrigger>
-              <TabsTrigger value="charts" className="data-[state=active]:bg-fuchsia-500/20">
-                <BarChart3 className="w-4 h-4 mr-2" />
-                Charts ({sampleFiles.charts.length})
-              </TabsTrigger>
-              <TabsTrigger value="presentations" className="data-[state=active]:bg-fuchsia-500/20">
-                <Presentation className="w-4 h-4 mr-2" />
-                Presentations ({sampleFiles.presentations.length})
-              </TabsTrigger>
-            </TabsList>
+        {/* Content Tabs */}
+        <Tabs defaultValue="documents" className="space-y-6">
+          <TabsList className="bg-card border border-border">
+            <TabsTrigger value="documents" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+              <FileText className="w-4 h-4 mr-2" />
+              Documents
+            </TabsTrigger>
+            <TabsTrigger value="images" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+              <Image className="w-4 h-4 mr-2" />
+              Images
+            </TabsTrigger>
+            <TabsTrigger value="charts" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+              <BarChart3 className="w-4 h-4 mr-2" />
+              Charts
+            </TabsTrigger>
+          </TabsList>
 
-            <TabsContent value="documents" className="space-y-4">
-              {sampleFiles.documents.map((doc, index) => (
-                <div key={index} className="flex items-center gap-4 bg-white/5 border border-white/10 rounded-xl p-4 hover:border-fuchsia-500/50 transition-all cursor-pointer">
-                  <div className="p-3 bg-blue-500/20 rounded-lg">
-                    <FileText className="w-6 h-6 text-blue-400" />
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="font-medium text-white">{doc.name}</h3>
-                    <p className="text-sm text-gray-400">{doc.size} • {doc.date}</p>
-                  </div>
-                  <Badge 
-                    variant="outline" 
-                    className={
-                      doc.status === 'signed' ? 'bg-green-500/20 text-green-400 border-green-500/30' :
-                      doc.status === 'draft' ? 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30' :
-                      'bg-blue-500/20 text-blue-400 border-blue-500/30'
-                    }
+          <TabsContent value="documents" className="space-y-3">
+            {sampleFiles.documents.map((doc, index) => (
+              <div key={index} className="flex items-center gap-4 bg-card border border-border rounded-xl p-4 hover:border-primary/50 transition-all cursor-pointer">
+                <div className="p-3 bg-secondary rounded-lg">
+                  <FileText className="w-5 h-5 text-muted-foreground" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-medium text-foreground">{doc.name}</h3>
+                  <p className="text-sm text-muted-foreground">{doc.size} · {doc.date}</p>
+                </div>
+                <Badge 
+                  variant="outline" 
+                  className={doc.status === 'final' ? 'bg-green-500/10 text-green-400 border-green-500/30' : 'bg-amber-500/10 text-amber-400 border-amber-500/30'}
+                >
+                  {doc.status}
+                </Badge>
+                <Button variant="ghost" size="icon">
+                  <Download className="w-4 h-4" />
+                </Button>
+              </div>
+            ))}
+          </TabsContent>
+
+          <TabsContent value="images" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {sampleFiles.images.map((img, index) => (
+              <div key={index} className="bg-card border border-border rounded-xl overflow-hidden hover:border-primary/50 transition-all cursor-pointer">
+                <div className="aspect-video bg-secondary flex items-center justify-center">
+                  <Image className="w-12 h-12 text-muted-foreground/30" />
+                </div>
+                <div className="p-4">
+                  <h3 className="font-medium text-foreground">{img.name}</h3>
+                  <p className="text-sm text-muted-foreground">{img.source} · {img.date}</p>
+                </div>
+              </div>
+            ))}
+          </TabsContent>
+
+          <TabsContent value="charts" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {sampleFiles.charts.map((chart, index) => (
+              <div key={index} className="bg-card border border-border rounded-xl p-4 hover:border-primary/50 transition-all cursor-pointer">
+                <div className="aspect-video bg-secondary rounded-lg flex items-center justify-center mb-3">
+                  <BarChart3 className="w-12 h-12 text-muted-foreground/30" />
+                </div>
+                <h3 className="font-medium text-foreground">{chart.name}</h3>
+                <p className="text-sm text-muted-foreground">{chart.type} · {chart.date}</p>
+              </div>
+            ))}
+          </TabsContent>
+        </Tabs>
+      </div>
+    );
+  }
+
+  // Main library view
+  return (
+    <div className="min-h-screen bg-background p-6">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-8">
+        <div>
+          <h1 className="text-2xl font-semibold text-foreground">Library</h1>
+          <p className="text-muted-foreground text-sm mt-1">All your project files in one place</p>
+        </div>
+        <div className="flex items-center gap-3">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <Input
+              placeholder="Search files..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-9 w-64 bg-card border-border"
+            />
+          </div>
+          <div className="flex items-center bg-card border border-border rounded-lg p-1">
+            <button 
+              onClick={() => setViewMode('grid')}
+              className={`p-2 rounded transition-colors ${viewMode === 'grid' ? 'bg-secondary text-foreground' : 'text-muted-foreground hover:text-foreground'}`}
+            >
+              <LayoutGrid className="w-4 h-4" />
+            </button>
+            <button 
+              onClick={() => setViewMode('list')}
+              className={`p-2 rounded transition-colors ${viewMode === 'list' ? 'bg-secondary text-foreground' : 'text-muted-foreground hover:text-foreground'}`}
+            >
+              <List className="w-4 h-4" />
+            </button>
+          </div>
+          <Button size="sm" className="gap-2">
+            <Upload className="w-4 h-4" />
+            Upload
+          </Button>
+        </div>
+      </div>
+
+      {/* Stats Row */}
+      <div className="grid grid-cols-4 gap-4 mb-8">
+        <div className="bg-card border border-border rounded-xl p-4">
+          <div className="text-3xl font-bold text-foreground">{projects.length}</div>
+          <div className="text-sm text-muted-foreground">Projects</div>
+        </div>
+        <div className="bg-card border border-border rounded-xl p-4">
+          <div className="text-3xl font-bold text-foreground">{totalFiles}</div>
+          <div className="text-sm text-muted-foreground">Total Files</div>
+        </div>
+        <div className="bg-card border border-border rounded-xl p-4">
+          <div className="text-3xl font-bold text-foreground">{projects.reduce((acc, p) => acc + p.documents, 0)}</div>
+          <div className="text-sm text-muted-foreground">Documents</div>
+        </div>
+        <div className="bg-card border border-border rounded-xl p-4">
+          <div className="text-3xl font-bold text-foreground">{projects.reduce((acc, p) => acc + p.images, 0)}</div>
+          <div className="text-sm text-muted-foreground">Images</div>
+        </div>
+      </div>
+
+      {/* Projects Grid */}
+      {viewMode === 'grid' ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {projects.map(project => (
+            <div
+              key={project.id}
+              onClick={() => setSelectedProject(project.id)}
+              className="bg-card border border-border rounded-xl p-5 hover:border-primary/50 transition-all cursor-pointer group"
+            >
+              <div className="flex items-start justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <div 
+                    className="w-10 h-10 rounded-lg flex items-center justify-center text-white font-semibold text-sm"
+                    style={{ backgroundColor: project.color }}
                   >
-                    {doc.status}
-                  </Badge>
-                  <Button variant="ghost" size="icon">
-                    <Download className="w-4 h-4" />
-                  </Button>
+                    {project.name.split(' ').map(w => w[0]).join('').slice(0, 2)}
+                  </div>
+                  <div>
+                    <h3 className="font-medium text-foreground group-hover:text-primary transition-colors">
+                      {project.name}
+                    </h3>
+                    <p className="text-xs text-muted-foreground">Updated {project.lastUpdated}</p>
+                  </div>
                 </div>
-              ))}
-            </TabsContent>
+                <ChevronRight className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
+              </div>
 
-            <TabsContent value="images" className="grid grid-cols-4 gap-4">
-              {sampleFiles.images.map((img, index) => (
-                <div key={index} className="bg-white/5 border border-white/10 rounded-xl overflow-hidden hover:border-fuchsia-500/50 transition-all cursor-pointer">
-                  <div className="aspect-video bg-gradient-to-br from-fuchsia-500/20 to-cyan-500/20 flex items-center justify-center">
-                    <Image className="w-12 h-12 text-white/30" />
-                  </div>
-                  <div className="p-3">
-                    <h3 className="font-medium text-white text-sm truncate">{img.name}</h3>
-                    <p className="text-xs text-gray-400">{img.source} • {img.date}</p>
-                  </div>
+              <div className="grid grid-cols-3 gap-3 pt-4 border-t border-border">
+                <div className="text-center">
+                  <div className="text-lg font-semibold text-foreground">{project.documents}</div>
+                  <div className="text-xs text-muted-foreground">Docs</div>
                 </div>
-              ))}
-            </TabsContent>
-
-            <TabsContent value="charts" className="grid grid-cols-3 gap-4">
-              {sampleFiles.charts.map((chart, index) => (
-                <div key={index} className="bg-white/5 border border-white/10 rounded-xl p-4 hover:border-fuchsia-500/50 transition-all cursor-pointer">
-                  <div className="aspect-video bg-gradient-to-br from-cyan-500/10 to-fuchsia-500/10 rounded-lg flex items-center justify-center mb-3">
-                    <BarChart3 className="w-12 h-12 text-cyan-400/50" />
-                  </div>
-                  <h3 className="font-medium text-white">{chart.name}</h3>
-                  <p className="text-sm text-gray-400">{chart.type} • {chart.date}</p>
+                <div className="text-center">
+                  <div className="text-lg font-semibold text-foreground">{project.images}</div>
+                  <div className="text-xs text-muted-foreground">Images</div>
                 </div>
-              ))}
-            </TabsContent>
-
-            <TabsContent value="presentations" className="grid grid-cols-2 gap-4">
-              {sampleFiles.presentations.map((pres, index) => (
-                <div key={index} className="bg-white/5 border border-white/10 rounded-xl p-6 hover:border-fuchsia-500/50 transition-all cursor-pointer">
-                  <div className="flex items-center gap-4">
-                    <div className="p-4 bg-fuchsia-500/20 rounded-xl">
-                      <Presentation className="w-8 h-8 text-fuchsia-400" />
-                    </div>
-                    <div>
-                      <h3 className="font-medium text-white text-lg">{pres.name}</h3>
-                      <p className="text-sm text-gray-400">{pres.slides} slides • {pres.date}</p>
-                    </div>
-                  </div>
+                <div className="text-center">
+                  <div className="text-lg font-semibold text-foreground">{project.charts}</div>
+                  <div className="text-xs text-muted-foreground">Charts</div>
                 </div>
-              ))}
-            </TabsContent>
-          </Tabs>
+              </div>
+            </div>
+          ))}
         </div>
       ) : (
-        // Projects Overview
-        <div className="space-y-8">
-          {/* Project Folders */}
-          <div>
-            <h2 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
-              <Briefcase className="w-5 h-5 text-fuchsia-400" />
-              Projects
-            </h2>
-            <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
+        /* List View */
+        <div className="bg-card border border-border rounded-xl overflow-hidden">
+          <table className="w-full">
+            <thead>
+              <tr className="border-b border-border">
+                <th className="text-left p-4 text-sm font-medium text-muted-foreground">Project</th>
+                <th className="text-left p-4 text-sm font-medium text-muted-foreground">Documents</th>
+                <th className="text-left p-4 text-sm font-medium text-muted-foreground">Images</th>
+                <th className="text-left p-4 text-sm font-medium text-muted-foreground">Charts</th>
+                <th className="text-left p-4 text-sm font-medium text-muted-foreground">Updated</th>
+                <th className="p-4"></th>
+              </tr>
+            </thead>
+            <tbody>
               {projects.map(project => (
-                <div
-                  key={project.id}
-                  onClick={() => setSelectedProject(project)}
-                  className="group relative p-4 md:p-5 rounded-xl bg-card/60 border border-border hover:border-primary/50 hover:bg-card/80 transition-all duration-300 cursor-pointer overflow-hidden hover:scale-[1.02] active:scale-[0.98] hover:shadow-lg hover:shadow-primary/10"
+                <tr 
+                  key={project.id} 
+                  onClick={() => setSelectedProject(project.id)}
+                  className="border-b border-border last:border-0 hover:bg-secondary/50 cursor-pointer transition-colors"
                 >
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className="p-2 rounded-lg bg-primary/10">
-                      <FolderOpen className="w-5 h-5 text-primary" />
+                  <td className="p-4">
+                    <div className="flex items-center gap-3">
+                      <div 
+                        className="w-8 h-8 rounded-lg flex items-center justify-center text-white font-semibold text-xs"
+                        style={{ backgroundColor: project.color }}
+                      >
+                        {project.name.split(' ').map(w => w[0]).join('').slice(0, 2)}
+                      </div>
+                      <span className="font-medium text-foreground">{project.name}</span>
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <h3 className="font-semibold text-foreground truncate">{project.name}</h3>
-                      {project.subtitle && (
-                        <p className="text-xs text-muted-foreground truncate">{project.subtitle}</p>
-                      )}
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-3 text-xs text-muted-foreground">
-                    <span className="flex items-center gap-1">
-                      <FileText className="w-3 h-3" />
-                      {project.documents}
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <Image className="w-3 h-3" />
-                      {project.images}
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <BarChart3 className="w-3 h-3" />
-                      {project.charts}
-                    </span>
-                  </div>
-                </div>
+                  </td>
+                  <td className="p-4 text-sm text-muted-foreground">{project.documents}</td>
+                  <td className="p-4 text-sm text-muted-foreground">{project.images}</td>
+                  <td className="p-4 text-sm text-muted-foreground">{project.charts}</td>
+                  <td className="p-4 text-sm text-muted-foreground">{project.lastUpdated}</td>
+                  <td className="p-4">
+                    <Button variant="ghost" size="icon" className="h-8 w-8">
+                      <ArrowUpRight className="w-4 h-4" />
+                    </Button>
+                  </td>
+                </tr>
               ))}
-            </div>
-          </div>
-
-          {/* Personal Section */}
-          <div>
-            <h2 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
-              <Home className="w-5 h-5 text-primary" />
-              Personal
-            </h2>
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
-              {personalItems.map(item => (
-                <div
-                  key={item.id}
-                  className="group relative p-4 rounded-xl bg-card/60 border border-border hover:border-primary/50 hover:bg-card/80 transition-all duration-300 cursor-pointer hover:scale-[1.02] active:scale-[0.98]"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-primary/10">
-                      <Home className="w-4 h-4 text-primary" />
-                    </div>
-                    <div>
-                      <h3 className="font-medium text-foreground">{item.name}</h3>
-                      <p className="text-xs text-muted-foreground">{item.items} items</p>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Recent Files */}
-          <div>
-            <h2 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
-              <Clock className="w-5 h-5 text-amber-400" />
-              Recent Files
-            </h2>
-            <div className="bg-white/5 border border-white/10 rounded-xl divide-y divide-white/10">
-              {[...sampleFiles.documents.slice(0, 3), ...sampleFiles.images.slice(0, 2)].map((file, index) => (
-                <div key={index} className="flex items-center gap-4 p-4 hover:bg-white/5 cursor-pointer">
-                  <div className={`p-2 rounded-lg ${'size' in file ? 'bg-blue-500/20' : 'bg-fuchsia-500/20'}`}>
-                    {'size' in file ? (
-                      <FileText className="w-5 h-5 text-blue-400" />
-                    ) : (
-                      <Image className="w-5 h-5 text-fuchsia-400" />
-                    )}
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="font-medium text-white">{file.name}</h3>
-                    <p className="text-sm text-gray-400">{'size' in file ? file.size : 'AI Generated'} • {file.date}</p>
-                  </div>
-                  <ChevronRight className="w-5 h-5 text-gray-400" />
-                </div>
-              ))}
-            </div>
-          </div>
+            </tbody>
+          </table>
         </div>
       )}
     </div>

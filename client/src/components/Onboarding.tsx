@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { 
   Sun, Users, FolderKanban, Fingerprint, Brain, 
-  ChevronRight, ChevronLeft, X, Sparkles, Check, Lock, Shield
+  ChevronRight, ChevronLeft, X, Sparkles, Check
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -20,55 +20,55 @@ interface OnboardingStep {
 const ONBOARDING_STEPS: OnboardingStep[] = [
   {
     id: 1,
-    title: 'The Brain Thinks',
-    description: 'The Brain is your AI command center - it learns, remembers, and reasons. CEPHO is the spark that fires the neurons. Together, they execute so you don\'t have to.',
+    title: 'CEPHO',
+    description: 'Your AI-powered command center that learns from you and works alongside you. A living ecosystem of intelligence at your fingertips.',
     icon: Brain,
     color: 'text-primary',
     useBrain: true,
   },
   {
     id: 2,
-    title: 'Your Chief of Staff',
-    description: 'An AI that learns how YOU think. It handles emails, schedules, and decisions the way you would. You stay in control - it does the work.',
-    icon: Fingerprint,
-    color: 'text-purple-400',
-    highlight: '[data-tour="digital-twin"]',
-  },
-  {
-    id: 3,
     title: 'The Signal',
-    description: 'Every morning: what matters, what\'s at risk, what\'s the opportunity. No inbox digging. No missed deadlines. Just clarity.',
+    description: 'Every morning, your Chief of Staff prepares a personalized briefing with priorities, insights, and action items ready for your review.',
     icon: Sun,
     color: 'text-amber-400',
     highlight: '[data-tour="daily-brief"]',
   },
   {
-    id: 4,
-    title: 'AI Experts On Demand',
-    description: 'Legal review? Financial modeling? Marketing strategy? 273 AI specialists ready to work. They deliver, you decide.',
+    id: 3,
+    title: 'AI-SMEs',
+    description: 'Need help with a task? Access 273+ AI-SMEs across every domain - strategists, analysts, legal, finance, marketing - your Chief of Staff assembles the right team for each task.',
     icon: Users,
     color: 'text-cyan-400',
     highlight: '[data-tour="ai-experts"]',
   },
   {
+    id: 4,
+    title: 'Workflow',
+    description: 'Monitor all your active projects, see what\'s blocked, and track deliverables. Your AI team updates progress in real-time.',
+    icon: FolderKanban,
+    color: 'text-green-400',
+    highlight: '[data-tour="workflow"]',
+  },
+  {
     id: 5,
-    title: 'The Vault',
-    description: 'Your passwords, credentials, and sensitive data - encrypted and secure. Connect your tools once, access them safely forever.',
-    icon: Shield,
-    color: 'text-emerald-400',
-    highlight: '[data-tour="vault"]',
+    title: 'Chief of Staff',
+    description: 'The more you interact, the smarter your Twin becomes. It learns your preferences, communication style, and decision patterns.',
+    icon: Fingerprint,
+    color: 'text-purple-400',
+    highlight: '[data-tour="digital-twin"]',
   },
   {
     id: 6,
-    title: 'Freedom',
-    description: 'This is about optimization. CEPHO handles the work so you have time for the things you actually want to be doing.',
+    title: 'You\'re Ready!',
+    description: 'Start by checking The Signal, or ask your Chief of Staff anything. Cepho is here to get you to a 10 every day.',
     icon: Sparkles,
     color: 'text-primary',
     useBrain: true,
   },
 ];
 
-const ONBOARDING_KEY = 'brain-onboarding-completed';
+const ONBOARDING_KEY = 'cepho-onboarding-completed';
 
 export function useOnboarding() {
   const [hasCompletedOnboarding, setHasCompletedOnboarding] = useState(() => {
@@ -233,7 +233,6 @@ export function OnboardingModal({ isOpen, onComplete, onSkip }: OnboardingModalP
                       step.color === 'text-amber-400' && 'bg-amber-400',
                       step.color === 'text-cyan-400' && 'bg-cyan-400',
                       step.color === 'text-green-400' && 'bg-green-400',
-                      step.color === 'text-emerald-400' && 'bg-emerald-400',
                       step.color === 'text-purple-400' && 'bg-purple-400',
                       step.color === 'text-primary' && 'bg-primary',
                     )} />
@@ -287,7 +286,7 @@ export function OnboardingModal({ isOpen, onComplete, onSkip }: OnboardingModalP
                 >
                   {isLastStep ? (
                     <>
-                      Enter
+                      Enter Cepho
                       <Sparkles className="w-5 h-5" />
                     </>
                   ) : (

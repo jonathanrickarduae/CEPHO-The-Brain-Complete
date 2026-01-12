@@ -196,7 +196,7 @@ export function EmailIntegrationPanel() {
       accountName: integrations.find(i => i.provider === 'email_outlook')?.providerAccountId ?? undefined,
       lastSync: integrations.find(i => i.provider === 'email_outlook')?.lastSyncAt ?? undefined,
       features: [
-        'Read and send emails from The Brain',
+        'Read and send emails from Cepho',
         'Auto-categorize incoming messages',
         'Smart reply suggestions',
         'Meeting scheduling from emails',
@@ -212,7 +212,7 @@ export function EmailIntegrationPanel() {
       accountName: integrations.find(i => i.provider === 'email_gmail')?.providerAccountId ?? undefined,
       lastSync: integrations.find(i => i.provider === 'email_gmail')?.lastSyncAt ?? undefined,
       features: [
-        'Read and send emails from The Brain',
+        'Read and send emails from Cepho',
         'Auto-categorize incoming messages',
         'Smart reply suggestions',
         'Label and filter management',
@@ -238,7 +238,7 @@ export function EmailIntegrationPanel() {
         <h3 className="text-lg font-semibold text-foreground">Email Integrations</h3>
       </div>
       <p className="text-sm text-muted-foreground mb-4">
-        Connect your email accounts to manage all communications from The Brain's Universal Inbox.
+        Connect your email accounts to manage all communications from Cepho's Universal Inbox.
       </p>
       <div className="space-y-3">
         {emailIntegrations.map(integration => (
@@ -272,7 +272,7 @@ export function CalendarIntegrationPanel() {
       accountName: integrations.find(i => i.provider === 'calendar_outlook')?.providerAccountId ?? undefined,
       lastSync: integrations.find(i => i.provider === 'calendar_outlook')?.lastSyncAt ?? undefined,
       features: [
-        'View all calendar events in Daily Brief',
+        'View all calendar events in The Signal',
         'Auto-schedule meetings from emails',
         'Meeting prep reminders',
         'Conflict detection',
@@ -288,7 +288,7 @@ export function CalendarIntegrationPanel() {
       accountName: integrations.find(i => i.provider === 'calendar_google')?.providerAccountId ?? undefined,
       lastSync: integrations.find(i => i.provider === 'calendar_google')?.lastSyncAt ?? undefined,
       features: [
-        'View all calendar events in Daily Brief',
+        'View all calendar events in The Signal',
         'Auto-schedule meetings from emails',
         'Meeting prep reminders',
         'Multi-calendar support',
@@ -312,7 +312,7 @@ export function CalendarIntegrationPanel() {
         <h3 className="text-lg font-semibold text-foreground">Calendar Integrations</h3>
       </div>
       <p className="text-sm text-muted-foreground mb-4">
-        Connect your calendars to see events in your Daily Brief and enable smart scheduling.
+        Connect your calendars to see events in your The Signal and enable smart scheduling.
       </p>
       <div className="space-y-3">
         {calendarIntegrations.map(integration => (
@@ -345,8 +345,8 @@ export function AsanaIntegrationPanel() {
     accountName: integrations.find(i => i.provider === 'asana')?.providerAccountId ?? undefined,
     lastSync: integrations.find(i => i.provider === 'asana')?.lastSyncAt ?? undefined,
     features: [
-      'Sync tasks to The Brain workflow',
-      'Create Asana tasks from The Brain',
+      'Sync tasks to Cepho workflow',
+      'Create Asana tasks from Cepho',
       'Project status updates',
       'Team collaboration visibility',
       'Due date and priority sync',
@@ -369,7 +369,7 @@ export function AsanaIntegrationPanel() {
         <h3 className="text-lg font-semibold text-foreground">Asana Integration</h3>
       </div>
       <p className="text-sm text-muted-foreground mb-4">
-        Connect Asana to sync your projects and tasks with The Brain's workflow system.
+        Connect Asana to sync your projects and tasks with Cepho's workflow system.
       </p>
       <IntegrationCard
         integration={asanaIntegration}

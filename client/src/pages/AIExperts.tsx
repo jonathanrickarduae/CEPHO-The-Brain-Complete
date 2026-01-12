@@ -85,7 +85,7 @@ interface DialogueMessage {
   needsResponse?: boolean;
 }
 
-// Mock pending tasks from Daily Brief
+// Mock pending tasks from The Signal
 const MOCK_PENDING_TASKS: PendingTask[] = [
   {
     id: "task-1",
@@ -209,7 +209,7 @@ export default function AIExperts() {
   const startTask = (task: PendingTask) => {
     setActiveTask(task);
     if (task.type === "twin") {
-      // Digital Twin handles directly - skip to active phase
+      // Chief of Staff handles directly - skip to active phase
       setPhase("active");
       setDeliverableTime(30); // 30 minutes for twin tasks
       setTimeRemaining(30 * 60);
@@ -558,7 +558,7 @@ export default function AIExperts() {
                 {tasks.filter(t => t.status !== "completed").length === 0 ? (
                   <div className="text-center py-8 text-muted-foreground">
                     <Zap className="w-12 h-12 mx-auto mb-4 opacity-30" />
-                    <p>No pending tasks. Create a new mission above or action items from Daily Brief.</p>
+                    <p>No pending tasks. Create a new mission above or action items from The Signal.</p>
                   </div>
                 ) : (
                   tasks.filter(t => t.status !== "completed").map((task) => (
@@ -682,7 +682,7 @@ export default function AIExperts() {
                     className="flex-1 bg-primary hover:bg-primary/90"
                     onClick={() => {
                       if (selectedTemplate === 1) {
-                        // Communications - Digital Twin
+                        // Communications - Chief of Staff
                         const newTask: PendingTask = {
                           id: `task-${Date.now()}`,
                           title: mission || "Draft Communications",

@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { ChevronDown, MessageSquare, Clock, Star, Search, Plus } from 'lucide-react';
+import { ChevronDown, MessageSquare, Clock, Star, Search, Plus, Brain } from 'lucide-react';
 
 interface Conversation {
   id: string;
@@ -135,7 +135,7 @@ export function ConversationSwitcher({
                 >
                   <div className="w-8 h-8 rounded-lg bg-gray-700 flex items-center justify-center flex-shrink-0">
                     {conv.expertName ? (
-                      <span className="text-lg">🧠</span>
+                      <Brain className="w-4 h-4 text-pink-500" />
                     ) : (
                       <MessageSquare className="w-4 h-4 text-muted-foreground" />
                     )}

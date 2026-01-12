@@ -241,7 +241,7 @@ export default function DailyBrief() {
                 <Sun className="w-6 h-6 md:w-8 md:h-8 text-blue-400" />
               </div>
               <div>
-                <h1 className="text-xl md:text-2xl font-display font-bold">Daily Brief</h1>
+                <h1 className="text-xl md:text-2xl font-display font-bold">The Signal</h1>
                 <p className="text-muted-foreground text-sm">{BRIEF_DATA.date} • 5 min read</p>
               </div>
             </div>
@@ -311,6 +311,56 @@ export default function DailyBrief() {
         {/* Overview Tab - High-level listening summary */}
         {activeTab === "overview" && (
           <div className="space-y-6">
+            {/* Presenter Video Brief */}
+            <Card className="bg-gradient-to-br from-primary/10 via-card/60 to-purple-500/10 border-primary/30">
+              <CardContent className="p-6">
+                <div className="flex flex-col md:flex-row gap-6 items-start">
+                  {/* Presenter Avatar */}
+                  <div className="shrink-0">
+                    <div className="w-20 h-20 md:w-24 md:h-24 rounded-2xl bg-gradient-to-br from-primary/30 to-purple-500/30 border border-primary/40 flex items-center justify-center">
+                      <span className="text-2xl md:text-3xl font-display font-bold text-primary">VS</span>
+                    </div>
+                    <p className="text-center text-xs text-muted-foreground mt-2">Victoria Sterling</p>
+                    <p className="text-center text-[10px] text-muted-foreground/60">Daily Brief Presenter</p>
+                  </div>
+                  
+                  {/* Brief Content */}
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3 mb-3">
+                      <Badge className="bg-primary/20 text-primary border-0">
+                        <Play className="w-3 h-3 mr-1" /> 2-3 min brief
+                      </Badge>
+                      <span className="text-xs text-muted-foreground">Ready to play</span>
+                    </div>
+                    
+                    <p className="text-foreground/90 leading-relaxed mb-4">
+                      "Good morning. Here's your brief for today. {BRIEF_DATA.overviewSummary.headline}. 
+                      You have {BRIEF_DATA.schedule.filter(s => s.type === 'meeting').length} meetings scheduled, 
+                      including your investor lunch at noon. {BRIEF_DATA.overviewSummary.energyFocus}."
+                    </p>
+                    
+                    <div className="flex gap-2">
+                      <Button 
+                        size="sm" 
+                        className="bg-primary hover:bg-primary/90"
+                        onClick={() => toast.info('Video brief generation coming soon')}
+                      >
+                        <Play className="w-4 h-4 mr-2" /> Watch Brief
+                      </Button>
+                      <Button 
+                        size="sm" 
+                        variant="outline"
+                        className="border-primary/30 hover:bg-primary/10"
+                        onClick={() => toast.info('Audio brief generation coming soon')}
+                      >
+                        <Headphones className="w-4 h-4 mr-2" /> Listen
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
             {/* Executive Summary */}
             <Card className="bg-card/60 border-border">
               <CardHeader className="pb-3">

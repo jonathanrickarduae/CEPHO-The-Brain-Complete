@@ -1,6 +1,15 @@
 import { eq, desc, and, gte, lte, sql } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users, moodHistory, InsertMoodHistory, MoodHistory, conversations, InsertConversation, Conversation } from "../drizzle/schema";
+import { InsertUser, users, moodHistory, InsertMoodHistory, MoodHistory, conversations, InsertConversation, Conversation,
+  expertConversations, InsertExpertConversation, ExpertConversation,
+  expertMemory, InsertExpertMemory, ExpertMemory,
+  expertPromptEvolution, InsertExpertPromptEvolution, ExpertPromptEvolution,
+  expertInsights, InsertExpertInsight, ExpertInsight,
+  expertResearchTasks, InsertExpertResearchTask, ExpertResearchTask,
+  expertCollaboration, InsertExpertCollaboration, ExpertCollaboration,
+  expertCoachingSessions, InsertExpertCoachingSession, ExpertCoachingSession,
+  expertDomainKnowledge, InsertExpertDomainKnowledge, ExpertDomainKnowledge
+} from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -917,603 +926,373 @@ export async function getUnprocessedVoiceNotes(userId: number) {
 }
 
 
-// ==================== DIGITAL TWIN PROFILE & ONBOARDING ====================
+// ==================== EXPERT EVOLUTION SYSTEM ====================
 
-import { 
-  digitalTwinProfile, InsertDigitalTwinProfile, DigitalTwinProfile,
-  profileAnswers, InsertProfileAnswer, ProfileAnswer,
-  dtDecisionPatterns, InsertDTDecisionPattern, DTDecisionPattern,
-  communicationPreferences, InsertCommunicationPreference, CommunicationPreference,
-  learningEvents, InsertLearningEvent, LearningEvent,
-  autonomyLevels, InsertAutonomyLevel, AutonomyLevel,
-} from "../drizzle/schema";
-
-// ==================== DIGITAL TWIN PROFILE ====================
-
-export async function getDigitalTwinProfile(userId: number): Promise<DigitalTwinProfile | null> {
+// Expert Conversations - persistent memory for each expert
+export async function createExpertConversation(entry: InsertExpertConversation): Promise<ExpertConversation | null> {
   const db = await getDb();
   if (!db) return null;
-
-  try {
-    const [profile] = await db.select()
-      .from(digitalTwinProfile)
-      .where(eq(digitalTwinProfile.userId, userId))
-      .limit(1);
-    return profile || null;
-  } catch (error) {
-    console.error("[Database] Failed to get digital twin profile:", error);
-    return null;
-  }
+  
+  const result = await db.insert(expertConversations).values(entry);
+  const id = result[0].insertId;
+  const created = await db.select().from(expertConversations).where(eq(expertConversations.id, id)).limit(1);
+  return created[0] || null;
 }
 
-export async function upsertDigitalTwinProfile(data: InsertDigitalTwinProfile): Promise<DigitalTwinProfile | null> {
+export async function getExpertConversations(
+  userId: number, 
+  expertId: string, 
+  options?: { limit?: number; projectId?: number }
+): Promise<ExpertConversation[]> {
+  const db = await getDb();
+  if (!db) return [];
+  
+  const conditions = [
+    eq(expertConversations.userId, userId),
+    eq(expertConversations.expertId, expertId)
+  ];
+  
+  if (options?.projectId) {
+    conditions.push(eq(expertConversations.projectId, options.projectId));
+  }
+  
+  return db.select().from(expertConversations)
+    .where(and(...conditions))
+    .orderBy(desc(expertConversations.createdAt))
+    .limit(options?.limit || 50);
+}
+
+export async function getExpertConversationContext(
+  userId: number, 
+  expertId: string, 
+  limit: number = 20
+): Promise<string> {
+  const conversations = await getExpertConversations(userId, expertId, { limit });
+  
+  // Format conversations for context injection
+  return conversations
+    .reverse()
+    .map(c => `${c.role === 'user' ? 'User' : 'Expert'}: ${c.content}`)
+    .join('\n');
+}
+
+// Expert Memory - key learnings per expert
+export async function createExpertMemory(entry: InsertExpertMemory): Promise<ExpertMemory | null> {
   const db = await getDb();
   if (!db) return null;
-
-  try {
-    // Check if profile exists
-    const existing = await getDigitalTwinProfile(data.userId);
-    
-    if (existing) {
-      // Update existing profile
-      await db.update(digitalTwinProfile)
-        .set({ ...data, updatedAt: new Date() })
-        .where(eq(digitalTwinProfile.userId, data.userId));
-    } else {
-      // Insert new profile
-      await db.insert(digitalTwinProfile).values(data);
-    }
-    
-    return getDigitalTwinProfile(data.userId);
-  } catch (error) {
-    console.error("[Database] Failed to upsert digital twin profile:", error);
-    return null;
-  }
+  
+  const result = await db.insert(expertMemory).values(entry);
+  const id = result[0].insertId;
+  const created = await db.select().from(expertMemory).where(eq(expertMemory.id, id)).limit(1);
+  return created[0] || null;
 }
 
-export async function updateDigitalTwinTrainingHours(userId: number, additionalHours: number): Promise<void> {
+export async function getExpertMemories(
+  userId: number, 
+  expertId: string, 
+  options?: { memoryType?: string; limit?: number }
+): Promise<ExpertMemory[]> {
+  const db = await getDb();
+  if (!db) return [];
+  
+  const conditions = [
+    eq(expertMemory.userId, userId),
+    eq(expertMemory.expertId, expertId)
+  ];
+  
+  return db.select().from(expertMemory)
+    .where(and(...conditions))
+    .orderBy(desc(expertMemory.confidence), desc(expertMemory.usageCount))
+    .limit(options?.limit || 100);
+}
+
+export async function updateExpertMemory(id: number, data: Partial<InsertExpertMemory>) {
   const db = await getDb();
   if (!db) return;
-
-  try {
-    // Update profile completeness as a proxy for training progress
-    const profile = await getDigitalTwinProfile(userId);
-    const currentCompleteness = profile?.profileCompleteness ?? 0;
-    const newCompleteness = Math.min(100, currentCompleteness + Math.round(additionalHours * 10));
-    
-    await db.update(digitalTwinProfile)
-      .set({ 
-        profileCompleteness: newCompleteness,
-        lastProfileUpdate: new Date(),
-        updatedAt: new Date()
-      })
-      .where(eq(digitalTwinProfile.userId, userId));
-  } catch (error) {
-    console.error("[Database] Failed to update training hours:", error);
-  }
+  
+  await db.update(expertMemory).set({
+    ...data,
+    usageCount: sql`${expertMemory.usageCount} + 1`,
+    lastUsed: new Date()
+  }).where(eq(expertMemory.id, id));
 }
 
-// ==================== PROFILE ANSWERS (ONBOARDING) ====================
-
-export async function saveProfileAnswer(data: InsertProfileAnswer): Promise<ProfileAnswer | null> {
-  const db = await getDb();
-  if (!db) return null;
-
-  try {
-    // Check if answer already exists for this question
-    const [existing] = await db.select()
-      .from(profileAnswers)
-      .where(and(
-        eq(profileAnswers.userId, data.userId),
-        eq(profileAnswers.questionId, data.questionId)
-      ))
-      .limit(1);
-
-    if (existing) {
-      // Update existing answer
-      await db.update(profileAnswers)
-        .set({ 
-          answer: data.answer,
-          answerMetadata: data.answerMetadata,
-          isProcessed: false, // Reset processing status
-          updatedAt: new Date()
-        })
-        .where(eq(profileAnswers.id, existing.id));
-      
-      const [updated] = await db.select()
-        .from(profileAnswers)
-        .where(eq(profileAnswers.id, existing.id));
-      return updated;
-    } else {
-      // Insert new answer
-      const result = await db.insert(profileAnswers).values(data);
-      const insertId = result[0].insertId;
-      const [newAnswer] = await db.select()
-        .from(profileAnswers)
-        .where(eq(profileAnswers.id, insertId));
-      return newAnswer;
-    }
-  } catch (error) {
-    console.error("[Database] Failed to save profile answer:", error);
-    return null;
-  }
-}
-
-export async function getProfileAnswers(userId: number): Promise<ProfileAnswer[]> {
-  const db = await getDb();
-  if (!db) return [];
-
-  try {
-    return db.select()
-      .from(profileAnswers)
-      .where(eq(profileAnswers.userId, userId))
-      .orderBy(profileAnswers.createdAt);
-  } catch (error) {
-    console.error("[Database] Failed to get profile answers:", error);
-    return [];
-  }
-}
-
-export async function bulkSaveProfileAnswers(
-  userId: number, 
-  answers: Array<{ questionId: string; answer: string; metadata?: any }>
-): Promise<void> {
-  const db = await getDb();
-  if (!db) return;
-
-  try {
-    for (const answer of answers) {
-      await saveProfileAnswer({
-        userId,
-        questionId: parseInt(answer.questionId) || 0,
-        answer: answer.answer,
-        answerMetadata: answer.metadata,
-      });
-    }
-  } catch (error) {
-    console.error("[Database] Failed to bulk save profile answers:", error);
-  }
-}
-
-// ==================== DECISION PATTERNS ====================
-
-export async function saveDtDecisionPattern(data: InsertDTDecisionPattern): Promise<DTDecisionPattern | null> {
-  const db = await getDb();
-  if (!db) return null;
-
-  try {
-    const result = await db.insert(dtDecisionPatterns).values(data);
-    const insertId = result[0].insertId;
-    const [newPattern] = await db.select()
-      .from(dtDecisionPatterns)
-      .where(eq(dtDecisionPatterns.id, insertId));
-    return newPattern;
-  } catch (error) {
-    console.error("[Database] Failed to save decision pattern:", error);
-    return null;
-  }
-}
-
-export async function getDtDecisionPatterns(userId: number, category?: string): Promise<DTDecisionPattern[]> {
-  const db = await getDb();
-  if (!db) return [];
-
-  try {
-    const conditions = [eq(dtDecisionPatterns.userId, userId)];
-    if (category) {
-      conditions.push(eq(dtDecisionPatterns.category, category as any));
-    }
-    
-    return db.select()
-      .from(dtDecisionPatterns)
-      .where(and(...conditions))
-      .orderBy(desc(dtDecisionPatterns.confidence));
-  } catch (error) {
-    console.error("[Database] Failed to get decision patterns:", error);
-    return [];
-  }
-}
-
-// ==================== COMMUNICATION PREFERENCES ====================
-
-export async function upsertCommunicationPreference(data: InsertCommunicationPreference): Promise<CommunicationPreference | null> {
-  const db = await getDb();
-  if (!db) return null;
-
-  try {
-    const [existing] = await db.select()
-      .from(communicationPreferences)
-      .where(eq(communicationPreferences.userId, data.userId))
-      .limit(1);
-
-    if (existing) {
-      await db.update(communicationPreferences)
-        .set({ ...data, updatedAt: new Date() })
-        .where(eq(communicationPreferences.userId, data.userId));
-    } else {
-      await db.insert(communicationPreferences).values(data);
-    }
-
-    const [result] = await db.select()
-      .from(communicationPreferences)
-      .where(eq(communicationPreferences.userId, data.userId));
-    return result;
-  } catch (error) {
-    console.error("[Database] Failed to upsert communication preference:", error);
-    return null;
-  }
-}
-
-export async function getCommunicationPreference(userId: number): Promise<CommunicationPreference | null> {
-  const db = await getDb();
-  if (!db) return null;
-
-  try {
-    const [pref] = await db.select()
-      .from(communicationPreferences)
-      .where(eq(communicationPreferences.userId, userId))
-      .limit(1);
-    return pref || null;
-  } catch (error) {
-    console.error("[Database] Failed to get communication preference:", error);
-    return null;
-  }
-}
-
-// ==================== LEARNING EVENTS ====================
-
-export async function recordLearningEvent(data: InsertLearningEvent): Promise<LearningEvent | null> {
-  const db = await getDb();
-  if (!db) return null;
-
-  try {
-    const result = await db.insert(learningEvents).values(data);
-    const insertId = result[0].insertId;
-    const [newEvent] = await db.select()
-      .from(learningEvents)
-      .where(eq(learningEvents.id, insertId));
-    return newEvent;
-  } catch (error) {
-    console.error("[Database] Failed to record learning event:", error);
-    return null;
-  }
-}
-
-export async function getLearningEvents(
-  userId: number, 
-  options?: { eventType?: string; limit?: number; days?: number }
-): Promise<LearningEvent[]> {
-  const db = await getDb();
-  if (!db) return [];
-
-  try {
-    const conditions = [eq(learningEvents.userId, userId)];
-    
-    if (options?.eventType) {
-      conditions.push(eq(learningEvents.eventType, options.eventType as any));
-    }
-    
-    if (options?.days) {
-      const startDate = new Date();
-      startDate.setDate(startDate.getDate() - options.days);
-      conditions.push(gte(learningEvents.createdAt, startDate));
-    }
-
-    return db.select()
-      .from(learningEvents)
-      .where(and(...conditions))
-      .orderBy(desc(learningEvents.createdAt))
-      .limit(options?.limit || 100);
-  } catch (error) {
-    console.error("[Database] Failed to get learning events:", error);
-    return [];
-  }
-}
-
-// ==================== AUTONOMY LEVELS ====================
-
-export async function getAutonomyLevel(userId: number, domain: string): Promise<AutonomyLevel | null> {
-  const db = await getDb();
-  if (!db) return null;
-
-  try {
-    const [level] = await db.select()
-      .from(autonomyLevels)
-      .where(and(
-        eq(autonomyLevels.userId, userId),
-        eq(autonomyLevels.domain, domain)
-      ))
-      .limit(1);
-    return level || null;
-  } catch (error) {
-    console.error("[Database] Failed to get autonomy level:", error);
-    return null;
-  }
-}
-
-export async function upsertAutonomyLevel(data: InsertAutonomyLevel): Promise<AutonomyLevel | null> {
-  const db = await getDb();
-  if (!db) return null;
-
-  try {
-    const existing = await getAutonomyLevel(data.userId, data.domain);
-    
-    if (existing) {
-      await db.update(autonomyLevels)
-        .set({ ...data, updatedAt: new Date() })
-        .where(and(
-          eq(autonomyLevels.userId, data.userId),
-          eq(autonomyLevels.domain, data.domain)
-        ));
-    } else {
-      await db.insert(autonomyLevels).values(data);
-    }
-
-    return getAutonomyLevel(data.userId, data.domain);
-  } catch (error) {
-    console.error("[Database] Failed to upsert autonomy level:", error);
-    return null;
-  }
-}
-
-export async function getAllAutonomyLevels(userId: number): Promise<AutonomyLevel[]> {
-  const db = await getDb();
-  if (!db) return [];
-
-  try {
-    return db.select()
-      .from(autonomyLevels)
-      .where(eq(autonomyLevels.userId, userId))
-      .orderBy(autonomyLevels.domain);
-  } catch (error) {
-    console.error("[Database] Failed to get all autonomy levels:", error);
-    return [];
-  }
-}
-
-// ==================== ONBOARDING COMPLETION CHECK ====================
-
-export async function getOnboardingProgress(userId: number): Promise<{
-  profileComplete: boolean;
-  answersCount: number;
-  trainingHours: number;
-  maturityLevel: number;
-}> {
-  const db = await getDb();
-  if (!db) return { profileComplete: false, answersCount: 0, trainingHours: 0, maturityLevel: 1 };
-
-  try {
-    const profile = await getDigitalTwinProfile(userId);
-    const answers = await getProfileAnswers(userId);
-    
-    return {
-      profileComplete: !!profile && (profile.profileCompleteness ?? 0) >= 50,
-      answersCount: answers.length,
-      trainingHours: 0, // Training hours tracked elsewhere
-      maturityLevel: 1, // Calculated from profile completeness
-    };
-  } catch (error) {
-    console.error("[Database] Failed to get onboarding progress:", error);
-    return { profileComplete: false, answersCount: 0, trainingHours: 0, maturityLevel: 1 };
-  }
-}
-
-
-// ==================== INVESTOR DATABASE ====================
-
-import { 
-  investors, capitalRaises, investorInteractions, investorCommitments,
-  type Investor, type InsertInvestor,
-  type InvestorInteraction, type InsertInvestorInteraction,
-  type InvestorCommitment, type InsertInvestorCommitment
-} from "../drizzle/schema";
-
-// Create a new investor
-export async function createInvestor(data: InsertInvestor): Promise<Investor | null> {
-  const db = await getDb();
-  if (!db) return null;
-
-  try {
-    const result = await db.insert(investors).values(data);
-    const insertId = result[0].insertId;
-    const [newInvestor] = await db.select()
-      .from(investors)
-      .where(eq(investors.id, insertId));
-    return newInvestor;
-  } catch (error) {
-    console.error("[Database] Failed to create investor:", error);
-    return null;
-  }
-}
-
-// Get all investors for a user
-export async function getInvestors(userId: number): Promise<Investor[]> {
-  const db = await getDb();
-  if (!db) return [];
-
-  try {
-    return db.select()
-      .from(investors)
-      .where(eq(investors.userId, userId))
-      .orderBy(desc(investors.createdAt));
-  } catch (error) {
-    console.error("[Database] Failed to get investors:", error);
-    return [];
-  }
-}
-
-// Get investor by ID
-export async function getInvestorById(id: number, userId: number): Promise<Investor | null> {
-  const db = await getDb();
-  if (!db) return null;
-
-  try {
-    const [investor] = await db.select()
-      .from(investors)
-      .where(and(eq(investors.id, id), eq(investors.userId, userId)))
-      .limit(1);
-    return investor || null;
-  } catch (error) {
-    console.error("[Database] Failed to get investor:", error);
-    return null;
-  }
-}
-
-// Update investor
-export async function updateInvestor(id: number, userId: number, data: Partial<InsertInvestor>): Promise<Investor | null> {
-  const db = await getDb();
-  if (!db) return null;
-
-  try {
-    await db.update(investors)
-      .set({ ...data, updatedAt: new Date() })
-      .where(and(eq(investors.id, id), eq(investors.userId, userId)));
-    return getInvestorById(id, userId);
-  } catch (error) {
-    console.error("[Database] Failed to update investor:", error);
-    return null;
-  }
-}
-
-// Delete investor
-export async function deleteInvestor(id: number, userId: number): Promise<boolean> {
-  const db = await getDb();
-  if (!db) return false;
-
-  try {
-    await db.delete(investors)
-      .where(and(eq(investors.id, id), eq(investors.userId, userId)));
-    return true;
-  } catch (error) {
-    console.error("[Database] Failed to delete investor:", error);
-    return false;
-  }
-}
-
-// Get investors by type
-export async function getInvestorsByType(userId: number, type: string): Promise<Investor[]> {
-  const db = await getDb();
-  if (!db) return [];
-
-  try {
-    return db.select()
-      .from(investors)
-      .where(and(
-        eq(investors.userId, userId),
-        eq(investors.type, type as any)
-      ))
-      .orderBy(desc(investors.createdAt));
-  } catch (error) {
-    console.error("[Database] Failed to get investors by type:", error);
-    return [];
-  }
-}
-
-// Get investors matching capital raise criteria
-export async function matchInvestorsForRaise(
-  userId: number, 
-  amount: number, 
-  sector?: string,
-  stage?: string
-): Promise<Investor[]> {
-  const db = await getDb();
-  if (!db) return [];
-
-  try {
-    // Get all investors for user
-    const allInvestors = await getInvestors(userId);
-    
-    // Filter by ticket size
-    return allInvestors.filter(inv => {
-      const minOk = !inv.ticketSizeMin || inv.ticketSizeMin <= amount;
-      const maxOk = !inv.ticketSizeMax || inv.ticketSizeMax >= amount;
-      
-      // Check sector match if provided
-      let sectorOk = true;
-      if (sector && inv.sectors) {
-        const sectors = inv.sectors as string[];
-        sectorOk = sectors.includes(sector) || sectors.includes('all');
-      }
-      
-      // Check stage match if provided
-      let stageOk = true;
-      if (stage && inv.stages) {
-        const stages = inv.stages as string[];
-        stageOk = stages.includes(stage) || stages.includes('all');
-      }
-      
-      return minOk && maxOk && sectorOk && stageOk;
+export async function getExpertMemoryContext(userId: number, expertId: string): Promise<string> {
+  const memories = await getExpertMemories(userId, expertId, { limit: 30 });
+  
+  if (memories.length === 0) return '';
+  
+  // Group by type for organized context
+  const grouped: Record<string, ExpertMemory[]> = {};
+  memories.forEach(m => {
+    if (!grouped[m.memoryType]) grouped[m.memoryType] = [];
+    grouped[m.memoryType].push(m);
+  });
+  
+  let context = '## What I Know About You:\n';
+  
+  if (grouped.preference) {
+    context += '\n### Preferences:\n';
+    grouped.preference.forEach(m => {
+      context += `- ${m.key}: ${m.value}\n`;
     });
-  } catch (error) {
-    console.error("[Database] Failed to match investors:", error);
-    return [];
   }
+  
+  if (grouped.style) {
+    context += '\n### Communication Style:\n';
+    grouped.style.forEach(m => {
+      context += `- ${m.key}: ${m.value}\n`;
+    });
+  }
+  
+  if (grouped.fact) {
+    context += '\n### Key Facts:\n';
+    grouped.fact.forEach(m => {
+      context += `- ${m.key}: ${m.value}\n`;
+    });
+  }
+  
+  if (grouped.correction) {
+    context += '\n### Past Corrections (avoid these mistakes):\n';
+    grouped.correction.forEach(m => {
+      context += `- ${m.key}: ${m.value}\n`;
+    });
+  }
+  
+  return context;
 }
 
-// Record investor interaction
-export async function recordInvestorInteraction(data: InsertInvestorInteraction): Promise<InvestorInteraction | null> {
+// Expert Prompt Evolution - track how prompts improve
+export async function createExpertPromptEvolution(entry: InsertExpertPromptEvolution): Promise<ExpertPromptEvolution | null> {
   const db = await getDb();
   if (!db) return null;
-
-  try {
-    const result = await db.insert(investorInteractions).values(data);
-    const insertId = result[0].insertId;
-    const [interaction] = await db.select()
-      .from(investorInteractions)
-      .where(eq(investorInteractions.id, insertId));
-    return interaction;
-  } catch (error) {
-    console.error("[Database] Failed to record investor interaction:", error);
-    return null;
-  }
+  
+  const result = await db.insert(expertPromptEvolution).values(entry);
+  const id = result[0].insertId;
+  const created = await db.select().from(expertPromptEvolution).where(eq(expertPromptEvolution.id, id)).limit(1);
+  return created[0] || null;
 }
 
-// Get interactions for an investor
-export async function getInvestorInteractions(investorId: number): Promise<InvestorInteraction[]> {
-  const db = await getDb();
-  if (!db) return [];
-
-  try {
-    return db.select()
-      .from(investorInteractions)
-      .where(eq(investorInteractions.investorId, investorId))
-      .orderBy(desc(investorInteractions.interactionDate));
-  } catch (error) {
-    console.error("[Database] Failed to get investor interactions:", error);
-    return [];
-  }
-}
-
-// Record investor commitment
-export async function recordInvestorCommitment(data: InsertInvestorCommitment): Promise<InvestorCommitment | null> {
+export async function getLatestExpertPromptEvolution(expertId: string): Promise<ExpertPromptEvolution | null> {
   const db = await getDb();
   if (!db) return null;
-
-  try {
-    const result = await db.insert(investorCommitments).values(data);
-    const insertId = result[0].insertId;
-    const [commitment] = await db.select()
-      .from(investorCommitments)
-      .where(eq(investorCommitments.id, insertId));
-    return commitment;
-  } catch (error) {
-    console.error("[Database] Failed to record investor commitment:", error);
-    return null;
-  }
+  
+  const results = await db.select().from(expertPromptEvolution)
+    .where(eq(expertPromptEvolution.expertId, expertId))
+    .orderBy(desc(expertPromptEvolution.version))
+    .limit(1);
+  
+  return results[0] || null;
 }
 
-// Get commitments for a capital raise
-export async function getCommitmentsForRaise(capitalRaiseId: number): Promise<InvestorCommitment[]> {
+export async function getExpertPromptHistory(expertId: string, limit: number = 10): Promise<ExpertPromptEvolution[]> {
   const db = await getDb();
   if (!db) return [];
+  
+  return db.select().from(expertPromptEvolution)
+    .where(eq(expertPromptEvolution.expertId, expertId))
+    .orderBy(desc(expertPromptEvolution.version))
+    .limit(limit);
+}
 
-  try {
-    return db.select()
-      .from(investorCommitments)
-      .where(eq(investorCommitments.capitalRaiseId, capitalRaiseId))
-      .orderBy(desc(investorCommitments.createdAt));
-  } catch (error) {
-    console.error("[Database] Failed to get commitments:", error);
-    return [];
+// Expert Insights - shared knowledge repository
+export async function createExpertInsight(entry: InsertExpertInsight): Promise<ExpertInsight | null> {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const result = await db.insert(expertInsights).values(entry);
+  const id = result[0].insertId;
+  const created = await db.select().from(expertInsights).where(eq(expertInsights.id, id)).limit(1);
+  return created[0] || null;
+}
+
+export async function getExpertInsights(
+  userId: number,
+  options?: { expertId?: string; category?: string; projectId?: number; limit?: number }
+): Promise<ExpertInsight[]> {
+  const db = await getDb();
+  if (!db) return [];
+  
+  const conditions = [eq(expertInsights.userId, userId)];
+  
+  if (options?.expertId) {
+    conditions.push(eq(expertInsights.expertId, options.expertId));
   }
+  
+  if (options?.projectId) {
+    conditions.push(eq(expertInsights.projectId, options.projectId));
+  }
+  
+  return db.select().from(expertInsights)
+    .where(and(...conditions))
+    .orderBy(desc(expertInsights.confidence), desc(expertInsights.usageCount))
+    .limit(options?.limit || 50);
+}
+
+export async function updateExpertInsight(id: number, data: Partial<InsertExpertInsight>) {
+  const db = await getDb();
+  if (!db) return;
+  
+  await db.update(expertInsights).set(data).where(eq(expertInsights.id, id));
+}
+
+export async function incrementInsightUsage(id: number) {
+  const db = await getDb();
+  if (!db) return;
+  
+  await db.update(expertInsights).set({
+    usageCount: sql`${expertInsights.usageCount} + 1`
+  }).where(eq(expertInsights.id, id));
+}
+
+// Expert Research Tasks - scheduled research
+export async function createExpertResearchTask(entry: InsertExpertResearchTask): Promise<ExpertResearchTask | null> {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const result = await db.insert(expertResearchTasks).values(entry);
+  const id = result[0].insertId;
+  const created = await db.select().from(expertResearchTasks).where(eq(expertResearchTasks.id, id)).limit(1);
+  return created[0] || null;
+}
+
+export async function getExpertResearchTasks(
+  expertId: string,
+  options?: { status?: string; limit?: number }
+): Promise<ExpertResearchTask[]> {
+  const db = await getDb();
+  if (!db) return [];
+  
+  const conditions = [eq(expertResearchTasks.expertId, expertId)];
+  
+  return db.select().from(expertResearchTasks)
+    .where(and(...conditions))
+    .orderBy(desc(expertResearchTasks.scheduledFor))
+    .limit(options?.limit || 20);
+}
+
+export async function updateExpertResearchTask(id: number, data: Partial<InsertExpertResearchTask>) {
+  const db = await getDb();
+  if (!db) return;
+  
+  await db.update(expertResearchTasks).set(data).where(eq(expertResearchTasks.id, id));
+}
+
+export async function getPendingResearchTasks(limit: number = 10): Promise<ExpertResearchTask[]> {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return db.select().from(expertResearchTasks)
+    .where(eq(expertResearchTasks.status, 'pending'))
+    .orderBy(expertResearchTasks.scheduledFor)
+    .limit(limit);
+}
+
+// Expert Collaboration - track how experts work together
+export async function createExpertCollaboration(entry: InsertExpertCollaboration): Promise<ExpertCollaboration | null> {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const result = await db.insert(expertCollaboration).values(entry);
+  const id = result[0].insertId;
+  const created = await db.select().from(expertCollaboration).where(eq(expertCollaboration.id, id)).limit(1);
+  return created[0] || null;
+}
+
+export async function getExpertCollaborations(
+  userId: number,
+  options?: { expertId?: string; projectId?: number; limit?: number }
+): Promise<ExpertCollaboration[]> {
+  const db = await getDb();
+  if (!db) return [];
+  
+  const conditions = [eq(expertCollaboration.userId, userId)];
+  
+  if (options?.expertId) {
+    conditions.push(eq(expertCollaboration.initiatorExpertId, options.expertId));
+  }
+  
+  if (options?.projectId) {
+    conditions.push(eq(expertCollaboration.projectId, options.projectId));
+  }
+  
+  return db.select().from(expertCollaboration)
+    .where(and(...conditions))
+    .orderBy(desc(expertCollaboration.createdAt))
+    .limit(options?.limit || 20);
+}
+
+// Expert Coaching Sessions - Chief of Staff training experts
+export async function createExpertCoachingSession(entry: InsertExpertCoachingSession): Promise<ExpertCoachingSession | null> {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const result = await db.insert(expertCoachingSessions).values(entry);
+  const id = result[0].insertId;
+  const created = await db.select().from(expertCoachingSessions).where(eq(expertCoachingSessions.id, id)).limit(1);
+  return created[0] || null;
+}
+
+export async function getExpertCoachingSessions(
+  expertId: string,
+  options?: { status?: string; limit?: number }
+): Promise<ExpertCoachingSession[]> {
+  const db = await getDb();
+  if (!db) return [];
+  
+  const conditions = [eq(expertCoachingSessions.expertId, expertId)];
+  
+  return db.select().from(expertCoachingSessions)
+    .where(and(...conditions))
+    .orderBy(desc(expertCoachingSessions.createdAt))
+    .limit(options?.limit || 10);
+}
+
+export async function updateExpertCoachingSession(id: number, data: Partial<InsertExpertCoachingSession>) {
+  const db = await getDb();
+  if (!db) return;
+  
+  await db.update(expertCoachingSessions).set(data).where(eq(expertCoachingSessions.id, id));
+}
+
+// Expert Domain Knowledge - track expertise areas
+export async function createExpertDomainKnowledge(entry: InsertExpertDomainKnowledge): Promise<ExpertDomainKnowledge | null> {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const result = await db.insert(expertDomainKnowledge).values(entry);
+  const id = result[0].insertId;
+  const created = await db.select().from(expertDomainKnowledge).where(eq(expertDomainKnowledge.id, id)).limit(1);
+  return created[0] || null;
+}
+
+export async function getExpertDomainKnowledge(expertId: string): Promise<ExpertDomainKnowledge[]> {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return db.select().from(expertDomainKnowledge)
+    .where(eq(expertDomainKnowledge.expertId, expertId))
+    .orderBy(desc(expertDomainKnowledge.lastUpdated));
+}
+
+export async function updateExpertDomainKnowledge(id: number, data: Partial<InsertExpertDomainKnowledge>) {
+  const db = await getDb();
+  if (!db) return;
+  
+  await db.update(expertDomainKnowledge).set({
+    ...data,
+    lastUpdated: new Date()
+  }).where(eq(expertDomainKnowledge.id, id));
+}
+
+export async function getStaleExpertDomains(daysOld: number = 7): Promise<ExpertDomainKnowledge[]> {
+  const db = await getDb();
+  if (!db) return [];
+  
+  const cutoffDate = new Date();
+  cutoffDate.setDate(cutoffDate.getDate() - daysOld);
+  
+  return db.select().from(expertDomainKnowledge)
+    .where(lte(expertDomainKnowledge.lastUpdated, cutoffDate))
+    .orderBy(expertDomainKnowledge.lastUpdated);
 }

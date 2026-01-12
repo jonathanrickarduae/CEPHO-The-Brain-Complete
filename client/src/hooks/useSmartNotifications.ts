@@ -245,7 +245,7 @@ export function useSmartNotifications() {
         addNotification({
           type: 'nudge',
           title: 'We miss you!',
-          message: 'Your Digital Twin has been waiting. Check in to maintain your streak.',
+          message: 'Your Chief of Staff has been waiting. Check in to maintain your streak.',
           priority: 'medium',
           icon: '👋',
         });

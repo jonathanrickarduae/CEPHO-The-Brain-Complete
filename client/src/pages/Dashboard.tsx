@@ -3,12 +3,12 @@ import { useLocation } from "wouter";
 import { 
   Sun, Users, Lock, 
   Mic, Send, 
-  Fingerprint, Shield, ShieldCheck, FolderKanban, BookOpen
+  Fingerprint, Shield, ShieldCheck, FolderKanban, BookOpen, Brain, Sparkles
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-// Gamification badges removed
-// Streak removed
+import { LearningBadge } from "@/components/LearningIndicator";
+
 import { Tooltip } from "@/components/Tooltip";
 import { useMoodCheck } from "@/hooks/useMoodCheck";
 import { WellnessScoreDashboard } from "@/components/WellnessScoreDashboard";
@@ -24,6 +24,7 @@ import { PerformanceBoost } from "@/components/PerformanceBoost";
 import { TwinBreakApproval } from "@/components/TwinBreakApproval";
 import { TourPrompt } from '@/components/TourAndDemoMode';
 import { NeuralNetworkViz } from '@/components/NeuralNetworkViz';
+import { TaskProgressTracker } from '@/components/TaskProgressTracker';
 import { isDemoModeEnabled, getDemoData, initializeDemoModeIfNeeded } from "@/services/demoMode";
 
 // Daily rotating quotes - one for each day
@@ -127,7 +128,7 @@ export default function Dashboard() {
   // Mood tracking
   const { todaysMoods } = useMoodCheck();
   
-  // Gamification removed
+
   
   // Demo mode initialization
   useEffect(() => {
@@ -145,21 +146,21 @@ export default function Dashboard() {
   const [showMobileInput, setShowMobileInput] = useState(false);
   
   const handleMobileSubmit = (value: string, type?: 'task' | 'question' | 'note') => {
-    // Navigate to Digital Twin with the message
+    // Navigate to Chief of Staff with the message
     setLocation(`/digital-twin?message=${encodeURIComponent(value)}`);
   };
 
   // Daily rotating inspiration - memoized to only change on day change
   const inspiration = useMemo(() => getDailyQuote(), []);
 
-  // Top Row - The Flow (Daily Brief → AI Expert Engine → Workflow)
+  // Top Row - The Flow (The Signal → AI Expert Engine → Workflow)
   // Bottom Row - Support (Chief of Staff Training, Library, Vault)
   const buttons = [
     // TOP ROW - The Flow
     { 
       id: 1, 
       label: "THE SIGNAL", 
-      sub: "Daily Briefing", 
+      sub: "Morning Briefing", 
       icon: Sun, 
       color: "#f59e0b",
       path: "/daily-brief",
@@ -167,7 +168,7 @@ export default function Dashboard() {
     },
     { 
       id: 2, 
-      label: "AI SMEs", 
+      label: "AI-SMEs", 
       sub: "287 Experts Ready", 
       icon: Users, 
       color: "#06b6d4",
@@ -187,11 +188,12 @@ export default function Dashboard() {
     { 
       id: 4, 
       label: "CHIEF OF STAFF", 
-      sub: "Your AI Assistant", 
+      sub: "Level 2: Learning", 
       icon: Fingerprint, 
       color: "#a855f7",
       path: "/digital-twin",
-      tooltip: "Your AI Chief of Staff that handles tasks, communications, and decisions on your behalf."
+      badge: <LearningBadge className="absolute top-2 right-2" />,
+      tooltip: "Your AI counterpart that learns from you. Train it to handle tasks autonomously."
     },
     { 
       id: 5, 
@@ -215,7 +217,7 @@ export default function Dashboard() {
 
   const handleSubmit = () => {
     if (inputValue.trim()) {
-      // Navigate to Digital Twin with the message
+      // Navigate to Chief of Staff with the message
       setLocation(`/digital-twin?message=${encodeURIComponent(inputValue)}`);
     }
   };
@@ -296,34 +298,30 @@ export default function Dashboard() {
 
       {/* Compact Header Row */}
       <div className="flex justify-between items-center mb-4">
-        <div className="flex items-center gap-2">
-          {/* Protocol Toggle - Tight pill design */}
-          <div className="relative flex items-center h-7 rounded-full bg-gray-900/80 border border-gray-700/50 p-0.5">
-            {/* Sliding background indicator */}
-            <div 
-              className={`absolute h-6 w-[52px] rounded-full transition-all duration-200 ease-out ${
-                governanceMode === 'omni' 
-                  ? 'left-0.5 bg-gradient-to-r from-purple-600 to-purple-500 shadow-[0_0_12px_rgba(168,85,247,0.4)]' 
-                  : 'left-[54px] bg-gradient-to-r from-blue-600 to-blue-500 shadow-[0_0_12px_rgba(59,130,246,0.4)]'
-              }`}
-            />
-            <button 
-              onClick={() => setGovernanceMode("omni")}
-              className={`relative z-10 px-3 py-1 rounded-full text-[10px] font-bold tracking-wide transition-colors ${
-                governanceMode === 'omni' ? 'text-white' : 'text-gray-500 hover:text-gray-300'
-              }`}
-            >
-              OMNI
-            </button>
-            <button 
-              onClick={() => setGovernanceMode("governed")}
-              className={`relative z-10 px-3 py-1 rounded-full text-[10px] font-bold tracking-wide transition-colors ${
-                governanceMode === 'governed' ? 'text-white' : 'text-gray-500 hover:text-gray-300'
-              }`}
-            >
-              GOV
-            </button>
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-card/60 border border-border">
+            <Shield className={`w-4 h-4 ${governanceMode === 'omni' ? 'text-purple-500' : 'text-blue-500'}`} />
+            <span className="text-xs font-medium text-muted-foreground hidden sm:inline">PROTOCOL:</span>
+            <div className="flex items-center gap-1">
+              <button 
+                onClick={() => setGovernanceMode("omni")}
+                className={`px-2 py-0.5 rounded-full text-xs font-bold transition-all min-h-0 min-w-0 ${governanceMode === 'omni' ? 'bg-purple-500 text-white shadow-[0_0_10px_rgba(168,85,247,0.5)]' : 'text-muted-foreground hover:text-foreground'}`}
+              >
+                OMNI
+              </button>
+              <button 
+                onClick={() => setGovernanceMode("governed")}
+                className={`px-2 py-0.5 rounded-full text-xs font-bold transition-all min-h-0 min-w-0 ${governanceMode === 'governed' ? 'bg-blue-500 text-white shadow-[0_0_10px_rgba(59,130,246,0.5)]' : 'text-muted-foreground hover:text-foreground'}`}
+              >
+                GOVERNED
+              </button>
+            </div>
           </div>
+          {governanceMode === 'governed' && (
+            <Badge variant="outline" className="border-blue-500/50 text-blue-400 bg-blue-500/10 text-xs hidden md:flex">
+              <ShieldCheck className="w-3 h-3 mr-1" /> COMPLIANCE
+            </Badge>
+          )}
         </div>
         
         <div className="flex items-center gap-3">
@@ -338,10 +336,14 @@ export default function Dashboard() {
             <span className="text-xs text-muted-foreground hidden sm:inline">Wellness</span>
           </button>
           
-          {/* Today's mood indicator - just the number */}
+          
+          {/* Today's mood indicator */}
           {latestMood && (
-            <div className="flex items-center gap-1 px-3 py-1.5 rounded-full bg-card/60 border border-border">
-              <span className="text-sm font-medium text-foreground">{latestMood.mood}</span>
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-card/60 border border-border">
+              <div className="w-6 h-6 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">
+                <span className="text-xs font-bold text-white">{latestMood.mood}</span>
+              </div>
+              <span className="text-xs text-muted-foreground hidden sm:inline">Mood</span>
             </div>
           )}
           
@@ -352,6 +354,24 @@ export default function Dashboard() {
             <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></div>
             <span className="text-xs font-mono tracking-wider">ONLINE</span>
           </div>
+        </div>
+      </div>
+
+      {/* Compact Header & Inspiration */}
+      <div className="mb-4 text-center">
+        <div className="flex items-center justify-center gap-2 mb-2">
+          <Brain className="w-6 h-6 text-primary" />
+          <h1 className="text-2xl md:text-4xl font-display font-bold tracking-tight text-foreground">
+            GETTING YOU TO A 10
+          </h1>
+        </div>
+        <div className="flex flex-col items-center gap-1">
+          <div className="flex items-center gap-2">
+            <Sparkles className="w-4 h-4 text-primary/60" />
+            <p className="text-sm md:text-base font-light text-muted-foreground italic max-w-xl">"{inspiration.quote}"</p>
+            <Sparkles className="w-4 h-4 text-primary/60" />
+          </div>
+          <p className="text-xs font-bold text-primary tracking-widest uppercase">— {inspiration.author}</p>
         </div>
       </div>
 
@@ -369,7 +389,8 @@ export default function Dashboard() {
               onClick={() => setLocation(btn.path)}
               className="group relative p-3 sm:p-4 md:p-5 rounded-xl bg-card/60 border border-border hover:border-primary/50 hover:bg-card/80 transition-all duration-300 cursor-pointer overflow-hidden text-left min-h-[100px] sm:min-h-[120px] w-full h-full hover:scale-[1.02] active:scale-[0.98] hover:shadow-lg hover:shadow-primary/10 touch-manipulation"
             >
-
+              {/* Learning badge for Chief of Staff */}
+              {btn.badge}
               
               {/* Glow on Hover */}
               <div 
@@ -397,6 +418,16 @@ export default function Dashboard() {
             </button>
           </Tooltip>
          ))}
+      </div>
+
+      {/* Active Tasks Progress Tracker */}
+      <div className="max-w-3xl mx-auto w-full mb-6">
+        <TaskProgressTracker />
+      </div>
+
+      {/* Getting Started Checklist for new users */}
+      <div className="max-w-3xl mx-auto w-full mb-6">
+        <GettingStartedChecklist />
       </div>
 
       {/* Intelligent Nudges - Contextual Suggestions */}

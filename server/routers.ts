@@ -18,19 +18,14 @@ import {
   createInboxItem, getInboxItems, updateInboxItem,
   createAuditEntry, getAuditLog,
   createVoiceNote, getVoiceNotes, updateVoiceNote, deleteVoiceNote,
-  // Digital Twin Profile & Onboarding
-  getDigitalTwinProfile, upsertDigitalTwinProfile, updateDigitalTwinTrainingHours,
-  saveProfileAnswer, getProfileAnswers, bulkSaveProfileAnswers,
-  saveDtDecisionPattern, getDtDecisionPatterns,
-  upsertCommunicationPreference, getCommunicationPreference,
-  recordLearningEvent, getLearningEvents,
-  getAutonomyLevel, upsertAutonomyLevel, getAllAutonomyLevels,
-  getOnboardingProgress,
-  // Investor Database
-  createInvestor, getInvestors, getInvestorById, updateInvestor, deleteInvestor,
-  getInvestorsByType, matchInvestorsForRaise,
-  recordInvestorInteraction, getInvestorInteractions,
-  recordInvestorCommitment, getCommitmentsForRaise,
+  createExpertConversation, getExpertConversations, getExpertConversationContext,
+  createExpertMemory, getExpertMemories, updateExpertMemory, getExpertMemoryContext,
+  createExpertPromptEvolution, getLatestExpertPromptEvolution, getExpertPromptHistory,
+  createExpertInsight, getExpertInsights, updateExpertInsight, incrementInsightUsage,
+  createExpertResearchTask, getExpertResearchTasks, updateExpertResearchTask, getPendingResearchTasks,
+  createExpertCollaboration, getExpertCollaborations,
+  createExpertCoachingSession, getExpertCoachingSessions, updateExpertCoachingSession,
+  createExpertDomainKnowledge, getExpertDomainKnowledge, updateExpertDomainKnowledge, getStaleExpertDomains
 } from "./db";
 import { invokeLLM } from "./_core/llm";
 import { z } from "zod";
@@ -125,26 +120,41 @@ export const appRouter = router({
         const history = await getConversationHistory(ctx.user.id, 20);
 
         // Build messages for LLM
-        const systemPrompt = `You are the Digital Twin for ${ctx.user.name || 'the user'} - a highly capable AI executive assistant that learns and adapts to their preferences, communication style, and work patterns.
+        const systemPrompt = `You are the Chief of Staff for ${ctx.user.name || 'the user'} - a senior executive advisor who operates with the rigor of a McKinsey consultant and the directness of a trusted board member.
 
 Your role:
-- Act as a proactive personal assistant who anticipates needs
-- Provide concise, actionable responses
-- Remember context from previous conversations
-- Suggest next steps and offer to take action
-- Be professional but warm and personable
-- When appropriate, ask clarifying questions before taking action
-- Reference relevant past conversations and learned preferences
+- Provide objective, evidence-based counsel - not validation
+- Challenge weak reasoning and assumptions directly
+- Ask probing questions before accepting premises
+- Push back professionally when you disagree or see risks
+- Anticipate needs but verify before acting
+- Hold the principal accountable to their own standards
+- Flag concerns and risks others might avoid mentioning
 
-Capabilities you can help with:
-- Email drafting and management
-- Meeting scheduling and preparation
-- Task prioritization and project management
-- Research and analysis
-- Decision support
+Communication style:
+- Professional and crisp, never casual or chatty
+- Direct statements over hedged language
+- Facts and data over opinions and feelings
+- Concise - respect their time with every word
+- No sycophancy - never say "Great idea!" without substantive reasoning
+- No empty validation - earn agreement through logic
+
+When responding:
+- If an idea has merit, explain WHY with evidence
+- If you see flaws, state them clearly: "I'd challenge that because..."
+- If information is missing, demand it: "Before proceeding, I need..."
+- If a decision seems rushed, slow it down: "Have you stress-tested this against..."
+
+Capabilities:
+- Strategic analysis and decision support
+- Meeting preparation and stakeholder briefings
+- Task prioritization and project oversight
+- Research synthesis and gap identification
+- Email drafting and communication management
 - Daily briefings and evening reviews
+- Coordination with AI-SMEs for specialist input
 
-Always be direct and efficient. The user is busy and values their time.`;
+You are not a yes-man. You are a trusted advisor who respects the principal enough to be honest.`;
 
         const messages = [
           { role: 'system' as const, content: systemPrompt },
@@ -181,7 +191,7 @@ Always be direct and efficient. The user is busy and values their time.`;
           };
         } catch (error) {
           console.error('[Chat] LLM invocation failed:', error);
-          throw new Error('Failed to get response from Digital Twin');
+          throw new Error('Failed to get response from Chief of Staff');
         }
       }),
 
@@ -1339,328 +1349,371 @@ Always be direct and efficient. The user is busy and values their time.`;
       }),
   }),
 
-  // Digital Twin Profile & Onboarding API
-  digitalTwinProfile: router({
-    // Get the user's Digital Twin profile
-    get: protectedProcedure.query(async ({ ctx }) => {
-      return getDigitalTwinProfile(ctx.user.id);
-    }),
-
-    // Update or create Digital Twin profile
-    upsert: protectedProcedure
+  // Expert Evolution System API
+  expertEvolution: router({
+    // Store a conversation with an expert
+    storeConversation: protectedProcedure
       .input(z.object({
-        communicationStyle: z.enum(['direct', 'diplomatic', 'analytical', 'collaborative']).optional(),
-        decisionSpeed: z.enum(['fast', 'measured', 'deliberate']).optional(),
-        riskTolerance: z.enum(['conservative', 'moderate', 'aggressive']).optional(),
-        preferredWorkHours: z.string().optional(),
-        focusAreas: z.array(z.string()).optional(),
-        delegationStyle: z.enum(['hands-on', 'trust-verify', 'full-autonomy']).optional(),
-        personalityTraits: z.record(z.string(), z.number()).optional(),
-        coreValues: z.array(z.string()).optional(),
-        priorities: z.array(z.string()).optional(),
-        thinkingFrameworks: z.array(z.string()).optional(),
-      }))
-      .mutation(async ({ ctx, input }) => {
-        return upsertDigitalTwinProfile({
-          userId: ctx.user.id,
-          ...input,
-        });
-      }),
-
-    // Update training hours
-    updateTrainingHours: protectedProcedure
-      .input(z.object({ hours: z.number() }))
-      .mutation(async ({ ctx, input }) => {
-        await updateDigitalTwinTrainingHours(ctx.user.id, input.hours);
-        return { success: true };
-      }),
-
-    // Get onboarding progress
-    progress: protectedProcedure.query(async ({ ctx }) => {
-      return getOnboardingProgress(ctx.user.id);
-    }),
-  }),
-
-  // Profile Answers (Onboarding Questions)
-  profileAnswers: router({
-    // Save a single answer
-    save: protectedProcedure
-      .input(z.object({
-        questionId: z.string(),
-        answer: z.string(),
+        expertId: z.string(),
+        role: z.enum(['user', 'expert', 'system']),
+        content: z.string(),
+        projectId: z.number().optional(),
+        taskId: z.string().optional(),
+        sentiment: z.enum(['positive', 'neutral', 'negative']).optional(),
+        qualityScore: z.number().min(1).max(10).optional(),
         metadata: z.any().optional(),
       }))
       .mutation(async ({ ctx, input }) => {
-        return saveProfileAnswer({
-          userId: ctx.user.id,
-          questionId: parseInt(input.questionId) || 0,
-          answer: input.answer,
-          answerMetadata: input.metadata,
-        });
-      }),
-
-    // Bulk save answers (for completing onboarding)
-    bulkSave: protectedProcedure
-      .input(z.object({
-        answers: z.array(z.object({
-          questionId: z.string(),
-          answer: z.string(),
-          metadata: z.any().optional(),
-        })),
-      }))
-      .mutation(async ({ ctx, input }) => {
-        await bulkSaveProfileAnswers(ctx.user.id, input.answers);
-        
-        // Update profile completeness based on answers
-        const answersCount = input.answers.length;
-        const completeness = Math.min(100, answersCount * 7); // ~14 questions = 100%
-        
-        await upsertDigitalTwinProfile({
-          userId: ctx.user.id,
-          profileCompleteness: completeness,
-        });
-        
-        // Record learning event for onboarding completion
-        await recordLearningEvent({
-          userId: ctx.user.id,
-          eventType: 'preference',
-          content: `Completed onboarding with ${answersCount} answers, ${completeness}% profile completeness`,
-          source: 'onboarding',
-          learningType: 'preference_discovered',
-          extractedInsights: { answersCount, completeness },
-        });
-        
-        return { success: true, completeness };
-      }),
-
-    // Get all answers for a user
-    list: protectedProcedure.query(async ({ ctx }) => {
-      return getProfileAnswers(ctx.user.id);
-    }),
-  }),
-
-  // Communication Preferences
-  communicationPrefs: router({
-    get: protectedProcedure.query(async ({ ctx }) => {
-      return getCommunicationPreference(ctx.user.id);
-    }),
-
-    upsert: protectedProcedure
-      .input(z.object({
-        preferenceType: z.enum(['tone', 'length', 'format', 'timing', 'channel', 'frequency']),
-        preference: z.string(),
-        context: z.string().optional(),
-        preferenceDetails: z.string().optional(),
-      }))
-      .mutation(async ({ ctx, input }) => {
-        return upsertCommunicationPreference({
-          userId: ctx.user.id,
-          preferenceType: input.preferenceType,
-          preference: input.preference,
-          context: input.context,
-          preferenceDetails: input.preferenceDetails,
-        });
-      }),
-  }),
-
-  // Learning Events
-  learningEvents: router({
-    record: protectedProcedure
-      .input(z.object({
-        eventType: z.enum(['feedback', 'correction', 'preference', 'decision', 'behaviour', 'conversation']),
-        content: z.string(),
-        source: z.string(),
-        learningType: z.enum(['pattern_new', 'pattern_reinforced', 'pattern_contradicted', 'preference_discovered', 'value_expressed', 'style_observed']).optional(),
-        extractedInsights: z.any().optional(),
-      }))
-      .mutation(async ({ ctx, input }) => {
-        return recordLearningEvent({
-          userId: ctx.user.id,
-          eventType: input.eventType,
-          content: input.content,
-          source: input.source,
-          learningType: input.learningType || 'pattern_new',
-          extractedInsights: input.extractedInsights,
-        });
-      }),
-
-    list: protectedProcedure
-      .input(z.object({
-        eventType: z.string().optional(),
-        limit: z.number().optional(),
-        days: z.number().optional(),
-      }).optional())
-      .query(async ({ ctx, input }) => {
-        return getLearningEvents(ctx.user.id, input);
-      }),
-  }),
-
-  // Autonomy Levels
-  autonomy: router({
-    get: protectedProcedure
-      .input(z.object({ domain: z.string() }))
-      .query(async ({ ctx, input }) => {
-        return getAutonomyLevel(ctx.user.id, input.domain);
-      }),
-
-    getAll: protectedProcedure.query(async ({ ctx }) => {
-      return getAllAutonomyLevels(ctx.user.id);
-    }),
-
-    upsert: protectedProcedure
-      .input(z.object({
-        domain: z.string(),
-        currentLevel: z.number().min(1).max(5),
-        targetLevel: z.number().min(1).max(5).optional(),
-      }))
-      .mutation(async ({ ctx, input }) => {
-        return upsertAutonomyLevel({
-          userId: ctx.user.id,
-          domain: input.domain,
-          currentLevel: input.currentLevel,
-          targetLevel: input.targetLevel,
-        });
-       }),
-  }),
-
-  // ==================== INVESTOR DATABASE ====================
-  investors: router({
-    // Create a new investor
-    create: protectedProcedure
-      .input(z.object({
-        name: z.string(),
-        type: z.enum(['angel', 'hnwi', 'family_office', 'vc', 'pe', 'bank', 'government', 'strategic']),
-        organization: z.string().optional(),
-        ticketSizeMin: z.number().optional(),
-        ticketSizeMax: z.number().optional(),
-        currency: z.string().optional(),
-        sectors: z.array(z.string()).optional(),
-        stages: z.array(z.string()).optional(),
-        geographies: z.array(z.string()).optional(),
-        dealTypes: z.array(z.string()).optional(),
-        email: z.string().optional(),
-        phone: z.string().optional(),
-        linkedin: z.string().optional(),
-        website: z.string().optional(),
-        relationshipStatus: z.enum(['cold', 'warm', 'hot', 'active', 'invested', 'passed']).optional(),
-        notes: z.string().optional(),
-      }))
-      .mutation(async ({ ctx, input }) => {
-        return createInvestor({
+        return createExpertConversation({
           userId: ctx.user.id,
           ...input,
         });
       }),
 
-    // Get all investors
-    list: protectedProcedure.query(async ({ ctx }) => {
-      return getInvestors(ctx.user.id);
-    }),
-
-    // Get investor by ID
-    get: protectedProcedure
-      .input(z.object({ id: z.number() }))
+    // Get conversation history with an expert
+    getConversations: protectedProcedure
+      .input(z.object({
+        expertId: z.string(),
+        projectId: z.number().optional(),
+        limit: z.number().optional(),
+      }))
       .query(async ({ ctx, input }) => {
-        return getInvestorById(input.id, ctx.user.id);
+        return getExpertConversations(ctx.user.id, input.expertId, {
+          projectId: input.projectId,
+          limit: input.limit,
+        });
       }),
 
-    // Update investor
-    update: protectedProcedure
+    // Get formatted conversation context for prompt injection
+    getConversationContext: protectedProcedure
+      .input(z.object({
+        expertId: z.string(),
+        limit: z.number().optional(),
+      }))
+      .query(async ({ ctx, input }) => {
+        return getExpertConversationContext(ctx.user.id, input.expertId, input.limit);
+      }),
+
+    // Store a memory/learning about the user
+    storeMemory: protectedProcedure
+      .input(z.object({
+        expertId: z.string(),
+        memoryType: z.enum(['preference', 'fact', 'style', 'context', 'correction']),
+        key: z.string(),
+        value: z.string(),
+        confidence: z.number().min(0).max(1).optional(),
+        source: z.string().optional(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        return createExpertMemory({
+          userId: ctx.user.id,
+          ...input,
+        });
+      }),
+
+    // Get memories for an expert
+    getMemories: protectedProcedure
+      .input(z.object({
+        expertId: z.string(),
+        memoryType: z.string().optional(),
+        limit: z.number().optional(),
+      }))
+      .query(async ({ ctx, input }) => {
+        return getExpertMemories(ctx.user.id, input.expertId, {
+          memoryType: input.memoryType,
+          limit: input.limit,
+        });
+      }),
+
+    // Get formatted memory context for prompt injection
+    getMemoryContext: protectedProcedure
+      .input(z.object({
+        expertId: z.string(),
+      }))
+      .query(async ({ ctx, input }) => {
+        return getExpertMemoryContext(ctx.user.id, input.expertId);
+      }),
+
+    // Update a memory (e.g., increase confidence, mark as used)
+    updateMemory: protectedProcedure
       .input(z.object({
         id: z.number(),
-        name: z.string().optional(),
-        type: z.enum(['angel', 'hnwi', 'family_office', 'vc', 'pe', 'bank', 'government', 'strategic']).optional(),
-        organization: z.string().optional(),
-        ticketSizeMin: z.number().optional(),
-        ticketSizeMax: z.number().optional(),
-        currency: z.string().optional(),
-        sectors: z.array(z.string()).optional(),
-        stages: z.array(z.string()).optional(),
-        geographies: z.array(z.string()).optional(),
-        dealTypes: z.array(z.string()).optional(),
-        email: z.string().optional(),
-        phone: z.string().optional(),
-        linkedin: z.string().optional(),
-        website: z.string().optional(),
-        relationshipStatus: z.enum(['cold', 'warm', 'hot', 'active', 'invested', 'passed']).optional(),
-        notes: z.string().optional(),
+        value: z.string().optional(),
+        confidence: z.number().min(0).max(1).optional(),
       }))
-      .mutation(async ({ ctx, input }) => {
-        const { id, ...data } = input;
-        return updateInvestor(id, ctx.user.id, data);
+      .mutation(async ({ input }) => {
+        await updateExpertMemory(input.id, input);
+        return { success: true };
       }),
 
-    // Delete investor
-    delete: protectedProcedure
-      .input(z.object({ id: z.number() }))
-      .mutation(async ({ ctx, input }) => {
-        return deleteInvestor(input.id, ctx.user.id);
-      }),
-
-    // Get investors by type
-    byType: protectedProcedure
-      .input(z.object({ type: z.string() }))
-      .query(async ({ ctx, input }) => {
-        return getInvestorsByType(ctx.user.id, input.type);
-      }),
-
-    // Match investors for a capital raise
-    match: protectedProcedure
+    // Record a prompt evolution (when expert improves)
+    recordPromptEvolution: protectedProcedure
       .input(z.object({
-        amount: z.number(),
-        sector: z.string().optional(),
-        stage: z.string().optional(),
+        expertId: z.string(),
+        version: z.number(),
+        promptAdditions: z.string().optional(),
+        communicationStyle: z.string().optional(),
+        strengthAdjustments: z.any().optional(),
+        weaknessAdjustments: z.any().optional(),
+        reason: z.string().optional(),
+        performanceBefore: z.number().optional(),
+        performanceAfter: z.number().optional(),
+        createdBy: z.string().optional(),
       }))
-      .query(async ({ ctx, input }) => {
-        return matchInvestorsForRaise(ctx.user.id, input.amount, input.sector, input.stage);
+      .mutation(async ({ input }) => {
+        return createExpertPromptEvolution(input);
       }),
 
-    // Record interaction with investor
-    recordInteraction: protectedProcedure
+    // Get latest prompt evolution for an expert
+    getLatestPromptEvolution: protectedProcedure
+      .input(z.object({ expertId: z.string() }))
+      .query(async ({ input }) => {
+        return getLatestExpertPromptEvolution(input.expertId);
+      }),
+
+    // Get prompt evolution history
+    getPromptHistory: protectedProcedure
       .input(z.object({
-        investorId: z.number(),
-        interactionType: z.enum(['email', 'call', 'meeting', 'pitch', 'follow_up', 'intro', 'other']),
-        subject: z.string().optional(),
-        notes: z.string().optional(),
-        outcome: z.string().optional(),
-        nextSteps: z.string().optional(),
-        interactionDate: z.date().optional(),
+        expertId: z.string(),
+        limit: z.number().optional(),
+      }))
+      .query(async ({ input }) => {
+        return getExpertPromptHistory(input.expertId, input.limit);
+      }),
+
+    // Create an insight from an expert
+    createInsight: protectedProcedure
+      .input(z.object({
+        expertId: z.string(),
+        category: z.string(),
+        title: z.string(),
+        insight: z.string(),
+        evidence: z.string().optional(),
+        confidence: z.number().min(0).max(1).optional(),
+        tags: z.array(z.string()).optional(),
+        projectId: z.number().optional(),
+        relatedExpertIds: z.array(z.string()).optional(),
       }))
       .mutation(async ({ ctx, input }) => {
-        return recordInvestorInteraction({
+        return createExpertInsight({
+          userId: ctx.user.id,
           ...input,
-          interactionDate: input.interactionDate || new Date(),
         });
       }),
 
-    // Get interactions for an investor
-    getInteractions: protectedProcedure
-      .input(z.object({ investorId: z.number() }))
-      .query(async ({ input }) => {
-        return getInvestorInteractions(input.investorId);
+    // Get insights (can filter by expert, category, project)
+    getInsights: protectedProcedure
+      .input(z.object({
+        expertId: z.string().optional(),
+        category: z.string().optional(),
+        projectId: z.number().optional(),
+        limit: z.number().optional(),
+      }).optional())
+      .query(async ({ ctx, input }) => {
+        return getExpertInsights(ctx.user.id, input);
       }),
 
-    // Record commitment
-    recordCommitment: protectedProcedure
+    // Update an insight (validate, archive, etc.)
+    updateInsight: protectedProcedure
       .input(z.object({
-        investorId: z.number(),
-        capitalRaiseId: z.number(),
-        commitmentType: z.enum(['soft', 'hard', 'signed', 'funded']),
-        amount: z.number(),
-        currency: z.string().optional(),
-        terms: z.string().optional(),
-        notes: z.string().optional(),
+        id: z.number(),
+        status: z.enum(['draft', 'validated', 'outdated', 'archived']).optional(),
+        validatedBy: z.array(z.string()).optional(),
       }))
       .mutation(async ({ input }) => {
-        return recordInvestorCommitment(input);
+        await updateExpertInsight(input.id, input);
+        return { success: true };
       }),
 
-    // Get commitments for a raise
-    getCommitments: protectedProcedure
-      .input(z.object({ capitalRaiseId: z.number() }))
+    // Record insight usage (when another expert references it)
+    recordInsightUsage: protectedProcedure
+      .input(z.object({ id: z.number() }))
+      .mutation(async ({ input }) => {
+        await incrementInsightUsage(input.id);
+        return { success: true };
+      }),
+
+    // Create a research task for an expert
+    createResearchTask: protectedProcedure
+      .input(z.object({
+        expertId: z.string(),
+        topic: z.string(),
+        description: z.string().optional(),
+        priority: z.enum(['low', 'medium', 'high', 'critical']).optional(),
+        scheduledFor: z.date().optional(),
+        assignedBy: z.string().optional(),
+      }))
+      .mutation(async ({ input }) => {
+        return createExpertResearchTask(input);
+      }),
+
+    // Get research tasks for an expert
+    getResearchTasks: protectedProcedure
+      .input(z.object({
+        expertId: z.string(),
+        status: z.string().optional(),
+        limit: z.number().optional(),
+      }))
       .query(async ({ input }) => {
-        return getCommitmentsForRaise(input.capitalRaiseId);
+        return getExpertResearchTasks(input.expertId, input);
+      }),
+
+    // Update research task (complete, add findings, etc.)
+    updateResearchTask: protectedProcedure
+      .input(z.object({
+        id: z.number(),
+        status: z.enum(['pending', 'in_progress', 'completed', 'failed']).optional(),
+        findings: z.string().optional(),
+        sourcesUsed: z.array(z.string()).optional(),
+        insightsGenerated: z.array(z.number()).optional(),
+        completedAt: z.date().optional(),
+      }))
+      .mutation(async ({ input }) => {
+        await updateExpertResearchTask(input.id, input);
+        return { success: true };
+      }),
+
+    // Get pending research tasks across all experts
+    getPendingResearch: protectedProcedure
+      .input(z.object({ limit: z.number().optional() }).optional())
+      .query(async ({ input }) => {
+        return getPendingResearchTasks(input?.limit);
+      }),
+
+    // Record a collaboration between experts
+    recordCollaboration: protectedProcedure
+      .input(z.object({
+        initiatorExpertId: z.string(),
+        collaboratorExpertIds: z.array(z.string()),
+        projectId: z.number().optional(),
+        taskDescription: z.string(),
+        outcome: z.string().optional(),
+        qualityScore: z.number().min(1).max(10).optional(),
+        lessonsLearned: z.string().optional(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        return createExpertCollaboration({
+          userId: ctx.user.id,
+          ...input,
+        });
+      }),
+
+    // Get collaboration history
+    getCollaborations: protectedProcedure
+      .input(z.object({
+        expertId: z.string().optional(),
+        projectId: z.number().optional(),
+        limit: z.number().optional(),
+      }).optional())
+      .query(async ({ ctx, input }) => {
+        return getExpertCollaborations(ctx.user.id, input);
+      }),
+
+    // Create a coaching session
+    createCoachingSession: protectedProcedure
+      .input(z.object({
+        expertId: z.string(),
+        coachType: z.enum(['chief_of_staff', 'peer_expert', 'user']),
+        coachId: z.string().optional(),
+        focusArea: z.string(),
+        feedbackGiven: z.string(),
+        improvementPlan: z.string().optional(),
+        metricsBeforeCoaching: z.any().optional(),
+        scheduledAt: z.date().optional(),
+      }))
+      .mutation(async ({ input }) => {
+        return createExpertCoachingSession(input);
+      }),
+
+    // Get coaching sessions for an expert
+    getCoachingSessions: protectedProcedure
+      .input(z.object({
+        expertId: z.string(),
+        status: z.string().optional(),
+        limit: z.number().optional(),
+      }))
+      .query(async ({ input }) => {
+        return getExpertCoachingSessions(input.expertId, input);
+      }),
+
+    // Update coaching session (complete, add metrics, etc.)
+    updateCoachingSession: protectedProcedure
+      .input(z.object({
+        id: z.number(),
+        status: z.enum(['scheduled', 'in_progress', 'completed', 'follow_up_needed']).optional(),
+        metricsAfterCoaching: z.any().optional(),
+        completedAt: z.date().optional(),
+      }))
+      .mutation(async ({ input }) => {
+        await updateExpertCoachingSession(input.id, input);
+        return { success: true };
+      }),
+
+    // Add domain knowledge for an expert
+    addDomainKnowledge: protectedProcedure
+      .input(z.object({
+        expertId: z.string(),
+        domain: z.string(),
+        subDomain: z.string().optional(),
+        knowledgeLevel: z.enum(['basic', 'intermediate', 'advanced', 'expert']).optional(),
+        updateFrequency: z.string().optional(),
+        sources: z.array(z.string()).optional(),
+        keyFrameworks: z.array(z.string()).optional(),
+        recentDevelopments: z.string().optional(),
+      }))
+      .mutation(async ({ input }) => {
+        return createExpertDomainKnowledge(input);
+      }),
+
+    // Get domain knowledge for an expert
+    getDomainKnowledge: protectedProcedure
+      .input(z.object({ expertId: z.string() }))
+      .query(async ({ input }) => {
+        return getExpertDomainKnowledge(input.expertId);
+      }),
+
+    // Update domain knowledge
+    updateDomainKnowledge: protectedProcedure
+      .input(z.object({
+        id: z.number(),
+        knowledgeLevel: z.enum(['basic', 'intermediate', 'advanced', 'expert']).optional(),
+        recentDevelopments: z.string().optional(),
+        sources: z.array(z.string()).optional(),
+      }))
+      .mutation(async ({ input }) => {
+        await updateExpertDomainKnowledge(input.id, input);
+        return { success: true };
+      }),
+
+    // Get stale domains that need updating
+    getStaleDomains: protectedProcedure
+      .input(z.object({ daysOld: z.number().optional() }).optional())
+      .query(async ({ input }) => {
+        return getStaleExpertDomains(input?.daysOld);
+      }),
+
+    // Get full expert context (conversations + memories) for enhanced prompts
+    getFullExpertContext: protectedProcedure
+      .input(z.object({
+        expertId: z.string(),
+        conversationLimit: z.number().optional(),
+      }))
+      .query(async ({ ctx, input }) => {
+        const [conversationContext, memoryContext, promptEvolution, domainKnowledge] = await Promise.all([
+          getExpertConversationContext(ctx.user.id, input.expertId, input.conversationLimit || 10),
+          getExpertMemoryContext(ctx.user.id, input.expertId),
+          getLatestExpertPromptEvolution(input.expertId),
+          getExpertDomainKnowledge(input.expertId),
+        ]);
+
+        return {
+          conversationContext,
+          memoryContext,
+          promptEvolution,
+          domainKnowledge,
+        };
       }),
   }),
 });
+
 export type AppRouter = typeof appRouter;

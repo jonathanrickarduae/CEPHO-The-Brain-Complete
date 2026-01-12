@@ -256,7 +256,7 @@ export default function Settings() {
                   
                   <div className="space-y-4">
                     {[
-                      { label: 'Daily Brief Reminder', description: 'Get reminded to check your daily brief each morning', enabled: true },
+                      { label: 'The Signal Reminder', description: 'Get reminded to check your daily brief each morning', enabled: true },
                       { label: 'Mood Check Prompts', description: 'Receive prompts to log your mood 3x daily', enabled: true },
                       { label: 'Task Deadlines', description: 'Get notified before task deadlines', enabled: true },
                       { label: 'AI Insights', description: 'Receive insights from your Chief of Staff', enabled: false },

@@ -191,7 +191,7 @@ export function InsightsPanel() {
   );
 }
 
-// Inline nudge for specific contexts (e.g., in Digital Twin page)
+// Inline nudge for specific contexts (e.g., in Chief of Staff page)
 export function InlineNudge({ 
   type, 
   message, 

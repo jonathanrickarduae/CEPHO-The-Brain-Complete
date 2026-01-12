@@ -21,7 +21,8 @@ const MOOD_COLORS = {
   10: 'bg-emerald-500',
 };
 
-const MOOD_EMOJIS = ['😢', '😔', '😟', '😕', '😐', '🙂', '😊', '😄', '😁', '🤩'];
+// Mood labels instead of emojis for professional look
+const MOOD_LABELS = ['Very Low', 'Low', 'Below Avg', 'Fair', 'Neutral', 'Good', 'Very Good', 'Great', 'Excellent', 'Peak'];
 
 export function MoodTimeline({ days = 7, className }: MoodTimelineProps) {
   const { data: history, isLoading } = trpc.mood.history.useQuery(
@@ -83,7 +84,7 @@ export function MoodTimeline({ days = 7, className }: MoodTimelineProps) {
       {/* Summary Stats */}
       <div className="grid grid-cols-3 gap-4">
         <div className="bg-card/60 border border-white/10 rounded-xl p-4 text-center">
-          <div className="text-3xl mb-1">{MOOD_EMOJIS[Math.round((trends?.averageScore || 5) - 1)]}</div>
+          <div className="text-sm text-muted-foreground mb-1">{MOOD_LABELS[Math.round((trends?.averageScore || 5) - 1)]}</div>
           <div className="text-2xl font-bold text-foreground">{trends?.averageScore?.toFixed(1) || '-'}</div>
           <div className="text-xs text-muted-foreground">Average</div>
         </div>
@@ -218,7 +219,7 @@ export function MoodTimelineCompact({ className }: { className?: string }) {
 
   return (
     <div className={cn('flex items-center gap-3', className)}>
-      <div className="text-2xl">{MOOD_EMOJIS[Math.round(trends.averageScore - 1)]}</div>
+      <div className="text-sm text-muted-foreground">{MOOD_LABELS[Math.round(trends.averageScore - 1)]}</div>
       <div>
         <div className="flex items-center gap-1">
           <span className="text-sm font-medium text-foreground">{trends.averageScore.toFixed(1)}</span>

@@ -23,7 +23,7 @@ export default function IntegrationsPage() {
             Integrations
           </h1>
           <p className="text-muted-foreground mt-2">
-            Connect your email, calendar, and productivity tools to centralize everything in The Brain.
+            Connect your email, calendar, and productivity tools to centralize everything in Cepho.
           </p>
         </div>
 
@@ -35,14 +35,14 @@ export default function IntegrationsPage() {
           <div className="space-y-2 text-sm text-muted-foreground">
             <p>
               <strong className="text-foreground">Email:</strong> Once connected, emails sync automatically to your Universal Inbox. 
-              You can read, reply, and manage emails without leaving The Brain.
+              You can read, reply, and manage emails without leaving Cepho.
             </p>
             <p>
-              <strong className="text-foreground">Calendar:</strong> Your events appear in Daily Brief and can be used for 
+              <strong className="text-foreground">Calendar:</strong> Your events appear in The Signal and can be used for 
               smart scheduling and meeting prep.
             </p>
             <p>
-              <strong className="text-foreground">Asana:</strong> Tasks sync both ways - create tasks in The Brain that appear 
+              <strong className="text-foreground">Asana:</strong> Tasks sync both ways - create tasks in Cepho that appear 
               in Asana, and vice versa.
             </p>
           </div>

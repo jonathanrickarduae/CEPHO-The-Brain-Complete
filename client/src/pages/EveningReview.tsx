@@ -197,7 +197,7 @@ export default function EveningReview() {
                     {CHALLENGES.map((item) => (
                       <div key={item.id} className="p-2 rounded-lg bg-amber-500/10 border border-amber-500/20">
                         <p className="text-sm mb-1">{item.text}</p>
-                        <p className="text-xs text-amber-400">💡 {item.suggestion}</p>
+                        <p className="text-xs text-amber-400 flex items-center gap-1"><Sparkles className="w-3 h-3" /> {item.suggestion}</p>
                       </div>
                     ))}
                   </div>
@@ -252,7 +252,7 @@ export default function EveningReview() {
                   className="min-h-20 mb-3 bg-secondary/30"
                 />
                 <p className="text-xs text-muted-foreground">
-                  Your Chief of Staff and AI Expert team will process these while you rest. Results ready in tomorrow's Daily Brief.
+                  Your Chief of Staff and AI Expert team will process these while you rest. Results ready in tomorrow's The Signal.
                 </p>
               </CardContent>
             </Card>
@@ -278,7 +278,7 @@ export default function EveningReview() {
                     step={1}
                     className="flex-1"
                   />
-                  <span className="text-lg">🔥</span>
+                  <Zap className="w-5 h-5 text-pink-500" />
                 </div>
               </CardContent>
             </Card>
@@ -358,7 +358,7 @@ export default function EveningReview() {
             </Button>
             
             <p className="text-xs text-center text-muted-foreground">
-              Your Chief of Staff will process everything overnight and have your Daily Brief ready by 7 AM.
+              Your Chief of Staff will process everything overnight and have your The Signal ready by 7 AM.
             </p>
           </div>
         </div>

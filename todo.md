@@ -1697,425 +1697,940 @@
 - [ ] Active learning mode with screen observation
 
 
-## Onboarding Refinement (Jan 12)
-- [ ] Refine 6-step onboarding to clearly explain what Cepho is
-- [ ] Focus core message on "operating at a 10" - optimal brain capacity
-- [ ] Emphasize freeing up time in real life
-- [ ] Make it crystal clear for first-time users
-- [ ] Review and improve the 6 things to learn about
-
-
-## Multi-AI Validation System (Jan 12)
-- [ ] Build Multi-AI orchestration in Chief of Staff
-- [ ] Integration points for Claude, Perplexity, GPT-4
-- [ ] Validation routing logic based on content type
-- [ ] Quality badges (Single AI, Double AI Verified, Triple AI Verified)
-- [ ] QMS integration - certain deliverables require multi-AI validation
-
-
-## Digital Twin Core (Jan 12)
-- [x] Create profile vault database schema (decision patterns, preferences, values, thinking frameworks)
-- [x] Build learning engine that analyses interactions and extracts patterns
-- [ ] Create personality model capture (communication style, priorities, risk tolerance)
-- [ ] Build structured onboarding for initial profile capture
-- [ ] Wire learning engine to feed into Chief of Staff and all SME interactions
-- [ ] Create profile evolution system that updates over time
-- [ ] Build autonomy progression tracking
-
-
-### Digital Twin Structured Learning Program
-- [ ] Create 30-minute initial onboarding session for personality/working style capture
-- [ ] Build daily 15-minute learning prompts system
-- [ ] Implement communication style matching (learn tone and mirror it)
-- [ ] Create decision framework capture ("How would you approach this as CSO/COO?")
-- [ ] Build progressive autonomy system - takes on more as it learns
-- [ ] Research and implement learning frameworks for accelerated understanding
-- [ ] Make learning process interesting and engaging, not boring questionnaires
-
-- [ ] Research Digital Twin best practices and frameworks
-- [ ] Build document/email upload for learning from real examples
-- [ ] Create strength/gap profiling (what you're good at vs not)
-- [ ] Add role-based scenarios (COO, CSO, Consultant, Financial Modeller)
-- [ ] Build accelerated learning beyond 30-min onboarding
-- [ ] Create stereotype quickly from initial session
-
-- [ ] Add demographic baseline to Digital Twin (age, gender, nationality)
-- [ ] Research external Digital Twin frameworks for potential integration
-- [ ] Ensure all learning is properly logged and stored in database
-
-
-## QMS Blueprint Library for Project Genesis
-
-### Project Type Blueprints (9 Types)
-- [ ] New Business / Revenue Generation blueprint with intake questions, SME assignments, QA gates
-- [ ] Due Diligence blueprint with data room access prompts, file upload, analysis workflow
-- [ ] Strategic Investment blueprint with valuation models, risk assessment, SME deep dive
-- [ ] Investor Presentation blueprint with material review, deck building, pitch prep
-- [ ] Go-to-Market Strategy blueprint with market research, positioning, launch plan
-- [ ] Deep Research blueprint with source gathering, analysis, synthesis workflow
-- [ ] Financial Model blueprint with assumptions, projections, sensitivity analysis
-- [ ] Legal/Compliance Pack blueprint with document review, risk flagging, sign-off
-- [ ] Custom Project blueprint with flexible wizard, user-defined deliverables
-
-### Blueprint Components for Each Type
-- [ ] Intake Questions - Yes/No questions, data dump prompts, file upload triggers
-- [ ] Process Steps - Clear workflow with dependencies and milestones
-- [ ] SME Assignments - Which AI experts work on each phase
-- [ ] QA Gates - Sign-off criteria at each checkpoint
-- [ ] Deliverables - What gets produced at each stage
-- [ ] Triple AI Validation - Cross-checking system with verification badges
-
-### Wizard Flow Implementation
-- [ ] Project type selection screen with clear descriptions
-- [ ] Dynamic intake questions based on project type
-- [ ] Data dump interface - file upload, paste content, provide access credentials
-- [ ] SME deep dive phase - experts analyze and build
-- [ ] Progressive QA gates - sign-off at each stage
-- [ ] Final deliverables with validation badges
-
-### Process Diagrams & Sign-off Criteria
-- [ ] Visual process flow for each project type
-- [ ] Clear sign-off criteria at each gate
-- [ ] Dependency mapping between steps
-- [ ] Estimated timelines for each phase
-
-
-### Capital Matching Engine
-- [ ] Amount-based routing logic (£50K → Angels, £500K → HNWIs, £5M+ → Family offices/VCs)
-- [ ] Investor database schema (contacts, ticket sizes, sectors, locations, deal preferences)
-- [ ] Smart matching algorithm based on location, sector, stage, equity structure, deal type
-- [ ] Intake questions for capital strategy (amount, equity %, valuation, location, timeline, use of funds)
-
-### Investor Categories Database
-- [ ] Angel Networks (£10K-£100K tickets)
-- [ ] HNWIs (£100K-£1M tickets)
-- [ ] Family Offices (£1M-£10M tickets)
-- [ ] VCs (£500K-£50M, stage-specific)
-- [ ] Banks (debt, bridging, asset-backed lending)
-- [ ] Government/Grants (innovation funds, regional development)
-- [ ] Strategic Partners (JV, corporate investment)
-
-### Capital Strategy Intake Questions
-- [ ] How much are you raising?
-- [ ] What's the equity structure? (% offered, valuation, terms)
-- [ ] Location of business? (UK, UAE, US - different investor pools)
-- [ ] Joint venture or straight equity?
-- [ ] Timeline for close?
-- [ ] What's the use of funds?
-- [ ] Previous funding history?
-- [ ] Current cap table structure?
-
-
-## Vault Security Architecture
-
-### Multi-Layer Authentication
-- [ ] Biometric authentication via WebAuthn API (Face ID / Touch ID)
-- [ ] Hardware key support (YubiKey / FIDO2)
-- [ ] TOTP Authenticator integration (Google Authenticator / Authy)
-- [ ] Long passphrase master key (24+ characters)
-- [ ] Device binding - Vault only accessible from registered devices
-
-### Vault Security Features
-- [ ] Zero-knowledge encryption - credentials encrypted client-side before storage
-- [ ] Session timeouts - auto-lock after inactivity
-- [ ] Access logging - every vault access logged with device/location
-- [ ] Anomaly detection - alert on unusual access patterns
-- [ ] Emergency lockdown - remote wipe capability
-
-### Integration Security
-- [ ] OAuth tokens stored encrypted
-- [ ] API keys never exposed to frontend
-- [ ] Credential rotation reminders
-- [ ] Integration health monitoring
-- [ ] Re-authentication required before showing sensitive data
-
-
-## QMS Blueprint Library for Project Genesis (Completed)
-
-### Project Type Blueprints
-- [x] New Business / Revenue Generation blueprint
-- [x] Due Diligence blueprint
-- [x] Investor Presentation blueprint
-- [x] Strategic Investment blueprint
-- [x] Go-to-Market Strategy blueprint
-- [x] Deep Research blueprint
-- [x] Financial Model blueprint
-- [x] Legal/Compliance Pack blueprint
-- [x] Custom Project blueprint
-
-### Blueprint Components (Each Type)
-- [x] Intake questions (SME-sourced from McKinsey, VCs, CFOs, lawyers)
-- [x] Process steps with dependencies and time estimates
-- [x] SME team assignments (lead, core, specialists)
-- [x] QA gates with sign-off criteria
-- [x] Triple AI validation configuration
-- [x] Deliverables with quality standards
-
-### Capital Matching Engine
-- [x] Investor database schema (investors table)
-- [x] Capital raises tracking (capital_raises table)
-- [x] Investor interactions log (investor_interactions table)
-- [x] Commitment tracking (investor_commitments table)
-- [x] Amount-based investor matching function
-- [x] Investor categories (angels, HNWIs, VCs, family offices, banks, government)
-
-### Project Genesis Database Tables
-- [x] project_blueprints table
-- [x] blueprint_step_progress table
-- [x] triple_ai_validation table
-
-### Enhanced Vault Security
-- [x] vault_credentials table (encrypted storage)
-- [x] registered_devices table (WebAuthn support)
-- [x] security_settings table (biometric, TOTP, hardware key)
-
-### Project Genesis Wizard
-- [x] Created ProjectGenesisWizard.tsx with new blueprint system
-- [ ] Integrate wizard into existing ProjectGenesis component
-- [ ] Add voice input to intake questions
-- [ ] Connect to database for project creation
-- [ ] Add file upload for data dump functionality
-
-
-## Video-First Investor Pitch System
-
-### Core Concept
-- [x] Video Pitch Pack as new deliverable type in Project Genesis
-- [x] 2-3 minute video snapshots replacing traditional pitch decks
-- [x] Secure, shareable landing pages for investor outreach
-- [x] Modern engagement approach respecting attention spans
-
-### Video Script Generator
-- [x] AI-powered script writing from business intake data
-- [x] 2-minute overview script template
-- [x] Product deep-dive script template
-- [x] Team/vision script template
-- [x] Key messaging extraction from Project Genesis data
-- [x] Tone and style customization options
-
-### Video Production Workflow
-- [ ] Script review and approval stage
-- [ ] Imagery and b-roll suggestions
-- [ ] Graphics and visual asset generation
-- [ ] Video upload and management
-- [ ] Multiple video slots (Overview, Product, Team, Traction)
-
-### Secure Landing Page
-- [x] Password/link protection for investor access
-- [x] Embedded video player(s)
-- [x] Social links integration
-- [x] Contact information display
-- [x] Optional downloadable materials (deck, one-pager)
-- [ ] Analytics tracking (views, watch time, clicks)
-- [ ] Expiry date option for time-limited access
-
-### Database Schema
-- [x] video_pitch_packs table
-- [x] pitch_videos table (multiple per pack)
-- [x] pitch_landing_pages table
-- [x] landing_page_access_logs table
-- [x] video_scripts table
-
-### Integration
-- [ ] Add Video Pitch Pack to Project Genesis deliverables
-- [ ] Connect to investor database for targeted sharing
-- [ ] Track investor engagement with videos
-
-
-## Video Pitch Studio Enhancements
-
-### Project Genesis Integration
-- [ ] Add "Create Video Pitch Pack" button in Project Genesis
-- [ ] Auto-populate business data from project intake to script generator
-- [ ] Link pitch packs to Project Genesis projects
-- [ ] Show pitch pack status in project dashboard
-
-### Video Upload/Embed Functionality
-- [ ] S3 storage integration for video uploads
-- [ ] YouTube/Vimeo embed support
-- [ ] Video thumbnail generation
-- [ ] Upload progress indicator
-- [ ] Video preview in studio
-
-### Investor Engagement Analytics Dashboard
-- [x] Total views and unique visitors tracking
-- [x] Watch time analytics per video
-- [x] Document download tracking
-- [x] Investor engagement scoring
-- [x] Investor pipeline (hot/warm/cold status)
-- [x] Export engagement reports button
-
-
-## Unified Brain Banner System
-
-### Design Consistency
-- [x] Extract animated brain/neural network from landing page
-- [x] Create reusable BrainBanner component
-- [x] Thick header banner with animated brain on every page
-- [x] Pink page title text (e.g., "THE VAULT", "THE LIBRARY")
-- [x] Subtle neuron pulsing animation while working
-- [x] Consistent black background with cyan/pink glow
-- [x] "Operating at a 10" premium feel throughout
-
-### Implementation
-- [x] Add BrainBanner to main BrainLayout component
-- [x] Page-specific titles passed as props
-- [x] Responsive design for mobile (mobile uses existing header)
-- [x] Performance optimization for animations
-
-
-## Onboarding Brand Story Enhancement
-
-### Core Value Proposition Messaging
-- [x] "Getting you to a 10" tagline prominently featured
-- [x] Secure single point of contact messaging
-- [x] Chief of Staff / Digital Twin working for you
-- [x] Freeing you up to focus on what matters
-- [x] All integrations in one secure place
-
-### Onboarding Flow Updates
-- [x] Review and enhance onboarding copy
-- [x] Add brand story elements throughout
-- [x] Consistent visual identity with BrainBanner
-- [x] Clear articulation of what The Brain does
-
-
-## Video Pitch Studio Analytics Integration
-
-- [ ] Wire InvestorAnalyticsDashboard into VideoPitchStudio page
-- [ ] Add tab navigation between Studio and Analytics views
-- [ ] Connect analytics to pitch pack selection
-
-## Onboarding Flow Testing
-
-- [ ] Test 6-step onboarding flow end-to-end
-- [ ] Verify brand story messaging resonates
-- [ ] Check visual consistency with BrainBanner
-
-## Investor Database Connection
-
-- [ ] Create API routes for investor CRUD operations
-- [ ] Add investor creation/import functionality
-- [ ] Connect capital matching engine to live data
-- [ ] Build investor list management UI
-
-
-## Video Pitch Studio Analytics Integration (Completed)
-- [x] Wire Analytics Dashboard to Video Pitch Studio
-- [x] Add tab navigation (Studio / Analytics)
-- [x] Pass pitch pack data to analytics component
-
-## Onboarding Flow Testing (Completed)
-- [x] Test onboarding flow end-to-end
-- [x] Verify brand story messaging in all 6 steps
-- [x] Check visual consistency
-
-## Investor Database API (Completed)
-- [x] Create investor CRUD API routes
-- [x] Add capital matching endpoint
-- [x] Add interaction recording endpoint
-- [x] Add commitment tracking endpoint
-- [x] Write unit tests for investor matching logic (13 tests passing)
-
-
-## Investor CRM UI
-- [ ] Create dedicated Investor CRM page
-- [ ] Add/Edit/Delete investor contacts
-- [ ] Filter by type (Angel, HNWI, VC, etc.)
-- [ ] Filter by relationship status (cold/warm/hot)
-- [ ] Search functionality
-- [ ] Investor profile cards with contact details
-- [ ] Interaction history timeline per investor
-
-## Investor CSV Import
-- [ ] CSV upload component
-- [ ] Column mapping interface
-- [ ] Validation and error handling
-- [ ] Bulk import with progress indicator
-- [ ] Sample CSV template download
-
-## Video Pitch to Project Genesis Connection
-- [ ] Add "Create Video Pitch Pack" button in Project Genesis
-- [ ] Auto-populate business data from project intake
-- [ ] Pre-fill company name, description, key metrics
-- [ ] Link pitch pack to project for tracking
-
-## McKinsey Insights Integration
-- [ ] Research McKinsey RSS/API feeds
-- [ ] Create McKinsey Insights data fetcher
-- [ ] Display latest insights in Daily Brief Intelligence section
-- [ ] Add McKinsey as source for fact-checking
-- [ ] Citation system with source links
-- [ ] Industry-specific insights filtering
-- [ ] Integration with Project Genesis research phase
-
-
-## Session Completed Items (Jan 12, 2026)
-
-### Investor CRM
-- [x] Create Investor CRM page component
-- [x] Add/edit/delete investor functionality
-- [x] Filter by type, status, sector
-- [x] Search functionality
-- [x] View investor details modal
-- [x] CSV import functionality with template download
-- [x] Bulk import with validation
-- [x] Route added to App.tsx
-
-### McKinsey Insights Integration
-- [x] Curated database of McKinsey research (10+ reports)
-- [x] Search insights by topic/category
-- [x] Fact-check claims against research
-- [x] Citation formatting (APA, MLA, Chicago)
-- [x] Key findings extraction
-- [x] McKinseyInsightsPanel component
-- [x] Search mode for research
-- [x] Fact-check mode for verification
-- [x] Copy citation functionality
-- [x] External link to full reports
-- [x] Industry-specific insights (Financial Services, Healthcare, Tech, Retail, Energy)
-
-### Video Pitch to Project Genesis Connection
-- [x] "Create Video Pitch Pack" button in Project Genesis complete section
-- [x] Auto-populate project data via URL parameters
-- [x] Link to Video Pitch Studio with prefill flag
-
-
-## UI Cleanup (User Request)
-- [ ] BrainBanner - Remove text, keep only animated brain
-- [ ] Mood check-in - Remove emoji face, show only number (6, 7, 8)
-- [ ] Remove all gamification - No streaks, scores, badges
-- [ ] Dashboard boxes - Fix labels (AI Expert Engine → AI SMEs, Digital Twin → Chief of Staff)
-- [ ] Dashboard boxes - Make clickable to navigate to pages
-
-
-## UI Fixes (User Request - Jan 12)
-- [ ] Mood display - just number, not X/10
-- [ ] Message placeholder - "Message Chief of Staff..." not "Message Digital Twin..."
-- [ ] Tighten protocol toggle (OMNI/GOVERNED) design
-- [ ] Keep Evening Review as is
-
-
-## Branding & UI Fixes (User Request - Priority)
-- [ ] Change "THE BRAIN" to "CEPHO" with brand explanation
-- [ ] Add CEPHO meaning: Chief Executive Personal Headquarters Operations
-- [ ] Blend between CEPHO and The Brain naming throughout
-- [ ] Update onboarding to explain the naming and value proposition
-- [ ] Move Getting Started checklist to Chief of Staff section
-- [ ] Add Learning module to Chief of Staff page
-- [ ] Add Behaviour module to Chief of Staff page
-- [ ] Add Pattern module to Chief of Staff page
-- [x] Update all remaining "Digital Twin" references to "Chief of Staff"
-- [x] Tighten OMNI/GOVERNED protocol toggle design
-- [ ] Remove Getting Started from main Nexus page
-
-## UI Improvements - Jan 12 2026
-- [x] Update sidebar icon for Chief of Staff (change from Brain to Briefcase/User icon)
-- [x] Add Getting Started checklist to Chief of Staff page
-- [x] Update landing page with Cepho branding blend
-
-
-## Updates - Jan 12 2026 (Batch 2)
-- [x] Update all remaining "Digital Twin" text references to "Chief of Staff"
-- [x] Tighten OMNI/GOVERNED protocol toggle design
-- [x] Update onboarding flow to explain CEPHO/Brain naming and value proposition
+## Enhanced Onboarding Experience
+
+### Data Storage & Security Explanations
+- [ ] Add clear data storage explanation for each integration (where data is held, encryption, access)
+- [ ] Explain search functionality - how it indexes and retrieves across integrations
+- [ ] Show data flow diagrams during onboarding (visual representation of where data goes)
+- [ ] Privacy-first messaging: "Your data stays yours - we just help you organize it"
+
+### Integration Value Propositions
+- [ ] Each integration step explains WHY it optimizes The Brain's performance
+- [ ] Show concrete benefits: "Connect email → AI can prioritize your inbox, draft responses, extract action items"
+- [ ] Explain how integrations compound: "More connections = smarter recommendations"
+- [ ] Display estimated time savings per integration
+
+### Progressive Learning Messaging
+- [ ] "As we work together, The Brain learns your patterns and preferences"
+- [ ] "Over time, recommendations become more personalized and accurate"
+- [ ] "Your Digital Twin grows stronger with each interaction"
+- [ ] Show learning progress indicators during onboarding
+
+### Financial Optimization Messaging
+- [ ] Explain AI provider cost optimization: "The Brain scouts for best-value AI models"
+- [ ] Show integration cost comparisons: "We find the most cost-effective tools"
+- [ ] Display potential savings from automation: "Average user saves X hours/week"
+- [ ] Highlight security improvements over time: "Continuous security scanning and updates"
+
+### Onboarding Flow Improvements
+- [ ] Step-by-step wizard with progress indicator
+- [ ] "Why this matters" tooltip for each integration
+- [ ] Skip option with "You can always add this later" reassurance
+- [ ] Success celebration after each integration connected
+- [ ] Summary screen showing all connected integrations and their benefits
+
+
+## Corporate Digital Twins - New Additions
+- [x] Add BlackRock corporate persona (investment management, risk analytics, ESG frameworks)
+- [x] Add Morgan Stanley corporate persona (wealth management, M&A advisory, capital markets)
+
+- [x] Add research methodology field to Corporate Partner data structure
+- [x] Add thinking framework field showing how each company approaches problems
+- [x] Add key principles field for core beliefs guiding their work
+- [x] Add signature tools/models field for proprietary frameworks
+- [x] Enhance all existing corporate partners with methodology descriptions
+
+
+## AI Expert & Corporate Partner Card Enhancements
+- [x] Implement flip card interaction for AI Expert cards (click to flip)
+- [x] Front: Name, avatar, specialty, performance score
+- [x] Back: Full bio, thinking style, strengths/weaknesses, methodology
+- [x] Add "Tweak Approach" button on back of card to adjust expert behavior
+- [x] Implement flip card interaction for Corporate Partner cards
+- [x] Corporate back: Research methodology, thinking framework, key principles, signature tools
+
+
+## Presentation Blueprint (Project Genesis)
+- [ ] Create Presentation Blueprint framework for investor deck creation
+- [ ] Build process flow document showing each step visually
+- [ ] Add decision points and branches in the flow
+- [ ] Identify bottlenecks and inefficiencies
+- [ ] Allow annotation and refinement during testing
+- [ ] Track time spent at each stage
+
+
+## Social Media Blueprint (Project Genesis Integration)
+
+### Platform Algorithm Intelligence
+- [ ] Instagram algorithm research: engagement signals, Reels priority, hashtag strategy, optimal posting times
+- [ ] YouTube algorithm research: watch time, CTR, retention curves, thumbnail optimization, SEO
+- [ ] TikTok algorithm research: For You Page mechanics, hook timing, trending sounds, completion rate
+- [ ] LinkedIn algorithm research: dwell time, comment quality, native content preference, B2B engagement
+- [ ] Build PlatformIntelligence.ts data layer with algorithm insights for each platform
+- [ ] Create AlgorithmInsights component showing what each platform rewards
+
+### Strategy Engine
+- [ ] Pull business objectives from Project Genesis sign-off
+- [ ] Define target audience personas per platform
+- [ ] Set KPIs: followers growth, engagement rate, brand awareness, conversion goals
+- [ ] Content pillar definition (educational, entertaining, promotional, behind-scenes)
+- [ ] Competitor analysis integration
+- [ ] Create SocialMediaStrategy component
+
+### Content Factory
+- [ ] Content type templates per platform (Reels, Stories, Carousels, Long-form, Shorts)
+- [ ] AI-powered caption generator with platform-specific tone
+- [ ] Hashtag research and optimization engine
+- [ ] Video script generator aligned to hook-story-CTA structure
+- [ ] Image/thumbnail generator integration
+- [ ] Content calendar with drag-drop scheduling
+- [ ] Create ContentFactory component
+
+### Account Setup & Optimization
+- [ ] Profile optimization checklist per platform
+- [ ] Bio generator with keyword optimization
+- [ ] Profile/cover image specifications and templates
+- [ ] Link-in-bio strategy
+- [ ] Account connection wizard (OAuth for each platform)
+- [ ] Create AccountSetup component
+
+### Scheduling & Rollout
+- [ ] Optimal posting time calculator per platform and audience
+- [ ] Content queue with preview
+- [ ] Cross-posting with platform-specific adaptations
+- [ ] A/B testing for captions and thumbnails
+- [ ] Performance tracking dashboard
+- [ ] Create SchedulingEngine component
+
+### End-to-End Automation
+- [ ] One-click content generation from business objectives
+- [ ] Batch content creation for week/month
+- [ ] Auto-adaptation of content for each platform
+- [ ] Review queue before publishing
+- [ ] Analytics feedback loop for optimization
+- [ ] Create SocialMediaBlueprint master component
+
+
+## Project Genesis - Intelligent Onboarding Flow
+
+### Context Detection & Entry Points
+- [ ] "What are you trying to achieve?" initial question with smart options
+- [ ] Detect: New company vs existing business vs specific deliverable request
+- [ ] Document upload zone for existing strategic plans, pitch decks, business plans
+- [ ] AI extraction of key info from uploaded documents
+- [ ] Fast-track mode when documents provide sufficient context
+
+### Adaptive Questioning Flow
+- [ ] Yes/No branching logic that doesn't overload
+- [ ] Progressive disclosure - only show relevant questions based on previous answers
+- [ ] Smart defaults based on industry/company type
+- [ ] Skip logic for questions already answered via document upload
+- [ ] Conversational UI that feels like talking to an advisor
+
+### Deep Dive Analysis (New Ventures)
+- [ ] Business model canvas generation
+- [ ] Market size and opportunity analysis (TAM/SAM/SOM)
+- [ ] Competitor landscape mapping
+- [ ] SWOT analysis with AI-powered insights
+- [ ] Value proposition refinement
+- [ ] Target customer persona development
+- [ ] Revenue model exploration
+- [ ] Risk assessment and mitigation strategies
+- [ ] Regulatory/compliance considerations
+- [ ] Team and capability gap analysis
+
+### Project Repository
+- [ ] Central document dump for all project materials
+- [ ] Auto-categorization of uploaded files
+- [ ] Version control for strategic documents
+- [ ] AI summary generation for each document
+- [ ] Cross-reference insights across documents
+
+### Sign-Off Document Generation
+- [ ] Comprehensive strategic brief (like Boundless doc structure)
+- [ ] Executive summary with key decisions
+- [ ] Clear objectives and success metrics
+- [ ] Identified risks and concerns
+- [ ] Resource requirements
+- [ ] Timeline and milestones
+- [ ] Approval workflow before downstream work begins
+
+### Downstream Blueprint Triggers
+- [ ] Presentation Blueprint unlocked after sign-off
+- [ ] Social Media Blueprint unlocked after sign-off
+- [ ] Financial Model Blueprint unlocked after sign-off
+- [ ] Each blueprint pulls context from signed-off Genesis document
+- [ ] Create ProjectGenesisWizard master component
+
+
+### SME Collaboration & Auto-Assembly
+- [ ] Auto-detect relevant AI Experts based on project context (sector, stage, objectives)
+- [ ] Strategy experts auto-engage during scoping phase
+- [ ] Sector specialists join based on industry (media, finance, tech, healthcare, etc.)
+- [ ] Data scientists provide ongoing analysis and recommendations
+- [ ] Corporate Digital Twins selected as peer reviewers (Netflix for media, BlackRock for finance, etc.)
+- [ ] Show active SME panel with their contributions in real-time
+- [ ] Each SME provides structured input at their expertise touchpoints
+
+### Quality Assurance & Peer Review Checkpoints
+- [ ] Multiple QA review gates throughout Genesis process
+- [ ] SME sign-off required at each major phase
+- [ ] Peer review from Corporate Digital Twins with sector expertise
+- [ ] Data validation checkpoint with Data Scientist review
+- [ ] Strategy coherence check with Strategy experts
+- [ ] Risk assessment review with relevant specialists
+- [ ] Visual indicator showing QA status and approvals
+
+### Living Document & Data Capture
+- [ ] Comprehensive report that grows throughout process
+- [ ] All data, facts, and insights captured in structured format
+- [ ] Keywords and resonant phrases identified and highlighted
+- [ ] Market data and statistics with sources
+- [ ] Competitor intelligence compiled
+- [ ] Customer insights and personas documented
+- [ ] Financial projections and assumptions
+- [ ] Risk register with mitigation strategies
+- [ ] Potentially 100+ pages when fully developed
+
+### Multi-Format Output Generation
+- [ ] Export as comprehensive PDF report
+- [ ] Generate executive summary (2-3 pages)
+- [ ] Convert to podcast script with key insights
+- [ ] Create video presentation from Genesis content
+- [ ] Slide deck auto-generation from key sections
+- [ ] One-pager for quick stakeholder briefing
+
+
+## Quality Management System & Blueprint Architecture
+
+### Genesis Blueprint (Master Document)
+- [ ] Create GenesisBlueprint data structure as single source of truth
+- [ ] All business objectives, strategy, and context stored centrally
+- [ ] Version control with change history
+- [ ] Approval status tracking
+- [ ] Links to all downstream sub-process blueprints
+
+### Sub-Process Blueprint Inheritance
+- [ ] Presentation Blueprint inherits from Genesis (objectives, messaging, audience)
+- [ ] Social Media Blueprint inherits from Genesis (brand voice, target personas, goals)
+- [ ] Financial Model Blueprint inherits from Genesis (revenue model, projections, assumptions)
+- [ ] Marketing Blueprint inherits from Genesis (positioning, channels, budget)
+- [ ] Operations Blueprint inherits from Genesis (team, timeline, milestones)
+- [ ] Each sub-blueprint shows inherited fields vs custom fields
+
+### Cascading Update System
+- [ ] When Genesis is updated, flag affected sub-blueprints
+- [ ] Show impact analysis before confirming changes
+- [ ] Auto-update inherited fields in downstream blueprints
+- [ ] Notification to relevant SMEs when their area is affected
+- [ ] Change propagation log showing what updated where
+
+### Quality Management Dashboard
+- [ ] Visual map of all blueprints and their connections
+- [ ] Status indicators (draft, in review, approved, needs update)
+- [ ] QA checkpoint completion tracking
+- [ ] SME approval status per blueprint
+- [ ] Version comparison and diff view
+- [ ] Audit trail of all changes
+
+### Feedback Loop & Learning System
+- [ ] Capture execution results (what worked, what didn't)
+- [ ] Link outcomes back to blueprint decisions
+- [ ] AI analysis of patterns across projects
+- [ ] Process improvement suggestions based on data
+- [ ] Digital Twin learning from feedback
+- [ ] Best practice extraction and documentation
+- [ ] Continuous improvement metrics
+
+### Blueprint Process Flow Visualization
+- [ ] Interactive flowchart showing Genesis → Sub-blueprints
+- [ ] Click to drill into any blueprint
+- [ ] Show dependencies and data flow
+- [ ] Highlight bottlenecks and inefficiencies
+- [ ] Time tracking at each stage
+- [ ] Create BlueprintQMS master component
+
+
+## Digital Twin as Chief of Staff - Active Orchestration
+
+### Questioning & Challenging
+- [ ] Digital Twin questions assumptions at each stage
+- [ ] Proactive clarification requests before proceeding
+- [ ] Challenge weak reasoning or gaps in logic
+- [ ] Surface contradictions between different inputs
+- [ ] "Have you considered..." prompts based on pattern recognition
+
+### SME Orchestration & Weighting
+- [ ] Track which SME has authority on which topics
+- [ ] Weight SME opinions based on relevance to current decision
+- [ ] Resolve conflicts between SME recommendations
+- [ ] Show reasoning for why one SME view is prioritized
+- [ ] Learn SME weighting preferences from user feedback
+
+### Escalation to User
+- [ ] Identify decisions that require user input
+- [ ] Clear escalation when Digital Twin is uncertain
+- [ ] Present options with pros/cons for user decision
+- [ ] "I'm not sure about X - here are the options, what do you think?"
+- [ ] Never proceed on major decisions without confirmation
+
+### Learning from User Decisions
+- [ ] Capture user's decision and reasoning
+- [ ] Store preferences for similar future situations
+- [ ] Build decision pattern library
+- [ ] Reduce escalations over time as confidence grows
+- [ ] Show "Based on your previous decision about X, I've done Y"
+
+### Two-Way Conversation Flow
+- [ ] Conversational UI that feels like advisor dialogue
+- [ ] Digital Twin provides updates on background work
+- [ ] User can interrupt and redirect at any point
+- [ ] Context maintained across conversation threads
+- [ ] Summary of what's been built/decided at any point
+- [ ] "Here's what I've done so far, does this look right?"
+
+### Decision Audit Trail
+- [ ] Log every decision point and who made it
+- [ ] Track SME input vs user override
+- [ ] Show confidence level for AI decisions
+- [ ] Enable rollback to previous decision states
+- [ ] Learn from decisions that were later changed
+
+
+## Project Genesis - Social Media Blueprint (In Progress)
+
+### Platform Intelligence Layer
+- [ ] Instagram algorithm insights (engagement signals, reach factors, content types)
+- [ ] YouTube algorithm insights (watch time, CTR, retention, suggested videos)
+- [ ] TikTok algorithm insights (For You page signals, completion rate, shares)
+- [ ] LinkedIn algorithm insights (dwell time, comments, professional relevance)
+- [ ] Platform-specific best posting times data
+- [ ] Content format recommendations per platform
+
+### Strategy Engine
+- [ ] Pull objectives from Genesis Blueprint sign-off
+- [ ] Target audience definition per platform
+- [ ] Competitor analysis integration
+- [ ] Brand voice and tone guidelines
+- [ ] Content pillar definition (education, entertainment, inspiration, promotion)
+
+### Content Factory
+- [ ] Video content templates (Reels, TikToks, YouTube Shorts, Stories)
+- [ ] Image content templates (carousels, single posts, infographics)
+- [ ] Copy templates per platform (hashtags, captions, hooks)
+- [ ] AI content generation integration
+- [ ] Brand asset library integration
+
+### Scheduling & Rollout
+- [ ] Content calendar with optimal posting times
+- [ ] Cross-platform scheduling
+- [ ] A/B testing framework
+- [ ] Performance tracking dashboard
+- [ ] Automated posting queue
+
+### Account Setup & Optimization
+- [ ] Profile optimization checklist per platform
+- [ ] Bio templates and guidelines
+- [ ] Link-in-bio strategy
+- [ ] Highlight/pinned content strategy
+
+
+
+## Project Genesis - Quality Management System (QMS)
+
+### Document Control
+- [ ] Author field on all documents/processes (who created it)
+- [ ] Version control (v1.0, v1.1, v2.0 etc.)
+- [ ] Date created and date last updated
+- [ ] Sign-off status (Digital Twin / User / Both)
+- [ ] Sign-off date and signature
+- [ ] Document status (Draft / In Review / Approved / Superseded)
+
+### Master Process Log
+- [ ] Central registry of all processes and blueprints
+- [ ] Process ID with naming convention (PG-001, PG-SM-001, etc.)
+- [ ] Process owner assignment
+- [ ] Dependencies mapping (which processes link to which)
+- [ ] Status dashboard showing all process health
+
+### Naming Conventions
+- [ ] Blueprint naming: [Project]-[Type]-[Version] (e.g., PG-SocialMedia-v1.0)
+- [ ] Document naming: [Date]-[Type]-[Description]-[Version]
+- [ ] Process naming: [Category]-[SubCategory]-[Number]
+- [ ] Clear folder structure mirroring naming convention
+
+### Audit Trail
+- [ ] Change log for every document/process
+- [ ] Who made the change
+- [ ] What was changed (diff view)
+- [ ] When it was changed
+- [ ] Why it was changed (change reason)
+- [ ] Approval status of change
+
+### Weekly Digital Twin Audit
+- [ ] Scheduled weekly review of all Project Genesis blueprints
+- [ ] Proactive enhancement suggestions
+- [ ] Identify outdated or inconsistent processes
+- [ ] Flag processes needing user review
+- [ ] Generate audit report with recommendations
+- [ ] Track implementation of previous audit items
+
+### Cascading Updates
+- [ ] When master Genesis Blueprint changes, flag all linked blueprints
+- [ ] Show impact analysis before applying changes
+- [ ] Require sign-off on cascaded changes
+- [ ] Maintain change history across linked documents
+
+
+
+## Digital Twin Chief of Staff - Job Description Document
+
+- [x] Create comprehensive job description document
+- [x] Define core responsibilities and duties
+- [x] Establish communication protocols (how to speak to user)
+- [x] Define QA and review responsibilities
+- [x] Set self-learning and development protocols
+- [x] Document decision-making authority levels
+- [x] Create escalation procedures
+- [x] Define weekly audit responsibilities
+- [x] Build into system as reference logic for AI behavior
+
+
+
+## Digital Twin Maturity Model & Development Journey
+
+### Maturity Levels
+- [x] Level 1: Infant - Basic responses, learning fundamentals, requires constant guidance
+- [x] Level 2: Learning - Pattern recognition, starting to anticipate needs, asks many questions
+- [x] Level 3: Competent - Handles routine tasks autonomously, good judgment on escalation
+- [x] Level 4: Advanced - Proactive suggestions, manages complex workflows, thinks ahead
+- [x] Level 5: Autonomous - Thinks like user, makes decisions confidently, teaches user new insights
+
+### Development Tracker
+- [x] Current maturity level indicator
+- [x] Progress percentage to next level
+- [x] Capabilities unlocked at each level
+- [x] Training hours logged
+- [x] Decisions made autonomously vs escalated
+- [x] Accuracy score on autonomous decisions
+- [x] Learning velocity (how fast improving)
+
+### Learning Acceleration
+- [ ] Active training sessions (user teaches directly)
+- [ ] Passive learning (observes user patterns)
+- [ ] Feedback loops (user corrects Digital Twin)
+- [ ] Expert consultation (learns from AI Experts)
+- [ ] Document ingestion (learns from uploaded materials)
+- [ ] Decision review (weekly audit of choices made)
+
+### Vault Integration
+- [ ] Store Digital Twin "soul" document in Vault
+- [ ] Secure as core IP and extension of user
+- [ ] Version control on personality/logic updates
+- [ ] Backup and recovery procedures
+
+
+
+## New AI Expert Roles
+
+- [x] Add Corporate Strategy Director (strategic planning, market positioning, competitive advantage)
+- [x] Add Private Equity Partner (deal structuring, valuation, portfolio management, exit strategies)
+- [x] Add Business Transformation Director (change management, digital transformation, operational excellence)
+
+
+
+## Presentation Blueprint (In Progress)
+
+- [ ] Create PresentationBlueprint wizard component
+- [ ] Inherit business info, value proposition, objectives from Genesis Master
+- [ ] Slide structure generator (title, problem, solution, market, traction, team, financials, ask)
+- [ ] AI-powered content suggestions for each slide
+- [ ] Design theme selection (professional, bold, minimal, creative)
+- [ ] Export options (PowerPoint, PDF, Google Slides)
+- [ ] SME review integration for investor-ready content
+- [ ] Version control for presentation iterations
+
+## Digital Twin QA Validation Integration
+
+- [ ] Create QAValidationService to classify all AI outputs
+- [ ] Add classification badges to Digital Twin chat responses
+- [ ] Add classification to AI Expert outputs
+- [ ] Add classification to Business Guardian insights
+- [ ] Implement source reference tracking for verified facts
+- [ ] Add "Request Verification" button for assumptions
+- [ ] Create QA Dashboard showing classification breakdown
+- [ ] Alert user when high percentage of outputs are assumptions
+
+## Weekly Audit Scheduler
+
+- [ ] Create WeeklyAuditScheduler component
+- [ ] Automatic blueprint review every Sunday
+- [ ] Generate audit report with enhancement suggestions
+- [ ] Track changes since last audit
+- [ ] Flag outdated or stale documents
+- [ ] Send notification when audit is complete
+- [ ] Store audit history in Digital Twin development log
+- [ ] Allow manual trigger of audit anytime
+
+
+## Jim Short - Key Stakeholder AI Expert
+
+- [ ] Create Jim Short as special AI Expert persona (key stakeholder/boss)
+- [ ] Add placeholder for Jim's photo (to be uploaded)
+- [ ] Build learning profile that captures his feedback patterns
+- [ ] Create "What would Jim think?" validation layer
+- [ ] Voice note/message ingestion to refine his persona
+- [ ] Track his preferences, expectations, and decision patterns
+- [ ] Integrate Jim's perspective into QA review process
+- [ ] Allow Jim's persona to evolve based on real feedback
+
+## Project Genesis - Governance Layer Enhancement
+
+- [ ] Add corporate structure section to Genesis wizard
+- [ ] Define roles and responsibilities upfront
+- [ ] Job description templates for key positions
+- [ ] RACI matrix (Responsible, Accountable, Consulted, Informed)
+- [ ] Decision-making authority levels
+- [ ] Approval workflows and sign-off requirements
+- [ ] Stakeholder mapping and communication plan
+- [ ] Governance dashboard showing who owns what
+
+## Neural Branding Update
+- [x] Rename "Command Center" to "The Nexus" across all UI
+- [x] Rename "Daily Brief" to "The Signal" (morning)
+- [x] Rename "Digital Twin" to "Chief of Staff" across all UI
+- [x] Rename "The Vault" to "The Hippocampus" across all UI
+- [x] Update sidebar navigation labels
+- [x] Update page titles and headers
+- [x] Update any references in components and modals
+- [x] Rename "AI Experts" to "AI-SMEs" across all UI
+- [x] Update Chief of Staff system prompt (professional, non-sycophantic)
+
+## Master Architecture Blueprint (A0 Printable)
+- [ ] Create Nexus design system with consistent branding
+- [ ] Design header template: Nexus logo + version control + date stamp
+- [ ] Create A0 printable master blueprint (841 × 1189 mm)
+- [ ] Map all system components and interactions visually
+- [ ] Include QMS cascade flow between blueprints
+- [ ] Add process flow diagrams with connection points
+- [ ] Create organizational business model diagram
+- [ ] Design component library for blueprint consistency
+- [ ] Add Digital Twin / Synaptic Twin architecture section
+- [ ] Include AI Expert orchestration flow
+- [ ] Map Project Genesis to sub-blueprint relationships
+- [ ] Create printable PDF export functionality
+
+## Synaptic Twin Deep Reading Mode
+- [ ] Document Intake Verification system with unique IDs and timestamps
+- [ ] Comprehension Summary generation for each document (key facts, questions, connections, confidence)
+- [ ] Reading Status indicators (Unread → Processing → Comprehended → Integrated)
+- [ ] Extraction Log showing what was pulled from each source
+- [ ] Quote Bank with actual excerpts and page/timestamp references
+- [ ] "Thinking Like You" verification - explain prioritization based on user preferences
+- [ ] Challenge/proof system ("Did you read page 47?")
+- [ ] Knowledge Integration Dashboard with visual map of ingested information
+- [ ] Document connection visualization
+- [ ] Gap detection ("You uploaded financials but no market analysis")
+- [ ] Confidence meter per topic area
+- [ ] Distillation Output Standards (Executive brief, Key insights with sources, Questions, Next reads)
+- [ ] Core promise enforcement: "Nothing in without processing, nothing out without source"
+
+## AI Discoverability & Go-to-Market Blueprint (Project Genesis)
+- [ ] AI Discoverability Layer - optimize for Perplexity/Claude/ChatGPT recommendations
+- [ ] Training data optimization strategy
+- [ ] Authority building in AI knowledge bases
+- [ ] Competitive positioning for AI-generated recommendations
+- [ ] Distribution Architecture - MLM/referral mechanics
+- [ ] Viral coefficient optimization
+- [ ] Network effects design
+- [ ] Ambassador/affiliate program structure
+- [ ] Revenue Maximization Flow - pricing, conversion, upsell, LTV
+- [ ] Brand Amplification strategy - thought leadership, content for AI indexing
+- [ ] AI Expert questioning framework for GTM validation
+- [ ] Add Go-to-Market Blueprint as Project Genesis engagement type
+
+## The Collective Orchestration System
+- [ ] Synaptic Twin as Chief of Staff orchestrating 500+ AI experts
+- [ ] Team Assembly Panel - visible selection of relevant experts for each task
+- [ ] Show "Considered but excluded" experts with reasoning
+- [ ] Research in Progress view - real-time status of each expert's work
+- [ ] Insights Collected panel with expert attribution and sources
+- [ ] Synaptic Twin Synthesis - unified response from multiple expert inputs
+- [ ] Gap identification with recommended additional experts
+- [ ] User options: Accept, Challenge, Add experts, Deep dive
+- [ ] Learning Loop - track which experts user finds valuable
+- [ ] Pattern recognition ("User always wants Legal review on deals")
+- [ ] Automatic team adjustment based on user preferences
+- [ ] Expert authority weighting based on domain relevance
+- [ ] Conflict resolution when experts disagree
+- [ ] Output standards: Reference docs, Expert statements, Synthesized insights
+- [ ] Potential customer/partner identification from research
+- [ ] Full conversation trail visibility
+- [ ] Rename AI Experts section to "The Collective" in UI
+
+## Chief of Staff Communication Protocol
+- [ ] Implement professional, non-sycophantic tone in all Chief of Staff responses
+- [ ] Remove all empty validation phrases ("Great idea!", "You're right!")
+- [ ] Add challenging/questioning behavior ("Have you considered...", "The data suggests...")
+- [ ] Enforce evidence-based recommendations over opinions
+- [ ] Use crisp, business English - no casual chat
+- [ ] Build in pushback mechanism when reasoning is weak
+- [ ] Add "Devil's advocate" mode for stress-testing decisions
+- [ ] Track when user overrides Chief of Staff advice (learning opportunity)
+- [ ] McKinsey consultant tone, not personal assistant
+- [ ] Respectful but not deferential communication style
+
+## Real-Time Progress & Time Management System
+- [x] Visual progress bar for every active task (0-100%)
+- [x] Estimated time remaining display ("~12 minutes left")
+- [x] Confidence level on time estimates based on similar past tasks
+- [x] Stage indicator (Researching → Drafting → QA Review → Complete)
+- [x] Chief of Staff proactive time advice ("This will take 15 min, recommend you...")
+- [ ] Parallel task tracking with earliest completion time
+- [ ] "Nothing requires attention for X minutes" notifications
+- [ ] Revised estimates when tasks take longer than expected
+- [ ] Dashboard sorted by completion time
+- [ ] "Next item ready for review in: X min" indicator
+- [ ] Push notification when task needs attention
+- [ ] Historical tracking to improve future estimates
+- [ ] Break recommendations based on task queue
+
+## Project X - Secure Commercialization Project
+- [ ] Create Project X as hidden/locked project (not visible in main Library)
+- [ ] Move Commercialization page from sidebar to Project X
+- [ ] Vault-level security with encryption and password protection
+- [ ] Project Genesis integration for building commercialization streams
+- [ ] Document the Three-Tier Corporate Partnership Model
+- [ ] Tier 1: Algorithm Access (company thinking models, subscription)
+- [ ] Tier 2: Expert Review (project feedback, per-project fee)
+- [ ] Tier 3: Dedicated Team (live access to humans, retainer)
+- [ ] Partnership value proposition documentation
+- [ ] Revenue model and split structures
+- [ ] Sales funnel visualization (Tier 1 → Tier 2 → Tier 3)
+- [ ] Target partner company list (McKinsey, PwC, etc.)
+- [ ] Investor-ready blueprint export capability
+- [ ] Continuous thinking/notes capture within project
+- [ ] Restrict Project X visibility to owner only
+
+## Project X - Hybrid SME Model (AI-First, Human-When-Needed)
+- [ ] Document the four-layer SME model in Project X
+- [ ] Layer 1: AI-SMEs (free) - default for research, analysis, strategy
+- [ ] Layer 2: Corporate AI (subscription) - validated company methodologies
+- [ ] Layer 3: Live Expert Calls (per-call fee) - 1-hour with real human SME
+- [ ] Layer 4: Freelancer Handoff (pass-through) - integration for execution work
+- [ ] AI recognition of limits ("This needs human expertise")
+- [ ] Warm handoff flow to expert calls or freelancer platforms
+- [ ] Partnership exploration with Freelancer/Upwork for referral model
+- [ ] Revenue model: Free AI-SMEs → Corporate subs → Call fees → Referral fees
+- [ ] Keep Nexus as intelligence layer, not execution platform
+- [ ] Build prompts that guide users through the escalation path
+- [ ] Celebrity/leader SMEs as premium tier (Jay-Z, etc.)
+
+## Project X - Brain Validated Expert Network
+- [ ] Design curated expert network (not open marketplace)
+- [ ] Invitation + interview only access (no self-signup)
+- [ ] ~10 experts per specialty (globally, best-in-class, English-speaking)
+- [ ] Expert categories: Strategy, CFO, COO, Chief of Staff, Technical specialists
+- [ ] Freelancer partnership portal for application intake
+- [ ] Interview/validation process to confirm world-class expertise
+- [ ] "Brain Validated Expert" badge for approved experts
+- [ ] Knowledge contribution agreement - insights feed AI-SME pool
+- [ ] 1-hour call booking system through The Brain
+- [ ] Larger project work handoff capability
+- [ ] Value proposition for experts: premium positioning, qualified leads, higher rates
+- [ ] Value proposition for users: guaranteed quality, trust, top 10 in world
+- [ ] Expert profile pages showing credentials, AI-SME contribution stats
+- [ ] Exclusivity as differentiator vs open platforms
+
+## Quick Project Creation Flow
+- [ ] Add RTT as new project in Library
+- [ ] Add "+ New Project" button on Library page
+- [ ] Quick setup modal (name, logo/emoji)
+- [ ] New project links to Project Genesis wizard
+- [ ] Archive/complete functionality for finished projects
+
+## Project Genesis - A/B Decision Framework
+- [ ] Implement binary choice system (A or B only, never more)
+- [ ] Logo generation with 2 options → Pick → Lock
+- [ ] Color palette generation with 2 options → Pick → Lock
+- [ ] Slide layout generation with 2 options → Pick → Lock
+- [ ] Chief of Staff recommendation on each choice ("I suggest A because...")
+- [ ] "You decide" option where Chief of Staff picks based on best practice
+- [ ] Lock mechanism - once decided, move on (no endless revisiting)
+- [ ] Speed-focused flow - 80% fast, refine later
+- [ ] AI-SME design experts advise based on business understanding first
+- [ ] Recommendations report with rationale tied to business goals
+- [ ] Cultural/geographic considerations (Middle East = gold/purple, etc.)
+- [ ] Final sign-off → Locked in The Vault as approved guidelines
+
+
+## AI Avatar Video Conversations
+- [ ] Phase 1: Voice note input to prime conversation (user gives context upfront)
+- [ ] Phase 2: Playback mode - sit back and listen to avatar response
+- [ ] Phase 3: Continuous conversation with VAD (voice activity detection)
+- [ ] Voice Activity Detection - mic always on, triggers only when speaking
+- [ ] Thinking indicator - small brain pulse animation while processing
+- [ ] Auto-stop detection when user finishes speaking
+- [ ] Connect to HeyGen or D-ID API for avatar video generation
+- [ ] Use ElevenLabs for voice synthesis (already have integration)
+- [ ] Support for famous personality avatars (Ryan Reynolds style)
+- [ ] Support for all 294 AI-SME avatars
+- [ ] Conversation history/transcript view alongside video
+- [ ] Manual override - tap to force start/stop mic if needed
+
+
+## AI-SME Feedback & Evolution System
+- [ ] Post-conversation 1-10 rating slider (quick, 5 seconds)
+- [ ] Optional voice note feedback after rating
+- [ ] Evening Review integration - Chief of Staff asks for deeper feedback
+- [ ] Chief of Staff overnight processing of all daily feedback
+- [ ] Expert performance tracking (average rating, trend over time)
+- [ ] Auto-actions based on ratings: Enhance, Retrain, Demote, Fire, Promote
+- [ ] Morning brief reports expert changes made overnight
+- [ ] Expert prompt/personality adjustment based on feedback
+- [ ] Feedback history stored per expert for pattern analysis
+- [ ] "What could be better?" capture for specific improvement guidance
+
+
+## AI-SME Feedback & Evolution System
+- [ ] Post-conversation 1-10 rating slider (quick, 5 seconds)
+- [ ] Optional voice note feedback after rating
+- [ ] Evening Review integration - Chief of Staff asks for deeper feedback
+- [ ] Chief of Staff overnight processing of all daily feedback
+- [ ] Expert performance tracking (average rating, trend over time)
+- [ ] Auto-actions based on ratings: Enhance, Retrain, Demote, Fire, Promote
+- [ ] Morning brief reports expert changes made overnight
+- [ ] Expert prompt/personality adjustment based on feedback
+- [ ] Feedback history stored per expert for pattern analysis
+- [ ] "What could be better?" capture for specific improvement guidance
+
+
+## M&A Due Diligence Module
+- [x] Create Due Diligence wizard under Project Genesis
+- [x] Pathway A: Data room login with human-like browsing agent
+- [x] Pathway B: Manual document upload (drag & drop, photos, bulk)
+- [x] Sub-project structure: Parent project → DD sub-project
+- [x] Document categories: Financial, Legal, Operational, Commercial
+- [x] AI Analysis: Revenue trends, EBITDA, margins, liabilities, IP review
+- [x] Risk Register with severity ratings (High/Medium/Low)
+- [x] Questions for Management list (gaps identified)
+- [x] Valuation modeling: DCF, comparables, precedent transactions
+- [x] Executive Summary (1-pager)
+- [x] Full DD Report (Big 4 format with Calibri, page numbers, headers)
+- [x] Go/No-Go Recommendation with rationale
+- [x] Chief of Staff QA review before finalizing
+- [x] Final report locked in Vault with sign-off
+- [x] Add Empower Farmer DD as sub-project under Celadon
+
+## AI-SME Feedback & Evolution System
+- [ ] Post-conversation 1-10 rating slider (quick, 5 seconds)
+- [ ] Optional voice note feedback after rating
+- [ ] Evening Review integration - Chief of Staff asks for deeper feedback
+- [ ] Chief of Staff overnight processing of all daily feedback
+- [ ] Expert performance tracking (average rating, trend over time)
+- [ ] Auto-actions based on ratings: Enhance, Retrain, Demote, Fire, Promote
+- [ ] Morning brief reports expert changes made overnight
+- [ ] Expert prompt/personality adjustment based on feedback
+
+## Cepho Rebrand (Jan 12, 2026)
+- [ ] Create animated landing page with Cepho ↔ The Brain morphing transition
+- [ ] Add soft pulsing neural animation between brand names
+- [ ] Update About section with full Cepho brand story (Greek etymology, cephalisation)
+- [ ] Add tagline: "From the Greek for brain. Where intelligence begins."
+- [ ] Rebrand all internal references from "The Brain" to "Cepho"
+- [ ] Update sidebar header to show "Cepho" instead of "The Brain"
+- [ ] Update page titles and meta tags to "Cepho"
+- [ ] Keep landing page animation as the only place showing both names
+- [ ] Update Waitlist page with Cepho branding
+- [ ] Update Settings/About pages with Cepho brand story
+
+
+## Cepho Rebrand (Jan 12, 2026)
+
+- [x] Create animated landing page with Cepho ↔ The Brain transition
+- [x] Update About section with full Cepho brand story
+- [x] Rebrand sidebar header from THE BRAIN to CEPHO
+- [x] Update menu item "About The Brain" to "About Cepho"
+- [x] Update all share text and URLs to cepho.ai
+- [x] Update onboarding flow with Cepho branding
+- [x] Update integration descriptions to reference Cepho
+- [x] Update tooltips and help text
+- [x] Update waitlist page branding
+- [x] Update loader messages
+- [x] Update all component references from The Brain to Cepho
+- [x] Create CephoLandingPage component with animated name transition
+- [x] Update Landing.tsx with CephoNameAnimation component
+
+- [ ] Add tagline explanation on login page for first-time visitors
+- [ ] Revert cepho.ai URLs to placeholder until domain is purchased
+
+## UI Refinements (Jan 12, 2026)
+- [x] Replace emoji mood buttons with professional slider bar
+- [x] Make Cepho text larger on landing page
+- [x] Ensure all UI is slick and professional, not gamified
+- [x] Clean up sidebar - less cluttered, more streamlined
+- [x] Polish dashboard - professional, inviting design
+- [x] Remove unnecessary visual clutter throughout UI
+- [x] Design review with luxury/tech design perspectives (Gucci, Tesla aesthetic)
+- [x] Enhance UI for cutting-edge professional look and feel
+
+
+## Expert Evolution System (Jan 12, 2026)
+
+### Expert Memory & Persistence
+- [ ] Database: expert_conversations table (store all expert interactions)
+- [ ] Database: expert_memory table (key learnings, preferences per expert)
+- [ ] Database: expert_performance table (ratings, feedback, improvement areas)
+- [ ] API: Store conversation after each expert interaction
+- [ ] API: Retrieve expert memory context for personalized responses
+
+### Expert Self-Improvement Loop
+- [ ] Chief of Staff reviews expert performance daily
+- [ ] Auto-adjust expert prompts based on user feedback
+- [ ] Track communication style effectiveness per expert
+- [ ] Expert "coaching" - Chief of Staff trains experts on succinctness
+- [ ] Feedback-driven prompt refinement system
+
+### Collective Knowledge Base
+- [ ] Database: expert_insights table (shared knowledge repository)
+- [ ] Experts contribute insights after each meaningful conversation
+- [ ] Cross-expert knowledge sharing (experts can reference others' insights)
+- [ ] Knowledge tagging and categorization system
+- [ ] Expert collaboration on complex problems
+
+### Scheduled Research & Updates
+- [ ] Background research tasks for each expert's domain
+- [ ] Knowledge freshness tracking (when was domain last updated)
+- [ ] Expert briefings on new developments in their field
+- [ ] Chief of Staff coordinates research priorities
+- [ ] Integration with external data sources for updates
+
+
+### Expert Persona Integration
+- [ ] Wire expert bios/thinking styles into prompt system
+- [ ] Create ExpertPromptBuilder service that combines persona + memory + context
+- [ ] Inject learned preferences into every expert call
+- [ ] Include past corrections to avoid repeated mistakes
+
+### Auto-Memory Extraction
+- [ ] Chief of Staff extracts key learnings after each conversation
+- [ ] Identify preferences, facts, style notes from conversations
+- [ ] Store extracted memories with confidence scores
+- [ ] Update existing memories when reinforced
+
+### Feedback-to-Improvement Loop
+- [ ] User ratings directly adjust expert prompts
+- [ ] Track communication effectiveness per expert
+- [ ] Auto-generate prompt improvements based on feedback patterns
+- [ ] Chief of Staff reviews and applies improvements
+
+### Cross-Expert Knowledge Sharing
+- [ ] Insights flow between experts on same project
+- [ ] Experts can reference each other's validated insights
+- [ ] Collaboration patterns tracked and optimized
+- [ ] Chief of Staff orchestrates based on learned patterns
+
+
+### Expert Feedback & QA System
+- [ ] Yes/No feedback buttons after each expert interaction
+- [ ] Evening wash-up: surface underperforming experts with their outputs
+- [ ] Feedback capture: "What was wrong with this?" modal
+- [ ] Chief of Staff learning loop from feedback patterns
+- [ ] Inject corrections into expert prompts on next call
+- [ ] Track expert performance trends over time
+
+- [x] Ensure Chief of Staff is gender-neutral throughout (no him/her, use "it" or just "Chief of Staff")
+
+
+## Cepho Architecture Blueprint
+- [x] Create A0-style architecture diagram with all system components
+- [x] Show interaction flows between modules
+- [x] Include proper branding (logo, version, date, description)
+- [x] Highlight automation opportunities
+- [x] Export as visual document
+
+- [x] Remove all emojis from Evening Review page
+- [x] Apply pink neon professional styling throughout
+- [x] Ensure efficiency-focused UI - no gamification
+
+
+## SME Design Refinements (Jan 12, 2026)
+- [x] Slow animations from 0.3s → 0.4s for luxury feel
+- [x] Add staggered element animations (100ms delays) for cinematic reveal
+- [x] Increase key metrics to 48px+ for scannability
+- [x] Soften dividers and reduce visual borders
+- [x] Increase padding/white space throughout
+
+- [x] Fix duplicate key error on /digital-twin page (key `4` appearing twice)
+- [ ] Add tick/confirm button for voice input on digital-twin chat (microphone → tick to confirm)
+- [x] Fix Workflow page design - cleaner layout, clear project status, easy drill-down
+- [ ] Create AI-SME expert browser page with all experts and bios
+- [ ] Add ability to start conversation with any expert from browser
+- [ ] Add Project Genesis to sidebar navigation
+- [ ] Verify Cepho/Brain animation on landing page
+- [x] Replace emoji icons on projects with professional coloured logo badges
+- [x] Make chat input bar taller/more prominent like Manus style
+- [x] Redesign Library page to match Workflow design principles
+- [x] Fix landing page animation - Cepho should transition to "The Brain" and back
+- [x] Remove "mood" terminology from wellness check - just show number, no labels
+- [x] Change wellness check to "How are you today?" - remove mood/wellness labels
+- [x] Make chat placeholder text smaller, add action buttons (files, apps, tick, cross, transcribe) in pink
+- [x] Improve voice transcription - ensure clean voice pickup like Manus
+- [x] Make chat layout less blocky, more flowing
+
+
+## The Signal Presenter & Chief of Staff Role Separation (Jan 12)
+- [ ] Create Catherine Leavitt-style presenter persona for The Signal daily brief
+- [ ] Design 2-3 minute video-style briefing format
+- [ ] Ensure Chief of Staff remains text-only, never speaks with voice
+- [ ] Split roles: Presenter delivers brief, Chief of Staff handles actions
+- [ ] Script template for daily brief covering priorities, meetings, urgent items
+
+
+## Project Genesis (Jan 12)
+- [ ] Add Project Genesis to sidebar as prominent item
+- [ ] Create Project Genesis wizard page
+- [ ] Wizard step 1: Project name and description
+- [ ] Wizard step 2: Team/SME selection
+- [ ] Wizard step 3: Governance structure
+- [ ] Wizard step 4: Key deliverables (presentations, models, etc.)
+- [ ] Wizard step 5: Timeline and milestones
+- [ ] Auto-create standardised project folder structure
+- [ ] Link new projects into Workflow automatically
+- [ ] Naming convention integration with Chief of Staff
+
+
+### Project Genesis Blueprint System
+- [ ] Voice-enabled wizard with quick tap options
+- [ ] Yes/No questions for fast progression
+- [ ] Project type selection (revenue, funding, due diligence, etc.)
+- [ ] Chief of Staff gap-filling and review recommendations
+- [ ] Standard blueprints for each deliverable type
+- [ ] Process documents with QA checkpoints per phase
+- [ ] Pre-assigned SME teams per blueprint type
+- [ ] Quality Management System integration
+- [ ] Process flow documents for each deliverable
+- [ ] Marketing blueprint with assigned SMEs
+- [ ] Financial model blueprint with assigned SMEs
+- [ ] Presentation blueprint with assigned SMEs
+- [ ] Due diligence blueprint with assigned SMEs
+
+
+### Quality Management System (QMS)
+- [ ] Create master document registry for all blueprints
+- [ ] Build process flows for every deliverable type
+- [ ] Document QA checkpoints and approval gates
+- [ ] Create continuous improvement log (blooms/containments)
+- [ ] Build gap analysis capability
+- [ ] Deep Research blueprint with process flow
+- [ ] Social Media blueprint with process flow
+- [ ] Validate all blueprints against SME data
+
+## Updates - Jan 12 2026 (Batch 4)
+- [x] Remove Streak feature from the app
+- [x] Add Project Genesis back to sidebar
+- [x] Rename Dashboard to The Nexus
+- [x] Rename Daily Brief to The Signal
+- [x] Add Evening Review to sidebar
+

@@ -7,6 +7,54 @@ import { Slider } from "@/components/ui/slider";
 import { Sun, Moon, Blend } from "lucide-react";
 import { useTheme } from "@/contexts/ThemeContext";
 
+// Animated Cepho/Brain name transition
+function CephoNameAnimation() {
+  const [showBrain, setShowBrain] = useState(false);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setShowBrain(prev => !prev);
+    }, 2000);
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <div className="min-h-[80px] flex flex-col items-center">
+      <AnimatePresence mode="wait">
+        {showBrain ? (
+          <motion.div
+            key="brain"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.4 }}
+            className="flex flex-col items-center"
+          >
+            <h1 className="font-display font-bold text-5xl md:text-7xl tracking-wider text-pink-500 drop-shadow-[0_0_30px_rgba(236,72,153,0.6)]">
+              The Brain
+            </h1>
+            <p className="text-sm text-muted-foreground mt-1 italic">English</p>
+          </motion.div>
+        ) : (
+          <motion.div
+            key="cepho"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.4 }}
+            className="flex flex-col items-center"
+          >
+            <h1 className="font-display font-bold text-5xl md:text-7xl tracking-wider bg-gradient-to-r from-primary via-pink-400 to-primary bg-clip-text text-transparent drop-shadow-[0_0_30px_rgba(236,72,153,0.6)]">
+              Cepho
+            </h1>
+            <p className="text-sm text-muted-foreground mt-1 italic">From the Greek for brain</p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
 // Check if mood was already captured today for this time period
 function shouldShowMoodCheck(): boolean {
   const now = new Date();
@@ -69,7 +117,7 @@ export default function Landing() {
         // Skip straight to dashboard if mood already captured today
         setLocation("/dashboard");
       }
-    }, 1500); // 1.5 second splash showing The Brain
+    }, 1500); // 1.5 second splash showing Cepho
 
     return () => clearTimeout(timer);
   }, [needsMoodCheck, setLocation]);
@@ -136,14 +184,7 @@ export default function Landing() {
           >
             <NeonBrain size="xl" className="w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 mb-8" state="thinking" />
             
-            <div className="flex flex-col items-center gap-2">
-              <h1 className="font-display font-bold text-5xl md:text-7xl tracking-wider text-pink-500 drop-shadow-[0_0_30px_rgba(236,72,153,0.6)]">
-                CEPHO
-              </h1>
-              <p className="text-sm text-muted-foreground/70 max-w-md">
-                The spark that fires the neurons
-              </p>
-            </div>
+            <CephoNameAnimation />
             
             {/* Loading indicator */}
             <div className="mt-8 flex items-center gap-2">

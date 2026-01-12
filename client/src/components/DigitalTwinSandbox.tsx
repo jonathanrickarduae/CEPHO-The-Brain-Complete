@@ -51,7 +51,7 @@ export function DigitalTwinSandbox() {
 
     // Simulate processing
     setTimeout(() => {
-      // Mock response - in production this would call the actual Digital Twin
+      // Mock response - in production this would call the actual Chief of Staff
       const mockResponses: Record<string, { response: string; confidence: number }> = {
         'email': { response: 'Draft prepared. Subject: Re: Meeting Request. Body: Confirmed for proposed time. Location details required.', confidence: 85 },
         'meeting': { response: '2 meetings today. 10:00 Board review (prep notes ready). 14:30 Team sync (agenda pending).', confidence: 94 },
