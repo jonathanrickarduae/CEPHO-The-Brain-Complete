@@ -2642,3 +2642,8 @@
 - [x] Add "Video Meeting with Expert" button for AI avatar video calls
 - [x] Add Expert Directory to sidebar (as button in AI-SMEs)
 - [x] Add routing for directory and profile pages
+
+## Expert Enhancements - Jan 12 2026
+- [ ] Generate AI avatar images for all 100+ experts
+- [ ] Wire Video Meeting button to AI avatar video call interface
+- [ ] Add Favorite/Pin functionality for experts

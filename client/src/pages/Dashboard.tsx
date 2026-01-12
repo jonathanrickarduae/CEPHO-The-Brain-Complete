@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect, useRef } from "react";
+import { useState, useRef, useMemo } from "react";
 import { useLocation } from "wouter";
 import { 
   Sun, Users, Lock, 
@@ -11,7 +11,6 @@ import { LearningBadge } from "@/components/LearningIndicator";
 
 import { Tooltip } from "@/components/Tooltip";
 import { useMoodCheck } from "@/hooks/useMoodCheck";
-import { WellnessScoreDashboard } from "@/components/WellnessScoreDashboard";
 import { Share2 } from "lucide-react";
 import { MobileInputSheet, QuickInputTrigger } from "@/components/MobileInputSheet";
 import { useIsMobile } from "@/hooks/useMobile";
@@ -81,6 +80,7 @@ export default function Dashboard() {
   const [recordingDuration, setRecordingDuration] = useState(0);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const recordingTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const [showMobileInput, setShowMobileInput] = useState(false);
 
   // Tap-to-toggle voice recording
   const toggleRecording = async () => {
@@ -100,54 +100,28 @@ export default function Dashboard() {
         const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
         const mediaRecorder = new MediaRecorder(stream);
         mediaRecorderRef.current = mediaRecorder;
-        const chunks: Blob[] = [];
-        
-        mediaRecorder.ondataavailable = (e) => {
-          if (e.data.size > 0) chunks.push(e.data);
+
+        mediaRecorder.ondataavailable = (event) => {
+          // Handle audio blob
         };
-        
-        mediaRecorder.onstop = () => {
-          const blob = new Blob(chunks, { type: 'audio/webm' });
-          stream.getTracks().forEach(track => track.stop());
-          // In production: send blob to Whisper API for transcription
-          console.log('Recording complete, ready for transcription', blob);
-        };
-        
+
         mediaRecorder.start();
         setIsRecording(true);
-        setRecordingDuration(0);
+
+        // Timer
+        let duration = 0;
         recordingTimerRef.current = setInterval(() => {
-          setRecordingDuration(d => d + 1);
+          duration += 1;
+          setRecordingDuration(duration);
         }, 1000);
-      } catch (err) {
-        console.error('Microphone access denied:', err);
+      } catch (error) {
+        console.error("Microphone access denied:", error);
       }
     }
   };
-  
 
-  
-  // Demo mode initialization
-  useEffect(() => {
-    initializeDemoModeIfNeeded();
-  }, []);
-  
-  // Get demo data if in demo mode
-  const demoData = isDemoModeEnabled() ? getDemoData() : null;
-  const activeProjects = demoData?.projects.filter(p => p.status === 'active').length || 0;
-  const pendingTasks = demoData?.tasks.filter(t => t.status === 'pending').length || 0;
-
-  
-  // Mobile detection and bottom sheet
   const isMobile = useIsMobile();
-  const [showMobileInput, setShowMobileInput] = useState(false);
-  
-  const handleMobileSubmit = (value: string, type?: 'task' | 'question' | 'note') => {
-    // Navigate to Chief of Staff with the message
-    setLocation(`/digital-twin?message=${encodeURIComponent(value)}`);
-  };
-
-  // Daily rotating inspiration - memoized to only change on day change
+  const { activeProjects } = useOnboardingStatus();
   const inspiration = useMemo(() => getDailyQuote(), []);
 
   // Top Row - The Flow (The Signal → AI Expert Engine → Workflow)
@@ -247,111 +221,75 @@ export default function Dashboard() {
           <>
             <div className="flex items-center gap-3 bg-card/80 border-2 border-primary/30 rounded-2xl px-4 py-4 focus-within:border-primary/60 focus-within:ring-2 focus-within:ring-primary/20 transition-all duration-300 shadow-lg shadow-primary/5">
               <input 
-                type="text" 
+                type="text"
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyDown={handleKeyDown}
-                placeholder="Message Chief of Staff..." 
-                className="flex-1 bg-transparent border-none outline-none text-lg text-foreground placeholder:text-muted-foreground/50 min-h-0"
-                autoFocus
+                placeholder="Ask your Chief of Staff anything..."
+                className="flex-1 bg-transparent text-foreground placeholder-muted-foreground outline-none text-sm md:text-base"
               />
-              <div className="flex items-center gap-2">
-                <Button 
-                  size="icon" 
-                  variant="ghost" 
-                  onClick={handleSubmit}
-                  disabled={!inputValue.trim()}
-                  className="h-10 w-10 rounded-full hover:bg-secondary text-muted-foreground hover:text-foreground disabled:opacity-50"
-                >
-                  <Send className="w-5 h-5" />
-                </Button>
-                <Button 
-                  size="icon" 
-                  onClick={toggleRecording}
-                  className={`h-12 w-12 rounded-full transition-all hover:scale-105 ${
-                    isRecording 
-                      ? 'bg-red-500 hover:bg-red-600 animate-pulse shadow-[0_0_15px_rgba(239,68,68,0.5)]' 
-                      : 'bg-primary text-primary-foreground hover:bg-primary/90 shadow-[0_0_15px_rgba(255,16,240,0.3)]'
-                  }`}
-                >
-                  <Mic className="w-6 h-6" />
-                </Button>
-              </div>
+              <button 
+                onClick={toggleRecording}
+                className={`p-2 rounded-lg transition-colors ${isRecording ? 'bg-red-500/20 text-red-400' : 'hover:bg-primary/10 text-muted-foreground hover:text-foreground'}`}
+              >
+                <Mic className="w-5 h-5" />
+              </button>
+              <button 
+                onClick={handleSubmit}
+                className="p-2 rounded-lg hover:bg-primary/10 text-muted-foreground hover:text-foreground transition-colors"
+              >
+                <Send className="w-5 h-5" />
+              </button>
             </div>
-            <p className="text-center text-xs text-muted-foreground/60 mt-2">
-              Press <kbd className="px-1.5 py-0.5 bg-secondary/50 rounded text-[10px]">Enter</kbd> to send • <kbd className="px-1.5 py-0.5 bg-secondary/50 rounded text-[10px]">?</kbd> for shortcuts • <kbd className="px-1.5 py-0.5 bg-secondary/50 rounded text-[10px]">Cmd+K</kbd> command palette
-            </p>
           </>
         )}
       </div>
-      
-      {/* Mobile Input Bottom Sheet */}
-      <MobileInputSheet
-        isOpen={showMobileInput}
-        onClose={() => setShowMobileInput(false)}
-        onSubmit={handleMobileSubmit}
-        placeholder="What do you need?"
-      />
 
-      {/* Compact Header Row */}
-      <div className="flex justify-between items-center mb-4">
-        <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-card/60 border border-border">
-            <Shield className={`w-4 h-4 ${governanceMode === 'omni' ? 'text-purple-500' : 'text-blue-500'}`} />
-            <span className="text-xs font-medium text-muted-foreground hidden sm:inline">PROTOCOL:</span>
-            <div className="flex items-center gap-1">
-              <button 
-                onClick={() => setGovernanceMode("omni")}
-                className={`px-2 py-0.5 rounded-full text-xs font-bold transition-all min-h-0 min-w-0 ${governanceMode === 'omni' ? 'bg-purple-500 text-white shadow-[0_0_10px_rgba(168,85,247,0.5)]' : 'text-muted-foreground hover:text-foreground'}`}
-              >
-                OMNI
-              </button>
-              <button 
-                onClick={() => setGovernanceMode("governed")}
-                className={`px-2 py-0.5 rounded-full text-xs font-bold transition-all min-h-0 min-w-0 ${governanceMode === 'governed' ? 'bg-blue-500 text-white shadow-[0_0_10px_rgba(59,130,246,0.5)]' : 'text-muted-foreground hover:text-foreground'}`}
-              >
-                GOVERNED
-              </button>
-            </div>
+      {/* Header with Protocol Toggle and Status */}
+      <div className="flex items-center justify-between mb-6 max-w-5xl mx-auto w-full">
+        <div className="flex items-center gap-2">
+          <span className="text-xs font-medium text-muted-foreground hidden sm:inline">PROTOCOL:</span>
+          <div className="flex items-center gap-1">
+            <button 
+              onClick={() => setGovernanceMode("omni")}
+              className={`px-2 py-0.5 rounded-full text-xs font-bold transition-all min-h-0 min-w-0 ${governanceMode === 'omni' ? 'bg-purple-500 text-white shadow-[0_0_10px_rgba(168,85,247,0.5)]' : 'text-muted-foreground hover:text-foreground'}`}
+            >
+              OMNI
+            </button>
+            <button 
+              onClick={() => setGovernanceMode("governed")}
+              className={`px-2 py-0.5 rounded-full text-xs font-bold transition-all min-h-0 min-w-0 ${governanceMode === 'governed' ? 'bg-blue-500 text-white shadow-[0_0_10px_rgba(59,130,246,0.5)]' : 'text-muted-foreground hover:text-foreground'}`}
+            >
+              GOVERNED
+            </button>
           </div>
-          {governanceMode === 'governed' && (
-            <Badge variant="outline" className="border-blue-500/50 text-blue-400 bg-blue-500/10 text-xs hidden md:flex">
-              <ShieldCheck className="w-3 h-3 mr-1" /> COMPLIANCE
-            </Badge>
-          )}
         </div>
-        
-        <div className="flex items-center gap-3">
-          {/* Wellness Score Mini */}
-          <button 
-            onClick={() => setLocation('/statistics')}
-            className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-gradient-to-r from-cyan-500/10 to-purple-500/10 border border-cyan-500/20 hover:border-cyan-500/40 transition-colors"
-          >
-            <div className="w-6 h-6 rounded-full bg-gradient-to-br from-cyan-500 to-purple-600 flex items-center justify-center">
-              <span className="text-xs font-bold text-white">7.8</span>
+        {governanceMode === 'governed' && (
+          <Badge variant="outline" className="border-blue-500/50 text-blue-400 bg-blue-500/10 text-xs hidden md:flex">
+            <ShieldCheck className="w-3 h-3 mr-1" /> COMPLIANCE
+          </Badge>
+        )}
+      </div>
+      
+      <div className="flex items-center gap-3 justify-end mb-6 max-w-5xl mx-auto w-full">
+        {/* Mood indicator - just number and circle */}
+        {(() => {
+          const { todaysMoods } = useMoodCheck();
+          const latestMood = todaysMoods.length > 0 ? todaysMoods[todaysMoods.length - 1] : null;
+          if (!latestMood) return null;
+          return (
+            <div className="w-7 h-7 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">
+              <span className="text-xs font-bold text-white">{latestMood.mood}</span>
             </div>
-            <span className="text-xs text-muted-foreground hidden sm:inline">Wellness</span>
-          </button>
-          
-          {/* Mood indicator - just number and circle */}
-          {(() => {
-            const { todaysMoods } = useMoodCheck();
-            const latestMood = todaysMoods.length > 0 ? todaysMoods[todaysMoods.length - 1] : null;
-            if (!latestMood) return null;
-            return (
-              <div className="w-7 h-7 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">
-                <span className="text-xs font-bold text-white">{latestMood.mood}</span>
-              </div>
-            );
-          })()}
-          
-          {/* Voice Interface Toggle */}
-          <VoiceInterfaceToggle />
-          
-          <div className="flex items-center gap-2 text-muted-foreground">
-            <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></div>
-            <span className="text-xs font-mono tracking-wider">ONLINE</span>
-          </div>
+          );
+        })()}
+        
+        {/* Voice Interface Toggle */}
+        <VoiceInterfaceToggle />
+        
+        <div className="flex items-center gap-2 text-muted-foreground">
+          <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></div>
+          <span className="text-xs font-mono tracking-wider">ONLINE</span>
         </div>
       </div>
 
@@ -400,99 +338,36 @@ export default function Dashboard() {
                 <btn.icon className="w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16" />
               </div>
 
-              <div className="relative z-10 flex flex-col h-full">
-                <div 
-                  className="p-2 w-fit rounded-lg bg-secondary/50 mb-2 group-hover:scale-105 transition-transform duration-300" 
-                  style={{ color: btn.color, border: `1px solid ${btn.color}30` }}
-                >
-                  <btn.icon className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
-                </div>
-                
-                <div>
-                  <h3 className="font-display font-bold text-xs sm:text-sm md:text-base mb-0.5 tracking-wide text-foreground leading-tight">{btn.label}</h3>
-                  <p className="text-[10px] sm:text-xs text-muted-foreground leading-tight">{btn.sub}</p>
-                </div>
+              <div className="relative z-10">
+                <h3 className="font-bold text-sm sm:text-base md:text-lg tracking-tight text-foreground mb-1">
+                  {btn.label}
+                </h3>
+                <p className="text-xs sm:text-sm text-muted-foreground">
+                  {btn.sub}
+                </p>
               </div>
             </button>
           </Tooltip>
-         ))}
+        ))}
       </div>
 
-      {/* Active Tasks Progress Tracker */}
-      <div className="max-w-3xl mx-auto w-full mb-6">
-        <TaskProgressTracker />
-      </div>
+      {/* Mobile Input Sheet */}
+      {isMobile && (
+        <MobileInputSheet 
+          open={showMobileInput} 
+          onOpenChange={setShowMobileInput}
+          onSubmit={(value) => {
+            setInputValue(value);
+            setShowMobileInput(false);
+            setLocation(`/digital-twin?message=${encodeURIComponent(value)}`);
+          }}
+        />
+      )}
 
-      {/* Getting Started Checklist for new users */}
-      <div className="max-w-3xl mx-auto w-full mb-6">
-        <GettingStartedChecklist />
-      </div>
-
-      {/* Intelligent Nudges - Contextual Suggestions */}
-      <div className="max-w-3xl mx-auto w-full mb-6">
-        <InsightsPanel />
-      </div>
-
-      {/* Performance Boost - Quick 15-min interventions */}
-      <div className="max-w-3xl mx-auto w-full mb-6">
-        <PerformanceBoost />
-      </div>
-
-      {/* Tour Prompt for new users */}
-      <div className="max-w-3xl mx-auto w-full mb-6">
-        <TourPrompt onStartTour={() => console.log('Start tour')} />
-      </div>
-
-      {/* Neural Network Visualization */}
-      <div className="max-w-3xl mx-auto w-full mb-6">
-        <NeuralNetworkViz />
-      </div>
-
-      {/* Voice Input - Manus Style with Mic on Right */}
-      <div className="max-w-3xl mx-auto w-full">
-        <div className="flex items-center gap-3 bg-card/60 border border-border rounded-xl px-4 py-3 focus-within:border-primary/50 focus-within:ring-1 focus-within:ring-primary/20 transition-all duration-300">
-          <input 
-            type="text" 
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            onKeyDown={handleKeyDown}
-            placeholder="Message Chief of Staff..." 
-            className="flex-1 bg-transparent border-none outline-none text-base text-foreground placeholder:text-muted-foreground/50 min-h-0"
-          />
-          <div className="flex items-center gap-2">
-            <Button 
-              size="icon" 
-              variant="ghost" 
-              onClick={handleSubmit}
-              disabled={!inputValue.trim()}
-              className="h-10 w-10 rounded-full hover:bg-secondary text-muted-foreground hover:text-foreground disabled:opacity-50"
-            >
-              <Send className="w-5 h-5" />
-            </Button>
-            <Button 
-              size="icon" 
-              onClick={toggleRecording}
-              className={`h-12 w-12 rounded-full transition-all hover:scale-105 ${
-                isRecording 
-                  ? 'bg-red-500 hover:bg-red-600 animate-pulse shadow-[0_0_15px_rgba(239,68,68,0.5)]' 
-                  : 'bg-primary text-primary-foreground hover:bg-primary/90 shadow-[0_0_15px_rgba(255,16,240,0.3)]'
-              }`}
-            >
-              <Mic className="w-6 h-6" />
-            </Button>
-          </div>
-        </div>
-        
-        {/* Keyboard shortcut hint */}
-        <p className="text-center text-xs text-muted-foreground/60 mt-2">
-          Press <kbd className="px-1.5 py-0.5 bg-secondary/50 rounded text-[10px]">Enter</kbd> to send • <kbd className="px-1.5 py-0.5 bg-secondary/50 rounded text-[10px]">?</kbd> for shortcuts
-        </p>
-      </div>
+      {/* Floating Elements */}
+      <FloatingVoiceNoteButton />
     </div>
     </PullToRefresh>
-    
-    {/* Floating Voice Note Button */}
-    <FloatingVoiceNoteButton />
     </>
   );
 }
