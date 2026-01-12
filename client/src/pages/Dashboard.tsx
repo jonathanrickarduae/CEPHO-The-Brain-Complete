@@ -3,12 +3,12 @@ import { useLocation } from "wouter";
 import { 
   Sun, Users, Lock, 
   Mic, Send, 
-  Fingerprint, Shield, ShieldCheck, FolderKanban, BookOpen, Brain, Sparkles
+  Fingerprint, Shield, ShieldCheck, FolderKanban, BookOpen
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { LearningBadge } from "@/components/LearningIndicator";
-import { StreakBadge, useStreak } from "@/components/DailyStreak";
+// Gamification badges removed
+// Streak removed
 import { Tooltip } from "@/components/Tooltip";
 import { useMoodCheck } from "@/hooks/useMoodCheck";
 import { WellnessScoreDashboard } from "@/components/WellnessScoreDashboard";
@@ -127,8 +127,7 @@ export default function Dashboard() {
   // Mood tracking
   const { todaysMoods } = useMoodCheck();
   
-  // Daily streak tracking - only show, don't auto-mark on load
-  const { current: streakDays } = useStreak();
+  // Gamification removed
   
   // Demo mode initialization
   useEffect(() => {
@@ -159,8 +158,8 @@ export default function Dashboard() {
     // TOP ROW - The Flow
     { 
       id: 1, 
-      label: "DAILY BRIEF", 
-      sub: "Briefing & Actions", 
+      label: "THE SIGNAL", 
+      sub: "Daily Briefing", 
       icon: Sun, 
       color: "#f59e0b",
       path: "/daily-brief",
@@ -168,7 +167,7 @@ export default function Dashboard() {
     },
     { 
       id: 2, 
-      label: "AI EXPERT ENGINE", 
+      label: "AI SMEs", 
       sub: "287 Experts Ready", 
       icon: Users, 
       color: "#06b6d4",
@@ -187,13 +186,12 @@ export default function Dashboard() {
     // BOTTOM ROW - Support
     { 
       id: 4, 
-      label: "DIGITAL TWIN", 
-      sub: "12.5h Training", 
+      label: "CHIEF OF STAFF", 
+      sub: "Your AI Assistant", 
       icon: Fingerprint, 
       color: "#a855f7",
       path: "/digital-twin",
-      badge: <LearningBadge className="absolute top-2 right-2" />,
-      tooltip: "Your AI counterpart that learns from you. Train it to handle tasks autonomously."
+      tooltip: "Your AI Chief of Staff that handles tasks, communications, and decisions on your behalf."
     },
     { 
       id: 5, 
@@ -336,16 +334,11 @@ export default function Dashboard() {
             <span className="text-xs text-muted-foreground hidden sm:inline">Wellness</span>
           </button>
           
-          {/* Daily Streak Badge */}
-          {streakDays > 0 && (
-            <StreakBadge streak={streakDays} size="md" showLabel={true} />
-          )}
-          
-          {/* Today's mood indicator */}
+          {/* Today's mood indicator - just the number */}
           {latestMood && (
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-card/60 border border-border">
-              <span className="text-lg">{['😫','😔','😐','🙂','😊','😄','🤩','🔥','💪','🚀'][latestMood.mood - 1]}</span>
-              <span className="text-xs text-muted-foreground hidden sm:inline">Mood: {latestMood.mood}/10</span>
+            <div className="flex items-center gap-1 px-3 py-1.5 rounded-full bg-card/60 border border-border">
+              <span className="text-sm font-medium text-foreground">{latestMood.mood}</span>
+              <span className="text-xs text-muted-foreground">/10</span>
             </div>
           )}
           
@@ -359,21 +352,11 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* Compact Header & Inspiration */}
+      {/* Daily Quote */}
       <div className="mb-4 text-center">
-        <div className="flex items-center justify-center gap-2 mb-2">
-          <Brain className="w-6 h-6 text-primary" />
-          <h1 className="text-2xl md:text-4xl font-display font-bold tracking-tight text-foreground">
-            GETTING YOU TO A 10
-          </h1>
-        </div>
         <div className="flex flex-col items-center gap-1">
-          <div className="flex items-center gap-2">
-            <Sparkles className="w-4 h-4 text-primary/60" />
-            <p className="text-sm md:text-base font-light text-muted-foreground italic max-w-xl">"{inspiration.quote}"</p>
-            <Sparkles className="w-4 h-4 text-primary/60" />
-          </div>
-          <p className="text-xs font-bold text-primary tracking-widest uppercase">— {inspiration.author}</p>
+          <p className="text-sm md:text-base font-light text-muted-foreground italic max-w-xl">"{inspiration.quote}"</p>
+          <p className="text-xs text-muted-foreground">— {inspiration.author}</p>
         </div>
       </div>
 
@@ -391,8 +374,7 @@ export default function Dashboard() {
               onClick={() => setLocation(btn.path)}
               className="group relative p-3 sm:p-4 md:p-5 rounded-xl bg-card/60 border border-border hover:border-primary/50 hover:bg-card/80 transition-all duration-300 cursor-pointer overflow-hidden text-left min-h-[100px] sm:min-h-[120px] w-full h-full hover:scale-[1.02] active:scale-[0.98] hover:shadow-lg hover:shadow-primary/10 touch-manipulation"
             >
-              {/* Learning badge for Digital Twin */}
-              {btn.badge}
+
               
               {/* Glow on Hover */}
               <div 

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { X, Smile, Frown, Meh, Sun, CloudSun, Moon } from 'lucide-react';
+import { X, Sun, CloudSun, Moon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
@@ -32,16 +32,16 @@ const PERIOD_CONFIG = {
 };
 
 const MOOD_LEVELS = [
-  { value: 1, emoji: '😫', label: 'Struggling', color: 'bg-red-500/20 border-red-500/50 hover:bg-red-500/30' },
-  { value: 2, emoji: '😔', label: 'Low', color: 'bg-orange-500/20 border-orange-500/50 hover:bg-orange-500/30' },
-  { value: 3, emoji: '😐', label: 'Okay', color: 'bg-yellow-500/20 border-yellow-500/50 hover:bg-yellow-500/30' },
-  { value: 4, emoji: '🙂', label: 'Good', color: 'bg-lime-500/20 border-lime-500/50 hover:bg-lime-500/30' },
-  { value: 5, emoji: '😊', label: 'Great', color: 'bg-green-500/20 border-green-500/50 hover:bg-green-500/30' },
-  { value: 6, emoji: '😄', label: 'Excellent', color: 'bg-emerald-500/20 border-emerald-500/50 hover:bg-emerald-500/30' },
-  { value: 7, emoji: '🤩', label: 'Amazing', color: 'bg-cyan-500/20 border-cyan-500/50 hover:bg-cyan-500/30' },
-  { value: 8, emoji: '🔥', label: 'On Fire', color: 'bg-blue-500/20 border-blue-500/50 hover:bg-blue-500/30' },
-  { value: 9, emoji: '💪', label: 'Unstoppable', color: 'bg-purple-500/20 border-purple-500/50 hover:bg-purple-500/30' },
-  { value: 10, emoji: '🚀', label: 'At a 10!', color: 'bg-primary/20 border-primary/50 hover:bg-primary/30' },
+  { value: 1, color: 'bg-red-500/20 border-red-500/50 hover:bg-red-500/30' },
+  { value: 2, color: 'bg-orange-500/20 border-orange-500/50 hover:bg-orange-500/30' },
+  { value: 3, color: 'bg-yellow-500/20 border-yellow-500/50 hover:bg-yellow-500/30' },
+  { value: 4, color: 'bg-lime-500/20 border-lime-500/50 hover:bg-lime-500/30' },
+  { value: 5, color: 'bg-green-500/20 border-green-500/50 hover:bg-green-500/30' },
+  { value: 6, color: 'bg-emerald-500/20 border-emerald-500/50 hover:bg-emerald-500/30' },
+  { value: 7, color: 'bg-cyan-500/20 border-cyan-500/50 hover:bg-cyan-500/30' },
+  { value: 8, color: 'bg-blue-500/20 border-blue-500/50 hover:bg-blue-500/30' },
+  { value: 9, color: 'bg-purple-500/20 border-purple-500/50 hover:bg-purple-500/30' },
+  { value: 10, color: 'bg-primary/20 border-primary/50 hover:bg-primary/30' },
 ];
 
 export function MoodCheckModal({ isOpen, onClose, onSubmit, period }: MoodCheckModalProps) {
@@ -101,24 +101,21 @@ export function MoodCheckModal({ isOpen, onClose, onSubmit, period }: MoodCheckM
                   key={mood.value}
                   onClick={() => setSelectedMood(mood.value)}
                   className={cn(
-                    'flex flex-col items-center gap-1 p-3 rounded-xl border transition-all duration-200',
+                    'flex items-center justify-center p-4 rounded-xl border transition-all duration-200',
                     mood.color,
                     selectedMood === mood.value && 'ring-2 ring-primary scale-105'
                   )}
                 >
-                  <span className="text-2xl">{mood.emoji}</span>
-                  <span className="text-[10px] text-muted-foreground font-medium">
-                    {mood.value}
-                  </span>
+                  <span className="text-xl font-bold text-foreground">{mood.value}</span>
                 </button>
               ))}
             </div>
 
-            {/* Selected mood label */}
+            {/* Selected mood display */}
             {selectedMood !== null && (
               <div className="mt-4 text-center animate-in fade-in duration-200">
                 <span className="text-lg font-bold text-foreground">
-                  {MOOD_LEVELS.find(m => m.value === selectedMood)?.label}
+                  {selectedMood}/10
                 </span>
               </div>
             )}

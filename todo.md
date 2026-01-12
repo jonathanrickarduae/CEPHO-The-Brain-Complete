@@ -2079,3 +2079,11 @@
 - [x] "Create Video Pitch Pack" button in Project Genesis complete section
 - [x] Auto-populate project data via URL parameters
 - [x] Link to Video Pitch Studio with prefill flag
+
+
+## UI Cleanup (User Request)
+- [ ] BrainBanner - Remove text, keep only animated brain
+- [ ] Mood check-in - Remove emoji face, show only number (6, 7, 8)
+- [ ] Remove all gamification - No streaks, scores, badges
+- [ ] Dashboard boxes - Fix labels (AI Expert Engine → AI SMEs, Digital Twin → Chief of Staff)
+- [ ] Dashboard boxes - Make clickable to navigate to pages

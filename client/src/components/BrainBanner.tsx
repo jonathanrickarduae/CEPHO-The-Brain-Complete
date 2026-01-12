@@ -271,7 +271,7 @@ function MiniBrain({ className = "" }: { className?: string }) {
   );
 }
 
-export default function BrainBanner({ pageTitle, subtitle, compact = false }: BrainBannerProps) {
+export default function BrainBanner({ compact = false }: BrainBannerProps) {
   const { theme } = useTheme();
   
   // Theme-aware background
@@ -281,35 +281,17 @@ export default function BrainBanner({ pageTitle, subtitle, compact = false }: Br
     ? 'bg-gradient-to-r from-gray-900/80 via-gray-800/80 to-gray-900/80 border-b border-gray-700/50 backdrop-blur-sm'
     : 'bg-gradient-to-r from-gray-950 via-black to-gray-950 border-b border-gray-800/50';
 
-  const height = compact ? 'h-16' : 'h-20';
-  const brainSize = compact ? 'w-10 h-10' : 'w-14 h-14';
-  const titleSize = compact ? 'text-xl' : 'text-2xl';
-  
-  // Display title - use pageTitle if provided, otherwise default to THE BRAIN
-  const displayTitle = pageTitle ? `THE ${pageTitle.toUpperCase()}` : 'THE BRAIN';
+  const height = compact ? 'h-14' : 'h-16';
+  const brainSize = compact ? 'w-10 h-10' : 'w-12 h-12';
 
   return (
-    <div className={`${bgClass} ${height} flex items-center px-6 relative overflow-hidden`}>
+    <div className={`${bgClass} ${height} flex items-center justify-center relative overflow-hidden`}>
       {/* Subtle background glow */}
-      <div className="absolute left-8 top-1/2 -translate-y-1/2 w-32 h-32 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute left-16 top-1/2 -translate-y-1/2 w-24 h-24 bg-pink-500/10 rounded-full blur-2xl pointer-events-none" />
+      <div className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 w-32 h-32 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 w-24 h-24 bg-pink-500/10 rounded-full blur-2xl pointer-events-none" />
       
-      <div className="flex items-center gap-4 relative z-10">
-        {/* Animated Brain */}
-        <MiniBrain className={brainSize} />
-        
-        {/* Page Title in Pink */}
-        <h1 className={`font-display font-bold ${titleSize} tracking-wider text-pink-500 drop-shadow-[0_0_20px_rgba(236,72,153,0.5)]`}>
-          {displayTitle}
-        </h1>
-      </div>
-      
-      {/* Subtitle on the right */}
-      {subtitle && (
-        <div className="ml-auto text-sm text-muted-foreground">
-          {subtitle}
-        </div>
-      )}
+      {/* Just the animated brain - centered */}
+      <MiniBrain className={brainSize} />
     </div>
   );
 }
