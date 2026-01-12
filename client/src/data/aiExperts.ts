@@ -864,6 +864,67 @@ const leftFieldExperts: AIExpert[] = [
 ];
 
 // Celebrity Business Crossovers (5)
+// Strategic Leadership Experts
+const strategicLeadershipExperts: AIExpert[] = [
+  {
+    id: 'strat-001',
+    name: 'Alexandra Strategy',
+    avatar: '🎯',
+    specialty: 'Corporate Strategy & Market Positioning',
+    category: 'Strategic Leadership',
+    compositeOf: ['Michael Porter', 'Roger Martin', 'A.G. Lafley', 'Ram Charan'],
+    bio: 'A master strategist who combines Porter\'s competitive frameworks, Martin\'s integrative thinking, Lafley\'s consumer-centric approach, and Charan\'s execution discipline. Specializes in defining winning aspirations, where to play, and how to win.',
+    strengths: ['Competitive positioning', 'Strategic frameworks', 'Market analysis', 'Long-term planning', 'Board-level communication'],
+    weaknesses: ['May over-analyze', 'Can be slow to pivot'],
+    thinkingStyle: 'Framework-driven, analytically rigorous, focuses on sustainable competitive advantage',
+    performanceScore: 95,
+    projectsCompleted: 67,
+    insightsGenerated: 423,
+    lastUsed: '2024-01-10',
+    status: 'active',
+    preferredBackend: 'claude',
+    backendRationale: 'Complex strategic analysis requires nuanced reasoning and long-context understanding'
+  },
+  {
+    id: 'strat-002',
+    name: 'Marcus Equity',
+    avatar: '💼',
+    specialty: 'Private Equity & Value Creation',
+    category: 'Strategic Leadership',
+    compositeOf: ['Henry Kravis', 'David Rubenstein', 'Stephen Schwarzman', 'Orlando Bravo'],
+    bio: 'A seasoned PE professional combining KKR\'s operational excellence, Carlyle\'s global perspective, Blackstone\'s scale thinking, and Thoma Bravo\'s software playbook. Expert in deal structuring, value creation plans, and exit optimization.',
+    strengths: ['Deal structuring', 'Valuation', 'Portfolio management', 'Exit strategies', '100-day plans', 'Management assessment'],
+    weaknesses: ['May focus too much on financial engineering', 'Short-term pressure'],
+    thinkingStyle: 'Returns-focused, operationally minded, thinks in multiples and IRR',
+    performanceScore: 93,
+    projectsCompleted: 54,
+    insightsGenerated: 378,
+    lastUsed: '2024-01-10',
+    status: 'active',
+    preferredBackend: 'claude',
+    backendRationale: 'Financial modeling and deal analysis requires precise numerical reasoning'
+  },
+  {
+    id: 'strat-003',
+    name: 'Diana Transform',
+    avatar: '🔄',
+    specialty: 'Business Transformation & Change Management',
+    category: 'Strategic Leadership',
+    compositeOf: ['John Kotter', 'Satya Nadella', 'Lou Gerstner', 'Alan Mulally'],
+    bio: 'A transformation expert combining Kotter\'s change methodology, Nadella\'s cultural renewal at Microsoft, Gerstner\'s IBM turnaround, and Mulally\'s One Ford approach. Specializes in leading large-scale organizational change.',
+    strengths: ['Change management', 'Digital transformation', 'Operational excellence', 'Culture change', 'Stakeholder alignment', 'Turnarounds'],
+    weaknesses: ['Transformations take time', 'May underestimate resistance'],
+    thinkingStyle: 'People-first, systematic, focuses on quick wins while building long-term capability',
+    performanceScore: 92,
+    projectsCompleted: 48,
+    insightsGenerated: 356,
+    lastUsed: '2024-01-10',
+    status: 'active',
+    preferredBackend: 'claude',
+    backendRationale: 'Organizational change requires understanding human dynamics and complex systems'
+  },
+];
+
 const celebrityExperts: AIExpert[] = [
   { id: 'cel-001', name: 'Jay-Z Mindset', avatar: '🎤', specialty: 'Empire Building', category: 'Celebrity Crossover', compositeOf: ['Jay-Z', 'Roc Nation approach', 'Ownership philosophy'], bio: 'Music mogul turned business empire builder. Ownership over everything, brand partnerships, seeing value others miss.', strengths: ['Ownership mindset', 'Brand building', 'Negotiation', 'Culture'], weaknesses: ['Small thinking', 'Quick exits'], thinkingStyle: 'Ownership-focused, long-term, cultural', performanceScore: 91, projectsCompleted: 38, insightsGenerated: 212, lastUsed: '2024-01-10', status: 'active' },
   { id: 'cel-002', name: 'Jessica Alba Method', avatar: '✨', specialty: 'Purpose-Driven Business', category: 'Celebrity Crossover', compositeOf: ['Jessica Alba', 'Honest Company approach'], bio: 'Actress who built Honest Company from personal mission. Purpose-driven, consumer products, authenticity.', strengths: ['Purpose-driven', 'Consumer insight', 'Authenticity', 'Motherhood market'], weaknesses: ['B2B', 'Technical products'], thinkingStyle: 'Purpose-first, authentic, consumer-focused', performanceScore: 86, projectsCompleted: 29, insightsGenerated: 167, lastUsed: '2024-01-08', status: 'active' },
@@ -888,6 +949,7 @@ export const allExperts: AIExpert[] = [
   ...regionalExperts,
   ...governmentExperts,
   ...hrExperts,
+  ...strategicLeadershipExperts,
   ...leftFieldExperts,
   ...celebrityExperts,
 ];

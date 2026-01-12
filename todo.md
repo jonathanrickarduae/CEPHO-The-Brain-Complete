@@ -2130,3 +2130,11 @@
 - [ ] Version control on personality/logic updates
 - [ ] Backup and recovery procedures
 
+
+
+## New AI Expert Roles
+
+- [x] Add Corporate Strategy Director (strategic planning, market positioning, competitive advantage)
+- [x] Add Private Equity Partner (deal structuring, valuation, portfolio management, exit strategies)
+- [x] Add Business Transformation Director (change management, digital transformation, operational excellence)
+

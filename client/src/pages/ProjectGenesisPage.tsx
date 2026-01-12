@@ -3,14 +3,17 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { 
   Brain, Rocket, FileText, GitBranch, Plus, 
-  ChevronRight, Sparkles, Clock, Check
+  ChevronRight, Sparkles, Clock, Check, Share2, 
+  PresentationIcon, DollarSign, Shield, BarChart3
 } from 'lucide-react';
 import ProjectGenesis from '@/components/ProjectGenesis';
 import { GenesisBlueprintWizard } from '@/components/GenesisBlueprintWizard';
 import { BlueprintQMS } from '@/components/BlueprintQMS';
+import { SocialMediaBlueprint } from '@/components/SocialMediaBlueprint';
+import { QMSProcessLog } from '@/components/QMSProcessLog';
 import { GenesisBlueprint } from '@/data/genesisBlueprint';
 
-type ViewMode = 'dashboard' | 'new_project' | 'qms' | 'legacy';
+type ViewMode = 'dashboard' | 'new_project' | 'qms' | 'legacy' | 'social_media' | 'presentation' | 'financial' | 'process_log';
 
 interface SavedProject {
   id: string;
@@ -128,16 +131,55 @@ export default function ProjectGenesisPage() {
             </button>
 
             <button
-              onClick={() => setViewMode('qms')}
+              onClick={() => setViewMode('process_log')}
               className="p-6 bg-white/5 border border-white/10 rounded-2xl text-left hover:border-white/20 transition-all group"
             >
               <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                <GitBranch className="w-6 h-6 text-gray-400" />
+                <Shield className="w-6 h-6 text-gray-400" />
               </div>
-              <h3 className="text-lg font-semibold text-white mb-1">Blueprint Network</h3>
+              <h3 className="text-lg font-semibold text-white mb-1">QMS Process Log</h3>
               <p className="text-sm text-gray-400">
-                View interconnections and manage cascading updates
+                Master document control, audit trail, and version management
               </p>
+            </button>
+          </div>
+
+          {/* Sub-Blueprints */}
+          <div className="grid grid-cols-4 gap-4 mb-8">
+            <button
+              onClick={() => setViewMode('social_media')}
+              className="p-4 bg-gradient-to-br from-pink-500/10 to-purple-500/10 border border-pink-500/30 rounded-xl text-left hover:border-pink-500/50 transition-all group"
+            >
+              <Share2 className="w-6 h-6 text-pink-400 mb-2 group-hover:scale-110 transition-transform" />
+              <h4 className="font-medium text-white text-sm">Social Media Blueprint</h4>
+              <p className="text-xs text-gray-400 mt-1">Platform strategy & content</p>
+            </button>
+
+            <button
+              onClick={() => setViewMode('presentation')}
+              className="p-4 bg-gradient-to-br from-blue-500/10 to-cyan-500/10 border border-blue-500/30 rounded-xl text-left hover:border-blue-500/50 transition-all group"
+            >
+              <PresentationIcon className="w-6 h-6 text-blue-400 mb-2 group-hover:scale-110 transition-transform" />
+              <h4 className="font-medium text-white text-sm">Presentation Blueprint</h4>
+              <p className="text-xs text-gray-400 mt-1">Investor decks & pitches</p>
+            </button>
+
+            <button
+              onClick={() => setViewMode('financial')}
+              className="p-4 bg-gradient-to-br from-emerald-500/10 to-green-500/10 border border-emerald-500/30 rounded-xl text-left hover:border-emerald-500/50 transition-all group"
+            >
+              <DollarSign className="w-6 h-6 text-emerald-400 mb-2 group-hover:scale-110 transition-transform" />
+              <h4 className="font-medium text-white text-sm">Financial Model Blueprint</h4>
+              <p className="text-xs text-gray-400 mt-1">Projections & valuations</p>
+            </button>
+
+            <button
+              onClick={() => setViewMode('qms')}
+              className="p-4 bg-gradient-to-br from-amber-500/10 to-orange-500/10 border border-amber-500/30 rounded-xl text-left hover:border-amber-500/50 transition-all group"
+            >
+              <GitBranch className="w-6 h-6 text-amber-400 mb-2 group-hover:scale-110 transition-transform" />
+              <h4 className="font-medium text-white text-sm">Blueprint Network</h4>
+              <p className="text-xs text-gray-400 mt-1">Cascading updates</p>
             </button>
           </div>
 
@@ -292,6 +334,92 @@ export default function ProjectGenesisPage() {
               console.log('Viewing blueprint:', id);
             }}
           />
+        </div>
+      </div>
+    );
+  }
+
+  // Social Media Blueprint View
+  if (viewMode === 'social_media') {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-900 to-gray-800 p-6">
+        <div className="max-w-6xl mx-auto">
+          <button
+            onClick={() => setViewMode('dashboard')}
+            className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors mb-6"
+          >
+            <ChevronRight className="w-4 h-4 rotate-180" />
+            Back to Dashboard
+          </button>
+          <SocialMediaBlueprint />
+        </div>
+      </div>
+    );
+  }
+
+  // Presentation Blueprint View (Coming Soon)
+  if (viewMode === 'presentation') {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-900 to-gray-800 p-6">
+        <div className="max-w-6xl mx-auto">
+          <button
+            onClick={() => setViewMode('dashboard')}
+            className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors mb-6"
+          >
+            <ChevronRight className="w-4 h-4 rotate-180" />
+            Back to Dashboard
+          </button>
+          <div className="text-center py-20">
+            <PresentationIcon className="w-16 h-16 mx-auto text-blue-400 mb-4" />
+            <h2 className="text-2xl font-bold text-white mb-2">Presentation Blueprint</h2>
+            <p className="text-gray-400 mb-6">Investor decks, pitch presentations, and strategic communications</p>
+            <Badge variant="outline" className="bg-blue-500/20 text-blue-400 border-blue-500/30">
+              Coming Soon - Inherits from Genesis Master
+            </Badge>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Financial Model Blueprint View (Coming Soon)
+  if (viewMode === 'financial') {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-900 to-gray-800 p-6">
+        <div className="max-w-6xl mx-auto">
+          <button
+            onClick={() => setViewMode('dashboard')}
+            className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors mb-6"
+          >
+            <ChevronRight className="w-4 h-4 rotate-180" />
+            Back to Dashboard
+          </button>
+          <div className="text-center py-20">
+            <DollarSign className="w-16 h-16 mx-auto text-emerald-400 mb-4" />
+            <h2 className="text-2xl font-bold text-white mb-2">Financial Model Blueprint</h2>
+            <p className="text-gray-400 mb-6">Revenue projections, valuations, and financial scenarios</p>
+            <Badge variant="outline" className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30">
+              Coming Soon - Inherits from Genesis Master
+            </Badge>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // QMS Process Log View
+  if (viewMode === 'process_log') {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-900 to-gray-800 p-6">
+        <div className="max-w-6xl mx-auto">
+          <button
+            onClick={() => setViewMode('dashboard')}
+            className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors mb-6"
+          >
+            <ChevronRight className="w-4 h-4 rotate-180" />
+            Back to Dashboard
+          </button>
+          <QMSProcessLog />
         </div>
       </div>
     );
