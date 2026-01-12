@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { useSearch } from "wouter";
 import { 
   Fingerprint, Mic, MicOff, Send,
-  Sparkles, Activity, Trash2
+  Sparkles, Activity, Trash2, Paperclip, Link2, Check, X, FileAudio
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -201,36 +201,30 @@ export default function DigitalTwin() {
         <div className="flex-1 overflow-y-auto">
           <div className="max-w-3xl mx-auto px-3 sm:px-4 py-4 sm:py-6 space-y-4 sm:space-y-6">
             {messages.map((msg) => (
-              <div key={msg.id} className={`flex gap-3 ${msg.from === "user" ? "flex-row-reverse" : ""}`}>
-                {/* Avatar */}
-                <div className={`shrink-0 w-8 h-8 rounded-full flex items-center justify-center ${
-                  msg.from === "twin" 
-                    ? "bg-gradient-to-br from-purple-500/30 to-pink-500/30 border border-purple-500/30" 
-                    : "bg-gradient-to-br from-cyan-500/30 to-blue-500/30 border border-cyan-500/30"
-                }`}>
-                  {msg.from === "twin" ? (
-                    <Fingerprint className="w-4 h-4 text-purple-400" />
-                  ) : (
-                    <span className="text-xs font-medium text-cyan-400">You</span>
-                  )}
-                </div>
+              <div key={msg.id} className={`flex gap-3 ${msg.from === "user" ? "justify-end" : ""}`}>
+                {/* Avatar - only for assistant */}
+                {msg.from === "twin" && (
+                  <div className="shrink-0 w-7 h-7 rounded-full flex items-center justify-center bg-primary/20 border border-primary/30">
+                    <Fingerprint className="w-3.5 h-3.5 text-primary" />
+                  </div>
+                )}
                 
                 {/* Message */}
-                <div className={`flex-1 max-w-[90%] sm:max-w-[85%] ${msg.from === "user" ? "flex flex-col items-end" : ""}`}>
-                  <div className={`inline-block px-4 py-3 rounded-2xl ${
+                <div className={`max-w-[80%] ${msg.from === "user" ? "" : ""}`}>
+                  <div className={`px-4 py-2.5 rounded-2xl ${
                     msg.from === "twin" 
-                      ? "bg-card/60 border border-white/10 rounded-tl-sm" 
-                      : "bg-gradient-to-r from-cyan-500/20 to-blue-500/20 border border-cyan-500/20 rounded-tr-sm"
+                      ? "bg-card/40 border border-white/5" 
+                      : "bg-primary/15 border border-primary/20"
                   }`}>
-                    <p className="text-sm text-foreground whitespace-pre-wrap leading-relaxed"
+                    <p className="text-sm text-foreground/90 whitespace-pre-wrap leading-relaxed"
                        dangerouslySetInnerHTML={{ 
                          __html: msg.message
-                           .replace(/\*\*(.*?)\*\*/g, '<strong class="text-foreground font-semibold">$1</strong>')
+                           .replace(/\*\*(.*?)\*\*/g, '<strong class="text-foreground font-medium">$1</strong>')
                            .replace(/\n/g, '<br/>')
                        }} 
                     />
                   </div>
-                  <p className="text-xs text-muted-foreground mt-1 px-1">{msg.time}</p>
+                  <p className="text-[10px] text-muted-foreground/60 mt-1 px-2">{msg.time}</p>
                 </div>
               </div>
             ))}
@@ -238,14 +232,14 @@ export default function DigitalTwin() {
             {/* Typing indicator */}
             {isTyping && (
               <div className="flex gap-3">
-                <div className="shrink-0 w-8 h-8 rounded-full flex items-center justify-center bg-gradient-to-br from-purple-500/30 to-pink-500/30 border border-purple-500/30">
-                  <Fingerprint className="w-4 h-4 text-purple-400" />
+                <div className="shrink-0 w-7 h-7 rounded-full flex items-center justify-center bg-primary/20 border border-primary/30">
+                  <Fingerprint className="w-3.5 h-3.5 text-primary" />
                 </div>
-                <div className="bg-card/60 border border-white/10 rounded-2xl rounded-tl-sm px-4 py-3">
+                <div className="bg-card/40 border border-white/5 rounded-2xl px-4 py-2.5">
                   <div className="flex gap-1">
-                    <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                    <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                    <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                    <div className="w-1.5 h-1.5 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                    <div className="w-1.5 h-1.5 bg-primary rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                    <div className="w-1.5 h-1.5 bg-primary rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
                   </div>
                 </div>
               </div>
@@ -270,47 +264,78 @@ export default function DigitalTwin() {
           </div>
         </div>
 
-        {/* Input Area - Fixed at bottom */}
-        <div className="shrink-0 border-t border-white/10 bg-card/90 backdrop-blur-xl px-4 py-4">
+        {/* Input Area - Fixed at bottom - Manus style */}
+        <div className="shrink-0 border-t border-white/10 bg-card/90 backdrop-blur-xl px-4 py-3">
           <div className="max-w-3xl mx-auto">
-            <div className="flex items-end gap-3">
-              {/* Voice button */}
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={toggleRecording}
-                className={`shrink-0 h-12 w-12 rounded-xl ${
-                  isListening 
-                    ? "bg-red-500/20 text-red-400 hover:bg-red-500/30 border border-red-500/30" 
-                    : "bg-secondary/50 border border-white/10 hover:bg-secondary hover:border-white/20"
-                }`}
-              >
-                {isListening ? <MicOff className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
-              </Button>
-              
+            {/* Input container */}
+            <div className="bg-secondary/30 border border-white/10 rounded-2xl overflow-hidden">
               {/* Text input */}
-              <div className="flex-1 relative">
-                <textarea
-                  ref={inputRef}
-                  value={messageInput}
-                  onChange={handleInputChange}
-                  onKeyDown={handleKeyDown}
-                  placeholder="Message your Chief of Staff..."
-                  rows={1}
-                  className="w-full px-5 py-4 pr-14 bg-secondary/50 border border-white/10 rounded-xl resize-none focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500/30 text-base placeholder:text-muted-foreground transition-all"
-                  style={{ minHeight: '52px', maxHeight: '200px' }}
-                />
+              <textarea
+                ref={inputRef}
+                value={messageInput}
+                onChange={handleInputChange}
+                onKeyDown={handleKeyDown}
+                placeholder="Message Chief of Staff..."
+                rows={1}
+                className="w-full px-4 py-3 bg-transparent resize-none focus:outline-none text-sm placeholder:text-muted-foreground/60"
+                style={{ minHeight: '44px', maxHeight: '120px' }}
+              />
+              
+              {/* Action bar */}
+              <div className="flex items-center justify-between px-3 py-2 border-t border-white/5">
+                {/* Left actions */}
+                <div className="flex items-center gap-1">
+                  <button
+                    className="p-2 rounded-lg text-primary/70 hover:text-primary hover:bg-primary/10 transition-colors"
+                    title="Add files"
+                  >
+                    <Paperclip className="w-4 h-4" />
+                  </button>
+                  <button
+                    className="p-2 rounded-lg text-primary/70 hover:text-primary hover:bg-primary/10 transition-colors"
+                    title="Connect apps"
+                  >
+                    <Link2 className="w-4 h-4" />
+                  </button>
+                  <button
+                    onClick={toggleRecording}
+                    className={`p-2 rounded-lg transition-colors ${
+                      isListening 
+                        ? "text-red-400 bg-red-500/20" 
+                        : "text-primary/70 hover:text-primary hover:bg-primary/10"
+                    }`}
+                    title={isListening ? "Stop recording" : "Voice input"}
+                  >
+                    {isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
+                  </button>
+                  <button
+                    className="p-2 rounded-lg text-primary/70 hover:text-primary hover:bg-primary/10 transition-colors"
+                    title="Transcribe audio"
+                  >
+                    <FileAudio className="w-4 h-4" />
+                  </button>
+                </div>
                 
-                {/* Send button */}
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={handleSendMessage}
-                  disabled={!messageInput.trim() || isLoading}
-                  className="absolute right-2 bottom-2 h-10 w-10 rounded-lg bg-purple-500/20 hover:bg-purple-500/30 disabled:opacity-50 transition-all"
-                >
-                  <Send className="w-5 h-5 text-purple-400" />
-                </Button>
+                {/* Right actions */}
+                <div className="flex items-center gap-1">
+                  {messageInput.trim() && (
+                    <button
+                      onClick={() => setMessageInput('')}
+                      className="p-2 rounded-lg text-muted-foreground hover:text-red-400 hover:bg-red-500/10 transition-colors"
+                      title="Clear"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  )}
+                  <button
+                    onClick={handleSendMessage}
+                    disabled={!messageInput.trim() || isLoading}
+                    className="p-2 rounded-lg bg-primary/20 text-primary hover:bg-primary/30 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                    title="Send"
+                  >
+                    <Send className="w-4 h-4" />
+                  </button>
+                </div>
               </div>
             </div>
             

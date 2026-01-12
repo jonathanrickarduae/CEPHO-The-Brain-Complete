@@ -2565,12 +2565,16 @@
 - [x] Fix duplicate key error on /digital-twin page (key `4` appearing twice)
 - [ ] Add tick/confirm button for voice input on digital-twin chat (microphone → tick to confirm)
 - [x] Fix Workflow page design - cleaner layout, clear project status, easy drill-down
-- [ ] Make AI-SME experts and their bios easily accessible from sidebar/navigation
-- [ ] Add ability to browse experts and start conversation with any of them
-- [ ] Ensure Project Genesis is visible and accessible in navigation
+- [ ] Create AI-SME expert browser page with all experts and bios
+- [ ] Add ability to start conversation with any expert from browser
+- [ ] Add Project Genesis to sidebar navigation
+- [ ] Verify Cepho/Brain animation on landing page
 - [x] Replace emoji icons on projects with professional coloured logo badges
 - [x] Make chat input bar taller/more prominent like Manus style
 - [x] Redesign Library page to match Workflow design principles
 - [x] Fix landing page animation - Cepho should transition to "The Brain" and back
 - [x] Remove "mood" terminology from wellness check - just show number, no labels
 - [x] Change wellness check to "How are you today?" - remove mood/wellness labels
+- [x] Make chat placeholder text smaller, add action buttons (files, apps, tick, cross, transcribe) in pink
+- [x] Improve voice transcription - ensure clean voice pickup like Manus
+- [x] Make chat layout less blocky, more flowing
