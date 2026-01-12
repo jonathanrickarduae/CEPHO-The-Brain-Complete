@@ -2561,3 +2561,12 @@
 - [x] Increase key metrics to 48px+ for scannability
 - [x] Soften dividers and reduce visual borders
 - [x] Increase padding/white space throughout
+
+- [x] Fix duplicate key error on /digital-twin page (key `4` appearing twice)
+- [ ] Add tick/confirm button for voice input on digital-twin chat (microphone → tick to confirm)
+- [x] Fix Workflow page design - cleaner layout, clear project status, easy drill-down
+- [ ] Make AI-SME experts and their bios easily accessible from sidebar/navigation
+- [ ] Add ability to browse experts and start conversation with any of them
+- [ ] Ensure Project Genesis is visible and accessible in navigation
+- [x] Replace emoji icons on projects with professional coloured logo badges
+- [x] Make chat input bar taller/more prominent like Manus style

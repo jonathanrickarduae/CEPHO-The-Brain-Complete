@@ -271,18 +271,18 @@ export default function DigitalTwin() {
         </div>
 
         {/* Input Area - Fixed at bottom */}
-        <div className="shrink-0 border-t border-white/10 bg-card/80 backdrop-blur-xl px-4 py-3">
+        <div className="shrink-0 border-t border-white/10 bg-card/90 backdrop-blur-xl px-4 py-4">
           <div className="max-w-3xl mx-auto">
-            <div className="flex items-end gap-2">
+            <div className="flex items-end gap-3">
               {/* Voice button */}
               <Button
                 variant="ghost"
                 size="icon"
                 onClick={toggleRecording}
-                className={`shrink-0 rounded-full ${
+                className={`shrink-0 h-12 w-12 rounded-xl ${
                   isListening 
-                    ? "bg-red-500/20 text-red-400 hover:bg-red-500/30" 
-                    : "hover:bg-secondary"
+                    ? "bg-red-500/20 text-red-400 hover:bg-red-500/30 border border-red-500/30" 
+                    : "bg-secondary/50 border border-white/10 hover:bg-secondary hover:border-white/20"
                 }`}
               >
                 {isListening ? <MicOff className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
@@ -297,8 +297,8 @@ export default function DigitalTwin() {
                   onKeyDown={handleKeyDown}
                   placeholder="Message your Chief of Staff..."
                   rows={1}
-                  className="w-full px-4 py-3 pr-12 bg-secondary/50 border border-white/10 rounded-2xl resize-none focus:outline-none focus:ring-2 focus:ring-purple-500/50 text-sm placeholder:text-muted-foreground"
-                  style={{ maxHeight: '120px' }}
+                  className="w-full px-5 py-4 pr-14 bg-secondary/50 border border-white/10 rounded-xl resize-none focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500/30 text-base placeholder:text-muted-foreground transition-all"
+                  style={{ minHeight: '52px', maxHeight: '200px' }}
                 />
                 
                 {/* Send button */}
@@ -307,9 +307,9 @@ export default function DigitalTwin() {
                   size="icon"
                   onClick={handleSendMessage}
                   disabled={!messageInput.trim() || isLoading}
-                  className="absolute right-2 bottom-1.5 rounded-full hover:bg-purple-500/20 disabled:opacity-50"
+                  className="absolute right-2 bottom-2 h-10 w-10 rounded-lg bg-purple-500/20 hover:bg-purple-500/30 disabled:opacity-50 transition-all"
                 >
-                  <Send className="w-4 h-4 text-purple-400" />
+                  <Send className="w-5 h-5 text-purple-400" />
                 </Button>
               </div>
             </div>

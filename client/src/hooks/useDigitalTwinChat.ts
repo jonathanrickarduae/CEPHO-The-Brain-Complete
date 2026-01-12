@@ -30,7 +30,7 @@ export function useDigitalTwinChat() {
   useEffect(() => {
     if (history && history.length > 0) {
       const loadedMessages: ChatMessage[] = history.map((h, index) => ({
-        id: index + 1,
+        id: Date.now() + index,
         from: h.role === 'user' ? 'user' : 'twin',
         message: h.content,
         time: new Date(h.createdAt).toLocaleTimeString([], { 
@@ -92,7 +92,7 @@ export function useDigitalTwinChat() {
     onMutate: async ({ message }) => {
       // Optimistically add user message
       const userMessage: ChatMessage = {
-        id: messages.length + 1,
+        id: Date.now(),
         from: 'user',
         message,
         time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
@@ -102,7 +102,7 @@ export function useDigitalTwinChat() {
     },
     onSuccess: (data) => {
       // Add assistant response with streaming
-      const twinMessageId = messages.length + 2;
+      const twinMessageId = Date.now() + 1;
       const twinMessage: ChatMessage = {
         id: twinMessageId,
         from: 'twin',
@@ -123,7 +123,7 @@ export function useDigitalTwinChat() {
       setIsTyping(false);
       // Add error message
       const errorMessage: ChatMessage = {
-        id: messages.length + 2,
+        id: Date.now() + 1,
         from: 'twin',
         message: "I'm sorry, I encountered an error. Please try again.",
         time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
@@ -158,7 +158,7 @@ export function useDigitalTwinChat() {
   useEffect(() => {
     if (history && history.length === 0 && messages.length === 0) {
       const welcomeMessage: ChatMessage = {
-        id: 1,
+        id: Date.now(),
         from: 'twin',
         message: "Good morning! I'm your Chief of Staff, ready to help you stay on top of everything.\n\nI can help you with:\n• **Email drafting** and inbox management\n• **Meeting preparation** and scheduling\n• **Task prioritization** and project updates\n• **Research** and analysis\n• **Daily briefings** and evening reviews\n\nWhat would you like to work on today?",
         time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
