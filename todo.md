@@ -1695,3 +1695,258 @@
 - [ ] Screen observation tracking (requires desktop app)
 - [ ] Biometric authentication (Face ID / Touch ID)
 - [ ] Active learning mode with screen observation
+
+
+## Enhanced Onboarding Experience
+
+### Data Storage & Security Explanations
+- [ ] Add clear data storage explanation for each integration (where data is held, encryption, access)
+- [ ] Explain search functionality - how it indexes and retrieves across integrations
+- [ ] Show data flow diagrams during onboarding (visual representation of where data goes)
+- [ ] Privacy-first messaging: "Your data stays yours - we just help you organize it"
+
+### Integration Value Propositions
+- [ ] Each integration step explains WHY it optimizes The Brain's performance
+- [ ] Show concrete benefits: "Connect email → AI can prioritize your inbox, draft responses, extract action items"
+- [ ] Explain how integrations compound: "More connections = smarter recommendations"
+- [ ] Display estimated time savings per integration
+
+### Progressive Learning Messaging
+- [ ] "As we work together, The Brain learns your patterns and preferences"
+- [ ] "Over time, recommendations become more personalized and accurate"
+- [ ] "Your Digital Twin grows stronger with each interaction"
+- [ ] Show learning progress indicators during onboarding
+
+### Financial Optimization Messaging
+- [ ] Explain AI provider cost optimization: "The Brain scouts for best-value AI models"
+- [ ] Show integration cost comparisons: "We find the most cost-effective tools"
+- [ ] Display potential savings from automation: "Average user saves X hours/week"
+- [ ] Highlight security improvements over time: "Continuous security scanning and updates"
+
+### Onboarding Flow Improvements
+- [ ] Step-by-step wizard with progress indicator
+- [ ] "Why this matters" tooltip for each integration
+- [ ] Skip option with "You can always add this later" reassurance
+- [ ] Success celebration after each integration connected
+- [ ] Summary screen showing all connected integrations and their benefits
+
+
+## Corporate Digital Twins - New Additions
+- [x] Add BlackRock corporate persona (investment management, risk analytics, ESG frameworks)
+- [x] Add Morgan Stanley corporate persona (wealth management, M&A advisory, capital markets)
+
+- [x] Add research methodology field to Corporate Partner data structure
+- [x] Add thinking framework field showing how each company approaches problems
+- [x] Add key principles field for core beliefs guiding their work
+- [x] Add signature tools/models field for proprietary frameworks
+- [x] Enhance all existing corporate partners with methodology descriptions
+
+
+## AI Expert & Corporate Partner Card Enhancements
+- [x] Implement flip card interaction for AI Expert cards (click to flip)
+- [x] Front: Name, avatar, specialty, performance score
+- [x] Back: Full bio, thinking style, strengths/weaknesses, methodology
+- [x] Add "Tweak Approach" button on back of card to adjust expert behavior
+- [x] Implement flip card interaction for Corporate Partner cards
+- [x] Corporate back: Research methodology, thinking framework, key principles, signature tools
+
+
+## Presentation Blueprint (Project Genesis)
+- [ ] Create Presentation Blueprint framework for investor deck creation
+- [ ] Build process flow document showing each step visually
+- [ ] Add decision points and branches in the flow
+- [ ] Identify bottlenecks and inefficiencies
+- [ ] Allow annotation and refinement during testing
+- [ ] Track time spent at each stage
+
+
+## Social Media Blueprint (Project Genesis Integration)
+
+### Platform Algorithm Intelligence
+- [ ] Instagram algorithm research: engagement signals, Reels priority, hashtag strategy, optimal posting times
+- [ ] YouTube algorithm research: watch time, CTR, retention curves, thumbnail optimization, SEO
+- [ ] TikTok algorithm research: For You Page mechanics, hook timing, trending sounds, completion rate
+- [ ] LinkedIn algorithm research: dwell time, comment quality, native content preference, B2B engagement
+- [ ] Build PlatformIntelligence.ts data layer with algorithm insights for each platform
+- [ ] Create AlgorithmInsights component showing what each platform rewards
+
+### Strategy Engine
+- [ ] Pull business objectives from Project Genesis sign-off
+- [ ] Define target audience personas per platform
+- [ ] Set KPIs: followers growth, engagement rate, brand awareness, conversion goals
+- [ ] Content pillar definition (educational, entertaining, promotional, behind-scenes)
+- [ ] Competitor analysis integration
+- [ ] Create SocialMediaStrategy component
+
+### Content Factory
+- [ ] Content type templates per platform (Reels, Stories, Carousels, Long-form, Shorts)
+- [ ] AI-powered caption generator with platform-specific tone
+- [ ] Hashtag research and optimization engine
+- [ ] Video script generator aligned to hook-story-CTA structure
+- [ ] Image/thumbnail generator integration
+- [ ] Content calendar with drag-drop scheduling
+- [ ] Create ContentFactory component
+
+### Account Setup & Optimization
+- [ ] Profile optimization checklist per platform
+- [ ] Bio generator with keyword optimization
+- [ ] Profile/cover image specifications and templates
+- [ ] Link-in-bio strategy
+- [ ] Account connection wizard (OAuth for each platform)
+- [ ] Create AccountSetup component
+
+### Scheduling & Rollout
+- [ ] Optimal posting time calculator per platform and audience
+- [ ] Content queue with preview
+- [ ] Cross-posting with platform-specific adaptations
+- [ ] A/B testing for captions and thumbnails
+- [ ] Performance tracking dashboard
+- [ ] Create SchedulingEngine component
+
+### End-to-End Automation
+- [ ] One-click content generation from business objectives
+- [ ] Batch content creation for week/month
+- [ ] Auto-adaptation of content for each platform
+- [ ] Review queue before publishing
+- [ ] Analytics feedback loop for optimization
+- [ ] Create SocialMediaBlueprint master component
+
+
+## Project Genesis - Intelligent Onboarding Flow
+
+### Context Detection & Entry Points
+- [ ] "What are you trying to achieve?" initial question with smart options
+- [ ] Detect: New company vs existing business vs specific deliverable request
+- [ ] Document upload zone for existing strategic plans, pitch decks, business plans
+- [ ] AI extraction of key info from uploaded documents
+- [ ] Fast-track mode when documents provide sufficient context
+
+### Adaptive Questioning Flow
+- [ ] Yes/No branching logic that doesn't overload
+- [ ] Progressive disclosure - only show relevant questions based on previous answers
+- [ ] Smart defaults based on industry/company type
+- [ ] Skip logic for questions already answered via document upload
+- [ ] Conversational UI that feels like talking to an advisor
+
+### Deep Dive Analysis (New Ventures)
+- [ ] Business model canvas generation
+- [ ] Market size and opportunity analysis (TAM/SAM/SOM)
+- [ ] Competitor landscape mapping
+- [ ] SWOT analysis with AI-powered insights
+- [ ] Value proposition refinement
+- [ ] Target customer persona development
+- [ ] Revenue model exploration
+- [ ] Risk assessment and mitigation strategies
+- [ ] Regulatory/compliance considerations
+- [ ] Team and capability gap analysis
+
+### Project Repository
+- [ ] Central document dump for all project materials
+- [ ] Auto-categorization of uploaded files
+- [ ] Version control for strategic documents
+- [ ] AI summary generation for each document
+- [ ] Cross-reference insights across documents
+
+### Sign-Off Document Generation
+- [ ] Comprehensive strategic brief (like Boundless doc structure)
+- [ ] Executive summary with key decisions
+- [ ] Clear objectives and success metrics
+- [ ] Identified risks and concerns
+- [ ] Resource requirements
+- [ ] Timeline and milestones
+- [ ] Approval workflow before downstream work begins
+
+### Downstream Blueprint Triggers
+- [ ] Presentation Blueprint unlocked after sign-off
+- [ ] Social Media Blueprint unlocked after sign-off
+- [ ] Financial Model Blueprint unlocked after sign-off
+- [ ] Each blueprint pulls context from signed-off Genesis document
+- [ ] Create ProjectGenesisWizard master component
+
+
+### SME Collaboration & Auto-Assembly
+- [ ] Auto-detect relevant AI Experts based on project context (sector, stage, objectives)
+- [ ] Strategy experts auto-engage during scoping phase
+- [ ] Sector specialists join based on industry (media, finance, tech, healthcare, etc.)
+- [ ] Data scientists provide ongoing analysis and recommendations
+- [ ] Corporate Digital Twins selected as peer reviewers (Netflix for media, BlackRock for finance, etc.)
+- [ ] Show active SME panel with their contributions in real-time
+- [ ] Each SME provides structured input at their expertise touchpoints
+
+### Quality Assurance & Peer Review Checkpoints
+- [ ] Multiple QA review gates throughout Genesis process
+- [ ] SME sign-off required at each major phase
+- [ ] Peer review from Corporate Digital Twins with sector expertise
+- [ ] Data validation checkpoint with Data Scientist review
+- [ ] Strategy coherence check with Strategy experts
+- [ ] Risk assessment review with relevant specialists
+- [ ] Visual indicator showing QA status and approvals
+
+### Living Document & Data Capture
+- [ ] Comprehensive report that grows throughout process
+- [ ] All data, facts, and insights captured in structured format
+- [ ] Keywords and resonant phrases identified and highlighted
+- [ ] Market data and statistics with sources
+- [ ] Competitor intelligence compiled
+- [ ] Customer insights and personas documented
+- [ ] Financial projections and assumptions
+- [ ] Risk register with mitigation strategies
+- [ ] Potentially 100+ pages when fully developed
+
+### Multi-Format Output Generation
+- [ ] Export as comprehensive PDF report
+- [ ] Generate executive summary (2-3 pages)
+- [ ] Convert to podcast script with key insights
+- [ ] Create video presentation from Genesis content
+- [ ] Slide deck auto-generation from key sections
+- [ ] One-pager for quick stakeholder briefing
+
+
+## Quality Management System & Blueprint Architecture
+
+### Genesis Blueprint (Master Document)
+- [ ] Create GenesisBlueprint data structure as single source of truth
+- [ ] All business objectives, strategy, and context stored centrally
+- [ ] Version control with change history
+- [ ] Approval status tracking
+- [ ] Links to all downstream sub-process blueprints
+
+### Sub-Process Blueprint Inheritance
+- [ ] Presentation Blueprint inherits from Genesis (objectives, messaging, audience)
+- [ ] Social Media Blueprint inherits from Genesis (brand voice, target personas, goals)
+- [ ] Financial Model Blueprint inherits from Genesis (revenue model, projections, assumptions)
+- [ ] Marketing Blueprint inherits from Genesis (positioning, channels, budget)
+- [ ] Operations Blueprint inherits from Genesis (team, timeline, milestones)
+- [ ] Each sub-blueprint shows inherited fields vs custom fields
+
+### Cascading Update System
+- [ ] When Genesis is updated, flag affected sub-blueprints
+- [ ] Show impact analysis before confirming changes
+- [ ] Auto-update inherited fields in downstream blueprints
+- [ ] Notification to relevant SMEs when their area is affected
+- [ ] Change propagation log showing what updated where
+
+### Quality Management Dashboard
+- [ ] Visual map of all blueprints and their connections
+- [ ] Status indicators (draft, in review, approved, needs update)
+- [ ] QA checkpoint completion tracking
+- [ ] SME approval status per blueprint
+- [ ] Version comparison and diff view
+- [ ] Audit trail of all changes
+
+### Feedback Loop & Learning System
+- [ ] Capture execution results (what worked, what didn't)
+- [ ] Link outcomes back to blueprint decisions
+- [ ] AI analysis of patterns across projects
+- [ ] Process improvement suggestions based on data
+- [ ] Digital Twin learning from feedback
+- [ ] Best practice extraction and documentation
+- [ ] Continuous improvement metrics
+
+### Blueprint Process Flow Visualization
+- [ ] Interactive flowchart showing Genesis → Sub-blueprints
+- [ ] Click to drill into any blueprint
+- [ ] Show dependencies and data flow
+- [ ] Highlight bottlenecks and inefficiencies
+- [ ] Time tracking at each stage
+- [ ] Create BlueprintQMS master component

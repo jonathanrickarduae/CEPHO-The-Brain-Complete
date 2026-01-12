@@ -34,6 +34,14 @@ export interface CorporatePartner {
   frameworks: string[];
   performanceScore: number;
   projectsCompleted: number;
+  /** How this company approaches problems and makes decisions */
+  thinkingFramework?: string;
+  /** Their systematic approach to research and analysis */
+  researchApproach?: string;
+  /** Core beliefs and principles that guide their work */
+  keyPrinciples?: string[];
+  /** Proprietary tools, models, or methodologies they use */
+  signatureTools?: string[];
 }
 
 // Investment & Finance Experts (25)
@@ -698,7 +706,11 @@ export const corporatePartners: CorporatePartner[] = [
     strengths: ['Strategy', 'Operations', 'Organization', 'Digital transformation'],
     frameworks: ['7S Framework', 'Three Horizons', 'Value Chain Analysis', 'MECE'],
     performanceScore: 94,
-    projectsCompleted: 156
+    projectsCompleted: 156,
+    thinkingFramework: 'Start with a hypothesis and test it rigorously. Structure every problem using MECE (Mutually Exclusive, Collectively Exhaustive). Use the Pyramid Principle for communication. Focus on the 80/20 - find the vital few that drive most impact.',
+    researchApproach: 'Issue tree decomposition. Hypothesis-driven research with rapid validation. Expert interviews and benchmarking. Quantitative analysis to size opportunities. Synthesis into actionable recommendations.',
+    keyPrinciples: ['Hypothesis-driven problem solving', 'MECE structuring', 'Client impact above all', 'One firm - leverage global expertise', 'Obligation to dissent'],
+    signatureTools: ['Issue Trees', 'Pyramid Principle', '7S Framework', 'Three Horizons', 'Influence Model']
   },
   {
     id: 'corp-002',
@@ -709,7 +721,11 @@ export const corporatePartners: CorporatePartner[] = [
     strengths: ['Audit', 'Tax', 'Advisory', 'Deals', 'Assurance'],
     frameworks: ['Risk Assessment', 'Internal Controls', 'Tax Optimization', 'Due Diligence'],
     performanceScore: 91,
-    projectsCompleted: 189
+    projectsCompleted: 189,
+    thinkingFramework: 'Trust is built through rigor and independence. Every assertion must be verifiable. Risk-based prioritization ensures focus on what matters most. Regulatory compliance is the floor, not the ceiling.',
+    researchApproach: 'Risk assessment to identify material areas. Substantive testing with audit-grade documentation. Regulatory landscape analysis. Industry benchmarking. Controls evaluation and gap analysis.',
+    keyPrinciples: ['Independence and objectivity', 'Professional skepticism', 'Evidence-based conclusions', 'Regulatory excellence', 'Trust through transparency'],
+    signatureTools: ['Risk Assessment Matrix', 'Controls Testing', 'Substantive Procedures', 'Tax Optimization Models', 'Due Diligence Checklists']
   },
   {
     id: 'corp-003',
@@ -720,7 +736,11 @@ export const corporatePartners: CorporatePartner[] = [
     strengths: ['Content strategy', 'Personalization', 'Culture', 'Disruption', 'Global scaling'],
     frameworks: ['Culture Deck', 'A/B Testing', 'Recommendation Algorithms', 'Keeper Test'],
     performanceScore: 89,
-    projectsCompleted: 78
+    projectsCompleted: 78,
+    thinkingFramework: 'Hire stunning colleagues and give them freedom. Make decisions with context, not control. Optimize for long-term over short-term. Data informs but doesn\'t dictate - judgment matters.',
+    researchApproach: 'A/B testing at massive scale. Viewing data analysis for content decisions. Consumer research for market entry. Competitive landscape monitoring. Cultural trend identification.',
+    keyPrinciples: ['Freedom and responsibility', 'Context not control', 'Highly aligned loosely coupled', 'Pay top of market', 'Keeper test for talent'],
+    signatureTools: ['A/B Testing Platform', 'Recommendation Engine', 'Viewing Analytics', 'Culture Deck Framework', 'Content Valuation Models']
   },
   {
     id: 'corp-004',
@@ -731,7 +751,11 @@ export const corporatePartners: CorporatePartner[] = [
     strengths: ['Innovation', 'Engineering excellence', 'Project management', 'Risk management'],
     frameworks: ['Systems Engineering', 'FMEA', 'Technology Readiness Levels', 'Mission Control'],
     performanceScore: 96,
-    projectsCompleted: 45
+    projectsCompleted: 45,
+    thinkingFramework: 'Failure is not an option - but learning from failure is essential. Think in systems, not components. Plan for every contingency. Set audacious goals that inspire. Redundancy saves lives.',
+    researchApproach: 'Systems engineering with rigorous requirements decomposition. Failure Mode and Effects Analysis (FMEA). Technology Readiness Level assessment. Simulation and testing before flight. Post-mission analysis and lessons learned.',
+    keyPrinciples: ['Safety first always', 'Systems thinking', 'Redundancy and backup', 'Test like you fly', 'Learn from every mission'],
+    signatureTools: ['FMEA', 'Technology Readiness Levels', 'Mission Control Protocols', 'Systems Engineering V-Model', 'Anomaly Resolution']
   },
   {
     id: 'corp-005',
@@ -742,7 +766,11 @@ export const corporatePartners: CorporatePartner[] = [
     strengths: ['Social platforms', 'AI/ML', 'Metaverse', 'Advertising', 'Community building'],
     frameworks: ['Growth Hacking', 'Platform Economics', 'Social Graph', 'Engagement Metrics'],
     performanceScore: 85,
-    projectsCompleted: 92
+    projectsCompleted: 92,
+    thinkingFramework: 'Move fast and ship. Data tells you what users actually do, not what they say. Think in platforms and network effects. Connect people and value follows. Bold bets on the future.',
+    researchApproach: 'Massive A/B testing and experimentation. User behavior analytics at scale. Network effect modeling. Competitive intelligence. Long-term technology bets with R&D investment.',
+    keyPrinciples: ['Move fast', 'Be bold', 'Focus on impact', 'Be open', 'Build social value'],
+    signatureTools: ['Growth Analytics', 'A/B Testing at Scale', 'Social Graph Analysis', 'Engagement Metrics', 'Platform Economics Models']
   },
   {
     id: 'corp-006',
@@ -753,7 +781,11 @@ export const corporatePartners: CorporatePartner[] = [
     strengths: ['AI infrastructure', 'GPU computing', 'Deep learning', 'Autonomous systems'],
     frameworks: ['CUDA', 'Tensor Computing', 'AI Training Pipelines', 'Edge Computing'],
     performanceScore: 93,
-    projectsCompleted: 67
+    projectsCompleted: 67,
+    thinkingFramework: 'The future is parallel. Hardware and software must be designed together. AI will transform every industry. Invest in platforms that enable ecosystems. Performance per watt is the ultimate metric.',
+    researchApproach: 'Deep technical research in parallel computing. AI model architecture optimization. Hardware-software co-design. Developer ecosystem building. Industry partnership for real-world validation.',
+    keyPrinciples: ['Parallel computing is the future', 'Hardware-software synergy', 'Developer ecosystem first', 'AI transforms everything', 'Performance leadership'],
+    signatureTools: ['CUDA Platform', 'Tensor Cores', 'AI Training Pipelines', 'Omniverse', 'Drive Platform']
   },
   {
     id: 'corp-007',
@@ -764,7 +796,41 @@ export const corporatePartners: CorporatePartner[] = [
     strengths: ['Manufacturing innovation', 'Battery technology', 'Autonomy', 'Energy'],
     frameworks: ['First Principles', 'Vertical Integration', 'OTA Updates', 'Gigafactory Model'],
     performanceScore: 88,
-    projectsCompleted: 54
+    projectsCompleted: 54,
+    thinkingFramework: 'Start from fundamental truths and reason up. Question every assumption. If physics allows it, find a way to make it happen. Optimize for speed of iteration over perfection.',
+    researchApproach: 'Physics-based analysis first. Identify constraints and challenge whether they are real or assumed. Prototype rapidly. Test in real conditions. Learn from failures fast.',
+    keyPrinciples: ['First principles over analogy', 'Vertical integration for control', 'Speed of iteration wins', 'Mission over profit'],
+    signatureTools: ['First Principles Canvas', 'Constraint Mapping', 'Rapid Prototyping Cycles', 'Real-World Testing']
+  },
+  {
+    id: 'corp-008',
+    name: 'BlackRock',
+    logo: '⬛',
+    industry: 'Investment Management & Risk Analytics',
+    methodology: 'Risk-first analysis, quantitative modeling, ESG integration, macro-to-micro approach',
+    strengths: ['Risk management', 'Portfolio construction', 'ESG investing', 'Market analysis', 'Institutional scale'],
+    frameworks: ['Aladdin Risk Platform', 'Factor Investing', 'ESG Integration', 'Scenario Analysis'],
+    performanceScore: 95,
+    projectsCompleted: 203,
+    thinkingFramework: 'Every investment decision starts with understanding risk. Use data and technology to see what others cannot. Think in terms of factors, not just assets. Consider long-term sustainability alongside returns.',
+    researchApproach: 'Quantitative analysis using massive datasets. Factor decomposition to understand return drivers. Stress testing across multiple scenarios. ESG materiality assessment. Macro overlay with bottom-up validation.',
+    keyPrinciples: ['Risk is the foundation of return', 'Technology creates edge', 'Diversification is the only free lunch', 'Long-term thinking beats short-term noise', 'Sustainability is alpha'],
+    signatureTools: ['Aladdin Platform', 'Factor Models', 'Scenario Stress Testing', 'ESG Scoring', 'Liquidity Analysis']
+  },
+  {
+    id: 'corp-009',
+    name: 'Morgan Stanley',
+    logo: '🏛️',
+    industry: 'Investment Banking & Wealth Management',
+    methodology: 'Client-centric advisory, M&A expertise, capital markets intelligence, wealth preservation',
+    strengths: ['M&A advisory', 'Capital raising', 'Wealth management', 'Research', 'Institutional relationships'],
+    frameworks: ['Deal Structuring', 'Valuation Models', 'Capital Markets Access', 'Wealth Planning'],
+    performanceScore: 92,
+    projectsCompleted: 178,
+    thinkingFramework: 'Start with the client\'s strategic objectives. Understand the full landscape of stakeholders. Structure solutions that align incentives. Execute with precision and confidentiality.',
+    researchApproach: 'Deep sector expertise combined with cross-industry pattern recognition. Comparable transaction analysis. Market sounding with key players. Regulatory landscape mapping. Synergy identification and validation.',
+    keyPrinciples: ['Client interests first', 'Relationships are everything', 'Execution excellence', 'Confidentiality is sacred', 'Long-term partnerships over transactions'],
+    signatureTools: ['Comparable Company Analysis', 'DCF Modeling', 'Synergy Analysis', 'Deal Process Management', 'Fairness Opinions']
   }
 ];
 
