@@ -23,7 +23,7 @@ import { getLoginUrl } from "@/const";
 import { useIsMobile } from "@/hooks/useMobile";
 import { 
   LayoutDashboard, LogOut, PanelLeft, 
-  BookOpen, BarChart3, Lock, Briefcase, Activity, Brain, Sun, Users, Moon, Keyboard, Settings, TrendingUp, Info, Clock, Sparkles, Rocket, Inbox, Search, Video, Bell, Mic, Podcast, Heart, Globe
+  BookOpen, BarChart3, Lock, Briefcase, Activity, Brain, Sun, Users, Moon, Keyboard, Settings, TrendingUp, Info, Clock, Sparkles, Rocket, Inbox, Search, Video, Bell, Mic, Podcast, Heart, Globe, Library, Workflow
 } from "lucide-react";
 import { CSSProperties, useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
@@ -54,8 +54,8 @@ const menuItems = [
   { icon: Rocket, label: "Project Genesis", path: "/project-genesis" },
   { icon: Users, label: "AI-SMEs", path: "/ai-experts" },
   { icon: Briefcase, label: "Chief of Staff", path: "/digital-twin" },
-  { icon: Activity, label: "Workflow", path: "/workflow", count: 2 },
-  { icon: BookOpen, label: "Library", path: "/library" },
+  { icon: Workflow, label: "Workflow", path: "/workflow", count: 2 },
+  { icon: Library, label: "Library", path: "/library" },
   { icon: Lock, label: "Vault", path: "/vault" },
   { icon: Moon, label: "Evening Review", path: "/evening-review" },
   { icon: BarChart3, label: "Analytics", path: "/statistics" },

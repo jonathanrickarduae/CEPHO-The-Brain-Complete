@@ -406,17 +406,18 @@ export default function DigitalTwin() {
               onClick={() => setRightPanelTab('training')}
               className={`flex-1 px-4 py-3 text-sm font-medium transition-colors ${
                 rightPanelTab === 'training' 
-                  ? 'text-purple-400 border-b-2 border-purple-400' 
+                  ? 'text-purple-400 border-b-2 border-purple-400 flex items-center justify-center gap-2' 
                   : 'text-muted-foreground hover:text-foreground'
               }`}
             >
+              <GraduationCap className="w-4 h-4" />
               Train
             </button>
             <button
               onClick={() => setRightPanelTab('guardian')}
               className={`flex-1 px-4 py-3 text-sm font-medium transition-colors ${
                 rightPanelTab === 'guardian' 
-                  ? 'text-fuchsia-400 border-b-2 border-fuchsia-400' 
+                  ? 'text-fuchsia-400 border-b-2 border-fuchsia-400 flex items-center justify-center gap-2' 
                   : 'text-muted-foreground hover:text-foreground'
               }`}
             >

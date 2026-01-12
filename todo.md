@@ -2807,3 +2807,11 @@
 - [x] Enable ElevenLabs speaker button in DirectExpertChat
 - [x] Enable ElevenLabs speaker button in CorporatePartnerChat
 - [ ] Add voice toggle in settings
+
+
+## UX/Design Fixes (Jan 2026) - Current Sprint
+- [x] Add icons to Library and Workflow tabs for differentiation
+- [x] Fix Chief of Staff training button - black text/background readability
+- [x] Replace training indicator with toggle button (cross/tick) for on/off
+- [x] Make all tabs consistent in styling (Chief of Staff differs from others)
+- [x] Fix Vault positioning - move content higher on page
