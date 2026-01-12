@@ -97,11 +97,11 @@ export default function BrainLayout({
             <h1 className="text-4xl font-display font-bold tracking-tight text-center text-white">
               CEPHO
             </h1>
-            <p className="text-lg text-white/70 text-center max-w-sm">
-              Your AI Chief of Staff
+            <p className="text-sm text-white/50 text-center max-w-sm">
+              The spark that fires the neurons
             </p>
-            <p className="text-sm text-white/50 text-center max-w-sm mt-1">
-              Less admin. More impact.
+            <p className="text-base text-white/70 text-center max-w-sm mt-2">
+              Optimization for freedom.
             </p>
           </div>
           

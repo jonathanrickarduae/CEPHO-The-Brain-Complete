@@ -20,8 +20,8 @@ interface OnboardingStep {
 const ONBOARDING_STEPS: OnboardingStep[] = [
   {
     id: 1,
-    title: 'Get to a 10',
-    description: 'CEPHO tracks how you\'re feeling and optimizes your day around it. Bad morning? It clears the noise. Feeling sharp? It loads you up. The goal: you operating at your best, every day.',
+    title: 'The Brain Thinks',
+    description: 'The Brain is your AI command center - it learns, remembers, and reasons. CEPHO is the spark that fires the neurons. Together, they execute so you don\'t have to.',
     icon: Brain,
     color: 'text-primary',
     useBrain: true,
@@ -29,7 +29,7 @@ const ONBOARDING_STEPS: OnboardingStep[] = [
   {
     id: 2,
     title: 'Your Chief of Staff',
-    description: 'An AI that learns how YOU think. It handles emails, schedules, and decisions the way you would. You stay in control - it just does the work.',
+    description: 'An AI that learns how YOU think. It handles emails, schedules, and decisions the way you would. You stay in control - it does the work.',
     icon: Fingerprint,
     color: 'text-purple-400',
     highlight: '[data-tour="digital-twin"]',
@@ -37,7 +37,7 @@ const ONBOARDING_STEPS: OnboardingStep[] = [
   {
     id: 3,
     title: 'The Signal',
-    description: 'Every morning: what matters today, what\'s at risk, what\'s the opportunity. No digging through emails. No missed deadlines. Just clarity.',
+    description: 'Every morning: what matters, what\'s at risk, what\'s the opportunity. No inbox digging. No missed deadlines. Just clarity.',
     icon: Sun,
     color: 'text-amber-400',
     highlight: '[data-tour="daily-brief"]',
@@ -45,7 +45,7 @@ const ONBOARDING_STEPS: OnboardingStep[] = [
   {
     id: 4,
     title: 'AI Experts On Demand',
-    description: 'Need legal review? Financial modeling? Marketing strategy? 273 AI specialists ready to work. They deliver, you decide.',
+    description: 'Legal review? Financial modeling? Marketing strategy? 273 AI specialists ready to work. They deliver, you decide.',
     icon: Users,
     color: 'text-cyan-400',
     highlight: '[data-tour="ai-experts"]',
@@ -60,8 +60,8 @@ const ONBOARDING_STEPS: OnboardingStep[] = [
   },
   {
     id: 6,
-    title: 'Let\'s Go',
-    description: 'Less admin. More impact. CEPHO handles the work so you can focus on what actually matters.',
+    title: 'Freedom',
+    description: 'This is about optimization. CEPHO handles the work so you have time for the things you actually want to be doing.',
     icon: Sparkles,
     color: 'text-primary',
     useBrain: true,
@@ -287,7 +287,7 @@ export function OnboardingModal({ isOpen, onComplete, onSkip }: OnboardingModalP
                 >
                   {isLastStep ? (
                     <>
-                      Let's Go
+                      Enter
                       <Sparkles className="w-5 h-5" />
                     </>
                   ) : (
