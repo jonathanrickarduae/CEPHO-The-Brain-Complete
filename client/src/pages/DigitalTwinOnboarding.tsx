@@ -311,7 +311,7 @@ export default function DigitalTwinOnboarding() {
   const handleComplete = () => {
     setIsComplete(true);
     // TODO: Save answers to Digital Twin profile via API
-    toast.success("Session complete! Your Digital Twin is learning...");
+    toast.success("Session complete! Your Chief of Staff is learning...");
   };
 
   const handlePrevious = () => {
@@ -332,7 +332,7 @@ export default function DigitalTwinOnboarding() {
               </div>
               <h2 className="text-2xl font-light text-white mb-4">Session Complete</h2>
               <p className="text-slate-400 mb-8">
-                Your Digital Twin has captured {Object.keys(answers).length} insights about how you think and work.
+                Your Chief of Staff has captured {Object.keys(answers).length} insights about how you think and work.
                 It will continue learning from every interaction.
               </p>
               <div className="grid grid-cols-3 gap-4 mb-8">

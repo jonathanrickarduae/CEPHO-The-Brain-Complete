@@ -33,7 +33,7 @@ const mockReviewItems: ReviewItem[] = [
     source: 'digital_twin',
     priority: 'high',
     createdAt: new Date(Date.now() - 1000 * 60 * 30), // 30 mins ago
-    context: 'Client sent revised proposal yesterday. Your Digital Twin drafted a response based on your communication style.',
+    context: 'Client sent revised proposal yesterday. Your Chief of Staff drafted a response based on your communication style.',
     suggestedAction: 'Send with minor edits',
   },
   {
@@ -155,7 +155,7 @@ export default function ReviewQueue() {
           </div>
           <h1 className="text-2xl font-bold text-foreground">Review Queue</h1>
         </div>
-        <p className="text-muted-foreground">Items awaiting your approval from Digital Twin and AI Experts</p>
+        <p className="text-muted-foreground">Items awaiting your approval from Chief of Staff and AI Experts</p>
       </div>
 
       {/* Stats Bar */}
@@ -193,7 +193,7 @@ export default function ReviewQueue() {
                   : 'bg-card/50 text-muted-foreground hover:bg-card'
               )}
             >
-              {f === 'all' ? 'All' : f === 'digital_twin' ? 'Digital Twin' : 'AI Experts'}
+              {f === 'all' ? 'All' : f === 'digital_twin' ? 'Chief of Staff' : 'AI Experts'}
             </button>
           ))}
         </div>
@@ -270,7 +270,7 @@ export default function ReviewQueue() {
                         {item.source === 'digital_twin' ? (
                           <div className="flex items-center gap-1 text-xs text-primary">
                             <Bot className="w-3 h-3" />
-                            <span>Digital Twin</span>
+                            <span>Chief of Staff</span>
                           </div>
                         ) : (
                           <div className="flex items-center gap-1 text-xs text-cyan-400">

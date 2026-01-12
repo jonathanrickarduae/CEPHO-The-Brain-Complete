@@ -41,10 +41,10 @@ export function DataGovernanceDashboard() {
 
   // Mock data categories
   const dataCategories: DataCategory[] = [
-    { id: 'conversations', name: 'Conversations', description: 'Digital Twin chat history', itemCount: 847, size: '12.4 MB', accessLevel: 'twin', encrypted: true, lastAccessed: new Date() },
+    { id: 'conversations', name: 'Conversations', description: 'Chief of Staff chat history', itemCount: 847, size: '12.4 MB', accessLevel: 'twin', encrypted: true, lastAccessed: new Date() },
     { id: 'documents', name: 'Documents', description: 'Uploaded files and PDFs', itemCount: 156, size: '234 MB', accessLevel: 'twin', encrypted: true, lastAccessed: new Date(Date.now() - 3600000) },
     { id: 'vault', name: 'Vault Items', description: 'Secure credentials and notes', itemCount: 43, size: '1.2 MB', accessLevel: 'private', encrypted: true },
-    { id: 'training', name: 'Training Data', description: 'Digital Twin learning data', itemCount: 2341, size: '45 MB', accessLevel: 'twin', encrypted: true },
+    { id: 'training', name: 'Training Data', description: 'Chief of Staff learning data', itemCount: 2341, size: '45 MB', accessLevel: 'twin', encrypted: true },
     { id: 'integrations', name: 'Integration Data', description: 'Connected service data', itemCount: 12, size: '8.7 MB', accessLevel: 'twin', encrypted: true },
     { id: 'preferences', name: 'Preferences', description: 'Settings and configurations', itemCount: 1, size: '24 KB', accessLevel: 'private', encrypted: false },
   ];
@@ -69,7 +69,7 @@ export function DataGovernanceDashboard() {
 
   const accessLevelConfig = {
     private: { label: 'You Only', icon: Lock, color: 'text-red-400', bg: 'bg-red-500/10' },
-    twin: { label: 'Digital Twin', icon: Eye, color: 'text-blue-400', bg: 'bg-blue-500/10' },
+    twin: { label: 'Chief of Staff', icon: Eye, color: 'text-blue-400', bg: 'bg-blue-500/10' },
     shared: { label: 'Shared', icon: Users, color: 'text-green-400', bg: 'bg-green-500/10' },
   };
 
@@ -84,7 +84,7 @@ export function DataGovernanceDashboard() {
 
   const actorConfig = {
     user: { label: 'You', icon: '👤' },
-    'digital-twin': { label: 'Digital Twin', icon: '🤖' },
+    'digital-twin': { label: 'Chief of Staff', icon: '🤖' },
     system: { label: 'System', icon: '⚙️' },
     integration: { label: 'Integration', icon: '🔗' },
   };
@@ -298,7 +298,7 @@ export function DataGovernanceDashboard() {
                   <h3 className="font-medium text-blue-400 mb-1">Access Hierarchy</h3>
                   <p className="text-sm text-muted-foreground">
                     Your data has three access levels. <strong className="text-foreground">You Only</strong> data is never shared. 
-                    <strong className="text-foreground"> Digital Twin</strong> data helps your AI learn and act on your behalf. 
+                    <strong className="text-foreground"> Chief of Staff</strong> data helps your AI learn and act on your behalf. 
                     <strong className="text-foreground"> Shared</strong> data can be accessed by people you explicitly authorize.
                   </p>
                 </div>
@@ -316,7 +316,7 @@ export function DataGovernanceDashboard() {
                     <h3 className="font-semibold text-foreground mb-1">{config.label}</h3>
                     <p className="text-sm text-muted-foreground mb-3">
                       {level === 'private' && 'Only you can access this data'}
-                      {level === 'twin' && 'Your Digital Twin can use this data'}
+                      {level === 'twin' && 'Your Chief of Staff can use this data'}
                       {level === 'shared' && 'Authorized users can access'}
                     </p>
                     <p className={`text-2xl font-bold ${config.color}`}>{count} categories</p>

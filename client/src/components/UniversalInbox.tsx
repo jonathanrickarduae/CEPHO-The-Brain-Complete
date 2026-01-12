@@ -455,7 +455,7 @@ export function UniversalInbox() {
             />
 
             <div className="bg-gray-800/50 rounded-lg p-3 mb-4">
-              <p className="text-xs text-muted-foreground mb-2">Digital Twin will:</p>
+              <p className="text-xs text-muted-foreground mb-2">Chief of Staff will:</p>
               <ul className="text-sm text-foreground space-y-1">
                 <li>• Extract and analyse all content</li>
                 <li>• Create initial assessment summary</li>

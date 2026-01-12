@@ -2105,8 +2105,8 @@
 - [ ] Add Learning module to Chief of Staff page
 - [ ] Add Behaviour module to Chief of Staff page
 - [ ] Add Pattern module to Chief of Staff page
-- [ ] Update all remaining "Digital Twin" references to "Chief of Staff"
-- [ ] Tighten OMNI/GOVERNED protocol toggle design
+- [x] Update all remaining "Digital Twin" references to "Chief of Staff"
+- [x] Tighten OMNI/GOVERNED protocol toggle design
 - [ ] Remove Getting Started from main Nexus page
 
 ## UI Improvements - Jan 12 2026
@@ -2114,3 +2114,8 @@
 - [x] Add Getting Started checklist to Chief of Staff page
 - [x] Update landing page with Cepho branding blend
 
+
+## Updates - Jan 12 2026 (Batch 2)
+- [x] Update all remaining "Digital Twin" text references to "Chief of Staff"
+- [x] Tighten OMNI/GOVERNED protocol toggle design
+- [x] Update onboarding flow to explain CEPHO/Brain naming and value proposition

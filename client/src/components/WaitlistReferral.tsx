@@ -59,7 +59,7 @@ export function WaitlistSignup({ onJoin }: { onJoin?: (email: string, referralCo
         </div>
         <h2 className="text-2xl font-bold text-white mb-2">Join The Brain Waitlist</h2>
         <p className="text-gray-400">
-          Get early access to your AI-powered Digital Twin. 
+          Get early access to your AI Chief of Staff. 
           <span className="text-cyan-400"> 15,000+ people</span> are already waiting.
         </p>
       </div>
@@ -127,7 +127,7 @@ export function WaitlistStatus({ position }: { position: WaitlistPosition }) {
   };
 
   const shareToTwitter = () => {
-    const text = encodeURIComponent(`I just joined The Brain waitlist! 🧠 Get early access to your AI-powered Digital Twin. Use my referral link to skip ahead:`);
+    const text = encodeURIComponent(`I just joined The Brain waitlist! 🧠 Get early access to your AI Chief of Staff. Use my referral link to skip ahead:`);
     const url = encodeURIComponent(`https://thebrain.app/join?ref=${position.referralCode}`);
     window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank');
   };

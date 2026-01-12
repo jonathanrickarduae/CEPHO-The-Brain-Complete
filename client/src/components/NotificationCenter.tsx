@@ -121,7 +121,7 @@ function getSampleNotifications(): Notification[] {
       id: 4,
       type: 'digital_twin',
       title: 'Training Milestone',
-      message: 'Digital Twin has reached 85% confidence on NDA reviews.',
+      message: 'Chief of Staff has reached 85% confidence on NDA reviews.',
       createdAt: new Date(Date.now() - 1000 * 60 * 120),
       read: false,
       actionUrl: '/qa-dashboard',

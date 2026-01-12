@@ -153,7 +153,7 @@ export default function Dashboard() {
   const inspiration = useMemo(() => getDailyQuote(), []);
 
   // Top Row - The Flow (Daily Brief → AI Expert Engine → Workflow)
-  // Bottom Row - Support (Digital Twin Training, Library, Vault)
+  // Bottom Row - Support (Chief of Staff Training, Library, Vault)
   const buttons = [
     // TOP ROW - The Flow
     { 
@@ -297,22 +297,32 @@ export default function Dashboard() {
       {/* Compact Header Row */}
       <div className="flex justify-between items-center mb-4">
         <div className="flex items-center gap-2">
-          <div className="flex items-center gap-1 px-2 py-1 rounded-lg bg-card/60 border border-border">
-            <Shield className={`w-3 h-3 ${governanceMode === 'omni' ? 'text-purple-500' : 'text-blue-500'}`} />
-            <div className="flex items-center">
-              <button 
-                onClick={() => setGovernanceMode("omni")}
-                className={`px-2 py-0.5 rounded text-[10px] font-bold transition-all ${governanceMode === 'omni' ? 'bg-purple-500 text-white' : 'text-muted-foreground hover:text-foreground'}`}
-              >
-                OMNI
-              </button>
-              <button 
-                onClick={() => setGovernanceMode("governed")}
-                className={`px-2 py-0.5 rounded text-[10px] font-bold transition-all ${governanceMode === 'governed' ? 'bg-blue-500 text-white' : 'text-muted-foreground hover:text-foreground'}`}
-              >
-                GOV
-              </button>
-            </div>
+          {/* Protocol Toggle - Tight pill design */}
+          <div className="relative flex items-center h-7 rounded-full bg-gray-900/80 border border-gray-700/50 p-0.5">
+            {/* Sliding background indicator */}
+            <div 
+              className={`absolute h-6 w-[52px] rounded-full transition-all duration-200 ease-out ${
+                governanceMode === 'omni' 
+                  ? 'left-0.5 bg-gradient-to-r from-purple-600 to-purple-500 shadow-[0_0_12px_rgba(168,85,247,0.4)]' 
+                  : 'left-[54px] bg-gradient-to-r from-blue-600 to-blue-500 shadow-[0_0_12px_rgba(59,130,246,0.4)]'
+              }`}
+            />
+            <button 
+              onClick={() => setGovernanceMode("omni")}
+              className={`relative z-10 px-3 py-1 rounded-full text-[10px] font-bold tracking-wide transition-colors ${
+                governanceMode === 'omni' ? 'text-white' : 'text-gray-500 hover:text-gray-300'
+              }`}
+            >
+              OMNI
+            </button>
+            <button 
+              onClick={() => setGovernanceMode("governed")}
+              className={`relative z-10 px-3 py-1 rounded-full text-[10px] font-bold tracking-wide transition-colors ${
+                governanceMode === 'governed' ? 'text-white' : 'text-gray-500 hover:text-gray-300'
+              }`}
+            >
+              GOV
+            </button>
           </div>
         </div>
         

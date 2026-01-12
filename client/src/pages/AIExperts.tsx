@@ -222,7 +222,7 @@ export default function AIExperts() {
         dialogue: [{
           id: 1,
           from: "twin" as const,
-          name: "Digital Twin",
+          name: "Chief of Staff",
           message: `Starting work on "${task.title}". I'll analyze the context and prepare the deliverable based on your patterns and preferences.`,
           timestamp: new Date()
         }]
@@ -230,7 +230,7 @@ export default function AIExperts() {
       setActiveTask(updatedTask);
       updateTaskInList(updatedTask);
       
-      toast.success("Digital Twin is now working on this task");
+      toast.success("Chief of Staff is now working on this task");
     } else {
       // Expert team needed - go through team assembly
       setMission(task.title + ": " + task.description);
@@ -323,7 +323,7 @@ export default function AIExperts() {
       {
         id: 1,
         from: "twin",
-        name: "Digital Twin",
+        name: "Chief of Staff",
         message: `I'm coordinating the team for "${activeTask.title}". Here's the plan based on your kickoff answers.`,
         timestamp: new Date()
       },
@@ -372,7 +372,7 @@ export default function AIExperts() {
       const response: DialogueMessage = {
         id: updatedTask.dialogue.length + 1,
         from: activeTask.type === "twin" ? "twin" : "expert",
-        name: activeTask.type === "twin" ? "Digital Twin" : EXPERT_PROFILES[approvedTeam[0]]?.name || "Team",
+        name: activeTask.type === "twin" ? "Chief of Staff" : EXPERT_PROFILES[approvedTeam[0]]?.name || "Team",
         message: "Understood. I'll incorporate that feedback into the deliverable.",
         timestamp: new Date()
       };
@@ -396,7 +396,7 @@ export default function AIExperts() {
     const reviewDialogue: DialogueMessage = {
       id: activeTask.dialogue.length + 1,
       from: "twin",
-      name: "Digital Twin",
+      name: "Chief of Staff",
       message: "The deliverable is ready for your review. I've conducted a quality check and have some recommendations.",
       timestamp: new Date(),
       needsResponse: true
@@ -538,7 +538,7 @@ export default function AIExperts() {
                       <p className="text-sm text-muted-foreground">{template.description}</p>
                     </div>
                     <Badge className={template.type === "twin" ? "bg-purple-500/20 text-purple-400" : "bg-cyan-500/20 text-cyan-400"}>
-                      {template.type === "twin" ? "Digital Twin" : "Expert Team"}
+                      {template.type === "twin" ? "Chief of Staff" : "Expert Team"}
                     </Badge>
                   </CardContent>
                 </Card>
@@ -575,7 +575,7 @@ export default function AIExperts() {
                           <div className="flex items-center gap-2 mb-1">
                             <Badge variant="outline" className="text-xs">{task.category}</Badge>
                             <Badge className={task.type === "twin" ? "bg-purple-500/20 text-purple-400 border-0" : "bg-cyan-500/20 text-cyan-400 border-0"}>
-                              {task.type === "twin" ? <><Fingerprint className="w-3 h-3 mr-1" /> Digital Twin</> : <><Users className="w-3 h-3 mr-1" /> Expert Team</>}
+                              {task.type === "twin" ? <><Fingerprint className="w-3 h-3 mr-1" /> Chief of Staff</> : <><Users className="w-3 h-3 mr-1" /> Expert Team</>}
                             </Badge>
                             {task.status === "active" && (
                               <Badge className="bg-green-500/20 text-green-400 border-0">
@@ -705,7 +705,7 @@ export default function AIExperts() {
                     disabled={!mission.trim()}
                   >
                     <ArrowRight className="w-4 h-4 mr-2" />
-                    {selectedTemplate === 1 ? "Start with Digital Twin" : "Assemble Expert Team"}
+                    {selectedTemplate === 1 ? "Start with Chief of Staff" : "Assemble Expert Team"}
                   </Button>
                 </div>
               </CardContent>
@@ -1019,7 +1019,7 @@ export default function AIExperts() {
                 </Card>
               )}
 
-              {/* Digital Twin Status */}
+              {/* Chief of Staff Status */}
               {activeTask.type === "twin" && (
                 <Card className="bg-purple-500/5 border-purple-500/30">
                   <CardContent className="p-4">
@@ -1028,7 +1028,7 @@ export default function AIExperts() {
                         <Fingerprint className="w-6 h-6 text-purple-400" />
                       </div>
                       <div>
-                        <p className="font-medium text-foreground">Digital Twin</p>
+                        <p className="font-medium text-foreground">Chief of Staff</p>
                         <p className="text-sm text-purple-400">Working autonomously</p>
                       </div>
                     </div>
@@ -1077,7 +1077,7 @@ export default function AIExperts() {
                 className={validationMode === 'challenge' ? 'bg-purple-500 hover:bg-purple-600' : ''}
               >
                 <Fingerprint className="w-4 h-4 mr-2" />
-                Digital Twin QA
+                Chief of Staff QA
               </Button>
             </div>
 
@@ -1097,11 +1097,11 @@ export default function AIExperts() {
                       <p className="text-muted-foreground">{activeTask.deliverable || "Deliverable content here..."}</p>
                     </div>
 
-                    {/* Digital Twin Feedback */}
+                    {/* Chief of Staff Feedback */}
                     <div className="p-4 rounded-xl bg-purple-500/10 border border-purple-500/30">
                       <div className="flex items-center gap-3 mb-3">
                         <Fingerprint className="w-5 h-5 text-purple-400" />
-                        <span className="font-medium text-foreground">Digital Twin Review</span>
+                        <span className="font-medium text-foreground">Chief of Staff Review</span>
                       </div>
                       <ul className="space-y-2 text-sm text-muted-foreground">
                         <li className="flex items-start gap-2">
@@ -1206,19 +1206,19 @@ export default function AIExperts() {
               </>
             )}
 
-            {/* Digital Twin QA Mode */}
+            {/* Chief of Staff QA Mode */}
             {validationMode === 'challenge' && (
               <>
                 <Card className="bg-purple-500/5 border-purple-500/30">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2 text-foreground">
                       <Fingerprint className="w-5 h-5 text-purple-400" />
-                      Digital Twin QA Challenge
+                      Chief of Staff QA Challenge
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <p className="text-sm text-muted-foreground">
-                      Your Digital Twin will challenge each expert's statements to verify accuracy 
+                      Your Chief of Staff will challenge each expert's statements to verify accuracy 
                       and identify potential hallucinations or unsupported claims.
                     </p>
                     
@@ -1228,7 +1228,7 @@ export default function AIExperts() {
                         <div key={idx} className="p-4 rounded-xl bg-purple-500/10 border border-purple-500/30">
                           <div className="flex items-center gap-2 mb-2">
                             <Fingerprint className="w-4 h-4 text-purple-400" />
-                            <span className="text-sm font-medium text-purple-400">Digital Twin Challenge #{idx + 1}</span>
+                            <span className="text-sm font-medium text-purple-400">Chief of Staff Challenge #{idx + 1}</span>
                           </div>
                           <p className="text-foreground text-sm">{question}</p>
                           <div className="flex gap-2 mt-3">

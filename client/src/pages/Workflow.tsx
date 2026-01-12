@@ -209,12 +209,12 @@ export default function Workflow() {
         </div>
       </div>
 
-      {/* Digital Twin Alerts */}
+      {/* Chief of Staff Alerts */}
       {twinAlerts.length > 0 && (
         <div className="mb-8">
           <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
             <Zap className="w-5 h-5 text-purple-400" />
-            Digital Twin Alerts
+            Chief of Staff Alerts
           </h2>
           <div className="space-y-2">
             {twinAlerts.map(alert => (

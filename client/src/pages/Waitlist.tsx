@@ -50,7 +50,7 @@ export default function Waitlist() {
   const features = [
     {
       icon: Brain,
-      title: 'Digital Twin AI',
+      title: 'Chief of Staff AI',
       description: 'An AI that learns your patterns, preferences, and goals to become your personalized assistant.',
     },
     {

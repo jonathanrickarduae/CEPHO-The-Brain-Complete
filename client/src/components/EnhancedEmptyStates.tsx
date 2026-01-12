@@ -135,7 +135,7 @@ export function EmptyDocuments({ onAction }: { onAction?: () => void }) {
     <EmptyState
       icon={<FileText className="w-8 h-8" />}
       title="No documents"
-      description="Upload documents to train your Digital Twin or store in the Library for easy access."
+      description="Upload documents to train your Chief of Staff or store in the Library for easy access."
       action={onAction ? { label: 'Upload Document', onClick: onAction } : undefined}
     />
   );
@@ -159,7 +159,7 @@ export function EmptyCalendar({ onAction }: { onAction?: () => void }) {
       title="No events scheduled"
       description="Connect your calendar to see meetings and deadlines, or create events directly."
       action={onAction ? { label: 'Connect Calendar', onClick: onAction } : undefined}
-      tip="Your Digital Twin can prepare briefings before meetings"
+      tip="Your Chief of Staff can prepare briefings before meetings"
     />
   );
 }
@@ -169,7 +169,7 @@ export function EmptyConversations({ onAction }: { onAction?: () => void }) {
     <EmptyState
       icon={<MessageSquare className="w-8 h-8" />}
       title="Start a conversation"
-      description="Chat with your Digital Twin to get things done. It learns from every interaction."
+      description="Chat with your Chief of Staff to get things done. It learns from every interaction."
       action={onAction ? { label: 'Say Hello', onClick: onAction, icon: <ArrowRight className="w-4 h-4 mr-2" /> } : undefined}
     />
   );
@@ -191,7 +191,7 @@ export function EmptyVoiceNotes({ onAction }: { onAction?: () => void }) {
     <EmptyState
       icon={<Mic className="w-8 h-8" />}
       title="No voice notes yet"
-      description="Capture thoughts throughout your day. Your Digital Twin uses these for context."
+      description="Capture thoughts throughout your day. Your Chief of Staff uses these for context."
       action={onAction ? { label: 'Record Note', onClick: onAction } : undefined}
       tip="Voice notes are automatically categorized and searchable"
     />
@@ -202,7 +202,7 @@ export function EmptyTrainingData({ onAction }: { onAction?: () => void }) {
   return (
     <EmptyState
       icon={<Brain className="w-8 h-8" />}
-      title="Train your Digital Twin"
+      title="Train your Chief of Staff"
       description="Upload documents, complete interviews, or chat to help your Twin learn your preferences and style."
       action={onAction ? { label: 'Start Training', onClick: onAction } : undefined}
       tip="More training data = more accurate and autonomous responses"
@@ -215,7 +215,7 @@ export function EmptySearchResults({ query, onClear }: { query: string; onClear?
     <EmptyState
       icon={<Sparkles className="w-8 h-8" />}
       title={`No results for "${query}"`}
-      description="Try different keywords or check your filters. Your Digital Twin can help find what you're looking for."
+      description="Try different keywords or check your filters. Your Chief of Staff can help find what you're looking for."
       action={onClear ? { label: 'Clear Search', onClick: onClear } : undefined}
       size="sm"
     />

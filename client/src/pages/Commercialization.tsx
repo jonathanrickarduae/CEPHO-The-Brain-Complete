@@ -10,13 +10,13 @@ import { PageHeader } from '@/components/Breadcrumbs';
 const mockCompetitors = [
   { id: 1, name: 'Superhuman', category: 'Email AI', threatLevel: 'high', score: 85, change: -2, features: ['AI Drafts', 'Keyboard-first', 'Social Insights'] },
   { id: 2, name: 'Motion', category: 'AI Scheduling', threatLevel: 'high', score: 82, change: 3, features: ['Auto-scheduling', 'Task Planner', 'Calendar AI'] },
-  { id: 3, name: 'Personal AI', category: 'Digital Twin', threatLevel: 'critical', score: 78, change: 5, features: ['Memory Bank', 'Training Studio', 'Voice Clone'] },
+  { id: 3, name: 'Personal AI', category: 'Chief of Staff', threatLevel: 'critical', score: 78, change: 5, features: ['Memory Bank', 'Training Studio', 'Voice Clone'] },
   { id: 4, name: 'Lindy', category: 'AI Agents', threatLevel: 'medium', score: 71, change: -1, features: ['Agent Builder', 'Autonomous Actions', 'Integrations'] },
   { id: 5, name: 'Granola', category: 'AI Notes', threatLevel: 'low', score: 65, change: 0, features: ['Meeting Notes', 'Human-AI Collab', 'Privacy-first'] },
 ];
 
 const mockThreats = [
-  { id: 1, type: 'threat', severity: 'critical', title: 'Personal AI launched voice cloning', description: 'Direct competition to Digital Twin voice features', date: '2 days ago' },
+  { id: 1, type: 'threat', severity: 'critical', title: 'Personal AI launched voice cloning', description: 'Direct competition to Chief of Staff voice features', date: '2 days ago' },
   { id: 2, type: 'opportunity', severity: 'high', title: 'Motion lacks wellness tracking', description: 'Gap in market for productivity + wellness combination', date: '1 week ago' },
   { id: 3, type: 'threat', severity: 'medium', title: 'Superhuman expanding to calendar', description: 'Moving into adjacent market', date: '3 days ago' },
 ];
@@ -201,7 +201,7 @@ export default function Commercialization() {
           <div className="bg-gray-800 rounded-xl p-6 border border-gray-700">
             <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
               <Brain className="w-5 h-5 text-purple-400" />
-              Digital Twin Strategy Tasks
+              Chief of Staff Strategy Tasks
             </h3>
             <div className="space-y-3">
               <div className="flex items-center justify-between p-3 bg-gray-900 rounded-lg">

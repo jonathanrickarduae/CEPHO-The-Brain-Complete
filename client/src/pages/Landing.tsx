@@ -140,11 +140,8 @@ export default function Landing() {
               <h1 className="font-display font-bold text-5xl md:text-7xl tracking-wider text-pink-500 drop-shadow-[0_0_30px_rgba(236,72,153,0.6)]">
                 CEPHO
               </h1>
-              <p className="text-sm md:text-base text-muted-foreground max-w-md">
-                Chief Executive Personal Headquarters Operations
-              </p>
-              <p className="text-xs text-muted-foreground/70 italic">
-                Where The Brain thinks, and Cepho executes
+              <p className="text-base md:text-lg text-muted-foreground max-w-md">
+                Your AI Chief of Staff
               </p>
             </div>
             

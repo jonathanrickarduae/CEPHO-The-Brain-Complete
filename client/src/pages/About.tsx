@@ -12,7 +12,7 @@ export default function About() {
   const pillars = [
     {
       icon: Fingerprint,
-      title: "Digital Twin",
+      title: "Chief of Staff",
       description: "Your AI counterpart that learns your patterns, preferences, and decision-making style. It grows smarter with every interaction, eventually thinking and acting like you.",
       color: "from-purple-500 to-pink-500"
     },
@@ -31,7 +31,7 @@ export default function About() {
     {
       icon: Shield,
       title: "The Vault",
-      description: "Your secure knowledge base. Store documents, insights, and learnings that your Digital Twin can access to make better decisions on your behalf.",
+      description: "Your secure knowledge base. Store documents, insights, and learnings that your Chief of Staff can access to make better decisions on your behalf.",
       color: "from-green-500 to-emerald-500"
     }
   ];
@@ -50,7 +50,7 @@ export default function About() {
     {
       icon: Layers,
       title: "Continuous Learning",
-      description: "Every conversation, decision, and preference trains your Digital Twin. Over time, it becomes an extension of your thinking—able to draft, decide, and act like you."
+      description: "Every conversation, decision, and preference trains your Chief of Staff. Over time, it becomes an extension of your thinking—able to draft, decide, and act like you."
     },
     {
       icon: Heart,
@@ -86,13 +86,13 @@ export default function About() {
           <div>
             <h2 className="text-xl font-bold text-white mb-2">The Vision</h2>
             <p className="text-muted-foreground leading-relaxed mb-3">
-              The Brain is your personal AI command center that creates a <strong className="text-white">Digital Twin</strong> of you—learning your patterns, decisions, and communication style—so it can eventually act autonomously on your behalf.
+              The Brain is your personal AI command center that creates a <strong className="text-white">Chief of Staff</strong> of you—learning your patterns, decisions, and communication style—so it can eventually act autonomously on your behalf.
             </p>
             <p className="text-muted-foreground leading-relaxed mb-3">
               It consolidates all your tools (Asana, email, calendar, health data), provides access to <strong className="text-white">250+ AI Experts</strong>, and optimizes your daily performance through structured workflows.
             </p>
             <p className="text-muted-foreground leading-relaxed">
-              Everything stays <strong className="text-green-400">highly secure in The Vault</strong>. Your data, your control, your Digital Twin—working to free you up for what truly matters in life.
+              Everything stays <strong className="text-green-400">highly secure in The Vault</strong>. Your data, your control, your Chief of Staff—working to free you up for what truly matters in life.
             </p>
           </div>
         </div>
@@ -151,7 +151,7 @@ export default function About() {
             { step: 1, title: "Morning Brief", desc: "Start your day with priorities, mood check, and AI insights" },
             { step: 2, title: "AI Consultation", desc: "Get expert perspectives on decisions and challenges" },
             { step: 3, title: "Execute & Capture", desc: "Work through tasks while The Brain learns from you" },
-            { step: 4, title: "Evening Review", desc: "Reflect, celebrate wins, and train your Digital Twin" }
+            { step: 4, title: "Evening Review", desc: "Reflect, celebrate wins, and train your Chief of Staff" }
           ].map((item, i) => (
             <div key={item.step} className="relative">
               <div className="flex flex-col items-center text-center">

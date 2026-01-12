@@ -321,7 +321,7 @@ export default function Vault() {
                 <CardTitle className="flex items-center gap-2">
                   <Sparkles className="w-5 h-5 text-purple-400" />
                   AI App Recommendations
-                  <Badge className="ml-2 bg-purple-500/20 text-purple-400 border-0">From Digital Twin</Badge>
+                  <Badge className="ml-2 bg-purple-500/20 text-purple-400 border-0">From Chief of Staff</Badge>
                 </CardTitle>
               </CardHeader>
               <CardContent>

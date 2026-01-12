@@ -89,7 +89,7 @@ export default function DigitalTwin() {
         return;
       }
       startListening();
-      toast.info("Listening... speak to your Digital Twin");
+      toast.info("Listening... speak to your Chief of Staff");
     }
   };
 
@@ -295,7 +295,7 @@ export default function DigitalTwin() {
                   value={messageInput}
                   onChange={handleInputChange}
                   onKeyDown={handleKeyDown}
-                  placeholder="Message your Digital Twin..."
+                  placeholder="Message your Chief of Staff..."
                   rows={1}
                   className="w-full px-4 py-3 pr-12 bg-secondary/50 border border-white/10 rounded-2xl resize-none focus:outline-none focus:ring-2 focus:ring-purple-500/50 text-sm placeholder:text-muted-foreground"
                   style={{ maxHeight: '120px' }}

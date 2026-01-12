@@ -43,7 +43,7 @@ interface ActivityType {
 // Sample data
 const SAMPLE_COLLABORATORS: CollaboratorType[] = [
   { id: '1', name: 'You', avatar: '👤', role: 'owner', status: 'online' },
-  { id: '2', name: 'Digital Twin', avatar: '🤖', role: 'editor', status: 'online' },
+  { id: '2', name: 'Chief of Staff', avatar: '🤖', role: 'editor', status: 'online' },
   { id: '3', name: 'Legal Expert', avatar: '⚖️', role: 'viewer', status: 'away', lastSeen: '5m ago' },
   { id: '4', name: 'Financial Analyst', avatar: '📊', role: 'editor', status: 'offline', lastSeen: '2h ago' },
 ];
@@ -286,7 +286,7 @@ export function ActivityFeed({ projectId }: { projectId?: string }) {
 // Version Control Panel
 export function VersionControlPanel({ documentId }: { documentId?: string }) {
   const versions = [
-    { id: '1', version: 'v2.1', author: 'Digital Twin', timestamp: new Date(Date.now() - 300000), changes: 'Added sensitivity analysis' },
+    { id: '1', version: 'v2.1', author: 'Chief of Staff', timestamp: new Date(Date.now() - 300000), changes: 'Added sensitivity analysis' },
     { id: '2', version: 'v2.0', author: 'You', timestamp: new Date(Date.now() - 3600000), changes: 'Major revision - updated projections' },
     { id: '3', version: 'v1.2', author: 'Financial Analyst', timestamp: new Date(Date.now() - 86400000), changes: 'Fixed formula errors' },
     { id: '4', version: 'v1.1', author: 'You', timestamp: new Date(Date.now() - 172800000), changes: 'Initial draft' },

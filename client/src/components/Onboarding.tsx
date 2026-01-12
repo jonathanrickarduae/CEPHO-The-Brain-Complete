@@ -20,8 +20,8 @@ interface OnboardingStep {
 const ONBOARDING_STEPS: OnboardingStep[] = [
   {
     id: 1,
-    title: 'CEPHO',
-    description: 'Chief Executive Personal Headquarters Operations. Your AI-powered command center - where The Brain thinks, and Cepho executes. One system, infinite possibilities.',
+    title: 'Get to a 10',
+    description: 'CEPHO tracks how you\'re feeling and optimizes your day around it. Bad morning? It clears the noise. Feeling sharp? It loads you up. The goal: you operating at your best, every day.',
     icon: Brain,
     color: 'text-primary',
     useBrain: true,
@@ -29,7 +29,7 @@ const ONBOARDING_STEPS: OnboardingStep[] = [
   {
     id: 2,
     title: 'Your Chief of Staff',
-    description: 'Your tireless executive assistant that never sleeps. It learns how you think, handles your communications, and makes decisions on your behalf. You review, it executes.',
+    description: 'An AI that learns how YOU think. It handles emails, schedules, and decisions the way you would. You stay in control - it just does the work.',
     icon: Fingerprint,
     color: 'text-purple-400',
     highlight: '[data-tour="digital-twin"]',
@@ -37,15 +37,15 @@ const ONBOARDING_STEPS: OnboardingStep[] = [
   {
     id: 3,
     title: 'The Signal',
-    description: 'Every morning, your Chief of Staff prepares your briefing: priorities sorted, threats flagged, opportunities identified. Start each day informed and in control.',
+    description: 'Every morning: what matters today, what\'s at risk, what\'s the opportunity. No digging through emails. No missed deadlines. Just clarity.',
     icon: Sun,
     color: 'text-amber-400',
     highlight: '[data-tour="daily-brief"]',
   },
   {
     id: 4,
-    title: 'AI SMEs',
-    description: 'Need a McKinsey strategist? A tax specialist? A creative director? 273 subject matter experts ready to assemble. They work while you focus on what matters.',
+    title: 'AI Experts On Demand',
+    description: 'Need legal review? Financial modeling? Marketing strategy? 273 AI specialists ready to work. They deliver, you decide.',
     icon: Users,
     color: 'text-cyan-400',
     highlight: '[data-tour="ai-experts"]',
@@ -53,15 +53,15 @@ const ONBOARDING_STEPS: OnboardingStep[] = [
   {
     id: 5,
     title: 'The Vault',
-    description: 'Bank-grade security for all your integrations, credentials, and sensitive data. Biometric login, encrypted storage, real-time threat monitoring. Your digital fortress.',
+    description: 'Your passwords, credentials, and sensitive data - encrypted and secure. Connect your tools once, access them safely forever.',
     icon: Shield,
     color: 'text-emerald-400',
     highlight: '[data-tour="vault"]',
   },
   {
     id: 6,
-    title: 'Welcome to Cepho',
-    description: 'The Brain powers the intelligence. Cepho is your interface. Together, they exist for one purpose: to free you up. Less admin, more impact. Every day, operating at your best.',
+    title: 'Let\'s Go',
+    description: 'Less admin. More impact. CEPHO handles the work so you can focus on what actually matters.',
     icon: Sparkles,
     color: 'text-primary',
     useBrain: true,
@@ -287,7 +287,7 @@ export function OnboardingModal({ isOpen, onComplete, onSkip }: OnboardingModalP
                 >
                   {isLastStep ? (
                     <>
-                      Enter Cepho
+                      Let's Go
                       <Sparkles className="w-5 h-5" />
                     </>
                   ) : (
