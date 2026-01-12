@@ -2654,3 +2654,10 @@
 - [x] Build Expert Performance Dashboard with analytics
 - [x] Create Expert Scheduling with calendar integration
 - [x] Integrate all features into AI-SMEs page
+
+## Direct Expert Chat - Jan 12 2026
+- [x] Add real avatar photos for Jay-Z, Ryan Reynolds, Jessica Alba
+- [x] Create DirectExpertChat component with voice note support
+- [x] Integrate direct chat into Expert Directory
+- [x] Update expert cards to show real photos
+

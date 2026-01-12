@@ -1,6 +1,7 @@
 import { useState, useMemo } from "react";
 import { useLocation } from "wouter";
 import { useFavorites } from "./MyBoard";
+import { DirectExpertChat } from "./DirectExpertChat";
 import { 
   Search, Users, Star, MessageSquare, Video, 
   Filter, ChevronRight, Brain, Sparkles,
@@ -29,6 +30,7 @@ export function ExpertDirectory({ onSelectExpert, onBack }: ExpertDirectoryProps
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [selectedExpert, setSelectedExpert] = useState<AIExpert | null>(null);
+  const [chatExpertId, setChatExpertId] = useState<string | null>(null);
   const { isFavorite, addFavorite, removeFavorite } = useFavorites();
 
   // Filter experts based on search and category
@@ -56,14 +58,24 @@ export function ExpertDirectory({ onSelectExpert, onBack }: ExpertDirectoryProps
   }, []);
 
   const handleChatWithExpert = (expert: AIExpert) => {
-    // Navigate to Chief of Staff with expert context
-    setLocation(`/digital-twin?expert=${expert.id}&name=${encodeURIComponent(expert.name)}`);
+    // Open direct chat with expert
+    setChatExpertId(expert.id);
   };
 
   const handleVideoMeeting = (expert: AIExpert) => {
     // Navigate to video studio with expert
     setLocation(`/video-studio?expert=${expert.id}&name=${encodeURIComponent(expert.name)}`);
   };
+
+  // Direct Chat View
+  if (chatExpertId) {
+    return (
+      <DirectExpertChat 
+        expertId={chatExpertId} 
+        onClose={() => setChatExpertId(null)} 
+      />
+    );
+  }
 
   // Expert Profile View
   if (selectedExpert) {
@@ -86,9 +98,17 @@ export function ExpertDirectory({ onSelectExpert, onBack }: ExpertDirectoryProps
           <div className="max-w-4xl mx-auto px-4 py-6">
             {/* Expert Header */}
             <div className="flex items-start gap-6 mb-8">
-              <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-purple-500/20 border border-cyan-500/30 flex items-center justify-center text-4xl">
-                {selectedExpert.avatar}
-              </div>
+              {selectedExpert.avatarUrl ? (
+                <img 
+                  src={selectedExpert.avatarUrl} 
+                  alt={selectedExpert.name}
+                  className="w-24 h-24 rounded-2xl object-cover border-2 border-cyan-500/30"
+                />
+              ) : (
+                <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-purple-500/20 border border-cyan-500/30 flex items-center justify-center text-4xl">
+                  {selectedExpert.avatar}
+                </div>
+              )}
               <div className="flex-1">
                 <h1 className="text-3xl font-bold text-foreground mb-1">{selectedExpert.name}</h1>
                 <p className="text-lg text-primary mb-2">{selectedExpert.specialty}</p>
@@ -301,9 +321,17 @@ export function ExpertDirectory({ onSelectExpert, onBack }: ExpertDirectoryProps
               >
                 <CardContent className="p-4">
                   <div className="flex items-start gap-3 mb-3">
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-500/20 to-purple-500/20 border border-cyan-500/30 flex items-center justify-center text-2xl flex-shrink-0">
-                      {expert.avatar}
-                    </div>
+                    {expert.avatarUrl ? (
+                      <img 
+                        src={expert.avatarUrl} 
+                        alt={expert.name}
+                        className="w-12 h-12 rounded-xl object-cover border border-cyan-500/30 flex-shrink-0"
+                      />
+                    ) : (
+                      <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-500/20 to-purple-500/20 border border-cyan-500/30 flex items-center justify-center text-2xl flex-shrink-0">
+                        {expert.avatar}
+                      </div>
+                    )}
                     <div className="flex-1 min-w-0">
                       <h3 className="font-semibold text-foreground truncate group-hover:text-primary transition-colors">
                         {expert.name}
