@@ -2,17 +2,20 @@ import { useState, useMemo } from "react";
 import { useLocation } from "wouter";
 import { useFavorites } from "./MyBoard";
 import { DirectExpertChat } from "./DirectExpertChat";
+import { CorporatePartnerChat } from "./CorporatePartnerChat";
 import { 
   Search, Users, Star, MessageSquare, Video, 
   Filter, ChevronRight, Brain, Sparkles,
-  TrendingUp, Award, BookOpen
+  TrendingUp, Award, BookOpen, Building2, Target
 } from "lucide-react";
 import { 
   AI_EXPERTS, 
   categories, 
   searchExperts,
   TOTAL_EXPERTS,
-  type AIExpert
+  corporatePartners,
+  type AIExpert,
+  type CorporatePartner
 } from "@/data/aiExperts";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -31,6 +34,9 @@ export function ExpertDirectory({ onSelectExpert, onBack }: ExpertDirectoryProps
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [selectedExpert, setSelectedExpert] = useState<AIExpert | null>(null);
   const [chatExpertId, setChatExpertId] = useState<string | null>(null);
+  const [chatPartnerId, setChatPartnerId] = useState<string | null>(null);
+  const [selectedPartner, setSelectedPartner] = useState<CorporatePartner | null>(null);
+  const [showPartnersOnly, setShowPartnersOnly] = useState(false);
   const { isFavorite, addFavorite, removeFavorite } = useFavorites();
 
   // Filter experts based on search and category
@@ -48,6 +54,18 @@ export function ExpertDirectory({ onSelectExpert, onBack }: ExpertDirectoryProps
     return results.sort((a, b) => b.performanceScore - a.performanceScore);
   }, [searchQuery, selectedCategory]);
 
+  // Filter corporate partners based on search
+  const filteredPartners = useMemo(() => {
+    if (!searchQuery.trim()) return corporatePartners;
+    const query = searchQuery.toLowerCase();
+    return corporatePartners.filter(p => 
+      p.name.toLowerCase().includes(query) ||
+      p.industry.toLowerCase().includes(query) ||
+      p.methodology.toLowerCase().includes(query) ||
+      p.strengths.some(s => s.toLowerCase().includes(query))
+    );
+  }, [searchQuery]);
+
   // Get unique categories with counts
   const categoryStats = useMemo(() => {
     const stats = new Map<string, number>();
@@ -58,14 +76,26 @@ export function ExpertDirectory({ onSelectExpert, onBack }: ExpertDirectoryProps
   }, []);
 
   const handleChatWithExpert = (expert: AIExpert) => {
-    // Open direct chat with expert
     setChatExpertId(expert.id);
   };
 
+  const handleChatWithPartner = (partner: CorporatePartner) => {
+    setChatPartnerId(partner.id);
+  };
+
   const handleVideoMeeting = (expert: AIExpert) => {
-    // Navigate to video studio with expert
     setLocation(`/video-studio?expert=${expert.id}&name=${encodeURIComponent(expert.name)}`);
   };
+
+  // Corporate Partner Chat View
+  if (chatPartnerId) {
+    return (
+      <CorporatePartnerChat 
+        partnerId={chatPartnerId} 
+        onClose={() => setChatPartnerId(null)} 
+      />
+    );
+  }
 
   // Direct Chat View
   if (chatExpertId) {
@@ -77,11 +107,166 @@ export function ExpertDirectory({ onSelectExpert, onBack }: ExpertDirectoryProps
     );
   }
 
+  // Corporate Partner Profile View
+  if (selectedPartner) {
+    return (
+      <div className="h-full bg-background">
+        <div className="border-b border-border bg-card/80 backdrop-blur-xl sticky top-0 z-10">
+          <div className="max-w-4xl mx-auto px-4 py-4">
+            <Button 
+              variant="ghost" 
+              onClick={() => setSelectedPartner(null)}
+              className="mb-2"
+            >
+              ← Back to Directory
+            </Button>
+          </div>
+        </div>
+
+        <ScrollArea className="h-[calc(100%-80px)]">
+          <div className="max-w-4xl mx-auto px-4 py-6">
+            {/* Partner Header */}
+            <div className="flex items-start gap-6 mb-8">
+              <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-blue-500/20 to-cyan-500/20 border border-blue-500/30 flex items-center justify-center text-5xl">
+                {selectedPartner.logo}
+              </div>
+              <div className="flex-1">
+                <h1 className="text-3xl font-bold text-foreground mb-1">{selectedPartner.name}</h1>
+                <p className="text-lg text-blue-400 mb-2">{selectedPartner.industry}</p>
+                <div className="flex items-center gap-3">
+                  <Badge className="bg-blue-500/20 text-blue-400 border-0">
+                    Corporate Partner
+                  </Badge>
+                  <Badge className="bg-yellow-500/20 text-yellow-400 border-0">
+                    <Star className="w-3 h-3 mr-1" />
+                    {selectedPartner.performanceScore}% Performance
+                  </Badge>
+                </div>
+              </div>
+            </div>
+
+            {/* Action Button */}
+            <div className="flex gap-3 mb-8">
+              <Button 
+                onClick={() => handleChatWithPartner(selectedPartner)}
+                className="flex-1 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600"
+              >
+                <MessageSquare className="w-4 h-4 mr-2" />
+                Chat with {selectedPartner.name}
+              </Button>
+            </div>
+
+            {/* Methodology */}
+            <Card className="mb-6 bg-card/60 border-border">
+              <CardContent className="p-6">
+                <h2 className="text-lg font-semibold text-foreground mb-3 flex items-center gap-2">
+                  <BookOpen className="w-5 h-5 text-blue-400" />
+                  Methodology
+                </h2>
+                <p className="text-muted-foreground leading-relaxed">{selectedPartner.methodology}</p>
+              </CardContent>
+            </Card>
+
+            {/* Thinking Framework */}
+            {selectedPartner.thinkingFramework && (
+              <Card className="mb-6 bg-card/60 border-border">
+                <CardContent className="p-6">
+                  <h2 className="text-lg font-semibold text-foreground mb-3 flex items-center gap-2">
+                    <Brain className="w-5 h-5 text-cyan-400" />
+                    Thinking Framework
+                  </h2>
+                  <p className="text-muted-foreground leading-relaxed">{selectedPartner.thinkingFramework}</p>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Frameworks */}
+            <Card className="mb-6 bg-card/60 border-border">
+              <CardContent className="p-6">
+                <h2 className="text-lg font-semibold text-foreground mb-3 flex items-center gap-2">
+                  <Sparkles className="w-5 h-5 text-purple-400" />
+                  Frameworks & Tools
+                </h2>
+                <div className="flex flex-wrap gap-2">
+                  {selectedPartner.frameworks.map((framework, idx) => (
+                    <Badge key={idx} variant="outline" className="text-sm py-1 px-3">
+                      {framework}
+                    </Badge>
+                  ))}
+                  {selectedPartner.signatureTools?.map((tool, idx) => (
+                    <Badge key={`tool-${idx}`} className="bg-blue-500/10 text-blue-400 border-0 text-sm py-1 px-3">
+                      {tool}
+                    </Badge>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Strengths & Key Principles */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+              <Card className="bg-card/60 border-border">
+                <CardContent className="p-6">
+                  <h2 className="text-lg font-semibold text-foreground mb-3 flex items-center gap-2">
+                    <TrendingUp className="w-5 h-5 text-green-400" />
+                    Strengths
+                  </h2>
+                  <ul className="space-y-2">
+                    {selectedPartner.strengths.map((strength, idx) => (
+                      <li key={idx} className="flex items-center gap-2 text-muted-foreground">
+                        <div className="w-1.5 h-1.5 rounded-full bg-green-400" />
+                        {strength}
+                      </li>
+                    ))}
+                  </ul>
+                </CardContent>
+              </Card>
+
+              {selectedPartner.keyPrinciples && (
+                <Card className="bg-card/60 border-border">
+                  <CardContent className="p-6">
+                    <h2 className="text-lg font-semibold text-foreground mb-3 flex items-center gap-2">
+                      <Target className="w-5 h-5 text-amber-400" />
+                      Key Principles
+                    </h2>
+                    <ul className="space-y-2">
+                      {selectedPartner.keyPrinciples.map((principle, idx) => (
+                        <li key={idx} className="flex items-center gap-2 text-muted-foreground">
+                          <div className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+                          {principle}
+                        </li>
+                      ))}
+                    </ul>
+                  </CardContent>
+                </Card>
+              )}
+            </div>
+
+            {/* Stats */}
+            <Card className="bg-card/60 border-border">
+              <CardContent className="p-6">
+                <h2 className="text-lg font-semibold text-foreground mb-4">Performance Stats</h2>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="text-center p-4 bg-secondary/30 rounded-xl">
+                    <p className="text-2xl font-bold text-foreground">{selectedPartner.projectsCompleted}</p>
+                    <p className="text-sm text-muted-foreground">Projects</p>
+                  </div>
+                  <div className="text-center p-4 bg-secondary/30 rounded-xl">
+                    <p className="text-2xl font-bold text-foreground">{selectedPartner.performanceScore}%</p>
+                    <p className="text-sm text-muted-foreground">Score</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </ScrollArea>
+      </div>
+    );
+  }
+
   // Expert Profile View
   if (selectedExpert) {
     return (
       <div className="h-full bg-background">
-        {/* Header */}
         <div className="border-b border-border bg-card/80 backdrop-blur-xl sticky top-0 z-10">
           <div className="max-w-4xl mx-auto px-4 py-4">
             <Button 
@@ -96,7 +281,6 @@ export function ExpertDirectory({ onSelectExpert, onBack }: ExpertDirectoryProps
 
         <ScrollArea className="h-[calc(100%-80px)]">
           <div className="max-w-4xl mx-auto px-4 py-6">
-            {/* Expert Header */}
             <div className="flex items-start gap-6 mb-8">
               {selectedExpert.avatarUrl ? (
                 <img 
@@ -118,18 +302,10 @@ export function ExpertDirectory({ onSelectExpert, onBack }: ExpertDirectoryProps
                     <Star className="w-3 h-3 mr-1" />
                     {selectedExpert.performanceScore}% Performance
                   </Badge>
-                  <Badge className={
-                    selectedExpert.status === 'active' ? "bg-green-500/20 text-green-400 border-0" :
-                    selectedExpert.status === 'training' ? "bg-blue-500/20 text-blue-400 border-0" :
-                    "bg-gray-500/20 text-gray-400 border-0"
-                  }>
-                    {selectedExpert.status}
-                  </Badge>
                 </div>
               </div>
             </div>
 
-            {/* Action Buttons */}
             <div className="flex gap-3 mb-8">
               <Button 
                 onClick={() => handleChatWithExpert(selectedExpert)}
@@ -148,7 +324,6 @@ export function ExpertDirectory({ onSelectExpert, onBack }: ExpertDirectoryProps
               </Button>
             </div>
 
-            {/* Bio */}
             <Card className="mb-6 bg-card/60 border-border">
               <CardContent className="p-6">
                 <h2 className="text-lg font-semibold text-foreground mb-3 flex items-center gap-2">
@@ -159,7 +334,6 @@ export function ExpertDirectory({ onSelectExpert, onBack }: ExpertDirectoryProps
               </CardContent>
             </Card>
 
-            {/* Composite Of */}
             <Card className="mb-6 bg-card/60 border-border">
               <CardContent className="p-6">
                 <h2 className="text-lg font-semibold text-foreground mb-3 flex items-center gap-2">
@@ -176,7 +350,6 @@ export function ExpertDirectory({ onSelectExpert, onBack }: ExpertDirectoryProps
               </CardContent>
             </Card>
 
-            {/* Strengths & Weaknesses */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
               <Card className="bg-card/60 border-border">
                 <CardContent className="p-6">
@@ -213,7 +386,6 @@ export function ExpertDirectory({ onSelectExpert, onBack }: ExpertDirectoryProps
               </Card>
             </div>
 
-            {/* Thinking Style */}
             <Card className="mb-6 bg-card/60 border-border">
               <CardContent className="p-6">
                 <h2 className="text-lg font-semibold text-foreground mb-3 flex items-center gap-2">
@@ -224,7 +396,6 @@ export function ExpertDirectory({ onSelectExpert, onBack }: ExpertDirectoryProps
               </CardContent>
             </Card>
 
-            {/* Stats */}
             <Card className="bg-card/60 border-border">
               <CardContent className="p-6">
                 <h2 className="text-lg font-semibold text-foreground mb-4">Performance Stats</h2>
@@ -268,14 +439,14 @@ export function ExpertDirectory({ onSelectExpert, onBack }: ExpertDirectoryProps
               </div>
               <div>
                 <h1 className="text-xl font-bold text-foreground">Expert Directory</h1>
-                <p className="text-sm text-muted-foreground">{TOTAL_EXPERTS} AI experts available</p>
+                <p className="text-sm text-muted-foreground">{TOTAL_EXPERTS} AI experts + {corporatePartners.length} Corporate Partners</p>
               </div>
             </div>
             <div className="flex-1 max-w-md">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <Input
-                  placeholder="Search experts by name, specialty, or skill..."
+                  placeholder="Search experts, partners, or skills..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="pl-10 bg-secondary/50"
@@ -284,116 +455,271 @@ export function ExpertDirectory({ onSelectExpert, onBack }: ExpertDirectoryProps
             </div>
           </div>
 
-          {/* Category Filter */}
-          <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+          {/* Tab Toggle: Partners vs Experts */}
+          <div className="flex gap-2 mb-3">
             <Button
-              variant={selectedCategory === null ? "default" : "outline"}
+              variant={!showPartnersOnly ? "default" : "outline"}
               size="sm"
-              onClick={() => setSelectedCategory(null)}
+              onClick={() => setShowPartnersOnly(false)}
               className="whitespace-nowrap"
             >
-              All ({TOTAL_EXPERTS})
+              <Users className="w-4 h-4 mr-1" />
+              AI Experts ({TOTAL_EXPERTS})
             </Button>
-            {categoryStats.map(([category, count]) => (
+            <Button
+              variant={showPartnersOnly ? "default" : "outline"}
+              size="sm"
+              onClick={() => setShowPartnersOnly(true)}
+              className={`whitespace-nowrap ${showPartnersOnly ? 'bg-blue-500 hover:bg-blue-600' : ''}`}
+            >
+              <Building2 className="w-4 h-4 mr-1" />
+              Corporate Partners ({corporatePartners.length})
+            </Button>
+          </div>
+
+          {/* Category Filter (only for experts) */}
+          {!showPartnersOnly && (
+            <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
               <Button
-                key={category}
-                variant={selectedCategory === category ? "default" : "outline"}
+                variant={selectedCategory === null ? "default" : "outline"}
                 size="sm"
-                onClick={() => setSelectedCategory(category)}
+                onClick={() => setSelectedCategory(null)}
                 className="whitespace-nowrap"
               >
-                {category} ({count})
+                All ({TOTAL_EXPERTS})
               </Button>
-            ))}
-          </div>
+              {categoryStats.map(([category, count]) => (
+                <Button
+                  key={category}
+                  variant={selectedCategory === category ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setSelectedCategory(category)}
+                  className="whitespace-nowrap"
+                >
+                  {category} ({count})
+                </Button>
+              ))}
+            </div>
+          )}
         </div>
       </div>
 
-      {/* Expert Grid */}
-      <ScrollArea className="h-[calc(100%-160px)]">
+      {/* Content */}
+      <ScrollArea className="h-[calc(100%-180px)]">
         <div className="max-w-7xl mx-auto px-4 py-6">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {filteredExperts.map((expert) => (
-              <Card 
-                key={expert.id}
-                className="bg-card/60 border-border hover:border-primary/50 transition-all cursor-pointer group"
-                onClick={() => setSelectedExpert(expert)}
-              >
-                <CardContent className="p-4">
-                  <div className="flex items-start gap-3 mb-3">
-                    {expert.avatarUrl ? (
-                      <img 
-                        src={expert.avatarUrl} 
-                        alt={expert.name}
-                        className="w-12 h-12 rounded-xl object-cover border border-cyan-500/30 flex-shrink-0"
-                      />
-                    ) : (
-                      <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-500/20 to-purple-500/20 border border-cyan-500/30 flex items-center justify-center text-2xl flex-shrink-0">
-                        {expert.avatar}
+          
+          {/* Corporate Partners Section */}
+          {showPartnersOnly ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {filteredPartners.map((partner) => (
+                <Card 
+                  key={partner.id}
+                  className="bg-gradient-to-br from-blue-500/5 to-cyan-500/5 border-blue-500/20 hover:border-blue-500/50 transition-all cursor-pointer group"
+                  onClick={() => setSelectedPartner(partner)}
+                >
+                  <CardContent className="p-5">
+                    <div className="flex items-start gap-4 mb-4">
+                      <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-blue-500/20 to-cyan-500/20 border border-blue-500/30 flex items-center justify-center text-3xl flex-shrink-0">
+                        {partner.logo}
                       </div>
-                    )}
-                    <div className="flex-1 min-w-0">
-                      <h3 className="font-semibold text-foreground truncate group-hover:text-primary transition-colors">
-                        {expert.name}
-                      </h3>
-                      <p className="text-xs text-muted-foreground truncate">{expert.specialty}</p>
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-bold text-foreground group-hover:text-blue-400 transition-colors">
+                          {partner.name}
+                        </h3>
+                        <p className="text-sm text-blue-400/80">{partner.industry}</p>
+                      </div>
                     </div>
-                  </div>
-                  
-                  <div className="flex items-center gap-2 mb-3">
-                    <Badge variant="outline" className="text-xs">{expert.category}</Badge>
-                    <Badge className="bg-yellow-500/10 text-yellow-400 border-0 text-xs">
-                      <Star className="w-3 h-3 mr-1" />
-                      {expert.performanceScore}%
-                    </Badge>
-                  </div>
+                    
+                    <p className="text-sm text-muted-foreground line-clamp-2 mb-4">
+                      {partner.methodology}
+                    </p>
 
-                  <p className="text-xs text-muted-foreground line-clamp-2 mb-3">
-                    {expert.bio.substring(0, 100)}...
-                  </p>
-
-                  <div className="flex items-center justify-between">
-                    <div className="flex gap-1">
-                      {expert.compositeOf.slice(0, 2).map((person, idx) => (
-                        <span key={idx} className="text-xs text-muted-foreground bg-secondary/50 px-2 py-0.5 rounded">
-                          {person.split(' ')[0]}
-                        </span>
+                    <div className="flex flex-wrap gap-1.5 mb-4">
+                      {partner.frameworks.slice(0, 3).map((framework, idx) => (
+                        <Badge key={idx} variant="outline" className="text-xs">
+                          {framework}
+                        </Badge>
                       ))}
-                      {expert.compositeOf.length > 2 && (
-                        <span className="text-xs text-muted-foreground">+{expert.compositeOf.length - 2}</span>
+                      {partner.frameworks.length > 3 && (
+                        <Badge variant="outline" className="text-xs">
+                          +{partner.frameworks.length - 3}
+                        </Badge>
                       )}
                     </div>
-                    <div className="flex items-center gap-1">
-                      <button
+
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <Badge className="bg-yellow-500/10 text-yellow-400 border-0 text-xs">
+                          <Star className="w-3 h-3 mr-1" />
+                          {partner.performanceScore}%
+                        </Badge>
+                        <span className="text-xs text-muted-foreground">
+                          {partner.projectsCompleted} projects
+                        </span>
+                      </div>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        className="text-blue-400 hover:text-blue-300 hover:bg-blue-500/10"
                         onClick={(e) => {
                           e.stopPropagation();
-                          if (isFavorite(expert.id)) {
-                            removeFavorite(expert.id);
-                          } else {
-                            addFavorite(expert.id);
-                          }
+                          handleChatWithPartner(partner);
                         }}
-                        className="p-1 hover:bg-primary/10 rounded transition-colors"
-                        title={isFavorite(expert.id) ? "Remove from board" : "Add to board"}
                       >
-                        <Star className={`w-4 h-4 transition-colors ${
-                          isFavorite(expert.id)
-                            ? 'fill-yellow-400 text-yellow-400'
-                            : 'text-muted-foreground hover:text-yellow-400'
-                        }`} />
-                      </button>
-                      <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
+                        <MessageSquare className="w-4 h-4 mr-1" />
+                        Chat
+                      </Button>
                     </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          ) : (
+            <>
+              {/* Featured Corporate Partners Banner (when viewing experts) */}
+              {!selectedCategory && !searchQuery && (
+                <div className="mb-6">
+                  <div className="flex items-center justify-between mb-3">
+                    <h2 className="text-lg font-semibold text-foreground flex items-center gap-2">
+                      <Building2 className="w-5 h-5 text-blue-400" />
+                      Corporate Partners
+                    </h2>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setShowPartnersOnly(true)}
+                      className="text-blue-400 hover:text-blue-300"
+                    >
+                      View All
+                      <ChevronRight className="w-4 h-4 ml-1" />
+                    </Button>
                   </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+                    {corporatePartners.slice(0, 5).map((partner) => (
+                      <Card 
+                        key={partner.id}
+                        className="bg-gradient-to-br from-blue-500/5 to-cyan-500/5 border-blue-500/20 hover:border-blue-500/50 transition-all cursor-pointer group"
+                        onClick={() => setSelectedPartner(partner)}
+                      >
+                        <CardContent className="p-3 text-center">
+                          <div className="w-12 h-12 mx-auto rounded-xl bg-gradient-to-br from-blue-500/20 to-cyan-500/20 border border-blue-500/30 flex items-center justify-center text-2xl mb-2">
+                            {partner.logo}
+                          </div>
+                          <h3 className="font-semibold text-sm text-foreground group-hover:text-blue-400 transition-colors truncate">
+                            {partner.name}
+                          </h3>
+                          <p className="text-xs text-muted-foreground truncate">{partner.industry}</p>
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            className="mt-2 w-full text-xs text-blue-400 hover:text-blue-300 hover:bg-blue-500/10"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleChatWithPartner(partner);
+                            }}
+                          >
+                            <MessageSquare className="w-3 h-3 mr-1" />
+                            Chat
+                          </Button>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                </div>
+              )}
 
-          {filteredExperts.length === 0 && (
+              {/* Expert Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                {filteredExperts.map((expert) => (
+                  <Card 
+                    key={expert.id}
+                    className="bg-card/60 border-border hover:border-primary/50 transition-all cursor-pointer group"
+                    onClick={() => setSelectedExpert(expert)}
+                  >
+                    <CardContent className="p-4">
+                      <div className="flex items-start gap-3 mb-3">
+                        {expert.avatarUrl ? (
+                          <img 
+                            src={expert.avatarUrl} 
+                            alt={expert.name}
+                            className="w-12 h-12 rounded-xl object-cover border border-cyan-500/30 flex-shrink-0"
+                          />
+                        ) : (
+                          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-500/20 to-purple-500/20 border border-cyan-500/30 flex items-center justify-center text-2xl flex-shrink-0">
+                            {expert.avatar}
+                          </div>
+                        )}
+                        <div className="flex-1 min-w-0">
+                          <h3 className="font-semibold text-foreground truncate group-hover:text-primary transition-colors">
+                            {expert.name}
+                          </h3>
+                          <p className="text-xs text-muted-foreground truncate">{expert.specialty}</p>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-center gap-2 mb-3">
+                        <Badge variant="outline" className="text-xs">{expert.category}</Badge>
+                        <Badge className="bg-yellow-500/10 text-yellow-400 border-0 text-xs">
+                          <Star className="w-3 h-3 mr-1" />
+                          {expert.performanceScore}%
+                        </Badge>
+                      </div>
+
+                      <p className="text-xs text-muted-foreground line-clamp-2 mb-3">
+                        {expert.bio.substring(0, 100)}...
+                      </p>
+
+                      <div className="flex items-center justify-between">
+                        <div className="flex gap-1">
+                          {expert.compositeOf.slice(0, 2).map((person, idx) => (
+                            <span key={idx} className="text-xs text-muted-foreground bg-secondary/50 px-2 py-0.5 rounded">
+                              {person.split(' ')[0]}
+                            </span>
+                          ))}
+                          {expert.compositeOf.length > 2 && (
+                            <span className="text-xs text-muted-foreground">+{expert.compositeOf.length - 2}</span>
+                          )}
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              if (isFavorite(expert.id)) {
+                                removeFavorite(expert.id);
+                              } else {
+                                addFavorite(expert.id);
+                              }
+                            }}
+                            className="p-1 hover:bg-primary/10 rounded transition-colors"
+                            title={isFavorite(expert.id) ? "Remove from board" : "Add to board"}
+                          >
+                            <Star className={`w-4 h-4 transition-colors ${
+                              isFavorite(expert.id)
+                                ? 'fill-yellow-400 text-yellow-400'
+                                : 'text-muted-foreground hover:text-yellow-400'
+                            }`} />
+                          </button>
+                          <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </>
+          )}
+
+          {filteredExperts.length === 0 && !showPartnersOnly && (
             <div className="text-center py-12">
               <Users className="w-12 h-12 mx-auto mb-4 text-muted-foreground opacity-50" />
               <p className="text-muted-foreground">No experts found matching your search.</p>
+            </div>
+          )}
+
+          {filteredPartners.length === 0 && showPartnersOnly && (
+            <div className="text-center py-12">
+              <Building2 className="w-12 h-12 mx-auto mb-4 text-muted-foreground opacity-50" />
+              <p className="text-muted-foreground">No corporate partners found matching your search.</p>
             </div>
           )}
         </div>

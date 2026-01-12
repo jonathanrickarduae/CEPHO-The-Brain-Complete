@@ -2668,3 +2668,28 @@
 - [ ] Wire DirectExpertChat to use real AI responses
 - [ ] Add voice response playback in chat interface
 
+
+## Expert Chat AI Integration (Priority)
+- [ ] Create expert chat tRPC endpoint with personality system prompts
+- [ ] Wire ExpertChat component to use real AI backend instead of mock responses
+- [ ] Add streaming support for expert chat responses
+- [ ] Integrate ElevenLabs voice cloning for audio responses
+- [ ] Add real avatar images for Jay-Z, Ryan Reynolds, Jessica Alba
+- [ ] Test expert personality consistency across conversations
+
+## Corporate Partners Enhancement
+- [ ] Make Corporate Partners more prominent/accessible in AI-SMEs section
+- [ ] Add dedicated Corporate Partners tab or section at top of AI-SMEs
+- [ ] Add direct chat capability with Corporate Partners (McKinsey, NASA, etc.)
+- [ ] Create Corporate Partner chat personas with unique methodologies
+- [ ] Test Corporate Partner chat functionality
+
+
+## Corporate Partners Enhancement (Jan 2026)
+- [x] Make Corporate Partners more prominent in AI-SMEs section
+- [x] Add tab toggle between AI Experts and Corporate Partners
+- [x] Create CorporatePartnerChat component for direct chat
+- [x] Add Corporate Partner profile view with methodology and frameworks
+- [x] Connect Corporate Partner chat to real AI backend with persona prompts
+- [x] Add featured Corporate Partners banner in Expert Directory
+- [x] Support search filtering for Corporate Partners

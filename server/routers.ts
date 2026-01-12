@@ -29,6 +29,7 @@ import {
 } from "./db";
 import { invokeLLM } from "./_core/llm";
 import { chatWithExpert } from "./services/expertChatService";
+import { textToSpeech, getExpertVoiceInfo, hasCustomVoice } from "./services/voiceService";
 import { z } from "zod";
 
 export const appRouter = router({
@@ -1712,6 +1713,85 @@ You are not a yes-man. You are a trusted advisor who respects the principal enou
           memoryContext,
           promptEvolution,
           domainKnowledge,
+        };
+      }),
+
+    // Chat with an expert - real AI backend
+    chat: protectedProcedure
+      .input(z.object({
+        expertId: z.string(),
+        message: z.string(),
+        expertData: z.object({
+          name: z.string(),
+          specialty: z.string(),
+          bio: z.string(),
+          compositeOf: z.array(z.string()),
+          strengths: z.array(z.string()),
+          weaknesses: z.array(z.string()),
+          thinkingStyle: z.string(),
+        }).optional(),
+        conversationHistory: z.array(z.object({
+          role: z.enum(['user', 'assistant', 'system']),
+          content: z.string(),
+        })).optional(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        const response = await chatWithExpert({
+          expertId: input.expertId,
+          expertData: input.expertData,
+          message: input.message,
+          conversationHistory: input.conversationHistory,
+        });
+
+        // Store the conversation for learning
+        await createExpertConversation({
+          userId: ctx.user.id,
+          expertId: input.expertId,
+          role: 'user',
+          content: input.message,
+        });
+        await createExpertConversation({
+          userId: ctx.user.id,
+          expertId: input.expertId,
+          role: 'expert',
+          content: response.response,
+        });
+
+        return response;
+      }),
+
+    // Generate voice audio for expert response
+    generateVoice: protectedProcedure
+      .input(z.object({
+        text: z.string(),
+        expertId: z.string(),
+      }))
+      .mutation(async ({ input }) => {
+        try {
+          const result = await textToSpeech({
+            text: input.text,
+            expertId: input.expertId,
+          });
+          
+          // Return base64 encoded audio
+          return {
+            audio: result.audioBuffer.toString('base64'),
+            contentType: result.contentType,
+            voiceName: result.voiceName,
+          };
+        } catch (error) {
+          console.error('Voice generation error:', error);
+          throw new Error('Failed to generate voice audio');
+        }
+      }),
+
+    // Check if expert has custom voice
+    hasVoice: publicProcedure
+      .input(z.object({ expertId: z.string() }))
+      .query(({ input }) => {
+        return {
+          hasVoice: hasCustomVoice(input.expertId),
+          voiceInfo: getExpertVoiceInfo(input.expertId),
         };
       }),
   }),

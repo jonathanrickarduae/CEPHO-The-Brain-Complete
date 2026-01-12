@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import { trpc } from '@/lib/trpc';
 import { useLocation } from 'wouter';
 import { 
   Send, Mic, MicOff, X, ArrowLeft, 
@@ -122,6 +123,38 @@ export function DirectExpertChat({ expertId, onClose }: DirectExpertChatProps) {
     return `That's a great question. Based on my experience in ${expert.specialty}, I'd say the key is to focus on ${expert.strengths[0]?.toLowerCase() || 'fundamentals'}. Let me think about this more specifically - what's the context?`;
   };
 
+  // tRPC mutation for expert chat
+  const chatMutation = trpc.expertEvolution.chat.useMutation({
+    onSuccess: (data: { response: string; expertName: string; voiceStyle?: string }) => {
+      const expertMessage: Message = {
+        id: `expert-${Date.now()}`,
+        role: 'expert',
+        content: data.response,
+        timestamp: new Date(),
+        type: 'text'
+      };
+      setMessages(prev => [...prev, expertMessage]);
+      setIsTyping(false);
+    },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    onError: (error: any) => {
+      console.error('Expert chat error:', error);
+      // Fallback to local response on error
+      if (expert) {
+        const fallbackResponse = generateExpertResponse(expert, inputValue);
+        const expertMessage: Message = {
+          id: `expert-${Date.now()}`,
+          role: 'expert',
+          content: fallbackResponse,
+          timestamp: new Date(),
+          type: 'text'
+        };
+        setMessages(prev => [...prev, expertMessage]);
+      }
+      setIsTyping(false);
+    }
+  });
+
   // Send message
   const sendMessage = (content: string, type: 'text' | 'voice' = 'text', voiceDuration?: number) => {
     if (!content.trim() || !expert) return;
@@ -139,20 +172,27 @@ export function DirectExpertChat({ expertId, onClose }: DirectExpertChatProps) {
     setInputValue('');
     setIsTyping(true);
 
-    // Simulate expert typing and response
-    const responseDelay = 1500 + Math.random() * 2000;
-    setTimeout(() => {
-      const response = generateExpertResponse(expert, content);
-      const expertMessage: Message = {
-        id: `expert-${Date.now()}`,
-        role: 'expert',
-        content: response,
-        timestamp: new Date(),
-        type: 'text'
-      };
-      setMessages(prev => [...prev, expertMessage]);
-      setIsTyping(false);
-    }, responseDelay);
+    // Build conversation history for context
+    const conversationHistory = messages.map(m => ({
+      role: m.role === 'user' ? 'user' as const : 'assistant' as const,
+      content: m.content
+    }));
+
+    // Call real AI backend
+    chatMutation.mutate({
+      expertId: expert.id,
+      message: content,
+      expertData: {
+        name: expert.name,
+        specialty: expert.specialty,
+        bio: expert.bio,
+        compositeOf: expert.compositeOf,
+        strengths: expert.strengths,
+        weaknesses: expert.weaknesses,
+        thinkingStyle: expert.thinkingStyle,
+      },
+      conversationHistory,
+    });
   };
 
   // Handle voice recording
