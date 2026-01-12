@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { useSearch } from "wouter";
 import { 
   Fingerprint, Mic, MicOff, Send,
-  Sparkles, Activity, Trash2, Paperclip, Link2, Check, X, FileAudio
+  Sparkles, Activity, Trash2, Paperclip, Link2, Check, X, FileAudio, GraduationCap
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -166,6 +166,14 @@ export default function DigitalTwin() {
               </div>
             </div>
             <div className="flex items-center gap-2">
+              {/* Training Button */}
+              <button
+                onClick={() => { setShowRightPanel(true); setRightPanelTab('training'); }}
+                className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-gradient-to-r from-emerald-500/10 to-cyan-500/10 border border-emerald-500/20 hover:border-emerald-500/40 transition-colors"
+              >
+                <GraduationCap className="w-4 h-4 text-emerald-400" />
+                <span className="text-xs text-emerald-400 font-medium">Training</span>
+              </button>
               {/* Training Progress Mini Badge */}
               <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-gradient-to-r from-cyan-500/10 to-purple-500/10 border border-cyan-500/20">
                 <CircularProgress value={25} max={100} size={24} strokeWidth={3} showValue={false} />

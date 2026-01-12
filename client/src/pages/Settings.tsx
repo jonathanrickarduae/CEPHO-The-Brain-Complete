@@ -10,8 +10,7 @@ import { CalendarIntegration } from '@/components/CalendarIntegration';
 import { TrainingDataPipeline } from '@/components/TrainingDataPipeline';
 import { ReferralDashboard } from '@/components/WaitlistReferral';
 import { AccessibilitySettingsPanel } from '@/components/AccessibilitySettingsPanel';
-import { StreakRewards } from '@/components/StreakRewards';
-import { useStreak } from '@/components/DailyStreak';
+
 import { IntegrationWizard } from '@/components/IntegrationWizard';
 import { SubscriptionManager } from '@/components/SubscriptionManager';
 import { SignatureManager } from '@/components/SignatureManager';
@@ -136,10 +135,7 @@ export default function Settings() {
                 </div>
               </div>
 
-              {/* Streak Rewards Section */}
-              <div className="mt-6">
-                <StreakRewards currentStreak={7} />
-              </div>
+
               </>
             )}
 
@@ -348,7 +344,9 @@ export default function Settings() {
                 
                 <div className="space-y-8">
                   {/* Theme Selector Component */}
-                  <ThemeSelector />
+                  <ThemeProvider>
+                    <ThemeSelector />
+                  </ThemeProvider>
 
                   <div className="border-t border-gray-700 pt-6">
                     <label className="block text-sm font-medium text-foreground mb-3">Accent Color</label>

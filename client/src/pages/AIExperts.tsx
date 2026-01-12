@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useSearch } from "wouter";
+import { ExpertDirectory } from "@/components/ExpertDirectory";
 import { 
   Users, Brain, Zap, Clock, CheckCircle2, 
   ArrowRight, MessageSquare, Play, Pause, 
@@ -167,6 +168,9 @@ export default function AIExperts() {
   const [timeRemaining, setTimeRemaining] = useState<number>(0);
   const [isRunning, setIsRunning] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
+  
+  // View mode: action engine or expert directory
+  const [viewMode, setViewMode] = useState<'action' | 'directory'>('action');
   
   // Insight Validation State
   const [validationMode, setValidationMode] = useState<'off' | 'review' | 'challenge'>('off');
@@ -464,6 +468,15 @@ export default function AIExperts() {
     toast.success("Task added to queue");
   };
 
+  // If viewing expert directory, show that instead
+  if (viewMode === 'directory') {
+    return (
+      <FeatureGate feature="aiExperts" showOverlay={true}>
+        <ExpertDirectory onBack={() => setViewMode('action')} />
+      </FeatureGate>
+    );
+  }
+
   return (
     <FeatureGate feature="aiExperts" showOverlay={true}>
     <div className="h-full bg-background text-foreground overflow-auto">
@@ -477,7 +490,16 @@ export default function AIExperts() {
                 <Zap className="w-6 h-6 md:w-8 md:h-8 text-cyan-400" />
               </div>
               <div>
-                <h1 className="text-xl md:text-2xl font-display font-bold">AI Action Engine</h1>
+                <div className="flex items-center gap-3">
+                  <h1 className="text-xl md:text-2xl font-display font-bold">AI Action Engine</h1>
+                  <button
+                    onClick={() => setViewMode('directory')}
+                    className="px-3 py-1 text-sm bg-purple-500/20 hover:bg-purple-500/30 text-purple-400 rounded-full border border-purple-500/30 transition-colors flex items-center gap-1"
+                  >
+                    <Users className="w-3 h-3" />
+                    Expert Directory
+                  </button>
+                </div>
                 <p className="text-muted-foreground text-sm">
                   {phase === "queue" ? "Your task queue" : 
                    phase === "active" ? "Task in progress" :

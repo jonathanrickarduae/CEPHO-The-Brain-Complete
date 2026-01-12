@@ -109,6 +109,48 @@ const INTEGRATIONS: Integration[] = [
     ],
   },
   
+  // Presentation Tools
+  {
+    id: 'pitch',
+    name: 'Pitch',
+    description: 'Create beautiful presentations with Pitch.com',
+    icon: <FileText className="w-6 h-6" />,
+    tier: 'basic',
+    category: 'productivity',
+    requiresApproval: false,
+    logo: '🎨',
+    setupSteps: [
+      { id: 'intro', title: 'Connect Pitch', description: 'Access your Pitch workspace for collaborative presentations.', type: 'info' },
+      { id: 'oauth', title: 'Sign in with Pitch', description: 'Click to connect your Pitch account.', type: 'oauth' },
+      { id: 'config', title: 'Workspace Settings', description: 'Choose sync options.', type: 'config', fields: [
+        { id: 'sync_templates', label: 'Sync presentation templates', type: 'checkbox' },
+        { id: 'auto_export', label: 'Auto-export to Library', type: 'checkbox' },
+      ]},
+    ],
+  },
+  {
+    id: 'gamma',
+    name: 'Gamma',
+    description: 'AI-powered presentations with Gamma.app',
+    icon: <Sparkles className="w-6 h-6" />,
+    tier: 'basic',
+    category: 'productivity',
+    requiresApproval: false,
+    logo: '✨',
+    setupSteps: [
+      { id: 'intro', title: 'Connect Gamma', description: 'Create AI-generated presentations directly from your content.', type: 'info' },
+      { id: 'oauth', title: 'Sign in with Gamma', description: 'Click to connect your Gamma account.', type: 'oauth' },
+      { id: 'config', title: 'Generation Settings', description: 'Configure AI presentation options.', type: 'config', fields: [
+        { id: 'default_style', label: 'Default Style', type: 'select', options: [
+          { value: 'professional', label: 'Professional' },
+          { value: 'creative', label: 'Creative' },
+          { value: 'minimal', label: 'Minimal' },
+        ]},
+        { id: 'auto_generate', label: 'Auto-generate from documents', type: 'checkbox' },
+      ]},
+    ],
+  },
+  
   // Standard Tier
   {
     id: 'zoom',

@@ -10,7 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { LearningBadge } from "@/components/LearningIndicator";
 
 import { Tooltip } from "@/components/Tooltip";
-
+import { useMoodCheck } from "@/hooks/useMoodCheck";
 import { WellnessScoreDashboard } from "@/components/WellnessScoreDashboard";
 import { Share2 } from "lucide-react";
 import { MobileInputSheet, QuickInputTrigger } from "@/components/MobileInputSheet";
@@ -333,7 +333,17 @@ export default function Dashboard() {
             <span className="text-xs text-muted-foreground hidden sm:inline">Wellness</span>
           </button>
           
-
+          {/* Mood indicator - just number and circle */}
+          {(() => {
+            const { todaysMoods } = useMoodCheck();
+            const latestMood = todaysMoods.length > 0 ? todaysMoods[todaysMoods.length - 1] : null;
+            if (!latestMood) return null;
+            return (
+              <div className="w-7 h-7 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">
+                <span className="text-xs font-bold text-white">{latestMood.mood}</span>
+              </div>
+            );
+          })()}
           
           {/* Voice Interface Toggle */}
           <VoiceInterfaceToggle />

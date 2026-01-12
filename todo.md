@@ -2634,3 +2634,11 @@
 - [x] Rename Daily Brief to The Signal
 - [x] Add Evening Review to sidebar
 
+
+## Expert Directory Feature - Jan 12 2026
+- [x] Create Expert Directory page with searchable grid of 100+ experts
+- [x] Create individual Expert Profile/Board page with bio, stats, strengths/weaknesses
+- [x] Add "Chat with Expert" button linking to Chief of Staff
+- [x] Add "Video Meeting with Expert" button for AI avatar video calls
+- [x] Add Expert Directory to sidebar (as button in AI-SMEs)
+- [x] Add routing for directory and profile pages
