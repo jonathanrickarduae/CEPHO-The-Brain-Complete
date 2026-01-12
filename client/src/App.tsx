@@ -34,6 +34,7 @@ import WellnessPage from "./pages/WellnessPage";
 import ReferenceLibrary from "./pages/ReferenceLibrary";
 import InvestorPitchPage from "./pages/InvestorPitchPage";
 import VideoPitchStudio from "./pages/VideoPitchStudio";
+import InvestorCRM from "./pages/InvestorCRM";
 import { GovernanceProvider, GovernanceModeChangeModal } from "./hooks/useGovernance";
 import { CelebrationProvider } from "./components/CelebrationAnimations";
 import { DailyCycleProvider } from "./components/DailyCycleProvider";
@@ -142,6 +143,11 @@ function Router() {
       {/* Video Pitch Studio */}
       <Route path="/video-pitch-studio">
         <WithLayout><VideoPitchStudio /></WithLayout>
+      </Route>
+      
+      {/* Investor CRM */}
+      <Route path="/investor-crm">
+        <WithLayout><InvestorCRM /></WithLayout>
       </Route>
       
       {/* Investor Pitch Pages - No layout wrapper for clean presentation */}

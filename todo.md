@@ -2016,3 +2016,66 @@
 - [x] Add interaction recording endpoint
 - [x] Add commitment tracking endpoint
 - [x] Write unit tests for investor matching logic (13 tests passing)
+
+
+## Investor CRM UI
+- [ ] Create dedicated Investor CRM page
+- [ ] Add/Edit/Delete investor contacts
+- [ ] Filter by type (Angel, HNWI, VC, etc.)
+- [ ] Filter by relationship status (cold/warm/hot)
+- [ ] Search functionality
+- [ ] Investor profile cards with contact details
+- [ ] Interaction history timeline per investor
+
+## Investor CSV Import
+- [ ] CSV upload component
+- [ ] Column mapping interface
+- [ ] Validation and error handling
+- [ ] Bulk import with progress indicator
+- [ ] Sample CSV template download
+
+## Video Pitch to Project Genesis Connection
+- [ ] Add "Create Video Pitch Pack" button in Project Genesis
+- [ ] Auto-populate business data from project intake
+- [ ] Pre-fill company name, description, key metrics
+- [ ] Link pitch pack to project for tracking
+
+## McKinsey Insights Integration
+- [ ] Research McKinsey RSS/API feeds
+- [ ] Create McKinsey Insights data fetcher
+- [ ] Display latest insights in Daily Brief Intelligence section
+- [ ] Add McKinsey as source for fact-checking
+- [ ] Citation system with source links
+- [ ] Industry-specific insights filtering
+- [ ] Integration with Project Genesis research phase
+
+
+## Session Completed Items (Jan 12, 2026)
+
+### Investor CRM
+- [x] Create Investor CRM page component
+- [x] Add/edit/delete investor functionality
+- [x] Filter by type, status, sector
+- [x] Search functionality
+- [x] View investor details modal
+- [x] CSV import functionality with template download
+- [x] Bulk import with validation
+- [x] Route added to App.tsx
+
+### McKinsey Insights Integration
+- [x] Curated database of McKinsey research (10+ reports)
+- [x] Search insights by topic/category
+- [x] Fact-check claims against research
+- [x] Citation formatting (APA, MLA, Chicago)
+- [x] Key findings extraction
+- [x] McKinseyInsightsPanel component
+- [x] Search mode for research
+- [x] Fact-check mode for verification
+- [x] Copy citation functionality
+- [x] External link to full reports
+- [x] Industry-specific insights (Financial Services, Healthcare, Tech, Retail, Energy)
+
+### Video Pitch to Project Genesis Connection
+- [x] "Create Video Pitch Pack" button in Project Genesis complete section
+- [x] Auto-populate project data via URL parameters
+- [x] Link to Video Pitch Studio with prefill flag
