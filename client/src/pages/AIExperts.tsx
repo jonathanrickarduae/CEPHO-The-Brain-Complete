@@ -2,6 +2,9 @@ import { useState, useEffect } from "react";
 import { useSearch } from "wouter";
 import { ExpertDirectory } from "@/components/ExpertDirectory";
 import { MyBoard } from "@/components/MyBoard";
+import { WarRoom } from "@/components/WarRoom";
+import { ExpertAnalytics } from "@/components/ExpertAnalytics";
+import { ExpertScheduling } from "@/components/ExpertScheduling";
 import { 
   Users, Brain, Zap, Clock, CheckCircle2, 
   ArrowRight, MessageSquare, Play, Pause, 
@@ -9,7 +12,7 @@ import {
   ThumbsDown, RotateCcw, Sparkles, Timer, 
   FileText, Mail, Code, Search, Mic, MicOff,
   Fingerprint, Eye, ChevronRight, AlertCircle,
-  ListChecks, RefreshCw, Star
+  ListChecks, RefreshCw, Star, BarChart3, Swords
 } from "lucide-react";
 import { 
   AI_EXPERTS, 
@@ -170,8 +173,8 @@ export default function AIExperts() {
   const [isRunning, setIsRunning] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
   
-  // View mode: action engine, expert directory, or my board
-  const [viewMode, setViewMode] = useState<'action' | 'directory' | 'board'>('action');
+  // View mode: action engine, expert directory, my board, war room, analytics, or scheduling
+  const [viewMode, setViewMode] = useState<'action' | 'directory' | 'board' | 'warroom' | 'analytics' | 'scheduling'>('action');
   
   // Insight Validation State
   const [validationMode, setValidationMode] = useState<'off' | 'review' | 'challenge'>('off');
@@ -510,6 +513,58 @@ export default function AIExperts() {
     );
   }
 
+  // If viewing War Room, show that instead
+  if (viewMode === 'warroom') {
+    return (
+      <FeatureGate feature="aiExperts" showOverlay={true}>
+        <div className="h-full bg-background text-foreground overflow-auto">
+          <div className="border-b border-border bg-card/80 backdrop-blur-xl sticky top-0 z-10">
+            <div className="max-w-7xl mx-auto px-4 md:px-6 py-4">
+              <div className="flex items-center gap-4">
+                <div className="p-3 rounded-2xl bg-gradient-to-br from-orange-500/20 to-red-500/20 border border-orange-500/30">
+                  <Swords className="w-6 h-6 md:w-8 md:h-8 text-orange-400" />
+                </div>
+                <div className="flex-1">
+                  <h1 className="text-xl md:text-2xl font-display font-bold">War Room</h1>
+                  <p className="text-muted-foreground text-sm">Multi-expert collaborative problem solving</p>
+                </div>
+                <button
+                  onClick={() => setViewMode('action')}
+                  className="px-3 py-1 text-sm bg-primary/10 hover:bg-primary/20 text-primary rounded-full border border-primary/20 transition-colors"
+                >
+                  Back
+                </button>
+              </div>
+            </div>
+          </div>
+          <WarRoom />
+        </div>
+      </FeatureGate>
+    );
+  }
+
+  // If viewing Analytics, show that instead
+  if (viewMode === 'analytics') {
+    return (
+      <FeatureGate feature="aiExperts" showOverlay={true}>
+        <div className="h-full bg-background text-foreground overflow-auto">
+          <ExpertAnalytics />
+        </div>
+      </FeatureGate>
+    );
+  }
+
+  // If viewing Scheduling, show that instead
+  if (viewMode === 'scheduling') {
+    return (
+      <FeatureGate feature="aiExperts" showOverlay={true}>
+        <div className="h-full bg-background text-foreground overflow-auto">
+          <ExpertScheduling />
+        </div>
+      </FeatureGate>
+    );
+  }
+
   return (
     <FeatureGate feature="aiExperts" showOverlay={true}>
     <div className="h-full bg-background text-foreground overflow-auto">
@@ -525,7 +580,7 @@ export default function AIExperts() {
               <div>
                 <div className="flex items-center gap-3">
                   <h1 className="text-xl md:text-2xl font-display font-bold">AI Action Engine</h1>
-                  <div className="flex gap-2">
+                  <div className="flex flex-wrap gap-2">
                     <button
                       onClick={() => setViewMode('directory')}
                       className={`px-3 py-1 text-sm rounded-full border transition-colors flex items-center gap-1 ${
@@ -535,7 +590,7 @@ export default function AIExperts() {
                       }`}
                     >
                       <Users className="w-3 h-3" />
-                      Expert Directory
+                      Directory
                     </button>
                     <button
                       onClick={() => setViewMode('board')}
@@ -547,6 +602,39 @@ export default function AIExperts() {
                     >
                       <Star className="w-3 h-3" />
                       My Board
+                    </button>
+                    <button
+                      onClick={() => setViewMode('warroom')}
+                      className={`px-3 py-1 text-sm rounded-full border transition-colors flex items-center gap-1 ${
+                        viewMode === 'warroom'
+                          ? 'bg-orange-500/30 text-orange-400 border-orange-500/50'
+                          : 'bg-orange-500/10 hover:bg-orange-500/20 text-orange-400/70 border-orange-500/20'
+                      }`}
+                    >
+                      <Swords className="w-3 h-3" />
+                      War Room
+                    </button>
+                    <button
+                      onClick={() => setViewMode('analytics')}
+                      className={`px-3 py-1 text-sm rounded-full border transition-colors flex items-center gap-1 ${
+                        viewMode === 'analytics'
+                          ? 'bg-blue-500/30 text-blue-400 border-blue-500/50'
+                          : 'bg-blue-500/10 hover:bg-blue-500/20 text-blue-400/70 border-blue-500/20'
+                      }`}
+                    >
+                      <BarChart3 className="w-3 h-3" />
+                      Analytics
+                    </button>
+                    <button
+                      onClick={() => setViewMode('scheduling')}
+                      className={`px-3 py-1 text-sm rounded-full border transition-colors flex items-center gap-1 ${
+                        viewMode === 'scheduling'
+                          ? 'bg-green-500/30 text-green-400 border-green-500/50'
+                          : 'bg-green-500/10 hover:bg-green-500/20 text-green-400/70 border-green-500/20'
+                      }`}
+                    >
+                      <Calendar className="w-3 h-3" />
+                      Schedule
                     </button>
                   </div>
                 </div>
