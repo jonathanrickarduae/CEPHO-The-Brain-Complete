@@ -13,6 +13,7 @@ import { ProgressBar, CircularProgress, DigitalTwinTrainingProgress } from "@/co
 import { ConversationSwitcher } from "@/components/ConversationSwitcher";
 import { DigitalTwinAccelerator } from "@/components/DigitalTwinAccelerator";
 import { BusinessGuardian } from "@/components/BusinessGuardian";
+import { DigitalTwinDevelopment } from "@/components/DigitalTwinDevelopment";
 import { useDigitalTwinChat } from "@/hooks/useDigitalTwinChat";
 import { useVoiceInput } from "@/hooks/useVoiceInput";
 
@@ -23,7 +24,7 @@ export default function DigitalTwin() {
   
   const [messageInput, setMessageInput] = useState(initialMessage || "");
   const [showRightPanel, setShowRightPanel] = useState(false);
-  const [rightPanelTab, setRightPanelTab] = useState<'learning' | 'activity' | 'training' | 'guardian'>('learning');
+  const [rightPanelTab, setRightPanelTab] = useState<'learning' | 'activity' | 'training' | 'guardian' | 'growth'>('learning');
   const [showTrainingModal, setShowTrainingModal] = useState(false);
   const [currentConversationId, setCurrentConversationId] = useState('current');
   
@@ -373,6 +374,16 @@ export default function DigitalTwin() {
             >
               Guardian
             </button>
+            <button
+              onClick={() => setRightPanelTab('growth')}
+              className={`flex-1 px-4 py-3 text-sm font-medium transition-colors ${
+                rightPanelTab === 'growth' 
+                  ? 'text-emerald-400 border-b-2 border-emerald-400' 
+                  : 'text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              Growth
+            </button>
           </div>
           
           {/* Panel Content */}
@@ -402,6 +413,9 @@ export default function DigitalTwin() {
             )}
             {rightPanelTab === 'guardian' && (
               <BusinessGuardian />
+            )}
+            {rightPanelTab === 'growth' && (
+              <DigitalTwinDevelopment />
             )}
           </div>
         </div>
