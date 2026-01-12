@@ -2349,3 +2349,17 @@
 - [ ] Quick setup modal (name, logo/emoji)
 - [ ] New project links to Project Genesis wizard
 - [ ] Archive/complete functionality for finished projects
+
+## Project Genesis - A/B Decision Framework
+- [ ] Implement binary choice system (A or B only, never more)
+- [ ] Logo generation with 2 options → Pick → Lock
+- [ ] Color palette generation with 2 options → Pick → Lock
+- [ ] Slide layout generation with 2 options → Pick → Lock
+- [ ] Chief of Staff recommendation on each choice ("I suggest A because...")
+- [ ] "You decide" option where Chief of Staff picks based on best practice
+- [ ] Lock mechanism - once decided, move on (no endless revisiting)
+- [ ] Speed-focused flow - 80% fast, refine later
+- [ ] AI-SME design experts advise based on business understanding first
+- [ ] Recommendations report with rationale tied to business goals
+- [ ] Cultural/geographic considerations (Middle East = gold/purple, etc.)
+- [ ] Final sign-off → Locked in The Vault as approved guidelines
