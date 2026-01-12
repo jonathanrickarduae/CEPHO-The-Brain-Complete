@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useSearch } from "wouter";
 import { ExpertDirectory } from "@/components/ExpertDirectory";
+import { MyBoard } from "@/components/MyBoard";
 import { 
   Users, Brain, Zap, Clock, CheckCircle2, 
   ArrowRight, MessageSquare, Play, Pause, 
@@ -169,8 +170,8 @@ export default function AIExperts() {
   const [isRunning, setIsRunning] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
   
-  // View mode: action engine or expert directory
-  const [viewMode, setViewMode] = useState<'action' | 'directory'>('action');
+  // View mode: action engine, expert directory, or my board
+  const [viewMode, setViewMode] = useState<'action' | 'directory' | 'board'>('action');
   
   // Insight Validation State
   const [validationMode, setValidationMode] = useState<'off' | 'review' | 'challenge'>('off');
@@ -477,6 +478,38 @@ export default function AIExperts() {
     );
   }
 
+  // If viewing My Board, show that instead
+  if (viewMode === 'board') {
+    return (
+      <FeatureGate feature="aiExperts" showOverlay={true}>
+        <div className="h-full bg-background text-foreground overflow-auto">
+          <div className="border-b border-border bg-card/80 backdrop-blur-xl sticky top-0 z-10">
+            <div className="max-w-7xl mx-auto px-4 md:px-6 py-4">
+              <div className="flex items-center gap-4">
+                <div className="p-3 rounded-2xl bg-gradient-to-br from-yellow-500/20 to-orange-500/20 border border-yellow-500/30">
+                  <Star className="w-6 h-6 md:w-8 md:h-8 text-yellow-400" />
+                </div>
+                <div className="flex-1">
+                  <h1 className="text-xl md:text-2xl font-display font-bold">My Board</h1>
+                  <p className="text-muted-foreground text-sm">Your favorite experts for quick access</p>
+                </div>
+                <button
+                  onClick={() => setViewMode('action')}
+                  className="px-3 py-1 text-sm bg-primary/10 hover:bg-primary/20 text-primary rounded-full border border-primary/20 transition-colors"
+                >
+                  Back
+                </button>
+              </div>
+            </div>
+          </div>
+          <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 py-4 sm:py-6">
+            <MyBoard />
+          </div>
+        </div>
+      </FeatureGate>
+    );
+  }
+
   return (
     <FeatureGate feature="aiExperts" showOverlay={true}>
     <div className="h-full bg-background text-foreground overflow-auto">
@@ -492,13 +525,30 @@ export default function AIExperts() {
               <div>
                 <div className="flex items-center gap-3">
                   <h1 className="text-xl md:text-2xl font-display font-bold">AI Action Engine</h1>
-                  <button
-                    onClick={() => setViewMode('directory')}
-                    className="px-3 py-1 text-sm bg-purple-500/20 hover:bg-purple-500/30 text-purple-400 rounded-full border border-purple-500/30 transition-colors flex items-center gap-1"
-                  >
-                    <Users className="w-3 h-3" />
-                    Expert Directory
-                  </button>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => setViewMode('directory')}
+                      className={`px-3 py-1 text-sm rounded-full border transition-colors flex items-center gap-1 ${
+                        viewMode === 'directory'
+                          ? 'bg-purple-500/30 text-purple-400 border-purple-500/50'
+                          : 'bg-purple-500/10 hover:bg-purple-500/20 text-purple-400/70 border-purple-500/20'
+                      }`}
+                    >
+                      <Users className="w-3 h-3" />
+                      Expert Directory
+                    </button>
+                    <button
+                      onClick={() => setViewMode('board')}
+                      className={`px-3 py-1 text-sm rounded-full border transition-colors flex items-center gap-1 ${
+                        viewMode === 'board'
+                          ? 'bg-yellow-500/30 text-yellow-400 border-yellow-500/50'
+                          : 'bg-yellow-500/10 hover:bg-yellow-500/20 text-yellow-400/70 border-yellow-500/20'
+                      }`}
+                    >
+                      <Star className="w-3 h-3" />
+                      My Board
+                    </button>
+                  </div>
                 </div>
                 <p className="text-muted-foreground text-sm">
                   {phase === "queue" ? "Your task queue" : 

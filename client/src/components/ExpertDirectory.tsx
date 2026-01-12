@@ -1,5 +1,6 @@
 import { useState, useMemo } from "react";
 import { useLocation } from "wouter";
+import { useFavorites } from "./MyBoard";
 import { 
   Search, Users, Star, MessageSquare, Video, 
   Filter, ChevronRight, Brain, Sparkles,
@@ -28,6 +29,7 @@ export function ExpertDirectory({ onSelectExpert, onBack }: ExpertDirectoryProps
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [selectedExpert, setSelectedExpert] = useState<AIExpert | null>(null);
+  const { isFavorite, addFavorite, removeFavorite } = useFavorites();
 
   // Filter experts based on search and category
   const filteredExperts = useMemo(() => {
@@ -333,7 +335,27 @@ export function ExpertDirectory({ onSelectExpert, onBack }: ExpertDirectoryProps
                         <span className="text-xs text-muted-foreground">+{expert.compositeOf.length - 2}</span>
                       )}
                     </div>
-                    <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
+                    <div className="flex items-center gap-1">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          if (isFavorite(expert.id)) {
+                            removeFavorite(expert.id);
+                          } else {
+                            addFavorite(expert.id);
+                          }
+                        }}
+                        className="p-1 hover:bg-primary/10 rounded transition-colors"
+                        title={isFavorite(expert.id) ? "Remove from board" : "Add to board"}
+                      >
+                        <Star className={`w-4 h-4 transition-colors ${
+                          isFavorite(expert.id)
+                            ? 'fill-yellow-400 text-yellow-400'
+                            : 'text-muted-foreground hover:text-yellow-400'
+                        }`} />
+                      </button>
+                      <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
+                    </div>
                   </div>
                 </CardContent>
               </Card>
