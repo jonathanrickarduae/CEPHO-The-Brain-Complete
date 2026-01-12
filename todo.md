@@ -2772,3 +2772,16 @@
 ## Bug Fixes (Jan 2026)
 - [x] Fix Vault design - content too far down on page
 - [x] Improve ChiefOfStaffRole page layout design
+
+
+## Chief of Staff Training Module Fixes (Jan 2026)
+- [x] Fix training module layout - text bleeding and centering issues
+- [x] Fix training banner readability - black text on black background
+- [x] Make training module always visible by default (with toggle option)
+- [x] Replace "Digital Twin" with "Chief of Staff" throughout the app
+
+
+## Presentation Blueprint Enhancements (Jan 2026)
+- [x] Add Quick Start option - upload documents directly without project
+- [x] Add Project Dropdown - link to existing projects (Short Circle Navigator, Celadon, etc.)
+- [x] Pull data from Library folders when project is selected

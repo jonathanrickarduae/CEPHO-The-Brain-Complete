@@ -262,7 +262,7 @@ export function useReferenceLibrary({ projectId, onSave }: UseReferenceLibraryOp
 }
 
 // ============================================================================
-// DIGITAL TWIN VALIDATION HOOK
+// chief of staff VALIDATION HOOK
 // ============================================================================
 
 interface UseDigitalTwinValidationOptions {

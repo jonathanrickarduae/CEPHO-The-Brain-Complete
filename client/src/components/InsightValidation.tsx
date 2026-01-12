@@ -520,7 +520,7 @@ export function ValidationSummary({ insights, references }: ValidationSummaryPro
 }
 
 // ============================================================================
-// DIGITAL TWIN QA PANEL
+// chief of staff QA PANEL
 // ============================================================================
 
 interface DigitalTwinQAProps {

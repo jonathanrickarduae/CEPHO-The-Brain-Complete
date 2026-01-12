@@ -11,6 +11,7 @@ import { GenesisBlueprintWizard } from '@/components/GenesisBlueprintWizard';
 import { BlueprintQMS } from '@/components/BlueprintQMS';
 import { SocialMediaBlueprint } from '@/components/SocialMediaBlueprint';
 import { QMSProcessLog } from '@/components/QMSProcessLog';
+import { PresentationBlueprint } from '@/components/PresentationBlueprint';
 import { GenesisBlueprint } from '@/data/genesisBlueprint';
 
 type ViewMode = 'dashboard' | 'new_project' | 'qms' | 'legacy' | 'social_media' | 'presentation' | 'financial' | 'process_log';
@@ -357,7 +358,7 @@ export default function ProjectGenesisPage() {
     );
   }
 
-  // Presentation Blueprint View (Coming Soon)
+  // Presentation Blueprint View
   if (viewMode === 'presentation') {
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-900 to-gray-800 p-6">
@@ -369,14 +370,7 @@ export default function ProjectGenesisPage() {
             <ChevronRight className="w-4 h-4 rotate-180" />
             Back to Dashboard
           </button>
-          <div className="text-center py-20">
-            <PresentationIcon className="w-16 h-16 mx-auto text-blue-400 mb-4" />
-            <h2 className="text-2xl font-bold text-white mb-2">Presentation Blueprint</h2>
-            <p className="text-gray-400 mb-6">Investor decks, pitch presentations, and strategic communications</p>
-            <Badge variant="outline" className="bg-blue-500/20 text-blue-400 border-blue-500/30">
-              Coming Soon - Inherits from Genesis Master
-            </Badge>
-          </div>
+          <PresentationBlueprint />
         </div>
       </div>
     );

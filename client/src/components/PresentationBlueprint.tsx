@@ -4,7 +4,7 @@ import {
   FileText, Users, TrendingUp, DollarSign, Target, Lightbulb,
   BarChart3, Building2, Rocket, Download, Eye, Edit3,
   Palette, Layout, Wand2, RefreshCw, CheckCircle2, Clock,
-  Brain, MessageSquare, AlertTriangle
+  Brain, MessageSquare, AlertTriangle, Upload, FolderOpen, Link2, Plus
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -107,7 +107,18 @@ const genesisData = {
   }
 };
 
+// Available projects from Genesis/Library
+const availableProjects = [
+  { id: 'boundless-ai', name: 'Boundless AI', description: 'AI command center platform', lastUpdated: '2 days ago' },
+  { id: 'short-circle-navigator', name: 'Short Circle Navigator', description: 'Investment navigation tool', lastUpdated: '1 week ago' },
+  { id: 'celadon', name: 'Celadon', description: 'Sustainable technology venture', lastUpdated: '3 days ago' },
+  { id: 'project-genesis', name: 'Project Genesis', description: 'Innovation incubator', lastUpdated: '5 days ago' },
+];
+
 export function PresentationBlueprint() {
+  const [startMode, setStartMode] = useState<'select' | 'quick' | 'project' | null>(null);
+  const [selectedProject, setSelectedProject] = useState<string | null>(null);
+  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const [currentStep, setCurrentStep] = useState<'structure' | 'content' | 'design' | 'review'>('structure');
   const [selectedSlides, setSelectedSlides] = useState<SlideType[]>([
     'title', 'problem', 'solution', 'market', 'product', 'traction', 'business_model', 'team', 'financials', 'ask'
@@ -215,23 +226,193 @@ export function PresentationBlueprint() {
     { id: 'review', label: 'Review', icon: CheckCircle2 },
   ];
 
+  const handleFileUpload = (files: FileList | null) => {
+    if (files) {
+      setUploadedFiles(prev => [...prev, ...Array.from(files)]);
+    }
+  };
+
+  const startWithProject = (projectId: string) => {
+    setSelectedProject(projectId);
+    setStartMode('project');
+  };
+
+  const startQuick = () => {
+    setStartMode('quick');
+  };
+
+  // Show mode selection if not yet selected
+  if (!startMode) {
+    return (
+      <div className="space-y-6">
+        {/* Header */}
+        <div className="text-center mb-8">
+          <h2 className="text-2xl font-bold text-foreground flex items-center justify-center gap-2">
+            <PresentationIcon className="w-7 h-7 text-blue-400" />
+            Presentation Blueprint
+          </h2>
+          <p className="text-muted-foreground mt-2">
+            Create investor-ready pitch decks with AI assistance
+          </p>
+        </div>
+
+        {/* Start Mode Selection */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+          {/* Quick Start Option */}
+          <button
+            onClick={startQuick}
+            className="p-6 bg-gradient-to-br from-emerald-500/10 to-cyan-500/10 border-2 border-emerald-500/30 rounded-2xl text-left hover:border-emerald-400 hover:from-emerald-500/20 hover:to-cyan-500/20 transition-all group"
+          >
+            <div className="flex items-center gap-3 mb-4">
+              <div className="p-3 bg-emerald-500/20 rounded-xl">
+                <Plus className="w-6 h-6 text-emerald-400" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-lg text-foreground">Quick Start</h3>
+                <p className="text-sm text-muted-foreground">Start fresh, upload documents</p>
+              </div>
+            </div>
+            <p className="text-sm text-muted-foreground mb-4">
+              Jump straight in and create a presentation from scratch. Upload your own documents, data, and research.
+            </p>
+            <div className="flex items-center gap-2 text-emerald-400 text-sm font-medium group-hover:gap-3 transition-all">
+              <Upload className="w-4 h-4" />
+              <span>Upload & Start</span>
+              <ChevronRight className="w-4 h-4" />
+            </div>
+          </button>
+
+          {/* Link to Project Option */}
+          <div className="p-6 bg-gradient-to-br from-blue-500/10 to-purple-500/10 border-2 border-blue-500/30 rounded-2xl">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="p-3 bg-blue-500/20 rounded-xl">
+                <Link2 className="w-6 h-6 text-blue-400" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-lg text-foreground">Link to Project</h3>
+                <p className="text-sm text-muted-foreground">Pull from existing data</p>
+              </div>
+            </div>
+            <p className="text-sm text-muted-foreground mb-4">
+              Connect to an existing project and automatically pull research, data, and documents from your Library.
+            </p>
+            
+            {/* Project Dropdown */}
+            <div className="space-y-2">
+              <label className="text-xs text-muted-foreground">Select a project:</label>
+              <div className="space-y-2 max-h-48 overflow-y-auto">
+                {availableProjects.map(project => (
+                  <button
+                    key={project.id}
+                    onClick={() => startWithProject(project.id)}
+                    className="w-full p-3 bg-background/50 border border-white/10 rounded-lg text-left hover:border-blue-500/50 hover:bg-blue-500/5 transition-all group"
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <FolderOpen className="w-4 h-4 text-blue-400" />
+                        <span className="font-medium text-foreground">{project.name}</span>
+                      </div>
+                      <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-blue-400 transition-colors" />
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-1 ml-6">{project.description}</p>
+                    <p className="text-xs text-muted-foreground/60 mt-1 ml-6">Updated {project.lastUpdated}</p>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Quick Start mode - show file upload
+  if (startMode === 'quick' && currentStep === 'structure' && uploadedFiles.length === 0) {
+    return (
+      <div className="space-y-6">
+        {/* Header with back button */}
+        <div className="flex items-center gap-4">
+          <button
+            onClick={() => setStartMode(null)}
+            className="p-2 hover:bg-secondary/50 rounded-lg transition-colors"
+          >
+            <ChevronLeft className="w-5 h-5 text-muted-foreground" />
+          </button>
+          <div>
+            <h2 className="text-2xl font-bold text-foreground flex items-center gap-2">
+              <PresentationIcon className="w-6 h-6 text-blue-400" />
+              Quick Start
+            </h2>
+            <p className="text-sm text-muted-foreground mt-1">
+              Upload documents to get started
+            </p>
+          </div>
+        </div>
+
+        {/* Upload Area */}
+        <div
+          className="border-2 border-dashed border-white/20 rounded-2xl p-12 text-center hover:border-emerald-500/50 transition-colors cursor-pointer"
+          onDragOver={(e) => e.preventDefault()}
+          onDrop={(e) => { e.preventDefault(); handleFileUpload(e.dataTransfer.files); }}
+        >
+          <input
+            type="file"
+            multiple
+            className="hidden"
+            id="presentation-file-upload"
+            onChange={(e) => handleFileUpload(e.target.files)}
+          />
+          <label htmlFor="presentation-file-upload" className="cursor-pointer">
+            <Upload className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
+            <p className="text-lg font-medium text-foreground mb-2">Drop files here or click to upload</p>
+            <p className="text-sm text-muted-foreground">
+              PDFs, Word docs, PowerPoints, spreadsheets - we'll extract the key information
+            </p>
+          </label>
+        </div>
+
+        {/* Or continue without files */}
+        <div className="text-center">
+          <button
+            onClick={() => setUploadedFiles([{ name: 'placeholder' } as File])}
+            className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+          >
+            Or continue without uploading files →
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-2xl font-bold text-foreground flex items-center gap-2">
-            <PresentationIcon className="w-6 h-6 text-blue-400" />
-            Presentation Blueprint
-          </h2>
-          <p className="text-sm text-muted-foreground mt-1">
-            Investor-ready pitch deck generation • Inherits from Genesis Master
-          </p>
+        <div className="flex items-center gap-4">
+          <button
+            onClick={() => { setStartMode(null); setSelectedProject(null); setUploadedFiles([]); }}
+            className="p-2 hover:bg-secondary/50 rounded-lg transition-colors"
+          >
+            <ChevronLeft className="w-5 h-5 text-muted-foreground" />
+          </button>
+          <div>
+            <h2 className="text-2xl font-bold text-foreground flex items-center gap-2">
+              <PresentationIcon className="w-6 h-6 text-blue-400" />
+              Presentation Blueprint
+            </h2>
+            <p className="text-sm text-muted-foreground mt-1">
+              {startMode === 'project' 
+                ? `Linked to: ${availableProjects.find(p => p.id === selectedProject)?.name}`
+                : 'Quick Start Mode'}
+            </p>
+          </div>
         </div>
-        <Badge variant="outline" className="bg-blue-500/10 text-blue-400 border-blue-500/30">
-          <Brain className="w-3 h-3 mr-1" />
-          Linked to: Boundless AI
-        </Badge>
+        {selectedProject && (
+          <Badge variant="outline" className="bg-blue-500/10 text-blue-400 border-blue-500/30">
+            <Brain className="w-3 h-3 mr-1" />
+            {availableProjects.find(p => p.id === selectedProject)?.name}
+          </Badge>
+        )}
       </div>
 
       {/* Progress Steps */}

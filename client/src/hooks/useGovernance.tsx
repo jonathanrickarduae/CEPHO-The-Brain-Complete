@@ -357,7 +357,7 @@ export function GovernanceModeChangeModal() {
                     <ul className="space-y-1 text-muted-foreground">
                       <li>• Microsoft Copilot</li>
                       <li>• Company-approved AI tools</li>
-                      <li>• Digital Twin (limited)</li>
+                      <li>• Chief of Staff (limited)</li>
                       <li>• Voice input</li>
                     </ul>
                   </div>

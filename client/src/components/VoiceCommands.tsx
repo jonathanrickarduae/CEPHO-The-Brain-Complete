@@ -87,7 +87,7 @@ export function VoiceCommands({ onCommand, className }: VoiceCommandsProps) {
       category: 'navigation',
     },
     {
-      patterns: ['go to digital twin', 'open digital twin', 'talk to twin'],
+      patterns: ['go to chief of staff', 'open chief of staff', 'talk to twin'],
       action: () => { setLocation('/digital-twin'); speak('Opening Chief of Staff'); },
       description: 'Navigate to Chief of Staff',
       category: 'navigation',

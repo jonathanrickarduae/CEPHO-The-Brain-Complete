@@ -1,7 +1,7 @@
 /**
  * Insight Validation Engine
  * 
- * Provides Digital Twin QA validation, reference tracking, citation management,
+ * Provides Chief of Staff QA validation, reference tracking, citation management,
  * and truth verification for all AI Expert outputs.
  */
 
@@ -89,7 +89,7 @@ export interface ValidationIssue {
 }
 
 // ============================================================================
-// DIGITAL TWIN QA CHALLENGE PROMPTS
+// chief of staff QA CHALLENGE PROMPTS
 // ============================================================================
 
 export const QA_CHALLENGE_PROMPTS = {
@@ -253,7 +253,7 @@ export function validateInsight(insight: Insight): ValidationResult {
       severity: 'warning',
       message: 'High confidence claim not yet verified',
     });
-    suggestions.push('Submit for Digital Twin verification before finalizing');
+    suggestions.push('Submit for Chief of Staff verification before finalizing');
   }
   
   // Check for potential hallucination markers

@@ -1,5 +1,5 @@
 /**
- * DIGITAL TWIN CHIEF OF STAFF
+ * chief of staff CHIEF OF STAFF
  * Job Description & Operating Logic
  * 
  * Version: 1.0

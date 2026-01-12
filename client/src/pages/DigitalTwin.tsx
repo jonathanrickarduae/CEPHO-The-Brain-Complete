@@ -23,8 +23,8 @@ export default function DigitalTwin() {
   const initialMessage = searchParams.get('message');
   
   const [messageInput, setMessageInput] = useState(initialMessage || "");
-  const [showRightPanel, setShowRightPanel] = useState(false);
-  const [rightPanelTab, setRightPanelTab] = useState<'learning' | 'activity' | 'training' | 'guardian' | 'growth'>('learning');
+  const [showRightPanel, setShowRightPanel] = useState(true);
+  const [rightPanelTab, setRightPanelTab] = useState<'learning' | 'activity' | 'training' | 'guardian' | 'growth'>('training');
   const [showTrainingModal, setShowTrainingModal] = useState(false);
   const [currentConversationId, setCurrentConversationId] = useState('current');
   
@@ -365,6 +365,21 @@ export default function DigitalTwin() {
       {/* Right Panel - Learning & Activity */}
       {showRightPanel && (
         <div className="w-80 border-l border-white/10 bg-card/50 hidden md:flex flex-col">
+          {/* Panel Header */}
+          <div className="px-4 py-3 border-b border-white/10 bg-gradient-to-r from-purple-500/10 to-pink-500/10">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <GraduationCap className="w-5 h-5 text-purple-400" />
+                <h3 className="font-semibold text-foreground">Training Center</h3>
+              </div>
+              <button
+                onClick={() => setShowRightPanel(false)}
+                className="p-1 rounded hover:bg-white/10 transition-colors"
+              >
+                <X className="w-4 h-4 text-muted-foreground" />
+              </button>
+            </div>
+          </div>
           {/* Panel Tabs */}
           <div className="flex border-b border-white/10">
             <button
@@ -431,10 +446,13 @@ export default function DigitalTwin() {
               <div className="space-y-4">
                 <button
                   onClick={() => setShowTrainingModal(true)}
-                  className="w-full p-4 bg-gradient-to-br from-purple-500/10 to-pink-500/10 border border-purple-500/30 rounded-xl text-left hover:border-purple-500/50 transition-all"
+                  className="w-full p-4 bg-gradient-to-br from-purple-600/30 to-pink-600/30 border-2 border-purple-500/50 rounded-xl text-left hover:border-purple-400 hover:from-purple-600/40 hover:to-pink-600/40 transition-all shadow-lg shadow-purple-500/10"
                 >
-                  <h4 className="font-medium text-foreground mb-1">Training Accelerator</h4>
-                  <p className="text-xs text-muted-foreground">Speed up your Chief of Staff's learning</p>
+                  <div className="flex items-center gap-2 mb-2">
+                    <Sparkles className="w-5 h-5 text-purple-300" />
+                    <h4 className="font-semibold text-white">Training Accelerator</h4>
+                  </div>
+                  <p className="text-sm text-purple-200">Speed up your Chief of Staff's learning</p>
                 </button>
                 <DigitalTwinTrainingProgress 
                   hoursLogged={127}
