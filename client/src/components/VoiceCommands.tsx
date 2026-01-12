@@ -88,8 +88,8 @@ export function VoiceCommands({ onCommand, className }: VoiceCommandsProps) {
     },
     {
       patterns: ['go to digital twin', 'open digital twin', 'talk to twin'],
-      action: () => { setLocation('/digital-twin'); speak('Opening Chief of Staff'); },
-      description: 'Navigate to Chief of Staff',
+      action: () => { setLocation('/digital-twin'); speak('Opening Digital Twin'); },
+      description: 'Navigate to Digital Twin',
       category: 'navigation',
     },
     {
@@ -236,12 +236,12 @@ export function VoiceCommands({ onCommand, className }: VoiceCommandsProps) {
       }
     }
 
-    // No command matched - send to Chief of Staff
+    // No command matched - send to Digital Twin
     setLastCommand(text);
-    setLastResult('Sending to Chief of Staff...');
+    setLastResult('Sending to Digital Twin...');
     speak('Let me help you with that');
     setLocation('/digital-twin?message=' + encodeURIComponent(text));
-    onCommand?.(text, 'Sent to Chief of Staff');
+    onCommand?.(text, 'Sent to Digital Twin');
   }, [commands, isHandsFree, wakeWordDetected, speak, setLocation, onCommand]);
 
   // Watch for transcript changes

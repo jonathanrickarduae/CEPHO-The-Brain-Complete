@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { useSearch } from "wouter";
 import { 
   Fingerprint, Mic, MicOff, Send,
-  Sparkles, Activity, Trash2, Paperclip, Link2, Check, X, FileAudio
+  Sparkles, Activity, Trash2
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -13,7 +13,6 @@ import { ProgressBar, CircularProgress, DigitalTwinTrainingProgress } from "@/co
 import { ConversationSwitcher } from "@/components/ConversationSwitcher";
 import { DigitalTwinAccelerator } from "@/components/DigitalTwinAccelerator";
 import { BusinessGuardian } from "@/components/BusinessGuardian";
-import { DigitalTwinDevelopment } from "@/components/DigitalTwinDevelopment";
 import { useDigitalTwinChat } from "@/hooks/useDigitalTwinChat";
 import { useVoiceInput } from "@/hooks/useVoiceInput";
 
@@ -24,7 +23,7 @@ export default function DigitalTwin() {
   
   const [messageInput, setMessageInput] = useState(initialMessage || "");
   const [showRightPanel, setShowRightPanel] = useState(false);
-  const [rightPanelTab, setRightPanelTab] = useState<'learning' | 'activity' | 'training' | 'guardian' | 'growth'>('learning');
+  const [rightPanelTab, setRightPanelTab] = useState<'learning' | 'activity' | 'training' | 'guardian'>('learning');
   const [showTrainingModal, setShowTrainingModal] = useState(false);
   const [currentConversationId, setCurrentConversationId] = useState('current');
   
@@ -38,7 +37,7 @@ export default function DigitalTwin() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   
-  // Chief of Staff chat hook with real API
+  // Digital Twin chat hook with real API
   const { messages, isTyping, sendMessage, clearHistory, isLoading } = useDigitalTwinChat();
   
   // Voice input hook
@@ -89,7 +88,7 @@ export default function DigitalTwin() {
         return;
       }
       startListening();
-      toast.info("Listening... speak to your Chief of Staff");
+      toast.info("Listening... speak to your Digital Twin");
     }
   };
 
@@ -124,7 +123,7 @@ export default function DigitalTwin() {
 
   // Quick action buttons
   const quickActions = [
-    { label: "Show The Signal", action: () => toast.info("Opening The Signal...") },
+    { label: "Show Daily Brief", action: () => toast.info("Opening Daily Brief...") },
     { label: "Check pending items", action: () => toast.info("5 items pending your review") },
     { label: "Schedule training", action: () => toast.info("Training session scheduled for 2:30 PM") },
     { label: "View activity log", action: () => { setShowRightPanel(true); setRightPanelTab('activity'); } },
@@ -145,7 +144,7 @@ export default function DigitalTwin() {
                 <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-background" />
               </div>
               <div>
-                <h1 className="text-base sm:text-lg font-semibold text-foreground">Chief of Staff</h1>
+                <h1 className="text-base sm:text-lg font-semibold text-foreground">Digital Twin</h1>
                 <p className="text-xs text-muted-foreground">Online • AI-Powered • Learning from you</p>
               </div>
               {/* Conversation Switcher */}
@@ -201,30 +200,36 @@ export default function DigitalTwin() {
         <div className="flex-1 overflow-y-auto">
           <div className="max-w-3xl mx-auto px-3 sm:px-4 py-4 sm:py-6 space-y-4 sm:space-y-6">
             {messages.map((msg) => (
-              <div key={msg.id} className={`flex gap-3 ${msg.from === "user" ? "justify-end" : ""}`}>
-                {/* Avatar - only for assistant */}
-                {msg.from === "twin" && (
-                  <div className="shrink-0 w-7 h-7 rounded-full flex items-center justify-center bg-primary/20 border border-primary/30">
-                    <Fingerprint className="w-3.5 h-3.5 text-primary" />
-                  </div>
-                )}
+              <div key={msg.id} className={`flex gap-3 ${msg.from === "user" ? "flex-row-reverse" : ""}`}>
+                {/* Avatar */}
+                <div className={`shrink-0 w-8 h-8 rounded-full flex items-center justify-center ${
+                  msg.from === "twin" 
+                    ? "bg-gradient-to-br from-purple-500/30 to-pink-500/30 border border-purple-500/30" 
+                    : "bg-gradient-to-br from-cyan-500/30 to-blue-500/30 border border-cyan-500/30"
+                }`}>
+                  {msg.from === "twin" ? (
+                    <Fingerprint className="w-4 h-4 text-purple-400" />
+                  ) : (
+                    <span className="text-xs font-medium text-cyan-400">You</span>
+                  )}
+                </div>
                 
                 {/* Message */}
-                <div className={`max-w-[80%] ${msg.from === "user" ? "" : ""}`}>
-                  <div className={`px-4 py-2.5 rounded-2xl ${
+                <div className={`flex-1 max-w-[90%] sm:max-w-[85%] ${msg.from === "user" ? "flex flex-col items-end" : ""}`}>
+                  <div className={`inline-block px-4 py-3 rounded-2xl ${
                     msg.from === "twin" 
-                      ? "bg-card/40 border border-white/5" 
-                      : "bg-primary/15 border border-primary/20"
+                      ? "bg-card/60 border border-white/10 rounded-tl-sm" 
+                      : "bg-gradient-to-r from-cyan-500/20 to-blue-500/20 border border-cyan-500/20 rounded-tr-sm"
                   }`}>
-                    <p className="text-sm text-foreground/90 whitespace-pre-wrap leading-relaxed"
+                    <p className="text-sm text-foreground whitespace-pre-wrap leading-relaxed"
                        dangerouslySetInnerHTML={{ 
                          __html: msg.message
-                           .replace(/\*\*(.*?)\*\*/g, '<strong class="text-foreground font-medium">$1</strong>')
+                           .replace(/\*\*(.*?)\*\*/g, '<strong class="text-foreground font-semibold">$1</strong>')
                            .replace(/\n/g, '<br/>')
                        }} 
                     />
                   </div>
-                  <p className="text-[10px] text-muted-foreground/60 mt-1 px-2">{msg.time}</p>
+                  <p className="text-xs text-muted-foreground mt-1 px-1">{msg.time}</p>
                 </div>
               </div>
             ))}
@@ -232,14 +237,14 @@ export default function DigitalTwin() {
             {/* Typing indicator */}
             {isTyping && (
               <div className="flex gap-3">
-                <div className="shrink-0 w-7 h-7 rounded-full flex items-center justify-center bg-primary/20 border border-primary/30">
-                  <Fingerprint className="w-3.5 h-3.5 text-primary" />
+                <div className="shrink-0 w-8 h-8 rounded-full flex items-center justify-center bg-gradient-to-br from-purple-500/30 to-pink-500/30 border border-purple-500/30">
+                  <Fingerprint className="w-4 h-4 text-purple-400" />
                 </div>
-                <div className="bg-card/40 border border-white/5 rounded-2xl px-4 py-2.5">
+                <div className="bg-card/60 border border-white/10 rounded-2xl rounded-tl-sm px-4 py-3">
                   <div className="flex gap-1">
-                    <div className="w-1.5 h-1.5 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                    <div className="w-1.5 h-1.5 bg-primary rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                    <div className="w-1.5 h-1.5 bg-primary rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                    <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                    <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                    <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
                   </div>
                 </div>
               </div>
@@ -264,78 +269,47 @@ export default function DigitalTwin() {
           </div>
         </div>
 
-        {/* Input Area - Fixed at bottom - Manus style */}
-        <div className="shrink-0 border-t border-white/10 bg-card/90 backdrop-blur-xl px-4 py-3">
+        {/* Input Area - Fixed at bottom */}
+        <div className="shrink-0 border-t border-white/10 bg-card/80 backdrop-blur-xl px-4 py-3">
           <div className="max-w-3xl mx-auto">
-            {/* Input container */}
-            <div className="bg-secondary/30 border border-white/10 rounded-2xl overflow-hidden">
-              {/* Text input */}
-              <textarea
-                ref={inputRef}
-                value={messageInput}
-                onChange={handleInputChange}
-                onKeyDown={handleKeyDown}
-                placeholder="Message Chief of Staff..."
-                rows={1}
-                className="w-full px-4 py-3 bg-transparent resize-none focus:outline-none text-sm placeholder:text-muted-foreground/60"
-                style={{ minHeight: '44px', maxHeight: '120px' }}
-              />
+            <div className="flex items-end gap-2">
+              {/* Voice button */}
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={toggleRecording}
+                className={`shrink-0 rounded-full ${
+                  isListening 
+                    ? "bg-red-500/20 text-red-400 hover:bg-red-500/30" 
+                    : "hover:bg-secondary"
+                }`}
+              >
+                {isListening ? <MicOff className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
+              </Button>
               
-              {/* Action bar */}
-              <div className="flex items-center justify-between px-3 py-2 border-t border-white/5">
-                {/* Left actions */}
-                <div className="flex items-center gap-1">
-                  <button
-                    className="p-2 rounded-lg text-primary/70 hover:text-primary hover:bg-primary/10 transition-colors"
-                    title="Add files"
-                  >
-                    <Paperclip className="w-4 h-4" />
-                  </button>
-                  <button
-                    className="p-2 rounded-lg text-primary/70 hover:text-primary hover:bg-primary/10 transition-colors"
-                    title="Connect apps"
-                  >
-                    <Link2 className="w-4 h-4" />
-                  </button>
-                  <button
-                    onClick={toggleRecording}
-                    className={`p-2 rounded-lg transition-colors ${
-                      isListening 
-                        ? "text-red-400 bg-red-500/20" 
-                        : "text-primary/70 hover:text-primary hover:bg-primary/10"
-                    }`}
-                    title={isListening ? "Stop recording" : "Voice input"}
-                  >
-                    {isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
-                  </button>
-                  <button
-                    className="p-2 rounded-lg text-primary/70 hover:text-primary hover:bg-primary/10 transition-colors"
-                    title="Transcribe audio"
-                  >
-                    <FileAudio className="w-4 h-4" />
-                  </button>
-                </div>
+              {/* Text input */}
+              <div className="flex-1 relative">
+                <textarea
+                  ref={inputRef}
+                  value={messageInput}
+                  onChange={handleInputChange}
+                  onKeyDown={handleKeyDown}
+                  placeholder="Message your Digital Twin..."
+                  rows={1}
+                  className="w-full px-4 py-3 pr-12 bg-secondary/50 border border-white/10 rounded-2xl resize-none focus:outline-none focus:ring-2 focus:ring-purple-500/50 text-sm placeholder:text-muted-foreground"
+                  style={{ maxHeight: '120px' }}
+                />
                 
-                {/* Right actions */}
-                <div className="flex items-center gap-1">
-                  {messageInput.trim() && (
-                    <button
-                      onClick={() => setMessageInput('')}
-                      className="p-2 rounded-lg text-muted-foreground hover:text-red-400 hover:bg-red-500/10 transition-colors"
-                      title="Clear"
-                    >
-                      <X className="w-4 h-4" />
-                    </button>
-                  )}
-                  <button
-                    onClick={handleSendMessage}
-                    disabled={!messageInput.trim() || isLoading}
-                    className="p-2 rounded-lg bg-primary/20 text-primary hover:bg-primary/30 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-                    title="Send"
-                  >
-                    <Send className="w-4 h-4" />
-                  </button>
-                </div>
+                {/* Send button */}
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={handleSendMessage}
+                  disabled={!messageInput.trim() || isLoading}
+                  className="absolute right-2 bottom-1.5 rounded-full hover:bg-purple-500/20 disabled:opacity-50"
+                >
+                  <Send className="w-4 h-4 text-purple-400" />
+                </Button>
               </div>
             </div>
             
@@ -399,16 +373,6 @@ export default function DigitalTwin() {
             >
               Guardian
             </button>
-            <button
-              onClick={() => setRightPanelTab('growth')}
-              className={`flex-1 px-4 py-3 text-sm font-medium transition-colors ${
-                rightPanelTab === 'growth' 
-                  ? 'text-emerald-400 border-b-2 border-emerald-400' 
-                  : 'text-muted-foreground hover:text-foreground'
-              }`}
-            >
-              Growth
-            </button>
           </div>
           
           {/* Panel Content */}
@@ -426,7 +390,7 @@ export default function DigitalTwin() {
                   className="w-full p-4 bg-gradient-to-br from-purple-500/10 to-pink-500/10 border border-purple-500/30 rounded-xl text-left hover:border-purple-500/50 transition-all"
                 >
                   <h4 className="font-medium text-foreground mb-1">Training Accelerator</h4>
-                  <p className="text-xs text-muted-foreground">Speed up your Chief of Staff's learning</p>
+                  <p className="text-xs text-muted-foreground">Speed up your Digital Twin's learning</p>
                 </button>
                 <DigitalTwinTrainingProgress 
                   hoursLogged={127}
@@ -438,9 +402,6 @@ export default function DigitalTwin() {
             )}
             {rightPanelTab === 'guardian' && (
               <BusinessGuardian />
-            )}
-            {rightPanelTab === 'growth' && (
-              <DigitalTwinDevelopment />
             )}
           </div>
         </div>

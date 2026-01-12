@@ -118,7 +118,7 @@ export default function Vault() {
               </div>
               <div>
                 <h1 className="text-xl md:text-2xl font-display font-bold">The Vault</h1>
-                <p className="text-muted-foreground text-sm">Security The Nexus</p>
+                <p className="text-muted-foreground text-sm">Security Command Center</p>
               </div>
             </div>
             
@@ -321,7 +321,7 @@ export default function Vault() {
                 <CardTitle className="flex items-center gap-2">
                   <Sparkles className="w-5 h-5 text-purple-400" />
                   AI App Recommendations
-                  <Badge className="ml-2 bg-purple-500/20 text-purple-400 border-0">From Chief of Staff</Badge>
+                  <Badge className="ml-2 bg-purple-500/20 text-purple-400 border-0">From Digital Twin</Badge>
                 </CardTitle>
               </CardHeader>
               <CardContent>

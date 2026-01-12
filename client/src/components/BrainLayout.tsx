@@ -45,22 +45,23 @@ import { StatusPulse } from "./StatusPulse";
 import { GlobalSearch } from "./GlobalSearch";
 import NeonBrain from "./NeonBrain";
 import { NotificationBell } from "./NotificationCenter";
-import { CephoLandingPage } from "./CephoLandingPage";
 
-// Core navigation - streamlined for professional use
 const menuItems = [
   { icon: LayoutDashboard, label: "Dashboard", path: "/dashboard" },
-  { icon: Sun, label: "Daily Brief", path: "/daily-brief", count: 3 },
+  { icon: Sun, label: "The Signal", path: "/daily-brief", count: 3 },
+  { icon: Rocket, label: "Project Genesis", path: "/project-genesis", highlight: true },
   { icon: Users, label: "AI-SMEs", path: "/ai-experts" },
   { icon: Fingerprint, label: "Chief of Staff", path: "/digital-twin" },
   { icon: Activity, label: "Workflow", path: "/workflow", count: 2 },
   { icon: BookOpen, label: "Library", path: "/library" },
   { icon: Lock, label: "Vault", path: "/vault" },
+  { icon: Moon, label: "Evening Review", path: "/evening-review" },
   { icon: BarChart3, label: "Analytics", path: "/statistics" },
   { icon: Settings, label: "Settings", path: "/settings" },
+  { icon: Info, label: "About Cepho", path: "/about" },
 ];
 
-const SIDEBAR_WIDTH_KEY = "cepho-sidebar-width";
+const SIDEBAR_WIDTH_KEY = "brain-sidebar-width";
 const DEFAULT_WIDTH = 260;
 const MIN_WIDTH = 200;
 const MAX_WIDTH = 400;
@@ -85,7 +86,33 @@ export default function BrainLayout({
   }
 
   if (!user) {
-    return <CephoLandingPage />;
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-black">
+        <div className="flex flex-col items-center gap-6 p-8 max-w-md w-full">
+          {/* Animated Brain Logo with Neural Nodes */}
+          <NeonBrain size="xl" state="thinking" mood={8} />
+          
+          <div className="flex flex-col items-center gap-4 mt-4">
+            <h1 className="text-4xl font-display font-bold tracking-tight text-center text-white">
+              Welcome to The Brain
+            </h1>
+            <p className="text-base text-white/60 text-center max-w-sm">
+              Your AI-powered command center. Sign in to access your personalized intelligence hub.
+            </p>
+          </div>
+          
+          <Button
+            onClick={() => {
+              window.location.href = getLoginUrl();
+            }}
+            size="lg"
+            className="w-full mt-4 bg-primary hover:bg-primary/90 text-white shadow-[0_0_20px_rgba(255,16,240,0.3)] hover:shadow-[0_0_30px_rgba(255,16,240,0.5)] transition-all"
+          >
+            Sign in to Continue
+          </Button>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -185,7 +212,7 @@ function BrainLayoutContent({
   // Handle voice input from quick actions
   const handleVoiceInput = (transcript: string) => {
     console.log('Voice input:', transcript);
-    // TODO: Process voice input through Chief of Staff
+    // TODO: Process voice input through Digital Twin
   };
 
   return (
@@ -209,7 +236,7 @@ function BrainLayoutContent({
                 <div className="flex items-center gap-2 min-w-0">
                   <Brain className="w-6 h-6 text-primary" />
                       <span className="font-display font-bold tracking-tight truncate text-sidebar-foreground">
-                    CEPHO
+                    THE BRAIN
                   </span>
                 </div>
               ) : null}
@@ -226,14 +253,21 @@ function BrainLayoutContent({
                       isActive={isActive}
                       onClick={() => setLocation(item.path)}
                       tooltip={item.label}
-                      className={`h-10 transition-all font-normal rounded-lg mb-0.5 ${isActive ? 'bg-primary/10 text-primary' : 'text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent/50'}`}
+                      className={`h-11 transition-all font-normal rounded-xl mb-1 ${isActive ? 'bg-sidebar-primary/20 text-sidebar-primary border border-sidebar-primary/30' : 'text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent'}`}
                     >
-                      <item.icon
-                        className={`h-4 w-4 ${isActive ? "text-primary" : "text-sidebar-foreground/50"}`}
-                      />
-                      <span className="text-sm">{item.label}</span>
+                      <StatusPulse 
+                        status={(item as any).status || 'idle'} 
+                        count={item.count}
+                        showPulse={!!(item as any).status}
+                        size="sm"
+                      >
+                        <item.icon
+                          className={`h-5 w-5 ${isActive ? "text-primary" : ""}`}
+                        />
+                      </StatusPulse>
+                      <span className="font-medium">{item.label}</span>
                       {item.count && item.count > 0 && (
-                        <span className="ml-auto text-[10px] bg-primary/20 text-primary px-1.5 py-0.5 rounded-full font-medium">
+                        <span className="ml-auto text-xs bg-primary/20 text-primary px-1.5 py-0.5 rounded-full">
                           {item.count}
                         </span>
                       )}
@@ -245,7 +279,38 @@ function BrainLayoutContent({
           </SidebarContent>
 
           <SidebarFooter className="p-3 border-t border-sidebar-border">
-            {/* Minimal footer - just user profile */}
+            {/* Keyboard shortcuts hint */}
+            {!isCollapsed && (
+              <div className="flex flex-col gap-1 mb-2">
+                <button
+                  onClick={keyboardHelp.open}
+                  className="flex items-center gap-2 px-2 py-1.5 text-xs text-sidebar-foreground/50 hover:text-sidebar-foreground/70 transition-colors rounded-lg hover:bg-sidebar-accent"
+                >
+                  <Keyboard className="w-3.5 h-3.5" />
+                  <span>Press <kbd className="px-1 py-0.5 bg-sidebar-accent rounded text-[10px]">?</kbd> for shortcuts</span>
+                </button>
+                <button
+                  onClick={() => setShowAccessibilitySettings(true)}
+                  className="flex items-center gap-2 px-2 py-1.5 text-xs text-sidebar-foreground/50 hover:text-sidebar-foreground/70 transition-colors rounded-lg hover:bg-sidebar-accent"
+                >
+                  <Accessibility className="w-3.5 h-3.5" />
+                  <span>Accessibility settings</span>
+                </button>
+                <button
+                  onClick={changelog.open}
+                  className="relative flex items-center gap-2 px-2 py-1.5 text-xs text-sidebar-foreground/50 hover:text-sidebar-foreground/70 transition-colors rounded-lg hover:bg-sidebar-accent"
+                >
+                  <Sparkles className="w-3.5 h-3.5" />
+                  <span>What's New</span>
+                  {changelog.hasNewUpdates && (
+                    <span className="absolute top-1 right-1 w-2 h-2 bg-primary rounded-full animate-pulse" />
+                  )}
+                </button>
+                <div className="pt-2 border-t border-sidebar-border mt-2">
+                  <GovernanceModeIndicator className="w-full justify-center" />
+                </div>
+              </div>
+            )}
             
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -295,7 +360,7 @@ function BrainLayoutContent({
               <div className="flex items-center gap-3">
                 <Brain className="w-5 h-5 text-primary" />
                 <span className="tracking-tight text-white font-medium">
-                  {activeMenuItem?.label ?? "Cepho"}
+                  {activeMenuItem?.label ?? "The Brain"}
                 </span>
               </div>
             </div>

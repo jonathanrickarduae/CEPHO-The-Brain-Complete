@@ -225,7 +225,7 @@ export function PersonalAnalytics({
           </div>
           <div className="p-3 rounded-lg bg-secondary/30">
             <p className="text-xs text-muted-foreground mb-1">Active Streak</p>
-            <p className="text-lg font-bold text-foreground">{data.streakDays} days</p>
+            <p className="text-lg font-bold text-foreground">{data.streakDays} days 🔥</p>
           </div>
         </div>
       </div>

@@ -56,7 +56,7 @@ export function ProgressBar({
   );
 }
 
-// Circular progress for Chief of Staff training
+// Circular progress for Digital Twin training
 interface CircularProgressProps {
   value: number;
   max?: number;
@@ -128,7 +128,7 @@ export function CircularProgress({
   );
 }
 
-// Chief of Staff Training Progress Card
+// Digital Twin Training Progress Card
 interface TrainingProgressProps {
   hoursLogged: number;
   targetHours?: number;
@@ -152,11 +152,11 @@ export function DigitalTwinTrainingProgress({
   }, [hoursLogged]);
 
   const milestones = [
-    { hours: 10, label: 'Beginner', level: 1 },
-    { hours: 25, label: 'Learning', level: 2 },
-    { hours: 50, label: 'Growing', level: 3 },
-    { hours: 75, label: 'Advanced', level: 4 },
-    { hours: 100, label: 'Expert', level: 5 },
+    { hours: 10, label: 'Beginner', icon: '🌱' },
+    { hours: 25, label: 'Learning', icon: '📚' },
+    { hours: 50, label: 'Growing', icon: '🌿' },
+    { hours: 75, label: 'Advanced', icon: '🚀' },
+    { hours: 100, label: 'Expert', icon: '🧠' },
   ];
 
   const currentMilestone = milestones.reduce((prev, curr) => 
@@ -173,9 +173,9 @@ export function DigitalTwinTrainingProgress({
             <Brain className="w-6 h-6 text-primary" />
           </div>
           <div>
-            <h3 className="font-semibold text-foreground">Chief of Staff Training</h3>
+            <h3 className="font-semibold text-foreground">Digital Twin Training</h3>
             <p className="text-sm text-muted-foreground">
-              Level {currentMilestone.level} - {currentMilestone.label}
+              {currentMilestone.icon} {currentMilestone.label} Level
             </p>
           </div>
         </div>
@@ -202,7 +202,7 @@ export function DigitalTwinTrainingProgress({
                 hoursLogged >= milestone.hours ? 'text-primary' : 'text-muted-foreground'
               }`}
             >
-              <span className="text-sm font-medium">L{milestone.level}</span>
+              <span className="text-lg">{milestone.icon}</span>
               <span className="text-xs">{milestone.hours}h</span>
             </div>
           ))}
@@ -233,7 +233,7 @@ export function DigitalTwinTrainingProgress({
         <div className="mt-4 p-3 bg-primary/10 rounded-lg border border-primary/20">
           <div className="flex items-center justify-between">
             <span className="text-sm text-muted-foreground">
-              Next: Level {nextMilestone.level} - {nextMilestone.label}
+              Next: {nextMilestone.icon} {nextMilestone.label}
             </span>
             <span className="text-sm font-medium text-primary">
               {nextMilestone.hours - hoursLogged}h to go

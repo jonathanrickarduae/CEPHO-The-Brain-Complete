@@ -118,7 +118,7 @@ export function InsightCard({
       id: `challenge-${Date.now()}`,
       insightId: insight.id,
       challengerId: 'digital_twin',
-      challengerName: 'Chief of Staff',
+      challengerName: 'Digital Twin',
       question: challengeQuestion,
       status: 'pending',
       createdAt: new Date().toISOString(),
@@ -213,7 +213,7 @@ export function InsightCard({
               className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground"
             >
               <Fingerprint className="w-4 h-4" />
-              {insight.challenges.length} Chief of Staff Challenge{insight.challenges.length > 1 ? 's' : ''}
+              {insight.challenges.length} Digital Twin Challenge{insight.challenges.length > 1 ? 's' : ''}
               {expanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
             </button>
             
@@ -286,7 +286,7 @@ export function InsightCard({
             <div className="mb-2">
               <span className="text-sm font-medium text-foreground">Challenge this insight</span>
               <p className="text-xs text-muted-foreground">
-                The Chief of Staff will question the expert to verify accuracy
+                The Digital Twin will question the expert to verify accuracy
               </p>
             </div>
             
@@ -555,7 +555,7 @@ export function DigitalTwinQA({
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-foreground">
           <Fingerprint className="w-5 h-5 text-purple-400" />
-          Chief of Staff QA Review
+          Digital Twin QA Review
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">

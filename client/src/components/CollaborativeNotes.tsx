@@ -2,7 +2,7 @@ import { useState, useCallback, useRef, useEffect } from 'react';
 import { 
   FileText, Sparkles, User, Bot, Check, X, 
   RefreshCw, History, Eye, EyeOff, Lightbulb,
-  ChevronDown, Copy, Download, PenLine, Plus
+  ChevronDown, Copy, Download
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -184,12 +184,11 @@ ${content}`,
   }, []);
 
   const getSuggestionIcon = (type: NoteSuggestion['type']) => {
-    const iconClass = 'w-4 h-4';
     switch (type) {
-      case 'expand': return <PenLine className={iconClass} />;
-      case 'clarify': return <Lightbulb className={iconClass} />;
-      case 'format': return <Sparkles className={iconClass} />;
-      case 'add': return <Plus className={iconClass} />;
+      case 'expand': return '📝';
+      case 'clarify': return '💡';
+      case 'format': return '✨';
+      case 'add': return '➕';
     }
   };
 

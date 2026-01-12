@@ -111,7 +111,7 @@ export default function DailyBrief() {
       gotit: "Got it! Added to your focus list.",
       defer: "Deferred to tomorrow's brief.",
       delegate: "Delegation request sent to team.",
-      twin: "Assigned to Chief of Staff - will handle autonomously."
+      twin: "Assigned to Digital Twin - will handle autonomously."
     };
     toast.success(messages[action]);
   };
@@ -158,7 +158,7 @@ export default function DailyBrief() {
       case "gotit": return { label: "You'll Handle", color: "text-green-400 bg-green-500/20" };
       case "defer": return { label: "Deferred", color: "text-yellow-400 bg-yellow-500/20" };
       case "delegate": return { label: "Delegated", color: "text-blue-400 bg-blue-500/20" };
-      case "twin": return { label: "Chief of Staff", color: "text-purple-400 bg-purple-500/20" };
+      case "twin": return { label: "Digital Twin", color: "text-purple-400 bg-purple-500/20" };
       default: return { label: "Pending", color: "text-gray-400 bg-gray-500/20" };
     }
   };
@@ -222,7 +222,7 @@ export default function DailyBrief() {
           variant="ghost" 
           className="h-8 px-2 hover:bg-purple-500/20 hover:text-purple-400"
           onClick={(e) => { e.stopPropagation(); handleAction(itemId, "twin", title, description, category, source); }}
-          title="Assign to Chief of Staff"
+          title="Assign to Digital Twin"
         >
           <Fingerprint className="w-4 h-4" />
         </Button>
@@ -241,7 +241,7 @@ export default function DailyBrief() {
                 <Sun className="w-6 h-6 md:w-8 md:h-8 text-blue-400" />
               </div>
               <div>
-                <h1 className="text-xl md:text-2xl font-display font-bold">The Signal</h1>
+                <h1 className="text-xl md:text-2xl font-display font-bold">Daily Brief</h1>
                 <p className="text-muted-foreground text-sm">{BRIEF_DATA.date} • 5 min read</p>
               </div>
             </div>
@@ -376,12 +376,12 @@ export default function DailyBrief() {
               </CardContent>
             </Card>
 
-            {/* Chief of Staff Insights */}
+            {/* Digital Twin Insights */}
             <Card className="bg-card/60 border-border">
               <CardHeader className="pb-3">
                 <CardTitle className="flex items-center gap-2 text-foreground">
                   <Brain className="w-5 h-5 text-purple-400" />
-                  Chief of Staff Recommendations
+                  Digital Twin Recommendations
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
@@ -620,7 +620,7 @@ export default function DailyBrief() {
                 { label: "You'll Handle", count: actionedItems.filter(i => i.action === "gotit").length, color: "text-green-400", bg: "bg-green-500/10" },
                 { label: "Deferred", count: actionedItems.filter(i => i.action === "defer").length, color: "text-yellow-400", bg: "bg-yellow-500/10" },
                 { label: "Delegated", count: actionedItems.filter(i => i.action === "delegate").length, color: "text-blue-400", bg: "bg-blue-500/10" },
-                { label: "Chief of Staff", count: actionedItems.filter(i => i.action === "twin").length, color: "text-purple-400", bg: "bg-purple-500/10" },
+                { label: "Digital Twin", count: actionedItems.filter(i => i.action === "twin").length, color: "text-purple-400", bg: "bg-purple-500/10" },
               ].map((stat) => (
                 <Card key={stat.label} className={`${stat.bg} border-border`}>
                   <CardContent className="p-4 text-center">
@@ -688,7 +688,7 @@ export default function DailyBrief() {
                     <Button 
                       className="w-full bg-primary hover:bg-primary/90 text-primary-foreground h-12 text-lg"
                       onClick={() => {
-                        toast.success("Day plan confirmed! Your Chief of Staff and team are now working on assigned tasks.");
+                        toast.success("Day plan confirmed! Your Digital Twin and team are now working on assigned tasks.");
                         // Could navigate to dashboard or show confirmation
                       }}
                     >
@@ -696,7 +696,7 @@ export default function DailyBrief() {
                       Confirm & Start Day
                     </Button>
                     <p className="text-center text-sm text-muted-foreground mt-2">
-                      This will notify your team and activate your Chief of Staff for assigned tasks
+                      This will notify your team and activate your Digital Twin for assigned tasks
                     </p>
                   </div>
                 )}

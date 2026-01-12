@@ -17,7 +17,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 <div className="absolute inset-0 bg-primary/20 rounded-full blur-md group-hover:bg-primary/40 transition-all duration-500"></div>
                 <Brain className="w-8 h-8 text-primary relative z-10 group-hover:scale-110 transition-transform duration-300" />
               </div>
-              <span className="font-display font-bold text-2xl tracking-wider text-foreground neon-text">CEPHO</span>
+              <span className="font-display font-bold text-2xl tracking-wider text-foreground neon-text">THE BRAIN</span>
             </div>
           </Link>
         </div>

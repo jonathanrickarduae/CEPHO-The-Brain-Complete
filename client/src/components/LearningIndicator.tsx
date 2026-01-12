@@ -64,7 +64,7 @@ export function LearningPanel({
     >
       <div className="flex items-center gap-2 mb-4">
         <Brain className="w-5 h-5 text-cyan-400" />
-        <h3 className="font-display font-bold text-sm">Chief of Staff Learning</h3>
+        <h3 className="font-display font-bold text-sm">Digital Twin Learning</h3>
         <span className="w-2 h-2 rounded-full bg-cyan-500 animate-pulse ml-auto" />
       </div>
 
@@ -140,7 +140,7 @@ export function LearningToast({
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 mb-0.5">
           <Brain className="w-3.5 h-3.5 text-cyan-400" />
-          <span className="text-xs font-medium text-cyan-400">Chief of Staff Learned</span>
+          <span className="text-xs font-medium text-cyan-400">Digital Twin Learned</span>
         </div>
         <p className="text-sm text-foreground truncate">{message}</p>
       </div>

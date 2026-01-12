@@ -128,7 +128,7 @@ export const tooltipContent = {
   aiExperts: "Access 287+ AI specialists. Ask questions, get blueprints, and assemble expert teams.",
   digitalTwin: "Your AI counterpart that learns your patterns. Train it through conversations and feedback.",
   vault: "Secure storage for sensitive data. Protected with 2FA email verification.",
-  moodCheck: "Track your mood 3x daily. Cepho uses this to optimize your productivity.",
+  moodCheck: "Track your mood 3x daily. The Brain uses this to optimize your productivity.",
   workflow: "Manage projects and tasks. See what's blocked, at-risk, or on-track.",
   library: "Store and organize documents, blueprints, and AI-generated content.",
   statistics: "View your productivity metrics, wellness score, and learning progress.",

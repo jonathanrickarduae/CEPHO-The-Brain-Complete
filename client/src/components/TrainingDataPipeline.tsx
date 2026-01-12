@@ -316,7 +316,7 @@ export function TrainingDataPipeline() {
               <h4 className="font-medium text-white mb-2">Delete All Training Data</h4>
               <p className="text-sm text-gray-400 mb-4">
                 Permanently delete all your training data. This action cannot be undone.
-                Your Chief of Staff will need to be retrained from scratch.
+                Your Digital Twin will need to be retrained from scratch.
               </p>
               <button className="flex items-center gap-2 px-4 py-2 bg-red-500/20 hover:bg-red-500/30 text-red-400 rounded-lg transition-colors">
                 <Trash2 className="w-4 h-4" />

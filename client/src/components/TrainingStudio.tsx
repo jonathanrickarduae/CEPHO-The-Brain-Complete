@@ -35,7 +35,7 @@ interface TrainingStudioProps {
 export function TrainingStudio({ className }: TrainingStudioProps) {
   const [activeTab, setActiveTab] = useState<'upload' | 'memory' | 'preferences' | 'privacy'>('upload');
   const [trainingData, setTrainingData] = useState<TrainingData[]>([
-    { id: '1', type: 'conversation', title: 'Chief of Staff Chat History', content: '47 conversations', createdAt: new Date(), isPrivate: true, status: 'trained' },
+    { id: '1', type: 'conversation', title: 'Digital Twin Chat History', content: '47 conversations', createdAt: new Date(), isPrivate: true, status: 'trained' },
     { id: '2', type: 'preference', title: 'Communication Style', content: 'Professional, concise', createdAt: new Date(), isPrivate: true, status: 'trained' },
     { id: '3', type: 'fact', title: 'Work Schedule', content: '9 AM - 6 PM, Mon-Fri', createdAt: new Date(), isPrivate: false, status: 'trained' },
   ]);

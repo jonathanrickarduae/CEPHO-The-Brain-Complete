@@ -298,7 +298,7 @@ export class IdealsClient {
         'Chunk-Number': chunkNumber.toString(),
         'Document-Size': totalSize.toString(),
       },
-      body: new Blob([data.buffer.slice(data.byteOffset, data.byteOffset + data.byteLength) as ArrayBuffer]),
+      body: data,
     });
 
     if (!response.ok) {

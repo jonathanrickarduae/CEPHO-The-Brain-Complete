@@ -36,7 +36,7 @@ interface ActivityLogProps {
 const TYPE_CONFIG = {
   twin_action: { 
     icon: Bot, 
-    label: 'Chief of Staff', 
+    label: 'Digital Twin', 
     color: 'text-cyan-400',
     bgColor: 'bg-cyan-500/20',
   },

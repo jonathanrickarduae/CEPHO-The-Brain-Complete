@@ -271,7 +271,7 @@ interface UseDigitalTwinValidationOptions {
 }
 
 export function useDigitalTwinValidation({ 
-  twinName = 'Chief of Staff',
+  twinName = 'Digital Twin',
   autoChallenge = false,
 }: UseDigitalTwinValidationOptions = {}) {
   const [isValidating, setIsValidating] = useState(false);
@@ -291,7 +291,7 @@ export function useDigitalTwinValidation({
     return next;
   }, [validationQueue]);
   
-  // Generate Chief of Staff challenge
+  // Generate Digital Twin challenge
   const generateChallenge = useCallback((insight: Insight): Challenge => {
     const validation = validateInsight(insight);
     

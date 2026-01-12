@@ -178,7 +178,7 @@ export function NeonBrainInline({ className = '' }: { className?: string }) {
 
 // Full page loader overlay
 export function NeonBrainOverlay({ 
-  message = 'Loading Cepho...',
+  message = 'Loading The Brain...',
   variant = 'default' as const
 }) {
   return (

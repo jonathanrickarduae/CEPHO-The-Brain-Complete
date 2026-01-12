@@ -256,10 +256,10 @@ export default function Settings() {
                   
                   <div className="space-y-4">
                     {[
-                      { label: 'The Signal Reminder', description: 'Get reminded to check your daily brief each morning', enabled: true },
+                      { label: 'Daily Brief Reminder', description: 'Get reminded to check your daily brief each morning', enabled: true },
                       { label: 'Mood Check Prompts', description: 'Receive prompts to log your mood 3x daily', enabled: true },
                       { label: 'Task Deadlines', description: 'Get notified before task deadlines', enabled: true },
-                      { label: 'AI Insights', description: 'Receive insights from your Chief of Staff', enabled: false },
+                      { label: 'AI Insights', description: 'Receive insights from your Digital Twin', enabled: false },
                       { label: 'Weekly Summary', description: 'Get a weekly productivity summary', enabled: true },
                       { label: 'Security Alerts', description: 'Get notified of security events in The Vault', enabled: true },
                       { label: 'Integration Status', description: 'Alerts when connected services have issues', enabled: true },
@@ -295,7 +295,7 @@ export default function Settings() {
                   <div className="p-4 bg-gray-900 rounded-xl">
                     <h4 className="font-medium text-white mb-2">Data Collection</h4>
                     <p className="text-sm text-gray-400 mb-4">
-                      Control what data your Chief of Staff can access and learn from.
+                      Control what data your Digital Twin can access and learn from.
                     </p>
                     <div className="space-y-3">
                       {[

@@ -14,9 +14,9 @@ interface ShortcutConfig {
 // Global keyboard shortcuts
 const GLOBAL_SHORTCUTS: ShortcutConfig[] = [
   { key: 'd', ctrl: true, action: () => {}, description: 'Go to Dashboard' },
-  { key: 'b', ctrl: true, action: () => {}, description: 'Go to The Signal' },
+  { key: 'b', ctrl: true, action: () => {}, description: 'Go to Daily Brief' },
   { key: 'e', ctrl: true, action: () => {}, description: 'Go to AI Experts' },
-  { key: 't', ctrl: true, action: () => {}, description: 'Go to Chief of Staff' },
+  { key: 't', ctrl: true, action: () => {}, description: 'Go to Digital Twin' },
   { key: 'w', ctrl: true, action: () => {}, description: 'Go to Workflow' },
   { key: 'l', ctrl: true, action: () => {}, description: 'Go to Library' },
   { key: 'v', ctrl: true, action: () => {}, description: 'Go to Vault' },
@@ -32,9 +32,9 @@ export function useKeyboardShortcuts(customShortcuts?: ShortcutConfig[]) {
   // Navigation shortcuts with actual navigation
   const navigationShortcuts: ShortcutConfig[] = [
     { key: 'd', ctrl: true, action: () => setLocation('/dashboard'), description: 'Go to Dashboard' },
-    { key: 'b', ctrl: true, action: () => setLocation('/daily-brief'), description: 'Go to The Signal' },
+    { key: 'b', ctrl: true, action: () => setLocation('/daily-brief'), description: 'Go to Daily Brief' },
     { key: 'e', ctrl: true, action: () => setLocation('/ai-experts'), description: 'Go to AI Experts' },
-    { key: 't', ctrl: true, action: () => setLocation('/digital-twin'), description: 'Go to Chief of Staff' },
+    { key: 't', ctrl: true, action: () => setLocation('/digital-twin'), description: 'Go to Digital Twin' },
     { key: 'w', ctrl: true, action: () => setLocation('/workflow'), description: 'Go to Workflow' },
     { key: 'l', ctrl: true, action: () => setLocation('/library'), description: 'Go to Library' },
     { key: 'v', ctrl: true, action: () => setLocation('/vault'), description: 'Go to Vault' },

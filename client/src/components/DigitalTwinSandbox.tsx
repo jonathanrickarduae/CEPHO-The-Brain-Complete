@@ -51,7 +51,7 @@ export function DigitalTwinSandbox() {
 
     // Simulate processing
     setTimeout(() => {
-      // Mock response - in production this would call the actual Chief of Staff
+      // Mock response - in production this would call the actual Digital Twin
       const mockResponses: Record<string, { response: string; confidence: number }> = {
         'email': { response: 'Draft prepared. Subject: Re: Meeting Request. Body: Confirmed for proposed time. Location details required.', confidence: 85 },
         'meeting': { response: '2 meetings today. 10:00 Board review (prep notes ready). 14:30 Team sync (agenda pending).', confidence: 94 },
@@ -105,7 +105,7 @@ export function DigitalTwinSandbox() {
           </div>
           <div>
             <h1 className="text-xl font-bold text-foreground">Testing Sandbox</h1>
-            <p className="text-sm text-muted-foreground">Test Chief of Staff responses without affecting live data</p>
+            <p className="text-sm text-muted-foreground">Test Digital Twin responses without affecting live data</p>
           </div>
         </div>
 
@@ -177,7 +177,7 @@ export function DigitalTwinSandbox() {
               <textarea
                 value={testInput}
                 onChange={(e) => setTestInput(e.target.value)}
-                placeholder="Enter a test query for your Chief of Staff..."
+                placeholder="Enter a test query for your Digital Twin..."
                 className="w-full h-24 px-4 py-3 bg-gray-900 border border-gray-700 rounded-xl text-foreground placeholder:text-muted-foreground resize-none focus:outline-none focus:border-primary"
               />
               <div className="flex items-center justify-between mt-4">

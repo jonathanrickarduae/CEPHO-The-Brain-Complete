@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
  * Inspired by Amporah's onboarding prompts
  */
 
-// Tour Prompt - "New to Cepho? Take a quick tour"
+// Tour Prompt - "New to The Brain? Take a quick tour"
 export function TourPrompt({ onStartTour, onSkip }: { onStartTour?: () => void; onSkip?: () => void }) {
   const [dismissed, setDismissed] = useState(false);
 
@@ -25,7 +25,7 @@ export function TourPrompt({ onStartTour, onSkip }: { onStartTour?: () => void; 
           <Play className="w-5 h-5 text-cyan-500" />
         </div>
         <div className="flex-1">
-          <h4 className="font-semibold text-foreground">New to Cepho?</h4>
+          <h4 className="font-semibold text-foreground">New to The Brain?</h4>
           <p className="text-sm text-muted-foreground">Take a quick tour to discover all features</p>
         </div>
         <div className="flex items-center gap-2">

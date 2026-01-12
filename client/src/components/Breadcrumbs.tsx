@@ -15,10 +15,10 @@ interface BreadcrumbsProps {
 
 // Route to breadcrumb mapping
 const ROUTE_LABELS: Record<string, string> = {
-  '/dashboard': 'The Nexus',
-  '/daily-brief': 'The Signal',
-  '/ai-experts': 'AI-SMEs',
-  '/digital-twin': 'Chief of Staff',
+  '/dashboard': 'Command Center',
+  '/daily-brief': 'Daily Brief',
+  '/ai-experts': 'AI Experts',
+  '/digital-twin': 'Digital Twin',
   '/workflow': 'Workflow',
   '/library': 'Library',
   '/vault': 'The Vault',

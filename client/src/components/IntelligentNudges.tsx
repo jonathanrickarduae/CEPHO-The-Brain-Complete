@@ -125,7 +125,7 @@ export function InsightsPanel() {
         id: 'n4',
         type: 'opportunity',
         priority: 'medium',
-        title: 'Chief of Staff: 67% confidence',
+        title: 'Digital Twin: 67% confidence',
         message: '15-minute training session available. Improves accuracy.',
         actionLabel: 'Start training',
         actionPath: '/digital-twin',
@@ -191,7 +191,7 @@ export function InsightsPanel() {
   );
 }
 
-// Inline nudge for specific contexts (e.g., in Chief of Staff page)
+// Inline nudge for specific contexts (e.g., in Digital Twin page)
 export function InlineNudge({ 
   type, 
   message, 
@@ -345,7 +345,7 @@ export function NudgePreferences() {
           { key: 'projectUpdates', label: 'Project Updates', desc: 'Notifications about stale or blocked projects' },
           { key: 'calendarReminders', label: 'Calendar Reminders', desc: 'Preparation suggestions for upcoming events' },
           { key: 'integrationInsights', label: 'Integration Insights', desc: 'Tips for using your connected tools better' },
-          { key: 'trainingOpportunities', label: 'Training Opportunities', desc: 'Suggestions to improve your Chief of Staff' },
+          { key: 'trainingOpportunities', label: 'Training Opportunities', desc: 'Suggestions to improve your Digital Twin' },
         ].map(item => (
           <div key={item.key} className="flex items-center justify-between p-4 bg-gray-800/50 rounded-xl">
             <div>

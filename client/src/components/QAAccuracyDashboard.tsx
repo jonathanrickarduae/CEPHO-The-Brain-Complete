@@ -168,7 +168,7 @@ export function QAAccuracyDashboard() {
         <div>
           <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
             <Brain className="w-6 h-6 text-purple-500" />
-            Chief of Staff QA Accuracy
+            Digital Twin QA Accuracy
           </h2>
           <p className="text-sm text-muted-foreground mt-1">
             Track learning progress and quality assurance performance
@@ -369,7 +369,7 @@ export function QAAccuracyDashboard() {
             <div>
               <p className="text-sm font-medium text-foreground">NDA documents ready for limited autonomy</p>
               <p className="text-xs text-muted-foreground mt-1">
-                With 91.7% approval rate and 85% confidence, the Chief of Staff can handle routine NDA reviews with minimal oversight.
+                With 91.7% approval rate and 85% confidence, the Digital Twin can handle routine NDA reviews with minimal oversight.
               </p>
             </div>
           </div>

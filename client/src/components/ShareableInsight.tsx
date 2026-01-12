@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Share2, Copy, Check, Twitter, Linkedin, Download, Eye, BarChart3, Heart, Star, Trophy, Lightbulb, Brain } from 'lucide-react';
+import { Share2, Copy, Check, Twitter, Linkedin, Download, Eye } from 'lucide-react';
 
 interface ShareableInsightProps {
   type: 'productivity' | 'mood' | 'wellness' | 'achievement' | 'consultation';
@@ -21,23 +21,23 @@ export function ShareableInsight({ type, title, data, onShare }: ShareableInsigh
   const generateShareUrl = () => {
     // In production, this would create a unique shareable link
     const shareCode = Math.random().toString(36).substring(7);
-    return `${window.location.origin}/shared/${shareCode}`;
+    return `https://thebrain.app/shared/${shareCode}`;
   };
 
   const generateShareText = () => {
     switch (type) {
       case 'productivity':
-        return `My productivity score this ${data.period || 'week'}: ${data.score}/10\n\n${data.highlights?.join('\n') || ''}\n\nPowered by Cepho`;
+        return `📊 My productivity score this ${data.period || 'week'}: ${data.score}/10\n\n${data.highlights?.join('\n') || ''}\n\nPowered by The Brain 🧠`;
       case 'mood':
-        return `My mood trend is ${data.trend}\n\n${data.highlights?.join('\n') || ''}\n\nTracking my wellness with Cepho`;
+        return `😊 My mood trend is ${data.trend}!\n\n${data.highlights?.join('\n') || ''}\n\nTracking my wellness with The Brain 🧠`;
       case 'wellness':
-        return `Wellness Score: ${data.score}/10\n\n${data.highlights?.join('\n') || ''}\n\nGetting to a 10 with Cepho`;
+        return `🌟 Wellness Score: ${data.score}/10\n\n${data.highlights?.join('\n') || ''}\n\nGetting to a 10 with The Brain 🧠`;
       case 'achievement':
-        return `${title}\n\n${data.highlights?.join('\n') || ''}\n\nAchieved with Cepho`;
+        return `🏆 ${title}\n\n${data.highlights?.join('\n') || ''}\n\nAchieved with The Brain 🧠`;
       case 'consultation':
-        return `Just consulted with ${data.expertName} on Cepho\n\nKey insight: ${data.highlights?.[0] || ''}\n\nAI-SMEs at Cepho`;
+        return `💡 Just consulted with ${data.expertName} on The Brain\n\nKey insight: ${data.highlights?.[0] || ''}\n\nAI Experts at thebrain.app 🧠`;
       default:
-        return `${title}\n\nPowered by Cepho`;
+        return `${title}\n\nPowered by The Brain 🧠`;
     }
   };
 
@@ -69,14 +69,13 @@ export function ShareableInsight({ type, title, data, onShare }: ShareableInsigh
   };
 
   const getTypeIcon = () => {
-    const iconClass = 'w-5 h-5';
     switch (type) {
-      case 'productivity': return <BarChart3 className={iconClass} />;
-      case 'mood': return <Heart className={iconClass} />;
-      case 'wellness': return <Star className={iconClass} />;
-      case 'achievement': return <Trophy className={iconClass} />;
-      case 'consultation': return <Lightbulb className={iconClass} />;
-      default: return <Brain className={iconClass} />;
+      case 'productivity': return '📊';
+      case 'mood': return '😊';
+      case 'wellness': return '🌟';
+      case 'achievement': return '🏆';
+      case 'consultation': return '💡';
+      default: return '🧠';
     }
   };
 
@@ -99,7 +98,7 @@ export function ShareableInsight({ type, title, data, onShare }: ShareableInsigh
           {/* Header */}
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-white/20">{getTypeIcon()}</div>
+              <span className="text-3xl">{getTypeIcon()}</span>
               <div>
                 <h3 className="text-lg font-semibold text-white">{title}</h3>
                 {data.period && (
@@ -151,8 +150,8 @@ export function ShareableInsight({ type, title, data, onShare }: ShareableInsigh
           {/* Branding */}
           <div className="flex items-center justify-between pt-4 border-t border-gray-700">
             <div className="flex items-center gap-2">
-              <Brain className="w-5 h-5 text-pink-500" />
-              <span className="text-sm text-gray-400">Powered by Cepho</span>
+              <span className="text-xl">🧠</span>
+              <span className="text-sm text-gray-400">Powered by The Brain</span>
             </div>
             <div className="flex items-center gap-1 text-sm text-gray-500">
               <Eye className="w-4 h-4" />

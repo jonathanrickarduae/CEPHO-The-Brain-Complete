@@ -3,8 +3,8 @@ import { Brain, BarChart3, Mail, FileText, Calendar, CheckCircle, Clock } from '
 import { Button } from '@/components/ui/button';
 
 /**
- * Chief of Staff Activity Dashboard
- * Shows what your Chief of Staff has been working on
+ * Digital Twin Activity Dashboard
+ * Shows what your Digital Twin has been working on
  * Inspired by Amporah's activity dashboard
  */
 
@@ -47,7 +47,7 @@ export function TwinActivityDashboard() {
         </div>
         <div className="flex-1">
           <p className="text-sm text-muted-foreground">Good evening</p>
-          <p className="font-semibold text-foreground">Here's what your Chief of Staff has been working on</p>
+          <p className="font-semibold text-foreground">Here's what your Digital Twin has been working on</p>
         </div>
       </div>
 

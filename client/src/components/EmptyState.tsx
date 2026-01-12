@@ -57,7 +57,7 @@ const EMPTY_STATE_CONFIGS: Record<EmptyStateType, EmptyStateConfig> = {
   inbox: {
     icon: Inbox,
     title: 'All caught up!',
-    description: 'No pending items require your attention. Your Chief of Staff is on it.',
+    description: 'No pending items require your attention. Your Digital Twin is on it.',
     color: 'text-purple-400',
     bgGradient: 'from-purple-500/10 to-purple-500/5',
   },
@@ -72,8 +72,8 @@ const EMPTY_STATE_CONFIGS: Record<EmptyStateType, EmptyStateConfig> = {
   tasks: {
     icon: Zap,
     title: 'No tasks for today',
-    description: 'Check your The Signal for new priorities, or create a task.',
-    actionLabel: 'View The Signal',
+    description: 'Check your Daily Brief for new priorities, or create a task.',
+    actionLabel: 'View Daily Brief',
     secondaryActionLabel: 'Add Task',
     color: 'text-amber-400',
     bgGradient: 'from-amber-500/10 to-amber-500/5',
@@ -81,14 +81,14 @@ const EMPTY_STATE_CONFIGS: Record<EmptyStateType, EmptyStateConfig> = {
   insights: {
     icon: Sparkles,
     title: 'Insights coming soon',
-    description: 'As you use Cepho more, your Chief of Staff will surface personalized insights here.',
+    description: 'As you use The Brain more, your Digital Twin will surface personalized insights here.',
     color: 'text-primary',
     bgGradient: 'from-primary/10 to-primary/5',
   },
   training: {
     icon: Brain,
     title: 'Start training your Twin',
-    description: 'The more you interact, the smarter your Chief of Staff becomes. Start a conversation!',
+    description: 'The more you interact, the smarter your Digital Twin becomes. Start a conversation!',
     actionLabel: 'Talk to Twin',
     color: 'text-purple-400',
     bgGradient: 'from-purple-500/10 to-purple-500/5',
@@ -105,7 +105,7 @@ const EMPTY_STATE_CONFIGS: Record<EmptyStateType, EmptyStateConfig> = {
   goals: {
     icon: Target,
     title: 'Set your first goal',
-    description: 'Define what success looks like and let Cepho help you get there.',
+    description: 'Define what success looks like and let The Brain help you get there.',
     actionLabel: 'Create Goal',
     color: 'text-green-400',
     bgGradient: 'from-green-500/10 to-green-500/5',

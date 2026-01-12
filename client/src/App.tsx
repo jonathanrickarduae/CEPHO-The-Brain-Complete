@@ -8,6 +8,7 @@ import BrainLayout from "./components/BrainLayout";
 import Landing from "./pages/Landing";
 import Dashboard from "@/pages/Dashboard";
 import DigitalTwin from "@/pages/DigitalTwin";
+import DigitalTwinOnboarding from "@/pages/DigitalTwinOnboarding";
 import Workflow from "@/pages/Workflow";
 import Library from "./pages/Library";
 import Statistics from "./pages/Statistics";
@@ -30,9 +31,7 @@ import VoiceNotepadPage from "./pages/VoiceNotepadPage";
 import IntegrationsPage from "./pages/IntegrationsPage";
 import PodcastPage from "./pages/PodcastPage";
 import WellnessPage from "./pages/WellnessPage";
-import ChiefOfStaffRole from "./pages/ChiefOfStaffRole";
 import ReferenceLibrary from "./pages/ReferenceLibrary";
-import DueDiligencePage from "./pages/DueDiligencePage";
 import { GovernanceProvider, GovernanceModeChangeModal } from "./hooks/useGovernance";
 import { CelebrationProvider } from "./components/CelebrationAnimations";
 import { DailyCycleProvider } from "./components/DailyCycleProvider";
@@ -67,8 +66,8 @@ function Router() {
       <Route path="/digital-twin">
         <WithLayout><DigitalTwin /></WithLayout>
       </Route>
-      <Route path="/chief-of-staff-role">
-        <WithLayout><ChiefOfStaffRole /></WithLayout>
+      <Route path="/digital-twin/onboarding">
+        <WithLayout><DigitalTwinOnboarding /></WithLayout>
       </Route>
       <Route path="/workflow">
         <WithLayout><Workflow /></WithLayout>
@@ -111,9 +110,6 @@ function Router() {
       </Route>
       <Route path="/project-genesis">
         <WithLayout><ProjectGenesisPage /></WithLayout>
-      </Route>
-      <Route path="/due-diligence">
-        <WithLayout><DueDiligencePage /></WithLayout>
       </Route>
       <Route path="/inbox">
         <WithLayout><InboxPage /></WithLayout>

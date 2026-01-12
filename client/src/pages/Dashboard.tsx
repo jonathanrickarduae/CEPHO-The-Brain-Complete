@@ -24,7 +24,6 @@ import { PerformanceBoost } from "@/components/PerformanceBoost";
 import { TwinBreakApproval } from "@/components/TwinBreakApproval";
 import { TourPrompt } from '@/components/TourAndDemoMode';
 import { NeuralNetworkViz } from '@/components/NeuralNetworkViz';
-import { TaskProgressTracker } from '@/components/TaskProgressTracker';
 import { isDemoModeEnabled, getDemoData, initializeDemoModeIfNeeded } from "@/services/demoMode";
 
 // Daily rotating quotes - one for each day
@@ -147,21 +146,21 @@ export default function Dashboard() {
   const [showMobileInput, setShowMobileInput] = useState(false);
   
   const handleMobileSubmit = (value: string, type?: 'task' | 'question' | 'note') => {
-    // Navigate to Chief of Staff with the message
+    // Navigate to Digital Twin with the message
     setLocation(`/digital-twin?message=${encodeURIComponent(value)}`);
   };
 
   // Daily rotating inspiration - memoized to only change on day change
   const inspiration = useMemo(() => getDailyQuote(), []);
 
-  // Top Row - The Flow (The Signal → AI Expert Engine → Workflow)
-  // Bottom Row - Support (Chief of Staff Training, Library, Vault)
+  // Top Row - The Flow (Daily Brief → AI Expert Engine → Workflow)
+  // Bottom Row - Support (Digital Twin Training, Library, Vault)
   const buttons = [
     // TOP ROW - The Flow
     { 
       id: 1, 
-      label: "THE SIGNAL", 
-      sub: "Morning Briefing", 
+      label: "DAILY BRIEF", 
+      sub: "Briefing & Actions", 
       icon: Sun, 
       color: "#f59e0b",
       path: "/daily-brief",
@@ -169,7 +168,7 @@ export default function Dashboard() {
     },
     { 
       id: 2, 
-      label: "AI-SMEs", 
+      label: "AI EXPERT ENGINE", 
       sub: "287 Experts Ready", 
       icon: Users, 
       color: "#06b6d4",
@@ -188,8 +187,8 @@ export default function Dashboard() {
     // BOTTOM ROW - Support
     { 
       id: 4, 
-      label: "CHIEF OF STAFF", 
-      sub: "Level 2: Learning", 
+      label: "DIGITAL TWIN", 
+      sub: "12.5h Training", 
       icon: Fingerprint, 
       color: "#a855f7",
       path: "/digital-twin",
@@ -218,7 +217,7 @@ export default function Dashboard() {
 
   const handleSubmit = () => {
     if (inputValue.trim()) {
-      // Navigate to Chief of Staff with the message
+      // Navigate to Digital Twin with the message
       setLocation(`/digital-twin?message=${encodeURIComponent(inputValue)}`);
     }
   };
@@ -255,7 +254,7 @@ export default function Dashboard() {
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyDown={handleKeyDown}
-                placeholder="Message Chief of Staff..." 
+                placeholder="Message Digital Twin..." 
                 className="flex-1 bg-transparent border-none outline-none text-lg text-foreground placeholder:text-muted-foreground/50 min-h-0"
                 autoFocus
               />
@@ -345,10 +344,8 @@ export default function Dashboard() {
           {/* Today's mood indicator */}
           {latestMood && (
             <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-card/60 border border-border">
-              <div className="w-6 h-6 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">
-                <span className="text-xs font-bold text-white">{latestMood.mood}</span>
-              </div>
-              <span className="text-xs text-muted-foreground hidden sm:inline">Mood</span>
+              <span className="text-lg">{['😫','😔','😐','🙂','😊','😄','🤩','🔥','💪','🚀'][latestMood.mood - 1]}</span>
+              <span className="text-xs text-muted-foreground hidden sm:inline">Mood: {latestMood.mood}/10</span>
             </div>
           )}
           
@@ -394,7 +391,7 @@ export default function Dashboard() {
               onClick={() => setLocation(btn.path)}
               className="group relative p-3 sm:p-4 md:p-5 rounded-xl bg-card/60 border border-border hover:border-primary/50 hover:bg-card/80 transition-all duration-300 cursor-pointer overflow-hidden text-left min-h-[100px] sm:min-h-[120px] w-full h-full hover:scale-[1.02] active:scale-[0.98] hover:shadow-lg hover:shadow-primary/10 touch-manipulation"
             >
-              {/* Learning badge for Chief of Staff */}
+              {/* Learning badge for Digital Twin */}
               {btn.badge}
               
               {/* Glow on Hover */}
@@ -423,11 +420,6 @@ export default function Dashboard() {
             </button>
           </Tooltip>
          ))}
-      </div>
-
-      {/* Active Tasks Progress Tracker */}
-      <div className="max-w-3xl mx-auto w-full mb-6">
-        <TaskProgressTracker />
       </div>
 
       {/* Getting Started Checklist for new users */}
@@ -463,7 +455,7 @@ export default function Dashboard() {
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Message Chief of Staff..." 
+            placeholder="Message Digital Twin..." 
             className="flex-1 bg-transparent border-none outline-none text-base text-foreground placeholder:text-muted-foreground/50 min-h-0"
           />
           <div className="flex items-center gap-2">

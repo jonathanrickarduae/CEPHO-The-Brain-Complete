@@ -202,7 +202,7 @@ export function DigitalTwinAccelerator({ onComplete }: DigitalTwinAcceleratorPro
         if (prev.totalHours < milestone && newTotal >= milestone) {
           showAchievement({
             title: `${milestone} Hours Trained!`,
-            description: `Your Chief of Staff is ${Math.round((milestone / TARGET_HOURS) * 100)}% trained`,
+            description: `Your Digital Twin is ${Math.round((milestone / TARGET_HOURS) * 100)}% trained`,
             icon: '🧠',
           });
           if (milestone === 5000) {
@@ -260,7 +260,7 @@ export function DigitalTwinAccelerator({ onComplete }: DigitalTwinAcceleratorPro
     } else {
       showAchievement({
         title: 'Scenarios Complete!',
-        description: 'Your Chief of Staff understands your decision style',
+        description: 'Your Digital Twin understands your decision style',
         icon: '🎯',
       });
       setMode('overview');
@@ -306,7 +306,7 @@ export function DigitalTwinAccelerator({ onComplete }: DigitalTwinAcceleratorPro
               <Brain className="w-7 h-7 text-white" />
             </div>
             <div>
-              <h2 className="text-xl font-bold text-foreground">Chief of Staff Accelerator</h2>
+              <h2 className="text-xl font-bold text-foreground">Digital Twin Accelerator</h2>
               <p className="text-sm text-muted-foreground">Train your AI to think like you</p>
             </div>
           </div>
@@ -426,7 +426,7 @@ export function DigitalTwinAccelerator({ onComplete }: DigitalTwinAcceleratorPro
                   </div>
                 </div>
                 <p className="text-sm text-muted-foreground mb-3">
-                  Choose how your Chief of Staff looks and communicates.
+                  Choose how your Digital Twin looks and communicates.
                 </p>
                 <div className="flex items-center gap-2">
                   <span className="text-2xl">{AVATAR_OPTIONS.find(a => a.id === progress.avatar)?.emoji}</span>
@@ -622,7 +622,7 @@ export function DigitalTwinAccelerator({ onComplete }: DigitalTwinAcceleratorPro
 
             <h3 className="text-xl font-semibold text-foreground mb-2">Upload & Learn</h3>
             <p className="text-muted-foreground mb-6">
-              Upload your communications to accelerate training. Your Chief of Staff will learn your writing style, vocabulary, and tone.
+              Upload your communications to accelerate training. Your Digital Twin will learn your writing style, vocabulary, and tone.
             </p>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -717,7 +717,7 @@ export function DigitalTwinAccelerator({ onComplete }: DigitalTwinAcceleratorPro
               </button>
             </div>
 
-            <h3 className="text-xl font-semibold text-foreground mb-6">Customize Your Chief of Staff</h3>
+            <h3 className="text-xl font-semibold text-foreground mb-6">Customize Your Digital Twin</h3>
 
             {/* Avatar Selection */}
             <div className="mb-8">
@@ -788,7 +788,7 @@ export function DigitalTwinAccelerator({ onComplete }: DigitalTwinAcceleratorPro
             </div>
             <h3 className="text-xl font-semibold text-foreground mb-2">Daily Micro-Training</h3>
             <p className="text-muted-foreground mb-6">
-              Quick 2-minute check-ins that compound over time. Your Chief of Staff learns from your daily patterns.
+              Quick 2-minute check-ins that compound over time. Your Digital Twin learns from your daily patterns.
             </p>
 
             <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-6 mb-6">

@@ -26,7 +26,7 @@ export const POST_ONBOARDING_ACTIONS = [
   {
     id: 'explore_brief',
     title: 'Check your Daily Brief',
-    description: 'See what your Chief of Staff has prepared for you',
+    description: 'See what your Digital Twin has prepared for you',
     icon: 'sun',
     path: '/daily-brief',
     priority: 1,
@@ -41,7 +41,7 @@ export const POST_ONBOARDING_ACTIONS = [
   },
   {
     id: 'train_twin',
-    title: 'Train your Chief of Staff',
+    title: 'Train your Digital Twin',
     description: 'Upload documents or complete a quick interview',
     icon: 'brain',
     path: '/digital-twin',

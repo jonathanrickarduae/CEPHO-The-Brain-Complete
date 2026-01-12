@@ -108,18 +108,18 @@ const MOCK_TOOL_TERMS: ToolTerms[] = [
   },
   {
     toolId: 'digital-twin',
-    toolName: 'Chief of Staff AI',
+    toolName: 'Digital Twin AI',
     category: 'ai',
     governanceLevel: 'restricted',
     terms: [
       {
         id: 't4',
-        title: 'Chief of Staff Terms of Service',
+        title: 'Digital Twin Terms of Service',
         version: '3.0',
         lastUpdated: '2024-03-01',
-        summary: 'Terms governing the Chief of Staff AI that learns and acts on your behalf.',
+        summary: 'Terms governing the Digital Twin AI that learns and acts on your behalf.',
         keyPoints: [
-          'Chief of Staff learns from your behavior and preferences',
+          'Digital Twin learns from your behavior and preferences',
           'Actions taken by Twin require your approval (configurable)',
           'Training data is encrypted and stored securely',
           'You can reset or delete Twin data at any time'

@@ -28,7 +28,7 @@ const changelog: ChangelogEntry[] = [
       },
       {
         title: 'Progress Indicators',
-        description: 'Track your Chief of Staff training progress with visual indicators',
+        description: 'Track your Digital Twin training progress with visual indicators',
         icon: '📊',
       },
       {
@@ -88,7 +88,7 @@ const changelog: ChangelogEntry[] = [
     improvements: [
       'Enhanced audit logging',
       'Better mobile responsiveness',
-      'Improved Chief of Staff streaming',
+      'Improved Digital Twin streaming',
     ],
   },
   {

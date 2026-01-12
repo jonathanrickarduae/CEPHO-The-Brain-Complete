@@ -101,7 +101,7 @@ const DEFAULT_ACHIEVEMENTS: Achievement[] = [
   {
     id: 'training-1',
     title: 'Twin Trainer',
-    description: 'Train your Chief of Staff for 1 hour',
+    description: 'Train your Digital Twin for 1 hour',
     icon: '🧠',
     unlockedAt: null,
     progress: 0,
@@ -111,7 +111,7 @@ const DEFAULT_ACHIEVEMENTS: Achievement[] = [
   {
     id: 'training-10',
     title: 'Neural Network',
-    description: 'Train your Chief of Staff for 10 hours',
+    description: 'Train your Digital Twin for 10 hours',
     icon: '🤖',
     unlockedAt: null,
     progress: 0,
@@ -121,7 +121,7 @@ const DEFAULT_ACHIEVEMENTS: Achievement[] = [
   {
     id: 'training-50',
     title: 'Mind Meld',
-    description: 'Train your Chief of Staff for 50 hours',
+    description: 'Train your Digital Twin for 50 hours',
     icon: '🌟',
     unlockedAt: null,
     progress: 0,

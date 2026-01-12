@@ -39,7 +39,7 @@ const DEFAULT_ITEMS: ChecklistItemData[] = [
   },
   {
     id: 'digital-twin',
-    title: 'Chat with your Chief of Staff',
+    title: 'Chat with your Digital Twin',
     description: 'Have your first conversation',
     iconName: 'message',
     action: '/digital-twin',

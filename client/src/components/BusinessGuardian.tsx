@@ -317,7 +317,7 @@ export function BusinessGuardian() {
   // Simulate scanning
   const runScan = () => {
     setIsScanning(true);
-    toast.info('Chief of Staff scanning for threats and opportunities...');
+    toast.info('Digital Twin scanning for threats and opportunities...');
     
     setTimeout(() => {
       setThreats(generateThreats());

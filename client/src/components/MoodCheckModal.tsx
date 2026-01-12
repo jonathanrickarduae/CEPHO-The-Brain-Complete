@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { X, Sun, CloudSun, Moon } from 'lucide-react';
+import { X, Smile, Frown, Meh, Sun, CloudSun, Moon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
@@ -31,10 +31,21 @@ const PERIOD_CONFIG = {
   },
 };
 
-// No labels - just the number
+const MOOD_LEVELS = [
+  { value: 1, emoji: '😫', label: 'Struggling', color: 'bg-red-500/20 border-red-500/50 hover:bg-red-500/30' },
+  { value: 2, emoji: '😔', label: 'Low', color: 'bg-orange-500/20 border-orange-500/50 hover:bg-orange-500/30' },
+  { value: 3, emoji: '😐', label: 'Okay', color: 'bg-yellow-500/20 border-yellow-500/50 hover:bg-yellow-500/30' },
+  { value: 4, emoji: '🙂', label: 'Good', color: 'bg-lime-500/20 border-lime-500/50 hover:bg-lime-500/30' },
+  { value: 5, emoji: '😊', label: 'Great', color: 'bg-green-500/20 border-green-500/50 hover:bg-green-500/30' },
+  { value: 6, emoji: '😄', label: 'Excellent', color: 'bg-emerald-500/20 border-emerald-500/50 hover:bg-emerald-500/30' },
+  { value: 7, emoji: '🤩', label: 'Amazing', color: 'bg-cyan-500/20 border-cyan-500/50 hover:bg-cyan-500/30' },
+  { value: 8, emoji: '🔥', label: 'On Fire', color: 'bg-blue-500/20 border-blue-500/50 hover:bg-blue-500/30' },
+  { value: 9, emoji: '💪', label: 'Unstoppable', color: 'bg-purple-500/20 border-purple-500/50 hover:bg-purple-500/30' },
+  { value: 10, emoji: '🚀', label: 'At a 10!', color: 'bg-primary/20 border-primary/50 hover:bg-primary/30' },
+];
 
 export function MoodCheckModal({ isOpen, onClose, onSubmit, period }: MoodCheckModalProps) {
-  const [selectedMood, setSelectedMood] = useState<number>(5);
+  const [selectedMood, setSelectedMood] = useState<number | null>(null);
 
   if (!isOpen || !period) return null;
 
@@ -42,12 +53,11 @@ export function MoodCheckModal({ isOpen, onClose, onSubmit, period }: MoodCheckM
   const PeriodIcon = config.icon;
 
   const handleSubmit = () => {
-    onSubmit(selectedMood);
-    setSelectedMood(5);
+    if (selectedMood !== null) {
+      onSubmit(selectedMood);
+      setSelectedMood(null);
+    }
   };
-
-  // Calculate gradient position based on mood
-  const gradientPosition = ((selectedMood - 1) / 9) * 100;
 
   return (
     <>
@@ -76,65 +86,42 @@ export function MoodCheckModal({ isOpen, onClose, onSubmit, period }: MoodCheckM
               <span className="text-lg font-display font-bold">{config.greeting}</span>
             </div>
             <h2 className="text-xl font-bold text-foreground mb-2">
-              How are you today?
+              Quick Check-In
             </h2>
+            <p className="text-muted-foreground text-sm">
+              {config.question}
+            </p>
           </div>
 
-          {/* Mood Slider */}
-          <div className="px-8 pb-6">
-            {/* Current Value Display */}
-            <div className="text-center mb-6">
-              <div className="text-6xl font-bold text-foreground">
-                {selectedMood}
+          {/* Mood Grid */}
+          <div className="px-6 pb-4">
+            <div className="grid grid-cols-5 gap-2">
+              {MOOD_LEVELS.map((mood) => (
+                <button
+                  key={mood.value}
+                  onClick={() => setSelectedMood(mood.value)}
+                  className={cn(
+                    'flex flex-col items-center gap-1 p-3 rounded-xl border transition-all duration-200',
+                    mood.color,
+                    selectedMood === mood.value && 'ring-2 ring-primary scale-105'
+                  )}
+                >
+                  <span className="text-2xl">{mood.emoji}</span>
+                  <span className="text-[10px] text-muted-foreground font-medium">
+                    {mood.value}
+                  </span>
+                </button>
+              ))}
+            </div>
+
+            {/* Selected mood label */}
+            {selectedMood !== null && (
+              <div className="mt-4 text-center animate-in fade-in duration-200">
+                <span className="text-lg font-bold text-foreground">
+                  {MOOD_LEVELS.find(m => m.value === selectedMood)?.label}
+                </span>
               </div>
-            </div>
-
-            {/* Slider Track */}
-            <div className="relative">
-              {/* Background track */}
-              <div className="h-2 rounded-full bg-secondary/50 relative overflow-hidden">
-                {/* Gradient fill */}
-                <div 
-                  className="absolute inset-y-0 left-0 rounded-full transition-all duration-150"
-                  style={{
-                    width: `${gradientPosition}%`,
-                    background: `linear-gradient(90deg, 
-                      rgb(239, 68, 68) 0%, 
-                      rgb(249, 115, 22) 25%, 
-                      rgb(234, 179, 8) 50%, 
-                      rgb(34, 197, 94) 75%, 
-                      rgb(255, 16, 240) 100%
-                    )`,
-                  }}
-                />
-              </div>
-
-              {/* Range Input */}
-              <input
-                type="range"
-                min="1"
-                max="10"
-                value={selectedMood}
-                onChange={(e) => setSelectedMood(parseInt(e.target.value))}
-                className="absolute inset-0 w-full h-2 opacity-0 cursor-pointer"
-                style={{ margin: 0 }}
-              />
-
-              {/* Custom Thumb */}
-              <div 
-                className="absolute top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-white shadow-lg border-2 border-primary pointer-events-none transition-all duration-150"
-                style={{ 
-                  left: `calc(${gradientPosition}% - 12px)`,
-                }}
-              />
-            </div>
-
-            {/* Scale Labels */}
-            <div className="flex justify-between mt-3 text-xs text-muted-foreground">
-              <span>1</span>
-              <span>5</span>
-              <span>10</span>
-            </div>
+            )}
           </div>
 
           {/* Actions */}
@@ -148,17 +135,18 @@ export function MoodCheckModal({ isOpen, onClose, onSubmit, period }: MoodCheckM
             </Button>
             <Button
               onClick={handleSubmit}
+              disabled={selectedMood === null}
               className="flex-1 bg-primary hover:bg-primary/90"
             >
-              Log
+              Log Mood
             </Button>
           </div>
 
           {/* Learning indicator */}
           <div className="px-6 pb-4">
             <div className="flex items-center justify-center gap-2 text-xs text-muted-foreground">
-              <span className="w-2 h-2 rounded-full bg-primary/60 animate-pulse" />
-              <span>Chief of Staff is learning your patterns</span>
+              <span className="w-2 h-2 rounded-full bg-cyan-500 animate-pulse" />
+              <span>Digital Twin is learning your patterns</span>
             </div>
           </div>
         </div>
