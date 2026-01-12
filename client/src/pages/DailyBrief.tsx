@@ -118,11 +118,16 @@ export default function DailyBrief() {
 
   const isActioned = (itemId: string) => actionedItems.some(item => item.id === itemId);
 
+  const [showVideoBriefing, setShowVideoBriefing] = useState(false);
+
   const handleExport = (format: "pdf" | "video" | "audio") => {
+    if (format === "video") {
+      setShowVideoBriefing(true);
+      return;
+    }
     const messages = {
       pdf: "Generating 2-page PDF brief...",
-      video: "Preparing video presentation...",
-      audio: "Creating podcast version..."
+      audio: "Creating podcast version with Victoria's voice..."
     };
     toast.info(messages[format]);
   };
@@ -232,17 +237,66 @@ export default function DailyBrief() {
 
   return (
     <div className="h-full bg-background text-foreground overflow-auto">
+      {/* Victoria Stirling Video Briefing Modal */}
+      {showVideoBriefing && (
+        <div className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4">
+          <div className="relative w-full max-w-4xl bg-card rounded-2xl overflow-hidden shadow-2xl border border-border">
+            <div className="absolute top-4 right-4 z-10">
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={() => setShowVideoBriefing(false)}
+                className="text-white hover:bg-white/20"
+              >
+                ✕ Close
+              </Button>
+            </div>
+            <div className="aspect-video bg-black relative">
+              <video 
+                src="/avatars/victoria-stirling-video.mp4" 
+                className="w-full h-full object-cover"
+                autoPlay
+                controls
+              />
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6">
+                <div className="flex items-center gap-3">
+                  <img 
+                    src="/avatars/victoria-stirling.jpg" 
+                    alt="Victoria Stirling" 
+                    className="w-10 h-10 rounded-full border-2 border-blue-500"
+                  />
+                  <div>
+                    <p className="text-white font-semibold">Victoria Stirling</p>
+                    <p className="text-white/70 text-sm">Your Daily Signal Briefing</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="p-4 bg-card border-t border-border">
+              <p className="text-muted-foreground text-sm text-center">
+                Victoria delivers your personalized daily briefing with key priorities, market intelligence, and strategic recommendations.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Header */}
       <div className="border-b border-border bg-card/80 backdrop-blur-xl sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 md:px-6 py-4">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div className="flex items-center gap-4">
-              <div className="p-3 rounded-2xl bg-gradient-to-br from-blue-500/20 to-purple-500/20 border border-blue-500/30">
-                <Sun className="w-6 h-6 md:w-8 md:h-8 text-blue-400" />
+              <div className="relative">
+                <img 
+                  src="/avatars/victoria-stirling.jpg" 
+                  alt="Victoria Stirling" 
+                  className="w-12 h-12 md:w-14 md:h-14 rounded-full object-cover border-2 border-blue-500/50 shadow-lg"
+                />
+                <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-background" />
               </div>
               <div>
                 <h1 className="text-xl md:text-2xl font-display font-bold">The Signal</h1>
-                <p className="text-muted-foreground text-sm">{BRIEF_DATA.date} • 5 min read</p>
+                <p className="text-muted-foreground text-sm">Presented by <span className="text-blue-400">Victoria Stirling</span> • {BRIEF_DATA.date}</p>
               </div>
             </div>
             

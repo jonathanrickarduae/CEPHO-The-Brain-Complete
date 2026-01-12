@@ -28,6 +28,7 @@ import {
   createExpertDomainKnowledge, getExpertDomainKnowledge, updateExpertDomainKnowledge, getStaleExpertDomains
 } from "./db";
 import { invokeLLM } from "./_core/llm";
+import { chatWithExpert } from "./services/expertChatService";
 import { z } from "zod";
 
 export const appRouter = router({

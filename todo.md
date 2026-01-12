@@ -2661,3 +2661,10 @@
 - [x] Integrate direct chat into Expert Directory
 - [x] Update expert cards to show real photos
 
+
+## AI Backend & Voice Cloning - Jan 12 2026
+- [ ] Create AI backend service for expert chat with personality prompts
+- [ ] Research and integrate ElevenLabs API for voice synthesis
+- [ ] Wire DirectExpertChat to use real AI responses
+- [ ] Add voice response playback in chat interface
+
