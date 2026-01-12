@@ -160,8 +160,8 @@ export default function Dashboard() {
     // TOP ROW - The Flow
     { 
       id: 1, 
-      label: "DAILY BRIEF", 
-      sub: "Briefing & Actions", 
+      label: "THE SIGNAL", 
+      sub: "Morning Briefing", 
       icon: Sun, 
       color: "#f59e0b",
       path: "/daily-brief",
@@ -169,7 +169,7 @@ export default function Dashboard() {
     },
     { 
       id: 2, 
-      label: "AI EXPERT ENGINE", 
+      label: "AI-SMEs", 
       sub: "287 Experts Ready", 
       icon: Users, 
       color: "#06b6d4",
@@ -188,8 +188,8 @@ export default function Dashboard() {
     // BOTTOM ROW - Support
     { 
       id: 4, 
-      label: "DIGITAL TWIN", 
-      sub: "12.5h Training", 
+      label: "CHIEF OF STAFF", 
+      sub: "Level 2: Learning", 
       icon: Fingerprint, 
       color: "#a855f7",
       path: "/digital-twin",
