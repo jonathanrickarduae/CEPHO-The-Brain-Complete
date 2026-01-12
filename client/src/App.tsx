@@ -32,6 +32,7 @@ import PodcastPage from "./pages/PodcastPage";
 import WellnessPage from "./pages/WellnessPage";
 import ChiefOfStaffRole from "./pages/ChiefOfStaffRole";
 import ReferenceLibrary from "./pages/ReferenceLibrary";
+import DueDiligencePage from "./pages/DueDiligencePage";
 import { GovernanceProvider, GovernanceModeChangeModal } from "./hooks/useGovernance";
 import { CelebrationProvider } from "./components/CelebrationAnimations";
 import { DailyCycleProvider } from "./components/DailyCycleProvider";
@@ -110,6 +111,9 @@ function Router() {
       </Route>
       <Route path="/project-genesis">
         <WithLayout><ProjectGenesisPage /></WithLayout>
+      </Route>
+      <Route path="/due-diligence">
+        <WithLayout><DueDiligencePage /></WithLayout>
       </Route>
       <Route path="/inbox">
         <WithLayout><InboxPage /></WithLayout>

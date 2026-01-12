@@ -22,7 +22,20 @@ const projects = [
     images: 12,
     charts: 8,
     lastUpdated: '2024-01-10',
-    status: 'active'
+    status: 'active',
+    subProjects: [
+      {
+        id: 'empower-farmer-dd',
+        name: 'Empower Farmer DD',
+        type: 'due-diligence',
+        icon: '🌾',
+        status: 'in_progress',
+        progress: 15,
+        documents: 0,
+        lastUpdated: '2024-01-12',
+        description: 'Due diligence review for Empower Farmer investment opportunity'
+      }
+    ]
   },
   {
     id: 'boundless',

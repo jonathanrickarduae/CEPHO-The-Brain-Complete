@@ -2363,3 +2363,72 @@
 - [ ] Recommendations report with rationale tied to business goals
 - [ ] Cultural/geographic considerations (Middle East = gold/purple, etc.)
 - [ ] Final sign-off → Locked in The Vault as approved guidelines
+
+
+## AI Avatar Video Conversations
+- [ ] Phase 1: Voice note input to prime conversation (user gives context upfront)
+- [ ] Phase 2: Playback mode - sit back and listen to avatar response
+- [ ] Phase 3: Continuous conversation with VAD (voice activity detection)
+- [ ] Voice Activity Detection - mic always on, triggers only when speaking
+- [ ] Thinking indicator - small brain pulse animation while processing
+- [ ] Auto-stop detection when user finishes speaking
+- [ ] Connect to HeyGen or D-ID API for avatar video generation
+- [ ] Use ElevenLabs for voice synthesis (already have integration)
+- [ ] Support for famous personality avatars (Ryan Reynolds style)
+- [ ] Support for all 294 AI-SME avatars
+- [ ] Conversation history/transcript view alongside video
+- [ ] Manual override - tap to force start/stop mic if needed
+
+
+## AI-SME Feedback & Evolution System
+- [ ] Post-conversation 1-10 rating slider (quick, 5 seconds)
+- [ ] Optional voice note feedback after rating
+- [ ] Evening Review integration - Chief of Staff asks for deeper feedback
+- [ ] Chief of Staff overnight processing of all daily feedback
+- [ ] Expert performance tracking (average rating, trend over time)
+- [ ] Auto-actions based on ratings: Enhance, Retrain, Demote, Fire, Promote
+- [ ] Morning brief reports expert changes made overnight
+- [ ] Expert prompt/personality adjustment based on feedback
+- [ ] Feedback history stored per expert for pattern analysis
+- [ ] "What could be better?" capture for specific improvement guidance
+
+
+## AI-SME Feedback & Evolution System
+- [ ] Post-conversation 1-10 rating slider (quick, 5 seconds)
+- [ ] Optional voice note feedback after rating
+- [ ] Evening Review integration - Chief of Staff asks for deeper feedback
+- [ ] Chief of Staff overnight processing of all daily feedback
+- [ ] Expert performance tracking (average rating, trend over time)
+- [ ] Auto-actions based on ratings: Enhance, Retrain, Demote, Fire, Promote
+- [ ] Morning brief reports expert changes made overnight
+- [ ] Expert prompt/personality adjustment based on feedback
+- [ ] Feedback history stored per expert for pattern analysis
+- [ ] "What could be better?" capture for specific improvement guidance
+
+
+## M&A Due Diligence Module
+- [x] Create Due Diligence wizard under Project Genesis
+- [x] Pathway A: Data room login with human-like browsing agent
+- [x] Pathway B: Manual document upload (drag & drop, photos, bulk)
+- [x] Sub-project structure: Parent project → DD sub-project
+- [x] Document categories: Financial, Legal, Operational, Commercial
+- [x] AI Analysis: Revenue trends, EBITDA, margins, liabilities, IP review
+- [x] Risk Register with severity ratings (High/Medium/Low)
+- [x] Questions for Management list (gaps identified)
+- [x] Valuation modeling: DCF, comparables, precedent transactions
+- [x] Executive Summary (1-pager)
+- [x] Full DD Report (Big 4 format with Calibri, page numbers, headers)
+- [x] Go/No-Go Recommendation with rationale
+- [x] Chief of Staff QA review before finalizing
+- [x] Final report locked in Vault with sign-off
+- [x] Add Empower Farmer DD as sub-project under Celadon
+
+## AI-SME Feedback & Evolution System
+- [ ] Post-conversation 1-10 rating slider (quick, 5 seconds)
+- [ ] Optional voice note feedback after rating
+- [ ] Evening Review integration - Chief of Staff asks for deeper feedback
+- [ ] Chief of Staff overnight processing of all daily feedback
+- [ ] Expert performance tracking (average rating, trend over time)
+- [ ] Auto-actions based on ratings: Enhance, Retrain, Demote, Fire, Promote
+- [ ] Morning brief reports expert changes made overnight
+- [ ] Expert prompt/personality adjustment based on feedback
