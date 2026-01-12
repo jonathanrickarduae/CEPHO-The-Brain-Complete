@@ -2342,3 +2342,10 @@
 - [ ] Value proposition for users: guaranteed quality, trust, top 10 in world
 - [ ] Expert profile pages showing credentials, AI-SME contribution stats
 - [ ] Exclusivity as differentiator vs open platforms
+
+## Quick Project Creation Flow
+- [ ] Add RTT as new project in Library
+- [ ] Add "+ New Project" button on Library page
+- [ ] Quick setup modal (name, logo/emoji)
+- [ ] New project links to Project Genesis wizard
+- [ ] Archive/complete functionality for finished projects
