@@ -109,8 +109,22 @@ interface ThemeToggleProps {
 }
 
 export function ThemeToggle({ variant = 'icon', className = '' }: ThemeToggleProps) {
-  const { theme, resolvedTheme, setTheme } = useTheme();
+  const context = useContext(ThemeContext);
   const [isOpen, setIsOpen] = useState(false);
+
+  // Fallback if context is not available
+  if (!context) {
+    return (
+      <button
+        className={`p-2 rounded-lg hover:bg-gray-800 transition-colors ${className}`}
+        title="Theme toggle"
+      >
+        <Moon className="w-5 h-5 text-muted-foreground" />
+      </button>
+    );
+  }
+
+  const { theme, resolvedTheme, setTheme } = context;
 
   const cycleTheme = () => {
     const themes: Theme[] = ['light', 'dark', 'system'];
