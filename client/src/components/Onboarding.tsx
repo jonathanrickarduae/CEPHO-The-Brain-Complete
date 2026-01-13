@@ -21,7 +21,7 @@ const ONBOARDING_STEPS: OnboardingStep[] = [
   {
     id: 1,
     title: 'CEPHO',
-    description: 'Your AI-powered command center that learns from you and works alongside you. A living ecosystem of intelligence at your fingertips.',
+    description: 'From the Greek for brain. Where intelligence begins.\n\nCepho derives from the Greek root that gives us "encephalon" - the scientific word for the brain itself. It connects to "cephalisation," the evolutionary process that created intelligence. We are continuing the story of how thinking emerged in the universe.',
     icon: Brain,
     color: 'text-primary',
     useBrain: true,

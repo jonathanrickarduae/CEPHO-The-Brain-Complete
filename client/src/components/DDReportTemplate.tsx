@@ -62,7 +62,7 @@ export function DDReportTemplate({ data, onExport }: DDReportTemplateProps) {
       case 'proceed': return 'text-green-600 bg-green-50';
       case 'proceed_with_caution': return 'text-amber-600 bg-amber-50';
       case 'do_not_proceed': return 'text-red-600 bg-red-50';
-      default: return 'text-gray-600 bg-gray-50';
+      default: return 'text-muted-foreground bg-secondary';
     }
   };
 
@@ -97,7 +97,7 @@ export function DDReportTemplate({ data, onExport }: DDReportTemplateProps) {
         </button>
         <button
           onClick={() => window.print()}
-          className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+          className="flex items-center gap-2 px-4 py-2 bg-secondary text-secondary-foreground rounded-lg hover:bg-secondary/80 transition-colors"
         >
           <Printer className="w-4 h-4" />
           Print
@@ -140,7 +140,7 @@ export function DDReportTemplate({ data, onExport }: DDReportTemplateProps) {
             <h2 className="text-5xl font-bold text-gray-900 mb-8" style={{ fontFamily: 'Calibri, sans-serif' }}>
               {data.companyName}
             </h2>
-            <div className="text-xl text-gray-600" style={{ fontFamily: 'Calibri, sans-serif' }}>
+            <div className="text-xl text-muted-foreground" style={{ fontFamily: 'Calibri, sans-serif' }}>
               {data.reportType}
             </div>
           </div>
@@ -231,7 +231,7 @@ export function DDReportTemplate({ data, onExport }: DDReportTemplateProps) {
           <div className="w-16 h-1 bg-purple-600 mb-8" />
           
           <div className="prose prose-gray max-w-none" style={{ fontFamily: 'Calibri, sans-serif' }}>
-            <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">
+            <p className="text-foreground leading-relaxed whitespace-pre-wrap">
               {data.executiveSummary}
             </p>
           </div>
@@ -314,7 +314,7 @@ export function DDReportTemplate({ data, onExport }: DDReportTemplateProps) {
             <div className="w-16 h-1 bg-purple-600 mb-8" />
 
             <div className="prose prose-gray max-w-none mb-8" style={{ fontFamily: 'Calibri, sans-serif' }}>
-              <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">
+              <p className="text-foreground leading-relaxed whitespace-pre-wrap">
                 {section.content}
               </p>
             </div>

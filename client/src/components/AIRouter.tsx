@@ -325,8 +325,8 @@ export function AIProviderSettings() {
   return (
     <div className="space-y-6">
       <div>
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">AI Providers</h3>
-        <p className="text-sm text-gray-600 mb-4">
+        <h3 className="text-lg font-semibold text-foreground mb-4">AI Providers</h3>
+        <p className="text-sm text-muted-foreground mb-4">
           Configure AI providers. The system automatically routes queries to the optimal provider based on task type.
         </p>
       </div>
@@ -345,17 +345,17 @@ export function AIProviderSettings() {
               <div className="flex items-start justify-between">
                 <div className="flex-1">
                   <div className="flex items-center gap-2">
-                    <h4 className="font-medium text-gray-900">{provider.name}</h4>
+                    <h4 className="font-medium text-foreground">{provider.name}</h4>
                     {isConfigured && (
                       <span className="px-2 py-0.5 text-xs bg-green-100 text-green-700 rounded-full">
                         Active
                       </span>
                     )}
                   </div>
-                  <p className="text-sm text-gray-600 mt-1">{provider.description}</p>
+                  <p className="text-sm text-muted-foreground mt-1">{provider.description}</p>
                   <div className="flex flex-wrap gap-1 mt-2">
                     {provider.bestFor.map(task => (
-                      <span key={task} className="px-2 py-0.5 text-xs bg-gray-100 text-gray-600 rounded">
+                      <span key={task} className="px-2 py-0.5 text-xs bg-secondary text-secondary-foreground rounded">
                         {task}
                       </span>
                     ))}

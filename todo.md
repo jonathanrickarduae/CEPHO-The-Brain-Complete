@@ -2829,3 +2829,19 @@
 - [x] Integrate favorites into Dashboard input area
 - [x] Add star icon to favorite/unfavorite contacts
 - [x] Display favorites in quick access panel
+
+
+## Cepho Intro Screen (Jan 2026)
+- [x] Add Cepho tagline and description to intro screen
+- [x] Add brand story about Greek etymology and cephalisation
+
+## Chief of Staff Redesign (Jan 2026)
+- [ ] Redesign Chief of Staff section to match Manus design language
+- [ ] Update styling and layout to be consistent with main platform
+
+## Dark Mode & Contrast Fixes (Jan 2026)
+- [x] Fix text contrast issues - ensure white text visible on dark backgrounds
+- [x] Fix FavoriteContacts component styling for dark mode
+- [x] Fix modal/dropdown text visibility on dark backgrounds
+- [x] Ensure all UI elements have proper contrast ratios (WCAG AA standard)
+- [x] Test all pages in dark mode for readability
