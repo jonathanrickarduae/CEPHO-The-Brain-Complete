@@ -25,6 +25,7 @@ import { TourPrompt } from '@/components/TourAndDemoMode';
 import { NeuralNetworkViz } from '@/components/NeuralNetworkViz';
 import { TaskProgressTracker } from '@/components/TaskProgressTracker';
 import { FavoriteContacts } from '@/components/FavoriteContacts';
+import { OnboardingOverlay } from '@/components/OnboardingOverlay';
 import { isDemoModeEnabled, getDemoData, initializeDemoModeIfNeeded } from "@/services/demoMode";
 
 // Daily rotating quotes - one for each day
@@ -224,7 +225,7 @@ export default function Dashboard() {
               <Mic className="w-4 h-4 text-primary" />
               <span className="text-xs font-semibold text-primary">VOICE CAPTURE</span>
             </div>
-            <div className="flex items-center gap-3 bg-card/80 border-2 border-primary/30 rounded-2xl px-4 py-4 focus-within:border-primary/60 focus-within:ring-2 focus-within:ring-primary/20 transition-all duration-300 shadow-lg shadow-primary/5">
+            <div className="flex items-center gap-3 bg-card/80 border-2 border-primary/30 rounded-2xl px-4 py-4 focus-within:border-primary/60 focus-within:ring-2 focus-within:ring-primary/20 transition-all duration-300 shadow-lg shadow-primary/5" data-tour="voice-input">
               <input 
                 type="text"
                 value={inputValue}
@@ -235,9 +236,22 @@ export default function Dashboard() {
               />
               <button 
                 onClick={toggleRecording}
-                className={`p-2 rounded-lg transition-colors ${isRecording ? 'bg-red-500/20 text-red-400' : 'hover:bg-primary/10 text-muted-foreground hover:text-foreground'}`}
+                className={`p-2 rounded-lg transition-all relative group ${
+                  isRecording 
+                    ? 'bg-red-500/20 text-red-400 animate-pulse' 
+                    : 'hover:bg-primary/10 text-muted-foreground hover:text-foreground hover:scale-110'
+                }`}
+                title="Hold to record voice input"
               >
-                <Mic className="w-5 h-5" />
+                {/* Pulse ring on hover */}
+                {!isRecording && (
+                  <div className="absolute inset-0 rounded-lg border-2 border-primary/0 group-hover:border-primary/50 group-hover:animate-pulse transition-all"></div>
+                )}
+                {/* Recording indicator */}
+                {isRecording && (
+                  <div className="absolute inset-0 rounded-lg border-2 border-red-400/50 animate-pulse"></div>
+                )}
+                <Mic className="w-5 h-5 relative z-10" />
               </button>
               <button 
                 onClick={handleSubmit}
@@ -376,6 +390,9 @@ export default function Dashboard() {
 
       {/* Floating Elements */}
       <FloatingVoiceNoteButton />
+      
+      {/* Onboarding Overlay */}
+      <OnboardingOverlay />
     </div>
     </PullToRefresh>
     </>
