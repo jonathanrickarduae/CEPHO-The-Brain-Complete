@@ -46,6 +46,7 @@ import { GlobalSearch } from "./GlobalSearch";
 import NeonBrain from "./NeonBrain";
 import { NotificationBell } from "./NotificationCenter";
 import { CephoLandingPage } from "./CephoLandingPage";
+import { ThemeToggle } from "./ThemeToggle";
 
 // Core navigation - streamlined for professional use
 const menuItems = [
@@ -310,6 +311,7 @@ function BrainLayoutContent({
                 <Search className="w-4 h-4" />
                 <span className="hidden sm:inline">Search...</span>
               </button>
+              <ThemeToggle />
               <NotificationBell />
             </div>
           </div>

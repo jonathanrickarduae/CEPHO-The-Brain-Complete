@@ -9,6 +9,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { QuickActionsPanel } from "@/components/QuickActionsPanel";
 import { toast } from "sonner";
 
 // Types for actioned items
@@ -718,6 +719,29 @@ export default function DailyBrief() {
         {/* Action Engine Tab - Final Review */}
         {activeTab === "actions" && (
           <div className="space-y-6">
+            {/* Quick Actions Panel */}
+            <Card className="bg-gradient-to-br from-primary/10 to-purple-500/10 border-primary/30">
+              <CardHeader>
+                <CardTitle className="text-foreground">Quick Actions</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <QuickActionsPanel
+                  onScheduleMeeting={() => {
+                    toast.success('Opening calendar to schedule meeting...');
+                  }}
+                  onSendEmail={() => {
+                    toast.success('Opening email draft with suggested recipients...');
+                  }}
+                  onCreateTask={() => {
+                    toast.success('Adding task to your list with suggested priority...');
+                  }}
+                  onEscalate={() => {
+                    toast.success('Escalating to expert team immediately...');
+                  }}
+                />
+              </CardContent>
+            </Card>
+
             {/* Summary Stats */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {[

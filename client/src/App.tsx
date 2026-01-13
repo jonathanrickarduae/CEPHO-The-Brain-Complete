@@ -39,6 +39,7 @@ import { AIRouterProvider } from "./components/AIRouter";
 import { CelebrationProvider } from "./components/CelebrationAnimations";
 import { DailyCycleProvider } from "./components/DailyCycleProvider";
 import { PageTransition } from "./components/PageTransition";
+import { KeyboardShortcutsGuide } from "./components/KeyboardShortcutsGuide";
 
 // Wrapper component for pages that need the sidebar layout with page transitions
 function WithLayout({ children }: { children: React.ReactNode }) {
@@ -165,6 +166,7 @@ function App() {
                   <Toaster />
                   <Router />
                   <GovernanceModeChangeModal />
+                  <KeyboardShortcutsGuide />
                 </TooltipProvider>
               </CelebrationProvider>
             </DailyCycleProvider>

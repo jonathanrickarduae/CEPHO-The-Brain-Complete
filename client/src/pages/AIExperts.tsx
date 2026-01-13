@@ -5,6 +5,7 @@ import { MyBoard } from "@/components/MyBoard";
 import { WarRoom } from "@/components/WarRoom";
 import { ExpertAnalytics } from "@/components/ExpertAnalytics";
 import { ExpertScheduling } from "@/components/ExpertScheduling";
+import { ExpertPerformanceRating, generateMockPerformance } from "@/components/ExpertPerformanceRating";
 import { 
   Users, Brain, Zap, Clock, CheckCircle2, 
   ArrowRight, MessageSquare, Play, Pause, 
