@@ -28,6 +28,9 @@ import {
   createExpertCoachingSession, getExpertCoachingSessions, updateExpertCoachingSession,
   createExpertDomainKnowledge, getExpertDomainKnowledge, updateExpertDomainKnowledge, getStaleExpertDomains
 } from "./db";
+import { getDb } from "./db";
+import { users } from "../drizzle/schema";
+import { eq } from "drizzle-orm";
 import { invokeLLM } from "./_core/llm";
 import { chatWithExpert } from "./services/expertChatService";
 import { textToSpeech, getExpertVoiceInfo, hasCustomVoice } from "./services/voiceService";
@@ -1848,7 +1851,34 @@ You are not a yes-man. You are a trusted advisor who respects the principal enou
         };
       }),
   }),
+   // Theme Preference API
+  theme: router({
+    get: protectedProcedure.query(async ({ ctx }) => {
+      const db = await getDb();
+      if (!db) return { themePreference: 'system' };
+      
+      const user = await db.select().from(users).where(eq(users.id, ctx.user.id)).limit(1);
+      return {
+        themePreference: user[0]?.themePreference || 'system',
+      };
+    }),
+    
+    set: protectedProcedure
+      .input(z.object({
+        themePreference: z.enum(['light', 'dark', 'system']),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        const db = await getDb();
+        if (!db) return { success: false };
+        
+        await db.update(users).set({
+          themePreference: input.themePreference,
+        }).where(eq(users.id, ctx.user.id));
+        
+        return { success: true, themePreference: input.themePreference };
+      }),
+  }),
+
   favorites: favoritesRouter,
 });
-
 export type AppRouter = typeof appRouter;

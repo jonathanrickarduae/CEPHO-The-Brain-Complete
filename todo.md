@@ -2883,3 +2883,9 @@
 - [x] 1 - Integrate Quick Actions into Daily Brief page
 - [x] 2 - Connect Expert Performance Ratings to real backend data
 - [x] 3 - Enable Dark/Light Mode toggle with theme switching
+
+
+## Theme & Accessibility (Jan 2026)
+- [x] Test theme switching functionality across all pages
+- [x] Add theme preference to user profile database
+- [x] Audit and fix light mode contrast for WCAG AA compliance
