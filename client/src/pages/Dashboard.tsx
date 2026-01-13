@@ -364,8 +364,8 @@ export default function Dashboard() {
       {/* Mobile Input Sheet */}
       {isMobile && (
         <MobileInputSheet 
-          open={showMobileInput} 
-          onOpenChange={setShowMobileInput}
+          isOpen={showMobileInput} 
+          onClose={() => setShowMobileInput(false)}
           onSubmit={(value) => {
             setInputValue(value);
             setShowMobileInput(false);

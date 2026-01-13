@@ -66,7 +66,7 @@ export const favoritesRouter = router({
       }
 
       // Create new
-      const result = await db.insert(favoriteContacts).values({
+      await db.insert(favoriteContacts).values({
         userId: ctx.user.id,
         contactType: input.contactType,
         contactId: input.contactId,
@@ -76,16 +76,18 @@ export const favoritesRouter = router({
         order: 0,
       });
 
-      return {
-        id: result.insertId,
-        userId: ctx.user.id,
-        contactType: input.contactType,
-        contactId: input.contactId,
-        contactName: input.contactName,
-        contactAvatar: input.contactAvatar,
-        isFavorited: true,
-        order: 0,
-      };
+      // Fetch the newly created record
+      const created = await db
+        .select()
+        .from(favoriteContacts)
+        .where(
+          and(
+            eq(favoriteContacts.userId, ctx.user.id),
+            eq(favoriteContacts.contactId, input.contactId)
+          )
+        );
+
+      return created[0];
     }),
 
   // Remove a contact from favorites

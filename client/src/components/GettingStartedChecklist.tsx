@@ -269,6 +269,7 @@ export function GettingStartedChecklist({ onDismiss, compact = false }: GettingS
 export function useOnboardingStatus() {
   const [isComplete, setIsComplete] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [activeProjects, setActiveProjects] = useState(0);
 
   useEffect(() => {
     const saved = localStorage.getItem('brain_onboarding_checklist');
@@ -278,7 +279,13 @@ export function useOnboardingStatus() {
       setProgress((completed / items.length) * 100);
       setIsComplete(completed === items.length);
     }
+    
+    // Get active projects count from localStorage
+    const projects = localStorage.getItem('active_projects');
+    if (projects) {
+      setActiveProjects(parseInt(projects, 10));
+    }
   }, []);
 
-  return { isComplete, progress };
+  return { isComplete, progress, activeProjects };
 }

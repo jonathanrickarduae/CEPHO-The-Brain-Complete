@@ -7,9 +7,9 @@ interface FavoriteContact {
   id: number;
   contactId: string;
   contactName: string;
-  contactAvatar?: string;
+  contactAvatar: string | null;
   contactType: "expert" | "corporate_partner" | "ai_expert" | "colleague";
-  order: number;
+  order: number | null;
 }
 
 interface FavoriteContactsProps {

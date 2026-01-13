@@ -7,7 +7,7 @@ import {
   Brain, Shield, Target, Clock, CheckCircle2, XCircle, 
   AlertTriangle, Plus, Edit2, Save, Trash2, ChevronRight,
   MessageSquare, Calendar, FileText, Users, TrendingUp,
-  Lock, Unlock, Settings, Zap
+  Lock, Unlock, Settings, Zap, Briefcase
 } from 'lucide-react';
 
 interface Responsibility {
@@ -93,233 +93,204 @@ export default function ChiefOfStaffRole() {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="max-w-6xl mx-auto px-4 md:px-6 py-4 space-y-4">
-        {/* Header */}
-        <div className="flex items-center justify-between py-2">
-          <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-xl bg-gradient-to-br from-fuchsia-500/20 to-purple-500/20 border border-fuchsia-500/30">
-              <Brain className="w-6 h-6 text-fuchsia-400" />
+      <div className="max-w-6xl mx-auto px-4 md:px-6 py-6 space-y-6">
+        {/* Header - Manus Style */}
+        <div className="border-b border-border pb-6">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <div className="p-3 rounded-lg bg-primary/10 border border-primary/20">
+                <Briefcase className="w-6 h-6 text-primary" />
+              </div>
+              <div>
+                <h1 className="text-2xl md:text-3xl font-bold text-foreground">Chief of Staff</h1>
+                <p className="text-muted-foreground text-sm mt-1">Configure responsibilities, boundaries, and autonomy levels</p>
+              </div>
             </div>
-            <div>
-              <h1 className="text-xl md:text-2xl font-bold text-white">Chief of Staff Role</h1>
-              <p className="text-muted-foreground text-sm">Configure responsibilities, boundaries & autonomy</p>
-            </div>
+            <Button size="sm" className="bg-primary hover:bg-primary/90">
+              <Save className="w-4 h-4 mr-2" />
+              Save Configuration
+            </Button>
           </div>
-          <Button size="sm" className="bg-fuchsia-600 hover:bg-fuchsia-700">
-            <Save className="w-4 h-4 mr-2" />
-            Save
-          </Button>
         </div>
 
-        {/* Maturity Level Card */}
-        <div className="bg-gradient-to-br from-fuchsia-500/10 to-purple-500/10 border border-fuchsia-500/30 rounded-xl p-4">
-          <div className="flex items-center justify-between mb-3">
+        {/* Maturity Level Card - Cleaner Design */}
+        <div className="bg-card border border-border rounded-lg p-6 space-y-4">
+          <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-lg font-semibold text-white">Maturity Level</h2>
-              <p className="text-gray-400 text-xs">Based on training hours and interaction patterns</p>
+              <h2 className="text-lg font-semibold text-foreground">Maturity Level</h2>
+              <p className="text-muted-foreground text-sm">Based on training hours and interaction patterns</p>
             </div>
-            <Badge className="bg-fuchsia-500/20 text-fuchsia-400 border-fuchsia-500/30 text-sm px-3 py-1">
+            <Badge variant="outline" className="text-base px-4 py-2">
               Level {currentLevel}: {MATURITY_LEVELS[currentLevel - 1].name}
             </Badge>
           </div>
 
           {/* Progress through levels */}
-          <div className="grid grid-cols-5 gap-2 mb-3">
+          <div className="grid grid-cols-5 gap-2">
             {MATURITY_LEVELS.map((level, index) => (
               <div 
                 key={level.level}
-                className={`p-3 rounded-lg border ${
+                className={`p-3 rounded-md border transition-all ${
                   index + 1 <= currentLevel 
-                    ? 'bg-fuchsia-500/20 border-fuchsia-500/50' 
-                    : 'bg-white/5 border-white/10'
+                    ? 'bg-primary/15 border-primary/40 shadow-sm' 
+                    : 'bg-secondary/30 border-border'
                 }`}
               >
-                <div className="flex items-center justify-between mb-1">
-                  <span className={`text-sm font-medium ${index + 1 <= currentLevel ? 'text-fuchsia-400' : 'text-gray-500'}`}>
-                    Level {level.level}
+                <div className="flex items-center justify-between mb-2">
+                  <span className={`text-xs font-medium ${index + 1 <= currentLevel ? 'text-primary' : 'text-muted-foreground'}`}>
+                    L{level.level}
                   </span>
-                  {index + 1 <= currentLevel && <CheckCircle2 className="w-4 h-4 text-fuchsia-400" />}
+                  {index + 1 <= currentLevel && <CheckCircle2 className="w-3 h-3 text-primary" />}
                 </div>
-                <p className={`text-xs ${index + 1 <= currentLevel ? 'text-white' : 'text-gray-500'}`}>
+                <p className={`text-xs font-medium ${index + 1 <= currentLevel ? 'text-foreground' : 'text-muted-foreground'}`}>
                   {level.name}
                 </p>
-                <p className="text-xs text-gray-500 mt-1">{level.hours} hrs</p>
+                <p className="text-xs text-muted-foreground mt-1">{level.hours} hrs</p>
               </div>
             ))}
           </div>
 
           {/* Training Progress */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 pt-2">
             <div className="flex-1">
-              <div className="flex items-center justify-between text-sm mb-1">
-                <span className="text-gray-400">Training Progress</span>
-                <span className="text-white font-medium">{trainingHours} hours logged</span>
+              <div className="flex items-center justify-between text-sm mb-2">
+                <span className="text-muted-foreground">Training Progress</span>
+                <span className="font-medium text-foreground">{trainingHours} hours logged</span>
               </div>
               <Progress value={(trainingHours / 200) * 100} className="h-2" />
             </div>
             <div className="text-right">
-              <p className="text-sm text-gray-400">Next level in</p>
-              <p className="text-lg font-semibold text-fuchsia-400">{200 - trainingHours} hours</p>
+              <p className="text-xs text-muted-foreground">Next level in</p>
+              <p className="text-lg font-semibold text-primary">{200 - trainingHours} hrs</p>
             </div>
           </div>
         </div>
 
-        {/* Tabs */}
-        <Tabs defaultValue="responsibilities" className="space-y-3">
-          <TabsList className="bg-white/5 border border-white/10">
-            <TabsTrigger value="responsibilities" className="data-[state=active]:bg-fuchsia-500/20">
+        {/* Tabs - Manus Style */}
+        <Tabs defaultValue="responsibilities" className="space-y-4">
+          <TabsList className="bg-secondary/50 border border-border">
+            <TabsTrigger value="responsibilities" className="data-[state=active]:bg-primary/15 data-[state=active]:text-primary">
               <Target className="w-4 h-4 mr-2" />
               Responsibilities
             </TabsTrigger>
-            <TabsTrigger value="boundaries" className="data-[state=active]:bg-fuchsia-500/20">
+            <TabsTrigger value="boundaries" className="data-[state=active]:bg-primary/15 data-[state=active]:text-primary">
               <Shield className="w-4 h-4 mr-2" />
               Boundaries
             </TabsTrigger>
-            <TabsTrigger value="communication" className="data-[state=active]:bg-fuchsia-500/20">
+            <TabsTrigger value="communication" className="data-[state=active]:bg-primary/15 data-[state=active]:text-primary">
               <MessageSquare className="w-4 h-4 mr-2" />
-              Communication Style
+              Communication
             </TabsTrigger>
           </TabsList>
 
           {/* Responsibilities Tab */}
-          <TabsContent value="responsibilities" className="space-y-6">
+          <TabsContent value="responsibilities" className="space-y-4">
             {categories.map(category => (
-              <div key={category} className="bg-card/50 border border-border rounded-xl overflow-hidden">
-                <div className="p-4 border-b border-border bg-white/5">
-                  <h3 className="font-semibold text-white">{category} Functions</h3>
+              <div key={category} className="bg-card border border-border rounded-lg overflow-hidden">
+                <div className="p-4 border-b border-border bg-secondary/30">
+                  <h3 className="font-semibold text-foreground">{category} Functions</h3>
                 </div>
-                <div className="divide-y divide-border/50">
+                <div className="divide-y divide-border">
                   {responsibilities.filter(r => r.category === category).map(resp => {
                     const AutonomyIcon = AUTONOMY_CONFIG[resp.autonomyLevel].icon;
                     return (
-                      <div key={resp.id} className="p-4 flex items-center justify-between hover:bg-white/5 transition-colors">
+                      <div key={resp.id} className="p-4 flex items-center justify-between hover:bg-secondary/20 transition-colors">
                         <div className="flex items-center gap-4 flex-1">
                           <button
                             onClick={() => toggleResponsibility(resp.id)}
-                            className={`w-6 h-6 rounded border-2 flex items-center justify-center transition-colors ${
+                            className={`w-6 h-6 rounded border-2 flex items-center justify-center transition-colors flex-shrink-0 ${
                               resp.enabled 
-                                ? 'bg-fuchsia-500 border-fuchsia-500' 
-                                : 'border-gray-500 hover:border-gray-400'
+                                ? 'bg-primary border-primary' 
+                                : 'border-border hover:border-primary/50'
                             }`}
                           >
-                            {resp.enabled && <CheckCircle2 className="w-4 h-4 text-white" />}
+                            {resp.enabled && <CheckCircle2 className="w-4 h-4 text-primary-foreground" />}
                           </button>
-                          <div>
-                            <h4 className={`font-medium ${resp.enabled ? 'text-white' : 'text-gray-500'}`}>
-                              {resp.title}
-                            </h4>
-                            <p className={`text-sm ${resp.enabled ? 'text-gray-400' : 'text-gray-600'}`}>
-                              {resp.description}
-                            </p>
+                          <div className="flex-1 min-w-0">
+                            <p className="font-medium text-foreground">{resp.title}</p>
+                            <p className="text-sm text-muted-foreground">{resp.description}</p>
                           </div>
                         </div>
-                        {resp.enabled && (
-                          <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-2 ml-4 flex-shrink-0">
+                          <div className="flex gap-1">
                             {(['ask', 'inform', 'autonomous'] as const).map(level => (
                               <button
                                 key={level}
                                 onClick={() => updateAutonomy(resp.id, level)}
-                                className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors ${
+                                className={`px-2 py-1 rounded text-xs font-medium transition-colors ${
                                   resp.autonomyLevel === level
                                     ? AUTONOMY_CONFIG[level].color
-                                    : 'bg-white/5 text-gray-400 border-white/10 hover:border-white/20'
+                                    : 'bg-secondary/50 text-muted-foreground hover:bg-secondary'
                                 }`}
                               >
-                                {AUTONOMY_CONFIG[level].label}
+                                {level === 'ask' ? 'Ask' : level === 'inform' ? 'Inform' : 'Auto'}
                               </button>
                             ))}
                           </div>
-                        )}
+                        </div>
                       </div>
                     );
                   })}
                 </div>
               </div>
             ))}
-
-            <Button variant="outline" className="w-full border-dashed border-white/20 text-gray-400 hover:text-white hover:border-white/40">
-              <Plus className="w-4 h-4 mr-2" />
-              Add Custom Responsibility
-            </Button>
           </TabsContent>
 
           {/* Boundaries Tab */}
           <TabsContent value="boundaries" className="space-y-4">
-            <div className="bg-card/50 border border-border rounded-xl overflow-hidden">
-              <div className="p-4 border-b border-border bg-white/5">
-                <h3 className="font-semibold text-white">What Chief of Staff Must NOT Do</h3>
-                <p className="text-sm text-gray-400">Hard boundaries that cannot be crossed</p>
-              </div>
-              <div className="divide-y divide-border/50">
-                {boundaries.map(boundary => {
-                  const BoundaryIcon = BOUNDARY_CONFIG[boundary.type].icon;
-                  return (
-                    <div key={boundary.id} className="p-4 flex items-center justify-between hover:bg-white/5 transition-colors">
-                      <div className="flex items-center gap-4">
-                        <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${BOUNDARY_CONFIG[boundary.type].color.split(' ')[0]}`}>
-                          <BoundaryIcon className={`w-5 h-5 ${BOUNDARY_CONFIG[boundary.type].color.split(' ')[1]}`} />
-                        </div>
-                        <div>
-                          <h4 className="font-medium text-white">{boundary.title}</h4>
-                          <p className="text-sm text-gray-400">{boundary.description}</p>
-                        </div>
+            <div className="space-y-3">
+              {boundaries.map(boundary => {
+                const BoundaryIcon = BOUNDARY_CONFIG[boundary.type].icon;
+                return (
+                  <div key={boundary.id} className="bg-card border border-border rounded-lg p-4">
+                    <div className="flex items-start gap-4">
+                      <div className={`p-2 rounded-md flex-shrink-0 ${BOUNDARY_CONFIG[boundary.type].color}`}>
+                        <BoundaryIcon className="w-4 h-4" />
                       </div>
-                      <Badge variant="outline" className={BOUNDARY_CONFIG[boundary.type].color}>
-                        {BOUNDARY_CONFIG[boundary.type].label}
-                      </Badge>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-1">
+                          <h3 className="font-medium text-foreground">{boundary.title}</h3>
+                          <Badge variant="outline" className="text-xs">
+                            {BOUNDARY_CONFIG[boundary.type].label}
+                          </Badge>
+                        </div>
+                        <p className="text-sm text-muted-foreground">{boundary.description}</p>
+                      </div>
                     </div>
-                  );
-                })}
-              </div>
+                  </div>
+                );
+              })}
             </div>
-
-            <Button variant="outline" className="w-full border-dashed border-white/20 text-gray-400 hover:text-white hover:border-white/40">
-              <Plus className="w-4 h-4 mr-2" />
-              Add Custom Boundary
-            </Button>
           </TabsContent>
 
-          {/* Communication Style Tab */}
+          {/* Communication Tab */}
           <TabsContent value="communication" className="space-y-4">
-            <div className="bg-card/50 border border-border rounded-xl p-6">
-              <h3 className="font-semibold text-white mb-4">Communication Protocol</h3>
-              
-              <div className="space-y-4">
-                <div className="p-4 bg-green-500/10 border border-green-500/30 rounded-lg">
-                  <h4 className="font-medium text-green-400 mb-2 flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4" />
-                    What Chief of Staff SHOULD Do
-                  </h4>
-                  <ul className="text-sm text-gray-300 space-y-2">
-                    <li>• Be direct and professional - no fluff or filler</li>
-                    <li>• Challenge weak reasoning: "I'd challenge that because..."</li>
-                    <li>• Demand missing information: "Before proceeding, I need..."</li>
-                    <li>• Slow down rushed decisions: "Have you stress-tested this against..."</li>
-                    <li>• Provide evidence-based recommendations with sources</li>
-                    <li>• Flag concerns others might avoid mentioning</li>
-                  </ul>
-                </div>
-
-                <div className="p-4 bg-red-500/10 border border-red-500/30 rounded-lg">
-                  <h4 className="font-medium text-red-400 mb-2 flex items-center gap-2">
-                    <XCircle className="w-4 h-4" />
-                    What Chief of Staff Must NOT Do
-                  </h4>
-                  <ul className="text-sm text-gray-300 space-y-2">
-                    <li>• No sycophancy - never say "Great idea!" without reasoning</li>
-                    <li>• No empty validation - earn agreement through logic</li>
-                    <li>• No casual chat - keep it professional and crisp</li>
-                    <li>• No hedged language - be direct with statements</li>
-                    <li>• No opinions without evidence - facts and data first</li>
-                  </ul>
-                </div>
-
-                <div className="p-4 bg-white/5 border border-white/10 rounded-lg">
-                  <h4 className="font-medium text-white mb-2">Tone Standard</h4>
-                  <p className="text-sm text-gray-400">
-                    Think McKinsey consultant, not personal assistant. Think boardroom, not coffee chat. 
-                    Respectful, rigorous, results-focused. A trusted advisor who respects you enough to be honest.
-                  </p>
+            <div className="bg-card border border-border rounded-lg p-6 space-y-4">
+              <div>
+                <h3 className="font-semibold text-foreground mb-2">Communication Protocol</h3>
+                <p className="text-sm text-muted-foreground mb-4">Define how your Chief of Staff should communicate with you</p>
+                <div className="space-y-3">
+                  <div className="flex items-center gap-3 p-3 bg-secondary/30 rounded-md border border-border">
+                    <input type="checkbox" defaultChecked className="w-4 h-4 rounded" />
+                    <div>
+                      <p className="text-sm font-medium text-foreground">Daily Summary</p>
+                      <p className="text-xs text-muted-foreground">Receive a daily briefing of key decisions and actions</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3 p-3 bg-secondary/30 rounded-md border border-border">
+                    <input type="checkbox" defaultChecked className="w-4 h-4 rounded" />
+                    <div>
+                      <p className="text-sm font-medium text-foreground">Real-time Alerts</p>
+                      <p className="text-xs text-muted-foreground">Notify me immediately of urgent issues or decisions</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3 p-3 bg-secondary/30 rounded-md border border-border">
+                    <input type="checkbox" className="w-4 h-4 rounded" />
+                    <div>
+                      <p className="text-sm font-medium text-foreground">Weekly Review</p>
+                      <p className="text-xs text-muted-foreground">Comprehensive weekly review of all decisions and outcomes</p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
