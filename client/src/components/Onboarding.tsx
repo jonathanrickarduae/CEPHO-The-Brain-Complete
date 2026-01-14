@@ -21,7 +21,7 @@ const ONBOARDING_STEPS: OnboardingStep[] = [
   {
     id: 1,
     title: 'CEPHO',
-    description: 'Your intelligent executive assistant. Where productivity begins.',
+    description: 'From the Greek for brain. Where intelligence begins. We are continuing the story of how thinking emerged in the universe.',
     icon: Brain,
     color: 'text-primary',
     useBrain: true,
