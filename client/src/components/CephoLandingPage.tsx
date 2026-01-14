@@ -97,10 +97,7 @@ export function CephoLandingPage() {
           Sign in to Continue
         </Button>
 
-        {/* Brand Story */}
-        <p className="text-xs text-white/30 text-center mt-4 max-w-sm">
-          Cepho derives from the Greek root that gives us "encephalon" — the scientific word for the brain itself.
-        </p>
+
       </div>
     </div>
   );

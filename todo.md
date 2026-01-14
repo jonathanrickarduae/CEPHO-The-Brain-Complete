@@ -2901,3 +2901,7 @@
 - [x] Add theme preference to user settings UI
 - [x] Implement page load theme transition animation
 - [x] Add theme-aware color picker
+
+
+## Quick Fixes (Jan 2026)
+- [x] Remove Greek etymology text from login/onboarding screen
