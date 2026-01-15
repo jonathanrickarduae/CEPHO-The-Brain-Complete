@@ -1848,7 +1848,7 @@
 - [ ] Cross-reference insights across documents
 
 ### Sign-Off Document Generation
-- [ ] Comprehensive strategic brief (like Boundless doc structure)
+- [x] Comprehensive strategic brief (like Boundless doc structure)
 - [ ] Executive summary with key decisions
 - [ ] Clear objectives and success metrics
 - [ ] Identified risks and concerns
@@ -2624,7 +2624,7 @@
 - [ ] Create continuous improvement log (blooms/containments)
 - [ ] Build gap analysis capability
 - [ ] Deep Research blueprint with process flow
-- [ ] Social Media blueprint with process flow
+- [x] Social Media blueprint with process flow
 - [ ] Validate all blueprints against SME data
 
 ## Updates - Jan 12 2026 (Batch 4)
@@ -2955,3 +2955,18 @@
 - [x] Create comprehensive SME Success DNA document
 - [x] Integrate into Blueprint Library as foundational base plate
 - [x] Apply success factors to Boundless Telecom gap analysis
+
+## Lightfied CRM Integration
+
+- [ ] Research Lightfied CRM platform and API capabilities
+- [ ] Design integration architecture for outreach workflow
+- [ ] Create onboarding process optimization guide
+- [ ] Build API connection documentation
+- [ ] Add integration to Blueprint Library
+
+## Social Media Platform Blueprints
+
+- [ ] Research platform algorithms (LinkedIn, X, Instagram, TikTok, YouTube, Facebook)
+- [ ] Create algorithm-optimized content strategies for each platform
+- [x] Build Social Media Platform Blueprint document
+- [x] Integrate with Lightfield CRM for unified outreach
