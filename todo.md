@@ -2905,3 +2905,12 @@
 
 ## Quick Fixes (Jan 2026)
 - [x] Remove Greek etymology text from login/onboarding screen
+
+
+## Project Genesis Blueprint (Jan 2026)
+- [ ] Document the voice note to expert team workflow
+- [ ] Define 12-person expert team structure template
+- [ ] Create implementation plan for Project Genesis wizard
+- [ ] Integrate voice note transcription into project intake
+- [ ] Add project lead assignment (L&D expert, etc.)
+- [ ] Create expert team assembly automation
