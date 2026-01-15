@@ -16,8 +16,9 @@ import { GenesisBlueprint } from '@/data/genesisBlueprint';
 import { VoiceNoteIntake } from '@/components/VoiceNoteIntake';
 import { ExpertTeamAssemblyWizard } from '@/components/ExpertTeamAssemblyWizard';
 import { IdeaScoringDashboard } from '@/components/IdeaScoringDashboard';
+import { ValidationEngine } from '@/components/ValidationEngine';
 
-type ViewMode = 'dashboard' | 'voice_intake' | 'new_project' | 'team_assembly' | 'idea_scoring' | 'qms' | 'legacy' | 'social_media' | 'presentation' | 'financial' | 'process_log';
+type ViewMode = 'dashboard' | 'voice_intake' | 'new_project' | 'team_assembly' | 'idea_scoring' | 'validation' | 'qms' | 'legacy' | 'social_media' | 'presentation' | 'financial' | 'process_log';
 
 interface SavedProject {
   id: string;
@@ -316,10 +317,50 @@ export default function ProjectGenesisPage() {
         projectName={currentBlueprint?.name || 'Project'}
         onComplete={(approvedIdeas) => {
           console.log('Approved ideas:', approvedIdeas);
-          setViewMode('qms');
+          setViewMode('validation');
         }}
         onBack={() => setViewMode('new_project')}
       />
+    );
+  }
+
+  // Chief of Staff Validation
+  if (viewMode === 'validation') {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-900 to-gray-800 p-6">
+        <div className="max-w-4xl mx-auto">
+          {/* Back Button */}
+          <button
+            onClick={() => setViewMode('idea_scoring')}
+            className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors mb-6"
+          >
+            <ChevronRight className="w-4 h-4 rotate-180" />
+            Back to Idea Scoring
+          </button>
+
+          <div className="mb-8">
+            <div className="flex items-center gap-3 mb-2">
+              <Shield className="w-8 h-8 text-cyan-400" />
+              <h1 className="text-3xl font-bold text-white">Chief of Staff Validation</h1>
+            </div>
+            <p className="text-gray-400">
+              All outputs are cross-validated, fact-checked, and source-referenced before delivery.
+            </p>
+          </div>
+
+          <ValidationEngine
+            projectId="demo-project"
+            projectName={currentBlueprint?.name || 'Project'}
+            content=""
+            onValidationComplete={(report) => {
+              console.log('Validation complete:', report);
+              if (report.overallStatus === 'verified') {
+                setViewMode('qms');
+              }
+            }}
+          />
+        </div>
+      </div>
     );
   }
 
