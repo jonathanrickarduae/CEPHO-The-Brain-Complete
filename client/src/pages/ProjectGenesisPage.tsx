@@ -13,8 +13,11 @@ import { SocialMediaBlueprint } from '@/components/SocialMediaBlueprint';
 import { QMSProcessLog } from '@/components/QMSProcessLog';
 import { PresentationBlueprint } from '@/components/PresentationBlueprint';
 import { GenesisBlueprint } from '@/data/genesisBlueprint';
+import { VoiceNoteIntake } from '@/components/VoiceNoteIntake';
+import { ExpertTeamAssemblyWizard } from '@/components/ExpertTeamAssemblyWizard';
+import { IdeaScoringDashboard } from '@/components/IdeaScoringDashboard';
 
-type ViewMode = 'dashboard' | 'new_project' | 'qms' | 'legacy' | 'social_media' | 'presentation' | 'financial' | 'process_log';
+type ViewMode = 'dashboard' | 'voice_intake' | 'new_project' | 'team_assembly' | 'idea_scoring' | 'qms' | 'legacy' | 'social_media' | 'presentation' | 'financial' | 'process_log';
 
 interface SavedProject {
   id: string;
@@ -104,17 +107,33 @@ export default function ProjectGenesisPage() {
           </div>
 
           {/* Quick Actions */}
-          <div className="grid grid-cols-3 gap-4 mb-8">
+          <div className="grid grid-cols-4 gap-4 mb-8">
+            <button
+              onClick={() => setViewMode('voice_intake')}
+              className="p-6 bg-gradient-to-br from-cyan-500/10 to-fuchsia-500/10 border-2 border-cyan-500/50 rounded-2xl text-left hover:border-cyan-500 transition-all group"
+            >
+              <div className="w-12 h-12 rounded-xl bg-cyan-500/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                <svg className="w-6 h-6 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+                </svg>
+              </div>
+              <h3 className="text-lg font-semibold text-white mb-1">Start with Voice</h3>
+              <p className="text-sm text-gray-400">
+                Record a voice note and let AI pre-populate the wizard
+              </p>
+              <span className="inline-block mt-2 text-xs text-cyan-400 font-medium">Recommended</span>
+            </button>
+
             <button
               onClick={() => setViewMode('new_project')}
-              className="p-6 bg-gradient-to-br from-cyan-500/10 to-fuchsia-500/10 border border-fuchsia-500/30 rounded-2xl text-left hover:border-fuchsia-500/50 transition-all group"
+              className="p-6 bg-gradient-to-br from-fuchsia-500/10 to-purple-500/10 border border-fuchsia-500/30 rounded-2xl text-left hover:border-fuchsia-500/50 transition-all group"
             >
               <div className="w-12 h-12 rounded-xl bg-fuchsia-500/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                 <Brain className="w-6 h-6 text-fuchsia-400" />
               </div>
               <h3 className="text-lg font-semibold text-white mb-1">Genesis Blueprint</h3>
               <p className="text-sm text-gray-400">
-                Intelligent wizard with SME collaboration and adaptive questioning
+                Intelligent wizard with SME collaboration
               </p>
             </button>
 
@@ -258,6 +277,49 @@ export default function ProjectGenesisPage() {
           </div>
         </div>
       </div>
+    );
+  }
+
+  // Voice Note Intake
+  if (viewMode === 'voice_intake') {
+    return (
+      <VoiceNoteIntake
+        onComplete={(result) => {
+          // Store extracted fields and move to wizard
+          console.log('Voice intake complete:', result);
+          setViewMode('team_assembly');
+        }}
+        onSkip={() => setViewMode('new_project')}
+      />
+    );
+  }
+
+  // Expert Team Assembly
+  if (viewMode === 'team_assembly') {
+    return (
+      <ExpertTeamAssemblyWizard
+        projectType="Graduate Program"
+        onComplete={(team) => {
+          console.log('Team assembled:', team);
+          setViewMode('new_project');
+        }}
+        onBack={() => setViewMode('voice_intake')}
+      />
+    );
+  }
+
+  // Idea Scoring Dashboard
+  if (viewMode === 'idea_scoring') {
+    return (
+      <IdeaScoringDashboard
+        projectId="demo-project"
+        projectName={currentBlueprint?.name || 'Project'}
+        onComplete={(approvedIdeas) => {
+          console.log('Approved ideas:', approvedIdeas);
+          setViewMode('qms');
+        }}
+        onBack={() => setViewMode('new_project')}
+      />
     );
   }
 

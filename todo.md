@@ -2914,3 +2914,18 @@
 - [ ] Integrate voice note transcription into project intake
 - [ ] Add project lead assignment (L&D expert, etc.)
 - [ ] Create expert team assembly automation
+
+
+## Project Genesis Enhancements (Jan 2026)
+- [ ] Build voice note intake UI with transcription and wizard pre-population
+- [ ] Create expert team assembly wizard with pre-configured teams
+- [ ] Implement idea scoring dashboard with weighted criteria
+
+
+## Project Genesis Enhancements (Jan 2026)
+- [x] Build voice note intake UI with transcription and wizard pre-population
+- [x] Create expert team assembly wizard with pre-configured teams
+- [x] Implement idea scoring dashboard with weighted criteria
+- [x] Create project status report template (WSP format)
+- [x] Create master project document template for scoping
+- [x] SME expert review and enhancement report
