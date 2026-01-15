@@ -2960,7 +2960,7 @@
 
 - [ ] Research Lightfied CRM platform and API capabilities
 - [ ] Design integration architecture for outreach workflow
-- [ ] Create onboarding process optimization guide
+- [x] Create onboarding process optimization guide
 - [ ] Build API connection documentation
 - [ ] Add integration to Blueprint Library
 
@@ -2970,3 +2970,12 @@
 - [ ] Create algorithm-optimized content strategies for each platform
 - [x] Build Social Media Platform Blueprint document
 - [x] Integrate with Lightfield CRM for unified outreach
+
+
+## Celadon Ajman Investor Deck Review
+- [ ] Review Celadon Ajman deck through SME expert panel
+- [ ] Compile and rank recommendations in decision table
+- [ ] Present recommendations for user approval
+- [x] Create complete Gamma-ready Celadon deck with full appendices
+- [x] Add design criteria and image suggestions for Gamma
+- [x] Create ranked recommendations decision table
