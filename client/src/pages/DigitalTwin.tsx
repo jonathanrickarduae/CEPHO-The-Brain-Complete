@@ -14,6 +14,7 @@ import { ConversationSwitcher } from "@/components/ConversationSwitcher";
 import { DigitalTwinAccelerator } from "@/components/DigitalTwinAccelerator";
 import { BusinessGuardian } from "@/components/BusinessGuardian";
 import { DigitalTwinDevelopment } from "@/components/DigitalTwinDevelopment";
+import { BusinessPlanReview } from "@/components/BusinessPlanReview";
 import { useDigitalTwinChat } from "@/hooks/useDigitalTwinChat";
 import { useVoiceInput } from "@/hooks/useVoiceInput";
 
@@ -24,7 +25,8 @@ export default function DigitalTwin() {
   
   const [messageInput, setMessageInput] = useState(initialMessage || "");
   const [showRightPanel, setShowRightPanel] = useState(true);
-  const [rightPanelTab, setRightPanelTab] = useState<'learning' | 'activity' | 'training' | 'guardian' | 'growth'>('training');
+  const [rightPanelTab, setRightPanelTab] = useState<'learning' | 'activity' | 'training' | 'guardian' | 'growth' | 'review'>('training');
+  const [showBusinessPlanReview, setShowBusinessPlanReview] = useState(false);
   const [showTrainingModal, setShowTrainingModal] = useState(false);
   const [currentConversationId, setCurrentConversationId] = useState('current');
   
@@ -126,7 +128,7 @@ export default function DigitalTwin() {
   const quickActions = [
     { label: "Show The Signal", action: () => toast.info("Opening The Signal...") },
     { label: "Check pending items", action: () => toast.info("5 items pending your review") },
-    { label: "Schedule training", action: () => toast.info("Training session scheduled for 2:30 PM") },
+    { label: "Review Business Plan", action: () => setShowBusinessPlanReview(true) },
     { label: "View activity log", action: () => { setShowRightPanel(true); setRightPanelTab('activity'); } },
   ];
 
@@ -490,6 +492,29 @@ export default function DigitalTwin() {
                 <span className="text-xl text-muted-foreground">×</span>
               </button>
               <DigitalTwinAccelerator onComplete={() => setShowTrainingModal(false)} />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Business Plan Review Modal */}
+      {showBusinessPlanReview && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+          <div className="w-full max-w-5xl h-[90vh] m-4 bg-card rounded-xl border border-white/10 overflow-hidden">
+            <div className="relative h-full">
+              <button
+                onClick={() => setShowBusinessPlanReview(false)}
+                className="absolute top-4 right-4 z-10 p-2 bg-gray-800 rounded-full hover:bg-gray-700 transition-colors"
+              >
+                <span className="text-xl text-muted-foreground">×</span>
+              </button>
+              <BusinessPlanReview 
+                projectName="Current Business Plan"
+                onComplete={(reviews) => {
+                  toast.success('Business plan review complete!');
+                  console.log('Reviews:', reviews);
+                }}
+              />
             </div>
           </div>
         </div>

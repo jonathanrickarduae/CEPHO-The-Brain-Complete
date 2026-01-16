@@ -3227,3 +3227,38 @@
 - [x] Add play/pause/stop controls for audio playback
 - [x] Show speaking indicator while audio plays
 - [x] Remember user's TTS preference (on/off)
+
+
+## Business Plan SME Expert Team Review (Jan 16, 2026)
+
+### Chief of Staff Coordination
+- [x] Create Business Plan Review workflow in Chief of Staff
+- [x] Enable Chief of Staff to coordinate SME expert team for comprehensive analysis
+- [x] Track review progress across all business plan sections
+- [x] Aggregate expert insights into consolidated recommendations
+
+### SME Expert Team Assignment
+- [x] Define expert team for each business plan section
+- [x] Assign Finance experts for financial projections and funding
+- [x] Assign Strategy experts for competitive analysis and positioning
+- [x] Assign Marketing experts for go-to-market and pricing
+- [x] Assign Operations experts for execution and logistics
+- [x] Assign Legal experts for regulatory and compliance
+- [x] Assign Technology experts for product/tech sections
+
+### Section-by-Section Analysis
+- [x] Executive Summary review
+- [x] Market Analysis and Opportunity review
+- [x] Competitive Landscape review
+- [x] Go-to-Market Strategy review
+- [x] Pricing Strategy review
+- [x] Financial Projections review
+- [x] Team and Operations review
+- [x] Risk Assessment review
+- [x] Funding Requirements review
+
+### Expert Insights Integration
+- [x] Collect expert recommendations per section
+- [x] Identify conflicting viewpoints for user decision
+- [x] Generate consolidated action items
+- [x] Create final reviewed business plan with expert annotations
