@@ -54,7 +54,8 @@ import {
   analyzeSection,
   generateConsolidatedReport,
   type SectionReview,
-  type ExpertInsight
+  type ExpertInsight,
+  selectExpertTeam
 } from "./services/businessPlanReviewService";
 import { z } from "zod";
 
@@ -2737,6 +2738,16 @@ ${transcript}
       .mutation(({ input }) => {
         const report = generateConsolidatedReport(input.reviews as SectionReview[]);
         return { report };
+      }),
+
+    // Chief of Staff: Select optimal expert team based on business plan content
+    selectExpertTeam: protectedProcedure
+      .input(z.object({
+        businessPlanContent: z.string().optional(),
+      }))
+      .mutation(async ({ input }) => {
+        const result = await selectExpertTeam(input.businessPlanContent || '');
+        return result;
       }),
   }),
 });

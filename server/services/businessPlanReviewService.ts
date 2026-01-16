@@ -424,3 +424,137 @@ ${reviews.flatMap(r => r.concerns || []).slice(0, 5).map(c => `- ${c}`).join('\n
 
   return report;
 }
+
+
+// Chief of Staff expert team selection using LLM
+export async function selectExpertTeam(
+  businessPlanContent: string,
+  availableExperts: typeof REVIEW_EXPERTS = REVIEW_EXPERTS
+): Promise<{
+  selectedExperts: string[];
+  reasoning: string;
+  teamComposition: { expertId: string; role: string; rationale: string }[];
+}> {
+  const expertDescriptions = availableExperts.map(e => 
+    `- ${e.id}: ${e.name} (${e.category}) - ${e.specialty}`
+  ).join('\n');
+
+  const systemPrompt = `You are the Chief of Staff, responsible for assembling the optimal expert team to review a business plan. 
+
+Available experts:
+${expertDescriptions}
+
+Your task is to analyze the business plan content and select the most relevant experts for a comprehensive review. Consider:
+1. The industry/sector of the business
+2. The stage of the business (startup, growth, mature)
+3. Key challenges and opportunities identified
+4. Areas that need the most scrutiny
+
+Respond in JSON format:
+{
+  "selectedExperts": ["expert-id-1", "expert-id-2", ...],
+  "reasoning": "Brief explanation of why this team composition was chosen",
+  "teamComposition": [
+    {
+      "expertId": "expert-id",
+      "role": "Lead Reviewer / Supporting Analyst / Specialist",
+      "rationale": "Why this expert is essential for this review"
+    }
+  ]
+}
+
+Select at least 4 experts but no more than 8. Prioritize experts whose specialties align with the business plan's key areas.`;
+
+  const userMessage = `Please analyze this business plan and select the optimal expert team for review:
+
+${businessPlanContent || 'No specific content provided. Please select a balanced team covering all major business plan areas.'}`;
+
+  try {
+    const result = await invokeLLM({
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: userMessage }
+      ],
+      response_format: {
+        type: 'json_schema',
+        json_schema: {
+          name: 'expert_team_selection',
+          strict: true,
+          schema: {
+            type: 'object',
+            properties: {
+              selectedExperts: { 
+                type: 'array', 
+                items: { type: 'string' },
+                description: 'List of expert IDs to include in the review team'
+              },
+              reasoning: { 
+                type: 'string', 
+                description: 'Explanation of the team composition decision'
+              },
+              teamComposition: {
+                type: 'array',
+                items: {
+                  type: 'object',
+                  properties: {
+                    expertId: { type: 'string' },
+                    role: { type: 'string' },
+                    rationale: { type: 'string' }
+                  },
+                  required: ['expertId', 'role', 'rationale'],
+                  additionalProperties: false
+                },
+                description: 'Detailed breakdown of each expert role'
+              }
+            },
+            required: ['selectedExperts', 'reasoning', 'teamComposition'],
+            additionalProperties: false
+          }
+        }
+      }
+    });
+
+    const content = result.choices[0]?.message?.content;
+    const selection = typeof content === 'string' ? JSON.parse(content) : content;
+
+    // Validate that selected experts exist
+    const validExperts = selection.selectedExperts.filter((id: string) => 
+      availableExperts.some(e => e.id === id)
+    );
+
+    // Ensure at least 4 experts are selected
+    if (validExperts.length < 4) {
+      // Add default experts to reach minimum
+      const defaultExperts = ['inv-001', 'str-001', 'mkt-001', 'tech-001'];
+      for (const defaultId of defaultExperts) {
+        if (!validExperts.includes(defaultId) && validExperts.length < 4) {
+          validExperts.push(defaultId);
+        }
+      }
+    }
+
+    return {
+      selectedExperts: validExperts,
+      reasoning: selection.reasoning,
+      teamComposition: selection.teamComposition.filter((tc: { expertId: string }) => 
+        validExperts.includes(tc.expertId)
+      )
+    };
+  } catch (error) {
+    console.error('[BusinessPlanReview] Error selecting expert team:', error);
+    
+    // Return default balanced team
+    return {
+      selectedExperts: ['inv-001', 'str-001', 'mkt-001', 'sal-001', 'tech-001', 'ops-001'],
+      reasoning: 'Default balanced team selected to cover all major business plan areas including finance, strategy, marketing, sales, technology, and operations.',
+      teamComposition: [
+        { expertId: 'inv-001', role: 'Lead Financial Reviewer', rationale: 'Essential for evaluating financial projections and funding requirements' },
+        { expertId: 'str-001', role: 'Strategy Lead', rationale: 'Critical for assessing competitive positioning and strategic direction' },
+        { expertId: 'mkt-001', role: 'Marketing Specialist', rationale: 'Key for evaluating go-to-market strategy and customer acquisition' },
+        { expertId: 'sal-001', role: 'Revenue Analyst', rationale: 'Important for pricing strategy and sales scalability assessment' },
+        { expertId: 'tech-001', role: 'Technology Reviewer', rationale: 'Necessary for product and technology feasibility analysis' },
+        { expertId: 'ops-001', role: 'Operations Analyst', rationale: 'Required for operational plan and execution capability review' }
+      ]
+    };
+  }
+}

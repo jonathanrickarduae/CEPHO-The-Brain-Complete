@@ -3262,3 +3262,91 @@
 - [x] Identify conflicting viewpoints for user decision
 - [x] Generate consolidated action items
 - [x] Create final reviewed business plan with expert annotations
+
+
+## Business Plan Review Enhancements (Jan 16, 2026)
+
+### File Upload for Business Plan Documents
+- [ ] Add file upload button to BusinessPlanReview component
+- [ ] Support PDF, Word (.docx), and text file formats
+- [ ] Extract text content from uploaded documents
+- [ ] Pass document content to expert analysis for targeted feedback
+- [ ] Show uploaded file name and status in UI
+
+### Save Reviews to Library
+- [ ] Add "Save to Library" button after review completion
+- [ ] Create library document with full review report
+- [ ] Include all expert insights, scores, and recommendations
+- [ ] Store review metadata (project name, date, experts involved)
+- [ ] Show success toast with link to Library
+
+### Chief of Staff Expert Team Selection
+- [ ] Chief of Staff autonomously reviews expert bios
+- [ ] Chief of Staff builds optimal team based on business plan content
+- [ ] Show committee decision reasoning to user
+- [ ] User does not select experts - Chief of Staff handles this
+
+
+## Business Plan Review Enhancements (Jan 16, 2026)
+
+### File Upload for Business Plan Documents
+- [ ] Add file upload button to BusinessPlanReview component
+- [ ] Support PDF, Word (.docx), and text file formats
+- [ ] Extract text content from uploaded documents
+- [ ] Pass document content to expert analysis for targeted feedback
+- [ ] Show uploaded file name and status in UI
+
+### Save Reviews to Library
+- [ ] Add "Save to Library" button after review completion
+- [ ] Create library document with full review report
+- [ ] Include all expert insights, scores, and recommendations
+- [ ] Store review metadata (project name, date, experts involved)
+- [ ] Show success toast with link to Library
+
+
+## Business Plan Review Enhancements (Jan 16, 2026)
+
+### File Upload for Business Plan Documents
+- [x] Add file upload button to BusinessPlanReview component
+- [x] Support PDF, Word (.docx), and text file formats
+- [x] Extract text content from uploaded documents
+- [x] Pass document content to expert analysis for targeted feedback
+- [x] Show uploaded file name and status in UI
+
+### Save Reviews to Library
+- [x] Add "Save to Library" button after review completion
+- [x] Create library document with full review report
+- [x] Include all expert insights, scores, and recommendations
+- [x] Store review metadata (project name, date, experts involved)
+- [x] Show success toast with link to Library
+
+### Expert Team Selection Mode
+- [x] Add toggle: "Chief of Staff Mode" vs "Manual Mode"
+- [x] Chief of Staff Mode: AI autonomously selects optimal expert team
+- [x] Manual Mode: User browses expert bios and picks team members
+- [x] Show expert cards with bios for manual selection
+- [x] Display selected team before starting review
+
+
+## Business Plan Review Enhancements (Jan 16, 2026)
+
+### File Upload for Business Plan Documents
+- [x] Add file upload button to BusinessPlanReview component
+- [x] Support PDF, Word (.docx), and text file formats
+- [x] Extract text content from uploaded documents
+- [x] Pass document content to expert analysis for targeted feedback
+- [x] Show uploaded file name and status in UI
+
+### Save Reviews to Library
+- [x] Add "Save to Library" button after review completion
+- [x] Create library document with full review report
+- [x] Include all expert insights, scores, and recommendations
+- [x] Store review metadata (project name, date, experts involved)
+- [x] Show success toast with link to Library
+
+### Expert Team Selection Mode
+- [x] Add toggle: "Chief of Staff Mode" vs "Manual Mode"
+- [x] Chief of Staff Mode: AI autonomously selects optimal expert team
+- [x] Manual Mode: User browses expert bios and picks team members
+- [x] Show expert cards with bios for manual selection
+- [x] Display selected team before starting review

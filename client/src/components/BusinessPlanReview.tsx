@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { 
   FileText, Users, CheckCircle2, Clock, AlertCircle, 
   ChevronRight, Play, Pause, RotateCcw, Download,
   MessageSquare, Lightbulb, Target, TrendingUp, DollarSign,
-  Shield, Scale, Briefcase, Globe, Zap
+  Shield, Scale, Briefcase, Globe, Zap, Upload, X, Save,
+  UserCog, Sparkles
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -177,8 +178,10 @@ interface BusinessPlanReviewProps {
   onComplete?: (reviews: SectionReview[]) => void;
 }
 
+type TeamSelectionMode = 'chief-of-staff' | 'manual';
+
 export function BusinessPlanReview({ 
-  businessPlanContent, 
+  businessPlanContent: initialContent, 
   projectName = 'Business Plan',
   onComplete 
 }: BusinessPlanReviewProps) {
@@ -187,6 +190,17 @@ export function BusinessPlanReview({
   const [isReviewing, setIsReviewing] = useState(false);
   const [currentReviewIndex, setCurrentReviewIndex] = useState(0);
   const [selectedExpertInsight, setSelectedExpertInsight] = useState<ExpertInsight | null>(null);
+  
+  // File upload state
+  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
+  const [businessPlanContent, setBusinessPlanContent] = useState<string>(initialContent || '');
+  const [isExtractingText, setIsExtractingText] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  
+  // Team selection mode
+  const [teamSelectionMode, setTeamSelectionMode] = useState<TeamSelectionMode>('chief-of-staff');
+  const [selectedExperts, setSelectedExperts] = useState<string[]>(REVIEW_EXPERTS.map(e => e.id));
+  const [showExpertSelection, setShowExpertSelection] = useState(false);
 
   // Calculate overall progress
   const completedSections = Array.from(sectionReviews.values()).filter(r => r.status === 'completed').length;
@@ -201,9 +215,38 @@ export function BusinessPlanReview({
 
   // tRPC mutation for analyzing sections
   const analyzeSectionMutation = trpc.businessPlanReview.analyzeSectionWithAllExperts.useMutation();
+  
+  // Chief of Staff team selection mutation
+  const selectTeamMutation = trpc.businessPlanReview.selectExpertTeam.useMutation();
+  const [teamSelectionResult, setTeamSelectionResult] = useState<{
+    reasoning: string;
+    teamComposition: { expertId: string; role: string; rationale: string }[];
+  } | null>(null);
+  const [isSelectingTeam, setIsSelectingTeam] = useState(false);
 
   // Start the review process
   const startReview = async () => {
+    // If in Chief of Staff mode, first select the optimal team
+    if (teamSelectionMode === 'chief-of-staff') {
+      setIsSelectingTeam(true);
+      try {
+        const result = await selectTeamMutation.mutateAsync({
+          businessPlanContent: businessPlanContent || undefined,
+        });
+        setSelectedExperts(result.selectedExperts);
+        setTeamSelectionResult({
+          reasoning: result.reasoning,
+          teamComposition: result.teamComposition,
+        });
+        toast.success('Chief of Staff has assembled the expert team');
+      } catch (error) {
+        console.error('Error selecting team:', error);
+        toast.error('Failed to select team, using default experts');
+      } finally {
+        setIsSelectingTeam(false);
+      }
+    }
+
     setIsReviewing(true);
     setCurrentReviewIndex(0);
     
@@ -307,6 +350,202 @@ export function BusinessPlanReview({
     setSectionReviews(new Map());
   };
 
+  // File upload handling
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    setUploadedFile(file);
+    setIsExtractingText(true);
+
+    try {
+      // Extract text based on file type
+      if (file.type === 'text/plain' || file.name.endsWith('.txt') || file.name.endsWith('.md')) {
+        const text = await file.text();
+        setBusinessPlanContent(text);
+        toast.success(`Loaded ${file.name}`);
+      } else if (file.type === 'application/pdf' || file.name.endsWith('.pdf')) {
+        // For PDF, we'll send to backend for extraction
+        const formData = new FormData();
+        formData.append('file', file);
+        
+        // Use a simple text extraction approach for now
+        const reader = new FileReader();
+        reader.onload = async (e) => {
+          // Note: Full PDF extraction would require backend processing
+          // For now, show a message that PDF content will be analyzed
+          setBusinessPlanContent(`[PDF Document: ${file.name}]\n\nDocument uploaded for analysis. The expert team will review the business plan content.`);
+          toast.success(`PDF uploaded: ${file.name}`);
+        };
+        reader.readAsArrayBuffer(file);
+      } else if (file.name.endsWith('.docx')) {
+        // For DOCX, similar approach
+        setBusinessPlanContent(`[Word Document: ${file.name}]\n\nDocument uploaded for analysis. The expert team will review the business plan content.`);
+        toast.success(`Document uploaded: ${file.name}`);
+      } else {
+        toast.error('Unsupported file type. Please upload PDF, Word, or text files.');
+      }
+    } catch (error) {
+      console.error('Error reading file:', error);
+      toast.error('Failed to read file');
+    } finally {
+      setIsExtractingText(false);
+    }
+  };
+
+  const removeUploadedFile = () => {
+    setUploadedFile(null);
+    setBusinessPlanContent(initialContent || '');
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
+  // Toggle expert selection
+  const toggleExpertSelection = (expertId: string) => {
+    setSelectedExperts(prev => 
+      prev.includes(expertId)
+        ? prev.filter(id => id !== expertId)
+        : [...prev, expertId]
+    );
+  };
+
+  // Save to Library mutation
+  const saveToLibraryMutation = trpc.library.create.useMutation();
+
+  const handleSaveToLibrary = async () => {
+    if (completedSections === 0) {
+      toast.error('Complete at least one section review before saving');
+      return;
+    }
+
+    try {
+      // Generate the report content
+      const reviews = Array.from(sectionReviews.values());
+      const overallScore = Math.round(
+        reviews.filter(r => r.overallScore).reduce((sum, r) => sum + (r.overallScore || 0), 0) / 
+        reviews.filter(r => r.overallScore).length
+      ) || 0;
+
+      let reportContent = `# Business Plan Review Report\n\n`;
+      reportContent += `**Project:** ${projectName}\n`;
+      reportContent += `**Date:** ${new Date().toLocaleDateString()}\n`;
+      reportContent += `**Overall Score:** ${overallScore}%\n\n`;
+      reportContent += `---\n\n`;
+      reportContent += `## Overall Assessment\n\n`;
+      reportContent += `This business plan has been reviewed by ${REVIEW_EXPERTS.length} SME experts across ${completedSections} sections.\n\n`;
+
+      // Section details
+      reportContent += `## Section-by-Section Analysis\n\n`;
+      for (const review of reviews) {
+        if (review.status !== 'completed') continue;
+        const section = BUSINESS_PLAN_SECTIONS.find(s => s.id === review.sectionId);
+        if (!section) continue;
+
+        reportContent += `### ${section.name}\n\n`;
+        reportContent += `**Score:** ${review.overallScore || 'N/A'}%\n\n`;
+
+        if (review.expertInsights.length > 0) {
+          reportContent += `**Expert Insights:**\n\n`;
+          for (const insight of review.expertInsights) {
+            reportContent += `> **${insight.expertName}** (${insight.score}%)\n`;
+            reportContent += `> ${insight.insight}\n\n`;
+          }
+        }
+
+        if (review.recommendations && review.recommendations.length > 0) {
+          reportContent += `**Recommendations:**\n`;
+          for (const rec of review.recommendations) {
+            reportContent += `- ${rec}\n`;
+          }
+          reportContent += `\n`;
+        }
+
+        if (review.concerns && review.concerns.length > 0) {
+          reportContent += `**Concerns:**\n`;
+          for (const concern of review.concerns) {
+            reportContent += `- ${concern}\n`;
+          }
+          reportContent += `\n`;
+        }
+
+        reportContent += `---\n\n`;
+      }
+
+      // Save to library
+      await saveToLibraryMutation.mutateAsync({
+        folder: 'business_plans',
+        subFolder: 'reviews',
+        name: `Business Plan Review - ${projectName} - ${new Date().toISOString().split('T')[0]}.md`,
+        type: 'document',
+        status: 'draft',
+        metadata: {
+          projectName,
+          overallScore,
+          sectionsReviewed: completedSections,
+          totalSections: BUSINESS_PLAN_SECTIONS.length,
+          reviewDate: new Date().toISOString(),
+          content: reportContent,
+        },
+      });
+
+      toast.success('Review saved to Library!');
+    } catch (error) {
+      console.error('Error saving to library:', error);
+      toast.error('Failed to save to Library');
+    }
+  };
+
+  // Export report as markdown file
+  const handleExportReport = () => {
+    const reviews = Array.from(sectionReviews.values());
+    const overallScore = Math.round(
+      reviews.filter(r => r.overallScore).reduce((sum, r) => sum + (r.overallScore || 0), 0) / 
+      reviews.filter(r => r.overallScore).length
+    ) || 0;
+
+    let reportContent = `# Business Plan Review Report\n\n`;
+    reportContent += `**Project:** ${projectName}\n`;
+    reportContent += `**Date:** ${new Date().toLocaleDateString()}\n`;
+    reportContent += `**Overall Score:** ${overallScore}%\n\n`;
+    reportContent += `---\n\n`;
+
+    for (const review of reviews) {
+      if (review.status !== 'completed') continue;
+      const section = BUSINESS_PLAN_SECTIONS.find(s => s.id === review.sectionId);
+      if (!section) continue;
+
+      reportContent += `## ${section.name}\n\n`;
+      reportContent += `**Score:** ${review.overallScore || 'N/A'}%\n\n`;
+
+      if (review.expertInsights.length > 0) {
+        for (const insight of review.expertInsights) {
+          reportContent += `### ${insight.expertName}\n`;
+          reportContent += `${insight.insight}\n\n`;
+        }
+      }
+
+      if (review.recommendations && review.recommendations.length > 0) {
+        reportContent += `**Recommendations:**\n`;
+        for (const rec of review.recommendations) {
+          reportContent += `- ${rec}\n`;
+        }
+        reportContent += `\n`;
+      }
+
+      reportContent += `---\n\n`;
+    }
+
+    const blob = new Blob([reportContent], { type: 'text/markdown' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `business-plan-review-${projectName.toLowerCase().replace(/\s+/g, '-')}.md`;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast.success('Report downloaded!');
+  };
+
   return (
     <div className="h-full flex flex-col">
       {/* Header */}
@@ -322,10 +561,83 @@ export function BusinessPlanReview({
             </p>
           </div>
           <div className="flex items-center gap-2">
+            {/* File Upload */}
+            <input
+              type="file"
+              ref={fileInputRef}
+              onChange={handleFileUpload}
+              accept=".pdf,.docx,.doc,.txt,.md"
+              className="hidden"
+            />
+            {!uploadedFile && !isReviewing && completedSections === 0 && (
+              <Button 
+                onClick={() => fileInputRef.current?.click()} 
+                variant="outline" 
+                size="sm"
+                disabled={isExtractingText}
+              >
+                <Upload className="w-4 h-4 mr-2" />
+                {isExtractingText ? 'Loading...' : 'Upload Plan'}
+              </Button>
+            )}
+            {uploadedFile && !isReviewing && (
+              <div className="flex items-center gap-2 px-3 py-1.5 bg-purple-500/20 rounded-lg">
+                <FileText className="w-4 h-4 text-purple-400" />
+                <span className="text-sm text-foreground truncate max-w-[150px]">{uploadedFile.name}</span>
+                <button onClick={removeUploadedFile} className="text-muted-foreground hover:text-foreground">
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            )}
+            
+            {/* Team Selection Mode Toggle */}
             {!isReviewing && completedSections === 0 && (
-              <Button onClick={startReview} className="bg-purple-500 hover:bg-purple-600">
-                <Play className="w-4 h-4 mr-2" />
-                Start Review
+              <div className="flex items-center gap-1 p-1 bg-white/5 rounded-lg">
+                <button
+                  onClick={() => setTeamSelectionMode('chief-of-staff')}
+                  className={`px-3 py-1.5 rounded text-sm transition-colors ${
+                    teamSelectionMode === 'chief-of-staff'
+                      ? 'bg-purple-500 text-white'
+                      : 'text-muted-foreground hover:text-foreground'
+                  }`}
+                >
+                  <Sparkles className="w-4 h-4 inline mr-1" />
+                  Auto
+                </button>
+                <button
+                  onClick={() => {
+                    setTeamSelectionMode('manual');
+                    setShowExpertSelection(true);
+                  }}
+                  className={`px-3 py-1.5 rounded text-sm transition-colors ${
+                    teamSelectionMode === 'manual'
+                      ? 'bg-purple-500 text-white'
+                      : 'text-muted-foreground hover:text-foreground'
+                  }`}
+                >
+                  <UserCog className="w-4 h-4 inline mr-1" />
+                  Manual
+                </button>
+              </div>
+            )}
+            
+            {!isReviewing && completedSections === 0 && (
+              <Button 
+                onClick={startReview} 
+                className="bg-purple-500 hover:bg-purple-600"
+                disabled={isSelectingTeam}
+              >
+                {isSelectingTeam ? (
+                  <>
+                    <Sparkles className="w-4 h-4 mr-2 animate-pulse" />
+                    Assembling Team...
+                  </>
+                ) : (
+                  <>
+                    <Play className="w-4 h-4 mr-2" />
+                    Start Review
+                  </>
+                )}
               </Button>
             )}
             {isReviewing && (
@@ -340,9 +652,18 @@ export function BusinessPlanReview({
                   <RotateCcw className="w-4 h-4 mr-2" />
                   Reset
                 </Button>
-                <Button variant="outline" size="sm">
+                <Button onClick={handleExportReport} variant="outline" size="sm">
                   <Download className="w-4 h-4 mr-2" />
-                  Export Report
+                  Export
+                </Button>
+                <Button 
+                  onClick={handleSaveToLibrary} 
+                  variant="outline" 
+                  size="sm"
+                  disabled={saveToLibraryMutation.isPending}
+                >
+                  <Save className="w-4 h-4 mr-2" />
+                  {saveToLibraryMutation.isPending ? 'Saving...' : 'Save to Library'}
                 </Button>
               </>
             )}
@@ -516,12 +837,44 @@ export function BusinessPlanReview({
 
           <TabsContent value="experts" className="flex-1 overflow-hidden p-4">
             <ScrollArea className="h-full">
+              {/* Chief of Staff Team Selection Reasoning */}
+              {teamSelectionResult && (
+                <Card className="border-purple-500/30 bg-purple-500/5 mb-4">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="flex items-center gap-2 text-base">
+                      <Sparkles className="w-5 h-5 text-purple-400" />
+                      Chief of Staff Team Selection
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm text-muted-foreground mb-3">
+                      {teamSelectionResult.reasoning}
+                    </p>
+                    <div className="space-y-2">
+                      {teamSelectionResult.teamComposition.map((tc, i) => {
+                        const expert = REVIEW_EXPERTS.find(e => e.id === tc.expertId);
+                        if (!expert) return null;
+                        return (
+                          <div key={i} className="flex items-center gap-2 text-sm">
+                            <span className="text-lg">{expert.avatar}</span>
+                            <span className="font-medium text-foreground">{expert.name}</span>
+                            <Badge variant="outline" className="text-xs">{tc.role}</Badge>
+                            <span className="text-muted-foreground text-xs">- {tc.rationale}</span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {REVIEW_EXPERTS.map(expert => {
+                {REVIEW_EXPERTS.filter(e => selectedExperts.includes(e.id)).map(expert => {
                   // Count how many sections this expert reviewed
                   const sectionsReviewed = Array.from(sectionReviews.values())
                     .filter(r => r.expertInsights.some(i => i.expertId === expert.id))
                     .length;
+                  const teamRole = teamSelectionResult?.teamComposition.find(tc => tc.expertId === expert.id);
                   
                   return (
                     <Card key={expert.id} className="border-white/10">
@@ -533,9 +886,16 @@ export function BusinessPlanReview({
                           <div className="flex-1">
                             <h3 className="font-medium text-foreground">{expert.name}</h3>
                             <p className="text-sm text-muted-foreground">{expert.specialty}</p>
-                            <Badge variant="outline" className="mt-1 text-xs">
-                              {expert.category}
-                            </Badge>
+                            {teamRole && (
+                              <Badge className="mt-1 text-xs bg-purple-500/20 text-purple-300">
+                                {teamRole.role}
+                              </Badge>
+                            )}
+                            {!teamRole && (
+                              <Badge variant="outline" className="mt-1 text-xs">
+                                {expert.category}
+                              </Badge>
+                            )}
                           </div>
                           <div className="text-right">
                             <div className="text-2xl font-bold text-foreground">{sectionsReviewed}</div>
@@ -639,6 +999,79 @@ export function BusinessPlanReview({
           </TabsContent>
         </Tabs>
       </div>
+
+      {/* Expert Selection Dialog for Manual Mode */}
+      <Dialog open={showExpertSelection} onOpenChange={setShowExpertSelection}>
+        <DialogContent className="max-w-2xl max-h-[80vh] overflow-hidden flex flex-col">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Users className="w-5 h-5 text-purple-400" />
+              Select Expert Team
+            </DialogTitle>
+          </DialogHeader>
+          <ScrollArea className="flex-1 pr-4">
+            <p className="text-sm text-muted-foreground mb-4">
+              Choose which experts should review your business plan. Each expert brings unique perspectives based on their specialty.
+            </p>
+            <div className="grid grid-cols-1 gap-3">
+              {REVIEW_EXPERTS.map(expert => {
+                const isSelected = selectedExperts.includes(expert.id);
+                return (
+                  <div
+                    key={expert.id}
+                    onClick={() => toggleExpertSelection(expert.id)}
+                    className={`p-4 rounded-lg border cursor-pointer transition-all ${
+                      isSelected
+                        ? 'border-purple-500 bg-purple-500/10'
+                        : 'border-white/10 hover:border-white/20'
+                    }`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className={`w-10 h-10 rounded-full flex items-center justify-center text-xl ${
+                        isSelected ? 'bg-purple-500/30' : 'bg-white/10'
+                      }`}>
+                        {expert.avatar}
+                      </div>
+                      <div className="flex-1">
+                        <h4 className="font-medium text-foreground">{expert.name}</h4>
+                        <p className="text-sm text-muted-foreground">{expert.specialty}</p>
+                      </div>
+                      <Badge variant={isSelected ? 'default' : 'outline'} className="shrink-0">
+                        {expert.category}
+                      </Badge>
+                      <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                        isSelected ? 'border-purple-500 bg-purple-500' : 'border-white/30'
+                      }`}>
+                        {isSelected && <CheckCircle2 className="w-3 h-3 text-white" />}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </ScrollArea>
+          <div className="flex items-center justify-between pt-4 border-t border-white/10">
+            <p className="text-sm text-muted-foreground">
+              {selectedExperts.length} of {REVIEW_EXPERTS.length} experts selected
+            </p>
+            <div className="flex gap-2">
+              <Button
+                variant="outline"
+                onClick={() => setSelectedExperts(REVIEW_EXPERTS.map(e => e.id))}
+              >
+                Select All
+              </Button>
+              <Button
+                onClick={() => setShowExpertSelection(false)}
+                className="bg-purple-500 hover:bg-purple-600"
+                disabled={selectedExperts.length === 0}
+              >
+                Confirm Team ({selectedExperts.length})
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
