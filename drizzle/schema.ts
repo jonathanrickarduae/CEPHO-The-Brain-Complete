@@ -1311,3 +1311,65 @@ export const smeFeedbackLog = mysqlTable("sme_feedback_log", {
 
 export type SmeFeedbackLog = typeof smeFeedbackLog.$inferSelect;
 export type InsertSmeFeedbackLog = typeof smeFeedbackLog.$inferInsert;
+
+
+/**
+ * Expert Consultation History - tracks which experts user has consulted
+ * Stores summaries and recommendations for quick reference
+ */
+export const expertConsultations = mysqlTable("expert_consultations", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  expertId: varchar("expertId", { length: 50 }).notNull(),
+  expertName: varchar("expertName", { length: 200 }).notNull(),
+  expertCategory: varchar("expertCategory", { length: 100 }),
+  topic: varchar("topic", { length: 300 }), // What was discussed
+  summary: text("summary"), // AI-generated summary of the consultation
+  recommendations: json("recommendations"), // Key recommendations from the expert
+  userRating: int("userRating"), // 1-10 rating of the consultation
+  userFeedback: text("userFeedback"), // Optional feedback
+  duration: int("duration"), // Duration in seconds
+  messageCount: int("messageCount").default(0), // Number of messages exchanged
+  projectId: int("projectId"), // Optional link to project
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type ExpertConsultation = typeof expertConsultations.$inferSelect;
+export type InsertExpertConsultation = typeof expertConsultations.$inferInsert;
+
+/**
+ * Expert Chat Sessions - individual chat sessions with experts
+ * Stores messages and context for each chat session
+ */
+export const expertChatSessions = mysqlTable("expert_chat_sessions", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  expertId: varchar("expertId", { length: 50 }).notNull(),
+  expertName: varchar("expertName", { length: 200 }),
+  systemPrompt: text("systemPrompt"),
+  projectId: int("projectId"),
+  consultationId: int("consultationId"), // Link to parent consultation
+  status: mysqlEnum("status", ["active", "paused", "completed"]).default("active").notNull(),
+  summary: text("summary"),
+  lastMessageAt: timestamp("lastMessageAt"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type ExpertChatSession = typeof expertChatSessions.$inferSelect;
+export type InsertExpertChatSession = typeof expertChatSessions.$inferInsert;
+
+/**
+ * Expert Chat Messages - individual messages in a chat session
+ */
+export const expertChatMessages = mysqlTable("expert_chat_messages", {
+  id: int("id").autoincrement().primaryKey(),
+  sessionId: int("sessionId").notNull(),
+  role: mysqlEnum("role", ["user", "expert", "system"]).notNull(),
+  content: text("content").notNull(),
+  metadata: json("metadata"), // Additional context like voice input, attachments
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type ExpertChatMessage = typeof expertChatMessages.$inferSelect;
+export type InsertExpertChatMessage = typeof expertChatMessages.$inferInsert;

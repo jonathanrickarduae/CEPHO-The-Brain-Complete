@@ -8,7 +8,10 @@ import { InsertUser, users, moodHistory, InsertMoodHistory, MoodHistory, convers
   expertResearchTasks, InsertExpertResearchTask, ExpertResearchTask,
   expertCollaboration, InsertExpertCollaboration, ExpertCollaboration,
   expertCoachingSessions, InsertExpertCoachingSession, ExpertCoachingSession,
-  expertDomainKnowledge, InsertExpertDomainKnowledge, ExpertDomainKnowledge
+  expertDomainKnowledge, InsertExpertDomainKnowledge, ExpertDomainKnowledge,
+  expertConsultations, InsertExpertConsultation, ExpertConsultation,
+  expertChatSessions, InsertExpertChatSession, ExpertChatSession,
+  expertChatMessages, InsertExpertChatMessage, ExpertChatMessage
 } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
@@ -1484,4 +1487,184 @@ export async function markFeedbackApplied(feedbackId: number) {
   if (!db) return;
   
   await db.update(smeFeedbackLog).set({ applied: true }).where(eq(smeFeedbackLog.id, feedbackId));
+}
+
+
+// ==================== EXPERT CONSULTATIONS ====================
+
+// Create a new consultation record
+export async function createExpertConsultation(entry: InsertExpertConsultation): Promise<ExpertConsultation | null> {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const result = await db.insert(expertConsultations).values(entry);
+  const id = result[0].insertId;
+  const created = await db.select().from(expertConsultations).where(eq(expertConsultations.id, id)).limit(1);
+  return created[0] || null;
+}
+
+// Get consultation history for a user
+export async function getExpertConsultationHistory(
+  userId: number, 
+  options?: { expertId?: string; limit?: number }
+): Promise<ExpertConsultation[]> {
+  const db = await getDb();
+  if (!db) return [];
+  
+  const conditions = [eq(expertConsultations.userId, userId)];
+  
+  if (options?.expertId) {
+    conditions.push(eq(expertConsultations.expertId, options.expertId));
+  }
+  
+  return db.select().from(expertConsultations)
+    .where(and(...conditions))
+    .orderBy(desc(expertConsultations.updatedAt))
+    .limit(options?.limit || 50);
+}
+
+// Get consultation count per expert for a user
+export async function getExpertConsultationCounts(userId: number): Promise<{ expertId: string; count: number; lastConsulted: Date }[]> {
+  const db = await getDb();
+  if (!db) return [];
+  
+  const results = await db.select({
+    expertId: expertConsultations.expertId,
+    count: sql<number>`COUNT(*)`,
+    lastConsulted: sql<Date>`MAX(${expertConsultations.updatedAt})`
+  })
+    .from(expertConsultations)
+    .where(eq(expertConsultations.userId, userId))
+    .groupBy(expertConsultations.expertId);
+  
+  return results;
+}
+
+// Update consultation record
+export async function updateExpertConsultation(id: number, data: Partial<InsertExpertConsultation>) {
+  const db = await getDb();
+  if (!db) return;
+  
+  await db.update(expertConsultations).set(data).where(eq(expertConsultations.id, id));
+}
+
+// ==================== EXPERT CHAT SESSIONS ====================
+
+// Create a new chat session
+export async function createExpertChatSession(entry: InsertExpertChatSession): Promise<ExpertChatSession | null> {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const result = await db.insert(expertChatSessions).values(entry);
+  const id = result[0].insertId;
+  const created = await db.select().from(expertChatSessions).where(eq(expertChatSessions.id, id)).limit(1);
+  return created[0] || null;
+}
+
+// Get active chat session for user and expert
+export async function getActiveExpertChatSession(userId: number, expertId: string): Promise<ExpertChatSession | null> {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const sessions = await db.select().from(expertChatSessions)
+    .where(and(
+      eq(expertChatSessions.userId, userId),
+      eq(expertChatSessions.expertId, expertId),
+      eq(expertChatSessions.status, 'active')
+    ))
+    .orderBy(desc(expertChatSessions.createdAt))
+    .limit(1);
+  
+  return sessions[0] || null;
+}
+
+// Get all chat sessions for a user
+export async function getExpertChatSessions(userId: number, options?: { expertId?: string; limit?: number }): Promise<ExpertChatSession[]> {
+  const db = await getDb();
+  if (!db) return [];
+  
+  const conditions = [eq(expertChatSessions.userId, userId)];
+  
+  if (options?.expertId) {
+    conditions.push(eq(expertChatSessions.expertId, options.expertId));
+  }
+  
+  return db.select().from(expertChatSessions)
+    .where(and(...conditions))
+    .orderBy(desc(expertChatSessions.createdAt))
+    .limit(options?.limit || 50);
+}
+
+// Update chat session
+export async function updateExpertChatSession(id: number, data: Partial<InsertExpertChatSession>) {
+  const db = await getDb();
+  if (!db) return;
+  
+  await db.update(expertChatSessions).set(data).where(eq(expertChatSessions.id, id));
+}
+
+// ==================== EXPERT CHAT MESSAGES ====================
+
+// Add a message to a chat session
+export async function createExpertChatMessage(entry: InsertExpertChatMessage): Promise<ExpertChatMessage | null> {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const result = await db.insert(expertChatMessages).values(entry);
+  const id = result[0].insertId;
+  const created = await db.select().from(expertChatMessages).where(eq(expertChatMessages.id, id)).limit(1);
+  
+  // Update session's lastMessageAt
+  if (entry.sessionId) {
+    await db.update(expertChatSessions)
+      .set({ lastMessageAt: new Date() })
+      .where(eq(expertChatSessions.id, entry.sessionId));
+  }
+  
+  return created[0] || null;
+}
+
+// Get messages for a chat session
+export async function getExpertChatMessages(sessionId: number, options?: { limit?: number }): Promise<ExpertChatMessage[]> {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return db.select().from(expertChatMessages)
+    .where(eq(expertChatMessages.sessionId, sessionId))
+    .orderBy(expertChatMessages.createdAt)
+    .limit(options?.limit || 100);
+}
+
+// Get recent messages across all sessions for an expert
+export async function getRecentExpertMessages(userId: number, expertId: string, limit: number = 20): Promise<ExpertChatMessage[]> {
+  const db = await getDb();
+  if (!db) return [];
+  
+  // First get session IDs for this user and expert
+  const sessions = await db.select({ id: expertChatSessions.id })
+    .from(expertChatSessions)
+    .where(and(
+      eq(expertChatSessions.userId, userId),
+      eq(expertChatSessions.expertId, expertId)
+    ));
+  
+  if (sessions.length === 0) return [];
+  
+  const sessionIds = sessions.map(s => s.id);
+  
+  // Get messages from these sessions
+  const messages: ExpertChatMessage[] = [];
+  for (const sessionId of sessionIds) {
+    const sessionMessages = await db.select().from(expertChatMessages)
+      .where(eq(expertChatMessages.sessionId, sessionId))
+      .orderBy(desc(expertChatMessages.createdAt))
+      .limit(limit);
+    messages.push(...sessionMessages);
+  }
+  
+  // Sort by createdAt and limit
+  return messages
+    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+    .slice(0, limit)
+    .reverse();
 }

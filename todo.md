@@ -3155,3 +3155,27 @@
 - [x] Create Leadership Thinking Styles module for Chief of Staff
 - [x] Update Digital Twin questionnaire with leadership dimensions
 - [x] Incorporate MIT, Harvard, NASA, McKinsey, CEO, Entrepreneur thinking styles
+
+
+## AI SME Advanced Features (January 16, 2026)
+
+### Expert Chat Functionality
+- [x] Create expert chat page with conversation UI
+- [x] Generate system prompts from expert profiles (composite inspirations, strengths, thinking style)
+- [x] Wire up Chat button in expert detail modal to navigate to chat
+- [x] Implement LLM integration for expert conversations
+- [x] Store chat history per expert
+
+### Expert Consultation History
+- [x] Create database table for expert consultations
+- [x] Track which experts user has consulted
+- [x] Store consultation summaries and recommendations
+- [x] Add Recent Consultations section to AI SMEs page
+- [x] Show consultation count and last consulted date per expert
+
+### Expert Comparison View
+- [x] Add checkbox selection for experts (max 3)
+- [x] Create comparison modal/view with side-by-side layout
+- [x] Display strengths, weaknesses, specialties comparison
+- [x] Show performance scores and thinking styles
+- [x] Add "Add to Team" action from comparison view

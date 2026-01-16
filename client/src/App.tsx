@@ -37,6 +37,7 @@ import ChiefOfStaffRole from "./pages/ChiefOfStaffRole";
 import ReferenceLibrary from "./pages/ReferenceLibrary";
 import DueDiligencePage from "./pages/DueDiligencePage";
 import CentralHub from "./pages/CentralHub";
+import ExpertChatPage from "./pages/ExpertChatPage";
 import { GovernanceProvider, GovernanceModeChangeModal } from "./hooks/useGovernance";
 import { AIRouterProvider } from "./components/AIRouter";
 import { CelebrationProvider } from "./components/CelebrationAnimations";
@@ -93,6 +94,9 @@ function Router() {
       </Route>
       <Route path="/ai-experts">
         <WithLayout><AISMEsPage /></WithLayout>
+      </Route>
+      <Route path="/expert-chat/:expertId">
+        <ExpertChatPage />
       </Route>
       <Route path="/evening-review">
         <WithLayout><EveningReview /></WithLayout>

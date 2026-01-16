@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import { useLocation } from "wouter";
 import { 
   Users, Brain, Search, Star, MessageSquare, FileText,
   ChevronRight, Plus, Mic, MicOff, Send, Eye, CheckCircle2,
@@ -52,6 +53,7 @@ interface SelectedExpert {
 export default function AISMEsPage() {
   const isMobile = useIsMobile();
   const [viewMode, setViewMode] = useState<ViewMode>('browse');
+  const [, setLocation] = useLocation();
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedExperts, setSelectedExperts] = useState<SelectedExpert[]>([]);
@@ -60,10 +62,16 @@ export default function AISMEsPage() {
   const [viewStyle, setViewStyle] = useState<'grid' | 'list'>('grid');
   const [teamName, setTeamName] = useState('');
   const [teamPurpose, setTeamPurpose] = useState('');
+  const [compareExperts, setCompareExperts] = useState<string[]>([]);
+  const [showCompareModal, setShowCompareModal] = useState(false);
 
   // tRPC hooks for team management
   const utils = trpc.useUtils();
   const { data: savedTeams, isLoading: teamsLoading } = trpc.smeTeam.list.useQuery();
+  
+  // Consultation history
+  const { data: consultationHistory } = trpc.expertConsultation.list.useQuery({ limit: 10 });
+  const { data: consultationCounts } = trpc.expertConsultation.counts.useQuery();
   
   const createTeamMutation = trpc.smeTeam.create.useMutation({
     onSuccess: async (team) => {
@@ -198,7 +206,22 @@ export default function AISMEsPage() {
     }
   };
 
+  // Toggle comparison selection (max 3)
+  const toggleCompareExpert = (expertId: string) => {
+    setCompareExperts(prev => {
+      if (prev.includes(expertId)) {
+        return prev.filter(id => id !== expertId);
+      }
+      if (prev.length >= 3) {
+        toast.error("Maximum 3 experts for comparison");
+        return prev;
+      }
+      return [...prev, expertId];
+    });
+  };
+
   const selectedExpert = showExpertDetail ? AI_EXPERTS.find(e => e.id === showExpertDetail) : null;
+  const compareExpertData = compareExperts.map(id => AI_EXPERTS.find(e => e.id === id)).filter(Boolean) as typeof AI_EXPERTS;
 
   return (
     <div className="h-[calc(100vh-56px)] md:h-screen flex flex-col bg-gradient-to-br from-gray-900 via-gray-900 to-gray-800">
@@ -210,6 +233,16 @@ export default function AISMEsPage() {
         iconColor="text-cyan-400"
       >
         <div className="flex items-center gap-2">
+          {compareExperts.length > 0 && (
+            <Button 
+              size="sm" 
+              onClick={() => setShowCompareModal(true)}
+              className="gap-2 bg-gradient-to-r from-purple-500 to-pink-500"
+            >
+              <BarChart3 className="w-4 h-4" />
+              Compare ({compareExperts.length})
+            </Button>
+          )}
           {selectedExperts.length > 0 && (
             <Badge className="bg-primary/20 text-primary">
               {selectedExperts.length} selected
@@ -255,6 +288,34 @@ export default function AISMEsPage() {
             {!isMobile && (
               <div className="w-56 border-r border-white/10 bg-white/5 overflow-y-auto">
                 <div className="p-3">
+                  {/* Recent Consultations */}
+                  {consultationHistory && consultationHistory.length > 0 && (
+                    <div className="mb-4">
+                      <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Recent Chats</h3>
+                      <div className="space-y-1">
+                        {consultationHistory.slice(0, 5).map(consultation => {
+                          const expert = AI_EXPERTS.find(e => e.id === consultation.expertId);
+                          if (!expert) return null;
+                          return (
+                            <button
+                              key={consultation.id}
+                              onClick={() => setLocation(`/expert-chat/${expert.id}`)}
+                              className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-sm hover:bg-white/5 text-gray-400 hover:text-white transition-colors"
+                            >
+                              <span className="text-lg">{expert.avatar}</span>
+                              <div className="flex-1 text-left truncate">
+                                <div className="truncate">{expert.name}</div>
+                                <div className="text-xs text-gray-500">
+                                  {new Date(consultation.updatedAt).toLocaleDateString()}
+                                </div>
+                              </div>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+                  
                   <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Categories</h3>
                   <div className="space-y-1">
                     {CATEGORIES.map(cat => (
@@ -333,13 +394,16 @@ export default function AISMEsPage() {
                   {filteredExperts.map(expert => {
                     const isSelected = selectedExperts.some(e => e.id === expert.id);
                     const isAvailable = expert.status === 'active';
+                    const isInCompare = compareExperts.includes(expert.id);
                     return (
                       <div
                         key={expert.id}
-                        className={`p-4 bg-white/5 border-2 rounded-2xl transition-all cursor-pointer group ${
-                          isSelected 
-                            ? 'border-cyan-500/50 bg-gradient-to-br from-cyan-500/10 to-blue-500/10' 
-                            : 'border-white/10 hover:border-cyan-500/30'
+                        className={`p-4 bg-white/5 border-2 rounded-2xl transition-all cursor-pointer group relative ${
+                          isInCompare
+                            ? 'border-purple-500/50 bg-gradient-to-br from-purple-500/10 to-pink-500/10'
+                            : isSelected 
+                              ? 'border-cyan-500/50 bg-gradient-to-br from-cyan-500/10 to-blue-500/10' 
+                              : 'border-white/10 hover:border-cyan-500/30'
                         } ${viewStyle === 'list' ? 'flex items-center gap-4' : ''}`}
                         onClick={() => setShowExpertDetail(expert.id)}
                       >
@@ -377,6 +441,22 @@ export default function AISMEsPage() {
                           )}
                         </div>
                         
+                        {/* Compare checkbox */}
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            toggleCompareExpert(expert.id);
+                          }}
+                          className={`absolute top-2 right-2 p-1.5 rounded-lg transition-colors ${
+                            isInCompare 
+                              ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white' 
+                              : 'bg-white/10 hover:bg-white/20 text-gray-400 opacity-0 group-hover:opacity-100'
+                          }`}
+                          title="Add to comparison"
+                        >
+                          <BarChart3 className="w-3 h-3" />
+                        </button>
+                        
                         {viewStyle === 'grid' && (
                           <>
                             <p className="text-xs text-muted-foreground mb-3 line-clamp-2">{expert.specialty}</p>
@@ -387,6 +467,12 @@ export default function AISMEsPage() {
                                   {expert.performanceScore}%
                                 </span>
                                 <span>{expert.projectsCompleted} projects</span>
+                                {consultationCounts?.find(c => c.expertId === expert.id) && (
+                                  <span className="flex items-center gap-1 text-emerald-400">
+                                    <MessageSquare className="w-3 h-3" />
+                                    {consultationCounts.find(c => c.expertId === expert.id)?.count} chats
+                                  </span>
+                                )}
                               </div>
                               <button
                                 onClick={(e) => {
@@ -737,11 +823,185 @@ export default function AISMEsPage() {
                       </>
                     )}
                   </Button>
-                  <Button variant="outline" className="gap-2">
+                  <Button 
+                    variant="outline" 
+                    className="gap-2"
+                    onClick={() => {
+                      setShowExpertDetail(null);
+                      setLocation(`/expert-chat/${selectedExpert.id}`);
+                    }}
+                  >
                     <MessageSquare className="w-4 h-4" />
                     Chat
                   </Button>
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Expert Comparison Modal */}
+      {showCompareModal && compareExpertData.length > 0 && (
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-gray-900 border border-white/20 rounded-2xl w-full max-w-5xl max-h-[90vh] overflow-hidden">
+            {/* Modal Header */}
+            <div className="flex items-center justify-between p-4 border-b border-white/10">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
+                  <BarChart3 className="w-5 h-5 text-white" />
+                </div>
+                <div>
+                  <h2 className="text-lg font-semibold">Expert Comparison</h2>
+                  <p className="text-sm text-gray-400">Comparing {compareExpertData.length} experts</p>
+                </div>
+              </div>
+              <Button variant="ghost" size="icon" onClick={() => setShowCompareModal(false)}>
+                <X className="w-5 h-5" />
+              </Button>
+            </div>
+
+            {/* Comparison Grid */}
+            <div className="p-4 overflow-y-auto max-h-[calc(90vh-140px)]">
+              <div className={`grid gap-4 ${compareExpertData.length === 2 ? 'grid-cols-2' : 'grid-cols-3'}`}>
+                {compareExpertData.map(expert => (
+                  <div key={expert.id} className="bg-white/5 border border-white/10 rounded-xl p-4">
+                    {/* Expert Header */}
+                    <div className="flex items-center gap-3 mb-4 pb-4 border-b border-white/10">
+                      <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-cyan-500/30 to-blue-500/30 flex items-center justify-center text-2xl">
+                        {expert.avatar}
+                      </div>
+                      <div>
+                        <h3 className="font-semibold">{expert.name}</h3>
+                        <p className="text-sm text-gray-400">{expert.category}</p>
+                      </div>
+                    </div>
+
+                    {/* Performance Score */}
+                    <div className="mb-4">
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="text-xs text-gray-400">Performance</span>
+                        <span className="text-sm font-semibold text-cyan-400">{expert.performanceScore}%</span>
+                      </div>
+                      <div className="h-2 bg-white/10 rounded-full overflow-hidden">
+                        <div 
+                          className="h-full bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full"
+                          style={{ width: `${expert.performanceScore}%` }}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Specialty */}
+                    <div className="mb-4">
+                      <h4 className="text-xs text-gray-400 uppercase tracking-wider mb-2">Specialty</h4>
+                      <p className="text-sm">{expert.specialty}</p>
+                    </div>
+
+                    {/* Strengths */}
+                    <div className="mb-4">
+                      <h4 className="text-xs text-gray-400 uppercase tracking-wider mb-2">Strengths</h4>
+                      <div className="flex flex-wrap gap-1">
+                        {expert.strengths.slice(0, 4).map((strength, i) => (
+                          <Badge key={i} variant="outline" className="text-xs bg-emerald-500/10 border-emerald-500/30 text-emerald-400">
+                            {strength}
+                          </Badge>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Weaknesses */}
+                    <div className="mb-4">
+                      <h4 className="text-xs text-gray-400 uppercase tracking-wider mb-2">Weaknesses</h4>
+                      <div className="flex flex-wrap gap-1">
+                        {expert.weaknesses.slice(0, 3).map((weakness, i) => (
+                          <Badge key={i} variant="outline" className="text-xs bg-red-500/10 border-red-500/30 text-red-400">
+                            {weakness}
+                          </Badge>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Thinking Style */}
+                    <div className="mb-4">
+                      <h4 className="text-xs text-gray-400 uppercase tracking-wider mb-2">Thinking Style</h4>
+                      <p className="text-sm">{expert.thinkingStyle}</p>
+                    </div>
+
+                    {/* Composite */}
+                    <div className="mb-4">
+                      <h4 className="text-xs text-gray-400 uppercase tracking-wider mb-2">Inspired By</h4>
+                      <p className="text-sm text-purple-400">{expert.compositeOf.join(' + ')}</p>
+                    </div>
+
+                    {/* Stats */}
+                    <div className="grid grid-cols-2 gap-2 text-center pt-4 border-t border-white/10">
+                      <div>
+                        <div className="text-lg font-semibold">{expert.projectsCompleted}</div>
+                        <div className="text-xs text-gray-400">Projects</div>
+                      </div>
+                      <div>
+                        <div className="text-lg font-semibold">{expert.performanceScore}</div>
+                        <div className="text-xs text-gray-400">Rating</div>
+                      </div>
+                    </div>
+
+                    {/* Actions */}
+                    <div className="flex gap-2 mt-4 pt-4 border-t border-white/10">
+                      <Button 
+                        size="sm" 
+                        className="flex-1 gap-1"
+                        onClick={() => {
+                          toggleExpertSelection(expert);
+                        }}
+                      >
+                        {selectedExperts.some(e => e.id === expert.id) ? (
+                          <><CheckCircle2 className="w-3 h-3" /> Selected</>
+                        ) : (
+                          <><Plus className="w-3 h-3" /> Add</>
+                        )}
+                      </Button>
+                      <Button 
+                        size="sm" 
+                        variant="outline" 
+                        className="gap-1"
+                        onClick={() => {
+                          setShowCompareModal(false);
+                          setLocation(`/expert-chat/${expert.id}`);
+                        }}
+                      >
+                        <MessageSquare className="w-3 h-3" />
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Modal Footer */}
+            <div className="flex items-center justify-between p-4 border-t border-white/10 bg-white/5">
+              <Button 
+                variant="ghost" 
+                onClick={() => setCompareExperts([])}
+                className="text-gray-400"
+              >
+                Clear All
+              </Button>
+              <div className="flex gap-2">
+                <Button variant="outline" onClick={() => setShowCompareModal(false)}>
+                  Close
+                </Button>
+                {selectedExperts.length > 0 && (
+                  <Button 
+                    className="gap-2 bg-gradient-to-r from-cyan-500 to-blue-500"
+                    onClick={() => {
+                      setShowCompareModal(false);
+                      setViewMode('assemble');
+                    }}
+                  >
+                    <Users className="w-4 h-4" />
+                    Assemble Team ({selectedExperts.length})
+                  </Button>
+                )}
               </div>
             </div>
           </div>
