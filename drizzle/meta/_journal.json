@@ -99,6 +99,13 @@
       "when": 1768585884883,
       "tag": "0013_cheerful_the_anarchist",
       "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "5",
+      "when": 1768591391788,
+      "tag": "0014_skinny_swordsman",
+      "breakpoints": true
     }
   ]
 }

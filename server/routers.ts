@@ -39,7 +39,11 @@ import {
   createExpertChatSession, getActiveExpertChatSession, getExpertChatSessions, updateExpertChatSession,
   createExpertChatMessage, getExpertChatMessages, getRecentExpertMessages,
   // Library Documents
-  createLibraryDocument, getLibraryDocuments, getLibraryDocumentById, updateLibraryDocument, deleteLibraryDocument
+  createLibraryDocument, getLibraryDocuments, getLibraryDocumentById, updateLibraryDocument, deleteLibraryDocument,
+  // Business Plan Review Versions
+  createBusinessPlanReviewVersion, getBusinessPlanReviewVersions, getBusinessPlanReviewVersionById, getLatestVersionNumber, getUserBusinessPlanProjects,
+  // Expert Follow-up Questions
+  createExpertFollowUpQuestion, getExpertFollowUpQuestions, answerExpertFollowUpQuestion
 } from "./db";
 import { getDb } from "./db";
 import { users } from "../drizzle/schema";
@@ -2748,6 +2752,123 @@ ${transcript}
       .mutation(async ({ input }) => {
         const result = await selectExpertTeam(input.businessPlanContent || '');
         return result;
+      }),
+
+    // Save review as a version
+    saveVersion: protectedProcedure
+      .input(z.object({
+        projectName: z.string(),
+        versionLabel: z.string().optional(),
+        overallScore: z.number().optional(),
+        sectionScores: z.record(z.string(), z.number()).optional(),
+        reviewData: z.any(),
+        expertTeam: z.array(z.string()),
+        teamSelectionMode: z.string(),
+        businessPlanContent: z.string().optional(),
+        sectionDocuments: z.record(z.string(), z.object({
+          fileName: z.string(),
+          content: z.string(),
+        })).optional(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        const latestVersion = await getLatestVersionNumber(ctx.user.id, input.projectName);
+        const versionId = await createBusinessPlanReviewVersion({
+          userId: ctx.user.id,
+          projectName: input.projectName,
+          versionNumber: latestVersion + 1,
+          versionLabel: input.versionLabel,
+          overallScore: input.overallScore,
+          sectionScores: input.sectionScores,
+          reviewData: input.reviewData,
+          expertTeam: input.expertTeam,
+          teamSelectionMode: input.teamSelectionMode,
+          businessPlanContent: input.businessPlanContent,
+          sectionDocuments: input.sectionDocuments,
+        });
+        return { versionId, versionNumber: latestVersion + 1 };
+      }),
+
+    // Get all versions for a project
+    getVersions: protectedProcedure
+      .input(z.object({
+        projectName: z.string(),
+      }))
+      .query(async ({ ctx, input }) => {
+        return getBusinessPlanReviewVersions(ctx.user.id, input.projectName);
+      }),
+
+    // Get a specific version by ID
+    getVersionById: protectedProcedure
+      .input(z.object({ id: z.number() }))
+      .query(async ({ input }) => {
+        return getBusinessPlanReviewVersionById(input.id);
+      }),
+
+    // Get all user's business plan projects
+    getProjects: protectedProcedure
+      .query(async ({ ctx }) => {
+        return getUserBusinessPlanProjects(ctx.user.id);
+      }),
+
+    // Ask follow-up question to an expert
+    askFollowUp: protectedProcedure
+      .input(z.object({
+        reviewVersionId: z.number(),
+        sectionId: z.string(),
+        expertId: z.string(),
+        question: z.string(),
+        originalInsight: z.string(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        // Create the question record
+        const questionId = await createExpertFollowUpQuestion({
+          userId: ctx.user.id,
+          reviewVersionId: input.reviewVersionId,
+          sectionId: input.sectionId,
+          expertId: input.expertId,
+          question: input.question,
+        });
+
+        // Get the expert info
+        const expert = REVIEW_EXPERTS.find(e => e.id === input.expertId);
+        if (!expert) {
+          throw new Error('Expert not found');
+        }
+
+        // Generate answer using LLM
+        const response = await invokeLLM({
+          messages: [
+            { 
+              role: 'system', 
+              content: `${expert.systemPrompt}\n\nYou previously provided this insight:\n"${input.originalInsight}"\n\nNow answer the follow-up question professionally and helpfully.` 
+            },
+            { role: 'user', content: input.question }
+          ]
+        });
+
+        const rawContent = response.choices[0]?.message?.content;
+        const answer = typeof rawContent === 'string' ? rawContent : 'Unable to generate response.';
+
+        // Update the question with the answer
+        if (questionId) {
+          await answerExpertFollowUpQuestion(questionId, answer);
+        }
+
+        return { questionId, answer };
+      }),
+
+    // Get follow-up questions for a review
+    getFollowUps: protectedProcedure
+      .input(z.object({
+        reviewVersionId: z.number(),
+        sectionId: z.string().optional(),
+        expertId: z.string().optional(),
+      }))
+      .query(async ({ input }) => {
+        return getExpertFollowUpQuestions(input.reviewVersionId, {
+          sectionId: input.sectionId,
+          expertId: input.expertId,
+        });
       }),
   }),
 });

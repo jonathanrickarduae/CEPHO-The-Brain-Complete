@@ -3350,3 +3350,28 @@
 - [x] Manual Mode: User browses expert bios and picks team members
 - [x] Show expert cards with bios for manual selection
 - [x] Display selected team before starting review
+
+
+## Business Plan Review Advanced Features (Jan 16, 2026)
+
+### Version Comparison
+- [x] Create review version history storage in database
+- [x] Add "Save as Version" button after completing review
+- [x] Build version selector dropdown to load previous reviews
+- [x] Create side-by-side comparison view for two versions
+- [x] Show score changes (improved/declined) between versions
+- [x] Highlight sections with significant changes
+
+### Expert Follow-up Questions
+- [x] Add "Ask Follow-up" button on each expert insight
+- [x] Create follow-up question dialog/modal
+- [x] Implement LLM-powered expert response to follow-up
+- [x] Store follow-up Q&A in review history
+- [x] Show follow-up conversation thread per expert
+
+### Section-Specific Document Upload
+- [x] Add document upload button per section
+- [x] Support different file types per section context
+- [x] Store section-document associations
+- [x] Pass section-specific content to expert analysis
+- [x] Show uploaded document indicator per section

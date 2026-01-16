@@ -11,7 +11,9 @@ import { InsertUser, users, moodHistory, InsertMoodHistory, MoodHistory, convers
   expertDomainKnowledge, InsertExpertDomainKnowledge, ExpertDomainKnowledge,
   expertConsultations, InsertExpertConsultation, ExpertConsultation,
   expertChatSessions, InsertExpertChatSession, ExpertChatSession,
-  expertChatMessages, InsertExpertChatMessage, ExpertChatMessage
+  expertChatMessages, InsertExpertChatMessage, ExpertChatMessage,
+  businessPlanReviewVersions, InsertBusinessPlanReviewVersion, BusinessPlanReviewVersion,
+  expertFollowUpQuestions, InsertExpertFollowUpQuestion, ExpertFollowUpQuestion
 } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
@@ -1728,4 +1730,114 @@ export async function deleteLibraryDocument(id: number) {
   if (!db) return;
   
   await db.delete(libraryDocuments).where(eq(libraryDocuments.id, id));
+}
+
+
+// ==================== Business Plan Review Versions ====================
+
+// Create a new review version
+export async function createBusinessPlanReviewVersion(data: InsertBusinessPlanReviewVersion): Promise<number | null> {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const [result] = await db.insert(businessPlanReviewVersions).values(data);
+  return result.insertId;
+}
+
+// Get all review versions for a user and project
+export async function getBusinessPlanReviewVersions(
+  userId: number, 
+  projectName: string
+): Promise<BusinessPlanReviewVersion[]> {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return db.select().from(businessPlanReviewVersions)
+    .where(and(
+      eq(businessPlanReviewVersions.userId, userId),
+      eq(businessPlanReviewVersions.projectName, projectName)
+    ))
+    .orderBy(desc(businessPlanReviewVersions.versionNumber));
+}
+
+// Get a specific review version by ID
+export async function getBusinessPlanReviewVersionById(id: number): Promise<BusinessPlanReviewVersion | null> {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const [version] = await db.select().from(businessPlanReviewVersions)
+    .where(eq(businessPlanReviewVersions.id, id));
+  return version || null;
+}
+
+// Get the latest version number for a project
+export async function getLatestVersionNumber(userId: number, projectName: string): Promise<number> {
+  const db = await getDb();
+  if (!db) return 0;
+  
+  const [result] = await db.select({ maxVersion: sql<number>`MAX(${businessPlanReviewVersions.versionNumber})` })
+    .from(businessPlanReviewVersions)
+    .where(and(
+      eq(businessPlanReviewVersions.userId, userId),
+      eq(businessPlanReviewVersions.projectName, projectName)
+    ));
+  
+  return result?.maxVersion || 0;
+}
+
+// Get all unique project names for a user
+export async function getUserBusinessPlanProjects(userId: number): Promise<string[]> {
+  const db = await getDb();
+  if (!db) return [];
+  
+  const results = await db.selectDistinct({ projectName: businessPlanReviewVersions.projectName })
+    .from(businessPlanReviewVersions)
+    .where(eq(businessPlanReviewVersions.userId, userId));
+  
+  return results.map(r => r.projectName);
+}
+
+// ==================== Expert Follow-up Questions ====================
+
+// Create a follow-up question
+export async function createExpertFollowUpQuestion(data: InsertExpertFollowUpQuestion): Promise<number | null> {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const [result] = await db.insert(expertFollowUpQuestions).values(data);
+  return result.insertId;
+}
+
+// Get follow-up questions for a review version
+export async function getExpertFollowUpQuestions(
+  reviewVersionId: number,
+  options?: { sectionId?: string; expertId?: string }
+): Promise<ExpertFollowUpQuestion[]> {
+  const db = await getDb();
+  if (!db) return [];
+  
+  const conditions = [eq(expertFollowUpQuestions.reviewVersionId, reviewVersionId)];
+  
+  if (options?.sectionId) {
+    conditions.push(eq(expertFollowUpQuestions.sectionId, options.sectionId));
+  }
+  if (options?.expertId) {
+    conditions.push(eq(expertFollowUpQuestions.expertId, options.expertId));
+  }
+  
+  return db.select().from(expertFollowUpQuestions)
+    .where(and(...conditions))
+    .orderBy(desc(expertFollowUpQuestions.createdAt));
+}
+
+// Update follow-up question with answer
+export async function answerExpertFollowUpQuestion(id: number, answer: string) {
+  const db = await getDb();
+  if (!db) return;
+  
+  await db.update(expertFollowUpQuestions).set({
+    answer,
+    status: 'answered',
+    answeredAt: new Date()
+  }).where(eq(expertFollowUpQuestions.id, id));
 }

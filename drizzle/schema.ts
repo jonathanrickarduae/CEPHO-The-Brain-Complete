@@ -1373,3 +1373,45 @@ export const expertChatMessages = mysqlTable("expert_chat_messages", {
 
 export type ExpertChatMessage = typeof expertChatMessages.$inferSelect;
 export type InsertExpertChatMessage = typeof expertChatMessages.$inferInsert;
+
+
+/**
+ * Business Plan Review Versions - track review history over time
+ */
+export const businessPlanReviewVersions = mysqlTable("business_plan_review_versions", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  projectName: varchar("projectName", { length: 300 }).notNull(),
+  versionNumber: int("versionNumber").notNull(),
+  versionLabel: varchar("versionLabel", { length: 100 }), // e.g., "Initial Draft", "Post-Feedback"
+  overallScore: int("overallScore"), // 0-100
+  sectionScores: json("sectionScores"), // { sectionId: score, ... }
+  reviewData: json("reviewData"), // Full review data including expert insights
+  expertTeam: json("expertTeam"), // List of expert IDs used
+  teamSelectionMode: varchar("teamSelectionMode", { length: 50 }), // "chief-of-staff" or "manual"
+  businessPlanContent: text("businessPlanContent"), // The content that was reviewed
+  sectionDocuments: json("sectionDocuments"), // { sectionId: { fileName, content }, ... }
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type BusinessPlanReviewVersion = typeof businessPlanReviewVersions.$inferSelect;
+export type InsertBusinessPlanReviewVersion = typeof businessPlanReviewVersions.$inferInsert;
+
+/**
+ * Expert Follow-up Questions - Q&A with experts after review
+ */
+export const expertFollowUpQuestions = mysqlTable("expert_follow_up_questions", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  reviewVersionId: int("reviewVersionId").notNull(), // Link to review version
+  sectionId: varchar("sectionId", { length: 100 }).notNull(),
+  expertId: varchar("expertId", { length: 100 }).notNull(),
+  question: text("question").notNull(),
+  answer: text("answer"),
+  status: mysqlEnum("status", ["pending", "answered"]).default("pending").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  answeredAt: timestamp("answeredAt"),
+});
+
+export type ExpertFollowUpQuestion = typeof expertFollowUpQuestions.$inferSelect;
+export type InsertExpertFollowUpQuestion = typeof expertFollowUpQuestions.$inferInsert;

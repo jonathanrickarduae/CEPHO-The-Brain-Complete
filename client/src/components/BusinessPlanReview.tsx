@@ -4,7 +4,7 @@ import {
   ChevronRight, Play, Pause, RotateCcw, Download,
   MessageSquare, Lightbulb, Target, TrendingUp, DollarSign,
   Shield, Scale, Briefcase, Globe, Zap, Upload, X, Save,
-  UserCog, Sparkles
+  UserCog, Sparkles, History, GitCompare, Send, PlusCircle
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -13,6 +13,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
 import { trpc } from '@/lib/trpc';
 import { toast } from 'sonner';
 
@@ -201,6 +202,22 @@ export function BusinessPlanReview({
   const [teamSelectionMode, setTeamSelectionMode] = useState<TeamSelectionMode>('chief-of-staff');
   const [selectedExperts, setSelectedExperts] = useState<string[]>(REVIEW_EXPERTS.map(e => e.id));
   const [showExpertSelection, setShowExpertSelection] = useState(false);
+  
+  // Version management
+  const [currentVersionId, setCurrentVersionId] = useState<number | null>(null);
+  const [showVersionHistory, setShowVersionHistory] = useState(false);
+  const [compareVersionId, setCompareVersionId] = useState<number | null>(null);
+  const [versionLabel, setVersionLabel] = useState('');
+  
+  // Follow-up questions
+  const [showFollowUpDialog, setShowFollowUpDialog] = useState(false);
+  const [followUpExpert, setFollowUpExpert] = useState<ExpertInsight | null>(null);
+  const [followUpSection, setFollowUpSection] = useState<string>('');
+  const [followUpQuestion, setFollowUpQuestion] = useState('');
+  const [followUpHistory, setFollowUpHistory] = useState<Array<{ question: string; answer: string; expertName: string }>>([]);
+  
+  // Section-specific documents
+  const [sectionDocuments, setSectionDocuments] = useState<Record<string, { fileName: string; content: string }>>({});
 
   // Calculate overall progress
   const completedSections = Array.from(sectionReviews.values()).filter(r => r.status === 'completed').length;
@@ -218,6 +235,20 @@ export function BusinessPlanReview({
   
   // Chief of Staff team selection mutation
   const selectTeamMutation = trpc.businessPlanReview.selectExpertTeam.useMutation();
+  
+  // Version management mutations
+  const saveVersionMutation = trpc.businessPlanReview.saveVersion.useMutation();
+  const versionsQuery = trpc.businessPlanReview.getVersions.useQuery(
+    { projectName },
+    { enabled: showVersionHistory }
+  );
+  const versionByIdQuery = trpc.businessPlanReview.getVersionById.useQuery(
+    { id: compareVersionId! },
+    { enabled: compareVersionId !== null }
+  );
+  
+  // Follow-up question mutation
+  const askFollowUpMutation = trpc.businessPlanReview.askFollowUp.useMutation();
   const [teamSelectionResult, setTeamSelectionResult] = useState<{
     reasoning: string;
     teamComposition: { expertId: string; role: string; rationale: string }[];
@@ -546,6 +577,112 @@ export function BusinessPlanReview({
     toast.success('Report downloaded!');
   };
 
+  // Save current review as a version
+  const handleSaveVersion = async () => {
+    if (completedSections === 0) {
+      toast.error('Complete at least one section review before saving a version');
+      return;
+    }
+
+    try {
+      const reviews = Array.from(sectionReviews.values());
+      const overallScore = Math.round(
+        reviews.filter(r => r.overallScore).reduce((sum, r) => sum + (r.overallScore || 0), 0) / 
+        reviews.filter(r => r.overallScore).length
+      ) || 0;
+
+      const sectionScores: Record<string, number> = {};
+      reviews.forEach(r => {
+        if (r.overallScore) sectionScores[r.sectionId] = r.overallScore;
+      });
+
+      const result = await saveVersionMutation.mutateAsync({
+        projectName,
+        versionLabel: versionLabel || `Review ${new Date().toLocaleDateString()}`,
+        overallScore,
+        sectionScores,
+        reviewData: reviews,
+        expertTeam: selectedExperts,
+        teamSelectionMode,
+        businessPlanContent,
+        sectionDocuments,
+      });
+
+      setCurrentVersionId(result.versionId);
+      toast.success(`Saved as Version ${result.versionNumber}`);
+      setVersionLabel('');
+    } catch (error) {
+      console.error('Error saving version:', error);
+      toast.error('Failed to save version');
+    }
+  };
+
+  // Load a previous version for comparison
+  const handleLoadVersion = (versionId: number) => {
+    setCompareVersionId(versionId);
+  };
+
+  // Ask follow-up question to an expert
+  const handleAskFollowUp = async () => {
+    if (!followUpQuestion.trim() || !followUpExpert || !currentVersionId) {
+      toast.error('Please enter a question');
+      return;
+    }
+
+    try {
+      const result = await askFollowUpMutation.mutateAsync({
+        reviewVersionId: currentVersionId,
+        sectionId: followUpSection,
+        expertId: followUpExpert.expertId,
+        question: followUpQuestion,
+        originalInsight: followUpExpert.insight,
+      });
+
+      setFollowUpHistory(prev => [...prev, {
+        question: followUpQuestion,
+        answer: result.answer,
+        expertName: followUpExpert.expertName,
+      }]);
+      setFollowUpQuestion('');
+      toast.success('Expert responded!');
+    } catch (error) {
+      console.error('Error asking follow-up:', error);
+      toast.error('Failed to get response');
+    }
+  };
+
+  // Open follow-up dialog for an expert
+  const openFollowUpDialog = (insight: ExpertInsight, sectionId: string) => {
+    setFollowUpExpert(insight);
+    setFollowUpSection(sectionId);
+    setShowFollowUpDialog(true);
+    setFollowUpHistory([]);
+  };
+
+  // Handle section-specific document upload
+  const handleSectionDocumentUpload = async (sectionId: string, event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    try {
+      let content = '';
+      if (file.type === 'text/plain' || file.name.endsWith('.txt') || file.name.endsWith('.md') || file.name.endsWith('.csv')) {
+        content = await file.text();
+      } else {
+        content = `[${file.name}] - Document uploaded for analysis`;
+      }
+
+      setSectionDocuments(prev => ({
+        ...prev,
+        [sectionId]: { fileName: file.name, content }
+      }));
+      toast.success(`Document added to ${BUSINESS_PLAN_SECTIONS.find(s => s.id === sectionId)?.name}`);
+    } catch (error) {
+      console.error('Error uploading section document:', error);
+      toast.error('Failed to upload document');
+    }
+  };
+
   return (
     <div className="h-full flex flex-col">
       {/* Header */}
@@ -665,6 +802,23 @@ export function BusinessPlanReview({
                   <Save className="w-4 h-4 mr-2" />
                   {saveToLibraryMutation.isPending ? 'Saving...' : 'Save to Library'}
                 </Button>
+                <Button 
+                  onClick={handleSaveVersion} 
+                  variant="outline" 
+                  size="sm"
+                  disabled={saveVersionMutation.isPending}
+                >
+                  <GitCompare className="w-4 h-4 mr-2" />
+                  {saveVersionMutation.isPending ? 'Saving...' : 'Save Version'}
+                </Button>
+                <Button 
+                  onClick={() => setShowVersionHistory(true)} 
+                  variant="outline" 
+                  size="sm"
+                >
+                  <History className="w-4 h-4 mr-2" />
+                  History
+                </Button>
               </>
             )}
           </div>
@@ -747,6 +901,45 @@ export function BusinessPlanReview({
                             </div>
                             <p className="text-sm text-muted-foreground mt-1">{section.description}</p>
                             
+                            {/* Section-specific Document */}
+                            {!isReviewing && !review?.status && (
+                              <div className="mt-2 flex items-center gap-2">
+                                <input
+                                  type="file"
+                                  id={`section-doc-${section.id}`}
+                                  onChange={(e) => handleSectionDocumentUpload(section.id, e)}
+                                  accept=".pdf,.docx,.doc,.txt,.md,.csv,.xlsx"
+                                  className="hidden"
+                                />
+                                {sectionDocuments[section.id] ? (
+                                  <div className="flex items-center gap-2 px-2 py-1 bg-purple-500/20 rounded text-xs">
+                                    <FileText className="w-3 h-3 text-purple-400" />
+                                    <span className="text-foreground truncate max-w-[120px]">
+                                      {sectionDocuments[section.id].fileName}
+                                    </span>
+                                    <button
+                                      onClick={() => setSectionDocuments(prev => {
+                                        const newDocs = { ...prev };
+                                        delete newDocs[section.id];
+                                        return newDocs;
+                                      })}
+                                      className="text-muted-foreground hover:text-foreground"
+                                    >
+                                      <X className="w-3 h-3" />
+                                    </button>
+                                  </div>
+                                ) : (
+                                  <button
+                                    onClick={() => document.getElementById(`section-doc-${section.id}`)?.click()}
+                                    className="flex items-center gap-1 px-2 py-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
+                                  >
+                                    <PlusCircle className="w-3 h-3" />
+                                    Add document
+                                  </button>
+                                )}
+                              </div>
+                            )}
+                            
                             {/* Expert Insights Preview */}
                             {review?.expertInsights && review.expertInsights.length > 0 && (
                               <div className="mt-3 space-y-2">
@@ -811,6 +1004,15 @@ export function BusinessPlanReview({
                                               </ul>
                                             </div>
                                           )}
+                                          <Button
+                                            onClick={() => openFollowUpDialog(insight, section.id)}
+                                            variant="outline"
+                                            size="sm"
+                                            className="mt-4"
+                                          >
+                                            <MessageSquare className="w-4 h-4 mr-2" />
+                                            Ask Follow-up Question
+                                          </Button>
                                         </div>
                                       </DialogContent>
                                     </Dialog>
@@ -1070,6 +1272,169 @@ export function BusinessPlanReview({
               </Button>
             </div>
           </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Version History Dialog */}
+      <Dialog open={showVersionHistory} onOpenChange={setShowVersionHistory}>
+        <DialogContent className="max-w-2xl max-h-[80vh] overflow-hidden flex flex-col">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <History className="w-5 h-5 text-purple-400" />
+              Review Version History
+            </DialogTitle>
+          </DialogHeader>
+          <div className="mb-4">
+            <label className="text-sm text-muted-foreground mb-2 block">Version Label (for next save)</label>
+            <Input
+              value={versionLabel}
+              onChange={(e) => setVersionLabel(e.target.value)}
+              placeholder="e.g., Post-Investor Feedback"
+              className="bg-white/5 border-white/10"
+            />
+          </div>
+          <ScrollArea className="flex-1 pr-4">
+            {versionsQuery.isLoading ? (
+              <div className="text-center py-8 text-muted-foreground">Loading versions...</div>
+            ) : versionsQuery.data && versionsQuery.data.length > 0 ? (
+              <div className="space-y-3">
+                {versionsQuery.data.map((version) => (
+                  <Card key={version.id} className="border-white/10">
+                    <CardContent className="p-4">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <span className="font-medium text-foreground">Version {version.versionNumber}</span>
+                            {version.versionLabel && (
+                              <Badge variant="outline" className="text-xs">{version.versionLabel}</Badge>
+                            )}
+                            {version.id === currentVersionId && (
+                              <Badge className="bg-green-500/20 text-green-300 text-xs">Current</Badge>
+                            )}
+                          </div>
+                          <p className="text-sm text-muted-foreground mt-1">
+                            {new Date(version.createdAt).toLocaleString()}
+                          </p>
+                          <p className="text-sm text-muted-foreground">
+                            Score: {version.overallScore || 'N/A'}% • {version.teamSelectionMode === 'chief-of-staff' ? 'Auto Team' : 'Manual Team'}
+                          </p>
+                        </div>
+                        <div className="flex gap-2">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleLoadVersion(version.id)}
+                            disabled={version.id === compareVersionId}
+                          >
+                            <GitCompare className="w-4 h-4 mr-1" />
+                            Compare
+                          </Button>
+                        </div>
+                      </div>
+                      {compareVersionId === version.id && versionByIdQuery.data && (
+                        <div className="mt-4 pt-4 border-t border-white/10">
+                          <h4 className="text-sm font-medium text-foreground mb-2">Section Scores Comparison</h4>
+                          <div className="grid grid-cols-2 gap-2">
+                            {Object.entries(versionByIdQuery.data.sectionScores as Record<string, number> || {}).map(([sectionId, score]) => {
+                              const currentScore = sectionReviews.get(sectionId)?.overallScore || 0;
+                              const diff = currentScore - score;
+                              return (
+                                <div key={sectionId} className="flex items-center justify-between text-sm">
+                                  <span className="text-muted-foreground truncate">
+                                    {BUSINESS_PLAN_SECTIONS.find(s => s.id === sectionId)?.name || sectionId}
+                                  </span>
+                                  <div className="flex items-center gap-2">
+                                    <span className="text-foreground">{score}%</span>
+                                    {diff !== 0 && (
+                                      <span className={diff > 0 ? 'text-green-400' : 'text-red-400'}>
+                                        {diff > 0 ? '+' : ''}{diff}%
+                                      </span>
+                                    )}
+                                  </div>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-8 text-muted-foreground">
+                No versions saved yet. Complete a review and click "Save Version" to track changes over time.
+              </div>
+            )}
+          </ScrollArea>
+        </DialogContent>
+      </Dialog>
+
+      {/* Follow-up Question Dialog */}
+      <Dialog open={showFollowUpDialog} onOpenChange={setShowFollowUpDialog}>
+        <DialogContent className="max-w-xl max-h-[80vh] overflow-hidden flex flex-col">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <MessageSquare className="w-5 h-5 text-purple-400" />
+              Ask Follow-up Question
+            </DialogTitle>
+          </DialogHeader>
+          {followUpExpert && (
+            <div className="mb-4 p-3 bg-white/5 rounded-lg">
+              <div className="flex items-center gap-2 mb-2">
+                <span className="text-lg">
+                  {REVIEW_EXPERTS.find(e => e.id === followUpExpert.expertId)?.avatar}
+                </span>
+                <span className="font-medium text-foreground">{followUpExpert.expertName}</span>
+              </div>
+              <p className="text-sm text-muted-foreground italic">"{followUpExpert.insight.slice(0, 200)}..."</p>
+            </div>
+          )}
+          <ScrollArea className="flex-1 pr-4 max-h-[300px]">
+            {followUpHistory.length > 0 && (
+              <div className="space-y-4 mb-4">
+                {followUpHistory.map((item, i) => (
+                  <div key={i} className="space-y-2">
+                    <div className="flex items-start gap-2">
+                      <div className="w-6 h-6 rounded-full bg-blue-500/20 flex items-center justify-center text-xs">Q</div>
+                      <p className="text-sm text-foreground flex-1">{item.question}</p>
+                    </div>
+                    <div className="flex items-start gap-2 ml-8">
+                      <div className="w-6 h-6 rounded-full bg-purple-500/20 flex items-center justify-center text-xs">
+                        {REVIEW_EXPERTS.find(e => e.name === item.expertName)?.avatar?.slice(0, 1) || 'A'}
+                      </div>
+                      <p className="text-sm text-muted-foreground flex-1">{item.answer}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </ScrollArea>
+          <div className="flex gap-2 pt-4 border-t border-white/10">
+            <Input
+              value={followUpQuestion}
+              onChange={(e) => setFollowUpQuestion(e.target.value)}
+              placeholder="Ask a follow-up question..."
+              className="flex-1 bg-white/5 border-white/10"
+              onKeyDown={(e) => e.key === 'Enter' && handleAskFollowUp()}
+            />
+            <Button
+              onClick={handleAskFollowUp}
+              disabled={!followUpQuestion.trim() || askFollowUpMutation.isPending || !currentVersionId}
+              className="bg-purple-500 hover:bg-purple-600"
+            >
+              {askFollowUpMutation.isPending ? (
+                <Clock className="w-4 h-4 animate-spin" />
+              ) : (
+                <Send className="w-4 h-4" />
+              )}
+            </Button>
+          </div>
+          {!currentVersionId && (
+            <p className="text-xs text-yellow-400 mt-2">
+              Save a version first to enable follow-up questions
+            </p>
+          )}
         </DialogContent>
       </Dialog>
     </div>
