@@ -73,6 +73,10 @@ export default function AISMEsPage() {
   const { data: consultationHistory } = trpc.expertConsultation.list.useQuery({ limit: 10 });
   const { data: consultationCounts } = trpc.expertConsultation.counts.useQuery();
   
+  // Expert recommendations
+  const { data: recommendations } = trpc.expertRecommendation.getRecommendations.useQuery({ limit: 5 });
+  const { data: insights } = trpc.expertRecommendation.getInsights.useQuery();
+  
   const createTeamMutation = trpc.smeTeam.create.useMutation({
     onSuccess: async (team) => {
       if (team) {

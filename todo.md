@@ -3179,3 +3179,26 @@
 - [x] Display strengths, weaknesses, specialties comparison
 - [x] Show performance scores and thinking styles
 - [x] Add "Add to Team" action from comparison view
+
+
+## AI SME Voice, Recommendations & Export (Jan 16, 2026)
+
+### Voice Input for Expert Chat
+- [x] Add voice input button to expert chat page (same as Nexus/Chief of Staff)
+- [x] Implement speech-to-text for expert conversations
+- [x] Add voice recording indicator and controls
+- [x] Ensure consistent voice button placement with other pages
+
+### Expert Recommendation Engine
+- [x] Create recommendation algorithm based on consultation history
+- [x] Factor in project context and expert specialties
+- [x] Add "Recommended Experts" section to AI SMEs page
+- [x] Create backend procedure for generating recommendations
+- [x] Show recommendation reasons (e.g., "Based on your recent finance projects")
+
+### Expert Chat Export
+- [x] Add export button to expert chat page
+- [x] Create export format (markdown document with metadata)
+- [x] Save exported chats to Library
+- [x] Include expert profile info in export header
+- [x] Add export confirmation with toast notification

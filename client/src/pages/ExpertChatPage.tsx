@@ -3,8 +3,10 @@ import { useParams, useLocation } from "wouter";
 import { 
   ArrowLeft, Send, Mic, MicOff, Volume2, VolumeX, 
   Sparkles, Clock, Star, MessageSquare, Loader2,
-  User, Bot, ChevronDown
+  User, Bot, ChevronDown, Download, FileText, BookOpen, Check
 } from "lucide-react";
+import { toast } from "sonner";
+import { useVoiceInput, useVoiceWaveform } from "@/hooks/useVoiceInput";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -63,7 +65,27 @@ export default function ExpertChatPage() {
   const createConsultationMutation = trpc.expertConsultation.create.useMutation();
   
   const [sessionId, setSessionId] = useState<number | null>(null);
-  const [messages, setMessages] = useState<Array<{ role: 'user' | 'expert' | 'system'; content: string }>>([]);
+  const [messages, setMessages] = useState<Array<{ role: 'user' | 'expert' | 'system'; content: string }>>([]); 
+  
+  // Voice input
+  const {
+    isListening,
+    isSupported: voiceSupported,
+    transcript,
+    interimTranscript,
+    startListening,
+    stopListening,
+    resetTranscript,
+  } = useVoiceInput({
+    continuous: true,
+    onResult: (text, isFinal) => {
+      if (isFinal) {
+        setMessage(prev => prev + text + ' ');
+      }
+    },
+  });
+  
+  const { audioLevel, waveformData, startWaveform, stopWaveform } = useVoiceWaveform();
   
   // Initialize chat session
   useEffect(() => {
@@ -124,6 +146,106 @@ export default function ExpertChatPage() {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       handleSend();
+    }
+  };
+  
+  // Voice recording toggle
+  const toggleVoiceRecording = () => {
+    if (isListening) {
+      stopListening();
+      stopWaveform();
+      setIsRecording(false);
+    } else {
+      startListening();
+      startWaveform();
+      setIsRecording(true);
+    }
+  };
+  
+  // Toast notifications via sonner
+  
+  // Export to library mutation
+  const exportToLibraryMutation = trpc.library.exportExpertChat.useMutation();
+  const [showExportMenu, setShowExportMenu] = useState(false);
+  const [isExporting, setIsExporting] = useState(false);
+  
+  // Export chat to markdown (download)
+  const handleExportDownload = async () => {
+    if (!expert || messages.length === 0) return;
+    
+    const timestamp = new Date().toISOString().split('T')[0];
+    const markdown = `# Expert Consultation: ${expert.name}
+
+**Date:** ${timestamp}
+**Expert:** ${expert.name}
+**Specialty:** ${expert.specialty}
+**Category:** ${expert.category}
+
+## Expert Profile
+
+${expert.bio}
+
+**Inspired By:** ${expert.compositeOf.join(', ')}
+
+**Strengths:** ${expert.strengths.join(', ')}
+
+**Thinking Style:** ${expert.thinkingStyle}
+
+---
+
+## Conversation Transcript
+
+${messages.map(msg => {
+  if (msg.role === 'user') return `### You:\n${msg.content}\n`;
+  if (msg.role === 'expert') return `### ${expert.name}:\n${msg.content}\n`;
+  return `### System:\n${msg.content}\n`;
+}).join('\n')}
+
+---
+
+*Exported from CEPHO AI SME Consultation*
+`;
+    
+    // Create blob and download
+    const blob = new Blob([markdown], { type: 'text/markdown' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `consultation-${expert.name.toLowerCase().replace(/\s+/g, '-')}-${timestamp}.md`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    setShowExportMenu(false);
+    
+    toast.success("Conversation exported to markdown file");
+  };
+  
+  // Export chat to library
+  const handleExportToLibrary = async () => {
+    if (!expert || messages.length === 0) return;
+    setIsExporting(true);
+    
+    try {
+      const result = await exportToLibraryMutation.mutateAsync({
+        expertId: expert.id,
+        expertName: expert.name,
+        expertSpecialty: expert.specialty,
+        expertCategory: expert.category,
+        expertBio: expert.bio,
+        compositeOf: expert.compositeOf,
+        strengths: expert.strengths,
+        thinkingStyle: expert.thinkingStyle,
+        messages: messages,
+      });
+      
+      setShowExportMenu(false);
+      toast.success(`Saved to Library: ${result.documentName}`);
+    } catch (error) {
+      console.error('Failed to export to library:', error);
+      toast.error("Could not save to library. Please try again.");
+    } finally {
+      setIsExporting(false);
     }
   };
   
@@ -274,14 +396,65 @@ export default function ExpertChatPage() {
       <div className="bg-black/40 backdrop-blur-sm border-t border-white/10 px-4 py-4">
         <div className="max-w-4xl mx-auto">
           <div className="flex items-center gap-3">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setIsRecording(!isRecording)}
-              className={`${isRecording ? 'bg-red-500/20 text-red-400' : 'text-white/60 hover:text-white'} hover:bg-white/10`}
-            >
-              {isRecording ? <MicOff className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
-            </Button>
+            {/* Voice Input Button */}
+            {voiceSupported && (
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={toggleVoiceRecording}
+                className={`relative ${isRecording ? 'bg-red-500/20 text-red-400' : 'text-white/60 hover:text-white'} hover:bg-white/10`}
+              >
+                {isRecording ? (
+                  <>
+                    <MicOff className="w-5 h-5" />
+                    {/* Waveform indicator */}
+                    <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-pulse" />
+                  </>
+                ) : (
+                  <Mic className="w-5 h-5" />
+                )}
+              </Button>
+            )}
+            
+            {/* Export Button with Dropdown */}
+            {messages.length > 0 && (
+              <div className="relative">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setShowExportMenu(!showExportMenu)}
+                  className="text-white/60 hover:text-white hover:bg-white/10"
+                  title="Export conversation"
+                >
+                  {isExporting ? (
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                  ) : (
+                    <Download className="w-5 h-5" />
+                  )}
+                </Button>
+                
+                {/* Export Dropdown Menu */}
+                {showExportMenu && (
+                  <div className="absolute bottom-full mb-2 right-0 bg-slate-800 border border-white/20 rounded-lg shadow-xl py-1 min-w-[180px] z-50">
+                    <button
+                      onClick={handleExportDownload}
+                      className="w-full px-4 py-2 text-left text-white/80 hover:bg-white/10 flex items-center gap-2 text-sm"
+                    >
+                      <Download className="w-4 h-4" />
+                      Download as Markdown
+                    </button>
+                    <button
+                      onClick={handleExportToLibrary}
+                      disabled={isExporting}
+                      className="w-full px-4 py-2 text-left text-white/80 hover:bg-white/10 flex items-center gap-2 text-sm disabled:opacity-50"
+                    >
+                      <BookOpen className="w-4 h-4" />
+                      Save to Library
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
             
             <div className="flex-1 relative">
               <Input

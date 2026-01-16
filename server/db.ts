@@ -1668,3 +1668,64 @@ export async function getRecentExpertMessages(userId: number, expertId: string, 
     .slice(0, limit)
     .reverse();
 }
+
+// ==================== LIBRARY DOCUMENTS ====================
+
+import { libraryDocuments, InsertLibraryDocument, LibraryDocument } from "../drizzle/schema";
+
+// Create a new library document
+export async function createLibraryDocument(entry: InsertLibraryDocument): Promise<LibraryDocument | null> {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const [newEntry] = await db.insert(libraryDocuments).values(entry).$returningId();
+  return { ...entry, id: newEntry.id, createdAt: new Date(), updatedAt: new Date() } as LibraryDocument;
+}
+
+// Get library documents for a user
+export async function getLibraryDocuments(
+  userId: number, 
+  options?: { folder?: string; subFolder?: string; type?: string; limit?: number }
+): Promise<LibraryDocument[]> {
+  const db = await getDb();
+  if (!db) return [];
+  
+  // Build conditions array
+  const conditions = [eq(libraryDocuments.userId, userId)];
+  if (options?.folder) {
+    conditions.push(eq(libraryDocuments.folder, options.folder));
+  }
+  if (options?.subFolder) {
+    conditions.push(eq(libraryDocuments.subFolder, options.subFolder));
+  }
+  
+  return db.select().from(libraryDocuments)
+    .where(and(...conditions))
+    .orderBy(desc(libraryDocuments.createdAt))
+    .limit(options?.limit || 100);
+}
+
+// Get library document by ID
+export async function getLibraryDocumentById(id: number): Promise<LibraryDocument | null> {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const [doc] = await db.select().from(libraryDocuments).where(eq(libraryDocuments.id, id));
+  return doc || null;
+}
+
+// Update library document
+export async function updateLibraryDocument(id: number, data: Partial<InsertLibraryDocument>) {
+  const db = await getDb();
+  if (!db) return;
+  
+  await db.update(libraryDocuments).set(data).where(eq(libraryDocuments.id, id));
+}
+
+// Delete library document
+export async function deleteLibraryDocument(id: number) {
+  const db = await getDb();
+  if (!db) return;
+  
+  await db.delete(libraryDocuments).where(eq(libraryDocuments.id, id));
+}

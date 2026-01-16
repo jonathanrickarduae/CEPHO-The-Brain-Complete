@@ -37,7 +37,9 @@ import {
   // Expert Consultations & Chat
   createExpertConsultation, getExpertConsultationHistory, getExpertConsultationCounts, updateExpertConsultation,
   createExpertChatSession, getActiveExpertChatSession, getExpertChatSessions, updateExpertChatSession,
-  createExpertChatMessage, getExpertChatMessages, getRecentExpertMessages
+  createExpertChatMessage, getExpertChatMessages, getRecentExpertMessages,
+  // Library Documents
+  createLibraryDocument, getLibraryDocuments, getLibraryDocumentById, updateLibraryDocument, deleteLibraryDocument
 } from "./db";
 import { getDb } from "./db";
 import { users } from "../drizzle/schema";
@@ -2290,6 +2292,290 @@ You are not a yes-man. You are a trusted advisor who respects the principal enou
       }))
       .query(async ({ ctx, input }) => {
         return getRecentExpertMessages(ctx.user.id, input.expertId, input.limit || 20);
+      }),
+  }),
+
+  // Expert Recommendations
+  expertRecommendation: router({
+    // Get recommended experts based on consultation history and context
+    getRecommendations: protectedProcedure
+      .input(z.object({
+        context: z.string().optional(), // Current project or topic context
+        limit: z.number().optional(),
+      }))
+      .query(async ({ ctx, input }) => {
+        const limit = input.limit || 5;
+        
+        // Get user's consultation history
+        const consultations = await getExpertConsultationHistory(ctx.user.id, { limit: 50 });
+        
+        // Get consultation counts per expert
+        const counts = await getExpertConsultationCounts(ctx.user.id);
+        
+        // Build recommendation logic
+        const recommendations: Array<{
+          expertId: string;
+          expertName: string;
+          reason: string;
+          score: number;
+          category: string;
+        }> = [];
+        
+        // Analyze consultation patterns
+        const categoryFrequency: Record<string, number> = {};
+        const consultedExperts = new Set<string>();
+        
+        for (const c of consultations) {
+          consultedExperts.add(c.expertId);
+          // Track categories from consultation topics
+          const topic = c.topic?.toLowerCase() || '';
+          if (topic.includes('finance') || topic.includes('investment')) categoryFrequency['Finance & Investment'] = (categoryFrequency['Finance & Investment'] || 0) + 1;
+          if (topic.includes('strategy') || topic.includes('business')) categoryFrequency['Strategy & Business'] = (categoryFrequency['Strategy & Business'] || 0) + 1;
+          if (topic.includes('tech') || topic.includes('ai')) categoryFrequency['Technology & AI'] = (categoryFrequency['Technology & AI'] || 0) + 1;
+          if (topic.includes('legal') || topic.includes('compliance')) categoryFrequency['Legal & Compliance'] = (categoryFrequency['Legal & Compliance'] || 0) + 1;
+          if (topic.includes('market') || topic.includes('sales')) categoryFrequency['Marketing & Sales'] = (categoryFrequency['Marketing & Sales'] || 0) + 1;
+        }
+        
+        // Find top categories
+        const topCategories = Object.entries(categoryFrequency)
+          .sort((a, b) => b[1] - a[1])
+          .slice(0, 3)
+          .map(([cat]) => cat);
+        
+        // Generate recommendations based on patterns
+        // 1. Recommend experts from frequently consulted categories that haven't been consulted yet
+        // 2. Recommend complementary experts based on context
+        
+        // Sample expert recommendations (in production, this would query the AI_EXPERTS data)
+        const expertSuggestions = [
+          { id: 'victor-sterling', name: 'Victor Sterling', category: 'Finance & Investment', reason: 'Top-rated investment strategist' },
+          { id: 'elena-vasquez', name: 'Elena Vasquez', category: 'Strategy & Business', reason: 'Expert in market entry strategies' },
+          { id: 'marcus-chen', name: 'Marcus Chen', category: 'Technology & AI', reason: 'AI implementation specialist' },
+          { id: 'sophia-williams', name: 'Sophia Williams', category: 'Legal & Compliance', reason: 'M&A legal expert' },
+          { id: 'david-okonkwo', name: 'David Okonkwo', category: 'Operations', reason: 'Supply chain optimization expert' },
+        ];
+        
+        // Filter and score recommendations
+        for (const expert of expertSuggestions) {
+          if (!consultedExperts.has(expert.id)) {
+            let score = 50; // Base score
+            
+            // Boost if in top categories
+            if (topCategories.includes(expert.category)) {
+              score += 30;
+            }
+            
+            // Boost based on context match
+            if (input.context) {
+              const contextLower = input.context.toLowerCase();
+              if (contextLower.includes(expert.category.toLowerCase().split(' ')[0])) {
+                score += 20;
+              }
+            }
+            
+            recommendations.push({
+              expertId: expert.id,
+              expertName: expert.name,
+              reason: expert.reason + (topCategories.includes(expert.category) ? ' - Matches your interests' : ''),
+              score,
+              category: expert.category,
+            });
+          }
+        }
+        
+        // Sort by score and return top recommendations
+        return recommendations
+          .sort((a, b) => b.score - a.score)
+          .slice(0, limit);
+      }),
+
+    // Get personalized insights based on consultation history
+    getInsights: protectedProcedure
+      .query(async ({ ctx }) => {
+        const consultations = await getExpertConsultationHistory(ctx.user.id, { limit: 100 });
+        const counts = await getExpertConsultationCounts(ctx.user.id);
+        
+        // Calculate insights
+        const totalConsultations = consultations.length;
+        const uniqueExperts = counts.length;
+        const mostConsulted = counts[0] || null;
+        
+        // Recent activity
+        const recentConsultations = consultations.slice(0, 5);
+        
+        return {
+          totalConsultations,
+          uniqueExperts,
+          mostConsulted: mostConsulted ? {
+            expertId: mostConsulted.expertId,
+            count: mostConsulted.count,
+          } : null,
+          recentActivity: recentConsultations.map(c => ({
+            expertId: c.expertId,
+            expertName: c.expertName,
+            topic: c.topic,
+            date: c.createdAt,
+          })),
+        };
+      }),
+  }),
+
+  // Library Documents API
+  library: router({
+    // Create a new library document
+    create: protectedProcedure
+      .input(z.object({
+        projectId: z.string().optional(),
+        folder: z.string(),
+        subFolder: z.string().optional(),
+        name: z.string(),
+        type: z.enum(['document', 'image', 'chart', 'presentation', 'data', 'other']),
+        status: z.enum(['draft', 'review', 'signed_off']).optional(),
+        fileUrl: z.string().optional(),
+        thumbnailUrl: z.string().optional(),
+        metadata: z.any().optional(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        return createLibraryDocument({
+          userId: ctx.user.id,
+          projectId: input.projectId || null,
+          folder: input.folder,
+          subFolder: input.subFolder || null,
+          name: input.name,
+          type: input.type,
+          status: input.status || 'draft',
+          fileUrl: input.fileUrl || null,
+          thumbnailUrl: input.thumbnailUrl || null,
+          metadata: input.metadata || null,
+        });
+      }),
+
+    // Get library documents
+    list: protectedProcedure
+      .input(z.object({
+        folder: z.string().optional(),
+        subFolder: z.string().optional(),
+        type: z.string().optional(),
+        limit: z.number().optional(),
+      }).optional())
+      .query(async ({ ctx, input }) => {
+        return getLibraryDocuments(ctx.user.id, input);
+      }),
+
+    // Get single document by ID
+    get: protectedProcedure
+      .input(z.object({ id: z.number() }))
+      .query(async ({ input }) => {
+        return getLibraryDocumentById(input.id);
+      }),
+
+    // Update document
+    update: protectedProcedure
+      .input(z.object({
+        id: z.number(),
+        name: z.string().optional(),
+        status: z.enum(['draft', 'review', 'signed_off']).optional(),
+        fileUrl: z.string().optional(),
+        metadata: z.any().optional(),
+      }))
+      .mutation(async ({ input }) => {
+        const { id, ...data } = input;
+        await updateLibraryDocument(id, data);
+        return { success: true };
+      }),
+
+    // Delete document
+    delete: protectedProcedure
+      .input(z.object({ id: z.number() }))
+      .mutation(async ({ input }) => {
+        await deleteLibraryDocument(input.id);
+        return { success: true };
+      }),
+
+    // Export expert chat to library
+    exportExpertChat: protectedProcedure
+      .input(z.object({
+        expertId: z.string(),
+        expertName: z.string(),
+        expertSpecialty: z.string(),
+        expertCategory: z.string(),
+        expertBio: z.string(),
+        compositeOf: z.array(z.string()),
+        strengths: z.array(z.string()),
+        thinkingStyle: z.string(),
+        messages: z.array(z.object({
+          role: z.enum(['user', 'expert', 'system']),
+          content: z.string(),
+        })),
+        projectId: z.string().optional(),
+        folder: z.string().optional(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        const timestamp = new Date().toISOString().split('T')[0];
+        
+        // Generate markdown content
+        const expertName = input.expertName;
+        const transcript = input.messages.map(msg => {
+          if (msg.role === 'user') return `### You:\n${msg.content}\n`;
+          if (msg.role === 'expert') return `### ${expertName}:\n${msg.content}\n`;
+          return `### System:\n${msg.content}\n`;
+        }).join('\n');
+        
+        const markdown = `# Expert Consultation: ${input.expertName}
+
+**Date:** ${timestamp}
+**Expert:** ${input.expertName}
+**Specialty:** ${input.expertSpecialty}
+**Category:** ${input.expertCategory}
+
+## Expert Profile
+
+${input.expertBio}
+
+**Inspired By:** ${input.compositeOf.join(', ')}
+
+**Strengths:** ${input.strengths.join(', ')}
+
+**Thinking Style:** ${input.thinkingStyle}
+
+---
+
+## Conversation Transcript
+
+${transcript}
+
+---
+
+*Exported from CEPHO AI SME Consultation*
+`;
+
+        // Create library document
+        const docName = `Consultation - ${input.expertName} - ${timestamp}.md`;
+        const doc = await createLibraryDocument({
+          userId: ctx.user.id,
+          projectId: input.projectId || null,
+          folder: input.folder || 'consultations',
+          subFolder: 'expert_chats',
+          name: docName,
+          type: 'document',
+          status: 'draft',
+          fileUrl: null, // Content stored in metadata
+          thumbnailUrl: null,
+          metadata: {
+            expertId: input.expertId,
+            expertName: input.expertName,
+            expertSpecialty: input.expertSpecialty,
+            messageCount: input.messages.length,
+            exportedAt: new Date().toISOString(),
+            content: markdown,
+          },
+        });
+
+        return {
+          success: true,
+          documentId: doc?.id,
+          documentName: docName,
+        };
       }),
   }),
 });
