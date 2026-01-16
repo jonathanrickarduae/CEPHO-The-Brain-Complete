@@ -18,9 +18,9 @@ interface TabItem {
 
 const TABS: TabItem[] = [
   { id: 'dashboard', label: 'Home', icon: LayoutDashboard, path: '/dashboard' },
-  { id: 'brief', label: 'Brief', icon: Sun, path: '/daily-brief' },
-  { id: 'experts', label: 'Experts', icon: Users, path: '/ai-experts' },
-  { id: 'twin', label: 'Twin', icon: Fingerprint, path: '/digital-twin' },
+  { id: 'brief', label: 'Signal', icon: Sun, path: '/daily-brief' },
+  { id: 'experts', label: 'AI SMEs', icon: Users, path: '/ai-experts' },
+  { id: 'twin', label: 'Chief of Staff', icon: Fingerprint, path: '/digital-twin' },
   { id: 'more', label: 'More', icon: MoreHorizontal, path: '' },
 ];
 

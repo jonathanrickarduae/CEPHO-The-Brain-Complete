@@ -213,7 +213,49 @@ export default function Dashboard() {
     <PullToRefresh onRefresh={handleRefresh} disabled={!isMobile}>
     <div className="h-full flex flex-col p-3 sm:p-4 md:p-6 overflow-y-auto md:overflow-hidden">
       
-      {/* Quick Action Input - Manus Style - Front and Center */}
+      {/* Header with Protocol Toggle and Status - Moved to top */}
+      <div className="flex items-center justify-between mb-4 max-w-5xl mx-auto w-full">
+        <div className="flex items-center gap-2">
+          <span className="text-xs font-medium text-muted-foreground hidden sm:inline">PROTOCOL:</span>
+          <div className="flex items-center gap-1">
+            <button 
+              onClick={() => setGovernanceMode("omni")}
+              className={`px-2 py-0.5 rounded-full text-xs font-bold transition-all min-h-0 min-w-0 ${governanceMode === 'omni' ? 'bg-purple-500 text-white shadow-[0_0_10px_rgba(168,85,247,0.5)]' : 'text-muted-foreground hover:text-foreground'}`}
+            >
+              OMNI
+            </button>
+            <button 
+              onClick={() => setGovernanceMode("governed")}
+              className={`px-2 py-0.5 rounded-full text-xs font-bold transition-all min-h-0 min-w-0 ${governanceMode === 'governed' ? 'bg-blue-500 text-white shadow-[0_0_10px_rgba(59,130,246,0.5)]' : 'text-muted-foreground hover:text-foreground'}`}
+            >
+              GOVERNED
+            </button>
+          </div>
+        </div>
+        <div className="flex items-center gap-3">
+          {/* Mood indicator - just number and circle */}
+          {(() => {
+            const { todaysMoods } = useMoodCheck();
+            const latestMood = todaysMoods.length > 0 ? todaysMoods[todaysMoods.length - 1] : null;
+            if (!latestMood) return null;
+            return (
+              <div className="w-7 h-7 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">
+                <span className="text-xs font-bold text-white">{latestMood.mood}</span>
+              </div>
+            );
+          })()}
+          
+          {/* Voice Interface Toggle */}
+          <VoiceInterfaceToggle />
+          
+          <div className="flex items-center gap-2 text-muted-foreground">
+            <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></div>
+            <span className="text-xs font-mono tracking-wider">ONLINE</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Quick Action Input - Manus Style */}
       <div className="max-w-3xl mx-auto w-full mb-6">
         {isMobile ? (
           /* Mobile: Tap to open bottom sheet */
@@ -269,69 +311,15 @@ export default function Dashboard() {
         <FavoriteContacts maxDisplay={6} />
       </div>
 
-      {/* Header with Protocol Toggle and Status */}
-      <div className="flex items-center justify-between mb-6 max-w-5xl mx-auto w-full">
-        <div className="flex items-center gap-2">
-          <span className="text-xs font-medium text-muted-foreground hidden sm:inline">PROTOCOL:</span>
-          <div className="flex items-center gap-1">
-            <button 
-              onClick={() => setGovernanceMode("omni")}
-              className={`px-2 py-0.5 rounded-full text-xs font-bold transition-all min-h-0 min-w-0 ${governanceMode === 'omni' ? 'bg-purple-500 text-white shadow-[0_0_10px_rgba(168,85,247,0.5)]' : 'text-muted-foreground hover:text-foreground'}`}
-            >
-              OMNI
-            </button>
-            <button 
-              onClick={() => setGovernanceMode("governed")}
-              className={`px-2 py-0.5 rounded-full text-xs font-bold transition-all min-h-0 min-w-0 ${governanceMode === 'governed' ? 'bg-blue-500 text-white shadow-[0_0_10px_rgba(59,130,246,0.5)]' : 'text-muted-foreground hover:text-foreground'}`}
-            >
-              GOVERNED
-            </button>
-          </div>
-        </div>
-        {governanceMode === 'governed' && (
-          <Badge variant="outline" className="border-blue-500/50 text-blue-400 bg-blue-500/10 text-xs hidden md:flex">
-            <ShieldCheck className="w-3 h-3 mr-1" /> COMPLIANCE
-          </Badge>
-        )}
-      </div>
-      
-      <div className="flex items-center gap-3 justify-end mb-6 max-w-5xl mx-auto w-full">
-        {/* Mood indicator - just number and circle */}
-        {(() => {
-          const { todaysMoods } = useMoodCheck();
-          const latestMood = todaysMoods.length > 0 ? todaysMoods[todaysMoods.length - 1] : null;
-          if (!latestMood) return null;
-          return (
-            <div className="w-7 h-7 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">
-              <span className="text-xs font-bold text-white">{latestMood.mood}</span>
-            </div>
-          );
-        })()}
-        
-        {/* Voice Interface Toggle */}
-        <VoiceInterfaceToggle />
-        
-        <div className="flex items-center gap-2 text-muted-foreground">
-          <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></div>
-          <span className="text-xs font-mono tracking-wider">ONLINE</span>
-        </div>
-      </div>
 
-      {/* Compact Header & Inspiration */}
+
+      {/* Compact Header */}
       <div className="mb-4 text-center">
         <div className="flex items-center justify-center gap-2 mb-2">
           <Brain className="w-6 h-6 text-primary" />
           <h1 className="text-2xl md:text-4xl font-display font-bold tracking-tight text-foreground">
             GETTING YOU TO A 10
           </h1>
-        </div>
-        <div className="flex flex-col items-center gap-1">
-          <div className="flex items-center gap-2">
-            <Sparkles className="w-4 h-4 text-primary/60" />
-            <p className="text-sm md:text-base font-light text-muted-foreground italic max-w-xl">"{inspiration.quote}"</p>
-            <Sparkles className="w-4 h-4 text-primary/60" />
-          </div>
-          <p className="text-xs font-bold text-primary tracking-widest uppercase">— {inspiration.author}</p>
         </div>
       </div>
 

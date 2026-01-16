@@ -293,13 +293,13 @@ function BrainLayoutContent({
 
       <SidebarInset className="bg-background">
         {isMobile && (
-            <div className="flex border-b border-border h-14 items-center justify-between bg-background/95 px-2 backdrop-blur supports-[backdrop-filter]:backdrop-blur sticky top-0 z-40">
+            <div className="flex border-b border-border h-14 items-center justify-between bg-black px-2 backdrop-blur supports-[backdrop-filter]:backdrop-blur sticky top-0 z-40">
             <div className="flex items-center gap-2">
               <SidebarTrigger className="h-9 w-9 rounded-lg bg-white/5 text-white" />
               <div className="flex items-center gap-3">
                 <Brain className="w-5 h-5 text-primary" />
-                <span className="tracking-tight text-white font-medium">
-                  {activeMenuItem?.label ?? "Cepho"}
+                <span className="tracking-tight text-white font-bold">
+                  CEPHO | {activeMenuItem?.label ?? "The Nexus"}
                 </span>
               </div>
             </div>

@@ -2991,3 +2991,30 @@
 - [x] Include complete SME bios and expertise areas
 - [x] Add step-by-step process guide for Manus task uploads
 - [x] Convert to PDF
+
+
+## Chief of Staff Digital Twin Learning System
+- [x] Create Chief of Staff Digital Twin Learning Framework
+- [ ] Extract learnings from current work stream into training modules
+- [ ] Create Tone and Communication Profile template
+- [ ] Build Decision Pattern Database structure
+- [ ] Integrate into Google Drive repository
+- [ ] Create auto-update protocol for continuous learning
+
+
+## UI/UX Design Fixes (January 2026)
+- [ ] Set light mode as default on login
+- [ ] Create black top banner with CEPHO branding and section name
+- [ ] Fix header layout - Omnigovern, Voice, Online/Offline positioning
+- [ ] Clean up Nexus landing page - remove daily quotes
+- [ ] Change "Brief" to "Signal" in bottom nav
+- [ ] Change "Experts" to "AI SMEs" in bottom nav
+- [ ] Change "Twin" to "Chief of Staff" in bottom nav
+
+## UI/UX Design Fixes (January 16, 2025)
+- [x] Default to light mode on login
+- [x] Black top banner with CEPHO branding and section name
+- [x] Fix header layout - move Omnigovern, Voice, Online higher
+- [x] Remove daily quotes from Nexus landing page
+- [x] Update bottom nav labels: Brief→Signal, Experts→AI SMEs, Twin→Chief of Staff
+
