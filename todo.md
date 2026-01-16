@@ -3202,3 +3202,28 @@
 - [x] Save exported chats to Library
 - [x] Include expert profile info in export header
 - [x] Add export confirmation with toast notification
+
+
+## Expert Chat Enhancements Phase 2
+
+### Recommended Experts Section
+- [x] Add "Recommended For You" section to AI SMEs page
+- [x] Display top 5 personalized expert recommendations
+- [x] Show recommendation reasons (e.g., "Based on your finance consultations")
+- [x] Include quick-start chat button for each recommendation
+- [x] Fetch recommendations from backend on page load
+
+### Library Consultation Viewer
+- [x] Add "Consultations" tab/section to Library page
+- [x] Display list of saved expert chat exports
+- [x] Show expert name, date, message count for each consultation
+- [x] Create consultation detail view with full markdown content
+- [x] Add delete functionality for consultations
+- [x] Filter consultations by expert or date
+
+### Text-to-Speech for Expert Responses
+- [x] Add speaker icon to expert messages in chat
+- [x] Implement text-to-speech using Web Speech API
+- [x] Add play/pause/stop controls for audio playback
+- [x] Show speaking indicator while audio plays
+- [x] Remember user's TTS preference (on/off)

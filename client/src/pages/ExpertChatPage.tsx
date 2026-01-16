@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useParams, useLocation } from "wouter";
 import { 
   ArrowLeft, Send, Mic, MicOff, Volume2, VolumeX, 
@@ -52,6 +52,13 @@ export default function ExpertChatPage() {
   const [message, setMessage] = useState("");
   const [isRecording, setIsRecording] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
+  const [speakingMessageIndex, setSpeakingMessageIndex] = useState<number | null>(null);
+  const [ttsEnabled, setTtsEnabled] = useState(() => {
+    // Load TTS preference from localStorage
+    const saved = localStorage.getItem('expertChat_ttsEnabled');
+    return saved ? JSON.parse(saved) : false;
+  });
+  const speechSynthRef = useRef<SpeechSynthesisUtterance | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -147,6 +154,78 @@ export default function ExpertChatPage() {
       e.preventDefault();
       handleSend();
     }
+  };
+  
+  // Text-to-speech handler
+  const handleSpeak = useCallback((text: string, messageIndex: number) => {
+    // Cancel any ongoing speech
+    if (window.speechSynthesis.speaking) {
+      window.speechSynthesis.cancel();
+      if (speakingMessageIndex === messageIndex) {
+        setSpeakingMessageIndex(null);
+        setIsSpeaking(false);
+        return;
+      }
+    }
+    
+    // Create new utterance
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.rate = 1.0;
+    utterance.pitch = 1.0;
+    utterance.volume = 1.0;
+    
+    // Try to use a natural-sounding voice
+    const voices = window.speechSynthesis.getVoices();
+    const preferredVoice = voices.find(v => 
+      v.name.includes('Google') || 
+      v.name.includes('Natural') || 
+      v.name.includes('Premium')
+    ) || voices.find(v => v.lang.startsWith('en'));
+    
+    if (preferredVoice) {
+      utterance.voice = preferredVoice;
+    }
+    
+    utterance.onstart = () => {
+      setSpeakingMessageIndex(messageIndex);
+      setIsSpeaking(true);
+    };
+    
+    utterance.onend = () => {
+      setSpeakingMessageIndex(null);
+      setIsSpeaking(false);
+    };
+    
+    utterance.onerror = () => {
+      setSpeakingMessageIndex(null);
+      setIsSpeaking(false);
+      toast.error('Text-to-speech failed');
+    };
+    
+    speechSynthRef.current = utterance;
+    window.speechSynthesis.speak(utterance);
+  }, [speakingMessageIndex]);
+  
+  // Stop speaking when component unmounts
+  useEffect(() => {
+    return () => {
+      if (window.speechSynthesis.speaking) {
+        window.speechSynthesis.cancel();
+      }
+    };
+  }, []);
+  
+  // Toggle TTS preference
+  const toggleTts = () => {
+    const newValue = !ttsEnabled;
+    setTtsEnabled(newValue);
+    localStorage.setItem('expertChat_ttsEnabled', JSON.stringify(newValue));
+    if (!newValue && window.speechSynthesis.speaking) {
+      window.speechSynthesis.cancel();
+      setSpeakingMessageIndex(null);
+      setIsSpeaking(false);
+    }
+    toast.success(newValue ? 'Text-to-speech enabled' : 'Text-to-speech disabled');
   };
   
   // Voice recording toggle
@@ -288,6 +367,15 @@ ${messages.map(msg => {
           </div>
           
           <div className="flex items-center gap-2">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={toggleTts}
+              className={`text-white/70 hover:text-white hover:bg-white/10 ${ttsEnabled ? 'bg-fuchsia-500/20 text-fuchsia-300' : ''}`}
+              title={ttsEnabled ? 'Disable text-to-speech' : 'Enable text-to-speech'}
+            >
+              {ttsEnabled ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
+            </Button>
             <Badge className="bg-fuchsia-500/20 text-fuchsia-300 border-fuchsia-500/30">
               <Star className="w-3 h-3 mr-1" />
               {expert.performanceScore}/100
@@ -370,6 +458,33 @@ ${messages.map(msg => {
                     </div>
                   )}
                 </div>
+                {/* Text-to-speech button for expert messages */}
+                {msg.role === 'expert' && (
+                  <div className="mt-2 flex justify-end">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => handleSpeak(msg.content, index)}
+                      className={`text-xs h-7 px-2 ${
+                        speakingMessageIndex === index
+                          ? 'text-fuchsia-300 bg-fuchsia-500/20'
+                          : 'text-white/50 hover:text-white/80 hover:bg-white/10'
+                      }`}
+                    >
+                      {speakingMessageIndex === index ? (
+                        <>
+                          <VolumeX className="w-3 h-3 mr-1" />
+                          Stop
+                        </>
+                      ) : (
+                        <>
+                          <Volume2 className="w-3 h-3 mr-1" />
+                          Listen
+                        </>
+                      )}
+                    </Button>
+                  </div>
+                )}
               </div>
             </div>
           ))}

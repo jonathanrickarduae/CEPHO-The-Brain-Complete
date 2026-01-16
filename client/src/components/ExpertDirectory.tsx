@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useLocation } from "wouter";
 import { useFavorites } from "./MyBoard";
 import { DirectExpertChat } from "./DirectExpertChat";
@@ -6,8 +6,9 @@ import { CorporatePartnerChat } from "./CorporatePartnerChat";
 import { 
   Search, Users, Star, MessageSquare, Video, 
   Filter, ChevronRight, Brain, Sparkles,
-  TrendingUp, Award, BookOpen, Building2, Target
+  TrendingUp, Award, BookOpen, Building2, Target, Zap, Loader2
 } from "lucide-react";
+import { trpc } from "@/lib/trpc";
 import { 
   AI_EXPERTS, 
   categories, 
@@ -38,6 +39,12 @@ export function ExpertDirectory({ onSelectExpert, onBack }: ExpertDirectoryProps
   const [selectedPartner, setSelectedPartner] = useState<CorporatePartner | null>(null);
   const [showPartnersOnly, setShowPartnersOnly] = useState(false);
   const { isFavorite, addFavorite, removeFavorite } = useFavorites();
+
+  // Fetch personalized recommendations
+  const { data: recommendations, isLoading: recommendationsLoading } = trpc.expertRecommendation.getRecommendations.useQuery(
+    { limit: 5 },
+    { staleTime: 5 * 60 * 1000 } // Cache for 5 minutes
+  );
 
   // Filter experts based on search and category
   const filteredExperts = useMemo(() => {
@@ -576,6 +583,88 @@ export function ExpertDirectory({ onSelectExpert, onBack }: ExpertDirectoryProps
             </div>
           ) : (
             <>
+              {/* Recommended For You Section */}
+              {!selectedCategory && !searchQuery && recommendations && recommendations.length > 0 && (
+                <div className="mb-6">
+                  <div className="flex items-center justify-between mb-3">
+                    <h2 className="text-lg font-semibold text-foreground flex items-center gap-2">
+                      <Zap className="w-5 h-5 text-fuchsia-400" />
+                      Recommended For You
+                    </h2>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+                    {recommendations.map((rec) => {
+                      // Find the actual expert from AI_EXPERTS
+                      const expert = AI_EXPERTS.find(e => 
+                        e.id === rec.expertId || 
+                        e.name.toLowerCase().replace(/\s+/g, '-') === rec.expertId
+                      );
+                      
+                      return (
+                        <Card 
+                          key={rec.expertId}
+                          className="bg-gradient-to-br from-fuchsia-500/5 to-purple-500/5 border-fuchsia-500/20 hover:border-fuchsia-500/50 transition-all cursor-pointer group"
+                          onClick={() => {
+                            if (expert) {
+                              setSelectedExpert(expert);
+                            } else {
+                              // Navigate to chat directly if expert not in local data
+                              setChatExpertId(rec.expertId);
+                            }
+                          }}
+                        >
+                          <CardContent className="p-3">
+                            <div className="flex items-start gap-3 mb-2">
+                              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-fuchsia-500/20 to-purple-500/20 border border-fuchsia-500/30 flex items-center justify-center text-xl flex-shrink-0">
+                                {rec.avatar}
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <h3 className="font-semibold text-sm text-foreground group-hover:text-fuchsia-400 transition-colors truncate">
+                                  {rec.expertName}
+                                </h3>
+                                <p className="text-xs text-muted-foreground truncate">{rec.specialty}</p>
+                              </div>
+                            </div>
+                            <p className="text-xs text-fuchsia-400/80 line-clamp-2 mb-2">
+                              {rec.reason}
+                            </p>
+                            <div className="flex items-center justify-between">
+                              <Badge variant="outline" className="text-xs">{rec.category}</Badge>
+                              <Button
+                                size="sm"
+                                variant="ghost"
+                                className="text-xs text-fuchsia-400 hover:text-fuchsia-300 hover:bg-fuchsia-500/10 h-7 px-2"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  if (expert) {
+                                    handleChatWithExpert(expert);
+                                  } else {
+                                    setChatExpertId(rec.expertId);
+                                  }
+                                }}
+                              >
+                                <MessageSquare className="w-3 h-3 mr-1" />
+                                Chat
+                              </Button>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {/* Loading state for recommendations */}
+              {!selectedCategory && !searchQuery && recommendationsLoading && (
+                <div className="mb-6">
+                  <div className="flex items-center gap-2 mb-3">
+                    <Loader2 className="w-5 h-5 text-fuchsia-400 animate-spin" />
+                    <span className="text-sm text-muted-foreground">Loading recommendations...</span>
+                  </div>
+                </div>
+              )}
+
               {/* Featured Corporate Partners Banner (when viewing experts) */}
               {!selectedCategory && !searchQuery && (
                 <div className="mb-6">

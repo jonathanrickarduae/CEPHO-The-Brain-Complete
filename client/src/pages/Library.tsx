@@ -1,13 +1,20 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
+import type { LibraryDocument } from '@shared/types';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { PageHeader } from '@/components/PageHeader';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { trpc } from '@/lib/trpc';
+import { toast } from 'sonner';
+import { Streamdown } from 'streamdown';
 import { 
   FolderOpen, FileText, Image, BarChart3, Presentation, Search,
   Plus, Upload, Download, Clock, LayoutGrid, List,
-  ChevronRight, ChevronLeft, File, ArrowUpRight, BookOpen
+  ChevronRight, ChevronLeft, File, ArrowUpRight, BookOpen,
+  MessageSquare, User, Trash2, Calendar, Loader2, Eye
 } from 'lucide-react';
 
 // Project data with brand colours (matching Workflow)
@@ -92,9 +99,109 @@ export default function Library() {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [selectedProject, setSelectedProject] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [activeTab, setActiveTab] = useState<'projects' | 'consultations'>('projects');
+  const [selectedConsultation, setSelectedConsultation] = useState<LibraryDocument | null>(null);
+  const [consultationSearch, setConsultationSearch] = useState('');
+
+  // Fetch consultations from library
+  const { data: consultations, isLoading: consultationsLoading, refetch: refetchConsultations } = 
+    trpc.library.list.useQuery(
+      { folder: 'Expert Consultations' },
+      { enabled: activeTab === 'consultations' }
+    );
+
+  // Delete consultation mutation
+  const deleteConsultation = trpc.library.delete.useMutation({
+    onSuccess: () => {
+      toast.success('Consultation deleted');
+      refetchConsultations();
+      setSelectedConsultation(null);
+    },
+    onError: () => {
+      toast.error('Failed to delete consultation');
+    }
+  });
+
+  // Filter consultations based on search
+  const filteredConsultations = useMemo(() => {
+    if (!consultations) return [];
+    if (!consultationSearch.trim()) return consultations;
+    
+    const query = consultationSearch.toLowerCase();
+    return consultations.filter((c: LibraryDocument) => 
+      c.name.toLowerCase().includes(query) ||
+      c.subFolder?.toLowerCase().includes(query) ||
+      (c.metadata as any)?.content?.toLowerCase().includes(query)
+    );
+  }, [consultations, consultationSearch]);
 
   const currentProject = projects.find(p => p.id === selectedProject);
   const totalFiles = projects.reduce((acc, p) => acc + p.documents + p.images + p.charts, 0);
+
+  // Consultation detail modal
+  const ConsultationViewer = () => {
+    if (!selectedConsultation) return null;
+    
+    return (
+      <Dialog open={!!selectedConsultation} onOpenChange={() => setSelectedConsultation(null)}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-hidden flex flex-col">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <MessageSquare className="w-5 h-5 text-fuchsia-400" />
+              {selectedConsultation.name}
+            </DialogTitle>
+          </DialogHeader>
+          <div className="flex items-center gap-4 text-sm text-muted-foreground border-b border-border pb-4">
+            <div className="flex items-center gap-1">
+              <User className="w-4 h-4" />
+              {selectedConsultation.subFolder || 'Expert Consultation'}
+            </div>
+            <div className="flex items-center gap-1">
+              <Calendar className="w-4 h-4" />
+              {new Date(selectedConsultation.createdAt).toLocaleDateString()}
+            </div>
+          </div>
+          <ScrollArea className="flex-1 pr-4">
+            <div className="prose prose-invert max-w-none">
+              <Streamdown>{(selectedConsultation.metadata as any)?.content || ''}</Streamdown>
+            </div>
+          </ScrollArea>
+          <div className="flex justify-between items-center pt-4 border-t border-border">
+            <Button
+              variant="destructive"
+              size="sm"
+              onClick={() => {
+                if (confirm('Are you sure you want to delete this consultation?')) {
+                  deleteConsultation.mutate({ id: selectedConsultation.id });
+                }
+              }}
+              disabled={deleteConsultation.isPending}
+            >
+              <Trash2 className="w-4 h-4 mr-2" />
+              Delete
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                const content = (selectedConsultation.metadata as any)?.content || '';
+                const blob = new Blob([content], { type: 'text/markdown' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `${selectedConsultation.name.replace(/[^a-z0-9]/gi, '_')}.md`;
+                a.click();
+                URL.revokeObjectURL(url);
+              }}
+            >
+              <Download className="w-4 h-4 mr-2" />
+              Download
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+    );
+  };
 
   // Project detail view
   if (selectedProject && currentProject) {
@@ -206,154 +313,289 @@ export default function Library() {
       <PageHeader 
         icon={BookOpen} 
         title="Library"
-        subtitle="All your project files in one place"
+        subtitle="All your project files and consultations"
         iconColor="text-pink-400"
       >
         <div className="flex items-center gap-3">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-            <Input
-              placeholder="Search files..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-9 w-64 bg-card border-border"
-            />
-          </div>
-          <div className="flex items-center bg-white/5 border border-white/20 rounded-lg p-1">
-            <button 
-              onClick={() => setViewMode('grid')}
-              className={`p-2 rounded transition-colors ${viewMode === 'grid' ? 'bg-pink-500/20 text-pink-400' : 'text-gray-400 hover:text-white'}`}
-            >
-              <LayoutGrid className="w-4 h-4" />
-            </button>
-            <button 
-              onClick={() => setViewMode('list')}
-              className={`p-2 rounded transition-colors ${viewMode === 'list' ? 'bg-pink-500/20 text-pink-400' : 'text-gray-400 hover:text-white'}`}
-            >
-              <List className="w-4 h-4" />
-            </button>
-          </div>
-          <Button size="sm" className="gap-2 bg-gradient-to-r from-pink-500 to-rose-500 hover:opacity-90">
-            <Upload className="w-4 h-4" />
-            Upload
-          </Button>
+          {activeTab === 'projects' ? (
+            <>
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <Input
+                  placeholder="Search files..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-9 w-64 bg-card border-border"
+                />
+              </div>
+              <div className="flex items-center bg-white/5 border border-white/20 rounded-lg p-1">
+                <button 
+                  onClick={() => setViewMode('grid')}
+                  className={`p-2 rounded transition-colors ${viewMode === 'grid' ? 'bg-pink-500/20 text-pink-400' : 'text-gray-400 hover:text-white'}`}
+                >
+                  <LayoutGrid className="w-4 h-4" />
+                </button>
+                <button 
+                  onClick={() => setViewMode('list')}
+                  className={`p-2 rounded transition-colors ${viewMode === 'list' ? 'bg-pink-500/20 text-pink-400' : 'text-gray-400 hover:text-white'}`}
+                >
+                  <List className="w-4 h-4" />
+                </button>
+              </div>
+              <Button size="sm" className="gap-2 bg-gradient-to-r from-pink-500 to-rose-500 hover:opacity-90">
+                <Upload className="w-4 h-4" />
+                Upload
+              </Button>
+            </>
+          ) : (
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <Input
+                placeholder="Search consultations..."
+                value={consultationSearch}
+                onChange={(e) => setConsultationSearch(e.target.value)}
+                className="pl-9 w-64 bg-card border-border"
+              />
+            </div>
+          )}
         </div>
       </PageHeader>
 
+      {/* Tab Navigation */}
+      <div className="px-6 pt-4">
+        <div className="flex gap-2">
+          <Button
+            variant={activeTab === 'projects' ? 'default' : 'outline'}
+            size="sm"
+            onClick={() => setActiveTab('projects')}
+            className={activeTab === 'projects' ? 'bg-gradient-to-r from-pink-500 to-rose-500' : ''}
+          >
+            <FolderOpen className="w-4 h-4 mr-2" />
+            Projects
+          </Button>
+          <Button
+            variant={activeTab === 'consultations' ? 'default' : 'outline'}
+            size="sm"
+            onClick={() => setActiveTab('consultations')}
+            className={activeTab === 'consultations' ? 'bg-gradient-to-r from-fuchsia-500 to-purple-500' : ''}
+          >
+            <MessageSquare className="w-4 h-4 mr-2" />
+            Expert Consultations
+            {consultations && consultations.length > 0 && (
+              <Badge variant="secondary" className="ml-2 bg-white/10">
+                {consultations.length}
+              </Badge>
+            )}
+          </Button>
+        </div>
+      </div>
+
       {/* Main Content */}
       <div className="flex-1 overflow-y-auto p-6">
-        {/* Stats Row */}
-      <div className="grid grid-cols-4 gap-4 mb-8">
-        <div className="bg-white/5 border-2 border-white/10 rounded-2xl p-4">
-          <div className="text-3xl font-bold text-white">{projects.length}</div>
-          <div className="text-sm text-gray-400">Projects</div>
-        </div>
-        <div className="bg-gradient-to-br from-pink-500/10 to-rose-500/10 border-2 border-pink-500/30 rounded-2xl p-4">
-          <div className="text-3xl font-bold text-pink-400">{totalFiles}</div>
-          <div className="text-sm text-gray-400">Total Files</div>
-        </div>
-        <div className="bg-gradient-to-br from-blue-500/10 to-cyan-500/10 border-2 border-blue-500/30 rounded-2xl p-4">
-          <div className="text-3xl font-bold text-blue-400">{projects.reduce((acc, p) => acc + p.documents, 0)}</div>
-          <div className="text-sm text-gray-400">Documents</div>
-        </div>
-        <div className="bg-gradient-to-br from-purple-500/10 to-fuchsia-500/10 border-2 border-purple-500/30 rounded-2xl p-4">
-          <div className="text-3xl font-bold text-purple-400">{projects.reduce((acc, p) => acc + p.images, 0)}</div>
-          <div className="text-sm text-gray-400">Images</div>
-        </div>
-      </div>
-
-      {/* Projects Grid */}
-      {viewMode === 'grid' ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {projects.map(project => (
-            <div
-              key={project.id}
-              onClick={() => setSelectedProject(project.id)}
-              className="bg-white/5 border-2 border-white/10 rounded-2xl p-5 hover:border-pink-500/50 transition-all cursor-pointer group"
-            >
-              <div className="flex items-start justify-between mb-4">
-                <div className="flex items-center gap-3">
-                  <div 
-                    className="w-10 h-10 rounded-lg flex items-center justify-center text-white font-semibold text-sm"
-                    style={{ backgroundColor: project.color }}
-                  >
-                    {project.name.split(' ').map(w => w[0]).join('').slice(0, 2)}
-                  </div>
-                  <div>
-                    <h3 className="font-medium text-foreground group-hover:text-primary transition-colors">
-                      {project.name}
-                    </h3>
-                    <p className="text-xs text-muted-foreground">Updated {project.lastUpdated}</p>
-                  </div>
-                </div>
-                <ChevronRight className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
+        {activeTab === 'projects' ? (
+          <>
+            {/* Stats Row */}
+            <div className="grid grid-cols-4 gap-4 mb-8">
+              <div className="bg-white/5 border-2 border-white/10 rounded-2xl p-4">
+                <div className="text-3xl font-bold text-white">{projects.length}</div>
+                <div className="text-sm text-gray-400">Projects</div>
               </div>
-
-              <div className="grid grid-cols-3 gap-3 pt-4 border-t border-border">
-                <div className="text-center">
-                  <div className="text-lg font-semibold text-foreground">{project.documents}</div>
-                  <div className="text-xs text-muted-foreground">Docs</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-lg font-semibold text-foreground">{project.images}</div>
-                  <div className="text-xs text-muted-foreground">Images</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-lg font-semibold text-foreground">{project.charts}</div>
-                  <div className="text-xs text-muted-foreground">Charts</div>
-                </div>
+              <div className="bg-gradient-to-br from-pink-500/10 to-rose-500/10 border-2 border-pink-500/30 rounded-2xl p-4">
+                <div className="text-3xl font-bold text-pink-400">{totalFiles}</div>
+                <div className="text-sm text-gray-400">Total Files</div>
+              </div>
+              <div className="bg-gradient-to-br from-blue-500/10 to-cyan-500/10 border-2 border-blue-500/30 rounded-2xl p-4">
+                <div className="text-3xl font-bold text-blue-400">{projects.reduce((acc, p) => acc + p.documents, 0)}</div>
+                <div className="text-sm text-gray-400">Documents</div>
+              </div>
+              <div className="bg-gradient-to-br from-purple-500/10 to-fuchsia-500/10 border-2 border-purple-500/30 rounded-2xl p-4">
+                <div className="text-3xl font-bold text-purple-400">{projects.reduce((acc, p) => acc + p.images, 0)}</div>
+                <div className="text-sm text-gray-400">Images</div>
               </div>
             </div>
-          ))}
-        </div>
-      ) : (
-        /* List View */
-        <div className="bg-card border border-border rounded-xl overflow-hidden">
-          <table className="w-full">
-            <thead>
-              <tr className="border-b border-border">
-                <th className="text-left p-4 text-sm font-medium text-muted-foreground">Project</th>
-                <th className="text-left p-4 text-sm font-medium text-muted-foreground">Documents</th>
-                <th className="text-left p-4 text-sm font-medium text-muted-foreground">Images</th>
-                <th className="text-left p-4 text-sm font-medium text-muted-foreground">Charts</th>
-                <th className="text-left p-4 text-sm font-medium text-muted-foreground">Updated</th>
-                <th className="p-4"></th>
-              </tr>
-            </thead>
-            <tbody>
-              {projects.map(project => (
-                <tr 
-                  key={project.id} 
-                  onClick={() => setSelectedProject(project.id)}
-                  className="border-b border-border last:border-0 hover:bg-secondary/50 cursor-pointer transition-colors"
-                >
-                  <td className="p-4">
-                    <div className="flex items-center gap-3">
-                      <div 
-                        className="w-8 h-8 rounded-lg flex items-center justify-center text-white font-semibold text-xs"
-                        style={{ backgroundColor: project.color }}
-                      >
-                        {project.name.split(' ').map(w => w[0]).join('').slice(0, 2)}
+
+            {/* Projects Grid */}
+            {viewMode === 'grid' ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {projects.map(project => (
+                  <div
+                    key={project.id}
+                    onClick={() => setSelectedProject(project.id)}
+                    className="bg-white/5 border-2 border-white/10 rounded-2xl p-5 hover:border-pink-500/50 transition-all cursor-pointer group"
+                  >
+                    <div className="flex items-start justify-between mb-4">
+                      <div className="flex items-center gap-3">
+                        <div 
+                          className="w-10 h-10 rounded-lg flex items-center justify-center text-white font-semibold text-sm"
+                          style={{ backgroundColor: project.color }}
+                        >
+                          {project.name.split(' ').map(w => w[0]).join('').slice(0, 2)}
+                        </div>
+                        <div>
+                          <h3 className="font-medium text-foreground group-hover:text-primary transition-colors">
+                            {project.name}
+                          </h3>
+                          <p className="text-xs text-muted-foreground">Updated {project.lastUpdated}</p>
+                        </div>
                       </div>
-                      <span className="font-medium text-foreground">{project.name}</span>
+                      <ChevronRight className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
                     </div>
-                  </td>
-                  <td className="p-4 text-sm text-muted-foreground">{project.documents}</td>
-                  <td className="p-4 text-sm text-muted-foreground">{project.images}</td>
-                  <td className="p-4 text-sm text-muted-foreground">{project.charts}</td>
-                  <td className="p-4 text-sm text-muted-foreground">{project.lastUpdated}</td>
-                  <td className="p-4">
-                    <Button variant="ghost" size="icon" className="h-8 w-8">
-                      <ArrowUpRight className="w-4 h-4" />
+
+                    <div className="grid grid-cols-3 gap-3 pt-4 border-t border-border">
+                      <div className="text-center">
+                        <div className="text-lg font-semibold text-foreground">{project.documents}</div>
+                        <div className="text-xs text-muted-foreground">Docs</div>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-lg font-semibold text-foreground">{project.images}</div>
+                        <div className="text-xs text-muted-foreground">Images</div>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-lg font-semibold text-foreground">{project.charts}</div>
+                        <div className="text-xs text-muted-foreground">Charts</div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              /* List View */
+              <div className="bg-card border border-border rounded-xl overflow-hidden">
+                <table className="w-full">
+                  <thead>
+                    <tr className="border-b border-border">
+                      <th className="text-left p-4 text-sm font-medium text-muted-foreground">Project</th>
+                      <th className="text-left p-4 text-sm font-medium text-muted-foreground">Documents</th>
+                      <th className="text-left p-4 text-sm font-medium text-muted-foreground">Images</th>
+                      <th className="text-left p-4 text-sm font-medium text-muted-foreground">Charts</th>
+                      <th className="text-left p-4 text-sm font-medium text-muted-foreground">Updated</th>
+                      <th className="p-4"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {projects.map(project => (
+                      <tr 
+                        key={project.id} 
+                        onClick={() => setSelectedProject(project.id)}
+                        className="border-b border-border last:border-0 hover:bg-secondary/50 cursor-pointer transition-colors"
+                      >
+                        <td className="p-4">
+                          <div className="flex items-center gap-3">
+                            <div 
+                              className="w-8 h-8 rounded-lg flex items-center justify-center text-white font-semibold text-xs"
+                              style={{ backgroundColor: project.color }}
+                            >
+                              {project.name.split(' ').map(w => w[0]).join('').slice(0, 2)}
+                            </div>
+                            <span className="font-medium text-foreground">{project.name}</span>
+                          </div>
+                        </td>
+                        <td className="p-4 text-sm text-muted-foreground">{project.documents}</td>
+                        <td className="p-4 text-sm text-muted-foreground">{project.images}</td>
+                        <td className="p-4 text-sm text-muted-foreground">{project.charts}</td>
+                        <td className="p-4 text-sm text-muted-foreground">{project.lastUpdated}</td>
+                        <td className="p-4">
+                          <Button variant="ghost" size="icon" className="h-8 w-8">
+                            <ArrowUpRight className="w-4 h-4" />
+                          </Button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </>
+        ) : (
+          /* Consultations Tab */
+          <div className="space-y-4">
+            {/* Stats */}
+            <div className="grid grid-cols-3 gap-4 mb-6">
+              <div className="bg-gradient-to-br from-fuchsia-500/10 to-purple-500/10 border-2 border-fuchsia-500/30 rounded-2xl p-4">
+                <div className="text-3xl font-bold text-fuchsia-400">
+                  {consultationsLoading ? '...' : consultations?.length || 0}
+                </div>
+                <div className="text-sm text-gray-400">Saved Consultations</div>
+              </div>
+              <div className="bg-white/5 border-2 border-white/10 rounded-2xl p-4">
+                <div className="text-3xl font-bold text-white">
+                  {consultationsLoading ? '...' : new Set(consultations?.map((c: LibraryDocument) => c.subFolder)).size || 0}
+                </div>
+                <div className="text-sm text-gray-400">Unique Experts</div>
+              </div>
+              <div className="bg-white/5 border-2 border-white/10 rounded-2xl p-4">
+                <div className="text-3xl font-bold text-white">
+                  {consultationsLoading ? '...' : 
+                    consultations?.length ? 
+                      new Date(Math.max(...consultations.map((c: LibraryDocument) => new Date(c.createdAt).getTime()))).toLocaleDateString() 
+                      : '-'
+                  }
+                </div>
+                <div className="text-sm text-gray-400">Last Consultation</div>
+              </div>
+            </div>
+
+            {/* Consultations List */}
+            {consultationsLoading ? (
+              <div className="flex items-center justify-center py-12">
+                <Loader2 className="w-8 h-8 text-fuchsia-400 animate-spin" />
+              </div>
+            ) : filteredConsultations.length === 0 ? (
+              <div className="text-center py-12 bg-white/5 border-2 border-white/10 rounded-2xl">
+                <MessageSquare className="w-12 h-12 text-muted-foreground/30 mx-auto mb-4" />
+                <h3 className="text-lg font-medium text-foreground mb-2">No consultations saved yet</h3>
+                <p className="text-muted-foreground text-sm">
+                  Export your expert chat conversations to save them here
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {filteredConsultations.map((consultation: LibraryDocument) => (
+                  <div
+                    key={consultation.id}
+                    onClick={() => setSelectedConsultation(consultation)}
+                    className="flex items-center gap-4 bg-white/5 border-2 border-white/10 rounded-2xl p-4 hover:border-fuchsia-500/50 transition-all cursor-pointer group"
+                  >
+                    <div className="p-3 bg-gradient-to-br from-fuchsia-500/20 to-purple-500/20 rounded-lg">
+                      <MessageSquare className="w-5 h-5 text-fuchsia-400" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-medium text-foreground group-hover:text-fuchsia-400 transition-colors truncate">
+                        {consultation.name}
+                      </h3>
+                      <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                        <span className="flex items-center gap-1">
+                          <User className="w-3 h-3" />
+                          {consultation.subFolder || 'Expert'}
+                        </span>
+                        <span className="flex items-center gap-1">
+                          <Calendar className="w-3 h-3" />
+                          {new Date(consultation.createdAt).toLocaleDateString()}
+                        </span>
+                      </div>
+                    </div>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="text-fuchsia-400 hover:text-fuchsia-300 hover:bg-fuchsia-500/10"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedConsultation(consultation);
+                      }}
+                    >
+                      <Eye className="w-4 h-4 mr-1" />
+                      View
                     </Button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
       </div>
+
+      {/* Consultation Viewer Modal */}
+      <ConsultationViewer />
     </div>
   );
 }
