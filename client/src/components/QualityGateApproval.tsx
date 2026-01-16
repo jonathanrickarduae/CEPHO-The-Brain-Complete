@@ -8,6 +8,7 @@ import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { Textarea } from './ui/textarea';
 import { toast } from 'sonner';
+import { trpc } from '@/lib/trpc';
 
 // Quality Gate Review Levels
 export type ReviewLevel = 'automated' | 'expert' | 'strategic' | 'final';
@@ -424,6 +425,10 @@ interface ApprovalQueueProps {
 }
 
 export function QualityGateApprovalQueue({ isChiefOfStaff = true }: ApprovalQueueProps) {
+  // Notification mutations
+  const notifyApproval = trpc.qualityGate.notifyApproval.useMutation();
+  const notifyRejection = trpc.qualityGate.notifyRejection.useMutation();
+
   const [gates, setGates] = useState<QualityGate[]>([
     // Demo data
     {
@@ -573,15 +578,16 @@ export function QualityGateApprovalQueue({ isChiefOfStaff = true }: ApprovalQueu
   };
 
   const handleFinalApprove = (gateId: string) => {
-    setGates(prev => prev.map(gate => {
-      if (gate.id !== gateId) return gate;
+    const gate = gates.find(g => g.id === gateId);
+    setGates(prev => prev.map(g => {
+      if (g.id !== gateId) return g;
       return {
-        ...gate,
+        ...g,
         status: 'approved' as GateStatus,
         finalDecision: 'approved',
         approvedBy: 'Chief of Staff',
         auditTrail: [
-          ...gate.auditTrail,
+          ...g.auditTrail,
           { 
             id: `a${Date.now()}`, 
             action: 'approved phase transition', 
@@ -591,19 +597,30 @@ export function QualityGateApprovalQueue({ isChiefOfStaff = true }: ApprovalQueu
         ],
       };
     }));
+    
+    // Send notification
+    if (gate) {
+      notifyApproval.mutate({
+        projectId: gate.projectId,
+        projectName: gate.projectName,
+        phase: gate.toPhase,
+        approvedBy: 'Chief of Staff',
+      });
+    }
     toast.success('Phase transition approved!');
   };
 
   const handleFinalReject = (gateId: string) => {
-    setGates(prev => prev.map(gate => {
-      if (gate.id !== gateId) return gate;
+    const gate = gates.find(g => g.id === gateId);
+    setGates(prev => prev.map(g => {
+      if (g.id !== gateId) return g;
       return {
-        ...gate,
+        ...g,
         status: 'rejected' as GateStatus,
         finalDecision: 'rejected',
         rejectedBy: 'Chief of Staff',
         auditTrail: [
-          ...gate.auditTrail,
+          ...g.auditTrail,
           { 
             id: `a${Date.now()}`, 
             action: 'rejected phase transition', 
@@ -613,6 +630,17 @@ export function QualityGateApprovalQueue({ isChiefOfStaff = true }: ApprovalQueu
         ],
       };
     }));
+    
+    // Send notification
+    if (gate) {
+      notifyRejection.mutate({
+        projectId: gate.projectId,
+        projectName: gate.projectName,
+        phase: gate.toPhase,
+        rejectedBy: 'Chief of Staff',
+        reason: 'Phase transition requirements not met',
+      });
+    }
     toast.error('Phase transition rejected');
   };
 

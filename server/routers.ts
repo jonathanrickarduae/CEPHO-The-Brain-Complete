@@ -3124,5 +3124,82 @@ ${transcript}
         return getCollaborativeReviewActivity(input.sessionId, input.limit || 50);
       }),
   }),
+
+  // Quality Gate Notifications API
+  qualityGate: router({
+    // Request quality gate review (sends notification to owner)
+    requestReview: protectedProcedure
+      .input(z.object({
+        projectId: z.string(),
+        projectName: z.string(),
+        fromPhase: z.string(),
+        toPhase: z.string(),
+        requestedBy: z.string(),
+      }))
+      .mutation(async ({ input }) => {
+        const { notifyOwner } = await import('./_core/notification');
+        const delivered = await notifyOwner({
+          title: `Quality Gate Review Requested: ${input.projectName}`,
+          content: `A quality gate review has been requested for project "${input.projectName}" to transition from ${input.fromPhase} to ${input.toPhase}.\n\nRequested by: ${input.requestedBy}\n\nPlease review and approve or reject this phase transition in the Chief of Staff dashboard.`,
+        });
+        return { success: delivered };
+      }),
+
+    // Notify on approval
+    notifyApproval: protectedProcedure
+      .input(z.object({
+        projectId: z.string(),
+        projectName: z.string(),
+        phase: z.string(),
+        approvedBy: z.string(),
+        comments: z.string().optional(),
+      }))
+      .mutation(async ({ input }) => {
+        const { notifyOwner } = await import('./_core/notification');
+        const delivered = await notifyOwner({
+          title: `Quality Gate Approved: ${input.projectName}`,
+          content: `The quality gate for project "${input.projectName}" phase "${input.phase}" has been approved.\n\nApproved by: ${input.approvedBy}${input.comments ? `\n\nComments: ${input.comments}` : ''}`,
+        });
+        return { success: delivered };
+      }),
+
+    // Notify on rejection
+    notifyRejection: protectedProcedure
+      .input(z.object({
+        projectId: z.string(),
+        projectName: z.string(),
+        phase: z.string(),
+        rejectedBy: z.string(),
+        reason: z.string(),
+      }))
+      .mutation(async ({ input }) => {
+        const { notifyOwner } = await import('./_core/notification');
+        const delivered = await notifyOwner({
+          title: `Quality Gate Rejected: ${input.projectName}`,
+          content: `The quality gate for project "${input.projectName}" phase "${input.phase}" has been rejected.\n\nRejected by: ${input.rejectedBy}\n\nReason: ${input.reason}`,
+        });
+        return { success: delivered };
+      }),
+
+    // Notify pending reviews (for scheduled reminders)
+    notifyPendingReviews: protectedProcedure
+      .input(z.object({
+        pendingCount: z.number(),
+        projects: z.array(z.object({
+          name: z.string(),
+          phase: z.string(),
+          waitingDays: z.number(),
+        })),
+      }))
+      .mutation(async ({ input }) => {
+        const { notifyOwner } = await import('./_core/notification');
+        const projectList = input.projects.map(p => `- ${p.name} (${p.phase}) - waiting ${p.waitingDays} days`).join('\n');
+        const delivered = await notifyOwner({
+          title: `${input.pendingCount} Quality Gate Reviews Pending`,
+          content: `You have ${input.pendingCount} quality gate reviews awaiting your attention:\n\n${projectList}\n\nPlease review these in the Chief of Staff dashboard.`,
+        });
+        return { success: delivered };
+      }),
+  }),
 });
 export type AppRouter = typeof appRouter;

@@ -3659,3 +3659,26 @@
 - [x] Create blueprint creation wizard
 - [ ] Add template inheritance and customization
 - [ ] Integrate blueprints with Project Genesis workflow
+
+
+## API Keys, Blueprint Integration & Notifications (January 2026)
+
+### Phase 1: API Key Configuration
+- [ ] Create secrets request for Notion API key
+- [ ] Create secrets request for Trello API key
+- [ ] Add API key validation tests
+- [ ] Update integration dashboard to show connection status
+
+### Phase 2: Blueprint Integration with Project Genesis
+- [x] Add blueprint selection step to project creation flow
+- [x] Add Blueprints button to Project Genesis header
+- [ ] Auto-generate phase documents when project is created
+- [x] Link blueprints to project phases in database
+- [ ] Add blueprint progress tracking to project dashboard
+
+### Phase 3: Quality Gate Notifications
+- [x] Connect quality gate approvals to notification system
+- [x] Add qualityGate router with notification endpoints
+- [x] Add push notification for pending reviews
+- [ ] Add email notification option for urgent approvals
+- [ ] Create notification preferences settings

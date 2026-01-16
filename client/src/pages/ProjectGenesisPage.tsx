@@ -19,8 +19,18 @@ import { IdeaScoringDashboard } from '@/components/IdeaScoringDashboard';
 import { ValidationEngine } from '@/components/ValidationEngine';
 import { ValueChainProgress, ValueChainProgressCompact } from '@/components/ValueChainProgress';
 import { valueChainPhases, type ProjectPhaseProgress, type ProjectPhaseStatus } from '@/data/valueChain';
+import { BlueprintTemplatesDashboard, defaultTemplates, type BlueprintTemplate } from '@/components/BlueprintTemplates';
 
-type ViewMode = 'dashboard' | 'voice_intake' | 'new_project' | 'team_assembly' | 'idea_scoring' | 'validation' | 'qms' | 'legacy' | 'social_media' | 'presentation' | 'financial' | 'process_log' | 'value_chain';
+type ViewMode = 'dashboard' | 'voice_intake' | 'new_project' | 'team_assembly' | 'idea_scoring' | 'validation' | 'qms' | 'legacy' | 'social_media' | 'presentation' | 'financial' | 'process_log' | 'value_chain' | 'blueprints';
+
+interface ProjectBlueprint {
+  templateId: string;
+  templateName: string;
+  phase: string;
+  status: 'draft' | 'in_progress' | 'review' | 'approved';
+  completedSections: number;
+  totalSections: number;
+}
 
 interface SavedProject {
   id: string;
@@ -33,6 +43,8 @@ interface SavedProject {
   // Value Chain tracking
   currentPhaseId: number;
   phaseProgress: ProjectPhaseProgress[];
+  // Blueprint tracking
+  blueprints?: ProjectBlueprint[];
 }
 
 export default function ProjectGenesisPage() {
@@ -119,6 +131,15 @@ export default function ProjectGenesisPage() {
               >
                 <BarChart3 className="w-4 h-4 md:mr-2" />
                 <span className="hidden md:inline">Value Chain</span>
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setViewMode('blueprints')}
+                className="border-purple-500/50 text-purple-400 hover:bg-purple-500/10"
+              >
+                <FileText className="w-4 h-4 md:mr-2" />
+                <span className="hidden md:inline">Blueprints</span>
               </Button>
               <Button
                 variant="outline"
@@ -560,6 +581,52 @@ export default function ProjectGenesisPage() {
             Back to Dashboard
           </button>
           <QMSProcessLog />
+        </div>
+      </div>
+    );
+  }
+
+  // Blueprints Dashboard View
+  if (viewMode === 'blueprints') {
+    const selectedProject = savedProjects[0]; // For now, use first project
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-900 to-gray-800 p-4 md:p-6">
+        <div className="max-w-6xl mx-auto">
+          {/* Back Button */}
+          <button
+            onClick={() => setViewMode('dashboard')}
+            className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors mb-6"
+          >
+            <ChevronRight className="w-4 h-4 rotate-180" />
+            Back to Dashboard
+          </button>
+
+          <BlueprintTemplatesDashboard
+            projectId={selectedProject?.id || 'new-project'}
+            projectName={selectedProject?.name || 'New Project'}
+            currentPhase={selectedProject?.currentPhaseId || 1}
+            onSelectTemplate={(template) => {
+              console.log('Selected template:', template);
+              // Auto-generate blueprint for project
+              const newBlueprint: ProjectBlueprint = {
+                templateId: template.id,
+                templateName: template.name,
+                phase: template.phase,
+                status: 'draft',
+                completedSections: 0,
+                totalSections: template.sections.length
+              };
+              // Update project with new blueprint
+              setSavedProjects(prev => prev.map(p => 
+                p.id === selectedProject?.id 
+                  ? { ...p, blueprints: [...(p.blueprints || []), newBlueprint] }
+                  : p
+              ));
+            }}
+            onCreateBlueprint={(templateId, projectId) => {
+              console.log('Creating blueprint from template:', templateId, 'for project:', projectId);
+            }}
+          />
         </div>
       </div>
     );
