@@ -3628,3 +3628,10 @@
 - [ ] Fix UK date formats throughout app
 
 - [x] Change tagline to "Your headspace, reclaimed"
+
+## Value Chain & AI-SME Testing (January 2026)
+- [x] Integrate Value Chain progress tracker into Project Genesis dashboard
+- [x] Test AI-SME leaderboard and panel filteringt cards
+- [ ] Test AI-SME leaderboard functionality
+- [ ] Test panel filtering (Blue Team, Left-Field, Red Team)
+- [ ] Test sorting options on AI-SME page

@@ -17,8 +17,10 @@ import { VoiceNoteIntake } from '@/components/VoiceNoteIntake';
 import { ExpertTeamAssemblyWizard } from '@/components/ExpertTeamAssemblyWizard';
 import { IdeaScoringDashboard } from '@/components/IdeaScoringDashboard';
 import { ValidationEngine } from '@/components/ValidationEngine';
+import { ValueChainProgress, ValueChainProgressCompact } from '@/components/ValueChainProgress';
+import { valueChainPhases, type ProjectPhaseProgress, type ProjectPhaseStatus } from '@/data/valueChain';
 
-type ViewMode = 'dashboard' | 'voice_intake' | 'new_project' | 'team_assembly' | 'idea_scoring' | 'validation' | 'qms' | 'legacy' | 'social_media' | 'presentation' | 'financial' | 'process_log';
+type ViewMode = 'dashboard' | 'voice_intake' | 'new_project' | 'team_assembly' | 'idea_scoring' | 'validation' | 'qms' | 'legacy' | 'social_media' | 'presentation' | 'financial' | 'process_log' | 'value_chain';
 
 interface SavedProject {
   id: string;
@@ -28,6 +30,9 @@ interface SavedProject {
   createdAt: Date;
   updatedAt: Date;
   completionPercentage: number;
+  // Value Chain tracking
+  currentPhaseId: number;
+  phaseProgress: ProjectPhaseProgress[];
 }
 
 export default function ProjectGenesisPage() {
@@ -41,7 +46,17 @@ export default function ProjectGenesisPage() {
       industry: 'Technology',
       createdAt: new Date('2024-01-15'),
       updatedAt: new Date('2024-01-20'),
-      completionPercentage: 75
+      completionPercentage: 75,
+      currentPhaseId: 3,
+      phaseProgress: [
+        { phaseId: 1, status: 'approved', completedChecks: ['Market opportunity validated', 'Problem clearly defined', 'Initial solution concept documented', 'Key assumptions identified'], startedAt: new Date('2024-01-15'), completedAt: new Date('2024-01-16') },
+        { phaseId: 2, status: 'approved', completedChecks: ['Value proposition validated with customers', 'Business model economics viable', 'Technical approach confirmed', 'IP position assessed'], startedAt: new Date('2024-01-16'), completedAt: new Date('2024-01-18') },
+        { phaseId: 3, status: 'in_progress', completedChecks: ['MVP meets core requirements', 'Quality systems operational'], startedAt: new Date('2024-01-18') },
+        { phaseId: 4, status: 'not_started', completedChecks: [] },
+        { phaseId: 5, status: 'not_started', completedChecks: [] },
+        { phaseId: 6, status: 'not_started', completedChecks: [] },
+        { phaseId: 7, status: 'not_started', completedChecks: [] }
+      ]
     }
   ]);
 
@@ -56,7 +71,14 @@ export default function ProjectGenesisPage() {
       industry: blueprint.businessInfo?.industry || 'Unknown',
       createdAt: new Date(),
       updatedAt: new Date(),
-      completionPercentage: 100
+      completionPercentage: 100,
+      currentPhaseId: 1,
+      phaseProgress: valueChainPhases.map(phase => ({
+        phaseId: phase.id,
+        status: phase.id === 1 ? 'in_progress' as ProjectPhaseStatus : 'not_started' as ProjectPhaseStatus,
+        completedChecks: [],
+        startedAt: phase.id === 1 ? new Date() : undefined
+      }))
     };
     
     setSavedProjects(prev => [newProject, ...prev]);
@@ -89,6 +111,15 @@ export default function ProjectGenesisPage() {
               </div>
             </div>
             <div className="flex gap-2 md:gap-3">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setViewMode('value_chain')}
+                className="border-cyan-500/50 text-cyan-400 hover:bg-cyan-500/10"
+              >
+                <BarChart3 className="w-4 h-4 md:mr-2" />
+                <span className="hidden md:inline">Value Chain</span>
+              </Button>
               <Button
                 variant="outline"
                 size="sm"
@@ -223,45 +254,53 @@ export default function ProjectGenesisPage() {
 
             {savedProjects.length > 0 ? (
               <div className="space-y-3">
-                {savedProjects.map(project => (
-                  <div 
-                    key={project.id}
-                    className="flex items-center gap-4 p-4 bg-white/5 rounded-xl hover:bg-white/10 transition-colors cursor-pointer"
-                    onClick={() => {
-                      // Load project into QMS view
-                      setViewMode('qms');
-                    }}
-                  >
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-cyan-500/20 to-fuchsia-500/20 flex items-center justify-center">
-                      <Rocket className="w-6 h-6 text-fuchsia-400" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-1">
-                        <h3 className="font-medium text-white truncate">{project.name}</h3>
-                        <Badge variant="outline" className={getStatusColor(project.status)}>
-                          {project.status?.replace('_', ' ')}
-                        </Badge>
+                {savedProjects.map(project => {
+                  const currentPhase = valueChainPhases.find(p => p.id === project.currentPhaseId);
+                  return (
+                    <div 
+                      key={project.id}
+                      className="p-4 bg-white/5 rounded-xl hover:bg-white/10 transition-colors cursor-pointer"
+                      onClick={() => {
+                        setViewMode('qms');
+                      }}
+                    >
+                      {/* Top row - Project info */}
+                      <div className="flex items-center gap-4 mb-3">
+                        <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-cyan-500/20 to-fuchsia-500/20 flex items-center justify-center shrink-0">
+                          <Rocket className="w-6 h-6 text-fuchsia-400" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 mb-1">
+                            <h3 className="font-medium text-white truncate">{project.name}</h3>
+                            <Badge variant="outline" className={getStatusColor(project.status)}>
+                              {project.status?.replace('_', ' ')}
+                            </Badge>
+                          </div>
+                          <div className="flex items-center gap-4 text-sm text-gray-400">
+                            <span>{project.industry}</span>
+                            <span>•</span>
+                            <span>Updated {project.updatedAt.toLocaleDateString('en-GB')}</span>
+                          </div>
+                        </div>
+                        <ChevronRight className="w-5 h-5 text-gray-500 shrink-0" />
                       </div>
-                      <div className="flex items-center gap-4 text-sm text-gray-400">
-                        <span>{project.industry}</span>
-                        <span>•</span>
-                        <span>Updated {project.updatedAt.toLocaleDateString()}</span>
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <div className="text-sm font-medium text-white mb-1">
-                        {project.completionPercentage}%
-                      </div>
-                      <div className="w-24 h-1.5 bg-white/10 rounded-full overflow-hidden">
-                        <div 
-                          className="h-full bg-gradient-to-r from-cyan-500 to-fuchsia-500 rounded-full"
-                          style={{ width: `${project.completionPercentage}%` }}
+                      
+                      {/* Value Chain Progress */}
+                      <div className="pl-16">
+                        <div className="flex items-center gap-2 mb-2">
+                          <span className="text-xs text-gray-500">Current Phase:</span>
+                          <span className={`text-xs font-medium ${currentPhase?.color || 'text-gray-400'}`}>
+                            {currentPhase?.icon} {currentPhase?.name || 'Not Started'}
+                          </span>
+                        </div>
+                        <ValueChainProgressCompact 
+                          currentPhaseId={project.currentPhaseId}
+                          phaseProgress={project.phaseProgress}
                         />
                       </div>
                     </div>
-                    <ChevronRight className="w-5 h-5 text-gray-500" />
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             ) : (
               <div className="text-center py-12">
@@ -526,7 +565,41 @@ export default function ProjectGenesisPage() {
     );
   }
 
-  // Legacy View (Original ProjectGenesis)
+  // Value Chain Detail View
+  if (viewMode === 'value_chain') {
+    const selectedProject = savedProjects[0]; // For now, use first project
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-900 to-gray-800 p-4 md:p-6">
+        <div className="max-w-4xl mx-auto">
+          {/* Back Button */}
+          <button
+            onClick={() => setViewMode('dashboard')}
+            className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors mb-6"
+          >
+            <ChevronRight className="w-4 h-4 rotate-180" />
+            Back to Dashboard
+          </button>
+
+          <ValueChainProgress
+            projectName={selectedProject?.name || 'Project'}
+            currentPhaseId={selectedProject?.currentPhaseId || 1}
+            phaseProgress={selectedProject?.phaseProgress || []}
+            onPhaseClick={(phase) => {
+              console.log('Phase clicked:', phase);
+            }}
+            onStartPhase={(phaseId) => {
+              console.log('Starting phase:', phaseId);
+            }}
+            onRequestReview={(phaseId) => {
+              console.log('Requesting review for phase:', phaseId);
+            }}
+          />
+        </div>
+      </div>
+    );
+  }
+
+  // Legacy Project Genesis View
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-900 to-gray-800">
       {/* Back Button */}
