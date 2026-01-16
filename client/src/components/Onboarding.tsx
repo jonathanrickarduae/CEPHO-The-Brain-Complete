@@ -175,7 +175,7 @@ export function OnboardingModal({ isOpen, onComplete, onSkip }: OnboardingModalP
           </button>
 
           {/* Main Card */}
-          <div className="relative bg-gradient-to-b from-card/95 to-card/80 border border-white/10 rounded-3xl shadow-2xl shadow-primary/10 overflow-hidden backdrop-blur-xl">
+          <div className="relative bg-black border border-white/10 rounded-3xl shadow-2xl shadow-primary/10 overflow-hidden backdrop-blur-xl">
             {/* Top glow line */}
             <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
             
@@ -248,13 +248,13 @@ export function OnboardingModal({ isOpen, onComplete, onSkip }: OnboardingModalP
                 )}>
                   {step.title}
                 </h2>
-                <p className="text-lg text-muted-foreground leading-relaxed max-w-md mx-auto">
+                <p className="text-lg text-white/80 leading-relaxed max-w-md mx-auto">
                   {step.description}
                 </p>
               </div>
 
               {/* Step indicator */}
-              <p className="text-center text-sm text-muted-foreground/60 mb-8 font-mono tracking-wider">
+              <p className="text-center text-sm text-white/50 mb-8 font-mono tracking-wider">
                 {currentStep + 1} / {ONBOARDING_STEPS.length}
               </p>
 
