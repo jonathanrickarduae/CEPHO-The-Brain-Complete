@@ -1,8 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { 
   Users, Brain, Search, Star, MessageSquare, FileText,
   ChevronRight, Plus, Mic, MicOff, Send, Eye, CheckCircle2,
-  Sparkles, Target, Clock, BarChart3, Filter, Grid, List, Trash2, Loader2
+  Sparkles, Target, Clock, BarChart3, Filter, Grid, List, Trash2, Loader2,
+  X, Activity
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -11,31 +12,26 @@ import { PageHeader } from "@/components/PageHeader";
 import { toast } from "sonner";
 import { useIsMobile } from "@/hooks/useMobile";
 import { trpc } from "@/lib/trpc";
+import { 
+  AI_EXPERTS, 
+  categories as expertCategories, 
+  searchExperts,
+  getExpertsByCategory,
+  TOTAL_EXPERTS,
+  type AIExpert 
+} from "@/data/aiExperts";
 
-// Expert categories
+// Build categories from real expert data
 const CATEGORIES = [
-  { id: 'all', label: 'All Experts', count: 287 },
-  { id: 'strategy', label: 'Strategy', count: 42 },
-  { id: 'finance', label: 'Finance', count: 38 },
-  { id: 'legal', label: 'Legal', count: 25 },
-  { id: 'marketing', label: 'Marketing', count: 35 },
-  { id: 'technology', label: 'Technology', count: 52 },
-  { id: 'operations', label: 'Operations', count: 31 },
-  { id: 'research', label: 'Research', count: 28 },
-  { id: 'hr', label: 'HR & People', count: 18 },
-  { id: 'design', label: 'Design', count: 18 },
-];
-
-// Sample experts
-const EXPERTS = [
-  { id: 'exp-1', name: 'Alex Chen', role: 'Strategy Lead', category: 'strategy', rating: 4.9, interactions: 156, avatar: 'AC', specialty: 'M&A, Market Entry, Competitive Analysis', available: true },
-  { id: 'exp-2', name: 'Sarah Kim', role: 'Finance Expert', category: 'finance', rating: 4.8, interactions: 203, avatar: 'SK', specialty: 'Financial Modeling, Valuation, Due Diligence', available: true },
-  { id: 'exp-3', name: 'Marcus Johnson', role: 'Marketing Lead', category: 'marketing', rating: 4.7, interactions: 89, avatar: 'MJ', specialty: 'Brand Strategy, Growth Marketing, GTM', available: true },
-  { id: 'exp-4', name: 'Elena Rodriguez', role: 'Legal Counsel', category: 'legal', rating: 4.9, interactions: 124, avatar: 'ER', specialty: 'Contracts, Compliance, IP Law', available: false },
-  { id: 'exp-5', name: 'David Park', role: 'Tech Architect', category: 'technology', rating: 4.8, interactions: 178, avatar: 'DP', specialty: 'System Design, AI/ML, Cloud Architecture', available: true },
-  { id: 'exp-6', name: 'Dr. Priya Sharma', role: 'Research Lead', category: 'research', rating: 4.9, interactions: 92, avatar: 'PS', specialty: 'Market Research, Data Analysis, Insights', available: true },
-  { id: 'exp-7', name: 'James Miller', role: 'Operations Expert', category: 'operations', rating: 4.6, interactions: 67, avatar: 'JM', specialty: 'Process Optimization, Supply Chain, Scaling', available: true },
-  { id: 'exp-8', name: 'Lisa Wang', role: 'Design Lead', category: 'design', rating: 4.8, interactions: 145, avatar: 'LW', specialty: 'UX/UI, Product Design, Design Systems', available: true },
+  { id: 'all', label: 'All Experts', count: TOTAL_EXPERTS },
+  ...expertCategories.map(cat => {
+    const count = AI_EXPERTS.filter(e => e.category === cat).length;
+    return {
+      id: cat.toLowerCase().replace(/[^a-z0-9]/g, '-'),
+      label: cat,
+      count
+    };
+  })
 ];
 
 // Active teams
@@ -126,22 +122,45 @@ export default function AISMEsPage() {
     ...ACTIVE_TEAMS.map(t => ({ ...t, dbId: undefined as number | undefined, isFromDb: false as const })),
   ];
 
-  // Filter experts
-  const filteredExperts = EXPERTS.filter(exp => {
-    const matchesCategory = selectedCategory === 'all' || exp.category === selectedCategory;
-    const matchesSearch = !searchQuery || 
-      exp.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      exp.specialty.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesCategory && matchesSearch;
-  });
+  // Filter experts from the full AI_EXPERTS database
+  const filteredExperts = useMemo(() => {
+    let experts = AI_EXPERTS;
+    
+    // Filter by category - find the matching category label
+    if (selectedCategory !== 'all') {
+      const selectedCat = CATEGORIES.find(c => c.id === selectedCategory);
+      if (selectedCat) {
+        experts = experts.filter(exp => exp.category === selectedCat.label);
+      }
+    }
+    
+    // Filter by search
+    if (searchQuery) {
+      const searchResults = searchExperts(searchQuery);
+      if (selectedCategory === 'all') {
+        experts = searchResults;
+      } else {
+        // Intersect search results with category filter
+        const expertIds = new Set(experts.map(e => e.id));
+        experts = searchResults.filter(e => expertIds.has(e.id));
+      }
+    }
+    
+    return experts;
+  }, [selectedCategory, searchQuery]);
 
   // Toggle expert selection
-  const toggleExpertSelection = (expert: typeof EXPERTS[0]) => {
+  const toggleExpertSelection = (expert: AIExpert) => {
     const isSelected = selectedExperts.some(e => e.id === expert.id);
     if (isSelected) {
       setSelectedExperts(prev => prev.filter(e => e.id !== expert.id));
     } else {
-      setSelectedExperts(prev => [...prev, { id: expert.id, name: expert.name, role: expert.role, avatar: expert.avatar }]);
+      setSelectedExperts(prev => [...prev, { 
+        id: expert.id, 
+        name: expert.name, 
+        role: expert.specialty, 
+        avatar: expert.avatar 
+      }]);
     }
   };
 
@@ -179,7 +198,7 @@ export default function AISMEsPage() {
     }
   };
 
-  const selectedExpert = showExpertDetail ? EXPERTS.find(e => e.id === showExpertDetail) : null;
+  const selectedExpert = showExpertDetail ? AI_EXPERTS.find(e => e.id === showExpertDetail) : null;
 
   return (
     <div className="h-[calc(100vh-56px)] md:h-screen flex flex-col bg-gradient-to-br from-gray-900 via-gray-900 to-gray-800">
@@ -187,7 +206,7 @@ export default function AISMEsPage() {
       <PageHeader 
         icon={Users} 
         title="AI-SMEs"
-        subtitle="287 Expert Specialists"
+        subtitle={`${TOTAL_EXPERTS} Expert Specialists`}
         iconColor="text-cyan-400"
       >
         <div className="flex items-center gap-2">
@@ -313,6 +332,7 @@ export default function AISMEsPage() {
                 }>
                   {filteredExperts.map(expert => {
                     const isSelected = selectedExperts.some(e => e.id === expert.id);
+                    const isAvailable = expert.status === 'active';
                     return (
                       <div
                         key={expert.id}
@@ -324,23 +344,23 @@ export default function AISMEsPage() {
                         onClick={() => setShowExpertDetail(expert.id)}
                       >
                         <div className={`flex items-center gap-3 ${viewStyle === 'grid' ? 'mb-3' : ''}`}>
-                          <div className={`w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-500/30 to-blue-500/30 flex items-center justify-center text-sm font-bold text-white group-hover:scale-110 transition-transform ${!expert.available ? 'opacity-50' : ''}`}>
+                          <div className={`w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-500/30 to-blue-500/30 flex items-center justify-center text-lg group-hover:scale-110 transition-transform ${!isAvailable ? 'opacity-50' : ''}`}>
                             {expert.avatar}
                           </div>
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2">
                               <h4 className="font-medium truncate">{expert.name}</h4>
-                              {!expert.available && (
-                                <Badge variant="outline" className="text-xs">Busy</Badge>
+                              {!isAvailable && (
+                                <Badge variant="outline" className="text-xs">{expert.status}</Badge>
                               )}
                             </div>
-                            <p className="text-sm text-muted-foreground">{expert.role}</p>
+                            <p className="text-sm text-muted-foreground truncate">{expert.category}</p>
                           </div>
                           {viewStyle === 'list' && (
                             <div className="flex items-center gap-4">
                               <div className="flex items-center gap-1">
-                                <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
-                                <span className="text-sm">{expert.rating}</span>
+                                <Activity className="w-4 h-4 text-cyan-400" />
+                                <span className="text-sm">{expert.performanceScore}%</span>
                               </div>
                               <button
                                 onClick={(e) => {
@@ -363,10 +383,10 @@ export default function AISMEsPage() {
                             <div className="flex items-center justify-between">
                               <div className="flex items-center gap-3 text-xs text-muted-foreground">
                                 <span className="flex items-center gap-1">
-                                  <Star className="w-3 h-3 text-amber-400 fill-amber-400" />
-                                  {expert.rating}
+                                  <Activity className="w-3 h-3 text-cyan-400" />
+                                  {expert.performanceScore}%
                                 </span>
-                                <span>{expert.interactions} tasks</span>
+                                <span>{expert.projectsCompleted} projects</span>
                               </div>
                               <button
                                 onClick={(e) => {
@@ -601,45 +621,103 @@ export default function AISMEsPage() {
       {/* Expert Detail Modal */}
       {showExpertDetail && selectedExpert && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={() => setShowExpertDetail(null)}>
-          <div className="bg-card border border-border rounded-2xl max-w-lg w-full max-h-[80vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
+          <div className="bg-card border border-border rounded-2xl max-w-2xl w-full max-h-[85vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
             <div className="p-6">
-              <div className="flex items-center gap-4 mb-4">
-                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-cyan-500/20 to-purple-500/20 flex items-center justify-center text-xl font-bold">
-                  {selectedExpert.avatar}
+              {/* Header */}
+              <div className="flex items-start justify-between mb-6">
+                <div className="flex items-center gap-4">
+                  <div className="w-16 h-16 rounded-full bg-gradient-to-br from-cyan-500/20 to-purple-500/20 flex items-center justify-center text-2xl">
+                    {selectedExpert.avatar}
+                  </div>
+                  <div>
+                    <h2 className="text-xl font-semibold">{selectedExpert.name}</h2>
+                    <p className="text-muted-foreground">{selectedExpert.specialty}</p>
+                    <Badge className="mt-1">{selectedExpert.category}</Badge>
+                  </div>
                 </div>
-                <div>
-                  <h2 className="text-xl font-semibold">{selectedExpert.name}</h2>
-                  <p className="text-muted-foreground">{selectedExpert.role}</p>
-                </div>
+                <button onClick={() => setShowExpertDetail(null)} className="p-2 hover:bg-white/10 rounded-lg">
+                  <X className="w-5 h-5" />
+                </button>
               </div>
 
-              <div className="space-y-4">
+              <div className="space-y-5">
+                {/* Bio */}
                 <div>
-                  <h3 className="text-sm font-medium text-muted-foreground mb-1">Specialty</h3>
-                  <p className="text-sm">{selectedExpert.specialty}</p>
+                  <h3 className="text-sm font-medium text-muted-foreground mb-2">Bio</h3>
+                  <p className="text-sm leading-relaxed">{selectedExpert.bio}</p>
                 </div>
 
-                <div className="flex gap-4">
-                  <div>
-                    <h3 className="text-sm font-medium text-muted-foreground mb-1">Rating</h3>
+                {/* Composite Of */}
+                <div>
+                  <h3 className="text-sm font-medium text-muted-foreground mb-2">Inspired By</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {selectedExpert.compositeOf.map((name, i) => (
+                      <Badge key={i} variant="outline" className="bg-white/5">{name}</Badge>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Stats */}
+                <div className="grid grid-cols-3 gap-4">
+                  <div className="p-3 bg-white/5 rounded-xl">
+                    <h3 className="text-xs font-medium text-muted-foreground mb-1">Performance</h3>
                     <div className="flex items-center gap-1">
-                      <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
-                      <span className="font-medium">{selectedExpert.rating}</span>
+                      <Activity className="w-4 h-4 text-cyan-400" />
+                      <span className="font-semibold">{selectedExpert.performanceScore}%</span>
                     </div>
                   </div>
-                  <div>
-                    <h3 className="text-sm font-medium text-muted-foreground mb-1">Tasks Completed</h3>
-                    <span className="font-medium">{selectedExpert.interactions}</span>
+                  <div className="p-3 bg-white/5 rounded-xl">
+                    <h3 className="text-xs font-medium text-muted-foreground mb-1">Projects</h3>
+                    <span className="font-semibold">{selectedExpert.projectsCompleted}</span>
                   </div>
-                  <div>
-                    <h3 className="text-sm font-medium text-muted-foreground mb-1">Status</h3>
-                    <Badge className={selectedExpert.available ? 'bg-emerald-500/10 text-emerald-400' : 'bg-amber-500/10 text-amber-400'}>
-                      {selectedExpert.available ? 'Available' : 'Busy'}
-                    </Badge>
+                  <div className="p-3 bg-white/5 rounded-xl">
+                    <h3 className="text-xs font-medium text-muted-foreground mb-1">Insights</h3>
+                    <span className="font-semibold">{selectedExpert.insightsGenerated}</span>
                   </div>
                 </div>
 
-                <div className="flex gap-2 pt-4">
+                {/* Strengths & Weaknesses */}
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <h3 className="text-sm font-medium text-emerald-400 mb-2">Strengths</h3>
+                    <ul className="space-y-1">
+                      {selectedExpert.strengths.map((s, i) => (
+                        <li key={i} className="text-sm text-muted-foreground flex items-center gap-2">
+                          <CheckCircle2 className="w-3 h-3 text-emerald-400" />
+                          {s}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-medium text-amber-400 mb-2">Considerations</h3>
+                    <ul className="space-y-1">
+                      {selectedExpert.weaknesses.map((w, i) => (
+                        <li key={i} className="text-sm text-muted-foreground flex items-center gap-2">
+                          <Clock className="w-3 h-3 text-amber-400" />
+                          {w}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+
+                {/* Thinking Style */}
+                <div>
+                  <h3 className="text-sm font-medium text-muted-foreground mb-2">Thinking Style</h3>
+                  <p className="text-sm italic text-muted-foreground">"{selectedExpert.thinkingStyle}"</p>
+                </div>
+
+                {/* Status */}
+                <div className="flex items-center justify-between pt-2">
+                  <Badge className={selectedExpert.status === 'active' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-amber-500/10 text-amber-400'}>
+                    {selectedExpert.status === 'active' ? 'Available' : selectedExpert.status}
+                  </Badge>
+                  <span className="text-xs text-muted-foreground">Last used: {selectedExpert.lastUsed}</span>
+                </div>
+
+                {/* Actions */}
+                <div className="flex gap-2 pt-4 border-t border-border">
                   <Button 
                     className="flex-1 gap-2"
                     onClick={() => {

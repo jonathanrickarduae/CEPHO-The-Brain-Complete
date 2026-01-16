@@ -468,6 +468,13 @@
 - [x] Write vitest tests for SME team procedures
 - [x] Write vitest tests for QA workflow procedures
 
+
+## AI SME Expert Data Restoration (Jan 16, 2026)
+
+- [x] Investigate missing AI SME experts and bios
+- [x] Restore full expert data with bios to AISMEsPage
+- [x] Ensure all experts are properly displayed and selectable
+
 ### Wellness Score Integration
 - [x] Add wellness score card to Dashboard
 - [x] Create wellness score detail page in Statistics
