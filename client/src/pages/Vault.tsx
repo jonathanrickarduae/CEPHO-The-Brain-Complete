@@ -136,11 +136,11 @@ export default function Vault() {
         </div>
       </div>
 
-      {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 md:px-6 py-2">
+      {/* Main Content - Stats at top for mobile */}
+      <div className="max-w-7xl mx-auto px-4 md:px-6 py-4">
         
-        {/* Quick Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
+        {/* Quick Stats - Immediately visible on mobile */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
           <Card className="bg-green-500/10 border-green-500/30">
             <CardContent className="p-4 flex items-center gap-3">
               <CheckCircle2 className="w-8 h-8 text-green-500" />
@@ -180,20 +180,22 @@ export default function Vault() {
         </div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="w-full grid grid-cols-4 bg-card/60 mb-6">
-            <TabsTrigger value="integrations" className="flex items-center gap-2">
-              <Globe className="w-4 h-4" /> Integrations
-            </TabsTrigger>
-            <TabsTrigger value="security" className="flex items-center gap-2">
-              <ShieldCheck className="w-4 h-4" /> Security
-            </TabsTrigger>
-            <TabsTrigger value="recommendations" className="flex items-center gap-2">
-              <Sparkles className="w-4 h-4" /> AI Suggestions
-            </TabsTrigger>
-            <TabsTrigger value="credentials" className="flex items-center gap-2">
-              <Key className="w-4 h-4" /> Credentials
-            </TabsTrigger>
-          </TabsList>
+          <div className="overflow-x-auto scrollbar-hide mb-6">
+            <TabsList className="inline-flex min-w-max bg-card/60">
+              <TabsTrigger value="integrations" className="flex items-center gap-2 whitespace-nowrap">
+                <Globe className="w-4 h-4" /> Integrations
+              </TabsTrigger>
+              <TabsTrigger value="security" className="flex items-center gap-2 whitespace-nowrap">
+                <ShieldCheck className="w-4 h-4" /> Security
+              </TabsTrigger>
+              <TabsTrigger value="recommendations" className="flex items-center gap-2 whitespace-nowrap">
+                <Sparkles className="w-4 h-4" /> AI Suggestions
+              </TabsTrigger>
+              <TabsTrigger value="credentials" className="flex items-center gap-2 whitespace-nowrap">
+                <Key className="w-4 h-4" /> Credentials
+              </TabsTrigger>
+            </TabsList>
+          </div>
 
           {/* Integrations Tab */}
           <TabsContent value="integrations">

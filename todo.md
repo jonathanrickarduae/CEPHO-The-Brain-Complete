@@ -3460,3 +3460,80 @@
 - [x] Add spacing and layout guidelines
 - [x] Include dark theme color tokens
 - [x] Document accessibility guidelines
+
+
+## Mobile UX Fixes (Jan 17, 2026)
+
+### Library Mobile Layout
+- [ ] Fix upload document button positioning (too far right)
+- [ ] Make bottom tabs horizontally scrollable instead of "More" dropdown
+- [ ] Ensure all content fits within mobile viewport
+
+### Chief of Staff Mobile Layout
+- [ ] Keep chat input fixed at bottom of screen
+- [ ] Ensure chat input is visible immediately on page load
+- [ ] Prevent chat input from being hidden below fold
+
+### Vault Mobile Layout
+- [ ] Move main content boxes to top of page
+- [ ] Reduce spacing above main content on mobile
+- [ ] Ensure key actions are immediately visible
+
+
+## Mobile UX Fixes (Jan 17, 2026)
+
+### Library Mobile Layout
+- [ ] Fix upload document button positioning (too far right)
+- [ ] Make bottom tabs horizontally scrollable instead of "More" dropdown
+- [ ] Ensure all content fits within mobile viewport
+
+### Chief of Staff Mobile Layout
+- [ ] Keep chat input fixed at bottom of screen
+- [ ] Ensure chat input is visible immediately on page load
+- [ ] Prevent chat input from being hidden below fold
+
+### Vault Mobile Layout
+- [ ] Move main content boxes to top of page
+- [ ] Reduce spacing above main content on mobile
+- [ ] Ensure key actions are immediately visible
+
+## AI SME Usage & Performance Analytics (Jan 17, 2026)
+
+### Usage Tracking
+- [ ] Track which experts are used most frequently
+- [ ] Display usage count/frequency on expert cards
+- [ ] Show "Most Used" section with top experts
+- [ ] Store consultation history per expert
+
+### Performance Scoring
+- [ ] Add rating mechanism after each consultation
+- [ ] Calculate average performance score per expert
+- [ ] Display score on expert cards (numerical, not emoji)
+- [ ] Track score trends over time
+
+### Performance Insights
+- [ ] Show how each expert is performing
+- [ ] Analyze consultation outcomes
+- [ ] Provide insights on expert effectiveness
+- [ ] Compare expert performance within categories
+
+
+## Navigation Order Fix (Jan 17, 2026)
+
+### Bottom Navigation Reorder
+- [ ] Update bottom nav order: Signal → Chief of Staff → AI SMEs → Workflow → Project Genesis
+- [ ] Add Workflow to bottom navigation (most important)
+- [ ] Add Project Genesis to bottom navigation scroll
+- [ ] Update Nexus dashboard buttons to match new order
+- [ ] Make bottom navigation horizontally scrollable on mobile
+
+
+## Mobile UX Fixes (January 2026)
+
+- [x] Update bottom navigation to be horizontally scrollable (no "More" button)
+- [x] Reorder bottom navigation: Home → Signal → Chief of Staff → AI SMEs → Workflow → Genesis → Library → Vault
+- [x] Fix Chief of Staff page - chat input fixed at bottom on mobile
+- [x] Fix Library page - upload button always visible, tabs scrollable
+- [x] Fix Vault page - quick stats at top, tabs scrollable on mobile
+- [x] Fix Project Genesis page - responsive grid layout for mobile
+- [x] Update Nexus Dashboard navigation order to match workflow priority

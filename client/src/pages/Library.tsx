@@ -324,19 +324,19 @@ export default function Library() {
         subtitle="All your project files and consultations"
         iconColor="text-pink-400"
       >
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 md:gap-3">
           {activeTab === 'projects' ? (
             <>
-              <div className="relative">
+              <div className="relative hidden sm:block">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <Input
                   placeholder="Search files..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-9 w-64 bg-card border-border"
+                  className="pl-9 w-48 md:w-64 bg-card border-border"
                 />
               </div>
-              <div className="flex items-center bg-white/5 border border-white/20 rounded-lg p-1">
+              <div className="hidden sm:flex items-center bg-white/5 border border-white/20 rounded-lg p-1">
                 <button 
                   onClick={() => setViewMode('grid')}
                   className={`p-2 rounded transition-colors ${viewMode === 'grid' ? 'bg-pink-500/20 text-pink-400' : 'text-gray-400 hover:text-white'}`}
@@ -353,34 +353,34 @@ export default function Library() {
               <Button 
                 size="sm" 
                 variant="outline" 
-                className="gap-2"
+                className="gap-2 hidden md:flex"
                 onClick={() => toast.info('Create Folder', { description: 'Folder organization coming soon' })}
               >
                 <FolderPlus className="w-4 h-4" />
-                New Folder
+                <span className="hidden md:inline">New Folder</span>
               </Button>
               <Button size="sm" className="gap-2 bg-gradient-to-r from-pink-500 to-rose-500 hover:opacity-90">
                 <Upload className="w-4 h-4" />
-                Upload
+                <span className="hidden sm:inline">Upload</span>
               </Button>
             </>
           ) : (
-            <div className="relative">
+            <div className="relative w-full sm:w-auto">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <Input
                 placeholder="Search consultations..."
                 value={consultationSearch}
                 onChange={(e) => setConsultationSearch(e.target.value)}
-                className="pl-9 w-64 bg-card border-border"
+                className="pl-9 w-full sm:w-48 md:w-64 bg-card border-border"
               />
             </div>
           )}
         </div>
       </PageHeader>
 
-      {/* Tab Navigation */}
-      <div className="px-6 pt-4">
-        <div className="flex gap-2">
+      {/* Tab Navigation - Horizontally scrollable on mobile */}
+      <div className="px-4 sm:px-6 pt-4 overflow-x-auto scrollbar-hide">
+        <div className="flex gap-2 min-w-max pb-2">
           <Button
             variant={activeTab === 'projects' ? 'default' : 'outline'}
             size="sm"
@@ -412,7 +412,7 @@ export default function Library() {
         {activeTab === 'projects' ? (
           <>
             {/* Stats Row */}
-            <div className="grid grid-cols-4 gap-4 mb-8">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8">
               <div className="bg-white/5 border-2 border-white/10 rounded-2xl p-4">
                 <div className="text-3xl font-bold text-white">{projects.length}</div>
                 <div className="text-sm text-gray-400">Projects</div>

@@ -72,7 +72,8 @@ export default function NexusDashboard() {
     e.target.style.height = Math.min(e.target.scrollHeight, 100) + 'px';
   };
 
-  // Navigation buttons with Project Genesis styling and notification badges
+  // Navigation buttons - Ordered by workflow priority:
+  // Signal → Chief of Staff → AI SMEs → Workflow → Project Genesis → Library → Vault
   const buttons = [
     { 
       id: 1, 
@@ -88,6 +89,18 @@ export default function NexusDashboard() {
     },
     { 
       id: 2, 
+      label: "CHIEF OF STAFF", 
+      sub: "Level 2: Learning", 
+      icon: Fingerprint, 
+      gradient: "from-fuchsia-500/20 to-purple-500/20",
+      border: "border-fuchsia-500/50 hover:border-fuchsia-400",
+      iconBg: "bg-fuchsia-500/30",
+      iconColor: "text-fuchsia-400",
+      path: "/digital-twin",
+      badge: <LearningBadge className="absolute top-2 right-2" />
+    },
+    { 
+      id: 3, 
       label: "AI-SMEs", 
       sub: "287 Experts Ready", 
       icon: Users, 
@@ -99,7 +112,7 @@ export default function NexusDashboard() {
       badge: <NotificationBadge count={5} /> // New recommendations
     },
     { 
-      id: 3, 
+      id: 4, 
       label: "WORKFLOW", 
       sub: "6 Active Projects", 
       icon: FolderKanban, 
@@ -109,18 +122,6 @@ export default function NexusDashboard() {
       iconColor: "text-emerald-400",
       path: "/workflow",
       badge: <NotificationBadge count={2} urgent /> // Urgent deadlines
-    },
-    { 
-      id: 4, 
-      label: "CHIEF OF STAFF", 
-      sub: "Level 2: Learning", 
-      icon: Fingerprint, 
-      gradient: "from-fuchsia-500/20 to-purple-500/20",
-      border: "border-fuchsia-500/50 hover:border-fuchsia-400",
-      iconBg: "bg-fuchsia-500/30",
-      iconColor: "text-fuchsia-400",
-      path: "/digital-twin",
-      badge: <LearningBadge className="absolute top-2 right-2" />
     },
     { 
       id: 5, 

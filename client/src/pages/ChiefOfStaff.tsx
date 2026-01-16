@@ -383,7 +383,7 @@ export default function ChiefOfStaff() {
             {/* Chat Area */}
             <div className="flex-1 flex flex-col">
               {/* Messages - Scrollable */}
-              <div className="flex-1 overflow-y-auto">
+              <div className={`flex-1 overflow-y-auto ${isMobile ? 'pb-32' : ''}`}>
                 <div className="max-w-3xl mx-auto px-4 py-6 space-y-4">
                   {messages.map((msg) => (
                     <div key={msg.id} className={`flex gap-3 ${msg.from === "user" ? "justify-end" : ""}`}>
@@ -430,7 +430,7 @@ export default function ChiefOfStaff() {
               </div>
 
               {/* Input Area - Fixed at bottom */}
-              <div className="shrink-0 border-t border-white/10 bg-gray-900/90 backdrop-blur-xl px-4 py-3">
+              <div className={`shrink-0 border-t border-white/10 bg-gray-900/90 backdrop-blur-xl px-4 py-3 ${isMobile ? 'fixed bottom-16 left-0 right-0 z-30' : ''}`}>
                 <div className="max-w-3xl mx-auto">
                   <div className="bg-white/5 border border-white/20 rounded-2xl overflow-hidden">
                     <textarea

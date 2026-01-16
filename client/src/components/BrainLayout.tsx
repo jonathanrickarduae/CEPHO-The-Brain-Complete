@@ -29,7 +29,7 @@ import { CSSProperties, useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
 import { DashboardLayoutSkeleton } from './DashboardLayoutSkeleton';
 import { Button } from "./ui/button";
-import { BottomTabBar, MoreMenuSheet } from "./BottomTabBar";
+import { BottomTabBar } from "./BottomTabBar";
 import { QuickActionsBar } from "./QuickActionsBar";
 import { MoodCheckModal } from "./MoodCheckModal";
 import { KeyboardShortcutsHelp, useKeyboardShortcutsHelp } from "./KeyboardShortcutsHelp";
@@ -133,9 +133,6 @@ function BrainLayoutContent({
   
   // Accessibility settings state
   const [showAccessibilitySettings, setShowAccessibilitySettings] = useState(false);
-  
-  // Mobile more menu state
-  const [showMoreMenu, setShowMoreMenu] = useState(false);
   
   // Keyboard shortcuts
   const keyboardHelp = useKeyboardShortcutsHelp();
@@ -320,13 +317,8 @@ function BrainLayoutContent({
         {/* Main content with bottom padding for mobile nav */}
         <main className={`flex-1 ${isMobile ? 'pb-20' : ''}`}>{children}</main>
         
-        {/* Mobile bottom tab bar */}
-        {isMobile && (
-          <>
-            <BottomTabBar onMorePress={() => setShowMoreMenu(true)} />
-            <MoreMenuSheet isOpen={showMoreMenu} onClose={() => setShowMoreMenu(false)} />
-          </>
-        )}
+        {/* Mobile bottom tab bar - horizontally scrollable */}
+        {isMobile && <BottomTabBar />}
         
         {/* Quick Actions FAB - always visible */}
         <QuickActionsBar 

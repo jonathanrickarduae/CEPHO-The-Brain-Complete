@@ -75,98 +75,101 @@ export default function ProjectGenesisPage() {
   // Dashboard View
   if (viewMode === 'dashboard') {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-900 to-gray-800 p-6">
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-900 to-gray-800 p-4 md:p-6">
         <div className="max-w-6xl mx-auto">
-          {/* Header */}
-          <div className="flex items-center justify-between mb-8">
-            <div className="flex items-center gap-4">
-              <div className="w-14 h-14 rounded-2xl bg-gradient-to-r from-cyan-500 to-fuchsia-500 flex items-center justify-center">
-                <Rocket className="w-7 h-7 text-white" />
+          {/* Header - Mobile responsive */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 md:mb-8">
+            <div className="flex items-center gap-3 md:gap-4">
+              <div className="w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-gradient-to-r from-cyan-500 to-fuchsia-500 flex items-center justify-center shrink-0">
+                <Rocket className="w-6 h-6 md:w-7 md:h-7 text-white" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-white">Project Genesis</h1>
-                <p className="text-gray-400">Strategic blueprint creation & management</p>
+                <h1 className="text-xl md:text-2xl font-bold text-white">Project Genesis</h1>
+                <p className="text-sm md:text-base text-gray-400">Strategic blueprint creation</p>
               </div>
             </div>
-            <div className="flex gap-3">
+            <div className="flex gap-2 md:gap-3">
               <Button
                 variant="outline"
+                size="sm"
                 onClick={() => setViewMode('qms')}
                 className="border-white/20 text-gray-300 hover:bg-white/5"
               >
-                <GitBranch className="w-4 h-4 mr-2" />
-                Quality Management
+                <GitBranch className="w-4 h-4 md:mr-2" />
+                <span className="hidden md:inline">Quality Management</span>
               </Button>
               <Button
+                size="sm"
                 onClick={() => setViewMode('new_project')}
                 className="bg-gradient-to-r from-cyan-500 to-fuchsia-500 hover:opacity-90"
               >
-                <Plus className="w-4 h-4 mr-2" />
-                New Project
+                <Plus className="w-4 h-4 md:mr-2" />
+                <span className="hidden sm:inline">New Project</span>
               </Button>
             </div>
           </div>
 
-          {/* Quick Actions */}
-          <div className="grid grid-cols-4 gap-4 mb-8">
+          {/* Quick Actions - Mobile responsive grid */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-6 md:mb-8">
             <button
               onClick={() => setViewMode('voice_intake')}
-              className="p-6 bg-gradient-to-br from-cyan-500/10 to-fuchsia-500/10 border-2 border-cyan-500/50 rounded-2xl text-left hover:border-cyan-500 transition-all group"
+              className="p-4 md:p-6 bg-gradient-to-br from-cyan-500/10 to-fuchsia-500/10 border-2 border-cyan-500/50 rounded-2xl text-left hover:border-cyan-500 transition-all group"
             >
-              <div className="w-12 h-12 rounded-xl bg-cyan-500/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                <svg className="w-6 h-6 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-cyan-500/20 flex items-center justify-center mb-3 md:mb-4 group-hover:scale-110 transition-transform">
+                <svg className="w-5 h-5 md:w-6 md:h-6 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
                 </svg>
               </div>
-              <h3 className="text-lg font-semibold text-white mb-1">Start with Voice</h3>
-              <p className="text-sm text-gray-400">
-                Record a voice note and let AI pre-populate the wizard
+              <h3 className="text-sm md:text-lg font-semibold text-white mb-1">Start with Voice</h3>
+              <p className="text-xs md:text-sm text-gray-400 hidden sm:block">
+                Record a voice note and let AI pre-populate
               </p>
-              <span className="inline-block mt-2 text-xs text-cyan-400 font-medium">Recommended</span>
+              <span className="inline-block mt-1 md:mt-2 text-xs text-cyan-400 font-medium">Recommended</span>
             </button>
 
             <button
               onClick={() => setViewMode('new_project')}
-              className="p-6 bg-gradient-to-br from-fuchsia-500/10 to-purple-500/10 border border-fuchsia-500/30 rounded-2xl text-left hover:border-fuchsia-500/50 transition-all group"
+              className="p-4 md:p-6 bg-gradient-to-br from-fuchsia-500/10 to-purple-500/10 border border-fuchsia-500/30 rounded-2xl text-left hover:border-fuchsia-500/50 transition-all group"
             >
-              <div className="w-12 h-12 rounded-xl bg-fuchsia-500/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                <Brain className="w-6 h-6 text-fuchsia-400" />
+              <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-fuchsia-500/20 flex items-center justify-center mb-3 md:mb-4 group-hover:scale-110 transition-transform">
+                <Brain className="w-5 h-5 md:w-6 md:h-6 text-fuchsia-400" />
               </div>
-              <h3 className="text-lg font-semibold text-white mb-1">Genesis Blueprint</h3>
-              <p className="text-sm text-gray-400">
+              <h3 className="text-sm md:text-lg font-semibold text-white mb-1">Genesis Blueprint</h3>
+              <p className="text-xs md:text-sm text-gray-400 hidden sm:block">
                 Intelligent wizard with SME collaboration
               </p>
             </button>
 
             <button
               onClick={() => setViewMode('legacy')}
-              className="p-6 bg-white/5 border border-white/10 rounded-2xl text-left hover:border-white/20 transition-all group"
+              className="p-4 md:p-6 bg-white/5 border border-white/10 rounded-2xl text-left hover:border-white/20 transition-all group"
             >
-              <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                <FileText className="w-6 h-6 text-gray-400" />
+              <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-white/10 flex items-center justify-center mb-3 md:mb-4 group-hover:scale-110 transition-transform">
+                <FileText className="w-5 h-5 md:w-6 md:h-6 text-gray-400" />
               </div>
-              <h3 className="text-lg font-semibold text-white mb-1">Classic Mode</h3>
-              <p className="text-sm text-gray-400">
-                Traditional project setup with deliverable selection
+              <h3 className="text-sm md:text-lg font-semibold text-white mb-1">Classic Mode</h3>
+              <p className="text-xs md:text-sm text-gray-400 hidden sm:block">
+                Traditional project setup
               </p>
             </button>
 
             <button
               onClick={() => setViewMode('process_log')}
-              className="p-6 bg-white/5 border border-white/10 rounded-2xl text-left hover:border-white/20 transition-all group"
+              className="p-4 md:p-6 bg-white/5 border border-white/10 rounded-2xl text-left hover:border-white/20 transition-all group"
             >
-              <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                <Shield className="w-6 h-6 text-gray-400" />
+              <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-white/10 flex items-center justify-center mb-3 md:mb-4 group-hover:scale-110 transition-transform">
+                <Shield className="w-5 h-5 md:w-6 md:h-6 text-gray-400" />
               </div>
-              <h3 className="text-lg font-semibold text-white mb-1">QMS Process Log</h3>
-              <p className="text-sm text-gray-400">
-                Master document control, audit trail, and version management
+              <h3 className="text-sm md:text-lg font-semibold text-white mb-1">QMS Process Log</h3>
+              <p className="text-xs md:text-sm text-gray-400 hidden sm:block">
+                Document control & audit
               </p>
             </button>
           </div>
 
-          {/* Sub-Blueprints */}
-          <div className="grid grid-cols-4 gap-4 mb-8">
+          {/* Sub-Blueprints - Scrollable on mobile */}
+          <div className="overflow-x-auto scrollbar-hide mb-6 md:mb-8 -mx-4 px-4 md:mx-0 md:px-0">
+            <div className="flex md:grid md:grid-cols-4 gap-3 md:gap-4 min-w-max md:min-w-0">
             <button
               onClick={() => setViewMode('social_media')}
               className="p-4 bg-gradient-to-br from-pink-500/10 to-purple-500/10 border border-pink-500/30 rounded-xl text-left hover:border-pink-500/50 transition-all group"
@@ -202,6 +205,7 @@ export default function ProjectGenesisPage() {
               <h4 className="font-medium text-white text-sm">Blueprint Network</h4>
               <p className="text-xs text-gray-400 mt-1">Cascading updates</p>
             </button>
+            </div>
           </div>
 
           {/* Recent Projects */}

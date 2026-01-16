@@ -5,7 +5,9 @@ import {
   Users, 
   Fingerprint, 
   FolderKanban,
-  MoreHorizontal 
+  Rocket,
+  BookOpen,
+  Lock
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -16,12 +18,16 @@ interface TabItem {
   path: string;
 }
 
+// Navigation order: Signal → Chief of Staff → AI SMEs → Workflow → Project Genesis
 const TABS: TabItem[] = [
   { id: 'dashboard', label: 'Home', icon: LayoutDashboard, path: '/dashboard' },
   { id: 'brief', label: 'Signal', icon: Sun, path: '/daily-brief' },
-  { id: 'experts', label: 'AI SMEs', icon: Users, path: '/ai-experts' },
   { id: 'twin', label: 'Chief of Staff', icon: Fingerprint, path: '/digital-twin' },
-  { id: 'more', label: 'More', icon: MoreHorizontal, path: '' },
+  { id: 'experts', label: 'AI SMEs', icon: Users, path: '/ai-experts' },
+  { id: 'workflow', label: 'Workflow', icon: FolderKanban, path: '/workflow' },
+  { id: 'genesis', label: 'Genesis', icon: Rocket, path: '/project-genesis' },
+  { id: 'library', label: 'Library', icon: BookOpen, path: '/library' },
+  { id: 'vault', label: 'Vault', icon: Lock, path: '/vault' },
 ];
 
 interface BottomTabBarProps {
@@ -29,7 +35,7 @@ interface BottomTabBarProps {
   className?: string;
 }
 
-export function BottomTabBar({ onMorePress, className }: BottomTabBarProps) {
+export function BottomTabBar({ className }: BottomTabBarProps) {
   const [location, setLocation] = useLocation();
 
   const isActive = (path: string) => {
@@ -41,42 +47,38 @@ export function BottomTabBar({ onMorePress, className }: BottomTabBarProps) {
     <nav
       className={cn(
         'fixed bottom-0 left-0 right-0 z-40 md:hidden',
-        'flex items-center justify-around',
         'h-16 bg-card/95 backdrop-blur-xl border-t border-white/10',
+        'overflow-x-auto scrollbar-hide',
         className
       )}
       style={{ paddingBottom: 'env(safe-area-inset-bottom, 0)' }}
     >
-      {TABS.map((tab) => {
-        const active = isActive(tab.path);
-        const Icon = tab.icon;
+      <div className="flex items-center h-full px-2 min-w-max">
+        {TABS.map((tab) => {
+          const active = isActive(tab.path);
+          const Icon = tab.icon;
 
-        return (
-          <button
-            key={tab.id}
-            onClick={() => {
-              if (tab.id === 'more') {
-                onMorePress?.();
-              } else {
-                setLocation(tab.path);
-              }
-            }}
-            className={cn(
-              'flex flex-col items-center justify-center gap-1 py-2 px-3 min-w-[64px]',
-              'transition-colors duration-200',
-              active ? 'text-primary' : 'text-muted-foreground'
-            )}
-            aria-label={tab.label}
-            aria-current={active ? 'page' : undefined}
-          >
-            <Icon className={cn('w-5 h-5', active && 'drop-shadow-[0_0_8px_var(--color-primary)]')} />
-            <span className="text-[10px] font-medium">{tab.label}</span>
-            {active && (
-              <span className="absolute bottom-1 w-1 h-1 rounded-full bg-primary" />
-            )}
-          </button>
-        );
-      })}
+          return (
+            <button
+              key={tab.id}
+              onClick={() => setLocation(tab.path)}
+              className={cn(
+                'flex flex-col items-center justify-center gap-1 py-2 px-3 min-w-[56px] relative',
+                'transition-colors duration-200',
+                active ? 'text-primary' : 'text-muted-foreground'
+              )}
+              aria-label={tab.label}
+              aria-current={active ? 'page' : undefined}
+            >
+              <Icon className={cn('w-5 h-5', active && 'drop-shadow-[0_0_8px_var(--color-primary)]')} />
+              <span className="text-[10px] font-medium whitespace-nowrap">{tab.label}</span>
+              {active && (
+                <span className="absolute bottom-1 w-1 h-1 rounded-full bg-primary" />
+              )}
+            </button>
+          );
+        })}
+      </div>
     </nav>
   );
 }
