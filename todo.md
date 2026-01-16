@@ -3537,3 +3537,94 @@
 - [x] Fix Vault page - quick stats at top, tabs scrollable on mobile
 - [x] Fix Project Genesis page - responsive grid layout for mobile
 - [x] Update Nexus Dashboard navigation order to match workflow priority
+
+
+## AI-SME Page Enhancements & Date Format Fix (January 2026)
+
+- [ ] Add leaderboard section showing top-scoring AI SMEs
+- [ ] Add "Recently Used" section for quick access to frequently consulted experts
+- [ ] Add sorting controls (by score, by category, by name, by recent use)
+- [ ] Add filtering by category, specialty, performance rating
+- [ ] Improve expert card design with ranking indicators
+- [ ] Fix all date formats to UK format (DD/MM/YYYY) throughout the app
+
+- [ ] Fix Vault page - no scroll, content fits on one screen at top
+
+
+## Productivity Engine Framework Integration (January 2026)
+
+### Phase 1: Data Models & Schema
+- [x] Create blueprint/document schema with phase tracking
+- [x] Add SME panel types (Blue Team, Left-Field, Red Team)
+- [x] Create quality gate tracking tables
+- [x] Add process playbook templates schema
+
+### Phase 2: AI-SME Panel Restructure
+- [x] Categorize experts into Blue Team / Left-Field / Red Team
+- [x] Add panel assembly workflow UI
+- [ ] Create consultation tracking per phase
+- [ ] Add pre-mortem and Red Team review features
+- [x] Add leaderboard and sorting to AI-SME page
+
+### Phase 3: Project Genesis Overhaul (7-Phase Value Chain)
+- [ ] Phase 1: Ideation (Opportunity discovery, concept development)
+- [ ] Phase 2: Innovation (Business case, validation sprint)
+- [ ] Phase 3: Development (Project Genesis execution, testing)
+- [ ] Phase 4: Go-to-Market (Launch, sales process)
+- [ ] Phase 5: Operations (Onboarding, EOS implementation)
+- [ ] Phase 6: Retention (Customer success, renewal)
+- [ ] Phase 7: Exit (Data room, due diligence)
+- [ ] Implement Quality Gate checkpoints (4-level review)
+- [ ] Connect to SME panel system
+- [ ] Add Manus delegation tracking
+
+### Phase 4: Chief of Staff Enhancement
+- [ ] Add Quality Gate management interface
+- [ ] Create process adherence monitoring
+- [ ] Implement executive reporting dashboard
+- [ ] Add resource allocation tracking
+
+### Phase 5: Blueprint/Document System
+- [ ] Create standardized blueprint templates
+- [ ] Add document versioning
+- [ ] Implement lessons learned repository
+- [ ] Add phase-specific document requirements
+
+## Tool Integrations (Ready for Tomorrow)
+
+### High Priority Integrations
+- [ ] Trello API integration (Project management)
+- [ ] Notion API integration (Knowledge base & blueprints)
+- [ ] Lightfield CRM integration (Customer management)
+- [ ] Calendly integration (Scheduling)
+- [ ] Zapier webhooks (Workflow automation)
+- [ ] iDeals VDR integration (Data room - Exit phase)
+
+### AI Assistants Integration (SME Panels)
+- [ ] Claude AI integration for SME panels
+- [ ] Google Gemini integration for SME panels
+- [ ] Microsoft Copilot integration for SME panels
+
+### Medium Priority Integrations
+- [ ] Todoist integration (Task management)
+- [ ] Toggl Track integration (Time tracking)
+- [ ] Canva integration (Design assets)
+- [ ] Loom integration (Video recording)
+- [ ] ElevenLabs integration (Voice AI)
+- [ ] Bitwarden integration (Vault passwords)
+- [ ] GitHub integration (Development phase)
+
+### Low Priority Integrations
+- [ ] HeyGen integration (Video generation)
+- [ ] Descript integration (Video editing)
+- [ ] Postman integration (API testing)
+- [ ] Grammarly integration (Writing)
+
+### Pending Setup
+- [ ] Stripe integration (CAPTCHA issue to resolve)
+
+## Bug Fixes (Current)
+- [x] Fix Vault page syntax error
+- [ ] Fix UK date formats throughout app
+
+- [x] Change tagline to "Your headspace, reclaimed"

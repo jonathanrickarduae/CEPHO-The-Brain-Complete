@@ -1483,3 +1483,346 @@ export const collaborativeReviewActivity = mysqlTable("collaborative_review_acti
 
 export type CollaborativeReviewActivity = typeof collaborativeReviewActivity.$inferSelect;
 export type InsertCollaborativeReviewActivity = typeof collaborativeReviewActivity.$inferInsert;
+
+
+// ============================================================================
+// PRODUCTIVITY ENGINE FRAMEWORK TABLES
+// Based on the AI-Powered Productivity Engine Framework v2.0
+// ============================================================================
+
+/**
+ * Value Chain Phases - The 7 phases of the productivity engine
+ * 1. Ideation, 2. Innovation, 3. Development, 4. Go-to-Market, 5. Operations, 6. Retention, 7. Exit
+ */
+export const valueChainPhases = mysqlTable("value_chain_phases", {
+  id: int("id").autoincrement().primaryKey(),
+  phaseNumber: int("phaseNumber").notNull(), // 1-7
+  name: varchar("name", { length: 100 }).notNull(),
+  description: text("description"),
+  primaryFocus: text("primaryFocus"),
+  keyExpertPanels: json("keyExpertPanels"), // Array of panel categories
+  isActive: boolean("isActive").default(true).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type ValueChainPhase = typeof valueChainPhases.$inferSelect;
+export type InsertValueChainPhase = typeof valueChainPhases.$inferInsert;
+
+/**
+ * Blueprints - Standardized process documents that track through phases
+ */
+export const blueprints = mysqlTable("blueprints", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  projectId: int("projectId"), // Link to projects table
+  name: varchar("name", { length: 300 }).notNull(),
+  description: text("description"),
+  blueprintType: mysqlEnum("blueprintType", [
+    "opportunity_brief",
+    "concept_proposal",
+    "business_case",
+    "project_charter",
+    "gtm_plan",
+    "operations_playbook",
+    "retention_plan",
+    "exit_readiness",
+    "process_document",
+    "other"
+  ]).notNull(),
+  currentPhase: int("currentPhase").default(1).notNull(), // 1-7
+  status: mysqlEnum("status", [
+    "draft",
+    "in_review",
+    "approved",
+    "rejected",
+    "archived"
+  ]).default("draft").notNull(),
+  version: int("version").default(1).notNull(),
+  content: json("content"), // Structured content of the blueprint
+  fileUrl: text("fileUrl"), // S3 URL if file uploaded
+  qualityGateStatus: mysqlEnum("qualityGateStatus", [
+    "not_started",
+    "level_1_complete",
+    "level_2_complete",
+    "level_3_complete",
+    "level_4_complete"
+  ]).default("not_started").notNull(),
+  metadata: json("metadata"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type Blueprint = typeof blueprints.$inferSelect;
+export type InsertBlueprint = typeof blueprints.$inferInsert;
+
+/**
+ * Blueprint Versions - Track document history
+ */
+export const blueprintVersions = mysqlTable("blueprint_versions", {
+  id: int("id").autoincrement().primaryKey(),
+  blueprintId: int("blueprintId").notNull(),
+  version: int("version").notNull(),
+  content: json("content"),
+  fileUrl: text("fileUrl"),
+  changeDescription: text("changeDescription"),
+  createdBy: int("createdBy").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type BlueprintVersion = typeof blueprintVersions.$inferSelect;
+export type InsertBlueprintVersion = typeof blueprintVersions.$inferInsert;
+
+/**
+ * SME Panel Types - Blue Team, Left-Field, Red Team (Devil's Advocate)
+ */
+export const smePanelTypes = mysqlTable("sme_panel_types", {
+  id: int("id").autoincrement().primaryKey(),
+  name: varchar("name", { length: 100 }).notNull(),
+  code: mysqlEnum("code", ["blue_team", "left_field", "red_team"]).notNull(),
+  description: text("description"),
+  role: text("role"), // What this panel does
+  typicalComposition: json("typicalComposition"), // Array of expert categories
+  isActive: boolean("isActive").default(true).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type SmePanelType = typeof smePanelTypes.$inferSelect;
+export type InsertSmePanelType = typeof smePanelTypes.$inferInsert;
+
+/**
+ * SME Panels - Assembled panels for specific reviews
+ */
+export const smePanels = mysqlTable("sme_panels", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  blueprintId: int("blueprintId"), // Optional link to blueprint
+  projectId: int("projectId"), // Optional link to project
+  panelTypeCode: mysqlEnum("panelTypeCode", ["blue_team", "left_field", "red_team"]).notNull(),
+  name: varchar("name", { length: 200 }).notNull(),
+  purpose: text("purpose"),
+  phase: int("phase"), // Which value chain phase (1-7)
+  status: mysqlEnum("status", ["assembling", "active", "completed", "disbanded"]).default("assembling").notNull(),
+  expertIds: json("expertIds"), // Array of expert IDs assigned to this panel
+  metadata: json("metadata"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type SmePanel = typeof smePanels.$inferSelect;
+export type InsertSmePanel = typeof smePanels.$inferInsert;
+
+/**
+ * SME Panel Consultations - Records of panel reviews and feedback
+ */
+export const smePanelConsultations = mysqlTable("sme_panel_consultations", {
+  id: int("id").autoincrement().primaryKey(),
+  panelId: int("panelId").notNull(),
+  blueprintId: int("blueprintId"),
+  consultationType: mysqlEnum("consultationType", [
+    "concept_review",
+    "pre_mortem",
+    "red_team_challenge",
+    "validation_review",
+    "quality_gate_review",
+    "ad_hoc"
+  ]).notNull(),
+  question: text("question"), // What was asked of the panel
+  findings: json("findings"), // Structured findings from each expert
+  recommendations: text("recommendations"),
+  risksIdentified: json("risksIdentified"), // Array of risks
+  status: mysqlEnum("status", ["pending", "in_progress", "completed"]).default("pending").notNull(),
+  completedAt: timestamp("completedAt"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type SmePanelConsultation = typeof smePanelConsultations.$inferSelect;
+export type InsertSmePanelConsultation = typeof smePanelConsultations.$inferInsert;
+
+/**
+ * Quality Gates - 4-level review protocol at each phase
+ */
+export const qualityGates = mysqlTable("quality_gates", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  blueprintId: int("blueprintId").notNull(),
+  phase: int("phase").notNull(), // Which value chain phase (1-7)
+  gateName: varchar("gateName", { length: 200 }).notNull(),
+  level1Complete: boolean("level1Complete").default(false), // Completeness Check
+  level1CompletedAt: timestamp("level1CompletedAt"),
+  level1Notes: text("level1Notes"),
+  level2Complete: boolean("level2Complete").default(false), // Expert Validation Review
+  level2CompletedAt: timestamp("level2CompletedAt"),
+  level2Notes: text("level2Notes"),
+  level3Complete: boolean("level3Complete").default(false), // Strategic Fit & Feasibility
+  level3CompletedAt: timestamp("level3CompletedAt"),
+  level3Notes: text("level3Notes"),
+  level4Decision: mysqlEnum("level4Decision", ["go", "hold", "recycle", "kill"]),
+  level4CompletedAt: timestamp("level4CompletedAt"),
+  level4Rationale: text("level4Rationale"),
+  gatekeeper: varchar("gatekeeper", { length: 100 }).default("Chief of Staff"),
+  status: mysqlEnum("status", ["not_started", "in_progress", "passed", "failed"]).default("not_started").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type QualityGate = typeof qualityGates.$inferSelect;
+export type InsertQualityGate = typeof qualityGates.$inferInsert;
+
+/**
+ * Process Playbooks - Templates for each phase's processes
+ */
+export const processPlaybooks = mysqlTable("process_playbooks", {
+  id: int("id").autoincrement().primaryKey(),
+  phase: int("phase").notNull(), // Which value chain phase (1-7)
+  processNumber: varchar("processNumber", { length: 20 }).notNull(), // e.g., "1.1", "2.2"
+  name: varchar("name", { length: 200 }).notNull(),
+  objective: text("objective"),
+  activities: json("activities"), // Array of activity objects
+  manusDelegation: json("manusDelegation"), // What Manus can do for each activity
+  tools: json("tools"), // Tools used in this process
+  expertPanels: json("expertPanels"), // Which panels are involved
+  qualityGateCriteria: json("qualityGateCriteria"), // Criteria for passing quality gate
+  isActive: boolean("isActive").default(true).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type ProcessPlaybook = typeof processPlaybooks.$inferSelect;
+export type InsertProcessPlaybook = typeof processPlaybooks.$inferInsert;
+
+/**
+ * Pre-Mortem Sessions - Proactive failure analysis
+ */
+export const preMortemSessions = mysqlTable("pre_mortem_sessions", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  blueprintId: int("blueprintId"),
+  projectId: int("projectId"),
+  sessionType: mysqlEnum("sessionType", [
+    "concept_pre_mortem",
+    "business_case_pre_mortem",
+    "launch_pre_mortem",
+    "churn_pre_mortem",
+    "buyer_objection_pre_mortem"
+  ]).notNull(),
+  scenario: text("scenario"), // "Assume the project has failed..."
+  failureReasons: json("failureReasons"), // Array of identified failure reasons
+  criticalAssumptions: json("criticalAssumptions"), // Assumptions that must be tested
+  mitigationStrategies: json("mitigationStrategies"), // How to address each risk
+  panelId: int("panelId"), // Which SME panel conducted this
+  status: mysqlEnum("status", ["scheduled", "in_progress", "completed"]).default("scheduled").notNull(),
+  completedAt: timestamp("completedAt"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type PreMortemSession = typeof preMortemSessions.$inferSelect;
+export type InsertPreMortemSession = typeof preMortemSessions.$inferInsert;
+
+/**
+ * Lessons Learned - Post-project insights repository
+ */
+export const lessonsLearned = mysqlTable("lessons_learned", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  projectId: int("projectId"),
+  blueprintId: int("blueprintId"),
+  phase: int("phase"), // Which phase this lesson applies to
+  category: mysqlEnum("category", [
+    "what_went_well",
+    "what_didnt_work",
+    "process_improvement",
+    "tool_recommendation",
+    "expert_insight",
+    "risk_mitigation"
+  ]).notNull(),
+  title: varchar("title", { length: 300 }).notNull(),
+  description: text("description").notNull(),
+  impact: mysqlEnum("impact", ["low", "medium", "high"]).default("medium"),
+  actionTaken: text("actionTaken"),
+  tags: json("tags"), // Array of tags for searchability
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type LessonLearned = typeof lessonsLearned.$inferSelect;
+export type InsertLessonLearned = typeof lessonsLearned.$inferInsert;
+
+/**
+ * Tool Integrations - Connected external tools and their status
+ */
+export const toolIntegrations = mysqlTable("tool_integrations", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  toolName: varchar("toolName", { length: 100 }).notNull(),
+  category: mysqlEnum("category", [
+    "project_management",
+    "ai_assistant",
+    "development",
+    "automation",
+    "content_creation",
+    "communication",
+    "business_crm",
+    "security",
+    "other"
+  ]).notNull(),
+  purpose: text("purpose"),
+  plan: varchar("plan", { length: 50 }), // "Free", "Pro", "Enterprise"
+  status: mysqlEnum("status", ["active", "inactive", "pending", "error"]).default("pending").notNull(),
+  apiKeyConfigured: boolean("apiKeyConfigured").default(false),
+  lastSyncAt: timestamp("lastSyncAt"),
+  healthScore: int("healthScore").default(100), // 0-100
+  alertMessage: text("alertMessage"),
+  valueChainPhases: json("valueChainPhases"), // Which phases this tool is used in
+  metadata: json("metadata"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type ToolIntegration = typeof toolIntegrations.$inferSelect;
+export type InsertToolIntegration = typeof toolIntegrations.$inferInsert;
+
+/**
+ * Manus Delegation Log - Track what Manus does autonomously
+ */
+export const manusDelegationLog = mysqlTable("manus_delegation_log", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  blueprintId: int("blueprintId"),
+  projectId: int("projectId"),
+  phase: int("phase"),
+  processNumber: varchar("processNumber", { length: 20 }),
+  activityName: varchar("activityName", { length: 200 }).notNull(),
+  delegationType: mysqlEnum("delegationType", [
+    "document_generation",
+    "data_analysis",
+    "research",
+    "scheduling",
+    "communication",
+    "monitoring",
+    "reporting",
+    "quality_check"
+  ]).notNull(),
+  input: json("input"), // What was provided to Manus
+  output: json("output"), // What Manus produced
+  status: mysqlEnum("status", ["pending", "in_progress", "completed", "failed"]).default("pending").notNull(),
+  completedAt: timestamp("completedAt"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type ManusDelegationLog = typeof manusDelegationLog.$inferSelect;
+export type InsertManusDelegationLog = typeof manusDelegationLog.$inferInsert;
+
+/**
+ * Expert Panel Assignments - Which experts are assigned to which panel type
+ */
+export const expertPanelAssignments = mysqlTable("expert_panel_assignments", {
+  id: int("id").autoincrement().primaryKey(),
+  expertId: varchar("expertId", { length: 100 }).notNull(),
+  panelTypeCode: mysqlEnum("panelTypeCode", ["blue_team", "left_field", "red_team"]).notNull(),
+  expertCategory: varchar("expertCategory", { length: 100 }), // e.g., "Strategy", "Finance", "Legal"
+  strengthAreas: json("strengthAreas"), // What this expert is good at for this panel type
+  isDefault: boolean("isDefault").default(false), // Is this a default assignment?
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type ExpertPanelAssignment = typeof expertPanelAssignments.$inferSelect;
+export type InsertExpertPanelAssignment = typeof expertPanelAssignments.$inferInsert;

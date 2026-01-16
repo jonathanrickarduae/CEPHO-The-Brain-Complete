@@ -154,7 +154,7 @@ export default function NexusDashboard() {
       <PageHeader 
         icon={LayoutDashboard} 
         title="The Nexus"
-        subtitle="Command Center"
+        subtitle="Your headspace, reclaimed"
         iconColor="text-cyan-400"
       >
         <div className="flex items-center gap-2">
