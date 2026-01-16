@@ -1,11 +1,11 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import { useSearch } from "wouter";
 import { 
   Fingerprint, Mic, MicOff, Send, Brain,
   Sparkles, Activity, Trash2, Paperclip, Link2, X, FileAudio, GraduationCap,
   CheckCircle2, Clock, AlertCircle, Shield, Users, FolderKanban,
   ChevronRight, BarChart3, MessageSquare, Play, Pause, RefreshCw,
-  ThumbsUp, ThumbsDown, Eye, FileCheck, Bot, Zap
+  ThumbsUp, ThumbsDown, Eye, FileCheck, Bot, Zap, Loader2
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -16,12 +16,14 @@ import { CircularProgress } from "@/components/ProgressIndicator";
 import { useDigitalTwinChat } from "@/hooks/useDigitalTwinChat";
 import { useVoiceInput } from "@/hooks/useVoiceInput";
 import { useIsMobile } from "@/hooks/useMobile";
+import { trpc } from "@/lib/trpc";
 
 // QA Status types
 type QAStatus = 'pending' | 'cos_reviewing' | 'cos_approved' | 'secondary_reviewing' | 'verified' | 'rejected';
 
 interface Task {
   id: string;
+  dbId?: number;
   title: string;
   description: string;
   project: string;
@@ -34,6 +36,7 @@ interface Task {
   feedback?: string;
   createdAt: Date;
   updatedAt: Date;
+  isFromDb?: boolean;
 }
 
 interface Conversation {
@@ -130,9 +133,81 @@ export default function ChiefOfStaff() {
   const [messageInput, setMessageInput] = useState(initialMessage || "");
   const [currentConversationId, setCurrentConversationId] = useState('conv-1');
   const [conversations] = useState<Conversation[]>(MOCK_CONVERSATIONS);
-  const [tasks] = useState<Task[]>(MOCK_TASKS);
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [showTaskDetail, setShowTaskDetail] = useState(false);
+  const [reviewScore, setReviewScore] = useState<number>(8);
+  const [reviewFeedback, setReviewFeedback] = useState('');
+
+  // tRPC hooks for QA workflow
+  const utils = trpc.useUtils();
+  const { data: tasksWithQA, isLoading: tasksLoading } = trpc.qa.getTasksWithStatus.useQuery();
+  
+  const submitCoSReviewMutation = trpc.qa.submitCoSReview.useMutation({
+    onSuccess: () => {
+      toast.success('Chief of Staff review submitted');
+      utils.qa.getTasksWithStatus.invalidate();
+      setShowTaskDetail(false);
+      setReviewScore(8);
+      setReviewFeedback('');
+    },
+    onError: (error) => {
+      toast.error(`Failed to submit review: ${error.message}`);
+    },
+  });
+
+  const submitSecondaryReviewMutation = trpc.qa.submitSecondaryReview.useMutation({
+    onSuccess: () => {
+      toast.success('Secondary AI verification complete');
+      utils.qa.getTasksWithStatus.invalidate();
+    },
+    onError: (error) => {
+      toast.error(`Failed to submit verification: ${error.message}`);
+    },
+  });
+
+  // Combine real tasks with mock tasks for display
+  const tasks = useMemo(() => {
+    const realTasks: Task[] = (tasksWithQA || []).map(t => ({
+      id: `db-${t.id}`,
+      dbId: t.id,
+      title: t.title,
+      description: t.description || '',
+      project: 'General', // TODO: join with projects table
+      status: (t.status === 'not_started' ? 'active' : t.status === 'in_progress' ? 'active' : t.status === 'completed' ? 'completed' : t.status === 'blocked' ? 'blocked' : 'review') as Task['status'],
+      progress: t.progress || 0,
+      qaStatus: (t.qaStatus || 'pending') as QAStatus,
+      assignedExperts: [],
+      cosScore: t.cosScore || undefined,
+      secondaryAIScore: t.secondaryAiScore || undefined,
+      feedback: undefined, // TODO: get from reviews
+      createdAt: new Date(t.createdAt),
+      updatedAt: new Date(t.updatedAt),
+      isFromDb: true,
+    }));
+    return [...realTasks, ...MOCK_TASKS.map(t => ({ ...t, isFromDb: false, dbId: undefined }))];
+  }, [tasksWithQA]);
+
+  // Handle CoS review submission
+  const handleSubmitCoSReview = (taskId: number, approved: boolean) => {
+    submitCoSReviewMutation.mutate({
+      taskId,
+      score: reviewScore,
+      feedback: reviewFeedback || undefined,
+      status: approved ? 'approved' : 'rejected',
+    });
+  };
+
+  // Handle Secondary AI verification
+  const handleSecondaryVerification = (taskId: number) => {
+    // Simulate AI verification with a score
+    const aiScore = Math.floor(Math.random() * 3) + 8; // 8-10 score
+    submitSecondaryReviewMutation.mutate({
+      taskId,
+      score: aiScore,
+      feedback: 'Automated verification complete. All quality criteria met.',
+      status: 'approved',
+    });
+  };
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);

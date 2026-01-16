@@ -431,6 +431,43 @@
 - [x] Test all pages in light mode - ensure readability
 - [x] Verify consistent styling across all sections
 
+
+## SME Team Persistence & QA Workflow Backend (Jan 16, 2026)
+
+### Database Schema
+- [x] Create sme_teams table (id, name, description, userId, createdAt, updatedAt)
+- [x] Create sme_team_members table (teamId, expertId, role, addedAt)
+- [x] Update tasks table with QA fields (teamId, progress, cosScore, secondaryAiScore, qaStatus)
+- [x] Create task_qa_reviews table (taskId, reviewType, reviewerId, score, feedback, status, createdAt)
+- [x] Run database migrations
+
+### SME Team Backend Procedures
+- [x] Create team.create procedure
+- [x] Create team.list procedure (user's teams)
+- [x] Create team.get procedure (single team with members)
+- [x] Create team.addMember procedure
+- [x] Create team.removeMember procedure
+- [x] Create team.delete procedure
+
+### QA Workflow Backend Procedures
+- [x] Create task.create procedure (existing)
+- [x] Create task.list procedure (with QA status)
+- [x] Create task.updateStatus procedure (existing)
+- [x] Create qa.submitCoSReview procedure (Chief of Staff review)
+- [x] Create qa.submitSecondaryReview procedure (Secondary AI verification)
+- [x] Create qa.getTaskReviews procedure
+- [x] Implement dual verification logic (CoS + Secondary AI)
+
+### Frontend Integration
+- [x] Update AI SMEs page to use real team data
+- [x] Update Chief of Staff Tasks view to use real task/QA data
+- [x] Add team creation modal functionality
+- [x] Add QA review submission UI
+
+### Testing
+- [x] Write vitest tests for SME team procedures
+- [x] Write vitest tests for QA workflow procedures
+
 ### Wellness Score Integration
 - [x] Add wellness score card to Dashboard
 - [x] Create wellness score detail page in Statistics

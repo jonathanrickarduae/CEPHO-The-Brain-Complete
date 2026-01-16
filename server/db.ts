@@ -1296,3 +1296,192 @@ export async function getStaleExpertDomains(daysOld: number = 7): Promise<Expert
     .where(lte(expertDomainKnowledge.lastUpdated, cutoffDate))
     .orderBy(expertDomainKnowledge.lastUpdated);
 }
+
+
+// ==================== SME TEAM MANAGEMENT ====================
+
+import { smeTeams, InsertSmeTeam, SmeTeam, smeTeamMembers, InsertSmeTeamMember, SmeTeamMember, taskQaReviews, InsertTaskQaReview, TaskQaReview, smeFeedbackLog, InsertSmeFeedbackLog, SmeFeedbackLog } from "../drizzle/schema";
+
+// Create a new SME team
+export async function createSmeTeam(entry: InsertSmeTeam): Promise<SmeTeam | null> {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const result = await db.insert(smeTeams).values(entry);
+  const id = result[0].insertId;
+  const created = await db.select().from(smeTeams).where(eq(smeTeams.id, id)).limit(1);
+  return created[0] || null;
+}
+
+// Get all SME teams for a user
+export async function getSmeTeams(userId: number): Promise<SmeTeam[]> {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return db.select().from(smeTeams)
+    .where(and(eq(smeTeams.userId, userId), eq(smeTeams.isActive, true)))
+    .orderBy(desc(smeTeams.updatedAt));
+}
+
+// Get a single SME team by ID
+export async function getSmeTeamById(teamId: number): Promise<SmeTeam | null> {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const results = await db.select().from(smeTeams).where(eq(smeTeams.id, teamId)).limit(1);
+  return results[0] || null;
+}
+
+// Update an SME team
+export async function updateSmeTeam(teamId: number, data: Partial<InsertSmeTeam>) {
+  const db = await getDb();
+  if (!db) return;
+  
+  await db.update(smeTeams).set(data).where(eq(smeTeams.id, teamId));
+}
+
+// Delete an SME team (soft delete)
+export async function deleteSmeTeam(teamId: number) {
+  const db = await getDb();
+  if (!db) return;
+  
+  await db.update(smeTeams).set({ isActive: false }).where(eq(smeTeams.id, teamId));
+}
+
+// Add a member to an SME team
+export async function addSmeTeamMember(entry: InsertSmeTeamMember): Promise<SmeTeamMember | null> {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const result = await db.insert(smeTeamMembers).values(entry);
+  const id = result[0].insertId;
+  const created = await db.select().from(smeTeamMembers).where(eq(smeTeamMembers.id, id)).limit(1);
+  return created[0] || null;
+}
+
+// Get all members of an SME team
+export async function getSmeTeamMembers(teamId: number): Promise<SmeTeamMember[]> {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return db.select().from(smeTeamMembers)
+    .where(eq(smeTeamMembers.teamId, teamId))
+    .orderBy(smeTeamMembers.addedAt);
+}
+
+// Remove a member from an SME team
+export async function removeSmeTeamMember(teamId: number, expertId: string) {
+  const db = await getDb();
+  if (!db) return;
+  
+  await db.delete(smeTeamMembers)
+    .where(and(eq(smeTeamMembers.teamId, teamId), eq(smeTeamMembers.expertId, expertId)));
+}
+
+// Get team with members
+export async function getSmeTeamWithMembers(teamId: number): Promise<{ team: SmeTeam; members: SmeTeamMember[] } | null> {
+  const team = await getSmeTeamById(teamId);
+  if (!team) return null;
+  
+  const members = await getSmeTeamMembers(teamId);
+  return { team, members };
+}
+
+
+// ==================== QA WORKFLOW ====================
+
+// Create a QA review for a task
+export async function createTaskQaReview(entry: InsertTaskQaReview): Promise<TaskQaReview | null> {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const result = await db.insert(taskQaReviews).values(entry);
+  const id = result[0].insertId;
+  const created = await db.select().from(taskQaReviews).where(eq(taskQaReviews.id, id)).limit(1);
+  return created[0] || null;
+}
+
+// Get all QA reviews for a task
+export async function getTaskQaReviews(taskId: number): Promise<TaskQaReview[]> {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return db.select().from(taskQaReviews)
+    .where(eq(taskQaReviews.taskId, taskId))
+    .orderBy(desc(taskQaReviews.createdAt));
+}
+
+// Update a QA review
+export async function updateTaskQaReview(reviewId: number, data: Partial<InsertTaskQaReview>) {
+  const db = await getDb();
+  if (!db) return;
+  
+  await db.update(taskQaReviews).set(data).where(eq(taskQaReviews.id, reviewId));
+}
+
+// Get tasks with QA status for a user
+export async function getTasksWithQaStatus(userId: number, options?: { projectId?: number; status?: string }) {
+  const db = await getDb();
+  if (!db) return [];
+  
+  const conditions = [eq(tasks.userId, userId)];
+  
+  if (options?.projectId) {
+    conditions.push(eq(tasks.projectId, options.projectId));
+  }
+  
+  return db.select().from(tasks)
+    .where(and(...conditions))
+    .orderBy(desc(tasks.updatedAt));
+}
+
+// Update task QA status after review
+export async function updateTaskQaStatus(taskId: number, qaStatus: string, cosScore?: number, secondaryAiScore?: number) {
+  const db = await getDb();
+  if (!db) return;
+  
+  const updateData: Record<string, unknown> = { qaStatus };
+  if (cosScore !== undefined) updateData.cosScore = cosScore;
+  if (secondaryAiScore !== undefined) updateData.secondaryAiScore = secondaryAiScore;
+  
+  // Update task status based on QA status
+  if (qaStatus === 'approved') {
+    updateData.status = 'verified';
+  } else if (qaStatus === 'cos_reviewed') {
+    updateData.status = 'cos_approved';
+  }
+  
+  await db.update(tasks).set(updateData).where(eq(tasks.id, taskId));
+}
+
+
+// ==================== SME FEEDBACK ====================
+
+// Create feedback for an SME expert
+export async function createSmeFeedback(entry: InsertSmeFeedbackLog): Promise<SmeFeedbackLog | null> {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const result = await db.insert(smeFeedbackLog).values(entry);
+  const id = result[0].insertId;
+  const created = await db.select().from(smeFeedbackLog).where(eq(smeFeedbackLog.id, id)).limit(1);
+  return created[0] || null;
+}
+
+// Get feedback for an expert
+export async function getSmeFeedback(userId: number, expertId: string): Promise<SmeFeedbackLog[]> {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return db.select().from(smeFeedbackLog)
+    .where(and(eq(smeFeedbackLog.userId, userId), eq(smeFeedbackLog.expertId, expertId)))
+    .orderBy(desc(smeFeedbackLog.createdAt));
+}
+
+// Mark feedback as applied (expert has "learned")
+export async function markFeedbackApplied(feedbackId: number) {
+  const db = await getDb();
+  if (!db) return;
+  
+  await db.update(smeFeedbackLog).set({ applied: true }).where(eq(smeFeedbackLog.id, feedbackId));
+}

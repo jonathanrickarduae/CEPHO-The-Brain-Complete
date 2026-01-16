@@ -890,26 +890,32 @@ export type Reminder = typeof reminders.$inferSelect;
 export type InsertReminder = typeof reminders.$inferInsert;
 
 /**
- * Tasks - granular task tracking within projects
+ * Tasks - granular task tracking within projects with QA workflow
  */
 export const tasks = mysqlTable("tasks", {
   id: int("id").autoincrement().primaryKey(),
   userId: int("userId").notNull(),
   projectId: int("projectId"),
+  teamId: int("teamId"), // Link to SME team
   parentTaskId: int("parentTaskId"), // For subtasks
   title: varchar("title", { length: 500 }).notNull(),
   description: text("description"),
   status: mysqlEnum("status", [
     "not_started", "in_progress", "blocked", 
-    "review", "completed", "cancelled"
+    "review", "cos_approved", "verified", "completed", "cancelled"
   ]).default("not_started").notNull(),
   priority: mysqlEnum("priority", ["low", "medium", "high", "critical"]).default("medium"),
+  progress: int("progress").default(0), // 0-100
   dueDate: timestamp("dueDate"),
   estimatedHours: float("estimatedHours"),
   actualHours: float("actualHours"),
   assignedTo: varchar("assignedTo", { length: 100 }), // "digital_twin", expert ID, or "user"
+  assignedExperts: json("assignedExperts"), // Array of expert IDs for team tasks
   dependencies: json("dependencies"), // Array of task IDs this depends on
   blockerDescription: text("blockerDescription"),
+  cosScore: int("cosScore"), // Chief of Staff QA score (1-10)
+  secondaryAiScore: int("secondaryAiScore"), // Secondary AI verification score (1-10)
+  qaStatus: mysqlEnum("qaStatus", ["pending", "cos_reviewed", "secondary_reviewed", "approved", "rejected"]).default("pending"),
   completedAt: timestamp("completedAt"),
   metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
@@ -1232,3 +1238,76 @@ export const favoriteContacts = mysqlTable("favorite_contacts", {
 
 export type FavoriteContact = typeof favoriteContacts.$inferSelect;
 export type InsertFavoriteContact = typeof favoriteContacts.$inferInsert;
+
+
+/**
+ * SME Teams - assembled teams of AI experts for specific projects/tasks
+ * Users can create and save teams for reuse
+ */
+export const smeTeams = mysqlTable("sme_teams", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  name: varchar("name", { length: 200 }).notNull(),
+  description: text("description"),
+  purpose: varchar("purpose", { length: 300 }), // What this team is for
+  projectId: int("projectId"), // Optional link to a project
+  isActive: boolean("isActive").default(true).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type SmeTeam = typeof smeTeams.$inferSelect;
+export type InsertSmeTeam = typeof smeTeams.$inferInsert;
+
+/**
+ * SME Team Members - experts assigned to a team
+ */
+export const smeTeamMembers = mysqlTable("sme_team_members", {
+  id: int("id").autoincrement().primaryKey(),
+  teamId: int("teamId").notNull(),
+  expertId: varchar("expertId", { length: 50 }).notNull(), // References AI expert ID
+  role: varchar("role", { length: 100 }), // Role within the team (e.g., "Lead", "Reviewer")
+  addedAt: timestamp("addedAt").defaultNow().notNull(),
+});
+
+export type SmeTeamMember = typeof smeTeamMembers.$inferSelect;
+export type InsertSmeTeamMember = typeof smeTeamMembers.$inferInsert;
+
+/**
+ * Task QA Reviews - dual verification system (Chief of Staff + Secondary AI)
+ * Tracks quality assurance reviews for each task
+ */
+export const taskQaReviews = mysqlTable("task_qa_reviews", {
+  id: int("id").autoincrement().primaryKey(),
+  taskId: int("taskId").notNull(),
+  reviewType: mysqlEnum("reviewType", ["cos_review", "secondary_ai", "sme_feedback"]).notNull(),
+  reviewerId: varchar("reviewerId", { length: 100 }), // "chief_of_staff" or AI expert ID
+  score: int("score"), // 1-10 quality score
+  feedback: text("feedback"),
+  status: mysqlEnum("status", ["pending", "approved", "rejected", "needs_revision"]).default("pending").notNull(),
+  improvements: json("improvements"), // Suggested improvements
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type TaskQaReview = typeof taskQaReviews.$inferSelect;
+export type InsertTaskQaReview = typeof taskQaReviews.$inferInsert;
+
+/**
+ * SME Feedback Log - feedback from Chief of Staff to individual SME experts
+ * Helps experts learn and improve over time
+ */
+export const smeFeedbackLog = mysqlTable("sme_feedback_log", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  expertId: varchar("expertId", { length: 50 }).notNull(),
+  taskId: int("taskId"),
+  feedbackType: mysqlEnum("feedbackType", ["positive", "constructive", "correction", "training"]).notNull(),
+  feedback: text("feedback").notNull(),
+  context: varchar("context", { length: 200 }), // What prompted this feedback
+  applied: boolean("applied").default(false), // Whether the expert has "learned" from this
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type SmeFeedbackLog = typeof smeFeedbackLog.$inferSelect;
+export type InsertSmeFeedbackLog = typeof smeFeedbackLog.$inferInsert;

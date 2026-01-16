@@ -26,7 +26,14 @@ import {
   createExpertResearchTask, getExpertResearchTasks, updateExpertResearchTask, getPendingResearchTasks,
   createExpertCollaboration, getExpertCollaborations,
   createExpertCoachingSession, getExpertCoachingSessions, updateExpertCoachingSession,
-  createExpertDomainKnowledge, getExpertDomainKnowledge, updateExpertDomainKnowledge, getStaleExpertDomains
+  createExpertDomainKnowledge, getExpertDomainKnowledge, updateExpertDomainKnowledge, getStaleExpertDomains,
+  // SME Team Management
+  createSmeTeam, getSmeTeams, getSmeTeamById, updateSmeTeam, deleteSmeTeam,
+  addSmeTeamMember, getSmeTeamMembers, removeSmeTeamMember, getSmeTeamWithMembers,
+  // QA Workflow
+  createTaskQaReview, getTaskQaReviews, updateTaskQaReview, getTasksWithQaStatus, updateTaskQaStatus,
+  // SME Feedback
+  createSmeFeedback, getSmeFeedback, markFeedbackApplied
 } from "./db";
 import { getDb } from "./db";
 import { users } from "../drizzle/schema";
@@ -1880,5 +1887,227 @@ You are not a yes-man. You are a trusted advisor who respects the principal enou
   }),
 
   favorites: favoritesRouter,
+
+  // SME Team Management API
+  smeTeam: router({
+    // Create a new SME team
+    create: protectedProcedure
+      .input(z.object({
+        name: z.string(),
+        description: z.string().optional(),
+        purpose: z.string().optional(),
+        projectId: z.number().optional(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        return createSmeTeam({
+          userId: ctx.user.id,
+          name: input.name,
+          description: input.description,
+          purpose: input.purpose,
+          projectId: input.projectId,
+        });
+      }),
+
+    // List all user's teams
+    list: protectedProcedure.query(async ({ ctx }) => {
+      return getSmeTeams(ctx.user.id);
+    }),
+
+    // Get a single team with members
+    get: protectedProcedure
+      .input(z.object({ teamId: z.number() }))
+      .query(async ({ input }) => {
+        return getSmeTeamWithMembers(input.teamId);
+      }),
+
+    // Update a team
+    update: protectedProcedure
+      .input(z.object({
+        teamId: z.number(),
+        name: z.string().optional(),
+        description: z.string().optional(),
+        purpose: z.string().optional(),
+      }))
+      .mutation(async ({ input }) => {
+        const { teamId, ...data } = input;
+        await updateSmeTeam(teamId, data);
+        return { success: true };
+      }),
+
+    // Delete a team (soft delete)
+    delete: protectedProcedure
+      .input(z.object({ teamId: z.number() }))
+      .mutation(async ({ input }) => {
+        await deleteSmeTeam(input.teamId);
+        return { success: true };
+      }),
+
+    // Add a member to a team
+    addMember: protectedProcedure
+      .input(z.object({
+        teamId: z.number(),
+        expertId: z.string(),
+        role: z.string().optional(),
+      }))
+      .mutation(async ({ input }) => {
+        return addSmeTeamMember({
+          teamId: input.teamId,
+          expertId: input.expertId,
+          role: input.role,
+        });
+      }),
+
+    // Remove a member from a team
+    removeMember: protectedProcedure
+      .input(z.object({
+        teamId: z.number(),
+        expertId: z.string(),
+      }))
+      .mutation(async ({ input }) => {
+        await removeSmeTeamMember(input.teamId, input.expertId);
+        return { success: true };
+      }),
+
+    // Get team members
+    getMembers: protectedProcedure
+      .input(z.object({ teamId: z.number() }))
+      .query(async ({ input }) => {
+        return getSmeTeamMembers(input.teamId);
+      }),
+  }),
+
+  // QA Workflow API
+  qa: router({
+    // Submit Chief of Staff review
+    submitCoSReview: protectedProcedure
+      .input(z.object({
+        taskId: z.number(),
+        score: z.number().min(1).max(10),
+        feedback: z.string().optional(),
+        status: z.enum(['approved', 'rejected', 'needs_revision']),
+        improvements: z.array(z.string()).optional(),
+      }))
+      .mutation(async ({ input }) => {
+        // Create the review record
+        const review = await createTaskQaReview({
+          taskId: input.taskId,
+          reviewType: 'cos_review',
+          reviewerId: 'chief_of_staff',
+          score: input.score,
+          feedback: input.feedback,
+          status: input.status,
+          improvements: input.improvements,
+        });
+
+        // Update task QA status
+        if (input.status === 'approved') {
+          await updateTaskQaStatus(input.taskId, 'cos_reviewed', input.score);
+        } else if (input.status === 'rejected') {
+          await updateTaskQaStatus(input.taskId, 'rejected', input.score);
+        }
+
+        return review;
+      }),
+
+    // Submit Secondary AI verification
+    submitSecondaryReview: protectedProcedure
+      .input(z.object({
+        taskId: z.number(),
+        score: z.number().min(1).max(10),
+        feedback: z.string().optional(),
+        status: z.enum(['approved', 'rejected', 'needs_revision']),
+        improvements: z.array(z.string()).optional(),
+      }))
+      .mutation(async ({ input }) => {
+        // Create the review record
+        const review = await createTaskQaReview({
+          taskId: input.taskId,
+          reviewType: 'secondary_ai',
+          reviewerId: 'secondary_ai_verifier',
+          score: input.score,
+          feedback: input.feedback,
+          status: input.status,
+          improvements: input.improvements,
+        });
+
+        // Update task QA status - if both CoS and Secondary AI approved, mark as fully approved
+        if (input.status === 'approved') {
+          await updateTaskQaStatus(input.taskId, 'approved', undefined, input.score);
+        } else if (input.status === 'rejected') {
+          await updateTaskQaStatus(input.taskId, 'rejected', undefined, input.score);
+        }
+
+        return review;
+      }),
+
+    // Get all reviews for a task
+    getTaskReviews: protectedProcedure
+      .input(z.object({ taskId: z.number() }))
+      .query(async ({ input }) => {
+        return getTaskQaReviews(input.taskId);
+      }),
+
+    // Get tasks with QA status
+    getTasksWithStatus: protectedProcedure
+      .input(z.object({
+        projectId: z.number().optional(),
+        status: z.string().optional(),
+      }).optional())
+      .query(async ({ ctx, input }) => {
+        return getTasksWithQaStatus(ctx.user.id, input);
+      }),
+
+    // Update QA review
+    updateReview: protectedProcedure
+      .input(z.object({
+        reviewId: z.number(),
+        score: z.number().min(1).max(10).optional(),
+        feedback: z.string().optional(),
+        status: z.enum(['pending', 'approved', 'rejected', 'needs_revision']).optional(),
+      }))
+      .mutation(async ({ input }) => {
+        const { reviewId, ...data } = input;
+        await updateTaskQaReview(reviewId, data);
+        return { success: true };
+      }),
+  }),
+
+  // SME Feedback API
+  smeFeedback: router({
+    // Create feedback for an expert
+    create: protectedProcedure
+      .input(z.object({
+        expertId: z.string(),
+        taskId: z.number().optional(),
+        feedbackType: z.enum(['positive', 'constructive', 'correction', 'training']),
+        feedback: z.string(),
+        context: z.string().optional(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        return createSmeFeedback({
+          userId: ctx.user.id,
+          expertId: input.expertId,
+          taskId: input.taskId,
+          feedbackType: input.feedbackType,
+          feedback: input.feedback,
+          context: input.context,
+        });
+      }),
+
+    // Get feedback for an expert
+    get: protectedProcedure
+      .input(z.object({ expertId: z.string() }))
+      .query(async ({ ctx, input }) => {
+        return getSmeFeedback(ctx.user.id, input.expertId);
+      }),
+
+    // Mark feedback as applied (expert has "learned")
+    markApplied: protectedProcedure
+      .input(z.object({ feedbackId: z.number() }))
+      .mutation(async ({ input }) => {
+        await markFeedbackApplied(input.feedbackId);
+        return { success: true };
+      }),
+  }),
 });
 export type AppRouter = typeof appRouter;

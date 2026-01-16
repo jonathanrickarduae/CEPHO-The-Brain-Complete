@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { 
   Users, Brain, Search, Star, MessageSquare, FileText,
   ChevronRight, Plus, Mic, MicOff, Send, Eye, CheckCircle2,
-  Sparkles, Target, Clock, BarChart3, Filter, Grid, List
+  Sparkles, Target, Clock, BarChart3, Filter, Grid, List, Trash2, Loader2
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { PageHeader } from "@/components/PageHeader";
 import { toast } from "sonner";
 import { useIsMobile } from "@/hooks/useMobile";
+import { trpc } from "@/lib/trpc";
 
 // Expert categories
 const CATEGORIES = [
@@ -61,6 +62,69 @@ export default function AISMEsPage() {
   const [showExpertDetail, setShowExpertDetail] = useState<string | null>(null);
   const [taskDescription, setTaskDescription] = useState('');
   const [viewStyle, setViewStyle] = useState<'grid' | 'list'>('grid');
+  const [teamName, setTeamName] = useState('');
+  const [teamPurpose, setTeamPurpose] = useState('');
+
+  // tRPC hooks for team management
+  const utils = trpc.useUtils();
+  const { data: savedTeams, isLoading: teamsLoading } = trpc.smeTeam.list.useQuery();
+  
+  const createTeamMutation = trpc.smeTeam.create.useMutation({
+    onSuccess: async (team) => {
+      if (team) {
+        // Add members to the team
+        for (const expert of selectedExperts) {
+          await addMemberMutation.mutateAsync({
+            teamId: team.id,
+            expertId: expert.id,
+            role: expert.role,
+          });
+        }
+        toast.success(`Team "${team.name}" created with ${selectedExperts.length} members`);
+        setSelectedExperts([]);
+        setTeamName('');
+        setTeamPurpose('');
+        setTaskDescription('');
+        setViewMode('teams');
+        utils.smeTeam.list.invalidate();
+      }
+    },
+    onError: (error) => {
+      toast.error(`Failed to create team: ${error.message}`);
+    },
+  });
+
+  const addMemberMutation = trpc.smeTeam.addMember.useMutation();
+  
+  const deleteTeamMutation = trpc.smeTeam.delete.useMutation({
+    onSuccess: () => {
+      toast.success('Team deleted');
+      utils.smeTeam.list.invalidate();
+    },
+    onError: (error) => {
+      toast.error(`Failed to delete team: ${error.message}`);
+    },
+  });
+
+  const removeMemberMutation = trpc.smeTeam.removeMember.useMutation({
+    onSuccess: () => {
+      utils.smeTeam.list.invalidate();
+    },
+  });
+
+  // Combine saved teams with static teams for display
+  const allTeams = [
+    ...(savedTeams || []).map(team => ({
+      id: `db-${team.id}`,
+      dbId: team.id,
+      name: team.name,
+      members: [] as string[], // Will be populated from team members query
+      status: 'active' as const,
+      task: team.purpose || team.description || 'No task assigned',
+      isFromDb: true as const,
+    })),
+    ...ACTIVE_TEAMS.map(t => ({ ...t, dbId: undefined as number | undefined, isFromDb: false as const })),
+  ];
 
   // Filter experts
   const filteredExperts = EXPERTS.filter(exp => {
@@ -90,16 +154,29 @@ export default function AISMEsPage() {
     setViewMode('assemble');
   };
 
-  // Submit task to team
+  // Submit task to team - now creates a real team in the database
   const submitTaskToTeam = () => {
-    if (!taskDescription.trim()) {
-      toast.error("Please describe the task");
+    if (!teamName.trim()) {
+      toast.error("Please enter a team name");
       return;
     }
-    toast.success(`Task assigned to ${selectedExperts.length} experts`);
-    setSelectedExperts([]);
-    setTaskDescription('');
-    setViewMode('teams');
+    if (selectedExperts.length === 0) {
+      toast.error("Please select at least one expert");
+      return;
+    }
+    
+    createTeamMutation.mutate({
+      name: teamName,
+      description: taskDescription,
+      purpose: teamPurpose || taskDescription,
+    });
+  };
+
+  // Delete a team
+  const handleDeleteTeam = (teamId: number) => {
+    if (confirm('Are you sure you want to delete this team?')) {
+      deleteTeamMutation.mutate({ teamId });
+    }
   };
 
   const selectedExpert = showExpertDetail ? EXPERTS.find(e => e.id === showExpertDetail) : null;
@@ -317,9 +394,12 @@ export default function AISMEsPage() {
         {viewMode === 'teams' && (
           <div className="flex-1 overflow-y-auto p-4 sm:p-6">
             <div className="max-w-4xl mx-auto">
-              <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4">Active Teams</h3>
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider">Active Teams</h3>
+                {teamsLoading && <Loader2 className="w-4 h-4 animate-spin text-cyan-400" />}
+              </div>
               
-              {ACTIVE_TEAMS.length === 0 ? (
+              {allTeams.length === 0 ? (
                 <div className="text-center py-12">
                   <Users className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
                   <h3 className="text-lg font-medium mb-2">No active teams</h3>
@@ -328,22 +408,42 @@ export default function AISMEsPage() {
                 </div>
               ) : (
                 <div className="space-y-4">
-                  {ACTIVE_TEAMS.map(team => (
+                  {allTeams.map(team => (
                     <div key={team.id} className="p-5 bg-white/5 border-2 border-white/10 rounded-2xl hover:border-cyan-500/30 transition-all">
                       <div className="flex items-start justify-between mb-3">
                         <div>
-                          <h4 className="font-medium">{team.name}</h4>
+                          <div className="flex items-center gap-2">
+                            <h4 className="font-medium">{team.name}</h4>
+                            {team.isFromDb && (
+                              <Badge variant="outline" className="text-xs text-cyan-400 border-cyan-400/30">Saved</Badge>
+                            )}
+                          </div>
                           <p className="text-sm text-muted-foreground">{team.task}</p>
                         </div>
-                        <Badge className={team.status === 'active' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-amber-500/10 text-amber-400'}>
-                          {team.status === 'active' ? 'Active' : 'Pending Review'}
-                        </Badge>
+                        <div className="flex items-center gap-2">
+                          <Badge className={team.status === 'active' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-amber-500/10 text-amber-400'}>
+                            {team.status === 'active' ? 'Active' : 'Pending Review'}
+                          </Badge>
+                          {team.isFromDb && team.dbId && (
+                            <button
+                              onClick={() => handleDeleteTeam(team.dbId!)}
+                              className="p-1.5 rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500/20 transition-colors"
+                              title="Delete team"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          )}
+                        </div>
                       </div>
                       <div className="flex items-center gap-2">
                         <span className="text-xs text-muted-foreground">Team:</span>
-                        {team.members.map((member, i) => (
-                          <Badge key={i} variant="outline" className="text-xs">{member}</Badge>
-                        ))}
+                        {team.members.length > 0 ? (
+                          team.members.map((member: string, i: number) => (
+                            <Badge key={i} variant="outline" className="text-xs">{member}</Badge>
+                          ))
+                        ) : (
+                          <span className="text-xs text-muted-foreground italic">Members loading...</span>
+                        )}
                       </div>
                       <div className="flex gap-2 mt-4">
                         <Button size="sm" variant="outline" className="gap-2">
@@ -367,6 +467,28 @@ export default function AISMEsPage() {
           <div className="flex-1 overflow-y-auto p-4 sm:p-6">
             <div className="max-w-2xl mx-auto">
               <h3 className="text-lg font-semibold mb-4">Assemble Your Team</h3>
+              
+              {/* Team Name */}
+              <div className="mb-6">
+                <label className="text-sm font-medium text-muted-foreground mb-2 block">Team Name *</label>
+                <Input
+                  value={teamName}
+                  onChange={(e) => setTeamName(e.target.value)}
+                  placeholder="e.g., Celadon Due Diligence Team"
+                  className="bg-secondary/30"
+                />
+              </div>
+
+              {/* Team Purpose */}
+              <div className="mb-6">
+                <label className="text-sm font-medium text-muted-foreground mb-2 block">Team Purpose</label>
+                <Input
+                  value={teamPurpose}
+                  onChange={(e) => setTeamPurpose(e.target.value)}
+                  placeholder="e.g., Financial analysis and risk assessment"
+                  className="bg-secondary/30"
+                />
+              </div>
               
               {/* Selected Experts */}
               <div className="mb-6">
@@ -430,11 +552,15 @@ export default function AISMEsPage() {
               <Button 
                 className="w-full gap-2" 
                 size="lg"
-                disabled={selectedExperts.length === 0 || !taskDescription.trim()}
+                disabled={selectedExperts.length === 0 || !teamName.trim() || createTeamMutation.isPending}
                 onClick={submitTaskToTeam}
               >
-                <Sparkles className="w-4 h-4" />
-                Assign Task to Team
+                {createTeamMutation.isPending ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  <Sparkles className="w-4 h-4" />
+                )}
+                {createTeamMutation.isPending ? 'Creating Team...' : 'Create Team & Assign Task'}
               </Button>
             </div>
           </div>
