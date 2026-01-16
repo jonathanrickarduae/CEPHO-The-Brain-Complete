@@ -13,6 +13,7 @@ import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
 import { PageHeader } from "@/components/PageHeader";
 import { CircularProgress } from "@/components/ProgressIndicator";
+import { QualityGateApprovalQueue } from "@/components/QualityGateApproval";
 import { useDigitalTwinChat } from "@/hooks/useDigitalTwinChat";
 import { useVoiceInput } from "@/hooks/useVoiceInput";
 import { useIsMobile } from "@/hooks/useMobile";
@@ -121,7 +122,7 @@ const QA_STATUS_CONFIG: Record<QAStatus, { label: string; color: string; icon: t
   rejected: { label: 'Needs Revision', color: 'text-red-400 bg-red-500/10', icon: AlertCircle }
 };
 
-type ViewMode = 'chat' | 'tasks' | 'training';
+type ViewMode = 'chat' | 'tasks' | 'training' | 'quality_gates';
 
 export default function ChiefOfStaff() {
   const search = useSearch();
@@ -311,6 +312,7 @@ export default function ChiefOfStaff() {
           {[
             { id: 'chat', label: 'Chat', icon: MessageSquare },
             { id: 'tasks', label: 'Tasks', icon: FolderKanban, badge: taskStats.active + taskStats.review },
+            { id: 'quality_gates', label: 'Quality Gates', icon: Shield, badge: 1 },
             { id: 'training', label: 'Training', icon: GraduationCap },
           ].map(tab => (
             <button
@@ -657,6 +659,14 @@ export default function ChiefOfStaff() {
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+        )}
+
+        {viewMode === 'quality_gates' && (
+          <div className="flex-1 overflow-y-auto">
+            <div className="max-w-5xl mx-auto p-4 sm:p-6">
+              <QualityGateApprovalQueue isChiefOfStaff={true} />
             </div>
           </div>
         )}
