@@ -239,17 +239,20 @@ export default function DigitalTwin() {
               </div>
             ))}
             
-            {/* Typing indicator */}
+            {/* Enhanced Typing/Thinking indicator */}
             {isTyping && (
-              <div className="flex gap-3">
-                <div className="shrink-0 w-7 h-7 rounded-full flex items-center justify-center bg-primary/20 border border-primary/30">
-                  <Fingerprint className="w-3.5 h-3.5 text-primary" />
+              <div className="flex gap-3 items-start">
+                <div className="shrink-0 w-8 h-8 rounded-full flex items-center justify-center bg-gradient-to-br from-primary/30 to-fuchsia-500/30 border border-primary/40 animate-pulse">
+                  <Fingerprint className="w-4 h-4 text-primary" />
                 </div>
-                <div className="bg-card/40 border border-white/5 rounded-2xl px-4 py-2.5">
-                  <div className="flex gap-1">
-                    <div className="w-1.5 h-1.5 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                    <div className="w-1.5 h-1.5 bg-primary rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                    <div className="w-1.5 h-1.5 bg-primary rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                <div className="bg-card/60 border border-primary/20 rounded-2xl px-4 py-3 shadow-lg shadow-primary/5">
+                  <div className="flex items-center gap-3">
+                    <div className="flex gap-1.5">
+                      <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                      <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                      <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                    </div>
+                    <span className="text-xs text-muted-foreground animate-pulse">Chief of Staff is thinking...</span>
                   </div>
                 </div>
               </div>
@@ -279,16 +282,27 @@ export default function DigitalTwin() {
           <div className="max-w-3xl mx-auto">
             {/* Input container */}
             <div className="bg-secondary/30 border border-white/10 rounded-2xl overflow-hidden">
-              {/* Text input */}
+              {/* Typing indicator */}
+              {isTyping && (
+                <div className="px-4 py-2 border-b border-white/5 flex items-center gap-2">
+                  <div className="flex gap-1">
+                    <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                    <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                    <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                  </div>
+                  <span className="text-xs text-muted-foreground">Chief of Staff is thinking...</span>
+                </div>
+              )}
+              {/* Text input - increased height for better UX */}
               <textarea
                 ref={inputRef}
                 value={messageInput}
                 onChange={handleInputChange}
                 onKeyDown={handleKeyDown}
                 placeholder="Message Chief of Staff..."
-                rows={1}
-                className="w-full px-4 py-3 bg-transparent resize-none focus:outline-none text-sm placeholder:text-muted-foreground/60"
-                style={{ minHeight: '44px', maxHeight: '120px' }}
+                rows={2}
+                className="w-full px-4 py-4 bg-transparent resize-none focus:outline-none text-sm placeholder:text-muted-foreground/60"
+                style={{ minHeight: '60px', maxHeight: '120px' }}
               />
               
               {/* Action bar */}
@@ -309,14 +323,14 @@ export default function DigitalTwin() {
                   </button>
                   <button
                     onClick={toggleRecording}
-                    className={`p-2 rounded-lg transition-colors ${
+                    className={`p-3 rounded-xl transition-all ${
                       isListening 
-                        ? "text-red-400 bg-red-500/20" 
-                        : "text-primary/70 hover:text-primary hover:bg-primary/10"
+                        ? "text-red-400 bg-red-500/20 animate-pulse scale-110" 
+                        : "text-primary hover:text-primary hover:bg-primary/20 hover:scale-105"
                     }`}
                     title={isListening ? "Stop recording" : "Voice input"}
                   >
-                    {isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
+                    {isListening ? <MicOff className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
                   </button>
                   <button
                     className="p-2 rounded-lg text-primary/70 hover:text-primary hover:bg-primary/10 transition-colors"

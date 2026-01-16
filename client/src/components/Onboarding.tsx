@@ -124,6 +124,33 @@ export function OnboardingModal({ isOpen, onComplete, onSkip }: OnboardingModalP
     }
   }, [step.highlight]);
 
+  // Keyboard navigation
+  useEffect(() => {
+    if (!isOpen) return;
+    
+    const handleKeyDown = (e: KeyboardEvent) => {
+      switch (e.key) {
+        case 'ArrowRight':
+        case 'Enter':
+        case ' ':
+          e.preventDefault();
+          goToNext();
+          break;
+        case 'ArrowLeft':
+          e.preventDefault();
+          if (!isFirstStep) goToPrev();
+          break;
+        case 'Escape':
+          e.preventDefault();
+          onSkip();
+          break;
+      }
+    };
+    
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, isFirstStep, isLastStep]);
+
   const goToNext = () => {
     if (isLastStep) {
       onComplete();

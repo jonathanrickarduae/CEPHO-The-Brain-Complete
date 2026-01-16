@@ -14,7 +14,7 @@ import {
   FolderOpen, FileText, Image, BarChart3, Presentation, Search,
   Plus, Upload, Download, Clock, LayoutGrid, List,
   ChevronRight, ChevronLeft, File, ArrowUpRight, BookOpen,
-  MessageSquare, User, Trash2, Calendar, Loader2, Eye
+  MessageSquare, User, Trash2, Calendar, Loader2, Eye, FolderPlus
 } from 'lucide-react';
 
 // Project data with brand colours (matching Workflow)
@@ -269,6 +269,14 @@ export default function Library() {
                 >
                   {doc.status}
                 </Badge>
+                <Button 
+                  variant="ghost" 
+                  size="icon"
+                  className="hover:bg-pink-500/20 hover:text-pink-400"
+                  onClick={() => toast.info(`Preview: ${doc.name}`, { description: 'Document preview coming soon' })}
+                >
+                  <Eye className="w-4 h-4" />
+                </Button>
                 <Button variant="ghost" size="icon">
                   <Download className="w-4 h-4" />
                 </Button>
@@ -342,6 +350,15 @@ export default function Library() {
                   <List className="w-4 h-4" />
                 </button>
               </div>
+              <Button 
+                size="sm" 
+                variant="outline" 
+                className="gap-2"
+                onClick={() => toast.info('Create Folder', { description: 'Folder organization coming soon' })}
+              >
+                <FolderPlus className="w-4 h-4" />
+                New Folder
+              </Button>
               <Button size="sm" className="gap-2 bg-gradient-to-r from-pink-500 to-rose-500 hover:opacity-90">
                 <Upload className="w-4 h-4" />
                 Upload

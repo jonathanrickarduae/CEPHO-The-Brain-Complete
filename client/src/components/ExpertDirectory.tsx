@@ -583,16 +583,20 @@ export function ExpertDirectory({ onSelectExpert, onBack }: ExpertDirectoryProps
             </div>
           ) : (
             <>
-              {/* Recommended For You Section */}
+              {/* Recommended For You Section - Made More Prominent */}
               {!selectedCategory && !searchQuery && recommendations && recommendations.length > 0 && (
-                <div className="mb-6">
-                  <div className="flex items-center justify-between mb-3">
-                    <h2 className="text-lg font-semibold text-foreground flex items-center gap-2">
-                      <Zap className="w-5 h-5 text-fuchsia-400" />
-                      Recommended For You
+                <div className="mb-8 p-6 rounded-2xl bg-gradient-to-br from-fuchsia-500/10 via-purple-500/5 to-pink-500/10 border-2 border-fuchsia-500/30">
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
+                      <div className="p-2 rounded-xl bg-fuchsia-500/20 animate-pulse">
+                        <Zap className="w-6 h-6 text-fuchsia-400" />
+                      </div>
+                      <span>Recommended For You</span>
+                      <Badge className="bg-fuchsia-500/20 text-fuchsia-400 border-0 ml-2">AI-Powered</Badge>
                     </h2>
+                    <span className="text-sm text-muted-foreground">Based on your consultation history</span>
                   </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
                     {recommendations.map((rec) => {
                       // Find the actual expert from AI_EXPERTS
                       const expert = AI_EXPERTS.find(e => 

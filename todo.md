@@ -3426,3 +3426,24 @@
 - [x] Black background with pink accents and white text only
 - [x] Override text-gray-300/400/500 classes for better visibility
 - [x] Ensure proper contrast ratios for accessibility
+
+
+## Chief of Staff UI/UX Recommendations (Jan 17, 2026)
+
+### High Priority
+- [x] Add notification badges to dashboard cards for unread/pending items
+- [x] Increase chat input height in Chief of Staff interface (minimum 60px)
+- [x] Add deadline warning indicators to Workflow projects
+- [x] Make "Recommended For You" section more prominent on AI-SMEs page
+
+### Medium Priority
+- [x] Add typing/thinking indicator for AI responses
+- [x] Enhance card hover states across the application
+- [x] Add document preview capability in Library
+- [x] Increase voice input button size for accessibility
+
+##### Low Priority
+- [x] Add keyboard navigation to onboarding (Arrow keys, Enter, Escape)
+- [x] Implement settings search functionality
+- [x] Add Kanban view option for Workflow
+- [x] Add folder organization button to Library

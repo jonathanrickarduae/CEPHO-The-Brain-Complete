@@ -2,8 +2,9 @@ import { useState } from 'react';
 import { 
   Settings as SettingsIcon, User, Calendar, Database, 
   Bell, Shield, Palette, CreditCard, Users,
-  ChevronRight, Check
+  ChevronRight, Check, Search
 } from 'lucide-react';
+import { Input } from '@/components/ui/input';
 import { PageHeader } from '@/components/Breadcrumbs';
 import { ThemeSelector, ThemeProvider } from '@/components/ThemeToggle';
 import { CalendarIntegration } from '@/components/CalendarIntegration';
@@ -25,6 +26,7 @@ type SettingsTab = 'profile' | 'integrations' | 'subscriptions' | 'signatures' |
 
 export default function Settings() {
   const [activeTab, setActiveTab] = useState<SettingsTab>('profile');
+  const [searchQuery, setSearchQuery] = useState('');
 
   const tabs = [
     { id: 'profile' as const, label: 'Profile', icon: User },
@@ -64,8 +66,21 @@ export default function Settings() {
         <div className="flex flex-col lg:flex-row gap-6">
           {/* Sidebar */}
           <div className="lg:w-64 flex-shrink-0">
+            {/* Settings Search */}
+            <div className="relative mb-4">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <Input
+                placeholder="Search settings..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-9 bg-gray-800 border-gray-700"
+              />
+            </div>
             <nav className="bg-gray-800 rounded-xl border border-gray-700 overflow-hidden">
-              {tabs.map((tab) => (
+              {tabs.filter(tab => 
+                searchQuery === '' || 
+                tab.label.toLowerCase().includes(searchQuery.toLowerCase())
+              ).map((tab) => (
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
