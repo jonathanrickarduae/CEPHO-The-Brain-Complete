@@ -7,13 +7,16 @@ import { ThemeProvider } from "./contexts/ThemeContext";
 import BrainLayout from "./components/BrainLayout";
 import Landing from "./pages/Landing";
 import Dashboard from "@/pages/Dashboard";
+import NexusDashboard from "@/pages/NexusDashboard";
 import DigitalTwin from "@/pages/DigitalTwin";
+import ChiefOfStaff from "@/pages/ChiefOfStaff";
 import Workflow from "@/pages/Workflow";
 import Library from "./pages/Library";
 import Statistics from "./pages/Statistics";
 import Vault from "./pages/Vault";
 import DailyBrief from "./pages/DailyBrief";
 import AIExperts from "./pages/AIExperts";
+import AISMEsPage from "./pages/AISMEsPage";
 import EveningReview from "./pages/EveningReview";
 import AITeam from "./pages/AITeam";
 import Waitlist from "./pages/Waitlist";
@@ -57,7 +60,7 @@ function Router() {
     <Switch>
       {/* Root goes directly to Dashboard - no landing page friction */}
       <Route path="/">
-        <WithLayout><Dashboard /></WithLayout>
+        <WithLayout><NexusDashboard /></WithLayout>
       </Route>
       
       {/* Waitlist page without sidebar */}
@@ -65,10 +68,10 @@ function Router() {
       
       {/* Dashboard pages with sidebar */}
       <Route path="/dashboard">
-        <WithLayout><Dashboard /></WithLayout>
+        <WithLayout><NexusDashboard /></WithLayout>
       </Route>
       <Route path="/digital-twin">
-        <WithLayout><DigitalTwin /></WithLayout>
+        <WithLayout><ChiefOfStaff /></WithLayout>
       </Route>
       <Route path="/chief-of-staff-role">
         <WithLayout><ChiefOfStaffRole /></WithLayout>
@@ -89,7 +92,7 @@ function Router() {
         <WithLayout><DailyBrief /></WithLayout>
       </Route>
       <Route path="/ai-experts">
-        <WithLayout><AIExperts /></WithLayout>
+        <WithLayout><AISMEsPage /></WithLayout>
       </Route>
       <Route path="/evening-review">
         <WithLayout><EveningReview /></WithLayout>
@@ -157,7 +160,7 @@ function Router() {
 function App() {
   return (
     <ErrorBoundary>
-      <ThemeProvider defaultTheme="dark" switchable>
+      <ThemeProvider defaultTheme="light" switchable>
         <GovernanceProvider>
           <AIRouterProvider>
             <DailyCycleProvider>

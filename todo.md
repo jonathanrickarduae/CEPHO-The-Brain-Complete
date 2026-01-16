@@ -360,6 +360,57 @@
 - [x] Add RAG status tracker for document processing
 - [x] Update Blueprint Library Index with new process
 
+
+## UI/UX Comprehensive Redesign (Jan 16, 2026)
+
+### Global Fixes
+- [x] Force light mode as default on all pages
+- [x] Add consistent CEPHO header (icon + section name) to all pages
+- [x] Follow Nexus header protocol across all sections
+
+### AI SMEs Page Redesign
+- [x] Redesign for team assembly workflow (primary use case)
+- [x] Add ability to engage with individual AI SME to build team
+- [x] Add document review functionality for expert teams
+- [x] Improve expert bio viewing experience
+- [x] Create clear team composition interface
+
+### Chief of Staff Major Redesign
+- [x] Add task tracking dashboard with progress metrics
+- [x] Show tasks being worked on with status updates
+- [x] Implement project-based conversation threads
+- [x] Allow multiple concurrent conversations organized by project
+- [x] Keep training section integrated
+- [x] Add clear metrics/KPIs display
+
+### Chief of Staff QA Protocol (Critical)
+- [x] Dual AI verification system (CoS review + secondary AI cross-check)
+- [x] QA status visible on each task (Pending → CoS Reviewed → Secondary AI Verified → Approved)
+- [x] 10/10 quality standard - nothing passes without CoS satisfaction
+- [x] SME feedback loop - CoS provides feedback to individual experts based on QA
+- [x] Learning system - SMEs get smarter from feedback
+- [x] CoS learns optimal prompting for each SME expert
+- [x] Link QA results to workflow/project view
+
+### Manus-Style Interface Pattern (All Pages)
+- [x] Fixed voice input at bottom - no scrolling to reach it
+- [x] Conversation flows upward - scroll within conversation area only
+- [x] Consistent voice button placement on Nexus and Chief of Staff
+- [x] No page scroll - everything fits on screen
+- [x] Only conversation content scrolls, not the page
+
+### Workflow Page UI Review
+- [x] Review and fix organizational structure consistency
+- [x] Ensure UI matches other sections
+
+### Library Page UI Review
+- [x] Review and fix organizational structure consistency
+- [x] Ensure UI matches other sections
+
+### Central Hub (Nexus) Review
+- [x] Ensure light mode consistency
+- [x] Review and improve design
+
 ### Wellness Score Integration
 - [x] Add wellness score card to Dashboard
 - [x] Create wellness score detail page in Statistics

@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { 
   Activity, AlertTriangle, CheckCircle2, Clock, ChevronRight,
-  Filter, LayoutGrid, List, MoreHorizontal, Plus, ArrowUpRight
+  Filter, LayoutGrid, List, MoreHorizontal, Plus, ArrowUpRight, FolderKanban
 } from "lucide-react";
+import { PageHeader } from "@/components/PageHeader";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -112,13 +113,14 @@ export default function Workflow() {
   };
 
   return (
-    <div className="min-h-screen bg-background p-6">
+    <div className="h-[calc(100vh-56px)] md:h-screen flex flex-col bg-background">
       {/* Header */}
-      <div className="flex items-center justify-between mb-8">
-        <div>
-          <h1 className="text-2xl font-semibold text-foreground">Workflow</h1>
-          <p className="text-muted-foreground text-sm mt-1">Track progress across all projects</p>
-        </div>
+      <PageHeader 
+        icon={FolderKanban} 
+        title="Workflow"
+        subtitle="Track progress across all projects"
+        iconColor="text-emerald-400"
+      >
         <div className="flex items-center gap-3">
           <div className="flex items-center bg-card border border-border rounded-lg p-1">
             <button 
@@ -139,7 +141,10 @@ export default function Workflow() {
             New Project
           </Button>
         </div>
-      </div>
+      </PageHeader>
+
+      {/* Main Content */}
+      <div className="flex-1 overflow-y-auto p-6">
 
       {/* Stats Row */}
       <div className="grid grid-cols-4 gap-4 mb-8">
@@ -331,6 +336,7 @@ export default function Workflow() {
           </table>
         </div>
       )}
+      </div>
     </div>
   );
 }

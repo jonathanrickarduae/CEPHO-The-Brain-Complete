@@ -3,10 +3,11 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { PageHeader } from '@/components/PageHeader';
 import { 
   FolderOpen, FileText, Image, BarChart3, Presentation, Search,
   Plus, Upload, Download, Clock, LayoutGrid, List,
-  ChevronRight, ChevronLeft, File, ArrowUpRight
+  ChevronRight, ChevronLeft, File, ArrowUpRight, BookOpen
 } from 'lucide-react';
 
 // Project data with brand colours (matching Workflow)
@@ -200,13 +201,14 @@ export default function Library() {
 
   // Main library view
   return (
-    <div className="min-h-screen bg-background p-6">
+    <div className="h-[calc(100vh-56px)] md:h-screen flex flex-col bg-background">
       {/* Header */}
-      <div className="flex items-center justify-between mb-8">
-        <div>
-          <h1 className="text-2xl font-semibold text-foreground">Library</h1>
-          <p className="text-muted-foreground text-sm mt-1">All your project files in one place</p>
-        </div>
+      <PageHeader 
+        icon={BookOpen} 
+        title="Library"
+        subtitle="All your project files in one place"
+        iconColor="text-pink-400"
+      >
         <div className="flex items-center gap-3">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
@@ -236,9 +238,11 @@ export default function Library() {
             Upload
           </Button>
         </div>
-      </div>
+      </PageHeader>
 
-      {/* Stats Row */}
+      {/* Main Content */}
+      <div className="flex-1 overflow-y-auto p-6">
+        {/* Stats Row */}
       <div className="grid grid-cols-4 gap-4 mb-8">
         <div className="bg-card border border-border rounded-xl p-4">
           <div className="text-3xl font-bold text-foreground">{projects.length}</div>
@@ -349,6 +353,7 @@ export default function Library() {
           </table>
         </div>
       )}
+      </div>
     </div>
   );
 }

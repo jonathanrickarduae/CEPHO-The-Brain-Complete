@@ -5,8 +5,9 @@ import {
   Inbox, Send, Archive, Trash2, Star, Clock, CheckCircle2,
   Video, FileText, Image, MoreHorizontal, ExternalLink,
   Cloud, HardDrive, Database, Link2, Bell, Shield,
-  Smartphone, Globe, Zap, ArrowUpRight, X
+  Smartphone, Globe, Zap, ArrowUpRight, X, LayoutDashboard
 } from 'lucide-react';
+import { PageHeader } from '@/components/PageHeader';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
@@ -100,60 +101,53 @@ export default function CentralHub() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-900 to-gray-800">
+    <div className="h-[calc(100vh-56px)] md:h-screen flex flex-col bg-background">
       {/* Header */}
-      <div className="border-b border-white/10 bg-card/30 backdrop-blur-sm sticky top-0 z-10">
-        <div className="max-w-7xl mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl font-bold text-foreground flex items-center gap-3">
-                <div className="p-2 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-xl">
-                  <Globe className="w-6 h-6 text-purple-400" />
-                </div>
-                Central Hub
-              </h1>
-              <p className="text-sm text-muted-foreground mt-1">
-                Your unified command center for all communications and files
-              </p>
-            </div>
-            <div className="flex items-center gap-3">
-              <Badge variant="outline" className="bg-emerald-500/10 text-emerald-400 border-emerald-500/30">
-                {connectedCount} of {integrations.length} connected
-              </Badge>
-              <Button variant="outline" size="sm" className="gap-2">
-                <RefreshCw className="w-4 h-4" />
-                Sync All
-              </Button>
-            </div>
-          </div>
+      <PageHeader 
+        icon={LayoutDashboard} 
+        title="Central Hub"
+        subtitle="Your unified command center"
+        iconColor="text-purple-400"
+      >
+        <div className="flex items-center gap-3">
+          <Badge variant="outline" className="bg-emerald-500/10 text-emerald-400 border-emerald-500/30">
+            {connectedCount} of {integrations.length} connected
+          </Badge>
+          <Button variant="outline" size="sm" className="gap-2">
+            <RefreshCw className="w-4 h-4" />
+            Sync All
+          </Button>
+        </div>
+      </PageHeader>
 
-          {/* Tabs */}
-          <div className="flex gap-1 mt-4 overflow-x-auto pb-2">
-            {tabs.map(tab => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id as TabType)}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all whitespace-nowrap ${
-                  activeTab === tab.id
-                    ? 'bg-purple-500/20 text-purple-400 border border-purple-500/30'
-                    : 'text-muted-foreground hover:text-foreground hover:bg-secondary/50'
-                }`}
-              >
-                <tab.icon className="w-4 h-4" />
-                {tab.label}
-                {tab.badge && (
-                  <span className="px-1.5 py-0.5 text-xs bg-red-500 text-white rounded-full">
-                    {tab.badge}
-                  </span>
-                )}
-              </button>
-            ))}
-          </div>
+      {/* Tabs */}
+      <div className="shrink-0 border-b border-border bg-card/50 px-4">
+        <div className="max-w-7xl mx-auto flex gap-1 overflow-x-auto py-2">
+          {tabs.map(tab => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id as TabType)}
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all whitespace-nowrap ${
+                activeTab === tab.id
+                  ? 'bg-primary/10 text-primary border border-primary/30'
+                  : 'text-muted-foreground hover:text-foreground hover:bg-secondary/50'
+              }`}
+            >
+              <tab.icon className="w-4 h-4" />
+              {tab.label}
+              {tab.badge && (
+                <span className="px-1.5 py-0.5 text-xs bg-red-500 text-white rounded-full">
+                  {tab.badge}
+                </span>
+              )}
+            </button>
+          ))}
         </div>
       </div>
 
       {/* Content */}
-      <div className="max-w-7xl mx-auto px-6 py-6">
+      <div className="flex-1 overflow-y-auto">
+        <div className="max-w-7xl mx-auto px-6 py-6">
         {/* Overview Tab */}
         {activeTab === 'overview' && (
           <div className="space-y-6">
@@ -685,6 +679,7 @@ export default function CentralHub() {
           </div>
         </div>
       )}
+      </div>
     </div>
   );
 }
