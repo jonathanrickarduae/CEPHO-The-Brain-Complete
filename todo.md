@@ -350,6 +350,16 @@
 - [x] Connect referral system to database (WaitlistReferral.tsx)
 - [x] Add invite modal to sidebar/header (WaitlistReferral.tsx)
 
+
+## Data Room Document Management Process
+
+- [x] Create secure Data Room Document Management Process
+- [x] Include intake methods for photos, screenshots, downloaded documents
+- [x] Add security guidelines prohibiting automated third-party data room access
+- [x] Create document classification system (AMPORA branded vs external)
+- [x] Add RAG status tracker for document processing
+- [x] Update Blueprint Library Index with new process
+
 ### Wellness Score Integration
 - [x] Add wellness score card to Dashboard
 - [x] Create wellness score detail page in Statistics
@@ -3018,3 +3028,15 @@
 - [x] Remove daily quotes from Nexus landing page
 - [x] Update bottom nav labels: Brief→Signal, Experts→AI SMEs, Twin→Chief of Staff
 
+
+
+## iDeals Data Room Setup (January 16, 2025)
+- [ ] Create iDeals folder structure and document mapping
+- [ ] Access iDeals platform
+- [ ] Populate corporate documents into data room
+
+
+## Leadership Thinking Styles Module (January 16, 2025)
+- [x] Create Leadership Thinking Styles module for Chief of Staff
+- [x] Update Digital Twin questionnaire with leadership dimensions
+- [x] Incorporate MIT, Harvard, NASA, McKinsey, CEO, Entrepreneur thinking styles

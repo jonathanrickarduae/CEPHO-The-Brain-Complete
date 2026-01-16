@@ -55,6 +55,16 @@ The SME Success DNA document is the absolute base plate for all Project Genesis 
 
 ---
 
+## Process Documents
+
+| Document ID | Document | Purpose | Location |
+|-------------|----------|---------|----------|
+| CEPHO-BP-012 | **Due Diligence Process Guide** | Complete due diligence framework and checklist | `/blueprints/CEPHO-BP-012-DUE_DILIGENCE_PROCESS_GUIDE.pdf` |
+| CEPHO-BP-013 | **Digital Twin Profile** | User decision-making patterns and preferences | `/blueprints/CEPHO-BP-013-DIGITAL_TWIN_PROFILE.md` |
+| CEPHO-BP-014 | **Data Room Document Management Process** | Secure protocols for third-party data room content | `/blueprints/CEPHO-BP-014-DATA_ROOM_DOCUMENT_MANAGEMENT_PROCESS.md` |
+
+---
+
 ## Case Studies
 
 | Case Study | Description | Location |
@@ -86,6 +96,19 @@ When starting a new project through Project Genesis:
 4. **Follow validation protocols** from Chief of Staff Validation Framework
 5. **Use status report template** for milestone updates
 6. **Reference research library** for best practices
+7. **For due diligence:** Follow CEPHO-BP-012 and CEPHO-BP-014 for secure document handling
+
+---
+
+## Security Notice: Third-Party Data Rooms
+
+**CRITICAL:** CEPHO (Manus AI) will **never** directly access third-party data rooms. All document intake must occur through user-provided materials only (downloads, screenshots, photos). See CEPHO-BP-014 for complete protocols.
+
+Prohibited activities include:
+- Automated login to data rooms
+- Scraping or bulk downloading
+- Using credentials on user's behalf
+- Simulating human behavior to mask automated access
 
 ---
 
@@ -93,5 +116,6 @@ When starting a new project through Project Genesis:
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 3.0 | Jan 16, 2026 | Added CEPHO-BP-012 (Due Diligence), CEPHO-BP-013 (Digital Twin Profile), CEPHO-BP-014 (Data Room Document Management) |
 | 2.0 | Jan 2026 | Added SME Success DNA document, 150 company research, 17 expert perspectives |
 | 1.0 | Jan 2026 | Initial library creation |
