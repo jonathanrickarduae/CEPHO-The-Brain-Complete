@@ -817,3 +817,44 @@
 .border-soft {
   border-color: rgba(255, 255, 255, 0.08);
 }
+
+
+/* ========================================
+   DARK THEME TEXT READABILITY OVERRIDES
+   ======================================== */
+
+/* Override gray text colors for better readability on dark backgrounds */
+/* text-gray-300 -> brighter white */
+.text-gray-300 {
+  color: oklch(0.85 0 0) !important;
+}
+
+/* text-gray-400 -> visible light gray */
+.text-gray-400 {
+  color: oklch(0.75 0 0) !important;
+}
+
+/* text-gray-500 -> readable medium gray */
+.text-gray-500 {
+  color: oklch(0.65 0 0) !important;
+}
+
+/* Ensure muted foreground is readable */
+.text-muted-foreground {
+  color: oklch(0.65 0 0) !important;
+}
+
+/* Secondary text that needs to be visible */
+.text-secondary {
+  color: oklch(0.8 0 0);
+}
+
+/* Subtle text that's still readable */
+.text-subtle {
+  color: oklch(0.6 0 0);
+}
+
+/* High contrast text for important info */
+.text-high-contrast {
+  color: oklch(0.95 0 0);
+}

@@ -3407,3 +3407,22 @@
 - [x] Track who reviewed which sections
 - [x] Activity logging for all actions
 - [x] Create shared review dashboard
+
+
+## UI/UX Dark Theme Fix (Jan 16, 2026)
+
+### Dark Theme Consistency
+- [x] Ensure fully dark theme across all panels (sidebar, main content, modals)
+- [x] Fix sidebar/index panel to use dark background instead of light
+- [x] Ensure consistent dark background color across entire application
+
+### Text Readability on Dark Backgrounds
+- [x] Fix grey text to white for readability on dark backgrounds
+- [x] Use white as primary text color on black/dark backgrounds
+- [x] Use pink only for accents and interactive elements
+- [x] Ensure all text is clearly visible against dark backgrounds
+
+### Color Scheme Enforcement
+- [x] Black background with pink accents and white text only
+- [x] Override text-gray-300/400/500 classes for better visibility
+- [x] Ensure proper contrast ratios for accessibility
