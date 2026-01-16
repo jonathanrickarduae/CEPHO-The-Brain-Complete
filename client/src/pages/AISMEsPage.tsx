@@ -105,7 +105,7 @@ export default function AISMEsPage() {
   const selectedExpert = showExpertDetail ? EXPERTS.find(e => e.id === showExpertDetail) : null;
 
   return (
-    <div className="h-[calc(100vh-56px)] md:h-screen flex flex-col bg-background">
+    <div className="h-[calc(100vh-56px)] md:h-screen flex flex-col bg-gradient-to-br from-gray-900 via-gray-900 to-gray-800">
       {/* Header */}
       <PageHeader 
         icon={Users} 
@@ -123,7 +123,7 @@ export default function AISMEsPage() {
       </PageHeader>
 
       {/* View Mode Tabs */}
-      <div className="shrink-0 border-b border-border bg-card/50 px-4">
+      <div className="shrink-0 border-b border-white/10 bg-white/5 px-4">
         <div className="max-w-7xl mx-auto flex gap-1">
           {[
             { id: 'browse', label: 'Browse Experts', icon: Search },
@@ -135,8 +135,8 @@ export default function AISMEsPage() {
               onClick={() => setViewMode(tab.id as ViewMode)}
               className={`flex items-center gap-2 px-4 py-3 text-sm font-medium transition-colors border-b-2 ${
                 viewMode === tab.id
-                  ? 'text-primary border-primary'
-                  : 'text-muted-foreground border-transparent hover:text-foreground'
+                  ? 'text-cyan-400 border-cyan-400'
+                  : 'text-gray-400 border-transparent hover:text-white'
               }`}
             >
               <tab.icon className="w-4 h-4" />
@@ -157,18 +157,18 @@ export default function AISMEsPage() {
           <>
             {/* Category Sidebar - Desktop */}
             {!isMobile && (
-              <div className="w-56 border-r border-border bg-card/30 overflow-y-auto">
+              <div className="w-56 border-r border-white/10 bg-white/5 overflow-y-auto">
                 <div className="p-3">
-                  <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Categories</h3>
+                  <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Categories</h3>
                   <div className="space-y-1">
                     {CATEGORIES.map(cat => (
                       <button
                         key={cat.id}
                         onClick={() => setSelectedCategory(cat.id)}
-                        className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm transition-colors ${
+                        className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm transition-colors ${
                           selectedCategory === cat.id
-                            ? 'bg-primary/10 text-primary'
-                            : 'hover:bg-secondary/50 text-muted-foreground hover:text-foreground'
+                            ? 'bg-gradient-to-r from-cyan-500/20 to-blue-500/20 text-cyan-400 border border-cyan-500/30'
+                            : 'hover:bg-white/5 text-gray-400 hover:text-white'
                         }`}
                       >
                         <span>{cat.label}</span>
@@ -194,16 +194,16 @@ export default function AISMEsPage() {
                       className="pl-10"
                     />
                   </div>
-                  <div className="flex items-center gap-1 border border-border rounded-lg p-1">
+                  <div className="flex items-center gap-1 border border-white/20 rounded-lg p-1">
                     <button
                       onClick={() => setViewStyle('grid')}
-                      className={`p-2 rounded ${viewStyle === 'grid' ? 'bg-primary/20 text-primary' : 'text-muted-foreground'}`}
+                      className={`p-2 rounded ${viewStyle === 'grid' ? 'bg-cyan-500/20 text-cyan-400' : 'text-gray-400'}`}
                     >
                       <Grid className="w-4 h-4" />
                     </button>
                     <button
                       onClick={() => setViewStyle('list')}
-                      className={`p-2 rounded ${viewStyle === 'list' ? 'bg-primary/20 text-primary' : 'text-muted-foreground'}`}
+                      className={`p-2 rounded ${viewStyle === 'list' ? 'bg-cyan-500/20 text-cyan-400' : 'text-gray-400'}`}
                     >
                       <List className="w-4 h-4" />
                     </button>
@@ -239,15 +239,15 @@ export default function AISMEsPage() {
                     return (
                       <div
                         key={expert.id}
-                        className={`p-4 bg-card/50 border rounded-xl transition-all cursor-pointer ${
+                        className={`p-4 bg-white/5 border-2 rounded-2xl transition-all cursor-pointer group ${
                           isSelected 
-                            ? 'border-primary bg-primary/5' 
-                            : 'border-border hover:border-primary/30'
+                            ? 'border-cyan-500/50 bg-gradient-to-br from-cyan-500/10 to-blue-500/10' 
+                            : 'border-white/10 hover:border-cyan-500/30'
                         } ${viewStyle === 'list' ? 'flex items-center gap-4' : ''}`}
                         onClick={() => setShowExpertDetail(expert.id)}
                       >
                         <div className={`flex items-center gap-3 ${viewStyle === 'grid' ? 'mb-3' : ''}`}>
-                          <div className={`w-12 h-12 rounded-full bg-gradient-to-br from-cyan-500/20 to-purple-500/20 flex items-center justify-center text-sm font-bold ${!expert.available ? 'opacity-50' : ''}`}>
+                          <div className={`w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-500/30 to-blue-500/30 flex items-center justify-center text-sm font-bold text-white group-hover:scale-110 transition-transform ${!expert.available ? 'opacity-50' : ''}`}>
                             {expert.avatar}
                           </div>
                           <div className="flex-1 min-w-0">
@@ -271,7 +271,7 @@ export default function AISMEsPage() {
                                   toggleExpertSelection(expert);
                                 }}
                                 className={`p-2 rounded-lg transition-colors ${
-                                  isSelected ? 'bg-primary text-primary-foreground' : 'bg-secondary hover:bg-secondary/80'
+                                  isSelected ? 'bg-gradient-to-r from-cyan-500 to-blue-500 text-white' : 'bg-white/10 hover:bg-white/20 text-gray-400'
                                 }`}
                               >
                                 {isSelected ? <CheckCircle2 className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
@@ -297,7 +297,7 @@ export default function AISMEsPage() {
                                   toggleExpertSelection(expert);
                                 }}
                                 className={`p-1.5 rounded-lg transition-colors ${
-                                  isSelected ? 'bg-primary text-primary-foreground' : 'bg-secondary hover:bg-secondary/80'
+                                  isSelected ? 'bg-gradient-to-r from-cyan-500 to-blue-500 text-white' : 'bg-white/10 hover:bg-white/20 text-gray-400'
                                 }`}
                               >
                                 {isSelected ? <CheckCircle2 className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
@@ -317,7 +317,7 @@ export default function AISMEsPage() {
         {viewMode === 'teams' && (
           <div className="flex-1 overflow-y-auto p-4 sm:p-6">
             <div className="max-w-4xl mx-auto">
-              <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-4">Active Teams</h3>
+              <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4">Active Teams</h3>
               
               {ACTIVE_TEAMS.length === 0 ? (
                 <div className="text-center py-12">
@@ -329,7 +329,7 @@ export default function AISMEsPage() {
               ) : (
                 <div className="space-y-4">
                   {ACTIVE_TEAMS.map(team => (
-                    <div key={team.id} className="p-4 bg-card/50 border border-border rounded-xl">
+                    <div key={team.id} className="p-5 bg-white/5 border-2 border-white/10 rounded-2xl hover:border-cyan-500/30 transition-all">
                       <div className="flex items-start justify-between mb-3">
                         <div>
                           <h4 className="font-medium">{team.name}</h4>

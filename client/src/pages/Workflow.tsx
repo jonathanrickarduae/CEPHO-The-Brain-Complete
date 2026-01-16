@@ -113,7 +113,7 @@ export default function Workflow() {
   };
 
   return (
-    <div className="h-[calc(100vh-56px)] md:h-screen flex flex-col bg-background">
+    <div className="h-[calc(100vh-56px)] md:h-screen flex flex-col bg-gradient-to-br from-gray-900 via-gray-900 to-gray-800">
       {/* Header */}
       <PageHeader 
         icon={FolderKanban} 
@@ -122,21 +122,21 @@ export default function Workflow() {
         iconColor="text-emerald-400"
       >
         <div className="flex items-center gap-3">
-          <div className="flex items-center bg-card border border-border rounded-lg p-1">
+          <div className="flex items-center bg-white/5 border border-white/20 rounded-lg p-1">
             <button 
               onClick={() => setViewMode('grid')}
-              className={`p-2 rounded transition-colors ${viewMode === 'grid' ? 'bg-secondary text-foreground' : 'text-muted-foreground hover:text-foreground'}`}
+              className={`p-2 rounded transition-colors ${viewMode === 'grid' ? 'bg-emerald-500/20 text-emerald-400' : 'text-gray-400 hover:text-white'}`}
             >
               <LayoutGrid className="w-4 h-4" />
             </button>
             <button 
               onClick={() => setViewMode('list')}
-              className={`p-2 rounded transition-colors ${viewMode === 'list' ? 'bg-secondary text-foreground' : 'text-muted-foreground hover:text-foreground'}`}
+              className={`p-2 rounded transition-colors ${viewMode === 'list' ? 'bg-emerald-500/20 text-emerald-400' : 'text-gray-400 hover:text-white'}`}
             >
               <List className="w-4 h-4" />
             </button>
           </div>
-          <Button size="sm" className="gap-2">
+          <Button size="sm" className="gap-2 bg-gradient-to-r from-emerald-500 to-green-500 hover:opacity-90">
             <Plus className="w-4 h-4" />
             New Project
           </Button>
@@ -148,30 +148,30 @@ export default function Workflow() {
 
       {/* Stats Row */}
       <div className="grid grid-cols-4 gap-4 mb-8">
-        <div className="bg-card border border-border rounded-xl p-4">
-          <div className="text-3xl font-bold text-foreground">{stats.total}</div>
-          <div className="text-sm text-muted-foreground">Total Projects</div>
+        <div className="bg-white/5 border-2 border-white/10 rounded-2xl p-4">
+          <div className="text-3xl font-bold text-white">{stats.total}</div>
+          <div className="text-sm text-gray-400">Total Projects</div>
         </div>
-        <div className="bg-card border border-border rounded-xl p-4">
+        <div className="bg-gradient-to-br from-emerald-500/10 to-green-500/10 border-2 border-emerald-500/30 rounded-2xl p-4">
           <div className="flex items-center gap-2">
-            <div className="w-2 h-2 rounded-full bg-green-500" />
-            <span className="text-3xl font-bold text-green-400">{stats.onTrack}</span>
+            <div className="w-2 h-2 rounded-full bg-emerald-500" />
+            <span className="text-3xl font-bold text-emerald-400">{stats.onTrack}</span>
           </div>
-          <div className="text-sm text-muted-foreground">On Track</div>
+          <div className="text-sm text-gray-400">On Track</div>
         </div>
-        <div className="bg-card border border-border rounded-xl p-4">
+        <div className="bg-gradient-to-br from-amber-500/10 to-orange-500/10 border-2 border-amber-500/30 rounded-2xl p-4">
           <div className="flex items-center gap-2">
             <div className="w-2 h-2 rounded-full bg-amber-500" />
             <span className="text-3xl font-bold text-amber-400">{stats.atRisk}</span>
           </div>
-          <div className="text-sm text-muted-foreground">At Risk</div>
+          <div className="text-sm text-gray-400">At Risk</div>
         </div>
-        <div className="bg-card border border-border rounded-xl p-4">
+        <div className="bg-gradient-to-br from-red-500/10 to-rose-500/10 border-2 border-red-500/30 rounded-2xl p-4">
           <div className="flex items-center gap-2">
             <div className="w-2 h-2 rounded-full bg-red-500" />
             <span className="text-3xl font-bold text-red-400">{stats.blocked}</span>
           </div>
-          <div className="text-sm text-muted-foreground">Blocked</div>
+          <div className="text-sm text-gray-400">Blocked</div>
         </div>
       </div>
 
@@ -181,10 +181,10 @@ export default function Workflow() {
           <button
             key={status}
             onClick={() => setFilterStatus(status)}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+            className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${
               filterStatus === status 
-                ? 'bg-primary text-primary-foreground' 
-                : 'bg-card border border-border text-muted-foreground hover:text-foreground hover:bg-secondary'
+                ? 'bg-gradient-to-r from-emerald-500 to-green-500 text-white' 
+                : 'bg-white/5 border border-white/10 text-gray-400 hover:text-white hover:bg-white/10'
             }`}
           >
             {status === 'all' ? 'All' : getStatusLabel(status)}
@@ -200,7 +200,7 @@ export default function Workflow() {
             return (
               <div
                 key={project.id}
-                className="bg-card border border-border rounded-xl p-5 hover:border-primary/50 transition-all cursor-pointer group"
+                className="bg-white/5 border-2 border-white/10 rounded-2xl p-5 hover:border-emerald-500/50 transition-all cursor-pointer group"
               >
                 {/* Project Header */}
                 <div className="flex items-start justify-between mb-4">

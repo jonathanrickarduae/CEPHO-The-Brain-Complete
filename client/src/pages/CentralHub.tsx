@@ -101,7 +101,7 @@ export default function CentralHub() {
   };
 
   return (
-    <div className="h-[calc(100vh-56px)] md:h-screen flex flex-col bg-background">
+    <div className="h-[calc(100vh-56px)] md:h-screen flex flex-col bg-gradient-to-br from-gray-900 via-gray-900 to-gray-800">
       {/* Header */}
       <PageHeader 
         icon={LayoutDashboard} 
@@ -121,16 +121,16 @@ export default function CentralHub() {
       </PageHeader>
 
       {/* Tabs */}
-      <div className="shrink-0 border-b border-border bg-card/50 px-4">
+      <div className="shrink-0 border-b border-white/10 bg-white/5 px-4">
         <div className="max-w-7xl mx-auto flex gap-1 overflow-x-auto py-2">
           {tabs.map(tab => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id as TabType)}
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all whitespace-nowrap ${
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all whitespace-nowrap ${
                 activeTab === tab.id
-                  ? 'bg-primary/10 text-primary border border-primary/30'
-                  : 'text-muted-foreground hover:text-foreground hover:bg-secondary/50'
+                  ? 'bg-gradient-to-r from-purple-500/20 to-fuchsia-500/20 text-purple-400 border border-purple-500/30'
+                  : 'text-gray-400 hover:text-white hover:bg-white/5'
               }`}
             >
               <tab.icon className="w-4 h-4" />
@@ -153,7 +153,7 @@ export default function CentralHub() {
           <div className="space-y-6">
             {/* Quick Stats */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <div className="p-4 bg-card/50 rounded-xl border border-white/10">
+              <div className="p-4 bg-white/5 rounded-2xl border-2 border-white/10 hover:border-purple-500/30 transition-all">
                 <div className="flex items-center gap-3">
                   <div className="p-2 bg-blue-500/20 rounded-lg">
                     <Mail className="w-5 h-5 text-blue-400" />
@@ -164,7 +164,7 @@ export default function CentralHub() {
                   </div>
                 </div>
               </div>
-              <div className="p-4 bg-card/50 rounded-xl border border-white/10">
+              <div className="p-4 bg-white/5 rounded-2xl border-2 border-white/10 hover:border-purple-500/30 transition-all">
                 <div className="flex items-center gap-3">
                   <div className="p-2 bg-purple-500/20 rounded-lg">
                     <Calendar className="w-5 h-5 text-purple-400" />
@@ -175,7 +175,7 @@ export default function CentralHub() {
                   </div>
                 </div>
               </div>
-              <div className="p-4 bg-card/50 rounded-xl border border-white/10">
+              <div className="p-4 bg-white/5 rounded-2xl border-2 border-white/10 hover:border-purple-500/30 transition-all">
                 <div className="flex items-center gap-3">
                   <div className="p-2 bg-emerald-500/20 rounded-lg">
                     <MessageSquare className="w-5 h-5 text-emerald-400" />
@@ -186,7 +186,7 @@ export default function CentralHub() {
                   </div>
                 </div>
               </div>
-              <div className="p-4 bg-card/50 rounded-xl border border-white/10">
+              <div className="p-4 bg-white/5 rounded-2xl border-2 border-white/10 hover:border-purple-500/30 transition-all">
                 <div className="flex items-center gap-3">
                   <div className="p-2 bg-orange-500/20 rounded-lg">
                     <FolderOpen className="w-5 h-5 text-orange-400" />
@@ -200,7 +200,7 @@ export default function CentralHub() {
             </div>
 
             {/* Integration Status */}
-            <div className="bg-card/50 rounded-xl border border-white/10 p-6">
+            <div className="bg-white/5 rounded-2xl border-2 border-white/10 p-6">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-lg font-semibold text-foreground">Connected Services</h2>
                 <Button variant="outline" size="sm" onClick={() => setActiveTab('settings')}>
@@ -498,7 +498,7 @@ export default function CentralHub() {
         {activeTab === 'productivity' && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Notta */}
-            <div className="bg-card/50 rounded-xl border border-white/10 p-6">
+            <div className="bg-white/5 rounded-2xl border-2 border-white/10 p-6">
               <div className="flex items-center gap-3 mb-4">
                 <span className="text-3xl">🎙️</span>
                 <div>
@@ -515,7 +515,7 @@ export default function CentralHub() {
             </div>
 
             {/* Grammarly */}
-            <div className="bg-card/50 rounded-xl border border-white/10 p-6">
+            <div className="bg-white/5 rounded-2xl border-2 border-white/10 p-6">
               <div className="flex items-center gap-3 mb-4">
                 <span className="text-3xl">✍️</span>
                 <div>
@@ -536,7 +536,7 @@ export default function CentralHub() {
         {/* Settings Tab */}
         {activeTab === 'settings' && (
           <div className="space-y-6">
-            <div className="bg-card/50 rounded-xl border border-white/10 p-6">
+            <div className="bg-white/5 rounded-2xl border-2 border-white/10 p-6">
               <h2 className="text-lg font-semibold text-foreground mb-4">Integration Settings</h2>
               <p className="text-sm text-muted-foreground mb-6">
                 Connect your accounts to access all your communications and files in one place. 
@@ -650,7 +650,7 @@ export default function CentralHub() {
       {/* Integration Modal */}
       {showIntegrationModal && selectedIntegration && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
-          <div className="bg-card border border-white/10 rounded-2xl p-6 max-w-md w-full mx-4">
+          <div className="bg-gray-900 border-2 border-purple-500/30 rounded-2xl p-6 max-w-md w-full mx-4">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-3">
                 <span className="text-3xl">{selectedIntegration.icon}</span>

@@ -210,7 +210,7 @@ export default function ChiefOfStaff() {
   const currentConversation = conversations.find(c => c.id === currentConversationId);
 
   return (
-    <div className="h-[calc(100vh-56px)] md:h-screen flex flex-col bg-background">
+    <div className="h-[calc(100vh-56px)] md:h-screen flex flex-col bg-gradient-to-br from-gray-900 via-gray-900 to-gray-800">
       {/* Header */}
       <PageHeader 
         icon={Fingerprint} 
@@ -231,7 +231,7 @@ export default function ChiefOfStaff() {
       </PageHeader>
 
       {/* View Mode Tabs */}
-      <div className="shrink-0 border-b border-border bg-card/50 px-4">
+      <div className="shrink-0 border-b border-white/10 bg-white/5 px-4">
         <div className="max-w-7xl mx-auto flex gap-1">
           {[
             { id: 'chat', label: 'Chat', icon: MessageSquare },
@@ -243,8 +243,8 @@ export default function ChiefOfStaff() {
               onClick={() => setViewMode(tab.id as ViewMode)}
               className={`flex items-center gap-2 px-4 py-3 text-sm font-medium transition-colors border-b-2 ${
                 viewMode === tab.id
-                  ? 'text-primary border-primary'
-                  : 'text-muted-foreground border-transparent hover:text-foreground'
+                  ? 'text-fuchsia-400 border-fuchsia-400'
+                  : 'text-gray-400 border-transparent hover:text-white'
               }`}
             >
               <tab.icon className="w-4 h-4" />
@@ -265,9 +265,9 @@ export default function ChiefOfStaff() {
           <>
             {/* Conversation Sidebar - Desktop only */}
             {!isMobile && (
-              <div className="w-64 border-r border-border bg-card/30 flex flex-col">
-                <div className="p-3 border-b border-border">
-                  <Button variant="outline" size="sm" className="w-full gap-2" onClick={() => {
+              <div className="w-64 border-r border-white/10 bg-white/5 flex flex-col">
+                <div className="p-3 border-b border-white/10">
+                  <Button variant="outline" size="sm" className="w-full gap-2 border-white/20 text-gray-300 hover:bg-white/5" onClick={() => {
                     clearHistory();
                     setCurrentConversationId('new-' + Date.now());
                     toast.success('New conversation started');
@@ -283,8 +283,8 @@ export default function ChiefOfStaff() {
                       onClick={() => setCurrentConversationId(conv.id)}
                       className={`w-full text-left p-3 rounded-lg transition-colors ${
                         currentConversationId === conv.id
-                          ? 'bg-primary/10 border border-primary/30'
-                          : 'hover:bg-secondary/50'
+                          ? 'bg-gradient-to-br from-fuchsia-500/10 to-purple-500/10 border border-fuchsia-500/30'
+                          : 'hover:bg-white/5'
                       }`}
                     >
                       <div className="flex items-center justify-between mb-1">
@@ -313,15 +313,15 @@ export default function ChiefOfStaff() {
                   {messages.map((msg) => (
                     <div key={msg.id} className={`flex gap-3 ${msg.from === "user" ? "justify-end" : ""}`}>
                       {msg.from === "twin" && (
-                        <div className="shrink-0 w-8 h-8 rounded-full flex items-center justify-center bg-primary/20 border border-primary/30">
+                        <div className="shrink-0 w-8 h-8 rounded-full flex items-center justify-center bg-gradient-to-r from-fuchsia-500/20 to-purple-500/20 border border-fuchsia-500/30">
                           <Fingerprint className="w-4 h-4 text-primary" />
                         </div>
                       )}
                       <div className={`max-w-[80%]`}>
                         <div className={`px-4 py-3 rounded-2xl ${
                           msg.from === "twin" 
-                            ? "bg-card border border-border" 
-                            : "bg-primary/15 border border-primary/20"
+                            ? "bg-white/5 border border-white/10" 
+                            : "bg-gradient-to-r from-cyan-500/15 to-fuchsia-500/15 border border-cyan-500/20"
                         }`}>
                           <p className="text-sm whitespace-pre-wrap leading-relaxed"
                              dangerouslySetInnerHTML={{ 
@@ -337,10 +337,10 @@ export default function ChiefOfStaff() {
                   
                   {isTyping && (
                     <div className="flex gap-3">
-                      <div className="shrink-0 w-8 h-8 rounded-full flex items-center justify-center bg-primary/20 border border-primary/30">
-                        <Fingerprint className="w-4 h-4 text-primary" />
+                      <div className="shrink-0 w-8 h-8 rounded-full flex items-center justify-center bg-gradient-to-r from-fuchsia-500/20 to-purple-500/20 border border-fuchsia-500/30">
+                        <Fingerprint className="w-4 h-4 text-fuchsia-400" />
                       </div>
-                      <div className="bg-card border border-border rounded-2xl px-4 py-3">
+                      <div className="bg-white/5 border border-white/10 rounded-2xl px-4 py-3">
                         <div className="flex gap-1">
                           <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
                           <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
@@ -355,9 +355,9 @@ export default function ChiefOfStaff() {
               </div>
 
               {/* Input Area - Fixed at bottom */}
-              <div className="shrink-0 border-t border-border bg-card/90 backdrop-blur-xl px-4 py-3">
+              <div className="shrink-0 border-t border-white/10 bg-gray-900/90 backdrop-blur-xl px-4 py-3">
                 <div className="max-w-3xl mx-auto">
-                  <div className="bg-secondary/30 border border-border rounded-2xl overflow-hidden">
+                  <div className="bg-white/5 border border-white/20 rounded-2xl overflow-hidden">
                     <textarea
                       ref={inputRef}
                       value={messageInput}
@@ -365,12 +365,12 @@ export default function ChiefOfStaff() {
                       onKeyDown={handleKeyDown}
                       placeholder="Message Chief of Staff..."
                       rows={1}
-                      className="w-full px-4 py-3 bg-transparent resize-none focus:outline-none text-sm"
+                      className="w-full px-4 py-3 bg-transparent resize-none focus:outline-none text-sm text-white placeholder:text-gray-500"
                       style={{ minHeight: '44px', maxHeight: '120px' }}
                     />
-                    <div className="flex items-center justify-between px-3 py-2 border-t border-border/50">
+                    <div className="flex items-center justify-between px-3 py-2 border-t border-white/10">
                       <div className="flex items-center gap-1">
-                        <button className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors">
+                        <button className="p-2 rounded-lg text-gray-400 hover:text-white hover:bg-white/10 transition-colors">
                           <Paperclip className="w-4 h-4" />
                         </button>
                         <button
@@ -378,7 +378,7 @@ export default function ChiefOfStaff() {
                           className={`p-2 rounded-lg transition-colors ${
                             isListening 
                               ? "text-red-400 bg-red-500/20" 
-                              : "text-muted-foreground hover:text-foreground hover:bg-secondary"
+                              : "text-gray-400 hover:text-white hover:bg-white/10"
                           }`}
                         >
                           {isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
@@ -387,7 +387,7 @@ export default function ChiefOfStaff() {
                       <button
                         onClick={handleSendMessage}
                         disabled={!messageInput.trim() || isLoading}
-                        className="p-2 rounded-lg bg-primary/20 text-primary hover:bg-primary/30 disabled:opacity-40 transition-colors"
+                        className="p-2 rounded-lg bg-gradient-to-r from-cyan-500 to-fuchsia-500 text-white hover:opacity-90 disabled:opacity-40 transition-all"
                       >
                         <Send className="w-4 h-4" />
                       </button>
@@ -425,7 +425,7 @@ export default function ChiefOfStaff() {
 
               {/* Task List */}
               <div className="space-y-3">
-                <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">All Tasks</h3>
+                <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider">All Tasks</h3>
                 {tasks.map(task => {
                   const qaConfig = QA_STATUS_CONFIG[task.qaStatus];
                   const QAIcon = qaConfig.icon;
@@ -433,7 +433,7 @@ export default function ChiefOfStaff() {
                     <div
                       key={task.id}
                       onClick={() => { setSelectedTask(task); setShowTaskDetail(true); }}
-                      className="p-4 bg-card/50 border border-border rounded-xl hover:border-primary/30 transition-colors cursor-pointer"
+                      className="p-4 bg-white/5 border-2 border-white/10 rounded-2xl hover:border-fuchsia-500/50 transition-all cursor-pointer group"
                     >
                       <div className="flex items-start justify-between mb-3">
                         <div className="flex-1">
@@ -479,7 +479,7 @@ export default function ChiefOfStaff() {
                       </div>
                       
                       {task.feedback && (
-                        <div className="mt-3 p-2 bg-secondary/30 rounded-lg">
+                        <div className="mt-3 p-2 bg-white/5 rounded-lg border border-white/10">
                           <p className="text-xs text-muted-foreground">
                             <span className="font-medium text-foreground">QA Feedback:</span> {task.feedback}
                           </p>
@@ -514,58 +514,58 @@ export default function ChiefOfStaff() {
 
               {/* Training Modules */}
               <div className="space-y-3">
-                <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Training Modules</h3>
+                <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider">Training Modules</h3>
                 
-                <button className="w-full p-4 bg-card/50 border border-border rounded-xl hover:border-primary/30 transition-colors text-left">
+                <button className="w-full p-5 bg-gradient-to-br from-emerald-500/10 to-green-500/10 border-2 border-emerald-500/30 rounded-2xl hover:border-emerald-400 transition-all text-left group">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <div className="p-2 bg-emerald-500/10 rounded-lg">
-                        <CheckCircle2 className="w-5 h-5 text-emerald-400" />
+                      <div className="w-12 h-12 rounded-xl bg-emerald-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+                        <CheckCircle2 className="w-6 h-6 text-emerald-400" />
                       </div>
                       <div>
-                        <h4 className="font-medium">Type A Questions (Scale 1-10)</h4>
-                        <p className="text-sm text-muted-foreground">Decision-making, risk, communication, values</p>
+                        <h4 className="font-semibold text-white">Type A Questions (Scale 1-10)</h4>
+                        <p className="text-sm text-gray-400">Decision-making, risk, communication, values</p>
                       </div>
                     </div>
-                    <Badge className="bg-emerald-500/10 text-emerald-400">Complete</Badge>
+                    <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30">Complete</Badge>
                   </div>
                 </button>
 
-                <button className="w-full p-4 bg-card/50 border border-border rounded-xl hover:border-primary/30 transition-colors text-left">
+                <button className="w-full p-5 bg-gradient-to-br from-amber-500/10 to-orange-500/10 border-2 border-amber-500/30 rounded-2xl hover:border-amber-400 transition-all text-left group">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <div className="p-2 bg-amber-500/10 rounded-lg">
-                        <Clock className="w-5 h-5 text-amber-400" />
+                      <div className="w-12 h-12 rounded-xl bg-amber-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+                        <Clock className="w-6 h-6 text-amber-400" />
                       </div>
                       <div>
-                        <h4 className="font-medium">Type B Questions (Yes/No)</h4>
-                        <p className="text-sm text-muted-foreground">Preferences, habits, boundaries</p>
+                        <h4 className="font-semibold text-white">Type B Questions (Yes/No)</h4>
+                        <p className="text-sm text-gray-400">Preferences, habits, boundaries</p>
                       </div>
                     </div>
-                    <Badge className="bg-amber-500/10 text-amber-400">0/100</Badge>
+                    <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30">0/100</Badge>
                   </div>
                 </button>
 
-                <button className="w-full p-4 bg-card/50 border border-border rounded-xl hover:border-primary/30 transition-colors text-left">
+                <button className="w-full p-5 bg-gradient-to-br from-purple-500/10 to-fuchsia-500/10 border-2 border-purple-500/30 rounded-2xl hover:border-purple-400 transition-all text-left group">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <div className="p-2 bg-purple-500/10 rounded-lg">
-                        <Brain className="w-5 h-5 text-purple-400" />
+                      <div className="w-12 h-12 rounded-xl bg-purple-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+                        <Brain className="w-6 h-6 text-purple-400" />
                       </div>
                       <div>
-                        <h4 className="font-medium">Leadership Thinking Styles</h4>
-                        <p className="text-sm text-muted-foreground">MIT, Harvard, NASA, McKinsey, CEO frameworks</p>
+                        <h4 className="font-semibold text-white">Leadership Thinking Styles</h4>
+                        <p className="text-sm text-gray-400">MIT, Harvard, NASA, McKinsey, CEO frameworks</p>
                       </div>
                     </div>
-                    <Badge className="bg-gray-500/10 text-gray-400">Coming Soon</Badge>
+                    <Badge className="bg-gray-500/20 text-gray-400 border-gray-500/30">Coming Soon</Badge>
                   </div>
                 </button>
               </div>
 
               {/* SME Learning Stats */}
               <div className="mt-6">
-                <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-3">SME Expert Learning</h3>
-                <div className="p-4 bg-card/50 border border-border rounded-xl">
+                <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">SME Expert Learning</h3>
+                <div className="p-4 bg-white/5 border border-white/10 rounded-2xl">
                   <p className="text-sm text-muted-foreground mb-3">
                     Chief of Staff learns optimal prompting for each SME based on QA feedback.
                   </p>

@@ -99,18 +99,18 @@ export default function Library() {
   // Project detail view
   if (selectedProject && currentProject) {
     return (
-      <div className="min-h-screen bg-background p-6">
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-900 to-gray-800 p-6">
         {/* Back button */}
         <button
           onClick={() => setSelectedProject(null)}
-          className="flex items-center gap-2 text-muted-foreground hover:text-foreground mb-6 transition-colors"
+          className="flex items-center gap-2 text-gray-400 hover:text-white mb-6 transition-colors"
         >
           <ChevronLeft className="w-4 h-4" />
           Back to Library
         </button>
 
         {/* Project Header */}
-        <div className="bg-card border border-border rounded-xl p-6 mb-6">
+        <div className="bg-white/5 border-2 border-white/10 rounded-2xl p-6 mb-6">
           <div className="flex items-center gap-4">
             <div 
               className="w-14 h-14 rounded-xl flex items-center justify-center text-white font-bold text-lg"
@@ -131,16 +131,16 @@ export default function Library() {
 
         {/* Content Tabs */}
         <Tabs defaultValue="documents" className="space-y-6">
-          <TabsList className="bg-card border border-border">
-            <TabsTrigger value="documents" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+          <TabsList className="bg-white/5 border border-white/10">
+            <TabsTrigger value="documents" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-pink-500 data-[state=active]:to-rose-500 data-[state=active]:text-white">
               <FileText className="w-4 h-4 mr-2" />
               Documents
             </TabsTrigger>
-            <TabsTrigger value="images" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+            <TabsTrigger value="images" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-pink-500 data-[state=active]:to-rose-500 data-[state=active]:text-white">
               <Image className="w-4 h-4 mr-2" />
               Images
             </TabsTrigger>
-            <TabsTrigger value="charts" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+            <TabsTrigger value="charts" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-pink-500 data-[state=active]:to-rose-500 data-[state=active]:text-white">
               <BarChart3 className="w-4 h-4 mr-2" />
               Charts
             </TabsTrigger>
@@ -148,7 +148,7 @@ export default function Library() {
 
           <TabsContent value="documents" className="space-y-3">
             {sampleFiles.documents.map((doc, index) => (
-              <div key={index} className="flex items-center gap-4 bg-card border border-border rounded-xl p-4 hover:border-primary/50 transition-all cursor-pointer">
+              <div key={index} className="flex items-center gap-4 bg-white/5 border-2 border-white/10 rounded-2xl p-4 hover:border-pink-500/50 transition-all cursor-pointer">
                 <div className="p-3 bg-secondary rounded-lg">
                   <FileText className="w-5 h-5 text-muted-foreground" />
                 </div>
@@ -171,7 +171,7 @@ export default function Library() {
 
           <TabsContent value="images" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {sampleFiles.images.map((img, index) => (
-              <div key={index} className="bg-card border border-border rounded-xl overflow-hidden hover:border-primary/50 transition-all cursor-pointer">
+              <div key={index} className="bg-white/5 border-2 border-white/10 rounded-2xl overflow-hidden hover:border-pink-500/50 transition-all cursor-pointer">
                 <div className="aspect-video bg-secondary flex items-center justify-center">
                   <Image className="w-12 h-12 text-muted-foreground/30" />
                 </div>
@@ -185,7 +185,7 @@ export default function Library() {
 
           <TabsContent value="charts" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {sampleFiles.charts.map((chart, index) => (
-              <div key={index} className="bg-card border border-border rounded-xl p-4 hover:border-primary/50 transition-all cursor-pointer">
+              <div key={index} className="bg-white/5 border-2 border-white/10 rounded-2xl p-4 hover:border-pink-500/50 transition-all cursor-pointer">
                 <div className="aspect-video bg-secondary rounded-lg flex items-center justify-center mb-3">
                   <BarChart3 className="w-12 h-12 text-muted-foreground/30" />
                 </div>
@@ -201,7 +201,7 @@ export default function Library() {
 
   // Main library view
   return (
-    <div className="h-[calc(100vh-56px)] md:h-screen flex flex-col bg-background">
+    <div className="h-[calc(100vh-56px)] md:h-screen flex flex-col bg-gradient-to-br from-gray-900 via-gray-900 to-gray-800">
       {/* Header */}
       <PageHeader 
         icon={BookOpen} 
@@ -219,21 +219,21 @@ export default function Library() {
               className="pl-9 w-64 bg-card border-border"
             />
           </div>
-          <div className="flex items-center bg-card border border-border rounded-lg p-1">
+          <div className="flex items-center bg-white/5 border border-white/20 rounded-lg p-1">
             <button 
               onClick={() => setViewMode('grid')}
-              className={`p-2 rounded transition-colors ${viewMode === 'grid' ? 'bg-secondary text-foreground' : 'text-muted-foreground hover:text-foreground'}`}
+              className={`p-2 rounded transition-colors ${viewMode === 'grid' ? 'bg-pink-500/20 text-pink-400' : 'text-gray-400 hover:text-white'}`}
             >
               <LayoutGrid className="w-4 h-4" />
             </button>
             <button 
               onClick={() => setViewMode('list')}
-              className={`p-2 rounded transition-colors ${viewMode === 'list' ? 'bg-secondary text-foreground' : 'text-muted-foreground hover:text-foreground'}`}
+              className={`p-2 rounded transition-colors ${viewMode === 'list' ? 'bg-pink-500/20 text-pink-400' : 'text-gray-400 hover:text-white'}`}
             >
               <List className="w-4 h-4" />
             </button>
           </div>
-          <Button size="sm" className="gap-2">
+          <Button size="sm" className="gap-2 bg-gradient-to-r from-pink-500 to-rose-500 hover:opacity-90">
             <Upload className="w-4 h-4" />
             Upload
           </Button>
@@ -244,21 +244,21 @@ export default function Library() {
       <div className="flex-1 overflow-y-auto p-6">
         {/* Stats Row */}
       <div className="grid grid-cols-4 gap-4 mb-8">
-        <div className="bg-card border border-border rounded-xl p-4">
-          <div className="text-3xl font-bold text-foreground">{projects.length}</div>
-          <div className="text-sm text-muted-foreground">Projects</div>
+        <div className="bg-white/5 border-2 border-white/10 rounded-2xl p-4">
+          <div className="text-3xl font-bold text-white">{projects.length}</div>
+          <div className="text-sm text-gray-400">Projects</div>
         </div>
-        <div className="bg-card border border-border rounded-xl p-4">
-          <div className="text-3xl font-bold text-foreground">{totalFiles}</div>
-          <div className="text-sm text-muted-foreground">Total Files</div>
+        <div className="bg-gradient-to-br from-pink-500/10 to-rose-500/10 border-2 border-pink-500/30 rounded-2xl p-4">
+          <div className="text-3xl font-bold text-pink-400">{totalFiles}</div>
+          <div className="text-sm text-gray-400">Total Files</div>
         </div>
-        <div className="bg-card border border-border rounded-xl p-4">
-          <div className="text-3xl font-bold text-foreground">{projects.reduce((acc, p) => acc + p.documents, 0)}</div>
-          <div className="text-sm text-muted-foreground">Documents</div>
+        <div className="bg-gradient-to-br from-blue-500/10 to-cyan-500/10 border-2 border-blue-500/30 rounded-2xl p-4">
+          <div className="text-3xl font-bold text-blue-400">{projects.reduce((acc, p) => acc + p.documents, 0)}</div>
+          <div className="text-sm text-gray-400">Documents</div>
         </div>
-        <div className="bg-card border border-border rounded-xl p-4">
-          <div className="text-3xl font-bold text-foreground">{projects.reduce((acc, p) => acc + p.images, 0)}</div>
-          <div className="text-sm text-muted-foreground">Images</div>
+        <div className="bg-gradient-to-br from-purple-500/10 to-fuchsia-500/10 border-2 border-purple-500/30 rounded-2xl p-4">
+          <div className="text-3xl font-bold text-purple-400">{projects.reduce((acc, p) => acc + p.images, 0)}</div>
+          <div className="text-sm text-gray-400">Images</div>
         </div>
       </div>
 
@@ -269,7 +269,7 @@ export default function Library() {
             <div
               key={project.id}
               onClick={() => setSelectedProject(project.id)}
-              className="bg-card border border-border rounded-xl p-5 hover:border-primary/50 transition-all cursor-pointer group"
+              className="bg-white/5 border-2 border-white/10 rounded-2xl p-5 hover:border-pink-500/50 transition-all cursor-pointer group"
             >
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-center gap-3">
