@@ -4,7 +4,7 @@ import {
   ChevronRight, Play, Pause, RotateCcw, Download,
   MessageSquare, Lightbulb, Target, TrendingUp, DollarSign,
   Shield, Scale, Briefcase, Globe, Zap, Upload, X, Save,
-  UserCog, Sparkles, History, GitCompare, Send, PlusCircle
+  UserCog, Sparkles, History, GitCompare, Send, PlusCircle, UserPlus
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -181,6 +181,112 @@ interface BusinessPlanReviewProps {
 
 type TeamSelectionMode = 'chief-of-staff' | 'manual';
 
+// Business type templates
+const BUSINESS_TEMPLATES = [
+  {
+    id: 'saas',
+    name: 'SaaS / Software',
+    description: 'Subscription-based software businesses',
+    icon: '💻',
+    keyMetrics: ['MRR/ARR', 'Churn Rate', 'CAC/LTV', 'NRR'],
+    sectionWeights: {
+      'pricing-strategy': 1.3,
+      'product-technology': 1.4,
+      'financial-projections': 1.2,
+    },
+    guidance: {
+      'pricing-strategy': 'Focus on subscription tiers and expansion revenue.',
+      'financial-projections': 'Emphasize MRR growth and churn assumptions.',
+      'product-technology': 'Detail tech stack and scalability.',
+    }
+  },
+  {
+    id: 'ecommerce',
+    name: 'E-Commerce / Retail',
+    description: 'Online retail and D2C brands',
+    icon: '🛒',
+    keyMetrics: ['AOV', 'Conversion Rate', 'CAC', 'Inventory Turnover'],
+    sectionWeights: {
+      'go-to-market': 1.3,
+      'team-operations': 1.3,
+      'competitive-landscape': 1.2,
+    },
+    guidance: {
+      'go-to-market': 'Detail acquisition channels and brand positioning.',
+      'team-operations': 'Focus on fulfillment and supply chain.',
+      'pricing-strategy': 'Address margin structure and promotions.',
+    }
+  },
+  {
+    id: 'marketplace',
+    name: 'Marketplace / Platform',
+    description: 'Two-sided marketplaces',
+    icon: '🔄',
+    keyMetrics: ['GMV', 'Take Rate', 'Liquidity', 'Repeat Rate'],
+    sectionWeights: {
+      'go-to-market': 1.4,
+      'competitive-landscape': 1.3,
+      'pricing-strategy': 1.2,
+    },
+    guidance: {
+      'go-to-market': 'Address chicken-and-egg and liquidity strategy.',
+      'competitive-landscape': 'Focus on network effects and switching costs.',
+      'pricing-strategy': 'Detail take rate and monetization timeline.',
+    }
+  },
+  {
+    id: 'fintech',
+    name: 'FinTech',
+    description: 'Financial technology services',
+    icon: '🏦',
+    keyMetrics: ['AUM', 'Transaction Volume', 'Default Rate', 'Compliance'],
+    sectionWeights: {
+      'risk-assessment': 1.5,
+      'financial-projections': 1.3,
+      'product-technology': 1.2,
+    },
+    guidance: {
+      'risk-assessment': 'Address regulatory and compliance framework.',
+      'financial-projections': 'Detail capital requirements and unit economics.',
+      'product-technology': 'Focus on security and data protection.',
+    }
+  },
+  {
+    id: 'healthcare',
+    name: 'Healthcare / HealthTech',
+    description: 'Digital health and medical devices',
+    icon: '🏥',
+    keyMetrics: ['Patient Outcomes', 'Regulatory Status', 'Reimbursement'],
+    sectionWeights: {
+      'risk-assessment': 1.5,
+      'product-technology': 1.3,
+      'team-operations': 1.2,
+    },
+    guidance: {
+      'risk-assessment': 'Address FDA pathway and clinical requirements.',
+      'product-technology': 'Detail clinical validation and efficacy.',
+      'team-operations': 'Emphasize clinical advisory and partnerships.',
+    }
+  },
+  {
+    id: 'b2b-services',
+    name: 'B2B Services',
+    description: 'Professional services and consulting',
+    icon: '🤝',
+    keyMetrics: ['Utilization', 'ACV', 'Client Retention', 'Revenue/Employee'],
+    sectionWeights: {
+      'team-operations': 1.4,
+      'go-to-market': 1.2,
+      'pricing-strategy': 1.1,
+    },
+    guidance: {
+      'team-operations': 'Focus on talent and scaling service delivery.',
+      'go-to-market': 'Detail enterprise sales and partnerships.',
+      'pricing-strategy': 'Address value-based pricing models.',
+    }
+  },
+];
+
 export function BusinessPlanReview({ 
   businessPlanContent: initialContent, 
   projectName = 'Business Plan',
@@ -218,6 +324,20 @@ export function BusinessPlanReview({
   
   // Section-specific documents
   const [sectionDocuments, setSectionDocuments] = useState<Record<string, { fileName: string; content: string }>>({});
+  
+  // Business type template
+  const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
+  const [showTemplateSelector, setShowTemplateSelector] = useState(true);
+  
+  // Collaborative review state
+  const [isCollaborativeMode, setIsCollaborativeMode] = useState(false);
+  const [collaborativeSessionId, setCollaborativeSessionId] = useState<number | null>(null);
+  const [showInviteDialog, setShowInviteDialog] = useState(false);
+  const [inviteUserId, setInviteUserId] = useState('');
+  const [inviteRole, setInviteRole] = useState<'reviewer' | 'viewer'>('reviewer');
+  const [showCollaborativeSessions, setShowCollaborativeSessions] = useState(false);
+  const [newComment, setNewComment] = useState('');
+  const [commentSection, setCommentSection] = useState<string | null>(null);
 
   // Calculate overall progress
   const completedSections = Array.from(sectionReviews.values()).filter(r => r.status === 'completed').length;
@@ -249,6 +369,19 @@ export function BusinessPlanReview({
   
   // Follow-up question mutation
   const askFollowUpMutation = trpc.businessPlanReview.askFollowUp.useMutation();
+  
+  // PDF export mutation
+  const generatePdfMutation = trpc.businessPlanReview.generateReportMarkdown.useMutation();
+  
+  // Collaborative review mutations
+  const createSessionMutation = trpc.collaborativeReview.createSession.useMutation();
+  const inviteParticipantMutation = trpc.collaborativeReview.inviteParticipant.useMutation();
+  const addCommentMutation = trpc.collaborativeReview.addComment.useMutation();
+  const sessionsQuery = trpc.collaborativeReview.getSessions.useQuery(undefined, { enabled: showCollaborativeSessions });
+  const sessionQuery = trpc.collaborativeReview.getSession.useQuery(
+    { sessionId: collaborativeSessionId! },
+    { enabled: collaborativeSessionId !== null && isCollaborativeMode }
+  );
   const [teamSelectionResult, setTeamSelectionResult] = useState<{
     reasoning: string;
     teamComposition: { expertId: string; role: string; rationale: string }[];
@@ -683,8 +816,217 @@ export function BusinessPlanReview({
     }
   };
 
+  // Export to PDF (generates markdown for download)
+  const handleExportPdf = async () => {
+    if (completedSections === 0) {
+      toast.error('Complete at least one section before exporting');
+      return;
+    }
+
+    try {
+      const sectionReviewsArray = Array.from(sectionReviews.entries()).map(([sectionId, review]) => {
+        const sectionDef = BUSINESS_PLAN_SECTIONS.find(s => s.id === sectionId);
+        return {
+          sectionId,
+          sectionName: sectionDef?.name || sectionId,
+          status: review.status,
+          overallScore: review.overallScore,
+          expertInsights: review.expertInsights.map(insight => ({
+            expertId: insight.expertId,
+            expertName: insight.expertName,
+            expertAvatar: insight.expertAvatar,
+            insight: insight.insight,
+            score: insight.score,
+            recommendations: insight.recommendations,
+            concerns: insight.concerns,
+          })),
+          recommendations: review.recommendations,
+          concerns: review.concerns,
+        };
+      });
+
+      const overallScore = Math.round(
+        sectionReviewsArray.reduce((acc, s) => acc + (s.overallScore || 0), 0) / 
+        sectionReviewsArray.filter(s => s.overallScore).length
+      );
+
+      const result = await generatePdfMutation.mutateAsync({
+        projectName,
+        templateId: selectedTemplate || undefined,
+        overallScore,
+        sectionReviews: sectionReviewsArray,
+        expertTeam: selectedExperts,
+        teamSelectionReasoning: teamSelectionResult?.reasoning,
+      });
+
+      // Download as markdown file
+      const blob = new Blob([result.markdown], { type: 'text/markdown' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${projectName.replace(/\s+/g, '_')}_Review_Report.md`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+
+      toast.success('Report exported successfully!');
+    } catch (error) {
+      console.error('Error exporting report:', error);
+      toast.error('Failed to export report');
+    }
+  };
+
+  // Get current template
+  const currentTemplate = selectedTemplate ? BUSINESS_TEMPLATES.find(t => t.id === selectedTemplate) : null;
+
+  // Get weighted score for a section
+  const getWeightedScore = (sectionId: string, score: number): number => {
+    if (!currentTemplate) return score;
+    const weights = currentTemplate.sectionWeights as { [key: string]: number | undefined };
+    const weight = weights[sectionId] || 1.0;
+    return Math.round(score * weight);
+  };
+
+  // Get template guidance for a section
+  const getTemplateGuidance = (sectionId: string): string | null => {
+    if (!currentTemplate) return null;
+    const guidance = currentTemplate.guidance as { [key: string]: string | undefined };
+    return guidance[sectionId] || null;
+  };
+
+  // Start collaborative review session
+  const handleStartCollaborativeSession = async () => {
+    try {
+      const result = await createSessionMutation.mutateAsync({
+        projectName,
+        templateId: selectedTemplate || undefined,
+        reviewData: {
+          sectionReviews: Object.fromEntries(sectionReviews),
+          selectedExperts,
+          teamSelectionResult,
+        },
+      });
+      setCollaborativeSessionId(result.sessionId || null);
+      setIsCollaborativeMode(true);
+      toast.success('Collaborative session started! You can now invite team members.');
+    } catch (error) {
+      console.error('Error starting collaborative session:', error);
+      toast.error('Failed to start collaborative session');
+    }
+  };
+
+  // Invite participant to session
+  const handleInviteParticipant = async () => {
+    if (!collaborativeSessionId || !inviteUserId) {
+      toast.error('Please enter a user ID');
+      return;
+    }
+    try {
+      await inviteParticipantMutation.mutateAsync({
+        sessionId: collaborativeSessionId,
+        userId: parseInt(inviteUserId),
+        role: inviteRole,
+      });
+      toast.success(`Invited user as ${inviteRole}`);
+      setInviteUserId('');
+      setShowInviteDialog(false);
+    } catch (error) {
+      console.error('Error inviting participant:', error);
+      toast.error('Failed to invite participant');
+    }
+  };
+
+  // Add comment to section
+  const handleAddComment = async () => {
+    if (!collaborativeSessionId || !commentSection || !newComment.trim()) {
+      toast.error('Please enter a comment');
+      return;
+    }
+    try {
+      await addCommentMutation.mutateAsync({
+        sessionId: collaborativeSessionId,
+        sectionId: commentSection,
+        comment: newComment,
+      });
+      toast.success('Comment added');
+      setNewComment('');
+      setCommentSection(null);
+    } catch (error) {
+      console.error('Error adding comment:', error);
+      toast.error('Failed to add comment');
+    }
+  };
+
   return (
     <div className="h-full flex flex-col">
+      {/* Template Selector */}
+      {showTemplateSelector && completedSections === 0 && !isReviewing && (
+        <div className="shrink-0 p-6 border-b border-white/10 bg-gradient-to-r from-purple-500/10 to-pink-500/10">
+          <h3 className="text-lg font-semibold text-foreground mb-2">Select Business Type</h3>
+          <p className="text-sm text-muted-foreground mb-4">
+            Choose a template to get tailored analysis with industry-specific metrics and weighted scoring.
+          </p>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+            {BUSINESS_TEMPLATES.map(template => (
+              <button
+                key={template.id}
+                onClick={() => {
+                  setSelectedTemplate(template.id);
+                  setShowTemplateSelector(false);
+                }}
+                className={`p-4 rounded-lg border text-left transition-all ${
+                  selectedTemplate === template.id
+                    ? 'border-purple-500 bg-purple-500/20'
+                    : 'border-white/10 bg-white/5 hover:border-white/20 hover:bg-white/10'
+                }`}
+              >
+                <div className="text-2xl mb-2">{template.icon}</div>
+                <h4 className="font-medium text-foreground text-sm">{template.name}</h4>
+                <p className="text-xs text-muted-foreground mt-1">{template.description}</p>
+                <div className="flex flex-wrap gap-1 mt-2">
+                  {template.keyMetrics.slice(0, 2).map((metric, i) => (
+                    <Badge key={i} variant="outline" className="text-xs">{metric}</Badge>
+                  ))}
+                </div>
+              </button>
+            ))}
+          </div>
+          <div className="flex justify-end mt-4">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setShowTemplateSelector(false)}
+            >
+              Skip - Use General Template
+            </Button>
+          </div>
+        </div>
+      )}
+
+      {/* Selected Template Badge */}
+      {currentTemplate && !showTemplateSelector && (
+        <div className="shrink-0 px-4 py-2 border-b border-white/10 bg-purple-500/10 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <span className="text-lg">{currentTemplate.icon}</span>
+            <span className="text-sm font-medium text-foreground">{currentTemplate.name} Template</span>
+            <div className="flex gap-1 ml-2">
+              {currentTemplate.keyMetrics.map((metric, i) => (
+                <Badge key={i} variant="outline" className="text-xs">{metric}</Badge>
+              ))}
+            </div>
+          </div>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setShowTemplateSelector(true)}
+            disabled={isReviewing || completedSections > 0}
+          >
+            Change
+          </Button>
+        </div>
+      )}
+
       {/* Header */}
       <div className="shrink-0 p-4 border-b border-white/10 bg-card/50">
         <div className="flex items-center justify-between">
@@ -793,6 +1135,36 @@ export function BusinessPlanReview({
                   <Download className="w-4 h-4 mr-2" />
                   Export
                 </Button>
+                <Button 
+                  onClick={handleExportPdf} 
+                  variant="outline" 
+                  size="sm"
+                  disabled={generatePdfMutation.isPending}
+                >
+                  <FileText className="w-4 h-4 mr-2" />
+                  {generatePdfMutation.isPending ? 'Generating...' : 'PDF Report'}
+                </Button>
+                {!isCollaborativeMode && (
+                  <Button 
+                    onClick={handleStartCollaborativeSession} 
+                    variant="outline" 
+                    size="sm"
+                    disabled={createSessionMutation.isPending}
+                  >
+                    <Users className="w-4 h-4 mr-2" />
+                    {createSessionMutation.isPending ? 'Starting...' : 'Collaborate'}
+                  </Button>
+                )}
+                {isCollaborativeMode && (
+                  <Button 
+                    onClick={() => setShowInviteDialog(true)} 
+                    variant="outline" 
+                    size="sm"
+                  >
+                    <UserPlus className="w-4 h-4 mr-2" />
+                    Invite
+                  </Button>
+                )}
                 <Button 
                   onClick={handleSaveToLibrary} 
                   variant="outline" 
@@ -1437,6 +1809,90 @@ export function BusinessPlanReview({
           )}
         </DialogContent>
       </Dialog>
+
+      {/* Invite Participant Dialog */}
+      <Dialog open={showInviteDialog} onOpenChange={setShowInviteDialog}>
+        <DialogContent className="bg-slate-900 border-white/10">
+          <DialogHeader>
+            <DialogTitle className="text-foreground">Invite Team Member</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div>
+              <label className="text-sm text-muted-foreground">User ID</label>
+              <Input
+                value={inviteUserId}
+                onChange={(e) => setInviteUserId(e.target.value)}
+                placeholder="Enter user ID"
+                className="mt-1 bg-white/5 border-white/10"
+              />
+            </div>
+            <div>
+              <label className="text-sm text-muted-foreground">Role</label>
+              <div className="flex gap-2 mt-1">
+                <button
+                  onClick={() => setInviteRole('reviewer')}
+                  className={`px-3 py-1.5 rounded text-sm transition-colors ${
+                    inviteRole === 'reviewer'
+                      ? 'bg-purple-500 text-white'
+                      : 'bg-white/5 text-muted-foreground hover:text-foreground'
+                  }`}
+                >
+                  Reviewer (can edit)
+                </button>
+                <button
+                  onClick={() => setInviteRole('viewer')}
+                  className={`px-3 py-1.5 rounded text-sm transition-colors ${
+                    inviteRole === 'viewer'
+                      ? 'bg-purple-500 text-white'
+                      : 'bg-white/5 text-muted-foreground hover:text-foreground'
+                  }`}
+                >
+                  Viewer (read-only)
+                </button>
+              </div>
+            </div>
+            <Button
+              onClick={handleInviteParticipant}
+              className="w-full bg-purple-500 hover:bg-purple-600"
+              disabled={inviteParticipantMutation.isPending}
+            >
+              {inviteParticipantMutation.isPending ? 'Inviting...' : 'Send Invitation'}
+            </Button>
+          </div>
+          
+          {/* Show current participants */}
+          {sessionQuery.data?.participants && sessionQuery.data.participants.length > 0 && (
+            <div className="mt-4 pt-4 border-t border-white/10">
+              <h4 className="text-sm font-medium text-foreground mb-2">Current Participants</h4>
+              <div className="space-y-2">
+                {sessionQuery.data.participants.map((p: any) => (
+                  <div key={p.id} className="flex items-center justify-between text-sm">
+                    <span className="text-muted-foreground">User #{p.userId}</span>
+                    <Badge variant="outline" className="text-xs">
+                      {p.role}
+                    </Badge>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Collaborative Session Indicator */}
+      {isCollaborativeMode && (
+        <div className="fixed bottom-4 right-4 bg-purple-500/20 border border-purple-500/50 rounded-lg p-3 backdrop-blur-sm">
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+            <span className="text-sm text-foreground">Collaborative Session Active</span>
+            {sessionQuery.data?.participants && (
+              <Badge variant="outline" className="text-xs">
+                {sessionQuery.data.participants.length} participants
+              </Badge>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

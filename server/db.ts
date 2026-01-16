@@ -13,7 +13,11 @@ import { InsertUser, users, moodHistory, InsertMoodHistory, MoodHistory, convers
   expertChatSessions, InsertExpertChatSession, ExpertChatSession,
   expertChatMessages, InsertExpertChatMessage, ExpertChatMessage,
   businessPlanReviewVersions, InsertBusinessPlanReviewVersion, BusinessPlanReviewVersion,
-  expertFollowUpQuestions, InsertExpertFollowUpQuestion, ExpertFollowUpQuestion
+  expertFollowUpQuestions, InsertExpertFollowUpQuestion, ExpertFollowUpQuestion,
+  collaborativeReviewSessions, InsertCollaborativeReviewSession, CollaborativeReviewSession,
+  collaborativeReviewParticipants, InsertCollaborativeReviewParticipant, CollaborativeReviewParticipant,
+  collaborativeReviewComments, InsertCollaborativeReviewComment, CollaborativeReviewComment,
+  collaborativeReviewActivity, InsertCollaborativeReviewActivity, CollaborativeReviewActivity
 } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
@@ -1840,4 +1844,266 @@ export async function answerExpertFollowUpQuestion(id: number, answer: string) {
     status: 'answered',
     answeredAt: new Date()
   }).where(eq(expertFollowUpQuestions.id, id));
+}
+
+// ============================================
+// Collaborative Review Functions
+// ============================================
+
+// Create a collaborative review session
+export async function createCollaborativeReviewSession(data: {
+  ownerId: number;
+  projectName: string;
+  templateId?: string;
+  reviewData?: any;
+}): Promise<number | undefined> {
+  const db = await getDb();
+  if (!db) return undefined;
+  
+  const result = await db.insert(collaborativeReviewSessions).values({
+    ownerId: data.ownerId,
+    projectName: data.projectName,
+    templateId: data.templateId,
+    reviewData: data.reviewData,
+  });
+  
+  const insertId = result[0]?.insertId;
+  
+  // Add owner as participant
+  if (insertId) {
+    await db.insert(collaborativeReviewParticipants).values({
+      sessionId: insertId,
+      userId: data.ownerId,
+      role: 'owner',
+      invitedBy: data.ownerId,
+      joinedAt: new Date(),
+    });
+  }
+  
+  return insertId;
+}
+
+// Get collaborative review sessions for a user
+export async function getCollaborativeReviewSessions(userId: number): Promise<CollaborativeReviewSession[]> {
+  const db = await getDb();
+  if (!db) return [];
+  
+  // Get sessions where user is a participant
+  const participantSessions = await db.select({ sessionId: collaborativeReviewParticipants.sessionId })
+    .from(collaborativeReviewParticipants)
+    .where(eq(collaborativeReviewParticipants.userId, userId));
+  
+  const sessionIds = participantSessions.map(p => p.sessionId);
+  if (sessionIds.length === 0) return [];
+  
+  return db.select().from(collaborativeReviewSessions)
+    .where(sql`${collaborativeReviewSessions.id} IN (${sql.join(sessionIds.map(id => sql`${id}`), sql`, `)})`)
+    .orderBy(desc(collaborativeReviewSessions.updatedAt));
+}
+
+// Get a specific collaborative review session
+export async function getCollaborativeReviewSessionById(sessionId: number): Promise<CollaborativeReviewSession | undefined> {
+  const db = await getDb();
+  if (!db) return undefined;
+  
+  const results = await db.select().from(collaborativeReviewSessions)
+    .where(eq(collaborativeReviewSessions.id, sessionId))
+    .limit(1);
+  
+  return results[0];
+}
+
+// Update collaborative review session
+export async function updateCollaborativeReviewSession(sessionId: number, data: {
+  status?: 'active' | 'completed' | 'archived';
+  reviewData?: any;
+}): Promise<void> {
+  const db = await getDb();
+  if (!db) return;
+  
+  await db.update(collaborativeReviewSessions).set(data)
+    .where(eq(collaborativeReviewSessions.id, sessionId));
+}
+
+// Add participant to a collaborative review session
+export async function addCollaborativeReviewParticipant(data: {
+  sessionId: number;
+  userId: number;
+  role: 'reviewer' | 'viewer';
+  invitedBy: number;
+}): Promise<number | undefined> {
+  const db = await getDb();
+  if (!db) return undefined;
+  
+  // Check if already a participant
+  const existing = await db.select().from(collaborativeReviewParticipants)
+    .where(and(
+      eq(collaborativeReviewParticipants.sessionId, data.sessionId),
+      eq(collaborativeReviewParticipants.userId, data.userId)
+    ))
+    .limit(1);
+  
+  if (existing.length > 0) return existing[0].id;
+  
+  const result = await db.insert(collaborativeReviewParticipants).values({
+    sessionId: data.sessionId,
+    userId: data.userId,
+    role: data.role,
+    invitedBy: data.invitedBy,
+  });
+  
+  return result[0]?.insertId;
+}
+
+// Get participants for a session
+export async function getCollaborativeReviewParticipants(sessionId: number): Promise<CollaborativeReviewParticipant[]> {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return db.select().from(collaborativeReviewParticipants)
+    .where(eq(collaborativeReviewParticipants.sessionId, sessionId));
+}
+
+// Update participant (e.g., when they join)
+export async function updateCollaborativeReviewParticipant(participantId: number, data: {
+  role?: 'owner' | 'reviewer' | 'viewer';
+  joinedAt?: Date;
+  lastActiveAt?: Date;
+}): Promise<void> {
+  const db = await getDb();
+  if (!db) return;
+  
+  await db.update(collaborativeReviewParticipants).set(data)
+    .where(eq(collaborativeReviewParticipants.id, participantId));
+}
+
+// Check if user is participant in a session
+export async function isSessionParticipant(sessionId: number, userId: number): Promise<boolean> {
+  const db = await getDb();
+  if (!db) return false;
+  
+  const results = await db.select().from(collaborativeReviewParticipants)
+    .where(and(
+      eq(collaborativeReviewParticipants.sessionId, sessionId),
+      eq(collaborativeReviewParticipants.userId, userId)
+    ))
+    .limit(1);
+  
+  return results.length > 0;
+}
+
+// Get participant role
+export async function getParticipantRole(sessionId: number, userId: number): Promise<string | undefined> {
+  const db = await getDb();
+  if (!db) return undefined;
+  
+  const results = await db.select({ role: collaborativeReviewParticipants.role })
+    .from(collaborativeReviewParticipants)
+    .where(and(
+      eq(collaborativeReviewParticipants.sessionId, sessionId),
+      eq(collaborativeReviewParticipants.userId, userId)
+    ))
+    .limit(1);
+  
+  return results[0]?.role;
+}
+
+// Add comment to a section
+export async function createCollaborativeReviewComment(data: {
+  sessionId: number;
+  userId: number;
+  sectionId: string;
+  comment: string;
+  parentCommentId?: number;
+}): Promise<number | undefined> {
+  const db = await getDb();
+  if (!db) return undefined;
+  
+  const result = await db.insert(collaborativeReviewComments).values({
+    sessionId: data.sessionId,
+    userId: data.userId,
+    sectionId: data.sectionId,
+    comment: data.comment,
+    parentCommentId: data.parentCommentId,
+  });
+  
+  return result[0]?.insertId;
+}
+
+// Get comments for a session
+export async function getCollaborativeReviewComments(sessionId: number, sectionId?: string): Promise<CollaborativeReviewComment[]> {
+  const db = await getDb();
+  if (!db) return [];
+  
+  const conditions = [eq(collaborativeReviewComments.sessionId, sessionId)];
+  if (sectionId) {
+    conditions.push(eq(collaborativeReviewComments.sectionId, sectionId));
+  }
+  
+  return db.select().from(collaborativeReviewComments)
+    .where(and(...conditions))
+    .orderBy(desc(collaborativeReviewComments.createdAt));
+}
+
+// Update comment status
+export async function updateCollaborativeReviewComment(commentId: number, data: {
+  comment?: string;
+  status?: 'active' | 'resolved' | 'deleted';
+}): Promise<void> {
+  const db = await getDb();
+  if (!db) return;
+  
+  await db.update(collaborativeReviewComments).set(data)
+    .where(eq(collaborativeReviewComments.id, commentId));
+}
+
+// Log activity
+export async function logCollaborativeReviewActivity(data: {
+  sessionId: number;
+  userId: number;
+  action: 'joined' | 'viewed_section' | 'commented' | 'reviewed_section' | 'completed_review';
+  sectionId?: string;
+  metadata?: any;
+}): Promise<void> {
+  const db = await getDb();
+  if (!db) return;
+  
+  await db.insert(collaborativeReviewActivity).values({
+    sessionId: data.sessionId,
+    userId: data.userId,
+    action: data.action,
+    sectionId: data.sectionId,
+    metadata: data.metadata,
+  });
+}
+
+// Get activity for a session
+export async function getCollaborativeReviewActivity(sessionId: number, limit: number = 50): Promise<CollaborativeReviewActivity[]> {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return db.select().from(collaborativeReviewActivity)
+    .where(eq(collaborativeReviewActivity.sessionId, sessionId))
+    .orderBy(desc(collaborativeReviewActivity.createdAt))
+    .limit(limit);
+}
+
+// Get session with participants and comments
+export async function getCollaborativeReviewSessionWithDetails(sessionId: number) {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const session = await getCollaborativeReviewSessionById(sessionId);
+  if (!session) return null;
+  
+  const participants = await getCollaborativeReviewParticipants(sessionId);
+  const comments = await getCollaborativeReviewComments(sessionId);
+  const activity = await getCollaborativeReviewActivity(sessionId, 20);
+  
+  return {
+    ...session,
+    participants,
+    comments,
+    recentActivity: activity,
+  };
 }

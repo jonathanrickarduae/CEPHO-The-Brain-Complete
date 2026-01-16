@@ -182,6 +182,160 @@ export const REVIEW_EXPERTS = [
   },
 ];
 
+// Business type templates with section weights and expert focus
+export const BUSINESS_TEMPLATES = [
+  {
+    id: 'saas',
+    name: 'SaaS / Software',
+    description: 'Software-as-a-Service and subscription-based software businesses',
+    icon: '💻',
+    sectionWeights: {
+      'executive-summary': 1.0,
+      'market-analysis': 1.0,
+      'competitive-landscape': 1.2,
+      'go-to-market': 1.1,
+      'pricing-strategy': 1.3,
+      'product-technology': 1.4,
+      'financial-projections': 1.2,
+      'team-operations': 1.0,
+      'risk-assessment': 0.9,
+      'funding-requirements': 1.0,
+    },
+    keyMetrics: ['MRR/ARR', 'Churn Rate', 'CAC/LTV Ratio', 'Net Revenue Retention', 'Gross Margin'],
+    expertFocus: ['tech-001', 'inv-001', 'mkt-001'],
+    guidance: {
+      'pricing-strategy': 'Focus on subscription tiers, annual vs monthly pricing, and expansion revenue potential.',
+      'financial-projections': 'Emphasize MRR growth, churn assumptions, and path to profitability.',
+      'product-technology': 'Detail the tech stack, scalability architecture, and product roadmap.',
+    }
+  },
+  {
+    id: 'ecommerce',
+    name: 'E-Commerce / Retail',
+    description: 'Online retail, D2C brands, and omnichannel commerce',
+    icon: '🛒',
+    sectionWeights: {
+      'executive-summary': 1.0,
+      'market-analysis': 1.1,
+      'competitive-landscape': 1.2,
+      'go-to-market': 1.3,
+      'pricing-strategy': 1.1,
+      'product-technology': 0.9,
+      'financial-projections': 1.2,
+      'team-operations': 1.3,
+      'risk-assessment': 1.0,
+      'funding-requirements': 1.0,
+    },
+    keyMetrics: ['AOV', 'Conversion Rate', 'Customer Acquisition Cost', 'Gross Margin', 'Inventory Turnover'],
+    expertFocus: ['ops-001', 'mkt-001', 'sal-001'],
+    guidance: {
+      'go-to-market': 'Detail customer acquisition channels, influencer strategy, and brand positioning.',
+      'team-operations': 'Focus on fulfillment, inventory management, and supply chain resilience.',
+      'pricing-strategy': 'Address margin structure, promotional strategy, and competitive pricing.',
+    }
+  },
+  {
+    id: 'marketplace',
+    name: 'Marketplace / Platform',
+    description: 'Two-sided marketplaces and platform businesses',
+    icon: '🔄',
+    sectionWeights: {
+      'executive-summary': 1.0,
+      'market-analysis': 1.2,
+      'competitive-landscape': 1.3,
+      'go-to-market': 1.4,
+      'pricing-strategy': 1.2,
+      'product-technology': 1.1,
+      'financial-projections': 1.1,
+      'team-operations': 1.0,
+      'risk-assessment': 1.1,
+      'funding-requirements': 1.0,
+    },
+    keyMetrics: ['GMV', 'Take Rate', 'Liquidity', 'Supply/Demand Ratio', 'Repeat Transaction Rate'],
+    expertFocus: ['str-001', 'mkt-001', 'tech-001'],
+    guidance: {
+      'go-to-market': 'Address the chicken-and-egg problem and initial liquidity strategy.',
+      'competitive-landscape': 'Focus on network effects, switching costs, and winner-take-all dynamics.',
+      'pricing-strategy': 'Detail take rate structure, pricing for both sides, and monetization timeline.',
+    }
+  },
+  {
+    id: 'fintech',
+    name: 'FinTech / Financial Services',
+    description: 'Financial technology and digital financial services',
+    icon: '🏦',
+    sectionWeights: {
+      'executive-summary': 1.0,
+      'market-analysis': 1.1,
+      'competitive-landscape': 1.1,
+      'go-to-market': 1.0,
+      'pricing-strategy': 1.2,
+      'product-technology': 1.2,
+      'financial-projections': 1.3,
+      'team-operations': 1.1,
+      'risk-assessment': 1.5,
+      'funding-requirements': 1.1,
+    },
+    keyMetrics: ['AUM', 'Transaction Volume', 'Default Rate', 'Regulatory Compliance', 'Customer Trust Score'],
+    expertFocus: ['inv-001', 'inv-002', 'leg-001'],
+    guidance: {
+      'risk-assessment': 'Thoroughly address regulatory requirements, compliance framework, and risk management.',
+      'financial-projections': 'Detail unit economics, capital requirements, and path to profitability.',
+      'product-technology': 'Focus on security, data protection, and integration capabilities.',
+    }
+  },
+  {
+    id: 'healthcare',
+    name: 'Healthcare / HealthTech',
+    description: 'Healthcare technology, digital health, and medical devices',
+    icon: '🏥',
+    sectionWeights: {
+      'executive-summary': 1.0,
+      'market-analysis': 1.2,
+      'competitive-landscape': 1.0,
+      'go-to-market': 1.1,
+      'pricing-strategy': 1.1,
+      'product-technology': 1.3,
+      'financial-projections': 1.1,
+      'team-operations': 1.2,
+      'risk-assessment': 1.5,
+      'funding-requirements': 1.2,
+    },
+    keyMetrics: ['Patient Outcomes', 'Regulatory Approval Status', 'Reimbursement Rate', 'Clinical Evidence', 'Market Access'],
+    expertFocus: ['leg-001', 'tech-001', 'ops-001'],
+    guidance: {
+      'risk-assessment': 'Address FDA/regulatory pathway, clinical trial requirements, and liability considerations.',
+      'product-technology': 'Detail clinical validation, efficacy data, and integration with healthcare systems.',
+      'team-operations': 'Emphasize clinical advisory board, regulatory expertise, and healthcare partnerships.',
+    }
+  },
+  {
+    id: 'b2b-services',
+    name: 'B2B Services / Consulting',
+    description: 'Professional services, consulting, and B2B service businesses',
+    icon: '🤝',
+    sectionWeights: {
+      'executive-summary': 1.0,
+      'market-analysis': 1.0,
+      'competitive-landscape': 1.1,
+      'go-to-market': 1.2,
+      'pricing-strategy': 1.1,
+      'product-technology': 0.8,
+      'financial-projections': 1.1,
+      'team-operations': 1.4,
+      'risk-assessment': 1.0,
+      'funding-requirements': 0.9,
+    },
+    keyMetrics: ['Utilization Rate', 'Average Contract Value', 'Client Retention', 'Revenue per Employee', 'Gross Margin'],
+    expertFocus: ['sal-001', 'ops-001', 'str-001'],
+    guidance: {
+      'team-operations': 'Focus on talent acquisition, training, and scaling service delivery.',
+      'go-to-market': 'Detail enterprise sales strategy, partnership channels, and thought leadership.',
+      'pricing-strategy': 'Address pricing models, value-based pricing, and margin optimization.',
+    }
+  },
+];
+
 export interface ExpertInsight {
   expertId: string;
   expertName: string;

@@ -3375,3 +3375,35 @@
 - [x] Store section-document associations
 - [x] Pass section-specific content to expert analysis
 - [x] Show uploaded document indicator per section
+
+
+## Business Plan Review Pro Features (Jan 16, 2026)
+
+### Review Templates
+- [x] Create template data structure with business type, section weights, expert focus
+- [x] Add SaaS template with emphasis on MRR, churn, CAC/LTV
+- [x] Add E-commerce template with focus on inventory, fulfillment, margins
+- [x] Add Marketplace template with focus on network effects, liquidity, take rate
+- [x] Add template selector UI before starting review
+- [x] Apply template weights to section scoring
+- [x] Show template-specific guidance per section
+
+### PDF Export
+- [x] Create PDF generation endpoint on server
+- [x] Design professional report layout with cover page
+- [x] Include executive summary with overall score
+- [x] Add section-by-section analysis with expert insights
+- [x] Include charts/visualizations for scores
+- [x] Add recommendations and concerns summary
+- [x] Include expert team roster in report
+- [x] Add download button for PDF export
+
+### Collaborative Review
+- [x] Create review session table in database
+- [x] Add invite collaborators functionality
+- [x] Implement role-based permissions (owner, reviewer, viewer)
+- [x] Show real-time collaborator presence indicator
+- [x] Allow comments on sections from collaborators
+- [x] Track who reviewed which sections
+- [x] Activity logging for all actions
+- [x] Create shared review dashboard

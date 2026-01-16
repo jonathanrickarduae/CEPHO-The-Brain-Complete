@@ -1415,3 +1415,71 @@ export const expertFollowUpQuestions = mysqlTable("expert_follow_up_questions", 
 
 export type ExpertFollowUpQuestion = typeof expertFollowUpQuestions.$inferSelect;
 export type InsertExpertFollowUpQuestion = typeof expertFollowUpQuestions.$inferInsert;
+
+/**
+ * Collaborative Review Sessions - Multi-user review sessions
+ */
+export const collaborativeReviewSessions = mysqlTable("collaborative_review_sessions", {
+  id: int("id").autoincrement().primaryKey(),
+  ownerId: int("ownerId").notNull(), // User who created the session
+  projectName: varchar("projectName", { length: 255 }).notNull(),
+  templateId: varchar("templateId", { length: 100 }),
+  status: mysqlEnum("status", ["active", "completed", "archived"]).default("active").notNull(),
+  reviewData: json("reviewData"), // Current state of the review
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type CollaborativeReviewSession = typeof collaborativeReviewSessions.$inferSelect;
+export type InsertCollaborativeReviewSession = typeof collaborativeReviewSessions.$inferInsert;
+
+/**
+ * Collaborative Review Participants - Users invited to a review session
+ */
+export const collaborativeReviewParticipants = mysqlTable("collaborative_review_participants", {
+  id: int("id").autoincrement().primaryKey(),
+  sessionId: int("sessionId").notNull(),
+  userId: int("userId").notNull(),
+  role: mysqlEnum("role", ["owner", "reviewer", "viewer"]).default("viewer").notNull(),
+  invitedBy: int("invitedBy"),
+  invitedAt: timestamp("invitedAt").defaultNow().notNull(),
+  joinedAt: timestamp("joinedAt"),
+  lastActiveAt: timestamp("lastActiveAt"),
+});
+
+export type CollaborativeReviewParticipant = typeof collaborativeReviewParticipants.$inferSelect;
+export type InsertCollaborativeReviewParticipant = typeof collaborativeReviewParticipants.$inferInsert;
+
+/**
+ * Collaborative Review Comments - Comments on sections from collaborators
+ */
+export const collaborativeReviewComments = mysqlTable("collaborative_review_comments", {
+  id: int("id").autoincrement().primaryKey(),
+  sessionId: int("sessionId").notNull(),
+  userId: int("userId").notNull(),
+  sectionId: varchar("sectionId", { length: 100 }).notNull(),
+  comment: text("comment").notNull(),
+  parentCommentId: int("parentCommentId"), // For threaded replies
+  status: mysqlEnum("status", ["active", "resolved", "deleted"]).default("active").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type CollaborativeReviewComment = typeof collaborativeReviewComments.$inferSelect;
+export type InsertCollaborativeReviewComment = typeof collaborativeReviewComments.$inferInsert;
+
+/**
+ * Collaborative Review Activity - Track who reviewed what
+ */
+export const collaborativeReviewActivity = mysqlTable("collaborative_review_activity", {
+  id: int("id").autoincrement().primaryKey(),
+  sessionId: int("sessionId").notNull(),
+  userId: int("userId").notNull(),
+  action: mysqlEnum("action", ["joined", "viewed_section", "commented", "reviewed_section", "completed_review"]).notNull(),
+  sectionId: varchar("sectionId", { length: 100 }),
+  metadata: json("metadata"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type CollaborativeReviewActivity = typeof collaborativeReviewActivity.$inferSelect;
+export type InsertCollaborativeReviewActivity = typeof collaborativeReviewActivity.$inferInsert;
