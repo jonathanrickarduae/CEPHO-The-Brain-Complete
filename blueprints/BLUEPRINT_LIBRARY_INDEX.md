@@ -62,6 +62,7 @@ The SME Success DNA document is the absolute base plate for all Project Genesis 
 | CEPHO-BP-012 | **Due Diligence Process Guide** | Complete due diligence framework and checklist | `/blueprints/CEPHO-BP-012-DUE_DILIGENCE_PROCESS_GUIDE.pdf` |
 | CEPHO-BP-013 | **Digital Twin Profile** | User decision-making patterns and preferences | `/blueprints/CEPHO-BP-013-DIGITAL_TWIN_PROFILE.md` |
 | CEPHO-BP-014 | **Data Room Document Management Process** | Secure protocols for third-party data room content | `/blueprints/CEPHO-BP-014-DATA_ROOM_DOCUMENT_MANAGEMENT_PROCESS.md` |
+| CEPHO-BP-015 | **Investor Grade Financial Modeling Framework** | Complete financial modeling standards, formulas, and workflows | `/blueprints/CEPHO-BP-015-FINANCIAL_MODELING_FRAMEWORK.md` |
 
 ---
 
@@ -116,6 +117,7 @@ Prohibited activities include:
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 3.1 | Jan 17, 2026 | Added CEPHO-BP-015 (Investor Grade Financial Modeling Framework) |
 | 3.0 | Jan 16, 2026 | Added CEPHO-BP-012 (Due Diligence), CEPHO-BP-013 (Digital Twin Profile), CEPHO-BP-014 (Data Room Document Management) |
 | 2.0 | Jan 2026 | Added SME Success DNA document, 150 company research, 17 expert perspectives |
 | 1.0 | Jan 2026 | Initial library creation |

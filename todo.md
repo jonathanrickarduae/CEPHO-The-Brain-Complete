@@ -3806,3 +3806,13 @@
 - [x] Create animated neuron brain component with subtle, slow pulsing
 - [x] Add gentle neuron firing effect (soft glow, not intense)
 - [x] Integrate into sidebar header and mobile header
+
+
+## Morning Signal & Pattern Learning
+- [x] Create Morning Signal page displaying Evening Review summaries
+- [x] Show accepted tasks for the day
+- [x] Show deferred tasks requiring attention
+- [x] Display key insights from previous evening's review
+- [x] Enhance pattern learning to track review completion times by day
+- [x] Auto-adjust Chief of Staff prompt timing based on learned patterns
+- [x] Add pattern insights display in Morning Signal page

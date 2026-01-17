@@ -18,6 +18,7 @@ import DailyBrief from "./pages/DailyBrief";
 import AIExperts from "./pages/AIExperts";
 import AISMEsPage from "./pages/AISMEsPage";
 import EveningReview from "./pages/EveningReview";
+import MorningSignal from "./pages/MorningSignal";
 import AITeam from "./pages/AITeam";
 import Waitlist from "./pages/Waitlist";
 import Settings from "./pages/Settings";
@@ -101,6 +102,9 @@ function Router() {
       </Route>
       <Route path="/evening-review">
         <WithLayout><EveningReview /></WithLayout>
+      </Route>
+      <Route path="/morning-signal">
+        <WithLayout><MorningSignal /></WithLayout>
       </Route>
       <Route path="/ai-team">
         <WithLayout><AITeam /></WithLayout>
