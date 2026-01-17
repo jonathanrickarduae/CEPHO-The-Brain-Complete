@@ -3914,3 +3914,29 @@
 - [x] Document Library: Filter by document type (Innovation Briefs tab)
 - [x] Document Library: Filter by QA status (Approved/Pending/Rejected)
 - [x] Document Library: View, Download, Email actions for documents
+
+
+## Document Library Enhancement Features (Jan 17, 2026)
+
+### PDF Export
+- [x] Create PDF generation service for Innovation Briefs
+- [x] Generate professional PDF with CEPHO branding (black, white, grey palette)
+- [x] Include all sections: Executive Summary, Assessments, Investment Scenarios, Recommendation
+- [x] Add download button in Document Library that generates and downloads PDF
+- [x] Store generated PDF URL in document record
+
+### QA Approval Workflow
+- [x] Add Approve/Reject buttons in Document Library for pending documents
+- [x] Create QA approval dialog with notes field
+- [x] Update document status on approval/rejection
+- [x] Record QA approver name and timestamp
+- [x] Show approval status badge (Approved/Pending/Rejected)
+- [x] Filter documents by QA status
+
+### Email Distribution
+- [x] Create email composition dialog with recipient fields
+- [x] Add customizable email template with document summary
+- [x] Support multiple recipients with name/email
+- [x] Include document attachment or link
+- [x] Send via notification service
+- [x] Track email send history in document metadata

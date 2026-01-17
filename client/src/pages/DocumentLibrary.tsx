@@ -24,7 +24,12 @@ import {
   Mail,
   Send,
   Plus,
-  X
+  X,
+  History,
+  FileDown,
+  AlertTriangle,
+  ThumbsUp,
+  ThumbsDown
 } from "lucide-react";
 import { format } from "date-fns";
 import { toast } from "sonner";
@@ -32,6 +37,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
@@ -44,6 +50,13 @@ import {
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 type DocumentType = "all" | "innovation_brief" | "project_genesis" | "report" | "other";
 type QAStatus = "all" | "approved" | "pending" | "rejected";
@@ -54,6 +67,8 @@ export default function DocumentLibrary() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedDocument, setSelectedDocument] = useState<any>(null);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+  
+  // Email dialog state
   const [isEmailDialogOpen, setIsEmailDialogOpen] = useState(false);
   const [emailRecipients, setEmailRecipients] = useState<Array<{ email: string; name: string }>>([]);
   const [newRecipientEmail, setNewRecipientEmail] = useState("");
@@ -61,6 +76,16 @@ export default function DocumentLibrary() {
   const [emailSubject, setEmailSubject] = useState("");
   const [emailMessage, setEmailMessage] = useState("");
   const [emailDocument, setEmailDocument] = useState<any>(null);
+  
+  // QA Approval dialog state
+  const [isQADialogOpen, setIsQADialogOpen] = useState(false);
+  const [qaDocument, setQaDocument] = useState<any>(null);
+  const [qaAction, setQaAction] = useState<"approve" | "reject">("approve");
+  const [qaNotes, setQaNotes] = useState("");
+  
+  // Email history dialog state
+  const [isEmailHistoryOpen, setIsEmailHistoryOpen] = useState(false);
+  const [emailHistoryDocument, setEmailHistoryDocument] = useState<any>(null);
 
   const { data: documents, isLoading, refetch } = trpc.documentLibrary.list.useQuery({
     type: activeType,
@@ -72,13 +97,21 @@ export default function DocumentLibrary() {
   const generatePDFMutation = trpc.documentLibrary.generatePDF.useMutation({
     onSuccess: (data) => {
       toast.success("Document generated successfully");
+      // Open the markdown URL for viewing/downloading
       if (data.markdownUrl) {
-        window.open(data.markdownUrl, "_blank");
+        // Create a download link
+        const link = document.createElement('a');
+        link.href = data.markdownUrl;
+        link.download = `document.md`;
+        link.target = '_blank';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
       }
       refetch();
     },
     onError: (error) => {
-      toast.error(`Failed to generate PDF: ${error.message}`);
+      toast.error(`Failed to generate document: ${error.message}`);
     },
   });
 
@@ -94,7 +127,10 @@ export default function DocumentLibrary() {
 
   const updateQAMutation = trpc.documentLibrary.updateQAStatus.useMutation({
     onSuccess: () => {
-      toast.success("QA status updated");
+      toast.success(qaAction === "approve" ? "Document approved" : "Document rejected");
+      setIsQADialogOpen(false);
+      setQaDocument(null);
+      setQaNotes("");
       refetch();
     },
     onError: (error) => {
@@ -112,6 +148,11 @@ export default function DocumentLibrary() {
       toast.error(`Failed to send: ${error.message}`);
     },
   });
+
+  const { data: emailHistory } = trpc.documentLibrary.getEmailHistory.useQuery(
+    { documentId: emailHistoryDocument?.documentId || "" },
+    { enabled: !!emailHistoryDocument?.documentId && isEmailHistoryOpen }
+  );
 
   const resetEmailForm = () => {
     setEmailRecipients([]);
@@ -158,6 +199,28 @@ export default function DocumentLibrary() {
     });
   };
 
+  const handleOpenQADialog = (doc: any, action: "approve" | "reject") => {
+    setQaDocument(doc);
+    setQaAction(action);
+    setQaNotes("");
+    setIsQADialogOpen(true);
+  };
+
+  const handleQASubmit = () => {
+    if (!qaDocument) return;
+    
+    updateQAMutation.mutate({
+      documentId: qaDocument.documentId,
+      status: qaAction === "approve" ? "approved" : "rejected",
+      notes: qaNotes || undefined,
+    });
+  };
+
+  const handleOpenEmailHistory = (doc: any) => {
+    setEmailHistoryDocument(doc);
+    setIsEmailHistoryOpen(true);
+  };
+
   const filteredDocuments = documents?.filter((doc) => {
     if (!searchQuery) return true;
     return (
@@ -190,7 +253,7 @@ export default function DocumentLibrary() {
         );
       case "pending":
         return (
-          <Badge variant="secondary" className="bg-amber-600">
+          <Badge variant="secondary" className="bg-amber-600 text-white">
             <Clock className="h-3 w-3 mr-1" />
             Pending QA
           </Badge>
@@ -234,17 +297,76 @@ export default function DocumentLibrary() {
     }
   };
 
-  const handleApprove = (documentId: string) => {
-    updateQAMutation.mutate({
-      documentId,
-      status: "approved",
-      notes: "Approved by Chief of Staff",
-    });
-  };
-
   const handlePreview = (doc: any) => {
     setSelectedDocument(doc);
     setIsPreviewOpen(true);
+  };
+
+  // Parse and render document content nicely
+  const renderDocumentContent = (content: string) => {
+    try {
+      const parsed = JSON.parse(content);
+      return (
+        <div className="space-y-4">
+          {parsed.description && (
+            <div>
+              <h4 className="font-semibold text-sm text-muted-foreground mb-1">Description</h4>
+              <p className="text-sm">{parsed.description}</p>
+            </div>
+          )}
+          {parsed.assessments && parsed.assessments.length > 0 && (
+            <div>
+              <h4 className="font-semibold text-sm text-muted-foreground mb-2">Assessments</h4>
+              <div className="space-y-2">
+                {parsed.assessments.map((a: any, i: number) => (
+                  <div key={i} className="flex items-center justify-between p-2 bg-muted rounded">
+                    <span className="text-sm capitalize">{a.type?.replace(/_/g, ' ')}</span>
+                    <Badge variant={a.score >= 70 ? "default" : a.score >= 50 ? "secondary" : "destructive"}>
+                      {Math.round(a.score)}/100
+                    </Badge>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+          {parsed.recommendation && (
+            <div>
+              <h4 className="font-semibold text-sm text-muted-foreground mb-1">Recommendation</h4>
+              <Badge className={
+                parsed.recommendation.decision === 'proceed' ? 'bg-green-600' :
+                parsed.recommendation.decision === 'refine' ? 'bg-amber-600' :
+                'bg-red-600'
+              }>
+                {parsed.recommendation.decision?.toUpperCase()}
+              </Badge>
+              {parsed.recommendation.rationale && (
+                <p className="text-sm mt-2">{parsed.recommendation.rationale}</p>
+              )}
+            </div>
+          )}
+          {parsed.scenarios && parsed.scenarios.length > 0 && (
+            <div>
+              <h4 className="font-semibold text-sm text-muted-foreground mb-2">Investment Scenarios</h4>
+              <div className="space-y-2">
+                {parsed.scenarios.map((s: any, i: number) => (
+                  <div key={i} className="p-2 bg-muted rounded">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-medium">{s.name}</span>
+                      {s.isRecommended && <Badge variant="default" className="bg-green-600">Recommended</Badge>}
+                    </div>
+                    <div className="text-xs text-muted-foreground mt-1">
+                      Investment: £{s.amount?.toLocaleString()} | Risk: {s.riskLevel} | Timeline: {s.timeline}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      );
+    } catch {
+      return <pre className="whitespace-pre-wrap text-sm">{content}</pre>;
+    }
   };
 
   return (
@@ -386,19 +508,25 @@ export default function DocumentLibrary() {
                         {getTypeIcon(doc.type)}
                       </div>
                       <div>
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-2 flex-wrap">
                           <h4 className="font-medium">{doc.title}</h4>
                           {getQABadge(doc.qaStatus)}
                           {getClassificationBadge(doc.classification)}
                         </div>
-                        <div className="flex items-center gap-3 text-sm text-muted-foreground mt-1">
+                        <div className="flex items-center gap-3 text-sm text-muted-foreground mt-1 flex-wrap">
                           <span>{doc.documentId}</span>
                           <span>•</span>
                           <span>{format(new Date(doc.createdAt), "MMM d, yyyy 'at' h:mm a")}</span>
                           {doc.qaApprover && (
                             <>
                               <span>•</span>
-                              <span>Approved by {doc.qaApprover}</span>
+                              <span className="text-green-600">Approved by {doc.qaApprover}</span>
+                            </>
+                          )}
+                          {doc.qaNotes && (
+                            <>
+                              <span>•</span>
+                              <span className="italic">"{doc.qaNotes}"</span>
                             </>
                           )}
                         </div>
@@ -409,23 +537,16 @@ export default function DocumentLibrary() {
                         variant="ghost"
                         size="sm"
                         onClick={() => handlePreview(doc)}
+                        title="Preview"
                       >
                         <Eye className="h-4 w-4" />
                       </Button>
-                      {doc.markdownUrl && (
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => doc.markdownUrl && window.open(doc.markdownUrl, "_blank")}
-                        >
-                          <ExternalLink className="h-4 w-4" />
-                        </Button>
-                      )}
                       <Button
                         variant="ghost"
                         size="sm"
                         onClick={() => handleGeneratePDF(doc)}
                         disabled={generatePDFMutation.isPending}
+                        title="Download"
                       >
                         <Download className="h-4 w-4" />
                       </Button>
@@ -445,11 +566,29 @@ export default function DocumentLibrary() {
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                           {doc.qaStatus === "pending" && (
-                            <DropdownMenuItem onClick={() => handleApprove(doc.documentId)}>
-                              <CheckCircle className="h-4 w-4 mr-2" />
-                              Approve (Chief of Staff)
+                            <>
+                              <DropdownMenuItem onClick={() => handleOpenQADialog(doc, "approve")}>
+                                <ThumbsUp className="h-4 w-4 mr-2 text-green-600" />
+                                Approve Document
+                              </DropdownMenuItem>
+                              <DropdownMenuItem onClick={() => handleOpenQADialog(doc, "reject")}>
+                                <ThumbsDown className="h-4 w-4 mr-2 text-red-600" />
+                                Reject Document
+                              </DropdownMenuItem>
+                              <DropdownMenuSeparator />
+                            </>
+                          )}
+                          {doc.markdownUrl && (
+                            <DropdownMenuItem onClick={() => doc.markdownUrl && window.open(doc.markdownUrl, "_blank")}>
+                              <ExternalLink className="h-4 w-4 mr-2" />
+                              Open in New Tab
                             </DropdownMenuItem>
                           )}
+                          <DropdownMenuItem onClick={() => handleOpenEmailHistory(doc)}>
+                            <History className="h-4 w-4 mr-2" />
+                            Email History
+                          </DropdownMenuItem>
+                          <DropdownMenuSeparator />
                           <DropdownMenuItem
                             onClick={() => handleDelete(doc.documentId)}
                             className="text-red-600"
@@ -486,34 +625,130 @@ export default function DocumentLibrary() {
                 {selectedDocument && getClassificationBadge(selectedDocument.classification)}
               </div>
               {selectedDocument?.content && (
-                <div className="prose dark:prose-invert max-w-none">
-                  <pre className="whitespace-pre-wrap text-sm bg-muted p-4 rounded-lg">
-                    {JSON.stringify(JSON.parse(selectedDocument.content), null, 2)}
-                  </pre>
+                <div className="bg-muted p-4 rounded-lg">
+                  {renderDocumentContent(selectedDocument.content)}
                 </div>
               )}
               <div className="flex justify-end gap-2">
                 {selectedDocument?.qaStatus === "pending" && (
-                  <Button onClick={() => {
-                    handleApprove(selectedDocument.documentId);
-                    setIsPreviewOpen(false);
-                  }}>
-                    <CheckCircle className="h-4 w-4 mr-2" />
-                    Approve Document
-                  </Button>
+                  <>
+                    <Button 
+                      variant="outline"
+                      onClick={() => {
+                        setIsPreviewOpen(false);
+                        handleOpenQADialog(selectedDocument, "reject");
+                      }}
+                    >
+                      <ThumbsDown className="h-4 w-4 mr-2" />
+                      Reject
+                    </Button>
+                    <Button onClick={() => {
+                      setIsPreviewOpen(false);
+                      handleOpenQADialog(selectedDocument, "approve");
+                    }}>
+                      <ThumbsUp className="h-4 w-4 mr-2" />
+                      Approve
+                    </Button>
+                  </>
                 )}
                 <Button
                   variant="outline"
                   onClick={() => {
                     handleGeneratePDF(selectedDocument);
-                    setIsPreviewOpen(false);
                   }}
+                  disabled={generatePDFMutation.isPending}
                 >
                   <Download className="h-4 w-4 mr-2" />
-                  Generate PDF
+                  Download
                 </Button>
               </div>
             </div>
+          </DialogContent>
+        </Dialog>
+
+        {/* QA Approval Dialog */}
+        <Dialog open={isQADialogOpen} onOpenChange={(open) => {
+          setIsQADialogOpen(open);
+          if (!open) {
+            setQaDocument(null);
+            setQaNotes("");
+          }
+        }}>
+          <DialogContent className="max-w-md">
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2">
+                {qaAction === "approve" ? (
+                  <ThumbsUp className="h-5 w-5 text-green-600" />
+                ) : (
+                  <ThumbsDown className="h-5 w-5 text-red-600" />
+                )}
+                {qaAction === "approve" ? "Approve Document" : "Reject Document"}
+              </DialogTitle>
+              <DialogDescription>
+                {qaAction === "approve" 
+                  ? "Confirm QA approval for this document. Once approved, it will be marked as Chief of Staff reviewed."
+                  : "Reject this document and provide feedback for revision."
+                }
+              </DialogDescription>
+            </DialogHeader>
+            
+            <div className="space-y-4">
+              {qaDocument && (
+                <div className="bg-muted p-3 rounded-lg">
+                  <div className="flex items-center gap-2 text-sm">
+                    {getTypeIcon(qaDocument.type)}
+                    <span className="font-medium">{qaDocument.title}</span>
+                  </div>
+                  <div className="text-xs text-muted-foreground mt-1">
+                    {qaDocument.documentId}
+                  </div>
+                </div>
+              )}
+              
+              <div>
+                <Label htmlFor="qa-notes">
+                  {qaAction === "approve" ? "Approval Notes (optional)" : "Rejection Reason"}
+                </Label>
+                <Textarea
+                  id="qa-notes"
+                  value={qaNotes}
+                  onChange={(e) => setQaNotes(e.target.value)}
+                  placeholder={qaAction === "approve" 
+                    ? "Add any notes about this approval..."
+                    : "Explain why this document is being rejected and what needs to be fixed..."
+                  }
+                  className="mt-1"
+                  rows={3}
+                />
+              </div>
+
+              {qaAction === "reject" && !qaNotes && (
+                <div className="flex items-center gap-2 text-amber-600 text-sm">
+                  <AlertTriangle className="h-4 w-4" />
+                  <span>Please provide a reason for rejection</span>
+                </div>
+              )}
+            </div>
+
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setIsQADialogOpen(false)}>
+                Cancel
+              </Button>
+              <Button 
+                onClick={handleQASubmit}
+                disabled={updateQAMutation.isPending || (qaAction === "reject" && !qaNotes)}
+                variant={qaAction === "approve" ? "default" : "destructive"}
+              >
+                {updateQAMutation.isPending ? (
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />
+                ) : qaAction === "approve" ? (
+                  <CheckCircle className="h-4 w-4 mr-2" />
+                ) : (
+                  <XCircle className="h-4 w-4 mr-2" />
+                )}
+                {qaAction === "approve" ? "Approve" : "Reject"}
+              </Button>
+            </DialogFooter>
           </DialogContent>
         </Dialog>
 
@@ -629,6 +864,69 @@ export default function DocumentLibrary() {
                   <Send className="h-4 w-4 mr-2" />
                 )}
                 Send Email
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
+        {/* Email History Dialog */}
+        <Dialog open={isEmailHistoryOpen} onOpenChange={(open) => {
+          setIsEmailHistoryOpen(open);
+          if (!open) setEmailHistoryDocument(null);
+        }}>
+          <DialogContent className="max-w-lg">
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2">
+                <History className="h-5 w-5 text-muted-foreground" />
+                Email History
+              </DialogTitle>
+              <DialogDescription>
+                Distribution history for "{emailHistoryDocument?.title}"
+              </DialogDescription>
+            </DialogHeader>
+            
+            <div className="space-y-3 max-h-[400px] overflow-y-auto">
+              {emailHistory && emailHistory.length > 0 ? (
+                emailHistory.map((entry: any, index: number) => (
+                  <div key={index} className="flex items-center justify-between p-3 bg-muted rounded-lg">
+                    <div>
+                      <div className="font-medium text-sm">
+                        {entry.recipientName || entry.recipientEmail}
+                      </div>
+                      <div className="text-xs text-muted-foreground">
+                        {entry.recipientEmail}
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <Badge variant={entry.status === 'sent' ? 'default' : 'destructive'} className="text-xs">
+                        {entry.status}
+                      </Badge>
+                      <div className="text-xs text-muted-foreground mt-1">
+                        {format(new Date(entry.sentAt), "MMM d, yyyy h:mm a")}
+                      </div>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="text-center py-8 text-muted-foreground">
+                  <Mail className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                  <p>No emails sent yet</p>
+                </div>
+              )}
+            </div>
+
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setIsEmailHistoryOpen(false)}>
+                Close
+              </Button>
+              <Button onClick={() => {
+                setIsEmailHistoryOpen(false);
+                if (emailHistoryDocument) {
+                  handleOpenEmailDialog(emailHistoryDocument);
+                }
+              }}>
+                <Send className="h-4 w-4 mr-2" />
+                Send New Email
               </Button>
             </DialogFooter>
           </DialogContent>
