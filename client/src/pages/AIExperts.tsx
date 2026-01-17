@@ -5,6 +5,7 @@ import { MyBoard } from "@/components/MyBoard";
 import { WarRoom } from "@/components/WarRoom";
 import { ExpertAnalytics } from "@/components/ExpertAnalytics";
 import { ExpertScheduling } from "@/components/ExpertScheduling";
+import { ExternalResources } from "@/components/ExternalResources";
 import { ExpertPerformanceRating, generateMockPerformance } from "@/components/ExpertPerformanceRating";
 import { 
   Users, Brain, Zap, Clock, CheckCircle2, 
@@ -13,7 +14,7 @@ import {
   ThumbsDown, RotateCcw, Sparkles, Timer, 
   FileText, Mail, Code, Search, Mic, MicOff,
   Fingerprint, Eye, ChevronRight, AlertCircle,
-  ListChecks, RefreshCw, Star, BarChart3, Swords
+  ListChecks, RefreshCw, Star, BarChart3, Swords, Globe
 } from "lucide-react";
 import { 
   AI_EXPERTS, 
@@ -174,8 +175,8 @@ export default function AIExperts() {
   const [isRunning, setIsRunning] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
   
-  // View mode: action engine, expert directory, my board, war room, analytics, or scheduling
-  const [viewMode, setViewMode] = useState<'action' | 'directory' | 'board' | 'warroom' | 'analytics' | 'scheduling'>('action');
+  // View mode: action engine, expert directory, my board, war room, analytics, scheduling, or external resources
+  const [viewMode, setViewMode] = useState<'action' | 'directory' | 'board' | 'warroom' | 'analytics' | 'scheduling' | 'external'>('action');
   
   // Insight Validation State
   const [validationMode, setValidationMode] = useState<'off' | 'review' | 'challenge'>('off');
@@ -566,6 +567,15 @@ export default function AIExperts() {
     );
   }
 
+  // If viewing External Resources, show that instead
+  if (viewMode === 'external') {
+    return (
+      <FeatureGate feature="aiExperts" showOverlay={true}>
+        <ExternalResources onBack={() => setViewMode('action')} />
+      </FeatureGate>
+    );
+  }
+
   return (
     <FeatureGate feature="aiExperts" showOverlay={true}>
     <div className="h-full bg-background text-foreground overflow-auto">
@@ -641,6 +651,18 @@ export default function AIExperts() {
                     >
                       <Calendar className="w-3 h-3" />
                       Schedule
+                    </button>
+                    <button
+                      onClick={() => setViewMode('external')}
+                      className={`px-3 py-1 text-sm rounded-full border transition-colors flex items-center gap-1 ${
+                        // @ts-ignore - viewMode type is correct
+                        viewMode === 'external'
+                          ? 'bg-emerald-500/30 text-emerald-400 border-emerald-500/50'
+                          : 'bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400/70 border-emerald-500/20'
+                      }`}
+                    >
+                      <Globe className="w-3 h-3" />
+                      External
                     </button>
                   </div>
                 </div>

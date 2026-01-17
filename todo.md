@@ -3754,3 +3754,32 @@
 - [x] Redesign brain icon - remove circle, use cyan/neon green color
 - [x] Softer neuron animations (less flashing)
 - [x] Move "Your headspace, reclaimed" closer to the heading
+
+
+## Evening Review Countdown & Cutoff (January 2026)
+- [ ] Add countdown timer showing time remaining until 8 PM cutoff
+- [ ] Add visual indicator when in review window (7-8 PM)
+- [ ] Chief of Staff prompts at 7 PM: "Ready to start your Evening Review?"
+- [ ] Auto-start overnight processing at 8 PM if no manual input
+- [ ] Auto-learning: analyze calendars, tasks, project status for smart decisions
+- [ ] Auto-generate Signal briefing from overnight processing
+- [ ] Manual override available anytime before 8 PM cutoff
+- [ ] Future: Add Google Calendar integration for automatic reminders
+
+
+## External SME Connections (January 2026)
+- [ ] Add External Resources category to AI-SME page
+- [ ] Include real company connections: McKinsey, The Economist, FT, Delphi.ai
+- [ ] Display company logos/names for external SME portals
+- [ ] Add click-through buttons to access external expert networks
+- [ ] Create filtering between AI personas and real external connections
+- [ ] Add API connection indicators for services with integrations
+
+
+## External SME Connections
+- [x] Create external SME resources data file with company info
+- [x] Add External Resources component with filtering and search
+- [x] Add External SMEs tab to AI-SMEs page
+- [x] Implement click-through buttons for external portals
+- [x] Show Connected APIs section with live status
+- [x] Category filtering (Consulting, Research, Media, AI Platforms, Data, Training)

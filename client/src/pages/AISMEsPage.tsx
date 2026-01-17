@@ -5,7 +5,7 @@ import {
   ChevronRight, Plus, Mic, MicOff, Send, Eye, CheckCircle2,
   Sparkles, Target, Clock, BarChart3, Filter, Grid, List, Trash2, Loader2,
   X, Activity, Trophy, TrendingUp, ArrowUpDown, SortAsc, SortDesc,
-  Shield, Zap, AlertTriangle
+  Shield, Zap, AlertTriangle, Globe
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -39,6 +39,7 @@ import {
   type ExpertType
 } from "@/data/expertTypes";
 import { corporatePartners } from "@/data/aiExperts";
+import { ExternalResources } from "@/components/ExternalResources";
 
 // Build categories from real expert data
 const CATEGORIES = [
@@ -63,7 +64,7 @@ const SORT_OPTIONS: { id: SortOption; label: string; icon: typeof TrendingUp }[]
   { id: 'recent', label: 'Recently Used', icon: Clock },
 ];
 
-type ViewMode = 'browse' | 'leaderboard' | 'teams' | 'assemble';
+type ViewMode = 'browse' | 'leaderboard' | 'teams' | 'assemble' | 'external';
 
 interface SelectedExpert {
   id: string;
@@ -288,6 +289,7 @@ export default function AISMEsPage() {
             { id: 'leaderboard', label: 'Leaderboard', icon: Trophy },
             { id: 'teams', label: 'My Teams', icon: Users },
             { id: 'assemble', label: 'Assemble', icon: Plus },
+            { id: 'external', label: 'External SMEs', icon: Globe },
           ].map(tab => (
             <button
               key={tab.id}
@@ -859,6 +861,13 @@ export default function AISMEsPage() {
                 </div>
               </div>
             </div>
+          </div>
+        )}
+
+        {/* External Resources View */}
+        {viewMode === 'external' && (
+          <div className="flex-1 overflow-hidden">
+            <ExternalResources />
           </div>
         )}
       </div>

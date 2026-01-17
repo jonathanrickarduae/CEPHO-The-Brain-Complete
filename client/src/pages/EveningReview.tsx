@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { 
   Moon, Check, X, Clock, ChevronDown, ChevronUp,
   Mic, MicOff, Send, Play, Folder, Target,
-  CheckCircle2, XCircle, ArrowRight
+  CheckCircle2, XCircle, ArrowRight, AlertCircle, Brain, Zap
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -60,6 +60,7 @@ const OVERNIGHT_TASKS = [
 ];
 
 type TaskStatus = 'pending' | 'accepted' | 'rejected' | 'deferred';
+type ReviewState = 'before_window' | 'in_window' | 'cutoff_warning' | 'auto_processing' | 'completed';
 
 interface TaskDecision {
   taskId: string;
@@ -76,6 +77,89 @@ export default function EveningReview() {
   const [didntGoText, setDidntGoText] = useState("");
   const [showReflection, setShowReflection] = useState(false);
   const [isReadyToStart, setIsReadyToStart] = useState(false);
+  const [chiefOfStaffPrompt, setChiefOfStaffPrompt] = useState(false);
+  const [autoProcessingStarted, setAutoProcessingStarted] = useState(false);
+  
+  // Time tracking
+  const [currentTime, setCurrentTime] = useState(new Date());
+  const [timeUntilCutoff, setTimeUntilCutoff] = useState<string>("");
+  const [reviewState, setReviewState] = useState<ReviewState>('before_window');
+
+  // Update time every second
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const now = new Date();
+      setCurrentTime(now);
+      
+      // Calculate cutoff time (8 PM today)
+      const cutoff = new Date();
+      cutoff.setHours(20, 0, 0, 0);
+      
+      // Calculate window start (7 PM today)
+      const windowStart = new Date();
+      windowStart.setHours(19, 0, 0, 0);
+      
+      // Calculate warning time (7:45 PM - 15 min before cutoff)
+      const warningTime = new Date();
+      warningTime.setHours(19, 45, 0, 0);
+      
+      const msUntilCutoff = cutoff.getTime() - now.getTime();
+      
+      // Determine review state
+      if (isReadyToStart || autoProcessingStarted) {
+        setReviewState('completed');
+      } else if (now >= cutoff) {
+        setReviewState('auto_processing');
+        if (!autoProcessingStarted) {
+          // Trigger auto-processing
+          handleAutoStart();
+        }
+      } else if (now >= warningTime) {
+        setReviewState('cutoff_warning');
+      } else if (now >= windowStart) {
+        setReviewState('in_window');
+        // Show Chief of Staff prompt at 7 PM
+        if (!chiefOfStaffPrompt) {
+          setChiefOfStaffPrompt(true);
+        }
+      } else {
+        setReviewState('before_window');
+      }
+      
+      // Format countdown
+      if (msUntilCutoff > 0) {
+        const hours = Math.floor(msUntilCutoff / (1000 * 60 * 60));
+        const minutes = Math.floor((msUntilCutoff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((msUntilCutoff % (1000 * 60)) / 1000);
+        
+        if (hours > 0) {
+          setTimeUntilCutoff(`${hours}h ${minutes}m ${seconds}s`);
+        } else if (minutes > 0) {
+          setTimeUntilCutoff(`${minutes}m ${seconds}s`);
+        } else {
+          setTimeUntilCutoff(`${seconds}s`);
+        }
+      } else {
+        setTimeUntilCutoff("Cutoff passed");
+      }
+    }, 1000);
+    
+    return () => clearInterval(interval);
+  }, [isReadyToStart, autoProcessingStarted, chiefOfStaffPrompt]);
+
+  const handleAutoStart = () => {
+    setAutoProcessingStarted(true);
+    // Auto-accept all pending tasks
+    OVERNIGHT_TASKS.forEach(project => {
+      project.tasks.forEach(task => {
+        const status = getTaskStatus(task.id);
+        if (status === 'pending') {
+          setTaskStatus(task.id, 'accepted');
+        }
+      });
+    });
+    toast.info("8 PM cutoff reached. Chief of Staff is auto-processing remaining tasks.");
+  };
 
   const getTaskStatus = (taskId: string): TaskStatus => {
     const decision = taskDecisions.find(d => d.taskId === taskId);
@@ -156,6 +240,10 @@ export default function EveningReview() {
     return now.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' });
   };
 
+  const formatTime = () => {
+    return currentTime.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+  };
+
   const getPriorityColor = (priority: string) => {
     switch (priority) {
       case 'high': return 'text-red-600 bg-red-50 border-red-200';
@@ -165,9 +253,119 @@ export default function EveningReview() {
     }
   };
 
+  const getReviewStateColor = () => {
+    switch (reviewState) {
+      case 'before_window': return 'bg-gray-100 text-gray-700 border-gray-300';
+      case 'in_window': return 'bg-green-100 text-green-700 border-green-300';
+      case 'cutoff_warning': return 'bg-amber-100 text-amber-700 border-amber-300';
+      case 'auto_processing': return 'bg-purple-100 text-purple-700 border-purple-300';
+      case 'completed': return 'bg-blue-100 text-blue-700 border-blue-300';
+      default: return 'bg-gray-100 text-gray-700 border-gray-300';
+    }
+  };
+
+  const getReviewStateText = () => {
+    switch (reviewState) {
+      case 'before_window': return 'Review window opens at 7:00 PM';
+      case 'in_window': return 'Review window open';
+      case 'cutoff_warning': return 'Less than 15 minutes until cutoff!';
+      case 'auto_processing': return 'Auto-processing by Chief of Staff';
+      case 'completed': return 'Review completed';
+      default: return '';
+    }
+  };
+
+  // Chief of Staff prompt modal
+  if (chiefOfStaffPrompt && !isReadyToStart && !autoProcessingStarted && reviewState !== 'completed') {
+    return (
+      <div className="h-full bg-background text-foreground flex items-center justify-center p-4">
+        <Card className="max-w-md w-full border-2 border-indigo-300 shadow-xl">
+          <CardContent className="p-6 text-center space-y-4">
+            <div className="w-16 h-16 mx-auto rounded-full bg-indigo-100 flex items-center justify-center">
+              <Brain className="w-8 h-8 text-indigo-600" />
+            </div>
+            <h2 className="text-xl font-bold text-foreground">Chief of Staff</h2>
+            <p className="text-muted-foreground">
+              It's {formatTime()}. Ready to start your Evening Review?
+            </p>
+            <p className="text-sm text-muted-foreground">
+              You have {stats.total} tasks across {OVERNIGHT_TASKS.length} projects to review.
+            </p>
+            <div className="flex flex-col gap-2 pt-4">
+              <Button 
+                onClick={() => setChiefOfStaffPrompt(false)}
+                className="w-full bg-indigo-600 hover:bg-indigo-700"
+              >
+                Yes, let's review
+              </Button>
+              <Button 
+                variant="outline"
+                onClick={() => {
+                  setChiefOfStaffPrompt(false);
+                  handleAutoStart();
+                }}
+                className="w-full"
+              >
+                No, auto-process for me
+              </Button>
+            </div>
+            <p className="text-xs text-muted-foreground">
+              Auto-processing will start at 8:00 PM if no action is taken
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  // Completed state
+  if (isReadyToStart || autoProcessingStarted) {
+    return (
+      <div className="h-full bg-background text-foreground flex items-center justify-center p-4">
+        <Card className="max-w-md w-full border-2 border-green-300 shadow-xl">
+          <CardContent className="p-6 text-center space-y-4">
+            <div className="w-16 h-16 mx-auto rounded-full bg-green-100 flex items-center justify-center">
+              <CheckCircle2 className="w-8 h-8 text-green-600" />
+            </div>
+            <h2 className="text-xl font-bold text-foreground">
+              {autoProcessingStarted && !isReadyToStart ? 'Auto-Processing Started' : 'Evening Review Complete'}
+            </h2>
+            <div className="space-y-2 text-left bg-gray-50 rounded-lg p-4">
+              <div className="flex justify-between text-sm">
+                <span className="text-muted-foreground">Tasks Accepted:</span>
+                <span className="font-medium text-green-600">{stats.accepted}</span>
+              </div>
+              <div className="flex justify-between text-sm">
+                <span className="text-muted-foreground">Tasks Deferred:</span>
+                <span className="font-medium text-amber-600">{stats.deferred}</span>
+              </div>
+              <div className="flex justify-between text-sm">
+                <span className="text-muted-foreground">Tasks Rejected:</span>
+                <span className="font-medium text-red-600">{stats.rejected}</span>
+              </div>
+            </div>
+            <div className="pt-4 space-y-2">
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <Zap className="w-4 h-4 text-indigo-500" />
+                <span>Chief of Staff is processing overnight tasks</span>
+              </div>
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <Clock className="w-4 h-4 text-indigo-500" />
+                <span>Signal briefing will be ready by 7:00 AM</span>
+              </div>
+            </div>
+            <p className="text-sm text-muted-foreground pt-4">
+              Rest well. Your morning Signal will include updates on all processed tasks.
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
   return (
     <div className="h-full bg-background text-foreground overflow-auto pb-24">
-      {/* Header */}
+      {/* Header with Countdown */}
       <div className="border-b border-border bg-gradient-to-r from-indigo-500/10 to-purple-500/10 sticky top-0 z-10">
         <div className="max-w-4xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
@@ -177,23 +375,48 @@ export default function EveningReview() {
               </div>
               <div>
                 <h1 className="text-xl font-bold text-foreground">Evening Review</h1>
-                <p className="text-sm text-muted-foreground">{formatDate()} • 8:00 PM</p>
+                <p className="text-sm text-muted-foreground">{formatDate()}</p>
               </div>
             </div>
-            <div className="flex items-center gap-2">
-              <Badge variant="outline" className="text-green-600 border-green-300 bg-green-50">
-                {stats.accepted} Accepted
-              </Badge>
-              <Badge variant="outline" className="text-amber-600 border-amber-300 bg-amber-50">
-                {stats.deferred} Deferred
-              </Badge>
-              <Badge variant="outline" className="text-red-600 border-red-300 bg-red-50">
-                {stats.rejected} Rejected
-              </Badge>
+            
+            {/* Countdown Timer */}
+            <div className="text-right">
+              <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full border ${getReviewStateColor()}`}>
+                <Clock className="w-4 h-4" />
+                <span className="text-sm font-medium">{timeUntilCutoff}</span>
+              </div>
+              <p className="text-xs text-muted-foreground mt-1">{getReviewStateText()}</p>
             </div>
+          </div>
+          
+          {/* Stats Bar */}
+          <div className="flex items-center gap-2 mt-3">
+            <Badge variant="outline" className="text-green-600 border-green-300 bg-green-50">
+              {stats.accepted} Accepted
+            </Badge>
+            <Badge variant="outline" className="text-amber-600 border-amber-300 bg-amber-50">
+              {stats.deferred} Deferred
+            </Badge>
+            <Badge variant="outline" className="text-red-600 border-red-300 bg-red-50">
+              {stats.rejected} Rejected
+            </Badge>
+            <Badge variant="outline" className="text-gray-600 border-gray-300 bg-gray-50">
+              {stats.pending} Pending
+            </Badge>
           </div>
         </div>
       </div>
+
+      {/* Warning Banner for Cutoff */}
+      {reviewState === 'cutoff_warning' && (
+        <div className="bg-amber-500 text-white px-4 py-2">
+          <div className="max-w-4xl mx-auto flex items-center gap-2">
+            <AlertCircle className="w-5 h-5" />
+            <span className="font-medium">Less than 15 minutes until 8 PM cutoff!</span>
+            <span className="text-amber-100">Chief of Staff will auto-process remaining tasks.</span>
+          </div>
+        </div>
+      )}
 
       <div className="max-w-4xl mx-auto px-4 py-6 space-y-6">
         {/* Task Summary Header */}
@@ -218,65 +441,66 @@ export default function EveningReview() {
         <div className="space-y-4">
           {OVERNIGHT_TASKS.map((project) => {
             const isExpanded = expandedProjects.includes(project.projectId);
-            const projectAccepted = project.tasks.filter(t => getTaskStatus(t.id) === 'accepted').length;
-            const projectTotal = project.tasks.length;
+            const projectStats = {
+              total: project.tasks.length,
+              accepted: project.tasks.filter(t => getTaskStatus(t.id) === 'accepted').length,
+              pending: project.tasks.filter(t => getTaskStatus(t.id) === 'pending').length,
+            };
             
             return (
-              <Card key={project.projectId} className="overflow-hidden">
+              <Card key={project.projectId} className="border overflow-hidden">
                 {/* Project Header */}
                 <div 
                   className="flex items-center justify-between p-4 cursor-pointer hover:bg-muted/50 transition-colors"
                   onClick={() => toggleProject(project.projectId)}
+                  style={{ borderLeft: `4px solid ${project.projectColor}` }}
                 >
                   <div className="flex items-center gap-3">
-                    <div 
-                      className="w-3 h-10 rounded-full"
-                      style={{ backgroundColor: project.projectColor }}
-                    />
-                    <div className="flex items-center gap-2">
-                      <Folder className="w-5 h-5 text-muted-foreground" />
-                      <span className="font-semibold text-foreground">{project.projectName}</span>
+                    <Folder className="w-5 h-5" style={{ color: project.projectColor }} />
+                    <div>
+                      <h3 className="font-semibold text-foreground">{project.projectName}</h3>
+                      <p className="text-xs text-muted-foreground">
+                        {projectStats.accepted}/{projectStats.total} accepted • {projectStats.pending} pending
+                      </p>
                     </div>
-                    <Badge variant="secondary" className="text-xs">
-                      {projectAccepted}/{projectTotal} tasks
-                    </Badge>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Button 
-                      size="sm" 
-                      variant="ghost"
-                      className="text-green-600 hover:text-green-700 hover:bg-green-50"
-                      onClick={(e) => { e.stopPropagation(); acceptAll(project.projectId); }}
-                    >
-                      Accept All
-                    </Button>
-                    {isExpanded ? <ChevronUp className="w-5 h-5 text-muted-foreground" /> : <ChevronDown className="w-5 h-5 text-muted-foreground" />}
+                    {projectStats.pending > 0 && (
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          acceptAll(project.projectId);
+                        }}
+                        className="text-xs"
+                      >
+                        Accept All
+                      </Button>
+                    )}
+                    {isExpanded ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
                   </div>
                 </div>
-
+                
                 {/* Tasks */}
                 {isExpanded && (
-                  <div className="border-t border-border">
+                  <div className="border-t divide-y">
                     {project.tasks.map((task) => {
                       const status = getTaskStatus(task.id);
                       return (
                         <div 
                           key={task.id}
-                          className={`flex items-center justify-between p-4 border-b border-border last:border-b-0 transition-colors ${
+                          className={`p-4 flex items-center justify-between gap-4 ${
                             status === 'accepted' ? 'bg-green-50/50' :
                             status === 'rejected' ? 'bg-red-50/50' :
                             status === 'deferred' ? 'bg-amber-50/50' : ''
                           }`}
                         >
-                          <div className="flex-1 pr-4">
-                            <div className="flex items-center gap-2 mb-1">
-                              <span className={`text-sm font-medium ${
-                                status === 'rejected' ? 'line-through text-muted-foreground' : 'text-foreground'
-                              }`}>
-                                {task.text}
-                              </span>
-                            </div>
-                            <div className="flex items-center gap-2">
+                          <div className="flex-1 min-w-0">
+                            <p className={`text-sm ${status !== 'pending' ? 'line-through opacity-60' : 'text-foreground'}`}>
+                              {task.text}
+                            </p>
+                            <div className="flex items-center gap-2 mt-1">
                               <Badge variant="outline" className={`text-xs ${getPriorityColor(task.priority)}`}>
                                 {task.priority}
                               </Badge>
@@ -292,7 +516,7 @@ export default function EveningReview() {
                             <Button
                               size="sm"
                               variant={status === 'accepted' ? 'default' : 'outline'}
-                              className={`h-8 w-8 p-0 ${status === 'accepted' ? 'bg-green-600 hover:bg-green-700' : 'hover:bg-green-50 hover:text-green-600 hover:border-green-300'}`}
+                              className={`h-8 w-8 p-0 ${status === 'accepted' ? 'bg-green-600 hover:bg-green-700' : ''}`}
                               onClick={() => setTaskStatus(task.id, 'accepted')}
                             >
                               <Check className="w-4 h-4" />
@@ -300,15 +524,15 @@ export default function EveningReview() {
                             <Button
                               size="sm"
                               variant={status === 'deferred' ? 'default' : 'outline'}
-                              className={`h-8 w-8 p-0 ${status === 'deferred' ? 'bg-amber-600 hover:bg-amber-700' : 'hover:bg-amber-50 hover:text-amber-600 hover:border-amber-300'}`}
+                              className={`h-8 px-2 text-xs ${status === 'deferred' ? 'bg-amber-600 hover:bg-amber-700' : ''}`}
                               onClick={() => setTaskStatus(task.id, 'deferred')}
                             >
-                              <Clock className="w-4 h-4" />
+                              Defer
                             </Button>
                             <Button
                               size="sm"
                               variant={status === 'rejected' ? 'default' : 'outline'}
-                              className={`h-8 w-8 p-0 ${status === 'rejected' ? 'bg-red-600 hover:bg-red-700' : 'hover:bg-red-50 hover:text-red-600 hover:border-red-300'}`}
+                              className={`h-8 w-8 p-0 ${status === 'rejected' ? 'bg-red-600 hover:bg-red-700' : ''}`}
                               onClick={() => setTaskStatus(task.id, 'rejected')}
                             >
                               <X className="w-4 h-4" />
@@ -325,66 +549,68 @@ export default function EveningReview() {
         </div>
 
         {/* Reflection Section (Collapsible) */}
-        <Card className="border border-border">
-          <div 
-            className="flex items-center justify-between p-4 cursor-pointer hover:bg-muted/50"
+        <Card className="border">
+          <CardHeader 
+            className="cursor-pointer hover:bg-muted/50 transition-colors"
             onClick={() => setShowReflection(!showReflection)}
           >
-            <div className="flex items-center gap-2">
-              <Target className="w-5 h-5 text-purple-600" />
-              <span className="font-semibold text-foreground">Daily Reflection</span>
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-base flex items-center gap-2">
+                <Target className="w-5 h-5 text-indigo-600" />
+                Daily Reflection (Optional)
+              </CardTitle>
+              {showReflection ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
             </div>
-            {showReflection ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
-          </div>
+          </CardHeader>
           
           {showReflection && (
-            <CardContent className="pt-0 space-y-4">
+            <CardContent className="space-y-4">
               {/* What Went Well */}
-              <div className="p-4 rounded-lg bg-green-50 border border-green-200">
-                <div className="flex items-center justify-between mb-2">
-                  <h3 className="font-semibold text-green-800">What Went Well Today</h3>
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <label className="text-sm font-medium text-green-700">What went well today?</label>
                   <Button
                     size="sm"
                     variant="ghost"
-                    className={`h-8 w-8 p-0 ${isRecordingWentWell ? 'text-red-600 animate-pulse' : 'text-green-600'}`}
                     onClick={toggleRecordingWentWell}
+                    className={isRecordingWentWell ? 'text-red-600' : 'text-muted-foreground'}
                   >
                     {isRecordingWentWell ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
                   </Button>
                 </div>
                 <Textarea
-                  placeholder="What achievements or positive moments stood out today?"
                   value={wentWellText}
                   onChange={(e) => setWentWellText(e.target.value)}
-                  className="bg-white border-green-200 text-green-900 placeholder:text-green-400 min-h-[80px]"
+                  placeholder="Wins, achievements, positive moments..."
+                  className="bg-green-50/50 border-green-200 min-h-[80px]"
                 />
               </div>
-
+              
               {/* What Didn't Go Well */}
-              <div className="p-4 rounded-lg bg-amber-50 border border-amber-200">
-                <div className="flex items-center justify-between mb-2">
-                  <h3 className="font-semibold text-amber-800">What Didn't Go Well</h3>
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <label className="text-sm font-medium text-amber-700">What didn't go well?</label>
                   <Button
                     size="sm"
                     variant="ghost"
-                    className={`h-8 w-8 p-0 ${isRecordingDidntGo ? 'text-red-600 animate-pulse' : 'text-amber-600'}`}
                     onClick={toggleRecordingDidntGo}
+                    className={isRecordingDidntGo ? 'text-red-600' : 'text-muted-foreground'}
                   >
                     {isRecordingDidntGo ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
                   </Button>
                 </div>
                 <Textarea
-                  placeholder="What challenges or setbacks occurred? What would you do differently?"
                   value={didntGoText}
                   onChange={(e) => setDidntGoText(e.target.value)}
-                  className="bg-white border-amber-200 text-amber-900 placeholder:text-amber-400 min-h-[80px]"
+                  placeholder="Challenges, blockers, lessons learned..."
+                  className="bg-amber-50/50 border-amber-200 min-h-[80px]"
                 />
               </div>
-
+              
               {/* Mood Score */}
-              <div className="p-4 rounded-lg bg-indigo-50 border border-indigo-200">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="font-semibold text-indigo-800">Today's Mood Score</h3>
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <label className="text-sm font-medium text-indigo-700">Today's mood score</label>
                   <span className="text-2xl font-bold text-indigo-600">{currentMood[0]}/10</span>
                 </div>
                 <Slider
@@ -393,48 +619,41 @@ export default function EveningReview() {
                   min={1}
                   max={10}
                   step={1}
-                  className="w-full"
+                  className="py-2"
                 />
-                <div className="flex justify-between mt-2 text-xs text-indigo-600">
-                  <span>Challenging</span>
-                  <span>Excellent</span>
-                </div>
               </div>
             </CardContent>
           )}
         </Card>
 
         {/* Ready to Start Button */}
-        <div className="sticky bottom-4 z-20">
+        <div className="sticky bottom-4">
           <Button
-            size="lg"
-            className={`w-full h-14 text-lg font-semibold shadow-lg ${
-              isReadyToStart 
-                ? 'bg-green-600 hover:bg-green-700' 
-                : allDecided 
-                  ? 'bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700'
-                  : 'bg-muted text-muted-foreground cursor-not-allowed'
-            }`}
             onClick={handleReadyToStart}
-            disabled={!allDecided || isReadyToStart}
+            disabled={!allDecided}
+            className={`w-full h-14 text-lg font-semibold ${
+              allDecided 
+                ? 'bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700' 
+                : 'bg-gray-300'
+            }`}
           >
-            {isReadyToStart ? (
-              <span className="flex items-center gap-2">
-                <CheckCircle2 className="w-5 h-5" />
-                Overnight Tasks Confirmed
-              </span>
-            ) : allDecided ? (
-              <span className="flex items-center gap-2">
-                <Play className="w-5 h-5" />
+            {allDecided ? (
+              <>
+                <Play className="w-5 h-5 mr-2" />
                 Ready to Start Overnight Tasks
-              </span>
+              </>
             ) : (
-              <span className="flex items-center gap-2">
-                <Clock className="w-5 h-5" />
-                Review {stats.pending} Remaining Tasks
-              </span>
+              <>
+                <Clock className="w-5 h-5 mr-2" />
+                {stats.pending} tasks still pending review
+              </>
             )}
           </Button>
+          {!allDecided && (
+            <p className="text-xs text-center text-muted-foreground mt-2">
+              Review all tasks to enable overnight processing
+            </p>
+          )}
         </div>
       </div>
     </div>
