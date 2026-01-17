@@ -4712,6 +4712,7 @@ A "short and sharp" assessment process for real-life problems or scenarios requi
 - What are the constraints (time, resources, stakeholders)?
 - What outcome are you hoping for?
 - Any relevant background or history?
+- **File Upload** - Attach documents, presentations, spreadsheets, or other files for detailed context
 
 **Step 2: Multi-SME Rapid Consultation (10 mins)**
 - Route to 3-5 most relevant SME experts
@@ -4772,7 +4773,8 @@ A "short and sharp" assessment process for real-life problems or scenarios requi
 
 ### Phase 1: Foundation
 - [ ] Create Rapid Scenario Analysis UI component
-- [ ] Build context gathering form
+- [ ] Build context gathering form with file upload button
+- [ ] Implement file upload to S3 storage
 - [ ] Implement multi-SME parallel routing
 - [ ] Create synthesis engine for Chief of Staff
 - [ ] Build briefing report template

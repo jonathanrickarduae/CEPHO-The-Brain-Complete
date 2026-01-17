@@ -857,3 +857,12 @@ export const getScoreLabel = (score: number): string => {
   if (score >= 40) return 'Developing';
   return 'Critical';
 };
+
+
+// Helper function to get categories by domain
+export const getCategoriesByDomain = (domain: KpiDomain): KpiCategory[] => {
+  return KPI_CATEGORIES.filter(cat => cat.domain === domain);
+};
+
+// Alias for backward compatibility
+export const getScoreColor = getHeatMapColorClass;
