@@ -3800,3 +3800,9 @@
 - [x] Calendar integration: Check for evening meetings and delay prompts
 - [x] Store review history in database for pattern analysis
 - [x] Generate Signal items from accepted/deferred tasks
+
+
+## Animated Brain Logo
+- [x] Create animated neuron brain component with subtle, slow pulsing
+- [x] Add gentle neuron firing effect (soft glow, not intense)
+- [x] Integrate into sidebar header and mobile header

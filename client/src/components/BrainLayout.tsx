@@ -44,6 +44,7 @@ import { ChangelogModal, useChangelog, WhatsNewButton } from "./ChangelogModal";
 import { StatusPulse } from "./StatusPulse";
 import { GlobalSearch } from "./GlobalSearch";
 import NeonBrain from "./NeonBrain";
+import AnimatedBrainLogo from "./AnimatedBrainLogo";
 import { NotificationBell } from "./NotificationCenter";
 import { CephoLandingPage } from "./CephoLandingPage";
 import { ThemeToggle } from "./ThemeToggle";
@@ -208,7 +209,7 @@ function BrainLayoutContent({
               </button>
               {!isCollapsed ? (
                 <div className="flex items-center gap-2 min-w-0">
-                  <Brain className="w-6 h-6 text-primary" />
+                  <AnimatedBrainLogo size="xs" intensity="subtle" color="var(--color-primary)" />
                       <span className="font-display font-bold tracking-tight truncate text-sidebar-foreground">
                     CEPHO
                   </span>
@@ -294,7 +295,7 @@ function BrainLayoutContent({
             <div className="flex items-center gap-2">
               <SidebarTrigger className="h-9 w-9 rounded-lg bg-white/5 text-white" />
               <div className="flex items-center gap-3">
-                <Brain className="w-5 h-5 text-primary" />
+                <AnimatedBrainLogo size="xs" intensity="subtle" color="var(--color-primary)" />
                 <span className="tracking-tight text-white font-bold">
                   CEPHO | {activeMenuItem?.label ?? "The Nexus"}
                 </span>
