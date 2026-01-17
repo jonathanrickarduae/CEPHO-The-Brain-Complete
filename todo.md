@@ -3783,3 +3783,12 @@
 - [x] Implement click-through buttons for external portals
 - [x] Show Connected APIs section with live status
 - [x] Category filtering (Consulting, Research, Media, AI Platforms, Data, Training)
+
+
+## Automated Evening Review System
+- [x] Chief of Staff notification prompt asking "Do you want me to start the evening review?"
+- [x] Calendar-aware timing (check meetings, tasks, outstanding items)
+- [x] Auto-start capability if no response within timeout
+- [x] Project status scanning before review
+- [ ] Signal information preparation for morning brief
+- [ ] Learning from user patterns (when they typically do reviews)

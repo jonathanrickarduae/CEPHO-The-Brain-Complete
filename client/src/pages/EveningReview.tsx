@@ -68,6 +68,11 @@ interface TaskDecision {
 }
 
 export default function EveningReview() {
+  // Check for URL parameters (autostart or delegate mode)
+  const urlParams = new URLSearchParams(window.location.search);
+  const isAutoStart = urlParams.get('autostart') === 'true';
+  const isDelegateMode = urlParams.get('delegate') === 'true';
+  
   const [taskDecisions, setTaskDecisions] = useState<TaskDecision[]>([]);
   const [expandedProjects, setExpandedProjects] = useState<string[]>(OVERNIGHT_TASKS.map(p => p.projectId));
   const [currentMood, setCurrentMood] = useState([6]);
@@ -146,6 +151,23 @@ export default function EveningReview() {
     
     return () => clearInterval(interval);
   }, [isReadyToStart, autoProcessingStarted, chiefOfStaffPrompt]);
+
+  // Handle URL parameters for auto-start or delegate mode
+  useEffect(() => {
+    if (isAutoStart || isDelegateMode) {
+      // Skip the Chief of Staff prompt and go directly to processing
+      setChiefOfStaffPrompt(false);
+      
+      if (isDelegateMode) {
+        // Delegate mode: auto-accept all tasks immediately
+        handleAutoStart();
+        toast.success("Chief of Staff is handling your evening review");
+      } else if (isAutoStart) {
+        // Auto-start mode: show the review but skip the prompt
+        toast.info("Evening review started automatically");
+      }
+    }
+  }, []); // Only run once on mount
 
   const handleAutoStart = () => {
     setAutoProcessingStarted(true);

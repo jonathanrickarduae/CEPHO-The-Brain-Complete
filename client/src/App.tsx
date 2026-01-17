@@ -44,6 +44,7 @@ import { CelebrationProvider } from "./components/CelebrationAnimations";
 import { DailyCycleProvider } from "./components/DailyCycleProvider";
 import { PageTransition } from "./components/PageTransition";
 import { KeyboardShortcutsGuide } from "./components/KeyboardShortcutsGuide";
+import { ChiefOfStaffNotification } from "./components/ChiefOfStaffNotification";
 
 // Wrapper component for pages that need the sidebar layout with page transitions
 function WithLayout({ children }: { children: React.ReactNode }) {
@@ -174,6 +175,7 @@ function App() {
                   <Router />
                   <GovernanceModeChangeModal />
                   <KeyboardShortcutsGuide />
+                  <ChiefOfStaffNotification />
                 </TooltipProvider>
               </CelebrationProvider>
             </DailyCycleProvider>
