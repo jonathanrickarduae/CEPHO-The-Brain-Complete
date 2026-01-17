@@ -82,6 +82,10 @@ export default function EveningReview() {
   const [wentWellText, setWentWellText] = useState("");
   const [didntGoText, setDidntGoText] = useState("");
   const [showReflection, setShowReflection] = useState(false);
+  const [showStrategicFocus, setShowStrategicFocus] = useState(false);
+  const [stopDoing, setStopDoing] = useState("");
+  const [delegateTo, setDelegateTo] = useState("");
+  const [focusMore, setFocusMore] = useState("");
   const [isReadyToStart, setIsReadyToStart] = useState(false);
   const [chiefOfStaffPrompt, setChiefOfStaffPrompt] = useState(false);
   const [autoProcessingStarted, setAutoProcessingStarted] = useState(false);
@@ -712,6 +716,88 @@ export default function EveningReview() {
                   step={1}
                   className="py-2"
                 />
+              </div>
+            </CardContent>
+          )}
+        </Card>
+
+        {/* Strategic Focus Module */}
+        <Card className="border border-fuchsia-200 bg-fuchsia-50/30">
+          <CardHeader 
+            className="cursor-pointer hover:bg-fuchsia-100/50 transition-colors"
+            onClick={() => setShowStrategicFocus(!showStrategicFocus)}
+          >
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-base flex items-center gap-2">
+                <Sparkles className="w-5 h-5 text-fuchsia-600" />
+                Strategic Focus (Weekly Review)
+              </CardTitle>
+              {showStrategicFocus ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
+            </div>
+          </CardHeader>
+          
+          {showStrategicFocus && (
+            <CardContent className="space-y-4">
+              <p className="text-sm text-muted-foreground">
+                Take a moment to reflect on your strategic priorities. What should change?
+              </p>
+              
+              {/* What should I stop doing? */}
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-red-700 flex items-center gap-2">
+                  <XCircle className="w-4 h-4" />
+                  What should I STOP doing?
+                </label>
+                <Textarea
+                  value={stopDoing}
+                  onChange={(e) => setStopDoing(e.target.value)}
+                  placeholder="Activities that drain energy without results, low-value tasks, distractions..."
+                  className="bg-red-50/50 border-red-200 min-h-[80px]"
+                />
+              </div>
+              
+              {/* What should I delegate? */}
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-amber-700 flex items-center gap-2">
+                  <ArrowRight className="w-4 h-4" />
+                  What should I DELEGATE?
+                </label>
+                <Textarea
+                  value={delegateTo}
+                  onChange={(e) => setDelegateTo(e.target.value)}
+                  placeholder="Tasks others can do, things that don't require your unique skills..."
+                  className="bg-amber-50/50 border-amber-200 min-h-[80px]"
+                />
+              </div>
+              
+              {/* What deserves more focus? */}
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-green-700 flex items-center gap-2">
+                  <Target className="w-4 h-4" />
+                  What deserves MORE focus?
+                </label>
+                <Textarea
+                  value={focusMore}
+                  onChange={(e) => setFocusMore(e.target.value)}
+                  placeholder="High-impact activities, strategic priorities, things only you can do..."
+                  className="bg-green-50/50 border-green-200 min-h-[80px]"
+                />
+              </div>
+              
+              <div className="flex items-center justify-between pt-2 border-t">
+                <p className="text-xs text-muted-foreground">
+                  Your responses will be saved and reviewed by Chief of Staff
+                </p>
+                <Button 
+                  size="sm" 
+                  className="bg-fuchsia-600 hover:bg-fuchsia-700"
+                  onClick={() => {
+                    toast.success("Strategic focus saved! Chief of Staff will follow up.");
+                    setShowStrategicFocus(false);
+                  }}
+                >
+                  Save Focus Areas
+                </Button>
               </div>
             </CardContent>
           )}

@@ -15,7 +15,11 @@ import {
   ShieldCheck,
   ShieldAlert,
   XCircle,
-  Activity
+  Activity,
+  FileText,
+  Calendar,
+  Clock,
+  Bell
 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -32,6 +36,18 @@ export default function Vault() {
     { id: 5, name: "Microsoft Copilot", status: "healthy", health: 100, lastSync: "Just now", icon: Globe, color: "text-cyan-400", category: "AI Tools" },
     { id: 6, name: "Salesforce", status: "broken", health: 0, lastSync: "Failed", icon: Globe, color: "text-red-400", category: "CRM", alert: "API Token Expired" },
   ];
+
+  // Contract renewals
+  const contractRenewals = [
+    { id: 1, name: "AWS Enterprise Agreement", vendor: "Amazon Web Services", renewalDate: "2026-02-15", value: "$45,000/yr", status: "upcoming", daysUntil: 29, autoRenew: true, category: "Infrastructure" },
+    { id: 2, name: "Salesforce CRM License", vendor: "Salesforce", renewalDate: "2026-01-25", value: "$12,000/yr", status: "urgent", daysUntil: 8, autoRenew: false, category: "CRM" },
+    { id: 3, name: "Microsoft 365 Business", vendor: "Microsoft", renewalDate: "2026-03-01", value: "$8,400/yr", status: "upcoming", daysUntil: 43, autoRenew: true, category: "Productivity" },
+    { id: 4, name: "Slack Business+", vendor: "Slack", renewalDate: "2026-04-15", value: "$6,000/yr", status: "ok", daysUntil: 88, autoRenew: true, category: "Communication" },
+    { id: 5, name: "Legal Retainer Agreement", vendor: "Henderson & Partners", renewalDate: "2026-01-31", value: "$25,000/yr", status: "urgent", daysUntil: 14, autoRenew: false, category: "Legal" },
+  ];
+
+  const urgentContracts = contractRenewals.filter(c => c.status === "urgent").length;
+  const upcomingContracts = contractRenewals.filter(c => c.status === "upcoming").length;
 
   // Security threats
   const securityEvents = [
@@ -163,6 +179,70 @@ export default function Vault() {
                         ⚠️ {integration.alert}
                       </p>
                     )}
+                  </div>
+                ))}
+              </div>
+            </Card>
+
+            {/* Contract Renewals Panel */}
+            <Card className="bg-white/5 border-white/10 flex flex-col min-h-0">
+              <div className="flex items-center justify-between p-4 border-b border-white/10 shrink-0">
+                <div className="flex items-center gap-2">
+                  <FileText className="w-5 h-5 text-fuchsia-500" />
+                  <h3 className="font-semibold">Contract Renewals</h3>
+                </div>
+                <div className="flex items-center gap-2">
+                  {urgentContracts > 0 && (
+                    <Badge variant="destructive" className="text-[10px]">
+                      {urgentContracts} urgent
+                    </Badge>
+                  )}
+                  <Badge variant="outline" className="text-xs">{upcomingContracts} upcoming</Badge>
+                </div>
+              </div>
+              <div className="flex-1 overflow-y-auto p-3 space-y-2">
+                {contractRenewals
+                  .sort((a, b) => a.daysUntil - b.daysUntil)
+                  .map((contract) => (
+                  <div 
+                    key={contract.id}
+                    className={`p-3 rounded-xl border ${
+                      contract.status === "urgent" ? "bg-red-500/5 border-red-500/30" :
+                      contract.status === "upcoming" ? "bg-amber-500/5 border-amber-500/30" :
+                      "bg-white/5 border-white/10"
+                    }`}
+                  >
+                    <div className="flex items-start justify-between">
+                      <div className="flex items-start gap-3">
+                        <div className={`p-1.5 rounded-lg ${
+                          contract.status === "urgent" ? "bg-red-500/20 text-red-500" :
+                          contract.status === "upcoming" ? "bg-amber-500/20 text-amber-500" :
+                          "bg-green-500/20 text-green-500"
+                        }`}>
+                          {contract.status === "urgent" ? <Bell className="w-4 h-4" /> :
+                           contract.status === "upcoming" ? <Clock className="w-4 h-4" /> :
+                           <CheckCircle2 className="w-4 h-4" />}
+                        </div>
+                        <div>
+                          <p className="font-medium text-sm">{contract.name}</p>
+                          <p className="text-xs text-muted-foreground">{contract.vendor}</p>
+                        </div>
+                      </div>
+                      <div className="text-right shrink-0">
+                        <p className="text-sm font-semibold text-fuchsia-400">{contract.value}</p>
+                        <div className="flex items-center gap-1 justify-end mt-1">
+                          <Calendar className="w-3 h-3 text-muted-foreground" />
+                          <p className="text-[10px] text-muted-foreground">
+                            {contract.daysUntil} days
+                          </p>
+                        </div>
+                        {contract.autoRenew && (
+                          <Badge variant="outline" className="text-[8px] mt-1 border-green-500/50 text-green-400">
+                            Auto-renew
+                          </Badge>
+                        )}
+                      </div>
+                    </div>
                   </div>
                 ))}
               </div>

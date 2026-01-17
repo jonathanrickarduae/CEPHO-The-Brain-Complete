@@ -42,6 +42,7 @@ import ExpertChatPage from "./pages/ExpertChatPage";
 import InnovationHub from "./pages/InnovationHub";
 import DocumentLibrary from "./pages/DocumentLibrary";
 import DevelopmentPathway from "./pages/DevelopmentPathway";
+import PortfolioCommandCenter from "./pages/PortfolioCommandCenter";
 import { GovernanceProvider, GovernanceModeChangeModal } from "./hooks/useGovernance";
 import { AIRouterProvider } from "./components/AIRouter";
 import { CelebrationProvider } from "./components/CelebrationAnimations";
@@ -138,6 +139,9 @@ function Router() {
       </Route>
       <Route path="/development-pathway">
         <WithLayout><DevelopmentPathway /></WithLayout>
+      </Route>
+      <Route path="/portfolio">
+        <WithLayout><PortfolioCommandCenter /></WithLayout>
       </Route>
       <Route path="/due-diligence">
         <WithLayout><DueDiligencePage /></WithLayout>

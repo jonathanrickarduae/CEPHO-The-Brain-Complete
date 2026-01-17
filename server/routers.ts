@@ -74,6 +74,16 @@ import {
   type ExpertInsight,
   selectExpertTeam
 } from "./services/businessPlanReviewService";
+import {
+  trackFeatureUsage,
+  getFeatureUsageStats,
+  getTopFeatures,
+  getUsageByCategory,
+  getUserEngagementMetrics,
+  generateAnalyticsSummary,
+  FEATURES,
+  type FeatureId,
+} from "./services/featureAnalyticsService";
 import { z } from "zod";
 
 export const appRouter = router({
@@ -4183,6 +4193,63 @@ ${transcript}
       .mutation(async ({ ctx }) => {
         const { checkAndSendReminders } = await import('./services/subscriptionReminderService');
         return checkAndSendReminders(ctx.user.id);
+      }),
+  }),
+
+  // Feature Usage Analytics API
+  featureAnalytics: router({
+    // Track a feature usage event
+    track: protectedProcedure
+      .input(z.object({
+        featureId: z.string(),
+        action: z.enum(['view', 'interact', 'complete']).default('view'),
+        metadata: z.record(z.string(), z.any()).optional(),
+      }))
+      .mutation(({ ctx, input }) => {
+        trackFeatureUsage(
+          input.featureId as FeatureId,
+          ctx.user.id,
+          input.action || 'view',
+          input.metadata
+        );
+        return { success: true };
+      }),
+
+    // Get all feature usage statistics
+    getStats: protectedProcedure
+      .query(() => {
+        return getFeatureUsageStats();
+      }),
+
+    // Get top features by usage
+    getTopFeatures: protectedProcedure
+      .input(z.object({ limit: z.number().min(1).max(50).default(10) }).optional())
+      .query(({ input }) => {
+        return getTopFeatures(input?.limit || 10);
+      }),
+
+    // Get usage breakdown by category
+    getByCategory: protectedProcedure
+      .query(() => {
+        return getUsageByCategory();
+      }),
+
+    // Get user engagement metrics
+    getUserEngagement: protectedProcedure
+      .query(({ ctx }) => {
+        return getUserEngagementMetrics(ctx.user.id);
+      }),
+
+    // Get analytics summary with recommendations
+    getSummary: protectedProcedure
+      .query(() => {
+        return generateAnalyticsSummary();
+      }),
+
+    // Get available features list
+    getFeatures: protectedProcedure
+      .query(() => {
+        return Object.values(FEATURES);
       }),
   }),
 });
