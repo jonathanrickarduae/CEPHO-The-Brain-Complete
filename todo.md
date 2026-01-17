@@ -4073,3 +4073,10 @@
 - [x] Auto-categorize ideas (Innovation, Enhancement, Bug Fix)
 - [x] Link ideas to funding opportunities
 - [x] Track idea progression through stages
+
+
+## AI SME Avatar Fix (Jan 17, 2026)
+- [x] Fix AISMEsPage component to display avatar images instead of emoji icons
+- [x] Ensure avatarUrl from aiExperts.ts is properly used in rendering
+- [x] Add fallback to emoji when avatar image fails to load
+- [x] Test avatar display on AI-SMEs page - 19 experts now show photos

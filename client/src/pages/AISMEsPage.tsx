@@ -575,8 +575,25 @@ export default function AISMEsPage() {
                         </div>
                         
                         <div className={`flex items-center gap-3 ${viewStyle === 'grid' ? 'mb-3 mt-6' : ''}`}>
-                          <div className={`w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-500/30 to-blue-500/30 flex items-center justify-center text-lg group-hover:scale-110 transition-transform ${!isAvailable ? 'opacity-50' : ''}`}>
-                            {expert.avatar}
+                          <div className={`relative w-12 h-12 rounded-xl overflow-hidden group-hover:scale-110 transition-transform ${!isAvailable ? 'opacity-50' : ''}`}>
+                            {expert.avatarUrl ? (
+                              <img 
+                                src={expert.avatarUrl} 
+                                alt={expert.name}
+                                className="w-full h-full object-cover"
+                                onError={(e) => {
+                                  e.currentTarget.style.display = 'none';
+                                  const fallback = e.currentTarget.nextElementSibling as HTMLElement;
+                                  if (fallback) fallback.style.display = 'flex';
+                                }}
+                              />
+                            ) : null}
+                            <div 
+                              className="absolute inset-0 bg-gradient-to-br from-cyan-500/30 to-blue-500/30 flex items-center justify-center text-lg"
+                              style={{ display: expert.avatarUrl ? 'none' : 'flex' }}
+                            >
+                              {expert.avatar}
+                            </div>
                           </div>
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2">
