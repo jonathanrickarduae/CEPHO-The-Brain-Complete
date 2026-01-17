@@ -1,4 +1,4 @@
-import { useEffect, useCallback } from 'react';
+import { useEffect, useCallback, useRef } from 'react';
 import { useLocation } from 'wouter';
 
 interface ShortcutConfig {
@@ -28,6 +28,7 @@ const GLOBAL_SHORTCUTS: ShortcutConfig[] = [
 
 export function useKeyboardShortcuts(customShortcuts?: ShortcutConfig[]) {
   const [, setLocation] = useLocation();
+  const lastKeyRef = useRef<{ key: string; time: number } | null>(null);
 
   // Navigation shortcuts with actual navigation
   const navigationShortcuts: ShortcutConfig[] = [
@@ -40,6 +41,20 @@ export function useKeyboardShortcuts(customShortcuts?: ShortcutConfig[]) {
     { key: 'v', ctrl: true, action: () => setLocation('/vault'), description: 'Go to Vault' },
     { key: 'r', ctrl: true, action: () => setLocation('/evening-review'), description: 'Go to Evening Review' },
   ];
+
+  // G+key navigation shortcuts (vim-style)
+  const gKeyNavigationMap: Record<string, string> = {
+    'h': '/dashboard',      // G+H = Home/Dashboard
+    's': '/daily-brief',    // G+S = Morning Signal
+    'e': '/ai-experts',     // G+E = AI Experts
+    'c': '/digital-twin',   // G+C = Chief of Staff
+    'w': '/workflow',       // G+W = Workflow
+    'l': '/library',        // G+L = Library
+    'v': '/vault',          // G+V = Vault
+    'r': '/evening-review', // G+R = Evening Review
+    'i': '/innovation-hub', // G+I = Innovation Hub
+    'd': '/development',    // G+D = Development Pathway
+  };
 
   const allShortcuts = [...navigationShortcuts, ...(customShortcuts || [])];
 
@@ -55,6 +70,27 @@ export function useKeyboardShortcuts(customShortcuts?: ShortcutConfig[]) {
       if (event.key !== 'Escape') return;
     }
 
+    const now = Date.now();
+    const key = event.key.toLowerCase();
+
+    // Check for G+key navigation (within 500ms)
+    if (lastKeyRef.current && lastKeyRef.current.key === 'g' && now - lastKeyRef.current.time < 500) {
+      const destination = gKeyNavigationMap[key];
+      if (destination) {
+        event.preventDefault();
+        setLocation(destination);
+        lastKeyRef.current = null;
+        return;
+      }
+    }
+
+    // Store 'g' key press for potential G+key combo
+    if (key === 'g' && !event.ctrlKey && !event.metaKey && !event.shiftKey && !event.altKey) {
+      lastKeyRef.current = { key: 'g', time: now };
+      return;
+    }
+
+    // Check standard shortcuts
     for (const shortcut of allShortcuts) {
       const ctrlMatch = shortcut.ctrl ? (event.ctrlKey || event.metaKey) : !event.ctrlKey && !event.metaKey;
       const shiftMatch = shortcut.shift ? event.shiftKey : !event.shiftKey;
@@ -67,7 +103,12 @@ export function useKeyboardShortcuts(customShortcuts?: ShortcutConfig[]) {
         return;
       }
     }
-  }, [allShortcuts]);
+
+    // Clear last key if it wasn't 'g'
+    if (key !== 'g') {
+      lastKeyRef.current = null;
+    }
+  }, [allShortcuts, setLocation]);
 
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);

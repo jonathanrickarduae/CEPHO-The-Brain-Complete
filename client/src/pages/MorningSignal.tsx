@@ -319,8 +319,43 @@ export default function MorningSignal() {
   if (authLoading) {
     return (
       <BrainLayout>
-        <div className="flex items-center justify-center min-h-[60vh]">
-          <div className="animate-pulse text-cyan-400">Loading...</div>
+        <div className="p-6 max-w-6xl mx-auto space-y-6">
+          {/* Header skeleton */}
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div className="space-y-2">
+              <div className="h-8 w-48 bg-white/10 rounded animate-pulse" />
+              <div className="h-4 w-64 bg-white/10 rounded animate-pulse" />
+            </div>
+            <div className="h-10 w-32 bg-white/10 rounded animate-pulse" />
+          </div>
+          {/* Stats skeleton */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <div key={i} className="p-4 rounded-xl border bg-card animate-pulse">
+                <div className="h-3 w-16 bg-white/10 rounded mb-2" />
+                <div className="h-6 w-12 bg-white/10 rounded" />
+              </div>
+            ))}
+          </div>
+          {/* Content skeleton */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="p-6 rounded-xl border bg-card space-y-4 animate-pulse">
+              <div className="h-5 w-32 bg-white/10 rounded" />
+              <div className="space-y-2">
+                {Array.from({ length: 4 }).map((_, i) => (
+                  <div key={i} className="h-4 w-full bg-white/10 rounded" />
+                ))}
+              </div>
+            </div>
+            <div className="p-6 rounded-xl border bg-card space-y-4 animate-pulse">
+              <div className="h-5 w-32 bg-white/10 rounded" />
+              <div className="space-y-2">
+                {Array.from({ length: 4 }).map((_, i) => (
+                  <div key={i} className="h-4 w-full bg-white/10 rounded" />
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
       </BrainLayout>
     );

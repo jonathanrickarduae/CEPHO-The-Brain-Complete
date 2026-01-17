@@ -864,8 +864,23 @@ export default function AISMEsPage() {
           <div className="flex-1 overflow-y-auto p-4 sm:p-6">
             <div className="max-w-4xl mx-auto">
               {teamsLoading ? (
-                <div className="flex items-center justify-center py-12">
-                  <Loader2 className="w-8 h-8 animate-spin text-cyan-400" />
+                <div className="space-y-4">
+                  {Array.from({ length: 3 }).map((_, i) => (
+                    <div key={i} className="bg-white/5 border border-white/10 rounded-2xl p-4 animate-pulse">
+                      <div className="flex items-center justify-between mb-3">
+                        <div className="space-y-2">
+                          <div className="h-5 w-40 bg-white/10 rounded" />
+                          <div className="h-3 w-64 bg-white/10 rounded" />
+                        </div>
+                        <div className="h-6 w-16 bg-white/10 rounded-full" />
+                      </div>
+                      <div className="flex gap-2">
+                        {Array.from({ length: 4 }).map((_, j) => (
+                          <div key={j} className="w-10 h-10 rounded-full bg-white/10" />
+                        ))}
+                      </div>
+                    </div>
+                  ))}
                 </div>
               ) : savedTeams && savedTeams.length > 0 ? (
                 <div className="space-y-4">

@@ -527,6 +527,43 @@ export default function Library() {
         ) : (
           /* Consultations Tab */
           <div className="space-y-4">
+            {/* Header with Export */}
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-semibold text-white">Expert Consultations</h2>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  if (!consultations || consultations.length === 0) {
+                    toast.error('No consultations to export');
+                    return;
+                  }
+                  // Generate CSV
+                  const headers = ['Expert', 'Category', 'Date', 'Summary'];
+                  const rows = consultations.map((c: LibraryDocument) => [
+                    c.subFolder || 'Unknown Expert',
+                    (c.metadata as { expertCategory?: string })?.expertCategory || 'General',
+                    new Date(c.createdAt).toLocaleDateString('en-GB'),
+                    c.name.replace(/,/g, ';').substring(0, 100)
+                  ]);
+                  const csv = [headers, ...rows].map(row => row.join(',')).join('\n');
+                  const blob = new Blob([csv], { type: 'text/csv' });
+                  const url = URL.createObjectURL(blob);
+                  const a = document.createElement('a');
+                  a.href = url;
+                  a.download = `consultations-${new Date().toISOString().split('T')[0]}.csv`;
+                  a.click();
+                  URL.revokeObjectURL(url);
+                  toast.success('Exported consultations to CSV');
+                }}
+                className="border-fuchsia-500/50 text-fuchsia-400 hover:bg-fuchsia-500/10"
+                disabled={consultationsLoading || !consultations?.length}
+              >
+                <Download className="w-4 h-4 mr-2" />
+                Export CSV
+              </Button>
+            </div>
+
             {/* Stats */}
             <div className="grid grid-cols-3 gap-4 mb-6">
               <div className="bg-gradient-to-br from-fuchsia-500/10 to-purple-500/10 border-2 border-fuchsia-500/30 rounded-2xl p-4">
@@ -555,8 +592,17 @@ export default function Library() {
 
             {/* Consultations List */}
             {consultationsLoading ? (
-              <div className="flex items-center justify-center py-12">
-                <Loader2 className="w-8 h-8 text-fuchsia-400 animate-spin" />
+              <div className="space-y-3">
+                {Array.from({ length: 4 }).map((_, i) => (
+                  <div key={i} className="flex items-center gap-4 bg-white/5 border-2 border-white/10 rounded-2xl p-4 animate-pulse">
+                    <div className="w-12 h-12 rounded-xl bg-white/10" />
+                    <div className="flex-1 space-y-2">
+                      <div className="h-4 w-48 bg-white/10 rounded" />
+                      <div className="h-3 w-32 bg-white/10 rounded" />
+                    </div>
+                    <div className="h-6 w-16 bg-white/10 rounded-full" />
+                  </div>
+                ))}
               </div>
             ) : filteredConsultations.length === 0 ? (
               <div className="text-center py-12 bg-white/5 border-2 border-white/10 rounded-2xl">

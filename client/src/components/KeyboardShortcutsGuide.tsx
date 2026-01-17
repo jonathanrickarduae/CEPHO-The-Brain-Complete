@@ -36,6 +36,20 @@ const SHORTCUTS: Shortcut[] = [
   { keys: ['Cmd', 'N'], description: 'Create new task', category: 'Productivity' },
   { keys: ['Cmd', 'M'], description: 'Schedule meeting', category: 'Productivity' },
   { keys: ['Cmd', 'Shift', 'E'], description: 'Send email', category: 'Productivity' },
+
+  // Quick Navigation
+  { keys: ['G', 'H'], description: 'Go to Home/Dashboard', category: 'Quick Navigation' },
+  { keys: ['G', 'S'], description: 'Go to Morning Signal', category: 'Quick Navigation' },
+  { keys: ['G', 'E'], description: 'Go to AI Experts', category: 'Quick Navigation' },
+  { keys: ['G', 'C'], description: 'Go to Chief of Staff', category: 'Quick Navigation' },
+  { keys: ['G', 'W'], description: 'Go to Workflow', category: 'Quick Navigation' },
+  { keys: ['G', 'L'], description: 'Go to Library', category: 'Quick Navigation' },
+  { keys: ['G', 'V'], description: 'Go to Vault', category: 'Quick Navigation' },
+
+  // Data & Export
+  { keys: ['Cmd', 'Shift', 'S'], description: 'Export current view', category: 'Data & Export' },
+  { keys: ['Cmd', 'P'], description: 'Print current page', category: 'Data & Export' },
+  { keys: ['Cmd', 'Shift', 'C'], description: 'Copy selected text', category: 'Data & Export' },
 ];
 
 const CATEGORIES = Array.from(new Set(SHORTCUTS.map((s) => s.category)));

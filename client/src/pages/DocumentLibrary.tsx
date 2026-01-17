@@ -485,8 +485,19 @@ export default function DocumentLibrary() {
           </CardHeader>
           <CardContent>
             {isLoading ? (
-              <div className="flex items-center justify-center py-12">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-cyan-500" />
+              <div className="space-y-3">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <div key={i} className="flex items-center justify-between p-4 rounded-lg border bg-card animate-pulse">
+                    <div className="flex items-center gap-4">
+                      <div className="p-2 rounded-lg bg-muted w-10 h-10" />
+                      <div className="space-y-2">
+                        <div className="h-4 w-48 bg-muted rounded" />
+                        <div className="h-3 w-32 bg-muted rounded" />
+                      </div>
+                    </div>
+                    <div className="h-8 w-20 bg-muted rounded" />
+                  </div>
+                ))}
               </div>
             ) : filteredDocuments.length === 0 ? (
               <div className="text-center py-12">
