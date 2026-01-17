@@ -221,7 +221,7 @@ export function PersonalAnalytics({
           </div>
           <div className="p-3 rounded-lg bg-secondary/30">
             <p className="text-xs text-muted-foreground mb-1">Mood Average</p>
-            <p className="text-lg font-bold text-foreground">{data.moodAverage}/10</p>
+            <p className="text-lg font-bold text-foreground">{data.moodAverage}/100</p>
           </div>
           <div className="p-3 rounded-lg bg-secondary/30">
             <p className="text-xs text-muted-foreground mb-1">Active Streak</p>
@@ -234,11 +234,11 @@ export function PersonalAnalytics({
       <div className="p-4 border-t border-white/10">
         <p className="text-xs text-muted-foreground mb-3">Mood This Week</p>
         <div className="flex items-end gap-2 h-16">
-          {[7, 8, 6, 7, 9, 8, 7].map((mood, i) => (
+          {[70, 80, 60, 70, 90, 80, 70].map((mood, i) => (
             <div key={i} className="flex-1 flex flex-col items-center gap-1">
               <div 
                 className="w-full rounded-t bg-primary/60 transition-all"
-                style={{ height: `${mood * 10}%` }}
+                style={{ height: `${mood}%` }}
               />
               <span className="text-[10px] text-muted-foreground">
                 {['M', 'T', 'W', 'T', 'F', 'S', 'S'][i]}

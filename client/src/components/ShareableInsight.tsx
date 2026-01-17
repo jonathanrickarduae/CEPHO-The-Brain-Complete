@@ -250,7 +250,7 @@ export function generateWellnessInsight(data: {
       score: data.score,
       trend: data.trend as 'improving' | 'stable' | 'declining',
       highlights: [
-        `Average mood: ${data.moodAverage.toFixed(1)}/10`,
+        `Average mood: ${Math.round(data.moodAverage)}/100`,
         ...data.recommendations.slice(0, 2),
       ],
     },

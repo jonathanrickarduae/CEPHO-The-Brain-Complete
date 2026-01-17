@@ -96,7 +96,7 @@ function saveMoodCheck(mood: number): void {
 export default function Landing() {
   const [_, setLocation] = useLocation();
   const [step, setStep] = useState<"splash" | "mood">("splash");
-  const [mood, setMood] = useState([5]);
+  const [mood, setMood] = useState([50]); // 0-100 scale (100% Optimization)
   const { theme, setTheme } = useTheme();
   const [needsMoodCheck, setNeedsMoodCheck] = useState(false);
 
@@ -107,7 +107,7 @@ export default function Landing() {
 
   // Auto-advance from splash after brief delay
   // ALWAYS show mood check first for new users - this is the first interaction
-  // The "Getting you to a 10" USP starts from the very first moment
+  // The "Getting you to 100" philosophy starts from the very first moment - 100% Optimization
   useEffect(() => {
     const timer = setTimeout(() => {
       if (needsMoodCheck) {
@@ -208,16 +208,16 @@ export default function Landing() {
 
             <div className="w-full max-w-md mb-8 relative">
               <div className="flex justify-between text-xs font-mono text-muted-foreground mb-4 uppercase tracking-widest">
-                <span>1</span>
-                <span>10</span>
+                <span>0</span>
+                <span>100</span>
               </div>
               
               <Slider
                 value={mood}
                 onValueChange={setMood}
-                max={10}
-                min={1}
-                step={1}
+                max={100}
+                min={0}
+                step={5}
                 className="py-4"
               />
               
@@ -226,7 +226,7 @@ export default function Landing() {
                   {mood[0]}
                 </span>
                 <span className="block text-sm text-muted-foreground mt-1">
-                  {mood[0] <= 3 ? "Let's work on that" : mood[0] <= 6 ? "Room to grow" : mood[0] <= 8 ? "Looking good" : "Peak state!"}
+                  {mood[0] <= 30 ? "Let's work on that" : mood[0] <= 60 ? "Room to grow" : mood[0] <= 80 ? "Looking good" : "Peak state!"}
                 </span>
               </div>
             </div>
@@ -236,7 +236,7 @@ export default function Landing() {
                 onClick={handleMoodSubmit}
                 className="w-full py-5 bg-primary hover:bg-primary/90 text-primary-foreground font-bold tracking-widest rounded-xl shadow-[0_0_20px_rgba(255,16,240,0.4)] hover:shadow-[0_0_40px_rgba(255,16,240,0.6)] transition-all duration-300"
               >
-                {mood[0] < 6 ? "LET'S GET YOU TO A 10" : "LET'S GO"}
+                {mood[0] < 60 ? "LET'S GET YOU TO 100" : "LET'S GO"}
               </Button>
               
               <button 

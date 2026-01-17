@@ -34,7 +34,7 @@ const PERIOD_CONFIG = {
 // No labels - just the number
 
 export function MoodCheckModal({ isOpen, onClose, onSubmit, period }: MoodCheckModalProps) {
-  const [selectedMood, setSelectedMood] = useState<number>(5);
+  const [selectedMood, setSelectedMood] = useState<number>(50); // 0-100 scale
 
   if (!isOpen || !period) return null;
 
@@ -43,11 +43,11 @@ export function MoodCheckModal({ isOpen, onClose, onSubmit, period }: MoodCheckM
 
   const handleSubmit = () => {
     onSubmit(selectedMood);
-    setSelectedMood(5);
+    setSelectedMood(50);
   };
 
   // Calculate gradient position based on mood
-  const gradientPosition = ((selectedMood - 1) / 9) * 100;
+  const gradientPosition = (selectedMood / 100) * 100; // 0-100 scale
 
   return (
     <>
@@ -112,8 +112,9 @@ export function MoodCheckModal({ isOpen, onClose, onSubmit, period }: MoodCheckM
               {/* Range Input */}
               <input
                 type="range"
-                min="1"
-                max="10"
+                min="0"
+                max="100"
+                step="5"
                 value={selectedMood}
                 onChange={(e) => setSelectedMood(parseInt(e.target.value))}
                 className="absolute inset-0 w-full h-2 opacity-0 cursor-pointer"
@@ -131,9 +132,9 @@ export function MoodCheckModal({ isOpen, onClose, onSubmit, period }: MoodCheckM
 
             {/* Scale Labels */}
             <div className="flex justify-between mt-3 text-xs text-muted-foreground">
-              <span>1</span>
-              <span>5</span>
-              <span>10</span>
+              <span>0</span>
+              <span>50</span>
+              <span>100</span>
             </div>
           </div>
 

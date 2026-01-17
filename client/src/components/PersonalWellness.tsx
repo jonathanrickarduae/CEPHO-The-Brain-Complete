@@ -47,9 +47,9 @@ const HEALTH_METRICS: HealthMetric[] = [
 
 // Mental metrics
 const MENTAL_METRICS: HealthMetric[] = [
-  { id: 'mood', label: 'Mood', value: '7/10', icon: Heart, status: 'good' },
+  { id: 'mood', label: 'Mood', value: '70/100', icon: Heart, status: 'good' },
   { id: 'stress', label: 'Stress', value: 'Moderate', icon: AlertTriangle, status: 'warning' },
-  { id: 'balance', label: 'Work-Life', value: '6/10', icon: Target, status: 'warning' },
+  { id: 'balance', label: 'Work-Life', value: '60/100', icon: Target, status: 'warning' },
   { id: 'focus', label: 'Focus', value: 'Sharp', icon: Brain, status: 'good' },
 ];
 

@@ -1,13 +1,15 @@
 /**
  * Wellness Score Algorithm
  * 
- * Proprietary algorithm that calculates a user's daily wellness score (1-10)
+ * Proprietary algorithm that calculates a user's daily wellness score (0-100)
  * based on multiple factors including mood, productivity, and patterns.
+ * 
+ * Philosophy: "Getting you to 100" - 100% Optimization across all fronts
  */
 
 export interface WellnessInputs {
   // Mood data (from mood checks)
-  moodScores: number[]; // Array of mood scores (1-10) for the day
+  moodScores: number[]; // Array of mood scores (0-100) for the day
   moodTrend: 'improving' | 'stable' | 'declining';
   
   // Productivity data
@@ -21,7 +23,7 @@ export interface WellnessInputs {
   backToBackMeetings: number;
   
   // Historical context
-  averageScore: number; // User's historical average
+  averageScore: number; // User's historical average (0-100)
   streakDays: number; // Days of consistent usage
   
   // Optional health data
@@ -30,7 +32,7 @@ export interface WellnessInputs {
 }
 
 export interface WellnessOutput {
-  score: number; // 1-10
+  score: number; // 0-100
   breakdown: {
     mood: number;
     productivity: number;
@@ -60,30 +62,30 @@ const OPTIMAL = {
 };
 
 /**
- * Calculate mood component score
+ * Calculate mood component score (0-100)
  */
 function calculateMoodScore(inputs: WellnessInputs): number {
-  if (inputs.moodScores.length === 0) return 5; // Default neutral
+  if (inputs.moodScores.length === 0) return 50; // Default neutral
   
-  // Average of mood scores
+  // Average of mood scores (already 0-100)
   const avgMood = inputs.moodScores.reduce((a, b) => a + b, 0) / inputs.moodScores.length;
   
   // Bonus for improving trend
   let trendBonus = 0;
-  if (inputs.moodTrend === 'improving') trendBonus = 0.5;
-  if (inputs.moodTrend === 'declining') trendBonus = -0.5;
+  if (inputs.moodTrend === 'improving') trendBonus = 5;
+  if (inputs.moodTrend === 'declining') trendBonus = -5;
   
   // Bonus for consistency (low variance)
   const variance = inputs.moodScores.length > 1
     ? inputs.moodScores.reduce((sum, score) => sum + Math.pow(score - avgMood, 2), 0) / inputs.moodScores.length
     : 0;
-  const consistencyBonus = variance < 2 ? 0.3 : 0;
+  const consistencyBonus = variance < 200 ? 3 : 0; // Adjusted for 0-100 scale
   
-  return Math.min(10, Math.max(1, avgMood + trendBonus + consistencyBonus));
+  return Math.min(100, Math.max(0, avgMood + trendBonus + consistencyBonus));
 }
 
 /**
- * Calculate productivity component score
+ * Calculate productivity component score (0-100)
  */
 function calculateProductivityScore(inputs: WellnessInputs): number {
   // Task completion rate
@@ -92,80 +94,80 @@ function calculateProductivityScore(inputs: WellnessInputs): number {
     : 0.5;
   
   // Focus time score (optimal is 2-5 hours)
-  let focusScore = 5;
+  let focusScore = 50;
   if (inputs.focusMinutes >= OPTIMAL.focusMinutes.min && inputs.focusMinutes <= OPTIMAL.focusMinutes.max) {
-    focusScore = 10;
+    focusScore = 100;
   } else if (inputs.focusMinutes < OPTIMAL.focusMinutes.min) {
-    focusScore = (inputs.focusMinutes / OPTIMAL.focusMinutes.min) * 10;
+    focusScore = (inputs.focusMinutes / OPTIMAL.focusMinutes.min) * 100;
   } else {
     // Diminishing returns above optimal
-    focusScore = 10 - ((inputs.focusMinutes - OPTIMAL.focusMinutes.max) / 60);
+    focusScore = 100 - ((inputs.focusMinutes - OPTIMAL.focusMinutes.max) / 6);
   }
   
   // Combine completion rate and focus time
-  const rawScore = (completionRate * 6) + (focusScore * 0.4);
+  const rawScore = (completionRate * 60) + (focusScore * 0.4);
   
-  return Math.min(10, Math.max(1, rawScore));
+  return Math.min(100, Math.max(0, rawScore));
 }
 
 /**
- * Calculate work-life balance component score
+ * Calculate work-life balance component score (0-100)
  */
 function calculateBalanceScore(inputs: WellnessInputs): number {
-  let score = 10;
+  let score = 100;
   
   // Calendar density penalty
   if (inputs.calendarDensity > OPTIMAL.calendarDensity.max) {
-    score -= (inputs.calendarDensity - OPTIMAL.calendarDensity.max) * 10;
+    score -= (inputs.calendarDensity - OPTIMAL.calendarDensity.max) * 100;
   } else if (inputs.calendarDensity < OPTIMAL.calendarDensity.min) {
     // Too empty can also be suboptimal
-    score -= 1;
+    score -= 10;
   }
   
   // Back-to-back meetings penalty
-  score -= inputs.backToBackMeetings * 0.5;
+  score -= inputs.backToBackMeetings * 5;
   
   // Meeting overload penalty
   if (inputs.meetingMinutes > OPTIMAL.meetingMinutes.max) {
-    score -= ((inputs.meetingMinutes - OPTIMAL.meetingMinutes.max) / 60) * 2;
+    score -= ((inputs.meetingMinutes - OPTIMAL.meetingMinutes.max) / 60) * 20;
   }
   
   // Sleep bonus (if available)
   if (inputs.sleepHours !== undefined) {
     if (inputs.sleepHours >= OPTIMAL.sleepHours.min && inputs.sleepHours <= OPTIMAL.sleepHours.max) {
-      score += 1;
+      score += 10;
     } else if (inputs.sleepHours < 6) {
-      score -= 2;
+      score -= 20;
     }
   }
   
   // Exercise bonus (if available)
   if (inputs.exerciseMinutes !== undefined && inputs.exerciseMinutes >= OPTIMAL.exerciseMinutes.min) {
-    score += 0.5;
+    score += 5;
   }
   
-  return Math.min(10, Math.max(1, score));
+  return Math.min(100, Math.max(0, score));
 }
 
 /**
- * Calculate momentum component score
+ * Calculate momentum component score (0-100)
  */
 function calculateMomentumScore(inputs: WellnessInputs): number {
-  let score = 5; // Start neutral
+  let score = 50; // Start neutral
   
   // Streak bonus
-  if (inputs.streakDays >= 7) score += 2;
-  else if (inputs.streakDays >= 3) score += 1;
+  if (inputs.streakDays >= 7) score += 20;
+  else if (inputs.streakDays >= 3) score += 10;
   
   // Above average bonus
   const currentEstimate = (calculateMoodScore(inputs) + calculateProductivityScore(inputs)) / 2;
   if (currentEstimate > inputs.averageScore) {
-    score += Math.min(2, (currentEstimate - inputs.averageScore) * 0.5);
+    score += Math.min(20, (currentEstimate - inputs.averageScore) * 0.5);
   } else {
-    score -= Math.min(2, (inputs.averageScore - currentEstimate) * 0.3);
+    score -= Math.min(20, (inputs.averageScore - currentEstimate) * 0.3);
   }
   
-  return Math.min(10, Math.max(1, score));
+  return Math.min(100, Math.max(0, score));
 }
 
 /**
@@ -174,9 +176,9 @@ function calculateMomentumScore(inputs: WellnessInputs): number {
 function generateInsights(inputs: WellnessInputs, breakdown: WellnessOutput['breakdown']): string[] {
   const insights: string[] = [];
   
-  if (breakdown.mood >= 8) {
+  if (breakdown.mood >= 80) {
     insights.push("Your mood has been excellent today! Keep up the positive energy.");
-  } else if (breakdown.mood <= 4) {
+  } else if (breakdown.mood <= 40) {
     insights.push("Your mood seems lower than usual. Consider taking a short break.");
   }
   
@@ -205,11 +207,11 @@ function generateInsights(inputs: WellnessInputs, breakdown: WellnessOutput['bre
 function generateRecommendations(inputs: WellnessInputs, breakdown: WellnessOutput['breakdown']): string[] {
   const recommendations: string[] = [];
   
-  if (breakdown.balance < 6) {
+  if (breakdown.balance < 60) {
     recommendations.push("Try to protect some focus time tomorrow by blocking your calendar.");
   }
   
-  if (breakdown.mood < 6 && inputs.moodTrend === 'declining') {
+  if (breakdown.mood < 60 && inputs.moodTrend === 'declining') {
     recommendations.push("Your mood has been declining. Consider scheduling something enjoyable.");
   }
   
@@ -225,7 +227,7 @@ function generateRecommendations(inputs: WellnessInputs, breakdown: WellnessOutp
     recommendations.push("Prioritize sleep tonight. Aim for 7-8 hours for optimal performance.");
   }
   
-  if (breakdown.productivity < 6 && inputs.tasksPlanned > 5) {
+  if (breakdown.productivity < 60 && inputs.tasksPlanned > 5) {
     recommendations.push("Consider planning fewer tasks tomorrow to increase completion rate.");
   }
   
@@ -237,8 +239,8 @@ function generateRecommendations(inputs: WellnessInputs, breakdown: WellnessOutp
  */
 function determineTrend(inputs: WellnessInputs, score: number): WellnessOutput['trend'] {
   const diff = score - inputs.averageScore;
-  if (diff > 0.5) return 'improving';
-  if (diff < -0.5) return 'declining';
+  if (diff > 5) return 'improving';
+  if (diff < -5) return 'declining';
   return 'stable';
 }
 
@@ -260,11 +262,11 @@ export function calculateWellnessScore(inputs: WellnessInputs): WellnessOutput {
     breakdown.balance * WEIGHTS.balance +
     breakdown.momentum * WEIGHTS.momentum;
   
-  // Round to one decimal place
-  const score = Math.round(rawScore * 10) / 10;
+  // Round to whole number
+  const score = Math.round(rawScore);
   
   return {
-    score: Math.min(10, Math.max(1, score)),
+    score: Math.min(100, Math.max(0, score)),
     breakdown,
     insights: generateInsights(inputs, breakdown),
     recommendations: generateRecommendations(inputs, breakdown),
@@ -273,25 +275,25 @@ export function calculateWellnessScore(inputs: WellnessInputs): WellnessOutput {
 }
 
 /**
- * Get a human-readable label for the score
+ * Get a human-readable label for the score (0-100 scale)
  */
 export function getScoreLabel(score: number): string {
-  if (score >= 9) return "Exceptional";
-  if (score >= 8) return "Excellent";
-  if (score >= 7) return "Very Good";
-  if (score >= 6) return "Good";
-  if (score >= 5) return "Moderate";
-  if (score >= 4) return "Fair";
-  if (score >= 3) return "Needs Attention";
+  if (score >= 90) return "Exceptional";
+  if (score >= 80) return "Excellent";
+  if (score >= 70) return "Very Good";
+  if (score >= 60) return "Good";
+  if (score >= 50) return "Moderate";
+  if (score >= 40) return "Fair";
+  if (score >= 30) return "Needs Attention";
   return "Challenging";
 }
 
 /**
- * Get color for score display
+ * Get color for score display (0-100 scale)
  */
 export function getScoreColor(score: number): string {
-  if (score >= 8) return "text-green-500";
-  if (score >= 6) return "text-blue-500";
-  if (score >= 4) return "text-yellow-500";
+  if (score >= 80) return "text-green-500";
+  if (score >= 60) return "text-blue-500";
+  if (score >= 40) return "text-yellow-500";
   return "text-red-500";
 }

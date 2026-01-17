@@ -4794,3 +4794,150 @@ A "short and sharp" assessment process for real-life problems or scenarios requi
 - [ ] Improve SME routing based on scenario type
 - [ ] Build scenario templates for common situations
 
+
+
+## CEPHO Brand Guidelines & Report Process
+
+### Brand Guidelines Document (Boundless Telecom Structure)
+- [ ] Create CEPHO brand guidelines document following Boundless Telecom structure
+- [ ] Define primary color palette (black, white, grey)
+- [ ] Define accent color (pink neon #ff006e)
+- [ ] Define typography standards (Calibri font family)
+- [ ] Define report formatting standards (no page numbers, professional consulting style)
+- [ ] Define logo usage and placement guidelines
+- [ ] Define header/footer standards
+- [ ] Define table and chart styling
+
+### Branded Report Template
+- [ ] Create CSS stylesheet for CEPHO branded reports
+- [ ] Create HTML report template with brand styling
+- [ ] Add report header with CEPHO logo
+- [ ] Add professional dividers and section styling
+- [ ] Create table styling for data presentation
+
+### KPI Heat Map Report Enhancement
+- [ ] Update KPI report to include all individual SME scores
+- [ ] Add SME expert names and contact details for follow-up
+- [ ] Show score breakdown by each SME expert
+- [ ] Enable drill-down to discuss specific scores with experts
+- [ ] Apply CEPHO brand styling to report
+
+### Report Generation Process
+- [ ] Create report generation utility function
+- [ ] Integrate brand template into report generation
+- [ ] Add PDF export with brand styling
+- [ ] Document report generation process in playbook
+
+### Report Fixes (Critical)
+- [ ] Fix white text on dark background score cells for readability
+- [ ] Ensure all scores display on 0-100 scale consistently
+- [ ] Make SME expert faces larger and more prominent
+- [ ] Add individual SME scores breakdown per category
+- [ ] Add lazy loading for SME avatar images
+- [ ] Use thumbnail sizes for faster loading
+- [ ] Add progressive image loading with placeholders
+- [ ] Paginate SME sections to limit images per view
+
+## CEPHO Document Generation System (CRITICAL - Jan 17, 2026)
+
+### Master Design Guidelines
+- [ ] Create comprehensive master design guidelines document
+- [ ] Define exact logo placement rules (position, size, margins for each doc type)
+- [ ] Define complete color palette with hex codes and usage rules
+- [ ] Define typography standards (fonts, sizes, weights for every element type)
+- [ ] Define spacing and layout grids for each document type
+- [ ] Define header/footer templates for each document type
+- [ ] Define naming conventions for all output files
+- [ ] Define author field standard (blank or "X")
+
+### Document Template Library
+- [ ] Create base template class with CEPHO branding
+- [ ] Create Report template (KPI, Assessment, Research)
+- [ ] Create Briefing Paper template
+- [ ] Create Presentation/Pitch Deck template
+- [ ] Create Executive Summary template
+- [ ] Create Meeting Notes template
+
+### Automated Generation System
+- [ ] Create document generator that reads from design guidelines folder
+- [ ] Auto-apply correct template based on document type
+- [ ] Auto-populate headers, footers, logos
+- [ ] Enforce naming conventions automatically
+- [ ] Output professional, consistent documents every time
+
+### Validation
+- [ ] Regenerate KPI Heat Map report using new system
+- [ ] Verify all guidelines are followed automatically
+- [ ] Test with different document types
+
+### Chief of Staff Quality Gate Integration
+- [ ] Update Chief of Staff role definition with quality gate responsibilities
+- [ ] Create validation checklist for all document outputs
+- [ ] Implement mandatory design guideline compliance check
+- [ ] Create rejection/regeneration workflow for failed documents
+- [ ] Ensure no document reaches user without Chief of Staff approval
+- [ ] Add quality metrics tracking for continuous improvement
+
+## Getting You to 100 - KPI Scorecard Optimization (CORE GOAL)
+
+### Overall Target: Move from 63/100 to 100/100
+
+The 100% Optimization Framework requires strong performance across ALL fronts. Current score is 63/100. This section tracks progress toward achieving 100/100.
+
+### Critical Areas (Score < 40) - Priority 1
+- [ ] Innovation Pipeline: 28 → 100
+- [ ] Culture and Values: 32 → 100
+- [ ] AI/ML Capability: 35 → 100
+- [ ] Team Capability: 38 → 100
+- [ ] Customer Success Programs: 39 → 100
+
+### Attention Areas (Score 40-59) - Priority 2
+- [ ] Partnership Strategy: 42 → 100
+- [ ] Competitive Positioning: 45 → 100
+- [ ] Market Penetration: 48 → 100
+- [ ] Brand Awareness: 52 → 100
+- [ ] Revenue Growth: 55 → 100
+
+### Improvement Areas (Score 60-69) - Priority 3
+- [ ] Technical Documentation: 55 → 100
+- [ ] Product Differentiation: 58 → 100
+- [ ] Financial Controls: 62 → 100
+- [ ] Operational Efficiency: 65 → 100
+
+### Strengthen Areas (Score 70-79) - Priority 4
+- [ ] Quality Assurance: 72 → 100
+- [ ] Security Posture: 75 → 100
+- [ ] Data Management: 78 → 100
+
+### Maintain Excellence (Score 80+) - Priority 5
+- [ ] Core Platform Stability: 85 → 100
+- [ ] User Experience: 82 → 100
+
+### Tracking
+- [ ] Weekly KPI review with SME panel
+- [ ] Monthly scorecard regeneration
+- [ ] Quarterly deep-dive on critical areas
+- [ ] Track individual SME scores for accountability
+
+## Wellness Score Scale Update (CRITICAL)
+
+### Change from 0-10 to 0-100 Scale
+- [x] Update "Getting you to a 10" → "Getting you to 100" across all UI
+- [x] Update mood check scale from 0-100
+- [x] Update wellness score algorithm to output 0-100
+- [ ] Update all wellness visualizations to 100 scale
+- [ ] Update Statistics page wellness displays
+- [ ] Update Dashboard wellness card
+- [ ] Align with KPI scorecard philosophy - everything is 100% optimization
+- [ ] Update onboarding to reference "Getting you to 100"
+- [ ] Update any marketing/copy referencing the 10 scale
+
+## Code Cleanup - Boundless Project Separation
+
+### Boundless is just ONE project (like Celadon, Green Waste Energy)
+- [ ] Identify all Boundless-specific code embedded in the codebase
+- [ ] Move Boundless research/data to project-specific folder structure
+- [ ] Remove Boundless hardcoding from core components
+- [ ] Ensure Boundless is treated as a project entry, not special case
+- [ ] Clean up any Boundless-specific UI that should be generic
+- [ ] Update Library to show Boundless as one project among many

@@ -76,7 +76,7 @@ export default function EveningReview() {
   
   const [taskDecisions, setTaskDecisions] = useState<TaskDecision[]>([]);
   const [expandedProjects, setExpandedProjects] = useState<string[]>(OVERNIGHT_TASKS.map(p => p.projectId));
-  const [currentMood, setCurrentMood] = useState([6]);
+  const [currentMood, setCurrentMood] = useState([60]); // 0-100 scale
   const [isRecordingWentWell, setIsRecordingWentWell] = useState(false);
   const [isRecordingDidntGo, setIsRecordingDidntGo] = useState(false);
   const [wentWellText, setWentWellText] = useState("");
@@ -706,14 +706,14 @@ export default function EveningReview() {
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
                   <label className="text-sm font-medium text-indigo-700">Today's mood score</label>
-                  <span className="text-2xl font-bold text-indigo-600">{currentMood[0]}/10</span>
+                  <span className="text-2xl font-bold text-indigo-600">{currentMood[0]}/100</span>
                 </div>
                 <Slider
                   value={currentMood}
                   onValueChange={setCurrentMood}
-                  min={1}
-                  max={10}
-                  step={1}
+                  min={0}
+                  max={100}
+                  step={5}
                   className="py-2"
                 />
               </div>

@@ -128,7 +128,7 @@ export default function Waitlist() {
             
             <p className="text-xl text-gray-400 max-w-2xl mx-auto mb-8">
               An AI that learns you—your patterns, preferences, and goals—to help you 
-              become the best version of yourself. Getting you to a 10.
+              become the best version of yourself. Getting you to 100.
             </p>
 
             {/* Referral notice */}
