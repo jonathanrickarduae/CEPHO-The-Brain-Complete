@@ -2567,3 +2567,173 @@ export async function getDocumentCounts(userId: number): Promise<{ type: string;
   
   return Object.entries(counts).map(([type, count]) => ({ type, count }));
 }
+
+
+// ============================================
+// Subscription Functions
+// ============================================
+
+import { subscriptions, type Subscription, type InsertSubscription } from "../drizzle/schema";
+
+// Create a new subscription
+export async function createSubscription(data: InsertSubscription): Promise<number | null> {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const [result] = await db.insert(subscriptions).values(data);
+  return result.insertId;
+}
+
+// Get subscriptions for a user
+export async function getSubscriptions(
+  userId: number,
+  filters?: { status?: string; category?: string; limit?: number; offset?: number }
+): Promise<Subscription[]> {
+  const db = await getDb();
+  if (!db) return [];
+  
+  const conditions = [eq(subscriptions.userId, userId)];
+  
+  if (filters?.status && filters.status !== 'all') {
+    conditions.push(sql`${subscriptions.status} = ${filters.status}`);
+  }
+  
+  if (filters?.category && filters.category !== 'all') {
+    conditions.push(sql`${subscriptions.category} = ${filters.category}`);
+  }
+  
+  return db.select().from(subscriptions)
+    .where(and(...conditions))
+    .orderBy(desc(subscriptions.createdAt))
+    .limit(filters?.limit || 100)
+    .offset(filters?.offset || 0);
+}
+
+// Get a subscription by ID
+export async function getSubscriptionById(id: number): Promise<Subscription | null> {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const [sub] = await db.select().from(subscriptions)
+    .where(eq(subscriptions.id, id))
+    .limit(1);
+  
+  return sub || null;
+}
+
+// Update a subscription
+export async function updateSubscription(id: number, data: Partial<InsertSubscription>): Promise<void> {
+  const db = await getDb();
+  if (!db) return;
+  
+  await db.update(subscriptions).set(data)
+    .where(eq(subscriptions.id, id));
+}
+
+// Delete a subscription
+export async function deleteSubscription(id: number): Promise<void> {
+  const db = await getDb();
+  if (!db) return;
+  
+  await db.delete(subscriptions)
+    .where(eq(subscriptions.id, id));
+}
+
+// Get subscription summary statistics
+export async function getSubscriptionSummary(userId: number): Promise<{
+  totalMonthly: number;
+  totalAnnual: number;
+  activeCount: number;
+  byCategory: { category: string; count: number; totalCost: number }[];
+}> {
+  const db = await getDb();
+  if (!db) return { totalMonthly: 0, totalAnnual: 0, activeCount: 0, byCategory: [] };
+  
+  const subs = await db.select().from(subscriptions)
+    .where(eq(subscriptions.userId, userId));
+  
+  let totalMonthly = 0;
+  let activeCount = 0;
+  const categoryMap: Record<string, { count: number; totalCost: number }> = {};
+  
+  subs.forEach(sub => {
+    if (sub.status === 'active') {
+      activeCount++;
+      
+      // Convert to monthly cost
+      let monthlyCost = sub.cost;
+      if (sub.billingCycle === 'annual') {
+        monthlyCost = sub.cost / 12;
+      } else if (sub.billingCycle === 'quarterly') {
+        monthlyCost = sub.cost / 3;
+      }
+      
+      totalMonthly += monthlyCost;
+      
+      // Track by category
+      const cat = sub.category || 'other';
+      if (!categoryMap[cat]) {
+        categoryMap[cat] = { count: 0, totalCost: 0 };
+      }
+      categoryMap[cat].count++;
+      categoryMap[cat].totalCost += monthlyCost;
+    }
+  });
+  
+  return {
+    totalMonthly,
+    totalAnnual: totalMonthly * 12,
+    activeCount,
+    byCategory: Object.entries(categoryMap).map(([category, data]) => ({
+      category,
+      ...data
+    }))
+  };
+}
+
+// Get subscription cost history (for trend chart)
+export async function getSubscriptionCostHistory(
+  userId: number,
+  months: number = 12
+): Promise<{ month: string; totalCost: number; subscriptionCount: number }[]> {
+  const db = await getDb();
+  if (!db) return [];
+  
+  const subs = await db.select().from(subscriptions)
+    .where(eq(subscriptions.userId, userId));
+  
+  const now = new Date();
+  const history: { month: string; totalCost: number; subscriptionCount: number }[] = [];
+  
+  for (let i = months - 1; i >= 0; i--) {
+    const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
+    const monthStr = date.toLocaleDateString('en-GB', { month: 'short', year: 'numeric' });
+    
+    let totalCost = 0;
+    let subscriptionCount = 0;
+    
+    subs.forEach(sub => {
+      // Check if subscription was active during this month
+      const startDate = sub.startDate ? new Date(sub.startDate) : sub.createdAt;
+      const endOfMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+      
+      if (startDate <= endOfMonth && (sub.status === 'active' || sub.status === 'paused')) {
+        subscriptionCount++;
+        
+        // Convert to monthly cost
+        let monthlyCost = sub.cost;
+        if (sub.billingCycle === 'annual') {
+          monthlyCost = sub.cost / 12;
+        } else if (sub.billingCycle === 'quarterly') {
+          monthlyCost = sub.cost / 3;
+        }
+        
+        totalCost += monthlyCost;
+      }
+    });
+    
+    history.push({ month: monthStr, totalCost, subscriptionCount });
+  }
+  
+  return history;
+}

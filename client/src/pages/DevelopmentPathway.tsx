@@ -26,12 +26,15 @@ import {
 import { trpc } from "@/lib/trpc";
 import { Link } from "wouter";
 import SubscriptionTracker from "@/components/SubscriptionTracker";
+import OptimizationAssessment from "@/components/OptimizationAssessment";
+import FundingAssessment from "@/components/FundingAssessment";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Brain, Gauge } from "lucide-react";
 
 // Stage configuration for the development pipeline
 const PIPELINE_STAGES = [
@@ -145,6 +148,10 @@ export default function DevelopmentPathway() {
             <TabsTrigger value="reviews" className="data-[state=active]:bg-gray-800">
               <Calendar className="w-4 h-4 mr-2" />
               Chief of Staff Reviews
+            </TabsTrigger>
+            <TabsTrigger value="optimization" className="data-[state=active]:bg-gray-800">
+              <Gauge className="w-4 h-4 mr-2" />
+              System Optimization
             </TabsTrigger>
           </TabsList>
 
@@ -335,76 +342,17 @@ export default function DevelopmentPathway() {
 
           {/* Government Funding Tab */}
           <TabsContent value="funding">
-            <Card className="bg-gray-900/50 border-gray-800">
-              <CardHeader>
-                <CardTitle className="text-white flex items-center gap-2">
-                  <Building2 className="w-5 h-5 text-emerald-400" />
-                  Government Funding Opportunities
-                </CardTitle>
-                <CardDescription>R&D tax credits, grants, and startup loans for UAE and UK</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-2 gap-4">
-                  {/* UAE Programs */}
-                  <div className="space-y-3">
-                    <h3 className="text-lg font-semibold text-white flex items-center gap-2">
-                      <span className="text-2xl">🇦🇪</span> UAE Programs
-                    </h3>
-                    <div className="space-y-2">
-                      {[
-                        { name: "MBRIF Innovation Accelerator", amount: "Up to 1M AED", type: "Accelerator" },
-                        { name: "Khalifa Fund", amount: "Up to 3M AED", type: "Loan" },
-                        { name: "Dubai SME", amount: "Up to 500K AED", type: "Grant" },
-                        { name: "Hub71 Incentives", amount: "Up to 2M AED", type: "Incentive" },
-                      ].map((program, i) => (
-                        <div key={i} className="p-3 bg-gray-800/50 rounded-lg">
-                          <div className="flex items-center justify-between">
-                            <span className="text-white font-medium">{program.name}</span>
-                            <Badge variant="outline" className="border-emerald-500/50 text-emerald-400">{program.type}</Badge>
-                          </div>
-                          <p className="text-sm text-gray-400 mt-1">{program.amount}</p>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                  
-                  {/* UK Programs */}
-                  <div className="space-y-3">
-                    <h3 className="text-lg font-semibold text-white flex items-center gap-2">
-                      <span className="text-2xl">🇬🇧</span> UK Programs
-                    </h3>
-                    <div className="space-y-2">
-                      {[
-                        { name: "R&D Tax Credits (SME)", amount: "Up to 33% relief", type: "Tax Credit" },
-                        { name: "Innovate UK Smart Grants", amount: "Up to £2M", type: "Grant" },
-                        { name: "Start Up Loans", amount: "Up to £25K", type: "Loan" },
-                        { name: "EIS/SEIS Schemes", amount: "Tax relief for investors", type: "Tax Relief" },
-                      ].map((program, i) => (
-                        <div key={i} className="p-3 bg-gray-800/50 rounded-lg">
-                          <div className="flex items-center justify-between">
-                            <span className="text-white font-medium">{program.name}</span>
-                            <Badge variant="outline" className="border-blue-500/50 text-blue-400">{program.type}</Badge>
-                          </div>
-                          <p className="text-sm text-gray-400 mt-1">{program.amount}</p>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="mt-6 p-4 bg-gradient-to-r from-emerald-500/10 to-blue-500/10 rounded-lg border border-emerald-500/20">
-                  <p className="text-gray-300 text-sm">
-                    <strong className="text-white">Coming Soon:</strong> Automatic eligibility assessment based on your Innovation Hub ideas. 
-                    The Chief of Staff will analyze your ideas and match them with suitable funding programs.
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
+            <FundingAssessment />
           </TabsContent>
 
           {/* Subscriptions Tab */}
           <TabsContent value="subscriptions">
             <SubscriptionTracker />
+          </TabsContent>
+
+          {/* System Optimization Tab */}
+          <TabsContent value="optimization">
+            <OptimizationAssessment />
           </TabsContent>
 
           {/* Chief of Staff Reviews Tab */}

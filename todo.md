@@ -4080,3 +4080,49 @@
 - [x] Ensure avatarUrl from aiExperts.ts is properly used in rendering
 - [x] Add fallback to emoji when avatar image fails to load
 - [x] Test avatar display on AI-SMEs page - 19 experts now show photos
+
+
+## Sprint: Database, Charts, Funding & Optimization (Jan 17, 2026)
+
+### 1. Subscription Database Persistence
+- [ ] Create tRPC endpoints for subscription CRUD operations
+- [ ] Wire SubscriptionTracker to save/load from database
+- [ ] Migrate sample data to database on first load
+- [ ] Add real-time sync for subscription changes
+
+### 2. Cost Trends Chart
+- [ ] Add line chart showing subscription spend over time
+- [ ] Display last 6-12 months of spending data
+- [ ] Show category breakdown trends
+- [ ] Add comparison to previous period
+
+### 3. Government Funding Auto-Assessment
+- [ ] Wire funding eligibility scoring to Innovation Hub ideas
+- [ ] Auto-match ideas with suitable UAE/UK programs
+- [ ] Display eligibility scores on idea cards
+- [ ] Show matched programs with confidence percentage
+- [ ] Generate funding recommendations in Brief
+
+### 4. Chief of Staff Optimization Assessment
+- [ ] Create system-wide optimization analysis
+- [ ] Analyze all modules for improvement opportunities
+- [ ] Generate optimization score (0-100)
+- [ ] Provide actionable recommendations
+- [ ] Display assessment in Chief of Staff page
+- [ ] Include areas: Performance, Data Quality, Feature Usage, Integrations
+
+
+## Chief of Staff Features (Jan 2026)
+
+- [x] Subscription Tracker: Connect to database with full CRUD operations
+- [x] Subscription Tracker: Add cost trends chart showing monthly spend over 12 months
+- [x] Subscription Tracker: Summary statistics (monthly/annual spend, active count, by category)
+- [x] Government Funding: AI-powered auto-assessment for ideas against funding programmes
+- [x] Government Funding: Match ideas with UAE and UK funding programmes
+- [x] Government Funding: Eligibility scoring with strengths, gaps, and recommendations
+- [x] System Optimization: Chief of Staff optimization assessment with percentage score
+- [x] System Optimization: Assess 5 areas (Data Quality, Process Efficiency, AI Utilization, Security, Integration)
+- [x] System Optimization: Top priorities and recommendations for improvement
+- [x] Unit tests: Subscription tracker database functions
+- [x] Unit tests: Optimization assessment logic
+- [x] Unit tests: Funding assessment matching logic
