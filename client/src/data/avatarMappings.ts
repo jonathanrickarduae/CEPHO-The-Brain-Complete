@@ -3,48 +3,48 @@
 
 export const avatarMappings: Record<string, string> = {
   // Investment & Finance
-  'victor-sterling': '/avatars/victor-sterling.png',
-  'marcus-macro': '/avatars/marcus-macro.png',
-  'sophia-venture': '/avatars/sophia-venture.png',
-  'grace-family': '/avatars/grace-family.png',
-  'warren-value': '/avatars/warren-value.png',
-  'ray-dalio': '/avatars/ray-dalio.png',
+  'victor-sterling': '/avatars/victor-sterling.jpg',
+  'marcus-macro': '/avatars/marcus-macro.jpg',
+  'sophia-venture': '/avatars/sophia-venture.jpg',
+  'grace-family': '/avatars/grace-family.jpg',
+  'warren-value': '/avatars/warren-value.jpg',
+  'ray-dalio': '/avatars/ray-dalio.jpg',
   
   // Technology & AI
-  'jensen-ai': '/avatars/jensen-ai.png',
-  'andrew-ml': '/avatars/andrew-ml.png',
-  'satya-cloud': '/avatars/satya-cloud.png',
-  'sundar-cloud': '/avatars/sundar-cloud.png',
-  'elon-tech': '/avatars/elon-tech.png',
-  'peter-thiel': '/avatars/peter-thiel.png',
+  'jensen-ai': '/avatars/jensen-ai.jpg',
+  'andrew-ml': '/avatars/andrew-ml.jpg',
+  'satya-cloud': '/avatars/satya-cloud.jpg',
+  'sundar-cloud': '/avatars/sundar-cloud.jpg',
+  'elon-tech': '/avatars/elon-tech.jpg',
+  'peter-thiel': '/avatars/peter-thiel.jpg',
   
   // Strategy & Leadership
-  'alexandra-strategy': '/avatars/alexandra-strategy.png',
-  'aurora-disrupt': '/avatars/aurora-disrupt.png',
-  'richard-growth': '/avatars/richard-growth.png',
+  'alexandra-strategy': '/avatars/alexandra-strategy.jpg',
+  'aurora-disrupt': '/avatars/aurora-disrupt.jpg',
+  'richard-growth': '/avatars/richard-growth.jpg',
   
   // Design & Creative
-  'franz-precision': '/avatars/franz-precision.png',
-  'alessandro-luxe': '/avatars/alessandro-luxe.png',
-  'maya-ux': '/avatars/maya-ux.png',
-  'elena-brand': '/avatars/elena-brand.png',
+  'franz-precision': '/avatars/franz-precision.jpg',
+  'alessandro-luxe': '/avatars/alessandro-luxe.jpg',
+  'maya-ux': '/avatars/maya-ux.jpg',
+  'elena-brand': '/avatars/elena-brand.jpg',
   
   // Operations & Corporate
-  'indra-operations': '/avatars/indra-operations.png',
-  'jeff-logistics': '/avatars/jeff-logistics.png',
-  'david-product': '/avatars/david-product.png',
-  'carlos-sales': '/avatars/carlos-sales.png',
-  'sarah-hr': '/avatars/sarah-hr.png',
-  'michael-legal': '/avatars/michael-legal.png',
-  'maxwell-patent': '/avatars/maxwell-patent.png',
+  'indra-operations': '/avatars/indra-operations.jpg',
+  'jeff-logistics': '/avatars/jeff-logistics.jpg',
+  'david-product': '/avatars/david-product.jpg',
+  'carlos-sales': '/avatars/carlos-sales.jpg',
+  'sarah-hr': '/avatars/sarah-hr.jpg',
+  'michael-legal': '/avatars/michael-legal.jpg',
+  'maxwell-patent': '/avatars/maxwell-patent.jpg',
   
   // Psychology & Behavioral
-  'emma-thaler': '/avatars/emma-thaler.png',
+  'emma-thaler': '/avatars/emma-thaler.jpg',
   
   // Celebrities
-  'jay-z': '/avatars/jay-z.png',
-  'oprah-media': '/avatars/oprah-media.png',
-  'ryan-reynolds': '/avatars/ryan-reynolds.png',
+  'jay-z': '/avatars/jay-z.jpg',
+  'oprah-media': '/avatars/oprah-media.jpg',
+  'ryan-reynolds': '/avatars/ryan-reynolds.jpg',
 };
 
 // Helper function to get avatar URL with fallback
