@@ -4162,6 +4162,28 @@ ${transcript}
         const { getSubscriptionCostHistory } = await import('./db');
         return getSubscriptionCostHistory(ctx.user.id, input?.months || 12);
       }),
+
+    // Get upcoming renewal reminders
+    getUpcomingRenewals: protectedProcedure
+      .input(z.object({ daysAhead: z.number().min(1).max(90).default(30) }).optional())
+      .query(async ({ ctx, input }) => {
+        const { getUpcomingRenewals } = await import('./services/subscriptionReminderService');
+        return getUpcomingRenewals(ctx.user.id, input?.daysAhead || 30);
+      }),
+
+    // Get renewal summary (count, total cost, next renewal)
+    getRenewalSummary: protectedProcedure
+      .query(async ({ ctx }) => {
+        const { getRenewalSummary } = await import('./services/subscriptionReminderService');
+        return getRenewalSummary(ctx.user.id);
+      }),
+
+    // Manually trigger reminder check and send notifications
+    sendRenewalReminders: protectedProcedure
+      .mutation(async ({ ctx }) => {
+        const { checkAndSendReminders } = await import('./services/subscriptionReminderService');
+        return checkAndSendReminders(ctx.user.id);
+      }),
   }),
 });
 export type AppRouter = typeof appRouter;

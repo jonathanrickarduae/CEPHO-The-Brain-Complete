@@ -212,6 +212,9 @@ export default function SubscriptionTracker() {
   
   // Fetch cost history for trend chart
   const { data: costHistory } = trpc.subscriptionTracker.getCostHistory.useQuery({ months: 12 });
+  
+  // Fetch upcoming renewals
+  const { data: renewalSummary } = trpc.subscriptionTracker.getRenewalSummary.useQuery();
 
   // Mutations
   const createMutation = trpc.subscriptionTracker.create.useMutation({
@@ -394,6 +397,53 @@ export default function SubscriptionTracker() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Upcoming Renewals Alert */}
+      {renewalSummary && renewalSummary.upcomingCount > 0 && (
+        <Card className="bg-amber-900/20 border-amber-800/50">
+          <CardContent className="pt-4">
+            <div className="flex items-start gap-4">
+              <div className="p-2 bg-amber-500/20 rounded-full">
+                <AlertTriangle className="w-5 h-5 text-amber-400" />
+              </div>
+              <div className="flex-1">
+                <h3 className="font-semibold text-amber-200">Upcoming Renewals</h3>
+                <p className="text-sm text-amber-300/80 mt-1">
+                  {renewalSummary.upcomingCount} subscription{renewalSummary.upcomingCount > 1 ? 's' : ''} renewing in the next 30 days
+                  {renewalSummary.nextRenewal && (
+                    <span> — Next: <strong>{renewalSummary.nextRenewal.subscriptionName}</strong> in {renewalSummary.nextRenewal.daysUntilRenewal} day{renewalSummary.nextRenewal.daysUntilRenewal !== 1 ? 's' : ''} ({formatCurrency(renewalSummary.nextRenewal.cost)})</span>
+                  )}
+                </p>
+                {renewalSummary.renewals.length > 1 && (
+                  <div className="mt-3 space-y-2">
+                    {renewalSummary.renewals.slice(0, 5).map((renewal) => (
+                      <div key={renewal.subscriptionId} className="flex items-center justify-between text-sm bg-amber-950/30 rounded px-3 py-2">
+                        <div className="flex items-center gap-2">
+                          <span className={`w-2 h-2 rounded-full ${
+                            renewal.daysUntilRenewal <= 1 ? 'bg-red-500' :
+                            renewal.daysUntilRenewal <= 3 ? 'bg-orange-500' :
+                            renewal.daysUntilRenewal <= 7 ? 'bg-yellow-500' : 'bg-blue-500'
+                          }`} />
+                          <span className="text-amber-100">{renewal.subscriptionName}</span>
+                          <span className="text-amber-400/60">({renewal.provider})</span>
+                        </div>
+                        <div className="flex items-center gap-4">
+                          <span className="text-amber-200">{formatCurrency(renewal.cost)}</span>
+                          <span className="text-amber-400/80">
+                            {renewal.daysUntilRenewal === 0 ? 'Today' :
+                             renewal.daysUntilRenewal === 1 ? 'Tomorrow' :
+                             `${renewal.daysUntilRenewal} days`}
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Cost Trend Chart */}
       <Card className="bg-gray-900/50 border-gray-800">

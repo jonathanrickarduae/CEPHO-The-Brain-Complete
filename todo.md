@@ -4126,3 +4126,18 @@
 - [x] Unit tests: Subscription tracker database functions
 - [x] Unit tests: Optimization assessment logic
 - [x] Unit tests: Funding assessment matching logic
+
+
+## Subscription Renewal Reminders (Jan 17, 2026)
+
+- [x] Create subscription reminder service to check upcoming renewals
+- [x] Add notification triggers for 7-day, 3-day, and 1-day before renewal
+- [x] Integrate with existing notification system (notifyOwner)
+- [x] Add UI indicator for upcoming renewals in Subscription Tracker
+- [ ] Store reminder preferences per subscription (future enhancement)
+## AI SME Avatar Generation (Jan 17, 2026)
+
+- [x] Identify experts without custom avatars (293 of 312 needed avatars)
+- [x] Generate professional AI headshots for key experts (25 new avatars generated)
+- [x] Update aiExperts.ts with new avatarUrl fields (37 total with avatars now)
+- [x] Test avatar display in AI-SME cardsyle across all avatars
