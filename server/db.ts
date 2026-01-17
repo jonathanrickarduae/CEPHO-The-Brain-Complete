@@ -17,7 +17,12 @@ import { InsertUser, users, moodHistory, InsertMoodHistory, MoodHistory, convers
   collaborativeReviewSessions, InsertCollaborativeReviewSession, CollaborativeReviewSession,
   collaborativeReviewParticipants, InsertCollaborativeReviewParticipant, CollaborativeReviewParticipant,
   collaborativeReviewComments, InsertCollaborativeReviewComment, CollaborativeReviewComment,
-  collaborativeReviewActivity, InsertCollaborativeReviewActivity, CollaborativeReviewActivity
+  collaborativeReviewActivity, InsertCollaborativeReviewActivity, CollaborativeReviewActivity,
+  eveningReviewSessions, InsertEveningReviewSession, EveningReviewSession,
+  eveningReviewTaskDecisions, InsertEveningReviewTaskDecision, EveningReviewTaskDecision,
+  reviewTimingPatterns, InsertReviewTimingPattern, ReviewTimingPattern,
+  signalItems, InsertSignalItem, SignalItem,
+  calendarEventsCache, InsertCalendarEventCache, CalendarEventCache
 } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
@@ -2106,4 +2111,373 @@ export async function getCollaborativeReviewSessionWithDetails(sessionId: number
     comments,
     recentActivity: activity,
   };
+}
+
+
+// ============================================
+// Evening Review System Functions
+// ============================================
+
+// Create an evening review session
+export async function createEveningReviewSession(data: InsertEveningReviewSession): Promise<number | null> {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const [result] = await db.insert(eveningReviewSessions).values(data);
+  return result.insertId;
+}
+
+// Get evening review sessions for a user
+export async function getEveningReviewSessions(
+  userId: number,
+  options?: { limit?: number; startDate?: Date; endDate?: Date }
+): Promise<EveningReviewSession[]> {
+  const db = await getDb();
+  if (!db) return [];
+  
+  const conditions = [eq(eveningReviewSessions.userId, userId)];
+  
+  if (options?.startDate) {
+    conditions.push(gte(eveningReviewSessions.reviewDate, options.startDate));
+  }
+  if (options?.endDate) {
+    conditions.push(lte(eveningReviewSessions.reviewDate, options.endDate));
+  }
+  
+  return db.select().from(eveningReviewSessions)
+    .where(and(...conditions))
+    .orderBy(desc(eveningReviewSessions.reviewDate))
+    .limit(options?.limit || 30);
+}
+
+// Get the latest evening review session
+export async function getLatestEveningReviewSession(userId: number): Promise<EveningReviewSession | null> {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const [session] = await db.select().from(eveningReviewSessions)
+    .where(eq(eveningReviewSessions.userId, userId))
+    .orderBy(desc(eveningReviewSessions.reviewDate))
+    .limit(1);
+  
+  return session || null;
+}
+
+// Update evening review session
+export async function updateEveningReviewSession(id: number, data: Partial<InsertEveningReviewSession>) {
+  const db = await getDb();
+  if (!db) return;
+  
+  await db.update(eveningReviewSessions).set(data).where(eq(eveningReviewSessions.id, id));
+}
+
+// Create task decisions for a review session
+export async function createEveningReviewTaskDecisions(decisions: InsertEveningReviewTaskDecision[]): Promise<void> {
+  const db = await getDb();
+  if (!db) return;
+  
+  if (decisions.length > 0) {
+    await db.insert(eveningReviewTaskDecisions).values(decisions);
+  }
+}
+
+// Get task decisions for a session
+export async function getEveningReviewTaskDecisions(sessionId: number): Promise<EveningReviewTaskDecision[]> {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return db.select().from(eveningReviewTaskDecisions)
+    .where(eq(eveningReviewTaskDecisions.sessionId, sessionId))
+    .orderBy(desc(eveningReviewTaskDecisions.createdAt));
+}
+
+// ============================================
+// Review Timing Pattern Functions
+// ============================================
+
+// Get or create timing pattern for a day
+export async function getReviewTimingPattern(userId: number, dayOfWeek: number): Promise<ReviewTimingPattern | null> {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const [pattern] = await db.select().from(reviewTimingPatterns)
+    .where(and(
+      eq(reviewTimingPatterns.userId, userId),
+      eq(reviewTimingPatterns.dayOfWeek, dayOfWeek)
+    ));
+  
+  return pattern || null;
+}
+
+// Get all timing patterns for a user
+export async function getAllReviewTimingPatterns(userId: number): Promise<ReviewTimingPattern[]> {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return db.select().from(reviewTimingPatterns)
+    .where(eq(reviewTimingPatterns.userId, userId))
+    .orderBy(reviewTimingPatterns.dayOfWeek);
+}
+
+// Update timing pattern based on new review data
+export async function updateReviewTimingPattern(
+  userId: number,
+  dayOfWeek: number,
+  startTime: string,
+  duration: number,
+  wasAutoProcessed: boolean
+): Promise<void> {
+  const db = await getDb();
+  if (!db) return;
+  
+  const existing = await getReviewTimingPattern(userId, dayOfWeek);
+  
+  if (existing) {
+    // Calculate new averages
+    const newSampleCount = existing.sampleCount + 1;
+    const newAutoProcessRate = ((existing.autoProcessRate || 0) * existing.sampleCount + (wasAutoProcessed ? 1 : 0)) / newSampleCount;
+    const newCompletionRate = ((existing.completionRate || 0) * existing.sampleCount + (wasAutoProcessed ? 0 : 1)) / newSampleCount;
+    
+    // Calculate average start time (simplified - just use latest for now)
+    await db.update(reviewTimingPatterns).set({
+      averageStartTime: startTime,
+      averageDuration: Math.round(((existing.averageDuration || 0) * existing.sampleCount + duration) / newSampleCount),
+      completionRate: newCompletionRate,
+      autoProcessRate: newAutoProcessRate,
+      sampleCount: newSampleCount,
+    }).where(eq(reviewTimingPatterns.id, existing.id));
+  } else {
+    // Create new pattern
+    await db.insert(reviewTimingPatterns).values({
+      userId,
+      dayOfWeek,
+      averageStartTime: startTime,
+      averageDuration: duration,
+      completionRate: wasAutoProcessed ? 0 : 1,
+      autoProcessRate: wasAutoProcessed ? 1 : 0,
+      sampleCount: 1,
+    });
+  }
+}
+
+// Get predicted review time for a day
+export async function getPredictedReviewTime(userId: number, dayOfWeek: number): Promise<string | null> {
+  const pattern = await getReviewTimingPattern(userId, dayOfWeek);
+  return pattern?.averageStartTime || null;
+}
+
+// ============================================
+// Signal Items Functions
+// ============================================
+
+// Create signal items
+export async function createSignalItems(items: InsertSignalItem[]): Promise<void> {
+  const db = await getDb();
+  if (!db) return;
+  
+  if (items.length > 0) {
+    await db.insert(signalItems).values(items);
+  }
+}
+
+// Get signal items for a date
+export async function getSignalItems(
+  userId: number,
+  targetDate: Date,
+  options?: { status?: string; category?: string }
+): Promise<SignalItem[]> {
+  const db = await getDb();
+  if (!db) return [];
+  
+  // Get items for the target date (same day)
+  const startOfDay = new Date(targetDate);
+  startOfDay.setHours(0, 0, 0, 0);
+  const endOfDay = new Date(targetDate);
+  endOfDay.setHours(23, 59, 59, 999);
+  
+  const conditions = [
+    eq(signalItems.userId, userId),
+    gte(signalItems.targetDate, startOfDay),
+    lte(signalItems.targetDate, endOfDay),
+  ];
+  
+  if (options?.status) {
+    conditions.push(eq(signalItems.status, options.status as any));
+  }
+  if (options?.category) {
+    conditions.push(eq(signalItems.category, options.category as any));
+  }
+  
+  return db.select().from(signalItems)
+    .where(and(...conditions))
+    .orderBy(desc(signalItems.priority), desc(signalItems.createdAt));
+}
+
+// Get pending signal items for morning brief
+export async function getPendingSignalItems(userId: number): Promise<SignalItem[]> {
+  const db = await getDb();
+  if (!db) return [];
+  
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  
+  return db.select().from(signalItems)
+    .where(and(
+      eq(signalItems.userId, userId),
+      eq(signalItems.status, 'pending'),
+      gte(signalItems.targetDate, today)
+    ))
+    .orderBy(desc(signalItems.priority), desc(signalItems.createdAt));
+}
+
+// Update signal item status
+export async function updateSignalItemStatus(id: number, status: 'pending' | 'delivered' | 'actioned' | 'dismissed') {
+  const db = await getDb();
+  if (!db) return;
+  
+  const updateData: any = { status };
+  if (status === 'delivered') {
+    updateData.deliveredAt = new Date();
+  }
+  
+  await db.update(signalItems).set(updateData).where(eq(signalItems.id, id));
+}
+
+// Generate signal items from evening review
+export async function generateSignalItemsFromReview(
+  userId: number,
+  sessionId: number,
+  decisions: EveningReviewTaskDecision[],
+  moodScore?: number,
+  reflectionNotes?: { wentWell?: string; didntGoWell?: string }
+): Promise<number> {
+  const db = await getDb();
+  if (!db) return 0;
+  
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  tomorrow.setHours(7, 0, 0, 0); // 7 AM tomorrow
+  
+  const items: InsertSignalItem[] = [];
+  
+  // Summarize accepted tasks
+  const acceptedTasks = decisions.filter(d => d.decision === 'accepted');
+  if (acceptedTasks.length > 0) {
+    const highPriorityCount = acceptedTasks.filter(t => t.priority === 'high' || t.priority === 'critical').length;
+    items.push({
+      userId,
+      sourceType: 'evening_review',
+      sourceId: sessionId,
+      category: 'task_summary',
+      title: `${acceptedTasks.length} tasks queued for overnight processing`,
+      description: highPriorityCount > 0 
+        ? `Including ${highPriorityCount} high-priority items. Chief of Staff will process these while you rest.`
+        : 'Chief of Staff will process these while you rest.',
+      priority: highPriorityCount > 0 ? 'high' : 'medium',
+      targetDate: tomorrow,
+    });
+  }
+  
+  // Summarize deferred tasks
+  const deferredTasks = decisions.filter(d => d.decision === 'deferred');
+  if (deferredTasks.length > 0) {
+    items.push({
+      userId,
+      sourceType: 'evening_review',
+      sourceId: sessionId,
+      category: 'task_summary',
+      title: `${deferredTasks.length} tasks deferred to tomorrow`,
+      description: `These items need your attention: ${deferredTasks.slice(0, 3).map(t => t.taskTitle).join(', ')}${deferredTasks.length > 3 ? '...' : ''}`,
+      priority: 'medium',
+      targetDate: tomorrow,
+    });
+  }
+  
+  // Add reflection insight if mood was low
+  if (moodScore && moodScore <= 4) {
+    items.push({
+      userId,
+      sourceType: 'evening_review',
+      sourceId: sessionId,
+      category: 'reflection',
+      title: 'Yesterday was challenging',
+      description: reflectionNotes?.didntGoWell || 'Consider scheduling lighter tasks today to recover.',
+      priority: 'medium',
+      targetDate: tomorrow,
+    });
+  }
+  
+  // Add positive reflection if mood was high
+  if (moodScore && moodScore >= 8) {
+    items.push({
+      userId,
+      sourceType: 'evening_review',
+      sourceId: sessionId,
+      category: 'reflection',
+      title: 'Great day yesterday!',
+      description: reflectionNotes?.wentWell || 'Momentum is building. Keep it up!',
+      priority: 'low',
+      targetDate: tomorrow,
+    });
+  }
+  
+  if (items.length > 0) {
+    await createSignalItems(items);
+  }
+  
+  return items.length;
+}
+
+// ============================================
+// Calendar Events Cache Functions
+// ============================================
+
+// Cache calendar events
+export async function cacheCalendarEvents(events: InsertCalendarEventCache[]): Promise<void> {
+  const db = await getDb();
+  if (!db) return;
+  
+  if (events.length > 0) {
+    await db.insert(calendarEventsCache).values(events);
+  }
+}
+
+// Get cached calendar events for a time range
+export async function getCachedCalendarEvents(
+  userId: number,
+  startTime: Date,
+  endTime: Date
+): Promise<CalendarEventCache[]> {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return db.select().from(calendarEventsCache)
+    .where(and(
+      eq(calendarEventsCache.userId, userId),
+      gte(calendarEventsCache.startTime, startTime),
+      lte(calendarEventsCache.endTime, endTime)
+    ))
+    .orderBy(calendarEventsCache.startTime);
+}
+
+// Check if user has events during a time window
+export async function hasEventsInWindow(
+  userId: number,
+  windowStart: Date,
+  windowEnd: Date
+): Promise<boolean> {
+  const events = await getCachedCalendarEvents(userId, windowStart, windowEnd);
+  return events.length > 0;
+}
+
+// Clear old cached events
+export async function clearOldCachedEvents(userId: number, beforeDate: Date): Promise<void> {
+  const db = await getDb();
+  if (!db) return;
+  
+  await db.delete(calendarEventsCache)
+    .where(and(
+      eq(calendarEventsCache.userId, userId),
+      lte(calendarEventsCache.endTime, beforeDate)
+    ));
 }

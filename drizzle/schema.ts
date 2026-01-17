@@ -1826,3 +1826,113 @@ export const expertPanelAssignments = mysqlTable("expert_panel_assignments", {
 
 export type ExpertPanelAssignment = typeof expertPanelAssignments.$inferSelect;
 export type InsertExpertPanelAssignment = typeof expertPanelAssignments.$inferInsert;
+
+
+// ============================================================================
+// EVENING REVIEW SYSTEM TABLES
+// ============================================================================
+
+/**
+ * Evening Review Sessions - Track each evening review session
+ */
+export const eveningReviewSessions = mysqlTable("evening_review_sessions", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  reviewDate: timestamp("reviewDate").notNull(),
+  startedAt: timestamp("startedAt").notNull(),
+  completedAt: timestamp("completedAt"),
+  mode: mysqlEnum("mode", ["manual", "auto_processed", "delegated"]).default("manual").notNull(),
+  tasksAccepted: int("tasksAccepted").default(0).notNull(),
+  tasksDeferred: int("tasksDeferred").default(0).notNull(),
+  tasksRejected: int("tasksRejected").default(0).notNull(),
+  moodScore: int("moodScore"), // 1-10
+  wentWellNotes: text("wentWellNotes"),
+  didntGoWellNotes: text("didntGoWellNotes"),
+  signalItemsGenerated: int("signalItemsGenerated").default(0),
+  metadata: json("metadata"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type EveningReviewSession = typeof eveningReviewSessions.$inferSelect;
+export type InsertEveningReviewSession = typeof eveningReviewSessions.$inferInsert;
+
+/**
+ * Evening Review Task Decisions - Individual task decisions from reviews
+ */
+export const eveningReviewTaskDecisions = mysqlTable("evening_review_task_decisions", {
+  id: int("id").autoincrement().primaryKey(),
+  sessionId: int("sessionId").notNull(),
+  taskId: int("taskId"), // Link to tasks table if applicable
+  taskTitle: varchar("taskTitle", { length: 500 }).notNull(),
+  projectName: varchar("projectName", { length: 200 }),
+  decision: mysqlEnum("decision", ["accepted", "deferred", "rejected"]).notNull(),
+  priority: varchar("priority", { length: 20 }),
+  estimatedTime: varchar("estimatedTime", { length: 50 }),
+  notes: text("notes"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type EveningReviewTaskDecision = typeof eveningReviewTaskDecisions.$inferSelect;
+export type InsertEveningReviewTaskDecision = typeof eveningReviewTaskDecisions.$inferInsert;
+
+/**
+ * Review Timing Patterns - Learn user's review habits
+ */
+export const reviewTimingPatterns = mysqlTable("review_timing_patterns", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  dayOfWeek: int("dayOfWeek").notNull(), // 0-6 (Sunday-Saturday)
+  averageStartTime: varchar("averageStartTime", { length: 10 }), // HH:MM format
+  averageDuration: int("averageDuration"), // minutes
+  completionRate: float("completionRate").default(0), // 0-1
+  autoProcessRate: float("autoProcessRate").default(0), // 0-1
+  sampleCount: int("sampleCount").default(0).notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type ReviewTimingPattern = typeof reviewTimingPatterns.$inferSelect;
+export type InsertReviewTimingPattern = typeof reviewTimingPatterns.$inferInsert;
+
+/**
+ * Signal Items - Items prepared for the morning Signal briefing
+ */
+export const signalItems = mysqlTable("signal_items", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  sourceType: mysqlEnum("sourceType", ["evening_review", "overnight_task", "calendar", "news", "project_update", "manual"]).notNull(),
+  sourceId: int("sourceId"), // ID of source record
+  category: mysqlEnum("category", ["task_summary", "project_update", "calendar_alert", "intelligence", "recommendation", "reflection"]).notNull(),
+  title: varchar("title", { length: 300 }).notNull(),
+  description: text("description"),
+  priority: mysqlEnum("priority", ["low", "medium", "high", "critical"]).default("medium").notNull(),
+  targetDate: timestamp("targetDate").notNull(), // Which morning this is for
+  status: mysqlEnum("status", ["pending", "delivered", "actioned", "dismissed"]).default("pending").notNull(),
+  deliveredAt: timestamp("deliveredAt"),
+  metadata: json("metadata"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type SignalItem = typeof signalItems.$inferSelect;
+export type InsertSignalItem = typeof signalItems.$inferInsert;
+
+/**
+ * Calendar Events Cache - Cached calendar events for smart prompting
+ */
+export const calendarEventsCache = mysqlTable("calendar_events_cache", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  externalId: varchar("externalId", { length: 200 }), // ID from external calendar
+  title: varchar("title", { length: 500 }).notNull(),
+  startTime: timestamp("startTime").notNull(),
+  endTime: timestamp("endTime").notNull(),
+  isAllDay: boolean("isAllDay").default(false).notNull(),
+  location: varchar("location", { length: 500 }),
+  attendees: json("attendees"),
+  source: varchar("source", { length: 50 }), // "google", "outlook", "manual"
+  metadata: json("metadata"),
+  syncedAt: timestamp("syncedAt").defaultNow().notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type CalendarEventCache = typeof calendarEventsCache.$inferSelect;
+export type InsertCalendarEventCache = typeof calendarEventsCache.$inferInsert;

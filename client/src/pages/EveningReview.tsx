@@ -2,8 +2,9 @@ import { useState, useEffect } from "react";
 import { 
   Moon, Check, X, Clock, ChevronDown, ChevronUp,
   Mic, MicOff, Send, Play, Folder, Target,
-  CheckCircle2, XCircle, ArrowRight, AlertCircle, Brain, Zap
+  CheckCircle2, XCircle, ArrowRight, AlertCircle, Brain, Zap, Sparkles
 } from "lucide-react";
+import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -169,7 +170,7 @@ export default function EveningReview() {
     }
   }, []); // Only run once on mount
 
-  const handleAutoStart = () => {
+  const handleAutoStart = async () => {
     setAutoProcessingStarted(true);
     // Auto-accept all pending tasks
     OVERNIGHT_TASKS.forEach(project => {
@@ -180,6 +181,33 @@ export default function EveningReview() {
         }
       });
     });
+    
+    // Save to database
+    try {
+      const mode = isDelegateMode ? 'delegated' : 'auto_processed';
+      const { sessionId } = await createSession.mutateAsync({ mode });
+      
+      if (sessionId) {
+        // All tasks auto-accepted
+        const decisions = OVERNIGHT_TASKS.flatMap(project => 
+          project.tasks.map(task => ({
+            taskTitle: task.text,
+            projectName: project.projectName,
+            decision: 'accepted' as const,
+            priority: task.priority,
+            estimatedTime: task.estimatedTime,
+          }))
+        );
+        
+        await completeSession.mutateAsync({
+          sessionId,
+          decisions,
+        });
+      }
+    } catch (error) {
+      console.error('Failed to save auto-processed session:', error);
+    }
+    
     toast.info("8 PM cutoff reached. Chief of Staff is auto-processing remaining tasks.");
   };
 
@@ -248,13 +276,54 @@ export default function EveningReview() {
     }
   };
 
-  const handleReadyToStart = () => {
+  // API mutations for saving review session
+  const createSession = trpc.eveningReview.createSession.useMutation();
+  const completeSession = trpc.eveningReview.completeSession.useMutation();
+
+  const handleReadyToStart = async () => {
     if (!allDecided) {
       toast.error("Please review all tasks before starting");
       return;
     }
-    setIsReadyToStart(true);
-    toast.success("Overnight tasks confirmed! Chief of Staff will process while you rest.");
+    
+    try {
+      // Create session
+      const { sessionId } = await createSession.mutateAsync({ mode: 'manual' });
+      
+      if (sessionId) {
+        // Prepare decisions for API
+        const decisions = OVERNIGHT_TASKS.flatMap(project => 
+          project.tasks.map(task => ({
+            taskTitle: task.text,
+            projectName: project.projectName,
+            decision: getTaskStatus(task.id) as 'accepted' | 'deferred' | 'rejected',
+            priority: task.priority,
+            estimatedTime: task.estimatedTime,
+          }))
+        );
+        
+        // Complete session with decisions
+        const result = await completeSession.mutateAsync({
+          sessionId,
+          decisions,
+          moodScore: currentMood[0],
+          wentWellNotes: wentWellText || undefined,
+          didntGoWellNotes: didntGoText || undefined,
+        });
+        
+        if (result.signalItemsGenerated > 0) {
+          toast.success(`${result.signalItemsGenerated} items prepared for your morning Signal`);
+        }
+      }
+      
+      setIsReadyToStart(true);
+      toast.success("Overnight tasks confirmed! Chief of Staff will process while you rest.");
+    } catch (error) {
+      console.error('Failed to save review session:', error);
+      // Still allow completion even if API fails
+      setIsReadyToStart(true);
+      toast.success("Overnight tasks confirmed! Chief of Staff will process while you rest.");
+    }
   };
 
   const formatDate = () => {

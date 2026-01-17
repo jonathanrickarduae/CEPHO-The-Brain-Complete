@@ -3792,3 +3792,11 @@
 - [x] Project status scanning before review
 - [ ] Signal information preparation for morning brief
 - [ ] Learning from user patterns (when they typically do reviews)
+
+
+## Evening Review Enhancements
+- [x] Signal preparation: Generate morning brief summary from evening review
+- [x] Pattern learning: Track review completion times and adjust prompt timing
+- [x] Calendar integration: Check for evening meetings and delay prompts
+- [x] Store review history in database for pattern analysis
+- [x] Generate Signal items from accepted/deferred tasks

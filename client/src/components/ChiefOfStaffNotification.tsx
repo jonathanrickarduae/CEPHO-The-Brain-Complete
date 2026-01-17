@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useLocation } from 'wouter';
-import { Brain, Clock, CheckCircle2, ArrowRight, X, Zap, Calendar, ListTodo } from 'lucide-react';
+import { Brain, Clock, CheckCircle2, ArrowRight, X, Zap, Calendar, ListTodo, Sparkles, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { trpc } from '@/lib/trpc';
 
 interface ReviewContext {
@@ -22,6 +21,7 @@ export function ChiefOfStaffNotification({ onClose }: ChiefOfStaffNotificationPr
   const [isDismissed, setIsDismissed] = useState(false);
   const [autoStartCountdown, setAutoStartCountdown] = useState<number | null>(null);
   const [reviewContext, setReviewContext] = useState<ReviewContext | null>(null);
+  const [learningInsight, setLearningInsight] = useState<string | null>(null);
 
   // Fetch user settings for preferred review time
   const { data: userSettings } = trpc.settings.get.useQuery();
@@ -31,6 +31,31 @@ export function ChiefOfStaffNotification({ onClose }: ChiefOfStaffNotificationPr
   
   // Fetch projects
   const { data: projects } = trpc.projects.list.useQuery();
+
+  // Fetch timing patterns for learning insights
+  const { data: timingPatterns } = trpc.eveningReview.getTimingPatterns.useQuery();
+
+  // Fetch predicted review time
+  const { data: predictedTimeData } = trpc.eveningReview.getPredictedTime.useQuery();
+
+  // Get latest review to check if already done today
+  const { data: latestReview } = trpc.eveningReview.getLatest.useQuery();
+
+  // Calculate review window for calendar conflict check
+  const reviewTime = userSettings?.eveningReviewTime || '19:00';
+  const [reviewHour] = reviewTime.split(':').map(Number);
+  
+  const now = new Date();
+  const windowStart = new Date(now);
+  windowStart.setHours(reviewHour, 0, 0, 0);
+  const windowEnd = new Date(windowStart);
+  windowEnd.setHours(windowEnd.getHours() + 2);
+
+  // Check for calendar conflicts
+  const { data: calendarConflicts } = trpc.eveningReview.checkCalendarConflicts.useQuery({
+    windowStart: windowStart.toISOString(),
+    windowEnd: windowEnd.toISOString(),
+  });
 
   // Calculate review context
   useEffect(() => {
@@ -44,7 +69,7 @@ export function ChiefOfStaffNotification({ onClose }: ChiefOfStaffNotificationPr
       ).length;
       
       const outstandingItems = taskItems.filter(
-        (item) => item.status === 'blocked' || item.priority === 'high'
+        (item) => item.status === 'blocked' || item.priority === 'high' || item.priority === 'critical'
       ).length;
 
       setReviewContext({
@@ -54,6 +79,24 @@ export function ChiefOfStaffNotification({ onClose }: ChiefOfStaffNotificationPr
       });
     }
   }, [taskItems, projects]);
+
+  // Generate learning insight
+  useEffect(() => {
+    if (timingPatterns && timingPatterns.length > 0) {
+      const dayOfWeek = new Date().getDay();
+      const todayPattern = timingPatterns.find(p => p.dayOfWeek === dayOfWeek);
+      
+      if (todayPattern && todayPattern.sampleCount >= 2) {
+        if ((todayPattern.autoProcessRate || 0) > 0.6) {
+          setLearningInsight("You often delegate reviews on this day. Shall I handle it?");
+        } else if (todayPattern.averageStartTime) {
+          setLearningInsight(`You typically review at ${todayPattern.averageStartTime}`);
+        } else if ((todayPattern.completionRate || 0) > 0.8) {
+          setLearningInsight("You usually complete reviews manually on this day");
+        }
+      }
+    }
+  }, [timingPatterns]);
 
   // Check if it's time to show the notification
   useEffect(() => {
@@ -67,8 +110,32 @@ export function ChiefOfStaffNotification({ onClose }: ChiefOfStaffNotificationPr
       const reviewTimeStr = userSettings?.eveningReviewTime || '19:00';
       const [reviewHour] = reviewTimeStr.split(':').map(Number);
       
+      // Use predicted time if available and different from setting
+      const predictedTime = predictedTimeData?.predictedTime;
+      const effectiveReviewHour = predictedTime 
+        ? parseInt(predictedTime.split(':')[0], 10) 
+        : reviewHour;
+      
       // Check if we're within the review window (review time to review time + 1 hour)
-      const isInReviewWindow = currentHour >= reviewHour && currentHour < reviewHour + 1;
+      const isInReviewWindow = currentHour >= effectiveReviewHour && currentHour < effectiveReviewHour + 1;
+      
+      // Check if we already did a review today
+      if (latestReview?.reviewDate) {
+        const lastReviewDate = new Date(latestReview.reviewDate);
+        const today = new Date();
+        if (
+          lastReviewDate.getDate() === today.getDate() &&
+          lastReviewDate.getMonth() === today.getMonth() &&
+          lastReviewDate.getFullYear() === today.getFullYear()
+        ) {
+          return; // Already reviewed today
+        }
+      }
+
+      // Don't show if there's a calendar conflict (user is busy)
+      if (calendarConflicts?.hasConflicts) {
+        return; // Will check again later
+      }
       
       // Only show if there are tasks to review
       const hasTasks = reviewContext && (reviewContext.pendingTasks > 0 || reviewContext.outstandingItems > 0);
@@ -87,7 +154,7 @@ export function ChiefOfStaffNotification({ onClose }: ChiefOfStaffNotificationPr
     const interval = setInterval(checkTrigger, 60000);
     
     return () => clearInterval(interval);
-  }, [userSettings, reviewContext, isDismissed, isVisible]);
+  }, [userSettings, reviewContext, isDismissed, isVisible, predictedTimeData, latestReview, calendarConflicts]);
 
   // Auto-start countdown
   useEffect(() => {
@@ -181,6 +248,22 @@ export function ChiefOfStaffNotification({ onClose }: ChiefOfStaffNotificationPr
             <p className="text-gray-200">
               It's <span className="font-semibold text-indigo-400">{formatTime()}</span>. Ready to start your Evening Review?
             </p>
+            
+            {/* Learning Insight */}
+            {learningInsight && (
+              <div className="flex items-center gap-2 px-3 py-2 bg-indigo-500/10 border border-indigo-500/20 rounded-lg">
+                <Sparkles className="w-4 h-4 text-indigo-400 flex-shrink-0" />
+                <span className="text-sm text-indigo-300">{learningInsight}</span>
+              </div>
+            )}
+
+            {/* Calendar Conflict Warning (shown if we're showing despite conflict) */}
+            {calendarConflicts?.hasConflicts && (
+              <div className="flex items-center gap-2 px-3 py-2 bg-amber-500/10 border border-amber-500/20 rounded-lg">
+                <AlertCircle className="w-4 h-4 text-amber-400 flex-shrink-0" />
+                <span className="text-sm text-amber-300">You have meetings during the review window</span>
+              </div>
+            )}
             
             {/* Context Stats */}
             {reviewContext && (
