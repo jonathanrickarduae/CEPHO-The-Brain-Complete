@@ -165,17 +165,29 @@ export default function NexusDashboard() {
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col p-4 sm:p-6 overflow-hidden">
-        {/* Title */}
+        {/* Title with Animated Brain */}
         <div className="text-center mb-4 sm:mb-6">
           <div className="flex items-center justify-center gap-2 mb-1">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-r from-cyan-500 to-fuchsia-500 flex items-center justify-center">
-              <Brain className="w-5 h-5 text-white" />
+            {/* Animated Neuron Brain */}
+            <div className="relative w-14 h-14 sm:w-16 sm:h-16">
+              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-pink-500/30 to-fuchsia-500/30 animate-pulse" />
+              <div className="absolute inset-1 rounded-full bg-gradient-to-r from-pink-500/20 to-fuchsia-500/20 animate-ping" style={{ animationDuration: '2s' }} />
+              <div className="absolute inset-2 rounded-full bg-gray-900 flex items-center justify-center">
+                <Brain className="w-7 h-7 sm:w-8 sm:h-8 text-pink-400 animate-pulse" style={{ animationDuration: '1.5s' }} />
+              </div>
+              {/* Neural connection dots */}
+              <div className="absolute top-0 left-1/2 w-1.5 h-1.5 rounded-full bg-pink-400 animate-ping" style={{ animationDuration: '1s', animationDelay: '0s' }} />
+              <div className="absolute top-1/4 right-0 w-1.5 h-1.5 rounded-full bg-fuchsia-400 animate-ping" style={{ animationDuration: '1.2s', animationDelay: '0.3s' }} />
+              <div className="absolute bottom-1/4 right-0 w-1.5 h-1.5 rounded-full bg-pink-400 animate-ping" style={{ animationDuration: '1.4s', animationDelay: '0.6s' }} />
+              <div className="absolute bottom-0 left-1/2 w-1.5 h-1.5 rounded-full bg-fuchsia-400 animate-ping" style={{ animationDuration: '1s', animationDelay: '0.9s' }} />
+              <div className="absolute bottom-1/4 left-0 w-1.5 h-1.5 rounded-full bg-pink-400 animate-ping" style={{ animationDuration: '1.3s', animationDelay: '0.2s' }} />
+              <div className="absolute top-1/4 left-0 w-1.5 h-1.5 rounded-full bg-fuchsia-400 animate-ping" style={{ animationDuration: '1.1s', animationDelay: '0.5s' }} />
             </div>
           </div>
-          <h1 className="text-xl sm:text-2xl md:text-3xl font-display font-bold tracking-tight text-white mt-3">
+          <h1 className="text-xl sm:text-2xl md:text-3xl font-display font-bold tracking-tight text-pink-400 mt-3">
             GETTING YOU TO A 10
           </h1>
-          <p className="text-xs sm:text-sm text-gray-400 mt-1">Your AI-powered command center</p>
+          <p className="text-sm sm:text-base text-white/80 mt-2 font-medium">Your headspace, reclaimed</p>
         </div>
 
         {/* 6-Button Grid - Project Genesis Style */}

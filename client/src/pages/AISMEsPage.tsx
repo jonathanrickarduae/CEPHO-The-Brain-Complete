@@ -30,6 +30,15 @@ import {
   getTopPerformersByPanel,
   type PanelType
 } from "@/data/smePanels";
+import {
+  expertTypes,
+  getExpertsByType,
+  getExpertTypeCounts,
+  getSubcategoriesForType,
+  getCorporatePartners,
+  type ExpertType
+} from "@/data/expertTypes";
+import { corporatePartners } from "@/data/aiExperts";
 
 // Build categories from real expert data
 const CATEGORIES = [
@@ -68,6 +77,8 @@ export default function AISMEsPage() {
   const [viewMode, setViewMode] = useState<ViewMode>('browse');
   const [, setLocation] = useLocation();
   const [selectedCategory, setSelectedCategory] = useState('all');
+  const [selectedExpertType, setSelectedExpertType] = useState<ExpertType | 'all'>('all');
+  const [expandedTypes, setExpandedTypes] = useState<ExpertType[]>(['individuals']);
   const [selectedPanel, setSelectedPanel] = useState<PanelType | 'all'>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedExperts, setSelectedExperts] = useState<SelectedExpert[]>([]);
@@ -335,16 +346,16 @@ export default function AISMEsPage() {
         {/* Browse View */}
         {viewMode === 'browse' && (
           <>
-            {/* Category Sidebar - Desktop */}
+            {/* Hierarchical Category Sidebar - Desktop */}
             {!isMobile && (
-              <div className="w-56 border-r border-white/10 bg-white/5 overflow-y-auto">
+              <div className="w-64 border-r border-white/10 bg-white/5 overflow-y-auto">
                 <div className="p-3">
                   {/* Recent Consultations */}
                   {consultationHistory && consultationHistory.length > 0 && (
                     <div className="mb-4">
                       <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Recent Chats</h3>
                       <div className="space-y-1">
-                        {consultationHistory.slice(0, 5).map(consultation => {
+                        {consultationHistory.slice(0, 3).map(consultation => {
                           const expert = AI_EXPERTS.find(e => e.id === consultation.expertId);
                           if (!expert) return null;
                           return (
@@ -367,22 +378,88 @@ export default function AISMEsPage() {
                     </div>
                   )}
                   
-                  <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Categories</h3>
+                  {/* Expert Types - Hierarchical */}
+                  <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Browse By Type</h3>
                   <div className="space-y-1">
-                    {CATEGORIES.map(cat => (
-                      <button
-                        key={cat.id}
-                        onClick={() => setSelectedCategory(cat.id)}
-                        className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm transition-colors ${
-                          selectedCategory === cat.id
-                            ? 'bg-gradient-to-r from-cyan-500/20 to-blue-500/20 text-cyan-400 border border-cyan-500/30'
-                            : 'hover:bg-white/5 text-gray-400 hover:text-white'
-                        }`}
-                      >
-                        <span className="truncate">{cat.label}</span>
-                        <span className="text-xs shrink-0">{cat.count}</span>
-                      </button>
-                    ))}
+                    {/* All Experts */}
+                    <button
+                      onClick={() => { setSelectedExpertType('all'); setSelectedCategory('all'); }}
+                      className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm transition-colors ${
+                        selectedExpertType === 'all'
+                          ? 'bg-gradient-to-r from-cyan-500/20 to-blue-500/20 text-cyan-400 border border-cyan-500/30'
+                          : 'hover:bg-white/5 text-gray-400 hover:text-white'
+                      }`}
+                    >
+                      <span className="flex items-center gap-2">
+                        <span>🌐</span>
+                        <span>All Experts</span>
+                      </span>
+                      <span className="text-xs">{TOTAL_EXPERTS + corporatePartners.length}</span>
+                    </button>
+                    
+                    {/* Expert Type Categories */}
+                    {(Object.keys(expertTypes) as ExpertType[]).map(typeKey => {
+                      const typeConfig = expertTypes[typeKey];
+                      const counts = getExpertTypeCounts();
+                      const isExpanded = expandedTypes.includes(typeKey);
+                      const subcategories = getSubcategoriesForType(typeKey);
+                      
+                      return (
+                        <div key={typeKey}>
+                          <button
+                            onClick={() => {
+                              setSelectedExpertType(typeKey);
+                              setSelectedCategory('all');
+                              setExpandedTypes(prev => 
+                                prev.includes(typeKey) 
+                                  ? prev.filter(t => t !== typeKey)
+                                  : [...prev, typeKey]
+                              );
+                            }}
+                            className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm transition-colors ${
+                              selectedExpertType === typeKey
+                                ? `${typeConfig.bgColor} ${typeConfig.color} border ${typeConfig.borderColor}`
+                                : 'hover:bg-white/5 text-gray-400 hover:text-white'
+                            }`}
+                          >
+                            <span className="flex items-center gap-2">
+                              <span>{typeConfig.icon}</span>
+                              <span>{typeConfig.name}</span>
+                            </span>
+                            <span className="flex items-center gap-1">
+                              <span className="text-xs">{counts[typeKey]}</span>
+                              <ChevronRight className={`w-3 h-3 transition-transform ${isExpanded ? 'rotate-90' : ''}`} />
+                            </span>
+                          </button>
+                          
+                          {/* Subcategories */}
+                          {isExpanded && subcategories.length > 0 && (
+                            <div className="ml-4 mt-1 space-y-0.5 border-l border-white/10 pl-2">
+                              {subcategories.map(subcat => {
+                                const subcatId = subcat.toLowerCase().replace(/[^a-z0-9]/g, '-');
+                                const subcatCount = typeKey === 'companies' 
+                                  ? corporatePartners.filter(c => c.industry === subcat).length
+                                  : AI_EXPERTS.filter(e => e.category === subcat).length;
+                                return (
+                                  <button
+                                    key={subcatId}
+                                    onClick={() => setSelectedCategory(subcatId)}
+                                    className={`w-full flex items-center justify-between px-2 py-1.5 rounded-lg text-xs transition-colors ${
+                                      selectedCategory === subcatId
+                                        ? 'bg-white/10 text-white'
+                                        : 'text-gray-500 hover:text-gray-300 hover:bg-white/5'
+                                    }`}
+                                  >
+                                    <span className="truncate">{subcat}</span>
+                                    <span className="text-xs opacity-60">{subcatCount}</span>
+                                  </button>
+                                );
+                              })}
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
               </div>
