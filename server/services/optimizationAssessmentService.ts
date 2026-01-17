@@ -61,6 +61,10 @@ export async function generateOptimizationAssessment(userId: number): Promise<Op
   const dataQualityCategory = await assessDataQuality(db, userId);
   categories.push(dataQualityCategory);
   
+  // 7. Revenue Infrastructure Assessment (from KPI Benchmark)
+  const revenueCategory = await assessRevenueInfrastructure(db, userId);
+  categories.push(revenueCategory);
+  
   // Calculate overall scores
   const totalScore = categories.reduce((sum, cat) => sum + cat.score, 0);
   const totalMaxScore = categories.reduce((sum, cat) => sum + cat.maxScore, 0);
@@ -571,4 +575,81 @@ function getTopPriorities(categories: OptimizationCategory[]): string[] {
     .sort((a, b) => b.priority - a.priority)
     .slice(0, 5)
     .map(r => r.rec);
+}
+
+
+async function assessRevenueInfrastructure(db: any, userId: number): Promise<OptimizationCategory> {
+  const findings: string[] = [];
+  const recommendations: string[] = [];
+  let score = 0;
+  const maxScore = 100;
+  
+  try {
+    // Check if Stripe is configured (check for any payment related data)
+    // For now, we check environment variables indirectly through system status
+    const stripeConfigured = process.env.STRIPE_SECRET_KEY && 
+                             process.env.STRIPE_SECRET_KEY.length > 10;
+    
+    if (stripeConfigured) {
+      score += 25;
+      findings.push('Payment processing configured');
+    } else {
+      findings.push('Payment processing not active');
+      recommendations.push('Claim Stripe sandbox to enable payment collection');
+    }
+    
+    // Check for revenue tracking tables (will be false until implemented)
+    // This is a placeholder that will improve as we add revenue features
+    const hasRevenueTracking = false; // Will be true once revenue_opportunities table exists
+    
+    if (hasRevenueTracking) {
+      score += 25;
+      findings.push('Revenue pipeline tracking active');
+    } else {
+      findings.push('No revenue pipeline management');
+      recommendations.push('Implement revenue opportunity tracking');
+    }
+    
+    // Check for client management
+    const hasClientManagement = false; // Will be true once clients table exists
+    
+    if (hasClientManagement) {
+      score += 25;
+      findings.push('Client management configured');
+    } else {
+      findings.push('No client/prospect management');
+      recommendations.push('Add client relationship management');
+    }
+    
+    // Check for invoicing capability
+    const hasInvoicing = false; // Will be true once invoices table exists
+    
+    if (hasInvoicing) {
+      score += 25;
+      findings.push('Invoicing system active');
+    } else {
+      findings.push('No invoicing capability');
+      recommendations.push('Implement invoice generation and tracking');
+    }
+    
+    // Base score for having the platform operational
+    score += 10;
+    findings.push('Platform operational foundation in place');
+    
+  } catch (error) {
+    findings.push('Unable to fully assess revenue infrastructure');
+    score = 35; // Default to current benchmark score
+  }
+  
+  const percentage = Math.round((score / maxScore) * 100);
+  
+  return {
+    name: 'Revenue Infrastructure',
+    score,
+    maxScore,
+    percentage,
+    status: getStatus(percentage),
+    findings,
+    recommendations
+  };
 }

@@ -2211,3 +2211,214 @@ export const fundingAssessments = mysqlTable("funding_assessments", {
 
 export type FundingAssessment = typeof fundingAssessments.$inferSelect;
 export type InsertFundingAssessment = typeof fundingAssessments.$inferInsert;
+
+
+// ==================== REVENUE INFRASTRUCTURE ====================
+
+/**
+ * Revenue streams - tracks all sources of income across ventures
+ */
+export const revenueStreams = mysqlTable("revenue_streams", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  ventureName: varchar("ventureName", { length: 200 }).notNull(), // e.g., "Celadon", "Boundless", "CEPHO.Ai"
+  streamName: varchar("streamName", { length: 200 }).notNull(), // e.g., "Subscription", "Consulting", "Licensing"
+  streamType: mysqlEnum("streamType", [
+    "subscription",
+    "one_time",
+    "recurring",
+    "licensing",
+    "consulting",
+    "commission",
+    "advertising",
+    "affiliate",
+    "other"
+  ]).notNull(),
+  status: mysqlEnum("status", ["active", "paused", "planned", "discontinued"]).default("planned").notNull(),
+  currency: varchar("currency", { length: 10 }).default("AED").notNull(),
+  monthlyRecurring: float("monthlyRecurring").default(0), // MRR for recurring streams
+  annualRecurring: float("annualRecurring").default(0), // ARR
+  averageTransactionValue: float("averageTransactionValue").default(0),
+  transactionsPerMonth: int("transactionsPerMonth").default(0),
+  marginPercentage: float("marginPercentage").default(0), // Gross margin %
+  paymentProcessor: varchar("paymentProcessor", { length: 100 }), // "Stripe", "PayPal", "Bank Transfer"
+  processorConnected: boolean("processorConnected").default(false),
+  pricingModel: text("pricingModel"), // Description of pricing structure
+  targetCustomerSegment: varchar("targetCustomerSegment", { length: 200 }),
+  notes: text("notes"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type RevenueStream = typeof revenueStreams.$inferSelect;
+export type InsertRevenueStream = typeof revenueStreams.$inferInsert;
+
+/**
+ * Revenue transactions - individual revenue events
+ */
+export const revenueTransactions = mysqlTable("revenue_transactions", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  streamId: int("streamId").notNull(), // FK to revenueStreams
+  transactionDate: timestamp("transactionDate").notNull(),
+  amount: float("amount").notNull(),
+  currency: varchar("currency", { length: 10 }).default("AED").notNull(),
+  status: mysqlEnum("status", ["pending", "completed", "failed", "refunded"]).default("pending").notNull(),
+  customerName: varchar("customerName", { length: 200 }),
+  customerEmail: varchar("customerEmail", { length: 320 }),
+  description: text("description"),
+  invoiceNumber: varchar("invoiceNumber", { length: 100 }),
+  paymentMethod: varchar("paymentMethod", { length: 100 }),
+  processorTransactionId: varchar("processorTransactionId", { length: 200 }), // External reference
+  metadata: json("metadata"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type RevenueTransaction = typeof revenueTransactions.$inferSelect;
+export type InsertRevenueTransaction = typeof revenueTransactions.$inferInsert;
+
+/**
+ * Pipeline opportunities - potential revenue being tracked
+ */
+export const pipelineOpportunities = mysqlTable("pipeline_opportunities", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  ventureName: varchar("ventureName", { length: 200 }).notNull(),
+  opportunityName: varchar("opportunityName", { length: 300 }).notNull(),
+  customerName: varchar("customerName", { length: 200 }),
+  customerContact: varchar("customerContact", { length: 320 }),
+  stage: mysqlEnum("stage", [
+    "lead",
+    "qualified",
+    "proposal",
+    "negotiation",
+    "verbal_yes",
+    "contract_sent",
+    "won",
+    "lost"
+  ]).default("lead").notNull(),
+  probability: int("probability").default(10), // 0-100%
+  estimatedValue: float("estimatedValue").notNull(),
+  currency: varchar("currency", { length: 10 }).default("AED").notNull(),
+  expectedCloseDate: timestamp("expectedCloseDate"),
+  actualCloseDate: timestamp("actualCloseDate"),
+  lostReason: text("lostReason"),
+  nextAction: text("nextAction"),
+  nextActionDate: timestamp("nextActionDate"),
+  assignedTo: varchar("assignedTo", { length: 200 }),
+  source: varchar("source", { length: 200 }), // How the lead was generated
+  notes: text("notes"),
+  metadata: json("metadata"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type PipelineOpportunity = typeof pipelineOpportunities.$inferSelect;
+export type InsertPipelineOpportunity = typeof pipelineOpportunities.$inferInsert;
+
+/**
+ * Pricing tiers - product/service pricing structures
+ */
+export const pricingTiers = mysqlTable("pricing_tiers", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  streamId: int("streamId").notNull(), // FK to revenueStreams
+  tierName: varchar("tierName", { length: 100 }).notNull(), // e.g., "Starter", "Pro", "Enterprise"
+  price: float("price").notNull(),
+  currency: varchar("currency", { length: 10 }).default("AED").notNull(),
+  billingPeriod: mysqlEnum("billingPeriod", ["one_time", "monthly", "quarterly", "annual"]).notNull(),
+  features: json("features"), // Array of features included
+  limitations: json("limitations"), // Usage limits, etc.
+  isActive: boolean("isActive").default(true).notNull(),
+  displayOrder: int("displayOrder").default(0),
+  stripePriceId: varchar("stripePriceId", { length: 200 }), // For Stripe integration
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type PricingTier = typeof pricingTiers.$inferSelect;
+export type InsertPricingTier = typeof pricingTiers.$inferInsert;
+
+/**
+ * Customer accounts - track customers across ventures
+ */
+export const customerAccounts = mysqlTable("customer_accounts", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  ventureName: varchar("ventureName", { length: 200 }).notNull(),
+  customerName: varchar("customerName", { length: 200 }).notNull(),
+  customerType: mysqlEnum("customerType", ["individual", "business", "enterprise"]).default("individual").notNull(),
+  email: varchar("email", { length: 320 }),
+  phone: varchar("phone", { length: 50 }),
+  company: varchar("company", { length: 200 }),
+  industry: varchar("industry", { length: 100 }),
+  country: varchar("country", { length: 100 }),
+  city: varchar("city", { length: 100 }),
+  status: mysqlEnum("status", ["prospect", "active", "churned", "paused"]).default("prospect").notNull(),
+  lifetimeValue: float("lifetimeValue").default(0),
+  currency: varchar("currency", { length: 10 }).default("AED").notNull(),
+  acquisitionSource: varchar("acquisitionSource", { length: 200 }),
+  acquisitionDate: timestamp("acquisitionDate"),
+  churnDate: timestamp("churnDate"),
+  churnReason: text("churnReason"),
+  stripeCustomerId: varchar("stripeCustomerId", { length: 200 }),
+  notes: text("notes"),
+  metadata: json("metadata"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type CustomerAccount = typeof customerAccounts.$inferSelect;
+export type InsertCustomerAccount = typeof customerAccounts.$inferInsert;
+
+/**
+ * Revenue forecasts - projected revenue by period
+ */
+export const revenueForecasts = mysqlTable("revenue_forecasts", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  ventureName: varchar("ventureName", { length: 200 }),
+  streamId: int("streamId"), // Optional FK to specific stream
+  forecastPeriod: varchar("forecastPeriod", { length: 20 }).notNull(), // "2026-Q1", "2026-02"
+  periodType: mysqlEnum("periodType", ["monthly", "quarterly", "annual"]).notNull(),
+  projectedRevenue: float("projectedRevenue").notNull(),
+  actualRevenue: float("actualRevenue"),
+  currency: varchar("currency", { length: 10 }).default("AED").notNull(),
+  assumptions: text("assumptions"), // What the forecast is based on
+  confidence: mysqlEnum("confidence", ["low", "medium", "high"]).default("medium"),
+  variance: float("variance"), // Calculated difference actual vs projected
+  variancePercentage: float("variancePercentage"),
+  notes: text("notes"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type RevenueForecast = typeof revenueForecasts.$inferSelect;
+export type InsertRevenueForecast = typeof revenueForecasts.$inferInsert;
+
+/**
+ * Revenue metrics snapshots - periodic KPI tracking
+ */
+export const revenueMetricsSnapshots = mysqlTable("revenue_metrics_snapshots", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  snapshotDate: timestamp("snapshotDate").notNull(),
+  totalMRR: float("totalMRR").default(0),
+  totalARR: float("totalARR").default(0),
+  totalRevenueMTD: float("totalRevenueMTD").default(0),
+  totalRevenueYTD: float("totalRevenueYTD").default(0),
+  pipelineValue: float("pipelineValue").default(0),
+  weightedPipelineValue: float("weightedPipelineValue").default(0),
+  activeCustomers: int("activeCustomers").default(0),
+  newCustomersMTD: int("newCustomersMTD").default(0),
+  churnedCustomersMTD: int("churnedCustomersMTD").default(0),
+  averageRevenuePerCustomer: float("averageRevenuePerCustomer").default(0),
+  currency: varchar("currency", { length: 10 }).default("AED").notNull(),
+  ventureBreakdown: json("ventureBreakdown"), // Revenue by venture
+  streamBreakdown: json("streamBreakdown"), // Revenue by stream type
+  metadata: json("metadata"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type RevenueMetricsSnapshot = typeof revenueMetricsSnapshots.$inferSelect;
+export type InsertRevenueMetricsSnapshot = typeof revenueMetricsSnapshots.$inferInsert;

@@ -155,6 +155,13 @@
       "when": 1768646530206,
       "tag": "0021_spooky_gorilla_man",
       "breakpoints": true
+    },
+    {
+      "idx": 22,
+      "version": "5",
+      "when": 1768660828976,
+      "tag": "0022_wild_thing",
+      "breakpoints": true
     }
   ]
 }

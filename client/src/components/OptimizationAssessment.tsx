@@ -19,7 +19,8 @@ import {
   ListTodo,
   Database,
   Sparkles,
-  Target
+  Target,
+  DollarSign
 } from "lucide-react";
 import { trpc } from "@/lib/trpc";
 import { cn } from "@/lib/utils";
@@ -81,7 +82,8 @@ const categoryIcons: Record<string, React.ElementType> = {
   'Integration Health': Plug,
   'Subscription Optimization': CreditCard,
   'Workflow Management': ListTodo,
-  'Data Quality & Engagement': Database
+  'Data Quality & Engagement': Database,
+  'Revenue Infrastructure': DollarSign
 };
 
 function ScoreGauge({ percentage, status }: { percentage: number; status: string }) {

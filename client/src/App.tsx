@@ -43,6 +43,7 @@ import InnovationHub from "./pages/InnovationHub";
 import DocumentLibrary from "./pages/DocumentLibrary";
 import DevelopmentPathway from "./pages/DevelopmentPathway";
 import PortfolioCommandCenter from "./pages/PortfolioCommandCenter";
+import RevenueDashboard from "./pages/RevenueDashboard";
 import { GovernanceProvider, GovernanceModeChangeModal } from "./hooks/useGovernance";
 import { AIRouterProvider } from "./components/AIRouter";
 import { CelebrationProvider } from "./components/CelebrationAnimations";
@@ -142,6 +143,9 @@ function Router() {
       </Route>
       <Route path="/portfolio">
         <WithLayout><PortfolioCommandCenter /></WithLayout>
+      </Route>
+      <Route path="/revenue">
+        <WithLayout><RevenueDashboard /></WithLayout>
       </Route>
       <Route path="/due-diligence">
         <WithLayout><DueDiligencePage /></WithLayout>
