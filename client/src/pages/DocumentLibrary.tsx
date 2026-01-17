@@ -20,7 +20,11 @@ import {
   FileSpreadsheet,
   MoreHorizontal,
   Trash2,
-  ExternalLink
+  ExternalLink,
+  Mail,
+  Send,
+  Plus,
+  X
 } from "lucide-react";
 import { format } from "date-fns";
 import { toast } from "sonner";
@@ -36,7 +40,10 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
+  DialogFooter,
 } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 
 type DocumentType = "all" | "innovation_brief" | "project_genesis" | "report" | "other";
 type QAStatus = "all" | "approved" | "pending" | "rejected";
@@ -47,6 +54,13 @@ export default function DocumentLibrary() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedDocument, setSelectedDocument] = useState<any>(null);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+  const [isEmailDialogOpen, setIsEmailDialogOpen] = useState(false);
+  const [emailRecipients, setEmailRecipients] = useState<Array<{ email: string; name: string }>>([]);
+  const [newRecipientEmail, setNewRecipientEmail] = useState("");
+  const [newRecipientName, setNewRecipientName] = useState("");
+  const [emailSubject, setEmailSubject] = useState("");
+  const [emailMessage, setEmailMessage] = useState("");
+  const [emailDocument, setEmailDocument] = useState<any>(null);
 
   const { data: documents, isLoading, refetch } = trpc.documentLibrary.list.useQuery({
     type: activeType,
@@ -87,6 +101,62 @@ export default function DocumentLibrary() {
       toast.error(`Failed to update QA status: ${error.message}`);
     },
   });
+
+  const sendEmailMutation = trpc.documentLibrary.sendEmail.useMutation({
+    onSuccess: (data) => {
+      toast.success(`Document sent to ${data.sent} recipient(s)`);
+      setIsEmailDialogOpen(false);
+      resetEmailForm();
+    },
+    onError: (error) => {
+      toast.error(`Failed to send: ${error.message}`);
+    },
+  });
+
+  const resetEmailForm = () => {
+    setEmailRecipients([]);
+    setNewRecipientEmail("");
+    setNewRecipientName("");
+    setEmailSubject("");
+    setEmailMessage("");
+    setEmailDocument(null);
+  };
+
+  const handleOpenEmailDialog = (doc: any) => {
+    setEmailDocument(doc);
+    setEmailSubject(`Document Shared: ${doc.title}`);
+    setIsEmailDialogOpen(true);
+  };
+
+  const handleAddRecipient = () => {
+    if (newRecipientEmail && newRecipientEmail.includes("@")) {
+      setEmailRecipients([...emailRecipients, { email: newRecipientEmail, name: newRecipientName }]);
+      setNewRecipientEmail("");
+      setNewRecipientName("");
+    } else {
+      toast.error("Please enter a valid email address");
+    }
+  };
+
+  const handleRemoveRecipient = (index: number) => {
+    setEmailRecipients(emailRecipients.filter((_, i) => i !== index));
+  };
+
+  const handleSendEmail = () => {
+    if (emailRecipients.length === 0) {
+      toast.error("Please add at least one recipient");
+      return;
+    }
+    if (!emailDocument) return;
+
+    sendEmailMutation.mutate({
+      documentId: emailDocument.documentId,
+      recipients: emailRecipients,
+      subject: emailSubject || undefined,
+      message: emailMessage || undefined,
+      includeAsLink: true,
+    });
+  };
 
   const filteredDocuments = documents?.filter((doc) => {
     if (!searchQuery) return true;
@@ -359,6 +429,14 @@ export default function DocumentLibrary() {
                       >
                         <Download className="h-4 w-4" />
                       </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleOpenEmailDialog(doc)}
+                        title="Send via Email"
+                      >
+                        <Mail className="h-4 w-4" />
+                      </Button>
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                           <Button variant="ghost" size="sm">
@@ -436,6 +514,123 @@ export default function DocumentLibrary() {
                 </Button>
               </div>
             </div>
+          </DialogContent>
+        </Dialog>
+
+        {/* Email Dialog */}
+        <Dialog open={isEmailDialogOpen} onOpenChange={(open) => {
+          setIsEmailDialogOpen(open);
+          if (!open) resetEmailForm();
+        }}>
+          <DialogContent className="max-w-lg">
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2">
+                <Mail className="h-5 w-5 text-cyan-500" />
+                Send Document via Email
+              </DialogTitle>
+              <DialogDescription>
+                Share "{emailDocument?.title}" with team members or external contacts.
+              </DialogDescription>
+            </DialogHeader>
+            
+            <div className="space-y-4">
+              {/* Recipients List */}
+              <div>
+                <Label>Recipients</Label>
+                {emailRecipients.length > 0 && (
+                  <div className="flex flex-wrap gap-2 mt-2 mb-3">
+                    {emailRecipients.map((recipient, index) => (
+                      <Badge key={index} variant="secondary" className="flex items-center gap-1">
+                        {recipient.name || recipient.email}
+                        <button
+                          onClick={() => handleRemoveRecipient(index)}
+                          className="ml-1 hover:text-red-500"
+                        >
+                          <X className="h-3 w-3" />
+                        </button>
+                      </Badge>
+                    ))}
+                  </div>
+                )}
+                <div className="flex gap-2">
+                  <Input
+                    placeholder="Email address"
+                    type="email"
+                    value={newRecipientEmail}
+                    onChange={(e) => setNewRecipientEmail(e.target.value)}
+                    className="flex-1"
+                    onKeyDown={(e) => e.key === 'Enter' && handleAddRecipient()}
+                  />
+                  <Input
+                    placeholder="Name (optional)"
+                    value={newRecipientName}
+                    onChange={(e) => setNewRecipientName(e.target.value)}
+                    className="w-32"
+                    onKeyDown={(e) => e.key === 'Enter' && handleAddRecipient()}
+                  />
+                  <Button variant="outline" size="icon" onClick={handleAddRecipient}>
+                    <Plus className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+
+              {/* Subject */}
+              <div>
+                <Label htmlFor="email-subject">Subject</Label>
+                <Input
+                  id="email-subject"
+                  value={emailSubject}
+                  onChange={(e) => setEmailSubject(e.target.value)}
+                  placeholder="Email subject"
+                  className="mt-1"
+                />
+              </div>
+
+              {/* Message */}
+              <div>
+                <Label htmlFor="email-message">Message (optional)</Label>
+                <Textarea
+                  id="email-message"
+                  value={emailMessage}
+                  onChange={(e) => setEmailMessage(e.target.value)}
+                  placeholder="Add a personal message..."
+                  className="mt-1"
+                  rows={3}
+                />
+              </div>
+
+              {/* Document Info */}
+              {emailDocument && (
+                <div className="bg-muted p-3 rounded-lg">
+                  <div className="flex items-center gap-2 text-sm">
+                    {getTypeIcon(emailDocument.type)}
+                    <span className="font-medium">{emailDocument.title}</span>
+                  </div>
+                  <div className="flex items-center gap-2 mt-1 text-xs text-muted-foreground">
+                    {getQABadge(emailDocument.qaStatus)}
+                    <span>•</span>
+                    <span>{emailDocument.documentId}</span>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setIsEmailDialogOpen(false)}>
+                Cancel
+              </Button>
+              <Button 
+                onClick={handleSendEmail}
+                disabled={emailRecipients.length === 0 || sendEmailMutation.isPending}
+              >
+                {sendEmailMutation.isPending ? (
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />
+                ) : (
+                  <Send className="h-4 w-4 mr-2" />
+                )}
+                Send Email
+              </Button>
+            </DialogFooter>
           </DialogContent>
         </Dialog>
       </div>

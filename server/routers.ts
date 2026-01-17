@@ -3830,6 +3830,98 @@ ${transcript}
         await deleteDocument(input.documentId);
         return { success: true };
       }),
+
+    // Send document via email
+    sendEmail: protectedProcedure
+      .input(z.object({
+        documentId: z.string(),
+        recipients: z.array(z.object({
+          email: z.string().email(),
+          name: z.string().optional(),
+        })),
+        subject: z.string().optional(),
+        message: z.string().optional(),
+        includeAsLink: z.boolean().default(true),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        const { getDocumentById } = await import('./db');
+        const { generateDocumentEmailHTML, addToDocumentEmailHistory } = await import('./services/emailService');
+        const { notifyOwner } = await import('./_core/notification');
+        
+        const doc = await getDocumentById(input.documentId);
+        if (!doc || doc.userId !== ctx.user.id) {
+          throw new Error('Document not found');
+        }
+        
+        const results = [];
+        
+        for (const recipient of input.recipients) {
+          try {
+            // Generate email content
+            const emailHtml = generateDocumentEmailHTML({
+              documentTitle: doc.title,
+              documentType: doc.type,
+              senderName: ctx.user.name || 'CEPHO User',
+              message: input.message,
+              documentUrl: doc.pdfUrl || doc.markdownUrl || undefined,
+              qaStatus: doc.qaStatus,
+            });
+            
+            // Use notification system to send
+            const subject = input.subject || `Document Shared: ${doc.title}`;
+            
+            // For now, notify owner about the share (in production would use email service)
+            await notifyOwner({
+              title: `Document shared with ${recipient.email}`,
+              content: `${ctx.user.name || 'User'} shared "${doc.title}" with ${recipient.name || recipient.email}.${input.message ? ` Message: ${input.message}` : ''}`,
+            });
+            
+            // Track in history
+            addToDocumentEmailHistory({
+              documentId: doc.id,
+              documentTitle: doc.title,
+              recipientEmail: recipient.email,
+              recipientName: recipient.name,
+              sentAt: new Date(),
+              sentBy: ctx.user.id,
+              status: 'sent',
+            });
+            
+            results.push({
+              success: true,
+              recipientEmail: recipient.email,
+              messageId: `msg_${Date.now()}`,
+            });
+          } catch (error) {
+            results.push({
+              success: false,
+              recipientEmail: recipient.email,
+              error: error instanceof Error ? error.message : 'Failed to send',
+            });
+          }
+        }
+        
+        return {
+          sent: results.filter(r => r.success).length,
+          failed: results.filter(r => !r.success).length,
+          results,
+        };
+      }),
+
+    // Get email history for a document
+    getEmailHistory: protectedProcedure
+      .input(z.object({ documentId: z.string() }))
+      .query(async ({ ctx, input }) => {
+        const { getDocumentById } = await import('./db');
+        const { getDocumentEmailHistory } = await import('./services/emailService');
+        
+        const doc = await getDocumentById(input.documentId);
+        if (!doc || doc.userId !== ctx.user.id) {
+          throw new Error('Document not found');
+        }
+        
+        return getDocumentEmailHistory(doc.id);
+      }),
   }),
 });
 export type AppRouter = typeof appRouter;

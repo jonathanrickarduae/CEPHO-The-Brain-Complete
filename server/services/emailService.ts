@@ -437,3 +437,210 @@ export async function syncEmailsToInbox(
 
   return { synced, errors };
 }
+
+
+// ============================================
+// Document Email Delivery Functions
+// ============================================
+
+export interface DocumentEmailOptions {
+  documentId: number;
+  recipients: Array<{ email: string; name?: string }>;
+  subject?: string;
+  message?: string;
+  includeAsAttachment: boolean;
+  includeAsLink: boolean;
+  senderId: number;
+  senderName: string;
+  senderEmail: string;
+}
+
+export interface DocumentEmailResult {
+  success: boolean;
+  messageId?: string;
+  error?: string;
+  recipientEmail: string;
+}
+
+// Email templates for document sharing
+export function generateDocumentEmailHTML(options: {
+  documentTitle: string;
+  documentType: string;
+  senderName: string;
+  message?: string;
+  documentUrl?: string;
+  qaStatus: string;
+}): string {
+  const { documentTitle, documentType, senderName, message, documentUrl, qaStatus } = options;
+  
+  return `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${documentTitle}</title>
+  <style>
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      line-height: 1.6;
+      color: #333333;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #f5f5f5;
+    }
+    .container {
+      background-color: #ffffff;
+      border-radius: 8px;
+      padding: 32px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 2px solid #00D4FF;
+    }
+    .logo {
+      font-size: 24px;
+      font-weight: 700;
+      color: #000000;
+    }
+    .logo span {
+      color: #00D4FF;
+    }
+    .document-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      background-color: #f0f0f0;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: #666666;
+      margin-bottom: 8px;
+    }
+    .qa-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-left: 8px;
+    }
+    .qa-approved {
+      background-color: #d4edda;
+      color: #155724;
+    }
+    .qa-pending {
+      background-color: #fff3cd;
+      color: #856404;
+    }
+    h1 {
+      font-size: 20px;
+      font-weight: 600;
+      color: #000000;
+      margin: 0 0 16px 0;
+    }
+    .message {
+      background-color: #f8f9fa;
+      border-left: 4px solid #00D4FF;
+      padding: 16px;
+      margin: 16px 0;
+      border-radius: 0 4px 4px 0;
+    }
+    .sender {
+      font-style: italic;
+      color: #666666;
+      margin-bottom: 8px;
+    }
+    .cta-button {
+      display: inline-block;
+      padding: 12px 24px;
+      background-color: #00D4FF;
+      color: #000000;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: 600;
+      margin-top: 16px;
+    }
+    .footer {
+      margin-top: 32px;
+      padding-top: 16px;
+      border-top: 1px solid #e0e0e0;
+      font-size: 12px;
+      color: #999999;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="logo">CEPHO<span>.AI</span></div>
+    </div>
+    
+    <div class="document-badge">${documentType}</div>
+    <span class="qa-badge ${qaStatus === 'approved' ? 'qa-approved' : 'qa-pending'}">
+      ${qaStatus === 'approved' ? '✓ QA Approved' : '⏳ Pending Review'}
+    </span>
+    
+    <h1>${documentTitle}</h1>
+    
+    ${message ? `
+    <div class="message">
+      <div class="sender">Message from ${senderName}:</div>
+      <p>${message}</p>
+    </div>
+    ` : ''}
+    
+    ${documentUrl ? `
+    <a href="${documentUrl}" class="cta-button">View Document</a>
+    ` : ''}
+    
+    <div class="footer">
+      <p>This document was shared via CEPHO.AI</p>
+      <p>Chief of Staff Quality Assured</p>
+    </div>
+  </div>
+</body>
+</html>
+`;
+}
+
+// In-memory email history for document sharing
+interface DocumentEmailHistoryEntry {
+  id: string;
+  documentId: number;
+  documentTitle: string;
+  recipientEmail: string;
+  recipientName?: string;
+  sentAt: Date;
+  sentBy: number;
+  status: 'sent' | 'delivered' | 'failed';
+}
+
+const documentEmailHistory: DocumentEmailHistoryEntry[] = [];
+
+export function addToDocumentEmailHistory(entry: Omit<DocumentEmailHistoryEntry, 'id'>): DocumentEmailHistoryEntry {
+  const newEntry: DocumentEmailHistoryEntry = {
+    ...entry,
+    id: `doc_email_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+  };
+  documentEmailHistory.push(newEntry);
+  return newEntry;
+}
+
+export function getDocumentEmailHistory(documentId: number): DocumentEmailHistoryEntry[] {
+  return documentEmailHistory.filter(e => e.documentId === documentId).sort((a, b) => 
+    b.sentAt.getTime() - a.sentAt.getTime()
+  );
+}
+
+export function getUserDocumentEmailHistory(userId: number): DocumentEmailHistoryEntry[] {
+  return documentEmailHistory.filter(e => e.sentBy === userId).sort((a, b) => 
+    b.sentAt.getTime() - a.sentAt.getTime()
+  );
+}

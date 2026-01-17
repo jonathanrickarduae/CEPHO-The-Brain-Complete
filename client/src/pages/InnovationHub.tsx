@@ -567,21 +567,52 @@ export default function InnovationHub() {
 
                     <TabsContent value="brief">
                       {selectedIdeaData.idea.briefDocument ? (
-                        <div className="prose prose-invert max-w-none">
-                          <div 
-                            className="whitespace-pre-wrap text-sm text-foreground"
-                            dangerouslySetInnerHTML={{ 
-                              __html: selectedIdeaData.idea.briefDocument.replace(/\n/g, '<br/>') 
-                            }}
-                          />
+                        <div className="space-y-4">
+                          <div className="flex justify-end gap-2">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => generateBriefMutation.mutate({ ideaId: selectedIdea! })}
+                              disabled={generateBriefMutation.isPending}
+                            >
+                              {generateBriefMutation.isPending ? (
+                                <><RefreshCw className="h-4 w-4 mr-2 animate-spin" /> Regenerating...</>
+                              ) : (
+                                <><RefreshCw className="h-4 w-4 mr-2" /> Regenerate Brief</>
+                              )}
+                            </Button>
+                          </div>
+                          <div className="prose prose-invert max-w-none">
+                            <div 
+                              className="whitespace-pre-wrap text-sm text-foreground"
+                              dangerouslySetInnerHTML={{ 
+                                __html: selectedIdeaData.idea.briefDocument.replace(/\n/g, '<br/>') 
+                              }}
+                            />
+                          </div>
                         </div>
                       ) : (
                         <div className="text-center py-8">
                           <FileText className="h-12 w-12 mx-auto mb-3 text-muted-foreground opacity-50" />
                           <p className="text-muted-foreground">No brief generated yet</p>
                           <p className="text-sm text-muted-foreground mt-1">
-                            Complete assessments and generate investment scenarios first
+                            {selectedIdeaData.assessments.length >= 5 && selectedIdeaData.scenarios.length > 0
+                              ? "All assessments complete. Ready to generate brief."
+                              : "Complete assessments and generate investment scenarios first"}
                           </p>
+                          {selectedIdeaData.assessments.length >= 5 && selectedIdeaData.scenarios.length > 0 && (
+                            <Button
+                              className="mt-4 bg-cyan-500 hover:bg-cyan-600 text-black"
+                              onClick={() => generateBriefMutation.mutate({ ideaId: selectedIdea! })}
+                              disabled={generateBriefMutation.isPending}
+                            >
+                              {generateBriefMutation.isPending ? (
+                                <><RefreshCw className="h-4 w-4 mr-2 animate-spin" /> Generating...</>
+                              ) : (
+                                <><FileText className="h-4 w-4 mr-2" /> Generate Innovation Brief</>
+                              )}
+                            </Button>
+                          )}
                         </div>
                       )}
                     </TabsContent>

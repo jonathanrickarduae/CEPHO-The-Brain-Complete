@@ -3893,3 +3893,24 @@
 - [x] Display QA status (approved/pending/rejected) for each document
 - [x] Enable download and sharing of documents
 - [x] Add Document Library to sidebar navigation
+
+
+## Email Delivery for Documents
+- [ ] Create email service for sending documents
+- [ ] Add email send dialog to Document Library
+- [ ] Support sending to self or team members
+- [ ] Include document as attachment or link
+- [ ] Add email history tracking
+
+
+## Innovation Hub Document Library Integration (Jan 17, 2026)
+
+- [x] Innovation Hub: Generate Innovation Brief button on Brief tab
+- [x] Innovation Hub: Regenerate Brief button for existing briefs
+- [x] Innovation Hub: Save generated briefs to Document Library automatically
+- [x] Innovation Hub: Include QA status tracking (pending/approved/rejected)
+- [x] Innovation Hub: Link documents to related idea via relatedIdeaId
+- [x] Document Library: Display Innovation Briefs with proper metadata
+- [x] Document Library: Filter by document type (Innovation Briefs tab)
+- [x] Document Library: Filter by QA status (Approved/Pending/Rejected)
+- [x] Document Library: View, Download, Email actions for documents

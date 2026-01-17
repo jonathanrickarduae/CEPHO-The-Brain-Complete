@@ -630,6 +630,39 @@ export async function generateIdeaBrief(ideaId: number) {
     })
     .where(eq(innovationIdeas.id, ideaId));
 
+  // Also save to Document Library
+  const { createDocument } = await import("../db");
+  const documentId = `DOC-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+  
+  await createDocument({
+    documentId,
+    userId: idea.userId,
+    title: `Innovation Brief: ${idea.title}`,
+    type: "innovation_brief",
+    content: JSON.stringify({
+      description: idea.description,
+      category: idea.category,
+      confidenceScore: avgScore,
+      assessments: assessmentData,
+      scenarios: investmentData,
+      recommendation: {
+        decision,
+        rationale: `Based on an overall assessment score of ${avgScore.toFixed(0)}/100`,
+        nextSteps: decision === "proceed" 
+          ? ["Initiate Project Genesis workflow", "Assign project lead and resources", "Develop detailed implementation plan"]
+          : decision === "refine"
+          ? ["Address identified gaps in assessment", "Conduct additional market research", "Re-run through Innovation Flywheel"]
+          : ["Archive idea with learnings", "Consider alternative approaches", "Monitor market for changes"],
+      },
+    }),
+    classification: "confidential",
+    qaStatus: qaResult.approved ? "approved" : "pending",
+    qaApprover: qaResult.approved ? "Chief of Staff AI" : undefined,
+    qaApprovedAt: qaResult.approved ? new Date() : undefined,
+    qaNotes: qaResult.commentary,
+    relatedIdeaId: ideaId,
+  });
+
   return { 
     briefDocument: finalBrief,
     qaApproved: qaResult.approved,
