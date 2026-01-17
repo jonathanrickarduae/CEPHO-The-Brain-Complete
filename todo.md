@@ -3683,3 +3683,14 @@
 - [x] Test quality gate notification flow end-to-end
 - [ ] Add email notification option for urgent approvals
 - [ ] Create notification preferences settings
+
+
+## Text Visibility & Evening Review Fixes (January 2026)
+- [x] Fix text visibility with theme-aware colors (light/dark mode compatible)
+- [x] Redesign Evening Review page:
+  - [x] Move "What went well" box to top with voice note support
+  - [x] Move "What didn't go well" box below with voice note support
+  - [x] Add mood score selector (numerical 1-10 slider)
+  - [x] Add "Actions for tomorrow" box with Chief of Staff suggestions
+  - [x] Move trend chart to collapsible section at bottom
+  - [x] Add submit button for end of day
