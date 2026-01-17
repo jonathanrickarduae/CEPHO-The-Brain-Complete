@@ -3511,5 +3511,171 @@ ${transcript}
       };
     }),
   }),
+
+  // Innovation Engine Router
+  innovation: router({
+    // Capture a new idea
+    captureIdea: protectedProcedure
+      .input(z.object({
+        title: z.string().min(1),
+        description: z.string().optional(),
+        source: z.enum(["manual", "article", "trend", "conversation", "chief_of_staff", "sme_suggestion"]).optional(),
+        sourceUrl: z.string().optional(),
+        category: z.string().optional(),
+        tags: z.array(z.string()).optional(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        const { captureIdea } = await import('./services/innovationEngineService');
+        return captureIdea(ctx.user.id, input);
+      }),
+
+    // Get all ideas
+    getIdeas: protectedProcedure
+      .input(z.object({
+        status: z.string().optional(),
+        stage: z.number().optional(),
+        limit: z.number().optional(),
+      }).optional())
+      .query(async ({ ctx, input }) => {
+        const { getIdeas } = await import('./services/innovationEngineService');
+        return getIdeas(ctx.user.id, input);
+      }),
+
+    // Get single idea with assessments
+    getIdeaWithAssessments: protectedProcedure
+      .input(z.object({ ideaId: z.number() }))
+      .query(async ({ input }) => {
+        const { getIdeaWithAssessments } = await import('./services/innovationEngineService');
+        return getIdeaWithAssessments(input.ideaId);
+      }),
+
+    // Run strategic assessment
+    runAssessment: protectedProcedure
+      .input(z.object({
+        ideaId: z.number(),
+        assessmentType: z.enum(["market_analysis", "feasibility", "competitive_landscape", "financial_viability", "risk_assessment"]),
+      }))
+      .mutation(async ({ input }) => {
+        const { runStrategicAssessment } = await import('./services/innovationEngineService');
+        return runStrategicAssessment(input.ideaId, input.assessmentType);
+      }),
+
+    // Advance to next stage
+    advanceStage: protectedProcedure
+      .input(z.object({
+        ideaId: z.number(),
+        rationale: z.string().optional(),
+      }))
+      .mutation(async ({ input }) => {
+        const { advanceToNextStage } = await import('./services/innovationEngineService');
+        return advanceToNextStage(input.ideaId, input.rationale);
+      }),
+
+    // Generate investment scenarios
+    generateScenarios: protectedProcedure
+      .input(z.object({
+        ideaId: z.number(),
+        budgets: z.array(z.number()).optional(),
+      }))
+      .mutation(async ({ input }) => {
+        const { generateInvestmentScenarios } = await import('./services/innovationEngineService');
+        return generateInvestmentScenarios(input.ideaId, input.budgets);
+      }),
+
+    // Generate idea brief
+    generateBrief: protectedProcedure
+      .input(z.object({ ideaId: z.number() }))
+      .mutation(async ({ input }) => {
+        const { generateIdeaBrief } = await import('./services/innovationEngineService');
+        return generateIdeaBrief(input.ideaId);
+      }),
+
+    // Promote to Project Genesis
+    promoteToGenesis: protectedProcedure
+      .input(z.object({ ideaId: z.number() }))
+      .mutation(async ({ input }) => {
+        const { promoteToGenesis } = await import('./services/innovationEngineService');
+        return promoteToGenesis(input.ideaId);
+      }),
+
+    // Analyze article for opportunities
+    analyzeArticle: protectedProcedure
+      .input(z.object({
+        url: z.string(),
+        context: z.string().optional(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        const { analyzeArticleForOpportunities } = await import('./services/innovationEngineService');
+        return analyzeArticleForOpportunities(ctx.user.id, input.url, input.context);
+      }),
+
+    // Get strategic framework questions
+    getFrameworkQuestions: publicProcedure
+      .input(z.object({
+        assessmentType: z.enum(["market_analysis", "feasibility", "competitive_landscape", "financial_viability", "risk_assessment"]),
+      }))
+      .query(async ({ input }) => {
+        const { STRATEGIC_FRAMEWORK } = await import('./services/innovationEngineService');
+        return STRATEGIC_FRAMEWORK[input.assessmentType];
+      }),
+  }),
+
+  // Stripe Payment Router
+  payments: router({
+    // Create checkout session for subscription
+    createCheckoutSession: protectedProcedure
+      .input(z.object({
+        priceId: z.string(),
+        mode: z.enum(["subscription", "payment"]).optional(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        const { createCheckoutSession } = await import('./stripe/stripeService');
+        const origin = ctx.req.headers.origin || 'http://localhost:3000';
+        
+        return createCheckoutSession({
+          userId: ctx.user.id,
+          userEmail: ctx.user.email || '',
+          userName: ctx.user.name || '',
+          priceId: input.priceId,
+          successUrl: `${origin}/settings?payment=success`,
+          cancelUrl: `${origin}/settings?payment=cancelled`,
+          mode: input.mode || 'subscription',
+        });
+      }),
+
+    // Get user's subscription status
+    getSubscription: protectedProcedure.query(async ({ ctx }) => {
+      const { getUserSubscription } = await import('./stripe/stripeService');
+      return getUserSubscription(ctx.user.id);
+    }),
+
+    // Cancel subscription
+    cancelSubscription: protectedProcedure
+      .input(z.object({ subscriptionId: z.string() }))
+      .mutation(async ({ input }) => {
+        const { cancelSubscription } = await import('./stripe/stripeService');
+        return cancelSubscription(input.subscriptionId);
+      }),
+
+    // Get customer portal URL
+    getPortalUrl: protectedProcedure.mutation(async ({ ctx }) => {
+      const { getOrCreateCustomer, createPortalSession } = await import('./stripe/stripeService');
+      const origin = ctx.req.headers.origin || 'http://localhost:3000';
+      
+      const customerId = await getOrCreateCustomer(
+        ctx.user.id, 
+        ctx.user.email || '',
+        ctx.user.name || undefined
+      );
+      
+      return createPortalSession(customerId, `${origin}/settings`);
+    }),
+
+    // Get available products
+    getProducts: publicProcedure.query(async () => {
+      const { PRODUCTS, ONE_TIME_PRODUCTS } = await import('./stripe/products');
+      return { subscriptions: PRODUCTS, oneTime: ONE_TIME_PRODUCTS };
+    }),
+  }),
 });
 export type AppRouter = typeof appRouter;

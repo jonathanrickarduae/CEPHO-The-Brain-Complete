@@ -3826,3 +3826,30 @@
 - [x] Implement Outlook/Microsoft Calendar sync service
 - [x] Calendar sync API endpoints (sync, getEvents, getTodaySummary, hasConflicts, getNextFreeSlot)
 - [x] Manual event creation for users without calendar integration
+
+
+## Innovation & Ideation Engine
+- [ ] Create innovation_ideas database table for capturing ideas
+- [ ] Create idea_assessments table for strategic framework evaluations
+- [ ] Create idea_refinements table for flywheel iteration history
+- [ ] Build Strategic Framework questionnaire (market, feasibility, investment, return)
+- [ ] Implement 5-stage Innovation Flywheel (Capture → Assess → Consult SMEs → Refine → Brief)
+- [ ] Create Innovation Hub page with idea capture and tracking
+- [ ] Add investment scenario analysis (£500 vs £20,000 budget comparisons)
+- [ ] Integrate SME experts for specialized feedback on ideas
+- [ ] Add trend analysis repository for Chief of Staff deep dives
+- [ ] Create Idea Brief document generator (pre-Project Genesis summary)
+- [ ] Integrate with Evening Review for daily innovation deep dives
+- [ ] Add article/URL analysis for opportunity detection
+
+
+## Stripe Integration
+- [ ] Add Stripe payment processing capability
+- [ ] Create subscription management for premium features
+- [ ] Add payment history tracking
+
+## Central Knowledge Database
+- [ ] Ensure all SME consultations flow to knowledge database
+- [ ] Capture all research findings and insights centrally
+- [ ] Track all development activities and learnings
+- [ ] Build systematic knowledge accumulation from all sources

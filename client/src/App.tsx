@@ -39,6 +39,7 @@ import ReferenceLibrary from "./pages/ReferenceLibrary";
 import DueDiligencePage from "./pages/DueDiligencePage";
 import CentralHub from "./pages/CentralHub";
 import ExpertChatPage from "./pages/ExpertChatPage";
+import InnovationHub from "./pages/InnovationHub";
 import { GovernanceProvider, GovernanceModeChangeModal } from "./hooks/useGovernance";
 import { AIRouterProvider } from "./components/AIRouter";
 import { CelebrationProvider } from "./components/CelebrationAnimations";
@@ -126,6 +127,9 @@ function Router() {
       </Route>
       <Route path="/project-genesis">
         <WithLayout><ProjectGenesisPage /></WithLayout>
+      </Route>
+      <Route path="/innovation-hub">
+        <WithLayout><InnovationHub /></WithLayout>
       </Route>
       <Route path="/due-diligence">
         <WithLayout><DueDiligencePage /></WithLayout>

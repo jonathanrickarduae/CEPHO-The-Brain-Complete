@@ -1936,3 +1936,146 @@ export const calendarEventsCache = mysqlTable("calendar_events_cache", {
 
 export type CalendarEventCache = typeof calendarEventsCache.$inferSelect;
 export type InsertCalendarEventCache = typeof calendarEventsCache.$inferInsert;
+
+
+/**
+ * Innovation Ideas - Captured ideas for strategic assessment
+ */
+export const innovationIdeas = mysqlTable("innovation_ideas", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  title: varchar("title", { length: 300 }).notNull(),
+  description: text("description"),
+  source: mysqlEnum("source", ["manual", "article", "trend", "conversation", "chief_of_staff", "sme_suggestion"]).default("manual").notNull(),
+  sourceUrl: text("sourceUrl"), // URL if from article
+  sourceMetadata: json("sourceMetadata"), // Additional source context
+  status: mysqlEnum("status", ["captured", "assessing", "refining", "validated", "rejected", "archived", "promoted_to_genesis"]).default("captured").notNull(),
+  currentStage: int("currentStage").default(1).notNull(), // 1-5 flywheel stage
+  priority: mysqlEnum("priority", ["low", "medium", "high", "critical"]).default("medium").notNull(),
+  category: varchar("category", { length: 100 }), // "business", "product", "investment", "trend", etc.
+  tags: json("tags"), // Array of tags
+  estimatedInvestment: json("estimatedInvestment"), // { min: number, max: number, currency: string }
+  estimatedReturn: json("estimatedReturn"), // { min: number, max: number, timeframe: string }
+  confidenceScore: float("confidenceScore"), // 0-100 overall confidence
+  briefDocument: text("briefDocument"), // Generated brief summary
+  promotedToProjectId: int("promotedToProjectId"), // If promoted to Project Genesis
+  metadata: json("metadata"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type InnovationIdea = typeof innovationIdeas.$inferSelect;
+export type InsertInnovationIdea = typeof innovationIdeas.$inferInsert;
+
+/**
+ * Idea Assessments - Strategic framework evaluations
+ */
+export const ideaAssessments = mysqlTable("idea_assessments", {
+  id: int("id").autoincrement().primaryKey(),
+  ideaId: int("ideaId").notNull(),
+  assessmentType: mysqlEnum("assessmentType", [
+    "market_analysis",
+    "feasibility",
+    "competitive_landscape",
+    "financial_viability",
+    "resource_requirements",
+    "risk_assessment",
+    "timing_analysis",
+    "strategic_fit",
+    "sme_consultation"
+  ]).notNull(),
+  stage: int("stage").notNull(), // Which flywheel stage (1-5)
+  assessorType: mysqlEnum("assessorType", ["chief_of_staff", "sme_expert", "framework", "user"]).default("framework").notNull(),
+  assessorId: varchar("assessorId", { length: 100 }), // SME expert ID if applicable
+  questions: json("questions"), // Array of { question: string, answer: string, score: number }
+  findings: text("findings"),
+  score: float("score"), // 0-100 score for this assessment
+  recommendation: mysqlEnum("recommendation", ["proceed", "refine", "pivot", "reject", "needs_more_info"]).default("needs_more_info").notNull(),
+  refinementSuggestions: json("refinementSuggestions"), // Array of suggestions
+  metadata: json("metadata"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type IdeaAssessment = typeof ideaAssessments.$inferSelect;
+export type InsertIdeaAssessment = typeof ideaAssessments.$inferInsert;
+
+/**
+ * Idea Refinements - Flywheel iteration history
+ */
+export const ideaRefinements = mysqlTable("idea_refinements", {
+  id: int("id").autoincrement().primaryKey(),
+  ideaId: int("ideaId").notNull(),
+  fromStage: int("fromStage").notNull(),
+  toStage: int("toStage").notNull(),
+  refinementType: mysqlEnum("refinementType", [
+    "pivot",
+    "scope_change",
+    "target_market_change",
+    "business_model_change",
+    "investment_adjustment",
+    "feature_addition",
+    "feature_removal",
+    "timeline_adjustment",
+    "risk_mitigation"
+  ]).notNull(),
+  previousState: json("previousState"), // Snapshot of idea before refinement
+  changes: json("changes"), // What changed
+  rationale: text("rationale"), // Why this refinement was made
+  triggeredBy: mysqlEnum("triggeredBy", ["assessment", "sme_feedback", "user_input", "chief_of_staff"]).default("assessment").notNull(),
+  metadata: json("metadata"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type IdeaRefinement = typeof ideaRefinements.$inferSelect;
+export type InsertIdeaRefinement = typeof ideaRefinements.$inferInsert;
+
+/**
+ * Investment Scenarios - Budget-based analysis for ideas
+ */
+export const investmentScenarios = mysqlTable("investment_scenarios", {
+  id: int("id").autoincrement().primaryKey(),
+  ideaId: int("ideaId").notNull(),
+  scenarioName: varchar("scenarioName", { length: 100 }).notNull(), // "Bootstrap", "Seed", "Growth"
+  investmentAmount: float("investmentAmount").notNull(),
+  currency: varchar("currency", { length: 10 }).default("GBP").notNull(),
+  breakdown: json("breakdown"), // { website: number, marketing: number, operations: number, etc. }
+  projectedRevenue: json("projectedRevenue"), // { month3: number, month6: number, year1: number }
+  projectedProfit: json("projectedProfit"),
+  timeToBreakeven: int("timeToBreakeven"), // Months
+  riskLevel: mysqlEnum("riskLevel", ["low", "medium", "high", "very_high"]).default("medium").notNull(),
+  keyAssumptions: json("keyAssumptions"), // Array of assumptions
+  recommendations: text("recommendations"),
+  isRecommended: boolean("isRecommended").default(false).notNull(),
+  metadata: json("metadata"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type InvestmentScenario = typeof investmentScenarios.$inferSelect;
+export type InsertInvestmentScenario = typeof investmentScenarios.$inferInsert;
+
+/**
+ * Trend Repository - Tracked trends for Chief of Staff deep dives
+ */
+export const trendRepository = mysqlTable("trend_repository", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  title: varchar("title", { length: 300 }).notNull(),
+  description: text("description"),
+  category: varchar("category", { length: 100 }), // "technology", "market", "consumer", "regulatory", etc.
+  source: varchar("source", { length: 200 }),
+  sourceUrl: text("sourceUrl"),
+  trendStrength: mysqlEnum("trendStrength", ["emerging", "growing", "mainstream", "declining"]).default("emerging").notNull(),
+  relevanceScore: float("relevanceScore"), // 0-100 how relevant to user's interests
+  potentialImpact: mysqlEnum("potentialImpact", ["low", "medium", "high", "transformative"]).default("medium").notNull(),
+  timeHorizon: varchar("timeHorizon", { length: 50 }), // "3 months", "1 year", "3-5 years"
+  relatedIndustries: json("relatedIndustries"), // Array of industries
+  keyInsights: json("keyInsights"), // Array of insights
+  linkedIdeaIds: json("linkedIdeaIds"), // Ideas generated from this trend
+  lastAnalyzedAt: timestamp("lastAnalyzedAt"),
+  metadata: json("metadata"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type TrendRepository = typeof trendRepository.$inferSelect;
+export type InsertTrendRepository = typeof trendRepository.$inferInsert;

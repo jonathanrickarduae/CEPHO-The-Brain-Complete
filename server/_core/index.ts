@@ -35,6 +35,12 @@ async function startServer() {
   // Trust proxy for rate limiting behind reverse proxy
   app.set('trust proxy', 1);
   
+  // Stripe webhook route - MUST be before body parser to get raw body
+  app.post("/api/stripe/webhook", express.raw({ type: "application/json" }), async (req, res) => {
+    const { handleStripeWebhook } = await import("../stripe/webhookHandler");
+    return handleStripeWebhook(req, res);
+  });
+  
   // Configure body parser with larger size limit for file uploads
   app.use(express.json({ limit: "50mb" }));
   app.use(express.urlencoded({ limit: "50mb", extended: true }));
