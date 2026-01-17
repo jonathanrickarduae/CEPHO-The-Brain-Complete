@@ -163,10 +163,19 @@ Deep dive research complete
 1. Validate all claims through primary SME expert
 2. Cross-validate through secondary perspective
 3. Triple-check through tertiary perspective
-4. Flag any unverified claims
-5. Generate validation report with confidence scores
-6. Update risk register with research findings
-7. Document mitigations for each risk
+4. **Customer Focus Group Validation** (NEW)
+   - Select relevant customer personas from the 100+ persona database
+   - Deploy targeted survey on product/service concept
+   - Collect feedback on value proposition and pricing
+   - Aggregate customer viewpoints for decision support
+5. Flag any unverified claims
+6. Generate validation report with confidence scores
+7. Update risk register with research findings
+8. Document mitigations for each risk
+9. **Check Prior Research** (NEW)
+   - Query Insights Repository for existing relevant research
+   - Reference previous customer feedback on similar concepts
+   - Avoid duplicate research where insights already exist
 
 ### Validation Framework
 
@@ -177,6 +186,7 @@ Deep dive research complete
 | Technical Claims | 90%+ | Platform review, security audit |
 | Legal Claims | 95%+ | Legal opinion, regulatory guidance |
 | Partner Claims | 90%+ | Reference checks, background verification |
+| **Customer Claims** | 75%+ | Customer Focus Group survey, persona feedback |
 
 ### Validation Status Badges
 
@@ -187,17 +197,31 @@ Deep dive research complete
 | UNVERIFIED | No validation yet, requires research |
 | FLAGGED | Conflicting sources or concerns identified |
 
+### Customer Focus Group Integration
+
+| Step | Action | Output |
+|------|--------|--------|
+| 1 | Select personas by industry, region, income | Target persona list |
+| 2 | Design survey (max 10 questions) | Survey template |
+| 3 | Deploy to selected personas | Response collection |
+| 4 | Aggregate feedback | Customer validation report |
+| 5 | Store insights | Insights Repository entry |
+
 ### Deliverables
 - [ ] Validation report with confidence scores
 - [ ] Updated risk register
 - [ ] Mitigation strategies documented
+- [ ] **Customer Focus Group feedback report** (NEW)
+- [ ] **Insights stored in repository** (NEW)
 - [ ] Chief of Staff sign-off
 
 ### Prompt to Use
-> "Please have the Chief of Staff conduct triple validation on all findings. Cross-reference claims, verify sources, and update the risk register with mitigations. Reference: MASTER_SME_TEAM_DOCUMENT.md - Part 1 (Chief of Staff Role)"
+> "Please have the Chief of Staff conduct triple validation on all findings, including Customer Focus Group feedback. Cross-reference claims, verify sources, deploy customer survey, and update the risk register with mitigations. Reference: MASTER_SME_TEAM_DOCUMENT.md - Part 1 (Chief of Staff Role)"
 
 ### SME Team Reference
 Reference: MASTER_SME_TEAM_DOCUMENT.md - Part 1 (Chief of Staff Role) and Part 4 (Reference Requirements)
+Reference: Customer Personas Database (100+ diverse personas)
+Reference: Insights Repository (prior research check)
 
 ---
 
@@ -213,6 +237,16 @@ Triple validation complete, mitigations documented
 4. Create 8-week project plan with timeline
 5. Define key performance indicators (KPIs)
 6. Escalate critical decisions to stakeholder
+7. **Individual SME Scoring Assessment** (NEW)
+   - Each SME expert scores relevant KPI categories (0-100)
+   - Capture rationale for each score
+   - Detect outliers (significant deviations from panel average)
+   - Flag discrepancies for Chief of Staff investigation
+8. **Generate KPI Heat Map** (NEW)
+   - Visualize all 50 KPI categories with color coding
+   - Green (90+) to Red (0-39) based on scores
+   - Enable multi-perspective views (CoS, SME, Customer)
+   - Identify weak spots requiring attention
 
 ### Master Report Structure
 
@@ -252,17 +286,37 @@ Triple validation complete, mitigations documented
 - Long-term vision (year 1+)
 - Success metrics and KPIs
 
+### 50 Category KPI Framework
+
+| Domain | Categories | Key Focus |
+|--------|------------|----------|
+| Strategy | 6 | Vision, positioning, business model |
+| Technology | 6 | Architecture, security, scalability |
+| Product | 5 | Quality, innovation, roadmap |
+| Customer | 5 | Satisfaction, retention, support |
+| Operations | 5 | Efficiency, quality, supply chain |
+| Finance | 5 | Revenue, profitability, cash flow |
+| People | 5 | Talent, culture, leadership |
+| Governance | 5 | Compliance, risk, ethics |
+| Innovation | 4 | R&D, IP, partnerships |
+| Market | 4 | Position, growth, brand |
+
 ### Deliverables
 - [ ] Master report document
 - [ ] 8-week project plan
 - [ ] KPI dashboard template
 - [ ] Stakeholder decision points identified
+- [ ] **Individual SME scoring completed** (NEW)
+- [ ] **KPI Heat Map generated** (NEW)
+- [ ] **Outlier analysis report** (NEW)
 
 ### Prompt to Use
-> "Please compile all findings into a Master Report following the structure in Phase 4. Include the 8-week project plan and KPI definitions. Have the Chief of Staff validate the final document. Reference: MASTER_SME_TEAM_DOCUMENT.md"
+> "Please compile all findings into a Master Report following the structure in Phase 4. Include the 8-week project plan, KPI definitions, individual SME scores, and KPI Heat Map. Have the Chief of Staff validate the final document and investigate any scoring outliers. Reference: MASTER_SME_TEAM_DOCUMENT.md"
 
 ### SME Team Reference
 Reference: MASTER_SME_TEAM_DOCUMENT.md - McKinsey Lens, Strategy SMEs
+Reference: 50 Category KPI Framework (shared/kpiCategories.ts)
+Reference: KPI Heat Map Visualization Component
 
 ---
 
@@ -475,11 +529,28 @@ Before moving to the next phase, confirm:
 - COMPETITIVE_ANALYSIS_BLUEPRINT.md (competitor research)
 - MASTER_BUSINESS_PLAN_TEMPLATE.md (business plan structure)
 
+**New Integrated Systems (January 2026):**
+- Customer Personas Database (100+ diverse personas)
+- 50 Category KPI Framework (shared/kpiCategories.ts)
+- KPI Heat Map Visualization Component
+- Insights Repository (prior research and learning)
+- Individual SME Scoring System
+- Output Quality Scoring System
+
 ---
 
 ## Version Information
 
-Version: 1.0
+Version: 2.0
 Created: January 2026
+Updated: January 17, 2026
 Phases: 9 (0-8)
 Integrated with: MASTER_SME_TEAM_DOCUMENT.md
+
+**Version 2.0 Updates:**
+- Added Customer Focus Group validation to Phase 3
+- Added Prior Research Check to Phase 3
+- Added Individual SME Scoring to Phase 4
+- Added 50 Category KPI Heat Map to Phase 4
+- Integrated Insights Repository throughout
+- Chief of Staff validated: January 17, 2026

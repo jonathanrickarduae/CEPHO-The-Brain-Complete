@@ -2877,3 +2877,428 @@ export async function rateExpertConsultation(
     userFeedback: feedback
   }).where(eq(expertConsultations.id, consultationId));
 }
+
+
+// ============================================
+// KPI Assessment & Customer Focus Group Functions
+// ============================================
+
+import {
+  kpiCategories, InsertKpiCategory, KpiCategory,
+  smeIndividualAssessments, InsertSmeIndividualAssessment, SmeIndividualAssessment,
+  assessmentOutliers, InsertAssessmentOutlier, AssessmentOutlier,
+  panelAssessmentAggregations, InsertPanelAssessmentAggregation, PanelAssessmentAggregation,
+  kpiSnapshots, InsertKpiSnapshot, KpiSnapshot,
+  expertConversationLogs, InsertExpertConversationLog, ExpertConversationLog,
+  customerPersonas, InsertCustomerPersona, CustomerPersona,
+  customerSurveys, InsertCustomerSurvey, CustomerSurvey,
+  customerSurveyResponses, InsertCustomerSurveyResponse, CustomerSurveyResponse,
+  customerFeedbackAggregations, InsertCustomerFeedbackAggregation, CustomerFeedbackAggregation,
+  focusGroupSessions, InsertFocusGroupSession, FocusGroupSession,
+  innovationValidationCheckpoints, InsertInnovationValidationCheckpoint, InnovationValidationCheckpoint,
+  insightsRepository, InsertInsightRepository, InsightRepository,
+  externalResearchReferences, InsertExternalResearchReference, ExternalResearchReference,
+  priorResearchChecks, InsertPriorResearchCheck, PriorResearchCheck,
+  insightUsageLog, InsertInsightUsageLog, InsightUsageLog,
+  knowledgeTopics, InsertKnowledgeTopic, KnowledgeTopic,
+  userActivityTracking, InsertUserActivityTracking, UserActivityTracking,
+  workflowPatterns, InsertWorkflowPattern, WorkflowPattern,
+  proactiveRecommendations, InsertProactiveRecommendation, ProactiveRecommendation,
+  outputQualityScores, InsertOutputQualityScore, OutputQualityScore,
+  qualityImprovementTickets, InsertQualityImprovementTicket, QualityImprovementTicket,
+  qualityMetricsSnapshots, InsertQualityMetricsSnapshot, QualityMetricsSnapshot
+} from "../drizzle/schema";
+
+// KPI Categories
+export async function createKpiCategory(data: InsertKpiCategory): Promise<KpiCategory | null> {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const [result] = await db.insert(kpiCategories).values(data);
+  const [category] = await db.select().from(kpiCategories).where(eq(kpiCategories.id, result.insertId));
+  return category;
+}
+
+export async function getKpiCategories(): Promise<KpiCategory[]> {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return db.select().from(kpiCategories).orderBy(kpiCategories.categoryNumber);
+}
+
+// SME Individual Assessments
+export async function createSmeAssessment(data: InsertSmeIndividualAssessment): Promise<SmeIndividualAssessment | null> {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const [result] = await db.insert(smeIndividualAssessments).values(data);
+  const [assessment] = await db.select().from(smeIndividualAssessments).where(eq(smeIndividualAssessments.id, result.insertId));
+  return assessment;
+}
+
+export async function getSmeAssessments(categoryId?: number, expertId?: string): Promise<SmeIndividualAssessment[]> {
+  const db = await getDb();
+  if (!db) return [];
+  
+  let query = db.select().from(smeIndividualAssessments);
+  
+  if (categoryId && expertId) {
+    return db.select().from(smeIndividualAssessments)
+      .where(and(
+        eq(smeIndividualAssessments.categoryId, categoryId),
+        eq(smeIndividualAssessments.expertId, expertId)
+      ));
+  } else if (categoryId) {
+    return db.select().from(smeIndividualAssessments)
+      .where(eq(smeIndividualAssessments.categoryId, categoryId));
+  } else if (expertId) {
+    return db.select().from(smeIndividualAssessments)
+      .where(eq(smeIndividualAssessments.expertId, expertId));
+  }
+  
+  return db.select().from(smeIndividualAssessments);
+}
+
+export async function getAssessmentsBySnapshot(assessmentPeriod: string): Promise<SmeIndividualAssessment[]> {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return db.select().from(smeIndividualAssessments)
+    .where(eq(smeIndividualAssessments.assessmentPeriod, assessmentPeriod));
+}
+
+// Assessment Outliers
+export async function createAssessmentOutlier(data: InsertAssessmentOutlier): Promise<AssessmentOutlier | null> {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const [result] = await db.insert(assessmentOutliers).values(data);
+  const [outlier] = await db.select().from(assessmentOutliers).where(eq(assessmentOutliers.id, result.insertId));
+  return outlier;
+}
+
+export async function getUnresolvedOutliers(): Promise<AssessmentOutlier[]> {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return db.select().from(assessmentOutliers)
+    .where(eq(assessmentOutliers.reviewStatus, 'pending'))
+    .orderBy(desc(assessmentOutliers.deviation));
+}
+
+export async function resolveOutlier(id: number, resolution: string): Promise<void> {
+  const db = await getDb();
+  if (!db) return;
+  
+  await db.update(assessmentOutliers).set({
+    reviewStatus: 'resolved',
+    resolutionNotes: resolution,
+    resolvedAt: new Date()
+  }).where(eq(assessmentOutliers.id, id));
+}
+
+// KPI Snapshots
+export async function createKpiSnapshot(data: InsertKpiSnapshot): Promise<KpiSnapshot | null> {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const [result] = await db.insert(kpiSnapshots).values(data);
+  const [snapshot] = await db.select().from(kpiSnapshots).where(eq(kpiSnapshots.id, result.insertId));
+  return snapshot;
+}
+
+export async function getKpiSnapshots(limit: number = 10): Promise<KpiSnapshot[]> {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return db.select().from(kpiSnapshots)
+    .orderBy(desc(kpiSnapshots.createdAt))
+    .limit(limit);
+}
+
+export async function getLatestKpiSnapshot(): Promise<KpiSnapshot | null> {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const [snapshot] = await db.select().from(kpiSnapshots)
+    .orderBy(desc(kpiSnapshots.createdAt))
+    .limit(1);
+  return snapshot || null;
+}
+
+// Customer Personas
+export async function createCustomerPersona(data: InsertCustomerPersona): Promise<CustomerPersona | null> {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const [result] = await db.insert(customerPersonas).values(data);
+  const [persona] = await db.select().from(customerPersonas).where(eq(customerPersonas.id, result.insertId));
+  return persona;
+}
+
+export async function getCustomerPersonas(filters?: {
+  industry?: string;
+  incomeLevel?: string;
+  minAge?: number;
+  maxAge?: number;
+}): Promise<CustomerPersona[]> {
+  const db = await getDb();
+  if (!db) return [];
+  
+  let query = db.select().from(customerPersonas).where(eq(customerPersonas.isActive, true));
+  
+  // Note: For complex filtering, we'd need to build conditions dynamically
+  // For now, return all active personas
+  return db.select().from(customerPersonas).where(eq(customerPersonas.isActive, true));
+}
+
+// Customer Surveys
+export async function createCustomerSurvey(data: InsertCustomerSurvey): Promise<CustomerSurvey | null> {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const [result] = await db.insert(customerSurveys).values(data);
+  const [survey] = await db.select().from(customerSurveys).where(eq(customerSurveys.id, result.insertId));
+  return survey;
+}
+
+export async function getCustomerSurveys(status?: 'draft' | 'active' | 'completed' | 'archived'): Promise<CustomerSurvey[]> {
+  const db = await getDb();
+  if (!db) return [];
+  
+  if (status) {
+    return db.select().from(customerSurveys).where(eq(customerSurveys.status, status));
+  }
+  return db.select().from(customerSurveys).orderBy(desc(customerSurveys.createdAt));
+}
+
+export async function updateSurveyStatus(id: number, status: 'draft' | 'active' | 'completed' | 'archived'): Promise<void> {
+  const db = await getDb();
+  if (!db) return;
+  
+  await db.update(customerSurveys).set({ status }).where(eq(customerSurveys.id, id));
+}
+
+// Survey Responses
+export async function createSurveyResponse(data: InsertCustomerSurveyResponse): Promise<CustomerSurveyResponse | null> {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const [result] = await db.insert(customerSurveyResponses).values(data);
+  const [response] = await db.select().from(customerSurveyResponses).where(eq(customerSurveyResponses.id, result.insertId));
+  return response;
+}
+
+export async function getSurveyResponses(surveyId: number): Promise<CustomerSurveyResponse[]> {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return db.select().from(customerSurveyResponses)
+    .where(eq(customerSurveyResponses.surveyId, surveyId));
+}
+
+// Focus Group Sessions
+export async function createFocusGroupSession(data: InsertFocusGroupSession): Promise<FocusGroupSession | null> {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const [result] = await db.insert(focusGroupSessions).values(data);
+  const [session] = await db.select().from(focusGroupSessions).where(eq(focusGroupSessions.id, result.insertId));
+  return session;
+}
+
+export async function getFocusGroupSessions(status?: 'planned' | 'in_progress' | 'completed' | 'analyzed'): Promise<FocusGroupSession[]> {
+  const db = await getDb();
+  if (!db) return [];
+  
+  if (status) {
+    return db.select().from(focusGroupSessions).where(eq(focusGroupSessions.status, status));
+  }
+  return db.select().from(focusGroupSessions).orderBy(desc(focusGroupSessions.createdAt));
+}
+
+// Insights Repository
+export async function createInsight(data: InsertInsightRepository): Promise<InsightRepository | null> {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const [result] = await db.insert(insightsRepository).values(data);
+  const [insight] = await db.select().from(insightsRepository).where(eq(insightsRepository.id, result.insertId));
+  return insight;
+}
+
+export async function getInsights(filters?: {
+  category?: 'customer_need' | 'pricing_insight' | 'feature_request' | 'market_trend' | 'competitive_intelligence' | 'user_behavior' | 'pain_point' | 'opportunity' | 'risk' | 'validation_result' | 'technical_feedback' | 'ux_feedback' | 'business_model' | 'regulatory' | 'other';
+  sourceType?: string;
+  search?: string;
+}): Promise<InsightRepository[]> {
+  const db = await getDb();
+  if (!db) return [];
+  
+  if (filters?.category) {
+    return db.select().from(insightsRepository)
+      .where(eq(insightsRepository.category, filters.category))
+      .orderBy(desc(insightsRepository.capturedAt));
+  }
+  
+  return db.select().from(insightsRepository)
+    .orderBy(desc(insightsRepository.capturedAt));
+}
+
+export async function incrementInsightUsageCount(id: number): Promise<void> {
+  const db = await getDb();
+  if (!db) return;
+  
+  await db.update(insightsRepository).set({
+    timesReferenced: sql`${insightsRepository.timesReferenced} + 1`,
+    lastReferencedAt: new Date()
+  }).where(eq(insightsRepository.id, id));
+}
+
+// Prior Research Checks
+export async function createPriorResearchCheck(data: InsertPriorResearchCheck): Promise<PriorResearchCheck | null> {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const [result] = await db.insert(priorResearchChecks).values(data);
+  const [check] = await db.select().from(priorResearchChecks).where(eq(priorResearchChecks.id, result.insertId));
+  return check;
+}
+
+export async function getPriorResearchChecks(topic?: string): Promise<PriorResearchCheck[]> {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return db.select().from(priorResearchChecks)
+    .orderBy(desc(priorResearchChecks.checkedAt));
+}
+
+// User Activity Tracking
+export async function trackUserActivity(data: InsertUserActivityTracking): Promise<void> {
+  const db = await getDb();
+  if (!db) return;
+  
+  await db.insert(userActivityTracking).values(data);
+}
+
+export async function getUserActivityHistory(userId: number, limit: number = 100): Promise<UserActivityTracking[]> {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return db.select().from(userActivityTracking)
+    .where(eq(userActivityTracking.userId, userId))
+    .orderBy(desc(userActivityTracking.createdAt))
+    .limit(limit);
+}
+
+// Proactive Recommendations
+export async function createProactiveRecommendation(data: InsertProactiveRecommendation): Promise<ProactiveRecommendation | null> {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const [result] = await db.insert(proactiveRecommendations).values(data);
+  const [rec] = await db.select().from(proactiveRecommendations).where(eq(proactiveRecommendations.id, result.insertId));
+  return rec;
+}
+
+export async function getPendingRecommendations(userId: number): Promise<ProactiveRecommendation[]> {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return db.select().from(proactiveRecommendations)
+    .where(and(
+      eq(proactiveRecommendations.userId, userId),
+      eq(proactiveRecommendations.status, 'pending')
+    ))
+    .orderBy(desc(proactiveRecommendations.priority));
+}
+
+export async function updateRecommendationStatus(id: number, status: 'pending' | 'viewed' | 'accepted' | 'rejected' | 'implemented'): Promise<void> {
+  const db = await getDb();
+  if (!db) return;
+  
+  await db.update(proactiveRecommendations).set({ status }).where(eq(proactiveRecommendations.id, id));
+}
+
+// Output Quality Scores
+export async function createOutputQualityScore(data: InsertOutputQualityScore): Promise<OutputQualityScore | null> {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const [result] = await db.insert(outputQualityScores).values(data);
+  const [score] = await db.select().from(outputQualityScores).where(eq(outputQualityScores.id, result.insertId));
+  return score;
+}
+
+export async function getOutputQualityScores(filters?: {
+  userId?: number;
+  outputType?: string;
+  minScore?: number;
+  maxScore?: number;
+}): Promise<OutputQualityScore[]> {
+  const db = await getDb();
+  if (!db) return [];
+  
+  if (filters?.userId) {
+    return db.select().from(outputQualityScores)
+      .where(eq(outputQualityScores.userId, filters.userId))
+      .orderBy(desc(outputQualityScores.scoredAt));
+  }
+  
+  return db.select().from(outputQualityScores)
+    .orderBy(desc(outputQualityScores.scoredAt));
+}
+
+export async function getLowQualityOutputs(threshold: number = 4): Promise<OutputQualityScore[]> {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return db.select().from(outputQualityScores)
+    .where(lte(outputQualityScores.score, threshold))
+    .orderBy(outputQualityScores.score);
+}
+
+// Quality Improvement Tickets
+export async function createQualityTicket(data: InsertQualityImprovementTicket): Promise<QualityImprovementTicket | null> {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const [result] = await db.insert(qualityImprovementTickets).values(data);
+  const [ticket] = await db.select().from(qualityImprovementTickets).where(eq(qualityImprovementTickets.id, result.insertId));
+  return ticket;
+}
+
+export async function getOpenQualityTickets(): Promise<QualityImprovementTicket[]> {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return db.select().from(qualityImprovementTickets)
+    .where(eq(qualityImprovementTickets.status, 'open'))
+    .orderBy(desc(qualityImprovementTickets.priority));
+}
+
+export async function updateQualityTicket(id: number, updates: Partial<QualityImprovementTicket>): Promise<void> {
+  const db = await getDb();
+  if (!db) return;
+  
+  await db.update(qualityImprovementTickets).set(updates).where(eq(qualityImprovementTickets.id, id));
+}
+
+// Quality Metrics Snapshots
+export async function createQualityMetricsSnapshot(data: InsertQualityMetricsSnapshot): Promise<QualityMetricsSnapshot | null> {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const [result] = await db.insert(qualityMetricsSnapshots).values(data);
+  const [snapshot] = await db.select().from(qualityMetricsSnapshots).where(eq(qualityMetricsSnapshots.id, result.insertId));
+  return snapshot;
+}
+
+export async function getQualityMetricsHistory(limit: number = 30): Promise<QualityMetricsSnapshot[]> {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return db.select().from(qualityMetricsSnapshots)
+    .orderBy(desc(qualityMetricsSnapshots.snapshotDate))
+    .limit(limit);
+}

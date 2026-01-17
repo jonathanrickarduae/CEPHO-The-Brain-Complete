@@ -2422,3 +2422,1106 @@ export const revenueMetricsSnapshots = mysqlTable("revenue_metrics_snapshots", {
 
 export type RevenueMetricsSnapshot = typeof revenueMetricsSnapshots.$inferSelect;
 export type InsertRevenueMetricsSnapshot = typeof revenueMetricsSnapshots.$inferInsert;
+
+
+/**
+ * Customer Focus Group System
+ * 
+ * Provides virtual customer personas for idea validation, pricing feedback,
+ * and product development insights. Integrated into Innovation Flywheel Stage 3-4.
+ */
+
+/**
+ * Customer personas - diverse virtual customers for focus group feedback
+ */
+export const customerPersonas = mysqlTable("customer_personas", {
+  id: int("id").autoincrement().primaryKey(),
+  
+  // Basic demographics
+  name: varchar("name", { length: 100 }).notNull(),
+  age: int("age").notNull(),
+  gender: mysqlEnum("gender", ["male", "female", "non_binary", "prefer_not_to_say"]).notNull(),
+  nationality: varchar("nationality", { length: 100 }).notNull(),
+  ethnicity: varchar("ethnicity", { length: 100 }),
+  location: varchar("location", { length: 200 }).notNull(), // City, Country
+  
+  // Professional profile
+  occupation: varchar("occupation", { length: 200 }).notNull(),
+  industry: varchar("industry", { length: 100 }).notNull(),
+  jobLevel: mysqlEnum("jobLevel", ["entry", "mid", "senior", "executive", "founder", "retired", "student"]).notNull(),
+  companySize: mysqlEnum("companySize", ["solo", "startup", "small", "medium", "large", "enterprise"]),
+  annualIncome: mysqlEnum("annualIncome", [
+    "under_25k", "25k_50k", "50k_75k", "75k_100k", "100k_150k", 
+    "150k_250k", "250k_500k", "500k_1m", "over_1m"
+  ]),
+  
+  // Psychographics
+  personalityType: varchar("personalityType", { length: 50 }), // e.g., "INTJ", "Early Adopter", "Pragmatist"
+  buyingStyle: mysqlEnum("buyingStyle", ["impulsive", "researcher", "bargain_hunter", "brand_loyal", "quality_focused", "value_seeker"]),
+  techSavviness: mysqlEnum("techSavviness", ["low", "medium", "high", "expert"]),
+  riskTolerance: mysqlEnum("riskTolerance", ["conservative", "moderate", "aggressive"]),
+  
+  // Interests and pain points
+  interests: json("interests"), // Array of interest areas
+  painPoints: json("painPoints"), // Array of common frustrations
+  goals: json("goals"), // Array of personal/professional goals
+  
+  // Bio and context
+  bio: text("bio").notNull(), // Detailed background story
+  avatar: varchar("avatar", { length: 500 }), // Avatar image URL
+  
+  // Categorization
+  segment: varchar("segment", { length: 100 }), // e.g., "Tech Professional", "Healthcare Worker", "Small Business Owner"
+  tier: mysqlEnum("tier", ["core", "extended", "niche"]).default("core").notNull(), // For phased rollout
+  
+  // Metadata
+  isActive: boolean("isActive").default(true).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type CustomerPersona = typeof customerPersonas.$inferSelect;
+export type InsertCustomerPersona = typeof customerPersonas.$inferInsert;
+
+/**
+ * Customer surveys - templates for gathering feedback
+ */
+export const customerSurveys = mysqlTable("customer_surveys", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  
+  // Survey details
+  title: varchar("title", { length: 200 }).notNull(),
+  description: text("description"),
+  surveyType: mysqlEnum("surveyType", [
+    "idea_validation",
+    "pricing_feedback", 
+    "feature_priority",
+    "product_feedback",
+    "market_research",
+    "competitor_comparison",
+    "user_experience"
+  ]).notNull(),
+  
+  // Associated context
+  innovationIdeaId: int("innovationIdeaId"), // FK to innovation_ideas if validating an idea
+  ventureName: varchar("ventureName", { length: 200 }),
+  productName: varchar("productName", { length: 200 }),
+  
+  // Survey configuration
+  questions: json("questions").notNull(), // Array of question objects
+  targetSegments: json("targetSegments"), // Which customer segments to survey
+  sampleSize: int("sampleSize").default(25), // How many personas to survey
+  
+  // Status
+  status: mysqlEnum("status", ["draft", "active", "completed", "archived"]).default("draft").notNull(),
+  
+  // Metadata
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  completedAt: timestamp("completedAt"),
+});
+
+export type CustomerSurvey = typeof customerSurveys.$inferSelect;
+export type InsertCustomerSurvey = typeof customerSurveys.$inferInsert;
+
+/**
+ * Customer survey responses - AI generated responses from personas
+ */
+export const customerSurveyResponses = mysqlTable("customer_survey_responses", {
+  id: int("id").autoincrement().primaryKey(),
+  surveyId: int("surveyId").notNull(), // FK to customerSurveys
+  personaId: int("personaId").notNull(), // FK to customerPersonas
+  
+  // Response data
+  responses: json("responses").notNull(), // Array of answer objects matching questions
+  
+  // Sentiment and analysis
+  overallSentiment: mysqlEnum("overallSentiment", ["very_negative", "negative", "neutral", "positive", "very_positive"]),
+  willingnessToPay: mysqlEnum("willingnessToPay", ["definitely_not", "unlikely", "maybe", "likely", "definitely"]),
+  suggestedPricePoint: float("suggestedPricePoint"),
+  currency: varchar("currency", { length: 10 }).default("AED"),
+  
+  // Key insights extracted
+  keyInsights: json("keyInsights"), // Array of insight strings
+  concerns: json("concerns"), // Array of concern strings
+  suggestions: json("suggestions"), // Array of suggestion strings
+  
+  // Metadata
+  generatedAt: timestamp("generatedAt").defaultNow().notNull(),
+});
+
+export type CustomerSurveyResponse = typeof customerSurveyResponses.$inferSelect;
+export type InsertCustomerSurveyResponse = typeof customerSurveyResponses.$inferInsert;
+
+/**
+ * Customer feedback aggregations - summarized insights from surveys
+ */
+export const customerFeedbackAggregations = mysqlTable("customer_feedback_aggregations", {
+  id: int("id").autoincrement().primaryKey(),
+  surveyId: int("surveyId").notNull(), // FK to customerSurveys
+  userId: int("userId").notNull(),
+  
+  // Aggregate metrics
+  totalResponses: int("totalResponses").default(0),
+  averageSentimentScore: float("averageSentimentScore"), // -2 to +2
+  
+  // Willingness to pay distribution
+  wtpDistribution: json("wtpDistribution"), // { definitely_not: 5, unlikely: 10, ... }
+  averageSuggestedPrice: float("averageSuggestedPrice"),
+  priceRangeMin: float("priceRangeMin"),
+  priceRangeMax: float("priceRangeMax"),
+  
+  // Segment breakdowns
+  sentimentBySegment: json("sentimentBySegment"), // { "Tech Professional": 1.5, ... }
+  wtpBySegment: json("wtpBySegment"),
+  
+  // Top insights
+  topPositives: json("topPositives"), // Most common positive feedback
+  topConcerns: json("topConcerns"), // Most common concerns
+  topSuggestions: json("topSuggestions"), // Most common suggestions
+  
+  // Recommendations
+  goNoGoRecommendation: mysqlEnum("goNoGoRecommendation", ["strong_go", "go", "conditional", "no_go", "strong_no_go"]),
+  recommendedPricePoint: float("recommendedPricePoint"),
+  keyRecommendations: json("keyRecommendations"), // Array of recommendation strings
+  
+  // Metadata
+  aggregatedAt: timestamp("aggregatedAt").defaultNow().notNull(),
+});
+
+export type CustomerFeedbackAggregation = typeof customerFeedbackAggregations.$inferSelect;
+export type InsertCustomerFeedbackAggregation = typeof customerFeedbackAggregations.$inferInsert;
+
+/**
+ * Focus group sessions - structured feedback sessions with multiple personas
+ */
+export const focusGroupSessions = mysqlTable("focus_group_sessions", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  
+  // Session details
+  title: varchar("title", { length: 200 }).notNull(),
+  objective: text("objective").notNull(),
+  sessionType: mysqlEnum("sessionType", [
+    "concept_testing",
+    "pricing_research",
+    "feature_prioritization",
+    "competitive_analysis",
+    "brand_perception",
+    "user_journey_mapping"
+  ]).notNull(),
+  
+  // Associated context
+  innovationIdeaId: int("innovationIdeaId"),
+  ventureName: varchar("ventureName", { length: 200 }),
+  
+  // Participants
+  participantPersonaIds: json("participantPersonaIds").notNull(), // Array of persona IDs
+  participantCount: int("participantCount").default(0),
+  
+  // Discussion guide
+  discussionGuide: json("discussionGuide"), // Array of discussion topics/questions
+  
+  // Session output
+  transcript: text("transcript"), // Full session transcript
+  keyThemes: json("keyThemes"), // Extracted themes
+  consensusPoints: json("consensusPoints"), // Points of agreement
+  divergencePoints: json("divergencePoints"), // Points of disagreement
+  
+  // Status
+  status: mysqlEnum("status", ["planned", "in_progress", "completed", "analyzed"]).default("planned").notNull(),
+  
+  // Metadata
+  scheduledFor: timestamp("scheduledFor"),
+  completedAt: timestamp("completedAt"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type FocusGroupSession = typeof focusGroupSessions.$inferSelect;
+export type InsertFocusGroupSession = typeof focusGroupSessions.$inferInsert;
+
+/**
+ * Innovation validation checkpoints - tracks customer validation in the flywheel
+ */
+export const innovationValidationCheckpoints = mysqlTable("innovation_validation_checkpoints", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  innovationIdeaId: int("innovationIdeaId").notNull(), // FK to innovation_ideas
+  
+  // Flywheel stage
+  flywheelStage: mysqlEnum("flywheelStage", [
+    "capture",
+    "assess", 
+    "validate",
+    "develop",
+    "commercialize"
+  ]).notNull(),
+  
+  // Validation type
+  validationType: mysqlEnum("validationType", [
+    "customer_survey",
+    "focus_group",
+    "pricing_test",
+    "concept_test",
+    "prototype_feedback"
+  ]).notNull(),
+  
+  // Associated validation
+  surveyId: int("surveyId"), // FK to customerSurveys
+  focusGroupId: int("focusGroupId"), // FK to focusGroupSessions
+  
+  // Validation results
+  validationScore: float("validationScore"), // 0-100
+  passedValidation: boolean("passedValidation"),
+  
+  // Decision
+  decision: mysqlEnum("decision", ["proceed", "pivot", "iterate", "abandon", "pending"]).default("pending").notNull(),
+  decisionRationale: text("decisionRationale"),
+  
+  // Sign-offs
+  smeReviewCompleted: boolean("smeReviewCompleted").default(false),
+  smeReviewNotes: text("smeReviewNotes"),
+  chiefOfStaffApproved: boolean("chiefOfStaffApproved").default(false),
+  chiefOfStaffNotes: text("chiefOfStaffNotes"),
+  
+  // Metadata
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  completedAt: timestamp("completedAt"),
+});
+
+export type InnovationValidationCheckpoint = typeof innovationValidationCheckpoints.$inferSelect;
+export type InsertInnovationValidationCheckpoint = typeof innovationValidationCheckpoints.$inferInsert;
+
+
+/**
+ * Individual SME Assessment System
+ * 
+ * Enables each SME expert to provide individual scores across all 20 KPI categories,
+ * with outlier detection and Chief of Staff review for discrepancies.
+ */
+
+/**
+ * KPI categories - the 20 benchmark categories for platform assessment
+ */
+export const kpiCategories = mysqlTable("kpi_categories", {
+  id: int("id").autoincrement().primaryKey(),
+  
+  // Category identification
+  categoryNumber: int("categoryNumber").notNull().unique(), // 1-20
+  name: varchar("name", { length: 200 }).notNull(),
+  description: text("description").notNull(),
+  
+  // Scoring guidance
+  scoringCriteria: json("scoringCriteria"), // What constitutes each score level
+  excellentThreshold: int("excellentThreshold").default(90), // 90%+
+  goodThreshold: int("goodThreshold").default(75), // 75-89%
+  adequateThreshold: int("adequateThreshold").default(60), // 60-74%
+  developingThreshold: int("developingThreshold").default(40), // 40-59%
+  
+  // Which panels assess this category
+  assessingPanels: json("assessingPanels"), // Array of panel names
+  
+  // Weighting
+  weight: float("weight").default(1.0), // For weighted averages
+  priority: mysqlEnum("priority", ["critical", "high", "medium", "maintain"]).default("medium"),
+  
+  // Metadata
+  isActive: boolean("isActive").default(true).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type KpiCategory = typeof kpiCategories.$inferSelect;
+export type InsertKpiCategory = typeof kpiCategories.$inferInsert;
+
+/**
+ * Individual SME assessments - each expert's individual scores
+ */
+export const smeIndividualAssessments = mysqlTable("sme_individual_assessments", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  
+  // Assessment period
+  assessmentPeriod: varchar("assessmentPeriod", { length: 20 }).notNull(), // e.g., "2026-01", "2026-Q1"
+  assessmentDate: timestamp("assessmentDate").notNull(),
+  
+  // Expert identification
+  expertId: varchar("expertId", { length: 100 }).notNull(), // Reference to AI expert
+  expertName: varchar("expertName", { length: 200 }).notNull(),
+  expertPanel: varchar("expertPanel", { length: 100 }).notNull(), // e.g., "Strategic Advisory", "Technology", "UX"
+  expertSpecialization: varchar("expertSpecialization", { length: 200 }),
+  
+  // Category being assessed
+  categoryId: int("categoryId").notNull(), // FK to kpiCategories
+  categoryNumber: int("categoryNumber").notNull(), // 1-20
+  categoryName: varchar("categoryName", { length: 200 }).notNull(),
+  
+  // Individual score
+  score: int("score").notNull(), // 0-100 percentage
+  scoreOutOf10: float("scoreOutOf10"), // Converted to 10-point scale
+  
+  // Rationale and evidence
+  rationale: text("rationale").notNull(), // Why this score
+  strengths: json("strengths"), // Array of observed strengths
+  weaknesses: json("weaknesses"), // Array of observed weaknesses
+  evidence: json("evidence"), // Specific examples supporting the score
+  recommendations: json("recommendations"), // Suggestions for improvement
+  
+  // Confidence
+  confidenceLevel: mysqlEnum("confidenceLevel", ["low", "medium", "high"]).default("medium"),
+  
+  // Metadata
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type SmeIndividualAssessment = typeof smeIndividualAssessments.$inferSelect;
+export type InsertSmeIndividualAssessment = typeof smeIndividualAssessments.$inferInsert;
+
+/**
+ * Assessment outliers - flagged discrepancies for review
+ */
+export const assessmentOutliers = mysqlTable("assessment_outliers", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  
+  // Assessment reference
+  assessmentId: int("assessmentId").notNull(), // FK to smeIndividualAssessments
+  assessmentPeriod: varchar("assessmentPeriod", { length: 20 }).notNull(),
+  
+  // Category
+  categoryId: int("categoryId").notNull(),
+  categoryNumber: int("categoryNumber").notNull(),
+  categoryName: varchar("categoryName", { length: 200 }).notNull(),
+  
+  // Expert who gave outlier score
+  expertId: varchar("expertId", { length: 100 }).notNull(),
+  expertName: varchar("expertName", { length: 200 }).notNull(),
+  expertPanel: varchar("expertPanel", { length: 100 }).notNull(),
+  
+  // Outlier details
+  expertScore: int("expertScore").notNull(),
+  panelAverage: float("panelAverage").notNull(),
+  overallAverage: float("overallAverage").notNull(),
+  deviation: float("deviation").notNull(), // How far from average
+  deviationPercentage: float("deviationPercentage").notNull(),
+  
+  // Classification
+  outlierType: mysqlEnum("outlierType", ["high", "low"]).notNull(), // Above or below average
+  severity: mysqlEnum("severity", ["minor", "moderate", "significant", "extreme"]).notNull(),
+  
+  // Review status
+  reviewStatus: mysqlEnum("reviewStatus", ["pending", "under_review", "resolved", "accepted"]).default("pending").notNull(),
+  
+  // Chief of Staff review
+  chiefOfStaffReviewed: boolean("chiefOfStaffReviewed").default(false),
+  chiefOfStaffNotes: text("chiefOfStaffNotes"),
+  reviewedAt: timestamp("reviewedAt"),
+  
+  // One-on-one conversation
+  conversationRequested: boolean("conversationRequested").default(false),
+  conversationCompleted: boolean("conversationCompleted").default(false),
+  conversationNotes: text("conversationNotes"),
+  conversationOutcome: text("conversationOutcome"),
+  
+  // Resolution
+  resolution: mysqlEnum("resolution", [
+    "score_adjusted",
+    "score_validated",
+    "insight_captured",
+    "system_improvement_identified",
+    "dismissed"
+  ]),
+  resolutionNotes: text("resolutionNotes"),
+  
+  // Metadata
+  flaggedAt: timestamp("flaggedAt").defaultNow().notNull(),
+  resolvedAt: timestamp("resolvedAt"),
+});
+
+export type AssessmentOutlier = typeof assessmentOutliers.$inferSelect;
+export type InsertAssessmentOutlier = typeof assessmentOutliers.$inferInsert;
+
+/**
+ * Panel assessment aggregations - aggregated scores per panel
+ */
+export const panelAssessmentAggregations = mysqlTable("panel_assessment_aggregations", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  
+  // Assessment period
+  assessmentPeriod: varchar("assessmentPeriod", { length: 20 }).notNull(),
+  
+  // Panel
+  panelName: varchar("panelName", { length: 100 }).notNull(),
+  
+  // Category
+  categoryId: int("categoryId").notNull(),
+  categoryNumber: int("categoryNumber").notNull(),
+  categoryName: varchar("categoryName", { length: 200 }).notNull(),
+  
+  // Aggregated scores
+  averageScore: float("averageScore").notNull(),
+  medianScore: float("medianScore"),
+  minScore: int("minScore"),
+  maxScore: int("maxScore"),
+  standardDeviation: float("standardDeviation"),
+  
+  // Individual scores breakdown
+  individualScores: json("individualScores"), // Array of { expertId, expertName, score }
+  expertCount: int("expertCount").default(0),
+  
+  // Consensus level
+  consensusLevel: mysqlEnum("consensusLevel", ["strong", "moderate", "weak", "divided"]),
+  
+  // Metadata
+  aggregatedAt: timestamp("aggregatedAt").defaultNow().notNull(),
+});
+
+export type PanelAssessmentAggregation = typeof panelAssessmentAggregations.$inferSelect;
+export type InsertPanelAssessmentAggregation = typeof panelAssessmentAggregations.$inferInsert;
+
+/**
+ * Overall KPI snapshots - point-in-time platform scores
+ */
+export const kpiSnapshots = mysqlTable("kpi_snapshots", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  
+  // Snapshot period
+  snapshotPeriod: varchar("snapshotPeriod", { length: 20 }).notNull(),
+  snapshotDate: timestamp("snapshotDate").notNull(),
+  
+  // Overall scores
+  overallScore: float("overallScore").notNull(),
+  previousScore: float("previousScore"),
+  scoreChange: float("scoreChange"),
+  
+  // Category breakdown
+  categoryScores: json("categoryScores").notNull(), // Array of { categoryNumber, name, score, change }
+  
+  // Distribution
+  excellentCount: int("excellentCount").default(0), // 90%+
+  goodCount: int("goodCount").default(0), // 75-89%
+  adequateCount: int("adequateCount").default(0), // 60-74%
+  developingCount: int("developingCount").default(0), // 40-59%
+  criticalCount: int("criticalCount").default(0), // Below 40%
+  
+  // Key metrics
+  highestCategory: varchar("highestCategory", { length: 200 }),
+  highestScore: int("highestScore"),
+  lowestCategory: varchar("lowestCategory", { length: 200 }),
+  lowestScore: int("lowestScore"),
+  
+  // Targets
+  targetScore: float("targetScore"),
+  gapToTarget: float("gapToTarget"),
+  
+  // Expert participation
+  totalExpertsAssessed: int("totalExpertsAssessed").default(0),
+  panelsParticipated: json("panelsParticipated"), // Array of panel names
+  
+  // Outliers summary
+  outliersIdentified: int("outliersIdentified").default(0),
+  outliersResolved: int("outliersResolved").default(0),
+  
+  // Metadata
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type KpiSnapshot = typeof kpiSnapshots.$inferSelect;
+export type InsertKpiSnapshot = typeof kpiSnapshots.$inferInsert;
+
+/**
+ * Expert conversation logs - one-on-one discussions about scores
+ */
+export const expertConversationLogs = mysqlTable("expert_conversation_logs", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  
+  // Context
+  outlierId: int("outlierId"), // FK to assessmentOutliers if from outlier
+  assessmentId: int("assessmentId"), // FK to smeIndividualAssessments
+  
+  // Expert
+  expertId: varchar("expertId", { length: 100 }).notNull(),
+  expertName: varchar("expertName", { length: 200 }).notNull(),
+  expertPanel: varchar("expertPanel", { length: 100 }).notNull(),
+  
+  // Category discussed
+  categoryNumber: int("categoryNumber"),
+  categoryName: varchar("categoryName", { length: 200 }),
+  
+  // Conversation
+  conversationType: mysqlEnum("conversationType", [
+    "outlier_investigation",
+    "score_clarification",
+    "deep_dive",
+    "recommendation_discussion",
+    "general_feedback"
+  ]).notNull(),
+  
+  // Content
+  messages: json("messages").notNull(), // Array of { role, content, timestamp }
+  
+  // Outcomes
+  keyInsights: json("keyInsights"), // Array of insights captured
+  actionItems: json("actionItems"), // Array of actions to take
+  scoreAdjustment: int("scoreAdjustment"), // If score was adjusted
+  
+  // Status
+  status: mysqlEnum("status", ["in_progress", "completed", "follow_up_needed"]).default("in_progress").notNull(),
+  
+  // Metadata
+  startedAt: timestamp("startedAt").defaultNow().notNull(),
+  completedAt: timestamp("completedAt"),
+});
+
+export type ExpertConversationLog = typeof expertConversationLogs.$inferSelect;
+export type InsertExpertConversationLog = typeof expertConversationLogs.$inferInsert;
+
+
+/**
+ * Central Insights Repository
+ * 
+ * Captures and stores all insights from customer feedback, SME assessments,
+ * expert conversations, and external research. Creates a searchable knowledge
+ * base that builds over time and prevents duplicate research.
+ */
+
+/**
+ * Insights repository - central store for all captured insights
+ */
+export const insightsRepository = mysqlTable("insights_repository", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  
+  // Insight content
+  title: varchar("title", { length: 300 }).notNull(),
+  summary: text("summary").notNull(),
+  fullContent: text("fullContent"),
+  
+  // Source tracking
+  sourceType: mysqlEnum("sourceType", [
+    "customer_survey",
+    "focus_group",
+    "sme_assessment",
+    "expert_conversation",
+    "external_research",
+    "market_data",
+    "competitor_analysis",
+    "user_observation",
+    "manual_entry"
+  ]).notNull(),
+  sourceId: int("sourceId"), // FK to source table based on sourceType
+  sourceReference: varchar("sourceReference", { length: 500 }), // URL or document reference
+  sourceName: varchar("sourceName", { length: 300 }), // Human readable source name
+  
+  // Categorization
+  category: mysqlEnum("category", [
+    "customer_need",
+    "pricing_insight",
+    "feature_request",
+    "market_trend",
+    "competitive_intelligence",
+    "user_behavior",
+    "pain_point",
+    "opportunity",
+    "risk",
+    "validation_result",
+    "technical_feedback",
+    "ux_feedback",
+    "business_model",
+    "regulatory",
+    "other"
+  ]).notNull(),
+  
+  // Tagging
+  tags: json("tags"), // Array of tag strings
+  ventures: json("ventures"), // Array of venture names this applies to
+  products: json("products"), // Array of product names
+  
+  // Relevance
+  relevanceScore: float("relevanceScore").default(0.5), // 0-1 how relevant/important
+  confidenceLevel: mysqlEnum("confidenceLevel", ["low", "medium", "high", "verified"]).default("medium"),
+  
+  // Validation
+  validatedBy: varchar("validatedBy", { length: 200 }), // Who validated this insight
+  validatedAt: timestamp("validatedAt"),
+  
+  // Usage tracking
+  timesReferenced: int("timesReferenced").default(0),
+  lastReferencedAt: timestamp("lastReferencedAt"),
+  
+  // Relationships
+  relatedInsightIds: json("relatedInsightIds"), // Array of related insight IDs
+  supersededBy: int("supersededBy"), // If this insight was updated/replaced
+  
+  // Status
+  status: mysqlEnum("status", ["active", "archived", "superseded", "disputed"]).default("active").notNull(),
+  
+  // Metadata
+  capturedAt: timestamp("capturedAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type InsightRepository = typeof insightsRepository.$inferSelect;
+export type InsertInsightRepository = typeof insightsRepository.$inferInsert;
+
+/**
+ * External research references - imported external sources
+ */
+export const externalResearchReferences = mysqlTable("external_research_references", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  
+  // Reference details
+  title: varchar("title", { length: 500 }).notNull(),
+  authors: json("authors"), // Array of author names
+  publicationDate: timestamp("publicationDate"),
+  
+  // Source
+  sourceType: mysqlEnum("sourceType", [
+    "academic_paper",
+    "industry_report",
+    "news_article",
+    "blog_post",
+    "government_data",
+    "market_research",
+    "competitor_website",
+    "social_media",
+    "podcast",
+    "video",
+    "book",
+    "other"
+  ]).notNull(),
+  url: varchar("url", { length: 1000 }),
+  publisher: varchar("publisher", { length: 300 }),
+  
+  // Content
+  abstract: text("abstract"),
+  keyFindings: json("keyFindings"), // Array of key finding strings
+  relevantQuotes: json("relevantQuotes"), // Array of quote objects
+  
+  // Categorization
+  topics: json("topics"), // Array of topic strings
+  ventures: json("ventures"), // Which ventures this relates to
+  
+  // Quality assessment
+  credibilityScore: float("credibilityScore").default(0.5), // 0-1
+  relevanceScore: float("relevanceScore").default(0.5), // 0-1
+  
+  // Linked insights
+  linkedInsightIds: json("linkedInsightIds"), // Insights derived from this
+  
+  // Status
+  status: mysqlEnum("status", ["active", "archived", "outdated"]).default("active").notNull(),
+  
+  // Metadata
+  importedAt: timestamp("importedAt").defaultNow().notNull(),
+  lastReviewedAt: timestamp("lastReviewedAt"),
+});
+
+export type ExternalResearchReference = typeof externalResearchReferences.$inferSelect;
+export type InsertExternalResearchReference = typeof externalResearchReferences.$inferInsert;
+
+/**
+ * Prior research checks - log of what was checked before new research
+ */
+export const priorResearchChecks = mysqlTable("prior_research_checks", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  
+  // What triggered the check
+  triggerType: mysqlEnum("triggerType", [
+    "new_survey",
+    "new_focus_group",
+    "new_assessment",
+    "new_idea_validation",
+    "manual_search"
+  ]).notNull(),
+  triggerId: int("triggerId"), // FK to the triggering entity
+  
+  // Search parameters
+  searchQuery: text("searchQuery"),
+  searchCategories: json("searchCategories"),
+  searchVentures: json("searchVentures"),
+  searchTags: json("searchTags"),
+  
+  // Results
+  insightsFound: int("insightsFound").default(0),
+  relevantInsightIds: json("relevantInsightIds"), // Array of matching insight IDs
+  externalRefsFound: int("externalRefsFound").default(0),
+  relevantExternalIds: json("relevantExternalIds"), // Array of matching external ref IDs
+  
+  // Summary
+  summaryGenerated: text("summaryGenerated"), // AI generated summary of prior knowledge
+  gapsIdentified: json("gapsIdentified"), // What we don't know yet
+  
+  // Action taken
+  actionTaken: mysqlEnum("actionTaken", [
+    "proceeded_with_new_research",
+    "used_existing_insights",
+    "modified_research_scope",
+    "cancelled_duplicate"
+  ]),
+  actionRationale: text("actionRationale"),
+  
+  // Metadata
+  checkedAt: timestamp("checkedAt").defaultNow().notNull(),
+});
+
+export type PriorResearchCheck = typeof priorResearchChecks.$inferSelect;
+export type InsertPriorResearchCheck = typeof priorResearchChecks.$inferInsert;
+
+/**
+ * Insight usage log - tracks when insights are referenced
+ */
+export const insightUsageLog = mysqlTable("insight_usage_log", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  insightId: int("insightId").notNull(), // FK to insightsRepository
+  
+  // Usage context
+  usageType: mysqlEnum("usageType", [
+    "decision_support",
+    "survey_design",
+    "validation_reference",
+    "report_citation",
+    "strategy_input",
+    "presentation",
+    "conversation_reference",
+    "search_result"
+  ]).notNull(),
+  usageContext: varchar("usageContext", { length: 300 }), // Where it was used
+  
+  // Related entities
+  relatedEntityType: varchar("relatedEntityType", { length: 100 }),
+  relatedEntityId: int("relatedEntityId"),
+  
+  // Metadata
+  usedAt: timestamp("usedAt").defaultNow().notNull(),
+});
+
+export type InsightUsageLog = typeof insightUsageLog.$inferSelect;
+export type InsertInsightUsageLog = typeof insightUsageLog.$inferInsert;
+
+/**
+ * Knowledge topics - taxonomy for organizing insights
+ */
+export const knowledgeTopics = mysqlTable("knowledge_topics", {
+  id: int("id").autoincrement().primaryKey(),
+  
+  // Topic hierarchy
+  name: varchar("name", { length: 200 }).notNull(),
+  parentTopicId: int("parentTopicId"), // For hierarchical topics
+  path: varchar("path", { length: 500 }), // Full path like "Market/Healthcare/Telehealth"
+  
+  // Description
+  description: text("description"),
+  
+  // Statistics
+  insightCount: int("insightCount").default(0),
+  lastInsightAt: timestamp("lastInsightAt"),
+  
+  // Status
+  isActive: boolean("isActive").default(true).notNull(),
+  
+  // Metadata
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type KnowledgeTopic = typeof knowledgeTopics.$inferSelect;
+export type InsertKnowledgeTopic = typeof knowledgeTopics.$inferInsert;
+
+
+/**
+ * User Behavior Analytics and Proactive Coaching
+ * 
+ * Tracks how the user interacts with the system to provide
+ * proactive recommendations for improving effectiveness.
+ */
+
+/**
+ * User activity tracking - captures navigation and feature usage
+ */
+export const userActivityTracking = mysqlTable("user_activity_tracking", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  
+  // Activity details
+  activityType: mysqlEnum("activityType", [
+    "page_view",
+    "feature_use",
+    "button_click",
+    "form_submit",
+    "search",
+    "report_generate",
+    "conversation",
+    "file_access",
+    "integration_use"
+  ]).notNull(),
+  
+  // Location
+  pagePath: varchar("pagePath", { length: 500 }),
+  featureName: varchar("featureName", { length: 200 }),
+  componentId: varchar("componentId", { length: 200 }),
+  
+  // Context
+  sessionId: varchar("sessionId", { length: 100 }),
+  previousPage: varchar("previousPage", { length: 500 }),
+  
+  // Timing
+  duration: int("duration"), // Time spent in milliseconds
+  
+  // Additional data
+  metadata: json("metadata"), // Any additional context
+  
+  // Timestamp
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type UserActivityTracking = typeof userActivityTracking.$inferSelect;
+export type InsertUserActivityTracking = typeof userActivityTracking.$inferInsert;
+
+/**
+ * Workflow patterns - detected sequences of actions
+ */
+export const workflowPatterns = mysqlTable("workflow_patterns", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  
+  // Pattern identification
+  patternName: varchar("patternName", { length: 200 }).notNull(),
+  patternType: mysqlEnum("patternType", [
+    "repetitive_task",
+    "inefficient_flow",
+    "feature_discovery",
+    "time_sink",
+    "successful_workflow"
+  ]).notNull(),
+  
+  // Pattern details
+  actionSequence: json("actionSequence").notNull(), // Array of actions in order
+  frequency: int("frequency").default(1), // How often this pattern occurs
+  averageDuration: int("averageDuration"), // Average time to complete
+  
+  // Analysis
+  efficiencyScore: float("efficiencyScore"), // 0-1, how efficient this workflow is
+  improvementPotential: float("improvementPotential"), // 0-1, how much could be improved
+  
+  // Status
+  isAddressed: boolean("isAddressed").default(false),
+  
+  // Metadata
+  firstDetectedAt: timestamp("firstDetectedAt").defaultNow().notNull(),
+  lastOccurredAt: timestamp("lastOccurredAt").defaultNow().notNull(),
+});
+
+export type WorkflowPattern = typeof workflowPatterns.$inferSelect;
+export type InsertWorkflowPattern = typeof workflowPatterns.$inferInsert;
+
+/**
+ * Proactive recommendations - suggestions from Chief of Staff
+ */
+export const proactiveRecommendations = mysqlTable("proactive_recommendations", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  
+  // Recommendation details
+  title: varchar("title", { length: 300 }).notNull(),
+  description: text("description").notNull(),
+  
+  // Type and category
+  recommendationType: mysqlEnum("recommendationType", [
+    "workflow_improvement",
+    "feature_suggestion",
+    "integration_recommendation",
+    "automation_opportunity",
+    "efficiency_tip",
+    "learning_resource"
+  ]).notNull(),
+  
+  // Source
+  triggeredBy: mysqlEnum("triggeredBy", [
+    "usage_pattern",
+    "time_analysis",
+    "error_detection",
+    "underutilization",
+    "manual_observation"
+  ]).notNull(),
+  relatedPatternId: int("relatedPatternId"), // FK to workflowPatterns
+  
+  // Priority
+  priority: mysqlEnum("priority", ["low", "medium", "high", "urgent"]).default("medium"),
+  estimatedTimeSaved: int("estimatedTimeSaved"), // Minutes per week
+  
+  // Action
+  actionUrl: varchar("actionUrl", { length: 500 }), // Where to go to implement
+  actionSteps: json("actionSteps"), // Array of steps to take
+  
+  // Status
+  status: mysqlEnum("status", ["pending", "viewed", "accepted", "rejected", "implemented"]).default("pending").notNull(),
+  userResponse: text("userResponse"), // Why they accepted/rejected
+  
+  // Metadata
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  viewedAt: timestamp("viewedAt"),
+  respondedAt: timestamp("respondedAt"),
+});
+
+export type ProactiveRecommendation = typeof proactiveRecommendations.$inferSelect;
+export type InsertProactiveRecommendation = typeof proactiveRecommendations.$inferInsert;
+
+/**
+ * Report Quality Scoring and Learning System
+ * 
+ * Allows user to rate outputs and captures feedback
+ * to improve future generation quality.
+ */
+
+/**
+ * Output quality scores - user ratings on generated content
+ */
+export const outputQualityScores = mysqlTable("output_quality_scores", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  
+  // What was scored
+  outputType: mysqlEnum("outputType", [
+    "report",
+    "document",
+    "analysis",
+    "presentation",
+    "email_draft",
+    "summary",
+    "recommendation",
+    "visualization",
+    "other"
+  ]).notNull(),
+  outputId: varchar("outputId", { length: 100 }), // Reference to the specific output
+  outputTitle: varchar("outputTitle", { length: 300 }),
+  
+  // Score
+  score: int("score").notNull(), // 1-10
+  
+  // Feedback for low scores (1-4)
+  issueCategory: mysqlEnum("issueCategory", [
+    "template_issue",
+    "formatting_problem",
+    "design_flaw",
+    "content_inaccuracy",
+    "missing_information",
+    "wrong_tone",
+    "too_long",
+    "too_short",
+    "unclear",
+    "other"
+  ]),
+  issueDescription: text("issueDescription"),
+  
+  // Responsible area
+  responsibleArea: mysqlEnum("responsibleArea", [
+    "ai_generation",
+    "template_design",
+    "data_quality",
+    "user_input",
+    "system_bug",
+    "unknown"
+  ]),
+  
+  // Follow up
+  requiresAction: boolean("requiresAction").default(false),
+  actionTaken: text("actionTaken"),
+  actionTakenAt: timestamp("actionTakenAt"),
+  
+  // Metadata
+  scoredAt: timestamp("scoredAt").defaultNow().notNull(),
+});
+
+export type OutputQualityScore = typeof outputQualityScores.$inferSelect;
+export type InsertOutputQualityScore = typeof outputQualityScores.$inferInsert;
+
+/**
+ * Quality improvement tickets - issues to be fixed
+ */
+export const qualityImprovementTickets = mysqlTable("quality_improvement_tickets", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  
+  // Ticket details
+  title: varchar("title", { length: 300 }).notNull(),
+  description: text("description").notNull(),
+  
+  // Category
+  category: mysqlEnum("category", [
+    "template_fix",
+    "formatting_update",
+    "design_improvement",
+    "content_accuracy",
+    "feature_enhancement",
+    "bug_fix"
+  ]).notNull(),
+  
+  // Related scores
+  relatedScoreIds: json("relatedScoreIds"), // Array of outputQualityScores IDs
+  occurrenceCount: int("occurrenceCount").default(1), // How many times this issue occurred
+  
+  // Priority
+  priority: mysqlEnum("priority", ["low", "medium", "high", "critical"]).default("medium"),
+  impactScore: float("impactScore"), // Calculated from frequency and severity
+  
+  // Assignment
+  assignedTo: varchar("assignedTo", { length: 200 }), // Team or person responsible
+  
+  // Status
+  status: mysqlEnum("status", ["open", "in_progress", "resolved", "wont_fix"]).default("open").notNull(),
+  resolution: text("resolution"),
+  
+  // Metadata
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  resolvedAt: timestamp("resolvedAt"),
+});
+
+export type QualityImprovementTicket = typeof qualityImprovementTickets.$inferSelect;
+export type InsertQualityImprovementTicket = typeof qualityImprovementTickets.$inferInsert;
+
+/**
+ * Quality metrics snapshots - track improvement over time
+ */
+export const qualityMetricsSnapshots = mysqlTable("quality_metrics_snapshots", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  
+  // Period
+  snapshotDate: timestamp("snapshotDate").notNull(),
+  periodType: mysqlEnum("periodType", ["daily", "weekly", "monthly"]).notNull(),
+  
+  // Overall metrics
+  totalOutputs: int("totalOutputs").default(0),
+  scoredOutputs: int("scoredOutputs").default(0),
+  averageScore: float("averageScore"),
+  
+  // Distribution
+  scoreDistribution: json("scoreDistribution"), // { "1": 2, "2": 5, ... "10": 20 }
+  
+  // By category
+  scoresByOutputType: json("scoresByOutputType"), // { "report": 7.5, "document": 8.2 }
+  scoresByIssueCategory: json("scoresByIssueCategory"), // Count of issues by category
+  
+  // Trends
+  previousAverageScore: float("previousAverageScore"),
+  scoreChange: float("scoreChange"),
+  
+  // Issues
+  openTickets: int("openTickets").default(0),
+  resolvedTickets: int("resolvedTickets").default(0),
+  
+  // Metadata
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type QualityMetricsSnapshot = typeof qualityMetricsSnapshots.$inferSelect;
+export type InsertQualityMetricsSnapshot = typeof qualityMetricsSnapshots.$inferInsert;
