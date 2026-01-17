@@ -318,8 +318,7 @@ export default function MorningSignal() {
 
   if (authLoading) {
     return (
-      <BrainLayout>
-        <div className="p-6 max-w-6xl mx-auto space-y-6">
+      <div className="p-6 max-w-6xl mx-auto space-y-6">
           {/* Header skeleton */}
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div className="space-y-2">
@@ -356,13 +355,11 @@ export default function MorningSignal() {
               </div>
             </div>
           </div>
-        </div>
-      </BrainLayout>
+      </div>
     );
   }
 
   return (
-    <BrainLayout>
       <div className="p-6 max-w-6xl mx-auto space-y-6">
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
@@ -756,7 +753,6 @@ export default function MorningSignal() {
             </div>
           </CardContent>
         </Card>
-      </div>
-    </BrainLayout>
+    </div>
   );
 }

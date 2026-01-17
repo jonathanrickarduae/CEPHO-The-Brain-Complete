@@ -146,8 +146,8 @@ export function MoodTimeline({ days = 7, className }: MoodTimelineProps) {
         {/* Bar Chart */}
         <div className="flex items-end gap-2 h-32">
           {groupedByDate.slice(-7).map((day, i) => {
-            const height = (day.average / 10) * 100;
-            const colorClass = MOOD_COLORS[Math.round(day.average) as keyof typeof MOOD_COLORS] || 'bg-gray-500';
+            const height = day.average; // Already on 0-100 scale
+            const colorClass = getMoodColor(day.average);
             
             return (
               <div key={i} className="flex-1 flex flex-col items-center gap-1">
@@ -157,7 +157,15 @@ export function MoodTimeline({ days = 7, className }: MoodTimelineProps) {
                   title={`${day.date}: ${day.average.toFixed(1)}`}
                 />
                 <span className="text-[10px] text-muted-foreground">
-                  {new Date(day.date).toLocaleDateString(undefined, { weekday: 'short' })}
+                  {(() => {
+                    // Parse DD/MM/YYYY format
+                    const parts = day.date.split('/');
+                    if (parts.length === 3) {
+                      const d = new Date(parseInt(parts[2]), parseInt(parts[1]) - 1, parseInt(parts[0]));
+                      return d.toLocaleDateString(undefined, { weekday: 'short' });
+                    }
+                    return day.date;
+                  })()}
                 </span>
               </div>
             );

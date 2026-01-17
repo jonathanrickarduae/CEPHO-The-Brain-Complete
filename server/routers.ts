@@ -105,7 +105,7 @@ export const appRouter = router({
     // Create a new mood entry
     create: protectedProcedure
       .input(z.object({
-        score: z.number().min(1).max(10),
+        score: z.number().min(0).max(100),
         timeOfDay: z.enum(['morning', 'afternoon', 'evening']),
         note: z.string().optional(),
       }))
@@ -2025,7 +2025,7 @@ You are not a yes-man. You are a trusted advisor who respects the principal enou
     submitCoSReview: protectedProcedure
       .input(z.object({
         taskId: z.number(),
-        score: z.number().min(1).max(10),
+        score: z.number().min(0).max(100),
         feedback: z.string().optional(),
         status: z.enum(['approved', 'rejected', 'needs_revision']),
         improvements: z.array(z.string()).optional(),
@@ -2056,7 +2056,7 @@ You are not a yes-man. You are a trusted advisor who respects the principal enou
     submitSecondaryReview: protectedProcedure
       .input(z.object({
         taskId: z.number(),
-        score: z.number().min(1).max(10),
+        score: z.number().min(0).max(100),
         feedback: z.string().optional(),
         status: z.enum(['approved', 'rejected', 'needs_revision']),
         improvements: z.array(z.string()).optional(),
@@ -3289,7 +3289,7 @@ ${transcript}
           estimatedTime: z.string().optional(),
           notes: z.string().optional(),
         })),
-        moodScore: z.number().min(1).max(10).optional(),
+        moodScore: z.number().min(0).max(100).optional(),
         wentWellNotes: z.string().optional(),
         didntGoWellNotes: z.string().optional(),
       }))

@@ -3,8 +3,8 @@ import { VoiceNotepad } from '../components/VoiceNotepad';
 
 export default function VoiceNotepadPage() {
   return (
-    <BrainLayout>
+    
       <VoiceNotepad />
-    </BrainLayout>
+    
   );
 }

@@ -180,7 +180,7 @@ export default function NexusDashboard() {
             </div>
           </div>
           <h1 className="text-xl sm:text-2xl md:text-3xl font-display font-bold tracking-tight text-white mt-2">
-            GETTING YOU TO A 10
+            GETTING YOU TO 100
           </h1>
           <p className="text-sm sm:text-base text-white/70 mt-1">Your headspace, reclaimed</p>
         </div>

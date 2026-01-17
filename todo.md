@@ -4829,10 +4829,10 @@ A "short and sharp" assessment process for real-life problems or scenarios requi
 - [ ] Document report generation process in playbook
 
 ### Report Fixes (Critical)
-- [ ] Fix white text on dark background score cells for readability
-- [ ] Ensure all scores display on 0-100 scale consistently
-- [ ] Make SME expert faces larger and more prominent
-- [ ] Add individual SME scores breakdown per category
+- [x] Fix white text on dark background score cells for readability
+- [x] Ensure all scores display on 0-100 scale consistently
+- [x] Make SME expert faces larger and more prominent
+- [x] Add individual SME scores breakdown per category
 - [ ] Add lazy loading for SME avatar images
 - [ ] Use thumbnail sizes for faster loading
 - [ ] Add progressive image loading with placeholders
@@ -4941,3 +4941,24 @@ The 100% Optimization Framework requires strong performance across ALL fronts. C
 - [ ] Ensure Boundless is treated as a project entry, not special case
 - [x] Clean up any Boundless-specific UI that should be generic
 - [ ] Update Library to show Boundless as one project among many
+
+## App Linking & Go-Live Preparation (17 Jan 2026)
+- [x] Audit all routes and navigation in App.tsx
+- [x] Verify DashboardLayout sidebar links work correctly
+- [x] Connect all page components to proper routes
+- [ ] Ensure data flows between components are working
+- [ ] Test authentication flow (login/logout)
+- [ ] Verify all tRPC endpoints are connected
+- [ ] Test critical user journeys
+- [ ] Fix any broken links or missing components
+- [ ] Ensure consistent styling across all pages
+- [ ] Verify mobile responsiveness
+
+## Sprint Fixes Completed (17 Jan 2026)
+- [x] Fix duplicate sidebar in DocumentLibrary, MorningSignal, IntegrationsPage, PodcastPage, VoiceNotepadPage, WellnessPage
+- [x] Fix mood score validation from 1-10 to 0-100 scale on server
+- [x] Fix MoodTimeline date parsing for DD/MM/YYYY format
+- [x] Fix MoodTimeline height calculation for 0-100 scale
+- [x] Update getMoodColor helper for proper color mapping
+- [x] Verify all navigation links working
+- [x] Test AI-SMEs, Workflow, Project Genesis, Innovation Hub, Analytics pages
