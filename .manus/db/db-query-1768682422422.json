@@ -1,0 +1,9 @@
+{
+  "query": "CREATE TABLE IF NOT EXISTS `questionnaire_responses` (\n  `id` int AUTO_INCREMENT NOT NULL,\n  `user_id` int NOT NULL,\n  `question_id` varchar(10) NOT NULL,\n  `question_type` enum('scale','boolean') NOT NULL,\n  `scale_value` int,\n  `boolean_value` boolean,\n  `section` varchar(100),\n  `created_at` timestamp NOT NULL DEFAULT (now()),\n  `updated_at` timestamp NOT NULL DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,\n  CONSTRAINT `questionnaire_responses_id` PRIMARY KEY(`id`)\n);",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user PcK35JNVkJ2ZTTh.b86832d2ef74 --database Mty5zxKKtMrwodBsbeuVa2 --execute CREATE TABLE IF NOT EXISTS `questionnaire_responses` (\n  `id` int AUTO_INCREMENT NOT NULL,\n  `user_id` int NOT NULL,\n  `question_id` varchar(10) NOT NULL,\n  `question_type` enum('scale','boolean') NOT NULL,\n  `scale_value` int,\n  `boolean_value` boolean,\n  `section` varchar(100),\n  `created_at` timestamp NOT NULL DEFAULT (now()),\n  `updated_at` timestamp NOT NULL DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,\n  CONSTRAINT `questionnaire_responses_id` PRIMARY KEY(`id`)\n);",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 1634
+}

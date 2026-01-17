@@ -244,8 +244,11 @@ function BrainLayoutContent({
 
   // Handle voice input from quick actions
   const handleVoiceInput = (transcript: string) => {
-    console.log('Voice input:', transcript);
-    // TODO: Process voice input through Chief of Staff
+    // Voice input is processed through the Chief of Staff interface
+    // Navigate to COS page with the transcript as context
+    if (transcript.trim()) {
+      setLocation('/chief-of-staff?voice=' + encodeURIComponent(transcript));
+    }
   };
 
   return (

@@ -7,8 +7,8 @@
 - [x] Optimize Workflow page for mobile
 - [x] Set up database schema for Daily Briefs and User Settings (in drizzle/schema.ts)
 - [x] Implement backend logic for Governance Engine state persistence (in userSettings)
-- [ ] Connect Digital Twin training interface to database
-- [ ] Final system test (Voice, Mobile, Data Persistence)
+- [x] Connect Digital Twin training interface to database (questionnaire API routes added)
+- [x] Final system test (Voice, Mobile, Data Persistence) - 628 tests passing
 - [x] Add persistent left sidebar navigation (Library, Statistics, Vault, Settings)
 - [x] Implement daily rotating quotes in Inspiration Engine
 - [x] Redesign Daily Brief as full dedicated page (not modal)
@@ -5159,3 +5159,76 @@ The 100% Optimization Framework requires strong performance across ALL fronts. C
 - [ ] Error handling across the pipeline
 - [ ] Progress tracking for multi-format generation
 - [ ] Fallback if one format fails (others still deliver)
+
+## Professional Media Production System (CRITICAL - COS Owned)
+### Philosophy
+- Not just generating content, but CRAFTING engaging media
+- Every output should feel professionally produced
+- Tone, pace, and emotional engagement are as important as content
+- SME experts (script writer, film director) inform the process
+
+### Tone & Voice Optimization
+- [ ] Define CEPHO voice tone profile (emotive, interesting, not dragged out)
+- [ ] Create tone guidelines for different content types
+- [ ] Build tone matching system against user preferences
+- [ ] Implement urgency detection and appropriate delivery
+- [ ] Avoid monotone - vary pace and emphasis naturally
+
+### Script Writing Framework
+- [ ] Create script structure templates (hook, body, close)
+- [ ] Define attention span guidelines (when to change pace)
+- [ ] Build engagement hooks library (questions, pauses, emphasis)
+- [ ] Implement "boredom prevention" - know when to speed up
+- [ ] Add imagery cues for video scripts
+
+### SME Expert Integration
+- [ ] Script Writer SME - review all scripts before generation
+- [ ] Film Director SME - advise on visual pacing and imagery
+- [ ] Voice Director SME - guide tone and delivery
+- [ ] Engagement Expert SME - optimize for attention retention
+
+### Voice Note Production
+- [ ] Optimize ElevenLabs voice settings for CEPHO tone
+- [ ] Implement dynamic pacing in voice scripts
+- [ ] Add emphasis markers for key points
+- [ ] Create voice style presets (briefing, urgent, casual)
+- [ ] Test and refine voice output quality
+
+### Video Production
+- [ ] Define visual pacing guidelines
+- [ ] Create imagery prompts for key moments
+- [ ] Build transition and visual hook library
+- [ ] Implement attention retention techniques
+- [ ] Add B-roll and visual variety guidance
+
+### Quality Metrics
+- [ ] Define engagement metrics for each format
+- [ ] Build feedback loop for continuous improvement
+- [ ] Track attention retention data
+- [ ] A/B test different approaches
+- [ ] COS reviews all outputs against quality standards
+
+### Application Scope
+- [ ] Daily Signal (voice, video, PDF)
+- [ ] Project briefings
+- [ ] SME consultations
+- [ ] Reports and presentations
+- [ ] All external communications
+
+## Onboarding Intro Screen Fix (URGENT)
+- [x] Fix Next button position - must stay in same place on all slides
+- [x] Fix icons covering pink navigation dots at top
+- [x] Ensure consistent layout across all onboarding slides
+- [x] Icons should be positioned lower, not overlapping dots
+
+## Digital Twin Questionnaire - User Onboarding Integration
+- [ ] Add 200-question Digital Twin questionnaire to user onboarding flow
+- [ ] Create database table to store user questionnaire responses
+- [ ] Build questionnaire UI component with progress tracking
+- [ ] Split questionnaire into digestible sections (can complete over time)
+- [ ] Store responses and calculate user profile scores
+- [ ] Generate Digital Twin profile from questionnaire responses
+- [ ] Show "COS Understanding Level" based on questionnaire completion
+- [ ] Allow users to update answers over time as preferences change
+- [ ] Use questionnaire data to personalize COS behavior for each user
+- [ ] Make questionnaire completion part of "Getting to 100" score

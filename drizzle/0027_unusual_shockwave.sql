@@ -1,0 +1,43 @@
+CREATE TABLE `digital_twin_profile` (
+	`id` int AUTO_INCREMENT NOT NULL,
+	`user_id` int NOT NULL,
+	`measurement_driven` int,
+	`process_standardization` int,
+	`automation_preference` int,
+	`ambiguity_tolerance` int,
+	`tech_adoption_speed` int,
+	`ai_belief_level` int,
+	`data_vs_intuition` int,
+	`build_vs_buy` enum('build','buy','balanced'),
+	`niche_vs_mass` int,
+	`first_mover_vs_follower` int,
+	`organic_vs_ma` enum('organic','ma','balanced'),
+	`structure_preference` int,
+	`interruption_tolerance` int,
+	`batching_preference` int,
+	`location_preference` enum('home','office','varied'),
+	`scenario_planning_level` int,
+	`pivot_comfort` int,
+	`trend_leadership` int,
+	`portfolio_diversification` int,
+	`cos_understanding_level` int DEFAULT 0,
+	`questionnaire_completion` int DEFAULT 0,
+	`last_calculated` timestamp,
+	`created_at` timestamp NOT NULL DEFAULT (now()),
+	`updated_at` timestamp NOT NULL DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,
+	CONSTRAINT `digital_twin_profile_id` PRIMARY KEY(`id`),
+	CONSTRAINT `digital_twin_profile_user_id_unique` UNIQUE(`user_id`)
+);
+--> statement-breakpoint
+CREATE TABLE `questionnaire_responses` (
+	`id` int AUTO_INCREMENT NOT NULL,
+	`user_id` int NOT NULL,
+	`question_id` varchar(10) NOT NULL,
+	`question_type` enum('scale','boolean') NOT NULL,
+	`scale_value` int,
+	`boolean_value` boolean,
+	`section` varchar(100),
+	`created_at` timestamp NOT NULL DEFAULT (now()),
+	`updated_at` timestamp NOT NULL DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,
+	CONSTRAINT `questionnaire_responses_id` PRIMARY KEY(`id`)
+);

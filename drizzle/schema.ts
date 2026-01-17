@@ -3748,3 +3748,57 @@ export const cosLearningMetrics = mysqlTable("cos_learning_metrics", {
 });
 export type CosLearningMetrics = typeof cosLearningMetrics.$inferSelect;
 export type InsertCosLearningMetrics = typeof cosLearningMetrics.$inferInsert;
+
+
+// Digital Twin Questionnaire Responses
+export const questionnaireResponses = mysqlTable('questionnaire_responses', {
+  id: int('id').primaryKey().autoincrement(),
+  userId: int('user_id').notNull(),
+  questionId: varchar('question_id', { length: 10 }).notNull(), // e.g., "A51", "B72"
+  questionType: mysqlEnum('question_type', ['scale', 'boolean']).notNull(),
+  scaleValue: int('scale_value'), // 1-10 for scale questions
+  booleanValue: boolean('boolean_value'), // true/false for Y/N questions
+  section: varchar('section', { length: 100 }), // e.g., "Business Operations", "Innovation"
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().onUpdateNow().notNull(),
+});
+export type QuestionnaireResponse = typeof questionnaireResponses.$inferSelect;
+export type InsertQuestionnaireResponse = typeof questionnaireResponses.$inferInsert;
+
+// Digital Twin Profile (calculated from questionnaire)
+export const digitalTwinProfile = mysqlTable('digital_twin_profile', {
+  id: int('id').primaryKey().autoincrement(),
+  userId: int('user_id').notNull().unique(),
+  // Execution DNA
+  measurementDriven: int('measurement_driven'), // 1-10
+  processStandardization: int('process_standardization'),
+  automationPreference: int('automation_preference'),
+  ambiguityTolerance: int('ambiguity_tolerance'),
+  // Technology Philosophy
+  techAdoptionSpeed: int('tech_adoption_speed'),
+  aiBeliefLevel: int('ai_belief_level'),
+  dataVsIntuition: int('data_vs_intuition'),
+  buildVsBuy: mysqlEnum('build_vs_buy', ['build', 'buy', 'balanced']),
+  // Market Strategy
+  nicheVsMass: int('niche_vs_mass'),
+  firstMoverVsFollower: int('first_mover_vs_follower'),
+  organicVsMA: mysqlEnum('organic_vs_ma', ['organic', 'ma', 'balanced']),
+  // Work Style
+  structurePreference: int('structure_preference'),
+  interruptionTolerance: int('interruption_tolerance'),
+  batchingPreference: int('batching_preference'),
+  locationPreference: mysqlEnum('location_preference', ['home', 'office', 'varied']),
+  // Strategic Mindset
+  scenarioPlanningLevel: int('scenario_planning_level'),
+  pivotComfort: int('pivot_comfort'),
+  trendLeadership: int('trend_leadership'),
+  portfolioDiversification: int('portfolio_diversification'),
+  // Calculated Scores
+  cosUnderstandingLevel: int('cos_understanding_level').default(0), // 0-100
+  questionnaireCompletion: int('questionnaire_completion').default(0), // 0-100 percentage
+  lastCalculated: timestamp('last_calculated'),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().onUpdateNow().notNull(),
+});
+export type DigitalTwinProfile = typeof digitalTwinProfile.$inferSelect;
+export type InsertDigitalTwinProfile = typeof digitalTwinProfile.$inferInsert;

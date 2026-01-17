@@ -61,7 +61,7 @@ const ONBOARDING_STEPS: OnboardingStep[] = [
   {
     id: 6,
     title: 'You\'re Ready!',
-    description: 'Start by checking The Signal, or ask your Chief of Staff anything. Cepho is here to get you to a 10 every day.',
+    description: 'Start by checking The Signal, or ask your Chief of Staff anything. Cepho is here to get you to 100 every day.',
     icon: Sparkles,
     color: 'text-primary',
     useBrain: true,
@@ -206,8 +206,8 @@ export function OnboardingModal({ isOpen, onComplete, onSkip }: OnboardingModalP
             {/* Top glow line */}
             <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
             
-            {/* Progress dots - top */}
-            <div className="absolute top-6 left-1/2 -translate-x-1/2 flex gap-2">
+            {/* Progress dots - top - positioned higher to avoid icon overlap */}
+            <div className="absolute top-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
               {ONBOARDING_STEPS.map((_, index) => (
                 <button
                   key={index}
@@ -230,18 +230,18 @@ export function OnboardingModal({ isOpen, onComplete, onSkip }: OnboardingModalP
               ))}
             </div>
 
-            {/* Content */}
+            {/* Content - Fixed height container for consistent button position */}
             <div className={cn(
-              'px-8 md:px-12 pt-16 pb-10 transition-all duration-200',
+              'px-8 md:px-12 pt-14 pb-8 transition-all duration-200 flex flex-col min-h-[520px]',
               isAnimating ? 'opacity-0 scale-95' : 'opacity-100 scale-100'
             )}>
-              {/* Icon / Brain */}
-              <div className="flex justify-center mb-8">
+              {/* Icon / Brain - Fixed height container */}
+              <div className="flex justify-center mb-6 h-40 md:h-48 items-center">
                 {step.useBrain ? (
-                  <div className="relative">
+                  <div className="relative w-32 h-32 md:w-36 md:h-36">
                     <NeonBrain 
-                      size="xl" 
-                      className="w-40 h-40 md:w-48 md:h-48" 
+                      size="lg" 
+                      className="w-32 h-32 md:w-36 md:h-36" 
                       state="thinking" 
                     />
                     {/* Glow ring */}
@@ -249,11 +249,11 @@ export function OnboardingModal({ isOpen, onComplete, onSkip }: OnboardingModalP
                   </div>
                 ) : (
                   <div className={cn(
-                    'relative w-28 h-28 md:w-32 md:h-32 rounded-3xl flex items-center justify-center',
+                    'relative w-24 h-24 md:w-28 md:h-28 rounded-3xl flex items-center justify-center',
                     'bg-gradient-to-br from-white/10 to-white/5 border border-white/10',
                     'shadow-2xl'
                   )}>
-                    <Icon className={cn('w-14 h-14 md:w-16 md:h-16', step.color)} />
+                    <Icon className={cn('w-12 h-12 md:w-14 md:h-14', step.color)} />
                     {/* Glow effect */}
                     <div className={cn(
                       'absolute inset-0 rounded-3xl blur-2xl -z-10 opacity-30',
@@ -267,8 +267,8 @@ export function OnboardingModal({ isOpen, onComplete, onSkip }: OnboardingModalP
                 )}
               </div>
 
-              {/* Text */}
-              <div className="text-center mb-10">
+              {/* Text - Fixed height for consistent layout */}
+              <div className="text-center mb-6 flex-grow flex flex-col justify-center">
                 <h2 className={cn(
                   'font-display font-bold mb-4 tracking-wider',
                   step.useBrain ? 'text-4xl md:text-5xl text-pink-500 drop-shadow-[0_0_25px_rgba(236,72,153,0.5)]' : 'text-3xl md:text-4xl text-foreground'
@@ -281,12 +281,12 @@ export function OnboardingModal({ isOpen, onComplete, onSkip }: OnboardingModalP
               </div>
 
               {/* Step indicator */}
-              <p className="text-center text-sm text-white/50 mb-8 font-mono tracking-wider">
+              <p className="text-center text-sm text-white/50 mb-4 font-mono tracking-wider">
                 {currentStep + 1} / {ONBOARDING_STEPS.length}
               </p>
 
-              {/* Navigation */}
-              <div className="flex items-center justify-center gap-4">
+              {/* Navigation - Fixed at bottom */}
+              <div className="flex items-center justify-center gap-4 mt-auto">
                 <Button
                   variant="ghost"
                   size="lg"

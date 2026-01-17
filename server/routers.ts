@@ -4252,5 +4252,74 @@ ${transcript}
         return Object.values(FEATURES);
       }),
   }),
+
+  // Digital Twin Questionnaire API
+  questionnaire: router({
+    // Save a single response
+    saveResponse: protectedProcedure
+      .input(z.object({
+        questionId: z.string(),
+        questionType: z.enum(['scale', 'boolean']),
+        scaleValue: z.number().min(1).max(10).optional(),
+        booleanValue: z.boolean().optional(),
+        section: z.string().optional(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        const { saveQuestionnaireResponse } = await import('./db');
+        return saveQuestionnaireResponse({
+          userId: ctx.user.id,
+          questionId: input.questionId,
+          questionType: input.questionType,
+          scaleValue: input.scaleValue,
+          booleanValue: input.booleanValue,
+          section: input.section,
+        });
+      }),
+
+    // Save bulk responses
+    saveBulk: protectedProcedure
+      .input(z.object({
+        responses: z.array(z.object({
+          questionId: z.string(),
+          questionType: z.enum(['scale', 'boolean']),
+          scaleValue: z.number().min(1).max(10).optional(),
+          booleanValue: z.boolean().optional(),
+          section: z.string().optional(),
+        })),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        const { saveBulkQuestionnaireResponses } = await import('./db');
+        const savedCount = await saveBulkQuestionnaireResponses(ctx.user.id, input.responses);
+        return { savedCount };
+      }),
+
+    // Get all responses for user
+    getResponses: protectedProcedure
+      .query(async ({ ctx }) => {
+        const { getQuestionnaireResponses } = await import('./db');
+        return getQuestionnaireResponses(ctx.user.id);
+      }),
+
+    // Get completion percentage
+    getCompletion: protectedProcedure
+      .query(async ({ ctx }) => {
+        const { getQuestionnaireCompletionPercentage } = await import('./db');
+        return { percentage: await getQuestionnaireCompletionPercentage(ctx.user.id) };
+      }),
+
+    // Get digital twin profile
+    getProfile: protectedProcedure
+      .query(async ({ ctx }) => {
+        const { getDigitalTwinProfile } = await import('./db');
+        return getDigitalTwinProfile(ctx.user.id);
+      }),
+
+    // Calculate and update profile from responses
+    calculateProfile: protectedProcedure
+      .mutation(async ({ ctx }) => {
+        const { calculateDigitalTwinProfile } = await import('./db');
+        return calculateDigitalTwinProfile(ctx.user.id);
+      }),
+  }),
 });
 export type AppRouter = typeof appRouter;

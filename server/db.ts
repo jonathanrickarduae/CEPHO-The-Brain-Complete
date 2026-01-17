@@ -3302,3 +3302,254 @@ export async function getQualityMetricsHistory(limit: number = 30): Promise<Qual
     .orderBy(desc(qualityMetricsSnapshots.snapshotDate))
     .limit(limit);
 }
+
+
+// ==================== DIGITAL TWIN QUESTIONNAIRE ====================
+import { questionnaireResponses, InsertQuestionnaireResponse, QuestionnaireResponse, digitalTwinProfile, InsertDigitalTwinProfile, DigitalTwinProfile } from "../drizzle/schema";
+
+export async function saveQuestionnaireResponse(response: InsertQuestionnaireResponse): Promise<QuestionnaireResponse | null> {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot save questionnaire response: database not available");
+    return null;
+  }
+
+  try {
+    // Upsert - update if exists, insert if not
+    const existing = await db.select()
+      .from(questionnaireResponses)
+      .where(and(
+        eq(questionnaireResponses.userId, response.userId),
+        eq(questionnaireResponses.questionId, response.questionId)
+      ))
+      .limit(1);
+
+    if (existing.length > 0) {
+      await db.update(questionnaireResponses)
+        .set({
+          scaleValue: response.scaleValue,
+          booleanValue: response.booleanValue,
+          section: response.section,
+        })
+        .where(eq(questionnaireResponses.id, existing[0].id));
+      
+      const [updated] = await db.select().from(questionnaireResponses).where(eq(questionnaireResponses.id, existing[0].id));
+      return updated;
+    } else {
+      const result = await db.insert(questionnaireResponses).values(response);
+      const insertId = result[0].insertId;
+      const [newEntry] = await db.select().from(questionnaireResponses).where(eq(questionnaireResponses.id, insertId));
+      return newEntry;
+    }
+  } catch (error) {
+    console.error("[Database] Failed to save questionnaire response:", error);
+    throw error;
+  }
+}
+
+export async function saveBulkQuestionnaireResponses(userId: number, responses: Array<{
+  questionId: string;
+  questionType: 'scale' | 'boolean';
+  scaleValue?: number;
+  booleanValue?: boolean;
+  section?: string;
+}>): Promise<number> {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot save questionnaire responses: database not available");
+    return 0;
+  }
+
+  try {
+    let savedCount = 0;
+    for (const response of responses) {
+      await saveQuestionnaireResponse({
+        userId,
+        questionId: response.questionId,
+        questionType: response.questionType,
+        scaleValue: response.scaleValue,
+        booleanValue: response.booleanValue,
+        section: response.section,
+      });
+      savedCount++;
+    }
+    return savedCount;
+  } catch (error) {
+    console.error("[Database] Failed to save bulk questionnaire responses:", error);
+    throw error;
+  }
+}
+
+export async function getQuestionnaireResponses(userId: number): Promise<QuestionnaireResponse[]> {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot get questionnaire responses: database not available");
+    return [];
+  }
+
+  try {
+    const results = await db.select()
+      .from(questionnaireResponses)
+      .where(eq(questionnaireResponses.userId, userId))
+      .orderBy(questionnaireResponses.questionId);
+    
+    return results;
+  } catch (error) {
+    console.error("[Database] Failed to get questionnaire responses:", error);
+    return [];
+  }
+}
+
+export async function getQuestionnaireCompletionPercentage(userId: number): Promise<number> {
+  const db = await getDb();
+  if (!db) {
+    return 0;
+  }
+
+  try {
+    const responses = await db.select()
+      .from(questionnaireResponses)
+      .where(eq(questionnaireResponses.userId, userId));
+    
+    // Total questions is 200
+    const totalQuestions = 200;
+    const completedQuestions = responses.length;
+    
+    return Math.round((completedQuestions / totalQuestions) * 100);
+  } catch (error) {
+    console.error("[Database] Failed to get questionnaire completion:", error);
+    return 0;
+  }
+}
+
+export async function getDigitalTwinProfile(userId: number): Promise<DigitalTwinProfile | null> {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot get digital twin profile: database not available");
+    return null;
+  }
+
+  try {
+    const [profile] = await db.select()
+      .from(digitalTwinProfile)
+      .where(eq(digitalTwinProfile.userId, userId))
+      .limit(1);
+    
+    return profile || null;
+  } catch (error) {
+    console.error("[Database] Failed to get digital twin profile:", error);
+    return null;
+  }
+}
+
+export async function upsertDigitalTwinProfile(profile: InsertDigitalTwinProfile): Promise<DigitalTwinProfile | null> {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot upsert digital twin profile: database not available");
+    return null;
+  }
+
+  try {
+    const existing = await db.select()
+      .from(digitalTwinProfile)
+      .where(eq(digitalTwinProfile.userId, profile.userId))
+      .limit(1);
+
+    if (existing.length > 0) {
+      await db.update(digitalTwinProfile)
+        .set({
+          ...profile,
+          lastCalculated: new Date(),
+        })
+        .where(eq(digitalTwinProfile.id, existing[0].id));
+      
+      const [updated] = await db.select().from(digitalTwinProfile).where(eq(digitalTwinProfile.id, existing[0].id));
+      return updated;
+    } else {
+      const result = await db.insert(digitalTwinProfile).values({
+        ...profile,
+        lastCalculated: new Date(),
+      });
+      const insertId = result[0].insertId;
+      const [newEntry] = await db.select().from(digitalTwinProfile).where(eq(digitalTwinProfile.id, insertId));
+      return newEntry;
+    }
+  } catch (error) {
+    console.error("[Database] Failed to upsert digital twin profile:", error);
+    throw error;
+  }
+}
+
+export async function calculateDigitalTwinProfile(userId: number): Promise<DigitalTwinProfile | null> {
+  const db = await getDb();
+  if (!db) {
+    return null;
+  }
+
+  try {
+    // Get all questionnaire responses
+    const responses = await getQuestionnaireResponses(userId);
+    
+    if (responses.length === 0) {
+      return null;
+    }
+
+    // Calculate profile scores from responses
+    // Map question IDs to profile fields
+    const profileData: Partial<InsertDigitalTwinProfile> = {
+      userId,
+      cosUnderstandingLevel: Math.round((responses.length / 200) * 100),
+      questionnaireCompletion: responses.length,
+    };
+
+    // Map specific questions to profile fields
+    for (const response of responses) {
+      if (response.questionType === 'scale' && response.scaleValue !== null) {
+        switch (response.questionId) {
+          case 'A52':
+            profileData.measurementDriven = response.scaleValue;
+            break;
+          case 'A53':
+            profileData.processStandardization = response.scaleValue;
+            break;
+          case 'A60':
+            profileData.automationPreference = response.scaleValue;
+            break;
+          case 'A58':
+            profileData.ambiguityTolerance = response.scaleValue;
+            break;
+          case 'A61':
+            profileData.techAdoptionSpeed = response.scaleValue;
+            break;
+          case 'A62':
+            profileData.aiBeliefLevel = response.scaleValue;
+            break;
+          case 'A70':
+            profileData.dataVsIntuition = response.scaleValue;
+            break;
+          case 'A65':
+            profileData.nicheVsMass = response.scaleValue;
+            break;
+          case 'A51':
+            profileData.firstMoverVsFollower = response.scaleValue;
+            break;
+          case 'A57':
+            profileData.structurePreference = response.scaleValue;
+            break;
+          case 'A66':
+            profileData.scenarioPlanningLevel = response.scaleValue;
+            break;
+          case 'A59':
+            profileData.pivotComfort = response.scaleValue;
+            break;
+        }
+      }
+    }
+
+    // Upsert the profile
+    return await upsertDigitalTwinProfile(profileData as InsertDigitalTwinProfile);
+  } catch (error) {
+    console.error("[Database] Failed to calculate digital twin profile:", error);
+    return null;
+  }
+}

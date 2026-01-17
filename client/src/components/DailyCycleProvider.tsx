@@ -65,9 +65,8 @@ export function DailyCycleProvider({ children }: DailyCycleProviderProps) {
     setNextTimes(getNextScheduledTimes());
   };
 
-  const handleEndOfDayComplete = (rating: number, tomorrowPriorities: string[]) => {
-    console.log('End of day completed:', { rating, tomorrowPriorities });
-    // Save to database/API
+  const handleEndOfDayComplete = (_rating: number, _tomorrowPriorities: string[]) => {
+    // End of day data is saved through the evening review system
     setShowEndOfDay(false);
     setNextTimes(getNextScheduledTimes());
   };

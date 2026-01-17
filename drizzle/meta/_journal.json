@@ -190,6 +190,13 @@
       "when": 1768678267551,
       "tag": "0026_kind_lockjaw",
       "breakpoints": true
+    },
+    {
+      "idx": 27,
+      "version": "5",
+      "when": 1768682096169,
+      "tag": "0027_unusual_shockwave",
+      "breakpoints": true
     }
   ]
 }
