@@ -39,7 +39,7 @@ export default function Statistics() {
   ];
 
   // Weekly mood data (mock)
-  const weeklyMoods = [7, 8, 6, 7, 9, 8, todaysMoods.length > 0 ? todaysMoods[todaysMoods.length - 1].mood : 7];
+  const weeklyMoods = [70, 80, 60, 70, 90, 80, todaysMoods.length > 0 ? todaysMoods[todaysMoods.length - 1].mood : 70]; // 0-100 scale
 
   return (
     <div className="p-4 md:p-6 overflow-auto">

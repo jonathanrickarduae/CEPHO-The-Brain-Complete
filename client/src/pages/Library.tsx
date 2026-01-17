@@ -30,7 +30,7 @@ const projects = [
   },
   {
     id: 'boundless',
-    name: 'Boundless Telecom',
+    name: 'Sample Project Telecom',
     color: '#3B82F6',
     documents: 18,
     images: 6,

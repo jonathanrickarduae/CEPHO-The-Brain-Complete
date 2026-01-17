@@ -27,10 +27,10 @@ export function WellnessScoreDashboard({ compact = false, onShare }: WellnessSco
     // In production, this would fetch real data from the API
     // For now, we'll use mock data based on localStorage
     const moodHistory = JSON.parse(localStorage.getItem('brain_mood_history') || '[]');
-    const recentMoods = moodHistory.slice(-3).map((m: any) => m.score || 7);
+    const recentMoods = moodHistory.slice(-3).map((m: any) => m.score || 70); // 0-100 scale
     
     const mockInputs: WellnessInputs = {
-      moodScores: recentMoods.length > 0 ? recentMoods : [7, 8, 7],
+      moodScores: recentMoods.length > 0 ? recentMoods : [70, 80, 70], // 0-100 scale
       moodTrend: 'stable',
       tasksCompleted: Math.floor(Math.random() * 8) + 3,
       tasksPlanned: 10,
@@ -38,7 +38,7 @@ export function WellnessScoreDashboard({ compact = false, onShare }: WellnessSco
       meetingMinutes: Math.floor(Math.random() * 120) + 30,
       calendarDensity: Math.random() * 0.5 + 0.3,
       backToBackMeetings: Math.floor(Math.random() * 3),
-      averageScore: 7.2,
+      averageScore: 72, // 0-100 scale
       streakDays: parseInt(localStorage.getItem('brain_streak_days') || '0'),
     };
 
@@ -126,7 +126,7 @@ export function WellnessScoreDashboard({ compact = false, onShare }: WellnessSco
               stroke="url(#gradient)"
               strokeWidth="8"
               fill="none"
-              strokeDasharray={`${(wellnessData.score / 10) * 352} 352`}
+              strokeDasharray={`${(wellnessData.score / 100) * 352} 352`}
               strokeLinecap="round"
             />
             <defs>
@@ -137,8 +137,8 @@ export function WellnessScoreDashboard({ compact = false, onShare }: WellnessSco
             </defs>
           </svg>
           <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <span className="text-4xl font-bold text-white">{wellnessData.score.toFixed(1)}</span>
-            <span className="text-sm text-gray-400">out of 10</span>
+            <span className="text-4xl font-bold text-white">{Math.round(wellnessData.score)}</span>
+            <span className="text-sm text-gray-400">out of 100</span>
           </div>
         </div>
 
@@ -226,11 +226,11 @@ export function WellnessScoreMini() {
   useEffect(() => {
     // Quick calculation for mini display
     const moodHistory = JSON.parse(localStorage.getItem('brain_mood_history') || '[]');
-    const recentMoods = moodHistory.slice(-3).map((m: any) => m.score || 7);
+    const recentMoods = moodHistory.slice(-3).map((m: any) => m.score || 70); // 0-100 scale
     const avgMood = recentMoods.length > 0 
       ? recentMoods.reduce((a: number, b: number) => a + b, 0) / recentMoods.length 
-      : 7;
-    setScore(Math.round(avgMood * 10) / 10);
+      : 70; // 0-100 scale
+    setScore(Math.round(avgMood));
   }, []);
 
   if (score === null) return null;

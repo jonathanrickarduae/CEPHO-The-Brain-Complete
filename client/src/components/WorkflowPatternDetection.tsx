@@ -54,7 +54,7 @@ const MOCK_PATTERNS: WorkflowPattern[] = [
     trend: 'improving',
     occurrences: 45,
     lastSeen: 'Today',
-    affectedProjects: ['Celadon Capital', 'Boundless'],
+    affectedProjects: ['Celadon Capital', 'Sample Project'],
     recommendation: 'Block 9-11am for strategic work'
   },
   {
@@ -93,7 +93,7 @@ const MOCK_PATTERNS: WorkflowPattern[] = [
     trend: 'improving',
     occurrences: 23,
     lastSeen: 'Yesterday',
-    affectedProjects: ['Celadon Capital', 'Boundless'],
+    affectedProjects: ['Celadon Capital', 'Sample Project'],
     recommendation: 'Set up auto-alerts for investor communications'
   }
 ];
@@ -128,7 +128,7 @@ const MOCK_PROJECT_COMPARISONS: ProjectComparison[] = [
     successFactors: ['Strong sponsor', 'Clear timeline', 'Dedicated resources']
   },
   {
-    project: 'Boundless',
+    project: 'Sample Project',
     successScore: 72,
     avgDuration: '6.1 months',
     blockers: ['Scope creep', 'Resource constraints'],

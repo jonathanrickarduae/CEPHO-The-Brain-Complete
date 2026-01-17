@@ -96,7 +96,7 @@ const sampleStartups: StartupMetrics[] = [
   },
   {
     id: "boundless",
-    name: "Boundless Mobile",
+    name: "Sample Project Mobile",
     monthlyBurn: 25000,
     cashOnHand: 75000,
     runway: 3,

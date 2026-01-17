@@ -23,7 +23,7 @@ const projects = [
   },
   {
     id: 'boundless',
-    name: 'Boundless Telecom',
+    name: 'Sample Project Telecom',
     color: '#3B82F6',
     status: 'on-track',
     progress: 82,

@@ -27,11 +27,11 @@ export function ShareableInsight({ type, title, data, onShare }: ShareableInsigh
   const generateShareText = () => {
     switch (type) {
       case 'productivity':
-        return `My productivity score this ${data.period || 'week'}: ${data.score}/10\n\n${data.highlights?.join('\n') || ''}\n\nPowered by Cepho`;
+        return `My productivity score this ${data.period || 'week'}: ${data.score}/100\n\n${data.highlights?.join('\n') || ''}\n\nPowered by Cepho`;
       case 'mood':
         return `My mood trend is ${data.trend}\n\n${data.highlights?.join('\n') || ''}\n\nTracking my wellness with Cepho`;
       case 'wellness':
-        return `Wellness Score: ${data.score}/10\n\n${data.highlights?.join('\n') || ''}\n\nGetting to a 10 with Cepho`;
+        return `Wellness Score: ${data.score}/100\n\n${data.highlights?.join('\n') || ''}\n\nGetting to 100 with Cepho`;
       case 'achievement':
         return `${title}\n\n${data.highlights?.join('\n') || ''}\n\nAchieved with Cepho`;
       case 'consultation':
@@ -219,7 +219,7 @@ export function generateProductivityInsight(data: {
   streak: number;
   period: string;
 }): ShareableInsightProps {
-  const score = Math.min(10, Math.round((data.tasksCompleted / 10 + data.focusHours / 4 + data.streak / 7) * 3.3));
+  const score = Math.min(100, Math.round((data.tasksCompleted / 10 + data.focusHours / 4 + data.streak / 7) * 33)); // 0-100 scale
   
   return {
     type: 'productivity',
@@ -227,7 +227,7 @@ export function generateProductivityInsight(data: {
     data: {
       score,
       period: data.period,
-      trend: score >= 7 ? 'improving' : score >= 5 ? 'stable' : 'declining',
+      trend: score >= 70 ? 'improving' : score >= 50 ? 'stable' : 'declining',
       highlights: [
         `Completed ${data.tasksCompleted} tasks`,
         `${data.focusHours} hours of deep focus`,

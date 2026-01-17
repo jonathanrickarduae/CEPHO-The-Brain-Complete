@@ -434,7 +434,7 @@ export function QualityGateApprovalQueue({ isChiefOfStaff = true }: ApprovalQueu
     {
       id: '1',
       projectId: 'boundless',
-      projectName: 'Boundless AI',
+      projectName: 'Sample Project AI',
       fromPhase: 'Development',
       toPhase: 'Go-to-Market',
       status: 'in_review',

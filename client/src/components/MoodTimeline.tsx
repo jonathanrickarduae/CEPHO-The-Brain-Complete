@@ -8,21 +8,34 @@ interface MoodTimelineProps {
   className?: string;
 }
 
-const MOOD_COLORS = {
-  1: 'bg-red-500',
-  2: 'bg-red-400',
-  3: 'bg-orange-500',
-  4: 'bg-orange-400',
-  5: 'bg-yellow-500',
-  6: 'bg-yellow-400',
-  7: 'bg-lime-500',
-  8: 'bg-green-400',
-  9: 'bg-green-500',
-  10: 'bg-emerald-500',
+// Color mapping for 0-100 scale (by 10s)
+const MOOD_COLORS: Record<number, string> = {
+  10: 'bg-red-500',
+  20: 'bg-red-400',
+  30: 'bg-orange-500',
+  40: 'bg-orange-400',
+  50: 'bg-yellow-500',
+  60: 'bg-yellow-400',
+  70: 'bg-lime-500',
+  80: 'bg-green-400',
+  90: 'bg-green-500',
+  100: 'bg-emerald-500',
+};
+
+// Helper to get color for any score 0-100
+const getMoodColor = (score: number): string => {
+  const bucket = Math.ceil(score / 10) * 10;
+  return MOOD_COLORS[Math.min(bucket, 100)] || 'bg-gray-500';
 };
 
 // Mood labels instead of emojis for professional look
 const MOOD_LABELS = ['Very Low', 'Low', 'Below Avg', 'Fair', 'Neutral', 'Good', 'Very Good', 'Great', 'Excellent', 'Peak'];
+
+// Get label for 0-100 score
+const getMoodLabel = (score: number): string => {
+  const index = Math.min(Math.floor(score / 10), 9);
+  return MOOD_LABELS[index];
+};
 
 export function MoodTimeline({ days = 7, className }: MoodTimelineProps) {
   const { data: history, isLoading } = trpc.mood.history.useQuery(
@@ -153,9 +166,9 @@ export function MoodTimeline({ days = 7, className }: MoodTimelineProps) {
         
         {/* Scale */}
         <div className="flex justify-between mt-2 text-[10px] text-muted-foreground">
-          <span>1</span>
-          <span>5</span>
-          <span>10</span>
+          <span>0</span>
+          <span>50</span>
+          <span>100</span>
         </div>
       </div>
 
@@ -164,7 +177,7 @@ export function MoodTimeline({ days = 7, className }: MoodTimelineProps) {
         <h4 className="text-sm font-medium text-foreground mb-4">Recent Check-ins</h4>
         <div className="space-y-2 max-h-48 overflow-y-auto">
           {history.slice(0, 10).map((entry) => {
-            const colorClass = MOOD_COLORS[entry.score as keyof typeof MOOD_COLORS] || 'bg-gray-500';
+            const colorClass = getMoodColor(entry.score);
             const TimeIcon = entry.timeOfDay === 'morning' ? Sun 
               : entry.timeOfDay === 'afternoon' ? Cloud 
               : Moon;

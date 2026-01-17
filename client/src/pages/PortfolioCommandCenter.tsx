@@ -80,7 +80,7 @@ const ventures: Venture[] = [
   },
   {
     id: "boundless",
-    name: "Boundless Mobile",
+    name: "Sample Project Mobile",
     description: "eSIM/MVNO platform for GCC market - B2B and consumer",
     status: "active",
     health: "amber",

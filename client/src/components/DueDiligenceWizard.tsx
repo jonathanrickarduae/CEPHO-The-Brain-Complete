@@ -48,7 +48,7 @@ interface DDSection {
 
 const PARENT_PROJECTS = [
   'Celadon',
-  'Boundless',
+  'Sample Project',
   'Perfect DXB',
   'Ampora',
   'Project 5',

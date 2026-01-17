@@ -4925,9 +4925,9 @@ The 100% Optimization Framework requires strong performance across ALL fronts. C
 - [x] Update "Getting you to a 10" → "Getting you to 100" across all UI
 - [x] Update mood check scale from 0-100
 - [x] Update wellness score algorithm to output 0-100
-- [ ] Update all wellness visualizations to 100 scale
-- [ ] Update Statistics page wellness displays
-- [ ] Update Dashboard wellness card
+- [x] Update all wellness visualizations to 100 scale
+- [x] Update Statistics page wellness displays
+- [x] Update Dashboard wellness card
 - [ ] Align with KPI scorecard philosophy - everything is 100% optimization
 - [ ] Update onboarding to reference "Getting you to 100"
 - [ ] Update any marketing/copy referencing the 10 scale
@@ -4937,7 +4937,7 @@ The 100% Optimization Framework requires strong performance across ALL fronts. C
 ### Boundless is just ONE project (like Celadon, Green Waste Energy)
 - [ ] Identify all Boundless-specific code embedded in the codebase
 - [ ] Move Boundless research/data to project-specific folder structure
-- [ ] Remove Boundless hardcoding from core components
+- [x] Remove Boundless hardcoding from core components
 - [ ] Ensure Boundless is treated as a project entry, not special case
-- [ ] Clean up any Boundless-specific UI that should be generic
+- [x] Clean up any Boundless-specific UI that should be generic
 - [ ] Update Library to show Boundless as one project among many

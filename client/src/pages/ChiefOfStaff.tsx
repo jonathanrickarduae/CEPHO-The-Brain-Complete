@@ -69,7 +69,7 @@ const MOCK_TASKS: Task[] = [
     id: 'task-2',
     title: 'Investor Deck Updates',
     description: 'Update pitch deck with latest metrics and market data',
-    project: 'Boundless',
+    project: 'Sample Project',
     status: 'active',
     progress: 60,
     qaStatus: 'pending',
@@ -109,7 +109,7 @@ const MOCK_TASKS: Task[] = [
 const MOCK_CONVERSATIONS: Conversation[] = [
   { id: 'conv-1', title: 'Current Session', project: undefined, lastMessage: 'How can I help you today?', timestamp: new Date(), unread: 0, starred: true },
   { id: 'conv-2', title: 'Celadon Strategy', project: 'Celadon', lastMessage: 'The financial projections look solid...', timestamp: new Date(Date.now() - 3600000), unread: 2, starred: true },
-  { id: 'conv-3', title: 'Boundless Pitch', project: 'Boundless', lastMessage: 'I\'ve updated the deck with...', timestamp: new Date(Date.now() - 86400000), unread: 0, starred: false },
+  { id: 'conv-3', title: 'Sample Project Pitch', project: 'Sample Project', lastMessage: 'I\'ve updated the deck with...', timestamp: new Date(Date.now() - 86400000), unread: 0, starred: false },
   { id: 'conv-4', title: 'General Planning', project: undefined, lastMessage: 'Your schedule for tomorrow...', timestamp: new Date(Date.now() - 172800000), unread: 0, starred: false },
 ];
 

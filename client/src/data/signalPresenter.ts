@@ -108,7 +108,7 @@ export function generateSampleBriefScript(): DailyBriefScript {
         timeNeeded: "90 minutes"
       },
       {
-        title: "Boundless partnership response",
+        title: "Sample Project partnership response",
         why: "They're expecting your decision by end of day",
         timeNeeded: "30 minutes"
       },

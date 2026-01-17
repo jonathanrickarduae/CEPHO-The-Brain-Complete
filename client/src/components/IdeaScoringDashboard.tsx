@@ -46,8 +46,8 @@ const MOCK_IDEAS: Idea[] = [
     sourceType: 'sme',
     category: 'Technology',
     scores: [
-      { expertId: '1', expertName: 'Strategy Lead', score: 9, comment: 'High impact, differentiator', votedAt: new Date() },
-      { expertId: '2', expertName: 'GCC Cultural', score: 8, comment: 'Culturally appropriate', votedAt: new Date() },
+      { expertId: '1', expertName: 'Strategy Lead', score: 90, comment: 'High impact, differentiator', votedAt: new Date() },
+      { expertId: '2', expertName: 'GCC Cultural', score: 80, comment: 'Culturally appropriate', votedAt: new Date() },
     ],
     status: 'pending',
     priority: 'high',
@@ -63,8 +63,8 @@ const MOCK_IDEAS: Idea[] = [
     sourceType: 'sme',
     category: 'Engagement',
     scores: [
-      { expertId: '1', expertName: 'Strategy Lead', score: 6, votedAt: new Date() },
-      { expertId: '3', expertName: 'Western Perspective', score: 8, comment: 'Works well in Western contexts', votedAt: new Date() },
+      { expertId: '1', expertName: 'Strategy Lead', score: 60, votedAt: new Date() },
+      { expertId: '3', expertName: 'Western Perspective', score: 80, comment: 'Works well in Western contexts', votedAt: new Date() },
     ],
     status: 'pending',
     priority: 'medium',
@@ -80,8 +80,8 @@ const MOCK_IDEAS: Idea[] = [
     sourceType: 'leadership',
     category: 'Program Design',
     scores: [
-      { expertId: '2', expertName: 'GCC Cultural', score: 10, comment: 'Essential for regional success', votedAt: new Date() },
-      { expertId: '4', expertName: 'Operations', score: 7, comment: 'Logistically complex but doable', votedAt: new Date() },
+      { expertId: '2', expertName: 'GCC Cultural', score: 100, comment: 'Essential for regional success', votedAt: new Date() },
+      { expertId: '4', expertName: 'Operations', score: 70, comment: 'Logistically complex but doable', votedAt: new Date() },
     ],
     status: 'pending',
     priority: 'high',
@@ -97,7 +97,7 @@ const MOCK_IDEAS: Idea[] = [
     sourceType: 'research',
     category: 'Technology',
     scores: [
-      { expertId: '5', expertName: 'Gen Z Voice', score: 9, comment: 'Would love this!', votedAt: new Date() },
+      { expertId: '5', expertName: 'Gen Z Voice', score: 90, comment: 'Would love this!', votedAt: new Date() },
     ],
     status: 'pending',
     priority: 'medium',
@@ -127,7 +127,7 @@ export function IdeaScoringDashboard({ projectId, projectName, onComplete, onBac
   const [filterStatus, setFilterStatus] = useState<Idea['status'] | 'all'>('all');
   const [filterPriority, setFilterPriority] = useState<Idea['priority'] | 'all'>('all');
   const [sortBy, setSortBy] = useState<'score' | 'impact' | 'recent'>('score');
-  const [userScore, setUserScore] = useState<number>(5);
+  const [userScore, setUserScore] = useState<number>(50); // 0-100 scale
   const [userComment, setUserComment] = useState('');
 
   // Calculate average score
@@ -175,7 +175,7 @@ export function IdeaScoringDashboard({ projectId, projectName, onComplete, onBac
         : idea
     ));
     
-    setUserScore(5);
+    setUserScore(50);
     setUserComment('');
   };
 
@@ -465,11 +465,11 @@ export function IdeaScoringDashboard({ projectId, projectName, onComplete, onBac
                     <div className="border-t border-white/10 pt-4">
                       <p className="text-xs text-gray-500 mb-2">Your Score</p>
                       <div className="flex items-center gap-2 mb-3">
-                        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(n => (
+                        {[10, 20, 30, 40, 50, 60, 70, 80, 90, 100].map(n => (
                           <button
                             key={n}
                             onClick={() => setUserScore(n)}
-                            className={`w-8 h-8 rounded-lg text-sm font-medium transition-all ${
+                            className={`w-8 h-8 rounded-lg text-xs font-medium transition-all ${
                               userScore >= n 
                                 ? 'bg-fuchsia-500 text-white' 
                                 : 'bg-white/5 text-gray-400 hover:bg-white/10'

@@ -551,7 +551,7 @@ export function BlueprintTemplatesDashboard({
               <div>
                 <label className="text-sm text-gray-400 mb-1 block">Project</label>
                 <select className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white">
-                  <option value="boundless">Boundless AI</option>
+                  <option value="boundless">Sample Project AI</option>
                   <option value="celadon">Celadon</option>
                   <option value="perfect-dxb">Perfect DXB</option>
                 </select>

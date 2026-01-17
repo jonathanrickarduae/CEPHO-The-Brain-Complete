@@ -53,7 +53,7 @@ export default function ProjectGenesisPage() {
   const [savedProjects, setSavedProjects] = useState<SavedProject[]>([
     {
       id: 'demo-1',
-      name: 'Boundless AI',
+      name: 'Sample Project AI',
       status: 'in_review',
       industry: 'Technology',
       createdAt: new Date('2024-01-15'),
@@ -465,7 +465,7 @@ export default function ProjectGenesisPage() {
           <BlueprintQMS
             genesisBlueprint={currentBlueprint || {
               id: 'demo-blueprint',
-              name: 'Boundless AI',
+              name: 'Sample Project AI',
               status: 'in_review',
               linkedBlueprints: [
                 { id: 'presentation', type: 'presentation', name: 'Presentation Blueprint', status: 'in_progress', inheritedFields: ['businessInfo', 'valueProposition', 'objectives'] },

@@ -49,7 +49,7 @@ export function BrandKitManager() {
     },
     {
       id: 'boundless',
-      name: 'Boundless',
+      name: 'Sample Project',
       colors: {
         primary: '#8B5CF6',
         secondary: '#7C3AED',
@@ -377,7 +377,7 @@ export function BrandSelector({
   
   const brands = [
     { id: 'celadon', name: 'Celadon', color: '#10B981' },
-    { id: 'boundless', name: 'Boundless', color: '#8B5CF6' },
+    { id: 'boundless', name: 'Sample Project', color: '#8B5CF6' },
     { id: 'personal', name: 'Personal', color: '#3B82F6' },
   ];
 

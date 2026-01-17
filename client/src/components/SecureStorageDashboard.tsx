@@ -69,7 +69,7 @@ export function SecureStorageDashboard() {
   
   const auditLog: AuditLogEntry[] = [
     { id: '1', action: 'File Upload', resource: 'WasteGen/pitch-deck.pdf', user: 'Jonathan', timestamp: new Date(Date.now() - 30 * 60 * 1000), ipAddress: '192.168.1.x' },
-    { id: '2', action: 'Document View', resource: 'Boundless/Final_Report.pdf', user: 'Jonathan', timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000), ipAddress: '192.168.1.x' },
+    { id: '2', action: 'Document View', resource: 'Sample Project/Final_Report.pdf', user: 'Jonathan', timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000), ipAddress: '192.168.1.x' },
     { id: '3', action: 'Backup Created', resource: 'System', user: 'System', timestamp: new Date(Date.now() - 3 * 60 * 60 * 1000), ipAddress: 'Internal' },
     { id: '4', action: 'Settings Changed', resource: 'Security Settings', user: 'Jonathan', timestamp: new Date(Date.now() - 5 * 60 * 60 * 1000), ipAddress: '192.168.1.x' },
     { id: '5', action: 'Login', resource: 'Account', user: 'Jonathan', timestamp: new Date(Date.now() - 6 * 60 * 60 * 1000), ipAddress: '192.168.1.x' },

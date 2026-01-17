@@ -77,7 +77,7 @@ function getStatusColor(status: 'good' | 'warning' | 'alert') {
 
 // Score Ring Component
 function ScoreRing({ score, size = 'md', label }: { score: number; size?: 'sm' | 'md' | 'lg'; label?: string }) {
-  const percentage = (score / 10) * 100;
+  const percentage = score; // Score is already 0-100
   const circumference = 2 * Math.PI * 45;
   const strokeDashoffset = circumference - (percentage / 100) * circumference;
   
@@ -88,9 +88,9 @@ function ScoreRing({ score, size = 'md', label }: { score: number; size?: 'sm' |
   };
 
   const getScoreColor = (s: number) => {
-    if (s >= 8) return '#22c55e'; // green
-    if (s >= 6) return '#eab308'; // yellow
-    if (s >= 4) return '#f97316'; // orange
+    if (s >= 80) return '#22c55e'; // green
+    if (s >= 60) return '#eab308'; // yellow
+    if (s >= 40) return '#f97316'; // orange
     return '#ef4444'; // red
   };
 

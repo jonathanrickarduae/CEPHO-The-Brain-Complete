@@ -59,7 +59,7 @@ export const sampleProjects: DemoProject[] = [
   },
   {
     id: 'proj-2',
-    name: 'Boundless Ventures Partnership',
+    name: 'Sample Project Ventures Partnership',
     type: 'strategic_review',
     status: 'active',
     progress: 40,
@@ -98,12 +98,12 @@ export const sampleTasks: DemoTask[] = [
   },
   {
     id: 'task-2',
-    title: 'Schedule call with Boundless legal team',
+    title: 'Schedule call with Sample Project legal team',
     description: 'Coordinate partnership agreement review meeting',
     priority: 'medium',
     status: 'in_progress',
     dueDate: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
-    project: 'Boundless Ventures Partnership',
+    project: 'Sample Project Ventures Partnership',
   },
   {
     id: 'task-3',
@@ -198,7 +198,7 @@ export const sampleVoiceNotes = [
   },
   {
     id: 'vn-2',
-    transcript: 'Idea for the Boundless partnership: propose a revenue share model instead of flat fee. Could be more attractive to both parties.',
+    transcript: 'Idea for the Sample Project partnership: propose a revenue share model instead of flat fee. Could be more attractive to both parties.',
     category: 'idea',
     timestamp: new Date(Date.now() - 24 * 60 * 60 * 1000),
   },

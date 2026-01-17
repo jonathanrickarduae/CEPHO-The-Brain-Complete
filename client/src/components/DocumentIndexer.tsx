@@ -58,9 +58,9 @@ const MOCK_DOCUMENTS: IndexedDocument[] = [
   },
   {
     id: 'd3',
-    name: 'NDA_Boundless_Signed.pdf',
+    name: 'NDA_Sample_Signed.pdf',
     type: 'contract',
-    project: 'Boundless',
+    project: 'Sample Project',
     indexedAt: '3 days ago',
     chunks: 12,
     preview: 'Non-disclosure agreement between parties regarding confidential information...'

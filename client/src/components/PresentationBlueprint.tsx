@@ -81,7 +81,7 @@ const designThemes: DesignTheme[] = [
 
 // Sample inherited data from Genesis Master
 const genesisData = {
-  companyName: 'Boundless AI',
+  companyName: 'Sample Project AI',
   tagline: 'The AI command center for strategic decision-making',
   problem: 'Business leaders are overwhelmed by fragmented tools, disconnected data, and the cognitive load of managing multiple AI assistants.',
   solution: 'A unified AI ecosystem that learns your patterns, manages your digital life, and proactively surfaces insights and opportunities.',
@@ -110,7 +110,7 @@ const genesisData = {
 
 // Available projects from Genesis/Library
 const availableProjects = [
-  { id: 'boundless-ai', name: 'Boundless AI', description: 'AI command center platform', lastUpdated: '2 days ago' },
+  { id: 'boundless-ai', name: 'Sample Project AI', description: 'AI command center platform', lastUpdated: '2 days ago' },
   { id: 'short-circle-navigator', name: 'Short Circle Navigator', description: 'Investment navigation tool', lastUpdated: '1 week ago' },
   { id: 'celadon', name: 'Celadon', description: 'Sustainable technology venture', lastUpdated: '3 days ago' },
   { id: 'project-genesis', name: 'Project Genesis', description: 'Innovation incubator', lastUpdated: '5 days ago' },
@@ -711,7 +711,7 @@ export function PresentationBlueprint() {
             <div className="flex items-center gap-3">
               <Brain className="w-5 h-5 text-muted-foreground" />
               <span className="text-foreground">
-                Source: <strong>Genesis Master - Boundless AI</strong>
+                Source: <strong>Genesis Master - Sample Project AI</strong>
               </span>
             </div>
           </div>

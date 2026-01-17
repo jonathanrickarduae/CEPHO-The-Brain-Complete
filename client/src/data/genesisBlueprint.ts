@@ -310,7 +310,7 @@ export const genesisWizardQuestions: WizardQuestion[] = [
     section: 'business',
     question: 'What is the company/project name?',
     type: 'text',
-    placeholder: 'e.g., Boundless AI',
+    placeholder: 'e.g., Sample Project AI',
     required: true,
     skipIf: { documentType: 'pitch_deck', field: 'companyName' }
   },
