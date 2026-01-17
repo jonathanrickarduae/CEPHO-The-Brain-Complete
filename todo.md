@@ -4371,3 +4371,11 @@
 - [ ] Track improvement trends over time
 - [ ] Highlight areas needing attention
 - [ ] Report on fixes implemented and their impact
+
+
+## SME Expert Photos (Jan 17, 2026)
+
+- [x] Identify all SME experts needing photos (64 missing out of 99)
+- [x] Generate professional headshot photos for all 99 SME experts
+- [x] Save photos to project avatars folder (35MB compressed)
+- [x] Update SME references with photo paths
