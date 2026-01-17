@@ -593,7 +593,7 @@ export function BusinessPlanReview({
 
       let reportContent = `# Business Plan Review Report\n\n`;
       reportContent += `**Project:** ${projectName}\n`;
-      reportContent += `**Date:** ${new Date().toLocaleDateString()}\n`;
+      reportContent += `**Date:** ${new Date().toLocaleDateString('en-GB')}\n`;
       reportContent += `**Overall Score:** ${overallScore}%\n\n`;
       reportContent += `---\n\n`;
       reportContent += `## Overall Assessment\n\n`;
@@ -670,7 +670,7 @@ export function BusinessPlanReview({
 
     let reportContent = `# Business Plan Review Report\n\n`;
     reportContent += `**Project:** ${projectName}\n`;
-    reportContent += `**Date:** ${new Date().toLocaleDateString()}\n`;
+    reportContent += `**Date:** ${new Date().toLocaleDateString('en-GB')}\n`;
     reportContent += `**Overall Score:** ${overallScore}%\n\n`;
     reportContent += `---\n\n`;
 
@@ -731,7 +731,7 @@ export function BusinessPlanReview({
 
       const result = await saveVersionMutation.mutateAsync({
         projectName,
-        versionLabel: versionLabel || `Review ${new Date().toLocaleDateString()}`,
+        versionLabel: versionLabel || `Review ${new Date().toLocaleDateString('en-GB')}`,
         overallScore,
         sectionScores,
         reviewData: reviews,

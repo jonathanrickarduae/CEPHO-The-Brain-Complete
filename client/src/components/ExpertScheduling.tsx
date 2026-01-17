@@ -188,7 +188,7 @@ export function ExpertScheduling() {
           <CardHeader className="pb-3">
             <div className="flex items-center justify-between">
               <CardTitle className="text-base">
-                {currentMonth.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
+                {currentMonth.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' })}
               </CardTitle>
               <div className="flex gap-1">
                 <Button
@@ -312,7 +312,7 @@ export function ExpertScheduling() {
                       </div>
                       <div className="flex items-center justify-between text-xs text-muted-foreground">
                         <span>
-                          {session.date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}
+                          {session.date.toLocaleDateString('en-GB', { weekday: 'short', month: 'short', day: 'numeric' })}
                           {' • '}
                           {session.date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
                         </span>
@@ -345,7 +345,7 @@ export function ExpertScheduling() {
         <Card className="bg-card/60 border-border">
           <CardHeader className="pb-3">
             <CardTitle className="text-base">
-              Sessions on {selectedDate.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
+              Sessions on {selectedDate.toLocaleDateString('en-GB', { weekday: 'long', month: 'long', day: 'numeric' })}
             </CardTitle>
           </CardHeader>
           <CardContent>

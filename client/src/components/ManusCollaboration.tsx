@@ -143,7 +143,7 @@ export function CommentsThread({ entityId, entityType }: { entityId?: string; en
     if (mins < 60) return `${mins}m ago`;
     const hours = Math.floor(mins / 60);
     if (hours < 24) return `${hours}h ago`;
-    return date.toLocaleDateString();
+    return date.toLocaleDateString('en-GB');
   };
 
   return (
@@ -239,7 +239,7 @@ export function ActivityFeed({ projectId }: { projectId?: string }) {
     if (mins < 60) return `${mins}m ago`;
     const hours = Math.floor(mins / 60);
     if (hours < 24) return `${hours}h ago`;
-    return date.toLocaleDateString();
+    return date.toLocaleDateString('en-GB');
   };
 
   const getActionIcon = (action: string) => {

@@ -25,6 +25,7 @@ import {
 } from "lucide-react";
 import { trpc } from "@/lib/trpc";
 import { Link } from "wouter";
+import SubscriptionTracker from "@/components/SubscriptionTracker";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -403,25 +404,7 @@ export default function DevelopmentPathway() {
 
           {/* Subscriptions Tab */}
           <TabsContent value="subscriptions">
-            <Card className="bg-gray-900/50 border-gray-800">
-              <CardHeader>
-                <CardTitle className="text-white flex items-center gap-2">
-                  <CreditCard className="w-5 h-5 text-amber-400" />
-                  Subscription & Cost Tracking
-                </CardTitle>
-                <CardDescription>Track all productivity apps and their costs</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="text-center py-8">
-                  <CreditCard className="w-16 h-16 text-amber-400/50 mx-auto mb-4" />
-                  <p className="text-gray-400 mb-4">Subscription tracking coming soon</p>
-                  <p className="text-sm text-gray-500 max-w-md mx-auto">
-                    Track all your productivity tools, SaaS subscriptions, and operational costs in one place.
-                    Get insights on spending and optimize your tech stack.
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
+            <SubscriptionTracker />
           </TabsContent>
 
           {/* Chief of Staff Reviews Tab */}

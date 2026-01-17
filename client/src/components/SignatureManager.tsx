@@ -432,7 +432,7 @@ export function SignatureManager({ onSave, compact = false }: SignatureManagerPr
                     <div>
                       <p className="font-medium text-foreground">{sig.name}</p>
                       <p className="text-xs text-muted-foreground capitalize">
-                        {sig.type} • {sig.createdAt.toLocaleDateString()}
+                        {sig.type} • {sig.createdAt.toLocaleDateString('en-GB')}
                       </p>
                     </div>
                   </div>

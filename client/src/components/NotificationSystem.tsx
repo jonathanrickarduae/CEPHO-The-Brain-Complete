@@ -153,7 +153,7 @@ export function NotificationBell() {
     if (mins < 1) return 'Just now';
     if (mins < 60) return `${mins}m ago`;
     if (hours < 24) return `${hours}h ago`;
-    return date.toLocaleDateString();
+    return date.toLocaleDateString('en-GB');
   };
 
   return (

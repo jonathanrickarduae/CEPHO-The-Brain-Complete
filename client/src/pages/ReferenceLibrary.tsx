@@ -600,9 +600,9 @@ export default function ReferenceLibrary() {
                 )}
                 
                 <div className="text-xs text-muted-foreground">
-                  Added: {new Date(selectedReference.dateAccessed).toLocaleDateString()}
+                  Added: {new Date(selectedReference.dateAccessed).toLocaleDateString('en-GB')}
                   {selectedReference.verifiedAt && (
-                    <> · Verified: {new Date(selectedReference.verifiedAt).toLocaleDateString()}</>
+                    <> · Verified: {new Date(selectedReference.verifiedAt).toLocaleDateString('en-GB')}</>
                   )}
                 </div>
                 

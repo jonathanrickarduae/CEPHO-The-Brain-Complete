@@ -175,7 +175,7 @@ export function SwipeableTask({ task, onApprove, onReject, onDefer }: SwipeableT
         </div>
         {task.dueDate && (
           <div className="text-xs text-muted-foreground mt-2">
-            Due: {task.dueDate.toLocaleDateString()}
+            Due: {task.dueDate.toLocaleDateString('en-GB')}
           </div>
         )}
         <div className="text-xs text-muted-foreground mt-2 md:hidden">

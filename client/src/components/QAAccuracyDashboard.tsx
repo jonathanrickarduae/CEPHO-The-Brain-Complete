@@ -276,7 +276,7 @@ export function QAAccuracyDashboard() {
                 />
               </div>
               <span className="text-xs text-muted-foreground">
-                {new Date(point.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                {new Date(point.date).toLocaleDateString('en-GB', { month: 'short', day: 'numeric' })}
               </span>
             </div>
           ))}

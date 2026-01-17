@@ -121,7 +121,7 @@ function formatTimeAgo(date: Date): string {
   if (seconds < 60) return 'Just now';
   if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`;
   if (seconds < 86400) return `${Math.floor(seconds / 3600)}h ago`;
-  return date.toLocaleDateString();
+  return date.toLocaleDateString('en-GB');
 }
 
 export function ActivityLog({

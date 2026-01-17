@@ -3546,9 +3546,9 @@
 - [ ] Add sorting controls (by score, by category, by name, by recent use)
 - [ ] Add filtering by category, specialty, performance rating
 - [ ] Improve expert card design with ranking indicators
-- [ ] Fix all date formats to UK format (DD/MM/YYYY) throughout the app
+- [x] Fix all date formats to UK format (DD/MM/YYYY) throughout the app
 
-- [ ] Fix Vault page - no scroll, content fits on one screen at top
+- [x] Fix Vault page - no scroll, content fits on one screen at top
 
 
 ## Productivity Engine Framework Integration (January 2026)
@@ -3625,7 +3625,7 @@
 
 ## Bug Fixes (Current)
 - [x] Fix Vault page syntax error
-- [ ] Fix UK date formats throughout app
+- [x] Fix UK date formats throughout app
 
 - [x] Change tagline to "Your headspace, reclaimed"
 
@@ -3945,14 +3945,14 @@
 ## UI Fixes (Jan 17, 2026)
 
 ### Text Visibility
-- [ ] Fix black text on dark backgrounds - change to white for readability
-- [ ] Review all pages for text contrast issues
-- [ ] Ensure consistent text colors across dark-themed components
+- [x] Fix black text on dark backgrounds - change to white for readability
+- [x] Review all pages for text contrast issues
+- [x] Ensure consistent text colors across dark-themed components
 
 ### AI SME Avatars
-- [ ] Add AI-generated avatar images to individual SME expert cards
-- [ ] Load avatar images from generated assets
-- [ ] Display avatars on expert profile cards in AI-SMEs page
+- [x] Add AI-generated avatar images to individual SME expert cards
+- [x] Load avatar images from generated assets (optimized to 7-16KB JPGs)
+- [x] Display avatars on expert profile cards in AI-SMEs page
 
 
 ## Government Funding Assessment Feature (Jan 17, 2026)
@@ -4007,20 +4007,20 @@
 ## Subscription & Cost Tracking (Jan 17, 2026)
 
 ### Productivity App Subscriptions
-- [ ] Create subscriptions database table (name, provider, cost, billing_cycle, category)
-- [ ] Add subscription management page in dashboard
-- [ ] Track all productivity tools being used (AI tools, SaaS, etc.)
-- [ ] Capture monthly/annual costs for each subscription
-- [ ] Calculate total monthly and annual spend
-- [ ] Categorize subscriptions (AI/ML, Productivity, Development, Marketing, etc.)
-- [ ] Add renewal date tracking and reminders
-- [ ] Show cost breakdown by category
+- [x] Create subscriptions database table (name, provider, cost, billing_cycle, category)
+- [x] Add subscription management page in dashboard (SubscriptionTracker component)
+- [x] Track all productivity tools being used (AI tools, SaaS, etc.)
+- [x] Capture monthly/annual costs for each subscription
+- [x] Calculate total monthly and annual spend
+- [x] Categorize subscriptions (AI/ML, Productivity, Development, Marketing, etc.)
+- [x] Add renewal date tracking and reminders (Needs Attention indicator)
+- [x] Show cost breakdown by category
 - [ ] Integration with Innovation Hub to track idea-related tool costs
 
 ### Cost Analysis Dashboard
-- [ ] Total subscription spend visualization
+- [x] Total subscription spend visualization (Monthly/Annual cards)
 - [ ] Cost trends over time
-- [ ] Category breakdown charts
+- [x] Category breakdown charts (Spend by Category panel)
 - [ ] ROI tracking per tool
 - [ ] Budget vs actual spend comparison
 
@@ -4028,11 +4028,11 @@
 ## Sidebar Navigation Update (Jan 17, 2026)
 
 ### Development Pathway Section
-- [ ] Add clear "Development Pathway" section to left sidebar
-- [ ] Include Innovation Hub link
-- [ ] Include Government Funding link
-- [ ] Include Subscription Tracking link
-- [ ] Ensure visual hierarchy is clear
+- [x] Add clear "Development Pathway" section to left sidebar
+- [x] Include Innovation Hub link
+- [x] Include Government Funding link (in Development Pathway tabs)
+- [x] Include Subscription Tracking link (in Development Pathway tabs)
+- [x] Ensure visual hierarchy is clear
 
 ### TypeScript Fixes
 - [ ] Fix fundingAssessmentService.ts database integration

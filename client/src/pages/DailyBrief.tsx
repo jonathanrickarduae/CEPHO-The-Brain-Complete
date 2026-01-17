@@ -24,7 +24,7 @@ interface ActionedItem {
 
 // Mock data for the daily brief
 const BRIEF_DATA = {
-  date: new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }),
+  date: new Date().toLocaleDateString('en-GB', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }),
   
   // Overview summary points
   overviewSummary: {

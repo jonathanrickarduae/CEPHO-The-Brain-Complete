@@ -318,7 +318,7 @@ export function DigitalTwinSandbox() {
                       <AlertCircle className="w-5 h-5 text-yellow-400" />
                     )}
                     <span className="text-sm text-muted-foreground">
-                      {result.timestamp.toLocaleDateString()} {result.timestamp.toLocaleTimeString()}
+                      {result.timestamp.toLocaleDateString('en-GB')} {result.timestamp.toLocaleTimeString()}
                     </span>
                   </div>
                   <span className={`text-sm font-medium ${

@@ -157,7 +157,7 @@ export function SourceReferenceCard({ source, index }: { source: SourceReference
           <ExternalLink className="w-3 h-3 text-gray-500 flex-shrink-0" />
         </div>
         <div className="flex items-center gap-4 text-xs text-gray-400">
-          <span>Verified: {new Date(source.accessDate).toLocaleDateString()}</span>
+          <span>Verified: {new Date(source.accessDate).toLocaleDateString('en-GB')}</span>
           <span className={source.isAccessible ? 'text-green-400' : 'text-red-400'}>
             {source.isAccessible ? '✓ Active' : '✗ Inactive'}
           </span>

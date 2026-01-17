@@ -233,7 +233,7 @@ export function TermsAcceptance({ toolId, onAccept, onDecline }: TermsAcceptance
             {selectedTool.acceptedAt && (
               <div className="mt-3 flex items-center gap-2 text-sm text-green-400">
                 <Check className="w-4 h-4" />
-                Terms accepted on {selectedTool.acceptedAt.toLocaleDateString()}
+                Terms accepted on {selectedTool.acceptedAt.toLocaleDateString('en-GB')}
               </div>
             )}
           </CardContent>

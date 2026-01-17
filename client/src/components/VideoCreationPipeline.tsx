@@ -167,7 +167,7 @@ export function VideoCreationPipeline() {
                       {project.scenes.length} scenes • {formatDuration(project.duration)}
                     </p>
                     <p className="text-xs text-muted-foreground">
-                      Created {project.createdAt.toLocaleDateString()}
+                      Created {project.createdAt.toLocaleDateString('en-GB')}
                     </p>
                   </div>
                   <div className="flex gap-2">

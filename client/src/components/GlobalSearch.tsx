@@ -218,7 +218,7 @@ export function GlobalSearch({ isOpen, onClose }: { isOpen: boolean; onClose: ()
                       )}
                       {result.date && (
                         <p className="text-xs text-muted-foreground/70 mt-0.5">
-                          {result.date.toLocaleDateString()}
+                          {result.date.toLocaleDateString('en-GB')}
                         </p>
                       )}
                     </div>

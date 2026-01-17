@@ -151,7 +151,7 @@ export function PresentationBlueprint() {
     id: p.id.toString(),
     name: p.name,
     description: p.description || `${p.type} - ${p.counterparty || 'In progress'}`,
-    lastUpdated: p.updatedAt ? new Date(p.updatedAt).toLocaleDateString() : 'Recently'
+    lastUpdated: p.updatedAt ? new Date(p.updatedAt).toLocaleDateString('en-GB') : 'Recently'
   })) || availableProjects;
 
   const toggleSlide = (type: SlideType) => {

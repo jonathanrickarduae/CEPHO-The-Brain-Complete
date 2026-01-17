@@ -135,7 +135,7 @@ export default function ReviewQueue() {
     
     if (mins < 60) return `${mins}m ago`;
     if (hours < 24) return `${hours}h ago`;
-    return date.toLocaleDateString();
+    return date.toLocaleDateString('en-GB');
   };
 
   const handleRefresh = async () => {

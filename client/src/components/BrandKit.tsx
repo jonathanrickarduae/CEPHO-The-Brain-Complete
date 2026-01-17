@@ -156,7 +156,7 @@ export function BrandKitManager() {
               <div>
                 <h1 className="text-2xl font-bold text-foreground">{selectedBrand.name}</h1>
                 <p className="text-sm text-muted-foreground">
-                  Created {selectedBrand.createdAt.toLocaleDateString()}
+                  Created {selectedBrand.createdAt.toLocaleDateString('en-GB')}
                 </p>
               </div>
             </div>

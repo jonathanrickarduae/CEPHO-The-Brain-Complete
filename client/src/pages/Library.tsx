@@ -158,7 +158,7 @@ export default function Library() {
             </div>
             <div className="flex items-center gap-1">
               <Calendar className="w-4 h-4" />
-              {new Date(selectedConsultation.createdAt).toLocaleDateString()}
+              {new Date(selectedConsultation.createdAt).toLocaleDateString('en-GB')}
             </div>
           </div>
           <ScrollArea className="flex-1 pr-4">
@@ -544,7 +544,7 @@ export default function Library() {
                 <div className="text-3xl font-bold text-white">
                   {consultationsLoading ? '...' : 
                     consultations?.length ? 
-                      new Date(Math.max(...consultations.map((c: LibraryDocument) => new Date(c.createdAt).getTime()))).toLocaleDateString() 
+                      new Date(Math.max(...consultations.map((c: LibraryDocument) => new Date(c.createdAt).getTime()))).toLocaleDateString('en-GB') 
                       : '-'
                   }
                 </div>
@@ -587,7 +587,7 @@ export default function Library() {
                         </span>
                         <span className="flex items-center gap-1">
                           <Calendar className="w-3 h-3" />
-                          {new Date(consultation.createdAt).toLocaleDateString()}
+                          {new Date(consultation.createdAt).toLocaleDateString('en-GB')}
                         </span>
                       </div>
                     </div>

@@ -41,7 +41,7 @@ export function MoodTimeline({ days = 7, className }: MoodTimelineProps) {
     
     const groups: Record<string, typeof history> = {};
     history.forEach(entry => {
-      const date = new Date(entry.createdAt).toLocaleDateString();
+      const date = new Date(entry.createdAt).toLocaleDateString('en-GB');
       if (!groups[date]) groups[date] = [];
       groups[date].push(entry);
     });
@@ -187,7 +187,7 @@ export function MoodTimeline({ days = 7, className }: MoodTimelineProps) {
                   )}
                 </div>
                 <span className="text-[10px] text-muted-foreground">
-                  {new Date(entry.createdAt).toLocaleDateString()}
+                  {new Date(entry.createdAt).toLocaleDateString('en-GB')}
                 </span>
               </div>
             );

@@ -203,7 +203,7 @@ export function AsanaIntegration({ onConnect }: AsanaIntegrationProps) {
     
     if (minutes < 60) return `${minutes}m ago`;
     if (hours < 24) return `${hours}h ago`;
-    return date.toLocaleDateString();
+    return date.toLocaleDateString('en-GB');
   };
 
   const getStatusColor = (status: string) => {
