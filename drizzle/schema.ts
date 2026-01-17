@@ -711,18 +711,39 @@ export type AuditLog = typeof auditLog.$inferSelect;
 export type InsertAuditLog = typeof auditLog.$inferInsert;
 
 /**
- * Subscriptions - SaaS subscription tracking
+ * Subscriptions - SaaS subscription tracking with enhanced cost analysis
  */
 export const subscriptions = mysqlTable("subscriptions", {
   id: int("id").autoincrement().primaryKey(),
   userId: int("userId").notNull(),
   name: varchar("name", { length: 200 }).notNull(), // "Asana", "Slack", "Zoom", etc.
-  category: varchar("category", { length: 100 }), // "productivity", "communication", "storage", etc.
-  cost: float("cost"), // Monthly cost in USD
-  billingCycle: mysqlEnum("billingCycle", ["monthly", "annual", "one_time"]).default("monthly"),
+  provider: varchar("provider", { length: 200 }), // Company name
+  description: text("description"),
+  category: mysqlEnum("category", [
+    "ai_ml",
+    "productivity",
+    "development",
+    "marketing",
+    "design",
+    "communication",
+    "storage",
+    "analytics",
+    "finance",
+    "security",
+    "other"
+  ]).default("other").notNull(),
+  cost: float("cost").notNull(), // Cost in AED
+  billingCycle: mysqlEnum("billingCycle", ["monthly", "quarterly", "annual", "one_time", "usage_based"]).default("monthly").notNull(),
+  currency: varchar("currency", { length: 10 }).default("AED").notNull(),
+  status: mysqlEnum("status", ["active", "paused", "cancelled", "trial"]).default("active").notNull(),
+  startDate: timestamp("startDate"),
   renewalDate: timestamp("renewalDate"),
-  status: mysqlEnum("status", ["active", "cancelled", "paused", "trial"]).default("active"),
+  trialEndDate: timestamp("trialEndDate"),
   usagePercent: int("usagePercent"), // 0-100, how much of the subscription is used
+  websiteUrl: text("websiteUrl"),
+  logoUrl: text("logoUrl"),
+  linkedIdeaId: int("linkedIdeaId"), // Link to innovation idea if subscription is for a specific project
+  linkedProjectId: int("linkedProjectId"),
   notes: text("notes"),
   metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
@@ -2108,3 +2129,85 @@ export const generatedDocuments = mysqlTable("generated_documents", {
 
 export type GeneratedDocument = typeof generatedDocuments.$inferSelect;
 export type InsertGeneratedDocument = typeof generatedDocuments.$inferInsert;
+
+
+/**
+ * Funding Programs - Government funding programs database (UAE & UK)
+ */
+export const fundingPrograms = mysqlTable("funding_programs", {
+  id: int("id").autoincrement().primaryKey(),
+  programId: varchar("programId", { length: 100 }).notNull().unique(),
+  name: varchar("name", { length: 300 }).notNull(),
+  country: mysqlEnum("country", ["UAE", "UK", "EU", "US", "Other"]).notNull(),
+  region: varchar("region", { length: 100 }), // e.g., "Dubai", "Abu Dhabi", "England"
+  type: mysqlEnum("type", [
+    "grant",
+    "loan",
+    "tax_credit",
+    "equity",
+    "accelerator",
+    "incubator",
+    "competition",
+    "other"
+  ]).notNull(),
+  provider: varchar("provider", { length: 200 }).notNull(), // e.g., "MBRIF", "Innovate UK"
+  description: text("description"),
+  fundingMin: float("fundingMin"), // Minimum funding amount in AED
+  fundingMax: float("fundingMax"), // Maximum funding amount in AED
+  equityRequired: float("equityRequired"), // Percentage if applicable
+  interestRate: float("interestRate"), // For loans
+  repaymentTerms: text("repaymentTerms"),
+  eligibilityCriteria: json("eligibilityCriteria"), // Array of criteria
+  requiredDocuments: json("requiredDocuments"), // Array of required documents
+  applicationProcess: json("applicationProcess"), // Steps to apply
+  deadlines: json("deadlines"), // Application deadlines
+  sectors: json("sectors"), // Eligible sectors
+  stages: json("stages"), // Eligible business stages (pre-seed, seed, etc.)
+  websiteUrl: text("websiteUrl"),
+  applicationUrl: text("applicationUrl"),
+  contactEmail: varchar("contactEmail", { length: 320 }),
+  successRate: float("successRate"), // Historical success rate percentage
+  averageProcessingDays: int("averageProcessingDays"),
+  isActive: boolean("isActive").default(true).notNull(),
+  lastUpdated: timestamp("lastUpdated"),
+  metadata: json("metadata"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type FundingProgram = typeof fundingPrograms.$inferSelect;
+export type InsertFundingProgram = typeof fundingPrograms.$inferInsert;
+
+/**
+ * Funding Assessments - Idea eligibility assessments for funding programs
+ */
+export const fundingAssessments = mysqlTable("funding_assessments", {
+  id: int("id").autoincrement().primaryKey(),
+  assessmentId: varchar("assessmentId", { length: 100 }).notNull().unique(),
+  userId: int("userId").notNull(),
+  ideaId: int("ideaId").notNull(), // Link to innovation idea
+  programId: varchar("programId", { length: 100 }).notNull(), // Link to funding program
+  eligibilityScore: float("eligibilityScore"), // 0-100 score
+  eligibilityStatus: mysqlEnum("eligibilityStatus", [
+    "highly_eligible",
+    "eligible",
+    "partially_eligible",
+    "not_eligible",
+    "needs_review"
+  ]).default("needs_review").notNull(),
+  criteriaResults: json("criteriaResults"), // Detailed results per criterion
+  strengths: json("strengths"), // Array of strengths for this program
+  gaps: json("gaps"), // Array of gaps/missing requirements
+  recommendations: json("recommendations"), // How to improve eligibility
+  estimatedFunding: float("estimatedFunding"), // Estimated funding amount in AED
+  applicationReadiness: float("applicationReadiness"), // 0-100 how ready to apply
+  generatedDocuments: json("generatedDocuments"), // Auto-generated application materials
+  notes: text("notes"),
+  assessedAt: timestamp("assessedAt").defaultNow().notNull(),
+  metadata: json("metadata"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type FundingAssessment = typeof fundingAssessments.$inferSelect;
+export type InsertFundingAssessment = typeof fundingAssessments.$inferInsert;

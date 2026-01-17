@@ -141,6 +141,20 @@
       "when": 1768640996606,
       "tag": "0019_flowery_loki",
       "breakpoints": true
+    },
+    {
+      "idx": 20,
+      "version": "5",
+      "when": 1768646481885,
+      "tag": "0020_dapper_leo",
+      "breakpoints": true
+    },
+    {
+      "idx": 21,
+      "version": "5",
+      "when": 1768646530206,
+      "tag": "0021_spooky_gorilla_man",
+      "breakpoints": true
     }
   ]
 }

@@ -18,6 +18,7 @@ import {
   type AIExpert,
   type CorporatePartner
 } from "@/data/aiExperts";
+import { getAvatarUrl } from "@/data/avatarMappings";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -731,17 +732,29 @@ export function ExpertDirectory({ onSelectExpert, onBack }: ExpertDirectoryProps
                   >
                     <CardContent className="p-4">
                       <div className="flex items-start gap-3 mb-3">
-                        {expert.avatarUrl ? (
-                          <img 
-                            src={expert.avatarUrl} 
-                            alt={expert.name}
-                            className="w-12 h-12 rounded-xl object-cover border border-cyan-500/30 flex-shrink-0"
-                          />
-                        ) : (
-                          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-500/20 to-purple-500/20 border border-cyan-500/30 flex items-center justify-center text-2xl flex-shrink-0">
-                            {expert.avatar}
-                          </div>
-                        )}
+                        {(() => {
+                          const avatarUrl = expert.avatarUrl || getAvatarUrl(expert.name);
+                          const hasRealAvatar = avatarUrl && avatarUrl.startsWith('/avatars/');
+                          return hasRealAvatar ? (
+                            <img 
+                              src={avatarUrl} 
+                              alt={expert.name}
+                              className="w-12 h-12 rounded-xl object-cover border border-cyan-500/30 flex-shrink-0"
+                              onError={(e) => {
+                                // Fallback to emoji on image load error
+                                e.currentTarget.style.display = 'none';
+                                const fallback = e.currentTarget.nextElementSibling as HTMLElement;
+                                if (fallback) fallback.style.display = 'flex';
+                              }}
+                            />
+                          ) : null;
+                        })()}
+                        <div 
+                          className="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-500/20 to-purple-500/20 border border-cyan-500/30 flex items-center justify-center text-2xl flex-shrink-0"
+                          style={{ display: (expert.avatarUrl || getAvatarUrl(expert.name))?.startsWith('/avatars/') ? 'none' : 'flex' }}
+                        >
+                          {expert.avatar}
+                        </div>
                         <div className="flex-1 min-w-0">
                           <h3 className="font-semibold text-foreground truncate group-hover:text-primary transition-colors">
                             {expert.name}

@@ -56,6 +56,7 @@ const menuItems = [
   { icon: Sparkles, label: "Morning Signal", path: "/morning-signal" },
   { icon: Rocket, label: "Project Genesis", path: "/project-genesis" },
   { icon: TrendingUp, label: "Innovation Hub", path: "/innovation-hub" },
+  { icon: Activity, label: "Development Pathway", path: "/development-pathway" },
   { icon: Users, label: "AI-SMEs", path: "/ai-experts" },
   { icon: Briefcase, label: "Chief of Staff", path: "/digital-twin" },
   { icon: Workflow, label: "Workflow", path: "/workflow", count: 2 },

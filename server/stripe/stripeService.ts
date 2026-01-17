@@ -138,7 +138,7 @@ export async function handleCheckoutComplete(session: Stripe.Checkout.Session) {
     await db.insert(subscriptions).values({
       userId,
       name: "CEPHO Pro",
-      category: "subscription",
+      category: "productivity",
       cost: 49,
       billingCycle: "monthly",
       renewalDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),

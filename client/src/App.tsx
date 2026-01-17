@@ -41,6 +41,7 @@ import CentralHub from "./pages/CentralHub";
 import ExpertChatPage from "./pages/ExpertChatPage";
 import InnovationHub from "./pages/InnovationHub";
 import DocumentLibrary from "./pages/DocumentLibrary";
+import DevelopmentPathway from "./pages/DevelopmentPathway";
 import { GovernanceProvider, GovernanceModeChangeModal } from "./hooks/useGovernance";
 import { AIRouterProvider } from "./components/AIRouter";
 import { CelebrationProvider } from "./components/CelebrationAnimations";
@@ -134,6 +135,9 @@ function Router() {
       </Route>
       <Route path="/documents">
         <WithLayout><DocumentLibrary /></WithLayout>
+      </Route>
+      <Route path="/development-pathway">
+        <WithLayout><DevelopmentPathway /></WithLayout>
       </Route>
       <Route path="/due-diligence">
         <WithLayout><DueDiligencePage /></WithLayout>

@@ -3618,6 +3618,71 @@ ${transcript}
         const { STRATEGIC_FRAMEWORK } = await import('./services/innovationEngineService');
         return STRATEGIC_FRAMEWORK[input.assessmentType];
       }),
+
+    // === Government Funding Assessment ===
+    
+    // Get all funding programs
+    getFundingPrograms: publicProcedure
+      .input(z.object({
+        country: z.enum(["UAE", "UK"]).optional(),
+        type: z.string().optional(),
+      }).optional())
+      .query(async ({ input }) => {
+        const { ALL_FUNDING_PROGRAMS } = await import('./services/fundingAssessmentService');
+        let programs = ALL_FUNDING_PROGRAMS;
+        if (input?.country) {
+          programs = programs.filter(p => p.country === input.country);
+        }
+        if (input?.type) {
+          programs = programs.filter(p => p.type === input.type);
+        }
+        return programs;
+      }),
+
+    // Get eligible programs for an idea
+    getEligiblePrograms: protectedProcedure
+      .input(z.object({
+        ideaId: z.number(),
+        country: z.enum(["UAE", "UK"]).optional(),
+      }))
+      .query(async ({ input }) => {
+        const { getEligiblePrograms } = await import('./services/fundingAssessmentService');
+        const { getIdeaWithAssessments } = await import('./services/innovationEngineService');
+        const idea = await getIdeaWithAssessments(input.ideaId);
+        if (!idea) return [];
+        return getEligiblePrograms(idea.idea?.category || 'Technology', idea.idea?.currentStage?.toString() || 'seed', input.country);
+      }),
+
+    // Assess idea for a specific funding program
+    assessForFunding: protectedProcedure
+      .input(z.object({
+        ideaId: z.number(),
+        programId: z.string(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        const { assessIdeaForProgram } = await import('./services/fundingAssessmentService');
+        return assessIdeaForProgram(ctx.user.id, input.ideaId, input.programId);
+      }),
+
+    // Get all funding assessments for an idea
+    getIdeaFundingAssessments: protectedProcedure
+      .input(z.object({ ideaId: z.number() }))
+      .query(async ({ input }) => {
+        const { getIdeaFundingAssessments } = await import('./services/fundingAssessmentService');
+        return getIdeaFundingAssessments(input.ideaId);
+      }),
+
+    // Generate application documents for a funding program
+    generateFundingDocuments: protectedProcedure
+      .input(z.object({
+        ideaId: z.number(),
+        programId: z.string(),
+        documentTypes: z.array(z.string()),
+      }))
+      .mutation(async ({ input }) => {
+        const { generateApplicationDocuments } = await import('./services/fundingAssessmentService');
+        return generateApplicationDocuments(input.ideaId, input.programId, input.documentTypes);
+      }),
   }),
 
   // Stripe Payment Router

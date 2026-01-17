@@ -3940,3 +3940,136 @@
 - [x] Include document attachment or link
 - [x] Send via notification service
 - [x] Track email send history in document metadata
+
+
+## UI Fixes (Jan 17, 2026)
+
+### Text Visibility
+- [ ] Fix black text on dark backgrounds - change to white for readability
+- [ ] Review all pages for text contrast issues
+- [ ] Ensure consistent text colors across dark-themed components
+
+### AI SME Avatars
+- [ ] Add AI-generated avatar images to individual SME expert cards
+- [ ] Load avatar images from generated assets
+- [ ] Display avatars on expert profile cards in AI-SMEs page
+
+
+## Government Funding Assessment Feature (Jan 17, 2026)
+
+### Core Functionality
+- [ ] Create Government Funding Assessment as new assessment type in Innovation Hub
+- [ ] Add "Funding Opportunities" tab to idea detail view
+- [ ] Integrate into development pathway after Financial Viability assessment
+
+### UAE Funding Programs
+- [ ] Research and catalog UAE government funding programs:
+  - [ ] Mohammed Bin Rashid Innovation Fund (MBRIF)
+  - [ ] Khalifa Fund for Enterprise Development
+  - [ ] Dubai SME programs
+  - [ ] Abu Dhabi Investment Office (ADIO) incentives
+  - [ ] Emirates Development Bank startup loans
+  - [ ] Hub71 funding programs
+- [ ] Create eligibility criteria checklist for each program
+- [ ] Build auto-assessment against UAE program requirements
+
+### UK Funding Programs
+- [ ] Research and catalog UK government funding programs:
+  - [ ] R&D Tax Credits (SME and RDEC schemes)
+  - [ ] Innovate UK Smart Grants
+  - [ ] British Business Bank Start Up Loans
+  - [ ] Enterprise Investment Scheme (EIS)
+  - [ ] Seed Enterprise Investment Scheme (SEIS)
+  - [ ] Patent Box tax relief
+  - [ ] Creative Industries Tax Relief
+- [ ] Create eligibility criteria checklist for each program
+- [ ] Build auto-assessment against UK program requirements
+
+### Application Support
+- [ ] Auto-fill application forms using captured idea data
+- [ ] Generate supporting documents for each program:
+  - [ ] Executive summary tailored to funding body
+  - [ ] Technical innovation statement
+  - [ ] Market opportunity analysis
+  - [ ] Financial projections in required format
+  - [ ] Team capability statement
+- [ ] Track application status and deadlines
+- [ ] Store generated applications in Document Library
+
+### UI/UX
+- [ ] Add funding eligibility score to idea summary
+- [ ] Show matched programs with confidence percentage
+- [ ] Display application requirements checklist
+- [ ] Create application wizard for guided form completion
+- [ ] Add funding timeline visualization
+
+
+## Subscription & Cost Tracking (Jan 17, 2026)
+
+### Productivity App Subscriptions
+- [ ] Create subscriptions database table (name, provider, cost, billing_cycle, category)
+- [ ] Add subscription management page in dashboard
+- [ ] Track all productivity tools being used (AI tools, SaaS, etc.)
+- [ ] Capture monthly/annual costs for each subscription
+- [ ] Calculate total monthly and annual spend
+- [ ] Categorize subscriptions (AI/ML, Productivity, Development, Marketing, etc.)
+- [ ] Add renewal date tracking and reminders
+- [ ] Show cost breakdown by category
+- [ ] Integration with Innovation Hub to track idea-related tool costs
+
+### Cost Analysis Dashboard
+- [ ] Total subscription spend visualization
+- [ ] Cost trends over time
+- [ ] Category breakdown charts
+- [ ] ROI tracking per tool
+- [ ] Budget vs actual spend comparison
+
+
+## Sidebar Navigation Update (Jan 17, 2026)
+
+### Development Pathway Section
+- [ ] Add clear "Development Pathway" section to left sidebar
+- [ ] Include Innovation Hub link
+- [ ] Include Government Funding link
+- [ ] Include Subscription Tracking link
+- [ ] Ensure visual hierarchy is clear
+
+### TypeScript Fixes
+- [ ] Fix fundingAssessmentService.ts database integration
+- [ ] Simplify to use existing patterns from codebase
+
+
+## Development Pathway Sprint (Jan 17, 2026)
+
+### Development Pathway Landing Page
+- [x] Create dedicated /development-pathway management page
+- [x] Show all ideas in pipeline with stage indicators
+- [x] Display Government Funding opportunities matched to ideas
+- [x] Show Subscription/Cost tracking summary
+- [x] Add quick-capture for new development items
+- [x] Visual pipeline view (Kanban-style stages)
+
+### Chief of Staff Review System
+- [x] Twice-weekly scheduled reviews (e.g., Monday & Thursday)
+- [x] Chief of Staff provides clear review summary
+- [x] Highlight items needing attention/decision
+- [ ] Track review history and decisions made
+- [ ] Generate review reports for each session
+
+### Sidebar Navigation Enhancement
+- [x] Add "Development Pathway" section to left sidebar
+- [x] Include sub-items: Innovation Hub, Funding, Subscriptions
+- [x] Clear visual hierarchy with icons
+- [x] Active state indicators
+
+### Scheduled Reminders
+- [x] Twice-weekly reminder notifications for pathway review
+- [x] Configurable review days (default: Monday, Thursday)
+- [ ] Push notification or in-app alert
+- [x] Quick-access link to pathway from reminder
+
+### Idea Capture & Tracking
+- [x] Quick capture form for new development ideas (via Innovation Hub)
+- [x] Auto-categorize ideas (Innovation, Enhancement, Bug Fix)
+- [x] Link ideas to funding opportunities
+- [x] Track idea progression through stages
