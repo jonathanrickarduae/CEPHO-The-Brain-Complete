@@ -53,6 +53,7 @@ import { ThemeToggle } from "./ThemeToggle";
 const menuItems = [
   { icon: LayoutDashboard, label: "The Nexus", path: "/dashboard" },
   { icon: Sun, label: "The Signal", path: "/daily-brief", count: 3 },
+  { icon: Sparkles, label: "Morning Signal", path: "/morning-signal" },
   { icon: Rocket, label: "Project Genesis", path: "/project-genesis" },
   { icon: Users, label: "AI-SMEs", path: "/ai-experts" },
   { icon: Briefcase, label: "Chief of Staff", path: "/digital-twin" },

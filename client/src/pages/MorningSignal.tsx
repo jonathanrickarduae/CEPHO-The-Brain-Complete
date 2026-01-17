@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useAuth } from "@/_core/hooks/useAuth";
 import BrainLayout from "@/components/BrainLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { trpc } from "@/lib/trpc";
+import { toast } from "sonner";
 import {
   Sun,
   CheckCircle2,
@@ -20,6 +21,8 @@ import {
   ArrowRight,
   Play,
   Volume2,
+  Pause,
+  Loader2,
 } from "lucide-react";
 import { useLocation } from "wouter";
 
@@ -38,6 +41,8 @@ export default function MorningSignal() {
   const [, setLocation] = useLocation();
   const [currentTime, setCurrentTime] = useState(new Date());
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isGeneratingAudio, setIsGeneratingAudio] = useState(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   // Fetch evening review data
   const { data: eveningReviewData } = trpc.eveningReview.getLatest.useQuery(
@@ -199,10 +204,117 @@ export default function MorningSignal() {
     }
   };
 
-  const handlePlayBrief = () => {
-    setIsPlaying(!isPlaying);
-    // TODO: Integrate with ElevenLabs for audio playback
+  // TTS mutation for generating audio
+  const generateVoiceMutation = trpc.expertEvolution.generateVoice.useMutation();
+
+  // Generate brief text for TTS
+  const generateBriefText = (): string => {
+    const greeting = getGreeting();
+    const userName = user?.name?.split(" ")[0] || "there";
+    const date = formatDate();
+    
+    let briefText = `${greeting}, ${userName}. Here's your morning signal for ${date}. `;
+    
+    // Add summary stats
+    briefText += `You have ${acceptedItems.length} tasks ready for today`;
+    if (deferredItems.length > 0) {
+      briefText += `, and ${deferredItems.length} items that need your attention`;
+    }
+    briefText += ". ";
+    
+    // Add top priority items
+    const highPriorityItems = signalItems.filter(i => i.priority === "high");
+    if (highPriorityItems.length > 0) {
+      briefText += `Your high priority items are: `;
+      highPriorityItems.slice(0, 3).forEach((item, index) => {
+        briefText += `${index + 1}. ${item.title}. `;
+      });
+    }
+    
+    // Add insights if any
+    if (insightItems.length > 0) {
+      briefText += `I have ${insightItems.length} insights from your digital twin. `;
+      insightItems.slice(0, 2).forEach((item) => {
+        briefText += `${item.title}: ${item.description}. `;
+      });
+    }
+    
+    // Add overnight work if any
+    if (overnightItems.length > 0) {
+      briefText += `While you were away, ${overnightItems.length} items were processed. `;
+    }
+    
+    briefText += "Have a productive day!";
+    
+    return briefText;
   };
+
+  const handlePlayBrief = async () => {
+    // If already playing, pause
+    if (isPlaying && audioRef.current) {
+      audioRef.current.pause();
+      setIsPlaying(false);
+      return;
+    }
+    
+    // If we have cached audio, play it
+    if (audioRef.current && audioRef.current.src) {
+      audioRef.current.play();
+      setIsPlaying(true);
+      return;
+    }
+    
+    // Generate new audio
+    setIsGeneratingAudio(true);
+    try {
+      const briefText = generateBriefText();
+      const result = await generateVoiceMutation.mutateAsync({
+        text: briefText,
+        expertId: "chief-of-staff", // Use Chief of Staff voice
+      });
+      
+      // Create audio from base64
+      const audioBlob = new Blob(
+        [Uint8Array.from(atob(result.audio), c => c.charCodeAt(0))],
+        { type: result.contentType }
+      );
+      const audioUrl = URL.createObjectURL(audioBlob);
+      
+      // Create and play audio element
+      const audio = new Audio(audioUrl);
+      audioRef.current = audio;
+      
+      audio.onended = () => {
+        setIsPlaying(false);
+      };
+      
+      audio.onerror = () => {
+        toast.error("Failed to play audio");
+        setIsPlaying(false);
+      };
+      
+      await audio.play();
+      setIsPlaying(true);
+      toast.success(`Playing brief with ${result.voiceName} voice`);
+    } catch (error) {
+      console.error("Failed to generate audio:", error);
+      toast.error("Failed to generate audio brief. Please try again.");
+    } finally {
+      setIsGeneratingAudio(false);
+    }
+  };
+
+  // Cleanup audio on unmount
+  useEffect(() => {
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        if (audioRef.current.src) {
+          URL.revokeObjectURL(audioRef.current.src);
+        }
+      }
+    };
+  }, []);
 
   if (authLoading) {
     return (
@@ -238,14 +350,17 @@ export default function MorningSignal() {
               variant="outline"
               size="sm"
               onClick={handlePlayBrief}
+              disabled={isGeneratingAudio}
               className="border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/10"
             >
-              {isPlaying ? (
-                <Volume2 className="h-4 w-4 mr-2 animate-pulse" />
+              {isGeneratingAudio ? (
+                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+              ) : isPlaying ? (
+                <Pause className="h-4 w-4 mr-2" />
               ) : (
                 <Play className="h-4 w-4 mr-2" />
               )}
-              {isPlaying ? "Playing..." : "Listen to Brief"}
+              {isGeneratingAudio ? "Generating..." : isPlaying ? "Pause" : "Listen to Brief"}
             </Button>
             <Button
               onClick={() => setLocation("/daily-brief")}

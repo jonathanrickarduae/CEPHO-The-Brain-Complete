@@ -3816,3 +3816,13 @@
 - [x] Enhance pattern learning to track review completion times by day
 - [x] Auto-adjust Chief of Staff prompt timing based on learned patterns
 - [x] Add pattern insights display in Morning Signal page
+
+
+## Morning Signal Enhancements
+- [x] Add Morning Signal to sidebar navigation
+- [x] Connect ElevenLabs audio for Listen to Brief button
+- [x] Generate audio summary from morning signal content
+- [x] Implement Google Calendar sync service
+- [x] Implement Outlook/Microsoft Calendar sync service
+- [x] Calendar sync API endpoints (sync, getEvents, getTodaySummary, hasConflicts, getNextFreeSlot)
+- [x] Manual event creation for users without calendar integration
