@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { useEffect, useState, useMemo } from "react";
 
 interface NeonBrainProps {
-  mood?: number; // 1-10
+  mood?: number; // 0-100 (100% Optimization Scale)
   state?: "idle" | "thinking" | "processing";
   className?: string;
   size?: "sm" | "md" | "lg" | "xl"; // Size variants
@@ -36,7 +36,7 @@ function generateConnections(count: number) {
 }
 
 export default function NeonBrain({ 
-  mood = 5, 
+  mood = 75, // Default to 75 on 0-100 scale
   state = "idle", 
   className = "",
   size = "lg"
@@ -56,12 +56,13 @@ export default function NeonBrain({
     xl: "w-72 h-72"
   };
 
-  // Determine color based on mood
+  // Determine color based on mood (0-100 scale)
   useEffect(() => {
-    if (mood >= 8) setColor("#10b981"); // Bright Emerald
-    else if (mood >= 5) setColor("#06b6d4"); // Bright Cyan
-    else if (mood >= 3) setColor("#a855f7"); // Bright Purple
-    else setColor("#f59e0b"); // Bright Amber
+    if (mood >= 90) setColor("#10b981"); // Bright Emerald - Excellent
+    else if (mood >= 75) setColor("#06b6d4"); // Bright Cyan - Good
+    else if (mood >= 60) setColor("#a855f7"); // Bright Purple - Adequate
+    else if (mood >= 40) setColor("#f59e0b"); // Bright Amber - Needs Work
+    else setColor("#ef4444"); // Bright Red - Critical
   }, [mood]);
 
   // Animation speed based on state

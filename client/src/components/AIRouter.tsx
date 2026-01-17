@@ -11,8 +11,8 @@ interface ProviderConfig {
   bestFor: string[];
   apiKeyRequired: boolean;
   isConfigured: boolean;
-  costPerToken: number; // relative cost 1-10
-  qualityScore: number; // relative quality 1-10
+  costPerToken: number; // relative cost 0-100
+  qualityScore: number; // relative quality 0-100
 }
 
 interface TaskAnalysis {
@@ -40,8 +40,8 @@ const PROVIDERS: ProviderConfig[] = [
     bestFor: ['general', 'creative'],
     apiKeyRequired: false,
     isConfigured: true,
-    costPerToken: 3,
-    qualityScore: 7,
+    costPerToken: 30,
+    qualityScore: 70,
   },
   {
     id: 'claude',
@@ -51,8 +51,8 @@ const PROVIDERS: ProviderConfig[] = [
     bestFor: ['medical', 'technical', 'creative'],
     apiKeyRequired: true,
     isConfigured: false,
-    costPerToken: 5,
-    qualityScore: 9,
+    costPerToken: 50,
+    qualityScore: 90,
   },
   {
     id: 'openai',
@@ -62,8 +62,8 @@ const PROVIDERS: ProviderConfig[] = [
     bestFor: ['legal', 'financial'],
     apiKeyRequired: true,
     isConfigured: false,
-    costPerToken: 6,
-    qualityScore: 8,
+    costPerToken: 60,
+    qualityScore: 80,
   },
   {
     id: 'perplexity',
@@ -73,8 +73,8 @@ const PROVIDERS: ProviderConfig[] = [
     bestFor: ['research'],
     apiKeyRequired: true,
     isConfigured: false,
-    costPerToken: 4,
-    qualityScore: 8,
+    costPerToken: 40,
+    qualityScore: 80,
   },
   {
     id: 'gemini',
@@ -84,8 +84,8 @@ const PROVIDERS: ProviderConfig[] = [
     bestFor: ['research', 'general'],
     apiKeyRequired: true,
     isConfigured: false,
-    costPerToken: 4,
-    qualityScore: 7,
+    costPerToken: 40,
+    qualityScore: 70,
   },
   {
     id: 'azure',
@@ -95,8 +95,8 @@ const PROVIDERS: ProviderConfig[] = [
     bestFor: ['legal', 'financial', 'general'],
     apiKeyRequired: true,
     isConfigured: false,
-    costPerToken: 7,
-    qualityScore: 8,
+    costPerToken: 70,
+    qualityScore: 80,
   },
   {
     id: 'ollama',
@@ -106,8 +106,8 @@ const PROVIDERS: ProviderConfig[] = [
     bestFor: ['general'],
     apiKeyRequired: false,
     isConfigured: false,
-    costPerToken: 1,
-    qualityScore: 6,
+    costPerToken: 10,
+    qualityScore: 60,
   },
 ];
 

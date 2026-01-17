@@ -23,7 +23,7 @@ export interface OutputQualityScore {
   outputType: string;
   outputId: string;
   outputTitle: string;
-  score: number;
+  score: number; // 0-100 scale
   issueCategory?: string;
   issueDescription?: string;
   responsibleArea?: string;
@@ -66,7 +66,7 @@ export function OutputQualityScorer({
   onScoreSubmit,
   compact = false
 }: OutputQualityScorerProps) {
-  const [score, setScore] = useState<number>(7);
+  const [score, setScore] = useState<number>(75); // Default to 75 on 0-100 scale
   const [showFeedbackDialog, setShowFeedbackDialog] = useState(false);
   const [issueCategory, setIssueCategory] = useState<string>('');
   const [issueDescription, setIssueDescription] = useState('');
@@ -79,7 +79,7 @@ export function OutputQualityScorer({
 
   const handleQuickScore = (quickScore: number) => {
     setScore(quickScore);
-    if (quickScore <= 4) {
+    if (quickScore < 40) {
       setShowFeedbackDialog(true);
     } else {
       submitScore(quickScore);
@@ -94,9 +94,9 @@ export function OutputQualityScorer({
       outputId,
       outputTitle,
       score: scoreToSubmit,
-      issueCategory: scoreToSubmit <= 4 ? issueCategory : undefined,
-      issueDescription: scoreToSubmit <= 4 ? issueDescription : undefined,
-      responsibleArea: scoreToSubmit <= 4 ? responsibleArea : undefined,
+      issueCategory: scoreToSubmit < 40 ? issueCategory : undefined,
+      issueDescription: scoreToSubmit < 40 ? issueDescription : undefined,
+      responsibleArea: scoreToSubmit < 40 ? responsibleArea : undefined,
     });
     
     setHasScored(true);
@@ -106,26 +106,28 @@ export function OutputQualityScorer({
     setResponsibleArea('');
   };
 
+  // Color coding based on 100% Optimization Framework
   const getScoreColor = (s: number) => {
-    if (s >= 8) return 'text-green-500';
-    if (s >= 6) return 'text-yellow-500';
-    if (s >= 4) return 'text-orange-500';
+    if (s >= 90) return 'text-green-500';
+    if (s >= 75) return 'text-lime-500';
+    if (s >= 60) return 'text-yellow-500';
+    if (s >= 40) return 'text-orange-500';
     return 'text-red-500';
   };
 
   const getScoreLabel = (s: number) => {
-    if (s >= 9) return 'Excellent';
-    if (s >= 7) return 'Good';
-    if (s >= 5) return 'Average';
-    if (s >= 3) return 'Poor';
-    return 'Very Poor';
+    if (s >= 90) return 'Excellent';
+    if (s >= 75) return 'Good';
+    if (s >= 60) return 'Adequate';
+    if (s >= 40) return 'Needs Work';
+    return 'Critical';
   };
 
   if (hasScored) {
     return (
       <div className="flex items-center gap-2 text-sm text-muted-foreground">
         <ThumbsUp className="w-4 h-4 text-green-500" />
-        <span>Scored: {score}/10</span>
+        <span>Scored: {score}/100</span>
         <Button variant="ghost" size="sm" onClick={() => setHasScored(false)}>
           Update
         </Button>
@@ -138,12 +140,12 @@ export function OutputQualityScorer({
       <div className="flex items-center gap-2">
         <span className="text-sm text-muted-foreground">Rate:</span>
         <div className="flex gap-1">
-          {[1, 3, 5, 7, 10].map(s => (
+          {[20, 40, 60, 80, 100].map(s => (
             <Button
               key={s}
               variant="ghost"
               size="sm"
-              className={`w-8 h-8 p-0 ${score === s ? getScoreColor(s) : ''}`}
+              className={`w-10 h-8 p-0 ${score === s ? getScoreColor(s) : ''}`}
               onClick={() => handleQuickScore(s)}
             >
               {s}
@@ -168,21 +170,21 @@ export function OutputQualityScorer({
             <div className="flex items-center justify-between">
               <span className="text-sm text-muted-foreground">Quality Score</span>
               <span className={`text-2xl font-bold ${getScoreColor(score)}`}>
-                {score}/10
+                {score}/100
               </span>
             </div>
             <Slider
               value={[score]}
               onValueChange={handleScoreChange}
-              min={1}
-              max={10}
+              min={0}
+              max={100}
               step={1}
               className="w-full"
             />
             <div className="flex justify-between text-xs text-muted-foreground">
-              <span>Poor</span>
+              <span>Critical (0)</span>
               <span className={getScoreColor(score)}>{getScoreLabel(score)}</span>
-              <span>Excellent</span>
+              <span>Perfect (100)</span>
             </div>
           </div>
 
@@ -192,14 +194,14 @@ export function OutputQualityScorer({
               size="sm"
               className="flex-1"
               onClick={() => {
-                if (score <= 4) {
+                if (score < 40) {
                   setShowFeedbackDialog(true);
                 } else {
                   submitScore();
                 }
               }}
             >
-              {score <= 4 ? (
+              {score < 40 ? (
                 <>
                   <ThumbsDown className="w-4 h-4 mr-2" />
                   Report Issue
@@ -223,7 +225,7 @@ export function OutputQualityScorer({
               What went wrong?
             </DialogTitle>
             <DialogDescription>
-              Help us improve by describing the issue with this output.
+              Score below 40 requires feedback. Help us improve by describing the issue.
             </DialogDescription>
           </DialogHeader>
 

@@ -58,11 +58,18 @@ Stakeholder initiates project with voice note, document, or description
 3. Pre-populate project intake form
 4. Generate scope alignment summary
 5. Confirm scope with stakeholder
+6. **Initialize 100% Optimization Scorecard** (NEW)
+   - Create project scorecard with all 50 categories
+   - Set initial baseline scores (0 for unknown, estimated for known)
+   - Identify which domains are most critical for this project type
+   - Generate initial heat map showing gaps
 
 ### Deliverables
 - [ ] Transcribed voice note
 - [ ] Scope alignment confirmation
 - [ ] Project intake form completed
+- [ ] **100% Optimization Scorecard initialized with baseline scores**
+- [ ] **Initial heat map showing gap areas**
 
 ### Prompt to Use
 > "Please extract the key elements from this opportunity description and create a scope alignment summary. Identify: opportunity, stakeholders, timeline, budget, and objectives."
@@ -100,6 +107,7 @@ Scope confirmed by stakeholder
 - [ ] SWOT analysis completed
 - [ ] Initial risk register created
 - [ ] Research tasks assigned
+- [ ] **100% Optimization Scorecard updated with Phase 1 findings**
 
 ### Prompt to Use
 > "Using the Master SME Team Document, please assemble the appropriate expert team for this [project type] opportunity. Conduct a SWOT analysis and create an initial risk register. Reference: MASTER_SME_TEAM_DOCUMENT.md"
@@ -145,6 +153,8 @@ Expert team assembled, SWOT complete
 - [ ] Integrated analysis document
 - [ ] Gap identification report
 - [ ] Follow-up questions documented
+- [ ] **100% Optimization Scorecard updated with research scores**
+- [ ] **Heat map refreshed showing remaining gaps**
 
 ### Prompt to Use
 > "Please have the assembled expert team conduct deep dive research on [topic/company]. Track all findings and identify gaps. Each expert should provide findings with references. Reference: MASTER_SME_TEAM_DOCUMENT.md"
@@ -213,6 +223,7 @@ Deep dive research complete
 - [ ] Mitigation strategies documented
 - [ ] **Customer Focus Group feedback report** (NEW)
 - [ ] **Insights stored in repository** (NEW)
+- [ ] **100% Optimization Scorecard updated with validation scores**
 - [ ] Chief of Staff sign-off
 
 ### Prompt to Use
@@ -370,6 +381,7 @@ Master report approved, strategic direction confirmed
 - [ ] Financial model (Excel)
 - [ ] Organizational chart
 - [ ] Competitive positioning framework
+- [ ] **100% Optimization Scorecard updated with business plan scores**
 
 ### Prompt to Use
 > "Please develop a McKinsey-style business plan based on the Master Report. Include all five parts with detailed analysis. Reference: MASTER_SME_TEAM_DOCUMENT.md - McKinsey and Company expert"
@@ -418,6 +430,7 @@ Business plan complete and validated
 - [ ] Executive summary (2 pages)
 - [ ] Q&A document
 - [ ] One-pager
+- [ ] **100% Optimization Scorecard included in appendix**
 
 ### Prompt to Use
 > "Please create the investor presentation materials following the Phase 6 structure. Use the Storytelling Expert and Visual Design Expert for review. Reference: MASTER_SME_TEAM_DOCUMENT.md"
@@ -456,6 +469,7 @@ Presentation materials complete
 - [ ] Voice note updates
 - [ ] Stakeholder communication plan
 - [ ] Meeting schedule
+- [ ] **100% Optimization Scorecard summary for stakeholders**
 
 ### Prompt to Use
 > "Please create the video script and stakeholder communication materials following Phase 7 structure. Reference: MASTER_SME_TEAM_DOCUMENT.md - Storytelling Expert"

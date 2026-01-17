@@ -29,7 +29,7 @@ export function CephoLandingPage() {
       
       <div className="flex flex-col items-center gap-6 p-8 max-w-xl w-full relative z-10">
         {/* Animated Brain Logo with Neural Nodes */}
-        <NeonBrain size="xl" state="thinking" mood={8} />
+        <NeonBrain size="xl" state="thinking" mood={85} />
         
         {/* Animated Brand Name Transition */}
         <div className="flex flex-col items-center gap-2 mt-4 min-h-[140px]">
@@ -78,7 +78,7 @@ export function CephoLandingPage() {
           transition={{ delay: 0.5 }}
         >
           <p className="text-xl text-white/80 font-medium">
-            Get you operating at a 10
+            Get you operating at 100
           </p>
           <p className="text-sm text-white/50 max-w-md mx-auto leading-relaxed">
             Your AI-powered Chief of Staff. One interface to manage your life, 

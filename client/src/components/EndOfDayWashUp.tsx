@@ -164,22 +164,63 @@ export function EndOfDayWashUp({ isOpen, onComplete }: EndOfDayWashUpProps) {
           <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
             <div className="text-center mb-8">
               <h2 className="text-2xl font-bold text-white mb-2">How was today?</h2>
+              <p className="text-gray-400 text-sm">Rate your day on the 100% Optimization Scale</p>
             </div>
 
-            {/* 1-10 Rating */}
+            {/* 0-100 Rating Slider */}
+            <div className="mb-8 px-4">
+              <div className="flex justify-between items-center mb-4">
+                <span className="text-gray-400 text-sm">Score</span>
+                <span className={cn(
+                  "text-3xl font-bold",
+                  (rating ?? 0) >= 90 ? "text-green-500" :
+                  (rating ?? 0) >= 75 ? "text-lime-500" :
+                  (rating ?? 0) >= 60 ? "text-yellow-500" :
+                  (rating ?? 0) >= 40 ? "text-orange-500" : "text-red-500"
+                )}>
+                  {rating ?? 50}/100
+                </span>
+              </div>
+              <input
+                type="range"
+                min="0"
+                max="100"
+                value={rating ?? 50}
+                onChange={(e) => setRating(parseInt(e.target.value))}
+                className="w-full h-3 bg-white/10 rounded-full appearance-none cursor-pointer accent-pink-500"
+                style={{
+                  background: `linear-gradient(to right, 
+                    ${(rating ?? 50) < 40 ? '#ef4444' : (rating ?? 50) < 60 ? '#f97316' : (rating ?? 50) < 75 ? '#eab308' : (rating ?? 50) < 90 ? '#84cc16' : '#22c55e'} 0%, 
+                    ${(rating ?? 50) < 40 ? '#ef4444' : (rating ?? 50) < 60 ? '#f97316' : (rating ?? 50) < 75 ? '#eab308' : (rating ?? 50) < 90 ? '#84cc16' : '#22c55e'} ${rating ?? 50}%, 
+                    rgba(255,255,255,0.1) ${rating ?? 50}%, 
+                    rgba(255,255,255,0.1) 100%)`
+                }}
+              />
+              <div className="flex justify-between text-xs text-gray-500 mt-2">
+                <span>Critical</span>
+                <span>Needs Work</span>
+                <span>Adequate</span>
+                <span>Good</span>
+                <span>Excellent</span>
+              </div>
+            </div>
+
+            {/* Quick Select Buttons */}
             <div className="flex justify-center gap-2 mb-8 flex-wrap">
-              {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(num => (
+              {[25, 50, 75, 90, 100].map(num => (
                 <button
                   key={num}
                   onClick={() => setRating(num)}
                   className={cn(
-                    "w-10 h-10 rounded-full font-bold text-sm transition-all",
+                    "px-4 py-2 rounded-full font-bold text-sm transition-all",
                     rating === num
-                      ? num <= 3 
+                      ? num < 40 
                         ? "bg-red-500 text-white scale-110" 
-                        : num <= 6 
-                          ? "bg-yellow-500 text-black scale-110"
-                          : "bg-green-500 text-white scale-110"
+                        : num < 60 
+                          ? "bg-orange-500 text-white scale-110"
+                          : num < 75
+                            ? "bg-yellow-500 text-black scale-110"
+                            : "bg-green-500 text-white scale-110"
                       : "bg-white/10 text-gray-400 hover:bg-white/20"
                   )}
                 >
