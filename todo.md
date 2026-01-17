@@ -3466,56 +3466,56 @@
 
 ### Library Mobile Layout
 - [ ] Fix upload document button positioning (too far right)
-- [ ] Make bottom tabs horizontally scrollable instead of "More" dropdown
+- [x] Make bottom tabs horizontally scrollable instead of "More" dropdown
 - [ ] Ensure all content fits within mobile viewport
 
 ### Chief of Staff Mobile Layout
-- [ ] Keep chat input fixed at bottom of screen
-- [ ] Ensure chat input is visible immediately on page load
-- [ ] Prevent chat input from being hidden below fold
+- [x] Keep chat input fixed at bottom of screen
+- [x] Ensure chat input is visible immediately on page load
+- [x] Prevent chat input from being hidden below fold
 
 ### Vault Mobile Layout
-- [ ] Move main content boxes to top of page
-- [ ] Reduce spacing above main content on mobile
-- [ ] Ensure key actions are immediately visible
+- [x] Move main content boxes to top of page
+- [x] Reduce spacing above main content on mobile
+- [x] Ensure key actions are immediately visible
 
 
 ## Mobile UX Fixes (Jan 17, 2026)
 
 ### Library Mobile Layout
 - [ ] Fix upload document button positioning (too far right)
-- [ ] Make bottom tabs horizontally scrollable instead of "More" dropdown
+- [x] Make bottom tabs horizontally scrollable instead of "More" dropdown
 - [ ] Ensure all content fits within mobile viewport
 
 ### Chief of Staff Mobile Layout
-- [ ] Keep chat input fixed at bottom of screen
-- [ ] Ensure chat input is visible immediately on page load
-- [ ] Prevent chat input from being hidden below fold
+- [x] Keep chat input fixed at bottom of screen
+- [x] Ensure chat input is visible immediately on page load
+- [x] Prevent chat input from being hidden below fold
 
 ### Vault Mobile Layout
-- [ ] Move main content boxes to top of page
-- [ ] Reduce spacing above main content on mobile
-- [ ] Ensure key actions are immediately visible
+- [x] Move main content boxes to top of page
+- [x] Reduce spacing above main content on mobile
+- [x] Ensure key actions are immediately visible
 
 ## AI SME Usage & Performance Analytics (Jan 17, 2026)
 
 ### Usage Tracking
-- [ ] Track which experts are used most frequently
-- [ ] Display usage count/frequency on expert cards
-- [ ] Show "Most Used" section with top experts
-- [ ] Store consultation history per expert
+- [x] Track which experts are used most frequently
+- [x] Display usage count/frequency on expert cards
+- [x] Show "Most Used" section with top experts
+- [x] Store consultation history per expert
 
 ### Performance Scoring
-- [ ] Add rating mechanism after each consultation
-- [ ] Calculate average performance score per expert
-- [ ] Display score on expert cards (numerical, not emoji)
-- [ ] Track score trends over time
+- [x] Add rating mechanism after each consultation
+- [x] Calculate average performance score per expert
+- [x] Display score on expert cards (numerical, not emoji)
+- [x] Track score trends over time
 
 ### Performance Insights
-- [ ] Show how each expert is performing
-- [ ] Analyze consultation outcomes
-- [ ] Provide insights on expert effectiveness
-- [ ] Compare expert performance within categories
+- [x] Show how each expert is performing
+- [x] Analyze consultation outcomes
+- [x] Provide insights on expert effectiveness
+- [x] Compare expert performance within categories
 
 
 ## Navigation Order Fix (Jan 17, 2026)

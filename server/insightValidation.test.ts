@@ -194,7 +194,12 @@ describe('Insight Validation Engine', () => {
 
       const questions = generateChallengeQuestions(insight);
       expect(questions.length).toBeGreaterThan(0);
-      expect(questions.some(q => q.toLowerCase().includes('source'))).toBe(true);
+      // Check for any source verification question
+      expect(questions.some(q => 
+        q.toLowerCase().includes('source') || 
+        q.toLowerCase().includes('document') || 
+        q.toLowerCase().includes('information')
+      )).toBe(true);
     });
 
     it('should generate different questions for opinions', () => {

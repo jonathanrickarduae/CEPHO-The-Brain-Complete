@@ -66,7 +66,7 @@ export default function Vault() {
         </PageHeader>
 
         {/* Main Content - Fixed height, no scroll */}
-        <div className="flex-1 p-4 md:p-6 flex flex-col gap-4 overflow-hidden">
+        <div className="flex-1 p-3 pt-2 md:p-6 flex flex-col gap-3 md:gap-4 overflow-hidden">
           {/* Quick Stats Row */}
           <div className="grid grid-cols-4 gap-2 md:gap-3 shrink-0">
             <Card className="bg-green-500/10 border-green-500/30">

@@ -324,9 +324,14 @@ export default function Library() {
         subtitle="All your project files and consultations"
         iconColor="text-pink-400"
       >
-        <div className="flex items-center gap-2 md:gap-3">
+        <div className="flex items-center gap-2 md:gap-3 flex-wrap justify-end">
           {activeTab === 'projects' ? (
             <>
+              {/* Upload button - always visible, positioned first on mobile */}
+              <Button size="sm" className="gap-2 bg-gradient-to-r from-pink-500 to-rose-500 hover:opacity-90 order-first sm:order-last">
+                <Upload className="w-4 h-4" />
+                <span>Upload</span>
+              </Button>
               <div className="relative hidden sm:block">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <Input
@@ -358,10 +363,6 @@ export default function Library() {
               >
                 <FolderPlus className="w-4 h-4" />
                 <span className="hidden md:inline">New Folder</span>
-              </Button>
-              <Button size="sm" className="gap-2 bg-gradient-to-r from-pink-500 to-rose-500 hover:opacity-90">
-                <Upload className="w-4 h-4" />
-                <span className="hidden sm:inline">Upload</span>
               </Button>
             </>
           ) : (

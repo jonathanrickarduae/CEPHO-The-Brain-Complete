@@ -679,6 +679,107 @@ export default function AISMEsPage() {
         {viewMode === 'leaderboard' && (
           <div className="flex-1 overflow-y-auto p-4 sm:p-6">
             <div className="max-w-4xl mx-auto space-y-6">
+              {/* Recommended For You Section */}
+              {recommendations && recommendations.length > 0 && (
+                <div className="bg-gradient-to-br from-pink-500/10 to-purple-500/10 border-2 border-pink-500/30 rounded-2xl p-4">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-pink-500 to-purple-500 flex items-center justify-center">
+                      <Sparkles className="w-5 h-5 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-pink-400">Recommended For You</h3>
+                      <p className="text-xs text-gray-400">Based on your consultation history</p>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                    {recommendations.slice(0, 5).map((rec: any) => {
+                      const expert = AI_EXPERTS.find(e => e.id === rec.expertId);
+                      if (!expert) return null;
+                      return (
+                        <div 
+                          key={rec.expertId}
+                          className="flex items-center gap-3 p-3 bg-white/5 rounded-xl hover:bg-white/10 cursor-pointer transition-colors"
+                          onClick={() => setLocation(`/expert-chat/${expert.id}`)}
+                        >
+                          <div className="w-10 h-10 rounded-xl overflow-hidden">
+                            {expert.avatarUrl ? (
+                              <img src={expert.avatarUrl} alt={expert.name} className="w-full h-full object-cover" />
+                            ) : (
+                              <div className="w-full h-full bg-gradient-to-br from-cyan-500/30 to-blue-500/30 flex items-center justify-center text-lg">
+                                {expert.avatar}
+                              </div>
+                            )}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <h4 className="font-medium text-sm truncate">{expert.name}</h4>
+                            <p className="text-xs text-pink-400 truncate">{rec.reason}</p>
+                          </div>
+                          <Button size="sm" variant="ghost" className="shrink-0">
+                            <MessageSquare className="w-4 h-4" />
+                          </Button>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {/* Overall Leaderboard - Top 10 */}
+              <div className="bg-white/5 rounded-2xl border border-white/10 overflow-hidden">
+                <div className="px-4 py-3 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 border-b border-cyan-500/30 flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Trophy className="w-5 h-5 text-cyan-400" />
+                    <h3 className="font-semibold">Top 10 Overall Performers</h3>
+                  </div>
+                  <Badge className="bg-cyan-500/20 text-cyan-400">All Panels</Badge>
+                </div>
+                <div className="divide-y divide-white/10">
+                  {AI_EXPERTS
+                    .sort((a, b) => b.performanceScore - a.performanceScore)
+                    .slice(0, 10)
+                    .map((expert, index) => {
+                      const expertPanel = getExpertPanelType(expert);
+                      const panelInfo = panelTypes[expertPanel];
+                      return (
+                        <div 
+                          key={expert.id}
+                          className="flex items-center gap-4 p-4 hover:bg-white/5 cursor-pointer transition-colors"
+                          onClick={() => setShowExpertDetail(expert.id)}
+                        >
+                          <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold ${
+                            index === 0 ? 'bg-yellow-500/20 text-yellow-400' :
+                            index === 1 ? 'bg-gray-400/20 text-gray-300' :
+                            index === 2 ? 'bg-amber-600/20 text-amber-500' :
+                            'bg-white/10 text-gray-400'
+                          }`}>
+                            {index + 1}
+                          </div>
+                          <div className="w-10 h-10 rounded-xl overflow-hidden">
+                            {expert.avatarUrl ? (
+                              <img src={expert.avatarUrl} alt={expert.name} className="w-full h-full object-cover" />
+                            ) : (
+                              <div className="w-full h-full bg-gradient-to-br from-cyan-500/30 to-blue-500/30 flex items-center justify-center text-lg">
+                                {expert.avatar}
+                              </div>
+                            )}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <h4 className="font-medium truncate">{expert.name}</h4>
+                            <p className="text-sm text-gray-400 truncate">{expert.specialty}</p>
+                          </div>
+                          <div className={`px-2 py-0.5 rounded-full text-[10px] ${panelInfo.bgColor} ${panelInfo.color}`}>
+                            {panelInfo.icon} {panelInfo.name}
+                          </div>
+                          <div className="text-right">
+                            <div className="text-lg font-bold text-cyan-400">{expert.performanceScore}%</div>
+                            <div className="text-xs text-gray-400">{expert.projectsCompleted} projects</div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                </div>
+              </div>
+
               {/* Panel Stats Overview */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 {(Object.keys(panelTypes) as PanelType[]).map(panelKey => {

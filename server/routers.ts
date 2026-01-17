@@ -36,6 +36,7 @@ import {
   createSmeFeedback, getSmeFeedback, markFeedbackApplied,
   // Expert Consultations & Chat
   createExpertConsultation, getExpertConsultationHistory, getExpertConsultationCounts, updateExpertConsultation,
+  getExpertUsageStats, getTopRatedExperts, getMostUsedExperts, getExpertConsultationTrends, rateExpertConsultation,
   createExpertChatSession, getActiveExpertChatSession, getExpertChatSessions, updateExpertChatSession,
   createExpertChatMessage, getExpertChatMessages, getRecentExpertMessages,
   // Library Documents
@@ -2189,6 +2190,45 @@ You are not a yes-man. You are a trusted advisor who respects the principal enou
       .mutation(async ({ input }) => {
         const { id, ...data } = input;
         await updateExpertConsultation(id, data);
+        return { success: true };
+      }),
+
+    // Get expert usage statistics
+    usageStats: protectedProcedure
+      .query(async ({ ctx }) => {
+        return getExpertUsageStats(ctx.user.id);
+      }),
+
+    // Get top rated experts
+    topRated: protectedProcedure
+      .input(z.object({ limit: z.number().optional() }).optional())
+      .query(async ({ ctx, input }) => {
+        return getTopRatedExperts(ctx.user.id, input?.limit || 10);
+      }),
+
+    // Get most used experts
+    mostUsed: protectedProcedure
+      .input(z.object({ limit: z.number().optional() }).optional())
+      .query(async ({ ctx, input }) => {
+        return getMostUsedExperts(ctx.user.id, input?.limit || 10);
+      }),
+
+    // Get consultation trends over time
+    trends: protectedProcedure
+      .input(z.object({ months: z.number().optional() }).optional())
+      .query(async ({ ctx, input }) => {
+        return getExpertConsultationTrends(ctx.user.id, input?.months || 6);
+      }),
+
+    // Rate a consultation
+    rate: protectedProcedure
+      .input(z.object({
+        consultationId: z.number(),
+        rating: z.number().min(1).max(10),
+        feedback: z.string().optional(),
+      }))
+      .mutation(async ({ input }) => {
+        await rateExpertConsultation(input.consultationId, input.rating, input.feedback);
         return { success: true };
       }),
   }),

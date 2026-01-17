@@ -2737,3 +2737,143 @@ export async function getSubscriptionCostHistory(
   
   return history;
 }
+
+
+// ============================================
+// Expert Analytics Functions
+// ============================================
+
+// Get expert usage statistics for a user
+export async function getExpertUsageStats(userId: number): Promise<{
+  expertId: string;
+  expertName: string;
+  expertCategory: string | null;
+  consultationCount: number;
+  totalMessages: number;
+  averageRating: number | null;
+  lastConsulted: Date;
+}[]> {
+  const db = await getDb();
+  if (!db) return [];
+  
+  const results = await db.select({
+    expertId: expertConsultations.expertId,
+    expertName: expertConsultations.expertName,
+    expertCategory: expertConsultations.expertCategory,
+    consultationCount: sql<number>`COUNT(*)`,
+    totalMessages: sql<number>`COALESCE(SUM(${expertConsultations.messageCount}), 0)`,
+    averageRating: sql<number | null>`AVG(${expertConsultations.userRating})`,
+    lastConsulted: sql<Date>`MAX(${expertConsultations.updatedAt})`
+  })
+    .from(expertConsultations)
+    .where(eq(expertConsultations.userId, userId))
+    .groupBy(expertConsultations.expertId, expertConsultations.expertName, expertConsultations.expertCategory)
+    .orderBy(desc(sql`COUNT(*)`));
+  
+  return results;
+}
+
+// Get top performing experts by rating
+export async function getTopRatedExperts(userId: number, limit: number = 10): Promise<{
+  expertId: string;
+  expertName: string;
+  averageRating: number;
+  consultationCount: number;
+}[]> {
+  const db = await getDb();
+  if (!db) return [];
+  
+  const results = await db.select({
+    expertId: expertConsultations.expertId,
+    expertName: expertConsultations.expertName,
+    averageRating: sql<number>`AVG(${expertConsultations.userRating})`,
+    consultationCount: sql<number>`COUNT(*)`
+  })
+    .from(expertConsultations)
+    .where(and(
+      eq(expertConsultations.userId, userId),
+      sql`${expertConsultations.userRating} IS NOT NULL`
+    ))
+    .groupBy(expertConsultations.expertId, expertConsultations.expertName)
+    .having(sql`COUNT(*) >= 1`)
+    .orderBy(desc(sql`AVG(${expertConsultations.userRating})`))
+    .limit(limit);
+  
+  return results;
+}
+
+// Get most used experts
+export async function getMostUsedExperts(userId: number, limit: number = 10): Promise<{
+  expertId: string;
+  expertName: string;
+  consultationCount: number;
+  totalMessages: number;
+}[]> {
+  const db = await getDb();
+  if (!db) return [];
+  
+  const results = await db.select({
+    expertId: expertConsultations.expertId,
+    expertName: expertConsultations.expertName,
+    consultationCount: sql<number>`COUNT(*)`,
+    totalMessages: sql<number>`COALESCE(SUM(${expertConsultations.messageCount}), 0)`
+  })
+    .from(expertConsultations)
+    .where(eq(expertConsultations.userId, userId))
+    .groupBy(expertConsultations.expertId, expertConsultations.expertName)
+    .orderBy(desc(sql`COUNT(*)`))
+    .limit(limit);
+  
+  return results;
+}
+
+// Get expert consultation trends over time
+export async function getExpertConsultationTrends(
+  userId: number,
+  months: number = 6
+): Promise<{ month: string; consultationCount: number; uniqueExperts: number }[]> {
+  const db = await getDb();
+  if (!db) return [];
+  
+  const consultations = await db.select().from(expertConsultations)
+    .where(eq(expertConsultations.userId, userId));
+  
+  const now = new Date();
+  const trends: { month: string; consultationCount: number; uniqueExperts: number }[] = [];
+  
+  for (let i = months - 1; i >= 0; i--) {
+    const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
+    const endOfMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+    const monthStr = date.toLocaleDateString('en-GB', { month: 'short', year: 'numeric' });
+    
+    const monthConsultations = consultations.filter(c => {
+      const consultDate = new Date(c.createdAt);
+      return consultDate >= date && consultDate <= endOfMonth;
+    });
+    
+    const uniqueExperts = new Set(monthConsultations.map(c => c.expertId)).size;
+    
+    trends.push({
+      month: monthStr,
+      consultationCount: monthConsultations.length,
+      uniqueExperts
+    });
+  }
+  
+  return trends;
+}
+
+// Rate an expert consultation
+export async function rateExpertConsultation(
+  consultationId: number,
+  rating: number,
+  feedback?: string
+): Promise<void> {
+  const db = await getDb();
+  if (!db) return;
+  
+  await db.update(expertConsultations).set({
+    userRating: rating,
+    userFeedback: feedback
+  }).where(eq(expertConsultations.id, consultationId));
+}

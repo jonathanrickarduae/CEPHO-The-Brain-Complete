@@ -1009,7 +1009,8 @@ export const categories = [
   'Government & Policy',
   'HR & Talent',
   'Left Field',
-  'Celebrity Crossover'
+  'Celebrity Crossover',
+  'Strategic Leadership'
 ];
 
 // Get left field experts for unexpected perspectives
