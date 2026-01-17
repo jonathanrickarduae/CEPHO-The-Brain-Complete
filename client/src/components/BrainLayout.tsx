@@ -23,7 +23,7 @@ import { getLoginUrl } from "@/const";
 import { useIsMobile } from "@/hooks/useMobile";
 import { 
   LayoutDashboard, LogOut, PanelLeft, 
-  BookOpen, BarChart3, Lock, Briefcase, Activity, Brain, Sun, Users, Moon, Keyboard, Settings, TrendingUp, Info, Clock, Sparkles, Rocket, Inbox, Search, Video, Bell, Mic, Podcast, Heart, Globe, Library, Workflow, FileText
+  BookOpen, BarChart3, Lock, Briefcase, Activity, Brain, Sun, Users, Moon, Keyboard, Settings, TrendingUp, Info, Clock, Sparkles, Rocket, Inbox, Search, Video, Bell, Mic, Podcast, Heart, Globe, Library, Workflow, FileText, ChevronDown, ChevronRight
 } from "lucide-react";
 import { CSSProperties, useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
@@ -49,23 +49,66 @@ import { NotificationBell } from "./NotificationCenter";
 import { CephoLandingPage } from "./CephoLandingPage";
 import { ThemeToggle } from "./ThemeToggle";
 
-// Core navigation - streamlined for professional use
-const menuItems = [
+// Core navigation - streamlined for professional use (COS-centric view)
+type MenuItem = {
+  icon: any;
+  label: string;
+  path: string;
+  count?: number;
+  children?: MenuItem[];
+};
+
+const menuItems: MenuItem[] = [
   { icon: LayoutDashboard, label: "The Nexus", path: "/dashboard" },
-  { icon: Sun, label: "The Signal", path: "/daily-brief", count: 3 },
-  { icon: Sparkles, label: "Morning Signal", path: "/morning-signal" },
-  { icon: Rocket, label: "Project Genesis", path: "/project-genesis" },
-  { icon: TrendingUp, label: "Innovation Hub", path: "/innovation-hub" },
-  { icon: Activity, label: "Development Pathway", path: "/development-pathway" },
+  { 
+    icon: Sun, 
+    label: "The Signal", 
+    path: "/daily-brief", 
+    count: 3,
+    children: [
+      { icon: Sparkles, label: "Morning Signal", path: "/morning-signal" },
+      { icon: Moon, label: "Evening Review", path: "/evening-review" },
+    ]
+  },
+  { 
+    icon: Briefcase, 
+    label: "Chief of Staff", 
+    path: "/digital-twin",
+    children: [
+      { icon: Activity, label: "Development Pathway", path: "/development-pathway" },
+      { icon: Brain, label: "COS Training", path: "/cos-training" },
+    ]
+  },
   { icon: Users, label: "AI-SMEs", path: "/ai-experts" },
-  { icon: Briefcase, label: "Chief of Staff", path: "/digital-twin" },
-  { icon: Workflow, label: "Workflow", path: "/workflow", count: 2 },
-  { icon: Library, label: "Library", path: "/library" },
-  { icon: FileText, label: "Documents", path: "/documents" },
-  { icon: Lock, label: "Vault", path: "/vault" },
-  { icon: Moon, label: "Evening Review", path: "/evening-review" },
-  { icon: BarChart3, label: "Analytics", path: "/statistics" },
-  { icon: Globe, label: "Central Hub", path: "/central-hub" },
+  { 
+    icon: Rocket, 
+    label: "Projects", 
+    path: "/project-genesis",
+    children: [
+      { icon: Rocket, label: "Project Genesis", path: "/project-genesis" },
+      { icon: TrendingUp, label: "Innovation Hub", path: "/innovation-hub" },
+      { icon: Workflow, label: "Workflow", path: "/workflow", count: 2 },
+    ]
+  },
+  { 
+    icon: Library, 
+    label: "Knowledge", 
+    path: "/library",
+    children: [
+      { icon: Library, label: "Library", path: "/library" },
+      { icon: FileText, label: "Documents", path: "/documents" },
+      { icon: Lock, label: "Vault", path: "/vault" },
+    ]
+  },
+  { 
+    icon: BarChart3, 
+    label: "Analytics", 
+    path: "/statistics",
+    children: [
+      { icon: BarChart3, label: "Statistics", path: "/statistics" },
+      { icon: Globe, label: "Central Hub", path: "/central-hub" },
+    ]
+  },
   { icon: Settings, label: "Settings", path: "/settings" },
 ];
 
@@ -148,6 +191,17 @@ function BrainLayoutContent({
   
   // Global search state
   const [showGlobalSearch, setShowGlobalSearch] = useState(false);
+  
+  // Collapsible navigation groups state - collapsed by default for clean look
+  const [expandedGroups, setExpandedGroups] = useState<string[]>([]);
+  
+  const toggleGroup = (groupLabel: string) => {
+    setExpandedGroups(prev => 
+      prev.includes(groupLabel) 
+        ? prev.filter(g => g !== groupLabel)
+        : [...prev, groupLabel]
+    );
+  };
   useKeyboardShortcuts([
     { key: '?', shift: true, action: keyboardHelp.toggle, description: 'Show keyboard shortcuts' },
   ]);
@@ -226,16 +280,26 @@ function BrainLayoutContent({
             <SidebarMenu className="px-2 py-3">
               {menuItems.map(item => {
                 const isActive = location === item.path;
+                const hasChildren = item.children && item.children.length > 0;
+                const isChildActive = hasChildren && item.children?.some(child => location === child.path);
+                const isExpanded = expandedGroups.includes(item.label);
+                
                 return (
                   <SidebarMenuItem key={item.path}>
                     <SidebarMenuButton
-                      isActive={isActive}
-                      onClick={() => setLocation(item.path)}
+                      isActive={isActive || isChildActive}
+                      onClick={() => {
+                        if (hasChildren) {
+                          toggleGroup(item.label);
+                        } else {
+                          setLocation(item.path);
+                        }
+                      }}
                       tooltip={item.label}
-                      className={`h-10 transition-all font-normal rounded-lg mb-0.5 ${isActive ? 'bg-primary/10 text-primary' : 'text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent/50'}`}
+                      className={`h-10 transition-all font-normal rounded-lg mb-0.5 ${isActive || isChildActive ? 'bg-primary/10 text-primary' : 'text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent/50'}`}
                     >
                       <item.icon
-                        className={`h-4 w-4 ${isActive ? "text-primary" : "text-sidebar-foreground/50"}`}
+                        className={`h-4 w-4 ${isActive || isChildActive ? "text-primary" : "text-sidebar-foreground/50"}`}
                       />
                       <span className="text-sm">{item.label}</span>
                       {item.count && item.count > 0 && (
@@ -243,7 +307,38 @@ function BrainLayoutContent({
                           {item.count}
                         </span>
                       )}
+                      {hasChildren && (
+                        <span className="ml-auto">
+                          <ChevronRight 
+                            className={`h-3 w-3 text-sidebar-foreground/50 transition-transform duration-200 ${isExpanded ? 'rotate-90' : ''}`} 
+                          />
+                        </span>
+                      )}
                     </SidebarMenuButton>
+                    {/* Render children if expanded - with smooth animation */}
+                    {hasChildren && (
+                      <div 
+                        className={`ml-4 mt-0.5 space-y-0.5 overflow-hidden transition-all duration-200 ease-in-out ${isExpanded ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}
+                      >
+                        {item.children?.map(child => {
+                          const isChildItemActive = location === child.path;
+                          return (
+                            <SidebarMenuButton
+                              key={child.path}
+                              isActive={isChildItemActive}
+                              onClick={() => setLocation(child.path)}
+                              tooltip={child.label}
+                              className={`h-9 transition-all font-normal rounded-lg ${isChildItemActive ? 'bg-primary/10 text-primary' : 'text-sidebar-foreground/60 hover:text-sidebar-foreground hover:bg-sidebar-accent/50'}`}
+                            >
+                              <child.icon
+                                className={`h-3.5 w-3.5 ${isChildItemActive ? "text-primary" : "text-sidebar-foreground/40"}`}
+                              />
+                              <span className="text-xs">{child.label}</span>
+                            </SidebarMenuButton>
+                          );
+                        })}
+                      </div>
+                    )}
                   </SidebarMenuItem>
                 );
               })}

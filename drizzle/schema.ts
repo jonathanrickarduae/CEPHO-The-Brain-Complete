@@ -3525,3 +3525,226 @@ export const qualityMetricsSnapshots = mysqlTable("quality_metrics_snapshots", {
 
 export type QualityMetricsSnapshot = typeof qualityMetricsSnapshots.$inferSelect;
 export type InsertQualityMetricsSnapshot = typeof qualityMetricsSnapshots.$inferInsert;
+
+
+// =============================================================================
+// COS DIGITAL TWIN LEARNING SYSTEM
+// =============================================================================
+
+/**
+ * COS Training Progress - tracks training level and module completion
+ */
+export const cosTrainingProgress = mysqlTable("cos_training_progress", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  
+  // Current level (1-5: Novice, Learning, Competent, Proficient, Expert)
+  currentLevel: int("currentLevel").default(1).notNull(),
+  trainingPercentage: float("trainingPercentage").default(20).notNull(), // 0-100
+  
+  // Module tracking
+  completedModules: json("completedModules"), // Array of completed module IDs
+  currentModuleId: int("currentModuleId"),
+  
+  // Timestamps
+  lastTrainingActivity: timestamp("lastTrainingActivity"),
+  levelUpAt: timestamp("levelUpAt"), // When they reached current level
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+export type CosTrainingProgress = typeof cosTrainingProgress.$inferSelect;
+export type InsertCosTrainingProgress = typeof cosTrainingProgress.$inferInsert;
+
+/**
+ * COS Training Modules - individual training modules with content
+ */
+export const cosTrainingModules = mysqlTable("cos_training_modules", {
+  id: int("id").autoincrement().primaryKey(),
+  
+  // Module info
+  name: varchar("name", { length: 200 }).notNull(),
+  description: text("description"),
+  requiredLevel: int("requiredLevel").default(1).notNull(), // Minimum level to access
+  duration: varchar("duration", { length: 50 }), // e.g., "30 min"
+  
+  // Content
+  content: text("content"), // Markdown content
+  learningObjectives: json("learningObjectives"), // Array of objectives
+  
+  // Assessment
+  hasAssessment: boolean("hasAssessment").default(false),
+  assessmentQuestions: json("assessmentQuestions"), // Quiz questions
+  passingScore: int("passingScore").default(80), // Percentage to pass
+  
+  // Ordering
+  sortOrder: int("sortOrder").default(0),
+  
+  // Metadata
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+export type CosTrainingModule = typeof cosTrainingModules.$inferSelect;
+export type InsertCosTrainingModule = typeof cosTrainingModules.$inferInsert;
+
+/**
+ * COS Interaction Log - captures ALL interactions for learning
+ */
+export const cosInteractionLog = mysqlTable("cos_interaction_log", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  
+  // Interaction details
+  interactionType: mysqlEnum("interactionType", [
+    "question",      // User asked a question
+    "clarification", // User asked for clarification
+    "correction",    // User corrected COS output
+    "approval",      // User approved something
+    "rejection",     // User rejected something
+    "feedback",      // User gave feedback
+    "preference",    // User stated a preference
+    "instruction"    // User gave an instruction
+  ]).notNull(),
+  
+  // Content
+  userInput: text("userInput").notNull(), // What user said/asked
+  cosResponse: text("cosResponse"), // What COS responded (if applicable)
+  context: varchar("context", { length: 200 }), // Where this happened
+  
+  // Learning extraction
+  extractedLearning: text("extractedLearning"), // What was learned from this
+  learningCategory: varchar("learningCategory", { length: 100 }), // Category of learning
+  confidenceScore: float("confidenceScore").default(0.5), // How confident in the learning
+  
+  // Processing status
+  processed: boolean("processed").default(false), // Has this been processed for learning?
+  appliedToModel: boolean("appliedToModel").default(false), // Has learning been applied?
+  
+  // Metadata
+  sessionId: varchar("sessionId", { length: 100 }), // Group interactions by session
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+export type CosInteractionLog = typeof cosInteractionLog.$inferSelect;
+export type InsertCosInteractionLog = typeof cosInteractionLog.$inferInsert;
+
+/**
+ * COS Learned Patterns - patterns extracted from interactions
+ */
+export const cosLearnedPatterns = mysqlTable("cos_learned_patterns", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  
+  // Pattern details
+  patternType: mysqlEnum("patternType", [
+    "thinking_style",      // How user approaches problems
+    "decision_pattern",    // How user makes decisions
+    "communication_style", // How user communicates
+    "quality_standard",    // What user considers quality
+    "priority_pattern",    // What user prioritizes
+    "workflow_pattern",    // How user likes to work
+    "format_preference",   // Formatting preferences
+    "terminology",         // Specific terms user uses
+    "value",               // Core values that guide decisions
+    "pet_peeve"            // Things user dislikes
+  ]).notNull(),
+  
+  // Pattern content
+  patternName: varchar("patternName", { length: 200 }).notNull(),
+  patternDescription: text("patternDescription").notNull(),
+  examples: json("examples"), // Array of example interactions
+  
+  // Confidence and validation
+  confidenceScore: float("confidenceScore").default(0.5).notNull(), // 0-1
+  validatedByUser: boolean("validatedByUser").default(false),
+  occurrenceCount: int("occurrenceCount").default(1), // How many times observed
+  
+  // Application
+  active: boolean("active").default(true), // Is this pattern being applied?
+  lastApplied: timestamp("lastApplied"),
+  applicationCount: int("applicationCount").default(0), // How many times applied
+  
+  // Source tracking
+  sourceInteractionIds: json("sourceInteractionIds"), // IDs of interactions that formed this pattern
+  
+  // Metadata
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+export type CosLearnedPattern = typeof cosLearnedPatterns.$inferSelect;
+export type InsertCosLearnedPattern = typeof cosLearnedPatterns.$inferInsert;
+
+/**
+ * COS User Mental Model - comprehensive profile of user's thinking
+ */
+export const cosUserMentalModel = mysqlTable("cos_user_mental_model", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull().unique(),
+  
+  // Core profile
+  thinkingStyle: text("thinkingStyle"), // How user approaches problems
+  communicationStyle: text("communicationStyle"), // How user communicates
+  decisionMakingStyle: text("decisionMakingStyle"), // How user makes decisions
+  
+  // Priorities and values
+  topPriorities: json("topPriorities"), // Array of priorities
+  coreValues: json("coreValues"), // Array of values
+  qualityStandards: json("qualityStandards"), // What "good" looks like
+  
+  // Preferences
+  formatPreferences: json("formatPreferences"), // Document, communication format preferences
+  workflowPreferences: json("workflowPreferences"), // How user likes to work
+  communicationPreferences: json("communicationPreferences"), // Communication preferences
+  
+  // Pet peeves and dislikes
+  petPeeves: json("petPeeves"), // Things that annoy user
+  avoidPatterns: json("avoidPatterns"), // Things to avoid
+  
+  // Terminology
+  customTerminology: json("customTerminology"), // User-specific terms and meanings
+  
+  // Model confidence
+  overallConfidence: float("overallConfidence").default(0.2), // How confident in the model
+  lastMajorUpdate: timestamp("lastMajorUpdate"),
+  interactionsProcessed: int("interactionsProcessed").default(0),
+  
+  // Metadata
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+export type CosUserMentalModel = typeof cosUserMentalModel.$inferSelect;
+export type InsertCosUserMentalModel = typeof cosUserMentalModel.$inferInsert;
+
+/**
+ * COS Learning Metrics - track how well COS is learning
+ */
+export const cosLearningMetrics = mysqlTable("cos_learning_metrics", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  
+  // Period
+  metricDate: timestamp("metricDate").notNull(),
+  periodType: mysqlEnum("periodType", ["daily", "weekly", "monthly"]).notNull(),
+  
+  // Interaction metrics
+  totalInteractions: int("totalInteractions").default(0),
+  correctionsReceived: int("correctionsReceived").default(0),
+  approvalsReceived: int("approvalsReceived").default(0),
+  
+  // Learning metrics
+  newPatternsLearned: int("newPatternsLearned").default(0),
+  patternsReinforced: int("patternsReinforced").default(0),
+  patternsInvalidated: int("patternsInvalidated").default(0),
+  
+  // Performance metrics
+  accuracyScore: float("accuracyScore"), // How often COS gets it right
+  anticipationScore: float("anticipationScore"), // How well COS anticipates needs
+  satisfactionScore: float("satisfactionScore"), // User satisfaction
+  
+  // Improvement tracking
+  previousAccuracyScore: float("previousAccuracyScore"),
+  accuracyChange: float("accuracyChange"),
+  
+  // Metadata
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+export type CosLearningMetrics = typeof cosLearningMetrics.$inferSelect;
+export type InsertCosLearningMetrics = typeof cosLearningMetrics.$inferInsert;

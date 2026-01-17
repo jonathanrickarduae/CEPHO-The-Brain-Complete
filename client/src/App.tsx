@@ -42,6 +42,7 @@ import ExpertChatPage from "./pages/ExpertChatPage";
 import InnovationHub from "./pages/InnovationHub";
 import DocumentLibrary from "./pages/DocumentLibrary";
 import DevelopmentPathway from "./pages/DevelopmentPathway";
+import COSTraining from "./pages/COSTraining";
 import PortfolioCommandCenter from "./pages/PortfolioCommandCenter";
 import RevenueDashboard from "./pages/RevenueDashboard";
 import KpiDashboard from "./pages/KpiDashboard";
@@ -141,6 +142,9 @@ function Router() {
       </Route>
       <Route path="/development-pathway">
         <WithLayout><DevelopmentPathway /></WithLayout>
+      </Route>
+      <Route path="/cos-training">
+        <WithLayout><COSTraining /></WithLayout>
       </Route>
       <Route path="/portfolio">
         <WithLayout><PortfolioCommandCenter /></WithLayout>

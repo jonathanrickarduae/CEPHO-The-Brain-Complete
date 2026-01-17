@@ -4962,3 +4962,141 @@ The 100% Optimization Framework requires strong performance across ALL fronts. C
 - [x] Update getMoodColor helper for proper color mapping
 - [x] Verify all navigation links working
 - [x] Test AI-SMEs, Workflow, Project Genesis, Innovation Hub, Analytics pages
+
+## Sidebar Navigation Reorganization
+- [ ] Group Morning Signal and Evening Review under "The Signal" section
+- [ ] Group Development Pathway and COS Training under "Chief of Staff" section
+- [ ] Create collapsible/expandable navigation groups for cleaner layout
+
+## Sidebar Navigation Improvements
+- [ ] Group Morning Signal and Evening Review under "The Signal" section
+- [ ] Create collapsible/expandable navigation group for cleaner layout
+
+## Sidebar Navigation Reorganization
+- [x] Group Morning Signal and Evening Review under "The Signal" (collapsible)
+- [x] Group Development Pathway and COS Training under "Chief of Staff" (collapsible)
+- [x] Add click-to-expand/collapse functionality for navigation groups
+
+## COS Training Score Integration
+- [x] Add COS training level to assessment scoring system
+- [x] Weight/average down all scores until COS reaches 100%
+- [ ] Display COS training progress as factor in overall assessments
+- [ ] Create accountability mechanism for COS training completion
+
+## KPI Report Enhancements
+- [x] Include all individual SME scores in heat maps (not just averages)
+- [ ] Add customer input/feedback scores to heat maps
+- [x] Show breakdown of each SME.s contribution to category scores
+- [ ] Enable drill-down from category to individual SME assessments
+
+## COS Adaptive Learning System (Phase 1 - CRITICAL)
+- [ ] Create interaction logging schema - capture all questions, feedback, corrections
+- [ ] Build pattern analysis system - identify what triggers clarifications
+- [ ] Create user profile/preferences model - working style, priorities, decision patterns
+- [ ] Implement learning extraction - what to learn from each interaction type
+- [ ] Build feedback loop - COS adjusts behavior based on learnings
+- [ ] Create "lessons learned" repository from interactions
+- [ ] Implement proactive suggestions based on learned patterns
+- [ ] Add preference tracking - formatting, communication style, detail level
+- [ ] Build correction tracking - what was wrong, what was the fix, apply to future
+- [ ] Create COS memory system - remember context across sessions
+- [ ] Implement "understanding you" dashboard - show what COS has learned
+- [ ] Add continuous improvement metrics - is COS getting better over time?
+
+## COS Actual Training System (Phase 1 - PRIORITY)
+- [ ] Create database schema for COS training progress
+- [ ] Build training module content for each level
+- [ ] Implement module completion flow with progress tracking
+- [ ] Create tRPC routes for training progress CRUD
+- [ ] Update COS Training page to use real data from database
+- [ ] Build module content viewer with completion tracking
+- [ ] Implement knowledge integration - COS learns from completed modules
+- [ ] Create assessment/quiz system to verify learning
+- [ ] Connect training progress to score weighting system
+- [ ] Add training reminders and progress notifications
+
+## COS Digital Twin Learning System (Phase 1 - CORE USP)
+### Interaction History Capture
+- [ ] Create database schema for interaction logging (questions, feedback, corrections)
+- [ ] Build transcript parser to extract learnings from past conversations
+- [ ] Implement real-time interaction capture for ongoing learning
+- [ ] Create categorization system for interaction types
+
+### Pattern Extraction Engine
+- [ ] Build thinking pattern analyzer - how user approaches problems
+- [ ] Create decision pattern extractor - what gets approved/rejected
+- [ ] Implement priority detector - what matters most to user
+- [ ] Build communication style analyzer - tone, detail level, format preferences
+
+### User Mental Model
+- [ ] Create preference model schema - documented preferences and standards
+- [ ] Build values extraction - what principles guide decisions
+- [ ] Implement quality standards model - what "good" looks like to user
+- [ ] Create working style profile - how user likes to work
+
+### COS Training Pipeline
+- [ ] Build learning extraction from each interaction
+- [ ] Create "lessons learned" repository with searchable index
+- [ ] Implement pattern-to-behavior mapping
+- [ ] Build continuous learning loop - apply learnings to future responses
+
+### Behavior Adjustment System
+- [ ] Implement "Would user approve this?" check before responses
+- [ ] Create pre-delivery validation against user standards
+- [ ] Build uncertainty handling - "How would user approach this?"
+- [ ] Implement proactive suggestions based on learned patterns
+
+### Understanding Dashboard
+- [ ] Create "What COS has learned" visualization
+- [ ] Build preference summary display
+- [ ] Implement learning progress metrics
+- [ ] Add continuous improvement tracking - is COS getting better?
+
+### Historical Processing
+- [ ] Process all past Manus conversations
+- [ ] Extract key learnings from historical interactions
+- [ ] Build baseline user profile from history
+- [ ] Create initial COS training dataset from past interactions
+
+## Innovation Ideas - Logged
+- [ ] IDEA: Dementia glasses for safety and name reminders - explore partnership/development opportunity
+  - Source: https://www.thetimes.com/article/8d646853-904d-4665-a499-bfbb2d05c3ca
+  - Concept: Glasses that help dementia patients stay safe and remind them of names
+  - Action: Research the technology, potential partnerships, and how CEPHO could integrate or develop similar
+
+## Technology Synthesis Framework (Core USP)
+### Philosophy
+- The art of business is pulling 2-5 existing things together that no one else is looking at to solve a problem
+- Lower cost than pure R&D, faster to market, higher success rate
+- The innovation is in the COMBINATION, not the invention
+
+### Framework Components
+- [ ] Build Technology Scanner - what exists right now, what's emerging
+- [ ] Create Problem Mapper - what problems need solving in target markets
+- [ ] Develop Synthesis Engine - AI-powered combination finder
+- [ ] Implement Gap Identifier - where is no one looking, what combinations are missed
+- [ ] Build Cost/Feasibility Analyzer - can these be combined practically
+- [ ] Create Partnership Mapper - who owns what tech, potential collaboration
+
+### Integration Points
+- [ ] Connect to Innovation Hub for idea generation
+- [ ] Feed into Project Genesis for opportunity evaluation
+- [ ] Link to SME panel for technical feasibility review
+- [ ] Add to COS learning - this is a core business philosophy
+
+### Example: Dementia Glasses
+- Existing tech 1: AR glasses
+- Existing tech 2: Facial recognition
+- Existing tech 3: GPS/location tracking
+- Existing tech 4: Voice prompts
+- Combination = Safety + name reminder glasses for dementia patients
+
+## Technology Synthesis - SME Panel Validation
+- [ ] Run Technology Synthesis concept through AI SME panel
+- [ ] Get Chief of Staff review and refinement
+- [ ] Validate the framework structure with Innovation SME
+- [ ] Get Technical Architect review on feasibility
+- [ ] Get Strategy SME input on market positioning
+- [ ] Refine based on SME feedback
+- [ ] Integrate validated framework into CEPHO ecosystem
+- [ ] Document as core methodology in design guidelines
