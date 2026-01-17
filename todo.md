@@ -4687,3 +4687,108 @@ When users consistently score themselves low (mood, wellbeing, performance below
 - User satisfaction with support provided
 - Time to recovery from low periods
 
+
+
+---
+
+## Rapid Scenario Analysis Process (Jan 17, 2026)
+*Logged by Chief of Staff - Quick Turnaround Decision Support*
+
+### Overview
+A "short and sharp" assessment process for real-life problems or scenarios requiring fast turnaround. Unlike the full Project Genesis process, this is designed for time-sensitive decisions where you need the best possible solution quickly with all available information.
+
+### Use Cases
+- Preparing for a presentation tomorrow
+- Responding to an urgent business situation
+- Quick strategic decision needed
+- Problem-solving with tight deadline
+- Scenario planning for upcoming meeting
+
+### Process Flow
+
+**Step 1: Context Gathering (5 mins)**
+- What is the scenario/problem?
+- Who is involved and why?
+- What are the constraints (time, resources, stakeholders)?
+- What outcome are you hoping for?
+- Any relevant background or history?
+
+**Step 2: Multi-SME Rapid Consultation (10 mins)**
+- Route to 3-5 most relevant SME experts
+- Parallel input gathering
+- Each expert provides quick assessment from their domain
+- Flag any critical considerations
+
+**Step 3: Chief of Staff Synthesis (5 mins)**
+- Quantify and qualify all inputs
+- Cross-reference with prior research/insights
+- Identify patterns and consensus
+- Note any conflicting viewpoints
+
+**Step 4: Deep & Wide Analysis (10 mins)**
+- Search for relevant references and precedents
+- Check industry best practices
+- Review similar scenarios from Insights Repository
+- Validate recommendations against evidence
+
+**Step 5: Options Development (5 mins)**
+- Generate 2-3 viable approaches
+- Rank by feasibility, impact, and risk
+- Clear pros/cons for each option
+- Recommended approach with rationale
+
+**Step 6: Deliverable Generation (5 mins)**
+- 1-2 page briefing report with:
+  - Situation summary
+  - Key considerations
+  - Options with analysis
+  - Recommended approach
+  - References/sources
+- Voice briefing from assigned expert
+
+### Voice Briefing Options
+- **Male Voice (Standard):** Professional, authoritative tone
+- **Female Voice (Not Charlotte):** Alternative professional voice
+- Expert assigned based on scenario domain
+
+### Deliverables
+1. **Briefing Report** (1-2 pages)
+   - Executive summary
+   - Situation analysis
+   - Options matrix
+   - Recommendation with rationale
+   - Key references
+
+2. **Voice Briefing** (2-3 mins)
+   - Verbal summary of recommendation
+   - Key points to remember
+   - Suggested talking points if presenting
+
+### Quality Standards
+- All recommendations must be referenced (not just opinions)
+- Clear logic chain from analysis to recommendation
+- Options presented objectively before recommendation
+- Time-stamped for context
+
+### Phase 1: Foundation
+- [ ] Create Rapid Scenario Analysis UI component
+- [ ] Build context gathering form
+- [ ] Implement multi-SME parallel routing
+- [ ] Create synthesis engine for Chief of Staff
+- [ ] Build briefing report template
+- [ ] Integrate voice briefing generation
+- [ ] Add to main navigation/quick access
+
+### Phase 2: Integration
+- [ ] Connect to Insights Repository for prior research
+- [ ] Link to SME expert database
+- [ ] Enable voice selection (male/female)
+- [ ] Add reference citation system
+- [ ] Create options matrix generator
+
+### Phase 3: Optimization
+- [ ] Track scenario types and outcomes
+- [ ] Learn from successful recommendations
+- [ ] Improve SME routing based on scenario type
+- [ ] Build scenario templates for common situations
+
