@@ -3694,3 +3694,55 @@
   - [x] Add "Actions for tomorrow" box with Chief of Staff suggestions
   - [x] Move trend chart to collapsible section at bottom
   - [x] Add submit button for end of day
+
+
+## AI Avatars & Nexus Page Fixes (January 2026)
+
+### AI SME Avatars
+- [ ] Generate realistic AI avatars for all SME experts
+- [ ] Replace placeholder emoji avatars with professional headshots
+- [ ] Ensure diverse representation across experts
+
+### Nexus Page Branding
+- [ ] Move "Your headspace, reclaimed" under "Getting you to a 10"
+- [ ] Add animated neuron brain icon (like login page)
+- [ ] Make "Getting you to a 10" text pink
+- [ ] Remove tagline from current wrong position
+
+
+## Evening Review Task Validation Workflow (January 2026)
+
+- [ ] Redesign Evening Review as task validation workflow
+- [ ] Add task summary list with Yes/No/Defer actions for each task
+- [ ] Show top 5 projects with their overnight task status
+- [ ] Add individual project drill-down for task validation
+- [ ] Quick swipe/click validation (Accept/Reject/Defer)
+- [ ] Add "Ready to Start" button to confirm overnight tasks
+- [ ] Set 8 PM trigger time for evening review notification
+- [ ] Keep What Went Well / What Didn't boxes for reflection
+- [ ] Add mood score (numerical 1-10) after task validation
+
+
+## AI-SME Page Filtering Improvements (January 2026)
+
+- [ ] Reorganize left sidebar with hierarchical filtering:
+  - [ ] AI SMEs (Individual experts)
+  - [ ] Corporate Roles (Business functions)
+  - [ ] Field Experts (Industry specialists)
+  - [ ] Celebrities (Public figures)
+  - [ ] Companies (Corporate digital twins - McKinsey, Netflix, etc.)
+- [ ] Add search across all categories
+- [ ] Improve filter UX for easier navigation
+
+
+## G Drive Daily Output Folder Structure (January 2026)
+
+- [ ] Create dated G Drive folder each morning (e.g., "17-01-2026")
+- [ ] Save overnight task list to folder
+- [ ] Save all overnight outputs/documents to folder
+- [ ] Mark all documents as "Draft" status initially
+- [ ] Link Signal daily brief to G Drive folder
+- [ ] Add sign-off workflow for each document (Draft → Signed Off)
+- [ ] Move signed-off documents to master files
+- [ ] Allow editing of drafts during the day before final sign-off
+- [ ] Create audit trail of all document movements
