@@ -547,7 +547,8 @@ export async function generateInvestmentScenarios(ideaId: number, budgets: numbe
 }
 
 /**
- * Generate idea brief document
+ * Generate idea brief document using CEPHO branded templates
+ * All briefs pass through Chief of Staff QA sign-off
  */
 export async function generateIdeaBrief(ideaId: number) {
   const db = await getDb();
@@ -557,55 +558,85 @@ export async function generateIdeaBrief(ideaId: number) {
   if (!ideaData) throw new Error("Idea not found");
 
   const { idea, assessments, scenarios } = ideaData;
+  
+  // Import branded template services
+  const { generateInnovationBrief, applyBrandFormatting } = await import("./documentTemplateService");
+  const { processDocumentQA } = await import("./chiefOfStaffQAService");
 
-  const response = await invokeLLM({
-    messages: [
-      {
-        role: "system",
-        content: `Generate a comprehensive but concise idea brief document. This is a pre-Project Genesis summary that should help the user decide whether to pursue this idea further.
-        
-        Structure:
-        1. Executive Summary (2-3 sentences)
-        2. Opportunity Overview
-        3. Key Findings from Assessments
-        4. Investment Scenarios Summary
-        5. Risks and Mitigations
-        6. Recommendation (Go/No-Go/Refine)
-        7. Next Steps if Proceeding
-        
-        Use markdown formatting.`
-      },
-      {
-        role: "user",
-        content: `Idea: ${idea.title}
-        
-Description: ${idea.description || "No description"}
+  // Prepare assessment data for branded template
+  const assessmentData = assessments.map(a => ({
+    type: a.assessmentType,
+    score: a.score || 0,
+    findings: a.findings || "Assessment pending",
+    // Expert viewpoints would be stored in metadata if available
+  }));
 
-Category: ${idea.category || "Uncategorized"}
+  // Prepare investment scenarios
+  const investmentData = scenarios.map(s => ({
+    name: s.scenarioName,
+    amount: s.investmentAmount,
+    projectedReturn: s.projectedProfit ? `£${(s.projectedProfit as number).toLocaleString()} projected profit` : "TBD",
+    riskLevel: s.riskLevel || "Medium",
+    timeline: `${s.timeToBreakeven || 12} months to break even`,
+  }));
 
-Assessments:
-${assessments.map(a => `- ${a.assessmentType}: Score ${a.score?.toFixed(1)}/100, Recommendation: ${a.recommendation}`).join("\n")}
+  // Determine final recommendation
+  const avgScore = assessments.reduce((sum, a) => sum + (a.score || 0), 0) / (assessments.length || 1);
+  let decision: "proceed" | "refine" | "pivot" | "reject" = "refine";
+  if (avgScore >= 75) decision = "proceed";
+  else if (avgScore >= 50) decision = "refine";
+  else if (avgScore >= 30) decision = "pivot";
+  else decision = "reject";
 
-Investment Scenarios:
-${scenarios.map(s => `- ${s.scenarioName} (£${s.investmentAmount.toLocaleString()}): Break-even in ${s.timeToBreakeven} months, Risk: ${s.riskLevel}${s.isRecommended ? " [RECOMMENDED]" : ""}`).join("\n")}
+  // Generate branded Innovation Brief
+  const { markdown: briefDocument, metadata, signOff } = await generateInnovationBrief(
+    {
+      title: idea.title,
+      description: idea.description || "No description provided",
+      source: idea.source || "manual",
+    },
+    assessmentData,
+    investmentData,
+    {
+      decision,
+      rationale: `Based on an overall assessment score of ${avgScore.toFixed(0)}/100, this idea ${decision === "proceed" ? "shows strong potential and is recommended for progression to Project Genesis" : decision === "refine" ? "has merit but requires further refinement before proceeding" : decision === "pivot" ? "needs significant changes to the core approach" : "does not meet minimum viability thresholds"}.`,
+      nextSteps: decision === "proceed" 
+        ? ["Initiate Project Genesis workflow", "Assign project lead and resources", "Develop detailed implementation plan"]
+        : decision === "refine"
+        ? ["Address identified gaps in assessment", "Conduct additional market research", "Re-run through Innovation Flywheel"]
+        : ["Archive idea with learnings", "Consider alternative approaches", "Monitor market for changes"],
+    },
+    "confidential"
+  );
 
-Overall Confidence Score: ${idea.confidenceScore?.toFixed(1) || "Not assessed"}/100`
-      }
-    ]
-  });
+  // Process through Chief of Staff QA
+  const qaResult = await processDocumentQA(
+    metadata.id,
+    "innovation_brief",
+    `Innovation Brief: ${idea.title}`,
+    briefDocument,
+    "confidential"
+  );
 
-  const briefDocument = (typeof response.choices[0].message.content === 'string' ? response.choices[0].message.content : '') || "";
+  // Use QA-approved content
+  const finalBrief = qaResult.approved ? qaResult.finalContent : briefDocument;
 
   // Update idea with brief
   await db.update(innovationIdeas)
     .set({ 
-      briefDocument,
+      briefDocument: finalBrief,
       currentStage: FLYWHEEL_STAGES.BRIEF,
       status: "validated",
     })
     .where(eq(innovationIdeas.id, ideaId));
 
-  return { briefDocument };
+  return { 
+    briefDocument: finalBrief,
+    qaApproved: qaResult.approved,
+    qaCommentary: qaResult.commentary,
+    metadata,
+    signOff,
+  };
 }
 
 /**

@@ -3853,3 +3853,33 @@
 - [ ] Capture all research findings and insights centrally
 - [ ] Track all development activities and learnings
 - [ ] Build systematic knowledge accumulation from all sources
+
+
+## Innovation Flywheel Enhancements
+- [ ] Progressive question depth: Initial basic questions, deeper probing questions each iteration
+- [ ] Multi-SME expert panel: Multiple domain experts weigh in as idea progresses
+- [ ] Expert debate/consensus: Different viewpoints synthesized into final recommendation
+- [ ] Stage 1: Chief of Staff initial assessment
+- [ ] Stage 2-3: Sector-specific experts (Finance, Marketing, Tech, etc.)
+- [ ] Stage 4-5: Full panel review with contrasting viewpoints
+- [ ] CEPHO branded report template (logo top-left, colour scheme)
+- [ ] 2-page executive summary output
+- [ ] Scoring matrix for each assessment dimension
+- [ ] Expert panel recommendations with individual viewpoints
+- [ ] Appendices with detailed ranking criteria and full scoring breakdown
+- [ ] Standardized CEPHO output document templates
+
+
+## CEPHO.AI Brand Guidelines & Document Standards
+- [x] Create CEPHO.AI Brand Guidelines document (CEPHO-BP-016)
+- [x] Define logo usage, placement, and sizing rules
+- [x] Define colour palette (primary, secondary, accent colours)
+- [x] Define typography standards (fonts, sizes, hierarchy)
+- [x] Define document templates for all output types
+- [x] Create branded report template with logo top-left
+- [x] Create 2-page executive summary template
+- [x] Create appendix template with scoring matrices
+- [x] Integrate brand compliance check into document generation
+- [x] Add Chief of Staff QA sign-off layer for all documents
+- [x] All Innovation Flywheel outputs use branded templates
+- [x] All Project Genesis outputs use branded templates
