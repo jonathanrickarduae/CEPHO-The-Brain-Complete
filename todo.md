@@ -3746,3 +3746,11 @@
 - [ ] Move signed-off documents to master files
 - [ ] Allow editing of drafts during the day before final sign-off
 - [ ] Create audit trail of all document movements
+
+
+## Nexus Page Branding Fixes (January 2026)
+- [x] Remove "Your headspace, reclaimed" from PageHeader subtitle
+- [x] Change "GETTING YOU TO A 10" back to white text
+- [x] Redesign brain icon - remove circle, use cyan/neon green color
+- [x] Softer neuron animations (less flashing)
+- [x] Move "Your headspace, reclaimed" closer to the heading
