@@ -3883,3 +3883,13 @@
 - [x] Add Chief of Staff QA sign-off layer for all documents
 - [x] All Innovation Flywheel outputs use branded templates
 - [x] All Project Genesis outputs use branded templates
+
+
+## PDF Export & Document Library
+- [x] Create PDF export service for branded documents
+- [x] Generate formatted PDFs with CEPHO logo and styling
+- [x] Add PDF export API endpoint for Innovation Briefs
+- [x] Create Document Library page showing all generated documents
+- [x] Display QA status (approved/pending/rejected) for each document
+- [x] Enable download and sharing of documents
+- [x] Add Document Library to sidebar navigation

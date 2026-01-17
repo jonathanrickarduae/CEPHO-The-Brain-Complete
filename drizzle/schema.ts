@@ -2079,3 +2079,32 @@ export const trendRepository = mysqlTable("trend_repository", {
 
 export type TrendRepository = typeof trendRepository.$inferSelect;
 export type InsertTrendRepository = typeof trendRepository.$inferInsert;
+
+
+/**
+ * Generated Documents - Document Library for all CEPHO outputs
+ */
+export const generatedDocuments = mysqlTable("generated_documents", {
+  id: int("id").autoincrement().primaryKey(),
+  documentId: varchar("documentId", { length: 100 }).notNull().unique(), // DOC-{timestamp}-{random}
+  userId: int("userId").notNull(),
+  title: varchar("title", { length: 500 }).notNull(),
+  type: mysqlEnum("type", ["innovation_brief", "project_genesis", "report", "other"]).notNull(),
+  content: text("content"), // JSON stringified content
+  classification: mysqlEnum("classification", ["public", "internal", "confidential", "restricted"]).default("internal").notNull(),
+  qaStatus: mysqlEnum("qaStatus", ["pending", "approved", "rejected"]).default("pending").notNull(),
+  qaApprover: varchar("qaApprover", { length: 200 }),
+  qaApprovedAt: timestamp("qaApprovedAt"),
+  qaNotes: text("qaNotes"),
+  markdownUrl: text("markdownUrl"), // S3 URL to markdown version
+  htmlUrl: text("htmlUrl"), // S3 URL to HTML version
+  pdfUrl: text("pdfUrl"), // S3 URL to PDF version
+  relatedIdeaId: int("relatedIdeaId"), // Link to innovation idea
+  relatedProjectId: int("relatedProjectId"), // Link to project genesis
+  metadata: json("metadata"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type GeneratedDocument = typeof generatedDocuments.$inferSelect;
+export type InsertGeneratedDocument = typeof generatedDocuments.$inferInsert;

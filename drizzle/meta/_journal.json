@@ -134,6 +134,13 @@
       "when": 1768638791624,
       "tag": "0018_volatile_gambit",
       "breakpoints": true
+    },
+    {
+      "idx": 19,
+      "version": "5",
+      "when": 1768640996606,
+      "tag": "0019_flowery_loki",
+      "breakpoints": true
     }
   ]
 }

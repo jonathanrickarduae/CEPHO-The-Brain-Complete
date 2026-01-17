@@ -22,7 +22,8 @@ import { InsertUser, users, moodHistory, InsertMoodHistory, MoodHistory, convers
   eveningReviewTaskDecisions, InsertEveningReviewTaskDecision, EveningReviewTaskDecision,
   reviewTimingPatterns, InsertReviewTimingPattern, ReviewTimingPattern,
   signalItems, InsertSignalItem, SignalItem,
-  calendarEventsCache, InsertCalendarEventCache, CalendarEventCache
+  calendarEventsCache, InsertCalendarEventCache, CalendarEventCache,
+  generatedDocuments, InsertGeneratedDocument, GeneratedDocument
 } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
@@ -2480,4 +2481,89 @@ export async function clearOldCachedEvents(userId: number, beforeDate: Date): Pr
       eq(calendarEventsCache.userId, userId),
       lte(calendarEventsCache.endTime, beforeDate)
     ));
+}
+
+
+// ============================================
+// Generated Documents Functions
+// ============================================
+
+// Create a new document
+export async function createDocument(data: InsertGeneratedDocument): Promise<number | null> {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const [result] = await db.insert(generatedDocuments).values(data);
+  return result.insertId;
+}
+
+// Get documents for a user
+export async function getDocuments(
+  userId: number,
+  filters?: { type?: string; qaStatus?: string; limit?: number; offset?: number }
+): Promise<GeneratedDocument[]> {
+  const db = await getDb();
+  if (!db) return [];
+  
+  const conditions = [eq(generatedDocuments.userId, userId)];
+  
+  if (filters?.type && filters.type !== 'all') {
+    conditions.push(eq(generatedDocuments.type, filters.type as any));
+  }
+  
+  if (filters?.qaStatus && filters.qaStatus !== 'all') {
+    conditions.push(eq(generatedDocuments.qaStatus, filters.qaStatus as any));
+  }
+  
+  return db.select().from(generatedDocuments)
+    .where(and(...conditions))
+    .orderBy(desc(generatedDocuments.createdAt))
+    .limit(filters?.limit || 50)
+    .offset(filters?.offset || 0);
+}
+
+// Get a document by ID
+export async function getDocumentById(documentId: string): Promise<GeneratedDocument | null> {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const [doc] = await db.select().from(generatedDocuments)
+    .where(eq(generatedDocuments.documentId, documentId))
+    .limit(1);
+  
+  return doc || null;
+}
+
+// Update a document
+export async function updateDocument(documentId: string, data: Partial<InsertGeneratedDocument>): Promise<void> {
+  const db = await getDb();
+  if (!db) return;
+  
+  await db.update(generatedDocuments).set(data)
+    .where(eq(generatedDocuments.documentId, documentId));
+}
+
+// Delete a document
+export async function deleteDocument(documentId: string): Promise<void> {
+  const db = await getDb();
+  if (!db) return;
+  
+  await db.delete(generatedDocuments)
+    .where(eq(generatedDocuments.documentId, documentId));
+}
+
+// Get document count by type
+export async function getDocumentCounts(userId: number): Promise<{ type: string; count: number }[]> {
+  const db = await getDb();
+  if (!db) return [];
+  
+  const docs = await db.select().from(generatedDocuments)
+    .where(eq(generatedDocuments.userId, userId));
+  
+  const counts: Record<string, number> = {};
+  docs.forEach(doc => {
+    counts[doc.type] = (counts[doc.type] || 0) + 1;
+  });
+  
+  return Object.entries(counts).map(([type, count]) => ({ type, count }));
 }

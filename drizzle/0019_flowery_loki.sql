@@ -1,0 +1,23 @@
+CREATE TABLE `generated_documents` (
+	`id` int AUTO_INCREMENT NOT NULL,
+	`documentId` varchar(100) NOT NULL,
+	`userId` int NOT NULL,
+	`title` varchar(500) NOT NULL,
+	`type` enum('innovation_brief','project_genesis','report','other') NOT NULL,
+	`content` text,
+	`classification` enum('public','internal','confidential','restricted') NOT NULL DEFAULT 'internal',
+	`qaStatus` enum('pending','approved','rejected') NOT NULL DEFAULT 'pending',
+	`qaApprover` varchar(200),
+	`qaApprovedAt` timestamp,
+	`qaNotes` text,
+	`markdownUrl` text,
+	`htmlUrl` text,
+	`pdfUrl` text,
+	`relatedIdeaId` int,
+	`relatedProjectId` int,
+	`metadata` json,
+	`createdAt` timestamp NOT NULL DEFAULT (now()),
+	`updatedAt` timestamp NOT NULL DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,
+	CONSTRAINT `generated_documents_id` PRIMARY KEY(`id`),
+	CONSTRAINT `generated_documents_documentId_unique` UNIQUE(`documentId`)
+);

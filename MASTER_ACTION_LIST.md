@@ -130,6 +130,8 @@ This document tracks all outstanding and completed actions for the CEPHO/The Bra
 | A-060 | ElevenLabs API Integration | ⏳ Pending | Low | Automated voice briefings |
 | A-061 | Portfolio Dashboard Build | ⏳ Pending | Low | Track multiple opportunities |
 | A-062 | Document Repository in The Brain | ⏳ Pending | Low | Version control system |
+| A-063 | PDF Export for Branded Documents | ⏳ Pending | High | Generate formatted PDFs with CEPHO branding |
+| A-064 | Document Library Page | ⏳ Pending | High | View all generated documents with QA status |
 
 ---
 
