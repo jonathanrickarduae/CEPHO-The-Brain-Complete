@@ -51,7 +51,7 @@ export function VictoriaPresenter({
           {/* Info */}
           <div className="flex-1">
             <h3 className="text-lg font-semibold text-white">Victoria</h3>
-            <p className="text-sm text-pink-300/80">Your CEPHO.Ai Presenter</p>
+            <p className="text-sm text-pink-300/80">Head of Briefings</p>
             <p className="text-xs text-foreground/60 mt-1">{briefTitle}</p>
           </div>
 

@@ -317,7 +317,7 @@ const getPhaseLabel = (phase: number) => {
   switch (phase) {
     case 1: return 'Phase 1: Foundation';
     case 2: return 'Phase 2: Enhancement';
-    case 3: return 'Phase 3: Automation';
+    case 3: return 'Phase 3: Market Entry';
     case 4: return 'Phase 4: Personal (AI Integration)';
     case 5: return 'Phase 5: In-house Productivity Apps';
     case 6: return 'Phase 6: Commercialization';
@@ -328,6 +328,15 @@ const getPhaseLabel = (phase: number) => {
 export function ChiefOfStaffRoadmap() {
   const [activeCategory, setActiveCategory] = useState('personal');
   const [expandedCapability, setExpandedCapability] = useState<string | null>('p4');
+  const [expandedPhases, setExpandedPhases] = useState<number[]>([1, 2]); // Default: show current phases
+
+  const togglePhase = (phase: number) => {
+    setExpandedPhases(prev => 
+      prev.includes(phase) 
+        ? prev.filter(p => p !== phase)
+        : [...prev, phase]
+    );
+  };
 
   const totalCapabilities = CAPABILITY_CATEGORIES.reduce((acc, cat) => acc + cat.capabilities.length, 0);
   const availableCapabilities = CAPABILITY_CATEGORIES.reduce(

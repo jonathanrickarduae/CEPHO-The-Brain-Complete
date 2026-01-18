@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CEPHO.Ai Strategic Framework Questionnaire</title>
+  <style>
+    :root {
+      --bg-primary: #0a0a0a;
+      --bg-secondary: #1a1a1a;
+      --bg-card: #141414;
+      --text-primary: #ffffff;
+      --text-secondary: #a0a0a0;
+      --accent-pink: #E91E8C;
+      --border: #333333;
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Calibri', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      line-height: 1.6;
+      padding: 20px;
+    }
+    
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    
+    .header {
+      text-align: center;
+      padding: 30px 0;
+      border-bottom: 2px solid var(--accent-pink);
+      margin-bottom: 30px;
+    }
+    
+    .header h1 {
+      font-size: 28px;
+      color: var(--accent-pink);
+      margin-bottom: 10px;
+    }
+    
+    .header p {
+      color: var(--text-secondary);
+      font-size: 14px;
+    }
+    
+    .section {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+    
+    .section h2 {
+      color: var(--accent-pink);
+      font-size: 18px;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    
+    .question {
+      margin-bottom: 24px;
+    }
+    
+    .question label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--text-primary);
+    }
+    
+    .question .hint {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-bottom: 10px;
+      font-style: italic;
+    }
+    
+    .question textarea {
+      width: 100%;
+      min-height: 120px;
+      padding: 12px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text-primary);
+      font-family: inherit;
+      font-size: 14px;
+      resize: vertical;
+    }
+    
+    .question textarea:focus {
+      outline: none;
+      border-color: var(--accent-pink);
+    }
+    
+    .question textarea::placeholder {
+      color: var(--text-secondary);
+    }
+    
+    .pre-populated {
+      background: var(--bg-secondary);
+      border-left: 3px solid var(--accent-pink);
+      padding: 12px;
+      margin-bottom: 10px;
+      border-radius: 0 8px 8px 0;
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+    
+    .pre-populated strong {
+      color: var(--accent-pink);
+    }
+    
+    .actions {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      padding: 30px 0;
+    }
+    
+    .btn {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .btn-primary {
+      background: var(--accent-pink);
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      opacity: 0.9;
+    }
+    
+    .btn-secondary {
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      border: 1px solid var(--border);
+    }
+    
+    .btn-secondary:hover {
+      background: var(--border);
+    }
+    
+    .progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 4px;
+      background: var(--accent-pink);
+      transition: width 0.3s;
+      z-index: 1000;
+    }
+    
+    .save-indicator {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+    
+    .save-indicator.saved {
+      border-color: #22c55e;
+      color: #22c55e;
+    }
+    
+    @media print {
+      body { background: white; color: black; }
+      .section { border: 1px solid #ccc; }
+      .question textarea { border: 1px solid #ccc; background: #f5f5f5; }
+      .actions { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="progress-bar" id="progressBar"></div>
+  
+  <div class="container">
+    <div class="header">
+      <h1>CEPHO.Ai Strategic Framework Questionnaire</h1>
+      <p>Complete this questionnaire to define your strategic direction. Your responses auto-save locally.</p>
+    </div>
+
+    <form id="strategicForm">
+      <!-- Section 1: Core Identity -->
+      <div class="section">
+        <h2>Section 1: Core Identity</h2>
+        
+        <div class="question">
+          <label>1.1 What is CEPHO.Ai's mission?</label>
+          <div class="hint">What problem are you solving and for whom?</div>
+          <div class="pre-populated"><strong>Pre-populated:</strong> To free entrepreneurs' mental bandwidth by providing AI-powered executive support, allowing them to focus on building their business rather than getting stuck in the weeds of things they don't know.</div>
+          <textarea name="mission" placeholder="Refine or expand on the mission statement..."></textarea>
+        </div>
+        
+        <div class="question">
+          <label>1.2 What is CEPHO.Ai's vision?</label>
+          <div class="hint">Where do you see the company in 5-10 years?</div>
+          <div class="pre-populated"><strong>Pre-populated:</strong> To become the world's leading AI-powered executive support platform, enabling every entrepreneur to operate with the strategic capability of a Fortune 500 CEO.</div>
+          <textarea name="vision" placeholder="Refine or expand on the vision..."></textarea>
+        </div>
+        
+        <div class="question">
+          <label>1.3 What are CEPHO.Ai's core values?</label>
+          <div class="hint">What principles guide every decision?</div>
+          <div class="pre-populated"><strong>Pre-populated:</strong> Constant Learning, Authentic Excellence, Human Amplification, Practical Wisdom, Relentless Improvement</div>
+          <textarea name="values" placeholder="Confirm or modify the core values..."></textarea>
+        </div>
+      </div>
+
+      <!-- Section 2: Market Position -->
+      <div class="section">
+        <h2>Section 2: Market Position</h2>
+        
+        <div class="question">
+          <label>2.1 Who is your primary target customer?</label>
+          <div class="hint">Be specific about demographics, psychographics, and pain points.</div>
+          <div class="pre-populated"><strong>Pre-populated:</strong> Solo founders and small business CEOs (1-10 employees) who lack access to executive support but need strategic guidance across multiple business functions.</div>
+          <textarea name="target_customer" placeholder="Describe your ideal customer in detail..."></textarea>
+        </div>
+        
+        <div class="question">
+          <label>2.2 What makes CEPHO.Ai different from competitors?</label>
+          <div class="hint">What is your unique value proposition?</div>
+          <div class="pre-populated"><strong>Pre-populated:</strong> Unlike generic AI assistants, CEPHO.Ai provides a complete AI executive team (Chief of Staff + SME Panel) that learns your preferences, maintains context, and delivers expert-level guidance across all business functions.</div>
+          <textarea name="differentiation" placeholder="Explain your competitive advantage..."></textarea>
+        </div>
+        
+        <div class="question">
+          <label>2.3 What does "number one" mean for CEPHO.Ai?</label>
+          <div class="hint">How do you define success? (Not just revenue)</div>
+          <div class="pre-populated"><strong>Pre-populated:</strong> Being number one means maximizing mental bandwidth liberation for users. Success is measured by how much cognitive load we remove from entrepreneurs, allowing them to focus on what they actually want to do.</div>
+          <textarea name="success_definition" placeholder="Define what winning looks like..."></textarea>
+        </div>
+      </div>
+
+      <!-- Section 3: Business Model -->
+      <div class="section">
+        <h2>Section 3: Business Model</h2>
+        
+        <div class="question">
+          <label>3.1 How will CEPHO.Ai generate revenue?</label>
+          <div class="hint">Describe your pricing model and revenue streams.</div>
+          <div class="pre-populated"><strong>Pre-populated:</strong> Subscription-based SaaS model with tiered pricing based on usage and features. Additional revenue from Digital Twin Management Agency services for enterprise clients.</div>
+          <textarea name="revenue_model" placeholder="Detail your revenue model..."></textarea>
+        </div>
+        
+        <div class="question">
+          <label>3.2 What is the cost structure?</label>
+          <div class="hint">What are the major cost drivers?</div>
+          <textarea name="cost_structure" placeholder="Describe major costs (AI compute, development, etc.)..."></textarea>
+        </div>
+        
+        <div class="question">
+          <label>3.3 What are the key partnerships needed?</label>
+          <div class="hint">Who do you need to work with to succeed?</div>
+          <textarea name="partnerships" placeholder="List key partnerships and integrations..."></textarea>
+        </div>
+      </div>
+
+      <!-- Section 4: Strategic Priorities -->
+      <div class="section">
+        <h2>Section 4: Strategic Priorities</h2>
+        
+        <div class="question">
+          <label>4.1 What are the top 3 priorities for the next 12 months?</label>
+          <div class="hint">What must be achieved to move to the next phase?</div>
+          <div class="pre-populated"><strong>Pre-populated:</strong> 1) Complete Phase 2 (Foundation) with full Chief of Staff functionality. 2) Achieve product-market fit with early adopters. 3) Secure seed funding for Phase 3 expansion.</div>
+          <textarea name="priorities_12m" placeholder="List your top priorities..."></textarea>
+        </div>
+        
+        <div class="question">
+          <label>4.2 What are the biggest risks to the business?</label>
+          <div class="hint">What could derail your plans?</div>
+          <textarea name="risks" placeholder="Identify key risks and mitigation strategies..."></textarea>
+        </div>
+        
+        <div class="question">
+          <label>4.3 What resources are needed to execute?</label>
+          <div class="hint">Funding, talent, technology, partnerships?</div>
+          <textarea name="resources" placeholder="List required resources..."></textarea>
+        </div>
+      </div>
+
+      <!-- Section 5: Exit Strategy -->
+      <div class="section">
+        <h2>Section 5: Long-term Vision</h2>
+        
+        <div class="question">
+          <label>5.1 What is the long-term exit strategy?</label>
+          <div class="hint">IPO, acquisition, lifestyle business, other?</div>
+          <textarea name="exit_strategy" placeholder="Describe your long-term plans..."></textarea>
+        </div>
+        
+        <div class="question">
+          <label>5.2 What legacy do you want CEPHO.Ai to leave?</label>
+          <div class="hint">Beyond financial success, what impact do you want to make?</div>
+          <textarea name="legacy" placeholder="Describe the impact you want to create..."></textarea>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button type="button" class="btn btn-secondary" onclick="exportResponses()">Export Responses</button>
+        <button type="button" class="btn btn-primary" onclick="saveAndContinue()">Save Progress</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="save-indicator" id="saveIndicator">Auto-save enabled</div>
+
+  <script>
+    const STORAGE_KEY = 'cepho_strategic_framework';
+    
+    // Load saved responses
+    function loadResponses() {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        const data = JSON.parse(saved);
+        Object.keys(data).forEach(key => {
+          const field = document.querySelector(`[name="${key}"]`);
+          if (field) field.value = data[key];
+        });
+        updateProgress();
+      }
+    }
+    
+    // Save responses
+    function saveResponses() {
+      const form = document.getElementById('strategicForm');
+      const formData = new FormData(form);
+      const data = {};
+      formData.forEach((value, key) => data[key] = value);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      
+      const indicator = document.getElementById('saveIndicator');
+      indicator.textContent = 'Saved!';
+      indicator.classList.add('saved');
+      setTimeout(() => {
+        indicator.textContent = 'Auto-save enabled';
+        indicator.classList.remove('saved');
+      }, 2000);
+      
+      updateProgress();
+    }
+    
+    // Update progress bar
+    function updateProgress() {
+      const textareas = document.querySelectorAll('textarea');
+      const filled = Array.from(textareas).filter(t => t.value.trim().length > 0).length;
+      const progress = (filled / textareas.length) * 100;
+      document.getElementById('progressBar').style.width = progress + '%';
+    }
+    
+    // Export responses as JSON
+    function exportResponses() {
+      const form = document.getElementById('strategicForm');
+      const formData = new FormData(form);
+      const data = { exportDate: new Date().toISOString(), responses: {} };
+      formData.forEach((value, key) => data.responses[key] = value);
+      
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'cepho_strategic_framework_' + new Date().toISOString().split('T')[0] + '.json';
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+    
+    // Save and show confirmation
+    function saveAndContinue() {
+      saveResponses();
+      alert('Your responses have been saved locally. You can close this page and return later to continue.');
+    }
+    
+    // Auto-save on input
+    document.querySelectorAll('textarea').forEach(textarea => {
+      textarea.addEventListener('input', () => {
+        clearTimeout(window.saveTimeout);
+        window.saveTimeout = setTimeout(saveResponses, 1000);
+      });
+    });
+    
+    // Load on page load
+    loadResponses();
+  </script>
+</body>
+</html>

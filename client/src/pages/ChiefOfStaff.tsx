@@ -690,7 +690,7 @@ export default function ChiefOfStaff() {
                   <div className="space-y-2">
                     {['Finance Expert', 'Strategy Lead', 'Research Lead', 'Legal Counsel'].map(expert => (
                       <div key={expert} className="flex items-center justify-between">
-                        <span className="text-sm">{expert}</span>
+                        <span className="text-sm text-white font-medium">{expert}</span>
                         <div className="flex items-center gap-2">
                           <Progress value={Math.random() * 100} className="w-20 h-1.5" />
                           <span className="text-xs text-muted-foreground">{Math.floor(Math.random() * 20 + 5)} interactions</span>

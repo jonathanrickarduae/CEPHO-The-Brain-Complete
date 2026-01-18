@@ -139,7 +139,7 @@ export function ExpertDirectory({ onSelectExpert, onBack }: ExpertDirectoryProps
                 {selectedPartner.logo}
               </div>
               <div className="flex-1">
-                <h1 className="text-3xl font-bold text-foreground mb-1">{selectedPartner.name}</h1>
+                <h1 className="text-3xl font-bold text-white mb-1">{selectedPartner.name}</h1>
                 <p className="text-lg text-blue-400 mb-2">{selectedPartner.industry}</p>
                 <div className="flex items-center gap-3">
                   <Badge className="bg-blue-500/20 text-blue-400 border-0">
@@ -302,7 +302,7 @@ export function ExpertDirectory({ onSelectExpert, onBack }: ExpertDirectoryProps
                 </div>
               )}
               <div className="flex-1">
-                <h1 className="text-3xl font-bold text-foreground mb-1">{selectedExpert.name}</h1>
+                <h1 className="text-3xl font-bold text-white mb-1">{selectedExpert.name}</h1>
                 <p className="text-lg text-primary mb-2">{selectedExpert.specialty}</p>
                 <div className="flex items-center gap-3">
                   <Badge variant="outline">{selectedExpert.category}</Badge>
@@ -750,7 +750,7 @@ export function ExpertDirectory({ onSelectExpert, onBack }: ExpertDirectoryProps
                           </div>
                         </div>
                         <div className="flex-1 min-w-0">
-                          <h3 className="font-semibold text-foreground truncate group-hover:text-primary transition-colors">
+                          <h3 className="font-semibold text-white truncate group-hover:text-primary transition-colors">
                             {expert.name}
                           </h3>
                           <p className="text-xs text-muted-foreground truncate">{expert.specialty}</p>

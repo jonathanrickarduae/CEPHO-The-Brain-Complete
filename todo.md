@@ -5631,7 +5631,7 @@ The 100% Optimization Framework requires strong performance across ALL fronts. C
 - [ ] #31 Make Development Pathway collapsible
 - [ ] #32 Fix layout overflow
 - [ ] #33 Add visual space between Recent Chats and Browse by type
-- [ ] #34 Change SME names text color to white
+- [x] #34 Change SME names text color to white
 - [ ] #35 Display full SME name when selected
 - [ ] #36 Style chat button in white
 
@@ -5738,3 +5738,53 @@ The 100% Optimization Framework requires strong performance across ALL fronts. C
 - [x] Distinct from Chief of Staff who does the grunt work and research
 - [x] Victoria presents the polished output, similar to Press Secretary role
 - [x] Update org chart component with Victoria's position in AI Executive Layer
+
+
+## Development Pathway Phase 5 Personal Project: Autonomous Job Application Management
+- [ ] Add Autonomous Job Application Management as a project within Phase 5 Personal
+- [ ] Sourcing: Identify and find relevant job opportunities matching user profile
+- [ ] Application: Auto-fill application forms using Chief of Staff knowledge of user
+- [ ] CV Optimization: Tailor CV to exactly match what each company wants
+- [ ] Email Management: Communicate with recruiters, arrange interview schedules
+- [ ] Psychometric Tests: Complete assessments on user's behalf
+- [ ] AI Interview Prep: Pass AI-led first-round interviews
+- [ ] Company Research: Deep understanding of target company before face-to-face
+- [ ] Handoff Point: Stop at face-to-face interview stage for human takeover
+- [ ] Goal: Get as far down automated hiring funnel as possible before human interaction required
+
+
+## Development Pathway Phase 3 Project: Quality Management System Integration
+- [ ] Add QMS Integration as a project within Phase 3 (Market Entry)
+- [ ] Plug into company's existing Quality Management System
+- [ ] Assess all processes, identify gaps, and analyze documentation
+- [ ] Run assessment through AI SME Expert Panel for multi-viewpoint analysis
+- [ ] Generate KPI scorecard based on different SME perspectives
+- [ ] Make recommendations for changes and improvements
+- [ ] Implement changes with acceptance/rejection workflow
+- [ ] Create continuous improvement loop for ongoing refinement
+- [ ] Key entry point into enterprise B2B clients
+- [ ] Eventually automate the entire QMS optimization cycle
+
+## Sprint Items 31-42 (18 January 2026)
+
+- [x] Create mobile-friendly Chief of Staff Questionnaire HTML (1-10 scales, Yes/No options)
+- [x] Add QMS Integration project to Phase 3 roadmap
+- [x] Add Autonomous Job Application Management project to Phase 5 roadmap
+- [ ] Make Development Pathway collapsible
+- [x] Fix SME name colors to white
+- [ ] Wire ElevenLabs to Victoria for actual voice synthesis
+- [ ] Create Manus Optimization Report (analyze capabilities, spawning, shortcuts)
+- [ ] Update Development Pathway with all new projects
+- [ ] Create Strategic Framework Questionnaire HTML (pre-filled, mobile-friendly)
+- [ ] Add Job Application Management to Development Pathway UI
+- [ ] Add QMS Integration to Development Pathway UI
+- [ ] Save checkpoint with all sprint items complete
+
+## Persephone.ai - AI Genius Board (18 January 2026)
+
+- [x] Create Persephone-AI framework document
+- [x] Update org chart with Persephone-AI as NED/Steering Committee
+- [x] Add Persephone-AI to Phase 3 roadmap
+- [x] Create deep dive repository structure for 14 AI leaders
+- [x] Build initial data collection plan for each leader
+- [ ] Save checkpoint with Persephone.ai complete
