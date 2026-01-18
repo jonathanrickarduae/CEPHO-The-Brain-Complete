@@ -553,27 +553,29 @@ Be thorough and specific in your assessment.`;
   // Generate assessment ID
   const assessmentId = `FA-${Date.now()}-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
   
-  // Save to database (skip for now - will implement with proper schema)
+  // Save to database
   const db = await getDb();
   if (db) {
-    // Database insert would go here
-    console.log(`[FundingAssessment] Would save assessment ${assessmentId}`);
+    try {
+      await db.insert(fundingAssessments).values({
+        assessmentId,
+        userId,
+        ideaId,
+        programId,
+        eligibilityScore: assessment.eligibilityScore,
+        eligibilityStatus: assessment.eligibilityStatus,
+        criteriaResults: assessment.criteriaResults,
+        strengths: assessment.strengths,
+        gaps: assessment.gaps,
+        recommendations: assessment.recommendations,
+        estimatedFunding: assessment.estimatedFunding,
+        applicationReadiness: assessment.applicationReadiness
+      });
+      console.log(`[FundingAssessment] Saved assessment ${assessmentId}`);
+    } catch (error) {
+      console.warn(`[FundingAssessment] Error saving assessment:`, error);
+    }
   }
-  
-  /* await db.insert(fundingAssessments).values({
-    assessmentId,
-    userId,
-    ideaId,
-    programId,
-    eligibilityScore: assessment.eligibilityScore,
-    eligibilityStatus: assessment.eligibilityStatus,
-    criteriaResults: assessment.criteriaResults,
-    strengths: assessment.strengths,
-    gaps: assessment.gaps,
-    recommendations: assessment.recommendations,
-    estimatedFunding: assessment.estimatedFunding,
-    applicationReadiness: assessment.applicationReadiness
-  }); */
   
   return {
     assessmentId,
@@ -588,8 +590,13 @@ export async function getIdeaFundingAssessments(ideaId: number) {
   const db = await getDb();
   if (!db) return [];
   
-  // Return empty array for now - will implement with proper schema
-  return [];
+  try {
+    const assessments = await db.select().from(fundingAssessments).where(eq(fundingAssessments.ideaId, ideaId));
+    return assessments;
+  } catch (error) {
+    console.warn(`[FundingAssessment] Error fetching assessments:`, error);
+    return [];
+  }
 }
 
 /**

@@ -92,6 +92,10 @@ export default function AISMEsPage() {
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
   const [compareExperts, setCompareExperts] = useState<string[]>([]);
   const [showCompareModal, setShowCompareModal] = useState(false);
+  const [favoriteExperts, setFavoriteExperts] = useState<string[]>(() => {
+    const saved = localStorage.getItem('favoriteExperts');
+    return saved ? JSON.parse(saved) : [];
+  });
 
   // tRPC hooks for team management
   const utils = trpc.useUtils();
@@ -216,6 +220,18 @@ export default function AISMEsPage() {
         return prev;
       }
       return [...prev, expertId];
+    });
+  };
+
+  // Toggle favorite expert
+  const toggleFavorite = (expertId: string) => {
+    setFavoriteExperts(prev => {
+      const newFavorites = prev.includes(expertId)
+        ? prev.filter(id => id !== expertId)
+        : [...prev, expertId];
+      localStorage.setItem('favoriteExperts', JSON.stringify(newFavorites));
+      toast.success(prev.includes(expertId) ? 'Removed from favorites' : 'Added to favorites');
+      return newFavorites;
     });
   };
 
@@ -625,21 +641,37 @@ export default function AISMEsPage() {
                           )}
                         </div>
                         
-                        {/* Compare checkbox */}
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            toggleCompareExpert(expert.id);
-                          }}
-                          className={`absolute top-2 right-2 p-1.5 rounded-lg transition-colors ${
-                            isInCompare 
-                              ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white' 
-                              : 'bg-white/10 hover:bg-white/20 text-foreground/70 opacity-0 group-hover:opacity-100'
-                          }`}
-                          title="Add to comparison"
-                        >
-                          <BarChart3 className="w-3 h-3" />
-                        </button>
+                        {/* Favorite and Compare buttons */}
+                        <div className="absolute top-2 right-2 flex items-center gap-1">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              toggleFavorite(expert.id);
+                            }}
+                            className={`p-1.5 rounded-lg transition-colors ${
+                              favoriteExperts.includes(expert.id)
+                                ? 'bg-yellow-500/20 text-yellow-400' 
+                                : 'bg-white/10 hover:bg-white/20 text-foreground/70 opacity-0 group-hover:opacity-100'
+                            }`}
+                            title={favoriteExperts.includes(expert.id) ? 'Remove from favorites' : 'Add to favorites'}
+                          >
+                            <Star className={`w-3 h-3 ${favoriteExperts.includes(expert.id) ? 'fill-current' : ''}`} />
+                          </button>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              toggleCompareExpert(expert.id);
+                            }}
+                            className={`p-1.5 rounded-lg transition-colors ${
+                              isInCompare 
+                                ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white' 
+                                : 'bg-white/10 hover:bg-white/20 text-foreground/70 opacity-0 group-hover:opacity-100'
+                            }`}
+                            title="Add to comparison"
+                          >
+                            <BarChart3 className="w-3 h-3" />
+                          </button>
+                        </div>
                         
                         {viewStyle === 'grid' && (
                           <>

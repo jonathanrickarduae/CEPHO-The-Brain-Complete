@@ -364,6 +364,14 @@ export default function Library() {
                 <FolderPlus className="w-4 h-4" />
                 <span className="hidden md:inline">New Folder</span>
               </Button>
+              <Button 
+                size="sm" 
+                className="gap-2 bg-gradient-to-r from-cyan-500 to-blue-500 hover:opacity-90"
+                onClick={() => window.location.href = '/project-genesis'}
+              >
+                <Plus className="w-4 h-4" />
+                <span>New Project</span>
+              </Button>
             </>
           ) : (
             <div className="relative w-full sm:w-auto">

@@ -471,9 +471,26 @@ export default function ChiefOfStaff() {
                     </div>
                   </div>
                   {isListening && (
-                    <div className="mt-2 flex items-center gap-2 text-xs text-red-400">
-                      <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
-                      Listening... {transcript && `"${transcript}"`}
+                    <div className="mt-2 flex items-center justify-between">
+                      <div className="flex items-center gap-2 text-xs text-red-400">
+                        <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
+                        Listening... {transcript && `"${transcript}"`}
+                      </div>
+                      {transcript && (
+                        <Button
+                          size="sm"
+                          onClick={() => {
+                            stopListening();
+                            if (messageInput.trim()) {
+                              handleSendMessage();
+                            }
+                          }}
+                          className="bg-gradient-to-r from-green-500 to-emerald-500 text-white text-xs px-3 py-1 h-7"
+                        >
+                          <CheckCircle2 className="w-3 h-3 mr-1" />
+                          Confirm
+                        </Button>
+                      )}
                     </div>
                   )}
                 </div>

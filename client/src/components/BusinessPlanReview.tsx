@@ -4,7 +4,8 @@ import {
   ChevronRight, Play, Pause, RotateCcw, Download,
   MessageSquare, Lightbulb, Target, TrendingUp, DollarSign,
   Shield, Scale, Briefcase, Globe, Zap, Upload, X, Save,
-  UserCog, Sparkles, History, GitCompare, Send, PlusCircle, UserPlus
+  UserCog, Sparkles, History, GitCompare, Send, PlusCircle, UserPlus,
+  ThumbsUp, ThumbsDown
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -1376,15 +1377,35 @@ export function BusinessPlanReview({
                                               </ul>
                                             </div>
                                           )}
-                                          <Button
-                                            onClick={() => openFollowUpDialog(insight, section.id)}
-                                            variant="outline"
-                                            size="sm"
-                                            className="mt-4"
-                                          >
-                                            <MessageSquare className="w-4 h-4 mr-2" />
-                                            Ask Follow-up Question
-                                          </Button>
+                                          <div className="flex items-center gap-2 mt-4">
+                                            <Button
+                                              onClick={() => openFollowUpDialog(insight, section.id)}
+                                              variant="outline"
+                                              size="sm"
+                                            >
+                                              <MessageSquare className="w-4 h-4 mr-2" />
+                                              Ask Follow-up
+                                            </Button>
+                                            <div className="flex items-center gap-1 ml-auto">
+                                              <span className="text-xs text-muted-foreground mr-1">Helpful?</span>
+                                              <Button
+                                                variant="outline"
+                                                size="sm"
+                                                className="h-7 px-2 hover:bg-green-500/20 hover:text-green-400 hover:border-green-500/50"
+                                                onClick={() => toast.success('Thanks for your feedback!')}
+                                              >
+                                                <ThumbsUp className="w-3 h-3" />
+                                              </Button>
+                                              <Button
+                                                variant="outline"
+                                                size="sm"
+                                                className="h-7 px-2 hover:bg-red-500/20 hover:text-red-400 hover:border-red-500/50"
+                                                onClick={() => toast.info('We\'ll improve this insight')}
+                                              >
+                                                <ThumbsDown className="w-3 h-3" />
+                                              </Button>
+                                            </div>
+                                          </div>
                                         </div>
                                       </DialogContent>
                                     </Dialog>

@@ -1,6 +1,6 @@
 {
-  "name": "The Brain",
-  "short_name": "The Brain",
+  "name": "CEPHO",
+  "short_name": "CEPHO",
   "description": "Your AI-powered command center that learns from you and works alongside you",
   "start_url": "/",
   "display": "standalone",
@@ -76,16 +76,16 @@
   ],
   "shortcuts": [
     {
-      "name": "Digital Twin",
-      "short_name": "Twin",
-      "description": "Chat with your Digital Twin",
+      "name": "Chief of Staff",
+      "short_name": "COS",
+      "description": "Chat with your Chief of Staff",
       "url": "/digital-twin",
       "icons": [{ "src": "/icons/twin-icon.png", "sizes": "96x96" }]
     },
     {
-      "name": "Daily Brief",
-      "short_name": "Brief",
-      "description": "View your daily briefing",
+      "name": "The Signal",
+      "short_name": "Signal",
+      "description": "View your morning signal",
       "url": "/daily-brief",
       "icons": [{ "src": "/icons/brief-icon.png", "sizes": "96x96" }]
     },

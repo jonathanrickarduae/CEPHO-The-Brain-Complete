@@ -88,7 +88,7 @@ export function InstallPrompt() {
           </div>
           
           <div className="flex-1 min-w-0">
-            <h3 className="font-semibold text-white text-sm">Install The Brain</h3>
+            <h3 className="font-semibold text-white text-sm">Install CEPHO</h3>
             <p className="text-xs text-zinc-400 mt-0.5">
               {isIOS 
                 ? 'Tap the share button and "Add to Home Screen"'
