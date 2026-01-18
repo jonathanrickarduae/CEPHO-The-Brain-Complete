@@ -5559,3 +5559,11 @@ The 100% Optimization Framework requires strong performance across ALL fronts. C
 - [x] Recommendation phase: Generate report with ranked recommendations
 - [x] Execution phase: Book the selected option upon user approval
 - [x] Implement AI agent-to-agent communication (Chief of Staff speaks to external AI agents wherever they exist)
+
+
+## CEPHO.Ai Product Structure Update
+- [ ] Update roadmap to distinguish CEPHO.Ai for Business vs CEPHO.Ai Personal
+- [ ] CEPHO.Ai for Business: Core platform (existing AI SMEs, Digital Twin, workflows, due diligence)
+- [ ] CEPHO.Ai Personal (Phase 4): Personal life management with expanded SME roster
+- [ ] Add Personal/Lifestyle SMEs: Travel Expert, Dining Specialist, Wellness Advisor, Home Manager, Concierge
+- [ ] Chief of Staff coordinates both business and personal SMEs based on task context

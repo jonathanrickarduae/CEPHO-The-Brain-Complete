@@ -50,11 +50,20 @@ interface CapabilityCategory {
   capabilities: Capability[];
 }
 
+// Personal/Lifestyle SMEs for Phase 4
+const PERSONAL_SMES = [
+  { id: 'travel', name: 'Travel & Hospitality Expert', description: 'Flights, hotels, experiences, and travel logistics', icon: Plane },
+  { id: 'dining', name: 'Dining & Entertainment Specialist', description: 'Restaurants, events, venues, and reservations', icon: Utensils },
+  { id: 'wellness', name: 'Wellness & Health Advisor', description: 'Fitness, medical appointments, and wellbeing', icon: User },
+  { id: 'home', name: 'Home & Lifestyle Manager', description: 'Services, maintenance, and personal errands', icon: Building2 },
+  { id: 'concierge', name: 'Concierge Specialist', description: 'Luxury services and special requests', icon: Star },
+];
+
 const CAPABILITY_CATEGORIES: CapabilityCategory[] = [
   {
     id: 'business',
-    name: 'Business Operations',
-    description: 'Core business management and strategic support',
+    name: 'CEPHO.Ai for Business',
+    description: 'Core business management with AI SME experts',
     icon: Briefcase,
     color: 'text-blue-500',
     capabilities: [
@@ -67,8 +76,8 @@ const CAPABILITY_CATEGORIES: CapabilityCategory[] = [
   },
   {
     id: 'personal',
-    name: 'Personal Assistant',
-    description: 'Personal life management and lifestyle support',
+    name: 'CEPHO.Ai Personal',
+    description: 'Personal life management with lifestyle SME experts (Phase 4)',
     icon: User,
     color: 'text-purple-500',
     capabilities: [
@@ -364,13 +373,26 @@ export function ChiefOfStaffRoadmap() {
         <CardHeader>
           <CardTitle className="text-white flex items-center gap-2">
             <Zap className="h-5 w-5 text-purple-400" />
-            Phase 4: AI Agent Integration (Coming Soon)
+            Phase 4: CEPHO.Ai Personal (Coming Soon)
           </CardTitle>
           <CardDescription>
-            The next evolution of Chief of Staff capabilities
+            Expanding from business to personal life management
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="space-y-6">
+          {/* New Personal SMEs */}
+          <div>
+            <h4 className="font-medium text-white mb-3">New Lifestyle SME Experts</h4>
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+              {PERSONAL_SMES.map(sme => (
+                <div key={sme.id} className="p-3 bg-gray-800/50 rounded-lg text-center">
+                  <sme.icon className="h-6 w-6 text-purple-400 mx-auto mb-2" />
+                  <p className="text-xs font-medium text-white">{sme.name}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+          
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="p-4 bg-gray-800/50 rounded-lg">
               <h4 className="font-medium text-white mb-2 flex items-center gap-2">
