@@ -85,6 +85,13 @@ Voice capability live, Digital Twin operational, first external integrations com
 | Support Infrastructure | Help documentation and support channels |
 | Marketing Launch | Brand awareness campaign and content strategy |
 | Sales Enablement | Pitch materials and demo capability |
+| AI SME Enhancement | Data absorption from real world experts to create deep, authentic SME personas |
+
+### Key Projects
+
+**AI SME Enhancement (IP Creation)**
+
+Massive data absorption initiative to enhance AI SME authenticity by scraping and structuring knowledge from real world experts. For each SME domain, select 2 to 3 recognized experts (e.g., Warren Buffett for Finance) and absorb their interviews, books, speeches, and public content. Use this data to fill out AI SME questionnaires, creating mock digital twins based on actual expert patterns. This creates significant IP through structured expert knowledge capture and bridges the gap between generic AI and authentic expert thinking.
 
 ### Resource Requirements
 
@@ -174,10 +181,17 @@ First productivity app launched, integration with core platform complete, enterp
 | Global Expansion | Multi language and multi region deployment |
 | Partnership Network | Strategic alliances with complementary platforms |
 | Exit Preparation | Financial optimization and governance for exit |
+| Digital Twin Management Agency | B2B service helping companies create and manage their digital twins |
+
+### Key Projects
+
+**Digital Twin Management Agency**
+
+Leverage CEPHO.Ai methodology and technology to offer B2B services helping other companies set up, commercialize, and manage their own digital twins. This combines consulting, technology licensing, and managed services into a scalable revenue stream. Services include digital twin setup using CEPHO methodology, commercialization strategy and execution support, and ongoing management and optimization.
 
 ### Resource Requirements
 
-Executive team expansion, global operations capability, investor relations, M&A advisory
+Executive team expansion, global operations capability, investor relations, M&A advisory, consulting team
 
 ### Funding Allocation
 
