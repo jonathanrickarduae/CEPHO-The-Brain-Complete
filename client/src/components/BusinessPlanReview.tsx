@@ -1051,7 +1051,7 @@ export function BusinessPlanReview({
 
       {/* Header */}
       <div className="shrink-0 p-4 border-b border-white/10 bg-card/50">
-        <div className="flex items-center justify-between">
+        <div className="flex items-start sm:items-center justify-between gap-4 flex-wrap">
           <div>
             <h2 className="text-lg font-semibold text-foreground flex items-center gap-2">
               <FileText className="w-5 h-5 text-purple-400" />

@@ -88,6 +88,7 @@ const menuItems: MenuItem[] = [
     children: [
       { icon: TrendingUp, label: "Innovation Hub", path: "/innovation-hub" },
       { icon: Workflow, label: "Workflow", path: "/workflow", count: 2 },
+      { icon: Globe, label: "Commercialization", path: "/commercialization" },
     ]
   },
   { 
