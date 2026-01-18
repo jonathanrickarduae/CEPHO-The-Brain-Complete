@@ -139,7 +139,7 @@ export function WellnessAlerts() {
       case 'healthy': return 'text-green-400 bg-green-500/20';
       case 'warning': return 'text-yellow-400 bg-yellow-500/20';
       case 'critical': return 'text-red-400 bg-red-500/20';
-      default: return 'text-gray-400 bg-gray-500/20';
+      default: return 'text-foreground/70 bg-gray-500/20';
     }
   };
 

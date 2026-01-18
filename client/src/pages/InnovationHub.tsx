@@ -47,7 +47,7 @@ const STATUS_COLORS: Record<string, string> = {
   refining: "bg-orange-500/20 text-orange-400",
   validated: "bg-green-500/20 text-green-400",
   rejected: "bg-red-500/20 text-red-400",
-  archived: "bg-gray-500/20 text-gray-400",
+  archived: "bg-gray-500/20 text-foreground/70",
   promoted_to_genesis: "bg-purple-500/20 text-purple-400",
 };
 

@@ -121,7 +121,7 @@ function ScoreGauge({ percentage, status }: { percentage: number; status: string
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center">
         <span className={cn("text-4xl font-bold", config.color)}>{percentage}%</span>
-        <span className="text-xs text-gray-500 mt-1">Optimized</span>
+        <span className="text-xs text-foreground/60 mt-1">Optimized</span>
       </div>
     </div>
   );
@@ -166,9 +166,9 @@ function CategoryCard({ category, isExpanded, onToggle }: {
             {config.label}
           </Badge>
           {isExpanded ? (
-            <ChevronUp className="w-5 h-5 text-gray-500" />
+            <ChevronUp className="w-5 h-5 text-foreground/60" />
           ) : (
-            <ChevronDown className="w-5 h-5 text-gray-500" />
+            <ChevronDown className="w-5 h-5 text-foreground/60" />
           )}
         </div>
       </button>
@@ -178,11 +178,11 @@ function CategoryCard({ category, isExpanded, onToggle }: {
           {/* Findings */}
           {category.findings.length > 0 && (
             <div>
-              <h5 className="text-sm font-medium text-gray-400 mb-2">Findings</h5>
+              <h5 className="text-sm font-medium text-foreground/70 mb-2">Findings</h5>
               <ul className="space-y-1">
                 {category.findings.map((finding, i) => (
-                  <li key={i} className="flex items-start gap-2 text-sm text-gray-300">
-                    <CheckCircle2 className="w-4 h-4 text-gray-500 mt-0.5 shrink-0" />
+                  <li key={i} className="flex items-start gap-2 text-sm text-foreground/80">
+                    <CheckCircle2 className="w-4 h-4 text-foreground/60 mt-0.5 shrink-0" />
                     {finding}
                   </li>
                 ))}
@@ -196,7 +196,7 @@ function CategoryCard({ category, isExpanded, onToggle }: {
               <h5 className="text-sm font-medium text-amber-400 mb-2">Recommendations</h5>
               <ul className="space-y-1">
                 {category.recommendations.map((rec, i) => (
-                  <li key={i} className="flex items-start gap-2 text-sm text-gray-300">
+                  <li key={i} className="flex items-start gap-2 text-sm text-foreground/80">
                     <AlertCircle className="w-4 h-4 text-amber-400 mt-0.5 shrink-0" />
                     {rec}
                   </li>
@@ -235,7 +235,7 @@ export default function OptimizationAssessment() {
         <CardContent className="py-12">
           <div className="flex flex-col items-center justify-center">
             <Brain className="w-12 h-12 text-cyan-400 animate-pulse mb-4" />
-            <p className="text-gray-400">Chief of Staff is analysing your system...</p>
+            <p className="text-foreground/70">Chief of Staff is analysing your system...</p>
           </div>
         </CardContent>
       </Card>
@@ -248,7 +248,7 @@ export default function OptimizationAssessment() {
         <CardContent className="py-12">
           <div className="flex flex-col items-center justify-center">
             <AlertCircle className="w-12 h-12 text-amber-400 mb-4" />
-            <p className="text-gray-400">Unable to generate assessment</p>
+            <p className="text-foreground/70">Unable to generate assessment</p>
             <Button 
               variant="outline" 
               className="mt-4"
@@ -312,7 +312,7 @@ export default function OptimizationAssessment() {
               <div className="p-4 bg-gray-800/50 rounded-lg">
                 <div className="flex items-start gap-3">
                   <Sparkles className="w-5 h-5 text-cyan-400 mt-0.5 shrink-0" />
-                  <p className="text-gray-300 text-sm leading-relaxed">{assessment.summary}</p>
+                  <p className="text-foreground/80 text-sm leading-relaxed">{assessment.summary}</p>
                 </div>
               </div>
               
@@ -334,7 +334,7 @@ export default function OptimizationAssessment() {
                         )}>
                           {i + 1}
                         </span>
-                        <span className="text-gray-300">{priority}</span>
+                        <span className="text-foreground/80">{priority}</span>
                       </li>
                     ))}
                   </ul>
@@ -364,7 +364,7 @@ export default function OptimizationAssessment() {
       </Card>
       
       {/* Footer */}
-      <p className="text-xs text-gray-500 text-center">
+      <p className="text-xs text-foreground/60 text-center">
         Assessment generated at {new Date(assessment.generatedAt).toLocaleString('en-GB', {
           day: '2-digit',
           month: '2-digit',

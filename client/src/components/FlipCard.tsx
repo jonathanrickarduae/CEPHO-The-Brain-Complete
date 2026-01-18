@@ -50,7 +50,7 @@ export function FlipCard({ expert, corporate, onStartProject, onTweakApproach }:
             <div className="text-center h-full flex flex-col">
               <div className="text-5xl mb-3">{expert.avatar}</div>
               <h3 className="font-semibold text-white text-lg">{expert.name}</h3>
-              <p className="text-xs text-gray-400 mt-1 line-clamp-2">{expert.specialty}</p>
+              <p className="text-xs text-foreground/70 mt-1 line-clamp-2">{expert.specialty}</p>
               <Badge variant="outline" className="mt-2 mx-auto text-xs">
                 {expert.category}
               </Badge>
@@ -62,7 +62,7 @@ export function FlipCard({ expert, corporate, onStartProject, onTweakApproach }:
                 >
                   {expert.performanceScore}% Performance
                 </Badge>
-                <p className="text-xs text-gray-500 mt-2 flex items-center justify-center gap-1">
+                <p className="text-xs text-foreground/60 mt-2 flex items-center justify-center gap-1">
                   <RotateCcw className="w-3 h-3" />
                   Click to flip
                 </p>
@@ -81,7 +81,7 @@ export function FlipCard({ expert, corporate, onStartProject, onTweakApproach }:
                 <span className="text-2xl">{expert.avatar}</span>
                 <div>
                   <h4 className="font-semibold text-white text-sm">{expert.name}</h4>
-                  <p className="text-[10px] text-gray-400">{expert.specialty}</p>
+                  <p className="text-[10px] text-foreground/70">{expert.specialty}</p>
                 </div>
               </div>
 
@@ -91,7 +91,7 @@ export function FlipCard({ expert, corporate, onStartProject, onTweakApproach }:
                   <Brain className="w-3 h-3" />
                   Thinking Style
                 </div>
-                <p className="text-[11px] text-gray-300 italic">"{expert.thinkingStyle}"</p>
+                <p className="text-[11px] text-foreground/80 italic">"{expert.thinkingStyle}"</p>
               </div>
 
               {/* Composite Influences */}
@@ -194,7 +194,7 @@ export function FlipCard({ expert, corporate, onStartProject, onTweakApproach }:
                 <div className="text-5xl">{corporate.logo}</div>
                 <div className="flex-1">
                   <h3 className="text-xl font-bold text-white">{corporate.name}</h3>
-                  <p className="text-sm text-gray-400">{corporate.industry}</p>
+                  <p className="text-sm text-foreground/70">{corporate.industry}</p>
                 </div>
                 <Badge 
                   variant="outline" 
@@ -204,19 +204,19 @@ export function FlipCard({ expert, corporate, onStartProject, onTweakApproach }:
                 </Badge>
               </div>
               
-              <p className="text-xs text-gray-500 mt-3 line-clamp-2">{corporate.methodology}</p>
+              <p className="text-xs text-foreground/60 mt-3 line-clamp-2">{corporate.methodology}</p>
               
               <div className="mt-4 flex flex-wrap gap-2">
                 {corporate.strengths.slice(0, 4).map(s => (
-                  <Badge key={s} variant="secondary" className="bg-white/5 text-gray-300 text-xs">
+                  <Badge key={s} variant="secondary" className="bg-white/5 text-foreground/80 text-xs">
                     {s}
                   </Badge>
                 ))}
               </div>
 
               <div className="mt-auto pt-4">
-                <p className="text-xs text-gray-400">{corporate.projectsCompleted} projects completed</p>
-                <p className="text-xs text-gray-500 mt-2 flex items-center gap-1">
+                <p className="text-xs text-foreground/70">{corporate.projectsCompleted} projects completed</p>
+                <p className="text-xs text-foreground/60 mt-2 flex items-center gap-1">
                   <RotateCcw className="w-3 h-3" />
                   Click to see research methodology
                 </p>
@@ -245,7 +245,7 @@ export function FlipCard({ expert, corporate, onStartProject, onTweakApproach }:
                   <Brain className="w-4 h-4" />
                   How They Think
                 </div>
-                <p className="text-xs text-gray-300">
+                <p className="text-xs text-foreground/80">
                   {(corporate as any).thinkingFramework || corporate.methodology}
                 </p>
               </div>
@@ -256,7 +256,7 @@ export function FlipCard({ expert, corporate, onStartProject, onTweakApproach }:
                   <BookOpen className="w-4 h-4" />
                   Research Approach
                 </div>
-                <p className="text-xs text-gray-300">
+                <p className="text-xs text-foreground/80">
                   {(corporate as any).researchApproach || 'Systematic analysis combining quantitative data with qualitative insights.'}
                 </p>
               </div>

@@ -154,11 +154,11 @@ const sampleAuditLog: AuditLogEntry[] = [
 ];
 
 const statusConfig: Record<DocumentStatus, { label: string; color: string; bgColor: string; borderColor: string }> = {
-  draft: { label: 'Draft', color: 'text-gray-400', bgColor: 'bg-gray-500/10', borderColor: 'border-gray-500/30' },
+  draft: { label: 'Draft', color: 'text-foreground/70', bgColor: 'bg-gray-500/10', borderColor: 'border-gray-500/30' },
   in_review: { label: 'In Review', color: 'text-amber-400', bgColor: 'bg-amber-500/10', borderColor: 'border-amber-500/30' },
   approved: { label: 'Approved', color: 'text-blue-400', bgColor: 'bg-blue-500/10', borderColor: 'border-blue-500/30' },
   published: { label: 'Published', color: 'text-emerald-400', bgColor: 'bg-emerald-500/10', borderColor: 'border-emerald-500/30' },
-  archived: { label: 'Archived', color: 'text-gray-500', bgColor: 'bg-gray-500/10', borderColor: 'border-gray-500/30' },
+  archived: { label: 'Archived', color: 'text-foreground/60', bgColor: 'bg-gray-500/10', borderColor: 'border-gray-500/30' },
 };
 
 const actorLabels: Record<SignOffType, string> = {
@@ -201,7 +201,7 @@ export function QMSProcessLog() {
       case 'approved': return 'text-emerald-400';
       case 'linked': return 'text-amber-400';
       case 'cascaded': return 'text-pink-400';
-      default: return 'text-gray-400';
+      default: return 'text-foreground/70';
     }
   };
 

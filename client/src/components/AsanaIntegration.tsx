@@ -83,7 +83,7 @@ const MOCK_PROJECTS: AsanaProject[] = [
   },
   {
     id: 'proj-sample',
-    name: 'Sample Project',
+    name: 'Boundless AI',
     color: '#8b5cf6',
     workspaceId: 'ws-1',
     workspaceName: 'Celadon Workspace',
@@ -134,7 +134,7 @@ const MOCK_PROJECTS: AsanaProject[] = [
 
 const MOCK_TASKS: AsanaTask[] = [
   { id: 't1', name: 'Review investor deck', projectId: 'proj-celadon', projectName: 'Celadon Capital', assignee: MOCK_PROJECTS[0].teamMembers[0], dueDate: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000), completed: false, priority: 'high', tags: ['urgent', 'investor'], subtasks: 5, completedSubtasks: 3 },
-  { id: 't2', name: 'Finalize partnership agreement', projectId: 'proj-sample', projectName: 'Sample Project', assignee: MOCK_PROJECTS[1].teamMembers[0], dueDate: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000), completed: false, priority: 'high', tags: ['legal', 'overdue'], subtasks: 3, completedSubtasks: 1 },
+  { id: 't2', name: 'Finalize partnership agreement', projectId: 'proj-sample', projectName: 'Boundless AI', assignee: MOCK_PROJECTS[1].teamMembers[0], dueDate: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000), completed: false, priority: 'high', tags: ['legal', 'overdue'], subtasks: 3, completedSubtasks: 1 },
   { id: 't3', name: 'Deploy v2.1 update', projectId: 'proj-cepho', projectName: 'Cepho Development', assignee: MOCK_PROJECTS[2].teamMembers[0], dueDate: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000), completed: false, priority: 'medium', tags: ['development'], subtasks: 8, completedSubtasks: 6 },
   { id: 't4', name: 'Social media content calendar', projectId: 'proj-marketing', projectName: 'Q1 Marketing Campaign', dueDate: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000), completed: false, priority: 'high', tags: ['marketing', 'overdue'], subtasks: 12, completedSubtasks: 2 },
   { id: 't5', name: 'Team standup notes', projectId: 'proj-celadon', projectName: 'Celadon Capital', assignee: MOCK_PROJECTS[0].teamMembers[1], dueDate: new Date(), completed: true, priority: 'low', tags: ['recurring'], subtasks: 0, completedSubtasks: 0 },
@@ -142,7 +142,7 @@ const MOCK_TASKS: AsanaTask[] = [
 
 const MOCK_UPDATES: AsanaUpdate[] = [
   { id: 'upd1', projectId: 'proj-celadon', projectName: 'Celadon Capital', type: 'task_completed', description: 'Completed "Quarterly report draft"', user: MOCK_PROJECTS[0].teamMembers[1], timestamp: new Date(Date.now() - 15 * 60 * 1000) },
-  { id: 'upd2', projectId: 'proj-sample', projectName: 'Sample Project', type: 'status_update', description: 'Project status changed to "At Risk"', user: MOCK_PROJECTS[1].teamMembers[0], timestamp: new Date(Date.now() - 45 * 60 * 1000) },
+  { id: 'upd2', projectId: 'proj-sample', projectName: 'Boundless AI', type: 'status_update', description: 'Project status changed to "At Risk"', user: MOCK_PROJECTS[1].teamMembers[0], timestamp: new Date(Date.now() - 45 * 60 * 1000) },
   { id: 'upd3', projectId: 'proj-cepho', projectName: 'Cepho Development', type: 'task_created', description: 'Created "Add Asana integration"', user: MOCK_PROJECTS[2].teamMembers[0], timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000) },
   { id: 'upd4', projectId: 'proj-marketing', projectName: 'Q1 Marketing Campaign', type: 'due_date_changed', description: 'Due date extended for "Launch campaign"', user: MOCK_PROJECTS[3].teamMembers[0], timestamp: new Date(Date.now() - 3 * 60 * 60 * 1000) },
   { id: 'upd5', projectId: 'proj-celadon', projectName: 'Celadon Capital', type: 'comment', description: 'Commented on "Review investor deck"', user: MOCK_PROJECTS[0].teamMembers[2], timestamp: new Date(Date.now() - 4 * 60 * 60 * 1000) },
@@ -211,7 +211,7 @@ export function AsanaIntegration({ onConnect }: AsanaIntegrationProps) {
       case 'on_track': return 'text-green-400 bg-green-500/20';
       case 'at_risk': return 'text-yellow-400 bg-yellow-500/20';
       case 'off_track': return 'text-red-400 bg-red-500/20';
-      default: return 'text-gray-400 bg-gray-500/20';
+      default: return 'text-foreground/70 bg-gray-500/20';
     }
   };
 
@@ -220,7 +220,7 @@ export function AsanaIntegration({ onConnect }: AsanaIntegrationProps) {
       case 'high': return 'text-red-400 bg-red-500/20';
       case 'medium': return 'text-yellow-400 bg-yellow-500/20';
       case 'low': return 'text-blue-400 bg-blue-500/20';
-      default: return 'text-gray-400 bg-gray-500/20';
+      default: return 'text-foreground/70 bg-gray-500/20';
     }
   };
 
@@ -230,7 +230,7 @@ export function AsanaIntegration({ onConnect }: AsanaIntegrationProps) {
       case 'task_created': return <Circle className="w-4 h-4 text-blue-400" />;
       case 'status_update': return <AlertTriangle className="w-4 h-4 text-yellow-400" />;
       case 'due_date_changed': return <Calendar className="w-4 h-4 text-purple-400" />;
-      default: return <CheckSquare className="w-4 h-4 text-gray-400" />;
+      default: return <CheckSquare className="w-4 h-4 text-foreground/70" />;
     }
   };
 

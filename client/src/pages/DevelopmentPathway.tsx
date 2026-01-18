@@ -86,11 +86,11 @@ export default function DevelopmentPathway() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold text-white">Development Pathway</h1>
-            <p className="text-gray-400 mt-1">Track ideas from capture to launch with Chief of Staff oversight</p>
+            <p className="text-foreground/70 mt-1">Track ideas from capture to launch with Chief of Staff oversight</p>
           </div>
           <div className="flex items-center gap-3">
             <div className="text-right">
-              <p className="text-xs text-gray-500">Next Review</p>
+              <p className="text-xs text-foreground/60">Next Review</p>
               <p className="text-sm font-medium text-cyan-400">{getNextReviewDate()}</p>
             </div>
             <Link href="/innovation-hub">
@@ -114,9 +114,9 @@ export default function DevelopmentPathway() {
                 <div className={`absolute top-0 left-0 right-0 h-1 ${stage.color}`} />
                 <CardContent className="pt-4 pb-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-gray-400 text-sm">{stage.name}</span>
+                    <span className="text-foreground/70 text-sm">{stage.name}</span>
                     {index < PIPELINE_STAGES.length - 1 && (
-                      <ArrowRight className="w-4 h-4 text-gray-600" />
+                      <ArrowRight className="w-4 h-4 text-foreground/50" />
                     )}
                   </div>
                   <p className="text-2xl font-bold text-white mt-1">{count}</p>
@@ -175,7 +175,7 @@ export default function DevelopmentPathway() {
                         <span className="text-sm">On Track</span>
                       </div>
                       <p className="text-2xl font-bold text-white">{pipelineStats.validated}</p>
-                      <p className="text-xs text-gray-500">Validated ideas ready for action</p>
+                      <p className="text-xs text-foreground/60">Validated ideas ready for action</p>
                     </div>
                     <div className="p-4 bg-gray-800/50 rounded-lg">
                       <div className="flex items-center gap-2 text-amber-400 mb-2">
@@ -183,7 +183,7 @@ export default function DevelopmentPathway() {
                         <span className="text-sm">In Progress</span>
                       </div>
                       <p className="text-2xl font-bold text-white">{pipelineStats.assessing}</p>
-                      <p className="text-xs text-gray-500">Ideas being assessed</p>
+                      <p className="text-xs text-foreground/60">Ideas being assessed</p>
                     </div>
                     <div className="p-4 bg-gray-800/50 rounded-lg">
                       <div className="flex items-center gap-2 text-blue-400 mb-2">
@@ -191,14 +191,14 @@ export default function DevelopmentPathway() {
                         <span className="text-sm">Awaiting Review</span>
                       </div>
                       <p className="text-2xl font-bold text-white">{pipelineStats.captured}</p>
-                      <p className="text-xs text-gray-500">New ideas to review</p>
+                      <p className="text-xs text-foreground/60">New ideas to review</p>
                     </div>
                   </div>
                   
                   {/* Progress Bar */}
                   <div className="space-y-2">
                     <div className="flex justify-between text-sm">
-                      <span className="text-gray-400">Pipeline Progress</span>
+                      <span className="text-foreground/70">Pipeline Progress</span>
                       <span className="text-white">{pipelineStats.total > 0 ? Math.round((pipelineStats.validated / pipelineStats.total) * 100) : 0}% validated</span>
                     </div>
                     <Progress value={pipelineStats.total > 0 ? (pipelineStats.validated / pipelineStats.total) * 100 : 0} className="h-2" />
@@ -256,11 +256,11 @@ export default function DevelopmentPathway() {
               </CardHeader>
               <CardContent>
                 {ideasLoading ? (
-                  <div className="text-center py-8 text-gray-500">Loading ideas...</div>
+                  <div className="text-center py-8 text-foreground/60">Loading ideas...</div>
                 ) : recentIdeas.length === 0 ? (
                   <div className="text-center py-8">
-                    <Lightbulb className="w-12 h-12 text-gray-600 mx-auto mb-3" />
-                    <p className="text-gray-400">No ideas captured yet</p>
+                    <Lightbulb className="w-12 h-12 text-foreground/50 mx-auto mb-3" />
+                    <p className="text-foreground/70">No ideas captured yet</p>
                     <Link href="/innovation-hub">
                       <Button className="mt-4" variant="outline">
                         <Plus className="w-4 h-4 mr-2" />
@@ -280,7 +280,7 @@ export default function DevelopmentPathway() {
                           }`} />
                           <div>
                             <p className="text-white font-medium">{idea.title}</p>
-                            <p className="text-xs text-gray-500">Stage {idea.currentStage} • {idea.status}</p>
+                            <p className="text-xs text-foreground/60">Stage {idea.currentStage} • {idea.status}</p>
                           </div>
                         </div>
                         <div className="flex items-center gap-2">
@@ -329,7 +329,7 @@ export default function DevelopmentPathway() {
               </CardHeader>
               <CardContent className="text-center py-8">
                 <Lightbulb className="w-16 h-16 text-cyan-400/50 mx-auto mb-4" />
-                <p className="text-gray-400 mb-4">Access the full Innovation Hub to manage your ideas pipeline</p>
+                <p className="text-foreground/70 mb-4">Access the full Innovation Hub to manage your ideas pipeline</p>
                 <Link href="/innovation-hub">
                   <Button className="bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-600 hover:to-purple-600">
                     <Lightbulb className="w-4 h-4 mr-2" />
@@ -376,22 +376,22 @@ export default function DevelopmentPathway() {
                           <span className="text-white font-medium">Monday Review</span>
                           <Badge className="bg-cyan-500/20 text-cyan-400">Weekly</Badge>
                         </div>
-                        <p className="text-sm text-gray-400 mt-1">Start of week planning & priority setting</p>
+                        <p className="text-sm text-foreground/70 mt-1">Start of week planning & priority setting</p>
                       </div>
                       <div className="p-4 bg-gray-800/50 rounded-lg border-l-4 border-purple-500">
                         <div className="flex items-center justify-between">
                           <span className="text-white font-medium">Thursday Review</span>
                           <Badge className="bg-purple-500/20 text-purple-400">Weekly</Badge>
                         </div>
-                        <p className="text-sm text-gray-400 mt-1">Mid-week progress check & adjustments</p>
+                        <p className="text-sm text-foreground/70 mt-1">Mid-week progress check & adjustments</p>
                       </div>
                     </div>
                     
                     <div className="p-4 bg-gradient-to-r from-cyan-500/10 to-purple-500/10 rounded-lg border border-cyan-500/20">
-                      <p className="text-sm text-gray-300">
+                      <p className="text-sm text-foreground/80">
                         <strong className="text-white">Next Review:</strong> {getNextReviewDate()}
                       </p>
-                      <p className="text-xs text-gray-500 mt-1">You'll receive a reminder notification</p>
+                      <p className="text-xs text-foreground/60 mt-1">You'll receive a reminder notification</p>
                     </div>
                   </div>
                   
@@ -407,8 +407,8 @@ export default function DevelopmentPathway() {
                       ].map((item, i) => (
                         <div key={i} className="flex items-center justify-between p-3 bg-gray-800/50 rounded-lg">
                           <div className="flex items-center gap-3">
-                            <item.icon className="w-5 h-5 text-gray-400" />
-                            <span className="text-gray-300">{item.label}</span>
+                            <item.icon className="w-5 h-5 text-foreground/70" />
+                            <span className="text-foreground/80">{item.label}</span>
                           </div>
                           <Badge variant="outline" className="border-gray-700">{item.count}</Badge>
                         </div>

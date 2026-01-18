@@ -200,7 +200,7 @@ function getStatusBadge(status: string) {
     case "on-hold":
       return <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30">On Hold</Badge>;
     case "completed":
-      return <Badge className="bg-gray-500/20 text-gray-400 border-gray-500/30">Completed</Badge>;
+      return <Badge className="bg-gray-500/20 text-foreground/70 border-gray-500/30">Completed</Badge>;
     default:
       return null;
   }
@@ -217,7 +217,7 @@ function VentureCard({ venture }: { venture: Venture }) {
               <CardTitle className="text-lg font-semibold text-white">
                 {venture.name}
               </CardTitle>
-              <p className="text-sm text-gray-400 mt-0.5">{venture.description}</p>
+              <p className="text-sm text-foreground/70 mt-0.5">{venture.description}</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -231,7 +231,7 @@ function VentureCard({ venture }: { venture: Venture }) {
         <div className="grid grid-cols-3 gap-3">
           {venture.metrics.map((metric, idx) => (
             <div key={idx} className="bg-gray-800/50 rounded-lg p-2.5">
-              <p className="text-xs text-gray-500">{metric.label}</p>
+              <p className="text-xs text-foreground/60">{metric.label}</p>
               <div className="flex items-center gap-1.5 mt-0.5">
                 <span className="text-sm font-semibold text-white">{metric.value}</span>
                 {metric.trend === "up" && <TrendingUp className="h-3 w-3 text-green-500" />}
@@ -244,18 +244,18 @@ function VentureCard({ venture }: { venture: Venture }) {
         {/* Next Actions */}
         {venture.nextActions.length > 0 && (
           <div>
-            <p className="text-xs text-gray-500 mb-2 flex items-center gap-1.5">
+            <p className="text-xs text-foreground/60 mb-2 flex items-center gap-1.5">
               <Target className="h-3 w-3" /> Next Actions
             </p>
             <ul className="space-y-1">
               {venture.nextActions.slice(0, 2).map((action, idx) => (
-                <li key={idx} className="text-sm text-gray-300 flex items-start gap-2">
+                <li key={idx} className="text-sm text-foreground/80 flex items-start gap-2">
                   <ArrowRight className="h-3 w-3 mt-1 text-fuchsia-500 shrink-0" />
                   {action}
                 </li>
               ))}
               {venture.nextActions.length > 2 && (
-                <li className="text-xs text-gray-500">
+                <li className="text-xs text-foreground/60">
                   +{venture.nextActions.length - 2} more actions
                 </li>
               )}
@@ -281,7 +281,7 @@ function VentureCard({ venture }: { venture: Venture }) {
 
         {/* Footer */}
         <div className="flex items-center justify-between pt-2 border-t border-gray-800">
-          <div className="flex items-center gap-4 text-xs text-gray-500">
+          <div className="flex items-center gap-4 text-xs text-foreground/60">
             {venture.teamSize && (
               <span className="flex items-center gap-1">
                 <Users className="h-3 w-3" /> {venture.teamSize}
@@ -318,7 +318,7 @@ export default function PortfolioCommandCenter() {
           </div>
           <div>
             <h1 className="text-2xl font-bold">Portfolio Command Center</h1>
-            <p className="text-gray-400 text-sm">
+            <p className="text-foreground/70 text-sm">
               Unified view of all ventures, investments, and strategic initiatives
             </p>
           </div>
@@ -335,7 +335,7 @@ export default function PortfolioCommandCenter() {
               </div>
               <div>
                 <p className="text-2xl font-bold">{portfolioSummary.totalVentures}</p>
-                <p className="text-xs text-gray-500">Total Ventures</p>
+                <p className="text-xs text-foreground/60">Total Ventures</p>
               </div>
             </div>
           </CardContent>
@@ -349,7 +349,7 @@ export default function PortfolioCommandCenter() {
               </div>
               <div>
                 <p className="text-2xl font-bold">{portfolioSummary.activeVentures}</p>
-                <p className="text-xs text-gray-500">Active</p>
+                <p className="text-xs text-foreground/60">Active</p>
               </div>
             </div>
           </CardContent>
@@ -363,7 +363,7 @@ export default function PortfolioCommandCenter() {
               </div>
               <div>
                 <p className="text-2xl font-bold">{portfolioSummary.healthyVentures}</p>
-                <p className="text-xs text-gray-500">Healthy</p>
+                <p className="text-xs text-foreground/60">Healthy</p>
               </div>
             </div>
           </CardContent>
@@ -377,7 +377,7 @@ export default function PortfolioCommandCenter() {
               </div>
               <div>
                 <p className="text-2xl font-bold">{portfolioSummary.totalBlockers}</p>
-                <p className="text-xs text-gray-500">Blockers</p>
+                <p className="text-xs text-foreground/60">Blockers</p>
               </div>
             </div>
           </CardContent>
@@ -391,7 +391,7 @@ export default function PortfolioCommandCenter() {
               </div>
               <div>
                 <p className="text-2xl font-bold">{portfolioSummary.totalNextActions}</p>
-                <p className="text-xs text-gray-500">Actions</p>
+                <p className="text-xs text-foreground/60">Actions</p>
               </div>
             </div>
           </CardContent>
@@ -454,7 +454,7 @@ export default function PortfolioCommandCenter() {
                       <div className="p-1.5 bg-gray-700 rounded">{venture.icon}</div>
                       <div className="flex-1">
                         <p className="text-sm text-white">{action}</p>
-                        <p className="text-xs text-gray-500 mt-1">{venture.name}</p>
+                        <p className="text-xs text-foreground/60 mt-1">{venture.name}</p>
                       </div>
                       <Button variant="ghost" size="sm" className="text-fuchsia-400">
                         <CheckCircle2 className="h-4 w-4" />
@@ -477,7 +477,7 @@ export default function PortfolioCommandCenter() {
             </CardHeader>
             <CardContent>
               {portfolioSummary.totalBlockers === 0 ? (
-                <div className="text-center py-8 text-gray-500">
+                <div className="text-center py-8 text-foreground/60">
                   <CheckCircle2 className="h-12 w-12 mx-auto mb-3 text-green-500" />
                   <p>No active blockers across portfolio</p>
                 </div>
@@ -496,7 +496,7 @@ export default function PortfolioCommandCenter() {
                           </div>
                           <div className="flex-1">
                             <p className="text-sm text-white">{blocker}</p>
-                            <p className="text-xs text-gray-500 mt-1">{venture.name}</p>
+                            <p className="text-xs text-foreground/60 mt-1">{venture.name}</p>
                           </div>
                           <Button variant="ghost" size="sm" className="text-red-400">
                             Resolve

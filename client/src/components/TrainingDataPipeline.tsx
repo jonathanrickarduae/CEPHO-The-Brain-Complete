@@ -136,7 +136,7 @@ export function TrainingDataPipeline() {
             <Database className="w-5 h-5 text-cyan-400" />
             Training Data Pipeline
           </h3>
-          <div className="flex items-center gap-2 text-sm text-gray-400">
+          <div className="flex items-center gap-2 text-sm text-foreground/70">
             <Shield className="w-4 h-4" />
             <span>Your data stays private</span>
           </div>
@@ -146,19 +146,19 @@ export function TrainingDataPipeline() {
         <div className="grid grid-cols-4 gap-4">
           <div className="bg-gray-900 rounded-xl p-3 text-center">
             <div className="text-2xl font-bold text-white">{stats.totalDocuments}</div>
-            <div className="text-xs text-gray-500">Documents</div>
+            <div className="text-xs text-foreground/60">Documents</div>
           </div>
           <div className="bg-gray-900 rounded-xl p-3 text-center">
             <div className="text-2xl font-bold text-white">{stats.totalConversations}</div>
-            <div className="text-xs text-gray-500">Conversations</div>
+            <div className="text-xs text-foreground/60">Conversations</div>
           </div>
           <div className="bg-gray-900 rounded-xl p-3 text-center">
             <div className="text-2xl font-bold text-white">{(stats.totalTokens / 1000).toFixed(0)}K</div>
-            <div className="text-xs text-gray-500">Tokens</div>
+            <div className="text-xs text-foreground/60">Tokens</div>
           </div>
           <div className="bg-gray-900 rounded-xl p-3 text-center">
             <div className="text-2xl font-bold text-cyan-400">{stats.modelVersion}</div>
-            <div className="text-xs text-gray-500">Model</div>
+            <div className="text-xs text-foreground/60">Model</div>
           </div>
         </div>
       </div>
@@ -176,7 +176,7 @@ export function TrainingDataPipeline() {
             className={`flex-1 py-3 text-sm font-medium transition-colors ${
               activeTab === tab.id
                 ? 'text-cyan-400 border-b-2 border-cyan-400'
-                : 'text-gray-400 hover:text-gray-300'
+                : 'text-foreground/70 hover:text-foreground/80'
             }`}
           >
             {tab.label}
@@ -205,7 +205,7 @@ export function TrainingDataPipeline() {
               {uploading ? (
                 <div className="flex flex-col items-center gap-3">
                   <Loader2 className="w-12 h-12 text-cyan-400 animate-spin" />
-                  <p className="text-gray-400">Processing files...</p>
+                  <p className="text-foreground/70">Processing files...</p>
                 </div>
               ) : (
                 <div className="flex flex-col items-center gap-3">
@@ -214,7 +214,7 @@ export function TrainingDataPipeline() {
                   </div>
                   <div>
                     <p className="text-white font-medium">Drop files here or click to upload</p>
-                    <p className="text-sm text-gray-500 mt-1">
+                    <p className="text-sm text-foreground/60 mt-1">
                       Supports .txt, .md, .pdf, .doc, .docx, .json
                     </p>
                   </div>
@@ -224,15 +224,15 @@ export function TrainingDataPipeline() {
 
             {/* Quick Actions */}
             <div className="grid grid-cols-3 gap-3 mt-6">
-              <button className="flex items-center gap-2 p-3 bg-gray-900 hover:bg-gray-850 rounded-xl text-sm text-gray-300 transition-colors">
+              <button className="flex items-center gap-2 p-3 bg-gray-900 hover:bg-gray-850 rounded-xl text-sm text-foreground/80 transition-colors">
                 <MessageSquare className="w-4 h-4 text-purple-400" />
                 <span>Import Conversations</span>
               </button>
-              <button className="flex items-center gap-2 p-3 bg-gray-900 hover:bg-gray-850 rounded-xl text-sm text-gray-300 transition-colors">
+              <button className="flex items-center gap-2 p-3 bg-gray-900 hover:bg-gray-850 rounded-xl text-sm text-foreground/80 transition-colors">
                 <FileText className="w-4 h-4 text-blue-400" />
                 <span>Connect Notes App</span>
               </button>
-              <button className="flex items-center gap-2 p-3 bg-gray-900 hover:bg-gray-850 rounded-xl text-sm text-gray-300 transition-colors">
+              <button className="flex items-center gap-2 p-3 bg-gray-900 hover:bg-gray-850 rounded-xl text-sm text-foreground/80 transition-colors">
                 <Brain className="w-4 h-4 text-pink-400" />
                 <span>Add Preferences</span>
               </button>
@@ -243,7 +243,7 @@ export function TrainingDataPipeline() {
         {activeTab === 'history' && (
           <div className="space-y-3">
             {documents.length === 0 ? (
-              <div className="text-center py-8 text-gray-500">
+              <div className="text-center py-8 text-foreground/60">
                 No training data uploaded yet
               </div>
             ) : (
@@ -268,7 +268,7 @@ export function TrainingDataPipeline() {
                       </div>
                       <div>
                         <div className="font-medium text-white">{doc.name}</div>
-                        <div className="text-xs text-gray-500">
+                        <div className="text-xs text-foreground/60">
                           {doc.size} • {doc.tokensExtracted?.toLocaleString()} tokens
                         </div>
                       </div>
@@ -283,7 +283,7 @@ export function TrainingDataPipeline() {
                       )}
                       <button
                         onClick={() => deleteDocument(doc.id)}
-                        className="p-2 rounded-lg hover:bg-gray-800 text-gray-400 hover:text-red-400 transition-colors"
+                        className="p-2 rounded-lg hover:bg-gray-800 text-foreground/70 hover:text-red-400 transition-colors"
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>
@@ -299,7 +299,7 @@ export function TrainingDataPipeline() {
           <div className="space-y-4">
             <div className="bg-gray-900 rounded-xl p-4">
               <h4 className="font-medium text-white mb-2">Export Your Training Data</h4>
-              <p className="text-sm text-gray-400 mb-4">
+              <p className="text-sm text-foreground/70 mb-4">
                 Download all your training data including documents, conversations, and preferences.
                 This data can be used to migrate to another service or for backup purposes.
               </p>
@@ -314,7 +314,7 @@ export function TrainingDataPipeline() {
 
             <div className="bg-gray-900 rounded-xl p-4">
               <h4 className="font-medium text-white mb-2">Delete All Training Data</h4>
-              <p className="text-sm text-gray-400 mb-4">
+              <p className="text-sm text-foreground/70 mb-4">
                 Permanently delete all your training data. This action cannot be undone.
                 Your Chief of Staff will need to be retrained from scratch.
               </p>
@@ -330,7 +330,7 @@ export function TrainingDataPipeline() {
       {/* Footer */}
       <div className="px-6 py-4 bg-gray-900/50 border-t border-gray-700">
         <div className="flex items-center justify-between text-sm">
-          <div className="flex items-center gap-2 text-gray-500">
+          <div className="flex items-center gap-2 text-foreground/60">
             <Info className="w-4 h-4" />
             <span>Last trained: {stats.lastTrainingDate?.toLocaleString()}</span>
           </div>

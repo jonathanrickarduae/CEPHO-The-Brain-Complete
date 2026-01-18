@@ -434,7 +434,7 @@ export function GenesisBlueprintWizard({ onComplete, existingBlueprint }: Genesi
                 className={`p-4 rounded-xl border text-left transition-all ${
                   answers[currentQuestion.id] === option
                     ? 'bg-gradient-to-r from-cyan-500/20 to-fuchsia-500/20 border-fuchsia-500/50 text-white'
-                    : 'bg-white/5 border-white/10 text-gray-300 hover:border-white/30'
+                    : 'bg-white/5 border-white/10 text-foreground/80 hover:border-white/30'
                 }`}
               >
                 <div className="flex items-center gap-3">
@@ -470,7 +470,7 @@ export function GenesisBlueprintWizard({ onComplete, existingBlueprint }: Genesi
                 className={`p-3 rounded-xl border text-left transition-all text-sm ${
                   selectedValues.includes(option)
                     ? 'bg-gradient-to-r from-cyan-500/20 to-fuchsia-500/20 border-fuchsia-500/50 text-white'
-                    : 'bg-white/5 border-white/10 text-gray-300 hover:border-white/30'
+                    : 'bg-white/5 border-white/10 text-foreground/80 hover:border-white/30'
                 }`}
               >
                 <div className="flex items-center gap-2">
@@ -500,7 +500,7 @@ export function GenesisBlueprintWizard({ onComplete, existingBlueprint }: Genesi
                 className={`flex-1 p-4 rounded-xl border text-center transition-all ${
                   answers[currentQuestion.id] === option
                     ? 'bg-gradient-to-r from-cyan-500/20 to-fuchsia-500/20 border-fuchsia-500/50 text-white'
-                    : 'bg-white/5 border-white/10 text-gray-300 hover:border-white/30'
+                    : 'bg-white/5 border-white/10 text-foreground/80 hover:border-white/30'
                 }`}
               >
                 {option === 'yes' ? 'Yes' : 'No'}
@@ -521,16 +521,16 @@ export function GenesisBlueprintWizard({ onComplete, existingBlueprint }: Genesi
               accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx"
             />
             <label htmlFor="file-upload" className="cursor-pointer">
-              <Upload className="w-12 h-12 mx-auto text-gray-400 mb-4" />
-              <p className="text-gray-300 mb-2">Drop files here or click to upload</p>
-              <p className="text-gray-500 text-sm">PDF, Word, PowerPoint, Excel</p>
+              <Upload className="w-12 h-12 mx-auto text-foreground/70 mb-4" />
+              <p className="text-foreground/80 mb-2">Drop files here or click to upload</p>
+              <p className="text-foreground/60 text-sm">PDF, Word, PowerPoint, Excel</p>
             </label>
             {uploadedFiles.length > 0 && (
               <div className="mt-4 space-y-2">
                 {uploadedFiles.map((file, i) => (
                   <div key={i} className="flex items-center gap-2 bg-white/5 rounded-lg p-2">
                     <FileText className="w-4 h-4 text-fuchsia-400" />
-                    <span className="text-sm text-gray-300">{file.name}</span>
+                    <span className="text-sm text-foreground/80">{file.name}</span>
                     <Check className="w-4 h-4 text-green-400 ml-auto" />
                   </div>
                 ))}
@@ -558,12 +558,12 @@ export function GenesisBlueprintWizard({ onComplete, existingBlueprint }: Genesi
               </div>
               <div>
                 <h1 className="text-lg font-semibold text-white">Genesis Blueprint</h1>
-                <p className="text-xs text-gray-400">Building your strategic foundation</p>
+                <p className="text-xs text-foreground/70">Building your strategic foundation</p>
               </div>
             </div>
             <div className="text-right">
-              <p className="text-sm text-gray-400">{Math.round(progress)}% complete</p>
-              <p className="text-xs text-gray-500">{answeredQuestions} of {totalQuestions} questions</p>
+              <p className="text-sm text-foreground/70">{Math.round(progress)}% complete</p>
+              <p className="text-xs text-foreground/60">{answeredQuestions} of {totalQuestions} questions</p>
             </div>
           </div>
           <Progress value={progress} className="h-1" />
@@ -587,7 +587,7 @@ export function GenesisBlueprintWizard({ onComplete, existingBlueprint }: Genesi
                       ? 'bg-gradient-to-r from-cyan-500/20 to-fuchsia-500/20 text-white border border-fuchsia-500/30'
                       : isCompleted
                       ? 'bg-green-500/10 text-green-400 border border-green-500/20'
-                      : 'bg-white/5 text-gray-400 border border-transparent hover:border-white/10'
+                      : 'bg-white/5 text-foreground/70 border border-transparent hover:border-white/10'
                   }`}
                 >
                   {isCompleted ? (
@@ -615,7 +615,7 @@ export function GenesisBlueprintWizard({ onComplete, existingBlueprint }: Genesi
                 </div>
                 <div>
                   <h2 className="text-xl font-semibold text-white">{sectionLabels[currentSection]}</h2>
-                  <p className="text-sm text-gray-400">
+                  <p className="text-sm text-foreground/70">
                     Question {currentQuestionIndex + 1} of {visibleQuestions.length}
                   </p>
                 </div>
@@ -636,7 +636,7 @@ export function GenesisBlueprintWizard({ onComplete, existingBlueprint }: Genesi
                       variant="outline"
                       onClick={prevQuestion}
                       disabled={currentSection === 'entry' && currentQuestionIndex === 0}
-                      className="border-white/20 text-gray-300 hover:bg-white/5"
+                      className="border-white/20 text-foreground/80 hover:bg-white/5"
                     >
                       <ChevronLeft className="w-4 h-4 mr-2" />
                       Previous
@@ -675,7 +675,7 @@ export function GenesisBlueprintWizard({ onComplete, existingBlueprint }: Genesi
                         <span className="text-2xl">{sme.avatar}</span>
                         <div className="flex-1 min-w-0">
                           <p className="text-sm font-medium text-white truncate">{sme.name}</p>
-                          <p className="text-xs text-gray-400 truncate">{sme.specialty}</p>
+                          <p className="text-xs text-foreground/70 truncate">{sme.specialty}</p>
                         </div>
                         <Badge 
                           variant="outline" 
@@ -684,7 +684,7 @@ export function GenesisBlueprintWizard({ onComplete, existingBlueprint }: Genesi
                               ? 'border-green-500/50 text-green-400'
                               : sme.status === 'thinking'
                               ? 'border-yellow-500/50 text-yellow-400'
-                              : 'border-white/20 text-gray-400'
+                              : 'border-white/20 text-foreground/70'
                           }`}
                         >
                           {sme.status === 'contributing' ? '💬 Contributing' : 
@@ -700,7 +700,7 @@ export function GenesisBlueprintWizard({ onComplete, existingBlueprint }: Genesi
                   ))}
                 </div>
               ) : (
-                <p className="text-sm text-gray-500 text-center py-4">
+                <p className="text-sm text-foreground/60 text-center py-4">
                   Experts will join based on your answers
                 </p>
               )}
@@ -708,7 +708,7 @@ export function GenesisBlueprintWizard({ onComplete, existingBlueprint }: Genesi
               {/* Corporate Partners */}
               {activeCorporates.length > 0 && (
                 <div className="mt-4 pt-4 border-t border-white/10">
-                  <p className="text-xs text-gray-400 mb-2">Sector Perspective From:</p>
+                  <p className="text-xs text-foreground/70 mb-2">Sector Perspective From:</p>
                   <div className="flex flex-wrap gap-2">
                     {activeCorporates.map(name => {
                       const corp = corporatePartners.find(c => c.name === name);
@@ -732,7 +732,7 @@ export function GenesisBlueprintWizard({ onComplete, existingBlueprint }: Genesi
                 </div>
                 <button 
                   onClick={() => setShowTwinChat(!showTwinChat)}
-                  className="text-gray-400 hover:text-white"
+                  className="text-foreground/70 hover:text-white"
                 >
                   {showTwinChat ? <X className="w-4 h-4" /> : <MessageSquare className="w-4 h-4" />}
                 </button>
@@ -750,7 +750,7 @@ export function GenesisBlueprintWizard({ onComplete, existingBlueprint }: Genesi
                           ? 'bg-fuchsia-500/10 border border-fuchsia-500/20 text-fuchsia-200'
                           : msg.type === 'escalation'
                           ? 'bg-yellow-500/10 border border-yellow-500/20 text-yellow-200'
-                          : 'bg-white/5 border border-white/10 text-gray-300'
+                          : 'bg-white/5 border border-white/10 text-foreground/80'
                       }`}
                     >
                       <div className="flex items-start gap-2">
@@ -765,8 +765,8 @@ export function GenesisBlueprintWizard({ onComplete, existingBlueprint }: Genesi
 
                   {digitalTwinMessages.length === 0 && (
                     <div className="text-center py-4">
-                      <Brain className="w-8 h-8 mx-auto text-gray-500 mb-2" />
-                      <p className="text-sm text-gray-500">
+                      <Brain className="w-8 h-8 mx-auto text-foreground/60 mb-2" />
+                      <p className="text-sm text-foreground/60">
                         I'm here to help guide you through this process
                       </p>
                     </div>
@@ -786,7 +786,7 @@ export function GenesisBlueprintWizard({ onComplete, existingBlueprint }: Genesi
               <Brain className="w-8 h-8 text-white" />
             </div>
             <h3 className="text-xl font-semibold text-white mb-2">Building Your Blueprint</h3>
-            <p className="text-gray-400 mb-4">
+            <p className="text-foreground/70 mb-4">
               Compiling insights, engaging experts, and preparing your strategic foundation...
             </p>
             <Progress value={75} className="h-2" />

@@ -120,11 +120,11 @@ export function DDReportTemplate({ data, onExport }: DDReportTemplateProps) {
                 </div>
               )}
               <div>
-                <div className="text-sm text-gray-500 font-medium">THE BRAIN</div>
-                <div className="text-xs text-gray-400">Due Diligence Report</div>
+                <div className="text-sm text-foreground/60 font-medium">THE BRAIN</div>
+                <div className="text-xs text-foreground/70">Due Diligence Report</div>
               </div>
             </div>
-            <div className="text-right text-sm text-gray-500">
+            <div className="text-right text-sm text-foreground/60">
               <div>Version {data.version}</div>
               <div className="text-xs uppercase tracking-wider text-red-600 font-semibold mt-1">
                 {data.confidentiality}
@@ -148,25 +148,25 @@ export function DDReportTemplate({ data, onExport }: DDReportTemplateProps) {
           {/* Meta Info */}
           <div className="grid grid-cols-2 gap-8 pt-8 border-t border-gray-200">
             <div>
-              <div className="text-sm text-gray-500 mb-1">Prepared For</div>
+              <div className="text-sm text-foreground/60 mb-1">Prepared For</div>
               <div className="text-gray-900 font-medium" style={{ fontFamily: 'Calibri, sans-serif' }}>
                 {data.preparedFor}
               </div>
             </div>
             <div>
-              <div className="text-sm text-gray-500 mb-1">Author</div>
+              <div className="text-sm text-foreground/60 mb-1">Author</div>
               <div className="text-gray-900 font-medium" style={{ fontFamily: 'Calibri, sans-serif' }}>
                 {data.author}
               </div>
             </div>
             <div>
-              <div className="text-sm text-gray-500 mb-1">Date</div>
+              <div className="text-sm text-foreground/60 mb-1">Date</div>
               <div className="text-gray-900 font-medium" style={{ fontFamily: 'Calibri, sans-serif' }}>
                 {data.date}
               </div>
             </div>
             <div>
-              <div className="text-sm text-gray-500 mb-1">Recommendation</div>
+              <div className="text-sm text-foreground/60 mb-1">Recommendation</div>
               <div className={`inline-block px-3 py-1 rounded-full text-sm font-semibold ${getRecommendationColor(data.recommendation)}`}>
                 {getRecommendationText(data.recommendation)}
               </div>
@@ -174,7 +174,7 @@ export function DDReportTemplate({ data, onExport }: DDReportTemplateProps) {
           </div>
 
           {/* Page Number */}
-          <div className="absolute bottom-8 right-12 text-sm text-gray-400">
+          <div className="absolute bottom-8 right-12 text-sm text-foreground/70">
             Page 1
           </div>
         </div>
@@ -188,37 +188,37 @@ export function DDReportTemplate({ data, onExport }: DDReportTemplateProps) {
           <div className="space-y-4" style={{ fontFamily: 'Calibri, sans-serif' }}>
             <div className="flex items-center justify-between py-2 border-b border-gray-100">
               <span className="text-gray-900">1. Executive Summary</span>
-              <span className="text-gray-500">3</span>
+              <span className="text-foreground/60">3</span>
             </div>
             <div className="flex items-center justify-between py-2 border-b border-gray-100">
               <span className="text-gray-900">2. Recommendation</span>
-              <span className="text-gray-500">4</span>
+              <span className="text-foreground/60">4</span>
             </div>
             {data.sections.map((section, idx) => (
               <div key={section.id} className="flex items-center justify-between py-2 border-b border-gray-100">
                 <span className="text-gray-900">{idx + 3}. {section.title}</span>
-                <span className="text-gray-500">{idx + 5}</span>
+                <span className="text-foreground/60">{idx + 5}</span>
               </div>
             ))}
             <div className="flex items-center justify-between py-2 border-b border-gray-100">
               <span className="text-gray-900">{data.sections.length + 3}. Valuation Analysis</span>
-              <span className="text-gray-500">{data.sections.length + 5}</span>
+              <span className="text-foreground/60">{data.sections.length + 5}</span>
             </div>
             <div className="flex items-center justify-between py-2 border-b border-gray-100">
               <span className="text-gray-900">{data.sections.length + 4}. Risk Register</span>
-              <span className="text-gray-500">{data.sections.length + 6}</span>
+              <span className="text-foreground/60">{data.sections.length + 6}</span>
             </div>
             <div className="flex items-center justify-between py-2 border-b border-gray-100">
               <span className="text-gray-900">{data.sections.length + 5}. Questions for Management</span>
-              <span className="text-gray-500">{data.sections.length + 7}</span>
+              <span className="text-foreground/60">{data.sections.length + 7}</span>
             </div>
             <div className="flex items-center justify-between py-2 border-b border-gray-100">
               <span className="text-gray-900">{data.sections.length + 6}. Sign-off & Approvals</span>
-              <span className="text-gray-500">{data.sections.length + 8}</span>
+              <span className="text-foreground/60">{data.sections.length + 8}</span>
             </div>
           </div>
 
-          <div className="absolute bottom-8 right-12 text-sm text-gray-400">
+          <div className="absolute bottom-8 right-12 text-sm text-foreground/70">
             Page 2
           </div>
         </div>
@@ -239,26 +239,26 @@ export function DDReportTemplate({ data, onExport }: DDReportTemplateProps) {
           {/* Key Metrics Box */}
           <div className="mt-8 grid grid-cols-3 gap-4">
             <div className="bg-gray-50 rounded-lg p-4">
-              <div className="text-sm text-gray-500 mb-1">Valuation Range</div>
+              <div className="text-sm text-foreground/60 mb-1">Valuation Range</div>
               <div className="text-xl font-bold text-gray-900">
                 {formatCurrency(data.valuation.lowRange, data.valuation.currency)} - {formatCurrency(data.valuation.highRange, data.valuation.currency)}
               </div>
             </div>
             <div className="bg-gray-50 rounded-lg p-4">
-              <div className="text-sm text-gray-500 mb-1">Key Risks</div>
+              <div className="text-sm text-foreground/60 mb-1">Key Risks</div>
               <div className="text-xl font-bold text-gray-900">
                 {data.sections.reduce((acc, s) => acc + s.risks.filter(r => r.level === 'high').length, 0)} High Priority
               </div>
             </div>
             <div className="bg-gray-50 rounded-lg p-4">
-              <div className="text-sm text-gray-500 mb-1">Open Questions</div>
+              <div className="text-sm text-foreground/60 mb-1">Open Questions</div>
               <div className="text-xl font-bold text-gray-900">
                 {data.questionsForManagement.length} Items
               </div>
             </div>
           </div>
 
-          <div className="absolute bottom-8 right-12 text-sm text-gray-400">
+          <div className="absolute bottom-8 right-12 text-sm text-foreground/70">
             Page 3
           </div>
         </div>
@@ -300,7 +300,7 @@ export function DDReportTemplate({ data, onExport }: DDReportTemplateProps) {
             </ul>
           </div>
 
-          <div className="absolute bottom-8 right-12 text-sm text-gray-400">
+          <div className="absolute bottom-8 right-12 text-sm text-foreground/70">
             Page 4
           </div>
         </div>
@@ -359,7 +359,7 @@ export function DDReportTemplate({ data, onExport }: DDReportTemplateProps) {
                       </div>
                       <p className="text-gray-700" style={{ fontFamily: 'Calibri, sans-serif' }}>{risk.description}</p>
                       {risk.mitigation && (
-                        <p className="text-sm text-gray-500 mt-2" style={{ fontFamily: 'Calibri, sans-serif' }}>
+                        <p className="text-sm text-foreground/60 mt-2" style={{ fontFamily: 'Calibri, sans-serif' }}>
                           <strong>Mitigation:</strong> {risk.mitigation}
                         </p>
                       )}
@@ -369,7 +369,7 @@ export function DDReportTemplate({ data, onExport }: DDReportTemplateProps) {
               </div>
             )}
 
-            <div className="absolute bottom-8 right-12 text-sm text-gray-400">
+            <div className="absolute bottom-8 right-12 text-sm text-foreground/70">
               Page {idx + 5}
             </div>
           </div>
@@ -384,11 +384,11 @@ export function DDReportTemplate({ data, onExport }: DDReportTemplateProps) {
 
           <div className="bg-gray-50 rounded-xl p-8 mb-8">
             <div className="text-center mb-8">
-              <div className="text-sm text-gray-500 mb-2">Valuation Range ({data.valuation.method})</div>
+              <div className="text-sm text-foreground/60 mb-2">Valuation Range ({data.valuation.method})</div>
               <div className="text-4xl font-bold text-gray-900">
                 {formatCurrency(data.valuation.midRange, data.valuation.currency)}
               </div>
-              <div className="text-gray-500 mt-2">
+              <div className="text-foreground/60 mt-2">
                 Range: {formatCurrency(data.valuation.lowRange, data.valuation.currency)} - {formatCurrency(data.valuation.highRange, data.valuation.currency)}
               </div>
             </div>
@@ -403,7 +403,7 @@ export function DDReportTemplate({ data, onExport }: DDReportTemplateProps) {
                 style={{ left: '50%', transform: 'translateX(-50%)' }}
               />
             </div>
-            <div className="flex justify-between text-sm text-gray-500 mt-2">
+            <div className="flex justify-between text-sm text-foreground/60 mt-2">
               <span>Low</span>
               <span>Mid</span>
               <span>High</span>
@@ -418,7 +418,7 @@ export function DDReportTemplate({ data, onExport }: DDReportTemplateProps) {
             </p>
           </div>
 
-          <div className="absolute bottom-8 right-12 text-sm text-gray-400">
+          <div className="absolute bottom-8 right-12 text-sm text-foreground/70">
             Page {data.sections.length + 5}
           </div>
         </div>
@@ -430,7 +430,7 @@ export function DDReportTemplate({ data, onExport }: DDReportTemplateProps) {
           </h2>
           <div className="w-16 h-1 bg-purple-600 mb-8" />
 
-          <p className="text-gray-600 mb-6" style={{ fontFamily: 'Calibri, sans-serif' }}>
+          <p className="text-foreground/50 mb-6" style={{ fontFamily: 'Calibri, sans-serif' }}>
             The following questions have been identified during the due diligence process 
             and require clarification from the target company's management team.
           </p>
@@ -446,7 +446,7 @@ export function DDReportTemplate({ data, onExport }: DDReportTemplateProps) {
             ))}
           </div>
 
-          <div className="absolute bottom-8 right-12 text-sm text-gray-400">
+          <div className="absolute bottom-8 right-12 text-sm text-foreground/70">
             Page {data.sections.length + 7}
           </div>
         </div>
@@ -458,7 +458,7 @@ export function DDReportTemplate({ data, onExport }: DDReportTemplateProps) {
           </h2>
           <div className="w-16 h-1 bg-purple-600 mb-8" />
 
-          <p className="text-gray-600 mb-8" style={{ fontFamily: 'Calibri, sans-serif' }}>
+          <p className="text-foreground/50 mb-8" style={{ fontFamily: 'Calibri, sans-serif' }}>
             This report has been reviewed and approved by the following AI-SME experts:
           </p>
 
@@ -469,10 +469,10 @@ export function DDReportTemplate({ data, onExport }: DDReportTemplateProps) {
                   <div className="font-semibold text-gray-900" style={{ fontFamily: 'Calibri, sans-serif' }}>
                     {reviewer.name}
                   </div>
-                  <div className="text-sm text-gray-500">{reviewer.role}</div>
+                  <div className="text-sm text-foreground/60">{reviewer.role}</div>
                 </div>
                 <div className="text-right">
-                  <div className="text-sm text-gray-500">Reviewed</div>
+                  <div className="text-sm text-foreground/60">Reviewed</div>
                   <div className="text-gray-900">{reviewer.date}</div>
                 </div>
                 <div className="w-32 h-12 border-b-2 border-gray-300" />
@@ -481,17 +481,17 @@ export function DDReportTemplate({ data, onExport }: DDReportTemplateProps) {
           </div>
 
           <div className="mt-12 p-6 bg-gray-50 rounded-lg">
-            <div className="text-sm text-gray-500 mb-2">Final Approval</div>
+            <div className="text-sm text-foreground/60 mb-2">Final Approval</div>
             <div className="flex items-center justify-between">
               <div>
                 <div className="font-semibold text-gray-900" style={{ fontFamily: 'Calibri, sans-serif' }}>
                   Chief of Staff
                 </div>
-                <div className="text-sm text-gray-500">Quality Assurance Review</div>
+                <div className="text-sm text-foreground/60">Quality Assurance Review</div>
               </div>
               <div className="flex items-center gap-4">
                 <div className="text-right">
-                  <div className="text-sm text-gray-500">Date</div>
+                  <div className="text-sm text-foreground/60">Date</div>
                   <div className="text-gray-900">{data.date}</div>
                 </div>
                 <div className="w-32 h-12 border-b-2 border-gray-300" />
@@ -499,7 +499,7 @@ export function DDReportTemplate({ data, onExport }: DDReportTemplateProps) {
             </div>
           </div>
 
-          <div className="absolute bottom-8 right-12 text-sm text-gray-400">
+          <div className="absolute bottom-8 right-12 text-sm text-foreground/70">
             Page {data.sections.length + 8}
           </div>
         </div>

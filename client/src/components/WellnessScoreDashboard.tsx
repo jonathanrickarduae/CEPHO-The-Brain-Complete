@@ -56,7 +56,7 @@ export function WellnessScoreDashboard({ compact = false, onShare }: WellnessSco
                     wellnessData.trend === 'declining' ? TrendingDown : Minus;
   
   const trendColor = wellnessData.trend === 'improving' ? 'text-green-400' :
-                     wellnessData.trend === 'declining' ? 'text-red-400' : 'text-gray-400';
+                     wellnessData.trend === 'declining' ? 'text-red-400' : 'text-foreground/70';
 
   if (compact) {
     return (
@@ -70,7 +70,7 @@ export function WellnessScoreDashboard({ compact = false, onShare }: WellnessSco
               <span className="text-2xl font-bold text-white">{wellnessData.score.toFixed(1)}</span>
             </div>
             <div>
-              <div className="text-sm text-gray-400">Wellness Score</div>
+              <div className="text-sm text-foreground/70">Wellness Score</div>
               <div className="flex items-center gap-2">
                 <span className={`font-semibold ${getScoreColor(wellnessData.score)}`}>
                   {getScoreLabel(wellnessData.score)}
@@ -79,7 +79,7 @@ export function WellnessScoreDashboard({ compact = false, onShare }: WellnessSco
               </div>
             </div>
           </div>
-          <ChevronRight className="w-5 h-5 text-gray-500" />
+          <ChevronRight className="w-5 h-5 text-foreground/60" />
         </div>
       </div>
     );
@@ -98,10 +98,10 @@ export function WellnessScoreDashboard({ compact = false, onShare }: WellnessSco
             onClick={() => setShowShareCard(true)}
             className="p-2 rounded-lg bg-gray-700 hover:bg-gray-600 transition-colors"
           >
-            <Share2 className="w-4 h-4 text-gray-400" />
+            <Share2 className="w-4 h-4 text-foreground/70" />
           </button>
           <button className="p-2 rounded-lg bg-gray-700 hover:bg-gray-600 transition-colors">
-            <Info className="w-4 h-4 text-gray-400" />
+            <Info className="w-4 h-4 text-foreground/70" />
           </button>
         </div>
       </div>
@@ -138,7 +138,7 @@ export function WellnessScoreDashboard({ compact = false, onShare }: WellnessSco
           </svg>
           <div className="absolute inset-0 flex flex-col items-center justify-center">
             <span className="text-4xl font-bold text-white">{Math.round(wellnessData.score)}</span>
-            <span className="text-sm text-gray-400">out of 100</span>
+            <span className="text-sm text-foreground/70">out of 100</span>
           </div>
         </div>
 
@@ -154,7 +154,7 @@ export function WellnessScoreDashboard({ compact = false, onShare }: WellnessSco
                'Stable'}
             </span>
           </div>
-          <p className="text-sm text-gray-400">
+          <p className="text-sm text-foreground/70">
             {wellnessData.insights[0] || "Keep up the great work!"}
           </p>
         </div>
@@ -171,7 +171,7 @@ export function WellnessScoreDashboard({ compact = false, onShare }: WellnessSco
           <div key={item.label} className="bg-gray-900 rounded-xl p-3 text-center">
             <item.icon className={`w-5 h-5 ${item.color} mx-auto mb-1`} />
             <div className="text-lg font-semibold text-white">{item.value.toFixed(1)}</div>
-            <div className="text-xs text-gray-500">{item.label}</div>
+            <div className="text-xs text-foreground/60">{item.label}</div>
           </div>
         ))}
       </div>
@@ -186,7 +186,7 @@ export function WellnessScoreDashboard({ compact = false, onShare }: WellnessSco
                 <div className="w-5 h-5 rounded-full bg-cyan-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
                   <span className="text-xs text-cyan-400">{index + 1}</span>
                 </div>
-                <p className="text-sm text-gray-300">{rec}</p>
+                <p className="text-sm text-foreground/80">{rec}</p>
               </div>
             ))}
           </div>
@@ -208,7 +208,7 @@ export function WellnessScoreDashboard({ compact = false, onShare }: WellnessSco
             />
             <button
               onClick={() => setShowShareCard(false)}
-              className="w-full mt-4 py-2 bg-gray-700 hover:bg-gray-600 text-gray-300 rounded-lg transition-colors"
+              className="w-full mt-4 py-2 bg-gray-700 hover:bg-gray-600 text-foreground/80 rounded-lg transition-colors"
             >
               Close
             </button>
@@ -240,7 +240,7 @@ export function WellnessScoreMini() {
       <div className="w-6 h-6 rounded-full bg-gradient-to-br from-cyan-500 to-purple-600 flex items-center justify-center">
         <span className="text-xs font-bold text-white">{score}</span>
       </div>
-      <span className="text-xs text-gray-400">Wellness</span>
+      <span className="text-xs text-foreground/70">Wellness</span>
     </div>
   );
 }

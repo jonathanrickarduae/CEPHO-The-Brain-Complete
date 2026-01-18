@@ -55,7 +55,7 @@ export function DailyStreak({
           >
             <Flame
               className={`w-6 h-6 ${
-                currentStreak > 0 ? 'text-orange-400' : 'text-gray-500'
+                currentStreak > 0 ? 'text-orange-400' : 'text-foreground/60'
               }`}
             />
           </div>

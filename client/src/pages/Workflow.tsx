@@ -23,7 +23,7 @@ const projects = [
   },
   {
     id: 'boundless',
-    name: 'Sample Project Telecom',
+    name: 'Boundless Telecom',
     color: '#3B82F6',
     status: 'on-track',
     progress: 82,
@@ -100,7 +100,7 @@ export default function Workflow() {
       case 'blocked': return { dot: 'bg-red-500', text: 'text-red-400', bg: 'bg-red-500/10' };
       case 'at-risk': return { dot: 'bg-amber-500', text: 'text-amber-400', bg: 'bg-amber-500/10' };
       case 'on-track': return { dot: 'bg-green-500', text: 'text-green-400', bg: 'bg-green-500/10' };
-      default: return { dot: 'bg-gray-500', text: 'text-gray-400', bg: 'bg-gray-500/10' };
+      default: return { dot: 'bg-gray-500', text: 'text-foreground/70', bg: 'bg-gray-500/10' };
     }
   };
 
@@ -138,21 +138,21 @@ export default function Workflow() {
           <div className="flex items-center bg-white/5 border border-white/20 rounded-lg p-1">
             <button 
               onClick={() => setViewMode('grid')}
-              className={`p-2 rounded transition-colors ${viewMode === 'grid' ? 'bg-emerald-500/20 text-emerald-400' : 'text-gray-400 hover:text-white'}`}
+              className={`p-2 rounded transition-colors ${viewMode === 'grid' ? 'bg-emerald-500/20 text-emerald-400' : 'text-foreground/70 hover:text-white'}`}
               title="Grid view"
             >
               <LayoutGrid className="w-4 h-4" />
             </button>
             <button 
               onClick={() => setViewMode('list')}
-              className={`p-2 rounded transition-colors ${viewMode === 'list' ? 'bg-emerald-500/20 text-emerald-400' : 'text-gray-400 hover:text-white'}`}
+              className={`p-2 rounded transition-colors ${viewMode === 'list' ? 'bg-emerald-500/20 text-emerald-400' : 'text-foreground/70 hover:text-white'}`}
               title="List view"
             >
               <List className="w-4 h-4" />
             </button>
             <button 
               onClick={() => setViewMode('kanban')}
-              className={`p-2 rounded transition-colors ${viewMode === 'kanban' ? 'bg-emerald-500/20 text-emerald-400' : 'text-gray-400 hover:text-white'}`}
+              className={`p-2 rounded transition-colors ${viewMode === 'kanban' ? 'bg-emerald-500/20 text-emerald-400' : 'text-foreground/70 hover:text-white'}`}
               title="Kanban view"
             >
               <Columns className="w-4 h-4" />
@@ -172,28 +172,28 @@ export default function Workflow() {
       <div className="grid grid-cols-4 gap-4 mb-8">
         <div className="bg-white/5 border-2 border-white/10 rounded-2xl p-4">
           <div className="text-3xl font-bold text-white">{stats.total}</div>
-          <div className="text-sm text-gray-400">Total Projects</div>
+          <div className="text-sm text-foreground/70">Total Projects</div>
         </div>
         <div className="bg-gradient-to-br from-emerald-500/10 to-green-500/10 border-2 border-emerald-500/30 rounded-2xl p-4">
           <div className="flex items-center gap-2">
             <div className="w-2 h-2 rounded-full bg-emerald-500" />
             <span className="text-3xl font-bold text-emerald-400">{stats.onTrack}</span>
           </div>
-          <div className="text-sm text-gray-400">On Track</div>
+          <div className="text-sm text-foreground/70">On Track</div>
         </div>
         <div className="bg-gradient-to-br from-amber-500/10 to-orange-500/10 border-2 border-amber-500/30 rounded-2xl p-4">
           <div className="flex items-center gap-2">
             <div className="w-2 h-2 rounded-full bg-amber-500" />
             <span className="text-3xl font-bold text-amber-400">{stats.atRisk}</span>
           </div>
-          <div className="text-sm text-gray-400">At Risk</div>
+          <div className="text-sm text-foreground/70">At Risk</div>
         </div>
         <div className="bg-gradient-to-br from-red-500/10 to-rose-500/10 border-2 border-red-500/30 rounded-2xl p-4">
           <div className="flex items-center gap-2">
             <div className="w-2 h-2 rounded-full bg-red-500" />
             <span className="text-3xl font-bold text-red-400">{stats.blocked}</span>
           </div>
-          <div className="text-sm text-gray-400">Blocked</div>
+          <div className="text-sm text-foreground/70">Blocked</div>
         </div>
       </div>
 
@@ -206,7 +206,7 @@ export default function Workflow() {
             className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${
               filterStatus === status 
                 ? 'bg-gradient-to-r from-emerald-500 to-green-500 text-white' 
-                : 'bg-white/5 border border-white/10 text-gray-400 hover:text-white hover:bg-white/10'
+                : 'bg-white/5 border border-white/10 text-foreground/70 hover:text-white hover:bg-white/10'
             }`}
           >
             {status === 'all' ? 'All' : getStatusLabel(status)}

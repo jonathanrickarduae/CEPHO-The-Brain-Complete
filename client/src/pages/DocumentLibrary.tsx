@@ -238,7 +238,7 @@ export default function DocumentLibrary() {
       case "report":
         return <FileSpreadsheet className="h-4 w-4 text-green-500" />;
       default:
-        return <FileText className="h-4 w-4 text-gray-500" />;
+        return <FileText className="h-4 w-4 text-foreground/60" />;
     }
   };
 

@@ -54,7 +54,7 @@ export function ValueChainProgress({
       case 'blocked':
         return <Badge className="bg-red-500/20 text-red-400 border-red-500/30">Blocked</Badge>;
       default:
-        return <Badge className="bg-gray-500/20 text-gray-400 border-gray-500/30">Not Started</Badge>;
+        return <Badge className="bg-gray-500/20 text-foreground/70 border-gray-500/30">Not Started</Badge>;
     }
   };
 
@@ -69,7 +69,7 @@ export function ValueChainProgress({
       case 'blocked':
         return <AlertTriangle className="w-5 h-5 text-red-400" />;
       default:
-        return <Lock className="w-5 h-5 text-gray-500" />;
+        return <Lock className="w-5 h-5 text-foreground/60" />;
     }
   };
 
@@ -81,7 +81,7 @@ export function ValueChainProgress({
           <FileText className="w-5 h-5 text-cyan-400" />
           Value Chain Progress
         </h2>
-        <p className="text-sm text-gray-400 mt-1">{projectName}</p>
+        <p className="text-sm text-foreground/70 mt-1">{projectName}</p>
       </div>
 
       {/* Phase Timeline */}
@@ -140,7 +140,7 @@ export function ValueChainProgress({
                         {getStatusBadge(status)}
                       </div>
                       <h3 className="font-semibold text-white">{phase.name}</h3>
-                      <p className="text-sm text-gray-400 truncate">{phase.description}</p>
+                      <p className="text-sm text-foreground/70 truncate">{phase.description}</p>
                     </div>
 
                     {/* Progress */}
@@ -156,7 +156,7 @@ export function ValueChainProgress({
                       </div>
                     )}
 
-                    <ChevronRight className={`w-5 h-5 text-gray-400 transition-transform ${isExpanded ? 'rotate-90' : ''}`} />
+                    <ChevronRight className={`w-5 h-5 text-foreground/70 transition-transform ${isExpanded ? 'rotate-90' : ''}`} />
                   </div>
 
                   {/* Expanded Details */}
@@ -164,10 +164,10 @@ export function ValueChainProgress({
                     <div className="mt-2 ml-16 p-4 bg-white/5 rounded-xl border border-white/10">
                       {/* Objectives */}
                       <div className="mb-4">
-                        <h4 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Objectives</h4>
+                        <h4 className="text-xs font-semibold text-foreground/70 uppercase tracking-wider mb-2">Objectives</h4>
                         <ul className="space-y-1">
                           {phase.objectives.map((obj, i) => (
-                            <li key={i} className="text-sm text-gray-300 flex items-start gap-2">
+                            <li key={i} className="text-sm text-foreground/80 flex items-start gap-2">
                               <span className={`w-1.5 h-1.5 rounded-full ${phase.bgColor} mt-1.5 shrink-0`} />
                               {obj}
                             </li>
@@ -177,7 +177,7 @@ export function ValueChainProgress({
 
                       {/* Quality Gate Checks */}
                       <div className="mb-4">
-                        <h4 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Quality Gate Checks</h4>
+                        <h4 className="text-xs font-semibold text-foreground/70 uppercase tracking-wider mb-2">Quality Gate Checks</h4>
                         <div className="space-y-2">
                           {phase.qualityGateChecks.map((check, i) => {
                             const isComplete = completedChecks.includes(check);
@@ -193,7 +193,7 @@ export function ValueChainProgress({
                                 }`}>
                                   {isComplete && <Check className="w-3 h-3 text-white" />}
                                 </div>
-                                <span className={`text-sm ${isComplete ? 'text-emerald-400' : 'text-gray-400'}`}>
+                                <span className={`text-sm ${isComplete ? 'text-emerald-400' : 'text-foreground/70'}`}>
                                   {check}
                                 </span>
                               </div>
@@ -204,7 +204,7 @@ export function ValueChainProgress({
 
                       {/* Recommended Experts */}
                       <div className="mb-4">
-                        <h4 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Recommended Experts</h4>
+                        <h4 className="text-xs font-semibold text-foreground/70 uppercase tracking-wider mb-2">Recommended Experts</h4>
                         <div className="flex flex-wrap gap-2">
                           {phase.recommendedExperts.map((expert, i) => (
                             <Badge key={i} variant="outline" className="text-xs">
@@ -215,7 +215,7 @@ export function ValueChainProgress({
                       </div>
 
                       {/* Duration */}
-                      <div className="flex items-center gap-2 text-sm text-gray-400 mb-4">
+                      <div className="flex items-center gap-2 text-sm text-foreground/70 mb-4">
                         <Clock className="w-4 h-4" />
                         Estimated Duration: {phase.estimatedDuration}
                       </div>
@@ -253,7 +253,7 @@ export function ValueChainProgress({
 
       {/* Quality Gate Levels Legend */}
       <div className="p-4 border-t border-white/10 bg-white/5">
-        <h4 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Quality Gate Levels</h4>
+        <h4 className="text-xs font-semibold text-foreground/70 uppercase tracking-wider mb-3">Quality Gate Levels</h4>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
           {qualityGateLevels.map(level => (
             <div key={level.level} className="p-2 bg-white/5 rounded-lg">
@@ -263,7 +263,7 @@ export function ValueChainProgress({
                 </div>
                 <span className="text-xs font-medium text-white">{level.name}</span>
               </div>
-              <p className="text-[10px] text-gray-400">{level.approver}</p>
+              <p className="text-[10px] text-foreground/70">{level.approver}</p>
             </div>
           ))}
         </div>
@@ -299,7 +299,7 @@ export function ValueChainProgressCompact({
                   ? 'bg-emerald-500/20 text-emerald-400' 
                   : isCurrent
                     ? `${phase.bgColor} ${phase.color}`
-                    : 'bg-white/10 text-gray-500'
+                    : 'bg-white/10 text-foreground/60'
               }`}
               title={phase.name}
             >

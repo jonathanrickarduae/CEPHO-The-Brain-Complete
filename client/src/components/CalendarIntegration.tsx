@@ -144,7 +144,7 @@ export function CalendarIntegration() {
           <button
             onClick={syncNow}
             disabled={syncing}
-            className="flex items-center gap-2 px-3 py-1.5 bg-gray-700 hover:bg-gray-600 rounded-lg text-sm text-gray-300 transition-colors disabled:opacity-50"
+            className="flex items-center gap-2 px-3 py-1.5 bg-gray-700 hover:bg-gray-600 rounded-lg text-sm text-foreground/80 transition-colors disabled:opacity-50"
           >
             <RefreshCw className={`w-4 h-4 ${syncing ? 'animate-spin' : ''}`} />
             {syncing ? 'Syncing...' : 'Sync Now'}
@@ -162,14 +162,14 @@ export function CalendarIntegration() {
                   {getProviderIcon(account.provider)}
                   <div>
                     <div className="font-medium text-white">{account.email}</div>
-                    <div className="text-xs text-gray-500">
+                    <div className="text-xs text-foreground/60">
                       Last synced: {account.lastSync?.toLocaleTimeString()}
                     </div>
                   </div>
                 </div>
                 <button
                   onClick={() => disconnectAccount(account.id)}
-                  className="p-2 rounded-lg hover:bg-gray-800 text-gray-400 hover:text-red-400 transition-colors"
+                  className="p-2 rounded-lg hover:bg-gray-800 text-foreground/70 hover:text-red-400 transition-colors"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -192,7 +192,7 @@ export function CalendarIntegration() {
                       className="w-3 h-3 rounded-full"
                       style={{ backgroundColor: calendar.color }}
                     />
-                    <span className="text-sm text-gray-300">{calendar.name}</span>
+                    <span className="text-sm text-foreground/80">{calendar.name}</span>
                   </label>
                 ))}
               </div>
@@ -214,9 +214,9 @@ export function CalendarIntegration() {
               <span className="text-white">Connect Google Calendar</span>
             </div>
             {connecting === 'google' ? (
-              <RefreshCw className="w-5 h-5 text-gray-400 animate-spin" />
+              <RefreshCw className="w-5 h-5 text-foreground/70 animate-spin" />
             ) : (
-              <ChevronRight className="w-5 h-5 text-gray-400" />
+              <ChevronRight className="w-5 h-5 text-foreground/70" />
             )}
           </button>
         )}
@@ -232,16 +232,16 @@ export function CalendarIntegration() {
               <span className="text-white">Connect Outlook Calendar</span>
             </div>
             {connecting === 'microsoft' ? (
-              <RefreshCw className="w-5 h-5 text-gray-400 animate-spin" />
+              <RefreshCw className="w-5 h-5 text-foreground/70 animate-spin" />
             ) : (
-              <ChevronRight className="w-5 h-5 text-gray-400" />
+              <ChevronRight className="w-5 h-5 text-foreground/70" />
             )}
           </button>
         )}
       </div>
 
       {/* Info */}
-      <p className="text-xs text-gray-500 mt-4">
+      <p className="text-xs text-foreground/60 mt-4">
         Connect your calendars to enable smart scheduling, meeting prep, and automatic time blocking.
       </p>
     </div>
@@ -312,11 +312,11 @@ export function UpcomingEvents() {
           >
             <div className="flex items-start justify-between mb-1">
               <div className="font-medium text-white">{event.title}</div>
-              <div className={`text-xs ${index === 0 ? 'text-cyan-400' : 'text-gray-500'}`}>
+              <div className={`text-xs ${index === 0 ? 'text-cyan-400' : 'text-foreground/60'}`}>
                 {getTimeUntil(event.start)}
               </div>
             </div>
-            <div className="flex items-center gap-3 text-sm text-gray-400">
+            <div className="flex items-center gap-3 text-sm text-foreground/70">
               <span>{formatTime(event.start)} - {formatTime(event.end)}</span>
               {event.attendees && (
                 <span className="flex items-center gap-1">

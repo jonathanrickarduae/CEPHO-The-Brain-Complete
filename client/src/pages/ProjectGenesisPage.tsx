@@ -53,7 +53,7 @@ export default function ProjectGenesisPage() {
   const [savedProjects, setSavedProjects] = useState<SavedProject[]>([
     {
       id: 'demo-1',
-      name: 'Sample Project AI',
+      name: 'Boundless AI',
       status: 'in_review',
       industry: 'Technology',
       createdAt: new Date('2024-01-15'),
@@ -102,7 +102,7 @@ export default function ProjectGenesisPage() {
       case 'approved': return 'bg-green-500/20 text-green-400 border-green-500/30';
       case 'in_review': return 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30';
       case 'needs_update': return 'bg-orange-500/20 text-orange-400 border-orange-500/30';
-      default: return 'bg-white/10 text-gray-400 border-white/20';
+      default: return 'bg-white/10 text-foreground/70 border-white/20';
     }
   };
 
@@ -119,7 +119,7 @@ export default function ProjectGenesisPage() {
               </div>
               <div>
                 <h1 className="text-xl md:text-2xl font-bold text-white">Project Genesis</h1>
-                <p className="text-sm md:text-base text-gray-400">Strategic blueprint creation</p>
+                <p className="text-sm md:text-base text-foreground/70">Strategic blueprint creation</p>
               </div>
             </div>
             <div className="flex gap-2 md:gap-3">
@@ -145,7 +145,7 @@ export default function ProjectGenesisPage() {
                 variant="outline"
                 size="sm"
                 onClick={() => setViewMode('qms')}
-                className="border-white/20 text-gray-300 hover:bg-white/5"
+                className="border-white/20 text-foreground/80 hover:bg-white/5"
               >
                 <GitBranch className="w-4 h-4 md:mr-2" />
                 <span className="hidden md:inline">Quality Management</span>
@@ -173,7 +173,7 @@ export default function ProjectGenesisPage() {
                 </svg>
               </div>
               <h3 className="text-sm md:text-lg font-semibold text-white mb-1">Start with Voice</h3>
-              <p className="text-xs md:text-sm text-gray-400 hidden sm:block">
+              <p className="text-xs md:text-sm text-foreground/70 hidden sm:block">
                 Record a voice note and let AI pre-populate
               </p>
               <span className="inline-block mt-1 md:mt-2 text-xs text-cyan-400 font-medium">Recommended</span>
@@ -187,7 +187,7 @@ export default function ProjectGenesisPage() {
                 <Brain className="w-5 h-5 md:w-6 md:h-6 text-fuchsia-400" />
               </div>
               <h3 className="text-sm md:text-lg font-semibold text-white mb-1">Genesis Blueprint</h3>
-              <p className="text-xs md:text-sm text-gray-400 hidden sm:block">
+              <p className="text-xs md:text-sm text-foreground/70 hidden sm:block">
                 Intelligent wizard with SME collaboration
               </p>
             </button>
@@ -197,10 +197,10 @@ export default function ProjectGenesisPage() {
               className="p-4 md:p-6 bg-white/5 border border-white/10 rounded-2xl text-left hover:border-white/20 transition-all group"
             >
               <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-white/10 flex items-center justify-center mb-3 md:mb-4 group-hover:scale-110 transition-transform">
-                <FileText className="w-5 h-5 md:w-6 md:h-6 text-gray-400" />
+                <FileText className="w-5 h-5 md:w-6 md:h-6 text-foreground/70" />
               </div>
               <h3 className="text-sm md:text-lg font-semibold text-white mb-1">Classic Mode</h3>
-              <p className="text-xs md:text-sm text-gray-400 hidden sm:block">
+              <p className="text-xs md:text-sm text-foreground/70 hidden sm:block">
                 Traditional project setup
               </p>
             </button>
@@ -210,10 +210,10 @@ export default function ProjectGenesisPage() {
               className="p-4 md:p-6 bg-white/5 border border-white/10 rounded-2xl text-left hover:border-white/20 transition-all group"
             >
               <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-white/10 flex items-center justify-center mb-3 md:mb-4 group-hover:scale-110 transition-transform">
-                <Shield className="w-5 h-5 md:w-6 md:h-6 text-gray-400" />
+                <Shield className="w-5 h-5 md:w-6 md:h-6 text-foreground/70" />
               </div>
               <h3 className="text-sm md:text-lg font-semibold text-white mb-1">QMS Process Log</h3>
-              <p className="text-xs md:text-sm text-gray-400 hidden sm:block">
+              <p className="text-xs md:text-sm text-foreground/70 hidden sm:block">
                 Document control & audit
               </p>
             </button>
@@ -228,7 +228,7 @@ export default function ProjectGenesisPage() {
             >
               <Share2 className="w-6 h-6 text-pink-400 mb-2 group-hover:scale-110 transition-transform" />
               <h4 className="font-medium text-white text-sm">Social Media Blueprint</h4>
-              <p className="text-xs text-gray-400 mt-1">Platform strategy & content</p>
+              <p className="text-xs text-foreground/70 mt-1">Platform strategy & content</p>
             </button>
 
             <button
@@ -237,7 +237,7 @@ export default function ProjectGenesisPage() {
             >
               <PresentationIcon className="w-6 h-6 text-blue-400 mb-2 group-hover:scale-110 transition-transform" />
               <h4 className="font-medium text-white text-sm">Presentation Blueprint</h4>
-              <p className="text-xs text-gray-400 mt-1">Investor decks & pitches</p>
+              <p className="text-xs text-foreground/70 mt-1">Investor decks & pitches</p>
             </button>
 
             <button
@@ -246,7 +246,7 @@ export default function ProjectGenesisPage() {
             >
               <DollarSign className="w-6 h-6 text-emerald-400 mb-2 group-hover:scale-110 transition-transform" />
               <h4 className="font-medium text-white text-sm">Financial Model Blueprint</h4>
-              <p className="text-xs text-gray-400 mt-1">Projections & valuations</p>
+              <p className="text-xs text-foreground/70 mt-1">Projections & valuations</p>
             </button>
 
             <button
@@ -255,7 +255,7 @@ export default function ProjectGenesisPage() {
             >
               <GitBranch className="w-6 h-6 text-amber-400 mb-2 group-hover:scale-110 transition-transform" />
               <h4 className="font-medium text-white text-sm">Blueprint Network</h4>
-              <p className="text-xs text-gray-400 mt-1">Cascading updates</p>
+              <p className="text-xs text-foreground/70 mt-1">Cascading updates</p>
             </button>
             </div>
           </div>
@@ -264,10 +264,10 @@ export default function ProjectGenesisPage() {
           <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-lg font-semibold text-white flex items-center gap-2">
-                <Clock className="w-5 h-5 text-gray-400" />
+                <Clock className="w-5 h-5 text-foreground/70" />
                 Recent Projects
               </h2>
-              <Button variant="ghost" className="text-gray-400 hover:text-white">
+              <Button variant="ghost" className="text-foreground/70 hover:text-white">
                 View All
                 <ChevronRight className="w-4 h-4 ml-1" />
               </Button>
@@ -297,20 +297,20 @@ export default function ProjectGenesisPage() {
                               {project.status?.replace('_', ' ')}
                             </Badge>
                           </div>
-                          <div className="flex items-center gap-4 text-sm text-gray-400">
+                          <div className="flex items-center gap-4 text-sm text-foreground/70">
                             <span>{project.industry}</span>
                             <span>•</span>
                             <span>Updated {project.updatedAt.toLocaleDateString('en-GB')}</span>
                           </div>
                         </div>
-                        <ChevronRight className="w-5 h-5 text-gray-500 shrink-0" />
+                        <ChevronRight className="w-5 h-5 text-foreground/60 shrink-0" />
                       </div>
                       
                       {/* Value Chain Progress */}
                       <div className="pl-16">
                         <div className="flex items-center gap-2 mb-2">
-                          <span className="text-xs text-gray-500">Current Phase:</span>
-                          <span className={`text-xs font-medium ${currentPhase?.color || 'text-gray-400'}`}>
+                          <span className="text-xs text-foreground/60">Current Phase:</span>
+                          <span className={`text-xs font-medium ${currentPhase?.color || 'text-foreground/70'}`}>
                             {currentPhase?.icon} {currentPhase?.name || 'Not Started'}
                           </span>
                         </div>
@@ -325,9 +325,9 @@ export default function ProjectGenesisPage() {
               </div>
             ) : (
               <div className="text-center py-12">
-                <Sparkles className="w-12 h-12 mx-auto text-gray-600 mb-4" />
-                <p className="text-gray-400 mb-2">No projects yet</p>
-                <p className="text-gray-500 text-sm mb-4">
+                <Sparkles className="w-12 h-12 mx-auto text-foreground/50 mb-4" />
+                <p className="text-foreground/70 mb-2">No projects yet</p>
+                <p className="text-foreground/60 text-sm mb-4">
                   Start your first Genesis Blueprint to build a strategic foundation
                 </p>
                 <Button
@@ -396,7 +396,7 @@ export default function ProjectGenesisPage() {
           {/* Back Button */}
           <button
             onClick={() => setViewMode('idea_scoring')}
-            className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors mb-6"
+            className="flex items-center gap-2 text-foreground/70 hover:text-white transition-colors mb-6"
           >
             <ChevronRight className="w-4 h-4 rotate-180" />
             Back to Idea Scoring
@@ -407,7 +407,7 @@ export default function ProjectGenesisPage() {
               <Shield className="w-8 h-8 text-cyan-400" />
               <h1 className="text-3xl font-bold text-white">Chief of Staff Validation</h1>
             </div>
-            <p className="text-gray-400">
+            <p className="text-foreground/70">
               All outputs are cross-validated, fact-checked, and source-referenced before delivery.
             </p>
           </div>
@@ -435,7 +435,7 @@ export default function ProjectGenesisPage() {
         {/* Back Button */}
         <button
           onClick={() => setViewMode('dashboard')}
-          className="absolute top-4 left-4 z-20 flex items-center gap-2 text-gray-400 hover:text-white transition-colors"
+          className="absolute top-4 left-4 z-20 flex items-center gap-2 text-foreground/70 hover:text-white transition-colors"
         >
           <ChevronRight className="w-4 h-4 rotate-180" />
           Back to Dashboard
@@ -456,7 +456,7 @@ export default function ProjectGenesisPage() {
           {/* Back Button */}
           <button
             onClick={() => setViewMode('dashboard')}
-            className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors mb-6"
+            className="flex items-center gap-2 text-foreground/70 hover:text-white transition-colors mb-6"
           >
             <ChevronRight className="w-4 h-4 rotate-180" />
             Back to Dashboard
@@ -465,7 +465,7 @@ export default function ProjectGenesisPage() {
           <BlueprintQMS
             genesisBlueprint={currentBlueprint || {
               id: 'demo-blueprint',
-              name: 'Sample Project AI',
+              name: 'Boundless AI',
               status: 'in_review',
               linkedBlueprints: [
                 { id: 'presentation', type: 'presentation', name: 'Presentation Blueprint', status: 'in_progress', inheritedFields: ['businessInfo', 'valueProposition', 'objectives'] },
@@ -514,7 +514,7 @@ export default function ProjectGenesisPage() {
         <div className="max-w-6xl mx-auto">
           <button
             onClick={() => setViewMode('dashboard')}
-            className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors mb-6"
+            className="flex items-center gap-2 text-foreground/70 hover:text-white transition-colors mb-6"
           >
             <ChevronRight className="w-4 h-4 rotate-180" />
             Back to Dashboard
@@ -532,7 +532,7 @@ export default function ProjectGenesisPage() {
         <div className="max-w-6xl mx-auto">
           <button
             onClick={() => setViewMode('dashboard')}
-            className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors mb-6"
+            className="flex items-center gap-2 text-foreground/70 hover:text-white transition-colors mb-6"
           >
             <ChevronRight className="w-4 h-4 rotate-180" />
             Back to Dashboard
@@ -550,7 +550,7 @@ export default function ProjectGenesisPage() {
         <div className="max-w-6xl mx-auto">
           <button
             onClick={() => setViewMode('dashboard')}
-            className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors mb-6"
+            className="flex items-center gap-2 text-foreground/70 hover:text-white transition-colors mb-6"
           >
             <ChevronRight className="w-4 h-4 rotate-180" />
             Back to Dashboard
@@ -558,7 +558,7 @@ export default function ProjectGenesisPage() {
           <div className="text-center py-20">
             <DollarSign className="w-16 h-16 mx-auto text-emerald-400 mb-4" />
             <h2 className="text-2xl font-bold text-white mb-2">Financial Model Blueprint</h2>
-            <p className="text-gray-400 mb-6">Revenue projections, valuations, and financial scenarios</p>
+            <p className="text-foreground/70 mb-6">Revenue projections, valuations, and financial scenarios</p>
             <Badge variant="outline" className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30">
               Coming Soon - Inherits from Genesis Master
             </Badge>
@@ -575,7 +575,7 @@ export default function ProjectGenesisPage() {
         <div className="max-w-6xl mx-auto">
           <button
             onClick={() => setViewMode('dashboard')}
-            className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors mb-6"
+            className="flex items-center gap-2 text-foreground/70 hover:text-white transition-colors mb-6"
           >
             <ChevronRight className="w-4 h-4 rotate-180" />
             Back to Dashboard
@@ -595,7 +595,7 @@ export default function ProjectGenesisPage() {
           {/* Back Button */}
           <button
             onClick={() => setViewMode('dashboard')}
-            className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors mb-6"
+            className="flex items-center gap-2 text-foreground/70 hover:text-white transition-colors mb-6"
           >
             <ChevronRight className="w-4 h-4 rotate-180" />
             Back to Dashboard
@@ -641,7 +641,7 @@ export default function ProjectGenesisPage() {
           {/* Back Button */}
           <button
             onClick={() => setViewMode('dashboard')}
-            className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors mb-6"
+            className="flex items-center gap-2 text-foreground/70 hover:text-white transition-colors mb-6"
           >
             <ChevronRight className="w-4 h-4 rotate-180" />
             Back to Dashboard
@@ -673,7 +673,7 @@ export default function ProjectGenesisPage() {
       <div className="p-4">
         <button
           onClick={() => setViewMode('dashboard')}
-          className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors"
+          className="flex items-center gap-2 text-foreground/70 hover:text-white transition-colors"
         >
           <ChevronRight className="w-4 h-4 rotate-180" />
           Back to Dashboard

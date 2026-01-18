@@ -54,7 +54,7 @@ const MOCK_PATTERNS: WorkflowPattern[] = [
     trend: 'improving',
     occurrences: 45,
     lastSeen: 'Today',
-    affectedProjects: ['Celadon Capital', 'Sample Project'],
+    affectedProjects: ['Celadon Capital', 'Boundless AI'],
     recommendation: 'Block 9-11am for strategic work'
   },
   {
@@ -93,7 +93,7 @@ const MOCK_PATTERNS: WorkflowPattern[] = [
     trend: 'improving',
     occurrences: 23,
     lastSeen: 'Yesterday',
-    affectedProjects: ['Celadon Capital', 'Sample Project'],
+    affectedProjects: ['Celadon Capital', 'Boundless AI'],
     recommendation: 'Set up auto-alerts for investor communications'
   }
 ];
@@ -128,7 +128,7 @@ const MOCK_PROJECT_COMPARISONS: ProjectComparison[] = [
     successFactors: ['Strong sponsor', 'Clear timeline', 'Dedicated resources']
   },
   {
-    project: 'Sample Project',
+    project: 'Boundless AI',
     successScore: 72,
     avgDuration: '6.1 months',
     blockers: ['Scope creep', 'Resource constraints'],
@@ -178,7 +178,7 @@ export function WorkflowPatternDetection() {
       case 'bottleneck': return 'text-red-400 bg-red-500/20';
       case 'risk': return 'text-orange-400 bg-orange-500/20';
       case 'efficiency': return 'text-cyan-400 bg-cyan-500/20';
-      default: return 'text-gray-400 bg-gray-500/20';
+      default: return 'text-foreground/70 bg-gray-500/20';
     }
   };
 
@@ -186,7 +186,7 @@ export function WorkflowPatternDetection() {
     switch (trend) {
       case 'improving': return <TrendingUp className="w-4 h-4 text-green-400" />;
       case 'declining': return <TrendingDown className="w-4 h-4 text-red-400" />;
-      default: return <ArrowRight className="w-4 h-4 text-gray-400" />;
+      default: return <ArrowRight className="w-4 h-4 text-foreground/70" />;
     }
   };
 

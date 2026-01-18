@@ -108,7 +108,7 @@ export function ActiveLearningMode() {
       case 'productivity': return 'bg-green-500/20 text-green-400';
       case 'communication': return 'bg-blue-500/20 text-blue-400';
       case 'entertainment': return 'bg-purple-500/20 text-purple-400';
-      default: return 'bg-gray-500/20 text-gray-400';
+      default: return 'bg-gray-500/20 text-foreground/70';
     }
   };
 
@@ -141,7 +141,7 @@ export function ActiveLearningMode() {
                 {isActive && !isPaused ? (
                   <Eye className="w-6 h-6 text-green-400" />
                 ) : (
-                  <EyeOff className="w-6 h-6 text-gray-400" />
+                  <EyeOff className="w-6 h-6 text-foreground/70" />
                 )}
               </div>
               <div>

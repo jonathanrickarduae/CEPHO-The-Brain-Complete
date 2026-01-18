@@ -61,7 +61,7 @@ export default function Commercialization() {
                 <div className="w-28 h-28 rounded-full bg-gray-900 flex items-center justify-center">
                   <div className="text-center">
                     <div className="text-4xl font-bold text-white">{overallScore}%</div>
-                    <div className="text-xs text-gray-400">Market Value</div>
+                    <div className="text-xs text-foreground/70">Market Value</div>
                   </div>
                 </div>
               </div>
@@ -74,19 +74,19 @@ export default function Commercialization() {
             </div>
             <div>
               <h2 className="text-2xl font-bold text-white mb-1">Cepho's Competitive Position</h2>
-              <p className="text-gray-400 mb-3">Based on feature parity, unique value, and market dynamics</p>
+              <p className="text-foreground/70 mb-3">Based on feature parity, unique value, and market dynamics</p>
               <div className="flex gap-4">
                 <div className="text-center">
                   <div className="text-lg font-bold text-cyan-400">82%</div>
-                  <div className="text-xs text-gray-500">Feature Parity</div>
+                  <div className="text-xs text-foreground/60">Feature Parity</div>
                 </div>
                 <div className="text-center">
                   <div className="text-lg font-bold text-purple-400">71%</div>
-                  <div className="text-xs text-gray-500">Unique Value</div>
+                  <div className="text-xs text-foreground/60">Unique Value</div>
                 </div>
                 <div className="text-center">
                   <div className="text-lg font-bold text-green-400">68%</div>
-                  <div className="text-xs text-gray-500">Market Readiness</div>
+                  <div className="text-xs text-foreground/60">Market Readiness</div>
                 </div>
               </div>
             </div>
@@ -100,7 +100,7 @@ export default function Commercialization() {
               <RefreshCw className={`w-4 h-4 ${isAnalyzing ? 'animate-spin' : ''}`} />
               {isAnalyzing ? 'Analyzing...' : 'Run Analysis'}
             </button>
-            <div className="text-xs text-gray-500 text-center">Last updated: 2 hours ago</div>
+            <div className="text-xs text-foreground/60 text-center">Last updated: 2 hours ago</div>
           </div>
         </div>
       </div>
@@ -120,7 +120,7 @@ export default function Commercialization() {
             className={`flex items-center gap-2 px-4 py-2 rounded-lg whitespace-nowrap transition-colors ${
               activeTab === tab.id
                 ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/50'
-                : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
+                : 'bg-gray-800 text-foreground/70 hover:bg-gray-700'
             }`}
           >
             <tab.icon className="w-4 h-4" />
@@ -150,7 +150,7 @@ export default function Commercialization() {
                 <div>
                   <h4 className="font-semibold text-white">University of Cambridge</h4>
                   <p className="text-sm text-cyan-400">Research Partner</p>
-                  <p className="text-xs text-gray-400 mt-1">AI-human collaboration research</p>
+                  <p className="text-xs text-foreground/70 mt-1">AI-human collaboration research</p>
                 </div>
               </div>
               <div className="flex items-center gap-4 bg-gray-900/50 rounded-xl p-4">
@@ -164,7 +164,7 @@ export default function Commercialization() {
                 <div>
                   <h4 className="font-semibold text-white">University of Oxford</h4>
                   <p className="text-sm text-purple-400">Strategic Partner</p>
-                  <p className="text-xs text-gray-400 mt-1">Ethical AI development</p>
+                  <p className="text-xs text-foreground/70 mt-1">Ethical AI development</p>
                 </div>
               </div>
             </div>
@@ -180,19 +180,19 @@ export default function Commercialization() {
             <div className="grid grid-cols-2 gap-4">
               <div className="bg-gray-900 rounded-lg p-4">
                 <div className="text-2xl font-bold text-white">{mockCompetitors.length}</div>
-                <div className="text-sm text-gray-400">Tracked Competitors</div>
+                <div className="text-sm text-foreground/70">Tracked Competitors</div>
               </div>
               <div className="bg-gray-900 rounded-lg p-4">
                 <div className="text-2xl font-bold text-red-400">{mockThreats.filter(t => t.type === 'threat').length}</div>
-                <div className="text-sm text-gray-400">Active Threats</div>
+                <div className="text-sm text-foreground/70">Active Threats</div>
               </div>
               <div className="bg-gray-900 rounded-lg p-4">
                 <div className="text-2xl font-bold text-green-400">{mockThreats.filter(t => t.type === 'opportunity').length}</div>
-                <div className="text-sm text-gray-400">Opportunities</div>
+                <div className="text-sm text-foreground/70">Opportunities</div>
               </div>
               <div className="bg-gray-900 rounded-lg p-4">
                 <div className="text-2xl font-bold text-purple-400">{mockRecommendations.length}</div>
-                <div className="text-sm text-gray-400">Pending Actions</div>
+                <div className="text-sm text-foreground/70">Pending Actions</div>
               </div>
             </div>
           </div>
@@ -207,30 +207,30 @@ export default function Commercialization() {
               <div className="flex items-center justify-between p-3 bg-gray-900 rounded-lg">
                 <div className="flex items-center gap-3">
                   <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
-                  <span className="text-sm text-gray-300">Daily competitor scan</span>
+                  <span className="text-sm text-foreground/80">Daily competitor scan</span>
                 </div>
-                <span className="text-xs text-gray-500">Running</span>
+                <span className="text-xs text-foreground/60">Running</span>
               </div>
               <div className="flex items-center justify-between p-3 bg-gray-900 rounded-lg">
                 <div className="flex items-center gap-3">
                   <div className="w-2 h-2 rounded-full bg-yellow-500"></div>
-                  <span className="text-sm text-gray-300">Patent landscape analysis</span>
+                  <span className="text-sm text-foreground/80">Patent landscape analysis</span>
                 </div>
-                <span className="text-xs text-gray-500">Scheduled 6pm</span>
+                <span className="text-xs text-foreground/60">Scheduled 6pm</span>
               </div>
               <div className="flex items-center justify-between p-3 bg-gray-900 rounded-lg">
                 <div className="flex items-center gap-3">
                   <div className="w-2 h-2 rounded-full bg-blue-500"></div>
-                  <span className="text-sm text-gray-300">Feature gap assessment</span>
+                  <span className="text-sm text-foreground/80">Feature gap assessment</span>
                 </div>
-                <span className="text-xs text-gray-500">Weekly</span>
+                <span className="text-xs text-foreground/60">Weekly</span>
               </div>
               <div className="flex items-center justify-between p-3 bg-gray-900 rounded-lg">
                 <div className="flex items-center gap-3">
                   <div className="w-2 h-2 rounded-full bg-purple-500"></div>
-                  <span className="text-sm text-gray-300">Regulatory update check</span>
+                  <span className="text-sm text-foreground/80">Regulatory update check</span>
                 </div>
-                <span className="text-xs text-gray-500">Daily</span>
+                <span className="text-xs text-foreground/60">Daily</span>
               </div>
             </div>
           </div>
@@ -249,9 +249,9 @@ export default function Commercialization() {
                   }`}></div>
                   <div className="flex-1">
                     <div className="text-sm font-medium text-white">{threat.title}</div>
-                    <div className="text-xs text-gray-500">{threat.date}</div>
+                    <div className="text-xs text-foreground/60">{threat.date}</div>
                   </div>
-                  <ChevronRight className="w-4 h-4 text-gray-500" />
+                  <ChevronRight className="w-4 h-4 text-foreground/60" />
                 </div>
               ))}
             </div>
@@ -268,7 +268,7 @@ export default function Commercialization() {
                 <span className="text-2xl">🔬</span>
                 <div className="flex-1">
                   <div className="text-sm font-medium text-white">Maxwell Patent</div>
-                  <div className="text-xs text-gray-500">Patent Law & AI Innovation</div>
+                  <div className="text-xs text-foreground/60">Patent Law & AI Innovation</div>
                 </div>
                 <span className="px-2 py-1 bg-green-500/20 text-green-400 text-xs rounded-full">Active</span>
               </div>
@@ -276,7 +276,7 @@ export default function Commercialization() {
                 <span className="text-2xl">📊</span>
                 <div className="flex-1">
                   <div className="text-sm font-medium text-white">Marcus Macro</div>
-                  <div className="text-xs text-gray-500">Market Analysis</div>
+                  <div className="text-xs text-foreground/60">Market Analysis</div>
                 </div>
                 <span className="px-2 py-1 bg-green-500/20 text-green-400 text-xs rounded-full">Active</span>
               </div>
@@ -284,7 +284,7 @@ export default function Commercialization() {
                 <span className="text-2xl">🎯</span>
                 <div className="flex-1">
                   <div className="text-sm font-medium text-white">Strategic Advisor</div>
-                  <div className="text-xs text-gray-500">Business Strategy</div>
+                  <div className="text-xs text-foreground/60">Business Strategy</div>
                 </div>
                 <span className="px-2 py-1 bg-green-500/20 text-green-400 text-xs rounded-full">Active</span>
               </div>
@@ -313,7 +313,7 @@ export default function Commercialization() {
                     </div>
                     <div>
                       <h4 className="text-lg font-semibold text-white">{competitor.name}</h4>
-                      <p className="text-sm text-gray-400">{competitor.category}</p>
+                      <p className="text-sm text-foreground/70">{competitor.category}</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-4">
@@ -338,7 +338,7 @@ export default function Commercialization() {
                 </div>
                 <div className="flex flex-wrap gap-2">
                   {competitor.features.map((feature, i) => (
-                    <span key={i} className="px-2 py-1 bg-gray-700 text-gray-300 text-xs rounded-full">
+                    <span key={i} className="px-2 py-1 bg-gray-700 text-foreground/80 text-xs rounded-full">
                       {feature}
                     </span>
                   ))}
@@ -369,10 +369,10 @@ export default function Commercialization() {
                       }`}>
                         {threat.severity.toUpperCase()}
                       </span>
-                      <span className="text-xs text-gray-500">{threat.date}</span>
+                      <span className="text-xs text-foreground/60">{threat.date}</span>
                     </div>
                     <h4 className="text-white font-medium mb-1">{threat.title}</h4>
-                    <p className="text-sm text-gray-400">{threat.description}</p>
+                    <p className="text-sm text-foreground/70">{threat.description}</p>
                   </div>
                 ))}
               </div>
@@ -391,10 +391,10 @@ export default function Commercialization() {
                       <span className="px-2 py-0.5 rounded text-xs font-medium bg-green-500/20 text-green-400">
                         OPPORTUNITY
                       </span>
-                      <span className="text-xs text-gray-500">{opp.date}</span>
+                      <span className="text-xs text-foreground/60">{opp.date}</span>
                     </div>
                     <h4 className="text-white font-medium mb-1">{opp.title}</h4>
-                    <p className="text-sm text-gray-400">{opp.description}</p>
+                    <p className="text-sm text-foreground/70">{opp.description}</p>
                   </div>
                 ))}
               </div>
@@ -424,20 +424,20 @@ export default function Commercialization() {
                     }`}>
                       {rec.priority.toUpperCase()}
                     </span>
-                    <span className="px-2 py-0.5 rounded text-xs bg-gray-700 text-gray-300">
+                    <span className="px-2 py-0.5 rounded text-xs bg-gray-700 text-foreground/80">
                       {rec.category}
                     </span>
                   </div>
                   <span className={`px-2 py-0.5 rounded text-xs ${
                     rec.status === 'in_progress' ? 'bg-yellow-500/20 text-yellow-400' :
                     rec.status === 'approved' ? 'bg-green-500/20 text-green-400' :
-                    'bg-gray-700 text-gray-400'
+                    'bg-gray-700 text-foreground/70'
                   }`}>
                     {rec.status.replace('_', ' ')}
                   </span>
                 </div>
                 <h4 className="text-lg font-medium text-white mb-2">{rec.title}</h4>
-                <div className="flex items-center gap-2 text-sm text-gray-400">
+                <div className="flex items-center gap-2 text-sm text-foreground/70">
                   <span>Recommended by:</span>
                   <span className="text-cyan-400">{rec.expert}</span>
                 </div>
@@ -454,22 +454,22 @@ export default function Commercialization() {
               <Scale className="w-6 h-6 text-purple-400" />
               <h3 className="text-lg font-semibold text-white">Regulatory Moat Analysis</h3>
             </div>
-            <p className="text-gray-400 mb-4">
+            <p className="text-foreground/70 mb-4">
               Regulations can create defensible moats. Early compliance with strict regulations (like EU AI Act) 
               can be a competitive advantage as competitors struggle to catch up.
             </p>
             <div className="grid grid-cols-3 gap-4">
               <div className="bg-gray-900 rounded-lg p-4 text-center">
                 <div className="text-2xl font-bold text-green-400">2</div>
-                <div className="text-sm text-gray-400">Compliant</div>
+                <div className="text-sm text-foreground/70">Compliant</div>
               </div>
               <div className="bg-gray-900 rounded-lg p-4 text-center">
                 <div className="text-2xl font-bold text-yellow-400">1</div>
-                <div className="text-sm text-gray-400">Partial</div>
+                <div className="text-sm text-foreground/70">Partial</div>
               </div>
               <div className="bg-gray-900 rounded-lg p-4 text-center">
                 <div className="text-2xl font-bold text-purple-400">1</div>
-                <div className="text-sm text-gray-400">High Moat Potential</div>
+                <div className="text-sm text-foreground/70">High Moat Potential</div>
               </div>
             </div>
           </div>
@@ -480,7 +480,7 @@ export default function Commercialization() {
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-3">
                     <h4 className="text-lg font-medium text-white">{reg.name}</h4>
-                    <span className="px-2 py-0.5 rounded text-xs bg-gray-700 text-gray-300">
+                    <span className="px-2 py-0.5 rounded text-xs bg-gray-700 text-foreground/80">
                       {reg.region}
                     </span>
                   </div>
@@ -488,20 +488,20 @@ export default function Commercialization() {
                     <span className={`px-2 py-0.5 rounded text-xs ${
                       reg.compliance === 'compliant' ? 'bg-green-500/20 text-green-400' :
                       reg.compliance === 'partial' ? 'bg-yellow-500/20 text-yellow-400' :
-                      'bg-gray-700 text-gray-400'
+                      'bg-gray-700 text-foreground/70'
                     }`}>
                       {reg.compliance}
                     </span>
                     <span className={`px-2 py-0.5 rounded text-xs ${
                       reg.moatPotential === 'high' ? 'bg-purple-500/20 text-purple-400' :
                       reg.moatPotential === 'medium' ? 'bg-blue-500/20 text-blue-400' :
-                      'bg-gray-700 text-gray-400'
+                      'bg-gray-700 text-foreground/70'
                     }`}>
                       {reg.moatPotential} moat potential
                     </span>
                   </div>
                 </div>
-                <div className="flex items-center gap-2 text-sm text-gray-400">
+                <div className="flex items-center gap-2 text-sm text-foreground/70">
                   <Clock className="w-4 h-4" />
                   Status: {reg.status}
                 </div>

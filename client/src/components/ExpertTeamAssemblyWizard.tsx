@@ -180,7 +180,7 @@ export function ExpertTeamAssemblyWizard({ projectType, onComplete, onBack }: Ex
           </div>
           <div>
             <h1 className="text-2xl font-bold text-white">Expert Team Assembly</h1>
-            <p className="text-gray-400">Build your 12 person expert team for this project</p>
+            <p className="text-foreground/70">Build your 12 person expert team for this project</p>
           </div>
         </div>
 
@@ -199,12 +199,12 @@ export function ExpertTeamAssemblyWizard({ projectType, onComplete, onBack }: Ex
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
                   isComplete ? 'bg-green-500 text-white' :
                   isActive ? 'bg-fuchsia-500 text-white' :
-                  'bg-white/10 text-gray-400'
+                  'bg-white/10 text-foreground/70'
                 }`}>
                   {isComplete ? <Check className="w-4 h-4" /> : stepNum}
                 </div>
-                <span className={`text-sm ${isActive ? 'text-white' : 'text-gray-400'}`}>{label}</span>
-                {i < 2 && <ChevronRight className="w-4 h-4 text-gray-600" />}
+                <span className={`text-sm ${isActive ? 'text-white' : 'text-foreground/70'}`}>{label}</span>
+                {i < 2 && <ChevronRight className="w-4 h-4 text-foreground/50" />}
               </div>
             );
           })}
@@ -237,9 +237,9 @@ export function ExpertTeamAssemblyWizard({ projectType, onComplete, onBack }: Ex
                     {template.icon}
                   </div>
                   <h3 className="text-lg font-semibold text-white mb-1">{template.name}</h3>
-                  <p className="text-sm text-gray-400 mb-3">{template.description}</p>
+                  <p className="text-sm text-foreground/70 mb-3">{template.description}</p>
                   <div className="flex items-center gap-2">
-                    <Badge variant="outline" className="bg-white/5 text-gray-300 border-white/20">
+                    <Badge variant="outline" className="bg-white/5 text-foreground/80 border-white/20">
                       {template.roles.length} experts
                     </Badge>
                     {template.id === suggestedTemplate.id && (
@@ -253,7 +253,7 @@ export function ExpertTeamAssemblyWizard({ projectType, onComplete, onBack }: Ex
             </div>
             
             <div className="flex justify-between pt-4">
-              <Button variant="outline" onClick={onBack} className="border-white/20 text-gray-300">
+              <Button variant="outline" onClick={onBack} className="border-white/20 text-foreground/80">
                 Back
               </Button>
             </div>
@@ -265,7 +265,7 @@ export function ExpertTeamAssemblyWizard({ projectType, onComplete, onBack }: Ex
           <div className="space-y-6">
             <div className="flex items-center justify-between">
               <h2 className="text-lg font-semibold text-white">Customize Your Team</h2>
-              <Badge className="bg-white/10 text-gray-300 border-white/20">
+              <Badge className="bg-white/10 text-foreground/80 border-white/20">
                 {selectedRoles.length} of 12 roles selected
               </Badge>
             </div>
@@ -301,7 +301,7 @@ export function ExpertTeamAssemblyWizard({ projectType, onComplete, onBack }: Ex
                           >
                             <div className="flex items-start gap-3">
                               <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
-                                isSelected ? 'bg-fuchsia-500/30 text-fuchsia-400' : 'bg-white/10 text-gray-400'
+                                isSelected ? 'bg-fuchsia-500/30 text-fuchsia-400' : 'bg-white/10 text-foreground/70'
                               }`}>
                                 {role.icon}
                               </div>
@@ -314,7 +314,7 @@ export function ExpertTeamAssemblyWizard({ projectType, onComplete, onBack }: Ex
                                     </Badge>
                                   )}
                                 </div>
-                                <p className="text-xs text-gray-400 mt-1">{role.description}</p>
+                                <p className="text-xs text-foreground/70 mt-1">{role.description}</p>
                               </div>
                               {isSelected && (
                                 <Check className="w-5 h-5 text-fuchsia-400 flex-shrink-0" />
@@ -330,7 +330,7 @@ export function ExpertTeamAssemblyWizard({ projectType, onComplete, onBack }: Ex
             })}
 
             <div className="flex justify-between pt-4">
-              <Button variant="outline" onClick={() => setStep('template')} className="border-white/20 text-gray-300">
+              <Button variant="outline" onClick={() => setStep('template')} className="border-white/20 text-foreground/80">
                 Back
               </Button>
               <Button 
@@ -379,7 +379,7 @@ export function ExpertTeamAssemblyWizard({ projectType, onComplete, onBack }: Ex
                 <Sparkles className="w-6 h-6 text-fuchsia-400 flex-shrink-0" />
                 <div>
                   <h3 className="font-medium text-white mb-1">Team Ready</h3>
-                  <p className="text-gray-400 text-sm">
+                  <p className="text-foreground/70 text-sm">
                     Your {selectedExperts.length} person expert team is assembled and ready to begin work on your project. 
                     Each expert will contribute their unique perspective and expertise.
                   </p>
@@ -388,7 +388,7 @@ export function ExpertTeamAssemblyWizard({ projectType, onComplete, onBack }: Ex
             </div>
 
             <div className="flex justify-between pt-4">
-              <Button variant="outline" onClick={() => setStep('customize')} className="border-white/20 text-gray-300">
+              <Button variant="outline" onClick={() => setStep('customize')} className="border-white/20 text-foreground/80">
                 Back
               </Button>
               <Button 

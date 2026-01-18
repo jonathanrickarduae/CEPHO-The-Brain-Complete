@@ -185,7 +185,7 @@ export function IdeaScoringDashboard({ projectId, projectName, onComplete, onBac
       case 'approved': return 'bg-green-500/20 text-green-400 border-green-500/30';
       case 'rejected': return 'bg-red-500/20 text-red-400 border-red-500/30';
       case 'deferred': return 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30';
-      default: return 'bg-white/10 text-gray-400 border-white/20';
+      default: return 'bg-white/10 text-foreground/70 border-white/20';
     }
   };
 
@@ -222,12 +222,12 @@ export function IdeaScoringDashboard({ projectId, projectName, onComplete, onBac
             </div>
             <div>
               <h1 className="text-2xl font-bold text-white">Idea Scoring Dashboard</h1>
-              <p className="text-gray-400">{projectName} • Leadership Team Review</p>
+              <p className="text-foreground/70">{projectName} • Leadership Team Review</p>
             </div>
           </div>
           <div className="flex items-center gap-4">
             <div className="text-right">
-              <p className="text-sm text-gray-400">Progress</p>
+              <p className="text-sm text-foreground/70">Progress</p>
               <p className="text-lg font-semibold text-white">
                 {ideas.filter(i => i.status !== 'pending').length} / {ideas.length} reviewed
               </p>
@@ -253,7 +253,7 @@ export function IdeaScoringDashboard({ projectId, projectName, onComplete, onBac
                 </div>
                 <div>
                   <p className="text-2xl font-bold text-white">{ideas.length}</p>
-                  <p className="text-xs text-gray-400">Total Ideas</p>
+                  <p className="text-xs text-foreground/70">Total Ideas</p>
                 </div>
               </div>
             </CardContent>
@@ -266,7 +266,7 @@ export function IdeaScoringDashboard({ projectId, projectName, onComplete, onBac
                 </div>
                 <div>
                   <p className="text-2xl font-bold text-white">{pendingIdeas.length}</p>
-                  <p className="text-xs text-gray-400">Pending Review</p>
+                  <p className="text-xs text-foreground/70">Pending Review</p>
                 </div>
               </div>
             </CardContent>
@@ -279,7 +279,7 @@ export function IdeaScoringDashboard({ projectId, projectName, onComplete, onBac
                 </div>
                 <div>
                   <p className="text-2xl font-bold text-white">{approvedIdeas.length}</p>
-                  <p className="text-xs text-gray-400">Approved</p>
+                  <p className="text-xs text-foreground/70">Approved</p>
                 </div>
               </div>
             </CardContent>
@@ -294,7 +294,7 @@ export function IdeaScoringDashboard({ projectId, projectName, onComplete, onBac
                   <p className="text-2xl font-bold text-white">
                     {ideas.length > 0 ? (ideas.reduce((sum, i) => sum + getAverageScore(i), 0) / ideas.length).toFixed(1) : '0'}
                   </p>
-                  <p className="text-xs text-gray-400">Avg Score</p>
+                  <p className="text-xs text-foreground/70">Avg Score</p>
                 </div>
               </div>
             </CardContent>
@@ -304,8 +304,8 @@ export function IdeaScoringDashboard({ projectId, projectName, onComplete, onBac
         {/* Filters */}
         <div className="flex items-center gap-4 mb-6">
           <div className="flex items-center gap-2">
-            <Filter className="w-4 h-4 text-gray-400" />
-            <span className="text-sm text-gray-400">Filter:</span>
+            <Filter className="w-4 h-4 text-foreground/70" />
+            <span className="text-sm text-foreground/70">Filter:</span>
           </div>
           <select
             value={filterStatus}
@@ -330,7 +330,7 @@ export function IdeaScoringDashboard({ projectId, projectName, onComplete, onBac
           </select>
           <div className="flex-1" />
           <div className="flex items-center gap-2">
-            <span className="text-sm text-gray-400">Sort:</span>
+            <span className="text-sm text-foreground/70">Sort:</span>
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as 'score' | 'impact' | 'recent')}
@@ -380,8 +380,8 @@ export function IdeaScoringDashboard({ projectId, projectName, onComplete, onBac
                             </Badge>
                           </div>
                         </div>
-                        <p className="text-sm text-gray-400 mb-3">{idea.description}</p>
-                        <div className="flex items-center gap-4 text-xs text-gray-500">
+                        <p className="text-sm text-foreground/70 mb-3">{idea.description}</p>
+                        <div className="flex items-center gap-4 text-xs text-foreground/60">
                           <span className="flex items-center gap-1">
                             {getSourceIcon(idea.sourceType)}
                             {idea.source}
@@ -408,12 +408,12 @@ export function IdeaScoringDashboard({ projectId, projectName, onComplete, onBac
                     <CardTitle className="text-white text-lg">{selectedIdea.title}</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                    <p className="text-gray-400 text-sm">{selectedIdea.description}</p>
+                    <p className="text-foreground/70 text-sm">{selectedIdea.description}</p>
                     
                     {/* Impact/Effort Matrix */}
                     <div className="grid grid-cols-2 gap-3">
                       <div className="bg-white/5 rounded-lg p-3">
-                        <p className="text-xs text-gray-500 mb-1">Impact</p>
+                        <p className="text-xs text-foreground/60 mb-1">Impact</p>
                         <div className="flex items-center gap-2">
                           <div className="flex-1 h-2 bg-white/10 rounded-full overflow-hidden">
                             <div 
@@ -425,7 +425,7 @@ export function IdeaScoringDashboard({ projectId, projectName, onComplete, onBac
                         </div>
                       </div>
                       <div className="bg-white/5 rounded-lg p-3">
-                        <p className="text-xs text-gray-500 mb-1">Effort</p>
+                        <p className="text-xs text-foreground/60 mb-1">Effort</p>
                         <div className="flex items-center gap-2">
                           <div className="flex-1 h-2 bg-white/10 rounded-full overflow-hidden">
                             <div 
@@ -441,7 +441,7 @@ export function IdeaScoringDashboard({ projectId, projectName, onComplete, onBac
                     {/* Expert Scores */}
                     {selectedIdea.scores.length > 0 && (
                       <div>
-                        <p className="text-xs text-gray-500 mb-2">Expert Scores</p>
+                        <p className="text-xs text-foreground/60 mb-2">Expert Scores</p>
                         <div className="space-y-2">
                           {selectedIdea.scores.map((score, i) => (
                             <div key={i} className="bg-white/5 rounded-lg p-3">
@@ -453,7 +453,7 @@ export function IdeaScoringDashboard({ projectId, projectName, onComplete, onBac
                                 </div>
                               </div>
                               {score.comment && (
-                                <p className="text-xs text-gray-400">{score.comment}</p>
+                                <p className="text-xs text-foreground/70">{score.comment}</p>
                               )}
                             </div>
                           ))}
@@ -463,7 +463,7 @@ export function IdeaScoringDashboard({ projectId, projectName, onComplete, onBac
 
                     {/* Your Score */}
                     <div className="border-t border-white/10 pt-4">
-                      <p className="text-xs text-gray-500 mb-2">Your Score</p>
+                      <p className="text-xs text-foreground/60 mb-2">Your Score</p>
                       <div className="flex items-center gap-2 mb-3">
                         {[10, 20, 30, 40, 50, 60, 70, 80, 90, 100].map(n => (
                           <button
@@ -472,7 +472,7 @@ export function IdeaScoringDashboard({ projectId, projectName, onComplete, onBac
                             className={`w-8 h-8 rounded-lg text-xs font-medium transition-all ${
                               userScore >= n 
                                 ? 'bg-fuchsia-500 text-white' 
-                                : 'bg-white/5 text-gray-400 hover:bg-white/10'
+                                : 'bg-white/5 text-foreground/70 hover:bg-white/10'
                             }`}
                           >
                             {n}
@@ -483,7 +483,7 @@ export function IdeaScoringDashboard({ projectId, projectName, onComplete, onBac
                         value={userComment}
                         onChange={(e) => setUserComment(e.target.value)}
                         placeholder="Add a comment (optional)"
-                        className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white placeholder:text-gray-500 resize-none"
+                        className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white placeholder:text-foreground/60 resize-none"
                         rows={2}
                       />
                       <Button 
@@ -499,7 +499,7 @@ export function IdeaScoringDashboard({ projectId, projectName, onComplete, onBac
                 {/* Decision Buttons */}
                 <Card className="bg-white/5 border-white/10">
                   <CardContent className="pt-4">
-                    <p className="text-xs text-gray-500 mb-3">Leadership Decision</p>
+                    <p className="text-xs text-foreground/60 mb-3">Leadership Decision</p>
                     <div className="grid grid-cols-3 gap-2">
                       <Button
                         onClick={() => updateIdeaStatus(selectedIdea.id, 'approved')}
@@ -530,9 +530,9 @@ export function IdeaScoringDashboard({ projectId, projectName, onComplete, onBac
               <Card className="bg-white/5 border-white/10">
                 <CardContent className="pt-6 text-center">
                   <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mx-auto mb-4">
-                    <MessageSquare className="w-8 h-8 text-gray-500" />
+                    <MessageSquare className="w-8 h-8 text-foreground/60" />
                   </div>
-                  <p className="text-gray-400">Select an idea to review and score</p>
+                  <p className="text-foreground/70">Select an idea to review and score</p>
                 </CardContent>
               </Card>
             )}
@@ -541,7 +541,7 @@ export function IdeaScoringDashboard({ projectId, projectName, onComplete, onBac
 
         {/* Footer */}
         <div className="flex justify-between mt-8">
-          <Button variant="outline" onClick={onBack} className="border-white/20 text-gray-300">
+          <Button variant="outline" onClick={onBack} className="border-white/20 text-foreground/80">
             Back
           </Button>
         </div>

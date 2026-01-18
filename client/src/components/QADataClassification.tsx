@@ -87,7 +87,7 @@ const classificationConfig: Record<DataClassification, {
   user_provided: {
     label: 'User Provided',
     icon: User,
-    color: 'text-gray-400',
+    color: 'text-foreground/70',
     bgColor: 'bg-gray-500/10',
     borderColor: 'border-gray-500/30',
     description: 'Data provided by you'

@@ -126,7 +126,7 @@ export default function Waitlist() {
               </span>
             </h1>
             
-            <p className="text-xl text-gray-400 max-w-2xl mx-auto mb-8">
+            <p className="text-xl text-foreground/70 max-w-2xl mx-auto mb-8">
               An AI that learns you—your patterns, preferences, and goals—to help you 
               become the best version of yourself. Getting you to 100.
             </p>
@@ -160,7 +160,7 @@ export default function Waitlist() {
                   <feature.icon className="w-6 h-6 text-cyan-400" />
                 </div>
                 <h3 className="text-lg font-semibold text-white mb-2">{feature.title}</h3>
-                <p className="text-gray-400 text-sm">{feature.description}</p>
+                <p className="text-foreground/70 text-sm">{feature.description}</p>
               </div>
             ))}
           </div>
@@ -181,10 +181,10 @@ export default function Waitlist() {
                       <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
                     ))}
                   </div>
-                  <p className="text-gray-300 mb-4">"{testimonial.quote}"</p>
+                  <p className="text-foreground/80 mb-4">"{testimonial.quote}"</p>
                   <div>
                     <div className="font-semibold text-white">{testimonial.author}</div>
-                    <div className="text-sm text-gray-500">{testimonial.role}</div>
+                    <div className="text-sm text-foreground/60">{testimonial.role}</div>
                   </div>
                 </div>
               ))}
@@ -207,7 +207,7 @@ export default function Waitlist() {
                 </div>
                 <h3 className="text-lg font-semibold text-white mb-1">University of Cambridge</h3>
                 <p className="text-cyan-400 text-sm mb-3">Research Partner</p>
-                <p className="text-gray-400 text-sm text-center max-w-xs">
+                <p className="text-foreground/70 text-sm text-center max-w-xs">
                   Collaborating on AI-human collaboration research and cognitive enhancement studies.
                 </p>
               </div>
@@ -221,7 +221,7 @@ export default function Waitlist() {
                 </div>
                 <h3 className="text-lg font-semibold text-white mb-1">University of Oxford</h3>
                 <p className="text-purple-400 text-sm mb-3">Strategic Partner</p>
-                <p className="text-gray-400 text-sm text-center max-w-xs">
+                <p className="text-foreground/70 text-sm text-center max-w-xs">
                   Advancing ethical AI development and human-machine interface research.
                 </p>
               </div>
@@ -231,7 +231,7 @@ export default function Waitlist() {
           {/* CTA */}
           {!position && (
             <div className="text-center">
-              <p className="text-gray-400 mb-4">
+              <p className="text-foreground/70 mb-4">
                 Join the waitlist today and be among the first to experience Cepho.
               </p>
               <button
@@ -248,14 +248,14 @@ export default function Waitlist() {
       {/* Footer */}
       <footer className="border-t border-gray-800 py-8">
         <div className="max-w-6xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2 text-gray-400">
+          <div className="flex items-center gap-2 text-foreground/70">
             <span className="text-xl">🧠</span>
             <span>Cepho © 2026</span>
           </div>
-          <div className="flex gap-6 text-sm text-gray-500">
-            <a href="#" className="hover:text-gray-300">Privacy</a>
-            <a href="#" className="hover:text-gray-300">Terms</a>
-            <a href="#" className="hover:text-gray-300">Contact</a>
+          <div className="flex gap-6 text-sm text-foreground/60">
+            <a href="#" className="hover:text-foreground/80">Privacy</a>
+            <a href="#" className="hover:text-foreground/80">Terms</a>
+            <a href="#" className="hover:text-foreground/80">Contact</a>
           </div>
         </div>
       </footer>

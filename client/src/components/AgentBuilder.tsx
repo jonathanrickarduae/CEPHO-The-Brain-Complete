@@ -187,13 +187,13 @@ export function AgentBuilder({ className }: AgentBuilderProps) {
     switch (status) {
       case 'active': return 'text-green-400';
       case 'paused': return 'text-amber-400';
-      case 'draft': return 'text-gray-400';
+      case 'draft': return 'text-foreground/70';
     }
   };
 
   const getAutonomyColor = (level: Agent['autonomyLevel']) => {
     switch (level) {
-      case 'observe': return 'bg-gray-500/20 text-gray-400';
+      case 'observe': return 'bg-gray-500/20 text-foreground/70';
       case 'suggest': return 'bg-amber-500/20 text-amber-400';
       case 'act': return 'bg-green-500/20 text-green-400';
     }

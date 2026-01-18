@@ -165,13 +165,13 @@ export function SMEFeedbackRating({
           )}
           <div>
             <h3 className="text-white font-medium">Rate this conversation</h3>
-            <p className="text-sm text-gray-400">with {expertName}</p>
+            <p className="text-sm text-foreground/70">with {expertName}</p>
           </div>
         </div>
         {onSkip && (
           <button 
             onClick={onSkip}
-            className="text-gray-500 hover:text-gray-300 transition-colors"
+            className="text-foreground/60 hover:text-foreground/80 transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -181,7 +181,7 @@ export function SMEFeedbackRating({
       {/* Rating Slider */}
       <div className="mb-6">
         <div className="flex items-center justify-between mb-2">
-          <span className="text-sm text-gray-400">How helpful was this?</span>
+          <span className="text-sm text-foreground/70">How helpful was this?</span>
           {rating > 0 && (
             <span className={`text-sm font-medium ${getRatingColor(rating)}`}>
               {rating}/10 - {getRatingLabel(rating)}
@@ -208,7 +208,7 @@ export function SMEFeedbackRating({
           ))}
         </div>
         
-        <div className="flex justify-between text-xs text-gray-500 mt-1">
+        <div className="flex justify-between text-xs text-foreground/60 mt-1">
           <span>Not helpful</span>
           <span>Very helpful</span>
         </div>
@@ -221,7 +221,7 @@ export function SMEFeedbackRating({
           className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl border transition-all ${
             quickFeedback === 'helpful'
               ? 'bg-green-500/20 border-green-500 text-green-400'
-              : 'bg-gray-800 border-gray-700 text-gray-400 hover:border-gray-600'
+              : 'bg-gray-800 border-gray-700 text-foreground/70 hover:border-gray-600'
           }`}
         >
           <ThumbsUp className="w-4 h-4" />
@@ -235,7 +235,7 @@ export function SMEFeedbackRating({
           className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl border transition-all ${
             quickFeedback === 'not_helpful'
               ? 'bg-red-500/20 border-red-500 text-red-400'
-              : 'bg-gray-800 border-gray-700 text-gray-400 hover:border-gray-600'
+              : 'bg-gray-800 border-gray-700 text-foreground/70 hover:border-gray-600'
           }`}
         >
           <ThumbsDown className="w-4 h-4" />
@@ -248,7 +248,7 @@ export function SMEFeedbackRating({
         <div className="space-y-4 mb-6 animate-in slide-in-from-top-2">
           {/* Improvement Tags */}
           <div>
-            <label className="block text-sm text-gray-400 mb-2">What could be improved?</label>
+            <label className="block text-sm text-foreground/70 mb-2">What could be improved?</label>
             <div className="flex flex-wrap gap-2">
               {IMPROVEMENT_OPTIONS.map((option) => (
                 <button
@@ -257,7 +257,7 @@ export function SMEFeedbackRating({
                   className={`px-3 py-1.5 rounded-full text-sm transition-all ${
                     selectedImprovements.includes(option.id)
                       ? 'bg-purple-500/30 border border-purple-500 text-purple-300'
-                      : 'bg-gray-800 border border-gray-700 text-gray-400 hover:border-gray-600'
+                      : 'bg-gray-800 border border-gray-700 text-foreground/70 hover:border-gray-600'
                   }`}
                 >
                   {option.label}
@@ -268,7 +268,7 @@ export function SMEFeedbackRating({
 
           {/* Text Feedback */}
           <div>
-            <label className="block text-sm text-gray-400 mb-2">Additional feedback (optional)</label>
+            <label className="block text-sm text-foreground/70 mb-2">Additional feedback (optional)</label>
             <textarea
               value={textFeedback}
               onChange={(e) => setTextFeedback(e.target.value)}
@@ -280,14 +280,14 @@ export function SMEFeedbackRating({
 
           {/* Voice Note */}
           <div>
-            <label className="block text-sm text-gray-400 mb-2">Or leave a voice note</label>
+            <label className="block text-sm text-foreground/70 mb-2">Or leave a voice note</label>
             <div className="flex items-center gap-3">
               <button
                 onClick={isRecording ? stopRecording : startRecording}
                 className={`flex items-center gap-2 px-4 py-2 rounded-xl transition-all ${
                   isRecording
                     ? 'bg-red-500 text-white animate-pulse'
-                    : 'bg-gray-800 border border-gray-700 text-gray-400 hover:border-gray-600'
+                    : 'bg-gray-800 border border-gray-700 text-foreground/70 hover:border-gray-600'
                 }`}
               >
                 {isRecording ? (
@@ -317,7 +317,7 @@ export function SMEFeedbackRating({
       {!showDetails && rating > 5 && (
         <button
           onClick={() => setShowDetails(true)}
-          className="w-full text-center text-sm text-gray-500 hover:text-gray-300 mb-4 transition-colors"
+          className="w-full text-center text-sm text-foreground/60 hover:text-foreground/80 mb-4 transition-colors"
         >
           + Add detailed feedback
         </button>
@@ -343,7 +343,7 @@ export function SMEFeedbackRating({
       </button>
 
       {/* Chief of Staff Note */}
-      <p className="text-center text-xs text-gray-500 mt-4">
+      <p className="text-center text-xs text-foreground/60 mt-4">
         Your feedback helps the Chief of Staff improve this expert overnight
       </p>
     </div>
@@ -381,7 +381,7 @@ export function SMEQuickRating({
 
   return (
     <div className="flex items-center gap-3">
-      <span className="text-sm text-gray-400">Rate {expertName}:</span>
+      <span className="text-sm text-foreground/70">Rate {expertName}:</span>
       <div className="flex items-center gap-0.5">
         {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((value) => (
           <button
@@ -426,7 +426,7 @@ export function ExpertPerformanceCard({
     switch (expert.trend) {
       case 'up': return <TrendingUp className="w-4 h-4 text-green-400" />;
       case 'down': return <TrendingDown className="w-4 h-4 text-red-400" />;
-      default: return <Minus className="w-4 h-4 text-gray-400" />;
+      default: return <Minus className="w-4 h-4 text-foreground/70" />;
     }
   };
 
@@ -463,7 +463,7 @@ export function ExpertPerformanceCard({
           )}
           <div>
             <h4 className="text-white font-medium">{expert.name}</h4>
-            <p className="text-xs text-gray-500">{expert.category}</p>
+            <p className="text-xs text-foreground/60">{expert.category}</p>
           </div>
         </div>
         {getStatusBadge()}
@@ -471,23 +471,23 @@ export function ExpertPerformanceCard({
 
       <div className="grid grid-cols-3 gap-4 mb-4">
         <div>
-          <div className="text-xs text-gray-500 mb-1">Avg Rating</div>
+          <div className="text-xs text-foreground/60 mb-1">Avg Rating</div>
           <div className={`text-xl font-bold ${getRatingColor(expert.averageRating)}`}>
             {expert.averageRating.toFixed(1)}
           </div>
         </div>
         <div>
-          <div className="text-xs text-gray-500 mb-1">Conversations</div>
+          <div className="text-xs text-foreground/60 mb-1">Conversations</div>
           <div className="text-xl font-bold text-white">{expert.totalConversations}</div>
         </div>
         <div>
-          <div className="text-xs text-gray-500 mb-1">Trend</div>
+          <div className="text-xs text-foreground/60 mb-1">Trend</div>
           <div className="flex items-center gap-1">
             {getTrendIcon()}
             <span className={`text-sm ${
               expert.trend === 'up' ? 'text-green-400' :
               expert.trend === 'down' ? 'text-red-400' :
-              'text-gray-400'
+              'text-foreground/70'
             }`}>
               {expert.trend === 'up' ? '+0.5' : expert.trend === 'down' ? '-0.3' : '0.0'}
             </span>
@@ -497,10 +497,10 @@ export function ExpertPerformanceCard({
 
       {expert.recentFeedback.length > 0 && (
         <div className="mb-4">
-          <div className="text-xs text-gray-500 mb-2">Recent Feedback</div>
+          <div className="text-xs text-foreground/60 mb-2">Recent Feedback</div>
           <div className="space-y-1">
             {expert.recentFeedback.slice(0, 2).map((feedback, idx) => (
-              <div key={idx} className="text-xs text-gray-400 flex items-start gap-2">
+              <div key={idx} className="text-xs text-foreground/70 flex items-start gap-2">
                 <MessageSquare className="w-3 h-3 mt-0.5 flex-shrink-0" />
                 <span className="line-clamp-1">{feedback}</span>
               </div>

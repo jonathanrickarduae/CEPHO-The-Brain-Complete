@@ -149,7 +149,7 @@ export default function NexusDashboard() {
   ];
 
   return (
-    <div className="h-[calc(100vh-56px)] md:h-screen flex flex-col bg-gradient-to-br from-gray-900 via-gray-900 to-gray-800">
+    <div className="h-[calc(100vh-56px)] md:h-screen flex flex-col bg-background">
       {/* Header */}
       <PageHeader 
         icon={LayoutDashboard} 
@@ -158,7 +158,7 @@ export default function NexusDashboard() {
       >
         <div className="flex items-center gap-2">
           <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-          <span className="text-xs text-white/70 font-mono">ONLINE</span>
+          <span className="text-xs text-foreground/70 font-mono">ONLINE</span>
         </div>
       </PageHeader>
 
@@ -182,7 +182,7 @@ export default function NexusDashboard() {
           <h1 className="text-xl sm:text-2xl md:text-3xl font-display font-bold tracking-tight text-white mt-2">
             GETTING YOU TO 100
           </h1>
-          <p className="text-sm sm:text-base text-white/70 mt-1">Your headspace, reclaimed</p>
+          <p className="text-sm sm:text-base text-foreground/70 mt-1">Your headspace, reclaimed</p>
         </div>
 
         {/* 6-Button Grid - Project Genesis Style */}
@@ -208,7 +208,7 @@ export default function NexusDashboard() {
                 <h3 className="font-bold text-sm sm:text-base md:text-lg tracking-tight mb-1 text-white group-hover:text-primary transition-colors">
                   {btn.label}
                 </h3>
-                <p className="text-xs sm:text-sm text-gray-400 group-hover:text-gray-300 transition-colors">
+                <p className="text-xs sm:text-sm text-foreground/60 group-hover:text-foreground/80 transition-colors">
                   {btn.sub}
                 </p>
               </div>
@@ -223,7 +223,7 @@ export default function NexusDashboard() {
       </div>
 
       {/* Voice Input - Fixed at bottom (Manus style) */}
-      <div className="shrink-0 border-t border-white/10 bg-gray-900/90 backdrop-blur-xl px-4 py-3">
+      <div className="shrink-0 border-t border-border bg-card/90 backdrop-blur-xl px-4 py-3">
         <div className="max-w-3xl mx-auto">
           <div className="bg-white/5 border border-white/20 rounded-2xl overflow-hidden">
             <textarea
@@ -233,7 +233,7 @@ export default function NexusDashboard() {
               onKeyDown={handleKeyDown}
               placeholder="Message Chief of Staff..."
               rows={1}
-              className="w-full px-4 py-3 bg-transparent resize-none focus:outline-none text-sm text-white placeholder:text-gray-500"
+              className="w-full px-4 py-3 bg-transparent resize-none focus:outline-none text-sm text-white placeholder:text-foreground/50"
               style={{ minHeight: '44px', maxHeight: '100px' }}
             />
             <div className="flex items-center justify-between px-3 py-2 border-t border-white/10">
@@ -243,7 +243,7 @@ export default function NexusDashboard() {
                   className={`p-2 rounded-lg transition-colors ${
                     isListening 
                       ? "text-red-400 bg-red-500/20 animate-pulse" 
-                      : "text-gray-400 hover:text-white hover:bg-white/10"
+                      : "text-foreground/70 hover:text-white hover:bg-white/10"
                   }`}
                 >
                   {isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}

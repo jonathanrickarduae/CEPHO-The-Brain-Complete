@@ -180,7 +180,7 @@ function StartupCard({ startup }: { startup: StartupMetrics }) {
         {/* Key Metrics Grid */}
         <div className="grid grid-cols-3 gap-3">
           <div className="bg-gray-800/50 rounded-lg p-3">
-            <div className="flex items-center gap-2 text-gray-400 text-xs mb-1">
+            <div className="flex items-center gap-2 text-foreground/70 text-xs mb-1">
               <DollarSign className="h-3 w-3" />
               Monthly Burn
             </div>
@@ -189,7 +189,7 @@ function StartupCard({ startup }: { startup: StartupMetrics }) {
             </p>
           </div>
           <div className="bg-gray-800/50 rounded-lg p-3">
-            <div className="flex items-center gap-2 text-gray-400 text-xs mb-1">
+            <div className="flex items-center gap-2 text-foreground/70 text-xs mb-1">
               <BarChart3 className="h-3 w-3" />
               Cash on Hand
             </div>
@@ -198,7 +198,7 @@ function StartupCard({ startup }: { startup: StartupMetrics }) {
             </p>
           </div>
           <div className="bg-gray-800/50 rounded-lg p-3">
-            <div className="flex items-center gap-2 text-gray-400 text-xs mb-1">
+            <div className="flex items-center gap-2 text-foreground/70 text-xs mb-1">
               <Users className="h-3 w-3" />
               Team Size
             </div>
@@ -209,7 +209,7 @@ function StartupCard({ startup }: { startup: StartupMetrics }) {
         {/* Runway Progress */}
         <div>
           <div className="flex items-center justify-between text-sm mb-2">
-            <span className="text-gray-400">Runway Progress</span>
+            <span className="text-foreground/70">Runway Progress</span>
             <span className={getRunwayColor(startup.runway)}>
               {startup.runway} / {startup.targets.runway} months
             </span>
@@ -226,7 +226,7 @@ function StartupCard({ startup }: { startup: StartupMetrics }) {
         {startup.targets.mrr > 0 && (
           <div>
             <div className="flex items-center justify-between text-sm mb-2">
-              <span className="text-gray-400">MRR Target</span>
+              <span className="text-foreground/70">MRR Target</span>
               <span className="text-white">
                 {formatCurrency(startup.mrr)} / {formatCurrency(startup.targets.mrr)}
               </span>
@@ -237,7 +237,7 @@ function StartupCard({ startup }: { startup: StartupMetrics }) {
 
         {/* Milestones */}
         <div>
-          <p className="text-sm text-gray-400 mb-2 flex items-center gap-1.5">
+          <p className="text-sm text-foreground/70 mb-2 flex items-center gap-1.5">
             <Target className="h-3 w-3" /> Key Milestones
           </p>
           <div className="space-y-2">
@@ -254,9 +254,9 @@ function StartupCard({ startup }: { startup: StartupMetrics }) {
                   ) : (
                     <div className="h-4 w-4 rounded-full border-2 border-gray-600" />
                   )}
-                  <span className="text-gray-300">{milestone.name}</span>
+                  <span className="text-foreground/80">{milestone.name}</span>
                 </div>
-                <span className="text-gray-500 text-xs">{milestone.target}</span>
+                <span className="text-foreground/60 text-xs">{milestone.target}</span>
               </div>
             ))}
           </div>
@@ -264,7 +264,7 @@ function StartupCard({ startup }: { startup: StartupMetrics }) {
 
         {/* Footer */}
         <div className="flex items-center justify-between pt-2 border-t border-gray-800">
-          <span className="text-xs text-gray-500 flex items-center gap-1">
+          <span className="text-xs text-foreground/60 flex items-center gap-1">
             <Clock className="h-3 w-3" /> Updated {startup.lastUpdated}
           </span>
           <Button variant="ghost" size="sm" className="text-fuchsia-400 hover:text-fuchsia-300">
@@ -302,7 +302,7 @@ export default function StartupHealthDashboard({ projectId, projectName }: Start
             <Sparkles className="h-5 w-5 text-fuchsia-400" />
             Startup Health Dashboard
           </h2>
-          <p className="text-sm text-gray-400 mt-1">
+          <p className="text-sm text-foreground/70 mt-1">
             Track runway, burn rate, and key metrics across your ventures
           </p>
         </div>
@@ -359,7 +359,7 @@ export default function StartupHealthDashboard({ projectId, projectName }: Start
               </div>
               <div>
                 <p className="text-xl font-bold text-white">{formatCurrency(totalBurn)}</p>
-                <p className="text-xs text-gray-500">Total Monthly Burn</p>
+                <p className="text-xs text-foreground/60">Total Monthly Burn</p>
               </div>
             </div>
           </CardContent>
@@ -373,7 +373,7 @@ export default function StartupHealthDashboard({ projectId, projectName }: Start
               </div>
               <div>
                 <p className="text-xl font-bold text-white">{formatCurrency(totalCash)}</p>
-                <p className="text-xs text-gray-500">Total Cash</p>
+                <p className="text-xs text-foreground/60">Total Cash</p>
               </div>
             </div>
           </CardContent>
@@ -387,7 +387,7 @@ export default function StartupHealthDashboard({ projectId, projectName }: Start
               </div>
               <div>
                 <p className="text-xl font-bold text-white">{avgRunway.toFixed(1)}mo</p>
-                <p className="text-xs text-gray-500">Avg Runway</p>
+                <p className="text-xs text-foreground/60">Avg Runway</p>
               </div>
             </div>
           </CardContent>
@@ -401,7 +401,7 @@ export default function StartupHealthDashboard({ projectId, projectName }: Start
               </div>
               <div>
                 <p className="text-xl font-bold text-white">{criticalRunway}</p>
-                <p className="text-xs text-gray-500">Critical (&lt;3mo)</p>
+                <p className="text-xs text-foreground/60">Critical (&lt;3mo)</p>
               </div>
             </div>
           </CardContent>
@@ -419,9 +419,9 @@ export default function StartupHealthDashboard({ projectId, projectName }: Start
       {startups.length === 0 && (
         <Card className="bg-gray-900/50 border-gray-800 border-dashed">
           <CardContent className="p-8 text-center">
-            <Rocket className="h-12 w-12 mx-auto mb-4 text-gray-600" />
+            <Rocket className="h-12 w-12 mx-auto mb-4 text-foreground/50" />
             <h3 className="text-lg font-semibold text-white mb-2">No startups tracked yet</h3>
-            <p className="text-gray-400 mb-4">
+            <p className="text-foreground/70 mb-4">
               Add your first startup to track runway, burn rate, and key metrics
             </p>
             <Button 

@@ -204,12 +204,12 @@ export default function GoLive() {
             <Rocket className="w-8 h-8 text-cyan-400" />
             <div>
               <h2 className="text-xl font-bold text-white">Launch Readiness</h2>
-              <p className="text-gray-400">Complete integrations to go live</p>
+              <p className="text-foreground/70">Complete integrations to go live</p>
             </div>
           </div>
           <div className="text-right">
             <div className="text-3xl font-bold text-white">{getProgress()}%</div>
-            <div className="text-sm text-gray-400">Complete</div>
+            <div className="text-sm text-foreground/70">Complete</div>
           </div>
         </div>
         <div className="w-full bg-gray-700 rounded-full h-3">
@@ -218,7 +218,7 @@ export default function GoLive() {
             style={{ width: `${getProgress()}%` }}
           />
         </div>
-        <div className="flex justify-between mt-2 text-xs text-gray-500">
+        <div className="flex justify-between mt-2 text-xs text-foreground/60">
           <span>{Object.values(integrationStatuses).filter(s => s === 'completed').length} of {integrations.length} integrations</span>
           <span>{getProgress() === 100 ? 'Ready to publish!' : 'Keep going...'}</span>
         </div>
@@ -231,7 +231,7 @@ export default function GoLive() {
             <div key={category.id}>
               <div className="flex items-center gap-2 mb-3">
                 <h3 className="text-lg font-semibold text-white">{category.label}</h3>
-                <span className="text-xs text-gray-500">— {category.description}</span>
+                <span className="text-xs text-foreground/60">— {category.description}</span>
               </div>
               <div className="space-y-2">
                 {integrations
@@ -256,12 +256,12 @@ export default function GoLive() {
                           <integration.icon className={`w-5 h-5 ${
                             status === 'completed' ? 'text-green-400' :
                             status === 'in_progress' ? 'text-yellow-400' :
-                            'text-gray-400'
+                            'text-foreground/70'
                           }`} />
                         </div>
                         <div className="flex-1 text-left">
                           <div className="font-medium text-white">{integration.name}</div>
-                          <div className="text-sm text-gray-400">{integration.description}</div>
+                          <div className="text-sm text-foreground/70">{integration.description}</div>
                         </div>
                         <div className="flex items-center gap-2">
                           {status === 'completed' ? (
@@ -274,13 +274,13 @@ export default function GoLive() {
                               In Progress
                             </span>
                           ) : status === 'skipped' ? (
-                            <span className="px-2 py-1 bg-gray-700 text-gray-400 text-xs rounded-full">
+                            <span className="px-2 py-1 bg-gray-700 text-foreground/70 text-xs rounded-full">
                               Skipped
                             </span>
                           ) : (
-                            <Circle className="w-4 h-4 text-gray-500" />
+                            <Circle className="w-4 h-4 text-foreground/60" />
                           )}
-                          <ChevronRight className="w-4 h-4 text-gray-500" />
+                          <ChevronRight className="w-4 h-4 text-foreground/60" />
                         </div>
                       </button>
                     );
@@ -300,13 +300,13 @@ export default function GoLive() {
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold text-white">{selectedIntegration.name}</h3>
-                  <p className="text-sm text-gray-400">{selectedIntegration.description}</p>
+                  <p className="text-sm text-foreground/70">{selectedIntegration.description}</p>
                 </div>
               </div>
 
               {/* Required Environment Variables */}
               <div className="mb-4">
-                <h4 className="text-sm font-medium text-gray-300 mb-2">Required Keys</h4>
+                <h4 className="text-sm font-medium text-foreground/80 mb-2">Required Keys</h4>
                 <div className="space-y-1">
                   {selectedIntegration.envKeys.map((key) => (
                     <code key={key} className="block text-xs bg-gray-900 text-cyan-400 px-2 py-1 rounded">
@@ -318,11 +318,11 @@ export default function GoLive() {
 
               {/* Setup Instructions */}
               <div className="mb-4">
-                <h4 className="text-sm font-medium text-gray-300 mb-2">Setup Steps</h4>
+                <h4 className="text-sm font-medium text-foreground/80 mb-2">Setup Steps</h4>
                 <ol className="space-y-2">
                   {selectedIntegration.instructions.map((step, i) => (
-                    <li key={i} className="flex items-start gap-2 text-sm text-gray-400">
-                      <span className="flex-shrink-0 w-5 h-5 rounded-full bg-gray-700 text-gray-300 text-xs flex items-center justify-center">
+                    <li key={i} className="flex items-start gap-2 text-sm text-foreground/70">
+                      <span className="flex-shrink-0 w-5 h-5 rounded-full bg-gray-700 text-foreground/80 text-xs flex items-center justify-center">
                         {i + 1}
                       </span>
                       {step}
@@ -354,7 +354,7 @@ export default function GoLive() {
                   </button>
                   <button
                     onClick={() => updateStatus(selectedIntegration.id, 'skipped')}
-                    className="flex items-center justify-center gap-1 px-3 py-2 bg-gray-700 hover:bg-gray-600 text-gray-300 rounded-lg text-sm transition-colors"
+                    className="flex items-center justify-center gap-1 px-3 py-2 bg-gray-700 hover:bg-gray-600 text-foreground/80 rounded-lg text-sm transition-colors"
                   >
                     Skip
                   </button>
@@ -363,8 +363,8 @@ export default function GoLive() {
             </div>
           ) : (
             <div className="bg-gray-800 rounded-xl p-6 border border-gray-700 text-center">
-              <Zap className="w-12 h-12 text-gray-600 mx-auto mb-3" />
-              <p className="text-gray-400">Select an integration to see setup instructions</p>
+              <Zap className="w-12 h-12 text-foreground/50 mx-auto mb-3" />
+              <p className="text-foreground/70">Select an integration to see setup instructions</p>
             </div>
           )}
         </div>

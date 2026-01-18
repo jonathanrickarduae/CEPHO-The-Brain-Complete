@@ -101,7 +101,7 @@ export default function KpiDashboard() {
   const getTrendIcon = (trend: number) => {
     if (trend > 2) return <TrendingUp className="h-4 w-4 text-emerald-500" />;
     if (trend < -2) return <TrendingDown className="h-4 w-4 text-red-500" />;
-    return <Minus className="h-4 w-4 text-gray-400" />;
+    return <Minus className="h-4 w-4 text-foreground/70" />;
   };
 
   const renderHeatMapCell = (category: KpiCategory) => {
@@ -138,14 +138,14 @@ export default function KpiDashboard() {
           </div>
           <div>
             <h1 className="text-xl font-bold tracking-tight">CEPHO</h1>
-            <p className="text-xs text-gray-400">KPI Scorecard</p>
+            <p className="text-xs text-foreground/70">KPI Scorecard</p>
           </div>
         </div>
         <div className="flex items-center gap-4">
           <Badge variant="outline" className="border-fuchsia-500 text-fuchsia-400">
             Stage 1: Project Genesis
           </Badge>
-          <span className="text-sm text-gray-400">
+          <span className="text-sm text-foreground/70">
             Last updated: {new Date().toLocaleDateString()}
           </span>
         </div>

@@ -240,9 +240,9 @@ export default function FundingAssessment() {
       {validIdeas.length === 0 ? (
         <Card className="bg-gray-900/50 border-gray-800">
           <CardContent className="py-12 text-center">
-            <Lightbulb className="w-12 h-12 text-gray-600 mx-auto mb-4" />
-            <p className="text-gray-400 mb-4">No ideas to assess yet</p>
-            <p className="text-sm text-gray-500">
+            <Lightbulb className="w-12 h-12 text-foreground/50 mx-auto mb-4" />
+            <p className="text-foreground/70 mb-4">No ideas to assess yet</p>
+            <p className="text-sm text-foreground/60">
               Add ideas in the Innovation Hub to assess their funding eligibility
             </p>
           </CardContent>
@@ -280,7 +280,7 @@ export default function FundingAssessment() {
                       </div>
                       <div className="flex items-center gap-2">
                         {assessments.length > 0 && (
-                          <span className="text-sm text-gray-500">
+                          <span className="text-sm text-foreground/60">
                             {assessments.length} assessment{assessments.length !== 1 ? 's' : ''}
                           </span>
                         )}
@@ -314,9 +314,9 @@ export default function FundingAssessment() {
                         <CollapsibleTrigger asChild>
                           <Button variant="ghost" size="icon" className="h-8 w-8">
                             {isExpanded ? (
-                              <ChevronUp className="w-4 h-4 text-gray-400" />
+                              <ChevronUp className="w-4 h-4 text-foreground/70" />
                             ) : (
-                              <ChevronDown className="w-4 h-4 text-gray-400" />
+                              <ChevronDown className="w-4 h-4 text-foreground/70" />
                             )}
                           </Button>
                         </CollapsibleTrigger>
@@ -328,8 +328,8 @@ export default function FundingAssessment() {
                     <CardContent className="pt-0">
                       {assessments.length === 0 ? (
                         <div className="p-6 bg-gray-800/30 rounded-lg text-center">
-                          <Target className="w-8 h-8 text-gray-600 mx-auto mb-2" />
-                          <p className="text-gray-400 text-sm">
+                          <Target className="w-8 h-8 text-foreground/50 mx-auto mb-2" />
+                          <p className="text-foreground/70 text-sm">
                             Click "Assess Eligibility" to analyse this idea against funding programmes
                           </p>
                         </div>
@@ -349,23 +349,23 @@ export default function FundingAssessment() {
                               </div>
                               <div className="grid grid-cols-3 gap-4 text-sm">
                                 <div>
-                                  <span className="text-gray-400">Estimated Funding:</span>
+                                  <span className="text-foreground/70">Estimated Funding:</span>
                                   <p className="text-white font-medium">
                                     {formatCurrency(bestMatch.result.estimatedFunding)}
                                   </p>
                                 </div>
                                 <div>
-                                  <span className="text-gray-400">Application Readiness:</span>
+                                  <span className="text-foreground/70">Application Readiness:</span>
                                   <p className="text-white font-medium">{bestMatch.result.applicationReadiness}%</p>
                                 </div>
                                 <div>
-                                  <span className="text-gray-400">Provider:</span>
+                                  <span className="text-foreground/70">Provider:</span>
                                   <p className="text-white font-medium">{bestMatch.program.provider}</p>
                                 </div>
                               </div>
                               {bestMatch.result.recommendations.length > 0 && (
                                 <div className="mt-3 pt-3 border-t border-emerald-500/20">
-                                  <p className="text-sm text-gray-400 mb-1">Top Recommendation:</p>
+                                  <p className="text-sm text-foreground/70 mb-1">Top Recommendation:</p>
                                   <p className="text-sm text-emerald-300">{bestMatch.result.recommendations[0]}</p>
                                 </div>
                               )}
@@ -374,7 +374,7 @@ export default function FundingAssessment() {
 
                           {/* All Assessments */}
                           <div className="space-y-3">
-                            <h4 className="text-sm font-medium text-gray-400">All Assessments</h4>
+                            <h4 className="text-sm font-medium text-foreground/70">All Assessments</h4>
                             {assessments
                               .sort((a, b) => (b.result?.eligibilityScore || 0) - (a.result?.eligibilityScore || 0))
                               .map(({ program, result }) => (
@@ -389,14 +389,14 @@ export default function FundingAssessment() {
                                       </span>
                                       <div>
                                         <span className="text-white font-medium">{program.name}</span>
-                                        <p className="text-xs text-gray-500">{program.provider}</p>
+                                        <p className="text-xs text-foreground/60">{program.provider}</p>
                                       </div>
                                     </div>
                                     <div className="flex items-center gap-3">
                                       {result && (
                                         <>
                                           <div className="text-right">
-                                            <p className="text-sm text-gray-400">Score</p>
+                                            <p className="text-sm text-foreground/70">Score</p>
                                             <p className="text-lg font-bold text-white">{result.eligibilityScore}%</p>
                                           </div>
                                           <Badge className={getStatusColor(result.eligibilityStatus)}>
@@ -408,7 +408,7 @@ export default function FundingAssessment() {
                                         href={program.websiteUrl} 
                                         target="_blank" 
                                         rel="noopener noreferrer"
-                                        className="text-gray-400 hover:text-cyan-400"
+                                        className="text-foreground/70 hover:text-cyan-400"
                                       >
                                         <ExternalLink className="w-4 h-4" />
                                       </a>
@@ -424,7 +424,7 @@ export default function FundingAssessment() {
                                             <p className="text-xs text-emerald-400 mb-1 flex items-center gap-1">
                                               <CheckCircle2 className="w-3 h-3" /> Strengths
                                             </p>
-                                            <ul className="text-xs text-gray-400 space-y-0.5">
+                                            <ul className="text-xs text-foreground/70 space-y-0.5">
                                               {result.strengths.slice(0, 2).map((s, i) => (
                                                 <li key={i}>• {s}</li>
                                               ))}
@@ -438,7 +438,7 @@ export default function FundingAssessment() {
                                             <p className="text-xs text-amber-400 mb-1 flex items-center gap-1">
                                               <AlertCircle className="w-3 h-3" /> Gaps
                                             </p>
-                                            <ul className="text-xs text-gray-400 space-y-0.5">
+                                            <ul className="text-xs text-foreground/70 space-y-0.5">
                                               {result.gaps.slice(0, 2).map((g, i) => (
                                                 <li key={i}>• {g}</li>
                                               ))}
@@ -489,7 +489,7 @@ export default function FundingAssessment() {
                         {program.type.replace('_', ' ')}
                       </Badge>
                     </div>
-                    <p className="text-sm text-gray-400 mt-1">
+                    <p className="text-sm text-foreground/70 mt-1">
                       {program.fundingMax > 0 
                         ? `Up to ${formatCurrency(program.fundingMax)}`
                         : program.description.slice(0, 50) + '...'
@@ -514,7 +514,7 @@ export default function FundingAssessment() {
                         {program.type.replace('_', ' ')}
                       </Badge>
                     </div>
-                    <p className="text-sm text-gray-400 mt-1">
+                    <p className="text-sm text-foreground/70 mt-1">
                       {program.fundingMax > 0 
                         ? `Up to ${formatCurrency(program.fundingMax, "GBP")}`
                         : program.description.slice(0, 50) + '...'

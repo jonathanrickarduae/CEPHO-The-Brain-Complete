@@ -16,7 +16,7 @@ import { toast } from "sonner";
 const OVERNIGHT_TASKS = [
   {
     projectId: 'proj-1',
-    projectName: 'Sample Project AI',
+    projectName: 'Boundless AI',
     projectColor: '#8B5CF6',
     tasks: [
       { id: 't1', text: 'Review investor deck feedback from Sarah', priority: 'high', estimatedTime: '15 min', status: 'pending' },
@@ -344,7 +344,7 @@ export default function EveningReview() {
       case 'high': return 'text-red-600 bg-red-50 border-red-200';
       case 'medium': return 'text-amber-600 bg-amber-50 border-amber-200';
       case 'low': return 'text-green-600 bg-green-50 border-green-200';
-      default: return 'text-gray-600 bg-gray-50 border-gray-200';
+      default: return 'text-foreground/50 bg-gray-50 border-gray-200';
     }
   };
 
@@ -495,7 +495,7 @@ export default function EveningReview() {
             <Badge variant="outline" className="text-red-600 border-red-300 bg-red-50">
               {stats.rejected} Rejected
             </Badge>
-            <Badge variant="outline" className="text-gray-600 border-gray-300 bg-gray-50">
+            <Badge variant="outline" className="text-foreground/50 border-gray-300 bg-gray-50">
               {stats.pending} Pending
             </Badge>
           </div>

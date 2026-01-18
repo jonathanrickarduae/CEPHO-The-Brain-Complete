@@ -137,7 +137,7 @@ export function KpiHeatMap({
     const diff = current.score - current.previousScore;
     if (diff > 5) return <TrendingUp className="w-3 h-3 text-green-500" />;
     if (diff < -5) return <TrendingDown className="w-3 h-3 text-red-500" />;
-    return <Minus className="w-3 h-3 text-gray-400" />;
+    return <Minus className="w-3 h-3 text-foreground/70" />;
   };
 
   const hasOutlier = (categoryId: number) => {

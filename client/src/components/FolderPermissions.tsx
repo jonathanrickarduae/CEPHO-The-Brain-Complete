@@ -114,7 +114,7 @@ export function FolderPermissions({ folderId }: FolderPermissionsProps) {
       case 'private': return 'bg-red-500/20 text-red-400 border-red-500/30';
       case 'team': return 'bg-blue-500/20 text-blue-400 border-blue-500/30';
       case 'public': return 'bg-green-500/20 text-green-400 border-green-500/30';
-      default: return 'bg-gray-500/20 text-gray-400 border-gray-500/30';
+      default: return 'bg-gray-500/20 text-foreground/70 border-gray-500/30';
     }
   };
 
@@ -124,7 +124,7 @@ export function FolderPermissions({ folderId }: FolderPermissionsProps) {
       case 'admin': return 'bg-red-500/20 text-red-400 border-red-500/30';
       case 'editor': return 'bg-blue-500/20 text-blue-400 border-blue-500/30';
       case 'viewer': return 'bg-green-500/20 text-green-400 border-green-500/30';
-      default: return 'bg-gray-500/20 text-gray-400 border-gray-500/30';
+      default: return 'bg-gray-500/20 text-foreground/70 border-gray-500/30';
     }
   };
 

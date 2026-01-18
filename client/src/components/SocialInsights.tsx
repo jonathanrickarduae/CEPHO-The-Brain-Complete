@@ -117,7 +117,7 @@ export function SocialInsights({ contactName, compact = false }: SocialInsightsP
       case 'strong': return 'bg-green-500/20 text-green-400 border-green-500/30';
       case 'moderate': return 'bg-blue-500/20 text-blue-400 border-blue-500/30';
       case 'new': return 'bg-purple-500/20 text-purple-400 border-purple-500/30';
-      default: return 'bg-gray-500/20 text-gray-400 border-gray-500/30';
+      default: return 'bg-gray-500/20 text-foreground/70 border-gray-500/30';
     }
   };
 
@@ -126,7 +126,7 @@ export function SocialInsights({ contactName, compact = false }: SocialInsightsP
       case 'positive': return 'text-green-400';
       case 'neutral': return 'text-blue-400';
       case 'needs-attention': return 'text-orange-400';
-      default: return 'text-gray-400';
+      default: return 'text-foreground/70';
     }
   };
 

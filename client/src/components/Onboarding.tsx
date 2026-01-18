@@ -53,7 +53,7 @@ const ONBOARDING_STEPS: OnboardingStep[] = [
   {
     id: 5,
     title: 'Chief of Staff',
-    description: 'The more you interact, the smarter your Twin becomes. It learns your preferences, communication style, and decision patterns.',
+    description: 'The more you interact, the smarter your Chief of Staff becomes. It learns your preferences, communication style, and decision patterns.',
     icon: Fingerprint,
     color: 'text-purple-400',
     highlight: '[data-tour="digital-twin"]',

@@ -169,7 +169,7 @@ const NotificationIcon = ({ type }: { type: Notification['type'] }) => {
     case 'achievement':
       return <Trophy className="w-4 h-4 text-yellow-400" />;
     default: 
-      return <Info className="w-4 h-4 text-gray-400" />;
+      return <Info className="w-4 h-4 text-foreground/70" />;
   }
 };
 

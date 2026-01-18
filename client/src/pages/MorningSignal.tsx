@@ -369,10 +369,10 @@ export default function MorningSignal() {
                 <Sun className="h-6 w-6 text-amber-400" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-white">
-                  {getGreeting()}, {user?.name?.split(" ")[0] || "there"}
+                <h1 className="text-2xl font-bold text-foreground">
+                  Morning Signal
                 </h1>
-                <p className="text-sm text-slate-400">{formatDate()}</p>
+                <p className="text-sm text-foreground/70">{formatDate()}</p>
               </div>
             </div>
           </div>
@@ -392,7 +392,7 @@ export default function MorningSignal() {
               ) : (
                 <Play className="h-4 w-4 mr-2" />
               )}
-              {isGeneratingAudio ? "Generating..." : isPlaying ? "Pause" : "Listen to Brief"}
+              {isGeneratingAudio ? "Generating..." : isPlaying ? "Pause" : "Listen to the Brief"}
             </Button>
             <Button
               onClick={() => setLocation("/daily-brief")}
@@ -415,7 +415,7 @@ export default function MorningSignal() {
                 <p className="text-2xl font-bold text-white">
                   {acceptedItems.length}
                 </p>
-                <p className="text-xs text-slate-400">Tasks Ready</p>
+                <p className="text-xs text-foreground/70">Tasks Ready</p>
               </div>
             </CardContent>
           </Card>
@@ -429,7 +429,7 @@ export default function MorningSignal() {
                 <p className="text-2xl font-bold text-white">
                   {deferredItems.length}
                 </p>
-                <p className="text-xs text-slate-400">Need Attention</p>
+                <p className="text-xs text-foreground/70">Need Attention</p>
               </div>
             </CardContent>
           </Card>
@@ -443,7 +443,7 @@ export default function MorningSignal() {
                 <p className="text-2xl font-bold text-white">
                   {insightItems.length}
                 </p>
-                <p className="text-xs text-slate-400">Insights</p>
+                <p className="text-xs text-foreground/70">Insights</p>
               </div>
             </CardContent>
           </Card>
@@ -457,7 +457,7 @@ export default function MorningSignal() {
                 <p className="text-2xl font-bold text-white">
                   {overnightItems.length}
                 </p>
-                <p className="text-xs text-slate-400">Overnight Work</p>
+                <p className="text-xs text-foreground/70">Overnight Work</p>
               </div>
             </CardContent>
           </Card>

@@ -183,7 +183,7 @@ export function DueDiligenceChecklist({ projectId }: DueDiligenceChecklistProps)
       case 'commercial': return 'bg-orange-500/20 text-orange-400';
       case 'technical': return 'bg-cyan-500/20 text-cyan-400';
       case 'hr': return 'bg-pink-500/20 text-pink-400';
-      default: return 'bg-gray-500/20 text-gray-400';
+      default: return 'bg-gray-500/20 text-foreground/70';
     }
   };
 
@@ -193,8 +193,8 @@ export function DueDiligenceChecklist({ projectId }: DueDiligenceChecklistProps)
       case 'in-progress': return 'bg-blue-500/20 text-blue-400 border-blue-500/30';
       case 'pending': return 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30';
       case 'blocked': return 'bg-red-500/20 text-red-400 border-red-500/30';
-      case 'na': return 'bg-gray-500/20 text-gray-400 border-gray-500/30';
-      default: return 'bg-gray-500/20 text-gray-400 border-gray-500/30';
+      case 'na': return 'bg-gray-500/20 text-foreground/70 border-gray-500/30';
+      default: return 'bg-gray-500/20 text-foreground/70 border-gray-500/30';
     }
   };
 

@@ -254,7 +254,7 @@ export default function AISMEsPage() {
   };
 
   return (
-    <div className="h-[calc(100vh-56px)] md:h-screen flex flex-col bg-gradient-to-br from-gray-900 via-gray-900 to-gray-800">
+    <div className="h-[calc(100vh-56px)] md:h-screen flex flex-col bg-background">
       {/* Header */}
       <PageHeader 
         icon={Users} 
@@ -297,7 +297,7 @@ export default function AISMEsPage() {
               className={`flex items-center gap-2 px-4 py-3 text-sm font-medium transition-colors border-b-2 whitespace-nowrap ${
                 viewMode === tab.id
                   ? 'text-cyan-400 border-cyan-400'
-                  : 'text-gray-400 border-transparent hover:text-white'
+                  : 'text-foreground/70 border-transparent hover:text-white'
               }`}
             >
               <tab.icon className="w-4 h-4" />
@@ -310,13 +310,13 @@ export default function AISMEsPage() {
       {/* Panel Type Filter Bar */}
       <div className="shrink-0 border-b border-white/10 bg-white/5 px-4 py-2 overflow-x-auto scrollbar-hide">
         <div className="max-w-7xl mx-auto flex items-center gap-2">
-          <span className="text-xs text-gray-400 mr-2 shrink-0">Panel:</span>
+          <span className="text-xs text-foreground/70 mr-2 shrink-0">Panel:</span>
           <button
             onClick={() => setSelectedPanel('all')}
             className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors shrink-0 ${
               selectedPanel === 'all'
                 ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/30'
-                : 'bg-white/5 text-gray-400 hover:bg-white/10'
+                : 'bg-white/5 text-foreground/70 hover:bg-white/10'
             }`}
           >
             All Panels ({TOTAL_EXPERTS})
@@ -331,7 +331,7 @@ export default function AISMEsPage() {
                 className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium transition-colors shrink-0 ${
                   selectedPanel === panelKey
                     ? `${panel.bgColor} ${panel.color} border ${panel.borderColor}`
-                    : 'bg-white/5 text-gray-400 hover:bg-white/10'
+                    : 'bg-white/5 text-foreground/70 hover:bg-white/10'
                 }`}
               >
                 <span>{panel.icon}</span>
@@ -355,7 +355,7 @@ export default function AISMEsPage() {
                   {/* Recent Consultations */}
                   {consultationHistory && consultationHistory.length > 0 && (
                     <div className="mb-4">
-                      <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Recent Chats</h3>
+                      <h3 className="text-xs font-semibold text-foreground/70 uppercase tracking-wider mb-2">Recent Chats</h3>
                       <div className="space-y-1">
                         {consultationHistory.slice(0, 3).map(consultation => {
                           const expert = AI_EXPERTS.find(e => e.id === consultation.expertId);
@@ -364,12 +364,12 @@ export default function AISMEsPage() {
                             <button
                               key={consultation.id}
                               onClick={() => setLocation(`/expert-chat/${expert.id}`)}
-                              className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-sm hover:bg-white/5 text-gray-400 hover:text-white transition-colors"
+                              className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-sm hover:bg-white/5 text-foreground/70 hover:text-white transition-colors"
                             >
                               <span className="text-lg">{expert.avatar}</span>
                               <div className="flex-1 text-left truncate">
                                 <div className="truncate">{expert.name}</div>
-                                <div className="text-xs text-gray-500">
+                                <div className="text-xs text-foreground/60">
                                   {formatDate(consultation.updatedAt.toString())}
                                 </div>
                               </div>
@@ -381,7 +381,7 @@ export default function AISMEsPage() {
                   )}
                   
                   {/* Expert Types - Hierarchical */}
-                  <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Browse By Type</h3>
+                  <h3 className="text-xs font-semibold text-foreground/70 uppercase tracking-wider mb-2">Browse By Type</h3>
                   <div className="space-y-1">
                     {/* All Experts */}
                     <button
@@ -389,7 +389,7 @@ export default function AISMEsPage() {
                       className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm transition-colors ${
                         selectedExpertType === 'all'
                           ? 'bg-gradient-to-r from-cyan-500/20 to-blue-500/20 text-cyan-400 border border-cyan-500/30'
-                          : 'hover:bg-white/5 text-gray-400 hover:text-white'
+                          : 'hover:bg-white/5 text-foreground/70 hover:text-white'
                       }`}
                     >
                       <span className="flex items-center gap-2">
@@ -421,7 +421,7 @@ export default function AISMEsPage() {
                             className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm transition-colors ${
                               selectedExpertType === typeKey
                                 ? `${typeConfig.bgColor} ${typeConfig.color} border ${typeConfig.borderColor}`
-                                : 'hover:bg-white/5 text-gray-400 hover:text-white'
+                                : 'hover:bg-white/5 text-foreground/70 hover:text-white'
                             }`}
                           >
                             <span className="flex items-center gap-2">
@@ -449,7 +449,7 @@ export default function AISMEsPage() {
                                     className={`w-full flex items-center justify-between px-2 py-1.5 rounded-lg text-xs transition-colors ${
                                       selectedCategory === subcatId
                                         ? 'bg-white/10 text-white'
-                                        : 'text-gray-500 hover:text-gray-300 hover:bg-white/5'
+                                        : 'text-foreground/60 hover:text-foreground/80 hover:bg-white/5'
                                     }`}
                                   >
                                     <span className="truncate">{subcat}</span>
@@ -484,7 +484,7 @@ export default function AISMEsPage() {
                   
                   {/* Sort Dropdown */}
                   <div className="flex items-center gap-2">
-                    <span className="text-xs text-gray-400">Sort:</span>
+                    <span className="text-xs text-foreground/70">Sort:</span>
                     <select
                       value={sortBy}
                       onChange={(e) => setSortBy(e.target.value as SortOption)}
@@ -506,13 +506,13 @@ export default function AISMEsPage() {
                   <div className="flex items-center gap-1 border border-white/20 rounded-lg p-1">
                     <button
                       onClick={() => setViewStyle('grid')}
-                      className={`p-2 rounded ${viewStyle === 'grid' ? 'bg-cyan-500/20 text-cyan-400' : 'text-gray-400'}`}
+                      className={`p-2 rounded ${viewStyle === 'grid' ? 'bg-cyan-500/20 text-cyan-400' : 'text-foreground/70'}`}
                     >
                       <Grid className="w-4 h-4" />
                     </button>
                     <button
                       onClick={() => setViewStyle('list')}
-                      className={`p-2 rounded ${viewStyle === 'list' ? 'bg-cyan-500/20 text-cyan-400' : 'text-gray-400'}`}
+                      className={`p-2 rounded ${viewStyle === 'list' ? 'bg-cyan-500/20 text-cyan-400' : 'text-foreground/70'}`}
                     >
                       <List className="w-4 h-4" />
                     </button>
@@ -540,7 +540,7 @@ export default function AISMEsPage() {
 
                 {/* Results Count */}
                 <div className="flex items-center justify-between mb-4">
-                  <p className="text-sm text-gray-400">
+                  <p className="text-sm text-foreground/70">
                     Showing {filteredExperts.length} expert{filteredExperts.length !== 1 ? 's' : ''}
                   </p>
                 </div>
@@ -616,7 +616,7 @@ export default function AISMEsPage() {
                                   toggleExpertSelection(expert);
                                 }}
                                 className={`p-2 rounded-lg transition-colors ${
-                                  isSelected ? 'bg-gradient-to-r from-cyan-500 to-blue-500 text-white' : 'bg-white/10 hover:bg-white/20 text-gray-400'
+                                  isSelected ? 'bg-gradient-to-r from-cyan-500 to-blue-500 text-white' : 'bg-white/10 hover:bg-white/20 text-foreground/70'
                                 }`}
                               >
                                 {isSelected ? <CheckCircle2 className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
@@ -634,7 +634,7 @@ export default function AISMEsPage() {
                           className={`absolute top-2 right-2 p-1.5 rounded-lg transition-colors ${
                             isInCompare 
                               ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white' 
-                              : 'bg-white/10 hover:bg-white/20 text-gray-400 opacity-0 group-hover:opacity-100'
+                              : 'bg-white/10 hover:bg-white/20 text-foreground/70 opacity-0 group-hover:opacity-100'
                           }`}
                           title="Add to comparison"
                         >
@@ -658,7 +658,7 @@ export default function AISMEsPage() {
                                   toggleExpertSelection(expert);
                                 }}
                                 className={`p-1.5 rounded-lg transition-colors ${
-                                  isSelected ? 'bg-gradient-to-r from-cyan-500 to-blue-500 text-white' : 'bg-white/10 hover:bg-white/20 text-gray-400'
+                                  isSelected ? 'bg-gradient-to-r from-cyan-500 to-blue-500 text-white' : 'bg-white/10 hover:bg-white/20 text-foreground/70'
                                 }`}
                               >
                                 {isSelected ? <CheckCircle2 className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
@@ -688,7 +688,7 @@ export default function AISMEsPage() {
                     </div>
                     <div>
                       <h3 className="font-semibold text-pink-400">Recommended For You</h3>
-                      <p className="text-xs text-gray-400">Based on your consultation history</p>
+                      <p className="text-xs text-foreground/70">Based on your consultation history</p>
                     </div>
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -748,9 +748,9 @@ export default function AISMEsPage() {
                         >
                           <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold ${
                             index === 0 ? 'bg-yellow-500/20 text-yellow-400' :
-                            index === 1 ? 'bg-gray-400/20 text-gray-300' :
+                            index === 1 ? 'bg-gray-400/20 text-foreground/80' :
                             index === 2 ? 'bg-amber-600/20 text-amber-500' :
-                            'bg-white/10 text-gray-400'
+                            'bg-white/10 text-foreground/70'
                           }`}>
                             {index + 1}
                           </div>
@@ -765,14 +765,14 @@ export default function AISMEsPage() {
                           </div>
                           <div className="flex-1 min-w-0">
                             <h4 className="font-medium truncate">{expert.name}</h4>
-                            <p className="text-sm text-gray-400 truncate">{expert.specialty}</p>
+                            <p className="text-sm text-foreground/70 truncate">{expert.specialty}</p>
                           </div>
                           <div className={`px-2 py-0.5 rounded-full text-[10px] ${panelInfo.bgColor} ${panelInfo.color}`}>
                             {panelInfo.icon} {panelInfo.name}
                           </div>
                           <div className="text-right">
                             <div className="text-lg font-bold text-cyan-400">{expert.performanceScore}%</div>
-                            <div className="text-xs text-gray-400">{expert.projectsCompleted} projects</div>
+                            <div className="text-xs text-foreground/70">{expert.projectsCompleted} projects</div>
                           </div>
                         </div>
                       );
@@ -794,17 +794,17 @@ export default function AISMEsPage() {
                         <span className="text-2xl">{panel.icon}</span>
                         <div>
                           <h3 className={`font-semibold ${panel.color}`}>{panel.name}</h3>
-                          <p className="text-xs text-gray-400">{panel.description}</p>
+                          <p className="text-xs text-foreground/70">{panel.description}</p>
                         </div>
                       </div>
                       <div className="grid grid-cols-2 gap-4 text-center">
                         <div>
                           <div className="text-2xl font-bold">{stats.count}</div>
-                          <div className="text-xs text-gray-400">Experts</div>
+                          <div className="text-xs text-foreground/70">Experts</div>
                         </div>
                         <div>
                           <div className="text-2xl font-bold">{stats.avgScore}%</div>
-                          <div className="text-xs text-gray-400">Avg Score</div>
+                          <div className="text-xs text-foreground/70">Avg Score</div>
                         </div>
                       </div>
                     </div>
@@ -832,9 +832,9 @@ export default function AISMEsPage() {
                         >
                           <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold ${
                             index === 0 ? 'bg-yellow-500/20 text-yellow-400' :
-                            index === 1 ? 'bg-gray-400/20 text-gray-300' :
+                            index === 1 ? 'bg-gray-400/20 text-foreground/80' :
                             index === 2 ? 'bg-amber-600/20 text-amber-500' :
-                            'bg-white/10 text-gray-400'
+                            'bg-white/10 text-foreground/70'
                           }`}>
                             {index + 1}
                           </div>
@@ -843,11 +843,11 @@ export default function AISMEsPage() {
                           </div>
                           <div className="flex-1 min-w-0">
                             <h4 className="font-medium truncate">{expert.name}</h4>
-                            <p className="text-sm text-gray-400 truncate">{expert.specialty}</p>
+                            <p className="text-sm text-foreground/70 truncate">{expert.specialty}</p>
                           </div>
                           <div className="text-right">
                             <div className="text-lg font-bold text-cyan-400">{expert.performanceScore}%</div>
-                            <div className="text-xs text-gray-400">{expert.projectsCompleted} projects</div>
+                            <div className="text-xs text-foreground/70">{expert.projectsCompleted} projects</div>
                           </div>
                         </div>
                       ))}
@@ -889,7 +889,7 @@ export default function AISMEsPage() {
                       <div className="flex items-center justify-between mb-3">
                         <div>
                           <h3 className="font-semibold">{team.name}</h3>
-                          <p className="text-sm text-gray-400">{team.purpose || team.description}</p>
+                          <p className="text-sm text-foreground/70">{team.purpose || team.description}</p>
                         </div>
                         <div className="flex items-center gap-2">
                           <Badge className="bg-emerald-500/10 text-emerald-400">Active</Badge>
@@ -903,7 +903,7 @@ export default function AISMEsPage() {
                           </Button>
                         </div>
                       </div>
-                      <div className="text-xs text-gray-500">
+                      <div className="text-xs text-foreground/60">
                         Created: {formatDate(team.createdAt.toString())}
                       </div>
                     </div>
@@ -911,9 +911,9 @@ export default function AISMEsPage() {
                 </div>
               ) : (
                 <div className="text-center py-12">
-                  <Users className="w-12 h-12 mx-auto mb-4 text-gray-600" />
+                  <Users className="w-12 h-12 mx-auto mb-4 text-foreground/50" />
                   <h3 className="text-lg font-medium mb-2">No Teams Yet</h3>
-                  <p className="text-gray-400 mb-4">Assemble your first expert team to get started</p>
+                  <p className="text-foreground/70 mb-4">Assemble your first expert team to get started</p>
                   <Button onClick={() => setViewMode('assemble')} className="gap-2">
                     <Plus className="w-4 h-4" />
                     Assemble Team
@@ -965,7 +965,7 @@ export default function AISMEsPage() {
                             <span className="text-sm">{expert.name}</span>
                             <button
                               onClick={() => setSelectedExperts(prev => prev.filter(e => e.id !== expert.id))}
-                              className="text-gray-400 hover:text-white"
+                              className="text-foreground/70 hover:text-white"
                             >
                               <X className="w-4 h-4" />
                             </button>
@@ -973,7 +973,7 @@ export default function AISMEsPage() {
                         ))}
                       </div>
                     ) : (
-                      <p className="text-sm text-gray-400">
+                      <p className="text-sm text-foreground/70">
                         Go to Browse tab to select experts
                       </p>
                     )}
@@ -1016,7 +1016,7 @@ export default function AISMEsPage() {
                 </div>
                 <div>
                   <h2 className="text-lg font-semibold">{selectedExpert.name}</h2>
-                  <p className="text-sm text-gray-400">{selectedExpert.category}</p>
+                  <p className="text-sm text-foreground/70">{selectedExpert.category}</p>
                 </div>
               </div>
               <Button variant="ghost" size="icon" onClick={() => setShowExpertDetail(null)}>
@@ -1037,31 +1037,31 @@ export default function AISMEsPage() {
                 );
               })()}
               
-              <p className="text-sm text-gray-300 mb-4">{selectedExpert.bio}</p>
+              <p className="text-sm text-foreground/80 mb-4">{selectedExpert.bio}</p>
               
               <div className="grid grid-cols-3 gap-4 mb-4">
                 <div className="text-center p-3 bg-white/5 rounded-xl">
                   <div className="text-2xl font-bold text-cyan-400">{selectedExpert.performanceScore}%</div>
-                  <div className="text-xs text-gray-400">Performance</div>
+                  <div className="text-xs text-foreground/70">Performance</div>
                 </div>
                 <div className="text-center p-3 bg-white/5 rounded-xl">
                   <div className="text-2xl font-bold">{selectedExpert.projectsCompleted}</div>
-                  <div className="text-xs text-gray-400">Projects</div>
+                  <div className="text-xs text-foreground/70">Projects</div>
                 </div>
                 <div className="text-center p-3 bg-white/5 rounded-xl">
                   <div className="text-2xl font-bold">{selectedExpert.insightsGenerated}</div>
-                  <div className="text-xs text-gray-400">Insights</div>
+                  <div className="text-xs text-foreground/70">Insights</div>
                 </div>
               </div>
               
               <div className="space-y-4">
                 <div>
-                  <h4 className="text-xs text-gray-400 uppercase tracking-wider mb-2">Specialty</h4>
+                  <h4 className="text-xs text-foreground/70 uppercase tracking-wider mb-2">Specialty</h4>
                   <p className="text-sm">{selectedExpert.specialty}</p>
                 </div>
                 
                 <div>
-                  <h4 className="text-xs text-gray-400 uppercase tracking-wider mb-2">Strengths</h4>
+                  <h4 className="text-xs text-foreground/70 uppercase tracking-wider mb-2">Strengths</h4>
                   <div className="flex flex-wrap gap-1">
                     {selectedExpert.strengths.map((strength, i) => (
                       <Badge key={i} variant="outline" className="text-xs bg-emerald-500/10 border-emerald-500/30 text-emerald-400">
@@ -1072,7 +1072,7 @@ export default function AISMEsPage() {
                 </div>
                 
                 <div>
-                  <h4 className="text-xs text-gray-400 uppercase tracking-wider mb-2">Weaknesses</h4>
+                  <h4 className="text-xs text-foreground/70 uppercase tracking-wider mb-2">Weaknesses</h4>
                   <div className="flex flex-wrap gap-1">
                     {selectedExpert.weaknesses.map((weakness, i) => (
                       <Badge key={i} variant="outline" className="text-xs bg-red-500/10 border-red-500/30 text-red-400">
@@ -1083,12 +1083,12 @@ export default function AISMEsPage() {
                 </div>
                 
                 <div>
-                  <h4 className="text-xs text-gray-400 uppercase tracking-wider mb-2">Thinking Style</h4>
+                  <h4 className="text-xs text-foreground/70 uppercase tracking-wider mb-2">Thinking Style</h4>
                   <p className="text-sm">{selectedExpert.thinkingStyle}</p>
                 </div>
                 
                 <div>
-                  <h4 className="text-xs text-gray-400 uppercase tracking-wider mb-2">Inspired By</h4>
+                  <h4 className="text-xs text-foreground/70 uppercase tracking-wider mb-2">Inspired By</h4>
                   <p className="text-sm text-purple-400">{selectedExpert.compositeOf.join(' + ')}</p>
                 </div>
                 
@@ -1148,7 +1148,7 @@ export default function AISMEsPage() {
                 </div>
                 <div>
                   <h2 className="text-lg font-semibold">Expert Comparison</h2>
-                  <p className="text-sm text-gray-400">Comparing {compareExpertData.length} experts</p>
+                  <p className="text-sm text-foreground/70">Comparing {compareExpertData.length} experts</p>
                 </div>
               </div>
               <Button variant="ghost" size="icon" onClick={() => setShowCompareModal(false)}>
@@ -1170,7 +1170,7 @@ export default function AISMEsPage() {
                         </div>
                         <div>
                           <h3 className="font-semibold">{expert.name}</h3>
-                          <p className="text-sm text-gray-400">{expert.category}</p>
+                          <p className="text-sm text-foreground/70">{expert.category}</p>
                           <div className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] mt-1 ${panelInfo.bgColor} ${panelInfo.color}`}>
                             {panelInfo.icon} {panelInfo.name}
                           </div>
@@ -1179,7 +1179,7 @@ export default function AISMEsPage() {
 
                       <div className="mb-4">
                         <div className="flex items-center justify-between mb-1">
-                          <span className="text-xs text-gray-400">Performance</span>
+                          <span className="text-xs text-foreground/70">Performance</span>
                           <span className="text-sm font-semibold text-cyan-400">{expert.performanceScore}%</span>
                         </div>
                         <div className="h-2 bg-white/10 rounded-full overflow-hidden">
@@ -1191,7 +1191,7 @@ export default function AISMEsPage() {
                       </div>
 
                       <div className="mb-4">
-                        <h4 className="text-xs text-gray-400 uppercase tracking-wider mb-2">Strengths</h4>
+                        <h4 className="text-xs text-foreground/70 uppercase tracking-wider mb-2">Strengths</h4>
                         <div className="flex flex-wrap gap-1">
                           {expert.strengths.slice(0, 4).map((strength, i) => (
                             <Badge key={i} variant="outline" className="text-xs bg-emerald-500/10 border-emerald-500/30 text-emerald-400">
@@ -1204,11 +1204,11 @@ export default function AISMEsPage() {
                       <div className="grid grid-cols-2 gap-2 text-center pt-4 border-t border-white/10">
                         <div>
                           <div className="text-lg font-semibold">{expert.projectsCompleted}</div>
-                          <div className="text-xs text-gray-400">Projects</div>
+                          <div className="text-xs text-foreground/70">Projects</div>
                         </div>
                         <div>
                           <div className="text-lg font-semibold">{expert.performanceScore}</div>
-                          <div className="text-xs text-gray-400">Rating</div>
+                          <div className="text-xs text-foreground/70">Rating</div>
                         </div>
                       </div>
 
@@ -1246,7 +1246,7 @@ export default function AISMEsPage() {
               <Button 
                 variant="ghost" 
                 onClick={() => setCompareExperts([])}
-                className="text-gray-400"
+                className="text-foreground/70"
               >
                 Clear All
               </Button>

@@ -90,7 +90,7 @@ export function ConfirmProvider({ children }: { children: React.ReactNode }) {
               onClick={handleCancel}
               className="absolute top-4 right-4 p-1 rounded-lg hover:bg-gray-800 transition-colors"
             >
-              <X className="w-5 h-5 text-gray-400" />
+              <X className="w-5 h-5 text-foreground/70" />
             </button>
             
             <div className="p-6">
@@ -103,7 +103,7 @@ export function ConfirmProvider({ children }: { children: React.ReactNode }) {
               <h3 className="text-lg font-semibold text-white mb-2">
                 {options?.title}
               </h3>
-              <p className="text-gray-400 text-sm mb-6">
+              <p className="text-foreground/70 text-sm mb-6">
                 {options?.message}
               </p>
               

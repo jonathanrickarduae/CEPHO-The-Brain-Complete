@@ -113,19 +113,19 @@ export function ValidationHeader({ report }: { report: ValidationReport }) {
       
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
         <div>
-          <span className="text-gray-400">Validated:</span>
+          <span className="text-foreground/70">Validated:</span>
           <p className="text-white font-medium">{new Date(report.validatedAt).toLocaleString()}</p>
         </div>
         <div>
-          <span className="text-gray-400">Validator:</span>
+          <span className="text-foreground/70">Validator:</span>
           <p className="text-white font-medium">{report.validatedBy}</p>
         </div>
         <div>
-          <span className="text-gray-400">Confidence:</span>
+          <span className="text-foreground/70">Confidence:</span>
           <p className="text-white font-medium">{report.overallConfidence}%</p>
         </div>
         <div>
-          <span className="text-gray-400">Sources:</span>
+          <span className="text-foreground/70">Sources:</span>
           <p className="text-white font-medium">
             <span className="text-green-400">{report.verifiedClaims} verified</span>
             {report.flaggedClaims > 0 && <span className="text-orange-400"> | {report.flaggedClaims} flagged</span>}
@@ -154,9 +154,9 @@ export function SourceReferenceCard({ source, index }: { source: SourceReference
           >
             {source.title}
           </a>
-          <ExternalLink className="w-3 h-3 text-gray-500 flex-shrink-0" />
+          <ExternalLink className="w-3 h-3 text-foreground/60 flex-shrink-0" />
         </div>
-        <div className="flex items-center gap-4 text-xs text-gray-400">
+        <div className="flex items-center gap-4 text-xs text-foreground/70">
           <span>Verified: {new Date(source.accessDate).toLocaleDateString('en-GB')}</span>
           <span className={source.isAccessible ? 'text-green-400' : 'text-red-400'}>
             {source.isAccessible ? '✓ Active' : '✗ Inactive'}
@@ -186,7 +186,7 @@ export function ClaimValidationCard({ claim }: { claim: ClaimValidation }) {
         <ValidationBadge status={claim.status} size="sm" />
         <div className="flex-1">
           <p className="text-white text-sm">{claim.claim}</p>
-          <p className="text-gray-500 text-xs mt-1">
+          <p className="text-foreground/60 text-xs mt-1">
             {claim.sources.length} source(s) • {claim.confidence}% confidence
           </p>
         </div>
@@ -200,11 +200,11 @@ export function ClaimValidationCard({ claim }: { claim: ClaimValidation }) {
                 <RefreshCw className="w-4 h-4 text-cyan-400" />
                 <span className="text-sm font-medium text-white">Cross-Validation</span>
               </div>
-              <div className="text-sm text-gray-400">
+              <div className="text-sm text-foreground/70">
                 <p>Engine: {claim.crossValidation.engine}</p>
                 <p>Agreement: {claim.crossValidation.agrees ? '✓ Confirmed' : '✗ Disputed'}</p>
                 <p>Confidence: {claim.crossValidation.confidence}%</p>
-                {claim.crossValidation.notes && <p className="mt-1 text-gray-500">{claim.crossValidation.notes}</p>}
+                {claim.crossValidation.notes && <p className="mt-1 text-foreground/60">{claim.crossValidation.notes}</p>}
               </div>
             </div>
           )}
@@ -243,7 +243,7 @@ export function ValidationSummary({ report }: { report: ValidationReport }) {
       <div className="grid grid-cols-2 gap-4">
         {metrics.map((metric, idx) => (
           <div key={idx} className="flex justify-between items-center py-2 border-b border-gray-700 last:border-0">
-            <span className="text-gray-400 text-sm">{metric.label}</span>
+            <span className="text-foreground/70 text-sm">{metric.label}</span>
             <span className={`font-medium ${metric.className || 'text-white'}`}>{metric.value}</span>
           </div>
         ))}
@@ -380,7 +380,7 @@ export function ValidationEngine({ projectId, projectName, content, onValidation
         <div className="text-center py-12">
           <Shield className="w-16 h-16 mx-auto text-cyan-400 mb-4" />
           <h2 className="text-xl font-semibold text-white mb-2">Chief of Staff Validation</h2>
-          <p className="text-gray-400 mb-6 max-w-md mx-auto">
+          <p className="text-foreground/70 mb-6 max-w-md mx-auto">
             Run comprehensive validation to cross-check all claims, verify sources, and ensure zero hallucinations.
           </p>
           <Button

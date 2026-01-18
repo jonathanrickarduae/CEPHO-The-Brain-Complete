@@ -462,7 +462,7 @@ export function IntegrationWizard({ onComplete, initialIntegration }: Integratio
               <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
                 i < currentSetupStep ? 'bg-green-500 text-white' :
                 i === currentSetupStep ? 'bg-primary text-white' :
-                'bg-gray-700 text-gray-400'
+                'bg-gray-700 text-foreground/70'
               }`}>
                 {i < currentSetupStep ? <Check className="w-4 h-4" /> : i + 1}
               </div>

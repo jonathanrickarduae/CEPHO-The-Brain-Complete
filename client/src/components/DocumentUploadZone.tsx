@@ -49,7 +49,7 @@ export function DocumentUploadZone({ onExtractedData, onDocumentsChange }: Docum
       case 'doc': return <File className="w-5 h-5 text-blue-400" />;
       case 'ppt': return <Presentation className="w-5 h-5 text-orange-400" />;
       case 'xls': return <FileSpreadsheet className="w-5 h-5 text-green-400" />;
-      default: return <File className="w-5 h-5 text-gray-400" />;
+      default: return <File className="w-5 h-5 text-foreground/70" />;
     }
   };
 
@@ -238,19 +238,19 @@ export function DocumentUploadZone({ onExtractedData, onDocumentsChange }: Docum
           <div className={`w-16 h-16 mx-auto mb-4 rounded-2xl flex items-center justify-center transition-all ${
             isDragging ? 'bg-fuchsia-500/20' : 'bg-white/10'
           }`}>
-            <Upload className={`w-8 h-8 ${isDragging ? 'text-fuchsia-400' : 'text-gray-400'}`} />
+            <Upload className={`w-8 h-8 ${isDragging ? 'text-fuchsia-400' : 'text-foreground/70'}`} />
           </div>
           <p className="text-lg font-medium text-white mb-2">
             {isDragging ? 'Drop files here' : 'Upload your documents'}
           </p>
-          <p className="text-gray-400 text-sm mb-4">
+          <p className="text-foreground/70 text-sm mb-4">
             Drag and drop or click to browse
           </p>
           <div className="flex flex-wrap justify-center gap-2">
-            <Badge variant="outline" className="border-white/20 text-gray-400">PDF</Badge>
-            <Badge variant="outline" className="border-white/20 text-gray-400">Word</Badge>
-            <Badge variant="outline" className="border-white/20 text-gray-400">PowerPoint</Badge>
-            <Badge variant="outline" className="border-white/20 text-gray-400">Excel</Badge>
+            <Badge variant="outline" className="border-white/20 text-foreground/70">PDF</Badge>
+            <Badge variant="outline" className="border-white/20 text-foreground/70">Word</Badge>
+            <Badge variant="outline" className="border-white/20 text-foreground/70">PowerPoint</Badge>
+            <Badge variant="outline" className="border-white/20 text-foreground/70">Excel</Badge>
           </div>
         </label>
       </div>
@@ -258,7 +258,7 @@ export function DocumentUploadZone({ onExtractedData, onDocumentsChange }: Docum
       {/* Uploaded Documents */}
       {documents.length > 0 && (
         <div className="space-y-3">
-          <h4 className="text-sm font-medium text-gray-400 flex items-center gap-2">
+          <h4 className="text-sm font-medium text-foreground/70 flex items-center gap-2">
             <FileText className="w-4 h-4" />
             Uploaded Documents ({documents.length})
           </h4>
@@ -273,13 +273,13 @@ export function DocumentUploadZone({ onExtractedData, onDocumentsChange }: Docum
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
                     <p className="text-sm font-medium text-white truncate">{doc.name}</p>
-                    <span className="text-xs text-gray-500">{formatFileSize(doc.size)}</span>
+                    <span className="text-xs text-foreground/60">{formatFileSize(doc.size)}</span>
                   </div>
 
                   {/* Status */}
                   {doc.status === 'uploading' && (
                     <div className="mt-2">
-                      <div className="flex items-center gap-2 text-xs text-gray-400 mb-1">
+                      <div className="flex items-center gap-2 text-xs text-foreground/70 mb-1">
                         <Loader2 className="w-3 h-3 animate-spin" />
                         Uploading...
                       </div>
@@ -309,7 +309,7 @@ export function DocumentUploadZone({ onExtractedData, onDocumentsChange }: Docum
                         <div className="p-2 bg-gradient-to-r from-cyan-500/10 to-fuchsia-500/10 rounded-lg border border-white/10">
                           <div className="flex items-start gap-2">
                             <Sparkles className="w-3 h-3 text-fuchsia-400 mt-0.5 flex-shrink-0" />
-                            <p className="text-xs text-gray-300">{doc.aiSummary}</p>
+                            <p className="text-xs text-foreground/80">{doc.aiSummary}</p>
                           </div>
                         </div>
                       )}
@@ -363,7 +363,7 @@ export function DocumentUploadZone({ onExtractedData, onDocumentsChange }: Docum
                 {/* Remove Button */}
                 <button
                   onClick={() => removeDocument(doc.id)}
-                  className="text-gray-500 hover:text-red-400 transition-colors"
+                  className="text-foreground/60 hover:text-red-400 transition-colors"
                 >
                   <X className="w-4 h-4" />
                 </button>

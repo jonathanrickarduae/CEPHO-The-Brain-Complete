@@ -46,8 +46,8 @@ const statusConfig: Record<string, {
   queued: { label: 'Queued', icon: Clock, colors: 'bg-amber-500/10 text-amber-400 border-amber-500/30', iconColors: 'text-amber-400' },
   
   // Paused states
-  paused: { label: 'Paused', icon: Pause, colors: 'bg-gray-500/10 text-gray-400 border-gray-500/30', iconColors: 'text-gray-400' },
-  on_hold: { label: 'On Hold', icon: Pause, colors: 'bg-gray-500/10 text-gray-400 border-gray-500/30', iconColors: 'text-gray-400' },
+  paused: { label: 'Paused', icon: Pause, colors: 'bg-gray-500/10 text-foreground/70 border-gray-500/30', iconColors: 'text-foreground/70' },
+  on_hold: { label: 'On Hold', icon: Pause, colors: 'bg-gray-500/10 text-foreground/70 border-gray-500/30', iconColors: 'text-foreground/70' },
   
   // Error states
   failed: { label: 'Failed', icon: XCircle, colors: 'bg-red-500/10 text-red-400 border-red-500/30', iconColors: 'text-red-400' },
@@ -59,7 +59,7 @@ const statusConfig: Record<string, {
   attention: { label: 'Attention', icon: AlertCircle, colors: 'bg-amber-500/10 text-amber-400 border-amber-500/30', iconColors: 'text-amber-400' },
   
   // Draft states
-  draft: { label: 'Draft', icon: Circle, colors: 'bg-gray-500/10 text-gray-400 border-gray-500/30', iconColors: 'text-gray-400' },
+  draft: { label: 'Draft', icon: Circle, colors: 'bg-gray-500/10 text-foreground/70 border-gray-500/30', iconColors: 'text-foreground/70' },
   new: { label: 'New', icon: Circle, colors: 'bg-purple-500/10 text-purple-400 border-purple-500/30', iconColors: 'text-purple-400' },
 };
 
@@ -75,8 +75,8 @@ export function StatusBadge({
   const config = statusConfig[normalizedStatus] || {
     label: status,
     icon: Circle,
-    colors: 'bg-gray-500/10 text-gray-400 border-gray-500/30',
-    iconColors: 'text-gray-400',
+    colors: 'bg-gray-500/10 text-foreground/70 border-gray-500/30',
+    iconColors: 'text-foreground/70',
   };
 
   const Icon = config.icon;
@@ -134,7 +134,7 @@ const healthConfig: Record<HealthType, { label: string; colors: string; dotColor
   green: { label: 'Healthy', colors: 'bg-green-500/10 text-green-400 border-green-500/30', dotColor: 'bg-green-400' },
   yellow: { label: 'At Risk', colors: 'bg-amber-500/10 text-amber-400 border-amber-500/30', dotColor: 'bg-amber-400' },
   red: { label: 'Critical', colors: 'bg-red-500/10 text-red-400 border-red-500/30', dotColor: 'bg-red-400' },
-  gray: { label: 'Unknown', colors: 'bg-gray-500/10 text-gray-400 border-gray-500/30', dotColor: 'bg-gray-400' },
+  gray: { label: 'Unknown', colors: 'bg-gray-500/10 text-foreground/70 border-gray-500/30', dotColor: 'bg-gray-400' },
 };
 
 export function HealthBadge({
@@ -186,7 +186,7 @@ const priorityConfig: Record<PriorityType, { label: string; colors: string }> = 
   urgent: { label: 'Urgent', colors: 'bg-red-500/10 text-red-400 border-red-500/30' },
   high: { label: 'High', colors: 'bg-amber-500/10 text-amber-400 border-amber-500/30' },
   medium: { label: 'Medium', colors: 'bg-cyan-500/10 text-cyan-400 border-cyan-500/30' },
-  low: { label: 'Low', colors: 'bg-gray-500/10 text-gray-400 border-gray-500/30' },
+  low: { label: 'Low', colors: 'bg-gray-500/10 text-foreground/70 border-gray-500/30' },
 };
 
 export function PriorityBadge({

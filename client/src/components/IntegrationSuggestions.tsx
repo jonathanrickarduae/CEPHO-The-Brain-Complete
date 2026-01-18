@@ -138,7 +138,7 @@ export function IntegrationSuggestions({ onConnect, onDismiss, compact = false }
       case 'security': return 'text-green-400';
       case 'wellness': return 'text-purple-400';
       case 'business': return 'text-orange-400';
-      default: return 'text-gray-400';
+      default: return 'text-foreground/70';
     }
   };
 

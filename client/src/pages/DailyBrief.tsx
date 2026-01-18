@@ -112,7 +112,7 @@ export default function DailyBrief() {
       gotit: "Got it! Added to your focus list.",
       defer: "Deferred to tomorrow's brief.",
       delegate: "Delegation request sent to team.",
-      twin: "Assigned to Chief of Staff - will handle autonomously."
+      twin: "Assigned to Chief of Staff for autonomous handling."
     };
     toast.success(messages[action]);
   };
@@ -164,8 +164,8 @@ export default function DailyBrief() {
       case "gotit": return { label: "You'll Handle", color: "text-green-400 bg-green-500/20" };
       case "defer": return { label: "Deferred", color: "text-yellow-400 bg-yellow-500/20" };
       case "delegate": return { label: "Delegated", color: "text-blue-400 bg-blue-500/20" };
-      case "twin": return { label: "Chief of Staff", color: "text-purple-400 bg-purple-500/20" };
-      default: return { label: "Pending", color: "text-gray-400 bg-gray-500/20" };
+      case "twin": return { label: "Chief of Staff", color: "text-primary bg-primary/20" };
+      default: return { label: "Pending", color: "text-foreground/70 bg-gray-500/20" };
     }
   };
 

@@ -61,7 +61,7 @@ export function SMEPanel({
       case 'contributing': return 'text-green-400 border-green-500/30';
       case 'thinking': return 'text-yellow-400 border-yellow-500/30';
       case 'awaiting_response': return 'text-fuchsia-400 border-fuchsia-500/30';
-      default: return 'text-gray-400 border-white/20';
+      default: return 'text-foreground/70 border-white/20';
     }
   };
 
@@ -110,7 +110,7 @@ export function SMEPanel({
         <div className="flex items-center gap-2">
           <Users className="w-5 h-5 text-fuchsia-400" />
           <h3 className="font-semibold text-white">Expert Panel</h3>
-          <Badge variant="outline" className="border-white/20 text-gray-400 text-xs">
+          <Badge variant="outline" className="border-white/20 text-foreground/70 text-xs">
             {activeSMEs.length} active
           </Badge>
         </div>
@@ -154,7 +154,7 @@ export function SMEPanel({
                       </Badge>
                     )}
                   </div>
-                  <p className="text-xs text-gray-400 truncate">
+                  <p className="text-xs text-foreground/70 truncate">
                     {sme.isCorporate 
                       ? (sme.expert as CorporatePartner).methodology 
                       : (sme.expert as AIExpert).specialty}
@@ -171,9 +171,9 @@ export function SMEPanel({
                     <div className="w-2 h-2 rounded-full bg-fuchsia-500 animate-pulse" />
                   )}
                   {isExpanded ? (
-                    <ChevronUp className="w-4 h-4 text-gray-400" />
+                    <ChevronUp className="w-4 h-4 text-foreground/70" />
                   ) : (
-                    <ChevronDown className="w-4 h-4 text-gray-400" />
+                    <ChevronDown className="w-4 h-4 text-foreground/70" />
                   )}
                 </div>
               </button>
@@ -183,7 +183,7 @@ export function SMEPanel({
                 <div className="border-t border-white/10 p-3 space-y-3">
                   {/* Weight Indicator */}
                   <div className="flex items-center gap-2 text-xs">
-                    <span className="text-gray-500">Authority on this topic:</span>
+                    <span className="text-foreground/60">Authority on this topic:</span>
                     <div className="flex gap-0.5">
                       {[...Array(10)].map((_, i) => (
                         <div 
@@ -215,7 +215,7 @@ export function SMEPanel({
                                   ? contribution.modifiedContent 
                                   : contribution.content}
                               </p>
-                              <p className="text-[10px] text-gray-500 mt-1">
+                              <p className="text-[10px] text-foreground/60 mt-1">
                                 {new Date(contribution.timestamp).toLocaleTimeString()}
                               </p>
                             </div>
@@ -245,7 +245,7 @@ export function SMEPanel({
                               <Button
                                 size="sm"
                                 variant="ghost"
-                                className="h-7 text-xs text-gray-400 hover:text-white hover:bg-white/10"
+                                className="h-7 text-xs text-foreground/70 hover:text-white hover:bg-white/10"
                               >
                                 <RotateCcw className="w-3 h-3 mr-1" />
                                 Modify
@@ -276,7 +276,7 @@ export function SMEPanel({
                       ))}
                     </div>
                   ) : (
-                    <p className="text-xs text-gray-500 text-center py-2">
+                    <p className="text-xs text-foreground/60 text-center py-2">
                       No contributions for this section yet
                     </p>
                   )}
@@ -318,11 +318,11 @@ export function SMEPanel({
       {/* Empty State */}
       {activeSMEs.length === 0 && (
         <div className="text-center py-8">
-          <Brain className="w-12 h-12 mx-auto text-gray-600 mb-3" />
-          <p className="text-gray-400 text-sm">
+          <Brain className="w-12 h-12 mx-auto text-foreground/50 mb-3" />
+          <p className="text-foreground/70 text-sm">
             Experts will automatically join based on your answers
           </p>
-          <p className="text-gray-500 text-xs mt-1">
+          <p className="text-foreground/60 text-xs mt-1">
             They'll provide insights, recommendations, and quality checks
           </p>
         </div>
@@ -330,18 +330,18 @@ export function SMEPanel({
 
       {/* Legend */}
       <div className="pt-3 border-t border-white/10">
-        <p className="text-[10px] text-gray-500 mb-2">Contribution Types:</p>
+        <p className="text-[10px] text-foreground/60 mb-2">Contribution Types:</p>
         <div className="flex flex-wrap gap-2">
-          <div className="flex items-center gap-1 text-[10px] text-gray-400">
+          <div className="flex items-center gap-1 text-[10px] text-foreground/70">
             <Sparkles className="w-3 h-3 text-cyan-400" /> Insight
           </div>
-          <div className="flex items-center gap-1 text-[10px] text-gray-400">
+          <div className="flex items-center gap-1 text-[10px] text-foreground/70">
             <ThumbsUp className="w-3 h-3 text-green-400" /> Recommendation
           </div>
-          <div className="flex items-center gap-1 text-[10px] text-gray-400">
+          <div className="flex items-center gap-1 text-[10px] text-foreground/70">
             <MessageSquare className="w-3 h-3 text-yellow-400" /> Question
           </div>
-          <div className="flex items-center gap-1 text-[10px] text-gray-400">
+          <div className="flex items-center gap-1 text-[10px] text-foreground/70">
             <AlertCircle className="w-3 h-3 text-orange-400" /> Concern
           </div>
         </div>

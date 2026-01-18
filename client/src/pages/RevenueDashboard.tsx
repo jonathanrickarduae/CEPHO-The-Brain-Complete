@@ -37,7 +37,7 @@ import { toast } from "sonner";
 const demoVentures = [
   { name: "CEPHO.Ai", mrr: 0, arr: 0, status: "pre_revenue", customers: 1, stage: "MVP" },
   { name: "Celadon", mrr: 45000, arr: 540000, status: "active", customers: 12, stage: "Growth" },
-  { name: "Sample Project", mrr: 0, arr: 0, status: "planned", customers: 0, stage: "Concept" },
+  { name: "Boundless AI", mrr: 0, arr: 0, status: "planned", customers: 0, stage: "Concept" },
   { name: "Perfect DXB", mrr: 28000, arr: 336000, status: "active", customers: 8, stage: "Established" },
 ];
 

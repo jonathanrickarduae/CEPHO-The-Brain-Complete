@@ -100,7 +100,7 @@ export function SecureStorageDashboard() {
       {/* Header */}
       <div>
         <h3 className="text-lg font-semibold text-gray-900">Secure Cloud Storage</h3>
-        <p className="text-sm text-gray-600">Storage usage, backups, and security status</p>
+        <p className="text-sm text-foreground/50">Storage usage, backups, and security status</p>
       </div>
       
       {/* Tabs */}
@@ -112,7 +112,7 @@ export function SecureStorageDashboard() {
             className={`flex-1 px-4 py-2 text-sm font-medium rounded-md transition-colors ${
               activeTab === tab
                 ? 'bg-white text-gray-900 shadow-sm'
-                : 'text-gray-600 hover:text-gray-900'
+                : 'text-foreground/50 hover:text-gray-900'
             }`}
           >
             {tab.charAt(0).toUpperCase() + tab.slice(1)}
@@ -155,7 +155,7 @@ export function SecureStorageDashboard() {
                     <div className={`w-3 h-3 rounded-full ${tier.color}`} />
                     <span className="font-medium text-gray-900">{tier.name}</span>
                   </div>
-                  <span className="text-sm text-gray-600">
+                  <span className="text-sm text-foreground/50">
                     {formatBytes(tier.used)} / {formatBytes(tier.total)}
                   </span>
                 </div>
@@ -165,7 +165,7 @@ export function SecureStorageDashboard() {
                     style={{ width: `${(tier.used / tier.total) * 100}%` }}
                   />
                 </div>
-                <p className="text-xs text-gray-500 mt-2">{tier.description}</p>
+                <p className="text-xs text-foreground/60 mt-2">{tier.description}</p>
               </div>
             ))}
           </div>
@@ -192,7 +192,7 @@ export function SecureStorageDashboard() {
       {activeTab === 'backups' && (
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <p className="text-sm text-gray-600">Automatic backups are enabled</p>
+            <p className="text-sm text-foreground/50">Automatic backups are enabled</p>
             <button className="px-3 py-1.5 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700">
               Create Backup Now
             </button>
@@ -211,11 +211,11 @@ export function SecureStorageDashboard() {
                   </div>
                   <div>
                     <p className="font-medium text-gray-900 capitalize">{backup.type} Backup</p>
-                    <p className="text-sm text-gray-500">{formatTime(backup.timestamp)}</p>
+                    <p className="text-sm text-foreground/60">{formatTime(backup.timestamp)}</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-4">
-                  <span className="text-sm text-gray-600">{backup.size} MB</span>
+                  <span className="text-sm text-foreground/50">{backup.size} MB</span>
                   <span className={`px-2 py-1 text-xs rounded-full ${
                     backup.status === 'completed' ? 'bg-green-100 text-green-700' :
                     backup.status === 'in_progress' ? 'bg-blue-100 text-blue-700' :
@@ -236,15 +236,15 @@ export function SecureStorageDashboard() {
             <h4 className="font-medium text-gray-900 mb-2">Backup Schedule</h4>
             <div className="grid grid-cols-3 gap-4 text-sm">
               <div>
-                <p className="text-gray-500">Daily</p>
+                <p className="text-foreground/60">Daily</p>
                 <p className="font-medium">Every day at 3:00 AM</p>
               </div>
               <div>
-                <p className="text-gray-500">Weekly</p>
+                <p className="text-foreground/60">Weekly</p>
                 <p className="font-medium">Every Sunday at 3:00 AM</p>
               </div>
               <div>
-                <p className="text-gray-500">Monthly</p>
+                <p className="text-foreground/60">Monthly</p>
                 <p className="font-medium">1st of each month</p>
               </div>
             </div>
@@ -259,7 +259,7 @@ export function SecureStorageDashboard() {
           <div className="p-4 bg-white border rounded-lg">
             <div className="flex items-center justify-between mb-4">
               <div>
-                <p className="text-sm text-gray-600">Security Health Score</p>
+                <p className="text-sm text-foreground/50">Security Health Score</p>
                 <p className="text-3xl font-bold text-gray-900">{securityScore}%</p>
               </div>
               <div className={`w-16 h-16 rounded-full flex items-center justify-center ${
@@ -286,10 +286,10 @@ export function SecureStorageDashboard() {
                   </div>
                   <div>
                     <p className="font-medium text-gray-900">{check.name}</p>
-                    <p className="text-sm text-gray-500">{check.description}</p>
+                    <p className="text-sm text-foreground/60">{check.description}</p>
                   </div>
                 </div>
-                <span className="text-xs text-gray-400">
+                <span className="text-xs text-foreground/70">
                   Checked {formatTime(check.lastChecked)}
                 </span>
               </div>
@@ -321,7 +321,7 @@ export function SecureStorageDashboard() {
       {activeTab === 'audit' && (
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <p className="text-sm text-gray-600">Recent activity on your account</p>
+            <p className="text-sm text-foreground/50">Recent activity on your account</p>
             <button className="text-sm text-blue-600 hover:text-blue-700">
               Export Full Log
             </button>
@@ -339,12 +339,12 @@ export function SecureStorageDashboard() {
                   </div>
                   <div>
                     <p className="font-medium text-gray-900">{entry.action}</p>
-                    <p className="text-sm text-gray-500">{entry.resource}</p>
+                    <p className="text-sm text-foreground/60">{entry.resource}</p>
                   </div>
                 </div>
                 <div className="text-right">
-                  <p className="text-sm text-gray-600">{entry.user}</p>
-                  <p className="text-xs text-gray-400">{formatTime(entry.timestamp)}</p>
+                  <p className="text-sm text-foreground/50">{entry.user}</p>
+                  <p className="text-xs text-foreground/70">{formatTime(entry.timestamp)}</p>
                 </div>
               </div>
             ))}

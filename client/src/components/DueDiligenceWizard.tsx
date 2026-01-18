@@ -48,7 +48,7 @@ interface DDSection {
 
 const PARENT_PROJECTS = [
   'Celadon',
-  'Sample Project',
+  'Boundless AI',
   'Perfect DXB',
   'Ampora',
   'Project 5',
@@ -124,12 +124,12 @@ export function DueDiligenceWizard() {
                 <FileSearch className="w-8 h-8 text-white" />
               </div>
               <h2 className="text-2xl font-bold text-white mb-2">Due Diligence Review</h2>
-              <p className="text-gray-400">Comprehensive M&A analysis powered by AI-SMEs</p>
+              <p className="text-foreground/70">Comprehensive M&A analysis powered by AI-SMEs</p>
             </div>
 
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">Company Name *</label>
+                <label className="block text-sm font-medium text-foreground/80 mb-2">Company Name *</label>
                 <input
                   type="text"
                   value={project.companyName || ''}
@@ -140,7 +140,7 @@ export function DueDiligenceWizard() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">Parent Project *</label>
+                <label className="block text-sm font-medium text-foreground/80 mb-2">Parent Project *</label>
                 <select
                   value={project.parentProject || ''}
                   onChange={(e) => setProject(prev => ({ ...prev, parentProject: e.target.value }))}
@@ -154,7 +154,7 @@ export function DueDiligenceWizard() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">DD Type *</label>
+                <label className="block text-sm font-medium text-foreground/80 mb-2">DD Type *</label>
                 <div className="grid grid-cols-2 gap-3">
                   {[
                     { value: 'acquisition', label: 'Acquisition' },
@@ -168,7 +168,7 @@ export function DueDiligenceWizard() {
                       className={`px-4 py-3 rounded-lg border transition-all ${
                         project.ddType === opt.value
                           ? 'bg-purple-600 border-purple-500 text-white'
-                          : 'bg-gray-800 border-gray-700 text-gray-300 hover:border-gray-600'
+                          : 'bg-gray-800 border-gray-700 text-foreground/80 hover:border-gray-600'
                       }`}
                     >
                       {opt.label}
@@ -178,7 +178,7 @@ export function DueDiligenceWizard() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">Confidentiality Level</label>
+                <label className="block text-sm font-medium text-foreground/80 mb-2">Confidentiality Level</label>
                 <div className="grid grid-cols-3 gap-3">
                   {[
                     { value: 'standard', label: 'Standard', icon: <Shield className="w-4 h-4" /> },
@@ -191,7 +191,7 @@ export function DueDiligenceWizard() {
                       className={`px-4 py-3 rounded-lg border transition-all flex items-center justify-center gap-2 ${
                         project.confidentialityLevel === opt.value
                           ? 'bg-purple-600 border-purple-500 text-white'
-                          : 'bg-gray-800 border-gray-700 text-gray-300 hover:border-gray-600'
+                          : 'bg-gray-800 border-gray-700 text-foreground/80 hover:border-gray-600'
                       }`}
                     >
                       {opt.icon}
@@ -209,14 +209,14 @@ export function DueDiligenceWizard() {
           <div className="space-y-6">
             <div className="text-center mb-8">
               <h2 className="text-2xl font-bold text-white mb-2">Company Information</h2>
-              <p className="text-gray-400">Help us gather additional context for thorough analysis</p>
+              <p className="text-foreground/70">Help us gather additional context for thorough analysis</p>
             </div>
 
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">Company Website</label>
+                <label className="block text-sm font-medium text-foreground/80 mb-2">Company Website</label>
                 <div className="relative">
-                  <Globe className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+                  <Globe className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-foreground/60" />
                   <input
                     type="url"
                     value={project.companyWebsite || ''}
@@ -225,11 +225,11 @@ export function DueDiligenceWizard() {
                     className="w-full pl-10 pr-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                   />
                 </div>
-                <p className="text-xs text-gray-500 mt-1">We'll research public information to supplement data room findings</p>
+                <p className="text-xs text-foreground/60 mt-1">We'll research public information to supplement data room findings</p>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">Industry / Sector</label>
+                <label className="block text-sm font-medium text-foreground/80 mb-2">Industry / Sector</label>
                 <select
                   value={project.sector || ''}
                   onChange={(e) => setProject(prev => ({ ...prev, sector: e.target.value }))}
@@ -254,7 +254,7 @@ export function DueDiligenceWizard() {
                   <Search className="w-5 h-5 text-blue-400 mt-0.5" />
                   <div>
                     <h4 className="text-white font-medium">Open Source Intelligence</h4>
-                    <p className="text-sm text-gray-400 mt-1">
+                    <p className="text-sm text-foreground/70 mt-1">
                       Our AI-SMEs will automatically research public information including news, 
                       regulatory filings, social media, and industry reports to identify potential 
                       risks not visible in the data room.
@@ -271,7 +271,7 @@ export function DueDiligenceWizard() {
           <div className="space-y-6">
             <div className="text-center mb-8">
               <h2 className="text-2xl font-bold text-white mb-2">Document Access</h2>
-              <p className="text-gray-400">How would you like to provide the due diligence documents?</p>
+              <p className="text-foreground/70">How would you like to provide the due diligence documents?</p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -287,7 +287,7 @@ export function DueDiligenceWizard() {
                   <Lock className="w-6 h-6 text-blue-400" />
                 </div>
                 <h3 className="text-lg font-semibold text-white mb-2">Data Room Access</h3>
-                <p className="text-sm text-gray-400">
+                <p className="text-sm text-foreground/70">
                   Provide login credentials and our AI will browse the data room like a human analyst, 
                   reading and extracting information systematically.
                 </p>
@@ -309,7 +309,7 @@ export function DueDiligenceWizard() {
                   <Upload className="w-6 h-6 text-green-400" />
                 </div>
                 <h3 className="text-lg font-semibold text-white mb-2">Manual Upload</h3>
-                <p className="text-sm text-gray-400">
+                <p className="text-sm text-foreground/70">
                   Upload documents directly, take photos of screens, or drag & drop files. 
                   Supports PDF, Word, Excel, images, and more.
                 </p>
@@ -323,7 +323,7 @@ export function DueDiligenceWizard() {
             {pathway === 'dataroom' && (
               <div className="mt-6 space-y-4 p-4 bg-gray-800/50 rounded-lg border border-gray-700">
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">Data Room URL</label>
+                  <label className="block text-sm font-medium text-foreground/80 mb-2">Data Room URL</label>
                   <input
                     type="url"
                     value={project.dataRoomUrl || ''}
@@ -334,7 +334,7 @@ export function DueDiligenceWizard() {
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">Username / Email</label>
+                    <label className="block text-sm font-medium text-foreground/80 mb-2">Username / Email</label>
                     <input
                       type="text"
                       placeholder="your@email.com"
@@ -342,7 +342,7 @@ export function DueDiligenceWizard() {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">Password</label>
+                    <label className="block text-sm font-medium text-foreground/80 mb-2">Password</label>
                     <input
                       type="password"
                       placeholder="••••••••"
@@ -350,7 +350,7 @@ export function DueDiligenceWizard() {
                     />
                   </div>
                 </div>
-                <div className="flex items-start gap-2 text-xs text-gray-400">
+                <div className="flex items-start gap-2 text-xs text-foreground/70">
                   <Shield className="w-4 h-4 mt-0.5 text-purple-400" />
                   <span>Credentials are encrypted in transit and used only for this session. They are never stored.</span>
                 </div>
@@ -371,14 +371,14 @@ export function DueDiligenceWizard() {
                     onChange={(e) => handleFileUpload(e.target.files)}
                     accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.jpg,.jpeg,.png"
                   />
-                  <FolderOpen className="w-12 h-12 text-gray-500 mx-auto mb-4" />
+                  <FolderOpen className="w-12 h-12 text-foreground/60 mx-auto mb-4" />
                   <p className="text-white font-medium">Drop files here or click to upload</p>
-                  <p className="text-sm text-gray-400 mt-1">PDF, Word, Excel, PowerPoint, Images</p>
+                  <p className="text-sm text-foreground/70 mt-1">PDF, Word, Excel, PowerPoint, Images</p>
                 </div>
 
                 <div className="flex items-center gap-4">
                   <div className="flex-1 h-px bg-gray-700" />
-                  <span className="text-gray-500 text-sm">or</span>
+                  <span className="text-foreground/60 text-sm">or</span>
                   <div className="flex-1 h-px bg-gray-700" />
                 </div>
 
@@ -393,9 +393,9 @@ export function DueDiligenceWizard() {
                     <div className="space-y-2 max-h-40 overflow-y-auto">
                       {project.documents.map((file, idx) => (
                         <div key={idx} className="flex items-center gap-3 text-sm">
-                          <FileText className="w-4 h-4 text-gray-400" />
-                          <span className="text-gray-300 truncate">{file.name}</span>
-                          <span className="text-gray-500 ml-auto">{(file.size / 1024).toFixed(0)} KB</span>
+                          <FileText className="w-4 h-4 text-foreground/70" />
+                          <span className="text-foreground/80 truncate">{file.name}</span>
+                          <span className="text-foreground/60 ml-auto">{(file.size / 1024).toFixed(0)} KB</span>
                         </div>
                       ))}
                     </div>
@@ -411,7 +411,7 @@ export function DueDiligenceWizard() {
           <div className="space-y-6">
             <div className="text-center mb-8">
               <h2 className="text-2xl font-bold text-white mb-2">AI-SME Expert Team</h2>
-              <p className="text-gray-400">Select specialists to review this due diligence</p>
+              <p className="text-foreground/70">Select specialists to review this due diligence</p>
             </div>
 
             <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-4 mb-4">
@@ -419,7 +419,7 @@ export function DueDiligenceWizard() {
                 <Brain className="w-5 h-5 text-purple-400 mt-0.5" />
                 <div>
                   <h4 className="text-white font-medium">Auto-Selected Based on Sector</h4>
-                  <p className="text-sm text-gray-400 mt-1">
+                  <p className="text-sm text-foreground/70 mt-1">
                     Based on {project.sector || 'the selected sector'}, we've recommended relevant experts. 
                     You can adjust the team as needed.
                   </p>
@@ -458,7 +458,7 @@ export function DueDiligenceWizard() {
                     <div className={`w-2 h-2 rounded-full ${selectedExperts.includes(expert.id) ? 'bg-green-400' : 'bg-gray-600'}`} />
                     <span className="text-white font-medium text-sm">{expert.name}</span>
                   </div>
-                  <span className="text-xs text-gray-400">{expert.specialty}</span>
+                  <span className="text-xs text-foreground/70">{expert.specialty}</span>
                 </button>
               ))}
             </div>
@@ -468,7 +468,7 @@ export function DueDiligenceWizard() {
                 <HelpCircle className="w-5 h-5 text-amber-400 mt-0.5" />
                 <div>
                   <h4 className="text-amber-400 font-medium">Questions for Management</h4>
-                  <p className="text-sm text-gray-300 mt-1">
+                  <p className="text-sm text-foreground/80 mt-1">
                     As the team reviews documents, they'll compile questions that need answers 
                     from the target company's management team.
                   </p>
@@ -483,7 +483,7 @@ export function DueDiligenceWizard() {
           <div className="space-y-6">
             <div className="text-center mb-8">
               <h2 className="text-2xl font-bold text-white mb-2">Analysis in Progress</h2>
-              <p className="text-gray-400">AI-SMEs are reviewing all documents and gathering intelligence</p>
+              <p className="text-foreground/70">AI-SMEs are reviewing all documents and gathering intelligence</p>
             </div>
 
             {isAnalyzing && (
@@ -513,7 +513,7 @@ export function DueDiligenceWizard() {
                         section.status === 'complete' ? 'bg-green-500/20 text-green-400' :
                         section.status === 'flagged' ? 'bg-red-500/20 text-red-400' :
                         section.status === 'in_progress' ? 'bg-purple-500/20 text-purple-400' :
-                        'bg-gray-700 text-gray-400'
+                        'bg-gray-700 text-foreground/70'
                       }`}>
                         {section.icon}
                       </div>
@@ -561,21 +561,21 @@ export function DueDiligenceWizard() {
                 <CheckCircle className="w-8 h-8 text-white" />
               </div>
               <h2 className="text-2xl font-bold text-white mb-2">Analysis Complete</h2>
-              <p className="text-gray-400">Review the findings and generate your DD report</p>
+              <p className="text-foreground/70">Review the findings and generate your DD report</p>
             </div>
 
             <div className="grid grid-cols-3 gap-4 mb-6">
               <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-4 text-center">
                 <div className="text-3xl font-bold text-white">47</div>
-                <div className="text-sm text-gray-400">Documents Reviewed</div>
+                <div className="text-sm text-foreground/70">Documents Reviewed</div>
               </div>
               <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-4 text-center">
                 <div className="text-3xl font-bold text-red-400">8</div>
-                <div className="text-sm text-gray-400">Risks Identified</div>
+                <div className="text-sm text-foreground/70">Risks Identified</div>
               </div>
               <div className="bg-amber-500/10 border border-amber-500/30 rounded-lg p-4 text-center">
                 <div className="text-3xl font-bold text-amber-400">12</div>
-                <div className="text-sm text-gray-400">Questions for Mgmt</div>
+                <div className="text-sm text-foreground/70">Questions for Mgmt</div>
               </div>
             </div>
 
@@ -584,23 +584,23 @@ export function DueDiligenceWizard() {
               <div className="space-y-2">
                 <label className="flex items-center gap-3 p-3 bg-gray-900 rounded-lg cursor-pointer hover:bg-gray-800 transition-colors">
                   <input type="checkbox" defaultChecked className="w-4 h-4 rounded border-gray-600 text-purple-600 focus:ring-purple-500" />
-                  <span className="text-gray-300">Executive Summary (1-page)</span>
+                  <span className="text-foreground/80">Executive Summary (1-page)</span>
                 </label>
                 <label className="flex items-center gap-3 p-3 bg-gray-900 rounded-lg cursor-pointer hover:bg-gray-800 transition-colors">
                   <input type="checkbox" defaultChecked className="w-4 h-4 rounded border-gray-600 text-purple-600 focus:ring-purple-500" />
-                  <span className="text-gray-300">Full DD Report (Big 4 format)</span>
+                  <span className="text-foreground/80">Full DD Report (Big 4 format)</span>
                 </label>
                 <label className="flex items-center gap-3 p-3 bg-gray-900 rounded-lg cursor-pointer hover:bg-gray-800 transition-colors">
                   <input type="checkbox" defaultChecked className="w-4 h-4 rounded border-gray-600 text-purple-600 focus:ring-purple-500" />
-                  <span className="text-gray-300">Risk Register</span>
+                  <span className="text-foreground/80">Risk Register</span>
                 </label>
                 <label className="flex items-center gap-3 p-3 bg-gray-900 rounded-lg cursor-pointer hover:bg-gray-800 transition-colors">
                   <input type="checkbox" defaultChecked className="w-4 h-4 rounded border-gray-600 text-purple-600 focus:ring-purple-500" />
-                  <span className="text-gray-300">Questions for Management</span>
+                  <span className="text-foreground/80">Questions for Management</span>
                 </label>
                 <label className="flex items-center gap-3 p-3 bg-gray-900 rounded-lg cursor-pointer hover:bg-gray-800 transition-colors">
                   <input type="checkbox" defaultChecked className="w-4 h-4 rounded border-gray-600 text-purple-600 focus:ring-purple-500" />
-                  <span className="text-gray-300">Valuation Analysis</span>
+                  <span className="text-foreground/80">Valuation Analysis</span>
                 </label>
               </div>
             </div>
@@ -610,7 +610,7 @@ export function DueDiligenceWizard() {
               Generate DD Report
             </button>
 
-            <p className="text-center text-sm text-gray-500">
+            <p className="text-center text-sm text-foreground/60">
               Report will be reviewed by Chief of Staff before final sign-off
             </p>
           </div>
@@ -625,7 +625,7 @@ export function DueDiligenceWizard() {
     <div className="max-w-2xl mx-auto">
       {/* Progress Bar */}
       <div className="mb-8">
-        <div className="flex items-center justify-between text-sm text-gray-400 mb-2">
+        <div className="flex items-center justify-between text-sm text-foreground/70 mb-2">
           <span>Due Diligence Wizard</span>
           <span>{Math.round(progress)}% complete</span>
         </div>
@@ -647,7 +647,7 @@ export function DueDiligenceWizard() {
         <button
           onClick={() => setStep(s => Math.max(1, s - 1))}
           disabled={step === 1}
-          className="flex items-center gap-2 px-4 py-2 text-gray-400 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          className="flex items-center gap-2 px-4 py-2 text-foreground/70 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
         >
           <ChevronLeft className="w-5 h-5" />
           Previous

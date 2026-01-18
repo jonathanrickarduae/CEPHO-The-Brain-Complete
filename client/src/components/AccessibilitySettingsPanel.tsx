@@ -26,7 +26,7 @@ export function AccessibilitySettingsPanel() {
         </h3>
         <button
           onClick={resetToDefaults}
-          className="flex items-center gap-2 px-3 py-1.5 bg-gray-700 hover:bg-gray-600 rounded-lg text-sm text-gray-300 transition-colors"
+          className="flex items-center gap-2 px-3 py-1.5 bg-gray-700 hover:bg-gray-600 rounded-lg text-sm text-foreground/80 transition-colors"
         >
           <RotateCcw className="w-4 h-4" />
           Reset
@@ -42,7 +42,7 @@ export function AccessibilitySettingsPanel() {
             </div>
             <div>
               <div className="font-medium text-white">Reduced Motion</div>
-              <div className="text-sm text-gray-500">Minimize animations and transitions</div>
+              <div className="text-sm text-foreground/60">Minimize animations and transitions</div>
             </div>
           </div>
           <button
@@ -67,7 +67,7 @@ export function AccessibilitySettingsPanel() {
             </div>
             <div>
               <div className="font-medium text-white">High Contrast</div>
-              <div className="text-sm text-gray-500">Increase color contrast for better visibility</div>
+              <div className="text-sm text-foreground/60">Increase color contrast for better visibility</div>
             </div>
           </div>
           <button
@@ -92,7 +92,7 @@ export function AccessibilitySettingsPanel() {
             </div>
             <div>
               <div className="font-medium text-white">Screen Reader Mode</div>
-              <div className="text-sm text-gray-500">Optimize for screen reader compatibility</div>
+              <div className="text-sm text-foreground/60">Optimize for screen reader compatibility</div>
             </div>
           </div>
           <button
@@ -117,7 +117,7 @@ export function AccessibilitySettingsPanel() {
             </div>
             <div>
               <div className="font-medium text-white">Font Size</div>
-              <div className="text-sm text-gray-500">Adjust text size throughout the app</div>
+              <div className="text-sm text-foreground/60">Adjust text size throughout the app</div>
             </div>
           </div>
           <div className="flex gap-2">
@@ -128,7 +128,7 @@ export function AccessibilitySettingsPanel() {
                 className={`flex-1 py-2 rounded-lg text-sm font-medium transition-colors ${
                   fontSize === size
                     ? 'bg-cyan-500 text-white'
-                    : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
+                    : 'bg-gray-800 text-foreground/70 hover:bg-gray-700'
                 }`}
               >
                 {size === 'normal' ? 'Normal' : size === 'large' ? 'Large' : 'Larger'}
@@ -145,14 +145,14 @@ export function AccessibilitySettingsPanel() {
             </div>
             <div>
               <div className="font-medium text-white">Preview</div>
-              <div className="text-sm text-gray-500">See how your settings affect the interface</div>
+              <div className="text-sm text-foreground/60">See how your settings affect the interface</div>
             </div>
           </div>
           <div className={`p-4 rounded-lg border ${
             highContrast ? 'bg-black border-white' : 'bg-gray-800 border-gray-700'
           }`}>
             <p className={`${
-              highContrast ? 'text-white' : 'text-gray-300'
+              highContrast ? 'text-white' : 'text-foreground/80'
             } ${
               fontSize === 'normal' ? 'text-base' :
               fontSize === 'large' ? 'text-lg' : 'text-xl'

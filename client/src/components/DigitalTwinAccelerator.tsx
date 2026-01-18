@@ -461,7 +461,7 @@ export function DigitalTwinAccelerator({ onComplete }: DigitalTwinAcceleratorPro
               <div className="p-5 bg-gray-800/50 border border-gray-700 rounded-xl">
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-10 h-10 rounded-lg bg-gray-700 flex items-center justify-center">
-                    <Trophy className="w-5 h-5 text-gray-400" />
+                    <Trophy className="w-5 h-5 text-foreground/70" />
                   </div>
                   <h3 className="font-semibold text-foreground">Training Breakdown</h3>
                 </div>

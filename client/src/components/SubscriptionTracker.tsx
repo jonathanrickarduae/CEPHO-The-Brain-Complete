@@ -106,7 +106,7 @@ const initialFormData: FormData = {
 function CostTrendChart({ data }: { data: { month: string; totalCost: number; subscriptionCount: number }[] }) {
   if (!data || data.length === 0) {
     return (
-      <div className="h-48 flex items-center justify-center text-gray-500">
+      <div className="h-48 flex items-center justify-center text-foreground/60">
         No cost history available
       </div>
     );
@@ -187,7 +187,7 @@ function CostTrendChart({ data }: { data: { month: string; totalCost: number; su
       </svg>
       
       {/* X-axis labels */}
-      <div className="flex justify-between px-2 text-xs text-gray-500 mt-1">
+      <div className="flex justify-between px-2 text-xs text-foreground/60 mt-1">
         {data.filter((_, i) => i % Math.ceil(data.length / 6) === 0 || i === data.length - 1).map((d, i) => (
           <span key={i}>{d.month}</span>
         ))}
@@ -345,7 +345,7 @@ export default function SubscriptionTracker() {
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-400">Monthly Spend</p>
+                <p className="text-sm text-foreground/70">Monthly Spend</p>
                 <p className="text-2xl font-bold text-white">{formatCurrency(summary?.totalMonthly || monthlyTotal)}</p>
               </div>
               <div className="p-3 bg-amber-500/20 rounded-full">
@@ -359,7 +359,7 @@ export default function SubscriptionTracker() {
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-400">Annual Spend</p>
+                <p className="text-sm text-foreground/70">Annual Spend</p>
                 <p className="text-2xl font-bold text-white">{formatCurrency(summary?.totalAnnual || annualTotal)}</p>
               </div>
               <div className="p-3 bg-purple-500/20 rounded-full">
@@ -373,7 +373,7 @@ export default function SubscriptionTracker() {
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-400">Active Subscriptions</p>
+                <p className="text-sm text-foreground/70">Active Subscriptions</p>
                 <p className="text-2xl font-bold text-white">{summary?.activeCount || subscriptions?.filter(s => s.status === 'active').length || 0}</p>
               </div>
               <div className="p-3 bg-emerald-500/20 rounded-full">
@@ -387,7 +387,7 @@ export default function SubscriptionTracker() {
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-400">On Trial</p>
+                <p className="text-sm text-foreground/70">On Trial</p>
                 <p className="text-2xl font-bold text-white">{subscriptions?.filter(s => s.status === 'trial').length || 0}</p>
               </div>
               <div className="p-3 bg-cyan-500/20 rounded-full">
@@ -471,7 +471,7 @@ export default function SubscriptionTracker() {
             <div className="mt-4 flex items-center justify-center gap-6 text-sm">
               <div className="flex items-center gap-2">
                 <div className="w-3 h-3 rounded-full bg-cyan-500" />
-                <span className="text-gray-400">Monthly Cost</span>
+                <span className="text-foreground/70">Monthly Cost</span>
               </div>
               {costHistory.length >= 2 && (
                 <div className="flex items-center gap-2">
@@ -656,8 +656,8 @@ export default function SubscriptionTracker() {
               </div>
             ) : !subscriptions || subscriptions.length === 0 ? (
               <div className="text-center py-12">
-                <CreditCard className="w-12 h-12 text-gray-600 mx-auto mb-4" />
-                <p className="text-gray-400 mb-4">No subscriptions tracked yet</p>
+                <CreditCard className="w-12 h-12 text-foreground/50 mx-auto mb-4" />
+                <p className="text-foreground/70 mb-4">No subscriptions tracked yet</p>
                 <Button 
                   onClick={() => setIsAddDialogOpen(true)}
                   className="bg-gradient-to-r from-cyan-500 to-purple-500"
@@ -699,13 +699,13 @@ export default function SubscriptionTracker() {
                                 </Badge>
                               )}
                             </div>
-                            <p className="text-sm text-gray-400">{sub.provider || sub.name}</p>
+                            <p className="text-sm text-foreground/70">{sub.provider || sub.name}</p>
                           </div>
                         </div>
                         <div className="flex items-center gap-4">
                           <div className="text-right">
                             <p className="text-white font-medium">{formatCurrency(sub.cost)}</p>
-                            <p className="text-xs text-gray-500">
+                            <p className="text-xs text-foreground/60">
                               {BILLING_CYCLES.find(c => c.value === sub.billingCycle)?.label}
                             </p>
                           </div>
@@ -715,7 +715,7 @@ export default function SubscriptionTracker() {
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                               <Button variant="ghost" size="icon" className="h-8 w-8">
-                                <MoreHorizontal className="w-4 h-4 text-gray-400" />
+                                <MoreHorizontal className="w-4 h-4 text-foreground/70" />
                               </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end" className="bg-gray-800 border-gray-700">
@@ -757,14 +757,14 @@ export default function SubscriptionTracker() {
           <CardContent>
             <div className="space-y-4">
               {categoryTotals.length === 0 ? (
-                <p className="text-gray-500 text-center py-4">No data available</p>
+                <p className="text-foreground/60 text-center py-4">No data available</p>
               ) : (
                 categoryTotals.map((cat) => (
                   <div key={cat.value} className="space-y-2">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <div className={`w-3 h-3 rounded-full ${cat.color}`} />
-                        <span className="text-sm text-gray-300">{cat.label}</span>
+                        <span className="text-sm text-foreground/80">{cat.label}</span>
                       </div>
                       <span className="text-sm font-medium text-white">{formatCurrency(cat.total)}</span>
                     </div>
@@ -786,7 +786,7 @@ export default function SubscriptionTracker() {
                   <TrendingDown className="w-4 h-4 text-amber-400" />
                   Optimization Tip
                 </h4>
-                <p className="text-sm text-gray-400">
+                <p className="text-sm text-foreground/70">
                   {categoryTotals[0]?.label} accounts for {monthlyTotal > 0 ? ((categoryTotals[0]?.total / monthlyTotal) * 100).toFixed(0) : 0}% of your spend. 
                   Consider reviewing these subscriptions for potential consolidation.
                 </p>

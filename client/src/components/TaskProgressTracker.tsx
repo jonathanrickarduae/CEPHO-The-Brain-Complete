@@ -130,7 +130,7 @@ export function TaskProgressTracker({ tasks = DEMO_TASKS, onTaskClick }: TaskPro
           </div>
           <div>
             <h3 className="font-semibold text-white">Active Tasks</h3>
-            <p className="text-sm text-gray-400">
+            <p className="text-sm text-foreground/70">
               {inProgressTasks.length} in progress • Next ready in ~{Math.ceil(nextCompletion)} min
             </p>
           </div>
@@ -142,7 +142,7 @@ export function TaskProgressTracker({ tasks = DEMO_TASKS, onTaskClick }: TaskPro
               <span>~{Math.ceil(totalEstimated)} min until all complete</span>
             </div>
           )}
-          {expanded ? <ChevronUp className="w-5 h-5 text-gray-400" /> : <ChevronDown className="w-5 h-5 text-gray-400" />}
+          {expanded ? <ChevronUp className="w-5 h-5 text-foreground/70" /> : <ChevronDown className="w-5 h-5 text-foreground/70" />}
         </div>
       </div>
 
@@ -172,13 +172,13 @@ export function TaskProgressTracker({ tasks = DEMO_TASKS, onTaskClick }: TaskPro
                         {STAGE_CONFIG[task.stage].label}
                       </Badge>
                     </div>
-                    <p className="text-sm text-gray-400">{task.description}</p>
+                    <p className="text-sm text-foreground/70">{task.description}</p>
                   </div>
                   <div className="text-right ml-4">
                     <div className="text-lg font-semibold text-white">
                       {task.stage === 'complete' ? '✓' : `~${Math.ceil(remaining)} min`}
                     </div>
-                    <div className="text-xs text-gray-500">
+                    <div className="text-xs text-foreground/60">
                       {task.confidence}% confidence
                     </div>
                   </div>
@@ -186,7 +186,7 @@ export function TaskProgressTracker({ tasks = DEMO_TASKS, onTaskClick }: TaskPro
 
                 {/* Progress Bar */}
                 <div className="mb-3">
-                  <div className="flex items-center justify-between text-xs text-gray-400 mb-1">
+                  <div className="flex items-center justify-between text-xs text-foreground/70 mb-1">
                     <span>{Math.round(task.progress)}% complete</span>
                     <span>{Math.round(task.elapsedMinutes)} / {task.estimatedMinutes} min</span>
                   </div>
@@ -201,13 +201,13 @@ export function TaskProgressTracker({ tasks = DEMO_TASKS, onTaskClick }: TaskPro
                       {ASSIGNEE_CONFIG[task.assignedTo].label}
                     </span>
                     {task.experts && task.experts.length > 0 && (
-                      <span className="text-xs text-gray-500">
+                      <span className="text-xs text-foreground/60">
                         ({task.experts.join(', ')})
                       </span>
                     )}
                   </div>
                   {task.stage !== 'complete' && task.stage !== 'blocked' && (
-                    <Button variant="ghost" size="sm" className="text-xs text-gray-400 hover:text-white">
+                    <Button variant="ghost" size="sm" className="text-xs text-foreground/70 hover:text-white">
                       View Details
                     </Button>
                   )}
@@ -223,7 +223,7 @@ export function TaskProgressTracker({ tasks = DEMO_TASKS, onTaskClick }: TaskPro
                 <Brain className="w-5 h-5 text-fuchsia-400 mt-0.5" />
                 <div>
                   <p className="text-sm text-white font-medium">Chief of Staff Recommendation</p>
-                  <p className="text-sm text-gray-400 mt-1">
+                  <p className="text-sm text-foreground/70 mt-1">
                     {totalEstimated > 15 
                       ? `These tasks will take approximately ${Math.ceil(totalEstimated)} minutes. Consider taking a break or reviewing your inbox while I complete them.`
                       : `Next item ready for your review in ~${Math.ceil(nextCompletion)} minutes. I'll notify you when it's ready.`

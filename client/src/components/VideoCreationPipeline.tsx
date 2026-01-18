@@ -158,7 +158,7 @@ export function VideoCreationPipeline() {
                         project.status === 'ready' ? 'bg-green-500/20 text-green-400' :
                         project.status === 'generating' ? 'bg-yellow-500/20 text-yellow-400' :
                         project.status === 'exported' ? 'bg-blue-500/20 text-blue-400' :
-                        'bg-gray-500/20 text-gray-400'
+                        'bg-gray-500/20 text-foreground/70'
                       }`}>
                         {project.status}
                       </span>

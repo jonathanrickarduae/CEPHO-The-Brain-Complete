@@ -152,7 +152,7 @@ export function VoiceInterfaceToggle() {
 
   if (!isSupported) {
     return (
-      <div className="flex items-center gap-2 px-3 py-2 bg-gray-800/50 rounded-lg text-gray-500 text-sm">
+      <div className="flex items-center gap-2 px-3 py-2 bg-gray-800/50 rounded-lg text-foreground/60 text-sm">
         <MicOff className="w-4 h-4" />
         <span>Voice not supported</span>
       </div>
@@ -225,7 +225,7 @@ export function VoiceInterfaceToggle() {
           <div className="space-y-4">
             {/* Language */}
             <div>
-              <label className="text-xs text-gray-400 block mb-1">Language</label>
+              <label className="text-xs text-foreground/70 block mb-1">Language</label>
               <select
                 value={settings.language}
                 onChange={(e) => updateSettings({ language: e.target.value })}
@@ -239,7 +239,7 @@ export function VoiceInterfaceToggle() {
 
             {/* Voice speed */}
             <div>
-              <label className="text-xs text-gray-400 block mb-1">
+              <label className="text-xs text-foreground/70 block mb-1">
                 Voice Speed: {settings.voiceSpeed.toFixed(1)}x
               </label>
               <input
@@ -254,7 +254,7 @@ export function VoiceInterfaceToggle() {
             </div>
 
             {/* Auto-listen */}
-            <label className="flex items-center gap-2 text-sm text-gray-300 cursor-pointer">
+            <label className="flex items-center gap-2 text-sm text-foreground/80 cursor-pointer">
               <input
                 type="checkbox"
                 checked={settings.autoListen}

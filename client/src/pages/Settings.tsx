@@ -73,10 +73,10 @@ export default function Settings() {
                 placeholder="Search settings..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-9 bg-gray-800 border-gray-700"
+                className="pl-9 bg-card border-border"
               />
             </div>
-            <nav className="bg-gray-800 rounded-xl border border-gray-700 overflow-hidden">
+            <nav className="bg-card rounded-xl border border-border overflow-hidden">
               {tabs.filter(tab => 
                 searchQuery === '' || 
                 tab.label.toLowerCase().includes(searchQuery.toLowerCase())
@@ -87,7 +87,7 @@ export default function Settings() {
                   className={`w-full flex items-center gap-3 px-4 py-3 text-left transition-colors ${
                     activeTab === tab.id
                       ? 'bg-cyan-500/10 text-cyan-400 border-l-2 border-cyan-400'
-                      : 'text-gray-400 hover:bg-gray-700/50 hover:text-gray-300'
+                      : 'text-foreground/70 hover:bg-gray-700/50 hover:text-foreground/80'
                   }`}
                 >
                   <tab.icon className="w-5 h-5" />
@@ -118,7 +118,7 @@ export default function Settings() {
 
                   <div className="grid gap-4">
                     <div>
-                      <label className="block text-sm text-gray-400 mb-2">Display Name</label>
+                      <label className="block text-sm text-foreground/70 mb-2">Display Name</label>
                       <input
                         type="text"
                         defaultValue="User"
@@ -126,7 +126,7 @@ export default function Settings() {
                       />
                     </div>
                     <div>
-                      <label className="block text-sm text-gray-400 mb-2">Email</label>
+                      <label className="block text-sm text-foreground/70 mb-2">Email</label>
                       <input
                         type="email"
                         defaultValue="user@example.com"
@@ -134,7 +134,7 @@ export default function Settings() {
                       />
                     </div>
                     <div>
-                      <label className="block text-sm text-gray-400 mb-2">Timezone</label>
+                      <label className="block text-sm text-foreground/70 mb-2">Timezone</label>
                       <select className="w-full px-4 py-2 bg-gray-900 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-cyan-500">
                         <option>UTC-8 (Pacific Time)</option>
                         <option>UTC-5 (Eastern Time)</option>
@@ -205,7 +205,7 @@ export default function Settings() {
                     <div className="flex items-center justify-between p-4 bg-gray-900 rounded-xl">
                       <div>
                         <div className="font-medium text-white">Enable Do Not Disturb</div>
-                        <div className="text-sm text-gray-500">Pause all notifications</div>
+                        <div className="text-sm text-foreground/60">Pause all notifications</div>
                       </div>
                       <button className="w-12 h-6 rounded-full transition-colors bg-gray-700">
                         <div className="w-5 h-5 rounded-full bg-white transition-transform translate-x-0.5" />
@@ -215,7 +215,7 @@ export default function Settings() {
                       <div className="font-medium text-white mb-3">Schedule Quiet Hours</div>
                       <div className="grid grid-cols-2 gap-4">
                         <div>
-                          <label className="text-sm text-gray-400 block mb-1">Start Time</label>
+                          <label className="text-sm text-foreground/70 block mb-1">Start Time</label>
                           <select className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white">
                             <option>10:00 PM</option>
                             <option>11:00 PM</option>
@@ -223,7 +223,7 @@ export default function Settings() {
                           </select>
                         </div>
                         <div>
-                          <label className="text-sm text-gray-400 block mb-1">End Time</label>
+                          <label className="text-sm text-foreground/70 block mb-1">End Time</label>
                           <select className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white">
                             <option>6:00 AM</option>
                             <option>7:00 AM</option>
@@ -254,7 +254,7 @@ export default function Settings() {
                         />
                         <div>
                           <div className="font-medium text-white">{option.label}</div>
-                          <div className="text-sm text-gray-500">{option.description}</div>
+                          <div className="text-sm text-foreground/60">{option.description}</div>
                         </div>
                       </label>
                     ))}
@@ -278,7 +278,7 @@ export default function Settings() {
                       <div key={index} className="flex items-center justify-between p-4 bg-gray-900 rounded-xl">
                         <div>
                           <div className="font-medium text-white">{item.label}</div>
-                          <div className="text-sm text-gray-500">{item.description}</div>
+                          <div className="text-sm text-foreground/60">{item.description}</div>
                         </div>
                         <button
                           className={`w-12 h-6 rounded-full transition-colors ${
@@ -305,7 +305,7 @@ export default function Settings() {
                 <div className="space-y-6">
                   <div className="p-4 bg-gray-900 rounded-xl">
                     <h4 className="font-medium text-white mb-2">Data Collection</h4>
-                    <p className="text-sm text-gray-400 mb-4">
+                    <p className="text-sm text-foreground/70 mb-4">
                       Control what data your Chief of Staff can access and learn from.
                     </p>
                     <div className="space-y-3">
@@ -321,7 +321,7 @@ export default function Settings() {
                             defaultChecked={item.enabled}
                             className="w-4 h-4 rounded border-gray-600 bg-gray-700 text-cyan-500 focus:ring-cyan-500"
                           />
-                          <span className="text-gray-300">{item.label}</span>
+                          <span className="text-foreground/80">{item.label}</span>
                         </label>
                       ))}
                     </div>
@@ -329,7 +329,7 @@ export default function Settings() {
 
                   <div className="p-4 bg-gray-900 rounded-xl">
                     <h4 className="font-medium text-white mb-2">Data Retention</h4>
-                    <p className="text-sm text-gray-400 mb-4">
+                    <p className="text-sm text-foreground/70 mb-4">
                       Choose how long to keep your data.
                     </p>
                     <select className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-cyan-500">
@@ -342,7 +342,7 @@ export default function Settings() {
 
                   <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl">
                     <h4 className="font-medium text-red-400 mb-2">Danger Zone</h4>
-                    <p className="text-sm text-gray-400 mb-4">
+                    <p className="text-sm text-foreground/70 mb-4">
                       Permanently delete your account and all associated data.
                     </p>
                     <button className="px-4 py-2 bg-red-500/20 hover:bg-red-500/30 text-red-400 rounded-lg transition-colors">

@@ -69,7 +69,7 @@ const MOCK_TASKS: Task[] = [
     id: 'task-2',
     title: 'Investor Deck Updates',
     description: 'Update pitch deck with latest metrics and market data',
-    project: 'Sample Project',
+    project: 'Boundless AI',
     status: 'active',
     progress: 60,
     qaStatus: 'pending',
@@ -109,12 +109,12 @@ const MOCK_TASKS: Task[] = [
 const MOCK_CONVERSATIONS: Conversation[] = [
   { id: 'conv-1', title: 'Current Session', project: undefined, lastMessage: 'How can I help you today?', timestamp: new Date(), unread: 0, starred: true },
   { id: 'conv-2', title: 'Celadon Strategy', project: 'Celadon', lastMessage: 'The financial projections look solid...', timestamp: new Date(Date.now() - 3600000), unread: 2, starred: true },
-  { id: 'conv-3', title: 'Sample Project Pitch', project: 'Sample Project', lastMessage: 'I\'ve updated the deck with...', timestamp: new Date(Date.now() - 86400000), unread: 0, starred: false },
+  { id: 'conv-3', title: 'Sample Project Pitch', project: 'Boundless AI', lastMessage: 'I\'ve updated the deck with...', timestamp: new Date(Date.now() - 86400000), unread: 0, starred: false },
   { id: 'conv-4', title: 'General Planning', project: undefined, lastMessage: 'Your schedule for tomorrow...', timestamp: new Date(Date.now() - 172800000), unread: 0, starred: false },
 ];
 
 const QA_STATUS_CONFIG: Record<QAStatus, { label: string; color: string; icon: typeof CheckCircle2 }> = {
-  pending: { label: 'Pending QA', color: 'text-gray-400 bg-gray-500/10', icon: Clock },
+  pending: { label: 'Pending QA', color: 'text-foreground/70 bg-gray-500/10', icon: Clock },
   cos_reviewing: { label: 'CoS Reviewing', color: 'text-amber-400 bg-amber-500/10', icon: Eye },
   cos_approved: { label: 'CoS Approved', color: 'text-blue-400 bg-blue-500/10', icon: CheckCircle2 },
   secondary_reviewing: { label: '2nd AI Check', color: 'text-purple-400 bg-purple-500/10', icon: Bot },
@@ -321,7 +321,7 @@ export default function ChiefOfStaff() {
               className={`flex items-center gap-2 px-4 py-3 text-sm font-medium transition-colors border-b-2 ${
                 viewMode === tab.id
                   ? 'text-fuchsia-400 border-fuchsia-400'
-                  : 'text-gray-400 border-transparent hover:text-white'
+                  : 'text-foreground/70 border-transparent hover:text-white'
               }`}
             >
               <tab.icon className="w-4 h-4" />
@@ -344,7 +344,7 @@ export default function ChiefOfStaff() {
             {!isMobile && (
               <div className="w-64 border-r border-white/10 bg-white/5 flex flex-col">
                 <div className="p-3 border-b border-white/10">
-                  <Button variant="outline" size="sm" className="w-full gap-2 border-white/20 text-gray-300 hover:bg-white/5" onClick={() => {
+                  <Button variant="outline" size="sm" className="w-full gap-2 border-white/20 text-foreground/80 hover:bg-white/5" onClick={() => {
                     clearHistory();
                     setCurrentConversationId('new-' + Date.now());
                     toast.success('New conversation started');
@@ -442,12 +442,12 @@ export default function ChiefOfStaff() {
                       onKeyDown={handleKeyDown}
                       placeholder="Message Chief of Staff..."
                       rows={1}
-                      className="w-full px-4 py-3 bg-transparent resize-none focus:outline-none text-sm text-white placeholder:text-gray-500"
+                      className="w-full px-4 py-3 bg-transparent resize-none focus:outline-none text-sm text-white placeholder:text-foreground/60"
                       style={{ minHeight: '44px', maxHeight: '120px' }}
                     />
                     <div className="flex items-center justify-between px-3 py-2 border-t border-white/10">
                       <div className="flex items-center gap-1">
-                        <button className="p-2 rounded-lg text-gray-400 hover:text-white hover:bg-white/10 transition-colors">
+                        <button className="p-2 rounded-lg text-foreground/70 hover:text-white hover:bg-white/10 transition-colors">
                           <Paperclip className="w-4 h-4" />
                         </button>
                         <button
@@ -455,7 +455,7 @@ export default function ChiefOfStaff() {
                           className={`p-2 rounded-lg transition-colors ${
                             isListening 
                               ? "text-red-400 bg-red-500/20" 
-                              : "text-gray-400 hover:text-white hover:bg-white/10"
+                              : "text-foreground/70 hover:text-white hover:bg-white/10"
                           }`}
                         >
                           {isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
@@ -502,7 +502,7 @@ export default function ChiefOfStaff() {
 
               {/* Task List */}
               <div className="space-y-3">
-                <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider">All Tasks</h3>
+                <h3 className="text-sm font-semibold text-foreground/70 uppercase tracking-wider">All Tasks</h3>
                 {tasks.map(task => {
                   const qaConfig = QA_STATUS_CONFIG[task.qaStatus];
                   const QAIcon = qaConfig.icon;
@@ -591,7 +591,7 @@ export default function ChiefOfStaff() {
 
               {/* Training Modules */}
               <div className="space-y-3">
-                <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider">Training Modules</h3>
+                <h3 className="text-sm font-semibold text-foreground/70 uppercase tracking-wider">Training Modules</h3>
                 
                 <button className="w-full p-5 bg-gradient-to-br from-emerald-500/10 to-green-500/10 border-2 border-emerald-500/30 rounded-2xl hover:border-emerald-400 transition-all text-left group">
                   <div className="flex items-center justify-between">
@@ -601,7 +601,7 @@ export default function ChiefOfStaff() {
                       </div>
                       <div>
                         <h4 className="font-semibold text-white">Type A Questions (Scale 1-10)</h4>
-                        <p className="text-sm text-gray-400">Decision-making, risk, communication, values</p>
+                        <p className="text-sm text-foreground/70">Decision-making, risk, communication, values</p>
                       </div>
                     </div>
                     <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30">Complete</Badge>
@@ -616,7 +616,7 @@ export default function ChiefOfStaff() {
                       </div>
                       <div>
                         <h4 className="font-semibold text-white">Type B Questions (Yes/No)</h4>
-                        <p className="text-sm text-gray-400">Preferences, habits, boundaries</p>
+                        <p className="text-sm text-foreground/70">Preferences, habits, boundaries</p>
                       </div>
                     </div>
                     <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30">0/100</Badge>
@@ -631,17 +631,17 @@ export default function ChiefOfStaff() {
                       </div>
                       <div>
                         <h4 className="font-semibold text-white">Leadership Thinking Styles</h4>
-                        <p className="text-sm text-gray-400">MIT, Harvard, NASA, McKinsey, CEO frameworks</p>
+                        <p className="text-sm text-foreground/70">MIT, Harvard, NASA, McKinsey, CEO frameworks</p>
                       </div>
                     </div>
-                    <Badge className="bg-gray-500/20 text-gray-400 border-gray-500/30">Coming Soon</Badge>
+                    <Badge className="bg-gray-500/20 text-foreground/70 border-gray-500/30">Coming Soon</Badge>
                   </div>
                 </button>
               </div>
 
               {/* SME Learning Stats */}
               <div className="mt-6">
-                <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">SME Expert Learning</h3>
+                <h3 className="text-sm font-semibold text-foreground/70 uppercase tracking-wider mb-3">SME Expert Learning</h3>
                 <div className="p-4 bg-white/5 border border-white/10 rounded-2xl">
                   <p className="text-sm text-muted-foreground mb-3">
                     Chief of Staff learns optimal prompting for each SME based on QA feedback.

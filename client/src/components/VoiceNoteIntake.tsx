@@ -175,7 +175,7 @@ export function VoiceNoteIntake({ onComplete, onSkip }: VoiceNoteIntakeProps) {
             <Brain className="w-10 h-10 text-white" />
           </div>
           <h1 className="text-3xl font-bold text-white mb-2">Start with a Voice Note</h1>
-          <p className="text-gray-400 max-w-lg mx-auto">
+          <p className="text-foreground/70 max-w-lg mx-auto">
             Describe your project idea in your own words. Our AI will transcribe it and pre-populate the project wizard for you.
           </p>
         </div>
@@ -216,7 +216,7 @@ export function VoiceNoteIntake({ onComplete, onSkip }: VoiceNoteIntakeProps) {
                       </div>
                     )}
                     
-                    <p className="text-gray-400 text-sm">
+                    <p className="text-foreground/70 text-sm">
                       {isRecording ? 'Click to stop recording' : 'Click to start recording'}
                     </p>
                   </>
@@ -232,7 +232,7 @@ export function VoiceNoteIntake({ onComplete, onSkip }: VoiceNoteIntakeProps) {
                           <p className="text-white font-medium">
                             {uploadedFile ? uploadedFile.name : 'Voice Recording'}
                           </p>
-                          <p className="text-gray-400 text-sm">
+                          <p className="text-foreground/70 text-sm">
                             {uploadedFile ? `${(uploadedFile.size / 1024 / 1024).toFixed(2)} MB` : formatTime(recordingTime)}
                           </p>
                         </div>
@@ -249,7 +249,7 @@ export function VoiceNoteIntake({ onComplete, onSkip }: VoiceNoteIntakeProps) {
                           setAudioUrl(null);
                           setUploadedFile(null);
                         }}
-                        className="flex-1 border-white/20 text-gray-300"
+                        className="flex-1 border-white/20 text-foreground/80"
                       >
                         Record Again
                       </Button>
@@ -280,7 +280,7 @@ export function VoiceNoteIntake({ onComplete, onSkip }: VoiceNoteIntakeProps) {
                 <>
                   <div className="flex items-center gap-4">
                     <div className="flex-1 h-px bg-white/10" />
-                    <span className="text-gray-500 text-sm">or</span>
+                    <span className="text-foreground/60 text-sm">or</span>
                     <div className="flex-1 h-px bg-white/10" />
                   </div>
 
@@ -296,7 +296,7 @@ export function VoiceNoteIntake({ onComplete, onSkip }: VoiceNoteIntakeProps) {
                     <Button
                       variant="outline"
                       onClick={() => fileInputRef.current?.click()}
-                      className="border-white/20 text-gray-300 hover:bg-white/5"
+                      className="border-white/20 text-foreground/80 hover:bg-white/5"
                     >
                       <Upload className="w-4 h-4 mr-2" />
                       Upload Audio File
@@ -325,37 +325,37 @@ export function VoiceNoteIntake({ onComplete, onSkip }: VoiceNoteIntakeProps) {
             <CardContent className="space-y-6">
               {/* Full Transcription */}
               <div>
-                <h4 className="text-sm font-medium text-gray-400 mb-2">Full Transcription</h4>
-                <div className="bg-white/5 rounded-xl p-4 text-gray-300">
+                <h4 className="text-sm font-medium text-foreground/70 mb-2">Full Transcription</h4>
+                <div className="bg-white/5 rounded-xl p-4 text-foreground/80">
                   {transcriptionResult.text}
                 </div>
               </div>
 
               {/* Extracted Fields */}
               <div>
-                <h4 className="text-sm font-medium text-gray-400 mb-3">Extracted Project Details</h4>
+                <h4 className="text-sm font-medium text-foreground/70 mb-3">Extracted Project Details</h4>
                 <div className="grid grid-cols-2 gap-4">
                   {transcriptionResult.extractedFields.projectName && (
                     <div className="bg-white/5 rounded-xl p-4">
-                      <p className="text-xs text-gray-500 mb-1">Project Name</p>
+                      <p className="text-xs text-foreground/60 mb-1">Project Name</p>
                       <p className="text-white font-medium">{transcriptionResult.extractedFields.projectName}</p>
                     </div>
                   )}
                   {transcriptionResult.extractedFields.projectType && (
                     <div className="bg-white/5 rounded-xl p-4">
-                      <p className="text-xs text-gray-500 mb-1">Project Type</p>
+                      <p className="text-xs text-foreground/60 mb-1">Project Type</p>
                       <p className="text-white font-medium">{transcriptionResult.extractedFields.projectType}</p>
                     </div>
                   )}
                   {transcriptionResult.extractedFields.industry && (
                     <div className="bg-white/5 rounded-xl p-4">
-                      <p className="text-xs text-gray-500 mb-1">Industry</p>
+                      <p className="text-xs text-foreground/60 mb-1">Industry</p>
                       <p className="text-white font-medium">{transcriptionResult.extractedFields.industry}</p>
                     </div>
                   )}
                   {transcriptionResult.extractedFields.timeline && (
                     <div className="bg-white/5 rounded-xl p-4">
-                      <p className="text-xs text-gray-500 mb-1">Timeline</p>
+                      <p className="text-xs text-foreground/60 mb-1">Timeline</p>
                       <p className="text-white font-medium">{transcriptionResult.extractedFields.timeline}</p>
                     </div>
                   )}
@@ -363,10 +363,10 @@ export function VoiceNoteIntake({ onComplete, onSkip }: VoiceNoteIntakeProps) {
 
                 {transcriptionResult.extractedFields.objectives && transcriptionResult.extractedFields.objectives.length > 0 && (
                   <div className="mt-4 bg-white/5 rounded-xl p-4">
-                    <p className="text-xs text-gray-500 mb-2">Objectives</p>
+                    <p className="text-xs text-foreground/60 mb-2">Objectives</p>
                     <ul className="space-y-1">
                       {transcriptionResult.extractedFields.objectives.map((obj, i) => (
-                        <li key={i} className="text-gray-300 flex items-start gap-2">
+                        <li key={i} className="text-foreground/80 flex items-start gap-2">
                           <CheckCircle className="w-4 h-4 text-green-400 mt-0.5 flex-shrink-0" />
                           {obj}
                         </li>
@@ -377,10 +377,10 @@ export function VoiceNoteIntake({ onComplete, onSkip }: VoiceNoteIntakeProps) {
 
                 {transcriptionResult.extractedFields.successMetrics && transcriptionResult.extractedFields.successMetrics.length > 0 && (
                   <div className="mt-4 bg-white/5 rounded-xl p-4">
-                    <p className="text-xs text-gray-500 mb-2">Success Metrics</p>
+                    <p className="text-xs text-foreground/60 mb-2">Success Metrics</p>
                     <ul className="space-y-1">
                       {transcriptionResult.extractedFields.successMetrics.map((metric, i) => (
-                        <li key={i} className="text-gray-300 flex items-start gap-2">
+                        <li key={i} className="text-foreground/80 flex items-start gap-2">
                           <CheckCircle className="w-4 h-4 text-cyan-400 mt-0.5 flex-shrink-0" />
                           {metric}
                         </li>
@@ -395,7 +395,7 @@ export function VoiceNoteIntake({ onComplete, onSkip }: VoiceNoteIntakeProps) {
                 <Button
                   variant="outline"
                   onClick={() => setTranscriptionResult(null)}
-                  className="flex-1 border-white/20 text-gray-300"
+                  className="flex-1 border-white/20 text-foreground/80"
                 >
                   Re-record
                 </Button>
@@ -416,7 +416,7 @@ export function VoiceNoteIntake({ onComplete, onSkip }: VoiceNoteIntakeProps) {
           <Button
             variant="ghost"
             onClick={onSkip}
-            className="text-gray-400 hover:text-white"
+            className="text-foreground/70 hover:text-white"
           >
             Skip and start with blank wizard
           </Button>
@@ -428,7 +428,7 @@ export function VoiceNoteIntake({ onComplete, onSkip }: VoiceNoteIntakeProps) {
             <Sparkles className="w-5 h-5 text-fuchsia-400" />
             Tips for Better Results
           </h3>
-          <ul className="space-y-2 text-gray-400 text-sm">
+          <ul className="space-y-2 text-foreground/70 text-sm">
             <li className="flex items-start gap-2">
               <Clock className="w-4 h-4 mt-0.5 text-cyan-400" />
               Aim for 2 to 5 minutes of clear explanation

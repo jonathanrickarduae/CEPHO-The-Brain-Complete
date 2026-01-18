@@ -59,18 +59,18 @@ export function EndOfDayWashUp({ isOpen, onComplete }: EndOfDayWashUpProps) {
             <div className="text-center mb-6">
               <Moon className="w-10 h-10 text-purple-400 mx-auto mb-3" />
               <h2 className="text-2xl font-bold text-white mb-1">End of Day</h2>
-              <p className="text-gray-400 text-sm">Quick review</p>
+              <p className="text-foreground/70 text-sm">Quick review</p>
             </div>
 
             {/* Quick Stats */}
             <div className="flex justify-center gap-6 mb-6">
               <div className="text-center">
                 <div className="text-3xl font-bold text-green-400">{completedCount}</div>
-                <div className="text-xs text-gray-500">Done</div>
+                <div className="text-xs text-foreground/60">Done</div>
               </div>
               <div className="text-center">
                 <div className="text-3xl font-bold text-yellow-400">{tasks.length - completedCount}</div>
-                <div className="text-xs text-gray-500">Remaining</div>
+                <div className="text-xs text-foreground/60">Remaining</div>
               </div>
             </div>
 
@@ -93,7 +93,7 @@ export function EndOfDayWashUp({ isOpen, onComplete }: EndOfDayWashUpProps) {
                       Tomorrow <ArrowRight className="w-3 h-3" />
                     </span>
                   ) : (
-                    <span className="text-xs text-gray-500">Tap to carry forward</span>
+                    <span className="text-xs text-foreground/60">Tap to carry forward</span>
                   )}
                 </button>
               ))}
@@ -114,7 +114,7 @@ export function EndOfDayWashUp({ isOpen, onComplete }: EndOfDayWashUpProps) {
             <div className="text-center mb-6">
               <Sparkles className="w-10 h-10 text-cyan-400 mx-auto mb-3" />
               <h2 className="text-2xl font-bold text-white mb-1">Tomorrow</h2>
-              <p className="text-gray-400 text-sm">What should I prepare?</p>
+              <p className="text-foreground/70 text-sm">What should I prepare?</p>
             </div>
 
             {/* Voice Input */}
@@ -128,8 +128,8 @@ export function EndOfDayWashUp({ isOpen, onComplete }: EndOfDayWashUpProps) {
                     : "border-white/20 bg-white/5 hover:border-white/40"
                 )}
               >
-                <Mic className={cn("w-5 h-5", isRecording ? "text-red-400 animate-pulse" : "text-gray-400")} />
-                <span className="text-gray-300 text-sm">
+                <Mic className={cn("w-5 h-5", isRecording ? "text-red-400 animate-pulse" : "text-foreground/70")} />
+                <span className="text-foreground/80 text-sm">
                   {isRecording ? "Recording... tap to stop" : "Tap to speak tomorrow's focus"}
                 </span>
               </button>
@@ -164,13 +164,13 @@ export function EndOfDayWashUp({ isOpen, onComplete }: EndOfDayWashUpProps) {
           <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
             <div className="text-center mb-8">
               <h2 className="text-2xl font-bold text-white mb-2">How was today?</h2>
-              <p className="text-gray-400 text-sm">Rate your day on the 100% Optimization Scale</p>
+              <p className="text-foreground/70 text-sm">Rate your day on the 100% Optimization Scale</p>
             </div>
 
             {/* 0-100 Rating Slider */}
             <div className="mb-8 px-4">
               <div className="flex justify-between items-center mb-4">
-                <span className="text-gray-400 text-sm">Score</span>
+                <span className="text-foreground/70 text-sm">Score</span>
                 <span className={cn(
                   "text-3xl font-bold",
                   (rating ?? 0) >= 90 ? "text-green-500" :
@@ -196,7 +196,7 @@ export function EndOfDayWashUp({ isOpen, onComplete }: EndOfDayWashUpProps) {
                     rgba(255,255,255,0.1) 100%)`
                 }}
               />
-              <div className="flex justify-between text-xs text-gray-500 mt-2">
+              <div className="flex justify-between text-xs text-foreground/60 mt-2">
                 <span>Critical</span>
                 <span>Needs Work</span>
                 <span>Adequate</span>
@@ -221,7 +221,7 @@ export function EndOfDayWashUp({ isOpen, onComplete }: EndOfDayWashUpProps) {
                           : num < 75
                             ? "bg-yellow-500 text-black scale-110"
                             : "bg-green-500 text-white scale-110"
-                      : "bg-white/10 text-gray-400 hover:bg-white/20"
+                      : "bg-white/10 text-foreground/70 hover:bg-white/20"
                   )}
                 >
                   {num}
@@ -236,7 +236,7 @@ export function EndOfDayWashUp({ isOpen, onComplete }: EndOfDayWashUpProps) {
                 "w-full py-3 rounded-xl font-semibold flex items-center justify-center gap-2 transition-all",
                 rating !== null
                   ? "bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:opacity-90"
-                  : "bg-white/10 text-gray-500 cursor-not-allowed"
+                  : "bg-white/10 text-foreground/60 cursor-not-allowed"
               )}
             >
               Done <Check className="w-4 h-4" />

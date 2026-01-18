@@ -130,7 +130,7 @@ export default function CentralHub() {
               className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all whitespace-nowrap ${
                 activeTab === tab.id
                   ? 'bg-gradient-to-r from-purple-500/20 to-fuchsia-500/20 text-purple-400 border border-purple-500/30'
-                  : 'text-gray-400 hover:text-white hover:bg-white/5'
+                  : 'text-foreground/70 hover:text-white hover:bg-white/5'
               }`}
             >
               <tab.icon className="w-4 h-4" />

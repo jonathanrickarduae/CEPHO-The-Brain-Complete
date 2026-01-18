@@ -78,7 +78,7 @@ export const toolIntegrations: ToolIntegration[] = [
     id: 'notion',
     name: 'Notion',
     description: 'Knowledge base and documentation',
-    icon: <FileText className="w-5 h-5 text-gray-300" />,
+    icon: <FileText className="w-5 h-5 text-foreground/80" />,
     category: 'project_management',
     phases: ['ideation', 'innovation', 'exit'],
     status: 'disconnected',
@@ -178,7 +178,7 @@ export const toolIntegrations: ToolIntegration[] = [
     id: 'github',
     name: 'GitHub',
     description: 'Code repository and version control',
-    icon: <GitBranch className="w-5 h-5 text-gray-300" />,
+    icon: <GitBranch className="w-5 h-5 text-foreground/80" />,
     category: 'development',
     phases: ['development'],
     status: 'disconnected',
@@ -383,12 +383,12 @@ export function ToolCard({
               <Badge variant="outline" className={`text-xs ${
                 tool.priority === 'high' ? 'border-cyan-500/50 text-cyan-400' :
                 tool.priority === 'medium' ? 'border-yellow-500/50 text-yellow-400' :
-                'border-gray-500/50 text-gray-400'
+                'border-gray-500/50 text-foreground/70'
               }`}>
                 {tool.priority}
               </Badge>
             </div>
-            <p className="text-sm text-gray-400 mt-0.5">{tool.description}</p>
+            <p className="text-sm text-foreground/70 mt-0.5">{tool.description}</p>
             
             {/* Phase badges */}
             <div className="flex flex-wrap gap-1 mt-2">
@@ -403,12 +403,12 @@ export function ToolCard({
             </div>
             
             {tool.status === 'connected' && tool.accountName && (
-              <p className="text-xs text-gray-500 mt-2">
+              <p className="text-xs text-foreground/60 mt-2">
                 Account: {tool.accountName}
               </p>
             )}
             {tool.status === 'connected' && tool.lastSync && (
-              <p className="text-xs text-gray-500">
+              <p className="text-xs text-foreground/60">
                 Last synced: {new Date(tool.lastSync).toLocaleString('en-GB')}
               </p>
             )}
@@ -423,7 +423,7 @@ export function ToolCard({
                 size="sm"
                 onClick={onSync}
                 disabled={isSyncing}
-                className="h-8 text-gray-400 hover:text-white"
+                className="h-8 text-foreground/70 hover:text-white"
               >
                 {isSyncing ? (
                   <Loader2 className="w-4 h-4 animate-spin" />
@@ -435,7 +435,7 @@ export function ToolCard({
                 variant="ghost"
                 size="sm"
                 onClick={() => setShowDetails(!showDetails)}
-                className="h-8 text-gray-400 hover:text-white"
+                className="h-8 text-foreground/70 hover:text-white"
               >
                 <Settings className="w-4 h-4" />
               </Button>
@@ -472,7 +472,7 @@ export function ToolCard({
           <h5 className="text-sm font-medium text-white mb-2">Features enabled:</h5>
           <ul className="space-y-1">
             {tool.features.map((feature, i) => (
-              <li key={i} className="flex items-center gap-2 text-sm text-gray-400">
+              <li key={i} className="flex items-center gap-2 text-sm text-foreground/70">
                 <Check className="w-3 h-3 text-green-400" />
                 {feature}
               </li>
@@ -549,30 +549,30 @@ export function ToolIntegrationsDashboard({ filterPhase, filterCategory }: ToolI
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <div className="p-4 bg-white/5 rounded-xl border border-white/10">
           <div className="text-2xl font-bold text-white">{connectedCount}</div>
-          <div className="text-sm text-gray-400">Connected</div>
+          <div className="text-sm text-foreground/70">Connected</div>
         </div>
         <div className="p-4 bg-white/5 rounded-xl border border-white/10">
           <div className="text-2xl font-bold text-white">{totalCount - connectedCount}</div>
-          <div className="text-sm text-gray-400">Available</div>
+          <div className="text-sm text-foreground/70">Available</div>
         </div>
         <div className="p-4 bg-white/5 rounded-xl border border-white/10">
           <div className="text-2xl font-bold text-cyan-400">
             {tools.filter(t => t.priority === 'high').length}
           </div>
-          <div className="text-sm text-gray-400">High Priority</div>
+          <div className="text-sm text-foreground/70">High Priority</div>
         </div>
         <div className="p-4 bg-white/5 rounded-xl border border-white/10">
           <div className="text-2xl font-bold text-green-400">
             {Math.round((connectedCount / totalCount) * 100)}%
           </div>
-          <div className="text-sm text-gray-400">Integration Coverage</div>
+          <div className="text-sm text-foreground/70">Integration Coverage</div>
         </div>
       </div>
 
       {/* Filters */}
       <div className="flex flex-wrap gap-4">
         <div>
-          <label className="text-sm text-gray-400 mb-2 block">Filter by Phase</label>
+          <label className="text-sm text-foreground/70 mb-2 block">Filter by Phase</label>
           <select 
             value={selectedPhase}
             onChange={(e) => setSelectedPhase(e.target.value as ValueChainPhase | 'all')}
@@ -585,7 +585,7 @@ export function ToolIntegrationsDashboard({ filterPhase, filterCategory }: ToolI
           </select>
         </div>
         <div>
-          <label className="text-sm text-gray-400 mb-2 block">Filter by Category</label>
+          <label className="text-sm text-foreground/70 mb-2 block">Filter by Category</label>
           <select 
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value as ToolCategory | 'all')}
@@ -619,7 +619,7 @@ export function ToolIntegrationsDashboard({ filterPhase, filterCategory }: ToolI
       </div>
 
       {filteredTools.length === 0 && (
-        <div className="text-center py-12 text-gray-400">
+        <div className="text-center py-12 text-foreground/70">
           No integrations found for the selected filters.
         </div>
       )}

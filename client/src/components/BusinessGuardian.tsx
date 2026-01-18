@@ -263,7 +263,7 @@ const getPotentialColor = (potential: Opportunity['potential']) => {
   switch (potential) {
     case 'high': return 'text-green-500 bg-green-500/10 border-green-500/30';
     case 'medium': return 'text-blue-500 bg-blue-500/10 border-blue-500/30';
-    case 'low': return 'text-gray-500 bg-gray-500/10 border-gray-500/30';
+    case 'low': return 'text-foreground/60 bg-gray-500/10 border-gray-500/30';
   }
 };
 
@@ -272,7 +272,7 @@ const getStatusColor = (status: IntegrationHealth['status']) => {
     case 'healthy': return 'text-green-500';
     case 'degraded': return 'text-amber-500';
     case 'down': return 'text-red-500';
-    case 'unknown': return 'text-gray-500';
+    case 'unknown': return 'text-foreground/60';
   }
 };
 
@@ -572,7 +572,7 @@ export function BusinessGuardian() {
                         className={`text-xs ${
                           strength.impact === 'high' ? 'text-green-400 border-green-400/30' :
                           strength.impact === 'medium' ? 'text-blue-400 border-blue-400/30' :
-                          'text-gray-400 border-gray-400/30'
+                          'text-foreground/70 border-gray-400/30'
                         }`}
                       >
                         {strength.impact} impact

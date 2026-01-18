@@ -26,7 +26,7 @@ export function MorningBrief({ isOpen, onDismiss }: MorningBriefProps) {
       content: (
         <div className="text-center py-8">
           <Sun className="w-16 h-16 text-yellow-400 mx-auto mb-4 animate-pulse" />
-          <p className="text-gray-400 text-sm">Here's what I prepared overnight</p>
+          <p className="text-foreground/70 text-sm">Here's what I prepared overnight</p>
         </div>
       )
     },
@@ -90,7 +90,7 @@ export function MorningBrief({ isOpen, onDismiss }: MorningBriefProps) {
             <Shield className="w-8 h-8 text-green-400" />
           </div>
           <p className="text-green-400 font-semibold mb-1">All Secure</p>
-          <p className="text-gray-500 text-xs">No threats detected overnight</p>
+          <p className="text-foreground/60 text-xs">No threats detected overnight</p>
         </div>
       )
     }
@@ -177,7 +177,7 @@ function BriefCard({
       <div className="flex items-start justify-between">
         <div>
           <p className="text-white text-sm font-medium">{title}</p>
-          <p className="text-gray-500 text-xs mt-0.5">{subtitle}</p>
+          <p className="text-foreground/60 text-xs mt-0.5">{subtitle}</p>
         </div>
         {priority === 'high' && (
           <span className="text-xs bg-red-500/20 text-red-400 px-2 py-0.5 rounded-full">

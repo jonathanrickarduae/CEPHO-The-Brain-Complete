@@ -58,7 +58,7 @@ export function WaitlistSignup({ onJoin }: { onJoin?: (email: string, referralCo
           <Brain className="w-8 h-8 text-white" />
         </div>
         <h2 className="text-2xl font-bold text-white mb-2">Join the Cepho Waitlist</h2>
-        <p className="text-gray-400">
+        <p className="text-foreground/70">
           Get early access to your AI-powered Chief of Staff. 
           <span className="text-cyan-400"> 15,000+ people</span> are already waiting.
         </p>
@@ -85,7 +85,7 @@ export function WaitlistSignup({ onJoin }: { onJoin?: (email: string, referralCo
               placeholder="Referral code (optional)"
               className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500 transition-colors"
             />
-            <p className="text-xs text-gray-500 mt-1">
+            <p className="text-xs text-foreground/60 mt-1">
               Have a referral code? Enter it to skip ahead in the queue!
             </p>
           </div>
@@ -108,7 +108,7 @@ export function WaitlistSignup({ onJoin }: { onJoin?: (email: string, referralCo
         </button>
       </form>
 
-      <p className="text-xs text-gray-500 text-center mt-4">
+      <p className="text-xs text-foreground/60 text-center mt-4">
         By joining, you agree to our Terms of Service and Privacy Policy.
       </p>
     </div>
@@ -144,11 +144,11 @@ export function WaitlistStatus({ position }: { position: WaitlistPosition }) {
       <div className="bg-gray-800 rounded-2xl p-6 border border-gray-700">
         {/* Position Display */}
         <div className="text-center mb-6">
-          <div className="text-sm text-gray-400 mb-1">Your position</div>
+          <div className="text-sm text-foreground/70 mb-1">Your position</div>
           <div className="text-5xl font-bold text-white mb-1">
             #{position.position.toLocaleString()}
           </div>
-          <div className="text-sm text-gray-400">
+          <div className="text-sm text-foreground/70">
             of {position.totalWaiting.toLocaleString()} waiting
           </div>
           {position.positionsGained > 0 && (
@@ -161,7 +161,7 @@ export function WaitlistStatus({ position }: { position: WaitlistPosition }) {
 
         {/* Progress Bar */}
         <div className="mb-6">
-          <div className="flex justify-between text-sm text-gray-400 mb-2">
+          <div className="flex justify-between text-sm text-foreground/70 mb-2">
             <span>Queue progress</span>
             <span>Top {percentile}%</span>
           </div>
@@ -181,13 +181,13 @@ export function WaitlistStatus({ position }: { position: WaitlistPosition }) {
             </div>
             <div>
               <div className="font-semibold text-white">Skip ahead!</div>
-              <div className="text-sm text-gray-400">
+              <div className="text-sm text-foreground/70">
                 Invite friends to move up the queue
               </div>
             </div>
           </div>
 
-          <div className="space-y-2 text-sm text-gray-300">
+          <div className="space-y-2 text-sm text-foreground/80">
             <div className="flex justify-between">
               <span>Each invite sent</span>
               <span className="text-cyan-400">+50 spots</span>
@@ -205,7 +205,7 @@ export function WaitlistStatus({ position }: { position: WaitlistPosition }) {
 
         {/* Referral Code */}
         <div className="mb-4">
-          <div className="text-sm text-gray-400 mb-2">Your referral code</div>
+          <div className="text-sm text-foreground/70 mb-2">Your referral code</div>
           <div className="flex gap-2">
             <div className="flex-1 px-4 py-2 bg-gray-900 rounded-lg font-mono text-white">
               {position.referralCode}
@@ -214,7 +214,7 @@ export function WaitlistStatus({ position }: { position: WaitlistPosition }) {
               onClick={copyReferralLink}
               className="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors"
             >
-              {copied ? <Check className="w-5 h-5 text-green-400" /> : <Copy className="w-5 h-5 text-gray-300" />}
+              {copied ? <Check className="w-5 h-5 text-green-400" /> : <Copy className="w-5 h-5 text-foreground/80" />}
             </button>
           </div>
         </div>
@@ -223,21 +223,21 @@ export function WaitlistStatus({ position }: { position: WaitlistPosition }) {
         <div className="flex gap-2">
           <button
             onClick={copyReferralLink}
-            className="flex-1 flex items-center justify-center gap-2 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg text-gray-300 transition-colors"
+            className="flex-1 flex items-center justify-center gap-2 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg text-foreground/80 transition-colors"
           >
             <Copy className="w-4 h-4" />
             <span>Copy link</span>
           </button>
           <button
             onClick={shareToTwitter}
-            className="flex-1 flex items-center justify-center gap-2 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg text-gray-300 transition-colors"
+            className="flex-1 flex items-center justify-center gap-2 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg text-foreground/80 transition-colors"
           >
             <Twitter className="w-4 h-4" />
             <span>Tweet</span>
           </button>
           <button
             onClick={shareToLinkedIn}
-            className="flex-1 flex items-center justify-center gap-2 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg text-gray-300 transition-colors"
+            className="flex-1 flex items-center justify-center gap-2 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg text-foreground/80 transition-colors"
           >
             <Linkedin className="w-4 h-4" />
             <span>Share</span>
@@ -247,7 +247,7 @@ export function WaitlistStatus({ position }: { position: WaitlistPosition }) {
         {/* Referral Stats */}
         {position.referralsCount > 0 && (
           <div className="mt-4 pt-4 border-t border-gray-700">
-            <div className="flex items-center gap-2 text-sm text-gray-400">
+            <div className="flex items-center gap-2 text-sm text-foreground/70">
               <Users className="w-4 h-4" />
               <span>{position.referralsCount} friends referred</span>
             </div>
@@ -283,15 +283,15 @@ export function ReferralDashboard({ stats }: { stats: ReferralStats }) {
       <div className="grid grid-cols-3 gap-4 mb-6">
         <div className="bg-gray-900 rounded-xl p-4 text-center">
           <div className="text-2xl font-bold text-white">{stats.totalReferrals}</div>
-          <div className="text-sm text-gray-400">Total Referrals</div>
+          <div className="text-sm text-foreground/70">Total Referrals</div>
         </div>
         <div className="bg-gray-900 rounded-xl p-4 text-center">
           <div className="text-2xl font-bold text-yellow-400">{stats.pendingReferrals}</div>
-          <div className="text-sm text-gray-400">Pending</div>
+          <div className="text-sm text-foreground/70">Pending</div>
         </div>
         <div className="bg-gray-900 rounded-xl p-4 text-center">
           <div className="text-2xl font-bold text-green-400">{stats.convertedReferrals}</div>
-          <div className="text-sm text-gray-400">Converted</div>
+          <div className="text-sm text-foreground/70">Converted</div>
         </div>
       </div>
 
@@ -299,15 +299,15 @@ export function ReferralDashboard({ stats }: { stats: ReferralStats }) {
       <div className="bg-gradient-to-r from-cyan-500/10 to-purple-500/10 rounded-xl p-4 mb-6">
         <h4 className="font-semibold text-white mb-3">Earn rewards</h4>
         <div className="space-y-2 text-sm">
-          <div className="flex justify-between text-gray-300">
+          <div className="flex justify-between text-foreground/80">
             <span>Friend joins waitlist</span>
             <span className="text-cyan-400">+50 credits</span>
           </div>
-          <div className="flex justify-between text-gray-300">
+          <div className="flex justify-between text-foreground/80">
             <span>Friend becomes active user</span>
             <span className="text-cyan-400">+200 credits</span>
           </div>
-          <div className="flex justify-between text-gray-300">
+          <div className="flex justify-between text-foreground/80">
             <span>Friend upgrades to Pro</span>
             <span className="text-cyan-400">+1 month free</span>
           </div>
@@ -316,9 +316,9 @@ export function ReferralDashboard({ stats }: { stats: ReferralStats }) {
 
       {/* Referral Link */}
       <div>
-        <div className="text-sm text-gray-400 mb-2">Your referral link</div>
+        <div className="text-sm text-foreground/70 mb-2">Your referral link</div>
         <div className="flex gap-2">
-          <div className="flex-1 px-4 py-2 bg-gray-900 rounded-lg text-sm text-gray-300 truncate">
+          <div className="flex-1 px-4 py-2 bg-gray-900 rounded-lg text-sm text-foreground/80 truncate">
             {window.location.host}/join?ref={stats.referralCode}
           </div>
           <button
@@ -365,12 +365,12 @@ export function InviteModal({
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
       <div className="bg-gray-800 rounded-2xl p-6 max-w-md w-full">
         <h3 className="text-xl font-semibold text-white mb-2">Invite Friends</h3>
-        <p className="text-gray-400 text-sm mb-6">
+        <p className="text-foreground/70 text-sm mb-6">
           Share Cepho with friends and earn rewards when they join.
         </p>
 
         <div className="mb-4">
-          <label className="text-sm text-gray-400 mb-2 block">
+          <label className="text-sm text-foreground/70 mb-2 block">
             Email addresses (comma separated)
           </label>
           <textarea
@@ -385,7 +385,7 @@ export function InviteModal({
         <div className="flex gap-3">
           <button
             onClick={onClose}
-            className="flex-1 py-2 bg-gray-700 hover:bg-gray-600 text-gray-300 rounded-lg transition-colors"
+            className="flex-1 py-2 bg-gray-700 hover:bg-gray-600 text-foreground/80 rounded-lg transition-colors"
           >
             Cancel
           </button>

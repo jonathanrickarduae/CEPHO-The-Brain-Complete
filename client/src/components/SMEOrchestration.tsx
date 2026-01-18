@@ -146,7 +146,7 @@ export function SMEOrchestration({
             </div>
             <div>
               <h3 className="font-semibold text-white">{taskTitle}</h3>
-              <p className="text-sm text-gray-400">{taskDescription}</p>
+              <p className="text-sm text-foreground/70">{taskDescription}</p>
             </div>
           </div>
           <Badge variant="outline" className="bg-cyan-500/20 text-cyan-400 border-cyan-500/30">
@@ -159,7 +159,7 @@ export function SMEOrchestration({
       {/* Team Assembly Panel */}
       <div className="p-4 border-b border-border">
         <div className="flex items-center justify-between mb-3">
-          <h4 className="text-sm font-medium text-gray-400 flex items-center gap-2">
+          <h4 className="text-sm font-medium text-foreground/70 flex items-center gap-2">
             <CheckCircle2 className="w-4 h-4 text-green-400" />
             Selected Experts ({selectedExperts.length})
           </h4>
@@ -184,7 +184,7 @@ export function SMEOrchestration({
                   <span className="text-2xl">{expert.avatar}</span>
                   <div>
                     <h5 className="font-medium text-white">{expert.name}</h5>
-                    <p className="text-xs text-gray-400">{expert.role}</p>
+                    <p className="text-xs text-foreground/70">{expert.role}</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
@@ -201,16 +201,16 @@ export function SMEOrchestration({
                     </Badge>
                   )}
                   {expert.confidence && expert.confidence > 0 && (
-                    <span className="text-xs text-gray-500">{expert.confidence}% confidence</span>
+                    <span className="text-xs text-foreground/60">{expert.confidence}% confidence</span>
                   )}
                 </div>
               </div>
 
               {expert.insight && (
                 <div className="mt-2 p-2 bg-black/20 rounded-lg">
-                  <p className="text-sm text-gray-300">{expert.insight}</p>
+                  <p className="text-sm text-foreground/80">{expert.insight}</p>
                   {expert.source && (
-                    <p className="text-xs text-gray-500 mt-1 flex items-center gap-1">
+                    <p className="text-xs text-foreground/60 mt-1 flex items-center gap-1">
                       <FileText className="w-3 h-3" />
                       Source: {expert.source}
                     </p>
@@ -223,13 +223,13 @@ export function SMEOrchestration({
                   <Button 
                     variant="ghost" 
                     size="sm" 
-                    className="text-xs text-gray-400 hover:text-white"
+                    className="text-xs text-foreground/70 hover:text-white"
                     onClick={() => onChallenge?.(expert.id)}
                   >
                     <AlertTriangle className="w-3 h-3 mr-1" />
                     Challenge
                   </Button>
-                  <Button variant="ghost" size="sm" className="text-xs text-gray-400 hover:text-white">
+                  <Button variant="ghost" size="sm" className="text-xs text-foreground/70 hover:text-white">
                     <ExternalLink className="w-3 h-3 mr-1" />
                     View Sources
                   </Button>
@@ -246,11 +246,11 @@ export function SMEOrchestration({
           onClick={() => setShowExcluded(!showExcluded)}
           className="flex items-center justify-between w-full text-left"
         >
-          <h4 className="text-sm font-medium text-gray-500 flex items-center gap-2">
-            <XCircle className="w-4 h-4 text-gray-500" />
+          <h4 className="text-sm font-medium text-foreground/60 flex items-center gap-2">
+            <XCircle className="w-4 h-4 text-foreground/60" />
             Considered but Excluded ({excludedExperts.length})
           </h4>
-          {showExcluded ? <ChevronUp className="w-4 h-4 text-gray-500" /> : <ChevronDown className="w-4 h-4 text-gray-500" />}
+          {showExcluded ? <ChevronUp className="w-4 h-4 text-foreground/60" /> : <ChevronDown className="w-4 h-4 text-foreground/60" />}
         </button>
 
         {showExcluded && (
@@ -260,11 +260,11 @@ export function SMEOrchestration({
                 <div className="flex items-center gap-2">
                   <span className="text-lg opacity-50">{expert.avatar}</span>
                   <div>
-                    <p className="text-sm text-gray-400">{expert.name}</p>
-                    <p className="text-xs text-gray-500">{expert.role}</p>
+                    <p className="text-sm text-foreground/70">{expert.name}</p>
+                    <p className="text-xs text-foreground/60">{expert.role}</p>
                   </div>
                 </div>
-                <p className="text-xs text-gray-500 max-w-[200px] text-right">{expert.reason}</p>
+                <p className="text-xs text-foreground/60 max-w-[200px] text-right">{expert.reason}</p>
               </div>
             ))}
           </div>
@@ -278,14 +278,14 @@ export function SMEOrchestration({
             <Brain className="w-6 h-6 text-fuchsia-400 mt-1" />
             <div>
               <h4 className="font-semibold text-white mb-2">Chief of Staff Synthesis</h4>
-              <div className="text-sm text-gray-300 space-y-2">
+              <div className="text-sm text-foreground/80 space-y-2">
                 <p>
                   <strong>Assessment:</strong> Based on input from 4 experts, this appears to be a viable investment with manageable risks.
                 </p>
                 <p>
                   <strong>Key Findings:</strong>
                 </p>
-                <ul className="list-disc list-inside space-y-1 text-gray-400">
+                <ul className="list-disc list-inside space-y-1 text-foreground/70">
                   <li>Valuation range €45-58M is reasonable given market comparables</li>
                   <li>Earnout structure (45%) is aggressive - recommend negotiating to 30%</li>
                   <li>EU regulatory compliance requires €2.3M investment by 2026</li>
@@ -307,7 +307,7 @@ export function SMEOrchestration({
               <Plus className="w-4 h-4 mr-2" />
               Add Technical Expert
             </Button>
-            <Button variant="ghost" className="text-gray-400 hover:text-white">
+            <Button variant="ghost" className="text-foreground/70 hover:text-white">
               <MessageSquare className="w-4 h-4 mr-2" />
               Deep Dive
             </Button>
@@ -317,7 +317,7 @@ export function SMEOrchestration({
 
       {/* Waiting for completion */}
       {!synthesisReady && (
-        <div className="p-4 flex items-center justify-center gap-3 text-gray-400">
+        <div className="p-4 flex items-center justify-center gap-3 text-foreground/70">
           <Loader2 className="w-5 h-5 animate-spin" />
           <span>Waiting for all experts to complete their analysis...</span>
         </div>

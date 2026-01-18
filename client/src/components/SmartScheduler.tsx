@@ -171,7 +171,7 @@ export function SmartScheduler({ tasks, onScheduleGenerated, className }: SmartS
       case 'focus': return <Zap className="w-4 h-4 text-purple-400" />;
       case 'meeting': return <Calendar className="w-4 h-4 text-blue-400" />;
       case 'break': return <Coffee className="w-4 h-4 text-green-400" />;
-      case 'buffer': return <Clock className="w-4 h-4 text-gray-400" />;
+      case 'buffer': return <Clock className="w-4 h-4 text-foreground/70" />;
     }
   };
 
@@ -359,7 +359,7 @@ export function SmartScheduler({ tasks, onScheduleGenerated, className }: SmartS
                         'ml-2 px-1.5 py-0.5 rounded text-[10px]',
                         block.task.priority === 'high' ? 'bg-red-500/20 text-red-400' :
                         block.task.priority === 'medium' ? 'bg-amber-500/20 text-amber-400' :
-                        'bg-gray-500/20 text-gray-400'
+                        'bg-gray-500/20 text-foreground/70'
                       )}>
                         {block.task.priority}
                       </span>

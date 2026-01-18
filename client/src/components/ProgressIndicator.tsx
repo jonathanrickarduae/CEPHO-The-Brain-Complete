@@ -265,7 +265,7 @@ export function StepProgress({ steps, currentStep, variant = 'horizontal' }: Ste
                     ? 'bg-primary text-primary-foreground'
                     : index === currentStep
                     ? 'bg-primary/20 text-primary border-2 border-primary'
-                    : 'bg-gray-700 text-gray-400'
+                    : 'bg-gray-700 text-foreground/70'
                 }`}
               >
                 {index < currentStep ? <CheckCircle className="w-5 h-5" /> : index + 1}
@@ -304,7 +304,7 @@ export function StepProgress({ steps, currentStep, variant = 'horizontal' }: Ste
                   ? 'bg-primary text-primary-foreground'
                   : index === currentStep
                   ? 'bg-primary/20 text-primary border-2 border-primary'
-                  : 'bg-gray-700 text-gray-400'
+                  : 'bg-gray-700 text-foreground/70'
               }`}
             >
               {index < currentStep ? <CheckCircle className="w-4 h-4" /> : index + 1}

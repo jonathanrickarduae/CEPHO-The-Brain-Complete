@@ -79,7 +79,7 @@ const CLASSIFICATION_CONFIG = {
   },
   unknown: {
     label: 'Unknown',
-    color: 'text-gray-500',
+    color: 'text-foreground/60',
     bgColor: 'bg-gray-500/10',
     borderColor: 'border-gray-500/30',
     icon: ShieldQuestion,

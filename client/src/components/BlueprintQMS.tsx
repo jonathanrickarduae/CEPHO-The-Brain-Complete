@@ -143,7 +143,7 @@ export function BlueprintQMS({
       case 'completed': return 'text-green-400 border-green-500/30 bg-green-500/10';
       case 'in_progress': return 'text-yellow-400 border-yellow-500/30 bg-yellow-500/10';
       case 'needs_update': return 'text-orange-400 border-orange-500/30 bg-orange-500/10';
-      default: return 'text-gray-400 border-white/20 bg-white/5';
+      default: return 'text-foreground/70 border-white/20 bg-white/5';
     }
   };
 
@@ -177,7 +177,7 @@ export function BlueprintQMS({
           </div>
           <div>
             <h2 className="text-lg font-semibold text-white">Quality Management System</h2>
-            <p className="text-xs text-gray-400">Blueprint interconnections & cascading updates</p>
+            <p className="text-xs text-foreground/70">Blueprint interconnections & cascading updates</p>
           </div>
         </div>
         {pendingChanges.length > 0 && (
@@ -212,7 +212,7 @@ export function BlueprintQMS({
                       ? 'border-green-500/30 text-green-400'
                       : genesisBlueprint.status === 'in_review'
                       ? 'border-yellow-500/30 text-yellow-400'
-                      : 'border-white/20 text-gray-400'
+                      : 'border-white/20 text-foreground/70'
                   }`}
                 >
                   {genesisBlueprint.status || 'Draft'}
@@ -281,7 +281,7 @@ export function BlueprintQMS({
                         className={`text-[9px] px-1.5 py-0.5 rounded ${
                           impact?.affectedFields.includes(field)
                             ? 'bg-orange-500/20 text-orange-300'
-                            : 'bg-white/10 text-gray-400'
+                            : 'bg-white/10 text-foreground/70'
                         }`}
                       >
                         {field}
@@ -328,7 +328,7 @@ export function BlueprintQMS({
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
                       <p className="text-sm font-medium text-white">{change.field}</p>
-                      <Badge variant="outline" className="text-[10px] border-white/20 text-gray-400">
+                      <Badge variant="outline" className="text-[10px] border-white/20 text-foreground/70">
                         {change.changedBy === 'user' && <User className="w-2 h-2 mr-1" />}
                         {change.changedBy === 'sme' && <Sparkles className="w-2 h-2 mr-1" />}
                         {change.changedBy === 'digital_twin' && <Brain className="w-2 h-2 mr-1" />}
@@ -340,13 +340,13 @@ export function BlueprintQMS({
                       <span className="text-red-400 line-through truncate max-w-[150px]">
                         {String(change.oldValue).substring(0, 30)}...
                       </span>
-                      <ArrowRight className="w-3 h-3 text-gray-500 flex-shrink-0" />
+                      <ArrowRight className="w-3 h-3 text-foreground/60 flex-shrink-0" />
                       <span className="text-green-400 truncate max-w-[150px]">
                         {String(change.newValue).substring(0, 30)}...
                       </span>
                     </div>
 
-                    <p className="text-[10px] text-gray-500 mt-1 flex items-center gap-1">
+                    <p className="text-[10px] text-foreground/60 mt-1 flex items-center gap-1">
                       <Clock className="w-2 h-2" />
                       {new Date(change.timestamp).toLocaleString()}
                     </p>
@@ -450,7 +450,7 @@ export function BlueprintQMS({
         <div className="bg-white/5 border border-white/10 rounded-2xl p-8 text-center">
           <Check className="w-12 h-12 mx-auto text-green-400 mb-3" />
           <p className="text-white font-medium">All blueprints are in sync</p>
-          <p className="text-gray-400 text-sm mt-1">
+          <p className="text-foreground/70 text-sm mt-1">
             No pending changes to review
           </p>
         </div>

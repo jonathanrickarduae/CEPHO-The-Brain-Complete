@@ -41,7 +41,7 @@ interface VisualBlueprintProps {
 
 // Sample blueprint structure for a Full Project Genesis
 const SAMPLE_BLUEPRINT: BlueprintData = {
-  projectName: 'Sample Project',
+  projectName: 'Boundless AI',
   projectType: 'Full Project Genesis',
   layers: [
     { id: 'governance', name: 'Governance & Compliance', color: '#8B5CF6', nodes: ['gov1', 'gov2', 'gov3'] },
@@ -157,7 +157,7 @@ export function VisualBlueprint({ projectName, projectType, data }: VisualBluepr
       case 'complete': return <CheckCircle2 className="w-3 h-3 text-green-500" />;
       case 'in_progress': return <Clock className="w-3 h-3 text-blue-500" />;
       case 'blocked': return <AlertTriangle className="w-3 h-3 text-red-500" />;
-      default: return <Clock className="w-3 h-3 text-gray-500" />;
+      default: return <Clock className="w-3 h-3 text-foreground/60" />;
     }
   };
 
@@ -322,7 +322,7 @@ export function VisualBlueprint({ projectName, projectType, data }: VisualBluepr
               {[
                 { status: 'complete', label: 'Complete', color: 'text-green-500' },
                 { status: 'in_progress', label: 'In Progress', color: 'text-blue-500' },
-                { status: 'pending', label: 'Pending', color: 'text-gray-500' },
+                { status: 'pending', label: 'Pending', color: 'text-foreground/60' },
                 { status: 'blocked', label: 'Blocked', color: 'text-red-500' },
               ].map(item => (
                 <div key={item.status} className="flex items-center gap-2">

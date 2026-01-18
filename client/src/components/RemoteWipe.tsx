@@ -183,7 +183,7 @@ export function RemoteWipe() {
                       <DeviceIcon className={`w-5 h-5 ${
                         device.status === 'active' ? 'text-green-400' :
                         device.status === 'wiped' ? 'text-red-400' :
-                        'text-gray-400'
+                        'text-foreground/70'
                       }`} />
                     </div>
                     <div>
@@ -204,7 +204,7 @@ export function RemoteWipe() {
                     <Badge variant="outline" className={
                       device.status === 'active' ? 'bg-green-500/20 text-green-400 border-green-500/30' :
                       device.status === 'wiped' ? 'bg-red-500/20 text-red-400 border-red-500/30' :
-                      'bg-gray-500/20 text-gray-400 border-gray-500/30'
+                      'bg-gray-500/20 text-foreground/70 border-gray-500/30'
                     }>
                       {device.status === 'active' && <CheckCircle2 className="w-3 h-3 mr-1" />}
                       {device.status === 'wiped' && <XCircle className="w-3 h-3 mr-1" />}

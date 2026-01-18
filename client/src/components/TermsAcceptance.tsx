@@ -155,7 +155,7 @@ export function TermsAcceptance({ toolId, onAccept, onDecline }: TermsAcceptance
       case 'standard': return 'bg-green-500/20 text-green-400 border-green-500/30';
       case 'governed': return 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30';
       case 'restricted': return 'bg-red-500/20 text-red-400 border-red-500/30';
-      default: return 'bg-gray-500/20 text-gray-400 border-gray-500/30';
+      default: return 'bg-gray-500/20 text-foreground/70 border-gray-500/30';
     }
   };
 

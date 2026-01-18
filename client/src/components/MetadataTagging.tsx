@@ -33,7 +33,7 @@ interface Asset {
 // Mock data
 const MOCK_TAGS: Tag[] = [
   { id: 't1', name: 'Celadon Capital', color: 'bg-blue-500', category: 'project', count: 24 },
-  { id: 't2', name: 'Sample Project', color: 'bg-green-500', category: 'project', count: 18 },
+  { id: 't2', name: 'Boundless AI', color: 'bg-green-500', category: 'project', count: 18 },
   { id: 't3', name: 'Perfect DXB', color: 'bg-purple-500', category: 'project', count: 12 },
   { id: 't4', name: 'Financial', color: 'bg-yellow-500', category: 'type', count: 45 },
   { id: 't5', name: 'Legal', color: 'bg-red-500', category: 'type', count: 32 },
@@ -73,8 +73,8 @@ const MOCK_ASSETS: Asset[] = [
     id: 'a3',
     name: 'NDA_Signed.pdf',
     type: 'document',
-    project: 'Sample Project',
-    tags: ['Sample Project', 'Legal', 'Confidential', 'Final'],
+    project: 'Boundless AI',
+    tags: ['Boundless AI', 'Legal', 'Confidential', 'Final'],
     createdAt: '2024-01-10',
     modifiedAt: '2024-01-10',
     owner: 'Jonathan',

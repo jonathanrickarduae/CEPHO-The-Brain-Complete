@@ -60,7 +60,7 @@ const MOCK_DOCUMENTS: IndexedDocument[] = [
     id: 'd3',
     name: 'NDA_Sample_Signed.pdf',
     type: 'contract',
-    project: 'Sample Project',
+    project: 'Boundless AI',
     indexedAt: '3 days ago',
     chunks: 12,
     preview: 'Non-disclosure agreement between parties regarding confidential information...'
@@ -123,7 +123,7 @@ export function DocumentIndexer() {
       case 'image': return 'bg-purple-500/20 text-purple-400';
       case 'ai_output': return 'bg-cyan-500/20 text-cyan-400';
       case 'contract': return 'bg-red-500/20 text-red-400';
-      default: return 'bg-gray-500/20 text-gray-400';
+      default: return 'bg-gray-500/20 text-foreground/70';
     }
   };
 

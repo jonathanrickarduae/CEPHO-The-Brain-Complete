@@ -42,7 +42,7 @@ const REFERENCE_TYPES = {
   legal_document: { icon: Scale, label: 'Legal Document', color: 'text-orange-500' },
   data_source: { icon: Database, label: 'Data Source', color: 'text-yellow-500' },
   expert_statement: { icon: Users, label: 'Expert Statement', color: 'text-pink-500' },
-  other: { icon: FileText, label: 'Other', color: 'text-gray-500' },
+  other: { icon: FileText, label: 'Other', color: 'text-foreground/60' },
 };
 
 export default function ReferenceLibrary() {
@@ -325,7 +325,7 @@ export default function ReferenceLibrary() {
                       >
                         <CardTitle className="flex items-center justify-between">
                           <div className="flex items-center gap-3">
-                            <TypeIcon className={`w-5 h-5 ${typeConfig?.color || 'text-gray-500'}`} />
+                            <TypeIcon className={`w-5 h-5 ${typeConfig?.color || 'text-foreground/60'}`} />
                             <span>{typeConfig?.label || type}</span>
                             <Badge variant="outline">{refs.length}</Badge>
                           </div>

@@ -147,7 +147,7 @@ export function StreakRewards({ currentStreak, onRewardClaim }: StreakRewardsPro
                 {status === 'claimed' ? (
                   <Check className="w-4 h-4 text-green-400" />
                 ) : status === 'locked' ? (
-                  <Lock className="w-4 h-4 text-gray-500" />
+                  <Lock className="w-4 h-4 text-foreground/60" />
                 ) : (
                   <span className="w-2 h-2 bg-primary rounded-full animate-pulse block" />
                 )}

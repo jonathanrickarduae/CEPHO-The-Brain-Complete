@@ -623,7 +623,7 @@ export function ProjectGenesis() {
                                 bp.priority === 'critical' ? 'bg-red-500/20 text-red-400' :
                                 bp.priority === 'high' ? 'bg-amber-500/20 text-amber-400' :
                                 bp.priority === 'medium' ? 'bg-blue-500/20 text-blue-400' :
-                                'bg-gray-500/20 text-gray-400'
+                                'bg-gray-500/20 text-foreground/70'
                               }`}>
                                 {bp.priority}
                               </span>

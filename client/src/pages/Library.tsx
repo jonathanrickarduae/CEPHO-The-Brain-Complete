@@ -210,7 +210,7 @@ export default function Library() {
         {/* Back button */}
         <button
           onClick={() => setSelectedProject(null)}
-          className="flex items-center gap-2 text-gray-400 hover:text-white mb-6 transition-colors"
+          className="flex items-center gap-2 text-foreground/70 hover:text-white mb-6 transition-colors"
         >
           <ChevronLeft className="w-4 h-4" />
           Back to Library
@@ -344,13 +344,13 @@ export default function Library() {
               <div className="hidden sm:flex items-center bg-white/5 border border-white/20 rounded-lg p-1">
                 <button 
                   onClick={() => setViewMode('grid')}
-                  className={`p-2 rounded transition-colors ${viewMode === 'grid' ? 'bg-pink-500/20 text-pink-400' : 'text-gray-400 hover:text-white'}`}
+                  className={`p-2 rounded transition-colors ${viewMode === 'grid' ? 'bg-pink-500/20 text-pink-400' : 'text-foreground/70 hover:text-white'}`}
                 >
                   <LayoutGrid className="w-4 h-4" />
                 </button>
                 <button 
                   onClick={() => setViewMode('list')}
-                  className={`p-2 rounded transition-colors ${viewMode === 'list' ? 'bg-pink-500/20 text-pink-400' : 'text-gray-400 hover:text-white'}`}
+                  className={`p-2 rounded transition-colors ${viewMode === 'list' ? 'bg-pink-500/20 text-pink-400' : 'text-foreground/70 hover:text-white'}`}
                 >
                   <List className="w-4 h-4" />
                 </button>
@@ -416,19 +416,19 @@ export default function Library() {
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8">
               <div className="bg-white/5 border-2 border-white/10 rounded-2xl p-4">
                 <div className="text-3xl font-bold text-white">{projects.length}</div>
-                <div className="text-sm text-gray-400">Projects</div>
+                <div className="text-sm text-foreground/70">Projects</div>
               </div>
               <div className="bg-gradient-to-br from-pink-500/10 to-rose-500/10 border-2 border-pink-500/30 rounded-2xl p-4">
                 <div className="text-3xl font-bold text-pink-400">{totalFiles}</div>
-                <div className="text-sm text-gray-400">Total Files</div>
+                <div className="text-sm text-foreground/70">Total Files</div>
               </div>
               <div className="bg-gradient-to-br from-blue-500/10 to-cyan-500/10 border-2 border-blue-500/30 rounded-2xl p-4">
                 <div className="text-3xl font-bold text-blue-400">{projects.reduce((acc, p) => acc + p.documents, 0)}</div>
-                <div className="text-sm text-gray-400">Documents</div>
+                <div className="text-sm text-foreground/70">Documents</div>
               </div>
               <div className="bg-gradient-to-br from-purple-500/10 to-fuchsia-500/10 border-2 border-purple-500/30 rounded-2xl p-4">
                 <div className="text-3xl font-bold text-purple-400">{projects.reduce((acc, p) => acc + p.images, 0)}</div>
-                <div className="text-sm text-gray-400">Images</div>
+                <div className="text-sm text-foreground/70">Images</div>
               </div>
             </div>
 
@@ -570,13 +570,13 @@ export default function Library() {
                 <div className="text-3xl font-bold text-fuchsia-400">
                   {consultationsLoading ? '...' : consultations?.length || 0}
                 </div>
-                <div className="text-sm text-gray-400">Saved Consultations</div>
+                <div className="text-sm text-foreground/70">Saved Consultations</div>
               </div>
               <div className="bg-white/5 border-2 border-white/10 rounded-2xl p-4">
                 <div className="text-3xl font-bold text-white">
                   {consultationsLoading ? '...' : new Set(consultations?.map((c: LibraryDocument) => c.subFolder)).size || 0}
                 </div>
-                <div className="text-sm text-gray-400">Unique Experts</div>
+                <div className="text-sm text-foreground/70">Unique Experts</div>
               </div>
               <div className="bg-white/5 border-2 border-white/10 rounded-2xl p-4">
                 <div className="text-3xl font-bold text-white">
@@ -586,7 +586,7 @@ export default function Library() {
                       : '-'
                   }
                 </div>
-                <div className="text-sm text-gray-400">Last Consultation</div>
+                <div className="text-sm text-foreground/70">Last Consultation</div>
               </div>
             </div>
 

@@ -103,7 +103,7 @@ export function ShareableInsight({ type, title, data, onShare }: ShareableInsigh
               <div>
                 <h3 className="text-lg font-semibold text-white">{title}</h3>
                 {data.period && (
-                  <p className="text-sm text-gray-400">{data.period}</p>
+                  <p className="text-sm text-foreground/70">{data.period}</p>
                 )}
               </div>
             </div>
@@ -120,13 +120,13 @@ export function ShareableInsight({ type, title, data, onShare }: ShareableInsigh
             <div className="flex items-center gap-4 mb-4">
               <div className="text-5xl font-bold text-white">
                 {data.score}
-                <span className="text-2xl text-gray-400">/10</span>
+                <span className="text-2xl text-foreground/70">/10</span>
               </div>
               {data.trend && (
                 <div className={`px-3 py-1 rounded-full text-sm font-medium ${
                   data.trend === 'improving' ? 'bg-green-500/20 text-green-400' :
                   data.trend === 'declining' ? 'bg-red-500/20 text-red-400' :
-                  'bg-gray-500/20 text-gray-400'
+                  'bg-gray-500/20 text-foreground/70'
                 }`}>
                   {data.trend === 'improving' ? '↑ Improving' :
                    data.trend === 'declining' ? '↓ Declining' :
@@ -142,7 +142,7 @@ export function ShareableInsight({ type, title, data, onShare }: ShareableInsigh
               {data.highlights.map((highlight, index) => (
                 <div key={index} className="flex items-start gap-2">
                   <span className="text-green-400 mt-0.5">✓</span>
-                  <p className="text-gray-300 text-sm">{highlight}</p>
+                  <p className="text-foreground/80 text-sm">{highlight}</p>
                 </div>
               ))}
             </div>
@@ -152,9 +152,9 @@ export function ShareableInsight({ type, title, data, onShare }: ShareableInsigh
           <div className="flex items-center justify-between pt-4 border-t border-gray-700">
             <div className="flex items-center gap-2">
               <Brain className="w-5 h-5 text-pink-500" />
-              <span className="text-sm text-gray-400">Powered by Cepho</span>
+              <span className="text-sm text-foreground/70">Powered by Cepho</span>
             </div>
-            <div className="flex items-center gap-1 text-sm text-gray-500">
+            <div className="flex items-center gap-1 text-sm text-foreground/60">
               <Eye className="w-4 h-4" />
               <span>Public insight</span>
             </div>
@@ -167,28 +167,28 @@ export function ShareableInsight({ type, title, data, onShare }: ShareableInsigh
         <div className="absolute top-full right-0 mt-2 w-48 bg-gray-800 rounded-lg shadow-xl border border-gray-700 overflow-hidden z-50">
           <button
             onClick={copyToClipboard}
-            className="w-full flex items-center gap-3 px-4 py-3 text-left text-gray-300 hover:bg-gray-700 transition-colors"
+            className="w-full flex items-center gap-3 px-4 py-3 text-left text-foreground/80 hover:bg-gray-700 transition-colors"
           >
             {copied ? <Check className="w-5 h-5 text-green-400" /> : <Copy className="w-5 h-5" />}
             <span>{copied ? 'Copied!' : 'Copy text'}</span>
           </button>
           <button
             onClick={shareToTwitter}
-            className="w-full flex items-center gap-3 px-4 py-3 text-left text-gray-300 hover:bg-gray-700 transition-colors"
+            className="w-full flex items-center gap-3 px-4 py-3 text-left text-foreground/80 hover:bg-gray-700 transition-colors"
           >
             <Twitter className="w-5 h-5" />
             <span>Share on X</span>
           </button>
           <button
             onClick={shareToLinkedIn}
-            className="w-full flex items-center gap-3 px-4 py-3 text-left text-gray-300 hover:bg-gray-700 transition-colors"
+            className="w-full flex items-center gap-3 px-4 py-3 text-left text-foreground/80 hover:bg-gray-700 transition-colors"
           >
             <Linkedin className="w-5 h-5" />
             <span>Share on LinkedIn</span>
           </button>
           <button
             onClick={downloadAsImage}
-            className="w-full flex items-center gap-3 px-4 py-3 text-left text-gray-300 hover:bg-gray-700 transition-colors"
+            className="w-full flex items-center gap-3 px-4 py-3 text-left text-foreground/80 hover:bg-gray-700 transition-colors"
           >
             <Download className="w-5 h-5" />
             <span>Download image</span>
@@ -204,7 +204,7 @@ export function ShareButton({ onClick }: { onClick: () => void }) {
   return (
     <button
       onClick={onClick}
-      className="flex items-center gap-2 px-3 py-1.5 text-sm text-gray-400 hover:text-white bg-gray-800 hover:bg-gray-700 rounded-lg transition-colors"
+      className="flex items-center gap-2 px-3 py-1.5 text-sm text-foreground/70 hover:text-white bg-gray-800 hover:bg-gray-700 rounded-lg transition-colors"
     >
       <Share2 className="w-4 h-4" />
       <span>Share</span>

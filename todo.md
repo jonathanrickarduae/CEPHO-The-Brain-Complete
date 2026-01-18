@@ -5249,3 +5249,241 @@ The 100% Optimization Framework requires strong performance across ALL fronts. C
 - [x] Expand SME panel to 50 reviewers
 - [x] Update CEO KPI Report with new categories and reviewers
 - [x] Recalculate overall scores
+
+
+## SME Panel Review Actions - 18 January 2026
+*Logged by Chief of Staff for Today's Implementation*
+
+### Technology Panel
+- [ ] #1 Dr Sarah Chen (Cloud Architecture): Implement edge caching for global latency reduction
+- [ ] #2 Marcus Webb (AI Systems): Add model versioning and A/B testing framework
+- [ ] #3 Elena Rodriguez (Security): Implement zero-trust architecture for API layer
+- [ ] #6 Thomas Eriksson (Backend): Optimize database queries for scale
+
+### UI/UX Panel
+- [ ] #9 Lisa Park (UX Research): Conduct usability testing with 20+ users monthly
+- [ ] #10 David Müller (Interaction Design): Reduce cognitive load in complex workflows
+- [ ] #13 Sophie Laurent (Visual Design): Strengthen brand consistency in micro-interactions
+- [ ] #16 Michael Santos (Design Systems): Document component library for consistency
+
+### Strategy Panel
+- [ ] #20 Michael Torres (Investment): Prepare investor deck for Series A readiness
+- [ ] #21 Dr Helen Wright (Competitive Intel): Establish monthly competitor tracking dashboard
+- [ ] #22 Jonathan Blake (M&A Advisory): Identify potential acquisition targets in AI space
+
+### Operations Panel
+- [ ] #24 Carlos Mendez (Process Engineer): Implement continuous improvement framework
+
+### Finance Panel
+- [ ] #32 Diana Patel (Investor Relations): Create monthly investor update cadence
+
+### Customer Panel
+- [ ] #35 Emma Wilson (Customer Success): Implement proactive health scoring for accounts
+- [ ] #37 Rachel Green (Customer Research): Launch NPS program with quarterly surveys
+- [ ] #38 Daniel Brown (Community): Build customer community with 1000+ members
+- [ ] #40 William Taylor (Retention): Implement churn prediction model
+
+### Legal Panel
+- [ ] #42 Patrick Sullivan (Compliance): Implement GDPR compliance automation
+- [ ] #43 Natalie Chen (Privacy): Conduct annual privacy impact assessments
+- [ ] #44 Andrew Walsh (Corporate): Establish board advisory committee
+
+
+
+## Development Actions - 18 January 2026
+*Logged by Chief of Staff for Implementation*
+
+### Morning Signal System
+- [ ] #60 Connect ElevenLabs TTS to daily signal content (P1)
+- [ ] #61 Create voice briefing script generator (P1)
+- [ ] #62 Add voice note player to Morning Signal page (P1)
+- [ ] #63 Store generated audio files (P2)
+- [ ] #64 Connect AI avatar video generation to daily signal (P2)
+- [ ] #65 Create video script from signal content (P2)
+- [ ] #66 Generate avatar video presentation (P2)
+- [ ] #67 Add video player to Morning Signal page (P2)
+- [ ] #68 Generate branded PDF using CEPHO design guidelines (P1)
+- [ ] #69 Include all signal sections in PDF format (P1)
+- [ ] #70 Add download button to Morning Signal page (P1)
+- [ ] #71 Store generated PDFs (P2)
+- [ ] #72 All outputs pass through Chief of Staff validation (P1)
+- [ ] #73 Check design guidelines compliance (P1)
+- [ ] #74 Verify content quality before delivery (P1)
+- [ ] #75 Log all outputs for COS learning (P2)
+- [ ] #76 Ensure all parts work together seamlessly end-to-end (P1)
+- [ ] #77 Single trigger generates all three formats (voice, video, PDF) (P2)
+- [ ] #78 Consistent content across all formats (P2)
+- [ ] #79 Unified delivery mechanism (P2)
+- [ ] #80 Error handling across the pipeline (P2)
+- [ ] #81 Progress tracking for multi-format generation (P3)
+- [ ] #82 Fallback if one format fails (others still deliver) (P2)
+- [ ] #83 Define CEPHO voice tone profile (P1)
+- [ ] #84 Create tone guidelines for different content types (P2)
+- [ ] #85 Build tone matching system against user preferences (P2)
+- [ ] #86 Implement urgency detection and appropriate delivery (P2)
+- [ ] #87 Avoid monotone - vary pace and emphasis naturally (P2)
+- [ ] #88 Create script structure templates (hook, body, close) (P2)
+- [ ] #89 Define attention span guidelines (P3)
+- [ ] #90 Build engagement hooks library (P3)
+- [ ] #91 Implement boredom prevention (P3)
+
+### Content Quality SME Panel
+- [ ] #92 Script Writer SME - review all scripts before generation (P2)
+- [ ] #93 Film Director SME - advise on visual pacing and imagery (P2)
+- [ ] #94 Voice Director SME - guide tone and delivery (P2)
+- [ ] #95 Engagement Expert SME - optimize for attention retention (P2)
+- [ ] #96 Optimize ElevenLabs voice settings for CEPHO tone (P2)
+- [ ] #97 Implement dynamic pacing in voice scripts (P3)
+- [ ] #98 Add emphasis markers for key points (P3)
+- [ ] #99 Create voice style presets (briefing, urgent, casual) (P3)
+- [ ] #100 Test and refine voice output quality (P2)
+- [ ] #101 Define visual pacing guidelines (P3)
+- [ ] #102 Create imagery prompts for key moments (P3)
+- [ ] #103 Build transition and visual hook library (P3)
+
+### Quality Assurance System
+- [ ] #104 Define engagement metrics for each format (P2)
+- [ ] #105 Build feedback loop for continuous improvement (P2)
+- [ ] #106 Track attention retention data (P3)
+- [ ] #107 A/B test different approaches (P3)
+- [ ] #108 COS reviews all outputs against quality standards (P1)
+- [ ] #109 Daily Signal (voice, video, PDF) quality check (P1)
+- [ ] #110 Project briefings quality check (P2)
+- [ ] #111 SME consultations quality check (P2)
+- [ ] #112 Reports and presentations quality check (P2)
+- [ ] #113 All external communications quality check (P1)
+
+### Digital Twin Questionnaire System
+- [ ] #114 Add 200-question Digital Twin questionnaire to onboarding (P1)
+- [ ] #115 Create database table to store questionnaire responses (P1)
+- [ ] #116 Build questionnaire UI component with progress tracking (P1)
+- [ ] #117 Split questionnaire into digestible sections (P2)
+- [ ] #118 Store responses and calculate user profile scores (P2)
+- [ ] #119 Generate Digital Twin profile from questionnaire responses (P1)
+- [ ] #120 Show COS Understanding Level based on completion (P2)
+- [ ] #121 Allow users to update answers over time (P3)
+- [ ] #122 Use questionnaire data to personalize COS behavior (P1)
+- [ ] #123 Make questionnaire completion part of Getting to 100 score (P2)
+
+### Chief of Staff KPI Dashboard
+- [ ] #124 Create ChiefOfStaffKPIReport component (P1)
+- [ ] #125 Build SME Performance Heatmap with color-coded scoring (P1)
+- [ ] #126 Create Business Area Scoring Table with all SME rankings (P1)
+- [ ] #127 Implement Enhancement Recommendations engine (P1)
+- [ ] #128 Add export functionality for report (PDF/CSV) (P2)
+- [ ] #129 Integrate report into Chief of Staff page (P1)
+
+### Process Documentation
+- [ ] #130 Build process flow document showing each step visually (P2)
+- [ ] #131 Add decision points and branches in the flow (P2)
+- [ ] #132 Add imagery cues for video scripts (P3)
+- [ ] #133 Implement attention retention techniques (P3)
+- [ ] #134 Add B-roll and visual variety guidance (P3)
+- [ ] #135 Daily Signal application (P2)
+- [ ] #136 Project briefings application (P2)
+- [ ] #137 SME consultations application (P2)
+- [ ] #138 Reports and presentations application (P2)
+- [ ] #139 All external communications application (P2)
+
+### Additional Items
+- [ ] #143 Active learning mode with screen observation (P3)
+- [ ] #144 Label and thread management for Gmail (P3)
+- [ ] #145 Push notifications for new emails (P2)
+- [ ] #146 Real-time webhook for new emails (P2)
+- [ ] #147 Custom domain setup (P2)
+
+
+
+## CEPHO Template Repository - 18 January 2026
+*Create master repository of all CEPHO templates following design principles*
+
+### Design Principles (Mandatory)
+- All text must be black (#000000) - NO light grey
+- Font: Calibri for documents, Inter for platform
+- Pink accent (#E91E8C) for H2 headings only
+- Heat map colors for scoring (Green/Lime/Orange/Red)
+
+### Templates to Create
+- [ ] #148 CEO KPI Scorecard Report Template
+- [ ] #149 Chief of Staff Briefing Paper Template
+- [ ] #150 SME Panel Review Report Template
+- [ ] #151 Project Genesis Assessment Template
+- [ ] #152 Morning Signal Daily Briefing Template
+- [ ] #153 Investor Update Template
+- [ ] #154 Board Meeting Pack Template
+- [ ] #155 Strategic Review Template
+- [ ] #156 Competitive Analysis Template
+- [ ] #157 Financial Summary Template
+- [ ] #158 Customer Success Report Template
+- [ ] #159 Development Action List Template
+- [ ] #160 Process Documentation Template
+- [ ] #161 Meeting Minutes Template
+- [ ] #162 Decision Log Template
+
+
+
+## Notter Integration - 18 January 2026
+*Integrate Notter as backup voice note system*
+
+- [ ] #163 Research Notter API capabilities
+- [ ] #164 Set up Notter account connection
+- [ ] #165 Build voice note import from Notter
+- [ ] #166 Create sync mechanism for voice notes
+- [ ] #167 Add Notter as fallback when Manus unavailable
+- [ ] #168 Process Notter voice notes through COS pipeline
+
+
+
+## UI Cepho Review Actions - 18 January 2026
+*UI/UX fixes and enhancements from review*
+
+### General and Theming
+- [ ] #169 Apply consistent design language across all pages (black bg, white text, pink accents)
+- [ ] #170 Replace grey Sepho logo with official pink brain logo on all pages
+- [ ] #171 Standardize terminology: "Digital Twin" → "Chief of Staff", "Experts" → "AI SMEs"
+
+### Morning Signal (Landing Page)
+- [ ] #172 Remove personalized greetings (no "Good morning, John")
+- [ ] #173 Change all grey text to white for readability
+- [ ] #174 Rename "Listen to brief" to "Morning Brief" or "Daily Brief"
+- [ ] #175 Attribute brief to "Victoria" with her picture
+- [ ] #176 Add clear buttons: "Watch the Brief" and "Listen to the Brief"
+
+### Evening Review
+- [ ] #177 Apply consistent design (black banner, black background)
+- [ ] #178 Optimize layout to be more compact, reduce scrolling
+- [ ] #179 Add icons for actions (tick, defer, cross)
+
+### Chief of Staff
+- [ ] #180 Create clear landing page dashboard showing all action status
+- [ ] #181 Make Development Pathway collapsible/hidden by default
+- [ ] #182 Fix layout overflow (not extending too far right)
+- [ ] #183 Display action status with percentage completion
+- [ ] #184 Add Future Development section for ideas tracking
+- [ ] #185 Remove/relocate secondary bar (government funding, subscriptions)
+- [ ] #186 Add direct chat function with Chief of Staff
+- [ ] #187 Establish as central hub for status updates
+
+### AI SMEs
+- [ ] #188 Add visual space between "Recent Chats" and "Browse by type"
+- [ ] #189 Change SME names text color to white
+- [ ] #190 Display full SME name when selected (not just icon)
+- [ ] #191 Fix "Projects" and "Insights" label text colors
+- [ ] #192 Style chat button in white
+
+### Other Sections
+- [ ] #193 Projects/Project Genesis: Apply consistent black/white/pink theme
+- [ ] #194 Innovation Hub: Apply consistent theme, clear layout
+- [ ] #195 Workflow: Fix all formatting to new standards
+- [ ] #196 Knowledge and Vault: Clarify Library vs Document Library distinction
+- [ ] #197 The Vault: Fix text readability (visible colors)
+
+
+
+## Chief of Staff Sprint Process - 18 January 2026
+*Process documented and saved*
+
+- [x] Create Chief of Staff Sprint Process document
+- [x] Generate Sprint Action List PDF (140 items)
+- [x] Save process to docs/processes/CHIEF_OF_STAFF_SPRINT_PROCESS.md
+

@@ -93,7 +93,7 @@ const statusConfig: Record<GateStatus, {
 }> = {
   pending: { 
     label: 'Pending', 
-    color: 'text-gray-400 bg-gray-500/20',
+    color: 'text-foreground/70 bg-gray-500/20',
     icon: <Clock className="w-4 h-4" />
   },
   in_review: { 
@@ -152,22 +152,22 @@ function CheckCard({ check, onApprove, onReject, onRequestRevision, isReviewer }
                 <span className="ml-1">{status.label}</span>
               </Badge>
             </div>
-            <p className="text-sm text-gray-400 mt-1">{check.description}</p>
-            <p className="text-xs text-gray-500 mt-1">{levelConfig.description}</p>
+            <p className="text-sm text-foreground/70 mt-1">{check.description}</p>
+            <p className="text-xs text-foreground/60 mt-1">{levelConfig.description}</p>
             
             {check.reviewer && (
-              <p className="text-xs text-gray-500 mt-2">
+              <p className="text-xs text-foreground/60 mt-2">
                 Reviewed by: {check.reviewer} • {check.reviewedAt?.toLocaleString('en-GB')}
               </p>
             )}
             {check.comments && (
               <div className="mt-2 p-2 bg-white/5 rounded-lg">
-                <p className="text-sm text-gray-300">{check.comments}</p>
+                <p className="text-sm text-foreground/80">{check.comments}</p>
               </div>
             )}
             {check.score !== undefined && (
               <div className="mt-2">
-                <span className="text-xs text-gray-500">Score: </span>
+                <span className="text-xs text-foreground/60">Score: </span>
                 <span className={`text-sm font-medium ${
                   check.score >= 80 ? 'text-green-400' :
                   check.score >= 60 ? 'text-yellow-400' :
@@ -183,7 +183,7 @@ function CheckCard({ check, onApprove, onReject, onRequestRevision, isReviewer }
             variant="ghost"
             size="sm"
             onClick={() => setShowActions(!showActions)}
-            className="text-gray-400 hover:text-white"
+            className="text-foreground/70 hover:text-white"
           >
             <ChevronRight className={`w-4 h-4 transition-transform ${showActions ? 'rotate-90' : ''}`} />
           </Button>
@@ -197,7 +197,7 @@ function CheckCard({ check, onApprove, onReject, onRequestRevision, isReviewer }
             placeholder="Add review comments..."
             value={comments}
             onChange={(e) => setComments(e.target.value)}
-            className="bg-white/5 border-white/10 text-white placeholder:text-gray-500"
+            className="bg-white/5 border-white/10 text-white placeholder:text-foreground/60"
             rows={2}
           />
           <div className="flex gap-2">
@@ -295,7 +295,7 @@ export function QualityGateCard({
             </div>
             <div>
               <h3 className="font-medium text-white">{gate.projectName}</h3>
-              <div className="flex items-center gap-2 text-sm text-gray-400">
+              <div className="flex items-center gap-2 text-sm text-foreground/70">
                 <span>{gate.fromPhase}</span>
                 <ArrowRight className="w-4 h-4" />
                 <span className="text-cyan-400">{gate.toPhase}</span>
@@ -305,14 +305,14 @@ export function QualityGateCard({
           
           <div className="flex items-center gap-3">
             <div className="text-right">
-              <div className="text-sm text-gray-400">Progress</div>
+              <div className="text-sm text-foreground/70">Progress</div>
               <div className="text-lg font-bold text-white">{approvedCount}/{totalCount}</div>
             </div>
             <Badge className={statusConfig[gate.status].color}>
               {statusConfig[gate.status].icon}
               <span className="ml-1">{statusConfig[gate.status].label}</span>
             </Badge>
-            <ChevronRight className={`w-5 h-5 text-gray-400 transition-transform ${expanded ? 'rotate-90' : ''}`} />
+            <ChevronRight className={`w-5 h-5 text-foreground/70 transition-transform ${expanded ? 'rotate-90' : ''}`} />
           </div>
         </div>
 
@@ -401,12 +401,12 @@ export function QualityGateCard({
               <div className="space-y-2 max-h-40 overflow-y-auto">
                 {gate.auditTrail.map(entry => (
                   <div key={entry.id} className="flex items-start gap-2 text-sm">
-                    <span className="text-gray-500 text-xs whitespace-nowrap">
+                    <span className="text-foreground/60 text-xs whitespace-nowrap">
                       {entry.timestamp.toLocaleString('en-GB')}
                     </span>
-                    <span className="text-gray-400">
+                    <span className="text-foreground/70">
                       <span className="text-white">{entry.actor}</span> {entry.action}
-                      {entry.details && <span className="text-gray-500"> - {entry.details}</span>}
+                      {entry.details && <span className="text-foreground/60"> - {entry.details}</span>}
                     </span>
                   </div>
                 ))}
@@ -652,7 +652,7 @@ export function QualityGateApprovalQueue({ isChiefOfStaff = true }: ApprovalQueu
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-xl font-bold text-white">Quality Gate Approvals</h2>
-          <p className="text-sm text-gray-400">Review and approve phase transitions</p>
+          <p className="text-sm text-foreground/70">Review and approve phase transitions</p>
         </div>
         {pendingCount > 0 && (
           <Badge className="bg-cyan-500/20 text-cyan-400 border-cyan-500/30">
@@ -665,23 +665,23 @@ export function QualityGateApprovalQueue({ isChiefOfStaff = true }: ApprovalQueu
       <div className="grid grid-cols-4 gap-4">
         <div className="p-4 bg-white/5 rounded-xl border border-white/10">
           <div className="text-2xl font-bold text-white">{gates.length}</div>
-          <div className="text-sm text-gray-400">Total Gates</div>
+          <div className="text-sm text-foreground/70">Total Gates</div>
         </div>
         <div className="p-4 bg-white/5 rounded-xl border border-white/10">
           <div className="text-2xl font-bold text-yellow-400">{pendingCount}</div>
-          <div className="text-sm text-gray-400">Pending Review</div>
+          <div className="text-sm text-foreground/70">Pending Review</div>
         </div>
         <div className="p-4 bg-white/5 rounded-xl border border-white/10">
           <div className="text-2xl font-bold text-green-400">
             {gates.filter(g => g.status === 'approved').length}
           </div>
-          <div className="text-sm text-gray-400">Approved</div>
+          <div className="text-sm text-foreground/70">Approved</div>
         </div>
         <div className="p-4 bg-white/5 rounded-xl border border-white/10">
           <div className="text-2xl font-bold text-red-400">
             {gates.filter(g => g.status === 'rejected').length}
           </div>
-          <div className="text-sm text-gray-400">Rejected</div>
+          <div className="text-sm text-foreground/70">Rejected</div>
         </div>
       </div>
 
@@ -702,7 +702,7 @@ export function QualityGateApprovalQueue({ isChiefOfStaff = true }: ApprovalQueu
       </div>
 
       {gates.length === 0 && (
-        <div className="text-center py-12 text-gray-400">
+        <div className="text-center py-12 text-foreground/70">
           <CheckCircle2 className="w-12 h-12 mx-auto mb-4 opacity-50" />
           <p>No pending quality gates</p>
         </div>

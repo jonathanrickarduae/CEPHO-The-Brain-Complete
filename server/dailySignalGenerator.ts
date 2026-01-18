@@ -365,14 +365,14 @@ function generatePDFHTML(content: SignalContent): string {
   <meta charset="UTF-8">
   <title>CEPHO Morning Signal - ${dateStr}</title>
   <style>
-    /* CEPHO Design Guidelines */
+    /* CEPHO Design Guidelines - Updated 18 Jan 2026 */
     :root {
-      --cepho-primary: #1E3A5F;
-      --cepho-secondary: #2E5077;
-      --cepho-accent: #4A90A4;
-      --cepho-gold: #D4AF37;
-      --cepho-text: #2C3E50;
-      --cepho-light: #F8F9FA;
+      --cepho-primary: #E91E8C;
+      --cepho-secondary: #0D0D0D;
+      --cepho-accent: #E91E8C;
+      --cepho-text: #000000;
+      --cepho-light: #FFFFFF;
+      --cepho-card: #F5F5F5;
     }
     
     body {

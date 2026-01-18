@@ -112,11 +112,11 @@ const phaseConfig: Record<ValueChainPhase, {
 
 // Status configuration
 const statusConfig: Record<BlueprintStatus, { label: string; color: string; icon: React.ReactNode }> = {
-  draft: { label: 'Draft', color: 'text-gray-400 bg-gray-500/20', icon: <Edit className="w-3 h-3" /> },
+  draft: { label: 'Draft', color: 'text-foreground/70 bg-gray-500/20', icon: <Edit className="w-3 h-3" /> },
   in_progress: { label: 'In Progress', color: 'text-blue-400 bg-blue-500/20', icon: <Clock className="w-3 h-3" /> },
   review: { label: 'In Review', color: 'text-yellow-400 bg-yellow-500/20', icon: <Users className="w-3 h-3" /> },
   approved: { label: 'Approved', color: 'text-green-400 bg-green-500/20', icon: <CheckCircle2 className="w-3 h-3" /> },
-  archived: { label: 'Archived', color: 'text-gray-500 bg-gray-600/20', icon: <FileText className="w-3 h-3" /> },
+  archived: { label: 'Archived', color: 'text-foreground/60 bg-gray-600/20', icon: <FileText className="w-3 h-3" /> },
 };
 
 // Default templates for each phase
@@ -338,18 +338,18 @@ function TemplateCard({ template, onUseTemplate }: TemplateCardProps) {
             </div>
             <div>
               <h4 className="font-medium text-white">{template.name}</h4>
-              <p className="text-sm text-gray-400 mt-1">{template.description}</p>
+              <p className="text-sm text-foreground/70 mt-1">{template.description}</p>
               <div className="flex items-center gap-2 mt-2">
                 <Badge className={`${phase.color} border-0 text-xs`}>
                   {phase.label}
                 </Badge>
-                <span className="text-xs text-gray-500">
+                <span className="text-xs text-foreground/60">
                   {template.sections.length} sections • {template.estimatedDuration}
                 </span>
               </div>
             </div>
           </div>
-          <ChevronRight className={`w-5 h-5 text-gray-400 transition-transform ${expanded ? 'rotate-90' : ''}`} />
+          <ChevronRight className={`w-5 h-5 text-foreground/70 transition-transform ${expanded ? 'rotate-90' : ''}`} />
         </div>
       </div>
 
@@ -362,7 +362,7 @@ function TemplateCard({ template, onUseTemplate }: TemplateCardProps) {
               {template.sections.map(section => (
                 <div key={section.id} className="flex items-center gap-2 text-sm">
                   <div className={`w-2 h-2 rounded-full ${section.required ? 'bg-cyan-400' : 'bg-gray-500'}`} />
-                  <span className="text-gray-300">{section.title}</span>
+                  <span className="text-foreground/80">{section.title}</span>
                   {section.required && <span className="text-xs text-cyan-400">(required)</span>}
                 </div>
               ))}
@@ -374,7 +374,7 @@ function TemplateCard({ template, onUseTemplate }: TemplateCardProps) {
             <h5 className="text-sm font-medium text-white mb-2">Required Experts</h5>
             <div className="flex flex-wrap gap-1">
               {template.requiredExperts.map(expert => (
-                <Badge key={expert} variant="outline" className="text-xs border-white/20 text-gray-300">
+                <Badge key={expert} variant="outline" className="text-xs border-white/20 text-foreground/80">
                   {expert}
                 </Badge>
               ))}
@@ -386,7 +386,7 @@ function TemplateCard({ template, onUseTemplate }: TemplateCardProps) {
             <h5 className="text-sm font-medium text-white mb-2">Quality Checks</h5>
             <div className="space-y-1">
               {template.qualityChecks.map((check, i) => (
-                <div key={i} className="flex items-center gap-2 text-sm text-gray-400">
+                <div key={i} className="flex items-center gap-2 text-sm text-foreground/70">
                   <CheckCircle2 className="w-3 h-3 text-green-400" />
                   {check}
                 </div>
@@ -457,7 +457,7 @@ export function BlueprintTemplatesDashboard({
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-xl font-bold text-white">Blueprint Templates</h2>
-          <p className="text-sm text-gray-400">
+          <p className="text-sm text-foreground/70">
             {projectName 
               ? `Select templates for ${projectName} (Phase ${currentPhase || 1})`
               : 'Standardized process documents for each Value Chain phase'
@@ -475,7 +475,7 @@ export function BlueprintTemplatesDashboard({
           placeholder="Search templates..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-64 bg-white/5 border-white/10 text-white placeholder:text-gray-500"
+          className="w-64 bg-white/5 border-white/10 text-white placeholder:text-foreground/60"
         />
         <select 
           value={selectedPhase}
@@ -506,7 +506,7 @@ export function BlueprintTemplatesDashboard({
               <div className="flex flex-col items-center gap-1">
                 {config.icon}
                 <span className="text-xs text-white">{config.label}</span>
-                <span className="text-xs text-gray-500">{count} templates</span>
+                <span className="text-xs text-foreground/60">{count} templates</span>
               </div>
             </button>
           );
@@ -525,7 +525,7 @@ export function BlueprintTemplatesDashboard({
       </div>
 
       {filteredTemplates.length === 0 && (
-        <div className="text-center py-12 text-gray-400">
+        <div className="text-center py-12 text-foreground/70">
           <FileText className="w-12 h-12 mx-auto mb-4 opacity-50" />
           <p>No templates found for the selected filters.</p>
         </div>
@@ -536,20 +536,20 @@ export function BlueprintTemplatesDashboard({
         <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
           <div className="bg-gray-900 rounded-xl border border-white/10 max-w-lg w-full p-6">
             <h3 className="text-lg font-bold text-white mb-4">Create Blueprint</h3>
-            <p className="text-gray-400 mb-4">
+            <p className="text-foreground/70 mb-4">
               Create a new blueprint from the "{selectedTemplate.name}" template.
             </p>
             
             <div className="space-y-4">
               <div>
-                <label className="text-sm text-gray-400 mb-1 block">Blueprint Name</label>
+                <label className="text-sm text-foreground/70 mb-1 block">Blueprint Name</label>
                 <Input 
                   defaultValue={selectedTemplate.name}
                   className="bg-white/5 border-white/10 text-white"
                 />
               </div>
               <div>
-                <label className="text-sm text-gray-400 mb-1 block">Project</label>
+                <label className="text-sm text-foreground/70 mb-1 block">Project</label>
                 <select className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white">
                   <option value="boundless">Sample Project AI</option>
                   <option value="celadon">Celadon</option>
@@ -562,7 +562,7 @@ export function BlueprintTemplatesDashboard({
               <Button
                 variant="outline"
                 onClick={() => setShowCreateModal(false)}
-                className="flex-1 border-white/20 text-gray-300"
+                className="flex-1 border-white/20 text-foreground/80"
               >
                 Cancel
               </Button>

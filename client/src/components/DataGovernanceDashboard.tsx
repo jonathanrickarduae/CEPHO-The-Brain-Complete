@@ -74,7 +74,7 @@ export function DataGovernanceDashboard() {
   };
 
   const actionConfig = {
-    view: { label: 'Viewed', color: 'text-gray-400' },
+    view: { label: 'Viewed', color: 'text-foreground/70' },
     create: { label: 'Created', color: 'text-green-400' },
     update: { label: 'Updated', color: 'text-blue-400' },
     delete: { label: 'Deleted', color: 'text-red-400' },
@@ -361,7 +361,7 @@ export function DataGovernanceDashboard() {
                         <span className={`text-xs px-2 py-0.5 rounded-full ${
                           policy.autoDelete 
                             ? 'bg-yellow-500/20 text-yellow-400' 
-                            : 'bg-gray-500/20 text-gray-400'
+                            : 'bg-gray-500/20 text-foreground/70'
                         }`}>
                           {policy.autoDelete ? 'Enabled' : 'Disabled'}
                         </span>

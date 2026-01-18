@@ -68,19 +68,19 @@ export default function AITeam() {
           <h1 className="text-3xl font-bold bg-gradient-to-r from-cyan-400 to-fuchsia-500 bg-clip-text text-transparent">
             AI Expert Team
           </h1>
-          <p className="text-gray-400 mt-1">287 AI Experts (250 Core + 25 Left Field + 5 Celebrity + 7 Corporate)</p>
+          <p className="text-foreground/70 mt-1">287 AI Experts (250 Core + 25 Left Field + 5 Celebrity + 7 Corporate)</p>
         </div>
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2 bg-white/5 rounded-lg p-1">
             <button
               onClick={() => setViewMode('grid')}
-              className={`p-2 rounded ${viewMode === 'grid' ? 'bg-fuchsia-500/20 text-fuchsia-400' : 'text-gray-400'}`}
+              className={`p-2 rounded ${viewMode === 'grid' ? 'bg-fuchsia-500/20 text-fuchsia-400' : 'text-foreground/70'}`}
             >
               <Grid3X3 className="w-4 h-4" />
             </button>
             <button
               onClick={() => setViewMode('list')}
-              className={`p-2 rounded ${viewMode === 'list' ? 'bg-fuchsia-500/20 text-fuchsia-400' : 'text-gray-400'}`}
+              className={`p-2 rounded ${viewMode === 'list' ? 'bg-fuchsia-500/20 text-fuchsia-400' : 'text-foreground/70'}`}
             >
               <List className="w-4 h-4" />
             </button>
@@ -97,7 +97,7 @@ export default function AITeam() {
             </div>
             <div>
               <p className="text-2xl font-bold text-cyan-400">{allExperts.length}</p>
-              <p className="text-xs text-gray-400">Individual Experts</p>
+              <p className="text-xs text-foreground/70">Individual Experts</p>
             </div>
           </div>
         </div>
@@ -108,7 +108,7 @@ export default function AITeam() {
             </div>
             <div>
               <p className="text-2xl font-bold text-fuchsia-400">{corporatePartners.length}</p>
-              <p className="text-xs text-gray-400">Corporate Partners</p>
+              <p className="text-xs text-foreground/70">Corporate Partners</p>
             </div>
           </div>
         </div>
@@ -119,7 +119,7 @@ export default function AITeam() {
             </div>
             <div>
               <p className="text-2xl font-bold text-green-400">{topPerformers.length}</p>
-              <p className="text-xs text-gray-400">Top Performers</p>
+              <p className="text-xs text-foreground/70">Top Performers</p>
             </div>
           </div>
         </div>
@@ -130,7 +130,7 @@ export default function AITeam() {
             </div>
             <div>
               <p className="text-2xl font-bold text-orange-400">{needsReview.length}</p>
-              <p className="text-xs text-gray-400">Needs Review</p>
+              <p className="text-xs text-foreground/70">Needs Review</p>
             </div>
           </div>
         </div>
@@ -157,7 +157,7 @@ export default function AITeam() {
           {/* Search and Filter */}
           <div className="flex gap-4">
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-foreground/70" />
               <Input
                 placeholder="Search experts by name or specialty..."
                 value={searchQuery}
@@ -193,9 +193,9 @@ export default function AITeam() {
                   <div className={`text-4xl ${viewMode === 'list' ? '' : 'mb-3'}`}>{expert.avatar}</div>
                   <div className={viewMode === 'list' ? 'flex-1' : ''}>
                     <h3 className="font-semibold text-white">{expert.name}</h3>
-                    <p className="text-xs text-gray-400 mt-1">{expert.specialty}</p>
+                    <p className="text-xs text-foreground/70 mt-1">{expert.specialty}</p>
                     {viewMode === 'list' && (
-                      <p className="text-xs text-gray-500">{expert.category}</p>
+                      <p className="text-xs text-foreground/60">{expert.category}</p>
                     )}
                   </div>
                 </div>
@@ -204,7 +204,7 @@ export default function AITeam() {
                     {expert.performanceScore}%
                   </Badge>
                   {viewMode === 'list' && (
-                    <div className="flex items-center gap-4 text-xs text-gray-400">
+                    <div className="flex items-center gap-4 text-xs text-foreground/70">
                       <span>{expert.projectsCompleted} projects</span>
                       <span>{expert.insightsGenerated} insights</span>
                     </div>
@@ -214,7 +214,7 @@ export default function AITeam() {
             ))}
           </div>
           {filteredExperts.length > 50 && (
-            <p className="text-center text-gray-400 text-sm">
+            <p className="text-center text-foreground/70 text-sm">
               Showing 50 of {filteredExperts.length} experts. Use search to find specific experts.
             </p>
           )}
@@ -233,8 +233,8 @@ export default function AITeam() {
                   <div className="text-5xl">{partner.logo}</div>
                   <div className="flex-1">
                     <h3 className="text-xl font-bold text-white">{partner.name}</h3>
-                    <p className="text-sm text-gray-400">{partner.industry}</p>
-                    <p className="text-xs text-gray-500 mt-2">{partner.methodology}</p>
+                    <p className="text-sm text-foreground/70">{partner.industry}</p>
+                    <p className="text-xs text-foreground/60 mt-2">{partner.methodology}</p>
                   </div>
                   <Badge variant="outline" className={`${getScoreBg(partner.performanceScore)} ${getScoreColor(partner.performanceScore)} border`}>
                     {partner.performanceScore}%
@@ -242,13 +242,13 @@ export default function AITeam() {
                 </div>
                 <div className="mt-4 flex flex-wrap gap-2">
                   {partner.strengths.slice(0, 4).map(strength => (
-                    <Badge key={strength} variant="secondary" className="bg-white/5 text-gray-300 text-xs">
+                    <Badge key={strength} variant="secondary" className="bg-white/5 text-foreground/80 text-xs">
                       {strength}
                     </Badge>
                   ))}
                 </div>
                 <div className="mt-4 flex items-center justify-between text-sm">
-                  <span className="text-gray-400">{partner.projectsCompleted} projects completed</span>
+                  <span className="text-foreground/70">{partner.projectsCompleted} projects completed</span>
                   <Button size="sm" variant="outline" className="border-fuchsia-500/50 text-fuchsia-400 hover:bg-fuchsia-500/10">
                     Start Project
                   </Button>
@@ -274,7 +274,7 @@ export default function AITeam() {
                     <span className="text-2xl">{expert.avatar}</span>
                     <div className="flex-1">
                       <p className="font-medium text-white">{expert.name}</p>
-                      <p className="text-xs text-gray-400">{expert.specialty}</p>
+                      <p className="text-xs text-foreground/70">{expert.specialty}</p>
                     </div>
                     <Badge className="bg-green-500/20 text-green-400 border-green-500/30">
                       {expert.performanceScore}%
@@ -296,7 +296,7 @@ export default function AITeam() {
                     <span className="text-2xl">{expert.avatar}</span>
                     <div className="flex-1">
                       <p className="font-medium text-white">{expert.name}</p>
-                      <p className="text-xs text-gray-400">{expert.specialty}</p>
+                      <p className="text-xs text-foreground/70">{expert.specialty}</p>
                     </div>
                     <Badge className="bg-orange-500/20 text-orange-400 border-orange-500/30">
                       {expert.performanceScore}%
@@ -318,27 +318,27 @@ export default function AITeam() {
             </h3>
             <div className="grid grid-cols-3 gap-4">
               <div className="bg-black/20 rounded-lg p-4">
-                <p className="text-sm text-gray-400">Average Performance</p>
+                <p className="text-sm text-foreground/70">Average Performance</p>
                 <p className="text-3xl font-bold text-white mt-1">
                   {Math.round(allExperts.reduce((acc, e) => acc + e.performanceScore, 0) / allExperts.length)}%
                 </p>
                 <Progress value={Math.round(allExperts.reduce((acc, e) => acc + e.performanceScore, 0) / allExperts.length)} className="mt-2" />
               </div>
               <div className="bg-black/20 rounded-lg p-4">
-                <p className="text-sm text-gray-400">Total Projects</p>
+                <p className="text-sm text-foreground/70">Total Projects</p>
                 <p className="text-3xl font-bold text-white mt-1">
                   {allExperts.reduce((acc, e) => acc + e.projectsCompleted, 0).toLocaleString()}
                 </p>
               </div>
               <div className="bg-black/20 rounded-lg p-4">
-                <p className="text-sm text-gray-400">Insights Generated</p>
+                <p className="text-sm text-foreground/70">Insights Generated</p>
                 <p className="text-3xl font-bold text-white mt-1">
                   {allExperts.reduce((acc, e) => acc + e.insightsGenerated, 0).toLocaleString()}
                 </p>
               </div>
             </div>
             <div className="mt-4 p-4 bg-black/20 rounded-lg">
-              <p className="text-sm text-gray-300">
+              <p className="text-sm text-foreground/80">
                 <span className="text-fuchsia-400 font-medium">Chief of Staff Assessment:</span> Your team is performing well overall. 
                 {needsReview.length > 0 && ` ${needsReview.length} experts need attention - consider sending them for overnight training.`}
                 {' '}Top performers are excelling in Investment & Finance and Technology categories.
@@ -359,11 +359,11 @@ export default function AITeam() {
                   <div className="text-6xl">{selectedExpert.avatar}</div>
                   <div>
                     <h2 className="text-2xl font-bold text-white">{selectedExpert.name}</h2>
-                    <p className="text-gray-400">{selectedExpert.specialty}</p>
+                    <p className="text-foreground/70">{selectedExpert.specialty}</p>
                     <Badge variant="outline" className="mt-2">{selectedExpert.category}</Badge>
                   </div>
                 </div>
-                <button onClick={() => setSelectedExpert(null)} className="text-gray-400 hover:text-white">
+                <button onClick={() => setSelectedExpert(null)} className="text-foreground/70 hover:text-white">
                   <X className="w-6 h-6" />
                 </button>
               </div>
@@ -371,7 +371,7 @@ export default function AITeam() {
               {/* Performance Score */}
               <div className={`rounded-xl p-4 mb-6 ${getScoreBg(selectedExpert.performanceScore)} border`}>
                 <div className="flex items-center justify-between">
-                  <span className="text-gray-300">Performance Score</span>
+                  <span className="text-foreground/80">Performance Score</span>
                   <span className={`text-3xl font-bold ${getScoreColor(selectedExpert.performanceScore)}`}>
                     {selectedExpert.performanceScore}%
                   </span>
@@ -381,13 +381,13 @@ export default function AITeam() {
 
               {/* Bio */}
               <div className="mb-6">
-                <h3 className="text-sm font-medium text-gray-400 mb-2">Background</h3>
-                <p className="text-gray-300">{selectedExpert.bio}</p>
+                <h3 className="text-sm font-medium text-foreground/70 mb-2">Background</h3>
+                <p className="text-foreground/80">{selectedExpert.bio}</p>
               </div>
 
               {/* Composite Of */}
               <div className="mb-6">
-                <h3 className="text-sm font-medium text-gray-400 mb-2">Composite Influences</h3>
+                <h3 className="text-sm font-medium text-foreground/70 mb-2">Composite Influences</h3>
                 <div className="flex flex-wrap gap-2">
                   {selectedExpert.compositeOf.map(influence => (
                     <Badge key={influence} variant="secondary" className="bg-fuchsia-500/10 text-fuchsia-300">
@@ -403,7 +403,7 @@ export default function AITeam() {
                   <h3 className="text-sm font-medium text-green-400 mb-2">Strengths</h3>
                   <ul className="space-y-1">
                     {selectedExpert.strengths.map(s => (
-                      <li key={s} className="text-sm text-gray-300 flex items-center gap-2">
+                      <li key={s} className="text-sm text-foreground/80 flex items-center gap-2">
                         <span className="w-1.5 h-1.5 bg-green-400 rounded-full" />
                         {s}
                       </li>
@@ -414,7 +414,7 @@ export default function AITeam() {
                   <h3 className="text-sm font-medium text-orange-400 mb-2">Weaknesses</h3>
                   <ul className="space-y-1">
                     {selectedExpert.weaknesses.map(w => (
-                      <li key={w} className="text-sm text-gray-300 flex items-center gap-2">
+                      <li key={w} className="text-sm text-foreground/80 flex items-center gap-2">
                         <span className="w-1.5 h-1.5 bg-orange-400 rounded-full" />
                         {w}
                       </li>
@@ -425,29 +425,29 @@ export default function AITeam() {
 
               {/* Thinking Style */}
               <div className="mb-6">
-                <h3 className="text-sm font-medium text-gray-400 mb-2">Thinking Style</h3>
-                <p className="text-gray-300 italic">"{selectedExpert.thinkingStyle}"</p>
+                <h3 className="text-sm font-medium text-foreground/70 mb-2">Thinking Style</h3>
+                <p className="text-foreground/80 italic">"{selectedExpert.thinkingStyle}"</p>
               </div>
 
               {/* Stats */}
               <div className="grid grid-cols-3 gap-4 mb-6">
                 <div className="bg-white/5 rounded-lg p-3 text-center">
                   <p className="text-2xl font-bold text-cyan-400">{selectedExpert.projectsCompleted}</p>
-                  <p className="text-xs text-gray-400">Projects</p>
+                  <p className="text-xs text-foreground/70">Projects</p>
                 </div>
                 <div className="bg-white/5 rounded-lg p-3 text-center">
                   <p className="text-2xl font-bold text-fuchsia-400">{selectedExpert.insightsGenerated}</p>
-                  <p className="text-xs text-gray-400">Insights</p>
+                  <p className="text-xs text-foreground/70">Insights</p>
                 </div>
                 <div className="bg-white/5 rounded-lg p-3 text-center">
-                  <p className="text-sm font-medium text-gray-300">{selectedExpert.lastUsed}</p>
-                  <p className="text-xs text-gray-400">Last Used</p>
+                  <p className="text-sm font-medium text-foreground/80">{selectedExpert.lastUsed}</p>
+                  <p className="text-xs text-foreground/70">Last Used</p>
                 </div>
               </div>
 
               {/* Development Plan / Feedback */}
               <div className="mb-6">
-                <h3 className="text-sm font-medium text-gray-400 mb-2">Development Plan (Voice Note)</h3>
+                <h3 className="text-sm font-medium text-foreground/70 mb-2">Development Plan (Voice Note)</h3>
                 <div className="flex gap-2">
                   <Input
                     placeholder="Type feedback or use voice..."
@@ -507,17 +507,17 @@ export default function AITeam() {
                   <div className="text-6xl">{selectedCorporate.logo}</div>
                   <div>
                     <h2 className="text-2xl font-bold text-white">{selectedCorporate.name}</h2>
-                    <p className="text-gray-400">{selectedCorporate.industry}</p>
+                    <p className="text-foreground/70">{selectedCorporate.industry}</p>
                   </div>
                 </div>
-                <button onClick={() => setSelectedCorporate(null)} className="text-gray-400 hover:text-white">
+                <button onClick={() => setSelectedCorporate(null)} className="text-foreground/70 hover:text-white">
                   <X className="w-6 h-6" />
                 </button>
               </div>
 
               <div className={`rounded-xl p-4 mb-6 ${getScoreBg(selectedCorporate.performanceScore)} border`}>
                 <div className="flex items-center justify-between">
-                  <span className="text-gray-300">Performance Score</span>
+                  <span className="text-foreground/80">Performance Score</span>
                   <span className={`text-3xl font-bold ${getScoreColor(selectedCorporate.performanceScore)}`}>
                     {selectedCorporate.performanceScore}%
                   </span>
@@ -526,12 +526,12 @@ export default function AITeam() {
               </div>
 
               <div className="mb-6">
-                <h3 className="text-sm font-medium text-gray-400 mb-2">Methodology</h3>
-                <p className="text-gray-300">{selectedCorporate.methodology}</p>
+                <h3 className="text-sm font-medium text-foreground/70 mb-2">Methodology</h3>
+                <p className="text-foreground/80">{selectedCorporate.methodology}</p>
               </div>
 
               <div className="mb-6">
-                <h3 className="text-sm font-medium text-gray-400 mb-2">Strengths</h3>
+                <h3 className="text-sm font-medium text-foreground/70 mb-2">Strengths</h3>
                 <div className="flex flex-wrap gap-2">
                   {selectedCorporate.strengths.map(s => (
                     <Badge key={s} variant="secondary" className="bg-green-500/10 text-green-300">
@@ -542,7 +542,7 @@ export default function AITeam() {
               </div>
 
               <div className="mb-6">
-                <h3 className="text-sm font-medium text-gray-400 mb-2">Frameworks</h3>
+                <h3 className="text-sm font-medium text-foreground/70 mb-2">Frameworks</h3>
                 <div className="flex flex-wrap gap-2">
                   {selectedCorporate.frameworks.map(f => (
                     <Badge key={f} variant="secondary" className="bg-fuchsia-500/10 text-fuchsia-300">
