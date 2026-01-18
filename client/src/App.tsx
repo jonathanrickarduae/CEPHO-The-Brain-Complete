@@ -46,6 +46,7 @@ import COSTraining from "./pages/COSTraining";
 import PortfolioCommandCenter from "./pages/PortfolioCommandCenter";
 import RevenueDashboard from "./pages/RevenueDashboard";
 import KpiDashboard from "./pages/KpiDashboard";
+import OperationsPage from "./pages/OperationsPage";
 import QuestionnaireOnline from "./pages/QuestionnaireOnline";
 import { GovernanceProvider, GovernanceModeChangeModal } from "./hooks/useGovernance";
 import { AIRouterProvider } from "./components/AIRouter";
@@ -158,6 +159,9 @@ function Router() {
       </Route>
       <Route path="/kpi-dashboard">
         <WithLayout><KpiDashboard /></WithLayout>
+      </Route>
+      <Route path="/operations">
+        <WithLayout><OperationsPage /></WithLayout>
       </Route>
       <Route path="/due-diligence">
         <WithLayout><DueDiligencePage /></WithLayout>

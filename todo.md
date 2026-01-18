@@ -5513,3 +5513,10 @@ The 100% Optimization Framework requires strong performance across ALL fronts. C
 - [x] Partnership Pipeline component with Kanban-style view
 - [x] Team Capability Matrix component with skill tracking
 - [x] Added tRPC routers for NPS, Partnerships, Team Capabilities, Customer Health
+
+## Operations Dashboard - 18 January 2026
+- [x] Create Operations page with NPS, Partnership, Team Capability tabs
+- [x] Add Operations route to App.tsx
+- [x] Add Operations to sidebar navigation under Analytics
+- [x] Move Project Genesis to prominent top-level sidebar position
+- [x] Reorganize Innovation section (separate from Project Genesis)

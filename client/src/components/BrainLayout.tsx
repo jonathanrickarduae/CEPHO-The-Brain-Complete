@@ -60,6 +60,7 @@ type MenuItem = {
 
 const menuItems: MenuItem[] = [
   { icon: LayoutDashboard, label: "The Nexus", path: "/dashboard" },
+  { icon: Rocket, label: "Project Genesis", path: "/project-genesis" },
   { 
     icon: Sun, 
     label: "The Signal", 
@@ -81,11 +82,10 @@ const menuItems: MenuItem[] = [
   },
   { icon: Users, label: "AI-SMEs", path: "/ai-experts" },
   { 
-    icon: Rocket, 
-    label: "Projects", 
-    path: "/project-genesis",
+    icon: TrendingUp, 
+    label: "Innovation", 
+    path: "/innovation-hub",
     children: [
-      { icon: Rocket, label: "Project Genesis", path: "/project-genesis" },
       { icon: TrendingUp, label: "Innovation Hub", path: "/innovation-hub" },
       { icon: Workflow, label: "Workflow", path: "/workflow", count: 2 },
     ]
@@ -107,6 +107,7 @@ const menuItems: MenuItem[] = [
     children: [
       { icon: BarChart3, label: "Statistics", path: "/statistics" },
       { icon: Globe, label: "Central Hub", path: "/central-hub" },
+      { icon: TrendingUp, label: "Operations", path: "/operations" },
     ]
   },
   { icon: Settings, label: "Settings", path: "/settings" },
