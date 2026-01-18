@@ -29,6 +29,7 @@ import SubscriptionTracker from "@/components/SubscriptionTracker";
 import OptimizationAssessment from "@/components/OptimizationAssessment";
 import FundingAssessment from "@/components/FundingAssessment";
 import { ChiefOfStaffRoadmap } from "@/components/ChiefOfStaffRoadmap";
+import { FivePhaseRoadmap } from "@/components/FivePhaseRoadmap";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -153,6 +154,10 @@ export default function DevelopmentPathway() {
             <TabsTrigger value="optimization" className="data-[state=active]:bg-gray-800">
               <Gauge className="w-4 h-4 mr-2" />
               System Optimization
+            </TabsTrigger>
+            <TabsTrigger value="5phase" className="data-[state=active]:bg-gray-800">
+              <Rocket className="w-4 h-4 mr-2" />
+              5-Phase Roadmap
             </TabsTrigger>
             <TabsTrigger value="roadmap" className="data-[state=active]:bg-gray-800">
               <Map className="w-4 h-4 mr-2" />
@@ -358,6 +363,11 @@ export default function DevelopmentPathway() {
           {/* System Optimization Tab */}
           <TabsContent value="optimization">
             <OptimizationAssessment />
+          </TabsContent>
+
+          {/* 5-Phase Roadmap Tab */}
+          <TabsContent value="5phase">
+            <FivePhaseRoadmap />
           </TabsContent>
 
           {/* Chief of Staff Roadmap Tab */}

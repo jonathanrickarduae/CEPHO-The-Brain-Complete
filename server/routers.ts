@@ -1463,6 +1463,52 @@ You are not a yes-man. You are a trusted advisor who respects the principal enou
       }),
   }),
 
+  // Text-to-Speech API - ElevenLabs integration for Victoria
+  textToSpeech: router({
+    synthesize: protectedProcedure
+      .input(z.object({
+        text: z.string().min(1).max(5000),
+        voiceId: z.string().optional(),
+      }))
+      .mutation(async ({ input }) => {
+        const { synthesizeSpeech } = await import("./_core/textToSpeech");
+        const result = await synthesizeSpeech({
+          text: input.text,
+          voiceId: input.voiceId,
+        });
+        
+        if ('error' in result) {
+          throw new Error(result.error);
+        }
+        
+        return result;
+      }),
+
+    getVoices: protectedProcedure
+      .query(async () => {
+        const { getAvailableVoices } = await import("./_core/textToSpeech");
+        const result = await getAvailableVoices();
+        
+        if ('error' in result) {
+          throw new Error(result.error);
+        }
+        
+        return result;
+      }),
+
+    getSubscription: protectedProcedure
+      .query(async () => {
+        const { getSubscriptionInfo } = await import("./_core/textToSpeech");
+        const result = await getSubscriptionInfo();
+        
+        if ('error' in result) {
+          throw new Error(result.error);
+        }
+        
+        return result;
+      }),
+  }),
+
   // Expert Evolution System API
   expertEvolution: router({
     // Store a conversation with an expert
