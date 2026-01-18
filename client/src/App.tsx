@@ -51,6 +51,7 @@ import GrowthPage from "./pages/GrowthPage";
 import SocialMediaBlueprint from "./pages/SocialMediaBlueprint";
 import BusinessModelPage from "./pages/BusinessModelPage";
 import QuestionnaireOnline from "./pages/QuestionnaireOnline";
+import StrategicFrameworkQuestionnaire from "./pages/StrategicFrameworkQuestionnaire";
 import { GovernanceProvider, GovernanceModeChangeModal } from "./hooks/useGovernance";
 import { AIRouterProvider } from "./components/AIRouter";
 import { CelebrationProvider } from "./components/CelebrationAnimations";
@@ -153,6 +154,9 @@ function Router() {
       </Route>
       <Route path="/questionnaire">
         <WithLayout><QuestionnaireOnline /></WithLayout>
+      </Route>
+      <Route path="/strategic-framework">
+        <StrategicFrameworkQuestionnaire />
       </Route>
       <Route path="/portfolio">
         <WithLayout><PortfolioCommandCenter /></WithLayout>

@@ -5689,3 +5689,9 @@ The 100% Optimization Framework requires strong performance across ALL fronts. C
 - [x] Service 2: Help companies commercialize their digital twins
 - [x] Service 3: Ongoing management and optimization of client digital twins
 - [x] B2B consulting plus technology plus managed services model
+
+
+## Strategic Framework Questionnaire Page
+- [x] Create standalone Strategic Framework Questionnaire page with pre-populated answers
+- [x] Add route for questionnaire page
+- [ ] Provide links to both questionnaires (Strategic Framework and Part 3)
