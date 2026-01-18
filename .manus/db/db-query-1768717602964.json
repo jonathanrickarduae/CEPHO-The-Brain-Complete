@@ -1,0 +1,9 @@
+{
+  "query": "CREATE TABLE IF NOT EXISTS partnerships (\n  id INT AUTO_INCREMENT PRIMARY KEY,\n  name VARCHAR(200) NOT NULL,\n  type ENUM('technology', 'distribution', 'strategic', 'integration', 'referral') NOT NULL,\n  status ENUM('prospect', 'contacted', 'negotiating', 'active', 'inactive', 'churned') NOT NULL,\n  priority ENUM('low', 'medium', 'high', 'critical') DEFAULT 'medium',\n  contact_name VARCHAR(200),\n  contact_email VARCHAR(320),\n  value VARCHAR(100),\n  notes TEXT,\n  next_action TEXT,\n  next_action_date TIMESTAMP,\n  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,\n  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL\n);",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user PcK35JNVkJ2ZTTh.b86832d2ef74 --database Mty5zxKKtMrwodBsbeuVa2 --execute CREATE TABLE IF NOT EXISTS partnerships (\n  id INT AUTO_INCREMENT PRIMARY KEY,\n  name VARCHAR(200) NOT NULL,\n  type ENUM('technology', 'distribution', 'strategic', 'integration', 'referral') NOT NULL,\n  status ENUM('prospect', 'contacted', 'negotiating', 'active', 'inactive', 'churned') NOT NULL,\n  priority ENUM('low', 'medium', 'high', 'critical') DEFAULT 'medium',\n  contact_name VARCHAR(200),\n  contact_email VARCHAR(320),\n  value VARCHAR(100),\n  notes TEXT,\n  next_action TEXT,\n  next_action_date TIMESTAMP,\n  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,\n  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL\n);",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 1639
+}

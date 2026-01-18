@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>CEPHO.Ai - Digital Twin Training</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #0D0D0D;
+      color: #FAFAFA;
+      min-height: 100vh;
+      padding: 16px;
+      padding-bottom: 100px;
+    }
+    .header {
+      text-align: center;
+      padding: 20px 0;
+      border-bottom: 1px solid #333;
+      margin-bottom: 20px;
+    }
+    .logo {
+      font-size: 28px;
+      font-weight: bold;
+      color: #E91E8C;
+      margin-bottom: 8px;
+    }
+    .subtitle {
+      color: #888;
+      font-size: 14px;
+    }
+    .progress-container {
+      background: #1A1A1A;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 20px;
+    }
+    .progress-bar {
+      height: 8px;
+      background: #333;
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 8px;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #E91E8C, #00D4FF);
+      border-radius: 4px;
+      transition: width 0.3s ease;
+    }
+    .progress-text {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: #888;
+    }
+    .section-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+    .section-btn {
+      padding: 8px 12px;
+      background: #1A1A1A;
+      border: 1px solid #333;
+      border-radius: 8px;
+      color: #888;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .section-btn.active {
+      background: #E91E8C;
+      border-color: #E91E8C;
+      color: white;
+    }
+    .section-btn.complete {
+      background: #1A3A1A;
+      border-color: #22C55E;
+      color: #22C55E;
+    }
+    .question-card {
+      background: #1A1A1A;
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+    .question-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .question-number {
+      background: #E91E8C;
+      color: white;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: bold;
+    }
+    .question-section {
+      color: #888;
+      font-size: 11px;
+    }
+    .question-text {
+      font-size: 16px;
+      line-height: 1.5;
+      margin-bottom: 16px;
+      color: #FAFAFA;
+    }
+    .scale-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: #666;
+      margin-bottom: 8px;
+      padding: 0 4px;
+    }
+    .scale-buttons {
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
+      gap: 6px;
+    }
+    .scale-btn {
+      aspect-ratio: 1;
+      border: 2px solid #333;
+      border-radius: 8px;
+      background: #0D0D0D;
+      color: #888;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .scale-btn:hover {
+      border-color: #E91E8C;
+      color: #E91E8C;
+    }
+    .scale-btn.selected {
+      background: #E91E8C;
+      border-color: #E91E8C;
+      color: white;
+    }
+    .nav-buttons {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #0D0D0D;
+      border-top: 1px solid #333;
+      padding: 16px;
+      display: flex;
+      gap: 12px;
+    }
+    .nav-btn {
+      flex: 1;
+      padding: 14px;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .nav-btn.prev {
+      background: #1A1A1A;
+      border: 1px solid #333;
+      color: #888;
+    }
+    .nav-btn.next {
+      background: #E91E8C;
+      border: none;
+      color: white;
+    }
+    .nav-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .export-section {
+      background: #1A1A1A;
+      border-radius: 16px;
+      padding: 20px;
+      margin-top: 20px;
+      text-align: center;
+    }
+    .export-btn {
+      background: linear-gradient(90deg, #E91E8C, #00D4FF);
+      border: none;
+      color: white;
+      padding: 16px 32px;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 12px;
+    }
+    .score-display {
+      font-size: 48px;
+      font-weight: bold;
+      color: #E91E8C;
+      margin: 20px 0;
+    }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="logo">CEPHO.Ai</div>
+    <div class="subtitle">Digital Twin Training Questionnaire</div>
+  </div>
+
+  <div class="progress-container">
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+    </div>
+    <div class="progress-text">
+      <span id="answeredCount">0 of 150 answered</span>
+      <span id="progressPercent">0%</span>
+    </div>
+  </div>
+
+  <div class="section-nav" id="sectionNav"></div>
+
+  <div id="questionsContainer"></div>
+
+  <div class="export-section" id="exportSection">
+    <h3 style="margin-bottom: 8px;">COS Understanding Level</h3>
+    <div class="score-display" id="scoreDisplay">0/100</div>
+    <p style="color: #888; font-size: 14px;">Complete more questions to improve your score</p>
+    <button class="export-btn" onclick="exportResponses()">Export Responses (JSON)</button>
+  </div>
+
+  <div class="nav-buttons">
+    <button class="nav-btn prev" onclick="prevSection()" id="prevBtn">Previous</button>
+    <button class="nav-btn next" onclick="nextSection()" id="nextBtn">Next Section</button>
+  </div>
+
+  <script>
+    // Questions data
+    const sections = [
+      {
+        id: 1,
+        title: "Leadership & Vision",
+        questions: [
+          { id: "A1", text: "I prefer to lead from the front vs. empower others to lead", low: "Empower others", high: "Lead from front" },
+          { id: "A2", text: "I make decisions quickly vs. take time to gather all information", low: "Gather info", high: "Decide quickly" },
+          { id: "A3", text: "I prefer structured plans vs. flexible approaches", low: "Flexible", high: "Structured" },
+          { id: "A4", text: "I focus on short-term wins vs. long-term strategy", low: "Long-term", high: "Short-term" },
+          { id: "A5", text: "I communicate directly vs. diplomatically", low: "Diplomatic", high: "Direct" },
+          { id: "A6", text: "I trust data over intuition when making decisions", low: "Intuition", high: "Data" },
+          { id: "A7", text: "I prefer to work alone vs. collaborate with teams", low: "Collaborate", high: "Work alone" },
+          { id: "A8", text: "I embrace change vs. prefer stability", low: "Stability", high: "Change" },
+          { id: "A9", text: "I focus on details vs. big picture thinking", low: "Big picture", high: "Details" },
+          { id: "A10", text: "I prioritize speed vs. quality in delivery", low: "Quality", high: "Speed" }
+        ]
+      },
+      {
+        id: 2,
+        title: "Business Operations",
+        questions: [
+          { id: "B1", text: "I prefer standardized processes vs. custom solutions", low: "Custom", high: "Standardized" },
+          { id: "B2", text: "I automate tasks whenever possible", low: "Manual", high: "Automate" },
+          { id: "B3", text: "I measure everything with KPIs and metrics", low: "Qualitative", high: "Quantitative" },
+          { id: "B4", text: "I prefer lean operations vs. robust infrastructure", low: "Robust", high: "Lean" },
+          { id: "B5", text: "I outsource non-core functions vs. keep in-house", low: "In-house", high: "Outsource" },
+          { id: "B6", text: "I invest heavily in technology vs. people", low: "People", high: "Technology" },
+          { id: "B7", text: "I prefer flat organizational structures", low: "Hierarchical", high: "Flat" },
+          { id: "B8", text: "I document everything vs. rely on tribal knowledge", low: "Tribal", high: "Documented" },
+          { id: "B9", text: "I prefer agile vs. waterfall project management", low: "Waterfall", high: "Agile" },
+          { id: "B10", text: "I focus on efficiency vs. effectiveness", low: "Effectiveness", high: "Efficiency" }
+        ]
+      },
+      {
+        id: 3,
+        title: "Technology & Innovation",
+        questions: [
+          { id: "C1", text: "I adopt new technology early vs. wait for maturity", low: "Wait", high: "Early adopt" },
+          { id: "C2", text: "I believe AI will transform my industry significantly", low: "Skeptical", high: "Believer" },
+          { id: "C3", text: "I prefer building custom solutions vs. buying off-the-shelf", low: "Buy", high: "Build" },
+          { id: "C4", text: "I invest in R&D vs. proven solutions", low: "Proven", high: "R&D" },
+          { id: "C5", text: "I prioritize cybersecurity in all decisions", low: "Secondary", high: "Priority" },
+          { id: "C6", text: "I prefer cloud vs. on-premise infrastructure", low: "On-premise", high: "Cloud" },
+          { id: "C7", text: "I embrace open source vs. proprietary solutions", low: "Proprietary", high: "Open source" },
+          { id: "C8", text: "I believe in digital-first customer experiences", low: "Traditional", high: "Digital-first" },
+          { id: "C9", text: "I invest in data analytics capabilities", low: "Basic", high: "Advanced" },
+          { id: "C10", text: "I prioritize mobile-first design", low: "Desktop", high: "Mobile" }
+        ]
+      },
+      {
+        id: 4,
+        title: "Market Strategy",
+        questions: [
+          { id: "D1", text: "I target niche markets vs. mass markets", low: "Mass", high: "Niche" },
+          { id: "D2", text: "I prefer being first to market vs. fast follower", low: "Follower", high: "First" },
+          { id: "D3", text: "I grow organically vs. through acquisitions", low: "Acquisitions", high: "Organic" },
+          { id: "D4", text: "I compete on price vs. value/quality", low: "Price", high: "Value" },
+          { id: "D5", text: "I focus on customer retention vs. acquisition", low: "Acquisition", high: "Retention" },
+          { id: "D6", text: "I prefer direct sales vs. channel partnerships", low: "Channels", high: "Direct" },
+          { id: "D7", text: "I invest heavily in marketing vs. product", low: "Product", high: "Marketing" },
+          { id: "D8", text: "I expand globally vs. focus locally", low: "Local", high: "Global" },
+          { id: "D9", text: "I diversify offerings vs. specialize deeply", low: "Specialize", high: "Diversify" },
+          { id: "D10", text: "I prioritize brand building vs. performance marketing", low: "Performance", high: "Brand" }
+        ]
+      },
+      {
+        id: 5,
+        title: "Financial Philosophy",
+        questions: [
+          { id: "E1", text: "I prefer bootstrapping vs. raising external capital", low: "Raise capital", high: "Bootstrap" },
+          { id: "E2", text: "I reinvest profits vs. distribute to stakeholders", low: "Distribute", high: "Reinvest" },
+          { id: "E3", text: "I take calculated risks vs. play it safe financially", low: "Safe", high: "Risk-taking" },
+          { id: "E4", text: "I focus on revenue growth vs. profitability", low: "Profitability", high: "Growth" },
+          { id: "E5", text: "I prefer fixed costs vs. variable costs", low: "Variable", high: "Fixed" },
+          { id: "E6", text: "I negotiate aggressively with suppliers", low: "Collaborative", high: "Aggressive" },
+          { id: "E7", text: "I maintain high cash reserves vs. deploy capital", low: "Deploy", high: "Reserves" },
+          { id: "E8", text: "I use debt financing vs. equity financing", low: "Equity", high: "Debt" },
+          { id: "E9", text: "I focus on unit economics vs. market share", low: "Market share", high: "Unit economics" },
+          { id: "E10", text: "I prefer recurring revenue vs. one-time sales", low: "One-time", high: "Recurring" }
+        ]
+      },
+      {
+        id: 6,
+        title: "Work Style",
+        questions: [
+          { id: "F1", text: "I prefer structured schedules vs. flexible time", low: "Flexible", high: "Structured" },
+          { id: "F2", text: "I batch similar tasks vs. context switch frequently", low: "Switch", high: "Batch" },
+          { id: "F3", text: "I work best in the morning vs. evening", low: "Evening", high: "Morning" },
+          { id: "F4", text: "I prefer deep work blocks vs. short bursts", low: "Short bursts", high: "Deep work" },
+          { id: "F5", text: "I check email/messages frequently vs. scheduled times", low: "Scheduled", high: "Frequent" },
+          { id: "F6", text: "I prefer meetings vs. async communication", low: "Async", high: "Meetings" },
+          { id: "F7", text: "I work from office vs. remote", low: "Remote", high: "Office" },
+          { id: "F8", text: "I take regular breaks vs. power through", low: "Power through", high: "Breaks" },
+          { id: "F9", text: "I plan my week in advance vs. day-by-day", low: "Day-by-day", high: "Week ahead" },
+          { id: "F10", text: "I delegate tasks easily vs. prefer to do myself", low: "Do myself", high: "Delegate" },
+          { id: "F11", text: "I tolerate interruptions vs. protect focus time", low: "Protect focus", high: "Tolerate" },
+          { id: "F12", text: "I prefer written vs. verbal communication", low: "Verbal", high: "Written" },
+          { id: "F13", text: "I make lists vs. keep things in my head", low: "In head", high: "Lists" },
+          { id: "F14", text: "I prefer video calls vs. phone calls", low: "Phone", high: "Video" },
+          { id: "F15", text: "I work weekends when needed vs. strict boundaries", low: "Boundaries", high: "Weekends" },
+          { id: "F16", text: "I respond to messages immediately vs. batch responses", low: "Batch", high: "Immediate" },
+          { id: "F17", text: "I prefer standing vs. sitting while working", low: "Sitting", high: "Standing" },
+          { id: "F18", text: "I use multiple monitors vs. single screen", low: "Single", high: "Multiple" },
+          { id: "F19", text: "I prefer silence vs. background music while working", low: "Music", high: "Silence" },
+          { id: "F20", text: "I take notes digitally vs. on paper", low: "Paper", high: "Digital" }
+        ]
+      },
+      {
+        id: 7,
+        title: "People & Culture",
+        questions: [
+          { id: "G1", text: "I hire for skills vs. cultural fit", low: "Culture fit", high: "Skills" },
+          { id: "G2", text: "I give frequent feedback vs. formal reviews", low: "Formal", high: "Frequent" },
+          { id: "G3", text: "I prefer experienced hires vs. developing talent", low: "Develop", high: "Experienced" },
+          { id: "G4", text: "I offer equity vs. higher salaries", low: "Salary", high: "Equity" },
+          { id: "G5", text: "I promote from within vs. hire externally", low: "External", high: "Internal" },
+          { id: "G6", text: "I prefer small teams vs. larger departments", low: "Large", high: "Small" },
+          { id: "G7", text: "I value individual performance vs. team results", low: "Team", high: "Individual" },
+          { id: "G8", text: "I prefer specialists vs. generalists", low: "Generalists", high: "Specialists" },
+          { id: "G9", text: "I encourage remote work vs. in-office presence", low: "In-office", high: "Remote" },
+          { id: "G10", text: "I invest in employee training and development", low: "Minimal", high: "Heavy" },
+          { id: "G11", text: "I prefer consensus vs. decisive leadership", low: "Decisive", high: "Consensus" },
+          { id: "G12", text: "I share company financials with employees", low: "Private", high: "Transparent" },
+          { id: "G13", text: "I encourage work-life balance vs. hustle culture", low: "Hustle", high: "Balance" },
+          { id: "G14", text: "I prefer formal vs. casual workplace culture", low: "Casual", high: "Formal" },
+          { id: "G15", text: "I value diversity in hiring decisions", low: "Secondary", high: "Priority" },
+          { id: "G16", text: "I prefer contractors vs. full-time employees", low: "Full-time", high: "Contractors" },
+          { id: "G17", text: "I encourage cross-functional collaboration", low: "Siloed", high: "Collaborative" },
+          { id: "G18", text: "I prefer flat communication vs. chain of command", low: "Chain", high: "Flat" },
+          { id: "G19", text: "I celebrate wins publicly vs. privately", low: "Private", high: "Public" },
+          { id: "G20", text: "I address conflicts directly vs. let them resolve", low: "Let resolve", high: "Direct" }
+        ]
+      },
+      {
+        id: 8,
+        title: "Risk & Decision Making",
+        questions: [
+          { id: "H1", text: "I make decisions with incomplete information", low: "Need complete", high: "Incomplete OK" },
+          { id: "H2", text: "I trust my gut vs. rely on analysis", low: "Analysis", high: "Gut" },
+          { id: "H3", text: "I consider worst-case scenarios in planning", low: "Optimistic", high: "Worst-case" },
+          { id: "H4", text: "I pivot quickly when things aren't working", low: "Persist", high: "Pivot" },
+          { id: "H5", text: "I seek external advice vs. decide independently", low: "Independent", high: "Seek advice" },
+          { id: "H6", text: "I prefer reversible vs. irreversible decisions", low: "Irreversible OK", high: "Reversible" },
+          { id: "H7", text: "I set aggressive vs. achievable targets", low: "Achievable", high: "Aggressive" },
+          { id: "H8", text: "I learn from failures vs. move on quickly", low: "Move on", high: "Learn" },
+          { id: "H9", text: "I prefer multiple options vs. binary choices", low: "Binary", high: "Multiple" },
+          { id: "H10", text: "I involve others in major decisions", low: "Solo", high: "Involve others" },
+          { id: "H11", text: "I document decision rationale for future reference", low: "No docs", high: "Document" },
+          { id: "H12", text: "I revisit past decisions to improve", low: "Move forward", high: "Revisit" },
+          { id: "H13", text: "I prefer quick experiments vs. thorough planning", low: "Plan", high: "Experiment" },
+          { id: "H14", text: "I consider opportunity cost in decisions", low: "Rarely", high: "Always" },
+          { id: "H15", text: "I set decision deadlines to avoid paralysis", low: "No deadlines", high: "Deadlines" },
+          { id: "H16", text: "I prefer consensus vs. authority in decisions", low: "Authority", high: "Consensus" },
+          { id: "H17", text: "I factor in emotional impact of decisions", low: "Logic only", high: "Emotional" },
+          { id: "H18", text: "I consider long-term consequences vs. immediate", low: "Immediate", high: "Long-term" },
+          { id: "H19", text: "I prefer simple vs. complex solutions", low: "Complex OK", high: "Simple" },
+          { id: "H20", text: "I trust experts vs. verify independently", low: "Verify", high: "Trust experts" }
+        ]
+      },
+      {
+        id: 9,
+        title: "Communication Style",
+        questions: [
+          { id: "I1", text: "I prefer concise vs. detailed communication", low: "Detailed", high: "Concise" },
+          { id: "I2", text: "I use data/charts vs. stories to persuade", low: "Stories", high: "Data" },
+          { id: "I3", text: "I prefer formal vs. casual tone", low: "Casual", high: "Formal" },
+          { id: "I4", text: "I give direct feedback vs. soften criticism", low: "Soften", high: "Direct" },
+          { id: "I5", text: "I prefer email vs. instant messaging", low: "IM", high: "Email" },
+          { id: "I6", text: "I schedule calls vs. call spontaneously", low: "Spontaneous", high: "Scheduled" },
+          { id: "I7", text: "I prefer written agendas vs. open discussions", low: "Open", high: "Agenda" },
+          { id: "I8", text: "I follow up in writing after verbal agreements", low: "Verbal OK", high: "Written" },
+          { id: "I9", text: "I prefer presentations vs. documents", low: "Documents", high: "Presentations" },
+          { id: "I10", text: "I share updates proactively vs. when asked", low: "When asked", high: "Proactive" },
+          { id: "I11", text: "I prefer 1:1 vs. group communications", low: "Group", high: "1:1" },
+          { id: "I12", text: "I use emojis/GIFs in professional communication", low: "Never", high: "Often" },
+          { id: "I13", text: "I prefer synchronous vs. asynchronous updates", low: "Async", high: "Sync" },
+          { id: "I14", text: "I record meetings for later reference", low: "Never", high: "Always" },
+          { id: "I15", text: "I prefer voice notes vs. typed messages", low: "Typed", high: "Voice" },
+          { id: "I16", text: "I share context vs. just the ask", low: "Just ask", high: "Context" },
+          { id: "I17", text: "I prefer bullet points vs. paragraphs", low: "Paragraphs", high: "Bullets" },
+          { id: "I18", text: "I use templates vs. write from scratch", low: "Scratch", high: "Templates" },
+          { id: "I19", text: "I prefer short vs. long meetings", low: "Long OK", high: "Short" },
+          { id: "I20", text: "I end meetings early if objectives are met", low: "Use full time", high: "End early" }
+        ]
+      },
+      {
+        id: 10,
+        title: "Personal Values",
+        questions: [
+          { id: "J1", text: "I prioritize profit vs. purpose in business", low: "Purpose", high: "Profit" },
+          { id: "J2", text: "I value transparency in all dealings", low: "Strategic", high: "Transparent" },
+          { id: "J3", text: "I consider environmental impact in decisions", low: "Secondary", high: "Priority" },
+          { id: "J4", text: "I prioritize family vs. work commitments", low: "Work", high: "Family" },
+          { id: "J5", text: "I value reputation vs. short-term gains", low: "Gains", high: "Reputation" },
+          { id: "J6", text: "I prefer competition vs. collaboration", low: "Collaboration", high: "Competition" },
+          { id: "J7", text: "I value loyalty vs. performance in people", low: "Performance", high: "Loyalty" },
+          { id: "J8", text: "I prefer innovation vs. tradition", low: "Tradition", high: "Innovation" },
+          { id: "J9", text: "I value speed vs. thoroughness", low: "Thorough", high: "Speed" },
+          { id: "J10", text: "I prefer autonomy vs. guidance in work", low: "Guidance", high: "Autonomy" }
+        ]
+      }
+    ];
+
+    let responses = JSON.parse(localStorage.getItem('dtResponses') || '{}');
+    let currentSection = 0;
+
+    function init() {
+      renderSectionNav();
+      renderQuestions();
+      updateProgress();
+    }
+
+    function renderSectionNav() {
+      const nav = document.getElementById('sectionNav');
+      nav.innerHTML = sections.map((section, idx) => {
+        const answered = countSectionAnswered(idx);
+        const total = section.questions.length;
+        const isComplete = answered === total;
+        const isActive = idx === currentSection;
+        return `<button class="section-btn ${isActive ? 'active' : ''} ${isComplete ? 'complete' : ''}" 
+                        onclick="goToSection(${idx})">
+                  ${idx + 1}. ${answered}/${total}
+                </button>`;
+      }).join('');
+    }
+
+    function countSectionAnswered(sectionIdx) {
+      return sections[sectionIdx].questions.filter(q => responses[q.id] !== undefined).length;
+    }
+
+    function renderQuestions() {
+      const container = document.getElementById('questionsContainer');
+      const section = sections[currentSection];
+      
+      container.innerHTML = `
+        <div style="background: linear-gradient(90deg, #E91E8C, #00D4FF); padding: 16px; border-radius: 12px; margin-bottom: 16px;">
+          <div style="font-size: 12px; opacity: 0.8;">SECTION ${section.id} OF ${sections.length}</div>
+          <div style="font-size: 20px; font-weight: bold;">${section.title}</div>
+          <div style="font-size: 12px; opacity: 0.8;">Question ${countSectionAnswered(currentSection) + 1} of ${section.questions.length}</div>
+        </div>
+        ${section.questions.map((q, idx) => `
+          <div class="question-card">
+            <div class="question-header">
+              <span class="question-number">Q${idx + 1}</span>
+              <span class="question-section">${q.id}</span>
+            </div>
+            <div class="question-text">${q.text}</div>
+            <div class="scale-labels">
+              <span>${q.low}</span>
+              <span>${q.high}</span>
+            </div>
+            <div class="scale-buttons">
+              ${[1,2,3,4,5,6,7,8,9,10].map(n => `
+                <button class="scale-btn ${responses[q.id] === n ? 'selected' : ''}" 
+                        onclick="selectAnswer('${q.id}', ${n})">${n}</button>
+              `).join('')}
+            </div>
+          </div>
+        `).join('')}
+      `;
+
+      document.getElementById('prevBtn').disabled = currentSection === 0;
+      document.getElementById('nextBtn').textContent = currentSection === sections.length - 1 ? 'Complete' : 'Next Section';
+    }
+
+    function selectAnswer(questionId, value) {
+      responses[questionId] = value;
+      localStorage.setItem('dtResponses', JSON.stringify(responses));
+      renderQuestions();
+      renderSectionNav();
+      updateProgress();
+    }
+
+    function updateProgress() {
+      const totalQuestions = sections.reduce((sum, s) => sum + s.questions.length, 0);
+      const answered = Object.keys(responses).length;
+      const percent = Math.round((answered / totalQuestions) * 100);
+      
+      document.getElementById('progressFill').style.width = `${percent}%`;
+      document.getElementById('answeredCount').textContent = `${answered} of ${totalQuestions} answered`;
+      document.getElementById('progressPercent').textContent = `${percent}%`;
+      document.getElementById('scoreDisplay').textContent = `${percent}/100`;
+    }
+
+    function goToSection(idx) {
+      currentSection = idx;
+      renderSectionNav();
+      renderQuestions();
+      window.scrollTo(0, 0);
+    }
+
+    function prevSection() {
+      if (currentSection > 0) {
+        currentSection--;
+        renderSectionNav();
+        renderQuestions();
+        window.scrollTo(0, 0);
+      }
+    }
+
+    function nextSection() {
+      if (currentSection < sections.length - 1) {
+        currentSection++;
+        renderSectionNav();
+        renderQuestions();
+        window.scrollTo(0, 0);
+      }
+    }
+
+    function exportResponses() {
+      const data = {
+        exportDate: new Date().toISOString(),
+        totalAnswered: Object.keys(responses).length,
+        completionPercent: Math.round((Object.keys(responses).length / 150) * 100),
+        responses: responses
+      };
+      
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `digital_twin_responses_${new Date().toISOString().split('T')[0]}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    init();
+  </script>
+</body>
+</html>

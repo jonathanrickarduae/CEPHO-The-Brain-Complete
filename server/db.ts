@@ -3553,3 +3553,190 @@ export async function calculateDigitalTwinProfile(userId: number): Promise<Digit
     return null;
   }
 }
+
+
+// ============================================
+// Expert Recommendation Functions - 18 Jan 2026
+// ============================================
+
+import * as schema from "../drizzle/schema";
+
+// NPS Tracking
+export async function saveNpsResponse(userId: number, score: number, feedback?: string, touchpoint?: string) {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const category = score >= 9 ? 'promoter' : score >= 7 ? 'passive' : 'detractor';
+  const result = await db.insert(schema.npsResponses).values({
+    userId,
+    score,
+    category: category as 'promoter' | 'passive' | 'detractor',
+    feedback,
+    touchpoint,
+  });
+  return result;
+}
+
+export async function getNpsStats() {
+  const db = await getDb();
+  if (!db) return { promoters: 0, passives: 0, detractors: 0, npsScore: 0, totalResponses: 0 };
+  
+  const responses = await db.select().from(schema.npsResponses);
+  const promoters = responses.filter(r => r.category === 'promoter').length;
+  const passives = responses.filter(r => r.category === 'passive').length;
+  const detractors = responses.filter(r => r.category === 'detractor').length;
+  const total = responses.length;
+  const npsScore = total > 0 ? Math.round(((promoters - detractors) / total) * 100) : 0;
+  
+  return { promoters, passives, detractors, npsScore, totalResponses: total };
+}
+
+// Customer Health
+export async function updateCustomerHealth(userId: number, healthScore: number, engagementLevel: 'low' | 'medium' | 'high' | 'champion') {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const existing = await db.select().from(schema.customerHealth).where(eq(schema.customerHealth.userId, userId)).limit(1);
+  if (existing.length > 0) {
+    await db.update(schema.customerHealth)
+      .set({ healthScore, engagementLevel, lastActiveDate: new Date() })
+      .where(eq(schema.customerHealth.userId, userId));
+  } else {
+    await db.insert(schema.customerHealth).values({
+      userId,
+      healthScore,
+      engagementLevel,
+      lastActiveDate: new Date(),
+    });
+  }
+}
+
+export async function getCustomerHealthStats() {
+  const db = await getDb();
+  if (!db) return { totalCustomers: 0, avgHealthScore: 0, atRisk: 0, champions: 0 };
+  
+  const records = await db.select().from(schema.customerHealth);
+  const total = records.length;
+  const avgHealth = total > 0 ? Math.round(records.reduce((sum, r) => sum + r.healthScore, 0) / total) : 0;
+  const atRisk = records.filter(r => r.riskLevel === 'high' || r.riskLevel === 'critical').length;
+  const champions = records.filter(r => r.engagementLevel === 'champion').length;
+  
+  return { totalCustomers: total, avgHealthScore: avgHealth, atRisk, champions };
+}
+
+// Partnerships
+export async function getPartnerships(status?: string) {
+  const db = await getDb();
+  if (!db) return [];
+  
+  if (status) {
+    return db.select().from(schema.partnerships).where(eq(schema.partnerships.status, status as any));
+  }
+  return db.select().from(schema.partnerships).orderBy(desc(schema.partnerships.updatedAt));
+}
+
+export async function createPartnership(data: {
+  name: string;
+  type: 'technology' | 'distribution' | 'strategic' | 'integration' | 'referral';
+  status: 'prospect' | 'contacted' | 'negotiating' | 'active' | 'inactive' | 'churned';
+  priority?: 'low' | 'medium' | 'high' | 'critical';
+  contactName?: string;
+  contactEmail?: string;
+  notes?: string;
+}) {
+  const db = await getDb();
+  if (!db) return null;
+  
+  return db.insert(schema.partnerships).values(data);
+}
+
+// Team Capabilities
+export async function getTeamCapabilities() {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return db.select().from(schema.teamCapabilities).orderBy(schema.teamCapabilities.skillCategory);
+}
+
+export async function addTeamCapability(data: {
+  teamMember: string;
+  role: string;
+  skillCategory: string;
+  skillName: string;
+  currentLevel: number;
+  targetLevel?: number;
+  developmentPlan?: string;
+}) {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const gap = data.targetLevel ? data.targetLevel - data.currentLevel : null;
+  return db.insert(schema.teamCapabilities).values({
+    ...data,
+    gap,
+    lastAssessed: new Date(),
+  });
+}
+
+// Compliance Items
+export async function getComplianceItems(framework?: string) {
+  const db = await getDb();
+  if (!db) return [];
+  
+  if (framework) {
+    return db.select().from(schema.complianceItems).where(eq(schema.complianceItems.framework, framework as any));
+  }
+  return db.select().from(schema.complianceItems).orderBy(schema.complianceItems.category);
+}
+
+export async function createComplianceItem(data: {
+  framework: 'soc2' | 'gdpr' | 'hipaa' | 'iso27001' | 'wcag';
+  category: string;
+  requirement: string;
+  status: 'not_started' | 'in_progress' | 'implemented' | 'verified' | 'na';
+  owner?: string;
+  dueDate?: Date;
+}) {
+  const db = await getDb();
+  if (!db) return null;
+  
+  return db.insert(schema.complianceItems).values(data);
+}
+
+export async function updateComplianceStatus(id: number, status: 'not_started' | 'in_progress' | 'implemented' | 'verified' | 'na', evidence?: string) {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const completedDate = status === 'verified' ? new Date() : null;
+  return db.update(schema.complianceItems)
+    .set({ status, evidence, completedDate })
+    .where(eq(schema.complianceItems.id, id));
+}
+
+// RAG Context
+export async function saveRagContext(userId: number, contextType: 'conversation' | 'document' | 'preference' | 'decision' | 'memory', content: string, metadata?: any) {
+  const db = await getDb();
+  if (!db) return null;
+  
+  return db.insert(schema.ragContexts).values({
+    userId,
+    contextType,
+    content,
+    metadata,
+  });
+}
+
+export async function getRagContexts(userId: number, contextType?: string, limit = 50) {
+  const db = await getDb();
+  if (!db) return [];
+  
+  const conditions = [eq(schema.ragContexts.userId, userId)];
+  if (contextType) {
+    conditions.push(eq(schema.ragContexts.contextType, contextType as any));
+  }
+  return db.select()
+    .from(schema.ragContexts)
+    .where(and(...conditions))
+    .orderBy(desc(schema.ragContexts.createdAt))
+    .limit(limit);
+}

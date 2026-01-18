@@ -1,0 +1,9 @@
+{
+  "query": "CREATE TABLE IF NOT EXISTS team_capabilities (\n  id INT AUTO_INCREMENT PRIMARY KEY,\n  team_member VARCHAR(200) NOT NULL,\n  role VARCHAR(100) NOT NULL,\n  skill_category VARCHAR(100) NOT NULL,\n  skill_name VARCHAR(200) NOT NULL,\n  current_level INT NOT NULL,\n  target_level INT,\n  gap INT,\n  development_plan TEXT,\n  last_assessed TIMESTAMP,\n  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,\n  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL\n);",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user PcK35JNVkJ2ZTTh.b86832d2ef74 --database Mty5zxKKtMrwodBsbeuVa2 --execute CREATE TABLE IF NOT EXISTS team_capabilities (\n  id INT AUTO_INCREMENT PRIMARY KEY,\n  team_member VARCHAR(200) NOT NULL,\n  role VARCHAR(100) NOT NULL,\n  skill_category VARCHAR(100) NOT NULL,\n  skill_name VARCHAR(200) NOT NULL,\n  current_level INT NOT NULL,\n  target_level INT,\n  gap INT,\n  development_plan TEXT,\n  last_assessed TIMESTAMP,\n  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,\n  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL\n);",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 1652
+}

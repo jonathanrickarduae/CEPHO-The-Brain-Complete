@@ -1,0 +1,9 @@
+{
+  "query": "CREATE TABLE IF NOT EXISTS rag_contexts (\n  id INT AUTO_INCREMENT PRIMARY KEY,\n  user_id INT NOT NULL,\n  context_type ENUM('conversation', 'document', 'preference', 'decision', 'memory') NOT NULL,\n  content TEXT NOT NULL,\n  embedding JSON,\n  metadata JSON,\n  relevance_score FLOAT,\n  access_count INT DEFAULT 0,\n  last_accessed TIMESTAMP,\n  expires_at TIMESTAMP,\n  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL\n);",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user PcK35JNVkJ2ZTTh.b86832d2ef74 --database Mty5zxKKtMrwodBsbeuVa2 --execute CREATE TABLE IF NOT EXISTS rag_contexts (\n  id INT AUTO_INCREMENT PRIMARY KEY,\n  user_id INT NOT NULL,\n  context_type ENUM('conversation', 'document', 'preference', 'decision', 'memory') NOT NULL,\n  content TEXT NOT NULL,\n  embedding JSON,\n  metadata JSON,\n  relevance_score FLOAT,\n  access_count INT DEFAULT 0,\n  last_accessed TIMESTAMP,\n  expires_at TIMESTAMP,\n  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL\n);",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 1624
+}

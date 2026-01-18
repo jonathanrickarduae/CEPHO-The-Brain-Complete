@@ -1,0 +1,30 @@
+{
+  "query": "SELECT section, COUNT(*) as count FROM questionnaire_responses GROUP BY section ORDER BY section;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user PcK35JNVkJ2ZTTh.b86832d2ef74 --database Mty5zxKKtMrwodBsbeuVa2 --execute SELECT section, COUNT(*) as count FROM questionnaire_responses GROUP BY section ORDER BY section;",
+  "rows": [
+    {
+      "section": "Business Operations",
+      "count": "20"
+    },
+    {
+      "section": "Market Competition",
+      "count": "20"
+    },
+    {
+      "section": "Personal Productivity",
+      "count": "20"
+    },
+    {
+      "section": "Technology Innovation",
+      "count": "20"
+    },
+    {
+      "section": "Vision Legacy",
+      "count": "20"
+    }
+  ],
+  "messages": [],
+  "stdout": "section\tcount\nBusiness Operations\t20\nMarket Competition\t20\nPersonal Productivity\t20\nTechnology Innovation\t20\nVision Legacy\t20\n",
+  "stderr": "",
+  "execution_time_ms": 1564
+}

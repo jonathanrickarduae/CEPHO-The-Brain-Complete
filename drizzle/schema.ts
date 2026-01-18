@@ -3802,3 +3802,122 @@ export const digitalTwinProfile = mysqlTable('digital_twin_profile', {
 });
 export type DigitalTwinProfile = typeof digitalTwinProfile.$inferSelect;
 export type InsertDigitalTwinProfile = typeof digitalTwinProfile.$inferInsert;
+
+
+// ============================================
+// Expert Recommendation Tables - 18 Jan 2026
+// ============================================
+
+/**
+ * NPS Tracking - Customer Net Promoter Score surveys
+ */
+export const npsResponses = mysqlTable('nps_responses', {
+  id: int('id').primaryKey().autoincrement(),
+  userId: int('user_id').notNull(),
+  score: int('score').notNull(), // 0-10 NPS scale
+  category: mysqlEnum('category', ['detractor', 'passive', 'promoter']).notNull(),
+  feedback: text('feedback'), // Optional open-ended feedback
+  touchpoint: varchar('touchpoint', { length: 100 }), // Where survey was triggered
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+});
+export type NpsResponse = typeof npsResponses.$inferSelect;
+export type InsertNpsResponse = typeof npsResponses.$inferInsert;
+
+/**
+ * Customer Success Program - Track customer health and engagement
+ */
+export const customerHealth = mysqlTable('customer_health', {
+  id: int('id').primaryKey().autoincrement(),
+  userId: int('user_id').notNull(),
+  healthScore: int('health_score').notNull(), // 0-100
+  engagementLevel: mysqlEnum('engagement_level', ['low', 'medium', 'high', 'champion']).notNull(),
+  lastActiveDate: timestamp('last_active_date'),
+  featureAdoption: json('feature_adoption'), // Which features they use
+  riskLevel: mysqlEnum('risk_level', ['low', 'medium', 'high', 'critical']).default('low'),
+  nextCheckIn: timestamp('next_check_in'),
+  notes: text('notes'),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().onUpdateNow().notNull(),
+});
+export type CustomerHealth = typeof customerHealth.$inferSelect;
+export type InsertCustomerHealth = typeof customerHealth.$inferInsert;
+
+/**
+ * Strategic Partnerships - Partnership pipeline tracking
+ */
+export const partnerships = mysqlTable('partnerships', {
+  id: int('id').primaryKey().autoincrement(),
+  name: varchar('name', { length: 200 }).notNull(),
+  type: mysqlEnum('type', ['technology', 'distribution', 'strategic', 'integration', 'referral']).notNull(),
+  status: mysqlEnum('status', ['prospect', 'contacted', 'negotiating', 'active', 'inactive', 'churned']).notNull(),
+  priority: mysqlEnum('priority', ['low', 'medium', 'high', 'critical']).default('medium'),
+  contactName: varchar('contact_name', { length: 200 }),
+  contactEmail: varchar('contact_email', { length: 320 }),
+  value: varchar('value', { length: 100 }), // Estimated value
+  notes: text('notes'),
+  nextAction: text('next_action'),
+  nextActionDate: timestamp('next_action_date'),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().onUpdateNow().notNull(),
+});
+export type Partnership = typeof partnerships.$inferSelect;
+export type InsertPartnership = typeof partnerships.$inferInsert;
+
+/**
+ * Team Capability Matrix - Track team skills and gaps
+ */
+export const teamCapabilities = mysqlTable('team_capabilities', {
+  id: int('id').primaryKey().autoincrement(),
+  teamMember: varchar('team_member', { length: 200 }).notNull(),
+  role: varchar('role', { length: 100 }).notNull(),
+  skillCategory: varchar('skill_category', { length: 100 }).notNull(), // e.g., "Technical", "Leadership"
+  skillName: varchar('skill_name', { length: 200 }).notNull(),
+  currentLevel: int('current_level').notNull(), // 1-5
+  targetLevel: int('target_level'), // 1-5
+  gap: int('gap'), // Calculated difference
+  developmentPlan: text('development_plan'),
+  lastAssessed: timestamp('last_assessed'),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().onUpdateNow().notNull(),
+});
+export type TeamCapability = typeof teamCapabilities.$inferSelect;
+export type InsertTeamCapability = typeof teamCapabilities.$inferInsert;
+
+/**
+ * SOC 2 Compliance Tracking - Security and compliance checklist
+ */
+export const complianceItems = mysqlTable('compliance_items', {
+  id: int('id').primaryKey().autoincrement(),
+  framework: mysqlEnum('framework', ['soc2', 'gdpr', 'hipaa', 'iso27001', 'wcag']).notNull(),
+  category: varchar('category', { length: 100 }).notNull(),
+  requirement: text('requirement').notNull(),
+  status: mysqlEnum('status', ['not_started', 'in_progress', 'implemented', 'verified', 'na']).notNull(),
+  evidence: text('evidence'),
+  owner: varchar('owner', { length: 200 }),
+  dueDate: timestamp('due_date'),
+  completedDate: timestamp('completed_date'),
+  notes: text('notes'),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().onUpdateNow().notNull(),
+});
+export type ComplianceItem = typeof complianceItems.$inferSelect;
+export type InsertComplianceItem = typeof complianceItems.$inferInsert;
+
+/**
+ * RAG Context Store - Retrieval Augmented Generation context
+ */
+export const ragContexts = mysqlTable('rag_contexts', {
+  id: int('id').primaryKey().autoincrement(),
+  userId: int('user_id').notNull(),
+  contextType: mysqlEnum('context_type', ['conversation', 'document', 'preference', 'decision', 'memory']).notNull(),
+  content: text('content').notNull(),
+  embedding: json('embedding'), // Vector embedding for similarity search
+  metadata: json('metadata'),
+  relevanceScore: float('relevance_score'),
+  accessCount: int('access_count').default(0),
+  lastAccessed: timestamp('last_accessed'),
+  expiresAt: timestamp('expires_at'),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+});
+export type RagContext = typeof ragContexts.$inferSelect;
+export type InsertRagContext = typeof ragContexts.$inferInsert;

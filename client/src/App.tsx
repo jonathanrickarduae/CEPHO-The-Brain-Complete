@@ -46,6 +46,7 @@ import COSTraining from "./pages/COSTraining";
 import PortfolioCommandCenter from "./pages/PortfolioCommandCenter";
 import RevenueDashboard from "./pages/RevenueDashboard";
 import KpiDashboard from "./pages/KpiDashboard";
+import QuestionnaireOnline from "./pages/QuestionnaireOnline";
 import { GovernanceProvider, GovernanceModeChangeModal } from "./hooks/useGovernance";
 import { AIRouterProvider } from "./components/AIRouter";
 import { CelebrationProvider } from "./components/CelebrationAnimations";
@@ -145,6 +146,9 @@ function Router() {
       </Route>
       <Route path="/cos-training">
         <WithLayout><COSTraining /></WithLayout>
+      </Route>
+      <Route path="/questionnaire">
+        <WithLayout><QuestionnaireOnline /></WithLayout>
       </Route>
       <Route path="/portfolio">
         <WithLayout><PortfolioCommandCenter /></WithLayout>
