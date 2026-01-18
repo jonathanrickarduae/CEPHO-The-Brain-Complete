@@ -47,6 +47,7 @@ import PortfolioCommandCenter from "./pages/PortfolioCommandCenter";
 import RevenueDashboard from "./pages/RevenueDashboard";
 import KpiDashboard from "./pages/KpiDashboard";
 import OperationsPage from "./pages/OperationsPage";
+import GrowthPage from "./pages/GrowthPage";
 import QuestionnaireOnline from "./pages/QuestionnaireOnline";
 import { GovernanceProvider, GovernanceModeChangeModal } from "./hooks/useGovernance";
 import { AIRouterProvider } from "./components/AIRouter";
@@ -162,6 +163,9 @@ function Router() {
       </Route>
       <Route path="/operations">
         <WithLayout><OperationsPage /></WithLayout>
+      </Route>
+      <Route path="/growth">
+        <WithLayout><GrowthPage /></WithLayout>
       </Route>
       <Route path="/due-diligence">
         <WithLayout><DueDiligencePage /></WithLayout>
