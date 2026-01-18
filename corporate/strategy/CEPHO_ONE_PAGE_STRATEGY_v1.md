@@ -4,15 +4,27 @@
 
 ---
 
+### Core Ethos
+
+**Freeing Your Brain to Build**
+
+CEPHO.Ai exists because you only know what you know. Every founder faces the same challenge: building a business requires expertise across dozens of domains, yet your time and mental bandwidth are finite. We believe success should not depend on what you happen to already know.
+
+Our measure of being number one is not revenue or market share. It is the mental bandwidth we return to founders. When you can focus entirely on building your business rather than struggling with unfamiliar territory, we have succeeded.
+
+This is why CEPHO.Ai constantly questions itself, constantly learns, and constantly improves. Not for the sake of technology, but because your freedom to focus on what matters depends on us getting better every single day.
+
+---
+
 ### Mission
 
-To democratize access to executive level intelligence, enabling founders and CEOs to operate with the strategic capability of a Fortune 500 company through AI amplification.
+To free founders and CEOs from the burden of "you only know what you know" by providing AI amplified executive intelligence that handles everything else, so they can focus entirely on building their business.
 
 ---
 
 ### Vision
 
-To become the definitive AI powered executive platform that transforms how businesses operate, making world class strategic support accessible to every ambitious leader regardless of company size or resources.
+To become the platform that gives every ambitious founder the mental bandwidth of a Fortune 500 CEO, not through more resources, but through intelligent amplification of what they already have.
 
 ---
 
@@ -67,11 +79,11 @@ Subscription based SaaS with three tiers designed to match business stage and ne
 
 ### Key Success Metrics
 
-Customer retention rate, Net Promoter Score, time saved per user, decision quality improvement, and revenue per customer.
+Mental bandwidth returned to users, customer retention rate, Net Promoter Score, time saved per user, and decision quality improvement.
 
 ---
 
 *Document Classification: Confidential*
-*Version: 1.0 Draft*
+*Version: 1.1*
 *Date: 18 January 2026*
 *Status: Pending CEO Review*

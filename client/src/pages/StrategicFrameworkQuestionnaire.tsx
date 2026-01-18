@@ -27,7 +27,7 @@ const QUESTIONS: Question[] = [
     sectionIcon: Target,
     question: 'Mission Statement: What is the core purpose of CEPHO.Ai? What problem does it solve and for whom?',
     hint: 'Focus on the fundamental problem you solve and who benefits most.',
-    prepopulated: 'To democratize access to executive level intelligence, enabling founders and CEOs to operate with the strategic capability of a Fortune 500 company through AI amplification.'
+    prepopulated: 'To free founders and CEOs from the burden of "you only know what you know" by providing AI amplified executive intelligence that handles everything else, so they can focus entirely on building their business.'
   },
   {
     id: '1.2',
@@ -35,7 +35,7 @@ const QUESTIONS: Question[] = [
     sectionIcon: Target,
     question: 'Vision Statement: Where do you see CEPHO.Ai in 5 to 10 years? What does success look like at scale?',
     hint: 'Think big. What does the world look like when CEPHO.Ai succeeds?',
-    prepopulated: 'To become the definitive AI powered executive platform that transforms how businesses operate, making world class strategic support accessible to every ambitious leader regardless of company size or resources.'
+    prepopulated: 'To become the platform that gives every ambitious founder the mental bandwidth of a Fortune 500 CEO, not through more resources, but through intelligent amplification of what they already have. Our measure of being number one is the mental bandwidth we return to founders.'
   },
   {
     id: '1.3',
