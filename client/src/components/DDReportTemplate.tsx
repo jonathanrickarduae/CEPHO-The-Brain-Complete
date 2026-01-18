@@ -120,7 +120,7 @@ export function DDReportTemplate({ data, onExport }: DDReportTemplateProps) {
                 </div>
               )}
               <div>
-                <div className="text-sm text-foreground/60 font-medium">THE BRAIN</div>
+                <div className="text-sm text-foreground/60 font-medium">CEPHO</div>
                 <div className="text-xs text-foreground/70">Due Diligence Report</div>
               </div>
             </div>

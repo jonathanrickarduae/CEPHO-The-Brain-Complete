@@ -3,7 +3,7 @@ import { useSearch } from "wouter";
 import { 
   Fingerprint, Mic, MicOff, Send, Brain,
   Sparkles, Activity, Trash2, Paperclip, Link2, X, FileAudio, GraduationCap,
-  CheckCircle2, Clock, AlertCircle, Shield, Users, FolderKanban,
+  CheckCircle2, Clock, AlertCircle, AlertTriangle, Shield, Users, FolderKanban,
   ChevronRight, BarChart3, MessageSquare, Play, Pause, RefreshCw,
   ThumbsUp, ThumbsDown, Eye, FileCheck, Bot, Zap, Loader2
 } from "lucide-react";
@@ -408,6 +408,30 @@ export default function ChiefOfStaff() {
                              }} 
                           />
                         </div>
+                        {msg.from === "twin" && (
+                          <div className="flex items-center gap-1 mt-2">
+                            <button
+                              onClick={() => {
+                                setMessageInput("Please verify the assumptions in your last response. What evidence supports these claims?");
+                                inputRef.current?.focus();
+                              }}
+                              className="px-2 py-1 text-xs rounded-lg bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 transition-colors border border-amber-500/30"
+                            >
+                              <AlertTriangle className="w-3 h-3 inline mr-1" />
+                              Verify
+                            </button>
+                            <button
+                              onClick={() => {
+                                setMessageInput("Play devil's advocate: What could go wrong with this approach? What are the counterarguments?");
+                                inputRef.current?.focus();
+                              }}
+                              className="px-2 py-1 text-xs rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500/20 transition-colors border border-red-500/30"
+                            >
+                              <Shield className="w-3 h-3 inline mr-1" />
+                              Devil's Advocate
+                            </button>
+                          </div>
+                        )}
                       </div>
                     </div>
                   ))}

@@ -530,29 +530,50 @@ export function BusinessPlanReview({
         setBusinessPlanContent(text);
         toast.success(`Loaded ${file.name}`);
       } else if (file.type === 'application/pdf' || file.name.endsWith('.pdf')) {
-        // For PDF, we'll send to backend for extraction
-        const formData = new FormData();
-        formData.append('file', file);
+        // Extract text from PDF using pdfjs-dist
+        const arrayBuffer = await file.arrayBuffer();
+        const pdfjsLib = await import('pdfjs-dist');
+        pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
         
-        // Use a simple text extraction approach for now
-        const reader = new FileReader();
-        reader.onload = async (e) => {
-          // Note: Full PDF extraction would require backend processing
-          // For now, show a message that PDF content will be analyzed
-          setBusinessPlanContent(`[PDF Document: ${file.name}]\n\nDocument uploaded for analysis. The expert team will review the business plan content.`);
-          toast.success(`PDF uploaded: ${file.name}`);
-        };
-        reader.readAsArrayBuffer(file);
+        const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+        let fullText = '';
+        
+        for (let i = 1; i <= pdf.numPages; i++) {
+          const page = await pdf.getPage(i);
+          const textContent = await page.getTextContent();
+          const pageText = textContent.items
+            .map((item: any) => item.str)
+            .join(' ');
+          fullText += pageText + '\n\n';
+        }
+        
+        if (fullText.trim()) {
+          setBusinessPlanContent(fullText.trim());
+          toast.success(`Extracted text from ${file.name} (${pdf.numPages} pages)`);
+        } else {
+          setBusinessPlanContent(`[PDF Document: ${file.name}]\n\nDocument uploaded for analysis. Text extraction returned empty - document may be image-based.`);
+          toast.info(`PDF uploaded but text extraction limited - may be image-based`);
+        }
       } else if (file.name.endsWith('.docx')) {
-        // For DOCX, similar approach
-        setBusinessPlanContent(`[Word Document: ${file.name}]\n\nDocument uploaded for analysis. The expert team will review the business plan content.`);
-        toast.success(`Document uploaded: ${file.name}`);
+        // Extract text from DOCX using mammoth
+        const arrayBuffer = await file.arrayBuffer();
+        const mammoth = await import('mammoth');
+        const result = await mammoth.extractRawText({ arrayBuffer });
+        
+        if (result.value.trim()) {
+          setBusinessPlanContent(result.value.trim());
+          toast.success(`Extracted text from ${file.name}`);
+        } else {
+          setBusinessPlanContent(`[Word Document: ${file.name}]\n\nDocument uploaded but text extraction returned empty.`);
+          toast.info(`Document uploaded but text extraction limited`);
+        }
       } else {
         toast.error('Unsupported file type. Please upload PDF, Word, or text files.');
       }
     } catch (error) {
       console.error('Error reading file:', error);
       toast.error('Failed to read file');
+      setBusinessPlanContent(`[Document: ${file.name}]\n\nDocument uploaded for analysis. Text extraction failed.`);
     } finally {
       setIsExtractingText(false);
     }

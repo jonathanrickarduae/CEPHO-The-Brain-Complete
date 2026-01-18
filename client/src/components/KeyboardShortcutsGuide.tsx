@@ -20,7 +20,7 @@ const SHORTCUTS: Shortcut[] = [
   { keys: ['Cmd', 'D'], description: 'Go to Dashboard', category: 'Dashboard' },
   { keys: ['Cmd', 'B'], description: 'Open Daily Brief', category: 'Dashboard' },
   { keys: ['Cmd', 'E'], description: 'Open AI Experts', category: 'Dashboard' },
-  { keys: ['Cmd', 'T'], description: 'Open Digital Twin', category: 'Dashboard' },
+  { keys: ['Cmd', 'T'], description: 'Open Chief of Staff', category: 'Dashboard' },
 
   // Actions
   { keys: ['Cmd', 'Enter'], description: 'Submit message or form', category: 'Actions' },

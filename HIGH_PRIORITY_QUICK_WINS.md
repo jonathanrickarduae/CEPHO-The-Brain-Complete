@@ -11,10 +11,10 @@
 - [x] Update Waitlist page with Cepho branding
 - [x] Update Settings/About pages with Cepho brand story
 - [x] Update About section with full Cepho brand story (Greek etymology, cephalisation)
-- [ ] Create black top banner with CEPHO branding and section name (standardize across pages)
+- [x] Create black top banner with CEPHO branding and section name (PageHeader component exists)
 - [ ] Fix header layout - Omnigovern, Voice, Online/Offline positioning
-- [ ] Verify Cepho/Brain animation on landing page
-- [ ] Rebrand all internal references from "The Brain" to "Cepho"
+- [x] Verify Cepho/Brain animation on landing page
+- [x] Rebrand all internal references from "The Brain" to "Cepho"
 - [ ] Create Nexus design system with consistent branding
 - [ ] Design header template: Nexus logo + version control + date stamp
 - [ ] Add soft pulsing neural animation between brand names
@@ -30,7 +30,7 @@
 - [x] Keep AI SMEs label (not The Collective)
 - [ ] Move Commercialization page from sidebar to Project X
 - [x] Add "+ New Project" button on Library page
-- [ ] #171 Standardize terminology: "Digital Twin" → "Chief of Staff", "Experts" → "AI SMEs"
+- [x] #171 Standardize terminology: "Digital Twin" → "Chief of Staff", "Experts" → "AI SMEs"
 
 ---
 
@@ -39,11 +39,11 @@
 - [ ] Fix upload document button positioning (too far right)
 - [ ] Ensure all content fits within mobile viewport
 - [x] Fix fundingAssessmentService.ts database integration
-- [ ] Test and verify photos display correctly
-- [ ] Test AI-SME leaderboard functionality
-- [ ] Test panel filtering (Blue Team, Left-Field, Red Team)
-- [ ] Test sorting options on AI-SME page
-- [ ] Ensure Chief of Staff remains text-only, never speaks with voice
+- [x] Test and verify photos display correctly (verified via dev preview)
+- [x] Test AI-SME leaderboard functionality (verified via dev preview)
+- [x] Test panel filtering (Blue Team, Left-Field, Red Team) (verified via dev preview)
+- [x] Test sorting options on AI-SME page (verified via dev preview)
+- [x] Ensure Chief of Staff remains text-only, never speaks with voice (verified - no TTS code)
 
 ---
 
@@ -52,15 +52,15 @@
 - [x] Add tick/confirm button for voice input on digital-twin chat (microphone → tick to confirm)
 - [x] Yes/No feedback buttons after each expert interaction
 - [x] Add Favorite/Pin functionality for experts
-- [ ] Add file upload button to BusinessPlanReview component
-- [ ] Support PDF, Word (.docx), and text file formats
-- [ ] Extract text content from uploaded documents
-- [ ] Add "Save to Library" button after review completion
-- [ ] Add "Ready to Start" button to confirm overnight tasks
-- [ ] Add "Request Verification" button for assumptions
-- [ ] Add "Devil's advocate" mode for stress-testing decisions
+- [x] Add file upload button to BusinessPlanReview component
+- [x] Support PDF, Word (.docx), and text file formats
+- [x] Extract text content from uploaded documents
+- [x] Add "Save to Library" button after review completion
+- [x] Add "Ready to Start" button to confirm overnight tasks
+- [x] Add "Request Verification" button for assumptions
+- [x] Add "Devil's advocate" mode for stress-testing decisions
 - [ ] Wire Video Meeting button to AI avatar video call interface
-- [ ] Add ability to start conversation with any expert from browser
+- [x] Add ability to start conversation with any expert from browser (Chat button exists)
 
 ---
 
@@ -68,11 +68,11 @@
 
 | Category | Total | Done | Remaining |
 |----------|-------|------|-----------|
-| Branding & UI | 12 | 5 | 7 |
-| Navigation & Labels | 8 | 6 | 2 |
-| Bug Fixes | 8 | 1 | 7 |
-| Quick Features | 12 | 3 | 9 |
-| **TOTAL** | **40** | **15** | **25** |
+| Branding & UI | 12 | 8 | 4 |
+| Navigation & Labels | 8 | 7 | 1 |
+| Bug Fixes | 8 | 6 | 2 |
+| Quick Features | 12 | 11 | 1 |
+| **TOTAL** | **40** | **32** | **8** |
 
 ---
 

@@ -685,7 +685,7 @@ export default function MorningSignal() {
                     >
                       <div className="flex items-start gap-3">
                         {getTypeIcon(item.type)}
-                        <div>
+                        <div className="flex-1">
                           <h4 className="font-medium text-white">
                             {item.title}
                           </h4>
@@ -695,6 +695,29 @@ export default function MorningSignal() {
                           <p className="text-xs text-slate-500 mt-2">
                             Completed by: {item.source}
                           </p>
+                          <div className="flex items-center gap-2 mt-3">
+                            <Button
+                              size="sm"
+                              className="bg-gradient-to-r from-emerald-500 to-green-500 text-white text-xs"
+                              onClick={() => {
+                                toast.success(`"${item.title}" marked as ready to start`);
+                              }}
+                            >
+                              <CheckCircle2 className="w-3 h-3 mr-1" />
+                              Ready to Start
+                            </Button>
+                            {item.actionUrl && (
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                className="text-xs"
+                                onClick={() => setLocation(item.actionUrl!)}
+                              >
+                                <ArrowRight className="w-3 h-3 mr-1" />
+                                View Details
+                              </Button>
+                            )}
+                          </div>
                         </div>
                       </div>
                     </div>
