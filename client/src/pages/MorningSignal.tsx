@@ -25,7 +25,9 @@ import {
   Loader2,
   Download,
   FileText,
+  Video,
 } from "lucide-react";
+import { VictoriaPresenter } from "@/components/VictoriaPresenter";
 import { useLocation } from "wouter";
 
 interface SignalItem {
@@ -213,10 +215,10 @@ export default function MorningSignal() {
   // Generate brief text for TTS
   const generateBriefText = (): string => {
     const greeting = getGreeting();
-    const userName = user?.name?.split(" ")[0] || "there";
+    // Removed personalized greeting per sprint item #40
     const date = formatDate();
     
-    let briefText = `${greeting}, ${userName}. Here's your morning signal for ${date}. `;
+    let briefText = `${greeting}. Here's your morning signal for ${date}. `;
     
     // Add summary stats
     briefText += `You have ${acceptedItems.length} tasks ready for today`;
@@ -416,22 +418,6 @@ export default function MorningSignal() {
             <Button
               variant="outline"
               size="sm"
-              onClick={handlePlayBrief}
-              disabled={isGeneratingAudio}
-              className="border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/10"
-            >
-              {isGeneratingAudio ? (
-                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-              ) : isPlaying ? (
-                <Pause className="h-4 w-4 mr-2" />
-              ) : (
-                <Play className="h-4 w-4 mr-2" />
-              )}
-              {isGeneratingAudio ? "Generating..." : isPlaying ? "Pause" : "Listen"}
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
               onClick={handleDownloadPdf}
               disabled={isGeneratingPdf}
               className="border-pink-500/30 text-pink-400 hover:bg-pink-500/10"
@@ -439,19 +425,20 @@ export default function MorningSignal() {
               {isGeneratingPdf ? (
                 <Loader2 className="h-4 w-4 mr-2 animate-spin" />
               ) : (
-                <FileText className="h-4 w-4 mr-2" />
+                <Download className="h-4 w-4 mr-2" />
               )}
-              {isGeneratingPdf ? "Generating..." : "PDF"}
-            </Button>
-            <Button
-              onClick={() => setLocation("/daily-brief")}
-              className="bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600"
-            >
-              <Coffee className="h-4 w-4 mr-2" />
-              Full Daily Brief
+              {isGeneratingPdf ? "Generating..." : "Download PDF"}
             </Button>
           </div>
         </div>
+
+        {/* Victoria Presenter - Morning Brief */}
+        <VictoriaPresenter
+          onPlayAudio={handlePlayBrief}
+          isPlaying={isPlaying}
+          isGenerating={isGeneratingAudio}
+          briefTitle="Morning Brief"
+        />
 
         {/* Quick Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">

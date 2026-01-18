@@ -5636,12 +5636,12 @@ The 100% Optimization Framework requires strong performance across ALL fronts. C
 - [ ] #36 Style chat button in white
 
 ### Morning Signal (37-42)
-- [ ] #37 Rename Listen to brief to Morning Brief
-- [ ] #38 Attribute brief to Victoria with her picture
-- [ ] #39 Add Watch the Brief and Listen to the Brief buttons
-- [ ] #40 Remove personalized greetings
-- [ ] #41 Add download button to Morning Signal page
-- [ ] #42 Include all signal sections in PDF format
+- [x] #37 Rename Listen to brief to Morning Brief
+- [x] #38 Attribute brief to Victoria with her picture
+- [x] #39 Add Watch the Brief and Listen to the Brief buttons
+- [x] #40 Remove personalized greetings
+- [x] #41 Add download button to Morning Signal page
+- [x] #42 Include all signal sections in PDF format
 
 
 ## Development Pathway - New Phases
