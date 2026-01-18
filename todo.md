@@ -5232,3 +5232,13 @@ The 100% Optimization Framework requires strong performance across ALL fronts. C
 - [ ] Allow users to update answers over time as preferences change
 - [ ] Use questionnaire data to personalize COS behavior for each user
 - [ ] Make questionnaire completion part of "Getting to 100" score
+
+
+## Chief of Staff KPI Report (January 2026)
+
+- [ ] Create ChiefOfStaffKPIReport component with comprehensive dashboard
+- [ ] Build SME Performance Heatmap with color-coded scoring
+- [ ] Create Business Area Scoring Table with all SME rankings
+- [ ] Implement Enhancement Recommendations engine
+- [ ] Add export functionality for report (PDF/CSV)
+- [ ] Integrate report into Chief of Staff page
