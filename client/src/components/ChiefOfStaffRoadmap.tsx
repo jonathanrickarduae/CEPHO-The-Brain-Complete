@@ -167,6 +167,136 @@ const CAPABILITY_CATEGORIES: CapabilityCategory[] = [
       { id: 'e2', name: 'Vendor Management', description: 'Track and manage vendor relationships', status: 'planned', phase: 4, icon: Building2 },
       { id: 'e3', name: 'Contract Analysis', description: 'Review and summarize legal documents', status: 'future', phase: 5, icon: FileText },
     ]
+  },
+  {
+    id: 'productivity',
+    name: 'In-house Productivity Apps',
+    description: 'Phase 5: Build productivity tools to our own standards',
+    icon: Zap,
+    color: 'text-emerald-500',
+    capabilities: [
+      { 
+        id: 'prod1', 
+        name: 'Task & Project Management', 
+        description: 'Custom task management built to CEPHO standards',
+        status: 'future', 
+        phase: 5, 
+        icon: CheckCircle2,
+        features: [
+          'Integrated with Chief of Staff workflow',
+          'AI-powered prioritization',
+          'SME assignment and tracking',
+          'Quality gate integration'
+        ]
+      },
+      { 
+        id: 'prod2', 
+        name: 'Document Management', 
+        description: 'Document creation, versioning, and collaboration',
+        status: 'future', 
+        phase: 5, 
+        icon: FileText,
+        features: [
+          'CEPHO branded templates',
+          'AI-assisted writing',
+          'Jim Short quality review',
+          'Version control and audit trail'
+        ]
+      },
+      { 
+        id: 'prod3', 
+        name: 'Communication Hub', 
+        description: 'Unified messaging and notification system',
+        status: 'future', 
+        phase: 5, 
+        icon: MessageSquare,
+        features: [
+          'Email integration',
+          'Internal messaging',
+          'AI-drafted responses',
+          'Priority inbox management'
+        ]
+      },
+      { 
+        id: 'prod4', 
+        name: 'Analytics Dashboard', 
+        description: 'Business intelligence and KPI tracking',
+        status: 'future', 
+        phase: 5, 
+        icon: Search,
+        features: [
+          'Real-time KPI monitoring',
+          'CEO scorecard generation',
+          'Trend analysis and forecasting',
+          'Custom report builder'
+        ]
+      },
+    ]
+  },
+  {
+    id: 'commercialization',
+    name: 'Commercialization',
+    description: 'Phase 6: Taking CEPHO.Ai to market',
+    icon: Globe,
+    color: 'text-pink-500',
+    capabilities: [
+      { 
+        id: 'com1', 
+        name: 'Multi-tenant Platform', 
+        description: 'Support multiple organizations on single platform',
+        status: 'future', 
+        phase: 6, 
+        icon: Building2,
+        features: [
+          'Organization isolation',
+          'Custom branding per tenant',
+          'Usage-based billing',
+          'Admin dashboards'
+        ]
+      },
+      { 
+        id: 'com2', 
+        name: 'Subscription Management', 
+        description: 'Tiered pricing and subscription handling',
+        status: 'future', 
+        phase: 6, 
+        icon: Star,
+        features: [
+          'Free tier with limits',
+          'Professional tier',
+          'Enterprise tier',
+          'Stripe integration'
+        ]
+      },
+      { 
+        id: 'com3', 
+        name: 'Marketplace', 
+        description: 'SME expert marketplace and custom integrations',
+        status: 'future', 
+        phase: 6, 
+        icon: Globe,
+        features: [
+          'Third-party SME experts',
+          'Integration marketplace',
+          'Revenue sharing model',
+          'Quality certification'
+        ]
+      },
+      { 
+        id: 'com4', 
+        name: 'White-label Solution', 
+        description: 'Offer CEPHO as white-label to enterprises',
+        status: 'future', 
+        phase: 6, 
+        icon: Briefcase,
+        features: [
+          'Custom branding',
+          'Dedicated infrastructure',
+          'SLA guarantees',
+          'Enterprise support'
+        ]
+      },
+    ]
   }
 ];
 
@@ -188,8 +318,9 @@ const getPhaseLabel = (phase: number) => {
     case 1: return 'Phase 1: Foundation';
     case 2: return 'Phase 2: Enhancement';
     case 3: return 'Phase 3: Automation';
-    case 4: return 'Phase 4: AI Integration';
-    case 5: return 'Phase 5: Full Autonomy';
+    case 4: return 'Phase 4: Personal (AI Integration)';
+    case 5: return 'Phase 5: In-house Productivity Apps';
+    case 6: return 'Phase 6: Commercialization';
     default: return `Phase ${phase}`;
   }
 };
@@ -237,7 +368,7 @@ export function ChiefOfStaffRoadmap() {
         <Card className="bg-gray-900/50 border-gray-800">
           <CardContent className="pt-6">
             <div className="text-center">
-              <div className="text-3xl font-bold text-purple-500">5</div>
+              <div className="text-3xl font-bold text-purple-500">6</div>
               <div className="text-sm text-muted-foreground">Development Phases</div>
             </div>
           </CardContent>

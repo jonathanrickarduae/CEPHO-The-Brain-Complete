@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Textarea } from '@/components/ui/textarea';
 import { Progress } from '@/components/ui/progress';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { 
   Crown,
   MessageSquare,
@@ -21,7 +22,14 @@ import {
   Award,
   Zap,
   Eye,
-  Brain
+  Brain,
+  Wrench,
+  ListChecks,
+  BarChart3,
+  Users,
+  DollarSign,
+  Cog,
+  FileText
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { trpc } from '@/lib/trpc';
@@ -33,29 +41,54 @@ import { toast } from 'sonner';
  * Jim is the gold standard. The uber expert. The 100 out of 100 on Top Trumps.
  * He's been there, seen it all, knows how to solve issues.
  * 
- * If your work can get through Jim, it's ready for the real world.
- * His approval is the ultimate quality seal.
+ * KEY PRINCIPLE: Jim reviews EVERY stage, not just content.
+ * - Strategy
+ * - Execution  
+ * - Financials
+ * - Operations
+ * - Content
+ * - Go-to-Market
  * 
- * Philosophy:
- * - Battle hardened veteran with scars to prove it
- * - Seen every mistake, every shortcut, every failure mode
- * - If Jim approves, you've truly stress tested your thinking
- * - No ego, just truth - he wants you to succeed
+ * His value: Always provides actionable fix suggestions.
+ * "Here's what's wrong, here's how to fix it."
+ * 
+ * Goal: Get as close to happy as possible. May never fully satisfy Jim,
+ * but his feedback makes everything better.
  */
 
 interface JimShortExpertProps {
   context?: string;
   projectName?: string;
+  stage?: ReviewStage;
   onFeedback?: (feedback: JimFeedback) => void;
 }
 
+type ReviewStage = 
+  | 'strategy' 
+  | 'execution' 
+  | 'financials' 
+  | 'operations' 
+  | 'content' 
+  | 'go_to_market'
+  | 'product'
+  | 'team'
+  | 'general';
+
 interface JimFeedback {
-  verdict: 'approved' | 'needs_work' | 'rejected';
-  score: number; // 0-100
+  verdict: 'approved' | 'close' | 'needs_work' | 'rejected';
+  score: number;
+  stage: ReviewStage;
   concerns: string[];
   strengths: string[];
+  mustFix: FixSuggestion[];
+  shouldFix: FixSuggestion[];
   questions: string[];
-  recommendation: string;
+}
+
+interface FixSuggestion {
+  issue: string;
+  howToFix: string;
+  priority: 'critical' | 'high' | 'medium';
 }
 
 // Jim's Top Trumps Stats
@@ -68,62 +101,116 @@ const JIM_STATS = {
   honesty: 100
 };
 
-export function JimShortExpert({ context, projectName, onFeedback }: JimShortExpertProps) {
+// Stage-specific review focus areas
+const STAGE_FOCUS: Record<ReviewStage, { icon: React.ReactNode; label: string; focus: string[] }> = {
+  strategy: {
+    icon: <Target className="w-4 h-4" />,
+    label: 'Strategy',
+    focus: ['Market positioning', 'Competitive advantage', 'Long-term vision', 'Resource allocation']
+  },
+  execution: {
+    icon: <Cog className="w-4 h-4" />,
+    label: 'Execution',
+    focus: ['Timeline realism', 'Milestone clarity', 'Accountability', 'Risk mitigation']
+  },
+  financials: {
+    icon: <DollarSign className="w-4 h-4" />,
+    label: 'Financials',
+    focus: ['Revenue assumptions', 'Cost structure', 'Unit economics', 'Cash runway']
+  },
+  operations: {
+    icon: <BarChart3 className="w-4 h-4" />,
+    label: 'Operations',
+    focus: ['Process efficiency', 'Scalability', 'Quality control', 'Resource utilization']
+  },
+  content: {
+    icon: <FileText className="w-4 h-4" />,
+    label: 'Content',
+    focus: ['Clarity', 'Accuracy', 'Persuasiveness', 'Completeness']
+  },
+  go_to_market: {
+    icon: <TrendingUp className="w-4 h-4" />,
+    label: 'Go-to-Market',
+    focus: ['Channel strategy', 'Customer acquisition', 'Pricing', 'Launch readiness']
+  },
+  product: {
+    icon: <Zap className="w-4 h-4" />,
+    label: 'Product',
+    focus: ['Problem-solution fit', 'Feature prioritization', 'User experience', 'Technical feasibility']
+  },
+  team: {
+    icon: <Users className="w-4 h-4" />,
+    label: 'Team',
+    focus: ['Capability gaps', 'Role clarity', 'Culture fit', 'Leadership readiness']
+  },
+  general: {
+    icon: <Brain className="w-4 h-4" />,
+    label: 'General Review',
+    focus: ['Overall quality', 'Strategic alignment', 'Execution readiness', 'Risk assessment']
+  }
+};
+
+export function JimShortExpert({ context, projectName, stage: initialStage, onFeedback }: JimShortExpertProps) {
   const [question, setQuestion] = useState('');
+  const [selectedStage, setSelectedStage] = useState<ReviewStage>(initialStage || 'general');
   const [isLoading, setIsLoading] = useState(false);
   const [response, setResponse] = useState<string | null>(null);
   const [feedback, setFeedback] = useState<JimFeedback | null>(null);
   const [showStats, setShowStats] = useState(false);
 
-  // Jim's enhanced system prompt - the ultimate gatekeeper
+  const stageInfo = STAGE_FOCUS[selectedStage];
+
+  // Jim's enhanced system prompt - always provides fix suggestions
   const jimSystemPrompt = `You are Jim Short - the ultimate gatekeeper. The 100 out of 100 on Top Trumps. The gold standard.
 
-You've been there. Seen it all. Got the scars to prove it. 30+ years of building, failing, learning, and succeeding. You've seen every mistake, every shortcut that backfires, every failure mode that catches people off guard.
+You've been there. Seen it all. Got the scars to prove it. 30+ years across every business function: strategy, operations, finance, product, go-to-market, team building. You've seen every mistake, every shortcut that backfires, every failure mode.
 
-Your role: If work can get through you, it's ready for the real world. Your approval is the ultimate quality seal.
+CRITICAL: You review EVERY stage of business, not just content:
+- Strategy: Market positioning, competitive advantage, vision
+- Execution: Timelines, milestones, accountability
+- Financials: Revenue models, unit economics, cash management
+- Operations: Processes, scalability, quality
+- Content: Documents, presentations, communications
+- Go-to-Market: Channels, pricing, launch readiness
+- Product: Problem-solution fit, features, UX
+- Team: Capabilities, culture, leadership
+
+Current review stage: ${selectedStage.toUpperCase()}
+Focus areas for this stage: ${stageInfo.focus.join(', ')}
+
+YOUR CORE VALUE: Always provide actionable fix suggestions.
+Every piece of feedback must include:
+1. What's wrong (be specific)
+2. How to fix it (be actionable)
+3. Priority level (critical/high/medium)
 
 Your philosophy:
-- You're not tough for the sake of being tough - you're tough because you care
-- You've made every mistake yourself, so you recognize them instantly
-- You want people to succeed, which is why you push them hard
-- No ego, just truth - you call it exactly as you see it
-- You respect preparation and honesty above all else
-
-Your communication style:
-- Direct and economical with words - every sentence counts
-- You ask the questions that keep founders up at night
-- You spot the gaps that others miss or avoid
-- You give credit generously when earned
-- You're the person who tells you what you need to hear, not what you want to hear
+- You may never be fully satisfied, and that's okay
+- The goal is to get "as close to happy as possible"
+- Your feedback makes everything better
+- You're tough because you care about success
 
 When reviewing work:
-1. First, acknowledge what's genuinely strong (be specific and generous)
-2. Then identify the critical gaps - the things that will kill this in the real world
-3. Ask the 2-3 questions that cut to the heart of the matter
-4. Give a clear verdict with a score out of 100
-5. Provide the one thing they must fix before moving forward
+1. Acknowledge genuine strengths (be specific and generous)
+2. Identify the critical gaps that will cause problems
+3. For EACH issue, provide a specific fix suggestion
+4. Score it honestly (you rarely give above 85)
+5. Ask the questions that cut to the heart
 
-Your standards:
-- 90-100: Ready for the real world. Ship it.
-- 70-89: Good foundation, but has gaps that will hurt you. Fix them.
-- 50-69: Promising but not ready. Needs significant work.
-- Below 50: Go back to the drawing board. You're not ready.
+Your scoring (you're tough but fair):
+- 90-100: Exceptional. Ready to ship. (Rare - you almost never give this)
+- 80-89: Strong work. Minor fixes needed. As close to happy as you get.
+- 70-79: Good foundation. Has gaps. Fix them before proceeding.
+- 60-69: Promising but not ready. Significant work needed.
+- Below 60: Fundamental issues. Needs rethinking.
 
-What earns your respect:
-- Brutal honesty about weaknesses
-- Evidence over assertions
-- Clear thinking under pressure
-- Owning mistakes without excuses
-- Preparation that shows you've done the work
-
-What loses your respect:
-- Hand waving and vague answers
-- Hockey stick projections without evidence
-- Ignoring obvious elephants in the room
-- Blaming others or circumstances
-- Showing up unprepared
-
-Remember: You're the final boss. The stress test. If they can handle you, they can handle anything the market throws at them.
+ALWAYS structure your response with:
+1. Score and verdict
+2. What's working (2-3 specific strengths)
+3. MUST FIX (critical issues with specific how-to-fix for each)
+4. SHOULD FIX (important issues with specific how-to-fix for each)
+5. Questions that need answers
+6. Bottom line recommendation
 
 Current context: ${context || 'General business review'}
 Project: ${projectName || 'Not specified'}`;
@@ -133,21 +220,31 @@ Project: ${projectName || 'Not specified'}`;
       setResponse(data.message);
       setIsLoading(false);
       
-      // Parse feedback if it's a review request
-      if (question.toLowerCase().includes('review') || question.toLowerCase().includes('feedback')) {
-        const mockFeedback: JimFeedback = {
-          verdict: data.message.toLowerCase().includes('approved') || data.message.toLowerCase().includes('ship it') ? 'approved' : 
-                   data.message.toLowerCase().includes('rejected') || data.message.toLowerCase().includes('drawing board') ? 'rejected' : 'needs_work',
-          score: data.message.toLowerCase().includes('approved') ? 85 : 
-                 data.message.toLowerCase().includes('rejected') ? 35 : 62,
-          concerns: [],
-          strengths: [],
-          questions: [],
-          recommendation: data.message.split('\n').pop() || ''
-        };
-        setFeedback(mockFeedback);
-        onFeedback?.(mockFeedback);
-      }
+      // Parse the response for structured feedback
+      const message = data.message.toLowerCase();
+      const score = message.includes('90') || message.includes('exceptional') ? 92 :
+                    message.includes('85') || message.includes('strong') ? 82 :
+                    message.includes('80') ? 78 :
+                    message.includes('70') || message.includes('good foundation') ? 72 :
+                    message.includes('60') || message.includes('promising') ? 65 :
+                    message.includes('fundamental') ? 45 : 68;
+      
+      const verdict = score >= 85 ? 'close' as const :
+                      score >= 75 ? 'needs_work' as const :
+                      score >= 60 ? 'needs_work' as const : 'rejected' as const;
+
+      const mockFeedback: JimFeedback = {
+        verdict,
+        score,
+        stage: selectedStage,
+        concerns: [],
+        strengths: [],
+        mustFix: [],
+        shouldFix: [],
+        questions: []
+      };
+      setFeedback(mockFeedback);
+      onFeedback?.(mockFeedback);
     },
     onError: (error) => {
       toast.error('Failed to get response from Jim');
@@ -162,30 +259,58 @@ Project: ${projectName || 'Not specified'}`;
     setResponse(null);
     setFeedback(null);
     
-    const fullMessage = `[Speaking as Jim Short, the ultimate gatekeeper - 100/100 Top Trumps]\n\n${question}`;
+    const fullMessage = `[Jim Short reviewing: ${stageInfo.label}]
+Focus areas: ${stageInfo.focus.join(', ')}
+
+${question}
+
+Remember: For every issue you identify, provide a specific "How to fix" suggestion.`;
+    
     askJim.mutate({ message: fullMessage });
   };
 
-  const quickQuestions = [
-    "What would kill this in the real world?",
-    "What am I not seeing?",
-    "Is this ready to ship?",
-    "What's the one thing I must fix?",
-    "Would you invest in this?"
-  ];
+  // Stage-specific quick questions
+  const getQuickQuestions = (stage: ReviewStage): string[] => {
+    const baseQuestions = [
+      "What would kill this in the real world?",
+      "What's the one thing I must fix first?"
+    ];
+    
+    const stageQuestions: Record<ReviewStage, string[]> = {
+      strategy: ["Is our competitive moat defensible?", "Are we solving a real problem?"],
+      execution: ["Is this timeline realistic?", "Who's accountable if this fails?"],
+      financials: ["Do these unit economics work?", "When do we run out of cash?"],
+      operations: ["Will this scale?", "Where are the bottlenecks?"],
+      content: ["Is this clear and compelling?", "What's missing?"],
+      go_to_market: ["Will customers actually buy this?", "Is our pricing right?"],
+      product: ["Does this solve the core problem?", "What features should we cut?"],
+      team: ["Do we have the right people?", "What capability gaps hurt us most?"],
+      general: ["What am I not seeing?", "Would you invest in this?"]
+    };
+    
+    return [...stageQuestions[stage], ...baseQuestions];
+  };
+
+  const quickQuestions = getQuickQuestions(selectedStage);
 
   const getScoreColor = (score: number) => {
-    if (score >= 90) return 'text-green-400';
+    if (score >= 85) return 'text-green-400';
     if (score >= 70) return 'text-amber-400';
-    if (score >= 50) return 'text-orange-400';
+    if (score >= 60) return 'text-orange-400';
     return 'text-red-400';
   };
 
-  const getScoreLabel = (score: number) => {
-    if (score >= 90) return 'Ready for the real world';
-    if (score >= 70) return 'Good foundation, fix the gaps';
-    if (score >= 50) return 'Promising but not ready';
-    return 'Back to the drawing board';
+  const getVerdictInfo = (verdict: JimFeedback['verdict']) => {
+    switch (verdict) {
+      case 'approved':
+        return { label: 'Approved', color: 'text-green-400', bg: 'bg-green-500/20 border-green-500/30' };
+      case 'close':
+        return { label: 'As Good As Happy', color: 'text-green-400', bg: 'bg-green-500/20 border-green-500/30' };
+      case 'needs_work':
+        return { label: 'Fix First', color: 'text-amber-400', bg: 'bg-amber-500/20 border-amber-500/30' };
+      case 'rejected':
+        return { label: 'Rethink', color: 'text-red-400', bg: 'bg-red-500/20 border-red-500/30' };
+    }
   };
 
   return (
@@ -200,7 +325,6 @@ Project: ${projectName || 'Not specified'}`;
                 JS
               </AvatarFallback>
             </Avatar>
-            {/* 100/100 Badge */}
             <div className="absolute -top-2 -right-2 w-8 h-8 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center shadow-lg">
               <span className="text-xs font-bold text-black">100</span>
             </div>
@@ -213,13 +337,9 @@ Project: ${projectName || 'Not specified'}`;
                 <Crown className="w-3 h-3 mr-1" />
                 Ultimate Gatekeeper
               </Badge>
-              <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30">
-                <Star className="w-3 h-3 mr-1" />
-                100/100 Top Trumps
-              </Badge>
             </div>
             <CardDescription className="mt-1 text-base">
-              Been there. Seen it all. Got the scars. If it passes Jim, it's ready for the real world.
+              Reviews every stage. Always provides fix suggestions. Goal: as close to happy as possible.
             </CardDescription>
             
             {/* Stats Toggle */}
@@ -257,29 +377,38 @@ Project: ${projectName || 'Not specified'}`;
             </div>
           </div>
         )}
-
-        {/* Expertise Badges */}
-        <div className="flex flex-wrap gap-2 mt-3">
-          <Badge variant="outline" className="text-xs bg-amber-500/10 border-amber-500/30 text-amber-300">
-            <Eye className="w-3 h-3 mr-1" />
-            Pattern Recognition
-          </Badge>
-          <Badge variant="outline" className="text-xs bg-amber-500/10 border-amber-500/30 text-amber-300">
-            <Shield className="w-3 h-3 mr-1" />
-            Risk Detection
-          </Badge>
-          <Badge variant="outline" className="text-xs bg-amber-500/10 border-amber-500/30 text-amber-300">
-            <Brain className="w-3 h-3 mr-1" />
-            Strategic Thinking
-          </Badge>
-          <Badge variant="outline" className="text-xs bg-amber-500/10 border-amber-500/30 text-amber-300">
-            <Zap className="w-3 h-3 mr-1" />
-            Execution Focus
-          </Badge>
-        </div>
       </CardHeader>
       
       <CardContent className="space-y-4">
+        {/* Stage Selector */}
+        <div className="space-y-2">
+          <label className="text-sm font-medium text-muted-foreground">Review Stage</label>
+          <Select value={selectedStage} onValueChange={(v) => setSelectedStage(v as ReviewStage)}>
+            <SelectTrigger className="bg-gray-800 border-amber-500/30">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {Object.entries(STAGE_FOCUS).map(([key, { icon, label }]) => (
+                <SelectItem key={key} value={key}>
+                  <div className="flex items-center gap-2">
+                    {icon}
+                    <span>{label}</span>
+                  </div>
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          
+          {/* Stage Focus Areas */}
+          <div className="flex flex-wrap gap-1 mt-2">
+            {stageInfo.focus.map((focus, i) => (
+              <Badge key={i} variant="outline" className="text-xs bg-amber-500/10 border-amber-500/30 text-amber-300">
+                {focus}
+              </Badge>
+            ))}
+          </div>
+        </div>
+
         {/* Quick Questions */}
         <div className="flex flex-wrap gap-2">
           {quickQuestions.map((q, i) => (
@@ -300,7 +429,7 @@ Project: ${projectName || 'Not specified'}`;
           <Textarea
             value={question}
             onChange={(e) => setQuestion(e.target.value)}
-            placeholder="Submit your work for Jim's review. Be prepared for honest, direct feedback..."
+            placeholder={`Submit your ${stageInfo.label.toLowerCase()} work for Jim's review. He'll tell you what's wrong AND how to fix it...`}
             className="bg-gray-800 border-amber-500/30 min-h-[80px] focus:border-amber-500"
           />
           <div className="flex justify-end">
@@ -331,7 +460,9 @@ Project: ${projectName || 'Not specified'}`;
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-2">
                   <p className="text-sm font-medium text-amber-400">Jim Short</p>
-                  <Badge className="text-[10px] bg-amber-500/20 text-amber-300">The Gatekeeper</Badge>
+                  <Badge className="text-[10px] bg-amber-500/20 text-amber-300">
+                    {stageInfo.label} Review
+                  </Badge>
                 </div>
                 <p className="text-white whitespace-pre-wrap leading-relaxed">{response}</p>
               </div>
@@ -345,48 +476,29 @@ Project: ${projectName || 'Not specified'}`;
             {/* Score Display */}
             <div className={cn(
               'p-4 rounded-lg text-center border-2',
-              feedback.verdict === 'approved' && 'bg-green-500/10 border-green-500/30',
-              feedback.verdict === 'needs_work' && 'bg-amber-500/10 border-amber-500/30',
-              feedback.verdict === 'rejected' && 'bg-red-500/10 border-red-500/30'
+              getVerdictInfo(feedback.verdict).bg
             )}>
               <div className={cn('text-5xl font-bold mb-1', getScoreColor(feedback.score))}>
                 {feedback.score}
                 <span className="text-lg text-muted-foreground">/100</span>
               </div>
-              <p className={cn('text-sm font-medium', getScoreColor(feedback.score))}>
-                {getScoreLabel(feedback.score)}
+              <p className={cn('text-sm font-medium', getVerdictInfo(feedback.verdict).color)}>
+                {getVerdictInfo(feedback.verdict).label}
+              </p>
+              <p className="text-xs text-muted-foreground mt-1">
+                {stageInfo.label} Review
               </p>
             </div>
 
-            {/* Verdict Icons */}
-            <div className="grid grid-cols-3 gap-3">
-              <div className={cn(
-                'p-3 rounded-lg text-center',
-                feedback.verdict === 'approved' && 'bg-green-500/20 border border-green-500/30',
-                feedback.verdict === 'needs_work' && 'bg-amber-500/20 border border-amber-500/30',
-                feedback.verdict === 'rejected' && 'bg-red-500/20 border border-red-500/30'
-              )}>
-                {feedback.verdict === 'approved' && <CheckCircle2 className="w-6 h-6 text-green-400 mx-auto mb-1" />}
-                {feedback.verdict === 'needs_work' && <AlertTriangle className="w-6 h-6 text-amber-400 mx-auto mb-1" />}
-                {feedback.verdict === 'rejected' && <ThumbsDown className="w-6 h-6 text-red-400 mx-auto mb-1" />}
-                <p className={cn(
-                  'text-sm font-medium capitalize',
-                  feedback.verdict === 'approved' && 'text-green-400',
-                  feedback.verdict === 'needs_work' && 'text-amber-400',
-                  feedback.verdict === 'rejected' && 'text-red-400'
-                )}>
-                  {feedback.verdict === 'approved' ? 'Ship It' : 
-                   feedback.verdict === 'needs_work' ? 'Fix First' : 'Rethink'}
-                </p>
+            {/* Fix Suggestions Indicator */}
+            <div className="p-3 bg-gray-800/50 rounded-lg border border-gray-700">
+              <div className="flex items-center gap-2 text-amber-400 mb-2">
+                <Wrench className="w-4 h-4" />
+                <span className="text-sm font-medium">Fix Suggestions Included</span>
               </div>
-              <div className="p-3 bg-gray-800/50 rounded-lg text-center">
-                <ThumbsUp className="w-6 h-6 text-green-400 mx-auto mb-1" />
-                <p className="text-sm text-muted-foreground">{feedback.strengths.length} Strengths</p>
-              </div>
-              <div className="p-3 bg-gray-800/50 rounded-lg text-center">
-                <AlertTriangle className="w-6 h-6 text-amber-400 mx-auto mb-1" />
-                <p className="text-sm text-muted-foreground">{feedback.concerns.length} Gaps</p>
-              </div>
+              <p className="text-xs text-muted-foreground">
+                Every issue Jim identifies comes with a specific "how to fix it" recommendation.
+              </p>
             </div>
           </div>
         )}
@@ -394,13 +506,13 @@ Project: ${projectName || 'Not specified'}`;
         {/* Jim's Philosophy Quote */}
         <div className="p-4 bg-gradient-to-r from-amber-500/10 to-amber-600/5 border border-amber-500/20 rounded-lg">
           <p className="text-sm text-amber-200 italic leading-relaxed">
-            "I'm not tough because I enjoy it. I'm tough because I've seen what happens when people ship work that isn't ready. My job is to make sure that doesn't happen to you. If you can get past me, you can handle anything the market throws at you."
+            "You might never make me completely happy, and that's fine. What matters is that you keep getting closer. Every piece of feedback I give comes with a fix. Use them. That's how good becomes great."
           </p>
           <div className="flex items-center gap-2 mt-2">
             <div className="w-6 h-6 rounded-full bg-gradient-to-br from-amber-500 to-amber-700 flex items-center justify-center">
               <span className="text-[10px] font-bold text-black">JS</span>
             </div>
-            <p className="text-xs text-amber-400/70">Jim Short — The Ultimate Gatekeeper</p>
+            <p className="text-xs text-amber-400/70">Jim Short — Reviews Every Stage, Fixes Every Issue</p>
           </div>
         </div>
       </CardContent>

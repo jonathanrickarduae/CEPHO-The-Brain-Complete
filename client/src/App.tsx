@@ -49,6 +49,7 @@ import KpiDashboard from "./pages/KpiDashboard";
 import OperationsPage from "./pages/OperationsPage";
 import GrowthPage from "./pages/GrowthPage";
 import SocialMediaBlueprint from "./pages/SocialMediaBlueprint";
+import BusinessModelPage from "./pages/BusinessModelPage";
 import QuestionnaireOnline from "./pages/QuestionnaireOnline";
 import { GovernanceProvider, GovernanceModeChangeModal } from "./hooks/useGovernance";
 import { AIRouterProvider } from "./components/AIRouter";
@@ -170,6 +171,9 @@ function Router() {
       </Route>
       <Route path="/social-media-blueprint">
         <WithLayout><SocialMediaBlueprint /></WithLayout>
+      </Route>
+      <Route path="/business-model">
+        <WithLayout><BusinessModelPage /></WithLayout>
       </Route>
       <Route path="/due-diligence">
         <WithLayout><DueDiligencePage /></WithLayout>
