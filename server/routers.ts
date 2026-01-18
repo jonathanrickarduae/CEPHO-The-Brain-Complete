@@ -4253,6 +4253,108 @@ ${transcript}
       }),
   }),
 
+  // NPS Tracking API
+  nps: router({
+    // Submit NPS score
+    submit: protectedProcedure
+      .input(z.object({
+        score: z.number().min(0).max(10),
+        feedback: z.string().optional(),
+        touchpoint: z.string().optional(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        const { saveNpsResponse } = await import('./db');
+        await saveNpsResponse(ctx.user.id, input.score, input.feedback, input.touchpoint);
+        return { success: true };
+      }),
+
+    // Get NPS statistics
+    getStats: protectedProcedure
+      .query(async () => {
+        const { getNpsStats } = await import('./db');
+        return getNpsStats();
+      }),
+  }),
+
+  // Partnership Pipeline API
+  partnerships: router({
+    // Get all partnerships
+    list: protectedProcedure
+      .input(z.object({
+        status: z.enum(['prospect', 'contacted', 'negotiating', 'active', 'inactive', 'churned']).optional(),
+      }).optional())
+      .query(async ({ input }) => {
+        const { getPartnerships } = await import('./db');
+        return getPartnerships(input?.status);
+      }),
+
+    // Create a new partnership
+    create: protectedProcedure
+      .input(z.object({
+        name: z.string(),
+        type: z.enum(['technology', 'distribution', 'strategic', 'integration', 'referral']),
+        status: z.enum(['prospect', 'contacted', 'negotiating', 'active', 'inactive', 'churned']),
+        priority: z.enum(['low', 'medium', 'high', 'critical']).optional(),
+        contactName: z.string().optional(),
+        contactEmail: z.string().email().optional(),
+        notes: z.string().optional(),
+      }))
+      .mutation(async ({ input }) => {
+        const { createPartnership } = await import('./db');
+        await createPartnership(input);
+        return { success: true };
+      }),
+  }),
+
+  // Team Capability Matrix API
+  teamCapabilities: router({
+    // Get all team capabilities
+    list: protectedProcedure
+      .query(async () => {
+        const { getTeamCapabilities } = await import('./db');
+        return getTeamCapabilities();
+      }),
+
+    // Add a team capability
+    add: protectedProcedure
+      .input(z.object({
+        teamMember: z.string(),
+        role: z.string(),
+        skillCategory: z.string(),
+        skillName: z.string(),
+        currentLevel: z.number().min(1).max(5),
+        targetLevel: z.number().min(1).max(5).optional(),
+        developmentPlan: z.string().optional(),
+      }))
+      .mutation(async ({ input }) => {
+        const { addTeamCapability } = await import('./db');
+        await addTeamCapability(input);
+        return { success: true };
+      }),
+  }),
+
+  // Customer Health API
+  customerHealth: router({
+    // Update customer health
+    update: protectedProcedure
+      .input(z.object({
+        healthScore: z.number().min(0).max(100),
+        engagementLevel: z.enum(['low', 'medium', 'high', 'champion']),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        const { updateCustomerHealth } = await import('./db');
+        await updateCustomerHealth(ctx.user.id, input.healthScore, input.engagementLevel);
+        return { success: true };
+      }),
+
+    // Get customer health stats
+    getStats: protectedProcedure
+      .query(async () => {
+        const { getCustomerHealthStats } = await import('./db');
+        return getCustomerHealthStats();
+      }),
+  }),
+
   // Digital Twin Questionnaire API
   questionnaire: router({
     // Save a single response
