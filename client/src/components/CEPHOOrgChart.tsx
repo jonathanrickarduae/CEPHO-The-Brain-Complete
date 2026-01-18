@@ -38,7 +38,9 @@ import {
   Target,
   Lightbulb,
   ChevronDown,
-  ChevronUp
+  ChevronUp,
+  Mic,
+  Volume2
 } from "lucide-react";
 
 // =============================================================================
@@ -127,12 +129,15 @@ export function CEPHOOrgChart({ variant = "full", showDetails = true }: CEPHOOrg
       <div className="text-center">
         <h2 className="text-2xl font-bold text-white mb-2">CEPHO.Ai Organization</h2>
         <p className="text-muted-foreground">The AI-Powered Executive Structure</p>
-        <div className="flex justify-center gap-4 mt-4">
+        <div className="flex justify-center gap-4 mt-4 flex-wrap">
           <Badge variant="outline" className="bg-[#E91E8C]/20 text-[#E91E8C] border-[#E91E8C]/30">
             1 Employee
           </Badge>
           <Badge variant="outline" className="bg-purple-500/20 text-purple-400 border-purple-500/30">
-            1 Virtual COS
+            Virtual COS
+          </Badge>
+          <Badge variant="outline" className="bg-amber-500/20 text-amber-400 border-amber-500/30">
+            Head of Briefings
           </Badge>
           <Badge variant="outline" className="bg-cyan-500/20 text-cyan-400 border-cyan-500/30">
             AI SME Team
@@ -188,25 +193,39 @@ export function CEPHOOrgChart({ variant = "full", showDetails = true }: CEPHOOrg
             <div className="w-0.5 h-8 bg-gradient-to-b from-[#E91E8C] to-purple-500"></div>
             <div className="flex items-center gap-2 bg-gray-900 px-3 py-1 rounded-full border border-gray-700">
               <Sparkles className="h-3 w-3 text-purple-400" />
-              <span className="text-xs text-gray-400">AI Bridge</span>
+              <span className="text-xs text-gray-400">AI Executive Layer</span>
             </div>
-            <div className="w-0.5 h-8 bg-gradient-to-b from-purple-500 to-purple-500"></div>
           </div>
         </div>
 
-        {/* Virtual AI Chief of Staff - The Bridge */}
-        <div className="flex justify-center mb-8">
-          <Card className="bg-gradient-to-br from-purple-500/20 to-purple-500/5 border-2 border-purple-500 w-80">
+        {/* AI Executive Layer - COS and Victoria side by side */}
+        <div className="flex justify-center gap-6 mb-8 flex-wrap">
+          {/* Virtual AI Chief of Staff */}
+          <Card className="bg-gradient-to-br from-purple-500/20 to-purple-500/5 border-2 border-purple-500 w-72">
             <CardContent className="pt-6 text-center">
-              <div className="w-20 h-20 rounded-full bg-purple-500/30 border-2 border-purple-500 flex items-center justify-center mx-auto mb-4">
-                <Brain className="h-10 w-10 text-purple-400" />
+              <div className="w-16 h-16 rounded-full bg-purple-500/30 border-2 border-purple-500 flex items-center justify-center mx-auto mb-3">
+                <Brain className="h-8 w-8 text-purple-400" />
               </div>
-              <h3 className="text-xl font-bold text-white">Virtual AI Chief of Staff</h3>
-              <p className="text-sm text-purple-400">The Bridge & Gateway</p>
-              <div className="mt-3 flex flex-wrap justify-center gap-2">
-                <Badge variant="outline" className="text-xs border-purple-500/30 text-purple-300">Coordination</Badge>
-                <Badge variant="outline" className="text-xs border-purple-500/30 text-purple-300">Intelligence</Badge>
+              <h3 className="text-lg font-bold text-white">Virtual Chief of Staff</h3>
+              <p className="text-sm text-purple-400">Research & Coordination</p>
+              <div className="mt-3 flex flex-wrap justify-center gap-1">
+                <Badge variant="outline" className="text-xs border-purple-500/30 text-purple-300">Analysis</Badge>
                 <Badge variant="outline" className="text-xs border-purple-500/30 text-purple-300">Execution</Badge>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Victoria - Head of Briefings */}
+          <Card className="bg-gradient-to-br from-amber-500/20 to-amber-500/5 border-2 border-amber-500 w-72">
+            <CardContent className="pt-6 text-center">
+              <div className="w-16 h-16 rounded-full bg-amber-500/30 border-2 border-amber-500 flex items-center justify-center mx-auto mb-3">
+                <Mic className="h-8 w-8 text-amber-400" />
+              </div>
+              <h3 className="text-lg font-bold text-white">Victoria</h3>
+              <p className="text-sm text-amber-400">Head of Briefings</p>
+              <div className="mt-3 flex flex-wrap justify-center gap-1">
+                <Badge variant="outline" className="text-xs border-amber-500/30 text-amber-300">Voice Briefings</Badge>
+                <Badge variant="outline" className="text-xs border-amber-500/30 text-amber-300">Updates</Badge>
               </div>
             </CardContent>
           </Card>
@@ -281,14 +300,18 @@ export function CEPHOOrgChart({ variant = "full", showDetails = true }: CEPHOOrg
       {showDetails && (
         <Card className="bg-gray-900/50 border-gray-800 mt-8">
           <CardContent className="pt-6">
-            <div className="grid grid-cols-3 gap-6 text-center">
+            <div className="grid grid-cols-4 gap-4 text-center">
               <div>
                 <p className="text-3xl font-bold text-[#E91E8C]">1</p>
                 <p className="text-sm text-muted-foreground">Human Employee</p>
               </div>
               <div>
                 <p className="text-3xl font-bold text-purple-400">1</p>
-                <p className="text-sm text-muted-foreground">Virtual Chief of Staff</p>
+                <p className="text-sm text-muted-foreground">Virtual COS</p>
+              </div>
+              <div>
+                <p className="text-3xl font-bold text-amber-400">1</p>
+                <p className="text-sm text-muted-foreground">Head of Briefings</p>
               </div>
               <div>
                 <p className="text-3xl font-bold text-cyan-400">8+</p>
@@ -298,7 +321,8 @@ export function CEPHOOrgChart({ variant = "full", showDetails = true }: CEPHOOrg
             <div className="mt-6 pt-6 border-t border-gray-800 text-center">
               <p className="text-sm text-muted-foreground">
                 <span className="text-white font-medium">The CEPHO Model:</span> One human CEO amplified by AI infrastructure, 
-                with a Virtual Chief of Staff bridging to an unlimited AI expert team and the world's advisory network.
+                with a Virtual Chief of Staff handling research and coordination, Victoria delivering all briefings, 
+                and an unlimited AI expert team connected to the world's advisory network.
               </p>
             </div>
           </CardContent>
