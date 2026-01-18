@@ -3460,6 +3460,78 @@ ${transcript}
       }),
   }),
 
+  // Morning Signal API
+  morningSignal: router({
+    // Generate PDF of morning signal
+    generatePdf: protectedProcedure
+      .input(z.object({
+        includePatterns: z.boolean().optional(),
+      }).optional())
+      .mutation(async ({ ctx, input }) => {
+        const { generateMorningSignalHtml } = await import('./services/morningSignalPdfService');
+        
+        // Get latest evening review data
+        const latestReview = await getLatestEveningReviewSession(ctx.user.id);
+        const metadata = latestReview?.metadata as any || {};
+        
+        // Build signal data
+        const now = new Date();
+        const hour = now.getHours();
+        const greeting = hour < 12 ? 'Good Morning' : hour < 17 ? 'Good Afternoon' : 'Good Evening';
+        
+        const signalData = {
+          userName: ctx.user.name?.split(' ')[0] || 'there',
+          date: now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' }),
+          greeting,
+          acceptedTasks: (metadata.acceptedTasks || []).map((t: any, i: number) => ({
+            id: `accepted-${i}`,
+            type: 'accepted' as const,
+            title: t.title || `Task ${i + 1}`,
+            description: t.description || 'Ready for today',
+            priority: t.priority || 'medium',
+            source: t.project || 'Evening Review',
+          })),
+          deferredTasks: (metadata.deferredTasks || []).map((t: any, i: number) => ({
+            id: `deferred-${i}`,
+            type: 'deferred' as const,
+            title: t.title || `Deferred Task ${i + 1}`,
+            description: t.reason || 'Needs attention',
+            priority: 'high' as const,
+            source: t.project || 'Evening Review',
+          })),
+          insights: (metadata.insights || []).map((ins: any, i: number) => ({
+            id: `insight-${i}`,
+            type: 'insight' as const,
+            title: ins.title || 'Insight',
+            description: ins.content || ins,
+            priority: 'medium' as const,
+            source: 'Chief of Staff Analysis',
+          })),
+          overnightWork: (metadata.overnightWork || []).map((w: any, i: number) => ({
+            id: `overnight-${i}`,
+            type: 'overnight' as const,
+            title: w.title || 'Overnight Progress',
+            description: w.summary || 'Completed while you slept',
+            priority: 'low' as const,
+            source: 'Chief of Staff',
+          })),
+          patterns: input?.includePatterns ? {
+            productivityScore: metadata.productivityScore,
+            focusAreas: metadata.focusAreas || [],
+            recommendations: metadata.recommendations || [],
+          } : undefined,
+        };
+        
+        const html = generateMorningSignalHtml(signalData);
+        return { html, signalData };
+      }),
+      
+    // Get signal items for today
+    getItems: protectedProcedure.query(async ({ ctx }) => {
+      return getPendingSignalItems(ctx.user.id);
+    }),
+  }),
+
   // Calendar Sync API
   calendar: router({
     // Sync calendar events from a provider

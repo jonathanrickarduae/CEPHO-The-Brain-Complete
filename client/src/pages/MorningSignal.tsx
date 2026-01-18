@@ -23,6 +23,8 @@ import {
   Volume2,
   Pause,
   Loader2,
+  Download,
+  FileText,
 } from "lucide-react";
 import { useLocation } from "wouter";
 
@@ -42,6 +44,7 @@ export default function MorningSignal() {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [isPlaying, setIsPlaying] = useState(false);
   const [isGeneratingAudio, setIsGeneratingAudio] = useState(false);
+  const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   // Fetch evening review data
@@ -304,6 +307,38 @@ export default function MorningSignal() {
     }
   };
 
+  // PDF generation mutation
+  const generatePdfMutation = trpc.morningSignal.generatePdf.useMutation();
+
+  const handleDownloadPdf = async () => {
+    setIsGeneratingPdf(true);
+    try {
+      const result = await generatePdfMutation.mutateAsync({ includePatterns: true });
+      
+      // Create a blob from the HTML and trigger download
+      const blob = new Blob([result.html], { type: 'text/html' });
+      const url = URL.createObjectURL(blob);
+      
+      // Open in new window for printing/saving as PDF
+      const printWindow = window.open(url, '_blank');
+      if (printWindow) {
+        printWindow.onload = () => {
+          // Auto-trigger print dialog for PDF saving
+          setTimeout(() => {
+            printWindow.print();
+          }, 500);
+        };
+      }
+      
+      toast.success('Morning Signal opened for printing. Use "Save as PDF" in the print dialog.');
+    } catch (error) {
+      console.error('Failed to generate PDF:', error);
+      toast.error('Failed to generate PDF. Please try again.');
+    } finally {
+      setIsGeneratingPdf(false);
+    }
+  };
+
   // Cleanup audio on unmount
   useEffect(() => {
     return () => {
@@ -392,7 +427,21 @@ export default function MorningSignal() {
               ) : (
                 <Play className="h-4 w-4 mr-2" />
               )}
-              {isGeneratingAudio ? "Generating..." : isPlaying ? "Pause" : "Listen to the Brief"}
+              {isGeneratingAudio ? "Generating..." : isPlaying ? "Pause" : "Listen"}
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleDownloadPdf}
+              disabled={isGeneratingPdf}
+              className="border-pink-500/30 text-pink-400 hover:bg-pink-500/10"
+            >
+              {isGeneratingPdf ? (
+                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+              ) : (
+                <FileText className="h-4 w-4 mr-2" />
+              )}
+              {isGeneratingPdf ? "Generating..." : "PDF"}
             </Button>
             <Button
               onClick={() => setLocation("/daily-brief")}
