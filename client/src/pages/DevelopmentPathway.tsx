@@ -28,13 +28,14 @@ import { Link } from "wouter";
 import SubscriptionTracker from "@/components/SubscriptionTracker";
 import OptimizationAssessment from "@/components/OptimizationAssessment";
 import FundingAssessment from "@/components/FundingAssessment";
+import { ChiefOfStaffRoadmap } from "@/components/ChiefOfStaffRoadmap";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Brain, Gauge } from "lucide-react";
+import { Brain, Gauge, Map } from "lucide-react";
 
 // Stage configuration for the development pipeline
 const PIPELINE_STAGES = [
@@ -152,6 +153,10 @@ export default function DevelopmentPathway() {
             <TabsTrigger value="optimization" className="data-[state=active]:bg-gray-800">
               <Gauge className="w-4 h-4 mr-2" />
               System Optimization
+            </TabsTrigger>
+            <TabsTrigger value="roadmap" className="data-[state=active]:bg-gray-800">
+              <Map className="w-4 h-4 mr-2" />
+              CoS Roadmap
             </TabsTrigger>
           </TabsList>
 
@@ -353,6 +358,11 @@ export default function DevelopmentPathway() {
           {/* System Optimization Tab */}
           <TabsContent value="optimization">
             <OptimizationAssessment />
+          </TabsContent>
+
+          {/* Chief of Staff Roadmap Tab */}
+          <TabsContent value="roadmap">
+            <ChiefOfStaffRoadmap />
           </TabsContent>
 
           {/* Chief of Staff Reviews Tab */}
