@@ -16,6 +16,7 @@ import {
   corporatePartnerMapping,
   GenesisBlueprint 
 } from '@/data/genesisBlueprint';
+import { useSimulationContext } from '@/hooks/useSimulationContext';
 import { allExperts, corporatePartners, AIExpert } from '@/data/aiExperts';
 
 interface GenesisBlueprintWizardProps {
@@ -51,6 +52,15 @@ export function GenesisBlueprintWizard({ onComplete, existingBlueprint }: Genesi
   const [isProcessing, setIsProcessing] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const [showTwinChat, setShowTwinChat] = useState(true);
+  
+  // Simulation context for end-to-end testing without live integrations
+  const { 
+    isSimulationMode, 
+    genesisContext, 
+    getTodaySnapshot, 
+    getProjectContext,
+    getBusinessInsights 
+  } = useSimulationContext();
 
   const sections = ['entry', 'business', 'objectives', 'market', 'differentiation', 'revenue', 'resources'];
   const sectionLabels: Record<string, string> = {

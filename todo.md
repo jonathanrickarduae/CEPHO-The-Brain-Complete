@@ -5845,3 +5845,21 @@ The 100% Optimization Framework requires strong performance across ALL fronts. C
 
 - [x] Fix Settings integrations page to show connected/not connected status clearly (syncs with DB)
 - [ ] Review and compile UI/UX quick wins from backlog
+
+
+## Deferred to Next Sprint (from 19 January 2026)
+
+- [ ] Create voice style presets (briefing, urgent, casual)
+- [ ] Store generated audio files in S3
+- [ ] SME Expert Panel review of strategy (pending CEO input)
+- [ ] Plan follow-up briefing for next day with additional optimization areas
+- [ ] Add recurring learning process to continuously discover new capabilities
+- [ ] Future action: Press a button creates whole business bucket
+
+
+## Simulation Mode for Integrations (19 January 2026)
+
+- [x] Create simulation data service with realistic sample data
+- [x] Add simulation mode toggle to integrations (tRPC router added)
+- [x] Wire simulation data to Project Genesis consumption points (useSimulationContext hook created)
+- [x] Test end-to-end Project Genesis flow with simulation data (26 tests passing)

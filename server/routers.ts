@@ -373,6 +373,66 @@ You are not a yes-man. You are a trusted advisor who respects the principal enou
       }),
   }),
 
+  // Simulation Mode API (Phase 1 - No OAuth required)
+  simulation: router({
+    // Get simulation mode status
+    getStatus: protectedProcedure.query(async () => {
+      const { isSimulationMode } = await import('./services/simulationDataService');
+      return { enabled: isSimulationMode() };
+    }),
+
+    // Toggle simulation mode
+    setStatus: protectedProcedure
+      .input(z.object({ enabled: z.boolean() }))
+      .mutation(async ({ input }) => {
+        const { setSimulationMode } = await import('./services/simulationDataService');
+        setSimulationMode(input.enabled);
+        return { success: true, enabled: input.enabled };
+      }),
+
+    // Get simulated calendar events
+    getCalendarEvents: protectedProcedure.query(async () => {
+      const { isSimulationMode, getSimulatedCalendarEvents } = await import('./services/simulationDataService');
+      if (!isSimulationMode()) return { events: [], simulationMode: false };
+      return { events: getSimulatedCalendarEvents(), simulationMode: true };
+    }),
+
+    // Get simulated emails
+    getEmails: protectedProcedure.query(async () => {
+      const { isSimulationMode, getSimulatedEmails } = await import('./services/simulationDataService');
+      if (!isSimulationMode()) return { emails: [], simulationMode: false };
+      return { emails: getSimulatedEmails(), simulationMode: true };
+    }),
+
+    // Get simulated Notion pages
+    getNotionPages: protectedProcedure.query(async () => {
+      const { isSimulationMode, getSimulatedNotionPages } = await import('./services/simulationDataService');
+      if (!isSimulationMode()) return { pages: [], simulationMode: false };
+      return { pages: getSimulatedNotionPages(), simulationMode: true };
+    }),
+
+    // Get simulated tasks
+    getTasks: protectedProcedure.query(async () => {
+      const { isSimulationMode, getSimulatedTasks } = await import('./services/simulationDataService');
+      if (!isSimulationMode()) return { tasks: [], simulationMode: false };
+      return { tasks: getSimulatedTasks(), simulationMode: true };
+    }),
+
+    // Get simulation summary (aggregated data)
+    getSummary: protectedProcedure.query(async () => {
+      const { isSimulationMode, getSimulationSummary } = await import('./services/simulationDataService');
+      if (!isSimulationMode()) return { summary: null, simulationMode: false };
+      return { summary: getSimulationSummary(), simulationMode: true };
+    }),
+
+    // Get Project Genesis context from simulation data
+    getGenesisContext: protectedProcedure.query(async () => {
+      const { isSimulationMode, buildGenesisContext } = await import('./services/simulationDataService');
+      if (!isSimulationMode()) return { context: null, simulationMode: false };
+      return { context: buildGenesisContext(), simulationMode: true };
+    }),
+  }),
+
   // Notifications API
   notifications: router({
     list: protectedProcedure
