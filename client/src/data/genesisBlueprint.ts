@@ -466,6 +466,45 @@ export const genesisWizardQuestions: WizardQuestion[] = [
     smeRelevant: ['finance_expert', 'marketing_expert']
   },
 
+  // Founder Story (for narrative generation)
+  {
+    id: 'founder_industry_experience',
+    section: 'business',
+    question: 'What industry experience do you bring to this venture?',
+    type: 'textarea',
+    placeholder: 'e.g., 10 years in fintech, former consultant, built 3 startups...',
+    required: false,
+    helpText: 'This helps craft an authentic founder narrative for investor pitches',
+    smeRelevant: ['marketing_expert', 'strategy_expert']
+  },
+  {
+    id: 'founder_observation_moment',
+    section: 'business',
+    question: 'What observation or insight led you to this opportunity?',
+    type: 'textarea',
+    placeholder: 'e.g., While working at X, I noticed that Y was a consistent problem...',
+    required: false,
+    helpText: 'The "aha moment" that sparked the idea',
+    smeRelevant: ['marketing_expert']
+  },
+  {
+    id: 'founder_motivation_type',
+    section: 'business',
+    question: 'What primarily drives your motivation for this venture?',
+    type: 'select',
+    options: [
+      'Solving a problem I personally experienced',
+      'Market opportunity I identified',
+      'Technology breakthrough I want to apply',
+      'Mission to change an industry',
+      'Building something I wish existed',
+      'Other'
+    ],
+    required: false,
+    helpText: 'Helps frame the emotional driver in your story',
+    smeRelevant: ['marketing_expert']
+  },
+
   // Resources
   {
     id: 'team_size',

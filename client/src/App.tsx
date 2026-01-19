@@ -52,6 +52,7 @@ import SocialMediaBlueprint from "./pages/SocialMediaBlueprint";
 import BusinessModelPage from "./pages/BusinessModelPage";
 import QuestionnaireOnline from "./pages/QuestionnaireOnline";
 import StrategicFrameworkQuestionnaire from "./pages/StrategicFrameworkQuestionnaire";
+import PersephoneAI from "./pages/PersephoneAI";
 import { GovernanceProvider, GovernanceModeChangeModal } from "./hooks/useGovernance";
 import { AIRouterProvider } from "./components/AIRouter";
 import { CelebrationProvider } from "./components/CelebrationAnimations";
@@ -148,6 +149,9 @@ function Router() {
       </Route>
       <Route path="/development-pathway">
         <WithLayout><DevelopmentPathway /></WithLayout>
+      </Route>
+      <Route path="/persephone-ai">
+        <WithLayout><PersephoneAI /></WithLayout>
       </Route>
       <Route path="/cos-training">
         <WithLayout><COSTraining /></WithLayout>
