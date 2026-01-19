@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CEPHO.Ai CEO KPI Report - 18 January 2026</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #FFF; color: #000; font-size: 11px; line-height: 1.4; }
+        .page { max-width: 1100px; margin: 0 auto; padding: 20px; }
+        
+        /* Cover */
+        .cover { text-align: center; padding: 40px 20px; border-bottom: 2px solid #000; margin-bottom: 20px; }
+        .brand { font-size: 36px; font-weight: 700; color: #E91E8C; letter-spacing: 6px; }
+        .title { font-size: 20px; font-weight: 600; margin-top: 10px; }
+        .meta { font-size: 10px; margin-top: 8px; }
+        .score-box { display: inline-block; margin-top: 20px; padding: 15px 40px; background: #F8F8F8; border: 1px solid #E0E0E0; border-radius: 8px; }
+        .score-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; }
+        .score-value { font-size: 48px; font-weight: 700; color: #F59E0B; }
+        .score-max { font-size: 16px; color: #000; }
+        
+        /* Section */
+        .section { margin-bottom: 20px; }
+        h1 { font-size: 14px; font-weight: 700; color: #000; padding: 8px 0; border-bottom: 2px solid #E91E8C; margin-bottom: 10px; }
+        h2 { font-size: 12px; font-weight: 600; color: #E91E8C; margin: 12px 0 6px; }
+        
+        /* Legend */
+        .legend { display: flex; gap: 12px; flex-wrap: wrap; padding: 8px; background: #F8F8F8; border-radius: 4px; margin-bottom: 12px; font-size: 10px; }
+        .legend-item { display: flex; align-items: center; gap: 4px; }
+        .legend-color { width: 16px; height: 16px; border-radius: 2px; }
+        
+        /* Scores */
+        .s-ex { background: #22C55E; color: #FFF; }
+        .s-gd { background: #84CC16; color: #000; }
+        .s-ad { background: #F59E0B; color: #000; }
+        .s-dv { background: #F97316; color: #FFF; }
+        .s-cr { background: #DC2626; color: #FFF; }
+        
+        /* Domain Grid */
+        .domain-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; margin-bottom: 12px; }
+        .domain-card { background: #F8F8F8; border: 1px solid #E0E0E0; border-radius: 6px; padding: 8px; text-align: center; }
+        .domain-name { font-size: 9px; font-weight: 500; margin-bottom: 4px; }
+        .domain-score { font-size: 20px; font-weight: 700; }
+        .domain-status { font-size: 8px; padding: 2px 6px; border-radius: 2px; display: inline-block; margin-top: 4px; }
+        
+        /* Heat Map Table */
+        .hm { width: 100%; border-collapse: collapse; font-size: 10px; margin-bottom: 12px; }
+        .hm th { background: #F0F0F0; color: #000; font-size: 9px; font-weight: 600; text-transform: uppercase; padding: 6px 4px; text-align: left; border-bottom: 1px solid #CCC; }
+        .hm td { padding: 4px; border-bottom: 1px solid #EEE; }
+        .hm tr:hover { background: #FAFAFA; }
+        .hm .id { width: 30px; color: #000; }
+        .hm .cat { }
+        .hm .sc { width: 50px; text-align: center; }
+        .hm .st { width: 70px; }
+        .hm .ch { width: 40px; text-align: center; }
+        .badge { display: inline-block; padding: 2px 8px; border-radius: 2px; font-weight: 600; font-size: 10px; }
+        .status { font-size: 8px; padding: 2px 6px; border-radius: 2px; }
+        .ch-pos { color: #22C55E; font-weight: 600; }
+        .ch-neg { color: #DC2626; font-weight: 600; }
+        .ch-neu { color: #000; }
+        
+        /* Priority Grid */
+        .priority-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+        .priority-card { background: #F8F8F8; border: 1px solid #E0E0E0; border-radius: 6px; padding: 10px; }
+        .priority-card.critical { border-left: 3px solid #DC2626; }
+        .priority-card.excellent { border-left: 3px solid #22C55E; }
+        .priority-title { font-size: 10px; font-weight: 600; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+        .priority-title .dot { width: 6px; height: 6px; border-radius: 50%; }
+        .priority-list { list-style: none; }
+        .priority-list li { display: flex; justify-content: space-between; padding: 3px 0; border-bottom: 1px solid #EEE; font-size: 10px; }
+        .priority-list li:last-child { border-bottom: none; }
+        
+        /* SME Table */
+        .sme { width: 100%; border-collapse: collapse; font-size: 9px; }
+        .sme th { background: #F0F0F0; color: #000; font-size: 8px; font-weight: 600; text-transform: uppercase; padding: 5px 4px; text-align: left; border-bottom: 1px solid #CCC; }
+        .sme td { padding: 4px; border-bottom: 1px solid #EEE; vertical-align: top; }
+        .sme .rec { font-style: italic; color: #000; font-size: 8px; }
+        
+        /* Footer */
+        .footer { text-align: center; padding: 15px 0; border-top: 1px solid #E0E0E0; margin-top: 20px; }
+        .footer-logo { font-size: 14px; font-weight: 700; color: #E91E8C; letter-spacing: 3px; }
+        .footer-meta { font-size: 9px; margin-top: 4px; }
+        
+        @media print { body { font-size: 9px; } .page { padding: 10px; } }
+    </style>
+</head>
+<body>
+    <div class="cover">
+        <div class="brand">CEPHO</div>
+        <div class="title">Chief of Staff KPI Report</div>
+        <div class="meta">18 January 2026 | 11:45 GMT+4 | 75 Categories | 50 SME Reviewers</div>
+        <div class="score-box">
+            <div class="score-label">Overall Score</div>
+            <div class="score-value">74<span class="score-max">/100</span></div>
+        </div>
+    </div>
+    
+    <div class="page">
+        <!-- Legend -->
+        <div class="legend">
+            <div class="legend-item"><div class="legend-color s-ex"></div><strong>90-100</strong> Excellent</div>
+            <div class="legend-item"><div class="legend-color s-gd"></div><strong>75-89</strong> Good</div>
+            <div class="legend-item"><div class="legend-color s-ad"></div><strong>60-74</strong> Adequate</div>
+            <div class="legend-item"><div class="legend-color s-dv"></div><strong>40-59</strong> Developing</div>
+            <div class="legend-item"><div class="legend-color s-cr"></div><strong>0-39</strong> Critical</div>
+        </div>
+        
+        <!-- Domain Summary -->
+        <div class="section">
+            <h1>Domain Summary (11 Domains)</h1>
+            <div class="domain-grid">
+                <div class="domain-card">
+                    <div class="domain-name">UI/UX</div>
+                    <div class="domain-score" style="color: #84CC16;">82</div>
+                    <div class="domain-status s-gd">Good</div>
+                </div>
+                <div class="domain-card">
+                    <div class="domain-name">Operations</div>
+                    <div class="domain-score" style="color: #84CC16;">86</div>
+                    <div class="domain-status s-gd">Good</div>
+                </div>
+                <div class="domain-card">
+                    <div class="domain-name">Technology</div>
+                    <div class="domain-score" style="color: #84CC16;">85</div>
+                    <div class="domain-status s-gd">Good</div>
+                </div>
+                <div class="domain-card">
+                    <div class="domain-name">Market</div>
+                    <div class="domain-score" style="color: #84CC16;">80</div>
+                    <div class="domain-status s-gd">Good</div>
+                </div>
+                <div class="domain-card">
+                    <div class="domain-name">Product</div>
+                    <div class="domain-score" style="color: #84CC16;">78</div>
+                    <div class="domain-status s-gd">Good</div>
+                </div>
+                <div class="domain-card">
+                    <div class="domain-name">Finance</div>
+                    <div class="domain-score" style="color: #84CC16;">76</div>
+                    <div class="domain-status s-gd">Good</div>
+                </div>
+                <div class="domain-card">
+                    <div class="domain-name">Innovation</div>
+                    <div class="domain-score" style="color: #84CC16;">75</div>
+                    <div class="domain-status s-gd">Good</div>
+                </div>
+                <div class="domain-card">
+                    <div class="domain-name">Strategy</div>
+                    <div class="domain-score" style="color: #F59E0B;">70</div>
+                    <div class="domain-status s-ad">Adequate</div>
+                </div>
+                <div class="domain-card">
+                    <div class="domain-name">Governance</div>
+                    <div class="domain-score" style="color: #F59E0B;">68</div>
+                    <div class="domain-status s-ad">Adequate</div>
+                </div>
+                <div class="domain-card">
+                    <div class="domain-name">Customer</div>
+                    <div class="domain-score" style="color: #F59E0B;">67</div>
+                    <div class="domain-status s-ad">Adequate</div>
+                </div>
+                <div class="domain-card">
+                    <div class="domain-name">People</div>
+                    <div class="domain-score" style="color: #F97316;">59</div>
+                    <div class="domain-status s-dv">Developing</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Priority Areas -->
+        <div class="section">
+            <h1>Priority Areas</h1>
+            <div class="priority-grid">
+                <div class="priority-card critical">
+                    <div class="priority-title"><span class="dot" style="background:#DC2626;"></span>Needs Attention (Below 60)</div>
+                    <ul class="priority-list">
+                        <li><span>Culture and Values</span><span style="color:#F97316;font-weight:600;">48</span></li>
+                        <li><span>Team Capability</span><span style="color:#F97316;font-weight:600;">52</span></li>
+                        <li><span>Customer Success Programs</span><span style="color:#F97316;font-weight:600;">52</span></li>
+                        <li><span>Customer Satisfaction</span><span style="color:#F97316;font-weight:600;">55</span></li>
+                        <li><span>Partnership Strategy</span><span style="color:#F97316;font-weight:600;">55</span></li>
+                        <li><span>Business Model Viability</span><span style="color:#F97316;font-weight:600;">58</span></li>
+                        <li><span>Product Market Fit</span><span style="color:#F97316;font-weight:600;">58</span></li>
+                        <li><span>Customer Support Quality</span><span style="color:#F97316;font-weight:600;">58</span></li>
+                    </ul>
+                </div>
+                <div class="priority-card excellent">
+                    <div class="priority-title"><span class="dot" style="background:#22C55E;"></span>Excellence (90+)</div>
+                    <ul class="priority-list">
+                        <li><span>Feature Completeness</span><span style="color:#22C55E;font-weight:600;">93</span></li>
+                        <li><span>System Reliability</span><span style="color:#22C55E;font-weight:600;">92</span></li>
+                        <li><span>Data Management</span><span style="color:#22C55E;font-weight:600;">92</span></li>
+                        <li><span>Visual Hierarchy</span><span style="color:#22C55E;font-weight:600;">92</span></li>
+                        <li><span>Platform Architecture</span><span style="color:#22C55E;font-weight:600;">91</span></li>
+                        <li><span>Quality Assurance</span><span style="color:#22C55E;font-weight:600;">91</span></li>
+                        <li><span>Onboarding Experience</span><span style="color:#22C55E;font-weight:600;">91</span></li>
+                        <li><span>Technical Debt Management</span><span style="color:#22C55E;font-weight:600;">90</span></li>
+                        <li><span>Navigation Clarity</span><span style="color:#22C55E;font-weight:600;">90</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Full Heat Map -->
+        <div class="section">
+            <h1>Full 75 Category Heat Map</h1>
+            
+            <h2>UI/UX Domain (25 Categories) - NEW</h2>
+            <table class="hm">
+                <thead><tr><th class="id">#</th><th class="cat">Category</th><th class="sc">Score</th><th class="st">Status</th><th class="ch">Δ</th></tr></thead>
+                <tbody>
+                    <tr><td class="id">51</td><td class="cat">Visual Hierarchy</td><td class="sc"><span class="badge s-ex">92</span></td><td class="st"><span class="status s-ex">Excellent</span></td><td class="ch ch-pos">+8</td></tr>
+                    <tr><td class="id">52</td><td class="cat">Navigation Clarity</td><td class="sc"><span class="badge s-ex">90</span></td><td class="st"><span class="status s-ex">Excellent</span></td><td class="ch ch-pos">+12</td></tr>
+                    <tr><td class="id">53</td><td class="cat">Information Architecture</td><td class="sc"><span class="badge s-gd">88</span></td><td class="st"><span class="status s-gd">Good</span></td><td class="ch ch-pos">+15</td></tr>
+                    <tr><td class="id">54</td><td class="cat">Responsive Design</td><td class="sc"><span class="badge s-gd">89</span></td><td class="st"><span class="status s-gd">Good</span></td><td class="ch ch-pos">+20</td></tr>
+                    <tr><td class="id">55</td><td class="cat">Touch Target Sizing</td><td class="sc"><span class="badge s-gd">85</span></td><td class="st"><span class="status s-gd">Good</span></td><td class="ch ch-pos">+18</td></tr>
+                    <tr><td class="id">56</td><td class="cat">Loading Performance</td><td class="sc"><span class="badge s-gd">87</span></td><td class="st"><span class="status s-gd">Good</span></td><td class="ch ch-pos">+22</td></tr>
+                    <tr><td class="id">57</td><td class="cat">Error Handling UX</td><td class="sc"><span class="badge s-gd">82</span></td><td class="st"><span class="status s-gd">Good</span></td><td class="ch ch-pos">+25</td></tr>
+                    <tr><td class="id">58</td><td class="cat">Form Usability</td><td class="sc"><span class="badge s-gd">84</span></td><td class="st"><span class="status s-gd">Good</span></td><td class="ch ch-pos">+16</td></tr>
+                    <tr><td class="id">59</td><td class="cat">Feedback Mechanisms</td><td class="sc"><span class="badge s-gd">86</span></td><td class="st"><span class="status s-gd">Good</span></td><td class="ch ch-pos">+19</td></tr>
+                    <tr><td class="id">60</td><td class="cat">Consistency</td><td class="sc"><span class="badge s-gd">88</span></td><td class="st"><span class="status s-gd">Good</span></td><td class="ch ch-pos">+14</td></tr>
+                    <tr><td class="id">61</td><td class="cat">Micro-interactions</td><td class="sc"><span class="badge s-gd">83</span></td><td class="st"><span class="status s-gd">Good</span></td><td class="ch ch-pos">+28</td></tr>
+                    <tr><td class="id">62</td><td class="cat">Empty States</td><td class="sc"><span class="badge s-gd">80</span></td><td class="st"><span class="status s-gd">Good</span></td><td class="ch ch-pos">+35</td></tr>
+                    <tr><td class="id">63</td><td class="cat">Skeleton Loading</td><td class="sc"><span class="badge s-gd">85</span></td><td class="st"><span class="status s-gd">Good</span></td><td class="ch ch-pos">+40</td></tr>
+                    <tr><td class="id">64</td><td class="cat">Color Contrast</td><td class="sc"><span class="badge s-gd">78</span></td><td class="st"><span class="status s-gd">Good</span></td><td class="ch ch-pos">+10</td></tr>
+                    <tr><td class="id">65</td><td class="cat">Typography Readability</td><td class="sc"><span class="badge s-gd">82</span></td><td class="st"><span class="status s-gd">Good</span></td><td class="ch ch-pos">+12</td></tr>
+                    <tr><td class="id">66</td><td class="cat">Icon Clarity</td><td class="sc"><span class="badge s-gd">79</span></td><td class="st"><span class="status s-gd">Good</span></td><td class="ch ch-pos">+8</td></tr>
+                    <tr><td class="id">67</td><td class="cat">Keyboard Navigation</td><td class="sc"><span class="badge s-gd">76</span></td><td class="st"><span class="status s-gd">Good</span></td><td class="ch ch-pos">+30</td></tr>
+                    <tr><td class="id">68</td><td class="cat">Screen Reader Support</td><td class="sc"><span class="badge s-ad">72</span></td><td class="st"><span class="status s-ad">Adequate</span></td><td class="ch ch-pos">+25</td></tr>
+                    <tr><td class="id">69</td><td class="cat">Focus Management</td><td class="sc"><span class="badge s-gd">78</span></td><td class="st"><span class="status s-gd">Good</span></td><td class="ch ch-pos">+32</td></tr>
+                    <tr><td class="id">70</td><td class="cat">Motion Design</td><td class="sc"><span class="badge s-gd">81</span></td><td class="st"><span class="status s-gd">Good</span></td><td class="ch ch-pos">+36</td></tr>
+                    <tr><td class="id">71</td><td class="cat">Dark Mode Quality</td><td class="sc"><span class="badge s-gd">88</span></td><td class="st"><span class="status s-gd">Good</span></td><td class="ch ch-pos">+15</td></tr>
+                    <tr><td class="id">72</td><td class="cat">Voice Interface</td><td class="sc"><span class="badge s-gd">85</span></td><td class="st"><span class="status s-gd">Good</span></td><td class="ch ch-pos">+45</td></tr>
+                    <tr><td class="id">73</td><td class="cat">Gesture Support</td><td class="sc"><span class="badge s-gd">77</span></td><td class="st"><span class="status s-gd">Good</span></td><td class="ch ch-pos">+22</td></tr>
+                    <tr><td class="id">74</td><td class="cat">Offline Experience</td><td class="sc"><span class="badge s-gd">75</span></td><td class="st"><span class="status s-gd">Good</span></td><td class="ch ch-pos">+38</td></tr>
+                    <tr><td class="id">75</td><td class="cat">PWA Quality</td><td class="sc"><span class="badge s-gd">80</span></td><td class="st"><span class="status s-gd">Good</span></td><td class="ch ch-pos">+42</td></tr>
+                </tbody>
+            </table>
+            
+            <h2>Strategy Domain (6 Categories)</h2>
+            <table class="hm">
+                <thead><tr><th class="id">#</th><th class="cat">Category</th><th class="sc">Score</th><th class="st">Status</th><th class="ch">Δ</th></tr></thead>
+                <tbody>
+                    <tr><td class="id">1</td><td class="cat">Vision and Mission Clarity</td><td class="sc"><span class="badge s-gd">78</span></td><td class="st"><span class="status s-gd">Good</span></td><td class="ch ch-pos">+6</td></tr>
+                    <tr><td class="id">2</td><td class="cat">Strategic Positioning</td><td class="sc"><span class="badge s-ad">62</span></td><td class="st"><span class="status s-ad">Adequate</span></td><td class="ch ch-pos">+17</td></tr>
+                    <tr><td class="id">3</td><td class="cat">Business Model Viability</td><td class="sc"><span class="badge s-dv">58</span></td><td class="st"><span class="status s-dv">Developing</span></td><td class="ch ch-pos">+14</td></tr>
+                    <tr><td class="id">4</td><td class="cat">Go to Market Strategy</td><td class="sc"><span class="badge s-gd">85</span></td><td class="st"><span class="status s-gd">Good</span></td><td class="ch ch-pos">+2</td></tr>
+                    <tr><td class="id">5</td><td class="cat">Partnership and Alliance Strategy</td><td class="sc"><span class="badge s-dv">55</span></td><td class="st"><span class="status s-dv">Developing</span></td><td class="ch ch-pos">+17</td></tr>
+                    <tr><td class="id">6</td><td class="cat">Exit Strategy Readiness</td><td class="sc"><span class="badge s-gd">80</span></td><td class="st"><span class="status s-gd">Good</span></td><td class="ch ch-pos">+2</td></tr>
+                </tbody>
+            </table>
+            
+            <h2>Technology Domain (8 Categories)</h2>
+            <table class="hm">
+                <thead><tr><th class="id">#</th><th class="cat">Category</th><th class="sc">Score</th><th class="st">Status</th><th class="ch">Δ</th></tr></thead>
+                <tbody>
+                    <tr><td class="id">7</td><td class="cat">Platform Architecture</td><td class="sc"><span class="badge s-ex">91</span></td><td class="st"><span class="status s-ex">Excellent</span></td><td class="ch ch-pos">+7</td></tr>
+                    <tr><td class="id">8</td><td class="cat">AI and Machine Learning</td><td class="sc"><span class="badge s-gd">78</span></td><td class="st"><span class="status s-gd">Good</span></td><td class="ch ch-pos">+45</td></tr>
+                    <tr><td class="id">9</td><td class="cat">Security and Compliance</td><td class="sc"><span class="badge s-gd">85</span></td><td class="st"><span class="status s-gd">Good</span></td><td class="ch ch-pos">+7</td></tr>
+                    <tr><td class="id">10</td><td class="cat">System Reliability</td><td class="sc"><span class="badge s-ex">92</span></td><td class="st"><span class="status s-ex">Excellent</span></td><td class="ch ch-pos">+5</td></tr>
+                    <tr><td class="id">11</td><td class="cat">Integration Capabilities</td><td class="sc"><span class="badge s-gd">82</span></td><td class="st"><span class="status s-gd">Good</span></td><td class="ch ch-pos">+35</td></tr>
+                    <tr><td class="id">12</td><td class="cat">Development Velocity</td><td class="sc"><span class="badge s-gd">88</span></td><td class="st"><span class="status s-gd">Good</span></td><td class="ch ch-pos">+45</td></tr>
+                    <tr><td class="id">13</td><td class="cat">Technical Documentation</td><td class="sc"><span class="badge s-gd">75</span></td><td class="st"><span class="status s-gd">Good</span></td><td class="ch ch-pos">+15</td></tr>
+                    <tr><td class="id">14</td><td class="cat">Technical Debt Management</td><td class="sc"><span class="badge s-ex">90</span></td><td class="st"><span class="status s-ex">Excellent</span></td><td class="ch ch-pos">+2</td></tr>
+                </tbody>
+            </table>
+            
+            <h2>Product Domain (8 Categories)</h2>
+            <table class="hm">
+                <thead><tr><th class="id">#</th><th class="cat">Category</th><th class="sc">Score</th><th class="st">Status</th><th class="ch">Δ</th></tr></thead>
+                <tbody>
+                    <tr><td class="id">15</td><td class="cat">Product Market Fit</td><td class="sc"><span class="badge s-dv">58</span></td><td class="st"><span class="status s-dv">Developing</span></td><td class="ch ch-pos">+18</td></tr>
+                    <tr><td class="id">16</td><td class="cat">User Experience Quality</td><td class="sc"><span class="badge s-gd">82</span></td><td class="st"><span class="status s-gd">Good</span></td><td class="ch ch-pos">+33</td></tr>
+                    <tr><td class="id">17</td><td class="cat">Feature Completeness</td><td class="sc"><span class="badge s-ex">93</span></td><td class="st"><span class="status s-ex">Excellent</span></td><td class="ch ch-pos">+7</td></tr>
+                    <tr><td class="id">18</td><td class="cat">Product Differentiation</td><td class="sc"><span class="badge s-gd">78</span></td><td class="st"><span class="status s-gd">Good</span></td><td class="ch ch-pos">+6</td></tr>
+                    <tr><td class="id">19</td><td class="cat">Mobile Experience</td><td class="sc"><span class="badge s-gd">85</span></td><td class="st"><span class="status s-gd">Good</span></td><td class="ch ch-pos">+12</td></tr>
+                    <tr><td class="id">20</td><td class="cat">Accessibility Compliance</td><td class="sc"><span class="badge s-ad">72</span></td><td class="st"><span class="status s-ad">Adequate</span></td><td class="ch ch-pos">+16</td></tr>
+                    <tr><td class="id">21</td><td class="cat">Product Roadmap Clarity</td><td class="sc"><span class="badge s-ad">68</span></td><td class="st"><span class="status s-ad">Adequate</span></td><td class="ch ch-pos">+28</td></tr>
+                    <tr><td class="id">22</td><td class="cat">Onboarding Experience</td><td class="sc"><span class="badge s-ex">91</span></td><td class="st"><span class="status s-ex">Excellent</span></td><td class="ch ch-pos">+6</td></tr>
+                </tbody>
+            </table>
+            
+            <h2>Customer Domain (8 Categories)</h2>
+            <table class="hm">
+                <thead><tr><th class="id">#</th><th class="cat">Category</th><th class="sc">Score</th><th class="st">Status</th><th class="ch">Δ</th></tr></thead>
+                <tbody>
+                    <tr><td class="id">23</td><td class="cat">Customer Satisfaction</td><td class="sc"><span class="badge s-dv">55</span></td><td class="st"><span class="status s-dv">Developing</span></td><td class="ch ch-pos">+16</td></tr>
+                    <tr><td class="id">24</td><td class="cat">Customer Retention</td><td class="sc"><span class="badge s-gd">80</span></td><td class="st"><span class="status s-gd">Good</span></td><td class="ch ch-pos">+3</td></tr>
+                    <tr><td class="id">25</td><td class="cat">Customer Support Quality</td><td class="sc"><span class="badge s-dv">58</span></td><td class="st"><span class="status s-dv">Developing</span></td><td class="ch ch-pos">+16</td></tr>
+                    <tr><td class="id">26</td><td class="cat">Customer Success Programs</td><td class="sc"><span class="badge s-dv">52</span></td><td class="st"><span class="status s-dv">Developing</span></td><td class="ch ch-pos">+15</td></tr>
+                    <tr><td class="id">27</td><td class="cat">Customer Feedback Integration</td><td class="sc"><span class="badge s-gd">75</span></td><td class="st"><span class="status s-gd">Good</span></td><td class="ch ch-pos">+14</td></tr>
+                    <tr><td class="id">28</td><td class="cat">Customer Segmentation</td><td class="sc"><span class="badge s-ad">72</span></td><td class="st"><span class="status s-ad">Adequate</span></td><td class="ch ch-pos">+5</td></tr>
+                    <tr><td class="id">29</td><td class="cat">Customer Advocacy</td><td class="sc"><span class="badge s-ad">65</span></td><td class="st"><span class="status s-ad">Adequate</span></td><td class="ch ch-pos">+7</td></tr>
+                    <tr><td class="id">30</td><td class="cat">Customer Education</td><td class="sc"><span class="badge s-gd">78</span></td><td class="st"><span class="status s-gd">Good</span></td><td class="ch ch-pos">+6</td></tr>
+                </tbody>
+            </table>
+            
+            <h2>Operations Domain (6 Categories)</h2>
+            <table class="hm">
+                <thead><tr><th class="id">#</th><th class="cat">Category</th><th class="sc">Score</th><th class="st">Status</th><th class="ch">Δ</th></tr></thead>
+                <tbody>
+                    <tr><td class="id">31</td><td class="cat">Process Efficiency</td><td class="sc"><span class="badge s-gd">88</span></td><td class="st"><span class="status s-gd">Good</span></td><td class="ch ch-pos">+3</td></tr>
+                    <tr><td class="id">32</td><td class="cat">Quality Assurance</td><td class="sc"><span class="badge s-ex">91</span></td><td class="st"><span class="status s-ex">Excellent</span></td><td class="ch ch-pos">+9</td></tr>
+                    <tr><td class="id">33</td><td class="cat">Vendor Management</td><td class="sc"><span class="badge s-gd">86</span></td><td class="st"><span class="status s-gd">Good</span></td><td class="ch ch-neu">0</td></tr>
+                    <tr><td class="id">34</td><td class="cat">Scalability Readiness</td><td class="sc"><span class="badge s-gd">78</span></td><td class="st"><span class="status s-gd">Good</span></td><td class="ch ch-pos">+13</td></tr>
+                    <tr><td class="id">35</td><td class="cat">Business Continuity</td><td class="sc"><span class="badge s-gd">80</span></td><td class="st"><span class="status s-gd">Good</span></td><td class="ch ch-pos">+4</td></tr>
+                    <tr><td class="id">36</td><td class="cat">Data Management</td><td class="sc"><span class="badge s-ex">92</span></td><td class="st"><span class="status s-ex">Excellent</span></td><td class="ch ch-pos">+3</td></tr>
+                </tbody>
+            </table>
+            
+            <h2>Finance Domain (6 Categories)</h2>
+            <table class="hm">
+                <thead><tr><th class="id">#</th><th class="cat">Category</th><th class="sc">Score</th><th class="st">Status</th><th class="ch">Δ</th></tr></thead>
+                <tbody>
+                    <tr><td class="id">37</td><td class="cat">Revenue Growth</td><td class="sc"><span class="badge s-ad">72</span></td><td class="st"><span class="status s-ad">Adequate</span></td><td class="ch ch-pos">+1</td></tr>
+                    <tr><td class="id">38</td><td class="cat">Unit Economics</td><td class="sc"><span class="badge s-gd">88</span></td><td class="st"><span class="status s-gd">Good</span></td><td class="ch ch-neu">0</td></tr>
+                    <tr><td class="id">39</td><td class="cat">Cash Flow Management</td><td class="sc"><span class="badge s-gd">82</span></td><td class="st"><span class="status s-gd">Good</span></td><td class="ch ch-pos">+1</td></tr>
+                    <tr><td class="id">40</td><td class="cat">Financial Reporting</td><td class="sc"><span class="badge s-gd">80</span></td><td class="st"><span class="status s-gd">Good</span></td><td class="ch ch-pos">+1</td></tr>
+                    <tr><td class="id">41</td><td class="cat">Pricing Strategy</td><td class="sc"><span class="badge s-ad">68</span></td><td class="st"><span class="status s-ad">Adequate</span></td><td class="ch ch-pos">+8</td></tr>
+                    <tr><td class="id">42</td><td class="cat">Investor Relations</td><td class="sc"><span class="badge s-ad">65</span></td><td class="st"><span class="status s-ad">Adequate</span></td><td class="ch ch-pos">+9</td></tr>
+                </tbody>
+            </table>
+            
+            <h2>People Domain (4 Categories)</h2>
+            <table class="hm">
+                <thead><tr><th class="id">#</th><th class="cat">Category</th><th class="sc">Score</th><th class="st">Status</th><th class="ch">Δ</th></tr></thead>
+                <tbody>
+                    <tr><td class="id">43</td><td class="cat">Team Capability</td><td class="sc"><span class="badge s-dv">52</span></td><td class="st"><span class="status s-dv">Developing</span></td><td class="ch ch-pos">+16</td></tr>
+                    <tr><td class="id">44</td><td class="cat">Leadership Effectiveness</td><td class="sc"><span class="badge s-ad">72</span></td><td class="st"><span class="status s-ad">Adequate</span></td><td class="ch ch-pos">+7</td></tr>
+                    <tr><td class="id">45</td><td class="cat">Culture and Values</td><td class="sc"><span class="badge s-dv">48</span></td><td class="st"><span class="status s-dv">Developing</span></td><td class="ch ch-pos">+17</td></tr>
+                    <tr><td class="id">46</td><td class="cat">Talent Acquisition</td><td class="sc"><span class="badge s-ad">62</span></td><td class="st"><span class="status s-ad">Adequate</span></td><td class="ch ch-pos">+7</td></tr>
+                </tbody>
+            </table>
+            
+            <h2>Governance Domain (2 Categories)</h2>
+            <table class="hm">
+                <thead><tr><th class="id">#</th><th class="cat">Category</th><th class="sc">Score</th><th class="st">Status</th><th class="ch">Δ</th></tr></thead>
+                <tbody>
+                    <tr><td class="id">47</td><td class="cat">Corporate Governance</td><td class="sc"><span class="badge s-ad">70</span></td><td class="st"><span class="status s-ad">Adequate</span></td><td class="ch ch-pos">+7</td></tr>
+                    <tr><td class="id">48</td><td class="cat">Legal and Regulatory</td><td class="sc"><span class="badge s-ad">65</span></td><td class="st"><span class="status s-ad">Adequate</span></td><td class="ch ch-pos">+17</td></tr>
+                </tbody>
+            </table>
+            
+            <h2>Innovation Domain (1 Category)</h2>
+            <table class="hm">
+                <thead><tr><th class="id">#</th><th class="cat">Category</th><th class="sc">Score</th><th class="st">Status</th><th class="ch">Δ</th></tr></thead>
+                <tbody>
+                    <tr><td class="id">49</td><td class="cat">Innovation Pipeline</td><td class="sc"><span class="badge s-gd">75</span></td><td class="st"><span class="status s-gd">Good</span></td><td class="ch ch-pos">+45</td></tr>
+                </tbody>
+            </table>
+            
+            <h2>Market Domain (1 Category)</h2>
+            <table class="hm">
+                <thead><tr><th class="id">#</th><th class="cat">Category</th><th class="sc">Score</th><th class="st">Status</th><th class="ch">Δ</th></tr></thead>
+                <tbody>
+                    <tr><td class="id">50</td><td class="cat">Market Position and Share</td><td class="sc"><span class="badge s-gd">80</span></td><td class="st"><span class="status s-gd">Good</span></td><td class="ch ch-pos">+3</td></tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- SME Panel Reviews with Recommendations -->
+        <div class="section">
+            <h1>SME Panel Reviews (50 Reviewers)</h1>
+            
+            <h2>Technology Panel (8 Reviewers) - Avg: 87/100</h2>
+            <table class="sme">
+                <thead><tr><th>#</th><th>Reviewer</th><th>Role</th><th>Score</th><th>Recommendation</th></tr></thead>
+                <tbody>
+                    <tr><td><strong>1</strong></td><td>Dr Sarah Chen</td><td>Cloud Architecture</td><td><span class="badge s-gd">88</span></td><td class="rec">Implement edge caching for global latency reduction</td></tr>
+                    <tr><td><strong>2</strong></td><td>Marcus Webb</td><td>AI Systems</td><td><span class="badge s-gd">85</span></td><td class="rec">Add model versioning and A/B testing framework</td></tr>
+                    <tr><td><strong>3</strong></td><td>Elena Rodriguez</td><td>Security</td><td><span class="badge s-gd">86</span></td><td class="rec">Implement zero-trust architecture for API layer</td></tr>
+                    <tr><td><strong>4</strong></td><td>James Okonkwo</td><td>DevOps</td><td><span class="badge s-ex">90</span></td><td class="rec">Add chaos engineering tests for resilience</td></tr>
+                    <tr><td><strong>5</strong></td><td>Dr Aisha Patel</td><td>Data Science</td><td><span class="badge s-gd">87</span></td><td class="rec">Implement real-time analytics pipeline</td></tr>
+                    <tr><td><strong>6</strong></td><td>Thomas Eriksson</td><td>Backend</td><td><span class="badge s-gd">89</span></td><td class="rec">Optimize database queries for scale</td></tr>
+                    <tr><td><strong>7</strong></td><td>Yuki Tanaka</td><td>Mobile</td><td><span class="badge s-gd">85</span></td><td class="rec">Add offline-first sync for mobile app</td></tr>
+                    <tr><td><strong>8</strong></td><td>Raj Krishnan</td><td>Infrastructure</td><td><span class="badge s-gd">86</span></td><td class="rec">Multi-region deployment for disaster recovery</td></tr>
+                </tbody>
+            </table>
+            
+            <h2>UI/UX Panel (8 Reviewers) - Avg: 84/100</h2>
+            <table class="sme">
+                <thead><tr><th>#</th><th>Reviewer</th><th>Role</th><th>Score</th><th>Recommendation</th></tr></thead>
+                <tbody>
+                    <tr><td><strong>9</strong></td><td>Lisa Park</td><td>UX Research</td><td><span class="badge s-gd">84</span></td><td class="rec">Conduct usability testing with 20+ users monthly</td></tr>
+                    <tr><td><strong>10</strong></td><td>David Müller</td><td>Interaction Design</td><td><span class="badge s-gd">86</span></td><td class="rec">Reduce cognitive load in complex workflows</td></tr>
+                    <tr><td><strong>11</strong></td><td>Priya Sharma</td><td>Accessibility</td><td><span class="badge s-gd">78</span></td><td class="rec">Achieve WCAG 2.1 AA compliance across all pages</td></tr>
+                    <tr><td><strong>12</strong></td><td>Tom Anderson</td><td>Mobile UX</td><td><span class="badge s-gd">88</span></td><td class="rec">Optimize thumb-zone placement for key actions</td></tr>
+                    <tr><td><strong>13</strong></td><td>Sophie Laurent</td><td>Visual Design</td><td><span class="badge s-gd">85</span></td><td class="rec">Strengthen brand consistency in micro-interactions</td></tr>
+                    <tr><td><strong>14</strong></td><td>Chen Wei</td><td>Motion Design</td><td><span class="badge s-gd">83</span></td><td class="rec">Add purposeful animations for state changes</td></tr>
+                    <tr><td><strong>15</strong></td><td>Anna Kowalski</td><td>Information Arch</td><td><span class="badge s-gd">82</span></td><td class="rec">Simplify navigation depth to 3 levels max</td></tr>
+                    <tr><td><strong>16</strong></td><td>Michael Santos</td><td>Design Systems</td><td><span class="badge s-gd">86</span></td><td class="rec">Document component library for consistency</td></tr>
+                </tbody>
+            </table>
+            
+            <h2>Strategy Panel (6 Reviewers) - Avg: 71/100</h2>
+            <table class="sme">
+                <thead><tr><th>#</th><th>Reviewer</th><th>Role</th><th>Score</th><th>Recommendation</th></tr></thead>
+                <tbody>
+                    <tr><td><strong>17</strong></td><td>Victoria Sterling</td><td>Strategy Partner</td><td><span class="badge s-ad">72</span></td><td class="rec">Define 3-year strategic roadmap with milestones</td></tr>
+                    <tr><td><strong>18</strong></td><td>Robert Chang</td><td>Market Analyst</td><td><span class="badge s-gd">75</span></td><td class="rec">Expand TAM analysis to adjacent markets</td></tr>
+                    <tr><td><strong>19</strong></td><td>Amanda Foster</td><td>Business Dev</td><td><span class="badge s-ad">68</span></td><td class="rec">Build partnership pipeline with 10 strategic targets</td></tr>
+                    <tr><td><strong>20</strong></td><td>Michael Torres</td><td>Investment</td><td><span class="badge s-ad">70</span></td><td class="rec">Prepare investor deck for Series A readiness</td></tr>
+                    <tr><td><strong>21</strong></td><td>Dr Helen Wright</td><td>Competitive Intel</td><td><span class="badge s-ad">72</span></td><td class="rec">Establish monthly competitor tracking dashboard</td></tr>
+                    <tr><td><strong>22</strong></td><td>Jonathan Blake</td><td>M&A Advisory</td><td><span class="badge s-ad">69</span></td><td class="rec">Identify potential acquisition targets in AI space</td></tr>
+                </tbody>
+            </table>
+            
+            <h2>Operations Panel (6 Reviewers) - Avg: 89/100</h2>
+            <table class="sme">
+                <thead><tr><th>#</th><th>Reviewer</th><th>Role</th><th>Score</th><th>Recommendation</th></tr></thead>
+                <tbody>
+                    <tr><td><strong>23</strong></td><td>Jennifer Wu</td><td>Operations Dir</td><td><span class="badge s-gd">88</span></td><td class="rec">Automate 80% of manual operational tasks</td></tr>
+                    <tr><td><strong>24</strong></td><td>Carlos Mendez</td><td>Process Engineer</td><td><span class="badge s-gd">86</span></td><td class="rec">Implement continuous improvement framework</td></tr>
+                    <tr><td><strong>25</strong></td><td>Sarah O'Brien</td><td>Quality Manager</td><td><span class="badge s-ex">91</span></td><td class="rec">Add automated regression testing suite</td></tr>
+                    <tr><td><strong>26</strong></td><td>Ahmed Hassan</td><td>Data Governance</td><td><span class="badge s-ex">90</span></td><td class="rec">Implement data lineage tracking</td></tr>
+                    <tr><td><strong>27</strong></td><td>Maria Gonzalez</td><td>Supply Chain</td><td><span class="badge s-gd">88</span></td><td class="rec">Diversify vendor dependencies</td></tr>
+                    <tr><td><strong>28</strong></td><td>Peter Johansson</td><td>Scalability</td><td><span class="badge s-ex">91</span></td><td class="rec">Load test for 10x current capacity</td></tr>
+                </tbody>
+            </table>
+            
+            <h2>Finance Panel (6 Reviewers) - Avg: 77/100</h2>
+            <table class="sme">
+                <thead><tr><th>#</th><th>Reviewer</th><th>Role</th><th>Score</th><th>Recommendation</th></tr></thead>
+                <tbody>
+                    <tr><td><strong>29</strong></td><td>Richard Thompson</td><td>CFO Advisor</td><td><span class="badge s-gd">76</span></td><td class="rec">Build 18-month financial model with scenarios</td></tr>
+                    <tr><td><strong>30</strong></td><td>Maria Santos</td><td>Financial Analyst</td><td><span class="badge s-gd">78</span></td><td class="rec">Implement real-time revenue dashboards</td></tr>
+                    <tr><td><strong>31</strong></td><td>Kevin O'Neill</td><td>Unit Economics</td><td><span class="badge s-gd">82</span></td><td class="rec">Optimize CAC/LTV ratio to 1:4 target</td></tr>
+                    <tr><td><strong>32</strong></td><td>Diana Patel</td><td>Investor Relations</td><td><span class="badge s-ad">72</span></td><td class="rec">Create monthly investor update cadence</td></tr>
+                    <tr><td><strong>33</strong></td><td>George Williams</td><td>Pricing Strategy</td><td><span class="badge s-gd">75</span></td><td class="rec">A/B test pricing tiers with cohort analysis</td></tr>
+                    <tr><td><strong>34</strong></td><td>Susan Chen</td><td>Treasury</td><td><span class="badge s-gd">79</span></td><td class="rec">Extend runway to 24 months minimum</td></tr>
+                </tbody>
+            </table>
+            
+            <h2>Customer Panel (6 Reviewers) - Avg: 69/100</h2>
+            <table class="sme">
+                <thead><tr><th>#</th><th>Reviewer</th><th>Role</th><th>Score</th><th>Recommendation</th></tr></thead>
+                <tbody>
+                    <tr><td><strong>35</strong></td><td>Emma Wilson</td><td>Customer Success</td><td><span class="badge s-ad">68</span></td><td class="rec">Implement proactive health scoring for accounts</td></tr>
+                    <tr><td><strong>36</strong></td><td>Jason Kim</td><td>Support Ops</td><td><span class="badge s-ad">65</span></td><td class="rec">Reduce first response time to under 2 hours</td></tr>
+                    <tr><td><strong>37</strong></td><td>Rachel Green</td><td>Customer Research</td><td><span class="badge s-ad">70</span></td><td class="rec">Launch NPS program with quarterly surveys</td></tr>
+                    <tr><td><strong>38</strong></td><td>Daniel Brown</td><td>Community</td><td><span class="badge s-ad">72</span></td><td class="rec">Build customer community with 1000+ members</td></tr>
+                    <tr><td><strong>39</strong></td><td>Olivia Martinez</td><td>Onboarding</td><td><span class="badge s-ad">70</span></td><td class="rec">Reduce time-to-value to under 7 days</td></tr>
+                    <tr><td><strong>40</strong></td><td>William Taylor</td><td>Retention</td><td><span class="badge s-ad">69</span></td><td class="rec">Implement churn prediction model</td></tr>
+                </tbody>
+            </table>
+            
+            <h2>Legal Panel (4 Reviewers) - Avg: 68/100</h2>
+            <table class="sme">
+                <thead><tr><th>#</th><th>Reviewer</th><th>Role</th><th>Score</th><th>Recommendation</th></tr></thead>
+                <tbody>
+                    <tr><td><strong>41</strong></td><td>Catherine Moore</td><td>General Counsel</td><td><span class="badge s-ad">68</span></td><td class="rec">Complete SOC 2 Type II certification</td></tr>
+                    <tr><td><strong>42</strong></td><td>Patrick Sullivan</td><td>Compliance</td><td><span class="badge s-ad">65</span></td><td class="rec">Implement GDPR compliance automation</td></tr>
+                    <tr><td><strong>43</strong></td><td>Natalie Chen</td><td>Privacy</td><td><span class="badge s-ad">70</span></td><td class="rec">Conduct annual privacy impact assessments</td></tr>
+                    <tr><td><strong>44</strong></td><td>Andrew Walsh</td><td>Corporate</td><td><span class="badge s-ad">68</span></td><td class="rec">Establish board advisory committee</td></tr>
+                </tbody>
+            </table>
+            
+            <h2>People Panel (6 Reviewers) - Avg: 59/100</h2>
+            <table class="sme">
+                <thead><tr><th>#</th><th>Reviewer</th><th>Role</th><th>Score</th><th>Recommendation</th></tr></thead>
+                <tbody>
+                    <tr><td><strong>45</strong></td><td>Michelle Taylor</td><td>HR Director</td><td><span class="badge s-dv">58</span></td><td class="rec">Define clear career progression frameworks</td></tr>
+                    <tr><td><strong>46</strong></td><td>Steven Clark</td><td>Talent Acquisition</td><td><span class="badge s-ad">62</span></td><td class="rec">Build employer brand with content strategy</td></tr>
+                    <tr><td><strong>47</strong></td><td>Laura Martinez</td><td>Culture Lead</td><td><span class="badge s-dv">55</span></td><td class="rec">Document and communicate core values</td></tr>
+                    <tr><td><strong>48</strong></td><td>Brian Johnson</td><td>Learning Dev</td><td><span class="badge s-ad">60</span></td><td class="rec">Launch internal training academy</td></tr>
+                    <tr><td><strong>49</strong></td><td>Nicole Adams</td><td>Employee Exp</td><td><span class="badge s-dv">58</span></td><td class="rec">Implement quarterly engagement surveys</td></tr>
+                    <tr><td><strong>50</strong></td><td>Christopher Lee</td><td>Compensation</td><td><span class="badge s-ad">61</span></td><td class="rec">Benchmark salaries against market data</td></tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Key Insights -->
+        <div class="section">
+            <h1>Key Insights & Top Priority Recommendations</h1>
+            <table class="hm">
+                <thead><tr><th>#</th><th>Priority</th><th>Area</th><th>Issue</th><th>Recommendation</th><th>Impact</th></tr></thead>
+                <tbody>
+                    <tr><td><strong>47</strong></td><td style="color:#DC2626;font-weight:600;">P1</td><td>People</td><td>Culture undefined</td><td>Document core values, run culture workshops</td><td>+15 pts</td></tr>
+                    <tr><td><strong>36</strong></td><td style="color:#DC2626;font-weight:600;">P1</td><td>Customer</td><td>Low satisfaction</td><td>Reduce first response time to under 2 hours</td><td>+12 pts</td></tr>
+                    <tr><td><strong>45</strong></td><td style="color:#DC2626;font-weight:600;">P1</td><td>People</td><td>Team capability gaps</td><td>Define clear career progression frameworks</td><td>+10 pts</td></tr>
+                    <tr><td><strong>19</strong></td><td style="color:#F59E0B;font-weight:600;">P2</td><td>Strategy</td><td>Partnership weakness</td><td>Build partnership pipeline with 10 strategic targets</td><td>+8 pts</td></tr>
+                    <tr><td><strong>9</strong></td><td style="color:#F59E0B;font-weight:600;">P2</td><td>Product</td><td>Market fit unclear</td><td>Conduct usability testing with 20+ users monthly</td><td>+8 pts</td></tr>
+                    <tr><td><strong>11</strong></td><td style="color:#F59E0B;font-weight:600;">P2</td><td>UI/UX</td><td>Accessibility gaps</td><td>Achieve WCAG 2.1 AA compliance across all pages</td><td>+6 pts</td></tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="footer">
+            <div class="footer-logo">CEPHO.Ai</div>
+            <div class="footer-meta">18 January 2026 | 11:45 GMT+4 | 75 Categories | 50 SME Reviewers | Confidential</div>
+        </div>
+    </div>
+</body>
+</html>

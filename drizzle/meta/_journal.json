@@ -1,0 +1,209 @@
+{
+  "version": "7",
+  "dialect": "mysql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1768040529888,
+      "tag": "0000_bizarre_stryfe",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1768123104738,
+      "tag": "0001_sloppy_giant_girl",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1768126010745,
+      "tag": "0002_nasty_risque",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1768128497891,
+      "tag": "0003_nebulous_swarm",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1768128629234,
+      "tag": "0004_majestic_reaper",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1768129991563,
+      "tag": "0005_greedy_lady_mastermind",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1768140633800,
+      "tag": "0006_mysterious_blazing_skull",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "5",
+      "when": 1768142189334,
+      "tag": "0007_icy_zodiak",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "5",
+      "when": 1768202261800,
+      "tag": "0008_concerned_talkback",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "5",
+      "when": 1768243420268,
+      "tag": "0009_broad_magdalene",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "5",
+      "when": 1768302955767,
+      "tag": "0010_giant_mariko_yashida",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "5",
+      "when": 1768572271764,
+      "tag": "0011_tidy_impossible_man",
+      "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "5",
+      "when": 1768585509942,
+      "tag": "0012_aspiring_argent",
+      "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "5",
+      "when": 1768585884883,
+      "tag": "0013_cheerful_the_anarchist",
+      "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "5",
+      "when": 1768591391788,
+      "tag": "0014_skinny_swordsman",
+      "breakpoints": true
+    },
+    {
+      "idx": 15,
+      "version": "5",
+      "when": 1768592436756,
+      "tag": "0015_awesome_mauler",
+      "breakpoints": true
+    },
+    {
+      "idx": 16,
+      "version": "5",
+      "when": 1768598371773,
+      "tag": "0016_amusing_zodiak",
+      "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "5",
+      "when": 1768626544919,
+      "tag": "0017_aromatic_outlaw_kid",
+      "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "5",
+      "when": 1768638791624,
+      "tag": "0018_volatile_gambit",
+      "breakpoints": true
+    },
+    {
+      "idx": 19,
+      "version": "5",
+      "when": 1768640996606,
+      "tag": "0019_flowery_loki",
+      "breakpoints": true
+    },
+    {
+      "idx": 20,
+      "version": "5",
+      "when": 1768646481885,
+      "tag": "0020_dapper_leo",
+      "breakpoints": true
+    },
+    {
+      "idx": 21,
+      "version": "5",
+      "when": 1768646530206,
+      "tag": "0021_spooky_gorilla_man",
+      "breakpoints": true
+    },
+    {
+      "idx": 22,
+      "version": "5",
+      "when": 1768660828976,
+      "tag": "0022_wild_thing",
+      "breakpoints": true
+    },
+    {
+      "idx": 23,
+      "version": "5",
+      "when": 1768663482391,
+      "tag": "0023_blushing_jazinda",
+      "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "5",
+      "when": 1768663856347,
+      "tag": "0024_fixed_alice",
+      "breakpoints": true
+    },
+    {
+      "idx": 25,
+      "version": "5",
+      "when": 1768664251270,
+      "tag": "0025_glorious_hardball",
+      "breakpoints": true
+    },
+    {
+      "idx": 26,
+      "version": "5",
+      "when": 1768678267551,
+      "tag": "0026_kind_lockjaw",
+      "breakpoints": true
+    },
+    {
+      "idx": 27,
+      "version": "5",
+      "when": 1768682096169,
+      "tag": "0027_unusual_shockwave",
+      "breakpoints": true
+    },
+    {
+      "idx": 28,
+      "version": "5",
+      "when": 1768717571451,
+      "tag": "0028_tired_human_robot",
+      "breakpoints": true
+    }
+  ]
+}

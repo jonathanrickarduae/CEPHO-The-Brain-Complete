@@ -1,0 +1,1298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CEPHO.Ai CEO KPI Report - 18 January 2026</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: #FFFFFF;
+            color: #000000;
+            line-height: 1.6;
+        }
+        
+        .page {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 60px 40px;
+        }
+        
+        /* Cover Page */
+        .cover {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: linear-gradient(180deg, #FFFFFF 0%, #F8F8F8 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cover::before {
+            content: '';
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(233, 30, 140, 0.08) 0%, transparent 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .brand-name {
+            font-size: 48px;
+            font-weight: 700;
+            letter-spacing: 8px;
+            color: #E91E8C;
+        }
+        
+        .doc-title {
+            font-size: 32px;
+            font-weight: 600;
+            margin-top: 40px;
+            color: #000000;
+        }
+        
+        .doc-subtitle {
+            font-size: 18px;
+            color: #000000;
+            margin-top: 16px;
+        }
+        
+        .doc-meta {
+            margin-top: 60px;
+            color: #000000;
+            font-size: 14px;
+        }
+        
+        .overall-score {
+            margin-top: 60px;
+            padding: 40px 80px;
+            background: #F8F8F8;
+            border: 1px solid #E0E0E0;
+            border-radius: 16px;
+        }
+        
+        .score-label {
+            font-size: 14px;
+            color: #000000;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        .score-value {
+            font-size: 96px;
+            font-weight: 700;
+            color: #F59E0B;
+            line-height: 1;
+            margin-top: 8px;
+        }
+        
+        .score-max {
+            font-size: 24px;
+            color: #000000;
+        }
+        
+        /* Section Styling */
+        .section {
+            padding: 60px 0;
+            border-bottom: 1px solid #E0E0E0;
+        }
+        
+        .section:last-child {
+            border-bottom: none;
+        }
+        
+        h1 {
+            font-size: 32px;
+            font-weight: 700;
+            color: #000000;
+            margin-bottom: 32px;
+        }
+        
+        h2 {
+            font-size: 22px;
+            font-weight: 600;
+            color: #E91E8C;
+            margin-bottom: 20px;
+            margin-top: 40px;
+        }
+        
+        h2:first-of-type {
+            margin-top: 0;
+        }
+        
+        h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #000000;
+            margin-bottom: 12px;
+            margin-top: 24px;
+        }
+        
+        p {
+            color: #000000;
+            margin-bottom: 16px;
+            font-size: 14px;
+        }
+        
+        /* Heat Map Legend */
+        .legend {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin: 24px 0;
+            padding: 20px;
+            background: #F8F8F8;
+            border-radius: 12px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            color: #000000;
+        }
+        
+        .legend-color {
+            width: 24px;
+            height: 24px;
+            border-radius: 4px;
+        }
+        
+        /* Heat Map Scores */
+        .score-excellent { background: #22C55E; color: #FFFFFF; }
+        .score-good { background: #84CC16; color: #000000; }
+        .score-adequate { background: #F59E0B; color: #000000; }
+        .score-developing { background: #F97316; color: #FFFFFF; }
+        .score-critical { background: #DC2626; color: #FFFFFF; }
+        
+        /* Domain Cards */
+        .domain-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            margin: 24px 0;
+        }
+        
+        .domain-card {
+            background: #F8F8F8;
+            border: 1px solid #E0E0E0;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .domain-name {
+            font-size: 13px;
+            color: #000000;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .domain-score {
+            font-size: 36px;
+            font-weight: 700;
+            line-height: 1;
+        }
+        
+        .domain-status {
+            font-size: 11px;
+            margin-top: 8px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            display: inline-block;
+        }
+        
+        /* Heat Map Table */
+        .heatmap-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 24px 0;
+            font-size: 13px;
+        }
+        
+        .heatmap-table th {
+            background: #F8F8F8;
+            color: #000000;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 12px 8px;
+            text-align: left;
+            border-bottom: 2px solid #E0E0E0;
+        }
+        
+        .heatmap-table th:nth-child(3),
+        .heatmap-table th:nth-child(5) {
+            text-align: center;
+        }
+        
+        .heatmap-table td {
+            padding: 10px 8px;
+            border-bottom: 1px solid #E0E0E0;
+            color: #000000;
+        }
+        
+        .heatmap-table tr:hover {
+            background: #F8F8F8;
+        }
+        
+        .heatmap-table .id-col {
+            color: #000000;
+            width: 40px;
+        }
+        
+        .heatmap-table .category-col {
+            color: #000000;
+        }
+        
+        .heatmap-table .score-col {
+            text-align: center;
+            width: 60px;
+        }
+        
+        .heatmap-table .domain-col {
+            color: #000000;
+            width: 100px;
+        }
+        
+        .heatmap-table .status-col {
+            width: 100px;
+        }
+        
+        .heatmap-table .change-col {
+            text-align: center;
+            width: 60px;
+        }
+        
+        .score-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 13px;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+        
+        .change-positive {
+            color: #22C55E;
+            font-weight: 600;
+        }
+        
+        .change-negative {
+            color: #DC2626;
+            font-weight: 600;
+        }
+        
+        .change-neutral {
+            color: #000000;
+        }
+        
+        /* SME Table */
+        .sme-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 24px 0;
+        }
+        
+        .sme-table th {
+            background: #F8F8F8;
+            color: #000000;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 12px;
+            text-align: left;
+            border-bottom: 2px solid #E0E0E0;
+        }
+        
+        .sme-table td {
+            padding: 12px;
+            border-bottom: 1px solid #E0E0E0;
+            font-size: 13px;
+            color: #000000;
+        }
+        
+        .sme-table tr:hover {
+            background: #F8F8F8;
+        }
+        
+        /* Priority Cards */
+        .priority-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            margin: 24px 0;
+        }
+        
+        .priority-card {
+            background: #F8F8F8;
+            border: 1px solid #E0E0E0;
+            border-radius: 12px;
+            padding: 24px;
+        }
+        
+        .priority-card.critical {
+            border-left: 4px solid #DC2626;
+        }
+        
+        .priority-card.excellent {
+            border-left: 4px solid #22C55E;
+        }
+        
+        .priority-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #000000;
+        }
+        
+        .priority-title .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+        
+        .priority-list {
+            list-style: none;
+        }
+        
+        .priority-list li {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #E0E0E0;
+            font-size: 13px;
+            color: #000000;
+        }
+        
+        .priority-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .priority-list .score {
+            font-weight: 600;
+        }
+        
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 60px 0;
+            border-top: 1px solid #E0E0E0;
+        }
+        
+        .footer-logo {
+            font-size: 20px;
+            font-weight: 700;
+            color: #E91E8C;
+            letter-spacing: 4px;
+        }
+        
+        .footer-tagline {
+            color: #000000;
+            font-size: 12px;
+            margin-top: 8px;
+        }
+        
+        /* Print */
+        @media print {
+            body { background: white; }
+            .section { border-color: #E0E0E0; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Cover Page -->
+    <div class="cover">
+        <div class="brand-name">CEPHO</div>
+        <div class="doc-title">Chief of Staff KPI Report</div>
+        <div class="doc-subtitle">Comprehensive Business Assessment</div>
+        
+        <div class="overall-score">
+            <div class="score-label">Overall Score</div>
+            <div class="score-value">72<span class="score-max">/100</span></div>
+        </div>
+        
+        <div class="doc-meta">
+            18 January 2026 | 10:12 GMT+4 | Confidential
+        </div>
+    </div>
+    
+    <div class="page">
+        <!-- Heat Map Legend -->
+        <div class="section">
+            <h1>Heat Map Scoring Guide</h1>
+            
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-color score-excellent"></div>
+                    <span><strong>90-100</strong> Excellent</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color score-good"></div>
+                    <span><strong>75-89</strong> Good</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color score-adequate"></div>
+                    <span><strong>60-74</strong> Adequate</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color score-developing"></div>
+                    <span><strong>40-59</strong> Developing</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color score-critical"></div>
+                    <span><strong>0-39</strong> Critical</span>
+                </div>
+            </div>
+            
+            <p>Scores are assessed across 50 KPI categories spanning 10 business domains. Each category is evaluated by the Chief of Staff, SME expert panels, and customer focus groups where applicable.</p>
+        </div>
+        
+        <!-- Domain Summary -->
+        <div class="section">
+            <h1>Domain Summary</h1>
+            
+            <div class="domain-grid">
+                <div class="domain-card">
+                    <div class="domain-name">Operations</div>
+                    <div class="domain-score" style="color: #84CC16;">86</div>
+                    <div class="status-badge score-good">Good</div>
+                </div>
+                <div class="domain-card">
+                    <div class="domain-name">Technology</div>
+                    <div class="domain-score" style="color: #84CC16;">85</div>
+                    <div class="status-badge score-good">Good</div>
+                </div>
+                <div class="domain-card">
+                    <div class="domain-name">Market</div>
+                    <div class="domain-score" style="color: #84CC16;">80</div>
+                    <div class="status-badge score-good">Good</div>
+                </div>
+                <div class="domain-card">
+                    <div class="domain-name">Product</div>
+                    <div class="domain-score" style="color: #84CC16;">78</div>
+                    <div class="status-badge score-good">Good</div>
+                </div>
+                <div class="domain-card">
+                    <div class="domain-name">Finance</div>
+                    <div class="domain-score" style="color: #84CC16;">76</div>
+                    <div class="status-badge score-good">Good</div>
+                </div>
+                <div class="domain-card">
+                    <div class="domain-name">Innovation</div>
+                    <div class="domain-score" style="color: #84CC16;">75</div>
+                    <div class="status-badge score-good">Good</div>
+                </div>
+                <div class="domain-card">
+                    <div class="domain-name">Strategy</div>
+                    <div class="domain-score" style="color: #F59E0B;">70</div>
+                    <div class="status-badge score-adequate">Adequate</div>
+                </div>
+                <div class="domain-card">
+                    <div class="domain-name">Governance</div>
+                    <div class="domain-score" style="color: #F59E0B;">68</div>
+                    <div class="status-badge score-adequate">Adequate</div>
+                </div>
+                <div class="domain-card">
+                    <div class="domain-name">Customer</div>
+                    <div class="domain-score" style="color: #F59E0B;">67</div>
+                    <div class="status-badge score-adequate">Adequate</div>
+                </div>
+                <div class="domain-card">
+                    <div class="domain-name">People</div>
+                    <div class="domain-score" style="color: #F97316;">59</div>
+                    <div class="status-badge score-developing">Developing</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Priority Areas -->
+        <div class="section">
+            <h1>Priority Areas</h1>
+            
+            <div class="priority-grid">
+                <div class="priority-card critical">
+                    <div class="priority-title">
+                        <span class="dot" style="background: #DC2626;"></span>
+                        Areas Requiring Attention (Below 60)
+                    </div>
+                    <ul class="priority-list">
+                        <li><span>Culture and Values</span><span class="score" style="color: #F97316;">48</span></li>
+                        <li><span>Team Capability</span><span class="score" style="color: #F97316;">52</span></li>
+                        <li><span>Customer Success Programs</span><span class="score" style="color: #F97316;">52</span></li>
+                        <li><span>Customer Satisfaction</span><span class="score" style="color: #F97316;">55</span></li>
+                        <li><span>Partnership Strategy</span><span class="score" style="color: #F97316;">55</span></li>
+                        <li><span>Business Model Viability</span><span class="score" style="color: #F97316;">58</span></li>
+                        <li><span>Product Market Fit</span><span class="score" style="color: #F97316;">58</span></li>
+                        <li><span>Customer Support Quality</span><span class="score" style="color: #F97316;">58</span></li>
+                    </ul>
+                </div>
+                <div class="priority-card excellent">
+                    <div class="priority-title">
+                        <span class="dot" style="background: #22C55E;"></span>
+                        Areas of Excellence (90+)
+                    </div>
+                    <ul class="priority-list">
+                        <li><span>Feature Completeness</span><span class="score" style="color: #22C55E;">93</span></li>
+                        <li><span>System Reliability</span><span class="score" style="color: #22C55E;">92</span></li>
+                        <li><span>Data Management</span><span class="score" style="color: #22C55E;">92</span></li>
+                        <li><span>Platform Architecture</span><span class="score" style="color: #22C55E;">91</span></li>
+                        <li><span>Quality Assurance</span><span class="score" style="color: #22C55E;">91</span></li>
+                        <li><span>Onboarding Experience</span><span class="score" style="color: #22C55E;">91</span></li>
+                        <li><span>Technical Debt Management</span><span class="score" style="color: #22C55E;">90</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Full Heat Map -->
+        <div class="section">
+            <h1>Full 50 Category Heat Map</h1>
+            
+            <h2>Strategy Domain</h2>
+            <table class="heatmap-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Category</th>
+                        <th>Score</th>
+                        <th>Status</th>
+                        <th>Change</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="id-col">1</td>
+                        <td class="category-col">Vision and Mission Clarity</td>
+                        <td class="score-col"><span class="score-badge score-good">78</span></td>
+                        <td class="status-col"><span class="status-badge score-good">Good</span></td>
+                        <td class="change-col change-positive">+6</td>
+                    </tr>
+                    <tr>
+                        <td class="id-col">2</td>
+                        <td class="category-col">Strategic Positioning</td>
+                        <td class="score-col"><span class="score-badge score-adequate">62</span></td>
+                        <td class="status-col"><span class="status-badge score-adequate">Adequate</span></td>
+                        <td class="change-col change-positive">+17</td>
+                    </tr>
+                    <tr>
+                        <td class="id-col">3</td>
+                        <td class="category-col">Business Model Viability</td>
+                        <td class="score-col"><span class="score-badge score-developing">58</span></td>
+                        <td class="status-col"><span class="status-badge score-developing">Developing</span></td>
+                        <td class="change-col change-positive">+14</td>
+                    </tr>
+                    <tr>
+                        <td class="id-col">4</td>
+                        <td class="category-col">Go to Market Strategy</td>
+                        <td class="score-col"><span class="score-badge score-good">85</span></td>
+                        <td class="status-col"><span class="status-badge score-good">Good</span></td>
+                        <td class="change-col change-positive">+2</td>
+                    </tr>
+                    <tr>
+                        <td class="id-col">5</td>
+                        <td class="category-col">Partnership and Alliance Strategy</td>
+                        <td class="score-col"><span class="score-badge score-developing">55</span></td>
+                        <td class="status-col"><span class="status-badge score-developing">Developing</span></td>
+                        <td class="change-col change-positive">+17</td>
+                    </tr>
+                    <tr>
+                        <td class="id-col">6</td>
+                        <td class="category-col">Exit Strategy Readiness</td>
+                        <td class="score-col"><span class="score-badge score-good">80</span></td>
+                        <td class="status-col"><span class="status-badge score-good">Good</span></td>
+                        <td class="change-col change-positive">+2</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h2>Technology Domain</h2>
+            <table class="heatmap-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Category</th>
+                        <th>Score</th>
+                        <th>Status</th>
+                        <th>Change</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="id-col">7</td>
+                        <td class="category-col">Platform Architecture</td>
+                        <td class="score-col"><span class="score-badge score-excellent">91</span></td>
+                        <td class="status-col"><span class="status-badge score-excellent">Excellent</span></td>
+                        <td class="change-col change-positive">+7</td>
+                    </tr>
+                    <tr>
+                        <td class="id-col">8</td>
+                        <td class="category-col">AI and Machine Learning Capability</td>
+                        <td class="score-col"><span class="score-badge score-good">78</span></td>
+                        <td class="status-col"><span class="status-badge score-good">Good</span></td>
+                        <td class="change-col change-positive">+45</td>
+                    </tr>
+                    <tr>
+                        <td class="id-col">9</td>
+                        <td class="category-col">Security and Compliance</td>
+                        <td class="score-col"><span class="score-badge score-good">85</span></td>
+                        <td class="status-col"><span class="status-badge score-good">Good</span></td>
+                        <td class="change-col change-positive">+7</td>
+                    </tr>
+                    <tr>
+                        <td class="id-col">10</td>
+                        <td class="category-col">System Reliability and Uptime</td>
+                        <td class="score-col"><span class="score-badge score-excellent">92</span></td>
+                        <td class="status-col"><span class="status-badge score-excellent">Excellent</span></td>
+                        <td class="change-col change-positive">+5</td>
+                    </tr>
+                    <tr>
+                        <td class="id-col">11</td>
+                        <td class="category-col">Integration Capabilities</td>
+                        <td class="score-col"><span class="score-badge score-good">82</span></td>
+                        <td class="status-col"><span class="status-badge score-good">Good</span></td>
+                        <td class="change-col change-positive">+35</td>
+                    </tr>
+                    <tr>
+                        <td class="id-col">12</td>
+                        <td class="category-col">Development Velocity</td>
+                        <td class="score-col"><span class="score-badge score-good">88</span></td>
+                        <td class="status-col"><span class="status-badge score-good">Good</span></td>
+                        <td class="change-col change-positive">+45</td>
+                    </tr>
+                    <tr>
+                        <td class="id-col">13</td>
+                        <td class="category-col">Technical Documentation</td>
+                        <td class="score-col"><span class="score-badge score-good">75</span></td>
+                        <td class="status-col"><span class="status-badge score-good">Good</span></td>
+                        <td class="change-col change-positive">+15</td>
+                    </tr>
+                    <tr>
+                        <td class="id-col">14</td>
+                        <td class="category-col">Technical Debt Management</td>
+                        <td class="score-col"><span class="score-badge score-excellent">90</span></td>
+                        <td class="status-col"><span class="status-badge score-excellent">Excellent</span></td>
+                        <td class="change-col change-positive">+2</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h2>Product Domain</h2>
+            <table class="heatmap-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Category</th>
+                        <th>Score</th>
+                        <th>Status</th>
+                        <th>Change</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="id-col">15</td>
+                        <td class="category-col">Product Market Fit</td>
+                        <td class="score-col"><span class="score-badge score-developing">58</span></td>
+                        <td class="status-col"><span class="status-badge score-developing">Developing</span></td>
+                        <td class="change-col change-positive">+18</td>
+                    </tr>
+                    <tr>
+                        <td class="id-col">16</td>
+                        <td class="category-col">User Experience Quality</td>
+                        <td class="score-col"><span class="score-badge score-good">82</span></td>
+                        <td class="status-col"><span class="status-badge score-good">Good</span></td>
+                        <td class="change-col change-positive">+33</td>
+                    </tr>
+                    <tr>
+                        <td class="id-col">17</td>
+                        <td class="category-col">Feature Completeness</td>
+                        <td class="score-col"><span class="score-badge score-excellent">93</span></td>
+                        <td class="status-col"><span class="status-badge score-excellent">Excellent</span></td>
+                        <td class="change-col change-positive">+7</td>
+                    </tr>
+                    <tr>
+                        <td class="id-col">18</td>
+                        <td class="category-col">Product Differentiation</td>
+                        <td class="score-col"><span class="score-badge score-good">78</span></td>
+                        <td class="status-col"><span class="status-badge score-good">Good</span></td>
+                        <td class="change-col change-positive">+6</td>
+                    </tr>
+                    <tr>
+                        <td class="id-col">19</td>
+                        <td class="category-col">Mobile Experience</td>
+                        <td class="score-col"><span class="score-badge score-good">85</span></td>
+                        <td class="status-col"><span class="status-badge score-good">Good</span></td>
+                        <td class="change-col change-positive">+12</td>
+                    </tr>
+                    <tr>
+                        <td class="id-col">20</td>
+                        <td class="category-col">Accessibility Compliance</td>
+                        <td class="score-col"><span class="score-badge score-adequate">72</span></td>
+                        <td class="status-col"><span class="status-badge score-adequate">Adequate</span></td>
+                        <td class="change-col change-positive">+16</td>
+                    </tr>
+                    <tr>
+                        <td class="id-col">21</td>
+                        <td class="category-col">Product Roadmap Clarity</td>
+                        <td class="score-col"><span class="score-badge score-adequate">68</span></td>
+                        <td class="status-col"><span class="status-badge score-adequate">Adequate</span></td>
+                        <td class="change-col change-positive">+28</td>
+                    </tr>
+                    <tr>
+                        <td class="id-col">22</td>
+                        <td class="category-col">Onboarding Experience</td>
+                        <td class="score-col"><span class="score-badge score-excellent">91</span></td>
+                        <td class="status-col"><span class="status-badge score-excellent">Excellent</span></td>
+                        <td class="change-col change-positive">+6</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h2>Customer Domain</h2>
+            <table class="heatmap-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Category</th>
+                        <th>Score</th>
+                        <th>Status</th>
+                        <th>Change</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="id-col">23</td>
+                        <td class="category-col">Customer Satisfaction</td>
+                        <td class="score-col"><span class="score-badge score-developing">55</span></td>
+                        <td class="status-col"><span class="status-badge score-developing">Developing</span></td>
+                        <td class="change-col change-positive">+16</td>
+                    </tr>
+                    <tr>
+                        <td class="id-col">24</td>
+                        <td class="category-col">Customer Retention</td>
+                        <td class="score-col"><span class="score-badge score-good">80</span></td>
+                        <td class="status-col"><span class="status-badge score-good">Good</span></td>
+                        <td class="change-col change-positive">+3</td>
+                    </tr>
+                    <tr>
+                        <td class="id-col">25</td>
+                        <td class="category-col">Customer Support Quality</td>
+                        <td class="score-col"><span class="score-badge score-developing">58</span></td>
+                        <td class="status-col"><span class="status-badge score-developing">Developing</span></td>
+                        <td class="change-col change-positive">+16</td>
+                    </tr>
+                    <tr>
+                        <td class="id-col">26</td>
+                        <td class="category-col">Customer Success Programs</td>
+                        <td class="score-col"><span class="score-badge score-developing">52</span></td>
+                        <td class="status-col"><span class="status-badge score-developing">Developing</span></td>
+                        <td class="change-col change-positive">+15</td>
+                    </tr>
+                    <tr>
+                        <td class="id-col">27</td>
+                        <td class="category-col">Customer Feedback Integration</td>
+                        <td class="score-col"><span class="score-badge score-good">75</span></td>
+                        <td class="status-col"><span class="status-badge score-good">Good</span></td>
+                        <td class="change-col change-positive">+14</td>
+                    </tr>
+                    <tr>
+                        <td class="id-col">28</td>
+                        <td class="category-col">Customer Segmentation</td>
+                        <td class="score-col"><span class="score-badge score-adequate">72</span></td>
+                        <td class="status-col"><span class="status-badge score-adequate">Adequate</span></td>
+                        <td class="change-col change-positive">+5</td>
+                    </tr>
+                    <tr>
+                        <td class="id-col">29</td>
+                        <td class="category-col">Customer Advocacy</td>
+                        <td class="score-col"><span class="score-badge score-adequate">65</span></td>
+                        <td class="status-col"><span class="status-badge score-adequate">Adequate</span></td>
+                        <td class="change-col change-positive">+7</td>
+                    </tr>
+                    <tr>
+                        <td class="id-col">30</td>
+                        <td class="category-col">Customer Education</td>
+                        <td class="score-col"><span class="score-badge score-good">78</span></td>
+                        <td class="status-col"><span class="status-badge score-good">Good</span></td>
+                        <td class="change-col change-positive">+6</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h2>Operations Domain</h2>
+            <table class="heatmap-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Category</th>
+                        <th>Score</th>
+                        <th>Status</th>
+                        <th>Change</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="id-col">31</td>
+                        <td class="category-col">Process Efficiency</td>
+                        <td class="score-col"><span class="score-badge score-good">88</span></td>
+                        <td class="status-col"><span class="status-badge score-good">Good</span></td>
+                        <td class="change-col change-positive">+3</td>
+                    </tr>
+                    <tr>
+                        <td class="id-col">32</td>
+                        <td class="category-col">Quality Assurance</td>
+                        <td class="score-col"><span class="score-badge score-excellent">91</span></td>
+                        <td class="status-col"><span class="status-badge score-excellent">Excellent</span></td>
+                        <td class="change-col change-positive">+9</td>
+                    </tr>
+                    <tr>
+                        <td class="id-col">33</td>
+                        <td class="category-col">Vendor Management</td>
+                        <td class="score-col"><span class="score-badge score-good">86</span></td>
+                        <td class="status-col"><span class="status-badge score-good">Good</span></td>
+                        <td class="change-col change-neutral">0</td>
+                    </tr>
+                    <tr>
+                        <td class="id-col">34</td>
+                        <td class="category-col">Scalability Readiness</td>
+                        <td class="score-col"><span class="score-badge score-good">78</span></td>
+                        <td class="status-col"><span class="status-badge score-good">Good</span></td>
+                        <td class="change-col change-positive">+13</td>
+                    </tr>
+                    <tr>
+                        <td class="id-col">35</td>
+                        <td class="category-col">Business Continuity</td>
+                        <td class="score-col"><span class="score-badge score-good">80</span></td>
+                        <td class="status-col"><span class="status-badge score-good">Good</span></td>
+                        <td class="change-col change-positive">+4</td>
+                    </tr>
+                    <tr>
+                        <td class="id-col">36</td>
+                        <td class="category-col">Data Management</td>
+                        <td class="score-col"><span class="score-badge score-excellent">92</span></td>
+                        <td class="status-col"><span class="status-badge score-excellent">Excellent</span></td>
+                        <td class="change-col change-positive">+3</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h2>Finance Domain</h2>
+            <table class="heatmap-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Category</th>
+                        <th>Score</th>
+                        <th>Status</th>
+                        <th>Change</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="id-col">37</td>
+                        <td class="category-col">Revenue Growth</td>
+                        <td class="score-col"><span class="score-badge score-adequate">72</span></td>
+                        <td class="status-col"><span class="status-badge score-adequate">Adequate</span></td>
+                        <td class="change-col change-positive">+1</td>
+                    </tr>
+                    <tr>
+                        <td class="id-col">38</td>
+                        <td class="category-col">Unit Economics</td>
+                        <td class="score-col"><span class="score-badge score-good">88</span></td>
+                        <td class="status-col"><span class="status-badge score-good">Good</span></td>
+                        <td class="change-col change-neutral">0</td>
+                    </tr>
+                    <tr>
+                        <td class="id-col">39</td>
+                        <td class="category-col">Cash Flow Management</td>
+                        <td class="score-col"><span class="score-badge score-good">82</span></td>
+                        <td class="status-col"><span class="status-badge score-good">Good</span></td>
+                        <td class="change-col change-positive">+1</td>
+                    </tr>
+                    <tr>
+                        <td class="id-col">40</td>
+                        <td class="category-col">Financial Reporting</td>
+                        <td class="score-col"><span class="score-badge score-good">80</span></td>
+                        <td class="status-col"><span class="status-badge score-good">Good</span></td>
+                        <td class="change-col change-positive">+1</td>
+                    </tr>
+                    <tr>
+                        <td class="id-col">41</td>
+                        <td class="category-col">Pricing Strategy</td>
+                        <td class="score-col"><span class="score-badge score-adequate">68</span></td>
+                        <td class="status-col"><span class="status-badge score-adequate">Adequate</span></td>
+                        <td class="change-col change-positive">+8</td>
+                    </tr>
+                    <tr>
+                        <td class="id-col">42</td>
+                        <td class="category-col">Investor Relations</td>
+                        <td class="score-col"><span class="score-badge score-adequate">65</span></td>
+                        <td class="status-col"><span class="status-badge score-adequate">Adequate</span></td>
+                        <td class="change-col change-positive">+9</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h2>People Domain</h2>
+            <table class="heatmap-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Category</th>
+                        <th>Score</th>
+                        <th>Status</th>
+                        <th>Change</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="id-col">43</td>
+                        <td class="category-col">Team Capability</td>
+                        <td class="score-col"><span class="score-badge score-developing">52</span></td>
+                        <td class="status-col"><span class="status-badge score-developing">Developing</span></td>
+                        <td class="change-col change-positive">+16</td>
+                    </tr>
+                    <tr>
+                        <td class="id-col">44</td>
+                        <td class="category-col">Leadership Effectiveness</td>
+                        <td class="score-col"><span class="score-badge score-adequate">72</span></td>
+                        <td class="status-col"><span class="status-badge score-adequate">Adequate</span></td>
+                        <td class="change-col change-positive">+7</td>
+                    </tr>
+                    <tr>
+                        <td class="id-col">45</td>
+                        <td class="category-col">Culture and Values</td>
+                        <td class="score-col"><span class="score-badge score-developing">48</span></td>
+                        <td class="status-col"><span class="status-badge score-developing">Developing</span></td>
+                        <td class="change-col change-positive">+17</td>
+                    </tr>
+                    <tr>
+                        <td class="id-col">46</td>
+                        <td class="category-col">Talent Acquisition</td>
+                        <td class="score-col"><span class="score-badge score-adequate">62</span></td>
+                        <td class="status-col"><span class="status-badge score-adequate">Adequate</span></td>
+                        <td class="change-col change-positive">+7</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h2>Governance Domain</h2>
+            <table class="heatmap-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Category</th>
+                        <th>Score</th>
+                        <th>Status</th>
+                        <th>Change</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="id-col">47</td>
+                        <td class="category-col">Corporate Governance</td>
+                        <td class="score-col"><span class="score-badge score-adequate">70</span></td>
+                        <td class="status-col"><span class="status-badge score-adequate">Adequate</span></td>
+                        <td class="change-col change-positive">+7</td>
+                    </tr>
+                    <tr>
+                        <td class="id-col">48</td>
+                        <td class="category-col">Legal and Regulatory Compliance</td>
+                        <td class="score-col"><span class="score-badge score-adequate">65</span></td>
+                        <td class="status-col"><span class="status-badge score-adequate">Adequate</span></td>
+                        <td class="change-col change-positive">+17</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h2>Innovation Domain</h2>
+            <table class="heatmap-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Category</th>
+                        <th>Score</th>
+                        <th>Status</th>
+                        <th>Change</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="id-col">49</td>
+                        <td class="category-col">Innovation Pipeline</td>
+                        <td class="score-col"><span class="score-badge score-good">75</span></td>
+                        <td class="status-col"><span class="status-badge score-good">Good</span></td>
+                        <td class="change-col change-positive">+45</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h2>Market Domain</h2>
+            <table class="heatmap-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Category</th>
+                        <th>Score</th>
+                        <th>Status</th>
+                        <th>Change</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="id-col">50</td>
+                        <td class="category-col">Market Position and Share</td>
+                        <td class="score-col"><span class="score-badge score-good">80</span></td>
+                        <td class="status-col"><span class="status-badge score-good">Good</span></td>
+                        <td class="change-col change-positive">+3</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- SME Panel Reviews -->
+        <div class="section">
+            <h1>SME Panel Reviews</h1>
+            
+            <table class="sme-table">
+                <thead>
+                    <tr>
+                        <th>Panel</th>
+                        <th>Reviewer</th>
+                        <th>Role</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Technology</td>
+                        <td>Dr Sarah Chen</td>
+                        <td>Cloud Architecture Specialist</td>
+                        <td><span class="score-badge score-good">88</span></td>
+                    </tr>
+                    <tr>
+                        <td>Technology</td>
+                        <td>Marcus Webb</td>
+                        <td>AI Systems Engineer</td>
+                        <td><span class="score-badge score-good">85</span></td>
+                    </tr>
+                    <tr>
+                        <td>Technology</td>
+                        <td>Elena Rodriguez</td>
+                        <td>Security Architect</td>
+                        <td><span class="score-badge score-good">86</span></td>
+                    </tr>
+                    <tr>
+                        <td>Technology</td>
+                        <td>James Okonkwo</td>
+                        <td>DevOps Lead</td>
+                        <td><span class="score-badge score-excellent">90</span></td>
+                    </tr>
+                    <tr>
+                        <td>UX Design</td>
+                        <td>Lisa Park</td>
+                        <td>Senior UX Researcher</td>
+                        <td><span class="score-badge score-good">84</span></td>
+                    </tr>
+                    <tr>
+                        <td>UX Design</td>
+                        <td>David Müller</td>
+                        <td>Interaction Designer</td>
+                        <td><span class="score-badge score-good">86</span></td>
+                    </tr>
+                    <tr>
+                        <td>UX Design</td>
+                        <td>Priya Sharma</td>
+                        <td>Accessibility Specialist</td>
+                        <td><span class="score-badge score-good">78</span></td>
+                    </tr>
+                    <tr>
+                        <td>UX Design</td>
+                        <td>Tom Anderson</td>
+                        <td>Mobile UX Lead</td>
+                        <td><span class="score-badge score-good">88</span></td>
+                    </tr>
+                    <tr>
+                        <td>Strategy</td>
+                        <td>Victoria Sterling</td>
+                        <td>Strategy Partner</td>
+                        <td><span class="score-badge score-adequate">72</span></td>
+                    </tr>
+                    <tr>
+                        <td>Strategy</td>
+                        <td>Robert Chang</td>
+                        <td>Market Analyst</td>
+                        <td><span class="score-badge score-good">75</span></td>
+                    </tr>
+                    <tr>
+                        <td>Strategy</td>
+                        <td>Amanda Foster</td>
+                        <td>Business Development</td>
+                        <td><span class="score-badge score-adequate">68</span></td>
+                    </tr>
+                    <tr>
+                        <td>Strategy</td>
+                        <td>Michael Torres</td>
+                        <td>Investment Advisor</td>
+                        <td><span class="score-badge score-adequate">70</span></td>
+                    </tr>
+                    <tr>
+                        <td>Operations</td>
+                        <td>Jennifer Wu</td>
+                        <td>Operations Director</td>
+                        <td><span class="score-badge score-good">88</span></td>
+                    </tr>
+                    <tr>
+                        <td>Operations</td>
+                        <td>Carlos Mendez</td>
+                        <td>Process Engineer</td>
+                        <td><span class="score-badge score-good">86</span></td>
+                    </tr>
+                    <tr>
+                        <td>Operations</td>
+                        <td>Sarah O'Brien</td>
+                        <td>Quality Manager</td>
+                        <td><span class="score-badge score-excellent">91</span></td>
+                    </tr>
+                    <tr>
+                        <td>Operations</td>
+                        <td>Ahmed Hassan</td>
+                        <td>Data Governance Lead</td>
+                        <td><span class="score-badge score-excellent">90</span></td>
+                    </tr>
+                    <tr>
+                        <td>Finance</td>
+                        <td>Richard Thompson</td>
+                        <td>CFO Advisor</td>
+                        <td><span class="score-badge score-good">76</span></td>
+                    </tr>
+                    <tr>
+                        <td>Finance</td>
+                        <td>Maria Santos</td>
+                        <td>Financial Analyst</td>
+                        <td><span class="score-badge score-good">78</span></td>
+                    </tr>
+                    <tr>
+                        <td>Finance</td>
+                        <td>Kevin O'Neill</td>
+                        <td>Unit Economics Specialist</td>
+                        <td><span class="score-badge score-good">82</span></td>
+                    </tr>
+                    <tr>
+                        <td>Finance</td>
+                        <td>Diana Patel</td>
+                        <td>Investor Relations</td>
+                        <td><span class="score-badge score-adequate">72</span></td>
+                    </tr>
+                    <tr>
+                        <td>Customer</td>
+                        <td>Emma Wilson</td>
+                        <td>Customer Success Lead</td>
+                        <td><span class="score-badge score-adequate">68</span></td>
+                    </tr>
+                    <tr>
+                        <td>Customer</td>
+                        <td>Jason Kim</td>
+                        <td>Support Operations</td>
+                        <td><span class="score-badge score-adequate">65</span></td>
+                    </tr>
+                    <tr>
+                        <td>Customer</td>
+                        <td>Rachel Green</td>
+                        <td>Customer Research</td>
+                        <td><span class="score-badge score-adequate">70</span></td>
+                    </tr>
+                    <tr>
+                        <td>Customer</td>
+                        <td>Daniel Brown</td>
+                        <td>Community Manager</td>
+                        <td><span class="score-badge score-adequate">72</span></td>
+                    </tr>
+                    <tr>
+                        <td>Legal</td>
+                        <td>Catherine Moore</td>
+                        <td>General Counsel</td>
+                        <td><span class="score-badge score-adequate">68</span></td>
+                    </tr>
+                    <tr>
+                        <td>Legal</td>
+                        <td>Patrick Sullivan</td>
+                        <td>Compliance Officer</td>
+                        <td><span class="score-badge score-adequate">65</span></td>
+                    </tr>
+                    <tr>
+                        <td>Legal</td>
+                        <td>Natalie Chen</td>
+                        <td>Privacy Specialist</td>
+                        <td><span class="score-badge score-adequate">70</span></td>
+                    </tr>
+                    <tr>
+                        <td>Legal</td>
+                        <td>Andrew Walsh</td>
+                        <td>Corporate Secretary</td>
+                        <td><span class="score-badge score-adequate">68</span></td>
+                    </tr>
+                    <tr>
+                        <td>People</td>
+                        <td>Michelle Taylor</td>
+                        <td>HR Director</td>
+                        <td><span class="score-badge score-developing">58</span></td>
+                    </tr>
+                    <tr>
+                        <td>People</td>
+                        <td>Steven Clark</td>
+                        <td>Talent Acquisition</td>
+                        <td><span class="score-badge score-adequate">62</span></td>
+                    </tr>
+                    <tr>
+                        <td>People</td>
+                        <td>Laura Martinez</td>
+                        <td>Culture Lead</td>
+                        <td><span class="score-badge score-developing">55</span></td>
+                    </tr>
+                    <tr>
+                        <td>People</td>
+                        <td>Brian Johnson</td>
+                        <td>Learning Development</td>
+                        <td><span class="score-badge score-adequate">60</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <div class="footer-logo">CEPHO.Ai</div>
+            <div class="footer-tagline">Where Intelligence Begins</div>
+            <div style="margin-top: 24px; color: #000000; font-size: 12px;">
+                18 January 2026 | 10:12 GMT+4 | Confidential
+            </div>
+        </div>
+    </div>
+</body>
+</html>

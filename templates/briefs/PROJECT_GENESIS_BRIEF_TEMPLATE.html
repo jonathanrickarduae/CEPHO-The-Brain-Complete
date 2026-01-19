@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>CEPHO.Ai Project Genesis Brief - [PROJECT_NAME]</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #0D0D0D;
+      color: #000000;
+      line-height: 1.6;
+    }
+    
+    .page {
+      background: #FFFFFF;
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 50px;
+    }
+    
+    .cover {
+      text-align: center;
+      padding: 60px 0;
+      border-bottom: 3px solid #E91E8C;
+      margin-bottom: 40px;
+    }
+    
+    .logo {
+      font-size: 32px;
+      font-weight: 700;
+      color: #E91E8C;
+      margin-bottom: 40px;
+    }
+    
+    .project-name {
+      font-size: 36px;
+      font-weight: 700;
+      color: #000000;
+      margin-bottom: 10px;
+    }
+    
+    .project-type {
+      font-size: 14px;
+      color: #000000;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 30px;
+    }
+    
+    .meta-info {
+      font-size: 12px;
+      color: #000000;
+    }
+    
+    h1 {
+      font-size: 24px;
+      font-weight: 700;
+      color: #000000;
+      margin: 30px 0 15px 0;
+    }
+    
+    h2 {
+      font-size: 18px;
+      font-weight: 600;
+      color: #E91E8C;
+      margin: 25px 0 15px 0;
+      border-bottom: 2px solid #E91E8C;
+      padding-bottom: 8px;
+    }
+    
+    h3 {
+      font-size: 14px;
+      font-weight: 600;
+      color: #000000;
+      margin: 20px 0 10px 0;
+    }
+    
+    p {
+      font-size: 12px;
+      color: #000000;
+      margin-bottom: 12px;
+    }
+    
+    .executive-summary {
+      background: #FDF2F8;
+      border-left: 4px solid #E91E8C;
+      padding: 20px;
+      margin: 20px 0;
+    }
+    
+    .metric-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+      margin: 20px 0;
+    }
+    
+    .metric-box {
+      background: #F5F5F5;
+      padding: 20px;
+      text-align: center;
+    }
+    
+    .metric-value {
+      font-size: 28px;
+      font-weight: 700;
+      color: #E91E8C;
+    }
+    
+    .metric-label {
+      font-size: 11px;
+      color: #000000;
+      text-transform: uppercase;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 15px 0;
+    }
+    
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #E5E5E5;
+      font-size: 12px;
+      color: #000000;
+    }
+    
+    th {
+      background: #1A1A1A;
+      color: #FFFFFF;
+      font-weight: 600;
+    }
+    
+    .phase-indicator {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      margin-right: 8px;
+    }
+    
+    .phase-complete { background: #10B981; }
+    .phase-active { background: #E91E8C; }
+    .phase-pending { background: #D4D4D4; }
+    
+    .risk-high { color: #DC2626; font-weight: 600; }
+    .risk-medium { color: #F59E0B; }
+    .risk-low { color: #10B981; }
+    
+    .footer {
+      margin-top: 50px;
+      padding-top: 20px;
+      border-top: 2px solid #E91E8C;
+      font-size: 10px;
+      color: #000000;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="cover">
+      <div class="logo">CEPHO.Ai</div>
+      <div class="project-type">Project Genesis Brief</div>
+      <div class="project-name">[PROJECT_NAME]</div>
+      <div class="meta-info">
+        <p>Prepared: [DATE]</p>
+        <p>Version: [VERSION]</p>
+        <p>Classification: Confidential</p>
+      </div>
+    </div>
+    
+    <h2>Executive Summary</h2>
+    <div class="executive-summary">
+      <p><strong>Vision:</strong> [VISION_STATEMENT]</p>
+      <p><strong>Opportunity:</strong> [OPPORTUNITY_DESCRIPTION]</p>
+      <p><strong>Recommendation:</strong> [RECOMMENDATION]</p>
+    </div>
+    
+    <div class="metric-row">
+      <div class="metric-box">
+        <div class="metric-value">[SCORE]</div>
+        <div class="metric-label">Viability Score</div>
+      </div>
+      <div class="metric-box">
+        <div class="metric-value">[AMOUNT]</div>
+        <div class="metric-label">Investment Req.</div>
+      </div>
+      <div class="metric-box">
+        <div class="metric-value">[MONTHS]</div>
+        <div class="metric-label">Time to Market</div>
+      </div>
+      <div class="metric-box">
+        <div class="metric-value">[ROI]</div>
+        <div class="metric-label">Projected ROI</div>
+      </div>
+    </div>
+    
+    <h2>Project Phases</h2>
+    <table>
+      <tr>
+        <th>Phase</th>
+        <th>Description</th>
+        <th>Duration</th>
+        <th>Status</th>
+      </tr>
+      <tr>
+        <td><span class="phase-indicator phase-complete"></span>Discovery</td>
+        <td>Market research and validation</td>
+        <td>2 weeks</td>
+        <td>Complete</td>
+      </tr>
+      <tr>
+        <td><span class="phase-indicator phase-active"></span>Planning</td>
+        <td>Strategy and resource allocation</td>
+        <td>3 weeks</td>
+        <td>In Progress</td>
+      </tr>
+      <tr>
+        <td><span class="phase-indicator phase-pending"></span>Execution</td>
+        <td>Development and implementation</td>
+        <td>8 weeks</td>
+        <td>Pending</td>
+      </tr>
+    </table>
+    
+    <h2>Risk Assessment</h2>
+    <table>
+      <tr>
+        <th>Risk</th>
+        <th>Impact</th>
+        <th>Probability</th>
+        <th>Mitigation</th>
+      </tr>
+      <tr>
+        <td>[RISK_DESCRIPTION]</td>
+        <td class="risk-high">High</td>
+        <td>Medium</td>
+        <td>[MITIGATION_STRATEGY]</td>
+      </tr>
+    </table>
+    
+    <h2>SME Panel Assessment</h2>
+    <table>
+      <tr>
+        <th>Expert</th>
+        <th>Domain</th>
+        <th>Score</th>
+        <th>Key Insight</th>
+      </tr>
+      <tr>
+        <td>[EXPERT_NAME]</td>
+        <td>[DOMAIN]</td>
+        <td>[SCORE]/100</td>
+        <td>[INSIGHT]</td>
+      </tr>
+    </table>
+    
+    <h2>Next Steps</h2>
+    <ol>
+      <li>[NEXT_STEP_1]</li>
+      <li>[NEXT_STEP_2]</li>
+      <li>[NEXT_STEP_3]</li>
+    </ol>
+    
+    <div class="footer">
+      CEPHO.Ai | Chief Executive Personal Headquarters Operations | Project Genesis Framework v2.0
+    </div>
+  </div>
+</body>
+</html>

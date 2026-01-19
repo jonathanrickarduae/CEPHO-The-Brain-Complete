@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CEPHO.Ai Action List - 18 January 2026</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Inter', 'Calibri', sans-serif;
+            background: #FFF;
+            color: #000;
+            font-size: 10px;
+            line-height: 1.4;
+        }
+        
+        .page {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 30px 20px;
+            border-bottom: 3px solid #E91E8C;
+            margin-bottom: 20px;
+        }
+        
+        .brand {
+            font-size: 32px;
+            font-weight: 700;
+            color: #E91E8C;
+            letter-spacing: 4px;
+            margin-bottom: 5px;
+        }
+        
+        .title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #000;
+            margin-bottom: 5px;
+        }
+        
+        .date {
+            font-size: 14px;
+            color: #000;
+            margin-bottom: 15px;
+        }
+        
+        .summary-box {
+            display: inline-block;
+            padding: 10px 30px;
+            background: #F8F8F8;
+            border: 1px solid #E0E0E0;
+            border-radius: 6px;
+        }
+        
+        .summary-box span {
+            margin: 0 15px;
+        }
+        
+        .summary-box strong {
+            color: #E91E8C;
+        }
+        
+        /* Section */
+        .section {
+            margin-bottom: 20px;
+            page-break-inside: avoid;
+        }
+        
+        h1 {
+            font-size: 14px;
+            font-weight: 700;
+            color: #000;
+            padding: 8px 12px;
+            background: #F0F0F0;
+            border-left: 4px solid #E91E8C;
+            margin-bottom: 10px;
+        }
+        
+        /* Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 9px;
+            margin-bottom: 15px;
+        }
+        
+        th {
+            background: #000;
+            color: #FFF;
+            font-size: 9px;
+            font-weight: 600;
+            text-transform: uppercase;
+            padding: 6px 8px;
+            text-align: left;
+        }
+        
+        td {
+            padding: 5px 8px;
+            border-bottom: 1px solid #E0E0E0;
+            color: #000;
+            vertical-align: top;
+        }
+        
+        tr:hover {
+            background: #FAFAFA;
+        }
+        
+        .col-num { width: 35px; text-align: center; font-weight: 600; }
+        .col-action { }
+        .col-status { width: 50px; text-align: center; }
+        .col-comments { width: 150px; }
+        
+        .checkbox {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border: 2px solid #000;
+            border-radius: 2px;
+        }
+        
+        /* Quick Reference */
+        .quick-ref {
+            background: #F8F8F8;
+            border: 1px solid #E0E0E0;
+            border-radius: 6px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .quick-ref h2 {
+            font-size: 12px;
+            color: #E91E8C;
+            margin-bottom: 10px;
+        }
+        
+        .quick-ref table {
+            margin-bottom: 0;
+        }
+        
+        .quick-ref th {
+            background: #E91E8C;
+        }
+        
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 15px;
+            border-top: 2px solid #E91E8C;
+            margin-top: 20px;
+            font-size: 9px;
+        }
+        
+        .footer-brand {
+            font-size: 14px;
+            font-weight: 700;
+            color: #E91E8C;
+            letter-spacing: 2px;
+        }
+        
+        .design-note {
+            margin-top: 8px;
+            padding: 5px 10px;
+            background: #000;
+            color: #FFF;
+            display: inline-block;
+            border-radius: 3px;
+            font-size: 8px;
+        }
+        
+        @media print {
+            body { font-size: 9px; }
+            .page { padding: 10px; }
+            .section { page-break-inside: avoid; }
+        }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <!-- Header -->
+        <div class="header">
+            <div class="brand">CEPHO</div>
+            <div class="title">Action List</div>
+            <div class="date">18 January 2026</div>
+            <div class="summary-box">
+                <span><strong>140</strong> Actions</span>
+                <span><strong>9</strong> Sections</span>
+                <span>Status: <strong>In Progress</strong></span>
+                <span>Generated: <strong>14:15 GMT+4</strong></span>
+            </div>
+        </div>
+        
+        <!-- Quick Reference -->
+        <div class="quick-ref">
+            <h2>Quick Reference</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Section</th>
+                        <th>Items</th>
+                        <th>Range</th>
+                        <th>Priority</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>1. UI/UX Review Actions</td><td>29</td><td>1-29</td><td style="color:#E91E8C;font-weight:600;">HIGH</td></tr>
+                    <tr><td>2. SME Panel Recommendations</td><td>20</td><td>30-49</td><td style="color:#E91E8C;font-weight:600;">HIGH</td></tr>
+                    <tr><td>3. CEPHO Template Repository</td><td>15</td><td>50-64</td><td style="color:#E91E8C;font-weight:600;">HIGH</td></tr>
+                    <tr><td>4. Notta Integration</td><td>6</td><td>65-70</td><td>MEDIUM</td></tr>
+                    <tr><td>5. Morning Signal System</td><td>32</td><td>71-102</td><td>MEDIUM</td></tr>
+                    <tr><td>6. Content Quality SME Panel</td><td>12</td><td>103-114</td><td>MEDIUM</td></tr>
+                    <tr><td>7. Quality Assurance System</td><td>10</td><td>115-124</td><td>MEDIUM</td></tr>
+                    <tr><td>8. Digital Twin Questionnaire</td><td>10</td><td>125-134</td><td>MEDIUM</td></tr>
+                    <tr><td>9. Chief of Staff KPI Dashboard</td><td>6</td><td>135-140</td><td>MEDIUM</td></tr>
+                    <tr style="font-weight:700;background:#F0F0F0;"><td>TOTAL</td><td>140</td><td>1-140</td><td>-</td></tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Section 1: UI/UX Review Actions -->
+        <div class="section">
+            <h1>1. UI/UX Review Actions (1-29)</h1>
+            <table>
+                <thead>
+                    <tr><th class="col-num">#</th><th class="col-action">Action</th><th class="col-status">Status</th><th class="col-comments">Comments</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td class="col-num">1</td><td>Apply consistent design language across all pages (black bg, white text, pink accents)</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">2</td><td>Replace grey Sepho logo with official pink brain logo on all pages</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">3</td><td>Standardize terminology: "Digital Twin" → "Chief of Staff", "Experts" → "AI SMEs"</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">4</td><td>Remove personalized greetings (no "Good morning, John")</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">5</td><td>Change all grey text to white for readability</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">6</td><td>Rename "Listen to brief" to "Morning Brief" or "Daily Brief"</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">7</td><td>Attribute brief to "Victoria" with her picture</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">8</td><td>Add clear buttons: "Watch the Brief" and "Listen to the Brief"</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">9</td><td>Evening Review: Apply consistent design (black banner, black background)</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">10</td><td>Evening Review: Optimize layout to be more compact, reduce scrolling</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">11</td><td>Evening Review: Add icons for actions (tick, defer, cross)</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">12</td><td>Chief of Staff: Create clear landing page dashboard showing all action status</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">13</td><td>Chief of Staff: Make Development Pathway collapsible/hidden by default</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">14</td><td>Chief of Staff: Fix layout overflow (not extending too far right)</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">15</td><td>Chief of Staff: Display action status with percentage completion</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">16</td><td>Chief of Staff: Add Future Development section for ideas tracking</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">17</td><td>Chief of Staff: Remove/relocate secondary bar (government funding, subscriptions)</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">18</td><td>Chief of Staff: Add direct chat function</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">19</td><td>Chief of Staff: Establish as central hub for status updates</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">20</td><td>AI SMEs: Add visual space between "Recent Chats" and "Browse by type"</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">21</td><td>AI SMEs: Change SME names text color to white</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">22</td><td>AI SMEs: Display full SME name when selected (not just icon)</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">23</td><td>AI SMEs: Fix "Projects" and "Insights" label text colors</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">24</td><td>AI SMEs: Style chat button in white</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">25</td><td>Projects/Project Genesis: Apply consistent black/white/pink theme</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">26</td><td>Innovation Hub: Apply consistent theme, clear layout</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">27</td><td>Workflow: Fix all formatting to new standards</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">28</td><td>Knowledge and Vault: Clarify Library vs Document Library distinction</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">29</td><td>The Vault: Fix text readability (visible colors)</td><td><span class="checkbox"></span></td><td></td></tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Section 2: SME Panel Recommendations -->
+        <div class="section">
+            <h1>2. SME Panel Recommendations (30-49)</h1>
+            <table>
+                <thead>
+                    <tr><th class="col-num">#</th><th class="col-action">Action</th><th class="col-status">Status</th><th class="col-comments">Comments</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td class="col-num">30</td><td>Dr Sarah Chen: Implement edge caching for global latency reduction</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">31</td><td>Marcus Webb: Add model versioning and A/B testing framework</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">32</td><td>Elena Rodriguez: Implement zero-trust architecture for API layer</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">33</td><td>Thomas Eriksson: Optimize database queries for scale</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">34</td><td>Lisa Park: Conduct usability testing with 20+ users monthly</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">35</td><td>David Müller: Reduce cognitive load in complex workflows</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">36</td><td>Sophie Laurent: Strengthen brand consistency in micro-interactions</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">37</td><td>Michael Santos: Document component library for consistency</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">38</td><td>Michael Torres: Prepare investor deck for Series A readiness</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">39</td><td>Dr Helen Wright: Establish monthly competitor tracking dashboard</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">40</td><td>Jonathan Blake: Identify potential acquisition targets in AI space</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">41</td><td>Carlos Mendez: Implement continuous improvement framework</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">42</td><td>Diana Patel: Create monthly investor update cadence</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">43</td><td>Emma Wilson: Implement proactive health scoring for accounts</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">44</td><td>Rachel Green: Launch NPS program with quarterly surveys</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">45</td><td>Daniel Brown: Build customer community with 1000+ members</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">46</td><td>William Taylor: Implement churn prediction model</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">47</td><td>Patrick Sullivan: Implement GDPR compliance automation</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">48</td><td>Natalie Chen: Conduct annual privacy impact assessments</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">49</td><td>Andrew Walsh: Establish board advisory committee</td><td><span class="checkbox"></span></td><td></td></tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Section 3: CEPHO Template Repository -->
+        <div class="section">
+            <h1>3. CEPHO Template Repository (50-64)</h1>
+            <table>
+                <thead>
+                    <tr><th class="col-num">#</th><th class="col-action">Action</th><th class="col-status">Status</th><th class="col-comments">Comments</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td class="col-num">50</td><td>CEO KPI Scorecard Report Template</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">51</td><td>Chief of Staff Briefing Paper Template</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">52</td><td>SME Panel Review Report Template</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">53</td><td>Project Genesis Assessment Template</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">54</td><td>Morning Signal Daily Briefing Template</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">55</td><td>Investor Update Template</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">56</td><td>Board Meeting Pack Template</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">57</td><td>Strategic Review Template</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">58</td><td>Competitive Analysis Template</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">59</td><td>Financial Summary Template</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">60</td><td>Customer Success Report Template</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">61</td><td>Development Action List Template</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">62</td><td>Process Documentation Template</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">63</td><td>Meeting Minutes Template</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">64</td><td>Decision Log Template</td><td><span class="checkbox"></span></td><td></td></tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Section 4: Notta Integration -->
+        <div class="section">
+            <h1>4. Notta Integration (65-70)</h1>
+            <table>
+                <thead>
+                    <tr><th class="col-num">#</th><th class="col-action">Action</th><th class="col-status">Status</th><th class="col-comments">Comments</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td class="col-num">65</td><td>Research Notta API capabilities</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">66</td><td>Set up Notta account connection</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">67</td><td>Build voice note import from Notta</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">68</td><td>Create sync mechanism for voice notes</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">69</td><td>Add Notta as fallback when Manus unavailable</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">70</td><td>Process Notta voice notes through COS pipeline</td><td><span class="checkbox"></span></td><td></td></tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Section 5: Morning Signal System -->
+        <div class="section">
+            <h1>5. Morning Signal System (71-102)</h1>
+            <table>
+                <thead>
+                    <tr><th class="col-num">#</th><th class="col-action">Action</th><th class="col-status">Status</th><th class="col-comments">Comments</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td class="col-num">71</td><td>Connect ElevenLabs TTS to daily signal content</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">72</td><td>Create voice briefing script generator</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">73</td><td>Add voice note player to Morning Signal page</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">74</td><td>Store generated audio files</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">75</td><td>Connect AI avatar video generation to daily signal</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">76</td><td>Create video script from signal content</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">77</td><td>Generate avatar video presentation</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">78</td><td>Add video player to Morning Signal page</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">79</td><td>Generate branded PDF using CEPHO design guidelines</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">80</td><td>Include all signal sections in PDF format</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">81</td><td>Add download button to Morning Signal page</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">82</td><td>Store generated PDFs</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">83</td><td>All outputs pass through Chief of Staff validation</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">84</td><td>Check design guidelines compliance</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">85</td><td>Verify content quality before delivery</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">86</td><td>Log all outputs for COS learning</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">87</td><td>Ensure all parts work together seamlessly end-to-end</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">88</td><td>Single trigger generates all three formats (voice, video, PDF)</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">89</td><td>Consistent content across all formats</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">90</td><td>Unified delivery mechanism</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">91</td><td>Error handling across the pipeline</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">92</td><td>Progress tracking for multi-format generation</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">93</td><td>Fallback if one format fails (others still deliver)</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">94</td><td>Define CEPHO voice tone profile</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">95</td><td>Create tone guidelines for different content types</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">96</td><td>Build tone matching system against user preferences</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">97</td><td>Implement urgency detection and appropriate delivery</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">98</td><td>Avoid monotone - vary pace and emphasis naturally</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">99</td><td>Create script structure templates (hook, body, close)</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">100</td><td>Define attention span guidelines</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">101</td><td>Build engagement hooks library</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">102</td><td>Implement boredom prevention</td><td><span class="checkbox"></span></td><td></td></tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Section 6: Content Quality SME Panel -->
+        <div class="section">
+            <h1>6. Content Quality SME Panel (103-114)</h1>
+            <table>
+                <thead>
+                    <tr><th class="col-num">#</th><th class="col-action">Action</th><th class="col-status">Status</th><th class="col-comments">Comments</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td class="col-num">103</td><td>Script Writer SME - review all scripts before generation</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">104</td><td>Film Director SME - advise on visual pacing and imagery</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">105</td><td>Voice Director SME - guide tone and delivery</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">106</td><td>Engagement Expert SME - optimize for attention retention</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">107</td><td>Optimize ElevenLabs voice settings for CEPHO tone</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">108</td><td>Implement dynamic pacing in voice scripts</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">109</td><td>Add emphasis markers for key points</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">110</td><td>Create voice style presets (briefing, urgent, casual)</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">111</td><td>Test and refine voice output quality</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">112</td><td>Define visual pacing guidelines</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">113</td><td>Create imagery prompts for key moments</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">114</td><td>Build transition and visual hook library</td><td><span class="checkbox"></span></td><td></td></tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Section 7: Quality Assurance System -->
+        <div class="section">
+            <h1>7. Quality Assurance System (115-124)</h1>
+            <table>
+                <thead>
+                    <tr><th class="col-num">#</th><th class="col-action">Action</th><th class="col-status">Status</th><th class="col-comments">Comments</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td class="col-num">115</td><td>Define engagement metrics for each format</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">116</td><td>Build feedback loop for continuous improvement</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">117</td><td>Track attention retention data</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">118</td><td>A/B test different approaches</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">119</td><td>COS reviews all outputs against quality standards</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">120</td><td>Daily Signal (voice, video, PDF) quality check</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">121</td><td>Project briefings quality check</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">122</td><td>SME consultations quality check</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">123</td><td>Reports and presentations quality check</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">124</td><td>All external communications quality check</td><td><span class="checkbox"></span></td><td></td></tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Section 8: Digital Twin Questionnaire -->
+        <div class="section">
+            <h1>8. Digital Twin Questionnaire (125-134)</h1>
+            <table>
+                <thead>
+                    <tr><th class="col-num">#</th><th class="col-action">Action</th><th class="col-status">Status</th><th class="col-comments">Comments</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td class="col-num">125</td><td>Add 200-question Digital Twin questionnaire to onboarding</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">126</td><td>Create database table to store questionnaire responses</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">127</td><td>Build questionnaire UI component with progress tracking</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">128</td><td>Split questionnaire into digestible sections</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">129</td><td>Store responses and calculate user profile scores</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">130</td><td>Generate Digital Twin profile from questionnaire responses</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">131</td><td>Show COS Understanding Level based on completion</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">132</td><td>Allow users to update answers over time</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">133</td><td>Use questionnaire data to personalize COS behavior</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">134</td><td>Make questionnaire completion part of Getting to 100 score</td><td><span class="checkbox"></span></td><td></td></tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Section 9: Chief of Staff KPI Dashboard -->
+        <div class="section">
+            <h1>9. Chief of Staff KPI Dashboard (135-140)</h1>
+            <table>
+                <thead>
+                    <tr><th class="col-num">#</th><th class="col-action">Action</th><th class="col-status">Status</th><th class="col-comments">Comments</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td class="col-num">135</td><td>Create ChiefOfStaffKPIReport component</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">136</td><td>Build SME Performance Heatmap with color-coded scoring</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">137</td><td>Create Business Area Scoring Table with all SME rankings</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">138</td><td>Implement Enhancement Recommendations engine</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">139</td><td>Add export functionality for report (PDF/CSV)</td><td><span class="checkbox"></span></td><td></td></tr>
+                    <tr><td class="col-num">140</td><td>Integrate report into Chief of Staff page</td><td><span class="checkbox"></span></td><td></td></tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <div class="footer-brand">CEPHO</div>
+            <div>Document Generated: 18 January 2026 | 14:15 GMT+4</div>
+            <div>Logged by: Chief of Staff</div>
+            <div class="design-note">Design Principles: Black text (#000000) | Pink accents (#E91E8C) | NO light grey</div>
+        </div>
+    </div>
+</body>
+</html>

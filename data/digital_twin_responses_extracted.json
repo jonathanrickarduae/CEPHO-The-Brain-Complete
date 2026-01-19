@@ -1,0 +1,163 @@
+{
+  "metadata": {
+    "extracted_from": "Screenshots IMG_0751-IMG_0765",
+    "extraction_date": "2026-01-18",
+    "questionnaire_version": "Part 2 (Sections 6-10)",
+    "total_questions_extracted": 100
+  },
+  "sections": {
+    "section_6_business_operations": {
+      "title": "Business Operations & Execution",
+      "type_a_scale_questions": {
+        "A51": {"value": 5, "description": "Balance between planning and moving fast"},
+        "A52": {"value": 9, "description": "Strong believer in measuring everything"},
+        "A53": {"value": 8, "description": "Prefer structured processes"},
+        "A54": {"value": 7, "description": "Lean toward quality over speed"},
+        "A55": {"value": 9, "description": "Strong process documentation"},
+        "A56": {"value": 7, "description": "Prefer standardization"},
+        "A57": {"value": 9, "description": "Believe in automation"},
+        "A58": {"value": 4, "description": "Lean toward flexibility"},
+        "A59": {"value": 4, "description": "Moderate risk tolerance"},
+        "A60": {"value": 9, "description": "Strong believer in automation"}
+      },
+      "type_b_yes_no_questions": {
+        "B51": {"value": true, "description": "Formal project management methodology"},
+        "B52": {"value": true, "description": "Fixed budgets"},
+        "B53": {"value": true, "description": "Regular financial reporting"},
+        "B54": {"value": true, "description": "Backup plans for critical operations"},
+        "B55": {"value": true, "description": "Prefer MVPs"},
+        "B56": {"value": false, "description": "Focus on few key metrics (not religiously)"},
+        "B57": {"value": true, "description": "Post-mortems after failures"},
+        "B58": {"value": true, "description": "Prefer in-house legal/finance"},
+        "B59": {"value": false, "description": "No formal vendor evaluation"},
+        "B60": {"value": true, "description": "Believe in kaizen/continuous improvement"}
+      }
+    },
+    "section_7_technology_innovation": {
+      "title": "Technology & Innovation",
+      "type_a_scale_questions": {
+        "A61": {"value": 10, "description": "Strong believer in custom technology"},
+        "A62": {"value": 10, "description": "Comfortable with technology I don't understand"},
+        "A63": {"value": 7, "description": "Prioritize UX over technical sophistication"},
+        "A64": {"value": 10, "description": "Believe in open-source"},
+        "A65": {"value": 8, "description": "Prefer cloud-native solutions"},
+        "A66": {"value": 9, "description": "Data-driven decisions"},
+        "A67": {"value": 9, "description": "Prioritize UX"},
+        "A68": {"value": 8, "description": "Open-source contributions"},
+        "A69": {"value": 9, "description": "Cloud-native preference"},
+        "A70": {"value": 10, "description": "Data-driven decisions"}
+      },
+      "type_b_yes_no_questions": {
+        "B61": {"value": true, "description": "Invest in R&D"},
+        "B62": {"value": true, "description": "Early adopter"},
+        "B63": {"value": false, "description": "Not always build vs buy"},
+        "B64": {"value": true, "description": "AI will be significant"},
+        "B65": {"value": true, "description": "Mobile-first"},
+        "B66": {"value": false, "description": "Not mobile-first (desktop-first)"},
+        "B67": {"value": false, "description": "Not API-first"},
+        "B68": {"value": true, "description": "Have cybersecurity strategy"},
+        "B69": {"value": false, "description": "Don't require technical co-founders"},
+        "B70": {"value": false, "description": "Delegate technology understanding"}
+      }
+    },
+    "section_8_market_competition": {
+      "title": "Market & Competition",
+      "type_a_scale_questions": {
+        "A71": {"value": 4, "description": "Lean toward B2C"},
+        "A72": {"value": 7, "description": "Lean toward B2B"},
+        "A73": {"value": 5, "description": "Balance premium vs volume"},
+        "A74": {"value": 3, "description": "Lean toward mass markets"},
+        "A75": {"value": 4, "description": "Lean toward B2C models"},
+        "A76": {"value": 5, "description": "Balance premium vs volume"},
+        "A77": {"value": 9, "description": "Prefer niche markets"},
+        "A78": {"value": 7, "description": "Lean toward vertical integration"},
+        "A79": {"value": 7, "description": "Lean toward global expansion"},
+        "A80": {"value": 7, "description": "Lean toward brand building"}
+      },
+      "type_b_yes_no_questions": {
+        "B71": {"value": true, "description": "Monitor competitor activities"},
+        "B72": {"value": true, "description": "Competitive intelligence gathering"},
+        "B73": {"value": true, "description": "Would acquire competitor"},
+        "B74": {"value": true, "description": "Strategic partnerships with competitors"},
+        "B75": {"value": false, "description": "Don't prefer M&A for growth"},
+        "B76": {"value": true, "description": "Customer segmentation strategies"},
+        "B77": {"value": true, "description": "Believe in market timing"},
+        "B78": {"value": true, "description": "Customer segmentation"},
+        "B79": {"value": false, "description": "Channel partnerships (not direct)"},
+        "B80": {"value": true, "description": "Geographic before product expansion"}
+      }
+    },
+    "section_9_personal_productivity": {
+      "title": "Personal Productivity & Wellness",
+      "type_a_scale_questions": {
+        "A81": {"value": 7, "description": "Lean toward morning productivity"},
+        "A82": {"value": 7, "description": "Prefer deep work blocks"},
+        "A83": {"value": 6, "description": "Slightly energized by meetings"},
+        "A84": {"value": 6, "description": "Moderate delegation"},
+        "A85": {"value": 4, "description": "Lean toward flexibility"},
+        "A86": {"value": 9, "description": "Strong time blocking"},
+        "A87": {"value": 3, "description": "Comfortable with interruptions"},
+        "A88": {"value": 9, "description": "Prefer batching tasks"},
+        "A89": {"value": 6, "description": "Moderate travel energy"},
+        "A90": {"value": 8, "description": "Prefer working from home"}
+      },
+      "type_b_yes_no_questions": {
+        "B81": {"value": true, "description": "Consistent morning routine"},
+        "B82": {"value": true, "description": "Exercise regularly"},
+        "B83": {"value": true, "description": "Meditate/mindfulness"},
+        "B84": {"value": false, "description": "Don't track sleep quality"},
+        "B85": {"value": true, "description": "Shutdown ritual"},
+        "B86": {"value": true, "description": "Regular vacations/breaks"},
+        "B87": {"value": true, "description": "Delegate effectively"},
+        "B88": {"value": true, "description": "Use productivity systems"},
+        "B89": {"value": true, "description": "Believe in inbox zero"},
+        "B90": {"value": true, "description": "Schedule personal time like meetings"}
+      }
+    },
+    "section_10_vision_legacy": {
+      "title": "Vision & Legacy",
+      "type_a_scale_questions": {
+        "A91": {"value": 7, "description": "Lean toward longer-term thinking"},
+        "A92": {"value": 3, "description": "Prefer diversified portfolio over one big bet"},
+        "A93": {"value": 4, "description": "Lean toward opportunistic decision making"},
+        "A94": {"value": 9, "description": "Believe in bold moves"},
+        "A95": {"value": 9, "description": "Strong vision orientation"},
+        "A96": {"value": 8, "description": "Lean toward transformative"},
+        "A97": {"value": 7, "description": "Lean toward long-term positioning"},
+        "A98": {"value": 6, "description": "Balance control vs adaptation"},
+        "A99": {"value": 10, "description": "Strong scenario planning"},
+        "A100": {"value": 6, "description": "Balance lasting vs financial exits"}
+      },
+      "type_b_yes_no_questions": {
+        "B91": {"value": true, "description": "Written personal vision statement"},
+        "B92": {"value": true, "description": "Annual strategic planning sessions"},
+        "B93": {"value": true, "description": "Believe in OKRs"},
+        "B94": {"value": true, "description": "Board of advisors"},
+        "B95": {"value": true, "description": "Formal strategic planning documents"},
+        "B96": {"value": false, "description": "Prefer create and exit over empire building"},
+        "B97": {"value": false, "description": "No defined investment thesis"},
+        "B98": {"value": false, "description": "Don't believe in skin in the game for all"},
+        "B99": {"value": false, "description": "Prefer operator over visionary"},
+        "B100": {"value": true, "description": "Legacy goal beyond financial success"}
+      }
+    }
+  },
+  "summary": {
+    "total_type_a_questions": 50,
+    "total_type_b_questions": 50,
+    "average_type_a_score": 6.9,
+    "type_b_yes_count": 35,
+    "type_b_no_count": 15,
+    "key_insights": [
+      "Strong believer in measurement and automation (A52=9, A57=9, A60=9)",
+      "Data-driven decision maker (A70=10)",
+      "Prefers scenario planning (A99=10)",
+      "Morning person with structured routines (B81=Y, B85=Y)",
+      "Values long-term positioning over short-term wins",
+      "Prefers diversified portfolio approach (A92=3)",
+      "Strong process orientation with flexibility",
+      "Believes in continuous improvement (kaizen)",
+      "Has legacy goals beyond financial success"
+    ]
+  }
+}

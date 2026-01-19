@@ -1,0 +1,704 @@
+{
+  "results": [
+    {
+      "input": "Healthcare: Moderna (mRNA therapeutics)",
+      "output": {
+        "company_name": "Moderna",
+        "sector": "Healthcare",
+        "sector_specific_sections": "Regulatory Pathway, Clinical Trials, IP Portfolio, Manufacturing and Scalability, Pipeline and Platform Technology",
+        "sector_specific_metrics": "Probability of Success (POS) of Clinical Trials, Pipeline Advancement (Phase Progression), Cash Burn Rate and Runway, Total Addressable Market (TAM) for each indication, Revenue and sales growth from approved products.",
+        "regulatory_considerations": "FDA and EMA approval are critical for market access in the US and Europe. A clear and well-defined regulatory strategy, including plans for clinical trials and data submission, is essential. Post-market surveillance and compliance are also significant considerations.",
+        "investor_focus_areas": "Strength and breadth of the IP portfolio, The experience and expertise of the management team and scientific advisory board, The company's ability to manufacture its products at scale, The commercialization strategy and ability to drive adoption of new products, The competitive landscape and the company's differentiation.",
+        "sector_best_practices": "A strong emphasis on the underlying science and technology platform, a clear and well-defined clinical and regulatory strategy, a diversified pipeline of product candidates to mitigate risk, a strong management team with a track record of success in the biotech industry, and a focus on unmet medical needs and large market opportunities.",
+        "key_takeaway": "A successful business plan in the mRNA therapeutics sector must demonstrate a powerful and versatile platform technology capable of generating a deep and diversified pipeline of product candidates, while simultaneously navigating a complex, lengthy, and expensive regulatory landscape."
+      },
+      "error": ""
+    },
+    {
+      "input": "Healthcare: Teladoc (telehealth)",
+      "output": {
+        "company_name": "Teladoc",
+        "sector": "Healthcare",
+        "sector_specific_sections": "Telehealth Service Delivery Model, Regulatory and Compliance Strategy, Technology and Infrastructure, Marketing and Patient Outreach Plan",
+        "sector_specific_metrics": "Patient Outcomes, Patient Satisfaction, Practitioner Utilization, Patient Engagement and Retention, Operational Efficiency, Financial Performance",
+        "regulatory_considerations": "HIPAA compliance, State licensure, Reimbursement policies",
+        "investor_focus_areas": "Scalability, Clinical Efficacy, Competitive Differentiation, Regulatory and Reimbursement Risk",
+        "sector_best_practices": "To stand out, a telehealth business plan should focus on a specific niche, demonstrate a clear value proposition, have a strong technology partner, and include a detailed financial model.",
+        "key_takeaway": "A successful telehealth business plan must go beyond a generic template and address the unique clinical, regulatory, and technological challenges and opportunities of the sector."
+      },
+      "error": ""
+    },
+    {
+      "input": "Healthcare: Oscar Health (health insurance)",
+      "output": {
+        "company_name": "Oscar Health",
+        "sector": "Healthcare",
+        "sector_specific_sections": "Technology Platform, Member Engagement Strategy, Reinsurance Strategy, Regulatory Compliance",
+        "sector_specific_metrics": "Medical Loss Ratio (MLR), Member Growth and Retention, Cost per Acquisition (CPA), Engagement Metrics (e.g., app usage, virtual care utilization), Claims Auto-Adjudication Rate",
+        "regulatory_considerations": "Affordable Care Act (ACA) compliance, state-level insurance regulations, HIPAA compliance, and providing a Summary of Benefits and Coverage (SBC).",
+        "investor_focus_areas": "Scalability of the technology platform, Path to profitability, Competitive differentiation, Regulatory risk",
+        "sector_best_practices": "Demonstrate a deep understanding of the member's health journey, not just as a payer of claims. Emphasize a technology-forward approach to improve member experience and outcomes while reducing costs. Initially focusing on a niche or underserved market can be a successful strategy.",
+        "key_takeaway": "Success in the health insurance sector hinges on the ability to create a superior member experience through technology and personalization, while navigating a complex regulatory landscape and demonstrating a clear path to profitability."
+      },
+      "error": ""
+    },
+    {
+      "input": "Healthcare: Hims & Hers (digital health)",
+      "output": {
+        "company_name": "Hims & Hers",
+        "sector": "Healthcare",
+        "sector_specific_sections": "Regulatory Strategy, Technology Platform, Provider Network, Patient Acquisition and Retention",
+        "sector_specific_metrics": "Customer Acquisition Cost (CAC), Lifetime Value (LTV), Churn Rate, Net Revenue Retention (NRR), Gross Margin, Number of consultations",
+        "regulatory_considerations": "HIPAA compliance, State-by-state provider licensure, FDA regulations for prescription drugs, and Corporate Practice of Medicine (CPOM) laws.",
+        "investor_focus_areas": "Scalability of the business model, Unit economics (LTV/CAC ratio), Regulatory risk mitigation, Competitive differentiation, Path to profitability",
+        "sector_best_practices": "A successful digital health business plan should demonstrate a deep understanding of the patient journey, showcase a strong brand and marketing strategy, emphasize a data-driven approach to product development and patient care, present a clear and defensible regulatory strategy, and highlight a scalable and efficient technology platform.",
+        "key_takeaway": "Success in the digital health sector requires a dual focus on both healthcare and technology, demonstrating expertise in navigating the complexities of the healthcare industry while leveraging technology to create a seamless and engaging patient experience."
+      },
+      "error": ""
+    },
+    {
+      "input": "Healthcare: 23andMe (genetic testing)",
+      "output": {
+        "company_name": "23andMe",
+        "sector": "Healthcare",
+        "sector_specific_sections": "Regulatory Pathway, Clinical Trials, IP Portfolio, Genomic Database and Research Partnerships, Data Privacy and Security.",
+        "sector_specific_metrics": "Customer Acquisition Cost (CAC), Lifetime Value (LTV), Churn Rate, Net Revenue Retention (NRR), Growth and engagement of the genomic database, Number and stage of development of therapeutic programs.",
+        "regulatory_considerations": "FDA approval for health-related reports, HIPAA compliance for handling protected health information, and adherence to data privacy regulations such as GDPR and CCPA.",
+        "investor_focus_areas": "Data security and privacy, Path to profitability, Competition, Clinical trial risk",
+        "sector_best_practices": "A stand-out business plan in this sector will detail a clear strategy for monetizing the genomic database beyond kit sales, demonstrate a strong commitment to data privacy and security to build consumer trust, present a clear regulatory strategy, and feature a diversified revenue model that is not solely reliant on one-time consumer purchases.",
+        "key_takeaway": "A successful business plan in the direct-to-consumer genetics testing sector must have a long-term strategy for leveraging data to create additional value beyond the initial consumer product, such as through therapeutic development or research partnerships, while navigating significant regulatory and privacy challenges."
+      },
+      "error": ""
+    },
+    {
+      "input": "Healthcare: Ro (digital pharmacy)",
+      "output": {
+        "company_name": "Ro",
+        "sector": "Healthcare",
+        "sector_specific_sections": "Regulatory Compliance and Licensing, Technology and Platform, Vertically Integrated Supply Chain, Patient Acquisition and Marketing Strategy, Clinical Protocols and Quality Assurance",
+        "sector_specific_metrics": "Customer Acquisition Cost (CAC), Lifetime Value (LTV), Patient Satisfaction/Net Promoter Score (NPS), Churn Rate, Medication Adherence Rates, Provider Utilization",
+        "regulatory_considerations": "HIPAA compliance, State-by-state pharmacy and medical licensing, FDA regulations for drugs and diagnostics, DEA regulations for controlled substances, and NABP accreditation.",
+        "investor_focus_areas": "Scalability of technology platform, Path to profitability, Regulatory risks and compliance, Competitive differentiation, Patient acquisition costs and retention",
+        "sector_best_practices": "A successful business plan in this sector should demonstrate a deep understanding of the patient journey and pain points, a clear strategy for navigating the complex regulatory landscape, and a scalable, vertically integrated model that prioritizes patient experience and outcomes. It should also showcase a multi-faceted revenue model that is not solely reliant on prescription fulfillment.",
+        "key_takeaway": "A successful digital health business plan must demonstrate a vertically integrated, patient-centric ecosystem that combines telehealth, diagnostics, and pharmacy services while navigating complex regulations."
+      },
+      "error": ""
+    },
+    {
+      "input": "Healthcare: Tempus (precision medicine)",
+      "output": {
+        "company_name": "Tempus",
+        "sector": "Healthcare",
+        "sector_specific_sections": "Genomics and Data Infrastructure, AI and Machine Learning Models, Clinical Trial Matching and Recruitment, Regulatory Pathway and Compliance, Intellectual Property Portfolio, Data Monetization Strategy",
+        "sector_specific_metrics": "Clinical sequencing volume, Size of data library (e.g., number of de-identified research records), Number of biopharma partnerships, Clinical trial enrollment rate, Revenue from data licensing vs. genomic testing",
+        "regulatory_considerations": "FDA approval for diagnostic tests, CLIA certification, CAP accreditation, HIPAA compliance, and data privacy and security.",
+        "investor_focus_areas": "Scalability of the business model, Quality and size of data assets, Strength of intellectual property, Path to profitability, Strategic partnerships with pharmaceutical companies",
+        "sector_best_practices": "A compelling business plan in this sector should highlight a dual business model that combines diagnostics with data licensing, creating multiple revenue streams. It should also demonstrate a flywheel effect, where the accumulation of data enhances the value of the company's products and services, creating a strong competitive advantage. Integrating with existing clinical workflows to ensure physician adoption is also a critical success factor.",
+        "key_takeaway": "A successful business plan in the precision medicine sector must demonstrate a clear strategy for building a proprietary, multimodal data asset and a virtuous cycle where data acquisition, analysis, and clinical application reinforce each other to create a strong competitive moat."
+      },
+      "error": ""
+    },
+    {
+      "input": "Healthcare: Butterfly Network (medical devices)",
+      "output": {
+        "company_name": "Butterfly Network",
+        "sector": "Healthcare",
+        "sector_specific_sections": "Regulatory pathway, Clinical trials, Intellectual property portfolio, Reimbursement strategy",
+        "sector_specific_metrics": "Adjusted gross profit, Adjusted gross margin, Adjusted EBITDA, Revenue growth, Cash burn, Customer adoption/penetration",
+        "regulatory_considerations": "FDA approval is required, with the specific pathway (Premarket Notification 510(k) or Premarket Approval (PMA)) depending on the device classification. HIPAA compliance is also critical if the device handles protected health information (PHI).",
+        "investor_focus_areas": "Regulatory risk, Market size and growth potential, Competitive landscape, Intellectual property, Reimbursement risk, Management team experience",
+        "sector_best_practices": "Business plans in the medical device sector stand out when they clearly articulate a strong clinical and economic value proposition, a well-defined regulatory strategy, a robust intellectual property portfolio, a detailed reimbursement strategy, and are backed by a credible and experienced management team.",
+        "key_takeaway": "A successful medical device business plan must comprehensively address the regulatory pathway and reimbursement strategy to de-risk the investment for stakeholders."
+      },
+      "error": ""
+    },
+    {
+      "input": "Fintech: Stripe (payments)",
+      "output": {
+        "company_name": "Stripe",
+        "sector": "Fintech",
+        "sector_specific_sections": "Technology Infrastructure, Customer Acquisition Strategy, Regulatory Compliance Framework, Monetization Strategy",
+        "sector_specific_metrics": "Customer Acquisition Cost (CAC), Lifetime Value (LTV), Churn Rate, Revenue Per User (RPU), Net Interest Margin (NIM), Loan Default Rate, Gross Transaction Value (GTV), Payment Success Rate, Fraud Rate",
+        "regulatory_considerations": "PCI DSS Compliance, Know Your Customer (KYC) and Anti-Money Laundering (AML), Payment Services Directive 2 (PSD2) (for Europe), Consumer Financial Protection Bureau (CFPB) regulations (for US)",
+        "investor_focus_areas": "Path to profitability (LTV/CAC ratio), Scalability of the business model, Customer acquisition and retention metrics, Risk management (fraud, credit), Regulatory compliance",
+        "sector_best_practices": "A fintech business plan stands out by focusing on a specific, underserved niche and demonstrating a deep understanding of customer pain points. It should articulate a clear and diversified monetization strategy, show a robust and compliant technology infrastructure plan, and detail a data-driven customer acquisition and iteration strategy.",
+        "key_takeaway": "A successful fintech business plan must demonstrate a deep understanding of a specific customer niche and a clear strategy for building a compliant, scalable, and profitable financial product."
+      },
+      "error": ""
+    },
+    {
+      "input": "Fintech: Plaid (financial data)",
+      "output": {
+        "company_name": "Plaid",
+        "sector": "Fintech",
+        "sector_specific_sections": "Technology and API Infrastructure, Data Security and Privacy, Regulatory and Compliance Strategy, Ecosystem and Partnerships, Use Cases and Developer Adoption",
+        "sector_specific_metrics": "API usage and transaction volume, Developer and app ecosystem growth, Customer Acquisition Cost (CAC), Customer Lifetime Value (LTV), Net Dollar Retention (NDR), Gross Margin, Uptime and reliability",
+        "regulatory_considerations": "Dodd-Frank Act Section 1033, Data privacy regulations (GDPR, CCPA), Anti-Money Laundering (AML) and Know Your Customer (KYC) programs, and adherence to data security standards like SOC 2.",
+        "investor_focus_areas": "Scalability and reliability of the platform, Data security and trust, Competitive moat, Monetization strategy, Regulatory risk, Path to profitability",
+        "sector_best_practices": "A successful business plan in this sector clearly articulates a multi-faceted value proposition for consumers, developers, and financial institutions. It should emphasize a developer-first approach to foster a strong ecosystem, and a commitment to data security and privacy to build trust. Demonstrating a clear understanding of the regulatory landscape and a proactive compliance strategy is also critical for standing out and attracting investment.",
+        "key_takeaway": "A successful business plan in the financial data sector must demonstrate a robust and secure technology platform that can navigate a complex regulatory environment while building a strong ecosystem of developers and financial institution partners."
+      },
+      "error": ""
+    },
+    {
+      "input": "Fintech: Chime (digital banking)",
+      "output": {
+        "company_name": "Chime",
+        "sector": "Fintech (Digital Banking)",
+        "sector_specific_sections": "Regulatory and Compliance Strategy, Technology Stack and Architecture, Partnership and Ecosystem Strategy, Customer Acquisition and Trust Building",
+        "sector_specific_metrics": "Customer Acquisition Cost (CAC), Lifetime Value (LTV), Churn Rate, Monthly Active Users (MAU), Transaction Volume, Assets Under Management (AUM), Loan Portfolio Yield, Loan Default Rate",
+        "regulatory_considerations": "Obtaining necessary licenses, Anti-Money Laundering (AML) and Know Your Customer (KYC) compliance, Data privacy and security (e.g., GDPR), Consumer protection regulations, and partnerships with regulated financial institutions.",
+        "investor_focus_areas": "Scalability of the business model, Path to profitability, Regulatory risk, Competitive landscape, Strength of the team, Technology and security",
+        "sector_best_practices": "A fintech business plan stands out by demonstrating a deep understanding of the regulatory environment, clearly articulating a unique value proposition, providing a detailed and realistic financial model, highlighting a strong and experienced team, and focusing on a specific niche or underserved market.",
+        "key_takeaway": "A key lesson for creating a business plan in the fintech sector is that a deep understanding of the regulatory landscape and a clear strategy for navigating it are just as important as the technology and business model."
+      },
+      "error": ""
+    },
+    {
+      "input": "Fintech: Brex (corporate cards)",
+      "output": {
+        "company_name": "Brex",
+        "sector": "Fintech",
+        "sector_specific_sections": "Risk Assessment & Underwriting, Compliance and Regulatory Strategy, Technology and Platform",
+        "sector_specific_metrics": "Customer Acquisition Cost (CAC), Lifetime Value (LTV), Churn Rate, Net Promoter Score (NPS), Monthly Recurring Revenue (MRR), Time to Value (TTV), Liquidity-at-Risk Percentage, Regulatory/Compliance Exceptions",
+        "regulatory_considerations": "Adherence to financial regulations (e.g., from SEC, FINRA, CFPB), data security and privacy laws (e.g., GDPR, CCPA), and Anti-Money Laundering (AML) and Know Your Customer (KYC) regulations.",
+        "investor_focus_areas": "Scalability of the business model, Strength of the technology and its defensibility (IP strategy), Customer acquisition and retention strategies, Regulatory compliance and risk management framework, Path to profitability",
+        "sector_best_practices": "A fintech business plan stands out with a clear and defensible technology advantage, a deep understanding of the regulatory landscape with a proactive compliance strategy, a data-driven approach to underwriting and risk management, a strong focus on user experience and customer support, and a scalable customer acquisition strategy.",
+        "key_takeaway": "A successful fintech business plan must demonstrate a deep understanding of the regulatory environment and a robust, technology-driven approach to risk management and customer acquisition, which are more critical than in many other sectors."
+      },
+      "error": ""
+    },
+    {
+      "input": "Fintech: Affirm (BNPL)",
+      "output": {
+        "company_name": "Affirm",
+        "sector": "Fintech",
+        "sector_specific_sections": "Technology and Platform Architecture, Risk Management and Underwriting Process, Regulatory and Compliance Strategy, Merchant Acquisition and Partnership Strategy, Funding and Capital Strategy",
+        "sector_specific_metrics": "Gross Merchandise Volume (GMV), Customer Acquisition Cost (CAC), Lifetime Value (LTV), Loan Delinquency Rates, Repeat Customer Rate, Time to Value (TTV), Net Promoter Score (NPS)",
+        "regulatory_considerations": "BNPL providers are under scrutiny from the CFPB, which is concerned about consumer debt, data harvesting, and lack of regulatory oversight. Compliance with TILA, state lending laws, and data privacy regulations like GLBA and CCPA is crucial.",
+        "investor_focus_areas": "Path to Profitability, Credit Risk Management, Competition, Regulatory Risk, Scalability",
+        "sector_best_practices": "Key best practices include transparency with consumers about loan terms, seamless integration for both consumers and merchants, data-driven underwriting using alternative data and machine learning, and building a two-sided network that creates value for both consumers and merchants to drive growth.",
+        "key_takeaway": "A successful business plan in the BNPL sector must demonstrate a robust, technology-driven approach to managing credit risk and a clear strategy for navigating the evolving regulatory landscape, as these are the primary factors that determine long-term viability and profitability."
+      },
+      "error": ""
+    },
+    {
+      "input": "Fintech: Klarna (BNPL)",
+      "output": {
+        "company_name": "Klarna",
+        "sector": "Fintech (BNPL)",
+        "sector_specific_sections": "Integrated Shopping Experience/Customer Journey, Go-to-Market Strategy (Merchant Acquisition & Partnerships), Technology and Data Infrastructure, Risk Management Framework (Credit & Fraud)",
+        "sector_specific_metrics": "Gross Merchandise Volume (GMV), Customer Acquisition Cost (CAC), Customer Lifetime Value (LTV), Repeat Purchase Rate, Default/Loss Rate, Return on Assets (ROA), Transaction Volume/Frequency",
+        "regulatory_considerations": "Evolving consumer protection laws, credit reporting regulations, data privacy and security (GDPR, CCPA), and Anti-Money Laundering (AML) and Know Your Customer (KYC) compliance are critical.",
+        "investor_focus_areas": "Scalability of the business model, Path to profitability, Customer acquisition and retention strategies, Technology and data analytics capabilities for credit risk assessment, Regulatory risks and compliance management, Differentiation from competitors",
+        "sector_best_practices": "A stand-out business plan will demonstrate a clear strategy to become an 'integrated shopping app' or 'super app' with diversified revenue streams beyond financing, such as affiliate marketing and cross-selling. It should also highlight a low-cost customer acquisition strategy through merchant partnerships and a strong brand to foster customer loyalty.",
+        "key_takeaway": "Success in the BNPL sector hinges on building an engaged ecosystem around the customer's entire shopping journey, rather than just providing a point-of-sale financing option."
+      },
+      "error": ""
+    },
+    {
+      "input": "Fintech: Revolut (neobank)",
+      "output": {
+        "company_name": "Revolut",
+        "sector": "Fintech",
+        "sector_specific_sections": "Regulatory Strategy, Technology Stack and Security, Customer Acquisition Costs (CAC) and Deposit Growth Strategy",
+        "sector_specific_metrics": "Time to Value (TTV), Liquidity-at-Risk Percentage, Regulatory/Compliance Exceptions Ratio, Customer Satisfaction (CSAT), Net Promoter Score (NPS), Time to Break Even (TTB), Customer Acquisition Cost (CAC), Lifetime Value (LTV), Churn Rate",
+        "regulatory_considerations": "Data protection (GDPR, CCPA), Anti-Money Laundering (AML), Know Your Customer (KYC), Payment services regulations (e.g., PSD2 in Europe), and obtaining necessary licenses (e.g., banking license).",
+        "investor_focus_areas": "Scalable business model, Innovative technology, Strong team, Market size, Competitive advantage, Traction, Regulatory compliance",
+        "sector_best_practices": "A successful fintech business plan should have a clear and detailed explanation of the regulatory strategy and compliance plan. It should also focus on the technology stack and security measures to build trust. A data-driven approach to customer acquisition and growth, and a strong emphasis on user experience and customer satisfaction are also crucial.",
+        "key_takeaway": "A successful fintech business plan must go beyond traditional financial projections and demonstrate a deep understanding of the regulatory landscape, a robust technology and security infrastructure, and a clear path to acquiring and retaining customers in a competitive market."
+      },
+      "error": ""
+    },
+    {
+      "input": "Fintech: Wise (international transfers)",
+      "output": {
+        "company_name": "Wise",
+        "sector": "Fintech",
+        "sector_specific_sections": "Regulatory and Compliance Strategy, Technology and Infrastructure, Risk Management Framework, Partnerships and Ecosystem",
+        "sector_specific_metrics": "Cross-border volume, Active customers, Customer acquisition cost (CAC), Lifetime value (LTV), Churn rate, Net Promoter Score (NPS)",
+        "regulatory_considerations": "Payment Services Directive (PSD2), General Data Protection Regulation (GDPR), Payment Card Industry Data Security Standard (PCI DSS), Know Your Customer (KYC), and Anti-Money Laundering (AML) regulations.",
+        "investor_focus_areas": "Scalability of business model, Path to profitability, Strength of the team, Competitive differentiation, Regulatory compliance",
+        "sector_best_practices": "A successful fintech business plan should clearly articulate a customer-centric approach, a robust and scalable technology infrastructure, and a well-defined strategy for navigating the complex regulatory environment. It should also highlight a clear path to profitability and a strong management team with relevant industry experience.",
+        "key_takeaway": "A successful fintech business plan must demonstrate a deep understanding of the regulatory landscape and a clear strategy for achieving compliance, as this is a critical factor for building trust and achieving long-term growth."
+      },
+      "error": ""
+    },
+    {
+      "input": "B2B SaaS: Salesforce (CRM)",
+      "output": {
+        "company_name": "Salesforce",
+        "sector": "B2B SaaS",
+        "sector_specific_sections": "Customer Acquisition and Retention Strategy, Product and Technology Roadmap, Financial Plan with SaaS Metrics",
+        "sector_specific_metrics": "Monthly Recurring Revenue (MRR), Annual Recurring Revenue (ARR), Customer Acquisition Cost (CAC), Customer Lifetime Value (LTV), Churn Rate, Net Revenue Retention (NRR)",
+        "regulatory_considerations": "Data Privacy and Security (GDPR, CCPA), Tax Requirements, Advertising and Marketing Regulations",
+        "investor_focus_areas": "Scalability, Unit Economics (LTV/CAC ratio), Market Size and Competitive Landscape, Management Team",
+        "sector_best_practices": "A successful SaaS business is built on a deep understanding of its customers' needs and pain points. Use data to inform all aspects of the business, from product development to marketing and sales. A strong brand is a key differentiator in a crowded market. Customer success is not just about providing support; it's about proactively helping customers achieve their desired outcomes.",
+        "key_takeaway": "The key to a successful B2B SaaS business plan is a relentless focus on the customer and a deep understanding of the unique financial and operational metrics that drive growth in the subscription economy."
+      },
+      "error": ""
+    },
+    {
+      "input": "B2B SaaS: HubSpot (marketing automation)",
+      "output": {
+        "company_name": "HubSpot",
+        "sector": "B2B SaaS (Marketing Automation)",
+        "sector_specific_sections": "Customer Acquisition and Retention Strategy, Go-to-Market Strategy, Technology Stack and Product Roadmap, Subscription and Pricing Model, Financial Projections with SaaS Metrics",
+        "sector_specific_metrics": "Monthly Recurring Revenue (MRR), Annual Recurring Revenue (ARR), Customer Acquisition Cost (CAC), Customer Lifetime Value (LTV), Churn Rate, Net Revenue Retention (NRR), CAC Payback Period, LTV-to-CAC Ratio",
+        "regulatory_considerations": "Data privacy and protection regulations such as GDPR and CCPA are critical, and for specific industries, compliance like HIPAA may be required.",
+        "investor_focus_areas": "Scalability of the business model, Unit economics (LTV-to-CAC ratio), Customer acquisition and retention strategies, Market size and growth potential, Strength of the management team",
+        "sector_best_practices": "A stand-out B2B SaaS business plan clearly defines the target market, demonstrates a deep understanding of the competitive landscape and the company's Unique Selling Proposition (USP), presents a robust financial model with a 5-year forecast emphasizing recurring revenue and key SaaS metrics, and showcases a strong management team with relevant experience.",
+        "key_takeaway": "A B2B SaaS business plan must demonstrate a clear path to sustainable, scalable, and profitable growth, with a strong emphasis on customer acquisition, retention, and the associated metrics."
+      },
+      "error": ""
+    },
+    {
+      "input": "B2B SaaS: Zendesk (customer service)",
+      "output": {
+        "company_name": "Zendesk",
+        "sector": "B2B SaaS (Customer Service)",
+        "sector_specific_sections": "Product Implementation/Roadmap, SaaS Business Model, Customer Acquisition and Retention Strategy, Financial Plan with SaaS Metrics",
+        "sector_specific_metrics": "Annual Recurring Revenue (ARR), Net Revenue Retention (NRR), Customer Acquisition Cost (CAC), Customer Lifetime Value (LTV), Churn Rate, CAC Payback Period, Gross Margin",
+        "regulatory_considerations": "Data privacy and security regulations (GDPR, CCPA), industry-specific compliance (HIPAA), security standards (SOC 2, ISO 27001), and payment processing standards (PCI DSS).",
+        "investor_focus_areas": "Scalable and predictable recurring revenue growth (ARR), High net revenue retention (NRR), Efficient customer acquisition (CAC payback period), Healthy gross margins, A clear path to profitability",
+        "sector_best_practices": "A business plan that stands out in the B2B SaaS sector will demonstrate a deep understanding of the target customer and their pain points, a clear and defensible competitive advantage, a scalable customer acquisition strategy, a product-led growth strategy, and a focus on data security and compliance.",
+        "key_takeaway": "A successful B2B SaaS business plan must demonstrate a clear path to scalable, profitable growth, supported by strong unit economics and a deep understanding of customer needs and the competitive landscape."
+      },
+      "error": ""
+    },
+    {
+      "input": "B2B SaaS: Workday (HR software)",
+      "output": {
+        "company_name": "Workday",
+        "sector": "B2B SaaS (HR Software)",
+        "sector_specific_sections": "Product Implementation/Roadmap, SaaS Business Model, Operations Plan, Risk Analysis",
+        "sector_specific_metrics": "Monthly Recurring Revenue (MRR), Average Revenue Per User (ARPU), Customer Acquisition Cost (CAC), Customer Lifetime Value (LTV), Churn Rate, Net Revenue Retention (NRR)",
+        "regulatory_considerations": "Data privacy and security (GDPR, CCPA, SOC 2), tax requirements, and advertising and marketing regulations.",
+        "investor_focus_areas": "Market Opportunity, Competitive Landscape, Traction and Milestones, Financial Projections, Team",
+        "sector_best_practices": "A strong emphasis on customer retention and reducing churn, a clear and detailed product roadmap, a well-defined go-to-market strategy, a focus on data security and compliance, and a scalable and efficient customer support system.",
+        "key_takeaway": "A successful B2B SaaS business plan must demonstrate a deep understanding of the target market, a clear path to customer acquisition and retention, and a robust financial model that accounts for the recurring revenue nature of the business."
+      },
+      "error": ""
+    },
+    {
+      "input": "B2B SaaS: ServiceNow (IT management)",
+      "output": {
+        "company_name": "ServiceNow",
+        "sector": "B2B SaaS (IT management)",
+        "sector_specific_sections": "Go-to-market strategy, Product-led growth strategy, Customer success & retention strategy",
+        "sector_specific_metrics": "ARR (Annual Recurring Revenue), CAC (Customer Acquisition Cost), LTV (Customer Lifetime Value), NRR (Net Revenue Retention), Churn Rate",
+        "regulatory_considerations": "Data privacy and security regulations (e.g., GDPR, CCPA), industry-specific compliance (e.g., HIPAA for healthcare).",
+        "investor_focus_areas": "Scalability of the business model, Strength of the team, Product-market fit, Path to profitability",
+        "sector_best_practices": "A strong emphasis on customer success, a clear and detailed go-to-market strategy, and a product-led growth approach are key. The business plan should demonstrate a deep understanding of the target market and a clear path to scaling the business.",
+        "key_takeaway": "A successful B2B SaaS business plan must demonstrate a clear path to acquiring, retaining, and growing a loyal customer base."
+      },
+      "error": ""
+    },
+    {
+      "input": "B2B SaaS: Snowflake (data cloud)",
+      "output": {
+        "company_name": "Snowflake",
+        "sector": "B2B SaaS",
+        "sector_specific_sections": "Product and Technology Roadmap, Go-to-Market Strategy, Customer Success and Support, Financial Projections with SaaS Metrics, Regulatory and Compliance Strategy",
+        "sector_specific_metrics": "Monthly Recurring Revenue (MRR), Customer Acquisition Cost (CAC), Customer Lifetime Value (LTV), Churn Rate, Net Revenue Retention (NRR)",
+        "regulatory_considerations": "Compliance with data privacy and security regulations such as SOC 2, GDPR, CCPA, and HIPAA is critical, especially when handling sensitive customer data.",
+        "investor_focus_areas": "Financial stability and predictable revenue, Low customer churn and high retention rates, Scalable and secure technology infrastructure, Clear intellectual property ownership, Strong and stable management team",
+        "sector_best_practices": "A standout B2B SaaS business plan demonstrates a deep understanding of the target customer and their pain points, a clear and scalable go-to-market strategy, and a robust financial model that emphasizes recurring revenue and key SaaS metrics. It should also showcase a strong technology foundation and a clear roadmap for product development and innovation.",
+        "key_takeaway": "A successful B2B SaaS business plan must demonstrate a deep understanding of the customer, a clear path to scalable and profitable growth, and a robust framework for managing the unique financial and operational complexities of the recurring revenue model."
+      },
+      "error": ""
+    },
+    {
+      "input": "B2B SaaS: Databricks (data analytics)",
+      "output": {
+        "company_name": "Databricks",
+        "sector": "B2B SaaS (Data Analytics)",
+        "sector_specific_sections": "Product Implementation/Onboarding, Customer Success & Support, Security & Compliance, Product Roadmap",
+        "sector_specific_metrics": "Monthly Recurring Revenue (MRR), Annual Recurring Revenue (ARR), Customer Acquisition Cost (CAC), Customer Lifetime Value (LTV), Churn Rate, Net Revenue Retention (NRR), CAC Payback Period",
+        "regulatory_considerations": "Data privacy regulations (GDPR, CCPA), SOC 2, and industry-specific regulations like HIPAA or PCI DSS are critical.",
+        "investor_focus_areas": "Scalability, Product-Market Fit, Competitive Moat, Unit Economics",
+        "sector_best_practices": "A B2B SaaS business plan stands out by demonstrating a deep understanding of the subscription model, focusing on customer acquisition, retention, and value realization. It should also showcase a clear path to profitability with strong unit economics (LTV:CAC ratio), a scalable growth strategy, and a robust approach to data security and compliance.",
+        "key_takeaway": "A successful B2B SaaS business plan must go beyond a generic template and meticulously detail the strategies for acquiring, retaining, and growing customer accounts in a subscription-based model, while also proving the business's scalability and profitability to investors."
+      },
+      "error": ""
+    },
+    {
+      "input": "Consumer: Warby Parker (eyewear DTC)",
+      "output": {
+        "company_name": "Warby Parker",
+        "sector": "Consumer",
+        "sector_specific_sections": "Direct-to-Consumer Strategy, Customer Experience and Technology, Social Impact/Mission",
+        "sector_specific_metrics": "Gross Margin % by SKU, Production Throughput Rate, Inventory Turnover Ratio, Customer Acquisition Cost (CAC), Defect Rate (Yield %), Operating Expense (OpEx) Ratio, Return on Equity (ROE)",
+        "regulatory_considerations": "FTC Eyeglass Rule compliance, prescription portability, and state-specific prescription requirements.",
+        "investor_focus_areas": "Scalability and growth potential, Brand strength and story, Founder-market fit, Unit economics (CAC/LTV)",
+        "sector_best_practices": "A strong brand narrative that resonates with consumers, a seamless and innovative customer experience (e.g., home try-on, virtual try-on), and a social impact component can make a business plan in this sector stand out. A clear path to profitability, beyond just revenue growth, is also critical.",
+        "key_takeaway": "Success in the DTC eyewear sector hinges on disrupting traditional models by offering a superior customer experience, a strong brand narrative, and a direct relationship with consumers, all while maintaining a keen focus on unit economics."
+      },
+      "error": ""
+    },
+    {
+      "input": "Consumer: Allbirds (sustainable footwear)",
+      "output": {
+        "company_name": "Allbirds",
+        "sector": "Consumer",
+        "sector_specific_sections": "Sustainability & Social Impact, Materials Innovation, Direct-to-Consumer (DTC) Strategy, Brand Story & Mission",
+        "sector_specific_metrics": "Customer Acquisition Cost (CAC), Lifetime Value (LTV), Churn Rate, Net Promoter Score (NPS), Gross Margin, Inventory Turnover",
+        "regulatory_considerations": "FTC Green Guides, Supply Chain Transparency, Consumer Product Safety Commission (CPSC)",
+        "investor_focus_areas": "Scalability of Sustainable Materials, Profitability vs. Growth, Brand Authenticity, Competition, Customer Loyalty",
+        "sector_best_practices": "A compelling brand story that resonates with consumers' values, transparency in the supply chain and manufacturing processes, a focus on high-quality, durable products that last, a multi-channel retail strategy that combines e-commerce with physical stores, and continuous innovation in sustainable materials and manufacturing techniques.",
+        "key_takeaway": "For a sustainable consumer brand like Allbirds, a successful business plan must not only demonstrate a path to profitability but also authentically embed sustainability into every aspect of the business, from materials and manufacturing to marketing and customer engagement."
+      },
+      "error": ""
+    },
+    {
+      "input": "Consumer: Glossier (beauty DTC)",
+      "output": {
+        "company_name": "Glossier",
+        "sector": "Consumer: Beauty DTC",
+        "sector_specific_sections": "Community-led growth and social media strategy, Brand identity and storytelling, Customer relationship management (CRM) and personalization, Supply chain and logistics for DTC",
+        "sector_specific_metrics": "Customer Acquisition Cost (CAC), Customer Lifetime Value (LTV), Churn Rate, Average Order Value (AOV), Gross Margin, Repeat Purchase Rate",
+        "regulatory_considerations": "FDA regulations under the Modernization of Cosmetics Regulation Act of 2022 (MoCRA), Fair Packaging and Labeling Act (FPLA) compliance, and ensuring marketing claims are truthful and not misleading.",
+        "investor_focus_areas": "Brand strength and community engagement, Scalability of the DTC model, Customer acquisition and retention strategies, Profitability and gross margins, Competitive landscape and differentiation",
+        "sector_best_practices": "Building a strong, authentic brand narrative and community is paramount. Leveraging social media and user-generated content for marketing, focusing on a seamless and personalized customer experience, and using data-driven decision-making for product development and marketing are all crucial for success in the DTC beauty sector.",
+        "key_takeaway": "Success in the DTC beauty sector is driven by building a strong brand community and fostering direct relationships with customers, rather than just selling products."
+      },
+      "error": ""
+    },
+    {
+      "input": "Consumer: Dollar Shave Club (subscription)",
+      "output": {
+        "company_name": "Dollar Shave Club",
+        "sector": "Consumer (Subscription)",
+        "sector_specific_sections": "Customer Acquisition Strategy, Subscription Model and Pricing, Customer Retention and Churn Analysis, Logistics and Fulfillment",
+        "sector_specific_metrics": "Customer Acquisition Cost (CAC), Customer Lifetime Value (LTV), LTV:CAC ratio, Churn Rate, Monthly Recurring Revenue (MRR), Average Revenue Per User (ARPU)",
+        "regulatory_considerations": "General consumer protection laws, regulations related to product safety and marketing claims.",
+        "investor_focus_areas": "Predictability of revenue, Scalability, Unit economics (LTV:CAC ratio), Customer retention and churn rate",
+        "sector_best_practices": "A strong brand and compelling storytelling are crucial for acquiring customers in a crowded market. The focus should be on the entire customer experience, from the initial marketing to the unboxing of the product. A data-driven approach to understanding customer behavior is essential for optimizing the service and reducing churn.",
+        "key_takeaway": "For a subscription-based consumer business, the focus should be on building a strong brand and a loyal customer base through a superior customer experience, while maintaining favorable unit economics (LTV > CAC)."
+      },
+      "error": ""
+    },
+    {
+      "input": "Consumer: Casper (mattress DTC)",
+      "output": {
+        "company_name": "Casper",
+        "sector": "Consumer: Direct-to-Consumer (DTC) Mattress",
+        "sector_specific_sections": "Product Innovation and Design, Supply Chain and Logistics, Marketing and Customer Acquisition, Customer Experience and Support",
+        "sector_specific_metrics": "CAC, LTV, Gross Margin, Conversion Rate, AOV, NPS",
+        "regulatory_considerations": "Compliance with federal flammability standards (16 CFR Parts 1632 and 1633), the Flammable Fabrics Act (FFA), and state-specific law label requirements.",
+        "investor_focus_areas": "Path to profitability, Customer acquisition cost (CAC) at scale, Brand strength and competitive moat, Repeat purchase behavior and customer lifetime value (LTV)",
+        "sector_best_practices": "Building a strong brand narrative, creating an omnichannel experience, leveraging social proof and user-generated content, and offering a generous trial and return policy are key to standing out in the DTC mattress sector.",
+        "key_takeaway": "A successful business plan in the DTC mattress sector must demonstrate a sophisticated understanding of digital marketing and branding, a clear strategy for managing customer acquisition costs, and a commitment to providing an exceptional customer experience to build a sustainable and profitable business in a competitive market."
+      },
+      "error": ""
+    },
+    {
+      "input": "Consumer: Peloton (connected fitness)",
+      "output": {
+        "company_name": "Peloton",
+        "sector": "Consumer",
+        "sector_specific_sections": "Hybrid Hardware-Subscription Model, Technology and Content Platform, Community and Engagement Strategy",
+        "sector_specific_metrics": "Connected-fitness subscribers, Monthly churn, Subscription revenue, Gross margin, Customer Acquisition Cost (CAC), Lifetime Value (LTV)",
+        "regulatory_considerations": "FDA regulation for low-risk general wellness devices, data privacy and security (e.g., GDPR, CCPA)",
+        "investor_focus_areas": "Path to profitability, Subscriber growth and retention, Competitive landscape, Supply chain management",
+        "sector_best_practices": "A strong brand and community, a seamless user experience across hardware and software, and a clear strategy for content and scaling the subscription model while managing hardware inventory and logistics.",
+        "key_takeaway": "The key to a successful connected fitness business plan is demonstrating a clear path to profitability through a hybrid model of high-margin subscription revenue and hardware sales, while building a strong brand and community to foster long-term customer retention."
+      },
+      "error": ""
+    },
+    {
+      "input": "Consumer: Oatly (plant-based food)",
+      "output": {
+        "company_name": "Oatly",
+        "sector": "Consumer: Plant-based food",
+        "sector_specific_sections": "Supply Chain and Sourcing, Sustainability and Environmental Impact, Brand and Marketing Strategy, Innovation and Product Development, Go-to-Market Strategy",
+        "sector_specific_metrics": "Sales Velocity, Market Share, Customer Acquisition Cost (CAC), Lifetime Value (LTV), Production Capacity and Utilization, Gross Margin",
+        "regulatory_considerations": "Food safety and labeling regulations (e.g., FDA), substantiation for health claims, and navigating international regulations for global expansion.",
+        "investor_focus_areas": "Brand authenticity and mission, Scalability of supply chain, Competitive landscape, Execution of multi-channel strategy, Path to profitability",
+        "sector_best_practices": "A compelling and authentic brand narrative that connects with consumers on an emotional and ethical level is crucial. A phased go-to-market strategy that begins with building brand credibility in the foodservice channel before expanding to retail can be highly effective. The product must be delicious and high-quality to win over mainstream consumers. Integrating sustainability into every aspect of the business is essential for long-term success.",
+        "key_takeaway": "In the plant-based food sector, a business plan must be built around a powerful and authentic brand that champions a clear mission, as this is the primary driver of consumer loyalty and competitive advantage."
+      },
+      "error": ""
+    },
+    {
+      "input": "Telecom: T-Mobile (wireless)",
+      "output": {
+        "company_name": "T-Mobile",
+        "sector": "Telecom",
+        "sector_specific_sections": "Network Infrastructure and Technology Roadmap, Customer Acquisition and Retention Strategy, Regulatory Compliance and Government Relations, Cybersecurity and Data Privacy",
+        "sector_specific_metrics": "Average Revenue Per User (ARPU), Churn Rate, Customer Acquisition Cost (CAC), Customer Lifetime Value (CLV), Network Availability/Uptime, EBITDA Margin",
+        "regulatory_considerations": "Spectrum licensing, data privacy and security compliance (e.g., GDPR), net neutrality regulations, and emergency services mandates (e.g., E911).",
+        "investor_focus_areas": "Path to Profitability and Sustainable Growth, Scalability of Network Infrastructure, Competitive Differentiation, Management of Regulatory and Technological Risks",
+        "sector_best_practices": "A deep emphasis on customer experience and a clear strategy to minimize churn, a forward-looking technology roadmap that addresses future trends like 5G, IoT, and AI, a robust and detailed financial model that includes key telecom-specific metrics, and a clear articulation of the company's competitive advantages.",
+        "key_takeaway": "In the telecom sector, a business plan must demonstrate a clear path to sustainable growth and profitability in a capital-intensive and highly competitive environment, with a relentless focus on customer retention and network excellence."
+      },
+      "error": ""
+    },
+    {
+      "input": "Telecom: Starlink (satellite internet)",
+      "output": {
+        "company_name": "Starlink",
+        "sector": "Telecom",
+        "sector_specific_sections": "Network Architecture and Technology, Regulatory and Licensing Strategy, Launch and Deployment Plan, Market Analysis",
+        "sector_specific_metrics": "Average Revenue Per User (ARPU), Churn Rate, Subscriber Growth, Network Performance (Latency, Throughput, Uptime), Cost per Launch, Customer Acquisition Cost (CAC)",
+        "regulatory_considerations": "Spectrum allocation, Landing rights, Space debris mitigation, National security and lawful intercept",
+        "investor_focus_areas": "Scalability of the constellation, Path to profitability, Competitive landscape, Technological risk",
+        "sector_best_practices": "A business plan in this sector stands out by demonstrating a clear path to navigating the complex regulatory landscape, a robust and scalable technological solution, and a well-defined strategy for reaching underserved markets. It should also highlight a strong management team with experience in both the space and telecommunications industries.",
+        "key_takeaway": "Success in the satellite internet sector hinges on a dual mastery of cutting-edge space technology and complex global regulations, requiring a business plan that is as much a technical and regulatory roadmap as it is a financial one."
+      },
+      "error": ""
+    },
+    {
+      "input": "Telecom: Twilio (communications API)",
+      "output": {
+        "company_name": "Twilio",
+        "sector": "Telecom",
+        "sector_specific_sections": "Platform Architecture and Technology Stack, Developer Ecosystem and Go-to-Market Strategy, API Product Roadmap, Global Network Infrastructure, Use Cases and Solutions",
+        "sector_specific_metrics": "Dollar-Based Net Expansion Rate, Number of Active Customer Accounts, API Usage Volume, Customer Acquisition Cost (CAC), Lifetime Value (LTV)",
+        "regulatory_considerations": "Compliance with telecommunications regulations in different countries, data privacy and protection laws (e.g., GDPR, CCPA), and adherence to industry standards like CAMARA for API development.",
+        "investor_focus_areas": "Scalability and reliability of the platform, Developer adoption and ecosystem growth, Path to profitability, Competitive differentiation",
+        "sector_best_practices": "A developer-first approach with a low-friction, self-service model is crucial. The business plan should emphasize a robust and scalable platform, a clear usage-based pricing model, and a strong focus on building a vibrant developer community. It should also showcase a clear path to expanding from a developer-centric base to enterprise-wide adoption.",
+        "key_takeaway": "A successful business plan in the CPaaS sector must demonstrate a clear strategy for building and nurturing a strong developer community, as this is the primary channel for customer acquisition and growth."
+      },
+      "error": ""
+    },
+    {
+      "input": "Telecom: Vonage (cloud communications)",
+      "output": {
+        "company_name": "Vonage",
+        "sector": "Telecom: Cloud Communications",
+        "sector_specific_sections": "Technology and Infrastructure, Service and Product Portfolio, Go-to-Market Strategy, Regulatory Compliance, Customer Support and Operations",
+        "sector_specific_metrics": "Service/System Availability, Reliability (Mean Time Between Failure and Mean Time To Repair), Response Time, Security, Throughput (Bandwidth), Latency, Scalability, Number of Customers, Customer Churn, Average Revenue Per Customer",
+        "regulatory_considerations": "FCC regulations for VoIP services, including 911 service obligations, local number portability (LNP), and protection of customer proprietary network information. Compliance with the Telecommunications Relay Services (TRS) Fund and adherence to various cloud compliance standards such as GDPR, HIPAA, and SOC 2.",
+        "investor_focus_areas": "Scalability and reliability of the platform, Security measures and data protection, Integration capabilities with existing business systems, Total cost of ownership and potential for cost savings, Quality of customer support and service level agreements (SLAs), Provider's expertise and track record in the industry",
+        "sector_best_practices": "A business plan in this sector stands out by demonstrating a robust and scalable technology infrastructure, a clear go-to-market strategy, and a strong focus on customer support and reliability. It should also address the complex regulatory landscape and highlight a clear path to profitability through a subscription-based model.",
+        "key_takeaway": "A successful business plan in the cloud communications sector must emphasize not just the technology, but also a deep understanding of the regulatory environment and a customer-centric approach to service and support."
+      },
+      "error": ""
+    },
+    {
+      "input": "Telecom: Bandwidth (communications platform)",
+      "output": {
+        "company_name": "Twilio",
+        "sector": "Telecom: Bandwidth (communications platform)",
+        "sector_specific_sections": "Developer Ecosystem and Community, API Strategy and Documentation, Platform Architecture and Scalability, Use Cases and Sample Applications, Go-to-Market for Developers",
+        "sector_specific_metrics": "Average Revenue Per User (ARPU), Annual Contract Value (ACV), Customer Churn Rate, Customer Lifetime Value (LTV), Customer Acquisition Cost (CAC), Monthly Recurring Revenue (MRR)",
+        "regulatory_considerations": "Adherence to regulations from bodies like the FCC, ITU, and NTIA, covering data privacy (e.g., GDPR, CCPA), cybersecurity standards, and telecommunication service regulations is critical.",
+        "investor_focus_areas": "Scalability of the platform, developer adoption and community engagement, competitive differentiation, total addressable market (TAM), and the company's go-to-market strategy.",
+        "sector_best_practices": "A business plan that stands out in this sector will feature a clear go-to-market strategy targeting developers, a comprehensive and well-documented API, a strong emphasis on platform reliability and security, and a detailed overview of potential use cases to showcase the platform's versatility.",
+        "key_takeaway": "A successful business plan in the CPaaS sector must prioritize the developer experience, offering a robust, well-documented, and easy-to-use API to foster adoption and innovation."
+      },
+      "error": ""
+    },
+    {
+      "input": "Real Estate: Opendoor (iBuying)",
+      "output": {
+        "company_name": "Opendoor",
+        "sector": "Real Estate",
+        "sector_specific_sections": "Technology and Automation, Logistics and Operations, Market Analysis and Expansion Strategy, Risk Management",
+        "sector_specific_metrics": "Contribution margin per home, Inventory turn rate, Customer Acquisition Cost (CAC), Net Promoter Score (NPS)",
+        "regulatory_considerations": "FTC scrutiny, Real estate licensing, Data privacy, AI and algorithm fairness",
+        "investor_focus_areas": "Path to profitability, Scalability, Risk management, Competitive moat",
+        "sector_best_practices": "A successful business plan in this sector must clearly articulate a sophisticated, data-driven approach to property valuation and risk management. It should emphasize operational efficiency and the ability to scale quickly while maintaining a positive customer experience. Transparency around the fee structure and the value proposition for sellers is crucial for building trust and overcoming regulatory scrutiny.",
+        "key_takeaway": "Success in the iBuying sector hinges on a delicate balance between rapid growth and rigorous risk management, underpinned by a robust technological and operational infrastructure."
+      },
+      "error": ""
+    },
+    {
+      "input": "Real Estate: Compass (real estate tech)",
+      "output": {
+        "company_name": "Compass",
+        "sector": "Real Estate Tech",
+        "sector_specific_sections": "Technology Platform and R&D, Agent Recruitment and Retention Strategy, Market Analysis and Expansion Plan, Adjacent Services (e.g., mortgage, title, escrow)",
+        "sector_specific_metrics": "Gross Transaction Value, Total Transactions, Average Number of Principal Agents, Net Platform Contribution Retention, Agent Retention Rate",
+        "regulatory_considerations": "Compliance with national, state, and local real estate licensing laws and regulations, as well as data privacy and security regulations.",
+        "investor_focus_areas": "Profitability, agent retention, competition from traditional and online brokerages, and the cyclical nature of the real estate market",
+        "sector_best_practices": "A successful business plan in this sector should demonstrate a strong agent-centric model, a proprietary and scalable technology platform that improves agent productivity, and a clear strategy for capturing market share in a competitive landscape. Emphasizing a virtuous cycle of agent success leading to company growth is a key differentiator.",
+        "key_takeaway": "A business plan in the real estate tech sector must demonstrate a clear path to empowering real estate agents through technology, as their success is directly tied to the company's success."
+      },
+      "error": ""
+    },
+    {
+      "input": "Real Estate: Redfin (real estate brokerage)",
+      "output": {
+        "company_name": "Redfin",
+        "sector": "Real Estate",
+        "sector_specific_sections": "Market Analysis (size, trends, competition), Technology and Platform (proprietary software, data analytics), Agent Model (salaried vs. commission, training), Marketing and Customer Acquisition Strategy, Financial Projections (detailed revenue and cost models)",
+        "sector_specific_metrics": "Gross Merchandise Value (GMV), Market Share, Revenue per Transaction, Customer Acquisition Cost (CAC), Agent Productivity (transactions per agent), Attach Rate of ancillary services (mortgage, title)",
+        "regulatory_considerations": "Compliance with real estate licensing laws in each state of operation, the Real Estate Settlement Procedures Act (RESPA), fair housing laws, and data privacy and security regulations are all critical.",
+        "investor_focus_areas": "Path to profitability, Scalability of the business model, Competitive differentiation (technology, service), Customer satisfaction and retention, Ability to attract and retain top agent talent",
+        "sector_best_practices": "A standout business plan in the real estate sector will detail a hybrid model that combines technology with human agents to create a seamless, end-to-end customer experience. It should also emphasize data-driven decision-making in all aspects of the business and a strategy for building a strong brand and community around the platform.",
+        "key_takeaway": "A successful real estate brokerage business plan must demonstrate a clear strategy for leveraging technology to create a more efficient and customer-centric experience than traditional brokerages, while also showing a viable path to profitability in a competitive market."
+      },
+      "error": ""
+    },
+    {
+      "input": "Real Estate: WeWork (flexible workspace)",
+      "output": {
+        "company_name": "WeWork",
+        "sector": "Real Estate: Flexible Workspace",
+        "sector_specific_sections": "Community and Culture, Technology and Infrastructure, Location and Market Analysis, Membership and Pricing Models, Partnerships and Amenities",
+        "sector_specific_metrics": "Occupancy Rate, Revenue per Available Desk (RevPAD), Member Churn Rate, Customer Acquisition Cost (CAC), Lifetime Value (LTV) of a member, Average Revenue Per Member (ARPM)",
+        "regulatory_considerations": "Zoning and building codes, Health and safety regulations, Lease agreements, Data privacy and security",
+        "investor_focus_areas": "Path to profitability, Scalability of the business model, Unit economics, Competitive differentiation, Strength of the management team",
+        "sector_best_practices": "A strong emphasis on community building and creating a vibrant and collaborative environment. Flexible and tiered membership options to cater to a diverse range of clients. Integration of technology to enhance the member experience. Strategic partnerships with local businesses to offer additional value and amenities. A well-defined brand and a unique value proposition.",
+        "key_takeaway": "A successful flexible workspace business plan must demonstrate a clear path to profitability by balancing the high fixed costs of real estate with a flexible and diversified revenue model, while also creating a strong sense of community to attract and retain members."
+      },
+      "error": ""
+    },
+    {
+      "input": "Real Estate: Airbnb (short-term rentals)",
+      "output": {
+        "company_name": "Airbnb",
+        "sector": "Real Estate: Short-term rentals",
+        "sector_specific_sections": "Guest Personas, Value Proposition, Competitive Analysis, Operations and Teams, Pricing and Revenue Management, Marketing and Distribution",
+        "sector_specific_metrics": "Occupancy rate, Average Daily Rate (ADR), Revenue per Available Room (RevPAR), Cash on Cash (CoC) return, Return on Investment (ROI), monthly profit, and operational expenses as a percentage of revenue.",
+        "regulatory_considerations": "Thorough research of local zoning laws, short-term rental regulations, licensing requirements, and potential for future restrictions is critical.",
+        "investor_focus_areas": "Financial plan for growth and scaling, profitability analysis, cash flow forecast, expected ROI and CoC return, risk mitigation strategies",
+        "sector_best_practices": "A stand-out business plan will include a deep competitive analysis of the local market, a defined guest persona, a clear value proposition, and a detailed operational plan covering everything from guest communication to inventory management. It should also feature a sophisticated pricing and revenue management strategy.",
+        "key_takeaway": "A successful short-term rental business plan requires a hyper-localized strategy, detailed operational planning, and a clear path to profitability to attract investment and ensure long-term success."
+      },
+      "error": ""
+    },
+    {
+      "input": "Energy: Tesla Energy (solar/storage)",
+      "output": {
+        "company_name": "Tesla Energy",
+        "sector": "Energy",
+        "sector_specific_sections": "Technology and Equipment, System Design and Engineering, Interconnection and Grid Integration, Operations and Maintenance, Regulatory and Environmental Compliance, Project Finance",
+        "sector_specific_metrics": "Energy Performance Index (EPI), Levelized Cost of Energy (LCOE), Customer Acquisition Cost (CAC), Lifetime Value (LTV), EBITDA Margin, Grid stability metrics, Cycle life (for storage), Round-trip efficiency (for storage)",
+        "regulatory_considerations": "Federal, state, and local energy policies, environmental regulations, permitting requirements, interconnection standards, and power purchase agreements (PPAs).",
+        "investor_focus_areas": "Technical and commercial due diligence, Project bankability, Market risks and opportunities, Grid integration strategy, Long-term service and maintenance plans",
+        "sector_best_practices": "A business plan in this sector should have a strong emphasis on technical feasibility, detailed financial projections that account for long-term operational costs and revenue streams, and a clear strategy for navigating the complex regulatory landscape. It should also include a robust analysis of the competitive landscape and a clear articulation of the company's unique value proposition.",
+        "key_takeaway": "A successful business plan in the energy sector must go beyond a simple market analysis and product description to include a detailed, data-driven analysis of the technical, financial, and regulatory aspects of the project."
+      },
+      "error": ""
+    },
+    {
+      "input": "Energy: Sunrun (residential solar)",
+      "output": {
+        "company_name": "Sunrun",
+        "sector": "Energy",
+        "sector_specific_sections": "Virtual Power Plant (VPP) Strategy, Customer Acquisition Channels, Financing and Capital Strategy, Regulatory Environment and Incentives, Technology and Product Roadmap (including battery storage)",
+        "sector_specific_metrics": "Net Subscriber Value, Creation Costs, Contracted Subscriber Value, Customer Lifetime Value (LTV), Customer Acquisition Cost (CAC), Churn Rate",
+        "regulatory_considerations": "Federal Investment Tax Credit (ITC), state and local solar incentives, net metering policies, and interconnection standards.",
+        "investor_focus_areas": "Scalability of the Virtual Power Plant (VPP) model, Customer Acquisition Cost (CAC) vs. Lifetime Value (LTV), Access to low-cost capital, Sensitivity to regulatory changes (e.g., net metering, tax incentives)",
+        "sector_best_practices": "A successful business plan in this sector must demonstrate a clear path to profitability through a strong financing strategy, a diversified customer acquisition model, and a compelling value proposition that includes not just cost savings but also energy resilience and grid services. Emphasis on building a brand and customer trust is also critical for long-term success.",
+        "key_takeaway": "Success in the residential solar sector hinges on a capital-intensive, subscription-based model that requires a sophisticated financing strategy and a robust customer acquisition engine to achieve scale and profitability."
+      },
+      "error": ""
+    },
+    {
+      "input": "Energy: ChargePoint (EV charging)",
+      "output": {
+        "company_name": "ChargePoint",
+        "sector": "Energy: EV Charging",
+        "sector_specific_sections": "Technology and Infrastructure, Site Acquisition and Partnership Strategy, Utility and Grid Integration, Regulatory and Compliance Roadmap, Interoperability and Network Effects",
+        "sector_specific_metrics": "Charger Utilization Rate, Charger Availability Rate (Uptime), Average Revenue Per Charging Session, Customer Acquisition Cost (CAC) and Lifetime Value (LTV), Energy Delivered (kWh), Network Growth Rate",
+        "regulatory_considerations": "Zoning and Permitting, Utility Regulation, Building Codes, Data Privacy and Security, Accessibility Standards",
+        "investor_focus_areas": "Scalability of the Business Model, Path to Profitability, Technology Differentiation, Strength of Partnerships, Management of Electricity Costs",
+        "sector_best_practices": "A business plan in the EV charging sector stands out when it demonstrates a dual-sided platform approach with a clear value proposition for both EV drivers and site hosts. It should also focus on customer experience, data-driven decision-making, and future-proofing the technology.",
+        "key_takeaway": "The key lesson for creating a business plan in the EV charging sector is that success hinges on demonstrating a holistic and integrated strategy that addresses the unique interplay of technology, real estate, energy markets, and regulation, while proving a scalable and profitable model for all stakeholders in the ecosystem."
+      },
+      "error": ""
+    },
+    {
+      "input": "Energy: Rivian (electric vehicles)",
+      "output": {
+        "company_name": "Rivian",
+        "sector": "Energy",
+        "sector_specific_sections": "Technology and Innovation, Charging Infrastructure, Manufacturing and Supply Chain, Regulatory and Environmental Compliance",
+        "sector_specific_metrics": "Pre-orders and Reservations, Battery Cost per kWh, Vehicle Range and Efficiency (miles/kWh), Charging Speed and Network Coverage, Production Ramp-up Rate",
+        "regulatory_considerations": "Compliance with vehicle safety standards (e.g., NHTSA), environmental regulations (e.g., EPA), and securing intellectual property rights are critical.",
+        "investor_focus_areas": "Scalability of manufacturing and production, Battery technology and supply chain, Competitive differentiation and brand positioning, Path to profitability and long-term financial sustainability, Strength of the management and engineering teams",
+        "sector_best_practices": "Business plans in the EV sector stand out by showcasing a strong technology roadmap, a detailed plan for scalable manufacturing and supply chain management, and a comprehensive strategy for charging infrastructure. Emphasizing a direct-to-consumer model, a strong brand identity, and a clear path to profitability are also key differentiators.",
+        "key_takeaway": "A successful business plan in the electric vehicle sector must demonstrate a clear and credible path to achieving manufacturing scale and profitability in a capital-intensive and rapidly evolving market."
+      },
+      "error": ""
+    },
+    {
+      "input": "Energy: QuantumScape (solid-state batteries)",
+      "output": {
+        "company_name": "QuantumScape",
+        "sector": "Energy",
+        "sector_specific_sections": "Technology and IP Portfolio, Manufacturing and Scalability Plan, Go-to-Market Strategy and Ecosystem Development, Product Roadmap",
+        "sector_specific_metrics": "Energy Density (Wh/kg), Power Density (W/kg), Cycle Life, Charging Speed, Safety performance, Cost per kWh ($/kWh), Manufacturing Yield, Round-Trip Efficiency",
+        "regulatory_considerations": "Compliance with battery safety standards (e.g., UL standards), environmental regulations for materials and manufacturing, and transportation regulations for high-energy-density batteries.",
+        "investor_focus_areas": "Technology validation and performance data, Scalability of manufacturing process, Strength of IP portfolio, Go-to-market strategy and partnerships, Long-term development roadmap",
+        "sector_best_practices": "A standout business plan in this sector will de-risk the investment by providing strong third-party validation of the technology, detailed plans for scaling production, a clear strategy for building a partner ecosystem, and a comprehensive intellectual property strategy. It needs to build confidence in the company's ability to transition from a research-focused entity to a commercially viable enterprise.",
+        "key_takeaway": "A successful business plan in the solid-state battery sector must not only present a compelling technological innovation but also a clear and credible roadmap for scaling manufacturing and building a robust ecosystem of partners to achieve commercialization."
+      },
+      "error": ""
+    },
+    {
+      "input": "Logistics: Flexport (freight forwarding)",
+      "output": {
+        "company_name": "Flexport",
+        "sector": "Logistics",
+        "sector_specific_sections": "Operations and Technology Infrastructure, Regulatory Compliance and Licensing, Network and Partnership Strategy",
+        "sector_specific_metrics": "On-Time Delivery Rate, Customer Acquisition Cost (CAC), Lifetime Value (LTV), Gross Margin, Shipment Volume Growth, Technology Adoption/Platform Usage",
+        "regulatory_considerations": "Customs Broker License, International trade regulations, Import/export laws, Transportation-specific regulations",
+        "investor_focus_areas": "Scalability of technology platform, Ability to manage complex global supply chains, Strategy for navigating low-margin freight forwarding, Approach to managing regulatory and compliance risks",
+        "sector_best_practices": "A standout business plan in this sector demonstrates a clear technology-driven value proposition that addresses the inefficiencies of the traditional freight forwarding industry. It should also showcase a robust and scalable operational model and a deep understanding of the regulatory landscape.",
+        "key_takeaway": "A successful business plan in the logistics sector must leverage technology to solve the inherent complexities and inefficiencies of global trade, creating a more transparent and efficient experience for customers."
+      },
+      "error": ""
+    },
+    {
+      "input": "Logistics: Convoy (digital freight)",
+      "output": {
+        "company_name": "Convoy",
+        "sector": "Logistics",
+        "sector_specific_sections": "Technology Platform and Architecture, Marketplace Dynamics, Network Effects, Data Strategy",
+        "sector_specific_metrics": "Gross Merchandise Value (GMV), Net Revenue, Contribution Margin, Load Growth, Carrier and Shipper Churn, Technology Adoption Rate",
+        "regulatory_considerations": "FMCSA Compliance, Data Privacy and Security, Insurance and Liability",
+        "investor_focus_areas": "Scalability, Path to Profitability, Competitive Differentiation, Market Volatility",
+        "sector_best_practices": "A successful business plan in the digital freight sector should demonstrate a deep understanding of the trucking industry, a clear path to profitability on a per-transaction basis, a strong carrier network, and a commitment to continuous technological innovation.",
+        "key_takeaway": "A resilient business model that can weather the inherent volatility of the freight market is more critical for long-term success than rapid, venture-backed growth at any cost."
+      },
+      "error": ""
+    },
+    {
+      "input": "Logistics: DoorDash (delivery)",
+      "output": {
+        "company_name": "DoorDash",
+        "sector": "Logistics",
+        "sector_specific_sections": "Operating Strategy, Technology Infrastructure, Driver Management Plan, Unit Economics",
+        "sector_specific_metrics": "Gross Order Value (GOV), Revenue Growth, Net Revenue Margin, Customer Acquisition Cost (CAC), Lifetime Value (LTV), Churn Rate, Contribution Margin per Order, Dasher utilization rate",
+        "regulatory_considerations": "Gig worker classification, Commission fee caps, Food safety and handling, Data privacy, Antitrust concerns",
+        "investor_focus_areas": "Path to profitability, Scalability of the business model, Competitive differentiation, Unit economics, Regulatory risks, Technology and data advantage",
+        "sector_best_practices": "A detailed and realistic Operating Strategy that addresses logistics, driver management, and technology. A thorough Competitive Analysis that identifies a clear and sustainable competitive advantage. A convincing Financial Projections section with a clear path to profitability and strong unit economics. A focus on customer experience and how the service will address common pain points in the delivery industry. A clear strategy for driver acquisition, retention, and satisfaction.",
+        "key_takeaway": "Operational excellence and a clear path to profitability are paramount, as the logistics of delivery are complex and low-margin, so a successful business plan must demonstrate a deep understanding of the operational challenges and a credible strategy for achieving profitability at scale."
+      },
+      "error": ""
+    },
+    {
+      "input": "Logistics: Instacart (grocery delivery)",
+      "output": {
+        "company_name": "Instacart",
+        "sector": "Logistics",
+        "sector_specific_sections": "Logistics and Fulfillment Model, Technology Platform, Retail Partnerships, Two-Sided Marketplace Strategy",
+        "sector_specific_metrics": "Customer Acquisition Cost (CAC), Customer Lifetime Value (LTV), Average Order Value (AOV), Order Frequency, Gross Merchandise Value (GMV), Contribution Margin per Order, On-Time Delivery Rate, Order Accuracy, Shopper Retention Rate",
+        "regulatory_considerations": "Food safety and handling, labor laws, data privacy, and business licenses.",
+        "investor_focus_areas": "Path to Profitability, Scalability, Unit Economics, Competitive Differentiation, Technology and Infrastructure",
+        "sector_best_practices": "A successful business plan in this sector should emphasize a multi-sided platform that creates value for customers, shoppers, and retail partners. It needs to demonstrate a deep understanding of the logistical challenges of on-demand delivery and present a scalable technology solution. Building strong relationships with grocery retailers is crucial for a wide product selection and competitive pricing.",
+        "key_takeaway": "The key to a successful grocery delivery business plan is to demonstrate a clear strategy for balancing the needs of a three-sided marketplace (customers, shoppers, and retailers) while managing complex logistics and achieving positive unit economics."
+      },
+      "error": ""
+    },
+    {
+      "input": "Logistics: Getir (quick commerce)",
+      "output": {
+        "company_name": "Getir",
+        "sector": "Logistics",
+        "sector_specific_sections": "Technology and Operations, Franchise Model, Service Portfolio",
+        "sector_specific_metrics": "Customer Acquisition Cost (CAC), Customer Lifetime Value (LTV), Churn Rate, Average Order Value (AOV), Delivery Time, Order Accuracy, Inventory Turnover",
+        "regulatory_considerations": "Compliance with local regulations for dark stores, including zoning, licensing, and safety; adherence to food safety standards for storage and handling of perishable goods; compliance with packaging and labeling laws for all products; and compliance with labor laws for delivery couriers.",
+        "investor_focus_areas": "Path to profitability, Scalability, Competitive differentiation, Unit economics, Logistics and supply chain",
+        "sector_best_practices": "A business plan in the quick commerce sector stands out by demonstrating a clear path to profitability through operational efficiency, a strong brand, and a loyal customer base. It should also highlight a robust technology stack that can optimize everything from inventory management to delivery routes. A detailed explanation of the unit economics and a clear strategy for managing the complex logistics of last-mile delivery are also crucial.",
+        "key_takeaway": "Success in the quick commerce sector hinges on a deep understanding of the complex interplay between technology, logistics, and unit economics, and the ability to execute flawlessly on all three fronts."
+      },
+      "error": ""
+    }
+  ]
+}
