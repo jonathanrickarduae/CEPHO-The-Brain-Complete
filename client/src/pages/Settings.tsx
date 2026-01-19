@@ -150,6 +150,35 @@ export default function Settings() {
                 </div>
               </div>
 
+              {/* Questionnaires Section */}
+              <div className="bg-gray-800 rounded-xl border border-gray-700 p-6 mt-6">
+                <h3 className="text-lg font-semibold text-white mb-4">Strategic Questionnaires</h3>
+                <p className="text-sm text-foreground/70 mb-4">Complete these questionnaires to help configure your Digital Twin and strategic framework.</p>
+                <div className="space-y-3">
+                  <a 
+                    href="/questionnaires/strategic-framework-questionnaire.html" 
+                    target="_blank"
+                    className="flex items-center justify-between p-4 bg-gray-900 border border-gray-700 rounded-lg hover:border-cyan-500/50 transition-colors group"
+                  >
+                    <div>
+                      <h4 className="font-medium text-white">Strategic Framework Questionnaire</h4>
+                      <p className="text-sm text-foreground/70">Define your business strategy and goals</p>
+                    </div>
+                    <ChevronRight className="w-5 h-5 text-foreground/50 group-hover:text-cyan-400 transition-colors" />
+                  </a>
+                  <a 
+                    href="/questionnaires/chief-of-staff-questionnaire.html" 
+                    target="_blank"
+                    className="flex items-center justify-between p-4 bg-gray-900 border border-gray-700 rounded-lg hover:border-cyan-500/50 transition-colors group"
+                  >
+                    <div>
+                      <h4 className="font-medium text-white">Chief of Staff Questionnaire</h4>
+                      <p className="text-sm text-foreground/70">Configure your virtual assistant preferences</p>
+                    </div>
+                    <ChevronRight className="w-5 h-5 text-foreground/50 group-hover:text-cyan-400 transition-colors" />
+                  </a>
+                </div>
+              </div>
 
               </>
             )}

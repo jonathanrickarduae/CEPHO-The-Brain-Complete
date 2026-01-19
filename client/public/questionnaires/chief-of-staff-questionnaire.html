@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chief of Staff Questionnaire | CEPHO.Ai</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 50%, #16213e 100%);
+      min-height: 100vh;
+      color: #fff;
+      padding: 20px;
+    }
+    
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    
+    header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding: 30px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 20px;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    h1 {
+      font-size: 2rem;
+      background: linear-gradient(135deg, #06b6d4, #8b5cf6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 10px;
+    }
+    
+    .subtitle {
+      color: rgba(255,255,255,0.7);
+      font-size: 1rem;
+    }
+    
+    .section {
+      background: rgba(255,255,255,0.05);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 24px;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    .section-title {
+      font-size: 1.25rem;
+      color: #06b6d4;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    .question {
+      margin-bottom: 24px;
+    }
+    
+    .question-label {
+      display: block;
+      font-weight: 500;
+      margin-bottom: 12px;
+      color: rgba(255,255,255,0.9);
+    }
+    
+    .question-hint {
+      font-size: 0.875rem;
+      color: rgba(255,255,255,0.5);
+      margin-bottom: 8px;
+    }
+    
+    /* Scale Input (1-10) */
+    .scale-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .scale-input {
+      flex: 1;
+      -webkit-appearance: none;
+      height: 8px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 4px;
+      outline: none;
+    }
+    
+    .scale-input::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 24px;
+      height: 24px;
+      background: linear-gradient(135deg, #06b6d4, #8b5cf6);
+      border-radius: 50%;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(6,182,212,0.4);
+    }
+    
+    .scale-value {
+      min-width: 40px;
+      text-align: center;
+      font-weight: 600;
+      color: #06b6d4;
+      font-size: 1.25rem;
+    }
+    
+    .scale-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.5);
+      margin-top: 4px;
+    }
+    
+    /* Yes/No Toggle */
+    .toggle-group {
+      display: flex;
+      gap: 12px;
+    }
+    
+    .toggle-btn {
+      flex: 1;
+      padding: 12px 24px;
+      border: 2px solid rgba(255,255,255,0.2);
+      background: transparent;
+      color: rgba(255,255,255,0.7);
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+    
+    .toggle-btn:hover {
+      border-color: rgba(6,182,212,0.5);
+    }
+    
+    .toggle-btn.active {
+      background: linear-gradient(135deg, #06b6d4, #8b5cf6);
+      border-color: transparent;
+      color: #fff;
+    }
+    
+    /* Text Input */
+    .text-input {
+      width: 100%;
+      padding: 12px 16px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 12px;
+      color: #fff;
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    
+    .text-input:focus {
+      border-color: #06b6d4;
+    }
+    
+    .text-input::placeholder {
+      color: rgba(255,255,255,0.4);
+    }
+    
+    textarea.text-input {
+      min-height: 100px;
+      resize: vertical;
+    }
+    
+    /* Multi-select */
+    .multi-select {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    
+    .multi-option {
+      padding: 8px 16px;
+      border: 1px solid rgba(255,255,255,0.2);
+      background: transparent;
+      color: rgba(255,255,255,0.7);
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 0.875rem;
+      transition: all 0.2s;
+    }
+    
+    .multi-option:hover {
+      border-color: rgba(6,182,212,0.5);
+    }
+    
+    .multi-option.selected {
+      background: rgba(6,182,212,0.2);
+      border-color: #06b6d4;
+      color: #06b6d4;
+    }
+    
+    /* Submit Button */
+    .submit-btn {
+      width: 100%;
+      padding: 16px 32px;
+      background: linear-gradient(135deg, #06b6d4, #8b5cf6);
+      border: none;
+      border-radius: 12px;
+      color: #fff;
+      font-size: 1.125rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    
+    .submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(6,182,212,0.3);
+    }
+    
+    @media (max-width: 640px) {
+      body {
+        padding: 12px;
+      }
+      
+      h1 {
+        font-size: 1.5rem;
+      }
+      
+      .section {
+        padding: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Chief of Staff Questionnaire</h1>
+      <p class="subtitle">Configure your virtual assistant preferences and working style</p>
+    </header>
+    
+    <form id="questionnaire">
+      <!-- Section 1: Communication Preferences -->
+      <div class="section">
+        <h2 class="section-title">Communication Preferences</h2>
+        
+        <div class="question">
+          <label class="question-label">How detailed do you want your morning briefings?</label>
+          <div class="scale-container">
+            <span style="font-size: 0.875rem; color: rgba(255,255,255,0.5);">Brief</span>
+            <input type="range" class="scale-input" min="1" max="10" value="7" oninput="this.nextElementSibling.textContent = this.value">
+            <span class="scale-value">7</span>
+            <span style="font-size: 0.875rem; color: rgba(255,255,255,0.5);">Detailed</span>
+          </div>
+        </div>
+        
+        <div class="question">
+          <label class="question-label">Preferred communication style</label>
+          <div class="multi-select">
+            <button type="button" class="multi-option" onclick="this.classList.toggle('selected')">Formal</button>
+            <button type="button" class="multi-option selected" onclick="this.classList.toggle('selected')">Professional</button>
+            <button type="button" class="multi-option" onclick="this.classList.toggle('selected')">Casual</button>
+            <button type="button" class="multi-option" onclick="this.classList.toggle('selected')">Direct</button>
+            <button type="button" class="multi-option" onclick="this.classList.toggle('selected')">Supportive</button>
+          </div>
+        </div>
+        
+        <div class="question">
+          <label class="question-label">Do you want voice briefings?</label>
+          <div class="toggle-group">
+            <button type="button" class="toggle-btn active" onclick="selectToggle(this)">Yes</button>
+            <button type="button" class="toggle-btn" onclick="selectToggle(this)">No</button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Section 2: Working Hours -->
+      <div class="section">
+        <h2 class="section-title">Working Hours & Availability</h2>
+        
+        <div class="question">
+          <label class="question-label">What time do you typically start your day?</label>
+          <input type="time" class="text-input" value="07:00">
+        </div>
+        
+        <div class="question">
+          <label class="question-label">What time do you typically end your day?</label>
+          <input type="time" class="text-input" value="18:00">
+        </div>
+        
+        <div class="question">
+          <label class="question-label">Do you work weekends?</label>
+          <div class="toggle-group">
+            <button type="button" class="toggle-btn" onclick="selectToggle(this)">Yes</button>
+            <button type="button" class="toggle-btn active" onclick="selectToggle(this)">Sometimes</button>
+            <button type="button" class="toggle-btn" onclick="selectToggle(this)">No</button>
+          </div>
+        </div>
+        
+        <div class="question">
+          <label class="question-label">Preferred focus time blocks</label>
+          <div class="multi-select">
+            <button type="button" class="multi-option selected" onclick="this.classList.toggle('selected')">Early Morning (6-9am)</button>
+            <button type="button" class="multi-option" onclick="this.classList.toggle('selected')">Late Morning (9-12pm)</button>
+            <button type="button" class="multi-option" onclick="this.classList.toggle('selected')">Afternoon (12-5pm)</button>
+            <button type="button" class="multi-option" onclick="this.classList.toggle('selected')">Evening (5-9pm)</button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Section 3: Decision Making -->
+      <div class="section">
+        <h2 class="section-title">Decision Making Style</h2>
+        
+        <div class="question">
+          <label class="question-label">How much autonomy should your Digital Twin have?</label>
+          <div class="scale-container">
+            <span style="font-size: 0.875rem; color: rgba(255,255,255,0.5);">Ask First</span>
+            <input type="range" class="scale-input" min="1" max="10" value="5" oninput="this.nextElementSibling.textContent = this.value">
+            <span class="scale-value">5</span>
+            <span style="font-size: 0.875rem; color: rgba(255,255,255,0.5);">Act First</span>
+          </div>
+        </div>
+        
+        <div class="question">
+          <label class="question-label">For routine tasks (scheduling, reminders), should the Twin act autonomously?</label>
+          <div class="toggle-group">
+            <button type="button" class="toggle-btn active" onclick="selectToggle(this)">Yes</button>
+            <button type="button" class="toggle-btn" onclick="selectToggle(this)">No</button>
+          </div>
+        </div>
+        
+        <div class="question">
+          <label class="question-label">What decisions require your explicit approval?</label>
+          <div class="multi-select">
+            <button type="button" class="multi-option selected" onclick="this.classList.toggle('selected')">Financial (any amount)</button>
+            <button type="button" class="multi-option selected" onclick="this.classList.toggle('selected')">External Communications</button>
+            <button type="button" class="multi-option selected" onclick="this.classList.toggle('selected')">Calendar Changes</button>
+            <button type="button" class="multi-option" onclick="this.classList.toggle('selected')">Task Delegation</button>
+            <button type="button" class="multi-option" onclick="this.classList.toggle('selected')">Document Sharing</button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Section 4: Priorities -->
+      <div class="section">
+        <h2 class="section-title">Priorities & Focus Areas</h2>
+        
+        <div class="question">
+          <label class="question-label">What are your top 3 priorities right now?</label>
+          <textarea class="text-input" placeholder="e.g., Launch new product, Close Q1 deals, Hire senior developer..."></textarea>
+        </div>
+        
+        <div class="question">
+          <label class="question-label">How important is work-life balance to you?</label>
+          <div class="scale-container">
+            <span style="font-size: 0.875rem; color: rgba(255,255,255,0.5);">Work First</span>
+            <input type="range" class="scale-input" min="1" max="10" value="6" oninput="this.nextElementSibling.textContent = this.value">
+            <span class="scale-value">6</span>
+            <span style="font-size: 0.875rem; color: rgba(255,255,255,0.5);">Balance First</span>
+          </div>
+        </div>
+        
+        <div class="question">
+          <label class="question-label">Should the Twin proactively suggest breaks and wellness reminders?</label>
+          <div class="toggle-group">
+            <button type="button" class="toggle-btn active" onclick="selectToggle(this)">Yes</button>
+            <button type="button" class="toggle-btn" onclick="selectToggle(this)">No</button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Section 5: Information Preferences -->
+      <div class="section">
+        <h2 class="section-title">Information & Intelligence</h2>
+        
+        <div class="question">
+          <label class="question-label">What topics should your morning signal cover?</label>
+          <div class="multi-select">
+            <button type="button" class="multi-option selected" onclick="this.classList.toggle('selected')">Calendar & Meetings</button>
+            <button type="button" class="multi-option selected" onclick="this.classList.toggle('selected')">Priority Tasks</button>
+            <button type="button" class="multi-option selected" onclick="this.classList.toggle('selected')">Market News</button>
+            <button type="button" class="multi-option" onclick="this.classList.toggle('selected')">Competitor Updates</button>
+            <button type="button" class="multi-option" onclick="this.classList.toggle('selected')">Industry Trends</button>
+            <button type="button" class="multi-option" onclick="this.classList.toggle('selected')">Weather</button>
+            <button type="button" class="multi-option" onclick="this.classList.toggle('selected')">Personal Reminders</button>
+          </div>
+        </div>
+        
+        <div class="question">
+          <label class="question-label">How often should you receive intelligence updates?</label>
+          <div class="toggle-group">
+            <button type="button" class="toggle-btn" onclick="selectToggle(this)">Hourly</button>
+            <button type="button" class="toggle-btn active" onclick="selectToggle(this)">Daily</button>
+            <button type="button" class="toggle-btn" onclick="selectToggle(this)">Weekly</button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Section 6: Notification Preferences -->
+      <div class="section">
+        <h2 class="section-title">Notifications & Interruptions</h2>
+        
+        <div class="question">
+          <label class="question-label">How tolerant are you of interruptions during focus time?</label>
+          <div class="scale-container">
+            <span style="font-size: 0.875rem; color: rgba(255,255,255,0.5);">No Interruptions</span>
+            <input type="range" class="scale-input" min="1" max="10" value="3" oninput="this.nextElementSibling.textContent = this.value">
+            <span class="scale-value">3</span>
+            <span style="font-size: 0.875rem; color: rgba(255,255,255,0.5);">Always Available</span>
+          </div>
+        </div>
+        
+        <div class="question">
+          <label class="question-label">What warrants an immediate notification?</label>
+          <div class="multi-select">
+            <button type="button" class="multi-option selected" onclick="this.classList.toggle('selected')">Urgent from VIPs</button>
+            <button type="button" class="multi-option selected" onclick="this.classList.toggle('selected')">Meeting in 5 mins</button>
+            <button type="button" class="multi-option" onclick="this.classList.toggle('selected')">New high-priority task</button>
+            <button type="button" class="multi-option" onclick="this.classList.toggle('selected')">System alerts</button>
+            <button type="button" class="multi-option" onclick="this.classList.toggle('selected')">Team updates</button>
+          </div>
+        </div>
+        
+        <div class="question">
+          <label class="question-label">Enable Do Not Disturb mode during focus blocks?</label>
+          <div class="toggle-group">
+            <button type="button" class="toggle-btn active" onclick="selectToggle(this)">Yes</button>
+            <button type="button" class="toggle-btn" onclick="selectToggle(this)">No</button>
+          </div>
+        </div>
+      </div>
+      
+      <button type="submit" class="submit-btn">Save Preferences</button>
+    </form>
+  </div>
+  
+  <script>
+    function selectToggle(btn) {
+      const group = btn.parentElement;
+      group.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+    
+    document.getElementById('questionnaire').addEventListener('submit', function(e) {
+      e.preventDefault();
+      alert('Preferences saved! Your Chief of Staff will be configured accordingly.');
+    });
+  </script>
+</body>
+</html>

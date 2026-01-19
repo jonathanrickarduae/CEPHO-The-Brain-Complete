@@ -5694,7 +5694,7 @@ The 100% Optimization Framework requires strong performance across ALL fronts. C
 ## Strategic Framework Questionnaire Page
 - [x] Create standalone Strategic Framework Questionnaire page with pre-populated answers
 - [x] Add route for questionnaire page
-- [ ] Provide links to both questionnaires (Strategic Framework and Part 3)
+- [x] Provide links to both questionnaires (added to Settings profile tab)
 
 
 ## CEPHO.Ai Core Ethos Update
@@ -5815,12 +5815,12 @@ The 100% Optimization Framework requires strong performance across ALL fronts. C
 
 - [ ] Create voice style presets (briefing, urgent, casual)
 - [ ] Store generated audio files in S3
-- [ ] Fix layout overflow
-- [ ] Add visual space between Recent Chats and Browse by type
-- [ ] Display full SME name when selected
-- [ ] Style chat button in white
+- [x] Fix layout overflow (added overflow-hidden to main container)
+- [x] Add visual space between Recent Chats and Browse by type (added mt-6 pt-4 border-t)
+- [x] Display full SME name when selected (text-white added)
+- [x] Style chat button in white (all MessageSquare buttons updated)
 - [ ] SME Expert Panel review of strategy (pending CEO input)
-- [ ] Provide links to both questionnaires (Strategic Framework and Part 3)
+- [x] Provide links to both questionnaires (added to Settings profile tab)
 - [ ] Future action: Press a button creates whole business bucket
 - [ ] Plan follow-up briefing for next day with additional optimization areas
 - [ ] Add recurring learning process to continuously discover new capabilities
@@ -5829,3 +5829,19 @@ The 100% Optimization Framework requires strong performance across ALL fronts. C
 ## Documentation Task (19 January 2026)
 
 - [x] Create MIGRATION.md explaining app structure, APIs, data storage, and auth
+
+
+## Google OAuth Integration (19 January 2026)
+
+- [x] Add Google OAuth credentials as environment secrets
+- [x] Create Google OAuth service (googleOAuthService.ts)
+- [x] Create Google OAuth routes (googleOAuthRoutes.ts)
+- [x] Wire routes into server index.ts
+- [x] Update redirect URI in Google Cloud Console
+- [x] Test OAuth flow end-to-end (Google Calendar connected and syncing)
+
+
+## UI/UX Quick Win Sprint (19 January 2026 - 1 Hour)
+
+- [x] Fix Settings integrations page to show connected/not connected status clearly (syncs with DB)
+- [ ] Review and compile UI/UX quick wins from backlog

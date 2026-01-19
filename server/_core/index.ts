@@ -8,6 +8,7 @@ import { appRouter } from "../routers";
 import { createContext } from "./context";
 import { serveStatic, setupVite } from "./vite";
 import { apiRateLimit } from "./rateLimit";
+import { googleOAuthRoutes } from "../routes/googleOAuthRoutes";
 
 function isPortAvailable(port: number): Promise<boolean> {
   return new Promise(resolve => {
@@ -50,6 +51,9 @@ async function startServer() {
   
   // OAuth callback under /api/oauth/callback
   registerOAuthRoutes(app);
+  
+  // Google OAuth routes for Calendar and Gmail
+  app.use("/api/oauth", googleOAuthRoutes);
   
   // tRPC API
   app.use(

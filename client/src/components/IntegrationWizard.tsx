@@ -6,6 +6,7 @@ import {
   Sparkles, ExternalLink, Eye, EyeOff
 } from 'lucide-react';
 import { useGovernance } from '@/hooks/useGovernance';
+import { trpc } from '@/lib/trpc';
 
 // Integration definitions
 interface Integration {
@@ -375,6 +376,37 @@ export function IntegrationWizard({ onComplete, initialIntegration }: Integratio
     const saved = localStorage.getItem('brain_connected_integrations');
     return saved ? JSON.parse(saved) : [];
   });
+
+  // Sync with actual integrations from database
+  const { data: dbIntegrations } = trpc.integrations.list.useQuery();
+  
+  useEffect(() => {
+    if (dbIntegrations && dbIntegrations.length > 0) {
+      // Map database provider names to wizard integration IDs
+      const providerToIdMap: Record<string, string> = {
+        'google-calendar': 'google-calendar',
+        'google_calendar': 'google-calendar',
+        'outlook-calendar': 'outlook-calendar',
+        'outlook_calendar': 'outlook-calendar',
+        'gmail': 'gmail',
+        'google': 'gmail',
+        'outlook': 'outlook-calendar',
+        'asana': 'asana',
+      };
+      
+      const connectedFromDb = dbIntegrations
+        .filter(i => i.status === 'active')
+        .map(i => providerToIdMap[i.provider] || i.provider)
+        .filter(Boolean);
+      
+      // Merge with localStorage connected integrations
+      const merged = Array.from(new Set([...connectedIntegrations, ...connectedFromDb]));
+      if (merged.length !== connectedIntegrations.length) {
+        setConnectedIntegrations(merged);
+        localStorage.setItem('brain_connected_integrations', JSON.stringify(merged));
+      }
+    }
+  }, [dbIntegrations]);
 
   // Filter integrations by tier
   const filteredIntegrations = selectedTier === 'all' 

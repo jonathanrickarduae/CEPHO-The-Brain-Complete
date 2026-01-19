@@ -18,12 +18,12 @@ interface Integration {
   features: string[];
 }
 
-// OAuth URLs (placeholders - would be configured in backend)
+// OAuth URLs - configured to match backend routes
 const OAUTH_URLS: Record<IntegrationType, string> = {
   email_outlook: '/api/integrations/oauth/outlook',
-  email_gmail: '/api/integrations/oauth/gmail',
+  email_gmail: '/api/oauth/gmail',
   calendar_outlook: '/api/integrations/oauth/outlook-calendar',
-  calendar_google: '/api/integrations/oauth/google-calendar',
+  calendar_google: '/api/oauth/google-calendar',
   asana: '/api/integrations/oauth/asana',
   whatsapp: '/api/integrations/whatsapp/setup',
 };

@@ -270,7 +270,7 @@ export default function AISMEsPage() {
   };
 
   return (
-    <div className="h-[calc(100vh-56px)] md:h-screen flex flex-col bg-background">
+    <div className="h-[calc(100vh-56px)] md:h-screen flex flex-col bg-background overflow-hidden">
       {/* Header */}
       <PageHeader 
         icon={Users} 
@@ -397,7 +397,7 @@ export default function AISMEsPage() {
                   )}
                   
                   {/* Expert Types - Hierarchical */}
-                  <h3 className="text-xs font-semibold text-foreground/70 uppercase tracking-wider mb-2">Browse By Type</h3>
+                  <h3 className="text-xs font-semibold text-foreground/70 uppercase tracking-wider mb-2 mt-6 pt-4 border-t border-white/10">Browse By Type</h3>
                   <div className="space-y-1">
                     {/* All Experts */}
                     <button
@@ -613,7 +613,7 @@ export default function AISMEsPage() {
                           </div>
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2">
-                              <h4 className="font-medium truncate">{expert.name}</h4>
+                              <h4 className="font-medium truncate text-white">{expert.name}</h4>
                               {!isAvailable && (
                                 <Badge variant="outline" className="text-xs">{expert.status}</Badge>
                               )}
@@ -746,7 +746,7 @@ export default function AISMEsPage() {
                             <h4 className="font-medium text-sm truncate">{expert.name}</h4>
                             <p className="text-xs text-pink-400 truncate">{rec.reason}</p>
                           </div>
-                          <Button size="sm" variant="ghost" className="shrink-0">
+                          <Button size="sm" variant="ghost" className="shrink-0 text-white hover:text-white hover:bg-white/20">
                             <MessageSquare className="w-4 h-4" />
                           </Button>
                         </div>
@@ -796,7 +796,7 @@ export default function AISMEsPage() {
                             )}
                           </div>
                           <div className="flex-1 min-w-0">
-                            <h4 className="font-medium truncate">{expert.name}</h4>
+                            <h4 className="font-medium truncate text-white">{expert.name}</h4>
                             <p className="text-sm text-foreground/70 truncate">{expert.specialty}</p>
                           </div>
                           <div className={`px-2 py-0.5 rounded-full text-[10px] ${panelInfo.bgColor} ${panelInfo.color}`}>
@@ -874,7 +874,7 @@ export default function AISMEsPage() {
                             {expert.avatar}
                           </div>
                           <div className="flex-1 min-w-0">
-                            <h4 className="font-medium truncate">{expert.name}</h4>
+                            <h4 className="font-medium truncate text-white">{expert.name}</h4>
                             <p className="text-sm text-foreground/70 truncate">{expert.specialty}</p>
                           </div>
                           <div className="text-right">
@@ -1155,7 +1155,7 @@ export default function AISMEsPage() {
               </Button>
               <Button 
                 variant="outline" 
-                className="gap-2"
+                className="gap-2 text-white border-white/30 hover:bg-white/10"
                 onClick={() => {
                   setShowExpertDetail(null);
                   setLocation(`/expert-chat/${selectedExpert.id}`);
@@ -1259,7 +1259,7 @@ export default function AISMEsPage() {
                         <Button 
                           size="sm" 
                           variant="outline" 
-                          className="gap-1"
+                          className="gap-1 text-white border-white/30 hover:bg-white/10"
                           onClick={() => {
                             setShowCompareModal(false);
                             setLocation(`/expert-chat/${expert.id}`);
