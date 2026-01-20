@@ -9,3 +9,19 @@ export const ENV = {
   forgeApiKey: process.env.BUILT_IN_FORGE_API_KEY ?? "",
   elevenLabsApiKey: process.env.ELEVENLABS_API_KEY ?? "",
 };
+// Phase 2 — Startup Environment Validation
+
+const requiredEnv = [
+  "DATABASE_URL",
+  "BUILT_IN_FORGE_API_URL",
+  "BUILT_IN_FORGE_API_KEY",
+  "OWNER_OPEN_ID",
+];
+
+for (const key of requiredEnv) {
+  if (!process.env[key]) {
+    throw new Error(
+      `Missing required environment variable: ${key}. Cepho cannot start safely without it.`
+    );
+  }
+}
