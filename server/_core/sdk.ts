@@ -267,23 +267,18 @@ class SDKServer {
     // const bypassEnabled = process.env.AUTH_BYPASS === 'true' || process.env.VITE_AUTH_BYPASS === 'true';
     
     if (bypassEnabled) {
-      console.log('[Auth] Using bypass mode');
-      let user = await db.getUserByOpenId('bypass-user');
-      if (!user) {
-        console.log('[Auth] Creating bypass user');
-        await db.upsertUser({
-          openId: 'bypass-user',
-          name: 'Bypass User',
-          email: null,
-          loginMethod: 'bypass',
-          lastSignedIn: new Date(),
-        });
-        user = await db.getUserByOpenId('bypass-user');
-      }
-      if (!user) {
-        throw new Error('Failed to create bypass user');
-      }
-      return user;
+      console.log('[Auth] Using bypass mode - returning mock user');
+      // Return in-memory bypass user (don't rely on database)
+      return {
+        id: 999,
+        openId: 'bypass-user',
+        name: 'Bypass User',
+        email: null,
+        loginMethod: 'bypass',
+        role: null,
+        createdAt: new Date(),
+        lastSignedIn: new Date(),
+      } as User;
     }
 
     // Regular authentication flow
