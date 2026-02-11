@@ -13,9 +13,13 @@ export function useAuth(options?: UseAuthOptions) {
     options ?? {};
   const utils = trpc.useUtils();
 
+  // Check for auth bypass
+  const authBypass = import.meta.env.VITE_AUTH_BYPASS === 'true';
+
   const meQuery = trpc.auth.me.useQuery(undefined, {
     retry: false,
     refetchOnWindowFocus: false,
+    enabled: !authBypass, // Skip query if auth bypass is enabled
   });
 
   const logoutMutation = trpc.auth.logout.useMutation({
@@ -42,6 +46,25 @@ export function useAuth(options?: UseAuthOptions) {
   }, [logoutMutation, utils]);
 
   const state = useMemo(() => {
+    // If auth bypass is enabled, return a mock user
+    if (authBypass) {
+      const mockUser = {
+        id: 1,
+        openId: 'bypass-user',
+        name: 'Bypass User',
+      };
+      localStorage.setItem(
+        "manus-runtime-user-info",
+        JSON.stringify(mockUser)
+      );
+      return {
+        user: mockUser,
+        loading: false,
+        error: null,
+        isAuthenticated: true,
+      };
+    }
+
     localStorage.setItem(
       "manus-runtime-user-info",
       JSON.stringify(meQuery.data)
@@ -53,6 +76,7 @@ export function useAuth(options?: UseAuthOptions) {
       isAuthenticated: Boolean(meQuery.data),
     };
   }, [
+    authBypass,
     meQuery.data,
     meQuery.error,
     meQuery.isLoading,
