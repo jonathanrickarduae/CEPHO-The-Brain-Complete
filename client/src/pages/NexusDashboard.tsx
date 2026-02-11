@@ -10,6 +10,8 @@ import { LearningBadge } from "@/components/LearningIndicator";
 import { useVoiceInput } from "@/hooks/useVoiceInput";
 import { toast } from "sonner";
 import { trpc } from "@/lib/trpc";
+import { OpenClawChat } from "@/components/OpenClawChat";
+import { SkillCards } from "@/components/SkillCards";
 
 // Notification badge component
 function NotificationBadge({ count, urgent = false }: { count: number; urgent?: boolean }) {
@@ -219,6 +221,26 @@ export default function NexusDashboard() {
               </div>
             </button>
           ))}
+        </div>
+      </div>
+
+      {/* OpenClaw Skills Section */}
+      <div className="px-4 sm:px-6 lg:px-8 mb-8">
+        <div className="mb-6">
+          <h2 className="text-2xl font-bold text-foreground mb-2">CEPHO Skills</h2>
+          <p className="text-sm text-muted-foreground">Quick access to all 7 autonomous capabilities</p>
+        </div>
+        <SkillCards />
+      </div>
+
+      {/* OpenClaw Chat Section */}
+      <div className="px-4 sm:px-6 lg:px-8 mb-8">
+        <div className="mb-6">
+          <h2 className="text-2xl font-bold text-foreground mb-2">Conversational Interface</h2>
+          <p className="text-sm text-muted-foreground">Chat with CEPHO to execute any skill</p>
+        </div>
+        <div className="h-[500px]">
+          <OpenClawChat />
         </div>
       </div>
 
