@@ -257,6 +257,27 @@ class SDKServer {
   }
 
   async authenticateRequest(req: Request): Promise<User> {
+    // Check for auth bypass in development
+    if (process.env.VITE_AUTH_BYPASS === 'true') {
+      console.log('[Auth] Using bypass mode');
+      let user = await db.getUserByOpenId('bypass-user');
+      if (!user) {
+        console.log('[Auth] Creating bypass user');
+        await db.upsertUser({
+          openId: 'bypass-user',
+          name: 'Bypass User',
+          email: null,
+          loginMethod: 'bypass',
+          lastSignedIn: new Date(),
+        });
+        user = await db.getUserByOpenId('bypass-user');
+      }
+      if (!user) {
+        throw new Error('Failed to create bypass user');
+      }
+      return user;
+    }
+
     // Regular authentication flow
     const cookies = this.parseCookies(req.headers.cookie);
     const sessionCookie = cookies.get(COOKIE_NAME);
