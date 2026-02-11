@@ -1,4 +1,9 @@
 import "dotenv/config";
+
+// Debug: Log auth bypass status at startup
+console.log('[Startup] AUTH_BYPASS:', process.env.AUTH_BYPASS);
+console.log('[Startup] VITE_AUTH_BYPASS:', process.env.VITE_AUTH_BYPASS);
+console.log('[Startup] NODE_ENV:', process.env.NODE_ENV);
 import express from "express";
 import { createServer } from "http";
 import net from "net";

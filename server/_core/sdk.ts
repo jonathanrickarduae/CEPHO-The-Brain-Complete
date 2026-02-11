@@ -258,9 +258,10 @@ class SDKServer {
 
   async authenticateRequest(req: Request): Promise<User> {
     // Check for auth bypass in development
+    console.log('[Auth Debug] AUTH_BYPASS value:', process.env.AUTH_BYPASS);
     console.log('[Auth Debug] VITE_AUTH_BYPASS value:', process.env.VITE_AUTH_BYPASS);
     console.log('[Auth Debug] All env vars:', Object.keys(process.env).filter(k => k.includes('AUTH')));
-    if (process.env.VITE_AUTH_BYPASS === 'true') {
+    if (process.env.AUTH_BYPASS === 'true' || process.env.VITE_AUTH_BYPASS === 'true') {
       console.log('[Auth] Using bypass mode');
       let user = await db.getUserByOpenId('bypass-user');
       if (!user) {
