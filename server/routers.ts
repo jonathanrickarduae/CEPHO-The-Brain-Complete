@@ -1,3 +1,4 @@
+import { openClawRouter } from "./openclaw-router";
 import { COOKIE_NAME } from "@shared/const";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
@@ -87,6 +88,7 @@ import {
 import { z } from "zod";
 
 export const appRouter = router({
+  openClaw: openClawRouter,
     // if you need to use socket.io, read and register route in server/_core/index.ts, all api should start with '/api/' so that the gateway can route correctly
   system: systemRouter,
   auth: router({
