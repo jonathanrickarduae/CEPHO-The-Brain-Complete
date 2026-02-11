@@ -4,7 +4,7 @@
  */
 
 import { TRPCError } from "@trpc/server";
-import { db } from "./db";
+import { getDb } from "./db";
 import { z } from "zod";
 
 // Skill execution engine
@@ -35,7 +35,7 @@ export class OpenClawGateway {
       });
     }
 
-    return await skill.execute(input, userId, db);
+    return await skill.execute(input, userId);
   }
 
   async chat(message: string, userId: string, context?: any) {
@@ -206,12 +206,12 @@ export class OpenClawGateway {
 
 // Base skill handler interface
 interface SkillHandler {
-  execute(input: any, userId: string, db: any): Promise<any>;
+  execute(input: any, userId: string): Promise<any>;
 }
 
 // Project Genesis Skill Implementation
 class ProjectGenesisSkill implements SkillHandler {
-  async execute(input: any, userId: string, db: any) {
+  async execute(input: any, userId: string) {
     // Create project in database
     const project = {
       name: input.companyName,
@@ -237,7 +237,7 @@ class ProjectGenesisSkill implements SkillHandler {
 
 // AI-SME Skill Implementation
 class AISMESkill implements SkillHandler {
-  async execute(input: any, userId: string, db: any) {
+  async execute(input: any, userId: string) {
     // TODO: Call LLM with expert persona
     const response = `Based on my expertise, here's my analysis: ${input.question}`;
 
@@ -252,7 +252,7 @@ class AISMESkill implements SkillHandler {
 
 // QMS Skill Implementation
 class QMSSkill implements SkillHandler {
-  async execute(input: any, userId: string, db: any) {
+  async execute(input: any, userId: string) {
     // TODO: Run quality gate validation
     return {
       success: true,
@@ -266,7 +266,7 @@ class QMSSkill implements SkillHandler {
 
 // Due Diligence Skill Implementation
 class DueDiligenceSkill implements SkillHandler {
-  async execute(input: any, userId: string, db: any) {
+  async execute(input: any, userId: string) {
     return {
       success: true,
       targetCompany: input.targetCompany,
@@ -278,7 +278,7 @@ class DueDiligenceSkill implements SkillHandler {
 
 // Financial Modeling Skill Implementation
 class FinancialModelingSkill implements SkillHandler {
-  async execute(input: any, userId: string, db: any) {
+  async execute(input: any, userId: string) {
     return {
       success: true,
       modelType: input.modelType,
@@ -290,7 +290,7 @@ class FinancialModelingSkill implements SkillHandler {
 
 // Data Room Skill Implementation
 class DataRoomSkill implements SkillHandler {
-  async execute(input: any, userId: string, db: any) {
+  async execute(input: any, userId: string) {
     return {
       success: true,
       name: input.name,
@@ -302,7 +302,7 @@ class DataRoomSkill implements SkillHandler {
 
 // Digital Twin Skill Implementation
 class DigitalTwinSkill implements SkillHandler {
-  async execute(input: any, userId: string, db: any) {
+  async execute(input: any, userId: string) {
     if (input.action === "briefing") {
       return {
         success: true,

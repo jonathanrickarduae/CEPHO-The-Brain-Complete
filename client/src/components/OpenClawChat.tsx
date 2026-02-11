@@ -4,9 +4,9 @@
  */
 
 import { useState } from "react";
-import { trpc } from "../_core/trpc";
+import { trpc } from "@/lib/trpc";
 
-export function OpenClawChat() {
+export default function OpenClawChat() {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState<Array<{ role: string; content: string }>>([
     {

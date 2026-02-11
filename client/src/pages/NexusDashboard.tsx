@@ -12,8 +12,7 @@ import { toast } from "sonner";
 import { trpc } from "@/lib/trpc";
 import OpenClawChat from "@/components/OpenClawChat";
 import SkillCards from "@/components/SkillCards";
-import { OpenClawChat } from "@/components/OpenClawChat";
-import { SkillCards } from "@/components/SkillCards";
+
 
 // Notification badge component
 function NotificationBadge({ count, urgent = false }: { count: number; urgent?: boolean }) {

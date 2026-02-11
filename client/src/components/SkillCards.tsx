@@ -3,10 +3,10 @@
  * Quick access to all 7 OpenClaw skills
  */
 
-import { trpc } from "../_core/trpc";
+import { trpc } from "@/lib/trpc";
 import { useState } from "react";
 
-export function SkillCards() {
+export default function SkillCards() {
   const [activeSkill, setActiveSkill] = useState<string | null>(null);
 
   const skills = [
