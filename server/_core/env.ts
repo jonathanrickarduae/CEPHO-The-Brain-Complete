@@ -13,9 +13,10 @@ export const ENV = {
 
 const requiredEnv = [
   "DATABASE_URL",
-  "BUILT_IN_FORGE_API_URL",
-  "BUILT_IN_FORGE_API_KEY",
-  "OWNER_OPEN_ID",
+  // Temporarily commented out to allow deployment without Forge API
+  // "BUILT_IN_FORGE_API_URL",
+  // "BUILT_IN_FORGE_API_KEY",
+  // "OWNER_OPEN_ID",
 ];
 
 for (const key of requiredEnv) {
