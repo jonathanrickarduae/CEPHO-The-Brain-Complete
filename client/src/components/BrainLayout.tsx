@@ -138,13 +138,9 @@ export default function BrainLayout({
     return <DashboardLayoutSkeleton />
   }
 
-  // Use demo user when backend is not available
-  const demoUser = user || { id: 'demo', name: 'Demo User', email: 'demo@cepho.ai' };
-  
-  // Skip landing page for demo - go straight to dashboard
-  // if (!user) {
-  //   return <CephoLandingPage />;
-  // }
+  if (!user) {
+    return <CephoLandingPage />;
+  }
 
   return (
     <SidebarProvider
@@ -170,8 +166,7 @@ function BrainLayoutContent({
   children,
   setSidebarWidth,
 }: BrainLayoutContentProps) {
-  const { user: authUser, logout } = useAuth();
-  const user = authUser || { id: 'demo', name: 'Demo User', email: 'demo@cepho.ai' };
+  const { user, logout } = useAuth();
   const [location, setLocation] = useLocation();
   const { state, toggleSidebar } = useSidebar();
   const isCollapsed = state === "collapsed";

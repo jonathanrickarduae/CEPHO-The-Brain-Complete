@@ -1,0 +1,13 @@
+{
+  "query": "SHOW TABLES LIKE 'digital_twin_profile';",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user PcK35JNVkJ2ZTTh.b86832d2ef74 --database Mty5zxKKtMrwodBsbeuVa2 --execute SHOW TABLES LIKE 'digital_twin_profile';",
+  "rows": [
+    {
+      "Tables_in_Mty5zxKKtMrwodBsbeuVa2 (digital_twin_profile)": "digital_twin_profile"
+    }
+  ],
+  "messages": [],
+  "stdout": "Tables_in_Mty5zxKKtMrwodBsbeuVa2 (digital_twin_profile)\ndigital_twin_profile\n",
+  "stderr": "",
+  "execution_time_ms": 1913
+}

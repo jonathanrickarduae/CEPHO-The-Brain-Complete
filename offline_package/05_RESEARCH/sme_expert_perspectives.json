@@ -1,0 +1,242 @@
+{
+  "results": [
+    {
+      "input": "Warren Buffett - Investment & Value Creation Expert",
+      "output": {
+        "expert_name": "Warren Buffett - Investment & Value Creation Expert",
+        "top_5_success_factors": "1. A durable competitive advantage (a 'moat'), 2. A simple, understandable business model, 3. Rational, honest, and competent management, 4. A focus on long-term value creation, not short-term profits, 5. Operating with a margin of safety",
+        "top_3_mistakes": "1. Taking on excessive debt, 2. Expanding into areas outside of their circle of competence, 3. Focusing on accounting earnings rather than true economic reality",
+        "early_stage_spending_priority": "Building a superior product or service that provides immense value to customers, creating a strong foundation for long-term growth and profitability.",
+        "common_money_waste": "Unnecessary overhead such as lavish offices, excessive marketing without clear ROI, and chasing growth at the expense of profitability.",
+        "key_metrics_to_track": "Owner earnings, return on tangible assets, customer lifetime value, free cash flow",
+        "single_best_advice": "Build a business you would be happy to own forever, focusing on long-term value rather than short-term market sentiment.",
+        "success_vs_failure_differentiator": "A deep understanding of their business's economics and a relentless focus on widening their competitive 'moat' to protect long-term profitability."
+      },
+      "error": ""
+    },
+    {
+      "input": "Richard Branson - Entrepreneurship & Brand Building Expert",
+      "output": {
+        "expert_name": "Richard Branson - Entrepreneurship & Brand Building Expert",
+        "top_5_success_factors": "1. Have a clear purpose and values that go beyond just making money, 2. Find and inspire great people, because your employees are your business, 3. Obsess over the customer experience and make it exceptional, 4. Take calculated risks and don't be afraid to fail, 5. Have fun, be passionate, and enjoy the journey.",
+        "top_3_mistakes": "1. Getting stuck behind a desk and not being visible to your team and customers, 2. Not listening deeply to your team and customers, 3. Fearing failure and not taking calculated risks.",
+        "early_stage_spending_priority": "Building a great team and creating an exceptional customer experience from day one.",
+        "common_money_waste": "Lavish offices and unnecessary overhead instead of focusing on the core product and customer experience.",
+        "key_metrics_to_track": "Customer Satisfaction (NPS), Employee Happiness, Brand Reputation",
+        "single_best_advice": "Screw it, just do it. If you have an idea that can improve people's lives, put it into practice.",
+        "success_vs_failure_differentiator": "The ability to inspire people and build a strong, purpose-driven culture around a brand that people love."
+      },
+      "error": ""
+    },
+    {
+      "input": "Elon Musk - Innovation & Scaling Expert",
+      "output": {
+        "expert_name": "Elon Musk - Innovation & Scaling Expert",
+        "top_5_success_factors": "1. A maniacal focus on product quality and innovation, 2. Working from first principles to solve problems, 3. A high tolerance for risk and failure, 4. An obsession with talent and engineering, 5. A relentless drive to scale and improve efficiency.",
+        "top_3_mistakes": "1. Focusing on marketing instead of product, 2. Not working from first principles, 3. Being afraid to fail.",
+        "early_stage_spending_priority": "Relentless product improvement and engineering. A product that is its own best marketing asset is the ultimate competitive advantage.",
+        "common_money_waste": "Excessive marketing, bloated administrative overhead, and outsourcing core product development. Focus on engineering and innovation, not just sales.",
+        "key_metrics_to_track": "Pace of innovation, Customer satisfaction, Product-led growth rate, First principles-based cost reduction",
+        "single_best_advice": "Work from first principles, not by analogy, to innovate and solve fundamental problems.",
+        "success_vs_failure_differentiator": "The relentless pace of innovation and an obsessive focus on making a product that is fundamentally better, not just incrementally different."
+      },
+      "error": ""
+    },
+    {
+      "input": "McKinsey Strategy Consultant - Strategic Planning Expert",
+      "output": {
+        "expert_name": "McKinsey Strategy Consultant - Strategic Planning Expert",
+        "top_5_success_factors": "1. A clear and compelling strategic vision, 2. An obsessive focus on the customer and user experience, 3. A scalable, product-led growth model, 4. Rigorous financial discipline and capital allocation, 5. Building a strong, adaptable team and culture.",
+        "top_3_mistakes": "1. Scaling prematurely before validating product-market fit, 2. Neglecting rigorous financial planning and underestimating capital requirements, 3. Lacking a differentiated go-to-market strategy and relying on hope.",
+        "early_stage_spending_priority": "Product development and engineering to build a superior product that solves a core customer need, thereby achieving strong product-market fit.",
+        "common_money_waste": "Excessive marketing spend before achieving product-market fit, hiring too quickly, and investing in non-essential overhead like lavish offices.",
+        "key_metrics_to_track": "Customer Acquisition Cost (CAC), Customer Lifetime Value (LTV), Monthly Recurring Revenue (MRR), Churn Rate, Net Promoter Score (NPS)",
+        "single_best_advice": "Maintain a relentless focus on solving a validated customer problem with a superior solution, and let that guide all strategic decisions.",
+        "success_vs_failure_differentiator": "The ability to maintain strategic discipline and operational excellence while adapting to market feedback, versus getting distracted by vanity metrics and losing focus."
+      },
+      "error": ""
+    },
+    {
+      "input": "PwC Financial Advisory - Financial Management Expert",
+      "output": {
+        "expert_name": "PwC Financial Advisory - Financial Management Expert",
+        "top_5_success_factors": "1. Robust financial planning and cash flow management, 2. A scalable business model with a clear path to profitability, 3. Data-driven decision-making based on key financial and operational metrics, 4. A relentless focus on unit economics (LTV/CAC), 5. Strategic capital allocation and fundraising.",
+        "top_3_mistakes": "1. Neglecting financial planning and underestimating capital needs, 2. Focusing on revenue growth at the expense of profitability and sustainable unit economics, 3. Lack of a clear, defensible, and value-based pricing strategy.",
+        "early_stage_spending_priority": "Prioritize spending on product development to achieve product-market fit and on targeted, data-driven marketing to validate customer acquisition channels and unit economics.",
+        "common_money_waste": "Excessive spending on non-essential overhead, such as lavish offices or large, premature hires, and unfocused marketing campaigns with no clear ROI measurement.",
+        "key_metrics_to_track": "Cash Runway, Customer Acquisition Cost (CAC), Lifetime Value (LTV), Monthly Recurring Revenue (MRR), Churn Rate",
+        "single_best_advice": "Maintain rigorous financial discipline from day one; your cash flow is the lifeblood of your business.",
+        "success_vs_failure_differentiator": "Successful SMEs obsessively manage their cash flow and unit economics, enabling them to make strategic, data-driven decisions, while failures often run out of cash unexpectedly."
+      },
+      "error": ""
+    },
+    {
+      "input": "Y Combinator Partner - Startup Acceleration Expert",
+      "output": {
+        "expert_name": "Michael Seibel - Y Combinator Partner",
+        "top_5_success_factors": "1. Product-Led Growth, 2. Customer Obsession, 3. Scalable Distribution, 4. A Strong and Resilient Founding Team, 5. Intense Focus and Execution Speed",
+        "top_3_mistakes": "1. Not talking to users, 2. Scaling prematurely before achieving product-market fit, 3. Founder disputes",
+        "early_stage_spending_priority": "Primarily on product development to iterate quickly and early experiments in customer acquisition to find a scalable channel.",
+        "common_money_waste": "Hiring too quickly, especially non-essential roles, and spending on marketing without a clear return on investment.",
+        "key_metrics_to_track": "Active Users/Customers, Revenue Growth, Customer Retention/Churn, Net Promoter Score (NPS)",
+        "single_best_advice": "Make something people want.",
+        "success_vs_failure_differentiator": "Successful companies are relentlessly focused on their users and product, while failures get distracted by vanity metrics and internal politics."
+      },
+      "error": ""
+    },
+    {
+      "input": "Sequoia Capital Partner - Venture Capital Expert",
+      "output": {
+        "expert_name": "Sequoia Capital Partner - Venture Capital Expert",
+        "top_5_success_factors": "1. Unwavering focus on product-market fit, 2. Building a scalable and repeatable go-to-market engine, 3. Assembling a world-class, resilient founding team, 4. Obsessive focus on unit economics and capital efficiency, 5. Creating a strong, differentiated product with a superior user experience",
+        "top_3_mistakes": "1. Scaling prematurely before nailing product-market fit, 2. Neglecting the importance of a strong company culture from day one, 3. Chasing growth at all costs without a clear path to profitability",
+        "early_stage_spending_priority": "Relentless investment in product development and engineering to create a truly exceptional product that solves a critical customer pain point. The best marketing is a product that sells itself.",
+        "common_money_waste": "Excessive spending on paid marketing before achieving product-market fit, hiring senior executives too early, and investing in large, fancy office spaces instead of product and talent.",
+        "key_metrics_to_track": "Customer Acquisition Cost (CAC), Lifetime Value (LTV), Net Revenue Churn, Gross Margin, and Net Promoter Score (NPS)",
+        "single_best_advice": "Stay laser-focused on solving a real problem for a specific customer segment and build a product they can't live without.",
+        "success_vs_failure_differentiator": "The ability to rapidly learn, adapt, and iterate based on market feedback, coupled with an insane level of resilience and determination from the founding team."
+      },
+      "error": ""
+    },
+    {
+      "input": "Harvard Business School Professor - Business Strategy Expert",
+      "output": {
+        "expert_name": "Harvard Business School Professor - Business Strategy Expert",
+        "top_5_success_factors": "1. Customer-Centricity, 2. Scalable Business Model, 3. Exceptional User Experience, 4. Data-Driven Decision Making, 5. Agile and Iterative Approach",
+        "top_3_mistakes": "1. Ignoring or misunderstanding customer needs, 2. Scaling prematurely, 3. Neglecting financial discipline",
+        "early_stage_spending_priority": "Product development and achieving product-market fit. This includes engineering, user research, and iterating on the core offering to solve a validated customer need.",
+        "common_money_waste": "Excessive marketing and sales spend before product-market fit, hiring too quickly, and investing in elaborate office spaces or non-essential perks.",
+        "key_metrics_to_track": "Customer Acquisition Cost (CAC), Customer Lifetime Value (LTV), Churn Rate, Monthly Recurring Revenue (MRR), Net Promoter Score (NPS)",
+        "single_best_advice": "Obsess over solving a real customer problem better than anyone else, and the path to a sustainable business will reveal itself.",
+        "success_vs_failure_differentiator": "Successful SMEs relentlessly focus on achieving and maintaining product-market fit, while failures often get distracted by vanity metrics and premature scaling."
+      },
+      "error": ""
+    },
+    {
+      "input": "Silicon Valley Serial Entrepreneur - Startup Execution Expert",
+      "output": {
+        "expert_name": "Alex Reed - Startup Execution Expert",
+        "top_5_success_factors": "1. Unrelenting Customer Obsession, 2. Product-Led Growth (PLG) Engine, 3. Rapid Iteration and Execution Speed, 4. World-Class User Experience (UX), 5. A Scalable, Data-Driven Go-to-Market Strategy",
+        "top_3_mistakes": "1. Building a solution in search of a problem, 2. Prematurely scaling sales and marketing before achieving product-market fit, 3. Neglecting to define and track key performance metrics from the start",
+        "early_stage_spending_priority": "Prioritize investment in engineering and product development to build a core product that solves a critical user problem exceptionally well.",
+        "common_money_waste": "Excessive spending on non-essential overhead like lavish offices, large marketing campaigns before product-market fit, and hiring too many non-product roles too early.",
+        "key_metrics_to_track": "Customer Acquisition Cost (CAC), Lifetime Value (LTV), Churn Rate, Monthly Recurring Revenue (MRR), Net Promoter Score (NPS)",
+        "single_best_advice": "Fall in love with the problem you are solving, not the solution you have built.",
+        "success_vs_failure_differentiator": "The ability to rapidly and relentlessly iterate on the product based on direct customer feedback and data, while maintaining a clear long-term vision."
+      },
+      "error": ""
+    },
+    {
+      "input": "Private Equity Operating Partner - Operational Excellence Expert",
+      "output": {
+        "expert_name": "Alex Sterling - Private Equity Operating Partner, Operational Excellence Expert",
+        "top_5_success_factors": "1. Scalable Unit Economics: Ensuring profitability on a per-unit basis before scaling., 2. Robust Operational Playbook: Creating and documenting standardized processes for all core functions., 3. Data-Driven Decision Making: Implementing systems to track key metrics and using that data to inform strategy., 4. Disciplined Capital Allocation: A rigorous process for deciding where to invest capital for the highest ROI., 5. A-Player Talent Density: Hiring and retaining top talent that can execute and adapt.",
+        "top_3_mistakes": "1. Premature Scaling: Scaling marketing, sales, or operations before the product and business model are proven., 2. Neglecting Financial Controls: Poor bookkeeping, lack of cash flow management, and no clear financial reporting., 3. Founder as Bottleneck: The founder being involved in every decision, preventing the team from moving quickly and scaling.",
+        "early_stage_spending_priority": "Product development to achieve product-market fit and building a repeatable, data-driven customer acquisition process.",
+        "common_money_waste": "Excessive marketing spend without clear ROI, expensive office space, and hiring too many non-essential employees too early.",
+        "key_metrics_to_track": "Customer Acquisition Cost (CAC), Lifetime Value (LTV), Churn Rate, Cash Burn Rate, Gross Margin",
+        "single_best_advice": "Focus relentlessly on building a repeatable and scalable system for acquiring and serving customers profitably.",
+        "success_vs_failure_differentiator": "The ability to execute with operational discipline and a relentless focus on data and metrics, not just vision and passion."
+      },
+      "error": ""
+    },
+    {
+      "input": "CFO of Fortune 500 Company - Financial Discipline Expert",
+      "output": {
+        "expert_name": "CFO of Fortune 500 Company - Financial Discipline Expert",
+        "top_5_success_factors": "1. Rigorous Financial Planning and Analysis (FP&A), 2. Positive Unit Economics from Day One, 3. Scalable and Efficient Customer Acquisition, 4. Prudent Capital Allocation, 5. A Culture of Financial Discipline",
+        "top_3_mistakes": "1. Scaling Prematurely, 2. Neglecting Cash Flow Management, 3. Lack of a Clear Path to Profitability",
+        "early_stage_spending_priority": "Invest in building a strong financial foundation, including robust accounting systems, experienced financial personnel, and detailed financial models. This provides the necessary visibility and control to make sound financial decisions.",
+        "common_money_waste": "Uncontrolled marketing and sales expenses without clear attribution to revenue, excessive spending on non-essential perks and overhead, and premature international expansion.",
+        "key_metrics_to_track": "Cash Burn Rate, Customer Acquisition Cost (CAC) and Lifetime Value (LTV), Gross Margin, Monthly Recurring Revenue (MRR) and Churn Rate, Days Sales Outstanding (DSO)",
+        "single_best_advice": "Preserve capital as if it's the last dollar you'll ever have, because in the early stages, it very well might be.",
+        "success_vs_failure_differentiator": "The ability to maintain financial discipline and a relentless focus on achieving positive unit economics, even in the face of pressure to grow at all costs."
+      },
+      "error": ""
+    },
+    {
+      "input": "Chief Revenue Officer - Sales & Growth Expert",
+      "output": {
+        "expert_name": "Alex Steele - Chief Revenue Officer - Sales & Growth Expert",
+        "top_5_success_factors": "1. A scalable, repeatable sales process, 2. Unwavering focus on the user experience to drive adoption, 3. A clear Product-Led Growth strategy for efficient customer acquisition, 4. Data-driven decision making based on revenue metrics, 5. Strategic pricing and packaging that aligns value with revenue.",
+        "top_3_mistakes": "1. Scaling the sales team before achieving product-market fit, 2. Neglecting customer retention and focusing only on new logos, 3. Lacking a clear Ideal Customer Profile (ICP) and go-to-market strategy.",
+        "early_stage_spending_priority": "Prioritize spending on product development and engineering to create a product that solves a deep pain point. A great product is the foundation of all growth and sales efforts.",
+        "common_money_waste": "Hiring expensive senior sales leadership too early and spending heavily on broad marketing campaigns before identifying a repeatable customer acquisition channel.",
+        "key_metrics_to_track": "Customer Acquisition Cost (CAC), Customer Lifetime Value (LTV), Churn Rate, Average Revenue Per User (ARPU)",
+        "single_best_advice": "Become obsessed with your customer's success, and the revenue will follow as a natural consequence of the value you deliver.",
+        "success_vs_failure_differentiator": "Successful SMEs find a profitable and scalable go-to-market motion before they run out of capital, while failures burn through cash without a clear path to sustainable revenue."
+      },
+      "error": ""
+    },
+    {
+      "input": "Chief Product Officer - Product Development Expert",
+      "output": {
+        "expert_name": "Chief Product Officer - Product Development Expert",
+        "top_5_success_factors": "1. A relentless focus on solving a well-defined customer problem. 2. Product-Led Growth driven by an exceptional user experience. 3. Rapid iteration and development based on continuous user feedback. 4. Building in network effects and viral loops from the beginning. 5. A simple, value-aligned pricing and freemium strategy.",
+        "top_3_mistakes": "1. Building a product without validating the market need first. 2. Over-engineering the initial product instead of launching a lean MVP. 3. Ignoring user feedback and data in favor of internal assumptions.",
+        "early_stage_spending_priority": "Invest heavily in engineering and user research to build a great product that solves a real problem and achieves product-market fit quickly.",
+        "common_money_waste": "Prematurely scaling sales and marketing efforts before achieving product-market fit and organic user retention.",
+        "key_metrics_to_track": "User Activation Rate, Product Adoption Rate, User Retention/Churn, Net Promoter Score (NPS)",
+        "single_best_advice": "Fall in love with your customer's problem, not your solution, and iterate relentlessly based on their feedback.",
+        "success_vs_failure_differentiator": "Successful SMEs are obsessed with their users and build products that create a cycle of value, feedback, and iteration. Failures often build what they think is cool, not what the market needs."
+      },
+      "error": ""
+    },
+    {
+      "input": "Chief Technology Officer - Technology Strategy Expert",
+      "output": {
+        "expert_name": "Dr. Evelyn Reed - Chief Technology Officer",
+        "top_5_success_factors": "1. Scalable Technical Architecture, 2. Product-Led Growth, 3. Data-Driven Decision Making, 4. Developer-First Focus, 5. API-First Design",
+        "top_3_mistakes": "1. Over-engineering the Minimum Viable Product (MVP), 2. Ignoring security and compliance from the start, 3. Getting locked into a specific vendor or technology stack",
+        "early_stage_spending_priority": "Invest in a strong engineering team and a flexible, scalable cloud infrastructure. Prioritize tools that enhance developer productivity and automate repetitive tasks.",
+        "common_money_waste": "Spending on expensive, enterprise-grade software before it's needed, and premature scaling of infrastructure and marketing.",
+        "key_metrics_to_track": "Customer Acquisition Cost (CAC), Lifetime Value (LTV), Churn Rate, Monthly Recurring Revenue (MRR), Daily Active Users (DAU)",
+        "single_best_advice": "Focus relentlessly on solving a real problem for a specific user segment and iterate based on their feedback.",
+        "success_vs_failure_differentiator": "Successful SMEs continuously adapt their technology and product strategy based on user feedback and market changes, while failures remain rigid and fail to evolve."
+      },
+      "error": ""
+    },
+    {
+      "input": "Chief Marketing Officer - Marketing & Brand Expert",
+      "output": {
+        "expert_name": "Isabella Rossi - Chief Marketing Officer",
+        "top_5_success_factors": "1. Building a Strong Brand Identity from Day One, 2. Obsessive Focus on Customer Experience (CX), 3. Product-Led Growth (PLG) with a Viral Loop, 4. Strategic Content Marketing to Build Authority, 5. Community Building for Network Effects",
+        "top_3_mistakes": "1. Neglecting Brand Until Later, 2. Ignoring Customer Feedback and Insights, 3. Chasing Every Marketing Trend Without a Clear Strategy",
+        "early_stage_spending_priority": "Customer research and validation, building a minimum viable brand (MVB), and creating high-quality content that addresses customer pain points.",
+        "common_money_waste": "Expensive, large-scale advertising campaigns too early, hiring a large marketing team before product-market fit, and over-investing in non-essential perks.",
+        "key_metrics_to_track": "Customer Acquisition Cost (CAC), Customer Lifetime Value (LTV), Net Promoter Score (NPS), Conversion Rate, Brand Awareness Metrics",
+        "single_best_advice": "Fall in love with your customer's problem, not your solution, and build your brand around solving that problem better than anyone else.",
+        "success_vs_failure_differentiator": "Successful SMEs build a brand that customers love and trust, creating a moat that competitors can't easily cross. Failures focus only on the transaction."
+      },
+      "error": ""
+    },
+    {
+      "input": "HR Director - Talent & Culture Expert",
+      "output": {
+        "expert_name": "Jane Doe - HR Director - Talent & Culture Expert",
+        "top_5_success_factors": "1. Building a strong, intentional culture from day one, 2. Hiring for cultural fit and adaptability over just skills, 3. Investing in employee growth and development, 4. Fostering transparent and effective leadership communication, 5. Creating a diverse and inclusive team to drive innovation",
+        "top_3_mistakes": "1. Hiring too quickly and making compromises on talent quality and cultural fit, 2. Neglecting to define and nurture company culture until problems arise, 3. Lack of clear roles, responsibilities, and career progression paths",
+        "early_stage_spending_priority": "Prioritize spending on attracting and retaining a small team of high-impact individuals who can build the core product and establish the company culture.",
+        "common_money_waste": "Hiring expensive senior executives too early and overspending on non-essential office perks instead of competitive salaries and core benefits.",
+        "key_metrics_to_track": "Employee turnover rate, employee net promoter score (eNPS), time to fill critical roles, diversity and inclusion rates",
+        "single_best_advice": "Be as obsessed with your people and culture as you are with your product and customers; the former builds the latter.",
+        "success_vs_failure_differentiator": "Successful SMEs build a resilient and adaptable culture that can weather challenges, while failures often have a toxic or undefined culture that crumbles under pressure."
+      },
+      "error": ""
+    },
+    {
+      "input": "Operations Excellence Consultant - Process Optimization Expert",
+      "output": {
+        "expert_name": "Operations Excellence Consultant - Process Optimization Expert",
+        "top_5_success_factors": "1. Scalable Processes from Day One, 2. Data-Driven Decision Making, 3. Lean Operations, 4. Customer Feedback Loops, 5. Automation of Repetitive Tasks",
+        "top_3_mistakes": "1. Neglecting Process for Growth, 2. Over-investing in Custom Tools, 3. Manual Everything",
+        "early_stage_spending_priority": "Invest in a solid, scalable CRM and a simple project management tool to streamline workflows and centralize customer data, creating a foundation for efficient operations.",
+        "common_money_waste": "Hiring too many people too quickly before processes are defined, leading to low productivity and high overhead. Also, spending on expensive office space before it's necessary.",
+        "key_metrics_to_track": "Customer Acquisition Cost (CAC), Customer Lifetime Value (LTV), Churn Rate, Process Cycle Time, Employee Productivity",
+        "single_best_advice": "Document your core processes early and continuously refine them as you grow; this is the foundation of a scalable and successful business.",
+        "success_vs_failure_differentiator": "Successful SMEs build a culture of continuous improvement and operational excellence, allowing them to adapt and scale efficiently, while failures remain reactive and chaotic."
+      },
+      "error": ""
+    }
+  ]
+}

@@ -1,0 +1,146 @@
+%%{init: {'theme': 'dark', 'themeVariables': { 'primaryColor': '#ec4899', 'primaryTextColor': '#fff', 'primaryBorderColor': '#be185d', 'lineColor': '#6b7280', 'secondaryColor': '#1f2937', 'tertiaryColor': '#374151', 'background': '#111827', 'mainBkg': '#1f2937', 'nodeBorder': '#ec4899'}}}%%
+
+flowchart TB
+    subgraph HEADER["<b>CEPHO SYSTEM ARCHITECTURE BLUEPRINT</b><br/>Version 1.0 | Created: January 12, 2026 | Document: CEPHO-ARCH-001"]
+    end
+
+    subgraph USER_LAYER["👤 USER INTERFACE LAYER"]
+        direction LR
+        LOGIN[/"🔐 Login/Landing<br/>(Cepho ↔ The Brain)"/]
+        DASHBOARD["📊 Dashboard<br/>Central Command"]
+        SIDEBAR["📋 Navigation<br/>9 Core Modules"]
+    end
+
+    subgraph CORE_MODULES["🧠 CORE MODULES"]
+        direction TB
+        
+        subgraph SIGNAL["THE SIGNAL"]
+            DAILY_BRIEF["☀️ Daily Brief<br/>Morning Intelligence"]
+            EVENING_REVIEW["🌙 Evening Wash-up<br/>Performance Review"]
+        end
+        
+        subgraph COS["CHIEF OF STAFF"]
+            COS_CHAT["💬 Chat Interface"]
+            COS_ORCHESTRATION["🎯 Task Orchestration"]
+            COS_LEARNING["📚 Learning Engine"]
+            COS_QA["✅ Quality Assurance"]
+        end
+        
+        subgraph EXPERTS["AI-SME ENGINE (287 Experts)"]
+            EXPERT_ROSTER["👥 Expert Roster<br/>12 Categories"]
+            EXPERT_EVOLUTION["🧬 Evolution System<br/>Memory + Learning"]
+            EXPERT_COLLAB["🤝 Collaboration<br/>Multi-Expert Tasks"]
+        end
+        
+        subgraph WORKFLOW["WORKFLOW"]
+            PROJECTS["📁 Projects"]
+            TASKS["✓ Tasks"]
+            CALENDAR["📅 Calendar"]
+        end
+        
+        subgraph VAULT["THE VAULT"]
+            LIBRARY["📚 Reference Library"]
+            INSIGHTS["💡 Insights Repository"]
+            DOCUMENTS["📄 Document Store"]
+        end
+        
+        INBOX["📥 Universal Inbox<br/>Email, Voice, Docs, Links"]
+    end
+
+    subgraph DATA_LAYER["💾 DATA & PERSISTENCE LAYER"]
+        direction LR
+        
+        subgraph DB["MySQL Database (58 Tables)"]
+            USER_DATA["👤 User Data"]
+            EXPERT_DATA["🧠 Expert Memory"]
+            PROJECT_DATA["📁 Project Data"]
+            FEEDBACK_DATA["📊 Feedback History"]
+        end
+        
+        subgraph STORAGE["S3 Storage"]
+            FILES["📎 File Storage"]
+            MEDIA["🎵 Voice Notes"]
+        end
+    end
+
+    subgraph INTEGRATION_LAYER["🔌 INTEGRATION LAYER"]
+        direction LR
+        EMAIL_INT["📧 Email<br/>(Gmail/Outlook)"]
+        CALENDAR_INT["📅 Calendar<br/>(Google/Outlook)"]
+        ASANA_INT["✓ Asana"]
+        WHATSAPP_INT["💬 WhatsApp"]
+    end
+
+    subgraph AI_LAYER["🤖 AI PROCESSING LAYER"]
+        direction LR
+        LLM["🧠 LLM API<br/>(Forge/Claude/GPT)"]
+        PROMPT_BUILDER["📝 Prompt Builder<br/>+ Memory Injection"]
+        WHISPER["🎤 Whisper<br/>Voice Transcription"]
+    end
+
+    subgraph AUTOMATION["⚡ AUTOMATION OPPORTUNITIES"]
+        direction LR
+        AUTO_BRIEF["Auto Daily Brief"]
+        AUTO_TRIAGE["Auto Inbox Triage"]
+        AUTO_DELEGATE["Auto Task Delegation"]
+        AUTO_COACH["Auto Expert Coaching"]
+    end
+
+    %% User Flow
+    LOGIN --> DASHBOARD
+    DASHBOARD --> SIDEBAR
+    SIDEBAR --> SIGNAL
+    SIDEBAR --> COS
+    SIDEBAR --> EXPERTS
+    SIDEBAR --> WORKFLOW
+    SIDEBAR --> VAULT
+    SIDEBAR --> INBOX
+
+    %% Chief of Staff Orchestration
+    COS_ORCHESTRATION --> EXPERT_ROSTER
+    COS_ORCHESTRATION --> WORKFLOW
+    COS_QA --> EXPERT_EVOLUTION
+    COS_LEARNING --> FEEDBACK_DATA
+
+    %% Expert Evolution Flow
+    EXPERT_ROSTER --> PROMPT_BUILDER
+    EXPERT_EVOLUTION --> PROMPT_BUILDER
+    PROMPT_BUILDER --> LLM
+    LLM --> COS_QA
+
+    %% Data Flows
+    INBOX --> COS_ORCHESTRATION
+    PROJECTS --> TASKS
+    TASKS --> CALENDAR
+    
+    %% Integration Flows
+    EMAIL_INT --> INBOX
+    CALENDAR_INT --> CALENDAR
+    ASANA_INT --> TASKS
+    WHATSAPP_INT --> INBOX
+
+    %% Storage
+    DOCUMENTS --> FILES
+    MEDIA --> WHISPER
+    WHISPER --> INBOX
+
+    %% Automation Connections
+    DAILY_BRIEF -.-> AUTO_BRIEF
+    INBOX -.-> AUTO_TRIAGE
+    COS_ORCHESTRATION -.-> AUTO_DELEGATE
+    EXPERT_EVOLUTION -.-> AUTO_COACH
+
+    %% Styling
+    classDef userLayer fill:#1e3a5f,stroke:#3b82f6,stroke-width:2px
+    classDef coreModule fill:#1f2937,stroke:#ec4899,stroke-width:2px
+    classDef dataLayer fill:#1e3a3a,stroke:#10b981,stroke-width:2px
+    classDef integrationLayer fill:#3d1f3a,stroke:#a855f7,stroke-width:2px
+    classDef aiLayer fill:#3a2f1e,stroke:#f59e0b,stroke-width:2px
+    classDef automation fill:#1a1a2e,stroke:#6366f1,stroke-width:2px,stroke-dasharray: 5 5
+
+    class LOGIN,DASHBOARD,SIDEBAR userLayer
+    class DAILY_BRIEF,EVENING_REVIEW,COS_CHAT,COS_ORCHESTRATION,COS_LEARNING,COS_QA,EXPERT_ROSTER,EXPERT_EVOLUTION,EXPERT_COLLAB,PROJECTS,TASKS,CALENDAR,LIBRARY,INSIGHTS,DOCUMENTS,INBOX coreModule
+    class USER_DATA,EXPERT_DATA,PROJECT_DATA,FEEDBACK_DATA,FILES,MEDIA dataLayer
+    class EMAIL_INT,CALENDAR_INT,ASANA_INT,WHATSAPP_INT integrationLayer
+    class LLM,PROMPT_BUILDER,WHISPER aiLayer
+    class AUTO_BRIEF,AUTO_TRIAGE,AUTO_DELEGATE,AUTO_COACH automation

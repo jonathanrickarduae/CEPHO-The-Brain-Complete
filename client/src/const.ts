@@ -5,9 +5,9 @@ export const getLoginUrl = () => {
   const oauthPortalUrl = import.meta.env.VITE_OAUTH_PORTAL_URL;
   const appId = import.meta.env.VITE_APP_ID;
   
-  // If OAuth is not configured, return a placeholder
+  // Return empty string if OAuth is not configured (production deployment without Manus)
   if (!oauthPortalUrl || !appId) {
-    return "/login";
+    return "";
   }
   
   const redirectUri = `${window.location.origin}/api/oauth/callback`;
