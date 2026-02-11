@@ -10,6 +10,8 @@ import { LearningBadge } from "@/components/LearningIndicator";
 import { useVoiceInput } from "@/hooks/useVoiceInput";
 import { toast } from "sonner";
 import { trpc } from "@/lib/trpc";
+import OpenClawChat from "@/components/OpenClawChat";
+import SkillCards from "@/components/SkillCards";
 
 // Notification badge component
 function NotificationBadge({ count, urgent = false }: { count: number; urgent?: boolean }) {
