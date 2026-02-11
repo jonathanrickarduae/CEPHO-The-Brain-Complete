@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Strategic Framework Questionnaire | CEPHO.Ai</title>
+  <style>
+    :root {
+      --primary: #d946ef;
+      --primary-dark: #a21caf;
+      --bg-dark: #0a0a0a;
+      --bg-card: #1a1a1a;
+      --border: #333;
+      --text: #ffffff;
+      --text-muted: #888;
+      --success: #22c55e;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg-dark);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 1rem;
+    }
+    
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    
+    header {
+      text-align: center;
+      padding: 2rem 0;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 2rem;
+    }
+    
+    .logo {
+      font-size: 2rem;
+      font-weight: bold;
+      background: linear-gradient(135deg, var(--primary), #06b6d4);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    h1 {
+      font-size: 1.5rem;
+      margin-top: 0.5rem;
+      color: var(--text);
+    }
+    
+    .subtitle {
+      color: var(--text-muted);
+      margin-top: 0.5rem;
+    }
+    
+    .progress-bar {
+      background: var(--bg-card);
+      border-radius: 9999px;
+      height: 8px;
+      margin: 2rem 0;
+      overflow: hidden;
+    }
+    
+    .progress-fill {
+      background: linear-gradient(90deg, var(--primary), #06b6d4);
+      height: 100%;
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+    
+    .section {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .section-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .section-number {
+      background: var(--primary);
+      color: white;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.875rem;
+      font-weight: bold;
+    }
+    
+    .question {
+      margin-bottom: 1.5rem;
+    }
+    
+    .question:last-child {
+      margin-bottom: 0;
+    }
+    
+    .question-label {
+      display: block;
+      font-weight: 500;
+      margin-bottom: 0.75rem;
+    }
+    
+    .question-hint {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+    }
+    
+    input[type="text"],
+    input[type="email"],
+    textarea,
+    select {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      background: var(--bg-dark);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-size: 1rem;
+      transition: border-color 0.2s;
+    }
+    
+    input:focus,
+    textarea:focus,
+    select:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+    
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+    
+    /* Slider styles */
+    .slider-container {
+      padding: 0.5rem 0;
+    }
+    
+    .slider-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+    }
+    
+    input[type="range"] {
+      width: 100%;
+      height: 8px;
+      background: var(--bg-dark);
+      border-radius: 9999px;
+      appearance: none;
+      cursor: pointer;
+    }
+    
+    input[type="range"]::-webkit-slider-thumb {
+      appearance: none;
+      width: 24px;
+      height: 24px;
+      background: var(--primary);
+      border-radius: 50%;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(217, 70, 239, 0.4);
+    }
+    
+    .slider-value {
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: var(--primary);
+      margin-top: 0.5rem;
+    }
+    
+    /* Yes/No toggle */
+    .toggle-group {
+      display: flex;
+      gap: 1rem;
+    }
+    
+    .toggle-option {
+      flex: 1;
+      padding: 1rem;
+      background: var(--bg-dark);
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .toggle-option:hover {
+      border-color: var(--primary);
+    }
+    
+    .toggle-option.selected {
+      border-color: var(--primary);
+      background: rgba(217, 70, 239, 0.1);
+    }
+    
+    .toggle-option input {
+      display: none;
+    }
+    
+    /* Multi-select */
+    .checkbox-group {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.75rem;
+    }
+    
+    @media (max-width: 600px) {
+      .checkbox-group {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .checkbox-option {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1rem;
+      background: var(--bg-dark);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .checkbox-option:hover {
+      border-color: var(--primary);
+    }
+    
+    .checkbox-option.checked {
+      border-color: var(--primary);
+      background: rgba(217, 70, 239, 0.1);
+    }
+    
+    .checkbox-option input {
+      display: none;
+    }
+    
+    .custom-checkbox {
+      width: 20px;
+      height: 20px;
+      border: 2px solid var(--border);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    
+    .checkbox-option.checked .custom-checkbox {
+      background: var(--primary);
+      border-color: var(--primary);
+    }
+    
+    .custom-checkbox svg {
+      display: none;
+      width: 14px;
+      height: 14px;
+      color: white;
+    }
+    
+    .checkbox-option.checked .custom-checkbox svg {
+      display: block;
+    }
+    
+    /* Submit button */
+    .submit-section {
+      text-align: center;
+      padding: 2rem 0;
+    }
+    
+    .submit-btn {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      border: none;
+      padding: 1rem 3rem;
+      font-size: 1.125rem;
+      font-weight: 600;
+      border-radius: 9999px;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    
+    .submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 20px rgba(217, 70, 239, 0.4);
+    }
+    
+    .submit-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+    
+    /* Success state */
+    .success-message {
+      display: none;
+      text-align: center;
+      padding: 3rem;
+    }
+    
+    .success-message.show {
+      display: block;
+    }
+    
+    .success-icon {
+      width: 80px;
+      height: 80px;
+      background: var(--success);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+    }
+    
+    .success-icon svg {
+      width: 40px;
+      height: 40px;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="logo">CEPHO.Ai</div>
+      <h1>Strategic Framework Questionnaire</h1>
+      <p class="subtitle">Help us understand your business to provide tailored strategic guidance</p>
+    </header>
+    
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+    
+    <form id="strategicForm">
+      <!-- Section 1: Business Overview -->
+      <div class="section">
+        <h2 class="section-title">
+          <span class="section-number">1</span>
+          Business Overview
+        </h2>
+        
+        <div class="question">
+          <label class="question-label">Business Name</label>
+          <input type="text" name="businessName" placeholder="Enter your business name" required>
+        </div>
+        
+        <div class="question">
+          <label class="question-label">Industry / Sector</label>
+          <select name="industry" required>
+            <option value="">Select your industry</option>
+            <option value="technology">Technology</option>
+            <option value="healthcare">Healthcare</option>
+            <option value="finance">Finance & Banking</option>
+            <option value="retail">Retail & E-commerce</option>
+            <option value="manufacturing">Manufacturing</option>
+            <option value="professional_services">Professional Services</option>
+            <option value="real_estate">Real Estate & Construction</option>
+            <option value="hospitality">Hospitality & Tourism</option>
+            <option value="education">Education</option>
+            <option value="energy">Energy & Utilities</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        
+        <div class="question">
+          <label class="question-label">Business Stage</label>
+          <select name="stage" required>
+            <option value="">Select your current stage</option>
+            <option value="idea">Idea / Concept</option>
+            <option value="startup">Startup (0-2 years)</option>
+            <option value="growth">Growth (2-5 years)</option>
+            <option value="established">Established (5+ years)</option>
+            <option value="enterprise">Enterprise / Corporation</option>
+          </select>
+        </div>
+        
+        <div class="question">
+          <label class="question-label">Team Size</label>
+          <select name="teamSize" required>
+            <option value="">Select team size</option>
+            <option value="solo">Solo Founder</option>
+            <option value="1-5">1-5 employees</option>
+            <option value="6-20">6-20 employees</option>
+            <option value="21-50">21-50 employees</option>
+            <option value="51-200">51-200 employees</option>
+            <option value="200+">200+ employees</option>
+          </select>
+        </div>
+      </div>
+      
+      <!-- Section 2: Strategic Clarity -->
+      <div class="section">
+        <h2 class="section-title">
+          <span class="section-number">2</span>
+          Strategic Clarity
+        </h2>
+        
+        <div class="question">
+          <label class="question-label">How clear is your business vision?</label>
+          <p class="question-hint">Rate from 1 (unclear) to 10 (crystal clear)</p>
+          <div class="slider-container">
+            <div class="slider-labels">
+              <span>Unclear</span>
+              <span>Crystal Clear</span>
+            </div>
+            <input type="range" name="visionClarity" min="1" max="10" value="5" oninput="updateSliderValue(this)">
+            <div class="slider-value">5</div>
+          </div>
+        </div>
+        
+        <div class="question">
+          <label class="question-label">How well defined is your target market?</label>
+          <div class="slider-container">
+            <div class="slider-labels">
+              <span>Not Defined</span>
+              <span>Precisely Defined</span>
+            </div>
+            <input type="range" name="marketDefinition" min="1" max="10" value="5" oninput="updateSliderValue(this)">
+            <div class="slider-value">5</div>
+          </div>
+        </div>
+        
+        <div class="question">
+          <label class="question-label">Do you have a documented business strategy?</label>
+          <div class="toggle-group">
+            <label class="toggle-option" onclick="selectToggle(this)">
+              <input type="radio" name="hasStrategy" value="yes">
+              Yes
+            </label>
+            <label class="toggle-option" onclick="selectToggle(this)">
+              <input type="radio" name="hasStrategy" value="no">
+              No
+            </label>
+            <label class="toggle-option" onclick="selectToggle(this)">
+              <input type="radio" name="hasStrategy" value="partial">
+              Partially
+            </label>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Section 3: Current Challenges -->
+      <div class="section">
+        <h2 class="section-title">
+          <span class="section-number">3</span>
+          Current Challenges
+        </h2>
+        
+        <div class="question">
+          <label class="question-label">What are your top business challenges? (Select all that apply)</label>
+          <div class="checkbox-group">
+            <label class="checkbox-option" onclick="toggleCheckbox(this)">
+              <input type="checkbox" name="challenges" value="revenue_growth">
+              <span class="custom-checkbox">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              </span>
+              Revenue Growth
+            </label>
+            <label class="checkbox-option" onclick="toggleCheckbox(this)">
+              <input type="checkbox" name="challenges" value="talent">
+              <span class="custom-checkbox">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              </span>
+              Finding Talent
+            </label>
+            <label class="checkbox-option" onclick="toggleCheckbox(this)">
+              <input type="checkbox" name="challenges" value="operations">
+              <span class="custom-checkbox">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              </span>
+              Operational Efficiency
+            </label>
+            <label class="checkbox-option" onclick="toggleCheckbox(this)">
+              <input type="checkbox" name="challenges" value="funding">
+              <span class="custom-checkbox">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              </span>
+              Funding / Cash Flow
+            </label>
+            <label class="checkbox-option" onclick="toggleCheckbox(this)">
+              <input type="checkbox" name="challenges" value="marketing">
+              <span class="custom-checkbox">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              </span>
+              Marketing & Sales
+            </label>
+            <label class="checkbox-option" onclick="toggleCheckbox(this)">
+              <input type="checkbox" name="challenges" value="technology">
+              <span class="custom-checkbox">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              </span>
+              Technology / Digital
+            </label>
+            <label class="checkbox-option" onclick="toggleCheckbox(this)">
+              <input type="checkbox" name="challenges" value="competition">
+              <span class="custom-checkbox">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              </span>
+              Competition
+            </label>
+            <label class="checkbox-option" onclick="toggleCheckbox(this)">
+              <input type="checkbox" name="challenges" value="strategy">
+              <span class="custom-checkbox">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              </span>
+              Strategic Direction
+            </label>
+          </div>
+        </div>
+        
+        <div class="question">
+          <label class="question-label">How urgent is addressing these challenges?</label>
+          <div class="slider-container">
+            <div class="slider-labels">
+              <span>Not Urgent</span>
+              <span>Critical</span>
+            </div>
+            <input type="range" name="urgency" min="1" max="10" value="5" oninput="updateSliderValue(this)">
+            <div class="slider-value">5</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Section 4: Goals & Aspirations -->
+      <div class="section">
+        <h2 class="section-title">
+          <span class="section-number">4</span>
+          Goals & Aspirations
+        </h2>
+        
+        <div class="question">
+          <label class="question-label">What is your primary goal for the next 12 months?</label>
+          <select name="primaryGoal" required>
+            <option value="">Select your primary goal</option>
+            <option value="revenue">Increase Revenue</option>
+            <option value="profitability">Improve Profitability</option>
+            <option value="expansion">Market Expansion</option>
+            <option value="product">Launch New Product/Service</option>
+            <option value="funding">Secure Funding</option>
+            <option value="exit">Prepare for Exit/Sale</option>
+            <option value="efficiency">Operational Excellence</option>
+            <option value="team">Build Team</option>
+          </select>
+        </div>
+        
+        <div class="question">
+          <label class="question-label">Where do you see your business in 3 years?</label>
+          <textarea name="threeYearVision" placeholder="Describe your vision for the business in 3 years..."></textarea>
+        </div>
+        
+        <div class="question">
+          <label class="question-label">Are you open to external investment?</label>
+          <div class="toggle-group">
+            <label class="toggle-option" onclick="selectToggle(this)">
+              <input type="radio" name="openToInvestment" value="yes">
+              Yes
+            </label>
+            <label class="toggle-option" onclick="selectToggle(this)">
+              <input type="radio" name="openToInvestment" value="no">
+              No
+            </label>
+            <label class="toggle-option" onclick="selectToggle(this)">
+              <input type="radio" name="openToInvestment" value="maybe">
+              Maybe
+            </label>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Section 5: AI & Technology Readiness -->
+      <div class="section">
+        <h2 class="section-title">
+          <span class="section-number">5</span>
+          AI & Technology Readiness
+        </h2>
+        
+        <div class="question">
+          <label class="question-label">How would you rate your current use of AI/automation?</label>
+          <div class="slider-container">
+            <div class="slider-labels">
+              <span>Not Using</span>
+              <span>Fully Integrated</span>
+            </div>
+            <input type="range" name="aiReadiness" min="1" max="10" value="3" oninput="updateSliderValue(this)">
+            <div class="slider-value">3</div>
+          </div>
+        </div>
+        
+        <div class="question">
+          <label class="question-label">What areas would benefit most from AI assistance?</label>
+          <div class="checkbox-group">
+            <label class="checkbox-option" onclick="toggleCheckbox(this)">
+              <input type="checkbox" name="aiAreas" value="strategy">
+              <span class="custom-checkbox">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              </span>
+              Strategic Planning
+            </label>
+            <label class="checkbox-option" onclick="toggleCheckbox(this)">
+              <input type="checkbox" name="aiAreas" value="operations">
+              <span class="custom-checkbox">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              </span>
+              Operations
+            </label>
+            <label class="checkbox-option" onclick="toggleCheckbox(this)">
+              <input type="checkbox" name="aiAreas" value="marketing">
+              <span class="custom-checkbox">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              </span>
+              Marketing
+            </label>
+            <label class="checkbox-option" onclick="toggleCheckbox(this)">
+              <input type="checkbox" name="aiAreas" value="finance">
+              <span class="custom-checkbox">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              </span>
+              Finance
+            </label>
+            <label class="checkbox-option" onclick="toggleCheckbox(this)">
+              <input type="checkbox" name="aiAreas" value="hr">
+              <span class="custom-checkbox">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              </span>
+              HR & People
+            </label>
+            <label class="checkbox-option" onclick="toggleCheckbox(this)">
+              <input type="checkbox" name="aiAreas" value="customer">
+              <span class="custom-checkbox">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              </span>
+              Customer Service
+            </label>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Section 6: Contact -->
+      <div class="section">
+        <h2 class="section-title">
+          <span class="section-number">6</span>
+          Contact Information
+        </h2>
+        
+        <div class="question">
+          <label class="question-label">Your Name</label>
+          <input type="text" name="contactName" placeholder="Enter your full name" required>
+        </div>
+        
+        <div class="question">
+          <label class="question-label">Email Address</label>
+          <input type="email" name="contactEmail" placeholder="Enter your email" required>
+        </div>
+        
+        <div class="question">
+          <label class="question-label">Preferred Contact Method</label>
+          <div class="toggle-group">
+            <label class="toggle-option" onclick="selectToggle(this)">
+              <input type="radio" name="contactMethod" value="email">
+              Email
+            </label>
+            <label class="toggle-option" onclick="selectToggle(this)">
+              <input type="radio" name="contactMethod" value="phone">
+              Phone
+            </label>
+            <label class="toggle-option" onclick="selectToggle(this)">
+              <input type="radio" name="contactMethod" value="video">
+              Video Call
+            </label>
+          </div>
+        </div>
+      </div>
+      
+      <div class="submit-section">
+        <button type="submit" class="submit-btn">Submit Questionnaire</button>
+      </div>
+    </form>
+    
+    <div class="success-message" id="successMessage">
+      <div class="success-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+      </div>
+      <h2>Thank You!</h2>
+      <p style="color: var(--text-muted); margin-top: 1rem;">Your responses have been submitted. Our team will review and prepare your strategic assessment.</p>
+    </div>
+  </div>
+  
+  <script>
+    // Update slider value display
+    function updateSliderValue(slider) {
+      const valueDisplay = slider.parentElement.querySelector('.slider-value');
+      valueDisplay.textContent = slider.value;
+      updateProgress();
+    }
+    
+    // Toggle selection for radio buttons
+    function selectToggle(element) {
+      const group = element.parentElement;
+      group.querySelectorAll('.toggle-option').forEach(opt => opt.classList.remove('selected'));
+      element.classList.add('selected');
+      element.querySelector('input').checked = true;
+      updateProgress();
+    }
+    
+    // Toggle checkbox
+    function toggleCheckbox(element) {
+      element.classList.toggle('checked');
+      const checkbox = element.querySelector('input');
+      checkbox.checked = !checkbox.checked;
+      updateProgress();
+    }
+    
+    // Update progress bar
+    function updateProgress() {
+      const form = document.getElementById('strategicForm');
+      const inputs = form.querySelectorAll('input[required], select[required], textarea[required]');
+      const sliders = form.querySelectorAll('input[type="range"]');
+      const checkboxGroups = form.querySelectorAll('.checkbox-group');
+      const toggleGroups = form.querySelectorAll('.toggle-group');
+      
+      let filled = 0;
+      let total = inputs.length + sliders.length + checkboxGroups.length + toggleGroups.length;
+      
+      inputs.forEach(input => {
+        if (input.value) filled++;
+      });
+      
+      sliders.forEach(() => filled++); // Sliders always have a value
+      
+      checkboxGroups.forEach(group => {
+        if (group.querySelector('.checked')) filled++;
+      });
+      
+      toggleGroups.forEach(group => {
+        if (group.querySelector('.selected')) filled++;
+      });
+      
+      const percentage = (filled / total) * 100;
+      document.getElementById('progressFill').style.width = percentage + '%';
+    }
+    
+    // Form submission
+    document.getElementById('strategicForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      // Collect form data
+      const formData = new FormData(this);
+      const data = Object.fromEntries(formData.entries());
+      
+      // Collect checkbox values
+      const challenges = [];
+      document.querySelectorAll('input[name="challenges"]:checked').forEach(cb => {
+        challenges.push(cb.value);
+      });
+      data.challenges = challenges;
+      
+      const aiAreas = [];
+      document.querySelectorAll('input[name="aiAreas"]:checked').forEach(cb => {
+        aiAreas.push(cb.value);
+      });
+      data.aiAreas = aiAreas;
+      
+      console.log('Form Data:', data);
+      
+      // Show success message
+      this.style.display = 'none';
+      document.getElementById('successMessage').classList.add('show');
+    });
+    
+    // Initialize progress
+    updateProgress();
+  </script>
+</body>
+</html>
