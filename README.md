@@ -189,3 +189,4 @@ Proprietary - CEPHO.ai
 ## Support
 
 For support inquiries, please contact the development team through the Manus platform.
+# Trigger Vercel deployment
