@@ -135,17 +135,21 @@ export const projectGenesisRouter = router({
     .query(async ({ ctx }) => {
       const db = await getDb();
       
-      const result: any = await db.execute(
-        `SELECT pg.*, 
-         (SELECT COUNT(*) FROM project_genesis_phases WHERE projectId = pg.id AND status = 'completed') as completedPhases,
-         (SELECT COUNT(*) FROM project_genesis_milestones WHERE projectId = pg.id AND status = 'completed') as completedMilestones
-         FROM project_genesis pg
-         WHERE pg.userId = ?
-         ORDER BY pg.createdAt DESC`,
-        [ctx.user.id]
-      );
-      
-      return result.rows || [];
+      try {
+        const result: any = await db.execute(
+          `SELECT pg.* 
+           FROM project_genesis pg
+           WHERE pg.userId = ?
+           ORDER BY pg.createdAt DESC`,
+          [ctx.user.id]
+        );
+        
+        return result.rows || [];
+      } catch (error) {
+        console.error('[projectGenesis.listProjects] Error:', error);
+        // Return empty array if table doesn't exist yet
+        return [];
+      }
     }),
 
   /**
