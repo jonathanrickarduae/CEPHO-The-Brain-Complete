@@ -1,4 +1,5 @@
 import { openClawRouter } from "./openclaw-router";
+import { integrationsRouter } from "./routers/integrationsRouter";
 import { projectGenesisRouter } from "./routers/projectGenesisRouter";
 import { qualityGatesRouter } from "./routers/qualityGatesRouter";
 import { blueprintRouter } from "./routers/blueprintRouter";
@@ -92,6 +93,7 @@ import { z } from "zod";
 
 export const appRouter = router({
   openClaw: openClawRouter,
+  integrations: integrationsRouter,
   projectGenesis: projectGenesisRouter,
   qualityGates: qualityGatesRouter,
   blueprint: blueprintRouter,

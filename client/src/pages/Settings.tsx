@@ -14,6 +14,7 @@ import { AccessibilitySettingsPanel } from '@/components/AccessibilitySettingsPa
 
 import { IntegrationWizard } from '@/components/IntegrationWizard';
 import { IntegrationsStatus } from '@/components/IntegrationsStatus';
+import { IntegrationsStatusReal } from '@/components/IntegrationsStatusReal';
 import { SubscriptionManager } from '@/components/SubscriptionManager';
 import { SignatureManager } from '@/components/SignatureManager';
 import { AIProviderSettings } from '@/components/AIRouter';
@@ -157,7 +158,7 @@ export default function Settings() {
 
             {activeTab === 'integrations' && (
               <div className="bg-gray-800 rounded-xl border border-gray-700 p-6">
-                <IntegrationsStatus />
+                <IntegrationsStatusReal />
               </div>
             )}
 
