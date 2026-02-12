@@ -5,6 +5,10 @@ import { qualityGatesRouter } from "./routers/qualityGatesRouter";
 import { blueprintRouter } from "./routers/blueprintRouter";
 import { smeRouter } from "./routers/smeRouter";
 import { digitalTwinRouter } from "./routers/digitalTwinRouter";
+import { blueprintsRouter } from "./routers/blueprintsRouter";
+import { chiefOfStaffRouter } from "./routers/chiefOfStaffRouter";
+import { deepDiveRouter } from "./routers/deepDiveRouter";
+import { businessPlanRouter } from "./routers/businessPlanRouter";
 import { COOKIE_NAME } from "@shared/const";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
@@ -101,6 +105,10 @@ export const appRouter = router({
   blueprint: blueprintRouter,
   sme: smeRouter,
   digitalTwin: digitalTwinRouter,
+  blueprints: blueprintsRouter,
+  chiefOfStaff: chiefOfStaffRouter,
+  deepDive: deepDiveRouter,
+  businessPlan: businessPlanRouter,
     // if you need to use socket.io, read and register route in server/_core/index.ts, all api should start with '/api/' so that the gateway can route correctly
   system: systemRouter,
   auth: router({
