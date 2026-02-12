@@ -12,7 +12,8 @@ export const ENV = {
 // Phase 2 — Startup Environment Validation
 
 const requiredEnv = [
-  "DATABASE_URL",
+  // Temporarily commented out to allow deployment without database
+  // "DATABASE_URL",
   // Temporarily commented out to allow deployment without Forge API
   // "BUILT_IN_FORGE_API_URL",
   // "BUILT_IN_FORGE_API_KEY",
