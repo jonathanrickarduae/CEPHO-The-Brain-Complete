@@ -13,6 +13,7 @@ import { ReferralDashboard } from '@/components/WaitlistReferral';
 import { AccessibilitySettingsPanel } from '@/components/AccessibilitySettingsPanel';
 
 import { IntegrationWizard } from '@/components/IntegrationWizard';
+import { IntegrationsStatus } from '@/components/IntegrationsStatus';
 import { SubscriptionManager } from '@/components/SubscriptionManager';
 import { SignatureManager } from '@/components/SignatureManager';
 import { AIProviderSettings } from '@/components/AIRouter';
@@ -154,7 +155,11 @@ export default function Settings() {
               </>
             )}
 
-            {activeTab === 'integrations' && <IntegrationWizard />}
+            {activeTab === 'integrations' && (
+              <div className="bg-gray-800 rounded-xl border border-gray-700 p-6">
+                <IntegrationsStatus />
+              </div>
+            )}
 
             {activeTab === 'subscriptions' && <SubscriptionManager />}
 
