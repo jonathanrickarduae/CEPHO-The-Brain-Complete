@@ -1,4 +1,4 @@
-import { db } from '../db';
+import { getDb } from '../db';
 import { integrationCredentials, integrationLogs } from '../../drizzle/schema';
 import { eq, and } from 'drizzle-orm';
 import crypto from 'crypto';
@@ -55,6 +55,8 @@ export class IntegrationManager {
     if (credential.metadata) data.metadata = credential.metadata;
 
     // Upsert
+    const db = await getDb();
+    if (!db) throw new Error('Database not available');
     await db.insert(integrationCredentials)
       .values(data)
       .onConflictDoUpdate({
@@ -67,6 +69,8 @@ export class IntegrationManager {
 
   // Get credentials for a service
   async getCredentials(userId: string, service: string): Promise<IntegrationCredential | null> {
+    const db = await getDb();
+    if (!db) return null;
     const id = `${userId}-${service}`;
     const result = await db.select()
       .from(integrationCredentials)
@@ -190,6 +194,8 @@ export class IntegrationManager {
 
   // Update connection status
   async updateStatus(userId: string, service: string, status: 'connected' | 'disconnected' | 'error' | 'pending', error?: string) {
+    const db = await getDb();
+    if (!db) return;
     const id = `${userId}-${service}`;
     await db.update(integrationCredentials)
       .set({
@@ -203,6 +209,8 @@ export class IntegrationManager {
 
   // Log connection activity
   async logConnection(userId: string, service: string, action: string, success: boolean, errorMessage?: string, metadata?: any) {
+    const db = await getDb();
+    if (!db) return;
     const id = `${userId}-${service}-${Date.now()}`;
     await db.insert(integrationLogs).values({
       id,
@@ -217,6 +225,8 @@ export class IntegrationManager {
 
   // Get all integrations for a user
   async getAllIntegrations(userId: string) {
+    const db = await getDb();
+    if (!db) return [];
     const results = await db.select()
       .from(integrationCredentials)
       .where(eq(integrationCredentials.userId, userId));

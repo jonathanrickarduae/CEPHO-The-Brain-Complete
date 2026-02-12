@@ -3,10 +3,10 @@ import { integrationsRouter } from "./routers/integrationsRouter";
 import { projectGenesisRouter } from "./routers/projectGenesisRouter";
 import { qualityGatesRouter } from "./routers/qualityGatesRouter";
 import { blueprintRouter } from "./routers/blueprintRouter";
-import { smeRouter } from "./routers/smeRouter";
-import { digitalTwinRouter } from "./routers/digitalTwinRouter";
-import { blueprintsRouter } from "./routers/blueprintsRouter";
-import { chiefOfStaffRouter } from "./routers/chiefOfStaffRouter";
+// import { smeRouter } from "./routers/smeRouter"; // Temporarily disabled - missing table definitions
+// import { digitalTwinRouter } from "./routers/digitalTwinRouter"; // Temporarily disabled - missing table definitions
+// import { blueprintsRouter } from "./routers/blueprintsRouter"; // Temporarily disabled - uses db import
+// import { chiefOfStaffRouter } from "./routers/chiefOfStaffRouter"; // Temporarily disabled - uses db import
 import { deepDiveRouter } from "./routers/deepDiveRouter";
 import { businessPlanRouter } from "./routers/businessPlanRouter";
 import { COOKIE_NAME } from "@shared/const";
@@ -103,10 +103,10 @@ export const appRouter = router({
   projectGenesis: projectGenesisRouter,
   qualityGates: qualityGatesRouter,
   blueprint: blueprintRouter,
-  sme: smeRouter,
-  digitalTwin: digitalTwinRouter,
-  blueprints: blueprintsRouter,
-  chiefOfStaff: chiefOfStaffRouter,
+  // sme: smeRouter, // Temporarily disabled - missing table definitions
+  // digitalTwin: digitalTwinRouter, // Temporarily disabled - missing table definitions
+  // blueprints: blueprintsRouter, // Temporarily disabled
+  // chiefOfStaff: chiefOfStaffRouter, // Temporarily disabled
   deepDive: deepDiveRouter,
   businessPlan: businessPlanRouter,
     // if you need to use socket.io, read and register route in server/_core/index.ts, all api should start with '/api/' so that the gateway can route correctly
@@ -293,105 +293,6 @@ You are not a yes-man. You are a trusted advisor who respects the principal enou
       .mutation(async ({ ctx }) => {
         await clearConversationHistory(ctx.user.id);
         return { success: true };
-      }),
-  }),
-
-  // Integrations API
-  integrations: router({
-    list: protectedProcedure.query(async ({ ctx }) => {
-      return getIntegrations(ctx.user.id);
-    }),
-
-    create: protectedProcedure
-      .input(z.object({
-        provider: z.string(),
-        providerAccountId: z.string().optional(),
-        accessToken: z.string().optional(),
-        refreshToken: z.string().optional(),
-        scopes: z.array(z.string()).optional(),
-        metadata: z.record(z.string(), z.any()).optional(),
-      }))
-      .mutation(async ({ ctx, input }) => {
-        return createIntegration({
-          userId: ctx.user.id,
-          provider: input.provider,
-          providerAccountId: input.providerAccountId,
-          accessToken: input.accessToken,
-          refreshToken: input.refreshToken,
-          scopes: input.scopes,
-          metadata: input.metadata,
-          status: 'active',
-        });
-      }),
-
-    update: protectedProcedure
-      .input(z.object({
-        id: z.number(),
-        status: z.enum(['active', 'expired', 'revoked', 'error']).optional(),
-        accessToken: z.string().optional(),
-        refreshToken: z.string().optional(),
-        syncError: z.string().optional(),
-      }))
-      .mutation(async ({ input }) => {
-        await updateIntegration(input.id, input);
-        return { success: true };
-      }),
-
-    delete: protectedProcedure
-      .input(z.object({ id: z.number() }))
-      .mutation(async ({ input }) => {
-        await deleteIntegration(input.id);
-        return { success: true };
-      }),
-
-    // Connect integration (OAuth flow)
-    connect: protectedProcedure
-      .input(z.object({
-        type: z.string(),
-        config: z.record(z.string(), z.any()).optional(),
-      }))
-      .mutation(async ({ ctx, input }) => {
-        // Create or update integration record
-        const existing = await getIntegrations(ctx.user.id);
-        const existingIntegration = existing.find(i => i.provider === input.type);
-        
-        if (existingIntegration) {
-          await updateIntegration(existingIntegration.id, { status: 'active' });
-          return { success: true, id: existingIntegration.id };
-        }
-        
-        const newIntegration = await createIntegration({
-          userId: ctx.user.id,
-          provider: input.type,
-          status: 'active',
-          metadata: input.config,
-        });
-        return { success: true, id: newIntegration?.id ?? 0 };
-      }),
-
-    // Disconnect integration
-    disconnect: protectedProcedure
-      .input(z.object({ type: z.string() }))
-      .mutation(async ({ ctx, input }) => {
-        const integrations = await getIntegrations(ctx.user.id);
-        const integration = integrations.find(i => i.provider === input.type);
-        if (integration) {
-          await updateIntegration(integration.id, { status: 'revoked' });
-        }
-        return { success: true };
-      }),
-
-    // Sync integration data
-    sync: protectedProcedure
-      .input(z.object({ type: z.string() }))
-      .mutation(async ({ ctx, input }) => {
-        const integrations = await getIntegrations(ctx.user.id);
-        const integration = integrations.find(i => i.provider === input.type);
-        if (integration) {
-          // Update lastSyncAt
-          await updateIntegration(integration.id, { lastSyncAt: new Date() });
-        }
-        return { success: true, syncedAt: new Date() };
       }),
   }),
 

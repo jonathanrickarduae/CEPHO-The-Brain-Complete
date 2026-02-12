@@ -4134,12 +4134,10 @@ export const integrationLogs = pgTable('integration_logs', {
 // Phase 2 Completion: Missing Database Tables
 // These tables complete the A0 Architecture database requirements
 
-import { pgTable, uuid, text, integer, timestamp, json, boolean, varchar } from 'drizzle-orm/pg-core';
-import { users } from './schema';
+// ===== Chief of Staff Training System (Phase 2) =====
+// Note: MySQL version exists earlier in file, this is PostgreSQL version
 
-// ===== Chief of Staff Training System =====
-
-export const cosTrainingModules = pgTable("cos_training_modules", {
+export const cosTrainingModulesPg = pgTable("cos_training_modules_pg", {
   id: uuid("id").primaryKey().defaultRandom(),
   moduleNumber: integer("module_number").notNull().unique(), // 1-8
   title: text("title").notNull(),
@@ -4154,10 +4152,10 @@ export const cosTrainingModules = pgTable("cos_training_modules", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
-export const cosModuleProgress = pgTable("cos_module_progress", {
+export const cosModuleProgressPg = pgTable("cos_module_progress_pg", {
   id: uuid("id").primaryKey().defaultRandom(),
   userId: uuid("user_id").references(() => users.id).notNull(),
-  moduleId: uuid("module_id").references(() => cosTrainingModules.id).notNull(),
+  moduleId: uuid("module_id").references(() => cosTrainingModulesPg.id).notNull(),
   status: varchar("status", { length: 50 }).notNull().default('not_started'), // not_started, in_progress, completed
   startedAt: timestamp("started_at"),
   completedAt: timestamp("completed_at"),
