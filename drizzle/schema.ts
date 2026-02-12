@@ -4097,7 +4097,7 @@ export const blueprintExecutions = mysqlTable("blueprint_executions", {
 export type BlueprintExecution = typeof blueprintExecutions.$inferSelect;
 export type InsertBlueprintExecution = typeof blueprintExecutions.$inferInsert;
 
-import { pgTable, text, timestamp, boolean, jsonb } from 'drizzle-orm/pg-core';
+import { pgTable, uuid, text, integer, timestamp, boolean, jsonb, json, varchar } from 'drizzle-orm/pg-core';
 
 // Integration credentials table
 export const integrationCredentials = pgTable('integration_credentials', {
