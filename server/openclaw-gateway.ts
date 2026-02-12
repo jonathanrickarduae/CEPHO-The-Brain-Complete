@@ -6,6 +6,8 @@
 import { TRPCError } from "@trpc/server";
 import { getDb } from "./db";
 import { z } from "zod";
+import { getLLMService } from "./services/llm-service";
+import { getConversationService } from "./services/conversation-service";
 
 // Skill execution engine
 export class OpenClawGateway {
@@ -39,27 +41,82 @@ export class OpenClawGateway {
   }
 
   async chat(message: string, userId: string, context?: any) {
-    // Parse user intent and route to appropriate skill
-    const intent = await this.parseIntent(message, context);
+    console.log('[OpenClaw] Chat request:', { message, userId });
     
-    if (!intent.skillName) {
+    const llmService = getLLMService();
+    const conversationService = getConversationService();
+    
+    // Convert userId to number if it's a string
+    const userIdNum = typeof userId === 'string' ? parseInt(userId, 10) : userId;
+    
+    // Detect which skill the user is asking about
+    const skill = llmService.detectSkill(message);
+    console.log('[OpenClaw] Detected skill:', skill);
+    
+    // Get conversation history from database
+    const history = await conversationService.getConversationHistory(userIdNum, 5);
+    
+    // Build conversation messages for LLM
+    const messages = [
+      {
+        role: 'system' as const,
+        content: llmService.getSystemPrompt(skill),
+      },
+      // Add conversation history
+      ...history.map(h => ({
+        role: h.role as 'user' | 'assistant',
+        content: h.content,
+      })),
+      // Add current message
+      {
+        role: 'user' as const,
+        content: message,
+      },
+    ];
+    
+    try {
+      // Call LLM for intelligent response
+      const response = await llmService.chat(messages);
+      
+      // Save user message to conversation history
+      await conversationService.addMessage(userIdNum, 'user', message, { skill });
+      
+      // Save assistant response to conversation history
+      await conversationService.addMessage(userIdNum, 'assistant', response, { skill });
+      
+      // Generate suggestions based on skill
+      const suggestions = llmService.generateSuggestions(skill);
+      
       return {
-        response: "I'm not sure what you'd like me to do. Try asking about Project Genesis, AI-SME consultations, or other CEPHO features.",
-        suggestions: [
-          "Start Project Genesis for my startup",
-          "Get expert consultation on market analysis",
-          "Run quality gate validation",
-        ],
+        response,
+        suggestions,
+        skill,
+      };
+    } catch (error: any) {
+      console.error('[OpenClaw] Error:', error.message);
+      
+      // Fallback to skill execution if LLM fails
+      const intent = await this.parseIntent(message, context);
+      
+      if (!intent.skillName) {
+        return {
+          response: "I'm not sure what you'd like me to do. Try asking about Project Genesis, AI-SME consultations, or other CEPHO features.",
+          suggestions: [
+            "Start Project Genesis for my startup",
+            "Get expert consultation on market analysis",
+            "Run quality gate validation",
+          ],
+        };
+      }
+
+      // Execute the skill
+      const result = await this.executeSkill(intent.skillName, intent.params, userId);
+      
+      return {
+        response: this.formatResponse(result, intent.skillName),
+        data: result,
       };
     }
-
-    // Execute the skill
-    const result = await this.executeSkill(intent.skillName, intent.params, userId);
-    
-    return {
-      response: this.formatResponse(result, intent.skillName),
-      data: result,
-    };
   }
 
   private async parseIntent(message: string, context?: any) {
