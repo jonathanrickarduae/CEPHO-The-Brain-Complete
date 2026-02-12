@@ -12,7 +12,7 @@ export const users = mysqlTable("users", {
   role: mysqlEnum("role", ["user", "admin"]).default("user").notNull(),
   themePreference: mysqlEnum("themePreference", ["light", "dark", "system"]).default("system").notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateCurrentTimestamp().notNull(),
   lastSignedIn: timestamp("lastSignedIn").defaultNow().notNull(),
 });
 
@@ -80,7 +80,7 @@ export const userPreferences = mysqlTable("user_preferences", {
   confidence: float("confidence").default(0.5), // 0-1 confidence score
   source: varchar("source", { length: 50 }), // "explicit", "inferred", "conversation"
   learnedAt: timestamp("learnedAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateCurrentTimestamp().notNull(),
 });
 
 export type UserPreference = typeof userPreferences.$inferSelect;
@@ -97,7 +97,7 @@ export const vocabularyPatterns = mysqlTable("vocabulary_patterns", {
   context: varchar("context", { length: 100 }), // Where this term is typically used
   frequency: int("frequency").default(1), // How often used
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateCurrentTimestamp().notNull(),
 });
 
 export type VocabularyPattern = typeof vocabularyPatterns.$inferSelect;
@@ -153,7 +153,7 @@ export const expertPerformance = mysqlTable("expert_performance", {
   lastUsed: timestamp("lastUsed"),
   notes: text("notes"), // User notes about this expert
   status: mysqlEnum("status", ["active", "training", "fired"]).default("active").notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateCurrentTimestamp().notNull(),
 });
 
 export type ExpertPerformance = typeof expertPerformance.$inferSelect;
@@ -175,7 +175,7 @@ export const projects = mysqlTable("projects", {
   assignedExperts: json("assignedExperts"), // Array of expert IDs
   metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateCurrentTimestamp().notNull(),
 });
 
 export type Project = typeof projects.$inferSelect;
@@ -219,7 +219,7 @@ export const userSettings = mysqlTable("user_settings", {
   sidebarCollapsed: boolean("sidebarCollapsed").default(false),
   onboardingComplete: boolean("onboardingComplete").default(false),
   metadata: json("metadata"),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateCurrentTimestamp().notNull(),
 });
 
 export type UserSettings = typeof userSettings.$inferSelect;
@@ -241,7 +241,7 @@ export const libraryDocuments = mysqlTable("library_documents", {
   thumbnailUrl: text("thumbnailUrl"),
   metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateCurrentTimestamp().notNull(),
 });
 
 export type LibraryDocument = typeof libraryDocuments.$inferSelect;
@@ -308,7 +308,7 @@ export const userCredits = mysqlTable("user_credits", {
   balance: int("balance").default(0).notNull(),
   lifetimeEarned: int("lifetimeEarned").default(0).notNull(),
   lifetimeSpent: int("lifetimeSpent").default(0).notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateCurrentTimestamp().notNull(),
 });
 
 export type UserCredits = typeof userCredits.$inferSelect;
@@ -363,7 +363,7 @@ export const memoryBank = mysqlTable("memory_bank", {
   source: varchar("source", { length: 100 }), // Where this memory came from
   lastAccessed: timestamp("lastAccessed"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateCurrentTimestamp().notNull(),
 });
 
 export type MemoryBank = typeof memoryBank.$inferSelect;
@@ -398,7 +398,7 @@ export const streaks = mysqlTable("streaks", {
   currentStreak: int("currentStreak").default(0).notNull(),
   longestStreak: int("longestStreak").default(0).notNull(),
   lastActivityDate: timestamp("lastActivityDate"),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateCurrentTimestamp().notNull(),
 });
 
 export type Streak = typeof streaks.$inferSelect;
@@ -434,7 +434,7 @@ export const competitors = mysqlTable("competitors", {
   threatLevel: mysqlEnum("threatLevel", ["low", "medium", "high", "critical"]).default("medium"),
   lastAnalyzed: timestamp("lastAnalyzed"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateCurrentTimestamp().notNull(),
 });
 
 export type Competitor = typeof competitors.$inferSelect;
@@ -453,7 +453,7 @@ export const featureComparison = mysqlTable("feature_comparison", {
   competitorData: json("competitorData"), // { competitorId: score, ... }
   importance: mysqlEnum("importance", ["low", "medium", "high", "critical"]).default("medium"),
   notes: text("notes"),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateCurrentTimestamp().notNull(),
 });
 
 export type FeatureComparison = typeof featureComparison.$inferSelect;
@@ -514,7 +514,7 @@ export const regulatoryLandscape = mysqlTable("regulatory_landscape", {
   description: text("description"),
   requirements: json("requirements"), // Array of specific requirements
   notes: text("notes"),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateCurrentTimestamp().notNull(),
 });
 
 export type RegulatoryLandscape = typeof regulatoryLandscape.$inferSelect;
@@ -536,7 +536,7 @@ export const strategyRecommendations = mysqlTable("strategy_recommendations", {
   status: mysqlEnum("status", ["proposed", "approved", "in_progress", "completed", "rejected"]).default("proposed"),
   generatedBy: varchar("generatedBy", { length: 100 }), // AI expert who generated it
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateCurrentTimestamp().notNull(),
 });
 
 export type StrategyRecommendation = typeof strategyRecommendations.$inferSelect;
@@ -659,7 +659,7 @@ export const integrations = mysqlTable("integrations", {
   syncError: text("syncError"),
   metadata: json("metadata"), // Provider-specific data
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateCurrentTimestamp().notNull(),
 });
 
 export type Integration = typeof integrations.$inferSelect;
@@ -747,7 +747,7 @@ export const subscriptions = mysqlTable("subscriptions", {
   notes: text("notes"),
   metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateCurrentTimestamp().notNull(),
 });
 
 export type Subscription = typeof subscriptions.$inferSelect;
@@ -778,7 +778,7 @@ export const projectGenesis = mysqlTable("project_genesis", {
   notes: text("notes"),
   metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateCurrentTimestamp().notNull(),
 });
 
 export type ProjectGenesisRecord = typeof projectGenesis.$inferSelect;
@@ -841,7 +841,7 @@ export const brandKit = mysqlTable("brand_kit", {
   templates: json("templates"), // Document template settings
   metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateCurrentTimestamp().notNull(),
 });
 
 export type BrandKitRecord = typeof brandKit.$inferSelect;
@@ -859,7 +859,7 @@ export const signatures = mysqlTable("signatures", {
   fontFamily: varchar("fontFamily", { length: 100 }), // For typed signatures
   isDefault: boolean("isDefault").default(false),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateCurrentTimestamp().notNull(),
 });
 
 export type Signature = typeof signatures.$inferSelect;
@@ -880,7 +880,7 @@ export const aiProviderSettings = mysqlTable("ai_provider_settings", {
   domains: json("domains"), // Array of domains this provider handles
   metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateCurrentTimestamp().notNull(),
 });
 
 export type AIProviderSetting = typeof aiProviderSettings.$inferSelect;
@@ -904,7 +904,7 @@ export const reminders = mysqlTable("reminders", {
   notificationSent: boolean("notificationSent").default(false),
   metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateCurrentTimestamp().notNull(),
 });
 
 export type Reminder = typeof reminders.$inferSelect;
@@ -940,7 +940,7 @@ export const tasks = mysqlTable("tasks", {
   completedAt: timestamp("completedAt"),
   metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateCurrentTimestamp().notNull(),
 });
 
 export type Task = typeof tasks.$inferSelect;
@@ -981,7 +981,7 @@ export const dataRetentionPolicies = mysqlTable("data_retention_policies", {
   nextPurgeAt: timestamp("nextPurgeAt"),
   itemsDeleted: int("itemsDeleted").default(0),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateCurrentTimestamp().notNull(),
 });
 
 export type DataRetentionPolicy = typeof dataRetentionPolicies.$inferSelect;
@@ -1025,7 +1025,7 @@ export const complianceChecklists = mysqlTable("compliance_checklists", {
   completedAt: timestamp("completedAt"),
   metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateCurrentTimestamp().notNull(),
 });
 
 export type ComplianceChecklist = typeof complianceChecklists.$inferSelect;
@@ -1096,7 +1096,7 @@ export const expertMemory = mysqlTable("expert_memory", {
   usageCount: int("usageCount").default(0), // How often this memory has been used
   lastUsed: timestamp("lastUsed"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateCurrentTimestamp().notNull(),
 });
 
 export type ExpertMemory = typeof expertMemory.$inferSelect;
@@ -1145,7 +1145,7 @@ export const expertInsights = mysqlTable("expert_insights", {
   status: mysqlEnum("status", ["draft", "validated", "outdated", "archived"]).default("draft"),
   expiresAt: timestamp("expiresAt"), // When this insight should be reviewed
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateCurrentTimestamp().notNull(),
 });
 
 export type ExpertInsight = typeof expertInsights.$inferSelect;
@@ -1233,7 +1233,7 @@ export const expertDomainKnowledge = mysqlTable("expert_domain_knowledge", {
   keyFrameworks: json("keyFrameworks"), // Frameworks this expert uses
   recentDevelopments: text("recentDevelopments"), // Latest updates in this domain
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateCurrentTimestamp().notNull(),
 });
 
 export type ExpertDomainKnowledge = typeof expertDomainKnowledge.$inferSelect;
@@ -1254,7 +1254,7 @@ export const favoriteContacts = mysqlTable("favorite_contacts", {
   order: int("order").default(0), // For custom ordering
   isFavorited: boolean("isFavorited").default(true).notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateCurrentTimestamp().notNull(),
 });
 
 export type FavoriteContact = typeof favoriteContacts.$inferSelect;
@@ -1274,7 +1274,7 @@ export const smeTeams = mysqlTable("sme_teams", {
   projectId: int("projectId"), // Optional link to a project
   isActive: boolean("isActive").default(true).notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateCurrentTimestamp().notNull(),
 });
 
 export type SmeTeam = typeof smeTeams.$inferSelect;
@@ -1308,7 +1308,7 @@ export const taskQaReviews = mysqlTable("task_qa_reviews", {
   status: mysqlEnum("status", ["pending", "approved", "rejected", "needs_revision"]).default("pending").notNull(),
   improvements: json("improvements"), // Suggested improvements
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateCurrentTimestamp().notNull(),
 });
 
 export type TaskQaReview = typeof taskQaReviews.$inferSelect;
@@ -1353,7 +1353,7 @@ export const expertConsultations = mysqlTable("expert_consultations", {
   messageCount: int("messageCount").default(0), // Number of messages exchanged
   projectId: int("projectId"), // Optional link to project
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateCurrentTimestamp().notNull(),
 });
 
 export type ExpertConsultation = typeof expertConsultations.$inferSelect;
@@ -1448,7 +1448,7 @@ export const collaborativeReviewSessions = mysqlTable("collaborative_review_sess
   status: mysqlEnum("status", ["active", "completed", "archived"]).default("active").notNull(),
   reviewData: json("reviewData"), // Current state of the review
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateCurrentTimestamp().notNull(),
 });
 
 export type CollaborativeReviewSession = typeof collaborativeReviewSessions.$inferSelect;
@@ -1483,7 +1483,7 @@ export const collaborativeReviewComments = mysqlTable("collaborative_review_comm
   parentCommentId: int("parentCommentId"), // For threaded replies
   status: mysqlEnum("status", ["active", "resolved", "deleted"]).default("active").notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateCurrentTimestamp().notNull(),
 });
 
 export type CollaborativeReviewComment = typeof collaborativeReviewComments.$inferSelect;
@@ -1570,7 +1570,7 @@ export const blueprints = mysqlTable("blueprints", {
   ]).default("not_started").notNull(),
   metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateCurrentTimestamp().notNull(),
 });
 
 export type Blueprint = typeof blueprints.$inferSelect;
@@ -1626,7 +1626,7 @@ export const smePanels = mysqlTable("sme_panels", {
   expertIds: json("expertIds"), // Array of expert IDs assigned to this panel
   metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateCurrentTimestamp().notNull(),
 });
 
 export type SmePanel = typeof smePanels.$inferSelect;
@@ -1683,7 +1683,7 @@ export const qualityGates = mysqlTable("quality_gates", {
   gatekeeper: varchar("gatekeeper", { length: 100 }).default("Chief of Staff"),
   status: mysqlEnum("status", ["not_started", "in_progress", "passed", "failed"]).default("not_started").notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateCurrentTimestamp().notNull(),
 });
 
 export type QualityGate = typeof qualityGates.$inferSelect;
@@ -1705,7 +1705,7 @@ export const processPlaybooks = mysqlTable("process_playbooks", {
   qualityGateCriteria: json("qualityGateCriteria"), // Criteria for passing quality gate
   isActive: boolean("isActive").default(true).notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateCurrentTimestamp().notNull(),
 });
 
 export type ProcessPlaybook = typeof processPlaybooks.$inferSelect;
@@ -1795,7 +1795,7 @@ export const toolIntegrations = mysqlTable("tool_integrations", {
   valueChainPhases: json("valueChainPhases"), // Which phases this tool is used in
   metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateCurrentTimestamp().notNull(),
 });
 
 export type ToolIntegration = typeof toolIntegrations.$inferSelect;
@@ -1908,7 +1908,7 @@ export const reviewTimingPatterns = mysqlTable("review_timing_patterns", {
   completionRate: float("completionRate").default(0), // 0-1
   autoProcessRate: float("autoProcessRate").default(0), // 0-1
   sampleCount: int("sampleCount").default(0).notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateCurrentTimestamp().notNull(),
 });
 
 export type ReviewTimingPattern = typeof reviewTimingPatterns.$inferSelect;
@@ -1982,7 +1982,7 @@ export const innovationIdeas = mysqlTable("innovation_ideas", {
   promotedToProjectId: int("promotedToProjectId"), // If promoted to Project Genesis
   metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateCurrentTimestamp().notNull(),
 });
 
 export type InnovationIdea = typeof innovationIdeas.$inferSelect;
@@ -2095,7 +2095,7 @@ export const trendRepository = mysqlTable("trend_repository", {
   lastAnalyzedAt: timestamp("lastAnalyzedAt"),
   metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateCurrentTimestamp().notNull(),
 });
 
 export type TrendRepository = typeof trendRepository.$inferSelect;
@@ -2124,7 +2124,7 @@ export const generatedDocuments = mysqlTable("generated_documents", {
   relatedProjectId: int("relatedProjectId"), // Link to project genesis
   metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateCurrentTimestamp().notNull(),
 });
 
 export type GeneratedDocument = typeof generatedDocuments.$inferSelect;
@@ -2172,7 +2172,7 @@ export const fundingPrograms = mysqlTable("funding_programs", {
   lastUpdated: timestamp("lastUpdated"),
   metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateCurrentTimestamp().notNull(),
 });
 
 export type FundingProgram = typeof fundingPrograms.$inferSelect;
@@ -2206,7 +2206,7 @@ export const fundingAssessments = mysqlTable("funding_assessments", {
   assessedAt: timestamp("assessedAt").defaultNow().notNull(),
   metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateCurrentTimestamp().notNull(),
 });
 
 export type FundingAssessment = typeof fundingAssessments.$inferSelect;
@@ -2247,7 +2247,7 @@ export const revenueStreams = mysqlTable("revenue_streams", {
   targetCustomerSegment: varchar("targetCustomerSegment", { length: 200 }),
   notes: text("notes"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateCurrentTimestamp().notNull(),
 });
 
 export type RevenueStream = typeof revenueStreams.$inferSelect;
@@ -2310,7 +2310,7 @@ export const pipelineOpportunities = mysqlTable("pipeline_opportunities", {
   notes: text("notes"),
   metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateCurrentTimestamp().notNull(),
 });
 
 export type PipelineOpportunity = typeof pipelineOpportunities.$inferSelect;
@@ -2333,7 +2333,7 @@ export const pricingTiers = mysqlTable("pricing_tiers", {
   displayOrder: int("displayOrder").default(0),
   stripePriceId: varchar("stripePriceId", { length: 200 }), // For Stripe integration
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateCurrentTimestamp().notNull(),
 });
 
 export type PricingTier = typeof pricingTiers.$inferSelect;
@@ -2365,7 +2365,7 @@ export const customerAccounts = mysqlTable("customer_accounts", {
   notes: text("notes"),
   metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateCurrentTimestamp().notNull(),
 });
 
 export type CustomerAccount = typeof customerAccounts.$inferSelect;
@@ -2390,7 +2390,7 @@ export const revenueForecasts = mysqlTable("revenue_forecasts", {
   variancePercentage: float("variancePercentage"),
   notes: text("notes"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateCurrentTimestamp().notNull(),
 });
 
 export type RevenueForecast = typeof revenueForecasts.$inferSelect;
@@ -2477,7 +2477,7 @@ export const customerPersonas = mysqlTable("customer_personas", {
   // Metadata
   isActive: boolean("isActive").default(true).notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateCurrentTimestamp().notNull(),
 });
 
 export type CustomerPersona = typeof customerPersonas.$inferSelect;
@@ -2518,7 +2518,7 @@ export const customerSurveys = mysqlTable("customer_surveys", {
   
   // Metadata
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateCurrentTimestamp().notNull(),
   completedAt: timestamp("completedAt"),
 });
 
@@ -2729,7 +2729,7 @@ export const kpiCategories = mysqlTable("kpi_categories", {
   // Metadata
   isActive: boolean("isActive").default(true).notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateCurrentTimestamp().notNull(),
 });
 
 export type KpiCategory = typeof kpiCategories.$inferSelect;
@@ -2773,7 +2773,7 @@ export const smeIndividualAssessments = mysqlTable("sme_individual_assessments",
   
   // Metadata
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateCurrentTimestamp().notNull(),
 });
 
 export type SmeIndividualAssessment = typeof smeIndividualAssessments.$inferSelect;
@@ -3063,7 +3063,7 @@ export const insightsRepository = mysqlTable("insights_repository", {
   
   // Metadata
   capturedAt: timestamp("capturedAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateCurrentTimestamp().notNull(),
 });
 
 export type InsightRepository = typeof insightsRepository.$inferSelect;
@@ -3481,7 +3481,7 @@ export const qualityImprovementTickets = mysqlTable("quality_improvement_tickets
   
   // Metadata
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateCurrentTimestamp().notNull(),
   resolvedAt: timestamp("resolvedAt"),
 });
 
@@ -3550,7 +3550,7 @@ export const cosTrainingProgress = mysqlTable("cos_training_progress", {
   lastTrainingActivity: timestamp("lastTrainingActivity"),
   levelUpAt: timestamp("levelUpAt"), // When they reached current level
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateCurrentTimestamp().notNull(),
 });
 export type CosTrainingProgress = typeof cosTrainingProgress.$inferSelect;
 export type InsertCosTrainingProgress = typeof cosTrainingProgress.$inferInsert;
@@ -3581,7 +3581,7 @@ export const cosTrainingModules = mysqlTable("cos_training_modules", {
   
   // Metadata
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateCurrentTimestamp().notNull(),
 });
 export type CosTrainingModule = typeof cosTrainingModules.$inferSelect;
 export type InsertCosTrainingModule = typeof cosTrainingModules.$inferInsert;
@@ -3667,7 +3667,7 @@ export const cosLearnedPatterns = mysqlTable("cos_learned_patterns", {
   
   // Metadata
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateCurrentTimestamp().notNull(),
 });
 export type CosLearnedPattern = typeof cosLearnedPatterns.$inferSelect;
 export type InsertCosLearnedPattern = typeof cosLearnedPatterns.$inferInsert;
@@ -3708,7 +3708,7 @@ export const cosUserMentalModel = mysqlTable("cos_user_mental_model", {
   
   // Metadata
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateCurrentTimestamp().notNull(),
 });
 export type CosUserMentalModel = typeof cosUserMentalModel.$inferSelect;
 export type InsertCosUserMentalModel = typeof cosUserMentalModel.$inferInsert;
@@ -3760,7 +3760,7 @@ export const questionnaireResponses = mysqlTable('questionnaire_responses', {
   booleanValue: boolean('boolean_value'), // true/false for Y/N questions
   section: varchar('section', { length: 100 }), // e.g., "Business Operations", "Innovation"
   createdAt: timestamp('created_at').defaultNow().notNull(),
-  updatedAt: timestamp('updated_at').defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().onUpdateCurrentTimestamp().notNull(),
 });
 export type QuestionnaireResponse = typeof questionnaireResponses.$inferSelect;
 export type InsertQuestionnaireResponse = typeof questionnaireResponses.$inferInsert;
@@ -3798,7 +3798,7 @@ export const digitalTwinProfile = mysqlTable('digital_twin_profile', {
   questionnaireCompletion: int('questionnaire_completion').default(0), // 0-100 percentage
   lastCalculated: timestamp('last_calculated'),
   createdAt: timestamp('created_at').defaultNow().notNull(),
-  updatedAt: timestamp('updated_at').defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().onUpdateCurrentTimestamp().notNull(),
 });
 export type DigitalTwinProfile = typeof digitalTwinProfile.$inferSelect;
 export type InsertDigitalTwinProfile = typeof digitalTwinProfile.$inferInsert;
@@ -3837,7 +3837,7 @@ export const customerHealth = mysqlTable('customer_health', {
   nextCheckIn: timestamp('next_check_in'),
   notes: text('notes'),
   createdAt: timestamp('created_at').defaultNow().notNull(),
-  updatedAt: timestamp('updated_at').defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().onUpdateCurrentTimestamp().notNull(),
 });
 export type CustomerHealth = typeof customerHealth.$inferSelect;
 export type InsertCustomerHealth = typeof customerHealth.$inferInsert;
@@ -3858,7 +3858,7 @@ export const partnerships = mysqlTable('partnerships', {
   nextAction: text('next_action'),
   nextActionDate: timestamp('next_action_date'),
   createdAt: timestamp('created_at').defaultNow().notNull(),
-  updatedAt: timestamp('updated_at').defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().onUpdateCurrentTimestamp().notNull(),
 });
 export type Partnership = typeof partnerships.$inferSelect;
 export type InsertPartnership = typeof partnerships.$inferInsert;
@@ -3878,7 +3878,7 @@ export const teamCapabilities = mysqlTable('team_capabilities', {
   developmentPlan: text('development_plan'),
   lastAssessed: timestamp('last_assessed'),
   createdAt: timestamp('created_at').defaultNow().notNull(),
-  updatedAt: timestamp('updated_at').defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().onUpdateCurrentTimestamp().notNull(),
 });
 export type TeamCapability = typeof teamCapabilities.$inferSelect;
 export type InsertTeamCapability = typeof teamCapabilities.$inferInsert;
@@ -3898,7 +3898,7 @@ export const complianceItems = mysqlTable('compliance_items', {
   completedDate: timestamp('completed_date'),
   notes: text('notes'),
   createdAt: timestamp('created_at').defaultNow().notNull(),
-  updatedAt: timestamp('updated_at').defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().onUpdateCurrentTimestamp().notNull(),
 });
 export type ComplianceItem = typeof complianceItems.$inferSelect;
 export type InsertComplianceItem = typeof complianceItems.$inferInsert;
@@ -3951,7 +3951,7 @@ export const projectGenesisPhases = mysqlTable("project_genesis_phases", {
   notes: text("notes"),
   metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateCurrentTimestamp().notNull(),
 });
 
 export type ProjectGenesisPhase = typeof projectGenesisPhases.$inferSelect;
@@ -3973,7 +3973,7 @@ export const projectGenesisMilestones = mysqlTable("project_genesis_milestones",
   notes: text("notes"),
   metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateCurrentTimestamp().notNull(),
 });
 
 export type ProjectGenesisMilestone = typeof projectGenesisMilestones.$inferSelect;
@@ -3997,7 +3997,7 @@ export const projectGenesisDeliverables = mysqlTable("project_genesis_deliverabl
   reviewNotes: text("reviewNotes"),
   metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateCurrentTimestamp().notNull(),
 });
 
 export type ProjectGenesisDeliverable = typeof projectGenesisDeliverables.$inferSelect;
@@ -4017,7 +4017,7 @@ export const qualityGateCriteria = mysqlTable("quality_gate_criteria", {
   evaluationType: varchar("evaluationType", { length: 50 }).notNull(), // "automated", "manual", "hybrid"
   metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateCurrentTimestamp().notNull(),
 });
 
 export type QualityGateCriteria = typeof qualityGateCriteria.$inferSelect;
@@ -4038,7 +4038,7 @@ export const qualityGateResults = mysqlTable("quality_gate_results", {
   evidence: json("evidence"), // Supporting evidence/documents
   metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateCurrentTimestamp().notNull(),
 });
 
 export type QualityGateResult = typeof qualityGateResults.$inferSelect;
@@ -4066,7 +4066,7 @@ export const blueprintLibrary = mysqlTable("blueprint_library", {
   createdBy: int("createdBy"),
   metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateCurrentTimestamp().notNull(),
 });
 
 export type Blueprint = typeof blueprintLibrary.$inferSelect;
@@ -4091,7 +4091,7 @@ export const blueprintExecutions = mysqlTable("blueprint_executions", {
   notes: text("notes"),
   metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateCurrentTimestamp().notNull(),
 });
 
 export type BlueprintExecution = typeof blueprintExecutions.$inferSelect;
