@@ -56,7 +56,7 @@ export default function ProjectGenesisPage() {
   
   // ===== NEW: Real API Integration =====
   // Fetch projects from backend
-  const { data: apiProjects, isLoading: projectsLoading, refetch: refetchProjects } = trpc.projectGenesis.list.useQuery();
+  const { data: apiProjects, isLoading: projectsLoading, refetch: refetchProjects } = trpc.projectGenesis.listProjects.useQuery();
   
   // Create project mutation
   const createProjectMutation = trpc.projectGenesis.initiate.useMutation({
