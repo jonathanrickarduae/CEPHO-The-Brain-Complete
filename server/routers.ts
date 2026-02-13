@@ -3,8 +3,8 @@ import { integrationsRouter } from "./routers/integrationsRouter";
 import { projectGenesisRouter } from "./routers/projectGenesisRouter";
 import { qualityGatesRouter } from "./routers/qualityGatesRouter";
 import { blueprintRouter } from "./routers/blueprintRouter";
-// import { smeRouter } from "./routers/smeRouter"; // Temporarily disabled - missing table definitions
-// import { digitalTwinRouter } from "./routers/digitalTwinRouter"; // Temporarily disabled - missing table definitions
+import { smeRouter } from "./routers/smeRouter";
+import { digitalTwinRouter } from "./routers/digitalTwinRouter";
 import { blueprintsRouter } from "./routers/blueprintsRouter";
 import { chiefOfStaffRouter } from "./routers/chiefOfStaffRouter";
 import { deepDiveRouter } from "./routers/deepDiveRouter";
@@ -103,8 +103,8 @@ export const appRouter = router({
   projectGenesis: projectGenesisRouter,
   qualityGates: qualityGatesRouter,
   blueprint: blueprintRouter,
-  // sme: smeRouter, // Temporarily disabled - missing table definitions
-  // digitalTwin: digitalTwinRouter, // Temporarily disabled - missing table definitions
+  sme: smeRouter,
+  digitalTwin: digitalTwinRouter,
   blueprints: blueprintsRouter,
   chiefOfStaff: chiefOfStaffRouter,
   deepDive: deepDiveRouter,

@@ -4302,3 +4302,140 @@ export const qmsComplianceChecks = pgTable("qms_compliance_checks", {
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
+
+// =============================================================================
+// DIGITAL TWIN PROFILES
+// =============================================================================
+
+/**
+ * Digital Twins - User's AI Chief of Staff profile
+ */
+export const digitalTwins = mysqlTable("digital_twins", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull().unique(),
+  
+  // Profile
+  name: varchar("name", { length: 200 }),
+  learningStyle: mysqlEnum("learningStyle", [
+    "visual",
+    "auditory",
+    "reading",
+    "kinesthetic",
+    "mixed"
+  ]).default("mixed"),
+  
+  // Competency scores (0-100)
+  strategicThinking: int("strategicThinking").default(20).notNull(),
+  executiveCommunication: int("executiveCommunication").default(20).notNull(),
+  operationalExcellence: int("operationalExcellence").default(20).notNull(),
+  dataAnalytics: int("dataAnalytics").default(20).notNull(),
+  leadershipDevelopment: int("leadershipDevelopment").default(20).notNull(),
+  crisisManagement: int("crisisManagement").default(20).notNull(),
+  innovationStrategy: int("innovationStrategy").default(20).notNull(),
+  stakeholderManagement: int("stakeholderManagement").default(20).notNull(),
+  
+  // Overall competency
+  overallCompetency: int("overallCompetency").default(20).notNull(),
+  
+  // Timestamps
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
+});
+export type DigitalTwin = typeof digitalTwins.$inferSelect;
+export type InsertDigitalTwin = typeof digitalTwins.$inferInsert;
+
+/**
+ * Decision Log - tracks user decisions for learning
+ */
+export const decisionLog = mysqlTable("decision_log", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  
+  // Decision details
+  decisionType: varchar("decisionType", { length: 100 }).notNull(),
+  decisionContext: text("decisionContext").notNull(),
+  decisionMade: text("decisionMade").notNull(),
+  reasoning: text("reasoning"),
+  
+  // Outcome tracking
+  outcome: text("outcome"),
+  outcomeRating: int("outcomeRating"), // 1-5
+  lessonsLearned: text("lessonsLearned"),
+  
+  // Metadata
+  relatedModule: int("relatedModule"), // Training module ID
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+export type DecisionLog = typeof decisionLog.$inferSelect;
+export type InsertDecisionLog = typeof decisionLog.$inferInsert;
+
+// =============================================================================
+// AI-SME EXPERTS SYSTEM
+// =============================================================================
+
+/**
+ * AI-SME Experts - Available expert consultants
+ */
+export const aiSmeExperts = mysqlTable("ai_sme_experts", {
+  id: int("id").autoincrement().primaryKey(),
+  
+  // Expert profile
+  name: varchar("name", { length: 200 }).notNull(),
+  title: varchar("title", { length: 200 }).notNull(),
+  domain: varchar("domain", { length: 100 }).notNull(), // finance, legal, marketing, etc.
+  expertise: json("expertise").$type<string[]>(), // Array of expertise areas
+  
+  // Description
+  bio: text("bio"),
+  specialization: text("specialization"),
+  
+  // Availability
+  isActive: boolean("isActive").default(true).notNull(),
+  consultationCount: int("consultationCount").default(0).notNull(),
+  
+  // System prompt
+  systemPrompt: text("systemPrompt").notNull(),
+  
+  // Metadata
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
+});
+export type AiSmeExpert = typeof aiSmeExperts.$inferSelect;
+export type InsertAiSmeExpert = typeof aiSmeExperts.$inferInsert;
+
+/**
+ * AI-SME Consultations - User consultations with experts
+ */
+export const aiSmeConsultations = mysqlTable("ai_sme_consultations", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  expertId: int("expertId").notNull(),
+  
+  // Consultation details
+  topic: varchar("topic", { length: 255 }).notNull(),
+  question: text("question").notNull(),
+  response: text("response"),
+  
+  // Status
+  status: mysqlEnum("status", [
+    "pending",
+    "in_progress",
+    "completed",
+    "cancelled"
+  ]).default("pending").notNull(),
+  
+  // Conversation
+  conversationHistory: json("conversationHistory").$type<any[]>(),
+  
+  // Rating
+  rating: int("rating"), // 1-5
+  feedback: text("feedback"),
+  
+  // Metadata
+  duration: int("duration"), // seconds
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  completedAt: timestamp("completedAt"),
+  updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
+});
+export type AiSmeConsultation = typeof aiSmeConsultations.$inferSelect;
+export type InsertAiSmeConsultation = typeof aiSmeConsultations.$inferInsert;

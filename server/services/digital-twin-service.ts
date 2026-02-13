@@ -3,7 +3,7 @@
  * Implements personalized AI assistant with 8-module training program
  */
 
-import { db } from '../db';
+import { getDb } from '../db';
 import { digitalTwins, cosTrainingProgress, decisionLog } from '../../drizzle/schema';
 import { eq, and } from 'drizzle-orm';
 
@@ -168,13 +168,13 @@ export const TRAINING_MODULES = [
  */
 export async function getOrCreateProfile(userId: string) {
   // Check if profile exists
-  let [profile] = await db.select()
+  let [profile] = await (await getDb()).select()
     .from(digitalTwins)
     .where(eq(digitalTwins.userId, userId));
 
   if (!profile) {
     // Create new profile
-    [profile] = await db.insert(digitalTwins).values({
+    [profile] = await (await getDb()).insert(digitalTwins).values({
       userId,
       name: 'Your Digital Twin',
       learningStyle: 'adaptive',
@@ -191,7 +191,7 @@ export async function getOrCreateProfile(userId: string) {
  * Get training progress
  */
 export async function getTrainingProgress(userId: string) {
-  const progress = await db.select()
+  const progress = await (await getDb()).select()
     .from(cosTrainingProgress)
     .where(eq(cosTrainingProgress.userId, userId))
     .orderBy(cosTrainingProgress.moduleId);
@@ -214,7 +214,7 @@ export async function startModule(userId: string, moduleId: number) {
   if (!module) throw new Error('Module not found');
 
   // Check if already started
-  const [existing] = await db.select()
+  const [existing] = await (await getDb()).select()
     .from(cosTrainingProgress)
     .where(
       and(
@@ -228,7 +228,7 @@ export async function startModule(userId: string, moduleId: number) {
   }
 
   // Create progress record
-  const [progress] = await db.insert(cosTrainingProgress).values({
+  const [progress] = await (await getDb()).insert(cosTrainingProgress).values({
     userId,
     moduleId,
     moduleTitle: module.title,
@@ -252,7 +252,7 @@ export async function completeModule(
   if (!module) throw new Error('Module not found');
 
   // Update progress
-  await db.update(cosTrainingProgress)
+  await (await getDb()).update(cosTrainingProgress)
     .set({
       status: 'completed',
       progress: 100,
@@ -272,7 +272,7 @@ export async function completeModule(
   const averageScore = completedModules.reduce((sum, p) => sum + (p.assessmentScore || 0), 0) / completedModules.length;
   const competencyLevel = (completedModules.length / TRAINING_MODULES.length) * 100;
 
-  await db.update(digitalTwins)
+  await (await getDb()).update(digitalTwins)
     .set({
       competencyLevel,
       averageScore,
@@ -298,7 +298,7 @@ export async function recordDecision(
   selectedOption: string,
   reasoning: string
 ) {
-  const [decision] = await db.insert(decisionLog).values({
+  const [decision] = await (await getDb()).insert(decisionLog).values({
     userId,
     context,
     options,
@@ -322,7 +322,7 @@ export async function recordDecision(
   preferences.decisionPatterns = preferences.decisionPatterns || [];
   preferences.decisionPatterns.push(decisionPattern);
 
-  await db.update(digitalTwins)
+  await (await getDb()).update(digitalTwins)
     .set({ preferences })
     .where(eq(digitalTwins.userId, userId));
 
@@ -367,7 +367,7 @@ export async function getSuggestion(userId: string, context: string, options: st
  * Get decision history
  */
 export async function getDecisionHistory(userId: string, limit: number = 50) {
-  const decisions = await db.select()
+  const decisions = await (await getDb()).select()
     .from(decisionLog)
     .where(eq(decisionLog.userId, userId))
     .orderBy(decisionLog.timestamp)
@@ -407,7 +407,7 @@ export async function updateLearningStyle(
   userId: string,
   learningStyle: 'visual' | 'auditory' | 'kinesthetic' | 'reading' | 'adaptive'
 ) {
-  await db.update(digitalTwins)
+  await (await getDb()).update(digitalTwins)
     .set({ learningStyle })
     .where(eq(digitalTwins.userId, userId));
 
@@ -427,7 +427,7 @@ export async function recordPreference(
 
   preferences[category] = preference;
 
-  await db.update(digitalTwins)
+  await (await getDb()).update(digitalTwins)
     .set({ preferences })
     .where(eq(digitalTwins.userId, userId));
 

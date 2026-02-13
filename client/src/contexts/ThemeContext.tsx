@@ -22,6 +22,16 @@ export function ThemeProvider({
   switchable = false,
 }: ThemeProviderProps) {
   const [theme, setThemeState] = useState<Theme>(() => {
+    // If defaultTheme is explicitly set to dark, use it unless user has explicitly changed it
+    if (defaultTheme === "dark" && switchable) {
+      const stored = localStorage.getItem("theme");
+      // Only use stored theme if it exists AND is different from default
+      if (stored && stored !== defaultTheme && (stored === "light" || stored === "dark" || stored === "mix")) {
+        return stored;
+      }
+      return defaultTheme;
+    }
+    
     if (switchable) {
       const stored = localStorage.getItem("theme");
       if (stored === "light" || stored === "dark" || stored === "mix") {

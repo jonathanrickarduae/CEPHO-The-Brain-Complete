@@ -3,7 +3,7 @@
  * Manages 323 AI experts across 16 categories with panel assembly
  */
 
-import { db } from '../db';
+import { getDb } from '../db';
 import { aiSmeExperts, aiSmeConsultations } from '../../drizzle/schema';
 import { eq, and, inArray, like, or } from 'drizzle-orm';
 import { allExperts, type AIExpert } from '../../client/src/data/aiExperts';
@@ -18,14 +18,14 @@ export async function loadExperts() {
 
   for (const expert of allExperts) {
     // Check if expert already exists
-    const existing = await db.select()
+    const existing = await (await getDb()).select()
       .from(aiSmeExperts)
       .where(eq(aiSmeExperts.expertId, expert.id))
       .limit(1);
 
     if (existing.length === 0) {
       // Insert new expert
-      const [inserted] = await db.insert(aiSmeExperts).values({
+      const [inserted] = await (await getDb()).insert(aiSmeExperts).values({
         expertId: expert.id,
         name: expert.name,
         title: expert.title,
@@ -61,7 +61,7 @@ export async function loadExperts() {
  * Get all experts
  */
 export async function getAllExperts() {
-  const experts = await db.select()
+  const experts = await (await getDb()).select()
     .from(aiSmeExperts)
     .where(eq(aiSmeExperts.availability, 'available'))
     .orderBy(aiSmeExperts.rating);
@@ -73,7 +73,7 @@ export async function getAllExperts() {
  * Get expert by ID
  */
 export async function getExpert(expertId: string) {
-  const [expert] = await db.select()
+  const [expert] = await (await getDb()).select()
     .from(aiSmeExperts)
     .where(eq(aiSmeExperts.expertId, expertId));
 
@@ -84,7 +84,7 @@ export async function getExpert(expertId: string) {
  * Get experts by category
  */
 export async function getExpertsByCategory(category: string) {
-  const experts = await db.select()
+  const experts = await (await getDb()).select()
     .from(aiSmeExperts)
     .where(
       and(
@@ -103,7 +103,7 @@ export async function getExpertsByCategory(category: string) {
 export async function searchExperts(query: string) {
   const searchTerm = `%${query}%`;
   
-  const experts = await db.select()
+  const experts = await (await getDb()).select()
     .from(aiSmeExperts)
     .where(
       and(
@@ -221,7 +221,7 @@ export async function requestConsultation(
   context?: any
 ) {
   // Create consultation record
-  const [consultation] = await db.insert(aiSmeConsultations).values({
+  const [consultation] = await (await getDb()).insert(aiSmeConsultations).values({
     userId,
     expertId,
     question,
@@ -237,7 +237,7 @@ export async function requestConsultation(
   const response = await generateExpertResponse(expert, question, context);
 
   // Update consultation with response
-  await db.update(aiSmeConsultations)
+  await (await getDb()).update(aiSmeConsultations)
     .set({
       response,
       status: 'completed',
@@ -246,7 +246,7 @@ export async function requestConsultation(
     .where(eq(aiSmeConsultations.id, consultation.id));
 
   // Increment consultation count
-  await db.update(aiSmeExperts)
+  await (await getDb()).update(aiSmeExperts)
     .set({
       consultationCount: expert.consultationCount + 1,
     })
@@ -292,7 +292,7 @@ Would you like me to elaborate on any of these points?`;
  * Get consultation history for a user
  */
 export async function getConsultationHistory(userId: string, limit: number = 20) {
-  const consultations = await db.select()
+  const consultations = await (await getDb()).select()
     .from(aiSmeConsultations)
     .where(eq(aiSmeConsultations.userId, userId))
     .orderBy(aiSmeConsultations.createdAt)
@@ -310,7 +310,7 @@ export async function submitFeedback(
   comment?: string
 ) {
   // Update consultation with feedback
-  await db.update(aiSmeConsultations)
+  await (await getDb()).update(aiSmeConsultations)
     .set({
       rating,
       feedback: comment,
@@ -318,7 +318,7 @@ export async function submitFeedback(
     .where(eq(aiSmeConsultations.id, consultationId));
 
   // Update expert's average rating
-  const [consultation] = await db.select()
+  const [consultation] = await (await getDb()).select()
     .from(aiSmeConsultations)
     .where(eq(aiSmeConsultations.id, consultationId));
 
@@ -329,7 +329,7 @@ export async function submitFeedback(
       const totalRating = expert.rating * expert.consultationCount;
       const newRating = (totalRating + rating) / (expert.consultationCount + 1);
 
-      await db.update(aiSmeExperts)
+      await (await getDb()).update(aiSmeExperts)
         .set({ rating: newRating })
         .where(eq(aiSmeExperts.expertId, consultation.expertId));
     }
