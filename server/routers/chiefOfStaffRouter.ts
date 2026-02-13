@@ -1,7 +1,7 @@
 // Chief of Staff Router - Daily Briefings, Training, and Digital Twin
 import { router, protectedProcedure } from '../_core/trpc';
 import { z } from 'zod';
-import { db } from '../db';
+import { getDb } from '../db';
 import { 
   cosTrainingModules, 
   cosModuleProgress, 
@@ -100,6 +100,8 @@ export const chiefOfStaffRouter = router({
       strengthsWeaknesses: z.any().optional(),
     }))
     .mutation(async ({ input, ctx }) => {
+      const db = await getDb();
+      if (!db) throw new Error('Database not available');
       // Get existing profile
       const existing = await db.select()
         .from(digitalTwinProfiles)

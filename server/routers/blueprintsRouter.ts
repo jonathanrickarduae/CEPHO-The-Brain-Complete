@@ -1,7 +1,7 @@
 // Blueprints Router - BP-001 to BP-016+ Blueprint Library & Execution
 import { router, protectedProcedure } from '../_core/trpc';
 import { z } from 'zod';
-import { db } from '../db';
+import { getDb } from '../db';
 import { blueprintLibrary, blueprintExecutions, blueprintParameters, blueprintOutputs } from '../../drizzle/schema';
 import { eq, and } from 'drizzle-orm';
 
@@ -13,6 +13,8 @@ export const blueprintsRouter = router({
       search: z.string().optional(),
     }))
     .query(async ({ input, ctx }) => {
+      const db = await getDb();
+      if (!db) throw new Error('Database not available');
       const blueprints = await db.select().from(blueprintLibrary);
       
       let filtered = blueprints;
@@ -42,6 +44,8 @@ export const blueprintsRouter = router({
       blueprintId: z.string(),
     }))
     .query(async ({ input, ctx }) => {
+      const db = await getDb();
+      if (!db) throw new Error('Database not available');
       const blueprint = await db.select()
         .from(blueprintLibrary)
         .where(eq(blueprintLibrary.id, input.blueprintId))
@@ -72,6 +76,8 @@ export const blueprintsRouter = router({
       parameters: z.record(z.any()).optional(),
     }))
     .mutation(async ({ input, ctx }) => {
+      const db = await getDb();
+      if (!db) throw new Error('Database not available');
       // Create execution record
       const execution = await db.insert(blueprintExecutions).values({
         blueprintId: input.blueprintId,
@@ -153,6 +159,8 @@ export const blueprintsRouter = router({
       executionId: z.string(),
     }))
     .query(async ({ input, ctx }) => {
+      const db = await getDb();
+      if (!db) throw new Error('Database not available');
       const outputs = await db.select()
         .from(blueprintOutputs)
         .where(eq(blueprintOutputs.executionId, input.executionId));

@@ -5,8 +5,8 @@ import { qualityGatesRouter } from "./routers/qualityGatesRouter";
 import { blueprintRouter } from "./routers/blueprintRouter";
 // import { smeRouter } from "./routers/smeRouter"; // Temporarily disabled - missing table definitions
 // import { digitalTwinRouter } from "./routers/digitalTwinRouter"; // Temporarily disabled - missing table definitions
-// import { blueprintsRouter } from "./routers/blueprintsRouter"; // Temporarily disabled - uses db import
-// import { chiefOfStaffRouter } from "./routers/chiefOfStaffRouter"; // Temporarily disabled - uses db import
+import { blueprintsRouter } from "./routers/blueprintsRouter";
+import { chiefOfStaffRouter } from "./routers/chiefOfStaffRouter";
 import { deepDiveRouter } from "./routers/deepDiveRouter";
 import { businessPlanRouter } from "./routers/businessPlanRouter";
 import { COOKIE_NAME } from "@shared/const";
@@ -105,8 +105,8 @@ export const appRouter = router({
   blueprint: blueprintRouter,
   // sme: smeRouter, // Temporarily disabled - missing table definitions
   // digitalTwin: digitalTwinRouter, // Temporarily disabled - missing table definitions
-  // blueprints: blueprintsRouter, // Temporarily disabled
-  // chiefOfStaff: chiefOfStaffRouter, // Temporarily disabled
+  blueprints: blueprintsRouter,
+  chiefOfStaff: chiefOfStaffRouter,
   deepDive: deepDiveRouter,
   businessPlan: businessPlanRouter,
     // if you need to use socket.io, read and register route in server/_core/index.ts, all api should start with '/api/' so that the gateway can route correctly
