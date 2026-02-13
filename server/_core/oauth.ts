@@ -1,6 +1,5 @@
 import { COOKIE_NAME, ONE_YEAR_MS } from "@shared/const";
 import type { Express, Request, Response } from "express";
-import * as db from "../db";
 import { getSessionCookieOptions } from "./cookies";
 import { sdk } from "./sdk";
 
@@ -28,6 +27,7 @@ export function registerOAuthRoutes(app: Express) {
         return;
       }
 
+      const db = await import("../db");
       await db.upsertUser({
         openId: userInfo.openId,
         name: userInfo.name || null,

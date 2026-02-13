@@ -5,8 +5,6 @@ import { parse as parseCookieHeader } from "cookie";
 import type { Request } from "express";
 import { SignJWT, jwtVerify } from "jose";
 import type { User } from "../../drizzle/schema";
-import * as db from "../db";
-import { ENV } from "./env";
 import type {
   ExchangeTokenRequest,
   ExchangeTokenResponse,
@@ -30,8 +28,9 @@ const GET_USER_INFO_WITH_JWT_PATH = `/webdev.v1.WebDevAuthPublicService/GetUserI
 
 class OAuthService {
   constructor(private client: ReturnType<typeof axios.create>) {
-    console.log("[OAuth] Initialized with baseURL:", ENV.oAuthServerUrl);
-    if (!ENV.oAuthServerUrl) {
+    const oAuthServerUrl = process.env.OAUTH_SERVER_URL ?? "";
+    console.log("[OAuth] Initialized with baseURL:", oAuthServerUrl);
+    if (!oAuthServerUrl) {
       console.error(
         "[OAuth] ERROR: OAUTH_SERVER_URL is not configured! Set OAUTH_SERVER_URL environment variable."
       );
@@ -48,7 +47,7 @@ class OAuthService {
     state: string
   ): Promise<ExchangeTokenResponse> {
     const payload: ExchangeTokenRequest = {
-      clientId: ENV.appId,
+      clientId: process.env.VITE_APP_ID ?? "",
       grantType: "authorization_code",
       code,
       redirectUri: this.decodeState(state),
@@ -78,7 +77,7 @@ class OAuthService {
 
 const createOAuthHttpClient = (): AxiosInstance =>
   axios.create({
-    baseURL: ENV.oAuthServerUrl,
+    baseURL: process.env.OAUTH_SERVER_URL ?? "",
     timeout: AXIOS_TIMEOUT_MS,
   });
 
@@ -155,7 +154,7 @@ class SDKServer {
   }
 
   private getSessionSecret() {
-    const secret = ENV.cookieSecret;
+    const secret = process.env.JWT_SECRET ?? "";
     return new TextEncoder().encode(secret);
   }
 
@@ -171,7 +170,7 @@ class SDKServer {
     return this.signSession(
       {
         openId,
-        appId: ENV.appId,
+        appId: process.env.VITE_APP_ID ?? "",
         name: options.name || "",
       },
       options
@@ -237,7 +236,7 @@ class SDKServer {
   ): Promise<GetUserInfoWithJwtResponse> {
     const payload: GetUserInfoWithJwtRequest = {
       jwtToken,
-      projectId: ENV.appId,
+      projectId: process.env.VITE_APP_ID ?? "",
     };
 
     const { data } = await this.client.post<GetUserInfoWithJwtResponse>(
@@ -292,6 +291,7 @@ class SDKServer {
 
     const sessionUserId = session.openId;
     const signedInAt = new Date();
+    const db = await import("../db");
     let user = await db.getUserByOpenId(sessionUserId);
 
     // If user not in DB, sync from OAuth server automatically

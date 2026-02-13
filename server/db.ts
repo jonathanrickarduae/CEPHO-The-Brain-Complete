@@ -25,7 +25,6 @@ import { InsertUser, users, moodHistory, InsertMoodHistory, MoodHistory, convers
   calendarEventsCache, InsertCalendarEventCache, CalendarEventCache,
   generatedDocuments, InsertGeneratedDocument, GeneratedDocument
 } from "../drizzle/schema";
-import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
 

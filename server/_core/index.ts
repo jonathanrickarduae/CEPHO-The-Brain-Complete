@@ -1,3 +1,4 @@
+// Load environment variables FIRST before any other imports
 import dotenv from "dotenv";
 import { fileURLToPath } from "url";
 import path from "path";
@@ -5,10 +6,11 @@ import path from "path";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Load .env.production in production
 if (process.env.NODE_ENV === "production") {
-  const envPath = path.resolve(__dirname, "..", "..", ".env.production");
+  const envPath = path.resolve(__dirname, ".env.production");
   dotenv.config({ path: envPath });
+  console.log('[dotenv] Loaded .env.production from:', envPath);
+  console.log('[dotenv] DATABASE_URL present:', !!process.env.DATABASE_URL);
 } else {
   dotenv.config();
 }
@@ -17,6 +19,8 @@ if (process.env.NODE_ENV === "production") {
 console.log('[Startup] AUTH_BYPASS:', process.env.AUTH_BYPASS);
 console.log('[Startup] VITE_AUTH_BYPASS:', process.env.VITE_AUTH_BYPASS);
 console.log('[Startup] NODE_ENV:', process.env.NODE_ENV);
+
+// Now import other modules
 import express from "express";
 import { createServer } from "http";
 import net from "net";

@@ -1,4 +1,3 @@
-import { ENV } from "./env";
 
 export type Role = "system" | "user" | "assistant" | "tool" | "function";
 
@@ -209,13 +208,15 @@ const normalizeToolChoice = (
   return toolChoice;
 };
 
-const resolveApiUrl = () =>
-  ENV.forgeApiUrl && ENV.forgeApiUrl.trim().length > 0
-    ? `${ENV.forgeApiUrl.replace(/\/$/, "")}/v1/chat/completions`
+const resolveApiUrl = () => {
+  const apiUrl = process.env.BUILT_IN_FORGE_API_URL ?? "";
+  return apiUrl.trim().length > 0
+    ? `${apiUrl.replace(/\/$/, "")}/v1/chat/completions`
     : "https://forge.manus.im/v1/chat/completions";
+};
 
 const assertApiKey = () => {
-  if (!ENV.forgeApiKey) {
+  if (!(process.env.BUILT_IN_FORGE_API_KEY ?? "")) {
     throw new Error("OPENAI_API_KEY is not configured");
   }
 };
@@ -316,7 +317,7 @@ export async function invokeLLM(params: InvokeParams): Promise<InvokeResult> {
     method: "POST",
     headers: {
       "content-type": "application/json",
-      authorization: `Bearer ${ENV.forgeApiKey}`,
+      authorization: `Bearer ${process.env.BUILT_IN_FORGE_API_KEY ?? ""}`,
     },
     body: JSON.stringify(payload),
   });

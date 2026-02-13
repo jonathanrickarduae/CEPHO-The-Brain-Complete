@@ -19,7 +19,6 @@
  * }
  * ```
  */
-import { ENV } from "./env";
 import { storagePut } from "../storage";
 
 // Victoria Stirling's voice configuration
@@ -68,7 +67,7 @@ export async function synthesizeSpeech(
 ): Promise<SynthesisResponse | SynthesisError> {
   try {
     // Validate API key
-    if (!ENV.elevenLabsApiKey) {
+    if (!(process.env.ELEVENLABS_API_KEY ?? "")) {
       return {
         error: "ElevenLabs API key is not configured",
         code: "SERVICE_ERROR",
@@ -111,7 +110,7 @@ export async function synthesizeSpeech(
         headers: {
           "Accept": "audio/mpeg",
           "Content-Type": "application/json",
-          "xi-api-key": ENV.elevenLabsApiKey,
+          "xi-api-key": process.env.ELEVENLABS_API_KEY ?? "",
         },
         body: JSON.stringify({
           text,
@@ -188,7 +187,7 @@ export async function getAvailableVoices(): Promise<
   { voices: Array<{ voice_id: string; name: string; category: string }> } | SynthesisError
 > {
   try {
-    if (!ENV.elevenLabsApiKey) {
+    if (!(process.env.ELEVENLABS_API_KEY ?? "")) {
       return {
         error: "ElevenLabs API key is not configured",
         code: "SERVICE_ERROR",
@@ -198,7 +197,7 @@ export async function getAvailableVoices(): Promise<
 
     const response = await fetch("https://api.elevenlabs.io/v1/voices", {
       headers: {
-        "xi-api-key": ENV.elevenLabsApiKey,
+        "xi-api-key": process.env.ELEVENLABS_API_KEY ?? "",
       },
     });
 
@@ -237,7 +236,7 @@ export async function getSubscriptionInfo(): Promise<
   { character_count: number; character_limit: number; tier: string } | SynthesisError
 > {
   try {
-    if (!ENV.elevenLabsApiKey) {
+    if (!(process.env.ELEVENLABS_API_KEY ?? "")) {
       return {
         error: "ElevenLabs API key is not configured",
         code: "SERVICE_ERROR",
@@ -247,7 +246,7 @@ export async function getSubscriptionInfo(): Promise<
 
     const response = await fetch("https://api.elevenlabs.io/v1/user/subscription", {
       headers: {
-        "xi-api-key": ENV.elevenLabsApiKey,
+        "xi-api-key": process.env.ELEVENLABS_API_KEY ?? "",
       },
     });
 
