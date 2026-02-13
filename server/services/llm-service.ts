@@ -1,5 +1,6 @@
 import { getOpenAIClient, ChatMessage as OpenAIMessage } from './openai-client';
 import { getClaudeClient, ClaudeMessage } from './claude-client';
+import { buildCompletePrompt, SkillType } from '../prompts';
 
 export interface LLMMessage {
   role: 'system' | 'user' | 'assistant';
@@ -115,7 +116,35 @@ export class LLMService {
     return "I'm currently experiencing technical difficulties. Please try again in a moment, or contact support if the issue persists.";
   }
 
-  // Skill-specific system prompts
+  /**
+   * Chat with skill-specific context
+   */
+  async chatWithSkill(
+    skillType: SkillType,
+    userMessage: string,
+    conversationHistory?: Array<{ role: 'user' | 'assistant'; content: string }>,
+    userContext?: {
+      name?: string;
+      company?: string;
+      industry?: string;
+      role?: string;
+      preferences?: Record<string, any>;
+    },
+    options?: LLMOptions
+  ): Promise<string> {
+    // Build complete prompt with skill-specific system message and context
+    const messages = buildCompletePrompt(
+      skillType,
+      userMessage,
+      conversationHistory,
+      userContext
+    );
+
+    // Call chat with built messages
+    return await this.chat(messages, options);
+  }
+
+  // Legacy skill-specific system prompts (deprecated - use chatWithSkill instead)
   getSystemPrompt(skillName: string): string {
     const prompts: Record<string, string> = {
       'project-genesis': `You are CEPHO's AI assistant specializing in Project Genesis - a comprehensive 6-phase venture development process.

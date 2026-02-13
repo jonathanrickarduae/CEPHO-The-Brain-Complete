@@ -8,6 +8,9 @@ import { getDb } from "./db";
 import { z } from "zod";
 import { getLLMService } from "./services/llm-service";
 import { getConversationService } from "./services/conversation-service";
+import cacheService, { CacheService } from "./services/cache-service";
+import rateLimitService from "./services/rate-limit-service";
+import { SkillType } from "./prompts";
 
 // Skill execution engine
 export class OpenClawGateway {
@@ -43,15 +46,38 @@ export class OpenClawGateway {
   async chat(message: string, userId: string, context?: any) {
     console.log('[OpenClaw] Chat request:', { message, userId });
     
-    const llmService = getLLMService();
-    const conversationService = getConversationService();
-    
     // Convert userId to number if it's a string
     const userIdNum = typeof userId === 'string' ? parseInt(userId, 10) : userId;
+    
+    // Check rate limit
+    const rateLimit = rateLimitService.checkLimit(`user:${userIdNum}`, 'ai-chat');
+    if (!rateLimit.allowed) {
+      const resetIn = Math.ceil((rateLimit.resetAt - Date.now()) / 1000 / 60);
+      throw new TRPCError({
+        code: 'TOO_MANY_REQUESTS',
+        message: `Rate limit exceeded. Please try again in ${resetIn} minutes. You have ${rateLimit.remaining} requests remaining.`,
+      });
+    }
+    
+    const llmService = getLLMService();
+    const conversationService = getConversationService();
     
     // Detect which skill the user is asking about
     const skill = llmService.detectSkill(message);
     console.log('[OpenClaw] Detected skill:', skill);
+    
+    // Check cache for similar recent query
+    const cacheKey = CacheService.generateAICacheKey(skill, message, userIdNum);
+    const cachedResponse = cacheService.get(cacheKey);
+    if (cachedResponse) {
+      console.log('[OpenClaw] Cache hit for query');
+      return {
+        response: cachedResponse,
+        suggestions: llmService.generateSuggestions(skill),
+        skill,
+        cached: true,
+      };
+    }
     
     // Get conversation history from database
     const history = await conversationService.getConversationHistory(userIdNum, 5);
@@ -75,14 +101,28 @@ export class OpenClawGateway {
     ];
     
     try {
-      // Call LLM for intelligent response
-      const response = await llmService.chat(messages);
+      // Call LLM for intelligent response with enhanced error handling
+      const response = await llmService.chat(messages).catch((error: any) => {
+        console.error('[OpenClaw] LLM Error:', {
+          message: error.message,
+          code: error.code,
+          provider: error.provider,
+        });
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: `AI service error: ${error.message}. Please try again.`,
+          cause: error,
+        });
+      });
       
       // Save user message to conversation history
       await conversationService.addMessage(userIdNum, 'user', message, { skill });
       
       // Save assistant response to conversation history
       await conversationService.addMessage(userIdNum, 'assistant', response, { skill });
+      
+      // Cache the response for 1 hour
+      cacheService.set(cacheKey, response, 3600);
       
       // Generate suggestions based on skill
       const suggestions = llmService.generateSuggestions(skill);
@@ -91,6 +131,11 @@ export class OpenClawGateway {
         response,
         suggestions,
         skill,
+        cached: false,
+        rateLimit: {
+          remaining: rateLimit.remaining - 1,
+          resetAt: rateLimit.resetAt,
+        },
       };
     } catch (error: any) {
       console.error('[OpenClaw] Error:', error.message);
