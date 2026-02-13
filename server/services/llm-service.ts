@@ -30,6 +30,12 @@ export class LLMService {
   }
 
   async chat(messages: LLMMessage[], options?: LLMOptions): Promise<string> {
+    console.log('[LLM] Chat called', {
+      aiEnabled: this.aiEnabled,
+      provider: options?.provider || this.defaultProvider,
+      messageCount: messages.length,
+    });
+    
     if (!this.aiEnabled) {
       console.log('[LLM] AI disabled, returning fallback');
       return this.getFallbackResponse();

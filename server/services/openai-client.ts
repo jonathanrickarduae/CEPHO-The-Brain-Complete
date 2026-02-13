@@ -18,6 +18,13 @@ export class OpenAIClient {
   constructor(apiKey?: string) {
     this.apiKey = apiKey || process.env.OPENAI_API_KEY;
     
+    console.log('[OpenAI] Constructor called', {
+      apiKeyProvided: !!apiKey,
+      envKeyExists: !!process.env.OPENAI_API_KEY,
+      envKeyLength: process.env.OPENAI_API_KEY?.length,
+      finalKeyLength: this.apiKey?.length,
+    });
+    
     if (this.apiKey) {
       try {
         this.client = new OpenAI({
