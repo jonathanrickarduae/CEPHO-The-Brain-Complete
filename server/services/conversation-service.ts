@@ -1,4 +1,6 @@
-import { getDb } from '../db';
+import { getDb, saveConversation, getConversationHistory as dbGetConversationHistory } from '../db';
+import { conversations } from '../../drizzle/schema';
+import { eq, desc } from 'drizzle-orm';
 
 export interface ConversationMessage {
   role: 'user' | 'assistant' | 'system';
@@ -9,13 +11,12 @@ export interface ConversationMessage {
 export class ConversationService {
   async addMessage(userId: number, role: 'user' | 'assistant' | 'system', content: string, metadata?: any) {
     try {
-      const db = await getDb();
-      
-      const result = await db.execute(
-        `INSERT INTO conversations (userId, role, content, metadata, createdAt) 
-         VALUES (?, ?, ?, ?, NOW())`,
-        [userId, role, content, metadata ? JSON.stringify(metadata) : null]
-      );
+      const result = await saveConversation({
+        userId,
+        role,
+        content,
+        metadata: metadata || null,
+      });
       
       console.log('[Conversation] Message saved:', { userId, role });
       return result;
@@ -27,22 +28,12 @@ export class ConversationService {
 
   async getConversationHistory(userId: number, limit: number = 10): Promise<ConversationMessage[]> {
     try {
-      const db = await getDb();
+      const history = await dbGetConversationHistory(userId, limit);
       
-      const rows: any = await db.execute(
-        `SELECT role, content, metadata, createdAt 
-         FROM conversations 
-         WHERE userId = ? 
-         ORDER BY createdAt DESC 
-         LIMIT ?`,
-        [userId, limit]
-      );
-      
-      // Reverse to get chronological order (oldest first)
-      const messages = (rows.rows || []).reverse().map((row: any) => ({
+      const messages = history.map(row => ({
         role: row.role,
         content: row.content,
-        metadata: row.metadata ? JSON.parse(row.metadata) : null,
+        metadata: row.metadata,
       }));
       
       console.log('[Conversation] Retrieved history:', { userId, count: messages.length });
@@ -56,11 +47,9 @@ export class ConversationService {
   async clearConversationHistory(userId: number) {
     try {
       const db = await getDb();
+      if (!db) throw new Error('Database not available');
       
-      await db.execute(
-        `DELETE FROM conversations WHERE userId = ?`,
-        [userId]
-      );
+      await db.delete(conversations).where(eq(conversations.userId, userId));
       
       console.log('[Conversation] History cleared:', { userId });
     } catch (error: any) {
@@ -71,21 +60,16 @@ export class ConversationService {
 
   async getConversationStats(userId: number) {
     try {
-      const db = await getDb();
+      const history = await dbGetConversationHistory(userId, 1000);
       
-      const result: any = await db.execute(
-        `SELECT 
-          COUNT(*) as totalMessages,
-          SUM(CASE WHEN role = 'user' THEN 1 ELSE 0 END) as userMessages,
-          SUM(CASE WHEN role = 'assistant' THEN 1 ELSE 0 END) as assistantMessages,
-          MIN(createdAt) as firstMessage,
-          MAX(createdAt) as lastMessage
-         FROM conversations 
-         WHERE userId = ?`,
-        [userId]
-      );
+      const stats = {
+        totalMessages: history.length,
+        userMessages: history.filter(m => m.role === 'user').length,
+        assistantMessages: history.filter(m => m.role === 'assistant').length,
+        firstMessage: history.length > 0 ? history[0].createdAt : null,
+        lastMessage: history.length > 0 ? history[history.length - 1].createdAt : null,
+      };
       
-      const stats = result.rows[0] || {};
       console.log('[Conversation] Stats retrieved:', { userId, stats });
       return stats;
     } catch (error: any) {
