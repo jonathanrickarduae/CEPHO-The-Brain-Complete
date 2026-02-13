@@ -1,4 +1,4 @@
-import { Client } from 'pg';
+import { getPool } from '../db-pool';
 
 export interface ConversationMessage {
   role: 'user' | 'assistant' | 'system';
@@ -6,24 +6,12 @@ export interface ConversationMessage {
   metadata?: any;
 }
 
-async function getClient() {
-  if (!process.env.DATABASE_URL) {
-    throw new Error('DATABASE_URL not configured');
-  }
-  const client = new Client({
-    connectionString: process.env.DATABASE_URL,
-  });
-  await client.connect();
-  return client;
-}
-
 export class ConversationService {
   async addMessage(userId: number, role: 'user' | 'assistant' | 'system', content: string, metadata?: any) {
-    let client;
     try {
-      client = await getClient();
+      const pool = getPool();
       
-      const result = await client.query(
+      const result = await pool.query(
         `INSERT INTO conversations ("userId", role, content, metadata, "createdAt") 
          VALUES ($1, $2, $3, $4, NOW()) RETURNING *`,
         [userId, role, content, metadata ? JSON.stringify(metadata) : null]
@@ -34,17 +22,14 @@ export class ConversationService {
     } catch (error: any) {
       console.error('[Conversation] Error saving message:', error.message);
       throw error;
-    } finally {
-      if (client) await client.end();
     }
   }
 
   async getConversationHistory(userId: number, limit: number = 10): Promise<ConversationMessage[]> {
-    let client;
     try {
-      client = await getClient();
+      const pool = getPool();
       
-      const result = await client.query(
+      const result = await pool.query(
         `SELECT role, content, metadata, "createdAt" 
          FROM conversations 
          WHERE "userId" = $1 
@@ -65,17 +50,14 @@ export class ConversationService {
     } catch (error: any) {
       console.error('[Conversation] Error retrieving history:', error.message);
       return [];
-    } finally {
-      if (client) await client.end();
     }
   }
 
   async clearConversationHistory(userId: number) {
-    let client;
     try {
-      client = await getClient();
+      const pool = getPool();
       
-      await client.query(
+      await pool.query(
         `DELETE FROM conversations WHERE "userId" = $1`,
         [userId]
       );
@@ -84,17 +66,14 @@ export class ConversationService {
     } catch (error: any) {
       console.error('[Conversation] Error clearing history:', error.message);
       throw error;
-    } finally {
-      if (client) await client.end();
     }
   }
 
   async getConversationStats(userId: number) {
-    let client;
     try {
-      client = await getClient();
+      const pool = getPool();
       
-      const result = await client.query(
+      const result = await pool.query(
         `SELECT 
           COUNT(*) as "totalMessages",
           SUM(CASE WHEN role = 'user' THEN 1 ELSE 0 END) as "userMessages",
@@ -112,8 +91,6 @@ export class ConversationService {
     } catch (error: any) {
       console.error('[Conversation] Error retrieving stats:', error.message);
       return null;
-    } finally {
-      if (client) await client.end();
     }
   }
 }
