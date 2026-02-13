@@ -89,6 +89,9 @@ function Router() {
       <Route path="/digital-twin">
         <WithLayout><ChiefOfStaff /></WithLayout>
       </Route>
+      <Route path="/chief-of-staff">
+        <WithLayout><ChiefOfStaff /></WithLayout>
+      </Route>
       <Route path="/chief-of-staff-role">
         <WithLayout><ChiefOfStaffRole /></WithLayout>
       </Route>
