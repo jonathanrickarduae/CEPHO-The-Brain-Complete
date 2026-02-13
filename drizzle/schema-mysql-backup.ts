@@ -1,85 +1,16 @@
 import { int, mysqlEnum, mysqlTable, text, timestamp, varchar, json, boolean, float } from "drizzle-orm/mysql-core";
 
-// PostgreSQL Enums
-export const roleEnum = pgEnum("role", ["user", "admin"]);
-export const themePreferenceEnum = pgEnum("themePreference", ["light", "dark", "system"]);
-export const timeOfDayEnum = pgEnum("timeOfDay", ["morning", "afternoon", "evening"]);
-export const contentTypeEnum = pgEnum("contentType", ["text", "voice", "action"]);
-export const feedbackTypeEnum = pgEnum("feedbackType", ["positive", "negative", "neutral", "correction"]);
-export const statusEnum = pgEnum("status", ["pending", "completed", "failed", "cancelled"]);
-export const priorityEnum = pgEnum("priority", ["low", "medium", "high", "critical"]);
-export const categoryEnum = pgEnum("category", ["key_insight", "meeting", "task", "intelligence", "recommendation"]);
-export const themeEnum = pgEnum("theme", ["light", "dark", "mix"]);
-export const governanceModeEnum = pgEnum("governanceMode", ["omni", "governed"]);
-export const typeEnum = pgEnum("type", ["document", "image", "chart", "presentation", "data", "other"]);
-export const threatLevelEnum = pgEnum("threatLevel", ["low", "medium", "high", "critical"]);
-export const theBrainStatusEnum = pgEnum("theBrainStatus", ["not_started", "in_progress", "launched", "superior"]);
-export const importanceEnum = pgEnum("importance", ["low", "medium", "high", "critical"]);
-export const severityEnum = pgEnum("severity", ["low", "medium", "high", "critical"]);
-export const complianceStatusEnum = pgEnum("complianceStatus", ["not_applicable", "non_compliant", "partial", "compliant"]);
-export const moatPotentialEnum = pgEnum("moatPotential", ["none", "low", "medium", "high"]);
-export const effortEnum = pgEnum("effort", ["low", "medium", "high"]);
-export const taskTypeEnum = pgEnum("taskType", ["competitor_analysis", "feature_gap", "market_research", "pricing_review", "regulatory_check", "strategy_update"]);
-export const methodEnum = pgEnum("method", ["email", "sms"]);
-export const billingCycleEnum = pgEnum("billingCycle", ["monthly", "quarterly", "annual", "one_time", "usage_based"]);
-export const repeatTypeEnum = pgEnum("repeatType", ["none", "daily", "weekly", "monthly", "custom"]);
-export const qaStatusEnum = pgEnum("qaStatus", ["pending", "cos_reviewed", "secondary_reviewed", "approved", "rejected"]);
-export const actorTypeEnum = pgEnum("actorType", ["user", "digital_twin", "ai_expert", "system"]);
-export const sentimentEnum = pgEnum("sentiment", ["positive", "neutral", "negative"]);
-export const memoryTypeEnum = pgEnum("memoryType", ["preference", "fact", "style", "context", "correction"]);
-export const coachTypeEnum = pgEnum("coachType", ["chief_of_staff", "peer_expert", "user"]);
-export const knowledgeLevelEnum = pgEnum("knowledgeLevel", ["basic", "intermediate", "advanced", "expert"]);
-export const contactTypeEnum = pgEnum("contactType", ["expert", "corporate_partner", "ai_expert", "colleague"]);
-export const reviewTypeEnum = pgEnum("reviewType", ["cos_review", "secondary_ai", "sme_feedback"]);
-export const actionEnum = pgEnum("action", ["joined", "viewed_section", "commented", "reviewed_section", "completed_review"]);
-export const codeEnum = pgEnum("code", ["blue_team", "left_field", "red_team"]);
-export const panelTypeCodeEnum = pgEnum("panelTypeCode", ["blue_team", "left_field", "red_team"]);
-export const level4DecisionEnum = pgEnum("level4Decision", ["go", "hold", "recycle", "kill"]);
-export const impactEnum = pgEnum("impact", ["low", "medium", "high"]);
-export const modeEnum = pgEnum("mode", ["manual", "auto_processed", "delegated"]);
-export const decisionEnum = pgEnum("decision", ["accepted", "deferred", "rejected"]);
-export const sourceTypeEnum = pgEnum("sourceType", ["evening_review", "overnight_task", "calendar", "news", "project_update", "manual"]);
-export const sourceEnum = pgEnum("source", ["manual", "article", "trend", "conversation", "chief_of_staff", "sme_suggestion"]);
-export const assessorTypeEnum = pgEnum("assessorType", ["chief_of_staff", "sme_expert", "framework", "user"]);
-export const recommendationEnum = pgEnum("recommendation", ["proceed", "refine", "pivot", "reject", "needs_more_info"]);
-export const triggeredByEnum = pgEnum("triggeredBy", ["assessment", "sme_feedback", "user_input", "chief_of_staff"]);
-export const riskLevelEnum = pgEnum("riskLevel", ["low", "medium", "high", "very_high"]);
-export const trendStrengthEnum = pgEnum("trendStrength", ["emerging", "growing", "mainstream", "declining"]);
-export const potentialImpactEnum = pgEnum("potentialImpact", ["low", "medium", "high", "transformative"]);
-export const classificationEnum = pgEnum("classification", ["public", "internal", "confidential", "restricted"]);
-export const countryEnum = pgEnum("country", ["UAE", "UK", "EU", "US", "Other"]);
-export const billingPeriodEnum = pgEnum("billingPeriod", ["one_time", "monthly", "quarterly", "annual"]);
-export const customerTypeEnum = pgEnum("customerType", ["individual", "business", "enterprise"]);
-export const periodTypeEnum = pgEnum("periodType", ["monthly", "quarterly", "annual"]);
-export const confidenceEnum = pgEnum("confidence", ["low", "medium", "high"]);
-export const genderEnum = pgEnum("gender", ["male", "female", "non_binary", "prefer_not_to_say"]);
-export const jobLevelEnum = pgEnum("jobLevel", ["entry", "mid", "senior", "executive", "founder", "retired", "student"]);
-export const companySizeEnum = pgEnum("companySize", ["solo", "startup", "small", "medium", "large", "enterprise"]);
-export const buyingStyleEnum = pgEnum("buyingStyle", ["impulsive", "researcher", "bargain_hunter", "brand_loyal", "quality_focused", "value_seeker"]);
-export const techSavvinessEnum = pgEnum("techSavviness", ["low", "medium", "high", "expert"]);
-export const riskToleranceEnum = pgEnum("riskTolerance", ["conservative", "moderate", "aggressive"]);
-export const tierEnum = pgEnum("tier", ["core", "extended", "niche"]);
-export const overallSentimentEnum = pgEnum("overallSentiment", ["very_negative", "negative", "neutral", "positive", "very_positive"]);
-export const willingnessToPayEnum = pgEnum("willingnessToPay", ["definitely_not", "unlikely", "maybe", "likely", "definitely"]);
-export const goNoGoRecommendationEnum = pgEnum("goNoGoRecommendation", ["strong_go", "go", "conditional", "no_go", "strong_no_go"]);
-export const confidenceLevelEnum = pgEnum("confidenceLevel", ["low", "medium", "high"]);
-export const outlierTypeEnum = pgEnum("outlierType", ["high", "low"]);
-export const reviewStatusEnum = pgEnum("reviewStatus", ["pending", "under_review", "resolved", "accepted"]);
-export const consensusLevelEnum = pgEnum("consensusLevel", ["strong", "moderate", "weak", "divided"]);
-export const complexityEnum = pgEnum("complexity", ["low", "medium", "high"]);
-
-
 /**
  * Core user table backing auth flow.
  */
-export const users = pgTable("users", {
-  id: serial("id").primaryKey(),
+export const users = mysqlTable("users", {
+  id: int("id").autoincrement().primaryKey(),
   openId: varchar("openId", { length: 64 }).notNull().unique(),
   name: text("name"),
   email: varchar("email", { length: 320 }),
   loginMethod: varchar("loginMethod", { length: 64 }),
-  role: roleEnum.default("user").notNull(),
-  themePreference: themePreferenceEnum.default("dark").notNull(),
+  role: mysqlEnum("role", ["user", "admin"]).default("user").notNull(),
+  themePreference: mysqlEnum("themePreference", ["light", "dark", "system"]).default("dark").notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
   lastSignedIn: timestamp("lastSignedIn").defaultNow().notNull(),
@@ -92,11 +23,11 @@ export type InsertUser = typeof users.$inferInsert;
  * Mood history - tracks emotional state throughout the day
  * Only captured 3x daily: morning, afternoon, evening
  */
-export const moodHistory = pgTable("mood_history", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
-  score: integer("score").notNull(), // 1-10
-  timeOfDay: timeOfDayEnum.notNull(),
+export const moodHistory = mysqlTable("mood_history", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  score: int("score").notNull(), // 1-10
+  timeOfDay: mysqlEnum("timeOfDay", ["morning", "afternoon", "evening"]).notNull(),
   note: text("note"), // Optional context
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
@@ -107,14 +38,14 @@ export type InsertMoodHistory = typeof moodHistory.$inferInsert;
 /**
  * Training conversations - full conversation logs with Digital Twin
  */
-export const trainingConversations = pgTable("training_conversations", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
-  role: roleEnum.notNull(),
+export const trainingConversations = mysqlTable("training_conversations", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  role: mysqlEnum("role", ["user", "twin"]).notNull(),
   content: text("content").notNull(),
-  contentType: contentTypeEnum.default("text").notNull(),
+  contentType: mysqlEnum("contentType", ["text", "voice", "action"]).default("text").notNull(),
   context: varchar("context", { length: 100 }), // e.g., "daily_brief", "ai_experts", "workflow"
-  metadata: jsonb("metadata"), // Additional structured data
+  metadata: json("metadata"), // Additional structured data
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 
@@ -124,9 +55,9 @@ export type InsertTrainingConversation = typeof trainingConversations.$inferInse
 /**
  * Decision patterns - every choice the user makes
  */
-export const decisionPatterns = pgTable("decision_patterns", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
+export const decisionPatterns = mysqlTable("decision_patterns", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
   decisionType: varchar("decisionType", { length: 50 }).notNull(), // "got_it", "defer", "delegate", "digital_twin"
   itemType: varchar("itemType", { length: 50 }).notNull(), // "email", "meeting", "project", "task"
   itemDescription: text("itemDescription"),
@@ -141,12 +72,12 @@ export type InsertDecisionPattern = typeof decisionPatterns.$inferInsert;
 /**
  * User preferences - extracted from behavior patterns
  */
-export const userPreferences = pgTable("user_preferences", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
+export const userPreferences = mysqlTable("user_preferences", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
   preferenceKey: varchar("preferenceKey", { length: 100 }).notNull(), // e.g., "preferred_meeting_time"
   preferenceValue: text("preferenceValue").notNull(),
-  confidence: real("confidence").default(0.5), // 0-1 confidence score
+  confidence: float("confidence").default(0.5), // 0-1 confidence score
   source: varchar("source", { length: 50 }), // "explicit", "inferred", "conversation"
   learnedAt: timestamp("learnedAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
@@ -158,13 +89,13 @@ export type InsertUserPreference = typeof userPreferences.$inferInsert;
 /**
  * Vocabulary patterns - user's specific terms and phrases
  */
-export const vocabularyPatterns = pgTable("vocabulary_patterns", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
+export const vocabularyPatterns = mysqlTable("vocabulary_patterns", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
   term: varchar("term", { length: 200 }).notNull(),
   meaning: text("meaning"), // What the user means by this term
   context: varchar("context", { length: 100 }), // Where this term is typically used
-  frequency: integer("frequency").default(1), // How often used
+  frequency: int("frequency").default(1), // How often used
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
 });
@@ -175,13 +106,13 @@ export type InsertVocabularyPattern = typeof vocabularyPatterns.$inferInsert;
 /**
  * Feedback history - user feedback on AI expert work
  */
-export const feedbackHistory = pgTable("feedback_history", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
+export const feedbackHistory = mysqlTable("feedback_history", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
   expertId: varchar("expertId", { length: 50 }), // AI expert who did the work
   projectId: varchar("projectId", { length: 50 }),
-  rating: integer("rating"), // 1-5 stars
-  feedbackType: feedbackTypeEnum.notNull(),
+  rating: int("rating"), // 1-5 stars
+  feedbackType: mysqlEnum("feedbackType", ["positive", "negative", "neutral", "correction"]).notNull(),
   feedbackText: text("feedbackText"),
   originalOutput: text("originalOutput"), // What the AI produced
   correctedOutput: text("correctedOutput"), // What user wanted instead
@@ -194,14 +125,14 @@ export type InsertFeedbackHistory = typeof feedbackHistory.$inferInsert;
 /**
  * Digital Twin activity log - what the twin does autonomously
  */
-export const twinActivityLog = pgTable("twin_activity_log", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
+export const twinActivityLog = mysqlTable("twin_activity_log", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
   activityType: varchar("activityType", { length: 50 }).notNull(), // "email_sent", "task_completed", "meeting_scheduled"
   description: text("description").notNull(),
-  status: statusEnum.default("completed").notNull(),
+  status: mysqlEnum("status", ["pending", "completed", "failed", "cancelled"]).default("completed").notNull(),
   autonomous: boolean("autonomous").default(false), // Was this done without user approval?
-  metadata: jsonb("metadata"),
+  metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 
@@ -211,17 +142,17 @@ export type InsertTwinActivityLog = typeof twinActivityLog.$inferInsert;
 /**
  * AI Expert performance scores
  */
-export const expertPerformance = pgTable("expert_performance", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
+export const expertPerformance = mysqlTable("expert_performance", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
   expertId: varchar("expertId", { length: 50 }).notNull(),
-  score: real("score").default(80), // 0-100 performance score
-  projectsCompleted: integer("projectsCompleted").default(0),
-  positiveFeedback: integer("positiveFeedback").default(0),
-  negativeFeedback: integer("negativeFeedback").default(0),
+  score: float("score").default(80), // 0-100 performance score
+  projectsCompleted: int("projectsCompleted").default(0),
+  positiveFeedback: int("positiveFeedback").default(0),
+  negativeFeedback: int("negativeFeedback").default(0),
   lastUsed: timestamp("lastUsed"),
   notes: text("notes"), // User notes about this expert
-  status: statusEnum.default("active").notNull(),
+  status: mysqlEnum("status", ["active", "training", "fired"]).default("active").notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
 });
 
@@ -231,18 +162,18 @@ export type InsertExpertPerformance = typeof expertPerformance.$inferInsert;
 /**
  * Projects - user's active projects
  */
-export const projects = pgTable("projects", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
+export const projects = mysqlTable("projects", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
   name: varchar("name", { length: 200 }).notNull(),
   description: text("description"),
-  status: statusEnum.default("not_started").notNull(),
-  priority: priorityEnum.default("medium").notNull(),
-  progress: integer("progress").default(0), // 0-100
+  status: mysqlEnum("status", ["not_started", "in_progress", "blocked", "review", "complete"]).default("not_started").notNull(),
+  priority: mysqlEnum("priority", ["low", "medium", "high", "critical"]).default("medium").notNull(),
+  progress: int("progress").default(0), // 0-100
   dueDate: timestamp("dueDate"),
   blockerDescription: text("blockerDescription"),
-  assignedExperts: jsonb("assignedExperts"), // Array of expert IDs
-  metadata: jsonb("metadata"),
+  assignedExperts: json("assignedExperts"), // Array of expert IDs
+  metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
 });
@@ -253,17 +184,17 @@ export type InsertProject = typeof projects.$inferInsert;
 /**
  * Daily Brief items
  */
-export const dailyBriefItems = pgTable("daily_brief_items", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
+export const dailyBriefItems = mysqlTable("daily_brief_items", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
   briefDate: timestamp("briefDate").notNull(),
-  category: categoryEnum.notNull(),
+  category: mysqlEnum("category", ["key_insight", "meeting", "task", "intelligence", "recommendation"]).notNull(),
   title: varchar("title", { length: 300 }).notNull(),
   description: text("description"),
-  priority: priorityEnum.default("medium").notNull(),
-  status: statusEnum.default("pending").notNull(),
+  priority: mysqlEnum("priority", ["low", "medium", "high", "critical"]).default("medium").notNull(),
+  status: mysqlEnum("status", ["pending", "got_it", "deferred", "delegated", "digital_twin"]).default("pending").notNull(),
   actionedAt: timestamp("actionedAt"),
-  metadata: jsonb("metadata"),
+  metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 
@@ -273,21 +204,21 @@ export type InsertDailyBriefItem = typeof dailyBriefItems.$inferInsert;
 /**
  * User settings and app state
  */
-export const userSettings = pgTable("user_settings", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull().unique(),
-  theme: themeEnum.default("dark").notNull(),
-  governanceMode: governanceModeEnum.default("governed").notNull(),
+export const userSettings = mysqlTable("user_settings", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull().unique(),
+  theme: mysqlEnum("theme", ["light", "dark", "mix"]).default("dark").notNull(),
+  governanceMode: mysqlEnum("governanceMode", ["omni", "governed"]).default("governed").notNull(),
   dailyBriefTime: varchar("dailyBriefTime", { length: 10 }).default("07:00"),
   eveningReviewTime: varchar("eveningReviewTime", { length: 10 }).default("18:00"),
   lastMoodCheckMorning: timestamp("lastMoodCheckMorning"),
   lastMoodCheckAfternoon: timestamp("lastMoodCheckAfternoon"),
   lastMoodCheckEvening: timestamp("lastMoodCheckEvening"),
-  twinAutonomyLevel: integer("twinAutonomyLevel").default(1), // 1-10, how autonomous the twin can be
+  twinAutonomyLevel: int("twinAutonomyLevel").default(1), // 1-10, how autonomous the twin can be
   notificationsEnabled: boolean("notificationsEnabled").default(true),
   sidebarCollapsed: boolean("sidebarCollapsed").default(false),
   onboardingComplete: boolean("onboardingComplete").default(false),
-  metadata: jsonb("metadata"),
+  metadata: json("metadata"),
   updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
 });
 
@@ -297,18 +228,18 @@ export type InsertUserSettings = typeof userSettings.$inferInsert;
 /**
  * Library documents
  */
-export const libraryDocuments = pgTable("library_documents", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
+export const libraryDocuments = mysqlTable("library_documents", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
   projectId: varchar("projectId", { length: 50 }), // null for personal items
   folder: varchar("folder", { length: 100 }).notNull(), // "celadon", "boundless", "personal", etc.
   subFolder: varchar("subFolder", { length: 100 }), // "documents", "ai_images", "charts", etc.
   name: varchar("name", { length: 300 }).notNull(),
-  type: typeEnum.notNull(),
-  status: statusEnum.default("draft").notNull(),
+  type: mysqlEnum("type", ["document", "image", "chart", "presentation", "data", "other"]).notNull(),
+  status: mysqlEnum("status", ["draft", "review", "signed_off"]).default("draft").notNull(),
   fileUrl: text("fileUrl"),
   thumbnailUrl: text("thumbnailUrl"),
-  metadata: jsonb("metadata"),
+  metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
 });
@@ -319,12 +250,12 @@ export type InsertLibraryDocument = typeof libraryDocuments.$inferInsert;
 /**
  * Digital Twin conversation history
  */
-export const conversations = pgTable("conversations", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
-  role: roleEnum.notNull(),
+export const conversations = mysqlTable("conversations", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  role: mysqlEnum("role", ["user", "assistant", "system"]).notNull(),
   content: text("content").notNull(),
-  metadata: jsonb("metadata"), // Store additional context like mood, voice input, etc.
+  metadata: json("metadata"), // Store additional context like mood, voice input, etc.
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 
@@ -335,14 +266,14 @@ export type InsertConversation = typeof conversations.$inferInsert;
 /**
  * Waitlist - users waiting for access
  */
-export const waitlist = pgTable("waitlist", {
-  id: serial("id").primaryKey(),
+export const waitlist = mysqlTable("waitlist", {
+  id: int("id").autoincrement().primaryKey(),
   email: varchar("email", { length: 320 }).notNull().unique(),
   name: varchar("name", { length: 200 }),
   referralCode: varchar("referralCode", { length: 20 }).notNull().unique(),
   referredBy: varchar("referredBy", { length: 20 }), // Referral code of who referred them
-  position: integer("position").notNull(),
-  status: statusEnum.default("waiting").notNull(),
+  position: int("position").notNull(),
+  status: mysqlEnum("status", ["waiting", "invited", "joined", "churned"]).default("waiting").notNull(),
   invitedAt: timestamp("invitedAt"),
   joinedAt: timestamp("joinedAt"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
@@ -354,13 +285,13 @@ export type InsertWaitlist = typeof waitlist.$inferInsert;
 /**
  * Referrals - track referral relationships and rewards
  */
-export const referrals = pgTable("referrals", {
-  id: serial("id").primaryKey(),
-  referrerId: integer("referrerId").notNull(), // User who referred
+export const referrals = mysqlTable("referrals", {
+  id: int("id").autoincrement().primaryKey(),
+  referrerId: int("referrerId").notNull(), // User who referred
   referredEmail: varchar("referredEmail", { length: 320 }).notNull(),
-  referredUserId: integer("referredUserId"), // Filled when they join
-  status: statusEnum.default("pending").notNull(),
-  creditsAwarded: integer("creditsAwarded").default(0),
+  referredUserId: int("referredUserId"), // Filled when they join
+  status: mysqlEnum("status", ["pending", "signed_up", "active", "churned"]).default("pending").notNull(),
+  creditsAwarded: int("creditsAwarded").default(0),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   convertedAt: timestamp("convertedAt"),
 });
@@ -371,12 +302,12 @@ export type InsertReferral = typeof referrals.$inferInsert;
 /**
  * User credits - earned through referrals and achievements
  */
-export const userCredits = pgTable("user_credits", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
-  balance: integer("balance").default(0).notNull(),
-  lifetimeEarned: integer("lifetimeEarned").default(0).notNull(),
-  lifetimeSpent: integer("lifetimeSpent").default(0).notNull(),
+export const userCredits = mysqlTable("user_credits", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  balance: int("balance").default(0).notNull(),
+  lifetimeEarned: int("lifetimeEarned").default(0).notNull(),
+  lifetimeSpent: int("lifetimeSpent").default(0).notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
 });
 
@@ -386,11 +317,11 @@ export type InsertUserCredits = typeof userCredits.$inferInsert;
 /**
  * Credit transactions - audit log of credit changes
  */
-export const creditTransactions = pgTable("credit_transactions", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
-  amount: integer("amount").notNull(), // Positive for earn, negative for spend
-  type: typeEnum.notNull(),
+export const creditTransactions = mysqlTable("credit_transactions", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  amount: int("amount").notNull(), // Positive for earn, negative for spend
+  type: mysqlEnum("type", ["referral", "achievement", "purchase", "spend", "bonus"]).notNull(),
   description: varchar("description", { length: 500 }),
   referenceId: varchar("referenceId", { length: 100 }), // ID of related entity
   createdAt: timestamp("createdAt").defaultNow().notNull(),
@@ -402,15 +333,15 @@ export type InsertCreditTransaction = typeof creditTransactions.$inferInsert;
 /**
  * Training documents - uploaded files for Digital Twin training
  */
-export const trainingDocuments = pgTable("training_documents", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
+export const trainingDocuments = mysqlTable("training_documents", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
   name: varchar("name", { length: 300 }).notNull(),
-  type: typeEnum.notNull(),
+  type: mysqlEnum("type", ["document", "conversation", "preference", "memory"]).notNull(),
   content: text("content"), // Text content or extracted text
   fileUrl: text("fileUrl"), // S3 URL if file uploaded
-  fileSize: integer("fileSize"),
-  tokenCount: integer("tokenCount"),
+  fileSize: int("fileSize"),
+  tokenCount: int("tokenCount"),
   processed: boolean("processed").default(false),
   processedAt: timestamp("processedAt"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
@@ -422,13 +353,13 @@ export type InsertTrainingDocument = typeof trainingDocuments.$inferInsert;
 /**
  * Memory bank - persistent facts the Digital Twin remembers
  */
-export const memoryBank = pgTable("memory_bank", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
-  category: categoryEnum.notNull(),
+export const memoryBank = mysqlTable("memory_bank", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  category: mysqlEnum("category", ["personal", "work", "preference", "relationship", "fact"]).notNull(),
   key: varchar("key", { length: 200 }).notNull(),
   value: text("value").notNull(),
-  confidence: real("confidence").default(1.0),
+  confidence: float("confidence").default(1.0),
   source: varchar("source", { length: 100 }), // Where this memory came from
   lastAccessed: timestamp("lastAccessed"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
@@ -441,16 +372,16 @@ export type InsertMemoryBank = typeof memoryBank.$inferInsert;
 /**
  * Wellness scores - daily calculated wellness metrics
  */
-export const wellnessScores = pgTable("wellness_scores", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
+export const wellnessScores = mysqlTable("wellness_scores", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
   date: timestamp("date").notNull(),
-  overallScore: real("overallScore").notNull(), // 0-10
-  moodScore: real("moodScore"),
-  productivityScore: real("productivityScore"),
-  balanceScore: real("balanceScore"),
-  momentumScore: real("momentumScore"),
-  factors: jsonb("factors"), // Breakdown of contributing factors
+  overallScore: float("overallScore").notNull(), // 0-10
+  moodScore: float("moodScore"),
+  productivityScore: float("productivityScore"),
+  balanceScore: float("balanceScore"),
+  momentumScore: float("momentumScore"),
+  factors: json("factors"), // Breakdown of contributing factors
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 
@@ -460,12 +391,12 @@ export type InsertWellnessScore = typeof wellnessScores.$inferInsert;
 /**
  * Streaks - gamification tracking
  */
-export const streaks = pgTable("streaks", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
+export const streaks = mysqlTable("streaks", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
   type: varchar("type", { length: 50 }).notNull(), // "daily_login", "mood_check", "task_complete"
-  currentStreak: integer("currentStreak").default(0).notNull(),
-  longestStreak: integer("longestStreak").default(0).notNull(),
+  currentStreak: int("currentStreak").default(0).notNull(),
+  longestStreak: int("longestStreak").default(0).notNull(),
   lastActivityDate: timestamp("lastActivityDate"),
   updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
 });
@@ -476,9 +407,9 @@ export type InsertStreak = typeof streaks.$inferInsert;
 /**
  * Achievements - unlocked achievements
  */
-export const achievements = pgTable("achievements", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
+export const achievements = mysqlTable("achievements", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
   achievementId: varchar("achievementId", { length: 100 }).notNull(),
   unlockedAt: timestamp("unlockedAt").defaultNow().notNull(),
 });
@@ -490,17 +421,17 @@ export type InsertAchievement = typeof achievements.$inferInsert;
 /**
  * Competitors - tracked competitive landscape
  */
-export const competitors = pgTable("competitors", {
-  id: serial("id").primaryKey(),
+export const competitors = mysqlTable("competitors", {
+  id: int("id").autoincrement().primaryKey(),
   name: varchar("name", { length: 200 }).notNull(),
   website: varchar("website", { length: 500 }),
   description: text("description"),
   category: varchar("category", { length: 100 }), // "ai_assistant", "productivity", "calendar", etc.
   pricing: varchar("pricing", { length: 100 }), // "free", "$10/mo", "$30/mo", etc.
   targetMarket: varchar("targetMarket", { length: 200 }),
-  strengths: jsonb("strengths"), // Array of strength descriptions
-  weaknesses: jsonb("weaknesses"), // Array of weakness descriptions
-  threatLevel: threatLevelEnum.default("medium"),
+  strengths: json("strengths"), // Array of strength descriptions
+  weaknesses: json("weaknesses"), // Array of weakness descriptions
+  threatLevel: mysqlEnum("threatLevel", ["low", "medium", "high", "critical"]).default("medium"),
   lastAnalyzed: timestamp("lastAnalyzed"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
@@ -512,15 +443,15 @@ export type InsertCompetitor = typeof competitors.$inferInsert;
 /**
  * Feature comparison - track features across competitors
  */
-export const featureComparison = pgTable("feature_comparison", {
-  id: serial("id").primaryKey(),
+export const featureComparison = mysqlTable("feature_comparison", {
+  id: int("id").autoincrement().primaryKey(),
   featureName: varchar("featureName", { length: 200 }).notNull(),
   category: varchar("category", { length: 100 }).notNull(), // "ai", "productivity", "integration", etc.
   description: text("description"),
-  theBrainStatus: theBrainStatusEnum.default("not_started"),
-  theBrainScore: integer("theBrainScore").default(0), // 0-100
-  competitorData: jsonb("competitorData"), // { competitorId: score, ... }
-  importance: importanceEnum.default("medium"),
+  theBrainStatus: mysqlEnum("theBrainStatus", ["not_started", "in_progress", "launched", "superior"]).default("not_started"),
+  theBrainScore: int("theBrainScore").default(0), // 0-100
+  competitorData: json("competitorData"), // { competitorId: score, ... }
+  importance: mysqlEnum("importance", ["low", "medium", "high", "critical"]).default("medium"),
   notes: text("notes"),
   updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
 });
@@ -531,15 +462,15 @@ export type InsertFeatureComparison = typeof featureComparison.$inferInsert;
 /**
  * Market position history - track competitive position over time
  */
-export const marketPositionHistory = pgTable("market_position_history", {
-  id: serial("id").primaryKey(),
+export const marketPositionHistory = mysqlTable("market_position_history", {
+  id: int("id").autoincrement().primaryKey(),
   date: timestamp("date").notNull(),
-  overallScore: real("overallScore").notNull(), // 0-100
-  featureParityScore: real("featureParityScore"),
-  uniqueValueScore: real("uniqueValueScore"),
-  marketShareEstimate: real("marketShareEstimate"),
-  competitorScores: jsonb("competitorScores"), // { competitorId: score, ... }
-  factors: jsonb("factors"), // Breakdown of what contributed to score
+  overallScore: float("overallScore").notNull(), // 0-100
+  featureParityScore: float("featureParityScore"),
+  uniqueValueScore: float("uniqueValueScore"),
+  marketShareEstimate: float("marketShareEstimate"),
+  competitorScores: json("competitorScores"), // { competitorId: score, ... }
+  factors: json("factors"), // Breakdown of what contributed to score
   analysis: text("analysis"), // AI-generated analysis
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
@@ -550,16 +481,16 @@ export type InsertMarketPositionHistory = typeof marketPositionHistory.$inferIns
 /**
  * Competitive threats - detected threats and opportunities
  */
-export const competitiveThreats = pgTable("competitive_threats", {
-  id: serial("id").primaryKey(),
-  type: typeEnum.notNull(),
-  severity: severityEnum.default("medium"),
-  competitorId: integer("competitorId"),
+export const competitiveThreats = mysqlTable("competitive_threats", {
+  id: int("id").autoincrement().primaryKey(),
+  type: mysqlEnum("type", ["threat", "opportunity"]).notNull(),
+  severity: mysqlEnum("severity", ["low", "medium", "high", "critical"]).default("medium"),
+  competitorId: int("competitorId"),
   title: varchar("title", { length: 300 }).notNull(),
   description: text("description").notNull(),
   impact: text("impact"), // How this affects The Brain
   recommendedAction: text("recommendedAction"),
-  status: statusEnum.default("new"),
+  status: mysqlEnum("status", ["new", "analyzing", "action_required", "addressed", "monitoring"]).default("new"),
   detectedAt: timestamp("detectedAt").defaultNow().notNull(),
   addressedAt: timestamp("addressedAt"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
@@ -571,17 +502,17 @@ export type InsertCompetitiveThreat = typeof competitiveThreats.$inferInsert;
 /**
  * Regulatory landscape - track regulations and compliance
  */
-export const regulatoryLandscape = pgTable("regulatory_landscape", {
-  id: serial("id").primaryKey(),
+export const regulatoryLandscape = mysqlTable("regulatory_landscape", {
+  id: int("id").autoincrement().primaryKey(),
   region: varchar("region", { length: 100 }).notNull(), // "US", "EU", "UK", "Global"
   regulation: varchar("regulation", { length: 300 }).notNull(), // "GDPR", "AI Act", "CCPA"
   category: varchar("category", { length: 100 }), // "data_privacy", "ai_governance", "consumer_protection"
-  status: statusEnum.default("proposed"),
+  status: mysqlEnum("status", ["proposed", "enacted", "enforced"]).default("proposed"),
   effectiveDate: timestamp("effectiveDate"),
-  complianceStatus: complianceStatusEnum.default("not_applicable"),
-  moatPotential: moatPotentialEnum.default("none"),
+  complianceStatus: mysqlEnum("complianceStatus", ["not_applicable", "non_compliant", "partial", "compliant"]).default("not_applicable"),
+  moatPotential: mysqlEnum("moatPotential", ["none", "low", "medium", "high"]).default("none"),
   description: text("description"),
-  requirements: jsonb("requirements"), // Array of specific requirements
+  requirements: json("requirements"), // Array of specific requirements
   notes: text("notes"),
   updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
 });
@@ -592,17 +523,17 @@ export type InsertRegulatoryLandscape = typeof regulatoryLandscape.$inferInsert;
 /**
  * Strategy recommendations - AI-generated strategic advice
  */
-export const strategyRecommendations = pgTable("strategy_recommendations", {
-  id: serial("id").primaryKey(),
-  category: categoryEnum.notNull(),
-  priority: priorityEnum.default("medium"),
+export const strategyRecommendations = mysqlTable("strategy_recommendations", {
+  id: int("id").autoincrement().primaryKey(),
+  category: mysqlEnum("category", ["product", "pricing", "marketing", "partnership", "regulatory", "technical"]).notNull(),
+  priority: mysqlEnum("priority", ["low", "medium", "high", "critical"]).default("medium"),
   title: varchar("title", { length: 300 }).notNull(),
   recommendation: text("recommendation").notNull(),
   rationale: text("rationale"),
   expectedImpact: text("expectedImpact"),
-  effort: effortEnum.default("medium"),
+  effort: mysqlEnum("effort", ["low", "medium", "high"]).default("medium"),
   timeframe: varchar("timeframe", { length: 100 }), // "immediate", "1-2 weeks", "1-3 months"
-  status: statusEnum.default("proposed"),
+  status: mysqlEnum("status", ["proposed", "approved", "in_progress", "completed", "rejected"]).default("proposed"),
   generatedBy: varchar("generatedBy", { length: 100 }), // AI expert who generated it
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
@@ -614,13 +545,13 @@ export type InsertStrategyRecommendation = typeof strategyRecommendations.$infer
 /**
  * Commercialization tasks - Digital Twin's strategy work
  */
-export const commercializationTasks = pgTable("commercialization_tasks", {
-  id: serial("id").primaryKey(),
-  taskType: taskTypeEnum.notNull(),
+export const commercializationTasks = mysqlTable("commercialization_tasks", {
+  id: int("id").autoincrement().primaryKey(),
+  taskType: mysqlEnum("taskType", ["competitor_analysis", "feature_gap", "market_research", "pricing_review", "regulatory_check", "strategy_update"]).notNull(),
   title: varchar("title", { length: 300 }).notNull(),
   description: text("description"),
-  status: statusEnum.default("pending"),
-  priority: priorityEnum.default("medium"),
+  status: mysqlEnum("status", ["pending", "in_progress", "completed", "failed"]).default("pending"),
+  priority: mysqlEnum("priority", ["low", "medium", "high"]).default("medium"),
   assignedExpert: varchar("assignedExpert", { length: 100 }), // AI expert handling this
   result: text("result"), // Outcome of the task
   scheduledFor: timestamp("scheduledFor"),
@@ -635,14 +566,14 @@ export type InsertCommercializationTask = typeof commercializationTasks.$inferIn
 /**
  * Two-Factor Authentication - Verification codes for Vault access
  */
-export const vaultVerificationCodes = pgTable("vault_verification_codes", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
+export const vaultVerificationCodes = mysqlTable("vault_verification_codes", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
   code: varchar("code", { length: 6 }).notNull(), // 6-digit code
-  method: methodEnum.default("email").notNull(),
+  method: mysqlEnum("method", ["email", "sms"]).default("email").notNull(),
   expiresAt: timestamp("expiresAt").notNull(),
   used: boolean("used").default(false),
-  attempts: integer("attempts").default(0), // Failed verification attempts
+  attempts: int("attempts").default(0), // Failed verification attempts
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 
@@ -652,9 +583,9 @@ export type InsertVaultVerificationCode = typeof vaultVerificationCodes.$inferIn
 /**
  * Trusted devices - devices that can skip 2FA temporarily
  */
-export const trustedDevices = pgTable("trusted_devices", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
+export const trustedDevices = mysqlTable("trusted_devices", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
   deviceToken: varchar("deviceToken", { length: 64 }).notNull().unique(),
   deviceName: varchar("deviceName", { length: 200 }),
   userAgent: text("userAgent"),
@@ -670,9 +601,9 @@ export type InsertTrustedDevice = typeof trustedDevices.$inferInsert;
 /**
  * Vault access log - audit trail of all Vault access attempts
  */
-export const vaultAccessLog = pgTable("vault_access_log", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
+export const vaultAccessLog = mysqlTable("vault_access_log", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
   action: mysqlEnum("action", [
     "access_attempt", 
     "access_granted", 
@@ -687,7 +618,7 @@ export const vaultAccessLog = pgTable("vault_access_log", {
   ipAddress: varchar("ipAddress", { length: 45 }),
   userAgent: text("userAgent"),
   success: boolean("success").default(false),
-  metadata: jsonb("metadata"), // Additional info like device, location
+  metadata: json("metadata"), // Additional info like device, location
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 
@@ -697,9 +628,9 @@ export type InsertVaultAccessLog = typeof vaultAccessLog.$inferInsert;
 /**
  * Vault sessions - active authenticated sessions
  */
-export const vaultSessions = pgTable("vault_sessions", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
+export const vaultSessions = mysqlTable("vault_sessions", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
   sessionToken: varchar("sessionToken", { length: 64 }).notNull().unique(),
   expiresAt: timestamp("expiresAt").notNull(), // Session timeout (e.g., 30 minutes)
   lastActivity: timestamp("lastActivity"),
@@ -714,19 +645,19 @@ export type InsertVaultSession = typeof vaultSessions.$inferInsert;
 /**
  * External integrations - OAuth connections to third-party services
  */
-export const integrations = pgTable("integrations", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
+export const integrations = mysqlTable("integrations", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
   provider: varchar("provider", { length: 50 }).notNull(), // "asana", "google", "outlook", "slack", etc.
   providerAccountId: varchar("providerAccountId", { length: 200 }), // External account ID
   accessToken: text("accessToken"), // Encrypted
   refreshToken: text("refreshToken"), // Encrypted
   tokenExpiresAt: timestamp("tokenExpiresAt"),
-  scopes: jsonb("scopes"), // Array of granted scopes
-  status: statusEnum.default("active").notNull(),
+  scopes: json("scopes"), // Array of granted scopes
+  status: mysqlEnum("status", ["active", "expired", "revoked", "error"]).default("active").notNull(),
   lastSyncAt: timestamp("lastSyncAt"),
   syncError: text("syncError"),
-  metadata: jsonb("metadata"), // Provider-specific data
+  metadata: json("metadata"), // Provider-specific data
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
 });
@@ -737,9 +668,9 @@ export type InsertIntegration = typeof integrations.$inferInsert;
 /**
  * Notifications - in-app notification system
  */
-export const notifications = pgTable("notifications", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
+export const notifications = mysqlTable("notifications", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
   type: mysqlEnum("type", [
     "info", "success", "warning", "error",
     "task_assigned", "task_completed", "project_update",
@@ -752,7 +683,7 @@ export const notifications = pgTable("notifications", {
   actionLabel: varchar("actionLabel", { length: 100 }), // Button text
   read: boolean("read").default(false),
   readAt: timestamp("readAt"),
-  metadata: jsonb("metadata"),
+  metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 
@@ -762,13 +693,13 @@ export type InsertNotification = typeof notifications.$inferInsert;
 /**
  * Audit log - comprehensive activity tracking
  */
-export const auditLog = pgTable("audit_log", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId"),
+export const auditLog = mysqlTable("audit_log", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId"),
   action: varchar("action", { length: 100 }).notNull(), // "login", "create_project", "update_settings", etc.
   resource: varchar("resource", { length: 100 }), // "project", "document", "integration", etc.
   resourceId: varchar("resourceId", { length: 100 }),
-  details: jsonb("details"), // Action-specific data
+  details: json("details"), // Action-specific data
   ipAddress: varchar("ipAddress", { length: 45 }),
   userAgent: text("userAgent"),
   success: boolean("success").default(true),
@@ -782,9 +713,9 @@ export type InsertAuditLog = typeof auditLog.$inferInsert;
 /**
  * Subscriptions - SaaS subscription tracking with enhanced cost analysis
  */
-export const subscriptions = pgTable("subscriptions", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
+export const subscriptions = mysqlTable("subscriptions", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
   name: varchar("name", { length: 200 }).notNull(), // "Asana", "Slack", "Zoom", etc.
   provider: varchar("provider", { length: 200 }), // Company name
   description: text("description"),
@@ -801,20 +732,20 @@ export const subscriptions = pgTable("subscriptions", {
     "security",
     "other"
   ]).default("other").notNull(),
-  cost: real("cost").notNull(), // Cost in AED
-  billingCycle: billingCycleEnum.default("monthly").notNull(),
+  cost: float("cost").notNull(), // Cost in AED
+  billingCycle: mysqlEnum("billingCycle", ["monthly", "quarterly", "annual", "one_time", "usage_based"]).default("monthly").notNull(),
   currency: varchar("currency", { length: 10 }).default("AED").notNull(),
-  status: statusEnum.default("active").notNull(),
+  status: mysqlEnum("status", ["active", "paused", "cancelled", "trial"]).default("active").notNull(),
   startDate: timestamp("startDate"),
   renewalDate: timestamp("renewalDate"),
   trialEndDate: timestamp("trialEndDate"),
-  usagePercent: integer("usagePercent"), // 0-100, how much of the subscription is used
+  usagePercent: int("usagePercent"), // 0-100, how much of the subscription is used
   websiteUrl: text("websiteUrl"),
   logoUrl: text("logoUrl"),
-  linkedIdeaId: integer("linkedIdeaId"), // Link to innovation idea if subscription is for a specific project
-  linkedProjectId: integer("linkedProjectId"),
+  linkedIdeaId: int("linkedIdeaId"), // Link to innovation idea if subscription is for a specific project
+  linkedProjectId: int("linkedProjectId"),
   notes: text("notes"),
-  metadata: jsonb("metadata"),
+  metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
 });
@@ -825,27 +756,27 @@ export type InsertSubscription = typeof subscriptions.$inferInsert;
 /**
  * Project Genesis - new opportunity/deal tracking
  */
-export const projectGenesis = pgTable("project_genesis", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
+export const projectGenesis = mysqlTable("project_genesis", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
   name: varchar("name", { length: 300 }).notNull(),
-  type: typeEnum.notNull(),
+  type: mysqlEnum("type", ["investment", "partnership", "acquisition", "joint_venture", "other"]).notNull(),
   stage: mysqlEnum("stage", [
     "discovery", "qualification", "due_diligence", 
     "negotiation", "documentation", "closing", "post_deal"
   ]).default("discovery").notNull(),
-  status: statusEnum.default("active").notNull(),
+  status: mysqlEnum("status", ["active", "on_hold", "won", "lost", "abandoned"]).default("active").notNull(),
   counterparty: varchar("counterparty", { length: 300 }),
-  dealValue: real("dealValue"),
+  dealValue: float("dealValue"),
   currency: varchar("currency", { length: 3 }).default("USD"),
-  probability: integer("probability").default(50), // 0-100
+  probability: int("probability").default(50), // 0-100
   expectedCloseDate: timestamp("expectedCloseDate"),
   description: text("description"),
-  keyContacts: jsonb("keyContacts"), // Array of contact info
-  documents: jsonb("documents"), // Array of document references
-  tasks: jsonb("tasks"), // Array of task IDs
+  keyContacts: json("keyContacts"), // Array of contact info
+  documents: json("documents"), // Array of document references
+  tasks: json("tasks"), // Array of task IDs
   notes: text("notes"),
-  metadata: jsonb("metadata"),
+  metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
 });
@@ -856,9 +787,9 @@ export type InsertProjectGenesis = typeof projectGenesis.$inferInsert;
 /**
  * Universal Inbox - centralized intake for all incoming items
  */
-export const universalInbox = pgTable("universal_inbox", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
+export const universalInbox = mysqlTable("universal_inbox", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
   source: mysqlEnum("source", [
     "email", "document", "voice_note", "whatsapp", 
     "slack", "asana", "calendar", "manual", "webhook"
@@ -872,15 +803,15 @@ export const universalInbox = pgTable("universal_inbox", {
   preview: text("preview"), // First 500 chars or summary
   content: text("content"), // Full content
   sender: varchar("sender", { length: 300 }),
-  priority: priorityEnum.default("medium"),
+  priority: mysqlEnum("priority", ["low", "medium", "high", "urgent"]).default("medium"),
   status: mysqlEnum("status", [
     "unread", "read", "processing", "processed", 
     "archived", "deleted", "action_required"
   ]).default("unread").notNull(),
   processedBy: varchar("processedBy", { length: 100 }), // "digital_twin", "ai_expert", "user"
   processedResult: text("processedResult"),
-  attachments: jsonb("attachments"), // Array of attachment URLs
-  metadata: jsonb("metadata"),
+  attachments: json("attachments"), // Array of attachment URLs
+  metadata: json("metadata"),
   receivedAt: timestamp("receivedAt").defaultNow().notNull(),
   processedAt: timestamp("processedAt"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
@@ -892,9 +823,9 @@ export type InsertUniversalInboxItem = typeof universalInbox.$inferInsert;
 /**
  * Brand Kit - company branding assets
  */
-export const brandKit = pgTable("brand_kit", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
+export const brandKit = mysqlTable("brand_kit", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
   companyName: varchar("companyName", { length: 200 }).notNull(),
   isDefault: boolean("isDefault").default(false),
   logoUrl: text("logoUrl"),
@@ -906,9 +837,9 @@ export const brandKit = pgTable("brand_kit", {
   tagline: varchar("tagline", { length: 500 }),
   description: text("description"),
   website: varchar("website", { length: 500 }),
-  socialLinks: jsonb("socialLinks"), // { linkedin, twitter, etc. }
-  templates: jsonb("templates"), // Document template settings
-  metadata: jsonb("metadata"),
+  socialLinks: json("socialLinks"), // { linkedin, twitter, etc. }
+  templates: json("templates"), // Document template settings
+  metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
 });
@@ -919,11 +850,11 @@ export type InsertBrandKit = typeof brandKit.$inferInsert;
 /**
  * Signatures - stored signatures for document signing
  */
-export const signatures = pgTable("signatures", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
+export const signatures = mysqlTable("signatures", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
   name: varchar("name", { length: 200 }).notNull(), // "Main Signature", "Initials", etc.
-  type: typeEnum.notNull(),
+  type: mysqlEnum("type", ["drawn", "typed", "uploaded"]).notNull(),
   imageUrl: text("imageUrl").notNull(), // S3 URL of signature image
   fontFamily: varchar("fontFamily", { length: 100 }), // For typed signatures
   isDefault: boolean("isDefault").default(false),
@@ -937,17 +868,17 @@ export type InsertSignature = typeof signatures.$inferInsert;
 /**
  * AI Provider settings - API keys and routing preferences
  */
-export const aiProviderSettings = pgTable("ai_provider_settings", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
+export const aiProviderSettings = mysqlTable("ai_provider_settings", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
   provider: varchar("provider", { length: 50 }).notNull(), // "openai", "anthropic", "perplexity", etc.
   apiKey: text("apiKey"), // Encrypted
   isEnabled: boolean("isEnabled").default(true),
-  priority: integer("priority").default(1), // Lower = higher priority
-  usageLimit: integer("usageLimit"), // Monthly token limit
-  currentUsage: integer("currentUsage").default(0),
-  domains: jsonb("domains"), // Array of domains this provider handles
-  metadata: jsonb("metadata"),
+  priority: int("priority").default(1), // Lower = higher priority
+  usageLimit: int("usageLimit"), // Monthly token limit
+  currentUsage: int("currentUsage").default(0),
+  domains: json("domains"), // Array of domains this provider handles
+  metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
 });
@@ -958,20 +889,20 @@ export type InsertAIProviderSetting = typeof aiProviderSettings.$inferInsert;
 /**
  * Reminders - scheduled reminders and follow-ups
  */
-export const reminders = pgTable("reminders", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
+export const reminders = mysqlTable("reminders", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
   title: varchar("title", { length: 300 }).notNull(),
   description: text("description"),
   dueAt: timestamp("dueAt").notNull(),
-  repeatType: repeatTypeEnum.default("none"),
-  repeatInterval: integer("repeatInterval"), // For custom repeats
-  status: statusEnum.default("pending"),
+  repeatType: mysqlEnum("repeatType", ["none", "daily", "weekly", "monthly", "custom"]).default("none"),
+  repeatInterval: int("repeatInterval"), // For custom repeats
+  status: mysqlEnum("status", ["pending", "triggered", "snoozed", "completed", "cancelled"]).default("pending"),
   snoozedUntil: timestamp("snoozedUntil"),
   relatedType: varchar("relatedType", { length: 50 }), // "project", "task", "inbox_item", etc.
-  relatedId: integer("relatedId"),
+  relatedId: int("relatedId"),
   notificationSent: boolean("notificationSent").default(false),
-  metadata: jsonb("metadata"),
+  metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
 });
@@ -982,32 +913,32 @@ export type InsertReminder = typeof reminders.$inferInsert;
 /**
  * Tasks - granular task tracking within projects with QA workflow
  */
-export const tasks = pgTable("tasks", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
-  projectId: integer("projectId"),
-  teamId: integer("teamId"), // Link to SME team
-  parentTaskId: integer("parentTaskId"), // For subtasks
+export const tasks = mysqlTable("tasks", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  projectId: int("projectId"),
+  teamId: int("teamId"), // Link to SME team
+  parentTaskId: int("parentTaskId"), // For subtasks
   title: varchar("title", { length: 500 }).notNull(),
   description: text("description"),
   status: mysqlEnum("status", [
     "not_started", "in_progress", "blocked", 
     "review", "cos_approved", "verified", "completed", "cancelled"
   ]).default("not_started").notNull(),
-  priority: priorityEnum.default("medium"),
-  progress: integer("progress").default(0), // 0-100
+  priority: mysqlEnum("priority", ["low", "medium", "high", "critical"]).default("medium"),
+  progress: int("progress").default(0), // 0-100
   dueDate: timestamp("dueDate"),
-  estimatedHours: real("estimatedHours"),
-  actualHours: real("actualHours"),
+  estimatedHours: float("estimatedHours"),
+  actualHours: float("actualHours"),
   assignedTo: varchar("assignedTo", { length: 100 }), // "digital_twin", expert ID, or "user"
-  assignedExperts: jsonb("assignedExperts"), // Array of expert IDs for team tasks
-  dependencies: jsonb("dependencies"), // Array of task IDs this depends on
+  assignedExperts: json("assignedExperts"), // Array of expert IDs for team tasks
+  dependencies: json("dependencies"), // Array of task IDs this depends on
   blockerDescription: text("blockerDescription"),
-  cosScore: integer("cosScore"), // Chief of Staff QA score (1-10)
-  secondaryAiScore: integer("secondaryAiScore"), // Secondary AI verification score (1-10)
-  qaStatus: qaStatusEnum.default("pending"),
+  cosScore: int("cosScore"), // Chief of Staff QA score (1-10)
+  secondaryAiScore: int("secondaryAiScore"), // Secondary AI verification score (1-10)
+  qaStatus: mysqlEnum("qaStatus", ["pending", "cos_reviewed", "secondary_reviewed", "approved", "rejected"]).default("pending"),
   completedAt: timestamp("completedAt"),
-  metadata: jsonb("metadata"),
+  metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
 });
@@ -1018,19 +949,19 @@ export type InsertTask = typeof tasks.$inferInsert;
 /**
  * Activity feed - project and system activity
  */
-export const activityFeed = pgTable("activity_feed", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
-  projectId: integer("projectId"),
-  actorType: actorTypeEnum.notNull(),
+export const activityFeed = mysqlTable("activity_feed", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  projectId: int("projectId"),
+  actorType: mysqlEnum("actorType", ["user", "digital_twin", "ai_expert", "system"]).notNull(),
   actorId: varchar("actorId", { length: 100 }), // Expert ID or "system"
   actorName: varchar("actorName", { length: 200 }),
   action: varchar("action", { length: 100 }).notNull(), // "created", "updated", "completed", etc.
   targetType: varchar("targetType", { length: 50 }), // "task", "document", "project", etc.
-  targetId: integer("targetId"),
+  targetId: int("targetId"),
   targetName: varchar("targetName", { length: 300 }),
   description: text("description"),
-  metadata: jsonb("metadata"),
+  metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 
@@ -1040,15 +971,15 @@ export type InsertActivityFeedItem = typeof activityFeed.$inferInsert;
 /**
  * Data retention policies - compliance tracking
  */
-export const dataRetentionPolicies = pgTable("data_retention_policies", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
+export const dataRetentionPolicies = mysqlTable("data_retention_policies", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
   dataType: varchar("dataType", { length: 100 }).notNull(), // "conversations", "documents", "audit_logs", etc.
-  retentionDays: integer("retentionDays").notNull(),
+  retentionDays: int("retentionDays").notNull(),
   autoDelete: boolean("autoDelete").default(false),
   lastPurgeAt: timestamp("lastPurgeAt"),
   nextPurgeAt: timestamp("nextPurgeAt"),
-  itemsDeleted: integer("itemsDeleted").default(0),
+  itemsDeleted: int("itemsDeleted").default(0),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
 });
@@ -1059,18 +990,18 @@ export type InsertDataRetentionPolicy = typeof dataRetentionPolicies.$inferInser
 /**
  * PII detection log - flagged sensitive data
  */
-export const piiDetectionLog = pgTable("pii_detection_log", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
+export const piiDetectionLog = mysqlTable("pii_detection_log", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
   sourceType: varchar("sourceType", { length: 50 }).notNull(), // "document", "conversation", "inbox", etc.
-  sourceId: integer("sourceId").notNull(),
+  sourceId: int("sourceId").notNull(),
   piiType: varchar("piiType", { length: 50 }).notNull(), // "email", "phone", "ssn", "credit_card", etc.
   detectedText: text("detectedText"), // The flagged content (may be redacted)
-  confidence: real("confidence"), // 0-1 confidence score
-  status: statusEnum.default("detected"),
+  confidence: float("confidence"), // 0-1 confidence score
+  status: mysqlEnum("status", ["detected", "reviewed", "false_positive", "redacted"]).default("detected"),
   reviewedBy: varchar("reviewedBy", { length: 100 }),
   reviewedAt: timestamp("reviewedAt"),
-  metadata: jsonb("metadata"),
+  metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 
@@ -1080,19 +1011,19 @@ export type InsertPIIDetectionLog = typeof piiDetectionLog.$inferInsert;
 /**
  * Compliance checklists - project-specific compliance tracking
  */
-export const complianceChecklists = pgTable("compliance_checklists", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
-  projectId: integer("projectId"),
+export const complianceChecklists = mysqlTable("compliance_checklists", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  projectId: int("projectId"),
   projectType: varchar("projectType", { length: 100 }).notNull(), // "investment", "partnership", etc.
   checklistName: varchar("checklistName", { length: 200 }).notNull(),
-  items: jsonb("items").notNull(), // Array of { id, title, required, completed, completedAt, notes }
-  completedCount: integer("completedCount").default(0),
-  totalCount: integer("totalCount").notNull(),
-  status: statusEnum.default("not_started"),
+  items: json("items").notNull(), // Array of { id, title, required, completed, completedAt, notes }
+  completedCount: int("completedCount").default(0),
+  totalCount: int("totalCount").notNull(),
+  status: mysqlEnum("status", ["not_started", "in_progress", "completed", "blocked"]).default("not_started"),
   dueDate: timestamp("dueDate"),
   completedAt: timestamp("completedAt"),
-  metadata: jsonb("metadata"),
+  metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
 });
@@ -1104,19 +1035,19 @@ export type InsertComplianceChecklist = typeof complianceChecklists.$inferInsert
 /**
  * Voice notes - captured throughout the day for Digital Twin context
  */
-export const voiceNotes = pgTable("voice_notes", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
+export const voiceNotes = mysqlTable("voice_notes", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
   content: text("content").notNull(), // Transcribed text
-  category: categoryEnum.default("observation").notNull(),
+  category: mysqlEnum("category", ["task", "idea", "reminder", "observation", "question", "follow_up"]).default("observation").notNull(),
   audioUrl: varchar("audioUrl", { length: 500 }), // S3 URL to original audio
-  duration: integer("duration"), // Duration in seconds
-  projectId: integer("projectId"), // Optional link to project
+  duration: int("duration"), // Duration in seconds
+  projectId: int("projectId"), // Optional link to project
   projectName: varchar("projectName", { length: 300 }),
   isActionItem: boolean("isActionItem").default(false),
   isProcessed: boolean("isProcessed").default(false), // Has Digital Twin processed this?
-  extractedTasks: jsonb("extractedTasks"), // Array of task strings extracted
-  metadata: jsonb("metadata"),
+  extractedTasks: json("extractedTasks"), // Array of task strings extracted
+  metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 
@@ -1132,17 +1063,17 @@ export type InsertVoiceNote = typeof voiceNotes.$inferInsert;
  * Expert conversations - full conversation history with each AI expert
  * Enables persistent memory and context for each expert
  */
-export const expertConversations = pgTable("expert_conversations", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
+export const expertConversations = mysqlTable("expert_conversations", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
   expertId: varchar("expertId", { length: 50 }).notNull(),
-  role: roleEnum.notNull(),
+  role: mysqlEnum("role", ["user", "expert", "system"]).notNull(),
   content: text("content").notNull(),
-  projectId: integer("projectId"), // Optional link to project
+  projectId: int("projectId"), // Optional link to project
   taskId: varchar("taskId", { length: 100 }), // Task this conversation relates to
-  sentiment: sentimentEnum,
-  qualityScore: integer("qualityScore"), // 1-10 rating of this response
-  metadata: jsonb("metadata"),
+  sentiment: mysqlEnum("sentiment", ["positive", "neutral", "negative"]),
+  qualityScore: int("qualityScore"), // 1-10 rating of this response
+  metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 
@@ -1153,16 +1084,16 @@ export type InsertExpertConversation = typeof expertConversations.$inferInsert;
  * Expert memory - key learnings and preferences per expert
  * What each expert has learned about the user and their work
  */
-export const expertMemory = pgTable("expert_memory", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
+export const expertMemory = mysqlTable("expert_memory", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
   expertId: varchar("expertId", { length: 50 }).notNull(),
-  memoryType: memoryTypeEnum.notNull(),
+  memoryType: mysqlEnum("memoryType", ["preference", "fact", "style", "context", "correction"]).notNull(),
   key: varchar("key", { length: 200 }).notNull(),
   value: text("value").notNull(),
-  confidence: real("confidence").default(0.8), // 0-1 confidence in this memory
+  confidence: float("confidence").default(0.8), // 0-1 confidence in this memory
   source: varchar("source", { length: 100 }), // "conversation", "feedback", "inferred"
-  usageCount: integer("usageCount").default(0), // How often this memory has been used
+  usageCount: int("usageCount").default(0), // How often this memory has been used
   lastUsed: timestamp("lastUsed"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
@@ -1175,17 +1106,17 @@ export type InsertExpertMemory = typeof expertMemory.$inferInsert;
  * Expert prompt evolution - track how expert prompts change over time
  * Enables self-improvement based on feedback
  */
-export const expertPromptEvolution = pgTable("expert_prompt_evolution", {
-  id: serial("id").primaryKey(),
+export const expertPromptEvolution = mysqlTable("expert_prompt_evolution", {
+  id: int("id").autoincrement().primaryKey(),
   expertId: varchar("expertId", { length: 50 }).notNull(),
-  version: integer("version").notNull(),
+  version: int("version").notNull(),
   promptAdditions: text("promptAdditions"), // Additional instructions added
   communicationStyle: text("communicationStyle"), // Learned communication preferences
-  strengthAdjustments: jsonb("strengthAdjustments"), // Adjusted strength scores
-  weaknessAdjustments: jsonb("weaknessAdjustments"), // Adjusted weakness areas
+  strengthAdjustments: json("strengthAdjustments"), // Adjusted strength scores
+  weaknessAdjustments: json("weaknessAdjustments"), // Adjusted weakness areas
   reason: text("reason"), // Why this change was made
-  performanceBefore: real("performanceBefore"),
-  performanceAfter: real("performanceAfter"),
+  performanceBefore: float("performanceBefore"),
+  performanceAfter: float("performanceAfter"),
   appliedAt: timestamp("appliedAt").defaultNow().notNull(),
   createdBy: varchar("createdBy", { length: 50 }), // "chief_of_staff", "user_feedback", "auto"
 });
@@ -1197,21 +1128,21 @@ export type InsertExpertPromptEvolution = typeof expertPromptEvolution.$inferIns
  * Expert insights - shared knowledge repository
  * Insights generated by experts that can be referenced by others
  */
-export const expertInsights = pgTable("expert_insights", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
+export const expertInsights = mysqlTable("expert_insights", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
   expertId: varchar("expertId", { length: 50 }).notNull(),
   category: varchar("category", { length: 100 }).notNull(), // "market", "strategy", "operations", etc.
   title: varchar("title", { length: 300 }).notNull(),
   insight: text("insight").notNull(),
   evidence: text("evidence"), // Supporting data/reasoning
-  confidence: real("confidence").default(0.7),
-  tags: jsonb("tags"), // Array of tags for searchability
-  projectId: integer("projectId"),
-  relatedExpertIds: jsonb("relatedExpertIds"), // Other experts who contributed
-  usageCount: integer("usageCount").default(0), // How often referenced by other experts
-  validatedBy: jsonb("validatedBy"), // Array of expert IDs who validated this
-  status: statusEnum.default("draft"),
+  confidence: float("confidence").default(0.7),
+  tags: json("tags"), // Array of tags for searchability
+  projectId: int("projectId"),
+  relatedExpertIds: json("relatedExpertIds"), // Other experts who contributed
+  usageCount: int("usageCount").default(0), // How often referenced by other experts
+  validatedBy: json("validatedBy"), // Array of expert IDs who validated this
+  status: mysqlEnum("status", ["draft", "validated", "outdated", "archived"]).default("draft"),
   expiresAt: timestamp("expiresAt"), // When this insight should be reviewed
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
@@ -1224,18 +1155,18 @@ export type InsertExpertInsight = typeof expertInsights.$inferInsert;
  * Expert research tasks - scheduled research for domain updates
  * Keeps experts current in their field
  */
-export const expertResearchTasks = pgTable("expert_research_tasks", {
-  id: serial("id").primaryKey(),
+export const expertResearchTasks = mysqlTable("expert_research_tasks", {
+  id: int("id").autoincrement().primaryKey(),
   expertId: varchar("expertId", { length: 50 }).notNull(),
   topic: varchar("topic", { length: 300 }).notNull(),
   description: text("description"),
-  priority: priorityEnum.default("medium"),
-  status: statusEnum.default("pending"),
+  priority: mysqlEnum("priority", ["low", "medium", "high", "critical"]).default("medium"),
+  status: mysqlEnum("status", ["pending", "in_progress", "completed", "failed"]).default("pending"),
   scheduledFor: timestamp("scheduledFor"),
   completedAt: timestamp("completedAt"),
   findings: text("findings"), // Research results
-  sourcesUsed: jsonb("sourcesUsed"), // Array of sources consulted
-  insightsGenerated: jsonb("insightsGenerated"), // IDs of insights created from this research
+  sourcesUsed: json("sourcesUsed"), // Array of sources consulted
+  insightsGenerated: json("insightsGenerated"), // IDs of insights created from this research
   assignedBy: varchar("assignedBy", { length: 50 }), // "chief_of_staff", "user", "auto"
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
@@ -1247,15 +1178,15 @@ export type InsertExpertResearchTask = typeof expertResearchTasks.$inferInsert;
  * Expert collaboration log - track how experts work together
  * Records cross-expert interactions and knowledge sharing
  */
-export const expertCollaboration = pgTable("expert_collaboration", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
+export const expertCollaboration = mysqlTable("expert_collaboration", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
   initiatorExpertId: varchar("initiatorExpertId", { length: 50 }).notNull(),
-  collaboratorExpertIds: jsonb("collaboratorExpertIds").notNull(), // Array of expert IDs
-  projectId: integer("projectId"),
+  collaboratorExpertIds: json("collaboratorExpertIds").notNull(), // Array of expert IDs
+  projectId: int("projectId"),
   taskDescription: text("taskDescription").notNull(),
   outcome: text("outcome"),
-  qualityScore: integer("qualityScore"), // 1-10 rating of collaboration
+  qualityScore: int("qualityScore"), // 1-10 rating of collaboration
   lessonsLearned: text("lessonsLearned"), // What was learned from this collaboration
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
@@ -1267,17 +1198,17 @@ export type InsertExpertCollaboration = typeof expertCollaboration.$inferInsert;
  * Expert coaching sessions - Chief of Staff training experts
  * Records coaching interactions to improve expert performance
  */
-export const expertCoachingSessions = pgTable("expert_coaching_sessions", {
-  id: serial("id").primaryKey(),
+export const expertCoachingSessions = mysqlTable("expert_coaching_sessions", {
+  id: int("id").autoincrement().primaryKey(),
   expertId: varchar("expertId", { length: 50 }).notNull(),
-  coachType: coachTypeEnum.notNull(),
+  coachType: mysqlEnum("coachType", ["chief_of_staff", "peer_expert", "user"]).notNull(),
   coachId: varchar("coachId", { length: 50 }), // ID of coaching expert if peer
   focusArea: varchar("focusArea", { length: 200 }).notNull(), // "communication", "accuracy", "speed", etc.
   feedbackGiven: text("feedbackGiven").notNull(),
   improvementPlan: text("improvementPlan"),
-  metricsBeforeCoaching: jsonb("metricsBeforeCoaching"),
-  metricsAfterCoaching: jsonb("metricsAfterCoaching"),
-  status: statusEnum.default("scheduled"),
+  metricsBeforeCoaching: json("metricsBeforeCoaching"),
+  metricsAfterCoaching: json("metricsAfterCoaching"),
+  status: mysqlEnum("status", ["scheduled", "in_progress", "completed", "follow_up_needed"]).default("scheduled"),
   scheduledAt: timestamp("scheduledAt"),
   completedAt: timestamp("completedAt"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
@@ -1290,16 +1221,16 @@ export type InsertExpertCoachingSession = typeof expertCoachingSessions.$inferIn
  * Expert domain knowledge - structured knowledge per expert domain
  * Tracks what each expert knows and when it was last updated
  */
-export const expertDomainKnowledge = pgTable("expert_domain_knowledge", {
-  id: serial("id").primaryKey(),
+export const expertDomainKnowledge = mysqlTable("expert_domain_knowledge", {
+  id: int("id").autoincrement().primaryKey(),
   expertId: varchar("expertId", { length: 50 }).notNull(),
   domain: varchar("domain", { length: 200 }).notNull(), // "private_equity", "strategy", "marketing", etc.
   subDomain: varchar("subDomain", { length: 200 }), // More specific area
-  knowledgeLevel: knowledgeLevelEnum.default("advanced"),
+  knowledgeLevel: mysqlEnum("knowledgeLevel", ["basic", "intermediate", "advanced", "expert"]).default("advanced"),
   lastUpdated: timestamp("lastUpdated").defaultNow().notNull(),
   updateFrequency: varchar("updateFrequency", { length: 50 }).default("weekly"), // How often to refresh
-  sources: jsonb("sources"), // Preferred sources for this domain
-  keyFrameworks: jsonb("keyFrameworks"), // Frameworks this expert uses
+  sources: json("sources"), // Preferred sources for this domain
+  keyFrameworks: json("keyFrameworks"), // Frameworks this expert uses
   recentDevelopments: text("recentDevelopments"), // Latest updates in this domain
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
@@ -1313,14 +1244,14 @@ export type InsertExpertDomainKnowledge = typeof expertDomainKnowledge.$inferIns
  * Favorite contacts - quick access to frequently messaged contacts
  * Allows users to star/favorite contacts for quick access in the Message Chief of Staff section
  */
-export const favoriteContacts = pgTable("favorite_contacts", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
-  contactType: contactTypeEnum.notNull(),
+export const favoriteContacts = mysqlTable("favorite_contacts", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  contactType: mysqlEnum("contactType", ["expert", "corporate_partner", "ai_expert", "colleague"]).notNull(),
   contactId: varchar("contactId", { length: 100 }).notNull(), // ID of the expert, partner, or colleague
   contactName: varchar("contactName", { length: 200 }).notNull(), // Display name
   contactAvatar: varchar("contactAvatar", { length: 500 }), // Avatar URL
-  order: integer("order").default(0), // For custom ordering
+  order: int("order").default(0), // For custom ordering
   isFavorited: boolean("isFavorited").default(true).notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
@@ -1334,13 +1265,13 @@ export type InsertFavoriteContact = typeof favoriteContacts.$inferInsert;
  * SME Teams - assembled teams of AI experts for specific projects/tasks
  * Users can create and save teams for reuse
  */
-export const smeTeams = pgTable("sme_teams", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
+export const smeTeams = mysqlTable("sme_teams", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
   name: varchar("name", { length: 200 }).notNull(),
   description: text("description"),
   purpose: varchar("purpose", { length: 300 }), // What this team is for
-  projectId: integer("projectId"), // Optional link to a project
+  projectId: int("projectId"), // Optional link to a project
   isActive: boolean("isActive").default(true).notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
@@ -1352,9 +1283,9 @@ export type InsertSmeTeam = typeof smeTeams.$inferInsert;
 /**
  * SME Team Members - experts assigned to a team
  */
-export const smeTeamMembers = pgTable("sme_team_members", {
-  id: serial("id").primaryKey(),
-  teamId: integer("teamId").notNull(),
+export const smeTeamMembers = mysqlTable("sme_team_members", {
+  id: int("id").autoincrement().primaryKey(),
+  teamId: int("teamId").notNull(),
   expertId: varchar("expertId", { length: 50 }).notNull(), // References AI expert ID
   role: varchar("role", { length: 100 }), // Role within the team (e.g., "Lead", "Reviewer")
   addedAt: timestamp("addedAt").defaultNow().notNull(),
@@ -1367,15 +1298,15 @@ export type InsertSmeTeamMember = typeof smeTeamMembers.$inferInsert;
  * Task QA Reviews - dual verification system (Chief of Staff + Secondary AI)
  * Tracks quality assurance reviews for each task
  */
-export const taskQaReviews = pgTable("task_qa_reviews", {
-  id: serial("id").primaryKey(),
-  taskId: integer("taskId").notNull(),
-  reviewType: reviewTypeEnum.notNull(),
+export const taskQaReviews = mysqlTable("task_qa_reviews", {
+  id: int("id").autoincrement().primaryKey(),
+  taskId: int("taskId").notNull(),
+  reviewType: mysqlEnum("reviewType", ["cos_review", "secondary_ai", "sme_feedback"]).notNull(),
   reviewerId: varchar("reviewerId", { length: 100 }), // "chief_of_staff" or AI expert ID
-  score: integer("score"), // 1-10 quality score
+  score: int("score"), // 1-10 quality score
   feedback: text("feedback"),
-  status: statusEnum.default("pending").notNull(),
-  improvements: jsonb("improvements"), // Suggested improvements
+  status: mysqlEnum("status", ["pending", "approved", "rejected", "needs_revision"]).default("pending").notNull(),
+  improvements: json("improvements"), // Suggested improvements
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
 });
@@ -1387,12 +1318,12 @@ export type InsertTaskQaReview = typeof taskQaReviews.$inferInsert;
  * SME Feedback Log - feedback from Chief of Staff to individual SME experts
  * Helps experts learn and improve over time
  */
-export const smeFeedbackLog = pgTable("sme_feedback_log", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
+export const smeFeedbackLog = mysqlTable("sme_feedback_log", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
   expertId: varchar("expertId", { length: 50 }).notNull(),
-  taskId: integer("taskId"),
-  feedbackType: feedbackTypeEnum.notNull(),
+  taskId: int("taskId"),
+  feedbackType: mysqlEnum("feedbackType", ["positive", "constructive", "correction", "training"]).notNull(),
   feedback: text("feedback").notNull(),
   context: varchar("context", { length: 200 }), // What prompted this feedback
   applied: boolean("applied").default(false), // Whether the expert has "learned" from this
@@ -1407,20 +1338,20 @@ export type InsertSmeFeedbackLog = typeof smeFeedbackLog.$inferInsert;
  * Expert Consultation History - tracks which experts user has consulted
  * Stores summaries and recommendations for quick reference
  */
-export const expertConsultations = pgTable("expert_consultations", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
+export const expertConsultations = mysqlTable("expert_consultations", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
   expertId: varchar("expertId", { length: 50 }).notNull(),
   expertName: varchar("expertName", { length: 200 }).notNull(),
   expertCategory: varchar("expertCategory", { length: 100 }),
   topic: varchar("topic", { length: 300 }), // What was discussed
   summary: text("summary"), // AI-generated summary of the consultation
-  recommendations: jsonb("recommendations"), // Key recommendations from the expert
-  userRating: integer("userRating"), // 1-10 rating of the consultation
+  recommendations: json("recommendations"), // Key recommendations from the expert
+  userRating: int("userRating"), // 1-10 rating of the consultation
   userFeedback: text("userFeedback"), // Optional feedback
-  duration: integer("duration"), // Duration in seconds
-  messageCount: integer("messageCount").default(0), // Number of messages exchanged
-  projectId: integer("projectId"), // Optional link to project
+  duration: int("duration"), // Duration in seconds
+  messageCount: int("messageCount").default(0), // Number of messages exchanged
+  projectId: int("projectId"), // Optional link to project
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
 });
@@ -1432,15 +1363,15 @@ export type InsertExpertConsultation = typeof expertConsultations.$inferInsert;
  * Expert Chat Sessions - individual chat sessions with experts
  * Stores messages and context for each chat session
  */
-export const expertChatSessions = pgTable("expert_chat_sessions", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
+export const expertChatSessions = mysqlTable("expert_chat_sessions", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
   expertId: varchar("expertId", { length: 50 }).notNull(),
   expertName: varchar("expertName", { length: 200 }),
   systemPrompt: text("systemPrompt"),
-  projectId: integer("projectId"),
-  consultationId: integer("consultationId"), // Link to parent consultation
-  status: statusEnum.default("active").notNull(),
+  projectId: int("projectId"),
+  consultationId: int("consultationId"), // Link to parent consultation
+  status: mysqlEnum("status", ["active", "paused", "completed"]).default("active").notNull(),
   summary: text("summary"),
   lastMessageAt: timestamp("lastMessageAt"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
@@ -1452,12 +1383,12 @@ export type InsertExpertChatSession = typeof expertChatSessions.$inferInsert;
 /**
  * Expert Chat Messages - individual messages in a chat session
  */
-export const expertChatMessages = pgTable("expert_chat_messages", {
-  id: serial("id").primaryKey(),
-  sessionId: integer("sessionId").notNull(),
-  role: roleEnum.notNull(),
+export const expertChatMessages = mysqlTable("expert_chat_messages", {
+  id: int("id").autoincrement().primaryKey(),
+  sessionId: int("sessionId").notNull(),
+  role: mysqlEnum("role", ["user", "expert", "system"]).notNull(),
   content: text("content").notNull(),
-  metadata: jsonb("metadata"), // Additional context like voice input, attachments
+  metadata: json("metadata"), // Additional context like voice input, attachments
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 
@@ -1468,19 +1399,19 @@ export type InsertExpertChatMessage = typeof expertChatMessages.$inferInsert;
 /**
  * Business Plan Review Versions - track review history over time
  */
-export const businessPlanReviewVersions = pgTable("business_plan_review_versions", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
+export const businessPlanReviewVersions = mysqlTable("business_plan_review_versions", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
   projectName: varchar("projectName", { length: 300 }).notNull(),
-  versionNumber: integer("versionNumber").notNull(),
+  versionNumber: int("versionNumber").notNull(),
   versionLabel: varchar("versionLabel", { length: 100 }), // e.g., "Initial Draft", "Post-Feedback"
-  overallScore: integer("overallScore"), // 0-100
-  sectionScores: jsonb("sectionScores"), // { sectionId: score, ... }
-  reviewData: jsonb("reviewData"), // Full review data including expert insights
-  expertTeam: jsonb("expertTeam"), // List of expert IDs used
+  overallScore: int("overallScore"), // 0-100
+  sectionScores: json("sectionScores"), // { sectionId: score, ... }
+  reviewData: json("reviewData"), // Full review data including expert insights
+  expertTeam: json("expertTeam"), // List of expert IDs used
   teamSelectionMode: varchar("teamSelectionMode", { length: 50 }), // "chief-of-staff" or "manual"
   businessPlanContent: text("businessPlanContent"), // The content that was reviewed
-  sectionDocuments: jsonb("sectionDocuments"), // { sectionId: { fileName, content }, ... }
+  sectionDocuments: json("sectionDocuments"), // { sectionId: { fileName, content }, ... }
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 
@@ -1490,15 +1421,15 @@ export type InsertBusinessPlanReviewVersion = typeof businessPlanReviewVersions.
 /**
  * Expert Follow-up Questions - Q&A with experts after review
  */
-export const expertFollowUpQuestions = pgTable("expert_follow_up_questions", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
-  reviewVersionId: integer("reviewVersionId").notNull(), // Link to review version
+export const expertFollowUpQuestions = mysqlTable("expert_follow_up_questions", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  reviewVersionId: int("reviewVersionId").notNull(), // Link to review version
   sectionId: varchar("sectionId", { length: 100 }).notNull(),
   expertId: varchar("expertId", { length: 100 }).notNull(),
   question: text("question").notNull(),
   answer: text("answer"),
-  status: statusEnum.default("pending").notNull(),
+  status: mysqlEnum("status", ["pending", "answered"]).default("pending").notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   answeredAt: timestamp("answeredAt"),
 });
@@ -1509,13 +1440,13 @@ export type InsertExpertFollowUpQuestion = typeof expertFollowUpQuestions.$infer
 /**
  * Collaborative Review Sessions - Multi-user review sessions
  */
-export const collaborativeReviewSessions = pgTable("collaborative_review_sessions", {
-  id: serial("id").primaryKey(),
-  ownerId: integer("ownerId").notNull(), // User who created the session
+export const collaborativeReviewSessions = mysqlTable("collaborative_review_sessions", {
+  id: int("id").autoincrement().primaryKey(),
+  ownerId: int("ownerId").notNull(), // User who created the session
   projectName: varchar("projectName", { length: 255 }).notNull(),
   templateId: varchar("templateId", { length: 100 }),
-  status: statusEnum.default("active").notNull(),
-  reviewData: jsonb("reviewData"), // Current state of the review
+  status: mysqlEnum("status", ["active", "completed", "archived"]).default("active").notNull(),
+  reviewData: json("reviewData"), // Current state of the review
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
 });
@@ -1526,12 +1457,12 @@ export type InsertCollaborativeReviewSession = typeof collaborativeReviewSession
 /**
  * Collaborative Review Participants - Users invited to a review session
  */
-export const collaborativeReviewParticipants = pgTable("collaborative_review_participants", {
-  id: serial("id").primaryKey(),
-  sessionId: integer("sessionId").notNull(),
-  userId: integer("userId").notNull(),
-  role: roleEnum.default("viewer").notNull(),
-  invitedBy: integer("invitedBy"),
+export const collaborativeReviewParticipants = mysqlTable("collaborative_review_participants", {
+  id: int("id").autoincrement().primaryKey(),
+  sessionId: int("sessionId").notNull(),
+  userId: int("userId").notNull(),
+  role: mysqlEnum("role", ["owner", "reviewer", "viewer"]).default("viewer").notNull(),
+  invitedBy: int("invitedBy"),
   invitedAt: timestamp("invitedAt").defaultNow().notNull(),
   joinedAt: timestamp("joinedAt"),
   lastActiveAt: timestamp("lastActiveAt"),
@@ -1543,14 +1474,14 @@ export type InsertCollaborativeReviewParticipant = typeof collaborativeReviewPar
 /**
  * Collaborative Review Comments - Comments on sections from collaborators
  */
-export const collaborativeReviewComments = pgTable("collaborative_review_comments", {
-  id: serial("id").primaryKey(),
-  sessionId: integer("sessionId").notNull(),
-  userId: integer("userId").notNull(),
+export const collaborativeReviewComments = mysqlTable("collaborative_review_comments", {
+  id: int("id").autoincrement().primaryKey(),
+  sessionId: int("sessionId").notNull(),
+  userId: int("userId").notNull(),
   sectionId: varchar("sectionId", { length: 100 }).notNull(),
   comment: text("comment").notNull(),
-  parentCommentId: integer("parentCommentId"), // For threaded replies
-  status: statusEnum.default("active").notNull(),
+  parentCommentId: int("parentCommentId"), // For threaded replies
+  status: mysqlEnum("status", ["active", "resolved", "deleted"]).default("active").notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
 });
@@ -1561,13 +1492,13 @@ export type InsertCollaborativeReviewComment = typeof collaborativeReviewComment
 /**
  * Collaborative Review Activity - Track who reviewed what
  */
-export const collaborativeReviewActivity = pgTable("collaborative_review_activity", {
-  id: serial("id").primaryKey(),
-  sessionId: integer("sessionId").notNull(),
-  userId: integer("userId").notNull(),
-  action: actionEnum.notNull(),
+export const collaborativeReviewActivity = mysqlTable("collaborative_review_activity", {
+  id: int("id").autoincrement().primaryKey(),
+  sessionId: int("sessionId").notNull(),
+  userId: int("userId").notNull(),
+  action: mysqlEnum("action", ["joined", "viewed_section", "commented", "reviewed_section", "completed_review"]).notNull(),
   sectionId: varchar("sectionId", { length: 100 }),
-  metadata: jsonb("metadata"),
+  metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 
@@ -1584,13 +1515,13 @@ export type InsertCollaborativeReviewActivity = typeof collaborativeReviewActivi
  * Value Chain Phases - The 7 phases of the productivity engine
  * 1. Ideation, 2. Innovation, 3. Development, 4. Go-to-Market, 5. Operations, 6. Retention, 7. Exit
  */
-export const valueChainPhases = pgTable("value_chain_phases", {
-  id: serial("id").primaryKey(),
-  phaseNumber: integer("phaseNumber").notNull(), // 1-7
+export const valueChainPhases = mysqlTable("value_chain_phases", {
+  id: int("id").autoincrement().primaryKey(),
+  phaseNumber: int("phaseNumber").notNull(), // 1-7
   name: varchar("name", { length: 100 }).notNull(),
   description: text("description"),
   primaryFocus: text("primaryFocus"),
-  keyExpertPanels: jsonb("keyExpertPanels"), // Array of panel categories
+  keyExpertPanels: json("keyExpertPanels"), // Array of panel categories
   isActive: boolean("isActive").default(true).notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
@@ -1601,10 +1532,10 @@ export type InsertValueChainPhase = typeof valueChainPhases.$inferInsert;
 /**
  * Blueprints - Standardized process documents that track through phases
  */
-export const blueprints = pgTable("blueprints", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
-  projectId: integer("projectId"), // Link to projects table
+export const blueprints = mysqlTable("blueprints", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  projectId: int("projectId"), // Link to projects table
   name: varchar("name", { length: 300 }).notNull(),
   description: text("description"),
   blueprintType: mysqlEnum("blueprintType", [
@@ -1619,7 +1550,7 @@ export const blueprints = pgTable("blueprints", {
     "process_document",
     "other"
   ]).notNull(),
-  currentPhase: integer("currentPhase").default(1).notNull(), // 1-7
+  currentPhase: int("currentPhase").default(1).notNull(), // 1-7
   status: mysqlEnum("status", [
     "draft",
     "in_review",
@@ -1627,8 +1558,8 @@ export const blueprints = pgTable("blueprints", {
     "rejected",
     "archived"
   ]).default("draft").notNull(),
-  version: integer("version").default(1).notNull(),
-  content: jsonb("content"), // Structured content of the blueprint
+  version: int("version").default(1).notNull(),
+  content: json("content"), // Structured content of the blueprint
   fileUrl: text("fileUrl"), // S3 URL if file uploaded
   qualityGateStatus: mysqlEnum("qualityGateStatus", [
     "not_started",
@@ -1637,7 +1568,7 @@ export const blueprints = pgTable("blueprints", {
     "level_3_complete",
     "level_4_complete"
   ]).default("not_started").notNull(),
-  metadata: jsonb("metadata"),
+  metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
 });
@@ -1648,14 +1579,14 @@ export type InsertBlueprint = typeof blueprints.$inferInsert;
 /**
  * Blueprint Versions - Track document history
  */
-export const blueprintVersions = pgTable("blueprint_versions", {
-  id: serial("id").primaryKey(),
-  blueprintId: integer("blueprintId").notNull(),
-  version: integer("version").notNull(),
-  content: jsonb("content"),
+export const blueprintVersions = mysqlTable("blueprint_versions", {
+  id: int("id").autoincrement().primaryKey(),
+  blueprintId: int("blueprintId").notNull(),
+  version: int("version").notNull(),
+  content: json("content"),
   fileUrl: text("fileUrl"),
   changeDescription: text("changeDescription"),
-  createdBy: integer("createdBy").notNull(),
+  createdBy: int("createdBy").notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 
@@ -1665,13 +1596,13 @@ export type InsertBlueprintVersion = typeof blueprintVersions.$inferInsert;
 /**
  * SME Panel Types - Blue Team, Left-Field, Red Team (Devil's Advocate)
  */
-export const smePanelTypes = pgTable("sme_panel_types", {
-  id: serial("id").primaryKey(),
+export const smePanelTypes = mysqlTable("sme_panel_types", {
+  id: int("id").autoincrement().primaryKey(),
   name: varchar("name", { length: 100 }).notNull(),
-  code: codeEnum.notNull(),
+  code: mysqlEnum("code", ["blue_team", "left_field", "red_team"]).notNull(),
   description: text("description"),
   role: text("role"), // What this panel does
-  typicalComposition: jsonb("typicalComposition"), // Array of expert categories
+  typicalComposition: json("typicalComposition"), // Array of expert categories
   isActive: boolean("isActive").default(true).notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
@@ -1682,18 +1613,18 @@ export type InsertSmePanelType = typeof smePanelTypes.$inferInsert;
 /**
  * SME Panels - Assembled panels for specific reviews
  */
-export const smePanels = pgTable("sme_panels", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
-  blueprintId: integer("blueprintId"), // Optional link to blueprint
-  projectId: integer("projectId"), // Optional link to project
-  panelTypeCode: panelTypeCodeEnum.notNull(),
+export const smePanels = mysqlTable("sme_panels", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  blueprintId: int("blueprintId"), // Optional link to blueprint
+  projectId: int("projectId"), // Optional link to project
+  panelTypeCode: mysqlEnum("panelTypeCode", ["blue_team", "left_field", "red_team"]).notNull(),
   name: varchar("name", { length: 200 }).notNull(),
   purpose: text("purpose"),
-  phase: integer("phase"), // Which value chain phase (1-7)
-  status: statusEnum.default("assembling").notNull(),
-  expertIds: jsonb("expertIds"), // Array of expert IDs assigned to this panel
-  metadata: jsonb("metadata"),
+  phase: int("phase"), // Which value chain phase (1-7)
+  status: mysqlEnum("status", ["assembling", "active", "completed", "disbanded"]).default("assembling").notNull(),
+  expertIds: json("expertIds"), // Array of expert IDs assigned to this panel
+  metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
 });
@@ -1704,10 +1635,10 @@ export type InsertSmePanel = typeof smePanels.$inferInsert;
 /**
  * SME Panel Consultations - Records of panel reviews and feedback
  */
-export const smePanelConsultations = pgTable("sme_panel_consultations", {
-  id: serial("id").primaryKey(),
-  panelId: integer("panelId").notNull(),
-  blueprintId: integer("blueprintId"),
+export const smePanelConsultations = mysqlTable("sme_panel_consultations", {
+  id: int("id").autoincrement().primaryKey(),
+  panelId: int("panelId").notNull(),
+  blueprintId: int("blueprintId"),
   consultationType: mysqlEnum("consultationType", [
     "concept_review",
     "pre_mortem",
@@ -1717,10 +1648,10 @@ export const smePanelConsultations = pgTable("sme_panel_consultations", {
     "ad_hoc"
   ]).notNull(),
   question: text("question"), // What was asked of the panel
-  findings: jsonb("findings"), // Structured findings from each expert
+  findings: json("findings"), // Structured findings from each expert
   recommendations: text("recommendations"),
-  risksIdentified: jsonb("risksIdentified"), // Array of risks
-  status: statusEnum.default("pending").notNull(),
+  risksIdentified: json("risksIdentified"), // Array of risks
+  status: mysqlEnum("status", ["pending", "in_progress", "completed"]).default("pending").notNull(),
   completedAt: timestamp("completedAt"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
@@ -1731,11 +1662,11 @@ export type InsertSmePanelConsultation = typeof smePanelConsultations.$inferInse
 /**
  * Quality Gates - 4-level review protocol at each phase
  */
-export const qualityGates = pgTable("quality_gates", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
-  blueprintId: integer("blueprintId").notNull(),
-  phase: integer("phase").notNull(), // Which value chain phase (1-7)
+export const qualityGates = mysqlTable("quality_gates", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  blueprintId: int("blueprintId").notNull(),
+  phase: int("phase").notNull(), // Which value chain phase (1-7)
   gateName: varchar("gateName", { length: 200 }).notNull(),
   level1Complete: boolean("level1Complete").default(false), // Completeness Check
   level1CompletedAt: timestamp("level1CompletedAt"),
@@ -1746,11 +1677,11 @@ export const qualityGates = pgTable("quality_gates", {
   level3Complete: boolean("level3Complete").default(false), // Strategic Fit & Feasibility
   level3CompletedAt: timestamp("level3CompletedAt"),
   level3Notes: text("level3Notes"),
-  level4Decision: level4DecisionEnum,
+  level4Decision: mysqlEnum("level4Decision", ["go", "hold", "recycle", "kill"]),
   level4CompletedAt: timestamp("level4CompletedAt"),
   level4Rationale: text("level4Rationale"),
   gatekeeper: varchar("gatekeeper", { length: 100 }).default("Chief of Staff"),
-  status: statusEnum.default("not_started").notNull(),
+  status: mysqlEnum("status", ["not_started", "in_progress", "passed", "failed"]).default("not_started").notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
 });
@@ -1761,17 +1692,17 @@ export type InsertQualityGate = typeof qualityGates.$inferInsert;
 /**
  * Process Playbooks - Templates for each phase's processes
  */
-export const processPlaybooks = pgTable("process_playbooks", {
-  id: serial("id").primaryKey(),
-  phase: integer("phase").notNull(), // Which value chain phase (1-7)
+export const processPlaybooks = mysqlTable("process_playbooks", {
+  id: int("id").autoincrement().primaryKey(),
+  phase: int("phase").notNull(), // Which value chain phase (1-7)
   processNumber: varchar("processNumber", { length: 20 }).notNull(), // e.g., "1.1", "2.2"
   name: varchar("name", { length: 200 }).notNull(),
   objective: text("objective"),
-  activities: jsonb("activities"), // Array of activity objects
-  manusDelegation: jsonb("manusDelegation"), // What Manus can do for each activity
-  tools: jsonb("tools"), // Tools used in this process
-  expertPanels: jsonb("expertPanels"), // Which panels are involved
-  qualityGateCriteria: jsonb("qualityGateCriteria"), // Criteria for passing quality gate
+  activities: json("activities"), // Array of activity objects
+  manusDelegation: json("manusDelegation"), // What Manus can do for each activity
+  tools: json("tools"), // Tools used in this process
+  expertPanels: json("expertPanels"), // Which panels are involved
+  qualityGateCriteria: json("qualityGateCriteria"), // Criteria for passing quality gate
   isActive: boolean("isActive").default(true).notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
@@ -1783,11 +1714,11 @@ export type InsertProcessPlaybook = typeof processPlaybooks.$inferInsert;
 /**
  * Pre-Mortem Sessions - Proactive failure analysis
  */
-export const preMortemSessions = pgTable("pre_mortem_sessions", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
-  blueprintId: integer("blueprintId"),
-  projectId: integer("projectId"),
+export const preMortemSessions = mysqlTable("pre_mortem_sessions", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  blueprintId: int("blueprintId"),
+  projectId: int("projectId"),
   sessionType: mysqlEnum("sessionType", [
     "concept_pre_mortem",
     "business_case_pre_mortem",
@@ -1796,11 +1727,11 @@ export const preMortemSessions = pgTable("pre_mortem_sessions", {
     "buyer_objection_pre_mortem"
   ]).notNull(),
   scenario: text("scenario"), // "Assume the project has failed..."
-  failureReasons: jsonb("failureReasons"), // Array of identified failure reasons
-  criticalAssumptions: jsonb("criticalAssumptions"), // Assumptions that must be tested
-  mitigationStrategies: jsonb("mitigationStrategies"), // How to address each risk
-  panelId: integer("panelId"), // Which SME panel conducted this
-  status: statusEnum.default("scheduled").notNull(),
+  failureReasons: json("failureReasons"), // Array of identified failure reasons
+  criticalAssumptions: json("criticalAssumptions"), // Assumptions that must be tested
+  mitigationStrategies: json("mitigationStrategies"), // How to address each risk
+  panelId: int("panelId"), // Which SME panel conducted this
+  status: mysqlEnum("status", ["scheduled", "in_progress", "completed"]).default("scheduled").notNull(),
   completedAt: timestamp("completedAt"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
@@ -1811,12 +1742,12 @@ export type InsertPreMortemSession = typeof preMortemSessions.$inferInsert;
 /**
  * Lessons Learned - Post-project insights repository
  */
-export const lessonsLearned = pgTable("lessons_learned", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
-  projectId: integer("projectId"),
-  blueprintId: integer("blueprintId"),
-  phase: integer("phase"), // Which phase this lesson applies to
+export const lessonsLearned = mysqlTable("lessons_learned", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  projectId: int("projectId"),
+  blueprintId: int("blueprintId"),
+  phase: int("phase"), // Which phase this lesson applies to
   category: mysqlEnum("category", [
     "what_went_well",
     "what_didnt_work",
@@ -1827,9 +1758,9 @@ export const lessonsLearned = pgTable("lessons_learned", {
   ]).notNull(),
   title: varchar("title", { length: 300 }).notNull(),
   description: text("description").notNull(),
-  impact: impactEnum.default("medium"),
+  impact: mysqlEnum("impact", ["low", "medium", "high"]).default("medium"),
   actionTaken: text("actionTaken"),
-  tags: jsonb("tags"), // Array of tags for searchability
+  tags: json("tags"), // Array of tags for searchability
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 
@@ -1839,9 +1770,9 @@ export type InsertLessonLearned = typeof lessonsLearned.$inferInsert;
 /**
  * Tool Integrations - Connected external tools and their status
  */
-export const toolIntegrations = pgTable("tool_integrations", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
+export const toolIntegrations = mysqlTable("tool_integrations", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
   toolName: varchar("toolName", { length: 100 }).notNull(),
   category: mysqlEnum("category", [
     "project_management",
@@ -1856,13 +1787,13 @@ export const toolIntegrations = pgTable("tool_integrations", {
   ]).notNull(),
   purpose: text("purpose"),
   plan: varchar("plan", { length: 50 }), // "Free", "Pro", "Enterprise"
-  status: statusEnum.default("pending").notNull(),
+  status: mysqlEnum("status", ["active", "inactive", "pending", "error"]).default("pending").notNull(),
   apiKeyConfigured: boolean("apiKeyConfigured").default(false),
   lastSyncAt: timestamp("lastSyncAt"),
-  healthScore: integer("healthScore").default(100), // 0-100
+  healthScore: int("healthScore").default(100), // 0-100
   alertMessage: text("alertMessage"),
-  valueChainPhases: jsonb("valueChainPhases"), // Which phases this tool is used in
-  metadata: jsonb("metadata"),
+  valueChainPhases: json("valueChainPhases"), // Which phases this tool is used in
+  metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
 });
@@ -1873,12 +1804,12 @@ export type InsertToolIntegration = typeof toolIntegrations.$inferInsert;
 /**
  * Manus Delegation Log - Track what Manus does autonomously
  */
-export const manusDelegationLog = pgTable("manus_delegation_log", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
-  blueprintId: integer("blueprintId"),
-  projectId: integer("projectId"),
-  phase: integer("phase"),
+export const manusDelegationLog = mysqlTable("manus_delegation_log", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  blueprintId: int("blueprintId"),
+  projectId: int("projectId"),
+  phase: int("phase"),
   processNumber: varchar("processNumber", { length: 20 }),
   activityName: varchar("activityName", { length: 200 }).notNull(),
   delegationType: mysqlEnum("delegationType", [
@@ -1891,9 +1822,9 @@ export const manusDelegationLog = pgTable("manus_delegation_log", {
     "reporting",
     "quality_check"
   ]).notNull(),
-  input: jsonb("input"), // What was provided to Manus
-  output: jsonb("output"), // What Manus produced
-  status: statusEnum.default("pending").notNull(),
+  input: json("input"), // What was provided to Manus
+  output: json("output"), // What Manus produced
+  status: mysqlEnum("status", ["pending", "in_progress", "completed", "failed"]).default("pending").notNull(),
   completedAt: timestamp("completedAt"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
@@ -1904,12 +1835,12 @@ export type InsertManusDelegationLog = typeof manusDelegationLog.$inferInsert;
 /**
  * Expert Panel Assignments - Which experts are assigned to which panel type
  */
-export const expertPanelAssignments = pgTable("expert_panel_assignments", {
-  id: serial("id").primaryKey(),
+export const expertPanelAssignments = mysqlTable("expert_panel_assignments", {
+  id: int("id").autoincrement().primaryKey(),
   expertId: varchar("expertId", { length: 100 }).notNull(),
-  panelTypeCode: panelTypeCodeEnum.notNull(),
+  panelTypeCode: mysqlEnum("panelTypeCode", ["blue_team", "left_field", "red_team"]).notNull(),
   expertCategory: varchar("expertCategory", { length: 100 }), // e.g., "Strategy", "Finance", "Legal"
-  strengthAreas: jsonb("strengthAreas"), // What this expert is good at for this panel type
+  strengthAreas: json("strengthAreas"), // What this expert is good at for this panel type
   isDefault: boolean("isDefault").default(false), // Is this a default assignment?
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
@@ -1925,21 +1856,21 @@ export type InsertExpertPanelAssignment = typeof expertPanelAssignments.$inferIn
 /**
  * Evening Review Sessions - Track each evening review session
  */
-export const eveningReviewSessions = pgTable("evening_review_sessions", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
+export const eveningReviewSessions = mysqlTable("evening_review_sessions", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
   reviewDate: timestamp("reviewDate").notNull(),
   startedAt: timestamp("startedAt").notNull(),
   completedAt: timestamp("completedAt"),
-  mode: modeEnum.default("manual").notNull(),
-  tasksAccepted: integer("tasksAccepted").default(0).notNull(),
-  tasksDeferred: integer("tasksDeferred").default(0).notNull(),
-  tasksRejected: integer("tasksRejected").default(0).notNull(),
-  moodScore: integer("moodScore"), // 1-10
+  mode: mysqlEnum("mode", ["manual", "auto_processed", "delegated"]).default("manual").notNull(),
+  tasksAccepted: int("tasksAccepted").default(0).notNull(),
+  tasksDeferred: int("tasksDeferred").default(0).notNull(),
+  tasksRejected: int("tasksRejected").default(0).notNull(),
+  moodScore: int("moodScore"), // 1-10
   wentWellNotes: text("wentWellNotes"),
   didntGoWellNotes: text("didntGoWellNotes"),
-  signalItemsGenerated: integer("signalItemsGenerated").default(0),
-  metadata: jsonb("metadata"),
+  signalItemsGenerated: int("signalItemsGenerated").default(0),
+  metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 
@@ -1949,13 +1880,13 @@ export type InsertEveningReviewSession = typeof eveningReviewSessions.$inferInse
 /**
  * Evening Review Task Decisions - Individual task decisions from reviews
  */
-export const eveningReviewTaskDecisions = pgTable("evening_review_task_decisions", {
-  id: serial("id").primaryKey(),
-  sessionId: integer("sessionId").notNull(),
-  taskId: integer("taskId"), // Link to tasks table if applicable
+export const eveningReviewTaskDecisions = mysqlTable("evening_review_task_decisions", {
+  id: int("id").autoincrement().primaryKey(),
+  sessionId: int("sessionId").notNull(),
+  taskId: int("taskId"), // Link to tasks table if applicable
   taskTitle: varchar("taskTitle", { length: 500 }).notNull(),
   projectName: varchar("projectName", { length: 200 }),
-  decision: decisionEnum.notNull(),
+  decision: mysqlEnum("decision", ["accepted", "deferred", "rejected"]).notNull(),
   priority: varchar("priority", { length: 20 }),
   estimatedTime: varchar("estimatedTime", { length: 50 }),
   notes: text("notes"),
@@ -1968,15 +1899,15 @@ export type InsertEveningReviewTaskDecision = typeof eveningReviewTaskDecisions.
 /**
  * Review Timing Patterns - Learn user's review habits
  */
-export const reviewTimingPatterns = pgTable("review_timing_patterns", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
-  dayOfWeek: integer("dayOfWeek").notNull(), // 0-6 (Sunday-Saturday)
+export const reviewTimingPatterns = mysqlTable("review_timing_patterns", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  dayOfWeek: int("dayOfWeek").notNull(), // 0-6 (Sunday-Saturday)
   averageStartTime: varchar("averageStartTime", { length: 10 }), // HH:MM format
-  averageDuration: integer("averageDuration"), // minutes
-  completionRate: real("completionRate").default(0), // 0-1
-  autoProcessRate: real("autoProcessRate").default(0), // 0-1
-  sampleCount: integer("sampleCount").default(0).notNull(),
+  averageDuration: int("averageDuration"), // minutes
+  completionRate: float("completionRate").default(0), // 0-1
+  autoProcessRate: float("autoProcessRate").default(0), // 0-1
+  sampleCount: int("sampleCount").default(0).notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
 });
 
@@ -1986,19 +1917,19 @@ export type InsertReviewTimingPattern = typeof reviewTimingPatterns.$inferInsert
 /**
  * Signal Items - Items prepared for the morning Signal briefing
  */
-export const signalItems = pgTable("signal_items", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
-  sourceType: sourceTypeEnum.notNull(),
-  sourceId: integer("sourceId"), // ID of source record
-  category: categoryEnum.notNull(),
+export const signalItems = mysqlTable("signal_items", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  sourceType: mysqlEnum("sourceType", ["evening_review", "overnight_task", "calendar", "news", "project_update", "manual"]).notNull(),
+  sourceId: int("sourceId"), // ID of source record
+  category: mysqlEnum("category", ["task_summary", "project_update", "calendar_alert", "intelligence", "recommendation", "reflection"]).notNull(),
   title: varchar("title", { length: 300 }).notNull(),
   description: text("description"),
-  priority: priorityEnum.default("medium").notNull(),
+  priority: mysqlEnum("priority", ["low", "medium", "high", "critical"]).default("medium").notNull(),
   targetDate: timestamp("targetDate").notNull(), // Which morning this is for
-  status: statusEnum.default("pending").notNull(),
+  status: mysqlEnum("status", ["pending", "delivered", "actioned", "dismissed"]).default("pending").notNull(),
   deliveredAt: timestamp("deliveredAt"),
-  metadata: jsonb("metadata"),
+  metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 
@@ -2008,18 +1939,18 @@ export type InsertSignalItem = typeof signalItems.$inferInsert;
 /**
  * Calendar Events Cache - Cached calendar events for smart prompting
  */
-export const calendarEventsCache = pgTable("calendar_events_cache", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
+export const calendarEventsCache = mysqlTable("calendar_events_cache", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
   externalId: varchar("externalId", { length: 200 }), // ID from external calendar
   title: varchar("title", { length: 500 }).notNull(),
   startTime: timestamp("startTime").notNull(),
   endTime: timestamp("endTime").notNull(),
   isAllDay: boolean("isAllDay").default(false).notNull(),
   location: varchar("location", { length: 500 }),
-  attendees: jsonb("attendees"),
+  attendees: json("attendees"),
   source: varchar("source", { length: 50 }), // "google", "outlook", "manual"
-  metadata: jsonb("metadata"),
+  metadata: json("metadata"),
   syncedAt: timestamp("syncedAt").defaultNow().notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
@@ -2031,25 +1962,25 @@ export type InsertCalendarEventCache = typeof calendarEventsCache.$inferInsert;
 /**
  * Innovation Ideas - Captured ideas for strategic assessment
  */
-export const innovationIdeas = pgTable("innovation_ideas", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
+export const innovationIdeas = mysqlTable("innovation_ideas", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
   title: varchar("title", { length: 300 }).notNull(),
   description: text("description"),
-  source: sourceEnum.default("manual").notNull(),
+  source: mysqlEnum("source", ["manual", "article", "trend", "conversation", "chief_of_staff", "sme_suggestion"]).default("manual").notNull(),
   sourceUrl: text("sourceUrl"), // URL if from article
-  sourceMetadata: jsonb("sourceMetadata"), // Additional source context
-  status: statusEnum.default("captured").notNull(),
-  currentStage: integer("currentStage").default(1).notNull(), // 1-5 flywheel stage
-  priority: priorityEnum.default("medium").notNull(),
+  sourceMetadata: json("sourceMetadata"), // Additional source context
+  status: mysqlEnum("status", ["captured", "assessing", "refining", "validated", "rejected", "archived", "promoted_to_genesis"]).default("captured").notNull(),
+  currentStage: int("currentStage").default(1).notNull(), // 1-5 flywheel stage
+  priority: mysqlEnum("priority", ["low", "medium", "high", "critical"]).default("medium").notNull(),
   category: varchar("category", { length: 100 }), // "business", "product", "investment", "trend", etc.
-  tags: jsonb("tags"), // Array of tags
-  estimatedInvestment: jsonb("estimatedInvestment"), // { min: number, max: number, currency: string }
-  estimatedReturn: jsonb("estimatedReturn"), // { min: number, max: number, timeframe: string }
-  confidenceScore: real("confidenceScore"), // 0-100 overall confidence
+  tags: json("tags"), // Array of tags
+  estimatedInvestment: json("estimatedInvestment"), // { min: number, max: number, currency: string }
+  estimatedReturn: json("estimatedReturn"), // { min: number, max: number, timeframe: string }
+  confidenceScore: float("confidenceScore"), // 0-100 overall confidence
   briefDocument: text("briefDocument"), // Generated brief summary
-  promotedToProjectId: integer("promotedToProjectId"), // If promoted to Project Genesis
-  metadata: jsonb("metadata"),
+  promotedToProjectId: int("promotedToProjectId"), // If promoted to Project Genesis
+  metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
 });
@@ -2060,9 +1991,9 @@ export type InsertInnovationIdea = typeof innovationIdeas.$inferInsert;
 /**
  * Idea Assessments - Strategic framework evaluations
  */
-export const ideaAssessments = pgTable("idea_assessments", {
-  id: serial("id").primaryKey(),
-  ideaId: integer("ideaId").notNull(),
+export const ideaAssessments = mysqlTable("idea_assessments", {
+  id: int("id").autoincrement().primaryKey(),
+  ideaId: int("ideaId").notNull(),
   assessmentType: mysqlEnum("assessmentType", [
     "market_analysis",
     "feasibility",
@@ -2074,15 +2005,15 @@ export const ideaAssessments = pgTable("idea_assessments", {
     "strategic_fit",
     "sme_consultation"
   ]).notNull(),
-  stage: integer("stage").notNull(), // Which flywheel stage (1-5)
-  assessorType: assessorTypeEnum.default("framework").notNull(),
+  stage: int("stage").notNull(), // Which flywheel stage (1-5)
+  assessorType: mysqlEnum("assessorType", ["chief_of_staff", "sme_expert", "framework", "user"]).default("framework").notNull(),
   assessorId: varchar("assessorId", { length: 100 }), // SME expert ID if applicable
-  questions: jsonb("questions"), // Array of { question: string, answer: string, score: number }
+  questions: json("questions"), // Array of { question: string, answer: string, score: number }
   findings: text("findings"),
-  score: real("score"), // 0-100 score for this assessment
-  recommendation: recommendationEnum.default("needs_more_info").notNull(),
-  refinementSuggestions: jsonb("refinementSuggestions"), // Array of suggestions
-  metadata: jsonb("metadata"),
+  score: float("score"), // 0-100 score for this assessment
+  recommendation: mysqlEnum("recommendation", ["proceed", "refine", "pivot", "reject", "needs_more_info"]).default("needs_more_info").notNull(),
+  refinementSuggestions: json("refinementSuggestions"), // Array of suggestions
+  metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 
@@ -2092,11 +2023,11 @@ export type InsertIdeaAssessment = typeof ideaAssessments.$inferInsert;
 /**
  * Idea Refinements - Flywheel iteration history
  */
-export const ideaRefinements = pgTable("idea_refinements", {
-  id: serial("id").primaryKey(),
-  ideaId: integer("ideaId").notNull(),
-  fromStage: integer("fromStage").notNull(),
-  toStage: integer("toStage").notNull(),
+export const ideaRefinements = mysqlTable("idea_refinements", {
+  id: int("id").autoincrement().primaryKey(),
+  ideaId: int("ideaId").notNull(),
+  fromStage: int("fromStage").notNull(),
+  toStage: int("toStage").notNull(),
   refinementType: mysqlEnum("refinementType", [
     "pivot",
     "scope_change",
@@ -2108,11 +2039,11 @@ export const ideaRefinements = pgTable("idea_refinements", {
     "timeline_adjustment",
     "risk_mitigation"
   ]).notNull(),
-  previousState: jsonb("previousState"), // Snapshot of idea before refinement
-  changes: jsonb("changes"), // What changed
+  previousState: json("previousState"), // Snapshot of idea before refinement
+  changes: json("changes"), // What changed
   rationale: text("rationale"), // Why this refinement was made
-  triggeredBy: triggeredByEnum.default("assessment").notNull(),
-  metadata: jsonb("metadata"),
+  triggeredBy: mysqlEnum("triggeredBy", ["assessment", "sme_feedback", "user_input", "chief_of_staff"]).default("assessment").notNull(),
+  metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 
@@ -2122,21 +2053,21 @@ export type InsertIdeaRefinement = typeof ideaRefinements.$inferInsert;
 /**
  * Investment Scenarios - Budget-based analysis for ideas
  */
-export const investmentScenarios = pgTable("investment_scenarios", {
-  id: serial("id").primaryKey(),
-  ideaId: integer("ideaId").notNull(),
+export const investmentScenarios = mysqlTable("investment_scenarios", {
+  id: int("id").autoincrement().primaryKey(),
+  ideaId: int("ideaId").notNull(),
   scenarioName: varchar("scenarioName", { length: 100 }).notNull(), // "Bootstrap", "Seed", "Growth"
-  investmentAmount: real("investmentAmount").notNull(),
+  investmentAmount: float("investmentAmount").notNull(),
   currency: varchar("currency", { length: 10 }).default("GBP").notNull(),
-  breakdown: jsonb("breakdown"), // { website: number, marketing: number, operations: number, etc. }
-  projectedRevenue: jsonb("projectedRevenue"), // { month3: number, month6: number, year1: number }
-  projectedProfit: jsonb("projectedProfit"),
-  timeToBreakeven: integer("timeToBreakeven"), // Months
-  riskLevel: riskLevelEnum.default("medium").notNull(),
-  keyAssumptions: jsonb("keyAssumptions"), // Array of assumptions
+  breakdown: json("breakdown"), // { website: number, marketing: number, operations: number, etc. }
+  projectedRevenue: json("projectedRevenue"), // { month3: number, month6: number, year1: number }
+  projectedProfit: json("projectedProfit"),
+  timeToBreakeven: int("timeToBreakeven"), // Months
+  riskLevel: mysqlEnum("riskLevel", ["low", "medium", "high", "very_high"]).default("medium").notNull(),
+  keyAssumptions: json("keyAssumptions"), // Array of assumptions
   recommendations: text("recommendations"),
   isRecommended: boolean("isRecommended").default(false).notNull(),
-  metadata: jsonb("metadata"),
+  metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 
@@ -2146,23 +2077,23 @@ export type InsertInvestmentScenario = typeof investmentScenarios.$inferInsert;
 /**
  * Trend Repository - Tracked trends for Chief of Staff deep dives
  */
-export const trendRepository = pgTable("trend_repository", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
+export const trendRepository = mysqlTable("trend_repository", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
   title: varchar("title", { length: 300 }).notNull(),
   description: text("description"),
   category: varchar("category", { length: 100 }), // "technology", "market", "consumer", "regulatory", etc.
   source: varchar("source", { length: 200 }),
   sourceUrl: text("sourceUrl"),
-  trendStrength: trendStrengthEnum.default("emerging").notNull(),
-  relevanceScore: real("relevanceScore"), // 0-100 how relevant to user's interests
-  potentialImpact: potentialImpactEnum.default("medium").notNull(),
+  trendStrength: mysqlEnum("trendStrength", ["emerging", "growing", "mainstream", "declining"]).default("emerging").notNull(),
+  relevanceScore: float("relevanceScore"), // 0-100 how relevant to user's interests
+  potentialImpact: mysqlEnum("potentialImpact", ["low", "medium", "high", "transformative"]).default("medium").notNull(),
   timeHorizon: varchar("timeHorizon", { length: 50 }), // "3 months", "1 year", "3-5 years"
-  relatedIndustries: jsonb("relatedIndustries"), // Array of industries
-  keyInsights: jsonb("keyInsights"), // Array of insights
-  linkedIdeaIds: jsonb("linkedIdeaIds"), // Ideas generated from this trend
+  relatedIndustries: json("relatedIndustries"), // Array of industries
+  keyInsights: json("keyInsights"), // Array of insights
+  linkedIdeaIds: json("linkedIdeaIds"), // Ideas generated from this trend
   lastAnalyzedAt: timestamp("lastAnalyzedAt"),
-  metadata: jsonb("metadata"),
+  metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
 });
@@ -2174,24 +2105,24 @@ export type InsertTrendRepository = typeof trendRepository.$inferInsert;
 /**
  * Generated Documents - Document Library for all CEPHO outputs
  */
-export const generatedDocuments = pgTable("generated_documents", {
-  id: serial("id").primaryKey(),
+export const generatedDocuments = mysqlTable("generated_documents", {
+  id: int("id").autoincrement().primaryKey(),
   documentId: varchar("documentId", { length: 100 }).notNull().unique(), // DOC-{timestamp}-{random}
-  userId: integer("userId").notNull(),
+  userId: int("userId").notNull(),
   title: varchar("title", { length: 500 }).notNull(),
-  type: typeEnum.notNull(),
+  type: mysqlEnum("type", ["innovation_brief", "project_genesis", "report", "other"]).notNull(),
   content: text("content"), // JSON stringified content
-  classification: classificationEnum.default("internal").notNull(),
-  qaStatus: qaStatusEnum.default("pending").notNull(),
+  classification: mysqlEnum("classification", ["public", "internal", "confidential", "restricted"]).default("internal").notNull(),
+  qaStatus: mysqlEnum("qaStatus", ["pending", "approved", "rejected"]).default("pending").notNull(),
   qaApprover: varchar("qaApprover", { length: 200 }),
   qaApprovedAt: timestamp("qaApprovedAt"),
   qaNotes: text("qaNotes"),
   markdownUrl: text("markdownUrl"), // S3 URL to markdown version
   htmlUrl: text("htmlUrl"), // S3 URL to HTML version
   pdfUrl: text("pdfUrl"), // S3 URL to PDF version
-  relatedIdeaId: integer("relatedIdeaId"), // Link to innovation idea
-  relatedProjectId: integer("relatedProjectId"), // Link to project genesis
-  metadata: jsonb("metadata"),
+  relatedIdeaId: int("relatedIdeaId"), // Link to innovation idea
+  relatedProjectId: int("relatedProjectId"), // Link to project genesis
+  metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
 });
@@ -2203,11 +2134,11 @@ export type InsertGeneratedDocument = typeof generatedDocuments.$inferInsert;
 /**
  * Funding Programs - Government funding programs database (UAE & UK)
  */
-export const fundingPrograms = pgTable("funding_programs", {
-  id: serial("id").primaryKey(),
+export const fundingPrograms = mysqlTable("funding_programs", {
+  id: int("id").autoincrement().primaryKey(),
   programId: varchar("programId", { length: 100 }).notNull().unique(),
   name: varchar("name", { length: 300 }).notNull(),
-  country: countryEnum.notNull(),
+  country: mysqlEnum("country", ["UAE", "UK", "EU", "US", "Other"]).notNull(),
   region: varchar("region", { length: 100 }), // e.g., "Dubai", "Abu Dhabi", "England"
   type: mysqlEnum("type", [
     "grant",
@@ -2221,25 +2152,25 @@ export const fundingPrograms = pgTable("funding_programs", {
   ]).notNull(),
   provider: varchar("provider", { length: 200 }).notNull(), // e.g., "MBRIF", "Innovate UK"
   description: text("description"),
-  fundingMin: real("fundingMin"), // Minimum funding amount in AED
-  fundingMax: real("fundingMax"), // Maximum funding amount in AED
-  equityRequired: real("equityRequired"), // Percentage if applicable
-  interestRate: real("interestRate"), // For loans
+  fundingMin: float("fundingMin"), // Minimum funding amount in AED
+  fundingMax: float("fundingMax"), // Maximum funding amount in AED
+  equityRequired: float("equityRequired"), // Percentage if applicable
+  interestRate: float("interestRate"), // For loans
   repaymentTerms: text("repaymentTerms"),
-  eligibilityCriteria: jsonb("eligibilityCriteria"), // Array of criteria
-  requiredDocuments: jsonb("requiredDocuments"), // Array of required documents
-  applicationProcess: jsonb("applicationProcess"), // Steps to apply
-  deadlines: jsonb("deadlines"), // Application deadlines
-  sectors: jsonb("sectors"), // Eligible sectors
-  stages: jsonb("stages"), // Eligible business stages (pre-seed, seed, etc.)
+  eligibilityCriteria: json("eligibilityCriteria"), // Array of criteria
+  requiredDocuments: json("requiredDocuments"), // Array of required documents
+  applicationProcess: json("applicationProcess"), // Steps to apply
+  deadlines: json("deadlines"), // Application deadlines
+  sectors: json("sectors"), // Eligible sectors
+  stages: json("stages"), // Eligible business stages (pre-seed, seed, etc.)
   websiteUrl: text("websiteUrl"),
   applicationUrl: text("applicationUrl"),
   contactEmail: varchar("contactEmail", { length: 320 }),
-  successRate: real("successRate"), // Historical success rate percentage
-  averageProcessingDays: integer("averageProcessingDays"),
+  successRate: float("successRate"), // Historical success rate percentage
+  averageProcessingDays: int("averageProcessingDays"),
   isActive: boolean("isActive").default(true).notNull(),
   lastUpdated: timestamp("lastUpdated"),
-  metadata: jsonb("metadata"),
+  metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
 });
@@ -2250,13 +2181,13 @@ export type InsertFundingProgram = typeof fundingPrograms.$inferInsert;
 /**
  * Funding Assessments - Idea eligibility assessments for funding programs
  */
-export const fundingAssessments = pgTable("funding_assessments", {
-  id: serial("id").primaryKey(),
+export const fundingAssessments = mysqlTable("funding_assessments", {
+  id: int("id").autoincrement().primaryKey(),
   assessmentId: varchar("assessmentId", { length: 100 }).notNull().unique(),
-  userId: integer("userId").notNull(),
-  ideaId: integer("ideaId").notNull(), // Link to innovation idea
+  userId: int("userId").notNull(),
+  ideaId: int("ideaId").notNull(), // Link to innovation idea
   programId: varchar("programId", { length: 100 }).notNull(), // Link to funding program
-  eligibilityScore: real("eligibilityScore"), // 0-100 score
+  eligibilityScore: float("eligibilityScore"), // 0-100 score
   eligibilityStatus: mysqlEnum("eligibilityStatus", [
     "highly_eligible",
     "eligible",
@@ -2264,16 +2195,16 @@ export const fundingAssessments = pgTable("funding_assessments", {
     "not_eligible",
     "needs_review"
   ]).default("needs_review").notNull(),
-  criteriaResults: jsonb("criteriaResults"), // Detailed results per criterion
-  strengths: jsonb("strengths"), // Array of strengths for this program
-  gaps: jsonb("gaps"), // Array of gaps/missing requirements
-  recommendations: jsonb("recommendations"), // How to improve eligibility
-  estimatedFunding: real("estimatedFunding"), // Estimated funding amount in AED
-  applicationReadiness: real("applicationReadiness"), // 0-100 how ready to apply
-  generatedDocuments: jsonb("generatedDocuments"), // Auto-generated application materials
+  criteriaResults: json("criteriaResults"), // Detailed results per criterion
+  strengths: json("strengths"), // Array of strengths for this program
+  gaps: json("gaps"), // Array of gaps/missing requirements
+  recommendations: json("recommendations"), // How to improve eligibility
+  estimatedFunding: float("estimatedFunding"), // Estimated funding amount in AED
+  applicationReadiness: float("applicationReadiness"), // 0-100 how ready to apply
+  generatedDocuments: json("generatedDocuments"), // Auto-generated application materials
   notes: text("notes"),
   assessedAt: timestamp("assessedAt").defaultNow().notNull(),
-  metadata: jsonb("metadata"),
+  metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
 });
@@ -2287,9 +2218,9 @@ export type InsertFundingAssessment = typeof fundingAssessments.$inferInsert;
 /**
  * Revenue streams - tracks all sources of income across ventures
  */
-export const revenueStreams = pgTable("revenue_streams", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
+export const revenueStreams = mysqlTable("revenue_streams", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
   ventureName: varchar("ventureName", { length: 200 }).notNull(), // e.g., "Celadon", "Boundless", "CEPHO.Ai"
   streamName: varchar("streamName", { length: 200 }).notNull(), // e.g., "Subscription", "Consulting", "Licensing"
   streamType: mysqlEnum("streamType", [
@@ -2303,13 +2234,13 @@ export const revenueStreams = pgTable("revenue_streams", {
     "affiliate",
     "other"
   ]).notNull(),
-  status: statusEnum.default("planned").notNull(),
+  status: mysqlEnum("status", ["active", "paused", "planned", "discontinued"]).default("planned").notNull(),
   currency: varchar("currency", { length: 10 }).default("AED").notNull(),
-  monthlyRecurring: real("monthlyRecurring").default(0), // MRR for recurring streams
-  annualRecurring: real("annualRecurring").default(0), // ARR
-  averageTransactionValue: real("averageTransactionValue").default(0),
-  transactionsPerMonth: integer("transactionsPerMonth").default(0),
-  marginPercentage: real("marginPercentage").default(0), // Gross margin %
+  monthlyRecurring: float("monthlyRecurring").default(0), // MRR for recurring streams
+  annualRecurring: float("annualRecurring").default(0), // ARR
+  averageTransactionValue: float("averageTransactionValue").default(0),
+  transactionsPerMonth: int("transactionsPerMonth").default(0),
+  marginPercentage: float("marginPercentage").default(0), // Gross margin %
   paymentProcessor: varchar("paymentProcessor", { length: 100 }), // "Stripe", "PayPal", "Bank Transfer"
   processorConnected: boolean("processorConnected").default(false),
   pricingModel: text("pricingModel"), // Description of pricing structure
@@ -2325,21 +2256,21 @@ export type InsertRevenueStream = typeof revenueStreams.$inferInsert;
 /**
  * Revenue transactions - individual revenue events
  */
-export const revenueTransactions = pgTable("revenue_transactions", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
-  streamId: integer("streamId").notNull(), // FK to revenueStreams
+export const revenueTransactions = mysqlTable("revenue_transactions", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  streamId: int("streamId").notNull(), // FK to revenueStreams
   transactionDate: timestamp("transactionDate").notNull(),
-  amount: real("amount").notNull(),
+  amount: float("amount").notNull(),
   currency: varchar("currency", { length: 10 }).default("AED").notNull(),
-  status: statusEnum.default("pending").notNull(),
+  status: mysqlEnum("status", ["pending", "completed", "failed", "refunded"]).default("pending").notNull(),
   customerName: varchar("customerName", { length: 200 }),
   customerEmail: varchar("customerEmail", { length: 320 }),
   description: text("description"),
   invoiceNumber: varchar("invoiceNumber", { length: 100 }),
   paymentMethod: varchar("paymentMethod", { length: 100 }),
   processorTransactionId: varchar("processorTransactionId", { length: 200 }), // External reference
-  metadata: jsonb("metadata"),
+  metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 
@@ -2349,9 +2280,9 @@ export type InsertRevenueTransaction = typeof revenueTransactions.$inferInsert;
 /**
  * Pipeline opportunities - potential revenue being tracked
  */
-export const pipelineOpportunities = pgTable("pipeline_opportunities", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
+export const pipelineOpportunities = mysqlTable("pipeline_opportunities", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
   ventureName: varchar("ventureName", { length: 200 }).notNull(),
   opportunityName: varchar("opportunityName", { length: 300 }).notNull(),
   customerName: varchar("customerName", { length: 200 }),
@@ -2366,8 +2297,8 @@ export const pipelineOpportunities = pgTable("pipeline_opportunities", {
     "won",
     "lost"
   ]).default("lead").notNull(),
-  probability: integer("probability").default(10), // 0-100%
-  estimatedValue: real("estimatedValue").notNull(),
+  probability: int("probability").default(10), // 0-100%
+  estimatedValue: float("estimatedValue").notNull(),
   currency: varchar("currency", { length: 10 }).default("AED").notNull(),
   expectedCloseDate: timestamp("expectedCloseDate"),
   actualCloseDate: timestamp("actualCloseDate"),
@@ -2377,7 +2308,7 @@ export const pipelineOpportunities = pgTable("pipeline_opportunities", {
   assignedTo: varchar("assignedTo", { length: 200 }),
   source: varchar("source", { length: 200 }), // How the lead was generated
   notes: text("notes"),
-  metadata: jsonb("metadata"),
+  metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
 });
@@ -2388,18 +2319,18 @@ export type InsertPipelineOpportunity = typeof pipelineOpportunities.$inferInser
 /**
  * Pricing tiers - product/service pricing structures
  */
-export const pricingTiers = pgTable("pricing_tiers", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
-  streamId: integer("streamId").notNull(), // FK to revenueStreams
+export const pricingTiers = mysqlTable("pricing_tiers", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  streamId: int("streamId").notNull(), // FK to revenueStreams
   tierName: varchar("tierName", { length: 100 }).notNull(), // e.g., "Starter", "Pro", "Enterprise"
-  price: real("price").notNull(),
+  price: float("price").notNull(),
   currency: varchar("currency", { length: 10 }).default("AED").notNull(),
-  billingPeriod: billingPeriodEnum.notNull(),
-  features: jsonb("features"), // Array of features included
-  limitations: jsonb("limitations"), // Usage limits, etc.
+  billingPeriod: mysqlEnum("billingPeriod", ["one_time", "monthly", "quarterly", "annual"]).notNull(),
+  features: json("features"), // Array of features included
+  limitations: json("limitations"), // Usage limits, etc.
   isActive: boolean("isActive").default(true).notNull(),
-  displayOrder: integer("displayOrder").default(0),
+  displayOrder: int("displayOrder").default(0),
   stripePriceId: varchar("stripePriceId", { length: 200 }), // For Stripe integration
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
@@ -2411,20 +2342,20 @@ export type InsertPricingTier = typeof pricingTiers.$inferInsert;
 /**
  * Customer accounts - track customers across ventures
  */
-export const customerAccounts = pgTable("customer_accounts", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
+export const customerAccounts = mysqlTable("customer_accounts", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
   ventureName: varchar("ventureName", { length: 200 }).notNull(),
   customerName: varchar("customerName", { length: 200 }).notNull(),
-  customerType: customerTypeEnum.default("individual").notNull(),
+  customerType: mysqlEnum("customerType", ["individual", "business", "enterprise"]).default("individual").notNull(),
   email: varchar("email", { length: 320 }),
   phone: varchar("phone", { length: 50 }),
   company: varchar("company", { length: 200 }),
   industry: varchar("industry", { length: 100 }),
   country: varchar("country", { length: 100 }),
   city: varchar("city", { length: 100 }),
-  status: statusEnum.default("prospect").notNull(),
-  lifetimeValue: real("lifetimeValue").default(0),
+  status: mysqlEnum("status", ["prospect", "active", "churned", "paused"]).default("prospect").notNull(),
+  lifetimeValue: float("lifetimeValue").default(0),
   currency: varchar("currency", { length: 10 }).default("AED").notNull(),
   acquisitionSource: varchar("acquisitionSource", { length: 200 }),
   acquisitionDate: timestamp("acquisitionDate"),
@@ -2432,7 +2363,7 @@ export const customerAccounts = pgTable("customer_accounts", {
   churnReason: text("churnReason"),
   stripeCustomerId: varchar("stripeCustomerId", { length: 200 }),
   notes: text("notes"),
-  metadata: jsonb("metadata"),
+  metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
 });
@@ -2443,20 +2374,20 @@ export type InsertCustomerAccount = typeof customerAccounts.$inferInsert;
 /**
  * Revenue forecasts - projected revenue by period
  */
-export const revenueForecasts = pgTable("revenue_forecasts", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
+export const revenueForecasts = mysqlTable("revenue_forecasts", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
   ventureName: varchar("ventureName", { length: 200 }),
-  streamId: integer("streamId"), // Optional FK to specific stream
+  streamId: int("streamId"), // Optional FK to specific stream
   forecastPeriod: varchar("forecastPeriod", { length: 20 }).notNull(), // "2026-Q1", "2026-02"
-  periodType: periodTypeEnum.notNull(),
-  projectedRevenue: real("projectedRevenue").notNull(),
-  actualRevenue: real("actualRevenue"),
+  periodType: mysqlEnum("periodType", ["monthly", "quarterly", "annual"]).notNull(),
+  projectedRevenue: float("projectedRevenue").notNull(),
+  actualRevenue: float("actualRevenue"),
   currency: varchar("currency", { length: 10 }).default("AED").notNull(),
   assumptions: text("assumptions"), // What the forecast is based on
-  confidence: confidenceEnum.default("medium"),
-  variance: real("variance"), // Calculated difference actual vs projected
-  variancePercentage: real("variancePercentage"),
+  confidence: mysqlEnum("confidence", ["low", "medium", "high"]).default("medium"),
+  variance: float("variance"), // Calculated difference actual vs projected
+  variancePercentage: float("variancePercentage"),
   notes: text("notes"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
@@ -2468,24 +2399,24 @@ export type InsertRevenueForecast = typeof revenueForecasts.$inferInsert;
 /**
  * Revenue metrics snapshots - periodic KPI tracking
  */
-export const revenueMetricsSnapshots = pgTable("revenue_metrics_snapshots", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
+export const revenueMetricsSnapshots = mysqlTable("revenue_metrics_snapshots", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
   snapshotDate: timestamp("snapshotDate").notNull(),
-  totalMRR: real("totalMRR").default(0),
-  totalARR: real("totalARR").default(0),
-  totalRevenueMTD: real("totalRevenueMTD").default(0),
-  totalRevenueYTD: real("totalRevenueYTD").default(0),
-  pipelineValue: real("pipelineValue").default(0),
-  weightedPipelineValue: real("weightedPipelineValue").default(0),
-  activeCustomers: integer("activeCustomers").default(0),
-  newCustomersMTD: integer("newCustomersMTD").default(0),
-  churnedCustomersMTD: integer("churnedCustomersMTD").default(0),
-  averageRevenuePerCustomer: real("averageRevenuePerCustomer").default(0),
+  totalMRR: float("totalMRR").default(0),
+  totalARR: float("totalARR").default(0),
+  totalRevenueMTD: float("totalRevenueMTD").default(0),
+  totalRevenueYTD: float("totalRevenueYTD").default(0),
+  pipelineValue: float("pipelineValue").default(0),
+  weightedPipelineValue: float("weightedPipelineValue").default(0),
+  activeCustomers: int("activeCustomers").default(0),
+  newCustomersMTD: int("newCustomersMTD").default(0),
+  churnedCustomersMTD: int("churnedCustomersMTD").default(0),
+  averageRevenuePerCustomer: float("averageRevenuePerCustomer").default(0),
   currency: varchar("currency", { length: 10 }).default("AED").notNull(),
-  ventureBreakdown: jsonb("ventureBreakdown"), // Revenue by venture
-  streamBreakdown: jsonb("streamBreakdown"), // Revenue by stream type
-  metadata: jsonb("metadata"),
+  ventureBreakdown: json("ventureBreakdown"), // Revenue by venture
+  streamBreakdown: json("streamBreakdown"), // Revenue by stream type
+  metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 
@@ -2503,13 +2434,13 @@ export type InsertRevenueMetricsSnapshot = typeof revenueMetricsSnapshots.$infer
 /**
  * Customer personas - diverse virtual customers for focus group feedback
  */
-export const customerPersonas = pgTable("customer_personas", {
-  id: serial("id").primaryKey(),
+export const customerPersonas = mysqlTable("customer_personas", {
+  id: int("id").autoincrement().primaryKey(),
   
   // Basic demographics
   name: varchar("name", { length: 100 }).notNull(),
-  age: integer("age").notNull(),
-  gender: genderEnum.notNull(),
+  age: int("age").notNull(),
+  gender: mysqlEnum("gender", ["male", "female", "non_binary", "prefer_not_to_say"]).notNull(),
   nationality: varchar("nationality", { length: 100 }).notNull(),
   ethnicity: varchar("ethnicity", { length: 100 }),
   location: varchar("location", { length: 200 }).notNull(), // City, Country
@@ -2517,8 +2448,8 @@ export const customerPersonas = pgTable("customer_personas", {
   // Professional profile
   occupation: varchar("occupation", { length: 200 }).notNull(),
   industry: varchar("industry", { length: 100 }).notNull(),
-  jobLevel: jobLevelEnum.notNull(),
-  companySize: companySizeEnum,
+  jobLevel: mysqlEnum("jobLevel", ["entry", "mid", "senior", "executive", "founder", "retired", "student"]).notNull(),
+  companySize: mysqlEnum("companySize", ["solo", "startup", "small", "medium", "large", "enterprise"]),
   annualIncome: mysqlEnum("annualIncome", [
     "under_25k", "25k_50k", "50k_75k", "75k_100k", "100k_150k", 
     "150k_250k", "250k_500k", "500k_1m", "over_1m"
@@ -2526,14 +2457,14 @@ export const customerPersonas = pgTable("customer_personas", {
   
   // Psychographics
   personalityType: varchar("personalityType", { length: 50 }), // e.g., "INTJ", "Early Adopter", "Pragmatist"
-  buyingStyle: buyingStyleEnum,
-  techSavviness: techSavvinessEnum,
-  riskTolerance: riskToleranceEnum,
+  buyingStyle: mysqlEnum("buyingStyle", ["impulsive", "researcher", "bargain_hunter", "brand_loyal", "quality_focused", "value_seeker"]),
+  techSavviness: mysqlEnum("techSavviness", ["low", "medium", "high", "expert"]),
+  riskTolerance: mysqlEnum("riskTolerance", ["conservative", "moderate", "aggressive"]),
   
   // Interests and pain points
-  interests: jsonb("interests"), // Array of interest areas
-  painPoints: jsonb("painPoints"), // Array of common frustrations
-  goals: jsonb("goals"), // Array of personal/professional goals
+  interests: json("interests"), // Array of interest areas
+  painPoints: json("painPoints"), // Array of common frustrations
+  goals: json("goals"), // Array of personal/professional goals
   
   // Bio and context
   bio: text("bio").notNull(), // Detailed background story
@@ -2541,7 +2472,7 @@ export const customerPersonas = pgTable("customer_personas", {
   
   // Categorization
   segment: varchar("segment", { length: 100 }), // e.g., "Tech Professional", "Healthcare Worker", "Small Business Owner"
-  tier: tierEnum.default("core").notNull(), // For phased rollout
+  tier: mysqlEnum("tier", ["core", "extended", "niche"]).default("core").notNull(), // For phased rollout
   
   // Metadata
   isActive: boolean("isActive").default(true).notNull(),
@@ -2555,9 +2486,9 @@ export type InsertCustomerPersona = typeof customerPersonas.$inferInsert;
 /**
  * Customer surveys - templates for gathering feedback
  */
-export const customerSurveys = pgTable("customer_surveys", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
+export const customerSurveys = mysqlTable("customer_surveys", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
   
   // Survey details
   title: varchar("title", { length: 200 }).notNull(),
@@ -2573,17 +2504,17 @@ export const customerSurveys = pgTable("customer_surveys", {
   ]).notNull(),
   
   // Associated context
-  innovationIdeaId: integer("innovationIdeaId"), // FK to innovation_ideas if validating an idea
+  innovationIdeaId: int("innovationIdeaId"), // FK to innovation_ideas if validating an idea
   ventureName: varchar("ventureName", { length: 200 }),
   productName: varchar("productName", { length: 200 }),
   
   // Survey configuration
-  questions: jsonb("questions").notNull(), // Array of question objects
-  targetSegments: jsonb("targetSegments"), // Which customer segments to survey
-  sampleSize: integer("sampleSize").default(25), // How many personas to survey
+  questions: json("questions").notNull(), // Array of question objects
+  targetSegments: json("targetSegments"), // Which customer segments to survey
+  sampleSize: int("sampleSize").default(25), // How many personas to survey
   
   // Status
-  status: statusEnum.default("draft").notNull(),
+  status: mysqlEnum("status", ["draft", "active", "completed", "archived"]).default("draft").notNull(),
   
   // Metadata
   createdAt: timestamp("createdAt").defaultNow().notNull(),
@@ -2597,24 +2528,24 @@ export type InsertCustomerSurvey = typeof customerSurveys.$inferInsert;
 /**
  * Customer survey responses - AI generated responses from personas
  */
-export const customerSurveyResponses = pgTable("customer_survey_responses", {
-  id: serial("id").primaryKey(),
-  surveyId: integer("surveyId").notNull(), // FK to customerSurveys
-  personaId: integer("personaId").notNull(), // FK to customerPersonas
+export const customerSurveyResponses = mysqlTable("customer_survey_responses", {
+  id: int("id").autoincrement().primaryKey(),
+  surveyId: int("surveyId").notNull(), // FK to customerSurveys
+  personaId: int("personaId").notNull(), // FK to customerPersonas
   
   // Response data
-  responses: jsonb("responses").notNull(), // Array of answer objects matching questions
+  responses: json("responses").notNull(), // Array of answer objects matching questions
   
   // Sentiment and analysis
-  overallSentiment: overallSentimentEnum,
-  willingnessToPay: willingnessToPayEnum,
-  suggestedPricePoint: real("suggestedPricePoint"),
+  overallSentiment: mysqlEnum("overallSentiment", ["very_negative", "negative", "neutral", "positive", "very_positive"]),
+  willingnessToPay: mysqlEnum("willingnessToPay", ["definitely_not", "unlikely", "maybe", "likely", "definitely"]),
+  suggestedPricePoint: float("suggestedPricePoint"),
   currency: varchar("currency", { length: 10 }).default("AED"),
   
   // Key insights extracted
-  keyInsights: jsonb("keyInsights"), // Array of insight strings
-  concerns: jsonb("concerns"), // Array of concern strings
-  suggestions: jsonb("suggestions"), // Array of suggestion strings
+  keyInsights: json("keyInsights"), // Array of insight strings
+  concerns: json("concerns"), // Array of concern strings
+  suggestions: json("suggestions"), // Array of suggestion strings
   
   // Metadata
   generatedAt: timestamp("generatedAt").defaultNow().notNull(),
@@ -2626,34 +2557,34 @@ export type InsertCustomerSurveyResponse = typeof customerSurveyResponses.$infer
 /**
  * Customer feedback aggregations - summarized insights from surveys
  */
-export const customerFeedbackAggregations = pgTable("customer_feedback_aggregations", {
-  id: serial("id").primaryKey(),
-  surveyId: integer("surveyId").notNull(), // FK to customerSurveys
-  userId: integer("userId").notNull(),
+export const customerFeedbackAggregations = mysqlTable("customer_feedback_aggregations", {
+  id: int("id").autoincrement().primaryKey(),
+  surveyId: int("surveyId").notNull(), // FK to customerSurveys
+  userId: int("userId").notNull(),
   
   // Aggregate metrics
-  totalResponses: integer("totalResponses").default(0),
-  averageSentimentScore: real("averageSentimentScore"), // -2 to +2
+  totalResponses: int("totalResponses").default(0),
+  averageSentimentScore: float("averageSentimentScore"), // -2 to +2
   
   // Willingness to pay distribution
-  wtpDistribution: jsonb("wtpDistribution"), // { definitely_not: 5, unlikely: 10, ... }
-  averageSuggestedPrice: real("averageSuggestedPrice"),
-  priceRangeMin: real("priceRangeMin"),
-  priceRangeMax: real("priceRangeMax"),
+  wtpDistribution: json("wtpDistribution"), // { definitely_not: 5, unlikely: 10, ... }
+  averageSuggestedPrice: float("averageSuggestedPrice"),
+  priceRangeMin: float("priceRangeMin"),
+  priceRangeMax: float("priceRangeMax"),
   
   // Segment breakdowns
-  sentimentBySegment: jsonb("sentimentBySegment"), // { "Tech Professional": 1.5, ... }
-  wtpBySegment: jsonb("wtpBySegment"),
+  sentimentBySegment: json("sentimentBySegment"), // { "Tech Professional": 1.5, ... }
+  wtpBySegment: json("wtpBySegment"),
   
   // Top insights
-  topPositives: jsonb("topPositives"), // Most common positive feedback
-  topConcerns: jsonb("topConcerns"), // Most common concerns
-  topSuggestions: jsonb("topSuggestions"), // Most common suggestions
+  topPositives: json("topPositives"), // Most common positive feedback
+  topConcerns: json("topConcerns"), // Most common concerns
+  topSuggestions: json("topSuggestions"), // Most common suggestions
   
   // Recommendations
-  goNoGoRecommendation: goNoGoRecommendationEnum,
-  recommendedPricePoint: real("recommendedPricePoint"),
-  keyRecommendations: jsonb("keyRecommendations"), // Array of recommendation strings
+  goNoGoRecommendation: mysqlEnum("goNoGoRecommendation", ["strong_go", "go", "conditional", "no_go", "strong_no_go"]),
+  recommendedPricePoint: float("recommendedPricePoint"),
+  keyRecommendations: json("keyRecommendations"), // Array of recommendation strings
   
   // Metadata
   aggregatedAt: timestamp("aggregatedAt").defaultNow().notNull(),
@@ -2665,9 +2596,9 @@ export type InsertCustomerFeedbackAggregation = typeof customerFeedbackAggregati
 /**
  * Focus group sessions - structured feedback sessions with multiple personas
  */
-export const focusGroupSessions = pgTable("focus_group_sessions", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
+export const focusGroupSessions = mysqlTable("focus_group_sessions", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
   
   // Session details
   title: varchar("title", { length: 200 }).notNull(),
@@ -2682,24 +2613,24 @@ export const focusGroupSessions = pgTable("focus_group_sessions", {
   ]).notNull(),
   
   // Associated context
-  innovationIdeaId: integer("innovationIdeaId"),
+  innovationIdeaId: int("innovationIdeaId"),
   ventureName: varchar("ventureName", { length: 200 }),
   
   // Participants
-  participantPersonaIds: jsonb("participantPersonaIds").notNull(), // Array of persona IDs
-  participantCount: integer("participantCount").default(0),
+  participantPersonaIds: json("participantPersonaIds").notNull(), // Array of persona IDs
+  participantCount: int("participantCount").default(0),
   
   // Discussion guide
-  discussionGuide: jsonb("discussionGuide"), // Array of discussion topics/questions
+  discussionGuide: json("discussionGuide"), // Array of discussion topics/questions
   
   // Session output
   transcript: text("transcript"), // Full session transcript
-  keyThemes: jsonb("keyThemes"), // Extracted themes
-  consensusPoints: jsonb("consensusPoints"), // Points of agreement
-  divergencePoints: jsonb("divergencePoints"), // Points of disagreement
+  keyThemes: json("keyThemes"), // Extracted themes
+  consensusPoints: json("consensusPoints"), // Points of agreement
+  divergencePoints: json("divergencePoints"), // Points of disagreement
   
   // Status
-  status: statusEnum.default("planned").notNull(),
+  status: mysqlEnum("status", ["planned", "in_progress", "completed", "analyzed"]).default("planned").notNull(),
   
   // Metadata
   scheduledFor: timestamp("scheduledFor"),
@@ -2713,10 +2644,10 @@ export type InsertFocusGroupSession = typeof focusGroupSessions.$inferInsert;
 /**
  * Innovation validation checkpoints - tracks customer validation in the flywheel
  */
-export const innovationValidationCheckpoints = pgTable("innovation_validation_checkpoints", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
-  innovationIdeaId: integer("innovationIdeaId").notNull(), // FK to innovation_ideas
+export const innovationValidationCheckpoints = mysqlTable("innovation_validation_checkpoints", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  innovationIdeaId: int("innovationIdeaId").notNull(), // FK to innovation_ideas
   
   // Flywheel stage
   flywheelStage: mysqlEnum("flywheelStage", [
@@ -2737,15 +2668,15 @@ export const innovationValidationCheckpoints = pgTable("innovation_validation_ch
   ]).notNull(),
   
   // Associated validation
-  surveyId: integer("surveyId"), // FK to customerSurveys
-  focusGroupId: integer("focusGroupId"), // FK to focusGroupSessions
+  surveyId: int("surveyId"), // FK to customerSurveys
+  focusGroupId: int("focusGroupId"), // FK to focusGroupSessions
   
   // Validation results
-  validationScore: real("validationScore"), // 0-100
+  validationScore: float("validationScore"), // 0-100
   passedValidation: boolean("passedValidation"),
   
   // Decision
-  decision: decisionEnum.default("pending").notNull(),
+  decision: mysqlEnum("decision", ["proceed", "pivot", "iterate", "abandon", "pending"]).default("pending").notNull(),
   decisionRationale: text("decisionRationale"),
   
   // Sign-offs
@@ -2773,27 +2704,27 @@ export type InsertInnovationValidationCheckpoint = typeof innovationValidationCh
 /**
  * KPI categories - the 20 benchmark categories for platform assessment
  */
-export const kpiCategories = pgTable("kpi_categories", {
-  id: serial("id").primaryKey(),
+export const kpiCategories = mysqlTable("kpi_categories", {
+  id: int("id").autoincrement().primaryKey(),
   
   // Category identification
-  categoryNumber: integer("categoryNumber").notNull().unique(), // 1-20
+  categoryNumber: int("categoryNumber").notNull().unique(), // 1-20
   name: varchar("name", { length: 200 }).notNull(),
   description: text("description").notNull(),
   
   // Scoring guidance
-  scoringCriteria: jsonb("scoringCriteria"), // What constitutes each score level
-  excellentThreshold: integer("excellentThreshold").default(90), // 90%+
-  goodThreshold: integer("goodThreshold").default(75), // 75-89%
-  adequateThreshold: integer("adequateThreshold").default(60), // 60-74%
-  developingThreshold: integer("developingThreshold").default(40), // 40-59%
+  scoringCriteria: json("scoringCriteria"), // What constitutes each score level
+  excellentThreshold: int("excellentThreshold").default(90), // 90%+
+  goodThreshold: int("goodThreshold").default(75), // 75-89%
+  adequateThreshold: int("adequateThreshold").default(60), // 60-74%
+  developingThreshold: int("developingThreshold").default(40), // 40-59%
   
   // Which panels assess this category
-  assessingPanels: jsonb("assessingPanels"), // Array of panel names
+  assessingPanels: json("assessingPanels"), // Array of panel names
   
   // Weighting
-  weight: real("weight").default(1.0), // For weighted averages
-  priority: priorityEnum.default("medium"),
+  weight: float("weight").default(1.0), // For weighted averages
+  priority: mysqlEnum("priority", ["critical", "high", "medium", "maintain"]).default("medium"),
   
   // Metadata
   isActive: boolean("isActive").default(true).notNull(),
@@ -2807,9 +2738,9 @@ export type InsertKpiCategory = typeof kpiCategories.$inferInsert;
 /**
  * Individual SME assessments - each expert's individual scores
  */
-export const smeIndividualAssessments = pgTable("sme_individual_assessments", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
+export const smeIndividualAssessments = mysqlTable("sme_individual_assessments", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
   
   // Assessment period
   assessmentPeriod: varchar("assessmentPeriod", { length: 20 }).notNull(), // e.g., "2026-01", "2026-Q1"
@@ -2822,23 +2753,23 @@ export const smeIndividualAssessments = pgTable("sme_individual_assessments", {
   expertSpecialization: varchar("expertSpecialization", { length: 200 }),
   
   // Category being assessed
-  categoryId: integer("categoryId").notNull(), // FK to kpiCategories
-  categoryNumber: integer("categoryNumber").notNull(), // 1-20
+  categoryId: int("categoryId").notNull(), // FK to kpiCategories
+  categoryNumber: int("categoryNumber").notNull(), // 1-20
   categoryName: varchar("categoryName", { length: 200 }).notNull(),
   
   // Individual score
-  score: integer("score").notNull(), // 0-100 percentage
-  scoreOutOf10: real("scoreOutOf10"), // Converted to 10-point scale
+  score: int("score").notNull(), // 0-100 percentage
+  scoreOutOf10: float("scoreOutOf10"), // Converted to 10-point scale
   
   // Rationale and evidence
   rationale: text("rationale").notNull(), // Why this score
-  strengths: jsonb("strengths"), // Array of observed strengths
-  weaknesses: jsonb("weaknesses"), // Array of observed weaknesses
-  evidence: jsonb("evidence"), // Specific examples supporting the score
-  recommendations: jsonb("recommendations"), // Suggestions for improvement
+  strengths: json("strengths"), // Array of observed strengths
+  weaknesses: json("weaknesses"), // Array of observed weaknesses
+  evidence: json("evidence"), // Specific examples supporting the score
+  recommendations: json("recommendations"), // Suggestions for improvement
   
   // Confidence
-  confidenceLevel: confidenceLevelEnum.default("medium"),
+  confidenceLevel: mysqlEnum("confidenceLevel", ["low", "medium", "high"]).default("medium"),
   
   // Metadata
   createdAt: timestamp("createdAt").defaultNow().notNull(),
@@ -2851,17 +2782,17 @@ export type InsertSmeIndividualAssessment = typeof smeIndividualAssessments.$inf
 /**
  * Assessment outliers - flagged discrepancies for review
  */
-export const assessmentOutliers = pgTable("assessment_outliers", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
+export const assessmentOutliers = mysqlTable("assessment_outliers", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
   
   // Assessment reference
-  assessmentId: integer("assessmentId").notNull(), // FK to smeIndividualAssessments
+  assessmentId: int("assessmentId").notNull(), // FK to smeIndividualAssessments
   assessmentPeriod: varchar("assessmentPeriod", { length: 20 }).notNull(),
   
   // Category
-  categoryId: integer("categoryId").notNull(),
-  categoryNumber: integer("categoryNumber").notNull(),
+  categoryId: int("categoryId").notNull(),
+  categoryNumber: int("categoryNumber").notNull(),
   categoryName: varchar("categoryName", { length: 200 }).notNull(),
   
   // Expert who gave outlier score
@@ -2870,18 +2801,18 @@ export const assessmentOutliers = pgTable("assessment_outliers", {
   expertPanel: varchar("expertPanel", { length: 100 }).notNull(),
   
   // Outlier details
-  expertScore: integer("expertScore").notNull(),
-  panelAverage: real("panelAverage").notNull(),
-  overallAverage: real("overallAverage").notNull(),
-  deviation: real("deviation").notNull(), // How far from average
-  deviationPercentage: real("deviationPercentage").notNull(),
+  expertScore: int("expertScore").notNull(),
+  panelAverage: float("panelAverage").notNull(),
+  overallAverage: float("overallAverage").notNull(),
+  deviation: float("deviation").notNull(), // How far from average
+  deviationPercentage: float("deviationPercentage").notNull(),
   
   // Classification
-  outlierType: outlierTypeEnum.notNull(), // Above or below average
-  severity: severityEnum.notNull(),
+  outlierType: mysqlEnum("outlierType", ["high", "low"]).notNull(), // Above or below average
+  severity: mysqlEnum("severity", ["minor", "moderate", "significant", "extreme"]).notNull(),
   
   // Review status
-  reviewStatus: reviewStatusEnum.default("pending").notNull(),
+  reviewStatus: mysqlEnum("reviewStatus", ["pending", "under_review", "resolved", "accepted"]).default("pending").notNull(),
   
   // Chief of Staff review
   chiefOfStaffReviewed: boolean("chiefOfStaffReviewed").default(false),
@@ -2915,9 +2846,9 @@ export type InsertAssessmentOutlier = typeof assessmentOutliers.$inferInsert;
 /**
  * Panel assessment aggregations - aggregated scores per panel
  */
-export const panelAssessmentAggregations = pgTable("panel_assessment_aggregations", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
+export const panelAssessmentAggregations = mysqlTable("panel_assessment_aggregations", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
   
   // Assessment period
   assessmentPeriod: varchar("assessmentPeriod", { length: 20 }).notNull(),
@@ -2926,23 +2857,23 @@ export const panelAssessmentAggregations = pgTable("panel_assessment_aggregation
   panelName: varchar("panelName", { length: 100 }).notNull(),
   
   // Category
-  categoryId: integer("categoryId").notNull(),
-  categoryNumber: integer("categoryNumber").notNull(),
+  categoryId: int("categoryId").notNull(),
+  categoryNumber: int("categoryNumber").notNull(),
   categoryName: varchar("categoryName", { length: 200 }).notNull(),
   
   // Aggregated scores
-  averageScore: real("averageScore").notNull(),
-  medianScore: real("medianScore"),
-  minScore: integer("minScore"),
-  maxScore: integer("maxScore"),
-  standardDeviation: real("standardDeviation"),
+  averageScore: float("averageScore").notNull(),
+  medianScore: float("medianScore"),
+  minScore: int("minScore"),
+  maxScore: int("maxScore"),
+  standardDeviation: float("standardDeviation"),
   
   // Individual scores breakdown
-  individualScores: jsonb("individualScores"), // Array of { expertId, expertName, score }
-  expertCount: integer("expertCount").default(0),
+  individualScores: json("individualScores"), // Array of { expertId, expertName, score }
+  expertCount: int("expertCount").default(0),
   
   // Consensus level
-  consensusLevel: consensusLevelEnum,
+  consensusLevel: mysqlEnum("consensusLevel", ["strong", "moderate", "weak", "divided"]),
   
   // Metadata
   aggregatedAt: timestamp("aggregatedAt").defaultNow().notNull(),
@@ -2954,46 +2885,46 @@ export type InsertPanelAssessmentAggregation = typeof panelAssessmentAggregation
 /**
  * Overall KPI snapshots - point-in-time platform scores
  */
-export const kpiSnapshots = pgTable("kpi_snapshots", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
+export const kpiSnapshots = mysqlTable("kpi_snapshots", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
   
   // Snapshot period
   snapshotPeriod: varchar("snapshotPeriod", { length: 20 }).notNull(),
   snapshotDate: timestamp("snapshotDate").notNull(),
   
   // Overall scores
-  overallScore: real("overallScore").notNull(),
-  previousScore: real("previousScore"),
-  scoreChange: real("scoreChange"),
+  overallScore: float("overallScore").notNull(),
+  previousScore: float("previousScore"),
+  scoreChange: float("scoreChange"),
   
   // Category breakdown
-  categoryScores: jsonb("categoryScores").notNull(), // Array of { categoryNumber, name, score, change }
+  categoryScores: json("categoryScores").notNull(), // Array of { categoryNumber, name, score, change }
   
   // Distribution
-  excellentCount: integer("excellentCount").default(0), // 90%+
-  goodCount: integer("goodCount").default(0), // 75-89%
-  adequateCount: integer("adequateCount").default(0), // 60-74%
-  developingCount: integer("developingCount").default(0), // 40-59%
-  criticalCount: integer("criticalCount").default(0), // Below 40%
+  excellentCount: int("excellentCount").default(0), // 90%+
+  goodCount: int("goodCount").default(0), // 75-89%
+  adequateCount: int("adequateCount").default(0), // 60-74%
+  developingCount: int("developingCount").default(0), // 40-59%
+  criticalCount: int("criticalCount").default(0), // Below 40%
   
   // Key metrics
   highestCategory: varchar("highestCategory", { length: 200 }),
-  highestScore: integer("highestScore"),
+  highestScore: int("highestScore"),
   lowestCategory: varchar("lowestCategory", { length: 200 }),
-  lowestScore: integer("lowestScore"),
+  lowestScore: int("lowestScore"),
   
   // Targets
-  targetScore: real("targetScore"),
-  gapToTarget: real("gapToTarget"),
+  targetScore: float("targetScore"),
+  gapToTarget: float("gapToTarget"),
   
   // Expert participation
-  totalExpertsAssessed: integer("totalExpertsAssessed").default(0),
-  panelsParticipated: jsonb("panelsParticipated"), // Array of panel names
+  totalExpertsAssessed: int("totalExpertsAssessed").default(0),
+  panelsParticipated: json("panelsParticipated"), // Array of panel names
   
   // Outliers summary
-  outliersIdentified: integer("outliersIdentified").default(0),
-  outliersResolved: integer("outliersResolved").default(0),
+  outliersIdentified: int("outliersIdentified").default(0),
+  outliersResolved: int("outliersResolved").default(0),
   
   // Metadata
   createdAt: timestamp("createdAt").defaultNow().notNull(),
@@ -3005,13 +2936,13 @@ export type InsertKpiSnapshot = typeof kpiSnapshots.$inferInsert;
 /**
  * Expert conversation logs - one-on-one discussions about scores
  */
-export const expertConversationLogs = pgTable("expert_conversation_logs", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
+export const expertConversationLogs = mysqlTable("expert_conversation_logs", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
   
   // Context
-  outlierId: integer("outlierId"), // FK to assessmentOutliers if from outlier
-  assessmentId: integer("assessmentId"), // FK to smeIndividualAssessments
+  outlierId: int("outlierId"), // FK to assessmentOutliers if from outlier
+  assessmentId: int("assessmentId"), // FK to smeIndividualAssessments
   
   // Expert
   expertId: varchar("expertId", { length: 100 }).notNull(),
@@ -3019,7 +2950,7 @@ export const expertConversationLogs = pgTable("expert_conversation_logs", {
   expertPanel: varchar("expertPanel", { length: 100 }).notNull(),
   
   // Category discussed
-  categoryNumber: integer("categoryNumber"),
+  categoryNumber: int("categoryNumber"),
   categoryName: varchar("categoryName", { length: 200 }),
   
   // Conversation
@@ -3032,15 +2963,15 @@ export const expertConversationLogs = pgTable("expert_conversation_logs", {
   ]).notNull(),
   
   // Content
-  messages: jsonb("messages").notNull(), // Array of { role, content, timestamp }
+  messages: json("messages").notNull(), // Array of { role, content, timestamp }
   
   // Outcomes
-  keyInsights: jsonb("keyInsights"), // Array of insights captured
-  actionItems: jsonb("actionItems"), // Array of actions to take
-  scoreAdjustment: integer("scoreAdjustment"), // If score was adjusted
+  keyInsights: json("keyInsights"), // Array of insights captured
+  actionItems: json("actionItems"), // Array of actions to take
+  scoreAdjustment: int("scoreAdjustment"), // If score was adjusted
   
   // Status
-  status: statusEnum.default("in_progress").notNull(),
+  status: mysqlEnum("status", ["in_progress", "completed", "follow_up_needed"]).default("in_progress").notNull(),
   
   // Metadata
   startedAt: timestamp("startedAt").defaultNow().notNull(),
@@ -3062,9 +2993,9 @@ export type InsertExpertConversationLog = typeof expertConversationLogs.$inferIn
 /**
  * Insights repository - central store for all captured insights
  */
-export const insightsRepository = pgTable("insights_repository", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
+export const insightsRepository = mysqlTable("insights_repository", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
   
   // Insight content
   title: varchar("title", { length: 300 }).notNull(),
@@ -3083,7 +3014,7 @@ export const insightsRepository = pgTable("insights_repository", {
     "user_observation",
     "manual_entry"
   ]).notNull(),
-  sourceId: integer("sourceId"), // FK to source table based on sourceType
+  sourceId: int("sourceId"), // FK to source table based on sourceType
   sourceReference: varchar("sourceReference", { length: 500 }), // URL or document reference
   sourceName: varchar("sourceName", { length: 300 }), // Human readable source name
   
@@ -3107,28 +3038,28 @@ export const insightsRepository = pgTable("insights_repository", {
   ]).notNull(),
   
   // Tagging
-  tags: jsonb("tags"), // Array of tag strings
-  ventures: jsonb("ventures"), // Array of venture names this applies to
-  products: jsonb("products"), // Array of product names
+  tags: json("tags"), // Array of tag strings
+  ventures: json("ventures"), // Array of venture names this applies to
+  products: json("products"), // Array of product names
   
   // Relevance
-  relevanceScore: real("relevanceScore").default(0.5), // 0-1 how relevant/important
-  confidenceLevel: confidenceLevelEnum.default("medium"),
+  relevanceScore: float("relevanceScore").default(0.5), // 0-1 how relevant/important
+  confidenceLevel: mysqlEnum("confidenceLevel", ["low", "medium", "high", "verified"]).default("medium"),
   
   // Validation
   validatedBy: varchar("validatedBy", { length: 200 }), // Who validated this insight
   validatedAt: timestamp("validatedAt"),
   
   // Usage tracking
-  timesReferenced: integer("timesReferenced").default(0),
+  timesReferenced: int("timesReferenced").default(0),
   lastReferencedAt: timestamp("lastReferencedAt"),
   
   // Relationships
-  relatedInsightIds: jsonb("relatedInsightIds"), // Array of related insight IDs
-  supersededBy: integer("supersededBy"), // If this insight was updated/replaced
+  relatedInsightIds: json("relatedInsightIds"), // Array of related insight IDs
+  supersededBy: int("supersededBy"), // If this insight was updated/replaced
   
   // Status
-  status: statusEnum.default("active").notNull(),
+  status: mysqlEnum("status", ["active", "archived", "superseded", "disputed"]).default("active").notNull(),
   
   // Metadata
   capturedAt: timestamp("capturedAt").defaultNow().notNull(),
@@ -3141,13 +3072,13 @@ export type InsertInsightRepository = typeof insightsRepository.$inferInsert;
 /**
  * External research references - imported external sources
  */
-export const externalResearchReferences = pgTable("external_research_references", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
+export const externalResearchReferences = mysqlTable("external_research_references", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
   
   // Reference details
   title: varchar("title", { length: 500 }).notNull(),
-  authors: jsonb("authors"), // Array of author names
+  authors: json("authors"), // Array of author names
   publicationDate: timestamp("publicationDate"),
   
   // Source
@@ -3170,22 +3101,22 @@ export const externalResearchReferences = pgTable("external_research_references"
   
   // Content
   abstract: text("abstract"),
-  keyFindings: jsonb("keyFindings"), // Array of key finding strings
-  relevantQuotes: jsonb("relevantQuotes"), // Array of quote objects
+  keyFindings: json("keyFindings"), // Array of key finding strings
+  relevantQuotes: json("relevantQuotes"), // Array of quote objects
   
   // Categorization
-  topics: jsonb("topics"), // Array of topic strings
-  ventures: jsonb("ventures"), // Which ventures this relates to
+  topics: json("topics"), // Array of topic strings
+  ventures: json("ventures"), // Which ventures this relates to
   
   // Quality assessment
-  credibilityScore: real("credibilityScore").default(0.5), // 0-1
-  relevanceScore: real("relevanceScore").default(0.5), // 0-1
+  credibilityScore: float("credibilityScore").default(0.5), // 0-1
+  relevanceScore: float("relevanceScore").default(0.5), // 0-1
   
   // Linked insights
-  linkedInsightIds: jsonb("linkedInsightIds"), // Insights derived from this
+  linkedInsightIds: json("linkedInsightIds"), // Insights derived from this
   
   // Status
-  status: statusEnum.default("active").notNull(),
+  status: mysqlEnum("status", ["active", "archived", "outdated"]).default("active").notNull(),
   
   // Metadata
   importedAt: timestamp("importedAt").defaultNow().notNull(),
@@ -3198,9 +3129,9 @@ export type InsertExternalResearchReference = typeof externalResearchReferences.
 /**
  * Prior research checks - log of what was checked before new research
  */
-export const priorResearchChecks = pgTable("prior_research_checks", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
+export const priorResearchChecks = mysqlTable("prior_research_checks", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
   
   // What triggered the check
   triggerType: mysqlEnum("triggerType", [
@@ -3210,23 +3141,23 @@ export const priorResearchChecks = pgTable("prior_research_checks", {
     "new_idea_validation",
     "manual_search"
   ]).notNull(),
-  triggerId: integer("triggerId"), // FK to the triggering entity
+  triggerId: int("triggerId"), // FK to the triggering entity
   
   // Search parameters
   searchQuery: text("searchQuery"),
-  searchCategories: jsonb("searchCategories"),
-  searchVentures: jsonb("searchVentures"),
-  searchTags: jsonb("searchTags"),
+  searchCategories: json("searchCategories"),
+  searchVentures: json("searchVentures"),
+  searchTags: json("searchTags"),
   
   // Results
-  insightsFound: integer("insightsFound").default(0),
-  relevantInsightIds: jsonb("relevantInsightIds"), // Array of matching insight IDs
-  externalRefsFound: integer("externalRefsFound").default(0),
-  relevantExternalIds: jsonb("relevantExternalIds"), // Array of matching external ref IDs
+  insightsFound: int("insightsFound").default(0),
+  relevantInsightIds: json("relevantInsightIds"), // Array of matching insight IDs
+  externalRefsFound: int("externalRefsFound").default(0),
+  relevantExternalIds: json("relevantExternalIds"), // Array of matching external ref IDs
   
   // Summary
   summaryGenerated: text("summaryGenerated"), // AI generated summary of prior knowledge
-  gapsIdentified: jsonb("gapsIdentified"), // What we don't know yet
+  gapsIdentified: json("gapsIdentified"), // What we don't know yet
   
   // Action taken
   actionTaken: mysqlEnum("actionTaken", [
@@ -3247,10 +3178,10 @@ export type InsertPriorResearchCheck = typeof priorResearchChecks.$inferInsert;
 /**
  * Insight usage log - tracks when insights are referenced
  */
-export const insightUsageLog = pgTable("insight_usage_log", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
-  insightId: integer("insightId").notNull(), // FK to insightsRepository
+export const insightUsageLog = mysqlTable("insight_usage_log", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  insightId: int("insightId").notNull(), // FK to insightsRepository
   
   // Usage context
   usageType: mysqlEnum("usageType", [
@@ -3267,7 +3198,7 @@ export const insightUsageLog = pgTable("insight_usage_log", {
   
   // Related entities
   relatedEntityType: varchar("relatedEntityType", { length: 100 }),
-  relatedEntityId: integer("relatedEntityId"),
+  relatedEntityId: int("relatedEntityId"),
   
   // Metadata
   usedAt: timestamp("usedAt").defaultNow().notNull(),
@@ -3279,19 +3210,19 @@ export type InsertInsightUsageLog = typeof insightUsageLog.$inferInsert;
 /**
  * Knowledge topics - taxonomy for organizing insights
  */
-export const knowledgeTopics = pgTable("knowledge_topics", {
-  id: serial("id").primaryKey(),
+export const knowledgeTopics = mysqlTable("knowledge_topics", {
+  id: int("id").autoincrement().primaryKey(),
   
   // Topic hierarchy
   name: varchar("name", { length: 200 }).notNull(),
-  parentTopicId: integer("parentTopicId"), // For hierarchical topics
+  parentTopicId: int("parentTopicId"), // For hierarchical topics
   path: varchar("path", { length: 500 }), // Full path like "Market/Healthcare/Telehealth"
   
   // Description
   description: text("description"),
   
   // Statistics
-  insightCount: integer("insightCount").default(0),
+  insightCount: int("insightCount").default(0),
   lastInsightAt: timestamp("lastInsightAt"),
   
   // Status
@@ -3315,9 +3246,9 @@ export type InsertKnowledgeTopic = typeof knowledgeTopics.$inferInsert;
 /**
  * User activity tracking - captures navigation and feature usage
  */
-export const userActivityTracking = pgTable("user_activity_tracking", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
+export const userActivityTracking = mysqlTable("user_activity_tracking", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
   
   // Activity details
   activityType: mysqlEnum("activityType", [
@@ -3342,10 +3273,10 @@ export const userActivityTracking = pgTable("user_activity_tracking", {
   previousPage: varchar("previousPage", { length: 500 }),
   
   // Timing
-  duration: integer("duration"), // Time spent in milliseconds
+  duration: int("duration"), // Time spent in milliseconds
   
   // Additional data
-  metadata: jsonb("metadata"), // Any additional context
+  metadata: json("metadata"), // Any additional context
   
   // Timestamp
   createdAt: timestamp("createdAt").defaultNow().notNull(),
@@ -3357,9 +3288,9 @@ export type InsertUserActivityTracking = typeof userActivityTracking.$inferInser
 /**
  * Workflow patterns - detected sequences of actions
  */
-export const workflowPatterns = pgTable("workflow_patterns", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
+export const workflowPatterns = mysqlTable("workflow_patterns", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
   
   // Pattern identification
   patternName: varchar("patternName", { length: 200 }).notNull(),
@@ -3372,13 +3303,13 @@ export const workflowPatterns = pgTable("workflow_patterns", {
   ]).notNull(),
   
   // Pattern details
-  actionSequence: jsonb("actionSequence").notNull(), // Array of actions in order
-  frequency: integer("frequency").default(1), // How often this pattern occurs
-  averageDuration: integer("averageDuration"), // Average time to complete
+  actionSequence: json("actionSequence").notNull(), // Array of actions in order
+  frequency: int("frequency").default(1), // How often this pattern occurs
+  averageDuration: int("averageDuration"), // Average time to complete
   
   // Analysis
-  efficiencyScore: real("efficiencyScore"), // 0-1, how efficient this workflow is
-  improvementPotential: real("improvementPotential"), // 0-1, how much could be improved
+  efficiencyScore: float("efficiencyScore"), // 0-1, how efficient this workflow is
+  improvementPotential: float("improvementPotential"), // 0-1, how much could be improved
   
   // Status
   isAddressed: boolean("isAddressed").default(false),
@@ -3394,9 +3325,9 @@ export type InsertWorkflowPattern = typeof workflowPatterns.$inferInsert;
 /**
  * Proactive recommendations - suggestions from Chief of Staff
  */
-export const proactiveRecommendations = pgTable("proactive_recommendations", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
+export const proactiveRecommendations = mysqlTable("proactive_recommendations", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
   
   // Recommendation details
   title: varchar("title", { length: 300 }).notNull(),
@@ -3420,18 +3351,18 @@ export const proactiveRecommendations = pgTable("proactive_recommendations", {
     "underutilization",
     "manual_observation"
   ]).notNull(),
-  relatedPatternId: integer("relatedPatternId"), // FK to workflowPatterns
+  relatedPatternId: int("relatedPatternId"), // FK to workflowPatterns
   
   // Priority
-  priority: priorityEnum.default("medium"),
-  estimatedTimeSaved: integer("estimatedTimeSaved"), // Minutes per week
+  priority: mysqlEnum("priority", ["low", "medium", "high", "urgent"]).default("medium"),
+  estimatedTimeSaved: int("estimatedTimeSaved"), // Minutes per week
   
   // Action
   actionUrl: varchar("actionUrl", { length: 500 }), // Where to go to implement
-  actionSteps: jsonb("actionSteps"), // Array of steps to take
+  actionSteps: json("actionSteps"), // Array of steps to take
   
   // Status
-  status: statusEnum.default("pending").notNull(),
+  status: mysqlEnum("status", ["pending", "viewed", "accepted", "rejected", "implemented"]).default("pending").notNull(),
   userResponse: text("userResponse"), // Why they accepted/rejected
   
   // Metadata
@@ -3453,9 +3384,9 @@ export type InsertProactiveRecommendation = typeof proactiveRecommendations.$inf
 /**
  * Output quality scores - user ratings on generated content
  */
-export const outputQualityScores = pgTable("output_quality_scores", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
+export const outputQualityScores = mysqlTable("output_quality_scores", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
   
   // What was scored
   outputType: mysqlEnum("outputType", [
@@ -3473,7 +3404,7 @@ export const outputQualityScores = pgTable("output_quality_scores", {
   outputTitle: varchar("outputTitle", { length: 300 }),
   
   // Score
-  score: integer("score").notNull(), // 1-10
+  score: int("score").notNull(), // 1-10
   
   // Feedback for low scores (1-4)
   issueCategory: mysqlEnum("issueCategory", [
@@ -3515,9 +3446,9 @@ export type InsertOutputQualityScore = typeof outputQualityScores.$inferInsert;
 /**
  * Quality improvement tickets - issues to be fixed
  */
-export const qualityImprovementTickets = pgTable("quality_improvement_tickets", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
+export const qualityImprovementTickets = mysqlTable("quality_improvement_tickets", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
   
   // Ticket details
   title: varchar("title", { length: 300 }).notNull(),
@@ -3534,18 +3465,18 @@ export const qualityImprovementTickets = pgTable("quality_improvement_tickets", 
   ]).notNull(),
   
   // Related scores
-  relatedScoreIds: jsonb("relatedScoreIds"), // Array of outputQualityScores IDs
-  occurrenceCount: integer("occurrenceCount").default(1), // How many times this issue occurred
+  relatedScoreIds: json("relatedScoreIds"), // Array of outputQualityScores IDs
+  occurrenceCount: int("occurrenceCount").default(1), // How many times this issue occurred
   
   // Priority
-  priority: priorityEnum.default("medium"),
-  impactScore: real("impactScore"), // Calculated from frequency and severity
+  priority: mysqlEnum("priority", ["low", "medium", "high", "critical"]).default("medium"),
+  impactScore: float("impactScore"), // Calculated from frequency and severity
   
   // Assignment
   assignedTo: varchar("assignedTo", { length: 200 }), // Team or person responsible
   
   // Status
-  status: statusEnum.default("open").notNull(),
+  status: mysqlEnum("status", ["open", "in_progress", "resolved", "wont_fix"]).default("open").notNull(),
   resolution: text("resolution"),
   
   // Metadata
@@ -3560,33 +3491,33 @@ export type InsertQualityImprovementTicket = typeof qualityImprovementTickets.$i
 /**
  * Quality metrics snapshots - track improvement over time
  */
-export const qualityMetricsSnapshots = pgTable("quality_metrics_snapshots", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
+export const qualityMetricsSnapshots = mysqlTable("quality_metrics_snapshots", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
   
   // Period
   snapshotDate: timestamp("snapshotDate").notNull(),
-  periodType: periodTypeEnum.notNull(),
+  periodType: mysqlEnum("periodType", ["daily", "weekly", "monthly"]).notNull(),
   
   // Overall metrics
-  totalOutputs: integer("totalOutputs").default(0),
-  scoredOutputs: integer("scoredOutputs").default(0),
-  averageScore: real("averageScore"),
+  totalOutputs: int("totalOutputs").default(0),
+  scoredOutputs: int("scoredOutputs").default(0),
+  averageScore: float("averageScore"),
   
   // Distribution
-  scoreDistribution: jsonb("scoreDistribution"), // { "1": 2, "2": 5, ... "10": 20 }
+  scoreDistribution: json("scoreDistribution"), // { "1": 2, "2": 5, ... "10": 20 }
   
   // By category
-  scoresByOutputType: jsonb("scoresByOutputType"), // { "report": 7.5, "document": 8.2 }
-  scoresByIssueCategory: jsonb("scoresByIssueCategory"), // Count of issues by category
+  scoresByOutputType: json("scoresByOutputType"), // { "report": 7.5, "document": 8.2 }
+  scoresByIssueCategory: json("scoresByIssueCategory"), // Count of issues by category
   
   // Trends
-  previousAverageScore: real("previousAverageScore"),
-  scoreChange: real("scoreChange"),
+  previousAverageScore: float("previousAverageScore"),
+  scoreChange: float("scoreChange"),
   
   // Issues
-  openTickets: integer("openTickets").default(0),
-  resolvedTickets: integer("resolvedTickets").default(0),
+  openTickets: int("openTickets").default(0),
+  resolvedTickets: int("resolvedTickets").default(0),
   
   // Metadata
   createdAt: timestamp("createdAt").defaultNow().notNull(),
@@ -3603,17 +3534,17 @@ export type InsertQualityMetricsSnapshot = typeof qualityMetricsSnapshots.$infer
 /**
  * COS Training Progress - tracks training level and module completion
  */
-export const cosTrainingProgress = pgTable("cos_training_progress", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
+export const cosTrainingProgress = mysqlTable("cos_training_progress", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
   
   // Current level (1-5: Novice, Learning, Competent, Proficient, Expert)
-  currentLevel: integer("currentLevel").default(1).notNull(),
-  trainingPercentage: real("trainingPercentage").default(20).notNull(), // 0-100
+  currentLevel: int("currentLevel").default(1).notNull(),
+  trainingPercentage: float("trainingPercentage").default(20).notNull(), // 0-100
   
   // Module tracking
-  completedModules: jsonb("completedModules"), // Array of completed module IDs
-  currentModuleId: integer("currentModuleId"),
+  completedModules: json("completedModules"), // Array of completed module IDs
+  currentModuleId: int("currentModuleId"),
   
   // Timestamps
   lastTrainingActivity: timestamp("lastTrainingActivity"),
@@ -3627,26 +3558,26 @@ export type InsertCosTrainingProgress = typeof cosTrainingProgress.$inferInsert;
 /**
  * COS Training Modules - individual training modules with content
  */
-export const cosTrainingModules = pgTable("cos_training_modules", {
-  id: serial("id").primaryKey(),
+export const cosTrainingModules = mysqlTable("cos_training_modules", {
+  id: int("id").autoincrement().primaryKey(),
   
   // Module info
   name: varchar("name", { length: 200 }).notNull(),
   description: text("description"),
-  requiredLevel: integer("requiredLevel").default(1).notNull(), // Minimum level to access
+  requiredLevel: int("requiredLevel").default(1).notNull(), // Minimum level to access
   duration: varchar("duration", { length: 50 }), // e.g., "30 min"
   
   // Content
   content: text("content"), // Markdown content
-  learningObjectives: jsonb("learningObjectives"), // Array of objectives
+  learningObjectives: json("learningObjectives"), // Array of objectives
   
   // Assessment
   hasAssessment: boolean("hasAssessment").default(false),
-  assessmentQuestions: jsonb("assessmentQuestions"), // Quiz questions
-  passingScore: integer("passingScore").default(80), // Percentage to pass
+  assessmentQuestions: json("assessmentQuestions"), // Quiz questions
+  passingScore: int("passingScore").default(80), // Percentage to pass
   
   // Ordering
-  sortOrder: integer("sortOrder").default(0),
+  sortOrder: int("sortOrder").default(0),
   
   // Metadata
   createdAt: timestamp("createdAt").defaultNow().notNull(),
@@ -3658,9 +3589,9 @@ export type InsertCosTrainingModule = typeof cosTrainingModules.$inferInsert;
 /**
  * COS Interaction Log - captures ALL interactions for learning
  */
-export const cosInteractionLog = pgTable("cos_interaction_log", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
+export const cosInteractionLog = mysqlTable("cos_interaction_log", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
   
   // Interaction details
   interactionType: mysqlEnum("interactionType", [
@@ -3682,7 +3613,7 @@ export const cosInteractionLog = pgTable("cos_interaction_log", {
   // Learning extraction
   extractedLearning: text("extractedLearning"), // What was learned from this
   learningCategory: varchar("learningCategory", { length: 100 }), // Category of learning
-  confidenceScore: real("confidenceScore").default(0.5), // How confident in the learning
+  confidenceScore: float("confidenceScore").default(0.5), // How confident in the learning
   
   // Processing status
   processed: boolean("processed").default(false), // Has this been processed for learning?
@@ -3698,9 +3629,9 @@ export type InsertCosInteractionLog = typeof cosInteractionLog.$inferInsert;
 /**
  * COS Learned Patterns - patterns extracted from interactions
  */
-export const cosLearnedPatterns = pgTable("cos_learned_patterns", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
+export const cosLearnedPatterns = mysqlTable("cos_learned_patterns", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
   
   // Pattern details
   patternType: mysqlEnum("patternType", [
@@ -3719,20 +3650,20 @@ export const cosLearnedPatterns = pgTable("cos_learned_patterns", {
   // Pattern content
   patternName: varchar("patternName", { length: 200 }).notNull(),
   patternDescription: text("patternDescription").notNull(),
-  examples: jsonb("examples"), // Array of example interactions
+  examples: json("examples"), // Array of example interactions
   
   // Confidence and validation
-  confidenceScore: real("confidenceScore").default(0.5).notNull(), // 0-1
+  confidenceScore: float("confidenceScore").default(0.5).notNull(), // 0-1
   validatedByUser: boolean("validatedByUser").default(false),
-  occurrenceCount: integer("occurrenceCount").default(1), // How many times observed
+  occurrenceCount: int("occurrenceCount").default(1), // How many times observed
   
   // Application
   active: boolean("active").default(true), // Is this pattern being applied?
   lastApplied: timestamp("lastApplied"),
-  applicationCount: integer("applicationCount").default(0), // How many times applied
+  applicationCount: int("applicationCount").default(0), // How many times applied
   
   // Source tracking
-  sourceInteractionIds: jsonb("sourceInteractionIds"), // IDs of interactions that formed this pattern
+  sourceInteractionIds: json("sourceInteractionIds"), // IDs of interactions that formed this pattern
   
   // Metadata
   createdAt: timestamp("createdAt").defaultNow().notNull(),
@@ -3744,9 +3675,9 @@ export type InsertCosLearnedPattern = typeof cosLearnedPatterns.$inferInsert;
 /**
  * COS User Mental Model - comprehensive profile of user's thinking
  */
-export const cosUserMentalModel = pgTable("cos_user_mental_model", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull().unique(),
+export const cosUserMentalModel = mysqlTable("cos_user_mental_model", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull().unique(),
   
   // Core profile
   thinkingStyle: text("thinkingStyle"), // How user approaches problems
@@ -3754,26 +3685,26 @@ export const cosUserMentalModel = pgTable("cos_user_mental_model", {
   decisionMakingStyle: text("decisionMakingStyle"), // How user makes decisions
   
   // Priorities and values
-  topPriorities: jsonb("topPriorities"), // Array of priorities
-  coreValues: jsonb("coreValues"), // Array of values
-  qualityStandards: jsonb("qualityStandards"), // What "good" looks like
+  topPriorities: json("topPriorities"), // Array of priorities
+  coreValues: json("coreValues"), // Array of values
+  qualityStandards: json("qualityStandards"), // What "good" looks like
   
   // Preferences
-  formatPreferences: jsonb("formatPreferences"), // Document, communication format preferences
-  workflowPreferences: jsonb("workflowPreferences"), // How user likes to work
-  communicationPreferences: jsonb("communicationPreferences"), // Communication preferences
+  formatPreferences: json("formatPreferences"), // Document, communication format preferences
+  workflowPreferences: json("workflowPreferences"), // How user likes to work
+  communicationPreferences: json("communicationPreferences"), // Communication preferences
   
   // Pet peeves and dislikes
-  petPeeves: jsonb("petPeeves"), // Things that annoy user
-  avoidPatterns: jsonb("avoidPatterns"), // Things to avoid
+  petPeeves: json("petPeeves"), // Things that annoy user
+  avoidPatterns: json("avoidPatterns"), // Things to avoid
   
   // Terminology
-  customTerminology: jsonb("customTerminology"), // User-specific terms and meanings
+  customTerminology: json("customTerminology"), // User-specific terms and meanings
   
   // Model confidence
-  overallConfidence: real("overallConfidence").default(0.2), // How confident in the model
+  overallConfidence: float("overallConfidence").default(0.2), // How confident in the model
   lastMajorUpdate: timestamp("lastMajorUpdate"),
-  interactionsProcessed: integer("interactionsProcessed").default(0),
+  interactionsProcessed: int("interactionsProcessed").default(0),
   
   // Metadata
   createdAt: timestamp("createdAt").defaultNow().notNull(),
@@ -3785,32 +3716,32 @@ export type InsertCosUserMentalModel = typeof cosUserMentalModel.$inferInsert;
 /**
  * COS Learning Metrics - track how well COS is learning
  */
-export const cosLearningMetrics = pgTable("cos_learning_metrics", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
+export const cosLearningMetrics = mysqlTable("cos_learning_metrics", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
   
   // Period
   metricDate: timestamp("metricDate").notNull(),
-  periodType: periodTypeEnum.notNull(),
+  periodType: mysqlEnum("periodType", ["daily", "weekly", "monthly"]).notNull(),
   
   // Interaction metrics
-  totalInteractions: integer("totalInteractions").default(0),
-  correctionsReceived: integer("correctionsReceived").default(0),
-  approvalsReceived: integer("approvalsReceived").default(0),
+  totalInteractions: int("totalInteractions").default(0),
+  correctionsReceived: int("correctionsReceived").default(0),
+  approvalsReceived: int("approvalsReceived").default(0),
   
   // Learning metrics
-  newPatternsLearned: integer("newPatternsLearned").default(0),
-  patternsReinforced: integer("patternsReinforced").default(0),
-  patternsInvalidated: integer("patternsInvalidated").default(0),
+  newPatternsLearned: int("newPatternsLearned").default(0),
+  patternsReinforced: int("patternsReinforced").default(0),
+  patternsInvalidated: int("patternsInvalidated").default(0),
   
   // Performance metrics
-  accuracyScore: real("accuracyScore"), // How often COS gets it right
-  anticipationScore: real("anticipationScore"), // How well COS anticipates needs
-  satisfactionScore: real("satisfactionScore"), // User satisfaction
+  accuracyScore: float("accuracyScore"), // How often COS gets it right
+  anticipationScore: float("anticipationScore"), // How well COS anticipates needs
+  satisfactionScore: float("satisfactionScore"), // User satisfaction
   
   // Improvement tracking
-  previousAccuracyScore: real("previousAccuracyScore"),
-  accuracyChange: real("accuracyChange"),
+  previousAccuracyScore: float("previousAccuracyScore"),
+  accuracyChange: float("accuracyChange"),
   
   // Metadata
   createdAt: timestamp("createdAt").defaultNow().notNull(),
@@ -3820,12 +3751,12 @@ export type InsertCosLearningMetrics = typeof cosLearningMetrics.$inferInsert;
 
 
 // Digital Twin Questionnaire Responses
-export const questionnaireResponses = pgTable('questionnaire_responses', {
-  id: integer('id').primaryKey().autoincrement(),
-  userId: integer('user_id').notNull(),
+export const questionnaireResponses = mysqlTable('questionnaire_responses', {
+  id: int('id').primaryKey().autoincrement(),
+  userId: int('user_id').notNull(),
   questionId: varchar('question_id', { length: 10 }).notNull(), // e.g., "A51", "B72"
   questionType: mysqlEnum('question_type', ['scale', 'boolean']).notNull(),
-  scaleValue: integer('scale_value'), // 1-10 for scale questions
+  scaleValue: int('scale_value'), // 1-10 for scale questions
   booleanValue: boolean('boolean_value'), // true/false for Y/N questions
   section: varchar('section', { length: 100 }), // e.g., "Business Operations", "Innovation"
   createdAt: timestamp('created_at').defaultNow().notNull(),
@@ -3835,36 +3766,36 @@ export type QuestionnaireResponse = typeof questionnaireResponses.$inferSelect;
 export type InsertQuestionnaireResponse = typeof questionnaireResponses.$inferInsert;
 
 // Digital Twin Profile (calculated from questionnaire)
-export const digitalTwinProfile = pgTable('digital_twin_profile', {
-  id: integer('id').primaryKey().autoincrement(),
-  userId: integer('user_id').notNull().unique(),
+export const digitalTwinProfile = mysqlTable('digital_twin_profile', {
+  id: int('id').primaryKey().autoincrement(),
+  userId: int('user_id').notNull().unique(),
   // Execution DNA
-  measurementDriven: integer('measurement_driven'), // 1-10
-  processStandardization: integer('process_standardization'),
-  automationPreference: integer('automation_preference'),
-  ambiguityTolerance: integer('ambiguity_tolerance'),
+  measurementDriven: int('measurement_driven'), // 1-10
+  processStandardization: int('process_standardization'),
+  automationPreference: int('automation_preference'),
+  ambiguityTolerance: int('ambiguity_tolerance'),
   // Technology Philosophy
-  techAdoptionSpeed: integer('tech_adoption_speed'),
-  aiBeliefLevel: integer('ai_belief_level'),
-  dataVsIntuition: integer('data_vs_intuition'),
+  techAdoptionSpeed: int('tech_adoption_speed'),
+  aiBeliefLevel: int('ai_belief_level'),
+  dataVsIntuition: int('data_vs_intuition'),
   buildVsBuy: mysqlEnum('build_vs_buy', ['build', 'buy', 'balanced']),
   // Market Strategy
-  nicheVsMass: integer('niche_vs_mass'),
-  firstMoverVsFollower: integer('first_mover_vs_follower'),
+  nicheVsMass: int('niche_vs_mass'),
+  firstMoverVsFollower: int('first_mover_vs_follower'),
   organicVsMA: mysqlEnum('organic_vs_ma', ['organic', 'ma', 'balanced']),
   // Work Style
-  structurePreference: integer('structure_preference'),
-  interruptionTolerance: integer('interruption_tolerance'),
-  batchingPreference: integer('batching_preference'),
+  structurePreference: int('structure_preference'),
+  interruptionTolerance: int('interruption_tolerance'),
+  batchingPreference: int('batching_preference'),
   locationPreference: mysqlEnum('location_preference', ['home', 'office', 'varied']),
   // Strategic Mindset
-  scenarioPlanningLevel: integer('scenario_planning_level'),
-  pivotComfort: integer('pivot_comfort'),
-  trendLeadership: integer('trend_leadership'),
-  portfolioDiversification: integer('portfolio_diversification'),
+  scenarioPlanningLevel: int('scenario_planning_level'),
+  pivotComfort: int('pivot_comfort'),
+  trendLeadership: int('trend_leadership'),
+  portfolioDiversification: int('portfolio_diversification'),
   // Calculated Scores
-  cosUnderstandingLevel: integer('cos_understanding_level').default(0), // 0-100
-  questionnaireCompletion: integer('questionnaire_completion').default(0), // 0-100 percentage
+  cosUnderstandingLevel: int('cos_understanding_level').default(0), // 0-100
+  questionnaireCompletion: int('questionnaire_completion').default(0), // 0-100 percentage
   lastCalculated: timestamp('last_calculated'),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().$onUpdate(() => new Date()).notNull(),
@@ -3880,10 +3811,10 @@ export type InsertDigitalTwinProfile = typeof digitalTwinProfile.$inferInsert;
 /**
  * NPS Tracking - Customer Net Promoter Score surveys
  */
-export const npsResponses = pgTable('nps_responses', {
-  id: integer('id').primaryKey().autoincrement(),
-  userId: integer('user_id').notNull(),
-  score: integer('score').notNull(), // 0-10 NPS scale
+export const npsResponses = mysqlTable('nps_responses', {
+  id: int('id').primaryKey().autoincrement(),
+  userId: int('user_id').notNull(),
+  score: int('score').notNull(), // 0-10 NPS scale
   category: mysqlEnum('category', ['detractor', 'passive', 'promoter']).notNull(),
   feedback: text('feedback'), // Optional open-ended feedback
   touchpoint: varchar('touchpoint', { length: 100 }), // Where survey was triggered
@@ -3895,13 +3826,13 @@ export type InsertNpsResponse = typeof npsResponses.$inferInsert;
 /**
  * Customer Success Program - Track customer health and engagement
  */
-export const customerHealth = pgTable('customer_health', {
-  id: integer('id').primaryKey().autoincrement(),
-  userId: integer('user_id').notNull(),
-  healthScore: integer('health_score').notNull(), // 0-100
+export const customerHealth = mysqlTable('customer_health', {
+  id: int('id').primaryKey().autoincrement(),
+  userId: int('user_id').notNull(),
+  healthScore: int('health_score').notNull(), // 0-100
   engagementLevel: mysqlEnum('engagement_level', ['low', 'medium', 'high', 'champion']).notNull(),
   lastActiveDate: timestamp('last_active_date'),
-  featureAdoption: jsonb('feature_adoption'), // Which features they use
+  featureAdoption: json('feature_adoption'), // Which features they use
   riskLevel: mysqlEnum('risk_level', ['low', 'medium', 'high', 'critical']).default('low'),
   nextCheckIn: timestamp('next_check_in'),
   notes: text('notes'),
@@ -3914,8 +3845,8 @@ export type InsertCustomerHealth = typeof customerHealth.$inferInsert;
 /**
  * Strategic Partnerships - Partnership pipeline tracking
  */
-export const partnerships = pgTable('partnerships', {
-  id: integer('id').primaryKey().autoincrement(),
+export const partnerships = mysqlTable('partnerships', {
+  id: int('id').primaryKey().autoincrement(),
   name: varchar('name', { length: 200 }).notNull(),
   type: mysqlEnum('type', ['technology', 'distribution', 'strategic', 'integration', 'referral']).notNull(),
   status: mysqlEnum('status', ['prospect', 'contacted', 'negotiating', 'active', 'inactive', 'churned']).notNull(),
@@ -3935,15 +3866,15 @@ export type InsertPartnership = typeof partnerships.$inferInsert;
 /**
  * Team Capability Matrix - Track team skills and gaps
  */
-export const teamCapabilities = pgTable('team_capabilities', {
-  id: integer('id').primaryKey().autoincrement(),
+export const teamCapabilities = mysqlTable('team_capabilities', {
+  id: int('id').primaryKey().autoincrement(),
   teamMember: varchar('team_member', { length: 200 }).notNull(),
   role: varchar('role', { length: 100 }).notNull(),
   skillCategory: varchar('skill_category', { length: 100 }).notNull(), // e.g., "Technical", "Leadership"
   skillName: varchar('skill_name', { length: 200 }).notNull(),
-  currentLevel: integer('current_level').notNull(), // 1-5
-  targetLevel: integer('target_level'), // 1-5
-  gap: integer('gap'), // Calculated difference
+  currentLevel: int('current_level').notNull(), // 1-5
+  targetLevel: int('target_level'), // 1-5
+  gap: int('gap'), // Calculated difference
   developmentPlan: text('development_plan'),
   lastAssessed: timestamp('last_assessed'),
   createdAt: timestamp('created_at').defaultNow().notNull(),
@@ -3955,8 +3886,8 @@ export type InsertTeamCapability = typeof teamCapabilities.$inferInsert;
 /**
  * SOC 2 Compliance Tracking - Security and compliance checklist
  */
-export const complianceItems = pgTable('compliance_items', {
-  id: integer('id').primaryKey().autoincrement(),
+export const complianceItems = mysqlTable('compliance_items', {
+  id: int('id').primaryKey().autoincrement(),
   framework: mysqlEnum('framework', ['soc2', 'gdpr', 'hipaa', 'iso27001', 'wcag']).notNull(),
   category: varchar('category', { length: 100 }).notNull(),
   requirement: text('requirement').notNull(),
@@ -3975,15 +3906,15 @@ export type InsertComplianceItem = typeof complianceItems.$inferInsert;
 /**
  * RAG Context Store - Retrieval Augmented Generation context
  */
-export const ragContexts = pgTable('rag_contexts', {
-  id: integer('id').primaryKey().autoincrement(),
-  userId: integer('user_id').notNull(),
+export const ragContexts = mysqlTable('rag_contexts', {
+  id: int('id').primaryKey().autoincrement(),
+  userId: int('user_id').notNull(),
   contextType: mysqlEnum('context_type', ['conversation', 'document', 'preference', 'decision', 'memory']).notNull(),
   content: text('content').notNull(),
-  embedding: jsonb('embedding'), // Vector embedding for similarity search
-  metadata: jsonb('metadata'),
-  relevanceScore: real('relevance_score'),
-  accessCount: integer('access_count').default(0),
+  embedding: json('embedding'), // Vector embedding for similarity search
+  metadata: json('metadata'),
+  relevanceScore: float('relevance_score'),
+  accessCount: int('access_count').default(0),
   lastAccessed: timestamp('last_accessed'),
   expiresAt: timestamp('expires_at'),
   createdAt: timestamp('created_at').defaultNow().notNull(),
@@ -4007,18 +3938,18 @@ export type InsertRagContext = typeof ragContexts.$inferInsert;
  * Phase 5: Quality Gate
  * Phase 6: Execution
  */
-export const projectGenesisPhases = pgTable("project_genesis_phases", {
-  id: serial("id").primaryKey(),
-  projectId: integer("projectId").notNull(), // FK to project_genesis
-  phaseNumber: integer("phaseNumber").notNull(), // 1-6
+export const projectGenesisPhases = mysqlTable("project_genesis_phases", {
+  id: int("id").autoincrement().primaryKey(),
+  projectId: int("projectId").notNull(), // FK to project_genesis
+  phaseNumber: int("phaseNumber").notNull(), // 1-6
   phaseName: varchar("phaseName", { length: 100 }).notNull(),
-  status: statusEnum.default("not_started").notNull(),
+  status: mysqlEnum("status", ["not_started", "in_progress", "completed", "blocked"]).default("not_started").notNull(),
   startedAt: timestamp("startedAt"),
   completedAt: timestamp("completedAt"),
-  assignedTeam: jsonb("assignedTeam"), // Array of user IDs and expert IDs
-  deliverables: jsonb("deliverables"), // Array of deliverable objects
+  assignedTeam: json("assignedTeam"), // Array of user IDs and expert IDs
+  deliverables: json("deliverables"), // Array of deliverable objects
   notes: text("notes"),
-  metadata: jsonb("metadata"),
+  metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
 });
@@ -4029,18 +3960,18 @@ export type InsertProjectGenesisPhase = typeof projectGenesisPhases.$inferInsert
 /**
  * Project Genesis Milestones - key milestones within each phase
  */
-export const projectGenesisMilestones = pgTable("project_genesis_milestones", {
-  id: serial("id").primaryKey(),
-  phaseId: integer("phaseId").notNull(), // FK to project_genesis_phases
-  projectId: integer("projectId").notNull(), // FK to project_genesis
+export const projectGenesisMilestones = mysqlTable("project_genesis_milestones", {
+  id: int("id").autoincrement().primaryKey(),
+  phaseId: int("phaseId").notNull(), // FK to project_genesis_phases
+  projectId: int("projectId").notNull(), // FK to project_genesis
   milestoneName: varchar("milestoneName", { length: 200 }).notNull(),
   description: text("description"),
   dueDate: timestamp("dueDate"),
-  status: statusEnum.default("pending").notNull(),
+  status: mysqlEnum("status", ["pending", "in_progress", "completed", "overdue"]).default("pending").notNull(),
   completedAt: timestamp("completedAt"),
-  completedBy: integer("completedBy"), // User ID
+  completedBy: int("completedBy"), // User ID
   notes: text("notes"),
-  metadata: jsonb("metadata"),
+  metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
 });
@@ -4051,20 +3982,20 @@ export type InsertProjectGenesisMilestone = typeof projectGenesisMilestones.$inf
 /**
  * Project Genesis Deliverables - outputs from each phase
  */
-export const projectGenesisDeliverables = pgTable("project_genesis_deliverables", {
-  id: serial("id").primaryKey(),
-  phaseId: integer("phaseId").notNull(), // FK to project_genesis_phases
-  projectId: integer("projectId").notNull(), // FK to project_genesis
+export const projectGenesisDeliverables = mysqlTable("project_genesis_deliverables", {
+  id: int("id").autoincrement().primaryKey(),
+  phaseId: int("phaseId").notNull(), // FK to project_genesis_phases
+  projectId: int("projectId").notNull(), // FK to project_genesis
   deliverableName: varchar("deliverableName", { length: 200 }).notNull(),
   deliverableType: varchar("deliverableType", { length: 100 }).notNull(), // "document", "presentation", "model", "report"
   description: text("description"),
   fileUrl: varchar("fileUrl", { length: 500 }),
-  status: statusEnum.default("draft").notNull(),
-  createdBy: integer("createdBy"), // User ID
-  reviewedBy: integer("reviewedBy"), // User ID
-  approvedBy: integer("approvedBy"), // User ID
+  status: mysqlEnum("status", ["draft", "review", "approved", "rejected"]).default("draft").notNull(),
+  createdBy: int("createdBy"), // User ID
+  reviewedBy: int("reviewedBy"), // User ID
+  approvedBy: int("approvedBy"), // User ID
   reviewNotes: text("reviewNotes"),
-  metadata: jsonb("metadata"),
+  metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
 });
@@ -4075,16 +4006,16 @@ export type InsertProjectGenesisDeliverable = typeof projectGenesisDeliverables.
 /**
  * Quality Gate Criteria - specific criteria for each gate (G1-G6)
  */
-export const qualityGateCriteria = pgTable("quality_gate_criteria", {
-  id: serial("id").primaryKey(),
-  gateNumber: integer("gateNumber").notNull(), // 1-6 (G1-G6)
+export const qualityGateCriteria = mysqlTable("quality_gate_criteria", {
+  id: int("id").autoincrement().primaryKey(),
+  gateNumber: int("gateNumber").notNull(), // 1-6 (G1-G6)
   gateName: varchar("gateName", { length: 100 }).notNull(),
   criteriaName: varchar("criteriaName", { length: 200 }).notNull(),
   description: text("description"),
-  weight: real("weight").default(1.0), // Importance weight
-  passingScore: integer("passingScore").default(70), // Minimum score to pass
+  weight: float("weight").default(1.0), // Importance weight
+  passingScore: int("passingScore").default(70), // Minimum score to pass
   evaluationType: varchar("evaluationType", { length: 50 }).notNull(), // "automated", "manual", "hybrid"
-  metadata: jsonb("metadata"),
+  metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
 });
@@ -4095,17 +4026,17 @@ export type InsertQualityGateCriteria = typeof qualityGateCriteria.$inferInsert;
 /**
  * Quality Gate Results - evaluation results for each project
  */
-export const qualityGateResults = pgTable("quality_gate_results", {
-  id: serial("id").primaryKey(),
-  projectId: integer("projectId").notNull(), // FK to project_genesis
-  gateNumber: integer("gateNumber").notNull(), // 1-6
-  criteriaId: integer("criteriaId").notNull(), // FK to quality_gate_criteria
-  score: integer("score").notNull(), // 0-100
+export const qualityGateResults = mysqlTable("quality_gate_results", {
+  id: int("id").autoincrement().primaryKey(),
+  projectId: int("projectId").notNull(), // FK to project_genesis
+  gateNumber: int("gateNumber").notNull(), // 1-6
+  criteriaId: int("criteriaId").notNull(), // FK to quality_gate_criteria
+  score: int("score").notNull(), // 0-100
   passed: boolean("passed").notNull(),
-  evaluatedBy: integer("evaluatedBy"), // User ID or "system"
+  evaluatedBy: int("evaluatedBy"), // User ID or "system"
   evaluationNotes: text("evaluationNotes"),
-  evidence: jsonb("evidence"), // Supporting evidence/documents
-  metadata: jsonb("metadata"),
+  evidence: json("evidence"), // Supporting evidence/documents
+  metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
 });
@@ -4116,24 +4047,24 @@ export type InsertQualityGateResult = typeof qualityGateResults.$inferInsert;
 /**
  * Blueprint Library - master library of all blueprints
  */
-export const blueprintLibrary = pgTable("blueprint_library", {
-  id: serial("id").primaryKey(),
+export const blueprintLibrary = mysqlTable("blueprint_library", {
+  id: int("id").autoincrement().primaryKey(),
   blueprintCode: varchar("blueprintCode", { length: 50 }).notNull().unique(), // e.g., "BP-001"
   title: varchar("title", { length: 300 }).notNull(),
   category: varchar("category", { length: 100 }).notNull(),
   description: text("description"),
-  objectives: jsonb("objectives"), // Array of objectives
-  phases: jsonb("phases"), // Array of phase objects
-  deliverables: jsonb("deliverables"), // Array of deliverable templates
-  resources: jsonb("resources"), // Required resources
-  estimatedDuration: integer("estimatedDuration"), // Hours
-  complexity: complexityEnum.default("medium"),
-  tags: jsonb("tags"), // Array of tags
+  objectives: json("objectives"), // Array of objectives
+  phases: json("phases"), // Array of phase objects
+  deliverables: json("deliverables"), // Array of deliverable templates
+  resources: json("resources"), // Required resources
+  estimatedDuration: int("estimatedDuration"), // Hours
+  complexity: mysqlEnum("complexity", ["low", "medium", "high"]).default("medium"),
+  tags: json("tags"), // Array of tags
   fileUrl: varchar("fileUrl", { length: 500 }),
   version: varchar("version", { length: 20 }).default("1.0"),
-  status: statusEnum.default("active").notNull(),
-  createdBy: integer("createdBy"),
-  metadata: jsonb("metadata"),
+  status: mysqlEnum("status", ["draft", "active", "deprecated"]).default("active").notNull(),
+  createdBy: int("createdBy"),
+  metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
 });
@@ -4144,21 +4075,21 @@ export type InsertBlueprint = typeof blueprintLibrary.$inferInsert;
 /**
  * Blueprint Executions - instances of blueprints being executed
  */
-export const blueprintExecutions = pgTable("blueprint_executions", {
-  id: serial("id").primaryKey(),
-  blueprintId: integer("blueprintId").notNull(), // FK to blueprint_library
-  projectId: integer("projectId"), // FK to project_genesis (optional)
-  userId: integer("userId").notNull(),
+export const blueprintExecutions = mysqlTable("blueprint_executions", {
+  id: int("id").autoincrement().primaryKey(),
+  blueprintId: int("blueprintId").notNull(), // FK to blueprint_library
+  projectId: int("projectId"), // FK to project_genesis (optional)
+  userId: int("userId").notNull(),
   executionName: varchar("executionName", { length: 300 }).notNull(),
-  status: statusEnum.default("planning").notNull(),
-  currentPhase: integer("currentPhase").default(1),
-  progress: integer("progress").default(0), // 0-100
+  status: mysqlEnum("status", ["planning", "in_progress", "completed", "paused", "cancelled"]).default("planning").notNull(),
+  currentPhase: int("currentPhase").default(1),
+  progress: int("progress").default(0), // 0-100
   startedAt: timestamp("startedAt"),
   completedAt: timestamp("completedAt"),
-  phaseData: jsonb("phaseData"), // Current state of each phase
-  deliverableData: jsonb("deliverableData"), // Generated deliverables
+  phaseData: json("phaseData"), // Current state of each phase
+  deliverableData: json("deliverableData"), // Generated deliverables
   notes: text("notes"),
-  metadata: jsonb("metadata"),
+  metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
 });
@@ -4212,11 +4143,11 @@ export const cosTrainingModulesPg = pgTable("cos_training_modules_pg", {
   title: text("title").notNull(),
   objective: text("objective").notNull(),
   duration: integer("duration").notNull(), // hours
-  topics: jsonb("topics").$type<string[]>(),
-  requiredReading: jsonb("required_reading").$type<string[]>(),
-  practicalExercises: jsonb("practical_exercises").$type<any[]>(),
-  competencyAssessment: jsonb("competency_assessment").$type<string[]>(),
-  prerequisites: jsonb("prerequisites").$type<number[]>(), // module numbers
+  topics: json("topics").$type<string[]>(),
+  requiredReading: json("required_reading").$type<string[]>(),
+  practicalExercises: json("practical_exercises").$type<any[]>(),
+  competencyAssessment: json("competency_assessment").$type<string[]>(),
+  prerequisites: json("prerequisites").$type<number[]>(), // module numbers
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
@@ -4241,16 +4172,16 @@ export const cosModuleProgressPg = pgTable("cos_module_progress_pg", {
 export const digitalTwinProfiles = pgTable("digital_twin_profiles", {
   id: uuid("id").primaryKey().defaultRandom(),
   userId: uuid("user_id").references(() => users.id).notNull().unique(),
-  successDNA: jsonb("success_dna").$type<any>(), // 100+ factors
+  successDNA: json("success_dna").$type<any>(), // 100+ factors
   learningStyle: varchar("learning_style", { length: 50 }),
-  communicationPreferences: jsonb("communication_preferences").$type<any>(),
-  workingStyle: jsonb("working_style").$type<any>(),
-  strengthsWeaknesses: jsonb("strengths_weaknesses").$type<any>(),
-  personalityProfile: jsonb("personality_profile").$type<any>(),
-  careerAspirations: jsonb("career_aspirations").$type<any>(),
-  skillMatrix: jsonb("skill_matrix").$type<any>(),
+  communicationPreferences: json("communication_preferences").$type<any>(),
+  workingStyle: json("working_style").$type<any>(),
+  strengthsWeaknesses: json("strengths_weaknesses").$type<any>(),
+  personalityProfile: json("personality_profile").$type<any>(),
+  careerAspirations: json("career_aspirations").$type<any>(),
+  skillMatrix: json("skill_matrix").$type<any>(),
   experienceLevel: varchar("experience_level", { length: 50 }),
-  industryExpertise: jsonb("industry_expertise").$type<string[]>(),
+  industryExpertise: json("industry_expertise").$type<string[]>(),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
@@ -4264,8 +4195,8 @@ export const digitalTwinGoals = pgTable("digital_twin_goals", {
   targetDate: timestamp("target_date"),
   status: varchar("status", { length: 50 }).default('active'), // active, completed, abandoned
   progressPercentage: integer("progress_percentage").default(0),
-  milestones: jsonb("milestones").$type<any[]>(),
-  metrics: jsonb("metrics").$type<any>(),
+  milestones: json("milestones").$type<any[]>(),
+  metrics: json("metrics").$type<any>(),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
@@ -4275,7 +4206,7 @@ export const digitalTwinPreferences = pgTable("digital_twin_preferences", {
   profileId: uuid("profile_id").references(() => digitalTwinProfiles.id).notNull(),
   category: varchar("category", { length: 100 }).notNull(), // briefing_time, notification_frequency, etc.
   preferenceKey: varchar("preference_key", { length: 100 }).notNull(),
-  preferenceValue: jsonb("preference_value").$type<any>(),
+  preferenceValue: json("preference_value").$type<any>(),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
@@ -4287,7 +4218,7 @@ export const expertTeams = pgTable("expert_teams", {
   projectId: uuid("project_id").notNull(), // references projectGenesis
   teamName: varchar("team_name", { length: 255 }).notNull(),
   purpose: text("purpose"),
-  expertIds: jsonb("expert_ids").$type<string[]>().notNull(), // array of expert IDs
+  expertIds: json("expert_ids").$type<string[]>().notNull(), // array of expert IDs
   teamLead: varchar("team_lead", { length: 255 }), // expert ID
   status: varchar("status", { length: 50 }).default('active'), // active, disbanded
   createdAt: timestamp("created_at").defaultNow(),
@@ -4302,7 +4233,7 @@ export const expertConsultationHistory = pgTable("expert_consultation_history", 
   expertName: varchar("expert_name", { length: 255 }).notNull(),
   consultationType: varchar("consultation_type", { length: 50 }).notNull(), // individual, team, review
   question: text("question").notNull(),
-  context: jsonb("context").$type<any>(),
+  context: json("context").$type<any>(),
   response: text("response").notNull(),
   confidence: integer("confidence"), // 0-100
   helpful: boolean("helpful"),
@@ -4319,7 +4250,7 @@ export const blueprintParameters = pgTable("blueprint_parameters", {
   id: uuid("id").primaryKey().defaultRandom(),
   executionId: uuid("execution_id").notNull(), // references blueprintExecutions
   parameterKey: varchar("parameter_key", { length: 100 }).notNull(),
-  parameterValue: jsonb("parameter_value").$type<any>(),
+  parameterValue: json("parameter_value").$type<any>(),
   parameterType: varchar("parameter_type", { length: 50 }), // string, number, boolean, object
   createdAt: timestamp("created_at").defaultNow(),
 });
@@ -4333,7 +4264,7 @@ export const blueprintOutputs = pgTable("blueprint_outputs", {
   outputPath: text("output_path"), // S3 path or file path
   outputUrl: text("output_url"),
   outputSize: integer("output_size"), // bytes
-  metadata: jsonb("metadata").$type<any>(),
+  metadata: json("metadata").$type<any>(),
   createdAt: timestamp("created_at").defaultNow(),
 });
 
@@ -4349,9 +4280,9 @@ export const qmsAuditTrail = pgTable("qms_audit_trail", {
   phase: varchar("phase", { length: 50 }),
   gateId: varchar("gate_id", { length: 50 }),
   resultId: uuid("result_id"), // references qualityGateResults
-  beforeState: jsonb("before_state").$type<any>(),
-  afterState: jsonb("after_state").$type<any>(),
-  metadata: jsonb("metadata").$type<any>(),
+  beforeState: json("before_state").$type<any>(),
+  afterState: json("after_state").$type<any>(),
+  metadata: json("metadata").$type<any>(),
   createdAt: timestamp("created_at").defaultNow(),
 });
 
@@ -4361,11 +4292,11 @@ export const qmsComplianceChecks = pgTable("qms_compliance_checks", {
   checkType: varchar("check_type", { length: 100 }).notNull(), // regulatory, internal, industry_standard
   checkName: varchar("check_name", { length: 255 }).notNull(),
   checkDescription: text("check_description"),
-  requirements: jsonb("requirements").$type<any[]>(),
+  requirements: json("requirements").$type<any[]>(),
   status: varchar("status", { length: 50 }).default('pending'), // pending, passed, failed, not_applicable
   score: integer("score"), // 0-100
-  findings: jsonb("findings").$type<any[]>(),
-  recommendations: jsonb("recommendations").$type<any[]>(),
+  findings: json("findings").$type<any[]>(),
+  recommendations: json("recommendations").$type<any[]>(),
   checkedBy: uuid("checked_by").references(() => users.id),
   checkedAt: timestamp("checked_at"),
   createdAt: timestamp("created_at").defaultNow(),
@@ -4379,9 +4310,9 @@ export const qmsComplianceChecks = pgTable("qms_compliance_checks", {
 /**
  * Digital Twins - User's AI Chief of Staff profile
  */
-export const digitalTwins = pgTable("digital_twins", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull().unique(),
+export const digitalTwins = mysqlTable("digital_twins", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull().unique(),
   
   // Profile
   name: varchar("name", { length: 200 }),
@@ -4394,17 +4325,17 @@ export const digitalTwins = pgTable("digital_twins", {
   ]).default("mixed"),
   
   // Competency scores (0-100)
-  strategicThinking: integer("strategicThinking").default(20).notNull(),
-  executiveCommunication: integer("executiveCommunication").default(20).notNull(),
-  operationalExcellence: integer("operationalExcellence").default(20).notNull(),
-  dataAnalytics: integer("dataAnalytics").default(20).notNull(),
-  leadershipDevelopment: integer("leadershipDevelopment").default(20).notNull(),
-  crisisManagement: integer("crisisManagement").default(20).notNull(),
-  innovationStrategy: integer("innovationStrategy").default(20).notNull(),
-  stakeholderManagement: integer("stakeholderManagement").default(20).notNull(),
+  strategicThinking: int("strategicThinking").default(20).notNull(),
+  executiveCommunication: int("executiveCommunication").default(20).notNull(),
+  operationalExcellence: int("operationalExcellence").default(20).notNull(),
+  dataAnalytics: int("dataAnalytics").default(20).notNull(),
+  leadershipDevelopment: int("leadershipDevelopment").default(20).notNull(),
+  crisisManagement: int("crisisManagement").default(20).notNull(),
+  innovationStrategy: int("innovationStrategy").default(20).notNull(),
+  stakeholderManagement: int("stakeholderManagement").default(20).notNull(),
   
   // Overall competency
-  overallCompetency: integer("overallCompetency").default(20).notNull(),
+  overallCompetency: int("overallCompetency").default(20).notNull(),
   
   // Timestamps
   createdAt: timestamp("createdAt").defaultNow().notNull(),
@@ -4416,9 +4347,9 @@ export type InsertDigitalTwin = typeof digitalTwins.$inferInsert;
 /**
  * Decision Log - tracks user decisions for learning
  */
-export const decisionLog = pgTable("decision_log", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
+export const decisionLog = mysqlTable("decision_log", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
   
   // Decision details
   decisionType: varchar("decisionType", { length: 100 }).notNull(),
@@ -4428,11 +4359,11 @@ export const decisionLog = pgTable("decision_log", {
   
   // Outcome tracking
   outcome: text("outcome"),
-  outcomeRating: integer("outcomeRating"), // 1-5
+  outcomeRating: int("outcomeRating"), // 1-5
   lessonsLearned: text("lessonsLearned"),
   
   // Metadata
-  relatedModule: integer("relatedModule"), // Training module ID
+  relatedModule: int("relatedModule"), // Training module ID
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 export type DecisionLog = typeof decisionLog.$inferSelect;
@@ -4445,14 +4376,14 @@ export type InsertDecisionLog = typeof decisionLog.$inferInsert;
 /**
  * AI-SME Experts - Available expert consultants
  */
-export const aiSmeExperts = pgTable("ai_sme_experts", {
-  id: serial("id").primaryKey(),
+export const aiSmeExperts = mysqlTable("ai_sme_experts", {
+  id: int("id").autoincrement().primaryKey(),
   
   // Expert profile
   name: varchar("name", { length: 200 }).notNull(),
   title: varchar("title", { length: 200 }).notNull(),
   domain: varchar("domain", { length: 100 }).notNull(), // finance, legal, marketing, etc.
-  expertise: jsonb("expertise").$type<string[]>(), // Array of expertise areas
+  expertise: json("expertise").$type<string[]>(), // Array of expertise areas
   
   // Description
   bio: text("bio"),
@@ -4460,7 +4391,7 @@ export const aiSmeExperts = pgTable("ai_sme_experts", {
   
   // Availability
   isActive: boolean("isActive").default(true).notNull(),
-  consultationCount: integer("consultationCount").default(0).notNull(),
+  consultationCount: int("consultationCount").default(0).notNull(),
   
   // System prompt
   systemPrompt: text("systemPrompt").notNull(),
@@ -4475,10 +4406,10 @@ export type InsertAiSmeExpert = typeof aiSmeExperts.$inferInsert;
 /**
  * AI-SME Consultations - User consultations with experts
  */
-export const aiSmeConsultations = pgTable("ai_sme_consultations", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId").notNull(),
-  expertId: integer("expertId").notNull(),
+export const aiSmeConsultations = mysqlTable("ai_sme_consultations", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  expertId: int("expertId").notNull(),
   
   // Consultation details
   topic: varchar("topic", { length: 255 }).notNull(),
@@ -4494,14 +4425,14 @@ export const aiSmeConsultations = pgTable("ai_sme_consultations", {
   ]).default("pending").notNull(),
   
   // Conversation
-  conversationHistory: jsonb("conversationHistory").$type<any[]>(),
+  conversationHistory: json("conversationHistory").$type<any[]>(),
   
   // Rating
-  rating: integer("rating"), // 1-5
+  rating: int("rating"), // 1-5
   feedback: text("feedback"),
   
   // Metadata
-  duration: integer("duration"), // seconds
+  duration: int("duration"), // seconds
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   completedAt: timestamp("completedAt"),
   updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),

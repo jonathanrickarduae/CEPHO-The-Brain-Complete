@@ -93,7 +93,9 @@ export async function upsertUser(user: InsertUser): Promise<void> {
       updateSet.lastSignedIn = new Date();
     }
 
-    await db.insert(users).values(values).onConflictDoUpdate({ target: [users.openId], set: updateSet });
+    await db.insert(users).values(values).onDuplicateKeyUpdate({
+      set: updateSet,
+    });
   } catch (error) {
     console.error("[Database] Failed to upsert user:", error);
     throw error;
@@ -122,7 +124,9 @@ export async function createMoodEntry(entry: InsertMoodHistory): Promise<MoodHis
   }
 
   try {
-    const [newEntry] = await db.insert(moodHistory).values(entry).returning();
+    const result = await db.insert(moodHistory).values(entry);
+    const insertId = result[0].insertId;
+    const [newEntry] = await db.select().from(moodHistory).where(eq(moodHistory.id, insertId));
     return newEntry;
   } catch (error) {
     console.error("[Database] Failed to create mood entry:", error);
@@ -278,7 +282,9 @@ export async function saveConversation(entry: InsertConversation): Promise<Conve
   }
 
   try {
-    const [newEntry] = await db.insert(conversations).values(entry).returning();
+    const result = await db.insert(conversations).values(entry);
+    const insertId = result[0].insertId;
+    const [newEntry] = await db.select().from(conversations).where(eq(conversations.id, insertId));
     return newEntry;
   } catch (error) {
     console.error("[Database] Failed to save conversation:", error);
@@ -349,7 +355,9 @@ export async function createIntegration(data: InsertIntegration): Promise<Integr
   if (!db) return null;
 
   try {
-    const [newEntry] = await db.insert(integrations).values(data).returning();
+    const result = await db.insert(integrations).values(data);
+    const insertId = result[0].insertId;
+    const [newEntry] = await db.select().from(integrations).where(eq(integrations.id, insertId));
     return newEntry;
   } catch (error) {
     console.error("[Database] Failed to create integration:", error);
@@ -403,7 +411,9 @@ export async function createNotification(data: InsertNotification): Promise<Noti
   if (!db) return null;
 
   try {
-    const [newEntry] = await db.insert(notifications).values(data).returning();
+    const result = await db.insert(notifications).values(data);
+    const insertId = result[0].insertId;
+    const [newEntry] = await db.select().from(notifications).where(eq(notifications.id, insertId));
     return newEntry;
   } catch (error) {
     console.error("[Database] Failed to create notification:", error);
@@ -463,7 +473,9 @@ export async function createProject(data: InsertProject): Promise<Project | null
   if (!db) return null;
 
   try {
-    const [newEntry] = await db.insert(projects).values(data).returning();
+    const result = await db.insert(projects).values(data);
+    const insertId = result[0].insertId;
+    const [newEntry] = await db.select().from(projects).where(eq(projects.id, insertId));
     return newEntry;
   } catch (error) {
     console.error("[Database] Failed to create project:", error);
@@ -509,7 +521,9 @@ export async function createProjectGenesis(data: InsertProjectGenesis): Promise<
   if (!db) return null;
 
   try {
-    const [newEntry] = await db.insert(projectGenesis).values(data).returning();
+    const result = await db.insert(projectGenesis).values(data);
+    const insertId = result[0].insertId;
+    const [newEntry] = await db.select().from(projectGenesis).where(eq(projectGenesis.id, insertId));
     return newEntry;
   } catch (error) {
     console.error("[Database] Failed to create project genesis:", error);
@@ -584,7 +598,9 @@ export async function createTrainingDocument(data: InsertTrainingDocument): Prom
   if (!db) return null;
 
   try {
-    const [newEntry] = await db.insert(trainingDocuments).values(data).returning();
+    const result = await db.insert(trainingDocuments).values(data);
+    const insertId = result[0].insertId;
+    const [newEntry] = await db.select().from(trainingDocuments).where(eq(trainingDocuments.id, insertId));
     return newEntry;
   } catch (error) {
     console.error("[Database] Failed to create training document:", error);
@@ -614,7 +630,9 @@ export async function createMemory(data: InsertMemoryBank): Promise<MemoryBank |
   if (!db) return null;
 
   try {
-    const [newEntry] = await db.insert(memoryBank).values(data).returning();
+    const result = await db.insert(memoryBank).values(data);
+    const insertId = result[0].insertId;
+    const [newEntry] = await db.select().from(memoryBank).where(eq(memoryBank.id, insertId));
     return newEntry;
   } catch (error) {
     console.error("[Database] Failed to create memory:", error);
@@ -658,7 +676,9 @@ export async function recordDecision(data: InsertDecisionPattern): Promise<Decis
   if (!db) return null;
 
   try {
-    const [newEntry] = await db.insert(decisionPatterns).values(data).returning();
+    const result = await db.insert(decisionPatterns).values(data);
+    const insertId = result[0].insertId;
+    const [newEntry] = await db.select().from(decisionPatterns).where(eq(decisionPatterns.id, insertId));
     return newEntry;
   } catch (error) {
     console.error("[Database] Failed to record decision:", error);
@@ -689,7 +709,9 @@ export async function recordFeedback(data: InsertFeedbackHistory): Promise<Feedb
   if (!db) return null;
 
   try {
-    const [newEntry] = await db.insert(feedbackHistory).values(data).returning();
+    const result = await db.insert(feedbackHistory).values(data);
+    const insertId = result[0].insertId;
+    const [newEntry] = await db.select().from(feedbackHistory).where(eq(feedbackHistory.id, insertId));
     return newEntry;
   } catch (error) {
     console.error("[Database] Failed to record feedback:", error);
@@ -725,7 +747,9 @@ export async function createTask(data: InsertTask): Promise<Task | null> {
   if (!db) return null;
 
   try {
-    const [newEntry] = await db.insert(tasks).values(data).returning();
+    const result = await db.insert(tasks).values(data);
+    const insertId = result[0].insertId;
+    const [newEntry] = await db.select().from(tasks).where(eq(tasks.id, insertId));
     return newEntry;
   } catch (error) {
     console.error("[Database] Failed to create task:", error);
@@ -773,7 +797,9 @@ export async function createInboxItem(data: InsertUniversalInboxItem): Promise<U
   if (!db) return null;
 
   try {
-    const [newEntry] = await db.insert(universalInbox).values(data).returning();
+    const result = await db.insert(universalInbox).values(data);
+    const insertId = result[0].insertId;
+    const [newEntry] = await db.select().from(universalInbox).where(eq(universalInbox.id, insertId));
     return newEntry;
   } catch (error) {
     console.error("[Database] Failed to create inbox item:", error);
@@ -3311,7 +3337,9 @@ export async function saveQuestionnaireResponse(response: InsertQuestionnaireRes
       const [updated] = await db.select().from(questionnaireResponses).where(eq(questionnaireResponses.id, existing[0].id));
       return updated;
     } else {
-      const [newEntry] = await db.insert(questionnaireResponses).values(response).returning();
+      const result = await db.insert(questionnaireResponses).values(response);
+      const insertId = result[0].insertId;
+      const [newEntry] = await db.select().from(questionnaireResponses).where(eq(questionnaireResponses.id, insertId));
       return newEntry;
     }
   } catch (error) {
