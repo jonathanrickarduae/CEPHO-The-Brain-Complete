@@ -1,4 +1,17 @@
-import "dotenv/config";
+import dotenv from "dotenv";
+import { fileURLToPath } from "url";
+import path from "path";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Load .env.production in production
+if (process.env.NODE_ENV === "production") {
+  const envPath = path.resolve(__dirname, "..", "..", ".env.production");
+  dotenv.config({ path: envPath });
+} else {
+  dotenv.config();
+}
 
 // Debug: Log auth bypass status at startup
 console.log('[Startup] AUTH_BYPASS:', process.env.AUTH_BYPASS);
