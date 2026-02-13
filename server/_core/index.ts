@@ -78,8 +78,8 @@ async function startServer() {
   registerOAuthRoutes(app);
   
   // Workflow API routes
-  const workflowRoutes = await import("../routes/workflows");
-  app.use("/api/workflows", workflowRoutes.default);
+  const { default: workflowRoutes } = await import("../routes/workflows.js");
+  app.use("/api/workflows", workflowRoutes);
   
   // tRPC API
   app.use(
