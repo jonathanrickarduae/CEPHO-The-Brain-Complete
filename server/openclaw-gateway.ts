@@ -100,7 +100,7 @@ export class OpenClawGateway {
       
       if (!intent.skillName) {
         return {
-          response: "I'm not sure what you'd like me to do. Try asking about Project Genesis, AI-SME consultations, or other CEPHO features.",
+          response: `[DEBUG] LLM Error: ${error.message}. Stack: ${error.stack?.substring(0, 200)}. I'm not sure what you'd like me to do. Try asking about Project Genesis, AI-SME consultations, or other CEPHO features.`,
           suggestions: [
             "Start Project Genesis for my startup",
             "Get expert consultation on market analysis",
