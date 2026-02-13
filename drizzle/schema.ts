@@ -1,4 +1,4 @@
-import { int, mysqlEnum, mysqlTable, text, timestamp, varchar, json, boolean, float } from "drizzle-orm/mysql-core";
+import { pgTable, pgEnum, serial, text, timestamp, varchar, jsonb, boolean, integer, doublePrecision } from "drizzle-orm/pg-core";
 
 // PostgreSQL Enums
 export const roleEnum = pgEnum("role", ["user", "admin"]);
