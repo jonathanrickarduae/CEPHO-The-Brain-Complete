@@ -1,6 +1,4 @@
-import { getDb, saveConversation, getConversationHistory as dbGetConversationHistory } from '../db';
-import { conversations } from '../../drizzle/schema';
-import { eq, desc } from 'drizzle-orm';
+import { Client } from 'pg';
 
 export interface ConversationMessage {
   role: 'user' | 'assistant' | 'system';
@@ -8,29 +6,55 @@ export interface ConversationMessage {
   metadata?: any;
 }
 
+async function getClient() {
+  if (!process.env.DATABASE_URL) {
+    throw new Error('DATABASE_URL not configured');
+  }
+  const client = new Client({
+    connectionString: process.env.DATABASE_URL,
+  });
+  await client.connect();
+  return client;
+}
+
 export class ConversationService {
   async addMessage(userId: number, role: 'user' | 'assistant' | 'system', content: string, metadata?: any) {
+    let client;
     try {
-      const result = await saveConversation({
-        userId,
-        role,
-        content,
-        metadata: metadata || null,
-      });
+      client = await getClient();
+      
+      const result = await client.query(
+        `INSERT INTO conversations ("userId", role, content, metadata, "createdAt") 
+         VALUES ($1, $2, $3, $4, NOW()) RETURNING *`,
+        [userId, role, content, metadata ? JSON.stringify(metadata) : null]
+      );
       
       console.log('[Conversation] Message saved:', { userId, role });
-      return result;
+      return result.rows[0];
     } catch (error: any) {
       console.error('[Conversation] Error saving message:', error.message);
       throw error;
+    } finally {
+      if (client) await client.end();
     }
   }
 
   async getConversationHistory(userId: number, limit: number = 10): Promise<ConversationMessage[]> {
+    let client;
     try {
-      const history = await dbGetConversationHistory(userId, limit);
+      client = await getClient();
       
-      const messages = history.map(row => ({
+      const result = await client.query(
+        `SELECT role, content, metadata, "createdAt" 
+         FROM conversations 
+         WHERE "userId" = $1 
+         ORDER BY "createdAt" DESC 
+         LIMIT $2`,
+        [userId, limit]
+      );
+      
+      // Reverse to get chronological order (oldest first)
+      const messages = result.rows.reverse().map((row: any) => ({
         role: row.role,
         content: row.content,
         metadata: row.metadata,
@@ -41,40 +65,55 @@ export class ConversationService {
     } catch (error: any) {
       console.error('[Conversation] Error retrieving history:', error.message);
       return [];
+    } finally {
+      if (client) await client.end();
     }
   }
 
   async clearConversationHistory(userId: number) {
+    let client;
     try {
-      const db = await getDb();
-      if (!db) throw new Error('Database not available');
+      client = await getClient();
       
-      await db.delete(conversations).where(eq(conversations.userId, userId));
+      await client.query(
+        `DELETE FROM conversations WHERE "userId" = $1`,
+        [userId]
+      );
       
       console.log('[Conversation] History cleared:', { userId });
     } catch (error: any) {
       console.error('[Conversation] Error clearing history:', error.message);
       throw error;
+    } finally {
+      if (client) await client.end();
     }
   }
 
   async getConversationStats(userId: number) {
+    let client;
     try {
-      const history = await dbGetConversationHistory(userId, 1000);
+      client = await getClient();
       
-      const stats = {
-        totalMessages: history.length,
-        userMessages: history.filter(m => m.role === 'user').length,
-        assistantMessages: history.filter(m => m.role === 'assistant').length,
-        firstMessage: history.length > 0 ? history[0].createdAt : null,
-        lastMessage: history.length > 0 ? history[history.length - 1].createdAt : null,
-      };
+      const result = await client.query(
+        `SELECT 
+          COUNT(*) as "totalMessages",
+          SUM(CASE WHEN role = 'user' THEN 1 ELSE 0 END) as "userMessages",
+          SUM(CASE WHEN role = 'assistant' THEN 1 ELSE 0 END) as "assistantMessages",
+          MIN("createdAt") as "firstMessage",
+          MAX("createdAt") as "lastMessage"
+         FROM conversations 
+         WHERE "userId" = $1`,
+        [userId]
+      );
       
+      const stats = result.rows[0] || {};
       console.log('[Conversation] Stats retrieved:', { userId, stats });
       return stats;
     } catch (error: any) {
       console.error('[Conversation] Error retrieving stats:', error.message);
       return null;
+    } finally {
+      if (client) await client.end();
     }
   }
 }
