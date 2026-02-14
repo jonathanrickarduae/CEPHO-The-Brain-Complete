@@ -1,6 +1,10 @@
 import { getDb } from '../db';
 import * as fs from 'fs';
 import * as path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 export async function runMigrations(): Promise<void> {
   console.log('[Migrations] Starting database migrations...');
