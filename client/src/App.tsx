@@ -48,6 +48,8 @@ import RevenueDashboard from "./pages/RevenueDashboard";
 import KpiDashboard from "./pages/KpiDashboard";
 import OperationsPage from "./pages/OperationsPage";
 import GrowthPage from "./pages/GrowthPage";
+import WorkflowsPage from "./pages/WorkflowsPage";
+import WorkflowDetailPage from "./pages/WorkflowDetailPage";
 import SocialMediaBlueprint from "./pages/SocialMediaBlueprint";
 import BusinessModelPage from "./pages/BusinessModelPage";
 import QuestionnaireOnline from "./pages/QuestionnaireOnline";
@@ -212,6 +214,12 @@ function Router() {
       </Route>
       <Route path="/reference-library">
         <WithLayout><ReferenceLibrary /></WithLayout>
+      </Route>
+      <Route path="/workflows/:id">
+        <WithLayout><WorkflowDetailPage /></WithLayout>
+      </Route>
+      <Route path="/workflows">
+        <WithLayout><WorkflowsPage /></WithLayout>
       </Route>
       
       {/* Fallback */}

@@ -27,6 +27,18 @@ import { InsertUser, users, moodHistory, InsertMoodHistory, MoodHistory, convers
   generatedDocuments, InsertGeneratedDocument, GeneratedDocument
 } from "../drizzle/schema";
 
+import {
+  cephoWorkflows,
+  CephoWorkflow,
+  InsertCephoWorkflow,
+  cephoWorkflowSteps,
+  CephoWorkflowStep,
+  InsertCephoWorkflowStep,
+  cephoWorkflowValidations,
+  CephoWorkflowValidation,
+  InsertCephoWorkflowValidation
+} from "../drizzle/workflow-schema";
+
 let _db: ReturnType<typeof drizzle> | null = null;
 
 // Lazily create the drizzle instance so local tooling can run without a DB.
