@@ -1,5 +1,6 @@
 import { getOpenAIClient, ChatMessage as OpenAIMessage } from './openai-client';
 import { getClaudeClient, ClaudeMessage } from './claude-client';
+import { getRedisCache } from './redis-cache';
 
 export interface LLMMessage {
   role: 'system' | 'user' | 'assistant';
@@ -43,17 +44,34 @@ export class LLMService {
 
     const provider = options?.provider || this.defaultProvider;
 
+    // Check cache first
+    const cacheKey = this.getCacheKey(messages, provider, options);
+    const cache = getRedisCache();
+    const cached = await cache.get(cacheKey);
+    if (cached) {
+      console.log('[LLM] Returning cached response');
+      return cached;
+    }
+
     try {
+      let response: string;
       switch (provider) {
         case 'openai':
-          return await this.chatWithOpenAI(messages, options);
+          response = await this.chatWithOpenAI(messages, options);
+          break;
         case 'claude':
-          return await this.chatWithClaude(messages, options);
+          response = await this.chatWithClaude(messages, options);
+          break;
         case 'manus':
-          return await this.chatWithManus(messages, options);
+          response = await this.chatWithManus(messages, options);
+          break;
         default:
           throw new Error(`Unknown provider: ${provider}`);
       }
+
+      // Cache the response (1 hour TTL)
+      await cache.set(cacheKey, response, { ttl: 3600 });
+      return response;
     } catch (error: any) {
       console.error(`[LLM] Error with ${provider}:`, error.message);
       
@@ -113,6 +131,13 @@ export class LLMService {
 
   private getFallbackResponse(): string {
     return "I'm currently experiencing technical difficulties. Please try again in a moment, or contact support if the issue persists.";
+  }
+
+  private getCacheKey(messages: LLMMessage[], provider: string, options?: LLMOptions): string {
+    // Create a cache key from messages and options
+    const messagesHash = JSON.stringify(messages.map(m => ({ r: m.role, c: m.content.substring(0, 100) })));
+    const optionsHash = JSON.stringify({ p: provider, m: options?.model, t: options?.temperature });
+    return `llm:${provider}:${Buffer.from(messagesHash + optionsHash).toString('base64').substring(0, 50)}`;
   }
 
   // Skill-specific system prompts
