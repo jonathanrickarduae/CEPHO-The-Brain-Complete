@@ -48,6 +48,8 @@ import RevenueDashboard from "./pages/RevenueDashboard";
 import KpiDashboard from "./pages/KpiDashboard";
 import OperationsPage from "./pages/OperationsPage";
 import GrowthPage from "./pages/GrowthPage";
+import AIAgentsPage from "./pages/AIAgentsPage";
+import AgentDetailPage from "./pages/AgentDetailPage";
 import WorkflowsPage from "./pages/WorkflowsPage";
 import WorkflowDetailPage from "./pages/WorkflowDetailPage";
 import SocialMediaBlueprint from "./pages/SocialMediaBlueprint";
@@ -126,6 +128,12 @@ function Router() {
       </Route>
       <Route path="/ai-team">
         <WithLayout><AITeam /></WithLayout>
+      </Route>
+      <Route path="/agents">
+        <WithLayout><AIAgentsPage /></WithLayout>
+      </Route>
+      <Route path="/agents/:id">
+        <WithLayout><AgentDetailPage /></WithLayout>
       </Route>
       <Route path="/settings">
         <WithLayout><Settings /></WithLayout>
