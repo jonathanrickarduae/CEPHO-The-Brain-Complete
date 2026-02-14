@@ -81,6 +81,10 @@ async function startServer() {
   const workflowRoutes = await import("../routes/workflows");
   app.use("/api/workflows", workflowRoutes.default);
   
+  // AI Agents API routes
+  const agentRoutes = await import("../routes/agents");
+  app.use("/api/agents", agentRoutes.default);
+  
   // tRPC API
   app.use(
     "/api/trpc",
