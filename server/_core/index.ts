@@ -30,7 +30,7 @@ import { appRouter } from "../routers";
 import { createContext } from "./context";
 import { serveStatic, setupVite } from "./vite";
 import { apiRateLimit } from "./rateLimit";
-import { runMigrations } from "../migrations";
+import { runMigrations } from "../migrations/run-migrations";
 
 function isPortAvailable(port: number): Promise<boolean> {
   return new Promise(resolve => {
