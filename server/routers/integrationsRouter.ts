@@ -89,7 +89,7 @@ export const integrationsRouter = router({
         { service: 'gemini', email: getEnv('GEMINI_EMAIL') || 'configured' },
         { service: 'manus', email: getEnv('MANUS_EMAIL') || 'configured' },
         { service: 'render', email: getEnv('RENDER_EMAIL') || 'configured' },
-      ].filter(svc => svc.email); // Only include services with email configured
+      ].filter(svc => svc.email || svc.apiKey); // Only include services with credentials configured
 
       // Store all credentials
       for (const svc of services) {
