@@ -1,0 +1,167 @@
+# CEPHO.AI Master Working File Index
+
+**Version:** 1.0  
+**Last Updated:** January 16, 2026  
+**Status:** Active
+
+---
+
+## Purpose
+
+This master index serves as the central navigation hub for all CEPHO.AI processes, frameworks, and project documentation. All project folders link back to this master file to ensure consistent process adherence.
+
+---
+
+## Folder Structure
+
+| Folder | Purpose | Key Documents |
+|--------|---------|---------------|
+| **00_Master_Index** | Central navigation and linking | This document, Process Map |
+| **01_Core_Processes** | Operational workflows | Project Genesis, Due Diligence, QA Protocol |
+| **02_SME_Frameworks** | AI Expert configurations | 310 SME Profiles, System Prompts, Feedback Logs |
+| **03_Blueprints** | CEPHO Blueprint Library | BP-001 to BP-014 (and growing) |
+| **04_Project_Templates** | Reusable project structures | Standard Project Folder, DD Folder, Investment Folder |
+| **05_Active_Projects** | Links to live project folders | Project-specific folders |
+
+---
+
+## Core Process Links
+
+### Project Genesis (Primary Workflow)
+- **Location:** `01_Core_Processes/Project_Genesis/`
+- **Purpose:** Standard process for initiating and executing any new project
+- **Key Steps:**
+  1. Project Initiation & Scoping
+  2. SME Team Assembly
+  3. Research & Analysis
+  4. Deliverable Creation
+  5. QA Review (Dual AI Verification)
+  6. Final Approval
+
+### Due Diligence Process
+- **Location:** `01_Core_Processes/Due_Diligence/`
+- **Purpose:** Structured approach for investment/acquisition analysis
+- **Key Documents:**
+  - CEPHO-BP-012: Due Diligence Process Guide
+  - CEPHO-BP-014: Data Room Document Management Process
+
+### Quality Assurance Protocol
+- **Location:** `01_Core_Processes/QA_Protocol/`
+- **Purpose:** Dual AI verification system ensuring 10/10 quality standard
+- **Process:**
+  1. Chief of Staff Initial Review
+  2. Secondary AI Cross-Check
+  3. SME Feedback Loop
+  4. Final Approval
+
+---
+
+## SME Framework Integration
+
+### Available Expert Categories (310 Total)
+1. Strategy & Business Development
+2. Finance & Investment
+3. Legal & Compliance
+4. Technology & Innovation
+5. Operations & Supply Chain
+6. Marketing & Communications
+7. Human Resources & Talent
+8. Risk Management
+9. Industry Specialists
+10. Research & Analysis
+11. Creative & Design
+12. Data & Analytics
+13. Sustainability & ESG
+14. Government & Public Affairs
+15. Healthcare & Life Sciences
+16. Real Estate & Property
+
+### SME Usage Protocol
+1. Identify project requirements
+2. Select appropriate SME team composition
+3. Brief SMEs with context and objectives
+4. Review and iterate on outputs
+5. Log feedback for continuous improvement
+
+---
+
+## Blueprint Library Reference
+
+| Code | Title | Category |
+|------|-------|----------|
+| BP-001 | Strategic Planning Framework | Strategy |
+| BP-002 | Financial Analysis Template | Finance |
+| BP-003 | Risk Assessment Matrix | Risk |
+| BP-004 | Project Charter Template | Projects |
+| BP-005 | Stakeholder Mapping Guide | Strategy |
+| BP-006 | Communication Plan Template | Communications |
+| BP-007 | Change Management Framework | Operations |
+| BP-008 | Performance Metrics Dashboard | Analytics |
+| BP-009 | Vendor Evaluation Checklist | Procurement |
+| BP-010 | Compliance Audit Framework | Legal |
+| BP-011 | Digital Twin Profile | AI/Technology |
+| BP-012 | Due Diligence Process Guide | Investment |
+| BP-013 | Digital Twin Profile (Extended) | AI/Technology |
+| BP-014 | Data Room Document Management | Due Diligence |
+
+---
+
+## Project Linking Protocol
+
+### How to Link a New Project
+
+1. **Create Project Folder** in `05_Active_Projects/`
+   - Use naming convention: `[DATE]_[PROJECT_NAME]_[CLIENT]`
+   - Example: `2026-01-16_Boundless_DD_Boundless`
+
+2. **Copy Template Structure** from `04_Project_Templates/`
+   - Select appropriate template (Standard, DD, Investment)
+   - Maintain folder hierarchy
+
+3. **Link to Core Processes**
+   - Add shortcut to relevant process folder
+   - Reference this Master Index in project README
+
+4. **Assign SME Team**
+   - Document team composition in project folder
+   - Link to SME profiles in `02_SME_Frameworks/`
+
+5. **Track Progress**
+   - Update project status in this index
+   - Log QA reviews and approvals
+
+---
+
+## Active Projects Register
+
+| Project | Status | Lead SME Team | QA Status | Last Updated |
+|---------|--------|---------------|-----------|--------------|
+| Boundless DD | In Progress | Finance, Legal, Strategy | Pending | Jan 16, 2026 |
+| CEPHO.AI Development | Active | Technology, Strategy | Approved | Jan 16, 2026 |
+
+---
+
+## Security & Access Protocol
+
+### Data Room Access Rules
+- **NEVER** use automated tools to access third-party data rooms
+- All data room content must be manually downloaded by authorized user
+- Screenshots, photos, and downloaded documents are acceptable intake methods
+- Maintain audit trail compliance at all times
+
+### Document Classification
+- **AMPORA Internal:** Generated by CEPHO.AI system
+- **External AS-IS:** Third-party documents, unmodified
+- **Confidential:** Restricted access, NDA-protected
+
+---
+
+## Version History
+
+| Version | Date | Changes | Author |
+|---------|------|---------|--------|
+| 1.0 | Jan 16, 2026 | Initial creation | CEPHO.AI |
+
+---
+
+*This document is the authoritative source for CEPHO.AI process navigation. All projects must reference this index to ensure process compliance.*
