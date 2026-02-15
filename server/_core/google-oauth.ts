@@ -125,9 +125,19 @@ export function registerGoogleOAuthRoutes(app: Express) {
       
       // Get user info from Google
       const userInfo = await getGoogleUserInfo(tokenResponse.access_token);
+      
+      console.log('[Google OAuth] User info received:', JSON.stringify(userInfo, null, 2));
 
       if (!userInfo.sub || !userInfo.email) {
-        res.status(400).json({ error: "Invalid user info from Google" });
+        console.error('[Google OAuth] Missing required fields. sub:', userInfo.sub, 'email:', userInfo.email);
+        res.status(400).json({ 
+          error: "Invalid user info from Google",
+          debug: {
+            hasSub: !!userInfo.sub,
+            hasEmail: !!userInfo.email,
+            fields: Object.keys(userInfo)
+          }
+        });
         return;
       }
 
