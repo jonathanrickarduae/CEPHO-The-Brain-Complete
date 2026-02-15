@@ -261,9 +261,8 @@ class SDKServer {
     console.log('[Auth Debug] VITE_AUTH_BYPASS value:', process.env.VITE_AUTH_BYPASS);
     console.log('[Auth Debug] All env vars:', Object.keys(process.env).filter(k => k.includes('AUTH')));
     
-    // TEMPORARY: Hardcode bypass to true to get OpenClaw working
-    const bypassEnabled = true; // TODO: Change back to env var check once env is configured
-    // const bypassEnabled = process.env.AUTH_BYPASS === 'true' || process.env.VITE_AUTH_BYPASS === 'true';
+    // Check environment variable for auth bypass (disabled in production)
+    const bypassEnabled = process.env.AUTH_BYPASS === 'true' || process.env.VITE_AUTH_BYPASS === 'true';
     
     if (bypassEnabled) {
       console.log('[Auth] Using bypass mode - returning mock user');
