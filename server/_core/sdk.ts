@@ -256,29 +256,6 @@ class SDKServer {
   }
 
   async authenticateRequest(req: Request): Promise<User> {
-    // Check for auth bypass in development
-    console.log('[Auth Debug] AUTH_BYPASS value:', process.env.AUTH_BYPASS);
-    console.log('[Auth Debug] VITE_AUTH_BYPASS value:', process.env.VITE_AUTH_BYPASS);
-    console.log('[Auth Debug] All env vars:', Object.keys(process.env).filter(k => k.includes('AUTH')));
-    
-    // Check environment variable for auth bypass (disabled in production)
-    const bypassEnabled = process.env.AUTH_BYPASS === 'true' || process.env.VITE_AUTH_BYPASS === 'true';
-    
-    if (bypassEnabled) {
-      console.log('[Auth] Using bypass mode - returning mock user');
-      // Return in-memory bypass user (don't rely on database)
-      return {
-        id: 999,
-        openId: 'bypass-user',
-        name: 'Bypass User',
-        email: null,
-        loginMethod: 'bypass',
-        role: null,
-        createdAt: new Date(),
-        lastSignedIn: new Date(),
-      } as User;
-    }
-
     // Regular authentication flow
     const cookies = this.parseCookies(req.headers.cookie);
     const sessionCookie = cookies.get(COOKIE_NAME);
