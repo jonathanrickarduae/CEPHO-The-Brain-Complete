@@ -1,7 +1,19 @@
 /**
  * Trading Data Service
  * Fetches real-time and historical stock data for trading signals
+ * Includes caching and rate limiting to prevent API throttling
  */
+
+// Simple in-memory cache
+interface CacheEntry<T> {
+  data: T;
+  timestamp: number;
+}
+
+const cache = new Map<string, CacheEntry<any>>();
+const CACHE_TTL = 60000; // 1 minute cache
+const MIN_REQUEST_INTERVAL = 2000; // 2 seconds between requests
+let lastRequestTime = 0;
 
 export interface StockQuote {
   symbol: string;
@@ -54,7 +66,25 @@ export interface HistoricalData {
  * Uses Yahoo Finance as free alternative (no API key required)
  */
 export async function getStockQuote(symbol: string = 'AAPL'): Promise<StockQuote> {
+  // Check cache first
+  const cacheKey = `quote-${symbol}`;
+  const cached = cache.get(cacheKey);
+  
+  if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
+    console.log(`[TradingDataService] Using cached quote for ${symbol}`);
+    return cached.data;
+  }
+  
+  // Rate limiting: wait if needed
+  const timeSinceLastRequest = Date.now() - lastRequestTime;
+  if (timeSinceLastRequest < MIN_REQUEST_INTERVAL) {
+    const waitTime = MIN_REQUEST_INTERVAL - timeSinceLastRequest;
+    console.log(`[TradingDataService] Rate limiting: waiting ${waitTime}ms`);
+    await new Promise(resolve => setTimeout(resolve, waitTime));
+  }
+  
   try {
+    lastRequestTime = Date.now();
     // Yahoo Finance API (unofficial but free)
     const url = `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?interval=1m&range=1d`;
     const response = await fetch(url);
@@ -74,7 +104,7 @@ export async function getStockQuote(symbol: string = 'AAPL'): Promise<StockQuote
     const currentPrice = meta.regularMarketPrice || quote.close[latestIndex];
     const previousClose = meta.previousClose;
     
-    return {
+    const stockQuote: StockQuote = {
       symbol: symbol.toUpperCase(),
       price: currentPrice,
       change: currentPrice - previousClose,
@@ -86,8 +116,23 @@ export async function getStockQuote(symbol: string = 'AAPL'): Promise<StockQuote
       low: quote.low[latestIndex] || meta.regularMarketDayLow,
       previousClose: previousClose
     };
-  } catch (error) {
+    
+    // Cache the result
+    cache.set(cacheKey, { data: stockQuote, timestamp: Date.now() });
+    
+    return stockQuote;
+  } catch (error: any) {
     console.error('[TradingDataService] Failed to fetch stock quote:', error);
+    
+    // If rate limited, return cached data if available (even if stale)
+    if (error.message?.includes('Too Many Requests') || error.message?.includes('429')) {
+      const staleCache = cache.get(cacheKey);
+      if (staleCache) {
+        console.warn('[TradingDataService] Rate limited, using stale cache');
+        return staleCache.data;
+      }
+    }
+    
     throw error;
   }
 }
