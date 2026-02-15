@@ -18,7 +18,8 @@ interface GoogleTokenResponse {
 }
 
 interface GoogleUserInfo {
-  sub: string; // Google user ID
+  id: string; // Google user ID (OAuth v2 uses 'id', not 'sub')
+  sub?: string; // OpenID Connect field (optional)
   email: string;
   email_verified: boolean;
   name: string;
@@ -127,12 +128,16 @@ export function registerGoogleOAuthRoutes(app: Express) {
       const userInfo = await getGoogleUserInfo(tokenResponse.access_token);
       
       console.log('[Google OAuth] User info received:', JSON.stringify(userInfo, null, 2));
+      
+      // Google OAuth v2 uses 'id', OpenID Connect uses 'sub'
+      const userId = userInfo.id || userInfo.sub;
 
-      if (!userInfo.sub || !userInfo.email) {
-        console.error('[Google OAuth] Missing required fields. sub:', userInfo.sub, 'email:', userInfo.email);
+      if (!userId || !userInfo.email) {
+        console.error('[Google OAuth] Missing required fields. id:', userInfo.id, 'sub:', userInfo.sub, 'email:', userInfo.email);
         res.status(400).json({ 
           error: "Invalid user info from Google",
           debug: {
+            hasId: !!userInfo.id,
             hasSub: !!userInfo.sub,
             hasEmail: !!userInfo.email,
             fields: Object.keys(userInfo)
@@ -144,7 +149,7 @@ export function registerGoogleOAuthRoutes(app: Express) {
       // Upsert user in database
       const db = await import("../db");
       await db.upsertUser({
-        openId: userInfo.sub,
+        openId: userId,
         name: userInfo.name || null,
         email: userInfo.email,
         loginMethod: "google",
@@ -152,7 +157,7 @@ export function registerGoogleOAuthRoutes(app: Express) {
       });
 
       // Create session token
-      const sessionToken = createSessionToken(userInfo.sub, userInfo.name);
+      const sessionToken = createSessionToken(userId, userInfo.name);
 
       // Set cookie
       const cookieOptions = getSessionCookieOptions(req);
