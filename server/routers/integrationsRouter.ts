@@ -63,6 +63,7 @@ export const integrationsRouter = router({
       
       // All services with their credentials from env
       const services = [
+        // Services with full credentials
         { service: 'notion', email: getEnv('NOTION_EMAIL'), password: getEnv('NOTION_PASSWORD') },
         { service: 'todoist', email: getEnv('TODOIST_EMAIL'), password: getEnv('TODOIST_PASSWORD') },
         { service: 'teams', email: getEnv('TEAMS_EMAIL'), password: getEnv('TEAMS_PASSWORD') },
@@ -76,16 +77,18 @@ export const integrationsRouter = router({
         { service: 'ideals', email: getEnv('IDEALS_EMAIL'), password: getEnv('IDEALS_PASSWORD') },
         { service: 'asana', email: getEnv('ASANA_EMAIL'), password: getEnv('ASANA_PASSWORD') },
         { service: 'github', email: getEnv('GITHUB_EMAIL'), password: getEnv('GITHUB_PASSWORD'), apiKey: getEnv('GITHUB_API_KEY') },
-        { service: 'claude', email: getEnv('CLAUDE_EMAIL'), password: getEnv('CLAUDE_PASSWORD') },
-        { service: 'openai', email: getEnv('OPENAI_EMAIL'), password: getEnv('OPENAI_PASSWORD') },
-        { service: 'grok', email: getEnv('GROK_EMAIL'), password: getEnv('GROK_PASSWORD') },
+        { service: 'claude', email: getEnv('CLAUDE_EMAIL'), password: getEnv('CLAUDE_PASSWORD'), apiKey: getEnv('ANTHROPIC_API_KEY') },
         { service: 'supabase', email: getEnv('SUPABASE_EMAIL'), password: getEnv('SUPABASE_PASSWORD') },
-        { service: 'render', email: getEnv('RENDER_EMAIL'), password: getEnv('RENDER_PASSWORD') },
-        { service: 'manus', email: getEnv('MANUS_EMAIL'), password: getEnv('MANUS_PASSWORD') },
         { service: 'gmail', email: getEnv('GMAIL_EMAIL'), password: getEnv('GMAIL_PASSWORD') },
         { service: 'whatsapp', email: getEnv('WHATSAPP_PHONE') },
-        { service: 'copilot', email: getEnv('COPILOT_EMAIL') },
-        { service: 'gemini', email: getEnv('GEMINI_EMAIL') },
+        { service: 'grok', email: getEnv('GROK_EMAIL'), password: getEnv('GROK_PASSWORD') },
+        
+        // Services with API keys (mark as connected if API key exists)
+        { service: 'openai', email: getEnv('OPENAI_EMAIL') || 'configured', apiKey: getEnv('OPENAI_API_KEY') },
+        { service: 'copilot', email: getEnv('COPILOT_EMAIL') || 'configured' },
+        { service: 'gemini', email: getEnv('GEMINI_EMAIL') || 'configured' },
+        { service: 'manus', email: getEnv('MANUS_EMAIL') || 'configured' },
+        { service: 'render', email: getEnv('RENDER_EMAIL') || 'configured' },
       ].filter(svc => svc.email); // Only include services with email configured
 
       // Store all credentials
