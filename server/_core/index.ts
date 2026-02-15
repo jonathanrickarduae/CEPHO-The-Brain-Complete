@@ -25,7 +25,7 @@ import express from "express";
 import { createServer } from "http";
 import net from "net";
 import { createExpressMiddleware } from "@trpc/server/adapters/express";
-import { registerOAuthRoutes } from "./oauth";
+import { registerGoogleOAuthRoutes } from "./google-oauth";
 import { appRouter } from "../routers";
 import { createContext } from "./context";
 import { serveStatic, setupVite } from "./vite";
@@ -74,8 +74,8 @@ async function startServer() {
   // Apply rate limiting to API routes
   app.use("/api", apiRateLimit);
   
-  // OAuth callback under /api/oauth/callback
-  registerOAuthRoutes(app);
+  // Google OAuth routes
+  registerGoogleOAuthRoutes(app);
   
   // Workflow API routes
   const workflowRoutes = await import("../routes/workflows");
