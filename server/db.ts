@@ -106,7 +106,8 @@ export async function upsertUser(user: InsertUser): Promise<void> {
       updateSet.lastSignedIn = new Date();
     }
 
-    await db.insert(users).values(values).onDuplicateKeyUpdate({
+    await db.insert(users).values(values).onConflictDoUpdate({
+      target: users.openId,
       set: updateSet,
     });
   } catch (error) {
@@ -594,7 +595,8 @@ export async function upsertUserSettings(data: InsertUserSettings): Promise<User
   if (!db) return null;
 
   try {
-    await db.insert(userSettings).values(data).onDuplicateKeyUpdate({
+    await db.insert(userSettings).values(data).onConflictDoUpdate({
+      target: userSettings.userId,
       set: { ...data, updatedAt: new Date() },
     });
     return getUserSettings(data.userId);
