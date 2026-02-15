@@ -112,6 +112,15 @@ export async function upsertUser(user: InsertUser): Promise<void> {
     });
   } catch (error) {
     console.error("[Database] Failed to upsert user:", error);
+    console.error("[Database] Error details:", {
+      message: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : 'N/A',
+      code: (error as any)?.code,
+      detail: (error as any)?.detail,
+      constraint: (error as any)?.constraint,
+    });
+    console.error("[Database] Attempted values:", JSON.stringify(values, null, 2));
+    console.error("[Database] Update set:", JSON.stringify(updateSet, null, 2));
     throw error;
   }
 }
