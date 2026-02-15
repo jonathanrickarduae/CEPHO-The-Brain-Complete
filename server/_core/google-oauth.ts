@@ -166,8 +166,13 @@ export function registerGoogleOAuthRoutes(app: Express) {
       // Redirect to home
       res.redirect(302, "/");
     } catch (error) {
-      console.error("[Google OAuth] Callback failed", error);
-      res.status(500).json({ error: "OAuth callback failed" });
+      console.error("[Google OAuth] Callback failed:", error);
+      console.error("[Google OAuth] Error stack:", error instanceof Error ? error.stack : 'N/A');
+      console.error("[Google OAuth] Error message:", error instanceof Error ? error.message : String(error));
+      res.status(500).json({ 
+        error: "OAuth callback failed",
+        message: error instanceof Error ? error.message : String(error)
+      });
     }
   });
 
