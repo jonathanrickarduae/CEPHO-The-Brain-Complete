@@ -112,17 +112,18 @@ function checkTime() {
 export function startDailyCycle() {
   loadDailyCycleConfig();
   
+  // DISABLED: Daily cycle modals temporarily disabled per user request
   // Check every minute
-  if (checkInterval) {
-    clearInterval(checkInterval);
-  }
+  // if (checkInterval) {
+  //   clearInterval(checkInterval);
+  // }
   
-  checkInterval = setInterval(checkTime, 60000);
+  // checkInterval = setInterval(checkTime, 60000);
   
   // Also check immediately on start
-  checkTime();
+  // checkTime();
   
-  console.log('Daily cycle started:', config);
+  console.log('Daily cycle DISABLED (modals turned off)');
 }
 
 export function stopDailyCycle() {
