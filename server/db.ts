@@ -1,6 +1,7 @@
 import { eq, desc, and, gte, lte, sql } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
+import { ENV } from "./_core/env";
 import { InsertUser, users, moodHistory, InsertMoodHistory, MoodHistory, conversations, InsertConversation, Conversation,
   expertConversations, InsertExpertConversation, ExpertConversation,
   expertMemory, InsertExpertMemory, ExpertMemory,
