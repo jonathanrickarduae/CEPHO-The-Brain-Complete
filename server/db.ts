@@ -121,7 +121,11 @@ export async function upsertUser(user: InsertUser): Promise<void> {
     const updateColumns = Object.keys(updateSet).map(key => `"${key}" = EXCLUDED."${key}"`).join(', ');
     
     // Use postgres client directly instead of Drizzle's execute
-    const client = postgres(process.env.DATABASE_URL!);
+    // Configure for Supabase with connection pooling
+    const client = postgres(process.env.DATABASE_URL!, {
+      prepare: false, // Required for PgBouncer
+      max: 1 // Single connection for this operation
+    });
     
     try {
       await client`
