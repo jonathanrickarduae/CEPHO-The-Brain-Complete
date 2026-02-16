@@ -48,7 +48,11 @@ export async function getDb() {
     try {
       // Configure postgres client for Supabase/PgBouncer compatibility
       const client = postgres(process.env.DATABASE_URL, {
-        prepare: false, // Required for PgBouncer
+        prepare: false, // Required for PgBouncer - disables prepared statements
+        ssl: false, // Disable SSL to avoid pgbouncer parameter issues
+        connection: {
+          application_name: 'cepho-brain',
+        },
       });
       _db = drizzle(client);
     } catch (error) {
