@@ -108,21 +108,34 @@ export async function upsertUser(user: InsertUser): Promise<void> {
       updateSet.lastSignedIn = new Date();
     }
 
+    // Log values before insert for debugging
+    console.log('[Database] Upserting user with values:', JSON.stringify({
+      openId: values.openId,
+      name: values.name,
+      email: values.email,
+      loginMethod: values.loginMethod,
+      lastSignedIn: values.lastSignedIn
+    }, null, 2));
+
     // Use raw SQL for PostgreSQL ON CONFLICT to avoid Drizzle MySQL/PostgreSQL incompatibility
     const updateColumns = Object.keys(updateSet).map(key => `"${key}" = EXCLUDED."${key}"`).join(', ');
+    
+    const params = [
+      values.openId,
+      values.name || null,
+      values.email || null,
+      values.loginMethod || null,
+      values.lastSignedIn
+    ];
+    
+    console.log('[Database] SQL params:', JSON.stringify(params, null, 2));
     
     await db.execute(`
       INSERT INTO users ("openId", "name", "email", "loginMethod", "lastSignedIn")
       VALUES ($1, $2, $3, $4, $5)
       ON CONFLICT ("openId") DO UPDATE SET
         ${updateColumns}
-    `, [
-      values.openId,
-      values.name,
-      values.email,
-      values.loginMethod,
-      values.lastSignedIn
-    ]);
+    `, params);
   } catch (error) {
     console.error("[Database] Failed to upsert user:", error);
     console.error("[Database] Error details:", {
