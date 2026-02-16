@@ -120,22 +120,20 @@ export async function upsertUser(user: InsertUser): Promise<void> {
     // Use raw SQL for PostgreSQL ON CONFLICT to avoid Drizzle MySQL/PostgreSQL incompatibility
     const updateColumns = Object.keys(updateSet).map(key => `"${key}" = EXCLUDED."${key}"`).join(', ');
     
-    const params = [
-      values.openId,
-      values.name || null,
-      values.email || null,
-      values.loginMethod || null,
-      values.lastSignedIn
-    ];
+    // Use postgres client directly instead of Drizzle's execute
+    const client = postgres(process.env.DATABASE_URL!);
     
-    console.log('[Database] SQL params:', JSON.stringify(params, null, 2));
-    
-    await db.execute(`
-      INSERT INTO users ("openId", "name", "email", "loginMethod", "lastSignedIn")
-      VALUES ($1, $2, $3, $4, $5)
-      ON CONFLICT ("openId") DO UPDATE SET
-        ${updateColumns}
-    `, params);
+    try {
+      await client`
+        INSERT INTO users (${client('openId')}, ${client('name')}, ${client('email')}, ${client('loginMethod')}, ${client('lastSignedIn')})
+        VALUES (${values.openId}, ${values.name || null}, ${values.email || null}, ${values.loginMethod || null}, ${values.lastSignedIn})
+        ON CONFLICT ("openId") DO UPDATE SET
+          ${client.unsafe(updateColumns)}
+      `;
+      console.log('[Database] User upserted successfully');
+    } finally {
+      await client.end();
+    }
   } catch (error) {
     console.error("[Database] Failed to upsert user:", error);
     console.error("[Database] Error details:", {
