@@ -110,6 +110,9 @@ export async function upsertUser(user: InsertUser): Promise<void> {
     if (Object.keys(updateSet).length === 0) {
       updateSet.lastSignedIn = new Date();
     }
+    
+    // Always update updatedAt on conflict
+    updateSet.updatedAt = new Date();
 
     // Log values before insert for debugging
     console.log('[Database] Upserting user with values:', JSON.stringify({
