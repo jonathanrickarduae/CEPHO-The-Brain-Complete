@@ -108,10 +108,21 @@ export async function upsertUser(user: InsertUser): Promise<void> {
       updateSet.lastSignedIn = new Date();
     }
 
-    await db.insert(users).values(values).onConflictDoUpdate({
-      target: users.openId,
-      set: updateSet,
-    });
+    // Use raw SQL for PostgreSQL ON CONFLICT to avoid Drizzle MySQL/PostgreSQL incompatibility
+    const updateColumns = Object.keys(updateSet).map(key => `"${key}" = EXCLUDED."${key}"`).join(', ');
+    
+    await db.execute(`
+      INSERT INTO users ("openId", "name", "email", "loginMethod", "lastSignedIn")
+      VALUES ($1, $2, $3, $4, $5)
+      ON CONFLICT ("openId") DO UPDATE SET
+        ${updateColumns}
+    `, [
+      values.openId,
+      values.name,
+      values.email,
+      values.loginMethod,
+      values.lastSignedIn
+    ]);
   } catch (error) {
     console.error("[Database] Failed to upsert user:", error);
     console.error("[Database] Error details:", {
