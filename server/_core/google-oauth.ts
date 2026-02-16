@@ -148,13 +148,24 @@ export function registerGoogleOAuthRoutes(app: Express) {
 
       // Upsert user in database
       const db = await import("../db");
-      await db.upsertUser({
-        openId: userId,
-        name: userInfo.name || null,
-        email: userInfo.email,
-        loginMethod: "google",
-        lastSignedIn: new Date(),
-      });
+      try {
+        await db.upsertUser({
+          openId: userId,
+          name: userInfo.name || null,
+          email: userInfo.email,
+          loginMethod: "google",
+          lastSignedIn: new Date(),
+        });
+      } catch (upsertError) {
+        // Check if user was actually created despite the error
+        console.log('[Google OAuth] Upsert threw error, checking if user exists...');
+        const existingUser = await db.getUserByOpenId(userId);
+        if (!existingUser) {
+          // User wasn't created, re-throw the error
+          throw upsertError;
+        }
+        console.log('[Google OAuth] User exists despite error, continuing...');
+      }
 
       // Create session token
       const sessionToken = createSessionToken(userId, userInfo.name);
