@@ -117,27 +117,14 @@ export async function upsertUser(user: InsertUser): Promise<void> {
       lastSignedIn: values.lastSignedIn
     }, null, 2));
 
-    // Use raw SQL for PostgreSQL ON CONFLICT to avoid Drizzle MySQL/PostgreSQL incompatibility
-    const updateColumns = Object.keys(updateSet).map(key => `"${key}" = EXCLUDED."${key}"`).join(', ');
-    
-    // Use postgres client directly instead of Drizzle's execute
-    // Configure for Supabase with connection pooling
-    const client = postgres(process.env.DATABASE_URL!, {
-      prepare: false, // Required for PgBouncer
-      max: 1 // Single connection for this operation
+    // Use Drizzle's insert with onConflictDoUpdate
+    // This uses the existing db connection which is already configured correctly
+    await db.insert(users).values(values).onConflictDoUpdate({
+      target: users.openId,
+      set: updateSet,
     });
     
-    try {
-      await client`
-        INSERT INTO users (${client('openId')}, ${client('name')}, ${client('email')}, ${client('loginMethod')}, ${client('lastSignedIn')})
-        VALUES (${values.openId}, ${values.name || null}, ${values.email || null}, ${values.loginMethod || null}, ${values.lastSignedIn})
-        ON CONFLICT ("openId") DO UPDATE SET
-          ${client.unsafe(updateColumns)}
-      `;
-      console.log('[Database] User upserted successfully');
-    } finally {
-      await client.end();
-    }
+    console.log('[Database] User upserted successfully');
   } catch (error) {
     console.error("[Database] Failed to upsert user:", error);
     console.error("[Database] Error details:", {
