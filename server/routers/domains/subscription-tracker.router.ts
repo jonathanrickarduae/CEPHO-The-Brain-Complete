@@ -6,7 +6,7 @@
  * @module routers/domains/subscription-tracker
  */
 
-import { router } from "../_core/trpc";
+import { router } from "../../_core/trpc";
 import { z } from "zod";
 
 export const subscriptionTrackerRouter = router({
@@ -17,7 +17,7 @@ export const subscriptionTrackerRouter = router({
         category: z.string().optional(),
       }).optional())
       .query(async ({ ctx, input }) => {
-        const { getSubscriptions } = await import('./db');
+        const { getSubscriptions } = await import('../../db');
         return getSubscriptions(ctx.user.id, input);
       }),
 
@@ -25,7 +25,7 @@ export const subscriptionTrackerRouter = router({
     getById: protectedProcedure
       .input(z.object({ id: z.number() }))
       .query(async ({ ctx, input }) => {
-        const { getSubscriptionById } = await import('./db');
+        const { getSubscriptionById } = await import('../../db');
         const sub = await getSubscriptionById(input.id);
         if (!sub || sub.userId !== ctx.user.id) {
           throw new Error('Subscription not found');
@@ -53,7 +53,7 @@ export const subscriptionTrackerRouter = router({
         notes: z.string().optional(),
       }))
       .mutation(async ({ ctx, input }) => {
-        const { createSubscription } = await import('./db');
+        const { createSubscription } = await import('../../db');
         const id = await createSubscription({
           ...input,
           userId: ctx.user.id,
@@ -82,7 +82,7 @@ export const subscriptionTrackerRouter = router({
         notes: z.string().optional(),
       }))
       .mutation(async ({ ctx, input }) => {
-        const { getSubscriptionById, updateSubscription } = await import('./db');
+        const { getSubscriptionById, updateSubscription } = await import('../../db');
         const sub = await getSubscriptionById(input.id);
         if (!sub || sub.userId !== ctx.user.id) {
           throw new Error('Subscription not found');
@@ -96,7 +96,7 @@ export const subscriptionTrackerRouter = router({
     delete: protectedProcedure
       .input(z.object({ id: z.number() }))
       .mutation(async ({ ctx, input }) => {
-        const { getSubscriptionById, deleteSubscription } = await import('./db');
+        const { getSubscriptionById, deleteSubscription } = await import('../../db');
         const sub = await getSubscriptionById(input.id);
         if (!sub || sub.userId !== ctx.user.id) {
           throw new Error('Subscription not found');
@@ -108,7 +108,7 @@ export const subscriptionTrackerRouter = router({
     // Get subscription summary
     getSummary: protectedProcedure
       .query(async ({ ctx }) => {
-        const { getSubscriptionSummary } = await import('./db');
+        const { getSubscriptionSummary } = await import('../../db');
         return getSubscriptionSummary(ctx.user.id);
       }),
 
@@ -116,7 +116,7 @@ export const subscriptionTrackerRouter = router({
     getCostHistory: protectedProcedure
       .input(z.object({ months: z.number().min(1).max(24).default(12) }).optional())
       .query(async ({ ctx, input }) => {
-        const { getSubscriptionCostHistory } = await import('./db');
+        const { getSubscriptionCostHistory } = await import('../../db');
         return getSubscriptionCostHistory(ctx.user.id, input?.months || 12);
       }),
 
@@ -124,21 +124,21 @@ export const subscriptionTrackerRouter = router({
     getUpcomingRenewals: protectedProcedure
       .input(z.object({ daysAhead: z.number().min(1).max(90).default(30) }).optional())
       .query(async ({ ctx, input }) => {
-        const { getUpcomingRenewals } = await import('./services/subscriptionReminderService');
+// //         const { getUpcomingRenewals } = await import('../../services/subscriptionReminderService');
         return getUpcomingRenewals(ctx.user.id, input?.daysAhead || 30);
       }),
 
     // Get renewal summary (count, total cost, next renewal)
     getRenewalSummary: protectedProcedure
       .query(async ({ ctx }) => {
-        const { getRenewalSummary } = await import('./services/subscriptionReminderService');
+//         const { getRenewalSummary } = await import('../../services/subscriptionReminderService');
         return getRenewalSummary(ctx.user.id);
       }),
 
     // Manually trigger reminder check and send notifications
     sendRenewalReminders: protectedProcedure
       .mutation(async ({ ctx }) => {
-        const { checkAndSendReminders } = await import('./services/subscriptionReminderService');
+//         const { checkAndSendReminders } = await import('../../services/subscriptionReminderService');
         return checkAndSendReminders(ctx.user.id);
       }),
 });

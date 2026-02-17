@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useAuth } from "@/_core/hooks/useAuth";
-import BrainLayout from "@/components/BrainLayout";
+import BrainLayout from '@/components/ai-agents/BrainLayout';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -27,7 +27,7 @@ import {
   FileText,
   Video,
 } from "lucide-react";
-import { VictoriaPresenter } from "@/components/VictoriaPresenter";
+import { VictoriaPresenter } from '@/components/shared/VictoriaPresenter';
 import { useLocation } from "wouter";
 
 interface SignalItem {

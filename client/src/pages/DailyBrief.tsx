@@ -9,7 +9,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { QuickActionsPanel } from "@/components/QuickActionsPanel";
+import { QuickActionsPanel } from '@/components/shared/QuickActionsPanel';
 import { toast } from "sonner";
 
 // Types for actioned items
@@ -261,7 +261,7 @@ export default function DailyBrief() {
               />
               <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6">
                 <div className="flex items-center gap-3">
-                  <img 
+                  <img alt="Daily brief illustration" 
                     src="/avatars/victoria-stirling.jpg" 
                     alt="Victoria Stirling" 
                     className="w-10 h-10 rounded-full border-2 border-blue-500"
@@ -288,7 +288,7 @@ export default function DailyBrief() {
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div className="flex items-center gap-4">
               <div className="relative">
-                <img 
+                <img alt="Insights summary graphic" 
                   src="/avatars/victoria-stirling.jpg" 
                   alt="Victoria Stirling" 
                   className="w-12 h-12 md:w-14 md:h-14 rounded-full object-cover border-2 border-blue-500/50 shadow-lg"

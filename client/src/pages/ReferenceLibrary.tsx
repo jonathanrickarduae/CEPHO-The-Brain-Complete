@@ -29,7 +29,7 @@ import {
   VerificationBadge, 
   ReferenceTable,
   ValidationSummary,
-} from '@/components/InsightValidation';
+} from '@/components/analytics/InsightValidation';
 import { useReferenceLibrary } from '@/hooks/useReferenceLibrary';
 import { FeatureGate, RestrictedBadge } from '@/hooks/useGovernance';
 

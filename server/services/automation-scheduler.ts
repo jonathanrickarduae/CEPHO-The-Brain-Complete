@@ -230,41 +230,15 @@ class AutomationScheduler {
    * 6:30 AM - Chief of Staff validates signal
    */
   private async validateSignal() {
-    const db = await getDb();
-    
-    // Get today's signals that need validation
-    const signals = await db`
-   */
+    // TODO: Implement signal validation
+    console.log('Signal validation not yet implemented');
+  }
+
+  /**
   private async distributeSignal() {
-    const db = await getDb();
-    
-    // Get today's validated signals
-    const signals = await db`
-      SELECT s.*, p.name as "projectName", u.email, u.name as "userName"
-        
-        // Generate PDF report
-        const pdfPath = await generatePDF({
-          template: 'daily_signal',
-          data: { signal, briefing },
-          filename: `daily-signal-${signal.projectId}-${new Date().toISOString().split('T')[0]}.pdf`,
-        });
-        
-        // Send email
-        await sendEmail({
-          to: signal.email,
-          subject: `Daily Signal: ${signal.projectName}`,
-          template: 'daily_signal',
-          data: { signal, briefing, pdfPath },
-        });
-        
-        // Send WhatsApp (if configured)
-        await sendWhatsApp({
-          to: signal.email, // Assuming email maps to WhatsApp
-          message: `🧠 CEPHO Daily Signal\n\n${briefing.summary}\n\nSignal: ${signal.signal}\nConfidence: ${signal.confidence}%`,
-        });
-        
-        // Log distribution
-        await db`
+    // TODO: Implement signal distribution
+    console.log('Signal distribution not yet implemented');
+  }
 
   /**
    * Hourly market check (9 AM - 5 PM)

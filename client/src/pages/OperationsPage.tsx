@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { NPSSurvey, NPSStatsDashboard } from '@/components/NPSSurvey';
-import { PartnershipPipeline } from '@/components/PartnershipPipeline';
-import { TeamCapabilityMatrix } from '@/components/TeamCapabilityMatrix';
-import { PageHeader } from '@/components/PageHeader';
+import { NPSSurvey, NPSStatsDashboard } from '@/components/shared/NPSSurvey';
+import { PartnershipPipeline } from '@/components/communication/PartnershipPipeline';
+import { TeamCapabilityMatrix } from '@/components/team-management/TeamCapabilityMatrix';
+import { PageHeader } from '@/components/layout/PageHeader';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Users, Handshake, TrendingUp, BarChart3 } from 'lucide-react';
 

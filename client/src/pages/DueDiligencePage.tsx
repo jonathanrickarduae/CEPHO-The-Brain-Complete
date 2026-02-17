@@ -1,4 +1,4 @@
-import { DueDiligenceWizard } from '@/components/DueDiligenceWizard';
+import { DueDiligenceWizard } from '@/components/onboarding/DueDiligenceWizard';
 
 export default function DueDiligencePage() {
   return (

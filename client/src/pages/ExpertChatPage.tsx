@@ -10,9 +10,9 @@ import { useVoiceInput, useVoiceWaveform } from "@/hooks/useVoiceInput";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { PageHeader } from "@/components/PageHeader";
+import { PageHeader } from '@/components/layout/PageHeader';
 import { trpc } from "@/lib/trpc";
-import { AI_EXPERTS, type AIExpert } from "@/data/aiExperts";
+import { AI_EXPERTS, type AIExpert } from "@/data/ai-experts.data";
 import { Streamdown } from "streamdown";
 
 // Generate system prompt from expert profile

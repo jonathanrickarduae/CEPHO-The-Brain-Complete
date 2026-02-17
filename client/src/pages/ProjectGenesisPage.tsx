@@ -7,20 +7,20 @@ import {
   PresentationIcon, DollarSign, Shield, BarChart3,
   Loader2
 } from 'lucide-react';
-import ProjectGenesis from '@/components/ProjectGenesis';
-import { GenesisBlueprintWizard } from '@/components/GenesisBlueprintWizard';
-import { BlueprintQMS } from '@/components/BlueprintQMS';
-import { SocialMediaBlueprint } from '@/components/SocialMediaBlueprint';
-import { QMSProcessLog } from '@/components/QMSProcessLog';
-import { PresentationBlueprint } from '@/components/PresentationBlueprint';
-import { GenesisBlueprint } from '@/data/genesisBlueprint';
-import { VoiceNoteIntake } from '@/components/VoiceNoteIntake';
-import { ExpertTeamAssemblyWizard } from '@/components/ExpertTeamAssemblyWizard';
-import { IdeaScoringDashboard } from '@/components/IdeaScoringDashboard';
-import { ValidationEngine } from '@/components/ValidationEngine';
-import { ValueChainProgress, ValueChainProgressCompact } from '@/components/ValueChainProgress';
-import { valueChainPhases, type ProjectPhaseProgress, type ProjectPhaseStatus } from '@/data/valueChain';
-import { BlueprintTemplatesDashboard, defaultTemplates, type BlueprintTemplate } from '@/components/BlueprintTemplates';
+import ProjectGenesis from '@/components/project-management/ProjectGenesis';
+import { GenesisBlueprintWizard } from '@/components/business-plan/GenesisBlueprintWizard';
+import { BlueprintQMS } from '@/components/business-plan/BlueprintQMS';
+import { SocialMediaBlueprint } from '@/components/business-plan/SocialMediaBlueprint';
+import { QMSProcessLog } from '@/components/shared/QMSProcessLog';
+import { PresentationBlueprint } from '@/components/business-plan/PresentationBlueprint';
+import { GenesisBlueprint } from '@/data/genesis-blueprint.data';
+import { VoiceNoteIntake } from '@/components/shared/VoiceNoteIntake';
+import { ExpertTeamAssemblyWizard } from '@/components/expert-evolution/ExpertTeamAssemblyWizard';
+import { IdeaScoringDashboard } from '@/components/project-management/IdeaScoringDashboard';
+import { ValidationEngine } from '@/components/shared/ValidationEngine';
+import { ValueChainProgress, ValueChainProgressCompact } from '@/components/ai-agents/ValueChainProgress';
+import { valueChainPhases, type ProjectPhaseProgress, type ProjectPhaseStatus } from '@/data/value-chain.data';
+import { BlueprintTemplatesDashboard, defaultTemplates, type BlueprintTemplate } from '@/components/business-plan/BlueprintTemplates';
 import { trpc } from '@/lib/trpc';
 import { toast } from 'sonner';
 

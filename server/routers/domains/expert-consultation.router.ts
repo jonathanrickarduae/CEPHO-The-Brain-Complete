@@ -6,7 +6,7 @@
  * @module routers/domains/expert-consultation
  */
 
-import { router } from "../_core/trpc";
+import { router } from "../../_core/trpc";
 import { z } from "zod";
 
 export const expertConsultationRouter = router({

@@ -10,7 +10,7 @@ import {
   Mic, ChevronRight, X, MessageSquare, Zap, Target, Brain,
   Filter, SortAsc, Grid3X3, List
 } from 'lucide-react';
-import { allExperts, corporatePartners, categories, getTopPerformers, getExpertsNeedingReview, getLeftFieldExperts, getCelebrityExperts, AIExpert, CorporatePartner } from '@/data/aiExperts';
+import { allExperts, corporatePartners, categories, getTopPerformers, getExpertsNeedingReview, getLeftFieldExperts, getCelebrityExperts, AIExpert, CorporatePartner } from '@/data/ai-experts.data';
 
 export default function AITeam() {
   const [, setLocation] = useLocation();

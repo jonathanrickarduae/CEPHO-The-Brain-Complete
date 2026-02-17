@@ -6,7 +6,7 @@
  * @module routers/domains/document-library
  */
 
-import { router } from "../_core/trpc";
+import { router } from "../../_core/trpc";
 import { z } from "zod";
 
 export const documentLibraryRouter = router({
@@ -20,7 +20,7 @@ export const documentLibraryRouter = router({
       }).optional())
       .query(async ({ ctx, input }) => {
         const filters = input || { type: 'all', qaStatus: 'all', limit: 50, offset: 0 };
-        const { getDocuments } = await import('./db');
+        const { getDocuments } = await import('../../db');
         return getDocuments(ctx.user.id, filters);
       }),
 
@@ -28,7 +28,7 @@ export const documentLibraryRouter = router({
     get: protectedProcedure
       .input(z.object({ documentId: z.string() }))
       .query(async ({ ctx, input }) => {
-        const { getDocumentById } = await import('./db');
+        const { getDocumentById } = await import('../../db');
         const doc = await getDocumentById(input.documentId);
         if (!doc || doc.userId !== ctx.user.id) {
           throw new Error('Document not found');
@@ -43,9 +43,9 @@ export const documentLibraryRouter = router({
         type: z.enum(['innovation_brief', 'project_genesis', 'report']),
       }))
       .mutation(async ({ ctx, input }) => {
-        const { generateInnovationBriefPDF } = await import('./services/pdf-export.service');
-        const { getDocumentById, updateDocument } = await import('./db');
-        const { storagePut } = await import('./storage');
+        const { generateInnovationBriefPDF } = await import('../../services/pdf-export.service');
+        const { getDocumentById, updateDocument } = await import('../../db');
+        const { storagePut } = await import('../../storage');
         
         const doc = await getDocumentById(input.documentId);
         if (!doc || doc.userId !== ctx.user.id) {
@@ -105,7 +105,7 @@ export const documentLibraryRouter = router({
         relatedProjectId: z.number().optional(),
       }))
       .mutation(async ({ ctx, input }) => {
-        const { createDocument } = await import('./db');
+        const { createDocument } = await import('../../db');
         const documentId = `DOC-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
         
         const id = await createDocument({
@@ -131,7 +131,7 @@ export const documentLibraryRouter = router({
         notes: z.string().optional(),
       }))
       .mutation(async ({ ctx, input }) => {
-        const { updateDocument, getDocumentById } = await import('./db');
+        const { updateDocument, getDocumentById } = await import('../../db');
         const doc = await getDocumentById(input.documentId);
         if (!doc || doc.userId !== ctx.user.id) {
           throw new Error('Document not found');
@@ -151,7 +151,7 @@ export const documentLibraryRouter = router({
     delete: protectedProcedure
       .input(z.object({ documentId: z.string() }))
       .mutation(async ({ ctx, input }) => {
-        const { deleteDocument, getDocumentById } = await import('./db');
+        const { deleteDocument, getDocumentById } = await import('../../db');
         const doc = await getDocumentById(input.documentId);
         if (!doc || doc.userId !== ctx.user.id) {
           throw new Error('Document not found');
@@ -174,9 +174,9 @@ export const documentLibraryRouter = router({
         includeAsLink: z.boolean().default(true),
       }))
       .mutation(async ({ ctx, input }) => {
-        const { getDocumentById } = await import('./db');
-        const { generateDocumentEmailHTML, addToDocumentEmailHistory } = await import('./services/emailService');
-        const { notifyOwner } = await import('./_core/notification');
+        const { getDocumentById } = await import('../../db');
+// //         const { generateDocumentEmailHTML, addToDocumentEmailHistory } = await import('../../services/emailService');
+//         const { notifyOwner } = await import('./_core/notification');
         
         const doc = await getDocumentById(input.documentId);
         if (!doc || doc.userId !== ctx.user.id) {
@@ -242,8 +242,8 @@ export const documentLibraryRouter = router({
     getEmailHistory: protectedProcedure
       .input(z.object({ documentId: z.string() }))
       .query(async ({ ctx, input }) => {
-        const { getDocumentById } = await import('./db');
-        const { getDocumentEmailHistory } = await import('./services/emailService');
+        const { getDocumentById } = await import('../../db');
+//         const { getDocumentEmailHistory } = await import('../../services/emailService');
         
         const doc = await getDocumentById(input.documentId);
         if (!doc || doc.userId !== ctx.user.id) {

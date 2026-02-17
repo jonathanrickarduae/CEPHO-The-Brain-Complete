@@ -7,25 +7,25 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { LearningBadge } from "@/components/LearningIndicator";
+import { LearningBadge } from '@/components/expert-evolution/LearningIndicator';
 
-import { Tooltip } from "@/components/Tooltip";
+import { Tooltip } from '@/components/shared/Tooltip';
 import { useMoodCheck } from "@/hooks/useMoodCheck";
 import { Share2 } from "lucide-react";
-import { MobileInputSheet, QuickInputTrigger } from "@/components/MobileInputSheet";
+import { MobileInputSheet, QuickInputTrigger } from '@/components/shared/MobileInputSheet';
 import { useIsMobile } from "@/hooks/useMobile";
-import { PullToRefresh } from "@/components/PullToRefresh";
-import { GettingStartedChecklist, useOnboardingStatus } from "@/components/GettingStartedChecklist";
-import { InsightsPanel, InlineNudge, useNudgeEngine } from "@/components/IntelligentNudges";
-import { VoiceInterfaceToggle } from "@/components/VoiceInterfaceToggle";
-import { FloatingVoiceNoteButton } from "@/components/VoiceNotepad";
-import { PerformanceBoost } from "@/components/PerformanceBoost";
-import { TwinBreakApproval } from "@/components/TwinBreakApproval";
-import { TourPrompt } from '@/components/TourAndDemoMode';
-import { NeuralNetworkViz } from '@/components/NeuralNetworkViz';
-import { TaskProgressTracker } from '@/components/TaskProgressTracker';
-import { FavoriteContacts } from '@/components/FavoriteContacts';
-import { OnboardingOverlay } from '@/components/OnboardingOverlay';
+import { PullToRefresh } from '@/components/shared/PullToRefresh';
+import { GettingStartedChecklist, useOnboardingStatus } from '@/components/shared/GettingStartedChecklist';
+import { InsightsPanel, InlineNudge, useNudgeEngine } from '@/components/shared/IntelligentNudges';
+import { VoiceInterfaceToggle } from '@/components/shared/VoiceInterfaceToggle';
+import { FloatingVoiceNoteButton } from '@/components/shared/VoiceNotepad';
+import { PerformanceBoost } from '@/components/analytics/PerformanceBoost';
+import { TwinBreakApproval } from '@/components/shared/TwinBreakApproval';
+import { TourPrompt } from '@/components/onboarding/TourAndDemoMode';
+import { NeuralNetworkViz } from '@/components/shared/NeuralNetworkViz';
+import { TaskProgressTracker } from '@/components/project-management/TaskProgressTracker';
+import { FavoriteContacts } from '@/components/shared/FavoriteContacts';
+import { OnboardingOverlay } from '@/components/project-management/OnboardingOverlay';
 import { isDemoModeEnabled, getDemoData, initializeDemoModeIfNeeded } from "@/services/demoMode";
 
 // Daily rotating quotes - one for each day

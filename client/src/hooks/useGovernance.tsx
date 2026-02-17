@@ -117,7 +117,6 @@ export function GovernanceProvider({ children }: { children: ReactNode }) {
     });
     
     // In production, this would also send to server for compliance reporting
-    console.log('[Governance Audit]', newEntry);
   };
 
   // Load saved mode and audit log from localStorage

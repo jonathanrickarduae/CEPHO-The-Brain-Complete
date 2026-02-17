@@ -130,7 +130,6 @@ export function isFirstSession(): boolean {
 // Track onboarding completion (placeholder for analytics)
 function trackOnboardingComplete() {
   // This would send to analytics in production
-  console.log('Onboarding completed at:', new Date().toISOString());
 }
 
 // Get onboarding progress

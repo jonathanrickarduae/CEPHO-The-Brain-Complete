@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import StartupHealthDashboard from "@/components/StartupHealthDashboard";
+import StartupHealthDashboard from '@/components/project-management/StartupHealthDashboard';
 import {
   Building2,
   TrendingUp,

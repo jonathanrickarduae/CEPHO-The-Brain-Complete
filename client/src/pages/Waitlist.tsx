@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useSearch } from 'wouter';
-import { WaitlistSignup, WaitlistStatus } from '../components/WaitlistReferral';
+import { WaitlistSignup, WaitlistStatus } from '@/components/ai-agents/WaitlistReferral';
 import { Brain, Sparkles, Shield, Zap, Users, Star } from 'lucide-react';
 
 interface WaitlistPosition {
@@ -199,7 +199,7 @@ export default function Waitlist() {
             <div className="flex flex-wrap justify-center gap-6">
               <div className="bg-gray-900/50 border border-gray-800 rounded-2xl p-8 flex flex-col items-center">
                 <div className="w-24 h-24 rounded-xl bg-white flex items-center justify-center p-3 mb-4">
-                  <img 
+                  <img alt="CEPHO.AI platform preview" 
                     src="/logos/cambridge-university.png" 
                     alt="University of Cambridge" 
                     className="w-full h-full object-contain"
@@ -213,7 +213,7 @@ export default function Waitlist() {
               </div>
               <div className="bg-gray-900/50 border border-gray-800 rounded-2xl p-8 flex flex-col items-center">
                 <div className="w-24 h-24 rounded-xl bg-white flex items-center justify-center p-3 mb-4">
-                  <img 
+                  <img alt="Join waitlist illustration" 
                     src="/logos/oxford-university.png" 
                     alt="University of Oxford" 
                     className="w-full h-full object-contain"

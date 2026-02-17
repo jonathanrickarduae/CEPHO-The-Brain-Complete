@@ -6,9 +6,9 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { SwipeableItem, SwipeHint } from '@/components/SwipeGestures';
+import { SwipeableItem, SwipeHint } from '@/components/shared/SwipeGestures';
 import { useIsMobile } from '@/hooks/useMobile';
-import { PullToRefresh } from '@/components/PullToRefresh';
+import { PullToRefresh } from '@/components/shared/PullToRefresh';
 
 interface ReviewItem {
   id: string;

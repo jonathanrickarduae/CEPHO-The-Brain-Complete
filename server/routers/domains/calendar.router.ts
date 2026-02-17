@@ -6,7 +6,7 @@
  * @module routers/domains/calendar
  */
 
-import { router } from "../_core/trpc";
+import { router } from "../../_core/trpc";
 import { z } from "zod";
 
 export const calendarRouter = router({
@@ -17,7 +17,7 @@ export const calendarRouter = router({
         daysAhead: z.number().optional(),
       }))
       .mutation(async ({ ctx, input }) => {
-        const { syncCalendarEvents } = await import('./services/calendarSyncService');
+// //         const { syncCalendarEvents } = await import('../../services/calendarSyncService');
         return syncCalendarEvents(ctx.user.id, input.provider, input.daysAhead);
       }),
 
@@ -29,7 +29,7 @@ export const calendarRouter = router({
         provider: z.enum(['google', 'outlook', 'manual']).optional(),
       }))
       .query(async ({ ctx, input }) => {
-        const { getCachedEvents } = await import('./services/calendarSyncService');
+//         const { getCachedEvents } = await import('../../services/calendarSyncService');
         return getCachedEvents(
           ctx.user.id,
           new Date(input.startTime),
@@ -40,7 +40,7 @@ export const calendarRouter = router({
 
     // Get today's schedule summary
     getTodaySummary: protectedProcedure.query(async ({ ctx }) => {
-      const { getTodayScheduleSummary } = await import('./services/calendarSyncService');
+//       const { getTodayScheduleSummary } = await import('../../services/calendarSyncService');
       return getTodayScheduleSummary(ctx.user.id);
     }),
 
@@ -51,7 +51,7 @@ export const calendarRouter = router({
         windowEnd: z.string(),
       }))
       .query(async ({ ctx, input }) => {
-        const { hasEventsInTimeWindow } = await import('./services/calendarSyncService');
+//         const { hasEventsInTimeWindow } = await import('../../services/calendarSyncService');
         const hasConflicts = await hasEventsInTimeWindow(
           ctx.user.id,
           new Date(input.windowStart),
@@ -67,7 +67,7 @@ export const calendarRouter = router({
         durationMinutes: z.number().optional(),
       }).optional())
       .query(async ({ ctx, input }) => {
-        const { getNextFreeSlot } = await import('./services/calendarSyncService');
+//         const { getNextFreeSlot } = await import('../../services/calendarSyncService');
         return getNextFreeSlot(
           ctx.user.id,
           input?.startFrom ? new Date(input.startFrom) : new Date(),
@@ -85,7 +85,7 @@ export const calendarRouter = router({
         location: z.string().optional(),
       }))
       .mutation(async ({ ctx, input }) => {
-        const { addManualEvent } = await import('./services/calendarSyncService');
+//         const { addManualEvent } = await import('../../services/calendarSyncService');
         const eventId = await addManualEvent(ctx.user.id, {
           title: input.title,
           startTime: new Date(input.startTime),
@@ -98,7 +98,7 @@ export const calendarRouter = router({
 
     // Get calendar integration status
     getIntegrationStatus: protectedProcedure.query(async ({ ctx }) => {
-      const { getCalendarIntegration } = await import('./services/calendarSyncService');
+//       const { getCalendarIntegration } = await import('../../services/calendarSyncService');
       const [google, outlook] = await Promise.all([
         getCalendarIntegration(ctx.user.id, 'google'),
         getCalendarIntegration(ctx.user.id, 'outlook'),

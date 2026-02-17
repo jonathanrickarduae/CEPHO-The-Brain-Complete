@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "wouter";
 import { motion, AnimatePresence } from "framer-motion";
-import NeonBrain from "@/components/NeonBrain";
+import NeonBrain from '@/components/ai-agents/NeonBrain';
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Sun, Moon, Blend } from "lucide-react";

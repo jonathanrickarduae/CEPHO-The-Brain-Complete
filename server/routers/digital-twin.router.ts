@@ -7,7 +7,7 @@ import { router, protectedProcedure } from "../_core/trpc";
 import { z } from "zod";
 import * as digitalTwinService from "../services/digital-twin-service";
 
-export const digital-twin.router = router({
+export const digitalTwinRouter = router({
   /**
    * Get or create digital twin profile
    */

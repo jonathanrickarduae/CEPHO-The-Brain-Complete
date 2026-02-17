@@ -1,4 +1,4 @@
-import { UniversalInbox } from "@/components/UniversalInbox";
+import { UniversalInbox } from '@/components/shared/UniversalInbox';
 
 export default function InboxPage() {
   return (

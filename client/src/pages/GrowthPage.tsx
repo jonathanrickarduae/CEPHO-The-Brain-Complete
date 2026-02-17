@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ContentCalendar } from '@/components/ContentCalendar';
-import { CustomerValidationScheduler } from '@/components/CustomerValidationScheduler';
-import { PageHeader } from '@/components/PageHeader';
+import { ContentCalendar } from '@/components/integrations/ContentCalendar';
+import { CustomerValidationScheduler } from '@/components/shared/CustomerValidationScheduler';
+import { PageHeader } from '@/components/layout/PageHeader';
 import { TrendingUp, Calendar, Users, Target } from 'lucide-react';
 
 export default function GrowthPage() {

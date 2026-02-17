@@ -14,13 +14,13 @@ import {
   Sparkles,
   Calendar
 } from "lucide-react";
-import { PersonalAnalytics, ProductivityRing } from "@/components/PersonalAnalytics";
-import { PageHeader } from "@/components/Breadcrumbs";
+import { PersonalAnalytics, ProductivityRing } from '@/components/analytics/PersonalAnalytics';
+import { PageHeader } from '@/components/layout/Breadcrumbs';
 import { useMoodCheck } from "@/hooks/useMoodCheck";
-import { MoodTimeline } from "@/components/MoodTimeline";
-import { WellnessScoreDashboard } from "@/components/WellnessScoreDashboard";
-import { ShareableInsight, generateProductivityInsight } from "@/components/ShareableInsight";
-import { CollapsibleSection } from "@/components/CollapsibleSection";
+import { MoodTimeline } from '@/components/mood-tracking/MoodTimeline';
+import { WellnessScoreDashboard } from '@/components/mood-tracking/WellnessScoreDashboard';
+import { ShareableInsight, generateProductivityInsight } from '@/components/analytics/ShareableInsight';
+import { CollapsibleSection } from '@/components/shared/CollapsibleSection';
 
 export default function Statistics() {
   const { todaysMoods } = useMoodCheck();

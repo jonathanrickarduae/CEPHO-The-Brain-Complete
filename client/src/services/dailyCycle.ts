@@ -62,7 +62,6 @@ function isTimeMatch(current: { hours: number; minutes: number }, target: { hour
 // Send WhatsApp reminder via API
 export async function sendWhatsAppReminder(message: string) {
   if (!config.whatsappEnabled || !config.whatsappNumber) {
-    console.log('WhatsApp not configured, skipping reminder');
     return;
   }
 
@@ -79,7 +78,6 @@ export async function sendWhatsAppReminder(message: string) {
     });
     
     if (response.ok) {
-      console.log('WhatsApp reminder sent:', message);
     }
   } catch (error) {
     console.error('Failed to send WhatsApp reminder:', error);
@@ -123,7 +121,6 @@ export function startDailyCycle() {
   // Also check immediately on start
   // checkTime();
   
-  console.log('Daily cycle DISABLED (modals turned off)');
 }
 
 export function stopDailyCycle() {

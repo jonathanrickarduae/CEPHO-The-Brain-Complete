@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'wouter';
-import AIAgentsVideo from '@/components/AIAgentsVideo';
+import AIAgentsVideo from '@/components/ai-agents/AIAgentsVideo';
 
 interface AIAgent {
   id: string;

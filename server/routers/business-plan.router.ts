@@ -2,7 +2,7 @@
 import { router, protectedProcedure } from '../_core/trpc';
 import { z } from 'zod';
 
-export const business-plan.router = router({
+export const businessPlanRouter = router({
   // Generate Business Plan
   generateBusinessPlan: protectedProcedure
     .input(z.object({

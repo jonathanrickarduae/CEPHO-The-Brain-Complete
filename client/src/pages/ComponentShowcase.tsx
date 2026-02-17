@@ -171,7 +171,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { toast as sonnerToast } from "sonner";
-import { AIChatBox, type Message } from "@/components/AIChatBox";
+import { AIChatBox, type Message } from '@/components/ai-agents/AIChatBox';
 
 export default function ComponentsShowcase() {
   const { theme, setTheme } = useTheme();
@@ -195,7 +195,6 @@ export default function ComponentsShowcase() {
   const [isChatLoading, setIsChatLoading] = useState(false);
 
   const handleDialogSubmit = () => {
-    console.log("Dialog submitted with value:", dialogInput);
     sonnerToast.success("Submitted successfully", {
       description: `Input: ${dialogInput}`,
     });

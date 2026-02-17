@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { QAAccuracyDashboard } from '@/components/QAAccuracyDashboard';
-import { JimShortExpert } from '@/components/JimShortExpert';
+import { QAAccuracyDashboard } from '@/components/project-management/QAAccuracyDashboard';
+import { JimShortExpert } from '@/components/expert-evolution/JimShortExpert';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -105,7 +105,6 @@ export default function QADashboardPage() {
           {/* Jim Short Expert Component */}
           <JimShortExpert 
             context="You're reviewing documents prepared by the Chief of Staff AI. Be direct and constructive."
-            onFeedback={(feedback) => console.log('Jim feedback:', feedback)}
           />
 
           {/* Pending Reviews Queue */}

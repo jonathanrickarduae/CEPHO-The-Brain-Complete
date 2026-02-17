@@ -1,5 +1,5 @@
 import { useState } from "react";
-import DashboardLayout from "@/components/DashboardLayout";
+import DashboardLayout from '@/components/project-management/DashboardLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -25,11 +25,11 @@ import {
 } from "lucide-react";
 import { trpc } from "@/lib/trpc";
 import { Link } from "wouter";
-import SubscriptionTracker from "@/components/SubscriptionTracker";
-import OptimizationAssessment from "@/components/OptimizationAssessment";
-import FundingAssessment from "@/components/FundingAssessment";
-import { ChiefOfStaffRoadmap } from "@/components/ChiefOfStaffRoadmap";
-import { FivePhaseRoadmap } from "@/components/FivePhaseRoadmap";
+import SubscriptionTracker from '@/components/shared/SubscriptionTracker';
+import OptimizationAssessment from '@/components/expert-evolution/OptimizationAssessment';
+import FundingAssessment from '@/components/expert-evolution/FundingAssessment';
+import { ChiefOfStaffRoadmap } from '@/components/shared/ChiefOfStaffRoadmap';
+import { FivePhaseRoadmap } from '@/components/shared/FivePhaseRoadmap';
 import {
   DropdownMenu,
   DropdownMenuContent,

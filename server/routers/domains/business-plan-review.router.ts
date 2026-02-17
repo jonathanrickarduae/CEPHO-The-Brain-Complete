@@ -6,7 +6,7 @@
  * @module routers/domains/business-plan-review
  */
 
-import { router } from "../_core/trpc";
+import { router } from "../../_core/trpc";
 import { z } from "zod";
 
 export const businessPlanReviewRouter = router({
@@ -271,7 +271,7 @@ export const businessPlanReviewRouter = router({
         teamSelectionReasoning: z.string().optional(),
       }))
       .mutation(async ({ input }) => {
-        const { generateReportMarkdown } = await import('./services/pdfReportService');
+//         const { generateReportMarkdown } = await import('../../services/pdfReportService');
         const markdown = generateReportMarkdown({
           ...input,
           reviewDate: new Date(),

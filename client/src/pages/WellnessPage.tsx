@@ -1,5 +1,5 @@
-import BrainLayout from '@/components/BrainLayout';
-import { PersonalWellnessDashboard } from '@/components/PersonalWellness';
+import BrainLayout from '@/components/ai-agents/BrainLayout';
+import { PersonalWellnessDashboard } from '@/components/mood-tracking/PersonalWellness';
 
 export default function WellnessPage() {
   return (

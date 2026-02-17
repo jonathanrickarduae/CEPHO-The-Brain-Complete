@@ -7,7 +7,7 @@ import {
   Cloud, HardDrive, Database, Link2, Bell, Shield,
   Smartphone, Globe, Zap, ArrowUpRight, X, LayoutDashboard
 } from 'lucide-react';
-import { PageHeader } from '@/components/PageHeader';
+import { PageHeader } from '@/components/layout/PageHeader';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';

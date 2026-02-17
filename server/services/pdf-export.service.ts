@@ -9,7 +9,7 @@
  * - Chief of Staff QA sign-off footer
  */
 
-import { BRAND_GUIDELINES, getScoreRating } from "./documentTemplateService";
+// import { BRAND_GUIDELINES, getScoreRating } from "./documentTemplateService";
 
 // PDF generation using HTML to PDF conversion
 // We'll use the built-in manus-md-to-pdf utility for actual PDF generation

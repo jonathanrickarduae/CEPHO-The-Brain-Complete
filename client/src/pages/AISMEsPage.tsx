@@ -10,7 +10,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { PageHeader } from "@/components/PageHeader";
+import { PageHeader } from '@/components/layout/PageHeader';
 import { toast } from "sonner";
 import { useIsMobile } from "@/hooks/useMobile";
 import { trpc } from "@/lib/trpc";
@@ -21,7 +21,7 @@ import {
   getExpertsByCategory,
   TOTAL_EXPERTS,
   type AIExpert 
-} from "@/data/aiExperts";
+} from "@/data/ai-experts.data";
 import {
   panelTypes,
   getExpertsByPanelType,
@@ -29,7 +29,7 @@ import {
   getPanelStats,
   getTopPerformersByPanel,
   type PanelType
-} from "@/data/smePanels";
+} from "@/data/sme-panels.data";
 import {
   expertTypes,
   getExpertsByType,
@@ -37,9 +37,9 @@ import {
   getSubcategoriesForType,
   getCorporatePartners,
   type ExpertType
-} from "@/data/expertTypes";
-import { corporatePartners } from "@/data/aiExperts";
-import { ExternalResources } from "@/components/ExternalResources";
+} from "@/data/expert-types.data";
+import { corporatePartners } from "@/data/ai-experts.data";
+import { ExternalResources } from '@/components/shared/ExternalResources';
 
 // Build categories from real expert data
 const CATEGORIES = [
@@ -593,7 +593,7 @@ export default function AISMEsPage() {
                         <div className={`flex items-center gap-3 ${viewStyle === 'grid' ? 'mb-3 mt-6' : ''}`}>
                           <div className={`relative w-12 h-12 rounded-xl overflow-hidden group-hover:scale-110 transition-transform ${!isAvailable ? 'opacity-50' : ''}`}>
                             {expert.avatarUrl ? (
-                              <img 
+                              <img alt="SME expert profile" 
                                 src={expert.avatarUrl} 
                                 alt={expert.name}
                                 className="w-full h-full object-cover"

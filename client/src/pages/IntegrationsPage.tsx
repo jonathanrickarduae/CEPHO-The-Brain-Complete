@@ -1,5 +1,5 @@
-import BrainLayout from '../components/BrainLayout';
-import { IntegrationsDashboard } from '../components/IntegrationOAuth';
+import BrainLayout from '@/components/ai-agents/BrainLayout';
+import { IntegrationsDashboard } from '@/components/integrations/IntegrationOAuth';
 import { Link2, ArrowLeft } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { useLocation } from 'wouter';

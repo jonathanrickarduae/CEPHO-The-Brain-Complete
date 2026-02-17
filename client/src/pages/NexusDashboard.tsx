@@ -5,13 +5,13 @@ import {
   Fingerprint, FolderKanban, BookOpen, Brain, LayoutDashboard,
   ChevronRight, AlertCircle
 } from "lucide-react";
-import { PageHeader } from "@/components/PageHeader";
-import { LearningBadge } from "@/components/LearningIndicator";
+import { PageHeader } from '@/components/layout/PageHeader';
+import { LearningBadge } from '@/components/expert-evolution/LearningIndicator';
 import { useVoiceInput } from "@/hooks/useVoiceInput";
 import { toast } from "sonner";
 import { trpc } from "@/lib/trpc";
-import OpenClawChat from "@/components/OpenClawChat";
-import SkillCards from "@/components/SkillCards";
+import OpenClawChat from '@/components/ai-agents/OpenClawChat';
+import SkillCards from '@/components/expert-evolution/SkillCards';
 
 
 // Notification badge component

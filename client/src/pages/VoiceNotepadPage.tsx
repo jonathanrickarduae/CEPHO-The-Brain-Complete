@@ -1,5 +1,5 @@
-import BrainLayout from '../components/BrainLayout';
-import { VoiceNotepad } from '../components/VoiceNotepad';
+import BrainLayout from '@/components/ai-agents/BrainLayout';
+import { VoiceNotepad } from '@/components/shared/VoiceNotepad';
 
 export default function VoiceNotepadPage() {
   return (

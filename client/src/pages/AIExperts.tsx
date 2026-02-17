@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import { useSearch } from "wouter";
-import { ExpertDirectory } from "@/components/ExpertDirectory";
-import { MyBoard } from "@/components/MyBoard";
-import { WarRoom } from "@/components/WarRoom";
-import { ExpertAnalytics } from "@/components/ExpertAnalytics";
-import { ExpertScheduling } from "@/components/ExpertScheduling";
-import { ExternalResources } from "@/components/ExternalResources";
-import { ExpertPerformanceRating, generateMockPerformance } from "@/components/ExpertPerformanceRating";
+import { ExpertDirectory } from '@/components/expert-evolution/ExpertDirectory';
+import { MyBoard } from '@/components/project-management/MyBoard';
+import { WarRoom } from '@/components/shared/WarRoom';
+import { ExpertAnalytics } from '@/components/expert-evolution/ExpertAnalytics';
+import { ExpertScheduling } from '@/components/expert-evolution/ExpertScheduling';
+import { ExternalResources } from '@/components/shared/ExternalResources';
+import { ExpertPerformanceRating, generateMockPerformance } from '@/components/expert-evolution/ExpertPerformanceRating';
 import { 
   Users, Brain, Zap, Clock, CheckCircle2, 
   ArrowRight, MessageSquare, Play, Pause, 
@@ -24,7 +24,7 @@ import {
   getExpertsByCategory,
   generateExpertSystemPrompt,
   TOTAL_EXPERTS 
-} from "@/data/aiExperts";
+} from "@/data/ai-experts.data";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -38,14 +38,14 @@ import {
   DigitalTwinQA,
   ConfidenceBadge,
   VerificationBadge 
-} from "@/components/InsightValidation";
+} from '@/components/analytics/InsightValidation';
 import { 
   BatchVerificationPanel,
   TruthVerificationSummary,
   ClassificationBadge,
   type ClassifiedStatement,
   type StatementClassification
-} from "@/components/TruthVerification";
+} from '@/components/shared/TruthVerification';
 import { 
   type Insight,
   type ConfidenceLevel,

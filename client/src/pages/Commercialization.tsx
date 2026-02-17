@@ -4,7 +4,7 @@ import {
   Users, Zap, Eye, FileText, Brain, Lightbulb, Scale,
   ChevronRight, RefreshCw, Plus, ExternalLink, Clock
 } from 'lucide-react';
-import { PageHeader } from '@/components/Breadcrumbs';
+import { PageHeader } from '@/components/layout/Breadcrumbs';
 
 // Mock data - will be replaced with real API data
 const mockCompetitors = [
@@ -141,7 +141,7 @@ export default function Commercialization() {
             <div className="flex flex-wrap gap-6">
               <div className="flex items-center gap-4 bg-gray-900/50 rounded-xl p-4">
                 <div className="w-16 h-16 rounded-xl bg-white flex items-center justify-center p-2">
-                  <img 
+                  <img alt="Commercialization strategy diagram" 
                     src="/logos/cambridge-university.png" 
                     alt="University of Cambridge" 
                     className="w-full h-full object-contain"
@@ -155,7 +155,7 @@ export default function Commercialization() {
               </div>
               <div className="flex items-center gap-4 bg-gray-900/50 rounded-xl p-4">
                 <div className="w-16 h-16 rounded-xl bg-white flex items-center justify-center p-2">
-                  <img 
+                  <img alt="Market analysis visualization" 
                     src="/logos/oxford-university.png" 
                     alt="University of Oxford" 
                     className="w-full h-full object-contain"

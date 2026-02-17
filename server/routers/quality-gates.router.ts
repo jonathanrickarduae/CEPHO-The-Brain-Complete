@@ -8,7 +8,7 @@ import { router, protectedProcedure } from "../_core/trpc";
 import { z } from "zod";
 import { getDb } from "../db";
 
-export const quality-gates.router = router({
+export const qualityGatesRouter = router({
   /**
    * Get all quality gate criteria for a specific gate
    */

@@ -15,10 +15,10 @@ import {
   CheckCircle2
 } from 'lucide-react';
 import { useLocation } from 'wouter';
-import { ContentCalendar } from '@/components/ContentCalendar';
-import { CaptionGenerator } from '@/components/CaptionGenerator';
-import { BioTemplates } from '@/components/BioTemplates';
-import { ImageSpecifications } from '@/components/ImageSpecifications';
+import { ContentCalendar } from '@/components/integrations/ContentCalendar';
+import { CaptionGenerator } from '@/components/content/CaptionGenerator';
+import { BioTemplates } from '@/components/shared/BioTemplates';
+import { ImageSpecifications } from '@/components/shared/ImageSpecifications';
 
 /**
  * Social Media Blueprint Page

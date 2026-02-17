@@ -7,14 +7,14 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import { LearningPanel, LearningToast, useLearningNotifications } from "@/components/LearningIndicator";
-import { ActivityLog } from "@/components/ActivityLog";
-import { ProgressBar, CircularProgress, DigitalTwinTrainingProgress } from "@/components/ProgressIndicator";
-import { ConversationSwitcher } from "@/components/ConversationSwitcher";
-import { DigitalTwinAccelerator } from "@/components/DigitalTwinAccelerator";
-import { BusinessGuardian } from "@/components/BusinessGuardian";
-import { DigitalTwinDevelopment } from "@/components/DigitalTwinDevelopment";
-import { BusinessPlanReview } from "@/components/BusinessPlanReview";
+import { LearningPanel, LearningToast, useLearningNotifications } from '@/components/expert-evolution/LearningIndicator';
+import { ActivityLog } from '@/components/shared/ActivityLog';
+import { ProgressBar, CircularProgress, DigitalTwinTrainingProgress } from '@/components/shared/ProgressIndicator';
+import { ConversationSwitcher } from '@/components/communication/ConversationSwitcher';
+import { DigitalTwinAccelerator } from '@/components/shared/DigitalTwinAccelerator';
+import { BusinessGuardian } from '@/components/business-plan/BusinessGuardian';
+import { DigitalTwinDevelopment } from '@/components/expert-evolution/DigitalTwinDevelopment';
+import { BusinessPlanReview } from '@/components/business-plan/BusinessPlanReview';
 import { useDigitalTwinChat } from "@/hooks/useDigitalTwinChat";
 import { useVoiceInput } from "@/hooks/useVoiceInput";
 
@@ -526,7 +526,6 @@ export default function DigitalTwin() {
                 projectName="Current Business Plan"
                 onComplete={(reviews) => {
                   toast.success('Business plan review complete!');
-                  console.log('Reviews:', reviews);
                 }}
               />
             </div>

@@ -216,13 +216,11 @@ let isDemoMode = false;
 export function enableDemoMode() {
   isDemoMode = true;
   localStorage.setItem('brain-demo-mode', 'true');
-  console.log('Demo mode enabled with sample data');
 }
 
 export function disableDemoMode() {
   isDemoMode = false;
   localStorage.removeItem('brain-demo-mode');
-  console.log('Demo mode disabled');
 }
 
 export function isDemoModeEnabled(): boolean {

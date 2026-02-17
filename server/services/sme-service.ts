@@ -6,7 +6,7 @@
 import { getDb } from '../db';
 import { aiSmeExperts, aiSmeConsultations } from '../../drizzle/schema';
 import { eq, and, inArray, like, or } from 'drizzle-orm';
-import { allExperts, type AIExpert } from '../../client/src/data/aiExperts';
+import { allExperts, type AIExpert } from '../../client/src/data/ai-experts.data';
 import { panelTypes, type PanelType } from '../../client/src/data/smePanels';
 
 /**

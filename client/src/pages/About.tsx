@@ -4,7 +4,7 @@ import {
   MessageSquare, Lightbulb, Layers, ArrowRight
 } from 'lucide-react';
 import { useLocation } from 'wouter';
-import NeonBrain from '@/components/NeonBrain';
+import NeonBrain from '@/components/ai-agents/NeonBrain';
 
 export default function About() {
   const [, setLocation] = useLocation();
@@ -201,7 +201,7 @@ export default function About() {
         <div className="flex flex-wrap justify-center items-center gap-8">
           <div className="flex flex-col items-center gap-3">
             <div className="w-20 h-20 rounded-xl bg-white flex items-center justify-center p-2">
-              <img 
+              <img alt="CEPHO.AI platform overview" 
                 src="/logos/cambridge-university.png" 
                 alt="University of Cambridge" 
                 className="w-full h-full object-contain"
@@ -214,7 +214,7 @@ export default function About() {
           </div>
           <div className="flex flex-col items-center gap-3">
             <div className="w-20 h-20 rounded-xl bg-white flex items-center justify-center p-2">
-              <img 
+              <img alt="Team collaboration illustration" 
                 src="/logos/oxford-university.png" 
                 alt="University of Oxford" 
                 className="w-full h-full object-contain"

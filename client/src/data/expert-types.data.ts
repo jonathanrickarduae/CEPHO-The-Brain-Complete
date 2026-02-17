@@ -1,5 +1,5 @@
 // Expert Type Categorization for hierarchical filtering
-import { AI_EXPERTS, corporatePartners, type AIExpert, type CorporatePartner } from './aiExperts';
+import { AI_EXPERTS, corporatePartners, type AIExpert, type CorporatePartner } from './ai-experts.data';
 
 // Expert types for hierarchical filtering
 export type ExpertType = 'individuals' | 'corporate_roles' | 'field_experts' | 'celebrities' | 'companies';

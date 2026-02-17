@@ -1,14 +1,14 @@
 import { openClawRouter } from "./openclaw-router";
 import { integrationsRouter } from "./routers/integrations.router";
-import { project-genesisRouter } from "./routers/project-genesis.router";
-import { quality-gatesRouter } from "./routers/quality-gates.router";
+import { projectGenesisRouter } from "./routers/project-genesis.router";
+import { qualityGatesRouter } from "./routers/quality-gates.router";
 import { blueprintRouter } from "./routers/blueprint.router";
 import { smeRouter } from "./routers/sme.router";
-import { digital-twinRouter } from "./routers/digital-twin.router";
+import { digitalTwinRouter } from "./routers/digital-twin.router";
 import { blueprintsRouter } from "./routers/blueprints.router";
-import { chief-of-staffRouter } from "./routers/chief-of-staff.router";
-import { deep-diveRouter } from "./routers/deep-dive.router";
-import { business-planRouter } from "./routers/business-plan.router";
+import { chiefOfStaffRouter } from "./routers/chief-of-staff.router";
+import { deepDiveRouter } from "./routers/deep-dive.router";
+import { businessPlanRouter } from "./routers/business-plan.router";
 import { debugRouter } from "./routers/debug.router";
 import { cleanupRouter } from "./routers/cleanup.router";
 import { asanaRouter } from "./routers/asana.router";
@@ -76,7 +76,7 @@ import { users } from "../drizzle/schema";
 import { eq } from "drizzle-orm";
 import { invokeLLM } from "./_core/llm";
 import { chatWithExpert } from "./services/expert-chat.service";
-import { text-to-speech, getExpertVoiceInfo, hasCustomVoice } from "./services/voice.service";
+import { textToSpeech, getExpertVoiceInfo, hasCustomVoice } from "./services/voice.service";
 import { 
   BUSINESS_PLAN_SECTIONS, 
   REVIEW_EXPERTS, 
@@ -135,19 +135,19 @@ export const appRouter = router({
   qa: qaRouter,
   expertConsultation: expertConsultationRouter,
   openClaw: openClawRouter,
-  integrations: integrations.router,
-  projectGenesis: project-genesis.router,
-  qualityGates: quality-gates.router,
-  blueprint: blueprint.router,
-  sme: sme.router,
-  digitalTwin: digital-twin.router,
-  blueprints: blueprints.router,
-  chiefOfStaff: chief-of-staff.router,
-  deepDive: deep-dive.router,
-  businessPlan: business-plan.router,
-  debug: debug.router,
-    cleanup: cleanup.router,
-    asana: asana.router,
+  integrations: integrationsRouter,
+  projectGenesis: projectGenesisRouter,
+  qualityGates: qualityGatesRouter,
+  blueprint: blueprintRouter,
+  sme: smeRouter,
+  digitalTwin: digitalTwinRouter,
+  blueprints: blueprintsRouter,
+  chiefOfStaff: chiefOfStaffRouter,
+  deepDive: deepDiveRouter,
+  businessPlan: businessPlanRouter,
+  debug: debugRouter,
+    cleanup: cleanupRouter,
+    asana: asanaRouter,
     // if you need to use socket.io, read and register route in server/_core/index.ts, all api should start with '/api/' so that the gateway can route correctly
   system: systemRouter,
   auth: router({
@@ -1212,7 +1212,7 @@ export const appRouter = router({
   }),
 
   // Text-to-Speech API - ElevenLabs integration for Victoria
-  text-to-speech: router({
+  textToSpeech: router({
     synthesize: protectedProcedure
       .input(z.object({
         text: z.string().min(1).max(5000),
@@ -1568,7 +1568,7 @@ export const appRouter = router({
         includePatterns: z.boolean().optional(),
       }).optional())
       .mutation(async ({ ctx, input }) => {
-        const { generateMorningSignalHtml } = await import('./services/morningSignalPdfService');
+        //         const { generateMorningSignalHtml } = await import('./services/morningSignalPdfService');
         
         // Get latest evening review data
         const latestReview = await getLatestEveningReviewSession(ctx.user.id);
@@ -1701,14 +1701,14 @@ export const appRouter = router({
     // Get full optimization assessment
     getAssessment: protectedProcedure
       .query(async ({ ctx }) => {
-        const { generateOptimizationAssessment } = await import('./services/optimizationAssessmentService');
+        //         //         const { generateOptimizationAssessment } = await import('./services/optimizationAssessmentService');
         return generateOptimizationAssessment(ctx.user.id);
       }),
 
     // Get quick score only (lightweight)
     getQuickScore: protectedProcedure
       .query(async ({ ctx }) => {
-        const { generateOptimizationAssessment } = await import('./services/optimizationAssessmentService');
+        //         const { generateOptimizationAssessment } = await import('./services/optimizationAssessmentService');
         const assessment = await generateOptimizationAssessment(ctx.user.id);
         return {
           overallPercentage: assessment.overallPercentage,

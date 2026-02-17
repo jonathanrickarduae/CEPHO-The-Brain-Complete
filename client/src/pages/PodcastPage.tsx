@@ -1,5 +1,5 @@
-import BrainLayout from '@/components/BrainLayout';
-import { AIPodcastHub } from '@/components/AIPodcastHub';
+import BrainLayout from '@/components/ai-agents/BrainLayout';
+import { AIPodcastHub } from '@/components/ai-agents/AIPodcastHub';
 
 export default function PodcastPage() {
   return (

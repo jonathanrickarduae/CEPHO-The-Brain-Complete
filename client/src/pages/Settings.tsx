@@ -5,23 +5,23 @@ import {
   ChevronRight, Check, Search
 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
-import { PageHeader } from '@/components/Breadcrumbs';
-import { ThemeSelector, ThemeProvider } from '@/components/ThemeToggle';
-import { CalendarIntegration } from '@/components/CalendarIntegration';
-import { TrainingDataPipeline } from '@/components/TrainingDataPipeline';
-import { ReferralDashboard } from '@/components/WaitlistReferral';
-import { AccessibilitySettingsPanel } from '@/components/AccessibilitySettingsPanel';
+import { PageHeader } from '@/components/layout/Breadcrumbs';
+import { ThemeSelector, ThemeProvider } from '@/components/settings/ThemeToggle';
+import { CalendarIntegration } from '@/components/integrations/CalendarIntegration';
+import { TrainingDataPipeline } from '@/components/analytics/TrainingDataPipeline';
+import { ReferralDashboard } from '@/components/ai-agents/WaitlistReferral';
+import { AccessibilitySettingsPanel } from '@/components/settings/AccessibilitySettingsPanel';
 
-import { IntegrationWizard } from '@/components/IntegrationWizard';
-import { IntegrationsStatus } from '@/components/IntegrationsStatus';
-import { IntegrationsStatusReal } from '@/components/IntegrationsStatusReal';
-import { SubscriptionManager } from '@/components/SubscriptionManager';
-import { SignatureManager } from '@/components/SignatureManager';
-import { AIProviderSettings } from '@/components/AIRouter';
-import { APICostCalculator } from '@/components/APICostCalculator';
-import { SecureStorageDashboard } from '@/components/SecureStorageDashboard';
-import { BrandKitManager } from '@/components/BrandKit';
-import { DataGovernanceDashboard } from '@/components/DataGovernanceDashboard';
+import { IntegrationWizard } from '@/components/integrations/IntegrationWizard';
+import { IntegrationsStatus } from '@/components/integrations/IntegrationsStatus';
+import { IntegrationsStatusReal } from '@/components/integrations/IntegrationsStatusReal';
+import { SubscriptionManager } from '@/components/shared/SubscriptionManager';
+import { SignatureManager } from '@/components/shared/SignatureManager';
+import { AIProviderSettings } from '@/components/ai-agents/AIRouter';
+import { APICostCalculator } from '@/components/integrations/APICostCalculator';
+import { SecureStorageDashboard } from '@/components/project-management/SecureStorageDashboard';
+import { BrandKitManager } from '@/components/content/BrandKit';
+import { DataGovernanceDashboard } from '@/components/project-management/DataGovernanceDashboard';
 import { Plug, Wallet, FileSignature, Cpu, HardDrive, Paintbrush, ShieldCheck } from 'lucide-react';
 
 type SettingsTab = 'profile' | 'integrations' | 'subscriptions' | 'signatures' | 'ai-providers' | 'api-costs' | 'storage' | 'brand-kit' | 'data-governance' | 'calendar' | 'training' | 'referrals' | 'notifications' | 'privacy' | 'appearance' | 'accessibility';

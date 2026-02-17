@@ -1,8 +1,8 @@
-import { getOpenAIClient, ChatMessage as OpenAIMessage } from './openai-client';
+// import { getOpenAIClient, ChatMessage as OpenAIMessage } from './openai-client';
 import { logger } from "../utils/logger";
 const log = logger.module("LLMService");
-import { getClaudeClient, ClaudeMessage } from './claude-client';
-import { getRedisCache } from './redis-cache';
+// import { getClaudeClient, ClaudeMessage } from './claude-client';
+// import { getRedisCache } from './redis-cache';
 
 export interface LLMMessage {
   role: 'system' | 'user' | 'assistant';

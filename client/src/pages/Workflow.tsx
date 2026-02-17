@@ -3,7 +3,7 @@ import {
   Activity, AlertTriangle, CheckCircle2, Clock, ChevronRight,
   Filter, LayoutGrid, List, MoreHorizontal, Plus, ArrowUpRight, FolderKanban, Columns
 } from "lucide-react";
-import { PageHeader } from "@/components/PageHeader";
+import { PageHeader } from '@/components/layout/PageHeader';
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";

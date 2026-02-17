@@ -2,7 +2,7 @@
 import { router, protectedProcedure } from '../_core/trpc';
 import { z } from 'zod';
 
-export const deep-dive.router = router({
+export const deepDiveRouter = router({
   // Initiate Deep Dive Research
   initiateDeepDive: protectedProcedure
     .input(z.object({

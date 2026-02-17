@@ -145,7 +145,6 @@ export const expertEvolutionService = {
       expertPerformanceData.set(feedback.expertId, performance);
     }
     
-    console.log('Feedback submitted:', fullFeedback);
   },
 
   // Get performance data for an expert
@@ -205,7 +204,6 @@ export const expertEvolutionService = {
     performance.lastUpdated = new Date();
     expertPerformanceData.set(action.expertId, performance);
     
-    console.log('Evolution action applied:', action);
   },
 
   // Overnight processing - Chief of Staff reviews all feedback and makes recommendations

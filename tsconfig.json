@@ -17,7 +17,28 @@
     "types": ["node", "vite/client"],
     "paths": {
       "@/*": ["./client/src/*"],
-      "@shared/*": ["./shared/*"]
+      "@shared/*": ["./shared/*"],
+      "@components/*": ["./client/src/components/*"],
+      "@expert-evolution/*": ["./client/src/components/expert-evolution/*"],
+      "@business-plan/*": ["./client/src/components/business-plan/*"],
+      "@document-library/*": ["./client/src/components/document-library/*"],
+      "@mood-tracking/*": ["./client/src/components/mood-tracking/*"],
+      "@team-management/*": ["./client/src/components/team-management/*"],
+      "@project-management/*": ["./client/src/components/project-management/*"],
+      "@review-system/*": ["./client/src/components/review-system/*"],
+      "@analytics/*": ["./client/src/components/analytics/*"],
+      "@integrations/*": ["./client/src/components/integrations/*"],
+      "@ai-agents/*": ["./client/src/components/ai-agents/*"],
+      "@content/*": ["./client/src/components/content/*"],
+      "@communication/*": ["./client/src/components/communication/*"],
+      "@settings/*": ["./client/src/components/settings/*"],
+      "@onboarding/*": ["./client/src/components/onboarding/*"],
+      "@layout/*": ["./client/src/components/layout/*"],
+      "@ui/*": ["./client/src/components/ui/*"],
+      "@hooks/*": ["./client/src/hooks/*"],
+      "@lib/*": ["./client/src/lib/*"],
+      "@data/*": ["./client/src/data/*"],
+      "@pages/*": ["./client/src/pages/*"]
     }
   }
 }

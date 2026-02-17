@@ -4,7 +4,7 @@ import {
   Calendar, Mail, Video, MessageSquare, FileText, CreditCard,
   Globe, Bell, Lock, Database, Zap, ArrowRight
 } from 'lucide-react';
-import { PageHeader } from '@/components/Breadcrumbs';
+import { PageHeader } from '@/components/layout/Breadcrumbs';
 
 interface Integration {
   id: string;
