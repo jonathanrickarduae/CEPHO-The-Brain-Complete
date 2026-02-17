@@ -60,9 +60,9 @@ End-of-day reflection system:
 
 ### Backend
 - Express 4 with tRPC
-- MySQL/TiDB database
+- PostgreSQL database (Supabase)
 - Drizzle ORM for type-safe queries
-- Manus OAuth authentication
+- Google OAuth authentication
 
 ### AI Integration
 - LLM-powered expert consultations
@@ -115,7 +115,7 @@ The application uses a comprehensive schema including:
 ### Prerequisites
 - Node.js 22+
 - pnpm package manager
-- MySQL/TiDB database
+- PostgreSQL database (Supabase)
 
 ### Getting Started
 
@@ -187,7 +187,7 @@ The application is deployed on Render with:
 
 **Platform:** Render  
 **Repository:** GitHub - jonathanrickarduae/CEPHO-The-Brain-Complete  
-**Branch:** working-nexus-version  
+**Branch:** main  
 **Build Command:** `pnpm install && pnpm build`  
 **Start Command:** `pnpm start`  
 
