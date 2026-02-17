@@ -1,17 +1,17 @@
 import { openClawRouter } from "./openclaw-router";
-import { integrationsRouter } from "./routers/integrationsRouter";
+import { integrations.router } from "./routers/integrations.router";
 import { project-genesis.router } from "./routers/project-genesis.router";
 import { quality-gates.router } from "./routers/quality-gates.router";
-import { blueprintRouter } from "./routers/blueprintRouter";
-import { smeRouter } from "./routers/smeRouter";
+import { blueprint.router } from "./routers/blueprint.router";
+import { sme.router } from "./routers/sme.router";
 import { digital-twin.router } from "./routers/digital-twin.router";
-import { blueprintsRouter } from "./routers/blueprintsRouter";
+import { blueprints.router } from "./routers/blueprints.router";
 import { chief-of-staff.router } from "./routers/chief-of-staff.router";
 import { deep-dive.router } from "./routers/deep-dive.router";
 import { business-plan.router } from "./routers/business-plan.router";
-import { debugRouter } from "./routers/debugRouter";
-import { cleanupRouter } from "./routers/cleanupRouter";
-import { asanaRouter } from "./routers/asanaRouter";
+import { debug.router } from "./routers/debug.router";
+import { cleanup.router } from "./routers/cleanup.router";
+import { asana.router } from "./routers/asana.router";
 import { COOKIE_NAME } from "@shared/const";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
@@ -102,19 +102,19 @@ import { z } from "zod";
 
 export const appRouter = router({
   openClaw: openClawRouter,
-  integrations: integrationsRouter,
+  integrations: integrations.router,
   projectGenesis: project-genesis.router,
   qualityGates: quality-gates.router,
-  blueprint: blueprintRouter,
-  sme: smeRouter,
+  blueprint: blueprint.router,
+  sme: sme.router,
   digitalTwin: digital-twin.router,
-  blueprints: blueprintsRouter,
+  blueprints: blueprints.router,
   chiefOfStaff: chief-of-staff.router,
   deepDive: deep-dive.router,
   businessPlan: business-plan.router,
-  debug: debugRouter,
-    cleanup: cleanupRouter,
-    asana: asanaRouter,
+  debug: debug.router,
+    cleanup: cleanup.router,
+    asana: asana.router,
     // if you need to use socket.io, read and register route in server/_core/index.ts, all api should start with '/api/' so that the gateway can route correctly
   system: systemRouter,
   auth: router({
