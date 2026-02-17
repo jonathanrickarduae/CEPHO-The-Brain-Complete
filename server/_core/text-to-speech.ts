@@ -6,7 +6,7 @@
  * 
  * Example usage:
  * ```ts
- * import { synthesizeSpeech, VICTORIA_VOICE_ID } from "./_core/textToSpeech";
+ * import { synthesizeSpeech, VICTORIA_VOICE_ID } from "./_core/text-to-speech";
  * 
  * const result = await synthesizeSpeech({
  *   text: "Good morning. Here is your daily briefing.",

@@ -14,7 +14,7 @@ import { router, protectedProcedure } from "../_core/trpc";
 import { z } from "zod";
 import { getDb } from "../db";
 
-export const projectGenesisRouter = router({
+export const project-genesis.router = router({
   /**
    * Phase 1: Initiation
    * Create a new Project Genesis project and initialize Phase 1

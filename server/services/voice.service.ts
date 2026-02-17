@@ -72,7 +72,7 @@ interface TextToSpeechResponse {
 /**
  * Convert text to speech using ElevenLabs API
  */
-export async function textToSpeech(request: TextToSpeechRequest): Promise<TextToSpeechResponse> {
+export async function text-to-speech(request: TextToSpeechRequest): Promise<TextToSpeechResponse> {
   const { text, expertId, voiceId: customVoiceId, modelId, voiceSettings } = request;
   
   // Get the API key from environment

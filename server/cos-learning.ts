@@ -15,7 +15,7 @@ import {
   cosInteractionLog,
   cosLearnedPatterns,
   cosUserMentalModel,
-  cosLearningMetrics,
+  cos-learningMetrics,
   cosTrainingProgress,
 } from "../drizzle/schema";
 import { eq, desc, and, sql } from "drizzle-orm";
@@ -500,7 +500,7 @@ export async function recordLearningMetrics(userId: number) {
     : null;
   
   // Save metrics
-  await db.insert(cosLearningMetrics).values({
+  await db.insert(cos-learningMetrics).values({
     userId,
     metricDate: today,
     periodType: "daily",
@@ -515,7 +515,7 @@ export async function recordLearningMetrics(userId: number) {
 // EXPORTS FOR TRPC ROUTES
 // =============================================================================
 
-export const cosLearningService = {
+export const cos-learningService = {
   logInteraction,
   getUnprocessedInteractions,
   extractLearningFromInteraction,

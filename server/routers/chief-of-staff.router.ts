@@ -11,7 +11,7 @@ import {
 } from '../../drizzle/schema';
 import { eq, and } from 'drizzle-orm';
 
-export const chiefOfStaffRouter = router({
+export const chief-of-staff.router = router({
   // Morning Briefing
   getMorningBriefing: protectedProcedure
     .query(async ({ ctx }) => {

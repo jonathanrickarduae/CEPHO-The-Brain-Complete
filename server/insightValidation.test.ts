@@ -19,7 +19,7 @@ import {
   type Challenge,
   type ConfidenceLevel,
   type VerificationStatus,
-} from './insightValidation';
+} from './insight-validation';
 
 describe('Insight Validation Engine', () => {
   describe('validateInsight', () => {

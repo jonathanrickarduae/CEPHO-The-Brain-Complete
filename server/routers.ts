@@ -1,14 +1,14 @@
 import { openClawRouter } from "./openclaw-router";
 import { integrationsRouter } from "./routers/integrationsRouter";
-import { projectGenesisRouter } from "./routers/projectGenesisRouter";
-import { qualityGatesRouter } from "./routers/qualityGatesRouter";
+import { project-genesis.router } from "./routers/project-genesis.router";
+import { quality-gates.router } from "./routers/quality-gates.router";
 import { blueprintRouter } from "./routers/blueprintRouter";
 import { smeRouter } from "./routers/smeRouter";
-import { digitalTwinRouter } from "./routers/digitalTwinRouter";
+import { digital-twin.router } from "./routers/digital-twin.router";
 import { blueprintsRouter } from "./routers/blueprintsRouter";
-import { chiefOfStaffRouter } from "./routers/chiefOfStaffRouter";
-import { deepDiveRouter } from "./routers/deepDiveRouter";
-import { businessPlanRouter } from "./routers/businessPlanRouter";
+import { chief-of-staff.router } from "./routers/chief-of-staff.router";
+import { deep-dive.router } from "./routers/deep-dive.router";
+import { business-plan.router } from "./routers/business-plan.router";
 import { debugRouter } from "./routers/debugRouter";
 import { cleanupRouter } from "./routers/cleanupRouter";
 import { asanaRouter } from "./routers/asanaRouter";
@@ -76,7 +76,7 @@ import { users } from "../drizzle/schema";
 import { eq } from "drizzle-orm";
 import { invokeLLM } from "./_core/llm";
 import { chatWithExpert } from "./services/expert-chat.service";
-import { textToSpeech, getExpertVoiceInfo, hasCustomVoice } from "./services/voice.service";
+import { text-to-speech, getExpertVoiceInfo, hasCustomVoice } from "./services/voice.service";
 import { 
   BUSINESS_PLAN_SECTIONS, 
   REVIEW_EXPERTS, 
@@ -103,15 +103,15 @@ import { z } from "zod";
 export const appRouter = router({
   openClaw: openClawRouter,
   integrations: integrationsRouter,
-  projectGenesis: projectGenesisRouter,
-  qualityGates: qualityGatesRouter,
+  projectGenesis: project-genesis.router,
+  qualityGates: quality-gates.router,
   blueprint: blueprintRouter,
   sme: smeRouter,
-  digitalTwin: digitalTwinRouter,
+  digitalTwin: digital-twin.router,
   blueprints: blueprintsRouter,
-  chiefOfStaff: chiefOfStaffRouter,
-  deepDive: deepDiveRouter,
-  businessPlan: businessPlanRouter,
+  chiefOfStaff: chief-of-staff.router,
+  deepDive: deep-dive.router,
+  businessPlan: business-plan.router,
   debug: debugRouter,
     cleanup: cleanupRouter,
     asana: asanaRouter,
@@ -1393,14 +1393,14 @@ You are not a yes-man. You are a trusted advisor who respects the principal enou
   }),
 
   // Text-to-Speech API - ElevenLabs integration for Victoria
-  textToSpeech: router({
+  text-to-speech: router({
     synthesize: protectedProcedure
       .input(z.object({
         text: z.string().min(1).max(5000),
         voiceId: z.string().optional(),
       }))
       .mutation(async ({ input }) => {
-        const { synthesizeSpeech } = await import("./_core/textToSpeech");
+        const { synthesizeSpeech } = await import("./_core/text-to-speech");
         const result = await synthesizeSpeech({
           text: input.text,
           voiceId: input.voiceId,
@@ -1415,7 +1415,7 @@ You are not a yes-man. You are a trusted advisor who respects the principal enou
 
     getVoices: protectedProcedure
       .query(async () => {
-        const { getAvailableVoices } = await import("./_core/textToSpeech");
+        const { getAvailableVoices } = await import("./_core/text-to-speech");
         const result = await getAvailableVoices();
         
         if ('error' in result) {
@@ -1427,7 +1427,7 @@ You are not a yes-man. You are a trusted advisor who respects the principal enou
 
     getSubscription: protectedProcedure
       .query(async () => {
-        const { getSubscriptionInfo } = await import("./_core/textToSpeech");
+        const { getSubscriptionInfo } = await import("./_core/text-to-speech");
         const result = await getSubscriptionInfo();
         
         if ('error' in result) {
@@ -1855,7 +1855,7 @@ You are not a yes-man. You are a trusted advisor who respects the principal enou
       }))
       .mutation(async ({ input }) => {
         try {
-          const result = await textToSpeech({
+          const result = await text-to-speech({
             text: input.text,
             expertId: input.expertId,
           });

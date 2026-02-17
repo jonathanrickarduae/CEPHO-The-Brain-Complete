@@ -34,7 +34,7 @@ import {
   validateSignalQuality,
   generateDailySignal,
   type SignalContent
-} from "./dailySignalGenerator";
+} from "./daily-signal-generator";
 
 describe("Daily Signal Generator", () => {
   beforeEach(() => {
