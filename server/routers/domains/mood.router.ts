@@ -1,11 +1,6 @@
 import { router, protectedProcedure } from "../../_core/trpc";
 import { z } from "zod";
-import {
-  createMoodEntry,
-  getMoodHistory,
-  getMoodTrends,
-  getLastMoodCheck,
-} from "../../db";
+import { moodService } from "../../services/mood";
 
 export const moodRouter = router({
   // Create a new mood entry
@@ -16,11 +11,10 @@ export const moodRouter = router({
       note: z.string().optional(),
     }))
     .mutation(async ({ ctx, input }) => {
-      const entry = await createMoodEntry({
-        userId: ctx.user.id,
+      const entry = await moodService.recordMood(ctx.user.id, {
         score: input.score,
         timeOfDay: input.timeOfDay,
-        note: input.note || null,
+        note: input.note,
       });
       return entry;
     }),
@@ -39,7 +33,7 @@ export const moodRouter = router({
         startDate.setDate(startDate.getDate() - input.days);
         options.startDate = startDate;
       }
-      return getMoodHistory(ctx.user.id, options);
+      return moodService.getMoodHistory(ctx.user.id, input?.limit, input?.days);
     }),
 
   // Get mood trends/analytics
@@ -48,7 +42,7 @@ export const moodRouter = router({
       days: z.number().optional(),
     }).optional())
     .query(async ({ ctx, input }) => {
-      return getMoodTrends(ctx.user.id, input?.days || 30);
+      return moodService.getMoodTrends(ctx.user.id, input?.days || 30);
     }),
 
   // Check if mood was already recorded for a time period today
@@ -57,6 +51,6 @@ export const moodRouter = router({
       timeOfDay: z.enum(['morning', 'afternoon', 'evening']),
     }))
     .query(async ({ ctx, input }) => {
-      return getLastMoodCheck(ctx.user.id, input.timeOfDay);
+      return moodService.getLastMoodCheck(ctx.user.id, input.timeOfDay);
     }),
 });
