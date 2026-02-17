@@ -8,6 +8,7 @@
 
 import { router } from "../../_core/trpc";
 import { z } from "zod";
+import { communicationService } from "../../services/communication";
 
 export const chatRouter = router({
     // Send a message and get AI response

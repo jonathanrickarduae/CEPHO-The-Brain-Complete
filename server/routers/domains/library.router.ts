@@ -8,6 +8,7 @@
 
 import { router } from "../../_core/trpc";
 import { z } from "zod";
+import { documentService } from "../../services/document";
 
 export const libraryRouter = router({
     // Create a new library document

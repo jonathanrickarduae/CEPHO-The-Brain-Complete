@@ -8,6 +8,7 @@
 
 import { router } from "../../_core/trpc";
 import { z } from "zod";
+import { projectService } from "../../services/project";
 
 export const genesisRouter = router({
     list: protectedProcedure.query(async ({ ctx }) => {

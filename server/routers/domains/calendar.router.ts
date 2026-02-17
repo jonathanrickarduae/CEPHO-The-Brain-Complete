@@ -8,6 +8,7 @@
 
 import { router } from "../../_core/trpc";
 import { z } from "zod";
+import { calendarService } from "../../services/calendar";
 
 export const calendarRouter = router({
     // Sync calendar events from a provider
