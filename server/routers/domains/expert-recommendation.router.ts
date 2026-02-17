@@ -6,8 +6,9 @@
  * @module routers/domains/expert-recommendation
  */
 
-import { router } from "../../_core/trpc";
+import { router, protectedProcedure } from "../../_core/trpc";
 import { z } from "zod";
+import { expertService } from "../../services/expert";
 
 export const expertRecommendationRouter = router({
     // Get recommended experts based on consultation history and context

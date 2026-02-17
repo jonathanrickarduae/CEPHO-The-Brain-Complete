@@ -6,8 +6,20 @@
  * @module routers/domains/expert-chat
  */
 
-import { router } from "../../_core/trpc";
+import { router, protectedProcedure } from "../../_core/trpc";
 import { z } from "zod";
+import { expertService } from "../../services/expert";
+import { 
+  getActiveExpertChatSession,
+  createExpertChatSession,
+  getExpertChatSessions,
+  getExpertChatMessages,
+  createExpertChatMessage,
+  updateExpertChatSession,
+  getRecentExpertMessages,
+  createExpertConversation
+} from "../../db";
+import { chatWithExpert } from "../../services/expert-chat.service";
 
 export const expertChatRouter = router({
     // Start or get active chat session

@@ -6,8 +6,9 @@
  * @module routers/domains/expert-evolution
  */
 
-import { router } from "../../_core/trpc";
+import { router, protectedProcedure } from "../../_core/trpc";
 import { z } from "zod";
+import { expertService } from "../../services/expert";
 
 export const expertEvolutionRouter = router({
     // Store a conversation with an expert

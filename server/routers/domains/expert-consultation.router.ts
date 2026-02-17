@@ -6,8 +6,9 @@
  * @module routers/domains/expert-consultation
  */
 
-import { router } from "../../_core/trpc";
+import { router, protectedProcedure } from "../../_core/trpc";
 import { z } from "zod";
+import { expertService } from "../../services/expert";
 
 export const expertConsultationRouter = router({
     // Record a new consultation
