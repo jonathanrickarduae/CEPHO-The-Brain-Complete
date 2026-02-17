@@ -2,6 +2,9 @@ import { COOKIE_NAME, ONE_YEAR_MS } from "@shared/const";
 import type { Express, Request, Response } from "express";
 import { getSessionCookieOptions } from "./cookies";
 import { sdk } from "./sdk";
+import { logger } from "../utils/logger";
+
+const log = logger.module('GoogleOAuth');
 
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID!;
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET!;
@@ -100,7 +103,7 @@ export function registerGoogleOAuthRoutes(app: Express) {
     const error = getQueryParam(req, "error");
 
     if (error) {
-      console.error("[Google OAuth] Error:", error);
+      log.error('OAuth error from Google', error);
       res.redirect("/?error=oauth_failed");
       return;
     }
@@ -117,13 +120,13 @@ export function registerGoogleOAuthRoutes(app: Express) {
       // Get user info from Google
       const userInfo = await getGoogleUserInfo(tokenResponse.access_token);
       
-      console.log('[Google OAuth] User info received:', JSON.stringify(userInfo, null, 2));
+      log.debug('User info received from Google', { userId: userInfo.id, email: userInfo.email });
       
       // Google OAuth v2 uses 'id', OpenID Connect uses 'sub'
       const userId = userInfo.id || userInfo.sub;
 
       if (!userId || !userInfo.email) {
-        console.error('[Google OAuth] Missing required fields. id:', userInfo.id, 'sub:', userInfo.sub, 'email:', userInfo.email);
+        log.error('Missing required fields from Google', undefined, { hasId: !!userInfo.id, hasSub: !!userInfo.sub, hasEmail: !!userInfo.email });
         res.status(400).json({ 
           error: "Invalid user info from Google",
           debug: {
@@ -137,9 +140,8 @@ export function registerGoogleOAuthRoutes(app: Express) {
       }
 
       // Upsert user in database
-      console.log('[Google OAuth] Step 1: Importing database module...');
+      log.debug('Upserting user in database');
       const db = await import("../db");
-      console.log('[Google OAuth] Step 2: Upserting user...');
       try {
         await db.upsertUser({
           openId: userId,
@@ -148,44 +150,35 @@ export function registerGoogleOAuthRoutes(app: Express) {
           loginMethod: "google",
           lastSignedIn: new Date(),
         });
-        console.log('[Google OAuth] Step 3: User upserted successfully');
+        log.info('User upserted successfully', { userId, email: userInfo.email });
       } catch (upsertError) {
         // Check if user was actually created despite the error
-        console.log('[Google OAuth] Step 3: Upsert threw error, checking if user exists...');
-        console.error('[Google OAuth] Upsert error details:', upsertError);
+        log.warn('Upsert threw error, checking if user exists', upsertError);
         const existingUser = await db.getUserByOpenId(userId);
         if (!existingUser) {
           // User wasn't created, re-throw the error
-          console.error('[Google OAuth] User does not exist, failing OAuth');
+          log.error('User does not exist after upsert, failing OAuth');
           throw upsertError;
         }
-        console.log('[Google OAuth] User exists despite error, continuing...');
+        log.debug('User exists despite upsert error, continuing');
       }
 
       // Create session token
-      console.log('[Google OAuth] Step 4: Creating session token...');
+      log.debug('Creating session token');
       const sessionToken = await createSessionToken(userId, userInfo.name);
-      console.log('[Google OAuth] Step 5: Session token created');
+      log.debug('Session token created');
 
       // Set cookie
-      console.log('[Google OAuth] Step 6: Setting cookie...');
-      console.log('[Google OAuth] Request hostname:', req.hostname);
-      console.log('[Google OAuth] Request protocol:', req.protocol);
-      console.log('[Google OAuth] Request headers:', JSON.stringify(req.headers, null, 2));
+      log.debug('Setting session cookie', { hostname: req.hostname, protocol: req.protocol, cookieName: COOKIE_NAME });
       const cookieOptions = getSessionCookieOptions(req);
-      console.log('[Google OAuth] Cookie options:', JSON.stringify(cookieOptions, null, 2));
-      console.log('[Google OAuth] Cookie name:', COOKIE_NAME);
-      console.log('[Google OAuth] Session token (first 20 chars):', sessionToken.substring(0, 20));
       res.cookie(COOKIE_NAME, sessionToken, { ...cookieOptions, maxAge: ONE_YEAR_MS });
-      console.log('[Google OAuth] Step 7: Cookie set with maxAge:', ONE_YEAR_MS);
+      log.debug('Cookie set successfully');
 
       // Redirect to home
-      console.log('[Google OAuth] Step 8: Redirecting to /');
+      log.info('OAuth successful, redirecting to home', { userId, email: userInfo.email });
       res.redirect(302, "/");
     } catch (error) {
-      console.error("[Google OAuth] Callback failed:", error);
-      console.error("[Google OAuth] Error stack:", error instanceof Error ? error.stack : 'N/A');
-      console.error("[Google OAuth] Error message:", error instanceof Error ? error.message : String(error));
+      log.error('OAuth callback failed', error);
       res.status(500).json({ 
         error: "OAuth callback failed",
         message: error instanceof Error ? error.message : String(error)
@@ -233,7 +226,7 @@ export function registerGoogleOAuthRoutes(app: Express) {
         loginMethod: user.loginMethod,
       });
     } catch (error) {
-      console.error("[Auth] Failed to get user:", error);
+      log.error('Failed to get user info', error);
       res.status(401).json({ error: "Invalid token" });
     }
   });
