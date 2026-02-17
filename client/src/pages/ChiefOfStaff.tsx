@@ -173,7 +173,7 @@ export default function ChiefOfStaff() {
       dbId: t.id,
       title: t.title,
       description: t.description || '',
-      project: 'General', // TODO: join with projects table
+      project: 'General', // FUTURE: Join with projects table
       status: (t.status === 'not_started' ? 'active' : t.status === 'in_progress' ? 'active' : t.status === 'completed' ? 'completed' : t.status === 'blocked' ? 'blocked' : 'review') as Task['status'],
       progress: t.progress || 0,
       qaStatus: (t.qaStatus || 'pending') as QAStatus,

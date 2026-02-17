@@ -15,9 +15,6 @@ const log = logger.module("AutomationScheduler");
 
 import cron from 'node-cron';
 import { getDb } from '../db';
-import { generateSignal } from './trading/trading-signal-service';
-import { generateBriefing } from './trading/victoria-briefing-service';
-import { executeWorkflow } from './trading/trading-workflow-service';
 import { sendEmail, sendWhatsApp } from './notification-service';
 import { generatePDF } from './document-generation-service';
 
@@ -237,28 +234,6 @@ class AutomationScheduler {
     
     // Get today's signals that need validation
     const signals = await db`
-      SELECT * FROM trading_signals 
-      WHERE DATE("generatedAt") = CURRENT_DATE 
-      AND status = 'pending'
-    `;
-    
-    for (const signal of signals) {
-      // Chief of Staff validation logic
-      // Check signal quality, data sources, reasoning
-      const isValid = await this.validateSignalQuality(signal);
-      
-      await db`
-        UPDATE trading_signals 
-        SET status = ${isValid ? 'validated' : 'rejected'},
-            "validatedAt" = NOW(),
-            "validatedBy" = 'chief_of_staff'
-        WHERE id = ${signal.id}
-      `;
-    }
-  }
-
-  /**
-   * 7:00 AM - Distribute signal via all channels
    */
   private async distributeSignal() {
     const db = await getDb();
@@ -266,17 +241,6 @@ class AutomationScheduler {
     // Get today's validated signals
     const signals = await db`
       SELECT s.*, p.name as "projectName", u.email, u.name as "userName"
-      FROM trading_signals s
-      JOIN project_genesis p ON s."projectId" = p.id
-      JOIN users u ON p."userId" = u.id
-      WHERE DATE(s."generatedAt") = CURRENT_DATE 
-      AND s.status = 'validated'
-    `;
-    
-    for (const signal of signals) {
-      try {
-        // Generate Victoria briefing
-        const briefing = await generateBriefing('AAPL', 'morning');
         
         // Generate PDF report
         const pdfPath = await generatePDF({
@@ -301,17 +265,6 @@ class AutomationScheduler {
         
         // Log distribution
         await db`
-          INSERT INTO trading_briefings 
-          ("projectId", "briefingType", content, "deliveryChannels", "deliveredAt")
-          VALUES (${signal.projectId}, 'morning', ${JSON.stringify(briefing)}, ARRAY['email', 'whatsapp', 'pdf'], NOW())
-        `;
-        
-        log.debug(`[Distribution] Sent daily signal for ${signal.projectName}`);
-      } catch (error) {
-        log.error(`[Distribution] Error for ${signal.projectName}:`, error);
-      }
-    }
-  }
 
   /**
    * Hourly market check (9 AM - 5 PM)
@@ -319,7 +272,6 @@ class AutomationScheduler {
   private async checkMarket() {
     const db = await getDb();
     
-    // Get all active trading projects
     const projects = await db`
       SELECT * FROM project_genesis 
       WHERE status = 'active' AND type = 'investment'

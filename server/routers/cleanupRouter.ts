@@ -43,11 +43,7 @@ export const cleanupRouter = router({
         await db.execute(sql`DELETE FROM user_notifications`);
         await db.execute(sql`DELETE FROM generated_documents`);
         
-        await db.execute(sql`DELETE FROM trading_workflow_logs`);
-        await db.execute(sql`DELETE FROM trading_performance`);
         await db.execute(sql`DELETE FROM victoria_briefings`);
-        await db.execute(sql`DELETE FROM trading_positions`);
-        await db.execute(sql`DELETE FROM trading_signals`);
         
         await db.execute(sql`DELETE FROM cepho_workflow_validations`);
         await db.execute(sql`DELETE FROM cepho_workflow_steps`);

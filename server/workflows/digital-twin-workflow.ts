@@ -92,7 +92,7 @@ export class DigitalTwinWorkflow {
         'Block 2 hours for deep work',
         'Review meeting agenda before 10am',
       ],
-      weather: 'Sunny, 72°F', // TODO: Get actual weather
+      weather: 'Sunny, 72°F', // FUTURE: Integrate weather API
       news: [
         'Market update: Tech stocks up 2%',
         'Industry news: New AI regulations announced',

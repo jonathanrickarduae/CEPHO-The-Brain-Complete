@@ -221,7 +221,7 @@ export class QualityGatesWorkflow {
       correctiveActions,
       signedOff,
       reviewedAt: new Date().toISOString(),
-      reviewer: 'System', // TODO: Get actual reviewer
+      reviewer: req.user?.name || 'System',
     });
   }
 

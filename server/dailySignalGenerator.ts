@@ -341,7 +341,6 @@ export async function generatePDF(content: SignalContent): Promise<string | null
     const fileKey = `signals/pdf/morning-signal-${timestamp}.html`;
     const { url } = await storagePut(fileKey, Buffer.from(html), "text/html");
     
-    // TODO: Convert HTML to PDF using the CEPHO document generator
     // For now, return the HTML URL
     return url;
   } catch (error) {

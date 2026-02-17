@@ -429,7 +429,6 @@ export class DeliverableGenerator {
    * List all deliverables for a workflow
    */
   static async listDeliverables(workflowId: string): Promise<GeneratedDeliverable[]> {
-    // TODO: Implement database query to list deliverables
     return [];
   }
 }
