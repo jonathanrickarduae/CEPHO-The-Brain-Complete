@@ -1,0 +1,589 @@
+/**
+ * CEPHO.Ai Official Report Stylesheet
+ * Based on CEPHO Design Guidelines v1.0
+ * 
+ * Usage: Import this stylesheet for all CEPHO branded reports
+ * 
+ * FIXES APPLIED:
+ * - White text on dark backgrounds for readability
+ * - All scores on 0-100 scale
+ * - Larger SME expert avatars (prominent display)
+ */
+
+/* ============================================
+   CSS Variables - CEPHO Brand Colors
+   ============================================ */
+:root {
+  /* Primary Colors */
+  --cepho-black: #000000;
+  --cepho-pink-neon: #ff006e;
+  --cepho-white: #ffffff;
+  
+  /* Grey Scale */
+  --cepho-light-grey: #F3F4F6;
+  --cepho-mid-grey: #666666;
+  --cepho-dark-grey: #333333;
+  --cepho-alt-row: #FAFAFA;
+  
+  /* Heat Map Colors - 0-100 Scale */
+  /* Dark backgrounds MUST use white text */
+  --score-excellent: #22c55e;      /* 80-100: Green - white text */
+  --score-good: #84cc16;           /* 70-79: Light Green - black text */
+  --score-satisfactory: #eab308;   /* 60-69: Yellow - black text */
+  --score-attention: #f97316;      /* 40-59: Orange - white text */
+  --score-critical: #ef4444;       /* 30-39: Red - white text */
+  --score-severe: #dc2626;         /* 0-29: Dark Red - white text */
+  
+  /* Typography */
+  --font-primary: 'Calibri', 'Segoe UI', Arial, sans-serif;
+  
+  /* Spacing */
+  --margin-page: 2.54cm;
+  --spacing-section: 2rem;
+  --spacing-paragraph: 1rem;
+  
+  /* SME Avatar Sizes */
+  --avatar-small: 40px;
+  --avatar-medium: 64px;
+  --avatar-large: 96px;
+  --avatar-prominent: 120px;
+}
+
+/* ============================================
+   Base Document Styles
+   ============================================ */
+.cepho-report {
+  font-family: var(--font-primary);
+  font-size: 11pt;
+  line-height: 1.6;
+  color: var(--cepho-black);
+  background-color: var(--cepho-white);
+  max-width: 210mm; /* A4 width */
+  margin: 0 auto;
+  padding: var(--margin-page);
+}
+
+/* ============================================
+   Typography - Headings
+   ============================================ */
+.cepho-report h1 {
+  font-family: var(--font-primary);
+  font-size: 24pt;
+  font-weight: bold;
+  color: var(--cepho-black);
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--cepho-black);
+}
+
+.cepho-report h2 {
+  font-family: var(--font-primary);
+  font-size: 18pt;
+  font-weight: bold;
+  color: var(--cepho-dark-grey);
+  margin-top: var(--spacing-section);
+  margin-bottom: 1rem;
+  padding-bottom: 0.25rem;
+  border-bottom: 1px solid var(--cepho-light-grey);
+}
+
+.cepho-report h3 {
+  font-family: var(--font-primary);
+  font-size: 14pt;
+  font-weight: bold;
+  color: var(--cepho-black);
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.cepho-report h4 {
+  font-family: var(--font-primary);
+  font-size: 12pt;
+  font-weight: bold;
+  color: var(--cepho-dark-grey);
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+/* ============================================
+   Typography - Body Text
+   ============================================ */
+.cepho-report p {
+  font-size: 11pt;
+  color: var(--cepho-black);
+  margin-bottom: var(--spacing-paragraph);
+  text-align: left;
+}
+
+.cepho-report .accent-text {
+  color: var(--cepho-pink-neon);
+  font-weight: bold;
+}
+
+.cepho-report .secondary-text {
+  color: var(--cepho-mid-grey);
+  font-size: 10pt;
+}
+
+/* ============================================
+   Tables
+   ============================================ */
+.cepho-report table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  font-size: 10pt;
+}
+
+.cepho-report table thead th {
+  background-color: var(--cepho-light-grey);
+  color: var(--cepho-mid-grey);
+  font-weight: bold;
+  text-align: left;
+  padding: 12px 16px;
+  border-bottom: 2px solid var(--cepho-mid-grey);
+}
+
+.cepho-report table tbody td {
+  background-color: var(--cepho-white);
+  color: var(--cepho-black);
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--cepho-light-grey);
+}
+
+.cepho-report table tbody tr:nth-child(even) td {
+  background-color: var(--cepho-alt-row);
+}
+
+.cepho-report table tbody tr:hover td {
+  background-color: #f0f0f0;
+}
+
+/* ============================================
+   Score Cells - Heat Map Colors (0-100 Scale)
+   CRITICAL: White text on dark backgrounds
+   ============================================ */
+.cepho-report .score-cell {
+  font-weight: bold;
+  text-align: center;
+  border-radius: 4px;
+  padding: 6px 12px;
+  display: inline-block;
+  min-width: 50px;
+}
+
+/* 80-100: Excellent - Green with WHITE text */
+.cepho-report .score-excellent {
+  background-color: var(--score-excellent);
+  color: var(--cepho-white);
+}
+
+/* 70-79: Good - Light Green with BLACK text (lighter bg) */
+.cepho-report .score-good {
+  background-color: var(--score-good);
+  color: var(--cepho-black);
+}
+
+/* 60-69: Satisfactory - Yellow with BLACK text */
+.cepho-report .score-satisfactory {
+  background-color: var(--score-satisfactory);
+  color: var(--cepho-black);
+}
+
+/* 40-59: Needs Attention - Orange with WHITE text */
+.cepho-report .score-attention {
+  background-color: var(--score-attention);
+  color: var(--cepho-white);
+}
+
+/* 30-39: Critical - Red with WHITE text */
+.cepho-report .score-critical {
+  background-color: var(--score-critical);
+  color: var(--cepho-white);
+}
+
+/* 0-29: Severe - Dark Red with WHITE text */
+.cepho-report .score-severe {
+  background-color: var(--score-severe);
+  color: var(--cepho-white);
+}
+
+/* Large score display for summary metrics */
+.cepho-report .score-large {
+  font-size: 24pt;
+  padding: 12px 24px;
+  min-width: 80px;
+}
+
+/* ============================================
+   Report Header
+   ============================================ */
+.cepho-report-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 1rem;
+  margin-bottom: 2rem;
+  border-bottom: 3px solid var(--cepho-black);
+}
+
+.cepho-report-header .logo {
+  height: 48px;
+  width: auto;
+}
+
+.cepho-report-header .document-info {
+  text-align: right;
+  font-size: 10pt;
+  color: var(--cepho-mid-grey);
+}
+
+/* ============================================
+   Report Footer
+   ============================================ */
+.cepho-report-footer {
+  margin-top: 3rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--cepho-light-grey);
+  text-align: center;
+  font-size: 9pt;
+  color: var(--cepho-mid-grey);
+}
+
+/* ============================================
+   Executive Summary Box
+   ============================================ */
+.cepho-report .executive-summary {
+  background-color: var(--cepho-light-grey);
+  border-left: 4px solid var(--cepho-pink-neon);
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.cepho-report .executive-summary h3 {
+  margin-top: 0;
+  color: var(--cepho-black);
+}
+
+/* ============================================
+   Key Metrics Display
+   ============================================ */
+.cepho-report .metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.cepho-report .metric-card {
+  background-color: var(--cepho-light-grey);
+  padding: 1rem;
+  text-align: center;
+  border-radius: 4px;
+}
+
+.cepho-report .metric-card .metric-value {
+  font-size: 28pt;
+  font-weight: bold;
+  color: var(--cepho-black);
+}
+
+.cepho-report .metric-card .metric-value.highlight {
+  color: var(--cepho-pink-neon);
+}
+
+.cepho-report .metric-card .metric-label {
+  font-size: 10pt;
+  color: var(--cepho-mid-grey);
+  margin-top: 0.5rem;
+}
+
+/* ============================================
+   SME Expert Section - PROMINENT AVATARS
+   ============================================ */
+
+/* SME Expert Grid - Large prominent photos */
+.cepho-report .sme-expert-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+/* Individual SME Expert Card - Prominent display */
+.cepho-report .sme-expert-card {
+  background-color: var(--cepho-white);
+  border: 1px solid var(--cepho-light-grey);
+  border-radius: 8px;
+  padding: 1.5rem;
+  text-align: center;
+  transition: box-shadow 0.2s ease;
+}
+
+.cepho-report .sme-expert-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* PROMINENT Avatar - Large and visible */
+.cepho-report .sme-expert-card .expert-avatar-prominent {
+  width: var(--avatar-prominent);
+  height: var(--avatar-prominent);
+  border-radius: 50%;
+  object-fit: cover;
+  margin: 0 auto 1rem;
+  border: 3px solid var(--cepho-light-grey);
+  display: block;
+}
+
+.cepho-report .sme-expert-card .expert-name {
+  font-weight: bold;
+  font-size: 14pt;
+  color: var(--cepho-black);
+  margin-bottom: 0.25rem;
+}
+
+.cepho-report .sme-expert-card .expert-specialty {
+  font-size: 10pt;
+  color: var(--cepho-mid-grey);
+  margin-bottom: 1rem;
+}
+
+.cepho-report .sme-expert-card .expert-score {
+  font-size: 18pt;
+  font-weight: bold;
+  padding: 8px 16px;
+  border-radius: 6px;
+  display: inline-block;
+}
+
+/* SME Expert Row - For table listings */
+.cepho-report .sme-expert-row {
+  display: flex;
+  align-items: center;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--cepho-light-grey);
+}
+
+.cepho-report .sme-expert-row .expert-avatar {
+  width: var(--avatar-medium);
+  height: var(--avatar-medium);
+  border-radius: 50%;
+  margin-right: 1rem;
+  object-fit: cover;
+  border: 2px solid var(--cepho-light-grey);
+  flex-shrink: 0;
+}
+
+.cepho-report .sme-expert-row .expert-info {
+  flex: 1;
+}
+
+.cepho-report .sme-expert-row .expert-name {
+  font-weight: bold;
+  font-size: 12pt;
+  color: var(--cepho-black);
+}
+
+.cepho-report .sme-expert-row .expert-specialty {
+  font-size: 10pt;
+  color: var(--cepho-mid-grey);
+}
+
+.cepho-report .sme-expert-row .expert-score {
+  font-size: 14pt;
+  font-weight: bold;
+  padding: 6px 14px;
+  border-radius: 4px;
+}
+
+/* SME Panel Summary - Shows all experts who assessed */
+.cepho-report .sme-panel-summary {
+  background-color: var(--cepho-light-grey);
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin: 1.5rem 0;
+}
+
+.cepho-report .sme-panel-summary h4 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  color: var(--cepho-black);
+}
+
+.cepho-report .sme-panel-avatars {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+}
+
+.cepho-report .sme-panel-avatars .avatar-with-score {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.cepho-report .sme-panel-avatars .avatar-with-score img {
+  width: var(--avatar-large);
+  height: var(--avatar-large);
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--cepho-white);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.cepho-report .sme-panel-avatars .avatar-with-score .name {
+  font-size: 9pt;
+  color: var(--cepho-dark-grey);
+  font-weight: bold;
+  max-width: 100px;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cepho-report .sme-panel-avatars .avatar-with-score .score {
+  font-size: 11pt;
+  font-weight: bold;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+/* ============================================
+   Dividers and Separators
+   ============================================ */
+.cepho-report hr {
+  border: none;
+  border-top: 1px solid var(--cepho-light-grey);
+  margin: 2rem 0;
+}
+
+.cepho-report hr.thick {
+  border-top: 2px solid var(--cepho-black);
+}
+
+.cepho-report hr.accent {
+  border-top: 2px solid var(--cepho-pink-neon);
+}
+
+/* ============================================
+   Callout Boxes
+   ============================================ */
+.cepho-report .callout {
+  padding: 1rem 1.5rem;
+  margin: 1rem 0;
+  border-radius: 4px;
+}
+
+.cepho-report .callout-info {
+  background-color: var(--cepho-light-grey);
+  border-left: 4px solid var(--cepho-mid-grey);
+}
+
+.cepho-report .callout-warning {
+  background-color: #fef3c7;
+  border-left: 4px solid var(--score-satisfactory);
+}
+
+.cepho-report .callout-critical {
+  background-color: #fee2e2;
+  border-left: 4px solid var(--score-critical);
+}
+
+.cepho-report .callout-success {
+  background-color: #dcfce7;
+  border-left: 4px solid var(--score-excellent);
+}
+
+/* ============================================
+   Score Legend
+   ============================================ */
+.cepho-report .score-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin: 1rem 0;
+  padding: 1rem;
+  background-color: var(--cepho-light-grey);
+  border-radius: 4px;
+}
+
+.cepho-report .score-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 9pt;
+}
+
+.cepho-report .score-legend-item .color-box {
+  width: 20px;
+  height: 20px;
+  border-radius: 3px;
+}
+
+/* ============================================
+   Print Styles
+   ============================================ */
+@media print {
+  .cepho-report {
+    max-width: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .cepho-report h1,
+  .cepho-report h2,
+  .cepho-report h3 {
+    page-break-after: avoid;
+  }
+  
+  .cepho-report table {
+    page-break-inside: avoid;
+  }
+  
+  .cepho-report .sme-expert-card {
+    page-break-inside: avoid;
+  }
+  
+  .cepho-report .no-print {
+    display: none;
+  }
+  
+  /* Ensure colors print correctly */
+  .cepho-report .score-cell {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
+
+/* ============================================
+   Utility Classes
+   ============================================ */
+.cepho-report .text-center {
+  text-align: center;
+}
+
+.cepho-report .text-right {
+  text-align: right;
+}
+
+.cepho-report .font-bold {
+  font-weight: bold;
+}
+
+.cepho-report .text-white {
+  color: var(--cepho-white) !important;
+}
+
+.cepho-report .text-black {
+  color: var(--cepho-black) !important;
+}
+
+.cepho-report .mt-0 { margin-top: 0; }
+.cepho-report .mb-0 { margin-bottom: 0; }
+.cepho-report .mt-1 { margin-top: 0.5rem; }
+.cepho-report .mb-1 { margin-bottom: 0.5rem; }
+.cepho-report .mt-2 { margin-top: 1rem; }
+.cepho-report .mb-2 { margin-bottom: 1rem; }

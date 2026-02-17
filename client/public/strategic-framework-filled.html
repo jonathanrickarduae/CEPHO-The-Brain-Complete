@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>CEPHO.Ai Strategic Framework - First Pass</title>
+  <style>
+    :root {
+      --bg-primary: #0a0a0a;
+      --bg-secondary: #1a1a1a;
+      --bg-card: #141414;
+      --text-primary: #ffffff;
+      --text-secondary: #a0a0a0;
+      --accent-pink: #E91E8C;
+      --success: #22c55e;
+      --border: #333333;
+    }
+    
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      line-height: 1.5;
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+    
+    .header {
+      position: sticky;
+      top: 0;
+      background: var(--bg-primary);
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      z-index: 100;
+    }
+    
+    .header h1 {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--accent-pink);
+      margin-bottom: 4px;
+    }
+    
+    .header .subtitle {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+    
+    .progress-bar {
+      height: 4px;
+      background: var(--bg-secondary);
+      border-radius: 2px;
+      margin-top: 12px;
+      overflow: hidden;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent-pink), #ff6b9d);
+      border-radius: 2px;
+      transition: width 0.3s ease;
+    }
+    
+    .container {
+      padding: 20px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    .section {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+    
+    .section h2 {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--accent-pink);
+      margin-bottom: 16px;
+    }
+    
+    .question {
+      margin-bottom: 20px;
+    }
+    
+    .question-label {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      display: block;
+    }
+    
+    .question-hint {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+    
+    .pre-filled {
+      background: var(--bg-secondary);
+      border-left: 3px solid var(--accent-pink);
+      padding: 12px;
+      border-radius: 0 8px 8px 0;
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+    
+    .pre-filled-label {
+      font-size: 11px;
+      color: var(--accent-pink);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+    
+    .approval-buttons {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    
+    .approval-btn {
+      flex: 1;
+      padding: 12px;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .approval-btn.approve { border-color: var(--success); }
+    .approval-btn.approve.selected { background: var(--success); color: white; }
+    .approval-btn.modify { border-color: #f59e0b; }
+    .approval-btn.modify.selected { background: #f59e0b; color: white; }
+    
+    .modification-input {
+      width: 100%;
+      min-height: 80px;
+      padding: 12px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text-primary);
+      font-family: inherit;
+      font-size: 14px;
+      margin-top: 8px;
+      display: none;
+      resize: vertical;
+    }
+    
+    .modification-input.visible {
+      display: block;
+    }
+    
+    .actions {
+      display: flex;
+      gap: 12px;
+      padding: 20px 0;
+    }
+    
+    .btn {
+      flex: 1;
+      padding: 14px;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    
+    .btn-primary {
+      background: var(--accent-pink);
+      color: white;
+    }
+    
+    .btn-secondary {
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      border: 1px solid var(--border);
+    }
+    
+    .save-toast {
+      position: fixed;
+      bottom: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--success);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 20px;
+      font-size: 13px;
+      opacity: 0;
+      transition: opacity 0.3s;
+      z-index: 1000;
+    }
+    
+    .save-toast.visible {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Strategic Framework</h1>
+    <p class="subtitle">First Pass - Review and Approve or Modify</p>
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- Section 1: Core Identity -->
+    <div class="section">
+      <h2>1. Core Identity</h2>
+      
+      <div class="question" data-id="mission">
+        <span class="question-label">1.1 Mission Statement</span>
+        <span class="question-hint">What problem are you solving and for whom?</span>
+        <div class="pre-filled">
+          <div class="pre-filled-label">First Pass</div>
+          To free entrepreneurs' mental bandwidth by providing AI powered executive support, allowing them to focus on building their business rather than getting stuck in the weeds of things they don't know. You only know what you know. CEPHO.Ai fills the gaps.
+        </div>
+        <div class="approval-buttons">
+          <button class="approval-btn approve" onclick="approve(this)">Approve</button>
+          <button class="approval-btn modify" onclick="modify(this)">Modify</button>
+        </div>
+        <textarea class="modification-input" placeholder="Enter your modifications..."></textarea>
+      </div>
+      
+      <div class="question" data-id="vision">
+        <span class="question-label">1.2 Vision Statement</span>
+        <span class="question-hint">Where do you see the company in 5-10 years?</span>
+        <div class="pre-filled">
+          <div class="pre-filled-label">First Pass</div>
+          To become the world's leading AI powered executive support platform, enabling every entrepreneur to operate with the strategic capability of a Fortune 500 CEO while maintaining the agility of a startup.
+        </div>
+        <div class="approval-buttons">
+          <button class="approval-btn approve" onclick="approve(this)">Approve</button>
+          <button class="approval-btn modify" onclick="modify(this)">Modify</button>
+        </div>
+        <textarea class="modification-input" placeholder="Enter your modifications..."></textarea>
+      </div>
+      
+      <div class="question" data-id="values">
+        <span class="question-label">1.3 Core Values</span>
+        <span class="question-hint">What principles guide every decision?</span>
+        <div class="pre-filled">
+          <div class="pre-filled-label">First Pass</div>
+          1. Constant Learning: Always questioning, always improving<br>
+          2. Authentic Excellence: Be the best, not just look the best<br>
+          3. Human Amplification: AI serves humans, not replaces them<br>
+          4. Practical Wisdom: Real world solutions, not theoretical advice<br>
+          5. Relentless Improvement: If it passes Jim Short, it's ready
+        </div>
+        <div class="approval-buttons">
+          <button class="approval-btn approve" onclick="approve(this)">Approve</button>
+          <button class="approval-btn modify" onclick="modify(this)">Modify</button>
+        </div>
+        <textarea class="modification-input" placeholder="Enter your modifications..."></textarea>
+      </div>
+    </div>
+
+    <!-- Section 2: Market Position -->
+    <div class="section">
+      <h2>2. Market Position</h2>
+      
+      <div class="question" data-id="target">
+        <span class="question-label">2.1 Target Customer</span>
+        <span class="question-hint">Who is your primary customer?</span>
+        <div class="pre-filled">
+          <div class="pre-filled-label">First Pass</div>
+          Solo founders and small business CEOs (1-10 employees) who lack access to executive support but need strategic guidance across multiple business functions. They are time poor, knowledge constrained, and need a trusted advisor who understands their context.
+        </div>
+        <div class="approval-buttons">
+          <button class="approval-btn approve" onclick="approve(this)">Approve</button>
+          <button class="approval-btn modify" onclick="modify(this)">Modify</button>
+        </div>
+        <textarea class="modification-input" placeholder="Enter your modifications..."></textarea>
+      </div>
+      
+      <div class="question" data-id="differentiation">
+        <span class="question-label">2.2 Competitive Differentiation</span>
+        <span class="question-hint">What makes CEPHO.Ai unique?</span>
+        <div class="pre-filled">
+          <div class="pre-filled-label">First Pass</div>
+          Unlike generic AI assistants, CEPHO.Ai provides a complete AI executive team: Virtual Chief of Staff (coordination), Victoria Head of Briefings (communication), and AI SME Expert Panel (functional expertise). The system learns your preferences, maintains context across all interactions, and delivers expert level guidance with quality gated by Jim Short (100/100 Top Trumps standard).
+        </div>
+        <div class="approval-buttons">
+          <button class="approval-btn approve" onclick="approve(this)">Approve</button>
+          <button class="approval-btn modify" onclick="modify(this)">Modify</button>
+        </div>
+        <textarea class="modification-input" placeholder="Enter your modifications..."></textarea>
+      </div>
+      
+      <div class="question" data-id="success">
+        <span class="question-label">2.3 Definition of Success</span>
+        <span class="question-hint">What does "number one" mean? (Not just revenue)</span>
+        <div class="pre-filled">
+          <div class="pre-filled-label">First Pass</div>
+          Being number one means maximizing mental bandwidth liberation for users. Success is measured by how much cognitive load we remove from entrepreneurs, allowing them to focus on what they actually want to do: building their business. Revenue follows when we genuinely free people's brains.
+        </div>
+        <div class="approval-buttons">
+          <button class="approval-btn approve" onclick="approve(this)">Approve</button>
+          <button class="approval-btn modify" onclick="modify(this)">Modify</button>
+        </div>
+        <textarea class="modification-input" placeholder="Enter your modifications..."></textarea>
+      </div>
+    </div>
+
+    <!-- Section 3: Business Model -->
+    <div class="section">
+      <h2>3. Business Model</h2>
+      
+      <div class="question" data-id="revenue">
+        <span class="question-label">3.1 Revenue Model</span>
+        <span class="question-hint">How will CEPHO.Ai generate revenue?</span>
+        <div class="pre-filled">
+          <div class="pre-filled-label">First Pass</div>
+          1. SaaS Subscription: Tiered pricing based on usage and features<br>
+          2. Digital Twin Agency: B2B services helping companies set up and manage their digital twins<br>
+          3. Expert Marketplace: Premium access to specialized AI SME experts
+        </div>
+        <div class="approval-buttons">
+          <button class="approval-btn approve" onclick="approve(this)">Approve</button>
+          <button class="approval-btn modify" onclick="modify(this)">Modify</button>
+        </div>
+        <textarea class="modification-input" placeholder="Enter your modifications..."></textarea>
+      </div>
+      
+      <div class="question" data-id="org">
+        <span class="question-label">3.2 Organizational Structure</span>
+        <span class="question-hint">How is the company structured?</span>
+        <div class="pre-filled">
+          <div class="pre-filled-label">First Pass</div>
+          One human employee (CEO) supported by AI Executive Layer:<br>
+          - Virtual Chief of Staff (research, coordination, grunt work)<br>
+          - Victoria, Head of Briefings (all voice briefings and communications)<br>
+          - AI SME Expert Panel (functional expertise across all domains)<br>
+          - Advisory Network (external inputs from real world companies and people)<br>
+          - AI Infrastructure (backend powering everything)
+        </div>
+        <div class="approval-buttons">
+          <button class="approval-btn approve" onclick="approve(this)">Approve</button>
+          <button class="approval-btn modify" onclick="modify(this)">Modify</button>
+        </div>
+        <textarea class="modification-input" placeholder="Enter your modifications..."></textarea>
+      </div>
+    </div>
+
+    <!-- Section 4: Strategic Roadmap -->
+    <div class="section">
+      <h2>4. Strategic Roadmap</h2>
+      
+      <div class="question" data-id="phases">
+        <span class="question-label">4.1 Development Phases</span>
+        <span class="question-hint">The 6-phase development pathway</span>
+        <div class="pre-filled">
+          <div class="pre-filled-label">First Pass</div>
+          Phase 1: MVP (Complete) - Core platform and Chief of Staff<br>
+          Phase 2: Foundation - Development velocity, productivity app mastery<br>
+          Phase 3: Market Entry - AI SME enhancement, data absorption, mock digital twins<br>
+          Phase 4: Personal - Restaurant booking, lifestyle SMEs, autonomous workflows<br>
+          Phase 5: Productivity Apps - In-house tools built to our standards<br>
+          Phase 6: Commercialization - Digital Twin Management Agency, B2B services
+        </div>
+        <div class="approval-buttons">
+          <button class="approval-btn approve" onclick="approve(this)">Approve</button>
+          <button class="approval-btn modify" onclick="modify(this)">Modify</button>
+        </div>
+        <textarea class="modification-input" placeholder="Enter your modifications..."></textarea>
+      </div>
+      
+      <div class="question" data-id="priorities">
+        <span class="question-label">4.2 12-Month Priorities</span>
+        <span class="question-hint">Top 3 priorities for the next year</span>
+        <div class="pre-filled">
+          <div class="pre-filled-label">First Pass</div>
+          1. Complete Phase 2 Foundation with full Chief of Staff functionality<br>
+          2. Achieve product-market fit with early adopters<br>
+          3. Secure seed funding for Phase 3 expansion
+        </div>
+        <div class="approval-buttons">
+          <button class="approval-btn approve" onclick="approve(this)">Approve</button>
+          <button class="approval-btn modify" onclick="modify(this)">Modify</button>
+        </div>
+        <textarea class="modification-input" placeholder="Enter your modifications..."></textarea>
+      </div>
+    </div>
+
+    <!-- Section 5: Funding -->
+    <div class="section">
+      <h2>5. Funding Requirements</h2>
+      
+      <div class="question" data-id="funding">
+        <span class="question-label">5.1 Funding Needs by Phase</span>
+        <span class="question-hint">Capital requirements for each phase</span>
+        <div class="pre-filled">
+          <div class="pre-filled-label">First Pass</div>
+          Phase 2: £50K-100K (Current development costs, productivity tools)<br>
+          Phase 3: £250K-500K (AI SME enhancement, data absorption, team expansion)<br>
+          Phase 4: £500K-1M (Personal features, integrations, scaling)<br>
+          Phase 5: £1M-2M (In-house productivity apps development)<br>
+          Phase 6: £2M-5M (Commercialization, Digital Twin Agency launch)
+        </div>
+        <div class="approval-buttons">
+          <button class="approval-btn approve" onclick="approve(this)">Approve</button>
+          <button class="approval-btn modify" onclick="modify(this)">Modify</button>
+        </div>
+        <textarea class="modification-input" placeholder="Enter your modifications..."></textarea>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-secondary" onclick="exportData()">Export</button>
+      <button class="btn btn-primary" onclick="saveAll()">Save All</button>
+    </div>
+  </div>
+
+  <div class="save-toast" id="saveToast">Saved!</div>
+
+  <script>
+    const STORAGE_KEY = 'cepho_strategic_framework_v2';
+    
+    function approve(btn) {
+      const question = btn.closest('.question');
+      const buttons = question.querySelectorAll('.approval-btn');
+      const textarea = question.querySelector('.modification-input');
+      
+      buttons.forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      textarea.classList.remove('visible');
+      
+      saveData();
+      updateProgress();
+    }
+    
+    function modify(btn) {
+      const question = btn.closest('.question');
+      const buttons = question.querySelectorAll('.approval-btn');
+      const textarea = question.querySelector('.modification-input');
+      
+      buttons.forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      textarea.classList.add('visible');
+      textarea.focus();
+      
+      saveData();
+      updateProgress();
+    }
+    
+    function saveData() {
+      const data = {};
+      document.querySelectorAll('.question').forEach(q => {
+        const id = q.dataset.id;
+        const approved = q.querySelector('.approve.selected') !== null;
+        const modified = q.querySelector('.modify.selected') !== null;
+        const modText = q.querySelector('.modification-input').value;
+        data[id] = { approved, modified, modText };
+      });
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      showToast();
+    }
+    
+    function loadData() {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        const data = JSON.parse(saved);
+        Object.keys(data).forEach(id => {
+          const q = document.querySelector(`[data-id="${id}"]`);
+          if (q) {
+            if (data[id].approved) {
+              q.querySelector('.approve').classList.add('selected');
+            } else if (data[id].modified) {
+              q.querySelector('.modify').classList.add('selected');
+              q.querySelector('.modification-input').classList.add('visible');
+              q.querySelector('.modification-input').value = data[id].modText || '';
+            }
+          }
+        });
+      }
+      updateProgress();
+    }
+    
+    function updateProgress() {
+      const questions = document.querySelectorAll('.question');
+      const answered = Array.from(questions).filter(q => 
+        q.querySelector('.selected') !== null
+      ).length;
+      const percent = (answered / questions.length) * 100;
+      document.getElementById('progressFill').style.width = percent + '%';
+    }
+    
+    function showToast() {
+      const toast = document.getElementById('saveToast');
+      toast.classList.add('visible');
+      setTimeout(() => toast.classList.remove('visible'), 1500);
+    }
+    
+    function saveAll() {
+      saveData();
+      alert('All responses saved! You can close this page and return later.');
+    }
+    
+    function exportData() {
+      const data = { exportDate: new Date().toISOString(), responses: {} };
+      document.querySelectorAll('.question').forEach(q => {
+        const id = q.dataset.id;
+        const preFilled = q.querySelector('.pre-filled').innerText.replace('First Pass\n', '');
+        const approved = q.querySelector('.approve.selected') !== null;
+        const modText = q.querySelector('.modification-input').value;
+        data.responses[id] = {
+          original: preFilled,
+          approved: approved,
+          modified: modText || null,
+          final: approved ? preFilled : (modText || preFilled)
+        };
+      });
+      
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'strategic_framework_' + new Date().toISOString().split('T')[0] + '.json';
+      a.click();
+    }
+    
+    // Auto-save on textarea input
+    document.querySelectorAll('.modification-input').forEach(ta => {
+      ta.addEventListener('input', () => {
+        clearTimeout(window.saveTimeout);
+        window.saveTimeout = setTimeout(saveData, 1000);
+      });
+    });
+    
+    loadData();
+  </script>
+</body>
+</html>

@@ -1,0 +1,697 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "./styles/design-system.css";
+
+@custom-variant dark (&:is(.dark *));
+@custom-variant light (&:is(.light *));
+@custom-variant mix (&:is(.mix *));
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  
+  /* Brain-specific color tokens */
+  --color-brain-cyan: var(--brain-cyan);
+  --color-brain-magenta: var(--brain-magenta);
+  --color-brain-success: var(--brain-success);
+  --color-brain-warning: var(--brain-warning);
+  --color-brain-danger: var(--brain-danger);
+  
+  /* Font families */
+  --font-sans: "Space Grotesk", sans-serif;
+  --font-display: "Rajdhani", sans-serif;
+}
+
+:root {
+  /* Brain Design System - Core Colors */
+  --brain-cyan: oklch(0.85 0.2 190);      /* #00D4FF - Primary accent */
+  --brain-magenta: oklch(0.65 0.28 320);  /* #FF00FF - Secondary accent */
+  --brain-success: oklch(0.7 0.2 145);    /* #22C55E - Success green */
+  --brain-warning: oklch(0.75 0.18 70);   /* #F59E0B - Warning amber */
+  --brain-danger: oklch(0.6 0.22 25);     /* #EF4444 - Danger red */
+  
+  /* CEPHO Pink Primary - #E91E8C */
+  --primary: oklch(0.58 0.25 340); 
+  --primary-foreground: oklch(1 0 0);
+  
+  --sidebar-primary: oklch(0.58 0.25 340);
+  --sidebar-primary-foreground: oklch(1 0 0);
+  
+  /* Neon Accents */
+  --chart-1: oklch(0.58 0.25 340); /* AI Pink */
+  --chart-2: oklch(0.85 0.2 190); /* Cyan */
+  --chart-3: oklch(0.6 0.25 290); /* Electric Purple */
+  --chart-4: oklch(0.85 0.25 140); /* Acid Green */
+  --chart-5: oklch(0.7 0.2 40);   /* Safety Orange */
+  
+  --radius: 0.75rem; /* Slightly softer radius */
+  
+  /* Background: Deepest Void Black */
+  --background: oklch(0.06 0 0); 
+  --foreground: oklch(0.98 0 0);
+  
+  /* Surface: Dark Charcoal */
+  --card: oklch(0.1 0 0 / 0.95);
+  --card-foreground: oklch(0.98 0 0);
+  
+  --popover: oklch(0.1 0 0 / 0.98);
+  --popover-foreground: oklch(0.98 0 0);
+  
+  --secondary: oklch(0.12 0 0);
+  --secondary-foreground: oklch(0.98 0 0);
+  
+  --muted: oklch(0.12 0 0);
+  --muted-foreground: oklch(0.85 0 0);
+  
+  --accent: oklch(0.12 0 0);
+  --accent-foreground: oklch(1 0 0);
+  
+  --destructive: oklch(0.6 0.25 25);
+  --destructive-foreground: oklch(1 0 0);
+  
+  --border: oklch(0.2 0 0);
+  --input: oklch(0.12 0 0);
+  --ring: oklch(0.58 0.25 340);
+  
+  --sidebar: oklch(0.06 0 0);
+  --sidebar-foreground: oklch(0.98 0 0);
+  --sidebar-accent: oklch(0.12 0 0);
+  --sidebar-accent-foreground: oklch(1 0 0);
+  --sidebar-border: oklch(0.15 0 0);
+  --sidebar-ring: oklch(0.65 0.28 320);
+  
+  /* Animation timing */
+  --transition-fast: 150ms;
+  --transition-normal: 300ms;
+  --transition-slow: 500ms;
+  --ease-out: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dark {
+  --brain-cyan: oklch(0.85 0.2 190);
+  --brain-magenta: oklch(0.65 0.28 320);
+  --brain-success: oklch(0.7 0.2 145);
+  --brain-warning: oklch(0.75 0.18 70);
+  --brain-danger: oklch(0.6 0.22 25);
+  
+  --primary: oklch(0.65 0.28 320); 
+  --primary-foreground: oklch(1 0 0);
+  --sidebar-primary: oklch(0.58 0.25 340);
+  --sidebar-primary-foreground: oklch(1 0 0);
+  --background: oklch(0.06 0 0); 
+  --foreground: oklch(0.98 0 0);
+  --card: oklch(0.1 0 0 / 0.95);
+  --card-foreground: oklch(0.98 0 0);
+  --popover: oklch(0.1 0 0 / 0.98);
+  --popover-foreground: oklch(0.98 0 0);
+  --secondary: oklch(0.12 0 0);
+  --secondary-foreground: oklch(0.98 0 0);
+  --muted: oklch(0.12 0 0);
+  --muted-foreground: oklch(0.85 0 0);
+  --accent: oklch(0.12 0 0);
+  --accent-foreground: oklch(1 0 0);
+  --destructive: oklch(0.6 0.25 25);
+  --destructive-foreground: oklch(1 0 0);
+  --border: oklch(0.2 0 0);
+  --input: oklch(0.12 0 0);
+  --ring: oklch(0.58 0.25 340);
+  --chart-1: oklch(0.58 0.25 340);
+  --chart-2: oklch(0.85 0.2 190);
+  --chart-3: oklch(0.6 0.25 290);
+  --chart-4: oklch(0.85 0.25 140);
+  --chart-5: oklch(0.7 0.2 40);
+  --sidebar: oklch(0.06 0 0);
+  --sidebar-foreground: oklch(0.98 0 0);
+  --sidebar-accent: oklch(0.12 0 0);
+  --sidebar-accent-foreground: oklch(1 0 0);
+  --sidebar-border: oklch(0.15 0 0);
+  --sidebar-ring: oklch(0.65 0.28 320);
+}
+
+.light {
+  --brain-cyan: oklch(0.65 0.2 190);
+  --brain-magenta: oklch(0.55 0.28 320);
+  --brain-success: oklch(0.55 0.2 145);
+  --brain-warning: oklch(0.65 0.18 70);
+  --brain-danger: oklch(0.55 0.22 25);
+  
+  --primary: oklch(0.55 0.28 320); 
+  --primary-foreground: oklch(1 0 0);
+  --sidebar-primary: oklch(0.55 0.28 320);
+  --sidebar-primary-foreground: oklch(1 0 0);
+  --background: oklch(0.98 0 0); 
+  --foreground: oklch(0.15 0 0);
+  --card: oklch(1 0 0 / 0.9);
+  --card-foreground: oklch(0.15 0 0);
+  --popover: oklch(1 0 0 / 0.98);
+  --popover-foreground: oklch(0.15 0 0);
+  --secondary: oklch(0.95 0 0);
+  --secondary-foreground: oklch(0.15 0 0);
+  --muted: oklch(0.92 0 0);
+  --muted-foreground: oklch(0.45 0 0);
+  --accent: oklch(0.95 0 0);
+  --accent-foreground: oklch(0.15 0 0);
+  --destructive: oklch(0.55 0.25 25);
+  --destructive-foreground: oklch(1 0 0);
+  --border: oklch(0.88 0 0);
+  --input: oklch(0.95 0 0);
+  --ring: oklch(0.55 0.28 320);
+  --chart-1: oklch(0.55 0.28 320);
+  --chart-2: oklch(0.65 0.2 190);
+  --chart-3: oklch(0.5 0.25 290);
+  --chart-4: oklch(0.65 0.25 140);
+  --chart-5: oklch(0.6 0.2 40);
+  --sidebar: oklch(0.97 0 0);
+  --sidebar-foreground: oklch(0.35 0 0);
+  --sidebar-accent: oklch(0.94 0 0);
+  --sidebar-accent-foreground: oklch(0.15 0 0);
+  --sidebar-border: oklch(0.9 0 0);
+  --sidebar-ring: oklch(0.55 0.28 320);
+}
+
+.mix {
+  --brain-cyan: oklch(0.75 0.2 190);
+  --brain-magenta: oklch(0.6 0.28 320);
+  --brain-success: oklch(0.6 0.2 145);
+  --brain-warning: oklch(0.7 0.18 70);
+  --brain-danger: oklch(0.55 0.22 25);
+  
+  --primary: oklch(0.65 0.28 320); 
+  --primary-foreground: oklch(1 0 0);
+  --sidebar-primary: oklch(0.58 0.25 340);
+  --sidebar-primary-foreground: oklch(1 0 0);
+  --background: oklch(0.96 0 0); 
+  --foreground: oklch(0.15 0 0);
+  --card: oklch(1 0 0 / 0.85);
+  --card-foreground: oklch(0.15 0 0);
+  --popover: oklch(1 0 0 / 0.98);
+  --popover-foreground: oklch(0.15 0 0);
+  --secondary: oklch(0.93 0 0);
+  --secondary-foreground: oklch(0.15 0 0);
+  --muted: oklch(0.9 0 0);
+  --muted-foreground: oklch(0.45 0 0);
+  --accent: oklch(0.93 0 0);
+  --accent-foreground: oklch(0.15 0 0);
+  --destructive: oklch(0.55 0.25 25);
+  --destructive-foreground: oklch(1 0 0);
+  --border: oklch(0.85 0 0);
+  --input: oklch(0.93 0 0);
+  --ring: oklch(0.58 0.25 340);
+  --chart-1: oklch(0.55 0.28 320);
+  --chart-2: oklch(0.65 0.2 190);
+  --chart-3: oklch(0.5 0.25 290);
+  --chart-4: oklch(0.65 0.25 140);
+  --chart-5: oklch(0.6 0.2 40);
+  --sidebar: oklch(0.12 0 0);
+  --sidebar-foreground: oklch(0.7 0 0);
+  --sidebar-accent: oklch(0.2 0 0);
+  --sidebar-accent-foreground: oklch(1 0 0);
+  --sidebar-border: oklch(0.2 0 0);
+  --sidebar-ring: oklch(0.65 0.28 320);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  }
+  
+  html {
+    /* Use dynamic viewport height for mobile */
+    height: 100dvh;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  
+  /* Smooth theme transitions */
+  html.theme-transitioning * {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  body {
+    @apply bg-background text-foreground antialiased;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    min-height: 100dvh;
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
+  
+  /* Theme-specific backgrounds */
+  .dark body,
+  :root:not(.light):not(.mix) body {
+    background-image: url('/images/hero-background.jpg');
+    background-blend-mode: overlay;
+  }
+  
+  .light body {
+    background-image: linear-gradient(135deg, oklch(0.98 0 0) 0%, oklch(0.95 0.02 320) 100%);
+  }
+  
+  .mix body {
+    background-image: linear-gradient(135deg, oklch(0.96 0 0) 0%, oklch(0.94 0.01 320) 100%);
+  }
+  
+  /* Minimum touch target sizes (44x44px Apple HIG standard) */
+  button,
+  [role="button"],
+  a,
+  input[type="checkbox"],
+  input[type="radio"],
+  select {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Exception for inline links */
+  p a, span a, li a {
+    min-height: auto;
+    min-width: auto;
+  }
+  
+  /* Glassmorphism utilities */
+  .glass {
+    @apply bg-card/60 backdrop-blur-xl border border-white/10 shadow-lg;
+  }
+  
+  .glass-hover {
+    @apply hover:bg-card/80 hover:border-primary/50 transition-all duration-300;
+  }
+  
+  .neon-text {
+    text-shadow: 0 0 10px var(--color-primary), 0 0 20px var(--color-primary);
+  }
+  
+  .neon-border {
+    box-shadow: 0 0 5px var(--color-primary), inset 0 0 5px var(--color-primary);
+  }
+  
+  /* Interactive elements cursor */
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]),
+  [type="button"]:not(:disabled),
+  [type="submit"]:not(:disabled),
+  [type="reset"]:not(:disabled),
+  a[href],
+  select:not(:disabled),
+  input[type="checkbox"]:not(:disabled),
+  input[type="radio"]:not(:disabled) {
+    @apply cursor-pointer;
+  }
+}
+
+@layer components {
+  /* Container utility */
+  .container {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .flex {
+    min-height: 0;
+    min-width: 0;
+  }
+
+  @media (min-width: 640px) {
+    .container {
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .container {
+      padding-left: 2rem;
+      padding-right: 2rem;
+      max-width: 1280px;
+    }
+  }
+  
+  /* Brain-specific component styles */
+  
+  /* Command card with hover effect */
+  .brain-card {
+    @apply relative overflow-hidden rounded-xl border border-white/10 bg-card/60 backdrop-blur-xl;
+    @apply transition-all duration-300 ease-out;
+    @apply hover:scale-[1.02] hover:border-primary/50 hover:shadow-lg hover:shadow-primary/20;
+  }
+  
+  .brain-card::before {
+    content: '';
+    @apply absolute inset-0 opacity-0 transition-opacity duration-300;
+    background: radial-gradient(circle at center, var(--color-primary) 0%, transparent 70%);
+  }
+  
+  .brain-card:hover::before {
+    @apply opacity-10;
+  }
+  
+  /* Status badges */
+  .status-badge {
+    @apply inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium;
+  }
+  
+  .status-success {
+    @apply bg-brain-success/20 text-brain-success border border-brain-success/30;
+  }
+  
+  .status-warning {
+    @apply bg-brain-warning/20 text-brain-warning border border-brain-warning/30;
+  }
+  
+  .status-danger {
+    @apply bg-brain-danger/20 text-brain-danger border border-brain-danger/30;
+  }
+  
+  .status-info {
+    @apply bg-brain-cyan/20 text-brain-cyan border border-brain-cyan/30;
+  }
+  
+  /* Quick action button */
+  .quick-action-btn {
+    @apply flex items-center justify-center w-12 h-12 rounded-full;
+    @apply bg-card/80 backdrop-blur-xl border border-white/10;
+    @apply transition-all duration-200 ease-out;
+    @apply hover:scale-110 hover:border-primary/50 hover:shadow-lg hover:shadow-primary/30;
+    @apply active:scale-95;
+  }
+  
+  /* Floating action button (for voice input) */
+  .fab {
+    @apply fixed z-50 flex items-center justify-center;
+    @apply w-16 h-16 rounded-full bg-primary text-primary-foreground;
+    @apply shadow-lg shadow-primary/40;
+    @apply transition-all duration-200 ease-out;
+    @apply hover:scale-110 hover:shadow-xl hover:shadow-primary/50;
+    @apply active:scale-95;
+  }
+  
+  .fab-recording {
+    @apply animate-pulse bg-brain-danger shadow-brain-danger/40;
+  }
+  
+  /* Bottom tab bar for mobile */
+  .bottom-tabs {
+    @apply fixed bottom-0 left-0 right-0 z-40;
+    @apply flex items-center justify-around;
+    @apply h-16 bg-card/95 backdrop-blur-xl border-t border-white/10;
+    padding-bottom: env(safe-area-inset-bottom, 0);
+  }
+  
+  .bottom-tab {
+    @apply flex flex-col items-center justify-center gap-1 py-2 px-4;
+    @apply text-muted-foreground transition-colors duration-200;
+    @apply min-w-[64px];
+  }
+  
+  .bottom-tab.active {
+    @apply text-primary;
+  }
+  
+  .bottom-tab-icon {
+    @apply w-6 h-6;
+  }
+  
+  .bottom-tab-label {
+    @apply text-[10px] font-medium;
+  }
+  
+  /* Breadcrumbs */
+  .breadcrumbs {
+    @apply flex items-center gap-2 text-sm text-muted-foreground;
+  }
+  
+  .breadcrumb-item {
+    @apply hover:text-foreground transition-colors;
+  }
+  
+  .breadcrumb-separator {
+    @apply text-muted-foreground/50;
+  }
+  
+  .breadcrumb-current {
+    @apply text-foreground font-medium;
+  }
+  
+  /* Learning indicator */
+  .learning-badge {
+    @apply inline-flex items-center gap-2 px-3 py-1.5 rounded-lg;
+    @apply bg-brain-cyan/10 border border-brain-cyan/20;
+    @apply text-xs text-brain-cyan;
+  }
+  
+  .learning-badge::before {
+    content: '';
+    @apply w-2 h-2 rounded-full bg-brain-cyan animate-pulse;
+  }
+  
+  /* Pulse animation for live indicators */
+  @keyframes pulse-glow {
+    0%, 100% {
+      box-shadow: 0 0 0 0 var(--color-primary);
+    }
+    50% {
+      box-shadow: 0 0 0 8px transparent;
+    }
+  }
+  
+  .pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
+  
+  /* Skeleton loading */
+  .skeleton {
+    @apply animate-pulse bg-muted rounded;
+  }
+  
+  /* Safe area for mobile */
+
+}
+
+/* Animation Keyframes */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes confetti {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+@keyframes sparkle {
+  0% {
+    transform: scale(0) rotate(0deg);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1) rotate(180deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes glow-pulse {
+  0%, 100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
+.animate-confetti {
+  animation: confetti 3s ease-out forwards;
+}
+
+.animate-sparkle {
+  animation: sparkle 0.7s ease-out forwards;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-glow-pulse {
+  animation: glow-pulse 2s ease-in-out infinite;
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  .animate-pulse,
+  .animate-bounce,
+  .animate-spin,
+  .animate-ping,
+  .animate-confetti,
+  .animate-sparkle,
+  .animate-float,
+  .animate-glow-pulse {
+    animation: none !important;
+  }
+}
+
+/* High Contrast Mode */
+.high-contrast {
+  --primary: oklch(1 0 0);
+  --primary-foreground: oklch(0 0 0);
+  --background: oklch(0 0 0);
+  --foreground: oklch(1 0 0);
+  --card: oklch(0.1 0 0);
+  --card-foreground: oklch(1 0 0);
+  --border: oklch(1 0 0);
+  --muted-foreground: oklch(0.8 0 0);
+}
+
+.high-contrast * {
+  border-color: oklch(1 0 0) !important;
+}
+
+.high-contrast button,
+.high-contrast a {
+  outline: 2px solid oklch(1 0 0);
+  outline-offset: 2px;
+}
+
+/* Focus Management */
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.focus-ring {
+  @apply focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background;
+}
+
+/* Skip to content link for accessibility */
+.skip-link {
+  @apply sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50;
+  @apply px-4 py-2 bg-primary text-primary-foreground rounded-lg;
+}
+
+/* Onboarding highlight */
+.onboarding-highlight {
+  position: relative;
+  z-index: 51;
+  box-shadow: 0 0 0 4px var(--color-primary), 0 0 20px 10px rgba(255, 16, 240, 0.3);
+  border-radius: var(--radius);
+}
+
+@layer utilities {
+  /* Text gradient utility */
+  .text-gradient {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, var(--color-brain-cyan), var(--color-brain-magenta));
+  }
+  
+  /* Hide scrollbar but allow scrolling */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* Truncate with ellipsis */
+  .truncate-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  
+  .truncate-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
+
+/* Flip Card 3D Transforms */
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.transform-style-3d {
+  transform-style: preserve-3d;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+}
+
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}

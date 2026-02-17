@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: cepho-the-brain-fresh
+    runtime: node
+    buildCommand: pnpm install && pnpm run build
+    startCommand: NODE_ENV=production node dist/index.js
+    envVars:
+      - key: NODE_ENV
+        value: production

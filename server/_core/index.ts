@@ -1,0 +1,120 @@
+// Load environment variables FIRST before any other imports
+import dotenv from "dotenv";
+import { fileURLToPath } from "url";
+import path from "path";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+if (process.env.NODE_ENV === "production") {
+  const envPath = path.resolve(__dirname, ".env.production");
+  dotenv.config({ path: envPath });
+  console.log('[dotenv] Loaded .env.production from:', envPath);
+  console.log('[dotenv] DATABASE_URL present:', !!process.env.DATABASE_URL);
+} else {
+  dotenv.config();
+}
+
+// Debug: Log auth bypass status at startup
+console.log('[Startup] AUTH_BYPASS:', process.env.AUTH_BYPASS);
+console.log('[Startup] VITE_AUTH_BYPASS:', process.env.VITE_AUTH_BYPASS);
+console.log('[Startup] NODE_ENV:', process.env.NODE_ENV);
+
+// Now import other modules
+import express from "express";
+import { createServer } from "http";
+import net from "net";
+import { createExpressMiddleware } from "@trpc/server/adapters/express";
+import { registerGoogleOAuthRoutes } from "./google-oauth";
+import { appRouter } from "../routers";
+import { createContext } from "./context";
+import { serveStatic, setupVite } from "./vite";
+import { apiRateLimit } from "./rateLimit";
+import { runMigrations } from "../migrations/run-migrations";
+
+function isPortAvailable(port: number): Promise<boolean> {
+  return new Promise(resolve => {
+    const server = net.createServer();
+    server.listen(port, () => {
+      server.close(() => resolve(true));
+    });
+    server.on("error", () => resolve(false));
+  });
+}
+
+async function findAvailablePort(startPort: number = 3000): Promise<number> {
+  for (let port = startPort; port < startPort + 20; port++) {
+    if (await isPortAvailable(port)) {
+      return port;
+    }
+  }
+  throw new Error(`No available port found starting from ${startPort}`);
+}
+
+async function startServer() {
+  // Run database migrations first
+  await runMigrations();
+  
+  const app = express();
+  const server = createServer(app);
+  
+  // Trust proxy for rate limiting behind reverse proxy
+  app.set('trust proxy', 1);
+  
+  // Stripe webhook route - MUST be before body parser to get raw body
+  app.post("/api/stripe/webhook", express.raw({ type: "application/json" }), async (req, res) => {
+    const { handleStripeWebhook } = await import("../stripe/webhookHandler");
+    return handleStripeWebhook(req, res);
+  });
+  
+  // Configure body parser with larger size limit for file uploads
+  app.use(express.json({ limit: "50mb" }));
+  app.use(express.urlencoded({ limit: "50mb", extended: true }));
+  
+  // Apply rate limiting to API routes
+  app.use("/api", apiRateLimit);
+  
+  // Google OAuth routes
+  registerGoogleOAuthRoutes(app);
+  
+  // Workflow API routes
+  const workflowRoutes = await import("../routes/workflows");
+  app.use("/api/workflows", workflowRoutes.default);
+  
+  // AI Agents API routes
+  const agentRoutes = await import("../routes/agents");
+  app.use("/api/agents", agentRoutes.default);
+  
+  // Library API routes
+  const libraryRoutes = await import("../routes/libraryRouter");
+  app.use("/api/library", libraryRoutes.default);
+  
+  // tRPC API
+  app.use(
+    "/api/trpc",
+    createExpressMiddleware({
+      router: appRouter,
+      createContext,
+    })
+  );
+  
+  // development mode uses Vite, production mode uses static files
+  if (process.env.NODE_ENV === "development") {
+    await setupVite(app, server);
+  } else {
+    serveStatic(app);
+  }
+
+  const preferredPort = parseInt(process.env.PORT || "3000");
+  const port = await findAvailablePort(preferredPort);
+
+  if (port !== preferredPort) {
+    console.log(`Port ${preferredPort} is busy, using port ${port} instead`);
+  }
+
+  server.listen(port, () => {
+    console.log(`Server running on http://localhost:${port}/`);
+  });
+}
+
+startServer().catch(console.error);

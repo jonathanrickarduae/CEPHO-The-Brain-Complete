@@ -1,0 +1,36 @@
+{
+  "name": "CEPHO - The Brain",
+  "version": "2.0.0",
+  "description": "AI-Powered Business Management Platform with conversational interface",
+  "skills": [
+    "cepho-project-genesis",
+    "cepho-qms-validation",
+    "cepho-ai-sme-consultation",
+    "cepho-due-diligence",
+    "cepho-financial-modeling",
+    "cepho-data-room",
+    "cepho-digital-twin"
+  ],
+  "backend": {
+    "url": "https://cepho-the-brain-complete.onrender.com",
+    "apiPath": "/api/trpc"
+  },
+  "database": {
+    "url": "postgresql://postgres:ewkcMhvgqMMXFGjJ@db.xgoxduebjnlsrljzksvd.supabase.co:5432/postgres"
+  },
+  "messaging": {
+    "channels": ["whatsapp", "telegram", "slack"],
+    "defaultChannel": "whatsapp"
+  },
+  "ai": {
+    "model": "gpt-4.1-mini",
+    "temperature": 0.7,
+    "maxTokens": 4000
+  },
+  "features": {
+    "autonomousExecution": true,
+    "proactiveAssistance": true,
+    "backgroundProcessing": true,
+    "multiAgent": true
+  }
+}

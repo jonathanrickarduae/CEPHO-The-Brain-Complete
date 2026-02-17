@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>CEPHO.Ai Chief of Staff Questionnaire</title>
+  <style>
+    :root {
+      --bg-primary: #0a0a0a;
+      --bg-secondary: #1a1a1a;
+      --bg-card: #141414;
+      --text-primary: #ffffff;
+      --text-secondary: #a0a0a0;
+      --accent-pink: #E91E8C;
+      --success: #22c55e;
+      --border: #333333;
+    }
+    
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      line-height: 1.5;
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+    
+    .header {
+      position: sticky;
+      top: 0;
+      background: var(--bg-primary);
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      z-index: 100;
+    }
+    
+    .header h1 {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--accent-pink);
+      margin-bottom: 4px;
+    }
+    
+    .header .subtitle {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+    
+    .progress-bar {
+      height: 4px;
+      background: var(--bg-secondary);
+      border-radius: 2px;
+      margin-top: 12px;
+      overflow: hidden;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent-pink), #ff6b9d);
+      border-radius: 2px;
+      transition: width 0.3s ease;
+    }
+    
+    .container {
+      padding: 20px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    .section {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+    
+    .section h2 {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--accent-pink);
+      margin-bottom: 16px;
+    }
+    
+    .question {
+      margin-bottom: 24px;
+    }
+    
+    .question-label {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      display: block;
+    }
+    
+    /* Scale 1-10 */
+    .scale-container {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    
+    .scale-btn {
+      width: 36px;
+      height: 36px;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .scale-btn.selected {
+      background: var(--accent-pink);
+      border-color: var(--accent-pink);
+      color: white;
+    }
+    
+    .scale-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--text-secondary);
+      margin-top: 6px;
+    }
+    
+    /* Yes/No */
+    .yesno-container {
+      display: flex;
+      gap: 12px;
+    }
+    
+    .yesno-btn {
+      flex: 1;
+      padding: 14px;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .yesno-btn.selected.yes {
+      background: var(--success);
+      border-color: var(--success);
+      color: white;
+    }
+    
+    .yesno-btn.selected.no {
+      background: #ef4444;
+      border-color: #ef4444;
+      color: white;
+    }
+    
+    /* Multi-choice */
+    .choice-container {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    
+    .choice-btn {
+      padding: 12px 16px;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      font-size: 14px;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .choice-btn.selected {
+      background: var(--accent-pink);
+      border-color: var(--accent-pink);
+      color: white;
+    }
+    
+    .actions {
+      display: flex;
+      gap: 12px;
+      padding: 20px 0;
+    }
+    
+    .btn {
+      flex: 1;
+      padding: 14px;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    
+    .btn-primary {
+      background: var(--accent-pink);
+      color: white;
+    }
+    
+    .btn-secondary {
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      border: 1px solid var(--border);
+    }
+    
+    .save-toast {
+      position: fixed;
+      bottom: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--success);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 20px;
+      font-size: 13px;
+      opacity: 0;
+      transition: opacity 0.3s;
+      z-index: 1000;
+    }
+    
+    .save-toast.visible {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Chief of Staff Questionnaire</h1>
+    <p class="subtitle">Help your AI Chief of Staff learn your preferences</p>
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- Section 1: Communication Style -->
+    <div class="section">
+      <h2>1. Communication Style</h2>
+      
+      <div class="question" data-id="detail_level" data-type="scale">
+        <span class="question-label">How much detail do you prefer in briefings?</span>
+        <div class="scale-container">
+          <button class="scale-btn" data-value="1">1</button>
+          <button class="scale-btn" data-value="2">2</button>
+          <button class="scale-btn" data-value="3">3</button>
+          <button class="scale-btn" data-value="4">4</button>
+          <button class="scale-btn" data-value="5">5</button>
+          <button class="scale-btn" data-value="6">6</button>
+          <button class="scale-btn" data-value="7">7</button>
+          <button class="scale-btn" data-value="8">8</button>
+          <button class="scale-btn" data-value="9">9</button>
+          <button class="scale-btn" data-value="10">10</button>
+        </div>
+        <div class="scale-labels">
+          <span>Headlines only</span>
+          <span>Full detail</span>
+        </div>
+      </div>
+      
+      <div class="question" data-id="voice_briefings" data-type="yesno">
+        <span class="question-label">Do you prefer voice briefings over written?</span>
+        <div class="yesno-container">
+          <button class="yesno-btn yes" data-value="yes">Yes</button>
+          <button class="yesno-btn no" data-value="no">No</button>
+        </div>
+      </div>
+      
+      <div class="question" data-id="formality" data-type="scale">
+        <span class="question-label">How formal should communications be?</span>
+        <div class="scale-container">
+          <button class="scale-btn" data-value="1">1</button>
+          <button class="scale-btn" data-value="2">2</button>
+          <button class="scale-btn" data-value="3">3</button>
+          <button class="scale-btn" data-value="4">4</button>
+          <button class="scale-btn" data-value="5">5</button>
+          <button class="scale-btn" data-value="6">6</button>
+          <button class="scale-btn" data-value="7">7</button>
+          <button class="scale-btn" data-value="8">8</button>
+          <button class="scale-btn" data-value="9">9</button>
+          <button class="scale-btn" data-value="10">10</button>
+        </div>
+        <div class="scale-labels">
+          <span>Casual</span>
+          <span>Very formal</span>
+        </div>
+      </div>
+      
+      <div class="question" data-id="proactive_updates" data-type="yesno">
+        <span class="question-label">Should I proactively send updates without being asked?</span>
+        <div class="yesno-container">
+          <button class="yesno-btn yes" data-value="yes">Yes</button>
+          <button class="yesno-btn no" data-value="no">No</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 2: Decision Making -->
+    <div class="section">
+      <h2>2. Decision Making</h2>
+      
+      <div class="question" data-id="decision_speed" data-type="scale">
+        <span class="question-label">How quickly do you prefer to make decisions?</span>
+        <div class="scale-container">
+          <button class="scale-btn" data-value="1">1</button>
+          <button class="scale-btn" data-value="2">2</button>
+          <button class="scale-btn" data-value="3">3</button>
+          <button class="scale-btn" data-value="4">4</button>
+          <button class="scale-btn" data-value="5">5</button>
+          <button class="scale-btn" data-value="6">6</button>
+          <button class="scale-btn" data-value="7">7</button>
+          <button class="scale-btn" data-value="8">8</button>
+          <button class="scale-btn" data-value="9">9</button>
+          <button class="scale-btn" data-value="10">10</button>
+        </div>
+        <div class="scale-labels">
+          <span>Take time to analyze</span>
+          <span>Decide fast</span>
+        </div>
+      </div>
+      
+      <div class="question" data-id="data_driven" data-type="scale">
+        <span class="question-label">How data-driven are your decisions?</span>
+        <div class="scale-container">
+          <button class="scale-btn" data-value="1">1</button>
+          <button class="scale-btn" data-value="2">2</button>
+          <button class="scale-btn" data-value="3">3</button>
+          <button class="scale-btn" data-value="4">4</button>
+          <button class="scale-btn" data-value="5">5</button>
+          <button class="scale-btn" data-value="6">6</button>
+          <button class="scale-btn" data-value="7">7</button>
+          <button class="scale-btn" data-value="8">8</button>
+          <button class="scale-btn" data-value="9">9</button>
+          <button class="scale-btn" data-value="10">10</button>
+        </div>
+        <div class="scale-labels">
+          <span>Gut instinct</span>
+          <span>Data only</span>
+        </div>
+      </div>
+      
+      <div class="question" data-id="risk_tolerance" data-type="scale">
+        <span class="question-label">What is your risk tolerance?</span>
+        <div class="scale-container">
+          <button class="scale-btn" data-value="1">1</button>
+          <button class="scale-btn" data-value="2">2</button>
+          <button class="scale-btn" data-value="3">3</button>
+          <button class="scale-btn" data-value="4">4</button>
+          <button class="scale-btn" data-value="5">5</button>
+          <button class="scale-btn" data-value="6">6</button>
+          <button class="scale-btn" data-value="7">7</button>
+          <button class="scale-btn" data-value="8">8</button>
+          <button class="scale-btn" data-value="9">9</button>
+          <button class="scale-btn" data-value="10">10</button>
+        </div>
+        <div class="scale-labels">
+          <span>Very conservative</span>
+          <span>High risk taker</span>
+        </div>
+      </div>
+      
+      <div class="question" data-id="delegate_decisions" data-type="yesno">
+        <span class="question-label">Are you comfortable delegating decisions to AI?</span>
+        <div class="yesno-container">
+          <button class="yesno-btn yes" data-value="yes">Yes</button>
+          <button class="yesno-btn no" data-value="no">No</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 3: Working Style -->
+    <div class="section">
+      <h2>3. Working Style</h2>
+      
+      <div class="question" data-id="work_hours" data-type="choice">
+        <span class="question-label">When are you most productive?</span>
+        <div class="choice-container">
+          <button class="choice-btn" data-value="early">Early morning (5am-9am)</button>
+          <button class="choice-btn" data-value="morning">Morning (9am-12pm)</button>
+          <button class="choice-btn" data-value="afternoon">Afternoon (12pm-5pm)</button>
+          <button class="choice-btn" data-value="evening">Evening (5pm-9pm)</button>
+          <button class="choice-btn" data-value="night">Night (9pm+)</button>
+        </div>
+      </div>
+      
+      <div class="question" data-id="interruptions" data-type="scale">
+        <span class="question-label">How tolerant are you of interruptions?</span>
+        <div class="scale-container">
+          <button class="scale-btn" data-value="1">1</button>
+          <button class="scale-btn" data-value="2">2</button>
+          <button class="scale-btn" data-value="3">3</button>
+          <button class="scale-btn" data-value="4">4</button>
+          <button class="scale-btn" data-value="5">5</button>
+          <button class="scale-btn" data-value="6">6</button>
+          <button class="scale-btn" data-value="7">7</button>
+          <button class="scale-btn" data-value="8">8</button>
+          <button class="scale-btn" data-value="9">9</button>
+          <button class="scale-btn" data-value="10">10</button>
+        </div>
+        <div class="scale-labels">
+          <span>Do not disturb</span>
+          <span>Always available</span>
+        </div>
+      </div>
+      
+      <div class="question" data-id="multitask" data-type="yesno">
+        <span class="question-label">Do you prefer to multitask or focus on one thing?</span>
+        <div class="yesno-container">
+          <button class="yesno-btn yes" data-value="yes">Multitask</button>
+          <button class="yesno-btn no" data-value="no">Single focus</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 4: Priorities -->
+    <div class="section">
+      <h2>4. Priorities</h2>
+      
+      <div class="question" data-id="speed_vs_quality" data-type="scale">
+        <span class="question-label">Speed vs Quality: Where do you sit?</span>
+        <div class="scale-container">
+          <button class="scale-btn" data-value="1">1</button>
+          <button class="scale-btn" data-value="2">2</button>
+          <button class="scale-btn" data-value="3">3</button>
+          <button class="scale-btn" data-value="4">4</button>
+          <button class="scale-btn" data-value="5">5</button>
+          <button class="scale-btn" data-value="6">6</button>
+          <button class="scale-btn" data-value="7">7</button>
+          <button class="scale-btn" data-value="8">8</button>
+          <button class="scale-btn" data-value="9">9</button>
+          <button class="scale-btn" data-value="10">10</button>
+        </div>
+        <div class="scale-labels">
+          <span>Speed first</span>
+          <span>Quality first</span>
+        </div>
+      </div>
+      
+      <div class="question" data-id="innovation_vs_stability" data-type="scale">
+        <span class="question-label">Innovation vs Stability: Where do you sit?</span>
+        <div class="scale-container">
+          <button class="scale-btn" data-value="1">1</button>
+          <button class="scale-btn" data-value="2">2</button>
+          <button class="scale-btn" data-value="3">3</button>
+          <button class="scale-btn" data-value="4">4</button>
+          <button class="scale-btn" data-value="5">5</button>
+          <button class="scale-btn" data-value="6">6</button>
+          <button class="scale-btn" data-value="7">7</button>
+          <button class="scale-btn" data-value="8">8</button>
+          <button class="scale-btn" data-value="9">9</button>
+          <button class="scale-btn" data-value="10">10</button>
+        </div>
+        <div class="scale-labels">
+          <span>Try new things</span>
+          <span>Stick to proven</span>
+        </div>
+      </div>
+      
+      <div class="question" data-id="challenge_ideas" data-type="yesno">
+        <span class="question-label">Should I challenge your ideas when I see issues?</span>
+        <div class="yesno-container">
+          <button class="yesno-btn yes" data-value="yes">Yes, always</button>
+          <button class="yesno-btn no" data-value="no">No, support me</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 5: Personal Context -->
+    <div class="section">
+      <h2>5. Personal Context</h2>
+      
+      <div class="question" data-id="stress_handling" data-type="scale">
+        <span class="question-label">How do you handle stress?</span>
+        <div class="scale-container">
+          <button class="scale-btn" data-value="1">1</button>
+          <button class="scale-btn" data-value="2">2</button>
+          <button class="scale-btn" data-value="3">3</button>
+          <button class="scale-btn" data-value="4">4</button>
+          <button class="scale-btn" data-value="5">5</button>
+          <button class="scale-btn" data-value="6">6</button>
+          <button class="scale-btn" data-value="7">7</button>
+          <button class="scale-btn" data-value="8">8</button>
+          <button class="scale-btn" data-value="9">9</button>
+          <button class="scale-btn" data-value="10">10</button>
+        </div>
+        <div class="scale-labels">
+          <span>Need support</span>
+          <span>Thrive on it</span>
+        </div>
+      </div>
+      
+      <div class="question" data-id="work_life_balance" data-type="scale">
+        <span class="question-label">How important is work-life balance?</span>
+        <div class="scale-container">
+          <button class="scale-btn" data-value="1">1</button>
+          <button class="scale-btn" data-value="2">2</button>
+          <button class="scale-btn" data-value="3">3</button>
+          <button class="scale-btn" data-value="4">4</button>
+          <button class="scale-btn" data-value="5">5</button>
+          <button class="scale-btn" data-value="6">6</button>
+          <button class="scale-btn" data-value="7">7</button>
+          <button class="scale-btn" data-value="8">8</button>
+          <button class="scale-btn" data-value="9">9</button>
+          <button class="scale-btn" data-value="10">10</button>
+        </div>
+        <div class="scale-labels">
+          <span>All in on work</span>
+          <span>Balance is key</span>
+        </div>
+      </div>
+      
+      <div class="question" data-id="celebrate_wins" data-type="yesno">
+        <span class="question-label">Should I remind you to celebrate wins?</span>
+        <div class="yesno-container">
+          <button class="yesno-btn yes" data-value="yes">Yes</button>
+          <button class="yesno-btn no" data-value="no">No</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-secondary" onclick="exportData()">Export</button>
+      <button class="btn btn-primary" onclick="saveAll()">Save All</button>
+    </div>
+  </div>
+
+  <div class="save-toast" id="saveToast">Saved!</div>
+
+  <script>
+    const STORAGE_KEY = 'cepho_cos_questionnaire';
+    
+    // Handle scale button clicks
+    document.querySelectorAll('.scale-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const container = btn.closest('.scale-container');
+        container.querySelectorAll('.scale-btn').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        saveData();
+        updateProgress();
+      });
+    });
+    
+    // Handle yes/no button clicks
+    document.querySelectorAll('.yesno-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const container = btn.closest('.yesno-container');
+        container.querySelectorAll('.yesno-btn').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        saveData();
+        updateProgress();
+      });
+    });
+    
+    // Handle choice button clicks
+    document.querySelectorAll('.choice-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const container = btn.closest('.choice-container');
+        container.querySelectorAll('.choice-btn').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        saveData();
+        updateProgress();
+      });
+    });
+    
+    function saveData() {
+      const data = {};
+      document.querySelectorAll('.question').forEach(q => {
+        const id = q.dataset.id;
+        const selected = q.querySelector('.selected');
+        if (selected) {
+          data[id] = selected.dataset.value;
+        }
+      });
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      showToast();
+    }
+    
+    function loadData() {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        const data = JSON.parse(saved);
+        Object.keys(data).forEach(id => {
+          const q = document.querySelector(`[data-id="${id}"]`);
+          if (q) {
+            const btn = q.querySelector(`[data-value="${data[id]}"]`);
+            if (btn) btn.classList.add('selected');
+          }
+        });
+      }
+      updateProgress();
+    }
+    
+    function updateProgress() {
+      const questions = document.querySelectorAll('.question');
+      const answered = Array.from(questions).filter(q => 
+        q.querySelector('.selected') !== null
+      ).length;
+      const percent = (answered / questions.length) * 100;
+      document.getElementById('progressFill').style.width = percent + '%';
+    }
+    
+    function showToast() {
+      const toast = document.getElementById('saveToast');
+      toast.classList.add('visible');
+      setTimeout(() => toast.classList.remove('visible'), 1500);
+    }
+    
+    function saveAll() {
+      saveData();
+      alert('All responses saved! Your Chief of Staff will use these preferences.');
+    }
+    
+    function exportData() {
+      const data = { exportDate: new Date().toISOString(), responses: {} };
+      document.querySelectorAll('.question').forEach(q => {
+        const id = q.dataset.id;
+        const selected = q.querySelector('.selected');
+        data.responses[id] = selected ? selected.dataset.value : null;
+      });
+      
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'cos_questionnaire_' + new Date().toISOString().split('T')[0] + '.json';
+      a.click();
+    }
+    
+    loadData();
+  </script>
+</body>
+</html>

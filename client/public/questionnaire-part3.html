@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Digital Twin Questionnaire - Part 3</title>
+  <style>
+    :root {
+      --bg-primary: #0a0a0a;
+      --bg-secondary: #1a1a1a;
+      --bg-card: #141414;
+      --text-primary: #ffffff;
+      --text-secondary: #a0a0a0;
+      --accent-pink: #E91E8C;
+      --accent-pink-dim: rgba(233, 30, 140, 0.2);
+      --success: #22c55e;
+      --warning: #f59e0b;
+      --border: #333333;
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      line-height: 1.5;
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+    
+    .header {
+      position: sticky;
+      top: 0;
+      background: var(--bg-primary);
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      z-index: 100;
+    }
+    
+    .header h1 {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--accent-pink);
+      margin-bottom: 4px;
+    }
+    
+    .header .subtitle {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+    
+    .progress-bar {
+      height: 4px;
+      background: var(--bg-secondary);
+      border-radius: 2px;
+      margin-top: 12px;
+      overflow: hidden;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent-pink), #ff6b9d);
+      border-radius: 2px;
+      transition: width 0.3s ease;
+    }
+    
+    .progress-text {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-top: 6px;
+      text-align: right;
+    }
+    
+    .container {
+      padding: 20px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    .section-header {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+    
+    .section-header h2 {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--accent-pink);
+      margin-bottom: 4px;
+    }
+    
+    .section-header p {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+    
+    .question-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 16px;
+      transition: border-color 0.2s;
+    }
+    
+    .question-card.answered {
+      border-color: var(--success);
+    }
+    
+    .question-id {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--accent-pink);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+    
+    .question-text {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text-primary);
+      margin-bottom: 16px;
+      line-height: 1.5;
+    }
+    
+    /* Scale buttons (1-10) */
+    .scale-buttons {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+    }
+    
+    .scale-btn {
+      aspect-ratio: 1;
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .scale-btn:active {
+      transform: scale(0.95);
+    }
+    
+    .scale-btn.selected {
+      background: var(--accent-pink);
+      border-color: var(--accent-pink);
+      color: white;
+    }
+    
+    .scale-btn:hover:not(.selected) {
+      border-color: var(--accent-pink);
+      background: var(--accent-pink-dim);
+    }
+    
+    .scale-labels {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 8px;
+      font-size: 11px;
+      color: var(--text-secondary);
+    }
+    
+    /* Yes/No buttons */
+    .yn-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    
+    .yn-btn {
+      padding: 16px;
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .yn-btn:active {
+      transform: scale(0.98);
+    }
+    
+    .yn-btn.selected {
+      background: var(--accent-pink);
+      border-color: var(--accent-pink);
+      color: white;
+    }
+    
+    .yn-btn:hover:not(.selected) {
+      border-color: var(--accent-pink);
+      background: var(--accent-pink-dim);
+    }
+    
+    /* Navigation */
+    .nav-buttons {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+      padding-bottom: 40px;
+    }
+    
+    .nav-btn {
+      flex: 1;
+      padding: 16px;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .nav-btn.secondary {
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      border: 1px solid var(--border);
+    }
+    
+    .nav-btn.primary {
+      background: var(--accent-pink);
+      color: white;
+    }
+    
+    .nav-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    
+    /* Export section */
+    .export-section {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      margin-top: 24px;
+      text-align: center;
+    }
+    
+    .export-section h3 {
+      font-size: 16px;
+      margin-bottom: 12px;
+      color: var(--accent-pink);
+    }
+    
+    .export-btn {
+      width: 100%;
+      padding: 16px;
+      background: var(--success);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 12px;
+    }
+    
+    .saved-indicator {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--success);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 24px;
+      font-size: 14px;
+      font-weight: 500;
+      opacity: 0;
+      transition: opacity 0.3s;
+      z-index: 1000;
+    }
+    
+    .saved-indicator.show {
+      opacity: 1;
+    }
+    
+    /* Offline indicator */
+    .offline-badge {
+      display: none;
+      background: var(--warning);
+      color: black;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    
+    .offline .offline-badge {
+      display: inline-block;
+    }
+    
+    /* Section tabs */
+    .section-tabs {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 12px 0;
+      margin-bottom: 16px;
+      -webkit-overflow-scrolling: touch;
+    }
+    
+    .section-tab {
+      flex-shrink: 0;
+      padding: 8px 16px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      font-size: 13px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .section-tab.active {
+      background: var(--accent-pink);
+      border-color: var(--accent-pink);
+      color: white;
+    }
+    
+    .section-tab .count {
+      font-size: 11px;
+      opacity: 0.7;
+      margin-left: 4px;
+    }
+    
+    /* Hidden sections */
+    .section-content {
+      display: none;
+    }
+    
+    .section-content.active {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <div>
+        <h1>🧠 Digital Twin Learning</h1>
+        <div class="subtitle">Part 3: Deep Dive Questions</div>
+      </div>
+      <span class="offline-badge">Offline</span>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+    </div>
+    <div class="progress-text" id="progressText">0 of 100 answered</div>
+  </div>
+  
+  <div class="container">
+    <div class="section-tabs" id="sectionTabs">
+      <!-- Generated by JS -->
+    </div>
+    
+    <div id="questionsContainer">
+      <!-- Generated by JS -->
+    </div>
+    
+    <div class="export-section" id="exportSection" style="display: none;">
+      <h3>✅ Questionnaire Complete!</h3>
+      <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 16px;">
+        All 100 questions answered. Export your responses to import into The Brain.
+      </p>
+      <button class="export-btn" onclick="exportResponses()">
+        📤 Export Responses (JSON)
+      </button>
+      <button class="export-btn" style="background: var(--accent-pink); margin-top: 8px;" onclick="copyToClipboard()">
+        📋 Copy to Clipboard
+      </button>
+    </div>
+    
+    <div class="nav-buttons">
+      <button class="nav-btn secondary" onclick="previousSection()" id="prevBtn">← Previous</button>
+      <button class="nav-btn primary" onclick="nextSection()" id="nextBtn">Next →</button>
+    </div>
+  </div>
+  
+  <div class="saved-indicator" id="savedIndicator">✓ Saved locally</div>
+
+  <script>
+    // Part 3 Questions - Deep Dive into specific areas based on Part 1 & 2 responses
+    const sections = [
+      {
+        id: 'decision_making',
+        title: 'Decision Making',
+        description: 'How you approach complex decisions',
+        questions: [
+          { id: 'C1', type: 'scale', text: 'When facing a major business decision, how much do you rely on gut instinct vs data analysis?' },
+          { id: 'C2', type: 'scale', text: 'How comfortable are you making decisions with incomplete information?' },
+          { id: 'C3', type: 'boolean', text: 'Do you typically seek consensus before making important decisions?' },
+          { id: 'C4', type: 'scale', text: 'How quickly do you typically make decisions once you have sufficient information?' },
+          { id: 'C5', type: 'boolean', text: 'Do you often revisit and second-guess decisions after making them?' },
+          { id: 'C6', type: 'scale', text: 'How much weight do you give to expert opinions vs your own judgment?' },
+          { id: 'C7', type: 'boolean', text: 'Do you prefer to sleep on major decisions before finalizing?' },
+          { id: 'C8', type: 'scale', text: 'How often do you delegate decision-making authority to your team?' },
+          { id: 'C9', type: 'boolean', text: 'Do you document the reasoning behind major decisions?' },
+          { id: 'C10', type: 'scale', text: 'How well do you handle the consequences of decisions that turn out wrong?' },
+        ]
+      },
+      {
+        id: 'communication',
+        title: 'Communication Style',
+        description: 'Your preferred ways of communicating',
+        questions: [
+          { id: 'C11', type: 'scale', text: 'How direct are you in giving feedback to team members?' },
+          { id: 'C12', type: 'boolean', text: 'Do you prefer written communication over verbal?' },
+          { id: 'C13', type: 'scale', text: 'How comfortable are you with confrontational conversations?' },
+          { id: 'C14', type: 'boolean', text: 'Do you typically respond to messages immediately or batch them?' },
+          { id: 'C15', type: 'scale', text: 'How much context do you provide when delegating tasks?' },
+          { id: 'C16', type: 'boolean', text: 'Do you prefer formal or informal communication in business settings?' },
+          { id: 'C17', type: 'scale', text: 'How often do you use humor in professional communications?' },
+          { id: 'C18', type: 'boolean', text: 'Do you prefer video calls over phone calls?' },
+          { id: 'C19', type: 'scale', text: 'How detailed are your emails typically?' },
+          { id: 'C20', type: 'boolean', text: 'Do you prefer async communication over real-time meetings?' },
+        ]
+      },
+      {
+        id: 'risk_tolerance',
+        title: 'Risk & Opportunity',
+        description: 'Your approach to risk and opportunity',
+        questions: [
+          { id: 'C21', type: 'scale', text: 'How much of your capital would you risk on a high-potential opportunity?' },
+          { id: 'C22', type: 'boolean', text: 'Do you have a formal risk assessment process for new ventures?' },
+          { id: 'C23', type: 'scale', text: 'How quickly do you cut losses on underperforming investments?' },
+          { id: 'C24', type: 'boolean', text: 'Do you prefer guaranteed smaller returns over potential larger gains?' },
+          { id: 'C25', type: 'scale', text: 'How much do market conditions affect your risk appetite?' },
+          { id: 'C26', type: 'boolean', text: 'Do you maintain emergency reserves for unexpected opportunities?' },
+          { id: 'C27', type: 'scale', text: 'How often do you take calculated risks outside your comfort zone?' },
+          { id: 'C28', type: 'boolean', text: 'Do you prefer to be first-mover or fast-follower in new markets?' },
+          { id: 'C29', type: 'scale', text: 'How much due diligence do you require before committing to a deal?' },
+          { id: 'C30', type: 'boolean', text: 'Do you have a maximum loss threshold that triggers automatic exit?' },
+        ]
+      },
+      {
+        id: 'team_leadership',
+        title: 'Team & Leadership',
+        description: 'How you lead and manage teams',
+        questions: [
+          { id: 'C31', type: 'scale', text: 'How much autonomy do you give your direct reports?' },
+          { id: 'C32', type: 'boolean', text: 'Do you prefer flat organizational structures over hierarchical?' },
+          { id: 'C33', type: 'scale', text: 'How often do you have one-on-one meetings with team members?' },
+          { id: 'C34', type: 'boolean', text: 'Do you believe in promoting from within over external hires?' },
+          { id: 'C35', type: 'scale', text: 'How quickly do you address underperformance?' },
+          { id: 'C36', type: 'boolean', text: 'Do you share company financials openly with your team?' },
+          { id: 'C37', type: 'scale', text: 'How important is cultural fit vs skill set when hiring?' },
+          { id: 'C38', type: 'boolean', text: 'Do you prefer specialists or generalists on your team?' },
+          { id: 'C39', type: 'scale', text: 'How much do you invest in team training and development?' },
+          { id: 'C40', type: 'boolean', text: 'Do you have formal succession planning in place?' },
+        ]
+      },
+      {
+        id: 'time_energy',
+        title: 'Time & Energy',
+        description: 'How you manage your time and energy',
+        questions: [
+          { id: 'C41', type: 'scale', text: 'How strictly do you protect your calendar from interruptions?' },
+          { id: 'C42', type: 'boolean', text: 'Do you have designated "deep work" blocks in your schedule?' },
+          { id: 'C43', type: 'scale', text: 'How often do you work outside of normal business hours?' },
+          { id: 'C44', type: 'boolean', text: 'Do you take regular breaks during the workday?' },
+          { id: 'C45', type: 'scale', text: 'How well do you maintain work-life boundaries?' },
+          { id: 'C46', type: 'boolean', text: 'Do you have a morning routine that you follow consistently?' },
+          { id: 'C47', type: 'scale', text: 'How much time do you spend on strategic thinking vs operational tasks?' },
+          { id: 'C48', type: 'boolean', text: 'Do you use time-blocking or similar productivity techniques?' },
+          { id: 'C49', type: 'scale', text: 'How often do you say no to requests on your time?' },
+          { id: 'C50', type: 'boolean', text: 'Do you take regular vacations without checking work?' },
+        ]
+      },
+      {
+        id: 'innovation',
+        title: 'Innovation & Change',
+        description: 'Your approach to innovation and change',
+        questions: [
+          { id: 'C51', type: 'scale', text: 'How much of your budget is allocated to R&D or innovation?' },
+          { id: 'C52', type: 'boolean', text: 'Do you have a formal process for evaluating new ideas?' },
+          { id: 'C53', type: 'scale', text: 'How quickly do you adopt new technologies in your business?' },
+          { id: 'C54', type: 'boolean', text: 'Do you encourage experimentation even if it might fail?' },
+          { id: 'C55', type: 'scale', text: 'How often do you disrupt your own successful products/services?' },
+          { id: 'C56', type: 'boolean', text: 'Do you have dedicated innovation teams or is it everyone\'s job?' },
+          { id: 'C57', type: 'scale', text: 'How much do you invest in understanding emerging trends?' },
+          { id: 'C58', type: 'boolean', text: 'Do you prefer incremental improvements or radical innovation?' },
+          { id: 'C59', type: 'scale', text: 'How comfortable are you with pivoting your business model?' },
+          { id: 'C60', type: 'boolean', text: 'Do you actively seek out disruptive technologies?' },
+        ]
+      },
+      {
+        id: 'relationships',
+        title: 'Relationships & Network',
+        description: 'How you build and maintain relationships',
+        questions: [
+          { id: 'C61', type: 'scale', text: 'How much time do you invest in networking activities?' },
+          { id: 'C62', type: 'boolean', text: 'Do you prefer deep relationships with few people or broad networks?' },
+          { id: 'C63', type: 'scale', text: 'How often do you reach out to your network without needing something?' },
+          { id: 'C64', type: 'boolean', text: 'Do you have mentors you regularly consult?' },
+          { id: 'C65', type: 'scale', text: 'How important are industry events and conferences to you?' },
+          { id: 'C66', type: 'boolean', text: 'Do you actively mentor others?' },
+          { id: 'C67', type: 'scale', text: 'How much do you value personal relationships in business deals?' },
+          { id: 'C68', type: 'boolean', text: 'Do you prefer to work with people you know and trust?' },
+          { id: 'C69', type: 'scale', text: 'How often do you introduce people in your network to each other?' },
+          { id: 'C70', type: 'boolean', text: 'Do you maintain relationships with competitors?' },
+        ]
+      },
+      {
+        id: 'finance',
+        title: 'Financial Philosophy',
+        description: 'Your approach to money and finance',
+        questions: [
+          { id: 'C71', type: 'scale', text: 'How much do you reinvest profits back into the business?' },
+          { id: 'C72', type: 'boolean', text: 'Do you prefer debt financing or equity financing?' },
+          { id: 'C73', type: 'scale', text: 'How important is cash flow vs profitability to you?' },
+          { id: 'C74', type: 'boolean', text: 'Do you have a target exit valuation in mind?' },
+          { id: 'C75', type: 'scale', text: 'How conservative are you with financial projections?' },
+          { id: 'C76', type: 'boolean', text: 'Do you pay yourself a market-rate salary?' },
+          { id: 'C77', type: 'scale', text: 'How much financial runway do you maintain?' },
+          { id: 'C78', type: 'boolean', text: 'Do you have separate personal and business finances?' },
+          { id: 'C79', type: 'scale', text: 'How often do you review financial metrics?' },
+          { id: 'C80', type: 'boolean', text: 'Do you use financial advisors or manage investments yourself?' },
+        ]
+      },
+      {
+        id: 'values',
+        title: 'Values & Purpose',
+        description: 'What drives you and your business',
+        questions: [
+          { id: 'C81', type: 'scale', text: 'How important is social impact in your business decisions?' },
+          { id: 'C82', type: 'boolean', text: 'Do you have a formal mission statement that guides decisions?' },
+          { id: 'C83', type: 'scale', text: 'How much would you sacrifice profit for ethical considerations?' },
+          { id: 'C84', type: 'boolean', text: 'Do you actively consider environmental impact in operations?' },
+          { id: 'C85', type: 'scale', text: 'How important is building a legacy vs maximizing returns?' },
+          { id: 'C86', type: 'boolean', text: 'Do you believe business should solve societal problems?' },
+          { id: 'C87', type: 'scale', text: 'How much do you prioritize employee wellbeing over efficiency?' },
+          { id: 'C88', type: 'boolean', text: 'Do you have diversity and inclusion initiatives?' },
+          { id: 'C89', type: 'scale', text: 'How transparent are you about your values with stakeholders?' },
+          { id: 'C90', type: 'boolean', text: 'Would you turn down profitable deals that conflict with values?' },
+        ]
+      },
+      {
+        id: 'future',
+        title: 'Future Vision',
+        description: 'Your vision for the future',
+        questions: [
+          { id: 'C91', type: 'scale', text: 'How far ahead do you typically plan?' },
+          { id: 'C92', type: 'boolean', text: 'Do you have a written 5-year vision?' },
+          { id: 'C93', type: 'scale', text: 'How often do you revisit and update your long-term plans?' },
+          { id: 'C94', type: 'boolean', text: 'Do you believe AI will fundamentally change your industry?' },
+          { id: 'C95', type: 'scale', text: 'How prepared are you for potential economic downturns?' },
+          { id: 'C96', type: 'boolean', text: 'Do you have contingency plans for major disruptions?' },
+          { id: 'C97', type: 'scale', text: 'How optimistic are you about the next 5 years?' },
+          { id: 'C98', type: 'boolean', text: 'Do you plan to scale your business significantly?' },
+          { id: 'C99', type: 'scale', text: 'How important is geographic expansion to your strategy?' },
+          { id: 'C100', type: 'boolean', text: 'Do you see yourself still running this business in 10 years?' },
+        ]
+      }
+    ];
+    
+    let responses = {};
+    let currentSection = 0;
+    
+    // Load saved responses from localStorage
+    function loadResponses() {
+      const saved = localStorage.getItem('dt_questionnaire_part3');
+      if (saved) {
+        responses = JSON.parse(saved);
+      }
+    }
+    
+    // Save responses to localStorage
+    function saveResponses() {
+      localStorage.setItem('dt_questionnaire_part3', JSON.stringify(responses));
+      showSavedIndicator();
+    }
+    
+    function showSavedIndicator() {
+      const indicator = document.getElementById('savedIndicator');
+      indicator.classList.add('show');
+      setTimeout(() => indicator.classList.remove('show'), 1500);
+    }
+    
+    // Render section tabs
+    function renderTabs() {
+      const tabsContainer = document.getElementById('sectionTabs');
+      tabsContainer.innerHTML = sections.map((section, index) => {
+        const answered = section.questions.filter(q => responses[q.id] !== undefined).length;
+        const total = section.questions.length;
+        return `
+          <div class="section-tab ${index === currentSection ? 'active' : ''}" onclick="goToSection(${index})">
+            ${section.title}
+            <span class="count">${answered}/${total}</span>
+          </div>
+        `;
+      }).join('');
+    }
+    
+    // Render questions for current section
+    function renderQuestions() {
+      const container = document.getElementById('questionsContainer');
+      const section = sections[currentSection];
+      
+      let html = `
+        <div class="section-header">
+          <h2>${section.title}</h2>
+          <p>${section.description}</p>
+        </div>
+      `;
+      
+      section.questions.forEach(q => {
+        const isAnswered = responses[q.id] !== undefined;
+        html += `
+          <div class="question-card ${isAnswered ? 'answered' : ''}" id="card-${q.id}">
+            <div class="question-id">${q.id}</div>
+            <div class="question-text">${q.text}</div>
+            ${q.type === 'scale' ? renderScaleButtons(q.id) : renderYNButtons(q.id)}
+          </div>
+        `;
+      });
+      
+      container.innerHTML = html;
+      updateProgress();
+    }
+    
+    function renderScaleButtons(questionId) {
+      const value = responses[questionId];
+      let html = '<div class="scale-buttons">';
+      for (let i = 1; i <= 10; i++) {
+        html += `<button class="scale-btn ${value === i ? 'selected' : ''}" onclick="selectScale('${questionId}', ${i})">${i}</button>`;
+      }
+      html += '</div>';
+      html += '<div class="scale-labels"><span>Low</span><span>High</span></div>';
+      return html;
+    }
+    
+    function renderYNButtons(questionId) {
+      const value = responses[questionId];
+      return `
+        <div class="yn-buttons">
+          <button class="yn-btn ${value === true ? 'selected' : ''}" onclick="selectYN('${questionId}', true)">Yes</button>
+          <button class="yn-btn ${value === false ? 'selected' : ''}" onclick="selectYN('${questionId}', false)">No</button>
+        </div>
+      `;
+    }
+    
+    function selectScale(questionId, value) {
+      responses[questionId] = value;
+      saveResponses();
+      renderQuestions();
+      renderTabs();
+    }
+    
+    function selectYN(questionId, value) {
+      responses[questionId] = value;
+      saveResponses();
+      renderQuestions();
+      renderTabs();
+    }
+    
+    function updateProgress() {
+      const total = sections.reduce((sum, s) => sum + s.questions.length, 0);
+      const answered = Object.keys(responses).length;
+      const percentage = Math.round((answered / total) * 100);
+      
+      document.getElementById('progressFill').style.width = percentage + '%';
+      document.getElementById('progressText').textContent = `${answered} of ${total} answered`;
+      
+      // Show export section if complete
+      document.getElementById('exportSection').style.display = answered === total ? 'block' : 'none';
+    }
+    
+    function goToSection(index) {
+      currentSection = index;
+      renderTabs();
+      renderQuestions();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    
+    function previousSection() {
+      if (currentSection > 0) {
+        goToSection(currentSection - 1);
+      }
+    }
+    
+    function nextSection() {
+      if (currentSection < sections.length - 1) {
+        goToSection(currentSection + 1);
+      }
+    }
+    
+    function exportResponses() {
+      const exportData = {
+        version: 'part3',
+        timestamp: new Date().toISOString(),
+        responses: responses,
+        sections: sections.map(s => ({
+          id: s.id,
+          title: s.title,
+          questions: s.questions.map(q => ({
+            id: q.id,
+            type: q.type,
+            text: q.text,
+            response: responses[q.id]
+          }))
+        }))
+      };
+      
+      const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `digital-twin-questionnaire-part3-${new Date().toISOString().split('T')[0]}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+    
+    function copyToClipboard() {
+      const exportData = {
+        version: 'part3',
+        timestamp: new Date().toISOString(),
+        responses: responses
+      };
+      
+      navigator.clipboard.writeText(JSON.stringify(exportData, null, 2))
+        .then(() => {
+          alert('Responses copied to clipboard!');
+        })
+        .catch(err => {
+          console.error('Failed to copy:', err);
+          alert('Failed to copy. Please use the export button instead.');
+        });
+    }
+    
+    // Offline detection
+    function updateOnlineStatus() {
+      document.body.classList.toggle('offline', !navigator.onLine);
+    }
+    
+    window.addEventListener('online', updateOnlineStatus);
+    window.addEventListener('offline', updateOnlineStatus);
+    
+    // Initialize
+    loadResponses();
+    renderTabs();
+    renderQuestions();
+    updateOnlineStatus();
+  </script>
+</body>
+</html>
