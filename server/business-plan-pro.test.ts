@@ -40,7 +40,7 @@ describe('Business Plan Review Pro Features', () => {
   
   describe('Review Templates', () => {
     it('should have SaaS template with correct structure', async () => {
-      const { BUSINESS_TEMPLATES } = await import('./services/businessPlanReviewService');
+      const { BUSINESS_TEMPLATES } = await import('./services/business-plan-review.service');
       
       const saasTemplate = BUSINESS_TEMPLATES.find(t => t.id === 'saas');
       expect(saasTemplate).toBeDefined();
@@ -51,7 +51,7 @@ describe('Business Plan Review Pro Features', () => {
     });
     
     it('should have E-commerce template with correct structure', async () => {
-      const { BUSINESS_TEMPLATES } = await import('./services/businessPlanReviewService');
+      const { BUSINESS_TEMPLATES } = await import('./services/business-plan-review.service');
       
       const ecomTemplate = BUSINESS_TEMPLATES.find(t => t.id === 'ecommerce');
       expect(ecomTemplate).toBeDefined();
@@ -60,7 +60,7 @@ describe('Business Plan Review Pro Features', () => {
     });
     
     it('should have Marketplace template with correct structure', async () => {
-      const { BUSINESS_TEMPLATES } = await import('./services/businessPlanReviewService');
+      const { BUSINESS_TEMPLATES } = await import('./services/business-plan-review.service');
       
       const marketplaceTemplate = BUSINESS_TEMPLATES.find(t => t.id === 'marketplace');
       expect(marketplaceTemplate).toBeDefined();
@@ -69,13 +69,13 @@ describe('Business Plan Review Pro Features', () => {
     });
     
     it('should have at least 5 business templates', async () => {
-      const { BUSINESS_TEMPLATES } = await import('./services/businessPlanReviewService');
+      const { BUSINESS_TEMPLATES } = await import('./services/business-plan-review.service');
       
       expect(BUSINESS_TEMPLATES.length).toBeGreaterThanOrEqual(5);
     });
     
     it('should have section weights that sum appropriately', async () => {
-      const { BUSINESS_TEMPLATES } = await import('./services/businessPlanReviewService');
+      const { BUSINESS_TEMPLATES } = await import('./services/business-plan-review.service');
       
       for (const template of BUSINESS_TEMPLATES) {
         const weights = Object.values(template.sectionWeights);

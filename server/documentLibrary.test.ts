@@ -5,7 +5,7 @@ import {
   getScoreRating,
   applyBrandFormatting,
   validateBrandCompliance
-} from './services/documentTemplateService';
+} from './services/document-template.service';
 import {
   generatePDFHeader,
   generateTitleSection,
@@ -13,7 +13,7 @@ import {
   generateQAFooter,
   generatePDFDocument,
   markdownToHTML
-} from './services/pdfExportService';
+} from './services/pdf-export.service';
 
 describe('Document Library', () => {
   describe('Document Template Service', () => {

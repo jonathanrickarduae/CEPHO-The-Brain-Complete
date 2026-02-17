@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { 
   BUSINESS_PLAN_SECTIONS, 
   REVIEW_EXPERTS,
-} from './services/businessPlanReviewService';
+} from './services/business-plan-review.service';
 
 // Mock the database functions
 vi.mock('./db', () => ({

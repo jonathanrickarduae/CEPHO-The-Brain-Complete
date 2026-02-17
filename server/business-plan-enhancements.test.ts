@@ -4,7 +4,7 @@ import {
   REVIEW_EXPERTS,
   getExpertsForSection,
   selectExpertTeam
-} from './services/businessPlanReviewService';
+} from './services/business-plan-review.service';
 
 // Mock the LLM module
 vi.mock('./_core/llm', () => ({

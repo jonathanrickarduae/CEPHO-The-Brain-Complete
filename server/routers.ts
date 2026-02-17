@@ -75,8 +75,8 @@ import { getDb } from "./db";
 import { users } from "../drizzle/schema";
 import { eq } from "drizzle-orm";
 import { invokeLLM } from "./_core/llm";
-import { chatWithExpert } from "./services/expertChatService";
-import { textToSpeech, getExpertVoiceInfo, hasCustomVoice } from "./services/voiceService";
+import { chatWithExpert } from "./services/expert-chat.service";
+import { textToSpeech, getExpertVoiceInfo, hasCustomVoice } from "./services/voice.service";
 import { 
   BUSINESS_PLAN_SECTIONS, 
   REVIEW_EXPERTS, 
@@ -87,7 +87,7 @@ import {
   type SectionReview,
   type ExpertInsight,
   selectExpertTeam
-} from "./services/businessPlanReviewService";
+} from "./services/business-plan-review.service";
 import {
   trackFeatureUsage,
   getFeatureUsageStats,
@@ -97,7 +97,7 @@ import {
   generateAnalyticsSummary,
   FEATURES,
   type FeatureId,
-} from "./services/featureAnalyticsService";
+} from "./services/feature-analytics.service";
 import { z } from "zod";
 
 export const appRouter = router({
@@ -3881,7 +3881,7 @@ ${transcript}
         type: z.enum(['innovation_brief', 'project_genesis', 'report']),
       }))
       .mutation(async ({ ctx, input }) => {
-        const { generateInnovationBriefPDF } = await import('./services/pdfExportService');
+        const { generateInnovationBriefPDF } = await import('./services/pdf-export.service');
         const { getDocumentById, updateDocument } = await import('./db');
         const { storagePut } = await import('./storage');
         

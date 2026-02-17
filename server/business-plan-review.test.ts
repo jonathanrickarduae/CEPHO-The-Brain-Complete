@@ -5,7 +5,7 @@ import {
   getExpertsForSection,
   generateConsolidatedReport,
   type SectionReview
-} from './services/businessPlanReviewService';
+} from './services/business-plan-review.service';
 
 describe('Business Plan Review Service', () => {
   describe('BUSINESS_PLAN_SECTIONS', () => {
