@@ -1,4 +1,4 @@
-import { int, pgEnum, pgTable, text, timestamp, varchar, json, boolean, float } from "drizzle-orm/pg-core";
+import { int, pgEnum, pgTable, text, timestamp, varchar, json, boolean, float, index, uniqueIndex } from "drizzle-orm/pg-core";
 
 /**
  * Core user table backing auth flow.
@@ -14,7 +14,11 @@ export const users = pgTable("users", {
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
   lastSignedIn: timestamp("lastSignedIn").defaultNow().notNull(),
-});
+}, (table) => ({
+  emailIdx: index("users_email_idx").on(table.email),
+  openIdIdx: uniqueIndex("users_openid_idx").on(table.openId),
+  createdAtIdx: index("users_created_at_idx").on(table.createdAt),
+}));
 
 export type User = typeof users.$inferSelect;
 export type InsertUser = typeof users.$inferInsert;
@@ -30,7 +34,11 @@ export const moodHistory = pgTable("mood_history", {
   timeOfDay: pgEnum("timeOfDay", ["morning", "afternoon", "evening"]).notNull(),
   note: text("note"), // Optional context
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-});
+}, (table) => ({
+  userIdIdx: index("mood_history_user_id_idx").on(table.userId),
+  createdAtIdx: index("mood_history_created_at_idx").on(table.createdAt),
+  userCreatedIdx: index("mood_history_user_created_idx").on(table.userId, table.createdAt),
+}));
 
 export type MoodHistory = typeof moodHistory.$inferSelect;
 export type InsertMoodHistory = typeof moodHistory.$inferInsert;
@@ -257,7 +265,11 @@ export const conversations = pgTable("conversations", {
   content: text("content").notNull(),
   metadata: json("metadata"), // Store additional context like mood, voice input, etc.
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-});
+}, (table) => ({
+  idxIdx: index("conversations_user_id_idx").on(table.userId),
+  idxIdx: index("conversations_created_at_idx").on(table.createdAt),
+  idxIdx: index("conversations_user_created_idx").on(table.userId, table.createdAt),
+}));
 
 export type Conversation = typeof conversations.$inferSelect;
 export type InsertConversation = typeof conversations.$inferInsert;
@@ -309,7 +321,9 @@ export const userCredits = pgTable("user_credits", {
   lifetimeEarned: integer("lifetimeEarned").default(0).notNull(),
   lifetimeSpent: integer("lifetimeSpent").default(0).notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
-});
+}, (table) => ({
+  idxIdx: index("userCredits_user_id_idx").on(table.userId),
+}));
 
 export type UserCredits = typeof userCredits.$inferSelect;
 export type InsertUserCredits = typeof userCredits.$inferInsert;
@@ -383,7 +397,11 @@ export const wellnessScores = pgTable("wellness_scores", {
   momentumScore: float("momentumScore"),
   factors: json("factors"), // Breakdown of contributing factors
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-});
+}, (table) => ({
+  idxIdx: index("wellnessScores_user_id_idx").on(table.userId),
+  idxIdx: index("wellnessScores_created_at_idx").on(table.createdAt),
+  idxIdx: index("wellnessScores_user_created_idx").on(table.userId, table.createdAt),
+}));
 
 export type WellnessScore = typeof wellnessScores.$inferSelect;
 export type InsertWellnessScore = typeof wellnessScores.$inferInsert;
@@ -1390,7 +1408,9 @@ export const expertChatMessages = pgTable("expert_chat_messages", {
   content: text("content").notNull(),
   metadata: json("metadata"), // Additional context like voice input, attachments
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-});
+}, (table) => ({
+  idxIdx: index("expertChatMessages_created_at_idx").on(table.createdAt),
+}));
 
 export type ExpertChatMessage = typeof expertChatMessages.$inferSelect;
 export type InsertExpertChatMessage = typeof expertChatMessages.$inferInsert;
@@ -1466,7 +1486,9 @@ export const collaborativeReviewParticipants = pgTable("collaborative_review_par
   invitedAt: timestamp("invitedAt").defaultNow().notNull(),
   joinedAt: timestamp("joinedAt"),
   lastActiveAt: timestamp("lastActiveAt"),
-});
+}, (table) => ({
+  idxIdx: index("collaborativeReviewParticipants_user_id_idx").on(table.userId),
+}));
 
 export type CollaborativeReviewParticipant = typeof collaborativeReviewParticipants.$inferSelect;
 export type InsertCollaborativeReviewParticipant = typeof collaborativeReviewParticipants.$inferInsert;
@@ -1588,7 +1610,9 @@ export const blueprintVersions = pgTable("blueprint_versions", {
   changeDescription: text("changeDescription"),
   createdBy: integer("createdBy").notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-});
+}, (table) => ({
+  idxIdx: index("blueprintVersions_created_at_idx").on(table.createdAt),
+}));
 
 export type BlueprintVersion = typeof blueprintVersions.$inferSelect;
 export type InsertBlueprintVersion = typeof blueprintVersions.$inferInsert;
@@ -1654,7 +1678,9 @@ export const smePanelConsultations = pgTable("sme_panel_consultations", {
   status: pgEnum("status", ["pending", "in_progress", "completed"]).default("pending").notNull(),
   completedAt: timestamp("completedAt"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-});
+}, (table) => ({
+  idxIdx: index("smePanelConsultations_created_at_idx").on(table.createdAt),
+}));
 
 export type SmePanelConsultation = typeof smePanelConsultations.$inferSelect;
 export type InsertSmePanelConsultation = typeof smePanelConsultations.$inferInsert;
@@ -1734,7 +1760,12 @@ export const preMortemSessions = pgTable("pre_mortem_sessions", {
   status: pgEnum("status", ["scheduled", "in_progress", "completed"]).default("scheduled").notNull(),
   completedAt: timestamp("completedAt"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-});
+}, (table) => ({
+  idxIdx: index("preMortemSessions_user_id_idx").on(table.userId),
+  idxIdx: index("preMortemSessions_project_id_idx").on(table.projectId),
+  idxIdx: index("preMortemSessions_created_at_idx").on(table.createdAt),
+  idxIdx: index("preMortemSessions_user_created_idx").on(table.userId, table.createdAt),
+}));
 
 export type PreMortemSession = typeof preMortemSessions.$inferSelect;
 export type InsertPreMortemSession = typeof preMortemSessions.$inferInsert;
@@ -1872,7 +1903,11 @@ export const eveningReviewSessions = pgTable("evening_review_sessions", {
   signalItemsGenerated: integer("signalItemsGenerated").default(0),
   metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-});
+}, (table) => ({
+  idxIdx: index("eveningReviewSessions_user_id_idx").on(table.userId),
+  idxIdx: index("eveningReviewSessions_created_at_idx").on(table.createdAt),
+  idxIdx: index("eveningReviewSessions_user_created_idx").on(table.userId, table.createdAt),
+}));
 
 export type EveningReviewSession = typeof eveningReviewSessions.$inferSelect;
 export type InsertEveningReviewSession = typeof eveningReviewSessions.$inferInsert;
@@ -2045,7 +2080,9 @@ export const ideaRefinements = pgTable("idea_refinements", {
   triggeredBy: pgEnum("triggeredBy", ["assessment", "sme_feedback", "user_input", "chief_of_staff"]).default("assessment").notNull(),
   metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-});
+}, (table) => ({
+  idxIdx: index("ideaRefinements_created_at_idx").on(table.createdAt),
+}));
 
 export type IdeaRefinement = typeof ideaRefinements.$inferSelect;
 export type InsertIdeaRefinement = typeof ideaRefinements.$inferInsert;
@@ -2688,7 +2725,11 @@ export const innovationValidationCheckpoints = pgTable("innovation_validation_ch
   // Metadata
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   completedAt: timestamp("completedAt"),
-});
+}, (table) => ({
+  idxIdx: index("innovationValidationCheckpoints_user_id_idx").on(table.userId),
+  idxIdx: index("innovationValidationCheckpoints_created_at_idx").on(table.createdAt),
+  idxIdx: index("innovationValidationCheckpoints_user_created_idx").on(table.userId, table.createdAt),
+}));
 
 export type InnovationValidationCheckpoint = typeof innovationValidationCheckpoints.$inferSelect;
 export type InsertInnovationValidationCheckpoint = typeof innovationValidationCheckpoints.$inferInsert;
@@ -3170,7 +3211,9 @@ export const priorResearchChecks = pgTable("prior_research_checks", {
   
   // Metadata
   checkedAt: timestamp("checkedAt").defaultNow().notNull(),
-});
+}, (table) => ({
+  idxIdx: index("priorResearchChecks_user_id_idx").on(table.userId),
+}));
 
 export type PriorResearchCheck = typeof priorResearchChecks.$inferSelect;
 export type InsertPriorResearchCheck = typeof priorResearchChecks.$inferInsert;
@@ -3551,7 +3594,11 @@ export const cosTrainingProgress = pgTable("cos_training_progress", {
   levelUpAt: timestamp("levelUpAt"), // When they reached current level
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
-});
+}, (table) => ({
+  idxIdx: index("cosTrainingProgress_user_id_idx").on(table.userId),
+  idxIdx: index("cosTrainingProgress_created_at_idx").on(table.createdAt),
+  idxIdx: index("cosTrainingProgress_user_created_idx").on(table.userId, table.createdAt),
+}));
 export type CosTrainingProgress = typeof cosTrainingProgress.$inferSelect;
 export type InsertCosTrainingProgress = typeof cosTrainingProgress.$inferInsert;
 
@@ -3709,7 +3756,11 @@ export const cosUserMentalModel = pgTable("cos_user_mental_model", {
   // Metadata
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
-});
+}, (table) => ({
+  idxIdx: index("cosUserMentalModel_user_id_idx").on(table.userId),
+  idxIdx: index("cosUserMentalModel_created_at_idx").on(table.createdAt),
+  idxIdx: index("cosUserMentalModel_user_created_idx").on(table.userId, table.createdAt),
+}));
 export type CosUserMentalModel = typeof cosUserMentalModel.$inferSelect;
 export type InsertCosUserMentalModel = typeof cosUserMentalModel.$inferInsert;
 
@@ -3745,7 +3796,11 @@ export const cosLearningMetrics = pgTable("cos_learning_metrics", {
   
   // Metadata
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-});
+}, (table) => ({
+  idxIdx: index("cosLearningMetrics_user_id_idx").on(table.userId),
+  idxIdx: index("cosLearningMetrics_created_at_idx").on(table.createdAt),
+  idxIdx: index("cosLearningMetrics_user_created_idx").on(table.userId, table.createdAt),
+}));
 export type CosLearningMetrics = typeof cosLearningMetrics.$inferSelect;
 export type InsertCosLearningMetrics = typeof cosLearningMetrics.$inferInsert;
 
@@ -4039,7 +4094,10 @@ export const qualityGateResults = pgTable("quality_gate_results", {
   metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
-});
+}, (table) => ({
+  idxIdx: index("qualityGateResults_project_id_idx").on(table.projectId),
+  idxIdx: index("qualityGateResults_created_at_idx").on(table.createdAt),
+}));
 
 export type QualityGateResult = typeof qualityGateResults.$inferSelect;
 export type InsertQualityGateResult = typeof qualityGateResults.$inferInsert;
@@ -4150,7 +4208,9 @@ export const cosTrainingModulesPg = pgTable("cos_training_modules_pg", {
   prerequisites: json("prerequisites").$type<number[]>(), // module numbers
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
-});
+}, (table) => ({
+  idxIdx: index("cosTrainingModulesPg_created_at_idx").on(table.createdAt),
+}));
 
 export const cosModuleProgressPg = pgTable("cos_module_progress_pg", {
   id: uuid("id").primaryKey().defaultRandom(),

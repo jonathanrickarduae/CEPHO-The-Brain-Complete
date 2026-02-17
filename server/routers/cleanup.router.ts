@@ -2,6 +2,16 @@ import { router, protectedProcedure } from '../_core/trpc';
 import { getDb } from '../db';
 import { sql } from 'drizzle-orm';
 
+/**
+ * SQL SAFETY NOTE:
+ * This file uses Drizzle's `sql` template tag for bulk DELETE operations.
+ * The `sql` tag is SAFE and prevents SQL injection through parameterization.
+ * See /server/docs/SQL_SAFETY.md for details.
+ * 
+ * DO NOT convert these to query builder unless there's a specific benefit.
+ * These bulk deletes are intentional and secure.
+ */
+
 export const cleanupRouter = router({
   // Clear all dummy data from the database
   clearDummyData: protectedProcedure
