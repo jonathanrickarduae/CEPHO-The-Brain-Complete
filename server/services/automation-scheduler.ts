@@ -1,4 +1,6 @@
 /**
+import { logger } from "../utils/logger";
+const log = logger.module("AutomationScheduler");
  * 24-Hour Automation Scheduler
  * Manages all scheduled tasks for CEPHO platform
  * 
@@ -154,34 +156,34 @@ class AutomationScheduler {
    * Start all scheduled tasks
    */
   public start() {
-    console.log('[AutomationScheduler] Starting 24-hour automation system...');
+    log.debug('[AutomationScheduler] Starting 24-hour automation system...');
     
     for (const taskDef of this.taskDefinitions) {
       if (taskDef.enabled) {
         const task = cron.schedule(taskDef.schedule, async () => {
-          console.log(`[AutomationScheduler] Executing: ${taskDef.name}`);
+          log.debug(`[AutomationScheduler] Executing: ${taskDef.name}`);
           try {
             await taskDef.handler();
             await this.logTaskExecution(taskDef.id, 'success');
           } catch (error) {
-            console.error(`[AutomationScheduler] Error in ${taskDef.name}:`, error);
+            log.error(`[AutomationScheduler] Error in ${taskDef.name}:`, error);
             await this.logTaskExecution(taskDef.id, 'error', error.message);
           }
         });
         
         this.tasks.set(taskDef.id, task);
-        console.log(`[AutomationScheduler] Scheduled: ${taskDef.name} (${taskDef.schedule})`);
+        log.debug(`[AutomationScheduler] Scheduled: ${taskDef.name} (${taskDef.schedule})`);
       }
     }
     
-    console.log(`[AutomationScheduler] Started ${this.tasks.size} scheduled tasks`);
+    log.debug(`[AutomationScheduler] Started ${this.tasks.size} scheduled tasks`);
   }
 
   /**
    * Stop all scheduled tasks
    */
   public stop() {
-    console.log('[AutomationScheduler] Stopping all scheduled tasks...');
+    log.debug('[AutomationScheduler] Stopping all scheduled tasks...');
     for (const [id, task] of this.tasks) {
       task.stop();
     }
@@ -220,9 +222,9 @@ class AutomationScheduler {
         // Generate signal for each project
         const signal = await generateSignal('AAPL'); // TODO: Get symbol from project
         
-        console.log(`[DailySignal] Generated for project ${project.name}:`, signal);
+        log.debug(`[DailySignal] Generated for project ${project.name}:`, signal);
       } catch (error) {
-        console.error(`[DailySignal] Error for project ${project.name}:`, error);
+        log.error(`[DailySignal] Error for project ${project.name}:`, error);
       }
     }
   }
@@ -304,9 +306,9 @@ class AutomationScheduler {
           VALUES (${signal.projectId}, 'morning', ${JSON.stringify(briefing)}, ARRAY['email', 'whatsapp', 'pdf'], NOW())
         `;
         
-        console.log(`[Distribution] Sent daily signal for ${signal.projectName}`);
+        log.debug(`[Distribution] Sent daily signal for ${signal.projectName}`);
       } catch (error) {
-        console.error(`[Distribution] Error for ${signal.projectName}:`, error);
+        log.error(`[Distribution] Error for ${signal.projectName}:`, error);
       }
     }
   }
@@ -326,7 +328,7 @@ class AutomationScheduler {
     for (const project of projects) {
       // Update market data and check for significant changes
       // This would trigger alerts if needed
-      console.log(`[MarketCheck] Monitoring ${project.name}`);
+      log.debug(`[MarketCheck] Monitoring ${project.name}`);
     }
   }
 
@@ -334,7 +336,7 @@ class AutomationScheduler {
    * 12:00 PM - Midday performance check
    */
   private async middayCheck() {
-    console.log('[MiddayCheck] Performing midday performance analysis');
+    log.debug('[MiddayCheck] Performing midday performance analysis');
     // Analyze morning performance
     // Send update if significant changes
   }
@@ -357,9 +359,9 @@ class AutomationScheduler {
         const briefing = await generateBriefing('AAPL', 'evening');
         
         // Distribute via channels
-        console.log(`[EveningBriefing] Generated for ${project.name}`);
+        log.debug(`[EveningBriefing] Generated for ${project.name}`);
       } catch (error) {
-        console.error(`[EveningBriefing] Error for ${project.name}:`, error);
+        log.error(`[EveningBriefing] Error for ${project.name}:`, error);
       }
     }
   }
@@ -368,7 +370,7 @@ class AutomationScheduler {
    * 8:00 PM - Daily digest
    */
   private async dailyDigest() {
-    console.log('[DailyDigest] Generating daily performance digest');
+    log.debug('[DailyDigest] Generating daily performance digest');
     // Compile full day summary
     // Performance metrics
     // Lessons learned
@@ -379,7 +381,7 @@ class AutomationScheduler {
    * AI SME research (every 3 hours)
    */
   private async smeResearch() {
-    console.log('[SMEResearch] AI SMEs conducting research');
+    log.debug('[SMEResearch] AI SMEs conducting research');
     // Medium.com scanning
     // Market intelligence gathering
     // CEPHO enhancement ideas
@@ -390,17 +392,17 @@ class AutomationScheduler {
    * Chief of Staff: Review daily reports
    */
   private async chiefReviewReports() {
-    console.log('[ChiefOfStaff] Reviewing daily reports...');
+    log.debug('[ChiefOfStaff] Reviewing daily reports...');
     
     try {
       const { chiefOfStaffOrchestrator } = await import('./chief-of-staff-orchestrator');
       const result = await chiefOfStaffOrchestrator.reviewDailyReports();
       
-      console.log(`[ChiefOfStaff] Reviewed ${result.reviewed} reports:`);
-      console.log(`  - Auto-approved: ${result.autoApproved}`);
-      console.log(`  - Escalated: ${result.escalated}`);
+      log.debug(`[ChiefOfStaff] Reviewed ${result.reviewed} reports:`);
+      log.debug(`  - Auto-approved: ${result.autoApproved}`);
+      log.debug(`  - Escalated: ${result.escalated}`);
     } catch (error) {
-      console.error('[ChiefOfStaff] Error reviewing reports:', error);
+      log.error('[ChiefOfStaff] Error reviewing reports:', error);
     }
   }
   
@@ -408,18 +410,18 @@ class AutomationScheduler {
    * Chief of Staff: Review approval requests
    */
   private async chiefReviewApprovals() {
-    console.log('[ChiefOfStaff] Reviewing approval requests...');
+    log.debug('[ChiefOfStaff] Reviewing approval requests...');
     
     try {
       const { chiefOfStaffOrchestrator } = await import('./chief-of-staff-orchestrator');
       const result = await chiefOfStaffOrchestrator.reviewApprovalRequests();
       
-      console.log(`[ChiefOfStaff] Reviewed ${result.reviewed} approval requests:`);
-      console.log(`  - Auto-approved: ${result.autoApproved}`);
-      console.log(`  - Auto-rejected: ${result.autoRejected}`);
-      console.log(`  - Escalated: ${result.escalated}`);
+      log.debug(`[ChiefOfStaff] Reviewed ${result.reviewed} approval requests:`);
+      log.debug(`  - Auto-approved: ${result.autoApproved}`);
+      log.debug(`  - Auto-rejected: ${result.autoRejected}`);
+      log.debug(`  - Escalated: ${result.escalated}`);
     } catch (error) {
-      console.error('[ChiefOfStaff] Error reviewing approvals:', error);
+      log.error('[ChiefOfStaff] Error reviewing approvals:', error);
     }
   }
   
@@ -427,23 +429,23 @@ class AutomationScheduler {
    * Chief of Staff: Monitor agent performance
    */
   private async chiefMonitorPerformance() {
-    console.log('[ChiefOfStaff] Monitoring agent performance...');
+    log.debug('[ChiefOfStaff] Monitoring agent performance...');
     
     try {
       const { chiefOfStaffOrchestrator } = await import('./chief-of-staff-orchestrator');
       const result = await chiefOfStaffOrchestrator.monitorAgentPerformance();
       
-      console.log(`[ChiefOfStaff] Agent Performance:`);
-      console.log(`  - Healthy: ${result.healthy.length}`);
-      console.log(`  - Needs Attention: ${result.needsAttention.length}`);
-      console.log(`  - Underperforming: ${result.underperforming.length}`);
+      log.debug(`[ChiefOfStaff] Agent Performance:`);
+      log.debug(`  - Healthy: ${result.healthy.length}`);
+      log.debug(`  - Needs Attention: ${result.needsAttention.length}`);
+      log.debug(`  - Underperforming: ${result.underperforming.length}`);
       
       // Alert if there are underperforming agents
       if (result.underperforming.length > 0) {
-        console.warn(`[ChiefOfStaff] WARNING: ${result.underperforming.length} agents underperforming!`);
+        log.warn(`[ChiefOfStaff] WARNING: ${result.underperforming.length} agents underperforming!`);
       }
     } catch (error) {
-      console.error('[ChiefOfStaff] Error monitoring performance:', error);
+      log.error('[ChiefOfStaff] Error monitoring performance:', error);
     }
   }
   
@@ -451,33 +453,33 @@ class AutomationScheduler {
    * Chief of Staff: Generate daily summary
    */
   private async chiefDailySummary() {
-    console.log('[ChiefOfStaff] Generating daily summary...');
+    log.debug('[ChiefOfStaff] Generating daily summary...');
     
     try {
       const { chiefOfStaffOrchestrator } = await import('./chief-of-staff-orchestrator');
       const summary = await chiefOfStaffOrchestrator.generateDailySummary();
       
-      console.log(`[ChiefOfStaff] Daily Summary:`);
-      console.log(`  - Total Agents: ${summary.totalAgents}`);
-      console.log(`  - Active Agents: ${summary.activeAgents}`);
-      console.log(`  - Tasks Completed: ${summary.tasksCompleted}`);
-      console.log(`  - Avg Performance: ${summary.avgPerformance}`);
-      console.log(`  - Pending Reports: ${summary.pendingReports}`);
-      console.log(`  - Pending Approvals: ${summary.pendingApprovals}`);
+      log.debug(`[ChiefOfStaff] Daily Summary:`);
+      log.debug(`  - Total Agents: ${summary.totalAgents}`);
+      log.debug(`  - Active Agents: ${summary.activeAgents}`);
+      log.debug(`  - Tasks Completed: ${summary.tasksCompleted}`);
+      log.debug(`  - Avg Performance: ${summary.avgPerformance}`);
+      log.debug(`  - Pending Reports: ${summary.pendingReports}`);
+      log.debug(`  - Pending Approvals: ${summary.pendingApprovals}`);
       
       if (summary.highlights.length > 0) {
-        console.log(`  Highlights:`);
-        summary.highlights.forEach(h => console.log(`    - ${h}`));
+        log.debug(`  Highlights:`);
+        summary.highlights.forEach(h => log.debug(`    - ${h}`));
       }
       
       if (summary.concerns.length > 0) {
-        console.warn(`  Concerns:`);
-        summary.concerns.forEach(c => console.warn(`    - ${c}`));
+        log.warn(`  Concerns:`);
+        summary.concerns.forEach(c => log.warn(`    - ${c}`));
       }
       
       // TODO: Send summary email to user
     } catch (error) {
-      console.error('[ChiefOfStaff] Error generating summary:', error);
+      log.error('[ChiefOfStaff] Error generating summary:', error);
     }
   }
 
@@ -510,7 +512,7 @@ class AutomationScheduler {
         VALUES (${taskId}, ${status}, ${errorMessage || null}, NOW())
       `;
     } catch (error) {
-      console.error('[AutomationScheduler] Failed to log task execution:', error);
+      log.error('[AutomationScheduler] Failed to log task execution:', error);
     }
   }
 }

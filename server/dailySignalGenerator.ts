@@ -1,4 +1,6 @@
 /**
+import { logger } from "../utils/logger";
+const log = logger.module("DailySignal");
  * Daily Signal Generator Service
  * 
  * Generates the Morning Signal in multiple formats:
@@ -187,7 +189,7 @@ async function generatePersonalizedGreeting(
       return content;
     }
   } catch (error) {
-    console.error("Error generating greeting:", error);
+    log.error("Error generating greeting:", error);
   }
   
   // Fallback greeting
@@ -207,7 +209,7 @@ export async function generateVoiceNote(content: SignalContent): Promise<string 
   try {
     const apiKey = ENV.elevenLabsApiKey;
     if (!apiKey) {
-      console.error("ElevenLabs API key not configured");
+      log.error("ElevenLabs API key not configured");
       return null;
     }
     
@@ -235,7 +237,7 @@ export async function generateVoiceNote(content: SignalContent): Promise<string 
     );
     
     if (!response.ok) {
-      console.error("ElevenLabs API error:", response.status);
+      log.error("ElevenLabs API error:", response.status);
       return null;
     }
     
@@ -249,7 +251,7 @@ export async function generateVoiceNote(content: SignalContent): Promise<string 
     
     return url;
   } catch (error) {
-    console.error("Error generating voice note:", error);
+    log.error("Error generating voice note:", error);
     return null;
   }
 }
@@ -307,10 +309,10 @@ export async function generateVideo(content: SignalContent): Promise<string | nu
   // TODO: Integrate with AI avatar video service (e.g., HeyGen, Synthesia, D-ID)
   // For now, return null - will implement when video service is configured
   
-  console.log("Video generation script prepared:", script.substring(0, 100) + "...");
+  log.debug("Video generation script prepared:", script.substring(0, 100) + "...");
   
   // Placeholder - log that video generation is not yet configured
-  console.log("Video generation service not yet configured - skipping");
+  log.debug("Video generation service not yet configured - skipping");
   return null;
 }
 
@@ -343,7 +345,7 @@ export async function generatePDF(content: SignalContent): Promise<string | null
     // For now, return the HTML URL
     return url;
   } catch (error) {
-    console.error("Error generating PDF:", error);
+    log.error("Error generating PDF:", error);
     return null;
   }
 }
@@ -622,37 +624,37 @@ export async function validateSignalQuality(
  * Single trigger generates all three formats
  */
 export async function generateDailySignal(userId: number): Promise<GeneratedSignal> {
-  console.log(`[DailySignal] Starting generation for user ${userId}`);
+  log.debug(`[DailySignal] Starting generation for user ${userId}`);
   
   // Step 1: Generate content
-  console.log("[DailySignal] Generating content...");
+  log.debug("[DailySignal] Generating content...");
   const content = await generateSignalContent(userId);
   
   // Step 2: Generate all formats in parallel
-  console.log("[DailySignal] Generating formats (voice, video, PDF)...");
+  log.debug("[DailySignal] Generating formats (voice, video, PDF)...");
   const [voiceUrl, videoUrl, pdfUrl] = await Promise.all([
     generateVoiceNote(content).catch(err => {
-      console.error("[DailySignal] Voice generation failed:", err);
+      log.error("[DailySignal] Voice generation failed:", err);
       return null;
     }),
     generateVideo(content).catch(err => {
-      console.error("[DailySignal] Video generation failed:", err);
+      log.error("[DailySignal] Video generation failed:", err);
       return null;
     }),
     generatePDF(content).catch(err => {
-      console.error("[DailySignal] PDF generation failed:", err);
+      log.error("[DailySignal] PDF generation failed:", err);
       return null;
     })
   ]);
   
   // Step 3: Quality gate validation
-  console.log("[DailySignal] Running quality gate...");
+  log.debug("[DailySignal] Running quality gate...");
   const validation = await validateSignalQuality(content, voiceUrl, videoUrl, pdfUrl);
   
   // Step 4: Log results
-  console.log(`[DailySignal] Generation complete. Quality: ${validation.score}/100, Approved: ${validation.approved}`);
+  log.debug(`[DailySignal] Generation complete. Quality: ${validation.score}/100, Approved: ${validation.approved}`);
   if (validation.feedback.length > 0) {
-    console.log("[DailySignal] Feedback:", validation.feedback);
+    log.debug("[DailySignal] Feedback:", validation.feedback);
   }
   
   return {

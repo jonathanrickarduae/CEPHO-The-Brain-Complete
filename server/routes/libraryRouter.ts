@@ -1,4 +1,6 @@
 /**
+import { logger } from "../utils/logger";
+const log = logger.module("LibraryRouter");
  * Library Router
  * Handles all library-related operations: categories, items, uploads, downloads
  */
@@ -44,7 +46,7 @@ router.get('/categories', async (req, res) => {
     
     res.json(categories);
   } catch (error) {
-    console.error('[Library] Error fetching categories:', error);
+    log.error('[Library] Error fetching categories:', error);
     res.status(500).json({ error: 'Failed to fetch categories' });
   }
 });
@@ -101,7 +103,7 @@ router.get('/items', async (req, res) => {
     
     res.json(items);
   } catch (error) {
-    console.error('[Library] Error fetching items:', error);
+    log.error('[Library] Error fetching items:', error);
     res.status(500).json({ error: 'Failed to fetch items' });
   }
 });
@@ -139,7 +141,7 @@ router.get('/items/:id', async (req, res) => {
     
     res.json(items[0]);
   } catch (error) {
-    console.error('[Library] Error fetching item:', error);
+    log.error('[Library] Error fetching item:', error);
     res.status(500).json({ error: 'Failed to fetch item' });
   }
 });
@@ -182,7 +184,7 @@ router.post('/items', async (req, res) => {
     
     res.json(result[0]);
   } catch (error) {
-    console.error('[Library] Error creating item:', error);
+    log.error('[Library] Error creating item:', error);
     res.status(500).json({ error: 'Failed to create item' });
   }
 });
@@ -234,7 +236,7 @@ router.put('/items/:id', async (req, res) => {
     
     res.json(result[0]);
   } catch (error) {
-    console.error('[Library] Error updating item:', error);
+    log.error('[Library] Error updating item:', error);
     res.status(500).json({ error: 'Failed to update item' });
   }
 });
@@ -262,7 +264,7 @@ router.delete('/items/:id', async (req, res) => {
       try {
         await fs.unlink(items[0].filePath);
       } catch (error) {
-        console.error('[Library] Error deleting file:', error);
+        log.error('[Library] Error deleting file:', error);
       }
     }
     
@@ -273,7 +275,7 @@ router.delete('/items/:id', async (req, res) => {
     
     res.json({ success: true });
   } catch (error) {
-    console.error('[Library] Error deleting item:', error);
+    log.error('[Library] Error deleting item:', error);
     res.status(500).json({ error: 'Failed to delete item' });
   }
 });
@@ -308,7 +310,7 @@ router.post('/upload', upload.single('file'), async (req, res) => {
     
     res.json(result[0]);
   } catch (error) {
-    console.error('[Library] Error uploading file:', error);
+    log.error('[Library] Error uploading file:', error);
     res.status(500).json({ error: 'Failed to upload file' });
   }
 });
@@ -346,7 +348,7 @@ router.get('/download/:id', async (req, res) => {
     // Send file
     res.download(item.filePath, item.title);
   } catch (error) {
-    console.error('[Library] Error downloading file:', error);
+    log.error('[Library] Error downloading file:', error);
     res.status(500).json({ error: 'Failed to download file' });
   }
 });
@@ -369,7 +371,7 @@ router.post('/favorites/:id', async (req, res) => {
     
     res.json({ success: true });
   } catch (error) {
-    console.error('[Library] Error adding favorite:', error);
+    log.error('[Library] Error adding favorite:', error);
     res.status(500).json({ error: 'Failed to add favorite' });
   }
 });
@@ -391,7 +393,7 @@ router.delete('/favorites/:id', async (req, res) => {
     
     res.json({ success: true });
   } catch (error) {
-    console.error('[Library] Error removing favorite:', error);
+    log.error('[Library] Error removing favorite:', error);
     res.status(500).json({ error: 'Failed to remove favorite' });
   }
 });
@@ -420,7 +422,7 @@ router.get('/favorites', async (req, res) => {
     
     res.json(favorites);
   } catch (error) {
-    console.error('[Library] Error fetching favorites:', error);
+    log.error('[Library] Error fetching favorites:', error);
     res.status(500).json({ error: 'Failed to fetch favorites' });
   }
 });

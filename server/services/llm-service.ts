@@ -1,4 +1,6 @@
 import { getOpenAIClient, ChatMessage as OpenAIMessage } from './openai-client';
+import { logger } from "../utils/logger";
+const log = logger.module("LLMService");
 import { getClaudeClient, ClaudeMessage } from './claude-client';
 import { getRedisCache } from './redis-cache';
 
@@ -24,21 +26,21 @@ export class LLMService {
     this.aiEnabled = process.env.AI_ENABLED !== 'false';
     this.defaultProvider = (process.env.DEFAULT_LLM_PROVIDER as LLMProvider) || 'openai';
     
-    console.log('[LLM] Service initialized', {
+    log.debug('[LLM] Service initialized', {
       aiEnabled: this.aiEnabled,
       defaultProvider: this.defaultProvider,
     });
   }
 
   async chat(messages: LLMMessage[], options?: LLMOptions): Promise<string> {
-    console.log('[LLM] Chat called', {
+    log.debug('[LLM] Chat called', {
       aiEnabled: this.aiEnabled,
       provider: options?.provider || this.defaultProvider,
       messageCount: messages.length,
     });
     
     if (!this.aiEnabled) {
-      console.log('[LLM] AI disabled, returning fallback');
+      log.debug('[LLM] AI disabled, returning fallback');
       return this.getFallbackResponse();
     }
 
@@ -49,7 +51,7 @@ export class LLMService {
     const cache = getRedisCache();
     const cached = await cache.get(cacheKey);
     if (cached) {
-      console.log('[LLM] Returning cached response');
+      log.debug('[LLM] Returning cached response');
       return cached;
     }
 
@@ -73,15 +75,15 @@ export class LLMService {
       await cache.set(cacheKey, response, { ttl: 3600 });
       return response;
     } catch (error: any) {
-      console.error(`[LLM] Error with ${provider}:`, error.message);
+      log.error(`[LLM] Error with ${provider}:`, error.message);
       
       // Try fallback to another provider
       if (provider !== 'openai') {
-        console.log('[LLM] Trying fallback to OpenAI');
+        log.debug('[LLM] Trying fallback to OpenAI');
         try {
           return await this.chatWithOpenAI(messages, options);
         } catch (fallbackError) {
-          console.error('[LLM] Fallback failed, using static response');
+          log.error('[LLM] Fallback failed, using static response');
         }
       }
       
@@ -125,7 +127,7 @@ export class LLMService {
   private async chatWithManus(messages: LLMMessage[], options?: LLMOptions): Promise<string> {
     // TODO: Implement Manus API integration
     // For now, use OpenAI as fallback
-    console.log('[LLM] Manus provider not yet implemented, using OpenAI');
+    log.debug('[LLM] Manus provider not yet implemented, using OpenAI');
     return await this.chatWithOpenAI(messages, options);
   }
 

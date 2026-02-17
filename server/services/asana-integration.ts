@@ -1,4 +1,6 @@
 import axios from 'axios';
+import { logger } from "../utils/logger";
+const log = logger.module("AsanaIntegration");
 
 interface AsanaProject {
   gid: string;
@@ -57,7 +59,7 @@ export class AsanaIntegrationService {
       });
       return response.data.data;
     } catch (error: any) {
-      console.error('[Asana] Failed to get workspaces:', error.response?.data || error.message);
+      log.error('[Asana] Failed to get workspaces:', error.response?.data || error.message);
       throw new Error(`Failed to get Asana workspaces: ${error.message}`);
     }
   }
@@ -75,7 +77,7 @@ export class AsanaIntegrationService {
       });
       return response.data.data;
     } catch (error: any) {
-      console.error('[Asana] Failed to get projects:', error.response?.data || error.message);
+      log.error('[Asana] Failed to get projects:', error.response?.data || error.message);
       throw new Error(`Failed to get Asana projects: ${error.message}`);
     }
   }
@@ -110,10 +112,10 @@ export class AsanaIntegrationService {
         }
       );
 
-      console.log(`[Asana] Created project: ${options.name} (${response.data.data.gid})`);
+      log.debug(`[Asana] Created project: ${options.name} (${response.data.data.gid})`);
       return response.data.data;
     } catch (error: any) {
-      console.error('[Asana] Failed to create project:', error.response?.data || error.message);
+      log.error('[Asana] Failed to create project:', error.response?.data || error.message);
       throw new Error(`Failed to create Asana project: ${error.message}`);
     }
   }
@@ -131,7 +133,7 @@ export class AsanaIntegrationService {
       });
       return response.data.data;
     } catch (error: any) {
-      console.error('[Asana] Failed to get tasks:', error.response?.data || error.message);
+      log.error('[Asana] Failed to get tasks:', error.response?.data || error.message);
       throw new Error(`Failed to get Asana tasks: ${error.message}`);
     }
   }
@@ -165,10 +167,10 @@ export class AsanaIntegrationService {
         }
       );
 
-      console.log(`[Asana] Created task: ${options.name} (${response.data.data.gid})`);
+      log.debug(`[Asana] Created task: ${options.name} (${response.data.data.gid})`);
       return response.data.data;
     } catch (error: any) {
-      console.error('[Asana] Failed to create task:', error.response?.data || error.message);
+      log.error('[Asana] Failed to create task:', error.response?.data || error.message);
       throw new Error(`Failed to create Asana task: ${error.message}`);
     }
   }
@@ -190,10 +192,10 @@ export class AsanaIntegrationService {
         }
       );
 
-      console.log(`[Asana] Updated task ${taskGid} status to: ${completed ? 'completed' : 'incomplete'}`);
+      log.debug(`[Asana] Updated task ${taskGid} status to: ${completed ? 'completed' : 'incomplete'}`);
       return response.data.data;
     } catch (error: any) {
-      console.error('[Asana] Failed to update task:', error.response?.data || error.message);
+      log.error('[Asana] Failed to update task:', error.response?.data || error.message);
       throw new Error(`Failed to update Asana task: ${error.message}`);
     }
   }
@@ -238,14 +240,14 @@ export class AsanaIntegrationService {
         createdTasks.push(asanaTask);
       }
 
-      console.log(`[Asana] Synced project "${cephoProject.name}" with ${createdTasks.length} tasks`);
+      log.debug(`[Asana] Synced project "${cephoProject.name}" with ${createdTasks.length} tasks`);
 
       return {
         project: asanaProject,
         tasks: createdTasks,
       };
     } catch (error: any) {
-      console.error('[Asana] Failed to sync project:', error.message);
+      log.error('[Asana] Failed to sync project:', error.message);
       throw error;
     }
   }

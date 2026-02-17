@@ -1,4 +1,6 @@
 // Load environment variables FIRST before any other imports
+import { logger } from "../utils/logger";
+const log = logger.module("CoreIndex");
 import dotenv from "dotenv";
 import { fileURLToPath } from "url";
 import path from "path";
@@ -9,16 +11,16 @@ const __dirname = path.dirname(__filename);
 if (process.env.NODE_ENV === "production") {
   const envPath = path.resolve(__dirname, ".env.production");
   dotenv.config({ path: envPath });
-  console.log('[dotenv] Loaded .env.production from:', envPath);
-  console.log('[dotenv] DATABASE_URL present:', !!process.env.DATABASE_URL);
+  log.debug('[dotenv] Loaded .env.production from:', envPath);
+  log.debug('[dotenv] DATABASE_URL present:', !!process.env.DATABASE_URL);
 } else {
   dotenv.config();
 }
 
 // Debug: Log auth bypass status at startup
-console.log('[Startup] AUTH_BYPASS:', process.env.AUTH_BYPASS);
-console.log('[Startup] VITE_AUTH_BYPASS:', process.env.VITE_AUTH_BYPASS);
-console.log('[Startup] NODE_ENV:', process.env.NODE_ENV);
+log.debug('[Startup] AUTH_BYPASS:', process.env.AUTH_BYPASS);
+log.debug('[Startup] VITE_AUTH_BYPASS:', process.env.VITE_AUTH_BYPASS);
+log.debug('[Startup] NODE_ENV:', process.env.NODE_ENV);
 
 // Now import other modules
 import express from "express";
@@ -109,11 +111,11 @@ async function startServer() {
   const port = await findAvailablePort(preferredPort);
 
   if (port !== preferredPort) {
-    console.log(`Port ${preferredPort} is busy, using port ${port} instead`);
+    log.debug(`Port ${preferredPort} is busy, using port ${port} instead`);
   }
 
   server.listen(port, () => {
-    console.log(`Server running on http://localhost:${port}/`);
+    log.debug(`Server running on http://localhost:${port}/`);
   });
 }
 

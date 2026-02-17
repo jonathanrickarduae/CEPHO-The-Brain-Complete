@@ -1,4 +1,6 @@
 import { getPool } from '../db-pool';
+import { logger } from "../utils/logger";
+const log = logger.module("ConversationService");
 
 export interface ConversationMessage {
   role: 'user' | 'assistant' | 'system';
@@ -17,10 +19,10 @@ export class ConversationService {
         [userId, role, content, metadata ? JSON.stringify(metadata) : null]
       );
       
-      console.log('[Conversation] Message saved:', { userId, role });
+      log.debug('[Conversation] Message saved:', { userId, role });
       return result.rows[0];
     } catch (error: any) {
-      console.error('[Conversation] Error saving message:', error.message);
+      log.error('[Conversation] Error saving message:', error.message);
       throw error;
     }
   }
@@ -45,10 +47,10 @@ export class ConversationService {
         metadata: row.metadata,
       }));
       
-      console.log('[Conversation] Retrieved history:', { userId, count: messages.length });
+      log.debug('[Conversation] Retrieved history:', { userId, count: messages.length });
       return messages;
     } catch (error: any) {
-      console.error('[Conversation] Error retrieving history:', error.message);
+      log.error('[Conversation] Error retrieving history:', error.message);
       return [];
     }
   }
@@ -62,9 +64,9 @@ export class ConversationService {
         [userId]
       );
       
-      console.log('[Conversation] History cleared:', { userId });
+      log.debug('[Conversation] History cleared:', { userId });
     } catch (error: any) {
-      console.error('[Conversation] Error clearing history:', error.message);
+      log.error('[Conversation] Error clearing history:', error.message);
       throw error;
     }
   }
@@ -86,10 +88,10 @@ export class ConversationService {
       );
       
       const stats = result.rows[0] || {};
-      console.log('[Conversation] Stats retrieved:', { userId, stats });
+      log.debug('[Conversation] Stats retrieved:', { userId, stats });
       return stats;
     } catch (error: any) {
-      console.error('[Conversation] Error retrieving stats:', error.message);
+      log.error('[Conversation] Error retrieving stats:', error.message);
       return null;
     }
   }
