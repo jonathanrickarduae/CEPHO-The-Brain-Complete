@@ -2,6 +2,9 @@ import { eq, desc, and, gte, lte, sql } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 import { ENV } from "./_core/env";
+import { logger } from "./utils/logger";
+
+const log = logger.module('Database');
 import { InsertUser, users, moodHistory, InsertMoodHistory, MoodHistory, conversations, InsertConversation, Conversation,
   expertConversations, InsertExpertConversation, ExpertConversation,
   expertMemory, InsertExpertMemory, ExpertMemory,
@@ -47,12 +50,12 @@ let _client: ReturnType<typeof postgres> | null = null;
 export async function getDb() {
   if (!_db) {
     if (!process.env.DATABASE_URL) {
-      console.error("[Database] DATABASE_URL is not set!");
+      log.error("DATABASE_URL is not set");
       return null;
     }
     
     try {
-      console.log("[Database] Initializing connection with DATABASE_URL");
+      log.info("Initializing database connection");
       // Configure postgres client for Supabase/PgBouncer compatibility
       // Remove pgbouncer parameter from URL for raw client
       const dbUrl = process.env.DATABASE_URL.replace('?pgbouncer=true', '').replace(':6543/', ':5432/');
@@ -64,9 +67,9 @@ export async function getDb() {
         },
       });
       _db = drizzle(_client);
-      console.log("[Database] Connection initialized successfully");
+      log.info("Database connection initialized");
     } catch (error) {
-      console.error("[Database] Failed to connect:", error);
+      log.error("Failed to connect to database", error);
       _db = null;
     }
   }
@@ -88,7 +91,7 @@ export async function upsertUser(user: InsertUser): Promise<void> {
 
   const db = await getDb();
   if (!db) {
-    console.warn("[Database] Cannot upsert user: database not available");
+    log.warn("Cannot upsert user: database not available");
     return;
   }
 
@@ -137,7 +140,7 @@ export async function upsertUser(user: InsertUser): Promise<void> {
     updateSet.updatedAt = new Date();
 
     // Log values before insert for debugging
-    console.log('[Database] Upserting user with values:', JSON.stringify({
+    log.debug('Upserting user with values:', JSON.stringify({
       openId: values.openId,
       name: values.name,
       email: values.email,
@@ -152,18 +155,18 @@ export async function upsertUser(user: InsertUser): Promise<void> {
       set: updateSet,
     });
     
-    console.log('[Database] User upserted successfully');
+    log.debug('User upserted successfully');
   } catch (error) {
-    console.error("[Database] Failed to upsert user:", error);
-    console.error("[Database] Error details:", {
+    log.error("Failed to upsert user:", error);
+    log.error("Error details:", {
       message: error instanceof Error ? error.message : String(error),
       stack: error instanceof Error ? error.stack : 'N/A',
       code: (error as any)?.code,
       detail: (error as any)?.detail,
       constraint: (error as any)?.constraint,
     });
-    console.error("[Database] Attempted values:", JSON.stringify(values, null, 2));
-    console.error("[Database] Update set:", JSON.stringify(updateSet, null, 2));
+    log.error("Attempted values:", JSON.stringify(values, null, 2));
+    log.error("Update set:", JSON.stringify(updateSet, null, 2));
     throw error;
   }
 }
@@ -171,7 +174,7 @@ export async function upsertUser(user: InsertUser): Promise<void> {
 export async function getUserByOpenId(openId: string) {
   const db = await getDb();
   if (!db) {
-    console.warn("[Database] Cannot get user: database not available");
+    log.warn("Cannot get user: database not available");
     return undefined;
   }
 
@@ -191,7 +194,7 @@ export async function getUserByOpenId(openId: string) {
 export async function createMoodEntry(entry: InsertMoodHistory): Promise<MoodHistory | null> {
   const db = await getDb();
   if (!db) {
-    console.warn("[Database] Cannot create mood entry: database not available");
+    log.warn("Cannot create mood entry: database not available");
     return null;
   }
 
@@ -201,7 +204,7 @@ export async function createMoodEntry(entry: InsertMoodHistory): Promise<MoodHis
     const [newEntry] = await db.select().from(moodHistory).where(eq(moodHistory.id, insertId));
     return newEntry;
   } catch (error) {
-    console.error("[Database] Failed to create mood entry:", error);
+    log.error("Failed to create mood entry:", error);
     throw error;
   }
 }
@@ -212,7 +215,7 @@ export async function getMoodHistory(
 ): Promise<MoodHistory[]> {
   const db = await getDb();
   if (!db) {
-    console.warn("[Database] Cannot get mood history: database not available");
+    log.warn("Cannot get mood history: database not available");
     return [];
   }
 
@@ -235,7 +238,7 @@ export async function getMoodHistory(
     
     return results;
   } catch (error) {
-    console.error("[Database] Failed to get mood history:", error);
+    log.error("Failed to get mood history:", error);
     return [];
   }
 }
@@ -312,7 +315,7 @@ export async function getMoodTrends(userId: number, days: number = 30): Promise<
       totalEntries: entries.length,
     };
   } catch (error) {
-    console.error("[Database] Failed to get mood trends:", error);
+    log.error("Failed to get mood trends:", error);
     return { averageScore: 0, moodByTimeOfDay: {}, trend: 'stable', totalEntries: 0 };
   }
 }
@@ -339,7 +342,7 @@ export async function getLastMoodCheck(
     
     return entry || null;
   } catch (error) {
-    console.error("[Database] Failed to get last mood check:", error);
+    log.error("Failed to get last mood check:", error);
     return null;
   }
 }
@@ -349,7 +352,7 @@ export async function getLastMoodCheck(
 export async function saveConversation(entry: InsertConversation): Promise<Conversation | null> {
   const db = await getDb();
   if (!db) {
-    console.warn("[Database] Cannot save conversation: database not available");
+    log.warn("Cannot save conversation: database not available");
     return null;
   }
 
@@ -359,7 +362,7 @@ export async function saveConversation(entry: InsertConversation): Promise<Conve
     const [newEntry] = await db.select().from(conversations).where(eq(conversations.id, insertId));
     return newEntry;
   } catch (error) {
-    console.error("[Database] Failed to save conversation:", error);
+    log.error("Failed to save conversation:", error);
     throw error;
   }
 }
@@ -370,7 +373,7 @@ export async function getConversationHistory(
 ): Promise<Conversation[]> {
   const db = await getDb();
   if (!db) {
-    console.warn("[Database] Cannot get conversation history: database not available");
+    log.warn("Cannot get conversation history: database not available");
     return [];
   }
 
@@ -384,7 +387,7 @@ export async function getConversationHistory(
     // Return in chronological order
     return results.reverse();
   } catch (error) {
-    console.error("[Database] Failed to get conversation history:", error);
+    log.error("Failed to get conversation history:", error);
     return [];
   }
 }
@@ -396,7 +399,7 @@ export async function clearConversationHistory(userId: number): Promise<void> {
   try {
     await db.delete(conversations).where(eq(conversations.userId, userId));
   } catch (error) {
-    console.error("[Database] Failed to clear conversation history:", error);
+    log.error("Failed to clear conversation history:", error);
   }
 }
 
@@ -432,7 +435,7 @@ export async function createIntegration(data: InsertIntegration): Promise<Integr
     const [newEntry] = await db.select().from(integrations).where(eq(integrations.id, insertId));
     return newEntry;
   } catch (error) {
-    console.error("[Database] Failed to create integration:", error);
+    log.error("Failed to create integration:", error);
     throw error;
   }
 }
@@ -447,7 +450,7 @@ export async function getIntegrations(userId: number): Promise<Integration[]> {
       .where(eq(integrations.userId, userId))
       .orderBy(desc(integrations.updatedAt));
   } catch (error) {
-    console.error("[Database] Failed to get integrations:", error);
+    log.error("Failed to get integrations:", error);
     return [];
   }
 }
@@ -459,7 +462,7 @@ export async function updateIntegration(id: number, data: Partial<InsertIntegrat
   try {
     await db.update(integrations).set(data).where(eq(integrations.id, id));
   } catch (error) {
-    console.error("[Database] Failed to update integration:", error);
+    log.error("Failed to update integration:", error);
     throw error;
   }
 }
@@ -471,7 +474,7 @@ export async function deleteIntegration(id: number): Promise<void> {
   try {
     await db.delete(integrations).where(eq(integrations.id, id));
   } catch (error) {
-    console.error("[Database] Failed to delete integration:", error);
+    log.error("Failed to delete integration:", error);
     throw error;
   }
 }
@@ -488,7 +491,7 @@ export async function createNotification(data: InsertNotification): Promise<Noti
     const [newEntry] = await db.select().from(notifications).where(eq(notifications.id, insertId));
     return newEntry;
   } catch (error) {
-    console.error("[Database] Failed to create notification:", error);
+    log.error("Failed to create notification:", error);
     throw error;
   }
 }
@@ -509,7 +512,7 @@ export async function getNotifications(userId: number, options?: { unreadOnly?: 
       .orderBy(desc(notifications.createdAt))
       .limit(options?.limit || 50);
   } catch (error) {
-    console.error("[Database] Failed to get notifications:", error);
+    log.error("Failed to get notifications:", error);
     return [];
   }
 }
@@ -521,7 +524,7 @@ export async function markNotificationRead(id: number): Promise<void> {
   try {
     await db.update(notifications).set({ read: true, readAt: new Date() }).where(eq(notifications.id, id));
   } catch (error) {
-    console.error("[Database] Failed to mark notification read:", error);
+    log.error("Failed to mark notification read:", error);
   }
 }
 
@@ -534,7 +537,7 @@ export async function markAllNotificationsRead(userId: number): Promise<void> {
       .set({ read: true, readAt: new Date() })
       .where(and(eq(notifications.userId, userId), eq(notifications.read, false)));
   } catch (error) {
-    console.error("[Database] Failed to mark all notifications read:", error);
+    log.error("Failed to mark all notifications read:", error);
   }
 }
 
@@ -550,7 +553,7 @@ export async function createProject(data: InsertProject): Promise<Project | null
     const [newEntry] = await db.select().from(projects).where(eq(projects.id, insertId));
     return newEntry;
   } catch (error) {
-    console.error("[Database] Failed to create project:", error);
+    log.error("Failed to create project:", error);
     throw error;
   }
 }
@@ -569,7 +572,7 @@ export async function getProjects(userId: number, options?: { status?: string; l
       .orderBy(desc(projects.updatedAt))
       .limit(options?.limit || 100);
   } catch (error) {
-    console.error("[Database] Failed to get projects:", error);
+    log.error("Failed to get projects:", error);
     return [];
   }
 }
@@ -581,7 +584,7 @@ export async function updateProject(id: number, data: Partial<InsertProject>): P
   try {
     await db.update(projects).set(data).where(eq(projects.id, id));
   } catch (error) {
-    console.error("[Database] Failed to update project:", error);
+    log.error("Failed to update project:", error);
     throw error;
   }
 }
@@ -598,7 +601,7 @@ export async function createProjectGenesis(data: InsertProjectGenesis): Promise<
     const [newEntry] = await db.select().from(projectGenesis).where(eq(projectGenesis.id, insertId));
     return newEntry;
   } catch (error) {
-    console.error("[Database] Failed to create project genesis:", error);
+    log.error("Failed to create project genesis:", error);
     throw error;
   }
 }
@@ -613,7 +616,7 @@ export async function getProjectGenesisRecords(userId: number): Promise<ProjectG
       .where(eq(projectGenesis.userId, userId))
       .orderBy(desc(projectGenesis.updatedAt));
   } catch (error) {
-    console.error("[Database] Failed to get project genesis records:", error);
+    log.error("Failed to get project genesis records:", error);
     return [];
   }
 }
@@ -625,7 +628,7 @@ export async function updateProjectGenesis(id: number, data: Partial<InsertProje
   try {
     await db.update(projectGenesis).set(data).where(eq(projectGenesis.id, id));
   } catch (error) {
-    console.error("[Database] Failed to update project genesis:", error);
+    log.error("Failed to update project genesis:", error);
     throw error;
   }
 }
@@ -643,7 +646,7 @@ export async function getUserSettings(userId: number): Promise<UserSettings | nu
       .limit(1);
     return settings || null;
   } catch (error) {
-    console.error("[Database] Failed to get user settings:", error);
+    log.error("Failed to get user settings:", error);
     return null;
   }
 }
@@ -659,7 +662,7 @@ export async function upsertUserSettings(data: InsertUserSettings): Promise<User
     });
     return getUserSettings(data.userId);
   } catch (error) {
-    console.error("[Database] Failed to upsert user settings:", error);
+    log.error("Failed to upsert user settings:", error);
     throw error;
   }
 }
@@ -676,7 +679,7 @@ export async function createTrainingDocument(data: InsertTrainingDocument): Prom
     const [newEntry] = await db.select().from(trainingDocuments).where(eq(trainingDocuments.id, insertId));
     return newEntry;
   } catch (error) {
-    console.error("[Database] Failed to create training document:", error);
+    log.error("Failed to create training document:", error);
     throw error;
   }
 }
@@ -691,7 +694,7 @@ export async function getTrainingDocuments(userId: number): Promise<TrainingDocu
       .where(eq(trainingDocuments.userId, userId))
       .orderBy(desc(trainingDocuments.createdAt));
   } catch (error) {
-    console.error("[Database] Failed to get training documents:", error);
+    log.error("Failed to get training documents:", error);
     return [];
   }
 }
@@ -708,7 +711,7 @@ export async function createMemory(data: InsertMemoryBank): Promise<MemoryBank |
     const [newEntry] = await db.select().from(memoryBank).where(eq(memoryBank.id, insertId));
     return newEntry;
   } catch (error) {
-    console.error("[Database] Failed to create memory:", error);
+    log.error("Failed to create memory:", error);
     throw error;
   }
 }
@@ -726,7 +729,7 @@ export async function getMemories(userId: number, category?: string): Promise<Me
       .where(and(...conditions))
       .orderBy(desc(memoryBank.updatedAt));
   } catch (error) {
-    console.error("[Database] Failed to get memories:", error);
+    log.error("Failed to get memories:", error);
     return [];
   }
 }
@@ -738,7 +741,7 @@ export async function updateMemory(id: number, data: Partial<InsertMemoryBank>):
   try {
     await db.update(memoryBank).set({ ...data, lastAccessed: new Date() }).where(eq(memoryBank.id, id));
   } catch (error) {
-    console.error("[Database] Failed to update memory:", error);
+    log.error("Failed to update memory:", error);
   }
 }
 
@@ -754,7 +757,7 @@ export async function recordDecision(data: InsertDecisionPattern): Promise<Decis
     const [newEntry] = await db.select().from(decisionPatterns).where(eq(decisionPatterns.id, insertId));
     return newEntry;
   } catch (error) {
-    console.error("[Database] Failed to record decision:", error);
+    log.error("Failed to record decision:", error);
     throw error;
   }
 }
@@ -770,7 +773,7 @@ export async function getDecisionPatterns(userId: number, limit: number = 100): 
       .orderBy(desc(decisionPatterns.createdAt))
       .limit(limit);
   } catch (error) {
-    console.error("[Database] Failed to get decision patterns:", error);
+    log.error("Failed to get decision patterns:", error);
     return [];
   }
 }
@@ -787,7 +790,7 @@ export async function recordFeedback(data: InsertFeedbackHistory): Promise<Feedb
     const [newEntry] = await db.select().from(feedbackHistory).where(eq(feedbackHistory.id, insertId));
     return newEntry;
   } catch (error) {
-    console.error("[Database] Failed to record feedback:", error);
+    log.error("Failed to record feedback:", error);
     throw error;
   }
 }
@@ -808,7 +811,7 @@ export async function getFeedbackHistory(userId: number, options?: { expertId?: 
       .orderBy(desc(feedbackHistory.createdAt))
       .limit(options?.limit || 100);
   } catch (error) {
-    console.error("[Database] Failed to get feedback history:", error);
+    log.error("Failed to get feedback history:", error);
     return [];
   }
 }
@@ -825,7 +828,7 @@ export async function createTask(data: InsertTask): Promise<Task | null> {
     const [newEntry] = await db.select().from(tasks).where(eq(tasks.id, insertId));
     return newEntry;
   } catch (error) {
-    console.error("[Database] Failed to create task:", error);
+    log.error("Failed to create task:", error);
     throw error;
   }
 }
@@ -846,7 +849,7 @@ export async function getTasks(userId: number, options?: { projectId?: number; s
       .orderBy(desc(tasks.updatedAt))
       .limit(options?.limit || 100);
   } catch (error) {
-    console.error("[Database] Failed to get tasks:", error);
+    log.error("Failed to get tasks:", error);
     return [];
   }
 }
@@ -858,7 +861,7 @@ export async function updateTask(id: number, data: Partial<InsertTask>): Promise
   try {
     await db.update(tasks).set(data).where(eq(tasks.id, id));
   } catch (error) {
-    console.error("[Database] Failed to update task:", error);
+    log.error("Failed to update task:", error);
     throw error;
   }
 }
@@ -875,7 +878,7 @@ export async function createInboxItem(data: InsertUniversalInboxItem): Promise<U
     const [newEntry] = await db.select().from(universalInbox).where(eq(universalInbox.id, insertId));
     return newEntry;
   } catch (error) {
-    console.error("[Database] Failed to create inbox item:", error);
+    log.error("Failed to create inbox item:", error);
     throw error;
   }
 }
@@ -893,7 +896,7 @@ export async function getInboxItems(userId: number, options?: { status?: string;
       .orderBy(desc(universalInbox.receivedAt))
       .limit(options?.limit || 100);
   } catch (error) {
-    console.error("[Database] Failed to get inbox items:", error);
+    log.error("Failed to get inbox items:", error);
     return [];
   }
 }
@@ -905,7 +908,7 @@ export async function updateInboxItem(id: number, data: Partial<InsertUniversalI
   try {
     await db.update(universalInbox).set(data).where(eq(universalInbox.id, id));
   } catch (error) {
-    console.error("[Database] Failed to update inbox item:", error);
+    log.error("Failed to update inbox item:", error);
     throw error;
   }
 }
@@ -919,7 +922,7 @@ export async function createAuditEntry(data: InsertAuditLog): Promise<void> {
   try {
     await db.insert(auditLog).values(data);
   } catch (error) {
-    console.error("[Database] Failed to create audit entry:", error);
+    log.error("Failed to create audit entry:", error);
     // Don't throw - audit logging should not break main flow
   }
 }
@@ -940,7 +943,7 @@ export async function getAuditLog(userId: number, options?: { limit?: number; ac
       .orderBy(desc(auditLog.createdAt))
       .limit(options?.limit || 100);
   } catch (error) {
-    console.error("[Database] Failed to get audit log:", error);
+    log.error("Failed to get audit log:", error);
     return [];
   }
 }
@@ -3384,7 +3387,7 @@ import { questionnaireResponses, InsertQuestionnaireResponse, QuestionnaireRespo
 export async function saveQuestionnaireResponse(response: InsertQuestionnaireResponse): Promise<QuestionnaireResponse | null> {
   const db = await getDb();
   if (!db) {
-    console.warn("[Database] Cannot save questionnaire response: database not available");
+    log.warn("Cannot save questionnaire response: database not available");
     return null;
   }
 
@@ -3416,7 +3419,7 @@ export async function saveQuestionnaireResponse(response: InsertQuestionnaireRes
       return newEntry;
     }
   } catch (error) {
-    console.error("[Database] Failed to save questionnaire response:", error);
+    log.error("Failed to save questionnaire response:", error);
     throw error;
   }
 }
@@ -3430,7 +3433,7 @@ export async function saveBulkQuestionnaireResponses(userId: number, responses: 
 }>): Promise<number> {
   const db = await getDb();
   if (!db) {
-    console.warn("[Database] Cannot save questionnaire responses: database not available");
+    log.warn("Cannot save questionnaire responses: database not available");
     return 0;
   }
 
@@ -3449,7 +3452,7 @@ export async function saveBulkQuestionnaireResponses(userId: number, responses: 
     }
     return savedCount;
   } catch (error) {
-    console.error("[Database] Failed to save bulk questionnaire responses:", error);
+    log.error("Failed to save bulk questionnaire responses:", error);
     throw error;
   }
 }
@@ -3457,7 +3460,7 @@ export async function saveBulkQuestionnaireResponses(userId: number, responses: 
 export async function getQuestionnaireResponses(userId: number): Promise<QuestionnaireResponse[]> {
   const db = await getDb();
   if (!db) {
-    console.warn("[Database] Cannot get questionnaire responses: database not available");
+    log.warn("Cannot get questionnaire responses: database not available");
     return [];
   }
 
@@ -3469,7 +3472,7 @@ export async function getQuestionnaireResponses(userId: number): Promise<Questio
     
     return results;
   } catch (error) {
-    console.error("[Database] Failed to get questionnaire responses:", error);
+    log.error("Failed to get questionnaire responses:", error);
     return [];
   }
 }
@@ -3491,7 +3494,7 @@ export async function getQuestionnaireCompletionPercentage(userId: number): Prom
     
     return Math.round((completedQuestions / totalQuestions) * 100);
   } catch (error) {
-    console.error("[Database] Failed to get questionnaire completion:", error);
+    log.error("Failed to get questionnaire completion:", error);
     return 0;
   }
 }
@@ -3499,7 +3502,7 @@ export async function getQuestionnaireCompletionPercentage(userId: number): Prom
 export async function getDigitalTwinProfile(userId: number): Promise<DigitalTwinProfile | null> {
   const db = await getDb();
   if (!db) {
-    console.warn("[Database] Cannot get digital twin profile: database not available");
+    log.warn("Cannot get digital twin profile: database not available");
     return null;
   }
 
@@ -3511,7 +3514,7 @@ export async function getDigitalTwinProfile(userId: number): Promise<DigitalTwin
     
     return profile || null;
   } catch (error) {
-    console.error("[Database] Failed to get digital twin profile:", error);
+    log.error("Failed to get digital twin profile:", error);
     return null;
   }
 }
@@ -3519,7 +3522,7 @@ export async function getDigitalTwinProfile(userId: number): Promise<DigitalTwin
 export async function upsertDigitalTwinProfile(profile: InsertDigitalTwinProfile): Promise<DigitalTwinProfile | null> {
   const db = await getDb();
   if (!db) {
-    console.warn("[Database] Cannot upsert digital twin profile: database not available");
+    log.warn("Cannot upsert digital twin profile: database not available");
     return null;
   }
 
@@ -3549,7 +3552,7 @@ export async function upsertDigitalTwinProfile(profile: InsertDigitalTwinProfile
       return newEntry;
     }
   } catch (error) {
-    console.error("[Database] Failed to upsert digital twin profile:", error);
+    log.error("Failed to upsert digital twin profile:", error);
     throw error;
   }
 }
@@ -3623,7 +3626,7 @@ export async function calculateDigitalTwinProfile(userId: number): Promise<Digit
     // Upsert the profile
     return await upsertDigitalTwinProfile(profileData as InsertDigitalTwinProfile);
   } catch (error) {
-    console.error("[Database] Failed to calculate digital twin profile:", error);
+    log.error("Failed to calculate digital twin profile:", error);
     return null;
   }
 }
