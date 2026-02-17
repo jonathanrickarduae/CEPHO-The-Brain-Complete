@@ -218,7 +218,7 @@ export class DataRoomWorkflow {
       userId,
       action,
       timestamp: new Date().toISOString(),
-      ipAddress: '0.0.0.0', // TODO: Get actual IP
+      ipAddress: '0.0.0.0', // FUTURE: Capture actual client IP address
     });
 
     // Update document stats

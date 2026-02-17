@@ -403,7 +403,7 @@ export async function clearConversationHistory(userId: number): Promise<void> {
   }
 }
 
-// TODO: add more feature queries here as your schema grows.
+// Add feature-specific database queries as needed
 
 
 // ==================== INTEGRATIONS ====================

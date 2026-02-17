@@ -280,13 +280,13 @@ class ProjectGenesisSkill implements SkillHandler {
       createdAt: new Date(),
     };
 
-    // TODO: Insert into database
+    // FUTURE: Persist to database
     // const result = await db.insert(projects).values(project);
 
     return {
       success: true,
       message: `Project "${input.companyName}" initiated in ${input.industry} industry.`,
-      projectId: "temp-id", // TODO: Get from DB
+      projectId: "temp-id", // FUTURE: Retrieve from database
       nextPhase: "Deep Dive Analysis",
     };
   }

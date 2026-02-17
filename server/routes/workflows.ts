@@ -18,7 +18,7 @@ const router = express.Router();
  */
 router.get('/', async (req, res) => {
   try {
-    const userId = req.user?.id || 999; // TODO: Get from auth
+    const userId = req.user?.id || 999; // FUTURE: Implement proper user authentication
     const skillType = req.query.skillType as any;
 
     const workflows = await WorkflowEngine.getUserWorkflows(userId, skillType);

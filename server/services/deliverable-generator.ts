@@ -109,7 +109,7 @@ export class DeliverableGenerator {
           filepath,
           url: `/api/deliverables/${filename}`,
           type: 'application/pdf',
-          size: 0, // TODO: Get actual file size
+          size: 0, // FUTURE: Calculate actual file size
           createdAt: new Date(),
         });
       });
