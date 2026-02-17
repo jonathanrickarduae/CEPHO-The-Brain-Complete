@@ -16,8 +16,7 @@
 
 export { BaseRepository } from "./base.repository";
 export { UserRepository, userRepository } from "./user.repository";
-
-// Future repositories will be exported here:
-// export { ProjectRepository, projectRepository } from "./project.repository";
-// export { ExpertRepository, expertRepository } from "./expert.repository";
-// export { MoodRepository, moodRepository } from "./mood.repository";
+export { ProjectRepository, projectRepository } from "./project.repository";
+export { ExpertRepository, expertRepository } from "./expert.repository";
+export { TaskRepository, taskRepository } from "./task.repository";
+export { MoodRepository, moodRepository } from "./mood.repository";
