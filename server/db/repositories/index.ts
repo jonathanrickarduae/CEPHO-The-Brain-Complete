@@ -20,3 +20,5 @@ export { ProjectRepository, projectRepository } from "./project.repository";
 export { ExpertRepository, expertRepository } from "./expert.repository";
 export { TaskRepository, taskRepository } from "./task.repository";
 export { MoodRepository, moodRepository } from "./mood.repository";
+export { ReviewRepository, reviewRepository } from "./review.repository";
+export { TeamRepository, teamRepository } from "./team.repository";
