@@ -57,14 +57,16 @@ export async function getDb() {
     try {
       log.info("Initializing database connection");
       // Configure postgres client for Supabase/PgBouncer compatibility
-      // Remove pgbouncer parameter from URL for raw client
-      const dbUrl = process.env.DATABASE_URL.replace('?pgbouncer=true', '').replace(':6543/', ':5432/');
-      _client = postgres(dbUrl, {
+      // Use PgBouncer port (6543) with proper configuration
+      _client = postgres(process.env.DATABASE_URL, {
         prepare: false, // Required for PgBouncer - disables prepared statements
-        ssl: false, // Disable SSL to avoid pgbouncer parameter issues
+        ssl: process.env.NODE_ENV === 'production' ? 'require' : false,
         connection: {
           application_name: 'cepho-brain',
         },
+        max: 10, // Connection pool size
+        idle_timeout: 20, // Close idle connections after 20s
+        connect_timeout: 10, // Connection timeout
       });
       _db = drizzle(_client);
       log.info("Database connection initialized");
