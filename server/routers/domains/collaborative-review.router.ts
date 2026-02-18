@@ -1,14 +1,15 @@
 /**
- * Collaborativereview Router
+ * Collaborative Review Router
  * 
- * Auto-extracted from monolithic routers.ts
+ * Handles collaborative review sessions using service layer
  * 
  * @module routers/domains/collaborative-review
  */
 
-import { router } from "../../_core/trpc";
+import { router, protectedProcedure } from "../../_core/trpc";
 import { z } from "zod";
 import { reviewService } from "../../services/review";
+import { handleTRPCError, assertExists } from "../../utils/error-handler";
 
 export const collaborativeReviewRouter = router({
     // Create a new collaborative review session
@@ -19,29 +20,45 @@ export const collaborativeReviewRouter = router({
         reviewData: z.any().optional(),
       }))
       .mutation(async ({ ctx, input }) => {
-        const sessionId = await createCollaborativeReviewSession({
-          ownerId: ctx.user.id,
-          projectName: input.projectName,
-          templateId: input.templateId,
-          reviewData: input.reviewData,
-        });
-        return { sessionId };
+        try {
+          const sessionId = await reviewService.createCollaborativeReviewSession({
+            ownerId: ctx.user.id,
+            projectName: input.projectName,
+            templateId: input.templateId,
+            reviewData: input.reviewData,
+          });
+          return { sessionId };
+        } catch (error) {
+          handleTRPCError(error, 'CollaborativeReview.createSession');
+        }
       }),
 
     // Get user's collaborative review sessions
     getSessions: protectedProcedure.query(async ({ ctx }) => {
-      return getCollaborativeReviewSessions(ctx.user.id);
+      try {
+        return await reviewService.getCollaborativeReviewSessions(ctx.user.id);
+      } catch (error) {
+        handleTRPCError(error, 'CollaborativeReview.getSessions');
+      }
     }),
 
     // Get a specific session with details
     getSession: protectedProcedure
       .input(z.object({ sessionId: z.number() }))
       .query(async ({ ctx, input }) => {
-        const isParticipant = await isSessionParticipant(input.sessionId, ctx.user.id);
-        if (!isParticipant) {
-          throw new Error('Not authorized to view this session');
+        try {
+          const isParticipant = await reviewService.isSessionParticipant(input.sessionId, ctx.user.id);
+          if (!isParticipant) {
+            throw new Error('Not authorized to view this session');
+          }
+          
+          const session = await reviewService.getCollaborativeReviewSessionWithDetails(input.sessionId);
+          assertExists(session, 'Session', input.sessionId);
+          
+          return session;
+        } catch (error) {
+          handleTRPCError(error, 'CollaborativeReview.getSession');
         }
-        return getCollaborativeReviewSessionWithDetails(input.sessionId);
       }),
 
     // Update session review data
@@ -52,15 +69,21 @@ export const collaborativeReviewRouter = router({
         reviewData: z.any().optional(),
       }))
       .mutation(async ({ ctx, input }) => {
-        const role = await getParticipantRole(input.sessionId, ctx.user.id);
-        if (role !== 'owner' && role !== 'reviewer') {
-          throw new Error('Not authorized to update this session');
+        try {
+          const role = await reviewService.getParticipantRole(input.sessionId, ctx.user.id);
+          if (role !== 'owner' && role !== 'reviewer') {
+            throw new Error('Not authorized to update this session');
+          }
+          
+          await reviewService.updateCollaborativeReviewSession(input.sessionId, {
+            status: input.status,
+            reviewData: input.reviewData,
+          });
+          
+          return { success: true };
+        } catch (error) {
+          handleTRPCError(error, 'CollaborativeReview.updateSession');
         }
-        await updateCollaborativeReviewSession(input.sessionId, {
-          status: input.status,
-          reviewData: input.reviewData,
-        });
-        return { success: true };
       }),
 
     // Invite participant to session
@@ -71,49 +94,68 @@ export const collaborativeReviewRouter = router({
         role: z.enum(['reviewer', 'viewer']),
       }))
       .mutation(async ({ ctx, input }) => {
-        const myRole = await getParticipantRole(input.sessionId, ctx.user.id);
-        if (myRole !== 'owner') {
-          throw new Error('Only the owner can invite participants');
+        try {
+          const myRole = await reviewService.getParticipantRole(input.sessionId, ctx.user.id);
+          if (myRole !== 'owner') {
+            throw new Error('Only the owner can invite participants');
+          }
+          
+          const participantId = await reviewService.addCollaborativeReviewParticipant({
+            sessionId: input.sessionId,
+            userId: input.userId,
+            role: input.role,
+            invitedBy: ctx.user.id,
+          });
+          
+          return { participantId };
+        } catch (error) {
+          handleTRPCError(error, 'CollaborativeReview.inviteParticipant');
         }
-        const participantId = await addCollaborativeReviewParticipant({
-          sessionId: input.sessionId,
-          userId: input.userId,
-          role: input.role,
-          invitedBy: ctx.user.id,
-        });
-        return { participantId };
       }),
 
     // Get participants for a session
     getParticipants: protectedProcedure
       .input(z.object({ sessionId: z.number() }))
       .query(async ({ ctx, input }) => {
-        const isParticipant = await isSessionParticipant(input.sessionId, ctx.user.id);
-        if (!isParticipant) {
-          throw new Error('Not authorized to view participants');
+        try {
+          const isParticipant = await reviewService.isSessionParticipant(input.sessionId, ctx.user.id);
+          if (!isParticipant) {
+            throw new Error('Not authorized to view participants');
+          }
+          
+          return await reviewService.getCollaborativeReviewParticipants(input.sessionId);
+        } catch (error) {
+          handleTRPCError(error, 'CollaborativeReview.getParticipants');
         }
-        return getCollaborativeReviewParticipants(input.sessionId);
       }),
 
     // Join a session (mark as joined)
     joinSession: protectedProcedure
       .input(z.object({ sessionId: z.number() }))
       .mutation(async ({ ctx, input }) => {
-        const participants = await getCollaborativeReviewParticipants(input.sessionId);
-        const myParticipant = participants.find(p => p.userId === ctx.user.id);
-        if (!myParticipant) {
-          throw new Error('You are not invited to this session');
+        try {
+          const participants = await reviewService.getCollaborativeReviewParticipants(input.sessionId);
+          const myParticipant = participants.find(p => p.userId === ctx.user.id);
+          
+          if (!myParticipant) {
+            throw new Error('You are not invited to this session');
+          }
+          
+          await reviewService.updateCollaborativeReviewParticipant(myParticipant.id, {
+            joinedAt: new Date(),
+            lastActiveAt: new Date(),
+          });
+          
+          await reviewService.logCollaborativeReviewActivity({
+            sessionId: input.sessionId,
+            userId: ctx.user.id,
+            action: 'joined',
+          });
+          
+          return { success: true };
+        } catch (error) {
+          handleTRPCError(error, 'CollaborativeReview.joinSession');
         }
-        await updateCollaborativeReviewParticipant(myParticipant.id, {
-          joinedAt: new Date(),
-          lastActiveAt: new Date(),
-        });
-        await logCollaborativeReviewActivity({
-          sessionId: input.sessionId,
-          userId: ctx.user.id,
-          action: 'joined',
-        });
-        return { success: true };
       }),
 
     // Add comment to a section
@@ -125,24 +167,31 @@ export const collaborativeReviewRouter = router({
         parentCommentId: z.number().optional(),
       }))
       .mutation(async ({ ctx, input }) => {
-        const role = await getParticipantRole(input.sessionId, ctx.user.id);
-        if (!role) {
-          throw new Error('Not authorized to comment');
+        try {
+          const role = await reviewService.getParticipantRole(input.sessionId, ctx.user.id);
+          if (!role) {
+            throw new Error('Not authorized to comment');
+          }
+          
+          const commentId = await reviewService.createCollaborativeReviewComment({
+            sessionId: input.sessionId,
+            userId: ctx.user.id,
+            sectionId: input.sectionId,
+            comment: input.comment,
+            parentCommentId: input.parentCommentId,
+          });
+          
+          await reviewService.logCollaborativeReviewActivity({
+            sessionId: input.sessionId,
+            userId: ctx.user.id,
+            action: 'commented',
+            sectionId: input.sectionId,
+          });
+          
+          return { commentId };
+        } catch (error) {
+          handleTRPCError(error, 'CollaborativeReview.addComment');
         }
-        const commentId = await createCollaborativeReviewComment({
-          sessionId: input.sessionId,
-          userId: ctx.user.id,
-          sectionId: input.sectionId,
-          comment: input.comment,
-          parentCommentId: input.parentCommentId,
-        });
-        await logCollaborativeReviewActivity({
-          sessionId: input.sessionId,
-          userId: ctx.user.id,
-          action: 'commented',
-          sectionId: input.sectionId,
-        });
-        return { commentId };
       }),
 
     // Get comments for a session
@@ -152,11 +201,16 @@ export const collaborativeReviewRouter = router({
         sectionId: z.string().optional(),
       }))
       .query(async ({ ctx, input }) => {
-        const isParticipant = await isSessionParticipant(input.sessionId, ctx.user.id);
-        if (!isParticipant) {
-          throw new Error('Not authorized to view comments');
+        try {
+          const isParticipant = await reviewService.isSessionParticipant(input.sessionId, ctx.user.id);
+          if (!isParticipant) {
+            throw new Error('Not authorized to view comments');
+          }
+          
+          return await reviewService.getCollaborativeReviewComments(input.sessionId, input.sectionId);
+        } catch (error) {
+          handleTRPCError(error, 'CollaborativeReview.getComments');
         }
-        return getCollaborativeReviewComments(input.sessionId, input.sectionId);
       }),
 
     // Resolve a comment
@@ -166,12 +220,18 @@ export const collaborativeReviewRouter = router({
         sessionId: z.number(),
       }))
       .mutation(async ({ ctx, input }) => {
-        const role = await getParticipantRole(input.sessionId, ctx.user.id);
-        if (role !== 'owner' && role !== 'reviewer') {
-          throw new Error('Not authorized to resolve comments');
+        try {
+          const role = await reviewService.getParticipantRole(input.sessionId, ctx.user.id);
+          if (role !== 'owner' && role !== 'reviewer') {
+            throw new Error('Not authorized to resolve comments');
+          }
+          
+          await reviewService.updateCollaborativeReviewComment(input.commentId, { status: 'resolved' });
+          
+          return { success: true };
+        } catch (error) {
+          handleTRPCError(error, 'CollaborativeReview.resolveComment');
         }
-        await updateCollaborativeReviewComment(input.commentId, { status: 'resolved' });
-        return { success: true };
       }),
 
     // Log activity
@@ -183,22 +243,29 @@ export const collaborativeReviewRouter = router({
         metadata: z.any().optional(),
       }))
       .mutation(async ({ ctx, input }) => {
-        await logCollaborativeReviewActivity({
-          sessionId: input.sessionId,
-          userId: ctx.user.id,
-          action: input.action,
-          sectionId: input.sectionId,
-          metadata: input.metadata,
-        });
-        // Update last active
-        const participants = await getCollaborativeReviewParticipants(input.sessionId);
-        const myParticipant = participants.find(p => p.userId === ctx.user.id);
-        if (myParticipant) {
-          await updateCollaborativeReviewParticipant(myParticipant.id, {
-            lastActiveAt: new Date(),
+        try {
+          await reviewService.logCollaborativeReviewActivity({
+            sessionId: input.sessionId,
+            userId: ctx.user.id,
+            action: input.action,
+            sectionId: input.sectionId,
+            metadata: input.metadata,
           });
+          
+          // Update last active
+          const participants = await reviewService.getCollaborativeReviewParticipants(input.sessionId);
+          const myParticipant = participants.find(p => p.userId === ctx.user.id);
+          
+          if (myParticipant) {
+            await reviewService.updateCollaborativeReviewParticipant(myParticipant.id, {
+              lastActiveAt: new Date(),
+            });
+          }
+          
+          return { success: true };
+        } catch (error) {
+          handleTRPCError(error, 'CollaborativeReview.logActivity');
         }
-        return { success: true };
       }),
 
     // Get activity for a session
@@ -208,10 +275,15 @@ export const collaborativeReviewRouter = router({
         limit: z.number().optional(),
       }))
       .query(async ({ ctx, input }) => {
-        const isParticipant = await isSessionParticipant(input.sessionId, ctx.user.id);
-        if (!isParticipant) {
-          throw new Error('Not authorized to view activity');
+        try {
+          const isParticipant = await reviewService.isSessionParticipant(input.sessionId, ctx.user.id);
+          if (!isParticipant) {
+            throw new Error('Not authorized to view activity');
+          }
+          
+          return await reviewService.getCollaborativeReviewActivity(input.sessionId, input.limit || 50);
+        } catch (error) {
+          handleTRPCError(error, 'CollaborativeReview.getActivity');
         }
-        return getCollaborativeReviewActivity(input.sessionId, input.limit || 50);
       }),
 });
