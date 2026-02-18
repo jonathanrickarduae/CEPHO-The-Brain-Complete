@@ -164,15 +164,17 @@ export function registerGoogleOAuthRoutes(app: Express) {
       }
 
       // Create session token
-      log.debug('Creating session token');
+      log.debug('Creating session token', { userId, name: userInfo.name });
       const sessionToken = await createSessionToken(userId, userInfo.name);
-      log.debug('Session token created');
+      log.debug('Session token created', { tokenLength: sessionToken.length, tokenPreview: sessionToken.substring(0, 50) });
 
       // Set cookie
       log.debug('Setting session cookie', { hostname: req.hostname, protocol: req.protocol, cookieName: COOKIE_NAME });
       const cookieOptions = getSessionCookieOptions(req);
-      res.cookie(COOKIE_NAME, sessionToken, { ...cookieOptions, maxAge: ONE_YEAR_MS });
-      log.debug('Cookie set successfully');
+      const finalCookieOptions = { ...cookieOptions, maxAge: ONE_YEAR_MS };
+      log.debug('Cookie options:', finalCookieOptions);
+      res.cookie(COOKIE_NAME, sessionToken, finalCookieOptions);
+      log.debug('Cookie set successfully', { cookieName: COOKIE_NAME, domain: finalCookieOptions.domain });
 
       // Redirect to home
       log.info('OAuth successful, redirecting to home', { userId, email: userInfo.email });

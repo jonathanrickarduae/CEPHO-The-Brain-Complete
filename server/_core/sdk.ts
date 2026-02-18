@@ -200,11 +200,15 @@ class SDKServer {
     const expirationSeconds = Math.floor((issuedAt + expiresInMs) / 1000);
     const secretKey = this.getSessionSecret();
 
-    return new SignJWT({
+    const jwtPayload = {
       openId: payload.openId,
-      appId: payload.appId,
-      name: payload.name,
-    })
+      appId: payload.appId || "cepho-brain",
+      name: payload.name || "User",
+    };
+
+    console.log('[Auth] Creating JWT with payload:', jwtPayload);
+
+    return new SignJWT(jwtPayload)
       .setProtectedHeader({ alg: "HS256", typ: "JWT" })
       .setExpirationTime(expirationSeconds)
       .sign(secretKey);
@@ -225,11 +229,13 @@ class SDKServer {
       });
       const { openId, appId, name } = payload as Record<string, unknown>;
 
+      console.log('[Auth] Decoded JWT payload:', { openId, appId, name, hasOpenId: !!openId, hasName: !!name });
+
       if (
         !isNonEmptyString(openId) ||
         !isNonEmptyString(name)
       ) {
-        console.warn("[Auth] Session payload missing required fields");
+        console.warn("[Auth] Session payload missing required fields", { openId, appId, name });
         return null;
       }
 
