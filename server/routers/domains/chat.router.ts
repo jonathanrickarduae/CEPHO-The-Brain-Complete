@@ -1,14 +1,16 @@
 /**
  * Chat Router
  * 
- * Auto-extracted from monolithic routers.ts
+ * Handles Chief of Staff chat conversations using service layer
  * 
  * @module routers/domains/chat
  */
 
-import { router } from "../../_core/trpc";
+import { router, protectedProcedure } from "../../_core/trpc";
 import { z } from "zod";
 import { communicationService } from "../../services/communication";
+import { handleTRPCError } from "../../utils/error-handler";
+import { invokeLLM } from "../../services/llm";
 
 export const chatRouter = router({
     // Send a message and get AI response
@@ -18,19 +20,20 @@ export const chatRouter = router({
         context: z.string().optional(), // Optional context like "daily_brief", "workflow"
       }))
       .mutation(async ({ ctx, input }) => {
-        // Save user message
-        await saveConversation({
-          userId: ctx.user.id,
-          role: 'user',
-          content: input.message,
-          metadata: input.context ? { context: input.context } : null,
-        });
+        try {
+          // Save user message
+          await communicationService.saveConversation({
+            userId: ctx.user.id,
+            role: 'user',
+            content: input.message,
+            metadata: input.context ? { context: input.context } : undefined,
+          });
 
-        // Get conversation history for context
-        const history = await getConversationHistory(ctx.user.id, 20);
+          // Get conversation history for context
+          const history = await communicationService.getConversationHistory(ctx.user.id, 20);
 
-        // Build messages for LLM
-        const systemPrompt = `You are the Chief of Staff for ${ctx.user.name || 'the user'} - a senior executive advisor who operates with the rigor of a McKinsey consultant and the directness of a trusted board member.
+          // Build messages for LLM
+          const systemPrompt = `You are the Chief of Staff for ${ctx.user.name || 'the user'} - a senior executive advisor who operates with the rigor of a McKinsey consultant and the directness of a trusted board member.
 
 Your role:
 - Provide objective, evidence-based counsel - not validation
@@ -72,16 +75,15 @@ Capabilities:
 
 You are not a yes-man. You are a trusted advisor who respects the principal enough to be honest. You speak as a peer, not a servant.`;
 
-        const messages = [
-          { role: 'system' as const, content: systemPrompt },
-          ...history.map(h => ({
-            role: h.role as 'user' | 'assistant',
-            content: h.content,
-          })),
-          { role: 'user' as const, content: input.message },
-        ];
+          const messages = [
+            { role: 'system' as const, content: systemPrompt },
+            ...history.map(h => ({
+              role: h.role as 'user' | 'assistant',
+              content: h.content,
+            })),
+            { role: 'user' as const, content: input.message },
+          ];
 
-        try {
           // Call LLM
           const result = await invokeLLM({ messages });
           const assistantMessage = result.choices[0]?.message?.content || 'I apologize, but I was unable to generate a response. Please try again.';
@@ -94,11 +96,11 @@ You are not a yes-man. You are a trusted advisor who respects the principal enou
               : String(assistantMessage);
 
           // Save assistant response
-          await saveConversation({
+          await communicationService.saveConversation({
             userId: ctx.user.id,
             role: 'assistant',
             content: responseText,
-            metadata: null,
+            metadata: undefined,
           });
 
           return {
@@ -106,8 +108,7 @@ You are not a yes-man. You are a trusted advisor who respects the principal enou
             timestamp: new Date().toISOString(),
           };
         } catch (error) {
-          console.error('[Chat] LLM invocation failed:', error);
-          throw new Error('Failed to get response from Chief of Staff');
+          handleTRPCError(error, 'Chat.send');
         }
       }),
 
@@ -117,13 +118,41 @@ You are not a yes-man. You are a trusted advisor who respects the principal enou
         limit: z.number().optional(),
       }).optional())
       .query(async ({ ctx, input }) => {
-        return getConversationHistory(ctx.user.id, input?.limit || 50);
+        try {
+          return await communicationService.getConversationHistory(
+            ctx.user.id, 
+            input?.limit || 50
+          );
+        } catch (error) {
+          handleTRPCError(error, 'Chat.history');
+        }
       }),
 
     // Clear conversation history
     clear: protectedProcedure
       .mutation(async ({ ctx }) => {
-        await clearConversationHistory(ctx.user.id);
-        return { success: true };
+        try {
+          await communicationService.clearConversationHistory(ctx.user.id);
+          return { success: true };
+        } catch (error) {
+          handleTRPCError(error, 'Chat.clear');
+        }
+      }),
+
+    // Get conversation statistics
+    stats: protectedProcedure
+      .query(async ({ ctx }) => {
+        try {
+          const count = await communicationService.getConversationCount(ctx.user.id);
+          const history = await communicationService.getConversationHistory(ctx.user.id, 10);
+          
+          return {
+            totalMessages: count,
+            recentMessages: history.length,
+            lastMessageAt: history.length > 0 ? history[history.length - 1].createdAt : null,
+          };
+        } catch (error) {
+          handleTRPCError(error, 'Chat.stats');
+        }
       }),
 });
