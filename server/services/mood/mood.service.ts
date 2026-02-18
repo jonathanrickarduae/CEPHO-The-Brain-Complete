@@ -1,6 +1,7 @@
 import { MoodRepository } from './mood.repository';
 import { CreateMoodDto, MoodEntryDto } from './mood.types';
 import { logger } from '../../utils/logger';
+import * as cache from '../cache';
 
 const log = logger.module('MoodService');
 
@@ -50,6 +51,9 @@ export class MoodService {
 
     log.info({ userId, score: data.score, timeOfDay: data.timeOfDay }, 'Mood entry created');
 
+    // Invalidate cache
+    await cache.delPattern(`mood:*:${userId}:*`);
+
     return this.toDto(entry);
   }
 
@@ -61,8 +65,12 @@ export class MoodService {
    * @returns Array of mood entries
    */
   async getHistory(userId: number, days: number = 30): Promise<MoodEntryDto[]> {
-    const entries = await this.repository.findByUserId(userId, days);
-    return entries.map(entry => this.toDto(entry));
+    const cacheKey = `mood:history:${userId}:${days}`;
+    
+    return cache.getOrSet(cacheKey, async () => {
+      const entries = await this.repository.findByUserId(userId, days);
+      return entries.map(entry => this.toDto(entry));
+    }, 300); // Cache for 5 minutes
   }
 
   /**
