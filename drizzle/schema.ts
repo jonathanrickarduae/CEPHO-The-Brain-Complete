@@ -1,4 +1,4 @@
-import { int, pgEnum, pgTable, text, timestamp, varchar, json, boolean, float, index, uniqueIndex } from "drizzle-orm/pg-core";
+import { int, pgEnum, pgTable, text, timestamp, varchar, json, boolean, real, index, uniqueIndex } from "drizzle-orm/pg-core";
 
 /**
  * Core user table backing auth flow.
@@ -85,7 +85,7 @@ export const userPreferences = pgTable("user_preferences", {
   userId: integer("userId").notNull(),
   preferenceKey: varchar("preferenceKey", { length: 100 }).notNull(), // e.g., "preferred_meeting_time"
   preferenceValue: text("preferenceValue").notNull(),
-  confidence: float("confidence").default(0.5), // 0-1 confidence score
+  confidence: real("confidence").default(0.5), // 0-1 confidence score
   source: varchar("source", { length: 50 }), // "explicit", "inferred", "conversation"
   learnedAt: timestamp("learnedAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
@@ -154,7 +154,7 @@ export const expertPerformance = pgTable("expert_performance", {
   id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
   userId: integer("userId").notNull(),
   expertId: varchar("expertId", { length: 50 }).notNull(),
-  score: float("score").default(80), // 0-100 performance score
+  score: real("score").default(80), // 0-100 performance score
   projectsCompleted: integer("projectsCompleted").default(0),
   positiveFeedback: integer("positiveFeedback").default(0),
   negativeFeedback: integer("negativeFeedback").default(0),
@@ -373,7 +373,7 @@ export const memoryBank = pgTable("memory_bank", {
   category: pgEnum("category", ["personal", "work", "preference", "relationship", "fact"]).notNull(),
   key: varchar("key", { length: 200 }).notNull(),
   value: text("value").notNull(),
-  confidence: float("confidence").default(1.0),
+  confidence: real("confidence").default(1.0),
   source: varchar("source", { length: 100 }), // Where this memory came from
   lastAccessed: timestamp("lastAccessed"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
@@ -390,11 +390,11 @@ export const wellnessScores = pgTable("wellness_scores", {
   id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
   userId: integer("userId").notNull(),
   date: timestamp("date").notNull(),
-  overallScore: float("overallScore").notNull(), // 0-10
-  moodScore: float("moodScore"),
-  productivityScore: float("productivityScore"),
-  balanceScore: float("balanceScore"),
-  momentumScore: float("momentumScore"),
+  overallScore: real("overallScore").notNull(), // 0-10
+  moodScore: real("moodScore"),
+  productivityScore: real("productivityScore"),
+  balanceScore: real("balanceScore"),
+  momentumScore: real("momentumScore"),
   factors: json("factors"), // Breakdown of contributing factors
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 }, (table) => ({
@@ -482,10 +482,10 @@ export type InsertFeatureComparison = typeof featureComparison.$inferInsert;
 export const marketPositionHistory = pgTable("market_position_history", {
   id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
   date: timestamp("date").notNull(),
-  overallScore: float("overallScore").notNull(), // 0-100
-  featureParityScore: float("featureParityScore"),
-  uniqueValueScore: float("uniqueValueScore"),
-  marketShareEstimate: float("marketShareEstimate"),
+  overallScore: real("overallScore").notNull(), // 0-100
+  featureParityScore: real("featureParityScore"),
+  uniqueValueScore: real("uniqueValueScore"),
+  marketShareEstimate: real("marketShareEstimate"),
   competitorScores: json("competitorScores"), // { competitorId: score, ... }
   factors: json("factors"), // Breakdown of what contributed to score
   analysis: text("analysis"), // AI-generated analysis
@@ -749,7 +749,7 @@ export const subscriptions = pgTable("subscriptions", {
     "security",
     "other"
   ]).default("other").notNull(),
-  cost: float("cost").notNull(), // Cost in AED
+  cost: real("cost").notNull(), // Cost in AED
   billingCycle: pgEnum("billingCycle", ["monthly", "quarterly", "annual", "one_time", "usage_based"]).default("monthly").notNull(),
   currency: varchar("currency", { length: 10 }).default("AED").notNull(),
   status: pgEnum("status", ["active", "paused", "cancelled", "trial"]).default("active").notNull(),
@@ -784,7 +784,7 @@ export const projectGenesis = pgTable("project_genesis", {
   ]).default("discovery").notNull(),
   status: pgEnum("status", ["active", "on_hold", "won", "lost", "abandoned"]).default("active").notNull(),
   counterparty: varchar("counterparty", { length: 300 }),
-  dealValue: float("dealValue"),
+  dealValue: real("dealValue"),
   currency: varchar("currency", { length: 3 }).default("USD"),
   probability: integer("probability").default(50), // 0-100
   expectedCloseDate: timestamp("expectedCloseDate"),
@@ -945,8 +945,8 @@ export const tasks = pgTable("tasks", {
   priority: pgEnum("priority", ["low", "medium", "high", "critical"]).default("medium"),
   progress: integer("progress").default(0), // 0-100
   dueDate: timestamp("dueDate"),
-  estimatedHours: float("estimatedHours"),
-  actualHours: float("actualHours"),
+  estimatedHours: real("estimatedHours"),
+  actualHours: real("actualHours"),
   assignedTo: varchar("assignedTo", { length: 100 }), // "digital_twin", expert ID, or "user"
   assignedExperts: json("assignedExperts"), // Array of expert IDs for team tasks
   dependencies: json("dependencies"), // Array of task IDs this depends on
@@ -1014,7 +1014,7 @@ export const piiDetectionLog = pgTable("pii_detection_log", {
   sourceId: integer("sourceId").notNull(),
   piiType: varchar("piiType", { length: 50 }).notNull(), // "email", "phone", "ssn", "credit_card", etc.
   detectedText: text("detectedText"), // The flagged content (may be redacted)
-  confidence: float("confidence"), // 0-1 confidence score
+  confidence: real("confidence"), // 0-1 confidence score
   status: pgEnum("status", ["detected", "reviewed", "false_positive", "redacted"]).default("detected"),
   reviewedBy: varchar("reviewedBy", { length: 100 }),
   reviewedAt: timestamp("reviewedAt"),
@@ -1108,7 +1108,7 @@ export const expertMemory = pgTable("expert_memory", {
   memoryType: pgEnum("memoryType", ["preference", "fact", "style", "context", "correction"]).notNull(),
   key: varchar("key", { length: 200 }).notNull(),
   value: text("value").notNull(),
-  confidence: float("confidence").default(0.8), // 0-1 confidence in this memory
+  confidence: real("confidence").default(0.8), // 0-1 confidence in this memory
   source: varchar("source", { length: 100 }), // "conversation", "feedback", "inferred"
   usageCount: integer("usageCount").default(0), // How often this memory has been used
   lastUsed: timestamp("lastUsed"),
@@ -1132,8 +1132,8 @@ export const expertPromptEvolution = pgTable("expert_prompt_evolution", {
   strengthAdjustments: json("strengthAdjustments"), // Adjusted strength scores
   weaknessAdjustments: json("weaknessAdjustments"), // Adjusted weakness areas
   reason: text("reason"), // Why this change was made
-  performanceBefore: float("performanceBefore"),
-  performanceAfter: float("performanceAfter"),
+  performanceBefore: real("performanceBefore"),
+  performanceAfter: real("performanceAfter"),
   appliedAt: timestamp("appliedAt").defaultNow().notNull(),
   createdBy: varchar("createdBy", { length: 50 }), // "chief_of_staff", "user_feedback", "auto"
 });
@@ -1153,7 +1153,7 @@ export const expertInsights = pgTable("expert_insights", {
   title: varchar("title", { length: 300 }).notNull(),
   insight: text("insight").notNull(),
   evidence: text("evidence"), // Supporting data/reasoning
-  confidence: float("confidence").default(0.7),
+  confidence: real("confidence").default(0.7),
   tags: json("tags"), // Array of tags for searchability
   projectId: integer("projectId"),
   relatedExpertIds: json("relatedExpertIds"), // Other experts who contributed
@@ -1938,8 +1938,8 @@ export const reviewTimingPatterns = pgTable("review_timing_patterns", {
   dayOfWeek: integer("dayOfWeek").notNull(), // 0-6 (Sunday-Saturday)
   averageStartTime: varchar("averageStartTime", { length: 10 }), // HH:MM format
   averageDuration: integer("averageDuration"), // minutes
-  completionRate: float("completionRate").default(0), // 0-1
-  autoProcessRate: float("autoProcessRate").default(0), // 0-1
+  completionRate: real("completionRate").default(0), // 0-1
+  autoProcessRate: real("autoProcessRate").default(0), // 0-1
   sampleCount: integer("sampleCount").default(0).notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
 });
@@ -2010,7 +2010,7 @@ export const innovationIdeas = pgTable("innovation_ideas", {
   tags: json("tags"), // Array of tags
   estimatedInvestment: json("estimatedInvestment"), // { min: number, max: number, currency: string }
   estimatedReturn: json("estimatedReturn"), // { min: number, max: number, timeframe: string }
-  confidenceScore: float("confidenceScore"), // 0-100 overall confidence
+  confidenceScore: real("confidenceScore"), // 0-100 overall confidence
   briefDocument: text("briefDocument"), // Generated brief summary
   promotedToProjectId: integer("promotedToProjectId"), // If promoted to Project Genesis
   metadata: json("metadata"),
@@ -2043,7 +2043,7 @@ export const ideaAssessments = pgTable("idea_assessments", {
   assessorId: varchar("assessorId", { length: 100 }), // SME expert ID if applicable
   questions: json("questions"), // Array of { question: string, answer: string, score: number }
   findings: text("findings"),
-  score: float("score"), // 0-100 score for this assessment
+  score: real("score"), // 0-100 score for this assessment
   recommendation: pgEnum("recommendation", ["proceed", "refine", "pivot", "reject", "needs_more_info"]).default("needs_more_info").notNull(),
   refinementSuggestions: json("refinementSuggestions"), // Array of suggestions
   metadata: json("metadata"),
@@ -2092,7 +2092,7 @@ export const investmentScenarios = pgTable("investment_scenarios", {
   id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
   ideaId: integer("ideaId").notNull(),
   scenarioName: varchar("scenarioName", { length: 100 }).notNull(), // "Bootstrap", "Seed", "Growth"
-  investmentAmount: float("investmentAmount").notNull(),
+  investmentAmount: real("investmentAmount").notNull(),
   currency: varchar("currency", { length: 10 }).default("GBP").notNull(),
   breakdown: json("breakdown"), // { website: number, marketing: number, operations: number, etc. }
   projectedRevenue: json("projectedRevenue"), // { month3: number, month6: number, year1: number }
@@ -2121,7 +2121,7 @@ export const trendRepository = pgTable("trend_repository", {
   source: varchar("source", { length: 200 }),
   sourceUrl: text("sourceUrl"),
   trendStrength: pgEnum("trendStrength", ["emerging", "growing", "mainstream", "declining"]).default("emerging").notNull(),
-  relevanceScore: float("relevanceScore"), // 0-100 how relevant to user's interests
+  relevanceScore: real("relevanceScore"), // 0-100 how relevant to user's interests
   potentialImpact: pgEnum("potentialImpact", ["low", "medium", "high", "transformative"]).default("medium").notNull(),
   timeHorizon: varchar("timeHorizon", { length: 50 }), // "3 months", "1 year", "3-5 years"
   relatedIndustries: json("relatedIndustries"), // Array of industries
@@ -2187,10 +2187,10 @@ export const fundingPrograms = pgTable("funding_programs", {
   ]).notNull(),
   provider: varchar("provider", { length: 200 }).notNull(), // e.g., "MBRIF", "Innovate UK"
   description: text("description"),
-  fundingMin: float("fundingMin"), // Minimum funding amount in AED
-  fundingMax: float("fundingMax"), // Maximum funding amount in AED
-  equityRequired: float("equityRequired"), // Percentage if applicable
-  interestRate: float("interestRate"), // For loans
+  fundingMin: real("fundingMin"), // Minimum funding amount in AED
+  fundingMax: real("fundingMax"), // Maximum funding amount in AED
+  equityRequired: real("equityRequired"), // Percentage if applicable
+  interestRate: real("interestRate"), // For loans
   repaymentTerms: text("repaymentTerms"),
   eligibilityCriteria: json("eligibilityCriteria"), // Array of criteria
   requiredDocuments: json("requiredDocuments"), // Array of required documents
@@ -2201,7 +2201,7 @@ export const fundingPrograms = pgTable("funding_programs", {
   websiteUrl: text("websiteUrl"),
   applicationUrl: text("applicationUrl"),
   contactEmail: varchar("contactEmail", { length: 320 }),
-  successRate: float("successRate"), // Historical success rate percentage
+  successRate: real("successRate"), // Historical success rate percentage
   averageProcessingDays: integer("averageProcessingDays"),
   isActive: boolean("isActive").default(true).notNull(),
   lastUpdated: timestamp("lastUpdated"),
@@ -2222,7 +2222,7 @@ export const fundingAssessments = pgTable("funding_assessments", {
   userId: integer("userId").notNull(),
   ideaId: integer("ideaId").notNull(), // Link to innovation idea
   programId: varchar("programId", { length: 100 }).notNull(), // Link to funding program
-  eligibilityScore: float("eligibilityScore"), // 0-100 score
+  eligibilityScore: real("eligibilityScore"), // 0-100 score
   eligibilityStatus: pgEnum("eligibilityStatus", [
     "highly_eligible",
     "eligible",
@@ -2234,8 +2234,8 @@ export const fundingAssessments = pgTable("funding_assessments", {
   strengths: json("strengths"), // Array of strengths for this program
   gaps: json("gaps"), // Array of gaps/missing requirements
   recommendations: json("recommendations"), // How to improve eligibility
-  estimatedFunding: float("estimatedFunding"), // Estimated funding amount in AED
-  applicationReadiness: float("applicationReadiness"), // 0-100 how ready to apply
+  estimatedFunding: real("estimatedFunding"), // Estimated funding amount in AED
+  applicationReadiness: real("applicationReadiness"), // 0-100 how ready to apply
   generatedDocuments: json("generatedDocuments"), // Auto-generated application materials
   notes: text("notes"),
   assessedAt: timestamp("assessedAt").defaultNow().notNull(),
@@ -2271,11 +2271,11 @@ export const revenueStreams = pgTable("revenue_streams", {
   ]).notNull(),
   status: pgEnum("status", ["active", "paused", "planned", "discontinued"]).default("planned").notNull(),
   currency: varchar("currency", { length: 10 }).default("AED").notNull(),
-  monthlyRecurring: float("monthlyRecurring").default(0), // MRR for recurring streams
-  annualRecurring: float("annualRecurring").default(0), // ARR
-  averageTransactionValue: float("averageTransactionValue").default(0),
+  monthlyRecurring: real("monthlyRecurring").default(0), // MRR for recurring streams
+  annualRecurring: real("annualRecurring").default(0), // ARR
+  averageTransactionValue: real("averageTransactionValue").default(0),
   transactionsPerMonth: integer("transactionsPerMonth").default(0),
-  marginPercentage: float("marginPercentage").default(0), // Gross margin %
+  marginPercentage: real("marginPercentage").default(0), // Gross margin %
   paymentProcessor: varchar("paymentProcessor", { length: 100 }), // "Stripe", "PayPal", "Bank Transfer"
   processorConnected: boolean("processorConnected").default(false),
   pricingModel: text("pricingModel"), // Description of pricing structure
@@ -2296,7 +2296,7 @@ export const revenueTransactions = pgTable("revenue_transactions", {
   userId: integer("userId").notNull(),
   streamId: integer("streamId").notNull(), // FK to revenueStreams
   transactionDate: timestamp("transactionDate").notNull(),
-  amount: float("amount").notNull(),
+  amount: real("amount").notNull(),
   currency: varchar("currency", { length: 10 }).default("AED").notNull(),
   status: pgEnum("status", ["pending", "completed", "failed", "refunded"]).default("pending").notNull(),
   customerName: varchar("customerName", { length: 200 }),
@@ -2333,7 +2333,7 @@ export const pipelineOpportunities = pgTable("pipeline_opportunities", {
     "lost"
   ]).default("lead").notNull(),
   probability: integer("probability").default(10), // 0-100%
-  estimatedValue: float("estimatedValue").notNull(),
+  estimatedValue: real("estimatedValue").notNull(),
   currency: varchar("currency", { length: 10 }).default("AED").notNull(),
   expectedCloseDate: timestamp("expectedCloseDate"),
   actualCloseDate: timestamp("actualCloseDate"),
@@ -2359,7 +2359,7 @@ export const pricingTiers = pgTable("pricing_tiers", {
   userId: integer("userId").notNull(),
   streamId: integer("streamId").notNull(), // FK to revenueStreams
   tierName: varchar("tierName", { length: 100 }).notNull(), // e.g., "Starter", "Pro", "Enterprise"
-  price: float("price").notNull(),
+  price: real("price").notNull(),
   currency: varchar("currency", { length: 10 }).default("AED").notNull(),
   billingPeriod: pgEnum("billingPeriod", ["one_time", "monthly", "quarterly", "annual"]).notNull(),
   features: json("features"), // Array of features included
@@ -2390,7 +2390,7 @@ export const customerAccounts = pgTable("customer_accounts", {
   country: varchar("country", { length: 100 }),
   city: varchar("city", { length: 100 }),
   status: pgEnum("status", ["prospect", "active", "churned", "paused"]).default("prospect").notNull(),
-  lifetimeValue: float("lifetimeValue").default(0),
+  lifetimeValue: real("lifetimeValue").default(0),
   currency: varchar("currency", { length: 10 }).default("AED").notNull(),
   acquisitionSource: varchar("acquisitionSource", { length: 200 }),
   acquisitionDate: timestamp("acquisitionDate"),
@@ -2416,13 +2416,13 @@ export const revenueForecasts = pgTable("revenue_forecasts", {
   streamId: integer("streamId"), // Optional FK to specific stream
   forecastPeriod: varchar("forecastPeriod", { length: 20 }).notNull(), // "2026-Q1", "2026-02"
   periodType: pgEnum("periodType", ["monthly", "quarterly", "annual"]).notNull(),
-  projectedRevenue: float("projectedRevenue").notNull(),
-  actualRevenue: float("actualRevenue"),
+  projectedRevenue: real("projectedRevenue").notNull(),
+  actualRevenue: real("actualRevenue"),
   currency: varchar("currency", { length: 10 }).default("AED").notNull(),
   assumptions: text("assumptions"), // What the forecast is based on
   confidence: pgEnum("confidence", ["low", "medium", "high"]).default("medium"),
-  variance: float("variance"), // Calculated difference actual vs projected
-  variancePercentage: float("variancePercentage"),
+  variance: real("variance"), // Calculated difference actual vs projected
+  variancePercentage: real("variancePercentage"),
   notes: text("notes"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
@@ -2438,16 +2438,16 @@ export const revenueMetricsSnapshots = pgTable("revenue_metrics_snapshots", {
   id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
   userId: integer("userId").notNull(),
   snapshotDate: timestamp("snapshotDate").notNull(),
-  totalMRR: float("totalMRR").default(0),
-  totalARR: float("totalARR").default(0),
-  totalRevenueMTD: float("totalRevenueMTD").default(0),
-  totalRevenueYTD: float("totalRevenueYTD").default(0),
-  pipelineValue: float("pipelineValue").default(0),
-  weightedPipelineValue: float("weightedPipelineValue").default(0),
+  totalMRR: real("totalMRR").default(0),
+  totalARR: real("totalARR").default(0),
+  totalRevenueMTD: real("totalRevenueMTD").default(0),
+  totalRevenueYTD: real("totalRevenueYTD").default(0),
+  pipelineValue: real("pipelineValue").default(0),
+  weightedPipelineValue: real("weightedPipelineValue").default(0),
   activeCustomers: integer("activeCustomers").default(0),
   newCustomersMTD: integer("newCustomersMTD").default(0),
   churnedCustomersMTD: integer("churnedCustomersMTD").default(0),
-  averageRevenuePerCustomer: float("averageRevenuePerCustomer").default(0),
+  averageRevenuePerCustomer: real("averageRevenuePerCustomer").default(0),
   currency: varchar("currency", { length: 10 }).default("AED").notNull(),
   ventureBreakdown: json("ventureBreakdown"), // Revenue by venture
   streamBreakdown: json("streamBreakdown"), // Revenue by stream type
@@ -2574,7 +2574,7 @@ export const customerSurveyResponses = pgTable("customer_survey_responses", {
   // Sentiment and analysis
   overallSentiment: pgEnum("overallSentiment", ["very_negative", "negative", "neutral", "positive", "very_positive"]),
   willingnessToPay: pgEnum("willingnessToPay", ["definitely_not", "unlikely", "maybe", "likely", "definitely"]),
-  suggestedPricePoint: float("suggestedPricePoint"),
+  suggestedPricePoint: real("suggestedPricePoint"),
   currency: varchar("currency", { length: 10 }).default("AED"),
   
   // Key insights extracted
@@ -2599,13 +2599,13 @@ export const customerFeedbackAggregations = pgTable("customer_feedback_aggregati
   
   // Aggregate metrics
   totalResponses: integer("totalResponses").default(0),
-  averageSentimentScore: float("averageSentimentScore"), // -2 to +2
+  averageSentimentScore: real("averageSentimentScore"), // -2 to +2
   
   // Willingness to pay distribution
   wtpDistribution: json("wtpDistribution"), // { definitely_not: 5, unlikely: 10, ... }
-  averageSuggestedPrice: float("averageSuggestedPrice"),
-  priceRangeMin: float("priceRangeMin"),
-  priceRangeMax: float("priceRangeMax"),
+  averageSuggestedPrice: real("averageSuggestedPrice"),
+  priceRangeMin: real("priceRangeMin"),
+  priceRangeMax: real("priceRangeMax"),
   
   // Segment breakdowns
   sentimentBySegment: json("sentimentBySegment"), // { "Tech Professional": 1.5, ... }
@@ -2618,7 +2618,7 @@ export const customerFeedbackAggregations = pgTable("customer_feedback_aggregati
   
   // Recommendations
   goNoGoRecommendation: pgEnum("goNoGoRecommendation", ["strong_go", "go", "conditional", "no_go", "strong_no_go"]),
-  recommendedPricePoint: float("recommendedPricePoint"),
+  recommendedPricePoint: real("recommendedPricePoint"),
   keyRecommendations: json("keyRecommendations"), // Array of recommendation strings
   
   // Metadata
@@ -2707,7 +2707,7 @@ export const innovationValidationCheckpoints = pgTable("innovation_validation_ch
   focusGroupId: integer("focusGroupId"), // FK to focusGroupSessions
   
   // Validation results
-  validationScore: float("validationScore"), // 0-100
+  validationScore: real("validationScore"), // 0-100
   passedValidation: boolean("passedValidation"),
   
   // Decision
@@ -2762,7 +2762,7 @@ export const kpiCategories = pgTable("kpi_categories", {
   assessingPanels: json("assessingPanels"), // Array of panel names
   
   // Weighting
-  weight: float("weight").default(1.0), // For weighted averages
+  weight: real("weight").default(1.0), // For weighted averages
   priority: pgEnum("priority", ["critical", "high", "medium", "maintain"]).default("medium"),
   
   // Metadata
@@ -2798,7 +2798,7 @@ export const smeIndividualAssessments = pgTable("sme_individual_assessments", {
   
   // Individual score
   score: integer("score").notNull(), // 0-100 percentage
-  scoreOutOf10: float("scoreOutOf10"), // Converted to 10-point scale
+  scoreOutOf10: real("scoreOutOf10"), // Converted to 10-point scale
   
   // Rationale and evidence
   rationale: text("rationale").notNull(), // Why this score
@@ -2841,10 +2841,10 @@ export const assessmentOutliers = pgTable("assessment_outliers", {
   
   // Outlier details
   expertScore: integer("expertScore").notNull(),
-  panelAverage: float("panelAverage").notNull(),
-  overallAverage: float("overallAverage").notNull(),
-  deviation: float("deviation").notNull(), // How far from average
-  deviationPercentage: float("deviationPercentage").notNull(),
+  panelAverage: real("panelAverage").notNull(),
+  overallAverage: real("overallAverage").notNull(),
+  deviation: real("deviation").notNull(), // How far from average
+  deviationPercentage: real("deviationPercentage").notNull(),
   
   // Classification
   outlierType: pgEnum("outlierType", ["high", "low"]).notNull(), // Above or below average
@@ -2901,11 +2901,11 @@ export const panelAssessmentAggregations = pgTable("panel_assessment_aggregation
   categoryName: varchar("categoryName", { length: 200 }).notNull(),
   
   // Aggregated scores
-  averageScore: float("averageScore").notNull(),
-  medianScore: float("medianScore"),
+  averageScore: real("averageScore").notNull(),
+  medianScore: real("medianScore"),
   minScore: integer("minScore"),
   maxScore: integer("maxScore"),
-  standardDeviation: float("standardDeviation"),
+  standardDeviation: real("standardDeviation"),
   
   // Individual scores breakdown
   individualScores: json("individualScores"), // Array of { expertId, expertName, score }
@@ -2933,9 +2933,9 @@ export const kpiSnapshots = pgTable("kpi_snapshots", {
   snapshotDate: timestamp("snapshotDate").notNull(),
   
   // Overall scores
-  overallScore: float("overallScore").notNull(),
-  previousScore: float("previousScore"),
-  scoreChange: float("scoreChange"),
+  overallScore: real("overallScore").notNull(),
+  previousScore: real("previousScore"),
+  scoreChange: real("scoreChange"),
   
   // Category breakdown
   categoryScores: json("categoryScores").notNull(), // Array of { categoryNumber, name, score, change }
@@ -2954,8 +2954,8 @@ export const kpiSnapshots = pgTable("kpi_snapshots", {
   lowestScore: integer("lowestScore"),
   
   // Targets
-  targetScore: float("targetScore"),
-  gapToTarget: float("gapToTarget"),
+  targetScore: real("targetScore"),
+  gapToTarget: real("gapToTarget"),
   
   // Expert participation
   totalExpertsAssessed: integer("totalExpertsAssessed").default(0),
@@ -3082,7 +3082,7 @@ export const insightsRepository = pgTable("insights_repository", {
   products: json("products"), // Array of product names
   
   // Relevance
-  relevanceScore: float("relevanceScore").default(0.5), // 0-1 how relevant/important
+  relevanceScore: real("relevanceScore").default(0.5), // 0-1 how relevant/important
   confidenceLevel: pgEnum("confidenceLevel", ["low", "medium", "high", "verified"]).default("medium"),
   
   // Validation
@@ -3148,8 +3148,8 @@ export const externalResearchReferences = pgTable("external_research_references"
   ventures: json("ventures"), // Which ventures this relates to
   
   // Quality assessment
-  credibilityScore: float("credibilityScore").default(0.5), // 0-1
-  relevanceScore: float("relevanceScore").default(0.5), // 0-1
+  credibilityScore: real("credibilityScore").default(0.5), // 0-1
+  relevanceScore: real("relevanceScore").default(0.5), // 0-1
   
   // Linked insights
   linkedInsightIds: json("linkedInsightIds"), // Insights derived from this
@@ -3349,8 +3349,8 @@ export const workflowPatterns = pgTable("workflow_patterns", {
   averageDuration: integer("averageDuration"), // Average time to complete
   
   // Analysis
-  efficiencyScore: float("efficiencyScore"), // 0-1, how efficient this workflow is
-  improvementPotential: float("improvementPotential"), // 0-1, how much could be improved
+  efficiencyScore: real("efficiencyScore"), // 0-1, how efficient this workflow is
+  improvementPotential: real("improvementPotential"), // 0-1, how much could be improved
   
   // Status
   isAddressed: boolean("isAddressed").default(false),
@@ -3511,7 +3511,7 @@ export const qualityImprovementTickets = pgTable("quality_improvement_tickets", 
   
   // Priority
   priority: pgEnum("priority", ["low", "medium", "high", "critical"]).default("medium"),
-  impactScore: float("impactScore"), // Calculated from frequency and severity
+  impactScore: real("impactScore"), // Calculated from frequency and severity
   
   // Assignment
   assignedTo: varchar("assignedTo", { length: 200 }), // Team or person responsible
@@ -3543,7 +3543,7 @@ export const qualityMetricsSnapshots = pgTable("quality_metrics_snapshots", {
   // Overall metrics
   totalOutputs: integer("totalOutputs").default(0),
   scoredOutputs: integer("scoredOutputs").default(0),
-  averageScore: float("averageScore"),
+  averageScore: real("averageScore"),
   
   // Distribution
   scoreDistribution: json("scoreDistribution"), // { "1": 2, "2": 5, ... "10": 20 }
@@ -3553,8 +3553,8 @@ export const qualityMetricsSnapshots = pgTable("quality_metrics_snapshots", {
   scoresByIssueCategory: json("scoresByIssueCategory"), // Count of issues by category
   
   // Trends
-  previousAverageScore: float("previousAverageScore"),
-  scoreChange: float("scoreChange"),
+  previousAverageScore: real("previousAverageScore"),
+  scoreChange: real("scoreChange"),
   
   // Issues
   openTickets: integer("openTickets").default(0),
@@ -3581,7 +3581,7 @@ export const cosTrainingProgress = pgTable("cos_training_progress", {
   
   // Current level (1-5: Novice, Learning, Competent, Proficient, Expert)
   currentLevel: integer("currentLevel").default(1).notNull(),
-  trainingPercentage: float("trainingPercentage").default(20).notNull(), // 0-100
+  trainingPercentage: real("trainingPercentage").default(20).notNull(), // 0-100
   
   // Module tracking
   completedModules: json("completedModules"), // Array of completed module IDs
@@ -3658,7 +3658,7 @@ export const cosInteractionLog = pgTable("cos_interaction_log", {
   // Learning extraction
   extractedLearning: text("extractedLearning"), // What was learned from this
   learningCategory: varchar("learningCategory", { length: 100 }), // Category of learning
-  confidenceScore: float("confidenceScore").default(0.5), // How confident in the learning
+  confidenceScore: real("confidenceScore").default(0.5), // How confident in the learning
   
   // Processing status
   processed: boolean("processed").default(false), // Has this been processed for learning?
@@ -3698,7 +3698,7 @@ export const cosLearnedPatterns = pgTable("cos_learned_patterns", {
   examples: json("examples"), // Array of example interactions
   
   // Confidence and validation
-  confidenceScore: float("confidenceScore").default(0.5).notNull(), // 0-1
+  confidenceScore: real("confidenceScore").default(0.5).notNull(), // 0-1
   validatedByUser: boolean("validatedByUser").default(false),
   occurrenceCount: integer("occurrenceCount").default(1), // How many times observed
   
@@ -3747,7 +3747,7 @@ export const cosUserMentalModel = pgTable("cos_user_mental_model", {
   customTerminology: json("customTerminology"), // User-specific terms and meanings
   
   // Model confidence
-  overallConfidence: float("overallConfidence").default(0.2), // How confident in the model
+  overallConfidence: real("overallConfidence").default(0.2), // How confident in the model
   lastMajorUpdate: timestamp("lastMajorUpdate"),
   interactionsProcessed: integer("interactionsProcessed").default(0),
   
@@ -3784,13 +3784,13 @@ export const cosLearningMetrics = pgTable("cos_learning_metrics", {
   patternsInvalidated: integer("patternsInvalidated").default(0),
   
   // Performance metrics
-  accuracyScore: float("accuracyScore"), // How often COS gets it right
-  anticipationScore: float("anticipationScore"), // How well COS anticipates needs
-  satisfactionScore: float("satisfactionScore"), // User satisfaction
+  accuracyScore: real("accuracyScore"), // How often COS gets it right
+  anticipationScore: real("anticipationScore"), // How well COS anticipates needs
+  satisfactionScore: real("satisfactionScore"), // User satisfaction
   
   // Improvement tracking
-  previousAccuracyScore: float("previousAccuracyScore"),
-  accuracyChange: float("accuracyChange"),
+  previousAccuracyScore: real("previousAccuracyScore"),
+  accuracyChange: real("accuracyChange"),
   
   // Metadata
   createdAt: timestamp("createdAt").defaultNow().notNull(),
@@ -3966,7 +3966,7 @@ export const ragContexts = pgTable('rag_contexts', {
   content: text('content').notNull(),
   embedding: json('embedding'), // Vector embedding for similarity search
   metadata: json('metadata'),
-  relevanceScore: float('relevance_score'),
+  relevanceScore: real('relevance_score'),
   accessCount: integer('access_count').default(0),
   lastAccessed: timestamp('last_accessed'),
   expiresAt: timestamp('expires_at'),
@@ -4065,7 +4065,7 @@ export const qualityGateCriteria = pgTable("quality_gate_criteria", {
   gateName: varchar("gateName", { length: 100 }).notNull(),
   criteriaName: varchar("criteriaName", { length: 200 }).notNull(),
   description: text("description"),
-  weight: float("weight").default(1.0), // Importance weight
+  weight: real("weight").default(1.0), // Importance weight
   passingScore: integer("passingScore").default(70), // Minimum score to pass
   evaluationType: varchar("evaluationType", { length: 50 }).notNull(), // "automated", "manual", "hybrid"
   metadata: json("metadata"),
