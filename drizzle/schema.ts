@@ -1759,7 +1759,7 @@ export const preMortemSessions = pgTable("pre_mortem_sessions", {
   status: pgEnum("status", ["scheduled", "in_progress", "completed"]).default("scheduled").notNull(),
   completedAt: timestamp("completedAt"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-}}, (table) => ({
+}, (table) => ({
   userIdIdx: index("preMortemSessions_user_id_idx").on(table.userId),
   projectIdIdx: index("preMortemSessions_project_id_idx").on(table.projectId),
   createdAtIdx: index("preMortemSessions_created_at_idx").on(table.createdAt),
