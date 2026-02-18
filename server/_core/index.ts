@@ -33,6 +33,7 @@ import { createContext } from "./context";
 import { serveStatic, setupVite } from "./vite";
 import { apiRateLimit } from "./rateLimit";
 import { runMigrations } from "../migrations/run-migrations";
+import { applySecurityMiddleware } from "../middleware/security-headers";
 
 function isPortAvailable(port: number): Promise<boolean> {
   return new Promise(resolve => {
@@ -62,6 +63,9 @@ async function startServer() {
   
   // Trust proxy for rate limiting behind reverse proxy
   app.set('trust proxy', 1);
+  
+  // Apply security headers
+  applySecurityMiddleware(app);
   
   // Stripe webhook route - MUST be before body parser to get raw body
   app.post("/api/stripe/webhook", express.raw({ type: "application/json" }), async (req, res) => {
