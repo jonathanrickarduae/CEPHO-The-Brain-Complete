@@ -1,6 +1,7 @@
 import { router, protectedProcedure } from "../../_core/trpc";
 import { z } from "zod";
 import { moodService } from "../../services/mood";
+import { handleTRPCError } from "../../utils/error-handler";
 
 export const moodRouter = router({
   // Create a new mood entry
@@ -11,12 +12,16 @@ export const moodRouter = router({
       note: z.string().optional(),
     }))
     .mutation(async ({ ctx, input }) => {
-      const entry = await moodService.recordMood(ctx.user.id, {
-        score: input.score,
-        timeOfDay: input.timeOfDay,
-        note: input.note,
-      });
-      return entry;
+      try {
+        const entry = await moodService.recordMood(ctx.user.id, {
+          score: input.score,
+          timeOfDay: input.timeOfDay,
+          note: input.note,
+        });
+        return entry;
+      } catch (error) {
+        handleTRPCError(error, 'Mood.create');
+      }
     }),
 
   // Get mood history
@@ -26,14 +31,18 @@ export const moodRouter = router({
       days: z.number().optional(),
     }).optional())
     .query(async ({ ctx, input }) => {
-      const options: { limit?: number; startDate?: Date } = {};
-      if (input?.limit) options.limit = input.limit;
-      if (input?.days) {
-        const startDate = new Date();
-        startDate.setDate(startDate.getDate() - input.days);
-        options.startDate = startDate;
+      try {
+        const options: { limit?: number; startDate?: Date } = {};
+        if (input?.limit) options.limit = input.limit;
+        if (input?.days) {
+          const startDate = new Date();
+          startDate.setDate(startDate.getDate() - input.days);
+          options.startDate = startDate;
+        }
+        return await moodService.getMoodHistory(ctx.user.id, input?.limit, input?.days);
+      } catch (error) {
+        handleTRPCError(error, 'Mood.history');
       }
-      return moodService.getMoodHistory(ctx.user.id, input?.limit, input?.days);
     }),
 
   // Get mood trends/analytics
@@ -42,7 +51,11 @@ export const moodRouter = router({
       days: z.number().optional(),
     }).optional())
     .query(async ({ ctx, input }) => {
-      return moodService.getMoodTrends(ctx.user.id, input?.days || 30);
+      try {
+        return await moodService.getMoodTrends(ctx.user.id, input?.days || 30);
+      } catch (error) {
+        handleTRPCError(error, 'Mood.trends');
+      }
     }),
 
   // Check if mood was already recorded for a time period today
@@ -51,6 +64,10 @@ export const moodRouter = router({
       timeOfDay: z.enum(['morning', 'afternoon', 'evening']),
     }))
     .query(async ({ ctx, input }) => {
-      return moodService.getLastMoodCheck(ctx.user.id, input.timeOfDay);
+      try {
+        return await moodService.getLastMoodCheck(ctx.user.id, input.timeOfDay);
+      } catch (error) {
+        handleTRPCError(error, 'Mood.lastCheck');
+      }
     }),
 });

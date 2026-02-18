@@ -1,70 +1,87 @@
 /**
  * Genesis Router
  * 
- * Auto-extracted from monolithic routers.ts
+ * Handles project genesis records
  * 
  * @module routers/domains/genesis
  */
 
-import { router } from "../../_core/trpc";
+import { router, protectedProcedure } from "../../_core/trpc";
 import { z } from "zod";
 import { projectService } from "../../services/project";
+import { handleTRPCError } from "../../utils/error-handler";
 
 export const genesisRouter = router({
     list: protectedProcedure.query(async ({ ctx }) => {
-      return getProjectGenesisRecords(ctx.user.id);
+      try {
+        const { getProjectGenesisRecords } = await import('../../db');
+        return await getProjectGenesisRecords(ctx.user.id);
+      } catch (error) {
+        handleTRPCError(error, 'Genesis.list');
+      }
     }),
 
     getById: protectedProcedure
       .input(z.object({ id: z.number() }))
       .query(async ({ ctx, input }) => {
-        const projects = await getProjectGenesisRecords(ctx.user.id);
-        return projects.find((p: any) => p.id === input.id) || null;
+        try {
+          const { getProjectGenesisRecords } = await import('../../db');
+          const projects = await getProjectGenesisRecords(ctx.user.id);
+          return projects.find((p: any) => p.id === input.id) || null;
+        } catch (error) {
+          handleTRPCError(error, 'Genesis.getById');
+        }
       }),
 
     getProjectData: protectedProcedure
       .input(z.object({ projectId: z.string() }))
       .query(async ({ ctx, input }) => {
-        // Fetch project data for presentation blueprint
-        const projects = await getProjectGenesisRecords(ctx.user.id);
-        const project = projects.find((p: any) => p.id.toString() === input.projectId || p.name.toLowerCase().includes(input.projectId.toLowerCase()));
-        
-        if (!project) return null;
-        
-        // Return structured data for presentation
-        return {
-          id: project.id,
-          name: project.name,
-          type: project.type,
-          description: project.description,
-          counterparty: project.counterparty,
-          dealValue: project.dealValue,
-          stage: project.stage,
-          status: project.status,
-          // Add default presentation data structure
-          presentationData: {
-            companyName: project.name,
-            tagline: project.description || `${project.type} opportunity`,
-            problem: `Market opportunity in ${project.type} sector`,
-            solution: `Strategic ${project.type} with ${project.counterparty || 'target company'}`,
-            market: {
-              tam: project.dealValue ? `$${(project.dealValue * 10).toLocaleString()}` : 'TBD',
-              sam: project.dealValue ? `$${(project.dealValue * 3).toLocaleString()}` : 'TBD',
-              som: project.dealValue ? `$${project.dealValue.toLocaleString()}` : 'TBD',
-              growth: '15% CAGR'
-            },
-            traction: {
-              stage: project.stage,
-              status: project.status,
-              probability: project.probability
-            },
-            ask: {
-              amount: project.dealValue ? `$${project.dealValue.toLocaleString()}` : 'TBD',
-              stage: project.stage,
-              useOfFunds: ['Strategic Investment', 'Growth Capital', 'Market Expansion']
+        try {
+          const { getProjectGenesisRecords } = await import('../../db');
+          
+          // Fetch project data for presentation blueprint
+          const projects = await getProjectGenesisRecords(ctx.user.id);
+          const project = projects.find((p: any) => p.id.toString() === input.projectId || p.name.toLowerCase().includes(input.projectId.toLowerCase()));
+          
+          if (!project) return null;
+          
+          // Return structured data for presentation
+          return {
+            id: project.id,
+            name: project.name,
+            type: project.type,
+            description: project.description,
+            counterparty: project.counterparty,
+            dealValue: project.dealValue,
+            stage: project.stage,
+            status: project.status,
+            // Add default presentation data structure
+            presentationData: {
+              companyName: project.name,
+              tagline: project.description || `${project.type} opportunity`,
+              problem: `Market opportunity in ${project.type} sector`,
+              solution: `Strategic ${project.type} with ${project.counterparty || 'target company'}`,
+              market: {
+                tam: project.dealValue ? `$${(project.dealValue * 10).toLocaleString()}` : 'TBD',
+                sam: project.dealValue ? `$${(project.dealValue * 3).toLocaleString()}` : 'TBD',
+                som: project.dealValue ? `$${project.dealValue.toLocaleString()}` : 'TBD',
+                growth: '15% CAGR'
+              },
+              traction: {
+                stage: project.stage,
+                status: project.status,
+                probability: project.probability
+              },
+              ask: {
+                amount: project.dealValue ? `$${project.dealValue.toLocaleString()}` : 'TBD',
+                stage: project.stage,
+                useOfFunds: ['Strategic Investment', 'Growth Capital', 'Market Expansion']
+              }
             }
-          }
-        };
+          };
+        } catch (error) {
+          handleTRPCError(error, 'Genesis.getProjectData');
+        }
       }),
 
     create: protectedProcedure
@@ -78,19 +95,24 @@ export const genesisRouter = router({
         expectedCloseDate: z.date().optional(),
       }))
       .mutation(async ({ ctx, input }) => {
-        return createProjectGenesis({
-          userId: ctx.user.id,
-          name: input.name,
-          type: input.type,
-          counterparty: input.counterparty,
-          dealValue: input.dealValue,
-          currency: input.currency || 'USD',
-          description: input.description,
-          expectedCloseDate: input.expectedCloseDate,
-          stage: 'discovery',
-          status: 'active',
-          probability: 50,
-        });
+        try {
+          const { createProjectGenesis } = await import('../../db');
+          return await createProjectGenesis({
+            userId: ctx.user.id,
+            name: input.name,
+            type: input.type,
+            counterparty: input.counterparty,
+            dealValue: input.dealValue,
+            currency: input.currency || 'USD',
+            description: input.description,
+            expectedCloseDate: input.expectedCloseDate,
+            stage: 'discovery',
+            status: 'active',
+            probability: 50,
+          });
+        } catch (error) {
+          handleTRPCError(error, 'Genesis.create');
+        }
       }),
 
     update: protectedProcedure
@@ -102,8 +124,13 @@ export const genesisRouter = router({
         notes: z.string().optional(),
       }))
       .mutation(async ({ input }) => {
-        const { id, ...data } = input;
-        await updateProjectGenesis(id, data);
-        return { success: true };
+        try {
+          const { updateProjectGenesis } = await import('../../db');
+          const { id, ...data } = input;
+          await updateProjectGenesis(id, data);
+          return { success: true };
+        } catch (error) {
+          handleTRPCError(error, 'Genesis.update');
+        }
       }),
 });
