@@ -266,9 +266,9 @@ export const conversations = pgTable("conversations", {
   metadata: json("metadata"), // Store additional context like mood, voice input, etc.
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 }, (table) => ({
-  idxIdx: index("conversations_user_id_idx").on(table.userId),
-  idxIdx: index("conversations_created_at_idx").on(table.createdAt),
-  idxIdx: index("conversations_user_created_idx").on(table.userId, table.createdAt),
+  userIdIdx: index("conversations_user_id_idx").on(table.userId),
+  createdAtIdx: index("conversations_created_at_idx").on(table.createdAt),
+  userCreatedIdx: index("conversations_user_created_idx").on(table.userId, table.createdAt),
 }));
 
 export type Conversation = typeof conversations.$inferSelect;
@@ -398,12 +398,11 @@ export const wellnessScores = pgTable("wellness_scores", {
   factors: json("factors"), // Breakdown of contributing factors
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 }, (table) => ({
-  idxIdx: index("wellnessScores_user_id_idx").on(table.userId),
-  idxIdx: index("wellnessScores_created_at_idx").on(table.createdAt),
-  idxIdx: index("wellnessScores_user_created_idx").on(table.userId, table.createdAt),
+  userIdIdx: index("wellnessScores_user_id_idx").on(table.userId),
+  createdAtIdx: index("wellnessScores_created_at_idx").on(table.createdAt),
+  userCreatedIdx: index("wellnessScores_user_created_idx").on(table.userId, table.createdAt),
 }));
-
-export type WellnessScore = typeof wellnessScores.$inferSelect;
+export type WellnessScore = typeof wellnessScores.$inferSelect;;
 export type InsertWellnessScore = typeof wellnessScores.$inferInsert;
 
 /**
@@ -1760,13 +1759,12 @@ export const preMortemSessions = pgTable("pre_mortem_sessions", {
   status: pgEnum("status", ["scheduled", "in_progress", "completed"]).default("scheduled").notNull(),
   completedAt: timestamp("completedAt"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-}, (table) => ({
-  idxIdx: index("preMortemSessions_user_id_idx").on(table.userId),
-  idxIdx: index("preMortemSessions_project_id_idx").on(table.projectId),
-  idxIdx: index("preMortemSessions_created_at_idx").on(table.createdAt),
-  idxIdx: index("preMortemSessions_user_created_idx").on(table.userId, table.createdAt),
+}}, (table) => ({
+  userIdIdx: index("preMortemSessions_user_id_idx").on(table.userId),
+  projectIdIdx: index("preMortemSessions_project_id_idx").on(table.projectId),
+  createdAtIdx: index("preMortemSessions_created_at_idx").on(table.createdAt),
+  userCreatedIdx: index("preMortemSessions_user_created_idx").on(table.userId, table.createdAt),
 }));
-
 export type PreMortemSession = typeof preMortemSessions.$inferSelect;
 export type InsertPreMortemSession = typeof preMortemSessions.$inferInsert;
 
