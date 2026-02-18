@@ -1,7 +1,7 @@
 /**
- * Expertchat Router
+ * Expert Chat Router
  * 
- * Auto-extracted from monolithic routers.ts
+ * Handles expert chat sessions and messages using service layer
  * 
  * @module routers/domains/expert-chat
  */
@@ -9,17 +9,9 @@
 import { router, protectedProcedure } from "../../_core/trpc";
 import { z } from "zod";
 import { expertService } from "../../services/expert";
-import { 
-  getActiveExpertChatSession,
-  createExpertChatSession,
-  getExpertChatSessions,
-  getExpertChatMessages,
-  createExpertChatMessage,
-  updateExpertChatSession,
-  getRecentExpertMessages,
-  createExpertConversation
-} from "../../db";
+import { handleTRPCError, assertExists } from "../../utils/error-handler";
 import { chatWithExpert } from "../../services/expert-chat.service";
+import { createExpertConversation } from "../../db";
 
 export const expertChatRouter = router({
     // Start or get active chat session
@@ -31,21 +23,26 @@ export const expertChatRouter = router({
         projectId: z.number().optional(),
       }))
       .mutation(async ({ ctx, input }) => {
-        // Check for existing active session
-        const existing = await getActiveExpertChatSession(ctx.user.id, input.expertId);
-        if (existing) {
-          return existing;
+        try {
+          // Check for existing active session
+          const existingSessions = await expertService.getExpertChatSessions(
+            ctx.user.id,
+            input.expertId
+          );
+          
+          const activeSession = existingSessions.find(s => s.status === 'active');
+          if (activeSession) {
+            return activeSession;
+          }
+          
+          // Create new session
+          return await expertService.createChatSession(ctx.user.id, {
+            expertId: input.expertId,
+            topic: input.expertName,
+          });
+        } catch (error) {
+          handleTRPCError(error, 'ExpertChat.startSession');
         }
-        
-        // Create new session
-        return createExpertChatSession({
-          userId: ctx.user.id,
-          expertId: input.expertId,
-          expertName: input.expertName,
-          systemPrompt: input.systemPrompt,
-          projectId: input.projectId,
-          status: 'active',
-        });
       }),
 
     // Get all sessions for user
@@ -55,7 +52,14 @@ export const expertChatRouter = router({
         limit: z.number().optional(),
       }).optional())
       .query(async ({ ctx, input }) => {
-        return getExpertChatSessions(ctx.user.id, input);
+        try {
+          if (input?.expertId) {
+            return await expertService.getExpertChatSessions(ctx.user.id, input.expertId);
+          }
+          return await expertService.getUserChatSessions(ctx.user.id);
+        } catch (error) {
+          handleTRPCError(error, 'ExpertChat.listSessions');
+        }
       }),
 
     // Get messages for a session
@@ -64,8 +68,19 @@ export const expertChatRouter = router({
         sessionId: z.number(),
         limit: z.number().optional(),
       }))
-      .query(async ({ input }) => {
-        return getExpertChatMessages(input.sessionId, { limit: input.limit });
+      .query(async ({ ctx, input }) => {
+        try {
+          const messages = await expertService.getChatMessages(ctx.user.id, input.sessionId);
+          
+          // Apply limit if specified
+          if (input.limit) {
+            return messages.slice(-input.limit);
+          }
+          
+          return messages;
+        } catch (error) {
+          handleTRPCError(error, 'ExpertChat.getMessages');
+        }
       }),
 
     // Send a message and get AI response
@@ -77,50 +92,58 @@ export const expertChatRouter = router({
         message: z.string(),
       }))
       .mutation(async ({ ctx, input }) => {
-        // Store user message
-        await createExpertChatMessage({
-          sessionId: input.sessionId,
-          role: 'user',
-          content: input.message,
-        });
+        try {
+          // Verify session exists and belongs to user
+          const session = await expertService.getChatSession(ctx.user.id, input.sessionId);
+          assertExists(session, 'Chat session', input.sessionId);
 
-        // Get recent messages for context
-        const recentMessages = await getExpertChatMessages(input.sessionId, { limit: 20 });
-        const conversationHistory = recentMessages.map(m => ({
-          role: m.role as 'user' | 'assistant' | 'system',
-          content: m.content,
-        }));
+          // Store user message
+          await expertService.addChatMessage(ctx.user.id, {
+            sessionId: input.sessionId,
+            role: 'user',
+            content: input.message,
+          });
 
-        // Get AI response
-        const response = await chatWithExpert({
-          expertId: input.expertId,
-          expertData: input.expertData,
-          message: input.message,
-          conversationHistory,
-        });
+          // Get recent messages for context
+          const recentMessages = await expertService.getChatMessages(ctx.user.id, input.sessionId);
+          const conversationHistory = recentMessages.slice(-20).map(m => ({
+            role: m.role as 'user' | 'assistant' | 'system',
+            content: m.content,
+          }));
 
-        // Store expert message
-        await createExpertChatMessage({
-          sessionId: input.sessionId,
-          role: 'expert',
-          content: response.response,
-        });
+          // Get AI response
+          const response = await chatWithExpert({
+            expertId: input.expertId,
+            expertData: input.expertData,
+            message: input.message,
+            conversationHistory,
+          });
 
-        // Also store in expert evolution system for learning
-        await createExpertConversation({
-          userId: ctx.user.id,
-          expertId: input.expertId,
-          role: 'user',
-          content: input.message,
-        });
-        await createExpertConversation({
-          userId: ctx.user.id,
-          expertId: input.expertId,
-          role: 'expert',
-          content: response.response,
-        });
+          // Store expert message
+          await expertService.addChatMessage(ctx.user.id, {
+            sessionId: input.sessionId,
+            role: 'assistant',
+            content: response.response,
+          });
 
-        return response;
+          // Also store in expert evolution system for learning
+          await createExpertConversation({
+            userId: ctx.user.id,
+            expertId: input.expertId,
+            role: 'user',
+            content: input.message,
+          });
+          await createExpertConversation({
+            userId: ctx.user.id,
+            expertId: input.expertId,
+            role: 'expert',
+            content: response.response,
+          });
+
+          return response;
+        } catch (error) {
+          handleTRPCError(error, 'ExpertChat.sendMessage');
+        }
       }),
 
     // End a chat session
@@ -129,12 +152,15 @@ export const expertChatRouter = router({
         sessionId: z.number(),
         summary: z.string().optional(),
       }))
-      .mutation(async ({ input }) => {
-        await updateExpertChatSession(input.sessionId, {
-          status: 'completed',
-          summary: input.summary,
-        });
-        return { success: true };
+      .mutation(async ({ ctx, input }) => {
+        try {
+          const session = await expertService.completeChatSession(ctx.user.id, input.sessionId);
+          assertExists(session, 'Chat session', input.sessionId);
+          
+          return { success: true };
+        } catch (error) {
+          handleTRPCError(error, 'ExpertChat.endSession');
+        }
       }),
 
     // Get recent messages across all sessions for an expert (for context)
@@ -144,6 +170,24 @@ export const expertChatRouter = router({
         limit: z.number().optional(),
       }))
       .query(async ({ ctx, input }) => {
-        return getRecentExpertMessages(ctx.user.id, input.expertId, input.limit || 20);
+        try {
+          const sessions = await expertService.getExpertChatSessions(ctx.user.id, input.expertId);
+          const allMessages: any[] = [];
+          
+          // Get messages from all sessions
+          for (const session of sessions) {
+            const messages = await expertService.getChatMessages(ctx.user.id, session.id);
+            allMessages.push(...messages);
+          }
+          
+          // Sort by timestamp and limit
+          const sorted = allMessages.sort((a, b) => 
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+          );
+          
+          return sorted.slice(0, input.limit || 20);
+        } catch (error) {
+          handleTRPCError(error, 'ExpertChat.getRecentContext');
+        }
       }),
 });
