@@ -1,14 +1,15 @@
 /**
- * Subscriptiontracker Router
+ * Subscription Tracker Router
  * 
- * Auto-extracted from monolithic routers.ts
+ * Handles subscription management with error handling
  * 
  * @module routers/domains/subscription-tracker
  */
 
-import { router } from "../../_core/trpc";
+import { router, protectedProcedure } from "../../_core/trpc";
 import { z } from "zod";
 import { integrationService } from "../../services/integration";
+import { handleTRPCError, assertExists } from "../../utils/error-handler";
 
 export const subscriptionTrackerRouter = router({
     // Get all subscriptions for user
@@ -18,20 +19,32 @@ export const subscriptionTrackerRouter = router({
         category: z.string().optional(),
       }).optional())
       .query(async ({ ctx, input }) => {
-        const { getSubscriptions } = await import('../../db');
-        return getSubscriptions(ctx.user.id, input);
+        try {
+          const { getSubscriptions } = await import('../../db');
+          return await getSubscriptions(ctx.user.id, input);
+        } catch (error) {
+          handleTRPCError(error, 'SubscriptionTracker.getAll');
+        }
       }),
 
     // Get subscription by ID
     getById: protectedProcedure
       .input(z.object({ id: z.number() }))
       .query(async ({ ctx, input }) => {
-        const { getSubscriptionById } = await import('../../db');
-        const sub = await getSubscriptionById(input.id);
-        if (!sub || sub.userId !== ctx.user.id) {
-          throw new Error('Subscription not found');
+        try {
+          const { getSubscriptionById } = await import('../../db');
+          const sub = await getSubscriptionById(input.id);
+          
+          assertExists(sub, 'Subscription', input.id);
+          
+          if (sub.userId !== ctx.user.id) {
+            throw new Error('Not authorized to view this subscription');
+          }
+          
+          return sub;
+        } catch (error) {
+          handleTRPCError(error, 'SubscriptionTracker.getById');
         }
-        return sub;
       }),
 
     // Create a new subscription
@@ -54,12 +67,16 @@ export const subscriptionTrackerRouter = router({
         notes: z.string().optional(),
       }))
       .mutation(async ({ ctx, input }) => {
-        const { createSubscription } = await import('../../db');
-        const id = await createSubscription({
-          ...input,
-          userId: ctx.user.id,
-        });
-        return { id };
+        try {
+          const { createSubscription } = await import('../../db');
+          const id = await createSubscription({
+            ...input,
+            userId: ctx.user.id,
+          });
+          return { id };
+        } catch (error) {
+          handleTRPCError(error, 'SubscriptionTracker.create');
+        }
       }),
 
     // Update a subscription
@@ -83,63 +100,99 @@ export const subscriptionTrackerRouter = router({
         notes: z.string().optional(),
       }))
       .mutation(async ({ ctx, input }) => {
-        const { getSubscriptionById, updateSubscription } = await import('../../db');
-        const sub = await getSubscriptionById(input.id);
-        if (!sub || sub.userId !== ctx.user.id) {
-          throw new Error('Subscription not found');
+        try {
+          const { getSubscriptionById, updateSubscription } = await import('../../db');
+          const sub = await getSubscriptionById(input.id);
+          
+          assertExists(sub, 'Subscription', input.id);
+          
+          if (sub.userId !== ctx.user.id) {
+            throw new Error('Not authorized to update this subscription');
+          }
+          
+          const { id, ...data } = input;
+          await updateSubscription(id, data);
+          return { success: true };
+        } catch (error) {
+          handleTRPCError(error, 'SubscriptionTracker.update');
         }
-        const { id, ...data } = input;
-        await updateSubscription(id, data);
-        return { success: true };
       }),
 
     // Delete a subscription
     delete: protectedProcedure
       .input(z.object({ id: z.number() }))
       .mutation(async ({ ctx, input }) => {
-        const { getSubscriptionById, deleteSubscription } = await import('../../db');
-        const sub = await getSubscriptionById(input.id);
-        if (!sub || sub.userId !== ctx.user.id) {
-          throw new Error('Subscription not found');
+        try {
+          const { getSubscriptionById, deleteSubscription } = await import('../../db');
+          const sub = await getSubscriptionById(input.id);
+          
+          assertExists(sub, 'Subscription', input.id);
+          
+          if (sub.userId !== ctx.user.id) {
+            throw new Error('Not authorized to delete this subscription');
+          }
+          
+          await deleteSubscription(input.id);
+          return { success: true };
+        } catch (error) {
+          handleTRPCError(error, 'SubscriptionTracker.delete');
         }
-        await deleteSubscription(input.id);
-        return { success: true };
       }),
 
     // Get subscription summary
     getSummary: protectedProcedure
       .query(async ({ ctx }) => {
-        const { getSubscriptionSummary } = await import('../../db');
-        return getSubscriptionSummary(ctx.user.id);
+        try {
+          const { getSubscriptionSummary } = await import('../../db');
+          return await getSubscriptionSummary(ctx.user.id);
+        } catch (error) {
+          handleTRPCError(error, 'SubscriptionTracker.getSummary');
+        }
       }),
 
     // Get cost history for trend chart
     getCostHistory: protectedProcedure
       .input(z.object({ months: z.number().min(1).max(24).default(12) }).optional())
       .query(async ({ ctx, input }) => {
-        const { getSubscriptionCostHistory } = await import('../../db');
-        return getSubscriptionCostHistory(ctx.user.id, input?.months || 12);
+        try {
+          const { getSubscriptionCostHistory } = await import('../../db');
+          return await getSubscriptionCostHistory(ctx.user.id, input?.months || 12);
+        } catch (error) {
+          handleTRPCError(error, 'SubscriptionTracker.getCostHistory');
+        }
       }),
 
     // Get upcoming renewal reminders
     getUpcomingRenewals: protectedProcedure
       .input(z.object({ daysAhead: z.number().min(1).max(90).default(30) }).optional())
       .query(async ({ ctx, input }) => {
-// //         const { getUpcomingRenewals } = await import('../../services/subscriptionReminderService');
-        return getUpcomingRenewals(ctx.user.id, input?.daysAhead || 30);
+        try {
+          const { getUpcomingRenewals } = await import('../../db');
+          return await getUpcomingRenewals(ctx.user.id, input?.daysAhead || 30);
+        } catch (error) {
+          handleTRPCError(error, 'SubscriptionTracker.getUpcomingRenewals');
+        }
       }),
 
     // Get renewal summary (count, total cost, next renewal)
     getRenewalSummary: protectedProcedure
       .query(async ({ ctx }) => {
-//         const { getRenewalSummary } = await import('../../services/subscriptionReminderService');
-        return getRenewalSummary(ctx.user.id);
+        try {
+          const { getRenewalSummary } = await import('../../db');
+          return await getRenewalSummary(ctx.user.id);
+        } catch (error) {
+          handleTRPCError(error, 'SubscriptionTracker.getRenewalSummary');
+        }
       }),
 
     // Manually trigger reminder check and send notifications
     sendRenewalReminders: protectedProcedure
       .mutation(async ({ ctx }) => {
-//         const { checkAndSendReminders } = await import('../../services/subscriptionReminderService');
-        return checkAndSendReminders(ctx.user.id);
+        try {
+          const { checkAndSendReminders } = await import('../../db');
+          return await checkAndSendReminders(ctx.user.id);
+        } catch (error) {
+          handleTRPCError(error, 'SubscriptionTracker.sendRenewalReminders');
+        }
       }),
 });
