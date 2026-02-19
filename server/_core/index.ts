@@ -35,6 +35,7 @@ import { apiRateLimit } from "./rateLimit";
 import { runMigrations } from "../migrations/run-migrations";
 import { applySecurityMiddleware } from "../middleware/security-headers";
 import { metricsHandler, metricsMiddleware } from "../services/metrics/prometheus";
+import cookieParser from "cookie-parser";
 
 function isPortAvailable(port: number): Promise<boolean> {
   return new Promise(resolve => {
@@ -80,6 +81,7 @@ async function startServer() {
   // Configure body parser with larger size limit for file uploads
   app.use(express.json({ limit: "50mb" }));
   app.use(express.urlencoded({ limit: "50mb", extended: true }));
+  app.use(cookieParser());
   
   // Prometheus metrics endpoint (no rate limiting)
   app.get("/api/metrics", metricsHandler);
@@ -87,8 +89,12 @@ async function startServer() {
   // Apply rate limiting to ALL routes (not just /api)
   app.use(apiRateLimit);
   
-  // Google OAuth routes
-  registerGoogleOAuthRoutes(app);
+  // Google OAuth routes (DISABLED - using email/password auth)
+  // registerGoogleOAuthRoutes(app);
+  
+  // Simple email/password authentication
+  const simpleAuthRoutes = await import("../routes/simple-auth");
+  app.use("/api/auth", simpleAuthRoutes.default);
   
   // Workflow API routes
   const workflowRoutes = await import("../routes/workflows");
