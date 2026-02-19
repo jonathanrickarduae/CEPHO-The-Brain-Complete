@@ -11,7 +11,10 @@
     "lint": "tsc --noEmit",
     "format": "prettier --write .",
     "test": "vitest run",
-    "db:push": "drizzle-kit generate && drizzle-kit migrate",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "tsx server/db/migrate.ts",
+    "db:push": "pnpm db:generate && pnpm db:migrate",
+    "db:studio": "drizzle-kit studio",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage"
   },

@@ -12,7 +12,7 @@ export async function runMigrations(): Promise<void> {
   try {
     const db = await getDb();
     if (!db) {
-      console.error('[Migrations] Database not available');
+      console.warn('[Migrations] Database not available, skipping migrations');
       return;
     }
 
@@ -65,6 +65,7 @@ export async function runMigrations(): Promise<void> {
 
     console.log('[Migrations] ✅ Migrations complete');
   } catch (error: any) {
-    console.error('[Migrations] Failed to run migrations:', error.message);
+    console.warn('[Migrations] Failed to run migrations:', error.message);
+    console.warn('[Migrations] Continuing server startup despite migration errors');
   }
 }
