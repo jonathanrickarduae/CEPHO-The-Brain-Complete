@@ -30,8 +30,9 @@ import { createExpressMiddleware } from "@trpc/server/adapters/express";
 import { registerGoogleOAuthRoutes } from "./google-oauth";
 // import { appRouter } from "../routers"; // FULL ROUTER - all functionality restored
 // import { appRouter } from "../routers-minimal"; // PHASE 0 - emergency minimal
-import { appRouter } from "../routers-phase1"; // PHASE 1 - core inline routers (STABLE)
+// import { appRouter } from "../routers-phase1"; // PHASE 1 - core inline routers (STABLE)
 // import { appRouter } from "../routers-phase2"; // PHASE 2 - core + domain routers
+import { appRouter } from "../routers-batch1"; // BATCH 1 - Testing first 5 domain routers
 import { createContext } from "./context";
 import { serveStatic, setupVite } from "./vite";
 import { apiRateLimit } from "./rateLimit";
