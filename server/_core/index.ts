@@ -65,8 +65,11 @@ async function startServer() {
   // Trust proxy for rate limiting behind reverse proxy
   app.set('trust proxy', 1);
   
-  // Apply security headers
+  // CRITICAL: Security headers MUST be first
   applySecurityMiddleware(app);
+  
+  // Apply metrics middleware (before routes)
+  app.use(metricsMiddleware);
   
   // Stripe webhook route - MUST be before body parser to get raw body
   app.post("/api/stripe/webhook", express.raw({ type: "application/json" }), async (req, res) => {
@@ -78,14 +81,11 @@ async function startServer() {
   app.use(express.json({ limit: "50mb" }));
   app.use(express.urlencoded({ limit: "50mb", extended: true }));
   
-  // Apply metrics middleware
-  app.use(metricsMiddleware);
-  
-  // Prometheus metrics endpoint
+  // Prometheus metrics endpoint (no rate limiting)
   app.get("/api/metrics", metricsHandler);
   
-  // Apply rate limiting to API routes
-  app.use("/api", apiRateLimit);
+  // Apply rate limiting to ALL routes (not just /api)
+  app.use(apiRateLimit);
   
   // Google OAuth routes
   registerGoogleOAuthRoutes(app);
