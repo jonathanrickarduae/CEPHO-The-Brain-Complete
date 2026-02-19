@@ -32,7 +32,7 @@ import { registerGoogleOAuthRoutes } from "./google-oauth";
 // import { appRouter } from "../routers-minimal"; // PHASE 0 - emergency minimal
 // import { appRouter } from "../routers-phase1"; // PHASE 1 - core inline routers (STABLE)
 // import { appRouter } from "../routers-phase2"; // PHASE 2 - core + domain routers
-import { appRouter } from "../routers-batch3"; // BATCH 3 - ALL 16 domain routers
+import { appRouter } from "../routers-batch4"; // BATCH 4 - Domain + first 7 non-domain routers
 import { createContext } from "./context";
 import { serveStatic, setupVite } from "./vite";
 import { apiRateLimit } from "./rateLimit";
