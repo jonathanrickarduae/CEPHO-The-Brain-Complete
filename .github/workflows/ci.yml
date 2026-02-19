@@ -152,7 +152,7 @@ jobs:
         run: pnpm install --frozen-lockfile
       
       - name: Run unit tests
-        run: pnpm run test || echo "⚠️ Tests not configured yet"
+        run: pnpm run test
         env:
           DATABASE_URL: postgresql://postgres:postgres@localhost:5432/test_db
           NODE_ENV: test
