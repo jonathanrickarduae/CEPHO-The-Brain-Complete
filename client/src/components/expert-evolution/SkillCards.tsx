@@ -5,9 +5,11 @@
 
 import { trpc } from "@/lib/trpc";
 import { useState } from "react";
+import { useLocation } from "wouter";
 
 export default function SkillCards() {
   const [activeSkill, setActiveSkill] = useState<string | null>(null);
+  const [, setLocation] = useLocation();
 
   const skills = [
     {
@@ -16,6 +18,7 @@ export default function SkillCards() {
       icon: "🚀",
       description: "6-phase venture development",
       color: "from-blue-500 to-cyan-500",
+      path: "/project-genesis",
     },
     {
       id: "ai-sme",
@@ -23,6 +26,7 @@ export default function SkillCards() {
       icon: "🧠",
       description: "310 expert consultations",
       color: "from-purple-500 to-pink-500",
+      path: "/ai-experts",
     },
     {
       id: "qms",
@@ -30,6 +34,7 @@ export default function SkillCards() {
       icon: "✅",
       description: "QMS validation & compliance",
       color: "from-green-500 to-emerald-500",
+      path: "/workflow",
     },
     {
       id: "due-diligence",
@@ -37,6 +42,7 @@ export default function SkillCards() {
       icon: "🔍",
       description: "Structured DD process",
       color: "from-orange-500 to-red-500",
+      path: "/workflow",
     },
     {
       id: "financial",
@@ -44,6 +50,7 @@ export default function SkillCards() {
       icon: "💰",
       description: "Investor-ready models",
       color: "from-yellow-500 to-orange-500",
+      path: "/workflow",
     },
     {
       id: "data-room",
@@ -51,6 +58,7 @@ export default function SkillCards() {
       icon: "🔐",
       description: "Secure document management",
       color: "from-indigo-500 to-blue-500",
+      path: "/vault",
     },
     {
       id: "digital-twin",
@@ -58,8 +66,15 @@ export default function SkillCards() {
       icon: "👤",
       description: "Your AI Chief of Staff",
       color: "from-pink-500 to-rose-500",
+      path: "/chief-of-staff",
     },
   ];
+
+  const handleLaunch = (e: React.MouseEvent, path: string, skillId: string) => {
+    e.stopPropagation();
+    setActiveSkill(skillId);
+    setLocation(path);
+  };
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
@@ -83,7 +98,10 @@ export default function SkillCards() {
             <p className="text-sm text-muted-foreground">{skill.description}</p>
 
             {/* Action button */}
-            <button className="mt-4 w-full px-4 py-2 bg-primary text-primary-foreground rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <button 
+              onClick={(e) => handleLaunch(e, skill.path, skill.id)}
+              className="mt-4 w-full px-4 py-2 bg-primary text-primary-foreground rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:bg-primary/90"
+            >
               Launch
             </button>
           </div>

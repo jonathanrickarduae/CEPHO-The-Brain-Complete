@@ -277,7 +277,23 @@ export default function Library() {
                 >
                   <Eye className="w-4 h-4" />
                 </Button>
-                <Button variant="ghost" size="icon">
+                <Button 
+                  variant="ghost" 
+                  size="icon"
+                  className="hover:bg-pink-500/20 hover:text-pink-400"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    // Create a dummy download for demo purposes
+                    const blob = new Blob([`This is a sample document: ${doc.name}`], { type: 'text/plain' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = doc.name;
+                    a.click();
+                    URL.revokeObjectURL(url);
+                    toast.success(`Downloaded: ${doc.name}`);
+                  }}
+                >
                   <Download className="w-4 h-4" />
                 </Button>
               </div>

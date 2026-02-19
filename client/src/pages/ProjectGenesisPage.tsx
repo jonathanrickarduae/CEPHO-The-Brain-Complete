@@ -115,7 +115,7 @@ export default function ProjectGenesisPage() {
     
     // Create project via API
     try {
-      await createProjectMutation.mutateAsync({
+      const newProject = await createProjectMutation.mutateAsync({
         name: blueprint.name || 'Untitled Project',
         industry: blueprint.businessInfo?.industry || 'Unknown',
         description: blueprint.businessInfo?.description || '',
@@ -123,7 +123,12 @@ export default function ProjectGenesisPage() {
         uniqueValue: blueprint.businessInfo?.uniqueValue || ''
       });
       
-      setViewMode('qms');
+      toast.success(`Project "${newProject.name}" created! Redirecting to dashboard...`);
+      
+      // Wait a moment for the success message, then go back to dashboard
+      setTimeout(() => {
+        setViewMode('dashboard');
+      }, 1500);
     } catch (error) {
       console.error('Failed to create project:', error);
     }
