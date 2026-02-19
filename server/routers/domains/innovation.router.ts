@@ -6,7 +6,7 @@
  * @module routers/domains/innovation
  */
 
-import { router } from "../../_core/trpc";
+import { router, publicProcedure, protectedProcedure } from "../../_core/trpc";
 import { z } from "zod";
 import { projectService } from "../../services/project";
 import { handleTRPCError } from "../../utils/error-handler";

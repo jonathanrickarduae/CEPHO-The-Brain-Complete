@@ -6,7 +6,7 @@
  * @module routers/domains/business-plan-review
  */
 
-import { router } from "../../_core/trpc";
+import { router, publicProcedure, protectedProcedure } from "../../_core/trpc";
 import { z } from "zod";
 import { businessPlanService } from "../../services/business-plan";
 import { handleTRPCError } from "../../utils/error-handler";
