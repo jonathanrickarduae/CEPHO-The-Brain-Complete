@@ -445,7 +445,7 @@ export const expertEvolutionRouter = router({
       }),
 
     // Check if expert has custom voice
-    hasVoice: publicProcedure
+    hasVoice: protectedProcedure
       .input(z.object({ expertId: z.string() }))
       .query(({ input }) => {
         return {
