@@ -62,7 +62,7 @@ End-of-day reflection system:
 - Express 4 with tRPC
 - PostgreSQL database (Supabase)
 - Drizzle ORM for type-safe queries
-- Google OAuth authentication
+- **Simple Email/Password Authentication** (OAuth temporarily disabled)
 
 ### AI Integration
 - LLM-powered expert consultations
@@ -86,6 +86,7 @@ The application uses a comprehensive schema including:
 ## API Routes
 
 ### Authentication
+- `auth.login` - Simple email/password login
 - `auth.me` - Get current user
 - `auth.logout` - End session
 
@@ -201,4 +202,3 @@ Proprietary - CEPHO.ai
 ## Support
 
 For support inquiries, please contact the development team through the Manus platform.
-

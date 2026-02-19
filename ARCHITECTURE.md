@@ -35,7 +35,7 @@ The platform provides a comprehensive suite of business intelligence tools inclu
 
 ### Backend
 
-The backend infrastructure is built on **Node.js 22** with **TypeScript** for type safety, utilizing **tRPC** for end-to-end type-safe APIs. The database layer employs **PostgreSQL** via Supabase with **Drizzle ORM** for type-safe queries. Authentication is handled through **Google OAuth 2.0**, while the server framework uses **Express.js** with **Vite** for development.
+The backend infrastructure is built on **Node.js 22** with **TypeScript** for type safety, utilizing **tRPC** for end-to-end type-safe APIs. The database layer employs **PostgreSQL** via Supabase with **Drizzle ORM** for type-safe queries. Authentication is handled through a **simple email/password system** (OAuth temporarily disabled), while the server framework uses **Express.js** with **Vite** for development.
 
 ### Frontend
 
@@ -221,7 +221,7 @@ The application uses React Router v7 with file-based routing. Routes are defined
 
 ### OAuth Flow
 
-The authentication process follows a specific sequence. Users click "Sign in with Google", which redirects to Google OAuth. After authentication, Google returns to `/auth/google/callback`. The server creates or updates the user record, sets a session cookie, and redirects to the dashboard.
+The authentication process is handled by a simple email/password system. Users submit their credentials to `/api/auth/login`, which validates them and returns a JWT session token in an HttpOnly cookie.
 
 ### Session Management
 
