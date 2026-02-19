@@ -9,8 +9,8 @@ export const users = pgTable("users", {
   name: text("name"),
   email: varchar("email", { length: 320 }),
   loginMethod: varchar("loginMethod", { length: 64 }),
-  role: pgEnum("role", ["user", "admin"]).notNull(),
-  themePreference: pgEnum("themePreference", ["light", "dark", "system"]).notNull(),
+  role: text("role").notNull(),
+  themePreference: text("themePreference").notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
   lastSignedIn: timestamp("lastSignedIn").defaultNow().notNull(),
@@ -31,7 +31,7 @@ export const moodHistory = pgTable("mood_history", {
   id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
   userId: integer("userId").notNull(),
   score: integer("score").notNull(), // 1-10
-  timeOfDay: pgEnum("timeOfDay", ["morning", "afternoon", "evening"]).notNull(),
+  timeOfDay: text("timeOfDay").notNull(),
   note: text("note"), // Optional context
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 }, (table) => ({
@@ -49,9 +49,9 @@ export type InsertMoodHistory = typeof moodHistory.$inferInsert;
 export const trainingConversations = pgTable("training_conversations", {
   id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
   userId: integer("userId").notNull(),
-  role: pgEnum("role", ["user", "twin"]).notNull(),
+  role: text("role").notNull(),
   content: text("content").notNull(),
-  contentType: pgEnum("contentType", ["text", "voice", "action"]).notNull(),
+  contentType: text("contentType").notNull(),
   context: varchar("context", { length: 100 }), // e.g., "daily_brief", "ai_experts", "workflow"
   metadata: json("metadata"), // Additional structured data
   createdAt: timestamp("createdAt").defaultNow().notNull(),
@@ -120,7 +120,7 @@ export const feedbackHistory = pgTable("feedback_history", {
   expertId: varchar("expertId", { length: 50 }), // AI expert who did the work
   projectId: varchar("projectId", { length: 50 }),
   rating: integer("rating"), // 1-5 stars
-  feedbackType: pgEnum("feedbackType", ["positive", "negative", "neutral", "correction"]).notNull(),
+  feedbackType: text("feedbackType").notNull(),
   feedbackText: text("feedbackText"),
   originalOutput: text("originalOutput"), // What the AI produced
   correctedOutput: text("correctedOutput"), // What user wanted instead
@@ -138,7 +138,7 @@ export const twinActivityLog = pgTable("twin_activity_log", {
   userId: integer("userId").notNull(),
   activityType: varchar("activityType", { length: 50 }).notNull(), // "email_sent", "task_completed", "meeting_scheduled"
   description: text("description").notNull(),
-  status: pgEnum("status", ["pending", "completed", "failed", "cancelled"]).notNull(),
+  status: text("status").notNull(),
   autonomous: boolean("autonomous").default(false), // Was this done without user approval?
   metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
@@ -160,7 +160,7 @@ export const expertPerformance = pgTable("expert_performance", {
   negativeFeedback: integer("negativeFeedback").default(0),
   lastUsed: timestamp("lastUsed"),
   notes: text("notes"), // User notes about this expert
-  status: pgEnum("status", ["active", "training", "fired"]).notNull(),
+  status: text("status").notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
 });
 
@@ -175,8 +175,8 @@ export const projects = pgTable("projects", {
   userId: integer("userId").notNull(),
   name: varchar("name", { length: 200 }).notNull(),
   description: text("description"),
-  status: pgEnum("status", ["not_started", "in_progress", "blocked", "review", "complete"]).notNull(),
-  priority: pgEnum("priority", ["low", "medium", "high", "critical"]).notNull(),
+  status: text("status").notNull(),
+  priority: text("priority").notNull(),
   progress: integer("progress").default(0), // 0-100
   dueDate: timestamp("dueDate"),
   blockerDescription: text("blockerDescription"),
@@ -196,11 +196,11 @@ export const dailyBriefItems = pgTable("daily_brief_items", {
   id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
   userId: integer("userId").notNull(),
   briefDate: timestamp("briefDate").notNull(),
-  category: pgEnum("category", ["key_insight", "meeting", "task", "intelligence", "recommendation"]).notNull(),
+  category: text("category").notNull(),
   title: varchar("title", { length: 300 }).notNull(),
   description: text("description"),
-  priority: pgEnum("priority", ["low", "medium", "high", "critical"]).notNull(),
-  status: pgEnum("status", ["pending", "got_it", "deferred", "delegated", "digital_twin"]).notNull(),
+  priority: text("priority").notNull(),
+  status: text("status").notNull(),
   actionedAt: timestamp("actionedAt"),
   metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
@@ -215,8 +215,8 @@ export type InsertDailyBriefItem = typeof dailyBriefItems.$inferInsert;
 export const userSettings = pgTable("user_settings", {
   id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
   userId: integer("userId").notNull().unique(),
-  theme: pgEnum("theme", ["light", "dark", "mix"]).notNull(),
-  governanceMode: pgEnum("governanceMode", ["omni", "governed"]).notNull(),
+  theme: text("theme").notNull(),
+  governanceMode: text("governanceMode").notNull(),
   dailyBriefTime: varchar("dailyBriefTime", { length: 10 }).default("07:00"),
   eveningReviewTime: varchar("eveningReviewTime", { length: 10 }).default("18:00"),
   lastMoodCheckMorning: timestamp("lastMoodCheckMorning"),
@@ -243,8 +243,8 @@ export const libraryDocuments = pgTable("library_documents", {
   folder: varchar("folder", { length: 100 }).notNull(), // "celadon", "boundless", "personal", etc.
   subFolder: varchar("subFolder", { length: 100 }), // "documents", "ai_images", "charts", etc.
   name: varchar("name", { length: 300 }).notNull(),
-  type: pgEnum("type", ["document", "image", "chart", "presentation", "data", "other"]).notNull(),
-  status: pgEnum("status", ["draft", "review", "signed_off"]).notNull(),
+  type: text("type").notNull(),
+  status: text("status").notNull(),
   fileUrl: text("fileUrl"),
   thumbnailUrl: text("thumbnailUrl"),
   metadata: json("metadata"),
@@ -261,7 +261,7 @@ export type InsertLibraryDocument = typeof libraryDocuments.$inferInsert;
 export const conversations = pgTable("conversations", {
   id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
   userId: integer("userId").notNull(),
-  role: pgEnum("role", ["user", "assistant", "system"]).notNull(),
+  role: text("role").notNull(),
   content: text("content").notNull(),
   metadata: json("metadata"), // Store additional context like mood, voice input, etc.
   createdAt: timestamp("createdAt").defaultNow().notNull(),
@@ -285,7 +285,7 @@ export const waitlist = pgTable("waitlist", {
   referralCode: varchar("referralCode", { length: 20 }).notNull().unique(),
   referredBy: varchar("referredBy", { length: 20 }), // Referral code of who referred them
   position: integer("position").notNull(),
-  status: pgEnum("status", ["waiting", "invited", "joined", "churned"]).notNull(),
+  status: text("status").notNull(),
   invitedAt: timestamp("invitedAt"),
   joinedAt: timestamp("joinedAt"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
@@ -302,7 +302,7 @@ export const referrals = pgTable("referrals", {
   referrerId: integer("referrerId").notNull(), // User who referred
   referredEmail: varchar("referredEmail", { length: 320 }).notNull(),
   referredUserId: integer("referredUserId"), // Filled when they join
-  status: pgEnum("status", ["pending", "signed_up", "active", "churned"]).notNull(),
+  status: text("status").notNull(),
   creditsAwarded: integer("creditsAwarded").default(0),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   convertedAt: timestamp("convertedAt"),
@@ -335,7 +335,7 @@ export const creditTransactions = pgTable("credit_transactions", {
   id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
   userId: integer("userId").notNull(),
   amount: integer("amount").notNull(), // Positive for earn, negative for spend
-  type: pgEnum("type", ["referral", "achievement", "purchase", "spend", "bonus"]).notNull(),
+  type: text("type").notNull(),
   description: varchar("description", { length: 500 }),
   referenceId: varchar("referenceId", { length: 100 }), // ID of related entity
   createdAt: timestamp("createdAt").defaultNow().notNull(),
@@ -351,7 +351,7 @@ export const trainingDocuments = pgTable("training_documents", {
   id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
   userId: integer("userId").notNull(),
   name: varchar("name", { length: 300 }).notNull(),
-  type: pgEnum("type", ["document", "conversation", "preference", "memory"]).notNull(),
+  type: text("type").notNull(),
   content: text("content"), // Text content or extracted text
   fileUrl: text("fileUrl"), // S3 URL if file uploaded
   fileSize: integer("fileSize"),
@@ -370,7 +370,7 @@ export type InsertTrainingDocument = typeof trainingDocuments.$inferInsert;
 export const memoryBank = pgTable("memory_bank", {
   id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
   userId: integer("userId").notNull(),
-  category: pgEnum("category", ["personal", "work", "preference", "relationship", "fact"]).notNull(),
+  category: text("category").notNull(),
   key: varchar("key", { length: 200 }).notNull(),
   value: text("value").notNull(),
   confidence: real("confidence").default(1.0),
@@ -448,7 +448,7 @@ export const competitors = pgTable("competitors", {
   targetMarket: varchar("targetMarket", { length: 200 }),
   strengths: json("strengths"), // Array of strength descriptions
   weaknesses: json("weaknesses"), // Array of weakness descriptions
-  threatLevel: pgEnum("threatLevel", ["low", "medium", "high", "critical"]),
+  threatLevel: text("threatLevel"),
   lastAnalyzed: timestamp("lastAnalyzed"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
@@ -465,10 +465,10 @@ export const featureComparison = pgTable("feature_comparison", {
   featureName: varchar("featureName", { length: 200 }).notNull(),
   category: varchar("category", { length: 100 }).notNull(), // "ai", "productivity", "integration", etc.
   description: text("description"),
-  theBrainStatus: pgEnum("theBrainStatus", ["not_started", "in_progress", "launched", "superior"]),
+  theBrainStatus: text("theBrainStatus"),
   theBrainScore: integer("theBrainScore").default(0), // 0-100
   competitorData: json("competitorData"), // { competitorId: score, ... }
-  importance: pgEnum("importance", ["low", "medium", "high", "critical"]),
+  importance: text("importance"),
   notes: text("notes"),
   updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
 });
@@ -500,14 +500,14 @@ export type InsertMarketPositionHistory = typeof marketPositionHistory.$inferIns
  */
 export const competitiveThreats = pgTable("competitive_threats", {
   id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
-  type: pgEnum("type", ["threat", "opportunity"]).notNull(),
-  severity: pgEnum("severity", ["low", "medium", "high", "critical"]),
+  type: text("type").notNull(),
+  severity: text("severity"),
   competitorId: integer("competitorId"),
   title: varchar("title", { length: 300 }).notNull(),
   description: text("description").notNull(),
   impact: text("impact"), // How this affects The Brain
   recommendedAction: text("recommendedAction"),
-  status: pgEnum("status", ["new", "analyzing", "action_required", "addressed", "monitoring"]),
+  status: text("status"),
   detectedAt: timestamp("detectedAt").defaultNow().notNull(),
   addressedAt: timestamp("addressedAt"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
@@ -524,10 +524,10 @@ export const regulatoryLandscape = pgTable("regulatory_landscape", {
   region: varchar("region", { length: 100 }).notNull(), // "US", "EU", "UK", "Global"
   regulation: varchar("regulation", { length: 300 }).notNull(), // "GDPR", "AI Act", "CCPA"
   category: varchar("category", { length: 100 }), // "data_privacy", "ai_governance", "consumer_protection"
-  status: pgEnum("status", ["proposed", "enacted", "enforced"]),
+  status: text("status"),
   effectiveDate: timestamp("effectiveDate"),
-  complianceStatus: pgEnum("complianceStatus", ["not_applicable", "non_compliant", "partial", "compliant"]),
-  moatPotential: pgEnum("moatPotential", ["none", "low", "medium", "high"]),
+  complianceStatus: text("complianceStatus"),
+  moatPotential: text("moatPotential"),
   description: text("description"),
   requirements: json("requirements"), // Array of specific requirements
   notes: text("notes"),
@@ -542,15 +542,15 @@ export type InsertRegulatoryLandscape = typeof regulatoryLandscape.$inferInsert;
  */
 export const strategyRecommendations = pgTable("strategy_recommendations", {
   id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
-  category: pgEnum("category", ["product", "pricing", "marketing", "partnership", "regulatory", "technical"]).notNull(),
-  priority: pgEnum("priority", ["low", "medium", "high", "critical"]),
+  category: text("category").notNull(),
+  priority: text("priority"),
   title: varchar("title", { length: 300 }).notNull(),
   recommendation: text("recommendation").notNull(),
   rationale: text("rationale"),
   expectedImpact: text("expectedImpact"),
-  effort: pgEnum("effort", ["low", "medium", "high"]),
+  effort: text("effort"),
   timeframe: varchar("timeframe", { length: 100 }), // "immediate", "1-2 weeks", "1-3 months"
-  status: pgEnum("status", ["proposed", "approved", "in_progress", "completed", "rejected"]),
+  status: text("status"),
   generatedBy: varchar("generatedBy", { length: 100 }), // AI expert who generated it
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
@@ -564,11 +564,11 @@ export type InsertStrategyRecommendation = typeof strategyRecommendations.$infer
  */
 export const commercializationTasks = pgTable("commercialization_tasks", {
   id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
-  taskType: pgEnum("taskType", ["competitor_analysis", "feature_gap", "market_research", "pricing_review", "regulatory_check", "strategy_update"]).notNull(),
+  taskType: text("taskType").notNull(),
   title: varchar("title", { length: 300 }).notNull(),
   description: text("description"),
-  status: pgEnum("status", ["pending", "in_progress", "completed", "failed"]),
-  priority: pgEnum("priority", ["low", "medium", "high"]),
+  status: text("status"),
+  priority: text("priority"),
   assignedExpert: varchar("assignedExpert", { length: 100 }), // AI expert handling this
   result: text("result"), // Outcome of the task
   scheduledFor: timestamp("scheduledFor"),
@@ -587,7 +587,7 @@ export const vaultVerificationCodes = pgTable("vault_verification_codes", {
   id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
   userId: integer("userId").notNull(),
   code: varchar("code", { length: 6 }).notNull(), // 6-digit code
-  method: pgEnum("method", ["email", "sms"]).notNull(),
+  method: text("method").notNull(),
   expiresAt: timestamp("expiresAt").notNull(),
   used: boolean("used").default(false),
   attempts: integer("attempts").default(0), // Failed verification attempts
@@ -621,17 +621,7 @@ export type InsertTrustedDevice = typeof trustedDevices.$inferInsert;
 export const vaultAccessLog = pgTable("vault_access_log", {
   id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
   userId: integer("userId").notNull(),
-  action: pgEnum("action", [
-    "access_attempt", 
-    "access_granted", 
-    "access_denied", 
-    "code_sent", 
-    "code_verified",
-    "code_failed",
-    "session_expired",
-    "device_trusted",
-    "device_revoked"
-  ]).notNull(),
+  action: text("action").notNull(),
   ipAddress: varchar("ipAddress", { length: 45 }),
   userAgent: text("userAgent"),
   success: boolean("success").default(false),
@@ -671,7 +661,7 @@ export const integrations = pgTable("integrations", {
   refreshToken: text("refreshToken"), // Encrypted
   tokenExpiresAt: timestamp("tokenExpiresAt"),
   scopes: json("scopes"), // Array of granted scopes
-  status: pgEnum("status", ["active", "expired", "revoked", "error"]).notNull(),
+  status: text("status").notNull(),
   lastSyncAt: timestamp("lastSyncAt"),
   syncError: text("syncError"),
   metadata: json("metadata"), // Provider-specific data
@@ -688,12 +678,7 @@ export type InsertIntegration = typeof integrations.$inferInsert;
 export const notifications = pgTable("notifications", {
   id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
   userId: integer("userId").notNull(),
-  type: pgEnum("type", [
-    "info", "success", "warning", "error",
-    "task_assigned", "task_completed", "project_update",
-    "integration_alert", "security_alert", "digital_twin",
-    "daily_brief", "reminder", "achievement"
-  ]).notNull(),
+  type: text("type").notNull(),
   title: varchar("title", { length: 200 }).notNull(),
   message: text("message").notNull(),
   actionUrl: varchar("actionUrl", { length: 500 }), // Link to relevant page
@@ -736,23 +721,11 @@ export const subscriptions = pgTable("subscriptions", {
   name: varchar("name", { length: 200 }).notNull(), // "Asana", "Slack", "Zoom", etc.
   provider: varchar("provider", { length: 200 }), // Company name
   description: text("description"),
-  category: pgEnum("category", [
-    "ai_ml",
-    "productivity",
-    "development",
-    "marketing",
-    "design",
-    "communication",
-    "storage",
-    "analytics",
-    "finance",
-    "security",
-    "other"
-  ]).default("other").notNull(),
+  category: text("category").default("other").notNull(),
   cost: real("cost").notNull(), // Cost in AED
-  billingCycle: pgEnum("billingCycle", ["monthly", "quarterly", "annual", "one_time", "usage_based"]).notNull(),
+  billingCycle: text("billingCycle").notNull(),
   currency: varchar("currency", { length: 10 }).default("AED").notNull(),
-  status: pgEnum("status", ["active", "paused", "cancelled", "trial"]).notNull(),
+  status: text("status").notNull(),
   startDate: timestamp("startDate"),
   renewalDate: timestamp("renewalDate"),
   trialEndDate: timestamp("trialEndDate"),
@@ -777,12 +750,9 @@ export const projectGenesis = pgTable("project_genesis", {
   id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
   userId: integer("userId").notNull(),
   name: varchar("name", { length: 300 }).notNull(),
-  type: pgEnum("type", ["investment", "partnership", "acquisition", "joint_venture", "other"]).notNull(),
-  stage: pgEnum("stage", [
-    "discovery", "qualification", "due_diligence", 
-    "negotiation", "documentation", "closing", "post_deal"
-  ]).default("discovery").notNull(),
-  status: pgEnum("status", ["active", "on_hold", "won", "lost", "abandoned"]).notNull(),
+  type: text("type").notNull(),
+  stage: text("stage").default("discovery").notNull(),
+  status: text("status").notNull(),
   counterparty: varchar("counterparty", { length: 300 }),
   dealValue: real("dealValue"),
   currency: varchar("currency", { length: 3 }).default("USD"),
@@ -807,24 +777,15 @@ export type InsertProjectGenesis = typeof projectGenesis.$inferInsert;
 export const universalInbox = pgTable("universal_inbox", {
   id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
   userId: integer("userId").notNull(),
-  source: pgEnum("source", [
-    "email", "document", "voice_note", "whatsapp", 
-    "slack", "asana", "calendar", "manual", "webhook"
-  ]).notNull(),
+  source: text("source").notNull(),
   sourceId: varchar("sourceId", { length: 200 }), // External ID from source
-  type: pgEnum("type", [
-    "email", "document", "task", "meeting", "note", 
-    "attachment", "message", "reminder", "other"
-  ]).notNull(),
+  type: text("type").notNull(),
   title: varchar("title", { length: 500 }).notNull(),
   preview: text("preview"), // First 500 chars or summary
   content: text("content"), // Full content
   sender: varchar("sender", { length: 300 }),
-  priority: pgEnum("priority", ["low", "medium", "high", "urgent"]),
-  status: pgEnum("status", [
-    "unread", "read", "processing", "processed", 
-    "archived", "deleted", "action_required"
-  ]).default("unread").notNull(),
+  priority: text("priority"),
+  status: text("status").default("unread").notNull(),
   processedBy: varchar("processedBy", { length: 100 }), // "digital_twin", "ai_expert", "user"
   processedResult: text("processedResult"),
   attachments: json("attachments"), // Array of attachment URLs
@@ -871,7 +832,7 @@ export const signatures = pgTable("signatures", {
   id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
   userId: integer("userId").notNull(),
   name: varchar("name", { length: 200 }).notNull(), // "Main Signature", "Initials", etc.
-  type: pgEnum("type", ["drawn", "typed", "uploaded"]).notNull(),
+  type: text("type").notNull(),
   imageUrl: text("imageUrl").notNull(), // S3 URL of signature image
   fontFamily: varchar("fontFamily", { length: 100 }), // For typed signatures
   isDefault: boolean("isDefault").default(false),
@@ -912,9 +873,9 @@ export const reminders = pgTable("reminders", {
   title: varchar("title", { length: 300 }).notNull(),
   description: text("description"),
   dueAt: timestamp("dueAt").notNull(),
-  repeatType: pgEnum("repeatType", ["none", "daily", "weekly", "monthly", "custom"]),
+  repeatType: text("repeatType"),
   repeatInterval: integer("repeatInterval"), // For custom repeats
-  status: pgEnum("status", ["pending", "triggered", "snoozed", "completed", "cancelled"]),
+  status: text("status"),
   snoozedUntil: timestamp("snoozedUntil"),
   relatedType: varchar("relatedType", { length: 50 }), // "project", "task", "inbox_item", etc.
   relatedId: integer("relatedId"),
@@ -938,11 +899,8 @@ export const tasks = pgTable("tasks", {
   parentTaskId: integer("parentTaskId"), // For subtasks
   title: varchar("title", { length: 500 }).notNull(),
   description: text("description"),
-  status: pgEnum("status", [
-    "not_started", "in_progress", "blocked", 
-    "review", "cos_approved", "verified", "completed", "cancelled"
-  ]).default("not_started").notNull(),
-  priority: pgEnum("priority", ["low", "medium", "high", "critical"]),
+  status: text("status").default("not_started").notNull(),
+  priority: text("priority"),
   progress: integer("progress").default(0), // 0-100
   dueDate: timestamp("dueDate"),
   estimatedHours: real("estimatedHours"),
@@ -953,7 +911,7 @@ export const tasks = pgTable("tasks", {
   blockerDescription: text("blockerDescription"),
   cosScore: integer("cosScore"), // Chief of Staff QA score (1-10)
   secondaryAiScore: integer("secondaryAiScore"), // Secondary AI verification score (1-10)
-  qaStatus: pgEnum("qaStatus", ["pending", "cos_reviewed", "secondary_reviewed", "approved", "rejected"]),
+  qaStatus: text("qaStatus"),
   completedAt: timestamp("completedAt"),
   metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
@@ -970,7 +928,7 @@ export const activityFeed = pgTable("activity_feed", {
   id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
   userId: integer("userId").notNull(),
   projectId: integer("projectId"),
-  actorType: pgEnum("actorType", ["user", "digital_twin", "ai_expert", "system"]).notNull(),
+  actorType: text("actorType").notNull(),
   actorId: varchar("actorId", { length: 100 }), // Expert ID or "system"
   actorName: varchar("actorName", { length: 200 }),
   action: varchar("action", { length: 100 }).notNull(), // "created", "updated", "completed", etc.
@@ -1015,7 +973,7 @@ export const piiDetectionLog = pgTable("pii_detection_log", {
   piiType: varchar("piiType", { length: 50 }).notNull(), // "email", "phone", "ssn", "credit_card", etc.
   detectedText: text("detectedText"), // The flagged content (may be redacted)
   confidence: real("confidence"), // 0-1 confidence score
-  status: pgEnum("status", ["detected", "reviewed", "false_positive", "redacted"]),
+  status: text("status"),
   reviewedBy: varchar("reviewedBy", { length: 100 }),
   reviewedAt: timestamp("reviewedAt"),
   metadata: json("metadata"),
@@ -1037,7 +995,7 @@ export const complianceChecklists = pgTable("compliance_checklists", {
   items: json("items").notNull(), // Array of { id, title, required, completed, completedAt, notes }
   completedCount: integer("completedCount").default(0),
   totalCount: integer("totalCount").notNull(),
-  status: pgEnum("status", ["not_started", "in_progress", "completed", "blocked"]),
+  status: text("status"),
   dueDate: timestamp("dueDate"),
   completedAt: timestamp("completedAt"),
   metadata: json("metadata"),
@@ -1056,7 +1014,7 @@ export const voiceNotes = pgTable("voice_notes", {
   id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
   userId: integer("userId").notNull(),
   content: text("content").notNull(), // Transcribed text
-  category: pgEnum("category", ["task", "idea", "reminder", "observation", "question", "follow_up"]).notNull(),
+  category: text("category").notNull(),
   audioUrl: varchar("audioUrl", { length: 500 }), // S3 URL to original audio
   duration: integer("duration"), // Duration in seconds
   projectId: integer("projectId"), // Optional link to project
@@ -1084,11 +1042,11 @@ export const expertConversations = pgTable("expert_conversations", {
   id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
   userId: integer("userId").notNull(),
   expertId: varchar("expertId", { length: 50 }).notNull(),
-  role: pgEnum("role", ["user", "expert", "system"]).notNull(),
+  role: text("role").notNull(),
   content: text("content").notNull(),
   projectId: integer("projectId"), // Optional link to project
   taskId: varchar("taskId", { length: 100 }), // Task this conversation relates to
-  sentiment: pgEnum("sentiment", ["positive", "neutral", "negative"]),
+  sentiment: text("sentiment"),
   qualityScore: integer("qualityScore"), // 1-10 rating of this response
   metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
@@ -1105,7 +1063,7 @@ export const expertMemory = pgTable("expert_memory", {
   id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
   userId: integer("userId").notNull(),
   expertId: varchar("expertId", { length: 50 }).notNull(),
-  memoryType: pgEnum("memoryType", ["preference", "fact", "style", "context", "correction"]).notNull(),
+  memoryType: text("memoryType").notNull(),
   key: varchar("key", { length: 200 }).notNull(),
   value: text("value").notNull(),
   confidence: real("confidence").default(0.8), // 0-1 confidence in this memory
@@ -1159,7 +1117,7 @@ export const expertInsights = pgTable("expert_insights", {
   relatedExpertIds: json("relatedExpertIds"), // Other experts who contributed
   usageCount: integer("usageCount").default(0), // How often referenced by other experts
   validatedBy: json("validatedBy"), // Array of expert IDs who validated this
-  status: pgEnum("status", ["draft", "validated", "outdated", "archived"]),
+  status: text("status"),
   expiresAt: timestamp("expiresAt"), // When this insight should be reviewed
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
@@ -1177,8 +1135,8 @@ export const expertResearchTasks = pgTable("expert_research_tasks", {
   expertId: varchar("expertId", { length: 50 }).notNull(),
   topic: varchar("topic", { length: 300 }).notNull(),
   description: text("description"),
-  priority: pgEnum("priority", ["low", "medium", "high", "critical"]),
-  status: pgEnum("status", ["pending", "in_progress", "completed", "failed"]),
+  priority: text("priority"),
+  status: text("status"),
   scheduledFor: timestamp("scheduledFor"),
   completedAt: timestamp("completedAt"),
   findings: text("findings"), // Research results
@@ -1218,14 +1176,14 @@ export type InsertExpertCollaboration = typeof expertCollaboration.$inferInsert;
 export const expertCoachingSessions = pgTable("expert_coaching_sessions", {
   id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
   expertId: varchar("expertId", { length: 50 }).notNull(),
-  coachType: pgEnum("coachType", ["chief_of_staff", "peer_expert", "user"]).notNull(),
+  coachType: text("coachType").notNull(),
   coachId: varchar("coachId", { length: 50 }), // ID of coaching expert if peer
   focusArea: varchar("focusArea", { length: 200 }).notNull(), // "communication", "accuracy", "speed", etc.
   feedbackGiven: text("feedbackGiven").notNull(),
   improvementPlan: text("improvementPlan"),
   metricsBeforeCoaching: json("metricsBeforeCoaching"),
   metricsAfterCoaching: json("metricsAfterCoaching"),
-  status: pgEnum("status", ["scheduled", "in_progress", "completed", "follow_up_needed"]),
+  status: text("status"),
   scheduledAt: timestamp("scheduledAt"),
   completedAt: timestamp("completedAt"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
@@ -1243,7 +1201,7 @@ export const expertDomainKnowledge = pgTable("expert_domain_knowledge", {
   expertId: varchar("expertId", { length: 50 }).notNull(),
   domain: varchar("domain", { length: 200 }).notNull(), // "private_equity", "strategy", "marketing", etc.
   subDomain: varchar("subDomain", { length: 200 }), // More specific area
-  knowledgeLevel: pgEnum("knowledgeLevel", ["basic", "intermediate", "advanced", "expert"]),
+  knowledgeLevel: text("knowledgeLevel"),
   lastUpdated: timestamp("lastUpdated").defaultNow().notNull(),
   updateFrequency: varchar("updateFrequency", { length: 50 }).default("weekly"), // How often to refresh
   sources: json("sources"), // Preferred sources for this domain
@@ -1264,7 +1222,7 @@ export type InsertExpertDomainKnowledge = typeof expertDomainKnowledge.$inferIns
 export const favoriteContacts = pgTable("favorite_contacts", {
   id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
   userId: integer("userId").notNull(),
-  contactType: pgEnum("contactType", ["expert", "corporate_partner", "ai_expert", "colleague"]).notNull(),
+  contactType: text("contactType").notNull(),
   contactId: varchar("contactId", { length: 100 }).notNull(), // ID of the expert, partner, or colleague
   contactName: varchar("contactName", { length: 200 }).notNull(), // Display name
   contactAvatar: varchar("contactAvatar", { length: 500 }), // Avatar URL
@@ -1318,11 +1276,11 @@ export type InsertSmeTeamMember = typeof smeTeamMembers.$inferInsert;
 export const taskQaReviews = pgTable("task_qa_reviews", {
   id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
   taskId: integer("taskId").notNull(),
-  reviewType: pgEnum("reviewType", ["cos_review", "secondary_ai", "sme_feedback"]).notNull(),
+  reviewType: text("reviewType").notNull(),
   reviewerId: varchar("reviewerId", { length: 100 }), // "chief_of_staff" or AI expert ID
   score: integer("score"), // 1-10 quality score
   feedback: text("feedback"),
-  status: pgEnum("status", ["pending", "approved", "rejected", "needs_revision"]).notNull(),
+  status: text("status").notNull(),
   improvements: json("improvements"), // Suggested improvements
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
@@ -1340,7 +1298,7 @@ export const smeFeedbackLog = pgTable("sme_feedback_log", {
   userId: integer("userId").notNull(),
   expertId: varchar("expertId", { length: 50 }).notNull(),
   taskId: integer("taskId"),
-  feedbackType: pgEnum("feedbackType", ["positive", "constructive", "correction", "training"]).notNull(),
+  feedbackType: text("feedbackType").notNull(),
   feedback: text("feedback").notNull(),
   context: varchar("context", { length: 200 }), // What prompted this feedback
   applied: boolean("applied").default(false), // Whether the expert has "learned" from this
@@ -1388,7 +1346,7 @@ export const expertChatSessions = pgTable("expert_chat_sessions", {
   systemPrompt: text("systemPrompt"),
   projectId: integer("projectId"),
   consultationId: integer("consultationId"), // Link to parent consultation
-  status: pgEnum("status", ["active", "paused", "completed"]).notNull(),
+  status: text("status").notNull(),
   summary: text("summary"),
   lastMessageAt: timestamp("lastMessageAt"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
@@ -1403,7 +1361,7 @@ export type InsertExpertChatSession = typeof expertChatSessions.$inferInsert;
 export const expertChatMessages = pgTable("expert_chat_messages", {
   id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
   sessionId: integer("sessionId").notNull(),
-  role: pgEnum("role", ["user", "expert", "system"]).notNull(),
+  role: text("role").notNull(),
   content: text("content").notNull(),
   metadata: json("metadata"), // Additional context like voice input, attachments
   createdAt: timestamp("createdAt").defaultNow().notNull(),
@@ -1448,7 +1406,7 @@ export const expertFollowUpQuestions = pgTable("expert_follow_up_questions", {
   expertId: varchar("expertId", { length: 100 }).notNull(),
   question: text("question").notNull(),
   answer: text("answer"),
-  status: pgEnum("status", ["pending", "answered"]).notNull(),
+  status: text("status").notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   answeredAt: timestamp("answeredAt"),
 });
@@ -1464,7 +1422,7 @@ export const collaborativeReviewSessions = pgTable("collaborative_review_session
   ownerId: integer("ownerId").notNull(), // User who created the session
   projectName: varchar("projectName", { length: 255 }).notNull(),
   templateId: varchar("templateId", { length: 100 }),
-  status: pgEnum("status", ["active", "completed", "archived"]).notNull(),
+  status: text("status").notNull(),
   reviewData: json("reviewData"), // Current state of the review
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
@@ -1480,7 +1438,7 @@ export const collaborativeReviewParticipants = pgTable("collaborative_review_par
   id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
   sessionId: integer("sessionId").notNull(),
   userId: integer("userId").notNull(),
-  role: pgEnum("role", ["owner", "reviewer", "viewer"]).notNull(),
+  role: text("role").notNull(),
   invitedBy: integer("invitedBy"),
   invitedAt: timestamp("invitedAt").defaultNow().notNull(),
   joinedAt: timestamp("joinedAt"),
@@ -1502,7 +1460,7 @@ export const collaborativeReviewComments = pgTable("collaborative_review_comment
   sectionId: varchar("sectionId", { length: 100 }).notNull(),
   comment: text("comment").notNull(),
   parentCommentId: integer("parentCommentId"), // For threaded replies
-  status: pgEnum("status", ["active", "resolved", "deleted"]).notNull(),
+  status: text("status").notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
 });
@@ -1517,7 +1475,7 @@ export const collaborativeReviewActivity = pgTable("collaborative_review_activit
   id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
   sessionId: integer("sessionId").notNull(),
   userId: integer("userId").notNull(),
-  action: pgEnum("action", ["joined", "viewed_section", "commented", "reviewed_section", "completed_review"]).notNull(),
+  action: text("action").notNull(),
   sectionId: varchar("sectionId", { length: 100 }),
   metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
@@ -1559,36 +1517,13 @@ export const blueprints = pgTable("blueprints", {
   projectId: integer("projectId"), // Link to projects table
   name: varchar("name", { length: 300 }).notNull(),
   description: text("description"),
-  blueprintType: pgEnum("blueprintType", [
-    "opportunity_brief",
-    "concept_proposal",
-    "business_case",
-    "project_charter",
-    "gtm_plan",
-    "operations_playbook",
-    "retention_plan",
-    "exit_readiness",
-    "process_document",
-    "other"
-  ]).notNull(),
+  blueprintType: text("blueprintType").notNull(),
   currentPhase: integer("currentPhase").default(1).notNull(), // 1-7
-  status: pgEnum("status", [
-    "draft",
-    "in_review",
-    "approved",
-    "rejected",
-    "archived"
-  ]).default("draft").notNull(),
+  status: text("status").default("draft").notNull(),
   version: integer("version").default(1).notNull(),
   content: json("content"), // Structured content of the blueprint
   fileUrl: text("fileUrl"), // S3 URL if file uploaded
-  qualityGateStatus: pgEnum("qualityGateStatus", [
-    "not_started",
-    "level_1_complete",
-    "level_2_complete",
-    "level_3_complete",
-    "level_4_complete"
-  ]).default("not_started").notNull(),
+  qualityGateStatus: text("qualityGateStatus").default("not_started").notNull(),
   metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
@@ -1622,7 +1557,7 @@ export type InsertBlueprintVersion = typeof blueprintVersions.$inferInsert;
 export const smePanelTypes = pgTable("sme_panel_types", {
   id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
   name: varchar("name", { length: 100 }).notNull(),
-  code: pgEnum("code", ["blue_team", "left_field", "red_team"]).notNull(),
+  code: text("code").notNull(),
   description: text("description"),
   role: text("role"), // What this panel does
   typicalComposition: json("typicalComposition"), // Array of expert categories
@@ -1641,11 +1576,11 @@ export const smePanels = pgTable("sme_panels", {
   userId: integer("userId").notNull(),
   blueprintId: integer("blueprintId"), // Optional link to blueprint
   projectId: integer("projectId"), // Optional link to project
-  panelTypeCode: pgEnum("panelTypeCode", ["blue_team", "left_field", "red_team"]).notNull(),
+  panelTypeCode: text("panelTypeCode").notNull(),
   name: varchar("name", { length: 200 }).notNull(),
   purpose: text("purpose"),
   phase: integer("phase"), // Which value chain phase (1-7)
-  status: pgEnum("status", ["assembling", "active", "completed", "disbanded"]).notNull(),
+  status: text("status").notNull(),
   expertIds: json("expertIds"), // Array of expert IDs assigned to this panel
   metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
@@ -1662,19 +1597,12 @@ export const smePanelConsultations = pgTable("sme_panel_consultations", {
   id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
   panelId: integer("panelId").notNull(),
   blueprintId: integer("blueprintId"),
-  consultationType: pgEnum("consultationType", [
-    "concept_review",
-    "pre_mortem",
-    "red_team_challenge",
-    "validation_review",
-    "quality_gate_review",
-    "ad_hoc"
-  ]).notNull(),
+  consultationType: text("consultationType").notNull(),
   question: text("question"), // What was asked of the panel
   findings: json("findings"), // Structured findings from each expert
   recommendations: text("recommendations"),
   risksIdentified: json("risksIdentified"), // Array of risks
-  status: pgEnum("status", ["pending", "in_progress", "completed"]).notNull(),
+  status: text("status").notNull(),
   completedAt: timestamp("completedAt"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 }, (table) => ({
@@ -1702,11 +1630,11 @@ export const qualityGates = pgTable("quality_gates", {
   level3Complete: boolean("level3Complete").default(false), // Strategic Fit & Feasibility
   level3CompletedAt: timestamp("level3CompletedAt"),
   level3Notes: text("level3Notes"),
-  level4Decision: pgEnum("level4Decision", ["go", "hold", "recycle", "kill"]),
+  level4Decision: text("level4Decision"),
   level4CompletedAt: timestamp("level4CompletedAt"),
   level4Rationale: text("level4Rationale"),
   gatekeeper: varchar("gatekeeper", { length: 100 }).default("Chief of Staff"),
-  status: pgEnum("status", ["not_started", "in_progress", "passed", "failed"]).notNull(),
+  status: text("status").notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
 });
@@ -1744,19 +1672,13 @@ export const preMortemSessions = pgTable("pre_mortem_sessions", {
   userId: integer("userId").notNull(),
   blueprintId: integer("blueprintId"),
   projectId: integer("projectId"),
-  sessionType: pgEnum("sessionType", [
-    "concept_pre_mortem",
-    "business_case_pre_mortem",
-    "launch_pre_mortem",
-    "churn_pre_mortem",
-    "buyer_objection_pre_mortem"
-  ]).notNull(),
+  sessionType: text("sessionType").notNull(),
   scenario: text("scenario"), // "Assume the project has failed..."
   failureReasons: json("failureReasons"), // Array of identified failure reasons
   criticalAssumptions: json("criticalAssumptions"), // Assumptions that must be tested
   mitigationStrategies: json("mitigationStrategies"), // How to address each risk
   panelId: integer("panelId"), // Which SME panel conducted this
-  status: pgEnum("status", ["scheduled", "in_progress", "completed"]).notNull(),
+  status: text("status").notNull(),
   completedAt: timestamp("completedAt"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 }, (table) => ({
@@ -1777,17 +1699,10 @@ export const lessonsLearned = pgTable("lessons_learned", {
   projectId: integer("projectId"),
   blueprintId: integer("blueprintId"),
   phase: integer("phase"), // Which phase this lesson applies to
-  category: pgEnum("category", [
-    "what_went_well",
-    "what_didnt_work",
-    "process_improvement",
-    "tool_recommendation",
-    "expert_insight",
-    "risk_mitigation"
-  ]).notNull(),
+  category: text("category").notNull(),
   title: varchar("title", { length: 300 }).notNull(),
   description: text("description").notNull(),
-  impact: pgEnum("impact", ["low", "medium", "high"]),
+  impact: text("impact"),
   actionTaken: text("actionTaken"),
   tags: json("tags"), // Array of tags for searchability
   createdAt: timestamp("createdAt").defaultNow().notNull(),
@@ -1803,20 +1718,10 @@ export const toolIntegrations = pgTable("tool_integrations", {
   id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
   userId: integer("userId").notNull(),
   toolName: varchar("toolName", { length: 100 }).notNull(),
-  category: pgEnum("category", [
-    "project_management",
-    "ai_assistant",
-    "development",
-    "automation",
-    "content_creation",
-    "communication",
-    "business_crm",
-    "security",
-    "other"
-  ]).notNull(),
+  category: text("category").notNull(),
   purpose: text("purpose"),
   plan: varchar("plan", { length: 50 }), // "Free", "Pro", "Enterprise"
-  status: pgEnum("status", ["active", "inactive", "pending", "error"]).notNull(),
+  status: text("status").notNull(),
   apiKeyConfigured: boolean("apiKeyConfigured").default(false),
   lastSyncAt: timestamp("lastSyncAt"),
   healthScore: integer("healthScore").default(100), // 0-100
@@ -1841,19 +1746,10 @@ export const manusDelegationLog = pgTable("manus_delegation_log", {
   phase: integer("phase"),
   processNumber: varchar("processNumber", { length: 20 }),
   activityName: varchar("activityName", { length: 200 }).notNull(),
-  delegationType: pgEnum("delegationType", [
-    "document_generation",
-    "data_analysis",
-    "research",
-    "scheduling",
-    "communication",
-    "monitoring",
-    "reporting",
-    "quality_check"
-  ]).notNull(),
+  delegationType: text("delegationType").notNull(),
   input: json("input"), // What was provided to Manus
   output: json("output"), // What Manus produced
-  status: pgEnum("status", ["pending", "in_progress", "completed", "failed"]).notNull(),
+  status: text("status").notNull(),
   completedAt: timestamp("completedAt"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
@@ -1867,7 +1763,7 @@ export type InsertManusDelegationLog = typeof manusDelegationLog.$inferInsert;
 export const expertPanelAssignments = pgTable("expert_panel_assignments", {
   id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
   expertId: varchar("expertId", { length: 100 }).notNull(),
-  panelTypeCode: pgEnum("panelTypeCode", ["blue_team", "left_field", "red_team"]).notNull(),
+  panelTypeCode: text("panelTypeCode").notNull(),
   expertCategory: varchar("expertCategory", { length: 100 }), // e.g., "Strategy", "Finance", "Legal"
   strengthAreas: json("strengthAreas"), // What this expert is good at for this panel type
   isDefault: boolean("isDefault").default(false), // Is this a default assignment?
@@ -1891,7 +1787,7 @@ export const eveningReviewSessions = pgTable("evening_review_sessions", {
   reviewDate: timestamp("reviewDate").notNull(),
   startedAt: timestamp("startedAt").notNull(),
   completedAt: timestamp("completedAt"),
-  mode: pgEnum("mode", ["manual", "auto_processed", "delegated"]).notNull(),
+  mode: text("mode").notNull(),
   tasksAccepted: integer("tasksAccepted").default(0).notNull(),
   tasksDeferred: integer("tasksDeferred").default(0).notNull(),
   tasksRejected: integer("tasksRejected").default(0).notNull(),
@@ -1919,7 +1815,7 @@ export const eveningReviewTaskDecisions = pgTable("evening_review_task_decisions
   taskId: integer("taskId"), // Link to tasks table if applicable
   taskTitle: varchar("taskTitle", { length: 500 }).notNull(),
   projectName: varchar("projectName", { length: 200 }),
-  decision: pgEnum("decision", ["accepted", "deferred", "rejected"]).notNull(),
+  decision: text("decision").notNull(),
   priority: varchar("priority", { length: 20 }),
   estimatedTime: varchar("estimatedTime", { length: 50 }),
   notes: text("notes"),
@@ -1953,14 +1849,14 @@ export type InsertReviewTimingPattern = typeof reviewTimingPatterns.$inferInsert
 export const signalItems = pgTable("signal_items", {
   id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
   userId: integer("userId").notNull(),
-  sourceType: pgEnum("sourceType", ["evening_review", "overnight_task", "calendar", "news", "project_update", "manual"]).notNull(),
+  sourceType: text("sourceType").notNull(),
   sourceId: integer("sourceId"), // ID of source record
-  category: pgEnum("category", ["task_summary", "project_update", "calendar_alert", "intelligence", "recommendation", "reflection"]).notNull(),
+  category: text("category").notNull(),
   title: varchar("title", { length: 300 }).notNull(),
   description: text("description"),
-  priority: pgEnum("priority", ["low", "medium", "high", "critical"]).notNull(),
+  priority: text("priority").notNull(),
   targetDate: timestamp("targetDate").notNull(), // Which morning this is for
-  status: pgEnum("status", ["pending", "delivered", "actioned", "dismissed"]).notNull(),
+  status: text("status").notNull(),
   deliveredAt: timestamp("deliveredAt"),
   metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
@@ -2000,12 +1896,12 @@ export const innovationIdeas = pgTable("innovation_ideas", {
   userId: integer("userId").notNull(),
   title: varchar("title", { length: 300 }).notNull(),
   description: text("description"),
-  source: pgEnum("source", ["manual", "article", "trend", "conversation", "chief_of_staff", "sme_suggestion"]).notNull(),
+  source: text("source").notNull(),
   sourceUrl: text("sourceUrl"), // URL if from article
   sourceMetadata: json("sourceMetadata"), // Additional source context
-  status: pgEnum("status", ["captured", "assessing", "refining", "validated", "rejected", "archived", "promoted_to_genesis"]).notNull(),
+  status: text("status").notNull(),
   currentStage: integer("currentStage").default(1).notNull(), // 1-5 flywheel stage
-  priority: pgEnum("priority", ["low", "medium", "high", "critical"]).notNull(),
+  priority: text("priority").notNull(),
   category: varchar("category", { length: 100 }), // "business", "product", "investment", "trend", etc.
   tags: json("tags"), // Array of tags
   estimatedInvestment: json("estimatedInvestment"), // { min: number, max: number, currency: string }
@@ -2027,24 +1923,14 @@ export type InsertInnovationIdea = typeof innovationIdeas.$inferInsert;
 export const ideaAssessments = pgTable("idea_assessments", {
   id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
   ideaId: integer("ideaId").notNull(),
-  assessmentType: pgEnum("assessmentType", [
-    "market_analysis",
-    "feasibility",
-    "competitive_landscape",
-    "financial_viability",
-    "resource_requirements",
-    "risk_assessment",
-    "timing_analysis",
-    "strategic_fit",
-    "sme_consultation"
-  ]).notNull(),
+  assessmentType: text("assessmentType").notNull(),
   stage: integer("stage").notNull(), // Which flywheel stage (1-5)
-  assessorType: pgEnum("assessorType", ["chief_of_staff", "sme_expert", "framework", "user"]).notNull(),
+  assessorType: text("assessorType").notNull(),
   assessorId: varchar("assessorId", { length: 100 }), // SME expert ID if applicable
   questions: json("questions"), // Array of { question: string, answer: string, score: number }
   findings: text("findings"),
   score: real("score"), // 0-100 score for this assessment
-  recommendation: pgEnum("recommendation", ["proceed", "refine", "pivot", "reject", "needs_more_info"]).notNull(),
+  recommendation: text("recommendation").notNull(),
   refinementSuggestions: json("refinementSuggestions"), // Array of suggestions
   metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
@@ -2061,21 +1947,11 @@ export const ideaRefinements = pgTable("idea_refinements", {
   ideaId: integer("ideaId").notNull(),
   fromStage: integer("fromStage").notNull(),
   toStage: integer("toStage").notNull(),
-  refinementType: pgEnum("refinementType", [
-    "pivot",
-    "scope_change",
-    "target_market_change",
-    "business_model_change",
-    "investment_adjustment",
-    "feature_addition",
-    "feature_removal",
-    "timeline_adjustment",
-    "risk_mitigation"
-  ]).notNull(),
+  refinementType: text("refinementType").notNull(),
   previousState: json("previousState"), // Snapshot of idea before refinement
   changes: json("changes"), // What changed
   rationale: text("rationale"), // Why this refinement was made
-  triggeredBy: pgEnum("triggeredBy", ["assessment", "sme_feedback", "user_input", "chief_of_staff"]).notNull(),
+  triggeredBy: text("triggeredBy").notNull(),
   metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 }, (table) => ({
@@ -2098,7 +1974,7 @@ export const investmentScenarios = pgTable("investment_scenarios", {
   projectedRevenue: json("projectedRevenue"), // { month3: number, month6: number, year1: number }
   projectedProfit: json("projectedProfit"),
   timeToBreakeven: integer("timeToBreakeven"), // Months
-  riskLevel: pgEnum("riskLevel", ["low", "medium", "high", "very_high"]).notNull(),
+  riskLevel: text("riskLevel").notNull(),
   keyAssumptions: json("keyAssumptions"), // Array of assumptions
   recommendations: text("recommendations"),
   isRecommended: boolean("isRecommended").default(false).notNull(),
@@ -2120,9 +1996,9 @@ export const trendRepository = pgTable("trend_repository", {
   category: varchar("category", { length: 100 }), // "technology", "market", "consumer", "regulatory", etc.
   source: varchar("source", { length: 200 }),
   sourceUrl: text("sourceUrl"),
-  trendStrength: pgEnum("trendStrength", ["emerging", "growing", "mainstream", "declining"]).notNull(),
+  trendStrength: text("trendStrength").notNull(),
   relevanceScore: real("relevanceScore"), // 0-100 how relevant to user's interests
-  potentialImpact: pgEnum("potentialImpact", ["low", "medium", "high", "transformative"]).notNull(),
+  potentialImpact: text("potentialImpact").notNull(),
   timeHorizon: varchar("timeHorizon", { length: 50 }), // "3 months", "1 year", "3-5 years"
   relatedIndustries: json("relatedIndustries"), // Array of industries
   keyInsights: json("keyInsights"), // Array of insights
@@ -2145,10 +2021,10 @@ export const generatedDocuments = pgTable("generated_documents", {
   documentId: varchar("documentId", { length: 100 }).notNull().unique(), // DOC-{timestamp}-{random}
   userId: integer("userId").notNull(),
   title: varchar("title", { length: 500 }).notNull(),
-  type: pgEnum("type", ["innovation_brief", "project_genesis", "report", "other"]).notNull(),
+  type: text("type").notNull(),
   content: text("content"), // JSON stringified content
-  classification: pgEnum("classification", ["public", "internal", "confidential", "restricted"]).notNull(),
-  qaStatus: pgEnum("qaStatus", ["pending", "approved", "rejected"]).notNull(),
+  classification: text("classification").notNull(),
+  qaStatus: text("qaStatus").notNull(),
   qaApprover: varchar("qaApprover", { length: 200 }),
   qaApprovedAt: timestamp("qaApprovedAt"),
   qaNotes: text("qaNotes"),
@@ -2173,18 +2049,9 @@ export const fundingPrograms = pgTable("funding_programs", {
   id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
   programId: varchar("programId", { length: 100 }).notNull().unique(),
   name: varchar("name", { length: 300 }).notNull(),
-  country: pgEnum("country", ["UAE", "UK", "EU", "US", "Other"]).notNull(),
+  country: text("country").notNull(),
   region: varchar("region", { length: 100 }), // e.g., "Dubai", "Abu Dhabi", "England"
-  type: pgEnum("type", [
-    "grant",
-    "loan",
-    "tax_credit",
-    "equity",
-    "accelerator",
-    "incubator",
-    "competition",
-    "other"
-  ]).notNull(),
+  type: text("type").notNull(),
   provider: varchar("provider", { length: 200 }).notNull(), // e.g., "MBRIF", "Innovate UK"
   description: text("description"),
   fundingMin: real("fundingMin"), // Minimum funding amount in AED
@@ -2223,13 +2090,7 @@ export const fundingAssessments = pgTable("funding_assessments", {
   ideaId: integer("ideaId").notNull(), // Link to innovation idea
   programId: varchar("programId", { length: 100 }).notNull(), // Link to funding program
   eligibilityScore: real("eligibilityScore"), // 0-100 score
-  eligibilityStatus: pgEnum("eligibilityStatus", [
-    "highly_eligible",
-    "eligible",
-    "partially_eligible",
-    "not_eligible",
-    "needs_review"
-  ]).default("needs_review").notNull(),
+  eligibilityStatus: text("eligibilityStatus").default("needs_review").notNull(),
   criteriaResults: json("criteriaResults"), // Detailed results per criterion
   strengths: json("strengths"), // Array of strengths for this program
   gaps: json("gaps"), // Array of gaps/missing requirements
@@ -2258,18 +2119,8 @@ export const revenueStreams = pgTable("revenue_streams", {
   userId: integer("userId").notNull(),
   ventureName: varchar("ventureName", { length: 200 }).notNull(), // e.g., "Celadon", "Boundless", "CEPHO.Ai"
   streamName: varchar("streamName", { length: 200 }).notNull(), // e.g., "Subscription", "Consulting", "Licensing"
-  streamType: pgEnum("streamType", [
-    "subscription",
-    "one_time",
-    "recurring",
-    "licensing",
-    "consulting",
-    "commission",
-    "advertising",
-    "affiliate",
-    "other"
-  ]).notNull(),
-  status: pgEnum("status", ["active", "paused", "planned", "discontinued"]).notNull(),
+  streamType: text("streamType").notNull(),
+  status: text("status").notNull(),
   currency: varchar("currency", { length: 10 }).default("AED").notNull(),
   monthlyRecurring: real("monthlyRecurring").default(0), // MRR for recurring streams
   annualRecurring: real("annualRecurring").default(0), // ARR
@@ -2298,7 +2149,7 @@ export const revenueTransactions = pgTable("revenue_transactions", {
   transactionDate: timestamp("transactionDate").notNull(),
   amount: real("amount").notNull(),
   currency: varchar("currency", { length: 10 }).default("AED").notNull(),
-  status: pgEnum("status", ["pending", "completed", "failed", "refunded"]).notNull(),
+  status: text("status").notNull(),
   customerName: varchar("customerName", { length: 200 }),
   customerEmail: varchar("customerEmail", { length: 320 }),
   description: text("description"),
@@ -2322,16 +2173,7 @@ export const pipelineOpportunities = pgTable("pipeline_opportunities", {
   opportunityName: varchar("opportunityName", { length: 300 }).notNull(),
   customerName: varchar("customerName", { length: 200 }),
   customerContact: varchar("customerContact", { length: 320 }),
-  stage: pgEnum("stage", [
-    "lead",
-    "qualified",
-    "proposal",
-    "negotiation",
-    "verbal_yes",
-    "contract_sent",
-    "won",
-    "lost"
-  ]).default("lead").notNull(),
+  stage: text("stage").default("lead").notNull(),
   probability: integer("probability").default(10), // 0-100%
   estimatedValue: real("estimatedValue").notNull(),
   currency: varchar("currency", { length: 10 }).default("AED").notNull(),
@@ -2361,7 +2203,7 @@ export const pricingTiers = pgTable("pricing_tiers", {
   tierName: varchar("tierName", { length: 100 }).notNull(), // e.g., "Starter", "Pro", "Enterprise"
   price: real("price").notNull(),
   currency: varchar("currency", { length: 10 }).default("AED").notNull(),
-  billingPeriod: pgEnum("billingPeriod", ["one_time", "monthly", "quarterly", "annual"]).notNull(),
+  billingPeriod: text("billingPeriod").notNull(),
   features: json("features"), // Array of features included
   limitations: json("limitations"), // Usage limits, etc.
   isActive: boolean("isActive").default(true).notNull(),
@@ -2382,14 +2224,14 @@ export const customerAccounts = pgTable("customer_accounts", {
   userId: integer("userId").notNull(),
   ventureName: varchar("ventureName", { length: 200 }).notNull(),
   customerName: varchar("customerName", { length: 200 }).notNull(),
-  customerType: pgEnum("customerType", ["individual", "business", "enterprise"]).notNull(),
+  customerType: text("customerType").notNull(),
   email: varchar("email", { length: 320 }),
   phone: varchar("phone", { length: 50 }),
   company: varchar("company", { length: 200 }),
   industry: varchar("industry", { length: 100 }),
   country: varchar("country", { length: 100 }),
   city: varchar("city", { length: 100 }),
-  status: pgEnum("status", ["prospect", "active", "churned", "paused"]).notNull(),
+  status: text("status").notNull(),
   lifetimeValue: real("lifetimeValue").default(0),
   currency: varchar("currency", { length: 10 }).default("AED").notNull(),
   acquisitionSource: varchar("acquisitionSource", { length: 200 }),
@@ -2415,12 +2257,12 @@ export const revenueForecasts = pgTable("revenue_forecasts", {
   ventureName: varchar("ventureName", { length: 200 }),
   streamId: integer("streamId"), // Optional FK to specific stream
   forecastPeriod: varchar("forecastPeriod", { length: 20 }).notNull(), // "2026-Q1", "2026-02"
-  periodType: pgEnum("periodType", ["monthly", "quarterly", "annual"]).notNull(),
+  periodType: text("periodType").notNull(),
   projectedRevenue: real("projectedRevenue").notNull(),
   actualRevenue: real("actualRevenue"),
   currency: varchar("currency", { length: 10 }).default("AED").notNull(),
   assumptions: text("assumptions"), // What the forecast is based on
-  confidence: pgEnum("confidence", ["low", "medium", "high"]),
+  confidence: text("confidence"),
   variance: real("variance"), // Calculated difference actual vs projected
   variancePercentage: real("variancePercentage"),
   notes: text("notes"),
@@ -2475,7 +2317,7 @@ export const customerPersonas = pgTable("customer_personas", {
   // Basic demographics
   name: varchar("name", { length: 100 }).notNull(),
   age: integer("age").notNull(),
-  gender: pgEnum("gender", ["male", "female", "non_binary", "prefer_not_to_say"]).notNull(),
+  gender: text("gender").notNull(),
   nationality: varchar("nationality", { length: 100 }).notNull(),
   ethnicity: varchar("ethnicity", { length: 100 }),
   location: varchar("location", { length: 200 }).notNull(), // City, Country
@@ -2483,18 +2325,15 @@ export const customerPersonas = pgTable("customer_personas", {
   // Professional profile
   occupation: varchar("occupation", { length: 200 }).notNull(),
   industry: varchar("industry", { length: 100 }).notNull(),
-  jobLevel: pgEnum("jobLevel", ["entry", "mid", "senior", "executive", "founder", "retired", "student"]).notNull(),
-  companySize: pgEnum("companySize", ["solo", "startup", "small", "medium", "large", "enterprise"]),
-  annualIncome: pgEnum("annualIncome", [
-    "under_25k", "25k_50k", "50k_75k", "75k_100k", "100k_150k", 
-    "150k_250k", "250k_500k", "500k_1m", "over_1m"
-  ]),
+  jobLevel: text("jobLevel").notNull(),
+  companySize: text("companySize"),
+  annualIncome: text("annualIncome"),
   
   // Psychographics
   personalityType: varchar("personalityType", { length: 50 }), // e.g., "INTJ", "Early Adopter", "Pragmatist"
-  buyingStyle: pgEnum("buyingStyle", ["impulsive", "researcher", "bargain_hunter", "brand_loyal", "quality_focused", "value_seeker"]),
-  techSavviness: pgEnum("techSavviness", ["low", "medium", "high", "expert"]),
-  riskTolerance: pgEnum("riskTolerance", ["conservative", "moderate", "aggressive"]),
+  buyingStyle: text("buyingStyle"),
+  techSavviness: text("techSavviness"),
+  riskTolerance: text("riskTolerance"),
   
   // Interests and pain points
   interests: json("interests"), // Array of interest areas
@@ -2507,7 +2346,7 @@ export const customerPersonas = pgTable("customer_personas", {
   
   // Categorization
   segment: varchar("segment", { length: 100 }), // e.g., "Tech Professional", "Healthcare Worker", "Small Business Owner"
-  tier: pgEnum("tier", ["core", "extended", "niche"]).notNull(), // For phased rollout
+  tier: text("tier").notNull(), // For phased rollout
   
   // Metadata
   isActive: boolean("isActive").default(true).notNull(),
@@ -2528,15 +2367,7 @@ export const customerSurveys = pgTable("customer_surveys", {
   // Survey details
   title: varchar("title", { length: 200 }).notNull(),
   description: text("description"),
-  surveyType: pgEnum("surveyType", [
-    "idea_validation",
-    "pricing_feedback", 
-    "feature_priority",
-    "product_feedback",
-    "market_research",
-    "competitor_comparison",
-    "user_experience"
-  ]).notNull(),
+  surveyType: text("surveyType").notNull(),
   
   // Associated context
   innovationIdeaId: integer("innovationIdeaId"), // FK to innovation_ideas if validating an idea
@@ -2549,7 +2380,7 @@ export const customerSurveys = pgTable("customer_surveys", {
   sampleSize: integer("sampleSize").default(25), // How many personas to survey
   
   // Status
-  status: pgEnum("status", ["draft", "active", "completed", "archived"]).notNull(),
+  status: text("status").notNull(),
   
   // Metadata
   createdAt: timestamp("createdAt").defaultNow().notNull(),
@@ -2572,8 +2403,8 @@ export const customerSurveyResponses = pgTable("customer_survey_responses", {
   responses: json("responses").notNull(), // Array of answer objects matching questions
   
   // Sentiment and analysis
-  overallSentiment: pgEnum("overallSentiment", ["very_negative", "negative", "neutral", "positive", "very_positive"]),
-  willingnessToPay: pgEnum("willingnessToPay", ["definitely_not", "unlikely", "maybe", "likely", "definitely"]),
+  overallSentiment: text("overallSentiment"),
+  willingnessToPay: text("willingnessToPay"),
   suggestedPricePoint: real("suggestedPricePoint"),
   currency: varchar("currency", { length: 10 }).default("AED"),
   
@@ -2617,7 +2448,7 @@ export const customerFeedbackAggregations = pgTable("customer_feedback_aggregati
   topSuggestions: json("topSuggestions"), // Most common suggestions
   
   // Recommendations
-  goNoGoRecommendation: pgEnum("goNoGoRecommendation", ["strong_go", "go", "conditional", "no_go", "strong_no_go"]),
+  goNoGoRecommendation: text("goNoGoRecommendation"),
   recommendedPricePoint: real("recommendedPricePoint"),
   keyRecommendations: json("keyRecommendations"), // Array of recommendation strings
   
@@ -2638,14 +2469,7 @@ export const focusGroupSessions = pgTable("focus_group_sessions", {
   // Session details
   title: varchar("title", { length: 200 }).notNull(),
   objective: text("objective").notNull(),
-  sessionType: pgEnum("sessionType", [
-    "concept_testing",
-    "pricing_research",
-    "feature_prioritization",
-    "competitive_analysis",
-    "brand_perception",
-    "user_journey_mapping"
-  ]).notNull(),
+  sessionType: text("sessionType").notNull(),
   
   // Associated context
   innovationIdeaId: integer("innovationIdeaId"),
@@ -2665,7 +2489,7 @@ export const focusGroupSessions = pgTable("focus_group_sessions", {
   divergencePoints: json("divergencePoints"), // Points of disagreement
   
   // Status
-  status: pgEnum("status", ["planned", "in_progress", "completed", "analyzed"]).notNull(),
+  status: text("status").notNull(),
   
   // Metadata
   scheduledFor: timestamp("scheduledFor"),
@@ -2685,22 +2509,10 @@ export const innovationValidationCheckpoints = pgTable("innovation_validation_ch
   innovationIdeaId: integer("innovationIdeaId").notNull(), // FK to innovation_ideas
   
   // Flywheel stage
-  flywheelStage: pgEnum("flywheelStage", [
-    "capture",
-    "assess", 
-    "validate",
-    "develop",
-    "commercialize"
-  ]).notNull(),
+  flywheelStage: text("flywheelStage").notNull(),
   
   // Validation type
-  validationType: pgEnum("validationType", [
-    "customer_survey",
-    "focus_group",
-    "pricing_test",
-    "concept_test",
-    "prototype_feedback"
-  ]).notNull(),
+  validationType: text("validationType").notNull(),
   
   // Associated validation
   surveyId: integer("surveyId"), // FK to customerSurveys
@@ -2711,7 +2523,7 @@ export const innovationValidationCheckpoints = pgTable("innovation_validation_ch
   passedValidation: boolean("passedValidation"),
   
   // Decision
-  decision: pgEnum("decision", ["proceed", "pivot", "iterate", "abandon", "pending"]).notNull(),
+  decision: text("decision").notNull(),
   decisionRationale: text("decisionRationale"),
   
   // Sign-offs
@@ -2763,7 +2575,7 @@ export const kpiCategories = pgTable("kpi_categories", {
   
   // Weighting
   weight: real("weight").default(1.0), // For weighted averages
-  priority: pgEnum("priority", ["critical", "high", "medium", "maintain"]),
+  priority: text("priority"),
   
   // Metadata
   isActive: boolean("isActive").default(true).notNull(),
@@ -2808,7 +2620,7 @@ export const smeIndividualAssessments = pgTable("sme_individual_assessments", {
   recommendations: json("recommendations"), // Suggestions for improvement
   
   // Confidence
-  confidenceLevel: pgEnum("confidenceLevel", ["low", "medium", "high"]),
+  confidenceLevel: text("confidenceLevel"),
   
   // Metadata
   createdAt: timestamp("createdAt").defaultNow().notNull(),
@@ -2847,11 +2659,11 @@ export const assessmentOutliers = pgTable("assessment_outliers", {
   deviationPercentage: real("deviationPercentage").notNull(),
   
   // Classification
-  outlierType: pgEnum("outlierType", ["high", "low"]).notNull(), // Above or below average
-  severity: pgEnum("severity", ["minor", "moderate", "significant", "extreme"]).notNull(),
+  outlierType: text("outlierType").notNull(), // Above or below average
+  severity: text("severity").notNull(),
   
   // Review status
-  reviewStatus: pgEnum("reviewStatus", ["pending", "under_review", "resolved", "accepted"]).notNull(),
+  reviewStatus: text("reviewStatus").notNull(),
   
   // Chief of Staff review
   chiefOfStaffReviewed: boolean("chiefOfStaffReviewed").default(false),
@@ -2865,13 +2677,7 @@ export const assessmentOutliers = pgTable("assessment_outliers", {
   conversationOutcome: text("conversationOutcome"),
   
   // Resolution
-  resolution: pgEnum("resolution", [
-    "score_adjusted",
-    "score_validated",
-    "insight_captured",
-    "system_improvement_identified",
-    "dismissed"
-  ]),
+  resolution: text("resolution"),
   resolutionNotes: text("resolutionNotes"),
   
   // Metadata
@@ -2912,7 +2718,7 @@ export const panelAssessmentAggregations = pgTable("panel_assessment_aggregation
   expertCount: integer("expertCount").default(0),
   
   // Consensus level
-  consensusLevel: pgEnum("consensusLevel", ["strong", "moderate", "weak", "divided"]),
+  consensusLevel: text("consensusLevel"),
   
   // Metadata
   aggregatedAt: timestamp("aggregatedAt").defaultNow().notNull(),
@@ -2993,13 +2799,7 @@ export const expertConversationLogs = pgTable("expert_conversation_logs", {
   categoryName: varchar("categoryName", { length: 200 }),
   
   // Conversation
-  conversationType: pgEnum("conversationType", [
-    "outlier_investigation",
-    "score_clarification",
-    "deep_dive",
-    "recommendation_discussion",
-    "general_feedback"
-  ]).notNull(),
+  conversationType: text("conversationType").notNull(),
   
   // Content
   messages: json("messages").notNull(), // Array of { role, content, timestamp }
@@ -3010,7 +2810,7 @@ export const expertConversationLogs = pgTable("expert_conversation_logs", {
   scoreAdjustment: integer("scoreAdjustment"), // If score was adjusted
   
   // Status
-  status: pgEnum("status", ["in_progress", "completed", "follow_up_needed"]).notNull(),
+  status: text("status").notNull(),
   
   // Metadata
   startedAt: timestamp("startedAt").defaultNow().notNull(),
@@ -3042,39 +2842,13 @@ export const insightsRepository = pgTable("insights_repository", {
   fullContent: text("fullContent"),
   
   // Source tracking
-  sourceType: pgEnum("sourceType", [
-    "customer_survey",
-    "focus_group",
-    "sme_assessment",
-    "expert_conversation",
-    "external_research",
-    "market_data",
-    "competitor_analysis",
-    "user_observation",
-    "manual_entry"
-  ]).notNull(),
+  sourceType: text("sourceType").notNull(),
   sourceId: integer("sourceId"), // FK to source table based on sourceType
   sourceReference: varchar("sourceReference", { length: 500 }), // URL or document reference
   sourceName: varchar("sourceName", { length: 300 }), // Human readable source name
   
   // Categorization
-  category: pgEnum("category", [
-    "customer_need",
-    "pricing_insight",
-    "feature_request",
-    "market_trend",
-    "competitive_intelligence",
-    "user_behavior",
-    "pain_point",
-    "opportunity",
-    "risk",
-    "validation_result",
-    "technical_feedback",
-    "ux_feedback",
-    "business_model",
-    "regulatory",
-    "other"
-  ]).notNull(),
+  category: text("category").notNull(),
   
   // Tagging
   tags: json("tags"), // Array of tag strings
@@ -3083,7 +2857,7 @@ export const insightsRepository = pgTable("insights_repository", {
   
   // Relevance
   relevanceScore: real("relevanceScore").default(0.5), // 0-1 how relevant/important
-  confidenceLevel: pgEnum("confidenceLevel", ["low", "medium", "high", "verified"]),
+  confidenceLevel: text("confidenceLevel"),
   
   // Validation
   validatedBy: varchar("validatedBy", { length: 200 }), // Who validated this insight
@@ -3098,7 +2872,7 @@ export const insightsRepository = pgTable("insights_repository", {
   supersededBy: integer("supersededBy"), // If this insight was updated/replaced
   
   // Status
-  status: pgEnum("status", ["active", "archived", "superseded", "disputed"]).notNull(),
+  status: text("status").notNull(),
   
   // Metadata
   capturedAt: timestamp("capturedAt").defaultNow().notNull(),
@@ -3121,20 +2895,7 @@ export const externalResearchReferences = pgTable("external_research_references"
   publicationDate: timestamp("publicationDate"),
   
   // Source
-  sourceType: pgEnum("sourceType", [
-    "academic_paper",
-    "industry_report",
-    "news_article",
-    "blog_post",
-    "government_data",
-    "market_research",
-    "competitor_website",
-    "social_media",
-    "podcast",
-    "video",
-    "book",
-    "other"
-  ]).notNull(),
+  sourceType: text("sourceType").notNull(),
   url: varchar("url", { length: 1000 }),
   publisher: varchar("publisher", { length: 300 }),
   
@@ -3155,7 +2916,7 @@ export const externalResearchReferences = pgTable("external_research_references"
   linkedInsightIds: json("linkedInsightIds"), // Insights derived from this
   
   // Status
-  status: pgEnum("status", ["active", "archived", "outdated"]).notNull(),
+  status: text("status").notNull(),
   
   // Metadata
   importedAt: timestamp("importedAt").defaultNow().notNull(),
@@ -3173,13 +2934,7 @@ export const priorResearchChecks = pgTable("prior_research_checks", {
   userId: integer("userId").notNull(),
   
   // What triggered the check
-  triggerType: pgEnum("triggerType", [
-    "new_survey",
-    "new_focus_group",
-    "new_assessment",
-    "new_idea_validation",
-    "manual_search"
-  ]).notNull(),
+  triggerType: text("triggerType").notNull(),
   triggerId: integer("triggerId"), // FK to the triggering entity
   
   // Search parameters
@@ -3199,12 +2954,7 @@ export const priorResearchChecks = pgTable("prior_research_checks", {
   gapsIdentified: json("gapsIdentified"), // What we don't know yet
   
   // Action taken
-  actionTaken: pgEnum("actionTaken", [
-    "proceeded_with_new_research",
-    "used_existing_insights",
-    "modified_research_scope",
-    "cancelled_duplicate"
-  ]),
+  actionTaken: text("actionTaken"),
   actionRationale: text("actionRationale"),
   
   // Metadata
@@ -3225,16 +2975,7 @@ export const insightUsageLog = pgTable("insight_usage_log", {
   insightId: integer("insightId").notNull(), // FK to insightsRepository
   
   // Usage context
-  usageType: pgEnum("usageType", [
-    "decision_support",
-    "survey_design",
-    "validation_reference",
-    "report_citation",
-    "strategy_input",
-    "presentation",
-    "conversation_reference",
-    "search_result"
-  ]).notNull(),
+  usageType: text("usageType").notNull(),
   usageContext: varchar("usageContext", { length: 300 }), // Where it was used
   
   // Related entities
@@ -3292,17 +3033,7 @@ export const userActivityTracking = pgTable("user_activity_tracking", {
   userId: integer("userId").notNull(),
   
   // Activity details
-  activityType: pgEnum("activityType", [
-    "page_view",
-    "feature_use",
-    "button_click",
-    "form_submit",
-    "search",
-    "report_generate",
-    "conversation",
-    "file_access",
-    "integration_use"
-  ]).notNull(),
+  activityType: text("activityType").notNull(),
   
   // Location
   pagePath: varchar("pagePath", { length: 500 }),
@@ -3335,13 +3066,7 @@ export const workflowPatterns = pgTable("workflow_patterns", {
   
   // Pattern identification
   patternName: varchar("patternName", { length: 200 }).notNull(),
-  patternType: pgEnum("patternType", [
-    "repetitive_task",
-    "inefficient_flow",
-    "feature_discovery",
-    "time_sink",
-    "successful_workflow"
-  ]).notNull(),
+  patternType: text("patternType").notNull(),
   
   // Pattern details
   actionSequence: json("actionSequence").notNull(), // Array of actions in order
@@ -3375,27 +3100,14 @@ export const proactiveRecommendations = pgTable("proactive_recommendations", {
   description: text("description").notNull(),
   
   // Type and category
-  recommendationType: pgEnum("recommendationType", [
-    "workflow_improvement",
-    "feature_suggestion",
-    "integration_recommendation",
-    "automation_opportunity",
-    "efficiency_tip",
-    "learning_resource"
-  ]).notNull(),
+  recommendationType: text("recommendationType").notNull(),
   
   // Source
-  triggeredBy: pgEnum("triggeredBy", [
-    "usage_pattern",
-    "time_analysis",
-    "error_detection",
-    "underutilization",
-    "manual_observation"
-  ]).notNull(),
+  triggeredBy: text("triggeredBy").notNull(),
   relatedPatternId: integer("relatedPatternId"), // FK to workflowPatterns
   
   // Priority
-  priority: pgEnum("priority", ["low", "medium", "high", "urgent"]),
+  priority: text("priority"),
   estimatedTimeSaved: integer("estimatedTimeSaved"), // Minutes per week
   
   // Action
@@ -3403,7 +3115,7 @@ export const proactiveRecommendations = pgTable("proactive_recommendations", {
   actionSteps: json("actionSteps"), // Array of steps to take
   
   // Status
-  status: pgEnum("status", ["pending", "viewed", "accepted", "rejected", "implemented"]).notNull(),
+  status: text("status").notNull(),
   userResponse: text("userResponse"), // Why they accepted/rejected
   
   // Metadata
@@ -3430,17 +3142,7 @@ export const outputQualityScores = pgTable("output_quality_scores", {
   userId: integer("userId").notNull(),
   
   // What was scored
-  outputType: pgEnum("outputType", [
-    "report",
-    "document",
-    "analysis",
-    "presentation",
-    "email_draft",
-    "summary",
-    "recommendation",
-    "visualization",
-    "other"
-  ]).notNull(),
+  outputType: text("outputType").notNull(),
   outputId: varchar("outputId", { length: 100 }), // Reference to the specific output
   outputTitle: varchar("outputTitle", { length: 300 }),
   
@@ -3448,29 +3150,11 @@ export const outputQualityScores = pgTable("output_quality_scores", {
   score: integer("score").notNull(), // 1-10
   
   // Feedback for low scores (1-4)
-  issueCategory: pgEnum("issueCategory", [
-    "template_issue",
-    "formatting_problem",
-    "design_flaw",
-    "content_inaccuracy",
-    "missing_information",
-    "wrong_tone",
-    "too_long",
-    "too_short",
-    "unclear",
-    "other"
-  ]),
+  issueCategory: text("issueCategory"),
   issueDescription: text("issueDescription"),
   
   // Responsible area
-  responsibleArea: pgEnum("responsibleArea", [
-    "ai_generation",
-    "template_design",
-    "data_quality",
-    "user_input",
-    "system_bug",
-    "unknown"
-  ]),
+  responsibleArea: text("responsibleArea"),
   
   // Follow up
   requiresAction: boolean("requiresAction").default(false),
@@ -3496,28 +3180,21 @@ export const qualityImprovementTickets = pgTable("quality_improvement_tickets", 
   description: text("description").notNull(),
   
   // Category
-  category: pgEnum("category", [
-    "template_fix",
-    "formatting_update",
-    "design_improvement",
-    "content_accuracy",
-    "feature_enhancement",
-    "bug_fix"
-  ]).notNull(),
+  category: text("category").notNull(),
   
   // Related scores
   relatedScoreIds: json("relatedScoreIds"), // Array of outputQualityScores IDs
   occurrenceCount: integer("occurrenceCount").default(1), // How many times this issue occurred
   
   // Priority
-  priority: pgEnum("priority", ["low", "medium", "high", "critical"]),
+  priority: text("priority"),
   impactScore: real("impactScore"), // Calculated from frequency and severity
   
   // Assignment
   assignedTo: varchar("assignedTo", { length: 200 }), // Team or person responsible
   
   // Status
-  status: pgEnum("status", ["open", "in_progress", "resolved", "wont_fix"]).notNull(),
+  status: text("status").notNull(),
   resolution: text("resolution"),
   
   // Metadata
@@ -3538,7 +3215,7 @@ export const qualityMetricsSnapshots = pgTable("quality_metrics_snapshots", {
   
   // Period
   snapshotDate: timestamp("snapshotDate").notNull(),
-  periodType: pgEnum("periodType", ["daily", "weekly", "monthly"]).notNull(),
+  periodType: text("periodType").notNull(),
   
   // Overall metrics
   totalOutputs: integer("totalOutputs").default(0),
@@ -3639,16 +3316,7 @@ export const cosInteractionLog = pgTable("cos_interaction_log", {
   userId: integer("userId").notNull(),
   
   // Interaction details
-  interactionType: pgEnum("interactionType", [
-    "question",      // User asked a question
-    "clarification", // User asked for clarification
-    "correction",    // User corrected COS output
-    "approval",      // User approved something
-    "rejection",     // User rejected something
-    "feedback",      // User gave feedback
-    "preference",    // User stated a preference
-    "instruction"    // User gave an instruction
-  ]).notNull(),
+  interactionType: text("interactionType").notNull(),
   
   // Content
   userInput: text("userInput").notNull(), // What user said/asked
@@ -3679,18 +3347,7 @@ export const cosLearnedPatterns = pgTable("cos_learned_patterns", {
   userId: integer("userId").notNull(),
   
   // Pattern details
-  patternType: pgEnum("patternType", [
-    "thinking_style",      // How user approaches problems
-    "decision_pattern",    // How user makes decisions
-    "communication_style", // How user communicates
-    "quality_standard",    // What user considers quality
-    "priority_pattern",    // What user prioritizes
-    "workflow_pattern",    // How user likes to work
-    "format_preference",   // Formatting preferences
-    "terminology",         // Specific terms user uses
-    "value",               // Core values that guide decisions
-    "pet_peeve"            // Things user dislikes
-  ]).notNull(),
+  patternType: text("patternType").notNull(),
   
   // Pattern content
   patternName: varchar("patternName", { length: 200 }).notNull(),
@@ -3771,7 +3428,7 @@ export const cosLearningMetrics = pgTable("cos_learning_metrics", {
   
   // Period
   metricDate: timestamp("metricDate").notNull(),
-  periodType: pgEnum("periodType", ["daily", "weekly", "monthly"]).notNull(),
+  periodType: text("periodType").notNull(),
   
   // Interaction metrics
   totalInteractions: integer("totalInteractions").default(0),
@@ -3808,7 +3465,7 @@ export const questionnaireResponses = pgTable('questionnaire_responses', {
   id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
   userId: integer('user_id').notNull(),
   questionId: varchar('question_id', { length: 10 }).notNull(), // e.g., "A51", "B72"
-  questionType: pgEnum('question_type', ['scale', 'boolean']).notNull(),
+  questionType: text('question_type').notNull(),
   scaleValue: integer('scale_value'), // 1-10 for scale questions
   booleanValue: boolean('boolean_value'), // true/false for Y/N questions
   section: varchar('section', { length: 100 }), // e.g., "Business Operations", "Innovation"
@@ -3831,16 +3488,16 @@ export const digitalTwinProfile = pgTable('digital_twin_profile', {
   techAdoptionSpeed: integer('tech_adoption_speed'),
   aiBeliefLevel: integer('ai_belief_level'),
   dataVsIntuition: integer('data_vs_intuition'),
-  buildVsBuy: pgEnum('build_vs_buy', ['build', 'buy', 'balanced']),
+  buildVsBuy: text('build_vs_buy'),
   // Market Strategy
   nicheVsMass: integer('niche_vs_mass'),
   firstMoverVsFollower: integer('first_mover_vs_follower'),
-  organicVsMA: pgEnum('organic_vs_ma', ['organic', 'ma', 'balanced']),
+  organicVsMA: text('organic_vs_ma'),
   // Work Style
   structurePreference: integer('structure_preference'),
   interruptionTolerance: integer('interruption_tolerance'),
   batchingPreference: integer('batching_preference'),
-  locationPreference: pgEnum('location_preference', ['home', 'office', 'varied']),
+  locationPreference: text('location_preference'),
   // Strategic Mindset
   scenarioPlanningLevel: integer('scenario_planning_level'),
   pivotComfort: integer('pivot_comfort'),
@@ -3868,7 +3525,7 @@ export const npsResponses = pgTable('nps_responses', {
   id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
   userId: integer('user_id').notNull(),
   score: integer('score').notNull(), // 0-10 NPS scale
-  category: pgEnum('category', ['detractor', 'passive', 'promoter']).notNull(),
+  category: text('category').notNull(),
   feedback: text('feedback'), // Optional open-ended feedback
   touchpoint: varchar('touchpoint', { length: 100 }), // Where survey was triggered
   createdAt: timestamp('created_at').defaultNow().notNull(),
@@ -3883,10 +3540,10 @@ export const customerHealth = pgTable('customer_health', {
   id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
   userId: integer('user_id').notNull(),
   healthScore: integer('health_score').notNull(), // 0-100
-  engagementLevel: pgEnum('engagement_level', ['low', 'medium', 'high', 'champion']).notNull(),
+  engagementLevel: text('engagement_level').notNull(),
   lastActiveDate: timestamp('last_active_date'),
   featureAdoption: json('feature_adoption'), // Which features they use
-  riskLevel: pgEnum('risk_level', ['low', 'medium', 'high', 'critical']),
+  riskLevel: text('risk_level'),
   nextCheckIn: timestamp('next_check_in'),
   notes: text('notes'),
   createdAt: timestamp('created_at').defaultNow().notNull(),
@@ -3901,9 +3558,9 @@ export type InsertCustomerHealth = typeof customerHealth.$inferInsert;
 export const partnerships = pgTable('partnerships', {
   id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
   name: varchar('name', { length: 200 }).notNull(),
-  type: pgEnum('type', ['technology', 'distribution', 'strategic', 'integration', 'referral']).notNull(),
-  status: pgEnum('status', ['prospect', 'contacted', 'negotiating', 'active', 'inactive', 'churned']).notNull(),
-  priority: pgEnum('priority', ['low', 'medium', 'high', 'critical']),
+  type: text('type').notNull(),
+  status: text('status').notNull(),
+  priority: text('priority'),
   contactName: varchar('contact_name', { length: 200 }),
   contactEmail: varchar('contact_email', { length: 320 }),
   value: varchar('value', { length: 100 }), // Estimated value
@@ -3941,10 +3598,10 @@ export type InsertTeamCapability = typeof teamCapabilities.$inferInsert;
  */
 export const complianceItems = pgTable('compliance_items', {
   id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
-  framework: pgEnum('framework', ['soc2', 'gdpr', 'hipaa', 'iso27001', 'wcag']).notNull(),
+  framework: text('framework').notNull(),
   category: varchar('category', { length: 100 }).notNull(),
   requirement: text('requirement').notNull(),
-  status: pgEnum('status', ['not_started', 'in_progress', 'implemented', 'verified', 'na']).notNull(),
+  status: text('status').notNull(),
   evidence: text('evidence'),
   owner: varchar('owner', { length: 200 }),
   dueDate: timestamp('due_date'),
@@ -3962,7 +3619,7 @@ export type InsertComplianceItem = typeof complianceItems.$inferInsert;
 export const ragContexts = pgTable('rag_contexts', {
   id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
   userId: integer('user_id').notNull(),
-  contextType: pgEnum('context_type', ['conversation', 'document', 'preference', 'decision', 'memory']).notNull(),
+  contextType: text('context_type').notNull(),
   content: text('content').notNull(),
   embedding: json('embedding'), // Vector embedding for similarity search
   metadata: json('metadata'),
@@ -3996,7 +3653,7 @@ export const projectGenesisPhases = pgTable("project_genesis_phases", {
   projectId: integer("projectId").notNull(), // FK to project_genesis
   phaseNumber: integer("phaseNumber").notNull(), // 1-6
   phaseName: varchar("phaseName", { length: 100 }).notNull(),
-  status: pgEnum("status", ["not_started", "in_progress", "completed", "blocked"]).notNull(),
+  status: text("status").notNull(),
   startedAt: timestamp("startedAt"),
   completedAt: timestamp("completedAt"),
   assignedTeam: json("assignedTeam"), // Array of user IDs and expert IDs
@@ -4020,7 +3677,7 @@ export const projectGenesisMilestones = pgTable("project_genesis_milestones", {
   milestoneName: varchar("milestoneName", { length: 200 }).notNull(),
   description: text("description"),
   dueDate: timestamp("dueDate"),
-  status: pgEnum("status", ["pending", "in_progress", "completed", "overdue"]).notNull(),
+  status: text("status").notNull(),
   completedAt: timestamp("completedAt"),
   completedBy: integer("completedBy"), // User ID
   notes: text("notes"),
@@ -4043,7 +3700,7 @@ export const projectGenesisDeliverables = pgTable("project_genesis_deliverables"
   deliverableType: varchar("deliverableType", { length: 100 }).notNull(), // "document", "presentation", "model", "report"
   description: text("description"),
   fileUrl: varchar("fileUrl", { length: 500 }),
-  status: pgEnum("status", ["draft", "review", "approved", "rejected"]).notNull(),
+  status: text("status").notNull(),
   createdBy: integer("createdBy"), // User ID
   reviewedBy: integer("reviewedBy"), // User ID
   approvedBy: integer("approvedBy"), // User ID
@@ -4114,11 +3771,11 @@ export const blueprintLibrary = pgTable("blueprint_library", {
   deliverables: json("deliverables"), // Array of deliverable templates
   resources: json("resources"), // Required resources
   estimatedDuration: integer("estimatedDuration"), // Hours
-  complexity: pgEnum("complexity", ["low", "medium", "high"]),
+  complexity: text("complexity"),
   tags: json("tags"), // Array of tags
   fileUrl: varchar("fileUrl", { length: 500 }),
   version: varchar("version", { length: 20 }).default("1.0"),
-  status: pgEnum("status", ["draft", "active", "deprecated"]).notNull(),
+  status: text("status").notNull(),
   createdBy: integer("createdBy"),
   metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
@@ -4137,7 +3794,7 @@ export const blueprintExecutions = pgTable("blueprint_executions", {
   projectId: integer("projectId"), // FK to project_genesis (optional)
   userId: integer("userId").notNull(),
   executionName: varchar("executionName", { length: 300 }).notNull(),
-  status: pgEnum("status", ["planning", "in_progress", "completed", "paused", "cancelled"]).notNull(),
+  status: text("status").notNull(),
   currentPhase: integer("currentPhase").default(1),
   progress: integer("progress").default(0), // 0-100
   startedAt: timestamp("startedAt"),
@@ -4374,13 +4031,7 @@ export const digitalTwins = pgTable("digital_twins", {
   
   // Profile
   name: varchar("name", { length: 200 }),
-  learningStyle: pgEnum("learningStyle", [
-    "visual",
-    "auditory",
-    "reading",
-    "kinesthetic",
-    "mixed"
-  ]).default("mixed"),
+  learningStyle: text("learningStyle").default("mixed"),
   
   // Competency scores (0-100)
   strategicThinking: integer("strategicThinking").default(20).notNull(),
@@ -4475,12 +4126,7 @@ export const aiSmeConsultations = pgTable("ai_sme_consultations", {
   response: text("response"),
   
   // Status
-  status: pgEnum("status", [
-    "pending",
-    "in_progress",
-    "completed",
-    "cancelled"
-  ]).default("pending").notNull(),
+  status: text("status").default("pending").notNull(),
   
   // Conversation
   conversationHistory: json("conversationHistory").$type<any[]>(),
