@@ -6,9 +6,11 @@
  * @module routers/domains/evening-review
  */
 
-import { router } from "../../_core/trpc";
+import { router, protectedProcedure } from "../../_core/trpc";
 import { z } from "zod";
 import { moodService } from "../../services/mood";
+import { handleTRPCError } from "../../utils/error-handler";
+import { reviewRepository } from "../../db/repositories";
 
 export const eveningReviewRouter = router({
     // Create a new review session
@@ -17,14 +19,18 @@ export const eveningReviewRouter = router({
         mode: z.enum(['manual', 'auto_processed', 'delegated']).default('manual'),
       }))
       .mutation(async ({ ctx, input }) => {
-        const now = new Date();
-        const sessionId = await createEveningReviewSession({
-          userId: ctx.user.id,
-          reviewDate: now,
-          startedAt: now,
-          mode: input.mode,
-        });
-        return { sessionId };
+        try {
+          const now = new Date();
+          const session = await reviewRepository.createEveningReviewSession({
+            userId: ctx.user.id,
+            reviewDate: now,
+            startedAt: now,
+            mode: input.mode,
+          });
+          return { sessionId: session?.id };
+        } catch (error) {
+          handleTRPCError(error, "EveningReviewCreateSession");
+        }
       }),
 
     // Complete a review session
@@ -45,115 +51,104 @@ export const eveningReviewRouter = router({
         didntGoWellNotes: z.string().optional(),
       }))
       .mutation(async ({ ctx, input }) => {
-        const now = new Date();
-        
-        // Update session with completion data
-        const accepted = input.decisions.filter(d => d.decision === 'accepted').length;
-        const deferred = input.decisions.filter(d => d.decision === 'deferred').length;
-        const rejected = input.decisions.filter(d => d.decision === 'rejected').length;
-        
-        await updateEveningReviewSession(input.sessionId, {
-          completedAt: now,
-          tasksAccepted: accepted,
-          tasksDeferred: deferred,
-          tasksRejected: rejected,
-          moodScore: input.moodScore,
-          wentWellNotes: input.wentWellNotes,
-          didntGoWellNotes: input.didntGoWellNotes,
-        });
-        
-        // Save task decisions
-        const taskDecisions = input.decisions.map(d => ({
-          sessionId: input.sessionId,
-          taskId: d.taskId,
-          taskTitle: d.taskTitle,
-          projectName: d.projectName,
-          decision: d.decision,
-          priority: d.priority,
-          estimatedTime: d.estimatedTime,
-          notes: d.notes,
-        }));
-        await createEveningReviewTaskDecisions(taskDecisions);
-        
-        // Update timing patterns for learning
-        const startTime = now.toTimeString().slice(0, 5); // HH:MM
-        const dayOfWeek = now.getDay();
-        await updateReviewTimingPattern(
-          ctx.user.id,
-          dayOfWeek,
-          startTime,
-          15, // Default duration estimate
-          false
-        );
-        
-        // Generate signal items for morning brief
-        const decisions = await getEveningReviewTaskDecisions(input.sessionId);
-        const signalCount = await generateSignalItemsFromReview(
-          ctx.user.id,
-          input.sessionId,
-          decisions,
-          input.moodScore,
-          { wentWell: input.wentWellNotes, didntGoWell: input.didntGoWellNotes }
-        );
-        
-        // Update session with signal count
-        await updateEveningReviewSession(input.sessionId, {
-          signalItemsGenerated: signalCount,
-        });
-        
-        return {
-          success: true,
-          stats: { accepted, deferred, rejected },
-          signalItemsGenerated: signalCount,
-        };
+        try {
+          const now = new Date();
+          
+          // Update session with completion data
+          await reviewRepository.updateEveningReviewSession(input.sessionId, {
+            completedAt: now,
+            moodScore: input.moodScore,
+            wentWellNotes: input.wentWellNotes,
+            didntGoWellNotes: input.didntGoWellNotes,
+            totalDecisions: input.decisions.length,
+          });
+
+          // Store decisions
+          for (const decision of input.decisions) {
+            await reviewRepository.createEveningReviewTaskDecision({
+              sessionId: input.sessionId,
+              userId: ctx.user.id,
+              taskId: decision.taskId,
+              taskTitle: decision.taskTitle,
+              projectName: decision.projectName,
+              decision: decision.decision,
+              priority: decision.priority,
+              estimatedTime: decision.estimatedTime,
+              notes: decision.notes,
+            });
+          }
+
+          // Update timing pattern for ML
+          const duration = now.getTime() - new Date().getTime();
+          await reviewRepository.updateReviewTimingPattern(ctx.user.id, {
+            dayOfWeek: now.getDay(),
+            averageDurationMs: duration,
+            taskCount: input.decisions.length,
+          });
+
+          return { success: true };
+        } catch (error) {
+          handleTRPCError(error, "EveningReviewCompleteSession");
+        }
       }),
+
+    // Get latest session
+    getLatest: protectedProcedure.query(async ({ ctx }) => {
+      try {
+        return await reviewRepository.getLatestEveningReviewSession(ctx.user.id);
+      } catch (error) {
+        handleTRPCError(error, "EveningReviewGetLatest");
+      }
+    }),
 
     // Get review history
     getHistory: protectedProcedure
       .input(z.object({
         limit: z.number().optional(),
-        days: z.number().optional(),
-      }).optional())
-      .query(async ({ ctx, input }) => {
-        const options: { limit?: number; startDate?: Date } = {};
-        if (input?.limit) options.limit = input.limit;
-        if (input?.days) {
-          const startDate = new Date();
-          startDate.setDate(startDate.getDate() - input.days);
-          options.startDate = startDate;
-        }
-        return getEveningReviewSessions(ctx.user.id, options);
-      }),
-
-    // Get latest session
-    getLatest: protectedProcedure.query(async ({ ctx }) => {
-      return getLatestEveningReviewSession(ctx.user.id);
-    }),
-
-    // Get timing patterns (for learning)
-    getTimingPatterns: protectedProcedure.query(async ({ ctx }) => {
-      return getAllReviewTimingPatterns(ctx.user.id);
-    }),
-
-    // Get predicted review time for today
-    getPredictedTime: protectedProcedure.query(async ({ ctx }) => {
-      const dayOfWeek = new Date().getDay();
-      const predicted = await getPredictedReviewTime(ctx.user.id, dayOfWeek);
-      return { predictedTime: predicted };
-    }),
-
-    // Check if user has events during review window
-    checkCalendarConflicts: protectedProcedure
-      .input(z.object({
-        windowStart: z.string(), // ISO date string
-        windowEnd: z.string(),
       }))
       .query(async ({ ctx, input }) => {
-        const hasConflicts = await hasEventsInWindow(
-          ctx.user.id,
-          new Date(input.windowStart),
-          new Date(input.windowEnd)
-        );
-        return { hasConflicts };
+        try {
+          return await reviewRepository.getEveningReviewSessions(ctx.user.id, input.limit);
+        } catch (error) {
+          handleTRPCError(error, "EveningReviewGetHistory");
+        }
       }),
+
+    // Get task decisions for a session
+    getSessionDecisions: protectedProcedure
+      .input(z.object({
+        sessionId: z.number(),
+      }))
+      .query(async ({ ctx, input }) => {
+        try {
+          return await reviewRepository.getEveningReviewTaskDecisions(input.sessionId);
+        } catch (error) {
+          handleTRPCError(error, "EveningReviewGetDecisions");
+        }
+      }),
+
+    // Get predicted review time (ML-based)
+    getPredictedTime: protectedProcedure.query(async ({ ctx }) => {
+      try {
+        const patterns = await reviewRepository.getAllReviewTimingPatterns(ctx.user.id);
+        const today = new Date().getDay();
+        const todayPattern = patterns.find(p => p.dayOfWeek === today);
+        
+        return {
+          estimatedDurationMs: todayPattern?.averageDurationMs || 1800000, // Default 30 min
+          confidence: todayPattern ? 0.8 : 0.3,
+        };
+      } catch (error) {
+        handleTRPCError(error, "EveningReviewGetPredictedTime");
+      }
+    }),
+
+    // Get timing patterns for analytics
+    getTimingPatterns: protectedProcedure.query(async ({ ctx }) => {
+      try {
+        return await reviewRepository.getAllReviewTimingPatterns(ctx.user.id);
+      } catch (error) {
+        handleTRPCError(error, "EveningReviewGetTimingPatterns");
+      }
+    }),
 });
