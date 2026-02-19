@@ -9,6 +9,7 @@
 import { router } from "../../_core/trpc";
 import { z } from "zod";
 import { businessPlanService } from "../../services/business-plan";
+import { handleTRPCError } from "../../utils/error-handler";
 
 export const businessPlanReviewRouter = router({
     // Get all business plan sections
@@ -168,14 +169,22 @@ export const businessPlanReviewRouter = router({
         projectName: z.string(),
       }))
       .query(async ({ ctx, input }) => {
-        return getBusinessPlanReviewVersions(ctx.user.id, input.projectName);
+        try {
+          return getBusinessPlanReviewVersions(ctx.user.id, input.projectName);
+        } catch (error) {
+          handleTRPCError(error, "businessplanreview");
+        }
       }),
 
     // Get a specific version by ID
     getVersionById: protectedProcedure
       .input(z.object({ id: z.number() }))
       .query(async ({ input }) => {
-        return getBusinessPlanReviewVersionById(input.id);
+        try {
+          return getBusinessPlanReviewVersionById(input.id);
+        } catch (error) {
+          handleTRPCError(error, "businessplanreview");
+        }
       }),
 
     // Get all user's business plan projects
@@ -239,10 +248,14 @@ export const businessPlanReviewRouter = router({
         expertId: z.string().optional(),
       }))
       .query(async ({ input }) => {
-        return getExpertFollowUpQuestions(input.reviewVersionId, {
+        try {
+          return getExpertFollowUpQuestions(input.reviewVersionId, {
           sectionId: input.sectionId,
           expertId: input.expertId,
         });
+        } catch (error) {
+          handleTRPCError(error, "businessplanreview");
+        }
       }),
 
     // Generate PDF report markdown

@@ -9,6 +9,7 @@
 import { router } from "../../_core/trpc";
 import { z } from "zod";
 import { documentService } from "../../services/document";
+import { handleTRPCError } from "../../utils/error-handler";
 
 export const documentLibraryRouter = router({
     // List all generated documents

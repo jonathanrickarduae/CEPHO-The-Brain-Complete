@@ -9,6 +9,7 @@
 import { router } from "../../_core/trpc";
 import { z } from "zod";
 import { documentService } from "../../services/document";
+import { handleTRPCError } from "../../utils/error-handler";
 
 export const libraryRouter = router({
     // Create a new library document
@@ -25,7 +26,8 @@ export const libraryRouter = router({
         metadata: z.any().optional(),
       }))
       .mutation(async ({ ctx, input }) => {
-        return createLibraryDocument({
+        try {
+          return createLibraryDocument({
           userId: ctx.user.id,
           projectId: input.projectId || null,
           folder: input.folder,
@@ -37,6 +39,9 @@ export const libraryRouter = router({
           thumbnailUrl: input.thumbnailUrl || null,
           metadata: input.metadata || null,
         });
+        } catch (error) {
+          handleTRPCError(error, "library");
+        }
       }),
 
     // Get library documents
@@ -48,14 +53,22 @@ export const libraryRouter = router({
         limit: z.number().optional(),
       }).optional())
       .query(async ({ ctx, input }) => {
-        return getLibraryDocuments(ctx.user.id, input);
+        try {
+          return getLibraryDocuments(ctx.user.id, input);
+        } catch (error) {
+          handleTRPCError(error, "library");
+        }
       }),
 
     // Get single document by ID
     get: protectedProcedure
       .input(z.object({ id: z.number() }))
       .query(async ({ input }) => {
-        return getLibraryDocumentById(input.id);
+        try {
+          return getLibraryDocumentById(input.id);
+        } catch (error) {
+          handleTRPCError(error, "library");
+        }
       }),
 
     // Update document

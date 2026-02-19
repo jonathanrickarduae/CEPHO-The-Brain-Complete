@@ -9,6 +9,7 @@
 import { router } from "../../_core/trpc";
 import { z } from "zod";
 import { projectService } from "../../services/project";
+import { handleTRPCError } from "../../utils/error-handler";
 
 export const innovationRouter = router({
     // Capture a new idea
