@@ -40,6 +40,7 @@ const EveningReview = lazy(() => import("./pages/EveningReview"));
 const MorningSignal = lazy(() => import("./pages/MorningSignal"));
 const AITeam = lazy(() => import("./pages/AITeam"));
 const Waitlist = lazy(() => import("./pages/Waitlist"));
+const Login = lazy(() => import("./pages/Login"));
 const Settings = lazy(() => import("./pages/Settings"));
 const Commercialization = lazy(() => import("./pages/Commercialization"));
 const GoLive = lazy(() => import("./pages/GoLive"));
@@ -98,6 +99,9 @@ function Router() {
         
         {/* Waitlist page without sidebar */}
         <Route path="/waitlist" component={Waitlist} />
+        
+        {/* Login page without sidebar */}
+        <Route path="/login" component={Login} />
         
         {/* Dashboard pages with sidebar */}
         <Route path="/dashboard">
