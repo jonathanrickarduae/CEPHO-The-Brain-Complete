@@ -1902,9 +1902,9 @@ export const eveningReviewSessions = pgTable("evening_review_sessions", {
   metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 }, (table) => ({
-  idxIdx: index("eveningReviewSessions_user_id_idx").on(table.userId),
-  idxIdx: index("eveningReviewSessions_created_at_idx").on(table.createdAt),
-  idxIdx: index("eveningReviewSessions_user_created_idx").on(table.userId, table.createdAt),
+  userIdx: index("eveningReviewSessions_user_id_idx").on(table.userId),
+  createdIdx: index("eveningReviewSessions_created_at_idx").on(table.createdAt),
+  userCreatedIdx: index("eveningReviewSessions_user_created_idx").on(table.userId, table.createdAt),
 }));
 
 export type EveningReviewSession = typeof eveningReviewSessions.$inferSelect;
@@ -2724,9 +2724,9 @@ export const innovationValidationCheckpoints = pgTable("innovation_validation_ch
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   completedAt: timestamp("completedAt"),
 }, (table) => ({
-  idxIdx: index("innovationValidationCheckpoints_user_id_idx").on(table.userId),
-  idxIdx: index("innovationValidationCheckpoints_created_at_idx").on(table.createdAt),
-  idxIdx: index("innovationValidationCheckpoints_user_created_idx").on(table.userId, table.createdAt),
+  userIdx: index("innovationValidationCheckpoints_user_id_idx").on(table.userId),
+  createdIdx: index("innovationValidationCheckpoints_created_at_idx").on(table.createdAt),
+  userCreatedIdx: index("innovationValidationCheckpoints_user_created_idx").on(table.userId, table.createdAt),
 }));
 
 export type InnovationValidationCheckpoint = typeof innovationValidationCheckpoints.$inferSelect;
@@ -3593,9 +3593,9 @@ export const cosTrainingProgress = pgTable("cos_training_progress", {
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
 }, (table) => ({
-  idxIdx: index("cosTrainingProgress_user_id_idx").on(table.userId),
-  idxIdx: index("cosTrainingProgress_created_at_idx").on(table.createdAt),
-  idxIdx: index("cosTrainingProgress_user_created_idx").on(table.userId, table.createdAt),
+  userIdx: index("cosTrainingProgress_user_id_idx").on(table.userId),
+  createdIdx: index("cosTrainingProgress_created_at_idx").on(table.createdAt),
+  userCreatedIdx: index("cosTrainingProgress_user_created_idx").on(table.userId, table.createdAt),
 }));
 export type CosTrainingProgress = typeof cosTrainingProgress.$inferSelect;
 export type InsertCosTrainingProgress = typeof cosTrainingProgress.$inferInsert;
@@ -3755,9 +3755,9 @@ export const cosUserMentalModel = pgTable("cos_user_mental_model", {
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
 }, (table) => ({
-  idxIdx: index("cosUserMentalModel_user_id_idx").on(table.userId),
-  idxIdx: index("cosUserMentalModel_created_at_idx").on(table.createdAt),
-  idxIdx: index("cosUserMentalModel_user_created_idx").on(table.userId, table.createdAt),
+  userIdx: index("cosUserMentalModel_user_id_idx").on(table.userId),
+  createdIdx: index("cosUserMentalModel_created_at_idx").on(table.createdAt),
+  userCreatedIdx: index("cosUserMentalModel_user_created_idx").on(table.userId, table.createdAt),
 }));
 export type CosUserMentalModel = typeof cosUserMentalModel.$inferSelect;
 export type InsertCosUserMentalModel = typeof cosUserMentalModel.$inferInsert;

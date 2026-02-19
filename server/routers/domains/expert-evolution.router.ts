@@ -25,13 +25,10 @@ export const expertEvolutionRouter = router({
         metadata: z.any().optional(),
       }))
       .mutation(async ({ ctx, input }) => {
-        try {
-          return createExpertConversation({
+        return createExpertConversation({
           userId: ctx.user.id,
           ...input,
         });
-        } catch (error) {
-          handleTRPCError(error, "ExpertEvolution");
       }),
 
     // Get conversation history with an expert
@@ -42,13 +39,10 @@ export const expertEvolutionRouter = router({
         limit: z.number().optional(),
       }))
       .query(async ({ ctx, input }) => {
-        try {
-          return getExpertConversations(ctx.user.id, input.expertId, {
+        return getExpertConversations(ctx.user.id, input.expertId, {
           projectId: input.projectId,
           limit: input.limit,
         });
-        } catch (error) {
-          handleTRPCError(error, "ExpertEvolution");
       }),
 
     // Get formatted conversation context for prompt injection
@@ -58,10 +52,7 @@ export const expertEvolutionRouter = router({
         limit: z.number().optional(),
       }))
       .query(async ({ ctx, input }) => {
-        try {
-          return getExpertConversationContext(ctx.user.id, input.expertId, input.limit);
-        } catch (error) {
-          handleTRPCError(error, "ExpertEvolution");
+        return getExpertConversationContext(ctx.user.id, input.expertId, input.limit);
       }),
 
     // Store a memory/learning about the user
@@ -75,13 +66,10 @@ export const expertEvolutionRouter = router({
         source: z.string().optional(),
       }))
       .mutation(async ({ ctx, input }) => {
-        try {
-          return createExpertMemory({
+        return createExpertMemory({
           userId: ctx.user.id,
           ...input,
         });
-        } catch (error) {
-          handleTRPCError(error, "ExpertEvolution");
       }),
 
     // Get memories for an expert
@@ -92,13 +80,10 @@ export const expertEvolutionRouter = router({
         limit: z.number().optional(),
       }))
       .query(async ({ ctx, input }) => {
-        try {
-          return getExpertMemories(ctx.user.id, input.expertId, {
+        return getExpertMemories(ctx.user.id, input.expertId, {
           memoryType: input.memoryType,
           limit: input.limit,
         });
-        } catch (error) {
-          handleTRPCError(error, "ExpertEvolution");
       }),
 
     // Get formatted memory context for prompt injection
@@ -107,10 +92,7 @@ export const expertEvolutionRouter = router({
         expertId: z.string(),
       }))
       .query(async ({ ctx, input }) => {
-        try {
-          return getExpertMemoryContext(ctx.user.id, input.expertId);
-        } catch (error) {
-          handleTRPCError(error, "ExpertEvolution");
+        return getExpertMemoryContext(ctx.user.id, input.expertId);
       }),
 
     // Update a memory (e.g., increase confidence, mark as used)
@@ -140,20 +122,14 @@ export const expertEvolutionRouter = router({
         createdBy: z.string().optional(),
       }))
       .mutation(async ({ input }) => {
-        try {
-          return createExpertPromptEvolution(input);
-        } catch (error) {
-          handleTRPCError(error, "ExpertEvolution");
+        return createExpertPromptEvolution(input);
       }),
 
     // Get latest prompt evolution for an expert
     getLatestPromptEvolution: protectedProcedure
       .input(z.object({ expertId: z.string() }))
       .query(async ({ input }) => {
-        try {
-          return getLatestExpertPromptEvolution(input.expertId);
-        } catch (error) {
-          handleTRPCError(error, "ExpertEvolution");
+        return getLatestExpertPromptEvolution(input.expertId);
       }),
 
     // Get prompt evolution history
@@ -163,10 +139,7 @@ export const expertEvolutionRouter = router({
         limit: z.number().optional(),
       }))
       .query(async ({ input }) => {
-        try {
-          return getExpertPromptHistory(input.expertId, input.limit);
-        } catch (error) {
-          handleTRPCError(error, "ExpertEvolution");
+        return getExpertPromptHistory(input.expertId, input.limit);
       }),
 
     // Create an insight from an expert
@@ -183,13 +156,10 @@ export const expertEvolutionRouter = router({
         relatedExpertIds: z.array(z.string()).optional(),
       }))
       .mutation(async ({ ctx, input }) => {
-        try {
-          return createExpertInsight({
+        return createExpertInsight({
           userId: ctx.user.id,
           ...input,
         });
-        } catch (error) {
-          handleTRPCError(error, "ExpertEvolution");
       }),
 
     // Get insights (can filter by expert, category, project)
@@ -201,10 +171,7 @@ export const expertEvolutionRouter = router({
         limit: z.number().optional(),
       }).optional())
       .query(async ({ ctx, input }) => {
-        try {
-          return getExpertInsights(ctx.user.id, input);
-        } catch (error) {
-          handleTRPCError(error, "ExpertEvolution");
+        return getExpertInsights(ctx.user.id, input);
       }),
 
     // Update an insight (validate, archive, etc.)
@@ -238,10 +205,7 @@ export const expertEvolutionRouter = router({
         assignedBy: z.string().optional(),
       }))
       .mutation(async ({ input }) => {
-        try {
-          return createExpertResearchTask(input);
-        } catch (error) {
-          handleTRPCError(error, "ExpertEvolution");
+        return createExpertResearchTask(input);
       }),
 
     // Get research tasks for an expert
@@ -252,10 +216,7 @@ export const expertEvolutionRouter = router({
         limit: z.number().optional(),
       }))
       .query(async ({ input }) => {
-        try {
-          return getExpertResearchTasks(input.expertId, input);
-        } catch (error) {
-          handleTRPCError(error, "ExpertEvolution");
+        return getExpertResearchTasks(input.expertId, input);
       }),
 
     // Update research task (complete, add findings, etc.)
@@ -277,10 +238,7 @@ export const expertEvolutionRouter = router({
     getPendingResearch: protectedProcedure
       .input(z.object({ limit: z.number().optional() }).optional())
       .query(async ({ input }) => {
-        try {
-          return getPendingResearchTasks(input?.limit);
-        } catch (error) {
-          handleTRPCError(error, "ExpertEvolution");
+        return getPendingResearchTasks(input?.limit);
       }),
 
     // Record a collaboration between experts
@@ -295,13 +253,10 @@ export const expertEvolutionRouter = router({
         lessonsLearned: z.string().optional(),
       }))
       .mutation(async ({ ctx, input }) => {
-        try {
-          return createExpertCollaboration({
+        return createExpertCollaboration({
           userId: ctx.user.id,
           ...input,
         });
-        } catch (error) {
-          handleTRPCError(error, "ExpertEvolution");
       }),
 
     // Get collaboration history
@@ -312,10 +267,7 @@ export const expertEvolutionRouter = router({
         limit: z.number().optional(),
       }).optional())
       .query(async ({ ctx, input }) => {
-        try {
-          return getExpertCollaborations(ctx.user.id, input);
-        } catch (error) {
-          handleTRPCError(error, "ExpertEvolution");
+        return getExpertCollaborations(ctx.user.id, input);
       }),
 
     // Create a coaching session
@@ -331,10 +283,7 @@ export const expertEvolutionRouter = router({
         scheduledAt: z.date().optional(),
       }))
       .mutation(async ({ input }) => {
-        try {
-          return createExpertCoachingSession(input);
-        } catch (error) {
-          handleTRPCError(error, "ExpertEvolution");
+        return createExpertCoachingSession(input);
       }),
 
     // Get coaching sessions for an expert
@@ -345,10 +294,7 @@ export const expertEvolutionRouter = router({
         limit: z.number().optional(),
       }))
       .query(async ({ input }) => {
-        try {
-          return getExpertCoachingSessions(input.expertId, input);
-        } catch (error) {
-          handleTRPCError(error, "ExpertEvolution");
+        return getExpertCoachingSessions(input.expertId, input);
       }),
 
     // Update coaching session (complete, add metrics, etc.)
@@ -377,20 +323,14 @@ export const expertEvolutionRouter = router({
         recentDevelopments: z.string().optional(),
       }))
       .mutation(async ({ input }) => {
-        try {
-          return createExpertDomainKnowledge(input);
-        } catch (error) {
-          handleTRPCError(error, "ExpertEvolution");
+        return createExpertDomainKnowledge(input);
       }),
 
     // Get domain knowledge for an expert
     getDomainKnowledge: protectedProcedure
       .input(z.object({ expertId: z.string() }))
       .query(async ({ input }) => {
-        try {
-          return getExpertDomainKnowledge(input.expertId);
-        } catch (error) {
-          handleTRPCError(error, "ExpertEvolution");
+        return getExpertDomainKnowledge(input.expertId);
       }),
 
     // Update domain knowledge
@@ -410,10 +350,7 @@ export const expertEvolutionRouter = router({
     getStaleDomains: protectedProcedure
       .input(z.object({ daysOld: z.number().optional() }).optional())
       .query(async ({ input }) => {
-        try {
-          return getStaleExpertDomains(input?.daysOld);
-        } catch (error) {
-          handleTRPCError(error, "ExpertEvolution");
+        return getStaleExpertDomains(input?.daysOld);
       }),
 
     // Get full expert context (conversations + memories) for enhanced prompts
@@ -504,8 +441,6 @@ export const expertEvolutionRouter = router({
         } catch (error) {
           console.error('Voice generation error:', error);
           throw new Error('Failed to generate voice audio');
-        } catch (error) {
-          handleTRPCError(error, "ExpertEvolution");
         }
       }),
 

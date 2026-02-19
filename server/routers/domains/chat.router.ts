@@ -10,7 +10,6 @@ import { router, protectedProcedure } from "../../_core/trpc";
 import { z } from "zod";
 import { communicationService } from "../../services/communication";
 import { handleTRPCError } from "../../utils/error-handler";
-import { invokeLLM } from "../../services/llm";
 
 export const chatRouter = router({
     // Send a message and get AI response
