@@ -6,7 +6,7 @@
  * @module routers/domains/library
  */
 
-import { router } from "../../_core/trpc";
+import { router, protectedProcedure } from "../../_core/trpc";
 import { z } from "zod";
 import { documentService } from "../../services/document";
 import { handleTRPCError } from "../../utils/error-handler";
@@ -27,7 +27,7 @@ export const libraryRouter = router({
       }))
       .mutation(async ({ ctx, input }) => {
         try {
-          return createLibraryDocument({
+          return await documentService.createDocument({
           userId: ctx.user.id,
           projectId: input.projectId || null,
           folder: input.folder,
@@ -54,7 +54,7 @@ export const libraryRouter = router({
       }).optional())
       .query(async ({ ctx, input }) => {
         try {
-          return getLibraryDocuments(ctx.user.id, input);
+          return await documentService.getDocuments(ctx.user.id, input);
         } catch (error) {
           handleTRPCError(error, "library");
         }
@@ -65,7 +65,7 @@ export const libraryRouter = router({
       .input(z.object({ id: z.number() }))
       .query(async ({ input }) => {
         try {
-          return getLibraryDocumentById(input.id);
+          return await documentService.getDocumentById(input.id);
         } catch (error) {
           handleTRPCError(error, "library");
         }
@@ -82,7 +82,7 @@ export const libraryRouter = router({
       }))
       .mutation(async ({ input }) => {
         const { id, ...data } = input;
-        await updateLibraryDocument(id, data);
+        await documentService.updateDocument(id, data);
         return { success: true };
       }),
 
@@ -90,7 +90,7 @@ export const libraryRouter = router({
     delete: protectedProcedure
       .input(z.object({ id: z.number() }))
       .mutation(async ({ input }) => {
-        await deleteLibraryDocument(input.id);
+        await documentService.deleteDocument(input.id);
         return { success: true };
       }),
 
@@ -153,7 +153,7 @@ ${transcript}
 
         // Create library document
         const docName = `Consultation - ${input.expertName} - ${timestamp}.md`;
-        const doc = await createLibraryDocument({
+        const doc = await documentService.createDocument({
           userId: ctx.user.id,
           projectId: input.projectId || null,
           folder: input.folder || 'consultations',
