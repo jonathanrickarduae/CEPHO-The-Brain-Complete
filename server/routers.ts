@@ -5,6 +5,7 @@ import { qualityGatesRouter } from "./routers/quality-gates.router";
 import { blueprintRouter } from "./routers/blueprint.router";
 import { smeRouter } from "./routers/sme.router";
 import { digitalTwinRouter } from "./routers/digital-twin.router";
+import { digitalTwinTrainingRouter } from "./routers/digital-twin-training.router";
 import { blueprintsRouter } from "./routers/blueprints.router";
 import { chiefOfStaffRouter } from "./routers/chief-of-staff.router";
 import { deepDiveRouter } from "./routers/deep-dive.router";
@@ -126,6 +127,7 @@ export const appRouter = router({
   collaborativeReview: collaborativeReviewRouter,
   innovation: innovationRouter,
   innovationHubWorkflow: innovationHubWorkflowRouter,
+  digitalTwinTraining: digitalTwinTrainingRouter,
   expertRecommendation: expertRecommendationRouter,
   library: libraryRouter,
   eveningReview: eveningReviewRouter,
