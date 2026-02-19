@@ -164,8 +164,9 @@ export function registerGoogleOAuthRoutes(app: Express) {
       }
 
       // Create session token
-      log.debug('Creating session token', { userId, name: userInfo.name });
-      const sessionToken = await createSessionToken(userId, userInfo.name);
+      const userName = userInfo.name || userInfo.email || 'User';
+      log.debug('Creating session token', { userId, name: userName });
+      const sessionToken = await createSessionToken(userId, userName);
       log.debug('Session token created', { tokenLength: sessionToken.length, tokenPreview: sessionToken.substring(0, 50) });
 
       // Set cookie
