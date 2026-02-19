@@ -28,9 +28,9 @@ import { createServer } from "http";
 import net from "net";
 import { createExpressMiddleware } from "@trpc/server/adapters/express";
 import { registerGoogleOAuthRoutes } from "./google-oauth";
-// import { appRouter } from "../routers"; // DISABLED - full router has issues
+import { appRouter } from "../routers"; // FULL ROUTER - all functionality restored
 // import { appRouter } from "../routers-minimal"; // PHASE 0 - emergency minimal
-import { appRouter } from "../routers-phase1"; // PHASE 1 - core inline routers
+// import { appRouter } from "../routers-phase1"; // PHASE 1 - core inline routers
 import { createContext } from "./context";
 import { serveStatic, setupVite } from "./vite";
 import { apiRateLimit } from "./rateLimit";
