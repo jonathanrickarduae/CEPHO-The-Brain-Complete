@@ -13,8 +13,6 @@ import {
   smeTeams,
   smeTeamMembers,
   teamCapabilities,
-  smeAssessments,
-  smeFeedback,
   partnerships,
   type SmeTeam,
   type InsertSmeTeam,
