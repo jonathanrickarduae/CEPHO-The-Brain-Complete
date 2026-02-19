@@ -6,7 +6,7 @@
  * @module routers/domains/document-library
  */
 
-import { router } from "../../_core/trpc";
+import { router, protectedProcedure } from "../../_core/trpc";
 import { z } from "zod";
 import { documentService } from "../../services/document";
 import { handleTRPCError } from "../../utils/error-handler";
