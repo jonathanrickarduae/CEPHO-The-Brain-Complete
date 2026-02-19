@@ -12,7 +12,7 @@
 
 import { router, protectedProcedure } from "../_core/trpc";
 import { z } from "zod";
-import { getDb } from "../db";
+import { getRawClient } from "../db";
 
 export const projectGenesisRouter = router({
   /**
@@ -32,7 +32,8 @@ export const projectGenesisRouter = router({
       currency: z.string().default("USD"),
     }))
     .mutation(async ({ input, ctx }) => {
-      const db = await getDb();
+      const db = await getRawClient();
+      if (!db) throw new Error('Database connection not available');
       
       // Create project with PostgreSQL RETURNING clause
       const projectResult = await db`
@@ -90,7 +91,8 @@ export const projectGenesisRouter = router({
       projectId: z.number(),
     }))
     .query(async ({ input, ctx }) => {
-      const db = await getDb();
+      const db = await getRawClient();
+      if (!db) throw new Error('Database connection not available');
       
       // Get project
       const projectResult = await db`
@@ -131,7 +133,8 @@ export const projectGenesisRouter = router({
    */
   listProjects: protectedProcedure
     .query(async ({ ctx }) => {
-      const db = await getDb();
+      const db = await getRawClient();
+      if (!db) throw new Error('Database connection not available');
       
       try {
         const projects = await db`
@@ -158,7 +161,8 @@ export const projectGenesisRouter = router({
       status: z.enum(['not_started', 'in_progress', 'completed', 'blocked']),
     }))
     .mutation(async ({ input, ctx }) => {
-      const db = await getDb();
+      const db = await getRawClient();
+      if (!db) throw new Error('Database connection not available');
       
       // Update phase status
       await db`
@@ -203,7 +207,8 @@ export const projectGenesisRouter = router({
       currentPhaseNumber: z.number(),
     }))
     .mutation(async ({ input, ctx }) => {
-      const db = await getDb();
+      const db = await getRawClient();
+      if (!db) throw new Error('Database connection not available');
       
       // Mark current phase as completed
       await db`
@@ -249,7 +254,8 @@ export const projectGenesisRouter = router({
       dueDate: z.string().optional(),
     }))
     .mutation(async ({ input, ctx }) => {
-      const db = await getDb();
+      const db = await getRawClient();
+      if (!db) throw new Error('Database connection not available');
       
       const result = await db`
         INSERT INTO project_genesis_milestones 
@@ -272,7 +278,8 @@ export const projectGenesisRouter = router({
       milestoneId: z.number(),
     }))
     .mutation(async ({ input, ctx }) => {
-      const db = await getDb();
+      const db = await getRawClient();
+      if (!db) throw new Error('Database connection not available');
       
       await db`
         UPDATE project_genesis_milestones 
@@ -298,7 +305,8 @@ export const projectGenesisRouter = router({
       fileUrl: z.string().optional(),
     }))
     .mutation(async ({ input, ctx }) => {
-      const db = await getDb();
+      const db = await getRawClient();
+      if (!db) throw new Error('Database connection not available');
       
       const result = await db`
         INSERT INTO project_genesis_deliverables 
@@ -323,7 +331,8 @@ export const projectGenesisRouter = router({
       reviewNotes: z.string().optional(),
     }))
     .mutation(async ({ input, ctx }) => {
-      const db = await getDb();
+      const db = await getRawClient();
+      if (!db) throw new Error('Database connection not available');
       
       await db`
         UPDATE project_genesis_deliverables 
