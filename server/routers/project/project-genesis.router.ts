@@ -10,9 +10,9 @@
  * Phase 6: Execution
  */
 
-import { router, protectedProcedure } from "../_core/trpc";
+import { router, protectedProcedure } from "../../_core/trpc";
 import { z } from "zod";
-import { getRawClient } from "../db";
+import { getRawClient } from "../../db";
 
 export const projectGenesisRouter = router({
   /**

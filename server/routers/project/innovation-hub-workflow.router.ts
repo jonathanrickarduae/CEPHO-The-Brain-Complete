@@ -3,9 +3,9 @@
  * Manages idea suggestions from AI agents, SMEs, Chief of Staff, and Digital Twin
  */
 
-import { router, protectedProcedure } from "../_core/trpc";
+import { router, protectedProcedure } from "../../_core/trpc";
 import { z } from "zod";
-import { innovationHubWorkflowService } from "../services/innovation-hub-workflow.service";
+import { innovationHubWorkflowService } from "../../services/innovation-hub-workflow.service";
 
 export const innovationHubWorkflowRouter = router({
   /**

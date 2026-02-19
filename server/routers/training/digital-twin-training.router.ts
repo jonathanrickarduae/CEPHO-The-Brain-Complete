@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { publicProcedure, router } from "../_core/trpc";
-import { DigitalTwinTrainingService } from "../services/digital-twin-training.service";
+import { publicProcedure, router } from "../../_core/trpc";
+import { DigitalTwinTrainingService } from "../../services/digital-twin-training.service";
 
 const trainingService = new DigitalTwinTrainingService();
 

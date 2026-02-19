@@ -1,14 +1,14 @@
 // Chief of Staff Router - Daily Briefings, Training, and Digital Twin
-import { router, protectedProcedure } from '../_core/trpc';
+import { router, protectedProcedure } from '../../_core/trpc';
 import { z } from 'zod';
-import { getDb } from '../db';
+import { getDb } from '../../db';
 import { 
   cosTrainingModules, 
   cosModuleProgress, 
   digitalTwinProfiles,
   digitalTwinGoals,
   digitalTwinPreferences 
-} from '../../drizzle/schema';
+} from '../../../drizzle/schema';
 import { eq, and } from 'drizzle-orm';
 
 export const chiefOfStaffRouter = router({

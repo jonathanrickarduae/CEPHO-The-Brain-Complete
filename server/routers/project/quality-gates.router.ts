@@ -4,9 +4,9 @@
  * Gates: G1-G6
  */
 
-import { router, protectedProcedure } from "../_core/trpc";
+import { router, protectedProcedure } from "../../_core/trpc";
 import { z } from "zod";
-import { getDb } from "../db";
+import { getDb } from "../../db";
 
 export const qualityGatesRouter = router({
   /**

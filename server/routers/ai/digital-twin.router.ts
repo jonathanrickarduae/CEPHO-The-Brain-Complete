@@ -3,9 +3,9 @@
  * Endpoints for personalized AI assistant and training
  */
 
-import { router, protectedProcedure } from "../_core/trpc";
+import { router, protectedProcedure } from "../../_core/trpc";
 import { z } from "zod";
-import * as digitalTwinService from "../services/digital-twin-service";
+import * as digitalTwinService from "../../services/digital-twin-service";
 
 export const digitalTwinRouter = router({
   /**

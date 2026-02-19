@@ -3,9 +3,9 @@
  * Manage and execute blueprints (BP-001 to BP-016+)
  */
 
-import { router, protectedProcedure } from "../_core/trpc";
+import { router, protectedProcedure } from "../../_core/trpc";
 import { z } from "zod";
-import { getDb } from "../db";
+import { getDb } from "../../db";
 
 export const blueprintRouter = router({
   /**

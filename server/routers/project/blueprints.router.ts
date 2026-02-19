@@ -1,8 +1,8 @@
 // Blueprints Router - BP-001 to BP-016+ Blueprint Library & Execution
-import { router, protectedProcedure } from '../_core/trpc';
+import { router, protectedProcedure } from '../../_core/trpc';
 import { z } from 'zod';
-import { getDb } from '../db';
-import { blueprintLibrary, blueprintExecutions, blueprintParameters, blueprintOutputs } from '../../drizzle/schema';
+import { getDb } from '../../db';
+import { blueprintLibrary, blueprintExecutions, blueprintParameters, blueprintOutputs } from '../../../drizzle/schema';
 import { eq, and } from 'drizzle-orm';
 
 export const blueprintsRouter = router({

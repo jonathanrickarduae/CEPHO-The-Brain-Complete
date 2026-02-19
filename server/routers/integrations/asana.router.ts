@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { protectedProcedure, router } from "../_core/trpc";
-import { getAsanaService } from "../services/asana-integration";
+import { protectedProcedure, router } from "../../_core/trpc";
+import { getAsanaService } from "../../services/asana-integration";
 
 export const asanaRouter = router({
   /**

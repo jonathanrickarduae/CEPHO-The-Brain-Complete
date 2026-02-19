@@ -3,9 +3,9 @@
  * Endpoints for managing 323 AI experts and consultations
  */
 
-import { router, protectedProcedure, publicProcedure } from "../_core/trpc";
+import { router, protectedProcedure, publicProcedure } from "../../_core/trpc";
 import { z } from "zod";
-import * as smeService from "../services/sme-service";
+import * as smeService from "../../services/sme-service";
 
 export const smeRouter = router({
   /**

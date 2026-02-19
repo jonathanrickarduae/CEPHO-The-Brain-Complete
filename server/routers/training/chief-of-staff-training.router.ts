@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { publicProcedure, router } from "../_core/trpc";
-import { ChiefOfStaffTrainingService } from "../services/chief-of-staff-training.service";
+import { publicProcedure, router } from "../../_core/trpc";
+import { ChiefOfStaffTrainingService } from "../../services/chief-of-staff-training.service";
 
 const trainingService = new ChiefOfStaffTrainingService();
 

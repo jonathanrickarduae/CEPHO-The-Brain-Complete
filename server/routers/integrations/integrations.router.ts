@@ -1,6 +1,6 @@
 import { z } from 'zod';
-import { router, protectedProcedure } from '../_core/trpc';
-import { integrationManager } from '../services/integration-manager';
+import { router, protectedProcedure } from '../../_core/trpc';
+import { integrationManager } from '../../services/integration-manager';
 
 export const integrationsRouter = router({
   // Store credentials for a service
