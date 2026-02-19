@@ -60,6 +60,11 @@ async function startServer() {
   // Run database migrations first
   await runMigrations();
   
+  // Register all services with DI container
+  const { registerServices } = await import('./service-registry');
+  registerServices();
+  log.info('[DI] Dependency injection container initialized');
+  
   const app = express();
   const server = createServer(app);
   
