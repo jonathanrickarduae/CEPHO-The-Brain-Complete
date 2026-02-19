@@ -1,25 +1,21 @@
 /**
  * Simple Email/Password Authentication
- * Temporary replacement for OAuth
+ * Temporary replacement for OAuth - NO DATABASE DEPENDENCY
  */
 
 import { Router } from "express";
-// import bcrypt from "bcryptjs"; // Not needed for hardcoded password
 import jwt from "jsonwebtoken";
-import { getDb } from "../db/index";
-import { users } from "../../drizzle/schema";
-
-const db = getDb();
-import { eq } from "drizzle-orm";
 
 const router = Router();
 
-// Hardcoded user for immediate access (will be replaced with DB lookup)
+// Hardcoded user for immediate access
 const ADMIN_USER = {
   email: "jonathanrickarduae@gmail.com",
-  password: "Cepho44", // Will be hashed
+  password: "Cepho44",
   name: "Jonathan Rickard",
   id: 1,
+  openId: "hardcoded_admin_001",
+  appId: "cepho_app",
 };
 
 router.post("/login", async (req, res) => {
@@ -31,53 +27,37 @@ router.post("/login", async (req, res) => {
     }
 
     // Check if it's the admin user
-    if (email.toLowerCase() === ADMIN_USER.email.toLowerCase()) {
-      if (password === ADMIN_USER.password) {
-        // Find or create user in database
-        let user = await db.query.users.findFirst({
-          where: eq(users.email, ADMIN_USER.email),
-        });
+    if (email.toLowerCase() === ADMIN_USER.email.toLowerCase() && password === ADMIN_USER.password) {
+      // Generate JWT token
+      const secret = process.env.JWT_SECRET || "default-secret-change-in-production";
+      const token = jwt.sign(
+        {
+          openId: ADMIN_USER.openId,
+          appId: ADMIN_USER.appId,
+          name: ADMIN_USER.name,
+          email: ADMIN_USER.email,
+          id: ADMIN_USER.id,
+        },
+        secret,
+        { expiresIn: "7d" }
+      );
 
-        if (!user) {
-          // Create user if doesn't exist
-          const [newUser] = await db.insert(users).values({
-            email: ADMIN_USER.email,
-            name: ADMIN_USER.name,
-            openId: `email_${Date.now()}`, // Temporary openId
-          }).returning();
-          user = newUser;
-        }
+      // Set cookie
+      res.cookie("session_token", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      });
 
-        // Generate JWT token
-        const secret = process.env.JWT_SECRET || "default-secret-change-in-production";
-        const token = jwt.sign(
-          {
-            openId: user.openId,
-            appId: user.appId || "",
-            name: user.name || ADMIN_USER.name,
-            email: user.email,
-          },
-          secret,
-          { expiresIn: "7d" }
-        );
-
-        // Set cookie
-        res.cookie("session_token", token, {
-          httpOnly: true,
-          secure: process.env.NODE_ENV === "production",
-          sameSite: "lax",
-          maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-        });
-
-        return res.json({
-          success: true,
-          user: {
-            id: user.id,
-            email: user.email,
-            name: user.name,
-          },
-        });
-      }
+      return res.json({
+        success: true,
+        user: {
+          id: ADMIN_USER.id,
+          email: ADMIN_USER.email,
+          name: ADMIN_USER.name,
+        },
+      });
     }
 
     return res.status(401).json({ error: "Invalid credentials" });
@@ -103,18 +83,12 @@ router.get("/me", async (req, res) => {
     const secret = process.env.JWT_SECRET || "default-secret-change-in-production";
     const decoded = jwt.verify(token, secret) as any;
 
-    const user = await db.query.users.findFirst({
-      where: eq(users.openId, decoded.openId),
-    });
-
-    if (!user) {
-      return res.status(401).json({ error: "User not found" });
-    }
-
     return res.json({
-      id: user.id,
-      email: user.email,
-      name: user.name,
+      id: decoded.id,
+      email: decoded.email,
+      name: decoded.name,
+      openId: decoded.openId,
+      appId: decoded.appId,
     });
   } catch (error) {
     return res.status(401).json({ error: "Invalid token" });
