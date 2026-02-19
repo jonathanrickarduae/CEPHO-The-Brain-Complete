@@ -28,7 +28,8 @@ import { createServer } from "http";
 import net from "net";
 import { createExpressMiddleware } from "@trpc/server/adapters/express";
 import { registerGoogleOAuthRoutes } from "./google-oauth";
-import { appRouter } from "../routers";
+// import { appRouter } from "../routers"; // DISABLED - using minimal router
+import { appRouter } from "../routers-minimal";
 import { createContext } from "./context";
 import { serveStatic, setupVite } from "./vite";
 import { apiRateLimit } from "./rateLimit";
