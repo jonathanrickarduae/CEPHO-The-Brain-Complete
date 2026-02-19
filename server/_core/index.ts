@@ -34,6 +34,7 @@ import { serveStatic, setupVite } from "./vite";
 import { apiRateLimit } from "./rateLimit";
 import { runMigrations } from "../migrations/run-migrations";
 import { applySecurityMiddleware } from "../middleware/security-headers";
+import { metricsHandler, metricsMiddleware } from "../services/metrics/prometheus";
 
 function isPortAvailable(port: number): Promise<boolean> {
   return new Promise(resolve => {
@@ -76,6 +77,12 @@ async function startServer() {
   // Configure body parser with larger size limit for file uploads
   app.use(express.json({ limit: "50mb" }));
   app.use(express.urlencoded({ limit: "50mb", extended: true }));
+  
+  // Apply metrics middleware
+  app.use(metricsMiddleware);
+  
+  // Prometheus metrics endpoint
+  app.get("/api/metrics", metricsHandler);
   
   // Apply rate limiting to API routes
   app.use("/api", apiRateLimit);
