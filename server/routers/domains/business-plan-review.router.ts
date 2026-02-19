@@ -10,6 +10,28 @@ import { router, publicProcedure, protectedProcedure } from "../../_core/trpc";
 import { z } from "zod";
 import { businessPlanService } from "../../services/business-plan";
 import { handleTRPCError } from "../../utils/error-handler";
+import { 
+  BUSINESS_PLAN_SECTIONS, 
+  REVIEW_EXPERTS, 
+  BUSINESS_TEMPLATES,
+  getExpertsForSection, 
+  analyzeSection,
+  generateConsolidatedReport,
+  type SectionReview,
+  type ExpertInsight,
+  selectExpertTeam
+} from "../../services/business-plan-review.service";
+import {
+  createBusinessPlanReviewVersion, 
+  getBusinessPlanReviewVersions, 
+  getBusinessPlanReviewVersionById, 
+  getLatestVersionNumber, 
+  getUserBusinessPlanProjects,
+  createExpertFollowUpQuestion, 
+  getExpertFollowUpQuestions, 
+  answerExpertFollowUpQuestion
+} from "../../db/index";
+import { invokeLLM } from "../../_core/llm";
 
 export const businessPlanReviewRouter = router({
     // Get all business plan sections

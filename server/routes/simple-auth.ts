@@ -6,8 +6,10 @@
 import { Router } from "express";
 // import bcrypt from "bcryptjs"; // Not needed for hardcoded password
 import jwt from "jsonwebtoken";
-import { db } from "../_core/db";
-import { users } from "../_core/schema";
+import { getDb } from "../db/index";
+import { users } from "../../drizzle/schema";
+
+const db = getDb();
 import { eq } from "drizzle-orm";
 
 const router = Router();
