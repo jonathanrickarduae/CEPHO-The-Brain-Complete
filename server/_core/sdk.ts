@@ -289,21 +289,35 @@ class SDKServer {
     const db = await import("../db");
     let user = await db.getUserByOpenId(sessionUserId);
 
-    // If user not in DB, sync from OAuth server automatically
+    // If user not in DB, create them (for hardcoded admin or OAuth users)
     if (!user) {
-      try {
-        const userInfo = await this.getUserInfoWithJwt(sessionCookie ?? "");
+      // Check if this is the hardcoded admin user
+      if (sessionUserId === "hardcoded_admin_001") {
+        console.log("[Auth] Creating hardcoded admin user in database");
         await db.upsertUser({
-          openId: userInfo.openId,
-          name: userInfo.name || null,
-          email: userInfo.email ?? null,
-          loginMethod: userInfo.loginMethod ?? userInfo.platform ?? null,
+          openId: sessionUserId,
+          name: session.name,
+          email: "jonathanrickarduae@gmail.com",
+          loginMethod: "email",
           lastSignedIn: signedInAt,
         });
-        user = await db.getUserByOpenId(userInfo.openId);
-      } catch (error) {
-        console.error("[Auth] Failed to sync user from OAuth:", error);
-        throw ForbiddenError("Failed to sync user info");
+        user = await db.getUserByOpenId(sessionUserId);
+      } else {
+        // Try to sync from OAuth server
+        try {
+          const userInfo = await this.getUserInfoWithJwt(sessionCookie ?? "");
+          await db.upsertUser({
+            openId: userInfo.openId,
+            name: userInfo.name || null,
+            email: userInfo.email ?? null,
+            loginMethod: userInfo.loginMethod ?? userInfo.platform ?? null,
+            lastSignedIn: signedInAt,
+          });
+          user = await db.getUserByOpenId(userInfo.openId);
+        } catch (error) {
+          console.error("[Auth] Failed to sync user from OAuth:", error);
+          throw ForbiddenError("Failed to sync user info");
+        }
       }
     }
 
