@@ -70,8 +70,8 @@ import {
   getReviewTimingPattern, getAllReviewTimingPatterns, updateReviewTimingPattern, getPredictedReviewTime,
   createSignalItems, getSignalItems, getPendingSignalItems, updateSignalItemStatus, generateSignalItemsFromReview,
   getCachedCalendarEvents, hasEventsInWindow
-} from "./db";
-import { getDb } from "./db";
+} from "./db/index";
+import { getDb } from "./db/index";
 import { users } from "../drizzle/schema";
 import { eq } from "drizzle-orm";
 import { invokeLLM } from "./_core/llm";

@@ -3,7 +3,7 @@
  * Handles messaging and conversation management
  */
 
-import { db } from '../../db';
+import { getDb } from '../../db/index';
 import { conversations } from '../../../drizzle/schema';
 import { eq, desc, and } from 'drizzle-orm';
 import { logger } from '../../utils/logger';
@@ -58,6 +58,7 @@ export class CommunicationService {
    * Save a conversation message
    */
   async saveConversation(data: SaveConversationDto): Promise<ConversationDto> {
+    const db = await getDb();
     const [conversation] = await db.insert(conversations).values({
       userId: data.userId,
       role: data.role,
@@ -81,6 +82,7 @@ export class CommunicationService {
    * Get conversation history for a user
    */
   async getConversationHistory(userId: number, limit: number = 50): Promise<ConversationDto[]> {
+    const db = await getDb();
     const results = await db
       .select()
       .from(conversations)
@@ -103,6 +105,7 @@ export class CommunicationService {
    * Clear conversation history for a user
    */
   async clearConversationHistory(userId: number): Promise<void> {
+    const db = await getDb();
     await db
       .delete(conversations)
       .where(eq(conversations.userId, userId));
@@ -114,6 +117,7 @@ export class CommunicationService {
    * Get recent conversations across all users (for admin/analytics)
    */
   async getRecentConversations(limit: number = 100): Promise<ConversationDto[]> {
+    const db = await getDb();
     const results = await db
       .select()
       .from(conversations)
@@ -134,6 +138,7 @@ export class CommunicationService {
    * Get conversation count for a user
    */
   async getConversationCount(userId: number): Promise<number> {
+    const db = await getDb();
     const results = await db
       .select()
       .from(conversations)

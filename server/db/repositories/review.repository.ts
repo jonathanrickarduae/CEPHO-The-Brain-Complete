@@ -18,7 +18,7 @@ import {
   collaborativeReviewActivity,
   businessPlanReviewVersions,
   qualityMetricsSnapshots,
-  qualityTickets,
+  qualityImprovementTickets,
   outputQualityScores,
   taskQaReviews,
   assessmentOutliers,
@@ -332,7 +332,7 @@ export class ReviewRepository extends BaseRepository {
       this.logOperation("createQualityTicket", { userId: data.userId });
 
       const [ticket] = await db
-        .insert(qualityTickets)
+        .insert(qualityImprovementTickets)
         .values(data)
         .returning();
 
@@ -351,9 +351,9 @@ export class ReviewRepository extends BaseRepository {
       this.logOperation("updateQualityTicket", { id });
 
       await db
-        .update(qualityTickets)
+        .update(qualityImprovementTickets)
         .set(data)
-        .where(eq(qualityTickets.id, id));
+        .where(eq(qualityImprovementTickets.id, id));
     } catch (error) {
       this.handleError("updateQualityTicket", error as Error, { id, data });
     }
@@ -368,17 +368,17 @@ export class ReviewRepository extends BaseRepository {
       
       let query = db
         .select()
-        .from(qualityTickets)
-        .where(eq(qualityTickets.status, "open"));
+        .from(qualityImprovementTickets)
+        .where(eq(qualityImprovementTickets.status, "open"));
 
       if (userId) {
         query = query.where(and(
-          eq(qualityTickets.status, "open"),
-          eq(qualityTickets.userId, userId)
+          eq(qualityImprovementTickets.status, "open"),
+          eq(qualityImprovementTickets.userId, userId)
         )) as any;
       }
 
-      return await query.orderBy(desc(qualityTickets.createdAt));
+      return await query.orderBy(desc(qualityImprovementTickets.createdAt));
     } catch (error) {
       this.handleError("getOpenQualityTickets", error as Error, { userId });
     }

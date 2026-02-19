@@ -11,7 +11,7 @@ const log = logger.module("DailySignal");
  * All outputs pass through Chief of Staff quality gate before delivery.
  */
 
-import { getDb } from "./db";
+import { getDb } from "./db/index";
 import { invokeLLM } from "./_core/llm";
 import { storagePut } from "./storage";
 import { ENV } from "./_core/env";

@@ -4,7 +4,7 @@
  */
 
 import { TRPCError } from "@trpc/server";
-import { getDb } from "./db";
+import { getDb } from "./db/index";
 import { z } from "zod";
 import { getLLMService } from "./services/llm-service";
 import { getConversationService } from "./services/conversation-service";

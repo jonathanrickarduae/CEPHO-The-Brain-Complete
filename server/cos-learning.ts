@@ -10,7 +10,7 @@
  * The COS learns from EVERY interaction to think like the user.
  */
 
-import { getDb } from "./db";
+import { getDb } from "./db/index";
 import {
   cosInteractionLog,
   cosLearnedPatterns,
