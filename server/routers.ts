@@ -106,6 +106,7 @@ import { businessPlanReviewRouter } from "./routers/domains/business-plan-review
 import { documentLibraryRouter } from "./routers/domains/document-library.router";
 import { collaborativeReviewRouter } from "./routers/domains/collaborative-review.router";
 import { innovationRouter } from "./routers/domains/innovation.router";
+import { innovationHubWorkflowRouter } from "./routers/innovation-hub-workflow.router";
 import { expertRecommendationRouter } from "./routers/domains/expert-recommendation.router";
 import { libraryRouter } from "./routers/domains/library.router";
 import { eveningReviewRouter } from "./routers/domains/evening-review.router";
@@ -124,6 +125,7 @@ export const appRouter = router({
   documentLibrary: documentLibraryRouter,
   collaborativeReview: collaborativeReviewRouter,
   innovation: innovationRouter,
+  innovationHubWorkflow: innovationHubWorkflowRouter,
   expertRecommendation: expertRecommendationRouter,
   library: libraryRouter,
   eveningReview: eveningReviewRouter,
