@@ -6,6 +6,7 @@ import { blueprintRouter } from "./routers/blueprint.router";
 import { smeRouter } from "./routers/sme.router";
 import { digitalTwinRouter } from "./routers/digital-twin.router";
 import { digitalTwinTrainingRouter } from "./routers/digital-twin-training.router";
+import { chiefOfStaffTrainingRouter } from "./routers/chief-of-staff-training.router";
 import { blueprintsRouter } from "./routers/blueprints.router";
 import { chiefOfStaffRouter } from "./routers/chief-of-staff.router";
 import { deepDiveRouter } from "./routers/deep-dive.router";
@@ -128,6 +129,7 @@ export const appRouter = router({
   innovation: innovationRouter,
   innovationHubWorkflow: innovationHubWorkflowRouter,
   digitalTwinTraining: digitalTwinTrainingRouter,
+  chiefOfStaffTraining: chiefOfStaffTrainingRouter,
   expertRecommendation: expertRecommendationRouter,
   library: libraryRouter,
   eveningReview: eveningReviewRouter,
