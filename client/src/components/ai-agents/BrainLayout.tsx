@@ -21,9 +21,9 @@ import {
 } from "@/components/ui/sidebar";
 import { getLoginUrl } from "@/const";
 import { useIsMobile } from "@/hooks/useMobile";
-import { 
+import {
   LayoutDashboard, LogOut, PanelLeft, 
-  BookOpen, BarChart3, Lock, Briefcase, Activity, Brain, Sun, Users, Moon, Keyboard, Settings, TrendingUp, Info, Clock, Sparkles, Rocket, Inbox, Search, Video, Bell, Mic, Podcast, Heart, Globe, Library, Workflow, FileText, ChevronDown, ChevronRight
+  BookOpen, BarChart3, Lock, Briefcase, Activity, Brain, Sun, Users, Moon, Keyboard, Settings, TrendingUp, Info, Clock, Sparkles, Rocket, Inbox, Search, Video, Bell, Mic, Podcast, Heart, Globe, Library, Workflow, FileText, ChevronDown, ChevronRight, Mail, Volume2
 } from "lucide-react";
 import { CSSProperties, useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
@@ -76,10 +76,21 @@ const menuItems: MenuItem[] = [
     label: "Chief of Staff", 
     path: "/digital-twin",
     children: [
+      { icon: Brain, label: "Enhanced COS", path: "/chief-of-staff-enhanced" },
       { icon: Activity, label: "Development Pathway", path: "/development-pathway" },
       { icon: Brain, label: "COS Training", path: "/cos-training" },
     ]
   },
+  { 
+    icon: Mail, 
+    label: "Email", 
+    path: "/email/inbox",
+    children: [
+      { icon: Inbox, label: "Inbox", path: "/email/inbox" },
+      { icon: Settings, label: "Accounts", path: "/email/accounts" },
+    ]
+  },
+  { icon: Volume2, label: "Victoria's Brief", path: "/victoria" },
   { icon: Users, label: "AI-SMEs", path: "/ai-experts" },
   { 
     icon: TrendingUp, 

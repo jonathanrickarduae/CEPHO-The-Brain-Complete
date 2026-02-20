@@ -77,6 +77,10 @@ const BusinessModelPage = lazy(() => import("./pages/BusinessModelPage"));
 const QuestionnaireOnline = lazy(() => import("./pages/QuestionnaireOnline"));
 const StrategicFrameworkQuestionnaire = lazy(() => import("./pages/StrategicFrameworkQuestionnaire"));
 const AgentsMonitoring = lazy(() => import("./pages/AgentsMonitoring"));
+const EmailAccountsManager = lazy(() => import("./components/email/EmailAccountsManager"));
+const EmailList = lazy(() => import("./components/email/EmailList"));
+const VictoriaBriefing = lazy(() => import("./components/victoria/VictoriaBriefing"));
+const EnhancedChiefOfStaff = lazy(() => import("./components/chief-of-staff/EnhancedChiefOfStaff"));
 
 // Wrapper component for pages that need the sidebar layout with page transitions
 function WithLayout({ children }: { children: React.ReactNode }) {
@@ -249,6 +253,24 @@ function Router() {
         </Route>
         <Route path="/workflows">
           <WithLayout><WorkflowsPage /></WithLayout>
+        </Route>
+        
+        {/* Email Management */}
+        <Route path="/email/accounts">
+          <WithLayout><EmailAccountsManager /></WithLayout>
+        </Route>
+        <Route path="/email/inbox">
+          <WithLayout><EmailList /></WithLayout>
+        </Route>
+        
+        {/* Victoria's Briefing */}
+        <Route path="/victoria">
+          <WithLayout><VictoriaBriefing /></WithLayout>
+        </Route>
+        
+        {/* Enhanced Chief of Staff */}
+        <Route path="/chief-of-staff-enhanced">
+          <WithLayout><EnhancedChiefOfStaff /></WithLayout>
         </Route>
         
         {/* Fallback */}
