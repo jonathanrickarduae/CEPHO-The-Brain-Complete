@@ -28,6 +28,7 @@ import {
   Video,
 } from "lucide-react";
 import { VictoriaPresenter } from '@/components/shared/VictoriaPresenter';
+import { VictoriaBriefing } from '@/components/victoria/VictoriaBriefing';
 import { useLocation } from "wouter";
 
 interface SignalItem {
@@ -545,6 +546,9 @@ export default function MorningSignal() {
             <TabsTrigger value="overnight" className="data-[state=active]:bg-blue-500/20">
               Overnight
             </TabsTrigger>
+            <TabsTrigger value="victoria" className="data-[state=active]:bg-pink-500/20">
+              Victoria's Briefing
+            </TabsTrigger>
           </TabsList>
 
           {/* Today's Focus Tab */}
@@ -770,6 +774,11 @@ export default function MorningSignal() {
                 )}
               </CardContent>
             </Card>
+          </TabsContent>
+
+          {/* Victoria's Briefing Tab */}
+          <TabsContent value="victoria" className="space-y-4">
+            <VictoriaBriefing />
           </TabsContent>
         </Tabs>
 

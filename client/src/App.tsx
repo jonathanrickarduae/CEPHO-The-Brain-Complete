@@ -269,9 +269,9 @@ function Router() {
           <WithLayout><EmailList /></WithLayout>
         </Route>
         
-        {/* Victoria's Briefing */}
+        {/* Victoria's Briefing - Redirects to Morning Signal */}
         <Route path="/victoria">
-          <WithLayout><VictoriaBriefing /></WithLayout>
+          <WithLayout><MorningSignal /></WithLayout>
         </Route>
         
         {/* Enhanced Chief of Staff */}
