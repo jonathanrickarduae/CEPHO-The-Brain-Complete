@@ -359,4 +359,78 @@ export const gmailRouter = router({
       
       return { success: true };
     }),
+
+  /**
+   * Connect Gmail account (alias for getAuthUrl as mutation)
+   */
+  connect: protectedProcedure
+    .mutation(async ({ ctx }) => {
+      const authUrl = gmailService.getAuthUrl(ctx.user.id);
+      return { authUrl };
+    }),
+
+  /**
+   * Disconnect Gmail account (alias for deleteAccount)
+   */
+  disconnect: protectedProcedure
+    .input(z.object({
+      accountId: z.number(),
+    }))
+    .mutation(async ({ ctx, input }) => {
+      const db = await getDb();
+      if (!db) throw new Error('Database not available');
+      
+      // Get account by numeric ID
+      const accounts = await db
+        .select()
+        .from(emailAccounts)
+        .where(and(
+          eq(emailAccounts.userId, ctx.user.id)
+        ))
+        .limit(100);
+      
+      const account = accounts[input.accountId];
+      if (!account) {
+        throw new Error('Account not found');
+      }
+      
+      // Delete account
+      await db
+        .delete(emailAccounts)
+        .where(and(
+          eq(emailAccounts.id, account.id),
+          eq(emailAccounts.userId, ctx.user.id)
+        ));
+      
+      return { success: true };
+    }),
+
+  /**
+   * Sync emails for account (alias for syncAccount with number ID)
+   */
+  syncEmails: protectedProcedure
+    .input(z.object({
+      accountId: z.number(),
+    }))
+    .mutation(async ({ ctx, input }) => {
+      const db = await getDb();
+      if (!db) throw new Error('Database not available');
+      
+      // Get all accounts for user
+      const accounts = await db
+        .select()
+        .from(emailAccounts)
+        .where(eq(emailAccounts.userId, ctx.user.id))
+        .limit(100);
+      
+      const account = accounts[input.accountId];
+      if (!account) {
+        throw new Error('Account not found');
+      }
+      
+      // Sync account
+      await gmailService.syncAccount(account);
+      
+      return { success: true };
+    }),
 });
