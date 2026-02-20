@@ -13,6 +13,22 @@ export async function createContext(
 ): Promise<TrpcContext> {
   let user: User | null = null;
 
+  // Temporary bypass for testing
+  if (process.env.VITE_AUTH_BYPASS === 'true') {
+    return {
+      req: opts.req,
+      res: opts.res,
+      user: {
+        id: 1,
+        email: 'jonathanrickarduae@gmail.com',
+        name: 'Jonathan Rickard',
+        password: '',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+    };
+  }
+
   try {
     user = await sdk.authenticateRequest(opts.req);
   } catch (error) {
