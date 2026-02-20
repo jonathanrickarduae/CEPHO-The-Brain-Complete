@@ -50,11 +50,18 @@ export const libraryRouter = router({
         folder: z.string().optional(),
         subFolder: z.string().optional(),
         type: z.string().optional(),
-        limit: z.number().optional(),
+        limit: z.number().optional().default(100), // Default limit to prevent "too much data" errors
+        offset: z.number().optional().default(0),  // Support pagination
       }).optional())
       .query(async ({ ctx, input }) => {
         try {
-          return await documentService.getDocuments(ctx.user.id, input);
+          // Apply default limit if not specified
+          const options = {
+            ...input,
+            limit: input?.limit ?? 100,
+            offset: input?.offset ?? 0,
+          };
+          return await documentService.getDocuments(ctx.user.id, options);
         } catch (error) {
           handleTRPCError(error, "library");
         }

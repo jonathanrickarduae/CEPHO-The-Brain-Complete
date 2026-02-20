@@ -1776,7 +1776,7 @@ export async function createLibraryDocument(entry: InsertLibraryDocument): Promi
 // Get library documents for a user
 export async function getLibraryDocuments(
   userId: number, 
-  options?: { folder?: string; subFolder?: string; type?: string; limit?: number }
+  options?: { folder?: string; subFolder?: string; type?: string; limit?: number; offset?: number }
 ): Promise<LibraryDocument[]> {
   const db = await getDb();
   if (!db) return [];
@@ -1790,10 +1790,16 @@ export async function getLibraryDocuments(
     conditions.push(eq(libraryDocuments.subFolder, options.subFolder));
   }
   
-  return db.select().from(libraryDocuments)
+  let query = db.select().from(libraryDocuments)
     .where(and(...conditions))
     .orderBy(desc(libraryDocuments.createdAt))
     .limit(options?.limit || 100);
+  
+  if (options?.offset) {
+    query = query.offset(options.offset);
+  }
+  
+  return query;
 }
 
 // Get library document by ID
