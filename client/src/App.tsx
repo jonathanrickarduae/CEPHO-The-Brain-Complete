@@ -148,6 +148,12 @@ function Router() {
         <Route path="/morning-signal">
           <WithLayout><MorningSignal /></WithLayout>
         </Route>
+        <Route path="/signal/morning">
+          <WithLayout><MorningSignal /></WithLayout>
+        </Route>
+        <Route path="/signal/evening">
+          <WithLayout><EveningReview /></WithLayout>
+        </Route>
         <Route path="/ai-team">
           <WithLayout><AITeam /></WithLayout>
         </Route>

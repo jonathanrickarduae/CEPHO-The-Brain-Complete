@@ -244,3 +244,5 @@ export function EnhancedChiefOfStaff() {
     </div>
   );
 }
+
+export default EnhancedChiefOfStaff;

@@ -155,3 +155,5 @@ export function EmailAccountsManager() {
     </div>
   );
 }
+
+export default EmailAccountsManager;

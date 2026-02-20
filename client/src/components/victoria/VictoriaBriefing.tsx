@@ -295,3 +295,5 @@ export function VictoriaBriefing() {
     </div>
   );
 }
+
+export default VictoriaBriefing;

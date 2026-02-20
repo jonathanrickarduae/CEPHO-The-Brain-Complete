@@ -210,3 +210,5 @@ export function EmailList({ onEmailSelect }: EmailListProps) {
     </div>
   );
 }
+
+export default EmailList;
