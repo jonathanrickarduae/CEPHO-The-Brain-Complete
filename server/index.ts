@@ -3,11 +3,15 @@ import { createServer } from "http";
 import path from "path";
 import { fileURLToPath } from "url";
 import { startAutomation } from "./services/automation-scheduler.js";
+import { validateEnvironment } from "./_core/env.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 async function startServer() {
+  // Validate environment variables at startup
+  validateEnvironment();
+  
   const app = express();
   const server = createServer(app);
 

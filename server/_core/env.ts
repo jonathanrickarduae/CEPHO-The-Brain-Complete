@@ -12,19 +12,21 @@ export const ENV = {
   elevenLabsApiKey: process.env.ELEVENLABS_API_KEY ?? "",
 };
 // Phase 2 — Startup Environment Validation
+// Only validate at runtime, not during build
+export function validateEnvironment() {
+  const requiredEnv = [
+    "DATABASE_URL",
+    // Temporarily commented out to allow deployment without Forge API
+    // "BUILT_IN_FORGE_API_URL",
+    // "BUILT_IN_FORGE_API_KEY",
+    // "OWNER_OPEN_ID",
+  ];
 
-const requiredEnv = [
-  "DATABASE_URL",
-  // Temporarily commented out to allow deployment without Forge API
-  // "BUILT_IN_FORGE_API_URL",
-  // "BUILT_IN_FORGE_API_KEY",
-  // "OWNER_OPEN_ID",
-];
-
-for (const key of requiredEnv) {
-  if (!process.env[key]) {
-    throw new Error(
-      `Missing required environment variable: ${key}. Cepho cannot start safely without it.`
-    );
+  for (const key of requiredEnv) {
+    if (!process.env[key]) {
+      throw new Error(
+        `Missing required environment variable: ${key}. Cepho cannot start safely without it.`
+      );
+    }
   }
 }
