@@ -76,6 +76,7 @@ const SocialMediaBlueprint = lazy(() => import("./pages/SocialMediaBlueprint"));
 const BusinessModelPage = lazy(() => import("./pages/BusinessModelPage"));
 const QuestionnaireOnline = lazy(() => import("./pages/QuestionnaireOnline"));
 const StrategicFrameworkQuestionnaire = lazy(() => import("./pages/StrategicFrameworkQuestionnaire"));
+const AgentsMonitoring = lazy(() => import("./pages/AgentsMonitoring"));
 
 // Wrapper component for pages that need the sidebar layout with page transitions
 function WithLayout({ children }: { children: React.ReactNode }) {
@@ -151,6 +152,9 @@ function Router() {
         </Route>
         <Route path="/agents/:id">
           <WithLayout><AgentDetailPage /></WithLayout>
+        </Route>
+        <Route path="/agents-monitoring">
+          <WithLayout><AgentsMonitoring /></WithLayout>
         </Route>
         <Route path="/settings">
           <WithLayout><Settings /></WithLayout>
