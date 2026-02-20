@@ -3452,9 +3452,9 @@ export const cosLearningMetrics = pgTable("cos_learning_metrics", {
   // Metadata
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 }, (table) => ({
-  idxIdx: index("cosLearningMetrics_user_id_idx").on(table.userId),
-  idxIdx: index("cosLearningMetrics_created_at_idx").on(table.createdAt),
-  idxIdx: index("cosLearningMetrics_user_created_idx").on(table.userId, table.createdAt),
+  userIdIdx: index("cosLearningMetrics_user_id_idx").on(table.userId),
+  createdAtIdx: index("cosLearningMetrics_created_at_idx").on(table.createdAt),
+  userCreatedIdx: index("cosLearningMetrics_user_created_idx").on(table.userId, table.createdAt),
 }));
 export type CosLearningMetrics = typeof cosLearningMetrics.$inferSelect;
 export type InsertCosLearningMetrics = typeof cosLearningMetrics.$inferInsert;
@@ -3750,8 +3750,8 @@ export const qualityGateResults = pgTable("quality_gate_results", {
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
 }, (table) => ({
-  idxIdx: index("qualityGateResults_project_id_idx").on(table.projectId),
-  idxIdx: index("qualityGateResults_created_at_idx").on(table.createdAt),
+  projectIdIdx: index("qualityGateResults_project_id_idx").on(table.projectId),
+  createdAtIdx: index("qualityGateResults_created_at_idx").on(table.createdAt),
 }));
 
 export type QualityGateResult = typeof qualityGateResults.$inferSelect;
