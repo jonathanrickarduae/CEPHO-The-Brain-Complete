@@ -296,7 +296,8 @@ ${data.tasks
 **Due:** ${t.dueDate ? t.dueDate.toLocaleDateString() : 'No due date'}
 **Source:** ${t.source}
 ${t.description ? `**Description:** ${t.description}` : ''}
-${t.labels && t.labels.length > 0 ? `**Labels:** ${t.labels.join(', ')}` : ''}`);
+${t.labels && t.labels.length > 0 ? `**Labels:** ${t.labels.join(', ')}` : ''}
+`)
   .join('\n---\n') || '(no urgent tasks)'}
 
 ---
