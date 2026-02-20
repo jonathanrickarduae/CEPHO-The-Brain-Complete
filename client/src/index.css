@@ -57,62 +57,61 @@
 }
 
 :root {
-  /* Brain Design System - Core Colors */
-  --brain-cyan: oklch(0.85 0.2 190);      /* #00D4FF - Primary accent */
-  --brain-magenta: oklch(0.65 0.28 320);  /* #FF00FF - Secondary accent */
-  --brain-success: oklch(0.7 0.2 145);    /* #22C55E - Success green */
-  --brain-warning: oklch(0.75 0.18 70);   /* #F59E0B - Warning amber */
-  --brain-danger: oklch(0.6 0.22 25);     /* #EF4444 - Danger red */
+  /* Brain Design System - Core Colors (Light Mode) */
+  --brain-cyan: oklch(0.65 0.2 190);
+  --brain-magenta: oklch(0.55 0.28 320);
+  --brain-success: oklch(0.55 0.2 145);
+  --brain-warning: oklch(0.65 0.18 70);
+  --brain-danger: oklch(0.55 0.22 25);
   
   /* CEPHO Pink Primary - #E91E8C */
-  --primary: oklch(0.58 0.25 340); 
+  --primary: oklch(0.55 0.28 320); 
   --primary-foreground: oklch(1 0 0);
   
   --sidebar-primary: oklch(0.58 0.25 340);
   --sidebar-primary-foreground: oklch(1 0 0);
   
-  /* Neon Accents */
-  --chart-1: oklch(0.58 0.25 340); /* AI Pink */
-  --chart-2: oklch(0.85 0.2 190); /* Cyan */
-  --chart-3: oklch(0.6 0.25 290); /* Electric Purple */
-  --chart-4: oklch(0.85 0.25 140); /* Acid Green */
-  --chart-5: oklch(0.7 0.2 40);   /* Safety Orange */
+  /* Neon Accents (Light Mode) */
+  --chart-1: oklch(0.55 0.28 320); /* AI Pink */
+  --chart-2: oklch(0.65 0.2 190); /* Cyan */
+  --chart-3: oklch(0.5 0.25 290); /* Electric Purple */
+  --chart-4: oklch(0.65 0.25 140); /* Acid Green */
+  --chart-5: oklch(0.6 0.2 40);   /* Safety Orange */
   
   --radius: 0.75rem; /* Slightly softer radius */
   
-  /* Background: Deepest Void Black */
-  --background: oklch(0.06 0 0); 
-  --foreground: oklch(0.98 0 0);
+  /* Light mode as default */
+  --background: oklch(0.98 0 0); 
+  --foreground: oklch(0.15 0 0);
   
-  /* Surface: Dark Charcoal */
-  --card: oklch(0.1 0 0 / 0.95);
-  --card-foreground: oklch(0.98 0 0);
+  --card: oklch(1 0 0 / 0.9);
+  --card-foreground: oklch(0.15 0 0);
   
-  --popover: oklch(0.1 0 0 / 0.98);
-  --popover-foreground: oklch(0.98 0 0);
+  --popover: oklch(1 0 0 / 0.98);
+  --popover-foreground: oklch(0.15 0 0);
   
-  --secondary: oklch(0.12 0 0);
-  --secondary-foreground: oklch(0.98 0 0);
+  --secondary: oklch(0.95 0 0);
+  --secondary-foreground: oklch(0.15 0 0);
   
-  --muted: oklch(0.12 0 0);
-  --muted-foreground: oklch(0.85 0 0);
+  --muted: oklch(0.92 0 0);
+  --muted-foreground: oklch(0.45 0 0);
   
-  --accent: oklch(0.12 0 0);
-  --accent-foreground: oklch(1 0 0);
+  --accent: oklch(0.95 0 0);
+  --accent-foreground: oklch(0.15 0 0);
   
-  --destructive: oklch(0.6 0.25 25);
+  --destructive: oklch(0.55 0.25 25);
   --destructive-foreground: oklch(1 0 0);
   
-  --border: oklch(0.2 0 0);
-  --input: oklch(0.12 0 0);
-  --ring: oklch(0.58 0.25 340);
+  --border: oklch(0.88 0 0);
+  --input: oklch(0.95 0 0);
+  --ring: oklch(0.55 0.28 320);
   
-  --sidebar: oklch(0.06 0 0);
-  --sidebar-foreground: oklch(0.98 0 0);
-  --sidebar-accent: oklch(0.12 0 0);
-  --sidebar-accent-foreground: oklch(1 0 0);
-  --sidebar-border: oklch(0.15 0 0);
-  --sidebar-ring: oklch(0.65 0.28 320);
+  --sidebar: oklch(0.97 0 0);
+  --sidebar-foreground: oklch(0.35 0 0);
+  --sidebar-accent: oklch(0.94 0 0);
+  --sidebar-accent-foreground: oklch(0.15 0 0);
+  --sidebar-border: oklch(0.9 0 0);
+  --sidebar-ring: oklch(0.55 0.28 320);
   
   /* Animation timing */
   --transition-fast: 150ms;
@@ -272,13 +271,13 @@
   }
   
   /* Theme-specific backgrounds */
-  .dark body,
-  :root:not(.light):not(.mix) body {
+  .dark body {
     background-image: url('/images/hero-background.jpg');
     background-blend-mode: overlay;
   }
   
-  .light body {
+  .light body,
+  :root:not(.dark):not(.mix) body {
     background-image: linear-gradient(135deg, oklch(0.98 0 0) 0%, oklch(0.95 0.02 320) 100%);
   }
   
