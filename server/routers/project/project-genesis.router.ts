@@ -42,9 +42,12 @@ export const projectGenesisRouter = router({
       
       if (userCheck.length === 0) {
         // Create user if doesn't exist (for auth bypass scenarios)
+        const openId = `bypass-${ctx.user.id}`;
+        const userEmail = ctx.user.email || 'test@example.com';
+        const userName = ctx.user.name || 'Test User';
         await db`
           INSERT INTO users (id, "openId", email, name, role, "themePreference", "createdAt", "updatedAt", "lastSignedIn")
-          VALUES (${ctx.user.id}, 'bypass-${ctx.user.id}', ${ctx.user.email || 'test@example.com'}, ${ctx.user.name || 'Test User'}, 'user', 'dark', NOW(), NOW(), NOW())
+          VALUES (${ctx.user.id}, ${openId}, ${userEmail}, ${userName}, 'user', 'dark', NOW(), NOW(), NOW())
           ON CONFLICT (id) DO NOTHING
         `;
       }
