@@ -96,6 +96,8 @@ export default function AISMEsPage() {
     const saved = localStorage.getItem('favoriteExperts');
     return saved ? JSON.parse(saved) : [];
   });
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(24); // Show 24 experts per page (4x6 grid)
 
   // tRPC hooks for team management
   const utils = trpc.useUtils();
@@ -193,6 +195,17 @@ export default function AISMEsPage() {
     
     return experts;
   }, [selectedCategory, selectedPanel, searchQuery, sortBy, sortDirection]);
+
+  // Pagination calculations
+  const totalPages = Math.ceil(filteredExperts.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedExperts = filteredExperts.slice(startIndex, endIndex);
+
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [selectedCategory, selectedPanel, searchQuery, sortBy, selectedExpertType]);
 
   // Toggle expert selection
   const toggleExpertSelection = (expert: AIExpert) => {
@@ -557,7 +570,7 @@ export default function AISMEsPage() {
                 {/* Results Count */}
                 <div className="flex items-center justify-between mb-4">
                   <p className="text-sm text-foreground/70">
-                    Showing {filteredExperts.length} expert{filteredExperts.length !== 1 ? 's' : ''}
+                    Showing {startIndex + 1}-{Math.min(endIndex, filteredExperts.length)} of {filteredExperts.length} expert{filteredExperts.length !== 1 ? 's' : ''}
                   </p>
                 </div>
 
@@ -566,7 +579,7 @@ export default function AISMEsPage() {
                   ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3"
                   : "space-y-2"
                 }>
-                  {filteredExperts.map(expert => {
+                  {paginatedExperts.map(expert => {
                     const isSelected = selectedExperts.some(e => e.id === expert.id);
                     const isAvailable = expert.status === 'active';
                     const isInCompare = compareExperts.includes(expert.id);
@@ -702,6 +715,41 @@ export default function AISMEsPage() {
                     );
                   })}
                 </div>
+
+                {/* Pagination Controls */}
+                {totalPages > 1 && (
+                  <div className="flex items-center justify-center gap-2 mt-6 pb-4">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                      disabled={currentPage === 1}
+                    >
+                      Previous
+                    </Button>
+                    <div className="flex items-center gap-1">
+                      {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
+                        <Button
+                          key={page}
+                          variant={currentPage === page ? "default" : "ghost"}
+                          size="sm"
+                          onClick={() => setCurrentPage(page)}
+                          className={currentPage === page ? "bg-gradient-to-r from-cyan-500 to-blue-500" : ""}
+                        >
+                          {page}
+                        </Button>
+                      ))}
+                    </div>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                      disabled={currentPage === totalPages}
+                    >
+                      Next
+                    </Button>
+                  </div>
+                )}
               </div>
             </div>
           </>
