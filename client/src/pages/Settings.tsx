@@ -22,6 +22,7 @@ import { APICostCalculator } from '@/components/integrations/APICostCalculator';
 import { SecureStorageDashboard } from '@/components/project-management/SecureStorageDashboard';
 import { BrandKitManager } from '@/components/content/BrandKit';
 import { DataGovernanceDashboard } from '@/components/project-management/DataGovernanceDashboard';
+import { IntegrationsManager } from '@/components/IntegrationsManager';
 import { Plug, Wallet, FileSignature, Cpu, HardDrive, Paintbrush, ShieldCheck } from 'lucide-react';
 
 type SettingsTab = 'profile' | 'integrations' | 'subscriptions' | 'signatures' | 'ai-providers' | 'api-costs' | 'storage' | 'brand-kit' | 'data-governance' | 'calendar' | 'training' | 'referrals' | 'notifications' | 'privacy' | 'appearance' | 'accessibility';
@@ -158,7 +159,7 @@ export default function Settings() {
 
             {activeTab === 'integrations' && (
               <div className="bg-gray-800 rounded-xl border border-gray-700 p-6">
-                <IntegrationsStatusReal />
+                <IntegrationsManager />
               </div>
             )}
 

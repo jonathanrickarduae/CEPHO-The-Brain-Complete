@@ -3,6 +3,7 @@ import { useLocation } from "wouter";
 import { useFavorites } from "@/components/project-management/MyBoard";
 import { DirectExpertChat } from "@/components/expert-evolution/DirectExpertChat";
 import { CorporatePartnerChat } from "@/components/ai-agents/CorporatePartnerChat";
+import { ExpertDetailModal } from "@/components/ExpertDetailModal";
 import { 
   Search, Users, Star, MessageSquare, Video, 
   Filter, ChevronRight, Brain, Sparkles,
@@ -271,161 +272,15 @@ export function ExpertDirectory({ onSelectExpert, onBack }: ExpertDirectoryProps
     );
   }
 
-  // Expert Profile View
+  // Expert Profile View - Using ExpertDetailModal
   if (selectedExpert) {
     return (
-      <div className="h-full bg-background">
-        <div className="border-b border-border bg-card/80 backdrop-blur-xl sticky top-0 z-10">
-          <div className="max-w-4xl mx-auto px-4 py-4">
-            <Button 
-              variant="ghost" 
-              onClick={() => setSelectedExpert(null)}
-              className="mb-2"
-            >
-              ← Back to Directory
-            </Button>
-          </div>
-        </div>
-
-        <ScrollArea className="h-[calc(100%-80px)]">
-          <div className="max-w-4xl mx-auto px-4 py-6">
-            <div className="flex items-start gap-6 mb-8">
-              {selectedExpert.avatarUrl ? (
-                <img alt="Expert profile" 
-                  src={selectedExpert.avatarUrl} 
-                  alt={selectedExpert.name}
-                  className="w-24 h-24 rounded-2xl object-cover border-2 border-cyan-500/30"
-                />
-              ) : (
-                <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-purple-500/20 border border-cyan-500/30 flex items-center justify-center text-4xl">
-                  {selectedExpert.avatar}
-                </div>
-              )}
-              <div className="flex-1">
-                <h1 className="text-3xl font-bold text-white mb-1">{selectedExpert.name}</h1>
-                <p className="text-lg text-primary mb-2">{selectedExpert.specialty}</p>
-                <div className="flex items-center gap-3">
-                  <Badge variant="outline">{selectedExpert.category}</Badge>
-                  <Badge className="bg-yellow-500/20 text-yellow-400 border-0">
-                    <Star className="w-3 h-3 mr-1" />
-                    {selectedExpert.performanceScore}% Performance
-                  </Badge>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex gap-3 mb-8">
-              <Button 
-                onClick={() => handleChatWithExpert(selectedExpert)}
-                className="flex-1 bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600"
-              >
-                <MessageSquare className="w-4 h-4 mr-2" />
-                Chat with {selectedExpert.name.split(' ')[0]}
-              </Button>
-              <Button 
-                onClick={() => handleVideoMeeting(selectedExpert)}
-                variant="outline"
-                className="flex-1"
-              >
-                <Video className="w-4 h-4 mr-2" />
-                Video Meeting
-              </Button>
-            </div>
-
-            <Card className="mb-6 bg-card/60 border-border">
-              <CardContent className="p-6">
-                <h2 className="text-lg font-semibold text-foreground mb-3 flex items-center gap-2">
-                  <BookOpen className="w-5 h-5 text-primary" />
-                  About
-                </h2>
-                <p className="text-muted-foreground leading-relaxed">{selectedExpert.bio}</p>
-              </CardContent>
-            </Card>
-
-            <Card className="mb-6 bg-card/60 border-border">
-              <CardContent className="p-6">
-                <h2 className="text-lg font-semibold text-foreground mb-3 flex items-center gap-2">
-                  <Sparkles className="w-5 h-5 text-purple-400" />
-                  Modeled After
-                </h2>
-                <div className="flex flex-wrap gap-2">
-                  {selectedExpert.compositeOf.map((person, idx) => (
-                    <Badge key={idx} variant="outline" className="text-sm py-1 px-3">
-                      {person}
-                    </Badge>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-              <Card className="bg-card/60 border-border">
-                <CardContent className="p-6">
-                  <h2 className="text-lg font-semibold text-foreground mb-3 flex items-center gap-2">
-                    <TrendingUp className="w-5 h-5 text-green-400" />
-                    Strengths
-                  </h2>
-                  <ul className="space-y-2">
-                    {selectedExpert.strengths.map((strength, idx) => (
-                      <li key={idx} className="flex items-center gap-2 text-muted-foreground">
-                        <div className="w-1.5 h-1.5 rounded-full bg-green-400" />
-                        {strength}
-                      </li>
-                    ))}
-                  </ul>
-                </CardContent>
-              </Card>
-
-              <Card className="bg-card/60 border-border">
-                <CardContent className="p-6">
-                  <h2 className="text-lg font-semibold text-foreground mb-3 flex items-center gap-2">
-                    <Award className="w-5 h-5 text-amber-400" />
-                    Areas to Note
-                  </h2>
-                  <ul className="space-y-2">
-                    {selectedExpert.weaknesses.map((weakness, idx) => (
-                      <li key={idx} className="flex items-center gap-2 text-muted-foreground">
-                        <div className="w-1.5 h-1.5 rounded-full bg-amber-400" />
-                        {weakness}
-                      </li>
-                    ))}
-                  </ul>
-                </CardContent>
-              </Card>
-            </div>
-
-            <Card className="mb-6 bg-card/60 border-border">
-              <CardContent className="p-6">
-                <h2 className="text-lg font-semibold text-foreground mb-3 flex items-center gap-2">
-                  <Brain className="w-5 h-5 text-cyan-400" />
-                  Thinking Style
-                </h2>
-                <p className="text-muted-foreground">{selectedExpert.thinkingStyle}</p>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-card/60 border-border">
-              <CardContent className="p-6">
-                <h2 className="text-lg font-semibold text-foreground mb-4">Performance Stats</h2>
-                <div className="grid grid-cols-3 gap-4">
-                  <div className="text-center p-4 bg-secondary/30 rounded-xl">
-                    <p className="text-2xl font-bold text-foreground">{selectedExpert.projectsCompleted}</p>
-                    <p className="text-sm text-muted-foreground">Projects</p>
-                  </div>
-                  <div className="text-center p-4 bg-secondary/30 rounded-xl">
-                    <p className="text-2xl font-bold text-foreground">{selectedExpert.insightsGenerated}</p>
-                    <p className="text-sm text-muted-foreground">Insights</p>
-                  </div>
-                  <div className="text-center p-4 bg-secondary/30 rounded-xl">
-                    <p className="text-2xl font-bold text-foreground">{selectedExpert.performanceScore}%</p>
-                    <p className="text-sm text-muted-foreground">Score</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </ScrollArea>
-      </div>
+      <ExpertDetailModal
+        expert={selectedExpert}
+        isOpen={true}
+        onClose={() => setSelectedExpert(null)}
+        onConsult={() => handleChatWithExpert(selectedExpert)}
+      />
     );
   }
 

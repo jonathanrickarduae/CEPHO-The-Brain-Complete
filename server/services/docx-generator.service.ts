@@ -559,3 +559,39 @@ export async function generateProjectGenesisDocument(
 
   return generateDocx(documentData, outputPath);
 }
+
+
+/**
+ * DocxGeneratorService class wrapper for easier imports
+ */
+export class DocxGeneratorService {
+  async generateReport(reportData: {
+    title: string;
+    sections: Array<{
+      heading: string;
+      content: string | string[];
+    }>;
+  }): Promise<Buffer> {
+    return generateReport(reportData);
+  }
+
+  async generateInnovationBrief(briefData: {
+    title: string;
+    description: string;
+    category?: string;
+    confidenceScore?: number;
+    assessments?: Array<any>;
+    scenarios?: Array<any>;
+    recommendation?: any;
+  }): Promise<Buffer> {
+    return generateInnovationBrief(briefData);
+  }
+
+  async generateProjectGenesisDocument(projectData: {
+    projectName: string;
+    description: string;
+    phases?: Array<any>;
+  }): Promise<Buffer> {
+    return generateProjectGenesisDocument(projectData);
+  }
+}

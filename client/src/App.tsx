@@ -31,6 +31,8 @@ const DigitalTwin = lazy(() => import("@/pages/DigitalTwin"));
 const ChiefOfStaff = lazy(() => import("@/pages/ChiefOfStaff"));
 const Workflow = lazy(() => import("@/pages/Workflow"));
 const Library = lazy(() => import("./pages/Library"));
+const DocumentLibraryEnhanced = lazy(() => import("@/components/DocumentLibraryEnhanced"));
+const DashboardEnhanced = lazy(() => import("@/components/DashboardEnhanced"));
 const Statistics = lazy(() => import("./pages/Statistics"));
 const Vault = lazy(() => import("./pages/Vault"));
 const DailyBrief = lazy(() => import("./pages/DailyBrief"));
@@ -126,6 +128,12 @@ function Router() {
         </Route>
         <Route path="/library">
           <WithLayout><Library /></WithLayout>
+        </Route>
+        <Route path="/library/enhanced">
+          <WithLayout><DocumentLibraryEnhanced /></WithLayout>
+        </Route>
+        <Route path="/dashboard/enhanced">
+          <WithLayout><DashboardEnhanced /></WithLayout>
         </Route>
         <Route path="/statistics">
           <WithLayout><Statistics /></WithLayout>

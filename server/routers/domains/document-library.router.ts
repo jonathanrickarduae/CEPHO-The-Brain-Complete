@@ -10,6 +10,7 @@ import { router, protectedProcedure } from "../../_core/trpc";
 import { z } from "zod";
 import { documentService } from "../../services/document";
 import { handleTRPCError } from "../../utils/error-handler";
+import { DocxGeneratorService } from "../../services/docx-generator.service";
 
 export const documentLibraryRouter = router({
     // List all generated documents
@@ -36,6 +37,66 @@ export const documentLibraryRouter = router({
           throw new Error('Document not found');
         }
         return doc;
+      }),
+
+    // Generate DOCX for a document
+    generateDOCX: protectedProcedure
+      .input(z.object({
+        documentId: z.string(),
+        type: z.enum(['innovation_brief', 'project_genesis', 'report']),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        const { getDocumentById, updateDocument } = await import('../../db');
+        const { storagePut } = await import('../../storage');
+        
+        const doc = await getDocumentById(input.documentId);
+        if (!doc || doc.userId !== ctx.user.id) {
+          throw new Error('Document not found');
+        }
+        
+        // Parse document content
+        const content = JSON.parse(doc.content || '{}');
+        const docxService = new DocxGeneratorService();
+        
+        let buffer: Buffer;
+        
+        if (input.type === 'innovation_brief') {
+          buffer = await docxService.generateInnovationBrief({
+            title: doc.title,
+            description: content.description || '',
+            category: content.category,
+            confidenceScore: content.confidenceScore,
+            assessments: content.assessments || [],
+            scenarios: content.scenarios || [],
+            recommendation: content.recommendation || { decision: 'refine', rationale: '', nextSteps: [] },
+          });
+        } else if (input.type === 'project_genesis') {
+          buffer = await docxService.generateProjectGenesisDocument({
+            projectName: doc.title,
+            description: content.description || '',
+            phases: content.phases || [],
+          });
+        } else {
+          buffer = await docxService.generateReport({
+            title: doc.title,
+            sections: content.sections || [],
+          });
+        }
+        
+        // Save DOCX to storage
+        const docxKey = `documents/${ctx.user.id}/${input.documentId}.docx`;
+        const { url: docxUrl } = await storagePut(
+          docxKey,
+          buffer,
+          'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+        );
+        
+        // Update document with URL
+        await updateDocument(input.documentId, {
+          docxUrl: docxUrl,
+        });
+        
+        return { docxUrl };
       }),
 
     // Generate PDF for a document
