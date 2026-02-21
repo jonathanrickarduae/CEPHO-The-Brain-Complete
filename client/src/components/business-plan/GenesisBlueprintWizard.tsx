@@ -569,7 +569,7 @@ export function GenesisBlueprintWizard({ onComplete, existingBlueprint }: Genesi
           <Progress value={progress} className="h-1" />
           
           {/* Section Navigation */}
-          <div className="flex gap-1 mt-4 overflow-x-auto pb-2">
+          <div className="flex gap-1 mt-4 overflow-x-auto pb-2 scrollbar-hide">
             {sections.map((section, index) => {
               const Icon = sectionIcons[section];
               const isActive = section === currentSection;
@@ -582,7 +582,7 @@ export function GenesisBlueprintWizard({ onComplete, existingBlueprint }: Genesi
                     setCurrentSection(section);
                     setCurrentQuestionIndex(0);
                   }}
-                  className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs whitespace-nowrap transition-all ${
+                  className={`flex items-center gap-1 md:gap-2 px-2 md:px-3 py-1.5 rounded-lg text-xs whitespace-nowrap transition-all ${
                     isActive
                       ? 'bg-gradient-to-r from-cyan-500/20 to-fuchsia-500/20 text-white border border-fuchsia-500/30'
                       : isCompleted
@@ -603,11 +603,11 @@ export function GenesisBlueprintWizard({ onComplete, existingBlueprint }: Genesi
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto px-6 py-8">
-        <div className="grid grid-cols-3 gap-8">
+      <div className="max-w-6xl mx-auto px-4 md:px-6 py-4 md:py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-8">
           {/* Main Question Area */}
-          <div className="col-span-2">
-            <div className="bg-white/5 border border-white/10 rounded-2xl p-8">
+          <div className="lg:col-span-2">
+            <div className="bg-white/5 border border-white/10 rounded-2xl p-4 md:p-8">
               {/* Section Header */}
               <div className="flex items-center gap-3 mb-6">
                 <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-cyan-500/20 to-fuchsia-500/20 flex items-center justify-center">
@@ -659,7 +659,7 @@ export function GenesisBlueprintWizard({ onComplete, existingBlueprint }: Genesi
           </div>
 
           {/* Right Sidebar - SME Panel & Chief of Staff */}
-          <div className="space-y-6">
+          <div className="space-y-6 hidden lg:block">
             {/* Active SMEs */}
             <div className="bg-white/5 border border-white/10 rounded-2xl p-5">
               <div className="flex items-center gap-2 mb-4">

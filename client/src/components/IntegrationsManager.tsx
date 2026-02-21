@@ -388,7 +388,7 @@ export function IntegrationsManager() {
 
       {/* Category Tabs */}
       <Tabs value={selectedCategory} onValueChange={setSelectedCategory}>
-        <TabsList className="grid w-full grid-cols-6">
+        <TabsList className="grid w-full grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
           {categories.map(cat => (
             <TabsTrigger key={cat.value} value={cat.value}>
               {cat.label} ({cat.count})
@@ -402,7 +402,7 @@ export function IntegrationsManager() {
               {filteredServices.map(service => (
                 <Card key={service.id}>
                   <CardHeader>
-                    <div className="flex items-start justify-between">
+                    <div className="flex flex-col md:flex-row items-start md:justify-between gap-3">
                       <div className="flex items-center gap-3">
                         <div className="p-2 bg-primary/10 rounded-lg">
                           {service.icon}
@@ -414,7 +414,7 @@ export function IntegrationsManager() {
                           </CardDescription>
                         </div>
                       </div>
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2 self-end md:self-auto">
                         <Badge variant={service.status === 'active' ? 'default' : 'secondary'}>
                           {service.status === 'active' ? (
                             <><CheckCircle2 className="w-3 h-3 mr-1" /> Active</>
@@ -438,7 +438,7 @@ export function IntegrationsManager() {
                   <CardContent className="space-y-4">
                     {/* Usage Stats */}
                     {service.status === 'active' && (
-                      <div className="flex items-center gap-6 text-sm text-muted-foreground">
+                      <div className="flex flex-col md:flex-row items-start md:items-center gap-2 md:gap-6 text-sm text-muted-foreground">
                         <div>
                           <span className="font-medium">Last used:</span> {service.lastUsed}
                         </div>
