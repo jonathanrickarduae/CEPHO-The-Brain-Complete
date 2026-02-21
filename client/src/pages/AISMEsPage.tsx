@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from 'react';
 import { useLocation } from "wouter";
 import { 
   Users, Brain, Search, Star, MessageSquare, FileText,
