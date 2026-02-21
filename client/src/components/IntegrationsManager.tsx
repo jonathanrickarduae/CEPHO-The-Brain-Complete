@@ -536,3 +536,6 @@ export function IntegrationsManager() {
     </div>
   );
 }
+
+
+export default IntegrationsManager;

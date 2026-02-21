@@ -386,3 +386,6 @@ export function ExpertDetailModal({ expert, isOpen, onClose, onConsult }: Expert
     </Dialog>
   );
 }
+
+
+export default ExpertDetailModal;

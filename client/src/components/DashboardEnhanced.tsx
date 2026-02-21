@@ -346,3 +346,6 @@ export function DashboardEnhanced() {
     </div>
   );
 }
+
+
+export default DashboardEnhanced;

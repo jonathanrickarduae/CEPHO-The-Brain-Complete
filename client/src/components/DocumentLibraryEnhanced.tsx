@@ -463,3 +463,5 @@ export function DocumentLibraryEnhanced() {
     </div>
   );
 }
+
+export default DocumentLibraryEnhanced;
