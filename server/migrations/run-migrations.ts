@@ -19,7 +19,8 @@ export async function runMigrations(): Promise<void> {
     // Migration files to run
     const migrations = [
       { name: 'Monitoring Tables', file: '../../create-monitoring-tables.sql' },
-      { name: 'Critical Indexes', file: '../../drizzle/migrations/add-critical-indexes.sql' }
+      { name: 'Critical Indexes', file: '../../drizzle/migrations/add-critical-indexes.sql' },
+      { name: 'Project Genesis Tables', file: './004-project-genesis-tables.sql' }
     ];
 
     for (const migration of migrations) {
