@@ -35,6 +35,20 @@ export const projectGenesisRouter = router({
       const db = await getRawClient();
       if (!db) throw new Error('Database connection not available');
       
+      // Ensure user exists in database first
+      const userCheck = await db`
+        SELECT id FROM users WHERE id = ${ctx.user.id}
+      `;
+      
+      if (userCheck.length === 0) {
+        // Create user if doesn't exist (for auth bypass scenarios)
+        await db`
+          INSERT INTO users (id, "openId", email, name, role, "themePreference", "createdAt", "updatedAt", "lastSignedIn")
+          VALUES (${ctx.user.id}, 'bypass-${ctx.user.id}', ${ctx.user.email || 'test@example.com'}, ${ctx.user.name || 'Test User'}, 'user', 'dark', NOW(), NOW(), NOW())
+          ON CONFLICT (id) DO NOTHING
+        `;
+      }
+      
       // Create project with PostgreSQL RETURNING clause
       const projectResult = await db`
         INSERT INTO project_genesis 
