@@ -290,6 +290,23 @@ export default function ProjectGenesisPage() {
         />
       )}
       
+      {viewMode === 'qms' && currentBlueprint && (
+        <BlueprintQMS
+          blueprint={currentBlueprint as GenesisBlueprint}
+          onBack={() => setViewMode('dashboard')}
+          onUpdatePhase={(phaseId, status) => {
+            // Update phase via API
+            if (currentBlueprint.id) {
+              updatePhaseMutation.mutate({
+                projectId: parseInt(currentBlueprint.id),
+                phaseId,
+                status
+              });
+            }
+          }}
+        />
+      )}
+      
       {/* Add other view mode components as needed */}
     </div>
   );
