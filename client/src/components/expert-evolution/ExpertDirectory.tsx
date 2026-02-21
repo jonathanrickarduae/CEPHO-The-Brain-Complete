@@ -3,7 +3,7 @@ import { useLocation } from "wouter";
 import { useFavorites } from "@/components/project-management/MyBoard";
 import { DirectExpertChat } from "@/components/expert-evolution/DirectExpertChat";
 import { CorporatePartnerChat } from "@/components/ai-agents/CorporatePartnerChat";
-import { ExpertDetailModal } from "@/components/ExpertDetailModal";
+import ExpertDetailModal from "@/components/ExpertDetailModal";
 import { 
   Search, Users, Star, MessageSquare, Video, 
   Filter, ChevronRight, Brain, Sparkles,

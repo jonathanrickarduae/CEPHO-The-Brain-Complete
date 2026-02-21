@@ -112,7 +112,7 @@ function Router() {
         
         {/* Dashboard pages with sidebar */}
         <Route path="/dashboard">
-          <WithLayout><NexusDashboard /></WithLayout>
+          <WithLayout><DashboardEnhanced /></WithLayout>
         </Route>
         <Route path="/digital-twin">
           <WithLayout><ChiefOfStaff /></WithLayout>
@@ -127,14 +127,10 @@ function Router() {
           <WithLayout><Workflow /></WithLayout>
         </Route>
         <Route path="/library">
-          <WithLayout><Library /></WithLayout>
-        </Route>
-        <Route path="/library/enhanced">
           <WithLayout><DocumentLibraryEnhanced /></WithLayout>
         </Route>
-        <Route path="/dashboard/enhanced">
-          <WithLayout><DashboardEnhanced /></WithLayout>
-        </Route>
+
+
         <Route path="/statistics">
           <WithLayout><Statistics /></WithLayout>
         </Route>
