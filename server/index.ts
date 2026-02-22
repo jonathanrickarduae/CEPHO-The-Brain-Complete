@@ -21,10 +21,33 @@ async function startServer() {
       ? path.resolve(__dirname, "public")
       : path.resolve(__dirname, "..", "dist", "public");
 
-  app.use(express.static(staticPath));
+  // Serve static files with proper cache headers
+  app.use(express.static(staticPath, {
+    maxAge: 0, // Don't cache HTML
+    setHeaders: (res, filePath) => {
+      // Cache assets with hash in filename for 1 year
+      if (filePath.match(/\.(js|css|woff2?|ttf|eot)$/) && filePath.match(/-[a-f0-9]{8}\./)) {
+        res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+      }
+      // Cache images for 1 week
+      else if (filePath.match(/\.(jpg|jpeg|png|gif|svg|webp|ico)$/)) {
+        res.setHeader('Cache-Control', 'public, max-age=604800');
+      }
+      // Don't cache HTML files
+      else if (filePath.endsWith('.html')) {
+        res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+        res.setHeader('Pragma', 'no-cache');
+        res.setHeader('Expires', '0');
+      }
+    }
+  }));
 
   // Handle client-side routing - serve index.html for all routes
   app.get("*", (_req, res) => {
+    // Prevent caching of index.html
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
     res.sendFile(path.join(staticPath, "index.html"));
   });
 
