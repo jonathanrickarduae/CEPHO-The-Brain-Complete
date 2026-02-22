@@ -4,7 +4,7 @@ import {
   CheckCircle2, Clock, ArrowRight, Download, Play, 
   Headphones, ChevronRight, AlertTriangle, Lightbulb,
   Video, FileText, ThumbsUp, RotateCcw, UserPlus, Fingerprint,
-  ListChecks, Eye
+  ListChecks, Eye, Mail
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
