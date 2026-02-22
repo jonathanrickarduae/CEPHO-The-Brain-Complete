@@ -67,6 +67,21 @@ const BRIEF_DATA = {
     { id: 3, confidence: 78, title: "Block Focus Time After 4 PM", reason: "Your productivity peaks in late afternoon. No meetings scheduled - protect this time.", autoAction: "gotit" },
   ],
   
+  emailSummary: {
+    unread: 23,
+    highPriority: 5,
+    requiresResponse: 8,
+    urgent: [
+      { id: 1, from: "James K. (VC Partner)", subject: "Lunch meeting confirmation", preview: "Looking forward to our lunch today at 12pm. I'll bring the term sheet drafts...", priority: "high", suggestedResponse: "Confirmed. See you at The Capital Grille at noon. Looking forward to discussing the terms." },
+      { id: 2, from: "Sarah L. (CFO)", subject: "Q3 Budget - Final Review Needed", preview: "Attached is the final Q3 budget. Need your sign-off by 2pm today for board submission...", priority: "urgent", suggestedResponse: "Reviewed and approved. Please proceed with board submission. Great work on the cost optimizations." },
+      { id: 3, from: "Legal Team", subject: "EU Regulations - Action Required", preview: "New EU energy regulations effective Q4. We need to review compliance implications...", priority: "high", suggestedResponse: "Let's schedule a 30-min call tomorrow to discuss compliance strategy. Please prepare impact assessment." },
+    ],
+    actionable: [
+      { id: 4, from: "Marcus T. (Engineering)", subject: "Space Shuttle Blueprint - Ready for Review", preview: "Engineering team completed the blueprint review. Ready for your sign-off before presentation...", action: "Review and approve before 10am meeting" },
+      { id: 5, from: "Product Team", subject: "Roadmap Discussion Prep", preview: "Agenda for 3:30pm roadmap discussion. Please review priorities and provide feedback...", action: "Review agenda and prepare feedback" },
+    ]
+  },
+  
   strategyBriefing: {
     marketPosition: {
       status: "Strong",
@@ -484,6 +499,129 @@ export default function DailyBrief() {
                     </div>
                   </div>
                 ))}
+              </CardContent>
+            </Card>
+
+            {/* Email Summary - Chief of Staff Review */}
+            <Card className="bg-card/60 border-border">
+              <CardHeader className="pb-3">
+                <CardTitle className="flex items-center justify-between text-foreground">
+                  <div className="flex items-center gap-2">
+                    <Mail className="w-5 h-5 text-blue-400" />
+                    Email Review - Chief of Staff
+                  </div>
+                  <Badge className="bg-red-500/20 text-red-400 border-0">
+                    {BRIEF_DATA.emailSummary.highPriority} urgent
+                  </Badge>
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {/* Email Stats */}
+                <div className="grid grid-cols-3 gap-3">
+                  <div className="p-3 rounded-lg bg-blue-500/10 border border-blue-500/20">
+                    <p className="text-2xl font-bold text-blue-400">{BRIEF_DATA.emailSummary.unread}</p>
+                    <p className="text-xs text-muted-foreground">Unread</p>
+                  </div>
+                  <div className="p-3 rounded-lg bg-orange-500/10 border border-orange-500/20">
+                    <p className="text-2xl font-bold text-orange-400">{BRIEF_DATA.emailSummary.requiresResponse}</p>
+                    <p className="text-xs text-muted-foreground">Need Response</p>
+                  </div>
+                  <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/20">
+                    <p className="text-2xl font-bold text-red-400">{BRIEF_DATA.emailSummary.highPriority}</p>
+                    <p className="text-xs text-muted-foreground">High Priority</p>
+                  </div>
+                </div>
+
+                {/* Urgent Emails with Suggested Responses */}
+                <div>
+                  <h4 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
+                    <AlertTriangle className="w-4 h-4 text-red-400" />
+                    Urgent - Requires Your Attention
+                  </h4>
+                  <div className="space-y-3">
+                    {BRIEF_DATA.emailSummary.urgent.map((email) => (
+                      <div 
+                        key={email.id}
+                        className={`p-4 rounded-xl border ${email.priority === 'urgent' ? 'bg-red-500/5 border-red-500/20' : 'bg-orange-500/5 border-orange-500/20'} ${isActioned(`email-${email.id}`) ? 'opacity-60' : ''}`}
+                      >
+                        <div className="flex items-start justify-between gap-4 mb-3">
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-2 mb-1">
+                              <Badge variant="outline" className={email.priority === 'urgent' ? 'text-red-400 border-red-400/30' : 'text-orange-400 border-orange-400/30'}>
+                                {email.priority}
+                              </Badge>
+                              <span className="text-xs text-muted-foreground truncate">{email.from}</span>
+                            </div>
+                            <h4 className="font-bold text-foreground text-sm mb-1">{email.subject}</h4>
+                            <p className="text-xs text-muted-foreground line-clamp-2">{email.preview}</p>
+                          </div>
+                          <ActionButtons 
+                            itemId={`email-${email.id}`}
+                            title={email.subject}
+                            description={email.preview}
+                            category="Email"
+                            source="key"
+                          />
+                        </div>
+                        
+                        {/* COS Suggested Response */}
+                        {email.suggestedResponse && (
+                          <div className="mt-3 p-3 rounded-lg bg-blue-500/10 border border-blue-500/20">
+                            <div className="flex items-start gap-2 mb-2">
+                              <Brain className="w-4 h-4 text-blue-400 mt-0.5 shrink-0" />
+                              <div className="flex-1 min-w-0">
+                                <p className="text-xs font-semibold text-blue-400 mb-1">COS Suggested Response:</p>
+                                <p className="text-xs text-foreground/80 italic">"{email.suggestedResponse}"</p>
+                              </div>
+                            </div>
+                            <div className="flex gap-2 mt-2">
+                              <Button size="sm" variant="outline" className="h-7 text-xs border-blue-500/30 hover:bg-blue-500/10">
+                                <CheckCircle2 className="w-3 h-3 mr-1" /> Use Draft
+                              </Button>
+                              <Button size="sm" variant="ghost" className="h-7 text-xs hover:bg-blue-500/10">
+                                Edit
+                              </Button>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Actionable Emails */}
+                <div>
+                  <h4 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
+                    <ListChecks className="w-4 h-4 text-blue-400" />
+                    Action Required Today
+                  </h4>
+                  <div className="space-y-2">
+                    {BRIEF_DATA.emailSummary.actionable.map((email) => (
+                      <div 
+                        key={email.id}
+                        className="p-3 rounded-lg bg-blue-500/5 border border-blue-500/20 hover:border-blue-500/40 transition-colors cursor-pointer"
+                      >
+                        <div className="flex items-start gap-3">
+                          <CheckCircle2 className="w-4 h-4 text-blue-400 mt-0.5 shrink-0" />
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm font-medium text-foreground">{email.from}: {email.subject}</p>
+                            <p className="text-xs text-blue-400 mt-1">{email.action}</p>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* View All Emails Button */}
+                <Button 
+                  variant="outline" 
+                  className="w-full border-blue-500/30 hover:bg-blue-500/10"
+                  onClick={() => window.location.href = '/email/inbox'}
+                >
+                  <Mail className="w-4 h-4 mr-2" />
+                  View All Emails ({BRIEF_DATA.emailSummary.unread} unread)
+                </Button>
               </CardContent>
             </Card>
 
