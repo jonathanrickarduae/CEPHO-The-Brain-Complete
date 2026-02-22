@@ -367,13 +367,19 @@ export default function DailyBrief() {
         {activeTab === "overview" && (
           <div className="space-y-6">
             {/* Presenter Video Brief */}
-            <Card className="bg-gradient-to-br from-primary/10 via-card/60 to-purple-500/10 border-primary/30">
+            <Card className="relative bg-gradient-to-br from-primary/10 via-card/60 to-purple-500/10 border-2 border-primary/30 shadow-xl">
+              <div className="absolute -inset-1 bg-gradient-to-r from-primary/30 to-purple-500/30 rounded-xl blur-xl opacity-20 -z-10" />
               <CardContent className="p-6">
                 <div className="flex flex-col md:flex-row gap-6 items-start">
                   {/* Presenter Avatar */}
                   <div className="shrink-0">
-                    <div className="w-20 h-20 md:w-24 md:h-24 rounded-2xl bg-gradient-to-br from-primary/30 to-purple-500/30 border border-primary/40 flex items-center justify-center">
-                      <span className="text-2xl md:text-3xl font-display font-bold text-primary">VS</span>
+                    <div className="relative w-20 h-20 md:w-24 md:h-24 rounded-2xl overflow-hidden border-2 border-primary/40 shadow-lg">
+                      <img 
+                        src="/avatars/victoria-stirling.jpg" 
+                        alt="Victoria Sterling" 
+                        className="w-full h-full object-cover"
+                      />
+                      <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-card" />
                     </div>
                     <p className="text-center text-xs text-muted-foreground mt-2">Victoria Sterling</p>
                     <p className="text-center text-[10px] text-muted-foreground/60">Daily Brief Presenter</p>
@@ -396,19 +402,19 @@ export default function DailyBrief() {
                     
                     <div className="flex gap-2">
                       <Button 
-                        size="sm" 
-                        className="bg-primary hover:bg-primary/90"
+                        size="lg" 
+                        className="bg-primary hover:bg-primary/90 shadow-lg shadow-primary/30 text-base"
                         onClick={() => toast.info('Video brief generation coming soon')}
                       >
-                        <Play className="w-4 h-4 mr-2" /> Watch Brief
+                        <Play className="w-5 h-5 mr-2" /> Watch Victoria's Brief
                       </Button>
                       <Button 
-                        size="sm" 
+                        size="lg" 
                         variant="outline"
-                        className="border-primary/30 hover:bg-primary/10"
+                        className="border-primary/30 hover:bg-primary/10 text-base"
                         onClick={() => toast.info('Audio brief generation coming soon')}
                       >
-                        <Headphones className="w-4 h-4 mr-2" /> Listen
+                        <Headphones className="w-5 h-5 mr-2" /> Listen
                       </Button>
                     </div>
                   </div>
