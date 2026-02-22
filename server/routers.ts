@@ -120,9 +120,11 @@ import { genesisRouter } from "./routers/domains/genesis.router";
 import { qaRouter } from "./routers/domains/qa.router";
 import { expertConsultationRouter } from "./routers/domains/expert-consultation.router";
 import { victoriasBriefRouter } from "./routers/domains/victorias-brief.router";
+import { dashboardRouter } from "./routers/domains/dashboard.router";
 
 
 export const appRouter = router({
+  dashboard: dashboardRouter,
   expertEvolution: expertEvolutionRouter,
   businessPlanReview: businessPlanReviewRouter,
   documentLibrary: documentLibraryRouter,
