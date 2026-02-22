@@ -79,6 +79,7 @@ const BusinessModelPage = lazy(() => import("./pages/BusinessModelPage"));
 const QuestionnaireOnline = lazy(() => import("./pages/QuestionnaireOnline"));
 const StrategicFrameworkQuestionnaire = lazy(() => import("./pages/StrategicFrameworkQuestionnaire"));
 const AgentsMonitoring = lazy(() => import("./pages/AgentsMonitoring"));
+const PersephoneBoard = lazy(() => import("./pages/PersephoneBoard"));
 const EmailAccountsManager = lazy(() => import("./components/email/EmailAccountsManager"));
 const EmailList = lazy(() => import("./components/email/EmailList"));
 const VictoriaBriefing = lazy(() => import("./components/victoria/VictoriaBriefing"));
@@ -167,8 +168,8 @@ function Router() {
         <Route path="/agents/:id">
           <WithLayout><AgentDetailPage /></WithLayout>
         </Route>
-        <Route path="/agents-monitoring">
-          <WithLayout><AgentsMonitoring /></WithLayout>
+        <Route path="/agents-monitoring" component={WithLayout(AgentsMonitoring)} />
+        <Route path="/persephone" component={WithLayout(PersephoneBoard)} /></WithLayout>
         </Route>
         <Route path="/settings">
           <WithLayout><Settings /></WithLayout>
