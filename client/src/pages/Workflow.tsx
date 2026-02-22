@@ -12,7 +12,7 @@ import { Progress } from "@/components/ui/progress";
 const projects = [
   {
     id: 'celadon',
-    name: 'Celadon Pharmaceuticals',
+    name: 'Project A',
     color: '#10B981',
     status: 'blocked',
     progress: 65,
@@ -23,7 +23,7 @@ const projects = [
   },
   {
     id: 'boundless',
-    name: 'Boundless Telecom',
+    name: 'Project B',
     color: '#3B82F6',
     status: 'on-track',
     progress: 82,
@@ -45,7 +45,7 @@ const projects = [
   },
   {
     id: 'ampora',
-    name: 'Ampora',
+    name: 'Project C',
     color: '#06B6D4',
     status: 'on-track',
     progress: 91,

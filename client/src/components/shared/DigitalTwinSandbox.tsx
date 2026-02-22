@@ -31,7 +31,7 @@ export function DigitalTwinSandbox() {
   const testScenarios: TestScenario[] = [
     { id: 's1', category: 'Email', prompt: 'Draft response to meeting reschedule request', expectedBehavior: 'Professional, confirms new time, brief' },
     { id: 's2', category: 'Decision', prompt: 'Should I accept this speaking engagement?', expectedBehavior: 'Weighs calendar, relevance, provides recommendation' },
-    { id: 's3', category: 'Summary', prompt: 'Summarise the Celadon project status', expectedBehavior: 'Key metrics, blockers, next actions' },
+    { id: 's3', category: 'Summary', prompt: 'Summarise the Project A project status', expectedBehavior: 'Key metrics, blockers, next actions' },
     { id: 's4', category: 'Task', prompt: 'Prioritise my tasks for today', expectedBehavior: 'Ordered list based on urgency and importance' },
     { id: 's5', category: 'Research', prompt: 'What do I need to know about competitor X?', expectedBehavior: 'Factual summary from available data' },
   ];
@@ -39,7 +39,7 @@ export function DigitalTwinSandbox() {
   const [testResults, setTestResults] = useState<TestResult[]>([
     { scenarioId: 's1', response: 'Confirmed. Meeting moved to Thursday 14:00. Calendar updated.', confidence: 89, timestamp: new Date(Date.now() - 86400000), feedback: 'approved' },
     { scenarioId: 's2', response: 'Recommendation: Decline. Calendar conflict with board meeting. Topic outside current focus areas.', confidence: 76, timestamp: new Date(Date.now() - 172800000), feedback: 'approved' },
-    { scenarioId: 's3', response: 'Celadon: 67% complete. 3 tasks overdue. Blocker: awaiting legal review. Next: follow up with legal team.', confidence: 92, timestamp: new Date(Date.now() - 259200000), feedback: 'approved' },
+    { scenarioId: 's3', response: 'Project A: 67% complete. 3 tasks overdue. Blocker: awaiting legal review. Next: follow up with legal team.', confidence: 92, timestamp: new Date(Date.now() - 259200000), feedback: 'approved' },
   ]);
 
   const runTest = () => {
@@ -55,7 +55,7 @@ export function DigitalTwinSandbox() {
       const mockResponses: Record<string, { response: string; confidence: number }> = {
         'email': { response: 'Draft prepared. Subject: Re: Meeting Request. Body: Confirmed for proposed time. Location details required.', confidence: 85 },
         'meeting': { response: '2 meetings today. 10:00 Board review (prep notes ready). 14:30 Team sync (agenda pending).', confidence: 94 },
-        'task': { response: 'Priority order: 1. Legal review follow-up (overdue). 2. Board presentation finalise. 3. Celadon status update.', confidence: 88 },
+        'task': { response: 'Priority order: 1. Legal review follow-up (overdue). 2. Board presentation finalise. 3. Project A status update.', confidence: 88 },
         'default': { response: 'Query processed. Insufficient context for specific action. Clarification recommended.', confidence: 62 }
       };
 

@@ -42,8 +42,8 @@ interface DueDiligenceProject {
 // Mock data
 const MOCK_PROJECT: DueDiligenceProject = {
   id: 'dd1',
-  name: 'Celadon Capital Acquisition',
-  company: 'Celadon Capital Ltd',
+  name: 'Project A Acquisition',
+  company: 'Project A Ltd',
   stage: 'detailed',
   startDate: '2024-01-15',
   targetClose: '2024-03-30',

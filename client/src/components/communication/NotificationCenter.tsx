@@ -94,7 +94,7 @@ function getSampleNotifications(): Notification[] {
       id: 1,
       type: 'project_update',
       title: 'Project Update Required',
-      message: 'Celadon project has 3 overdue tasks that need attention.',
+      message: 'Project A project has 3 overdue tasks that need attention.',
       createdAt: new Date(Date.now() - 1000 * 60 * 30),
       read: false,
       actionUrl: '/workflow',

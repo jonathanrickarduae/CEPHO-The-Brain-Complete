@@ -53,7 +53,7 @@ export function DataGovernanceDashboard() {
   const auditLog: AuditLogEntry[] = [
     { id: 'a1', timestamp: new Date(), action: 'view', actor: 'user', resource: 'Dashboard', resourceType: 'page', ipAddress: '192.168.1.1' },
     { id: 'a2', timestamp: new Date(Date.now() - 300000), action: 'create', actor: 'digital-twin', resource: 'Meeting summary', resourceType: 'document', details: 'Auto-generated from Zoom' },
-    { id: 'a3', timestamp: new Date(Date.now() - 600000), action: 'update', actor: 'user', resource: 'Celadon Project', resourceType: 'project' },
+    { id: 'a3', timestamp: new Date(Date.now() - 600000), action: 'update', actor: 'user', resource: 'Project A Project', resourceType: 'project' },
     { id: 'a4', timestamp: new Date(Date.now() - 3600000), action: 'export', actor: 'user', resource: 'Weekly Report', resourceType: 'document' },
     { id: 'a5', timestamp: new Date(Date.now() - 7200000), action: 'share', actor: 'user', resource: 'Brand Guidelines', resourceType: 'document', details: 'Shared with team@company.com' },
     { id: 'a6', timestamp: new Date(Date.now() - 86400000), action: 'delete', actor: 'system', resource: 'Expired session data', resourceType: 'system', details: 'Automatic cleanup' },

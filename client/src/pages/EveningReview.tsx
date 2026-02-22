@@ -16,7 +16,7 @@ import { toast } from "sonner";
 const OVERNIGHT_TASKS = [
   {
     projectId: 'proj-1',
-    projectName: 'Boundless AI',
+    projectName: 'Project B',
     projectColor: '#8B5CF6',
     tasks: [
       { id: 't1', text: 'Review investor deck feedback from Sarah', priority: 'high', estimatedTime: '15 min', status: 'pending' },
@@ -44,7 +44,7 @@ const OVERNIGHT_TASKS = [
   },
   {
     projectId: 'proj-4',
-    projectName: 'Celadon Ventures',
+    projectName: 'Project A Ventures',
     projectColor: '#F59E0B',
     tasks: [
       { id: 't8', text: 'Review portfolio company updates', priority: 'medium', estimatedTime: '25 min', status: 'pending' },

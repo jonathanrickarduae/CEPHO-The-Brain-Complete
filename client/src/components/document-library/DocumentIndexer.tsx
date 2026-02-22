@@ -42,16 +42,16 @@ const MOCK_DOCUMENTS: IndexedDocument[] = [
     id: 'd1',
     name: 'Investment_Memo_Celadon.pdf',
     type: 'document',
-    project: 'Celadon Capital',
+    project: 'Project A',
     indexedAt: '2 hours ago',
     chunks: 45,
-    preview: 'Celadon Capital represents a compelling investment opportunity in the sustainable energy sector...'
+    preview: 'Project A represents a compelling investment opportunity in the sustainable energy sector...'
   },
   {
     id: 'd2',
     name: 'Financial_Model_Q4.xlsx',
     type: 'spreadsheet',
-    project: 'Celadon Capital',
+    project: 'Project A',
     indexedAt: '1 day ago',
     chunks: 28,
     preview: 'Revenue projections, EBITDA margins, DCF valuation model...'
@@ -60,7 +60,7 @@ const MOCK_DOCUMENTS: IndexedDocument[] = [
     id: 'd3',
     name: 'NDA_Sample_Signed.pdf',
     type: 'contract',
-    project: 'Boundless AI',
+    project: 'Project B',
     indexedAt: '3 days ago',
     chunks: 12,
     preview: 'Non-disclosure agreement between parties regarding confidential information...'
@@ -78,7 +78,7 @@ const MOCK_DOCUMENTS: IndexedDocument[] = [
     id: 'd5',
     name: 'Board_Presentation.pptx',
     type: 'presentation',
-    project: 'Ampora',
+    project: 'Project C',
     indexedAt: '1 week ago',
     chunks: 34,
     preview: 'Q3 board presentation covering strategic initiatives, financial performance, and roadmap...'

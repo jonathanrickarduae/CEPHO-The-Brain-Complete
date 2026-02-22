@@ -103,7 +103,7 @@ export function UniversalInbox() {
 
   const projects: Project[] = [
     { id: 'proj-1', name: 'WasteGen Opportunity', itemCount: 3 },
-    { id: 'proj-2', name: 'Celadon Development', itemCount: 12 },
+    { id: 'proj-2', name: 'Project A Development', itemCount: 12 },
   ];
 
   const typeConfig: Record<ItemType, { icon: typeof FileText; color: string; label: string }> = {

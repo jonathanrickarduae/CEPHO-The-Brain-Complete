@@ -56,7 +56,7 @@ const MOCK_TASKS: Task[] = [
     id: 'task-1',
     title: 'Q4 Financial Analysis',
     description: 'Complete financial review and projections for Q4',
-    project: 'Celadon',
+    project: 'Project A',
     status: 'review',
     progress: 95,
     qaStatus: 'cos_approved',
@@ -69,7 +69,7 @@ const MOCK_TASKS: Task[] = [
     id: 'task-2',
     title: 'Investor Deck Updates',
     description: 'Update pitch deck with latest metrics and market data',
-    project: 'Boundless AI',
+    project: 'Project B',
     status: 'active',
     progress: 60,
     qaStatus: 'pending',
@@ -81,7 +81,7 @@ const MOCK_TASKS: Task[] = [
     id: 'task-3',
     title: 'Due Diligence Report',
     description: 'Complete DD checklist and risk assessment',
-    project: 'Celadon',
+    project: 'Project A',
     status: 'completed',
     progress: 100,
     qaStatus: 'verified',
@@ -108,8 +108,8 @@ const MOCK_TASKS: Task[] = [
 
 const MOCK_CONVERSATIONS: Conversation[] = [
   { id: 'conv-1', title: 'Current Session', project: undefined, lastMessage: 'How can I help you today?', timestamp: new Date(), unread: 0, starred: true },
-  { id: 'conv-2', title: 'Celadon Strategy', project: 'Celadon', lastMessage: 'The financial projections look solid...', timestamp: new Date(Date.now() - 3600000), unread: 2, starred: true },
-  { id: 'conv-3', title: 'Sample Project Pitch', project: 'Boundless AI', lastMessage: 'I\'ve updated the deck with...', timestamp: new Date(Date.now() - 86400000), unread: 0, starred: false },
+  { id: 'conv-2', title: 'Project A Strategy', project: 'Project A', lastMessage: 'The financial projections look solid...', timestamp: new Date(Date.now() - 3600000), unread: 2, starred: true },
+  { id: 'conv-3', title: 'Sample Project Pitch', project: 'Project B', lastMessage: 'I\'ve updated the deck with...', timestamp: new Date(Date.now() - 86400000), unread: 0, starred: false },
   { id: 'conv-4', title: 'General Planning', project: undefined, lastMessage: 'Your schedule for tomorrow...', timestamp: new Date(Date.now() - 172800000), unread: 0, starred: false },
 ];
 

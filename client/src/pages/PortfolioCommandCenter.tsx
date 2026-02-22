@@ -57,7 +57,7 @@ interface Venture {
 const ventures: Venture[] = [
   {
     id: "celadon",
-    name: "Celadon Ajman",
+    name: "Project A Ajman",
     description: "Medical cannabis facility in UAE - manufacturing, testing, R&D",
     status: "active",
     health: "green",
@@ -125,7 +125,7 @@ const ventures: Venture[] = [
   },
   {
     id: "ampora",
-    name: "Ampora",
+    name: "Project C",
     description: "Water technology and sustainability solutions",
     status: "planning",
     health: "amber",

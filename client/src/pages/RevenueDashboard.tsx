@@ -36,16 +36,16 @@ import { toast } from "sonner";
 // Demo data for initial display
 const demoVentures = [
   { name: "CEPHO.Ai", mrr: 0, arr: 0, status: "pre_revenue", customers: 1, stage: "MVP" },
-  { name: "Celadon", mrr: 45000, arr: 540000, status: "active", customers: 12, stage: "Growth" },
-  { name: "Boundless AI", mrr: 0, arr: 0, status: "planned", customers: 0, stage: "Concept" },
+  { name: "Project A", mrr: 45000, arr: 540000, status: "active", customers: 12, stage: "Growth" },
+  { name: "Project B", mrr: 0, arr: 0, status: "planned", customers: 0, stage: "Concept" },
   { name: "Perfect DXB", mrr: 28000, arr: 336000, status: "active", customers: 8, stage: "Established" },
 ];
 
 const demoPipeline = [
-  { name: "Enterprise Client A", venture: "Celadon", value: 120000, stage: "proposal", probability: 60 },
+  { name: "Enterprise Client A", venture: "Project A", value: 120000, stage: "proposal", probability: 60 },
   { name: "Government Contract B", venture: "Perfect DXB", value: 450000, stage: "negotiation", probability: 40 },
   { name: "SaaS Pilot C", venture: "CEPHO.Ai", value: 24000, stage: "qualified", probability: 25 },
-  { name: "Consulting Project D", venture: "Celadon", value: 85000, stage: "verbal_yes", probability: 80 },
+  { name: "Consulting Project D", venture: "Project A", value: 85000, stage: "verbal_yes", probability: 80 },
 ];
 
 const stageColors: Record<string, string> = {
@@ -317,8 +317,8 @@ export default function RevenueDashboard() {
             <div className="grid gap-4">
               {/* Demo revenue streams */}
               {[
-                { name: "Celadon Consulting", venture: "Celadon", type: "consulting", mrr: 35000, status: "active" },
-                { name: "Celadon Retainers", venture: "Celadon", type: "recurring", mrr: 10000, status: "active" },
+                { name: "Project A Consulting", venture: "Project A", type: "consulting", mrr: 35000, status: "active" },
+                { name: "Project A Retainers", venture: "Project A", type: "recurring", mrr: 10000, status: "active" },
                 { name: "Perfect DXB Services", venture: "Perfect DXB", type: "recurring", mrr: 28000, status: "active" },
                 { name: "CEPHO.Ai Subscriptions", venture: "CEPHO.Ai", type: "subscription", mrr: 0, status: "planned" },
               ].map((stream, idx) => (

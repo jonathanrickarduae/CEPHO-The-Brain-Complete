@@ -69,7 +69,7 @@ interface StartupMetrics {
 const sampleStartups: StartupMetrics[] = [
   {
     id: "celadon",
-    name: "Celadon Ajman",
+    name: "Project A Ajman",
     monthlyBurn: 85000,
     cashOnHand: 250000,
     runway: 3,

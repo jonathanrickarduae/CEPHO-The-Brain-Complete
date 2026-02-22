@@ -44,7 +44,7 @@ export interface DemoConversation {
 export const sampleProjects: DemoProject[] = [
   {
     id: 'proj-1',
-    name: 'Celadon Capital Acquisition',
+    name: 'Project A Acquisition',
     type: 'full_genesis',
     status: 'active',
     progress: 65,
@@ -89,12 +89,12 @@ export const sampleProjects: DemoProject[] = [
 export const sampleTasks: DemoTask[] = [
   {
     id: 'task-1',
-    title: 'Review Celadon financial model assumptions',
+    title: 'Review Project A financial model assumptions',
     description: 'Check revenue growth rates and margin assumptions against industry benchmarks',
     priority: 'high',
     status: 'pending',
     dueDate: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000),
-    project: 'Celadon Capital Acquisition',
+    project: 'Project A Acquisition',
   },
   {
     id: 'task-2',
@@ -128,7 +128,7 @@ export const sampleTasks: DemoTask[] = [
     priority: 'high',
     status: 'pending',
     dueDate: new Date(Date.now() + 4 * 24 * 60 * 60 * 1000),
-    project: 'Celadon Capital Acquisition',
+    project: 'Project A Acquisition',
   },
 ];
 
@@ -137,19 +137,19 @@ export const sampleConversations: DemoConversation[] = [
   {
     id: 'conv-1',
     role: 'user',
-    content: 'What\'s the status on the Celadon deal?',
+    content: 'What\'s the status on the Project A deal?',
     timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000),
   },
   {
     id: 'conv-2',
     role: 'assistant',
-    content: 'The Celadon Capital Acquisition is progressing well at 65% completion. The NDA has been signed, and the financial model is currently under review. The DD team is making good progress on their report, expected to complete in 5 days. Would you like me to schedule a status call with the team?',
+    content: 'The Project A Acquisition is progressing well at 65% completion. The NDA has been signed, and the financial model is currently under review. The DD team is making good progress on their report, expected to complete in 5 days. Would you like me to schedule a status call with the team?',
     timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000 + 30000),
   },
   {
     id: 'conv-3',
     role: 'user',
-    content: 'Yes, and also draft an email to the Celadon CFO requesting the Q3 financials',
+    content: 'Yes, and also draft an email to the Project A CFO requesting the Q3 financials',
     timestamp: new Date(Date.now() - 1 * 60 * 60 * 1000),
   },
   {
@@ -166,7 +166,7 @@ export const sampleNotifications = [
     id: 'notif-1',
     type: 'task',
     title: 'Financial Model Review Due',
-    message: 'The Celadon financial model needs your review before submission',
+    message: 'The Project A financial model needs your review before submission',
     timestamp: new Date(Date.now() - 30 * 60 * 1000),
     read: false,
   },
@@ -192,7 +192,7 @@ export const sampleNotifications = [
 export const sampleVoiceNotes = [
   {
     id: 'vn-1',
-    transcript: 'Remember to follow up with the Celadon team about the revised timeline. They mentioned concerns about the Q4 deadline.',
+    transcript: 'Remember to follow up with the Project A team about the revised timeline. They mentioned concerns about the Q4 deadline.',
     category: 'reminder',
     timestamp: new Date(Date.now() - 3 * 60 * 60 * 1000),
   },

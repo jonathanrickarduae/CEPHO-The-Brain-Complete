@@ -42,7 +42,7 @@ export function MorningBrief({ isOpen, onDismiss }: MorningBriefProps) {
             type="review"
           />
           <BriefCard 
-            title="NDA for Celadon Partners"
+            title="NDA for Project A Partners"
             subtitle="Ready for your signature"
             type="review"
           />

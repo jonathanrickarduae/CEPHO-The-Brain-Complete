@@ -213,8 +213,8 @@ const INTEGRATIONS: Integration[] = [
     setupSteps: [
       { id: 'intro', title: 'Connect Asana', description: 'Sync your Asana projects and tasks to your dashboard. Your Chief of Staff will learn from project patterns.', type: 'info' },
       { id: 'oauth', title: 'Sign in with Asana', description: 'Click below to authorize access to your Asana workspaces.', type: 'oauth' },
-      { id: 'workspaces', title: 'Select Workspaces', description: 'Choose which workspaces to sync (Celadon, Sample Project, etc.).', type: 'config', fields: [
-        { id: 'workspace_celadon', label: 'Celadon Project', type: 'checkbox' },
+      { id: 'workspaces', title: 'Select Workspaces', description: 'Choose which workspaces to sync (Project A, Sample Project, etc.).', type: 'config', fields: [
+        { id: 'workspace_celadon', label: 'Project A Project', type: 'checkbox' },
         { id: 'workspace_boundless', label: 'Sample Project Project', type: 'checkbox' },
         { id: 'workspace_other', label: 'Other Workspaces', type: 'checkbox' },
       ]},

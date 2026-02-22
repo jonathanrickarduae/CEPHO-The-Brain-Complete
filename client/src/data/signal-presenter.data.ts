@@ -103,7 +103,7 @@ export function generateSampleBriefScript(): DailyBriefScript {
     },
     priorities: [
       {
-        title: "Celadon board preparation",
+        title: "Project A board preparation",
         why: "Board meeting in 3 days - materials need final review",
         timeNeeded: "90 minutes"
       },
@@ -142,7 +142,7 @@ export function generateSampleBriefScript(): DailyBriefScript {
       "Send thank you note to yesterday's guest speaker",
       "Review and merge the website updates"
     ],
-    focusRecommendation: "Block your morning for the Celadon prep. Your afternoon is meeting-heavy, so front-load the deep work.",
+    focusRecommendation: "Block your morning for the Project A prep. Your afternoon is meeting-heavy, so front-load the deep work.",
     closing: "That's your brief. Chief of Staff is ready when you are. Have a productive day."
   };
 }

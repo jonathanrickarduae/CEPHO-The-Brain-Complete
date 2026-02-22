@@ -46,7 +46,7 @@ const SAMPLE_PENDING_REVIEWS: PendingReview[] = [
   },
   {
     id: '3',
-    title: 'Shareholder Agreement - Celadon',
+    title: 'Shareholder Agreement - Project A',
     type: 'Legal Document',
     submittedAt: new Date('2026-01-16T11:00:00'),
     status: 'revision_needed',

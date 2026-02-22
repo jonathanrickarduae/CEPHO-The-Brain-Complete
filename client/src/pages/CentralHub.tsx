@@ -47,7 +47,7 @@ const integrations: Integration[] = [
 // Mock email data
 const mockEmails = [
   { id: '1', from: 'Sarah Chen', subject: 'Q4 Strategy Review - Action Items', preview: 'Hi team, following up on our strategy session...', time: '10:30 AM', unread: true, starred: true },
-  { id: '2', from: 'Michael Torres', subject: 'Investment Proposal - Celadon', preview: 'Please find attached the updated investment memo...', time: '9:15 AM', unread: true, starred: false },
+  { id: '2', from: 'Michael Torres', subject: 'Investment Proposal - Project A', preview: 'Please find attached the updated investment memo...', time: '9:15 AM', unread: true, starred: false },
   { id: '3', from: 'LinkedIn', subject: 'New connection request', preview: 'John Smith wants to connect with you...', time: 'Yesterday', unread: false, starred: false },
   { id: '4', from: 'AWS', subject: 'Your monthly invoice is ready', preview: 'Your AWS invoice for December 2025...', time: 'Yesterday', unread: false, starred: false },
   { id: '5', from: 'Emma Wilson', subject: 'Re: Partnership Discussion', preview: 'Thanks for the call yesterday. I think we...', time: 'Jan 10', unread: false, starred: true },

@@ -93,7 +93,7 @@ export const PROJECT_TYPES: ProjectType[] = [
   {
     id: 'due-diligence',
     name: 'Due Diligence',
-    description: 'Conducting due diligence on a business under Celadon',
+    description: 'Conducting due diligence on a business under Project A',
     icon: 'Search',
     blueprints: ['dd-checklist', 'financial-analysis', 'legal-review', 'market-assessment'],
     quickQuestions: [

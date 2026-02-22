@@ -41,7 +41,7 @@ interface VisualBlueprintProps {
 
 // Sample blueprint structure for a Full Project Genesis
 const SAMPLE_BLUEPRINT: BlueprintData = {
-  projectName: 'Boundless AI',
+  projectName: 'Project B',
   projectType: 'Full Project Genesis',
   layers: [
     { id: 'governance', name: 'Governance & Compliance', color: '#8B5CF6', nodes: ['gov1', 'gov2', 'gov3'] },

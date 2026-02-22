@@ -99,7 +99,7 @@ export function InsightsPanel() {
         id: 'n2',
         type: 'insight',
         priority: 'low',
-        title: 'Celadon: No updates for 3 days',
+        title: 'Project A: No updates for 3 days',
         message: 'Last activity: task completion by Sarah. Review recommended.',
         context: 'Asana',
         actionLabel: 'View project',

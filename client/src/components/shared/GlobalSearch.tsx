@@ -27,7 +27,7 @@ export function GlobalSearch({ isOpen, onClose }: { isOpen: boolean; onClose: ()
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [filters, setFilters] = useState<SearchFilter>({ type: null, dateRange: 'all' });
   const [recentSearches, setRecentSearches] = useState<string[]>([
-    'Celadon project status',
+    'Project A project status',
     'Board meeting notes',
     'Sarah contact'
   ]);
@@ -82,11 +82,11 @@ export function GlobalSearch({ isOpen, onClose }: { isOpen: boolean; onClose: ()
     // Simulate search - in production this would query the backend
     const timer = setTimeout(() => {
       const mockResults: SearchResult[] = [
-        { id: '1', type: 'project' as const, title: 'Celadon Project', excerpt: 'Main development project - 67% complete', relevance: 95 },
+        { id: '1', type: 'project' as const, title: 'Project A Project', excerpt: 'Main development project - 67% complete', relevance: 95 },
         { id: '2', type: 'document' as const, title: 'Board Meeting Notes - Jan 2026', excerpt: 'Q4 review and 2026 planning discussion...', date: new Date(Date.now() - 86400000), relevance: 88 },
         { id: '3', type: 'conversation' as const, title: 'Strategy discussion', excerpt: 'Chief of Staff training approach and timeline...', date: new Date(Date.now() - 172800000), relevance: 82 },
         { id: '4', type: 'expert' as const, title: 'Dr. Sarah Chen - Strategy', excerpt: 'AI Expert specialising in business strategy', relevance: 75 },
-        { id: '5', type: 'task' as const, title: 'Review legal documents', excerpt: 'Pending approval - Celadon contract', date: new Date(), relevance: 70 },
+        { id: '5', type: 'task' as const, title: 'Review legal documents', excerpt: 'Pending approval - Project A contract', date: new Date(), relevance: 70 },
         { id: '6', type: 'vault' as const, title: 'API Credentials', excerpt: 'Asana, Zoom, Teams integration keys', relevance: 65 },
         { id: '7', type: 'event' as const, title: 'Board Meeting', excerpt: 'Tomorrow 10:00 - Quarterly review', date: new Date(Date.now() + 86400000), relevance: 60 },
       ].filter(r => 

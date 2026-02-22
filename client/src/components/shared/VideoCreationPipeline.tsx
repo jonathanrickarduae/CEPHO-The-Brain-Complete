@@ -46,12 +46,12 @@ export function VideoCreationPipeline() {
   const [projects] = useState<VideoProject[]>([
     {
       id: 'proj-1',
-      name: 'Celadon Product Launch',
+      name: 'Project A Product Launch',
       status: 'ready',
       duration: 120,
       createdAt: new Date(Date.now() - 86400000),
       scenes: [
-        { id: 's1', type: 'text', content: 'Introducing Celadon', duration: 5, transition: 'fade' },
+        { id: 's1', type: 'text', content: 'Introducing Project A', duration: 5, transition: 'fade' },
         { id: 's2', type: 'ai-generated', content: 'Product showcase animation', duration: 15, transition: 'slide' },
         { id: 's3', type: 'text', content: 'Key Features', duration: 10, voiceover: 'Our platform offers...', transition: 'fade' },
       ]
@@ -199,7 +199,7 @@ export function VideoCreationPipeline() {
                 Describe your video and let AI create it for you. Include details about style, tone, and content.
               </p>
               <textarea
-                placeholder="E.g., Create a 60-second product launch video for Celadon. Professional tone, modern visuals, highlight key features: AI integration, real-time analytics, team collaboration. Include animated transitions and upbeat background music."
+                placeholder="E.g., Create a 60-second product launch video for Project A. Professional tone, modern visuals, highlight key features: AI integration, real-time analytics, team collaboration. Include animated transitions and upbeat background music."
                 className="w-full h-32 px-4 py-3 bg-gray-900 border border-gray-700 rounded-xl text-foreground placeholder:text-muted-foreground resize-none focus:outline-none focus:border-purple-500"
               />
               <div className="flex items-center justify-between mt-4">

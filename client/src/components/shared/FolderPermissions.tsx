@@ -41,8 +41,8 @@ interface User {
 const MOCK_FOLDERS: FolderPermission[] = [
   {
     id: 'f1',
-    name: 'Celadon Capital Acquisition',
-    path: '/Projects/Celadon Capital',
+    name: 'Project A Acquisition',
+    path: '/Projects/Project A',
     visibility: 'team',
     owner: 'Jonathan',
     permissions: [

@@ -54,7 +54,7 @@ const MOCK_PATTERNS: WorkflowPattern[] = [
     trend: 'improving',
     occurrences: 45,
     lastSeen: 'Today',
-    affectedProjects: ['Celadon Capital', 'Boundless AI'],
+    affectedProjects: ['Project A', 'Project B'],
     recommendation: 'Block 9-11am for strategic work'
   },
   {
@@ -67,7 +67,7 @@ const MOCK_PATTERNS: WorkflowPattern[] = [
     trend: 'stable',
     occurrences: 12,
     lastSeen: '2 days ago',
-    affectedProjects: ['Celadon Capital', 'Perfect DXB', 'Ampora'],
+    affectedProjects: ['Project A', 'Perfect DXB', 'Project C'],
     recommendation: 'Pre-schedule legal review slots or add parallel review capacity'
   },
   {
@@ -93,7 +93,7 @@ const MOCK_PATTERNS: WorkflowPattern[] = [
     trend: 'improving',
     occurrences: 23,
     lastSeen: 'Yesterday',
-    affectedProjects: ['Celadon Capital', 'Boundless AI'],
+    affectedProjects: ['Project A', 'Project B'],
     recommendation: 'Set up auto-alerts for investor communications'
   }
 ];
@@ -112,7 +112,7 @@ const MOCK_ANOMALIES: AnomalyAlert[] = [
     id: 'a2',
     title: 'Deal velocity spike',
     severity: 'info',
-    description: 'Celadon Capital progressing 50% faster than baseline',
+    description: 'Project A progressing 50% faster than baseline',
     detectedAt: '1 day ago',
     source: 'Deal Analytics',
     status: 'resolved'
@@ -121,14 +121,14 @@ const MOCK_ANOMALIES: AnomalyAlert[] = [
 
 const MOCK_PROJECT_COMPARISONS: ProjectComparison[] = [
   {
-    project: 'Celadon Capital',
+    project: 'Project A',
     successScore: 85,
     avgDuration: '4.2 months',
     blockers: ['Legal review delays', 'Stakeholder alignment'],
     successFactors: ['Strong sponsor', 'Clear timeline', 'Dedicated resources']
   },
   {
-    project: 'Boundless AI',
+    project: 'Project B',
     successScore: 72,
     avgDuration: '6.1 months',
     blockers: ['Scope creep', 'Resource constraints'],
@@ -142,7 +142,7 @@ const MOCK_PROJECT_COMPARISONS: ProjectComparison[] = [
     successFactors: ['Local partnerships', 'Clear governance']
   },
   {
-    project: 'Ampora',
+    project: 'Project C',
     successScore: 91,
     avgDuration: '3.8 months',
     blockers: ['Initial due diligence'],

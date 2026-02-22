@@ -34,7 +34,7 @@ export function BrandKitManager() {
   const [brands, setBrands] = useState<Brand[]>([
     {
       id: 'celadon',
-      name: 'Celadon',
+      name: 'Project A',
       colors: {
         primary: '#10B981',
         secondary: '#059669',
@@ -49,7 +49,7 @@ export function BrandKitManager() {
     },
     {
       id: 'boundless',
-      name: 'Boundless AI',
+      name: 'Project B',
       colors: {
         primary: '#8B5CF6',
         secondary: '#7C3AED',
@@ -376,8 +376,8 @@ export function BrandSelector({
   const [isOpen, setIsOpen] = useState(false);
   
   const brands = [
-    { id: 'celadon', name: 'Celadon', color: '#10B981' },
-    { id: 'boundless', name: 'Boundless AI', color: '#8B5CF6' },
+    { id: 'celadon', name: 'Project A', color: '#10B981' },
+    { id: 'boundless', name: 'Project B', color: '#8B5CF6' },
     { id: 'personal', name: 'Personal', color: '#3B82F6' },
   ];
 

@@ -112,7 +112,7 @@ const genesisData = {
 const availableProjects = [
   { id: 'boundless-ai', name: 'Sample Project AI', description: 'AI command center platform', lastUpdated: '2 days ago' },
   { id: 'short-circle-navigator', name: 'Short Circle Navigator', description: 'Investment navigation tool', lastUpdated: '1 week ago' },
-  { id: 'celadon', name: 'Celadon', description: 'Sustainable technology venture', lastUpdated: '3 days ago' },
+  { id: 'celadon', name: 'Project A', description: 'Sustainable technology venture', lastUpdated: '3 days ago' },
   { id: 'project-genesis', name: 'Project Genesis', description: 'Innovation incubator', lastUpdated: '5 days ago' },
 ];
 

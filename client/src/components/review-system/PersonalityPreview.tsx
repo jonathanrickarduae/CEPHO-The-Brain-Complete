@@ -31,10 +31,10 @@ function generatePreviewResponse(prompt: string, settings: PersonalitySettings):
   // Response templates based on prompt and settings
   const responses: Record<string, Record<string, string>> = {
     "What should I focus on today?": {
-      casual_concise: "Hey! Top 3 for today: 1) Celadon review 2) Team sync 3) Clear inbox. You've got this! 💪",
-      casual_detailed: "Morning! So I've been looking at your calendar and task list. Here's what I think makes sense:\n\n1. **Celadon Review** (2 hrs) - This is time-sensitive\n2. **Team Sync** (30 min) - Quick wins to unblock others\n3. **Inbox Zero** (1 hr) - You've got 12 items waiting\n\nI've also noticed you haven't taken a break in a while. Maybe schedule a walk?",
-      formal_concise: "Good morning. Priority items: 1) Celadon review 2) Team synchronization 3) Correspondence management.",
-      formal_detailed: "Good morning. Based on my analysis of your schedule and pending obligations, I recommend the following prioritization:\n\n1. **Celadon Pharmaceuticals Review** - Deadline approaching; estimated 2 hours\n2. **Team Synchronization Meeting** - Several team members awaiting direction\n3. **Correspondence Management** - 12 items requiring attention\n\nShall I prepare briefing materials for any of these items?",
+      casual_concise: "Hey! Top 3 for today: 1) Project A review 2) Team sync 3) Clear inbox. You've got this! 💪",
+      casual_detailed: "Morning! So I've been looking at your calendar and task list. Here's what I think makes sense:\n\n1. **Project A Review** (2 hrs) - This is time-sensitive\n2. **Team Sync** (30 min) - Quick wins to unblock others\n3. **Inbox Zero** (1 hr) - You've got 12 items waiting\n\nI've also noticed you haven't taken a break in a while. Maybe schedule a walk?",
+      formal_concise: "Good morning. Priority items: 1) Project A review 2) Team synchronization 3) Correspondence management.",
+      formal_detailed: "Good morning. Based on my analysis of your schedule and pending obligations, I recommend the following prioritization:\n\n1. **Project A Review** - Deadline approaching; estimated 2 hours\n2. **Team Synchronization Meeting** - Several team members awaiting direction\n3. **Correspondence Management** - 12 items requiring attention\n\nShall I prepare briefing materials for any of these items?",
     },
     "Can you summarize this meeting?": {
       casual_concise: "Quick recap: 3 decisions made, 2 action items for you, follow-up next Tuesday. Want the details?",

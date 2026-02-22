@@ -37,7 +37,7 @@ const MOCK_BRIEFING = {
       urgency: 'high' as const
     },
     {
-      title: 'Boundless AI Board Call Preparation',
+      title: 'Project B Board Call Preparation',
       description: 'Prepare talking points and review Q4 metrics',
       details: 'Focus on: user growth (127% QoQ), revenue projections, and Series A timeline',
       urgency: 'high' as const
@@ -52,7 +52,7 @@ const MOCK_BRIEFING = {
   recommendations: [
     {
       title: 'Delegate Portfolio Reviews',
-      description: 'Consider delegating Celadon portfolio updates to your associate to focus on high-priority deals',
+      description: 'Consider delegating Project A portfolio updates to your associate to focus on high-priority deals',
       action: 'Assign to Team'
     },
     {
