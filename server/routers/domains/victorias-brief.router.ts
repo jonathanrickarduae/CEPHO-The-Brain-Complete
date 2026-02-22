@@ -1,6 +1,8 @@
 import { z } from "zod";
 import { protectedProcedure, router } from "../../_core/trpc";
 import { TRPCError } from "@trpc/server";
+import { generateBriefPDF } from "../../services/pdf-generation.service";
+import { readFile } from "fs/promises";
 
 /**
  * Victoria's Brief Router
@@ -52,25 +54,23 @@ export const victoriasBriefRouter = router({
     .input(BriefDataSchema)
     .mutation(async ({ input, ctx }) => {
       try {
-        // TODO: Implement PDF generation
-        // For now, return a placeholder response
-        throw new TRPCError({
-          code: "NOT_IMPLEMENTED",
-          message: "PDF generation not yet implemented. Requires backend PDF library integration.",
-        });
-
-        // Implementation plan:
-        // 1. Use reportlab or weasyprint (already installed)
-        // 2. Create professional PDF template
-        // 3. Populate with brief data
-        // 4. Save to temporary file
-        // 5. Return download URL or base64 data
+        // Generate PDF from brief data
+        const pdfPath = await generateBriefPDF(input);
         
-        // return {
-        //   success: true,
-        //   pdfUrl: "/api/downloads/victoria-brief-2026-02-22.pdf",
-        //   filename: `victoria-brief-${input.date}.pdf`,
-        // };
+        // Read PDF file as base64
+        const pdfBuffer = await readFile(pdfPath);
+        const pdfBase64 = pdfBuffer.toString('base64');
+        
+        // Clean up temp file
+        const { unlink } = await import('fs/promises');
+        await unlink(pdfPath);
+        
+        return {
+          success: true,
+          pdfBase64,
+          filename: `victoria-brief-${input.date}.pdf`,
+          mimeType: 'application/pdf',
+        };
       } catch (error) {
         console.error("PDF generation error:", error);
         throw new TRPCError({
