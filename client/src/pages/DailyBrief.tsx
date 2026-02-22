@@ -11,6 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { QuickActionsPanel } from '@/components/shared/QuickActionsPanel';
 import { toast } from "sonner";
+import { trpc } from "@/lib/trpc";
 
 // Types for actioned items
 interface ActionedItem {
@@ -136,16 +137,45 @@ export default function DailyBrief() {
 
   const [showVideoBriefing, setShowVideoBriefing] = useState(false);
 
-  const handleExport = (format: "pdf" | "video" | "audio") => {
-    if (format === "video") {
-      setShowVideoBriefing(true);
-      return;
+  const generatePdfMutation = trpc.victoriasBrief.generatePdf.useMutation();
+  const generateVideoMutation = trpc.victoriasBrief.generateVideo.useMutation();
+  const generateAudioMutation = trpc.victoriasBrief.generateAudio.useMutation();
+
+  const handleExport = async (format: "pdf" | "video" | "audio") => {
+    try {
+      if (format === "pdf") {
+        toast.info("Generating 2-page PDF brief...");
+        const result = await generatePdfMutation.mutateAsync({
+          date: BRIEF_DATA.date,
+          content: BRIEF_DATA
+        });
+        window.open(result.pdfUrl, '_blank');
+        toast.success("PDF generated successfully!");
+      } else if (format === "video") {
+        toast.info("Creating video brief with Victoria...");
+        const result = await generateVideoMutation.mutateAsync({
+          script: `Good morning! Here's your brief for ${BRIEF_DATA.date}...`,
+          avatarId: "victoria"
+        });
+        if (result.status === 'processing') {
+          toast.info("Video is being generated. You'll be notified when ready.");
+        } else {
+          window.open(result.videoUrl, '_blank');
+          toast.success("Video generated successfully!");
+        }
+      } else if (format === "audio") {
+        toast.info("Creating podcast version with Victoria's voice...");
+        const result = await generateAudioMutation.mutateAsync({
+          text: `Good morning! Here's your brief for ${BRIEF_DATA.date}...`,
+          voiceId: "victoria"
+        });
+        window.open(result.audioUrl, '_blank');
+        toast.success("Audio generated successfully!");
+      }
+    } catch (error) {
+      toast.error(`Failed to generate ${format}. Please try again.`);
+      console.error(error);
     }
-    const messages = {
-      pdf: "Generating 2-page PDF brief...",
-      audio: "Creating podcast version with Victoria's voice..."
-    };
-    toast.info(messages[format]);
   };
 
   const getPriorityColor = (priority: string) => {
@@ -419,8 +449,7 @@ export default function DailyBrief() {
                       <Button 
                         size="lg" 
                         className="bg-primary hover:bg-primary/90 shadow-lg shadow-primary/30 text-base"
-                        disabled
-                        title="Video generation requires backend implementation"
+                        onClick={() => handleExport("video")}
                       >
                         <Play className="w-5 h-5 mr-2" /> Watch Victoria's Brief
                       </Button>
@@ -428,8 +457,7 @@ export default function DailyBrief() {
                         size="lg" 
                         variant="outline"
                         className="border-primary/30 hover:bg-primary/10 text-base"
-                        disabled
-                        title="Audio generation requires backend implementation"
+                        onClick={() => handleExport("audio")}
                       >
                         <Headphones className="w-5 h-5 mr-2" /> Listen
                       </Button>
