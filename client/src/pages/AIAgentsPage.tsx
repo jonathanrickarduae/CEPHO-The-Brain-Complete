@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Link } from 'wouter';
 import AIAgentsVideo from '@/components/ai-agents/AIAgentsVideo';
+import { trpc } from '@/lib/trpc';
 
 interface AIAgent {
   id: string;
@@ -25,11 +26,16 @@ interface AgentStats {
 }
 
 export default function AIAgentsPage() {
-  const [agents, setAgents] = useState<AIAgent[]>([]);
-  const [stats, setStats] = useState<AgentStats | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [sortBy, setSortBy] = useState<'name' | 'performance' | 'tasks'>('performance');
-  const [loading, setLoading] = useState(true);
+  
+  // Use tRPC to fetch agents and stats
+  const { data: agentsData, isLoading: agentsLoading } = trpc.aiAgentsMonitoring.getAgents.useQuery();
+  const { data: statsData, isLoading: statsLoading } = trpc.aiAgentsMonitoring.getStats.useQuery();
+  
+  const agents = agentsData?.agents || [];
+  const stats = statsData?.stats || null;
+  const loading = agentsLoading || statsLoading;
 
   const categories = [
     'all',
@@ -42,36 +48,7 @@ export default function AIAgentsPage() {
     'learning'
   ];
 
-  useEffect(() => {
-    loadAgents();
-    loadStats();
-  }, []);
 
-  const loadAgents = async () => {
-    try {
-      const response = await fetch('/api/agents');
-      if (response.ok) {
-        const data = await response.json();
-        setAgents(data);
-      }
-    } catch (error) {
-      console.error('Failed to load agents:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const loadStats = async () => {
-    try {
-      const response = await fetch('/api/agents/stats');
-      if (response.ok) {
-        const data = await response.json();
-        setStats(data);
-      }
-    } catch (error) {
-      console.error('Failed to load stats:', error);
-    }
-  };
 
   const filteredAgents = agents
     .filter(agent => selectedCategory === 'all' || agent.category === selectedCategory)
