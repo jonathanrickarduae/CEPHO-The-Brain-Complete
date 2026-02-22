@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { 
   Settings as SettingsIcon, User, Calendar, Database, 
   Bell, Shield, Palette, CreditCard, Users,
-  ChevronRight, Check, Search
+  ChevronRight, Check, Search, Accessibility
 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { PageHeader } from '@/components/layout/Breadcrumbs';
