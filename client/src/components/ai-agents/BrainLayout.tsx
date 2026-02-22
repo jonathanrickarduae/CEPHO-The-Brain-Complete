@@ -92,6 +92,7 @@ const menuItems: MenuItem[] = [
   },
   { icon: Volume2, label: "Victoria's Brief", path: "/victoria" },
   { icon: Users, label: "AI-SMEs", path: "/ai-experts" },
+  { icon: Users, label: "Persephone Board", path: "/persephone" },
   { 
     icon: TrendingUp, 
     label: "Innovation", 

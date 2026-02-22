@@ -24,6 +24,7 @@ const ROUTE_LABELS: Record<string, string> = {
   '/vault': 'The Vault',
   '/evening-review': 'Evening Review',
   '/statistics': 'Statistics',
+  '/persephone': 'Persephone Board',
 };
 
 export function Breadcrumbs({ items, className, showHome = true }: BreadcrumbsProps) {
