@@ -398,7 +398,7 @@ export function IntegrationsManager() {
 
         <TabsContent value={selectedCategory} className="space-y-4 mt-6">
           <ScrollArea className="h-[600px] pr-4">
-            <div className="space-y-4">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               {filteredServices.map(service => (
                 <Card key={service.id}>
                   <CardHeader>
@@ -415,9 +415,14 @@ export function IntegrationsManager() {
                         </div>
                       </div>
                       <div className="flex items-center gap-2 self-end md:self-auto">
-                        <Badge variant={service.status === 'active' ? 'default' : 'secondary'}>
+                        <Badge 
+                          className={service.status === 'active' 
+                            ? 'bg-green-500 hover:bg-green-600 text-white' 
+                            : 'bg-gray-500 hover:bg-gray-600 text-white'
+                          }
+                        >
                           {service.status === 'active' ? (
-                            <><CheckCircle2 className="w-3 h-3 mr-1" /> Active</>
+                            <><CheckCircle2 className="w-3 h-3 mr-1" /> Live</>
                           ) : (
                             <><AlertCircle className="w-3 h-3 mr-1" /> Inactive</>
                           )}
