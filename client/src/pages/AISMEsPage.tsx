@@ -40,6 +40,7 @@ import {
 } from "@/data/expert-types.data";
 import { corporatePartners } from "@/data/ai-experts.data";
 import { ExternalResources } from '@/components/shared/ExternalResources';
+import { ExpertDetailModal } from '@/components/ExpertDetailModal';
 
 // Build categories from real expert data
 const CATEGORIES = [
@@ -1087,134 +1088,12 @@ export default function AISMEsPage() {
 
       {/* Expert Detail Modal */}
       {showExpertDetail && selectedExpert && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-gray-900 border border-white/20 rounded-2xl w-full max-w-lg max-h-[90vh] overflow-hidden">
-            <div className="flex items-center justify-between p-4 border-b border-white/10">
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-500/30 to-blue-500/30 flex items-center justify-center text-xl">
-                  {selectedExpert.avatar}
-                </div>
-                <div>
-                  <h2 className="text-lg font-semibold">{selectedExpert.name}</h2>
-                  <p className="text-sm text-foreground/70">{selectedExpert.category}</p>
-                </div>
-              </div>
-              <Button variant="ghost" size="icon" onClick={() => setShowExpertDetail(null)}>
-                <X className="w-5 h-5" />
-              </Button>
-            </div>
-            
-            <div className="p-4 overflow-y-auto max-h-[calc(90vh-200px)]">
-              {/* Panel Badge */}
-              {(() => {
-                const expertPanel = getExpertPanelType(selectedExpert);
-                const panelInfo = panelTypes[expertPanel];
-                return (
-                  <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium mb-4 ${panelInfo.bgColor} ${panelInfo.color} border ${panelInfo.borderColor}`}>
-                    <span>{panelInfo.icon}</span>
-                    <span>{panelInfo.name}</span>
-                  </div>
-                );
-              })()}
-              
-              <p className="text-sm text-foreground/80 mb-4">{selectedExpert.bio}</p>
-              
-              <div className="grid grid-cols-3 gap-4 mb-4">
-                <div className="text-center p-3 bg-white/5 rounded-xl">
-                  <div className="text-2xl font-bold text-cyan-400">{selectedExpert.performanceScore}%</div>
-                  <div className="text-xs text-foreground/70">Performance</div>
-                </div>
-                <div className="text-center p-3 bg-white/5 rounded-xl">
-                  <div className="text-2xl font-bold">{selectedExpert.projectsCompleted}</div>
-                  <div className="text-xs text-foreground/70">Projects</div>
-                </div>
-                <div className="text-center p-3 bg-white/5 rounded-xl">
-                  <div className="text-2xl font-bold">{selectedExpert.insightsGenerated}</div>
-                  <div className="text-xs text-foreground/70">Insights</div>
-                </div>
-              </div>
-              
-              <div className="space-y-4">
-                <div>
-                  <h4 className="text-xs text-foreground/70 uppercase tracking-wider mb-2">Specialty</h4>
-                  <p className="text-sm">{selectedExpert.specialty}</p>
-                </div>
-                
-                <div>
-                  <h4 className="text-xs text-foreground/70 uppercase tracking-wider mb-2">Strengths</h4>
-                  <div className="flex flex-wrap gap-1">
-                    {selectedExpert.strengths.map((strength, i) => (
-                      <Badge key={i} variant="outline" className="text-xs bg-emerald-500/10 border-emerald-500/30 text-emerald-400">
-                        {strength}
-                      </Badge>
-                    ))}
-                  </div>
-                </div>
-                
-                <div>
-                  <h4 className="text-xs text-foreground/70 uppercase tracking-wider mb-2">Weaknesses</h4>
-                  <div className="flex flex-wrap gap-1">
-                    {selectedExpert.weaknesses.map((weakness, i) => (
-                      <Badge key={i} variant="outline" className="text-xs bg-red-500/10 border-red-500/30 text-red-400">
-                        {weakness}
-                      </Badge>
-                    ))}
-                  </div>
-                </div>
-                
-                <div>
-                  <h4 className="text-xs text-foreground/70 uppercase tracking-wider mb-2">Thinking Style</h4>
-                  <p className="text-sm">{selectedExpert.thinkingStyle}</p>
-                </div>
-                
-                <div>
-                  <h4 className="text-xs text-foreground/70 uppercase tracking-wider mb-2">Inspired By</h4>
-                  <p className="text-sm text-purple-400">{selectedExpert.compositeOf.join(' + ')}</p>
-                </div>
-                
-                <div className="flex items-center justify-between pt-2">
-                  <Badge className={selectedExpert.status === 'active' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-amber-500/10 text-amber-400'}>
-                    {selectedExpert.status === 'active' ? 'Available' : selectedExpert.status}
-                  </Badge>
-                  <span className="text-xs text-muted-foreground">Last used: {formatDate(selectedExpert.lastUsed)}</span>
-                </div>
-              </div>
-            </div>
-            
-            <div className="flex gap-2 p-4 border-t border-white/10">
-              <Button 
-                className="flex-1 gap-2"
-                onClick={() => {
-                  toggleExpertSelection(selectedExpert);
-                  setShowExpertDetail(null);
-                }}
-              >
-                {selectedExperts.some(e => e.id === selectedExpert.id) ? (
-                  <>
-                    <CheckCircle2 className="w-4 h-4" />
-                    Selected
-                  </>
-                ) : (
-                  <>
-                    <Plus className="w-4 h-4" />
-                    Add to Team
-                  </>
-                )}
-              </Button>
-              <Button 
-                variant="outline" 
-                className="gap-2"
-                onClick={() => {
-                  setShowExpertDetail(null);
-                  setLocation(`/expert-chat/${selectedExpert.id}`);
-                }}
-              >
-                <MessageSquare className="w-4 h-4" />
-                Chat
-              </Button>
-            </div>
-          </div>
-        </div>
+        <ExpertDetailModal
+          expert={selectedExpert}
+          isOpen={true}
+          onClose={() => setShowExpertDetail(null)}
+          onConsult={() => setLocation(`/expert-chat/${selectedExpert.id}`)}
+        />
       )}
 
       {/* Expert Comparison Modal */}
