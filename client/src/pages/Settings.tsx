@@ -25,7 +25,7 @@ import { DataGovernanceDashboard } from '@/components/project-management/DataGov
 import { IntegrationsManager } from '@/components/IntegrationsManager';
 import { Plug, Wallet, FileSignature, Cpu, HardDrive, Paintbrush, ShieldCheck } from 'lucide-react';
 
-type SettingsTab = 'profile' | 'integrations' | 'subscriptions' | 'signatures' | 'ai-providers' | 'api-costs' | 'storage' | 'brand-kit' | 'data-governance' | 'calendar' | 'training' | 'referrals' | 'notifications' | 'privacy' | 'appearance' | 'accessibility';
+type SettingsTab = 'profile' | 'integrations' | 'ai-providers' | 'storage' | 'data-governance' | 'calendar' | 'notifications' | 'privacy' | 'appearance' | 'accessibility';
 
 export default function Settings() {
   const [activeTab, setActiveTab] = useState<SettingsTab>('profile');
@@ -34,20 +34,14 @@ export default function Settings() {
   const tabs = [
     { id: 'profile' as const, label: 'Profile', icon: User },
     { id: 'integrations' as const, label: 'Integrations', icon: Plug },
-    { id: 'subscriptions' as const, label: 'Subscriptions', icon: Wallet },
-    { id: 'signatures' as const, label: 'Signatures', icon: FileSignature },
     { id: 'ai-providers' as const, label: 'AI Providers', icon: Cpu },
-    { id: 'api-costs' as const, label: 'API Costs', icon: CreditCard },
     { id: 'storage' as const, label: 'Storage & Security', icon: HardDrive },
-    { id: 'brand-kit' as const, label: 'Brand Kit', icon: Paintbrush },
     { id: 'data-governance' as const, label: 'Data Governance', icon: ShieldCheck },
     { id: 'calendar' as const, label: 'Calendar', icon: Calendar },
-    { id: 'training' as const, label: 'Training Data', icon: Database },
-    { id: 'referrals' as const, label: 'Referrals', icon: Users },
     { id: 'notifications' as const, label: 'Notifications', icon: Bell },
     { id: 'privacy' as const, label: 'Privacy', icon: Shield },
     { id: 'appearance' as const, label: 'Appearance', icon: Palette },
-    { id: 'accessibility' as const, label: 'Accessibility', icon: SettingsIcon },
+    { id: 'accessibility' as const, label: 'Accessibility', icon: Accessibility },
   ];
 
   const mockReferralStats = {
@@ -163,9 +157,6 @@ export default function Settings() {
               </div>
             )}
 
-            {activeTab === 'subscriptions' && <SubscriptionManager />}
-
-            {activeTab === 'signatures' && <SignatureManager />}
 
             {activeTab === 'ai-providers' && (
               <div className="bg-gray-800 rounded-xl border border-gray-700 p-6">
@@ -173,21 +164,9 @@ export default function Settings() {
               </div>
             )}
 
-            {activeTab === 'api-costs' && (
-              <div className="bg-gray-800 rounded-xl border border-gray-700 p-6">
-                <APICostCalculator />
-              </div>
-            )}
-
             {activeTab === 'storage' && (
               <div className="bg-gray-800 rounded-xl border border-gray-700 p-6">
                 <SecureStorageDashboard />
-              </div>
-            )}
-
-            {activeTab === 'brand-kit' && (
-              <div className="bg-gray-800 rounded-xl border border-gray-700 p-6">
-                <BrandKitManager />
               </div>
             )}
 
@@ -199,9 +178,6 @@ export default function Settings() {
 
             {activeTab === 'calendar' && <CalendarIntegration />}
 
-            {activeTab === 'training' && <TrainingDataPipeline />}
-
-            {activeTab === 'referrals' && <ReferralDashboard stats={mockReferralStats} />}
 
             {activeTab === 'notifications' && (
               <div className="space-y-6">
