@@ -24,7 +24,7 @@ import { BlueprintTemplatesDashboard, defaultTemplates, type BlueprintTemplate }
 import { trpc } from '@/lib/trpc';
 import { toast } from 'sonner';
 
-type ViewMode = 'dashboard' | 'voice_intake' | 'new_project' | 'team_assembly' | 'idea_scoring' | 'validation' | 'qms' | 'legacy' | 'social_media' | 'presentation' | 'financial' | 'process_log' | 'value_chain' | 'blueprints';
+type ViewMode = 'dashboard' | 'voice_intake' | 'new_project' | 'team_assembly' | 'idea_scoring' | 'validation' | 'qms' | 'legacy' | 'social_media' | 'presentation' | 'financial' | 'process_log' | 'value_chain' | 'blueprints' | 'edit_blueprint';
 
 interface ProjectBlueprint {
   templateId: string;
@@ -295,12 +295,90 @@ export default function ProjectGenesisPage() {
           genesisBlueprint={currentBlueprint as GenesisBlueprint}
           pendingChanges={[]}
           onApplyChanges={(changes, cascadeTargets) => {
+            toast.success('Changes applied successfully!');
           }}
           onRejectChanges={(changeIds) => {
+            toast.info('Changes rejected');
           }}
           onViewBlueprint={(blueprintId) => {
+            if (blueprintId === 'edit') {
+              setViewMode('edit_blueprint');
+            } else if (blueprintId === 'presentation') {
+              setViewMode('presentation');
+            } else if (blueprintId === 'social') {
+              setViewMode('social_media');
+            } else if (blueprintId === 'financial') {
+              setViewMode('financial');
+            } else {
+              toast.info(`Opening ${blueprintId} blueprint...`);
+            }
           }}
         />
+      )}
+      
+      {viewMode === 'edit_blueprint' && currentBlueprint && (
+        <div className="max-w-7xl mx-auto">
+          <div className="mb-6">
+            <Button
+              onClick={() => setViewMode('qms')}
+              variant="outline"
+              className="mb-4"
+            >
+              ← Back to QMS
+            </Button>
+          </div>
+          <GenesisBlueprintWizard
+            initialData={currentBlueprint as GenesisBlueprint}
+            onComplete={(blueprint) => {
+              toast.success('Blueprint updated!');
+              setCurrentBlueprint(blueprint);
+              setViewMode('qms');
+            }}
+            onCancel={() => setViewMode('qms')}
+          />
+        </div>
+      )}
+      
+      {viewMode === 'presentation' && currentBlueprint && (
+        <div className="max-w-7xl mx-auto">
+          <div className="mb-6">
+            <Button
+              onClick={() => setViewMode('qms')}
+              variant="outline"
+              className="mb-4"
+            >
+              ← Back to QMS
+            </Button>
+          </div>
+          <PresentationBlueprint
+            genesisBlueprint={currentBlueprint as GenesisBlueprint}
+            onComplete={() => {
+              toast.success('Presentation generated!');
+              setViewMode('qms');
+            }}
+          />
+        </div>
+      )}
+      
+      {viewMode === 'social_media' && currentBlueprint && (
+        <div className="max-w-7xl mx-auto">
+          <div className="mb-6">
+            <Button
+              onClick={() => setViewMode('qms')}
+              variant="outline"
+              className="mb-4"
+            >
+              ← Back to QMS
+            </Button>
+          </div>
+          <SocialMediaBlueprint
+            genesisBlueprint={currentBlueprint as GenesisBlueprint}
+            onComplete={() => {
+              toast.success('Social media plan created!');
+              setViewMode('qms');
+            }}
+          />
+        </div>
       )}
       
       {/* Add other view mode components as needed */}

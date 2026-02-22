@@ -170,7 +170,7 @@ export function BlueprintQMS({
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-gradient-to-r from-cyan-500/20 to-fuchsia-500/20 flex items-center justify-center">
             <GitBranch className="w-5 h-5 text-fuchsia-400" />
@@ -185,6 +185,41 @@ export function BlueprintQMS({
             {pendingChanges.length} pending changes
           </Badge>
         )}
+      </div>
+
+      {/* Action Buttons */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+        <Button
+          onClick={() => onViewBlueprint('edit')}
+          className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+        >
+          <Edit3 className="w-4 h-4 mr-2" />
+          Edit Blueprint
+        </Button>
+        <Button
+          onClick={() => onViewBlueprint('presentation')}
+          variant="outline"
+          className="border-purple-500/50 hover:bg-purple-500/10"
+        >
+          <Presentation className="w-4 h-4 mr-2" />
+          Generate Presentation
+        </Button>
+        <Button
+          onClick={() => onViewBlueprint('social')}
+          variant="outline"
+          className="border-cyan-500/50 hover:bg-cyan-500/10"
+        >
+          <Share2 className="w-4 h-4 mr-2" />
+          Social Media Plan
+        </Button>
+        <Button
+          onClick={() => onViewBlueprint('financial')}
+          variant="outline"
+          className="border-green-500/50 hover:bg-green-500/10"
+        >
+          <DollarSign className="w-4 h-4 mr-2" />
+          Financial Model
+        </Button>
       </div>
 
       {/* Blueprint Network Visualization */}
