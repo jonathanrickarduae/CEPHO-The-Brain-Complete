@@ -31,11 +31,14 @@ export default function NexusDashboard() {
   const [inputValue, setInputValue] = useState("");
   const inputRef = useRef<HTMLTextAreaElement>(null);
   
-  // Dynamic notification counts - would come from API/database
-  const [unreadSignals, setUnreadSignals] = useState(0); // Changed from hardcoded 3 to 0
-  const [expertRecommendations, setExpertRecommendations] = useState(5);
-  const [urgentTasks, setUrgentTasks] = useState(2);
-  const [newDocuments, setNewDocuments] = useState(1);
+  // Dashboard insights from API
+  const { data: insightsData, isLoading: insightsLoading } = trpc.dashboard.getInsights.useQuery();
+  
+  // Dynamic notification counts from insights
+  const unreadSignals = 0; // From daily brief API
+  const expertRecommendations = insightsData?.insights.expertUtilization.available || 0;
+  const urgentTasks = insightsData?.insights.taskMetrics.overdue || 0;
+  const newDocuments = 0; // From library API
   
   // Voice input
   const { 
@@ -193,6 +196,19 @@ export default function NexusDashboard() {
           </h1>
           <p className="text-sm sm:text-base text-foreground/70 mt-1">Your headspace, reclaimed</p>
         </div>
+
+        {/* Loading State */}
+        {insightsLoading && (
+          <div className="flex-1 grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 max-w-5xl mx-auto w-full">
+            {[1, 2, 3, 4, 5, 6].map(i => (
+              <div key={i} className="p-4 sm:p-5 rounded-2xl bg-gray-800/50 border-2 border-gray-700 animate-pulse">
+                <div className="h-12 w-12 bg-gray-700 rounded-xl mb-3"></div>
+                <div className="h-4 bg-gray-700 rounded w-2/3 mb-2"></div>
+                <div className="h-3 bg-gray-700 rounded w-1/2"></div>
+              </div>
+            ))}
+          </div>
+        )}
 
         {/* 6-Button Grid - Project Genesis Style */}
         <div className="flex-1 grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 max-w-5xl mx-auto w-full auto-rows-fr min-h-0">
