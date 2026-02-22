@@ -22,7 +22,7 @@ export function TrainingModal({ module, onComplete, onClose }: TrainingModalProp
   if (!module) return null;
 
   return (
-    <Dialog open={!!module} onOpenChange={onClose}>
+    <Dialog open={!!module} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="max-w-2xl">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-xl">
