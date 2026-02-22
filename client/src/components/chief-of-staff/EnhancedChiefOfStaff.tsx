@@ -15,16 +15,69 @@ import {
   AlertCircle
 } from 'lucide-react';
 
+// Mock data for demo purposes (until backend API is implemented)
+const MOCK_CONTEXT = {
+  emails: { unread: 12, highPriority: 3 },
+  tasks: { dueToday: 5, overdue: 2 },
+  projects: { active: 6, atRisk: 1 },
+  articles: { new: 8, trending: 3 },
+  documents: { total: 247, recent: 15 },
+  alerts: [
+    { title: 'Henderson Deal Due Diligence', message: 'Financial review deadline in 2 days' },
+    { title: 'Board Meeting Prep', message: 'Presentation materials need final review' }
+  ]
+};
+
+const MOCK_BRIEFING = {
+  topPriorities: [
+    {
+      title: 'Finalize Henderson Deal Term Sheet',
+      description: 'Review and approve final revisions before investor call at 2 PM',
+      details: 'Key points: valuation adjustment to $12M, board seat allocation, and vesting schedule',
+      urgency: 'high' as const
+    },
+    {
+      title: 'Boundless AI Board Call Preparation',
+      description: 'Prepare talking points and review Q4 metrics',
+      details: 'Focus on: user growth (127% QoQ), revenue projections, and Series A timeline',
+      urgency: 'high' as const
+    },
+    {
+      title: 'CEPHO Platform UX Review',
+      description: 'Review testing feedback and approve feature specifications',
+      details: 'Priority items: navigation improvements, mobile responsiveness, and integration UX',
+      urgency: 'medium' as const
+    }
+  ],
+  recommendations: [
+    {
+      title: 'Delegate Portfolio Reviews',
+      description: 'Consider delegating Celadon portfolio updates to your associate to focus on high-priority deals',
+      action: 'Assign to Team'
+    },
+    {
+      title: 'Schedule Weekly Planning',
+      description: 'Block 2 hours on Friday for strategic planning and next week preparation',
+      action: 'Add to Calendar'
+    }
+  ]
+};
+
 export function EnhancedChiefOfStaff() {
-  const { data: briefing, isLoading: briefingLoading, refetch: refetchBriefing } = 
+  const { data: briefingData, isLoading: briefingLoading, refetch: refetchBriefing } = 
     trpc.chiefOfStaff.getMorningBriefing.useQuery();
   
-  const { data: context, isLoading: contextLoading } = 
+  const { data: contextData, isLoading: contextLoading } = 
     trpc.chiefOfStaff.getContext.useQuery();
 
   const [selectedFocus, setSelectedFocus] = useState<number | null>(null);
 
-  if (briefingLoading || contextLoading) {
+  // Use mock data if API hasn't returned data yet
+  const briefing = briefingData || MOCK_BRIEFING;
+  const context = contextData || MOCK_CONTEXT;
+
+  // Only show loading on initial load, not when data is available
+  if ((briefingLoading || contextLoading) && !briefing && !context) {
     return (
       <div className="flex items-center justify-center p-8">
         <RefreshCw className="h-8 w-8 animate-spin text-purple-500" />
