@@ -6,7 +6,7 @@
  */
 
 import { db } from "../db";
-import { experts } from "../db/schema";
+import { aiSmeExperts as experts } from "../db/schema";
 import { eq } from "drizzle-orm";
 
 export interface AgentStatus {

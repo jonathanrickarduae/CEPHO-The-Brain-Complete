@@ -1,5 +1,5 @@
 import { db } from "../db";
-import { projects, tasks, experts } from "../db/schema";
+import { projects, tasks, aiSmeExperts as experts } from "../db/schema";
 import { eq, and, gte, lte, sql } from "drizzle-orm";
 
 interface CommandCentreContext {

@@ -12,8 +12,18 @@ import postgres from "postgres";
 import * as schema from "../../drizzle/schema";
 import { logger } from "../utils/logger";
 
-let db: ReturnType<typeof drizzle> | null = null;
+let dbInstance: ReturnType<typeof drizzle> | null = null;
 let rawClient: ReturnType<typeof postgres> | null = null;
+
+// Export db for direct use (will be initialized on first access)
+export const db = new Proxy({} as ReturnType<typeof drizzle>, {
+  get(target, prop) {
+    if (!dbInstance) {
+      throw new Error('Database not initialized. Call initializeDatabase() first.');
+    }
+    return (dbInstance as any)[prop];
+  }
+});
 
 /**
  * Initialize database connection
@@ -39,7 +49,7 @@ export async function initializeDatabase(): Promise<void> {
       connect_timeout: 10,
     });
 
-    db = drizzle(rawClient, { schema, logger: false });
+    dbInstance = drizzle(rawClient, { schema, logger: false });
     
     logger.info("Database connection initialized successfully");
   } catch (error) {
@@ -65,7 +75,7 @@ export async function initializeDatabase(): Promise<void> {
  * ```
  */
 export async function getDb(): Promise<ReturnType<typeof drizzle> | null> {
-  if (!db) {
+  if (!dbInstance) {
     try {
       await initializeDatabase();
     } catch (error) {
@@ -73,7 +83,7 @@ export async function getDb(): Promise<ReturnType<typeof drizzle> | null> {
       return null;
     }
   }
-  return db;
+  return dbInstance;
 }
 
 /**
@@ -116,7 +126,7 @@ export async function closeDatabase(): Promise<void> {
   if (rawClient) {
     try {
       await rawClient.end();
-      db = null;
+      dbInstance = null;
       rawClient = null;
       logger.info("Database connection closed");
     } catch (error) {

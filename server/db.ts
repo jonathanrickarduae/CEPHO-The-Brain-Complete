@@ -46,6 +46,16 @@ import {
 let _db: ReturnType<typeof drizzle> | null = null;
 let _client: ReturnType<typeof postgres> | null = null;
 
+// Export db proxy for direct use
+export const db = new Proxy({} as ReturnType<typeof drizzle>, {
+  get(target, prop) {
+    if (!_db) {
+      throw new Error('Database not initialized. Call getDb() first.');
+    }
+    return (_db as any)[prop];
+  }
+});
+
 // Lazily create the drizzle instance so local tooling can run without a DB.
 export async function getDb() {
   if (!_db) {

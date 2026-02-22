@@ -28,6 +28,9 @@ export {
   checkDatabaseHealth,
 } from "./connection";
 
+// Export db instance for direct use
+export { db } from "./connection";
+
 // Export repositories
 export * from "./repositories";
 

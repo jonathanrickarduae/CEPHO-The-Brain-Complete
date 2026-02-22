@@ -653,7 +653,8 @@ export default function DailyBrief() {
                   View All Emails ({BRIEF_DATA.emailSummary.unread} unread)
                 </Button>
               </CardContent>
-            </Card> */}
+            </Card>
+          </div> */}
 
             {/* Chief of Staff Insights */}
             <Card className="bg-card/60 border-border">
