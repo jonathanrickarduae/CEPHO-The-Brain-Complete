@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { TrainingModal } from "@/components/training/TrainingModal";
+import { toast } from "sonner";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -118,6 +120,15 @@ const TRAINING_MODULES = [
 
 export default function COSTraining() {
   const [selectedModule, setSelectedModule] = useState<number | null>(null);
+  const [completedModules, setCompletedModules] = useState<Set<number>>(new Set([1, 2, 3, 4, 5, 6, 7, 8]));
+
+  const handleCompleteModule = (moduleId: number) => {
+    setCompletedModules(prev => new Set([...prev, moduleId]));
+    const newCompleted = completedModules.size + 1;
+    const newPercentage = Math.round((newCompleted / TRAINING_MODULES.length) * 100);
+    toast.success(`Training module completed! Progress: ${newPercentage}%`);
+    setSelectedModule(null);
+  };
   
   const currentLevel = getCOSLevel(CURRENT_COS_TRAINING.percentage);
   const progress = getProgressToNextLevel(CURRENT_COS_TRAINING.percentage);
@@ -247,15 +258,16 @@ export default function COSTraining() {
         <CardContent>
           <div className="space-y-3">
             {TRAINING_MODULES.map((module, index) => {
+              const isCompleted = completedModules.has(module.id);
               const isLocked = module.level > currentLevel.level + 1;
-              const isAvailable = !isLocked && !module.completed;
+              const isAvailable = !isLocked && !isCompleted;
               const Icon = module.icon;
               
               return (
                 <div
                   key={module.id}
                   className={`flex items-center gap-4 p-4 rounded-lg border transition-all ${
-                    module.completed 
+                    isCompleted 
                       ? 'bg-green-500/10 border-green-500/30' 
                       : isLocked 
                         ? 'bg-muted/30 border-border opacity-60' 
@@ -264,13 +276,13 @@ export default function COSTraining() {
                   onClick={() => isAvailable && setSelectedModule(module.id)}
                 >
                   <div className={`p-2 rounded-lg ${
-                    module.completed 
+                    isCompleted 
                       ? 'bg-green-500/20' 
                       : isLocked 
                         ? 'bg-muted' 
                         : 'bg-primary/20'
                   }`}>
-                    {module.completed ? (
+                    {isCompleted ? (
                       <CheckCircle2 className="h-5 w-5 text-green-500" />
                     ) : isLocked ? (
                       <Lock className="h-5 w-5 text-muted-foreground" />
@@ -347,6 +359,13 @@ export default function COSTraining() {
           )}
         </CardContent>
       </Card>
+
+      {/* Training Modal */}
+      <TrainingModal
+        module={TRAINING_MODULES.find(m => m.id === selectedModule)}
+        onComplete={() => selectedModule && handleCompleteModule(selectedModule)}
+        onClose={() => setSelectedModule(null)}
+      />
     </div>
   );
 }
