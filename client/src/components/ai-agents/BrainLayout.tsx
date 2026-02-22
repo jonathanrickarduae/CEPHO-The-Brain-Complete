@@ -283,7 +283,7 @@ function BrainLayoutContent({
               </button>
               {!isCollapsed ? (
                 <div className="flex items-center gap-2 min-w-0">
-                  <AnimatedBrainLogo size="xs" intensity="subtle" color="var(--color-primary)" />
+                  <AnimatedBrainLogo size="xs" intensity="active" color="var(--color-primary)" />
                       <span className="font-display font-bold tracking-tight truncate text-sidebar-foreground">
                     CEPHO
                   </span>
@@ -410,7 +410,7 @@ function BrainLayoutContent({
             <div className="flex items-center gap-2">
               <SidebarTrigger className="h-9 w-9 rounded-lg bg-white/5 text-white" />
               <div className="flex items-center gap-3">
-                <AnimatedBrainLogo size="xs" intensity="subtle" color="var(--color-primary)" />
+                <AnimatedBrainLogo size="xs" intensity="active" color="var(--color-primary)" />
                 <span className="tracking-tight text-white font-bold">
                   CEPHO | {activeMenuItem?.label ?? "The Nexus"}
                 </span>
