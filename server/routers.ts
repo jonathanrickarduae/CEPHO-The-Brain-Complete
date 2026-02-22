@@ -119,6 +119,7 @@ import { calendarRouter } from "./routers/domains/calendar.router";
 import { genesisRouter } from "./routers/domains/genesis.router";
 import { qaRouter } from "./routers/domains/qa.router";
 import { expertConsultationRouter } from "./routers/domains/expert-consultation.router";
+import { victoriasBriefRouter } from "./routers/domains/victorias-brief.router";
 
 
 export const appRouter = router({
@@ -140,6 +141,7 @@ export const appRouter = router({
   genesis: genesisRouter,
   qa: qaRouter,
   expertConsultation: expertConsultationRouter,
+  victoriasBrief: victoriasBriefRouter,
   openClaw: openClawRouter,
   integrations: integrationsRouter,
   projectGenesis: projectGenesisRouter,
