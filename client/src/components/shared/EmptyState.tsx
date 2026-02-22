@@ -80,7 +80,7 @@ const EMPTY_STATE_CONFIGS: Record<EmptyStateType, EmptyStateConfig> = {
   },
   insights: {
     icon: Sparkles,
-    title: 'Insights coming soon',
+    title: 'No insights yet',
     description: 'As you use Cepho more, your Chief of Staff will surface personalized insights here.',
     color: 'text-primary',
     bgGradient: 'from-primary/10 to-primary/5',

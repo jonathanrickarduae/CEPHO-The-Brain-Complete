@@ -88,7 +88,7 @@ export function ExternalResources({ onBack }: ExternalResourcesProps) {
     } else if (resource.apiStatus === 'available') {
       toast.info(`API connection for ${resource.name} requires configuration. Contact admin.`);
     } else {
-      toast.info(`${resource.name} API integration coming soon`);
+      toast.info(`${resource.name} API integration not yet implemented`);
     }
   };
 
@@ -231,7 +231,7 @@ export function ExternalResources({ onBack }: ExternalResourcesProps) {
                             ? 'API Connected & Active' 
                             : selectedResource.apiStatus === 'available'
                             ? 'API Available for Connection'
-                            : 'API Integration Coming Soon'}
+                            : 'Not Yet Implemented'}
                         </p>
                         <p className="text-sm text-muted-foreground">
                           {selectedResource.apiStatus === 'connected' 

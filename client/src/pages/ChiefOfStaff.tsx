@@ -661,20 +661,7 @@ export default function ChiefOfStaff() {
                   </div>
                 </button>
 
-                <button className="w-full p-5 bg-gradient-to-br from-purple-500/10 to-fuchsia-500/10 border-2 border-purple-500/30 rounded-2xl hover:border-purple-400 transition-all text-left group">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 rounded-xl bg-purple-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
-                        <Brain className="w-6 h-6 text-purple-400" />
-                      </div>
-                      <div>
-                        <h4 className="font-semibold text-white">Leadership Thinking Styles</h4>
-                        <p className="text-sm text-foreground/70">MIT, Harvard, NASA, McKinsey, CEO frameworks</p>
-                      </div>
-                    </div>
-                    <Badge className="bg-gray-500/20 text-foreground/70 border-gray-500/30">Coming Soon</Badge>
-                  </div>
-                </button>
+                {/* Leadership Thinking Styles - Coming in future release */}
               </div>
 
               {/* SME Learning Stats */}

@@ -405,7 +405,7 @@ export function SocialMediaBlueprint() {
           <Calendar className="w-12 h-12 text-purple-400 mx-auto mb-4" />
           <h3 className="text-lg font-semibold text-foreground mb-2">Content Calendar</h3>
           <p className="text-muted-foreground mb-4">
-            Visual calendar view with drag-and-drop scheduling coming soon.
+            Visual calendar view with drag-and-drop scheduling not yet implemented.
             <br />
             Optimal posting times are automatically suggested based on platform intelligence.
           </p>

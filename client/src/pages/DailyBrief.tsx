@@ -419,7 +419,8 @@ export default function DailyBrief() {
                       <Button 
                         size="lg" 
                         className="bg-primary hover:bg-primary/90 shadow-lg shadow-primary/30 text-base"
-                        onClick={() => toast.info('Video brief generation coming soon')}
+                        disabled
+                        title="Video generation requires backend implementation"
                       >
                         <Play className="w-5 h-5 mr-2" /> Watch Victoria's Brief
                       </Button>
@@ -427,7 +428,8 @@ export default function DailyBrief() {
                         size="lg" 
                         variant="outline"
                         className="border-primary/30 hover:bg-primary/10 text-base"
-                        onClick={() => toast.info('Audio brief generation coming soon')}
+                        disabled
+                        title="Audio generation requires backend implementation"
                       >
                         <Headphones className="w-5 h-5 mr-2" /> Listen
                       </Button>

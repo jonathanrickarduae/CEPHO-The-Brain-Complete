@@ -299,7 +299,7 @@ export const RESOURCE_CATEGORIES = [
 export const API_STATUS_LABELS = {
   connected: { label: 'Connected', color: 'text-green-600 bg-green-50 border-green-200' },
   available: { label: 'API Available', color: 'text-blue-600 bg-blue-50 border-blue-200' },
-  coming_soon: { label: 'Coming Soon', color: 'text-amber-600 bg-amber-50 border-amber-200' },
+  not_implemented: { label: 'Not Implemented', color: 'text-amber-600 bg-amber-50 border-amber-200' },
   none: { label: 'Manual Access', color: 'text-gray-600 bg-gray-50 border-gray-200' }
 };
 

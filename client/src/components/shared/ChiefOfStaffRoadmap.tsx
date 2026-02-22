@@ -513,7 +513,7 @@ export function ChiefOfStaffRoadmap() {
         <CardHeader>
           <CardTitle className="text-white flex items-center gap-2">
             <Zap className="h-5 w-5 text-purple-400" />
-            Phase 4: CEPHO.Ai Personal (Coming Soon)
+            Phase 4: CEPHO.Ai Personal
           </CardTitle>
           <CardDescription>
             Expanding from business to personal life management
