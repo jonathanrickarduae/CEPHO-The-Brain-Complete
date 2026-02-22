@@ -168,7 +168,7 @@ export default function NexusDashboard() {
       {/* Main Content */}
       <div className="flex-1 flex flex-col p-4 sm:p-6 overflow-hidden">
         {/* Title with Animated Brain */}
-        <div className="text-center mb-4 sm:mb-6">
+        <div className="text-center mb-4 sm:mb-6 mt-8 sm:mt-12">
           <div className="flex items-center justify-center gap-2 mb-2">
             {/* Animated Neuron Brain - Cyan/Neon Green, No Circle */}
             <div className="relative w-12 h-12 sm:w-14 sm:h-14">
