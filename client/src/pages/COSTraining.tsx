@@ -260,7 +260,7 @@ export default function COSTraining() {
             {TRAINING_MODULES.map((module, index) => {
               const isCompleted = completedModules.has(module.id);
               const isLocked = module.level > currentLevel.level + 1;
-              const isAvailable = !isLocked && !isCompleted;
+              const isAvailable = !isLocked; // Allow clicking completed modules to review
               const Icon = module.icon;
               
               return (
