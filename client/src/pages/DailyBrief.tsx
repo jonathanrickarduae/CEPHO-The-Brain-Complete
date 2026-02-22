@@ -504,8 +504,8 @@ export default function DailyBrief() {
               </CardContent>
             </Card>
 
-            {/* Email Summary - Chief of Staff Review */}
-            <Card className="bg-card/60 border-border">
+            {/* Email Summary - Chief of Staff Review - TEMPORARILY DISABLED */}
+            {/* <Card className="bg-card/60 border-border">
               <CardHeader className="pb-3">
                 <CardTitle className="flex items-center justify-between text-foreground">
                   <div className="flex items-center gap-2">
@@ -625,7 +625,7 @@ export default function DailyBrief() {
                   View All Emails ({BRIEF_DATA.emailSummary.unread} unread)
                 </Button>
               </CardContent>
-            </Card>
+            </Card> */}
 
             {/* Chief of Staff Insights */}
             <Card className="bg-card/60 border-border">
