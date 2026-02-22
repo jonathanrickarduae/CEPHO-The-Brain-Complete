@@ -5,6 +5,7 @@ import { dataAggregationService } from '../../services/data-aggregation.service'
 import { emailAnalysisService } from '../../services/email-analysis.service';
 import { todoistService } from '../../services/todoist.service';
 import { getLLMService } from '../../services/llm-service';
+import { getCommandCentreContext, getCommandCentreBriefing } from '../../services/command-centre.service';
 
 const llmService = getLLMService();
 
@@ -233,5 +234,13 @@ Be ruthless in prioritization. Only the most important 3 items.`;
     }))
     .query(async ({ ctx, input }) => {
       return await emailAnalysisService.getTopSenders(ctx.user.id, input.limit);
+    }),
+
+  /**
+   * Get Command Centre context with real data
+   */
+  getContext: protectedProcedure
+    .query(async ({ ctx }) => {
+      return await getCommandCentreContext(ctx.user.id);
     }),
 });
