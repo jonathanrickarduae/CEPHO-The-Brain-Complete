@@ -2,6 +2,7 @@ import { z } from "zod";
 import { protectedProcedure, router } from "../../_core/trpc";
 import { TRPCError } from "@trpc/server";
 import { generateBriefPDF } from "../../services/pdf-generation.service";
+import { generateBriefVideo, checkVideoStatus } from "../../services/video-generation.service";
 import { readFile } from "fs/promises";
 
 /**
@@ -88,29 +89,24 @@ export const victoriasBriefRouter = router({
     .input(BriefDataSchema)
     .mutation(async ({ input, ctx }) => {
       try {
-        // TODO: Implement Synthesia integration
-        throw new TRPCError({
-          code: "NOT_IMPLEMENTED",
-          message: "Video generation not yet implemented. Requires Synthesia API integration and avatar setup.",
-        });
-
-        // Implementation plan:
-        // 1. Check for SYNTHESIA_API_KEY in environment
-        // 2. Create/select Victoria avatar in Synthesia
-        // 3. Format brief text as video script
-        // 4. Call Synthesia API to generate video
-        // 5. Poll for completion
-        // 6. Store video URL in database
-        // 7. Return video URL for playback
+        const result = await generateBriefVideo(input);
         
-        // return {
-        //   success: true,
-        //   videoUrl: "https://synthesia.io/videos/victoria-brief-xyz",
-        //   status: "processing", // or "ready"
-        //   estimatedTime: 120, // seconds
-        // };
-      } catch (error) {
+        return {
+          success: true,
+          videoId: result.id,
+          status: result.status,
+          message: "Video generation started. Use getGenerationStatus to check progress.",
+        };
+      } catch (error: any) {
         console.error("Video generation error:", error);
+        
+        if (error.message?.includes('SYNTHESIA_API_KEY')) {
+          throw new TRPCError({
+            code: "PRECONDITION_FAILED",
+            message: "Video generation requires SYNTHESIA_API_KEY environment variable.",
+          });
+        }
+        
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: "Failed to generate video",

@@ -1,0 +1,29 @@
+  generateVideo: protectedProcedure
+    .input(BriefDataSchema)
+    .mutation(async ({ input, ctx }) => {
+      try {
+        const result = await generateBriefVideo(input);
+        
+        return {
+          success: true,
+          videoId: result.id,
+          status: result.status,
+          message: "Video generation started. Use getGenerationStatus to check progress.",
+        };
+      } catch (error: any) {
+        console.error("Video generation error:", error);
+        
+        if (error.message?.includes('SYNTHESIA_API_KEY')) {
+          throw new TRPCError({
+            code: "PRECONDITION_FAILED",
+            message: "Video generation requires SYNTHESIA_API_KEY environment variable.",
+          });
+        }
+        
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to generate video",
+          cause: error,
+        });
+      }
+    }),
