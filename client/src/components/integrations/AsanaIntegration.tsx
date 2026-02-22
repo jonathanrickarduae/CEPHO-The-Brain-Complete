@@ -61,92 +61,12 @@ interface AsanaUpdate {
   timestamp: Date;
 }
 
-// Mock data for demonstration
-const MOCK_PROJECTS: AsanaProject[] = [
-  {
-    id: 'proj-celadon',
-    name: 'Celadon Capital',
-    color: '#10b981',
-    workspaceId: 'ws-1',
-    workspaceName: 'Celadon Workspace',
-    taskCount: 47,
-    completedCount: 32,
-    overdueCount: 3,
-    teamMembers: [
-      { id: 'u1', name: 'Sarah Chen', email: 'sarah@celadon.com', tasksAssigned: 12, tasksCompleted: 8 },
-      { id: 'u2', name: 'James Wilson', email: 'james@celadon.com', tasksAssigned: 15, tasksCompleted: 12 },
-      { id: 'u3', name: 'Emily Brown', email: 'emily@celadon.com', tasksAssigned: 10, tasksCompleted: 7 },
-    ],
-    dueDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-    status: 'on_track',
-    lastUpdated: new Date(),
-  },
-  {
-    id: 'proj-sample',
-    name: 'Boundless AI',
-    color: '#8b5cf6',
-    workspaceId: 'ws-1',
-    workspaceName: 'Celadon Workspace',
-    taskCount: 63,
-    completedCount: 28,
-    overdueCount: 8,
-    teamMembers: [
-      { id: 'u4', name: 'Michael Lee', email: 'michael@boundless.com', tasksAssigned: 20, tasksCompleted: 10 },
-      { id: 'u5', name: 'Anna Smith', email: 'anna@boundless.com', tasksAssigned: 18, tasksCompleted: 9 },
-    ],
-    dueDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000),
-    status: 'at_risk',
-    lastUpdated: new Date(Date.now() - 2 * 60 * 60 * 1000),
-  },
-  {
-    id: 'proj-cepho',
-    name: 'Cepho Development',
-    color: '#f59e0b',
-    workspaceId: 'ws-2',
-    workspaceName: 'Personal Projects',
-    taskCount: 89,
-    completedCount: 67,
-    overdueCount: 2,
-    teamMembers: [
-      { id: 'u6', name: 'Dev Team', email: 'dev@company.com', tasksAssigned: 45, tasksCompleted: 38 },
-    ],
-    dueDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-    status: 'on_track',
-    lastUpdated: new Date(Date.now() - 30 * 60 * 1000),
-  },
-  {
-    id: 'proj-marketing',
-    name: 'Q1 Marketing Campaign',
-    color: '#ec4899',
-    workspaceId: 'ws-1',
-    workspaceName: 'Celadon Workspace',
-    taskCount: 34,
-    completedCount: 8,
-    overdueCount: 12,
-    teamMembers: [
-      { id: 'u7', name: 'Marketing Team', email: 'marketing@celadon.com', tasksAssigned: 34, tasksCompleted: 8 },
-    ],
-    dueDate: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000),
-    status: 'off_track',
-    lastUpdated: new Date(Date.now() - 4 * 60 * 60 * 1000),
-  },
-];
+// No mock data - will be populated from real Asana API
+const MOCK_PROJECTS: AsanaProject[] = [];
 
-const MOCK_TASKS: AsanaTask[] = [
-  { id: 't1', name: 'Review investor deck', projectId: 'proj-celadon', projectName: 'Celadon Capital', assignee: MOCK_PROJECTS[0].teamMembers[0], dueDate: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000), completed: false, priority: 'high', tags: ['urgent', 'investor'], subtasks: 5, completedSubtasks: 3 },
-  { id: 't2', name: 'Finalize partnership agreement', projectId: 'proj-sample', projectName: 'Boundless AI', assignee: MOCK_PROJECTS[1].teamMembers[0], dueDate: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000), completed: false, priority: 'high', tags: ['legal', 'overdue'], subtasks: 3, completedSubtasks: 1 },
-  { id: 't3', name: 'Deploy v2.1 update', projectId: 'proj-cepho', projectName: 'Cepho Development', assignee: MOCK_PROJECTS[2].teamMembers[0], dueDate: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000), completed: false, priority: 'medium', tags: ['development'], subtasks: 8, completedSubtasks: 6 },
-  { id: 't4', name: 'Social media content calendar', projectId: 'proj-marketing', projectName: 'Q1 Marketing Campaign', dueDate: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000), completed: false, priority: 'high', tags: ['marketing', 'overdue'], subtasks: 12, completedSubtasks: 2 },
-  { id: 't5', name: 'Team standup notes', projectId: 'proj-celadon', projectName: 'Celadon Capital', assignee: MOCK_PROJECTS[0].teamMembers[1], dueDate: new Date(), completed: true, priority: 'low', tags: ['recurring'], subtasks: 0, completedSubtasks: 0 },
-];
+const MOCK_TASKS: AsanaTask[] = [];
 
-const MOCK_UPDATES: AsanaUpdate[] = [
-  { id: 'upd1', projectId: 'proj-celadon', projectName: 'Celadon Capital', type: 'task_completed', description: 'Completed "Quarterly report draft"', user: MOCK_PROJECTS[0].teamMembers[1], timestamp: new Date(Date.now() - 15 * 60 * 1000) },
-  { id: 'upd2', projectId: 'proj-sample', projectName: 'Boundless AI', type: 'status_update', description: 'Project status changed to "At Risk"', user: MOCK_PROJECTS[1].teamMembers[0], timestamp: new Date(Date.now() - 45 * 60 * 1000) },
-  { id: 'upd3', projectId: 'proj-cepho', projectName: 'Cepho Development', type: 'task_created', description: 'Created "Add Asana integration"', user: MOCK_PROJECTS[2].teamMembers[0], timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000) },
-  { id: 'upd4', projectId: 'proj-marketing', projectName: 'Q1 Marketing Campaign', type: 'due_date_changed', description: 'Due date extended for "Launch campaign"', user: MOCK_PROJECTS[3].teamMembers[0], timestamp: new Date(Date.now() - 3 * 60 * 60 * 1000) },
-  { id: 'upd5', projectId: 'proj-celadon', projectName: 'Celadon Capital', type: 'comment', description: 'Commented on "Review investor deck"', user: MOCK_PROJECTS[0].teamMembers[2], timestamp: new Date(Date.now() - 4 * 60 * 60 * 1000) },
-];
+const MOCK_UPDATES: AsanaUpdate[] = [];
 
 interface AsanaIntegrationProps {
   onConnect?: () => void;
