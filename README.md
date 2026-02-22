@@ -53,16 +53,16 @@ End-of-day reflection system:
 ## Technical Architecture
 
 ### Frontend
-- React 19 with TypeScript
-- Tailwind CSS 4 with custom design system
+- React 18 with TypeScript
+- Tailwind CSS with custom design system
 - tRPC for type-safe API calls
-- Shadcn/ui component library
+- Radix UI component library
 
 ### Backend
-- Express 4 with tRPC
+- Express with tRPC
 - PostgreSQL database (Supabase)
 - Drizzle ORM for type-safe queries
-- **Simple Email/Password Authentication** (OAuth temporarily disabled)
+- **JWT + OAuth Authenticationd)
 
 ### AI Integration
 - LLM-powered expert consultations
@@ -125,13 +125,13 @@ The application uses a comprehensive schema including:
 pnpm install
 
 # Push database schema
-pnpm db:push
+pnpm drizzle-kit push:pg
 
 # Start development server
 pnpm dev
 
 # Run tests
-pnpm test
+pnpm test:unit
 ```
 
 ### Environment Variables
@@ -152,10 +152,10 @@ The project includes comprehensive test coverage:
 
 ```bash
 # Run all tests
-pnpm test
+pnpm test:unit
 
 # Run specific test file
-pnpm test server/questionnaire.test.ts
+pnpm test:unit server/questionnaire.test.ts
 ```
 
 ## Design System
@@ -197,7 +197,7 @@ The application is deployed on Render with:
 
 ## License
 
-Proprietary - CEPHO.ai
+MIT License
 
 ## Support
 

@@ -35,11 +35,11 @@ The platform provides a comprehensive suite of business intelligence tools inclu
 
 ### Backend
 
-The backend infrastructure is built on **Node.js 22** with **TypeScript** for type safety, utilizing **tRPC** for end-to-end type-safe APIs. The database layer employs **PostgreSQL** via Supabase with **Drizzle ORM** for type-safe queries. Authentication is handled through a **simple email/password system** (OAuth temporarily disabled), while the server framework uses **Express.js** with **Vite** for development.
+The backend infrastructure is built on **Node.js 22** with **TypeScript** for type safety, utilizing **tRPC** for end-to-end type-safe APIs. The database layer employs **PostgreSQL** via Supabase with **Drizzle ORM** for type-safe queries. Authentication is handled through a **sJWT + OAuth system), while the server framework uses **Express.js** with **Vite** for development.
 
 ### Frontend
 
-The frontend leverages **React 19** with **TypeScript**, styled using **TailwindCSS** and **Shadcn/UI** components. State management is handled by **TanStack Query** (React Query), with routing provided by **React Router v7**. The UI components are built on **Radix UI** primitives for accessibility.
+The frontend leverages **ReReact 18 with TypeScriptpt**, styled using **TailwindCSS** and **Radix UI componentsts. State management is handled by **TanStack Query** (React Query), with routing provided by **Wouter**. The UI components are built on **Radix UI** primitives for accessibility.
 
 ### Infrastructure
 
@@ -213,7 +213,7 @@ State management utilizes **TanStack Query** for server state, **React Context**
 
 ### Routing
 
-The application uses React Router v7 with file-based routing. Routes are defined in `client/src/pages/` with automatic route generation.
+The application uses Wouter with file-based routing. Routes are defined in `client/src/pages/` with automatic route generation.
 
 ---
 
@@ -245,7 +245,7 @@ pnpm install
 cp .env.example .env
 
 # Run database migrations
-pnpm db:push
+pnpm drizzle-kit push:pg
 
 # Start development server
 pnpm dev
@@ -257,8 +257,8 @@ pnpm dev
 - `pnpm build` - Build for production
 - `pnpm preview` - Preview production build
 - `pnpm check` - TypeScript type checking
-- `pnpm test` - Run tests
-- `pnpm db:push` - Push schema changes to database
+- `pnpm test:unit` - Run tests
+- `pnpm drizzle-kit push:pg` - Push schema changes to database
 - `pnpm db:studio` - Open Drizzle Studio
 
 ### Code Quality
