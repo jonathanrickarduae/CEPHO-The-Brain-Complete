@@ -169,7 +169,8 @@ function Router() {
           <WithLayout><AgentDetailPage /></WithLayout>
         </Route>
         <Route path="/agents-monitoring" component={WithLayout(AgentsMonitoring)} />
-        <Route path="/persephone" component={WithLayout(PersephoneBoard)} /></WithLayout>
+        <Route path="/persephone">
+          <WithLayout><PersephoneBoard /></WithLayout>
         </Route>
         <Route path="/settings">
           <WithLayout><Settings /></WithLayout>
