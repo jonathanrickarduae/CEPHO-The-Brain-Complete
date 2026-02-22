@@ -585,17 +585,14 @@ export default function EveningReview() {
                       return (
                         <div 
                           key={task.id}
-                          className={`p-4 flex items-center justify-between gap-4 ${
-                            status === 'accepted' ? 'bg-green-50/50' :
-                            status === 'rejected' ? 'bg-red-50/50' :
-                            status === 'deferred' ? 'bg-amber-50/50' : ''
+                          className={`p-3 flex items-center justify-between gap-3 transition-colors ${
+                            status === 'accepted' ? 'bg-green-500/10 border-l-2 border-green-500' :
+                            status === 'rejected' ? 'bg-red-500/10 border-l-2 border-red-500' :
+                            status === 'deferred' ? 'bg-amber-500/10 border-l-2 border-amber-500' : 'hover:bg-muted/30'
                           }`}
                         >
                           <div className="flex-1 min-w-0">
-                            <p className={`text-sm ${status !== 'pending' ? 'line-through opacity-60' : 'text-foreground'}`}>
-                              {task.text}
-                            </p>
-                            <div className="flex items-center gap-2 mt-1">
+                            <div className="flex items-center gap-2 mb-1">
                               <Badge variant="outline" className={`text-xs ${getPriorityColor(task.priority)}`}>
                                 {task.priority}
                               </Badge>
@@ -604,33 +601,39 @@ export default function EveningReview() {
                                 {task.estimatedTime}
                               </span>
                             </div>
+                            <p className={`text-sm ${status !== 'pending' ? 'line-through opacity-60' : 'text-foreground font-medium'}`}>
+                              {task.text}
+                            </p>
                           </div>
                           
-                          {/* Action Buttons */}
+                          {/* Compact Action Buttons */}
                           <div className="flex items-center gap-1">
                             <Button
                               size="sm"
-                              variant={status === 'accepted' ? 'default' : 'outline'}
-                              className={`h-8 w-8 p-0 ${status === 'accepted' ? 'bg-green-600 hover:bg-green-700' : ''}`}
+                              variant="ghost"
+                              className={`h-7 w-7 p-0 ${status === 'accepted' ? 'bg-green-500 hover:bg-green-600 text-white' : 'hover:bg-green-500/20'}`}
                               onClick={() => setTaskStatus(task.id, 'accepted')}
+                              title="Accept"
                             >
-                              <Check className="w-4 h-4" />
+                              <Check className="w-3.5 h-3.5" />
                             </Button>
                             <Button
                               size="sm"
-                              variant={status === 'deferred' ? 'default' : 'outline'}
-                              className={`h-8 px-2 text-xs ${status === 'deferred' ? 'bg-amber-600 hover:bg-amber-700' : ''}`}
+                              variant="ghost"
+                              className={`h-7 w-7 p-0 ${status === 'deferred' ? 'bg-amber-500 hover:bg-amber-600 text-white' : 'hover:bg-amber-500/20'}`}
                               onClick={() => setTaskStatus(task.id, 'deferred')}
+                              title="Defer"
                             >
-                              Defer
+                              <Clock className="w-3.5 h-3.5" />
                             </Button>
                             <Button
                               size="sm"
-                              variant={status === 'rejected' ? 'default' : 'outline'}
-                              className={`h-8 w-8 p-0 ${status === 'rejected' ? 'bg-red-600 hover:bg-red-700' : ''}`}
+                              variant="ghost"
+                              className={`h-7 w-7 p-0 ${status === 'rejected' ? 'bg-red-500 hover:bg-red-600 text-white' : 'hover:bg-red-500/20'}`}
                               onClick={() => setTaskStatus(task.id, 'rejected')}
+                              title="Reject"
                             >
-                              <X className="w-4 h-4" />
+                              <X className="w-3.5 h-3.5" />
                             </Button>
                           </div>
                         </div>
