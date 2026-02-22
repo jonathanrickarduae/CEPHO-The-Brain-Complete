@@ -346,9 +346,9 @@ export default function InnovationHub() {
         </Card>
 
         {/* Main Content */}
-        <div className="grid grid-cols-3 gap-6">
+        <div className="grid grid-cols-5 gap-6">
           {/* Ideas List */}
-          <div className="col-span-1">
+          <div className="col-span-2">
             <Card className="bg-card/50 border-border/50 h-full">
               <CardHeader>
                 <CardTitle className="text-lg">Ideas Pipeline</CardTitle>
@@ -398,7 +398,7 @@ export default function InnovationHub() {
           </div>
 
           {/* Idea Details */}
-          <div className="col-span-2">
+          <div className="col-span-3">
             {selectedIdea && selectedIdeaData ? (
               <Card className="bg-card/50 border-border/50">
                 <CardHeader>
