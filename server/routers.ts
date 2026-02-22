@@ -121,9 +121,11 @@ import { qaRouter } from "./routers/domains/qa.router";
 import { expertConsultationRouter } from "./routers/domains/expert-consultation.router";
 import { victoriasBriefRouter } from "./routers/domains/victorias-brief.router";
 import { dashboardRouter } from "./routers/domains/dashboard.router";
+import { emailIntegrationRouter } from "./routers/domains/email-integration.router";
 
 
 export const appRouter = router({
+  emailIntegration: emailIntegrationRouter,
   dashboard: dashboardRouter,
   expertEvolution: expertEvolutionRouter,
   businessPlanReview: businessPlanReviewRouter,
