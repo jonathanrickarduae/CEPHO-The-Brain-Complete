@@ -14,12 +14,10 @@ export async function syncNottaNotes(config: NottaConfig) {
   // 2. Fetch recent voice notes
   // 3. Transcribe and import to CEPHO system
   // 4. Tag with source: 'notta'
-  console.log('Notta integration pending implementation');
   return { status: 'pending', notes: [] };
 }
 
 export async function uploadToNotta(audioBlob: Blob, config: NottaConfig) {
   // TODO: Implement upload to Notta as backup
-  console.log('Notta upload pending implementation');
   return { status: 'pending' };
 }

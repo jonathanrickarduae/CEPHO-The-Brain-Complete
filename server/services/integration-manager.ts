@@ -247,16 +247,13 @@ export class IntegrationManager {
 
   // Get all integrations for a user
   async getAllIntegrations(userId: string) {
-    console.log('[IntegrationManager] getAllIntegrations called with userId:', userId);
     const db = await getDb();
     if (!db) {
-      console.log('[IntegrationManager] Database not available');
       return [];
     }
     const results = await db.select()
       .from(integrationCredentials)
       .where(eq(integrationCredentials.userId, userId));
-    console.log('[IntegrationManager] Query returned', results.length, 'results');
 
     return results.map(r => ({
       service: r.service,

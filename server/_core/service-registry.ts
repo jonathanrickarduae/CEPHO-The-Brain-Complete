@@ -14,8 +14,6 @@ import { container } from './di-container';
  * Register all services with the DI container
  */
 export function registerServices(): void {
-  console.log('✅ Dependency Injection container initialized');
-  console.log('📦 Services will be registered lazily on first use');
   
   // Services are now available via getService() throughout the application
   // The DI container prevents runtime crashes from missing dependencies

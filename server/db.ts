@@ -181,9 +181,7 @@ export async function getUserByOpenId(openId: string) {
   }
 
   try {
-    console.log(`[Database] getUserByOpenId: Querying for openId=${openId}`);
     const result = await db.select().from(users).where(eq(users.openId, openId)).limit(1);
-    console.log(`[Database] getUserByOpenId: Found ${result.length} users`);
     return result.length > 0 ? result[0] : undefined;
   } catch (error) {
     console.error(`[Database] getUserByOpenId error:`, error);

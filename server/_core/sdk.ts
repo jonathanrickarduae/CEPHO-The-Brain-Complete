@@ -29,7 +29,6 @@ const GET_USER_INFO_WITH_JWT_PATH = `/webdev.v1.WebDevAuthPublicService/GetUserI
 class OAuthService {
   constructor(private client: ReturnType<typeof axios.create>) {
     const oAuthServerUrl = process.env.OAUTH_SERVER_URL ?? "";
-    console.log("[OAuth] Initialized with baseURL:", oAuthServerUrl);
     if (!oAuthServerUrl) {
       console.error(
         "[OAuth] ERROR: OAUTH_SERVER_URL is not configured! Set OAUTH_SERVER_URL environment variable."
@@ -157,7 +156,6 @@ class SDKServer {
   
   private getSessionSecret() {
     let secret = process.env.JWT_SECRET;
-    console.log('[Auth] JWT_SECRET from env:', secret ? `${secret.substring(0, 10)}...` : 'EMPTY');
     if (!secret || secret.length === 0) {
       // Generate a random secret once and reuse it
       if (!SDKServer._generatedSecret) {
@@ -166,9 +164,7 @@ class SDKServer {
         console.warn('[Auth] JWT_SECRET not set, generated and cached secret for this session');
       }
       secret = SDKServer._generatedSecret;
-      console.log('[Auth] Using generated secret:', secret ? `${secret.substring(0, 10)}...` : 'EMPTY');
     }
-    console.log('[Auth] Final secret length:', secret?.length || 0);
     return new TextEncoder().encode(secret);
   }
 
@@ -206,7 +202,6 @@ class SDKServer {
       name: payload.name || "User",
     };
 
-    console.log('[Auth] Creating JWT with payload:', jwtPayload);
 
     return new SignJWT(jwtPayload)
       .setProtectedHeader({ alg: "HS256", typ: "JWT" })
@@ -229,7 +224,6 @@ class SDKServer {
       });
       const { openId, appId, name } = payload as Record<string, unknown>;
 
-      console.log('[Auth] Decoded JWT payload:', { openId, appId, name, hasOpenId: !!openId, hasName: !!name });
 
       if (
         !isNonEmptyString(openId) ||
@@ -293,7 +287,6 @@ class SDKServer {
     if (!user) {
       // Check if this is the hardcoded admin user
       if (sessionUserId === "hardcoded_admin_001") {
-        console.log("[Auth] Creating hardcoded admin user in database");
         await db.upsertUser({
           openId: sessionUserId,
           name: session.name,

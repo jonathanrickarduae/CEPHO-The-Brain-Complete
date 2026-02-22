@@ -20,7 +20,6 @@ export const cleanupRouter = router({
         // Only allow if user is admin/owner
         const userId = ctx.user.openId;
         
-        console.log('Starting database cleanup...');
         
         // Execute cleanup in order (respecting foreign key constraints)
         const db = await getDb();
@@ -88,7 +87,6 @@ export const cleanupRouter = router({
         // Delete test users (keep only the real user)
         await db.execute(sql`DELETE FROM users WHERE id != 1`);
         
-        console.log('Database cleanup completed successfully');
         
         return { 
           success: true, 

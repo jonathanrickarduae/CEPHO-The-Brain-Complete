@@ -54,12 +54,9 @@ async function startServer() {
   const port = process.env.PORT || 3000;
 
   server.listen(port, () => {
-    console.log(`Server running on http://localhost:${port}/`);
     
     // Start 24-hour automation system
-    console.log('[Server] Starting 24-hour automation system...');
     startAutomation();
-    console.log('[Server] Automation system started');
   });
 }
 

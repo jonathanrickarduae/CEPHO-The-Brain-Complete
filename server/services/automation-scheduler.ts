@@ -231,13 +231,11 @@ class AutomationScheduler {
    */
   private async validateSignal() {
     // TODO: Implement signal validation
-    console.log('Signal validation not yet implemented');
   }
 
   /**
   private async distributeSignal() {
     // TODO: Implement signal distribution
-    console.log('Signal distribution not yet implemented');
   }
 
   /**

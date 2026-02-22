@@ -714,7 +714,6 @@ export const appRouter = router({
       }))
       .mutation(async ({ input }) => {
         // Log webhook and process based on source
-        console.log(`Webhook received: ${input.source}/${input.event}`);
         // Process based on source (WhatsApp, Asana, Calendar, etc.)
         return { success: true, received: new Date() };
       }),
@@ -728,7 +727,6 @@ export const appRouter = router({
       }))
       .mutation(async ({ input }) => {
         // Process WhatsApp message into inbox
-        console.log(`WhatsApp message from ${input.from}: ${input.message}`);
         return { success: true, queued: true };
       }),
   }),

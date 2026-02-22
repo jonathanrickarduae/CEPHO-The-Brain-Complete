@@ -150,7 +150,6 @@ export async function handleCheckoutComplete(session: Stripe.Checkout.Session) {
       },
     });
 
-    console.log(`[Stripe] Subscription created for user ${userId}: ${subscriptionId}`);
   }
 
   // For one-time payment mode
@@ -159,7 +158,6 @@ export async function handleCheckoutComplete(session: Stripe.Checkout.Session) {
       ? session.payment_intent
       : session.payment_intent.id;
 
-    console.log(`[Stripe] Payment completed for user ${userId}: ${paymentIntentId}`);
     
     // Handle one-time purchase fulfillment based on metadata
     // Add credits, unlock features, etc.
@@ -196,7 +194,6 @@ export async function handleSubscriptionUpdated(subscription: Stripe.Subscriptio
       .where(eq(subscriptions.id, matchingSub.id));
   }
 
-  console.log(`[Stripe] Subscription updated: ${subscription.id} - ${subscription.status}`);
 }
 
 /**
@@ -225,7 +222,6 @@ export async function handleSubscriptionDeleted(subscription: Stripe.Subscriptio
       .where(eq(subscriptions.id, matchingSub.id));
   }
 
-  console.log(`[Stripe] Subscription canceled: ${subscription.id}`);
 }
 
 /**

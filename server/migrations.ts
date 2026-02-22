@@ -2,7 +2,6 @@ import { Client } from 'pg';
 
 export async function runMigrations() {
   if (!process.env.DATABASE_URL) {
-    console.log('[Migrations] No DATABASE_URL, skipping migrations');
     return;
   }
 
@@ -13,7 +12,6 @@ export async function runMigrations() {
 
   try {
     await client.connect();
-    console.log('[Migrations] Connected to PostgreSQL database');
 
     // Create conversations table
     await client.query(`
@@ -26,14 +24,12 @@ export async function runMigrations() {
         "createdAt" TIMESTAMP DEFAULT NOW() NOT NULL
       );
     `);
-    console.log('[Migrations] ✓ conversations table ready');
 
     // Create index for faster queries
     await client.query(`
       CREATE INDEX IF NOT EXISTS idx_conversations_userId 
       ON conversations("userId");
     `);
-    console.log('[Migrations] ✓ conversations index ready');
 
     // Create users table if needed
     await client.query(`
@@ -50,9 +46,7 @@ export async function runMigrations() {
         "lastSignedIn" TIMESTAMP DEFAULT NOW() NOT NULL
       );
     `);
-    console.log('[Migrations] ✓ users table ready');
 
-    console.log('[Migrations] ✅ All migrations completed successfully!');
   } catch (error: any) {
     console.error('[Migrations] Error running migrations:', error.message);
     // Don't throw - allow app to start even if migrations fail

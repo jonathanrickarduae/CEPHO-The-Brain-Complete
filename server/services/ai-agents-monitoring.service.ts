@@ -218,7 +218,6 @@ export async function updateRequestStatus(
   try {
     // TODO: Store request status in database
     // For now, just return success
-    console.log(`Request ${requestId} ${status}`, feedback);
     return true;
   } catch (error) {
     console.error('Error updating request status:', error);

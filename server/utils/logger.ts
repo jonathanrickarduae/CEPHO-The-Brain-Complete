@@ -33,13 +33,11 @@ class Logger {
 
   debug(message: string, context?: LogContext): void {
     if (this.shouldLog(LogLevel.DEBUG)) {
-      console.log(this.formatMessage(LogLevel.DEBUG, message, context));
     }
   }
 
   info(message: string, context?: LogContext): void {
     if (this.shouldLog(LogLevel.INFO)) {
-      console.log(this.formatMessage(LogLevel.INFO, message, context));
     }
   }
 

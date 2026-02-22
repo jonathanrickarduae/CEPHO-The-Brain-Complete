@@ -56,7 +56,6 @@ export const integrationsRouter = router({
   // Bulk initialize all services with credentials from environment variables
   initializeAll: protectedProcedure
     .mutation(async ({ ctx }) => {
-      console.log('[IntegrationRouter] initializeAll called for userId:', ctx.user.openId);
       const userId = ctx.user.openId;
       
       // Load credentials from environment variables
@@ -88,21 +87,17 @@ export const integrationsRouter = router({
       ].filter(svc => svc.apiKey || svc.password); // Only include services with actual credentials
 
       // Store all credentials
-      console.log('[IntegrationRouter] Storing credentials for', services.length, 'services');
       let successCount = 0;
       for (const svc of services) {
         try {
-          console.log('[IntegrationRouter] Storing:', svc.service);
           await integrationManager.storeCredentials(userId, svc);
           await integrationManager.updateStatus(userId, svc.service, 'connected');
           successCount++;
-          console.log('[IntegrationRouter] Successfully stored:', svc.service);
         } catch (error) {
           console.error('[IntegrationRouter] Error storing', svc.service, ':', error);
         }
       }
 
-      console.log('[IntegrationRouter] initializeAll completed. Success:', successCount, '/', services.length);
       return { success: true, count: successCount };
     }),
 });

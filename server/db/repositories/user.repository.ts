@@ -209,7 +209,6 @@ export class UserRepository extends BaseRepository {
    * ```typescript
    * const deleted = await userRepository.delete(123);
    * if (deleted) {
-   *   console.log("User deleted successfully");
    * }
    * ```
    */
@@ -237,7 +236,6 @@ export class UserRepository extends BaseRepository {
    * @example
    * ```typescript
    * const totalUsers = await userRepository.count();
-   * console.log(`Total users: ${totalUsers}`);
    * ```
    */
   async count(): Promise<number> {

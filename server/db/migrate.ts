@@ -15,7 +15,6 @@ async function runMigrations() {
     process.exit(1);
   }
 
-  console.log("🔄 Starting database migrations...");
 
   // Create migration client with single connection
   const migrationClient = postgres(connectionString, { max: 1 });
@@ -23,7 +22,6 @@ async function runMigrations() {
 
   try {
     await migrate(db, { migrationsFolder: "./drizzle/migrations" });
-    console.log("✅ Migrations completed successfully");
     await migrationClient.end();
     process.exit(0);
   } catch (error) {

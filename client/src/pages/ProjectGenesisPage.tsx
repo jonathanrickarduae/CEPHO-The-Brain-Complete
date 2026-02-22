@@ -295,13 +295,10 @@ export default function ProjectGenesisPage() {
           genesisBlueprint={currentBlueprint as GenesisBlueprint}
           pendingChanges={[]}
           onApplyChanges={(changes, cascadeTargets) => {
-            console.log('Applying changes:', changes, cascadeTargets);
           }}
           onRejectChanges={(changeIds) => {
-            console.log('Rejecting changes:', changeIds);
           }}
           onViewBlueprint={(blueprintId) => {
-            console.log('Viewing blueprint:', blueprintId);
           }}
         />
       )}

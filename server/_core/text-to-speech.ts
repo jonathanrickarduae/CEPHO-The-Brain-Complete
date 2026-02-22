@@ -15,7 +15,6 @@
  * 
  * if ('audioUrl' in result) {
  *   // Play or return the audio URL
- *   console.log(result.audioUrl);
  * }
  * ```
  */

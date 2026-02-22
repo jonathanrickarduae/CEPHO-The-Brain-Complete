@@ -41,7 +41,6 @@ export class OpenClawGateway {
   }
 
   async chat(message: string, userId: string, context?: any) {
-    console.log('[OpenClaw] Chat request:', { message, userId });
     
     const llmService = getLLMService();
     const conversationService = getConversationService();
@@ -51,7 +50,6 @@ export class OpenClawGateway {
     
     // Detect which skill the user is asking about
     const skill = llmService.detectSkill(message);
-    console.log('[OpenClaw] Detected skill:', skill);
     
     // Get conversation history from database
     const history = await conversationService.getConversationHistory(userIdNum, 5);

@@ -25,7 +25,6 @@ export function getPool(): Pool {
       console.error('[DB Pool] Unexpected error on idle client', err);
     });
 
-    console.log('[DB Pool] PostgreSQL connection pool created');
   }
 
   if (!pool) {
@@ -39,6 +38,5 @@ export async function closePool() {
   if (pool) {
     await pool.end();
     pool = null;
-    console.log('[DB Pool] PostgreSQL connection pool closed');
   }
 }
