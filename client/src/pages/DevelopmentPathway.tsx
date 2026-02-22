@@ -1,5 +1,4 @@
 import { useState } from "react";
-import DashboardLayout from '@/components/project-management/DashboardLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -82,8 +81,7 @@ export default function DevelopmentPathway() {
   };
 
   return (
-    <DashboardLayout>
-      <div className="space-y-6">
+      <div className="space-y-6 p-6">
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
@@ -441,6 +439,5 @@ export default function DevelopmentPathway() {
           </TabsContent>
         </Tabs>
       </div>
-    </DashboardLayout>
   );
 }
