@@ -31,6 +31,12 @@ export default function NexusDashboard() {
   const [inputValue, setInputValue] = useState("");
   const inputRef = useRef<HTMLTextAreaElement>(null);
   
+  // Dynamic notification counts - would come from API/database
+  const [unreadSignals, setUnreadSignals] = useState(0); // Changed from hardcoded 3 to 0
+  const [expertRecommendations, setExpertRecommendations] = useState(5);
+  const [urgentTasks, setUrgentTasks] = useState(2);
+  const [newDocuments, setNewDocuments] = useState(1);
+  
   // Voice input
   const { 
     isListening, 
@@ -88,7 +94,7 @@ export default function NexusDashboard() {
       iconBg: "bg-amber-500/30",
       iconColor: "text-amber-400",
       path: "/daily-brief",
-      badge: <NotificationBadge count={3} /> // Unread briefings
+      badge: <NotificationBadge count={unreadSignals} /> // Dynamic unread briefings
     },
     { 
       id: 2, 
@@ -112,7 +118,7 @@ export default function NexusDashboard() {
       iconBg: "bg-cyan-500/30",
       iconColor: "text-cyan-400",
       path: "/ai-experts",
-      badge: <NotificationBadge count={5} /> // New recommendations
+      badge: <NotificationBadge count={expertRecommendations} /> // Dynamic expert recommendations
     },
     { 
       id: 4, 
@@ -124,7 +130,7 @@ export default function NexusDashboard() {
       iconBg: "bg-emerald-500/30",
       iconColor: "text-emerald-400",
       path: "/workflow",
-      badge: <NotificationBadge count={2} urgent /> // Urgent deadlines
+      badge: <NotificationBadge count={urgentTasks} urgent /> // Dynamic urgent tasks
     },
     { 
       id: 5, 
@@ -136,7 +142,7 @@ export default function NexusDashboard() {
       iconBg: "bg-pink-500/30",
       iconColor: "text-pink-400",
       path: "/library",
-      badge: <NotificationBadge count={1} /> // New documents
+      badge: <NotificationBadge count={newDocuments} /> // Dynamic new documents
     },
     { 
       id: 6, 
