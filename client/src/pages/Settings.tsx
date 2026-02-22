@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { 
   Settings as SettingsIcon, User, Calendar, Database, 
   Bell, Shield, Palette, CreditCard, Users,
-  ChevronRight, Check, Search, Accessibility
+  ChevronRight, Check, Search, Eye
 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { PageHeader } from '@/components/layout/Breadcrumbs';
@@ -41,7 +41,7 @@ export default function Settings() {
     { id: 'notifications' as const, label: 'Notifications', icon: Bell },
     { id: 'privacy' as const, label: 'Privacy', icon: Shield },
     { id: 'appearance' as const, label: 'Appearance', icon: Palette },
-    { id: 'accessibility' as const, label: 'Accessibility', icon: Accessibility },
+    { id: 'accessibility' as const, label: 'Accessibility', icon: Eye },
   ];
 
   const mockReferralStats = {
