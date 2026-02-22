@@ -3,6 +3,7 @@ import { protectedProcedure, router } from "../../_core/trpc";
 import { TRPCError } from "@trpc/server";
 import { generateBriefPDF } from "../../services/pdf-generation.service";
 import { generateBriefVideo, checkVideoStatus } from "../../services/video-generation.service";
+import { generateBriefAudio } from "../../services/audio-generation.service";
 import { readFile } from "fs/promises";
 
 /**
@@ -122,28 +123,32 @@ export const victoriasBriefRouter = router({
     .input(BriefDataSchema)
     .mutation(async ({ input, ctx }) => {
       try {
-        // TODO: Implement 11Labs integration
-        throw new TRPCError({
-          code: "NOT_IMPLEMENTED",
-          message: "Audio generation not yet implemented. Requires 11Labs API integration and voice selection.",
-        });
-
-        // Implementation plan:
-        // 1. Check for ELEVENLABS_API_KEY in environment
-        // 2. Select appropriate voice for Victoria
-        // 3. Format brief text for audio narration
-        // 4. Call 11Labs API to generate audio
-        // 5. Store audio file/URL
-        // 6. Return audio URL for playback
+        const audioPath = await generateBriefAudio(input);
         
-        // return {
-        //   success: true,
-        //   audioUrl: "/api/audio/victoria-brief-2026-02-22.mp3",
-        //   duration: 180, // seconds
-        //   format: "mp3",
-        // };
-      } catch (error) {
+        // Read audio file as base64
+        const audioBuffer = await readFile(audioPath);
+        const audioBase64 = audioBuffer.toString('base64');
+        
+        // Clean up temp file
+        const { unlink } = await import('fs/promises');
+        await unlink(audioPath);
+        
+        return {
+          success: true,
+          audioBase64,
+          filename: `victoria-brief-${input.date}.mp3`,
+          mimeType: 'audio/mpeg',
+        };
+      } catch (error: any) {
         console.error("Audio generation error:", error);
+        
+        if (error.message?.includes('ELEVENLABS_API_KEY')) {
+          throw new TRPCError({
+            code: "PRECONDITION_FAILED",
+            message: "Audio generation requires ELEVENLABS_API_KEY environment variable.",
+          });
+        }
+        
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: "Failed to generate audio",
