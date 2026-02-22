@@ -122,9 +122,11 @@ import { expertConsultationRouter } from "./routers/domains/expert-consultation.
 import { victoriasBriefRouter } from "./routers/domains/victorias-brief.router";
 import { dashboardRouter } from "./routers/domains/dashboard.router";
 import { emailIntegrationRouter } from "./routers/domains/email-integration.router";
+import { aiAgentsMonitoringRouter } from "./routers/domains/ai-agents-monitoring.router";
 
 
 export const appRouter = router({
+  aiAgentsMonitoring: aiAgentsMonitoringRouter,
   emailIntegration: emailIntegrationRouter,
   dashboard: dashboardRouter,
   expertEvolution: expertEvolutionRouter,
