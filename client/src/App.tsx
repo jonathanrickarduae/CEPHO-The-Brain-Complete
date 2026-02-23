@@ -101,7 +101,7 @@ function Router() {
     <Suspense fallback={<PageLoader />}>
       <Switch>
         {/* Root goes directly to Dashboard - no landing page friction */}
-        <Route path="/">
+        <Route path="/" exact>
           <WithLayout><NexusDashboard /></WithLayout>
         </Route>
         
