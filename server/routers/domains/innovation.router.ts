@@ -23,7 +23,7 @@ export const innovationRouter = router({
         tags: z.array(z.string()).optional(),
       }))
       .mutation(async ({ ctx, input }) => {
-// //         const { captureIdea } = await import('../../services/innovationEngineService');
+        const { captureIdea } = await import('../../services/innovationEngineService');
         return captureIdea(ctx.user.id, input);
       }),
 
@@ -35,7 +35,7 @@ export const innovationRouter = router({
         limit: z.number().optional(),
       }).optional())
       .query(async ({ ctx, input }) => {
-//         const { getIdeas } = await import('../../services/innovationEngineService');
+        const { getIdeas } = await import('../../services/innovationEngineService');
         return getIdeas(ctx.user.id, input);
       }),
 
@@ -43,7 +43,7 @@ export const innovationRouter = router({
     getIdeaWithAssessments: protectedProcedure
       .input(z.object({ ideaId: z.number() }))
       .query(async ({ input }) => {
-//         const { getIdeaWithAssessments } = await import('../../services/innovationEngineService');
+        const { getIdeaWithAssessments } = await import('../../services/innovationEngineService');
         return getIdeaWithAssessments(input.ideaId);
       }),
 
@@ -54,7 +54,7 @@ export const innovationRouter = router({
         assessmentType: z.enum(["market_analysis", "feasibility", "competitive_landscape", "financial_viability", "risk_assessment"]),
       }))
       .mutation(async ({ input }) => {
-//         const { runStrategicAssessment } = await import('../../services/innovationEngineService');
+        const { runStrategicAssessment } = await import('../../services/innovationEngineService');
         return runStrategicAssessment(input.ideaId, input.assessmentType);
       }),
 
@@ -65,7 +65,7 @@ export const innovationRouter = router({
         rationale: z.string().optional(),
       }))
       .mutation(async ({ input }) => {
-//         const { advanceToNextStage } = await import('../../services/innovationEngineService');
+        const { advanceToNextStage } = await import('../../services/innovationEngineService');
         return advanceToNextStage(input.ideaId, input.rationale);
       }),
 
@@ -76,7 +76,7 @@ export const innovationRouter = router({
         budgets: z.array(z.number()).optional(),
       }))
       .mutation(async ({ input }) => {
-//         const { generateInvestmentScenarios } = await import('../../services/innovationEngineService');
+        const { generateInvestmentScenarios } = await import('../../services/innovationEngineService');
         return generateInvestmentScenarios(input.ideaId, input.budgets);
       }),
 
@@ -84,7 +84,7 @@ export const innovationRouter = router({
     generateBrief: protectedProcedure
       .input(z.object({ ideaId: z.number() }))
       .mutation(async ({ input }) => {
-//         const { generateIdeaBrief } = await import('../../services/innovationEngineService');
+        const { generateIdeaBrief } = await import('../../services/innovationEngineService');
         return generateIdeaBrief(input.ideaId);
       }),
 
@@ -92,7 +92,7 @@ export const innovationRouter = router({
     promoteToGenesis: protectedProcedure
       .input(z.object({ ideaId: z.number() }))
       .mutation(async ({ input }) => {
-//         const { promoteToGenesis } = await import('../../services/innovationEngineService');
+        const { promoteToGenesis } = await import('../../services/innovationEngineService');
         return promoteToGenesis(input.ideaId);
       }),
 
@@ -103,8 +103,15 @@ export const innovationRouter = router({
         context: z.string().optional(),
       }))
       .mutation(async ({ ctx, input }) => {
-//         const { analyzeArticleForOpportunities } = await import('../../services/innovationEngineService');
+        const { analyzeArticleForOpportunities } = await import('../../services/innovationEngineService');
         return analyzeArticleForOpportunities(ctx.user.id, input.url, input.context);
+      }),
+
+    // Generate daily business ideas
+    generateDailyIdeas: protectedProcedure
+      .mutation(async ({ ctx }) => {
+        const { generateDailyIdeas } = await import('../../services/innovationEngineService');
+        return generateDailyIdeas(ctx.user.id);
       }),
 
     // Get strategic framework questions
@@ -113,7 +120,7 @@ export const innovationRouter = router({
         assessmentType: z.enum(["market_analysis", "feasibility", "competitive_landscape", "financial_viability", "risk_assessment"]),
       }))
       .query(async ({ input }) => {
-//         const { STRATEGIC_FRAMEWORK } = await import('../../services/innovationEngineService');
+        const { STRATEGIC_FRAMEWORK } = await import('../../services/innovationEngineService');
         return STRATEGIC_FRAMEWORK[input.assessmentType];
       }),
 
@@ -126,7 +133,7 @@ export const innovationRouter = router({
         type: z.string().optional(),
       }).optional())
       .query(async ({ input }) => {
-//         const { ALL_FUNDING_PROGRAMS } = await import('../../services/fundingAssessmentService');
+        const { ALL_FUNDING_PROGRAMS } = await import('../../services/fundingAssessmentService');
         let programs = ALL_FUNDING_PROGRAMS;
         if (input?.country) {
           programs = programs.filter(p => p.country === input.country);
@@ -144,8 +151,8 @@ export const innovationRouter = router({
         country: z.enum(["UAE", "UK"]).optional(),
       }))
       .query(async ({ input }) => {
-//         const { getEligiblePrograms } = await import('../../services/fundingAssessmentService');
-//         const { getIdeaWithAssessments } = await import('../../services/innovationEngineService');
+        const { getEligiblePrograms } = await import('../../services/fundingAssessmentService');
+        const { getIdeaWithAssessments } = await import('../../services/innovationEngineService');
         const idea = await getIdeaWithAssessments(input.ideaId);
         if (!idea) return [];
         return getEligiblePrograms(idea.idea?.category || 'Technology', idea.idea?.currentStage?.toString() || 'seed', input.country);
@@ -158,7 +165,7 @@ export const innovationRouter = router({
         programId: z.string(),
       }))
       .mutation(async ({ ctx, input }) => {
-//         const { assessIdeaForProgram } = await import('../../services/fundingAssessmentService');
+        const { assessIdeaForProgram } = await import('../../services/fundingAssessmentService');
         return assessIdeaForProgram(ctx.user.id, input.ideaId, input.programId);
       }),
 
@@ -166,7 +173,7 @@ export const innovationRouter = router({
     getIdeaFundingAssessments: protectedProcedure
       .input(z.object({ ideaId: z.number() }))
       .query(async ({ input }) => {
-//         const { getIdeaFundingAssessments } = await import('../../services/fundingAssessmentService');
+        const { getIdeaFundingAssessments } = await import('../../services/fundingAssessmentService');
         return getIdeaFundingAssessments(input.ideaId);
       }),
 
@@ -178,7 +185,7 @@ export const innovationRouter = router({
         documentTypes: z.array(z.string()),
       }))
       .mutation(async ({ input }) => {
-//         const { generateApplicationDocuments } = await import('../../services/fundingAssessmentService');
+        const { generateApplicationDocuments } = await import('../../services/fundingAssessmentService');
         return generateApplicationDocuments(input.ideaId, input.programId, input.documentTypes);
       }),
 });

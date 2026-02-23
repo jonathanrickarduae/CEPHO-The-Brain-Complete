@@ -94,6 +94,14 @@ export default function InnovationHub() {
     onError: (error) => toast.error(error.message),
   });
 
+  const generateDailyIdeasMutation = trpc.innovation.generateDailyIdeas.useMutation({
+    onSuccess: (data) => {
+      toast.success(`Generated ${data.length} new ideas!`);
+      refetchIdeas();
+    },
+    onError: (error) => toast.error(error.message),
+  });
+
   const runAssessmentMutation = trpc.innovation.runAssessment.useMutation({
     onSuccess: () => {
       toast.success("Assessment completed!");
@@ -172,6 +180,15 @@ export default function InnovationHub() {
             </p>
           </div>
           <div className="flex gap-3">
+            <Button 
+              variant="outline" 
+              className="gap-2"
+              onClick={() => generateDailyIdeasMutation.mutate()}
+              disabled={generateDailyIdeasMutation.isPending}
+            >
+              <Sparkles className="h-4 w-4" />
+              {generateDailyIdeasMutation.isPending ? "Generating..." : "Generate Daily Ideas"}
+            </Button>
             <Dialog open={showArticleDialog} onOpenChange={setShowArticleDialog}>
               <DialogTrigger asChild>
                 <Button variant="outline" className="gap-2">
