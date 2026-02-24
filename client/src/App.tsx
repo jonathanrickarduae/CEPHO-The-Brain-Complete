@@ -87,6 +87,8 @@ const EmailAccountsManager = lazy(() => import("./components/email/EmailAccounts
 const EmailList = lazy(() => import("./components/email/EmailList"));
 const VictoriaBriefing = lazy(() => import("./components/victoria/VictoriaBriefing"));
 const EnhancedChiefOfStaff = lazy(() => import("./components/chief-of-staff/EnhancedChiefOfStaff"));
+const WorkflowDashboard = lazy(() => import("./pages/WorkflowDashboard"));
+const ProjectGenesisWizard = lazy(() => import("./pages/ProjectGenesisWizard"));
 
 // Wrapper component for pages that need the sidebar layout with page transitions
 function WithLayout({ children }: { children: React.ReactNode }) {
@@ -152,6 +154,15 @@ function Router() {
         </Route>
         <Route path="/ai-agents-monitoring">
           <WithLayout><AIAgentsMonitoringPage /></WithLayout>
+        </Route>
+        <Route path="/workflows">
+          <WithLayout><WorkflowDashboard /></WithLayout>
+        </Route>
+        <Route path="/workflow/project_genesis/new">
+          <WithLayout><ProjectGenesisWizard /></WithLayout>
+        </Route>
+        <Route path="/workflow/project_genesis/:workflowId">
+          <WithLayout><ProjectGenesisWizard /></WithLayout>
         </Route>
         <Route path="/expert-chat/:expertId">
           <ExpertChatPage />
