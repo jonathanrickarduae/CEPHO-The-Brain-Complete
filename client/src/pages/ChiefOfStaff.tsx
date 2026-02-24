@@ -191,8 +191,28 @@ export default function ChiefOfStaff() {
       updatedAt: new Date(t.updatedAt),
       isFromDb: true,
     }));
-    return [...realTasks, ...MOCK_TASKS.map(t => ({ ...t, isFromDb: false, dbId: undefined }))];
-  }, [tasksWithQA]);
+    
+    // Add delegated tasks from Signal
+    const signalTasks: Task[] = (delegatedTasks || []).map(t => ({
+      id: `signal-${t.id}`,
+      dbId: t.id,
+      title: t.title || '',
+      description: t.description || '',
+      project: (t.metadata as any)?.category || 'Signal Task',
+      status: t.status === 'delegated' ? 'active' : (t.status as Task['status']),
+      progress: t.progress || 0,
+      qaStatus: (t.qaStatus || 'pending') as QAStatus,
+      assignedExperts: Array.isArray(t.assignedExperts) ? t.assignedExperts.map((e: any) => e.name || e) : [],
+      cosScore: t.cosScore || undefined,
+      secondaryAIScore: t.secondaryAiScore || undefined,
+      feedback: undefined,
+      createdAt: t.createdAt || new Date(),
+      updatedAt: t.updatedAt || new Date(),
+      isFromDb: true,
+    }));
+    
+    return [...realTasks, ...signalTasks, ...MOCK_TASKS.map(t => ({ ...t, isFromDb: false, dbId: undefined }))];
+  }, [tasksWithQA, delegatedTasks]);
 
   // Handle CoS review submission
   const handleSubmitCoSReview = (taskId: number, approved: boolean) => {
@@ -281,29 +301,7 @@ export default function ChiefOfStaff() {
     }
   };
 
-  // Combine mock tasks with delegated tasks from Signal
-  const allTasks = [
-    ...MOCK_TASKS,
-    ...(delegatedTasks || []).map(t => ({
-      id: `db-${t.id}`,
-      dbId: t.id,
-      title: t.title || '',
-      description: t.description || '',
-      project: (t.metadata as any)?.category || 'Signal Task',
-      status: t.status === 'delegated' ? 'active' : t.status,
-      progress: t.progress || 0,
-      qaStatus: (t.qaStatus || 'pending') as QAStatus,
-      assignedExperts: Array.isArray(t.assignedExperts) ? t.assignedExperts.map((e: any) => e.name || e) : [],
-      cosScore: t.cosScore || undefined,
-      secondaryAIScore: t.secondaryAiScore || undefined,
-      feedback: undefined,
-      createdAt: t.createdAt || new Date(),
-      updatedAt: t.updatedAt || new Date(),
-      isFromDb: true,
-    }))),
-  ];
-  
-  const tasks = allTasks;
+
 
   // Stats
   const taskStats = {
