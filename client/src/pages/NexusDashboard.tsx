@@ -172,7 +172,7 @@ export default function NexusDashboard() {
     { 
       label: "The Signal", 
       icon: Sun, 
-      path: "/daily-brief",
+      path: "/the-signal",
       gradient: "from-amber-500/20 to-orange-500/20",
       border: "border-amber-500/50 hover:border-amber-400",
     },

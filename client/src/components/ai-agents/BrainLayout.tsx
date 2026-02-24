@@ -64,9 +64,9 @@ const menuItems: MenuItem[] = [
   { 
     icon: Sun, 
     label: "The Signal", 
-    path: "/daily-brief",
+    path: "/the-signal",
     children: [
-      { icon: Sparkles, label: "Morning Signal", path: "/daily-brief" },
+      { icon: Sparkles, label: "Morning Signal", path: "/morning-signal" },
       { icon: Moon, label: "Evening Review", path: "/evening-review" },
     ]
   },
@@ -90,8 +90,15 @@ const menuItems: MenuItem[] = [
     ]
   },
   { icon: Volume2, label: "Victoria's Brief", path: "/victoria" },
-  { icon: Users, label: "AI-SMEs", path: "/ai-experts" },
-  { icon: Users, label: "Persephone Board", path: "/persephone" },
+  { 
+    icon: Users, 
+    label: "Expert Network", 
+    path: "/expert-network",
+    children: [
+      { icon: Users, label: "AI-SMEs", path: "/ai-experts" },
+      { icon: Users, label: "Persephone Board", path: "/persephone" },
+    ]
+  },
   { 
     icon: TrendingUp, 
     label: "Innovation", 
