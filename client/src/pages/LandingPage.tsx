@@ -59,11 +59,11 @@ export default function LandingPage() {
     <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-[#1a1a2e] via-[#0a3a3a] to-black">
       {/* Subtle Animated Background */}
       <div className="absolute inset-0 overflow-hidden">
-        {/* Few large floating orbs - like in the image */}
+        {/* Few large floating orbs with subtle flashing */}
         {[...Array(6)].map((_, i) => (
           <div
             key={i}
-            className="absolute rounded-full animate-float-gentle"
+            className="absolute rounded-full animate-float-flash"
             style={{
               width: `${60 + Math.random() * 40}px`,
               height: `${60 + Math.random() * 40}px`,
@@ -71,31 +71,34 @@ export default function LandingPage() {
               top: `${20 + Math.random() * 60}%`,
               background: i % 2 === 0 
                 ? 'radial-gradient(circle, rgba(255, 200, 100, 0.6) 0%, rgba(255, 150, 50, 0.3) 50%, transparent 100%)'
-                : 'radial-gradient(circle, rgba(100, 200, 255, 0.4) 0%, rgba(50, 150, 255, 0.2) 50%, transparent 100%)',
+                : 'radial-gradient(circle, rgba(100, 200, 255, 0.5) 0%, rgba(50, 150, 255, 0.3) 50%, transparent 100%)',
               filter: 'blur(20px)',
+              boxShadow: i % 2 === 0 ? '0 0 40px rgba(255, 200, 100, 0.4)' : '0 0 60px rgba(0, 200, 255, 0.5)',
               animationDelay: `${i * 1.5}s`,
               animationDuration: `${8 + Math.random() * 4}s`,
             }}
           />
         ))}
         
-        {/* Soft central glow - subtle brain area */}
+        {/* Blue neon glow - brain area */}
         <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[500px] h-[500px]">
-          {/* Soft outer glow */}
+          {/* Outer blue neon glow */}
           <div 
             className="absolute inset-0 rounded-full animate-pulse-slow"
             style={{
-              background: 'radial-gradient(circle, rgba(0, 200, 200, 0.15) 0%, transparent 70%)',
+              background: 'radial-gradient(circle, rgba(0, 200, 255, 0.25) 0%, rgba(0, 150, 255, 0.15) 40%, transparent 70%)',
               filter: 'blur(60px)',
+              boxShadow: '0 0 100px rgba(0, 200, 255, 0.3), inset 0 0 80px rgba(0, 150, 255, 0.2)',
             }}
           />
           
-          {/* Inner soft glow */}
+          {/* Inner bright neon core */}
           <div 
             className="absolute inset-[20%] rounded-full animate-pulse-slower"
             style={{
-              background: 'radial-gradient(circle, rgba(100, 220, 255, 0.2) 0%, transparent 70%)',
+              background: 'radial-gradient(circle, rgba(100, 220, 255, 0.35) 0%, rgba(0, 200, 255, 0.2) 50%, transparent 70%)',
               filter: 'blur(40px)',
+              boxShadow: '0 0 60px rgba(0, 220, 255, 0.5)',
             }}
           />
 
@@ -139,11 +142,11 @@ export default function LandingPage() {
               fontWeight: 800,
               letterSpacing: '-0.02em',
               lineHeight: 1,
-              background: 'linear-gradient(135deg, #f5f5dc 0%, #ffffff 25%, #ffe4b5 50%, #ffffff 75%, #f0e68c 100%)',
+              background: 'linear-gradient(135deg, #a855f7 0%, #d946ef 50%, #a855f7 100%)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               backgroundClip: 'text',
-              textShadow: '0 0 40px rgba(255, 255, 255, 0.1)',
+              textShadow: '0 0 40px rgba(168, 85, 247, 0.3)',
             }}
           >
             Cepho
@@ -246,18 +249,22 @@ export default function LandingPage() {
 
       {/* Subtle animations */}
       <style>{`
-        @keyframes float-gentle {
+        @keyframes float-flash {
           0%, 100% {
             transform: translate(0, 0);
+            opacity: 0.3;
+          }
+          25% {
+            transform: translate(30px, -20px);
+            opacity: 0.7;
+          }
+          50% {
+            transform: translate(10px, 20px);
             opacity: 0.4;
           }
-          33% {
-            transform: translate(30px, -20px);
-            opacity: 0.6;
-          }
-          66% {
+          75% {
             transform: translate(-20px, 30px);
-            opacity: 0.5;
+            opacity: 0.8;
           }
         }
 
@@ -316,8 +323,8 @@ export default function LandingPage() {
           }
         }
 
-        .animate-float-gentle {
-          animation: float-gentle linear infinite;
+        .animate-float-flash {
+          animation: float-flash linear infinite;
         }
 
         .animate-pulse-slow {
