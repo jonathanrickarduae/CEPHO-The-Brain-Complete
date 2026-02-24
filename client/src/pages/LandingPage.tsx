@@ -57,78 +57,137 @@ export default function LandingPage() {
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-[#0f2f2f] via-[#0a7a6e] to-black">
-      {/* Animated Neural Network */}
+      {/* Animated Neural Network with Electrical Impulses */}
       <div className="absolute inset-0 overflow-hidden">
-        {/* Fast-moving neurons */}
-        {[...Array(30)].map((_, i) => (
+        {/* Rapid-firing neurons with electrical flashes */}
+        {[...Array(40)].map((_, i) => (
           <div
             key={i}
-            className="absolute rounded-full bg-white animate-neuron"
+            className="absolute rounded-full bg-white animate-brain-flash"
             style={{
-              width: `${Math.random() * 20 + 8}px`,
-              height: `${Math.random() * 20 + 8}px`,
+              width: `${Math.random() * 15 + 5}px`,
+              height: `${Math.random() * 15 + 5}px`,
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
-              opacity: Math.random() * 0.6 + 0.3,
-              filter: 'blur(2px)',
-              animationDelay: `${Math.random() * 3}s`,
-              animationDuration: `${Math.random() * 4 + 3}s`,
+              filter: 'blur(1px)',
+              boxShadow: '0 0 10px rgba(255, 255, 255, 0.8), 0 0 20px rgba(0, 255, 255, 0.5)',
+              animationDelay: `${Math.random() * 2}s`,
+              animationDuration: `${Math.random() * 1 + 0.5}s`,
             }}
           />
         ))}
         
-        {/* Central brain cluster with intense glow */}
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[500px] h-[500px]">
-          {/* Outer glow */}
-          <div className="absolute inset-0 bg-cyan-400/40 rounded-full blur-[100px] animate-pulse-slow" />
+        {/* Central brain with intense electrical activity */}
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[600px] h-[600px]">
+          {/* Outer electrical field */}
+          <div className="absolute inset-0 bg-cyan-400/50 rounded-full blur-[120px] animate-electric-pulse" />
           
-          {/* Middle glow */}
-          <div className="absolute inset-[20%] bg-cyan-300/50 rounded-full blur-[60px] animate-pulse-medium" />
+          {/* Middle energy layer */}
+          <div className="absolute inset-[15%] bg-cyan-300/60 rounded-full blur-[80px] animate-electric-pulse-fast" />
           
-          {/* Inner bright core */}
-          <div className="absolute inset-[35%] bg-cyan-200/60 rounded-full blur-[40px] animate-pulse-fast" />
+          {/* Inner bright core - rapid pulsing */}
+          <div className="absolute inset-[30%] bg-white/70 rounded-full blur-[50px] animate-brain-core" />
           
-          {/* Active neurons in cluster */}
-          {[...Array(12)].map((_, i) => {
-            const angle = (i * 360) / 12;
-            const radius = 35 + Math.random() * 15;
+          {/* Synaptic firing - neurons in brain structure */}
+          {[...Array(20)].map((_, i) => {
+            const angle = (i * 360) / 20;
+            const radius = 30 + (i % 3) * 8;
             const x = 50 + radius * Math.cos((angle * Math.PI) / 180);
             const y = 50 + radius * Math.sin((angle * Math.PI) / 180);
             
             return (
               <div
-                key={`cluster-${i}`}
-                className="absolute rounded-full bg-white animate-pulse-fast"
+                key={`synapse-${i}`}
+                className="absolute rounded-full bg-white animate-synapse-fire"
                 style={{
-                  width: `${Math.random() * 30 + 15}px`,
-                  height: `${Math.random() * 30 + 15}px`,
+                  width: `${Math.random() * 25 + 10}px`,
+                  height: `${Math.random() * 25 + 10}px`,
                   left: `${x}%`,
                   top: `${y}%`,
                   transform: 'translate(-50%, -50%)',
-                  opacity: 0.9,
-                  filter: 'blur(3px)',
-                  boxShadow: '0 0 20px rgba(255, 255, 255, 0.8)',
-                  animationDelay: `${i * 0.2}s`,
+                  filter: 'blur(2px)',
+                  boxShadow: '0 0 15px rgba(255, 255, 255, 1), 0 0 30px rgba(0, 255, 255, 0.8)',
+                  animationDelay: `${i * 0.1}s`,
                 }}
               />
             );
           })}
-        </div>
 
-        {/* Connection lines between neurons */}
-        <svg className="absolute inset-0 w-full h-full opacity-20">
+          {/* Electrical sparks - random bursts */}
           {[...Array(15)].map((_, i) => (
-            <line
-              key={`line-${i}`}
-              x1={`${Math.random() * 100}%`}
-              y1={`${Math.random() * 100}%`}
-              x2={`${Math.random() * 100}%`}
-              y2={`${Math.random() * 100}%`}
-              stroke="rgba(255, 255, 255, 0.3)"
-              strokeWidth="1"
-              className="animate-pulse"
+            <div
+              key={`spark-${i}`}
+              className="absolute rounded-full bg-cyan-200 animate-spark"
+              style={{
+                width: '8px',
+                height: '8px',
+                left: `${40 + Math.random() * 20}%`,
+                top: `${40 + Math.random() * 20}%`,
+                filter: 'blur(1px)',
+                boxShadow: '0 0 20px rgba(0, 255, 255, 1)',
+                animationDelay: `${Math.random() * 3}s`,
+              }}
             />
           ))}
+        </div>
+
+        {/* Electrical pathways - animated connection lines */}
+        <svg className="absolute inset-0 w-full h-full">
+          {[...Array(25)].map((_, i) => {
+            const x1 = Math.random() * 100;
+            const y1 = Math.random() * 100;
+            const x2 = Math.random() * 100;
+            const y2 = Math.random() * 100;
+            
+            return (
+              <g key={`path-${i}`}>
+                <line
+                  x1={`${x1}%`}
+                  y1={`${y1}%`}
+                  x2={`${x2}%`}
+                  y2={`${y2}%`}
+                  stroke="rgba(0, 255, 255, 0.3)"
+                  strokeWidth="2"
+                  className="animate-pulse-line"
+                  style={{
+                    animationDelay: `${i * 0.2}s`,
+                  }}
+                />
+                {/* Traveling impulse */}
+                <circle
+                  r="4"
+                  fill="rgba(255, 255, 255, 0.9)"
+                  filter="url(#glow)"
+                  className="animate-travel"
+                  style={{
+                    animationDelay: `${i * 0.2}s`,
+                  }}
+                >
+                  <animateMotion
+                    dur={`${2 + Math.random() * 2}s`}
+                    repeatCount="indefinite"
+                    begin={`${i * 0.2}s`}
+                  >
+                    <mpath href={`#path-${i}`} />
+                  </animateMotion>
+                </circle>
+                <path
+                  id={`path-${i}`}
+                  d={`M ${x1} ${y1} L ${x2} ${y2}`}
+                  fill="none"
+                />
+              </g>
+            );
+          })}
+          <defs>
+            <filter id="glow">
+              <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+              <feMerge>
+                <feMergeNode in="coloredBlur"/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
+          </defs>
         </svg>
       </div>
 
@@ -136,7 +195,7 @@ export default function LandingPage() {
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 py-12">
         {/* Logo and Branding */}
         <div className="text-center mb-16 animate-fade-in">
-          <h1 className="text-7xl md:text-9xl font-bold mb-6 bg-gradient-to-r from-purple-400 via-fuchsia-500 to-purple-600 bg-clip-text text-transparent drop-shadow-2xl">
+          <h1 className="text-7xl md:text-9xl font-bold mb-6 bg-gradient-to-r from-purple-400 via-fuchsia-500 to-purple-600 bg-clip-text text-transparent drop-shadow-2xl animate-title-pulse">
             Cepho-AI
           </h1>
           <p className="text-white text-2xl md:text-3xl font-light tracking-wide">
@@ -217,57 +276,123 @@ export default function LandingPage() {
         )}
       </div>
 
-      {/* Enhanced CSS animations */}
+      {/* Brain-like electrical animations */}
       <style>{`
-        @keyframes neuron {
+        @keyframes brain-flash {
           0%, 100% {
-            transform: translate(0, 0) scale(1);
-            opacity: 0.4;
+            opacity: 0.2;
+            transform: scale(0.8);
           }
-          25% {
-            transform: translate(30px, -30px) scale(1.2);
-            opacity: 0.8;
+          10% {
+            opacity: 1;
+            transform: scale(1.3);
+          }
+          20% {
+            opacity: 0.3;
+            transform: scale(0.9);
+          }
+          30% {
+            opacity: 0.9;
+            transform: scale(1.2);
           }
           50% {
-            transform: translate(-30px, 30px) scale(0.9);
-            opacity: 0.5;
+            opacity: 0.1;
+            transform: scale(0.7);
           }
-          75% {
-            transform: translate(30px, 30px) scale(1.1);
-            opacity: 0.7;
+          70% {
+            opacity: 0.8;
+            transform: scale(1.1);
           }
         }
 
-        @keyframes pulse-slow {
+        @keyframes synapse-fire {
           0%, 100% {
             opacity: 0.3;
-            transform: scale(1);
+            transform: translate(-50%, -50%) scale(0.8);
+          }
+          15% {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1.4);
+          }
+          30% {
+            opacity: 0.2;
+            transform: translate(-50%, -50%) scale(0.9);
           }
           50% {
-            opacity: 0.5;
-            transform: scale(1.05);
+            opacity: 0.9;
+            transform: translate(-50%, -50%) scale(1.3);
           }
         }
 
-        @keyframes pulse-medium {
+        @keyframes spark {
+          0%, 100% {
+            opacity: 0;
+            transform: scale(0);
+          }
+          50% {
+            opacity: 1;
+            transform: scale(2);
+          }
+        }
+
+        @keyframes electric-pulse {
           0%, 100% {
             opacity: 0.4;
             transform: scale(1);
+          }
+          50% {
+            opacity: 0.7;
+            transform: scale(1.1);
+          }
+        }
+
+        @keyframes electric-pulse-fast {
+          0%, 100% {
+            opacity: 0.5;
+            transform: scale(1);
+          }
+          50% {
+            opacity: 0.9;
+            transform: scale(1.15);
+          }
+        }
+
+        @keyframes brain-core {
+          0%, 100% {
+            opacity: 0.6;
+            transform: scale(1);
+          }
+          25% {
+            opacity: 0.95;
+            transform: scale(1.08);
+          }
+          50% {
+            opacity: 0.7;
+            transform: scale(1.02);
+          }
+          75% {
+            opacity: 0.9;
+            transform: scale(1.12);
+          }
+        }
+
+        @keyframes pulse-line {
+          0%, 100% {
+            opacity: 0.2;
+            stroke-width: 1;
           }
           50% {
             opacity: 0.6;
-            transform: scale(1.08);
+            stroke-width: 3;
           }
         }
 
-        @keyframes pulse-fast {
+        @keyframes title-pulse {
           0%, 100% {
-            opacity: 0.5;
-            transform: scale(1);
+            filter: drop-shadow(0 0 20px rgba(168, 85, 247, 0.5));
           }
           50% {
-            opacity: 0.8;
-            transform: scale(1.12);
+            filter: drop-shadow(0 0 40px rgba(168, 85, 247, 0.8));
           }
         }
 
@@ -293,20 +418,36 @@ export default function LandingPage() {
           }
         }
 
-        .animate-neuron {
-          animation: neuron linear infinite;
+        .animate-brain-flash {
+          animation: brain-flash linear infinite;
         }
 
-        .animate-pulse-slow {
-          animation: pulse-slow 4s ease-in-out infinite;
+        .animate-synapse-fire {
+          animation: synapse-fire 0.8s ease-in-out infinite;
         }
 
-        .animate-pulse-medium {
-          animation: pulse-medium 3s ease-in-out infinite;
+        .animate-spark {
+          animation: spark 1.5s ease-in-out infinite;
         }
 
-        .animate-pulse-fast {
-          animation: pulse-fast 2s ease-in-out infinite;
+        .animate-electric-pulse {
+          animation: electric-pulse 2s ease-in-out infinite;
+        }
+
+        .animate-electric-pulse-fast {
+          animation: electric-pulse-fast 1.5s ease-in-out infinite;
+        }
+
+        .animate-brain-core {
+          animation: brain-core 1s ease-in-out infinite;
+        }
+
+        .animate-pulse-line {
+          animation: pulse-line 2s ease-in-out infinite;
+        }
+
+        .animate-title-pulse {
+          animation: title-pulse 3s ease-in-out infinite;
         }
 
         .animate-fade-in {
