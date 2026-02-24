@@ -180,10 +180,10 @@ export default function LandingPage() {
 
         {/* Login Form */}
         {showLogin && (
-          <div className="w-full max-w-md animate-slide-up">
-            <div className="backdrop-blur-xl bg-black/40 p-8 rounded-3xl border border-white/10 shadow-2xl">
-              <form onSubmit={handleLogin} className="space-y-6">
-                <div className="space-y-4">
+          <div className="w-full max-w-sm animate-slide-up">
+            <div className="backdrop-blur-lg bg-black/20 p-6 rounded-2xl border border-white/5 shadow-xl">
+              <form onSubmit={handleLogin} className="space-y-4">
+                <div className="space-y-3">
                   <div className="relative group">
                     <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-purple-400 transition-colors" />
                     <Input
@@ -192,7 +192,7 @@ export default function LandingPage() {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       required
-                      className="pl-12 h-14 bg-white/5 border-white/20 text-white placeholder:text-gray-500 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/50 rounded-xl transition-all"
+                      className="pl-12 h-12 bg-white/5 border-white/10 text-white placeholder:text-gray-400 focus:border-purple-400/50 focus:ring-1 focus:ring-purple-400/30 rounded-lg transition-all"
                     />
                   </div>
 
@@ -204,11 +204,11 @@ export default function LandingPage() {
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       required
-                      className="pl-12 h-14 bg-white/5 border-white/20 text-white placeholder:text-gray-500 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/50 rounded-xl transition-all"
+                      className="pl-12 h-12 bg-white/5 border-white/10 text-white placeholder:text-gray-400 focus:border-purple-400/50 focus:ring-1 focus:ring-purple-400/30 rounded-lg transition-all"
                     />
                   </div>
 
-                  <div className="flex items-center space-x-2 pt-2">
+                  <div className="flex items-center space-x-2 pt-1">
                     <Checkbox
                       id="remember"
                       checked={rememberMe}
@@ -217,7 +217,7 @@ export default function LandingPage() {
                     />
                     <label
                       htmlFor="remember"
-                      className="text-base text-gray-300 cursor-pointer select-none"
+                      className="text-sm text-gray-400 cursor-pointer select-none"
                     >
                       Remember me
                     </label>
@@ -226,7 +226,7 @@ export default function LandingPage() {
 
                 <Button
                   type="submit"
-                  className="w-full h-14 bg-gradient-to-r from-purple-500 via-fuchsia-500 to-purple-600 hover:from-purple-600 hover:via-fuchsia-600 hover:to-purple-700 text-white font-semibold text-lg rounded-xl transition-all duration-300 shadow-lg shadow-purple-500/50 hover:shadow-purple-600/60 hover:scale-[1.02]"
+                  className="w-full h-11 bg-gradient-to-r from-purple-500/90 via-fuchsia-500/90 to-purple-600/90 hover:from-purple-500 hover:via-fuchsia-500 hover:to-purple-600 text-white font-medium text-base rounded-lg transition-all duration-300 shadow-md shadow-purple-500/30 hover:shadow-purple-500/40"
                   disabled={isLoading}
                 >
                   {isLoading ? (
