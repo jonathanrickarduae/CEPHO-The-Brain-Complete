@@ -56,171 +56,125 @@ export default function LandingPage() {
   }
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-[#0f2f2f] via-[#0a7a6e] to-black">
-      {/* Animated Neural Network with Electrical Impulses */}
+    <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-[#1a1a2e] via-[#0a3a3a] to-black">
+      {/* Subtle Animated Background */}
       <div className="absolute inset-0 overflow-hidden">
-        {/* Gentle floating neurons */}
-        {[...Array(20)].map((_, i) => (
+        {/* Few large floating orbs - like in the image */}
+        {[...Array(6)].map((_, i) => (
           <div
             key={i}
-            className="absolute rounded-full bg-white animate-brain-flash"
+            className="absolute rounded-full animate-float-gentle"
             style={{
-              width: `${Math.random() * 15 + 5}px`,
-              height: `${Math.random() * 15 + 5}px`,
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              filter: 'blur(1px)',
-              boxShadow: '0 0 10px rgba(255, 255, 255, 0.8), 0 0 20px rgba(0, 255, 255, 0.5)',
-              animationDelay: `${Math.random() * 2}s`,
-              animationDuration: `${Math.random() * 3 + 2}s`,
+              width: `${60 + Math.random() * 40}px`,
+              height: `${60 + Math.random() * 40}px`,
+              left: `${15 + Math.random() * 70}%`,
+              top: `${20 + Math.random() * 60}%`,
+              background: i % 2 === 0 
+                ? 'radial-gradient(circle, rgba(255, 200, 100, 0.6) 0%, rgba(255, 150, 50, 0.3) 50%, transparent 100%)'
+                : 'radial-gradient(circle, rgba(100, 200, 255, 0.4) 0%, rgba(50, 150, 255, 0.2) 50%, transparent 100%)',
+              filter: 'blur(20px)',
+              animationDelay: `${i * 1.5}s`,
+              animationDuration: `${8 + Math.random() * 4}s`,
             }}
           />
         ))}
         
-        {/* Central brain with intense electrical activity */}
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[600px] h-[600px]">
-          {/* Outer electrical field */}
-          <div className="absolute inset-0 bg-cyan-400/50 rounded-full blur-[120px] animate-electric-pulse" />
+        {/* Soft central glow - subtle brain area */}
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[500px] h-[500px]">
+          {/* Soft outer glow */}
+          <div 
+            className="absolute inset-0 rounded-full animate-pulse-slow"
+            style={{
+              background: 'radial-gradient(circle, rgba(0, 200, 200, 0.15) 0%, transparent 70%)',
+              filter: 'blur(60px)',
+            }}
+          />
           
-          {/* Middle energy layer */}
-          <div className="absolute inset-[15%] bg-cyan-300/60 rounded-full blur-[80px] animate-electric-pulse-fast" />
-          
-          {/* Inner bright core - rapid pulsing */}
-          <div className="absolute inset-[30%] bg-white/70 rounded-full blur-[50px] animate-brain-core" />
-          
-          {/* Synaptic firing - neurons in brain structure */}
-          {[...Array(20)].map((_, i) => {
-            const angle = (i * 360) / 20;
-            const radius = 30 + (i % 3) * 8;
+          {/* Inner soft glow */}
+          <div 
+            className="absolute inset-[20%] rounded-full animate-pulse-slower"
+            style={{
+              background: 'radial-gradient(circle, rgba(100, 220, 255, 0.2) 0%, transparent 70%)',
+              filter: 'blur(40px)',
+            }}
+          />
+
+          {/* Small sparkles in center */}
+          {[...Array(8)].map((_, i) => {
+            const angle = (i * 360) / 8;
+            const radius = 25;
             const x = 50 + radius * Math.cos((angle * Math.PI) / 180);
             const y = 50 + radius * Math.sin((angle * Math.PI) / 180);
             
             return (
               <div
-                key={`synapse-${i}`}
-                className="absolute rounded-full bg-white animate-synapse-fire"
+                key={`sparkle-${i}`}
+                className="absolute rounded-full animate-twinkle"
                 style={{
-                  width: `${Math.random() * 25 + 10}px`,
-                  height: `${Math.random() * 25 + 10}px`,
+                  width: '4px',
+                  height: '4px',
                   left: `${x}%`,
                   top: `${y}%`,
-                  transform: 'translate(-50%, -50%)',
-                  filter: 'blur(2px)',
-                  boxShadow: '0 0 15px rgba(255, 255, 255, 1), 0 0 30px rgba(0, 255, 255, 0.8)',
-                  animationDelay: `${i * 0.1}s`,
+                  background: 'rgba(255, 255, 255, 0.6)',
+                  boxShadow: '0 0 8px rgba(100, 200, 255, 0.8)',
+                  filter: 'blur(0.5px)',
+                  animationDelay: `${i * 0.5}s`,
                 }}
               />
             );
           })}
-
-          {/* Electrical sparks - random bursts */}
-          {[...Array(15)].map((_, i) => (
-            <div
-              key={`spark-${i}`}
-              className="absolute rounded-full bg-cyan-200 animate-spark"
-              style={{
-                width: '8px',
-                height: '8px',
-                left: `${40 + Math.random() * 20}%`,
-                top: `${40 + Math.random() * 20}%`,
-                filter: 'blur(1px)',
-                boxShadow: '0 0 20px rgba(0, 255, 255, 1)',
-                animationDelay: `${Math.random() * 3}s`,
-              }}
-            />
-          ))}
         </div>
-
-        {/* Electrical pathways - animated connection lines */}
-        <svg className="absolute inset-0 w-full h-full">
-          {[...Array(25)].map((_, i) => {
-            const x1 = Math.random() * 100;
-            const y1 = Math.random() * 100;
-            const x2 = Math.random() * 100;
-            const y2 = Math.random() * 100;
-            
-            return (
-              <g key={`path-${i}`}>
-                <line
-                  x1={`${x1}%`}
-                  y1={`${y1}%`}
-                  x2={`${x2}%`}
-                  y2={`${y2}%`}
-                  stroke="rgba(0, 255, 255, 0.3)"
-                  strokeWidth="2"
-                  className="animate-pulse-line"
-                  style={{
-                    animationDelay: `${i * 0.2}s`,
-                  }}
-                />
-                {/* Traveling impulse */}
-                <circle
-                  r="4"
-                  fill="rgba(255, 255, 255, 0.9)"
-                  filter="url(#glow)"
-                  className="animate-travel"
-                  style={{
-                    animationDelay: `${i * 0.2}s`,
-                  }}
-                >
-                  <animateMotion
-                    dur={`${2 + Math.random() * 2}s`}
-                    repeatCount="indefinite"
-                    begin={`${i * 0.2}s`}
-                  >
-                    <mpath href={`#path-${i}`} />
-                  </animateMotion>
-                </circle>
-                <path
-                  id={`path-${i}`}
-                  d={`M ${x1} ${y1} L ${x2} ${y2}`}
-                  fill="none"
-                />
-              </g>
-            );
-          })}
-          <defs>
-            <filter id="glow">
-              <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
-              <feMerge>
-                <feMergeNode in="coloredBlur"/>
-                <feMergeNode in="SourceGraphic"/>
-              </feMerge>
-            </filter>
-          </defs>
-        </svg>
       </div>
 
       {/* Content */}
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 py-12">
-        {/* Logo and Branding - Matching original slick design */}
-        <div className="text-center mb-20 animate-fade-in">
-          {/* Cepho logo with original styling */}
+        {/* Logo and Branding */}
+        <div className="text-center mb-16 animate-fade-in">
+          {/* Cepho logo with mixed colors - cream/white tones */}
           <h1 
-            className="font-bold mb-3 bg-gradient-to-r from-[#a855f7] via-[#d946ef] to-[#a855f7] bg-clip-text text-transparent"
+            className="font-bold mb-4"
             style={{
-              fontSize: 'clamp(4rem, 12vw, 8rem)',
+              fontSize: 'clamp(4rem, 12vw, 7rem)',
               fontFamily: 'system-ui, -apple-system, sans-serif',
               fontWeight: 800,
               letterSpacing: '-0.02em',
               lineHeight: 1,
+              background: 'linear-gradient(135deg, #f5f5dc 0%, #ffffff 25%, #ffe4b5 50%, #ffffff 75%, #f0e68c 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+              textShadow: '0 0 40px rgba(255, 255, 255, 0.1)',
             }}
           >
-            CEPHO.AI
+            Cepho
           </h1>
           
-          {/* Subtitle with original styling */}
+          {/* Tagline - white, smaller */}
           <p 
-            className="text-white/90"
+            className="text-white/80 mb-2"
             style={{
-              fontSize: 'clamp(1.25rem, 3vw, 2rem)',
+              fontSize: 'clamp(0.875rem, 2vw, 1rem)',
+              fontFamily: 'system-ui, -apple-system, sans-serif',
+              fontWeight: 400,
+              letterSpacing: '0.05em',
+              lineHeight: 1.5,
+            }}
+          >
+            The Greek for Brain
+          </p>
+
+          {/* Subtitle - white, smaller */}
+          <p 
+            className="text-white/70"
+            style={{
+              fontSize: 'clamp(1rem, 2.5vw, 1.25rem)',
               fontFamily: 'system-ui, -apple-system, sans-serif',
               fontWeight: 400,
               letterSpacing: '0.02em',
-              lineHeight: 1.4,
+              lineHeight: 1.5,
             }}
           >
-            The Brain - AI-Powered Executive Intelligence
+            AI powered Executive Intelligence
           </p>
         </div>
 
@@ -263,7 +217,7 @@ export default function LandingPage() {
                     />
                     <label
                       htmlFor="remember"
-                      className="text-sm text-gray-300 cursor-pointer select-none"
+                      className="text-base text-gray-300 cursor-pointer select-none"
                     >
                       Remember me
                     </label>
@@ -290,121 +244,60 @@ export default function LandingPage() {
         )}
       </div>
 
-      {/* Brain-like electrical animations */}
+      {/* Subtle animations */}
       <style>{`
-        @keyframes brain-flash {
+        @keyframes float-gentle {
           0%, 100% {
-            opacity: 0.2;
-            transform: scale(0.8);
+            transform: translate(0, 0);
+            opacity: 0.4;
           }
-          10% {
-            opacity: 1;
-            transform: scale(1.3);
+          33% {
+            transform: translate(30px, -20px);
+            opacity: 0.6;
           }
-          20% {
-            opacity: 0.3;
-            transform: scale(0.9);
-          }
-          30% {
-            opacity: 0.9;
-            transform: scale(1.2);
-          }
-          50% {
-            opacity: 0.1;
-            transform: scale(0.7);
-          }
-          70% {
-            opacity: 0.8;
-            transform: scale(1.1);
+          66% {
+            transform: translate(-20px, 30px);
+            opacity: 0.5;
           }
         }
 
-        @keyframes synapse-fire {
+        @keyframes pulse-slow {
           0%, 100% {
             opacity: 0.3;
-            transform: translate(-50%, -50%) scale(0.8);
-          }
-          15% {
-            opacity: 1;
-            transform: translate(-50%, -50%) scale(1.4);
-          }
-          30% {
-            opacity: 0.2;
-            transform: translate(-50%, -50%) scale(0.9);
+            transform: scale(1);
           }
           50% {
-            opacity: 0.9;
-            transform: translate(-50%, -50%) scale(1.3);
+            opacity: 0.5;
+            transform: scale(1.05);
           }
         }
 
-        @keyframes spark {
-          0%, 100% {
-            opacity: 0;
-            transform: scale(0);
-          }
-          50% {
-            opacity: 1;
-            transform: scale(2);
-          }
-        }
-
-        @keyframes electric-pulse {
+        @keyframes pulse-slower {
           0%, 100% {
             opacity: 0.4;
             transform: scale(1);
           }
           50% {
-            opacity: 0.7;
-            transform: scale(1.1);
-          }
-        }
-
-        @keyframes electric-pulse-fast {
-          0%, 100% {
-            opacity: 0.5;
-            transform: scale(1);
-          }
-          50% {
-            opacity: 0.9;
-            transform: scale(1.15);
-          }
-        }
-
-        @keyframes brain-core {
-          0%, 100% {
             opacity: 0.6;
-            transform: scale(1);
-          }
-          25% {
-            opacity: 0.95;
             transform: scale(1.08);
           }
-          50% {
-            opacity: 0.7;
-            transform: scale(1.02);
-          }
-          75% {
-            opacity: 0.9;
-            transform: scale(1.12);
-          }
         }
 
-        @keyframes pulse-line {
+        @keyframes twinkle {
           0%, 100% {
-            opacity: 0.2;
-            stroke-width: 1;
+            opacity: 0.3;
+            transform: scale(0.8);
           }
           50% {
-            opacity: 0.6;
-            stroke-width: 3;
+            opacity: 1;
+            transform: scale(1.2);
           }
         }
 
         @keyframes fade-in {
           from {
             opacity: 0;
-            transform: translateY(-30px);
+            transform: translateY(-20px);
           }
           to {
             opacity: 1;
@@ -415,7 +308,7 @@ export default function LandingPage() {
         @keyframes slide-up {
           from {
             opacity: 0;
-            transform: translateY(50px);
+            transform: translateY(40px);
           }
           to {
             opacity: 1;
@@ -423,32 +316,20 @@ export default function LandingPage() {
           }
         }
 
-        .animate-brain-flash {
-          animation: brain-flash linear infinite;
+        .animate-float-gentle {
+          animation: float-gentle linear infinite;
         }
 
-        .animate-synapse-fire {
-          animation: synapse-fire 0.8s ease-in-out infinite;
+        .animate-pulse-slow {
+          animation: pulse-slow 4s ease-in-out infinite;
         }
 
-        .animate-spark {
-          animation: spark 1.5s ease-in-out infinite;
+        .animate-pulse-slower {
+          animation: pulse-slower 5s ease-in-out infinite;
         }
 
-        .animate-electric-pulse {
-          animation: electric-pulse 2s ease-in-out infinite;
-        }
-
-        .animate-electric-pulse-fast {
-          animation: electric-pulse-fast 1.5s ease-in-out infinite;
-        }
-
-        .animate-brain-core {
-          animation: brain-core 1s ease-in-out infinite;
-        }
-
-        .animate-pulse-line {
-          animation: pulse-line 2s ease-in-out infinite;
+        .animate-twinkle {
+          animation: twinkle 2s ease-in-out infinite;
         }
 
         .animate-fade-in {
