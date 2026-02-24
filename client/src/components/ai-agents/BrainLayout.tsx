@@ -78,6 +78,8 @@ const menuItems: MenuItem[] = [
       { icon: Brain, label: "Enhanced COS", path: "/chief-of-staff-enhanced" },
       { icon: Activity, label: "Development Pathway", path: "/development-pathway" },
       { icon: Brain, label: "COS Training", path: "/cos-training" },
+      { icon: Workflow, label: "Workflow", path: "/workflow", count: 2 },
+      { icon: TrendingUp, label: "Innovation Hub", path: "/innovation-hub" },
     ]
   },
   { 
@@ -89,7 +91,7 @@ const menuItems: MenuItem[] = [
       { icon: Settings, label: "Accounts", path: "/email/accounts" },
     ]
   },
-  { icon: Volume2, label: "Victoria's Brief", path: "/victoria" },
+  { icon: Volume2, label: "Victoria's Brief", path: "/daily-brief" },
   { 
     icon: Users, 
     label: "Expert Network", 
@@ -99,16 +101,7 @@ const menuItems: MenuItem[] = [
       { icon: Users, label: "Persephone Board", path: "/persephone" },
     ]
   },
-  { 
-    icon: TrendingUp, 
-    label: "Innovation", 
-    path: "/innovation-hub",
-    children: [
-      { icon: TrendingUp, label: "Innovation Hub", path: "/innovation-hub" },
-      { icon: Workflow, label: "Workflow", path: "/workflow", count: 2 },
-      { icon: Globe, label: "Commercialization", path: "/commercialization" },
-    ]
-  },
+
   { 
     icon: Library, 
     label: "Knowledge", 
@@ -129,7 +122,14 @@ const menuItems: MenuItem[] = [
       { icon: TrendingUp, label: "Operations", path: "/operations" },
     ]
   },
-  { icon: Settings, label: "Settings", path: "/settings" },
+  { 
+    icon: Settings, 
+    label: "Settings", 
+    path: "/settings",
+    children: [
+      { icon: Globe, label: "Commercialization", path: "/commercialization" },
+    ]
+  },
 ];
 
 const SIDEBAR_WIDTH_KEY = "cepho-sidebar-width";

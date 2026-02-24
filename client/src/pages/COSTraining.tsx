@@ -137,25 +137,48 @@ export default function COSTraining() {
   const sampleScores = [63, 72, 58, 81, 45]; // Sample KPI scores
   const scoreImpact = calculateOverallScore(sampleScores, CURRENT_COS_TRAINING.percentage);
 
+  const [trainingMode, setTrainingMode] = useState<'cos' | 'digital-twin'>('cos');
+
   return (
     <div className="container py-8 space-y-8">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">COS Training</h1>
+          <h1 className="text-3xl font-bold tracking-tight">AI Training Center</h1>
           <p className="text-muted-foreground mt-1">
-            Train your Chief of Staff to unlock full assessment accuracy
+            Train your Chief of Staff and Digital Twin to unlock full capabilities
           </p>
         </div>
-        <Badge 
-          variant="outline" 
-          className="text-lg px-4 py-2 bg-primary/10 border-primary/30"
-        >
-          Level {currentLevel.level}: {currentLevel.name}
-        </Badge>
+        <div className="flex items-center gap-3">
+          <Button
+            variant={trainingMode === 'cos' ? 'default' : 'outline'}
+            onClick={() => setTrainingMode('cos')}
+            className="flex items-center gap-2"
+          >
+            <Briefcase className="w-4 h-4" />
+            COS Training
+          </Button>
+          <Button
+            variant={trainingMode === 'digital-twin' ? 'default' : 'outline'}
+            onClick={() => setTrainingMode('digital-twin')}
+            className="flex items-center gap-2"
+          >
+            <Brain className="w-4 h-4" />
+            Digital Twin
+          </Button>
+          {trainingMode === 'cos' && (
+            <Badge 
+              variant="outline" 
+              className="text-lg px-4 py-2 bg-primary/10 border-primary/30"
+            >
+              Level {currentLevel.level}: {currentLevel.name}
+            </Badge>
+          )}
+        </div>
       </div>
 
       {/* Training Progress Overview */}
+      {trainingMode === 'cos' ? (
       <div className="grid gap-6 md:grid-cols-3">
         <Card className="md:col-span-2">
           <CardHeader>
@@ -366,6 +389,117 @@ export default function COSTraining() {
         onComplete={() => selectedModule && handleCompleteModule(selectedModule)}
         onClose={() => setSelectedModule(null)}
       />
+      </div>
+      ) : (
+        /* Digital Twin Training */
+        <div className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Brain className="h-5 w-5 text-primary" />
+                Digital Twin Training
+              </CardTitle>
+              <CardDescription>
+                Train your Digital Twin to better understand your preferences, decision-making patterns, and communication style
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-purple-500/30 rounded-lg p-6">
+                <h3 className="text-lg font-semibold mb-3">How Digital Twin Training Works</h3>
+                <div className="space-y-3 text-sm text-muted-foreground">
+                  <p>Your Digital Twin learns from:</p>
+                  <ul className="list-disc list-inside space-y-2 ml-4">
+                    <li>Your decision history and patterns</li>
+                    <li>Communication style and tone preferences</li>
+                    <li>Task prioritization and delegation habits</li>
+                    <li>Meeting and calendar management preferences</li>
+                    <li>Email response patterns and templates</li>
+                  </ul>
+                </div>
+              </div>
+
+              {/* Training Categories */}
+              <div className="grid gap-4 md:grid-cols-2">
+                <Card className="border-2 hover:border-primary/50 transition-all cursor-pointer">
+                  <CardHeader>
+                    <CardTitle className="text-base flex items-center gap-2">
+                      <Target className="h-4 w-4 text-blue-500" />
+                      Decision Patterns
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm text-muted-foreground mb-4">
+                      Analyze past decisions to predict future choices
+                    </p>
+                    <Progress value={65} className="h-2 mb-2" />
+                    <p className="text-xs text-muted-foreground">65% trained - 127 decisions analyzed</p>
+                  </CardContent>
+                </Card>
+
+                <Card className="border-2 hover:border-primary/50 transition-all cursor-pointer">
+                  <CardHeader>
+                    <CardTitle className="text-base flex items-center gap-2">
+                      <Zap className="h-4 w-4 text-amber-500" />
+                      Communication Style
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm text-muted-foreground mb-4">
+                      Learn your tone, vocabulary, and response patterns
+                    </p>
+                    <Progress value={42} className="h-2 mb-2" />
+                    <p className="text-xs text-muted-foreground">42% trained - 89 emails analyzed</p>
+                  </CardContent>
+                </Card>
+
+                <Card className="border-2 hover:border-primary/50 transition-all cursor-pointer">
+                  <CardHeader>
+                    <CardTitle className="text-base flex items-center gap-2">
+                      <Users className="h-4 w-4 text-green-500" />
+                      Delegation Preferences
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm text-muted-foreground mb-4">
+                      Understand which tasks you delegate and to whom
+                    </p>
+                    <Progress value={58} className="h-2 mb-2" />
+                    <p className="text-xs text-muted-foreground">58% trained - 43 delegations tracked</p>
+                  </CardContent>
+                </Card>
+
+                <Card className="border-2 hover:border-primary/50 transition-all cursor-pointer">
+                  <CardHeader>
+                    <CardTitle className="text-base flex items-center gap-2">
+                      <BookOpen className="h-4 w-4 text-purple-500" />
+                      Knowledge Base
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm text-muted-foreground mb-4">
+                      Build context about your business, industry, and goals
+                    </p>
+                    <Progress value={31} className="h-2 mb-2" />
+                    <p className="text-xs text-muted-foreground">31% trained - 24 documents processed</p>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Training Actions */}
+              <div className="flex gap-3">
+                <Button className="flex-1">
+                  <Brain className="w-4 h-4 mr-2" />
+                  Start Training Session
+                </Button>
+                <Button variant="outline">
+                  <BarChart3 className="w-4 h-4 mr-2" />
+                  View Analytics
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
     </div>
   );
 }

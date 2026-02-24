@@ -191,6 +191,72 @@ export default function ProjectGenesisPage() {
             </Button>
           </div>
 
+          {/* AI Agents Section */}
+          <div className="bg-gray-800/30 backdrop-blur-sm rounded-xl border border-gray-700/50 p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-xl font-semibold text-white flex items-center gap-2">
+                <Brain className="w-5 h-5 text-cyan-400" />
+                AI Agents Working on Projects
+              </h2>
+              <Badge variant="outline" className="bg-cyan-500/20 text-cyan-400 border-cyan-500/50">
+                {savedProjects.length} Active
+              </Badge>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {/* Financial Analyst Agent */}
+              <div className="bg-gray-900/50 rounded-lg border border-gray-700/50 p-4 hover:border-cyan-500/50 transition-all">
+                <div className="flex items-start gap-3">
+                  <div className="p-2 rounded-lg bg-cyan-500/20">
+                    <DollarSign className="w-5 h-5 text-cyan-400" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="font-semibold text-white mb-1">Financial Analyst</h3>
+                    <p className="text-xs text-gray-400 mb-2">Analyzing market trends & projections</p>
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                      <span className="text-xs text-emerald-400">Active</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Market Research Agent */}
+              <div className="bg-gray-900/50 rounded-lg border border-gray-700/50 p-4 hover:border-purple-500/50 transition-all">
+                <div className="flex items-start gap-3">
+                  <div className="p-2 rounded-lg bg-purple-500/20">
+                    <BarChart3 className="w-5 h-5 text-purple-400" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="font-semibold text-white mb-1">Market Researcher</h3>
+                    <p className="text-xs text-gray-400 mb-2">Gathering competitive intelligence</p>
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                      <span className="text-xs text-emerald-400">Active</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Legal Compliance Agent */}
+              <div className="bg-gray-900/50 rounded-lg border border-gray-700/50 p-4 hover:border-amber-500/50 transition-all">
+                <div className="flex items-start gap-3">
+                  <div className="p-2 rounded-lg bg-amber-500/20">
+                    <Shield className="w-5 h-5 text-amber-400" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="font-semibold text-white mb-1">Legal Advisor</h3>
+                    <p className="text-xs text-gray-400 mb-2">Reviewing compliance requirements</p>
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
+                      <span className="text-xs text-amber-400">Standby</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
           {/* Loading State */}
           {projectsLoading && (
             <div className="flex items-center justify-center py-12">
