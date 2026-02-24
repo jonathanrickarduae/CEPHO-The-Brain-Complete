@@ -193,85 +193,82 @@ export default function LandingPage() {
 
       {/* Content */}
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 py-12">
-        {/* Logo and Branding */}
-        <div className="text-center mb-16 animate-fade-in">
-          <h1 className="text-7xl md:text-9xl font-bold mb-6 bg-gradient-to-r from-purple-400 via-fuchsia-500 to-purple-600 bg-clip-text text-transparent drop-shadow-2xl animate-title-pulse">
+        {/* Logo and Branding - Matching original slick design */}
+        <div className="text-center mb-20 animate-fade-in">
+          {/* Cepho logo with original styling */}
+          <h1 
+            className="font-bold mb-3 bg-gradient-to-r from-[#a855f7] via-[#d946ef] to-[#a855f7] bg-clip-text text-transparent"
+            style={{
+              fontSize: 'clamp(4rem, 12vw, 8rem)',
+              fontFamily: 'system-ui, -apple-system, sans-serif',
+              fontWeight: 800,
+              letterSpacing: '-0.02em',
+              lineHeight: 1,
+            }}
+          >
             Cepho
           </h1>
-          <p className="text-white text-2xl md:text-3xl font-light tracking-wide">
-            Your AI Chief of Staff
+          
+          {/* Tagline with original styling */}
+          <p 
+            className="text-gray-400 italic"
+            style={{
+              fontSize: 'clamp(0.875rem, 2vw, 1.125rem)',
+              fontFamily: 'system-ui, -apple-system, sans-serif',
+              fontWeight: 400,
+              letterSpacing: '0.01em',
+              marginBottom: '3rem',
+            }}
+          >
+            From the Greek for brain
+          </p>
+
+          {/* Main heading */}
+          <h2 
+            className="text-white font-bold mb-4"
+            style={{
+              fontSize: 'clamp(2rem, 5vw, 3rem)',
+              fontFamily: 'system-ui, -apple-system, sans-serif',
+              fontWeight: 700,
+              letterSpacing: '-0.01em',
+              lineHeight: 1.2,
+            }}
+          >
+            Get you operating at 100
+          </h2>
+
+          {/* Description */}
+          <p 
+            className="text-gray-300 max-w-2xl mx-auto"
+            style={{
+              fontSize: 'clamp(1rem, 2.5vw, 1.125rem)',
+              fontFamily: 'system-ui, -apple-system, sans-serif',
+              fontWeight: 400,
+              lineHeight: 1.6,
+              letterSpacing: '0.005em',
+            }}
+          >
+            Your AI-powered Chief of Staff. One interface to manage your life,
+            amplified by intelligence that learns from you and works alongside you.
           </p>
         </div>
 
-        {/* Login Form */}
+        {/* Login Button - Matching original design */}
         {showLogin && (
           <div className="w-full max-w-md animate-slide-up">
-            <div className="backdrop-blur-xl bg-black/40 p-8 rounded-3xl border border-white/10 shadow-2xl">
-              <form onSubmit={handleLogin} className="space-y-6">
-                <div className="space-y-4">
-                  <div className="relative group">
-                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-purple-400 transition-colors" />
-                    <Input
-                      type="email"
-                      placeholder="Email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      required
-                      className="pl-12 h-14 bg-white/5 border-white/20 text-white placeholder:text-gray-500 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/50 rounded-xl transition-all"
-                    />
-                  </div>
-
-                  <div className="relative group">
-                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-purple-400 transition-colors" />
-                    <Input
-                      type="password"
-                      placeholder="Password"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      required
-                      className="pl-12 h-14 bg-white/5 border-white/20 text-white placeholder:text-gray-500 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/50 rounded-xl transition-all"
-                    />
-                  </div>
-
-                  <div className="flex items-center space-x-2 pt-2">
-                    <Checkbox
-                      id="remember"
-                      checked={rememberMe}
-                      onCheckedChange={(checked) => setRememberMe(checked as boolean)}
-                      className="border-white/30 data-[state=checked]:bg-purple-600 data-[state=checked]:border-purple-600"
-                    />
-                    <label
-                      htmlFor="remember"
-                      className="text-sm text-gray-300 cursor-pointer select-none"
-                    >
-                      Remember me
-                    </label>
-                  </div>
-                </div>
-
-                <Button
-                  type="submit"
-                  className="w-full h-14 bg-gradient-to-r from-purple-500 via-fuchsia-500 to-purple-600 hover:from-purple-600 hover:via-fuchsia-600 hover:to-purple-700 text-white font-semibold text-lg rounded-xl transition-all duration-300 shadow-lg shadow-purple-500/50 hover:shadow-purple-600/60 hover:scale-[1.02]"
-                  disabled={isLoading}
-                >
-                  {isLoading ? (
-                    <>
-                      <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                      Signing in...
-                    </>
-                  ) : (
-                    'Sign in to Continue'
-                  )}
-                </Button>
-              </form>
-
-              <p className="text-center text-gray-400 text-sm mt-6">
-                Don't have an account?{' '}
-                <a href="/waitlist" className="text-purple-400 hover:text-purple-300 font-medium transition-colors">
-                  Join the waitlist
-                </a>
-              </p>
-            </div>
+            <Button
+              onClick={() => navigate('/dashboard')}
+              className="w-full h-16 text-white font-semibold rounded-full transition-all duration-300 shadow-xl hover:scale-[1.02]"
+              style={{
+                background: 'linear-gradient(90deg, #d946ef 0%, #a855f7 100%)',
+                fontSize: '1.125rem',
+                fontFamily: 'system-ui, -apple-system, sans-serif',
+                fontWeight: 600,
+                letterSpacing: '0.01em',
+              }}
+            >
+              Sign in to Continue
+            </Button>
           </div>
         )}
       </div>
@@ -387,15 +384,6 @@ export default function LandingPage() {
           }
         }
 
-        @keyframes title-pulse {
-          0%, 100% {
-            filter: drop-shadow(0 0 20px rgba(168, 85, 247, 0.5));
-          }
-          50% {
-            filter: drop-shadow(0 0 40px rgba(168, 85, 247, 0.8));
-          }
-        }
-
         @keyframes fade-in {
           from {
             opacity: 0;
@@ -444,10 +432,6 @@ export default function LandingPage() {
 
         .animate-pulse-line {
           animation: pulse-line 2s ease-in-out infinite;
-        }
-
-        .animate-title-pulse {
-          animation: title-pulse 3s ease-in-out infinite;
         }
 
         .animate-fade-in {
