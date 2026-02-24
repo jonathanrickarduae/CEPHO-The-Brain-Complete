@@ -196,7 +196,7 @@ export default function LandingPage() {
         {/* Logo and Branding */}
         <div className="text-center mb-16 animate-fade-in">
           <h1 className="text-7xl md:text-9xl font-bold mb-6 bg-gradient-to-r from-purple-400 via-fuchsia-500 to-purple-600 bg-clip-text text-transparent drop-shadow-2xl animate-title-pulse">
-            Cepho-AI
+            Cepho
           </h1>
           <p className="text-white text-2xl md:text-3xl font-light tracking-wide">
             Your AI Chief of Staff
