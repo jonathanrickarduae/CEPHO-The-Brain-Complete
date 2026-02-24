@@ -52,149 +52,189 @@ export default function LandingPage() {
   };
 
   if (isLoading) {
-    return <LoadingScreen message="Signing you in..." />;
+    return <LoadingScreen />;
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 flex items-center justify-center p-6 relative overflow-hidden">
-      {/* Animated Background */}
+    <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-[#1a3a3a] via-[#0d9488] to-[#0a0a0a]">
+      {/* Animated Neurons/Particles */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+        {[...Array(20)].map((_, i) => (
+          <div
+            key={i}
+            className="absolute rounded-full bg-white opacity-60 blur-sm animate-float"
+            style={{
+              width: `${Math.random() * 30 + 10}px`,
+              height: `${Math.random() * 30 + 10}px`,
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              animationDelay: `${Math.random() * 5}s`,
+              animationDuration: `${Math.random() * 10 + 10}s`,
+            }}
+          />
+        ))}
+        
+        {/* Central glowing cluster */}
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-96 h-96">
+          <div className="absolute inset-0 bg-cyan-400 rounded-full blur-3xl opacity-40 animate-pulse" />
+          {[...Array(8)].map((_, i) => (
+            <div
+              key={`cluster-${i}`}
+              className="absolute rounded-full bg-white opacity-80 blur-md animate-pulse"
+              style={{
+                width: `${Math.random() * 40 + 20}px`,
+                height: `${Math.random() * 40 + 20}px`,
+                left: `${40 + Math.random() * 20}%`,
+                top: `${40 + Math.random() * 20}%`,
+                animationDelay: `${Math.random() * 2}s`,
+              }}
+            />
+          ))}
+        </div>
       </div>
 
-      {/* Main Content */}
-      <div className="relative z-10 w-full max-w-md">
-        {/* Animated Brain Logo */}
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center justify-center w-32 h-32 mb-6 relative">
-            {/* Pulsing rings */}
-            <div className="absolute inset-0 rounded-full bg-cyan-500/20 animate-ping" />
-            <div className="absolute inset-2 rounded-full bg-cyan-500/30 animate-pulse" />
-            
-            {/* Brain icon */}
-            <div className="relative z-10 w-20 h-20 flex items-center justify-center bg-gradient-to-br from-cyan-500 to-blue-600 rounded-full shadow-2xl shadow-cyan-500/50">
-              <Brain className="w-12 h-12 text-white animate-pulse" />
-            </div>
-          </div>
-
-          <h1 className="text-5xl font-bold text-white mb-3 bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
-            CEPHO.AI
+      {/* Content */}
+      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 py-12">
+        {/* Logo and Branding */}
+        <div className="text-center mb-12 animate-fade-in">
+          <h1 className="text-7xl md:text-8xl font-bold mb-4 bg-gradient-to-r from-purple-400 via-pink-500 to-purple-600 bg-clip-text text-transparent">
+            Cepho
           </h1>
-          <p className="text-gray-400 text-lg">
-            The Brain - AI-Powered Executive Intelligence
+          <p className="text-gray-400 text-lg italic mb-16">
+            From the Greek for brain
+          </p>
+
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+            Get you operating at 100
+          </h2>
+          <p className="text-gray-300 text-lg max-w-2xl mx-auto mb-12 leading-relaxed">
+            Your AI-powered Chief of Staff. One interface to manage your life,
+            amplified by intelligence that learns from you and works alongside you.
           </p>
         </div>
 
         {/* Login Form */}
-        <div 
-          className={`bg-gray-800/50 backdrop-blur-xl border border-gray-700/50 rounded-2xl p-8 shadow-2xl transition-all duration-1000 ${
-            showLogin ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-          }`}
-        >
-          <form onSubmit={handleLogin} className="space-y-6">
-            {/* Email Input */}
-            <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
-                Email Address
-              </label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                <Input
-                  type="email"
-                  placeholder="you@company.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  autoComplete="email"
-                  className="pl-11 bg-gray-900/50 border-gray-600 text-white placeholder:text-gray-500 focus:border-cyan-500 focus:ring-cyan-500/20"
-                />
-              </div>
-            </div>
+        {showLogin && (
+          <div className="w-full max-w-md animate-slide-up">
+            <form onSubmit={handleLogin} className="space-y-6">
+              <div className="space-y-4">
+                <div className="relative">
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <Input
+                    type="email"
+                    placeholder="Email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    className="pl-10 bg-black/30 border-gray-700 text-white placeholder:text-gray-500 focus:border-purple-500 focus:ring-purple-500"
+                  />
+                </div>
 
-            {/* Password Input */}
-            <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
-                Password
-              </label>
-              <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                <Input
-                  type="password"
-                  placeholder="Enter your password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  autoComplete="current-password"
-                  className="pl-11 bg-gray-900/50 border-gray-600 text-white placeholder:text-gray-500 focus:border-cyan-500 focus:ring-cyan-500/20"
-                />
-              </div>
-            </div>
+                <div className="relative">
+                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <Input
+                    type="password"
+                    placeholder="Password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    className="pl-10 bg-black/30 border-gray-700 text-white placeholder:text-gray-500 focus:border-purple-500 focus:ring-purple-500"
+                  />
+                </div>
 
-            {/* Remember Me */}
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                <Checkbox
-                  id="remember"
-                  checked={rememberMe}
-                  onCheckedChange={(checked) => setRememberMe(checked as boolean)}
-                  className="border-gray-600 data-[state=checked]:bg-cyan-500 data-[state=checked]:border-cyan-500"
-                />
-                <label
-                  htmlFor="remember"
-                  className="text-sm text-gray-400 cursor-pointer"
-                >
-                  Remember me
-                </label>
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="remember"
+                    checked={rememberMe}
+                    onCheckedChange={(checked) => setRememberMe(checked as boolean)}
+                    className="border-gray-700 data-[state=checked]:bg-purple-600 data-[state=checked]:border-purple-600"
+                  />
+                  <label
+                    htmlFor="remember"
+                    className="text-sm text-gray-300 cursor-pointer"
+                  >
+                    Remember me
+                  </label>
+                </div>
               </div>
-              <a
-                href="#"
-                className="text-sm text-cyan-400 hover:text-cyan-300 transition-colors"
+
+              <Button
+                type="submit"
+                className="w-full bg-gradient-to-r from-purple-500 via-pink-500 to-purple-600 hover:from-purple-600 hover:via-pink-600 hover:to-purple-700 text-white font-semibold py-6 text-lg rounded-2xl transition-all duration-300 shadow-lg shadow-purple-500/50 hover:shadow-purple-600/60"
+                disabled={isLoading}
               >
-                Forgot password?
-              </a>
-            </div>
+                {isLoading ? (
+                  <>
+                    <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                    Signing in...
+                  </>
+                ) : (
+                  'Sign in to Continue'
+                )}
+              </Button>
+            </form>
 
-            {/* Login Button */}
-            <Button
-              type="submit"
-              disabled={isLoading}
-              className="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-semibold py-6 rounded-xl shadow-lg shadow-cyan-500/30 transition-all duration-300 hover:shadow-cyan-500/50"
-            >
-              {isLoading ? (
-                <>
-                  <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                  Signing In...
-                </>
-              ) : (
-                'Sign In'
-              )}
-            </Button>
-          </form>
-
-          {/* Additional Links */}
-          <div className="mt-6 pt-6 border-t border-gray-700/50 text-center">
-            <p className="text-sm text-gray-400">
+            <p className="text-center text-gray-400 text-sm mt-6">
               Don't have an account?{' '}
-              <a href="#" className="text-cyan-400 hover:text-cyan-300 font-semibold transition-colors">
-                Contact Sales
+              <a href="/waitlist" className="text-purple-400 hover:text-purple-300 font-medium">
+                Join the waitlist
               </a>
             </p>
           </div>
-        </div>
-
-        {/* Footer */}
-        <div className="mt-8 text-center text-sm text-gray-500">
-          <p>© 2026 CEPHO.AI. All rights reserved.</p>
-          <div className="mt-2 space-x-4">
-            <a href="#" className="hover:text-cyan-400 transition-colors">Privacy</a>
-            <span>•</span>
-            <a href="#" className="hover:text-cyan-400 transition-colors">Terms</a>
-            <span>•</span>
-            <a href="#" className="hover:text-cyan-400 transition-colors">Support</a>
-          </div>
-        </div>
+        )}
       </div>
+
+      {/* CSS for animations */}
+      <style>{`
+        @keyframes float {
+          0%, 100% {
+            transform: translate(0, 0);
+          }
+          25% {
+            transform: translate(20px, -20px);
+          }
+          50% {
+            transform: translate(-20px, 20px);
+          }
+          75% {
+            transform: translate(20px, 20px);
+          }
+        }
+
+        @keyframes fade-in {
+          from {
+            opacity: 0;
+            transform: translateY(-20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @keyframes slide-up {
+          from {
+            opacity: 0;
+            transform: translateY(40px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        .animate-float {
+          animation: float linear infinite;
+        }
+
+        .animate-fade-in {
+          animation: fade-in 1s ease-out;
+        }
+
+        .animate-slide-up {
+          animation: slide-up 0.8s ease-out;
+        }
+      `}</style>
     </div>
   );
 }
