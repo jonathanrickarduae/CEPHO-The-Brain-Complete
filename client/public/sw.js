@@ -1,5 +1,7 @@
 // The Brain - Service Worker
-const CACHE_NAME = 'the-brain-v1';
+// Update this timestamp to force cache refresh on all devices
+const CACHE_VERSION = 'the-brain-v1-' + '20260224-001';
+const CACHE_NAME = CACHE_VERSION;
 const OFFLINE_URL = '/offline.html';
 
 // Assets to cache on install
@@ -25,6 +27,8 @@ self.addEventListener('install', (event) => {
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((cacheNames) => {
+      console.log('[SW] Current cache:', CACHE_NAME);
+      console.log('[SW] Found caches:', cacheNames);
       return Promise.all(
         cacheNames
           .filter((name) => name !== CACHE_NAME)
@@ -33,7 +37,10 @@ self.addEventListener('activate', (event) => {
             return caches.delete(name);
           })
       );
-    }).then(() => self.clients.claim())
+    }).then(() => {
+      console.log('[SW] Service worker activated, claiming clients');
+      return self.clients.claim();
+    })
   );
 });
 

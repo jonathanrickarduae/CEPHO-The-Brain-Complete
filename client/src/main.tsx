@@ -7,6 +7,10 @@ import superjson from "superjson";
 import App from "./App";
 import { getLoginUrl } from "./const";
 import "./index.css";
+import { checkAppVersion } from "./utils/cacheBuster";
+
+// Check app version and force reload if changed
+checkAppVersion();
 
 const queryClient = new QueryClient();
 
