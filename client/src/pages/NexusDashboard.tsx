@@ -3,7 +3,8 @@ import { useLocation } from "wouter";
 import { 
   Sun, Users, Lock, Mic, MicOff, Send, 
   Fingerprint, FolderKanban, BookOpen, Brain, LayoutDashboard,
-  ChevronRight, AlertCircle, Shield, ShieldCheck
+  ChevronRight, AlertCircle, Shield, ShieldCheck, Rocket, TrendingUp,
+  CheckCircle2, Clock, Lightbulb, Activity, Zap
 } from "lucide-react";
 import { PageHeader } from '@/components/layout/PageHeader';
 import { LearningBadge } from '@/components/expert-evolution/LearningIndicator';
@@ -14,14 +15,80 @@ import OpenClawChat from '@/components/ai-agents/OpenClawChat';
 import SkillCards from '@/components/expert-evolution/SkillCards';
 
 
-// Notification badge component
-function NotificationBadge({ count, urgent = false }: { count: number; urgent?: boolean }) {
-  if (count === 0) return null;
+// RAG Status Indicator Component
+function RAGStatus({ status, label, count }: { status: 'red' | 'amber' | 'green', label: string, count?: number }) {
+  const colors = {
+    red: 'bg-red-500/20 border-red-500/50 text-red-400',
+    amber: 'bg-amber-500/20 border-amber-500/50 text-amber-400',
+    green: 'bg-emerald-500/20 border-emerald-500/50 text-emerald-400',
+  };
+  
+  const dotColors = {
+    red: 'bg-red-500',
+    amber: 'bg-amber-500',
+    green: 'bg-emerald-500',
+  };
+
   return (
-    <div className={`absolute top-2 right-2 min-w-[20px] h-5 px-1.5 rounded-full flex items-center justify-center text-xs font-bold text-white ${
-      urgent ? 'bg-red-500 animate-pulse' : 'bg-primary'
-    }`}>
-      {count > 99 ? '99+' : count}
+    <div className={`flex items-center gap-2 px-3 py-2 rounded-lg border-2 ${colors[status]}`}>
+      <div className={`w-2 h-2 rounded-full ${dotColors[status]} ${status === 'green' ? 'animate-pulse' : ''}`} />
+      <span className="text-sm font-medium">{label}</span>
+      {count !== undefined && <span className="text-xs opacity-70">({count})</span>}
+    </div>
+  );
+}
+
+// Metric Card Component
+function MetricCard({ icon: Icon, label, value, trend, onClick }: { 
+  icon: any, 
+  label: string, 
+  value: string | number, 
+  trend?: 'up' | 'down' | 'stable',
+  onClick?: () => void 
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className="flex items-center gap-3 p-4 rounded-xl border-2 border-border bg-card hover:bg-card/80 hover:border-primary/50 transition-all duration-200 text-left w-full"
+    >
+      <div className="p-2 rounded-lg bg-primary/20">
+        <Icon className="w-5 h-5 text-primary" />
+      </div>
+      <div className="flex-1">
+        <p className="text-xs text-muted-foreground">{label}</p>
+        <p className="text-2xl font-bold text-foreground">{value}</p>
+      </div>
+      {trend && (
+        <TrendingUp className={`w-4 h-4 ${trend === 'up' ? 'text-emerald-500' : 'text-muted-foreground'}`} />
+      )}
+    </button>
+  );
+}
+
+// Activity Item Component
+function ActivityItem({ icon: Icon, title, subtitle, time, status }: {
+  icon: any,
+  title: string,
+  subtitle: string,
+  time: string,
+  status?: 'active' | 'complete' | 'pending'
+}) {
+  const statusColors = {
+    active: 'text-blue-400',
+    complete: 'text-emerald-400',
+    pending: 'text-amber-400',
+  };
+
+  return (
+    <div className="flex items-start gap-3 p-3 rounded-lg hover:bg-card/50 transition-colors">
+      <div className={`p-2 rounded-lg bg-primary/10 ${status ? statusColors[status] : ''}`}>
+        <Icon className="w-4 h-4" />
+      </div>
+      <div className="flex-1 min-w-0">
+        <p className="text-sm font-medium text-foreground truncate">{title}</p>
+        <p className="text-xs text-muted-foreground truncate">{subtitle}</p>
+      </div>
+      <span className="text-xs text-muted-foreground whitespace-nowrap">{time}</span>
     </div>
   );
 }
@@ -34,12 +101,6 @@ export default function NexusDashboard() {
   
   // Dashboard insights from API
   const { data: insightsData, isLoading: insightsLoading } = trpc.dashboard.getInsights.useQuery();
-  
-  // Dynamic notification counts from insights
-  const unreadSignals = 0; // From daily brief API
-  const expertRecommendations = insightsData?.insights.expertUtilization.available || 0;
-  const urgentTasks = insightsData?.insights.taskMetrics.overdue || 0;
-  const newDocuments = 0; // From library API
   
   // Voice input
   const { 
@@ -85,250 +146,239 @@ export default function NexusDashboard() {
     e.target.style.height = Math.min(e.target.scrollHeight, 100) + 'px';
   };
 
-  // Navigation buttons - Ordered by workflow priority:
-  // Signal → Chief of Staff → AI SMEs → Workflow → Project Genesis → Library → Vault
-  const buttons = [
+  // Quick Access Skill Buttons
+  const skillButtons = [
     { 
-      id: 1, 
-      label: "THE SIGNAL", 
-      sub: "Morning Briefing", 
-      icon: Sun, 
-      gradient: "from-amber-500/20 to-orange-500/20",
-      border: "border-amber-500/50 hover:border-amber-400",
-      iconBg: "bg-amber-500/30",
-      iconColor: "text-amber-400",
-      path: "/daily-brief",
-      badge: <NotificationBadge count={unreadSignals} /> // Dynamic unread briefings
+      label: "Project Genesis", 
+      icon: Rocket, 
+      path: "/project-genesis",
+      gradient: "from-purple-500/20 to-pink-500/20",
+      border: "border-purple-500/50 hover:border-purple-400",
     },
     { 
-      id: 2, 
-      label: "CHIEF OF STAFF", 
-      sub: "Level 2: Learning", 
-      icon: Fingerprint, 
-      gradient: "from-fuchsia-500/20 to-purple-500/20",
-      border: "border-fuchsia-500/50 hover:border-fuchsia-400",
-      iconBg: "bg-fuchsia-500/30",
-      iconColor: "text-fuchsia-400",
-      path: "/digital-twin",
-      badge: <LearningBadge className="absolute top-2 right-2" />
-    },
-    { 
-      id: 3, 
-      label: "AI-SMEs", 
-      sub: "287 Experts Ready", 
-      icon: Users, 
+      label: "AI-SME Experts", 
+      icon: Brain, 
+      path: "/ai-experts",
       gradient: "from-cyan-500/20 to-blue-500/20",
       border: "border-cyan-500/50 hover:border-cyan-400",
-      iconBg: "bg-cyan-500/30",
-      iconColor: "text-cyan-400",
-      path: "/ai-experts",
-      badge: <NotificationBadge count={expertRecommendations} /> // Dynamic expert recommendations
     },
     { 
-      id: 4, 
-      label: "WORKFLOW", 
-      sub: "6 Active Projects", 
-      icon: FolderKanban, 
-      gradient: "from-emerald-500/20 to-green-500/20",
+      label: "Digital Twin", 
+      icon: Users, 
+      path: "/digital-twin",
+      gradient: "from-blue-500/20 to-indigo-500/20",
+      border: "border-blue-500/50 hover:border-blue-400",
+    },
+    { 
+      label: "The Signal", 
+      icon: Sun, 
+      path: "/daily-brief",
+      gradient: "from-amber-500/20 to-orange-500/20",
+      border: "border-amber-500/50 hover:border-amber-400",
+    },
+    { 
+      label: "Chief of Staff", 
+      icon: Fingerprint, 
+      path: "/chief-of-staff",
+      gradient: "from-emerald-500/20 to-teal-500/20",
       border: "border-emerald-500/50 hover:border-emerald-400",
-      iconBg: "bg-emerald-500/30",
-      iconColor: "text-emerald-400",
-      path: "/workflow",
-      badge: <NotificationBadge count={urgentTasks} urgent /> // Dynamic urgent tasks
     },
     { 
-      id: 5, 
-      label: "LIBRARY", 
-      sub: "Knowledge Base", 
+      label: "Innovation Hub", 
+      icon: Lightbulb, 
+      path: "/innovation-hub",
+      gradient: "from-yellow-500/20 to-amber-500/20",
+      border: "border-yellow-500/50 hover:border-yellow-400",
+    },
+    { 
+      label: "Knowledge Library", 
       icon: BookOpen, 
-      gradient: "from-pink-500/20 to-rose-500/20",
-      border: "border-pink-500/50 hover:border-pink-400",
-      iconBg: "bg-pink-500/30",
-      iconColor: "text-pink-400",
       path: "/library",
-      badge: <NotificationBadge count={newDocuments} /> // Dynamic new documents
-    },
-    { 
-      id: 6, 
-      label: "THE VAULT", 
-      sub: "Secure Storage", 
-      icon: Lock, 
-      gradient: "from-slate-500/20 to-gray-500/20",
-      border: "border-slate-500/50 hover:border-slate-400",
-      iconBg: "bg-slate-500/30",
-      iconColor: "text-slate-400",
-      path: "/vault"
+      gradient: "from-indigo-500/20 to-purple-500/20",
+      border: "border-indigo-500/50 hover:border-indigo-400",
     },
   ];
 
   return (
     <div className="h-[calc(100vh-56px)] md:h-screen flex flex-col bg-background">
       {/* Header */}
-      <PageHeader 
-        icon={LayoutDashboard} 
-        title="The Nexus"
-        iconColor="text-cyan-400"
-      >
-        <div className="flex items-center gap-4">
-          {/* Governance Mode Toggle */}
-          <button
-            onClick={() => setGovernanceMode(prev => prev === 'everything' ? 'governed' : 'everything')}
-            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border-2 transition-all duration-300 ${
-              governanceMode === 'governed' 
-                ? 'bg-emerald-500/20 border-emerald-500/50 text-emerald-400' 
-                : 'bg-amber-500/20 border-amber-500/50 text-amber-400'
-            } hover:scale-105 active:scale-95`}
-            title={governanceMode === 'governed' ? 'Governed Mode: Only approved APIs' : 'Everything Mode: All APIs available'}
-          >
-            {governanceMode === 'governed' ? (
-              <><ShieldCheck className="w-4 h-4" /><span className="text-xs font-mono">GOVERNED</span></>
-            ) : (
-              <><Shield className="w-4 h-4" /><span className="text-xs font-mono">EVERYTHING</span></>
-            )}
-          </button>
-          
-          <div className="flex items-center gap-2">
-            <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="text-xs text-foreground/70 font-mono">ONLINE</span>
-          </div>
-        </div>
-      </PageHeader>
-
-      {/* Main Content */}
-      <div className="flex-1 flex flex-col p-4 sm:p-6 overflow-hidden">
-        {/* Title with Animated Brain */}
-        <div className="text-center mb-4 sm:mb-6 mt-8 sm:mt-12">
-          <div className="flex items-center justify-center gap-2 mb-2">
-            {/* Animated Neuron Brain - Cyan/Neon Green, No Circle */}
-            <div className="relative w-12 h-12 sm:w-14 sm:h-14">
-              <Brain className="w-12 h-12 sm:w-14 sm:h-14 text-cyan-400" style={{ filter: 'drop-shadow(0 0 8px rgba(34, 211, 238, 0.5))' }} />
-              {/* Subtle neural glow particles */}
-              <div className="absolute -top-1 left-1/2 w-1 h-1 rounded-full bg-cyan-400/60" style={{ animation: 'pulse 3s ease-in-out infinite' }} />
-              <div className="absolute top-1/4 -right-1 w-1 h-1 rounded-full bg-emerald-400/60" style={{ animation: 'pulse 3.5s ease-in-out infinite', animationDelay: '0.5s' }} />
-              <div className="absolute bottom-1/4 -right-1 w-1 h-1 rounded-full bg-cyan-400/60" style={{ animation: 'pulse 4s ease-in-out infinite', animationDelay: '1s' }} />
-              <div className="absolute -bottom-1 left-1/2 w-1 h-1 rounded-full bg-emerald-400/60" style={{ animation: 'pulse 3.2s ease-in-out infinite', animationDelay: '1.5s' }} />
-              <div className="absolute bottom-1/4 -left-1 w-1 h-1 rounded-full bg-cyan-400/60" style={{ animation: 'pulse 3.8s ease-in-out infinite', animationDelay: '0.8s' }} />
-              <div className="absolute top-1/4 -left-1 w-1 h-1 rounded-full bg-emerald-400/60" style={{ animation: 'pulse 3.3s ease-in-out infinite', animationDelay: '1.2s' }} />
+      <div className="border-b border-border bg-card/50 backdrop-blur-sm">
+        <div className="flex items-center justify-between px-6 py-4">
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-lg bg-cyan-500/20">
+              <LayoutDashboard className="w-6 h-6 text-cyan-400" />
+            </div>
+            <div>
+              <h1 className="text-2xl font-bold text-foreground">The Nexus</h1>
+              <p className="text-sm text-muted-foreground">Command Center</p>
             </div>
           </div>
-          <h1 className="text-xl sm:text-2xl md:text-3xl font-display font-bold tracking-tight text-white mt-2">
-            GETTING YOU TO 100
-          </h1>
-          <p className="text-sm sm:text-base text-foreground/70 mt-1">Your headspace, reclaimed</p>
+          
+          <div className="flex items-center gap-4">
+            {/* Governance Mode Toggle */}
+            <button
+              onClick={() => setGovernanceMode(prev => prev === 'everything' ? 'governed' : 'everything')}
+              className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border-2 transition-all duration-300 ${
+                governanceMode === 'governed' 
+                  ? 'bg-emerald-500/20 border-emerald-500/50 text-emerald-400' 
+                  : 'bg-amber-500/20 border-amber-500/50 text-amber-400'
+              } hover:scale-105 active:scale-95`}
+              title={governanceMode === 'governed' ? 'Governed Mode: Only approved APIs' : 'Everything Mode: All APIs available'}
+            >
+              {governanceMode === 'governed' ? (
+                <><ShieldCheck className="w-4 h-4" /><span className="text-xs font-mono">GOVERNED</span></>
+              ) : (
+                <><Shield className="w-4 h-4" /><span className="text-xs font-mono">EVERYTHING</span></>
+              )}
+            </button>
+            
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="text-xs text-foreground/70 font-mono">ONLINE</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col p-6 overflow-auto">
+        {/* RAG Status Row */}
+        <div className="mb-6">
+          <h2 className="text-sm font-semibold text-muted-foreground mb-3">SYSTEM STATUS</h2>
+          <div className="flex flex-wrap gap-3">
+            <RAGStatus status="green" label="Integrations" count={5} />
+            <RAGStatus status="green" label="AI Services" count={3} />
+            <RAGStatus status="green" label="Database" />
+            <RAGStatus status="amber" label="Pending Approvals" count={2} />
+          </div>
         </div>
 
-        {/* Loading State */}
-        {insightsLoading && (
-          <div className="flex-1 grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 max-w-5xl mx-auto w-full">
-            {[1, 2, 3, 4, 5, 6].map(i => (
-              <div key={i} className="p-4 sm:p-5 rounded-2xl bg-gray-800/50 border-2 border-gray-700 animate-pulse">
-                <div className="h-12 w-12 bg-gray-700 rounded-xl mb-3"></div>
-                <div className="h-4 bg-gray-700 rounded w-2/3 mb-2"></div>
-                <div className="h-3 bg-gray-700 rounded w-1/2"></div>
-              </div>
+        {/* Quick Access Skills */}
+        <div className="mb-6">
+          <h2 className="text-sm font-semibold text-muted-foreground mb-3">QUICK ACCESS</h2>
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3">
+            {skillButtons.map((skill, idx) => (
+              <button
+                key={idx}
+                onClick={() => setLocation(skill.path)}
+                className={`flex flex-col items-center gap-2 p-4 rounded-xl border-2 ${skill.border} bg-gradient-to-br ${skill.gradient} hover:scale-105 active:scale-95 transition-all duration-200`}
+              >
+                <skill.icon className="w-6 h-6" />
+                <span className="text-xs font-medium text-center">{skill.label}</span>
+              </button>
             ))}
           </div>
-        )}
-
-        {/* 6-Button Grid - Project Genesis Style */}
-        <div className="flex-1 grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 max-w-5xl mx-auto w-full auto-rows-fr min-h-0">
-          {buttons.map((btn) => (
-            <button 
-              key={btn.id}
-              onClick={() => setLocation(btn.path)}
-              className={`group relative p-4 sm:p-5 rounded-2xl bg-gradient-to-br ${btn.gradient} border-2 ${btn.border} transition-all duration-300 cursor-pointer overflow-hidden text-left hover:scale-[1.03] hover:shadow-xl hover:shadow-primary/10 active:scale-[0.98]`}
-            >
-              {btn.badge}
-              
-              {/* Hover glow effect */}
-              <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              
-              {/* Icon Container */}
-              <div className={`w-12 h-12 sm:w-14 sm:h-14 rounded-xl ${btn.iconBg} flex items-center justify-center mb-3 sm:mb-4 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300`}>
-                <btn.icon className={`w-6 h-6 sm:w-7 sm:h-7 ${btn.iconColor} group-hover:animate-pulse`} />
-              </div>
-
-              {/* Content */}
-              <div className="relative z-10">
-                <h3 className="font-bold text-sm sm:text-base md:text-lg tracking-tight mb-1 text-white group-hover:text-primary transition-colors">
-                  {btn.label}
-                </h3>
-                <p className="text-xs sm:text-sm text-foreground/60 group-hover:text-foreground/80 transition-colors">
-                  {btn.sub}
-                </p>
-              </div>
-
-              {/* Hover Arrow with slide animation */}
-              <div className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 translate-x-2 group-hover:translate-x-0 transition-all duration-300">
-                <ChevronRight className={`w-5 h-5 ${btn.iconColor}`} />
-              </div>
-            </button>
-          ))}
         </div>
-      </div>
 
-      {/* OpenClaw Skills Section */}
-      <div className="px-4 sm:px-6 lg:px-8 mb-8">
+        {/* Key Metrics */}
         <div className="mb-6">
-          <h2 className="text-2xl font-bold text-foreground mb-2">CEPHO Skills</h2>
-          <p className="text-sm text-muted-foreground">Quick access to all 7 autonomous capabilities</p>
-        </div>
-        <SkillCards />
-      </div>
-
-      {/* OpenClaw Chat Section */}
-      <div className="px-4 sm:px-6 lg:px-8 mb-8">
-        <div className="mb-6">
-          <h2 className="text-2xl font-bold text-foreground mb-2">Conversational Interface</h2>
-          <p className="text-sm text-muted-foreground">Chat with CEPHO to execute any skill</p>
-        </div>
-        <div className="h-[500px]">
-          <OpenClawChat />
-        </div>
-      </div>
-
-      {/* Voice Input - Fixed at bottom (Manus style) */}
-      <div className="shrink-0 border-t border-border bg-card/90 backdrop-blur-xl px-4 py-3">
-        <div className="max-w-3xl mx-auto">
-          <div className="bg-white/5 border border-white/20 rounded-2xl overflow-hidden">
-            <textarea
-              ref={inputRef}
-              value={inputValue}
-              onChange={handleInputChange}
-              onKeyDown={handleKeyDown}
-              placeholder="Message Chief of Staff..."
-              rows={1}
-              className="w-full px-4 py-3 bg-transparent resize-none focus:outline-none text-sm text-white placeholder:text-foreground/50"
-              style={{ minHeight: '44px', maxHeight: '100px' }}
+          <h2 className="text-sm font-semibold text-muted-foreground mb-3">KEY METRICS</h2>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <MetricCard 
+              icon={Lightbulb} 
+              label="Innovation Ideas" 
+              value="12" 
+              trend="up"
+              onClick={() => setLocation('/innovation-hub')}
             />
-            <div className="flex items-center justify-between px-3 py-2 border-t border-white/10">
-              <div className="flex items-center gap-1">
-                <button
-                  onClick={toggleRecording}
-                  className={`p-2 rounded-lg transition-colors ${
-                    isListening 
-                      ? "text-red-400 bg-red-500/20 animate-pulse" 
-                      : "text-foreground/70 hover:text-white hover:bg-white/10"
-                  }`}
-                >
-                  {isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
-                </button>
-              </div>
+            <MetricCard 
+              icon={Brain} 
+              label="AI-SME Consultations" 
+              value="47" 
+              trend="up"
+              onClick={() => setLocation('/ai-experts')}
+            />
+            <MetricCard 
+              icon={CheckCircle2} 
+              label="Tasks Completed" 
+              value="23" 
+              trend="stable"
+              onClick={() => setLocation('/chief-of-staff')}
+            />
+            <MetricCard 
+              icon={Rocket} 
+              label="Active Projects" 
+              value="3" 
+              trend="stable"
+              onClick={() => setLocation('/project-genesis')}
+            />
+          </div>
+        </div>
+
+        {/* Activity Feed */}
+        <div className="mb-6">
+          <h2 className="text-sm font-semibold text-muted-foreground mb-3">RECENT ACTIVITY</h2>
+          <div className="border-2 border-border rounded-xl bg-card p-4 space-y-2">
+            <ActivityItem 
+              icon={Brain}
+              title="AI-SME: Dr. Sarah Chen"
+              subtitle="Completed analysis on market trends"
+              time="5m ago"
+              status="complete"
+            />
+            <ActivityItem 
+              icon={Lightbulb}
+              title="Innovation Hub"
+              subtitle="New idea generated from TechCrunch article"
+              time="12m ago"
+              status="active"
+            />
+            <ActivityItem 
+              icon={Fingerprint}
+              title="Chief of Staff"
+              subtitle="3 tasks require your attention"
+              time="1h ago"
+              status="pending"
+            />
+            <ActivityItem 
+              icon={Sun}
+              title="Morning Signal"
+              subtitle="Daily brief ready for review"
+              time="2h ago"
+              status="complete"
+            />
+            <ActivityItem 
+              icon={Rocket}
+              title="Project Genesis"
+              subtitle="Blueprint updated: CEPHO Platform"
+              time="3h ago"
+              status="active"
+            />
+          </div>
+        </div>
+
+        {/* CEPHO Chat Input */}
+        <div className="mt-auto">
+          <div className="flex items-center gap-3 p-4 rounded-xl border-2 border-primary/50 bg-gradient-to-br from-primary/10 to-primary/5">
+            <Brain className="w-6 h-6 text-primary animate-pulse" />
+            <div className="flex-1 flex items-center gap-2 bg-background/50 rounded-lg px-3 py-2">
+              <textarea
+                ref={inputRef}
+                value={inputValue}
+                onChange={handleInputChange}
+                onKeyDown={handleKeyDown}
+                placeholder="Ask CEPHO anything..."
+                className="flex-1 bg-transparent border-none outline-none resize-none text-sm text-foreground placeholder:text-muted-foreground"
+                rows={1}
+              />
+              <button
+                onClick={toggleRecording}
+                className={`p-2 rounded-lg transition-colors ${
+                  isListening 
+                    ? 'bg-red-500/20 text-red-400' 
+                    : 'hover:bg-primary/10 text-muted-foreground hover:text-primary'
+                }`}
+              >
+                {isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
+              </button>
               <button
                 onClick={handleSubmit}
-                disabled={!inputValue.trim()}
-                className="p-2 rounded-lg bg-gradient-to-r from-cyan-500 to-fuchsia-500 text-white hover:opacity-90 disabled:opacity-40 transition-all"
+                className="p-2 rounded-lg bg-primary/20 text-primary hover:bg-primary/30 transition-colors"
               >
                 <Send className="w-4 h-4" />
               </button>
             </div>
           </div>
-          {isListening && (
-            <div className="mt-2 flex items-center gap-2 text-xs text-red-400">
-              <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
-              Listening... {transcript && `"${transcript}"`}
-            </div>
-          )}
         </div>
       </div>
     </div>
