@@ -179,6 +179,7 @@ export default function COSTraining() {
 
       {/* Training Progress Overview */}
       {trainingMode === 'cos' ? (
+      <>
       <div className="grid gap-6 md:grid-cols-3">
         <Card className="md:col-span-2">
           <CardHeader>
@@ -389,9 +390,10 @@ export default function COSTraining() {
         onComplete={() => selectedModule && handleCompleteModule(selectedModule)}
         onClose={() => setSelectedModule(null)}
       />
-      </div>
+      </>
       ) : (
         /* Digital Twin Training */
+        <>
         <div className="space-y-6">
           <Card>
             <CardHeader>
@@ -499,6 +501,7 @@ export default function COSTraining() {
             </CardContent>
           </Card>
         </div>
+        </>
       )}
     </div>
   );

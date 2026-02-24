@@ -223,7 +223,7 @@ export default function WorkflowDashboard() {
                 <BarChart3 className="w-6 h-6 text-purple-400" />
               </div>
             </div>
-          </div>
+          </Card>
         </div>
 
         {/* Filter Tabs */}
