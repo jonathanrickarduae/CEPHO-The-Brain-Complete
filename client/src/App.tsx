@@ -79,6 +79,7 @@ const BusinessModelPage = lazy(() => import("./pages/BusinessModelPage"));
 const QuestionnaireOnline = lazy(() => import("./pages/QuestionnaireOnline"));
 const StrategicFrameworkQuestionnaire = lazy(() => import("./pages/StrategicFrameworkQuestionnaire"));
 const AgentsMonitoring = lazy(() => import("./pages/AgentsMonitoring"));
+const AIAgentsMonitoringPage = lazy(() => import("./pages/AIAgentsMonitoringPage"));
 const PersephoneBoard = lazy(() => import("./pages/PersephoneBoard"));
 const ExpertNetwork = lazy(() => import("./pages/ExpertNetwork"));
 const TheSignal = lazy(() => import("./pages/TheSignal"));
@@ -148,6 +149,9 @@ function Router() {
         </Route>
         <Route path="/expert-network">
           <WithLayout><ExpertNetwork /></WithLayout>
+        </Route>
+        <Route path="/ai-agents-monitoring">
+          <WithLayout><AIAgentsMonitoringPage /></WithLayout>
         </Route>
         <Route path="/expert-chat/:expertId">
           <ExpertChatPage />

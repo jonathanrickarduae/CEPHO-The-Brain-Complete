@@ -8,6 +8,7 @@
 import { db } from "../db";
 import { aiSmeExperts as experts } from "../db/schema";
 import { eq } from "drizzle-orm";
+import { AGENT_DEFINITIONS } from "../data/agent-definitions";
 
 export interface AgentStatus {
   id: string;
@@ -66,23 +67,19 @@ export interface AgentDailyReport {
  */
 export async function getAllAgentsStatus(): Promise<AgentStatus[]> {
   try {
-    // Get all experts from database
-    const allExperts = await db.select().from(experts);
-    
-    // Map to agent status format
-    // In production, this would query actual agent performance data
-    const agents: AgentStatus[] = allExperts.map(expert => ({
-      id: expert.id.toString(),
-      name: expert.name,
-      specialization: expert.specialization,
-      status: 'active' as const,
+    // Load all 51 agents from agent definitions
+    const agents: AgentStatus[] = AGENT_DEFINITIONS.map((agent, index) => ({
+      id: `agent-${index + 1}`,
+      name: agent.name,
+      specialization: agent.specialization,
+      status: Math.random() > 0.1 ? 'active' as const : 'learning' as const, // 90% active
       performance: {
-        rating: Math.floor(Math.random() * 20) + 80, // 80-100 for demo
-        tasksCompleted: Math.floor(Math.random() * 100) + 50,
-        successRate: Math.floor(Math.random() * 15) + 85, // 85-100 for demo
-        averageResponseTime: Math.random() * 3 + 1, // 1-4 seconds
+        rating: Math.floor(Math.random() * 15) + 85, // 85-100 for demo
+        tasksCompleted: Math.floor(Math.random() * 150) + 50,
+        successRate: Math.floor(Math.random() * 12) + 88, // 88-100 for demo
+        averageResponseTime: Math.random() * 2.5 + 0.5, // 0.5-3 seconds
       },
-      lastActive: new Date().toISOString(),
+      lastActive: new Date(Date.now() - Math.random() * 3600000).toISOString(), // Within last hour
     }));
     
     return agents;
@@ -158,33 +155,29 @@ export async function getAgentStatus(agentId: string): Promise<AgentStatus | nul
 export async function getAllAgentsDailyReports(date?: string): Promise<AgentDailyReport[]> {
   try {
     const reportDate = date || new Date().toISOString().split('T')[0];
-    const allExperts = await db.select().from(experts);
     
-    // Generate daily reports for all agents
-    const reports: AgentDailyReport[] = allExperts.map(expert => ({
-      agentId: expert.id.toString(),
-      agentName: expert.name,
+    // Generate daily reports for all 51 agents
+    const reports: AgentDailyReport[] = AGENT_DEFINITIONS.map((agent, index) => ({
+      agentId: `agent-${index + 1}`,
+      agentName: agent.name,
       date: reportDate,
-      summary: `Daily report for ${expert.name}. Completed tasks successfully and continued learning in ${expert.specialization}.`,
+      summary: `Daily report for ${agent.name}. Completed tasks successfully and continued learning in ${agent.specialization}`,
       improvements: [
         'Enhanced response accuracy',
         'Improved processing speed',
       ],
-      newLearnings: [
-        `New techniques in ${expert.specialization}`,
-        'Best practices from recent research',
-      ],
+      newLearnings: agent.learningFocus.slice(0, 2),
       suggestions: [
         'Consider additional training in specific areas',
         'Recommend integration with new tools',
       ],
-      researchTopics: [
-        `Latest ${expert.specialization} developments`,
+      researchTopics: agent.learningFocus.slice(2, 4) || [
+        `Latest ${agent.specialization} developments`,
         'Industry best practices',
       ],
       requestsForApproval: [
         {
-          id: `req-${expert.id}-${Date.now()}`,
+          id: `req-${index + 1}-${Date.now()}`,
           type: 'enhancement',
           description: 'Upgrade to latest model version',
           reasoning: 'Improved performance and capabilities',

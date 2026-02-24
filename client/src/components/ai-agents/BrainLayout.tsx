@@ -78,6 +78,7 @@ const menuItems: MenuItem[] = [
       { icon: Brain, label: "Enhanced COS", path: "/chief-of-staff-enhanced" },
       { icon: Activity, label: "Development Pathway", path: "/development-pathway" },
       { icon: Brain, label: "COS Training", path: "/cos-training" },
+      { icon: Activity, label: "AI Agents", path: "/ai-agents-monitoring" },
       { icon: Workflow, label: "Workflow", path: "/workflow", count: 2 },
       { icon: TrendingUp, label: "Innovation Hub", path: "/innovation-hub" },
     ]
