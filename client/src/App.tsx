@@ -1,5 +1,5 @@
-import { Route, Switch } from "wouter";
-import { lazy, Suspense } from "react";
+import { Switch, Route, useLocation } from "wouter";
+import { lazy, Suspense, useEffect } from "react";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import ErrorBoundary from '@/components/shared/ErrorBoundary';
@@ -10,6 +10,7 @@ import { AIRouterProvider } from '@/components/ai-agents/AIRouter';
 import { CelebrationProvider } from '@/components/shared/CelebrationAnimations';
 import { DailyCycleProvider } from '@/components/ai-agents/DailyCycleProvider';
 import { PageTransition } from '@/components/shared/PageTransition';
+import AuthGuard from '@/components/AuthGuard';
 import { KeyboardShortcutsGuide } from '@/components/project-management/KeyboardShortcutsGuide';
 import { ChiefOfStaffNotification } from '@/components/communication/ChiefOfStaffNotification';
 
@@ -43,6 +44,7 @@ const MorningSignal = lazy(() => import("./pages/MorningSignal"));
 const AITeam = lazy(() => import("./pages/AITeam"));
 const Waitlist = lazy(() => import("./pages/Waitlist"));
 const Login = lazy(() => import("./pages/Login"));
+const LandingPage = lazy(() => import("./pages/LandingPage"));
 const Settings = lazy(() => import("./pages/Settings"));
 const Commercialization = lazy(() => import("./pages/Commercialization"));
 const GoLive = lazy(() => import("./pages/GoLive"));
@@ -92,6 +94,22 @@ const ProjectGenesisWizard = lazy(() => import("./pages/ProjectGenesisWizard"));
 
 // Wrapper component for pages that need the sidebar layout with page transitions
 function WithLayout({ children }: { children: React.ReactNode }) {
+  const [, navigate] = useLocation();
+
+  useEffect(() => {
+    const authToken = localStorage.getItem('cepho_auth_token');
+    
+    if (!authToken) {
+      navigate('/login');
+    }
+  }, [navigate]);
+
+  const authToken = localStorage.getItem('cepho_auth_token');
+  
+  if (!authToken) {
+    return null;
+  }
+
   return (
     <BrainLayout>
       <PageTransition className="h-full">
@@ -105,18 +123,16 @@ function Router() {
   return (
     <Suspense fallback={<PageLoader />}>
       <Switch>
-        {/* Root goes directly to Dashboard - no landing page friction */}
-        <Route path="/" exact>
-          <WithLayout><NexusDashboard /></WithLayout>
-        </Route>
+        {/* Landing page */}
+        <Route path="/" exact component={LandingPage} />
+        
+        {/* Login page */}
+        <Route path="/login" component={LandingPage} />
         
         {/* Waitlist page without sidebar */}
         <Route path="/waitlist" component={Waitlist} />
         
-        {/* Login page without sidebar */}
-        <Route path="/login" component={Login} />
-        
-        {/* Dashboard pages with sidebar */}
+        {/* Dashboard pages with sidebar - Protected */}
         <Route path="/dashboard">
           <WithLayout><DashboardEnhanced /></WithLayout>
         </Route>
