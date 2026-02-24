@@ -59,8 +59,8 @@ export default function LandingPage() {
     <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-[#0f2f2f] via-[#0a7a6e] to-black">
       {/* Animated Neural Network with Electrical Impulses */}
       <div className="absolute inset-0 overflow-hidden">
-        {/* Rapid-firing neurons with electrical flashes */}
-        {[...Array(40)].map((_, i) => (
+        {/* Gentle floating neurons */}
+        {[...Array(20)].map((_, i) => (
           <div
             key={i}
             className="absolute rounded-full bg-white animate-brain-flash"
@@ -72,7 +72,7 @@ export default function LandingPage() {
               filter: 'blur(1px)',
               boxShadow: '0 0 10px rgba(255, 255, 255, 0.8), 0 0 20px rgba(0, 255, 255, 0.5)',
               animationDelay: `${Math.random() * 2}s`,
-              animationDuration: `${Math.random() * 1 + 0.5}s`,
+              animationDuration: `${Math.random() * 3 + 2}s`,
             }}
           />
         ))}
@@ -224,22 +224,68 @@ export default function LandingPage() {
           </p>
         </div>
 
-        {/* Login Button - Matching original design */}
+        {/* Login Form */}
         {showLogin && (
           <div className="w-full max-w-md animate-slide-up">
-            <Button
-              onClick={() => navigate('/dashboard')}
-              className="w-full h-16 text-white font-semibold rounded-full transition-all duration-300 shadow-xl hover:scale-[1.02]"
-              style={{
-                background: 'linear-gradient(90deg, #d946ef 0%, #a855f7 100%)',
-                fontSize: '1.125rem',
-                fontFamily: 'system-ui, -apple-system, sans-serif',
-                fontWeight: 600,
-                letterSpacing: '0.01em',
-              }}
-            >
-              Sign in to Continue
-            </Button>
+            <div className="backdrop-blur-xl bg-black/40 p-8 rounded-3xl border border-white/10 shadow-2xl">
+              <form onSubmit={handleLogin} className="space-y-6">
+                <div className="space-y-4">
+                  <div className="relative group">
+                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-purple-400 transition-colors" />
+                    <Input
+                      type="email"
+                      placeholder="Email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                      className="pl-12 h-14 bg-white/5 border-white/20 text-white placeholder:text-gray-500 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/50 rounded-xl transition-all"
+                    />
+                  </div>
+
+                  <div className="relative group">
+                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-purple-400 transition-colors" />
+                    <Input
+                      type="password"
+                      placeholder="Password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
+                      className="pl-12 h-14 bg-white/5 border-white/20 text-white placeholder:text-gray-500 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/50 rounded-xl transition-all"
+                    />
+                  </div>
+
+                  <div className="flex items-center space-x-2 pt-2">
+                    <Checkbox
+                      id="remember"
+                      checked={rememberMe}
+                      onCheckedChange={(checked) => setRememberMe(checked as boolean)}
+                      className="border-white/30 data-[state=checked]:bg-purple-600 data-[state=checked]:border-purple-600"
+                    />
+                    <label
+                      htmlFor="remember"
+                      className="text-sm text-gray-300 cursor-pointer select-none"
+                    >
+                      Remember me
+                    </label>
+                  </div>
+                </div>
+
+                <Button
+                  type="submit"
+                  className="w-full h-14 bg-gradient-to-r from-purple-500 via-fuchsia-500 to-purple-600 hover:from-purple-600 hover:via-fuchsia-600 hover:to-purple-700 text-white font-semibold text-lg rounded-xl transition-all duration-300 shadow-lg shadow-purple-500/50 hover:shadow-purple-600/60 hover:scale-[1.02]"
+                  disabled={isLoading}
+                >
+                  {isLoading ? (
+                    <>
+                      <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                      Signing in...
+                    </>
+                  ) : (
+                    'Sign in to Continue'
+                  )}
+                </Button>
+              </form>
+            </div>
           </div>
         )}
       </div>
