@@ -1,5 +1,6 @@
 import BrainLayout from '@/components/ai-agents/BrainLayout';
 import { IntegrationsDashboard } from '@/components/integrations/IntegrationOAuth';
+import { APIKeyManagement } from '@/components/integrations/APIKeyManagement';
 import { Link2, ArrowLeft } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { useLocation } from 'wouter';
@@ -28,6 +29,11 @@ export default function IntegrationsPage() {
         </div>
 
         <IntegrationsDashboard />
+
+        {/* API Key Management for Governance */}
+        <div className="mt-12">
+          <APIKeyManagement />
+        </div>
 
         {/* Integration Status Summary */}
         <div className="mt-8 p-4 border border-border rounded-xl bg-card">

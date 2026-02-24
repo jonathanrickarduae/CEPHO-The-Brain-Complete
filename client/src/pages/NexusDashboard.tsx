@@ -3,7 +3,7 @@ import { useLocation } from "wouter";
 import { 
   Sun, Users, Lock, Mic, MicOff, Send, 
   Fingerprint, FolderKanban, BookOpen, Brain, LayoutDashboard,
-  ChevronRight, AlertCircle
+  ChevronRight, AlertCircle, Shield, ShieldCheck
 } from "lucide-react";
 import { PageHeader } from '@/components/layout/PageHeader';
 import { LearningBadge } from '@/components/expert-evolution/LearningIndicator';
@@ -30,6 +30,7 @@ export default function NexusDashboard() {
   const [, setLocation] = useLocation();
   const [inputValue, setInputValue] = useState("");
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const [governanceMode, setGovernanceMode] = useState<'everything' | 'governed'>('everything');
   
   // Dashboard insights from API
   const { data: insightsData, isLoading: insightsLoading } = trpc.dashboard.getInsights.useQuery();
@@ -168,9 +169,28 @@ export default function NexusDashboard() {
         title="The Nexus"
         iconColor="text-cyan-400"
       >
-        <div className="flex items-center gap-2">
-          <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-          <span className="text-xs text-foreground/70 font-mono">ONLINE</span>
+        <div className="flex items-center gap-4">
+          {/* Governance Mode Toggle */}
+          <button
+            onClick={() => setGovernanceMode(prev => prev === 'everything' ? 'governed' : 'everything')}
+            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border-2 transition-all duration-300 ${
+              governanceMode === 'governed' 
+                ? 'bg-emerald-500/20 border-emerald-500/50 text-emerald-400' 
+                : 'bg-amber-500/20 border-amber-500/50 text-amber-400'
+            } hover:scale-105 active:scale-95`}
+            title={governanceMode === 'governed' ? 'Governed Mode: Only approved APIs' : 'Everything Mode: All APIs available'}
+          >
+            {governanceMode === 'governed' ? (
+              <><ShieldCheck className="w-4 h-4" /><span className="text-xs font-mono">GOVERNED</span></>
+            ) : (
+              <><Shield className="w-4 h-4" /><span className="text-xs font-mono">EVERYTHING</span></>
+            )}
+          </button>
+          
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="text-xs text-foreground/70 font-mono">ONLINE</span>
+          </div>
         </div>
       </PageHeader>
 
