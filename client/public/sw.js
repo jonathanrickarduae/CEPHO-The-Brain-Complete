@@ -1,6 +1,6 @@
 // The Brain - Service Worker
 // Update this timestamp to force cache refresh on all devices
-const CACHE_VERSION = 'the-brain-v1-' + '20260224-001';
+const CACHE_VERSION = 'the-brain-v1-' + '20260224-002';
 const CACHE_NAME = CACHE_VERSION;
 const OFFLINE_URL = '/offline.html';
 

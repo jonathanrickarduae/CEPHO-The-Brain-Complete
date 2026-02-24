@@ -1,7 +1,7 @@
 // Cache Buster Utility
 // Forces mobile browsers to reload fresh content
 
-export const APP_VERSION = '1.0.0-20260224-001';
+export const APP_VERSION = '1.0.0-20260224-002';
 
 /**
  * Check if app version has changed and force reload if needed
