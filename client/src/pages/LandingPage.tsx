@@ -100,17 +100,7 @@ export default function LandingPage() {
           <h1 className="text-7xl md:text-8xl font-bold mb-4 bg-gradient-to-r from-purple-400 via-pink-500 to-purple-600 bg-clip-text text-transparent">
             Cepho
           </h1>
-          <p className="text-gray-400 text-lg italic mb-16">
-            From the Greek for brain
-          </p>
 
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-            Get you operating at 100
-          </h2>
-          <p className="text-gray-300 text-lg max-w-2xl mx-auto mb-12 leading-relaxed">
-            Your AI-powered Chief of Staff. One interface to manage your life,
-            amplified by intelligence that learns from you and works alongside you.
-          </p>
         </div>
 
         {/* Login Form */}
