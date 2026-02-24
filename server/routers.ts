@@ -124,9 +124,11 @@ import { dashboardRouter } from "./routers/domains/dashboard.router";
 import { emailIntegrationRouter } from "./routers/domains/email-integration.router";
 import { aiAgentsMonitoringRouter } from "./routers/domains/ai-agents-monitoring.router";
 import { cosTasksRouter } from "./routers/domains/cos-tasks.router";
+import { workflowsRouter } from "./routers/domains/workflows.router";
 
 
 export const appRouter = router({
+  workflows: workflowsRouter,
   aiAgentsMonitoring: aiAgentsMonitoringRouter,
   cosTasks: cosTasksRouter,
   emailIntegration: emailIntegrationRouter,

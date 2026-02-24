@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
@@ -6,9 +6,11 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { 
   Rocket, CheckCircle2, Circle, ChevronRight, ChevronLeft,
-  FileText, Download, Upload, AlertCircle, Sparkles
+  FileText, Download, Upload, AlertCircle, Sparkles, Loader2
 } from 'lucide-react';
-import { useLocation } from 'wouter';
+import { useLocation, useParams } from 'wouter';
+import { trpc } from '@/lib/trpc';
+import { toast } from 'sonner';
 
 // Import the workflow definition
 const PROJECT_GENESIS_PHASES = [
@@ -76,9 +78,50 @@ const PROJECT_GENESIS_PHASES = [
 
 export default function ProjectGenesisWizard() {
   const [, navigate] = useLocation();
+  const params = useParams();
+  const workflowId = params.workflowId;
+
   const [currentPhase, setCurrentPhase] = useState(1);
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState<Record<number, any>>({});
+
+  // Load workflow if workflowId exists
+  const { data: workflow, isLoading: isLoadingWorkflow } = trpc.workflows.get.useQuery(
+    { id: workflowId || '' },
+    { enabled: !!workflowId }
+  );
+
+  // Load workflow data when available
+  useEffect(() => {
+    if (workflow) {
+      setCurrentPhase(workflow.currentPhase);
+      setCurrentStep(workflow.currentStep);
+      
+      // Load form data from workflow steps
+      const stepData: Record<number, any> = {};
+      workflow.steps?.forEach((step: any) => {
+        if (step.formData) {
+          stepData[step.stepNumber] = step.formData;
+        }
+      });
+      setFormData(stepData);
+    }
+  }, [workflow]);
+
+  // Mutations
+  const updateStepMutation = trpc.workflows.updateStep.useMutation();
+  const updateProgressMutation = trpc.workflows.updateProgress.useMutation();
+  const completeStepMutation = trpc.workflows.completeStep.useMutation();
+  const generateDeliverableMutation = trpc.workflows.generateDeliverable.useMutation({
+    onSuccess: (data) => {
+      toast.success(`Generated: ${data.deliverableName}`);
+      // TODO: Show deliverable content in modal
+      console.log('Deliverable content:', data.content);
+    },
+    onError: (error) => {
+      toast.error(`Failed to generate: ${error.message}`);
+    },
+  });
 
   const phase = PROJECT_GENESIS_PHASES.find(p => p.phaseNumber === currentPhase);
   const step = phase?.steps.find(s => s.stepNumber === currentStep);
@@ -86,14 +129,51 @@ export default function ProjectGenesisWizard() {
   const isLastStepInPhase = stepIndex === (phase?.steps.length || 0) - 1;
   const isLastPhase = currentPhase === PROJECT_GENESIS_PHASES.length;
 
-  const handleNext = () => {
+  const handleNext = async () => {
+    // Save current step data
+    if (workflowId && formData[currentStep]) {
+      await updateStepMutation.mutateAsync({
+        workflowId,
+        stepNumber: currentStep,
+        formData: formData[currentStep],
+        status: 'completed',
+      });
+
+      await completeStepMutation.mutateAsync({
+        workflowId,
+        stepNumber: currentStep,
+      });
+    }
+
+    // Move to next step
     if (isLastStepInPhase) {
       if (!isLastPhase) {
-        setCurrentPhase(currentPhase + 1);
-        setCurrentStep(PROJECT_GENESIS_PHASES[currentPhase].steps[0].stepNumber);
+        const nextPhase = currentPhase + 1;
+        const nextStep = PROJECT_GENESIS_PHASES[currentPhase].steps[0].stepNumber;
+        setCurrentPhase(nextPhase);
+        setCurrentStep(nextStep);
+
+        if (workflowId) {
+          await updateProgressMutation.mutateAsync({
+            id: workflowId,
+            currentPhase: nextPhase,
+            currentStep: nextStep,
+            progress: Math.round((nextStep / 24) * 100),
+          });
+        }
       }
     } else {
-      setCurrentStep(currentStep + 1);
+      const nextStep = currentStep + 1;
+      setCurrentStep(nextStep);
+
+      if (workflowId) {
+        await updateProgressMutation.mutateAsync({
+          id: workflowId,
+          currentPhase,
+          currentStep: nextStep,
+          progress: Math.round((nextStep / 24) * 100),
+        });
+      }
     }
   };
 
@@ -110,21 +190,47 @@ export default function ProjectGenesisWizard() {
   };
 
   const handleInputChange = (field: string, value: any) => {
-    setFormData({
+    const newFormData = {
       ...formData,
       [currentStep]: {
         ...formData[currentStep],
         [field]: value,
       },
-    });
+    };
+    setFormData(newFormData);
+
+    // Auto-save to backend if workflow exists
+    if (workflowId) {
+      updateStepMutation.mutate({
+        workflowId,
+        stepNumber: currentStep,
+        formData: newFormData[currentStep],
+      });
+    }
   };
 
   const generateDeliverable = (deliverable: string) => {
-    // TODO: Integrate with AI to generate deliverable
-    alert(`Generating ${deliverable}...`);
+    if (!workflowId) {
+      toast.error('Please save workflow first');
+      return;
+    }
+
+    generateDeliverableMutation.mutate({
+      workflowId,
+      stepNumber: currentStep,
+      deliverableName: deliverable,
+    });
   };
 
   const progress = Math.round((currentStep / 24) * 100);
+
+  if (isLoadingWorkflow) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 flex items-center justify-center">
+        <Loader2 className="w-8 h-8 text-cyan-400 animate-spin" />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-6">
@@ -141,7 +247,7 @@ export default function ProjectGenesisWizard() {
           </Button>
           <h1 className="text-4xl font-bold text-white mb-2 flex items-center gap-3">
             <Rocket className="w-10 h-10 text-cyan-400" />
-            Project Genesis Wizard
+            {workflow?.name || 'Project Genesis Wizard'}
           </h1>
           <p className="text-gray-400">
             6-Phase Venture Development Process
@@ -291,10 +397,17 @@ export default function ProjectGenesisWizard() {
                       size="sm"
                       variant="outline"
                       onClick={() => generateDeliverable(deliverable)}
+                      disabled={generateDeliverableMutation.isLoading}
                       className="border-cyan-500/50 text-cyan-400 hover:bg-cyan-500/20"
                     >
-                      <Sparkles className="w-4 h-4 mr-2" />
-                      Generate
+                      {generateDeliverableMutation.isLoading ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : (
+                        <>
+                          <Sparkles className="w-4 h-4 mr-2" />
+                          Generate
+                        </>
+                      )}
                     </Button>
                   </div>
                 ))}

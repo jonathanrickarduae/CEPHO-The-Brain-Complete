@@ -4143,3 +4143,81 @@ export const aiSmeConsultations = pgTable("ai_sme_consultations", {
 });
 export type AiSmeConsultation = typeof aiSmeConsultations.$inferSelect;
 export type InsertAiSmeConsultation = typeof aiSmeConsultations.$inferInsert;
+
+
+/**
+ * Workflows - Process workflows for users
+ */
+export const workflows = pgTable("workflows", {
+  id: varchar("id", { length: 36 }).primaryKey().$defaultFn(() => crypto.randomUUID()),
+  userId: integer("userId").notNull(),
+  
+  // Workflow details
+  name: varchar("name", { length: 255 }).notNull(),
+  type: varchar("type", { length: 100 }).notNull(), // project_genesis, quality_gates, etc.
+  description: text("description"),
+  
+  // Status
+  status: text("status").default("not_started").notNull(), // not_started, in_progress, paused, completed, failed
+  
+  // Progress tracking
+  currentPhase: integer("currentPhase").default(1).notNull(),
+  currentStep: integer("currentStep").default(1).notNull(),
+  totalPhases: integer("totalPhases").notNull(),
+  totalSteps: integer("totalSteps").notNull(),
+  progress: integer("progress").default(0).notNull(), // 0-100
+  
+  // Metadata
+  metadata: json("metadata").$type<Record<string, any>>(),
+  
+  // Timestamps
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
+  completedAt: timestamp("completedAt"),
+}, (table) => ({
+  userIdIdx: index("workflows_user_id_idx").on(table.userId),
+  typeIdx: index("workflows_type_idx").on(table.type),
+  statusIdx: index("workflows_status_idx").on(table.status),
+}));
+
+export type Workflow = typeof workflows.$inferSelect;
+export type InsertWorkflow = typeof workflows.$inferInsert;
+
+/**
+ * Workflow Steps - Individual steps within workflows
+ */
+export const workflowSteps = pgTable("workflow_steps", {
+  id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
+  workflowId: varchar("workflowId", { length: 36 }).notNull(),
+  
+  // Step details
+  phaseNumber: integer("phaseNumber").notNull(),
+  phaseName: varchar("phaseName", { length: 100 }).notNull(),
+  stepNumber: integer("stepNumber").notNull(),
+  stepName: varchar("stepName", { length: 255 }).notNull(),
+  description: text("description"),
+  
+  // Status
+  status: text("status").default("pending").notNull(), // pending, in_progress, completed, skipped
+  
+  // Form data
+  formData: json("formData").$type<Record<string, any>>(),
+  
+  // Deliverables
+  deliverables: json("deliverables").$type<string[]>(),
+  generatedDeliverables: json("generatedDeliverables").$type<Array<{ name: string; url: string; generatedAt: Date }>>(),
+  
+  // Validations
+  validations: json("validations").$type<Array<{ rule: string; passed: boolean; message?: string }>>(),
+  
+  // Timestamps
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
+  completedAt: timestamp("completedAt"),
+}, (table) => ({
+  workflowIdIdx: index("workflow_steps_workflow_id_idx").on(table.workflowId),
+  stepNumberIdx: index("workflow_steps_step_number_idx").on(table.stepNumber),
+}));
+
+export type WorkflowStep = typeof workflowSteps.$inferSelect;
+export type InsertWorkflowStep = typeof workflowSteps.$inferInsert;
