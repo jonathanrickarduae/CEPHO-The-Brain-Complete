@@ -143,6 +143,12 @@ export default function ChiefOfStaff() {
   const utils = trpc.useUtils();
   const { data: tasksWithQA, isLoading: tasksLoading } = trpc.qa.getTasksWithStatus.useQuery();
   
+  // Fetch delegated tasks from Signal
+  const { data: delegatedTasks, isLoading: delegatedTasksLoading } = trpc.cosTasks.getTasks.useQuery({ status: 'delegated' });
+  
+  // Fetch active AI agents
+  const { data: activeAgents, isLoading: agentsLoading } = trpc.cosTasks.getActiveAgents.useQuery();
+  
   const submitCoSReviewMutation = trpc.qa.submitCoSReview.useMutation({
     onSuccess: () => {
       toast.success('Chief of Staff review submitted');
@@ -274,6 +280,30 @@ export default function ChiefOfStaff() {
       handleSendMessage();
     }
   };
+
+  // Combine mock tasks with delegated tasks from Signal
+  const allTasks = [
+    ...MOCK_TASKS,
+    ...(delegatedTasks || []).map(t => ({
+      id: `db-${t.id}`,
+      dbId: t.id,
+      title: t.title || '',
+      description: t.description || '',
+      project: (t.metadata as any)?.category || 'Signal Task',
+      status: t.status === 'delegated' ? 'active' : t.status,
+      progress: t.progress || 0,
+      qaStatus: (t.qaStatus || 'pending') as QAStatus,
+      assignedExperts: Array.isArray(t.assignedExperts) ? t.assignedExperts.map((e: any) => e.name || e) : [],
+      cosScore: t.cosScore || undefined,
+      secondaryAIScore: t.secondaryAiScore || undefined,
+      feedback: undefined,
+      createdAt: t.createdAt || new Date(),
+      updatedAt: t.updatedAt || new Date(),
+      isFromDb: true,
+    }))),
+  ];
+  
+  const tasks = allTasks;
 
   // Stats
   const taskStats = {

@@ -80,6 +80,8 @@ const QuestionnaireOnline = lazy(() => import("./pages/QuestionnaireOnline"));
 const StrategicFrameworkQuestionnaire = lazy(() => import("./pages/StrategicFrameworkQuestionnaire"));
 const AgentsMonitoring = lazy(() => import("./pages/AgentsMonitoring"));
 const PersephoneBoard = lazy(() => import("./pages/PersephoneBoard"));
+const ExpertNetwork = lazy(() => import("./pages/ExpertNetwork"));
+const TheSignal = lazy(() => import("./pages/TheSignal"));
 const EmailAccountsManager = lazy(() => import("./components/email/EmailAccountsManager"));
 const EmailList = lazy(() => import("./components/email/EmailList"));
 const VictoriaBriefing = lazy(() => import("./components/victoria/VictoriaBriefing"));
@@ -144,6 +146,9 @@ function Router() {
         <Route path="/ai-experts">
           <WithLayout><AISMEsPage /></WithLayout>
         </Route>
+        <Route path="/expert-network">
+          <WithLayout><ExpertNetwork /></WithLayout>
+        </Route>
         <Route path="/expert-chat/:expertId">
           <ExpertChatPage />
         </Route>
@@ -152,6 +157,12 @@ function Router() {
         </Route>
         <Route path="/morning-signal">
           <WithLayout><MorningSignal /></WithLayout>
+        </Route>
+        <Route path="/the-signal">
+          <WithLayout><TheSignal /></WithLayout>
+        </Route>
+        <Route path="/signal">
+          <WithLayout><TheSignal /></WithLayout>
         </Route>
         <Route path="/signal/morning">
           <WithLayout><MorningSignal /></WithLayout>
