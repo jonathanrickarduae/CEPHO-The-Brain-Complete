@@ -206,50 +206,21 @@ export default function LandingPage() {
               lineHeight: 1,
             }}
           >
-            Cepho
+            CEPHO.AI
           </h1>
           
-          {/* Tagline with original styling */}
+          {/* Subtitle with original styling */}
           <p 
-            className="text-gray-400 italic"
+            className="text-white/90"
             style={{
-              fontSize: 'clamp(0.875rem, 2vw, 1.125rem)',
+              fontSize: 'clamp(1.25rem, 3vw, 2rem)',
               fontFamily: 'system-ui, -apple-system, sans-serif',
               fontWeight: 400,
-              letterSpacing: '0.01em',
-              marginBottom: '3rem',
+              letterSpacing: '0.02em',
+              lineHeight: 1.4,
             }}
           >
-            From the Greek for brain
-          </p>
-
-          {/* Main heading */}
-          <h2 
-            className="text-white font-bold mb-4"
-            style={{
-              fontSize: 'clamp(2rem, 5vw, 3rem)',
-              fontFamily: 'system-ui, -apple-system, sans-serif',
-              fontWeight: 700,
-              letterSpacing: '-0.01em',
-              lineHeight: 1.2,
-            }}
-          >
-            Get you operating at 100
-          </h2>
-
-          {/* Description */}
-          <p 
-            className="text-gray-300 max-w-2xl mx-auto"
-            style={{
-              fontSize: 'clamp(1rem, 2.5vw, 1.125rem)',
-              fontFamily: 'system-ui, -apple-system, sans-serif',
-              fontWeight: 400,
-              lineHeight: 1.6,
-              letterSpacing: '0.005em',
-            }}
-          >
-            Your AI-powered Chief of Staff. One interface to manage your life,
-            amplified by intelligence that learns from you and works alongside you.
+            The Brain - AI-Powered Executive Intelligence
           </p>
         </div>
 
