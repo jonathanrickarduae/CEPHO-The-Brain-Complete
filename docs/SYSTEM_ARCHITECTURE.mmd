@@ -1,0 +1,64 @@
+graph TB
+    subgraph "Frontend - React + TypeScript"
+        UI[User Interface]
+        Pages[Pages/Routes]
+        Components[Reusable Components]
+        Hooks[Custom Hooks]
+        TRPCClient[tRPC Client]
+    end
+
+    subgraph "Backend - Node.js + Express"
+        API[Express Server]
+        TRPCServer[tRPC Server]
+        Routers[API Routers]
+        Services[Business Logic]
+        Auth[JWT Auth + OAuth]
+    end
+
+    subgraph "Database - PostgreSQL/Supabase"
+        DB[(PostgreSQL)]
+        Drizzle[Drizzle ORM]
+        RLS[Row Level Security]
+        Migrations[Schema Migrations]
+    end
+
+    subgraph "External Services"
+        OAuth[Manus OAuth]
+        Integrations[15+ Integrations]
+        AI[AI Services]
+    end
+
+    subgraph "Infrastructure"
+        Render[Render Hosting]
+        GitHub[GitHub Repo]
+        CICD[Auto Deploy]
+    end
+
+    UI --> Pages
+    Pages --> Components
+    Components --> Hooks
+    Hooks --> TRPCClient
+    TRPCClient -->|Type-Safe API| TRPCServer
+    
+    TRPCServer --> Routers
+    Routers --> Services
+    Services --> Drizzle
+    Services --> Auth
+    
+    Drizzle --> DB
+    RLS --> DB
+    Migrations --> DB
+    
+    Auth --> OAuth
+    Services --> Integrations
+    Services --> AI
+    
+    GitHub -->|Push to main| CICD
+    CICD -->|Deploy| Render
+    Render -->|Hosts| API
+    Render -->|Serves| UI
+
+    style UI fill:#4CAF50
+    style API fill:#2196F3
+    style DB fill:#FF9800
+    style Render fill:#9C27B0
