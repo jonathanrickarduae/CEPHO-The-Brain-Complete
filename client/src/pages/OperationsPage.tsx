@@ -3,12 +3,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { NPSSurvey, NPSStatsDashboard } from '@/components/shared/NPSSurvey';
 import { PartnershipPipeline } from '@/components/communication/PartnershipPipeline';
 import { TeamCapabilityMatrix } from '@/components/team-management/TeamCapabilityMatrix';
+import { CommandCentre } from '@/components/operations/CommandCentre';
 import { PageHeader } from '@/components/layout/PageHeader';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Users, Handshake, TrendingUp, BarChart3 } from 'lucide-react';
 
 export default function OperationsPage() {
-  const [activeTab, setActiveTab] = useState('nps');
+  const [activeTab, setActiveTab] = useState('command');
 
   return (
     <div className="min-h-screen bg-background">
@@ -30,6 +31,10 @@ export default function OperationsPage() {
       <div className="p-6">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
           <TabsList className="bg-muted/50 p-1">
+            <TabsTrigger value="command" className="flex items-center gap-2">
+              <BarChart3 className="w-4 h-4" />
+              Command Centre
+            </TabsTrigger>
             <TabsTrigger value="nps" className="flex items-center gap-2">
               <TrendingUp className="w-4 h-4" />
               NPS Tracking
@@ -43,6 +48,10 @@ export default function OperationsPage() {
               Team Capabilities
             </TabsTrigger>
           </TabsList>
+
+          <TabsContent value="command" className="mt-6">
+            <CommandCentre />
+          </TabsContent>
 
           <TabsContent value="nps" className="mt-6 space-y-6">
             <NPSStatsDashboard />
