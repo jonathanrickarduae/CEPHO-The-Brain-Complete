@@ -39,12 +39,6 @@ export default function OpenClawChat() {
 
   return (
     <div className="flex flex-col h-full bg-background border border-border rounded-lg">
-      {/* Header */}
-      <div className="p-4 border-b border-border">
-        <h3 className="text-lg font-semibold text-foreground">CEPHO Assistant</h3>
-        <p className="text-sm text-muted-foreground">Powered by OpenClaw</p>
-      </div>
-
       {/* Messages */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
         {messages.map((msg, idx) => (
