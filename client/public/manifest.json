@@ -1,5 +1,6 @@
 {
   "name": "CEPHO",
+  "version": "1.0.1",
   "short_name": "CEPHO",
   "description": "Your AI-powered command center that learns from you and works alongside you",
   "start_url": "/",
