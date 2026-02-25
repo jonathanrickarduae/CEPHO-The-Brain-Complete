@@ -206,11 +206,11 @@ export default function NexusDashboard() {
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between px-4 sm:px-6 py-4 gap-3 sm:gap-0">
           <div className="flex items-center gap-3">
             <div>
-              <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground flex items-center gap-2 sm:gap-3">
-                <LayoutDashboard className="h-6 w-6 sm:h-8 sm:w-8 text-cyan-400" />
-                The Nexus
+              <h1 className="text-lg sm:text-2xl md:text-3xl font-bold text-foreground flex items-center gap-2">
+                <LayoutDashboard className="h-5 w-5 sm:h-8 sm:w-8 text-cyan-400" />
+                <span className="text-base sm:text-2xl md:text-3xl">The Nexus</span>
               </h1>
-              <p className="text-sm sm:text-base text-muted-foreground mt-1">Command Center</p>
+              <p className="text-xs sm:text-base text-muted-foreground mt-0.5">Command Center</p>
             </div>
           </div>
           
@@ -219,7 +219,7 @@ export default function NexusDashboard() {
             <div className="flex items-center gap-2">
               <button
                 onClick={() => requestModeChange(mode === 'omni' ? 'governed' : 'omni')}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg border-2 transition-all duration-300 ${
+                className={`flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-1.5 sm:py-2 rounded-lg border-2 transition-all duration-300 ${
                   mode === 'governed' 
                     ? 'bg-emerald-500/20 border-emerald-500/50 text-emerald-400' 
                     : 'bg-amber-500/20 border-amber-500/50 text-amber-400'
@@ -227,9 +227,9 @@ export default function NexusDashboard() {
                 title={mode === 'governed' ? 'Governed Mode: Only approved tools' : 'Everything Mode: All tools available'}
               >
                 {mode === 'governed' ? (
-                  <><ShieldCheck className="w-5 h-5" /><span className="text-sm font-semibold">GOVERNED</span></>
+                  <><ShieldCheck className="w-4 h-4 sm:w-5 sm:h-5" /><span className="text-xs sm:text-sm font-semibold">GOVERNED</span></>
                 ) : (
-                  <><Shield className="w-5 h-5" /><span className="text-sm font-semibold">EVERYTHING</span></>
+                  <><Shield className="w-4 h-4 sm:w-5 sm:h-5" /><span className="text-xs sm:text-sm font-semibold">EVERYTHING</span></>
                 )}
               </button>
               <button
@@ -250,7 +250,7 @@ export default function NexusDashboard() {
       </div>
 
       {/* Main Content - Single Column Layout */}
-      <div className="flex-1 flex flex-col gap-4 sm:gap-6 p-3 sm:p-4 md:p-6 overflow-auto">
+      <div className="flex-1 flex flex-col gap-4 sm:gap-6 p-3 sm:p-4 md:p-6 pb-[50vh] lg:pb-6 overflow-auto">
         {/* Top Section - Dashboard Info */}
         <div className="flex flex-col gap-6">
           {/* RAG Status Row */}
@@ -272,10 +272,10 @@ export default function NexusDashboard() {
               <button
                 key={idx}
                 onClick={() => setLocation(skill.path)}
-                className={`flex flex-col items-center gap-2 p-4 rounded-xl border-2 ${skill.border} bg-gradient-to-br ${skill.gradient} hover:scale-105 active:scale-95 transition-all duration-200`}
+                className={`flex flex-col items-center gap-1 sm:gap-2 p-2 sm:p-4 rounded-xl border-2 ${skill.border} bg-gradient-to-br ${skill.gradient} hover:scale-105 active:scale-95 transition-all duration-200`}
               >
-                <skill.icon className="w-6 h-6" />
-                <span className="text-xs font-medium text-center">{skill.label}</span>
+                <skill.icon className="w-5 h-5 sm:w-6 sm:h-6" />
+                <span className="text-[0.65rem] sm:text-xs font-medium text-center leading-tight">{skill.label}</span>
               </button>
             ))}
             </div>
@@ -362,8 +362,13 @@ export default function NexusDashboard() {
         </div>
       </div>
 
-      {/* OpenClaw AI Assistant - Fixed Bottom Right */}
-      <div className="fixed bottom-6 right-6 z-50 w-96 h-[500px] border-2 border-cyan-400/50 rounded-xl overflow-hidden bg-card/95 backdrop-blur-lg shadow-[0_0_30px_rgba(0,212,255,0.3)]">
+      {/* OpenClaw AI Assistant - Fixed Bottom Right (Hidden on Mobile) */}
+      <div className="hidden lg:block fixed bottom-6 right-6 z-50 w-96 h-[500px] border-2 border-cyan-400/50 rounded-xl overflow-hidden bg-card/95 backdrop-blur-lg shadow-[0_0_30px_rgba(0,212,255,0.3)]">
+        <OpenClawChat />
+      </div>
+      
+      {/* Mobile OpenClaw - Full Width at Bottom */}
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-50 h-[50vh] border-t-2 border-cyan-400/50 bg-card/95 backdrop-blur-lg shadow-[0_-4px_20px_rgba(0,212,255,0.2)]">
         <OpenClawChat />
       </div>
     </div>

@@ -30,19 +30,22 @@ export default function AIAgentsPage() {
   const [sortBy, setSortBy] = useState<'name' | 'performance' | 'tasks'>('performance');
   
   // Use tRPC to fetch agents and stats with error handling
-  const { data: agentsData, isLoading: agentsLoading, error: agentsError } = trpc.aiAgentsMonitoring.getAgents.useQuery(undefined, {
+  const { data: agentsData, isLoading: agentsLoading, error: agentsError } = trpc.aiAgentsMonitoring.getAllStatus.useQuery(undefined, {
     retry: false,
     onError: (err) => console.error('Failed to load agents:', err)
   });
-  const { data: statsData, isLoading: statsLoading, error: statsError } = trpc.aiAgentsMonitoring.getStats.useQuery(undefined, {
-    retry: false,
-    onError: (err) => console.error('Failed to load stats:', err)
-  });
   
   const agents = agentsData?.agents || [];
-  const stats = statsData?.stats || null;
-  const loading = agentsLoading || statsLoading;
-  const hasError = agentsError || statsError;
+  const stats = agentsData ? {
+    totalAgents: agentsData.totalAgents,
+    activeAgents: agentsData.activeAgents,
+    avgPerformance: agents.length > 0 ? agents.reduce((sum, a) => sum + a.performanceRating, 0) / agents.length : 0,
+    totalTasksCompleted: agents.reduce((sum, a) => sum + a.tasksCompleted, 0),
+    pendingReports: 0,
+    pendingApprovals: 0
+  } : null;
+  const loading = agentsLoading;
+  const hasError = agentsError;
 
   const categories = [
     'all',
