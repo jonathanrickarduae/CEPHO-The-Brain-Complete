@@ -58,45 +58,6 @@
     }
   ],
   "categories": ["productivity", "business", "utilities"],
-  "screenshots": [
-    {
-      "src": "/screenshots/dashboard.png",
-      "sizes": "1280x720",
-      "type": "image/png",
-      "form_factor": "wide",
-      "label": "Command Center Dashboard"
-    },
-    {
-      "src": "/screenshots/mobile.png",
-      "sizes": "390x844",
-      "type": "image/png",
-      "form_factor": "narrow",
-      "label": "Mobile View"
-    }
-  ],
-  "shortcuts": [
-    {
-      "name": "Chief of Staff",
-      "short_name": "COS",
-      "description": "Chat with your Chief of Staff",
-      "url": "/digital-twin",
-      "icons": [{ "src": "/icons/twin-icon.png", "sizes": "96x96" }]
-    },
-    {
-      "name": "The Signal",
-      "short_name": "Signal",
-      "description": "View your morning signal",
-      "url": "/daily-brief",
-      "icons": [{ "src": "/icons/brief-icon.png", "sizes": "96x96" }]
-    },
-    {
-      "name": "Inbox",
-      "short_name": "Inbox",
-      "description": "Check your universal inbox",
-      "url": "/inbox",
-      "icons": [{ "src": "/icons/inbox-icon.png", "sizes": "96x96" }]
-    }
-  ],
   "related_applications": [],
   "prefer_related_applications": false
 }
