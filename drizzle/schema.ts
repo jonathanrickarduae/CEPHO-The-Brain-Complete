@@ -2025,14 +2025,14 @@ export const generatedDocuments = pgTable("generated_documents", {
   content: text("content"), // JSON stringified content
   classification: text("classification").notNull(),
   qaStatus: text("qaStatus").notNull(),
-  qaApprover: varchar("qaApprover", { length: 200 }),
+  qaApprovedBy: varchar("qaApprovedBy", { length: 200 }),
   qaApprovedAt: timestamp("qaApprovedAt"),
   qaNotes: text("qaNotes"),
   markdownUrl: text("markdownUrl"), // S3 URL to markdown version
   htmlUrl: text("htmlUrl"), // S3 URL to HTML version
   pdfUrl: text("pdfUrl"), // S3 URL to PDF version
   relatedIdeaId: integer("relatedIdeaId"), // Link to innovation idea
-  relatedProjectId: integer("relatedProjectId"), // Link to project genesis
+  deletedProjectId: integer("deletedProjectId"), // Link to project genesis
   metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),

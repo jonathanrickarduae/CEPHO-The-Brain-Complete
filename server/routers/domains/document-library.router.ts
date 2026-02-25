@@ -133,7 +133,7 @@ export const documentLibraryRouter = router({
               documentId: input.documentId,
               classification: doc.classification || 'internal',
               qaApproved: doc.qaStatus === 'approved',
-              qaApprover: doc.qaApprover || undefined,
+              qaApprover: doc.qaApprovedBy || undefined,
             }
           );
           
@@ -165,7 +165,7 @@ export const documentLibraryRouter = router({
         content: z.string(),
         classification: z.enum(['public', 'internal', 'confidential', 'restricted']).default('internal'),
         relatedIdeaId: z.number().optional(),
-        relatedProjectId: z.number().optional(),
+        deletedProjectId: z.number().optional(),
       }))
       .mutation(async ({ ctx, input }) => {
         const { createDocument } = await import('../../db');
@@ -180,7 +180,7 @@ export const documentLibraryRouter = router({
           classification: input.classification,
           qaStatus: 'pending',
           relatedIdeaId: input.relatedIdeaId,
-          relatedProjectId: input.relatedProjectId,
+          deletedProjectId: input.deletedProjectId,
         });
         
         return { id, documentId };
@@ -202,7 +202,7 @@ export const documentLibraryRouter = router({
         
         await updateDocument(input.documentId, {
           qaStatus: input.status,
-          qaApprover: input.status === 'approved' ? 'Chief of Staff' : undefined,
+          qaApprovedBy: input.status === 'approved' ? 'Chief of Staff' : undefined,
           qaApprovedAt: input.status === 'approved' ? new Date() : undefined,
           qaNotes: input.notes,
         });
