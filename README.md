@@ -203,3 +203,4 @@ MIT License
 
 For support inquiries, please contact the development team through the Manus platform.
 # DATABASE_URL added to Render
+# DATABASE_URL password updated
