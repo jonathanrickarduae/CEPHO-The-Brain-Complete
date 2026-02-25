@@ -89,7 +89,7 @@ function generateConnections(neurons: ReturnType<typeof generateNeurons>) {
 export default function AnimatedBrainLogo({ 
   className = "",
   size = "md",
-  color = "#ec4899", // Clearer pink
+  color = "#00d4ff", // Neon blue
   intensity = "active"
 }: AnimatedBrainLogoProps) {
   // Memoize neurons and connections
