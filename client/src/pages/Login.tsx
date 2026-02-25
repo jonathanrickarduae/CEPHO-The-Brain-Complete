@@ -199,8 +199,18 @@ export default function Login() {
       <Card className="w-full max-w-md relative z-10 bg-black/70 backdrop-blur-xl border-2 border-cyan-400/30 shadow-[0_0_50px_rgba(0,212,255,0.3)] animate-[pulse_3s_ease-in-out_infinite]">
         <CardHeader className="space-y-4 text-center">
           {/* CEPHO Logo - Animated neon blue brain */}
-          <div className="flex justify-center">
-            <AnimatedBrainLogo size="xl" intensity="active" color="#00d4ff" />
+          <div className="flex justify-center relative">
+            {/* Pulsing blue glow behind brain */}
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="w-32 h-32 bg-cyan-400/60 rounded-full blur-[60px] animate-pulse" />
+            </div>
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="w-24 h-24 bg-blue-500/80 rounded-full blur-[40px] animate-pulse" style={{ animationDuration: '2s' }} />
+            </div>
+            {/* Brain logo on top */}
+            <div className="relative z-10">
+              <AnimatedBrainLogo size="xl" intensity="active" color="#00d4ff" />
+            </div>
           </div>
           
           {/* CEPHO Title - Blended neon colors */}

@@ -249,8 +249,10 @@ export default function NexusDashboard() {
         </div>
       </div>
 
-      {/* Main Content */}
-      <div className="flex-1 flex flex-col p-6 overflow-auto">
+      {/* Main Content - Two Column Layout */}
+      <div className="flex-1 flex gap-6 p-6 overflow-hidden">
+        {/* Left Column - Dashboard Info */}
+        <div className="flex-1 flex flex-col gap-6 overflow-auto pr-2">
         {/* RAG Status Row */}
         <div className="mb-6">
           <h2 className="text-sm font-semibold text-muted-foreground mb-3">SYSTEM STATUS</h2>
@@ -315,7 +317,7 @@ export default function NexusDashboard() {
         </div>
 
         {/* Activity Feed */}
-        <div className="mb-6">
+        <div>
           <h2 className="text-sm font-semibold text-muted-foreground mb-3">RECENT ACTIVITY</h2>
           <div className="border-2 border-border rounded-xl bg-card p-4 space-y-2">
             <ActivityItem 
@@ -356,10 +358,12 @@ export default function NexusDashboard() {
           </div>
         </div>
 
-        {/* OpenClaw Chat Interface */}
-        <div className="mt-auto">
-          <div className="border-2 border-primary/30 rounded-xl overflow-hidden bg-card">
-            <div className="bg-primary/10 px-4 py-2 border-b border-primary/20">
+        </div>
+
+        {/* Right Column - OpenClaw Chat (Always Visible) */}
+        <div className="w-[600px] flex flex-col">
+          <div className="flex-1 border-2 border-primary/30 rounded-xl overflow-hidden bg-card flex flex-col">
+            <div className="bg-primary/10 px-4 py-3 border-b border-primary/20 shrink-0">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <Brain className="w-5 h-5 text-primary" />
@@ -371,7 +375,9 @@ export default function NexusDashboard() {
                 </span>
               </div>
             </div>
-            <OpenClawChat />
+            <div className="flex-1 overflow-hidden">
+              <OpenClawChat />
+            </div>
           </div>
         </div>
       </div>
