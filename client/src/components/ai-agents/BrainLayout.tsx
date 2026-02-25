@@ -70,14 +70,15 @@ const menuItems: MenuItem[] = [
     ]
   },
   { 
-    icon: Briefcase, 
+    icon: Fingerprint, 
     label: "Chief of Staff", 
     path: "/digital-twin",
     children: [
-      { icon: CheckCircle2, label: "Tasks", path: "/chief-of-staff-enhanced" },
+      { icon: CheckCircle2, label: "Tasks", path: "/digital-twin" },
       { icon: Rocket, label: "Odyssey Management", path: "/development-pathway" },
-      { icon: Brain, label: "Twin Training", path: "/cos-training" },
-      { icon: Activity, label: "AI Agents", path: "/ai-agents-monitoring" },
+      { icon: GraduationCap, label: "Twin Training", path: "/cos-training" },
+      { icon: Bot, label: "AI Agents", path: "/ai-agents" },
+      { icon: Users, label: "AI-SMEs", path: "/ai-experts" },
       { icon: TrendingUp, label: "Operations", path: "/operations" },
       { icon: BarChart3, label: "Analytics", path: "/statistics" },
       { icon: Library, label: "Document Library", path: "/documents" },
@@ -94,14 +95,7 @@ const menuItems: MenuItem[] = [
       { icon: Users, label: "Persephone Board", path: "/persephone" },
     ]
   },
-  { 
-    icon: Users, 
-    label: "Expert Network", 
-    path: "/expert-network",
-    children: [
-      { icon: Users, label: "AI-SMEs", path: "/ai-experts" },
-    ]
-  },
+
   { icon: Lock, label: "Vault", path: "/vault" },
   { icon: Settings, label: "Settings", path: "/settings" },
 ];

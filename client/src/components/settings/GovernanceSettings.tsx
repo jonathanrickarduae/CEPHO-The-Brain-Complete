@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Shield, ShieldCheck, Lock, CheckCircle2, Info, Filter } from 'lucide-react';
+import { Shield, ShieldCheck, Lock, CheckCircle2, Info } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -8,22 +8,26 @@ import { useGovernance } from '@/hooks/useGovernance';
 import { toast } from 'sonner';
 
 // Real integrations with actual governance rules
+// In governed mode: Only Microsoft 365 tools are allowed
 const REAL_INTEGRATIONS = [
   // Microsoft 365 - Allowed in governed mode
   { id: 'copilot', name: 'Microsoft Copilot', category: 'AI Assistant', governedAllowed: true },
   { id: 'outlook', name: 'Microsoft Outlook', category: 'Email', governedAllowed: true },
   { id: 'teams', name: 'Microsoft Teams', category: 'Communication', governedAllowed: true },
   { id: 'onedrive', name: 'Microsoft OneDrive', category: 'Storage', governedAllowed: true },
+  { id: 'sharepoint', name: 'Microsoft SharePoint', category: 'Collaboration', governedAllowed: true },
   
   // External AI - Blocked in governed mode
   { id: 'openai', name: 'OpenAI GPT-4', category: 'AI Models', governedAllowed: false },
   { id: 'claude', name: 'Anthropic Claude', category: 'AI Models', governedAllowed: false },
   { id: 'gemini', name: 'Google Gemini', category: 'AI Models', governedAllowed: false },
+  { id: 'perplexity', name: 'Perplexity AI', category: 'AI Search', governedAllowed: false },
   
-  // Other services
+  // Other services - Blocked in governed mode
   { id: 'gmail', name: 'Gmail', category: 'Email', governedAllowed: false },
   { id: 'slack', name: 'Slack', category: 'Communication', governedAllowed: false },
   { id: 'notion', name: 'Notion', category: 'Productivity', governedAllowed: false },
+  { id: 'google-calendar', name: 'Google Calendar', category: 'Calendar', governedAllowed: false },
 ];
 
 export function GovernanceSettings() {
@@ -44,7 +48,7 @@ export function GovernanceSettings() {
   });
 
   const allowedCount = REAL_INTEGRATIONS.filter(i => mode === 'omni' ? true : i.governedAllowed).length;
-  const blockedCount = REAL_INTEGRATIONS.length - allowedCount;
+  const blockedCount = mode === 'governed' ? REAL_INTEGRATIONS.length - allowedCount : 0;
 
   return (
     <div className="space-y-6">
@@ -96,7 +100,7 @@ export function GovernanceSettings() {
                 </p>
                 <p className="text-sm text-muted-foreground mt-1">
                   {mode === 'governed' 
-                    ? 'Only Microsoft 365 tools (Copilot, Outlook, Teams, OneDrive) are available. External AI models and third-party services are disabled for compliance.'
+                    ? 'Only Microsoft 365 tools (Copilot, Outlook, Teams, OneDrive, SharePoint) are available. External AI models and third-party services are disabled for compliance and security.'
                     : 'All AI tools, models, and integrations are available. Use this mode for maximum flexibility and access to all platform features.'}
                 </p>
               </div>
@@ -125,15 +129,17 @@ export function GovernanceSettings() {
             <CheckCircle2 className="w-4 h-4 mr-1" />
             Allowed ({allowedCount})
           </Button>
-          <Button
-            variant={filterMode === 'blocked' ? 'default' : 'outline'}
-            size="sm"
-            onClick={() => setFilterMode('blocked')}
-            className={filterMode === 'blocked' ? 'bg-red-600 hover:bg-red-700' : ''}
-          >
-            <Lock className="w-4 h-4 mr-1" />
-            Blocked ({blockedCount})
-          </Button>
+          {mode === 'governed' && (
+            <Button
+              variant={filterMode === 'blocked' ? 'default' : 'outline'}
+              size="sm"
+              onClick={() => setFilterMode('blocked')}
+              className={filterMode === 'blocked' ? 'bg-red-600 hover:bg-red-700' : ''}
+            >
+              <Lock className="w-4 h-4 mr-1" />
+              Blocked ({blockedCount})
+            </Button>
+          )}
         </div>
       </div>
 
@@ -174,7 +180,7 @@ export function GovernanceSettings() {
 
       {filteredIntegrations.length === 0 && (
         <div className="text-center py-12">
-          <Filter className="w-12 h-12 text-muted-foreground mx-auto mb-3" />
+          <Shield className="w-12 h-12 text-muted-foreground mx-auto mb-3" />
           <p className="text-muted-foreground">No integrations match this filter</p>
         </div>
       )}

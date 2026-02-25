@@ -1,71 +1,58 @@
 import { useState } from 'react';
 import { 
-  Key, Eye, EyeOff, Save, Plus, Trash2, AlertCircle, 
-  CheckCircle2, Settings, ExternalLink, RefreshCw,
-  Mail, MessageSquare, Video, Calendar, FileText, 
-  Database, Shield, Cpu, Sparkles, Lock, Globe
+  CheckCircle2, XCircle, Settings, ExternalLink, Search,
+  Cpu, Mail, MessageSquare, Calendar, FileText, 
+  Database, Shield, Globe, Sparkles
 } from 'lucide-react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { toast } from 'sonner';
-import { ScrollArea } from '@/components/ui/scroll-area';
 
-interface APIKey {
+interface Integration {
   id: string;
   name: string;
-  category: 'ai' | 'communication' | 'productivity' | 'security' | 'development';
+  category: string;
   icon: React.ReactNode;
-  key?: string;
-  status: 'active' | 'inactive' | 'error';
-  lastUsed?: string;
-  usageCount?: number;
+  status: 'active' | 'inactive';
   description: string;
   documentationUrl?: string;
 }
 
-const API_SERVICES: APIKey[] = [
+const INTEGRATIONS: Integration[] = [
   // AI Services
   {
     id: 'openai',
     name: 'OpenAI',
-    category: 'ai',
+    category: 'AI Services',
     icon: <Cpu className="w-4 h-4" />,
     status: 'active',
     description: 'GPT-4, GPT-3.5, DALL-E, Whisper APIs',
     documentationUrl: 'https://platform.openai.com/docs',
-    lastUsed: '2 hours ago',
-    usageCount: 1247
   },
   {
     id: 'claude',
     name: 'Anthropic Claude',
-    category: 'ai',
+    category: 'AI Services',
     icon: <Sparkles className="w-4 h-4" />,
     status: 'active',
     description: 'Claude 3 Opus, Sonnet, Haiku',
     documentationUrl: 'https://docs.anthropic.com',
-    lastUsed: '5 hours ago',
-    usageCount: 892
   },
   {
     id: 'gemini',
     name: 'Google Gemini',
-    category: 'ai',
+    category: 'AI Services',
     icon: <Sparkles className="w-4 h-4" />,
     status: 'active',
     description: 'Gemini Pro, Gemini Ultra',
     documentationUrl: 'https://ai.google.dev/docs',
-    lastUsed: '1 day ago',
-    usageCount: 456
   },
   {
     id: 'perplexity',
     name: 'Perplexity AI',
-    category: 'ai',
+    category: 'AI Services',
     icon: <Globe className="w-4 h-4" />,
     status: 'inactive',
     description: 'Real-time search and reasoning',
@@ -74,31 +61,27 @@ const API_SERVICES: APIKey[] = [
   {
     id: 'elevenlabs',
     name: 'ElevenLabs',
-    category: 'ai',
+    category: 'AI Services',
     icon: <MessageSquare className="w-4 h-4" />,
     status: 'active',
     description: 'Voice synthesis and cloning',
     documentationUrl: 'https://elevenlabs.io/docs',
-    lastUsed: '3 days ago',
-    usageCount: 78
   },
   
   // Communication
   {
     id: 'gmail',
     name: 'Gmail API',
-    category: 'communication',
+    category: 'Communication',
     icon: <Mail className="w-4 h-4" />,
     status: 'active',
     description: 'Email management and automation',
     documentationUrl: 'https://developers.google.com/gmail/api',
-    lastUsed: '1 hour ago',
-    usageCount: 2341
   },
   {
     id: 'sendgrid',
     name: 'SendGrid',
-    category: 'communication',
+    category: 'Communication',
     icon: <Mail className="w-4 h-4" />,
     status: 'inactive',
     description: 'Transactional email service',
@@ -107,7 +90,7 @@ const API_SERVICES: APIKey[] = [
   {
     id: 'twilio',
     name: 'Twilio',
-    category: 'communication',
+    category: 'Communication',
     icon: <MessageSquare className="w-4 h-4" />,
     status: 'inactive',
     description: 'SMS, voice, and messaging',
@@ -116,431 +99,171 @@ const API_SERVICES: APIKey[] = [
   {
     id: 'slack',
     name: 'Slack',
-    category: 'communication',
+    category: 'Communication',
     icon: <MessageSquare className="w-4 h-4" />,
     status: 'active',
     description: 'Team communication and bots',
     documentationUrl: 'https://api.slack.com',
-    lastUsed: '30 minutes ago',
-    usageCount: 567
   },
   
   // Productivity
   {
     id: 'notion',
     name: 'Notion',
-    category: 'productivity',
+    category: 'Productivity',
     icon: <FileText className="w-4 h-4" />,
     status: 'active',
     description: 'Database and content management',
     documentationUrl: 'https://developers.notion.com',
-    lastUsed: '6 hours ago',
-    usageCount: 234
   },
   {
     id: 'airtable',
     name: 'Airtable',
-    category: 'productivity',
+    category: 'Productivity',
     icon: <Database className="w-4 h-4" />,
     status: 'inactive',
     description: 'Spreadsheet-database hybrid',
     documentationUrl: 'https://airtable.com/developers'
   },
   {
-    id: 'asana',
-    name: 'Asana',
-    category: 'productivity',
-    icon: <CheckCircle2 className="w-4 h-4" />,
-    status: 'active',
-    description: 'Project and task management',
-    documentationUrl: 'https://developers.asana.com',
-    lastUsed: '2 days ago',
-    usageCount: 145
-  },
-  {
-    id: 'todoist',
-    name: 'Todoist',
-    category: 'productivity',
-    icon: <CheckCircle2 className="w-4 h-4" />,
-    status: 'active',
-    description: 'Task management and tracking',
-    documentationUrl: 'https://developer.todoist.com',
-    lastUsed: '4 hours ago',
-    usageCount: 678
-  },
-  {
     id: 'google-calendar',
     name: 'Google Calendar',
-    category: 'productivity',
+    category: 'Productivity',
     icon: <Calendar className="w-4 h-4" />,
     status: 'active',
-    description: 'Calendar and event management',
-    documentationUrl: 'https://developers.google.com/calendar',
-    lastUsed: '1 hour ago',
-    usageCount: 1892
+    description: 'Calendar integration and scheduling',
+    documentationUrl: 'https://developers.google.com/calendar'
   },
-  {
-    id: 'zoom',
-    name: 'Zoom',
-    category: 'productivity',
-    icon: <Video className="w-4 h-4" />,
-    status: 'active',
-    description: 'Video conferencing API',
-    documentationUrl: 'https://marketplace.zoom.us/docs',
-    lastUsed: '1 day ago',
-    usageCount: 89
-  },
-  
-  // Security
-  {
-    id: 'auth0',
-    name: 'Auth0',
-    category: 'security',
-    icon: <Shield className="w-4 h-4" />,
-    status: 'inactive',
-    description: 'Authentication and authorization',
-    documentationUrl: 'https://auth0.com/docs'
-  },
-  {
-    id: 'vault',
-    name: 'HashiCorp Vault',
-    category: 'security',
-    icon: <Lock className="w-4 h-4" />,
-    status: 'inactive',
-    description: 'Secrets management',
-    documentationUrl: 'https://www.vaultproject.io/docs'
-  },
-  
-  // Development
-  {
-    id: 'github',
-    name: 'GitHub',
-    category: 'development',
-    icon: <Database className="w-4 h-4" />,
-    status: 'active',
-    description: 'Repository and CI/CD management',
-    documentationUrl: 'https://docs.github.com',
-    lastUsed: '3 hours ago',
-    usageCount: 456
-  },
-  {
-    id: 'vercel',
-    name: 'Vercel',
-    category: 'development',
-    icon: <Globe className="w-4 h-4" />,
-    status: 'active',
-    description: 'Deployment and hosting',
-    documentationUrl: 'https://vercel.com/docs',
-    lastUsed: '5 hours ago',
-    usageCount: 123
-  },
-  {
-    id: 'stripe',
-    name: 'Stripe',
-    category: 'development',
-    icon: <Database className="w-4 h-4" />,
-    status: 'inactive',
-    description: 'Payment processing',
-    documentationUrl: 'https://stripe.com/docs'
-  },
-  {
-    id: 'aws',
-    name: 'AWS',
-    category: 'development',
-    icon: <Database className="w-4 h-4" />,
-    status: 'inactive',
-    description: 'Cloud infrastructure',
-    documentationUrl: 'https://docs.aws.amazon.com'
-  },
-  {
-    id: 'supabase',
-    name: 'Supabase',
-    category: 'development',
-    icon: <Database className="w-4 h-4" />,
-    status: 'active',
-    description: 'Backend as a service',
-    documentationUrl: 'https://supabase.com/docs',
-    lastUsed: '30 minutes ago',
-    usageCount: 3456
-  }
 ];
 
 export function IntegrationsManager() {
-  const [services, setServices] = useState<APIKey[]>(API_SERVICES);
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
-  const [editingService, setEditingService] = useState<string | null>(null);
-  const [showKey, setShowKey] = useState<{ [key: string]: boolean }>({});
-  const [apiKeys, setApiKeys] = useState<{ [key: string]: string }>({});
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filterStatus, setFilterStatus] = useState<'all' | 'active' | 'inactive'>('all');
 
-  const categories = [
-    { value: 'all', label: 'All Services', count: services.length },
-    { value: 'ai', label: 'AI Services', count: services.filter(s => s.category === 'ai').length },
-    { value: 'communication', label: 'Communication', count: services.filter(s => s.category === 'communication').length },
-    { value: 'productivity', label: 'Productivity', count: services.filter(s => s.category === 'productivity').length },
-    { value: 'security', label: 'Security', count: services.filter(s => s.category === 'security').length },
-    { value: 'development', label: 'Development', count: services.filter(s => s.category === 'development').length }
-  ];
+  const filteredIntegrations = INTEGRATIONS.filter(integration => {
+    const matchesSearch = integration.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                         integration.category.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesStatus = filterStatus === 'all' || integration.status === filterStatus;
+    return matchesSearch && matchesStatus;
+  });
 
-  const filteredServices = selectedCategory === 'all' 
-    ? services 
-    : services.filter(s => s.category === selectedCategory);
+  const activeCount = INTEGRATIONS.filter(i => i.status === 'active').length;
+  const inactiveCount = INTEGRATIONS.filter(i => i.status === 'inactive').length;
 
-  const activeServices = services.filter(s => s.status === 'active').length;
-  const inactiveServices = services.filter(s => s.status === 'inactive').length;
-
-  const handleSaveKey = (serviceId: string) => {
-    const key = apiKeys[serviceId];
-    if (!key || key.trim() === '') {
-      toast.error('Please enter a valid API key');
-      return;
-    }
-
-    setServices(services.map(s => 
-      s.id === serviceId 
-        ? { ...s, status: 'active' as const, key, lastUsed: 'Just now', usageCount: 0 }
-        : s
-    ));
-    
-    setEditingService(null);
-    toast.success(`API key saved for ${services.find(s => s.id === serviceId)?.name}`);
-  };
-
-  const handleRemoveKey = (serviceId: string) => {
-    setServices(services.map(s => 
-      s.id === serviceId 
-        ? { ...s, status: 'inactive' as const, key: undefined }
-        : s
-    ));
-    
-    setApiKeys({ ...apiKeys, [serviceId]: '' });
-    toast.success('API key removed');
-  };
-
-  const handleTestConnection = async (serviceId: string) => {
-    toast.info('Testing connection...');
-    
-    // Simulate API test
-    setTimeout(() => {
-      const service = services.find(s => s.id === serviceId);
-      if (service?.status === 'active') {
-        toast.success(`${service.name} connection successful`);
-      } else {
-        toast.error('Please configure API key first');
-      }
-    }, 1000);
-  };
-
-  const toggleShowKey = (serviceId: string) => {
-    setShowKey({ ...showKey, [serviceId]: !showKey[serviceId] });
+  const handleToggleStatus = (id: string) => {
+    toast.info('Integration status toggled (demo mode)');
   };
 
   return (
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h2 className="text-3xl font-bold tracking-tight">Integrations Manager</h2>
-        <p className="text-muted-foreground mt-2">
-          Manage API keys and credentials for all connected services
-        </p>
+        <h3 className="text-lg font-semibold text-foreground">Integrations</h3>
+        <p className="text-sm text-muted-foreground">Manage your API keys and service connections</p>
       </div>
 
-      {/* Stats */}
-      <div className="grid gap-4 md:grid-cols-3">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Services</CardTitle>
-            <Settings className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{services.length}</div>
-            <p className="text-xs text-muted-foreground">
-              Available integrations
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Active</CardTitle>
-            <CheckCircle2 className="h-4 w-4 text-green-500" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{activeServices}</div>
-            <p className="text-xs text-muted-foreground">
-              Connected and configured
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Inactive</CardTitle>
-            <AlertCircle className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{inactiveServices}</div>
-            <p className="text-xs text-muted-foreground">
-              Awaiting configuration
-            </p>
-          </CardContent>
-        </Card>
+      {/* Search and Filters */}
+      <div className="flex flex-col sm:flex-row gap-3">
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+          <Input
+            placeholder="Search integrations..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="pl-9"
+          />
+        </div>
+        <div className="flex gap-2">
+          <Button
+            variant={filterStatus === 'all' ? 'default' : 'outline'}
+            size="sm"
+            onClick={() => setFilterStatus('all')}
+          >
+            All ({INTEGRATIONS.length})
+          </Button>
+          <Button
+            variant={filterStatus === 'active' ? 'default' : 'outline'}
+            size="sm"
+            onClick={() => setFilterStatus('active')}
+            className={filterStatus === 'active' ? 'bg-emerald-600 hover:bg-emerald-700' : ''}
+          >
+            Active ({activeCount})
+          </Button>
+          <Button
+            variant={filterStatus === 'inactive' ? 'default' : 'outline'}
+            size="sm"
+            onClick={() => setFilterStatus('inactive')}
+          >
+            Inactive ({inactiveCount})
+          </Button>
+        </div>
       </div>
 
-      {/* Category Tabs */}
-      <Tabs value={selectedCategory} onValueChange={setSelectedCategory}>
-        <TabsList className="grid w-full grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
-          {categories.map(cat => (
-            <TabsTrigger key={cat.value} value={cat.value}>
-              {cat.label} ({cat.count})
-            </TabsTrigger>
-          ))}
-        </TabsList>
-
-        <TabsContent value={selectedCategory} className="space-y-4 mt-6">
-          <ScrollArea className="h-[600px] pr-4">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-              {filteredServices.map(service => (
-                <Card key={service.id}>
-                  <CardHeader>
-                    <div className="flex flex-col md:flex-row items-start md:justify-between gap-3">
-                      <div className="flex items-center gap-3">
-                        <div className="p-2 bg-primary/10 rounded-lg">
-                          {service.icon}
-                        </div>
-                        <div>
-                          <CardTitle className="text-lg">{service.name}</CardTitle>
-                          <CardDescription className="mt-1">
-                            {service.description}
-                          </CardDescription>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-2 self-end md:self-auto">
-                        <Badge 
-                          className={service.status === 'active' 
-                            ? 'bg-green-500 hover:bg-green-600 text-white' 
-                            : 'bg-gray-500 hover:bg-gray-600 text-white'
-                          }
-                        >
-                          {service.status === 'active' ? (
-                            <><CheckCircle2 className="w-3 h-3 mr-1" /> Live</>
-                          ) : (
-                            <><AlertCircle className="w-3 h-3 mr-1" /> Inactive</>
-                          )}
-                        </Badge>
-                        {service.documentationUrl && (
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => window.open(service.documentationUrl, '_blank')}
-                          >
-                            <ExternalLink className="w-4 h-4" />
-                          </Button>
-                        )}
-                      </div>
-                    </div>
-                  </CardHeader>
-
-                  <CardContent className="space-y-4">
-                    {/* Usage Stats */}
-                    {service.status === 'active' && (
-                      <div className="flex flex-col md:flex-row items-start md:items-center gap-2 md:gap-6 text-sm text-muted-foreground">
-                        <div>
-                          <span className="font-medium">Last used:</span> {service.lastUsed}
-                        </div>
-                        <div>
-                          <span className="font-medium">Requests:</span> {service.usageCount?.toLocaleString()}
-                        </div>
-                      </div>
-                    )}
-
-                    {/* API Key Management */}
-                    {editingService === service.id ? (
-                      <div className="space-y-3">
-                        <div className="space-y-2">
-                          <Label htmlFor={`api-key-${service.id}`}>API Key</Label>
-                          <div className="flex gap-2">
-                            <div className="relative flex-1">
-                              <Input
-                                id={`api-key-${service.id}`}
-                                type={showKey[service.id] ? 'text' : 'password'}
-                                placeholder="Enter your API key..."
-                                value={apiKeys[service.id] || ''}
-                                onChange={(e) => setApiKeys({ ...apiKeys, [service.id]: e.target.value })}
-                              />
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                className="absolute right-1 top-1/2 -translate-y-1/2"
-                                onClick={() => toggleShowKey(service.id)}
-                              >
-                                {showKey[service.id] ? (
-                                  <EyeOff className="w-4 h-4" />
-                                ) : (
-                                  <Eye className="w-4 h-4" />
-                                )}
-                              </Button>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="flex gap-2">
-                          <Button onClick={() => handleSaveKey(service.id)}>
-                            <Save className="w-4 h-4 mr-2" />
-                            Save Key
-                          </Button>
-                          <Button variant="outline" onClick={() => setEditingService(null)}>
-                            Cancel
-                          </Button>
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="flex gap-2">
-                        {service.status === 'active' ? (
-                          <>
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => setEditingService(service.id)}
-                            >
-                              <Key className="w-4 h-4 mr-2" />
-                              Update Key
-                            </Button>
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => handleTestConnection(service.id)}
-                            >
-                              <RefreshCw className="w-4 h-4 mr-2" />
-                              Test Connection
-                            </Button>
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => handleRemoveKey(service.id)}
-                            >
-                              <Trash2 className="w-4 h-4 mr-2" />
-                              Remove
-                            </Button>
-                          </>
-                        ) : (
-                          <Button
-                            onClick={() => setEditingService(service.id)}
-                          >
-                            <Plus className="w-4 h-4 mr-2" />
-                            Add API Key
-                          </Button>
-                        )}
-                      </div>
-                    )}
-                  </CardContent>
-                </Card>
-              ))}
+      {/* Integrations List */}
+      <div className="space-y-2">
+        {filteredIntegrations.map((integration) => (
+          <div
+            key={integration.id}
+            className="flex items-center justify-between p-4 rounded-lg border border-border bg-card hover:bg-accent/50 transition-colors"
+          >
+            <div className="flex items-center gap-4 flex-1">
+              <div className="p-2 rounded-lg bg-primary/10 text-primary">
+                {integration.icon}
+              </div>
+              <div className="flex-1">
+                <div className="flex items-center gap-2 mb-1">
+                  <h4 className="font-medium text-foreground">{integration.name}</h4>
+                  <Badge variant="outline" className="text-xs">
+                    {integration.category}
+                  </Badge>
+                </div>
+                <p className="text-sm text-muted-foreground">{integration.description}</p>
+              </div>
             </div>
-          </ScrollArea>
-        </TabsContent>
-      </Tabs>
+            
+            <div className="flex items-center gap-3">
+              {integration.status === 'active' ? (
+                <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/50">
+                  <CheckCircle2 className="w-3 h-3 mr-1" />
+                  Active
+                </Badge>
+              ) : (
+                <Badge variant="outline" className="text-muted-foreground">
+                  <XCircle className="w-3 h-3 mr-1" />
+                  Inactive
+                </Badge>
+              )}
+              
+              {integration.documentationUrl && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => window.open(integration.documentationUrl, '_blank')}
+                  title="View documentation"
+                >
+                  <ExternalLink className="w-4 h-4" />
+                </Button>
+              )}
+              
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => handleToggleStatus(integration.id)}
+              >
+                <Settings className="w-4 h-4 mr-2" />
+                Configure
+              </Button>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {filteredIntegrations.length === 0 && (
+        <div className="text-center py-12">
+          <Search className="w-12 h-12 text-muted-foreground mx-auto mb-3" />
+          <p className="text-muted-foreground">No integrations match your search</p>
+        </div>
+      )}
     </div>
   );
 }
-
-
-export default IntegrationsManager;
