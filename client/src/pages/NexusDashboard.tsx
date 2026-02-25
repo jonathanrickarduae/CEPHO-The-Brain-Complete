@@ -357,37 +357,22 @@ export default function NexusDashboard() {
           </div>
         </div>
 
-        {/* CEPHO Chat Input */}
+        {/* OpenClaw Chat Interface */}
         <div className="mt-auto">
-          <div className="flex items-center gap-3 p-4 rounded-xl border-2 border-primary/50 bg-gradient-to-br from-primary/10 to-primary/5">
-            <Brain className="w-6 h-6 text-primary animate-pulse" />
-            <div className="flex-1 flex items-center gap-2 bg-background/50 rounded-lg px-3 py-2">
-              <textarea
-                ref={inputRef}
-                value={inputValue}
-                onChange={handleInputChange}
-                onKeyDown={handleKeyDown}
-                placeholder="Ask CEPHO anything..."
-                className="flex-1 bg-transparent border-none outline-none resize-none text-sm text-foreground placeholder:text-muted-foreground"
-                rows={1}
-              />
-              <button
-                onClick={toggleRecording}
-                className={`p-2 rounded-lg transition-colors ${
-                  isListening 
-                    ? 'bg-red-500/20 text-red-400' 
-                    : 'hover:bg-primary/10 text-muted-foreground hover:text-primary'
-                }`}
-              >
-                {isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
-              </button>
-              <button
-                onClick={handleSubmit}
-                className="p-2 rounded-lg bg-primary/20 text-primary hover:bg-primary/30 transition-colors"
-              >
-                <Send className="w-4 h-4" />
-              </button>
+          <div className="border-2 border-primary/30 rounded-xl overflow-hidden bg-card">
+            <div className="bg-primary/10 px-4 py-2 border-b border-primary/20">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Brain className="w-5 h-5 text-primary" />
+                  <span className="text-sm font-semibold text-foreground">OpenClaw AI Assistant</span>
+                  <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                </div>
+                <span className="text-xs text-muted-foreground">
+                  {mode === 'governed' ? 'Copilot + Outlook' : 'All AI Models'}
+                </span>
+              </div>
             </div>
+            <OpenClawChat />
           </div>
         </div>
       </div>

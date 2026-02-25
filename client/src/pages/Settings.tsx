@@ -2,9 +2,11 @@ import { useState } from 'react';
 import { 
   Settings as SettingsIcon, User, Calendar, Database, 
   Bell, Shield, Palette, CreditCard, Users,
-  ChevronRight, Check, Search
+  ChevronRight, Check, Search, Plus
 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { PageHeader } from '@/components/layout/Breadcrumbs';
 import { ThemeSelector, ThemeProvider } from '@/components/settings/ThemeToggle';
 import { CalendarIntegration } from '@/components/integrations/CalendarIntegration';
@@ -22,16 +24,19 @@ import { APICostCalculator } from '@/components/integrations/APICostCalculator';
 import { SecureStorageDashboard } from '@/components/project-management/SecureStorageDashboard';
 import { BrandKitManager } from '@/components/content/BrandKit';
 import { DataGovernanceDashboard } from '@/components/project-management/DataGovernanceDashboard';
+import { GovernanceSettings } from '@/components/settings/GovernanceSettings';
 import { Plug, Wallet, FileSignature, Cpu, HardDrive, Paintbrush, ShieldCheck } from 'lucide-react';
 
-type SettingsTab = 'profile' | 'integrations' | 'subscriptions' | 'signatures' | 'ai-providers' | 'api-costs' | 'storage' | 'brand-kit' | 'data-governance' | 'calendar' | 'training' | 'referrals' | 'notifications' | 'privacy' | 'appearance' | 'accessibility';
+type SettingsTab = 'governance' | 'integrations' | 'email-accounts' | 'subscriptions' | 'signatures' | 'ai-providers' | 'api-costs' | 'storage' | 'brand-kit' | 'data-governance' | 'calendar' | 'training' | 'referrals' | 'notifications' | 'privacy' | 'appearance' | 'accessibility' | 'profile';
 
 export default function Settings() {
-  const [activeTab, setActiveTab] = useState<SettingsTab>('profile');
+  const [activeTab, setActiveTab] = useState<SettingsTab>('integrations');
   const [searchQuery, setSearchQuery] = useState('');
 
   const tabs = [
+    { id: 'governance' as const, label: 'Governance', icon: ShieldCheck },
     { id: 'integrations' as const, label: 'Integrations', icon: Plug },
+    { id: 'email-accounts' as const, label: 'Email Accounts', icon: Bell },
     { id: 'subscriptions' as const, label: 'Subscriptions', icon: Wallet },
     { id: 'signatures' as const, label: 'Signatures', icon: FileSignature },
     { id: 'ai-providers' as const, label: 'AI Providers', icon: Cpu },
@@ -107,6 +112,37 @@ export default function Settings() {
 
           {/* Content */}
           <div className="flex-1">
+            {activeTab === 'governance' && (
+              <div className="bg-gray-800 rounded-xl border border-gray-700 p-6">
+                <GovernanceSettings />
+              </div>
+            )}
+
+            {activeTab === 'email-accounts' && (
+              <div className="bg-gray-800 rounded-xl border border-gray-700 p-6">
+                <h3 className="text-lg font-semibold text-white mb-6">Email Accounts</h3>
+                <p className="text-muted-foreground mb-4">Manage your connected email accounts for CEPHO.AI</p>
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between p-4 rounded-lg border border-border bg-card">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center">
+                        <Bell className="w-5 h-5 text-blue-400" />
+                      </div>
+                      <div>
+                        <div className="font-medium text-foreground">Outlook</div>
+                        <div className="text-xs text-muted-foreground">user@company.com</div>
+                      </div>
+                    </div>
+                    <Badge variant="default" className="bg-emerald-500/20 text-emerald-400">Connected</Badge>
+                  </div>
+                  <Button variant="outline" className="w-full">
+                    <Plus className="w-4 h-4 mr-2" />
+                    Add Email Account
+                  </Button>
+                </div>
+              </div>
+            )}
+
             {activeTab === 'profile' && (
               <>
               <div className="bg-gray-800 rounded-xl border border-gray-700 p-6">
