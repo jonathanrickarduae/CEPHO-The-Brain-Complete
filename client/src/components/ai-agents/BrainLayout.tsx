@@ -35,7 +35,7 @@ import { MoodCheckModal } from "@/components/mood-tracking/MoodCheckModal";
 import { KeyboardShortcutsHelp, useKeyboardShortcutsHelp } from "@/components/project-management/KeyboardShortcutsHelp";
 import { useMoodCheck } from "@/hooks/useMoodCheck";
 import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
-import { OnboardingModal, useOnboarding } from "@/components/project-management/Onboarding";
+
 import { AccessibilitySettings, SkipLink } from "@/components/settings/AccessibilitySettings";
 import { Accessibility, Command } from "lucide-react";
 import { CommandPalette, useCommandPalette } from "@/components/shared/CommandPalette";
@@ -164,8 +164,7 @@ function BrainLayoutContent({
   // Mood check state (3x daily)
   const { shouldShowMoodCheck, currentPeriod, recordMoodCheck, dismissMoodCheck } = useMoodCheck();
   
-  // Onboarding state
-  const { shouldShowOnboarding, completeOnboarding } = useOnboarding();
+
   
   // Accessibility settings state
   const [showAccessibilitySettings, setShowAccessibilitySettings] = useState(false);
@@ -433,12 +432,7 @@ function BrainLayoutContent({
         onClose={keyboardHelp.close}
       />
       
-      {/* Onboarding Modal */}
-      <OnboardingModal
-        isOpen={shouldShowOnboarding}
-        onComplete={completeOnboarding}
-        onSkip={completeOnboarding}
-      />
+
       
       {/* Accessibility Settings */}
       <AccessibilitySettings
