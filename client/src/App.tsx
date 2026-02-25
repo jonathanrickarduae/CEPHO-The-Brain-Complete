@@ -134,7 +134,7 @@ function Router() {
         
         {/* Dashboard pages with sidebar - Protected */}
         <Route path="/nexus">
-          <WithLayout><DashboardEnhanced /></WithLayout>
+          <WithLayout><NexusDashboard /></WithLayout>
         </Route>
         <Route path="/tasks">
           <WithLayout><ChiefOfStaff /></WithLayout>

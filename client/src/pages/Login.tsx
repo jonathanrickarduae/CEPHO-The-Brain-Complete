@@ -182,9 +182,12 @@ export default function Login() {
 
   return (
     <div className="min-h-screen flex items-center justify-center relative overflow-hidden bg-black p-4">
-      {/* Large blue glow in center */}
+      {/* Intense pulsing blue glow in center */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[1000px] bg-blue-500/40 rounded-full blur-[150px]" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1200px] h-[1200px] bg-cyan-400/60 rounded-full blur-[200px] animate-pulse" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-blue-500/70 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '0.5s' }} />
+        <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-cyan-500/50 rounded-full blur-[100px] animate-pulse" style={{ animationDuration: '3s' }} />
+        <div className="absolute bottom-1/4 right-1/4 w-[600px] h-[600px] bg-blue-400/50 rounded-full blur-[100px] animate-pulse" style={{ animationDuration: '4s' }} />
       </div>
 
       {/* Animated particle field - prominent blue effect */}
@@ -193,7 +196,7 @@ export default function Login() {
       </div>
 
       {/* Login Card */}
-      <Card className="w-full max-w-md relative z-10 bg-black/80 backdrop-blur-xl border-2 border-white/10">
+      <Card className="w-full max-w-md relative z-10 bg-black/70 backdrop-blur-xl border-2 border-cyan-400/30 shadow-[0_0_50px_rgba(0,212,255,0.3)] animate-[pulse_3s_ease-in-out_infinite]">
         <CardHeader className="space-y-4 text-center">
           {/* CEPHO Logo - Animated neon blue brain */}
           <div className="flex justify-center">
@@ -202,12 +205,12 @@ export default function Login() {
           
           {/* CEPHO Title - Blended neon colors */}
           <div>
-            <CardTitle className="text-4xl font-bold text-center bg-gradient-to-r from-pink-400 via-blue-400 to-purple-400 bg-clip-text text-transparent drop-shadow-[0_0_20px_rgba(59,130,246,0.5)]">
-              CEPHO.AI
+            <CardTitle className="text-5xl font-bold text-center bg-gradient-to-r from-cyan-300 via-blue-400 to-cyan-300 bg-clip-text text-transparent drop-shadow-[0_0_40px_rgba(0,212,255,0.8)] animate-pulse">
+              Cepho
             </CardTitle>
-            <CardDescription className="text-center text-gray-400 mt-2">
-              Sign in to access your AI command center
-            </CardDescription>
+            <p className="text-center text-cyan-400/80 text-sm mt-1 drop-shadow-[0_0_10px_rgba(0,212,255,0.5)]">The Greek for Brain</p>
+            <p className="text-center text-gray-300 text-base mt-2">AI powered Executive Intelligence</p>
+
           </div>
         </CardHeader>
         
@@ -223,7 +226,7 @@ export default function Login() {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 disabled={isLoading}
-                className="bg-white/5 border-white/10 text-white placeholder:text-gray-500 focus:border-blue-400/50 focus:ring-blue-400/20"
+                className="bg-white/5 border-cyan-400/30 text-white placeholder:text-gray-500 focus:border-cyan-400 focus:ring-cyan-400/50 focus:shadow-[0_0_20px_rgba(0,212,255,0.4)] transition-all duration-300"
               />
             </div>
             
@@ -237,13 +240,13 @@ export default function Login() {
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 disabled={isLoading}
-                className="bg-white/5 border-white/10 text-white placeholder:text-gray-500 focus:border-blue-400/50 focus:ring-blue-400/20"
+                className="bg-white/5 border-cyan-400/30 text-white placeholder:text-gray-500 focus:border-cyan-400 focus:ring-cyan-400/50 focus:shadow-[0_0_20px_rgba(0,212,255,0.4)] transition-all duration-300"
               />
             </div>
             
             <Button 
               type="submit" 
-              className="w-full bg-gradient-to-r from-pink-500 via-blue-500 to-purple-500 hover:from-pink-600 hover:via-blue-600 hover:to-purple-600 text-white font-semibold shadow-lg shadow-blue-500/50"
+              className="w-full bg-gradient-to-r from-cyan-500 via-blue-500 to-cyan-500 hover:from-cyan-400 hover:via-blue-400 hover:to-cyan-400 text-white font-bold shadow-[0_0_30px_rgba(0,212,255,0.6)] hover:shadow-[0_0_50px_rgba(0,212,255,0.8)] transition-all duration-300 animate-pulse"
               disabled={isLoading}
             >
               {isLoading ? 'Signing in...' : 'Sign In'}
