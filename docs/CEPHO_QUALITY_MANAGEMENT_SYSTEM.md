@@ -939,6 +939,10 @@ Creation → Review → Storage → Access
 
 ## 9. Roles & Responsibilities
 
+See [AI Agents: Roles, Responsibilities, and Daily Workflows](AI_AGENTS_ROLES_AND_RESPONSIBILITIES.md) for a detailed breakdown of AI agent roles.
+
+See [Persephone Board: Innovation Hub Integration](PERSEPHONE_BOARD_INNOVATION_HUB_INTEGRATION.md) and [Persephone Board: Project Genesis Integration](PERSEPHONE_BOARD_PROJECT_GENESIS_INTEGRATION.md) for expert advisory integration.
+
 ### 9.1 User (Jonathan Rickard)
 **Primary Role:** Strategic Decision Maker
 
@@ -1012,6 +1016,14 @@ Creation → Review → Storage → Access
 ---
 
 ## 10. Process Maps & Flowcharts
+
+### 10.1 Innovation Hub Process Flow
+
+![Innovation Hub Process Flow](INNOVATION_HUB_PROCESS_FLOW.png)
+
+### 10.2 Project Genesis Process Flow
+
+![Project Genesis Process Flow](PROJECT_GENESIS_PROCESS_FLOW.png)
 
 ### 10.1 Morning Signal Process Map
 
@@ -1813,6 +1825,10 @@ For EACH button on EACH page:
 ---
 
 ## 9. Roles & Responsibilities
+
+See [AI Agents: Roles, Responsibilities, and Daily Workflows](AI_AGENTS_ROLES_AND_RESPONSIBILITIES.md) for a detailed breakdown of AI agent roles.
+
+See [Persephone Board: Innovation Hub Integration](PERSEPHONE_BOARD_INNOVATION_HUB_INTEGRATION.md) and [Persephone Board: Project Genesis Integration](PERSEPHONE_BOARD_PROJECT_GENESIS_INTEGRATION.md) for expert advisory integration.
 
 ### 9.1 Quality Assurance Team
 

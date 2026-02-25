@@ -1,0 +1,34 @@
+
+graph TD
+    A[Capture Idea] --> B{Assess Idea};
+    B --> C{AI-SME Review};
+    C --> D{Persephone Board Review - Assess Stage};
+    D --> E[Refine Idea];
+    E --> F{Final Brief};
+    F --> G{Persephone Board Review - Brief Stage};
+    G --> H[Promote to Project Genesis];
+
+    subgraph Innovation Hub
+        A;
+        B;
+        C;
+        D;
+        E;
+        F;
+        G;
+    end
+
+    subgraph AI Agents
+        B -- Innovation Hub Agent --> B;
+        C -- COS Agent --> C;
+        D -- Persephone Board Agent --> D;
+        E -- Project Genesis Agent --> E;
+        F -- COS Agent --> F;
+        G -- Persephone Board Agent --> G;
+    end
+
+    H -- Handover --> I((Project Genesis));
+
+    style A fill:#cde4ff
+    style H fill:#cde4ff
+
