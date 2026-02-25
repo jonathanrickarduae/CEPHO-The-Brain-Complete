@@ -53,6 +53,45 @@ export const integrationsRouter = router({
       return result;
     }),
 
+  // List all integrations (alias for getAll)
+  list: protectedProcedure
+    .query(async ({ ctx }) => {
+      return await integrationManager.getAllIntegrations(ctx.user.openId);
+    }),
+
+  // Connect an integration
+  connect: protectedProcedure
+    .input(z.object({
+      type: z.string(),
+    }))
+    .mutation(async ({ input, ctx }) => {
+      // For now, just update status to connected
+      await integrationManager.updateStatus(ctx.user.openId, input.type, 'connected');
+      return { success: true };
+    }),
+
+  // Disconnect an integration
+  disconnect: protectedProcedure
+    .input(z.object({
+      id: z.string(),
+    }))
+    .mutation(async ({ input, ctx }) => {
+      // Extract service name from id and update status
+      await integrationManager.updateStatus(ctx.user.openId, input.id, 'disconnected');
+      return { success: true };
+    }),
+
+  // Sync an integration
+  sync: protectedProcedure
+    .input(z.object({
+      id: z.string(),
+    }))
+    .mutation(async ({ input, ctx }) => {
+      // Log sync attempt
+      await integrationManager.logConnection(ctx.user.openId, input.id, 'sync', true);
+      return { success: true };
+    }),
+
   // Bulk initialize all services with credentials from environment variables
   initializeAll: protectedProcedure
     .mutation(async ({ ctx }) => {

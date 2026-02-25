@@ -72,15 +72,15 @@ const menuItems: MenuItem[] = [
   { 
     icon: User, 
     label: "Chief of Staff", 
-    path: "/tasks",
+    path: "/operations",
     children: [
+      { icon: BarChart3, label: "Chief of Staff Dashboard", path: "/operations" },
       { icon: CheckCircle2, label: "Tasks", path: "/tasks" },
       { icon: Rocket, label: "Odyssey Management", path: "/odyssey-management" },
       { icon: GraduationCap, label: "Digital Twin Training", path: "/twin-training" },
       { icon: Bot, label: "AI Agents", path: "/ai-agents" },
       { icon: Users, label: "AI-SMEs", path: "/ai-experts" },
-      { icon: TrendingUp, label: "Operations", path: "/operations" },
-      { icon: BarChart3, label: "Analytics", path: "/analytics" },
+      { icon: TrendingUp, label: "Analytics", path: "/analytics" },
       { icon: Library, label: "Document Library", path: "/documents" },
     ]
   },
