@@ -31,6 +31,7 @@ export default function Settings() {
   const [searchQuery, setSearchQuery] = useState('');
 
   const tabs = [
+    { id: 'profile' as const, label: 'Profile', icon: User },
     { id: 'integrations' as const, label: 'Integrations', icon: Plug },
     { id: 'subscriptions' as const, label: 'Subscriptions', icon: Wallet },
     { id: 'signatures' as const, label: 'Signatures', icon: FileSignature },
@@ -46,7 +47,6 @@ export default function Settings() {
     { id: 'privacy' as const, label: 'Privacy', icon: Shield },
     { id: 'appearance' as const, label: 'Appearance', icon: Palette },
     { id: 'accessibility' as const, label: 'Accessibility', icon: SettingsIcon },
-    { id: 'profile' as const, label: 'Profile', icon: User },
   ];
 
   const mockReferralStats = {
