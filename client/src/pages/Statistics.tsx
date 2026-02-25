@@ -49,7 +49,7 @@ export default function Statistics() {
         <div className="mb-6">
           <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
             <BarChart3 className="h-8 w-8 text-blue-400" />
-            Statistics & Analytics
+            Analytics
           </h1>
           <p className="text-muted-foreground mt-1">
             Personal performance metrics and system evolution
