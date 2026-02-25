@@ -67,6 +67,7 @@ const menuItems: MenuItem[] = [
     children: [
       { icon: Sparkles, label: "Morning Signal", path: "/morning-signal" },
       { icon: Moon, label: "Evening Review", path: "/evening-review" },
+      { icon: Volume2, label: "Victoria's Brief", path: "/daily-brief" },
     ]
   },
   { 
@@ -100,7 +101,6 @@ const menuItems: MenuItem[] = [
       { icon: Settings, label: "Accounts", path: "/email/accounts" },
     ]
   },
-  { icon: Volume2, label: "Victoria's Brief", path: "/daily-brief" },
   { 
     icon: Users, 
     label: "Expert Network", 
