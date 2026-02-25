@@ -118,9 +118,9 @@ export default function AnimatedBrainLogo({
       glowOpacity: 0.15
     },
     active: { 
-      neuronOpacity: [0.4, 0.9, 0.4],
-      connectionOpacity: [0, 0.4, 0],
-      glowOpacity: 0.25
+      neuronOpacity: [0.6, 1.0, 0.6],
+      connectionOpacity: [0, 0.6, 0],
+      glowOpacity: 0.5
     }
   };
   
@@ -128,16 +128,30 @@ export default function AnimatedBrainLogo({
 
   return (
     <div className={`relative ${sizeClasses[size]} ${className}`}>
-      {/* Subtle background glow */}
+      {/* Enhanced background glow */}
+      <motion.div
+        className="absolute inset-[-20%] rounded-full blur-2xl"
+        style={{ backgroundColor: color }}
+        animate={{
+          opacity: [settings.glowOpacity, settings.glowOpacity * 3, settings.glowOpacity],
+          scale: [1, 1.2, 1],
+        }}
+        transition={{
+          duration: 1.5,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+      />
+      {/* Additional inner glow layer */}
       <motion.div
         className="absolute inset-[-10%] rounded-full blur-xl"
         style={{ backgroundColor: color }}
         animate={{
-          opacity: [settings.glowOpacity, settings.glowOpacity * 2, settings.glowOpacity],
-          scale: [1, 1.1, 1],
+          opacity: [settings.glowOpacity * 1.5, settings.glowOpacity * 2.5, settings.glowOpacity * 1.5],
+          scale: [1, 1.15, 1],
         }}
         transition={{
-          duration: 1.5,
+          duration: 2,
           repeat: Infinity,
           ease: "easeInOut",
         }}
@@ -146,12 +160,13 @@ export default function AnimatedBrainLogo({
       <svg
         viewBox="0 0 100 100"
         className="w-full h-full relative z-10"
-        style={{ filter: `drop-shadow(0 0 8px ${color}40)` }}
+        style={{ filter: `drop-shadow(0 0 16px ${color}) drop-shadow(0 0 8px ${color})` }}
       >
         <defs>
-          <filter id="neuron-glow" x="-50%" y="-50%" width="200%" height="200%">
-            <feGaussianBlur stdDeviation="1.5" result="blur" />
+          <filter id="neuron-glow" x="-100%" y="-100%" width="300%" height="300%">
+            <feGaussianBlur stdDeviation="3" result="blur" />
             <feMerge>
+              <feMergeNode in="blur" />
               <feMergeNode in="blur" />
               <feMergeNode in="SourceGraphic" />
             </feMerge>
@@ -159,7 +174,7 @@ export default function AnimatedBrainLogo({
           
           <linearGradient id="brain-connection-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" stopColor={color} stopOpacity="0" />
-            <stop offset="50%" stopColor={color} stopOpacity="0.6" />
+            <stop offset="50%" stopColor={color} stopOpacity="0.9" />
             <stop offset="100%" stopColor={color} stopOpacity="0" />
           </linearGradient>
         </defs>
