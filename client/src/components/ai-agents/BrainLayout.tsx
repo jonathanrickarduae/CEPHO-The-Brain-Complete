@@ -85,10 +85,10 @@ const menuItems: MenuItem[] = [
   { 
     icon: Rocket, 
     label: "Odyssey Engine", 
-    path: "/project-genesis",
+    path: "/innovation-hub",
     children: [
-      { icon: Rocket, label: "Project Genesis", path: "/project-genesis" },
       { icon: TrendingUp, label: "Innovation Hub", path: "/innovation-hub" },
+      { icon: Rocket, label: "Project Genesis", path: "/project-genesis" },
       { icon: Workflow, label: "Workflows", path: "/workflows" },
       { icon: Users, label: "Persephone Board", path: "/persephone" },
     ]
