@@ -146,7 +146,7 @@ export default function COSTraining() {
         <div>
           <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
             <GraduationCap className="h-8 w-8 text-cyan-400" />
-            Twin Training
+            Digital Twin Training
           </h1>
           <p className="text-muted-foreground mt-1">
             Train your Chief of Staff and Digital Twin to unlock full capabilities
@@ -395,14 +395,14 @@ export default function COSTraining() {
       />
       </>
       ) : (
-        /* Digital Twin Training */
+        /* Digital Digital Twin Training */
         <>
         <div className="space-y-6">
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Brain className="h-5 w-5 text-primary" />
-                Digital Twin Training
+                Digital Digital Twin Training
               </CardTitle>
               <CardDescription>
                 Train your Digital Twin to better understand your preferences, decision-making patterns, and communication style
@@ -410,7 +410,7 @@ export default function COSTraining() {
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-purple-500/30 rounded-lg p-6">
-                <h3 className="text-lg font-semibold mb-3">How Digital Twin Training Works</h3>
+                <h3 className="text-lg font-semibold mb-3">How Digital Digital Twin Training Works</h3>
                 <div className="space-y-3 text-sm text-muted-foreground">
                   <p>Your Digital Twin learns from:</p>
                   <ul className="list-disc list-inside space-y-2 ml-4">

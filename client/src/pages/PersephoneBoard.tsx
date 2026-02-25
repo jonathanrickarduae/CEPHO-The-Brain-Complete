@@ -274,7 +274,7 @@ export default function PersephoneBoard() {
             <div>
               <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
                 <Users className="h-8 w-8 text-purple-400" />
-                Persephone-AI: The AI Genius Board
+                Persephone Board
               </h1>
               <p className="text-muted-foreground mt-1">
                 Virtual Board of 14 Top AI Leaders - Strategic Oversight & Industry Guidance

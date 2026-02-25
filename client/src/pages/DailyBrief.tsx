@@ -334,7 +334,7 @@ export default function DailyBrief() {
             <div>
               <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
                 <Zap className="h-8 w-8 text-blue-400" />
-                Victoria's Brief
+                Victoria's Briefing
               </h1>
               <p className="text-muted-foreground mt-1">
                 Your daily executive briefing • {BRIEF_DATA.date}
@@ -446,7 +446,7 @@ export default function DailyBrief() {
                         className="bg-primary hover:bg-primary/90 shadow-lg shadow-primary/30 text-base"
                         onClick={() => handleExport("video")}
                       >
-                        <Play className="w-5 h-5 mr-2" /> Watch Victoria's Brief
+                        <Play className="w-5 h-5 mr-2" /> Watch Victoria's Briefing
                       </Button>
                       <Button 
                         size="lg" 

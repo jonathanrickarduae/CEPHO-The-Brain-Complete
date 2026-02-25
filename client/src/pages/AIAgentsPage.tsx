@@ -29,13 +29,20 @@ export default function AIAgentsPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [sortBy, setSortBy] = useState<'name' | 'performance' | 'tasks'>('performance');
   
-  // Use tRPC to fetch agents and stats
-  const { data: agentsData, isLoading: agentsLoading } = trpc.aiAgentsMonitoring.getAgents.useQuery();
-  const { data: statsData, isLoading: statsLoading } = trpc.aiAgentsMonitoring.getStats.useQuery();
+  // Use tRPC to fetch agents and stats with error handling
+  const { data: agentsData, isLoading: agentsLoading, error: agentsError } = trpc.aiAgentsMonitoring.getAgents.useQuery(undefined, {
+    retry: false,
+    onError: (err) => console.error('Failed to load agents:', err)
+  });
+  const { data: statsData, isLoading: statsLoading, error: statsError } = trpc.aiAgentsMonitoring.getStats.useQuery(undefined, {
+    retry: false,
+    onError: (err) => console.error('Failed to load stats:', err)
+  });
   
   const agents = agentsData?.agents || [];
   const stats = statsData?.stats || null;
   const loading = agentsLoading || statsLoading;
+  const hasError = agentsError || statsError;
 
   const categories = [
     'all',
@@ -80,6 +87,18 @@ export default function AIAgentsPage() {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-xl">Loading AI Agents...</div>
+      </div>
+    );
+  }
+
+  if (hasError) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="text-xl text-red-500 mb-4">Failed to load AI Agents</div>
+          <p className="text-muted-foreground">The AI Agents monitoring system is currently unavailable.</p>
+          <p className="text-sm text-muted-foreground mt-2">Please try again later or contact support.</p>
+        </div>
       </div>
     );
   }

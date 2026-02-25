@@ -249,10 +249,10 @@ export default function NexusDashboard() {
         </div>
       </div>
 
-      {/* Main Content - Two Column Layout */}
-      <div className="flex-1 flex gap-6 p-6 overflow-hidden">
-        {/* Left Column - Dashboard Info */}
-        <div className="flex-1 flex flex-col gap-6 overflow-auto pr-2">
+      {/* Main Content - Single Column Layout */}
+      <div className="flex-1 flex flex-col gap-6 p-6 overflow-auto">
+        {/* Top Section - Dashboard Info */}
+        <div className="flex flex-col gap-6">
         {/* RAG Status Row */}
         <div className="mb-6">
           <h2 className="text-sm font-semibold text-muted-foreground mb-3">SYSTEM STATUS</h2>
@@ -316,8 +316,29 @@ export default function NexusDashboard() {
           </div>
         </div>
 
-        {/* Activity Feed */}
-        <div>
+        </div>
+
+        {/* Middle Section - OpenClaw Chat Banner */}
+        <div className="border-2 border-primary/30 rounded-xl overflow-hidden bg-card">
+          <div className="bg-primary/10 px-4 py-3 border-b border-primary/20">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Brain className="w-5 h-5 text-primary" />
+                <span className="text-sm font-semibold text-foreground">OpenClaw AI Assistant</span>
+                <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              </div>
+              <span className="text-xs text-muted-foreground">
+                {mode === 'governed' ? 'Copilot + Outlook' : 'All AI Models'}
+              </span>
+            </div>
+          </div>
+          <div className="h-[300px] overflow-hidden">
+            <OpenClawChat />
+          </div>
+        </div>
+
+        {/* Bottom Section - Activity Feed (Scrollable) */}
+        <div className="flex-1">
           <h2 className="text-sm font-semibold text-muted-foreground mb-3">RECENT ACTIVITY</h2>
           <div className="border-2 border-border rounded-xl bg-card p-4 space-y-2">
             <ActivityItem 
@@ -355,29 +376,6 @@ export default function NexusDashboard() {
               time="3h ago"
               status="active"
             />
-          </div>
-        </div>
-
-        </div>
-
-        {/* Right Column - OpenClaw Chat (Always Visible) */}
-        <div className="w-[600px] flex flex-col">
-          <div className="flex-1 border-2 border-primary/30 rounded-xl overflow-hidden bg-card flex flex-col">
-            <div className="bg-primary/10 px-4 py-3 border-b border-primary/20 shrink-0">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Brain className="w-5 h-5 text-primary" />
-                  <span className="text-sm font-semibold text-foreground">OpenClaw AI Assistant</span>
-                  <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                </div>
-                <span className="text-xs text-muted-foreground">
-                  {mode === 'governed' ? 'Copilot + Outlook' : 'All AI Models'}
-                </span>
-              </div>
-            </div>
-            <div className="flex-1 overflow-hidden">
-              <OpenClawChat />
-            </div>
           </div>
         </div>
       </div>

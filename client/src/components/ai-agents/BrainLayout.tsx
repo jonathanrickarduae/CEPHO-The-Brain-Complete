@@ -65,7 +65,7 @@ const menuItems: MenuItem[] = [
     label: "The Signal", 
     path: "/daily-brief",
     children: [
-      { icon: Volume2, label: "Victoria's Brief", path: "/daily-brief" },
+      { icon: Volume2, label: "Victoria's Briefing", path: "/daily-brief" },
       { icon: Moon, label: "Evening Review", path: "/evening-review" },
     ]
   },
@@ -76,7 +76,7 @@ const menuItems: MenuItem[] = [
     children: [
       { icon: CheckCircle2, label: "Tasks", path: "/tasks" },
       { icon: Rocket, label: "Odyssey Management", path: "/odyssey-management" },
-      { icon: GraduationCap, label: "Twin Training", path: "/twin-training" },
+      { icon: GraduationCap, label: "Digital Twin Training", path: "/twin-training" },
       { icon: Bot, label: "AI Agents", path: "/ai-agents" },
       { icon: Users, label: "AI-SMEs", path: "/ai-experts" },
       { icon: TrendingUp, label: "Operations", path: "/operations" },
