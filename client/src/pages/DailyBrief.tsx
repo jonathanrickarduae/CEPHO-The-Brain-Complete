@@ -334,7 +334,7 @@ export default function DailyBrief() {
             <div>
               <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
                 <Zap className="h-8 w-8 text-blue-400" />
-                The Signal
+                Victoria's Brief
               </h1>
               <p className="text-muted-foreground mt-1">
                 Your daily executive briefing • {BRIEF_DATA.date}

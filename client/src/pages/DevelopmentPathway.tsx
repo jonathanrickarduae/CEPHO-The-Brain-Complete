@@ -86,8 +86,8 @@ export default function DevelopmentPathway() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold text-white flex items-center gap-3">
-              <Map className="h-8 w-8 text-emerald-400" />
-              Development Pathway
+              <Rocket className="h-8 w-8 text-emerald-400" />
+              Odyssey Management
             </h1>
             <p className="text-gray-400 mt-1">Track ideas from capture to launch with Chief of Staff oversight</p>
           </div>

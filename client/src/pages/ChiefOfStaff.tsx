@@ -321,10 +321,10 @@ export default function ChiefOfStaff() {
           <div>
             <h1 className="text-3xl font-bold text-white flex items-center gap-3">
               <User className="h-8 w-8 text-purple-400" />
-              Chief of Staff
+              Tasks
             </h1>
             <p className="text-gray-400 mt-1">
-              Your AI Executive Assistant
+              Manage your tasks with Chief of Staff
             </p>
           </div>
           <div className="flex items-center gap-3">

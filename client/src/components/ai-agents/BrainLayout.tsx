@@ -75,8 +75,8 @@ const menuItems: MenuItem[] = [
     path: "/tasks",
     children: [
       { icon: CheckCircle2, label: "Tasks", path: "/tasks" },
-      { icon: Rocket, label: "Development Pathway", path: "/odyssey-management" },
-      { icon: GraduationCap, label: "AI Training Center", path: "/twin-training" },
+      { icon: Rocket, label: "Odyssey Management", path: "/odyssey-management" },
+      { icon: GraduationCap, label: "Twin Training", path: "/twin-training" },
       { icon: Bot, label: "AI Agents", path: "/ai-agents" },
       { icon: Users, label: "AI-SMEs", path: "/ai-experts" },
       { icon: TrendingUp, label: "Operations", path: "/operations" },

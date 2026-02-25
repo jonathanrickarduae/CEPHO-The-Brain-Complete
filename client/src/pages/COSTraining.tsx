@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { 
   Brain, CheckCircle2, Lock, ArrowRight, Trophy, 
-  Target, Zap, BookOpen, Users, Briefcase, BarChart3
+  Target, Zap, BookOpen, Users, Briefcase, BarChart3, GraduationCap
 } from "lucide-react";
 import { 
   COS_TRAINING_LEVELS, 
@@ -145,8 +145,8 @@ export default function COSTraining() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
-            <Brain className="h-8 w-8 text-cyan-400" />
-            AI Training Center
+            <GraduationCap className="h-8 w-8 text-cyan-400" />
+            Twin Training
           </h1>
           <p className="text-muted-foreground mt-1">
             Train your Chief of Staff and Digital Twin to unlock full capabilities
