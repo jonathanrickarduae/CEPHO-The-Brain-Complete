@@ -139,18 +139,14 @@ function Router() {
         <Route path="/digital-twin">
           <WithLayout><ChiefOfStaff /></WithLayout>
         </Route>
-        <Route path="/chief-of-staff">
-          <WithLayout><ChiefOfStaff /></WithLayout>
-        </Route>
+
         <Route path="/chief-of-staff-role">
           <WithLayout><ChiefOfStaffRole /></WithLayout>
         </Route>
         <Route path="/workflow">
           <WithLayout><Workflow /></WithLayout>
         </Route>
-        <Route path="/library">
-          <WithLayout><DocumentLibraryEnhanced /></WithLayout>
-        </Route>
+
 
 
         <Route path="/statistics">
@@ -165,9 +161,7 @@ function Router() {
         <Route path="/ai-experts">
           <WithLayout><AISMEsPage /></WithLayout>
         </Route>
-        <Route path="/expert-network">
-          <WithLayout><ExpertNetwork /></WithLayout>
-        </Route>
+
         <Route path="/ai-agents-monitoring">
           <WithLayout><AIAgentsMonitoringPage /></WithLayout>
         </Route>
@@ -186,31 +180,14 @@ function Router() {
         <Route path="/evening-review">
           <WithLayout><EveningReview /></WithLayout>
         </Route>
-        <Route path="/morning-signal">
-          <WithLayout><MorningSignal /></WithLayout>
-        </Route>
-        <Route path="/the-signal">
-          <WithLayout><TheSignal /></WithLayout>
-        </Route>
-        <Route path="/signal">
-          <WithLayout><TheSignal /></WithLayout>
-        </Route>
-        <Route path="/signal/morning">
-          <WithLayout><MorningSignal /></WithLayout>
-        </Route>
-        <Route path="/signal/evening">
-          <WithLayout><EveningReview /></WithLayout>
-        </Route>
-        <Route path="/ai-team">
-          <WithLayout><AITeam /></WithLayout>
-        </Route>
-        <Route path="/agents">
+
+
+        <Route path="/ai-agents">
           <WithLayout><AIAgentsPage /></WithLayout>
         </Route>
-        <Route path="/agents/:id">
+        <Route path="/ai-agents/:id">
           <WithLayout><AgentDetailPage /></WithLayout>
         </Route>
-        <Route path="/agents-monitoring" component={WithLayout(AgentsMonitoring)} />
         <Route path="/persephone">
           <WithLayout><PersephoneBoard /></WithLayout>
         </Route>
