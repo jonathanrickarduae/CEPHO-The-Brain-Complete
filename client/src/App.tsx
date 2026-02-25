@@ -297,6 +297,11 @@ function Router() {
           <WithLayout><MorningSignal /></WithLayout>
         </Route>
         
+        {/* The Signal */}
+        <Route path="/signal">
+          <WithLayout><TheSignal /></WithLayout>
+        </Route>
+        
         {/* Enhanced Chief of Staff */}
         <Route path="/chief-of-staff-enhanced">
           <WithLayout><EnhancedChiefOfStaff /></WithLayout>
