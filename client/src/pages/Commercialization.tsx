@@ -4,7 +4,7 @@ import {
   Users, Zap, Eye, FileText, Brain, Lightbulb, Scale,
   ChevronRight, RefreshCw, Plus, ExternalLink, Clock
 } from 'lucide-react';
-import { PageHeader } from '@/components/layout/PageHeader';
+import { PageHeader } from '@/components/layout/Breadcrumbs';
 
 // Mock data - will be replaced with real API data
 const mockCompetitors = [
@@ -46,14 +46,11 @@ export default function Commercialization() {
   };
 
   return (
-    <div className="h-[calc(100vh-56px)] md:h-screen flex flex-col bg-gradient-to-br from-gray-900 via-gray-900 to-gray-800">
+    <div className="h-full flex flex-col p-4 md:p-6 overflow-auto">
       <PageHeader 
-        icon={Target}
-        title="Commercialization" 
+        title="Commercialization Intelligence" 
         subtitle="AI-powered competitive analysis and strategy"
       />
-      
-      <div className="flex-1 overflow-auto p-4 md:p-6">
 
       {/* Value Score Hero */}
       <div className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 rounded-2xl p-6 mb-6 border border-gray-700">

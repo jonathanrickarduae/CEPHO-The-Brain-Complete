@@ -2,10 +2,10 @@ import { useState } from 'react';
 import { 
   Settings as SettingsIcon, User, Calendar, Database, 
   Bell, Shield, Palette, CreditCard, Users,
-  ChevronRight, Check, Search, Eye
+  ChevronRight, Check, Search
 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
-import { PageHeader } from '@/components/layout/PageHeader';
+import { PageHeader } from '@/components/layout/Breadcrumbs';
 import { ThemeSelector, ThemeProvider } from '@/components/settings/ThemeToggle';
 import { CalendarIntegration } from '@/components/integrations/CalendarIntegration';
 import { TrainingDataPipeline } from '@/components/analytics/TrainingDataPipeline';
@@ -22,28 +22,31 @@ import { APICostCalculator } from '@/components/integrations/APICostCalculator';
 import { SecureStorageDashboard } from '@/components/project-management/SecureStorageDashboard';
 import { BrandKitManager } from '@/components/content/BrandKit';
 import { DataGovernanceDashboard } from '@/components/project-management/DataGovernanceDashboard';
-import { IntegrationsManager } from '@/components/IntegrationsManager';
-import { GovernanceSettings } from '@/components/settings/GovernanceSettings';
 import { Plug, Wallet, FileSignature, Cpu, HardDrive, Paintbrush, ShieldCheck } from 'lucide-react';
 
-type SettingsTab = 'profile' | 'governance' | 'integrations' | 'ai-providers' | 'storage' | 'data-governance' | 'calendar' | 'notifications' | 'privacy' | 'appearance' | 'accessibility';
+type SettingsTab = 'profile' | 'integrations' | 'subscriptions' | 'signatures' | 'ai-providers' | 'api-costs' | 'storage' | 'brand-kit' | 'data-governance' | 'calendar' | 'training' | 'referrals' | 'notifications' | 'privacy' | 'appearance' | 'accessibility';
 
 export default function Settings() {
-  const [activeTab, setActiveTab] = useState<SettingsTab>('governance');
+  const [activeTab, setActiveTab] = useState<SettingsTab>('profile');
   const [searchQuery, setSearchQuery] = useState('');
 
   const tabs = [
-    { id: 'governance' as const, label: 'Governance', icon: ShieldCheck },
+    { id: 'profile' as const, label: 'Profile', icon: User },
     { id: 'integrations' as const, label: 'Integrations', icon: Plug },
+    { id: 'subscriptions' as const, label: 'Subscriptions', icon: Wallet },
+    { id: 'signatures' as const, label: 'Signatures', icon: FileSignature },
     { id: 'ai-providers' as const, label: 'AI Providers', icon: Cpu },
+    { id: 'api-costs' as const, label: 'API Costs', icon: CreditCard },
     { id: 'storage' as const, label: 'Storage & Security', icon: HardDrive },
+    { id: 'brand-kit' as const, label: 'Brand Kit', icon: Paintbrush },
     { id: 'data-governance' as const, label: 'Data Governance', icon: ShieldCheck },
     { id: 'calendar' as const, label: 'Calendar', icon: Calendar },
+    { id: 'training' as const, label: 'Training Data', icon: Database },
+    { id: 'referrals' as const, label: 'Referrals', icon: Users },
     { id: 'notifications' as const, label: 'Notifications', icon: Bell },
     { id: 'privacy' as const, label: 'Privacy', icon: Shield },
     { id: 'appearance' as const, label: 'Appearance', icon: Palette },
-    { id: 'accessibility' as const, label: 'Accessibility', icon: Eye },
-    { id: 'profile' as const, label: 'Profile', icon: User },
+    { id: 'accessibility' as const, label: 'Accessibility', icon: SettingsIcon },
   ];
 
   const mockReferralStats = {
@@ -55,15 +58,12 @@ export default function Settings() {
   };
 
   return (
-    <div className="h-[calc(100vh-56px)] md:h-screen flex flex-col bg-gradient-to-br from-gray-900 via-gray-900 to-gray-800">
-      <PageHeader 
-        icon={SettingsIcon}
-        title="Settings" 
-        subtitle="Manage your account and preferences"
-      />
-      
-      <div className="flex-1 overflow-auto p-4 md:p-6">
-        <div className="max-w-6xl mx-auto">
+    <div className="p-4 md:p-6 overflow-auto">
+      <div className="max-w-6xl mx-auto">
+        <PageHeader 
+          title="Settings" 
+          subtitle="Manage your account and preferences"
+        />
 
         <div className="flex flex-col lg:flex-row gap-6">
           {/* Sidebar */}
@@ -156,18 +156,15 @@ export default function Settings() {
               </>
             )}
 
-            {activeTab === 'governance' && (
-              <div className="bg-gray-800 rounded-xl border border-gray-700 p-6">
-                <GovernanceSettings />
-              </div>
-            )}
-
             {activeTab === 'integrations' && (
               <div className="bg-gray-800 rounded-xl border border-gray-700 p-6">
-                <IntegrationsManager />
+                <IntegrationsStatusReal />
               </div>
             )}
 
+            {activeTab === 'subscriptions' && <SubscriptionManager />}
+
+            {activeTab === 'signatures' && <SignatureManager />}
 
             {activeTab === 'ai-providers' && (
               <div className="bg-gray-800 rounded-xl border border-gray-700 p-6">
@@ -175,9 +172,21 @@ export default function Settings() {
               </div>
             )}
 
+            {activeTab === 'api-costs' && (
+              <div className="bg-gray-800 rounded-xl border border-gray-700 p-6">
+                <APICostCalculator />
+              </div>
+            )}
+
             {activeTab === 'storage' && (
               <div className="bg-gray-800 rounded-xl border border-gray-700 p-6">
                 <SecureStorageDashboard />
+              </div>
+            )}
+
+            {activeTab === 'brand-kit' && (
+              <div className="bg-gray-800 rounded-xl border border-gray-700 p-6">
+                <BrandKitManager />
               </div>
             )}
 
@@ -189,6 +198,9 @@ export default function Settings() {
 
             {activeTab === 'calendar' && <CalendarIntegration />}
 
+            {activeTab === 'training' && <TrainingDataPipeline />}
+
+            {activeTab === 'referrals' && <ReferralDashboard stats={mockReferralStats} />}
 
             {activeTab === 'notifications' && (
               <div className="space-y-6">
@@ -403,4 +415,3 @@ export default function Settings() {
     </div>
   );
 }
-// Force rebuild 1771755612

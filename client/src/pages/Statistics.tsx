@@ -1,5 +1,5 @@
-import { BarChart3, Button } from "@/components/ui/button";
-import { BarChart3, 
+import { Button } from "@/components/ui/button";
+import { 
   Activity, 
   TrendingUp, 
   Zap, 
@@ -14,13 +14,13 @@ import { BarChart3,
   Sparkles,
   Calendar
 } from "lucide-react";
-import { BarChart3, PersonalAnalytics, ProductivityRing } from '@/components/analytics/PersonalAnalytics';
-import { BarChart3, PageHeader } from '@/components/layout/PageHeader';
-import { BarChart3, useMoodCheck } from "@/hooks/useMoodCheck";
-import { BarChart3, MoodTimeline } from '@/components/mood-tracking/MoodTimeline';
-import { BarChart3, WellnessScoreDashboard } from '@/components/mood-tracking/WellnessScoreDashboard';
-import { BarChart3, ShareableInsight, generateProductivityInsight } from '@/components/analytics/ShareableInsight';
-import { BarChart3, CollapsibleSection } from '@/components/shared/CollapsibleSection';
+import { PersonalAnalytics, ProductivityRing } from '@/components/analytics/PersonalAnalytics';
+import { PageHeader } from '@/components/layout/Breadcrumbs';
+import { useMoodCheck } from "@/hooks/useMoodCheck";
+import { MoodTimeline } from '@/components/mood-tracking/MoodTimeline';
+import { WellnessScoreDashboard } from '@/components/mood-tracking/WellnessScoreDashboard';
+import { ShareableInsight, generateProductivityInsight } from '@/components/analytics/ShareableInsight';
+import { CollapsibleSection } from '@/components/shared/CollapsibleSection';
 
 export default function Statistics() {
   const { todaysMoods } = useMoodCheck();
@@ -42,15 +42,12 @@ export default function Statistics() {
   const weeklyMoods = [70, 80, 60, 70, 90, 80, todaysMoods.length > 0 ? todaysMoods[todaysMoods.length - 1].mood : 70]; // 0-100 scale
 
   return (
-    <div className="h-[calc(100vh-56px)] md:h-screen flex flex-col bg-gradient-to-br from-gray-900 via-gray-900 to-gray-800">
-      <PageHeader 
-        icon={BarChart3}
-        title="Analytics" 
-        subtitle="Personal performance metrics and system evolution"
-      />
-      
-      <div className="flex-1 overflow-auto p-4 md:p-6">
-        <div className="max-w-6xl mx-auto">
+    <div className="p-4 md:p-6 overflow-auto">
+      <div className="max-w-6xl mx-auto">
+        <PageHeader 
+          title="Statistics & Analytics" 
+          subtitle="Personal performance metrics and system evolution"
+        />
 
         {/* Personal Analytics Section */}
         <CollapsibleSection 

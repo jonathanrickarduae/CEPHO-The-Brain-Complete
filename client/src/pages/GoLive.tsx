@@ -4,7 +4,7 @@ import {
   Calendar, Mail, Video, MessageSquare, FileText, CreditCard,
   Globe, Bell, Lock, Database, Zap, ArrowRight
 } from 'lucide-react';
-import { PageHeader } from '@/components/layout/PageHeader';
+import { PageHeader } from '@/components/layout/Breadcrumbs';
 
 interface Integration {
   id: string;
@@ -191,14 +191,11 @@ export default function GoLive() {
   };
 
   return (
-    <div className="h-[calc(100vh-56px)] md:h-screen flex flex-col bg-gradient-to-br from-gray-900 via-gray-900 to-gray-800">
+    <div className="h-full flex flex-col p-4 md:p-6 overflow-auto">
       <PageHeader 
-        icon={Rocket}
-        title="Go Live" 
+        title="Go Live Wizard" 
         subtitle="Set up external integrations to launch your app"
       />
-      
-      <div className="flex-1 overflow-auto p-4 md:p-6">
 
       {/* Progress Overview */}
       <div className="bg-gradient-to-br from-cyan-500/10 to-purple-500/10 rounded-2xl p-6 mb-6 border border-cyan-500/30">
