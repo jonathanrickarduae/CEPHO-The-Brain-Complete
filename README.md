@@ -205,3 +205,4 @@ For support inquiries, please contact the development team through the Manus pla
 # DATABASE_URL added to Render
 # DATABASE_URL password updated
 # Added JWT_SECRET and INTEGRATION_ENCRYPTION_KEY
+# Added OAUTH_SERVER_URL
