@@ -29,11 +29,10 @@ import { Plug, Wallet, FileSignature, Cpu, HardDrive, Paintbrush, ShieldCheck } 
 type SettingsTab = 'profile' | 'governance' | 'integrations' | 'ai-providers' | 'storage' | 'data-governance' | 'calendar' | 'notifications' | 'privacy' | 'appearance' | 'accessibility';
 
 export default function Settings() {
-  const [activeTab, setActiveTab] = useState<SettingsTab>('profile');
+  const [activeTab, setActiveTab] = useState<SettingsTab>('governance');
   const [searchQuery, setSearchQuery] = useState('');
 
   const tabs = [
-    { id: 'profile' as const, label: 'Profile', icon: User },
     { id: 'governance' as const, label: 'Governance', icon: ShieldCheck },
     { id: 'integrations' as const, label: 'Integrations', icon: Plug },
     { id: 'ai-providers' as const, label: 'AI Providers', icon: Cpu },
@@ -44,6 +43,7 @@ export default function Settings() {
     { id: 'privacy' as const, label: 'Privacy', icon: Shield },
     { id: 'appearance' as const, label: 'Appearance', icon: Palette },
     { id: 'accessibility' as const, label: 'Accessibility', icon: Eye },
+    { id: 'profile' as const, label: 'Profile', icon: User },
   ];
 
   const mockReferralStats = {
