@@ -1334,7 +1334,7 @@ CREATE TABLE tasks (
 
 ### 12.2 Dashboard API
 
-**Base Path:** `/api/dashboard`
+**Base Path:** `/api/nexus`
 
 **Endpoints:**
 
@@ -1678,8 +1678,8 @@ For EACH button on EACH page:
 | Project Genesis | /project-genesis | 15 | 4 | ✅ | 2026-02-22 |
 | AI-SMEs | /ai-experts | 4 | 2 | ✅ | 2026-02-22 |
 | Innovation Hub | /innovation-hub | 10 | 3 | ✅ | 2026-02-22 |
-| Development Pathway | /development-pathway | 8 | 2 | ✅ | 2026-02-22 |
-| COS Training | /cos-training | 6 | 1 | ✅ | 2026-02-22 |
+| Development Pathway | /odyssey-management | 8 | 2 | ✅ | 2026-02-22 |
+| COS Training | /twin-training | 6 | 1 | ✅ | 2026-02-22 |
 | Chief of Staff | /chief-of-staff | 12 | 4 | ⚠️ | 2026-02-22 |
 | Command Centre | /chief-of-staff-enhanced | 8 | 3 | ✅ | 2026-02-22 |
 | Library | /library | 5 | 2 | ✅ | 2026-02-22 |

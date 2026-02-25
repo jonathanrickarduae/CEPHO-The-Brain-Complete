@@ -32,10 +32,10 @@ export function useKeyboardShortcuts(customShortcuts?: ShortcutConfig[]) {
 
   // Navigation shortcuts with actual navigation
   const navigationShortcuts: ShortcutConfig[] = [
-    { key: 'd', ctrl: true, action: () => setLocation('/dashboard'), description: 'Go to Dashboard' },
+    { key: 'd', ctrl: true, action: () => setLocation('/nexus'), description: 'Go to Dashboard' },
     { key: 'b', ctrl: true, action: () => setLocation('/daily-brief'), description: 'Go to The Signal' },
     { key: 'e', ctrl: true, action: () => setLocation('/ai-experts'), description: 'Go to AI Experts' },
-    { key: 't', ctrl: true, action: () => setLocation('/digital-twin'), description: 'Go to Chief of Staff' },
+    { key: 't', ctrl: true, action: () => setLocation('/tasks'), description: 'Go to Chief of Staff' },
     { key: 'w', ctrl: true, action: () => setLocation('/workflow'), description: 'Go to Workflow' },
     { key: 'l', ctrl: true, action: () => setLocation('/library'), description: 'Go to Library' },
     { key: 'v', ctrl: true, action: () => setLocation('/vault'), description: 'Go to Vault' },
@@ -44,10 +44,10 @@ export function useKeyboardShortcuts(customShortcuts?: ShortcutConfig[]) {
 
   // G+key navigation shortcuts (vim-style)
   const gKeyNavigationMap: Record<string, string> = {
-    'h': '/dashboard',      // G+H = Home/Dashboard
+    'h': '/nexus',      // G+H = Home/Dashboard
     's': '/daily-brief',    // G+S = Morning Signal
     'e': '/ai-experts',     // G+E = AI Experts
-    'c': '/digital-twin',   // G+C = Chief of Staff
+    'c': '/tasks',   // G+C = Chief of Staff
     'w': '/workflow',       // G+W = Workflow
     'l': '/library',        // G+L = Library
     'v': '/vault',          // G+V = Vault

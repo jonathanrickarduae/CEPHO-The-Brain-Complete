@@ -76,7 +76,7 @@ export function VoiceCommands({ onCommand, className }: VoiceCommandsProps) {
     // Navigation commands
     {
       patterns: ['go to dashboard', 'open dashboard', 'show dashboard'],
-      action: () => { setLocation('/dashboard'); speak('Opening dashboard'); },
+      action: () => { setLocation('/nexus'); speak('Opening dashboard'); },
       description: 'Navigate to dashboard',
       category: 'navigation',
     },
@@ -88,7 +88,7 @@ export function VoiceCommands({ onCommand, className }: VoiceCommandsProps) {
     },
     {
       patterns: ['go to chief of staff', 'open chief of staff', 'talk to twin'],
-      action: () => { setLocation('/digital-twin'); speak('Opening Chief of Staff'); },
+      action: () => { setLocation('/tasks'); speak('Opening Chief of Staff'); },
       description: 'Navigate to Chief of Staff',
       category: 'navigation',
     },
@@ -106,7 +106,7 @@ export function VoiceCommands({ onCommand, className }: VoiceCommandsProps) {
     },
     {
       patterns: ['go to statistics', 'open statistics', 'show stats'],
-      action: () => { setLocation('/statistics'); speak('Opening statistics'); },
+      action: () => { setLocation('/analytics'); speak('Opening statistics'); },
       description: 'Navigate to statistics',
       category: 'navigation',
     },
@@ -167,7 +167,7 @@ export function VoiceCommands({ onCommand, className }: VoiceCommandsProps) {
       patterns: ['how am i doing', 'my progress', 'productivity score'],
       action: () => {
         speak('Opening your statistics');
-        setLocation('/statistics');
+        setLocation('/analytics');
       },
       description: 'Check progress',
       category: 'query',

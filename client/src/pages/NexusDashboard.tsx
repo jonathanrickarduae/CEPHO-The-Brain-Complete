@@ -166,7 +166,7 @@ export default function NexusDashboard() {
     { 
       label: "Digital Twin", 
       icon: Users, 
-      path: "/digital-twin",
+      path: "/tasks",
       gradient: "from-blue-500/20 to-indigo-500/20",
       border: "border-blue-500/50 hover:border-blue-400",
     },

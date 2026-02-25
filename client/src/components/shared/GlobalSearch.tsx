@@ -113,7 +113,7 @@ export function GlobalSearch({ isOpen, onClose }: { isOpen: boolean; onClose: ()
     // Navigate based on type
     const paths: Record<string, string> = {
       document: '/library',
-      conversation: '/digital-twin',
+      conversation: '/tasks',
       project: '/workflow',
       vault: '/vault',
       expert: '/ai-experts',
@@ -254,7 +254,7 @@ export function GlobalSearch({ isOpen, onClose }: { isOpen: boolean; onClose: ()
                 <div className="grid grid-cols-2 gap-2">
                   {[
                     { label: 'New task', icon: Hash, path: '/review-queue' },
-                    { label: 'Ask Chief of Staff', icon: Sparkles, path: '/digital-twin' },
+                    { label: 'Ask Chief of Staff', icon: Sparkles, path: '/tasks' },
                     { label: 'View calendar', icon: Calendar, path: '/daily-brief' },
                     { label: 'Open vault', icon: Lock, path: '/vault' },
                   ].map(action => (

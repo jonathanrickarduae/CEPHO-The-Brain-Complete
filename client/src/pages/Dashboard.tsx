@@ -164,7 +164,7 @@ export default function Dashboard() {
       sub: "Level 2: Learning", 
       icon: Fingerprint, 
       color: "#a855f7",
-      path: "/digital-twin",
+      path: "/tasks",
       badge: <LearningBadge className="absolute top-2 right-2" />,
       tooltip: "Your AI counterpart that learns from you. Train it to handle tasks autonomously."
     },

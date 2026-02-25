@@ -8,7 +8,7 @@
 ## Phase 1: Route Cleanup ✅
 
 ### Obsolete Routes Removed:
-- ✅ `/chief-of-staff` (duplicate of `/digital-twin`)
+- ✅ `/chief-of-staff` (duplicate of `/tasks`)
 - ✅ `/library` (replaced by `/documents`)
 - ✅ `/expert-network` (AI-SMEs moved to Chief of Staff)
 - ✅ `/morning-signal` (consolidated into Victoria's Brief)
@@ -31,18 +31,18 @@
 
 ### Current Navigation (BrainLayout.tsx):
 ```
-✅ The Nexus → /dashboard
+✅ The Nexus → /nexus
 ✅ The Signal
    ├─ Victoria's Brief → /daily-brief
    └─ Evening Review → /evening-review
 ✅ Chief of Staff
-   ├─ Tasks → /digital-twin
-   ├─ Odyssey Management → /development-pathway
-   ├─ Twin Training → /cos-training
+   ├─ Tasks → /tasks
+   ├─ Odyssey Management → /odyssey-management
+   ├─ Twin Training → /twin-training
    ├─ AI Agents → /ai-agents
    ├─ AI-SMEs → /ai-experts
    ├─ Operations → /operations
-   ├─ Analytics → /statistics
+   ├─ Analytics → /analytics
    └─ Document Library → /documents
 ✅ Odyssey Engine
    ├─ Innovation Hub → /innovation-hub
@@ -148,16 +148,16 @@
 
 | Navigation Label | URL Path | Component | Status |
 |-----------------|----------|-----------|--------|
-| The Nexus | `/dashboard` | DashboardEnhanced | ✅ |
+| The Nexus | `/nexus` | DashboardEnhanced | ✅ |
 | Victoria's Brief | `/daily-brief` | DailyBrief | ✅ |
 | Evening Review | `/evening-review` | EveningReview | ✅ |
-| Tasks | `/digital-twin` | ChiefOfStaff | ✅ |
-| Odyssey Management | `/development-pathway` | DevelopmentPathway | ✅ |
-| Twin Training | `/cos-training` | COSTraining | ✅ |
+| Tasks | `/tasks` | ChiefOfStaff | ✅ |
+| Odyssey Management | `/odyssey-management` | DevelopmentPathway | ✅ |
+| Twin Training | `/twin-training` | COSTraining | ✅ |
 | AI Agents | `/ai-agents` | AIAgentsPage | ✅ |
 | AI-SMEs | `/ai-experts` | AISMEsPage | ✅ |
 | Operations | `/operations` | OperationsPage | ✅ |
-| Analytics | `/statistics` | Statistics | ✅ |
+| Analytics | `/analytics` | Statistics | ✅ |
 | Document Library | `/documents` | DocumentLibrary | ✅ |
 | Innovation Hub | `/innovation-hub` | InnovationHub | ✅ |
 | Project Genesis | `/project-genesis` | ProjectGenesisPage | ✅ |

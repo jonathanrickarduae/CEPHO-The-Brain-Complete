@@ -812,7 +812,7 @@ export default function MorningSignal() {
               </Button>
               <Button
                 variant="outline"
-                onClick={() => setLocation("/digital-twin")}
+                onClick={() => setLocation("/tasks")}
                 className="border-slate-600"
               >
                 <Brain className="h-4 w-4 mr-2" />

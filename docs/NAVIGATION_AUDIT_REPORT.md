@@ -9,7 +9,7 @@
 
 ### 1. The Nexus
 - **Label:** "The Nexus"
-- **Path:** `/dashboard`
+- **Path:** `/nexus`
 - **Status:** ✅ Matches route
 
 ### 2. The Signal
@@ -21,15 +21,15 @@
 
 ### 3. Chief of Staff
 - **Label:** "Chief of Staff"
-- **Path:** `/digital-twin`
+- **Path:** `/tasks`
 - **Children:**
-  - **Tasks** → `/digital-twin` ✅
-  - **Odyssey Management** → `/development-pathway` ✅
-  - **Twin Training** → `/cos-training` ✅
+  - **Tasks** → `/tasks` ✅
+  - **Odyssey Management** → `/odyssey-management` ✅
+  - **Twin Training** → `/twin-training` ✅
   - **AI Agents** → `/ai-agents` ⚠️ (route exists but needs verification)
   - **AI-SMEs** → `/ai-experts` ✅
   - **Operations** → `/operations` ✅
-  - **Analytics** → `/statistics` ✅
+  - **Analytics** → `/analytics` ✅
   - **Document Library** → `/documents` ✅
 
 ### 4. Odyssey Engine
@@ -55,7 +55,7 @@
 
 ### 1. Duplicate/Obsolete Routes
 ❌ **Routes that should be removed:**
-- `/chief-of-staff` - Duplicate of `/digital-twin`
+- `/chief-of-staff` - Duplicate of `/tasks`
 - `/chief-of-staff-role` - Separate page, not in navigation
 - `/morning-signal` - Removed from navigation (consolidated into Victoria's Brief)
 - `/the-signal` - Duplicate route
@@ -77,9 +77,9 @@
 
 | Navigation Label | Current URL | Suggested URL | Status |
 |-----------------|-------------|---------------|--------|
-| The Nexus | `/dashboard` | `/nexus` | ⚠️ Consider renaming |
-| Tasks | `/digital-twin` | `/tasks` | ⚠️ Consider renaming |
-| Analytics | `/statistics` | `/analytics` | ⚠️ Consider renaming |
+| The Nexus | `/nexus` | `/nexus` | ⚠️ Consider renaming |
+| Tasks | `/tasks` | `/tasks` | ⚠️ Consider renaming |
+| Analytics | `/analytics` | `/analytics` | ⚠️ Consider renaming |
 
 ---
 
@@ -87,7 +87,7 @@
 
 ### Phase 1: Remove Obsolete Routes
 Remove these routes from App.tsx:
-- `/chief-of-staff` (use `/digital-twin`)
+- `/chief-of-staff` (use `/tasks`)
 - `/morning-signal` (consolidated)
 - `/the-signal`, `/signal`, `/signal/morning`, `/signal/evening` (duplicates)
 - `/expert-network` (removed from nav)
@@ -97,15 +97,15 @@ Remove these routes from App.tsx:
 
 ### Phase 2: Fix URL Naming Consistency
 **Option A: Keep current URLs** (minimal changes)
-- Keep `/dashboard` for The Nexus
-- Keep `/digital-twin` for Tasks
-- Keep `/statistics` for Analytics
+- Keep `/nexus` for The Nexus
+- Keep `/tasks` for Tasks
+- Keep `/analytics` for Analytics
 - Update navigation labels if needed
 
 **Option B: Rename URLs to match labels** (more consistent)
-- `/dashboard` → `/nexus`
-- `/digital-twin` → `/tasks`
-- `/statistics` → `/analytics`
+- `/nexus` → `/nexus`
+- `/tasks` → `/tasks`
+- `/analytics` → `/analytics`
 
 **Recommendation:** Option A (keep current URLs) to avoid breaking existing bookmarks and references.
 
@@ -123,18 +123,18 @@ Update these documents with current navigation structure:
 ## Navigation to URL Mapping (Final)
 
 ```
-The Nexus → /dashboard
+The Nexus → /nexus
 The Signal
   ├─ Victoria's Brief → /daily-brief
   └─ Evening Review → /evening-review
 Chief of Staff
-  ├─ Tasks → /digital-twin
-  ├─ Odyssey Management → /development-pathway
-  ├─ Twin Training → /cos-training
+  ├─ Tasks → /tasks
+  ├─ Odyssey Management → /odyssey-management
+  ├─ Twin Training → /twin-training
   ├─ AI Agents → /ai-agents
   ├─ AI-SMEs → /ai-experts
   ├─ Operations → /operations
-  ├─ Analytics → /statistics
+  ├─ Analytics → /analytics
   └─ Document Library → /documents
 Odyssey Engine
   ├─ Innovation Hub → /innovation-hub

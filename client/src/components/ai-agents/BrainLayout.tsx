@@ -59,7 +59,7 @@ type MenuItem = {
 };
 
 const menuItems: MenuItem[] = [
-  { icon: LayoutDashboard, label: "The Nexus", path: "/dashboard" },
+  { icon: LayoutDashboard, label: "The Nexus", path: "/nexus" },
   { 
     icon: Sun, 
     label: "The Signal", 
@@ -72,15 +72,15 @@ const menuItems: MenuItem[] = [
   { 
     icon: Fingerprint, 
     label: "Chief of Staff", 
-    path: "/digital-twin",
+    path: "/tasks",
     children: [
-      { icon: CheckCircle2, label: "Tasks", path: "/digital-twin" },
-      { icon: Rocket, label: "Odyssey Management", path: "/development-pathway" },
-      { icon: GraduationCap, label: "Twin Training", path: "/cos-training" },
+      { icon: CheckCircle2, label: "Tasks", path: "/tasks" },
+      { icon: Rocket, label: "Odyssey Management", path: "/odyssey-management" },
+      { icon: GraduationCap, label: "Twin Training", path: "/twin-training" },
       { icon: Bot, label: "AI Agents", path: "/ai-agents" },
       { icon: Users, label: "AI-SMEs", path: "/ai-experts" },
       { icon: TrendingUp, label: "Operations", path: "/operations" },
-      { icon: BarChart3, label: "Analytics", path: "/statistics" },
+      { icon: BarChart3, label: "Analytics", path: "/analytics" },
       { icon: Library, label: "Document Library", path: "/documents" },
     ]
   },

@@ -115,7 +115,7 @@ export default function Landing() {
         setStep("mood");
       } else {
         // Skip straight to dashboard if mood already captured today
-        setLocation("/dashboard");
+        setLocation("/nexus");
       }
     }, 1500); // 1.5 second splash showing Cepho
 
@@ -125,12 +125,12 @@ export default function Landing() {
   const handleMoodSubmit = () => {
     saveMoodCheck(mood[0]);
     // After mood check, go to dashboard (onboarding will show there if needed)
-    setLocation("/dashboard");
+    setLocation("/nexus");
   };
 
   const handleSkip = () => {
     // Even if skipped, mark that we asked
-    setLocation("/dashboard");
+    setLocation("/nexus");
   };
 
   const themeOptions = [

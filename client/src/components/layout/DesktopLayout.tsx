@@ -23,7 +23,7 @@ export default function DesktopLayout({ children }: DesktopLayoutProps) {
   const [location] = useLocation();
 
   const navItems = [
-    { icon: LayoutDashboard, label: "Dashboard", path: "/dashboard" },
+    { icon: LayoutDashboard, label: "Dashboard", path: "/nexus" },
     { icon: Library, label: "Library", path: "/library" },
     { icon: Settings, label: "Settings", path: "/settings" },
   ];

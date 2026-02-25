@@ -47,7 +47,7 @@ export default function LandingPage() {
       // Save auth token
       localStorage.setItem('cepho_auth_token', 'authenticated');
       toast.success('Welcome to CEPHO.AI');
-      navigate('/dashboard');
+      navigate('/nexus');
     }, 2000);
   };
 

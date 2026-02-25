@@ -32,13 +32,13 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
   // Define all commands
   const commands: CommandItem[] = useMemo(() => [
     // Navigation
-    { id: 'nav-dashboard', title: 'Go to Dashboard', icon: Home, category: 'navigation', shortcut: 'G D', action: () => { setLocation('/dashboard'); onClose(); } },
+    { id: 'nav-dashboard', title: 'Go to Dashboard', icon: Home, category: 'navigation', shortcut: 'G D', action: () => { setLocation('/nexus'); onClose(); } },
     { id: 'nav-daily-brief', title: 'Go to The Signal', icon: Calendar, category: 'navigation', shortcut: 'G B', action: () => { setLocation('/daily-brief'); onClose(); } },
-    { id: 'nav-digital-twin', title: 'Go to Chief of Staff', icon: Brain, category: 'navigation', shortcut: 'G T', action: () => { setLocation('/digital-twin'); onClose(); } },
+    { id: 'nav-digital-twin', title: 'Go to Chief of Staff', icon: Brain, category: 'navigation', shortcut: 'G T', action: () => { setLocation('/tasks'); onClose(); } },
     { id: 'nav-ai-experts', title: 'Go to AI Experts', icon: Users, category: 'navigation', shortcut: 'G E', action: () => { setLocation('/ai-experts'); onClose(); } },
     { id: 'nav-workflow', title: 'Go to Workflow', icon: Target, category: 'navigation', shortcut: 'G W', action: () => { setLocation('/workflow'); onClose(); } },
     { id: 'nav-library', title: 'Go to Library', icon: BookOpen, category: 'navigation', shortcut: 'G L', action: () => { setLocation('/library'); onClose(); } },
-    { id: 'nav-statistics', title: 'Go to Statistics', icon: BarChart3, category: 'navigation', shortcut: 'G S', action: () => { setLocation('/statistics'); onClose(); } },
+    { id: 'nav-statistics', title: 'Go to Statistics', icon: BarChart3, category: 'navigation', shortcut: 'G S', action: () => { setLocation('/analytics'); onClose(); } },
     { id: 'nav-vault', title: 'Go to Vault', icon: Lock, category: 'navigation', shortcut: 'G V', action: () => { setLocation('/vault'); onClose(); } },
     { id: 'nav-settings', title: 'Go to Settings', icon: Settings, category: 'navigation', shortcut: 'G ,', action: () => { setLocation('/settings'); onClose(); } },
     

@@ -22,7 +22,7 @@
 | Page | Status | Grade | Notes |
 |------|--------|-------|-------|
 | / (The Nexus) | ✅ Working | A+ | World-class dashboard, excellent design |
-| /dashboard | ✅ Working | A+ | Redirects to /, works perfectly |
+| /nexus | ✅ Working | A+ | Redirects to /, works perfectly |
 | /daily-brief | ❌ BROKEN | F | Mail icon error - fix deployed |
 | /morning-signal | ✅ Working | A | Redirects to /daily-brief |
 | /signal/morning | ✅ Working | A | Same as /daily-brief |
@@ -43,7 +43,7 @@
 | /chief-of-staff | ✅ Working | A++ | **WORLD-CLASS** - Best page on platform |
 | /chief-of-staff-enhanced | ✅ Working | A | Excellent command centre |
 | /chief-of-staff-role | ✅ Working | A+ | Excellent COS configuration |
-| /cos-training | ✅ Working | A | Training modal works perfectly |
+| /twin-training | ✅ Working | A | Training modal works perfectly |
 | /review-queue | ✅ Working | A+ | Excellent approval workflow |
 
 **Category Score: 100% (5/5 working)**
@@ -71,7 +71,7 @@
 | /agents | ✅ Working | A | Clean agent directory |
 | /agents-monitoring | ⚠️ Empty | B | No data, but no errors |
 | /ai-team | ⚠️ Empty | B | No data, but no errors |
-| /digital-twin | ✅ Working | A | Redirects to /questionnaire |
+| /tasks | ✅ Working | A | Redirects to /questionnaire |
 | /questionnaire | ✅ Working | A+ | Excellent digital twin training |
 
 **Category Score: 71% (5/7 working, 2 empty)**
@@ -100,7 +100,7 @@
 |------|--------|-------|-------|
 | /project-genesis | ✅ Working | A+ | Excellent project management |
 | /innovation-hub | ✅ Working | A | Great idea capture system |
-| /development-pathway | ✅ Working | A | Clean development workflow |
+| /odyssey-management | ✅ Working | A | Clean development workflow |
 
 **Category Score: 100% (3/3 working)**
 
@@ -136,7 +136,7 @@
 
 | Page | Status | Grade | Notes |
 |------|--------|-------|-------|
-| /statistics | ✅ Working | A+ | Excellent analytics dashboard |
+| /analytics | ✅ Working | A+ | Excellent analytics dashboard |
 | /kpi-dashboard | ✅ Working | A+ | Professional KPI tracking |
 | /operations | ✅ Working | A | Clean operations dashboard |
 | /wellness | ✅ Working | A+ | Excellent wellness tracking |

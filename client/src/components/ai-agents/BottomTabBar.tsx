@@ -20,7 +20,7 @@ interface TabItem {
 
 // Navigation order: Signal → Chief of Staff → AI SMEs → Workflow → Project Genesis
 const TABS: TabItem[] = [
-  { id: 'dashboard', label: 'Home', icon: LayoutDashboard, path: '/dashboard' },
+  { id: 'dashboard', label: 'Home', icon: LayoutDashboard, path: '/nexus' },
   { id: 'brief', label: 'Signal', icon: Sun, path: '/the-signal' },
   { id: 'twin', label: 'Chief of Staff', icon: Fingerprint, path: '/chief-of-staff' },
   { id: 'experts', label: 'AI SMEs', icon: Users, path: '/ai-experts' },

@@ -15,15 +15,15 @@ interface BreadcrumbsProps {
 
 // Route to breadcrumb mapping
 const ROUTE_LABELS: Record<string, string> = {
-  '/dashboard': 'The Nexus',
+  '/nexus': 'The Nexus',
   '/daily-brief': 'The Signal',
   '/ai-experts': 'AI-SMEs',
-  '/digital-twin': 'Chief of Staff',
+  '/tasks': 'Chief of Staff',
   '/workflow': 'Workflow',
   '/library': 'Library',
   '/vault': 'The Vault',
   '/evening-review': 'Evening Review',
-  '/statistics': 'Statistics',
+  '/analytics': 'Statistics',
   '/persephone': 'Persephone Board',
 };
 
@@ -55,7 +55,7 @@ export function Breadcrumbs({ items, className, showHome = true }: BreadcrumbsPr
       {showHome && (
         <>
           <Link
-            href="/dashboard"
+            href="/nexus"
             className="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors"
           >
             <Home className="w-4 h-4" />

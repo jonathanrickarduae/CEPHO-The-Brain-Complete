@@ -234,7 +234,7 @@ export default function About() {
       {/* CTA */}
       <div className="text-center">
         <button
-          onClick={() => setLocation('/dashboard')}
+          onClick={() => setLocation('/nexus')}
           className="inline-flex items-center gap-2 px-6 py-3 bg-primary hover:bg-primary/90 text-primary-foreground font-bold rounded-xl shadow-[0_0_20px_rgba(255,16,240,0.3)] hover:shadow-[0_0_30px_rgba(255,16,240,0.5)] transition-all"
         >
           <Brain className="w-5 h-5" />

@@ -21,7 +21,7 @@
 
 **Core Dashboard & Briefings (5)**
 - `/` - Home/Nexus ✅ 200
-- `/dashboard` - Dashboard ✅ 200
+- `/nexus` - Dashboard ✅ 200
 - `/daily-brief` - The Signal/Daily Brief ✅ 200
 - `/morning-signal` - Morning Signal ✅ 200
 - `/evening-review` - Evening Review ✅ 200
@@ -29,7 +29,7 @@
 **AI & Experts (6)**
 - `/persephone` - Persephone Board (14 AI Leaders) ✅ 200
 - `/ai-experts` - AI-SMEs (311 experts) ✅ 200
-- `/digital-twin` - Digital Twin ✅ 200
+- `/tasks` - Digital Twin ✅ 200
 - `/chief-of-staff` - Chief of Staff ✅ 200
 - `/agents` - AI Agents ✅ 200
 - `/agents-monitoring` - Agents Monitoring ✅ 200
@@ -41,8 +41,8 @@
 - `/email/accounts` - Email Accounts ✅ 200
 
 **Chief of Staff Suite (3)**
-- `/development-pathway` - Development Pathway ✅ 200
-- `/cos-training` - COS Training ✅ 200
+- `/odyssey-management` - Development Pathway ✅ 200
+- `/twin-training` - COS Training ✅ 200
 - `/chief-of-staff-enhanced` - Enhanced COS (not in test list but exists)
 
 **Innovation & Projects (6)**
@@ -62,7 +62,7 @@
 - `/reference-library` - Reference Library ✅ 200
 
 **Analytics & Operations (7)**
-- `/statistics` - Statistics ✅ 200
+- `/analytics` - Statistics ✅ 200
 - `/central-hub` - Central Hub ✅ 200
 - `/operations` - Operations ✅ 200
 - `/revenue` - Revenue Dashboard ✅ 200
@@ -106,7 +106,7 @@
 
 ---
 
-### 2. **Dashboard** (`/dashboard`) ✅ EXCELLENT
+### 2. **Dashboard** (`/nexus`) ✅ EXCELLENT
 **Status:** Fully functional  
 **Content Quality:** Excellent - identical to Home (may be intentional)  
 **Key Elements:** Same as Home/Nexus  
@@ -221,7 +221,7 @@
 
 ---
 
-### 7. **Digital Twin / Chief of Staff** (`/digital-twin`) ✅ EXCELLENT
+### 7. **Digital Twin / Chief of Staff** (`/tasks`) ✅ EXCELLENT
 **Status:** Fully functional  
 **Content Quality:** Excellent - AI executive assistant interface  
 

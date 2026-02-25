@@ -44,7 +44,7 @@ export const POST_ONBOARDING_ACTIONS = [
     title: 'Train your Chief of Staff',
     description: 'Upload documents or complete a quick interview',
     icon: 'brain',
-    path: '/digital-twin',
+    path: '/tasks',
     priority: 3,
   },
   {

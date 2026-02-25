@@ -133,10 +133,10 @@ function Router() {
         <Route path="/waitlist" component={Waitlist} />
         
         {/* Dashboard pages with sidebar - Protected */}
-        <Route path="/dashboard">
+        <Route path="/nexus">
           <WithLayout><DashboardEnhanced /></WithLayout>
         </Route>
-        <Route path="/digital-twin">
+        <Route path="/tasks">
           <WithLayout><ChiefOfStaff /></WithLayout>
         </Route>
 
@@ -149,7 +149,7 @@ function Router() {
 
 
 
-        <Route path="/statistics">
+        <Route path="/analytics">
           <WithLayout><Statistics /></WithLayout>
         </Route>
         <Route path="/vault">
@@ -215,10 +215,10 @@ function Router() {
         <Route path="/documents">
           <WithLayout><DocumentLibrary /></WithLayout>
         </Route>
-        <Route path="/development-pathway">
+        <Route path="/odyssey-management">
           <WithLayout><DevelopmentPathway /></WithLayout>
         </Route>
-        <Route path="/cos-training">
+        <Route path="/twin-training">
           <WithLayout><COSTraining /></WithLayout>
         </Route>
         <Route path="/questionnaire">

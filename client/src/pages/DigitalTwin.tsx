@@ -69,7 +69,7 @@ export default function DigitalTwin() {
   // Process initial message from URL
   useEffect(() => {
     if (initialMessage) {
-      window.history.replaceState({}, '', '/digital-twin');
+      window.history.replaceState({}, '', '/tasks');
       inputRef.current?.focus();
     }
   }, [initialMessage]);

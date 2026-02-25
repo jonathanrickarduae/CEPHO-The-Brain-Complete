@@ -90,7 +90,7 @@ export function InsightsPanel() {
         message: 'Briefing notes can be prepared. Action required.',
         context: 'Calendar',
         actionLabel: 'Prepare briefing',
-        actionPath: '/digital-twin',
+        actionPath: '/tasks',
         dismissable: true,
         createdAt: new Date(),
         source: 'calendar'
@@ -128,7 +128,7 @@ export function InsightsPanel() {
         title: 'Chief of Staff: 67% confidence',
         message: '15-minute training session available. Improves accuracy.',
         actionLabel: 'Start training',
-        actionPath: '/digital-twin',
+        actionPath: '/tasks',
         dismissable: true,
         createdAt: new Date(Date.now() - 14400000),
         source: 'digital-twin'
@@ -304,7 +304,7 @@ export function useNudgeEngine() {
           message: `You have "${event.title}" scheduled. Would you like to prepare?`,
           context: 'Based on your calendar',
           actionLabel: 'Prepare briefing',
-          actionPath: '/digital-twin',
+          actionPath: '/tasks',
           source: 'calendar'
         });
       }

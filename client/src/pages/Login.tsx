@@ -168,7 +168,7 @@ export default function Login() {
       if (response.ok && data.success) {
         toast.success('Login successful!');
         // Redirect to dashboard
-        setLocation('/dashboard');
+        setLocation('/nexus');
       } else {
         toast.error(data.error || 'Invalid credentials');
       }
