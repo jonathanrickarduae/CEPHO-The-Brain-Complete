@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import { useGovernance } from "@/hooks/useGovernance";
 import { PageHeader } from '@/components/layout/PageHeader';
+import { PageBanner } from '@/components/layout/PageBanner';
 import { LearningBadge } from '@/components/expert-evolution/LearningIndicator';
 import { useVoiceInput } from "@/hooks/useVoiceInput";
 import { toast } from "sonner";
@@ -203,19 +204,14 @@ export default function NexusDashboard() {
   return (
     <div className="h-[calc(100vh-56px)] md:h-screen flex flex-col bg-background">
       {/* Header */}
-      <div className="border-b border-border bg-card/50 backdrop-blur-sm">
-        <div className="flex items-center justify-between px-6 py-4">
-          <div className="flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-cyan-500/20">
-              <LayoutDashboard className="w-6 h-6 text-cyan-400" />
-            </div>
-            <div>
-              <h1 className="text-2xl font-bold text-foreground">The Nexus</h1>
-              <p className="text-sm text-muted-foreground">Command Center</p>
-            </div>
-          </div>
-          
-          <div className="flex items-center gap-4">
+      <PageBanner
+        icon={LayoutDashboard}
+        title="Nexus"
+        subtitle="Command Center"
+        iconColor="text-cyan-400"
+        iconBgColor="bg-cyan-500/20"
+      >
+        <div className="flex items-center gap-4">
             {/* Governance Mode Toggle */}
             <div className="flex items-center gap-2">
               <button
@@ -247,8 +243,7 @@ export default function NexusDashboard() {
               <span className="text-xs text-foreground/70 font-mono">ONLINE</span>
             </div>
           </div>
-        </div>
-      </div>
+      </PageBanner>
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col p-6 overflow-auto">

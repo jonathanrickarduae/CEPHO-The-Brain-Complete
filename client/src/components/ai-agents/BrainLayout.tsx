@@ -59,43 +59,49 @@ type MenuItem = {
 };
 
 const menuItems: MenuItem[] = [
-  { icon: LayoutDashboard, label: "The Nexus", path: "/nexus" },
+  { icon: LayoutDashboard, label: "Nexus", path: "/nexus" },
   { 
     icon: Sun, 
-    label: "The Signal", 
-    path: "/daily-brief",
+    label: "Signal", 
+    path: "/the-signal",
     children: [
-      { icon: Volume2, label: "Victoria's Brief", path: "/daily-brief" },
+      { icon: Volume2, label: "Daily Brief", path: "/the-signal" },
       { icon: Moon, label: "Evening Review", path: "/evening-review" },
     ]
   },
   { 
     icon: User, 
     label: "Chief of Staff", 
-    path: "/tasks",
+    path: "/chief-of-staff",
     children: [
       { icon: CheckCircle2, label: "Tasks", path: "/tasks" },
       { icon: Rocket, label: "Odyssey Management", path: "/odyssey-management" },
       { icon: GraduationCap, label: "Twin Training", path: "/twin-training" },
       { icon: Bot, label: "AI Agents", path: "/ai-agents" },
-      { icon: Users, label: "AI-SMEs", path: "/ai-experts" },
-      { icon: TrendingUp, label: "Operations", path: "/operations" },
-      { icon: BarChart3, label: "Analytics", path: "/analytics" },
-      { icon: Library, label: "Document Library", path: "/documents" },
     ]
   },
   { 
+    icon: Users, 
+    label: "AI SMEs", 
+    path: "/ai-experts"
+  },
+  { 
+    icon: FolderKanban, 
+    label: "Workflow", 
+    path: "/workflow"
+  },
+  { 
     icon: Rocket, 
-    label: "Odyssey Engine", 
-    path: "/innovation-hub",
+    label: "Project Genesis", 
+    path: "/project-genesis",
     children: [
       { icon: TrendingUp, label: "Innovation Hub", path: "/innovation-hub" },
-      { icon: Star, label: "Project Genesis", path: "/project-genesis" },
+      { icon: Star, label: "New Project", path: "/project-genesis" },
       { icon: Workflow, label: "Workflows", path: "/workflows" },
       { icon: Users, label: "Persephone Board", path: "/persephone" },
     ]
   },
-
+  { icon: BookOpen, label: "Library", path: "/library" },
   { icon: Lock, label: "Vault", path: "/vault" },
   { icon: Settings, label: "Settings", path: "/settings" },
 ];
