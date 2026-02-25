@@ -78,6 +78,7 @@ const menuItems: MenuItem[] = [
       { icon: Rocket, label: "Odyssey Management", path: "/development-pathway" },
       { icon: Brain, label: "Twin Training", path: "/cos-training" },
       { icon: Activity, label: "AI Agents", path: "/ai-agents-monitoring" },
+      { icon: TrendingUp, label: "Operations", path: "/operations" },
       { icon: BarChart3, label: "Analytics", path: "/statistics" },
     ]
   },
@@ -117,7 +118,6 @@ const menuItems: MenuItem[] = [
     path: "/central-hub",
     children: [
       { icon: Globe, label: "Central Hub", path: "/central-hub" },
-      { icon: TrendingUp, label: "Operations", path: "/operations" },
     ]
   },
   { icon: Settings, label: "Settings", path: "/settings" },
