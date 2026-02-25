@@ -109,9 +109,9 @@ const menuItems: MenuItem[] = [
     children: [
       { icon: Library, label: "Library", path: "/library" },
       { icon: FileText, label: "Documents", path: "/documents" },
-      { icon: Lock, label: "Vault", path: "/vault" },
     ]
   },
+  { icon: Lock, label: "Vault", path: "/vault" },
   { 
     icon: BarChart3, 
     label: "Analytics", 
