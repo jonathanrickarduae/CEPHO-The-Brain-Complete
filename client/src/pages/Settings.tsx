@@ -27,7 +27,7 @@ import { DataGovernanceDashboard } from '@/components/project-management/DataGov
 import { GovernanceSettings } from '@/components/settings/GovernanceSettings';
 import { Plug, Wallet, FileSignature, Cpu, HardDrive, Paintbrush, ShieldCheck } from 'lucide-react';
 
-type SettingsTab = 'governance' | 'integrations' | 'email-accounts' | 'subscriptions' | 'signatures' | 'ai-providers' | 'api-costs' | 'storage' | 'brand-kit' | 'data-governance' | 'calendar' | 'training' | 'privacy' | 'appearance' | 'accessibility' | 'profile';
+type SettingsTab = 'governance' | 'integrations' | 'email-accounts' | 'subscriptions' | 'signatures' | 'ai-providers' | 'api-costs' | 'storage' | 'brand-kit' | 'data-governance' | 'calendar' | 'training' | 'referrals' | 'notifications' | 'privacy' | 'appearance' | 'accessibility' | 'profile';
 
 export default function Settings() {
   const [activeTab, setActiveTab] = useState<SettingsTab>('integrations');
@@ -46,7 +46,8 @@ export default function Settings() {
     { id: 'data-governance' as const, label: 'Data Governance', icon: ShieldCheck },
     { id: 'calendar' as const, label: 'Calendar', icon: Calendar },
     { id: 'training' as const, label: 'Training Data', icon: Database },
-
+    { id: 'referrals' as const, label: 'Referrals', icon: Users },
+    { id: 'notifications' as const, label: 'Notifications', icon: Bell },
     { id: 'privacy' as const, label: 'Privacy', icon: Shield },
     { id: 'appearance' as const, label: 'Appearance', icon: Palette },
     { id: 'accessibility' as const, label: 'Accessibility', icon: SettingsIcon },
@@ -241,7 +242,9 @@ export default function Settings() {
 
             {activeTab === 'training' && <TrainingDataPipeline />}
 
-            {activeTab === 'privacy' && (
+            {activeTab === 'referrals' && <ReferralDashboard stats={mockReferralStats} />}
+
+            {activeTab === 'notifications' && (
               <div className="space-y-6">
                 {/* Do Not Disturb */}
                 <div className="bg-gray-800 rounded-xl border border-gray-700 p-6">
@@ -340,13 +343,16 @@ export default function Settings() {
                     ))}
                   </div>
                 </div>
+              </div>
+              </div>
+            )}
 
-                {/* Privacy Settings */}
-                <div className="bg-gray-800 rounded-xl border border-gray-700 p-6">
-                  <h3 className="text-lg font-semibold text-white mb-6">Privacy Settings</h3>
-                  
-                  <div className="space-y-6">
-                    <div className="p-4 bg-gray-900 rounded-xl">
+            {activeTab === 'privacy' && (
+              <div className="bg-gray-800 rounded-xl border border-gray-700 p-6">
+                <h3 className="text-lg font-semibold text-white mb-6">Privacy Settings</h3>
+                
+                <div className="space-y-6">
+                  <div className="p-4 bg-gray-900 rounded-xl">
                     <h4 className="font-medium text-white mb-2">Data Collection</h4>
                     <p className="text-sm text-foreground/70 mb-4">
                       Control what data your Chief of Staff can access and learn from.
@@ -368,9 +374,9 @@ export default function Settings() {
                         </label>
                       ))}
                     </div>
-                    </div>
+                  </div>
 
-                    <div className="p-4 bg-gray-900 rounded-xl">
+                  <div className="p-4 bg-gray-900 rounded-xl">
                     <h4 className="font-medium text-white mb-2">Data Retention</h4>
                     <p className="text-sm text-foreground/70 mb-4">
                       Choose how long to keep your data.
@@ -381,9 +387,9 @@ export default function Settings() {
                       <option>6 months</option>
                       <option>3 months</option>
                     </select>
-                    </div>
+                  </div>
 
-                    <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl">
+                  <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl">
                     <h4 className="font-medium text-red-400 mb-2">Danger Zone</h4>
                     <p className="text-sm text-foreground/70 mb-4">
                       Permanently delete your account and all associated data.
@@ -391,9 +397,7 @@ export default function Settings() {
                     <button className="px-4 py-2 bg-red-500/20 hover:bg-red-500/30 text-red-400 rounded-lg transition-colors">
                       Delete Account
                     </button>
-                    </div>
                   </div>
-                </div>
                 </div>
               </div>
             )}
