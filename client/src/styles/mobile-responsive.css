@@ -1,0 +1,106 @@
+/**
+ * Mobile Responsive Utility Classes
+ * 
+ * Global styles to ensure mobile responsiveness across all pages
+ */
+
+/* Container Responsiveness */
+.container-responsive {
+  @apply px-4 sm:px-6 lg:px-8;
+}
+
+/* Text Responsiveness */
+.text-responsive-xl {
+  @apply text-2xl sm:text-3xl lg:text-4xl;
+}
+
+.text-responsive-lg {
+  @apply text-xl sm:text-2xl lg:text-3xl;
+}
+
+.text-responsive-md {
+  @apply text-lg sm:text-xl lg:text-2xl;
+}
+
+.text-responsive-sm {
+  @apply text-sm sm:text-base;
+}
+
+/* Button Responsiveness */
+.btn-responsive {
+  @apply px-3 py-2 sm:px-4 sm:py-2.5 lg:px-6 lg:py-3;
+  @apply text-sm sm:text-base;
+}
+
+/* Card Responsiveness */
+.card-responsive {
+  @apply p-4 sm:p-6 lg:p-8;
+}
+
+/* Grid Responsiveness */
+.grid-responsive-1-2-3 {
+  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3;
+}
+
+.grid-responsive-1-2 {
+  @apply grid grid-cols-1 md:grid-cols-2;
+}
+
+/* Spacing Responsiveness */
+.gap-responsive {
+  @apply gap-4 sm:gap-6 lg:gap-8;
+}
+
+.space-y-responsive {
+  @apply space-y-4 sm:space-y-6 lg:space-y-8;
+}
+
+/* Hide/Show on Mobile */
+.hide-mobile {
+  @apply hidden sm:block;
+}
+
+.show-mobile {
+  @apply block sm:hidden;
+}
+
+/* Mobile-specific overrides */
+@media (max-width: 640px) {
+  /* Ensure all containers have proper padding */
+  .min-h-screen {
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
+  }
+
+  /* Fix button sizes for touch targets */
+  button, a[role="button"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Ensure text doesn't overflow */
+  h1, h2, h3, h4, h5, h6, p {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+
+  /* Fix table overflow */
+  table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Fix modal/dialog widths */
+  [role="dialog"] {
+    max-width: calc(100vw - 2rem);
+  }
+}
+
+/* Tablet-specific overrides */
+@media (min-width: 641px) and (max-width: 1024px) {
+  /* Optimize for tablet */
+  .container {
+    max-width: 100%;
+  }
+}
