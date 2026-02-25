@@ -1,5 +1,5 @@
 import { 
-  Brain, Fingerprint, Users, Sparkles, Target, 
+  Brain, UserCircle, Users, Sparkles, Target, 
   Zap, Shield, TrendingUp, Heart, BookOpen,
   MessageSquare, Lightbulb, Layers, ArrowRight
 } from 'lucide-react';
@@ -11,7 +11,7 @@ export default function About() {
 
   const pillars = [
     {
-      icon: Fingerprint,
+      icon: UserCircle,
       title: "Chief of Staff",
       description: "Your AI counterpart that learns your patterns, preferences, and decision-making style. It grows smarter with every interaction, eventually thinking and acting like you.",
       color: "from-purple-500 to-pink-500"

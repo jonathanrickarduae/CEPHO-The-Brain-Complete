@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { 
   Shield, Lock, Mail, Smartphone, Eye, EyeOff, 
-  CheckCircle, AlertCircle, Loader2, Fingerprint,
+  CheckCircle, AlertCircle, Loader2, UserCircle,
   KeyRound, Clock, RefreshCw, X
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';

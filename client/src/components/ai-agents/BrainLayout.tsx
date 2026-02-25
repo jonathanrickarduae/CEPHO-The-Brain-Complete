@@ -70,7 +70,7 @@ const menuItems: MenuItem[] = [
     ]
   },
   { 
-    icon: Fingerprint, 
+    icon: UserCircle, 
     label: "Chief of Staff", 
     path: "/tasks",
     children: [

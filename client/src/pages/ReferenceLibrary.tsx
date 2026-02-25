@@ -3,7 +3,7 @@ import {
   BookOpen, Plus, Search, Filter, FileText, Link2, 
   ExternalLink, CheckCircle, AlertTriangle, Clock,
   Upload, Trash2, Edit, Eye, Download, Shield,
-  Fingerprint, Quote, Scale, Database, FileSpreadsheet,
+  UserCircle, Quote, Scale, Database, FileSpreadsheet,
   Users, ChevronDown, ChevronRight, X
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -285,7 +285,7 @@ export default function ReferenceLibrary() {
                     Export Citations
                   </Button>
                   <Button variant="outline" className="w-full justify-start" size="sm">
-                    <Fingerprint className="w-4 h-4 mr-2" />
+                    <UserCircle className="w-4 h-4 mr-2" />
                     Twin Verification
                   </Button>
                 </CardContent>

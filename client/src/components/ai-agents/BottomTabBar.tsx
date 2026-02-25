@@ -3,7 +3,7 @@ import {
   LayoutDashboard, 
   Sun, 
   Users, 
-  Fingerprint, 
+  UserCircle, 
   FolderKanban,
   Rocket,
   BookOpen,
@@ -22,7 +22,7 @@ interface TabItem {
 const TABS: TabItem[] = [
   { id: 'dashboard', label: 'Home', icon: LayoutDashboard, path: '/nexus' },
   { id: 'brief', label: 'Signal', icon: Sun, path: '/the-signal' },
-  { id: 'twin', label: 'Chief of Staff', icon: Fingerprint, path: '/chief-of-staff' },
+  { id: 'twin', label: 'Chief of Staff', icon: UserCircle, path: '/chief-of-staff' },
   { id: 'experts', label: 'AI SMEs', icon: Users, path: '/ai-experts' },
   { id: 'workflow', label: 'Workflow', icon: FolderKanban, path: '/workflow' },
   { id: 'genesis', label: 'Genesis', icon: Rocket, path: '/project-genesis' },

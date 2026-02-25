@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { 
-  Sun, Users, FolderKanban, Fingerprint, Brain, 
+  Sun, Users, FolderKanban, UserCircle, Brain, 
   ChevronRight, ChevronLeft, X, Sparkles, Check
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -54,7 +54,7 @@ const ONBOARDING_STEPS: OnboardingStep[] = [
     id: 5,
     title: 'Chief of Staff',
     description: 'The more you interact, the smarter your Chief of Staff becomes. It learns your preferences, communication style, and decision patterns.',
-    icon: Fingerprint,
+    icon: UserCircle,
     color: 'text-purple-400',
     highlight: '[data-tour="digital-twin"]',
   },

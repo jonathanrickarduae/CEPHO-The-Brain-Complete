@@ -4,7 +4,7 @@ import {
   Sun, Calendar, TrendingUp, Brain, Zap, 
   CheckCircle2, Clock, ArrowRight, Download, Play, 
   Headphones, AlertTriangle, Lightbulb, Video, FileText, 
-  ThumbsUp, RotateCcw, UserPlus, Fingerprint, ListChecks, 
+  ThumbsUp, RotateCcw, UserPlus, UserCircle, ListChecks, 
   Eye, Mail, ChevronDown, ChevronUp
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -108,7 +108,7 @@ export default function TheSignal() {
       case 'in_progress':
         return <Badge className="bg-blue-500/20 text-blue-400"><Clock className="w-3 h-3 mr-1 animate-spin" />Working</Badge>;
       case 'delegated':
-        return <Badge className="bg-purple-500/20 text-purple-400"><Fingerprint className="w-3 h-3 mr-1" />With COS</Badge>;
+        return <Badge className="bg-purple-500/20 text-purple-400"><UserCircle className="w-3 h-3 mr-1" />With COS</Badge>;
       default:
         return <Badge className="bg-border text-muted-foreground"><Clock className="w-3 h-3 mr-1" />Pending</Badge>;
     }
@@ -251,7 +251,7 @@ export default function TheSignal() {
                       onClick={() => handleDelegate(item)}
                       className="bg-purple-500/20 text-purple-400 hover:bg-purple-500/30"
                     >
-                      <Fingerprint className="w-4 h-4 mr-1" />
+                      <UserCircle className="w-4 h-4 mr-1" />
                       Delegate to COS
                     </Button>
                     <Button

@@ -3,7 +3,7 @@ import {
   Sun, Calendar, Users, TrendingUp, Brain, Zap, 
   CheckCircle2, Clock, ArrowRight, Download, Play, 
   Headphones, ChevronRight, AlertTriangle, Lightbulb,
-  Video, FileText, ThumbsUp, RotateCcw, UserPlus, Fingerprint,
+  Video, FileText, ThumbsUp, RotateCcw, UserPlus, UserCircle,
   ListChecks, Eye, Mail
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -275,7 +275,7 @@ export default function DailyBrief() {
           onClick={(e) => { e.stopPropagation(); handleAction(itemId, "twin", title, description, category, source); }}
           title="Assign to Chief of Staff"
         >
-          <Fingerprint className="w-4 h-4" />
+          <UserCircle className="w-4 h-4" />
         </Button>
       </div>
     );

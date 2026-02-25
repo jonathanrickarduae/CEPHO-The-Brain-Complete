@@ -2,7 +2,7 @@ import { useState, useRef } from "react";
 import { useLocation } from "wouter";
 import { 
   Sun, Users, Lock, Mic, MicOff, Send, 
-  Fingerprint, FolderKanban, BookOpen, Brain, LayoutDashboard,
+  UserCircle, FolderKanban, BookOpen, Brain, LayoutDashboard,
   ChevronRight, AlertCircle, Shield, ShieldCheck, Rocket, TrendingUp,
   CheckCircle2, Clock, Lightbulb, Activity, Zap, Settings as SettingsIcon
 } from "lucide-react";
@@ -179,7 +179,7 @@ export default function NexusDashboard() {
     },
     { 
       label: "Chief of Staff", 
-      icon: Fingerprint, 
+      icon: UserCircle, 
       path: "/chief-of-staff",
       gradient: "from-emerald-500/20 to-teal-500/20",
       border: "border-emerald-500/50 hover:border-emerald-400",
@@ -334,7 +334,7 @@ export default function NexusDashboard() {
               status="active"
             />
             <ActivityItem 
-              icon={Fingerprint}
+              icon={UserCircle}
               title="Chief of Staff"
               subtitle="3 tasks require your attention"
               time="1h ago"
