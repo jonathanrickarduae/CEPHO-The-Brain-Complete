@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'wouter';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -6,6 +6,142 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Label } from '@/components/ui/label';
 import { Brain } from 'lucide-react';
 import { toast } from 'sonner';
+
+// Particle system for blue glowing effect
+function ParticleField() {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    // Set canvas size
+    const resizeCanvas = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    // Particle class
+    class Particle {
+      x: number;
+      y: number;
+      size: number;
+      speedX: number;
+      speedY: number;
+      opacity: number;
+      fadeSpeed: number;
+      maxOpacity: number;
+
+      constructor() {
+        this.x = Math.random() * canvas!.width;
+        this.y = Math.random() * canvas!.height;
+        this.size = Math.random() * 3 + 1;
+        this.speedX = (Math.random() - 0.5) * 0.5;
+        this.speedY = (Math.random() - 0.5) * 0.5;
+        this.opacity = Math.random();
+        this.fadeSpeed = Math.random() * 0.02 + 0.01;
+        this.maxOpacity = Math.random() * 0.8 + 0.2;
+      }
+
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+
+        // Wrap around edges
+        if (this.x > canvas!.width) this.x = 0;
+        if (this.x < 0) this.x = canvas!.width;
+        if (this.y > canvas!.height) this.y = 0;
+        if (this.y < 0) this.y = canvas!.height;
+
+        // Pulsing opacity
+        this.opacity += this.fadeSpeed;
+        if (this.opacity > this.maxOpacity || this.opacity < 0.1) {
+          this.fadeSpeed = -this.fadeSpeed;
+        }
+      }
+
+      draw() {
+        if (!ctx) return;
+        
+        // Outer glow
+        const gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.size * 4);
+        gradient.addColorStop(0, `rgba(96, 165, 250, ${this.opacity})`);
+        gradient.addColorStop(0.5, `rgba(59, 130, 246, ${this.opacity * 0.5})`);
+        gradient.addColorStop(1, 'rgba(59, 130, 246, 0)');
+        
+        ctx.fillStyle = gradient;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size * 4, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Bright center
+        ctx.fillStyle = `rgba(147, 197, 253, ${this.opacity})`;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    // Create particles
+    const particleCount = 150;
+    const particles: Particle[] = [];
+    for (let i = 0; i < particleCount; i++) {
+      particles.push(new Particle());
+    }
+
+    // Animation loop
+    function animate() {
+      if (!ctx || !canvas) return;
+      
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      // Draw connections between nearby particles
+      particles.forEach((p1, i) => {
+        particles.slice(i + 1).forEach(p2 => {
+          const dx = p1.x - p2.x;
+          const dy = p1.y - p2.y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+          
+          if (distance < 150) {
+            ctx.strokeStyle = `rgba(59, 130, 246, ${(1 - distance / 150) * 0.2 * Math.min(p1.opacity, p2.opacity)})`;
+            ctx.lineWidth = 0.5;
+            ctx.beginPath();
+            ctx.moveTo(p1.x, p1.y);
+            ctx.lineTo(p2.x, p2.y);
+            ctx.stroke();
+          }
+        });
+      });
+
+      // Update and draw particles
+      particles.forEach(particle => {
+        particle.update();
+        particle.draw();
+      });
+
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+
+    return () => {
+      window.removeEventListener('resize', resizeCanvas);
+    };
+  }, []);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      className="absolute inset-0 w-full h-full"
+      style={{ opacity: 0.6 }}
+    />
+  );
+}
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -46,19 +182,14 @@ export default function Login() {
 
   return (
     <div className="min-h-screen flex items-center justify-center relative overflow-hidden bg-black p-4">
-      {/* Animated neon blob background - more prominent blue */}
+      {/* Large blue glow in center */}
       <div className="absolute inset-0 overflow-hidden">
-        {/* Main blue neon blob - larger and more prominent */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-blue-500/30 rounded-full blur-[120px] animate-pulse" />
-        
-        {/* Pink accent blob */}
-        <div className="absolute top-1/4 right-1/4 w-[500px] h-[500px] bg-pink-500/20 rounded-full blur-[100px] animate-pulse" style={{ animationDelay: '1s' }} />
-        
-        {/* Purple accent blob */}
-        <div className="absolute bottom-1/4 left-1/4 w-[600px] h-[600px] bg-purple-500/20 rounded-full blur-[110px] animate-pulse" style={{ animationDelay: '2s' }} />
-        
-        {/* Additional blue glow for prominence */}
-        <div className="absolute top-1/3 left-1/3 w-[700px] h-[700px] bg-cyan-400/20 rounded-full blur-[130px] animate-pulse" style={{ animationDelay: '0.5s' }} />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[1000px] bg-blue-500/40 rounded-full blur-[150px]" />
+      </div>
+
+      {/* Animated particle field - prominent blue effect */}
+      <div className="absolute inset-0">
+        <ParticleField />
       </div>
 
       {/* Login Card */}
@@ -115,17 +246,14 @@ export default function Login() {
               />
             </div>
             
-            <Button
-              type="submit"
-              className="w-full bg-gradient-to-r from-pink-500 via-blue-500 to-purple-500 hover:from-pink-600 hover:via-blue-600 hover:to-purple-600 text-white font-semibold shadow-lg shadow-blue-500/50 transition-all duration-300"
+            <Button 
+              type="submit" 
+              className="w-full bg-gradient-to-r from-pink-500 via-blue-500 to-purple-500 hover:from-pink-600 hover:via-blue-600 hover:to-purple-600 text-white font-semibold shadow-lg shadow-blue-500/50"
               disabled={isLoading}
             >
               {isLoading ? 'Signing in...' : 'Sign In'}
             </Button>
           </form>
-          
-          {/* Additional neon accent line */}
-          <div className="mt-6 h-px bg-gradient-to-r from-transparent via-blue-400/50 to-transparent" />
         </CardContent>
       </Card>
     </div>
