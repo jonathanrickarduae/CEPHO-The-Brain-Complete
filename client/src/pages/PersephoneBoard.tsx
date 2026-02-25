@@ -7,7 +7,7 @@ import {
   Brain, Cpu, Zap, Sparkles, Target, Shield,
   Rocket, Globe, Award, Video, MessageSquare
 } from 'lucide-react';
-import { PageHeader } from '@/components/layout/Breadcrumbs';
+import { PageHeader } from '@/components/layout/PageHeader';
 
 interface BoardMember {
   id: string;
@@ -266,13 +266,15 @@ export default function PersephoneBoard() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="h-[calc(100vh-56px)] md:h-screen flex flex-col bg-gradient-to-br from-gray-900 via-gray-900 to-gray-800">
       <PageHeader 
-        title="Persephone-AI: The AI Genius Board" 
-        description="Virtual Board of 14 Top AI Leaders - Strategic Oversight & Industry Guidance"
+        icon={Users}
+        title="Persephone Board" 
+        subtitle="Virtual Board of 14 Top AI Leaders - Strategic Oversight & Industry Guidance"
       />
 
-      <div className="container mx-auto px-6 py-8 space-y-8">
+      <div className="flex-1 overflow-auto">
+        <div className="container mx-auto px-6 py-8 space-y-8">
         {/* Board Overview Stats */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           <Card className="border-purple-500/30 bg-gradient-to-br from-purple-500/10 to-background">
