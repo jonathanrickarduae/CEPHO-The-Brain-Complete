@@ -2,7 +2,8 @@ import { useLocation } from 'wouter';
 import { 
   LayoutDashboard, 
   Sun, 
-  Users, 
+  Users,
+  User, 
   FolderKanban,
   Rocket,
   BookOpen,
@@ -21,7 +22,7 @@ interface TabItem {
 const getTabs = (): TabItem[] => [
   { id: 'dashboard', label: 'Home', icon: LayoutDashboard, path: '/nexus' },
   { id: 'brief', label: 'Signal', icon: Sun, path: '/the-signal' },
-  // Temporarily disabled: { id: 'twin', label: 'Chief of Staff', icon: User, path: '/chief-of-staff' },
+  { id: 'twin', label: 'Chief of Staff', icon: User, path: '/chief-of-staff' },
   { id: 'experts', label: 'AI SMEs', icon: Users, path: '/ai-experts' },
   { id: 'workflow', label: 'Workflow', icon: FolderKanban, path: '/workflow' },
   { id: 'genesis', label: 'Genesis', icon: Rocket, path: '/project-genesis' },
