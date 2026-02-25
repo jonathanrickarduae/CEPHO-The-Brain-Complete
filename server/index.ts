@@ -54,9 +54,18 @@ async function startServer() {
   const port = process.env.PORT || 3000;
 
   server.listen(port, () => {
+    console.log(`[Server] CEPHO.AI server listening on port ${port}`);
+    console.log(`[Server] Environment: ${process.env.NODE_ENV}`);
+    console.log(`[Server] Static files: ${staticPath}`);
     
-    // Start 24-hour automation system
-    startAutomation();
+    // Start 24-hour automation system with error handling
+    try {
+      startAutomation();
+      console.log('[Server] Automation scheduler started successfully');
+    } catch (error) {
+      console.error('[Server] Failed to start automation scheduler:', error);
+      console.log('[Server] Continuing without automation scheduler...');
+    }
   });
 }
 

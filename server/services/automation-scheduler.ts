@@ -153,27 +153,41 @@ class AutomationScheduler {
    * Start all scheduled tasks
    */
   public start() {
-    log.debug('[AutomationScheduler] Starting 24-hour automation system...');
-    
-    for (const taskDef of this.taskDefinitions) {
-      if (taskDef.enabled) {
-        const task = cron.schedule(taskDef.schedule, async () => {
-          log.debug(`[AutomationScheduler] Executing: ${taskDef.name}`);
+    try {
+      console.log('[AutomationScheduler] Starting 24-hour automation system...');
+      
+      for (const taskDef of this.taskDefinitions) {
+        if (taskDef.enabled) {
           try {
-            await taskDef.handler();
-            await this.logTaskExecution(taskDef.id, 'success');
+            const task = cron.schedule(taskDef.schedule, async () => {
+              console.log(`[AutomationScheduler] Executing: ${taskDef.name}`);
+              try {
+                await taskDef.handler();
+                await this.logTaskExecution(taskDef.id, 'success').catch(err => {
+                  console.error('[AutomationScheduler] Failed to log success:', err);
+                });
+              } catch (error) {
+                console.error(`[AutomationScheduler] Error in ${taskDef.name}:`, error);
+                await this.logTaskExecution(taskDef.id, 'error', error.message).catch(err => {
+                  console.error('[AutomationScheduler] Failed to log error:', err);
+                });
+              }
+            });
+            
+            this.tasks.set(taskDef.id, task);
+            console.log(`[AutomationScheduler] Scheduled: ${taskDef.name} (${taskDef.schedule})`);
           } catch (error) {
-            log.error(`[AutomationScheduler] Error in ${taskDef.name}:`, error);
-            await this.logTaskExecution(taskDef.id, 'error', error.message);
+            console.error(`[AutomationScheduler] Failed to schedule ${taskDef.name}:`, error);
+            // Continue scheduling other tasks even if one fails
           }
-        });
-        
-        this.tasks.set(taskDef.id, task);
-        log.debug(`[AutomationScheduler] Scheduled: ${taskDef.name} (${taskDef.schedule})`);
+        }
       }
+      
+      console.log(`[AutomationScheduler] Started ${this.tasks.size} scheduled tasks`);
+    } catch (error) {
+      console.error('[AutomationScheduler] Critical error during startup:', error);
+      throw error;
     }
-    
-    log.debug(`[AutomationScheduler] Started ${this.tasks.size} scheduled tasks`);
   }
 
   /**
