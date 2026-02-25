@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Shield, ShieldCheck, Lock, Unlock, AlertTriangle, CheckCircle2, Info, Filter } from 'lucide-react';
+import { Shield, ShieldCheck, Lock, CheckCircle2, Info, Filter } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -7,35 +7,44 @@ import { Switch } from '@/components/ui/switch';
 import { useGovernance } from '@/hooks/useGovernance';
 import { toast } from 'sonner';
 
-export function GovernanceSettings() {
-  const { mode, requestModeChange, features } = useGovernance();
-  const [filterMode, setFilterMode] = useState<'all' | 'allowed' | 'blocked'>('all');
+// Real integrations with actual governance rules
+const REAL_INTEGRATIONS = [
+  // Microsoft 365 - Allowed in governed mode
+  { id: 'copilot', name: 'Microsoft Copilot', category: 'AI Assistant', governedAllowed: true },
+  { id: 'outlook', name: 'Microsoft Outlook', category: 'Email', governedAllowed: true },
+  { id: 'teams', name: 'Microsoft Teams', category: 'Communication', governedAllowed: true },
+  { id: 'onedrive', name: 'Microsoft OneDrive', category: 'Storage', governedAllowed: true },
+  
+  // External AI - Blocked in governed mode
+  { id: 'openai', name: 'OpenAI GPT-4', category: 'AI Models', governedAllowed: false },
+  { id: 'claude', name: 'Anthropic Claude', category: 'AI Models', governedAllowed: false },
+  { id: 'gemini', name: 'Google Gemini', category: 'AI Models', governedAllowed: false },
+  
+  // Other services
+  { id: 'gmail', name: 'Gmail', category: 'Email', governedAllowed: false },
+  { id: 'slack', name: 'Slack', category: 'Communication', governedAllowed: false },
+  { id: 'notion', name: 'Notion', category: 'Productivity', governedAllowed: false },
+];
 
-  const integrations = [
-    { id: 'openai', name: 'OpenAI GPT-4', category: 'AI Models', omniAllowed: true, governedAllowed: false },
-    { id: 'claude', name: 'Anthropic Claude', category: 'AI Models', omniAllowed: true, governedAllowed: false },
-    { id: 'gemini', name: 'Google Gemini', category: 'AI Models', omniAllowed: true, governedAllowed: false },
-    { id: 'copilot', name: 'Microsoft Copilot', category: 'AI Tools', omniAllowed: true, governedAllowed: true },
-    { id: 'ai-smes', name: 'AI-SME Experts', category: 'Expert Network', omniAllowed: true, governedAllowed: false },
-    { id: 'digital-twin', name: 'Digital Twin', category: 'AI Agents', omniAllowed: true, governedAllowed: true },
-    { id: 'voice-input', name: 'Voice Input', category: 'Input Methods', omniAllowed: true, governedAllowed: true },
-    { id: 'training-studio', name: 'Training Studio', category: 'AI Training', omniAllowed: true, governedAllowed: false },
-    { id: 'data-export', name: 'Data Export', category: 'Data Management', omniAllowed: true, governedAllowed: false },
-    { id: 'autonomous-agents', name: 'Autonomous Agents', category: 'AI Agents', omniAllowed: true, governedAllowed: false },
-  ];
+export function GovernanceSettings() {
+  const { mode, requestModeChange } = useGovernance();
+  const [filterMode, setFilterMode] = useState<'all' | 'allowed' | 'blocked'>('all');
 
   const handleModeToggle = () => {
     const newMode = mode === 'omni' ? 'governed' : 'omni';
     requestModeChange(newMode);
-    toast.success(`Switching to ${newMode === 'omni' ? 'Everything' : 'Governed'} mode`);
+    toast.success(`Switched to ${newMode === 'omni' ? 'Everything' : 'Governed'} mode`);
   };
 
-  const filteredIntegrations = integrations.filter(integration => {
-    const isAllowed = mode === 'omni' ? integration.omniAllowed : integration.governedAllowed;
+  const filteredIntegrations = REAL_INTEGRATIONS.filter(integration => {
+    const isAllowed = mode === 'omni' ? true : integration.governedAllowed;
     if (filterMode === 'allowed') return isAllowed;
     if (filterMode === 'blocked') return !isAllowed;
     return true;
   });
+
+  const allowedCount = REAL_INTEGRATIONS.filter(i => mode === 'omni' ? true : i.governedAllowed).length;
+  const blockedCount = REAL_INTEGRATIONS.length - allowedCount;
 
   return (
     <div className="space-y-6">
@@ -52,7 +61,7 @@ export function GovernanceSettings() {
               <div>
                 <CardTitle className="text-xl">Governance Mode</CardTitle>
                 <CardDescription>
-                  Control which AI tools and integrations are available
+                  Control which tools and integrations are available
                 </CardDescription>
               </div>
             </div>
@@ -62,7 +71,7 @@ export function GovernanceSettings() {
                   {mode === 'governed' ? 'GOVERNED' : 'EVERYTHING'}
                 </div>
                 <div className="text-xs text-muted-foreground">
-                  {mode === 'governed' ? 'Company approved only' : 'All tools available'}
+                  {mode === 'governed' ? 'Microsoft 365 only' : 'All tools available'}
                 </div>
               </div>
               <Switch
@@ -87,7 +96,7 @@ export function GovernanceSettings() {
                 </p>
                 <p className="text-sm text-muted-foreground mt-1">
                   {mode === 'governed' 
-                    ? 'Only company-approved AI tools like Microsoft Copilot are available. External AI models and autonomous agents are disabled for compliance.'
+                    ? 'Only Microsoft 365 tools (Copilot, Outlook, Teams, OneDrive) are available. External AI models and third-party services are disabled for compliance.'
                     : 'All AI tools, models, and integrations are available. Use this mode for maximum flexibility and access to all platform features.'}
                 </p>
               </div>
@@ -105,7 +114,7 @@ export function GovernanceSettings() {
             size="sm"
             onClick={() => setFilterMode('all')}
           >
-            All ({integrations.length})
+            All ({REAL_INTEGRATIONS.length})
           </Button>
           <Button
             variant={filterMode === 'allowed' ? 'default' : 'outline'}
@@ -114,7 +123,7 @@ export function GovernanceSettings() {
             className={filterMode === 'allowed' ? 'bg-emerald-600 hover:bg-emerald-700' : ''}
           >
             <CheckCircle2 className="w-4 h-4 mr-1" />
-            Allowed ({filteredIntegrations.filter(i => mode === 'omni' ? i.omniAllowed : i.governedAllowed).length})
+            Allowed ({allowedCount})
           </Button>
           <Button
             variant={filterMode === 'blocked' ? 'default' : 'outline'}
@@ -123,43 +132,42 @@ export function GovernanceSettings() {
             className={filterMode === 'blocked' ? 'bg-red-600 hover:bg-red-700' : ''}
           >
             <Lock className="w-4 h-4 mr-1" />
-            Blocked ({integrations.filter(i => mode === 'omni' ? !i.omniAllowed : !i.governedAllowed).length})
+            Blocked ({blockedCount})
           </Button>
         </div>
       </div>
 
       {/* Integrations List */}
-      <div className="grid gap-3">
+      <div className="space-y-2">
         {filteredIntegrations.map((integration) => {
-          const isAllowed = mode === 'omni' ? integration.omniAllowed : integration.governedAllowed;
+          const isAllowed = mode === 'omni' ? true : integration.governedAllowed;
           
           return (
-            <Card key={integration.id} className={`border ${
-              isAllowed 
-                ? 'border-emerald-500/30 bg-emerald-500/5' 
-                : 'border-red-500/30 bg-red-500/5'
-            }`}>
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    {isAllowed ? (
-                      <CheckCircle2 className="w-5 h-5 text-emerald-500" />
-                    ) : (
-                      <Lock className="w-5 h-5 text-red-500" />
-                    )}
-                    <div>
-                      <div className="font-medium text-foreground">{integration.name}</div>
-                      <div className="text-xs text-muted-foreground">{integration.category}</div>
-                    </div>
-                  </div>
-                  <Badge variant={isAllowed ? 'default' : 'destructive'} className={
-                    isAllowed ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/50' : ''
-                  }>
-                    {isAllowed ? 'Allowed' : 'Blocked'}
-                  </Badge>
+            <div
+              key={integration.id}
+              className={`flex items-center justify-between p-4 rounded-lg border ${
+                isAllowed 
+                  ? 'border-emerald-500/30 bg-emerald-500/5' 
+                  : 'border-red-500/30 bg-red-500/5'
+              }`}
+            >
+              <div className="flex items-center gap-3">
+                {isAllowed ? (
+                  <CheckCircle2 className="w-5 h-5 text-emerald-500" />
+                ) : (
+                  <Lock className="w-5 h-5 text-red-500" />
+                )}
+                <div>
+                  <div className="font-medium text-foreground">{integration.name}</div>
+                  <div className="text-xs text-muted-foreground">{integration.category}</div>
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+              <Badge variant={isAllowed ? 'default' : 'destructive'} className={
+                isAllowed ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/50' : ''
+              }>
+                {isAllowed ? 'Allowed' : 'Blocked'}
+              </Badge>
+            </div>
           );
         })}
       </div>

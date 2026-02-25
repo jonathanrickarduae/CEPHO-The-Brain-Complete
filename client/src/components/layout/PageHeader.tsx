@@ -2,7 +2,8 @@ import { Brain } from "lucide-react";
 import { LucideIcon } from "lucide-react";
 
 interface PageHeaderProps {
-  icon: LucideIcon;
+  icon?: LucideIcon;
+  avatar?: string; // Avatar image URL
   title: string;
   subtitle?: string;
   iconColor?: string;
@@ -11,6 +12,7 @@ interface PageHeaderProps {
 
 export function PageHeader({ 
   icon: Icon, 
+  avatar,
   title, 
   subtitle,
   iconColor = "text-primary",
@@ -26,9 +28,20 @@ export function PageHeader({
             <span className="text-white/40">|</span>
           </div>
           <div className="flex items-center gap-2">
-            <div className={`p-1.5 rounded-lg bg-white/10 ${iconColor}`}>
-              <Icon className="w-4 h-4" />
-            </div>
+            {avatar ? (
+              <div className="relative">
+                <img 
+                  src={avatar} 
+                  alt={title}
+                  className="w-8 h-8 rounded-full object-cover border-2 border-primary/50"
+                />
+                <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-green-500 rounded-full border border-black" />
+              </div>
+            ) : Icon ? (
+              <div className={`p-1.5 rounded-lg bg-white/10 ${iconColor}`}>
+                <Icon className="w-4 h-4" />
+              </div>
+            ) : null}
             <div>
               <h1 className="text-base font-semibold">{title}</h1>
               {subtitle && (

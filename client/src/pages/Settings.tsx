@@ -5,7 +5,7 @@ import {
   ChevronRight, Check, Search, Eye
 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
-import { PageHeader } from '@/components/layout/Breadcrumbs';
+import { PageHeader } from '@/components/layout/PageHeader';
 import { ThemeSelector, ThemeProvider } from '@/components/settings/ThemeToggle';
 import { CalendarIntegration } from '@/components/integrations/CalendarIntegration';
 import { TrainingDataPipeline } from '@/components/analytics/TrainingDataPipeline';
@@ -55,12 +55,15 @@ export default function Settings() {
   };
 
   return (
-    <div className="p-4 md:p-6 overflow-auto">
-      <div className="max-w-6xl mx-auto">
-        <PageHeader 
-          title="Settings" 
-          subtitle="Manage your account and preferences"
-        />
+    <div className="h-[calc(100vh-56px)] md:h-screen flex flex-col bg-gradient-to-br from-gray-900 via-gray-900 to-gray-800">
+      <PageHeader 
+        icon={SettingsIcon}
+        title="Settings" 
+        subtitle="Manage your account and preferences"
+      />
+      
+      <div className="flex-1 overflow-auto p-4 md:p-6">
+        <div className="max-w-6xl mx-auto">
 
         <div className="flex flex-col lg:flex-row gap-6">
           {/* Sidebar */}
