@@ -7,6 +7,8 @@ import { errorTrackerService, errorHandlerMiddleware } from './services/monitori
 import { httpLoggerMiddleware, requestIdMiddleware } from './services/monitoring/logger.service';
 import { cacheService } from './services/cache/redis-cache.service';
 import healthRouter from './routers/health.router';
+import { csrfTokenMiddleware, csrfValidationMiddleware, csrfTokenHandler } from './middleware/csrf-protection';
+import { apmMiddleware, metricsHandler } from './services/monitoring/apm.service';
 
 /**
  * Setup all middleware for the Express application
@@ -15,13 +17,17 @@ import healthRouter from './routers/health.router';
 export async function setupMiddleware(app: Express) {
   console.log('[Middleware] Setting up security and performance middleware...');
 
-  // 1. Request ID tracking (must be first for logging)
+  // 1. APM monitoring (must be very early)
+  app.use(apmMiddleware);
+  console.log('[Middleware] ✅ APM monitoring enabled');
+
+  // 2. Request ID tracking (must be first for logging)
   app.use(requestIdMiddleware);
 
-  // 2. HTTP request logging
+  // 3. HTTP request logging
   app.use(httpLoggerMiddleware);
 
-  // 3. Initialize error tracking (Sentry)
+  // 4. Initialize error tracking (Sentry)
   if (process.env.SENTRY_DSN) {
     errorTrackerService.initialize(app);
     console.log('[Middleware] ✅ Error tracking initialized');
@@ -29,18 +35,23 @@ export async function setupMiddleware(app: Express) {
     console.log('[Middleware] ⚠️  Sentry DSN not configured, error tracking disabled');
   }
 
-  // 4. Security headers (Helmet.js)
+  // 5. Security headers (Helmet.js)
   configureSecurityHeaders(app);
   console.log('[Middleware] ✅ Security headers configured');
 
-  // 5. Body parsing is handled in server/_core/index.ts
+  // 6. Body parsing is handled in server/_core/index.ts
   // (Removed duplicate to avoid conflicts)
 
-  // 6. Input sanitization (XSS prevention)
+  // 7. Input sanitization (XSS prevention)
   applySanitizationMiddleware(app);
   console.log('[Middleware] ✅ Input sanitization enabled');
 
-  // 7. Rate limiting
+  // 8. CSRF protection
+  app.use(csrfTokenMiddleware);
+  app.get('/api/csrf-token', csrfTokenHandler);
+  console.log('[Middleware] ✅ CSRF protection enabled');
+
+  // 9. Rate limiting
   // Apply global rate limiter to all routes
   app.use(globalRateLimiter);
   console.log('[Middleware] ✅ Global rate limiting enabled (100 req/15min)');
@@ -51,7 +62,10 @@ export async function setupMiddleware(app: Express) {
   app.use('/api/register', authRateLimiter);
   console.log('[Middleware] ✅ Auth rate limiting enabled (5 req/15min)');
 
-  // 8. Initialize Redis cache
+  // 10. CSRF validation (after rate limiting)
+  app.use(csrfValidationMiddleware);
+
+  // 11. Initialize Redis cache
   try {
     await cacheService.connect();
     const stats = await cacheService.getStats();
@@ -64,7 +78,11 @@ export async function setupMiddleware(app: Express) {
     console.log('[Middleware] ⚠️  Redis connection failed, caching disabled');
   }
 
-  // 9. Health check routes
+  // 12. Metrics endpoint (before health checks)
+  app.get('/api/metrics', metricsHandler);
+  console.log('[Middleware] ✅ Prometheus metrics endpoint registered');
+
+  // 13. Health check routes
   app.use(healthRouter);
   console.log('[Middleware] ✅ Health check endpoints registered');
 

@@ -42,12 +42,45 @@ export default defineConfig({
   build: {
     outDir: path.resolve(import.meta.dirname, "dist/public"),
     emptyOutDir: true,
+    // Increase chunk size warning limit
+    chunkSizeWarningLimit: 1000,
     rollupOptions: {
       output: {
         // Use content hash for cache busting
         entryFileNames: 'assets/[name]-[hash].js',
         chunkFileNames: 'assets/[name]-[hash].js',
-        assetFileNames: 'assets/[name]-[hash].[ext]'
+        assetFileNames: 'assets/[name]-[hash].[ext]',
+        // Manual chunk splitting for better caching
+        manualChunks(id) {
+          // React core
+          if (id.includes('node_modules/react/') || id.includes('node_modules/react-dom/')) {
+            return 'react-vendor';
+          }
+          // React Router
+          if (id.includes('node_modules/react-router')) {
+            return 'router-vendor';
+          }
+          // UI libraries
+          if (id.includes('lucide-react') || id.includes('recharts') || id.includes('framer-motion')) {
+            return 'ui-vendor';
+          }
+          // Data/API libraries
+          if (id.includes('@tanstack/react-query') || id.includes('@trpc')) {
+            return 'data-vendor';
+          }
+          // Chart libraries (large)
+          if (id.includes('cytoscape') || id.includes('mermaid')) {
+            return 'chart-vendor';
+          }
+          // PDF/Document libraries (large)
+          if (id.includes('jspdf') || id.includes('html2canvas')) {
+            return 'document-vendor';
+          }
+          // Code editor (large)
+          if (id.includes('monaco-editor')) {
+            return 'editor-vendor';
+          }
+        }
       }
     }
   },
