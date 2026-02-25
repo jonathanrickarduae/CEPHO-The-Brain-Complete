@@ -61,7 +61,7 @@ const WellnessPage = lazy(() => import("./pages/WellnessPage"));
 const ChiefOfStaffRole = lazy(() => import("./pages/ChiefOfStaffRole"));
 const ReferenceLibrary = lazy(() => import("./pages/ReferenceLibrary"));
 const DueDiligencePage = lazy(() => import("./pages/DueDiligencePage"));
-const CentralHub = lazy(() => import("./pages/CentralHub"));
+
 const ExpertChatPage = lazy(() => import("./pages/ExpertChatPage"));
 const InnovationHub = lazy(() => import("./pages/InnovationHub"));
 const DocumentLibrary = lazy(() => import("./pages/DocumentLibrary"));
@@ -290,9 +290,7 @@ function Router() {
         <Route path="/integrations">
           <WithLayout><IntegrationsPage /></WithLayout>
         </Route>
-        <Route path="/central-hub">
-          <WithLayout><CentralHub /></WithLayout>
-        </Route>
+
         <Route path="/podcast">
           <WithLayout><PodcastPage /></WithLayout>
         </Route>
