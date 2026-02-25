@@ -1,9 +1,10 @@
 /**
  * Security Headers Middleware
- * Implements security best practices via HTTP headers
+ * Implements security best practices via HTTP headers using Helmet.js
  */
 
-import type { Request, Response, NextFunction } from 'express';
+import helmet from 'helmet';
+import type { Express, Request, Response, NextFunction } from 'express';
 
 /**
  * Apply security headers to all responses
@@ -108,9 +109,43 @@ export function removeServerHeaders(req: Request, res: Response, next: NextFunct
 }
 
 /**
+ * Configure comprehensive security headers using Helmet.js
+ */
+export function configureSecurityHeaders(app: Express) {
+  app.use(
+    helmet({
+      contentSecurityPolicy: {
+        directives: {
+          defaultSrc: ["'self'"],
+          scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", 'https://cdn.jsdelivr.net', 'https://accounts.google.com', 'https://www.gstatic.com'],
+          styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
+          fontSrc: ["'self'", 'https://fonts.gstatic.com', 'data:'],
+          imgSrc: ["'self'", 'data:', 'blob:', 'https:'],
+          connectSrc: ["'self'", 'https://accounts.google.com', 'https://www.googleapis.com', 'https://oauth.manus.im'],
+          frameSrc: ["'self'", 'https://accounts.google.com'],
+          objectSrc: ["'none'"],
+          upgradeInsecureRequests: [],
+        },
+      },
+      hsts: {
+        maxAge: 31536000,
+        includeSubDomains: true,
+        preload: true,
+      },
+      frameguard: { action: 'deny' },
+      noSniff: true,
+      xssFilter: true,
+      referrerPolicy: { policy: 'strict-origin-when-cross-origin' },
+      hidePoweredBy: true,
+    })
+  );
+}
+
+/**
  * Apply all security middleware
  */
 export function applySecurityMiddleware(app: any) {
+  configureSecurityHeaders(app);
   app.use(removeServerHeaders);
   app.use(corsHeaders);
   app.use(securityHeaders);
