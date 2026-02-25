@@ -60,7 +60,6 @@ type MenuItem = {
 
 const menuItems: MenuItem[] = [
   { icon: LayoutDashboard, label: "The Nexus", path: "/dashboard" },
-  { icon: Rocket, label: "Project Genesis", path: "/project-genesis" },
   { 
     icon: Sun, 
     label: "The Signal", 
@@ -79,8 +78,17 @@ const menuItems: MenuItem[] = [
       { icon: Activity, label: "Development Pathway", path: "/development-pathway" },
       { icon: Brain, label: "COS Training", path: "/cos-training" },
       { icon: Activity, label: "AI Agents", path: "/ai-agents-monitoring" },
-      { icon: Workflow, label: "Workflows", path: "/workflows" },
+    ]
+  },
+  { 
+    icon: Rocket, 
+    label: "Odyssey Engine", 
+    path: "/project-genesis",
+    children: [
+      { icon: Rocket, label: "Project Genesis", path: "/project-genesis" },
       { icon: TrendingUp, label: "Innovation Hub", path: "/innovation-hub" },
+      { icon: Workflow, label: "Workflows", path: "/workflows" },
+      { icon: Users, label: "Persephone Board", path: "/persephone" },
     ]
   },
   { 
@@ -99,7 +107,6 @@ const menuItems: MenuItem[] = [
     path: "/expert-network",
     children: [
       { icon: Users, label: "AI-SMEs", path: "/ai-experts" },
-      { icon: Users, label: "Persephone Board", path: "/persephone" },
     ]
   },
 
