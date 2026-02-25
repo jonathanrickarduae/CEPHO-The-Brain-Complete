@@ -317,12 +317,7 @@ export default function NexusDashboard() {
           </div>
         </div>
 
-        {/* OpenClaw AI Assistant */}
-        <div className="border-2 border-primary/30 rounded-xl overflow-hidden bg-card">
-          <div className="h-[500px] overflow-hidden">
-            <OpenClawChat />
-          </div>
-        </div>
+        {/* OpenClaw AI Assistant - Moved to fixed bottom-right */}
 
         {/* Bottom Section - Activity Feed (Scrollable) */}
         <div className="flex-1">
@@ -365,6 +360,11 @@ export default function NexusDashboard() {
             />
           </div>
         </div>
+      </div>
+
+      {/* OpenClaw AI Assistant - Fixed Bottom Right */}
+      <div className="fixed bottom-6 right-6 z-50 w-96 h-[500px] border-2 border-cyan-400/50 rounded-xl overflow-hidden bg-card/95 backdrop-blur-lg shadow-[0_0_30px_rgba(0,212,255,0.3)]">
+        <OpenClawChat />
       </div>
     </div>
   );

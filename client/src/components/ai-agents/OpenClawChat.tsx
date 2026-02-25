@@ -11,7 +11,7 @@ export default function OpenClawChat() {
   const [messages, setMessages] = useState<Array<{ role: string; content: string }>>([
     {
       role: "assistant",
-      content: "👋 Hi! I'm CEPHO. I can help you with Project Genesis, AI-SME consultations, quality validation, and more. What would you like to do?",
+      content: "👋 Hi! I am ClawBot. I can help you with Project Genesis, AI-SME consultations, quality validation, and more. What would you like to do?",
     },
   ]);
 

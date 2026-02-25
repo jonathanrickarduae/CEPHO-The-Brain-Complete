@@ -24,7 +24,12 @@ export default function AIAgentsMonitoringPage() {
   const [statusFilter, setStatusFilter] = useState<string>('all');
   
   // Fetch all agents
-  const { data: agentsData, isLoading } = trpc.aiAgentsMonitoring.getAllStatus.useQuery();
+  const { data: agentsData, isLoading, error, refetch } = trpc.aiAgentsMonitoring.getAllStatus.useQuery(undefined, {
+    retry: 2,
+    onError: (err) => {
+      console.error('Failed to load AI agents:', err);
+    }
+  });
   
   // Fetch daily reports
   const { data: reportsData } = trpc.aiAgentsMonitoring.getDailyReports.useQuery({});
@@ -76,6 +81,28 @@ export default function AIAgentsMonitoringPage() {
         <div className="text-center">
           <Brain className="w-16 h-16 text-blue-400 animate-pulse mx-auto mb-4" />
           <p className="text-xl">Loading AI Agents...</p>
+        </div>
+      </div>
+    );
+  }
+  
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white flex items-center justify-center">
+        <div className="max-w-md bg-gray-800/50 rounded-lg p-8 border border-red-500/50">
+          <div className="flex items-center gap-3 mb-4">
+            <XCircle className="w-8 h-8 text-red-400" />
+            <h2 className="text-2xl font-bold text-red-400">Failed to load AI Agents</h2>
+          </div>
+          <p className="text-gray-300 mb-4">The AI Agents monitoring system is currently unavailable.</p>
+          <p className="text-sm text-gray-400 mb-6">Error: {error.message || 'Unknown error'}</p>
+          <button 
+            onClick={() => refetch()}
+            className="w-full px-6 py-3 bg-blue-500 hover:bg-blue-600 rounded-lg font-semibold transition-colors"
+          >
+            Try Again
+          </button>
+          <p className="text-xs text-gray-500 mt-4 text-center">Please try again later or contact support.</p>
         </div>
       </div>
     );

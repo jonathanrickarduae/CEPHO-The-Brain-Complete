@@ -378,11 +378,25 @@ export default function DocumentLibrary() {
   if (error) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="text-center">
-          <div className="text-xl text-red-500 mb-4">Failed to load Document Library</div>
-          <p className="text-muted-foreground">The document library system is currently unavailable.</p>
-          <p className="text-sm text-muted-foreground mt-2">Please try again later.</p>
-        </div>
+        <Card className="max-w-md">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-red-500">
+              <AlertTriangle className="w-6 h-6" />
+              Failed to load Document Library
+            </CardTitle>
+            <CardDescription>
+              The document library system is currently unavailable.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <p className="text-sm text-muted-foreground">
+              Error: {error.message || 'Unknown error'}
+            </p>
+            <Button onClick={() => refetch()} className="w-full">
+              Try Again
+            </Button>
+          </CardContent>
+        </Card>
       </div>
     );
   }

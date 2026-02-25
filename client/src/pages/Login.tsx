@@ -138,7 +138,7 @@ function ParticleField() {
     <canvas
       ref={canvasRef}
       className="absolute inset-0 w-full h-full"
-      style={{ opacity: 0.6 }}
+      style={{ opacity: 0.85 }}
     />
   );
 }
@@ -182,12 +182,12 @@ export default function Login() {
 
   return (
     <div className="min-h-screen flex items-center justify-center relative overflow-hidden bg-black p-4">
-      {/* Intense pulsing blue glow in center */}
+      {/* Intense pulsing blue glow - moved higher and more visible */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1200px] h-[1200px] bg-cyan-400/60 rounded-full blur-[200px] animate-pulse" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-blue-500/70 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '0.5s' }} />
-        <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-cyan-500/50 rounded-full blur-[100px] animate-pulse" style={{ animationDuration: '3s' }} />
-        <div className="absolute bottom-1/4 right-1/4 w-[600px] h-[600px] bg-blue-400/50 rounded-full blur-[100px] animate-pulse" style={{ animationDuration: '4s' }} />
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1400px] h-[1400px] bg-cyan-400/80 rounded-full blur-[250px] animate-pulse" />
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[1000px] bg-blue-500/90 rounded-full blur-[150px] animate-pulse" style={{ animationDelay: '0.5s' }} />
+        <div className="absolute top-1/6 left-1/4 w-[700px] h-[700px] bg-cyan-500/70 rounded-full blur-[120px] animate-pulse" style={{ animationDuration: '3s' }} />
+        <div className="absolute top-1/6 right-1/4 w-[700px] h-[700px] bg-blue-400/70 rounded-full blur-[120px] animate-pulse" style={{ animationDuration: '4s' }} />
       </div>
 
       {/* Animated particle field - prominent blue effect */}
@@ -196,7 +196,7 @@ export default function Login() {
       </div>
 
       {/* Login Card */}
-      <Card className="w-full max-w-md relative z-10 bg-black/70 backdrop-blur-xl border-2 border-cyan-400/30 shadow-[0_0_50px_rgba(0,212,255,0.3)] animate-[pulse_3s_ease-in-out_infinite]">
+      <Card className="w-full max-w-md relative z-10 bg-black/85 backdrop-blur-xl border-2 border-cyan-400/50 shadow-[0_0_60px_rgba(0,212,255,0.5)] animate-[pulse_3s_ease-in-out_infinite]">
         <CardHeader className="space-y-4 text-center">
           {/* CEPHO Logo - Animated neon blue brain */}
           <div className="flex justify-center relative">

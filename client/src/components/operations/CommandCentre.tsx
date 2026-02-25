@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { 
@@ -11,7 +11,8 @@ import {
   AlertCircle,
   Users,
   Target,
-  Activity
+  Activity,
+  ChevronRight
 } from 'lucide-react';
 
 interface Project {
@@ -93,13 +94,13 @@ export function CommandCentre() {
   const getStatusColor = (status: Project['status']) => {
     switch (status) {
       case 'on-track':
-        return 'bg-green-500/10 text-green-500 border-green-500/20';
+        return 'bg-green-500/20 text-green-400 border-green-500/30';
       case 'at-risk':
-        return 'bg-yellow-500/10 text-yellow-500 border-yellow-500/20';
+        return 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30';
       case 'delayed':
-        return 'bg-red-500/10 text-red-500 border-red-500/20';
+        return 'bg-red-500/20 text-red-400 border-red-500/30';
       case 'completed':
-        return 'bg-blue-500/10 text-blue-500 border-blue-500/20';
+        return 'bg-blue-500/20 text-blue-400 border-blue-500/30';
     }
   };
 
@@ -116,105 +117,105 @@ export function CommandCentre() {
     }
   };
 
-  const getPriorityColor = (priority: Project['priority']) => {
+  const getPriorityBadge = (priority: Project['priority']) => {
     switch (priority) {
       case 'high':
-        return 'bg-red-500';
+        return <Badge className="bg-red-500/20 text-red-400 border-red-500/30">High Priority</Badge>;
       case 'medium':
-        return 'bg-yellow-500';
+        return <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-500/30">Medium</Badge>;
       case 'low':
-        return 'bg-green-500';
+        return <Badge className="bg-green-500/20 text-green-400 border-green-500/30">Low</Badge>;
     }
   };
 
   return (
-    <div className="space-y-6">
-      {/* Overview Stats */}
+    <div className="space-y-8">
+      {/* Overview Stats - Button Style */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card>
-          <CardContent className="pt-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-muted-foreground">Active Projects</p>
-                <p className="text-2xl font-bold text-foreground">{mockProjects.length}</p>
-              </div>
-              <Target className="w-8 h-8 text-cyan-500" />
-            </div>
-          </CardContent>
-        </Card>
+        <Button
+          variant="outline"
+          className="h-auto p-6 flex-col items-start bg-gradient-to-br from-cyan-500/10 to-blue-500/10 border-cyan-500/30 hover:border-cyan-500/50 transition-all"
+        >
+          <div className="flex items-center justify-between w-full mb-2">
+            <Target className="w-8 h-8 text-cyan-400" />
+            <ChevronRight className="w-5 h-5 text-cyan-400/50" />
+          </div>
+          <p className="text-sm text-muted-foreground">Active Projects</p>
+          <p className="text-3xl font-bold text-cyan-400">{mockProjects.length}</p>
+        </Button>
 
-        <Card>
-          <CardContent className="pt-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-muted-foreground">On Track</p>
-                <p className="text-2xl font-bold text-green-500">
-                  {mockProjects.filter(p => p.status === 'on-track').length}
-                </p>
-              </div>
-              <CheckCircle2 className="w-8 h-8 text-green-500" />
-            </div>
-          </CardContent>
-        </Card>
+        <Button
+          variant="outline"
+          className="h-auto p-6 flex-col items-start bg-gradient-to-br from-green-500/10 to-emerald-500/10 border-green-500/30 hover:border-green-500/50 transition-all"
+        >
+          <div className="flex items-center justify-between w-full mb-2">
+            <CheckCircle2 className="w-8 h-8 text-green-400" />
+            <ChevronRight className="w-5 h-5 text-green-400/50" />
+          </div>
+          <p className="text-sm text-muted-foreground">On Track</p>
+          <p className="text-3xl font-bold text-green-400">
+            {mockProjects.filter(p => p.status === 'on-track').length}
+          </p>
+        </Button>
 
-        <Card>
-          <CardContent className="pt-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-muted-foreground">At Risk</p>
-                <p className="text-2xl font-bold text-yellow-500">
-                  {mockProjects.filter(p => p.status === 'at-risk' || p.status === 'delayed').length}
-                </p>
-              </div>
-              <AlertCircle className="w-8 h-8 text-yellow-500" />
-            </div>
-          </CardContent>
-        </Card>
+        <Button
+          variant="outline"
+          className="h-auto p-6 flex-col items-start bg-gradient-to-br from-yellow-500/10 to-orange-500/10 border-yellow-500/30 hover:border-yellow-500/50 transition-all"
+        >
+          <div className="flex items-center justify-between w-full mb-2">
+            <AlertCircle className="w-8 h-8 text-yellow-400" />
+            <ChevronRight className="w-5 h-5 text-yellow-400/50" />
+          </div>
+          <p className="text-sm text-muted-foreground">At Risk</p>
+          <p className="text-3xl font-bold text-yellow-400">
+            {mockProjects.filter(p => p.status === 'at-risk' || p.status === 'delayed').length}
+          </p>
+        </Button>
 
-        <Card>
-          <CardContent className="pt-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-muted-foreground">Avg Performance</p>
-                <p className="text-2xl font-bold text-foreground">
-                  {Math.round(mockTeamMetrics.reduce((acc, t) => acc + t.performance, 0) / mockTeamMetrics.length)}%
-                </p>
-              </div>
-              <Activity className="w-8 h-8 text-cyan-500" />
-            </div>
-          </CardContent>
-        </Card>
+        <Button
+          variant="outline"
+          className="h-auto p-6 flex-col items-start bg-gradient-to-br from-purple-500/10 to-pink-500/10 border-purple-500/30 hover:border-purple-500/50 transition-all"
+        >
+          <div className="flex items-center justify-between w-full mb-2">
+            <Activity className="w-8 h-8 text-purple-400" />
+            <ChevronRight className="w-5 h-5 text-purple-400/50" />
+          </div>
+          <p className="text-sm text-muted-foreground">Avg Performance</p>
+          <p className="text-3xl font-bold text-purple-400">
+            {Math.round(mockTeamMetrics.reduce((acc, t) => acc + t.performance, 0) / mockTeamMetrics.length)}%
+          </p>
+        </Button>
       </div>
 
-      {/* Projects Grid */}
+      {/* Projects Grid - Button Style Cards */}
       <div>
-        <h2 className="text-xl font-semibold text-foreground mb-4">Project Status</h2>
+        <h2 className="text-2xl font-bold text-foreground mb-6 flex items-center gap-2">
+          <Target className="w-6 h-6 text-cyan-400" />
+          Project Status
+        </h2>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           {mockProjects.map((project) => (
-            <Card 
+            <Button
               key={project.id}
-              className={`cursor-pointer transition-all hover:shadow-lg ${
-                selectedProject === project.id ? 'ring-2 ring-cyan-500' : ''
+              variant="outline"
+              className={`h-auto p-6 flex-col items-start text-left bg-gray-900/50 border-gray-700 hover:border-cyan-500/50 transition-all ${
+                selectedProject === project.id ? 'ring-2 ring-cyan-500 border-cyan-500' : ''
               }`}
               onClick={() => setSelectedProject(project.id === selectedProject ? null : project.id)}
             >
-              <CardHeader>
-                <div className="flex items-start justify-between">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-2">
-                      <div className={`w-2 h-2 rounded-full ${getPriorityColor(project.priority)}`} />
-                      <CardTitle className="text-lg">{project.name}</CardTitle>
-                    </div>
+              <div className="w-full space-y-4">
+                {/* Header */}
+                <div className="flex items-start justify-between w-full">
+                  <div className="flex-1 space-y-2">
+                    <h3 className="text-lg font-semibold text-foreground">{project.name}</h3>
                     <div className="flex items-center gap-2 flex-wrap">
+                      {getPriorityBadge(project.priority)}
                       <Badge className={`${getStatusColor(project.status)} border`}>
                         <span className="flex items-center gap-1">
                           {getStatusIcon(project.status)}
                           {project.status.replace('-', ' ')}
                         </span>
                       </Badge>
-                      <span className="text-xs text-muted-foreground">
-                        Updated {project.lastUpdate}
-                      </span>
                     </div>
                   </div>
                   {project.asanaLink && (
@@ -222,24 +223,25 @@ export function CommandCentre() {
                       href={project.asanaLink}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="p-2 hover:bg-muted rounded-lg transition-colors"
+                      className="p-2 hover:bg-cyan-500/10 rounded-lg transition-colors"
                       onClick={(e) => e.stopPropagation()}
                     >
-                      <ExternalLink className="w-4 h-4 text-muted-foreground" />
+                      <ExternalLink className="w-5 h-5 text-cyan-400" />
                     </a>
                   )}
                 </div>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div>
+
+                {/* Progress */}
+                <div className="w-full">
                   <div className="flex items-center justify-between text-sm mb-2">
                     <span className="text-muted-foreground">Progress</span>
-                    <span className="font-medium text-foreground">{project.progress}%</span>
+                    <span className="font-bold text-cyan-400">{project.progress}%</span>
                   </div>
-                  <Progress value={project.progress} className="h-2" />
+                  <Progress value={project.progress} className="h-3 bg-gray-800" />
                 </div>
 
-                <div className="flex items-center justify-between text-sm">
+                {/* Meta Info */}
+                <div className="flex items-center justify-between text-sm w-full">
                   <div className="flex items-center gap-2 text-muted-foreground">
                     <Clock className="w-4 h-4" />
                     <span>Due: {new Date(project.deadline).toLocaleDateString()}</span>
@@ -250,51 +252,61 @@ export function CommandCentre() {
                   </div>
                 </div>
 
+                <div className="text-xs text-muted-foreground">
+                  Updated {project.lastUpdate}
+                </div>
+
+                {/* Expanded Details */}
                 {selectedProject === project.id && (
-                  <div className="pt-4 border-t border-border space-y-2">
-                    <p className="text-sm font-medium text-foreground">Teams Involved:</p>
+                  <div className="pt-4 border-t border-gray-700 space-y-3 w-full">
+                    <p className="text-sm font-semibold text-foreground">Teams Involved:</p>
                     <div className="flex flex-wrap gap-2">
                       {project.team.map((team) => (
-                        <Badge key={team} variant="outline">
+                        <Badge key={team} className="bg-cyan-500/20 text-cyan-400 border-cyan-500/30">
                           {team}
                         </Badge>
                       ))}
                     </div>
                   </div>
                 )}
-              </CardContent>
-            </Card>
+              </div>
+            </Button>
           ))}
         </div>
       </div>
 
-      {/* Team Performance */}
+      {/* Team Performance - Button Style */}
       <div>
-        <h2 className="text-xl font-semibold text-foreground mb-4">Team Performance</h2>
+        <h2 className="text-2xl font-bold text-foreground mb-6 flex items-center gap-2">
+          <Users className="w-6 h-6 text-purple-400" />
+          Team Performance
+        </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {mockTeamMetrics.map((team) => (
-            <Card key={team.name}>
-              <CardContent className="pt-6">
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <h3 className="font-medium text-foreground">{team.name}</h3>
-                    {team.trend === 'up' && <TrendingUp className="w-4 h-4 text-green-500" />}
-                    {team.trend === 'down' && <TrendingDown className="w-4 h-4 text-red-500" />}
-                    {team.trend === 'stable' && <Activity className="w-4 h-4 text-gray-500" />}
-                  </div>
-                  <div>
-                    <div className="flex items-center justify-between text-sm mb-2">
-                      <span className="text-muted-foreground">Performance</span>
-                      <span className="font-medium text-foreground">{team.performance}%</span>
-                    </div>
-                    <Progress value={team.performance} className="h-2" />
-                  </div>
-                  <div className="text-xs text-muted-foreground">
-                    {team.activeProjects} active project{team.activeProjects !== 1 ? 's' : ''}
-                  </div>
+            <Button
+              key={team.name}
+              variant="outline"
+              className="h-auto p-6 flex-col items-start bg-gradient-to-br from-gray-900/80 to-gray-800/50 border-gray-700 hover:border-purple-500/50 transition-all"
+            >
+              <div className="w-full space-y-3">
+                <div className="flex items-center justify-between w-full">
+                  <h3 className="font-semibold text-foreground">{team.name}</h3>
+                  {team.trend === 'up' && <TrendingUp className="w-5 h-5 text-green-400" />}
+                  {team.trend === 'down' && <TrendingDown className="w-5 h-5 text-red-400" />}
+                  {team.trend === 'stable' && <Activity className="w-5 h-5 text-gray-400" />}
                 </div>
-              </CardContent>
-            </Card>
+                <div className="w-full">
+                  <div className="flex items-center justify-between text-sm mb-2">
+                    <span className="text-muted-foreground">Performance</span>
+                    <span className="font-bold text-purple-400">{team.performance}%</span>
+                  </div>
+                  <Progress value={team.performance} className="h-3 bg-gray-800" />
+                </div>
+                <div className="text-sm text-muted-foreground">
+                  {team.activeProjects} active project{team.activeProjects !== 1 ? 's' : ''}
+                </div>
+              </div>
+            </Button>
           ))}
         </div>
       </div>

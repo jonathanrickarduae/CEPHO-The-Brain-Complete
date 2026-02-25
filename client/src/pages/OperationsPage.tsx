@@ -19,10 +19,10 @@ export default function OperationsPage() {
           <div>
             <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
               <BarChart3 className="h-8 w-8 text-[#E91E8C]" />
-              Operations
+              Chief of Staff Dashboard
             </h1>
             <p className="text-muted-foreground mt-1">
-              Customer success, partnerships, and team capabilities
+              Command centre for project oversight, team performance, and strategic operations
             </p>
           </div>
         </div>
