@@ -36,6 +36,7 @@ import { runMigrations } from "../migrations/run-migrations";
 import { applySecurityMiddleware } from "../middleware/security-headers";
 import { metricsHandler, metricsMiddleware } from "../services/metrics/prometheus";
 import cookieParser from "cookie-parser";
+import { setupMiddleware, setupErrorHandlers } from "../setup-middleware";
 
 function isPortAvailable(port: number): Promise<boolean> {
   return new Promise(resolve => {
@@ -60,6 +61,8 @@ async function startServer() {
   // Run database migrations first
   await runMigrations();
   
+  log.info('[Server] Starting Priority 1 middleware initialization...');
+  
   // Register all services with DI container
   const { registerServices } = await import('./service-registry');
   registerServices();
@@ -71,8 +74,11 @@ async function startServer() {
   // Trust proxy for rate limiting behind reverse proxy
   app.set('trust proxy', 1);
   
-  // CRITICAL: Security headers MUST be first
-  applySecurityMiddleware(app);
+  // Setup Priority 1 middleware (security, performance, monitoring)
+  await setupMiddleware(app);
+  
+  // CRITICAL: Security headers MUST be first (already handled by setupMiddleware)
+  // applySecurityMiddleware(app); // Commented out - now in setupMiddleware
   
   // Apply metrics middleware (before routes)
   app.use(metricsMiddleware);
@@ -131,6 +137,9 @@ async function startServer() {
       createContext,
     })
   );
+  
+  // Setup error handlers (must be after all routes)
+  setupErrorHandlers(app);
   
   // development mode uses Vite, production mode uses static files
   if (process.env.NODE_ENV === "development") {
