@@ -19,7 +19,7 @@ interface TabItem {
 }
 
 // Navigation order: Signal → Chief of Staff → AI SMEs → Workflow → Project Genesis
-const TABS: TabItem[] = [
+const getTabs = (): TabItem[] => [
   { id: 'dashboard', label: 'Home', icon: LayoutDashboard, path: '/nexus' },
   { id: 'brief', label: 'Signal', icon: Sun, path: '/the-signal' },
   { id: 'twin', label: 'Chief of Staff', icon: User, path: '/chief-of-staff' },
@@ -54,7 +54,7 @@ export function BottomTabBar({ className }: BottomTabBarProps) {
       style={{ paddingBottom: 'env(safe-area-inset-bottom, 0)' }}
     >
       <div className="flex items-center h-full px-2 min-w-max">
-        {TABS.map((tab) => {
+        {getTabs().map((tab) => {
           const active = isActive(tab.path);
           const Icon = tab.icon;
 
