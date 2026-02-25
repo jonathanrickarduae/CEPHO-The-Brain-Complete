@@ -33,9 +33,8 @@ export async function setupMiddleware(app: Express) {
   configureSecurityHeaders(app);
   console.log('[Middleware] ✅ Security headers configured');
 
-  // 5. Body parsing
-  app.use(express.json({ limit: '10mb' }));
-  app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+  // 5. Body parsing is handled in server/_core/index.ts
+  // (Removed duplicate to avoid conflicts)
 
   // 6. Input sanitization (XSS prevention)
   applySanitizationMiddleware(app);

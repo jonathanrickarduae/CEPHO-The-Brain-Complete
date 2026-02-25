@@ -97,15 +97,8 @@ async function startServer() {
   // Prometheus metrics endpoint (no rate limiting)
   app.get("/api/metrics", metricsHandler);
   
-  // Health check endpoint (no rate limiting)
-  app.get("/health", (_req, res) => {
-    res.status(200).json({ 
-      status: 'ok', 
-      timestamp: new Date().toISOString(),
-      env: process.env.NODE_ENV,
-      port: process.env.PORT
-    });
-  });
+  // Health check endpoints are registered in setupMiddleware
+  // See server/routers/health.router.ts for all health endpoints
   
   // Apply rate limiting to ALL routes (not just /api)
   app.use(apiRateLimit);
