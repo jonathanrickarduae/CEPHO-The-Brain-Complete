@@ -38,7 +38,7 @@ export const integrationsRouter = router({
       await integrationManager.updateStatus(
         ctx.user.openId,
         input.service,
-        result.success ? 'connected' : 'error',
+        result.success ? 'active' : 'error',
         result.error
       );
 
@@ -63,32 +63,33 @@ export const integrationsRouter = router({
   connect: protectedProcedure
     .input(z.object({
       type: z.string(),
+      config: z.any().optional(),
     }))
     .mutation(async ({ input, ctx }) => {
-      // For now, just update status to connected
-      await integrationManager.updateStatus(ctx.user.openId, input.type, 'connected');
+      // Update status to active (frontend expects 'active')
+      await integrationManager.updateStatus(ctx.user.openId, input.type, 'active');
       return { success: true };
     }),
 
   // Disconnect an integration
   disconnect: protectedProcedure
     .input(z.object({
-      id: z.string(),
+      type: z.string(),
     }))
     .mutation(async ({ input, ctx }) => {
-      // Extract service name from id and update status
-      await integrationManager.updateStatus(ctx.user.openId, input.id, 'disconnected');
+      // Update status to disconnected
+      await integrationManager.updateStatus(ctx.user.openId, input.type, 'disconnected');
       return { success: true };
     }),
 
   // Sync an integration
   sync: protectedProcedure
     .input(z.object({
-      id: z.string(),
+      type: z.string(),
     }))
     .mutation(async ({ input, ctx }) => {
       // Log sync attempt
-      await integrationManager.logConnection(ctx.user.openId, input.id, 'sync', true);
+      await integrationManager.logConnection(ctx.user.openId, input.type, 'sync', true);
       return { success: true };
     }),
 
@@ -130,7 +131,7 @@ export const integrationsRouter = router({
       for (const svc of services) {
         try {
           await integrationManager.storeCredentials(userId, svc);
-          await integrationManager.updateStatus(userId, svc.service, 'connected');
+          await integrationManager.updateStatus(userId, svc.service, 'active');
           successCount++;
         } catch (error) {
           console.error('[IntegrationRouter] Error storing', svc.service, ':', error);
