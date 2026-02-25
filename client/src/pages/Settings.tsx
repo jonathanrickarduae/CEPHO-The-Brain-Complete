@@ -27,7 +27,7 @@ import { DataGovernanceDashboard } from '@/components/project-management/DataGov
 import { GovernanceSettings } from '@/components/settings/GovernanceSettings';
 import { Plug, Wallet, FileSignature, Cpu, HardDrive, Paintbrush, ShieldCheck } from 'lucide-react';
 
-type SettingsTab = 'governance' | 'integrations' | 'email-accounts' | 'subscriptions' | 'signatures' | 'ai-providers' | 'api-costs' | 'storage' | 'brand-kit' | 'data-governance' | 'calendar' | 'training' | 'referrals' | 'notifications' | 'privacy' | 'appearance' | 'accessibility' | 'profile';
+type SettingsTab = 'governance' | 'integrations' | 'email-accounts' | 'subscriptions' | 'signatures' | 'ai-providers' | 'api-costs' | 'storage' | 'brand-kit' | 'data-governance' | 'calendar' | 'training' | 'privacy' | 'appearance' | 'accessibility' | 'profile';
 
 export default function Settings() {
   const [activeTab, setActiveTab] = useState<SettingsTab>('integrations');
@@ -46,8 +46,7 @@ export default function Settings() {
     { id: 'data-governance' as const, label: 'Data Governance', icon: ShieldCheck },
     { id: 'calendar' as const, label: 'Calendar', icon: Calendar },
     { id: 'training' as const, label: 'Training Data', icon: Database },
-    { id: 'referrals' as const, label: 'Referrals', icon: Users },
-    { id: 'notifications' as const, label: 'Notifications', icon: Bell },
+
     { id: 'privacy' as const, label: 'Privacy', icon: Shield },
     { id: 'appearance' as const, label: 'Appearance', icon: Palette },
     { id: 'accessibility' as const, label: 'Accessibility', icon: SettingsIcon },
@@ -242,9 +241,7 @@ export default function Settings() {
 
             {activeTab === 'training' && <TrainingDataPipeline />}
 
-            {activeTab === 'referrals' && <ReferralDashboard stats={mockReferralStats} />}
-
-            {activeTab === 'notifications' && (
+            {activeTab === 'privacy' && (
               <div className="space-y-6">
                 {/* Do Not Disturb */}
                 <div className="bg-gray-800 rounded-xl border border-gray-700 p-6">
@@ -343,10 +340,7 @@ export default function Settings() {
                     ))}
                   </div>
                 </div>
-              </div>
-            )}
 
-            {activeTab === 'privacy' && (
               <div className="bg-gray-800 rounded-xl border border-gray-700 p-6">
                 <h3 className="text-lg font-semibold text-white mb-6">Privacy Settings</h3>
                 
