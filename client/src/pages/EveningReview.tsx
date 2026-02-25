@@ -460,27 +460,27 @@ export default function EveningReview() {
 
   return (
     <div className="h-full bg-background text-foreground overflow-auto pb-24">
-      {/* Header with Countdown */}
+      {/* Header */}
       <div className="border-b border-border bg-gradient-to-r from-indigo-500/10 to-purple-500/10 sticky top-0 z-10">
         <div className="max-w-4xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="p-2 rounded-xl bg-indigo-500/20 border border-indigo-500/30">
-                <Moon className="w-6 h-6 text-indigo-600" />
-              </div>
-              <div>
-                <h1 className="text-xl font-bold text-foreground">Evening Review</h1>
-                <p className="text-sm text-muted-foreground">{formatDate()}</p>
-              </div>
+            <div>
+              <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
+                <Moon className="h-8 w-8 text-indigo-400" />
+                Evening Review
+              </h1>
+              <p className="text-muted-foreground mt-1">
+                Review and organize your day's tasks - {formatDate()}
+              </p>
             </div>
             
             {/* Countdown Timer */}
-            <div className="text-right">
+            <div className="flex flex-col items-end gap-2">
               <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full border ${getReviewStateColor()}`}>
                 <Clock className="w-4 h-4" />
                 <span className="text-sm font-medium">{timeUntilCutoff}</span>
               </div>
-              <p className="text-xs text-muted-foreground mt-1">{getReviewStateText()}</p>
+              <p className="text-xs text-muted-foreground">{getReviewStateText()}</p>
             </div>
           </div>
           

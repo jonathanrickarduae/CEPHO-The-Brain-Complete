@@ -85,8 +85,11 @@ export default function DevelopmentPathway() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-white">Development Pathway</h1>
-            <p className="text-foreground/70 mt-1">Track ideas from capture to launch with Chief of Staff oversight</p>
+            <h1 className="text-3xl font-bold text-white flex items-center gap-3">
+              <Map className="h-8 w-8 text-emerald-400" />
+              Development Pathway
+            </h1>
+            <p className="text-gray-400 mt-1">Track ideas from capture to launch with Chief of Staff oversight</p>
           </div>
           <div className="flex items-center gap-3">
             <div className="text-right">

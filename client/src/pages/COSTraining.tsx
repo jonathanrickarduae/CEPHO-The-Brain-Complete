@@ -144,7 +144,10 @@ export default function COSTraining() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">AI Training Center</h1>
+          <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
+            <Brain className="h-8 w-8 text-cyan-400" />
+            AI Training Center
+          </h1>
           <p className="text-muted-foreground mt-1">
             Train your Chief of Staff and Digital Twin to unlock full capabilities
           </p>

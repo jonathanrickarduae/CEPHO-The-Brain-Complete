@@ -316,23 +316,29 @@ export default function ChiefOfStaff() {
   return (
     <div className="h-[calc(100vh-56px)] md:h-screen flex flex-col bg-gradient-to-br from-gray-900 via-gray-900 to-gray-800">
       {/* Header */}
-      <PageHeader 
-        icon={User} 
-        title="Chief of Staff"
-        subtitle="Your AI Executive Assistant"
-        iconColor="text-purple-400"
-      >
-        <div className="flex items-center gap-2">
-          <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10">
-            <CircularProgress value={25} max={100} size={20} strokeWidth={2} showValue={false} />
-            <span className="text-xs text-white/70">12.5h trained</span>
+      <div className="bg-gradient-to-r from-purple-900/20 to-pink-900/20 border-b border-white/10 px-4 sm:px-6 py-4">
+        <div className="max-w-7xl mx-auto flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-white flex items-center gap-3">
+              <User className="h-8 w-8 text-purple-400" />
+              Chief of Staff
+            </h1>
+            <p className="text-gray-400 mt-1">
+              Your AI Executive Assistant
+            </p>
           </div>
-          <Badge variant="outline" className="bg-emerald-500/10 text-emerald-400 border-emerald-500/30 text-xs">
-            <Shield className="w-3 h-3 mr-1" />
-            {taskStats.verified} Verified
-          </Badge>
+          <div className="flex items-center gap-3">
+            <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10">
+              <CircularProgress value={25} max={100} size={20} strokeWidth={2} showValue={false} />
+              <span className="text-xs text-white/70">12.5h trained</span>
+            </div>
+            <Badge variant="outline" className="bg-emerald-500/10 text-emerald-400 border-emerald-500/30 text-xs">
+              <Shield className="w-3 h-3 mr-1" />
+              {taskStats.verified} Verified
+            </Badge>
+          </div>
         </div>
-      </PageHeader>
+      </div>
 
       {/* View Mode Tabs */}
       <div className="shrink-0 border-b border-white/10 bg-white/5 px-4">

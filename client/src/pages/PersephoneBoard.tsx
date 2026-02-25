@@ -267,10 +267,22 @@ export default function PersephoneBoard() {
 
   return (
     <div className="min-h-screen bg-background">
-      <PageHeader 
-        title="Persephone-AI: The AI Genius Board" 
-        description="Virtual Board of 14 Top AI Leaders - Strategic Oversight & Industry Guidance"
-      />
+      {/* Header */}
+      <div className="border-b border-border bg-gradient-to-r from-purple-500/10 to-pink-500/10">
+        <div className="container mx-auto px-6 py-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
+                <Users className="h-8 w-8 text-purple-400" />
+                Persephone-AI: The AI Genius Board
+              </h1>
+              <p className="text-muted-foreground mt-1">
+                Virtual Board of 14 Top AI Leaders - Strategic Oversight & Industry Guidance
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <div className="container mx-auto px-6 py-8 space-y-8">
         {/* Board Overview Stats */}
