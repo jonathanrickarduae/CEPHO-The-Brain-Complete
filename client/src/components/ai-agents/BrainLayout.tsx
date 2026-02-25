@@ -112,14 +112,6 @@ const menuItems: MenuItem[] = [
     ]
   },
   { icon: Lock, label: "Vault", path: "/vault" },
-  { 
-    icon: BarChart3, 
-    label: "Analytics", 
-    path: "/central-hub",
-    children: [
-      { icon: Globe, label: "Central Hub", path: "/central-hub" },
-    ]
-  },
   { icon: Settings, label: "Settings", path: "/settings" },
 ];
 
