@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { 
   Shield, ShieldCheck, ShieldAlert, ShieldQuestion,
   AlertTriangle, CheckCircle, XCircle, HelpCircle,
-  MessageSquare, FileText, Brain, UserCircle,
+  MessageSquare, FileText, Brain, User,
   ChevronDown, ChevronUp, Sparkles, Scale,
   Eye, ThumbsUp, ThumbsDown, RefreshCw
 } from 'lucide-react';
@@ -299,7 +299,7 @@ export function StatementVerificationCard({
             size="sm"
             onClick={() => setShowChallengeForm(!showChallengeForm)}
           >
-            <UserCircle className="w-4 h-4 mr-1" />
+            <User className="w-4 h-4 mr-1" />
             Challenge
           </Button>
           <div className="flex-1" />
@@ -572,7 +572,7 @@ export function ExpertValidationRequest({
     <Card className="bg-purple-500/5 border-purple-500/30">
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-foreground">
-          <UserCircle className="w-5 h-5 text-purple-400" />
+          <User className="w-5 h-5 text-purple-400" />
           Expert Self-Validation Request
         </CardTitle>
       </CardHeader>

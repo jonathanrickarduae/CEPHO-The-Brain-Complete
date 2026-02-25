@@ -13,7 +13,7 @@ import {
   Calendar, Target, Lightbulb, Send, ThumbsUp,
   ThumbsDown, RotateCcw, Sparkles, Timer, 
   FileText, Mail, Code, Search, Mic, MicOff,
-  UserCircle, Eye, ChevronRight, AlertCircle,
+  User, Eye, ChevronRight, AlertCircle,
   ListChecks, RefreshCw, Star, BarChart3, Swords, Globe
 } from "lucide-react";
 import { 
@@ -763,7 +763,7 @@ export default function AIExperts() {
                           <div className="flex items-center gap-2 mb-1">
                             <Badge variant="outline" className="text-xs">{task.category}</Badge>
                             <Badge className={task.type === "twin" ? "bg-purple-500/20 text-purple-400 border-0" : "bg-cyan-500/20 text-cyan-400 border-0"}>
-                              {task.type === "twin" ? <><UserCircle className="w-3 h-3 mr-1" /> Chief of Staff</> : <><Users className="w-3 h-3 mr-1" /> Expert Team</>}
+                              {task.type === "twin" ? <><User className="w-3 h-3 mr-1" /> Chief of Staff</> : <><Users className="w-3 h-3 mr-1" /> Expert Team</>}
                             </Badge>
                             {task.status === "active" && (
                               <Badge className="bg-green-500/20 text-green-400 border-0">
@@ -1135,7 +1135,7 @@ export default function AIExperts() {
                             msg.from === "user" ? "bg-primary text-primary-foreground" :
                             "bg-cyan-500/20 text-cyan-400"
                           }`}>
-                            {msg.from === "twin" ? <UserCircle className="w-4 h-4" /> :
+                            {msg.from === "twin" ? <User className="w-4 h-4" /> :
                              msg.from === "user" ? "Y" :
                              msg.name.charAt(0)}
                           </div>
@@ -1213,7 +1213,7 @@ export default function AIExperts() {
                   <CardContent className="p-4">
                     <div className="flex items-center gap-3">
                       <div className="p-3 rounded-xl bg-purple-500/20">
-                        <UserCircle className="w-6 h-6 text-purple-400" />
+                        <User className="w-6 h-6 text-purple-400" />
                       </div>
                       <div>
                         <p className="font-medium text-foreground">Chief of Staff</p>
@@ -1264,7 +1264,7 @@ export default function AIExperts() {
                 onClick={() => setValidationMode('challenge')}
                 className={validationMode === 'challenge' ? 'bg-purple-500 hover:bg-purple-600' : ''}
               >
-                <UserCircle className="w-4 h-4 mr-2" />
+                <User className="w-4 h-4 mr-2" />
                 Chief of Staff QA
               </Button>
             </div>
@@ -1288,7 +1288,7 @@ export default function AIExperts() {
                     {/* Chief of Staff Feedback */}
                     <div className="p-4 rounded-xl bg-purple-500/10 border border-purple-500/30">
                       <div className="flex items-center gap-3 mb-3">
-                        <UserCircle className="w-5 h-5 text-purple-400" />
+                        <User className="w-5 h-5 text-purple-400" />
                         <span className="font-medium text-foreground">Chief of Staff Review</span>
                       </div>
                       <ul className="space-y-2 text-sm text-muted-foreground">
@@ -1400,7 +1400,7 @@ export default function AIExperts() {
                 <Card className="bg-purple-500/5 border-purple-500/30">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2 text-foreground">
-                      <UserCircle className="w-5 h-5 text-purple-400" />
+                      <User className="w-5 h-5 text-purple-400" />
                       Chief of Staff QA Challenge
                     </CardTitle>
                   </CardHeader>
@@ -1415,7 +1415,7 @@ export default function AIExperts() {
                       {QA_CHALLENGE_PROMPTS.hallucination_detection.slice(0, 3).map((question, idx) => (
                         <div key={idx} className="p-4 rounded-xl bg-purple-500/10 border border-purple-500/30">
                           <div className="flex items-center gap-2 mb-2">
-                            <UserCircle className="w-4 h-4 text-purple-400" />
+                            <User className="w-4 h-4 text-purple-400" />
                             <span className="text-sm font-medium text-purple-400">Chief of Staff Challenge #{idx + 1}</span>
                           </div>
                           <p className="text-foreground text-sm">{question}</p>
@@ -1450,7 +1450,7 @@ export default function AIExperts() {
                           toast.info("Running full QA challenge sequence...");
                         }}
                       >
-                        <UserCircle className="w-4 h-4 mr-2" /> Run Full QA
+                        <User className="w-4 h-4 mr-2" /> Run Full QA
                       </Button>
                       <Button 
                         className="flex-1 bg-green-500 hover:bg-green-600"

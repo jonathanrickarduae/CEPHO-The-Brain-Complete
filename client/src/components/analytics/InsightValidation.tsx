@@ -3,7 +3,7 @@ import {
   Shield, ShieldCheck, ShieldAlert, ShieldQuestion,
   AlertTriangle, CheckCircle, XCircle, HelpCircle,
   MessageSquare, FileText, Link2, ExternalLink,
-  ChevronDown, ChevronUp, UserCircle, Brain,
+  ChevronDown, ChevronUp, User, Brain,
   BookOpen, Quote, Scale, Sparkles
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -212,7 +212,7 @@ export function InsightCard({
               onClick={() => setExpanded(!expanded)}
               className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground"
             >
-              <UserCircle className="w-4 h-4" />
+              <User className="w-4 h-4" />
               {insight.challenges.length} Chief of Staff Challenge{insight.challenges.length > 1 ? 's' : ''}
               {expanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
             </button>
@@ -225,7 +225,7 @@ export function InsightCard({
                     className="p-3 rounded-lg bg-purple-500/10 border border-purple-500/30"
                   >
                     <div className="flex items-center gap-2 mb-1">
-                      <UserCircle className="w-4 h-4 text-purple-400" />
+                      <User className="w-4 h-4 text-purple-400" />
                       <span className="text-sm font-medium text-purple-400">
                         {challenge.challengerName}
                       </span>
@@ -253,7 +253,7 @@ export function InsightCard({
             size="sm"
             onClick={() => setShowChallengeForm(!showChallengeForm)}
           >
-            <UserCircle className="w-4 h-4 mr-1" />
+            <User className="w-4 h-4 mr-1" />
             Challenge
           </Button>
           
@@ -554,7 +554,7 @@ export function DigitalTwinQA({
     <Card className="bg-purple-500/5 border-purple-500/30">
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-foreground">
-          <UserCircle className="w-5 h-5 text-purple-400" />
+          <User className="w-5 h-5 text-purple-400" />
           Chief of Staff QA Review
         </CardTitle>
       </CardHeader>

@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useSearch } from "wouter";
 import { 
-  UserCircle, Mic, MicOff, Send,
+  User, Mic, MicOff, Send,
   Sparkles, Activity, Trash2, Paperclip, Link2, Check, X, FileAudio, GraduationCap
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -142,7 +142,7 @@ export default function DigitalTwin() {
             <div className="flex items-center gap-3">
               <div className="relative">
                 <div className="p-2 rounded-xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-purple-500/30">
-                  <UserCircle className="w-5 h-5 text-purple-400" />
+                  <User className="w-5 h-5 text-purple-400" />
                 </div>
                 <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-background" />
               </div>
@@ -215,7 +215,7 @@ export default function DigitalTwin() {
                 {/* Avatar - only for assistant */}
                 {msg.from === "twin" && (
                   <div className="shrink-0 w-7 h-7 rounded-full flex items-center justify-center bg-primary/20 border border-primary/30">
-                    <UserCircle className="w-3.5 h-3.5 text-primary" />
+                    <User className="w-3.5 h-3.5 text-primary" />
                   </div>
                 )}
                 
@@ -243,7 +243,7 @@ export default function DigitalTwin() {
             {isTyping && (
               <div className="flex gap-3 items-start">
                 <div className="shrink-0 w-8 h-8 rounded-full flex items-center justify-center bg-gradient-to-br from-primary/30 to-fuchsia-500/30 border border-primary/40 animate-pulse">
-                  <UserCircle className="w-4 h-4 text-primary" />
+                  <User className="w-4 h-4 text-primary" />
                 </div>
                 <div className="bg-card/60 border border-primary/20 rounded-2xl px-4 py-3 shadow-lg shadow-primary/5">
                   <div className="flex items-center gap-3">

@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect, useMemo } from "react";
 import { useSearch } from "wouter";
 import { 
-  UserCircle, Mic, MicOff, Send, Brain,
+  User, Mic, MicOff, Send, Brain,
   Sparkles, Activity, Trash2, Paperclip, Link2, X, FileAudio, GraduationCap,
   CheckCircle2, Clock, AlertCircle, AlertTriangle, Shield, Users, FolderKanban,
   ChevronRight, BarChart3, MessageSquare, Play, Pause, RefreshCw,
@@ -317,7 +317,7 @@ export default function ChiefOfStaff() {
     <div className="h-[calc(100vh-56px)] md:h-screen flex flex-col bg-gradient-to-br from-gray-900 via-gray-900 to-gray-800">
       {/* Header */}
       <PageHeader 
-        icon={UserCircle} 
+        icon={User} 
         title="Chief of Staff"
         subtitle="Your AI Executive Assistant"
         iconColor="text-purple-400"
@@ -419,7 +419,7 @@ export default function ChiefOfStaff() {
                     <div key={msg.id} className={`flex gap-3 ${msg.from === "user" ? "justify-end" : ""}`}>
                       {msg.from === "twin" && (
                         <div className="shrink-0 w-8 h-8 rounded-full flex items-center justify-center bg-gradient-to-r from-fuchsia-500/20 to-purple-500/20 border border-fuchsia-500/30">
-                          <UserCircle className="w-4 h-4 text-primary" />
+                          <User className="w-4 h-4 text-primary" />
                         </div>
                       )}
                       <div className={`max-w-[80%]`}>
@@ -467,7 +467,7 @@ export default function ChiefOfStaff() {
                   {isTyping && (
                     <div className="flex gap-3">
                       <div className="shrink-0 w-8 h-8 rounded-full flex items-center justify-center bg-gradient-to-r from-fuchsia-500/20 to-purple-500/20 border border-fuchsia-500/30">
-                        <UserCircle className="w-4 h-4 text-fuchsia-400" />
+                        <User className="w-4 h-4 text-fuchsia-400" />
                       </div>
                       <div className="bg-white/5 border border-white/10 rounded-2xl px-4 py-3">
                         <div className="flex gap-1">

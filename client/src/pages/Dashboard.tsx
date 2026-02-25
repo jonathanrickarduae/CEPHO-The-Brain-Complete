@@ -3,7 +3,7 @@ import { useLocation } from "wouter";
 import { 
   Sun, Users, Lock, 
   Mic, Send, 
-  UserCircle, Shield, ShieldCheck, FolderKanban, BookOpen, Brain, Sparkles
+  User, Shield, ShieldCheck, FolderKanban, BookOpen, Brain, Sparkles
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -162,7 +162,7 @@ export default function Dashboard() {
       id: 4, 
       label: "CHIEF OF STAFF", 
       sub: "Level 2: Learning", 
-      icon: UserCircle, 
+      icon: User, 
       color: "#a855f7",
       path: "/tasks",
       badge: <LearningBadge className="absolute top-2 right-2" />,
