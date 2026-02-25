@@ -12,7 +12,8 @@ import {
   Cpu,
   Target,
   Sparkles,
-  Calendar
+  Calendar,
+  BarChart3
 } from "lucide-react";
 import { PersonalAnalytics, ProductivityRing } from '@/components/analytics/PersonalAnalytics';
 import { PageHeader } from '@/components/layout/Breadcrumbs';

@@ -87,11 +87,17 @@ export default function DocumentLibrary() {
   const [isEmailHistoryOpen, setIsEmailHistoryOpen] = useState(false);
   const [emailHistoryDocument, setEmailHistoryDocument] = useState<any>(null);
 
-  const { data: documents, isLoading, refetch } = trpc.documentLibrary.list.useQuery({
+  const { data: documents, isLoading, error, refetch } = trpc.documentLibrary.list.useQuery({
     type: activeType,
     qaStatus: qaFilter,
     limit: 50,
     offset: 0,
+  }, {
+    retry: false,
+    onError: (err) => {
+      console.error('Failed to load documents:', err);
+      toast.error('Failed to load documents');
+    }
   });
 
   const generatePDFMutation = trpc.documentLibrary.generatePDF.useMutation({
@@ -368,6 +374,18 @@ export default function DocumentLibrary() {
       return <pre className="whitespace-pre-wrap text-sm">{content}</pre>;
     }
   };
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="text-xl text-red-500 mb-4">Failed to load Document Library</div>
+          <p className="text-muted-foreground">The document library system is currently unavailable.</p>
+          <p className="text-sm text-muted-foreground mt-2">Please try again later.</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="p-6 space-y-6">
