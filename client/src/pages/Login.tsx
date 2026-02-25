@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
-import { Brain } from 'lucide-react';
+import AnimatedBrainLogo from '@/components/ai-agents/AnimatedBrainLogo';
 import { toast } from 'sonner';
 
 // Particle system for blue glowing effect
@@ -195,14 +195,9 @@ export default function Login() {
       {/* Login Card */}
       <Card className="w-full max-w-md relative z-10 bg-black/80 backdrop-blur-xl border-2 border-white/10">
         <CardHeader className="space-y-4 text-center">
-          {/* CEPHO Logo - Neon blue, no background */}
+          {/* CEPHO Logo - Animated neon blue brain */}
           <div className="flex justify-center">
-            <div className="relative">
-              {/* Neon glow effect */}
-              <div className="absolute inset-0 bg-blue-500/50 blur-xl rounded-full" />
-              {/* Brain icon - clear neon blue */}
-              <Brain className="w-20 h-20 text-blue-400 relative z-10 drop-shadow-[0_0_15px_rgba(59,130,246,0.8)]" strokeWidth={1.5} />
-            </div>
+            <AnimatedBrainLogo size="lg" intensity="active" color="#00d4ff" />
           </div>
           
           {/* CEPHO Title - Blended neon colors */}
