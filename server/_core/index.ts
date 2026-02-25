@@ -91,6 +91,16 @@ async function startServer() {
   // Prometheus metrics endpoint (no rate limiting)
   app.get("/api/metrics", metricsHandler);
   
+  // Health check endpoint (no rate limiting)
+  app.get("/health", (_req, res) => {
+    res.status(200).json({ 
+      status: 'ok', 
+      timestamp: new Date().toISOString(),
+      env: process.env.NODE_ENV,
+      port: process.env.PORT
+    });
+  });
+  
   // Apply rate limiting to ALL routes (not just /api)
   app.use(apiRateLimit);
   
@@ -137,6 +147,13 @@ async function startServer() {
   }
 
   server.listen(port, () => {
+    console.log(`========================================`);
+    console.log(`[CEPHO.AI] Server started successfully`);
+    console.log(`[CEPHO.AI] Environment: ${process.env.NODE_ENV}`);
+    console.log(`[CEPHO.AI] Port: ${port}`);
+    console.log(`[CEPHO.AI] Database: ${process.env.DATABASE_URL ? 'Connected' : 'Not configured'}`);
+    console.log(`[CEPHO.AI] Time: ${new Date().toISOString()}`);
+    console.log(`========================================`);
     log.debug(`Server running on http://localhost:${port}/`);
   });
 }
