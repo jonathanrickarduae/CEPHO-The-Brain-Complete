@@ -253,8 +253,8 @@ export default function NexusDashboard() {
       <div className="flex-1 flex flex-col gap-6 p-6 overflow-auto">
         {/* Top Section - Dashboard Info */}
         <div className="flex flex-col gap-6">
-        {/* RAG Status Row */}
-        <div className="mb-6">
+          {/* RAG Status Row */}
+          <div>
           <h2 className="text-sm font-semibold text-muted-foreground mb-3">SYSTEM STATUS</h2>
           <div className="flex flex-wrap gap-3">
             <RAGStatus status="green" label="Integrations" count={5} />
@@ -262,11 +262,11 @@ export default function NexusDashboard() {
             <RAGStatus status="green" label="Database" />
             <RAGStatus status="amber" label="Pending Approvals" count={2} />
           </div>
-        </div>
+          </div>
 
-        {/* Quick Access Skills */}
-        <div className="mb-6">
-          <h2 className="text-sm font-semibold text-muted-foreground mb-3">QUICK ACCESS</h2>
+          {/* Quick Access Skills */}
+          <div>
+            <h2 className="text-sm font-semibold text-muted-foreground mb-3">QUICK ACCESS</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3">
             {skillButtons.map((skill, idx) => (
               <button
@@ -278,12 +278,12 @@ export default function NexusDashboard() {
                 <span className="text-xs font-medium text-center">{skill.label}</span>
               </button>
             ))}
+            </div>
           </div>
-        </div>
 
-        {/* Key Metrics */}
-        <div className="mb-6">
-          <h2 className="text-sm font-semibold text-muted-foreground mb-3">KEY METRICS</h2>
+          {/* Key Metrics */}
+          <div>
+            <h2 className="text-sm font-semibold text-muted-foreground mb-3">KEY METRICS</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <MetricCard 
               icon={Lightbulb} 
@@ -313,9 +313,8 @@ export default function NexusDashboard() {
               trend="stable"
               onClick={() => setLocation('/project-genesis')}
             />
+            </div>
           </div>
-        </div>
-
         </div>
 
         {/* Middle Section - OpenClaw Chat Banner */}
