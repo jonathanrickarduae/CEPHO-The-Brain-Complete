@@ -65,10 +65,11 @@ export default function AITeam() {
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-cyan-400 to-fuchsia-500 bg-clip-text text-transparent">
+          <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
+            <Users className="h-8 w-8 text-cyan-400" />
             AI Expert Team
           </h1>
-          <p className="text-foreground/70 mt-1">287 AI Experts (250 Core + 25 Left Field + 5 Celebrity + 7 Corporate)</p>
+          <p className="text-muted-foreground mt-1">287 AI Experts (250 Core + 25 Left Field + 5 Celebrity + 7 Corporate)</p>
         </div>
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2 bg-white/5 rounded-lg p-1">

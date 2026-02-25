@@ -313,13 +313,18 @@ export default function Dashboard() {
 
 
 
-      {/* Compact Header */}
-      <div className="mb-4 text-center">
-        <div className="flex items-center justify-center gap-2 mb-2">
-          <Brain className="w-6 h-6 text-primary" />
-          <h1 className="text-2xl md:text-4xl font-display font-bold tracking-tight text-foreground">
-            GETTING YOU TO A 10
-          </h1>
+      {/* Header */}
+      <div className="mb-6 max-w-5xl mx-auto">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
+              <Brain className="h-8 w-8 text-cyan-400" />
+              Dashboard
+            </h1>
+            <p className="text-muted-foreground mt-1">
+              Your command center for executive intelligence
+            </p>
+          </div>
         </div>
       </div>
 

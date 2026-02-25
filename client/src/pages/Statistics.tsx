@@ -44,10 +44,16 @@ export default function Statistics() {
   return (
     <div className="p-4 md:p-6 overflow-auto">
       <div className="max-w-6xl mx-auto">
-        <PageHeader 
-          title="Statistics & Analytics" 
-          subtitle="Personal performance metrics and system evolution"
-        />
+        {/* Header */}
+        <div className="mb-6">
+          <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
+            <BarChart3 className="h-8 w-8 text-blue-400" />
+            Statistics & Analytics
+          </h1>
+          <p className="text-muted-foreground mt-1">
+            Personal performance metrics and system evolution
+          </p>
+        </div>
 
         {/* Personal Analytics Section */}
         <CollapsibleSection 

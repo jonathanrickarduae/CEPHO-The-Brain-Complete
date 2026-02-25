@@ -206,11 +206,19 @@ export default function ExpertNetwork() {
   return (
     <div className="h-[calc(100vh-56px)] md:h-screen flex flex-col bg-background">
       {/* Header */}
-      <PageHeader
-        title="Expert Network"
-        description="Access AI-SME specialists and Persephone Board advisors"
-        icon={Users}
-      />
+      <div className="border-b border-border px-6 py-4">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
+              <Users className="h-8 w-8 text-cyan-400" />
+              Expert Network
+            </h1>
+            <p className="text-muted-foreground mt-1">
+              Access AI-SME specialists and Persephone Board advisors
+            </p>
+          </div>
+        </div>
+      </div>
 
       {/* View Mode Tabs */}
       <div className="border-b border-border bg-card/50">

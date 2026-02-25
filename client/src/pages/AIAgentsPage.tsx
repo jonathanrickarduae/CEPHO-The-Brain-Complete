@@ -88,8 +88,11 @@ export default function AIAgentsPage() {
     <div className="container mx-auto px-4 py-8">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-4xl font-bold mb-2">AI Agents Dashboard</h1>
-        <p className="text-gray-600 dark:text-gray-400">
+        <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
+          <Bot className="h-8 w-8 text-purple-400" />
+          AI Agents Dashboard
+        </h1>
+        <p className="text-muted-foreground mt-1">
           Monitor and manage your 50 specialized AI agents
         </p>
       </div>

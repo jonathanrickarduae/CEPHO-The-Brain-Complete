@@ -312,16 +312,14 @@ export default function PortfolioCommandCenter() {
     <div className="min-h-screen bg-black text-white p-4 md:p-6">
       {/* Header */}
       <div className="mb-6">
-        <div className="flex items-center gap-3 mb-2">
-          <div className="p-2 bg-gradient-to-br from-fuchsia-500/20 to-purple-500/20 rounded-lg">
-            <Briefcase className="h-6 w-6 text-fuchsia-400" />
-          </div>
-          <div>
-            <h1 className="text-2xl font-bold">Portfolio Command Center</h1>
-            <p className="text-foreground/70 text-sm">
-              Unified view of all ventures, investments, and strategic initiatives
-            </p>
-          </div>
+        <div>
+          <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
+            <Briefcase className="h-8 w-8 text-fuchsia-400" />
+            Portfolio Command Center
+          </h1>
+          <p className="text-muted-foreground mt-1">
+            Unified view of all ventures, investments, and strategic initiatives
+          </p>
         </div>
       </div>
 

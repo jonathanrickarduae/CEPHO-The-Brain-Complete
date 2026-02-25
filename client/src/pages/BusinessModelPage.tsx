@@ -160,7 +160,10 @@ export default function BusinessModelPage() {
               <Building2 className="h-8 w-8 text-[#E91E8C]" />
             </div>
           </div>
-          <h1 className="text-4xl font-bold text-white">CEPHO.Ai Business Model</h1>
+          <h1 className="text-3xl font-bold text-white flex items-center justify-center gap-3">
+            <Briefcase className="h-8 w-8 text-[#E91E8C]" />
+            CEPHO.Ai Business Model
+          </h1>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
             The AI-powered executive platform that transforms how businesses operate
           </p>

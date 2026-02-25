@@ -372,14 +372,17 @@ export default function DocumentLibrary() {
   return (
     <div className="p-6 space-y-6">
         {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div className="flex items-center justify-between mb-6">
           <div>
-            <h1 className="text-2xl font-bold">Document Library</h1>
-            <p className="text-muted-foreground">
+            <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
+              <FileText className="h-8 w-8 text-blue-400" />
+              Document Library
+            </h1>
+            <p className="text-muted-foreground mt-1">
               All CEPHO generated documents with QA status tracking
             </p>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input

@@ -206,12 +206,12 @@ export default function NexusDashboard() {
       <div className="border-b border-border bg-card/50 backdrop-blur-sm">
         <div className="flex items-center justify-between px-6 py-4">
           <div className="flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-cyan-500/20">
-              <LayoutDashboard className="w-6 h-6 text-cyan-400" />
-            </div>
             <div>
-              <h1 className="text-2xl font-bold text-foreground">The Nexus</h1>
-              <p className="text-sm text-muted-foreground">Command Center</p>
+              <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
+                <LayoutDashboard className="h-8 w-8 text-cyan-400" />
+                The Nexus
+              </h1>
+              <p className="text-muted-foreground mt-1">Command Center</p>
             </div>
           </div>
           

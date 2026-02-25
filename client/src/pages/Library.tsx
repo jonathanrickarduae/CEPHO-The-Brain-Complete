@@ -28,12 +28,19 @@ export default function Library() {
 
   return (
     <div className="h-full flex flex-col bg-background">
-      <PageHeader
-        title="Library"
-        description="Knowledge Base"
-        icon={BookOpen}
-        actions={
-          <div className="flex items-center gap-2">
+      {/* Header */}
+      <div className="border-b border-border px-6 py-4">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
+              <BookOpen className="h-8 w-8 text-green-400" />
+              Library
+            </h1>
+            <p className="text-muted-foreground mt-1">
+              Knowledge base and document management
+            </p>
+          </div>
+          <div className="flex items-center gap-3">
             <Button 
               size="sm" 
               variant="outline" 
@@ -52,8 +59,8 @@ export default function Library() {
               <span className="hidden md:inline">New Document</span>
             </Button>
           </div>
-        }
-      />
+        </div>
+      </div>
 
       <div className="flex-1 p-6 overflow-auto">
         <div className="max-w-7xl mx-auto">

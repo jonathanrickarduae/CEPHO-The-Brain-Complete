@@ -163,12 +163,12 @@ export default function ReferenceLibrary() {
           <div className="max-w-7xl mx-auto px-4 md:px-6 py-4">
             <div className="flex items-center justify-between gap-4">
               <div className="flex items-center gap-4">
-                <div className="p-3 rounded-2xl bg-gradient-to-br from-amber-500/20 to-orange-500/20 border border-amber-500/30">
-                  <BookOpen className="w-6 h-6 md:w-8 md:h-8 text-amber-400" />
-                </div>
                 <div>
-                  <h1 className="text-xl md:text-2xl font-display font-bold">Reference Library</h1>
-                  <p className="text-muted-foreground text-sm">
+                  <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
+                    <BookOpen className="h-8 w-8 text-amber-400" />
+                    Reference Library
+                  </h1>
+                  <p className="text-muted-foreground mt-1">
                     {stats.totalReferences} references · {stats.verifiedReferences} verified
                   </p>
                 </div>

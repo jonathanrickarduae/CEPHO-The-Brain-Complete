@@ -103,22 +103,28 @@ export default function CentralHub() {
   return (
     <div className="h-[calc(100vh-56px)] md:h-screen flex flex-col bg-gradient-to-br from-gray-900 via-gray-900 to-gray-800">
       {/* Header */}
-      <PageHeader 
-        icon={LayoutDashboard} 
-        title="Central Hub"
-        subtitle="Your unified command center"
-        iconColor="text-purple-400"
-      >
-        <div className="flex items-center gap-3">
-          <Badge variant="outline" className="bg-emerald-500/10 text-emerald-400 border-emerald-500/30">
-            {connectedCount} of {integrations.length} connected
-          </Badge>
-          <Button variant="outline" size="sm" className="gap-2">
-            <RefreshCw className="w-4 h-4" />
-            Sync All
-          </Button>
+      <div className="border-b border-white/10 px-4 sm:px-6 py-4">
+        <div className="max-w-7xl mx-auto flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-white flex items-center gap-3">
+              <LayoutDashboard className="h-8 w-8 text-purple-400" />
+              Central Hub
+            </h1>
+            <p className="text-gray-400 mt-1">
+              Your unified command center
+            </p>
+          </div>
+          <div className="flex items-center gap-3">
+            <Badge variant="outline" className="bg-emerald-500/10 text-emerald-400 border-emerald-500/30">
+              {connectedCount} of {integrations.length} connected
+            </Badge>
+            <Button variant="outline" size="sm" className="gap-2">
+              <RefreshCw className="w-4 h-4" />
+              Sync All
+            </Button>
+          </div>
         </div>
-      </PageHeader>
+      </div>
 
       {/* Tabs */}
       <div className="shrink-0 border-b border-white/10 bg-white/5 px-4">

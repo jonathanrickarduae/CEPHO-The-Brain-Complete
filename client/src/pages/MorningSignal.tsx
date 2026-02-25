@@ -403,14 +403,14 @@ export default function MorningSignal() {
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div className="space-y-1">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-xl bg-gradient-to-br from-amber-500/20 to-orange-500/20 border border-amber-500/30">
-                <Sun className="h-6 w-6 text-amber-400" />
-              </div>
               <div>
-                <h1 className="text-2xl font-bold text-foreground">
+                <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
+                  <Sun className="h-8 w-8 text-amber-400" />
                   Morning Signal
                 </h1>
-                <p className="text-sm text-foreground/70">{formatDate()}</p>
+                <p className="text-muted-foreground mt-1">
+                  Start your day with strategic insights • {formatDate()}
+                </p>
               </div>
             </div>
           </div>

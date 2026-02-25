@@ -12,12 +12,20 @@ export default function OperationsPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <PageHeader 
-        icon={BarChart3} 
-        title="Operations" 
-        subtitle="Customer success, partnerships, and team capabilities"
-        iconColor="text-[#E91E8C]"
-      />
+      {/* Header */}
+      <div className="border-b border-border px-6 py-4">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
+              <BarChart3 className="h-8 w-8 text-[#E91E8C]" />
+              Operations
+            </h1>
+            <p className="text-muted-foreground mt-1">
+              Customer success, partnerships, and team capabilities
+            </p>
+          </div>
+        </div>
+      </div>
 
       <div className="p-6">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">

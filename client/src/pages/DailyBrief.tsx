@@ -330,20 +330,15 @@ export default function DailyBrief() {
       {/* Header */}
       <div className="border-b border-border bg-card/80 backdrop-blur-xl sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 md:px-6 py-4">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-            <div className="flex items-center gap-4">
-              <div className="relative">
-                <img alt="Insights summary graphic" 
-                  src="/avatars/victoria-stirling.jpg" 
-                  alt="Victoria Stirling" 
-                  className="w-12 h-12 md:w-14 md:h-14 rounded-full object-cover border-2 border-blue-500/50 shadow-lg"
-                />
-                <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-background" />
-              </div>
-              <div>
-                <h1 className="text-xl md:text-2xl font-display font-bold">The Signal</h1>
-                <p className="text-muted-foreground text-sm">Presented by <span className="text-blue-400">Victoria Stirling</span> • {BRIEF_DATA.date}</p>
-              </div>
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
+                <Zap className="h-8 w-8 text-blue-400" />
+                The Signal
+              </h1>
+              <p className="text-muted-foreground mt-1">
+                Your daily executive briefing • {BRIEF_DATA.date}
+              </p>
             </div>
             
             <div className="flex items-center gap-2">

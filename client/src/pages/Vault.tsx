@@ -64,22 +64,28 @@ export default function Vault() {
   return (
       <div className="h-[calc(100vh-56px)] md:h-screen flex flex-col bg-gradient-to-br from-gray-900 via-gray-900 to-gray-800">
         {/* Header */}
-        <PageHeader 
-          icon={Shield} 
-          title="The Vault"
-          subtitle="Security & Integrations"
-          iconColor="text-slate-400"
-        >
-          <div className="flex items-center gap-2">
-            <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-green-500/10 border border-green-500/30">
-              <ShieldCheck className="w-4 h-4 text-green-500" />
-              <span className="text-xs font-medium text-green-500">Secure</span>
+        <div className="border-b border-white/10 px-4 sm:px-6 py-4">
+          <div className="max-w-7xl mx-auto flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold text-white flex items-center gap-3">
+                <Shield className="h-8 w-8 text-slate-400" />
+                The Vault
+              </h1>
+              <p className="text-gray-400 mt-1">
+                Security & Integrations
+              </p>
             </div>
-            <Badge variant="outline" className="border-red-500/50 text-red-400 bg-red-500/10 text-xs">
-              {blockedThreats} blocked
-            </Badge>
+            <div className="flex items-center gap-3">
+              <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-green-500/10 border border-green-500/30">
+                <ShieldCheck className="w-4 h-4 text-green-500" />
+                <span className="text-xs font-medium text-green-500">Secure</span>
+              </div>
+              <Badge variant="outline" className="border-red-500/50 text-red-400 bg-red-500/10 text-xs">
+                {blockedThreats} blocked
+              </Badge>
+            </div>
           </div>
-        </PageHeader>
+        </div>
 
         {/* Main Content - Fixed height, no scroll */}
         <div className="flex-1 p-3 pt-2 md:p-6 flex flex-col gap-3 md:gap-4 overflow-hidden">

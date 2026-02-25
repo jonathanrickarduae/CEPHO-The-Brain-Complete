@@ -286,30 +286,36 @@ export default function AISMEsPage() {
   return (
     <div className="h-[calc(100vh-56px)] md:h-screen flex flex-col bg-background">
       {/* Header */}
-      <PageHeader 
-        icon={Users} 
-        title="AI-SMEs"
-        subtitle={`${TOTAL_EXPERTS} Expert Specialists`}
-        iconColor="text-cyan-400"
-      >
-        <div className="flex items-center gap-2">
-          {compareExperts.length > 0 && (
-            <Button 
-              size="sm" 
-              onClick={() => setShowCompareModal(true)}
-              className="gap-2 bg-gradient-to-r from-purple-500 to-pink-500"
-            >
-              <BarChart3 className="w-4 h-4" />
-              Compare ({compareExperts.length})
-            </Button>
-          )}
-          {selectedExperts.length > 0 && (
-            <Badge className="bg-primary/20 text-primary">
-              {selectedExperts.length} selected
-            </Badge>
-          )}
+      <div className="border-b border-white/10 px-4 sm:px-6 py-4">
+        <div className="max-w-7xl mx-auto flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-white flex items-center gap-3">
+              <Users className="h-8 w-8 text-cyan-400" />
+              AI-SMEs
+            </h1>
+            <p className="text-gray-400 mt-1">
+              {TOTAL_EXPERTS} Expert Specialists
+            </p>
+          </div>
+          <div className="flex items-center gap-3">
+            {compareExperts.length > 0 && (
+              <Button 
+                size="sm" 
+                onClick={() => setShowCompareModal(true)}
+                className="gap-2 bg-gradient-to-r from-purple-500 to-pink-500"
+              >
+                <BarChart3 className="w-4 h-4" />
+                Compare ({compareExperts.length})
+              </Button>
+            )}
+            {selectedExperts.length > 0 && (
+              <Badge className="bg-primary/20 text-primary">
+                {selectedExperts.length} selected
+              </Badge>
+            )}
+          </div>
         </div>
-      </PageHeader>
+      </div>
 
       {/* View Mode Tabs */}
       <div className="shrink-0 border-b border-white/10 bg-white/5 px-4 overflow-x-auto scrollbar-hide">
