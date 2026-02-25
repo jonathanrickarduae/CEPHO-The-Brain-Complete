@@ -4,8 +4,9 @@ import {
   Sun, Users, Lock, Mic, MicOff, Send, 
   Fingerprint, FolderKanban, BookOpen, Brain, LayoutDashboard,
   ChevronRight, AlertCircle, Shield, ShieldCheck, Rocket, TrendingUp,
-  CheckCircle2, Clock, Lightbulb, Activity, Zap
+  CheckCircle2, Clock, Lightbulb, Activity, Zap, Settings as SettingsIcon
 } from "lucide-react";
+import { useGovernance } from "@/hooks/useGovernance";
 import { PageHeader } from '@/components/layout/PageHeader';
 import { LearningBadge } from '@/components/expert-evolution/LearningIndicator';
 import { useVoiceInput } from "@/hooks/useVoiceInput";
@@ -97,7 +98,7 @@ export default function NexusDashboard() {
   const [, setLocation] = useLocation();
   const [inputValue, setInputValue] = useState("");
   const inputRef = useRef<HTMLTextAreaElement>(null);
-  const [governanceMode, setGovernanceMode] = useState<'everything' | 'governed'>('everything');
+  const { mode, requestModeChange } = useGovernance();
   
   // Dashboard insights from API
   const { data: insightsData, isLoading: insightsLoading } = trpc.dashboard.getInsights.useQuery();
@@ -216,21 +217,30 @@ export default function NexusDashboard() {
           
           <div className="flex items-center gap-4">
             {/* Governance Mode Toggle */}
-            <button
-              onClick={() => setGovernanceMode(prev => prev === 'everything' ? 'governed' : 'everything')}
-              className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border-2 transition-all duration-300 ${
-                governanceMode === 'governed' 
-                  ? 'bg-emerald-500/20 border-emerald-500/50 text-emerald-400' 
-                  : 'bg-amber-500/20 border-amber-500/50 text-amber-400'
-              } hover:scale-105 active:scale-95`}
-              title={governanceMode === 'governed' ? 'Governed Mode: Only approved APIs' : 'Everything Mode: All APIs available'}
-            >
-              {governanceMode === 'governed' ? (
-                <><ShieldCheck className="w-4 h-4" /><span className="text-xs font-mono">GOVERNED</span></>
-              ) : (
-                <><Shield className="w-4 h-4" /><span className="text-xs font-mono">EVERYTHING</span></>
-              )}
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => requestModeChange(mode === 'omni' ? 'governed' : 'omni')}
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg border-2 transition-all duration-300 ${
+                  mode === 'governed' 
+                    ? 'bg-emerald-500/20 border-emerald-500/50 text-emerald-400' 
+                    : 'bg-amber-500/20 border-amber-500/50 text-amber-400'
+                } hover:scale-105 active:scale-95`}
+                title={mode === 'governed' ? 'Governed Mode: Only approved tools' : 'Everything Mode: All tools available'}
+              >
+                {mode === 'governed' ? (
+                  <><ShieldCheck className="w-5 h-5" /><span className="text-sm font-semibold">GOVERNED</span></>
+                ) : (
+                  <><Shield className="w-5 h-5" /><span className="text-sm font-semibold">EVERYTHING</span></>
+                )}
+              </button>
+              <button
+                onClick={() => setLocation('/settings')}
+                className="p-2 rounded-lg border border-border hover:bg-card/50 transition-colors"
+                title="Manage governance settings"
+              >
+                <SettingsIcon className="w-4 h-4 text-muted-foreground" />
+              </button>
+            </div>
             
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />

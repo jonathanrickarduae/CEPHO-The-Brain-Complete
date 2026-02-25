@@ -23,9 +23,10 @@ import { SecureStorageDashboard } from '@/components/project-management/SecureSt
 import { BrandKitManager } from '@/components/content/BrandKit';
 import { DataGovernanceDashboard } from '@/components/project-management/DataGovernanceDashboard';
 import { IntegrationsManager } from '@/components/IntegrationsManager';
+import { GovernanceSettings } from '@/components/settings/GovernanceSettings';
 import { Plug, Wallet, FileSignature, Cpu, HardDrive, Paintbrush, ShieldCheck } from 'lucide-react';
 
-type SettingsTab = 'profile' | 'integrations' | 'ai-providers' | 'storage' | 'data-governance' | 'calendar' | 'notifications' | 'privacy' | 'appearance' | 'accessibility';
+type SettingsTab = 'profile' | 'governance' | 'integrations' | 'ai-providers' | 'storage' | 'data-governance' | 'calendar' | 'notifications' | 'privacy' | 'appearance' | 'accessibility';
 
 export default function Settings() {
   const [activeTab, setActiveTab] = useState<SettingsTab>('profile');
@@ -33,6 +34,7 @@ export default function Settings() {
 
   const tabs = [
     { id: 'profile' as const, label: 'Profile', icon: User },
+    { id: 'governance' as const, label: 'Governance', icon: ShieldCheck },
     { id: 'integrations' as const, label: 'Integrations', icon: Plug },
     { id: 'ai-providers' as const, label: 'AI Providers', icon: Cpu },
     { id: 'storage' as const, label: 'Storage & Security', icon: HardDrive },
@@ -149,6 +151,12 @@ export default function Settings() {
 
 
               </>
+            )}
+
+            {activeTab === 'governance' && (
+              <div className="bg-gray-800 rounded-xl border border-gray-700 p-6">
+                <GovernanceSettings />
+              </div>
             )}
 
             {activeTab === 'integrations' && (
