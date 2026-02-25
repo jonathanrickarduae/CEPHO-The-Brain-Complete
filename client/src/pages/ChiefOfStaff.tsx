@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
-import { PageHeader } from '@/components/layout/PageHeader';
+
 import { CircularProgress } from '@/components/shared/ProgressIndicator';
 import { QualityGateApprovalQueue } from '@/components/shared/QualityGateApproval';
 import { useDigitalTwinChat } from "@/hooks/useDigitalTwinChat";

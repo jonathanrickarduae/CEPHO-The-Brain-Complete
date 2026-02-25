@@ -7,7 +7,6 @@ import {
   CheckCircle2, Clock, Lightbulb, Activity, Zap, Settings as SettingsIcon
 } from "lucide-react";
 import { useGovernance } from "@/hooks/useGovernance";
-import { PageHeader } from '@/components/layout/PageHeader';
 import { LearningBadge } from '@/components/expert-evolution/LearningIndicator';
 import { useVoiceInput } from "@/hooks/useVoiceInput";
 import { toast } from "sonner";

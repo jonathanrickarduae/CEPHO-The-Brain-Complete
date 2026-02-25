@@ -24,7 +24,6 @@ import {
 import { useState } from "react";
 import { toast } from "sonner";
 
-import { PageHeader } from '@/components/layout/PageHeader';
 
 export default function Vault() {
   // Integration health data
