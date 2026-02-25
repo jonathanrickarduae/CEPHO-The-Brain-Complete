@@ -94,15 +94,6 @@ const menuItems: MenuItem[] = [
     ]
   },
   { 
-    icon: Mail, 
-    label: "Email", 
-    path: "/email/inbox",
-    children: [
-      { icon: Inbox, label: "Inbox", path: "/email/inbox" },
-      { icon: Settings, label: "Accounts", path: "/email/accounts" },
-    ]
-  },
-  { 
     icon: Users, 
     label: "Expert Network", 
     path: "/expert-network",
@@ -135,6 +126,7 @@ const menuItems: MenuItem[] = [
     label: "Settings", 
     path: "/settings",
     children: [
+      { icon: Mail, label: "Email Accounts", path: "/email/accounts" },
       { icon: Globe, label: "Commercialization", path: "/commercialization" },
     ]
   },
