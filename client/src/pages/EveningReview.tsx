@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { 
   Moon, Check, X, Clock, ChevronDown, ChevronUp,
   Mic, MicOff, Send, Play, Folder, Target,
-  CheckCircle2, XCircle, ArrowRight, AlertCircle, Brain, Zap, Sparkles
+  CheckCircle2, XCircle, ArrowRight, AlertCircle, Brain, Zap, Sparkles, Smile, Meh, Frown
 } from "lucide-react";
 import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
@@ -75,17 +75,12 @@ export default function EveningReview() {
   const isDelegateMode = urlParams.get('delegate') === 'true';
   
   const [taskDecisions, setTaskDecisions] = useState<TaskDecision[]>([]);
-  const [expandedProjects, setExpandedProjects] = useState<string[]>(OVERNIGHT_TASKS.map(p => p.projectId));
+  const [expandedProjects, setExpandedProjects] = useState<string[]>([]);
   const [currentMood, setCurrentMood] = useState([60]); // 0-100 scale
   const [isRecordingWentWell, setIsRecordingWentWell] = useState(false);
   const [isRecordingDidntGo, setIsRecordingDidntGo] = useState(false);
   const [wentWellText, setWentWellText] = useState("");
   const [didntGoText, setDidntGoText] = useState("");
-  const [showReflection, setShowReflection] = useState(false);
-  const [showStrategicFocus, setShowStrategicFocus] = useState(false);
-  const [stopDoing, setStopDoing] = useState("");
-  const [delegateTo, setDelegateTo] = useState("");
-  const [focusMore, setFocusMore] = useState("");
   const [isReadyToStart, setIsReadyToStart] = useState(false);
   const [chiefOfStaffPrompt, setChiefOfStaffPrompt] = useState(false);
   const [autoProcessingStarted, setAutoProcessingStarted] = useState(false);
@@ -101,103 +96,72 @@ export default function EveningReview() {
       const now = new Date();
       setCurrentTime(now);
       
-      // Calculate cutoff time (8 PM today)
-      const cutoff = new Date();
-      cutoff.setHours(20, 0, 0, 0);
+      const hours = now.getHours();
+      const minutes = now.getMinutes();
       
-      // Calculate window start (7 PM today)
-      const windowStart = new Date();
-      windowStart.setHours(19, 0, 0, 0);
-      
-      // Calculate warning time (7:45 PM - 15 min before cutoff)
-      const warningTime = new Date();
-      warningTime.setHours(19, 45, 0, 0);
-      
-      const msUntilCutoff = cutoff.getTime() - now.getTime();
-      
-      // Determine review state
-      if (isReadyToStart || autoProcessingStarted) {
-        setReviewState('completed');
-      } else if (now >= cutoff) {
-        setReviewState('auto_processing');
-        if (!autoProcessingStarted) {
-          // Trigger auto-processing
+      // Review window: 7:00 PM - 8:00 PM
+      if (hours === 19) {
+        if (minutes >= 45) {
+          setReviewState('cutoff_warning');
+          const minutesLeft = 60 - minutes;
+          setTimeUntilCutoff(`${minutesLeft} min until cutoff`);
+        } else {
+          setReviewState('in_window');
+          const minutesLeft = 60 - minutes;
+          setTimeUntilCutoff(`${minutesLeft} min remaining`);
+        }
+      } else if (hours < 19) {
+        setReviewState('before_window');
+        const hoursLeft = 18 - hours;
+        const minutesLeft = 60 - minutes;
+        setTimeUntilCutoff(`Opens in ${hoursLeft}h ${minutesLeft}m`);
+      } else if (hours >= 20) {
+        if (!autoProcessingStarted && !isReadyToStart) {
           handleAutoStart();
         }
-      } else if (now >= warningTime) {
-        setReviewState('cutoff_warning');
-      } else if (now >= windowStart) {
-        setReviewState('in_window');
-        // Show Chief of Staff prompt at 7 PM
-        if (!chiefOfStaffPrompt) {
-          setChiefOfStaffPrompt(true);
-        }
-      } else {
-        setReviewState('before_window');
-      }
-      
-      // Format countdown
-      if (msUntilCutoff > 0) {
-        const hours = Math.floor(msUntilCutoff / (1000 * 60 * 60));
-        const minutes = Math.floor((msUntilCutoff % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((msUntilCutoff % (1000 * 60)) / 1000);
-        
-        if (hours > 0) {
-          setTimeUntilCutoff(`${hours}h ${minutes}m ${seconds}s`);
-        } else if (minutes > 0) {
-          setTimeUntilCutoff(`${minutes}m ${seconds}s`);
-        } else {
-          setTimeUntilCutoff(`${seconds}s`);
-        }
-      } else {
-        setTimeUntilCutoff("Cutoff passed");
+        setReviewState('auto_processing');
+        setTimeUntilCutoff('Auto-processing');
       }
     }, 1000);
-    
+
     return () => clearInterval(interval);
-  }, [isReadyToStart, autoProcessingStarted, chiefOfStaffPrompt]);
+  }, [autoProcessingStarted, isReadyToStart]);
 
-  // Handle URL parameters for auto-start or delegate mode
+  // Auto-start prompt at 7 PM
   useEffect(() => {
-    if (isAutoStart || isDelegateMode) {
-      // Skip the Chief of Staff prompt and go directly to processing
-      setChiefOfStaffPrompt(false);
-      
-      if (isDelegateMode) {
-        // Delegate mode: auto-accept all tasks immediately
-        handleAutoStart();
-        toast.success("Chief of Staff is handling your evening review");
-      } else if (isAutoStart) {
-        // Auto-start mode: show the review but skip the prompt
-        toast.info("Evening review started automatically");
-      }
+    if (reviewState === 'in_window' && !chiefOfStaffPrompt && !isReadyToStart && !autoProcessingStarted) {
+      const timer = setTimeout(() => {
+        setChiefOfStaffPrompt(true);
+      }, 2000);
+      return () => clearTimeout(timer);
     }
-  }, []); // Only run once on mount
+  }, [reviewState]);
 
+  // Handle auto-start at 8 PM
   const handleAutoStart = async () => {
     setAutoProcessingStarted(true);
+    
     // Auto-accept all pending tasks
-    OVERNIGHT_TASKS.forEach(project => {
-      project.tasks.forEach(task => {
-        const status = getTaskStatus(task.id);
-        if (status === 'pending') {
-          setTaskStatus(task.id, 'accepted');
-        }
-      });
+    const allTasks = OVERNIGHT_TASKS.flatMap(p => p.tasks);
+    allTasks.forEach(task => {
+      if (getTaskStatus(task.id) === 'pending') {
+        setTaskStatus(task.id, 'accepted');
+      }
     });
     
     // Save to database
     try {
-      const mode = isDelegateMode ? 'delegated' : 'auto_processed';
-      const { sessionId } = await createSession.mutateAsync({ mode });
+      const createSession = trpc.eveningReview.createSession.useMutation();
+      const completeSession = trpc.eveningReview.completeSession.useMutation();
+      
+      const { sessionId } = await createSession.mutateAsync({ mode: 'auto' });
       
       if (sessionId) {
-        // All tasks auto-accepted
         const decisions = OVERNIGHT_TASKS.flatMap(project => 
           project.tasks.map(task => ({
             taskTitle: task.text,
             projectName: project.projectName,
-            decision: 'accepted' as const,
+            decision: getTaskStatus(task.id) as 'accepted' | 'deferred' | 'rejected',
             priority: task.priority,
             estimatedTime: task.estimatedTime,
           }))
@@ -341,21 +305,21 @@ export default function EveningReview() {
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'high': return 'text-red-600 bg-red-50 border-red-200';
-      case 'medium': return 'text-amber-600 bg-amber-50 border-amber-200';
-      case 'low': return 'text-green-600 bg-green-50 border-green-200';
-      default: return 'text-foreground/50 bg-gray-50 border-gray-200';
+      case 'high': return 'bg-red-500/20 text-red-400 border-red-500/30';
+      case 'medium': return 'bg-amber-500/20 text-amber-400 border-amber-500/30';
+      case 'low': return 'bg-green-500/20 text-green-400 border-green-500/30';
+      default: return 'bg-gray-500/20 text-gray-400 border-gray-500/30';
     }
   };
 
   const getReviewStateColor = () => {
     switch (reviewState) {
-      case 'before_window': return 'bg-gray-100 text-gray-700 border-gray-300';
-      case 'in_window': return 'bg-green-100 text-green-700 border-green-300';
-      case 'cutoff_warning': return 'bg-amber-100 text-amber-700 border-amber-300';
-      case 'auto_processing': return 'bg-purple-100 text-purple-700 border-purple-300';
-      case 'completed': return 'bg-blue-100 text-blue-700 border-blue-300';
-      default: return 'bg-gray-100 text-gray-700 border-gray-300';
+      case 'before_window': return 'bg-gray-500/20 text-gray-400 border-gray-500/30';
+      case 'in_window': return 'bg-green-500/20 text-green-400 border-green-500/30';
+      case 'cutoff_warning': return 'bg-amber-500/20 text-amber-400 border-amber-500/30';
+      case 'auto_processing': return 'bg-purple-500/20 text-purple-400 border-purple-500/30';
+      case 'completed': return 'bg-blue-500/20 text-blue-400 border-blue-500/30';
+      default: return 'bg-gray-500/20 text-gray-400 border-gray-500/30';
     }
   };
 
@@ -370,20 +334,26 @@ export default function EveningReview() {
     }
   };
 
+  const getMoodIcon = () => {
+    if (currentMood[0] >= 70) return <Smile className="w-5 h-5 text-green-400" />;
+    if (currentMood[0] >= 40) return <Meh className="w-5 h-5 text-amber-400" />;
+    return <Frown className="w-5 h-5 text-red-400" />;
+  };
+
   // Chief of Staff prompt modal
   if (chiefOfStaffPrompt && !isReadyToStart && !autoProcessingStarted && reviewState !== 'completed') {
     return (
-      <div className="h-full bg-background text-foreground flex items-center justify-center p-4">
-        <Card className="max-w-md w-full border-2 border-indigo-300 shadow-xl">
+      <div className="h-full bg-gradient-to-br from-gray-900 via-gray-900 to-indigo-900 text-foreground flex items-center justify-center p-4">
+        <Card className="max-w-md w-full border-2 border-indigo-500/30 shadow-[0_0_50px_rgba(99,102,241,0.3)] bg-black/80 backdrop-blur-xl">
           <CardContent className="p-6 text-center space-y-4">
-            <div className="w-16 h-16 mx-auto rounded-full bg-indigo-100 flex items-center justify-center">
-              <Brain className="w-8 h-8 text-indigo-600" />
+            <div className="w-16 h-16 mx-auto rounded-full bg-indigo-500/20 flex items-center justify-center">
+              <Brain className="w-8 h-8 text-indigo-400" />
             </div>
-            <h2 className="text-xl font-bold text-foreground">Chief of Staff</h2>
-            <p className="text-muted-foreground">
+            <h2 className="text-xl font-bold text-white">Chief of Staff</h2>
+            <p className="text-gray-300">
               It's {formatTime()}. Ready to start your Evening Review?
             </p>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-gray-400">
               You have {stats.total} tasks across {OVERNIGHT_TASKS.length} projects to review.
             </p>
             <div className="flex flex-col gap-2 pt-4">
@@ -399,12 +369,12 @@ export default function EveningReview() {
                   setChiefOfStaffPrompt(false);
                   handleAutoStart();
                 }}
-                className="w-full"
+                className="w-full border-white/20 text-white hover:bg-white/10"
               >
                 No, auto-process for me
               </Button>
             </div>
-            <p className="text-xs text-muted-foreground">
+            <p className="text-xs text-gray-500">
               Auto-processing will start at 8:00 PM if no action is taken
             </p>
           </CardContent>
@@ -416,42 +386,50 @@ export default function EveningReview() {
   // Completed state
   if (isReadyToStart || autoProcessingStarted) {
     return (
-      <div className="h-full bg-background text-foreground flex items-center justify-center p-4">
-        <Card className="max-w-md w-full border-2 border-green-300 shadow-xl">
+      <div className="h-full bg-gradient-to-br from-gray-900 via-gray-900 to-green-900 text-foreground flex items-center justify-center p-4">
+        <Card className="max-w-md w-full border-2 border-green-500/30 shadow-[0_0_50px_rgba(34,197,94,0.3)] bg-black/80 backdrop-blur-xl">
           <CardContent className="p-6 text-center space-y-4">
-            <div className="w-16 h-16 mx-auto rounded-full bg-green-100 flex items-center justify-center">
-              <CheckCircle2 className="w-8 h-8 text-green-600" />
+            <div className="w-16 h-16 mx-auto rounded-full bg-green-500/20 flex items-center justify-center">
+              <CheckCircle2 className="w-8 h-8 text-green-400" />
             </div>
-            <h2 className="text-xl font-bold text-foreground">
+            <h2 className="text-xl font-bold text-white">
               {autoProcessingStarted && !isReadyToStart ? 'Auto-Processing Started' : 'Evening Review Complete'}
             </h2>
-            <div className="space-y-2 text-left bg-gray-50 rounded-lg p-4">
+            <div className="space-y-2 text-left bg-white/5 rounded-lg p-4 border border-white/10">
               <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">Tasks Accepted:</span>
-                <span className="font-medium text-green-600">{stats.accepted}</span>
+                <span className="text-gray-400">Tasks Accepted:</span>
+                <span className="font-medium text-green-400">{stats.accepted}</span>
               </div>
               <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">Tasks Deferred:</span>
-                <span className="font-medium text-amber-600">{stats.deferred}</span>
+                <span className="text-gray-400">Tasks Deferred:</span>
+                <span className="font-medium text-amber-400">{stats.deferred}</span>
               </div>
               <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">Tasks Rejected:</span>
-                <span className="font-medium text-red-600">{stats.rejected}</span>
+                <span className="text-gray-400">Tasks Rejected:</span>
+                <span className="font-medium text-red-400">{stats.rejected}</span>
               </div>
             </div>
             <div className="pt-4 space-y-2">
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <Zap className="w-4 h-4 text-indigo-500" />
+              <div className="flex items-center gap-2 text-sm text-gray-300">
+                <Zap className="w-4 h-4 text-indigo-400" />
                 <span>Chief of Staff is processing overnight tasks</span>
               </div>
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <Clock className="w-4 h-4 text-indigo-500" />
+              <div className="flex items-center gap-2 text-sm text-gray-300">
+                <Clock className="w-4 h-4 text-indigo-400" />
                 <span>Signal briefing will be ready by 7:00 AM</span>
               </div>
+              <div className="flex items-center gap-2 text-sm text-gray-300">
+                <Moon className="w-4 h-4 text-indigo-400" />
+                <span>Have a restful evening!</span>
+              </div>
             </div>
-            <p className="text-sm text-muted-foreground pt-4">
-              Rest well. Your morning Signal will include updates on all processed tasks.
-            </p>
+            <Button 
+              variant="outline" 
+              className="w-full mt-4 border-white/20 text-white hover:bg-white/10"
+              onClick={() => window.location.href = '/nexus'}
+            >
+              Return to Nexus
+            </Button>
           </CardContent>
         </Card>
       </div>
@@ -459,381 +437,252 @@ export default function EveningReview() {
   }
 
   return (
-    <div className="h-full bg-background text-foreground overflow-auto pb-24">
-      {/* Header */}
-      <div className="border-b border-border bg-gradient-to-r from-indigo-500/10 to-purple-500/10 sticky top-0 z-10">
-        <div className="max-w-4xl mx-auto px-4 py-4">
+    <div className="h-full bg-gradient-to-br from-gray-900 via-gray-900 to-indigo-900 text-white overflow-auto">
+      {/* Compact Header */}
+      <div className="border-b border-white/10 bg-black/20 backdrop-blur-sm sticky top-0 z-10">
+        <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
+              <h1 className="text-3xl font-bold flex items-center gap-3">
                 <Moon className="h-8 w-8 text-indigo-400" />
                 Evening Review
               </h1>
-              <p className="text-muted-foreground mt-1">
-                Review and organize your day's tasks - {formatDate()}
+              <p className="text-gray-400 mt-1 text-sm">
+                {formatDate()} • {stats.total} tasks across {OVERNIGHT_TASKS.length} projects
               </p>
             </div>
             
-            {/* Countdown Timer */}
-            <div className="flex flex-col items-end gap-2">
-              <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full border ${getReviewStateColor()}`}>
+            {/* Compact Stats + Timer */}
+            <div className="flex items-center gap-3">
+              <div className="flex gap-2">
+                <Badge className="bg-green-500/20 text-green-400 border-green-500/30">{stats.accepted} ✓</Badge>
+                <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30">{stats.deferred} ⏸</Badge>
+                <Badge className="bg-red-500/20 text-red-400 border-red-500/30">{stats.rejected} ✕</Badge>
+                <Badge className="bg-gray-500/20 text-gray-400 border-gray-500/30">{stats.pending} ⋯</Badge>
+              </div>
+              <div className={`flex items-center gap-2 px-3 py-1.5 rounded-full border ${getReviewStateColor()}`}>
                 <Clock className="w-4 h-4" />
                 <span className="text-sm font-medium">{timeUntilCutoff}</span>
               </div>
-              <p className="text-xs text-muted-foreground">{getReviewStateText()}</p>
             </div>
-          </div>
-          
-          {/* Stats Bar */}
-          <div className="flex items-center gap-2 mt-3">
-            <Badge variant="outline" className="text-green-600 border-green-300 bg-green-50">
-              {stats.accepted} Accepted
-            </Badge>
-            <Badge variant="outline" className="text-amber-600 border-amber-300 bg-amber-50">
-              {stats.deferred} Deferred
-            </Badge>
-            <Badge variant="outline" className="text-red-600 border-red-300 bg-red-50">
-              {stats.rejected} Rejected
-            </Badge>
-            <Badge variant="outline" className="text-foreground/50 border-gray-300 bg-gray-50">
-              {stats.pending} Pending
-            </Badge>
           </div>
         </div>
       </div>
 
       {/* Warning Banner for Cutoff */}
       {reviewState === 'cutoff_warning' && (
-        <div className="bg-amber-500 text-white px-4 py-2">
-          <div className="max-w-4xl mx-auto flex items-center gap-2">
+        <div className="bg-amber-500/20 border-b border-amber-500/30 px-6 py-2">
+          <div className="max-w-7xl mx-auto flex items-center gap-2 text-amber-400">
             <AlertCircle className="w-5 h-5" />
             <span className="font-medium">Less than 15 minutes until 8 PM cutoff!</span>
-            <span className="text-amber-100">Chief of Staff will auto-process remaining tasks.</span>
+            <span className="text-amber-300/70">Chief of Staff will auto-process remaining tasks.</span>
           </div>
         </div>
       )}
 
-      <div className="max-w-4xl mx-auto px-4 py-6 space-y-6">
-        {/* Task Summary Header */}
-        <Card className="border-2 border-indigo-200 bg-indigo-50/50">
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <h2 className="text-lg font-semibold text-indigo-900">Overnight Task Summary</h2>
-                <p className="text-sm text-indigo-700">
-                  {stats.total} tasks across {OVERNIGHT_TASKS.length} projects • Review and validate each task
-                </p>
-              </div>
-              <div className="text-right">
-                <div className="text-2xl font-bold text-indigo-900">{stats.pending}</div>
-                <div className="text-xs text-indigo-600">Pending Review</div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Projects and Tasks */}
-        <div className="space-y-4">
-          {OVERNIGHT_TASKS.map((project) => {
-            const isExpanded = expandedProjects.includes(project.projectId);
-            const projectStats = {
-              total: project.tasks.length,
-              accepted: project.tasks.filter(t => getTaskStatus(t.id) === 'accepted').length,
-              pending: project.tasks.filter(t => getTaskStatus(t.id) === 'pending').length,
-            };
-            
-            return (
-              <Card key={project.projectId} className="border overflow-hidden">
-                {/* Project Header */}
-                <div 
-                  className="flex items-center justify-between p-4 cursor-pointer hover:bg-muted/50 transition-colors"
-                  onClick={() => toggleProject(project.projectId)}
-                  style={{ borderLeft: `4px solid ${project.projectColor}` }}
-                >
-                  <div className="flex items-center gap-3">
-                    <Folder className="w-5 h-5" style={{ color: project.projectColor }} />
-                    <div>
-                      <h3 className="font-semibold text-foreground">{project.projectName}</h3>
-                      <p className="text-xs text-muted-foreground">
-                        {projectStats.accepted}/{projectStats.total} accepted • {projectStats.pending} pending
-                      </p>
+      <div className="max-w-7xl mx-auto px-6 py-6">
+        {/* Two Column Layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Left Column - Tasks (2/3 width) */}
+          <div className="lg:col-span-2 space-y-4">
+            {OVERNIGHT_TASKS.map((project) => {
+              const isExpanded = expandedProjects.includes(project.projectId);
+              const projectStats = {
+                total: project.tasks.length,
+                accepted: project.tasks.filter(t => getTaskStatus(t.id) === 'accepted').length,
+                pending: project.tasks.filter(t => getTaskStatus(t.id) === 'pending').length,
+              };
+              
+              return (
+                <Card key={project.projectId} className="border border-white/10 bg-white/5 backdrop-blur-sm overflow-hidden">
+                  {/* Project Header */}
+                  <div 
+                    className="flex items-center justify-between p-4 cursor-pointer hover:bg-white/5 transition-colors"
+                    onClick={() => toggleProject(project.projectId)}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div 
+                        className="w-3 h-3 rounded-full" 
+                        style={{ backgroundColor: project.projectColor }}
+                      />
+                      <div>
+                        <h3 className="font-semibold text-white">{project.projectName}</h3>
+                        <p className="text-xs text-gray-400">
+                          {projectStats.accepted}/{projectStats.total} accepted
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      {projectStats.pending > 0 && (
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            acceptAll(project.projectId);
+                          }}
+                          className="text-xs text-green-400 hover:bg-green-500/10"
+                        >
+                          Accept All
+                        </Button>
+                      )}
+                      {isExpanded ? <ChevronUp className="w-5 h-5 text-gray-400" /> : <ChevronDown className="w-5 h-5 text-gray-400" />}
                     </div>
                   </div>
-                  <div className="flex items-center gap-2">
-                    {projectStats.pending > 0 && (
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          acceptAll(project.projectId);
-                        }}
-                        className="text-xs"
-                      >
-                        Accept All
-                      </Button>
-                    )}
-                    {isExpanded ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
-                  </div>
-                </div>
-                
-                {/* Tasks */}
-                {isExpanded && (
-                  <div className="border-t divide-y">
-                    {project.tasks.map((task) => {
-                      const status = getTaskStatus(task.id);
-                      return (
-                        <div 
-                          key={task.id}
-                          className={`p-3 flex items-center justify-between gap-3 transition-colors ${
-                            status === 'accepted' ? 'bg-green-500/10 border-l-2 border-green-500' :
-                            status === 'rejected' ? 'bg-red-500/10 border-l-2 border-red-500' :
-                            status === 'deferred' ? 'bg-amber-500/10 border-l-2 border-amber-500' : 'hover:bg-muted/30'
-                          }`}
-                        >
-                          <div className="flex-1 min-w-0">
-                            <div className="flex items-center gap-2 mb-1">
-                              <Badge variant="outline" className={`text-xs ${getPriorityColor(task.priority)}`}>
-                                {task.priority}
-                              </Badge>
-                              <span className="text-xs text-muted-foreground flex items-center gap-1">
-                                <Clock className="w-3 h-3" />
-                                {task.estimatedTime}
-                              </span>
-                            </div>
-                            <p className={`text-sm ${status !== 'pending' ? 'line-through opacity-60' : 'text-foreground font-medium'}`}>
-                              {task.text}
-                            </p>
-                          </div>
-                          
-                          {/* Compact Action Buttons */}
-                          <div className="flex items-center gap-1">
-                            <Button
-                              size="sm"
-                              variant="ghost"
-                              className={`h-7 w-7 p-0 ${status === 'accepted' ? 'bg-green-500 hover:bg-green-600 text-white' : 'hover:bg-green-500/20'}`}
-                              onClick={() => setTaskStatus(task.id, 'accepted')}
-                              title="Accept"
-                            >
-                              <Check className="w-3.5 h-3.5" />
-                            </Button>
-                            <Button
-                              size="sm"
-                              variant="ghost"
-                              className={`h-7 w-7 p-0 ${status === 'deferred' ? 'bg-amber-500 hover:bg-amber-600 text-white' : 'hover:bg-amber-500/20'}`}
-                              onClick={() => setTaskStatus(task.id, 'deferred')}
-                              title="Defer"
-                            >
-                              <Clock className="w-3.5 h-3.5" />
-                            </Button>
-                            <Button
-                              size="sm"
-                              variant="ghost"
-                              className={`h-7 w-7 p-0 ${status === 'rejected' ? 'bg-red-500 hover:bg-red-600 text-white' : 'hover:bg-red-500/20'}`}
-                              onClick={() => setTaskStatus(task.id, 'rejected')}
-                              title="Reject"
-                            >
-                              <X className="w-3.5 h-3.5" />
-                            </Button>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
-              </Card>
-            );
-          })}
-        </div>
 
-        {/* Reflection Section (Collapsible) */}
-        <Card className="border">
-          <CardHeader 
-            className="cursor-pointer hover:bg-muted/50 transition-colors"
-            onClick={() => setShowReflection(!showReflection)}
-          >
-            <div className="flex items-center justify-between">
-              <CardTitle className="text-base flex items-center gap-2">
-                <Target className="w-5 h-5 text-indigo-600" />
-                Daily Reflection (Optional)
-              </CardTitle>
-              {showReflection ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
-            </div>
-          </CardHeader>
-          
-          {showReflection && (
-            <CardContent className="space-y-4">
-              {/* What Went Well */}
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <label className="text-sm font-medium text-green-700">What went well today?</label>
-                  <Button
-                    size="sm"
-                    variant="ghost"
-                    onClick={toggleRecordingWentWell}
-                    className={isRecordingWentWell ? 'text-red-600' : 'text-muted-foreground'}
-                  >
-                    {isRecordingWentWell ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
-                  </Button>
-                </div>
-                <Textarea
-                  value={wentWellText}
-                  onChange={(e) => setWentWellText(e.target.value)}
-                  placeholder="Wins, achievements, positive moments..."
-                  className="bg-green-50/50 border-green-200 min-h-[80px]"
-                />
-              </div>
-              
-              {/* What Didn't Go Well */}
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <label className="text-sm font-medium text-amber-700">What didn't go well?</label>
-                  <Button
-                    size="sm"
-                    variant="ghost"
-                    onClick={toggleRecordingDidntGo}
-                    className={isRecordingDidntGo ? 'text-red-600' : 'text-muted-foreground'}
-                  >
-                    {isRecordingDidntGo ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
-                  </Button>
-                </div>
-                <Textarea
-                  value={didntGoText}
-                  onChange={(e) => setDidntGoText(e.target.value)}
-                  placeholder="Challenges, blockers, lessons learned..."
-                  className="bg-amber-50/50 border-amber-200 min-h-[80px]"
-                />
-              </div>
-              
-              {/* Mood Score */}
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <label className="text-sm font-medium text-indigo-700">Today's mood score</label>
-                  <span className="text-2xl font-bold text-indigo-600">{currentMood[0]}/100</span>
-                </div>
+                  {/* Tasks List */}
+                  {isExpanded && (
+                    <div className="border-t border-white/10 divide-y divide-white/10">
+                      {project.tasks.map((task) => {
+                        const status = getTaskStatus(task.id);
+                        return (
+                          <div key={task.id} className="p-3 hover:bg-white/5 transition-colors">
+                            <div className="flex items-start justify-between gap-3">
+                              <div className="flex-1 min-w-0">
+                                <p className={`text-sm ${status === 'rejected' ? 'line-through text-gray-500' : 'text-white'}`}>
+                                  {task.text}
+                                </p>
+                                <div className="flex items-center gap-2 mt-1">
+                                  <Badge variant="outline" className={`text-xs ${getPriorityColor(task.priority)}`}>
+                                    {task.priority}
+                                  </Badge>
+                                  <span className="text-xs text-gray-500">{task.estimatedTime}</span>
+                                </div>
+                              </div>
+                              <div className="flex gap-1 shrink-0">
+                                <Button
+                                  size="sm"
+                                  variant={status === 'accepted' ? 'default' : 'ghost'}
+                                  onClick={() => setTaskStatus(task.id, 'accepted')}
+                                  className={status === 'accepted' ? 'bg-green-600 hover:bg-green-700' : 'hover:bg-green-500/10 text-green-400'}
+                                >
+                                  <Check className="w-4 h-4" />
+                                </Button>
+                                <Button
+                                  size="sm"
+                                  variant={status === 'deferred' ? 'default' : 'ghost'}
+                                  onClick={() => setTaskStatus(task.id, 'deferred')}
+                                  className={status === 'deferred' ? 'bg-amber-600 hover:bg-amber-700' : 'hover:bg-amber-500/10 text-amber-400'}
+                                >
+                                  <Clock className="w-4 h-4" />
+                                </Button>
+                                <Button
+                                  size="sm"
+                                  variant={status === 'rejected' ? 'default' : 'ghost'}
+                                  onClick={() => setTaskStatus(task.id, 'rejected')}
+                                  className={status === 'rejected' ? 'bg-red-600 hover:bg-red-700' : 'hover:bg-red-500/10 text-red-400'}
+                                >
+                                  <X className="w-4 h-4" />
+                                </Button>
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </Card>
+              );
+            })}
+          </div>
+
+          {/* Right Column - Reflection (1/3 width) */}
+          <div className="space-y-4">
+            {/* Mood Tracker */}
+            <Card className="border border-white/10 bg-white/5 backdrop-blur-sm">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-base flex items-center gap-2">
+                  {getMoodIcon()}
+                  How was your day?
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
                 <Slider
                   value={currentMood}
                   onValueChange={setCurrentMood}
-                  min={0}
                   max={100}
-                  step={5}
-                  className="py-2"
+                  step={1}
+                  className="w-full"
                 />
-              </div>
-            </CardContent>
-          )}
-        </Card>
+                <div className="flex justify-between text-xs text-gray-500">
+                  <span>Challenging</span>
+                  <span>Great</span>
+                </div>
+              </CardContent>
+            </Card>
 
-        {/* Strategic Focus Module */}
-        <Card className="border border-fuchsia-200 bg-fuchsia-50/30">
-          <CardHeader 
-            className="cursor-pointer hover:bg-fuchsia-100/50 transition-colors"
-            onClick={() => setShowStrategicFocus(!showStrategicFocus)}
-          >
-            <div className="flex items-center justify-between">
-              <CardTitle className="text-base flex items-center gap-2">
-                <Sparkles className="w-5 h-5 text-fuchsia-600" />
-                Strategic Focus (Weekly Review)
-              </CardTitle>
-              {showStrategicFocus ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
-            </div>
-          </CardHeader>
-          
-          {showStrategicFocus && (
-            <CardContent className="space-y-4">
-              <p className="text-sm text-muted-foreground">
-                Take a moment to reflect on your strategic priorities. What should change?
-              </p>
-              
-              {/* What should I stop doing? */}
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-red-700 flex items-center gap-2">
-                  <XCircle className="w-4 h-4" />
-                  What should I STOP doing?
-                </label>
+            {/* Quick Notes */}
+            <Card className="border border-white/10 bg-white/5 backdrop-blur-sm">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-base flex items-center gap-2">
+                  <Sparkles className="w-4 h-4 text-green-400" />
+                  What went well?
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-2">
                 <Textarea
-                  value={stopDoing}
-                  onChange={(e) => setStopDoing(e.target.value)}
-                  placeholder="Activities that drain energy without results, low-value tasks, distractions..."
-                  className="bg-red-50/50 border-red-200 min-h-[80px]"
+                  placeholder="Quick notes..."
+                  value={wentWellText}
+                  onChange={(e) => setWentWellText(e.target.value)}
+                  className="min-h-[60px] bg-white/5 border-white/10 text-white resize-none"
                 />
-              </div>
-              
-              {/* What should I delegate? */}
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-amber-700 flex items-center gap-2">
-                  <ArrowRight className="w-4 h-4" />
-                  What should I DELEGATE?
-                </label>
-                <Textarea
-                  value={delegateTo}
-                  onChange={(e) => setDelegateTo(e.target.value)}
-                  placeholder="Tasks others can do, things that don't require your unique skills..."
-                  className="bg-amber-50/50 border-amber-200 min-h-[80px]"
-                />
-              </div>
-              
-              {/* What deserves more focus? */}
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-green-700 flex items-center gap-2">
-                  <Target className="w-4 h-4" />
-                  What deserves MORE focus?
-                </label>
-                <Textarea
-                  value={focusMore}
-                  onChange={(e) => setFocusMore(e.target.value)}
-                  placeholder="High-impact activities, strategic priorities, things only you can do..."
-                  className="bg-green-50/50 border-green-200 min-h-[80px]"
-                />
-              </div>
-              
-              <div className="flex items-center justify-between pt-2 border-t">
-                <p className="text-xs text-muted-foreground">
-                  Your responses will be saved and reviewed by Chief of Staff
-                </p>
-                <Button 
-                  size="sm" 
-                  className="bg-fuchsia-600 hover:bg-fuchsia-700"
-                  onClick={() => {
-                    toast.success("Strategic focus saved! Chief of Staff will follow up.");
-                    setShowStrategicFocus(false);
-                  }}
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={toggleRecordingWentWell}
+                  className={`w-full ${isRecordingWentWell ? 'bg-red-500/20 text-red-400' : 'text-gray-400'}`}
                 >
-                  Save Focus Areas
+                  {isRecordingWentWell ? <MicOff className="w-4 h-4 mr-2" /> : <Mic className="w-4 h-4 mr-2" />}
+                  {isRecordingWentWell ? 'Stop Recording' : 'Voice Note'}
                 </Button>
-              </div>
-            </CardContent>
-          )}
-        </Card>
+              </CardContent>
+            </Card>
 
-        {/* Ready to Start Button */}
-        <div className="sticky bottom-4">
-          <Button
-            onClick={handleReadyToStart}
-            disabled={!allDecided}
-            className={`w-full h-14 text-lg font-semibold ${
-              allDecided 
-                ? 'bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700' 
-                : 'bg-gray-300'
-            }`}
-          >
-            {allDecided ? (
-              <>
-                <Play className="w-5 h-5 mr-2" />
-                Ready to Start Overnight Tasks
-              </>
-            ) : (
-              <>
-                <Clock className="w-5 h-5 mr-2" />
-                {stats.pending} tasks still pending review
-              </>
-            )}
-          </Button>
-          {!allDecided && (
-            <p className="text-xs text-center text-muted-foreground mt-2">
-              Review all tasks to enable overnight processing
-            </p>
-          )}
+            <Card className="border border-white/10 bg-white/5 backdrop-blur-sm">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-base flex items-center gap-2">
+                  <AlertCircle className="w-4 h-4 text-amber-400" />
+                  What could improve?
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                <Textarea
+                  placeholder="Quick notes..."
+                  value={didntGoText}
+                  onChange={(e) => setDidntGoText(e.target.value)}
+                  className="min-h-[60px] bg-white/5 border-white/10 text-white resize-none"
+                />
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={toggleRecordingDidntGo}
+                  className={`w-full ${isRecordingDidntGo ? 'bg-red-500/20 text-red-400' : 'text-gray-400'}`}
+                >
+                  {isRecordingDidntGo ? <MicOff className="w-4 h-4 mr-2" /> : <Mic className="w-4 h-4 mr-2" />}
+                  {isRecordingDidntGo ? 'Stop Recording' : 'Voice Note'}
+                </Button>
+              </CardContent>
+            </Card>
+
+            {/* Complete Button */}
+            <Button
+              onClick={handleReadyToStart}
+              disabled={!allDecided}
+              className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {allDecided ? (
+                <>
+                  <CheckCircle2 className="w-4 h-4 mr-2" />
+                  Complete Review
+                </>
+              ) : (
+                <>
+                  <Clock className="w-4 h-4 mr-2" />
+                  Review {stats.pending} Pending Tasks
+                </>
+              )}
+            </Button>
+          </div>
         </div>
       </div>
     </div>
