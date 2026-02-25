@@ -317,21 +317,9 @@ export default function NexusDashboard() {
           </div>
         </div>
 
-        {/* Middle Section - OpenClaw Chat Banner */}
+        {/* OpenClaw AI Assistant */}
         <div className="border-2 border-primary/30 rounded-xl overflow-hidden bg-card">
-          <div className="bg-primary/10 px-4 py-3 border-b border-primary/20">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Brain className="w-5 h-5 text-primary" />
-                <span className="text-sm font-semibold text-foreground">OpenClaw AI Assistant</span>
-                <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              </div>
-              <span className="text-xs text-muted-foreground">
-                {mode === 'governed' ? 'Copilot + Outlook' : 'All AI Models'}
-              </span>
-            </div>
-          </div>
-          <div className="h-[400px] overflow-hidden">
+          <div className="h-[500px] overflow-hidden">
             <OpenClawChat />
           </div>
         </div>
