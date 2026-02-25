@@ -120,15 +120,7 @@ const menuItems: MenuItem[] = [
       { icon: TrendingUp, label: "Operations", path: "/operations" },
     ]
   },
-  { 
-    icon: Settings, 
-    label: "Settings", 
-    path: "/settings",
-    children: [
-      { icon: Mail, label: "Email Accounts", path: "/email/accounts" },
-      { icon: Globe, label: "Commercialization", path: "/commercialization" },
-    ]
-  },
+  { icon: Settings, label: "Settings", path: "/settings" },
 ];
 
 const SIDEBAR_WIDTH_KEY = "cepho-sidebar-width";
