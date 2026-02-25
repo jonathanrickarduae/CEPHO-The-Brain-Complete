@@ -23,7 +23,7 @@ import { getLoginUrl } from "@/const";
 import { useIsMobile } from "@/hooks/useMobile";
 import {
   LayoutDashboard, LogOut, PanelLeft, 
-  BookOpen, BarChart3, Lock, Briefcase, Activity, Brain, Sun, Users, Moon, Keyboard, Settings, TrendingUp, Info, Clock, Sparkles, Rocket, Inbox, Search, Video, Bell, Mic, Podcast, Heart, Globe, Library, Workflow, FileText, ChevronDown, ChevronRight, Mail, Volume2, CheckCircle2
+  BookOpen, BarChart3, Lock, Briefcase, Activity, Brain, Sun, Users, Moon, Keyboard, Settings, TrendingUp, Info, Clock, Sparkles, Rocket, Inbox, Search, Video, Bell, Mic, Podcast, Heart, Globe, Library, Workflow, FileText, ChevronDown, ChevronRight, Mail, Volume2, CheckCircle2, Star
 } from "lucide-react";
 import { CSSProperties, useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
@@ -89,7 +89,7 @@ const menuItems: MenuItem[] = [
     path: "/innovation-hub",
     children: [
       { icon: TrendingUp, label: "Innovation Hub", path: "/innovation-hub" },
-      { icon: Rocket, label: "Project Genesis", path: "/project-genesis" },
+      { icon: Star, label: "Project Genesis", path: "/project-genesis" },
       { icon: Workflow, label: "Workflows", path: "/workflows" },
       { icon: Users, label: "Persephone Board", path: "/persephone" },
     ]
