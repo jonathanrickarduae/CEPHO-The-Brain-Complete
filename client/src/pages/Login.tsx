@@ -197,7 +197,7 @@ export default function Login() {
         <CardHeader className="space-y-4 text-center">
           {/* CEPHO Logo - Animated neon blue brain */}
           <div className="flex justify-center">
-            <AnimatedBrainLogo size="lg" intensity="active" color="#00d4ff" />
+            <AnimatedBrainLogo size="xl" intensity="active" color="#00d4ff" />
           </div>
           
           {/* CEPHO Title - Blended neon colors */}

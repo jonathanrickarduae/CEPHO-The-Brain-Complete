@@ -3,7 +3,7 @@ import { useMemo } from "react";
 
 interface AnimatedBrainLogoProps {
   className?: string;
-  size?: "xs" | "sm" | "md" | "lg";
+  size?: "xs" | "sm" | "md" | "lg" | "xl";
   color?: string;
   intensity?: "subtle" | "gentle" | "active"; // How active the neurons are
 }
@@ -101,7 +101,8 @@ export default function AnimatedBrainLogo({
     xs: "w-8 h-8",
     sm: "w-12 h-12",
     md: "w-16 h-16",
-    lg: "w-24 h-24"
+    lg: "w-24 h-24",
+    xl: "w-32 h-32"
   };
   
   // Intensity settings
