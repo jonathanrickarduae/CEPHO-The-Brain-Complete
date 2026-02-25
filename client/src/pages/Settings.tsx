@@ -341,11 +341,12 @@ export default function Settings() {
                   </div>
                 </div>
 
-              <div className="bg-gray-800 rounded-xl border border-gray-700 p-6">
-                <h3 className="text-lg font-semibold text-white mb-6">Privacy Settings</h3>
-                
-                <div className="space-y-6">
-                  <div className="p-4 bg-gray-900 rounded-xl">
+                {/* Privacy Settings */}
+                <div className="bg-gray-800 rounded-xl border border-gray-700 p-6">
+                  <h3 className="text-lg font-semibold text-white mb-6">Privacy Settings</h3>
+                  
+                  <div className="space-y-6">
+                    <div className="p-4 bg-gray-900 rounded-xl">
                     <h4 className="font-medium text-white mb-2">Data Collection</h4>
                     <p className="text-sm text-foreground/70 mb-4">
                       Control what data your Chief of Staff can access and learn from.
@@ -367,9 +368,9 @@ export default function Settings() {
                         </label>
                       ))}
                     </div>
-                  </div>
+                    </div>
 
-                  <div className="p-4 bg-gray-900 rounded-xl">
+                    <div className="p-4 bg-gray-900 rounded-xl">
                     <h4 className="font-medium text-white mb-2">Data Retention</h4>
                     <p className="text-sm text-foreground/70 mb-4">
                       Choose how long to keep your data.
@@ -380,9 +381,9 @@ export default function Settings() {
                       <option>6 months</option>
                       <option>3 months</option>
                     </select>
-                  </div>
+                    </div>
 
-                  <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl">
+                    <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl">
                     <h4 className="font-medium text-red-400 mb-2">Danger Zone</h4>
                     <p className="text-sm text-foreground/70 mb-4">
                       Permanently delete your account and all associated data.
@@ -390,7 +391,9 @@ export default function Settings() {
                     <button className="px-4 py-2 bg-red-500/20 hover:bg-red-500/30 text-red-400 rounded-lg transition-colors">
                       Delete Account
                     </button>
+                    </div>
                   </div>
+                </div>
                 </div>
               </div>
             )}
