@@ -21,6 +21,37 @@ async function startServer() {
       ? path.resolve(__dirname, "public")
       : path.resolve(__dirname, "..", "dist", "public");
 
+  console.log(`[Server] Static path: ${staticPath}`);
+  console.log(`[Server] __dirname: ${__dirname}`);
+  console.log(`[Server] NODE_ENV: ${process.env.NODE_ENV}`);
+  
+  // Verify static files exist
+  const fs = require('fs');
+  const indexPath = path.join(staticPath, 'index.html');
+  if (fs.existsSync(staticPath)) {
+    console.log(`[Server] ✅ Static directory exists: ${staticPath}`);
+    if (fs.existsSync(indexPath)) {
+      console.log(`[Server] ✅ index.html exists`);
+    } else {
+      console.error(`[Server] ❌ index.html NOT FOUND at ${indexPath}`);
+    }
+    const files = fs.readdirSync(staticPath);
+    console.log(`[Server] Files in static directory: ${files.join(', ')}`);
+  } else {
+    console.error(`[Server] ❌ Static directory NOT FOUND: ${staticPath}`);
+  }
+
+  // Health check endpoint
+  app.get('/health', (_req, res) => {
+    res.status(200).json({ 
+      status: 'ok', 
+      timestamp: new Date().toISOString(),
+      staticPath: staticPath,
+      staticPathExists: fs.existsSync(staticPath),
+      indexHtmlExists: fs.existsSync(indexPath)
+    });
+  });
+
   // Serve static files with proper cache headers
   app.use(express.static(staticPath, {
     maxAge: 0, // Don't cache HTML
