@@ -63,10 +63,9 @@ const menuItems: MenuItem[] = [
   { 
     icon: Sun, 
     label: "The Signal", 
-    path: "/the-signal",
+    path: "/daily-brief",
     children: [
       { icon: Volume2, label: "Victoria's Brief", path: "/daily-brief" },
-      { icon: Sparkles, label: "Morning Signal", path: "/morning-signal" },
       { icon: Moon, label: "Evening Review", path: "/evening-review" },
     ]
   },
