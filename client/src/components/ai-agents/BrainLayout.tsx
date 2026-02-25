@@ -78,8 +78,8 @@ const menuItems: MenuItem[] = [
       { icon: CheckCircle2, label: "Tasks", path: "/chief-of-staff-enhanced" },
       { icon: Rocket, label: "Odyssey Management", path: "/development-pathway" },
       { icon: Brain, label: "Twin Training", path: "/cos-training" },
-      { icon: BarChart3, label: "Statistics", path: "/statistics" },
       { icon: Activity, label: "AI Agents", path: "/ai-agents-monitoring" },
+      { icon: BarChart3, label: "Analytics", path: "/statistics" },
     ]
   },
   { 
