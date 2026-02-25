@@ -4,6 +4,7 @@
 @import "./styles/mobile-responsive.css";
 @import "./styles/mobile-portrait.css";
 @import "./styles/mobile-enhanced.css";
+@import "./styles/mobile-fix-aggressive.css";
 
 @custom-variant dark (&:is(.dark *));
 @custom-variant light (&:is(.light *));

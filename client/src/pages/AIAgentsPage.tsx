@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'wouter';
+import { Bot, Activity, CheckCircle, Clock, TrendingUp, AlertCircle } from 'lucide-react';
 import AIAgentsVideo from '@/components/ai-agents/AIAgentsVideo';
 import { trpc } from '@/lib/trpc';
 
