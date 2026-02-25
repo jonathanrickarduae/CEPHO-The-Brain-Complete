@@ -65,7 +65,7 @@ export class EmailSyncService {
       const accounts = await db
         .select()
         .from(emailAccounts)
-        .where(and, 
+        .where(and(
           eq(emailAccounts.isActive, true),
           eq(emailAccounts.syncEnabled, true)
         ));
