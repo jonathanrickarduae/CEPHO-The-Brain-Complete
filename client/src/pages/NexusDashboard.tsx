@@ -203,18 +203,18 @@ export default function NexusDashboard() {
     <div className="h-[calc(100vh-56px)] md:h-screen flex flex-col bg-background">
       {/* Header */}
       <div className="border-b border-border bg-card/50 backdrop-blur-sm">
-        <div className="flex items-center justify-between px-6 py-4">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between px-4 sm:px-6 py-4 gap-3 sm:gap-0">
           <div className="flex items-center gap-3">
             <div>
-              <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
-                <LayoutDashboard className="h-8 w-8 text-cyan-400" />
+              <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground flex items-center gap-2 sm:gap-3">
+                <LayoutDashboard className="h-6 w-6 sm:h-8 sm:w-8 text-cyan-400" />
                 The Nexus
               </h1>
-              <p className="text-muted-foreground mt-1">Command Center</p>
+              <p className="text-sm sm:text-base text-muted-foreground mt-1">Command Center</p>
             </div>
           </div>
           
-          <div className="flex items-center gap-4">
+          <div className="flex flex-wrap items-center gap-2 sm:gap-4 w-full sm:w-auto">
             {/* Governance Mode Toggle */}
             <div className="flex items-center gap-2">
               <button
@@ -250,7 +250,7 @@ export default function NexusDashboard() {
       </div>
 
       {/* Main Content - Single Column Layout */}
-      <div className="flex-1 flex flex-col gap-6 p-6 overflow-auto">
+      <div className="flex-1 flex flex-col gap-4 sm:gap-6 p-3 sm:p-4 md:p-6 overflow-auto">
         {/* Top Section - Dashboard Info */}
         <div className="flex flex-col gap-6">
           {/* RAG Status Row */}
@@ -267,7 +267,7 @@ export default function NexusDashboard() {
           {/* Quick Access Skills */}
           <div>
             <h2 className="text-sm font-semibold text-muted-foreground mb-3">QUICK ACCESS</h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-2 sm:gap-3">
             {skillButtons.map((skill, idx) => (
               <button
                 key={idx}
@@ -284,7 +284,7 @@ export default function NexusDashboard() {
           {/* Key Metrics */}
           <div>
             <h2 className="text-sm font-semibold text-muted-foreground mb-3">KEY METRICS</h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
             <MetricCard 
               icon={Lightbulb} 
               label="Innovation Ideas" 

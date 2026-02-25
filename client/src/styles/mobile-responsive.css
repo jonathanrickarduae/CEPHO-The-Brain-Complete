@@ -1,59 +1,434 @@
 /**
- * Mobile Responsive Utility Classes
+ * Comprehensive Mobile Responsive Styles
  * 
- * Global styles to ensure mobile responsiveness across all pages
+ * Global styles to ensure excellent mobile experience across all pages
  */
 
-/* Container Responsiveness */
-.container-responsive {
-  @apply px-4 sm:px-6 lg:px-8;
+/* ============================================
+   BASE MOBILE RESETS
+   ============================================ */
+
+/* Ensure proper viewport behavior */
+html {
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
 }
 
-/* Text Responsiveness */
+body {
+  overflow-x: hidden;
+}
+
+/* ============================================
+   CONTAINER & LAYOUT RESPONSIVENESS
+   ============================================ */
+
+.container-responsive {
+  @apply px-4 sm:px-6 lg:px-8;
+  max-width: 100%;
+}
+
+/* Page containers */
+@media (max-width: 640px) {
+  .min-h-screen {
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
+  }
+
+  /* Main content areas */
+  main, [role="main"] {
+    padding: 1rem;
+    width: 100%;
+    overflow-x: hidden;
+  }
+
+  /* Sidebar handling on mobile */
+  aside, [role="complementary"] {
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+/* ============================================
+   TEXT RESPONSIVENESS
+   ============================================ */
+
 .text-responsive-xl {
-  @apply text-2xl sm:text-3xl lg:text-4xl;
+  @apply text-xl sm:text-2xl md:text-3xl lg:text-4xl;
 }
 
 .text-responsive-lg {
-  @apply text-xl sm:text-2xl lg:text-3xl;
+  @apply text-lg sm:text-xl md:text-2xl lg:text-3xl;
 }
 
 .text-responsive-md {
-  @apply text-lg sm:text-xl lg:text-2xl;
+  @apply text-base sm:text-lg md:text-xl lg:text-2xl;
 }
 
 .text-responsive-sm {
   @apply text-sm sm:text-base;
 }
 
-/* Button Responsiveness */
+.text-responsive-xs {
+  @apply text-xs sm:text-sm;
+}
+
+/* Ensure text doesn't overflow on mobile */
+@media (max-width: 640px) {
+  h1, h2, h3, h4, h5, h6, p, span, div {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+  }
+
+  /* Reduce heading sizes on mobile */
+  h1 {
+    font-size: 1.75rem !important;
+    line-height: 2rem !important;
+  }
+
+  h2 {
+    font-size: 1.5rem !important;
+    line-height: 1.75rem !important;
+  }
+
+  h3 {
+    font-size: 1.25rem !important;
+    line-height: 1.5rem !important;
+  }
+
+  h4, h5, h6 {
+    font-size: 1rem !important;
+    line-height: 1.25rem !important;
+  }
+}
+
+/* ============================================
+   BUTTON & INTERACTIVE ELEMENT RESPONSIVENESS
+   ============================================ */
+
 .btn-responsive {
   @apply px-3 py-2 sm:px-4 sm:py-2.5 lg:px-6 lg:py-3;
   @apply text-sm sm:text-base;
 }
 
-/* Card Responsiveness */
-.card-responsive {
-  @apply p-4 sm:p-6 lg:p-8;
+/* Touch-friendly button sizes */
+@media (max-width: 640px) {
+  button, 
+  a[role="button"],
+  [role="button"],
+  input[type="button"],
+  input[type="submit"] {
+    min-height: 44px;
+    min-width: 44px;
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+  }
+
+  /* Icon buttons */
+  button:has(svg:only-child),
+  [role="button"]:has(svg:only-child) {
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0.5rem;
+  }
 }
 
-/* Grid Responsiveness */
+/* ============================================
+   CARD & PANEL RESPONSIVENESS
+   ============================================ */
+
+.card-responsive {
+  @apply p-3 sm:p-4 md:p-6 lg:p-8;
+}
+
+@media (max-width: 640px) {
+  [class*="card"],
+  [class*="Card"] {
+    padding: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+
+  /* Card headers */
+  [class*="CardHeader"],
+  [class*="card-header"] {
+    padding: 0.75rem;
+  }
+
+  /* Card content */
+  [class*="CardContent"],
+  [class*="card-content"] {
+    padding: 0.75rem;
+  }
+}
+
+/* ============================================
+   GRID & LAYOUT RESPONSIVENESS
+   ============================================ */
+
 .grid-responsive-1-2-3 {
-  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3;
+  @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3;
+}
+
+.grid-responsive-1-2-4 {
+  @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4;
 }
 
 .grid-responsive-1-2 {
   @apply grid grid-cols-1 md:grid-cols-2;
 }
 
-/* Spacing Responsiveness */
+.grid-responsive-1-3 {
+  @apply grid grid-cols-1 lg:grid-cols-3;
+}
+
+/* Force single column on mobile */
+@media (max-width: 640px) {
+  .grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Flex to column on mobile */
+  .flex:not(.flex-col) {
+    flex-direction: column !important;
+  }
+
+  .flex.flex-row {
+    flex-direction: column !important;
+  }
+}
+
+/* ============================================
+   SPACING RESPONSIVENESS
+   ============================================ */
+
 .gap-responsive {
-  @apply gap-4 sm:gap-6 lg:gap-8;
+  @apply gap-3 sm:gap-4 md:gap-6 lg:gap-8;
 }
 
 .space-y-responsive {
-  @apply space-y-4 sm:space-y-6 lg:space-y-8;
+  @apply space-y-3 sm:space-y-4 md:space-y-6 lg:space-y-8;
 }
+
+.space-x-responsive {
+  @apply space-x-2 sm:space-x-3 md:space-x-4 lg:space-x-6;
+}
+
+@media (max-width: 640px) {
+  /* Reduce spacing on mobile */
+  .space-y-8 { @apply space-y-4; }
+  .space-y-6 { @apply space-y-3; }
+  .space-y-4 { @apply space-y-2; }
+  
+  .gap-8 { @apply gap-4; }
+  .gap-6 { @apply gap-3; }
+  .gap-4 { @apply gap-2; }
+  
+  .p-8 { @apply p-4; }
+  .p-6 { @apply p-3; }
+  
+  .m-8 { @apply m-4; }
+  .m-6 { @apply m-3; }
+}
+
+/* ============================================
+   TABLE RESPONSIVENESS
+   ============================================ */
+
+@media (max-width: 640px) {
+  table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    white-space: nowrap;
+  }
+
+  thead {
+    display: none;
+  }
+
+  tbody, tr, td {
+    display: block;
+    width: 100%;
+  }
+
+  tr {
+    margin-bottom: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+  }
+
+  td {
+    text-align: right;
+    padding: 0.5rem;
+    position: relative;
+    padding-left: 50%;
+  }
+
+  td:before {
+    content: attr(data-label);
+    position: absolute;
+    left: 0.75rem;
+    width: 45%;
+    padding-right: 0.5rem;
+    white-space: nowrap;
+    text-align: left;
+    font-weight: bold;
+    opacity: 0.7;
+  }
+}
+
+/* ============================================
+   MODAL & DIALOG RESPONSIVENESS
+   ============================================ */
+
+@media (max-width: 640px) {
+  [role="dialog"],
+  [role="alertdialog"],
+  .dialog,
+  .modal {
+    max-width: calc(100vw - 1rem) !important;
+    width: calc(100vw - 1rem) !important;
+    margin: 0.5rem;
+    max-height: calc(100vh - 2rem);
+    overflow-y: auto;
+  }
+
+  /* Dialog content */
+  [role="dialog"] > div,
+  .dialog-content {
+    padding: 1rem;
+  }
+
+  /* Dialog headers */
+  [class*="DialogHeader"],
+  [class*="dialog-header"] {
+    padding: 1rem;
+  }
+
+  /* Dialog footers */
+  [class*="DialogFooter"],
+  [class*="dialog-footer"] {
+    padding: 1rem;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  [class*="DialogFooter"] button,
+  [class*="dialog-footer"] button {
+    width: 100%;
+  }
+}
+
+/* ============================================
+   FORM RESPONSIVENESS
+   ============================================ */
+
+@media (max-width: 640px) {
+  input,
+  textarea,
+  select {
+    font-size: 16px !important; /* Prevents zoom on iOS */
+    width: 100%;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  /* Form groups */
+  .form-group,
+  [class*="FormGroup"] {
+    margin-bottom: 1rem;
+  }
+
+  /* Input groups */
+  .input-group {
+    flex-direction: column;
+  }
+
+  .input-group > * {
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+}
+
+/* ============================================
+   NAVIGATION & SIDEBAR RESPONSIVENESS
+   ============================================ */
+
+@media (max-width: 640px) {
+  /* Sidebar */
+  nav[class*="sidebar"],
+  aside[class*="sidebar"],
+  [role="navigation"] {
+    width: 100%;
+    max-width: 280px;
+  }
+
+  /* Navigation items */
+  nav a,
+  nav button {
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+  }
+
+  /* Breadcrumbs */
+  [aria-label="breadcrumb"],
+  .breadcrumb {
+    font-size: 0.75rem;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+}
+
+/* ============================================
+   TABS RESPONSIVENESS
+   ============================================ */
+
+@media (max-width: 640px) {
+  [role="tablist"] {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    flex-wrap: nowrap !important;
+  }
+
+  [role="tab"] {
+    white-space: nowrap;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+    min-width: auto;
+  }
+}
+
+/* ============================================
+   DROPDOWN & SELECT RESPONSIVENESS
+   ============================================ */
+
+@media (max-width: 640px) {
+  [role="menu"],
+  [role="listbox"],
+  .dropdown-menu {
+    max-width: calc(100vw - 2rem);
+    max-height: 60vh;
+    overflow-y: auto;
+  }
+
+  select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    padding-right: 2rem;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23fff' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+  }
+}
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
 
 /* Hide/Show on Mobile */
 .hide-mobile {
@@ -64,43 +439,147 @@
   @apply block sm:hidden;
 }
 
-/* Mobile-specific overrides */
+.hide-tablet {
+  @apply hidden lg:block;
+}
+
+.show-tablet {
+  @apply block lg:hidden;
+}
+
+/* Mobile-only utilities */
 @media (max-width: 640px) {
-  /* Ensure all containers have proper padding */
-  .min-h-screen {
-    min-height: 100vh;
-    min-height: -webkit-fill-available;
+  .mobile-full-width {
+    width: 100% !important;
   }
 
-  /* Fix button sizes for touch targets */
-  button, a[role="button"] {
-    min-height: 44px;
-    min-width: 44px;
+  .mobile-text-center {
+    text-align: center !important;
   }
 
-  /* Ensure text doesn't overflow */
-  h1, h2, h3, h4, h5, h6, p {
-    word-wrap: break-word;
-    overflow-wrap: break-word;
+  .mobile-no-padding {
+    padding: 0 !important;
   }
 
-  /* Fix table overflow */
-  table {
-    display: block;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  /* Fix modal/dialog widths */
-  [role="dialog"] {
-    max-width: calc(100vw - 2rem);
+  .mobile-no-margin {
+    margin: 0 !important;
   }
 }
 
-/* Tablet-specific overrides */
-@media (min-width: 641px) and (max-width: 1024px) {
-  /* Optimize for tablet */
-  .container {
-    max-width: 100%;
+/* ============================================
+   SPECIFIC COMPONENT FIXES
+   ============================================ */
+
+/* ClawBot Chat */
+@media (max-width: 640px) {
+  [class*="ClawBot"],
+  [class*="chat-widget"] {
+    bottom: 1rem !important;
+    right: 1rem !important;
+    max-width: calc(100vw - 2rem) !important;
+  }
+}
+
+/* Dashboard Cards */
+@media (max-width: 640px) {
+  [class*="dashboard"] .grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  [class*="metric-card"],
+  [class*="stat-card"] {
+    min-width: 100%;
+  }
+}
+
+/* Settings Page */
+@media (max-width: 640px) {
+  [class*="settings"] {
+    flex-direction: column !important;
+  }
+
+  [class*="settings-sidebar"] {
+    width: 100% !important;
+    margin-bottom: 1rem;
+  }
+
+  [class*="settings-content"] {
+    width: 100% !important;
+  }
+}
+
+/* Workflows Page */
+@media (max-width: 640px) {
+  [class*="workflow-card"] {
+    padding: 0.75rem;
+  }
+
+  [class*="workflow-step"] {
+    padding: 0.5rem;
+  }
+}
+
+/* ============================================
+   PRINT STYLES
+   ============================================ */
+
+@media print {
+  .hide-mobile,
+  .show-mobile,
+  button,
+  nav,
+  aside {
+    display: none !important;
+  }
+
+  body {
+    font-size: 12pt;
+  }
+
+  h1 { font-size: 18pt; }
+  h2 { font-size: 16pt; }
+  h3 { font-size: 14pt; }
+}
+
+/* ============================================
+   ACCESSIBILITY ENHANCEMENTS
+   ============================================ */
+
+/* Focus visible for keyboard navigation */
+@media (max-width: 640px) {
+  *:focus-visible {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+  }
+
+  /* Ensure adequate contrast */
+  button:disabled,
+  [disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+/* ============================================
+   PERFORMANCE OPTIMIZATIONS
+   ============================================ */
+
+/* Reduce animations on mobile for better performance */
+@media (max-width: 640px) and (prefers-reduced-motion: no-preference) {
+  * {
+    animation-duration: 0.3s !important;
+    transition-duration: 0.2s !important;
+  }
+}
+
+/* Disable animations if user prefers reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

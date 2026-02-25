@@ -14,23 +14,23 @@ export default function OperationsPage() {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <div className="border-b border-border px-6 py-4">
-        <div className="flex items-center justify-between">
+      <div className="border-b border-border px-4 sm:px-6 py-4">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0">
           <div>
-            <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
-              <BarChart3 className="h-8 w-8 text-[#E91E8C]" />
+            <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground flex items-center gap-2 sm:gap-3">
+              <BarChart3 className="h-6 w-6 sm:h-8 sm:w-8 text-[#E91E8C]" />
               Chief of Staff Dashboard
             </h1>
-            <p className="text-muted-foreground mt-1">
+            <p className="text-sm sm:text-base text-muted-foreground mt-1">
               Command centre for project oversight, team performance, and strategic operations
             </p>
           </div>
         </div>
       </div>
 
-      <div className="p-6">
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="bg-muted/50 p-1">
+      <div className="p-3 sm:p-4 md:p-6">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4 sm:space-y-6">
+          <TabsList className="bg-muted/50 p-1 flex-wrap h-auto gap-1">
             <TabsTrigger value="command" className="flex items-center gap-2">
               <BarChart3 className="w-4 h-4" />
               Command Centre

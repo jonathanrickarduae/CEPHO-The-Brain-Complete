@@ -131,7 +131,7 @@ export function CommandCentre() {
   return (
     <div className="space-y-8">
       {/* Overview Stats - Button Style */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
         <Button
           variant="outline"
           className="h-auto p-6 flex-col items-start bg-gradient-to-br from-cyan-500/10 to-blue-500/10 border-cyan-500/30 hover:border-cyan-500/50 transition-all"
@@ -193,7 +193,7 @@ export function CommandCentre() {
           <Target className="w-6 h-6 text-cyan-400" />
           Project Status
         </h2>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-3 sm:gap-4">
           {mockProjects.map((project) => (
             <Button
               key={project.id}
@@ -281,7 +281,7 @@ export function CommandCentre() {
           <Users className="w-6 h-6 text-purple-400" />
           Team Performance
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
           {mockTeamMetrics.map((team) => (
             <Button
               key={team.name}
