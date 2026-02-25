@@ -23,7 +23,7 @@ import { getLoginUrl } from "@/const";
 import { useIsMobile } from "@/hooks/useMobile";
 import {
   LayoutDashboard, LogOut, PanelLeft, 
-  BookOpen, BarChart3, Lock, Briefcase, Activity, Brain, Sun, Users, Moon, Keyboard, Settings, TrendingUp, Info, Clock, Sparkles, Rocket, Inbox, Search, Video, Bell, Mic, Podcast, Heart, Globe, Library, Workflow, FileText, ChevronDown, ChevronRight, Mail, Volume2
+  BookOpen, BarChart3, Lock, Briefcase, Activity, Brain, Sun, Users, Moon, Keyboard, Settings, TrendingUp, Info, Clock, Sparkles, Rocket, Inbox, Search, Video, Bell, Mic, Podcast, Heart, Globe, Library, Workflow, FileText, ChevronDown, ChevronRight, Mail, Volume2, CheckCircle2
 } from "lucide-react";
 import { CSSProperties, useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
@@ -75,9 +75,10 @@ const menuItems: MenuItem[] = [
     label: "Chief of Staff", 
     path: "/digital-twin",
     children: [
-      { icon: Brain, label: "Enhanced COS", path: "/chief-of-staff-enhanced" },
-      { icon: Activity, label: "Development Pathway", path: "/development-pathway" },
-      { icon: Brain, label: "COS Training", path: "/cos-training" },
+      { icon: CheckCircle2, label: "Tasks", path: "/chief-of-staff-enhanced" },
+      { icon: Rocket, label: "Odyssey Management", path: "/development-pathway" },
+      { icon: Brain, label: "Twin Training", path: "/cos-training" },
+      { icon: BarChart3, label: "Statistics", path: "/statistics" },
       { icon: Activity, label: "AI Agents", path: "/ai-agents-monitoring" },
     ]
   },
@@ -123,9 +124,8 @@ const menuItems: MenuItem[] = [
   { 
     icon: BarChart3, 
     label: "Analytics", 
-    path: "/statistics",
+    path: "/central-hub",
     children: [
-      { icon: BarChart3, label: "Statistics", path: "/statistics" },
       { icon: Globe, label: "Central Hub", path: "/central-hub" },
       { icon: TrendingUp, label: "Operations", path: "/operations" },
     ]
