@@ -52,5 +52,5 @@ The Innovation Flywheel is the first step in the broader 6-phase venture develop
 4.  **Refine and Brief:**
     *   Based on the assessment and consultation, refine the idea and generate a brief.
 
-5.  **Promote to Project Genesis:**
+5.  **Promote to Odyssey Engine > Project Genesis:**
     *   Once an idea is validated and refined, it can be promoted to Project Genesis to begin the formal venture development process.

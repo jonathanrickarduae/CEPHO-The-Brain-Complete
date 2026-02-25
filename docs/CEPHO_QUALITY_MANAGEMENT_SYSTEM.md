@@ -142,7 +142,7 @@ User → Frontend → Backend → Auth Service → Database
 
 ---
 
-### 3.2 Daily Brief Generation (Morning Signal)
+### 3.2 Victoria's Brief Generation
 
 **Process Owner:** Chief of Staff  
 **Frequency:** Daily at 6:00 AM  
@@ -180,7 +180,7 @@ User → Frontend → Backend → Auth Service → Database
 
 5. **Delivery (6:30 AM)**
    - Send notification to user
-   - Display on Morning Signal page
+   - Display on Victoria's Brief page
    - Available via mobile
    - Email summary sent
 
@@ -205,7 +205,7 @@ Competitor ───┘                                    Victoria's Brief
 - All links must be valid
 
 **File Locations:**
-- `/client/src/pages/DailyBrief.tsx`
+- `/client/src/pages/DailyBrief.tsx` (Victoria's Brief)
 - `/server/services/daily-brief.service.ts`
 - `/server/services/pdf-generation.service.ts`
 - `/server/services/video-generation.service.ts`
@@ -273,7 +273,7 @@ AI Logs ──────┘
 
 ---
 
-### 3.4 Project Genesis Workflow
+### 3.4 Odyssey Engine: Project Genesis Workflow
 
 **Process Owner:** Project Manager  
 **Frequency:** Per project  
@@ -285,7 +285,7 @@ AI Logs ──────┘
 **Objective:** Define the project vision and validate feasibility
 
 **Process Flow:**
-1. Submit project idea via Innovation Hub
+1. Submit project idea via Odyssey Engine > Innovation Hub
 2. AI-SMEs analyze feasibility
 3. Market research conducted
 4. Initial concept document created

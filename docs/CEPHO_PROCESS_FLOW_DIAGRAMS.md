@@ -28,7 +28,7 @@
 └─────────────────────────────────────────────────────────────────┘
 
 06:00 AM ─┐
-          │  MORNING SIGNAL GENERATION
+          │  VICTORIA'S BRIEF GENERATION
           ├─► Data Collection
           │   ├─ Calendar Events
           │   ├─ Email Inbox (Gmail/Outlook)
@@ -121,11 +121,11 @@
 
 ---
 
-### 1.2 Morning Signal Generation Flow (Detailed)
+### 1.2 Victoria's Brief Generation Flow (Detailed)
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│              MORNING SIGNAL GENERATION PROCESS                   │
+│              VICTORIA'S BRIEF GENERATION PROCESS                   │
 └─────────────────────────────────────────────────────────────────┘
 
 START (06:00:00)
