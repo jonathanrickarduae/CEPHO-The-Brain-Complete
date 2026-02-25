@@ -2608,7 +2608,27 @@ export async function getDocuments(
     conditions.push(eq(generatedDocuments.qaStatus, filters.qaStatus as any));
   }
   
-  return db.select().from(generatedDocuments)
+  return db.select({
+    id: generatedDocuments.id,
+    documentId: generatedDocuments.documentId,
+    userId: generatedDocuments.userId,
+    title: generatedDocuments.title,
+    type: generatedDocuments.type,
+    content: generatedDocuments.content,
+    classification: generatedDocuments.classification,
+    qaStatus: generatedDocuments.qaStatus,
+    qaApprover: generatedDocuments.qaApprover,
+    qaApprovedAt: generatedDocuments.qaApprovedAt,
+    qaNotes: generatedDocuments.qaNotes,
+    markdownUrl: generatedDocuments.markdownUrl,
+    htmlUrl: generatedDocuments.htmlUrl,
+    pdfUrl: generatedDocuments.pdfUrl,
+    relatedIdeaId: generatedDocuments.relatedIdeaId,
+    relatedProjectId: generatedDocuments.relatedProjectId,
+    metadata: generatedDocuments.metadata,
+    createdAt: generatedDocuments.createdAt,
+    updatedAt: generatedDocuments.updatedAt,
+  }).from(generatedDocuments)
     .where(and(...conditions))
     .orderBy(desc(generatedDocuments.createdAt))
     .limit(filters?.limit || 50)
