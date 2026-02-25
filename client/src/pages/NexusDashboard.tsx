@@ -331,7 +331,7 @@ export default function NexusDashboard() {
               </span>
             </div>
           </div>
-          <div className="h-[300px] overflow-hidden">
+          <div className="h-[400px] overflow-hidden">
             <OpenClawChat />
           </div>
         </div>

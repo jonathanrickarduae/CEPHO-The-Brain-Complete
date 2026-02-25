@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { 
-  Settings as SettingsIcon, User, Calendar, Database, 
+  Settings as SettingsIcon, Settings2, User, Calendar, Database, 
   Bell, Shield, Palette, CreditCard, Users,
   ChevronRight, Check, Search, Plus
 } from 'lucide-react';
