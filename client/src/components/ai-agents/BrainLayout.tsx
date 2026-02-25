@@ -80,6 +80,7 @@ const menuItems: MenuItem[] = [
       { icon: Activity, label: "AI Agents", path: "/ai-agents-monitoring" },
       { icon: TrendingUp, label: "Operations", path: "/operations" },
       { icon: BarChart3, label: "Analytics", path: "/statistics" },
+      { icon: Library, label: "Document Library", path: "/documents" },
     ]
   },
   { 
@@ -99,16 +100,6 @@ const menuItems: MenuItem[] = [
     path: "/expert-network",
     children: [
       { icon: Users, label: "AI-SMEs", path: "/ai-experts" },
-    ]
-  },
-
-  { 
-    icon: Library, 
-    label: "Knowledge", 
-    path: "/library",
-    children: [
-      { icon: Library, label: "Library", path: "/library" },
-      { icon: FileText, label: "Documents", path: "/documents" },
     ]
   },
   { icon: Lock, label: "Vault", path: "/vault" },
