@@ -1,6 +1,9 @@
 import type { CreateExpressContextOptions } from "@trpc/server/adapters/express";
 import type { User } from "../../drizzle/schema";
-import { sdk } from "./sdk";
+import { verifySupabaseSession } from "./supabase-auth";
+import { db } from "../db";
+import { users } from "../../drizzle/schema";
+import { eq } from "drizzle-orm";
 
 export type TrpcContext = {
   req: CreateExpressContextOptions["req"];
@@ -13,26 +16,28 @@ export async function createContext(
 ): Promise<TrpcContext> {
   let user: User | null = null;
 
-  // Temporary bypass for testing
-  if (process.env.VITE_AUTH_BYPASS === 'true') {
-    return {
-      req: opts.req,
-      res: opts.res,
-      user: {
-        id: 1,
-        email: 'jonathanrickarduae@gmail.com',
-        name: 'Jonathan Rickard',
-        password: '',
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },
-    };
-  }
-
   try {
-    user = await sdk.authenticateRequest(opts.req);
+    // Verify Supabase session
+    const supabaseUser = await verifySupabaseSession(opts.req);
+    
+    if (supabaseUser) {
+      // Find or create user in our database
+      const existingUsers = await db.select().from(users).where(eq(users.email, supabaseUser.email!));
+      
+      if (existingUsers.length > 0) {
+        user = existingUsers[0];
+      } else {
+        // Create new user from Supabase auth
+        const [newUser] = await db.insert(users).values({
+          email: supabaseUser.email!,
+          name: supabaseUser.user_metadata?.name || supabaseUser.email!.split('@')[0],
+          password: '', // Not used with Supabase Auth
+        }).returning();
+        user = newUser;
+      }
+    }
   } catch (error) {
-    // Authentication is optional for public procedures.
+    console.error('Error in createContext:', error);
     user = null;
   }
 

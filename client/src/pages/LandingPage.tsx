@@ -6,6 +6,7 @@ import { Loader2, Lock, Mail } from 'lucide-react';
 import { useLocation } from 'wouter';
 import { toast } from 'sonner';
 import LoadingScreen from '@/components/LoadingScreen';
+import { useSupabaseAuth } from '@/_core/hooks/useSupabaseAuth';
 
 export default function LandingPage() {
   const [, navigate] = useLocation();
@@ -29,26 +30,40 @@ export default function LandingPage() {
     setTimeout(() => setShowLogin(true), 1000);
   }, []);
 
+  const { signIn } = useSupabaseAuth();
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
-    // Save credentials if remember me is checked
-    if (rememberMe) {
-      localStorage.setItem('cepho_email', email);
-      localStorage.setItem('cepho_remember', 'true');
-    } else {
-      localStorage.removeItem('cepho_email');
-      localStorage.removeItem('cepho_remember');
-    }
+    try {
+      // Save credentials if remember me is checked
+      if (rememberMe) {
+        localStorage.setItem('cepho_email', email);
+        localStorage.setItem('cepho_remember', 'true');
+      } else {
+        localStorage.removeItem('cepho_email');
+        localStorage.removeItem('cepho_remember');
+      }
 
-    // Simulate login (replace with actual auth)
-    setTimeout(() => {
-      // Save auth token
-      localStorage.setItem('cepho_auth_token', 'authenticated');
-      toast.success('Welcome to CEPHO.AI');
-      navigate('/nexus');
-    }, 2000);
+      // Sign in with Supabase
+      const { data, error } = await signIn(email, password);
+
+      if (error) {
+        toast.error(error.message || 'Failed to sign in');
+        setIsLoading(false);
+        return;
+      }
+
+      if (data.user) {
+        toast.success('Welcome to CEPHO.AI');
+        navigate('/nexus');
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      toast.error('An unexpected error occurred');
+      setIsLoading(false);
+    }
   };
 
   if (isLoading) {
