@@ -120,6 +120,7 @@
   },
   "devDependencies": {
     "@builder.io/vite-plugin-jsx-loc": "^0.1.1",
+    "@playwright/test": "^1.58.2",
     "@tailwindcss/typography": "^0.5.15",
     "@tailwindcss/vite": "^4.1.3",
     "@testing-library/jest-dom": "^6.9.1",
@@ -145,6 +146,7 @@
     "jest": "^30.2.0",
     "jest-environment-jsdom": "^30.2.0",
     "jsdom": "^28.1.0",
+    "playwright": "^1.58.2",
     "pnpm": "^10.15.1",
     "postcss": "^8.4.47",
     "prettier": "^3.6.2",
