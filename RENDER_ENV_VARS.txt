@@ -1,0 +1,28 @@
+# RENDER ENVIRONMENT VARIABLES
+# Copy these to: Render Dashboard → Your Service → Environment → Add Environment Variable
+
+# ============================================
+# DATABASE
+# ============================================
+DATABASE_URL=postgresql://postgres.xgoxduebjnlsrljzksvd:8Y9K8vfPWwsyu5GH@aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres
+
+# ============================================
+# SUPABASE (Backend)
+# ============================================
+SUPABASE_URL=https://xgoxduebjnlsrljzksvd.supabase.co
+SUPABASE_SERVICE_ROLE_KEY=[You need to get this from Supabase Dashboard → Project Settings → API → service_role key]
+SUPABASE_JWT_SECRET=aRcFCmAp12ru5PBAzSzNBnwYfJaR8EagGNcekcZGn17VpUWX4HWICghZzzccW+MS7bPGdgyhvN7LTtROUePr8g==
+
+# ============================================
+# SUPABASE (Frontend - for Vite build)
+# ============================================
+VITE_SUPABASE_URL=https://xgoxduebjnlsrljzksvd.supabase.co
+VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhnb3hkdWViam5sc3Jsanprc3ZkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAwMDY4NDcsImV4cCI6MjA4NTU4Mjg0N30.zID48Whq09L7Pxl2pZeHewVEIprULWLXZHljhrEgSDk
+
+# ============================================
+# NOTES
+# ============================================
+# 1. All these variables should be added to Render Dashboard
+# 2. After adding/changing variables, Render will automatically redeploy
+# 3. Keep this file secure - it contains sensitive credentials
+# 4. The SUPABASE_SERVICE_ROLE_KEY needs to be filled in from Supabase Dashboard

@@ -124,9 +124,7 @@ export default function BrainLayout({
     return <DashboardLayoutSkeleton />
   }
 
-  if (!user) {
-    return <CephoLandingPage />;
-  }
+  // Removed CephoLandingPage - users go directly to login page
 
   return (
     <SidebarProvider
