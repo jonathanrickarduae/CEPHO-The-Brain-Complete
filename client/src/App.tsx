@@ -124,7 +124,9 @@ function Router() {
     <Suspense fallback={<PageLoader />}>
       <Switch>
         {/* Landing page */}
-        <Route path="/" exact component={LandingPage} />
+        <Route path="/" exact>
+          <WithLayout><NexusDashboard /></WithLayout>
+        </Route>
         
         {/* Login page */}
         <Route path="/login" component={LandingPage} />
