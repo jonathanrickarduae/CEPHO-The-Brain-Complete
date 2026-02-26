@@ -9,6 +9,8 @@ import { cacheService } from './services/cache/redis-cache.service';
 import healthRouter from './routers/health.router';
 import { csrfTokenMiddleware, csrfValidationMiddleware, csrfTokenHandler } from './middleware/csrf-protection';
 import { apmMiddleware, metricsHandler } from './services/monitoring/apm.service';
+import { apiAnalytics } from './services/monitoring/api-analytics.service';
+import analyticsRouter from './routers/analytics.router';
 
 /**
  * Setup all middleware for the Express application
@@ -21,13 +23,17 @@ export async function setupMiddleware(app: Express) {
   app.use(apmMiddleware);
   console.log('[Middleware] ✅ APM monitoring enabled');
 
-  // 2. Request ID tracking (must be first for logging)
+  // 2. API usage analytics tracking
+  app.use(apiAnalytics.trackRequest());
+  console.log('[Middleware] ✅ API analytics tracking enabled');
+
+  // 3. Request ID tracking (must be first for logging)
   app.use(requestIdMiddleware);
 
-  // 3. HTTP request logging
+  // 4. HTTP request logging
   app.use(httpLoggerMiddleware);
 
-  // 4. Initialize error tracking (Sentry)
+  // 5. Initialize error tracking (Sentry)
   if (process.env.SENTRY_DSN) {
     errorTrackerService.initialize(app);
     console.log('[Middleware] ✅ Error tracking initialized');
@@ -35,18 +41,18 @@ export async function setupMiddleware(app: Express) {
     console.log('[Middleware] ⚠️  Sentry DSN not configured, error tracking disabled');
   }
 
-  // 5. Security headers (Helmet.js)
+  // 6. Security headers (Helmet.js)
   configureSecurityHeaders(app);
   console.log('[Middleware] ✅ Security headers configured');
 
-  // 6. Body parsing is handled in server/_core/index.ts
+  // 7. Body parsing is handled in server/_core/index.ts
   // (Removed duplicate to avoid conflicts)
 
-  // 7. Input sanitization (XSS prevention)
+  // 8. Input sanitization (XSS prevention)
   applySanitizationMiddleware(app);
   console.log('[Middleware] ✅ Input sanitization enabled');
 
-  // 8. CSRF protection
+  // 9. CSRF protection
   app.use(csrfTokenMiddleware);
   app.get('/api/csrf-token', csrfTokenHandler);
   console.log('[Middleware] ✅ CSRF protection enabled');
@@ -82,7 +88,11 @@ export async function setupMiddleware(app: Express) {
   app.get('/api/metrics', metricsHandler);
   console.log('[Middleware] ✅ Prometheus metrics endpoint registered');
 
-  // 13. Health check routes
+  // 13. Analytics endpoints
+  app.use('/api/analytics', analyticsRouter);
+  console.log('[Middleware] ✅ API analytics endpoints registered');
+
+  // 14. Health check routes
   app.use(healthRouter);
   console.log('[Middleware] ✅ Health check endpoints registered');
 
