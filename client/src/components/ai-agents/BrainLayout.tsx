@@ -124,9 +124,10 @@ export default function BrainLayout({
     return <DashboardLayoutSkeleton />
   }
 
-  if (!user) {
-    return <CephoLandingPage />;
-  }
+  // Authentication disabled - allow access without user
+  // if (!user) {
+  //   return <CephoLandingPage />;
+  // }
 
   return (
     <SidebarProvider
