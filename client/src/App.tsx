@@ -94,22 +94,6 @@ const ProjectGenesisWizard = lazy(() => import("./pages/ProjectGenesisWizard"));
 
 // Wrapper component for pages that need the sidebar layout with page transitions
 function WithLayout({ children }: { children: React.ReactNode }) {
-  const [, navigate] = useLocation();
-
-  useEffect(() => {
-    const authToken = localStorage.getItem('cepho_auth_token');
-    
-    if (!authToken) {
-      navigate('/login');
-    }
-  }, [navigate]);
-
-  const authToken = localStorage.getItem('cepho_auth_token');
-  
-  if (!authToken) {
-    return null;
-  }
-
   return (
     <BrainLayout>
       <PageTransition className="h-full">
