@@ -14,15 +14,9 @@ checkAppVersion();
 
 const queryClient = new QueryClient();
 
-const redirectToLoginIfUnauthorized = (error: unknown) => {
-  if (!(error instanceof TRPCClientError)) return;
-  if (typeof window === "undefined") return;
-
-  const isUnauthorized = error.message === UNAUTHED_ERR_MSG;
-
-  if (!isUnauthorized) return;
-
-  window.location.href = getLoginUrl();
+const redirectToLoginIfUnauthorized = (_error: unknown) => {
+  // Authentication bypass - do not redirect to login
+  return;
 };
 
 queryClient.getQueryCache().subscribe(event => {
