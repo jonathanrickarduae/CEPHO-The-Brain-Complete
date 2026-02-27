@@ -1,27 +1,17 @@
 // @ts-nocheck
-import { render, screen } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
+// @vitest-environment jsdom
+import React from 'react';
+import { render } from '@testing-library/react';
 import App from '../App';
 
-// Mock tRPC client
-jest.mock('../lib/trpc', () => ({
-  trpc: {
-    useContext: jest.fn(() => ({
-      invalidate: jest.fn(),
-    })),
-  },
+vi.mock('../lib/trpc', () => ({
+  trpc: { useContext: vi.fn(() => ({ invalidate: vi.fn() })) },
   trpcClient: {},
 }));
 
 describe('App', () => {
   it('renders without crashing', () => {
-    render(
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    );
-    
-    // App should render without errors
-    expect(document.body).toBeInTheDocument();
+    const { container } = render(<App />);
+    expect(container).toBeTruthy();
   });
 });

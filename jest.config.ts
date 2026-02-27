@@ -31,7 +31,7 @@ const config: Config = {
     '!**/__tests__/**',
     '!**/dist/**'
   ],
-  coverageThresholds: {
+  coverageThreshold: {
     global: {
       branches: 50,
       functions: 50,

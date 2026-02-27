@@ -21,7 +21,7 @@ async function runMigrations() {
   const db = drizzle(migrationClient, { schema });
 
   try {
-    await migrate(db, { migrationsFolder: "./drizzle/migrations" });
+    await migrate(db, { migrationsFolder: "./drizzle" });
     await migrationClient.end();
     process.exit(0);
   } catch (error) {

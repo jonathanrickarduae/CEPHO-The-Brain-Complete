@@ -3,7 +3,6 @@
  * Tests caching, batching, and pagination utilities
  */
 
-import { describe, it, expect } from '@jest/globals';
 import { createPaginationParams, createCursorPagination } from '../utils/pagination';
 
 describe('Query Optimizer', () => {

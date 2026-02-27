@@ -3,7 +3,6 @@
  * Tests the 4-tier rate limiting system
  */
 
-import { describe, it, expect, beforeEach } from '@jest/globals';
 
 describe('Rate Limiter Middleware', () => {
   describe('Global Rate Limiter', () => {

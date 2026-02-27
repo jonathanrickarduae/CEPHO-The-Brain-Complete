@@ -3,7 +3,6 @@
  * Tests request tracking and metrics calculation
  */
 
-import { describe, it, expect, beforeEach } from '@jest/globals';
 
 describe('API Analytics Service', () => {
   describe('Request Tracking', () => {

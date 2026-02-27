@@ -365,3 +365,23 @@ export default {
   MAX_LIMIT,
   MIN_LIMIT
 };
+
+/**
+ * Create offset pagination params (helper for query optimizer tests)
+ */
+export function createPaginationParams(page: number = 1, limit: number = DEFAULT_LIMIT): { limit: number; offset: number } {
+  return {
+    limit,
+    offset: calculateOffset(page, limit)
+  };
+}
+
+/**
+ * Create cursor pagination params (helper for query optimizer tests)
+ */
+export function createCursorPagination(options: { after?: string; limit?: number }): { limit: number; cursor?: string } {
+  return {
+    limit: options.limit ?? DEFAULT_LIMIT,
+    cursor: options.after
+  };
+}
