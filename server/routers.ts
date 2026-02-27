@@ -35,11 +35,11 @@ import { projectGenesisRouter as projectGenesisRealRouter } from "./routers/proj
 import { documentLibraryRouter as documentLibraryRealRouter } from "./routers/documentLibrary.router";
 import { workflowsRouter as workflowsRealRouter } from "./routers/workflows.router";
 import { businessPlanReviewRouter as businessPlanReviewRealRouter, collaborativeReviewRouter as collaborativeReviewRealRouter } from "./routers/businessPlanReview.router";
+import { feedbackRouter as feedbackRealRouter } from "./routers/feedback.router";
 import {
   authRouter as authRealRouter,
   themeRouter as themeRealRouter,
   favoritesRouter as favoritesRealRouter,
-  feedbackRouter as feedbackRealRouter,
   npsRouter as npsRealRouter,
   calendarRouter as calendarRealRouter,
   gmailRouter as gmailRealRouter,

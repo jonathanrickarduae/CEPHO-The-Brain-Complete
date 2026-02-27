@@ -110,15 +110,21 @@ async function startServer() {
   // Simple email/password authentication
   const simpleAuthRoutes = await import("../routes/simple-auth");
   app.use("/api/auth", simpleAuthRoutes.default);
+  // API v1 versioned alias (backwards-compatible)
+  app.use("/api/v1/auth", simpleAuthRoutes.default);
 
-  // tRPC API
-  app.use(
-    "/api/trpc",
-    createExpressMiddleware({
-      router: appRouter,
-      createContext,
-    })
-  );
+  // tRPC API (mounted at both /api/trpc and /api/v1/trpc for versioning)
+  const trpcMiddleware = createExpressMiddleware({
+    router: appRouter,
+    createContext,
+  });
+  app.use("/api/trpc", trpcMiddleware);
+  app.use("/api/v1/trpc", trpcMiddleware);
+
+  // API version info endpoint
+  app.get("/api/v1", (_req, res) => {
+    res.json({ version: "1", status: "ok", description: "CEPHO Brain API v1" });
+  });
 
   // Setup error handlers (must be after all routes)
   setupErrorHandlers(app);

@@ -19,6 +19,7 @@ import AuthGuard from "@/components/AuthGuard";
 import { PinGate } from "@/components/PinGate";
 import { KeyboardShortcutsGuide } from "@/components/project-management/KeyboardShortcutsGuide";
 import { ChiefOfStaffNotification } from "@/components/communication/ChiefOfStaffNotification";
+import { FeedbackWidget } from "@/components/shared/FeedbackWidget";
 
 // Loading fallback component
 function PageLoader() {
@@ -433,6 +434,7 @@ function App() {
                     <GovernanceModeChangeModal />
                     <KeyboardShortcutsGuide />
                     <ChiefOfStaffNotification />
+                    <FeedbackWidget />
                   </TooltipProvider>
                 </CelebrationProvider>
               </DailyCycleProvider>

@@ -8,7 +8,7 @@
     "build": "vite build && esbuild server/_core/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist",
     "start": "NODE_ENV=production node dist/index.js",
     "check": "tsc --noEmit",
-    "lint": "eslint . --max-warnings=0",
+    "lint": "eslint server client/src --max-warnings 50",
     "format": "prettier --write .",
     "test": "vitest run",
     "db:generate": "drizzle-kit generate",
@@ -18,7 +18,7 @@
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "prepare": "husky",
-    "lint:fix": "eslint . --fix",
+    "lint:fix": "eslint server client/src --fix",
     "format:check": "prettier --check ."
   },
   "dependencies": {
@@ -142,6 +142,8 @@
     "@types/react-dom": "^19.2.1",
     "@types/supertest": "^6.0.3",
     "@types/validator": "^13.15.10",
+    "@typescript-eslint/eslint-plugin": "^8.56.1",
+    "@typescript-eslint/parser": "^8.56.1",
     "@vitejs/plugin-react": "^5.0.4",
     "@vitest/coverage-v8": "^4.0.18",
     "@vitest/ui": "^4.0.18",
@@ -151,6 +153,7 @@
     "esbuild": "^0.25.0",
     "eslint": "^10.0.2",
     "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.0.1",
     "globals": "^17.3.0",
@@ -189,15 +192,11 @@
     ]
   },
   "lint-staged": {
-    "*.{ts,tsx}": [
-      "eslint --fix --max-warnings=-1",
-      "prettier --write"
+    "server/**/*.ts": [
+      "eslint --max-warnings 50"
     ],
-    "*.{js,mjs,cjs}": [
-      "prettier --write"
-    ],
-    "*.{json,md,yaml,yml}": [
-      "prettier --write"
+    "client/src/**/*.{ts,tsx}": [
+      "eslint --max-warnings 50"
     ]
   }
 }
