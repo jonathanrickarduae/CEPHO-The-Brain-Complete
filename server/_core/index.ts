@@ -74,25 +74,24 @@ async function startServer() {
   // Trust proxy for rate limiting behind reverse proxy
   app.set('trust proxy', 1);
   
-  // Setup Priority 1 middleware (security, performance, monitoring)
-  await setupMiddleware(app);
-  
-  // CRITICAL: Security headers MUST be first (already handled by setupMiddleware)
-  // applySecurityMiddleware(app); // Commented out - now in setupMiddleware
-  
-  // Apply metrics middleware (before routes)
-  app.use(metricsMiddleware);
-  
   // Stripe webhook route - MUST be before body parser to get raw body
   app.post("/api/stripe/webhook", express.raw({ type: "application/json" }), async (req, res) => {
     const { handleStripeWebhook } = await import("../stripe/webhookHandler");
     return handleStripeWebhook(req, res);
   });
   
-  // Configure body parser with larger size limit for file uploads
+  // Configure body parser and cookie parser BEFORE all middleware
+  // (CSRF middleware needs req.cookies to be populated)
   app.use(express.json({ limit: "50mb" }));
   app.use(express.urlencoded({ limit: "50mb", extended: true }));
   app.use(cookieParser());
+  
+  // Setup Priority 1 middleware (security, performance, monitoring)
+  // cookieParser must be registered first so req.cookies is available for CSRF
+  await setupMiddleware(app);
+  
+  // Apply metrics middleware (before routes)
+  app.use(metricsMiddleware);
   
   // Prometheus metrics endpoint (no rate limiting)
   app.get("/api/metrics", metricsHandler);
