@@ -12,6 +12,20 @@ import { checkAppVersion } from "./utils/cacheBuster";
 // Check app version and force reload if changed
 checkAppVersion();
 
+// Register service worker for PWA support (production only)
+if ('serviceWorker' in navigator && import.meta.env.PROD) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js').then(
+      (registration) => {
+        console.log('[SW] Registered, scope:', registration.scope);
+      },
+      (error) => {
+        console.warn('[SW] Registration failed:', error);
+      }
+    );
+  });
+}
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
