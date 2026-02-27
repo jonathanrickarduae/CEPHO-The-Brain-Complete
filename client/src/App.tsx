@@ -1,4 +1,5 @@
 import { Switch, Route, useLocation } from "wouter";
+// Build version: 2026-02-27-v2
 import { lazy, Suspense, useEffect } from "react";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
