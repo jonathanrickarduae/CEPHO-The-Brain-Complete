@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/sidebar";
 import { getLoginUrl } from "@/const";
 import { useIsMobile } from "@/hooks/useMobile";
+import { useAuth } from "@/hooks";
 import {
   LayoutDashboard, LogOut, PanelLeft, 
   BookOpen, BarChart3, Lock, Briefcase, Activity, Brain, Sun, Users, User, Moon, Keyboard, Settings, TrendingUp, Info, Clock, Sparkles, Rocket, Inbox, Search, Video, Bell, Mic, Podcast, Heart, Globe, Library, Workflow, FileText, ChevronDown, ChevronRight, Mail, Volume2, CheckCircle2, Star, GraduationCap, Bot
