@@ -35,6 +35,26 @@ import { projectGenesisRouter as projectGenesisRealRouter } from "./routers/proj
 import { documentLibraryRouter as documentLibraryRealRouter } from "./routers/documentLibrary.router";
 import { workflowsRouter as workflowsRealRouter } from "./routers/workflows.router";
 import { businessPlanReviewRouter as businessPlanReviewRealRouter, collaborativeReviewRouter as collaborativeReviewRealRouter } from "./routers/businessPlanReview.router";
+import {
+  authRouter as authRealRouter,
+  themeRouter as themeRealRouter,
+  favoritesRouter as favoritesRealRouter,
+  feedbackRouter as feedbackRealRouter,
+  npsRouter as npsRealRouter,
+  calendarRouter as calendarRealRouter,
+  gmailRouter as gmailRealRouter,
+  integrationsRouter as integrationsRealRouter,
+  cosTasksRouter as cosTasksRealRouter,
+  qaRouter as qaRealRouter,
+  qualityGateRouter as qualityGateRealRouter,
+  smeTeamRouter as smeTeamRealRouter,
+  teamCapabilitiesRouter as teamCapabilitiesRealRouter,
+  libraryRouter as libraryRealRouter,
+  genesisRouter as genesisRealRouter,
+  optimizationRouter as optimizationRealRouter,
+  openClawRouter as openClawRealRouter,
+  aiRouter as aiRealRouter,
+} from "./routers/integrations.router";
 
 // ─── Functional Stubs ────────────────────────────────────────────────────────
 import {
@@ -72,8 +92,8 @@ export const appRouter = router({
 
   // ─── AI & Chat ──────────────────────────────────────────────────────────
   chat: chatRouter,
-  ai: aiRouter,
-  openClaw: openClawRouter,
+  ai: aiRealRouter,
+  openClaw: openClawRealRouter,
 
   // ─── Dashboard & Analytics ──────────────────────────────────────────────
   dashboard: dashboardRouter,
@@ -105,33 +125,33 @@ export const appRouter = router({
   settings: settingsRouter,
 
   // ─── Auth & User ────────────────────────────────────────────────────────
-  auth: authRouter,
-  theme: themeRouter,
-  favorites: favoritesRouter,
-  feedback: feedbackRouter,
+  auth: authRealRouter,
+  theme: themeRealRouter,
+  favorites: favoritesRealRouter,
+  feedback: feedbackRealRouter,
 
   // ─── Communication ──────────────────────────────────────────────────────
-  calendar: calendarRouter,
-  gmail: gmailRouter,
+  calendar: calendarRealRouter,
+  gmail: gmailRealRouter,
   voiceNotes: voiceNotesRouter,
-  nps: npsRouter,
+  nps: npsRealRouter,
 
   // ─── Integrations ───────────────────────────────────────────────────────
-  integrations: integrationsRouter,
+  integrations: integrationsRealRouter,
 
   // ─── Workflows & Operations ─────────────────────────────────────────────
   workflows: workflowsRealRouter,
-  cosTasks: cosTasksRouter,
-  qa: qaRouter,
-  qualityGate: qualityGateRouter,
-  smeTeam: smeTeamRouter,
-  teamCapabilities: teamCapabilitiesRouter,
+  cosTasks: cosTasksRealRouter,
+  qa: qaRealRouter,
+  qualityGate: qualityGateRealRouter,
+  smeTeam: smeTeamRealRouter,
+  teamCapabilities: teamCapabilitiesRealRouter,
   eveningReview: eveningReviewRouter,
   morningSignal: morningSignalRealRouter,
 
   // ─── Documents & Library ────────────────────────────────────────────────
   documentLibrary: documentLibraryRealRouter,
-  library: libraryRouter,
+  library: libraryRealRouter,
 
   // ─── Business Tools ─────────────────────────────────────────────────────
   subscriptionTracker: subscriptionTrackerRealRouter,
@@ -139,9 +159,9 @@ export const appRouter = router({
   businessPlanReview: businessPlanReviewRealRouter,
   partnerships: partnershipsRealRouter,
   innovation: innovationRouter,
-  genesis: genesisRouter,
+  genesis: genesisRealRouter,
   projectGenesis: projectGenesisRealRouter,
-  optimization: optimizationRouter,
+  optimization: optimizationRealRouter,
 });
 
 export type AppRouter = typeof appRouter;
