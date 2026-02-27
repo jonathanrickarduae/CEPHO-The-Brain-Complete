@@ -35,7 +35,7 @@ export const tasksRouter = router({
         .orderBy(asc(tasks.dueDate), desc(tasks.createdAt))
         .limit(input.limit);
 
-      return rows.map((t) => ({
+      return rows.map(t => ({
         id: t.id,
         title: t.title,
         description: t.description,
@@ -122,6 +122,10 @@ export const tasksRouter = router({
         throw new Error("Task not found or access denied");
       }
 
-      return { id: updated.id, status: updated.status, progress: updated.progress };
+      return {
+        id: updated.id,
+        status: updated.status,
+        progress: updated.progress,
+      };
     }),
 });

@@ -123,7 +123,12 @@ async function startServer() {
 
   // API version info endpoint
   app.get("/api/v1", (_req, res) => {
-    res.json({ version: "1", status: "ok", description: "CEPHO Brain API v1", docs: "/api/docs" });
+    res.json({
+      version: "1",
+      status: "ok",
+      description: "CEPHO Brain API v1",
+      docs: "/api/docs",
+    });
   });
 
   // OpenAPI / Swagger UI docs

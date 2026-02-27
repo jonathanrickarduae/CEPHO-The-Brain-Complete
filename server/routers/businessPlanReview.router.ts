@@ -21,12 +21,35 @@ function getOpenAIClient(): OpenAI {
   return new OpenAI({ apiKey });
 }
 
-const EXPERT_PROFILES: Record<string, { name: string; role: string; focus: string }> = {
-  "strategic-advisor": { name: "Dr. Sarah Chen", role: "Strategic Advisor", focus: "market positioning and competitive strategy" },
-  "financial-analyst": { name: "Marcus Thompson", role: "Financial Analyst", focus: "financial projections and unit economics" },
-  "marketing-expert": { name: "Elena Rodriguez", role: "Marketing Expert", focus: "go-to-market strategy and customer acquisition" },
-  "operations-specialist": { name: "James Okafor", role: "Operations Specialist", focus: "operational efficiency and scalability" },
-  "legal-counsel": { name: "Priya Patel", role: "Legal Counsel", focus: "regulatory compliance and risk management" },
+const EXPERT_PROFILES: Record<
+  string,
+  { name: string; role: string; focus: string }
+> = {
+  "strategic-advisor": {
+    name: "Dr. Sarah Chen",
+    role: "Strategic Advisor",
+    focus: "market positioning and competitive strategy",
+  },
+  "financial-analyst": {
+    name: "Marcus Thompson",
+    role: "Financial Analyst",
+    focus: "financial projections and unit economics",
+  },
+  "marketing-expert": {
+    name: "Elena Rodriguez",
+    role: "Marketing Expert",
+    focus: "go-to-market strategy and customer acquisition",
+  },
+  "operations-specialist": {
+    name: "James Okafor",
+    role: "Operations Specialist",
+    focus: "operational efficiency and scalability",
+  },
+  "legal-counsel": {
+    name: "Priya Patel",
+    role: "Legal Counsel",
+    focus: "regulatory compliance and risk management",
+  },
 };
 
 // ─── Business Plan Review Router ─────────────────────────────────────────────
@@ -48,7 +71,7 @@ export const businessPlanReviewRouter = router({
         )
         .orderBy(desc(businessPlanReviewVersions.createdAt));
 
-      return rows.map((v) => ({
+      return rows.map(v => ({
         id: v.id,
         projectName: v.projectName,
         versionNumber: v.versionNumber,
@@ -98,11 +121,18 @@ export const businessPlanReviewRouter = router({
     .mutation(async ({ input }) => {
       const openai = getOpenAIClient();
       const experts = input.expertIds?.length
-        ? input.expertIds.map((id) => EXPERT_PROFILES[id] ?? { name: id, role: "Expert", focus: "general analysis" })
+        ? input.expertIds.map(
+            id =>
+              EXPERT_PROFILES[id] ?? {
+                name: id,
+                role: "Expert",
+                focus: "general analysis",
+              }
+          )
         : Object.values(EXPERT_PROFILES);
 
       const analyses = await Promise.all(
-        experts.map(async (expert) => {
+        experts.map(async expert => {
           const completion = await openai.chat.completions.create({
             model: "gpt-4o-mini",
             messages: [
@@ -135,9 +165,16 @@ Format as JSON: { "score": number, "strengths": string[], "improvements": string
           const content = completion.choices[0]?.message?.content ?? "{}";
           let analysis: Record<string, unknown> = {};
           try {
-            analysis = JSON.parse(content.replace(/```json\n?|\n?```/g, "").trim());
+            analysis = JSON.parse(
+              content.replace(/```json\n?|\n?```/g, "").trim()
+            );
           } catch {
-            analysis = { score: 70, strengths: ["Good foundation"], improvements: ["Needs more detail"], recommendations: ["Expand this section"] };
+            analysis = {
+              score: 70,
+              strengths: ["Good foundation"],
+              improvements: ["Needs more detail"],
+              recommendations: ["Expand this section"],
+            };
           }
 
           return {
@@ -150,7 +187,11 @@ Format as JSON: { "score": number, "strengths": string[], "improvements": string
       );
 
       const avgScore = Math.round(
-        analyses.reduce((sum, a) => sum + (((a as Record<string, unknown>).score as number) ?? 70), 0) / analyses.length
+        analyses.reduce(
+          (sum, a) =>
+            sum + (((a as Record<string, unknown>).score as number) ?? 70),
+          0
+        ) / analyses.length
       );
 
       return {
@@ -195,9 +236,15 @@ Return only a JSON array of IDs: ["id1", "id2", ...]`,
         });
         const content = completion.choices[0]?.message?.content ?? "[]";
         try {
-          selectedExperts = JSON.parse(content.replace(/```json\n?|\n?```/g, "").trim());
+          selectedExperts = JSON.parse(
+            content.replace(/```json\n?|\n?```/g, "").trim()
+          );
         } catch {
-          selectedExperts = ["strategic-advisor", "financial-analyst", "marketing-expert"];
+          selectedExperts = [
+            "strategic-advisor",
+            "financial-analyst",
+            "marketing-expert",
+          ];
         }
       } else {
         selectedExperts = input.manualExpertIds ?? Object.keys(EXPERT_PROFILES);
@@ -205,7 +252,7 @@ Return only a JSON array of IDs: ["id1", "id2", ...]`,
 
       return {
         selectedExperts,
-        experts: selectedExperts.map((id) => ({
+        experts: selectedExperts.map(id => ({
           id,
           ...EXPERT_PROFILES[id],
         })),
@@ -283,10 +330,10 @@ export const collaborativeReviewRouter = router({
         .orderBy(desc(collaborativeReviewSessions.createdAt));
 
       const filtered = input.projectName
-        ? rows.filter((r) => r.projectName === input.projectName)
+        ? rows.filter(r => r.projectName === input.projectName)
         : rows;
 
-      return filtered.map((s) => ({
+      return filtered.map(s => ({
         id: s.id,
         projectName: s.projectName,
         templateId: s.templateId,
@@ -323,7 +370,7 @@ export const collaborativeReviewRouter = router({
         templateId: session.templateId,
         status: session.status,
         reviewData: session.reviewData,
-        comments: comments.map((c) => ({
+        comments: comments.map(c => ({
           id: c.id,
           sectionId: c.sectionId,
           comment: c.comment,
@@ -375,7 +422,9 @@ export const collaborativeReviewRouter = router({
       })
     )
     .mutation(async ({ input }) => {
-      console.log(`[CollaborativeReview] Invite sent to ${input.email} for session ${input.sessionId}`);
+      console.log(
+        `[CollaborativeReview] Invite sent to ${input.email} for session ${input.sessionId}`
+      );
       return { success: true, invited: input.email };
     }),
 

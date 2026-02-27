@@ -76,7 +76,7 @@ export const chatRouter = router({
         ...history
           .reverse()
           .slice(0, -1) // exclude the message we just inserted (it's the last one)
-          .map((c) => ({
+          .map(c => ({
             role: c.role as "user" | "assistant",
             content: c.content,
           })),
@@ -134,14 +134,14 @@ export const chatRouter = router({
         .from(conversations)
         .where(
           and(
-            eq(conversations.userId, ctx.user.id),
+            eq(conversations.userId, ctx.user.id)
             // Only return user/assistant messages, not system
           )
         )
         .orderBy(desc(conversations.createdAt))
         .limit(input.limit);
 
-      return rows.reverse().map((c) => ({
+      return rows.reverse().map(c => ({
         id: String(c.id),
         role: c.role as "user" | "assistant",
         content: c.content,
@@ -153,9 +153,7 @@ export const chatRouter = router({
    * Clear conversation history for the current user.
    */
   clear: protectedProcedure.mutation(async ({ ctx }) => {
-    await db
-      .delete(conversations)
-      .where(eq(conversations.userId, ctx.user.id));
+    await db.delete(conversations).where(eq(conversations.userId, ctx.user.id));
 
     return { success: true, message: "Conversation history cleared." };
   }),

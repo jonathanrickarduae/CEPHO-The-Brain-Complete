@@ -168,7 +168,7 @@ export const expertEvolutionRouter = router({
         .orderBy(desc(trainingConversations.createdAt))
         .limit(input.limit);
 
-      return rows.reverse().map((r) => ({
+      return rows.reverse().map(r => ({
         id: String(r.id),
         expertId: r.context ?? input.expertId,
         role: r.role as "user" | "assistant",

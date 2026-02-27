@@ -19,7 +19,10 @@ export const questionnaireRouter = router({
     )
     .mutation(async ({ input }) => {
       // TODO: Wire to questionnaire persistence service
-      console.log("[Questionnaire] Received response for:", input.questionId ?? "batch");
+      console.log(
+        "[Questionnaire] Received response for:",
+        input.questionId ?? "batch"
+      );
       return {
         success: true,
         savedAt: new Date().toISOString(),

@@ -37,11 +37,11 @@ export const voiceNotesRouter = router({
         .limit(input.limit);
 
       const filtered = input.category
-        ? rows.filter((r) => r.category === input.category)
+        ? rows.filter(r => r.category === input.category)
         : rows;
 
       return {
-        notes: filtered.map((n) => ({
+        notes: filtered.map(n => ({
           id: n.id,
           content: n.content,
           category: n.category,
@@ -93,7 +93,9 @@ Return only: ["task 1", "task 2", ...]`,
           temperature: 0.3,
         });
         const content = completion.choices[0]?.message?.content ?? "[]";
-        extractedTasks = JSON.parse(content.replace(/```json\n?|\n?```/g, "").trim());
+        extractedTasks = JSON.parse(
+          content.replace(/```json\n?|\n?```/g, "").trim()
+        );
         if (!Array.isArray(extractedTasks)) extractedTasks = [];
       } catch {
         extractedTasks = [];
@@ -132,10 +134,7 @@ Return only: ["task 1", "task 2", ...]`,
       await db
         .delete(voiceNotes)
         .where(
-          and(
-            eq(voiceNotes.id, input.id),
-            eq(voiceNotes.userId, ctx.user.id)
-          )
+          and(eq(voiceNotes.id, input.id), eq(voiceNotes.userId, ctx.user.id))
         );
 
       return { success: true };

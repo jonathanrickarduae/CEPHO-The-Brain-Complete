@@ -5,7 +5,16 @@
  * Submits feedback via trpc.feedback.submit.
  */
 import { useState } from "react";
-import { MessageSquarePlus, X, Send, Star, ThumbsUp, ThumbsDown, Bug, Lightbulb } from "lucide-react";
+import {
+  MessageSquarePlus,
+  X,
+  Send,
+  Star,
+  ThumbsUp,
+  ThumbsDown,
+  Bug,
+  Lightbulb,
+} from "lucide-react";
 import { trpc } from "../../lib/trpc";
 
 type FeedbackType = "bug" | "feature" | "praise" | "general";
@@ -17,7 +26,11 @@ interface FeedbackState {
   submitted: boolean;
 }
 
-const FEEDBACK_TYPES: { value: FeedbackType; label: string; icon: typeof Bug }[] = [
+const FEEDBACK_TYPES: {
+  value: FeedbackType;
+  label: string;
+  icon: typeof Bug;
+}[] = [
   { value: "bug", label: "Bug Report", icon: Bug },
   { value: "feature", label: "Feature Request", icon: Lightbulb },
   { value: "praise", label: "Praise", icon: ThumbsUp },
@@ -35,7 +48,7 @@ export function FeedbackWidget() {
 
   const submitMutation = trpc.feedback.submit.useMutation({
     onSuccess: () => {
-      setState((s) => ({ ...s, submitted: true }));
+      setState(s => ({ ...s, submitted: true }));
       setTimeout(() => {
         setIsOpen(false);
         setState({ type: "general", message: "", rating: 0, submitted: false });
@@ -72,7 +85,9 @@ export function FeedbackWidget() {
           <div className="flex items-center justify-between px-4 py-3 bg-primary/10 border-b border-border">
             <div className="flex items-center gap-2">
               <MessageSquarePlus className="w-4 h-4 text-primary" />
-              <span className="text-sm font-semibold text-foreground">Send Feedback</span>
+              <span className="text-sm font-semibold text-foreground">
+                Send Feedback
+              </span>
             </div>
             <button
               onClick={() => setIsOpen(false)}
@@ -85,7 +100,9 @@ export function FeedbackWidget() {
           {state.submitted ? (
             <div className="flex flex-col items-center gap-3 py-8 px-4">
               <ThumbsUp className="w-10 h-10 text-primary" />
-              <p className="text-sm font-medium text-foreground">Thank you for your feedback!</p>
+              <p className="text-sm font-medium text-foreground">
+                Thank you for your feedback!
+              </p>
               <p className="text-xs text-muted-foreground text-center">
                 Your input helps us improve CEPHO Brain.
               </p>
@@ -97,7 +114,7 @@ export function FeedbackWidget() {
                 {FEEDBACK_TYPES.map(({ value, label, icon: Icon }) => (
                   <button
                     key={value}
-                    onClick={() => setState((s) => ({ ...s, type: value }))}
+                    onClick={() => setState(s => ({ ...s, type: value }))}
                     className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium transition-colors ${
                       state.type === value
                         ? "bg-primary text-primary-foreground"
@@ -112,12 +129,14 @@ export function FeedbackWidget() {
 
               {/* Star rating */}
               <div className="space-y-1">
-                <label className="text-xs text-muted-foreground">Rating (optional)</label>
+                <label className="text-xs text-muted-foreground">
+                  Rating (optional)
+                </label>
                 <div className="flex gap-1">
-                  {[1, 2, 3, 4, 5].map((star) => (
+                  {[1, 2, 3, 4, 5].map(star => (
                     <button
                       key={star}
-                      onClick={() => setState((s) => ({ ...s, rating: star }))}
+                      onClick={() => setState(s => ({ ...s, rating: star }))}
                       className="transition-colors"
                     >
                       <Star
@@ -134,10 +153,14 @@ export function FeedbackWidget() {
 
               {/* Message */}
               <div className="space-y-1">
-                <label className="text-xs text-muted-foreground">Your feedback</label>
+                <label className="text-xs text-muted-foreground">
+                  Your feedback
+                </label>
                 <textarea
                   value={state.message}
-                  onChange={(e) => setState((s) => ({ ...s, message: e.target.value }))}
+                  onChange={e =>
+                    setState(s => ({ ...s, message: e.target.value }))
+                  }
                   placeholder="Tell us what you think..."
                   rows={3}
                   className="w-full px-3 py-2 text-sm bg-muted border border-border rounded-lg resize-none focus:outline-none focus:ring-1 focus:ring-primary text-foreground placeholder:text-muted-foreground"

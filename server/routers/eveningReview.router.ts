@@ -138,17 +138,12 @@ export const eveningReviewRouter = router({
     const pendingTasks = await db
       .select()
       .from(tasks)
-      .where(
-        and(
-          eq(tasks.userId, ctx.user.id),
-          eq(tasks.status, "pending")
-        )
-      )
+      .where(and(eq(tasks.userId, ctx.user.id), eq(tasks.status, "pending")))
       .orderBy(desc(tasks.createdAt))
       .limit(20);
 
     return {
-      tasks: pendingTasks.map((t) => ({
+      tasks: pendingTasks.map(t => ({
         id: t.id,
         title: t.title,
         description: t.description,
@@ -194,7 +189,9 @@ Keep it concise, warm, and professional. Max 100 words.`;
         temperature: 0.7,
       });
 
-      const summary = completion.choices[0]?.message?.content ?? "Great work today. Rest well and prepare for tomorrow.";
+      const summary =
+        completion.choices[0]?.message?.content ??
+        "Great work today. Rest well and prepare for tomorrow.";
 
       return { summary, generatedAt: new Date().toISOString() };
     }),
@@ -227,12 +224,7 @@ export const morningSignalRouter = router({
     const pendingTasks = await db
       .select()
       .from(tasks)
-      .where(
-        and(
-          eq(tasks.userId, ctx.user.id),
-          eq(tasks.status, "pending")
-        )
-      )
+      .where(and(eq(tasks.userId, ctx.user.id), eq(tasks.status, "pending")))
       .orderBy(desc(tasks.createdAt))
       .limit(10);
 
@@ -246,7 +238,7 @@ export const morningSignalRouter = router({
 
     return {
       date: new Date().toISOString(),
-      pendingTasks: pendingTasks.map((t) => ({
+      pendingTasks: pendingTasks.map(t => ({
         id: t.id,
         title: t.title,
         priority: t.priority,
@@ -260,9 +252,9 @@ export const morningSignalRouter = router({
           }
         : null,
       topPriorities: pendingTasks
-        .filter((t) => t.priority === "high" || t.priority === "urgent")
+        .filter(t => t.priority === "high" || t.priority === "urgent")
         .slice(0, 3)
-        .map((t) => t.title),
+        .map(t => t.title),
     };
   }),
 });

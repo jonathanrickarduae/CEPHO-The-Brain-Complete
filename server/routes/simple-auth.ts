@@ -48,7 +48,10 @@ router.post("/login", async (req, res) => {
   const userAgent = (req.headers["user-agent"] as string) ?? "unknown";
 
   try {
-    const { email, password } = req.body as { email?: string; password?: string };
+    const { email, password } = req.body as {
+      email?: string;
+      password?: string;
+    };
 
     if (!email || !password) {
       return res.status(400).json({ error: "Email and password required" });

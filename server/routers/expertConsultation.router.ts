@@ -75,7 +75,7 @@ export const expertConsultationRouter = router({
         .orderBy(desc(expertPerformance.lastUsed))
         .limit(20);
 
-      return rows.map((r) => ({
+      return rows.map(r => ({
         id: r.id,
         expertId: r.expertId,
         expertName: EXPERT_NAMES[r.expertId] ?? r.expertId,
@@ -105,7 +105,7 @@ export const expertConsultationRouter = router({
         .orderBy(desc(expertPerformance.projectsCompleted))
         .limit(input.limit);
 
-      return rows.map((r) => ({
+      return rows.map(r => ({
         expertId: r.expertId,
         expertName: EXPERT_NAMES[r.expertId] ?? r.expertId,
         totalConsultations: r.projectsCompleted,
@@ -122,7 +122,7 @@ export const expertConsultationRouter = router({
         .orderBy(desc(expertPerformance.score))
         .limit(input.limit);
 
-      return rows.map((r) => ({
+      return rows.map(r => ({
         expertId: r.expertId,
         expertName: EXPERT_NAMES[r.expertId] ?? r.expertId,
         averageRating: (r.score ?? 80) / 10,

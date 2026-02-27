@@ -115,8 +115,8 @@ export const feedbackRouter = router({
     );
 
     const ratings = all
-      .filter((r) => r.rating !== null)
-      .map((r) => r.rating as number);
+      .filter(r => r.rating !== null)
+      .map(r => r.rating as number);
 
     const avgRating =
       ratings.length > 0

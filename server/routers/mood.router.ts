@@ -18,7 +18,9 @@ export const moodRouter = router({
       z.object({
         score: z.number().min(1).max(10),
         note: z.string().max(500).optional(),
-        timeOfDay: z.enum(["morning", "afternoon", "evening", "night"]).default("morning"),
+        timeOfDay: z
+          .enum(["morning", "afternoon", "evening", "night"])
+          .default("morning"),
       })
     )
     .mutation(async ({ input, ctx }) => {
@@ -58,7 +60,7 @@ export const moodRouter = router({
         .orderBy(desc(moodHistory.createdAt))
         .limit(input.days);
 
-      return rows.map((r) => ({
+      return rows.map(r => ({
         id: r.id,
         score: r.score,
         note: r.note,
@@ -106,15 +108,15 @@ export const moodRouter = router({
       avg7d > avg14d + 0.5
         ? "improving"
         : avg7d < avg14d - 0.5
-        ? "declining"
-        : "stable";
+          ? "declining"
+          : "stable";
 
     return {
       averageAllTime: Math.round(avgAllTime * 10) / 10,
       average7Days: Math.round(avg7d * 10) / 10,
       trend,
       totalEntries,
-      recentScores: recentEntries.slice(0, 7).map((r) => ({
+      recentScores: recentEntries.slice(0, 7).map(r => ({
         score: r.score,
         date: r.createdAt.toISOString(),
       })),

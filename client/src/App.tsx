@@ -150,6 +150,18 @@ function Router() {
             <ChiefOfStaff />
           </WithLayout>
         </Route>
+        {/* Chief of Staff - primary navigation path */}
+        <Route path="/chief-of-staff">
+          <WithLayout>
+            <ChiefOfStaff />
+          </WithLayout>
+        </Route>
+        {/* Digital Twin - AI Chief of Staff chat interface */}
+        <Route path="/digital-twin">
+          <WithLayout>
+            <DigitalTwin />
+          </WithLayout>
+        </Route>
 
         <Route path="/chief-of-staff-role">
           <WithLayout>
@@ -390,10 +402,15 @@ function Router() {
           </WithLayout>
         </Route>
 
-        {/* Victoria's Briefing - Redirects to Morning Signal */}
+        {/* Victoria's Briefing */}
         <Route path="/victoria">
           <WithLayout>
-            <MorningSignal />
+            <VictoriaBriefing />
+          </WithLayout>
+        </Route>
+        <Route path="/victoria-briefing">
+          <WithLayout>
+            <VictoriaBriefing />
           </WithLayout>
         </Route>
 
@@ -403,7 +420,30 @@ function Router() {
             <TheSignal />
           </WithLayout>
         </Route>
+        <Route path="/the-signal">
+          <WithLayout>
+            <TheSignal />
+          </WithLayout>
+        </Route>
+        {/* Library alias for bottom nav */}
+        <Route path="/library">
+          <WithLayout>
+            <Library />
+          </WithLayout>
+        </Route>
 
+        {/* Agents Monitoring */}
+        <Route path="/agents-monitoring">
+          <WithLayout>
+            <AgentsMonitoring />
+          </WithLayout>
+        </Route>
+        {/* Expert Network */}
+        <Route path="/expert-network">
+          <WithLayout>
+            <ExpertNetwork />
+          </WithLayout>
+        </Route>
         {/* Enhanced Chief of Staff */}
         <Route path="/chief-of-staff-enhanced">
           <WithLayout>

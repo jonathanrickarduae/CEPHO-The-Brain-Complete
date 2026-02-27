@@ -11,7 +11,11 @@ import { users, type User, type InsertUser } from "../../../drizzle/schema";
  * Find a user by their OpenID identifier.
  */
 export async function getUserByOpenId(openId: string): Promise<User | null> {
-  const result = await db.select().from(users).where(eq(users.openId, openId)).limit(1);
+  const result = await db
+    .select()
+    .from(users)
+    .where(eq(users.openId, openId))
+    .limit(1);
   return result[0] ?? null;
 }
 

@@ -27,14 +27,20 @@ import {
   victoriasBriefRouter,
 } from "./routers/victoriaBriefing.router";
 import { innovationRouter } from "./routers/innovation.router";
-import { eveningReviewRouter, morningSignalRouter as morningSignalRealRouter } from "./routers/eveningReview.router";
+import {
+  eveningReviewRouter,
+  morningSignalRouter as morningSignalRealRouter,
+} from "./routers/eveningReview.router";
 import { partnershipsRouter as partnershipsRealRouter } from "./routers/partnerships.router";
 import { voiceNotesRouter } from "./routers/voiceNotes.router";
 import { subscriptionTrackerRouter as subscriptionTrackerRealRouter } from "./routers/subscriptionTracker.router";
 import { projectGenesisRouter as projectGenesisRealRouter } from "./routers/projectGenesis.router";
 import { documentLibraryRouter as documentLibraryRealRouter } from "./routers/documentLibrary.router";
 import { workflowsRouter as workflowsRealRouter } from "./routers/workflows.router";
-import { businessPlanReviewRouter as businessPlanReviewRealRouter, collaborativeReviewRouter as collaborativeReviewRealRouter } from "./routers/businessPlanReview.router";
+import {
+  businessPlanReviewRouter as businessPlanReviewRealRouter,
+  collaborativeReviewRouter as collaborativeReviewRealRouter,
+} from "./routers/businessPlanReview.router";
 import { feedbackRouter as feedbackRealRouter } from "./routers/feedback.router";
 import {
   authRouter as authRealRouter,
@@ -63,25 +69,16 @@ import {
   favoritesRouter,
   feedbackRouter,
   npsRouter,
-
   calendarRouter,
   gmailRouter,
   integrationsRouter,
-
   cosTasksRouter,
   qaRouter,
   qualityGateRouter,
   smeTeamRouter,
   teamCapabilitiesRouter,
-
-
   libraryRouter,
-
-
-
-
   genesisRouter,
-
   optimizationRouter,
   openClawRouter,
   aiRouter,

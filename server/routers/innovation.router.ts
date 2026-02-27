@@ -39,9 +39,9 @@ export const innovationRouter = router({
 
       return {
         ideas: rows
-          .filter((r) => !input.status || r.status === input.status)
-          .filter((r) => !input.category || r.category === input.category)
-          .map((r) => ({
+          .filter(r => !input.status || r.status === input.status)
+          .filter(r => !input.category || r.category === input.category)
+          .map(r => ({
             id: r.id,
             title: r.title,
             description: r.description,
@@ -163,9 +163,16 @@ Format as JSON array: [{"title": "...", "description": "...", "category": "...",
       response_format: { type: "json_object" },
     });
 
-    let ideas: Array<{ title: string; description: string; category: string; priority: string }> = [];
+    let ideas: Array<{
+      title: string;
+      description: string;
+      category: string;
+      priority: string;
+    }> = [];
     try {
-      const parsed = JSON.parse(completion.choices[0]?.message?.content ?? "{}");
+      const parsed = JSON.parse(
+        completion.choices[0]?.message?.content ?? "{}"
+      );
       ideas = parsed.ideas ?? parsed.data ?? [];
       if (!Array.isArray(ideas)) ideas = [];
     } catch {
@@ -174,7 +181,7 @@ Format as JSON array: [{"title": "...", "description": "...", "category": "...",
 
     // Save generated ideas to database
     const saved = await Promise.all(
-      ideas.slice(0, 5).map(async (idea) => {
+      ideas.slice(0, 5).map(async idea => {
         const [saved] = await db
           .insert(innovationIdeas)
           .values({
@@ -188,7 +195,11 @@ Format as JSON array: [{"title": "...", "description": "...", "category": "...",
             category: idea.category ?? "general",
           })
           .returning();
-        return { id: saved.id, title: saved.title, description: saved.description };
+        return {
+          id: saved.id,
+          title: saved.title,
+          description: saved.description,
+        };
       })
     );
 
@@ -248,9 +259,15 @@ Provide a JSON assessment with:
 
       let assessment: Record<string, unknown> = {};
       try {
-        assessment = JSON.parse(completion.choices[0]?.message?.content ?? "{}");
+        assessment = JSON.parse(
+          completion.choices[0]?.message?.content ?? "{}"
+        );
       } catch {
-        assessment = { viabilityScore: 70, confidenceScore: 65, recommendation: "investigate" };
+        assessment = {
+          viabilityScore: 70,
+          confidenceScore: 65,
+          recommendation: "investigate",
+        };
       }
 
       // Update idea with confidence score
@@ -264,7 +281,11 @@ Provide a JSON assessment with:
         })
         .where(eq(innovationIdeas.id, input.ideaId));
 
-      return { success: true, assessment, assessedAt: new Date().toISOString() };
+      return {
+        success: true,
+        assessment,
+        assessedAt: new Date().toISOString(),
+      };
     }),
 
   /**
@@ -310,7 +331,8 @@ Keep it professional and actionable. Max 400 words.`;
         temperature: 0.6,
       });
 
-      const brief = completion.choices[0]?.message?.content ?? "Brief generation failed";
+      const brief =
+        completion.choices[0]?.message?.content ?? "Brief generation failed";
 
       // Save brief to idea
       await db
@@ -375,7 +397,9 @@ Provide JSON with 3 scenarios (conservative, moderate, optimistic):
 
       let scenarios: unknown[] = [];
       try {
-        const parsed = JSON.parse(completion.choices[0]?.message?.content ?? "{}");
+        const parsed = JSON.parse(
+          completion.choices[0]?.message?.content ?? "{}"
+        );
         scenarios = parsed.scenarios ?? [];
       } catch {
         scenarios = [];
@@ -410,11 +434,20 @@ Return as JSON: { "title": "...", "description": "...", "category": "...", "prio
         response_format: { type: "json_object" },
       });
 
-      let extracted: { title?: string; description?: string; category?: string; priority?: string } = {};
+      let extracted: {
+        title?: string;
+        description?: string;
+        category?: string;
+        priority?: string;
+      } = {};
       try {
         extracted = JSON.parse(completion.choices[0]?.message?.content ?? "{}");
       } catch {
-        extracted = { title: "Article Analysis", description: "Analysis from article", category: "general" };
+        extracted = {
+          title: "Article Analysis",
+          description: "Analysis from article",
+          category: "general",
+        };
       }
 
       // Save as a new idea
@@ -460,11 +493,24 @@ Return as JSON: { "title": "...", "description": "...", "category": "...", "prio
       if (rows.length === 0) throw new Error("Idea not found");
 
       return {
-        assessment: "Funding assessment: This idea shows strong potential for Innovate UK and SEIS/EIS funding. Recommend preparing a detailed business case.",
+        assessment:
+          "Funding assessment: This idea shows strong potential for Innovate UK and SEIS/EIS funding. Recommend preparing a detailed business case.",
         fundingOptions: [
-          { name: "Innovate UK Smart Grant", amount: "£25k-£500k", probability: "medium" },
-          { name: "SEIS Investment", amount: "Up to £250k", probability: "high" },
-          { name: "EIS Investment", amount: "Up to £5m", probability: "medium" },
+          {
+            name: "Innovate UK Smart Grant",
+            amount: "£25k-£500k",
+            probability: "medium",
+          },
+          {
+            name: "SEIS Investment",
+            amount: "Up to £250k",
+            probability: "high",
+          },
+          {
+            name: "EIS Investment",
+            amount: "Up to £5m",
+            probability: "medium",
+          },
         ],
         assessedAt: new Date().toISOString(),
       };
@@ -475,10 +521,34 @@ Return as JSON: { "title": "...", "description": "...", "category": "...", "prio
    */
   getFundingPrograms: protectedProcedure.query(async () => ({
     programs: [
-      { id: "innovate_uk", name: "Innovate UK Smart Grant", maxAmount: "£500,000", deadline: "Rolling", category: "R&D" },
-      { id: "seis", name: "SEIS Investment", maxAmount: "£250,000", deadline: "Ongoing", category: "Seed Investment" },
-      { id: "eis", name: "EIS Investment", maxAmount: "£5,000,000", deadline: "Ongoing", category: "Growth Investment" },
-      { id: "horizon_europe", name: "Horizon Europe", maxAmount: "€2,500,000", deadline: "Various", category: "Research" },
+      {
+        id: "innovate_uk",
+        name: "Innovate UK Smart Grant",
+        maxAmount: "£500,000",
+        deadline: "Rolling",
+        category: "R&D",
+      },
+      {
+        id: "seis",
+        name: "SEIS Investment",
+        maxAmount: "£250,000",
+        deadline: "Ongoing",
+        category: "Seed Investment",
+      },
+      {
+        id: "eis",
+        name: "EIS Investment",
+        maxAmount: "£5,000,000",
+        deadline: "Ongoing",
+        category: "Growth Investment",
+      },
+      {
+        id: "horizon_europe",
+        name: "Horizon Europe",
+        maxAmount: "€2,500,000",
+        deadline: "Various",
+        category: "Research",
+      },
     ],
   })),
 

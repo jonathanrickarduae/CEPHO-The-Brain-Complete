@@ -33,4 +33,3 @@ export { db } from "./connection";
 
 // Export repositories
 export * from "./repositories";
-

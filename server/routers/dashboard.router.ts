@@ -83,24 +83,22 @@ export const dashboardRouter = router({
     const taskSummary = {
       total: taskStats.reduce((sum, t) => sum + Number(t.count), 0),
       completed: Number(
-        taskStats.find((t) => t.status === "completed")?.count ?? 0
+        taskStats.find(t => t.status === "completed")?.count ?? 0
       ),
       inProgress: Number(
-        taskStats.find((t) => t.status === "in_progress")?.count ?? 0
+        taskStats.find(t => t.status === "in_progress")?.count ?? 0
       ),
       notStarted: Number(
-        taskStats.find((t) => t.status === "not_started")?.count ?? 0
+        taskStats.find(t => t.status === "not_started")?.count ?? 0
       ),
     };
 
     // Aggregate project stats
     const projectSummary = {
       total: projectStats.reduce((sum, p) => sum + Number(p.count), 0),
-      active: Number(
-        projectStats.find((p) => p.status === "active")?.count ?? 0
-      ),
+      active: Number(projectStats.find(p => p.status === "active")?.count ?? 0),
       completed: Number(
-        projectStats.find((p) => p.status === "completed")?.count ?? 0
+        projectStats.find(p => p.status === "completed")?.count ?? 0
       ),
     };
 
@@ -151,7 +149,7 @@ export const dashboardRouter = router({
     ];
 
     // Format recent activity
-    const activity = recentActivity.map((item) => ({
+    const activity = recentActivity.map(item => ({
       id: String(item.id),
       actorName: item.actorName ?? "System",
       actorType: item.actorType,

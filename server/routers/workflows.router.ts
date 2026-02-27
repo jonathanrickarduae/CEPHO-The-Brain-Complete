@@ -48,7 +48,7 @@ export const workflowsRouter = router({
         .orderBy(projectGenesisPhases.phaseNumber);
 
       const currentPhase =
-        phases.find((p) => p.status === "in_progress")?.phaseNumber ?? 1;
+        phases.find(p => p.status === "in_progress")?.phaseNumber ?? 1;
 
       // Get cached step data
       const cached = workflowCache.get(input.id) ?? {};
@@ -60,11 +60,13 @@ export const workflowsRouter = router({
         currentPhase,
         currentStep: (cached.currentStep as number) ?? 1,
         status: project.status,
-        steps: phases.map((p) => ({
+        steps: phases.map(p => ({
           phaseNumber: p.phaseNumber,
           phaseName: p.phaseName,
           status: p.status,
-          formData: (cached[`step_${p.phaseNumber}`] as Record<string, unknown>) ?? null,
+          formData:
+            (cached[`step_${p.phaseNumber}`] as Record<string, unknown>) ??
+            null,
           completedAt: p.completedAt?.toISOString() ?? null,
         })),
       };
@@ -78,8 +80,8 @@ export const workflowsRouter = router({
       z.object({
         workflowId: z.string(),
         stepNumber: z.number(),
-formData: z.record(z.string(), z.unknown()),
-        })
+        formData: z.record(z.string(), z.unknown()),
+      })
     )
     .mutation(async ({ input }) => {
       const cached = workflowCache.get(input.workflowId) ?? {};
@@ -117,8 +119,8 @@ formData: z.record(z.string(), z.unknown()),
       z.object({
         workflowId: z.string(),
         stepNumber: z.number(),
-formData: z.record(z.string(), z.unknown()).optional(),
-        })
+        formData: z.record(z.string(), z.unknown()).optional(),
+      })
     )
     .mutation(async ({ input }) => {
       const cached = workflowCache.get(input.workflowId) ?? {};

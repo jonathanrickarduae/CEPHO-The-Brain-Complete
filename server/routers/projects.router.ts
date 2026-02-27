@@ -24,8 +24,8 @@ export const projectsRouter = router({
         .limit(input.limit);
 
       return rows
-        .filter((p) => !input.status || p.status === input.status)
-        .map((p) => ({
+        .filter(p => !input.status || p.status === input.status)
+        .map(p => ({
           id: p.id,
           name: p.name,
           description: p.description,

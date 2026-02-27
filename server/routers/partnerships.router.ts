@@ -47,10 +47,10 @@ export const partnershipsRouter = router({
         .orderBy(desc(partnerships.createdAt));
 
       const filtered = input?.status
-        ? rows.filter((r) => r.status === input.status)
+        ? rows.filter(r => r.status === input.status)
         : rows;
 
-      return filtered.map((p) => ({
+      return filtered.map(p => ({
         id: p.id,
         name: p.name,
         type: p.type,
@@ -183,9 +183,7 @@ export const partnershipsRouter = router({
   delete: protectedProcedure
     .input(z.object({ id: z.number() }))
     .mutation(async ({ input }) => {
-      await db
-        .delete(partnerships)
-        .where(eq(partnerships.id, input.id));
+      await db.delete(partnerships).where(eq(partnerships.id, input.id));
 
       return { success: true };
     }),
@@ -198,7 +196,7 @@ export const partnershipsRouter = router({
 
     const byStatus = PARTNERSHIP_STATUSES.reduce(
       (acc, status) => {
-        acc[status] = rows.filter((r) => r.status === status).length;
+        acc[status] = rows.filter(r => r.status === status).length;
         return acc;
       },
       {} as Record<string, number>

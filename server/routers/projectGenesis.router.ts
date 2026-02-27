@@ -31,7 +31,7 @@ export const projectGenesisRouter = router({
       .orderBy(desc(projectGenesis.createdAt));
 
     // Get phases for each project
-    const projectIds = projects.map((p) => p.id);
+    const projectIds = projects.map(p => p.id);
     const allPhases =
       projectIds.length > 0
         ? await db
@@ -44,13 +44,13 @@ export const projectGenesisRouter = router({
             )
         : [];
 
-    return projects.map((p) => {
-      const phases = allPhases.filter((ph) => ph.projectId === p.id);
+    return projects.map(p => {
+      const phases = allPhases.filter(ph => ph.projectId === p.id);
       const completedPhases = phases.filter(
-        (ph) => ph.status === "completed"
+        ph => ph.status === "completed"
       ).length;
       const currentPhase =
-        phases.find((ph) => ph.status === "in_progress")?.phaseNumber ?? 1;
+        phases.find(ph => ph.status === "in_progress")?.phaseNumber ?? 1;
       const completionPercentage =
         phases.length > 0
           ? Math.round((completedPhases / GENESIS_PHASES.length) * 100)
@@ -62,7 +62,8 @@ export const projectGenesisRouter = router({
         type: p.type,
         stage: p.stage,
         status: p.status,
-        industry: (p.metadata as Record<string, string> | null)?.industry ?? "General",
+        industry:
+          (p.metadata as Record<string, string> | null)?.industry ?? "General",
         description: p.description,
         currentPhase,
         completionPercentage,
@@ -107,7 +108,7 @@ export const projectGenesisRouter = router({
         description: p.description,
         notes: p.notes,
         metadata: p.metadata,
-        phases: phases.map((ph) => ({
+        phases: phases.map(ph => ({
           id: ph.id,
           phaseNumber: ph.phaseNumber,
           phaseName: ph.phaseName,
@@ -157,7 +158,7 @@ export const projectGenesisRouter = router({
 
       // Create all 6 phases
       await db.insert(projectGenesisPhases).values(
-        GENESIS_PHASES.map((phase) => ({
+        GENESIS_PHASES.map(phase => ({
           projectId: project.id,
           phaseNumber: phase.id,
           phaseName: phase.name,
@@ -208,10 +209,8 @@ export const projectGenesisRouter = router({
         .set({
           status: input.status,
           notes: input.notes ?? null,
-          completedAt:
-            input.status === "completed" ? new Date() : null,
-          startedAt:
-            input.status === "in_progress" ? new Date() : undefined,
+          completedAt: input.status === "completed" ? new Date() : null,
+          startedAt: input.status === "in_progress" ? new Date() : undefined,
           updatedAt: new Date(),
         })
         .where(

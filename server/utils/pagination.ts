@@ -122,7 +122,11 @@ export function validatePaginationParams(params: {
   if (params.limit !== undefined && params.limit > MAX_LIMIT) {
     errors.push(`Limit cannot exceed ${MAX_LIMIT}`);
   }
-  if (params.order !== undefined && params.order !== "asc" && params.order !== "desc") {
+  if (
+    params.order !== undefined &&
+    params.order !== "asc" &&
+    params.order !== "desc"
+  ) {
     errors.push('Order must be either "asc" or "desc"');
   }
 

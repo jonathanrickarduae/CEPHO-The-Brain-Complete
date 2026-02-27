@@ -53,9 +53,14 @@ export const victoriaBriefingRouter = router({
 
 Date: ${dateStr}
 
-Active Projects (${activeProjects.length}): ${activeProjects.map((p) => `${p.name} [${p.status}, ${p.progress ?? 0}% complete]`).join("; ") || "None"}
+Active Projects (${activeProjects.length}): ${activeProjects.map(p => `${p.name} [${p.status}, ${p.progress ?? 0}% complete]`).join("; ") || "None"}
 
-Pending Tasks (${pendingTasks.length}): ${pendingTasks.slice(0, 5).map((t) => `${t.title} [${t.priority ?? "medium"} priority]`).join("; ") || "None"}
+Pending Tasks (${pendingTasks.length}): ${
+      pendingTasks
+        .slice(0, 5)
+        .map(t => `${t.title} [${t.priority ?? "medium"} priority]`)
+        .join("; ") || "None"
+    }
 
 Generate a structured daily briefing with:
 1. **Executive Summary** (2-3 sentences on the day ahead)
@@ -83,7 +88,9 @@ Keep it concise, professional, and actionable. Format with clear sections.`;
       stats: {
         pendingTasks: pendingTasks.length,
         activeProjects: activeProjects.length,
-        highPriorityTasks: pendingTasks.filter((t) => t.priority === "high" || t.priority === "urgent").length,
+        highPriorityTasks: pendingTasks.filter(
+          t => t.priority === "high" || t.priority === "urgent"
+        ).length,
       },
       generatedAt: new Date().toISOString(),
     };
@@ -127,16 +134,28 @@ Keep it concise, professional, and actionable. Format with clear sections.`;
         );
 
         if (!response.ok) {
-          return { success: false, audioUrl: null, message: "Audio generation failed" };
+          return {
+            success: false,
+            audioUrl: null,
+            message: "Audio generation failed",
+          };
         }
 
         const buffer = await response.arrayBuffer();
         const base64 = Buffer.from(buffer).toString("base64");
         const audioUrl = `data:audio/mpeg;base64,${base64}`;
 
-        return { success: true, audioUrl, message: "Audio generated successfully" };
+        return {
+          success: true,
+          audioUrl,
+          message: "Audio generated successfully",
+        };
       } catch {
-        return { success: false, audioUrl: null, message: "Audio generation error" };
+        return {
+          success: false,
+          audioUrl: null,
+          message: "Audio generation error",
+        };
       }
     }),
 });
@@ -151,7 +170,8 @@ export const victoriasBriefRouter = router({
       // PDF generation would use a PDF library in production
       return {
         success: true,
-        message: "PDF generation queued. This feature requires server-side PDF generation.",
+        message:
+          "PDF generation queued. This feature requires server-side PDF generation.",
         downloadUrl: null,
       };
     }),
@@ -179,7 +199,11 @@ export const victoriasBriefRouter = router({
     .mutation(async ({ input }) => {
       const elevenLabsKey = process.env.ELEVENLABS_API_KEY;
       if (!elevenLabsKey) {
-        return { success: false, audioUrl: null, message: "Audio not configured" };
+        return {
+          success: false,
+          audioUrl: null,
+          message: "Audio not configured",
+        };
       }
 
       try {

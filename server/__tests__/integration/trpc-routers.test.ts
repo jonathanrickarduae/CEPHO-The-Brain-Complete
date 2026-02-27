@@ -13,7 +13,10 @@ async function trpcQuery(procedure: string) {
   const res = await fetch(`${BASE_URL}/api/trpc/${procedure}`, {
     headers: { "Content-Type": "application/json" },
   });
-  const body = (await res.json()) as { result?: { data?: unknown }; error?: unknown };
+  const body = (await res.json()) as {
+    result?: { data?: unknown };
+    error?: unknown;
+  };
   return { status: res.status, data: body?.result?.data, error: body?.error };
 }
 

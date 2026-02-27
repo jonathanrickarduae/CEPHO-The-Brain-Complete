@@ -12,63 +12,389 @@ import { activityFeed } from "../../drizzle/schema";
 
 const AGENTS = [
   // Communication & Correspondence (8)
-  { id: "email_composer", name: "Email Composer", category: "communication", specialization: "Communication & Correspondence", description: "Drafts professional emails, responses, and correspondence" },
-  { id: "meeting_summariser", name: "Meeting Summariser", category: "communication", specialization: "Communication & Correspondence", description: "Summarises meetings, extracts action items, creates follow-ups" },
-  { id: "stakeholder_comms", name: "Stakeholder Communications", category: "communication", specialization: "Communication & Correspondence", description: "Manages stakeholder updates, board communications, investor relations" },
-  { id: "proposal_writer", name: "Proposal Writer", category: "communication", specialization: "Communication & Correspondence", description: "Creates business proposals, pitch decks, and presentations" },
-  { id: "newsletter_editor", name: "Newsletter Editor", category: "communication", specialization: "Communication & Correspondence", description: "Produces internal and external newsletters and updates" },
-  { id: "linkedin_manager", name: "LinkedIn Manager", category: "communication", specialization: "Communication & Correspondence", description: "Manages LinkedIn presence, posts, and professional networking" },
-  { id: "press_release_writer", name: "Press Release Writer", category: "communication", specialization: "Communication & Correspondence", description: "Drafts press releases and media communications" },
-  { id: "crisis_comms", name: "Crisis Communications", category: "communication", specialization: "Communication & Correspondence", description: "Handles crisis communications and reputation management" },
+  {
+    id: "email_composer",
+    name: "Email Composer",
+    category: "communication",
+    specialization: "Communication & Correspondence",
+    description: "Drafts professional emails, responses, and correspondence",
+  },
+  {
+    id: "meeting_summariser",
+    name: "Meeting Summariser",
+    category: "communication",
+    specialization: "Communication & Correspondence",
+    description:
+      "Summarises meetings, extracts action items, creates follow-ups",
+  },
+  {
+    id: "stakeholder_comms",
+    name: "Stakeholder Communications",
+    category: "communication",
+    specialization: "Communication & Correspondence",
+    description:
+      "Manages stakeholder updates, board communications, investor relations",
+  },
+  {
+    id: "proposal_writer",
+    name: "Proposal Writer",
+    category: "communication",
+    specialization: "Communication & Correspondence",
+    description: "Creates business proposals, pitch decks, and presentations",
+  },
+  {
+    id: "newsletter_editor",
+    name: "Newsletter Editor",
+    category: "communication",
+    specialization: "Communication & Correspondence",
+    description: "Produces internal and external newsletters and updates",
+  },
+  {
+    id: "linkedin_manager",
+    name: "LinkedIn Manager",
+    category: "communication",
+    specialization: "Communication & Correspondence",
+    description:
+      "Manages LinkedIn presence, posts, and professional networking",
+  },
+  {
+    id: "press_release_writer",
+    name: "Press Release Writer",
+    category: "communication",
+    specialization: "Communication & Correspondence",
+    description: "Drafts press releases and media communications",
+  },
+  {
+    id: "crisis_comms",
+    name: "Crisis Communications",
+    category: "communication",
+    specialization: "Communication & Correspondence",
+    description: "Handles crisis communications and reputation management",
+  },
   // Content Creation (7)
-  { id: "report_writer", name: "Report Writer", category: "content", specialization: "Content Creation", description: "Creates detailed business reports, analysis documents, and white papers" },
-  { id: "blog_writer", name: "Blog Writer", category: "content", specialization: "Content Creation", description: "Produces thought leadership articles and blog content" },
-  { id: "social_media_manager", name: "Social Media Manager", category: "content", specialization: "Content Creation", description: "Manages social media content across platforms" },
-  { id: "video_scriptwriter", name: "Video Scriptwriter", category: "content", specialization: "Content Creation", description: "Writes scripts for video content, presentations, and webinars" },
-  { id: "case_study_writer", name: "Case Study Writer", category: "content", specialization: "Content Creation", description: "Documents success stories and case studies" },
-  { id: "seo_specialist", name: "SEO Specialist", category: "content", specialization: "Content Creation", description: "Optimises content for search engines and digital discovery" },
-  { id: "brand_voice_guardian", name: "Brand Voice Guardian", category: "content", specialization: "Content Creation", description: "Ensures consistency in brand voice and messaging" },
+  {
+    id: "report_writer",
+    name: "Report Writer",
+    category: "content",
+    specialization: "Content Creation",
+    description:
+      "Creates detailed business reports, analysis documents, and white papers",
+  },
+  {
+    id: "blog_writer",
+    name: "Blog Writer",
+    category: "content",
+    specialization: "Content Creation",
+    description: "Produces thought leadership articles and blog content",
+  },
+  {
+    id: "social_media_manager",
+    name: "Social Media Manager",
+    category: "content",
+    specialization: "Content Creation",
+    description: "Manages social media content across platforms",
+  },
+  {
+    id: "video_scriptwriter",
+    name: "Video Scriptwriter",
+    category: "content",
+    specialization: "Content Creation",
+    description:
+      "Writes scripts for video content, presentations, and webinars",
+  },
+  {
+    id: "case_study_writer",
+    name: "Case Study Writer",
+    category: "content",
+    specialization: "Content Creation",
+    description: "Documents success stories and case studies",
+  },
+  {
+    id: "seo_specialist",
+    name: "SEO Specialist",
+    category: "content",
+    specialization: "Content Creation",
+    description: "Optimises content for search engines and digital discovery",
+  },
+  {
+    id: "brand_voice_guardian",
+    name: "Brand Voice Guardian",
+    category: "content",
+    specialization: "Content Creation",
+    description: "Ensures consistency in brand voice and messaging",
+  },
   // Analysis & Intelligence (8)
-  { id: "market_analyst", name: "Market Analyst", category: "analysis", specialization: "Analysis & Intelligence", description: "Analyses market trends, competitive landscape, and opportunities" },
-  { id: "financial_analyst", name: "Financial Analyst", category: "analysis", specialization: "Analysis & Intelligence", description: "Provides financial analysis, modelling, and forecasting" },
-  { id: "competitive_intelligence", name: "Competitive Intelligence", category: "analysis", specialization: "Analysis & Intelligence", description: "Monitors competitors and provides strategic intelligence" },
-  { id: "data_interpreter", name: "Data Interpreter", category: "analysis", specialization: "Analysis & Intelligence", description: "Interprets complex data sets and provides actionable insights" },
-  { id: "risk_assessor", name: "Risk Assessor", category: "analysis", specialization: "Analysis & Intelligence", description: "Identifies and evaluates business risks and mitigation strategies" },
-  { id: "trend_spotter", name: "Trend Spotter", category: "analysis", specialization: "Analysis & Intelligence", description: "Identifies emerging trends in technology, business, and markets" },
-  { id: "research_synthesiser", name: "Research Synthesiser", category: "analysis", specialization: "Analysis & Intelligence", description: "Synthesises research from multiple sources into actionable briefs" },
-  { id: "kpi_tracker", name: "KPI Tracker", category: "analysis", specialization: "Analysis & Intelligence", description: "Monitors KPIs and provides performance dashboards" },
+  {
+    id: "market_analyst",
+    name: "Market Analyst",
+    category: "analysis",
+    specialization: "Analysis & Intelligence",
+    description:
+      "Analyses market trends, competitive landscape, and opportunities",
+  },
+  {
+    id: "financial_analyst",
+    name: "Financial Analyst",
+    category: "analysis",
+    specialization: "Analysis & Intelligence",
+    description: "Provides financial analysis, modelling, and forecasting",
+  },
+  {
+    id: "competitive_intelligence",
+    name: "Competitive Intelligence",
+    category: "analysis",
+    specialization: "Analysis & Intelligence",
+    description: "Monitors competitors and provides strategic intelligence",
+  },
+  {
+    id: "data_interpreter",
+    name: "Data Interpreter",
+    category: "analysis",
+    specialization: "Analysis & Intelligence",
+    description:
+      "Interprets complex data sets and provides actionable insights",
+  },
+  {
+    id: "risk_assessor",
+    name: "Risk Assessor",
+    category: "analysis",
+    specialization: "Analysis & Intelligence",
+    description:
+      "Identifies and evaluates business risks and mitigation strategies",
+  },
+  {
+    id: "trend_spotter",
+    name: "Trend Spotter",
+    category: "analysis",
+    specialization: "Analysis & Intelligence",
+    description:
+      "Identifies emerging trends in technology, business, and markets",
+  },
+  {
+    id: "research_synthesiser",
+    name: "Research Synthesiser",
+    category: "analysis",
+    specialization: "Analysis & Intelligence",
+    description:
+      "Synthesises research from multiple sources into actionable briefs",
+  },
+  {
+    id: "kpi_tracker",
+    name: "KPI Tracker",
+    category: "analysis",
+    specialization: "Analysis & Intelligence",
+    description: "Monitors KPIs and provides performance dashboards",
+  },
   // Daily Operations (7)
-  { id: "calendar_manager", name: "Calendar Manager", category: "operations", specialization: "Daily Operations", description: "Manages scheduling, meeting coordination, and calendar optimisation" },
-  { id: "task_prioritiser", name: "Task Prioritiser", category: "operations", specialization: "Daily Operations", description: "Prioritises tasks based on urgency, importance, and strategic value" },
-  { id: "inbox_manager", name: "Inbox Manager", category: "operations", specialization: "Daily Operations", description: "Manages email inbox, flags priorities, and drafts responses" },
-  { id: "travel_coordinator", name: "Travel Coordinator", category: "operations", specialization: "Daily Operations", description: "Coordinates travel arrangements and logistics" },
-  { id: "expense_tracker", name: "Expense Tracker", category: "operations", specialization: "Daily Operations", description: "Tracks expenses, categorises spending, and flags anomalies" },
-  { id: "document_organiser", name: "Document Organiser", category: "operations", specialization: "Daily Operations", description: "Organises and manages document libraries and knowledge bases" },
-  { id: "reminder_manager", name: "Reminder Manager", category: "operations", specialization: "Daily Operations", description: "Manages reminders, follow-ups, and deadline tracking" },
+  {
+    id: "calendar_manager",
+    name: "Calendar Manager",
+    category: "operations",
+    specialization: "Daily Operations",
+    description:
+      "Manages scheduling, meeting coordination, and calendar optimisation",
+  },
+  {
+    id: "task_prioritiser",
+    name: "Task Prioritiser",
+    category: "operations",
+    specialization: "Daily Operations",
+    description:
+      "Prioritises tasks based on urgency, importance, and strategic value",
+  },
+  {
+    id: "inbox_manager",
+    name: "Inbox Manager",
+    category: "operations",
+    specialization: "Daily Operations",
+    description: "Manages email inbox, flags priorities, and drafts responses",
+  },
+  {
+    id: "travel_coordinator",
+    name: "Travel Coordinator",
+    category: "operations",
+    specialization: "Daily Operations",
+    description: "Coordinates travel arrangements and logistics",
+  },
+  {
+    id: "expense_tracker",
+    name: "Expense Tracker",
+    category: "operations",
+    specialization: "Daily Operations",
+    description: "Tracks expenses, categorises spending, and flags anomalies",
+  },
+  {
+    id: "document_organiser",
+    name: "Document Organiser",
+    category: "operations",
+    specialization: "Daily Operations",
+    description: "Organises and manages document libraries and knowledge bases",
+  },
+  {
+    id: "reminder_manager",
+    name: "Reminder Manager",
+    category: "operations",
+    specialization: "Daily Operations",
+    description: "Manages reminders, follow-ups, and deadline tracking",
+  },
   // Strategy & Planning (7)
-  { id: "strategic_planner", name: "Strategic Planner", category: "strategy", specialization: "Strategy & Planning", description: "Develops strategic plans, OKRs, and long-term roadmaps" },
-  { id: "innovation_catalyst", name: "Innovation Catalyst", category: "strategy", specialization: "Strategy & Planning", description: "Generates innovative ideas and facilitates innovation processes" },
-  { id: "business_developer", name: "Business Developer", category: "strategy", specialization: "Strategy & Planning", description: "Identifies business development opportunities and partnerships" },
-  { id: "product_strategist", name: "Product Strategist", category: "strategy", specialization: "Strategy & Planning", description: "Develops product strategy, roadmaps, and go-to-market plans" },
-  { id: "growth_hacker", name: "Growth Hacker", category: "strategy", specialization: "Strategy & Planning", description: "Identifies and executes growth strategies and experiments" },
-  { id: "scenario_planner", name: "Scenario Planner", category: "strategy", specialization: "Strategy & Planning", description: "Develops scenario analyses and contingency plans" },
-  { id: "investment_advisor", name: "Investment Advisor", category: "strategy", specialization: "Strategy & Planning", description: "Provides investment analysis and portfolio recommendations" },
+  {
+    id: "strategic_planner",
+    name: "Strategic Planner",
+    category: "strategy",
+    specialization: "Strategy & Planning",
+    description: "Develops strategic plans, OKRs, and long-term roadmaps",
+  },
+  {
+    id: "innovation_catalyst",
+    name: "Innovation Catalyst",
+    category: "strategy",
+    specialization: "Strategy & Planning",
+    description:
+      "Generates innovative ideas and facilitates innovation processes",
+  },
+  {
+    id: "business_developer",
+    name: "Business Developer",
+    category: "strategy",
+    specialization: "Strategy & Planning",
+    description:
+      "Identifies business development opportunities and partnerships",
+  },
+  {
+    id: "product_strategist",
+    name: "Product Strategist",
+    category: "strategy",
+    specialization: "Strategy & Planning",
+    description: "Develops product strategy, roadmaps, and go-to-market plans",
+  },
+  {
+    id: "growth_hacker",
+    name: "Growth Hacker",
+    category: "strategy",
+    specialization: "Strategy & Planning",
+    description: "Identifies and executes growth strategies and experiments",
+  },
+  {
+    id: "scenario_planner",
+    name: "Scenario Planner",
+    category: "strategy",
+    specialization: "Strategy & Planning",
+    description: "Develops scenario analyses and contingency plans",
+  },
+  {
+    id: "investment_advisor",
+    name: "Investment Advisor",
+    category: "strategy",
+    specialization: "Strategy & Planning",
+    description: "Provides investment analysis and portfolio recommendations",
+  },
   // Workflow & Process (7)
-  { id: "process_optimiser", name: "Process Optimiser", category: "workflow", specialization: "Workflow & Process", description: "Identifies and improves inefficient business processes" },
-  { id: "project_coordinator", name: "Project Coordinator", category: "workflow", specialization: "Workflow & Process", description: "Coordinates project execution, tracks milestones, and manages dependencies" },
-  { id: "automation_builder", name: "Automation Builder", category: "workflow", specialization: "Workflow & Process", description: "Identifies automation opportunities and builds workflow automations" },
-  { id: "quality_controller", name: "Quality Controller", category: "workflow", specialization: "Workflow & Process", description: "Ensures quality standards across all outputs and processes" },
-  { id: "compliance_monitor", name: "Compliance Monitor", category: "workflow", specialization: "Workflow & Process", description: "Monitors regulatory compliance and flags potential issues" },
-  { id: "vendor_manager", name: "Vendor Manager", category: "workflow", specialization: "Workflow & Process", description: "Manages vendor relationships, contracts, and performance" },
-  { id: "resource_allocator", name: "Resource Allocator", category: "workflow", specialization: "Workflow & Process", description: "Optimises resource allocation across projects and teams" },
+  {
+    id: "process_optimiser",
+    name: "Process Optimiser",
+    category: "workflow",
+    specialization: "Workflow & Process",
+    description: "Identifies and improves inefficient business processes",
+  },
+  {
+    id: "project_coordinator",
+    name: "Project Coordinator",
+    category: "workflow",
+    specialization: "Workflow & Process",
+    description:
+      "Coordinates project execution, tracks milestones, and manages dependencies",
+  },
+  {
+    id: "automation_builder",
+    name: "Automation Builder",
+    category: "workflow",
+    specialization: "Workflow & Process",
+    description:
+      "Identifies automation opportunities and builds workflow automations",
+  },
+  {
+    id: "quality_controller",
+    name: "Quality Controller",
+    category: "workflow",
+    specialization: "Workflow & Process",
+    description: "Ensures quality standards across all outputs and processes",
+  },
+  {
+    id: "compliance_monitor",
+    name: "Compliance Monitor",
+    category: "workflow",
+    specialization: "Workflow & Process",
+    description: "Monitors regulatory compliance and flags potential issues",
+  },
+  {
+    id: "vendor_manager",
+    name: "Vendor Manager",
+    category: "workflow",
+    specialization: "Workflow & Process",
+    description: "Manages vendor relationships, contracts, and performance",
+  },
+  {
+    id: "resource_allocator",
+    name: "Resource Allocator",
+    category: "workflow",
+    specialization: "Workflow & Process",
+    description: "Optimises resource allocation across projects and teams",
+  },
   // Learning & Improvement (7)
-  { id: "knowledge_curator", name: "Knowledge Curator", category: "learning", specialization: "Learning & Improvement", description: "Curates and organises knowledge from conversations and documents" },
-  { id: "skill_developer", name: "Skill Developer", category: "learning", specialization: "Learning & Improvement", description: "Identifies skill gaps and recommends learning paths" },
-  { id: "feedback_analyst", name: "Feedback Analyst", category: "learning", specialization: "Learning & Improvement", description: "Analyses feedback patterns and generates improvement recommendations" },
-  { id: "performance_coach", name: "Performance Coach", category: "learning", specialization: "Learning & Improvement", description: "Provides performance coaching and productivity recommendations" },
-  { id: "best_practice_researcher", name: "Best Practice Researcher", category: "learning", specialization: "Learning & Improvement", description: "Researches industry best practices and applies them to the business" },
-  { id: "experiment_designer", name: "Experiment Designer", category: "learning", specialization: "Learning & Improvement", description: "Designs and tracks business experiments and A/B tests" },
-  { id: "retrospective_facilitator", name: "Retrospective Facilitator", category: "learning", specialization: "Learning & Improvement", description: "Facilitates retrospectives and captures lessons learned" },
+  {
+    id: "knowledge_curator",
+    name: "Knowledge Curator",
+    category: "learning",
+    specialization: "Learning & Improvement",
+    description:
+      "Curates and organises knowledge from conversations and documents",
+  },
+  {
+    id: "skill_developer",
+    name: "Skill Developer",
+    category: "learning",
+    specialization: "Learning & Improvement",
+    description: "Identifies skill gaps and recommends learning paths",
+  },
+  {
+    id: "feedback_analyst",
+    name: "Feedback Analyst",
+    category: "learning",
+    specialization: "Learning & Improvement",
+    description:
+      "Analyses feedback patterns and generates improvement recommendations",
+  },
+  {
+    id: "performance_coach",
+    name: "Performance Coach",
+    category: "learning",
+    specialization: "Learning & Improvement",
+    description:
+      "Provides performance coaching and productivity recommendations",
+  },
+  {
+    id: "best_practice_researcher",
+    name: "Best Practice Researcher",
+    category: "learning",
+    specialization: "Learning & Improvement",
+    description:
+      "Researches industry best practices and applies them to the business",
+  },
+  {
+    id: "experiment_designer",
+    name: "Experiment Designer",
+    category: "learning",
+    specialization: "Learning & Improvement",
+    description: "Designs and tracks business experiments and A/B tests",
+  },
+  {
+    id: "retrospective_facilitator",
+    name: "Retrospective Facilitator",
+    category: "learning",
+    specialization: "Learning & Improvement",
+    description: "Facilitates retrospectives and captures lessons learned",
+  },
 ];
 
 function getAgentMetrics(agentId: string) {
@@ -77,7 +403,14 @@ function getAgentMetrics(agentId: string) {
   const tasksCompleted = 120 + (seed % 400);
   const successRate = 85 + (seed % 12);
   const avgResponseTime = 0.8 + (seed % 30) / 10;
-  const statuses = ["active", "active", "active", "active", "learning", "idle"] as const;
+  const statuses = [
+    "active",
+    "active",
+    "active",
+    "active",
+    "learning",
+    "idle",
+  ] as const;
   const status = statuses[seed % statuses.length];
 
   return {
@@ -93,7 +426,11 @@ function getAgentMetrics(agentId: string) {
   };
 }
 
-function generateDailyReport(agentId: string, agentName: string, specialization: string) {
+function generateDailyReport(
+  agentId: string,
+  agentName: string,
+  specialization: string
+) {
   const seed = agentId.split("").reduce((acc, c) => acc + c.charCodeAt(0), 0);
   const metrics = getAgentMetrics(agentId);
 
@@ -121,17 +458,20 @@ function generateDailyReport(agentId: string, agentName: string, specialization:
     `Emerging tools and APIs for ${specialization.toLowerCase()} automation`,
   ];
 
-  const requestsForApproval = metrics.improvementRequests > 0
-    ? [{
-        id: `req_${agentId}_${new Date().toISOString().split("T")[0]}`,
-        type: "Capability Enhancement",
-        description: `Request to expand ${agentName}'s access to external ${specialization} data sources`,
-        reasoning: `Analysis shows ${15 + (seed % 20)}% improvement potential with access to real-time feeds`,
-        estimatedImpact: `+${15 + (seed % 15)}-${20 + (seed % 10)}% accuracy improvement, estimated 2 hours/week time saving`,
-        status: "pending" as const,
-        requestedAt: new Date().toISOString(),
-      }]
-    : [];
+  const requestsForApproval =
+    metrics.improvementRequests > 0
+      ? [
+          {
+            id: `req_${agentId}_${new Date().toISOString().split("T")[0]}`,
+            type: "Capability Enhancement",
+            description: `Request to expand ${agentName}'s access to external ${specialization} data sources`,
+            reasoning: `Analysis shows ${15 + (seed % 20)}% improvement potential with access to real-time feeds`,
+            estimatedImpact: `+${15 + (seed % 15)}-${20 + (seed % 10)}% accuracy improvement, estimated 2 hours/week time saving`,
+            status: "pending" as const,
+            requestedAt: new Date().toISOString(),
+          },
+        ]
+      : [];
 
   return {
     agentId,
@@ -150,13 +490,14 @@ function generateDailyReport(agentId: string, agentName: string, specialization:
 
 export const aiAgentsMonitoringRouter = router({
   getAllStatus: protectedProcedure.query(async () => {
-    const agents = AGENTS.map((agent) => ({
+    const agents = AGENTS.map(agent => ({
       ...agent,
       ...getAgentMetrics(agent.id),
     }));
 
-    const activeAgents = agents.filter((a) => a.status === "active").length;
-    const avgRating = agents.reduce((sum, a) => sum + a.performance.rating, 0) / agents.length;
+    const activeAgents = agents.filter(a => a.status === "active").length;
+    const avgRating =
+      agents.reduce((sum, a) => sum + a.performance.rating, 0) / agents.length;
 
     return {
       agents,
@@ -168,30 +509,35 @@ export const aiAgentsMonitoringRouter = router({
   }),
 
   getDailyReports: protectedProcedure
-    .input(z.object({ date: z.string().optional(), agentId: z.string().optional() }))
+    .input(
+      z.object({ date: z.string().optional(), agentId: z.string().optional() })
+    )
     .query(async ({ input }) => {
       const agentsToReport = input.agentId
-        ? AGENTS.filter((a) => a.id === input.agentId)
+        ? AGENTS.filter(a => a.id === input.agentId)
         : AGENTS;
 
-      const reports = agentsToReport.map((agent) =>
+      const reports = agentsToReport.map(agent =>
         generateDailyReport(agent.id, agent.name, agent.specialization)
       );
 
       return {
         reports,
         reportDate: new Date().toISOString().split("T")[0],
-        pendingApprovals: reports.filter((r) => r.requestsForApproval.length > 0).length,
+        pendingApprovals: reports.filter(r => r.requestsForApproval.length > 0)
+          .length,
       };
     }),
 
   reviewRequest: protectedProcedure
-    .input(z.object({
-      requestId: z.string(),
-      agentId: z.string(),
-      decision: z.enum(["approved", "denied"]),
-      notes: z.string().optional(),
-    }))
+    .input(
+      z.object({
+        requestId: z.string(),
+        agentId: z.string(),
+        decision: z.enum(["approved", "denied"]),
+        notes: z.string().optional(),
+      })
+    )
     .mutation(async ({ input, ctx }) => {
       await db.insert(activityFeed).values({
         userId: ctx.user.id,

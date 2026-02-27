@@ -30,22 +30,39 @@ async function buildUserContext(userId: number): Promise<string> {
 
   const [recentTasks, activeProjects, recentActivity] = await Promise.all([
     db
-      .select({ title: tasks.title, status: tasks.status, priority: tasks.priority })
+      .select({
+        title: tasks.title,
+        status: tasks.status,
+        priority: tasks.priority,
+      })
       .from(tasks)
       .where(and(eq(tasks.userId, userId), gte(tasks.createdAt, sevenDaysAgo)))
       .orderBy(desc(tasks.createdAt))
       .limit(10),
 
     db
-      .select({ name: projects.name, status: projects.status, description: projects.description })
+      .select({
+        name: projects.name,
+        status: projects.status,
+        description: projects.description,
+      })
       .from(projects)
       .where(and(eq(projects.userId, userId), eq(projects.status, "active")))
       .limit(5),
 
     db
-      .select({ action: activityFeed.action, targetName: activityFeed.targetName, description: activityFeed.description })
+      .select({
+        action: activityFeed.action,
+        targetName: activityFeed.targetName,
+        description: activityFeed.description,
+      })
       .from(activityFeed)
-      .where(and(eq(activityFeed.userId, userId), gte(activityFeed.createdAt, sevenDaysAgo)))
+      .where(
+        and(
+          eq(activityFeed.userId, userId),
+          gte(activityFeed.createdAt, sevenDaysAgo)
+        )
+      )
       .orderBy(desc(activityFeed.createdAt))
       .limit(5),
   ]);
@@ -54,28 +71,26 @@ async function buildUserContext(userId: number): Promise<string> {
 
   if (activeProjects.length > 0) {
     parts.push(
-      `Active Projects: ${activeProjects.map((p) => `${p.name} (${p.status})`).join(", ")}`
+      `Active Projects: ${activeProjects.map(p => `${p.name} (${p.status})`).join(", ")}`
     );
   }
 
   if (recentTasks.length > 0) {
-    const pending = recentTasks.filter((t) => t.status !== "completed");
+    const pending = recentTasks.filter(t => t.status !== "completed");
     if (pending.length > 0) {
       parts.push(
-        `Recent Tasks: ${pending.map((t) => `${t.title} [${t.status}]`).join("; ")}`
+        `Recent Tasks: ${pending.map(t => `${t.title} [${t.status}]`).join("; ")}`
       );
     }
   }
 
   if (recentActivity.length > 0) {
     parts.push(
-      `Recent Activity: ${recentActivity.map((a) => a.description ?? a.action).join("; ")}`
+      `Recent Activity: ${recentActivity.map(a => a.description ?? a.action).join("; ")}`
     );
   }
 
-  return parts.length > 0
-    ? `\n\nUser Context:\n${parts.join("\n")}`
-    : "";
+  return parts.length > 0 ? `\n\nUser Context:\n${parts.join("\n")}` : "";
 }
 
 export const chiefOfStaffRouter = router({
@@ -90,15 +105,13 @@ export const chiefOfStaffRouter = router({
       db
         .select()
         .from(tasks)
-        .where(and(eq(tasks.userId, userId), gte(tasks.createdAt, sevenDaysAgo)))
+        .where(
+          and(eq(tasks.userId, userId), gte(tasks.createdAt, sevenDaysAgo))
+        )
         .orderBy(desc(tasks.dueDate))
         .limit(20),
 
-      db
-        .select()
-        .from(projects)
-        .where(eq(projects.userId, userId))
-        .limit(10),
+      db.select().from(projects).where(eq(projects.userId, userId)).limit(10),
 
       db
         .select()
@@ -115,14 +128,14 @@ export const chiefOfStaffRouter = router({
       userId,
       name: ctx.user.name,
       email: ctx.user.email,
-      tasks: taskList.map((t) => ({
+      tasks: taskList.map(t => ({
         id: t.id,
         title: t.title,
         status: t.status,
         priority: t.priority,
         dueDate: t.dueDate?.toISOString() ?? null,
       })),
-      projects: projectList.map((p) => ({
+      projects: projectList.map(p => ({
         id: p.id,
         name: p.name,
         status: p.status,
@@ -146,12 +159,7 @@ export const chiefOfStaffRouter = router({
       db
         .select()
         .from(tasks)
-        .where(
-          and(
-            eq(tasks.userId, userId),
-            eq(tasks.status, "not_started")
-          )
-        )
+        .where(and(eq(tasks.userId, userId), eq(tasks.status, "not_started")))
         .orderBy(desc(tasks.createdAt))
         .limit(10),
 
@@ -169,8 +177,13 @@ export const chiefOfStaffRouter = router({
 
 Today is ${today.toLocaleDateString("en-GB", { weekday: "long", year: "numeric", month: "long", day: "numeric" })}.
 
-Pending tasks (${pendingTasks.length}): ${pendingTasks.slice(0, 5).map((t) => t.title).join(", ") || "None"}
-Active projects (${activeProjects.length}): ${activeProjects.map((p) => p.name).join(", ") || "None"}
+Pending tasks (${pendingTasks.length}): ${
+      pendingTasks
+        .slice(0, 5)
+        .map(t => t.title)
+        .join(", ") || "None"
+    }
+Active projects (${activeProjects.length}): ${activeProjects.map(p => p.name).join(", ") || "None"}
 ${userContext}
 
 Provide:

@@ -116,7 +116,8 @@ export const calendarRouter = router({
     events: [],
     totalEvents: 0,
     nextEvent: null,
-    message: "Calendar integration available — connect your calendar in Settings",
+    message:
+      "Calendar integration available — connect your calendar in Settings",
   })),
   getIntegrationStatus: protectedProcedure.query(async () => ({
     connected: false,
@@ -159,7 +160,12 @@ export const integrationsRouter = router({
       { id: "notion", name: "Notion", status: "configured", icon: "notion" },
       { id: "todoist", name: "Todoist", status: "configured", icon: "todoist" },
       { id: "zoom", name: "Zoom", status: "configured", icon: "zoom" },
-      { id: "calendly", name: "Calendly", status: "configured", icon: "calendly" },
+      {
+        id: "calendly",
+        name: "Calendly",
+        status: "configured",
+        icon: "calendly",
+      },
       { id: "trello", name: "Trello", status: "configured", icon: "trello" },
       { id: "gmail", name: "Gmail", status: "pending", icon: "gmail" },
     ],
@@ -224,7 +230,11 @@ export const cosTasksRouter = router({
     agents: [
       { id: "email_composer", name: "Email Composer", status: "active" },
       { id: "task_prioritiser", name: "Task Prioritiser", status: "active" },
-      { id: "meeting_summariser", name: "Meeting Summariser", status: "active" },
+      {
+        id: "meeting_summariser",
+        name: "Meeting Summariser",
+        status: "active",
+      },
     ],
   })),
   delegateTask: protectedProcedure
@@ -246,10 +256,22 @@ export const cosTasksRouter = router({
 export const qaRouter = router({
   getTasksWithStatus: protectedProcedure.query(async () => ({ tasks: [] })),
   submitCoSReview: protectedProcedure
-    .input(z.object({ taskId: z.number(), score: z.number(), notes: z.string().optional() }))
+    .input(
+      z.object({
+        taskId: z.number(),
+        score: z.number(),
+        notes: z.string().optional(),
+      })
+    )
     .mutation(async () => ({ success: true })),
   submitSecondaryReview: protectedProcedure
-    .input(z.object({ taskId: z.number(), score: z.number(), notes: z.string().optional() }))
+    .input(
+      z.object({
+        taskId: z.number(),
+        score: z.number(),
+        notes: z.string().optional(),
+      })
+    )
     .mutation(async () => ({ success: true })),
 });
 
@@ -353,7 +375,13 @@ export const documentLibraryRouter = router({
 // ─── Library Router ───────────────────────────────────────────────────────────
 export const libraryRouter = router({
   create: protectedProcedure
-    .input(z.object({ title: z.string(), content: z.string(), type: z.string().optional() }))
+    .input(
+      z.object({
+        title: z.string(),
+        content: z.string(),
+        type: z.string().optional(),
+      })
+    )
     .mutation(async () => ({
       id: crypto.randomUUID(),
       createdAt: new Date().toISOString(),
@@ -381,13 +409,21 @@ export const subscriptionTrackerRouter = router({
   })),
   getCostHistory: protectedProcedure.query(async () => ({ history: [] })),
   create: protectedProcedure
-    .input(z.object({ name: z.string(), cost: z.number(), billingCycle: z.string() }))
+    .input(
+      z.object({ name: z.string(), cost: z.number(), billingCycle: z.string() })
+    )
     .mutation(async () => ({
       id: crypto.randomUUID(),
       createdAt: new Date().toISOString(),
     })),
   update: protectedProcedure
-    .input(z.object({ id: z.string(), cost: z.number().optional(), status: z.string().optional() }))
+    .input(
+      z.object({
+        id: z.string(),
+        cost: z.number().optional(),
+        status: z.string().optional(),
+      })
+    )
     .mutation(async () => ({ success: true })),
   delete: protectedProcedure
     .input(z.object({ id: z.string() }))

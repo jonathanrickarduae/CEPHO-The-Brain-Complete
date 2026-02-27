@@ -43,11 +43,11 @@ export const documentLibraryRouter = router({
         .offset(input.offset);
 
       const filtered = rows
-        .filter((r) => !input.type || r.type === input.type)
-        .filter((r) => !input.qaStatus || r.qaStatus === input.qaStatus);
+        .filter(r => !input.type || r.type === input.type)
+        .filter(r => !input.qaStatus || r.qaStatus === input.qaStatus);
 
       return {
-        documents: filtered.map((d) => ({
+        documents: filtered.map(d => ({
           id: d.id,
           documentId: d.documentId,
           title: d.title,
@@ -109,7 +109,8 @@ Format as a professional Markdown document with:
       });
 
       const markdownContent =
-        completion.choices[0]?.message?.content ?? `# ${input.title}\n\nDocument generation failed.`;
+        completion.choices[0]?.message?.content ??
+        `# ${input.title}\n\nDocument generation failed.`;
 
       const docId = generateDocId();
 
@@ -177,8 +178,7 @@ Format as a professional Markdown document with:
           qaStatus: input.qaStatus,
           qaNotes: input.qaNotes ?? null,
           qaApprovedBy: input.qaApprovedBy ?? null,
-          qaApprovedAt:
-            input.qaStatus === "approved" ? new Date() : null,
+          qaApprovedAt: input.qaStatus === "approved" ? new Date() : null,
           updatedAt: new Date(),
         })
         .where(
@@ -206,7 +206,9 @@ Format as a professional Markdown document with:
     .mutation(async ({ input }) => {
       // In production this would use SendGrid/SES
       // For now, log the intent and return success
-      console.log(`[DocumentLibrary] Email send requested for doc ${input.documentId} to ${input.recipients.join(", ")}`);
+      console.log(
+        `[DocumentLibrary] Email send requested for doc ${input.documentId} to ${input.recipients.join(", ")}`
+      );
 
       return {
         success: true,

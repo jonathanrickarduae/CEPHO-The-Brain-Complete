@@ -7,11 +7,7 @@ import { z } from "zod";
 import { desc, eq, and, inArray } from "drizzle-orm";
 import { protectedProcedure, publicProcedure, router } from "../_core/trpc";
 import { db } from "../db";
-import {
-  integrations,
-  tasks,
-  smeTeams,
-} from "../../drizzle/schema";
+import { integrations, tasks, smeTeams } from "../../drizzle/schema";
 
 // ─── Auth Router ─────────────────────────────────────────────────────────────
 export const authRouter = router({
@@ -47,7 +43,12 @@ export const themeRouter = router({
 // ─── Integrations Router ──────────────────────────────────────────────────────
 const SUPPORTED_PROVIDERS = [
   { id: "asana", name: "Asana", category: "productivity", icon: "asana" },
-  { id: "google", name: "Google Calendar", category: "calendar", icon: "google" },
+  {
+    id: "google",
+    name: "Google Calendar",
+    category: "calendar",
+    icon: "google",
+  },
   { id: "outlook", name: "Outlook", category: "calendar", icon: "microsoft" },
   { id: "slack", name: "Slack", category: "communication", icon: "slack" },
   { id: "zoom", name: "Zoom", category: "communication", icon: "zoom" },
@@ -65,9 +66,9 @@ export const integrationsRouter = router({
       .from(integrations)
       .where(eq(integrations.userId, ctx.user.id));
 
-    const connectedMap = new Map(connected.map((i) => [i.provider, i]));
+    const connectedMap = new Map(connected.map(i => [i.provider, i]));
 
-    return SUPPORTED_PROVIDERS.map((p) => {
+    return SUPPORTED_PROVIDERS.map(p => {
       const conn = connectedMap.get(p.id);
       return {
         id: p.id,
@@ -93,7 +94,7 @@ export const integrationsRouter = router({
         )
       );
 
-    return rows.map((r) => ({
+    return rows.map(r => ({
       id: r.id,
       provider: r.provider,
       status: r.status,
@@ -133,7 +134,11 @@ export const integrationsRouter = router({
           })
           .where(eq(integrations.id, existing[0].id));
 
-        return { success: true, action: "reconnected", provider: input.provider };
+        return {
+          success: true,
+          action: "reconnected",
+          provider: input.provider,
+        };
       }
 
       await db.insert(integrations).values({
@@ -152,7 +157,12 @@ export const integrationsRouter = router({
     .mutation(async ({ input, ctx }) => {
       await db
         .update(integrations)
-        .set({ status: "disconnected", accessToken: null, refreshToken: null, updatedAt: new Date() })
+        .set({
+          status: "disconnected",
+          accessToken: null,
+          refreshToken: null,
+          updatedAt: new Date(),
+        })
         .where(
           and(
             eq(integrations.userId, ctx.user.id),
@@ -251,7 +261,11 @@ export const calendarRouter = router({
 
   getTodaySummary: protectedProcedure.query(async () => {
     const now = new Date();
-    const today = now.toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long" });
+    const today = now.toLocaleDateString("en-GB", {
+      weekday: "long",
+      day: "numeric",
+      month: "long",
+    });
 
     return {
       date: today,
@@ -293,11 +307,13 @@ export const gmailRouter = router({
       );
 
     return rows
-      .filter((r) => r.status === "active")
-      .map((r) => ({
+      .filter(r => r.status === "active")
+      .map(r => ({
         id: r.id,
         provider: r.provider,
-        email: (r.metadata as Record<string, string> | null)?.email ?? `${r.provider}@connected`,
+        email:
+          (r.metadata as Record<string, string> | null)?.email ??
+          `${r.provider}@connected`,
         status: r.status,
         lastSyncAt: r.lastSyncAt?.toISOString() ?? null,
       }));
@@ -318,7 +334,12 @@ export const gmailRouter = router({
     }),
 
   connect: protectedProcedure
-    .input(z.object({ provider: z.enum(["google", "outlook"]), email: z.string().email() }))
+    .input(
+      z.object({
+        provider: z.enum(["google", "outlook"]),
+        email: z.string().email(),
+      })
+    )
     .mutation(async ({ input, ctx }) => {
       await db.insert(integrations).values({
         userId: ctx.user.id,
@@ -374,14 +395,62 @@ export const cosTasksRouter = router({
   getActiveAgents: protectedProcedure.query(async () => {
     // Returns the 51 specialised CEPHO AI agents
     const AGENTS = [
-      { id: 1, name: "Victoria", role: "Chief of Staff", specialization: "Executive coordination", status: "active" },
-      { id: 2, name: "Aria", role: "Research Director", specialization: "Deep research & synthesis", status: "active" },
-      { id: 3, name: "Marcus", role: "Strategy Advisor", specialization: "Business strategy", status: "active" },
-      { id: 4, name: "Sophia", role: "Innovation Lead", specialization: "Creative ideation", status: "active" },
-      { id: 5, name: "Leo", role: "Data Analyst", specialization: "Data analysis & insights", status: "active" },
-      { id: 6, name: "Zara", role: "Content Director", specialization: "Content creation", status: "active" },
-      { id: 7, name: "Ethan", role: "Tech Advisor", specialization: "Technology & AI", status: "active" },
-      { id: 8, name: "Luna", role: "Marketing Strategist", specialization: "Growth & marketing", status: "active" },
+      {
+        id: 1,
+        name: "Victoria",
+        role: "Chief of Staff",
+        specialization: "Executive coordination",
+        status: "active",
+      },
+      {
+        id: 2,
+        name: "Aria",
+        role: "Research Director",
+        specialization: "Deep research & synthesis",
+        status: "active",
+      },
+      {
+        id: 3,
+        name: "Marcus",
+        role: "Strategy Advisor",
+        specialization: "Business strategy",
+        status: "active",
+      },
+      {
+        id: 4,
+        name: "Sophia",
+        role: "Innovation Lead",
+        specialization: "Creative ideation",
+        status: "active",
+      },
+      {
+        id: 5,
+        name: "Leo",
+        role: "Data Analyst",
+        specialization: "Data analysis & insights",
+        status: "active",
+      },
+      {
+        id: 6,
+        name: "Zara",
+        role: "Content Director",
+        specialization: "Content creation",
+        status: "active",
+      },
+      {
+        id: 7,
+        name: "Ethan",
+        role: "Tech Advisor",
+        specialization: "Technology & AI",
+        status: "active",
+      },
+      {
+        id: 8,
+        name: "Luna",
+        role: "Marketing Strategist",
+        specialization: "Growth & marketing",
+        status: "active",
+      },
     ];
     return AGENTS;
   }),
@@ -401,7 +470,7 @@ export const cosTasksRouter = router({
         .orderBy(desc(tasks.createdAt))
         .limit(50);
 
-      return rows.map((t) => ({
+      return rows.map(t => ({
         id: t.id,
         title: t.title,
         status: t.status,
@@ -428,12 +497,7 @@ export const cosTasksRouter = router({
           assignedTo: `agent:${input.agentId}`,
           updatedAt: new Date(),
         })
-        .where(
-          and(
-            eq(tasks.id, input.taskId),
-            eq(tasks.userId, ctx.user.id)
-          )
-        );
+        .where(and(eq(tasks.id, input.taskId), eq(tasks.userId, ctx.user.id)));
 
       return { success: true, delegatedTo: input.agentId };
     }),
@@ -454,7 +518,7 @@ export const qaRouter = router({
       .orderBy(desc(tasks.updatedAt))
       .limit(50);
 
-    return rows.map((t) => ({
+    return rows.map(t => ({
       id: t.id,
       title: t.title,
       status: t.status,
@@ -479,12 +543,7 @@ export const qaRouter = router({
           status: input.approved ? "completed" : "in_progress",
           updatedAt: new Date(),
         })
-        .where(
-          and(
-            eq(tasks.id, input.taskId),
-            eq(tasks.userId, ctx.user.id)
-          )
-        );
+        .where(and(eq(tasks.id, input.taskId), eq(tasks.userId, ctx.user.id)));
 
       return { success: true, approved: input.approved };
     }),
@@ -510,12 +569,7 @@ export const qaRouter = router({
           status: statusMap[input.decision],
           updatedAt: new Date(),
         })
-        .where(
-          and(
-            eq(tasks.id, input.taskId),
-            eq(tasks.userId, ctx.user.id)
-          )
-        );
+        .where(and(eq(tasks.id, input.taskId), eq(tasks.userId, ctx.user.id)));
 
       return { success: true, decision: input.decision };
     }),
@@ -524,16 +578,28 @@ export const qaRouter = router({
 // ─── Quality Gate Router ──────────────────────────────────────────────────────
 export const qualityGateRouter = router({
   notifyApproval: protectedProcedure
-    .input(z.object({ itemId: z.number(), itemType: z.string(), notes: z.string().optional() }))
+    .input(
+      z.object({
+        itemId: z.number(),
+        itemType: z.string(),
+        notes: z.string().optional(),
+      })
+    )
     .mutation(async ({ input }) => {
-      console.log(`[QualityGate] Approval notification for ${input.itemType} #${input.itemId}`);
+      console.log(
+        `[QualityGate] Approval notification for ${input.itemType} #${input.itemId}`
+      );
       return { success: true, notified: true };
     }),
 
   notifyRejection: protectedProcedure
-    .input(z.object({ itemId: z.number(), itemType: z.string(), reason: z.string() }))
+    .input(
+      z.object({ itemId: z.number(), itemType: z.string(), reason: z.string() })
+    )
     .mutation(async ({ input }) => {
-      console.log(`[QualityGate] Rejection notification for ${input.itemType} #${input.itemId}: ${input.reason}`);
+      console.log(
+        `[QualityGate] Rejection notification for ${input.itemType} #${input.itemId}: ${input.reason}`
+      );
       return { success: true, notified: true };
     }),
 });
@@ -547,7 +613,7 @@ export const smeTeamRouter = router({
       .where(eq(smeTeams.userId, ctx.user.id))
       .orderBy(desc(smeTeams.createdAt));
 
-    return teams.map((t) => ({
+    return teams.map(t => ({
       id: t.id,
       name: t.name,
       description: t.description,
@@ -601,10 +667,7 @@ export const smeTeamRouter = router({
       await db
         .delete(smeTeams)
         .where(
-          and(
-            eq(smeTeams.id, input.id),
-            eq(smeTeams.userId, ctx.user.id)
-          )
+          and(eq(smeTeams.id, input.id), eq(smeTeams.userId, ctx.user.id))
         );
 
       return { success: true };
@@ -642,7 +705,9 @@ export const feedbackRouter = router({
       })
     )
     .mutation(async ({ input }) => {
-      console.log(`[Feedback] ${input.type}: ${input.message} (rating: ${input.rating ?? "N/A"})`);
+      console.log(
+        `[Feedback] ${input.type}: ${input.message} (rating: ${input.rating ?? "N/A"})`
+      );
       return { success: true, message: "Thank you for your feedback!" };
     }),
 });
@@ -650,9 +715,16 @@ export const feedbackRouter = router({
 // ─── NPS Router ───────────────────────────────────────────────────────────────
 export const npsRouter = router({
   submit: protectedProcedure
-    .input(z.object({ score: z.number().min(0).max(10), comment: z.string().optional() }))
+    .input(
+      z.object({
+        score: z.number().min(0).max(10),
+        comment: z.string().optional(),
+      })
+    )
     .mutation(async ({ input }) => {
-      console.log(`[NPS] Score: ${input.score}, Comment: ${input.comment ?? "none"}`);
+      console.log(
+        `[NPS] Score: ${input.score}, Comment: ${input.comment ?? "none"}`
+      );
       return { success: true };
     }),
 
@@ -679,7 +751,12 @@ export const teamCapabilitiesRouter = router({
 // ─── Library Router ───────────────────────────────────────────────────────────
 export const libraryRouter = router({
   list: protectedProcedure
-    .input(z.object({ category: z.string().optional(), limit: z.number().default(20) }))
+    .input(
+      z.object({
+        category: z.string().optional(),
+        limit: z.number().default(20),
+      })
+    )
     .query(async () => {
       return { items: [], total: 0 };
     }),
@@ -723,7 +800,9 @@ export const aiRouter = router({
   }),
 
   complete: protectedProcedure
-    .input(z.object({ prompt: z.string().min(1), context: z.string().optional() }))
+    .input(
+      z.object({ prompt: z.string().min(1), context: z.string().optional() })
+    )
     .mutation(async ({ input }) => {
       const { default: OpenAI } = await import("openai");
       const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
@@ -731,7 +810,9 @@ export const aiRouter = router({
       const completion = await openai.chat.completions.create({
         model: "gpt-4o-mini",
         messages: [
-          ...(input.context ? [{ role: "system" as const, content: input.context }] : []),
+          ...(input.context
+            ? [{ role: "system" as const, content: input.context }]
+            : []),
           { role: "user" as const, content: input.prompt },
         ],
         max_tokens: 1000,

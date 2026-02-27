@@ -39,7 +39,10 @@ export const questionnaireRouter = router({
           section: input.section ?? null,
         })
         .onConflictDoUpdate({
-          target: [questionnaireResponses.userId, questionnaireResponses.questionId],
+          target: [
+            questionnaireResponses.userId,
+            questionnaireResponses.questionId,
+          ],
           set: {
             scaleValue: input.scaleValue ?? null,
             booleanValue: input.booleanValue ?? null,
@@ -66,7 +69,7 @@ export const questionnaireRouter = router({
       .from(questionnaireResponses)
       .where(eq(questionnaireResponses.userId, ctx.user.id));
 
-    return rows.map((r) => ({
+    return rows.map(r => ({
       id: r.id,
       questionId: r.questionId,
       questionType: r.questionType,

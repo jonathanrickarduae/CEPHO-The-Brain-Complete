@@ -28,16 +28,26 @@ function NavigationMenu() {
   return (
     <nav aria-label="Main navigation">
       <ul>
-        <li><a href="/dashboard">Dashboard</a></li>
-        <li><a href="/tasks">Tasks</a></li>
-        <li><a href="/settings">Settings</a></li>
+        <li>
+          <a href="/dashboard">Dashboard</a>
+        </li>
+        <li>
+          <a href="/tasks">Tasks</a>
+        </li>
+        <li>
+          <a href="/settings">Settings</a>
+        </li>
       </ul>
     </nav>
   );
 }
 
 function AlertMessage({ type }: { type: "error" | "success" | "info" }) {
-  const roleMap = { error: "alert", success: "status", info: "status" } as const;
+  const roleMap = {
+    error: "alert",
+    success: "status",
+    info: "status",
+  } as const;
   return (
     <div role={roleMap[type]} aria-live="polite">
       {type === "error" ? "An error occurred" : "Operation successful"}
@@ -49,35 +59,45 @@ describe("Accessibility Tests", () => {
   it("button has no critical accessibility violations", async () => {
     const { container } = render(<SimpleButton label="Click me" />);
     const results = await axe(container);
-    const critical = results.violations.filter(v => v.impact === "critical" || v.impact === "serious");
+    const critical = results.violations.filter(
+      v => v.impact === "critical" || v.impact === "serious"
+    );
     expect(critical).toHaveLength(0);
   });
 
   it("form with label has no critical accessibility violations", async () => {
     const { container } = render(<FormWithLabel />);
     const results = await axe(container);
-    const critical = results.violations.filter(v => v.impact === "critical" || v.impact === "serious");
+    const critical = results.violations.filter(
+      v => v.impact === "critical" || v.impact === "serious"
+    );
     expect(critical).toHaveLength(0);
   });
 
   it("navigation menu has no critical accessibility violations", async () => {
     const { container } = render(<NavigationMenu />);
     const results = await axe(container);
-    const critical = results.violations.filter(v => v.impact === "critical" || v.impact === "serious");
+    const critical = results.violations.filter(
+      v => v.impact === "critical" || v.impact === "serious"
+    );
     expect(critical).toHaveLength(0);
   });
 
   it("error alert has no critical accessibility violations", async () => {
     const { container } = render(<AlertMessage type="error" />);
     const results = await axe(container);
-    const critical = results.violations.filter(v => v.impact === "critical" || v.impact === "serious");
+    const critical = results.violations.filter(
+      v => v.impact === "critical" || v.impact === "serious"
+    );
     expect(critical).toHaveLength(0);
   });
 
   it("success status has no critical accessibility violations", async () => {
     const { container } = render(<AlertMessage type="success" />);
     const results = await axe(container);
-    const critical = results.violations.filter(v => v.impact === "critical" || v.impact === "serious");
+    const critical = results.violations.filter(
+      v => v.impact === "critical" || v.impact === "serious"
+    );
     expect(critical).toHaveLength(0);
   });
 });

@@ -15,7 +15,11 @@ async function request(path: string, options: RequestInit = {}) {
     ...options,
   });
   let body: unknown;
-  try { body = await res.json(); } catch { body = await res.text(); }
+  try {
+    body = await res.json();
+  } catch {
+    body = await res.text();
+  }
   return { status: res.status, body, headers: res.headers };
 }
 
@@ -28,7 +32,10 @@ describeIf("Auth Endpoints (integration)", () => {
   it("POST /api/auth/login returns 401 for wrong credentials", async () => {
     const { status } = await request("/api/auth/login", {
       method: "POST",
-      body: JSON.stringify({ email: "wrong@test.com", password: "wrongpassword" }),
+      body: JSON.stringify({
+        email: "wrong@test.com",
+        password: "wrongpassword",
+      }),
     });
     expect([400, 401, 403]).toContain(status);
   });

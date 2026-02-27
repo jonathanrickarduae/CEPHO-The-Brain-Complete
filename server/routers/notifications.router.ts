@@ -24,8 +24,8 @@ export const notificationsRouter = router({
         .limit(input.limit);
 
       return rows
-        .filter((n) => !input.unreadOnly || !n.read)
-        .map((n) => ({
+        .filter(n => !input.unreadOnly || !n.read)
+        .map(n => ({
           id: n.id,
           type: n.type,
           title: n.title,
