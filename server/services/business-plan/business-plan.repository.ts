@@ -1,23 +1,25 @@
-import { getDb } from '../../db';
+import { getDb } from "../../db";
 import {
   businessPlanReviewVersions,
   InsertBusinessPlanReviewVersion,
   BusinessPlanReviewVersion,
-} from '../../../drizzle/schema';
-import { eq, and, desc } from 'drizzle-orm';
+} from "../../../drizzle/schema";
+import { eq, and, desc } from "drizzle-orm";
 
 /**
  * Business Plan Repository
- * 
+ *
  * Handles all database operations for business plan reviews.
  */
 export class BusinessPlanRepository {
   /**
    * Create a new business plan review version
    */
-  async create(data: InsertBusinessPlanReviewVersion): Promise<BusinessPlanReviewVersion> {
+  async create(
+    data: InsertBusinessPlanReviewVersion
+  ): Promise<BusinessPlanReviewVersion> {
     const db = await getDb();
-    if (!db) throw new Error('Database not available');
+    if (!db) throw new Error("Database not available");
 
     const [review] = await db
       .insert(businessPlanReviewVersions)
@@ -30,7 +32,10 @@ export class BusinessPlanRepository {
   /**
    * Find review by ID
    */
-  async findById(id: number, userId: number): Promise<BusinessPlanReviewVersion | null> {
+  async findById(
+    id: number,
+    userId: number
+  ): Promise<BusinessPlanReviewVersion | null> {
     const db = await getDb();
     if (!db) return null;
 
@@ -82,7 +87,10 @@ export class BusinessPlanRepository {
   /**
    * Find review by version number
    */
-  async findByVersion(userId: number, versionNumber: number): Promise<BusinessPlanReviewVersion | null> {
+  async findByVersion(
+    userId: number,
+    versionNumber: number
+  ): Promise<BusinessPlanReviewVersion | null> {
     const db = await getDb();
     if (!db) return null;
 

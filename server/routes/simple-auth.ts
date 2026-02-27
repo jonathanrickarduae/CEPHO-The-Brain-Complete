@@ -26,12 +26,19 @@ function getAdminUser() {
   if (!email || !password) {
     console.error(
       "[Auth] CRITICAL: ADMIN_EMAIL and ADMIN_PASSWORD environment variables must be set. " +
-      "The server will not accept logins until these are configured."
+        "The server will not accept logins until these are configured."
     );
     return null;
   }
 
-  return { email, password, name, id: 1, openId: "admin_001", appId: "cepho_app" };
+  return {
+    email,
+    password,
+    name,
+    id: 1,
+    openId: "admin_001",
+    appId: "cepho_app",
+  };
 }
 
 router.post("/login", async (req, res) => {
@@ -44,7 +51,11 @@ router.post("/login", async (req, res) => {
 
     const adminUser = getAdminUser();
     if (!adminUser) {
-      return res.status(503).json({ error: "Authentication is not configured. Contact the administrator." });
+      return res
+        .status(503)
+        .json({
+          error: "Authentication is not configured. Contact the administrator.",
+        });
     }
 
     if (
@@ -57,7 +68,11 @@ router.post("/login", async (req, res) => {
     const secret = process.env.JWT_SECRET;
     if (!secret) {
       console.error("[Auth] JWT_SECRET is not set — cannot issue tokens.");
-      return res.status(503).json({ error: "Authentication misconfigured. Contact the administrator." });
+      return res
+        .status(503)
+        .json({
+          error: "Authentication misconfigured. Contact the administrator.",
+        });
     }
 
     const token = jwt.sign(
@@ -101,7 +116,7 @@ router.post("/logout", (_req, res) => {
 router.get("/me", async (req, res) => {
   try {
     const token = req.cookies?.session_token;
-    
+
     if (!token) {
       return res.status(401).json({ error: "Not authenticated" });
     }

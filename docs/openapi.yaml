@@ -3,16 +3,16 @@ info:
   title: CEPHO.AI Platform API
   description: |
     Comprehensive API documentation for the CEPHO.AI platform.
-    
+
     ## Authentication
     Most endpoints require authentication via session cookies.
-    
+
     ## Rate Limiting
     - Global: 100 requests per 15 minutes
     - Auth endpoints: 5 requests per 15 minutes
     - Heavy operations: 10 requests per 15 minutes
     - Read-only: 200 requests per 15 minutes
-    
+
     ## Error Handling
     All errors follow the standard format:
     ```json
@@ -64,7 +64,7 @@ paths:
       description: Returns basic server health status
       operationId: getHealth
       responses:
-        '200':
+        "200":
           description: Server is healthy
           content:
             application/json:
@@ -92,7 +92,7 @@ paths:
       description: Checks if server is ready to accept traffic (database connected, etc.)
       operationId: getHealthReady
       responses:
-        '200':
+        "200":
           description: Server is ready
           content:
             application/json:
@@ -120,12 +120,12 @@ paths:
                           status:
                             type: string
                             example: not_configured
-        '503':
+        "503":
           description: Server is not ready
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
 
   /health/live:
     get:
@@ -135,7 +135,7 @@ paths:
       description: Checks if server process is alive
       operationId: getHealthLive
       responses:
-        '200':
+        "200":
           description: Server is alive
           content:
             application/json:
@@ -177,7 +177,7 @@ paths:
       description: Checks if server has completed startup
       operationId: getHealthStartup
       responses:
-        '200':
+        "200":
           description: Server startup complete
           content:
             application/json:
@@ -202,7 +202,7 @@ paths:
       description: Returns Prometheus-formatted metrics for monitoring
       operationId: getMetrics
       responses:
-        '200':
+        "200":
           description: Metrics in Prometheus format
           content:
             text/plain:
@@ -221,7 +221,7 @@ paths:
       description: Returns comprehensive API usage statistics
       operationId: getAnalytics
       responses:
-        '200':
+        "200":
           description: Analytics data
           content:
             application/json:
@@ -249,7 +249,7 @@ paths:
                   endpoints:
                     type: array
                     items:
-                      $ref: '#/components/schemas/EndpointStats'
+                      $ref: "#/components/schemas/EndpointStats"
 
   /api/analytics/endpoint:
     get:
@@ -273,18 +273,18 @@ paths:
             enum: [GET, POST, PUT, DELETE, PATCH]
           description: HTTP method filter
       responses:
-        '200':
+        "200":
           description: Endpoint analytics
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/EndpointStats'
-        '404':
+                $ref: "#/components/schemas/EndpointStats"
+        "404":
           description: Endpoint not found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
 
   /api/analytics/export:
     get:
@@ -294,7 +294,7 @@ paths:
       description: Exports all analytics data as JSON
       operationId: exportAnalytics
       responses:
-        '200':
+        "200":
           description: Analytics export
           content:
             application/json:
@@ -318,7 +318,7 @@ paths:
       security:
         - sessionAuth: []
       responses:
-        '200':
+        "200":
           description: Analytics reset successful
           content:
             application/json:
@@ -328,12 +328,12 @@ paths:
                   message:
                     type: string
                     example: Analytics data reset successfully
-        '401':
+        "401":
           description: Unauthorized
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
 
   /api/csrf-token:
     get:
@@ -343,7 +343,7 @@ paths:
       description: Returns a CSRF token for form submissions
       operationId: getCsrfToken
       responses:
-        '200':
+        "200":
           description: CSRF token
           content:
             application/json:

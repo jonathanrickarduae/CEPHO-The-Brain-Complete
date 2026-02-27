@@ -1,7 +1,7 @@
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { Play, Pause, Volume2, Video, Loader2 } from 'lucide-react';
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Play, Pause, Volume2, Video, Loader2 } from "lucide-react";
 
 interface VictoriaPresenterProps {
   onPlayAudio: () => void;
@@ -16,7 +16,7 @@ export function VictoriaPresenter({
   onPlayVideo,
   isPlaying,
   isGenerating,
-  briefTitle = "Daily Brief"
+  briefTitle = "Daily Brief",
 }: VictoriaPresenterProps) {
   return (
     <Card className="bg-gradient-to-br from-slate-900 to-slate-800 border-pink-500/30 overflow-hidden">
@@ -28,17 +28,31 @@ export function VictoriaPresenter({
               {/* Placeholder avatar - can be replaced with actual image */}
               <svg viewBox="0 0 100 100" className="w-full h-full">
                 <defs>
-                  <linearGradient id="victoriaGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <linearGradient
+                    id="victoriaGrad"
+                    x1="0%"
+                    y1="0%"
+                    x2="100%"
+                    y2="100%"
+                  >
                     <stop offset="0%" stopColor="#ec4899" />
                     <stop offset="100%" stopColor="#8b5cf6" />
                   </linearGradient>
                 </defs>
                 <circle cx="50" cy="35" r="20" fill="#fcd5ce" />
                 <ellipse cx="50" cy="85" rx="30" ry="25" fill="#fcd5ce" />
-                <path d="M30 25 Q50 5 70 25 Q75 40 70 50 Q50 55 30 50 Q25 40 30 25" fill="#1a1a2e" />
+                <path
+                  d="M30 25 Q50 5 70 25 Q75 40 70 50 Q50 55 30 50 Q25 40 30 25"
+                  fill="#1a1a2e"
+                />
                 <circle cx="42" cy="35" r="3" fill="#1a1a2e" />
                 <circle cx="58" cy="35" r="3" fill="#1a1a2e" />
-                <path d="M45 45 Q50 48 55 45" stroke="#1a1a2e" strokeWidth="2" fill="none" />
+                <path
+                  d="M45 45 Q50 48 55 45"
+                  stroke="#1a1a2e"
+                  strokeWidth="2"
+                  fill="none"
+                />
               </svg>
             </div>
             {isPlaying && (
@@ -81,7 +95,7 @@ export function VictoriaPresenter({
                 </>
               )}
             </Button>
-            
+
             {onPlayVideo && (
               <Button
                 variant="outline"

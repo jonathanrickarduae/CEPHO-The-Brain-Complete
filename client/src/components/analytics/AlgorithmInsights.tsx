@@ -1,18 +1,40 @@
-import { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { platformIntelligence, type PlatformData, type AlgorithmInsight } from '@/lib/PlatformIntelligence';
-import { ChevronDown, ChevronUp, Clock, Lightbulb, Target, TrendingUp } from 'lucide-react';
+import { useState } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import {
+  platformIntelligence,
+  type PlatformData,
+  type AlgorithmInsight,
+} from "@/lib/PlatformIntelligence";
+import {
+  ChevronDown,
+  ChevronUp,
+  Clock,
+  Lightbulb,
+  Target,
+  TrendingUp,
+} from "lucide-react";
 
 interface AlgorithmInsightsProps {
   selectedPlatform?: string;
   onPlatformChange?: (platform: string) => void;
 }
 
-export function AlgorithmInsights({ selectedPlatform, onPlatformChange }: AlgorithmInsightsProps) {
-  const [activePlatform, setActivePlatform] = useState(selectedPlatform || 'instagram');
+export function AlgorithmInsights({
+  selectedPlatform,
+  onPlatformChange,
+}: AlgorithmInsightsProps) {
+  const [activePlatform, setActivePlatform] = useState(
+    selectedPlatform || "instagram"
+  );
   const [expandedFactors, setExpandedFactors] = useState<string[]>([]);
 
   const handlePlatformChange = (platform: string) => {
@@ -28,19 +50,27 @@ export function AlgorithmInsights({ selectedPlatform, onPlatformChange }: Algori
 
   const getWeightColor = (weight: string) => {
     switch (weight) {
-      case 'high': return 'bg-green-500';
-      case 'medium': return 'bg-yellow-500';
-      case 'low': return 'bg-gray-400';
-      default: return 'bg-gray-400';
+      case "high":
+        return "bg-green-500";
+      case "medium":
+        return "bg-yellow-500";
+      case "low":
+        return "bg-gray-400";
+      default:
+        return "bg-gray-400";
     }
   };
 
   const getWeightValue = (weight: string) => {
     switch (weight) {
-      case 'high': return 100;
-      case 'medium': return 60;
-      case 'low': return 30;
-      default: return 0;
+      case "high":
+        return 100;
+      case "medium":
+        return 60;
+      case "low":
+        return 30;
+      default:
+        return 0;
     }
   };
 
@@ -55,7 +85,9 @@ export function AlgorithmInsights({ selectedPlatform, onPlatformChange }: Algori
         <TabsList className="grid w-full grid-cols-4">
           {platforms.map(platform => (
             <TabsTrigger key={platform} value={platform} className="capitalize">
-              <span className="mr-2">{platformIntelligence[platform].icon}</span>
+              <span className="mr-2">
+                {platformIntelligence[platform].icon}
+              </span>
               {platformIntelligence[platform].name}
             </TabsTrigger>
           ))}
@@ -115,11 +147,18 @@ function PlatformContent({
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-2">
                     <span className="font-medium">{factor.factor}</span>
-                    <Badge variant={factor.weight === 'high' ? 'default' : 'secondary'}>
+                    <Badge
+                      variant={
+                        factor.weight === "high" ? "default" : "secondary"
+                      }
+                    >
                       {factor.weight} impact
                     </Badge>
                   </div>
-                  <Progress value={getWeightValue(factor.weight)} className="h-2" />
+                  <Progress
+                    value={getWeightValue(factor.weight)}
+                    className="h-2"
+                  />
                 </div>
                 {expandedFactors.includes(factor.factor) ? (
                   <ChevronUp className="h-5 w-5 ml-4" />
@@ -129,7 +168,9 @@ function PlatformContent({
               </div>
               {expandedFactors.includes(factor.factor) && (
                 <div className="mt-4 pt-4 border-t">
-                  <p className="text-sm text-muted-foreground mb-3">{factor.description}</p>
+                  <p className="text-sm text-muted-foreground mb-3">
+                    {factor.description}
+                  </p>
                   <div className="space-y-2">
                     <p className="text-sm font-medium flex items-center gap-2">
                       <Lightbulb className="h-4 w-4 text-yellow-500" />
@@ -168,7 +209,9 @@ function PlatformContent({
                 </div>
                 <div className="flex-1">
                   <p className="font-medium">{content.type}</p>
-                  <p className="text-sm text-muted-foreground">{content.description}</p>
+                  <p className="text-sm text-muted-foreground">
+                    {content.description}
+                  </p>
                 </div>
               </div>
             ))}
@@ -190,7 +233,10 @@ function PlatformContent({
         <CardContent>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {platform.optimalPostTimes.slice(0, 4).map(day => (
-              <div key={day.day} className="text-center p-3 bg-muted rounded-lg">
+              <div
+                key={day.day}
+                className="text-center p-3 bg-muted rounded-lg"
+              >
                 <p className="font-medium text-sm">{day.day}</p>
                 <div className="mt-2 space-y-1">
                   {day.times.map((time, i) => (

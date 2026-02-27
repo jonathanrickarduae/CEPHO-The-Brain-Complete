@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
-import { useLocation } from 'wouter';
-import { Star, Trash2, MessageSquare, Video } from 'lucide-react';
-import { allExperts } from '@/data/ai-experts.data';
+import { useState, useEffect } from "react";
+import { useLocation } from "wouter";
+import { Star, Trash2, MessageSquare, Video } from "lucide-react";
+import { allExperts } from "@/data/ai-experts.data";
 
 interface FavoriteExpert {
   id: string;
@@ -14,12 +14,12 @@ export function MyBoard() {
 
   // Load favorites from localStorage
   useEffect(() => {
-    const saved = localStorage.getItem('favoriteExperts');
+    const saved = localStorage.getItem("favoriteExperts");
     if (saved) {
       try {
         setFavorites(JSON.parse(saved));
       } catch (error) {
-        console.error('Failed to load favorites:', error);
+        console.error("Failed to load favorites:", error);
       }
     }
   }, []);
@@ -27,7 +27,7 @@ export function MyBoard() {
   // Save favorites to localStorage
   const saveFavorites = (newFavorites: FavoriteExpert[]) => {
     setFavorites(newFavorites);
-    localStorage.setItem('favoriteExperts', JSON.stringify(newFavorites));
+    localStorage.setItem("favoriteExperts", JSON.stringify(newFavorites));
   };
 
   const addFavorite = (expertId: string) => {
@@ -48,7 +48,7 @@ export function MyBoard() {
   const favoriteExperts = favorites
     .map(fav => ({
       ...allExperts.find(e => e.id === fav.id),
-      addedAt: fav.addedAt
+      addedAt: fav.addedAt,
     }))
     .filter(e => e && e.id)
     .sort((a, b) => (b.addedAt || 0) - (a.addedAt || 0));
@@ -59,7 +59,9 @@ export function MyBoard() {
       <div className="flex items-center gap-2 mb-6">
         <Star className="w-5 h-5 text-yellow-400 fill-yellow-400" />
         <h2 className="text-xl font-bold text-foreground">My Board</h2>
-        <span className="text-sm text-muted-foreground ml-auto">{favorites.length} Expert{favorites.length !== 1 ? 's' : ''}</span>
+        <span className="text-sm text-muted-foreground ml-auto">
+          {favorites.length} Expert{favorites.length !== 1 ? "s" : ""}
+        </span>
       </div>
 
       {/* Empty State */}
@@ -67,12 +69,14 @@ export function MyBoard() {
         <div className="text-center py-12 px-4 rounded-lg border border-dashed border-border">
           <Star className="w-12 h-12 text-muted-foreground/40 mx-auto mb-3" />
           <p className="text-muted-foreground mb-2">No favorite experts yet</p>
-          <p className="text-sm text-muted-foreground/60">Star experts to add them to your board for quick access</p>
+          <p className="text-sm text-muted-foreground/60">
+            Star experts to add them to your board for quick access
+          </p>
         </div>
       ) : (
         /* Favorites Grid */
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-          {favoriteExperts.map((expert) => (
+          {favoriteExperts.map(expert => (
             <div
               key={expert.id}
               className="group relative p-4 rounded-lg bg-card/60 border border-border hover:border-primary/50 hover:bg-card/80 transition-all duration-300"
@@ -94,32 +98,48 @@ export function MyBoard() {
               {/* Expert Info */}
               <div className="mt-6">
                 <div className="text-2xl mb-2">{expert.avatar}</div>
-                <h3 className="font-bold text-foreground text-sm mb-1">{expert.name}</h3>
-                <p className="text-xs text-muted-foreground mb-3">{expert.specialty}</p>
-                
+                <h3 className="font-bold text-foreground text-sm mb-1">
+                  {expert.name}
+                </h3>
+                <p className="text-xs text-muted-foreground mb-3">
+                  {expert.specialty}
+                </p>
+
                 {/* Quick Stats */}
                 <div className="grid grid-cols-2 gap-2 mb-3 text-xs">
                   <div className="bg-primary/10 rounded px-2 py-1">
-                    <div className="text-primary font-bold">{expert.performanceScore}</div>
+                    <div className="text-primary font-bold">
+                      {expert.performanceScore}
+                    </div>
                     <div className="text-muted-foreground">Score</div>
                   </div>
                   <div className="bg-primary/10 rounded px-2 py-1">
-                    <div className="text-primary font-bold">{expert.projectsCompleted}</div>
+                    <div className="text-primary font-bold">
+                      {expert.projectsCompleted}
+                    </div>
                     <div className="text-muted-foreground">Projects</div>
                   </div>
                 </div>
 
                 {/* Action Buttons */}
                 <div className="flex gap-2">
-                  <button 
-                    onClick={() => setLocation(`/digital-twin?expert=${expert.id}&name=${encodeURIComponent(expert.name || '')}`)}
+                  <button
+                    onClick={() =>
+                      setLocation(
+                        `/digital-twin?expert=${expert.id}&name=${encodeURIComponent(expert.name || "")}`
+                      )
+                    }
                     className="flex-1 flex items-center justify-center gap-1 px-2 py-1.5 rounded text-xs font-medium bg-primary/10 text-primary hover:bg-primary/20 transition-colors"
                   >
                     <MessageSquare className="w-3.5 h-3.5" />
                     Chat
                   </button>
-                  <button 
-                    onClick={() => setLocation(`/video-studio?expert=${expert.id}&name=${encodeURIComponent(expert.name || '')}`)}
+                  <button
+                    onClick={() =>
+                      setLocation(
+                        `/video-studio?expert=${expert.id}&name=${encodeURIComponent(expert.name || "")}`
+                      )
+                    }
                     className="flex-1 flex items-center justify-center gap-1 px-2 py-1.5 rounded text-xs font-medium bg-primary/10 text-primary hover:bg-primary/20 transition-colors"
                   >
                     <Video className="w-3.5 h-3.5" />
@@ -140,12 +160,12 @@ export function useFavorites() {
   const [favorites, setFavorites] = useState<FavoriteExpert[]>([]);
 
   useEffect(() => {
-    const saved = localStorage.getItem('favoriteExperts');
+    const saved = localStorage.getItem("favoriteExperts");
     if (saved) {
       try {
         setFavorites(JSON.parse(saved));
       } catch (error) {
-        console.error('Failed to load favorites:', error);
+        console.error("Failed to load favorites:", error);
       }
     }
   }, []);
@@ -154,7 +174,7 @@ export function useFavorites() {
     setFavorites(prev => {
       if (!prev.find(f => f.id === expertId)) {
         const newFavorites = [...prev, { id: expertId, addedAt: Date.now() }];
-        localStorage.setItem('favoriteExperts', JSON.stringify(newFavorites));
+        localStorage.setItem("favoriteExperts", JSON.stringify(newFavorites));
         return newFavorites;
       }
       return prev;
@@ -164,7 +184,7 @@ export function useFavorites() {
   const removeFavorite = (expertId: string) => {
     setFavorites(prev => {
       const newFavorites = prev.filter(f => f.id !== expertId);
-      localStorage.setItem('favoriteExperts', JSON.stringify(newFavorites));
+      localStorage.setItem("favoriteExperts", JSON.stringify(newFavorites));
       return newFavorites;
     });
   };

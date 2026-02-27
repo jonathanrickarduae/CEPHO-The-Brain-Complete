@@ -1,25 +1,44 @@
 // @ts-nocheck
-import { int, pgEnum, pgTable, text, timestamp, varchar, json, boolean, real, index, uniqueIndex } from "drizzle-orm/pg-core";
+import {
+  int,
+  pgEnum,
+  pgTable,
+  text,
+  timestamp,
+  varchar,
+  json,
+  boolean,
+  real,
+  index,
+  uniqueIndex,
+} from "drizzle-orm/pg-core";
 
 /**
  * Core user table backing auth flow.
  */
-export const users = pgTable("users", {
-  id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
-  openId: varchar("openId", { length: 64 }).notNull().unique(),
-  name: text("name"),
-  email: varchar("email", { length: 320 }),
-  loginMethod: varchar("loginMethod", { length: 64 }),
-  role: text("role").notNull(),
-  themePreference: text("themePreference").notNull(),
-  createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
-  lastSignedIn: timestamp("lastSignedIn").defaultNow().notNull(),
-}, (table) => ({
-  emailIdx: index("users_email_idx").on(table.email),
-  openIdIdx: uniqueIndex("users_openid_idx").on(table.openId),
-  createdAtIdx: index("users_created_at_idx").on(table.createdAt),
-}));
+export const users = pgTable(
+  "users",
+  {
+    id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
+    openId: varchar("openId", { length: 64 }).notNull().unique(),
+    name: text("name"),
+    email: varchar("email", { length: 320 }),
+    loginMethod: varchar("loginMethod", { length: 64 }),
+    role: text("role").notNull(),
+    themePreference: text("themePreference").notNull(),
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+    updatedAt: timestamp("updatedAt")
+      .defaultNow()
+      .$onUpdate(() => new Date())
+      .notNull(),
+    lastSignedIn: timestamp("lastSignedIn").defaultNow().notNull(),
+  },
+  table => ({
+    emailIdx: index("users_email_idx").on(table.email),
+    openIdIdx: uniqueIndex("users_openid_idx").on(table.openId),
+    createdAtIdx: index("users_created_at_idx").on(table.createdAt),
+  })
+);
 
 export type User = typeof users.$inferSelect;
 export type InsertUser = typeof users.$inferInsert;
@@ -28,18 +47,25 @@ export type InsertUser = typeof users.$inferInsert;
  * Mood history - tracks emotional state throughout the day
  * Only captured 3x daily: morning, afternoon, evening
  */
-export const moodHistory = pgTable("mood_history", {
-  id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
-  userId: integer("userId").notNull(),
-  score: integer("score").notNull(), // 1-10
-  timeOfDay: text("timeOfDay").notNull(),
-  note: text("note"), // Optional context
-  createdAt: timestamp("createdAt").defaultNow().notNull(),
-}, (table) => ({
-  userIdIdx: index("mood_history_user_id_idx").on(table.userId),
-  createdAtIdx: index("mood_history_created_at_idx").on(table.createdAt),
-  userCreatedIdx: index("mood_history_user_created_idx").on(table.userId, table.createdAt),
-}));
+export const moodHistory = pgTable(
+  "mood_history",
+  {
+    id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
+    userId: integer("userId").notNull(),
+    score: integer("score").notNull(), // 1-10
+    timeOfDay: text("timeOfDay").notNull(),
+    note: text("note"), // Optional context
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+  },
+  table => ({
+    userIdIdx: index("mood_history_user_id_idx").on(table.userId),
+    createdAtIdx: index("mood_history_created_at_idx").on(table.createdAt),
+    userCreatedIdx: index("mood_history_user_created_idx").on(
+      table.userId,
+      table.createdAt
+    ),
+  })
+);
 
 export type MoodHistory = typeof moodHistory.$inferSelect;
 export type InsertMoodHistory = typeof moodHistory.$inferInsert;
@@ -59,7 +85,8 @@ export const trainingConversations = pgTable("training_conversations", {
 });
 
 export type TrainingConversation = typeof trainingConversations.$inferSelect;
-export type InsertTrainingConversation = typeof trainingConversations.$inferInsert;
+export type InsertTrainingConversation =
+  typeof trainingConversations.$inferInsert;
 
 /**
  * Decision patterns - every choice the user makes
@@ -89,7 +116,10 @@ export const userPreferences = pgTable("user_preferences", {
   confidence: real("confidence").default(0.5), // 0-1 confidence score
   source: varchar("source", { length: 50 }), // "explicit", "inferred", "conversation"
   learnedAt: timestamp("learnedAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
+  updatedAt: timestamp("updatedAt")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
 });
 
 export type UserPreference = typeof userPreferences.$inferSelect;
@@ -106,7 +136,10 @@ export const vocabularyPatterns = pgTable("vocabulary_patterns", {
   context: varchar("context", { length: 100 }), // Where this term is typically used
   frequency: integer("frequency").default(1), // How often used
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
+  updatedAt: timestamp("updatedAt")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
 });
 
 export type VocabularyPattern = typeof vocabularyPatterns.$inferSelect;
@@ -162,7 +195,10 @@ export const expertPerformance = pgTable("expert_performance", {
   lastUsed: timestamp("lastUsed"),
   notes: text("notes"), // User notes about this expert
   status: text("status").notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
+  updatedAt: timestamp("updatedAt")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
 });
 
 export type ExpertPerformance = typeof expertPerformance.$inferSelect;
@@ -184,7 +220,10 @@ export const projects = pgTable("projects", {
   assignedExperts: json("assignedExperts"), // Array of expert IDs
   metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
+  updatedAt: timestamp("updatedAt")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
 });
 
 export type Project = typeof projects.$inferSelect;
@@ -219,7 +258,9 @@ export const userSettings = pgTable("user_settings", {
   theme: text("theme").notNull(),
   governanceMode: text("governanceMode").notNull(),
   dailyBriefTime: varchar("dailyBriefTime", { length: 10 }).default("07:00"),
-  eveningReviewTime: varchar("eveningReviewTime", { length: 10 }).default("18:00"),
+  eveningReviewTime: varchar("eveningReviewTime", { length: 10 }).default(
+    "18:00"
+  ),
   lastMoodCheckMorning: timestamp("lastMoodCheckMorning"),
   lastMoodCheckAfternoon: timestamp("lastMoodCheckAfternoon"),
   lastMoodCheckEvening: timestamp("lastMoodCheckEvening"),
@@ -228,7 +269,10 @@ export const userSettings = pgTable("user_settings", {
   sidebarCollapsed: boolean("sidebarCollapsed").default(false),
   onboardingComplete: boolean("onboardingComplete").default(false),
   metadata: json("metadata"),
-  updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
+  updatedAt: timestamp("updatedAt")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
 });
 
 export type UserSettings = typeof userSettings.$inferSelect;
@@ -250,7 +294,10 @@ export const libraryDocuments = pgTable("library_documents", {
   thumbnailUrl: text("thumbnailUrl"),
   metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
+  updatedAt: timestamp("updatedAt")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
 });
 
 export type LibraryDocument = typeof libraryDocuments.$inferSelect;
@@ -259,22 +306,28 @@ export type InsertLibraryDocument = typeof libraryDocuments.$inferInsert;
 /**
  * Digital Twin conversation history
  */
-export const conversations = pgTable("conversations", {
-  id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
-  userId: integer("userId").notNull(),
-  role: text("role").notNull(),
-  content: text("content").notNull(),
-  metadata: json("metadata"), // Store additional context like mood, voice input, etc.
-  createdAt: timestamp("createdAt").defaultNow().notNull(),
-}, (table) => ({
-  userIdIdx: index("conversations_user_id_idx").on(table.userId),
-  createdAtIdx: index("conversations_created_at_idx").on(table.createdAt),
-  userCreatedIdx: index("conversations_user_created_idx").on(table.userId, table.createdAt),
-}));
+export const conversations = pgTable(
+  "conversations",
+  {
+    id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
+    userId: integer("userId").notNull(),
+    role: text("role").notNull(),
+    content: text("content").notNull(),
+    metadata: json("metadata"), // Store additional context like mood, voice input, etc.
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+  },
+  table => ({
+    userIdIdx: index("conversations_user_id_idx").on(table.userId),
+    createdAtIdx: index("conversations_created_at_idx").on(table.createdAt),
+    userCreatedIdx: index("conversations_user_created_idx").on(
+      table.userId,
+      table.createdAt
+    ),
+  })
+);
 
 export type Conversation = typeof conversations.$inferSelect;
 export type InsertConversation = typeof conversations.$inferInsert;
-
 
 /**
  * Waitlist - users waiting for access
@@ -315,16 +368,23 @@ export type InsertReferral = typeof referrals.$inferInsert;
 /**
  * User credits - earned through referrals and achievements
  */
-export const userCredits = pgTable("user_credits", {
-  id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
-  userId: integer("userId").notNull(),
-  balance: integer("balance").default(0).notNull(),
-  lifetimeEarned: integer("lifetimeEarned").default(0).notNull(),
-  lifetimeSpent: integer("lifetimeSpent").default(0).notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
-}, (table) => ({
-  idxIdx: index("userCredits_user_id_idx").on(table.userId),
-}));
+export const userCredits = pgTable(
+  "user_credits",
+  {
+    id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
+    userId: integer("userId").notNull(),
+    balance: integer("balance").default(0).notNull(),
+    lifetimeEarned: integer("lifetimeEarned").default(0).notNull(),
+    lifetimeSpent: integer("lifetimeSpent").default(0).notNull(),
+    updatedAt: timestamp("updatedAt")
+      .defaultNow()
+      .$onUpdate(() => new Date())
+      .notNull(),
+  },
+  table => ({
+    idxIdx: index("userCredits_user_id_idx").on(table.userId),
+  })
+);
 
 export type UserCredits = typeof userCredits.$inferSelect;
 export type InsertUserCredits = typeof userCredits.$inferInsert;
@@ -378,7 +438,10 @@ export const memoryBank = pgTable("memory_bank", {
   source: varchar("source", { length: 100 }), // Where this memory came from
   lastAccessed: timestamp("lastAccessed"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
+  updatedAt: timestamp("updatedAt")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
 });
 
 export type MemoryBank = typeof memoryBank.$inferSelect;
@@ -387,23 +450,30 @@ export type InsertMemoryBank = typeof memoryBank.$inferInsert;
 /**
  * Wellness scores - daily calculated wellness metrics
  */
-export const wellnessScores = pgTable("wellness_scores", {
-  id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
-  userId: integer("userId").notNull(),
-  date: timestamp("date").notNull(),
-  overallScore: real("overallScore").notNull(), // 0-10
-  moodScore: real("moodScore"),
-  productivityScore: real("productivityScore"),
-  balanceScore: real("balanceScore"),
-  momentumScore: real("momentumScore"),
-  factors: json("factors"), // Breakdown of contributing factors
-  createdAt: timestamp("createdAt").defaultNow().notNull(),
-}, (table) => ({
-  userIdIdx: index("wellnessScores_user_id_idx").on(table.userId),
-  createdAtIdx: index("wellnessScores_created_at_idx").on(table.createdAt),
-  userCreatedIdx: index("wellnessScores_user_created_idx").on(table.userId, table.createdAt),
-}));
-export type WellnessScore = typeof wellnessScores.$inferSelect;;
+export const wellnessScores = pgTable(
+  "wellness_scores",
+  {
+    id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
+    userId: integer("userId").notNull(),
+    date: timestamp("date").notNull(),
+    overallScore: real("overallScore").notNull(), // 0-10
+    moodScore: real("moodScore"),
+    productivityScore: real("productivityScore"),
+    balanceScore: real("balanceScore"),
+    momentumScore: real("momentumScore"),
+    factors: json("factors"), // Breakdown of contributing factors
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+  },
+  table => ({
+    userIdIdx: index("wellnessScores_user_id_idx").on(table.userId),
+    createdAtIdx: index("wellnessScores_created_at_idx").on(table.createdAt),
+    userCreatedIdx: index("wellnessScores_user_created_idx").on(
+      table.userId,
+      table.createdAt
+    ),
+  })
+);
+export type WellnessScore = typeof wellnessScores.$inferSelect;
 export type InsertWellnessScore = typeof wellnessScores.$inferInsert;
 
 /**
@@ -416,7 +486,10 @@ export const streaks = pgTable("streaks", {
   currentStreak: integer("currentStreak").default(0).notNull(),
   longestStreak: integer("longestStreak").default(0).notNull(),
   lastActivityDate: timestamp("lastActivityDate"),
-  updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
+  updatedAt: timestamp("updatedAt")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
 });
 
 export type Streak = typeof streaks.$inferSelect;
@@ -435,7 +508,6 @@ export const achievements = pgTable("achievements", {
 export type Achievement = typeof achievements.$inferSelect;
 export type InsertAchievement = typeof achievements.$inferInsert;
 
-
 /**
  * Competitors - tracked competitive landscape
  */
@@ -452,7 +524,10 @@ export const competitors = pgTable("competitors", {
   threatLevel: text("threatLevel"),
   lastAnalyzed: timestamp("lastAnalyzed"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
+  updatedAt: timestamp("updatedAt")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
 });
 
 export type Competitor = typeof competitors.$inferSelect;
@@ -471,7 +546,10 @@ export const featureComparison = pgTable("feature_comparison", {
   competitorData: json("competitorData"), // { competitorId: score, ... }
   importance: text("importance"),
   notes: text("notes"),
-  updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
+  updatedAt: timestamp("updatedAt")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
 });
 
 export type FeatureComparison = typeof featureComparison.$inferSelect;
@@ -494,7 +572,8 @@ export const marketPositionHistory = pgTable("market_position_history", {
 });
 
 export type MarketPositionHistory = typeof marketPositionHistory.$inferSelect;
-export type InsertMarketPositionHistory = typeof marketPositionHistory.$inferInsert;
+export type InsertMarketPositionHistory =
+  typeof marketPositionHistory.$inferInsert;
 
 /**
  * Competitive threats - detected threats and opportunities
@@ -532,7 +611,10 @@ export const regulatoryLandscape = pgTable("regulatory_landscape", {
   description: text("description"),
   requirements: json("requirements"), // Array of specific requirements
   notes: text("notes"),
-  updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
+  updatedAt: timestamp("updatedAt")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
 });
 
 export type RegulatoryLandscape = typeof regulatoryLandscape.$inferSelect;
@@ -554,11 +636,16 @@ export const strategyRecommendations = pgTable("strategy_recommendations", {
   status: text("status"),
   generatedBy: varchar("generatedBy", { length: 100 }), // AI expert who generated it
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
+  updatedAt: timestamp("updatedAt")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
 });
 
-export type StrategyRecommendation = typeof strategyRecommendations.$inferSelect;
-export type InsertStrategyRecommendation = typeof strategyRecommendations.$inferInsert;
+export type StrategyRecommendation =
+  typeof strategyRecommendations.$inferSelect;
+export type InsertStrategyRecommendation =
+  typeof strategyRecommendations.$inferInsert;
 
 /**
  * Commercialization tasks - Digital Twin's strategy work
@@ -578,8 +665,8 @@ export const commercializationTasks = pgTable("commercialization_tasks", {
 });
 
 export type CommercializationTask = typeof commercializationTasks.$inferSelect;
-export type InsertCommercializationTask = typeof commercializationTasks.$inferInsert;
-
+export type InsertCommercializationTask =
+  typeof commercializationTasks.$inferInsert;
 
 /**
  * Two-Factor Authentication - Verification codes for Vault access
@@ -596,7 +683,8 @@ export const vaultVerificationCodes = pgTable("vault_verification_codes", {
 });
 
 export type VaultVerificationCode = typeof vaultVerificationCodes.$inferSelect;
-export type InsertVaultVerificationCode = typeof vaultVerificationCodes.$inferInsert;
+export type InsertVaultVerificationCode =
+  typeof vaultVerificationCodes.$inferInsert;
 
 /**
  * Trusted devices - devices that can skip 2FA temporarily
@@ -667,7 +755,10 @@ export const integrations = pgTable("integrations", {
   syncError: text("syncError"),
   metadata: json("metadata"), // Provider-specific data
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
+  updatedAt: timestamp("updatedAt")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
 });
 
 export type Integration = typeof integrations.$inferSelect;
@@ -738,7 +829,10 @@ export const subscriptions = pgTable("subscriptions", {
   notes: text("notes"),
   metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
+  updatedAt: timestamp("updatedAt")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
 });
 
 export type Subscription = typeof subscriptions.$inferSelect;
@@ -766,7 +860,10 @@ export const projectGenesis = pgTable("project_genesis", {
   notes: text("notes"),
   metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
+  updatedAt: timestamp("updatedAt")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
 });
 
 export type ProjectGenesisRecord = typeof projectGenesis.$inferSelect;
@@ -820,7 +917,10 @@ export const brandKit = pgTable("brand_kit", {
   templates: json("templates"), // Document template settings
   metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
+  updatedAt: timestamp("updatedAt")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
 });
 
 export type BrandKitRecord = typeof brandKit.$inferSelect;
@@ -838,7 +938,10 @@ export const signatures = pgTable("signatures", {
   fontFamily: varchar("fontFamily", { length: 100 }), // For typed signatures
   isDefault: boolean("isDefault").default(false),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
+  updatedAt: timestamp("updatedAt")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
 });
 
 export type Signature = typeof signatures.$inferSelect;
@@ -859,7 +962,10 @@ export const aiProviderSettings = pgTable("ai_provider_settings", {
   domains: json("domains"), // Array of domains this provider handles
   metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
+  updatedAt: timestamp("updatedAt")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
 });
 
 export type AIProviderSetting = typeof aiProviderSettings.$inferSelect;
@@ -883,7 +989,10 @@ export const reminders = pgTable("reminders", {
   notificationSent: boolean("notificationSent").default(false),
   metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
+  updatedAt: timestamp("updatedAt")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
 });
 
 export type Reminder = typeof reminders.$inferSelect;
@@ -916,7 +1025,10 @@ export const tasks = pgTable("tasks", {
   completedAt: timestamp("completedAt"),
   metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
+  updatedAt: timestamp("updatedAt")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
 });
 
 export type Task = typeof tasks.$inferSelect;
@@ -957,11 +1069,15 @@ export const dataRetentionPolicies = pgTable("data_retention_policies", {
   nextPurgeAt: timestamp("nextPurgeAt"),
   itemsDeleted: integer("itemsDeleted").default(0),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
+  updatedAt: timestamp("updatedAt")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
 });
 
 export type DataRetentionPolicy = typeof dataRetentionPolicies.$inferSelect;
-export type InsertDataRetentionPolicy = typeof dataRetentionPolicies.$inferInsert;
+export type InsertDataRetentionPolicy =
+  typeof dataRetentionPolicies.$inferInsert;
 
 /**
  * PII detection log - flagged sensitive data
@@ -1001,12 +1117,15 @@ export const complianceChecklists = pgTable("compliance_checklists", {
   completedAt: timestamp("completedAt"),
   metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
+  updatedAt: timestamp("updatedAt")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
 });
 
 export type ComplianceChecklist = typeof complianceChecklists.$inferSelect;
-export type InsertComplianceChecklist = typeof complianceChecklists.$inferInsert;
-
+export type InsertComplianceChecklist =
+  typeof complianceChecklists.$inferInsert;
 
 /**
  * Voice notes - captured throughout the day for Digital Twin context
@@ -1029,7 +1148,6 @@ export const voiceNotes = pgTable("voice_notes", {
 
 export type VoiceNote = typeof voiceNotes.$inferSelect;
 export type InsertVoiceNote = typeof voiceNotes.$inferInsert;
-
 
 // ============================================
 // EXPERT EVOLUTION SYSTEM
@@ -1072,7 +1190,10 @@ export const expertMemory = pgTable("expert_memory", {
   usageCount: integer("usageCount").default(0), // How often this memory has been used
   lastUsed: timestamp("lastUsed"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
+  updatedAt: timestamp("updatedAt")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
 });
 
 export type ExpertMemory = typeof expertMemory.$inferSelect;
@@ -1098,7 +1219,8 @@ export const expertPromptEvolution = pgTable("expert_prompt_evolution", {
 });
 
 export type ExpertPromptEvolution = typeof expertPromptEvolution.$inferSelect;
-export type InsertExpertPromptEvolution = typeof expertPromptEvolution.$inferInsert;
+export type InsertExpertPromptEvolution =
+  typeof expertPromptEvolution.$inferInsert;
 
 /**
  * Expert insights - shared knowledge repository
@@ -1121,7 +1243,10 @@ export const expertInsights = pgTable("expert_insights", {
   status: text("status"),
   expiresAt: timestamp("expiresAt"), // When this insight should be reviewed
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
+  updatedAt: timestamp("updatedAt")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
 });
 
 export type ExpertInsight = typeof expertInsights.$inferSelect;
@@ -1191,7 +1316,8 @@ export const expertCoachingSessions = pgTable("expert_coaching_sessions", {
 });
 
 export type ExpertCoachingSession = typeof expertCoachingSessions.$inferSelect;
-export type InsertExpertCoachingSession = typeof expertCoachingSessions.$inferInsert;
+export type InsertExpertCoachingSession =
+  typeof expertCoachingSessions.$inferInsert;
 
 /**
  * Expert domain knowledge - structured knowledge per expert domain
@@ -1209,12 +1335,15 @@ export const expertDomainKnowledge = pgTable("expert_domain_knowledge", {
   keyFrameworks: json("keyFrameworks"), // Frameworks this expert uses
   recentDevelopments: text("recentDevelopments"), // Latest updates in this domain
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
+  updatedAt: timestamp("updatedAt")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
 });
 
 export type ExpertDomainKnowledge = typeof expertDomainKnowledge.$inferSelect;
-export type InsertExpertDomainKnowledge = typeof expertDomainKnowledge.$inferInsert;
-
+export type InsertExpertDomainKnowledge =
+  typeof expertDomainKnowledge.$inferInsert;
 
 /**
  * Favorite contacts - quick access to frequently messaged contacts
@@ -1230,12 +1359,14 @@ export const favoriteContacts = pgTable("favorite_contacts", {
   order: integer("order").default(0), // For custom ordering
   isFavorited: boolean("isFavorited").default(true).notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
+  updatedAt: timestamp("updatedAt")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
 });
 
 export type FavoriteContact = typeof favoriteContacts.$inferSelect;
 export type InsertFavoriteContact = typeof favoriteContacts.$inferInsert;
-
 
 /**
  * SME Teams - assembled teams of AI experts for specific projects/tasks
@@ -1250,7 +1381,10 @@ export const smeTeams = pgTable("sme_teams", {
   projectId: integer("projectId"), // Optional link to a project
   isActive: boolean("isActive").default(true).notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
+  updatedAt: timestamp("updatedAt")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
 });
 
 export type SmeTeam = typeof smeTeams.$inferSelect;
@@ -1284,7 +1418,10 @@ export const taskQaReviews = pgTable("task_qa_reviews", {
   status: text("status").notNull(),
   improvements: json("improvements"), // Suggested improvements
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
+  updatedAt: timestamp("updatedAt")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
 });
 
 export type TaskQaReview = typeof taskQaReviews.$inferSelect;
@@ -1309,7 +1446,6 @@ export const smeFeedbackLog = pgTable("sme_feedback_log", {
 export type SmeFeedbackLog = typeof smeFeedbackLog.$inferSelect;
 export type InsertSmeFeedbackLog = typeof smeFeedbackLog.$inferInsert;
 
-
 /**
  * Expert Consultation History - tracks which experts user has consulted
  * Stores summaries and recommendations for quick reference
@@ -1329,7 +1465,10 @@ export const expertConsultations = pgTable("expert_consultations", {
   messageCount: integer("messageCount").default(0), // Number of messages exchanged
   projectId: integer("projectId"), // Optional link to project
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
+  updatedAt: timestamp("updatedAt")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
 });
 
 export type ExpertConsultation = typeof expertConsultations.$inferSelect;
@@ -1359,42 +1498,50 @@ export type InsertExpertChatSession = typeof expertChatSessions.$inferInsert;
 /**
  * Expert Chat Messages - individual messages in a chat session
  */
-export const expertChatMessages = pgTable("expert_chat_messages", {
-  id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
-  sessionId: integer("sessionId").notNull(),
-  role: text("role").notNull(),
-  content: text("content").notNull(),
-  metadata: json("metadata"), // Additional context like voice input, attachments
-  createdAt: timestamp("createdAt").defaultNow().notNull(),
-}, (table) => ({
-  idxIdx: index("expertChatMessages_created_at_idx").on(table.createdAt),
-}));
+export const expertChatMessages = pgTable(
+  "expert_chat_messages",
+  {
+    id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
+    sessionId: integer("sessionId").notNull(),
+    role: text("role").notNull(),
+    content: text("content").notNull(),
+    metadata: json("metadata"), // Additional context like voice input, attachments
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+  },
+  table => ({
+    idxIdx: index("expertChatMessages_created_at_idx").on(table.createdAt),
+  })
+);
 
 export type ExpertChatMessage = typeof expertChatMessages.$inferSelect;
 export type InsertExpertChatMessage = typeof expertChatMessages.$inferInsert;
 
-
 /**
  * Business Plan Review Versions - track review history over time
  */
-export const businessPlanReviewVersions = pgTable("business_plan_review_versions", {
-  id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
-  userId: integer("userId").notNull(),
-  projectName: varchar("projectName", { length: 300 }).notNull(),
-  versionNumber: integer("versionNumber").notNull(),
-  versionLabel: varchar("versionLabel", { length: 100 }), // e.g., "Initial Draft", "Post-Feedback"
-  overallScore: integer("overallScore"), // 0-100
-  sectionScores: json("sectionScores"), // { sectionId: score, ... }
-  reviewData: json("reviewData"), // Full review data including expert insights
-  expertTeam: json("expertTeam"), // List of expert IDs used
-  teamSelectionMode: varchar("teamSelectionMode", { length: 50 }), // "chief-of-staff" or "manual"
-  businessPlanContent: text("businessPlanContent"), // The content that was reviewed
-  sectionDocuments: json("sectionDocuments"), // { sectionId: { fileName, content }, ... }
-  createdAt: timestamp("createdAt").defaultNow().notNull(),
-});
+export const businessPlanReviewVersions = pgTable(
+  "business_plan_review_versions",
+  {
+    id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
+    userId: integer("userId").notNull(),
+    projectName: varchar("projectName", { length: 300 }).notNull(),
+    versionNumber: integer("versionNumber").notNull(),
+    versionLabel: varchar("versionLabel", { length: 100 }), // e.g., "Initial Draft", "Post-Feedback"
+    overallScore: integer("overallScore"), // 0-100
+    sectionScores: json("sectionScores"), // { sectionId: score, ... }
+    reviewData: json("reviewData"), // Full review data including expert insights
+    expertTeam: json("expertTeam"), // List of expert IDs used
+    teamSelectionMode: varchar("teamSelectionMode", { length: 50 }), // "chief-of-staff" or "manual"
+    businessPlanContent: text("businessPlanContent"), // The content that was reviewed
+    sectionDocuments: json("sectionDocuments"), // { sectionId: { fileName, content }, ... }
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+  }
+);
 
-export type BusinessPlanReviewVersion = typeof businessPlanReviewVersions.$inferSelect;
-export type InsertBusinessPlanReviewVersion = typeof businessPlanReviewVersions.$inferInsert;
+export type BusinessPlanReviewVersion =
+  typeof businessPlanReviewVersions.$inferSelect;
+export type InsertBusinessPlanReviewVersion =
+  typeof businessPlanReviewVersions.$inferInsert;
 
 /**
  * Expert Follow-up Questions - Q&A with experts after review
@@ -1412,79 +1559,109 @@ export const expertFollowUpQuestions = pgTable("expert_follow_up_questions", {
   answeredAt: timestamp("answeredAt"),
 });
 
-export type ExpertFollowUpQuestion = typeof expertFollowUpQuestions.$inferSelect;
-export type InsertExpertFollowUpQuestion = typeof expertFollowUpQuestions.$inferInsert;
+export type ExpertFollowUpQuestion =
+  typeof expertFollowUpQuestions.$inferSelect;
+export type InsertExpertFollowUpQuestion =
+  typeof expertFollowUpQuestions.$inferInsert;
 
 /**
  * Collaborative Review Sessions - Multi-user review sessions
  */
-export const collaborativeReviewSessions = pgTable("collaborative_review_sessions", {
-  id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
-  ownerId: integer("ownerId").notNull(), // User who created the session
-  projectName: varchar("projectName", { length: 255 }).notNull(),
-  templateId: varchar("templateId", { length: 100 }),
-  status: text("status").notNull(),
-  reviewData: json("reviewData"), // Current state of the review
-  createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
-});
+export const collaborativeReviewSessions = pgTable(
+  "collaborative_review_sessions",
+  {
+    id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
+    ownerId: integer("ownerId").notNull(), // User who created the session
+    projectName: varchar("projectName", { length: 255 }).notNull(),
+    templateId: varchar("templateId", { length: 100 }),
+    status: text("status").notNull(),
+    reviewData: json("reviewData"), // Current state of the review
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+    updatedAt: timestamp("updatedAt")
+      .defaultNow()
+      .$onUpdate(() => new Date())
+      .notNull(),
+  }
+);
 
-export type CollaborativeReviewSession = typeof collaborativeReviewSessions.$inferSelect;
-export type InsertCollaborativeReviewSession = typeof collaborativeReviewSessions.$inferInsert;
+export type CollaborativeReviewSession =
+  typeof collaborativeReviewSessions.$inferSelect;
+export type InsertCollaborativeReviewSession =
+  typeof collaborativeReviewSessions.$inferInsert;
 
 /**
  * Collaborative Review Participants - Users invited to a review session
  */
-export const collaborativeReviewParticipants = pgTable("collaborative_review_participants", {
-  id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
-  sessionId: integer("sessionId").notNull(),
-  userId: integer("userId").notNull(),
-  role: text("role").notNull(),
-  invitedBy: integer("invitedBy"),
-  invitedAt: timestamp("invitedAt").defaultNow().notNull(),
-  joinedAt: timestamp("joinedAt"),
-  lastActiveAt: timestamp("lastActiveAt"),
-}, (table) => ({
-  idxIdx: index("collaborativeReviewParticipants_user_id_idx").on(table.userId),
-}));
+export const collaborativeReviewParticipants = pgTable(
+  "collaborative_review_participants",
+  {
+    id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
+    sessionId: integer("sessionId").notNull(),
+    userId: integer("userId").notNull(),
+    role: text("role").notNull(),
+    invitedBy: integer("invitedBy"),
+    invitedAt: timestamp("invitedAt").defaultNow().notNull(),
+    joinedAt: timestamp("joinedAt"),
+    lastActiveAt: timestamp("lastActiveAt"),
+  },
+  table => ({
+    idxIdx: index("collaborativeReviewParticipants_user_id_idx").on(
+      table.userId
+    ),
+  })
+);
 
-export type CollaborativeReviewParticipant = typeof collaborativeReviewParticipants.$inferSelect;
-export type InsertCollaborativeReviewParticipant = typeof collaborativeReviewParticipants.$inferInsert;
+export type CollaborativeReviewParticipant =
+  typeof collaborativeReviewParticipants.$inferSelect;
+export type InsertCollaborativeReviewParticipant =
+  typeof collaborativeReviewParticipants.$inferInsert;
 
 /**
  * Collaborative Review Comments - Comments on sections from collaborators
  */
-export const collaborativeReviewComments = pgTable("collaborative_review_comments", {
-  id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
-  sessionId: integer("sessionId").notNull(),
-  userId: integer("userId").notNull(),
-  sectionId: varchar("sectionId", { length: 100 }).notNull(),
-  comment: text("comment").notNull(),
-  parentCommentId: integer("parentCommentId"), // For threaded replies
-  status: text("status").notNull(),
-  createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
-});
+export const collaborativeReviewComments = pgTable(
+  "collaborative_review_comments",
+  {
+    id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
+    sessionId: integer("sessionId").notNull(),
+    userId: integer("userId").notNull(),
+    sectionId: varchar("sectionId", { length: 100 }).notNull(),
+    comment: text("comment").notNull(),
+    parentCommentId: integer("parentCommentId"), // For threaded replies
+    status: text("status").notNull(),
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+    updatedAt: timestamp("updatedAt")
+      .defaultNow()
+      .$onUpdate(() => new Date())
+      .notNull(),
+  }
+);
 
-export type CollaborativeReviewComment = typeof collaborativeReviewComments.$inferSelect;
-export type InsertCollaborativeReviewComment = typeof collaborativeReviewComments.$inferInsert;
+export type CollaborativeReviewComment =
+  typeof collaborativeReviewComments.$inferSelect;
+export type InsertCollaborativeReviewComment =
+  typeof collaborativeReviewComments.$inferInsert;
 
 /**
  * Collaborative Review Activity - Track who reviewed what
  */
-export const collaborativeReviewActivity = pgTable("collaborative_review_activity", {
-  id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
-  sessionId: integer("sessionId").notNull(),
-  userId: integer("userId").notNull(),
-  action: text("action").notNull(),
-  sectionId: varchar("sectionId", { length: 100 }),
-  metadata: json("metadata"),
-  createdAt: timestamp("createdAt").defaultNow().notNull(),
-});
+export const collaborativeReviewActivity = pgTable(
+  "collaborative_review_activity",
+  {
+    id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
+    sessionId: integer("sessionId").notNull(),
+    userId: integer("userId").notNull(),
+    action: text("action").notNull(),
+    sectionId: varchar("sectionId", { length: 100 }),
+    metadata: json("metadata"),
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+  }
+);
 
-export type CollaborativeReviewActivity = typeof collaborativeReviewActivity.$inferSelect;
-export type InsertCollaborativeReviewActivity = typeof collaborativeReviewActivity.$inferInsert;
-
+export type CollaborativeReviewActivity =
+  typeof collaborativeReviewActivity.$inferSelect;
+export type InsertCollaborativeReviewActivity =
+  typeof collaborativeReviewActivity.$inferInsert;
 
 // ============================================================================
 // PRODUCTIVITY ENGINE FRAMEWORK TABLES
@@ -1527,7 +1704,10 @@ export const blueprints = pgTable("blueprints", {
   qualityGateStatus: text("qualityGateStatus").default("not_started").notNull(),
   metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
+  updatedAt: timestamp("updatedAt")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
 });
 
 export type Blueprint = typeof blueprints.$inferSelect;
@@ -1536,18 +1716,22 @@ export type InsertBlueprint = typeof blueprints.$inferInsert;
 /**
  * Blueprint Versions - Track document history
  */
-export const blueprintVersions = pgTable("blueprint_versions", {
-  id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
-  blueprintId: integer("blueprintId").notNull(),
-  version: integer("version").notNull(),
-  content: json("content"),
-  fileUrl: text("fileUrl"),
-  changeDescription: text("changeDescription"),
-  createdBy: integer("createdBy").notNull(),
-  createdAt: timestamp("createdAt").defaultNow().notNull(),
-}, (table) => ({
-  idxIdx: index("blueprintVersions_created_at_idx").on(table.createdAt),
-}));
+export const blueprintVersions = pgTable(
+  "blueprint_versions",
+  {
+    id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
+    blueprintId: integer("blueprintId").notNull(),
+    version: integer("version").notNull(),
+    content: json("content"),
+    fileUrl: text("fileUrl"),
+    changeDescription: text("changeDescription"),
+    createdBy: integer("createdBy").notNull(),
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+  },
+  table => ({
+    idxIdx: index("blueprintVersions_created_at_idx").on(table.createdAt),
+  })
+);
 
 export type BlueprintVersion = typeof blueprintVersions.$inferSelect;
 export type InsertBlueprintVersion = typeof blueprintVersions.$inferInsert;
@@ -1585,7 +1769,10 @@ export const smePanels = pgTable("sme_panels", {
   expertIds: json("expertIds"), // Array of expert IDs assigned to this panel
   metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
+  updatedAt: timestamp("updatedAt")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
 });
 
 export type SmePanel = typeof smePanels.$inferSelect;
@@ -1594,24 +1781,29 @@ export type InsertSmePanel = typeof smePanels.$inferInsert;
 /**
  * SME Panel Consultations - Records of panel reviews and feedback
  */
-export const smePanelConsultations = pgTable("sme_panel_consultations", {
-  id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
-  panelId: integer("panelId").notNull(),
-  blueprintId: integer("blueprintId"),
-  consultationType: text("consultationType").notNull(),
-  question: text("question"), // What was asked of the panel
-  findings: json("findings"), // Structured findings from each expert
-  recommendations: text("recommendations"),
-  risksIdentified: json("risksIdentified"), // Array of risks
-  status: text("status").notNull(),
-  completedAt: timestamp("completedAt"),
-  createdAt: timestamp("createdAt").defaultNow().notNull(),
-}, (table) => ({
-  idxIdx: index("smePanelConsultations_created_at_idx").on(table.createdAt),
-}));
+export const smePanelConsultations = pgTable(
+  "sme_panel_consultations",
+  {
+    id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
+    panelId: integer("panelId").notNull(),
+    blueprintId: integer("blueprintId"),
+    consultationType: text("consultationType").notNull(),
+    question: text("question"), // What was asked of the panel
+    findings: json("findings"), // Structured findings from each expert
+    recommendations: text("recommendations"),
+    risksIdentified: json("risksIdentified"), // Array of risks
+    status: text("status").notNull(),
+    completedAt: timestamp("completedAt"),
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+  },
+  table => ({
+    idxIdx: index("smePanelConsultations_created_at_idx").on(table.createdAt),
+  })
+);
 
 export type SmePanelConsultation = typeof smePanelConsultations.$inferSelect;
-export type InsertSmePanelConsultation = typeof smePanelConsultations.$inferInsert;
+export type InsertSmePanelConsultation =
+  typeof smePanelConsultations.$inferInsert;
 
 /**
  * Quality Gates - 4-level review protocol at each phase
@@ -1637,7 +1829,10 @@ export const qualityGates = pgTable("quality_gates", {
   gatekeeper: varchar("gatekeeper", { length: 100 }).default("Chief of Staff"),
   status: text("status").notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
+  updatedAt: timestamp("updatedAt")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
 });
 
 export type QualityGate = typeof qualityGates.$inferSelect;
@@ -1659,7 +1854,10 @@ export const processPlaybooks = pgTable("process_playbooks", {
   qualityGateCriteria: json("qualityGateCriteria"), // Criteria for passing quality gate
   isActive: boolean("isActive").default(true).notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
+  updatedAt: timestamp("updatedAt")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
 });
 
 export type ProcessPlaybook = typeof processPlaybooks.$inferSelect;
@@ -1668,26 +1866,33 @@ export type InsertProcessPlaybook = typeof processPlaybooks.$inferInsert;
 /**
  * Pre-Mortem Sessions - Proactive failure analysis
  */
-export const preMortemSessions = pgTable("pre_mortem_sessions", {
-  id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
-  userId: integer("userId").notNull(),
-  blueprintId: integer("blueprintId"),
-  projectId: integer("projectId"),
-  sessionType: text("sessionType").notNull(),
-  scenario: text("scenario"), // "Assume the project has failed..."
-  failureReasons: json("failureReasons"), // Array of identified failure reasons
-  criticalAssumptions: json("criticalAssumptions"), // Assumptions that must be tested
-  mitigationStrategies: json("mitigationStrategies"), // How to address each risk
-  panelId: integer("panelId"), // Which SME panel conducted this
-  status: text("status").notNull(),
-  completedAt: timestamp("completedAt"),
-  createdAt: timestamp("createdAt").defaultNow().notNull(),
-}, (table) => ({
-  userIdIdx: index("preMortemSessions_user_id_idx").on(table.userId),
-  projectIdIdx: index("preMortemSessions_project_id_idx").on(table.projectId),
-  createdAtIdx: index("preMortemSessions_created_at_idx").on(table.createdAt),
-  userCreatedIdx: index("preMortemSessions_user_created_idx").on(table.userId, table.createdAt),
-}));
+export const preMortemSessions = pgTable(
+  "pre_mortem_sessions",
+  {
+    id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
+    userId: integer("userId").notNull(),
+    blueprintId: integer("blueprintId"),
+    projectId: integer("projectId"),
+    sessionType: text("sessionType").notNull(),
+    scenario: text("scenario"), // "Assume the project has failed..."
+    failureReasons: json("failureReasons"), // Array of identified failure reasons
+    criticalAssumptions: json("criticalAssumptions"), // Assumptions that must be tested
+    mitigationStrategies: json("mitigationStrategies"), // How to address each risk
+    panelId: integer("panelId"), // Which SME panel conducted this
+    status: text("status").notNull(),
+    completedAt: timestamp("completedAt"),
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+  },
+  table => ({
+    userIdIdx: index("preMortemSessions_user_id_idx").on(table.userId),
+    projectIdIdx: index("preMortemSessions_project_id_idx").on(table.projectId),
+    createdAtIdx: index("preMortemSessions_created_at_idx").on(table.createdAt),
+    userCreatedIdx: index("preMortemSessions_user_created_idx").on(
+      table.userId,
+      table.createdAt
+    ),
+  })
+);
 export type PreMortemSession = typeof preMortemSessions.$inferSelect;
 export type InsertPreMortemSession = typeof preMortemSessions.$inferInsert;
 
@@ -1730,7 +1935,10 @@ export const toolIntegrations = pgTable("tool_integrations", {
   valueChainPhases: json("valueChainPhases"), // Which phases this tool is used in
   metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
+  updatedAt: timestamp("updatedAt")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
 });
 
 export type ToolIntegration = typeof toolIntegrations.$inferSelect;
@@ -1772,8 +1980,8 @@ export const expertPanelAssignments = pgTable("expert_panel_assignments", {
 });
 
 export type ExpertPanelAssignment = typeof expertPanelAssignments.$inferSelect;
-export type InsertExpertPanelAssignment = typeof expertPanelAssignments.$inferInsert;
-
+export type InsertExpertPanelAssignment =
+  typeof expertPanelAssignments.$inferInsert;
 
 // ============================================================================
 // EVENING REVIEW SYSTEM TABLES
@@ -1782,49 +1990,64 @@ export type InsertExpertPanelAssignment = typeof expertPanelAssignments.$inferIn
 /**
  * Evening Review Sessions - Track each evening review session
  */
-export const eveningReviewSessions = pgTable("evening_review_sessions", {
-  id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
-  userId: integer("userId").notNull(),
-  reviewDate: timestamp("reviewDate").notNull(),
-  startedAt: timestamp("startedAt").notNull(),
-  completedAt: timestamp("completedAt"),
-  mode: text("mode").notNull(),
-  tasksAccepted: integer("tasksAccepted").default(0).notNull(),
-  tasksDeferred: integer("tasksDeferred").default(0).notNull(),
-  tasksRejected: integer("tasksRejected").default(0).notNull(),
-  moodScore: integer("moodScore"), // 1-10
-  wentWellNotes: text("wentWellNotes"),
-  didntGoWellNotes: text("didntGoWellNotes"),
-  signalItemsGenerated: integer("signalItemsGenerated").default(0),
-  metadata: json("metadata"),
-  createdAt: timestamp("createdAt").defaultNow().notNull(),
-}, (table) => ({
-  userIdx: index("eveningReviewSessions_user_id_idx").on(table.userId),
-  createdIdx: index("eveningReviewSessions_created_at_idx").on(table.createdAt),
-  userCreatedIdx: index("eveningReviewSessions_user_created_idx").on(table.userId, table.createdAt),
-}));
+export const eveningReviewSessions = pgTable(
+  "evening_review_sessions",
+  {
+    id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
+    userId: integer("userId").notNull(),
+    reviewDate: timestamp("reviewDate").notNull(),
+    startedAt: timestamp("startedAt").notNull(),
+    completedAt: timestamp("completedAt"),
+    mode: text("mode").notNull(),
+    tasksAccepted: integer("tasksAccepted").default(0).notNull(),
+    tasksDeferred: integer("tasksDeferred").default(0).notNull(),
+    tasksRejected: integer("tasksRejected").default(0).notNull(),
+    moodScore: integer("moodScore"), // 1-10
+    wentWellNotes: text("wentWellNotes"),
+    didntGoWellNotes: text("didntGoWellNotes"),
+    signalItemsGenerated: integer("signalItemsGenerated").default(0),
+    metadata: json("metadata"),
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+  },
+  table => ({
+    userIdx: index("eveningReviewSessions_user_id_idx").on(table.userId),
+    createdIdx: index("eveningReviewSessions_created_at_idx").on(
+      table.createdAt
+    ),
+    userCreatedIdx: index("eveningReviewSessions_user_created_idx").on(
+      table.userId,
+      table.createdAt
+    ),
+  })
+);
 
 export type EveningReviewSession = typeof eveningReviewSessions.$inferSelect;
-export type InsertEveningReviewSession = typeof eveningReviewSessions.$inferInsert;
+export type InsertEveningReviewSession =
+  typeof eveningReviewSessions.$inferInsert;
 
 /**
  * Evening Review Task Decisions - Individual task decisions from reviews
  */
-export const eveningReviewTaskDecisions = pgTable("evening_review_task_decisions", {
-  id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
-  sessionId: integer("sessionId").notNull(),
-  taskId: integer("taskId"), // Link to tasks table if applicable
-  taskTitle: varchar("taskTitle", { length: 500 }).notNull(),
-  projectName: varchar("projectName", { length: 200 }),
-  decision: text("decision").notNull(),
-  priority: varchar("priority", { length: 20 }),
-  estimatedTime: varchar("estimatedTime", { length: 50 }),
-  notes: text("notes"),
-  createdAt: timestamp("createdAt").defaultNow().notNull(),
-});
+export const eveningReviewTaskDecisions = pgTable(
+  "evening_review_task_decisions",
+  {
+    id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
+    sessionId: integer("sessionId").notNull(),
+    taskId: integer("taskId"), // Link to tasks table if applicable
+    taskTitle: varchar("taskTitle", { length: 500 }).notNull(),
+    projectName: varchar("projectName", { length: 200 }),
+    decision: text("decision").notNull(),
+    priority: varchar("priority", { length: 20 }),
+    estimatedTime: varchar("estimatedTime", { length: 50 }),
+    notes: text("notes"),
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+  }
+);
 
-export type EveningReviewTaskDecision = typeof eveningReviewTaskDecisions.$inferSelect;
-export type InsertEveningReviewTaskDecision = typeof eveningReviewTaskDecisions.$inferInsert;
+export type EveningReviewTaskDecision =
+  typeof eveningReviewTaskDecisions.$inferSelect;
+export type InsertEveningReviewTaskDecision =
+  typeof eveningReviewTaskDecisions.$inferInsert;
 
 /**
  * Review Timing Patterns - Learn user's review habits
@@ -1838,11 +2061,15 @@ export const reviewTimingPatterns = pgTable("review_timing_patterns", {
   completionRate: real("completionRate").default(0), // 0-1
   autoProcessRate: real("autoProcessRate").default(0), // 0-1
   sampleCount: integer("sampleCount").default(0).notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
+  updatedAt: timestamp("updatedAt")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
 });
 
 export type ReviewTimingPattern = typeof reviewTimingPatterns.$inferSelect;
-export type InsertReviewTimingPattern = typeof reviewTimingPatterns.$inferInsert;
+export type InsertReviewTimingPattern =
+  typeof reviewTimingPatterns.$inferInsert;
 
 /**
  * Signal Items - Items prepared for the morning Signal briefing
@@ -1888,7 +2115,6 @@ export const calendarEventsCache = pgTable("calendar_events_cache", {
 export type CalendarEventCache = typeof calendarEventsCache.$inferSelect;
 export type InsertCalendarEventCache = typeof calendarEventsCache.$inferInsert;
 
-
 /**
  * Innovation Ideas - Captured ideas for strategic assessment
  */
@@ -1912,7 +2138,10 @@ export const innovationIdeas = pgTable("innovation_ideas", {
   promotedToProjectId: integer("promotedToProjectId"), // If promoted to Project Genesis
   metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
+  updatedAt: timestamp("updatedAt")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
 });
 
 export type InnovationIdea = typeof innovationIdeas.$inferSelect;
@@ -1943,21 +2172,25 @@ export type InsertIdeaAssessment = typeof ideaAssessments.$inferInsert;
 /**
  * Idea Refinements - Flywheel iteration history
  */
-export const ideaRefinements = pgTable("idea_refinements", {
-  id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
-  ideaId: integer("ideaId").notNull(),
-  fromStage: integer("fromStage").notNull(),
-  toStage: integer("toStage").notNull(),
-  refinementType: text("refinementType").notNull(),
-  previousState: json("previousState"), // Snapshot of idea before refinement
-  changes: json("changes"), // What changed
-  rationale: text("rationale"), // Why this refinement was made
-  triggeredBy: text("triggeredBy").notNull(),
-  metadata: json("metadata"),
-  createdAt: timestamp("createdAt").defaultNow().notNull(),
-}, (table) => ({
-  idxIdx: index("ideaRefinements_created_at_idx").on(table.createdAt),
-}));
+export const ideaRefinements = pgTable(
+  "idea_refinements",
+  {
+    id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
+    ideaId: integer("ideaId").notNull(),
+    fromStage: integer("fromStage").notNull(),
+    toStage: integer("toStage").notNull(),
+    refinementType: text("refinementType").notNull(),
+    previousState: json("previousState"), // Snapshot of idea before refinement
+    changes: json("changes"), // What changed
+    rationale: text("rationale"), // Why this refinement was made
+    triggeredBy: text("triggeredBy").notNull(),
+    metadata: json("metadata"),
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+  },
+  table => ({
+    idxIdx: index("ideaRefinements_created_at_idx").on(table.createdAt),
+  })
+);
 
 export type IdeaRefinement = typeof ideaRefinements.$inferSelect;
 export type InsertIdeaRefinement = typeof ideaRefinements.$inferInsert;
@@ -2007,12 +2240,14 @@ export const trendRepository = pgTable("trend_repository", {
   lastAnalyzedAt: timestamp("lastAnalyzedAt"),
   metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
+  updatedAt: timestamp("updatedAt")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
 });
 
 export type TrendRepository = typeof trendRepository.$inferSelect;
 export type InsertTrendRepository = typeof trendRepository.$inferInsert;
-
 
 /**
  * Generated Documents - Document Library for all CEPHO outputs
@@ -2036,12 +2271,14 @@ export const generatedDocuments = pgTable("generated_documents", {
   deletedProjectId: integer("deletedProjectId"), // Link to project genesis
   metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
+  updatedAt: timestamp("updatedAt")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
 });
 
 export type GeneratedDocument = typeof generatedDocuments.$inferSelect;
 export type InsertGeneratedDocument = typeof generatedDocuments.$inferInsert;
-
 
 /**
  * Funding Programs - Government funding programs database (UAE & UK)
@@ -2075,7 +2312,10 @@ export const fundingPrograms = pgTable("funding_programs", {
   lastUpdated: timestamp("lastUpdated"),
   metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
+  updatedAt: timestamp("updatedAt")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
 });
 
 export type FundingProgram = typeof fundingPrograms.$inferSelect;
@@ -2091,7 +2331,9 @@ export const fundingAssessments = pgTable("funding_assessments", {
   ideaId: integer("ideaId").notNull(), // Link to innovation idea
   programId: varchar("programId", { length: 100 }).notNull(), // Link to funding program
   eligibilityScore: real("eligibilityScore"), // 0-100 score
-  eligibilityStatus: text("eligibilityStatus").default("needs_review").notNull(),
+  eligibilityStatus: text("eligibilityStatus")
+    .default("needs_review")
+    .notNull(),
   criteriaResults: json("criteriaResults"), // Detailed results per criterion
   strengths: json("strengths"), // Array of strengths for this program
   gaps: json("gaps"), // Array of gaps/missing requirements
@@ -2103,12 +2345,14 @@ export const fundingAssessments = pgTable("funding_assessments", {
   assessedAt: timestamp("assessedAt").defaultNow().notNull(),
   metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
+  updatedAt: timestamp("updatedAt")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
 });
 
 export type FundingAssessment = typeof fundingAssessments.$inferSelect;
 export type InsertFundingAssessment = typeof fundingAssessments.$inferInsert;
-
 
 // ==================== REVENUE INFRASTRUCTURE ====================
 
@@ -2134,7 +2378,10 @@ export const revenueStreams = pgTable("revenue_streams", {
   targetCustomerSegment: varchar("targetCustomerSegment", { length: 200 }),
   notes: text("notes"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
+  updatedAt: timestamp("updatedAt")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
 });
 
 export type RevenueStream = typeof revenueStreams.$inferSelect;
@@ -2188,11 +2435,15 @@ export const pipelineOpportunities = pgTable("pipeline_opportunities", {
   notes: text("notes"),
   metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
+  updatedAt: timestamp("updatedAt")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
 });
 
 export type PipelineOpportunity = typeof pipelineOpportunities.$inferSelect;
-export type InsertPipelineOpportunity = typeof pipelineOpportunities.$inferInsert;
+export type InsertPipelineOpportunity =
+  typeof pipelineOpportunities.$inferInsert;
 
 /**
  * Pricing tiers - product/service pricing structures
@@ -2211,7 +2462,10 @@ export const pricingTiers = pgTable("pricing_tiers", {
   displayOrder: integer("displayOrder").default(0),
   stripePriceId: varchar("stripePriceId", { length: 200 }), // For Stripe integration
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
+  updatedAt: timestamp("updatedAt")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
 });
 
 export type PricingTier = typeof pricingTiers.$inferSelect;
@@ -2243,7 +2497,10 @@ export const customerAccounts = pgTable("customer_accounts", {
   notes: text("notes"),
   metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
+  updatedAt: timestamp("updatedAt")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
 });
 
 export type CustomerAccount = typeof customerAccounts.$inferSelect;
@@ -2268,7 +2525,10 @@ export const revenueForecasts = pgTable("revenue_forecasts", {
   variancePercentage: real("variancePercentage"),
   notes: text("notes"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
+  updatedAt: timestamp("updatedAt")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
 });
 
 export type RevenueForecast = typeof revenueForecasts.$inferSelect;
@@ -2298,13 +2558,14 @@ export const revenueMetricsSnapshots = pgTable("revenue_metrics_snapshots", {
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 
-export type RevenueMetricsSnapshot = typeof revenueMetricsSnapshots.$inferSelect;
-export type InsertRevenueMetricsSnapshot = typeof revenueMetricsSnapshots.$inferInsert;
-
+export type RevenueMetricsSnapshot =
+  typeof revenueMetricsSnapshots.$inferSelect;
+export type InsertRevenueMetricsSnapshot =
+  typeof revenueMetricsSnapshots.$inferInsert;
 
 /**
  * Customer Focus Group System
- * 
+ *
  * Provides virtual customer personas for idea validation, pricing feedback,
  * and product development insights. Integrated into Innovation Flywheel Stage 3-4.
  */
@@ -2314,7 +2575,7 @@ export type InsertRevenueMetricsSnapshot = typeof revenueMetricsSnapshots.$infer
  */
 export const customerPersonas = pgTable("customer_personas", {
   id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
-  
+
   // Basic demographics
   name: varchar("name", { length: 100 }).notNull(),
   age: integer("age").notNull(),
@@ -2322,37 +2583,40 @@ export const customerPersonas = pgTable("customer_personas", {
   nationality: varchar("nationality", { length: 100 }).notNull(),
   ethnicity: varchar("ethnicity", { length: 100 }),
   location: varchar("location", { length: 200 }).notNull(), // City, Country
-  
+
   // Professional profile
   occupation: varchar("occupation", { length: 200 }).notNull(),
   industry: varchar("industry", { length: 100 }).notNull(),
   jobLevel: text("jobLevel").notNull(),
   companySize: text("companySize"),
   annualIncome: text("annualIncome"),
-  
+
   // Psychographics
   personalityType: varchar("personalityType", { length: 50 }), // e.g., "INTJ", "Early Adopter", "Pragmatist"
   buyingStyle: text("buyingStyle"),
   techSavviness: text("techSavviness"),
   riskTolerance: text("riskTolerance"),
-  
+
   // Interests and pain points
   interests: json("interests"), // Array of interest areas
   painPoints: json("painPoints"), // Array of common frustrations
   goals: json("goals"), // Array of personal/professional goals
-  
+
   // Bio and context
   bio: text("bio").notNull(), // Detailed background story
   avatar: varchar("avatar", { length: 500 }), // Avatar image URL
-  
+
   // Categorization
   segment: varchar("segment", { length: 100 }), // e.g., "Tech Professional", "Healthcare Worker", "Small Business Owner"
   tier: text("tier").notNull(), // For phased rollout
-  
+
   // Metadata
   isActive: boolean("isActive").default(true).notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
+  updatedAt: timestamp("updatedAt")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
 });
 
 export type CustomerPersona = typeof customerPersonas.$inferSelect;
@@ -2364,28 +2628,31 @@ export type InsertCustomerPersona = typeof customerPersonas.$inferInsert;
 export const customerSurveys = pgTable("customer_surveys", {
   id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
   userId: integer("userId").notNull(),
-  
+
   // Survey details
   title: varchar("title", { length: 200 }).notNull(),
   description: text("description"),
   surveyType: text("surveyType").notNull(),
-  
+
   // Associated context
   innovationIdeaId: integer("innovationIdeaId"), // FK to innovation_ideas if validating an idea
   ventureName: varchar("ventureName", { length: 200 }),
   productName: varchar("productName", { length: 200 }),
-  
+
   // Survey configuration
   questions: json("questions").notNull(), // Array of question objects
   targetSegments: json("targetSegments"), // Which customer segments to survey
   sampleSize: integer("sampleSize").default(25), // How many personas to survey
-  
+
   // Status
   status: text("status").notNull(),
-  
+
   // Metadata
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
+  updatedAt: timestamp("updatedAt")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
   completedAt: timestamp("completedAt"),
 });
 
@@ -2399,66 +2666,73 @@ export const customerSurveyResponses = pgTable("customer_survey_responses", {
   id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
   surveyId: integer("surveyId").notNull(), // FK to customerSurveys
   personaId: integer("personaId").notNull(), // FK to customerPersonas
-  
+
   // Response data
   responses: json("responses").notNull(), // Array of answer objects matching questions
-  
+
   // Sentiment and analysis
   overallSentiment: text("overallSentiment"),
   willingnessToPay: text("willingnessToPay"),
   suggestedPricePoint: real("suggestedPricePoint"),
   currency: varchar("currency", { length: 10 }).default("AED"),
-  
+
   // Key insights extracted
   keyInsights: json("keyInsights"), // Array of insight strings
   concerns: json("concerns"), // Array of concern strings
   suggestions: json("suggestions"), // Array of suggestion strings
-  
+
   // Metadata
   generatedAt: timestamp("generatedAt").defaultNow().notNull(),
 });
 
-export type CustomerSurveyResponse = typeof customerSurveyResponses.$inferSelect;
-export type InsertCustomerSurveyResponse = typeof customerSurveyResponses.$inferInsert;
+export type CustomerSurveyResponse =
+  typeof customerSurveyResponses.$inferSelect;
+export type InsertCustomerSurveyResponse =
+  typeof customerSurveyResponses.$inferInsert;
 
 /**
  * Customer feedback aggregations - summarized insights from surveys
  */
-export const customerFeedbackAggregations = pgTable("customer_feedback_aggregations", {
-  id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
-  surveyId: integer("surveyId").notNull(), // FK to customerSurveys
-  userId: integer("userId").notNull(),
-  
-  // Aggregate metrics
-  totalResponses: integer("totalResponses").default(0),
-  averageSentimentScore: real("averageSentimentScore"), // -2 to +2
-  
-  // Willingness to pay distribution
-  wtpDistribution: json("wtpDistribution"), // { definitely_not: 5, unlikely: 10, ... }
-  averageSuggestedPrice: real("averageSuggestedPrice"),
-  priceRangeMin: real("priceRangeMin"),
-  priceRangeMax: real("priceRangeMax"),
-  
-  // Segment breakdowns
-  sentimentBySegment: json("sentimentBySegment"), // { "Tech Professional": 1.5, ... }
-  wtpBySegment: json("wtpBySegment"),
-  
-  // Top insights
-  topPositives: json("topPositives"), // Most common positive feedback
-  topConcerns: json("topConcerns"), // Most common concerns
-  topSuggestions: json("topSuggestions"), // Most common suggestions
-  
-  // Recommendations
-  goNoGoRecommendation: text("goNoGoRecommendation"),
-  recommendedPricePoint: real("recommendedPricePoint"),
-  keyRecommendations: json("keyRecommendations"), // Array of recommendation strings
-  
-  // Metadata
-  aggregatedAt: timestamp("aggregatedAt").defaultNow().notNull(),
-});
+export const customerFeedbackAggregations = pgTable(
+  "customer_feedback_aggregations",
+  {
+    id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
+    surveyId: integer("surveyId").notNull(), // FK to customerSurveys
+    userId: integer("userId").notNull(),
 
-export type CustomerFeedbackAggregation = typeof customerFeedbackAggregations.$inferSelect;
-export type InsertCustomerFeedbackAggregation = typeof customerFeedbackAggregations.$inferInsert;
+    // Aggregate metrics
+    totalResponses: integer("totalResponses").default(0),
+    averageSentimentScore: real("averageSentimentScore"), // -2 to +2
+
+    // Willingness to pay distribution
+    wtpDistribution: json("wtpDistribution"), // { definitely_not: 5, unlikely: 10, ... }
+    averageSuggestedPrice: real("averageSuggestedPrice"),
+    priceRangeMin: real("priceRangeMin"),
+    priceRangeMax: real("priceRangeMax"),
+
+    // Segment breakdowns
+    sentimentBySegment: json("sentimentBySegment"), // { "Tech Professional": 1.5, ... }
+    wtpBySegment: json("wtpBySegment"),
+
+    // Top insights
+    topPositives: json("topPositives"), // Most common positive feedback
+    topConcerns: json("topConcerns"), // Most common concerns
+    topSuggestions: json("topSuggestions"), // Most common suggestions
+
+    // Recommendations
+    goNoGoRecommendation: text("goNoGoRecommendation"),
+    recommendedPricePoint: real("recommendedPricePoint"),
+    keyRecommendations: json("keyRecommendations"), // Array of recommendation strings
+
+    // Metadata
+    aggregatedAt: timestamp("aggregatedAt").defaultNow().notNull(),
+  }
+);
+
+export type CustomerFeedbackAggregation =
+  typeof customerFeedbackAggregations.$inferSelect;
+export type InsertCustomerFeedbackAggregation =
+  typeof customerFeedbackAggregations.$inferInsert;
 
 /**
  * Focus group sessions - structured feedback sessions with multiple personas
@@ -2466,32 +2740,32 @@ export type InsertCustomerFeedbackAggregation = typeof customerFeedbackAggregati
 export const focusGroupSessions = pgTable("focus_group_sessions", {
   id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
   userId: integer("userId").notNull(),
-  
+
   // Session details
   title: varchar("title", { length: 200 }).notNull(),
   objective: text("objective").notNull(),
   sessionType: text("sessionType").notNull(),
-  
+
   // Associated context
   innovationIdeaId: integer("innovationIdeaId"),
   ventureName: varchar("ventureName", { length: 200 }),
-  
+
   // Participants
   participantPersonaIds: json("participantPersonaIds").notNull(), // Array of persona IDs
   participantCount: integer("participantCount").default(0),
-  
+
   // Discussion guide
   discussionGuide: json("discussionGuide"), // Array of discussion topics/questions
-  
+
   // Session output
   transcript: text("transcript"), // Full session transcript
   keyThemes: json("keyThemes"), // Extracted themes
   consensusPoints: json("consensusPoints"), // Points of agreement
   divergencePoints: json("divergencePoints"), // Points of disagreement
-  
+
   // Status
   status: text("status").notNull(),
-  
+
   // Metadata
   scheduledFor: timestamp("scheduledFor"),
   completedAt: timestamp("completedAt"),
@@ -2504,51 +2778,62 @@ export type InsertFocusGroupSession = typeof focusGroupSessions.$inferInsert;
 /**
  * Innovation validation checkpoints - tracks customer validation in the flywheel
  */
-export const innovationValidationCheckpoints = pgTable("innovation_validation_checkpoints", {
-  id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
-  userId: integer("userId").notNull(),
-  innovationIdeaId: integer("innovationIdeaId").notNull(), // FK to innovation_ideas
-  
-  // Flywheel stage
-  flywheelStage: text("flywheelStage").notNull(),
-  
-  // Validation type
-  validationType: text("validationType").notNull(),
-  
-  // Associated validation
-  surveyId: integer("surveyId"), // FK to customerSurveys
-  focusGroupId: integer("focusGroupId"), // FK to focusGroupSessions
-  
-  // Validation results
-  validationScore: real("validationScore"), // 0-100
-  passedValidation: boolean("passedValidation"),
-  
-  // Decision
-  decision: text("decision").notNull(),
-  decisionRationale: text("decisionRationale"),
-  
-  // Sign-offs
-  smeReviewCompleted: boolean("smeReviewCompleted").default(false),
-  smeReviewNotes: text("smeReviewNotes"),
-  chiefOfStaffApproved: boolean("chiefOfStaffApproved").default(false),
-  chiefOfStaffNotes: text("chiefOfStaffNotes"),
-  
-  // Metadata
-  createdAt: timestamp("createdAt").defaultNow().notNull(),
-  completedAt: timestamp("completedAt"),
-}, (table) => ({
-  userIdx: index("innovationValidationCheckpoints_user_id_idx").on(table.userId),
-  createdIdx: index("innovationValidationCheckpoints_created_at_idx").on(table.createdAt),
-  userCreatedIdx: index("innovationValidationCheckpoints_user_created_idx").on(table.userId, table.createdAt),
-}));
+export const innovationValidationCheckpoints = pgTable(
+  "innovation_validation_checkpoints",
+  {
+    id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
+    userId: integer("userId").notNull(),
+    innovationIdeaId: integer("innovationIdeaId").notNull(), // FK to innovation_ideas
 
-export type InnovationValidationCheckpoint = typeof innovationValidationCheckpoints.$inferSelect;
-export type InsertInnovationValidationCheckpoint = typeof innovationValidationCheckpoints.$inferInsert;
+    // Flywheel stage
+    flywheelStage: text("flywheelStage").notNull(),
 
+    // Validation type
+    validationType: text("validationType").notNull(),
+
+    // Associated validation
+    surveyId: integer("surveyId"), // FK to customerSurveys
+    focusGroupId: integer("focusGroupId"), // FK to focusGroupSessions
+
+    // Validation results
+    validationScore: real("validationScore"), // 0-100
+    passedValidation: boolean("passedValidation"),
+
+    // Decision
+    decision: text("decision").notNull(),
+    decisionRationale: text("decisionRationale"),
+
+    // Sign-offs
+    smeReviewCompleted: boolean("smeReviewCompleted").default(false),
+    smeReviewNotes: text("smeReviewNotes"),
+    chiefOfStaffApproved: boolean("chiefOfStaffApproved").default(false),
+    chiefOfStaffNotes: text("chiefOfStaffNotes"),
+
+    // Metadata
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+    completedAt: timestamp("completedAt"),
+  },
+  table => ({
+    userIdx: index("innovationValidationCheckpoints_user_id_idx").on(
+      table.userId
+    ),
+    createdIdx: index("innovationValidationCheckpoints_created_at_idx").on(
+      table.createdAt
+    ),
+    userCreatedIdx: index(
+      "innovationValidationCheckpoints_user_created_idx"
+    ).on(table.userId, table.createdAt),
+  })
+);
+
+export type InnovationValidationCheckpoint =
+  typeof innovationValidationCheckpoints.$inferSelect;
+export type InsertInnovationValidationCheckpoint =
+  typeof innovationValidationCheckpoints.$inferInsert;
 
 /**
  * Individual SME Assessment System
- * 
+ *
  * Enables each SME expert to provide individual scores across all 20 KPI categories,
  * with outlier detection and Chief of Staff review for discrepancies.
  */
@@ -2558,30 +2843,33 @@ export type InsertInnovationValidationCheckpoint = typeof innovationValidationCh
  */
 export const kpiCategories = pgTable("kpi_categories", {
   id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
-  
+
   // Category identification
   categoryNumber: integer("categoryNumber").notNull().unique(), // 1-20
   name: varchar("name", { length: 200 }).notNull(),
   description: text("description").notNull(),
-  
+
   // Scoring guidance
   scoringCriteria: json("scoringCriteria"), // What constitutes each score level
   excellentThreshold: integer("excellentThreshold").default(90), // 90%+
   goodThreshold: integer("goodThreshold").default(75), // 75-89%
   adequateThreshold: integer("adequateThreshold").default(60), // 60-74%
   developingThreshold: integer("developingThreshold").default(40), // 40-59%
-  
+
   // Which panels assess this category
   assessingPanels: json("assessingPanels"), // Array of panel names
-  
+
   // Weighting
   weight: real("weight").default(1.0), // For weighted averages
   priority: text("priority"),
-  
+
   // Metadata
   isActive: boolean("isActive").default(true).notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
+  updatedAt: timestamp("updatedAt")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
 });
 
 export type KpiCategory = typeof kpiCategories.$inferSelect;
@@ -2593,43 +2881,48 @@ export type InsertKpiCategory = typeof kpiCategories.$inferInsert;
 export const smeIndividualAssessments = pgTable("sme_individual_assessments", {
   id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
   userId: integer("userId").notNull(),
-  
+
   // Assessment period
   assessmentPeriod: varchar("assessmentPeriod", { length: 20 }).notNull(), // e.g., "2026-01", "2026-Q1"
   assessmentDate: timestamp("assessmentDate").notNull(),
-  
+
   // Expert identification
   expertId: varchar("expertId", { length: 100 }).notNull(), // Reference to AI expert
   expertName: varchar("expertName", { length: 200 }).notNull(),
   expertPanel: varchar("expertPanel", { length: 100 }).notNull(), // e.g., "Strategic Advisory", "Technology", "UX"
   expertSpecialization: varchar("expertSpecialization", { length: 200 }),
-  
+
   // Category being assessed
   categoryId: integer("categoryId").notNull(), // FK to kpiCategories
   categoryNumber: integer("categoryNumber").notNull(), // 1-20
   categoryName: varchar("categoryName", { length: 200 }).notNull(),
-  
+
   // Individual score
   score: integer("score").notNull(), // 0-100 percentage
   scoreOutOf10: real("scoreOutOf10"), // Converted to 10-point scale
-  
+
   // Rationale and evidence
   rationale: text("rationale").notNull(), // Why this score
   strengths: json("strengths"), // Array of observed strengths
   weaknesses: json("weaknesses"), // Array of observed weaknesses
   evidence: json("evidence"), // Specific examples supporting the score
   recommendations: json("recommendations"), // Suggestions for improvement
-  
+
   // Confidence
   confidenceLevel: text("confidenceLevel"),
-  
+
   // Metadata
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
+  updatedAt: timestamp("updatedAt")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
 });
 
-export type SmeIndividualAssessment = typeof smeIndividualAssessments.$inferSelect;
-export type InsertSmeIndividualAssessment = typeof smeIndividualAssessments.$inferInsert;
+export type SmeIndividualAssessment =
+  typeof smeIndividualAssessments.$inferSelect;
+export type InsertSmeIndividualAssessment =
+  typeof smeIndividualAssessments.$inferInsert;
 
 /**
  * Assessment outliers - flagged discrepancies for review
@@ -2637,50 +2930,50 @@ export type InsertSmeIndividualAssessment = typeof smeIndividualAssessments.$inf
 export const assessmentOutliers = pgTable("assessment_outliers", {
   id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
   userId: integer("userId").notNull(),
-  
+
   // Assessment reference
   assessmentId: integer("assessmentId").notNull(), // FK to smeIndividualAssessments
   assessmentPeriod: varchar("assessmentPeriod", { length: 20 }).notNull(),
-  
+
   // Category
   categoryId: integer("categoryId").notNull(),
   categoryNumber: integer("categoryNumber").notNull(),
   categoryName: varchar("categoryName", { length: 200 }).notNull(),
-  
+
   // Expert who gave outlier score
   expertId: varchar("expertId", { length: 100 }).notNull(),
   expertName: varchar("expertName", { length: 200 }).notNull(),
   expertPanel: varchar("expertPanel", { length: 100 }).notNull(),
-  
+
   // Outlier details
   expertScore: integer("expertScore").notNull(),
   panelAverage: real("panelAverage").notNull(),
   overallAverage: real("overallAverage").notNull(),
   deviation: real("deviation").notNull(), // How far from average
   deviationPercentage: real("deviationPercentage").notNull(),
-  
+
   // Classification
   outlierType: text("outlierType").notNull(), // Above or below average
   severity: text("severity").notNull(),
-  
+
   // Review status
   reviewStatus: text("reviewStatus").notNull(),
-  
+
   // Chief of Staff review
   chiefOfStaffReviewed: boolean("chiefOfStaffReviewed").default(false),
   chiefOfStaffNotes: text("chiefOfStaffNotes"),
   reviewedAt: timestamp("reviewedAt"),
-  
+
   // One-on-one conversation
   conversationRequested: boolean("conversationRequested").default(false),
   conversationCompleted: boolean("conversationCompleted").default(false),
   conversationNotes: text("conversationNotes"),
   conversationOutcome: text("conversationOutcome"),
-  
+
   // Resolution
   resolution: text("resolution"),
   resolutionNotes: text("resolutionNotes"),
-  
+
   // Metadata
   flaggedAt: timestamp("flaggedAt").defaultNow().notNull(),
   resolvedAt: timestamp("resolvedAt"),
@@ -2692,41 +2985,46 @@ export type InsertAssessmentOutlier = typeof assessmentOutliers.$inferInsert;
 /**
  * Panel assessment aggregations - aggregated scores per panel
  */
-export const panelAssessmentAggregations = pgTable("panel_assessment_aggregations", {
-  id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
-  userId: integer("userId").notNull(),
-  
-  // Assessment period
-  assessmentPeriod: varchar("assessmentPeriod", { length: 20 }).notNull(),
-  
-  // Panel
-  panelName: varchar("panelName", { length: 100 }).notNull(),
-  
-  // Category
-  categoryId: integer("categoryId").notNull(),
-  categoryNumber: integer("categoryNumber").notNull(),
-  categoryName: varchar("categoryName", { length: 200 }).notNull(),
-  
-  // Aggregated scores
-  averageScore: real("averageScore").notNull(),
-  medianScore: real("medianScore"),
-  minScore: integer("minScore"),
-  maxScore: integer("maxScore"),
-  standardDeviation: real("standardDeviation"),
-  
-  // Individual scores breakdown
-  individualScores: json("individualScores"), // Array of { expertId, expertName, score }
-  expertCount: integer("expertCount").default(0),
-  
-  // Consensus level
-  consensusLevel: text("consensusLevel"),
-  
-  // Metadata
-  aggregatedAt: timestamp("aggregatedAt").defaultNow().notNull(),
-});
+export const panelAssessmentAggregations = pgTable(
+  "panel_assessment_aggregations",
+  {
+    id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
+    userId: integer("userId").notNull(),
 
-export type PanelAssessmentAggregation = typeof panelAssessmentAggregations.$inferSelect;
-export type InsertPanelAssessmentAggregation = typeof panelAssessmentAggregations.$inferInsert;
+    // Assessment period
+    assessmentPeriod: varchar("assessmentPeriod", { length: 20 }).notNull(),
+
+    // Panel
+    panelName: varchar("panelName", { length: 100 }).notNull(),
+
+    // Category
+    categoryId: integer("categoryId").notNull(),
+    categoryNumber: integer("categoryNumber").notNull(),
+    categoryName: varchar("categoryName", { length: 200 }).notNull(),
+
+    // Aggregated scores
+    averageScore: real("averageScore").notNull(),
+    medianScore: real("medianScore"),
+    minScore: integer("minScore"),
+    maxScore: integer("maxScore"),
+    standardDeviation: real("standardDeviation"),
+
+    // Individual scores breakdown
+    individualScores: json("individualScores"), // Array of { expertId, expertName, score }
+    expertCount: integer("expertCount").default(0),
+
+    // Consensus level
+    consensusLevel: text("consensusLevel"),
+
+    // Metadata
+    aggregatedAt: timestamp("aggregatedAt").defaultNow().notNull(),
+  }
+);
+
+export type PanelAssessmentAggregation =
+  typeof panelAssessmentAggregations.$inferSelect;
+export type InsertPanelAssessmentAggregation =
+  typeof panelAssessmentAggregations.$inferInsert;
 
 /**
  * Overall KPI snapshots - point-in-time platform scores
@@ -2734,44 +3032,44 @@ export type InsertPanelAssessmentAggregation = typeof panelAssessmentAggregation
 export const kpiSnapshots = pgTable("kpi_snapshots", {
   id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
   userId: integer("userId").notNull(),
-  
+
   // Snapshot period
   snapshotPeriod: varchar("snapshotPeriod", { length: 20 }).notNull(),
   snapshotDate: timestamp("snapshotDate").notNull(),
-  
+
   // Overall scores
   overallScore: real("overallScore").notNull(),
   previousScore: real("previousScore"),
   scoreChange: real("scoreChange"),
-  
+
   // Category breakdown
   categoryScores: json("categoryScores").notNull(), // Array of { categoryNumber, name, score, change }
-  
+
   // Distribution
   excellentCount: integer("excellentCount").default(0), // 90%+
   goodCount: integer("goodCount").default(0), // 75-89%
   adequateCount: integer("adequateCount").default(0), // 60-74%
   developingCount: integer("developingCount").default(0), // 40-59%
   criticalCount: integer("criticalCount").default(0), // Below 40%
-  
+
   // Key metrics
   highestCategory: varchar("highestCategory", { length: 200 }),
   highestScore: integer("highestScore"),
   lowestCategory: varchar("lowestCategory", { length: 200 }),
   lowestScore: integer("lowestScore"),
-  
+
   // Targets
   targetScore: real("targetScore"),
   gapToTarget: real("gapToTarget"),
-  
+
   // Expert participation
   totalExpertsAssessed: integer("totalExpertsAssessed").default(0),
   panelsParticipated: json("panelsParticipated"), // Array of panel names
-  
+
   // Outliers summary
   outliersIdentified: integer("outliersIdentified").default(0),
   outliersResolved: integer("outliersResolved").default(0),
-  
+
   // Metadata
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
@@ -2785,46 +3083,46 @@ export type InsertKpiSnapshot = typeof kpiSnapshots.$inferInsert;
 export const expertConversationLogs = pgTable("expert_conversation_logs", {
   id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
   userId: integer("userId").notNull(),
-  
+
   // Context
   outlierId: integer("outlierId"), // FK to assessmentOutliers if from outlier
   assessmentId: integer("assessmentId"), // FK to smeIndividualAssessments
-  
+
   // Expert
   expertId: varchar("expertId", { length: 100 }).notNull(),
   expertName: varchar("expertName", { length: 200 }).notNull(),
   expertPanel: varchar("expertPanel", { length: 100 }).notNull(),
-  
+
   // Category discussed
   categoryNumber: integer("categoryNumber"),
   categoryName: varchar("categoryName", { length: 200 }),
-  
+
   // Conversation
   conversationType: text("conversationType").notNull(),
-  
+
   // Content
   messages: json("messages").notNull(), // Array of { role, content, timestamp }
-  
+
   // Outcomes
   keyInsights: json("keyInsights"), // Array of insights captured
   actionItems: json("actionItems"), // Array of actions to take
   scoreAdjustment: integer("scoreAdjustment"), // If score was adjusted
-  
+
   // Status
   status: text("status").notNull(),
-  
+
   // Metadata
   startedAt: timestamp("startedAt").defaultNow().notNull(),
   completedAt: timestamp("completedAt"),
 });
 
 export type ExpertConversationLog = typeof expertConversationLogs.$inferSelect;
-export type InsertExpertConversationLog = typeof expertConversationLogs.$inferInsert;
-
+export type InsertExpertConversationLog =
+  typeof expertConversationLogs.$inferInsert;
 
 /**
  * Central Insights Repository
- * 
+ *
  * Captures and stores all insights from customer feedback, SME assessments,
  * expert conversations, and external research. Creates a searchable knowledge
  * base that builds over time and prevents duplicate research.
@@ -2836,48 +3134,51 @@ export type InsertExpertConversationLog = typeof expertConversationLogs.$inferIn
 export const insightsRepository = pgTable("insights_repository", {
   id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
   userId: integer("userId").notNull(),
-  
+
   // Insight content
   title: varchar("title", { length: 300 }).notNull(),
   summary: text("summary").notNull(),
   fullContent: text("fullContent"),
-  
+
   // Source tracking
   sourceType: text("sourceType").notNull(),
   sourceId: integer("sourceId"), // FK to source table based on sourceType
   sourceReference: varchar("sourceReference", { length: 500 }), // URL or document reference
   sourceName: varchar("sourceName", { length: 300 }), // Human readable source name
-  
+
   // Categorization
   category: text("category").notNull(),
-  
+
   // Tagging
   tags: json("tags"), // Array of tag strings
   ventures: json("ventures"), // Array of venture names this applies to
   products: json("products"), // Array of product names
-  
+
   // Relevance
   relevanceScore: real("relevanceScore").default(0.5), // 0-1 how relevant/important
   confidenceLevel: text("confidenceLevel"),
-  
+
   // Validation
   validatedBy: varchar("validatedBy", { length: 200 }), // Who validated this insight
   validatedAt: timestamp("validatedAt"),
-  
+
   // Usage tracking
   timesReferenced: integer("timesReferenced").default(0),
   lastReferencedAt: timestamp("lastReferencedAt"),
-  
+
   // Relationships
   relatedInsightIds: json("relatedInsightIds"), // Array of related insight IDs
   supersededBy: integer("supersededBy"), // If this insight was updated/replaced
-  
+
   // Status
   status: text("status").notNull(),
-  
+
   // Metadata
   capturedAt: timestamp("capturedAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
+  updatedAt: timestamp("updatedAt")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
 });
 
 export type InsightRepository = typeof insightsRepository.$inferSelect;
@@ -2886,83 +3187,92 @@ export type InsertInsightRepository = typeof insightsRepository.$inferInsert;
 /**
  * External research references - imported external sources
  */
-export const externalResearchReferences = pgTable("external_research_references", {
-  id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
-  userId: integer("userId").notNull(),
-  
-  // Reference details
-  title: varchar("title", { length: 500 }).notNull(),
-  authors: json("authors"), // Array of author names
-  publicationDate: timestamp("publicationDate"),
-  
-  // Source
-  sourceType: text("sourceType").notNull(),
-  url: varchar("url", { length: 1000 }),
-  publisher: varchar("publisher", { length: 300 }),
-  
-  // Content
-  abstract: text("abstract"),
-  keyFindings: json("keyFindings"), // Array of key finding strings
-  relevantQuotes: json("relevantQuotes"), // Array of quote objects
-  
-  // Categorization
-  topics: json("topics"), // Array of topic strings
-  ventures: json("ventures"), // Which ventures this relates to
-  
-  // Quality assessment
-  credibilityScore: real("credibilityScore").default(0.5), // 0-1
-  relevanceScore: real("relevanceScore").default(0.5), // 0-1
-  
-  // Linked insights
-  linkedInsightIds: json("linkedInsightIds"), // Insights derived from this
-  
-  // Status
-  status: text("status").notNull(),
-  
-  // Metadata
-  importedAt: timestamp("importedAt").defaultNow().notNull(),
-  lastReviewedAt: timestamp("lastReviewedAt"),
-});
+export const externalResearchReferences = pgTable(
+  "external_research_references",
+  {
+    id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
+    userId: integer("userId").notNull(),
 
-export type ExternalResearchReference = typeof externalResearchReferences.$inferSelect;
-export type InsertExternalResearchReference = typeof externalResearchReferences.$inferInsert;
+    // Reference details
+    title: varchar("title", { length: 500 }).notNull(),
+    authors: json("authors"), // Array of author names
+    publicationDate: timestamp("publicationDate"),
+
+    // Source
+    sourceType: text("sourceType").notNull(),
+    url: varchar("url", { length: 1000 }),
+    publisher: varchar("publisher", { length: 300 }),
+
+    // Content
+    abstract: text("abstract"),
+    keyFindings: json("keyFindings"), // Array of key finding strings
+    relevantQuotes: json("relevantQuotes"), // Array of quote objects
+
+    // Categorization
+    topics: json("topics"), // Array of topic strings
+    ventures: json("ventures"), // Which ventures this relates to
+
+    // Quality assessment
+    credibilityScore: real("credibilityScore").default(0.5), // 0-1
+    relevanceScore: real("relevanceScore").default(0.5), // 0-1
+
+    // Linked insights
+    linkedInsightIds: json("linkedInsightIds"), // Insights derived from this
+
+    // Status
+    status: text("status").notNull(),
+
+    // Metadata
+    importedAt: timestamp("importedAt").defaultNow().notNull(),
+    lastReviewedAt: timestamp("lastReviewedAt"),
+  }
+);
+
+export type ExternalResearchReference =
+  typeof externalResearchReferences.$inferSelect;
+export type InsertExternalResearchReference =
+  typeof externalResearchReferences.$inferInsert;
 
 /**
  * Prior research checks - log of what was checked before new research
  */
-export const priorResearchChecks = pgTable("prior_research_checks", {
-  id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
-  userId: integer("userId").notNull(),
-  
-  // What triggered the check
-  triggerType: text("triggerType").notNull(),
-  triggerId: integer("triggerId"), // FK to the triggering entity
-  
-  // Search parameters
-  searchQuery: text("searchQuery"),
-  searchCategories: json("searchCategories"),
-  searchVentures: json("searchVentures"),
-  searchTags: json("searchTags"),
-  
-  // Results
-  insightsFound: integer("insightsFound").default(0),
-  relevantInsightIds: json("relevantInsightIds"), // Array of matching insight IDs
-  externalRefsFound: integer("externalRefsFound").default(0),
-  relevantExternalIds: json("relevantExternalIds"), // Array of matching external ref IDs
-  
-  // Summary
-  summaryGenerated: text("summaryGenerated"), // AI generated summary of prior knowledge
-  gapsIdentified: json("gapsIdentified"), // What we don't know yet
-  
-  // Action taken
-  actionTaken: text("actionTaken"),
-  actionRationale: text("actionRationale"),
-  
-  // Metadata
-  checkedAt: timestamp("checkedAt").defaultNow().notNull(),
-}, (table) => ({
-  idxIdx: index("priorResearchChecks_user_id_idx").on(table.userId),
-}));
+export const priorResearchChecks = pgTable(
+  "prior_research_checks",
+  {
+    id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
+    userId: integer("userId").notNull(),
+
+    // What triggered the check
+    triggerType: text("triggerType").notNull(),
+    triggerId: integer("triggerId"), // FK to the triggering entity
+
+    // Search parameters
+    searchQuery: text("searchQuery"),
+    searchCategories: json("searchCategories"),
+    searchVentures: json("searchVentures"),
+    searchTags: json("searchTags"),
+
+    // Results
+    insightsFound: integer("insightsFound").default(0),
+    relevantInsightIds: json("relevantInsightIds"), // Array of matching insight IDs
+    externalRefsFound: integer("externalRefsFound").default(0),
+    relevantExternalIds: json("relevantExternalIds"), // Array of matching external ref IDs
+
+    // Summary
+    summaryGenerated: text("summaryGenerated"), // AI generated summary of prior knowledge
+    gapsIdentified: json("gapsIdentified"), // What we don't know yet
+
+    // Action taken
+    actionTaken: text("actionTaken"),
+    actionRationale: text("actionRationale"),
+
+    // Metadata
+    checkedAt: timestamp("checkedAt").defaultNow().notNull(),
+  },
+  table => ({
+    idxIdx: index("priorResearchChecks_user_id_idx").on(table.userId),
+  })
+);
 
 export type PriorResearchCheck = typeof priorResearchChecks.$inferSelect;
 export type InsertPriorResearchCheck = typeof priorResearchChecks.$inferInsert;
@@ -2974,15 +3284,15 @@ export const insightUsageLog = pgTable("insight_usage_log", {
   id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
   userId: integer("userId").notNull(),
   insightId: integer("insightId").notNull(), // FK to insightsRepository
-  
+
   // Usage context
   usageType: text("usageType").notNull(),
   usageContext: varchar("usageContext", { length: 300 }), // Where it was used
-  
+
   // Related entities
   relatedEntityType: varchar("relatedEntityType", { length: 100 }),
   relatedEntityId: integer("relatedEntityId"),
-  
+
   // Metadata
   usedAt: timestamp("usedAt").defaultNow().notNull(),
 });
@@ -2995,22 +3305,22 @@ export type InsertInsightUsageLog = typeof insightUsageLog.$inferInsert;
  */
 export const knowledgeTopics = pgTable("knowledge_topics", {
   id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
-  
+
   // Topic hierarchy
   name: varchar("name", { length: 200 }).notNull(),
   parentTopicId: integer("parentTopicId"), // For hierarchical topics
   path: varchar("path", { length: 500 }), // Full path like "Market/Healthcare/Telehealth"
-  
+
   // Description
   description: text("description"),
-  
+
   // Statistics
   insightCount: integer("insightCount").default(0),
   lastInsightAt: timestamp("lastInsightAt"),
-  
+
   // Status
   isActive: boolean("isActive").default(true).notNull(),
-  
+
   // Metadata
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
@@ -3018,10 +3328,9 @@ export const knowledgeTopics = pgTable("knowledge_topics", {
 export type KnowledgeTopic = typeof knowledgeTopics.$inferSelect;
 export type InsertKnowledgeTopic = typeof knowledgeTopics.$inferInsert;
 
-
 /**
  * User Behavior Analytics and Proactive Coaching
- * 
+ *
  * Tracks how the user interacts with the system to provide
  * proactive recommendations for improving effectiveness.
  */
@@ -3032,31 +3341,32 @@ export type InsertKnowledgeTopic = typeof knowledgeTopics.$inferInsert;
 export const userActivityTracking = pgTable("user_activity_tracking", {
   id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
   userId: integer("userId").notNull(),
-  
+
   // Activity details
   activityType: text("activityType").notNull(),
-  
+
   // Location
   pagePath: varchar("pagePath", { length: 500 }),
   featureName: varchar("featureName", { length: 200 }),
   componentId: varchar("componentId", { length: 200 }),
-  
+
   // Context
   sessionId: varchar("sessionId", { length: 100 }),
   previousPage: varchar("previousPage", { length: 500 }),
-  
+
   // Timing
   duration: integer("duration"), // Time spent in milliseconds
-  
+
   // Additional data
   metadata: json("metadata"), // Any additional context
-  
+
   // Timestamp
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 
 export type UserActivityTracking = typeof userActivityTracking.$inferSelect;
-export type InsertUserActivityTracking = typeof userActivityTracking.$inferInsert;
+export type InsertUserActivityTracking =
+  typeof userActivityTracking.$inferInsert;
 
 /**
  * Workflow patterns - detected sequences of actions
@@ -3064,23 +3374,23 @@ export type InsertUserActivityTracking = typeof userActivityTracking.$inferInser
 export const workflowPatterns = pgTable("workflow_patterns", {
   id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
   userId: integer("userId").notNull(),
-  
+
   // Pattern identification
   patternName: varchar("patternName", { length: 200 }).notNull(),
   patternType: text("patternType").notNull(),
-  
+
   // Pattern details
   actionSequence: json("actionSequence").notNull(), // Array of actions in order
   frequency: integer("frequency").default(1), // How often this pattern occurs
   averageDuration: integer("averageDuration"), // Average time to complete
-  
+
   // Analysis
   efficiencyScore: real("efficiencyScore"), // 0-1, how efficient this workflow is
   improvementPotential: real("improvementPotential"), // 0-1, how much could be improved
-  
+
   // Status
   isAddressed: boolean("isAddressed").default(false),
-  
+
   // Metadata
   firstDetectedAt: timestamp("firstDetectedAt").defaultNow().notNull(),
   lastOccurredAt: timestamp("lastOccurredAt").defaultNow().notNull(),
@@ -3095,42 +3405,44 @@ export type InsertWorkflowPattern = typeof workflowPatterns.$inferInsert;
 export const proactiveRecommendations = pgTable("proactive_recommendations", {
   id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
   userId: integer("userId").notNull(),
-  
+
   // Recommendation details
   title: varchar("title", { length: 300 }).notNull(),
   description: text("description").notNull(),
-  
+
   // Type and category
   recommendationType: text("recommendationType").notNull(),
-  
+
   // Source
   triggeredBy: text("triggeredBy").notNull(),
   relatedPatternId: integer("relatedPatternId"), // FK to workflowPatterns
-  
+
   // Priority
   priority: text("priority"),
   estimatedTimeSaved: integer("estimatedTimeSaved"), // Minutes per week
-  
+
   // Action
   actionUrl: varchar("actionUrl", { length: 500 }), // Where to go to implement
   actionSteps: json("actionSteps"), // Array of steps to take
-  
+
   // Status
   status: text("status").notNull(),
   userResponse: text("userResponse"), // Why they accepted/rejected
-  
+
   // Metadata
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   viewedAt: timestamp("viewedAt"),
   respondedAt: timestamp("respondedAt"),
 });
 
-export type ProactiveRecommendation = typeof proactiveRecommendations.$inferSelect;
-export type InsertProactiveRecommendation = typeof proactiveRecommendations.$inferInsert;
+export type ProactiveRecommendation =
+  typeof proactiveRecommendations.$inferSelect;
+export type InsertProactiveRecommendation =
+  typeof proactiveRecommendations.$inferInsert;
 
 /**
  * Report Quality Scoring and Learning System
- * 
+ *
  * Allows user to rate outputs and captures feedback
  * to improve future generation quality.
  */
@@ -3141,27 +3453,27 @@ export type InsertProactiveRecommendation = typeof proactiveRecommendations.$inf
 export const outputQualityScores = pgTable("output_quality_scores", {
   id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
   userId: integer("userId").notNull(),
-  
+
   // What was scored
   outputType: text("outputType").notNull(),
   outputId: varchar("outputId", { length: 100 }), // Reference to the specific output
   outputTitle: varchar("outputTitle", { length: 300 }),
-  
+
   // Score
   score: integer("score").notNull(), // 1-10
-  
+
   // Feedback for low scores (1-4)
   issueCategory: text("issueCategory"),
   issueDescription: text("issueDescription"),
-  
+
   // Responsible area
   responsibleArea: text("responsibleArea"),
-  
+
   // Follow up
   requiresAction: boolean("requiresAction").default(false),
   actionTaken: text("actionTaken"),
   actionTakenAt: timestamp("actionTakenAt"),
-  
+
   // Metadata
   scoredAt: timestamp("scoredAt").defaultNow().notNull(),
 });
@@ -3172,40 +3484,48 @@ export type InsertOutputQualityScore = typeof outputQualityScores.$inferInsert;
 /**
  * Quality improvement tickets - issues to be fixed
  */
-export const qualityImprovementTickets = pgTable("quality_improvement_tickets", {
-  id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
-  userId: integer("userId").notNull(),
-  
-  // Ticket details
-  title: varchar("title", { length: 300 }).notNull(),
-  description: text("description").notNull(),
-  
-  // Category
-  category: text("category").notNull(),
-  
-  // Related scores
-  relatedScoreIds: json("relatedScoreIds"), // Array of outputQualityScores IDs
-  occurrenceCount: integer("occurrenceCount").default(1), // How many times this issue occurred
-  
-  // Priority
-  priority: text("priority"),
-  impactScore: real("impactScore"), // Calculated from frequency and severity
-  
-  // Assignment
-  assignedTo: varchar("assignedTo", { length: 200 }), // Team or person responsible
-  
-  // Status
-  status: text("status").notNull(),
-  resolution: text("resolution"),
-  
-  // Metadata
-  createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
-  resolvedAt: timestamp("resolvedAt"),
-});
+export const qualityImprovementTickets = pgTable(
+  "quality_improvement_tickets",
+  {
+    id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
+    userId: integer("userId").notNull(),
 
-export type QualityImprovementTicket = typeof qualityImprovementTickets.$inferSelect;
-export type InsertQualityImprovementTicket = typeof qualityImprovementTickets.$inferInsert;
+    // Ticket details
+    title: varchar("title", { length: 300 }).notNull(),
+    description: text("description").notNull(),
+
+    // Category
+    category: text("category").notNull(),
+
+    // Related scores
+    relatedScoreIds: json("relatedScoreIds"), // Array of outputQualityScores IDs
+    occurrenceCount: integer("occurrenceCount").default(1), // How many times this issue occurred
+
+    // Priority
+    priority: text("priority"),
+    impactScore: real("impactScore"), // Calculated from frequency and severity
+
+    // Assignment
+    assignedTo: varchar("assignedTo", { length: 200 }), // Team or person responsible
+
+    // Status
+    status: text("status").notNull(),
+    resolution: text("resolution"),
+
+    // Metadata
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+    updatedAt: timestamp("updatedAt")
+      .defaultNow()
+      .$onUpdate(() => new Date())
+      .notNull(),
+    resolvedAt: timestamp("resolvedAt"),
+  }
+);
+
+export type QualityImprovementTicket =
+  typeof qualityImprovementTickets.$inferSelect;
+export type InsertQualityImprovementTicket =
+  typeof qualityImprovementTickets.$inferInsert;
 
 /**
  * Quality metrics snapshots - track improvement over time
@@ -3213,38 +3533,39 @@ export type InsertQualityImprovementTicket = typeof qualityImprovementTickets.$i
 export const qualityMetricsSnapshots = pgTable("quality_metrics_snapshots", {
   id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
   userId: integer("userId").notNull(),
-  
+
   // Period
   snapshotDate: timestamp("snapshotDate").notNull(),
   periodType: text("periodType").notNull(),
-  
+
   // Overall metrics
   totalOutputs: integer("totalOutputs").default(0),
   scoredOutputs: integer("scoredOutputs").default(0),
   averageScore: real("averageScore"),
-  
+
   // Distribution
   scoreDistribution: json("scoreDistribution"), // { "1": 2, "2": 5, ... "10": 20 }
-  
+
   // By category
   scoresByOutputType: json("scoresByOutputType"), // { "report": 7.5, "document": 8.2 }
   scoresByIssueCategory: json("scoresByIssueCategory"), // Count of issues by category
-  
+
   // Trends
   previousAverageScore: real("previousAverageScore"),
   scoreChange: real("scoreChange"),
-  
+
   // Issues
   openTickets: integer("openTickets").default(0),
   resolvedTickets: integer("resolvedTickets").default(0),
-  
+
   // Metadata
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 
-export type QualityMetricsSnapshot = typeof qualityMetricsSnapshots.$inferSelect;
-export type InsertQualityMetricsSnapshot = typeof qualityMetricsSnapshots.$inferInsert;
-
+export type QualityMetricsSnapshot =
+  typeof qualityMetricsSnapshots.$inferSelect;
+export type InsertQualityMetricsSnapshot =
+  typeof qualityMetricsSnapshots.$inferInsert;
 
 // =============================================================================
 // COS DIGITAL TWIN LEARNING SYSTEM
@@ -3253,28 +3574,38 @@ export type InsertQualityMetricsSnapshot = typeof qualityMetricsSnapshots.$infer
 /**
  * COS Training Progress - tracks training level and module completion
  */
-export const cosTrainingProgress = pgTable("cos_training_progress", {
-  id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
-  userId: integer("userId").notNull(),
-  
-  // Current level (1-5: Novice, Learning, Competent, Proficient, Expert)
-  currentLevel: integer("currentLevel").default(1).notNull(),
-  trainingPercentage: real("trainingPercentage").default(20).notNull(), // 0-100
-  
-  // Module tracking
-  completedModules: json("completedModules"), // Array of completed module IDs
-  currentModuleId: integer("currentModuleId"),
-  
-  // Timestamps
-  lastTrainingActivity: timestamp("lastTrainingActivity"),
-  levelUpAt: timestamp("levelUpAt"), // When they reached current level
-  createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
-}, (table) => ({
-  userIdx: index("cosTrainingProgress_user_id_idx").on(table.userId),
-  createdIdx: index("cosTrainingProgress_created_at_idx").on(table.createdAt),
-  userCreatedIdx: index("cosTrainingProgress_user_created_idx").on(table.userId, table.createdAt),
-}));
+export const cosTrainingProgress = pgTable(
+  "cos_training_progress",
+  {
+    id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
+    userId: integer("userId").notNull(),
+
+    // Current level (1-5: Novice, Learning, Competent, Proficient, Expert)
+    currentLevel: integer("currentLevel").default(1).notNull(),
+    trainingPercentage: real("trainingPercentage").default(20).notNull(), // 0-100
+
+    // Module tracking
+    completedModules: json("completedModules"), // Array of completed module IDs
+    currentModuleId: integer("currentModuleId"),
+
+    // Timestamps
+    lastTrainingActivity: timestamp("lastTrainingActivity"),
+    levelUpAt: timestamp("levelUpAt"), // When they reached current level
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+    updatedAt: timestamp("updatedAt")
+      .defaultNow()
+      .$onUpdate(() => new Date())
+      .notNull(),
+  },
+  table => ({
+    userIdx: index("cosTrainingProgress_user_id_idx").on(table.userId),
+    createdIdx: index("cosTrainingProgress_created_at_idx").on(table.createdAt),
+    userCreatedIdx: index("cosTrainingProgress_user_created_idx").on(
+      table.userId,
+      table.createdAt
+    ),
+  })
+);
 export type CosTrainingProgress = typeof cosTrainingProgress.$inferSelect;
 export type InsertCosTrainingProgress = typeof cosTrainingProgress.$inferInsert;
 
@@ -3283,28 +3614,31 @@ export type InsertCosTrainingProgress = typeof cosTrainingProgress.$inferInsert;
  */
 export const cosTrainingModules = pgTable("cos_training_modules", {
   id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
-  
+
   // Module info
   name: varchar("name", { length: 200 }).notNull(),
   description: text("description"),
   requiredLevel: integer("requiredLevel").default(1).notNull(), // Minimum level to access
   duration: varchar("duration", { length: 50 }), // e.g., "30 min"
-  
+
   // Content
   content: text("content"), // Markdown content
   learningObjectives: json("learningObjectives"), // Array of objectives
-  
+
   // Assessment
   hasAssessment: boolean("hasAssessment").default(false),
   assessmentQuestions: json("assessmentQuestions"), // Quiz questions
   passingScore: integer("passingScore").default(80), // Percentage to pass
-  
+
   // Ordering
   sortOrder: integer("sortOrder").default(0),
-  
+
   // Metadata
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
+  updatedAt: timestamp("updatedAt")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
 });
 export type CosTrainingModule = typeof cosTrainingModules.$inferSelect;
 export type InsertCosTrainingModule = typeof cosTrainingModules.$inferInsert;
@@ -3315,24 +3649,24 @@ export type InsertCosTrainingModule = typeof cosTrainingModules.$inferInsert;
 export const cosInteractionLog = pgTable("cos_interaction_log", {
   id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
   userId: integer("userId").notNull(),
-  
+
   // Interaction details
   interactionType: text("interactionType").notNull(),
-  
+
   // Content
   userInput: text("userInput").notNull(), // What user said/asked
   cosResponse: text("cosResponse"), // What COS responded (if applicable)
   context: varchar("context", { length: 200 }), // Where this happened
-  
+
   // Learning extraction
   extractedLearning: text("extractedLearning"), // What was learned from this
   learningCategory: varchar("learningCategory", { length: 100 }), // Category of learning
   confidenceScore: real("confidenceScore").default(0.5), // How confident in the learning
-  
+
   // Processing status
   processed: boolean("processed").default(false), // Has this been processed for learning?
   appliedToModel: boolean("appliedToModel").default(false), // Has learning been applied?
-  
+
   // Metadata
   sessionId: varchar("sessionId", { length: 100 }), // Group interactions by session
   createdAt: timestamp("createdAt").defaultNow().notNull(),
@@ -3346,31 +3680,34 @@ export type InsertCosInteractionLog = typeof cosInteractionLog.$inferInsert;
 export const cosLearnedPatterns = pgTable("cos_learned_patterns", {
   id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
   userId: integer("userId").notNull(),
-  
+
   // Pattern details
   patternType: text("patternType").notNull(),
-  
+
   // Pattern content
   patternName: varchar("patternName", { length: 200 }).notNull(),
   patternDescription: text("patternDescription").notNull(),
   examples: json("examples"), // Array of example interactions
-  
+
   // Confidence and validation
   confidenceScore: real("confidenceScore").default(0.5).notNull(), // 0-1
   validatedByUser: boolean("validatedByUser").default(false),
   occurrenceCount: integer("occurrenceCount").default(1), // How many times observed
-  
+
   // Application
   active: boolean("active").default(true), // Is this pattern being applied?
   lastApplied: timestamp("lastApplied"),
   applicationCount: integer("applicationCount").default(0), // How many times applied
-  
+
   // Source tracking
   sourceInteractionIds: json("sourceInteractionIds"), // IDs of interactions that formed this pattern
-  
+
   // Metadata
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
+  updatedAt: timestamp("updatedAt")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
 });
 export type CosLearnedPattern = typeof cosLearnedPatterns.$inferSelect;
 export type InsertCosLearnedPattern = typeof cosLearnedPatterns.$inferInsert;
@@ -3378,142 +3715,166 @@ export type InsertCosLearnedPattern = typeof cosLearnedPatterns.$inferInsert;
 /**
  * COS User Mental Model - comprehensive profile of user's thinking
  */
-export const cosUserMentalModel = pgTable("cos_user_mental_model", {
-  id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
-  userId: integer("userId").notNull().unique(),
-  
-  // Core profile
-  thinkingStyle: text("thinkingStyle"), // How user approaches problems
-  communicationStyle: text("communicationStyle"), // How user communicates
-  decisionMakingStyle: text("decisionMakingStyle"), // How user makes decisions
-  
-  // Priorities and values
-  topPriorities: json("topPriorities"), // Array of priorities
-  coreValues: json("coreValues"), // Array of values
-  qualityStandards: json("qualityStandards"), // What "good" looks like
-  
-  // Preferences
-  formatPreferences: json("formatPreferences"), // Document, communication format preferences
-  workflowPreferences: json("workflowPreferences"), // How user likes to work
-  communicationPreferences: json("communicationPreferences"), // Communication preferences
-  
-  // Pet peeves and dislikes
-  petPeeves: json("petPeeves"), // Things that annoy user
-  avoidPatterns: json("avoidPatterns"), // Things to avoid
-  
-  // Terminology
-  customTerminology: json("customTerminology"), // User-specific terms and meanings
-  
-  // Model confidence
-  overallConfidence: real("overallConfidence").default(0.2), // How confident in the model
-  lastMajorUpdate: timestamp("lastMajorUpdate"),
-  interactionsProcessed: integer("interactionsProcessed").default(0),
-  
-  // Metadata
-  createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
-}, (table) => ({
-  userIdx: index("cosUserMentalModel_user_id_idx").on(table.userId),
-  createdIdx: index("cosUserMentalModel_created_at_idx").on(table.createdAt),
-  userCreatedIdx: index("cosUserMentalModel_user_created_idx").on(table.userId, table.createdAt),
-}));
+export const cosUserMentalModel = pgTable(
+  "cos_user_mental_model",
+  {
+    id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
+    userId: integer("userId").notNull().unique(),
+
+    // Core profile
+    thinkingStyle: text("thinkingStyle"), // How user approaches problems
+    communicationStyle: text("communicationStyle"), // How user communicates
+    decisionMakingStyle: text("decisionMakingStyle"), // How user makes decisions
+
+    // Priorities and values
+    topPriorities: json("topPriorities"), // Array of priorities
+    coreValues: json("coreValues"), // Array of values
+    qualityStandards: json("qualityStandards"), // What "good" looks like
+
+    // Preferences
+    formatPreferences: json("formatPreferences"), // Document, communication format preferences
+    workflowPreferences: json("workflowPreferences"), // How user likes to work
+    communicationPreferences: json("communicationPreferences"), // Communication preferences
+
+    // Pet peeves and dislikes
+    petPeeves: json("petPeeves"), // Things that annoy user
+    avoidPatterns: json("avoidPatterns"), // Things to avoid
+
+    // Terminology
+    customTerminology: json("customTerminology"), // User-specific terms and meanings
+
+    // Model confidence
+    overallConfidence: real("overallConfidence").default(0.2), // How confident in the model
+    lastMajorUpdate: timestamp("lastMajorUpdate"),
+    interactionsProcessed: integer("interactionsProcessed").default(0),
+
+    // Metadata
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+    updatedAt: timestamp("updatedAt")
+      .defaultNow()
+      .$onUpdate(() => new Date())
+      .notNull(),
+  },
+  table => ({
+    userIdx: index("cosUserMentalModel_user_id_idx").on(table.userId),
+    createdIdx: index("cosUserMentalModel_created_at_idx").on(table.createdAt),
+    userCreatedIdx: index("cosUserMentalModel_user_created_idx").on(
+      table.userId,
+      table.createdAt
+    ),
+  })
+);
 export type CosUserMentalModel = typeof cosUserMentalModel.$inferSelect;
 export type InsertCosUserMentalModel = typeof cosUserMentalModel.$inferInsert;
 
 /**
  * COS Learning Metrics - track how well COS is learning
  */
-export const cosLearningMetrics = pgTable("cos_learning_metrics", {
-  id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
-  userId: integer("userId").notNull(),
-  
-  // Period
-  metricDate: timestamp("metricDate").notNull(),
-  periodType: text("periodType").notNull(),
-  
-  // Interaction metrics
-  totalInteractions: integer("totalInteractions").default(0),
-  correctionsReceived: integer("correctionsReceived").default(0),
-  approvalsReceived: integer("approvalsReceived").default(0),
-  
-  // Learning metrics
-  newPatternsLearned: integer("newPatternsLearned").default(0),
-  patternsReinforced: integer("patternsReinforced").default(0),
-  patternsInvalidated: integer("patternsInvalidated").default(0),
-  
-  // Performance metrics
-  accuracyScore: real("accuracyScore"), // How often COS gets it right
-  anticipationScore: real("anticipationScore"), // How well COS anticipates needs
-  satisfactionScore: real("satisfactionScore"), // User satisfaction
-  
-  // Improvement tracking
-  previousAccuracyScore: real("previousAccuracyScore"),
-  accuracyChange: real("accuracyChange"),
-  
-  // Metadata
-  createdAt: timestamp("createdAt").defaultNow().notNull(),
-}, (table) => ({
-  userIdIdx: index("cosLearningMetrics_user_id_idx").on(table.userId),
-  createdAtIdx: index("cosLearningMetrics_created_at_idx").on(table.createdAt),
-  userCreatedIdx: index("cosLearningMetrics_user_created_idx").on(table.userId, table.createdAt),
-}));
+export const cosLearningMetrics = pgTable(
+  "cos_learning_metrics",
+  {
+    id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
+    userId: integer("userId").notNull(),
+
+    // Period
+    metricDate: timestamp("metricDate").notNull(),
+    periodType: text("periodType").notNull(),
+
+    // Interaction metrics
+    totalInteractions: integer("totalInteractions").default(0),
+    correctionsReceived: integer("correctionsReceived").default(0),
+    approvalsReceived: integer("approvalsReceived").default(0),
+
+    // Learning metrics
+    newPatternsLearned: integer("newPatternsLearned").default(0),
+    patternsReinforced: integer("patternsReinforced").default(0),
+    patternsInvalidated: integer("patternsInvalidated").default(0),
+
+    // Performance metrics
+    accuracyScore: real("accuracyScore"), // How often COS gets it right
+    anticipationScore: real("anticipationScore"), // How well COS anticipates needs
+    satisfactionScore: real("satisfactionScore"), // User satisfaction
+
+    // Improvement tracking
+    previousAccuracyScore: real("previousAccuracyScore"),
+    accuracyChange: real("accuracyChange"),
+
+    // Metadata
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+  },
+  table => ({
+    userIdIdx: index("cosLearningMetrics_user_id_idx").on(table.userId),
+    createdAtIdx: index("cosLearningMetrics_created_at_idx").on(
+      table.createdAt
+    ),
+    userCreatedIdx: index("cosLearningMetrics_user_created_idx").on(
+      table.userId,
+      table.createdAt
+    ),
+  })
+);
 export type CosLearningMetrics = typeof cosLearningMetrics.$inferSelect;
 export type InsertCosLearningMetrics = typeof cosLearningMetrics.$inferInsert;
 
-
 // Digital Twin Questionnaire Responses
-export const questionnaireResponses = pgTable('questionnaire_responses', {
-  id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
-  userId: integer('user_id').notNull(),
-  questionId: varchar('question_id', { length: 10 }).notNull(), // e.g., "A51", "B72"
-  questionType: text('question_type').notNull(),
-  scaleValue: integer('scale_value'), // 1-10 for scale questions
-  booleanValue: boolean('boolean_value'), // true/false for Y/N questions
-  section: varchar('section', { length: 100 }), // e.g., "Business Operations", "Innovation"
-  createdAt: timestamp('created_at').defaultNow().notNull(),
-  updatedAt: timestamp('updated_at').defaultNow().$onUpdate(() => new Date()).notNull(),
+export const questionnaireResponses = pgTable("questionnaire_responses", {
+  id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+  userId: integer("user_id").notNull(),
+  questionId: varchar("question_id", { length: 10 }).notNull(), // e.g., "A51", "B72"
+  questionType: text("question_type").notNull(),
+  scaleValue: integer("scale_value"), // 1-10 for scale questions
+  booleanValue: boolean("boolean_value"), // true/false for Y/N questions
+  section: varchar("section", { length: 100 }), // e.g., "Business Operations", "Innovation"
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
 });
 export type QuestionnaireResponse = typeof questionnaireResponses.$inferSelect;
-export type InsertQuestionnaireResponse = typeof questionnaireResponses.$inferInsert;
+export type InsertQuestionnaireResponse =
+  typeof questionnaireResponses.$inferInsert;
 
 // Digital Twin Profile (calculated from questionnaire)
-export const digitalTwinProfile = pgTable('digital_twin_profile', {
-  id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
-  userId: integer('user_id').notNull().unique(),
+export const digitalTwinProfile = pgTable("digital_twin_profile", {
+  id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+  userId: integer("user_id").notNull().unique(),
   // Execution DNA
-  measurementDriven: integer('measurement_driven'), // 1-10
-  processStandardization: integer('process_standardization'),
-  automationPreference: integer('automation_preference'),
-  ambiguityTolerance: integer('ambiguity_tolerance'),
+  measurementDriven: integer("measurement_driven"), // 1-10
+  processStandardization: integer("process_standardization"),
+  automationPreference: integer("automation_preference"),
+  ambiguityTolerance: integer("ambiguity_tolerance"),
   // Technology Philosophy
-  techAdoptionSpeed: integer('tech_adoption_speed'),
-  aiBeliefLevel: integer('ai_belief_level'),
-  dataVsIntuition: integer('data_vs_intuition'),
-  buildVsBuy: text('build_vs_buy'),
+  techAdoptionSpeed: integer("tech_adoption_speed"),
+  aiBeliefLevel: integer("ai_belief_level"),
+  dataVsIntuition: integer("data_vs_intuition"),
+  buildVsBuy: text("build_vs_buy"),
   // Market Strategy
-  nicheVsMass: integer('niche_vs_mass'),
-  firstMoverVsFollower: integer('first_mover_vs_follower'),
-  organicVsMA: text('organic_vs_ma'),
+  nicheVsMass: integer("niche_vs_mass"),
+  firstMoverVsFollower: integer("first_mover_vs_follower"),
+  organicVsMA: text("organic_vs_ma"),
   // Work Style
-  structurePreference: integer('structure_preference'),
-  interruptionTolerance: integer('interruption_tolerance'),
-  batchingPreference: integer('batching_preference'),
-  locationPreference: text('location_preference'),
+  structurePreference: integer("structure_preference"),
+  interruptionTolerance: integer("interruption_tolerance"),
+  batchingPreference: integer("batching_preference"),
+  locationPreference: text("location_preference"),
   // Strategic Mindset
-  scenarioPlanningLevel: integer('scenario_planning_level'),
-  pivotComfort: integer('pivot_comfort'),
-  trendLeadership: integer('trend_leadership'),
-  portfolioDiversification: integer('portfolio_diversification'),
+  scenarioPlanningLevel: integer("scenario_planning_level"),
+  pivotComfort: integer("pivot_comfort"),
+  trendLeadership: integer("trend_leadership"),
+  portfolioDiversification: integer("portfolio_diversification"),
   // Calculated Scores
-  cosUnderstandingLevel: integer('cos_understanding_level').default(0), // 0-100
-  questionnaireCompletion: integer('questionnaire_completion').default(0), // 0-100 percentage
-  lastCalculated: timestamp('last_calculated'),
-  createdAt: timestamp('created_at').defaultNow().notNull(),
-  updatedAt: timestamp('updated_at').defaultNow().$onUpdate(() => new Date()).notNull(),
+  cosUnderstandingLevel: integer("cos_understanding_level").default(0), // 0-100
+  questionnaireCompletion: integer("questionnaire_completion").default(0), // 0-100 percentage
+  lastCalculated: timestamp("last_calculated"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
 });
 export type DigitalTwinProfile = typeof digitalTwinProfile.$inferSelect;
 export type InsertDigitalTwinProfile = typeof digitalTwinProfile.$inferInsert;
-
 
 // ============================================
 // Expert Recommendation Tables - 18 Jan 2026
@@ -3522,14 +3883,14 @@ export type InsertDigitalTwinProfile = typeof digitalTwinProfile.$inferInsert;
 /**
  * NPS Tracking - Customer Net Promoter Score surveys
  */
-export const npsResponses = pgTable('nps_responses', {
-  id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
-  userId: integer('user_id').notNull(),
-  score: integer('score').notNull(), // 0-10 NPS scale
-  category: text('category').notNull(),
-  feedback: text('feedback'), // Optional open-ended feedback
-  touchpoint: varchar('touchpoint', { length: 100 }), // Where survey was triggered
-  createdAt: timestamp('created_at').defaultNow().notNull(),
+export const npsResponses = pgTable("nps_responses", {
+  id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+  userId: integer("user_id").notNull(),
+  score: integer("score").notNull(), // 0-10 NPS scale
+  category: text("category").notNull(),
+  feedback: text("feedback"), // Optional open-ended feedback
+  touchpoint: varchar("touchpoint", { length: 100 }), // Where survey was triggered
+  createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 export type NpsResponse = typeof npsResponses.$inferSelect;
 export type InsertNpsResponse = typeof npsResponses.$inferInsert;
@@ -3537,18 +3898,21 @@ export type InsertNpsResponse = typeof npsResponses.$inferInsert;
 /**
  * Customer Success Program - Track customer health and engagement
  */
-export const customerHealth = pgTable('customer_health', {
-  id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
-  userId: integer('user_id').notNull(),
-  healthScore: integer('health_score').notNull(), // 0-100
-  engagementLevel: text('engagement_level').notNull(),
-  lastActiveDate: timestamp('last_active_date'),
-  featureAdoption: json('feature_adoption'), // Which features they use
-  riskLevel: text('risk_level'),
-  nextCheckIn: timestamp('next_check_in'),
-  notes: text('notes'),
-  createdAt: timestamp('created_at').defaultNow().notNull(),
-  updatedAt: timestamp('updated_at').defaultNow().$onUpdate(() => new Date()).notNull(),
+export const customerHealth = pgTable("customer_health", {
+  id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+  userId: integer("user_id").notNull(),
+  healthScore: integer("health_score").notNull(), // 0-100
+  engagementLevel: text("engagement_level").notNull(),
+  lastActiveDate: timestamp("last_active_date"),
+  featureAdoption: json("feature_adoption"), // Which features they use
+  riskLevel: text("risk_level"),
+  nextCheckIn: timestamp("next_check_in"),
+  notes: text("notes"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
 });
 export type CustomerHealth = typeof customerHealth.$inferSelect;
 export type InsertCustomerHealth = typeof customerHealth.$inferInsert;
@@ -3556,20 +3920,23 @@ export type InsertCustomerHealth = typeof customerHealth.$inferInsert;
 /**
  * Strategic Partnerships - Partnership pipeline tracking
  */
-export const partnerships = pgTable('partnerships', {
-  id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
-  name: varchar('name', { length: 200 }).notNull(),
-  type: text('type').notNull(),
-  status: text('status').notNull(),
-  priority: text('priority'),
-  contactName: varchar('contact_name', { length: 200 }),
-  contactEmail: varchar('contact_email', { length: 320 }),
-  value: varchar('value', { length: 100 }), // Estimated value
-  notes: text('notes'),
-  nextAction: text('next_action'),
-  nextActionDate: timestamp('next_action_date'),
-  createdAt: timestamp('created_at').defaultNow().notNull(),
-  updatedAt: timestamp('updated_at').defaultNow().$onUpdate(() => new Date()).notNull(),
+export const partnerships = pgTable("partnerships", {
+  id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+  name: varchar("name", { length: 200 }).notNull(),
+  type: text("type").notNull(),
+  status: text("status").notNull(),
+  priority: text("priority"),
+  contactName: varchar("contact_name", { length: 200 }),
+  contactEmail: varchar("contact_email", { length: 320 }),
+  value: varchar("value", { length: 100 }), // Estimated value
+  notes: text("notes"),
+  nextAction: text("next_action"),
+  nextActionDate: timestamp("next_action_date"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
 });
 export type Partnership = typeof partnerships.$inferSelect;
 export type InsertPartnership = typeof partnerships.$inferInsert;
@@ -3577,19 +3944,22 @@ export type InsertPartnership = typeof partnerships.$inferInsert;
 /**
  * Team Capability Matrix - Track team skills and gaps
  */
-export const teamCapabilities = pgTable('team_capabilities', {
-  id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
-  teamMember: varchar('team_member', { length: 200 }).notNull(),
-  role: varchar('role', { length: 100 }).notNull(),
-  skillCategory: varchar('skill_category', { length: 100 }).notNull(), // e.g., "Technical", "Leadership"
-  skillName: varchar('skill_name', { length: 200 }).notNull(),
-  currentLevel: integer('current_level').notNull(), // 1-5
-  targetLevel: integer('target_level'), // 1-5
-  gap: integer('gap'), // Calculated difference
-  developmentPlan: text('development_plan'),
-  lastAssessed: timestamp('last_assessed'),
-  createdAt: timestamp('created_at').defaultNow().notNull(),
-  updatedAt: timestamp('updated_at').defaultNow().$onUpdate(() => new Date()).notNull(),
+export const teamCapabilities = pgTable("team_capabilities", {
+  id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+  teamMember: varchar("team_member", { length: 200 }).notNull(),
+  role: varchar("role", { length: 100 }).notNull(),
+  skillCategory: varchar("skill_category", { length: 100 }).notNull(), // e.g., "Technical", "Leadership"
+  skillName: varchar("skill_name", { length: 200 }).notNull(),
+  currentLevel: integer("current_level").notNull(), // 1-5
+  targetLevel: integer("target_level"), // 1-5
+  gap: integer("gap"), // Calculated difference
+  developmentPlan: text("development_plan"),
+  lastAssessed: timestamp("last_assessed"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
 });
 export type TeamCapability = typeof teamCapabilities.$inferSelect;
 export type InsertTeamCapability = typeof teamCapabilities.$inferInsert;
@@ -3597,19 +3967,22 @@ export type InsertTeamCapability = typeof teamCapabilities.$inferInsert;
 /**
  * SOC 2 Compliance Tracking - Security and compliance checklist
  */
-export const complianceItems = pgTable('compliance_items', {
-  id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
-  framework: text('framework').notNull(),
-  category: varchar('category', { length: 100 }).notNull(),
-  requirement: text('requirement').notNull(),
-  status: text('status').notNull(),
-  evidence: text('evidence'),
-  owner: varchar('owner', { length: 200 }),
-  dueDate: timestamp('due_date'),
-  completedDate: timestamp('completed_date'),
-  notes: text('notes'),
-  createdAt: timestamp('created_at').defaultNow().notNull(),
-  updatedAt: timestamp('updated_at').defaultNow().$onUpdate(() => new Date()).notNull(),
+export const complianceItems = pgTable("compliance_items", {
+  id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+  framework: text("framework").notNull(),
+  category: varchar("category", { length: 100 }).notNull(),
+  requirement: text("requirement").notNull(),
+  status: text("status").notNull(),
+  evidence: text("evidence"),
+  owner: varchar("owner", { length: 200 }),
+  dueDate: timestamp("due_date"),
+  completedDate: timestamp("completed_date"),
+  notes: text("notes"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
 });
 export type ComplianceItem = typeof complianceItems.$inferSelect;
 export type InsertComplianceItem = typeof complianceItems.$inferInsert;
@@ -3617,18 +3990,18 @@ export type InsertComplianceItem = typeof complianceItems.$inferInsert;
 /**
  * RAG Context Store - Retrieval Augmented Generation context
  */
-export const ragContexts = pgTable('rag_contexts', {
-  id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
-  userId: integer('user_id').notNull(),
-  contextType: text('context_type').notNull(),
-  content: text('content').notNull(),
-  embedding: json('embedding'), // Vector embedding for similarity search
-  metadata: json('metadata'),
-  relevanceScore: real('relevance_score'),
-  accessCount: integer('access_count').default(0),
-  lastAccessed: timestamp('last_accessed'),
-  expiresAt: timestamp('expires_at'),
-  createdAt: timestamp('created_at').defaultNow().notNull(),
+export const ragContexts = pgTable("rag_contexts", {
+  id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+  userId: integer("user_id").notNull(),
+  contextType: text("context_type").notNull(),
+  content: text("content").notNull(),
+  embedding: json("embedding"), // Vector embedding for similarity search
+  metadata: json("metadata"),
+  relevanceScore: real("relevance_score"),
+  accessCount: integer("access_count").default(0),
+  lastAccessed: timestamp("last_accessed"),
+  expiresAt: timestamp("expires_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 export type RagContext = typeof ragContexts.$inferSelect;
 export type InsertRagContext = typeof ragContexts.$inferInsert;
@@ -3662,11 +4035,15 @@ export const projectGenesisPhases = pgTable("project_genesis_phases", {
   notes: text("notes"),
   metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
+  updatedAt: timestamp("updatedAt")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
 });
 
 export type ProjectGenesisPhase = typeof projectGenesisPhases.$inferSelect;
-export type InsertProjectGenesisPhase = typeof projectGenesisPhases.$inferInsert;
+export type InsertProjectGenesisPhase =
+  typeof projectGenesisPhases.$inferInsert;
 
 /**
  * Project Genesis Milestones - key milestones within each phase
@@ -3684,35 +4061,48 @@ export const projectGenesisMilestones = pgTable("project_genesis_milestones", {
   notes: text("notes"),
   metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
+  updatedAt: timestamp("updatedAt")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
 });
 
-export type ProjectGenesisMilestone = typeof projectGenesisMilestones.$inferSelect;
-export type InsertProjectGenesisMilestone = typeof projectGenesisMilestones.$inferInsert;
+export type ProjectGenesisMilestone =
+  typeof projectGenesisMilestones.$inferSelect;
+export type InsertProjectGenesisMilestone =
+  typeof projectGenesisMilestones.$inferInsert;
 
 /**
  * Project Genesis Deliverables - outputs from each phase
  */
-export const projectGenesisDeliverables = pgTable("project_genesis_deliverables", {
-  id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
-  phaseId: integer("phaseId").notNull(), // FK to project_genesis_phases
-  projectId: integer("projectId").notNull(), // FK to project_genesis
-  deliverableName: varchar("deliverableName", { length: 200 }).notNull(),
-  deliverableType: varchar("deliverableType", { length: 100 }).notNull(), // "document", "presentation", "model", "report"
-  description: text("description"),
-  fileUrl: varchar("fileUrl", { length: 500 }),
-  status: text("status").notNull(),
-  createdBy: integer("createdBy"), // User ID
-  reviewedBy: integer("reviewedBy"), // User ID
-  approvedBy: integer("approvedBy"), // User ID
-  reviewNotes: text("reviewNotes"),
-  metadata: json("metadata"),
-  createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
-});
+export const projectGenesisDeliverables = pgTable(
+  "project_genesis_deliverables",
+  {
+    id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
+    phaseId: integer("phaseId").notNull(), // FK to project_genesis_phases
+    projectId: integer("projectId").notNull(), // FK to project_genesis
+    deliverableName: varchar("deliverableName", { length: 200 }).notNull(),
+    deliverableType: varchar("deliverableType", { length: 100 }).notNull(), // "document", "presentation", "model", "report"
+    description: text("description"),
+    fileUrl: varchar("fileUrl", { length: 500 }),
+    status: text("status").notNull(),
+    createdBy: integer("createdBy"), // User ID
+    reviewedBy: integer("reviewedBy"), // User ID
+    approvedBy: integer("approvedBy"), // User ID
+    reviewNotes: text("reviewNotes"),
+    metadata: json("metadata"),
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+    updatedAt: timestamp("updatedAt")
+      .defaultNow()
+      .$onUpdate(() => new Date())
+      .notNull(),
+  }
+);
 
-export type ProjectGenesisDeliverable = typeof projectGenesisDeliverables.$inferSelect;
-export type InsertProjectGenesisDeliverable = typeof projectGenesisDeliverables.$inferInsert;
+export type ProjectGenesisDeliverable =
+  typeof projectGenesisDeliverables.$inferSelect;
+export type InsertProjectGenesisDeliverable =
+  typeof projectGenesisDeliverables.$inferInsert;
 
 /**
  * Quality Gate Criteria - specific criteria for each gate (G1-G6)
@@ -3728,7 +4118,10 @@ export const qualityGateCriteria = pgTable("quality_gate_criteria", {
   evaluationType: varchar("evaluationType", { length: 50 }).notNull(), // "automated", "manual", "hybrid"
   metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
+  updatedAt: timestamp("updatedAt")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
 });
 
 export type QualityGateCriteria = typeof qualityGateCriteria.$inferSelect;
@@ -3737,23 +4130,34 @@ export type InsertQualityGateCriteria = typeof qualityGateCriteria.$inferInsert;
 /**
  * Quality Gate Results - evaluation results for each project
  */
-export const qualityGateResults = pgTable("quality_gate_results", {
-  id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
-  projectId: integer("projectId").notNull(), // FK to project_genesis
-  gateNumber: integer("gateNumber").notNull(), // 1-6
-  criteriaId: integer("criteriaId").notNull(), // FK to quality_gate_criteria
-  score: integer("score").notNull(), // 0-100
-  passed: boolean("passed").notNull(),
-  evaluatedBy: integer("evaluatedBy"), // User ID or "system"
-  evaluationNotes: text("evaluationNotes"),
-  evidence: json("evidence"), // Supporting evidence/documents
-  metadata: json("metadata"),
-  createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
-}, (table) => ({
-  projectIdIdx: index("qualityGateResults_project_id_idx").on(table.projectId),
-  createdAtIdx: index("qualityGateResults_created_at_idx").on(table.createdAt),
-}));
+export const qualityGateResults = pgTable(
+  "quality_gate_results",
+  {
+    id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
+    projectId: integer("projectId").notNull(), // FK to project_genesis
+    gateNumber: integer("gateNumber").notNull(), // 1-6
+    criteriaId: integer("criteriaId").notNull(), // FK to quality_gate_criteria
+    score: integer("score").notNull(), // 0-100
+    passed: boolean("passed").notNull(),
+    evaluatedBy: integer("evaluatedBy"), // User ID or "system"
+    evaluationNotes: text("evaluationNotes"),
+    evidence: json("evidence"), // Supporting evidence/documents
+    metadata: json("metadata"),
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+    updatedAt: timestamp("updatedAt")
+      .defaultNow()
+      .$onUpdate(() => new Date())
+      .notNull(),
+  },
+  table => ({
+    projectIdIdx: index("qualityGateResults_project_id_idx").on(
+      table.projectId
+    ),
+    createdAtIdx: index("qualityGateResults_created_at_idx").on(
+      table.createdAt
+    ),
+  })
+);
 
 export type QualityGateResult = typeof qualityGateResults.$inferSelect;
 export type InsertQualityGateResult = typeof qualityGateResults.$inferInsert;
@@ -3780,7 +4184,10 @@ export const blueprintLibrary = pgTable("blueprint_library", {
   createdBy: integer("createdBy"),
   metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
+  updatedAt: timestamp("updatedAt")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
 });
 
 export type Blueprint = typeof blueprintLibrary.$inferSelect;
@@ -3805,44 +4212,57 @@ export const blueprintExecutions = pgTable("blueprint_executions", {
   notes: text("notes"),
   metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
+  updatedAt: timestamp("updatedAt")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
 });
 
 export type BlueprintExecution = typeof blueprintExecutions.$inferSelect;
 export type InsertBlueprintExecution = typeof blueprintExecutions.$inferInsert;
 
-import { pgTable, uuid, text, integer, timestamp, boolean, jsonb, json, varchar } from 'drizzle-orm/pg-core';
+import {
+  pgTable,
+  uuid,
+  text,
+  integer,
+  timestamp,
+  boolean,
+  jsonb,
+  json,
+  varchar,
+} from "drizzle-orm/pg-core";
 
 // Integration credentials table
-export const integrationCredentials = pgTable('integration_credentials', {
-  id: text('id').primaryKey(),
-  userId: text('user_id').notNull(),
-  service: text('service').notNull(), // 'notion', 'github', 'openai', etc.
-  email: text('email'),
-  password: text('password'), // Encrypted
-  apiKey: text('api_key'), // Encrypted
-  apiSecret: text('api_secret'), // Encrypted
-  accessToken: text('access_token'), // Encrypted, for OAuth
-  refreshToken: text('refresh_token'), // Encrypted, for OAuth
-  tokenExpiry: timestamp('token_expiry'),
-  metadata: jsonb('metadata'), // Service-specific data
-  status: text('status').notNull().default('disconnected'), // 'connected', 'disconnected', 'error', 'pending'
-  lastChecked: timestamp('last_checked'),
-  lastError: text('last_error'),
-  createdAt: timestamp('created_at').defaultNow().notNull(),
-  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+export const integrationCredentials = pgTable("integration_credentials", {
+  id: text("id").primaryKey(),
+  userId: text("user_id").notNull(),
+  service: text("service").notNull(), // 'notion', 'github', 'openai', etc.
+  email: text("email"),
+  password: text("password"), // Encrypted
+  apiKey: text("api_key"), // Encrypted
+  apiSecret: text("api_secret"), // Encrypted
+  accessToken: text("access_token"), // Encrypted, for OAuth
+  refreshToken: text("refresh_token"), // Encrypted, for OAuth
+  tokenExpiry: timestamp("token_expiry"),
+  metadata: jsonb("metadata"), // Service-specific data
+  status: text("status").notNull().default("disconnected"), // 'connected', 'disconnected', 'error', 'pending'
+  lastChecked: timestamp("last_checked"),
+  lastError: text("last_error"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
 // Integration connection logs
-export const integrationLogs = pgTable('integration_logs', {
-  id: text('id').primaryKey(),
-  userId: text('user_id').notNull(),
-  service: text('service').notNull(),
-  action: text('action').notNull(), // 'connect', 'disconnect', 'test', 'sync', 'error'
-  success: boolean('success').notNull(),
-  errorMessage: text('error_message'),
-  metadata: jsonb('metadata'),
-  timestamp: timestamp('timestamp').defaultNow().notNull(),
+export const integrationLogs = pgTable("integration_logs", {
+  id: text("id").primaryKey(),
+  userId: text("user_id").notNull(),
+  service: text("service").notNull(),
+  action: text("action").notNull(), // 'connect', 'disconnect', 'test', 'sync', 'error'
+  success: boolean("success").notNull(),
+  errorMessage: text("error_message"),
+  metadata: jsonb("metadata"),
+  timestamp: timestamp("timestamp").defaultNow().notNull(),
 });
 
 // Phase 2 Completion: Missing Database Tables
@@ -3851,28 +4271,36 @@ export const integrationLogs = pgTable('integration_logs', {
 // ===== Chief of Staff Training System (Phase 2) =====
 // Note: MySQL version exists earlier in file, this is PostgreSQL version
 
-export const cosTrainingModulesPg = pgTable("cos_training_modules_pg", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  moduleNumber: integer("module_number").notNull().unique(), // 1-8
-  title: text("title").notNull(),
-  objective: text("objective").notNull(),
-  duration: integer("duration").notNull(), // hours
-  topics: json("topics").$type<string[]>(),
-  requiredReading: json("required_reading").$type<string[]>(),
-  practicalExercises: json("practical_exercises").$type<any[]>(),
-  competencyAssessment: json("competency_assessment").$type<string[]>(),
-  prerequisites: json("prerequisites").$type<number[]>(), // module numbers
-  createdAt: timestamp("created_at").defaultNow(),
-  updatedAt: timestamp("updated_at").defaultNow(),
-}, (table) => ({
-  idxIdx: index("cosTrainingModulesPg_created_at_idx").on(table.createdAt),
-}));
+export const cosTrainingModulesPg = pgTable(
+  "cos_training_modules_pg",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    moduleNumber: integer("module_number").notNull().unique(), // 1-8
+    title: text("title").notNull(),
+    objective: text("objective").notNull(),
+    duration: integer("duration").notNull(), // hours
+    topics: json("topics").$type<string[]>(),
+    requiredReading: json("required_reading").$type<string[]>(),
+    practicalExercises: json("practical_exercises").$type<any[]>(),
+    competencyAssessment: json("competency_assessment").$type<string[]>(),
+    prerequisites: json("prerequisites").$type<number[]>(), // module numbers
+    createdAt: timestamp("created_at").defaultNow(),
+    updatedAt: timestamp("updated_at").defaultNow(),
+  },
+  table => ({
+    idxIdx: index("cosTrainingModulesPg_created_at_idx").on(table.createdAt),
+  })
+);
 
 export const cosModuleProgressPg = pgTable("cos_module_progress_pg", {
   id: uuid("id").primaryKey().defaultRandom(),
-  userId: uuid("user_id").references(() => users.id).notNull(),
-  moduleId: uuid("module_id").references(() => cosTrainingModulesPg.id).notNull(),
-  status: varchar("status", { length: 50 }).notNull().default('not_started'), // not_started, in_progress, completed
+  userId: uuid("user_id")
+    .references(() => users.id)
+    .notNull(),
+  moduleId: uuid("module_id")
+    .references(() => cosTrainingModulesPg.id)
+    .notNull(),
+  status: varchar("status", { length: 50 }).notNull().default("not_started"), // not_started, in_progress, completed
   startedAt: timestamp("started_at"),
   completedAt: timestamp("completed_at"),
   progressPercentage: integer("progress_percentage").default(0),
@@ -3887,7 +4315,10 @@ export const cosModuleProgressPg = pgTable("cos_module_progress_pg", {
 
 export const digitalTwinProfiles = pgTable("digital_twin_profiles", {
   id: uuid("id").primaryKey().defaultRandom(),
-  userId: uuid("user_id").references(() => users.id).notNull().unique(),
+  userId: uuid("user_id")
+    .references(() => users.id)
+    .notNull()
+    .unique(),
   successDNA: json("success_dna").$type<any>(), // 100+ factors
   learningStyle: varchar("learning_style", { length: 50 }),
   communicationPreferences: json("communication_preferences").$type<any>(),
@@ -3904,12 +4335,14 @@ export const digitalTwinProfiles = pgTable("digital_twin_profiles", {
 
 export const digitalTwinGoals = pgTable("digital_twin_goals", {
   id: uuid("id").primaryKey().defaultRandom(),
-  profileId: uuid("profile_id").references(() => digitalTwinProfiles.id).notNull(),
+  profileId: uuid("profile_id")
+    .references(() => digitalTwinProfiles.id)
+    .notNull(),
   goalType: varchar("goal_type", { length: 50 }).notNull(), // short_term, long_term, career, personal
   title: text("title").notNull(),
   description: text("description"),
   targetDate: timestamp("target_date"),
-  status: varchar("status", { length: 50 }).default('active'), // active, completed, abandoned
+  status: varchar("status", { length: 50 }).default("active"), // active, completed, abandoned
   progressPercentage: integer("progress_percentage").default(0),
   milestones: json("milestones").$type<any[]>(),
   metrics: json("metrics").$type<any>(),
@@ -3919,7 +4352,9 @@ export const digitalTwinGoals = pgTable("digital_twin_goals", {
 
 export const digitalTwinPreferences = pgTable("digital_twin_preferences", {
   id: uuid("id").primaryKey().defaultRandom(),
-  profileId: uuid("profile_id").references(() => digitalTwinProfiles.id).notNull(),
+  profileId: uuid("profile_id")
+    .references(() => digitalTwinProfiles.id)
+    .notNull(),
   category: varchar("category", { length: 100 }).notNull(), // briefing_time, notification_frequency, etc.
   preferenceKey: varchar("preference_key", { length: 100 }).notNull(),
   preferenceValue: json("preference_value").$type<any>(),
@@ -3936,29 +4371,34 @@ export const expertTeams = pgTable("expert_teams", {
   purpose: text("purpose"),
   expertIds: json("expert_ids").$type<string[]>().notNull(), // array of expert IDs
   teamLead: varchar("team_lead", { length: 255 }), // expert ID
-  status: varchar("status", { length: 50 }).default('active'), // active, disbanded
+  status: varchar("status", { length: 50 }).default("active"), // active, disbanded
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
-export const expertConsultationHistory = pgTable("expert_consultation_history", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  userId: uuid("user_id").references(() => users.id).notNull(),
-  projectId: uuid("project_id"),
-  expertId: varchar("expert_id", { length: 255 }).notNull(),
-  expertName: varchar("expert_name", { length: 255 }).notNull(),
-  consultationType: varchar("consultation_type", { length: 50 }).notNull(), // individual, team, review
-  question: text("question").notNull(),
-  context: json("context").$type<any>(),
-  response: text("response").notNull(),
-  confidence: integer("confidence"), // 0-100
-  helpful: boolean("helpful"),
-  userFeedback: text("user_feedback"),
-  rating: integer("rating"), // 1-5
-  duration: integer("duration"), // seconds
-  tokensUsed: integer("tokens_used"),
-  createdAt: timestamp("created_at").defaultNow(),
-});
+export const expertConsultationHistory = pgTable(
+  "expert_consultation_history",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    userId: uuid("user_id")
+      .references(() => users.id)
+      .notNull(),
+    projectId: uuid("project_id"),
+    expertId: varchar("expert_id", { length: 255 }).notNull(),
+    expertName: varchar("expert_name", { length: 255 }).notNull(),
+    consultationType: varchar("consultation_type", { length: 50 }).notNull(), // individual, team, review
+    question: text("question").notNull(),
+    context: json("context").$type<any>(),
+    response: text("response").notNull(),
+    confidence: integer("confidence"), // 0-100
+    helpful: boolean("helpful"),
+    userFeedback: text("user_feedback"),
+    rating: integer("rating"), // 1-5
+    duration: integer("duration"), // seconds
+    tokensUsed: integer("tokens_used"),
+    createdAt: timestamp("created_at").defaultNow(),
+  }
+);
 
 // ===== Blueprint System =====
 
@@ -4009,7 +4449,7 @@ export const qmsComplianceChecks = pgTable("qms_compliance_checks", {
   checkName: varchar("check_name", { length: 255 }).notNull(),
   checkDescription: text("check_description"),
   requirements: json("requirements").$type<any[]>(),
-  status: varchar("status", { length: 50 }).default('pending'), // pending, passed, failed, not_applicable
+  status: varchar("status", { length: 50 }).default("pending"), // pending, passed, failed, not_applicable
   score: integer("score"), // 0-100
   findings: json("findings").$type<any[]>(),
   recommendations: json("recommendations").$type<any[]>(),
@@ -4029,27 +4469,32 @@ export const qmsComplianceChecks = pgTable("qms_compliance_checks", {
 export const digitalTwins = pgTable("digital_twins", {
   id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
   userId: integer("userId").notNull().unique(),
-  
+
   // Profile
   name: varchar("name", { length: 200 }),
   learningStyle: text("learningStyle").default("mixed"),
-  
+
   // Competency scores (0-100)
   strategicThinking: integer("strategicThinking").default(20).notNull(),
-  executiveCommunication: integer("executiveCommunication").default(20).notNull(),
+  executiveCommunication: integer("executiveCommunication")
+    .default(20)
+    .notNull(),
   operationalExcellence: integer("operationalExcellence").default(20).notNull(),
   dataAnalytics: integer("dataAnalytics").default(20).notNull(),
   leadershipDevelopment: integer("leadershipDevelopment").default(20).notNull(),
   crisisManagement: integer("crisisManagement").default(20).notNull(),
   innovationStrategy: integer("innovationStrategy").default(20).notNull(),
   stakeholderManagement: integer("stakeholderManagement").default(20).notNull(),
-  
+
   // Overall competency
   overallCompetency: integer("overallCompetency").default(20).notNull(),
-  
+
   // Timestamps
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
+  updatedAt: timestamp("updatedAt")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
 });
 export type DigitalTwin = typeof digitalTwins.$inferSelect;
 export type InsertDigitalTwin = typeof digitalTwins.$inferInsert;
@@ -4060,18 +4505,18 @@ export type InsertDigitalTwin = typeof digitalTwins.$inferInsert;
 export const decisionLog = pgTable("decision_log", {
   id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
   userId: integer("userId").notNull(),
-  
+
   // Decision details
   decisionType: varchar("decisionType", { length: 100 }).notNull(),
   decisionContext: text("decisionContext").notNull(),
   decisionMade: text("decisionMade").notNull(),
   reasoning: text("reasoning"),
-  
+
   // Outcome tracking
   outcome: text("outcome"),
   outcomeRating: integer("outcomeRating"), // 1-5
   lessonsLearned: text("lessonsLearned"),
-  
+
   // Metadata
   relatedModule: integer("relatedModule"), // Training module ID
   createdAt: timestamp("createdAt").defaultNow().notNull(),
@@ -4088,27 +4533,30 @@ export type InsertDecisionLog = typeof decisionLog.$inferInsert;
  */
 export const aiSmeExperts = pgTable("ai_sme_experts", {
   id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
-  
+
   // Expert profile
   name: varchar("name", { length: 200 }).notNull(),
   title: varchar("title", { length: 200 }).notNull(),
   domain: varchar("domain", { length: 100 }).notNull(), // finance, legal, marketing, etc.
   expertise: json("expertise").$type<string[]>(), // Array of expertise areas
-  
+
   // Description
   bio: text("bio"),
   specialization: text("specialization"),
-  
+
   // Availability
   isActive: boolean("isActive").default(true).notNull(),
   consultationCount: integer("consultationCount").default(0).notNull(),
-  
+
   // System prompt
   systemPrompt: text("systemPrompt").notNull(),
-  
+
   // Metadata
   createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
+  updatedAt: timestamp("updatedAt")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
 });
 export type AiSmeExpert = typeof aiSmeExperts.$inferSelect;
 export type InsertAiSmeExpert = typeof aiSmeExperts.$inferInsert;
@@ -4120,27 +4568,30 @@ export const aiSmeConsultations = pgTable("ai_sme_consultations", {
   id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
   userId: integer("userId").notNull(),
   expertId: integer("expertId").notNull(),
-  
+
   // Consultation details
   topic: varchar("topic", { length: 255 }).notNull(),
   question: text("question").notNull(),
   response: text("response"),
-  
+
   // Status
   status: text("status").default("pending").notNull(),
-  
+
   // Conversation
   conversationHistory: json("conversationHistory").$type<any[]>(),
-  
+
   // Rating
   rating: integer("rating"), // 1-5
   feedback: text("feedback"),
-  
+
   // Metadata
   duration: integer("duration"), // seconds
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   completedAt: timestamp("completedAt"),
-  updatedAt: timestamp("updatedAt").defaultNow().$onUpdate(() => new Date()).notNull(),
+  updatedAt: timestamp("updatedAt")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
 });
 export type AiSmeConsultation = typeof aiSmeConsultations.$inferSelect;
 export type InsertAiSmeConsultation = typeof aiSmeConsultations.$inferInsert;

@@ -1,6 +1,6 @@
 /**
  * Stripe Service
- * 
+ *
  * Handles Stripe checkout sessions and payment processing
  */
 
@@ -69,7 +69,11 @@ const customerCache = new Map<number, string>();
 /**
  * Get or create Stripe customer for a user
  */
-export async function getOrCreateCustomer(userId: number, email: string, name?: string) {
+export async function getOrCreateCustomer(
+  userId: number,
+  email: string,
+  name?: string
+) {
   const db = await getDb();
   if (!db) throw new Error("Database not available");
 
@@ -130,9 +134,10 @@ export async function handleCheckoutComplete(session: Stripe.Checkout.Session) {
 
   // For subscription mode
   if (session.mode === "subscription" && session.subscription) {
-    const subscriptionId = typeof session.subscription === "string" 
-      ? session.subscription 
-      : session.subscription.id;
+    const subscriptionId =
+      typeof session.subscription === "string"
+        ? session.subscription
+        : session.subscription.id;
 
     // Store subscription reference in metadata
     await db.insert(subscriptions).values({
@@ -149,16 +154,15 @@ export async function handleCheckoutComplete(session: Stripe.Checkout.Session) {
         planId: "pro",
       },
     });
-
   }
 
   // For one-time payment mode
   if (session.mode === "payment" && session.payment_intent) {
-    const paymentIntentId = typeof session.payment_intent === "string"
-      ? session.payment_intent
-      : session.payment_intent.id;
+    const paymentIntentId =
+      typeof session.payment_intent === "string"
+        ? session.payment_intent
+        : session.payment_intent.id;
 
-    
     // Handle one-time purchase fulfillment based on metadata
     // Add credits, unlock features, etc.
   }
@@ -167,12 +171,14 @@ export async function handleCheckoutComplete(session: Stripe.Checkout.Session) {
 /**
  * Handle subscription updated
  */
-export async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
+export async function handleSubscriptionUpdated(
+  subscription: Stripe.Subscription
+) {
   const db = await getDb();
   if (!db) throw new Error("Database not available");
 
   const userId = parseInt(subscription.metadata?.userId || "0");
-  
+
   // Find subscription by stripeSubscriptionId in metadata
   const allSubs = await db.select().from(subscriptions);
   const matchingSub = allSubs.find(s => {
@@ -181,25 +187,31 @@ export async function handleSubscriptionUpdated(subscription: Stripe.Subscriptio
   });
 
   if (matchingSub) {
-    await db.update(subscriptions)
+    await db
+      .update(subscriptions)
       .set({
-        status: subscription.status === "active" ? "active" : 
-                subscription.status === "canceled" ? "cancelled" : "paused",
+        status:
+          subscription.status === "active"
+            ? "active"
+            : subscription.status === "canceled"
+              ? "cancelled"
+              : "paused",
         renewalDate: new Date(),
         metadata: {
-          ...(matchingSub.metadata as object || {}),
+          ...((matchingSub.metadata as object) || {}),
           cancelAtPeriodEnd: subscription.cancel_at_period_end,
         },
       })
       .where(eq(subscriptions.id, matchingSub.id));
   }
-
 }
 
 /**
  * Handle subscription deleted/cancelled
  */
-export async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
+export async function handleSubscriptionDeleted(
+  subscription: Stripe.Subscription
+) {
   const db = await getDb();
   if (!db) throw new Error("Database not available");
 
@@ -211,17 +223,17 @@ export async function handleSubscriptionDeleted(subscription: Stripe.Subscriptio
   });
 
   if (matchingSub) {
-    await db.update(subscriptions)
+    await db
+      .update(subscriptions)
       .set({
         status: "cancelled",
         metadata: {
-          ...(matchingSub.metadata as object || {}),
+          ...((matchingSub.metadata as object) || {}),
           canceledAt: new Date().toISOString(),
         },
       })
       .where(eq(subscriptions.id, matchingSub.id));
   }
-
 }
 
 /**
@@ -254,7 +266,10 @@ export async function cancelSubscription(subscriptionId: string) {
 /**
  * Get customer portal session
  */
-export async function createPortalSession(customerId: string, returnUrl: string) {
+export async function createPortalSession(
+  customerId: string,
+  returnUrl: string
+) {
   const session = await stripe.billingPortal.sessions.create({
     customer: customerId,
     return_url: returnUrl,

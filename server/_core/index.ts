@@ -11,30 +11,31 @@ const __dirname = path.dirname(__filename);
 if (process.env.NODE_ENV === "production") {
   const envPath = path.resolve(__dirname, ".env.production");
   dotenv.config({ path: envPath });
-  log.debug('[dotenv] Loaded .env.production from:', envPath);
-  log.debug('[dotenv] DATABASE_URL present:', !!process.env.DATABASE_URL);
+  log.debug("[dotenv] Loaded .env.production from:", envPath);
+  log.debug("[dotenv] DATABASE_URL present:", !!process.env.DATABASE_URL);
 } else {
   dotenv.config();
 }
 
 // Debug: Log auth bypass status at startup
-log.debug('[Startup] AUTH_BYPASS:', process.env.AUTH_BYPASS);
-log.debug('[Startup] VITE_AUTH_BYPASS:', process.env.VITE_AUTH_BYPASS);
-log.debug('[Startup] NODE_ENV:', process.env.NODE_ENV);
+log.debug("[Startup] AUTH_BYPASS:", process.env.AUTH_BYPASS);
+log.debug("[Startup] VITE_AUTH_BYPASS:", process.env.VITE_AUTH_BYPASS);
+log.debug("[Startup] NODE_ENV:", process.env.NODE_ENV);
 
 // Now import other modules
 import express from "express";
 import { createServer } from "http";
 import net from "net";
 import { createExpressMiddleware } from "@trpc/server/adapters/express";
-import { registerGoogleOAuthRoutes } from "./google-oauth";
 import { appRouter } from "../routers"; // FULL ROUTER - all functionality restored
 import { createContext } from "./context";
 import { serveStatic, setupVite } from "./vite";
 import { apiRateLimit } from "./rateLimit";
 import { runMigrations } from "../migrations/run-migrations";
-import { applySecurityMiddleware } from "../middleware/security-headers";
-import { metricsHandler, metricsMiddleware } from "../services/metrics/prometheus";
+import {
+  metricsHandler,
+  metricsMiddleware,
+} from "../services/metrics/prometheus";
 import cookieParser from "cookie-parser";
 import { setupMiddleware, setupErrorHandlers } from "../setup-middleware";
 
@@ -60,67 +61,56 @@ async function findAvailablePort(startPort: number = 3000): Promise<number> {
 async function startServer() {
   // Run database migrations first
   await runMigrations();
-  
-  log.info('[Server] Starting Priority 1 middleware initialization...');
-  
+
+  log.info("[Server] Starting Priority 1 middleware initialization...");
+
   // Register all services with DI container
-  const { registerServices } = await import('./service-registry');
+  const { registerServices } = await import("./service-registry");
   registerServices();
-  log.info('[DI] Dependency injection container initialized');
-  
+  log.info("[DI] Dependency injection container initialized");
+
   const app = express();
   const server = createServer(app);
-  
+
   // Trust proxy for rate limiting behind reverse proxy
-  app.set('trust proxy', 1);
-  
+  app.set("trust proxy", 1);
+
   // Stripe webhook route - MUST be before body parser to get raw body
-  app.post("/api/stripe/webhook", express.raw({ type: "application/json" }), async (req, res) => {
-    const { handleStripeWebhook } = await import("../stripe/webhookHandler");
-    return handleStripeWebhook(req, res);
-  });
-  
+  app.post(
+    "/api/stripe/webhook",
+    express.raw({ type: "application/json" }),
+    async (req, res) => {
+      const { handleStripeWebhook } = await import("../stripe/webhookHandler");
+      return handleStripeWebhook(req, res);
+    }
+  );
+
   // Configure body parser and cookie parser BEFORE all middleware
   // (CSRF middleware needs req.cookies to be populated)
   app.use(express.json({ limit: "50mb" }));
   app.use(express.urlencoded({ limit: "50mb", extended: true }));
   app.use(cookieParser());
-  
+
   // Setup Priority 1 middleware (security, performance, monitoring)
   // cookieParser must be registered first so req.cookies is available for CSRF
   await setupMiddleware(app);
-  
+
   // Apply metrics middleware (before routes)
   app.use(metricsMiddleware);
-  
+
   // Prometheus metrics endpoint (no rate limiting)
   app.get("/api/metrics", metricsHandler);
-  
+
   // Health check endpoints are registered in setupMiddleware
   // See server/routers/health.router.ts for all health endpoints
-  
+
   // Apply rate limiting to ALL routes (not just /api)
   app.use(apiRateLimit);
-  
-  // Google OAuth routes (DISABLED - using email/password auth)
-  // registerGoogleOAuthRoutes(app);
-  
+
   // Simple email/password authentication
   const simpleAuthRoutes = await import("../routes/simple-auth");
   app.use("/api/auth", simpleAuthRoutes.default);
-  
-  // Workflow API routes
-  const workflowRoutes = await import("../routes/workflows");
-  app.use("/api/workflows", workflowRoutes.default);
-  
-  // AI Agents API routes
-  const agentRoutes = await import("../routes/agents");
-  app.use("/api/agents", agentRoutes.default);
-  
-  // Library API routes
-  const libraryRoutes = await import("../routes/libraryRouter");
-  app.use("/api/library", libraryRoutes.default);
-  
+
   // tRPC API
   app.use(
     "/api/trpc",
@@ -129,10 +119,10 @@ async function startServer() {
       createContext,
     })
   );
-  
+
   // Setup error handlers (must be after all routes)
   setupErrorHandlers(app);
-  
+
   // development mode uses Vite, production mode uses static files
   if (process.env.NODE_ENV === "development") {
     await setupVite(app, server);
@@ -152,7 +142,9 @@ async function startServer() {
     console.log(`[CEPHO.AI] Server started successfully`);
     console.log(`[CEPHO.AI] Environment: ${process.env.NODE_ENV}`);
     console.log(`[CEPHO.AI] Port: ${port}`);
-    console.log(`[CEPHO.AI] Database: ${process.env.DATABASE_URL ? 'Connected' : 'Not configured'}`);
+    console.log(
+      `[CEPHO.AI] Database: ${process.env.DATABASE_URL ? "Connected" : "Not configured"}`
+    );
     console.log(`[CEPHO.AI] Time: ${new Date().toISOString()}`);
     console.log(`========================================`);
     log.debug(`Server running on http://localhost:${port}/`);

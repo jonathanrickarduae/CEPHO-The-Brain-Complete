@@ -1,6 +1,6 @@
 /**
  * Time Constants
- * 
+ *
  * Centralized time-related constants to avoid magic numbers
  */
 

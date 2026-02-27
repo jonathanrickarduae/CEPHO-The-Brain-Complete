@@ -1,13 +1,30 @@
 // @ts-nocheck
-import { useState } from 'react';
-import { trpc } from '@/lib/trpc';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Mail, Plus, Trash2, RefreshCw, CheckCircle, XCircle } from 'lucide-react';
+import { useState } from "react";
+import { trpc } from "@/lib/trpc";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import {
+  Mail,
+  Plus,
+  Trash2,
+  RefreshCw,
+  CheckCircle,
+  XCircle,
+} from "lucide-react";
 
 export function EmailAccountsManager() {
-  const { data: accounts, isLoading, refetch } = trpc.gmail.getAccounts.useQuery();
+  const {
+    data: accounts,
+    isLoading,
+    refetch,
+  } = trpc.gmail.getAccounts.useQuery();
   const connectMutation = trpc.gmail.connect.useMutation();
   const disconnectMutation = trpc.gmail.disconnect.useMutation();
   const syncMutation = trpc.gmail.syncEmails.useMutation();
@@ -19,7 +36,7 @@ export function EmailAccountsManager() {
         window.location.href = result.authUrl;
       }
     } catch (error) {
-      console.error('Failed to connect Gmail:', error);
+      console.error("Failed to connect Gmail:", error);
     }
   };
 
@@ -28,7 +45,7 @@ export function EmailAccountsManager() {
       await disconnectMutation.mutateAsync({ accountId });
       refetch();
     } catch (error) {
-      console.error('Failed to disconnect account:', error);
+      console.error("Failed to disconnect account:", error);
     }
   };
 
@@ -37,7 +54,7 @@ export function EmailAccountsManager() {
       await syncMutation.mutateAsync({ accountId });
       refetch();
     } catch (error) {
-      console.error('Failed to sync emails:', error);
+      console.error("Failed to sync emails:", error);
     }
   };
 
@@ -55,7 +72,8 @@ export function EmailAccountsManager() {
         <div>
           <h2 className="text-2xl font-bold text-white">Email Accounts</h2>
           <p className="text-gray-400 mt-1">
-            Connect your Gmail accounts to enable email aggregation and AI analysis
+            Connect your Gmail accounts to enable email aggregation and AI
+            analysis
           </p>
         </div>
         <Button
@@ -70,7 +88,7 @@ export function EmailAccountsManager() {
 
       <div className="grid gap-4">
         {accounts && accounts.length > 0 ? (
-          accounts.map((account) => (
+          accounts.map(account => (
             <Card key={account.id} className="bg-gray-800 border-gray-700">
               <CardHeader>
                 <div className="flex items-center justify-between">
@@ -79,9 +97,11 @@ export function EmailAccountsManager() {
                       <Mail className="h-5 w-5 text-white" />
                     </div>
                     <div>
-                      <CardTitle className="text-white">{account.email}</CardTitle>
+                      <CardTitle className="text-white">
+                        {account.email}
+                      </CardTitle>
                       <CardDescription className="text-gray-400">
-                        {account.accountName || 'Personal Account'}
+                        {account.accountName || "Personal Account"}
                       </CardDescription>
                     </div>
                   </div>
@@ -103,9 +123,10 @@ export function EmailAccountsManager() {
               <CardContent>
                 <div className="flex items-center justify-between">
                   <div className="text-sm text-gray-400">
-                    Last synced: {account.lastSyncedAt 
+                    Last synced:{" "}
+                    {account.lastSyncedAt
                       ? new Date(account.lastSyncedAt).toLocaleString()
-                      : 'Never'}
+                      : "Never"}
                   </div>
                   <div className="flex gap-2">
                     <Button
@@ -115,7 +136,9 @@ export function EmailAccountsManager() {
                       disabled={syncMutation.isLoading}
                       className="border-gray-600 text-gray-300 hover:bg-gray-700"
                     >
-                      <RefreshCw className={`h-4 w-4 mr-2 ${syncMutation.isLoading ? 'animate-spin' : ''}`} />
+                      <RefreshCw
+                        className={`h-4 w-4 mr-2 ${syncMutation.isLoading ? "animate-spin" : ""}`}
+                      />
                       Sync Now
                     </Button>
                     <Button
@@ -136,10 +159,13 @@ export function EmailAccountsManager() {
           <Card className="bg-gray-800 border-gray-700">
             <CardContent className="flex flex-col items-center justify-center py-12">
               <Mail className="h-16 w-16 text-gray-600 mb-4" />
-              <h3 className="text-xl font-semibold text-white mb-2">No Email Accounts Connected</h3>
+              <h3 className="text-xl font-semibold text-white mb-2">
+                No Email Accounts Connected
+              </h3>
               <p className="text-gray-400 text-center mb-6 max-w-md">
-                Connect your Gmail accounts to enable intelligent email aggregation, AI-powered analysis, 
-                and automatic task creation from your emails.
+                Connect your Gmail accounts to enable intelligent email
+                aggregation, AI-powered analysis, and automatic task creation
+                from your emails.
               </p>
               <Button
                 onClick={handleConnect}

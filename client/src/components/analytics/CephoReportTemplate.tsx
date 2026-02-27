@@ -1,10 +1,10 @@
 // @ts-nocheck
 /**
  * CEPHO.Ai Report Template Component
- * 
+ *
  * A reusable template for generating branded reports following
  * CEPHO Design Guidelines v1.0
- * 
+ *
  * Features:
  * - Branded header with logo
  * - Executive summary section
@@ -13,26 +13,26 @@
  * - Print-optimized styling
  */
 
-import React from 'react';
-import '../styles/cepho-report.css';
+import React from "react";
+import "../styles/cepho-report.css";
 
 // Score color utility function
 export function getScoreClass(score: number): string {
-  if (score >= 80) return 'score-excellent';
-  if (score >= 70) return 'score-good';
-  if (score >= 60) return 'score-satisfactory';
-  if (score >= 40) return 'score-attention';
-  if (score >= 30) return 'score-critical';
-  return 'score-severe';
+  if (score >= 80) return "score-excellent";
+  if (score >= 70) return "score-good";
+  if (score >= 60) return "score-satisfactory";
+  if (score >= 40) return "score-attention";
+  if (score >= 30) return "score-critical";
+  return "score-severe";
 }
 
 export function getScoreLabel(score: number): string {
-  if (score >= 80) return 'Excellent';
-  if (score >= 70) return 'Good';
-  if (score >= 60) return 'Satisfactory';
-  if (score >= 40) return 'Needs Attention';
-  if (score >= 30) return 'Critical';
-  return 'Severe';
+  if (score >= 80) return "Excellent";
+  if (score >= 70) return "Good";
+  if (score >= 60) return "Satisfactory";
+  if (score >= 40) return "Needs Attention";
+  if (score >= 30) return "Critical";
+  return "Severe";
 }
 
 // Type definitions
@@ -69,11 +69,14 @@ interface CephoReportTemplateProps {
 }
 
 // Main Report Template
-export function CephoReportTemplate({ metadata, children }: CephoReportTemplateProps) {
-  const formattedDate = new Date(metadata.date).toLocaleDateString('en-GB', {
-    day: '2-digit',
-    month: 'short',
-    year: 'numeric'
+export function CephoReportTemplate({
+  metadata,
+  children,
+}: CephoReportTemplateProps) {
+  const formattedDate = new Date(metadata.date).toLocaleDateString("en-GB", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
   });
 
   return (
@@ -81,21 +84,24 @@ export function CephoReportTemplate({ metadata, children }: CephoReportTemplateP
       {/* Report Header */}
       <header className="cepho-report-header">
         <div className="logo-section">
-          <img alt="CEPHO.AI logo" 
-            src="/cepho-logo.png" 
-            alt="CEPHO.Ai" 
+          <img
+            alt="CEPHO.AI logo"
+            src="/cepho-logo.png"
+            alt="CEPHO.Ai"
             className="logo"
-            onError={(e) => {
+            onError={e => {
               // Fallback to text if logo not found
-              e.currentTarget.style.display = 'none';
+              e.currentTarget.style.display = "none";
             }}
           />
-          <span style={{ 
-            fontWeight: 'bold', 
-            fontSize: '24pt', 
-            color: '#000',
-            fontFamily: 'Calibri, sans-serif'
-          }}>
+          <span
+            style={{
+              fontWeight: "bold",
+              fontSize: "24pt",
+              color: "#000",
+              fontFamily: "Calibri, sans-serif",
+            }}
+          >
             CEPHO.Ai
           </span>
         </div>
@@ -109,7 +115,10 @@ export function CephoReportTemplate({ metadata, children }: CephoReportTemplateP
       {/* Document Title */}
       <h1>{metadata.title}</h1>
       {metadata.subtitle && (
-        <p className="secondary-text" style={{ marginTop: '-0.5rem', marginBottom: '2rem' }}>
+        <p
+          className="secondary-text"
+          style={{ marginTop: "-0.5rem", marginBottom: "2rem" }}
+        >
           {metadata.subtitle}
         </p>
       )}
@@ -149,7 +158,7 @@ interface MetricCardProps {
 export function MetricCard({ value, label, highlight }: MetricCardProps) {
   return (
     <div className="metric-card">
-      <div className={`metric-value ${highlight ? 'highlight' : ''}`}>
+      <div className={`metric-value ${highlight ? "highlight" : ""}`}>
         {value}
       </div>
       <div className="metric-label">{label}</div>
@@ -171,7 +180,10 @@ interface KPIHeatMapTableProps {
   showSMEDetails?: boolean;
 }
 
-export function KPIHeatMapTable({ categories, showSMEDetails = false }: KPIHeatMapTableProps) {
+export function KPIHeatMapTable({
+  categories,
+  showSMEDetails = false,
+}: KPIHeatMapTableProps) {
   return (
     <table>
       <thead>
@@ -185,32 +197,44 @@ export function KPIHeatMapTable({ categories, showSMEDetails = false }: KPIHeatM
         </tr>
       </thead>
       <tbody>
-        {categories.map((category) => (
+        {categories.map(category => (
           <React.Fragment key={category.id}>
             <tr>
               <td>{category.domain}</td>
               <td>{category.name}</td>
               <td>
-                <span className={`score-cell ${getScoreClass(category.chiefOfStaffScore)}`}>
+                <span
+                  className={`score-cell ${getScoreClass(category.chiefOfStaffScore)}`}
+                >
                   {category.chiefOfStaffScore}
                 </span>
               </td>
               <td>
-                <span className={`score-cell ${getScoreClass(category.averageScore)}`}>
+                <span
+                  className={`score-cell ${getScoreClass(category.averageScore)}`}
+                >
                   {category.averageScore.toFixed(0)}
                 </span>
               </td>
-              <td style={{ 
-                color: Math.abs(category.variance) > 10 ? '#ff006e' : '#666666',
-                fontWeight: Math.abs(category.variance) > 10 ? 'bold' : 'normal'
-              }}>
-                {category.variance > 0 ? '+' : ''}{category.variance.toFixed(1)}
+              <td
+                style={{
+                  color:
+                    Math.abs(category.variance) > 10 ? "#ff006e" : "#666666",
+                  fontWeight:
+                    Math.abs(category.variance) > 10 ? "bold" : "normal",
+                }}
+              >
+                {category.variance > 0 ? "+" : ""}
+                {category.variance.toFixed(1)}
               </td>
               <td>{getScoreLabel(category.averageScore)}</td>
             </tr>
             {showSMEDetails && category.smeScores.length > 0 && (
               <tr>
-                <td colSpan={6} style={{ padding: '0.5rem 1rem', backgroundColor: '#fafafa' }}>
+                <td
+                  colSpan={6}
+                  style={{ padding: "0.5rem 1rem", backgroundColor: "#fafafa" }}
+                >
                   <SMEScoreBreakdown scores={category.smeScores} />
                 </td>
               </tr>
@@ -229,24 +253,34 @@ interface SMEScoreBreakdownProps {
 
 export function SMEScoreBreakdown({ scores }: SMEScoreBreakdownProps) {
   return (
-    <div style={{ fontSize: '9pt' }}>
-      <strong style={{ color: '#666' }}>Individual SME Scores:</strong>
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginTop: '0.5rem' }}>
-        {scores.map((sme) => (
-          <div 
+    <div style={{ fontSize: "9pt" }}>
+      <strong style={{ color: "#666" }}>Individual SME Scores:</strong>
+      <div
+        style={{
+          display: "flex",
+          flexWrap: "wrap",
+          gap: "0.5rem",
+          marginTop: "0.5rem",
+        }}
+      >
+        {scores.map(sme => (
+          <div
             key={sme.expertId}
             style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.25rem',
-              padding: '2px 8px',
-              backgroundColor: '#fff',
-              border: '1px solid #e5e5e5',
-              borderRadius: '4px'
+              display: "flex",
+              alignItems: "center",
+              gap: "0.25rem",
+              padding: "2px 8px",
+              backgroundColor: "#fff",
+              border: "1px solid #e5e5e5",
+              borderRadius: "4px",
             }}
           >
             <span>{sme.expertName}</span>
-            <span className={`score-cell ${getScoreClass(sme.score)}`} style={{ fontSize: '9pt', padding: '1px 4px' }}>
+            <span
+              className={`score-cell ${getScoreClass(sme.score)}`}
+              style={{ fontSize: "9pt", padding: "1px 4px" }}
+            >
               {sme.score}
             </span>
           </div>
@@ -262,17 +296,24 @@ interface SMEExpertDetailTableProps {
   categoryName: string;
 }
 
-export function SMEExpertDetailTable({ experts, categoryName }: SMEExpertDetailTableProps) {
+export function SMEExpertDetailTable({
+  experts,
+  categoryName,
+}: SMEExpertDetailTableProps) {
   // Sort by score descending
   const sortedExperts = [...experts].sort((a, b) => b.score - a.score);
-  const avgScore = experts.reduce((sum, e) => sum + e.score, 0) / experts.length;
+  const avgScore =
+    experts.reduce((sum, e) => sum + e.score, 0) / experts.length;
 
   return (
-    <div style={{ marginBottom: '2rem' }}>
+    <div style={{ marginBottom: "2rem" }}>
       <h4>{categoryName} - SME Expert Scores</h4>
       <p className="secondary-text">
-        Average Score: <span className={`score-cell ${getScoreClass(avgScore)}`}>{avgScore.toFixed(0)}</span>
-        {' | '}Experts Assessed: {experts.length}
+        Average Score:{" "}
+        <span className={`score-cell ${getScoreClass(avgScore)}`}>
+          {avgScore.toFixed(0)}
+        </span>
+        {" | "}Experts Assessed: {experts.length}
       </p>
       <table>
         <thead>
@@ -285,19 +326,27 @@ export function SMEExpertDetailTable({ experts, categoryName }: SMEExpertDetailT
           </tr>
         </thead>
         <tbody>
-          {sortedExperts.map((expert) => {
+          {sortedExperts.map(expert => {
             const variance = expert.score - avgScore;
             const isOutlier = Math.abs(variance) > 15;
             return (
               <tr key={expert.expertId}>
                 <td>
-                  <div className="sme-expert-row" style={{ border: 'none', padding: 0 }}>
+                  <div
+                    className="sme-expert-row"
+                    style={{ border: "none", padding: 0 }}
+                  >
                     {expert.avatarUrl && (
-                      <img alt="Report chart or diagram" 
-                        src={expert.avatarUrl} 
+                      <img
+                        alt="Report chart or diagram"
+                        src={expert.avatarUrl}
                         alt={expert.expertName}
                         className="expert-avatar"
-                        style={{ width: '32px', height: '32px', marginRight: '0.5rem' }}
+                        style={{
+                          width: "32px",
+                          height: "32px",
+                          marginRight: "0.5rem",
+                        }}
                       />
                     )}
                     <span className="expert-name">{expert.expertName}</span>
@@ -309,14 +358,17 @@ export function SMEExpertDetailTable({ experts, categoryName }: SMEExpertDetailT
                     {expert.score}
                   </span>
                 </td>
-                <td style={{ 
-                  color: isOutlier ? '#ff006e' : '#666',
-                  fontWeight: isOutlier ? 'bold' : 'normal'
-                }}>
-                  {variance > 0 ? '+' : ''}{variance.toFixed(1)}
-                  {isOutlier && ' ⚠️'}
+                <td
+                  style={{
+                    color: isOutlier ? "#ff006e" : "#666",
+                    fontWeight: isOutlier ? "bold" : "normal",
+                  }}
+                >
+                  {variance > 0 ? "+" : ""}
+                  {variance.toFixed(1)}
+                  {isOutlier && " ⚠️"}
                 </td>
-                <td className="secondary-text">{expert.notes || '-'}</td>
+                <td className="secondary-text">{expert.notes || "-"}</td>
               </tr>
             );
           })}
@@ -328,7 +380,7 @@ export function SMEExpertDetailTable({ experts, categoryName }: SMEExpertDetailT
 
 // Callout Box Component
 interface CalloutProps {
-  type: 'info' | 'warning' | 'critical' | 'success';
+  type: "info" | "warning" | "critical" | "success";
   title?: string;
   children: React.ReactNode;
 }
@@ -344,11 +396,11 @@ export function Callout({ type, title, children }: CalloutProps) {
 
 // Section Divider Component
 interface SectionDividerProps {
-  variant?: 'default' | 'thick' | 'accent';
+  variant?: "default" | "thick" | "accent";
 }
 
-export function SectionDivider({ variant = 'default' }: SectionDividerProps) {
-  const className = variant === 'default' ? '' : variant;
+export function SectionDivider({ variant = "default" }: SectionDividerProps) {
+  const className = variant === "default" ? "" : variant;
   return <hr className={className} />;
 }
 

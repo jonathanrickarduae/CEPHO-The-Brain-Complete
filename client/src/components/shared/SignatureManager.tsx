@@ -1,15 +1,24 @@
 // @ts-nocheck
-import { useState, useRef, useEffect } from 'react';
-import { 
-  PenTool, Upload, Trash2, Check, X, 
-  Shield, Lock, FileSignature, Download,
-  Edit3, Type, Image as ImageIcon
-} from 'lucide-react';
+import { useState, useRef, useEffect } from "react";
+import {
+  PenTool,
+  Upload,
+  Trash2,
+  Check,
+  X,
+  Shield,
+  Lock,
+  FileSignature,
+  Download,
+  Edit3,
+  Type,
+  Image as ImageIcon,
+} from "lucide-react";
 
 interface Signature {
   id: string;
   name: string;
-  type: 'drawn' | 'uploaded' | 'typed';
+  type: "drawn" | "uploaded" | "typed";
   dataUrl: string;
   isDefault: boolean;
   createdAt: Date;
@@ -20,21 +29,26 @@ interface SignatureManagerProps {
   compact?: boolean;
 }
 
-export function SignatureManager({ onSave, compact = false }: SignatureManagerProps) {
+export function SignatureManager({
+  onSave,
+  compact = false,
+}: SignatureManagerProps) {
   const [signatures, setSignatures] = useState<Signature[]>([
     {
-      id: 'sig-1',
-      name: 'Formal Signature',
-      type: 'drawn',
-      dataUrl: '',
+      id: "sig-1",
+      name: "Formal Signature",
+      type: "drawn",
+      dataUrl: "",
       isDefault: true,
       createdAt: new Date(),
-    }
+    },
   ]);
-  const [activeTab, setActiveTab] = useState<'draw' | 'upload' | 'type'>('draw');
+  const [activeTab, setActiveTab] = useState<"draw" | "upload" | "type">(
+    "draw"
+  );
   const [isDrawing, setIsDrawing] = useState(false);
-  const [typedName, setTypedName] = useState('');
-  const [selectedFont, setSelectedFont] = useState('cursive');
+  const [typedName, setTypedName] = useState("");
+  const [selectedFont, setSelectedFont] = useState("cursive");
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [showManager, setShowManager] = useState(false);
 
@@ -43,44 +57,52 @@ export function SignatureManager({ onSave, compact = false }: SignatureManagerPr
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
     // Set up canvas
-    ctx.strokeStyle = '#ffffff';
+    ctx.strokeStyle = "#ffffff";
     ctx.lineWidth = 2;
-    ctx.lineCap = 'round';
-    ctx.lineJoin = 'round';
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
   }, []);
 
-  const startDrawing = (e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) => {
+  const startDrawing = (
+    e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>
+  ) => {
     setIsDrawing(true);
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
     const rect = canvas.getBoundingClientRect();
-    const x = 'touches' in e ? e.touches[0].clientX - rect.left : e.clientX - rect.left;
-    const y = 'touches' in e ? e.touches[0].clientY - rect.top : e.clientY - rect.top;
+    const x =
+      "touches" in e ? e.touches[0].clientX - rect.left : e.clientX - rect.left;
+    const y =
+      "touches" in e ? e.touches[0].clientY - rect.top : e.clientY - rect.top;
 
     ctx.beginPath();
     ctx.moveTo(x, y);
   };
 
-  const draw = (e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) => {
+  const draw = (
+    e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>
+  ) => {
     if (!isDrawing) return;
 
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
     const rect = canvas.getBoundingClientRect();
-    const x = 'touches' in e ? e.touches[0].clientX - rect.left : e.clientX - rect.left;
-    const y = 'touches' in e ? e.touches[0].clientY - rect.top : e.clientY - rect.top;
+    const x =
+      "touches" in e ? e.touches[0].clientX - rect.left : e.clientX - rect.left;
+    const y =
+      "touches" in e ? e.touches[0].clientY - rect.top : e.clientY - rect.top;
 
     ctx.lineTo(x, y);
     ctx.stroke();
@@ -94,7 +116,7 @@ export function SignatureManager({ onSave, compact = false }: SignatureManagerPr
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -104,11 +126,11 @@ export function SignatureManager({ onSave, compact = false }: SignatureManagerPr
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const dataUrl = canvas.toDataURL('image/png');
+    const dataUrl = canvas.toDataURL("image/png");
     const newSignature: Signature = {
       id: `sig-${Date.now()}`,
-      name: 'Drawn Signature',
-      type: 'drawn',
+      name: "Drawn Signature",
+      type: "drawn",
       dataUrl,
       isDefault: signatures.length === 0,
       createdAt: new Date(),
@@ -124,12 +146,12 @@ export function SignatureManager({ onSave, compact = false }: SignatureManagerPr
     if (!file) return;
 
     const reader = new FileReader();
-    reader.onload = (event) => {
+    reader.onload = event => {
       const dataUrl = event.target?.result as string;
       const newSignature: Signature = {
         id: `sig-${Date.now()}`,
-        name: file.name.replace(/\.[^/.]+$/, ''),
-        type: 'uploaded',
+        name: file.name.replace(/\.[^/.]+$/, ""),
+        type: "uploaded",
         dataUrl,
         isDefault: signatures.length === 0,
         createdAt: new Date(),
@@ -145,26 +167,26 @@ export function SignatureManager({ onSave, compact = false }: SignatureManagerPr
     if (!typedName.trim()) return;
 
     // Create a canvas to render the typed signature
-    const canvas = document.createElement('canvas');
+    const canvas = document.createElement("canvas");
     canvas.width = 400;
     canvas.height = 100;
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    ctx.fillStyle = 'transparent';
+    ctx.fillStyle = "transparent";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    
-    ctx.fillStyle = '#ffffff';
+
+    ctx.fillStyle = "#ffffff";
     ctx.font = `48px ${selectedFont}`;
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
     ctx.fillText(typedName, canvas.width / 2, canvas.height / 2);
 
-    const dataUrl = canvas.toDataURL('image/png');
+    const dataUrl = canvas.toDataURL("image/png");
     const newSignature: Signature = {
       id: `sig-${Date.now()}`,
-      name: 'Typed Signature',
-      type: 'typed',
+      name: "Typed Signature",
+      type: "typed",
       dataUrl,
       isDefault: signatures.length === 0,
       createdAt: new Date(),
@@ -172,7 +194,7 @@ export function SignatureManager({ onSave, compact = false }: SignatureManagerPr
 
     setSignatures([...signatures, newSignature]);
     onSave?.(newSignature);
-    setTypedName('');
+    setTypedName("");
   };
 
   const deleteSignature = (id: string) => {
@@ -180,17 +202,19 @@ export function SignatureManager({ onSave, compact = false }: SignatureManagerPr
   };
 
   const setDefaultSignature = (id: string) => {
-    setSignatures(signatures.map(s => ({
-      ...s,
-      isDefault: s.id === id,
-    })));
+    setSignatures(
+      signatures.map(s => ({
+        ...s,
+        isDefault: s.id === id,
+      }))
+    );
   };
 
   const fonts = [
-    { value: 'cursive', label: 'Cursive' },
-    { value: '"Brush Script MT", cursive', label: 'Brush Script' },
-    { value: '"Lucida Handwriting", cursive', label: 'Lucida' },
-    { value: 'Georgia, serif', label: 'Georgia' },
+    { value: "cursive", label: "Cursive" },
+    { value: '"Brush Script MT", cursive', label: "Brush Script" },
+    { value: '"Lucida Handwriting", cursive', label: "Lucida" },
+    { value: "Georgia, serif", label: "Georgia" },
   ];
 
   if (compact) {
@@ -212,16 +236,27 @@ export function SignatureManager({ onSave, compact = false }: SignatureManagerPr
         {signatures.length > 0 ? (
           <div className="space-y-2">
             {signatures.slice(0, 2).map(sig => (
-              <div key={sig.id} className="flex items-center justify-between p-2 bg-gray-800/50 rounded-lg">
+              <div
+                key={sig.id}
+                className="flex items-center justify-between p-2 bg-gray-800/50 rounded-lg"
+              >
                 <div className="flex items-center gap-2">
                   {sig.dataUrl ? (
-                    <img src={sig.dataUrl} alt={sig.name} className="h-8 w-auto max-w-[100px] object-contain" />
+                    <img
+                      src={sig.dataUrl}
+                      alt={sig.name}
+                      className="h-8 w-auto max-w-[100px] object-contain"
+                    />
                   ) : (
-                    <span className="text-sm text-muted-foreground">{sig.name}</span>
+                    <span className="text-sm text-muted-foreground">
+                      {sig.name}
+                    </span>
                   )}
                 </div>
                 {sig.isDefault && (
-                  <span className="text-xs px-2 py-0.5 bg-primary/20 text-primary rounded-full">Default</span>
+                  <span className="text-xs px-2 py-0.5 bg-primary/20 text-primary rounded-full">
+                    Default
+                  </span>
                 )}
               </div>
             ))}
@@ -244,7 +279,9 @@ export function SignatureManager({ onSave, compact = false }: SignatureManagerPr
             <FileSignature className="w-7 h-7 text-white" />
           </div>
           <div>
-            <h2 className="text-xl font-bold text-foreground">Signature Manager</h2>
+            <h2 className="text-xl font-bold text-foreground">
+              Signature Manager
+            </h2>
             <p className="text-sm text-muted-foreground">
               Create and manage your signatures for document signing
             </p>
@@ -263,33 +300,33 @@ export function SignatureManager({ onSave, compact = false }: SignatureManagerPr
       {/* Tabs */}
       <div className="flex border-b border-border">
         <button
-          onClick={() => setActiveTab('draw')}
+          onClick={() => setActiveTab("draw")}
           className={`flex-1 px-4 py-3 text-sm font-medium flex items-center justify-center gap-2 transition-colors ${
-            activeTab === 'draw'
-              ? 'text-primary border-b-2 border-primary'
-              : 'text-muted-foreground hover:text-foreground'
+            activeTab === "draw"
+              ? "text-primary border-b-2 border-primary"
+              : "text-muted-foreground hover:text-foreground"
           }`}
         >
           <PenTool className="w-4 h-4" />
           Draw
         </button>
         <button
-          onClick={() => setActiveTab('upload')}
+          onClick={() => setActiveTab("upload")}
           className={`flex-1 px-4 py-3 text-sm font-medium flex items-center justify-center gap-2 transition-colors ${
-            activeTab === 'upload'
-              ? 'text-primary border-b-2 border-primary'
-              : 'text-muted-foreground hover:text-foreground'
+            activeTab === "upload"
+              ? "text-primary border-b-2 border-primary"
+              : "text-muted-foreground hover:text-foreground"
           }`}
         >
           <Upload className="w-4 h-4" />
           Upload
         </button>
         <button
-          onClick={() => setActiveTab('type')}
+          onClick={() => setActiveTab("type")}
           className={`flex-1 px-4 py-3 text-sm font-medium flex items-center justify-center gap-2 transition-colors ${
-            activeTab === 'type'
-              ? 'text-primary border-b-2 border-primary'
-              : 'text-muted-foreground hover:text-foreground'
+            activeTab === "type"
+              ? "text-primary border-b-2 border-primary"
+              : "text-muted-foreground hover:text-foreground"
           }`}
         >
           <Type className="w-4 h-4" />
@@ -299,7 +336,7 @@ export function SignatureManager({ onSave, compact = false }: SignatureManagerPr
 
       {/* Content */}
       <div className="p-6">
-        {activeTab === 'draw' && (
+        {activeTab === "draw" && (
           <div className="space-y-4">
             <p className="text-sm text-muted-foreground">
               Draw your signature below using your mouse or touchscreen
@@ -339,7 +376,7 @@ export function SignatureManager({ onSave, compact = false }: SignatureManagerPr
           </div>
         )}
 
-        {activeTab === 'upload' && (
+        {activeTab === "upload" && (
           <div className="space-y-4">
             <p className="text-sm text-muted-foreground">
               Upload an image of your signature (PNG, JPG, or SVG)
@@ -364,7 +401,7 @@ export function SignatureManager({ onSave, compact = false }: SignatureManagerPr
           </div>
         )}
 
-        {activeTab === 'type' && (
+        {activeTab === "type" && (
           <div className="space-y-4">
             <p className="text-sm text-muted-foreground">
               Type your name and choose a signature style
@@ -372,7 +409,7 @@ export function SignatureManager({ onSave, compact = false }: SignatureManagerPr
             <input
               type="text"
               value={typedName}
-              onChange={(e) => setTypedName(e.target.value)}
+              onChange={e => setTypedName(e.target.value)}
               placeholder="Type your name..."
               className="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary"
             />
@@ -383,17 +420,19 @@ export function SignatureManager({ onSave, compact = false }: SignatureManagerPr
                   onClick={() => setSelectedFont(font.value)}
                   className={`p-3 rounded-lg border transition-colors ${
                     selectedFont === font.value
-                      ? 'border-primary bg-primary/10'
-                      : 'border-gray-700 hover:border-gray-600'
+                      ? "border-primary bg-primary/10"
+                      : "border-gray-700 hover:border-gray-600"
                   }`}
                 >
-                  <span 
+                  <span
                     className="text-xl text-foreground"
                     style={{ fontFamily: font.value }}
                   >
-                    {typedName || 'Preview'}
+                    {typedName || "Preview"}
                   </span>
-                  <p className="text-xs text-muted-foreground mt-1">{font.label}</p>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    {font.label}
+                  </p>
                 </button>
               ))}
             </div>
@@ -411,29 +450,34 @@ export function SignatureManager({ onSave, compact = false }: SignatureManagerPr
         {/* Saved Signatures */}
         {signatures.length > 0 && (
           <div className="mt-8">
-            <h3 className="font-semibold text-foreground mb-4">Saved Signatures</h3>
+            <h3 className="font-semibold text-foreground mb-4">
+              Saved Signatures
+            </h3>
             <div className="space-y-3">
               {signatures.map(sig => (
-                <div 
+                <div
                   key={sig.id}
                   className="flex items-center justify-between p-4 bg-gray-800/50 border border-gray-700 rounded-xl"
                 >
                   <div className="flex items-center gap-4">
                     <div className="w-24 h-12 bg-gray-900 rounded-lg flex items-center justify-center p-2">
                       {sig.dataUrl ? (
-                        <img alt="Signature preview" 
-                          src={sig.dataUrl} 
-                          alt={sig.name} 
+                        <img
+                          alt="Signature preview"
+                          src={sig.dataUrl}
+                          alt={sig.name}
                           className="max-w-full max-h-full object-contain"
                         />
                       ) : (
-                        <span className="text-muted-foreground text-sm">No preview</span>
+                        <span className="text-muted-foreground text-sm">
+                          No preview
+                        </span>
                       )}
                     </div>
                     <div>
                       <p className="font-medium text-foreground">{sig.name}</p>
                       <p className="text-xs text-muted-foreground capitalize">
-                        {sig.type} • {sig.createdAt.toLocaleDateString('en-GB')}
+                        {sig.type} • {sig.createdAt.toLocaleDateString("en-GB")}
                       </p>
                     </div>
                   </div>
@@ -469,11 +513,14 @@ export function SignatureManager({ onSave, compact = false }: SignatureManagerPr
           <div className="flex items-start gap-3">
             <Lock className="w-5 h-5 text-blue-400 mt-0.5" />
             <div>
-              <h4 className="font-medium text-blue-400 mb-1">How signatures are used</h4>
+              <h4 className="font-medium text-blue-400 mb-1">
+                How signatures are used
+              </h4>
               <p className="text-sm text-muted-foreground">
-                Your Chief of Staff can apply your signature to documents with your explicit approval. 
-                For pre-authorized document types (e.g., routine approvals), you can enable auto-signing 
-                in governance settings.
+                Your Chief of Staff can apply your signature to documents with
+                your explicit approval. For pre-authorized document types (e.g.,
+                routine approvals), you can enable auto-signing in governance
+                settings.
               </p>
             </div>
           </div>

@@ -1,20 +1,35 @@
-import { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Calendar } from '@/components/ui/calendar';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { platformIntelligence, getOptimalPostTime } from '@/lib/PlatformIntelligence';
-import { 
-  Calendar as CalendarIcon, 
-  Clock, 
-  Plus, 
+import { useState } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  platformIntelligence,
+  getOptimalPostTime,
+} from "@/lib/PlatformIntelligence";
+import {
+  Calendar as CalendarIcon,
+  Clock,
+  Plus,
   Trash2,
   ChevronLeft,
   ChevronRight,
-  Sparkles
-} from 'lucide-react';
-import { format, addDays, startOfWeek, isSameDay } from 'date-fns';
+  Sparkles,
+} from "lucide-react";
+import { format, addDays, startOfWeek, isSameDay } from "date-fns";
 
 interface ScheduledPost {
   id: string;
@@ -22,7 +37,7 @@ interface ScheduledPost {
   title: string;
   scheduledDate: Date;
   scheduledTime: string;
-  status: 'scheduled' | 'published' | 'failed';
+  status: "scheduled" | "published" | "failed";
 }
 
 interface SchedulingEngineProps {
@@ -31,14 +46,26 @@ interface SchedulingEngineProps {
   onDelete?: (postId: string) => void;
 }
 
-export function SchedulingEngine({ posts = [], onSchedule, onDelete }: SchedulingEngineProps) {
+export function SchedulingEngine({
+  posts = [],
+  onSchedule,
+  onDelete,
+}: SchedulingEngineProps) {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-  const [selectedPlatform, setSelectedPlatform] = useState('instagram');
-  const [selectedTime, setSelectedTime] = useState('');
-  const [viewMode, setViewMode] = useState<'week' | 'month'>('week');
+  const [selectedPlatform, setSelectedPlatform] = useState("instagram");
+  const [selectedTime, setSelectedTime] = useState("");
+  const [viewMode, setViewMode] = useState<"week" | "month">("week");
 
   const platforms = Object.keys(platformIntelligence);
-  const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  const dayNames = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
 
   const getOptimalTimes = () => {
     const dayName = dayNames[selectedDate.getDay()];
@@ -58,23 +85,37 @@ export function SchedulingEngine({ posts = [], onSchedule, onDelete }: Schedulin
 
   const handleSchedule = () => {
     if (!selectedTime) return;
-    
+
     const newPost: ScheduledPost = {
       id: Date.now().toString(),
       platform: selectedPlatform,
-      title: 'New Post',
+      title: "New Post",
       scheduledDate: selectedDate,
       scheduledTime: selectedTime,
-      status: 'scheduled',
+      status: "scheduled",
     };
-    
+
     onSchedule?.(newPost);
   };
 
   const timeSlots = [
-    '6:00 AM', '7:00 AM', '8:00 AM', '9:00 AM', '10:00 AM', '11:00 AM',
-    '12:00 PM', '1:00 PM', '2:00 PM', '3:00 PM', '4:00 PM', '5:00 PM',
-    '6:00 PM', '7:00 PM', '8:00 PM', '9:00 PM', '10:00 PM',
+    "6:00 AM",
+    "7:00 AM",
+    "8:00 AM",
+    "9:00 AM",
+    "10:00 AM",
+    "11:00 AM",
+    "12:00 PM",
+    "1:00 PM",
+    "2:00 PM",
+    "3:00 PM",
+    "4:00 PM",
+    "5:00 PM",
+    "6:00 PM",
+    "7:00 PM",
+    "8:00 PM",
+    "9:00 PM",
+    "10:00 PM",
   ];
 
   return (
@@ -101,7 +142,7 @@ export function SchedulingEngine({ posts = [], onSchedule, onDelete }: Schedulin
                 <ChevronLeft className="h-4 w-4" />
               </Button>
               <span className="font-medium">
-                {format(selectedDate, 'MMMM yyyy')}
+                {format(selectedDate, "MMMM yyyy")}
               </span>
               <Button
                 variant="outline"
@@ -113,16 +154,16 @@ export function SchedulingEngine({ posts = [], onSchedule, onDelete }: Schedulin
             </div>
             <div className="flex gap-2">
               <Button
-                variant={viewMode === 'week' ? 'default' : 'outline'}
+                variant={viewMode === "week" ? "default" : "outline"}
                 size="sm"
-                onClick={() => setViewMode('week')}
+                onClick={() => setViewMode("week")}
               >
                 Week
               </Button>
               <Button
-                variant={viewMode === 'month' ? 'default' : 'outline'}
+                variant={viewMode === "month" ? "default" : "outline"}
                 size="sm"
-                onClick={() => setViewMode('month')}
+                onClick={() => setViewMode("month")}
               >
                 Month
               </Button>
@@ -130,34 +171,44 @@ export function SchedulingEngine({ posts = [], onSchedule, onDelete }: Schedulin
           </div>
 
           {/* Week View */}
-          {viewMode === 'week' && (
+          {viewMode === "week" && (
             <div className="grid grid-cols-7 gap-2">
               {getWeekDays().map((day, i) => (
                 <div
                   key={i}
                   className={`p-2 border rounded-lg cursor-pointer transition-colors ${
                     isSameDay(day, selectedDate)
-                      ? 'border-primary bg-primary/5'
-                      : 'hover:border-primary/50'
+                      ? "border-primary bg-primary/5"
+                      : "hover:border-primary/50"
                   }`}
                   onClick={() => setSelectedDate(day)}
                 >
                   <div className="text-center">
-                    <p className="text-xs text-muted-foreground">{format(day, 'EEE')}</p>
-                    <p className={`text-lg font-bold ${isSameDay(day, new Date()) ? 'text-primary' : ''}`}>
-                      {format(day, 'd')}
+                    <p className="text-xs text-muted-foreground">
+                      {format(day, "EEE")}
+                    </p>
+                    <p
+                      className={`text-lg font-bold ${isSameDay(day, new Date()) ? "text-primary" : ""}`}
+                    >
+                      {format(day, "d")}
                     </p>
                   </div>
                   <div className="mt-2 space-y-1">
-                    {getPostsForDate(day).slice(0, 3).map(post => (
-                      <div
-                        key={post.id}
-                        className="text-xs p-1 rounded truncate"
-                        style={{ backgroundColor: platformIntelligence[post.platform]?.color + '20' }}
-                      >
-                        {platformIntelligence[post.platform]?.icon} {post.scheduledTime}
-                      </div>
-                    ))}
+                    {getPostsForDate(day)
+                      .slice(0, 3)
+                      .map(post => (
+                        <div
+                          key={post.id}
+                          className="text-xs p-1 rounded truncate"
+                          style={{
+                            backgroundColor:
+                              platformIntelligence[post.platform]?.color + "20",
+                          }}
+                        >
+                          {platformIntelligence[post.platform]?.icon}{" "}
+                          {post.scheduledTime}
+                        </div>
+                      ))}
                     {getPostsForDate(day).length > 3 && (
                       <p className="text-xs text-muted-foreground text-center">
                         +{getPostsForDate(day).length - 3} more
@@ -170,11 +221,11 @@ export function SchedulingEngine({ posts = [], onSchedule, onDelete }: Schedulin
           )}
 
           {/* Month View */}
-          {viewMode === 'month' && (
+          {viewMode === "month" && (
             <Calendar
               mode="single"
               selected={selectedDate}
-              onSelect={(date) => date && setSelectedDate(date)}
+              onSelect={date => date && setSelectedDate(date)}
               className="rounded-md border"
             />
           )}
@@ -184,13 +235,18 @@ export function SchedulingEngine({ posts = [], onSchedule, onDelete }: Schedulin
       {/* Schedule New Post */}
       <Card>
         <CardHeader>
-          <CardTitle>Schedule for {format(selectedDate, 'EEEE, MMMM d')}</CardTitle>
+          <CardTitle>
+            Schedule for {format(selectedDate, "EEEE, MMMM d")}
+          </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <label className="text-sm font-medium">Platform</label>
-              <Select value={selectedPlatform} onValueChange={setSelectedPlatform}>
+              <Select
+                value={selectedPlatform}
+                onValueChange={setSelectedPlatform}
+              >
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -232,7 +288,8 @@ export function SchedulingEngine({ posts = [], onSchedule, onDelete }: Schedulin
           <div className="p-3 bg-muted rounded-lg">
             <p className="text-sm font-medium flex items-center gap-2 mb-2">
               <Sparkles className="h-4 w-4 text-yellow-500" />
-              Optimal posting times for {platformIntelligence[selectedPlatform].name}
+              Optimal posting times for{" "}
+              {platformIntelligence[selectedPlatform].name}
             </p>
             <div className="flex flex-wrap gap-2">
               {optimalTimes.length > 0 ? (
@@ -248,12 +305,18 @@ export function SchedulingEngine({ posts = [], onSchedule, onDelete }: Schedulin
                   </Badge>
                 ))
               ) : (
-                <span className="text-sm text-muted-foreground">No specific optimal times for this day</span>
+                <span className="text-sm text-muted-foreground">
+                  No specific optimal times for this day
+                </span>
               )}
             </div>
           </div>
 
-          <Button onClick={handleSchedule} disabled={!selectedTime} className="w-full">
+          <Button
+            onClick={handleSchedule}
+            disabled={!selectedTime}
+            className="w-full"
+          >
             <Plus className="h-4 w-4 mr-2" />
             Schedule Post
           </Button>
@@ -265,7 +328,8 @@ export function SchedulingEngine({ posts = [], onSchedule, onDelete }: Schedulin
         <CardHeader>
           <CardTitle>Scheduled Posts</CardTitle>
           <CardDescription>
-            {getPostsForDate(selectedDate).length} posts scheduled for {format(selectedDate, 'MMM d')}
+            {getPostsForDate(selectedDate).length} posts scheduled for{" "}
+            {format(selectedDate, "MMM d")}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -283,19 +347,27 @@ export function SchedulingEngine({ posts = [], onSchedule, onDelete }: Schedulin
                   <div className="flex items-center gap-3">
                     <div
                       className="w-10 h-10 rounded-full flex items-center justify-center text-lg"
-                      style={{ backgroundColor: platformIntelligence[post.platform]?.color + '20' }}
+                      style={{
+                        backgroundColor:
+                          platformIntelligence[post.platform]?.color + "20",
+                      }}
                     >
                       {platformIntelligence[post.platform]?.icon}
                     </div>
                     <div>
                       <p className="font-medium">{post.title}</p>
                       <p className="text-sm text-muted-foreground">
-                        {post.scheduledTime} • {platformIntelligence[post.platform]?.name}
+                        {post.scheduledTime} •{" "}
+                        {platformIntelligence[post.platform]?.name}
                       </p>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Badge variant={post.status === 'scheduled' ? 'default' : 'secondary'}>
+                    <Badge
+                      variant={
+                        post.status === "scheduled" ? "default" : "secondary"
+                      }
+                    >
                       {post.status}
                     </Badge>
                     <Button

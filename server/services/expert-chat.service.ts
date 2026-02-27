@@ -1,21 +1,24 @@
 /**
  * Expert Chat Service
- * 
+ *
  * Handles direct 1-on-1 conversations with AI experts using their unique personas.
  * Supports real-time chat with personality-driven responses.
  */
 
-import { invokeLLM } from '../_core/llm';
+import { invokeLLM } from "../_core/llm";
 
 // Celebrity expert personas with detailed personality prompts
-const CELEBRITY_PERSONAS: Record<string, {
-  name: string;
-  systemPrompt: string;
-  voiceStyle: string;
-  catchPhrases: string[];
-}> = {
-  'jay-z-mogul': {
-    name: 'Jay-Z',
+const CELEBRITY_PERSONAS: Record<
+  string,
+  {
+    name: string;
+    systemPrompt: string;
+    voiceStyle: string;
+    catchPhrases: string[];
+  }
+> = {
+  "jay-z-mogul": {
+    name: "Jay-Z",
     systemPrompt: `You are Jay-Z (Shawn Corey Carter), the legendary rapper, entrepreneur, and business mogul. 
 
 ## Your Identity
@@ -45,16 +48,16 @@ const CELEBRITY_PERSONAS: Record<string, {
 - Value authenticity and staying true to yourself
 - Emphasize the importance of timing and patience
 - Share lessons from failures as much as successes`,
-    voiceStyle: 'deep, measured, confident with Brooklyn accent undertones',
+    voiceStyle: "deep, measured, confident with Brooklyn accent undertones",
     catchPhrases: [
       "I'm not a businessman, I'm a business, man",
       "Men lie, women lie, numbers don't",
       "Allow me to reintroduce myself",
-      "We don't believe you, you need more people"
-    ]
+      "We don't believe you, you need more people",
+    ],
   },
-  'ryan-reynolds-marketing': {
-    name: 'Ryan Reynolds',
+  "ryan-reynolds-marketing": {
+    name: "Ryan Reynolds",
     systemPrompt: `You are Ryan Reynolds, actor, entrepreneur, and marketing genius.
 
 ## Your Identity
@@ -87,16 +90,17 @@ const CELEBRITY_PERSONAS: Record<string, {
 - Leverage celebrity in authentic ways
 - Turn constraints into creative opportunities
 - The best marketing doesn't feel like marketing`,
-    voiceStyle: 'quick-witted, warm, self-deprecating with perfect comedic timing',
+    voiceStyle:
+      "quick-witted, warm, self-deprecating with perfect comedic timing",
     catchPhrases: [
       "Maximum Effort",
       "But wait, there's more... actually, no there isn't",
       "I'm going to be honest with you",
-      "Look, I'm just a simple actor who accidentally became a businessman"
-    ]
+      "Look, I'm just a simple actor who accidentally became a businessman",
+    ],
   },
-  'victoria-stirling-comms': {
-    name: 'Victoria Stirling',
+  "victoria-stirling-comms": {
+    name: "Victoria Stirling",
     systemPrompt: `You are Victoria Stirling, a British strategic communications and PR expert.
 
 ## Your Identity
@@ -127,16 +131,17 @@ const CELEBRITY_PERSONAS: Record<string, {
 - Stakeholder communications
 - Message development and narrative control
 - Social media strategy for executives`,
-    voiceStyle: 'refined British accent, measured and articulate, warm but professional',
+    voiceStyle:
+      "refined British accent, measured and articulate, warm but professional",
     catchPhrases: [
       "The key message here is...",
       "One must always consider the optics",
       "Let's ensure we're controlling the narrative",
-      "Preparation is everything, darling"
-    ]
+      "Preparation is everything, darling",
+    ],
   },
-  'jessica-alba-entrepreneur': {
-    name: 'Jessica Alba',
+  "jessica-alba-entrepreneur": {
+    name: "Jessica Alba",
     systemPrompt: `You are Jessica Alba, actress, entrepreneur, and founder of The Honest Company.
 
 ## Your Identity
@@ -169,14 +174,14 @@ const CELEBRITY_PERSONAS: Record<string, {
 - Stay connected to your customers
 - Quality and values matter more than rapid growth
 - Being underestimated can be an advantage`,
-    voiceStyle: 'warm, passionate, authentic with California positivity',
+    voiceStyle: "warm, passionate, authentic with California positivity",
     catchPhrases: [
       "Honest is not just our name, it's our promise",
       "I built this for my kids, and yours",
       "Being a mom made me a better CEO",
-      "Purpose and profit aren't mutually exclusive"
-    ]
-  }
+      "Purpose and profit aren't mutually exclusive",
+    ],
+  },
 };
 
 // Generic expert persona builder for non-celebrity experts
@@ -195,16 +200,16 @@ function buildGenericExpertPrompt(expert: {
 ${expert.bio}
 
 ## Your Expertise Is Modeled After
-${expert.compositeOf.join(', ')}
+${expert.compositeOf.join(", ")}
 
 ## Your Thinking Style
 ${expert.thinkingStyle}
 
 ## Your Strengths
-${expert.strengths.map(s => `- ${s}`).join('\n')}
+${expert.strengths.map(s => `- ${s}`).join("\n")}
 
 ## Areas You're Working On
-${expert.weaknesses.map(w => `- ${w}`).join('\n')}
+${expert.weaknesses.map(w => `- ${w}`).join("\n")}
 
 ## Communication Guidelines
 - Be direct and helpful
@@ -215,7 +220,7 @@ ${expert.weaknesses.map(w => `- ${w}`).join('\n')}
 }
 
 interface ChatMessage {
-  role: 'user' | 'assistant' | 'system';
+  role: "user" | "assistant" | "system";
   content: string;
 }
 
@@ -243,24 +248,29 @@ interface ExpertChatResponse {
 /**
  * Generate a response from an AI expert
  */
-export async function chatWithExpert(request: ExpertChatRequest): Promise<ExpertChatResponse> {
+export async function chatWithExpert(
+  request: ExpertChatRequest
+): Promise<ExpertChatResponse> {
   const { expertId, expertData, message, conversationHistory = [] } = request;
-  
+
   // Check if this is a celebrity expert with a custom persona
   const celebrityPersona = CELEBRITY_PERSONAS[expertId];
-  
+
   let systemPrompt: string;
   let expertName: string;
   let voiceStyle: string | undefined;
-  
+
   if (celebrityPersona) {
     systemPrompt = celebrityPersona.systemPrompt;
     expertName = celebrityPersona.name;
     voiceStyle = celebrityPersona.voiceStyle;
-    
+
     // Add a random catchphrase occasionally
     if (Math.random() > 0.7 && celebrityPersona.catchPhrases.length > 0) {
-      const randomPhrase = celebrityPersona.catchPhrases[Math.floor(Math.random() * celebrityPersona.catchPhrases.length)];
+      const randomPhrase =
+        celebrityPersona.catchPhrases[
+          Math.floor(Math.random() * celebrityPersona.catchPhrases.length)
+        ];
       systemPrompt += `\n\nConsider naturally incorporating this phrase if appropriate: "${randomPhrase}"`;
     }
   } else if (expertData) {
@@ -269,38 +279,42 @@ export async function chatWithExpert(request: ExpertChatRequest): Promise<Expert
   } else {
     throw new Error(`Expert not found: ${expertId}`);
   }
-  
+
   // Build messages array
   const messages: ChatMessage[] = [
-    { role: 'system', content: systemPrompt },
+    { role: "system", content: systemPrompt },
     ...conversationHistory,
-    { role: 'user', content: message }
+    { role: "user", content: message },
   ];
-  
+
   try {
-    const result = await invokeLLM({ 
+    const result = await invokeLLM({
       messages,
-      maxTokens: 500
+      maxTokens: 500,
     });
-    
-    const assistantMessage = result.choices[0]?.message?.content || 
+
+    const assistantMessage =
+      result.choices[0]?.message?.content ||
       `I apologize, but I'm having trouble responding right now. Please try again.`;
-    
+
     // Handle content that might be an array
-    const responseText = typeof assistantMessage === 'string' 
-      ? assistantMessage 
-      : Array.isArray(assistantMessage) 
-        ? assistantMessage.map(c => c.type === 'text' ? c.text : '').join('')
-        : String(assistantMessage);
-    
+    const responseText =
+      typeof assistantMessage === "string"
+        ? assistantMessage
+        : Array.isArray(assistantMessage)
+          ? assistantMessage
+              .map(c => (c.type === "text" ? c.text : ""))
+              .join("")
+          : String(assistantMessage);
+
     return {
       response: responseText,
       expertName,
-      voiceStyle
+      voiceStyle,
     };
   } catch (error) {
-    console.error('Expert chat error:', error);
-    throw new Error('Failed to generate expert response');
+    console.error("Expert chat error:", error);
+    throw new Error("Failed to generate expert response");
   }
 }
 

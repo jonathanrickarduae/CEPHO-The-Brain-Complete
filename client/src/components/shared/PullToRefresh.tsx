@@ -1,5 +1,5 @@
-import { useState, useRef, ReactNode, TouchEvent, useEffect } from 'react';
-import { RefreshCw, ArrowDown } from 'lucide-react';
+import { useState, useRef, ReactNode, TouchEvent, useEffect } from "react";
+import { RefreshCw, ArrowDown } from "lucide-react";
 
 interface PullToRefreshProps {
   children: ReactNode;
@@ -15,7 +15,7 @@ export function PullToRefresh({
   onRefresh,
   threshold = 80,
   maxPull = 120,
-  className = '',
+  className = "",
   disabled = false,
 }: PullToRefreshProps) {
   const [pullDistance, setPullDistance] = useState(0);
@@ -27,12 +27,12 @@ export function PullToRefresh({
 
   const handleTouchStart = (e: TouchEvent) => {
     if (disabled || isRefreshing) return;
-    
+
     const container = containerRef.current;
     if (!container) return;
-    
+
     scrollTopRef.current = container.scrollTop;
-    
+
     // Only start pull if at top of scroll
     if (scrollTopRef.current <= 0) {
       startYRef.current = e.touches[0].clientY;
@@ -42,7 +42,7 @@ export function PullToRefresh({
 
   const handleTouchMove = (e: TouchEvent) => {
     if (!isPulling || disabled || isRefreshing) return;
-    
+
     const container = containerRef.current;
     if (!container || container.scrollTop > 0) {
       setIsPulling(false);
@@ -52,13 +52,13 @@ export function PullToRefresh({
 
     const currentY = e.touches[0].clientY;
     const diff = currentY - startYRef.current;
-    
+
     if (diff > 0) {
       // Apply resistance to pull
       const resistance = 0.5;
       const distance = Math.min(maxPull, diff * resistance);
       setPullDistance(distance);
-      
+
       // Prevent default scroll when pulling
       e.preventDefault();
     }
@@ -66,18 +66,18 @@ export function PullToRefresh({
 
   const handleTouchEnd = async () => {
     if (!isPulling || disabled) return;
-    
+
     setIsPulling(false);
-    
+
     if (pullDistance >= threshold && !isRefreshing) {
       setIsRefreshing(true);
       setPullDistance(threshold);
-      
+
       // Haptic feedback
       if (navigator.vibrate) {
         navigator.vibrate(50);
       }
-      
+
       try {
         await onRefresh();
       } finally {
@@ -110,7 +110,7 @@ export function PullToRefresh({
       >
         <div
           className={`flex flex-col items-center gap-2 transition-all duration-200 ${
-            shouldTrigger ? 'text-primary' : 'text-muted-foreground'
+            shouldTrigger ? "text-primary" : "text-muted-foreground"
           }`}
           style={{
             opacity: progress,
@@ -132,10 +132,10 @@ export function PullToRefresh({
           )}
           <span className="text-xs font-medium">
             {isRefreshing
-              ? 'Refreshing...'
+              ? "Refreshing..."
               : shouldTrigger
-              ? 'Release to refresh'
-              : 'Pull to refresh'}
+                ? "Release to refresh"
+                : "Pull to refresh"}
           </span>
         </div>
       </div>
@@ -187,10 +187,10 @@ export function RefreshIndicator({
     const now = new Date();
     const diff = now.getTime() - date.getTime();
     const minutes = Math.floor(diff / 60000);
-    
-    if (minutes < 1) return 'Just now';
+
+    if (minutes < 1) return "Just now";
     if (minutes < 60) return `${minutes}m ago`;
-    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
   };
 
   return (
@@ -199,7 +199,7 @@ export function RefreshIndicator({
       disabled={isRefreshing}
       className="flex items-center gap-2 px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors disabled:opacity-50"
     >
-      <RefreshCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin' : ''}`} />
+      <RefreshCw className={`w-4 h-4 ${isRefreshing ? "animate-spin" : ""}`} />
       {lastRefreshed && !isRefreshing && (
         <span className="text-xs">Updated {formatTime(lastRefreshed)}</span>
       )}

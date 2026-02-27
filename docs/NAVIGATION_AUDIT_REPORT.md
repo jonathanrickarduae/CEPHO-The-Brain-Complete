@@ -8,11 +8,13 @@
 ## Current Navigation Structure (BrainLayout.tsx)
 
 ### 1. The Nexus
+
 - **Label:** "The Nexus"
 - **Path:** `/nexus`
 - **Status:** ✅ Matches route
 
 ### 2. The Signal
+
 - **Label:** "The Signal"
 - **Path:** `/daily-brief`
 - **Children:**
@@ -20,6 +22,7 @@
   - **Evening Review** → `/evening-review` ✅
 
 ### 3. Chief of Staff
+
 - **Label:** "Chief of Staff"
 - **Path:** `/tasks`
 - **Children:**
@@ -33,6 +36,7 @@
   - **Document Library** → `/documents` ✅
 
 ### 4. Odyssey Engine
+
 - **Label:** "Odyssey Engine"
 - **Path:** `/innovation-hub`
 - **Children:**
@@ -42,10 +46,12 @@
   - **Persephone Board** → `/persephone` ✅
 
 ### 5. Vault
+
 - **Label:** "Vault"
 - **Path:** `/vault` ✅
 
 ### 6. Settings
+
 - **Label:** "Settings"
 - **Path:** `/settings` ✅
 
@@ -54,7 +60,9 @@
 ## Issues Found
 
 ### 1. Duplicate/Obsolete Routes
+
 ❌ **Routes that should be removed:**
+
 - `/chief-of-staff` - Duplicate of `/tasks`
 - `/chief-of-staff-role` - Separate page, not in navigation
 - `/morning-signal` - Removed from navigation (consolidated into Victoria's Brief)
@@ -69,24 +77,28 @@
 - `/library` - Not in navigation (replaced by `/documents`)
 
 ### 2. Missing AI Agents Route
+
 ⚠️ **AI Agents navigation points to `/ai-agents`**
+
 - Need to verify this route exists and works
 - May need to create or update the route
 
 ### 3. Page Name vs URL Mismatches
 
-| Navigation Label | Current URL | Suggested URL | Status |
-|-----------------|-------------|---------------|--------|
-| The Nexus | `/nexus` | `/nexus` | ⚠️ Consider renaming |
-| Tasks | `/tasks` | `/tasks` | ⚠️ Consider renaming |
-| Analytics | `/analytics` | `/analytics` | ⚠️ Consider renaming |
+| Navigation Label | Current URL  | Suggested URL | Status               |
+| ---------------- | ------------ | ------------- | -------------------- |
+| The Nexus        | `/nexus`     | `/nexus`      | ⚠️ Consider renaming |
+| Tasks            | `/tasks`     | `/tasks`      | ⚠️ Consider renaming |
+| Analytics        | `/analytics` | `/analytics`  | ⚠️ Consider renaming |
 
 ---
 
 ## Recommended Actions
 
 ### Phase 1: Remove Obsolete Routes
+
 Remove these routes from App.tsx:
+
 - `/chief-of-staff` (use `/tasks`)
 - `/morning-signal` (consolidated)
 - `/the-signal`, `/signal`, `/signal/morning`, `/signal/evening` (duplicates)
@@ -96,13 +108,16 @@ Remove these routes from App.tsx:
 - `/library` (use `/documents`)
 
 ### Phase 2: Fix URL Naming Consistency
+
 **Option A: Keep current URLs** (minimal changes)
+
 - Keep `/nexus` for The Nexus
 - Keep `/tasks` for Tasks
 - Keep `/analytics` for Analytics
 - Update navigation labels if needed
 
 **Option B: Rename URLs to match labels** (more consistent)
+
 - `/nexus` → `/nexus`
 - `/tasks` → `/tasks`
 - `/analytics` → `/analytics`
@@ -110,10 +125,13 @@ Remove these routes from App.tsx:
 **Recommendation:** Option A (keep current URLs) to avoid breaking existing bookmarks and references.
 
 ### Phase 3: Verify AI Agents Route
+
 Check if `/ai-agents` route exists and points to correct component.
 
 ### Phase 4: Update QMS Documents
+
 Update these documents with current navigation structure:
+
 - `CEPHO_PROCESS_FLOW_DIAGRAMS.md`
 - `CEPHO_QUALITY_MANAGEMENT_SYSTEM.md`
 - `INNOVATION_HUB_WORKFLOWS.md`

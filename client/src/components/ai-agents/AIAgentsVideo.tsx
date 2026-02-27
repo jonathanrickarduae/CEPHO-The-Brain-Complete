@@ -1,5 +1,5 @@
 // @ts-nocheck
-import React from 'react';
+import React from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Play, Download, BookOpen } from "lucide-react";
@@ -11,28 +11,28 @@ export default function AIAgentsVideo() {
     {
       title: "Title Card",
       image: "/video-assets/01-title-card.png",
-      description: "Introduction to CEPHO's 50 AI Agents"
+      description: "Introduction to CEPHO's 50 AI Agents",
     },
     {
       title: "Agent Categories",
       image: "/video-assets/02-agent-categories.png",
-      description: "7 specialized categories with 50 total agents"
+      description: "7 specialized categories with 50 total agents",
     },
     {
       title: "Self-Improvement Cycle",
       image: "/video-assets/03-self-improvement-cycle.png",
-      description: "How agents learn and improve daily"
+      description: "How agents learn and improve daily",
     },
     {
       title: "Performance Growth",
       image: "/video-assets/04-performance-improvement.png",
-      description: "90-day performance improvement tracking"
+      description: "90-day performance improvement tracking",
     },
     {
       title: "Chief of Staff Orchestration",
       image: "/video-assets/05-chief-of-staff-orchestration.png",
-      description: "How the Chief of Staff coordinates all agents"
-    }
+      description: "How the Chief of Staff coordinates all agents",
+    },
   ];
 
   return (
@@ -47,17 +47,18 @@ export default function AIAgentsVideo() {
               Understanding AI Agents
             </h3>
             <p className="text-gray-300 mb-4">
-              Learn how CEPHO's 50 specialized AI agents work together to automate your business,
-              improve daily, and deliver world-class results. This educational video explains
-              the technology, benefits, and real-world applications.
+              Learn how CEPHO's 50 specialized AI agents work together to
+              automate your business, improve daily, and deliver world-class
+              results. This educational video explains the technology, benefits,
+              and real-world applications.
             </p>
             <div className="flex gap-3">
-              <Button 
+              <Button
                 onClick={() => setIsPlaying(!isPlaying)}
                 className="bg-blue-600 hover:bg-blue-700"
               >
                 <Play className="w-4 h-4 mr-2" />
-                {isPlaying ? 'Pause Video' : 'Watch Video (7 min)'}
+                {isPlaying ? "Pause Video" : "Watch Video (7 min)"}
               </Button>
               <Button variant="outline" className="border-gray-600">
                 <Download className="w-4 h-4 mr-2" />
@@ -71,10 +72,14 @@ export default function AIAgentsVideo() {
       {/* Video Sections Preview */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {videoAssets.map((asset, index) => (
-          <Card key={index} className="overflow-hidden bg-gray-800/50 border-gray-700">
+          <Card
+            key={index}
+            className="overflow-hidden bg-gray-800/50 border-gray-700"
+          >
             <div className="aspect-video bg-gray-900 relative group">
-              <img alt="AI agents demonstration video thumbnail" 
-                src={asset.image} 
+              <img
+                alt="AI agents demonstration video thumbnail"
+                src={asset.image}
                 alt={asset.title}
                 className="w-full h-full object-cover"
               />
@@ -98,28 +103,38 @@ export default function AIAgentsVideo() {
             <div className="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
             <div>
               <p className="text-white font-medium">50 Specialized Agents</p>
-              <p className="text-sm text-gray-400">Across 7 categories, each world-class in their domain</p>
+              <p className="text-sm text-gray-400">
+                Across 7 categories, each world-class in their domain
+              </p>
             </div>
           </div>
           <div className="flex items-start gap-3">
             <div className="w-2 h-2 bg-purple-500 rounded-full mt-2"></div>
             <div>
               <p className="text-white font-medium">Daily Self-Improvement</p>
-              <p className="text-sm text-gray-400">Agents research, learn, and propose enhancements</p>
+              <p className="text-sm text-gray-400">
+                Agents research, learn, and propose enhancements
+              </p>
             </div>
           </div>
           <div className="flex items-start gap-3">
             <div className="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
             <div>
-              <p className="text-white font-medium">Chief of Staff Orchestration</p>
-              <p className="text-sm text-gray-400">Coordinates all agents and approves improvements</p>
+              <p className="text-white font-medium">
+                Chief of Staff Orchestration
+              </p>
+              <p className="text-sm text-gray-400">
+                Coordinates all agents and approves improvements
+              </p>
             </div>
           </div>
           <div className="flex items-start gap-3">
             <div className="w-2 h-2 bg-yellow-500 rounded-full mt-2"></div>
             <div>
               <p className="text-white font-medium">Continuous Learning</p>
-              <p className="text-sm text-gray-400">Performance improves 15-20% every 30 days</p>
+              <p className="text-sm text-gray-400">
+                Performance improves 15-20% every 30 days
+              </p>
             </div>
           </div>
         </div>

@@ -1,10 +1,10 @@
-import { getDb } from '../../db';
-import { projects, InsertProject, Project } from '../../../drizzle/schema';
-import { eq, and, desc, lte } from 'drizzle-orm';
+import { getDb } from "../../db";
+import { projects, InsertProject, Project } from "../../../drizzle/schema";
+import { eq, and, desc, lte } from "drizzle-orm";
 
 /**
  * Project Repository
- * 
+ *
  * Handles all database operations for project management.
  */
 export class ProjectRepository {
@@ -13,12 +13,9 @@ export class ProjectRepository {
    */
   async create(data: InsertProject): Promise<Project> {
     const db = await getDb();
-    if (!db) throw new Error('Database not available');
+    if (!db) throw new Error("Database not available");
 
-    const [project] = await db
-      .insert(projects)
-      .values(data)
-      .returning();
+    const [project] = await db.insert(projects).values(data).returning();
 
     return project;
   }
@@ -33,12 +30,7 @@ export class ProjectRepository {
     const [project] = await db
       .select()
       .from(projects)
-      .where(
-        and(
-          eq(projects.id, id),
-          eq(projects.userId, userId)
-        )
-      )
+      .where(and(eq(projects.id, id), eq(projects.userId, userId)))
       .limit(1);
 
     return project || null;
@@ -63,7 +55,7 @@ export class ProjectRepository {
    */
   async findByStatus(
     userId: number,
-    status: 'not_started' | 'in_progress' | 'blocked' | 'review' | 'complete'
+    status: "not_started" | "in_progress" | "blocked" | "review" | "complete"
   ): Promise<Project[]> {
     const db = await getDb();
     if (!db) return [];
@@ -71,12 +63,7 @@ export class ProjectRepository {
     return await db
       .select()
       .from(projects)
-      .where(
-        and(
-          eq(projects.userId, userId),
-          eq(projects.status, status)
-        )
-      )
+      .where(and(eq(projects.userId, userId), eq(projects.status, status)))
       .orderBy(desc(projects.priority), desc(projects.updatedAt));
   }
 
@@ -85,7 +72,7 @@ export class ProjectRepository {
    */
   async findByPriority(
     userId: number,
-    priority: 'low' | 'medium' | 'high' | 'critical'
+    priority: "low" | "medium" | "high" | "critical"
   ): Promise<Project[]> {
     const db = await getDb();
     if (!db) return [];
@@ -93,12 +80,7 @@ export class ProjectRepository {
     return await db
       .select()
       .from(projects)
-      .where(
-        and(
-          eq(projects.userId, userId),
-          eq(projects.priority, priority)
-        )
-      )
+      .where(and(eq(projects.userId, userId), eq(projects.priority, priority)))
       .orderBy(desc(projects.updatedAt));
   }
 
@@ -118,7 +100,7 @@ export class ProjectRepository {
         and(
           eq(projects.userId, userId),
           lte(projects.dueDate, now),
-          eq(projects.status, 'in_progress')
+          eq(projects.status, "in_progress")
         )
       )
       .orderBy(projects.dueDate);
@@ -138,12 +120,7 @@ export class ProjectRepository {
     const [updated] = await db
       .update(projects)
       .set({ ...data, updatedAt: new Date() })
-      .where(
-        and(
-          eq(projects.id, id),
-          eq(projects.userId, userId)
-        )
-      )
+      .where(and(eq(projects.id, id), eq(projects.userId, userId)))
       .returning();
 
     return updated || null;
@@ -158,12 +135,7 @@ export class ProjectRepository {
 
     const result = await db
       .delete(projects)
-      .where(
-        and(
-          eq(projects.id, id),
-          eq(projects.userId, userId)
-        )
-      )
+      .where(and(eq(projects.id, id), eq(projects.userId, userId)))
       .returning();
 
     return result.length > 0;
@@ -179,11 +151,11 @@ export class ProjectRepository {
     const allProjects = await this.findByUserId(userId);
 
     return {
-      not_started: allProjects.filter(p => p.status === 'not_started').length,
-      in_progress: allProjects.filter(p => p.status === 'in_progress').length,
-      blocked: allProjects.filter(p => p.status === 'blocked').length,
-      review: allProjects.filter(p => p.status === 'review').length,
-      complete: allProjects.filter(p => p.status === 'complete').length,
+      not_started: allProjects.filter(p => p.status === "not_started").length,
+      in_progress: allProjects.filter(p => p.status === "in_progress").length,
+      blocked: allProjects.filter(p => p.status === "blocked").length,
+      review: allProjects.filter(p => p.status === "review").length,
+      complete: allProjects.filter(p => p.status === "complete").length,
     };
   }
 }

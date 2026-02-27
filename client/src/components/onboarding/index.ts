@@ -1,3 +1,3 @@
 // @ts-nocheck
-export { default as DueDiligenceWizard } from './DueDiligenceWizard';
-export { default as TourAndDemoMode } from './TourAndDemoMode';
+export { default as DueDiligenceWizard } from "./DueDiligenceWizard";
+export { default as TourAndDemoMode } from "./TourAndDemoMode";

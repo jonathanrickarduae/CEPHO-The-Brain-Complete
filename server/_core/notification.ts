@@ -13,9 +13,7 @@ const isNonEmptyString = (value: unknown): value is string =>
   typeof value === "string" && value.trim().length > 0;
 
 const buildEndpointUrl = (baseUrl: string): string => {
-  const normalizedBase = baseUrl.endsWith("/")
-    ? baseUrl
-    : `${baseUrl}/`;
+  const normalizedBase = baseUrl.endsWith("/") ? baseUrl : `${baseUrl}/`;
   return new URL(
     "webdevtoken.v1.WebDevService/SendNotification",
     normalizedBase
@@ -69,7 +67,7 @@ export async function notifyOwner(
 
   const forgeApiUrl = process.env.BUILT_IN_FORGE_API_URL ?? "";
   const forgeApiKey = process.env.BUILT_IN_FORGE_API_KEY ?? "";
-  
+
   if (!forgeApiUrl) {
     throw new TRPCError({
       code: "INTERNAL_SERVER_ERROR",

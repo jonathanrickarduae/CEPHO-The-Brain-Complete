@@ -1,34 +1,48 @@
 /**
  * Centralized Logging Utility
- * 
+ *
  * Provides structured logging with levels and context.
  * In production, can be extended to send logs to external services (Sentry, LogRocket, etc.)
  */
 
 export enum LogLevel {
-  DEBUG = 'DEBUG',
-  INFO = 'INFO',
-  WARN = 'WARN',
-  ERROR = 'ERROR',
+  DEBUG = "DEBUG",
+  INFO = "INFO",
+  WARN = "WARN",
+  ERROR = "ERROR",
 }
 
 // Accept any value as context - objects, strings, booleans, etc.
 type LogContext = any;
 
 class Logger {
-  private isDevelopment = process.env.NODE_ENV !== 'production';
-  private minLevel: LogLevel = this.isDevelopment ? LogLevel.DEBUG : LogLevel.INFO;
+  private isDevelopment = process.env.NODE_ENV !== "production";
+  private minLevel: LogLevel = this.isDevelopment
+    ? LogLevel.DEBUG
+    : LogLevel.INFO;
 
   private shouldLog(level: LogLevel): boolean {
-    const levels = [LogLevel.DEBUG, LogLevel.INFO, LogLevel.WARN, LogLevel.ERROR];
+    const levels = [
+      LogLevel.DEBUG,
+      LogLevel.INFO,
+      LogLevel.WARN,
+      LogLevel.ERROR,
+    ];
     return levels.indexOf(level) >= levels.indexOf(this.minLevel);
   }
 
-  private formatMessage(level: LogLevel, message: string, context?: LogContext): string {
+  private formatMessage(
+    level: LogLevel,
+    message: string,
+    context?: LogContext
+  ): string {
     const timestamp = new Date().toISOString();
-    let contextStr = '';
+    let contextStr = "";
     if (context !== undefined && context !== null) {
-      contextStr = typeof context === 'object' ? ` ${JSON.stringify(context)}` : ` ${context}`;
+      contextStr =
+        typeof context === "object"
+          ? ` ${JSON.stringify(context)}`
+          : ` ${context}`;
     }
     return `[${timestamp}] [${level}] ${message}${contextStr}`;
   }
@@ -53,9 +67,14 @@ class Logger {
 
   error(message: string, error?: Error | unknown, context?: LogContext): void {
     if (this.shouldLog(LogLevel.ERROR)) {
-      const errorContext = error instanceof Error
-        ? { ...(typeof context === 'object' ? context : { context }), error: error.message, stack: error.stack }
-        : { ...(typeof context === 'object' ? context : { context }), error };
+      const errorContext =
+        error instanceof Error
+          ? {
+              ...(typeof context === "object" ? context : { context }),
+              error: error.message,
+              stack: error.stack,
+            }
+          : { ...(typeof context === "object" ? context : { context }), error };
       console.error(this.formatMessage(LogLevel.ERROR, message, errorContext));
     }
   }

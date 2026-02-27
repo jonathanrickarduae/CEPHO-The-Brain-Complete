@@ -40,8 +40,12 @@ export function PinGate({ children }: { children: React.ReactNode }) {
           <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-600 to-purple-900 flex items-center justify-center shadow-lg shadow-purple-900/50">
             <span className="text-white text-2xl font-bold">C</span>
           </div>
-          <h1 className="text-white text-2xl font-semibold tracking-tight">CEPHO</h1>
-          <p className="text-gray-500 text-sm">Enter your access code to continue</p>
+          <h1 className="text-white text-2xl font-semibold tracking-tight">
+            CEPHO
+          </h1>
+          <p className="text-gray-500 text-sm">
+            Enter your access code to continue
+          </p>
         </div>
 
         {/* PIN Form */}
@@ -53,18 +57,22 @@ export function PinGate({ children }: { children: React.ReactNode }) {
           <input
             type="password"
             value={pin}
-            onChange={(e) => {
+            onChange={e => {
               setPin(e.target.value);
               setError(false);
             }}
             placeholder="Access code"
             autoFocus
             className={`w-64 px-4 py-3 rounded-xl bg-white/5 border ${
-              error ? "border-red-500 text-red-400" : "border-white/10 text-white"
+              error
+                ? "border-red-500 text-red-400"
+                : "border-white/10 text-white"
             } text-center text-lg tracking-widest placeholder:text-gray-600 focus:outline-none focus:border-purple-500 transition-colors`}
           />
           {error && (
-            <p className="text-red-400 text-sm">Incorrect access code. Try again.</p>
+            <p className="text-red-400 text-sm">
+              Incorrect access code. Try again.
+            </p>
           )}
           <button
             type="submit"

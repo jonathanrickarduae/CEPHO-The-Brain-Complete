@@ -1,27 +1,27 @@
 // @ts-nocheck
-import { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Loader2, Lock, Mail } from 'lucide-react';
-import { useLocation } from 'wouter';
-import { toast } from 'sonner';
-import LoadingScreen from '@/components/LoadingScreen';
-import { useSupabaseAuth } from '@/_core/hooks/useSupabaseAuth';
+import { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Loader2, Lock, Mail } from "lucide-react";
+import { useLocation } from "wouter";
+import { toast } from "sonner";
+import LoadingScreen from "@/components/LoadingScreen";
+import { useSupabaseAuth } from "@/_core/hooks/useSupabaseAuth";
 
 export default function LandingPage() {
   const [, navigate] = useLocation();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
 
   // Load saved credentials on mount
   useEffect(() => {
-    const savedEmail = localStorage.getItem('cepho_email');
-    const savedRemember = localStorage.getItem('cepho_remember') === 'true';
-    
+    const savedEmail = localStorage.getItem("cepho_email");
+    const savedRemember = localStorage.getItem("cepho_remember") === "true";
+
     if (savedEmail && savedRemember) {
       setEmail(savedEmail);
       setRememberMe(true);
@@ -40,29 +40,29 @@ export default function LandingPage() {
     try {
       // Save credentials if remember me is checked
       if (rememberMe) {
-        localStorage.setItem('cepho_email', email);
-        localStorage.setItem('cepho_remember', 'true');
+        localStorage.setItem("cepho_email", email);
+        localStorage.setItem("cepho_remember", "true");
       } else {
-        localStorage.removeItem('cepho_email');
-        localStorage.removeItem('cepho_remember');
+        localStorage.removeItem("cepho_email");
+        localStorage.removeItem("cepho_remember");
       }
 
       // Sign in with Supabase
       const { data, error } = await signIn(email, password);
 
       if (error) {
-        toast.error(error.message || 'Failed to sign in');
+        toast.error(error.message || "Failed to sign in");
         setIsLoading(false);
         return;
       }
 
       if (data.user) {
-        toast.success('Welcome to CEPHO.AI');
-        navigate('/nexus');
+        toast.success("Welcome to CEPHO.AI");
+        navigate("/nexus");
       }
     } catch (error) {
-      console.error('Login error:', error);
-      toast.error('An unexpected error occurred');
+      console.error("Login error:", error);
+      toast.error("An unexpected error occurred");
       setIsLoading(false);
     }
   };
@@ -85,36 +85,43 @@ export default function LandingPage() {
               height: `${60 + Math.random() * 40}px`,
               left: `${15 + Math.random() * 70}%`,
               top: `${20 + Math.random() * 60}%`,
-              background: i % 2 === 0 
-                ? 'radial-gradient(circle, rgba(255, 200, 100, 0.6) 0%, rgba(255, 150, 50, 0.3) 50%, transparent 100%)'
-                : 'radial-gradient(circle, rgba(100, 200, 255, 0.5) 0%, rgba(50, 150, 255, 0.3) 50%, transparent 100%)',
-              filter: 'blur(20px)',
-              boxShadow: i % 2 === 0 ? '0 0 40px rgba(255, 200, 100, 0.4)' : '0 0 60px rgba(0, 200, 255, 0.5)',
+              background:
+                i % 2 === 0
+                  ? "radial-gradient(circle, rgba(255, 200, 100, 0.6) 0%, rgba(255, 150, 50, 0.3) 50%, transparent 100%)"
+                  : "radial-gradient(circle, rgba(100, 200, 255, 0.5) 0%, rgba(50, 150, 255, 0.3) 50%, transparent 100%)",
+              filter: "blur(20px)",
+              boxShadow:
+                i % 2 === 0
+                  ? "0 0 40px rgba(255, 200, 100, 0.4)"
+                  : "0 0 60px rgba(0, 200, 255, 0.5)",
               animationDelay: `${i * 1.5}s`,
               animationDuration: `${8 + Math.random() * 4}s`,
             }}
           />
         ))}
-        
+
         {/* Blue neon glow - brain area */}
         <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[500px] h-[500px]">
           {/* Outer blue neon glow */}
-          <div 
+          <div
             className="absolute inset-0 rounded-full animate-pulse-slow"
             style={{
-              background: 'radial-gradient(circle, rgba(0, 200, 255, 0.25) 0%, rgba(0, 150, 255, 0.15) 40%, transparent 70%)',
-              filter: 'blur(60px)',
-              boxShadow: '0 0 100px rgba(0, 200, 255, 0.3), inset 0 0 80px rgba(0, 150, 255, 0.2)',
+              background:
+                "radial-gradient(circle, rgba(0, 200, 255, 0.25) 0%, rgba(0, 150, 255, 0.15) 40%, transparent 70%)",
+              filter: "blur(60px)",
+              boxShadow:
+                "0 0 100px rgba(0, 200, 255, 0.3), inset 0 0 80px rgba(0, 150, 255, 0.2)",
             }}
           />
-          
+
           {/* Inner bright neon core */}
-          <div 
+          <div
             className="absolute inset-[20%] rounded-full animate-pulse-slower"
             style={{
-              background: 'radial-gradient(circle, rgba(100, 220, 255, 0.35) 0%, rgba(0, 200, 255, 0.2) 50%, transparent 70%)',
-              filter: 'blur(40px)',
-              boxShadow: '0 0 60px rgba(0, 220, 255, 0.5)',
+              background:
+                "radial-gradient(circle, rgba(100, 220, 255, 0.35) 0%, rgba(0, 200, 255, 0.2) 50%, transparent 70%)",
+              filter: "blur(40px)",
+              boxShadow: "0 0 60px rgba(0, 220, 255, 0.5)",
             }}
           />
 
@@ -124,19 +131,19 @@ export default function LandingPage() {
             const radius = 25;
             const x = 50 + radius * Math.cos((angle * Math.PI) / 180);
             const y = 50 + radius * Math.sin((angle * Math.PI) / 180);
-            
+
             return (
               <div
                 key={`sparkle-${i}`}
                 className="absolute rounded-full animate-twinkle"
                 style={{
-                  width: '4px',
-                  height: '4px',
+                  width: "4px",
+                  height: "4px",
                   left: `${x}%`,
                   top: `${y}%`,
-                  background: 'rgba(255, 255, 255, 0.6)',
-                  boxShadow: '0 0 8px rgba(100, 200, 255, 0.8)',
-                  filter: 'blur(0.5px)',
+                  background: "rgba(255, 255, 255, 0.6)",
+                  boxShadow: "0 0 8px rgba(100, 200, 255, 0.8)",
+                  filter: "blur(0.5px)",
                   animationDelay: `${i * 0.5}s`,
                 }}
               />
@@ -150,32 +157,33 @@ export default function LandingPage() {
         {/* Logo and Branding */}
         <div className="text-center mb-16 animate-fade-in">
           {/* Cepho logo with mixed colors - cream/white tones */}
-          <h1 
+          <h1
             className="font-bold mb-4"
             style={{
-              fontSize: 'clamp(4rem, 12vw, 7rem)',
-              fontFamily: 'system-ui, -apple-system, sans-serif',
+              fontSize: "clamp(4rem, 12vw, 7rem)",
+              fontFamily: "system-ui, -apple-system, sans-serif",
               fontWeight: 800,
-              letterSpacing: '-0.02em',
+              letterSpacing: "-0.02em",
               lineHeight: 1,
-              background: 'linear-gradient(135deg, #a855f7 0%, #d946ef 50%, #a855f7 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-              textShadow: '0 0 40px rgba(168, 85, 247, 0.3)',
+              background:
+                "linear-gradient(135deg, #a855f7 0%, #d946ef 50%, #a855f7 100%)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              backgroundClip: "text",
+              textShadow: "0 0 40px rgba(168, 85, 247, 0.3)",
             }}
           >
             Cepho
           </h1>
-          
+
           {/* Tagline - white, smaller */}
-          <p 
+          <p
             className="text-white/80 mb-2"
             style={{
-              fontSize: 'clamp(0.875rem, 2vw, 1rem)',
-              fontFamily: 'system-ui, -apple-system, sans-serif',
+              fontSize: "clamp(0.875rem, 2vw, 1rem)",
+              fontFamily: "system-ui, -apple-system, sans-serif",
               fontWeight: 400,
-              letterSpacing: '0.05em',
+              letterSpacing: "0.05em",
               lineHeight: 1.5,
             }}
           >
@@ -183,13 +191,13 @@ export default function LandingPage() {
           </p>
 
           {/* Subtitle - white, smaller */}
-          <p 
+          <p
             className="text-white/70"
             style={{
-              fontSize: 'clamp(1rem, 2.5vw, 1.25rem)',
-              fontFamily: 'system-ui, -apple-system, sans-serif',
+              fontSize: "clamp(1rem, 2.5vw, 1.25rem)",
+              fontFamily: "system-ui, -apple-system, sans-serif",
               fontWeight: 400,
-              letterSpacing: '0.02em',
+              letterSpacing: "0.02em",
               lineHeight: 1.5,
             }}
           >
@@ -209,7 +217,7 @@ export default function LandingPage() {
                       type="email"
                       placeholder="Email"
                       value={email}
-                      onChange={(e) => setEmail(e.target.value)}
+                      onChange={e => setEmail(e.target.value)}
                       required
                       className="pl-12 h-12 bg-white/5 border-white/10 text-white placeholder:text-gray-400 focus:border-purple-400/50 focus:ring-1 focus:ring-purple-400/30 rounded-lg transition-all"
                     />
@@ -221,7 +229,7 @@ export default function LandingPage() {
                       type="password"
                       placeholder="Password"
                       value={password}
-                      onChange={(e) => setPassword(e.target.value)}
+                      onChange={e => setPassword(e.target.value)}
                       required
                       className="pl-12 h-12 bg-white/5 border-white/10 text-white placeholder:text-gray-400 focus:border-purple-400/50 focus:ring-1 focus:ring-purple-400/30 rounded-lg transition-all"
                     />
@@ -231,7 +239,9 @@ export default function LandingPage() {
                     <Checkbox
                       id="remember"
                       checked={rememberMe}
-                      onCheckedChange={(checked) => setRememberMe(checked as boolean)}
+                      onCheckedChange={checked =>
+                        setRememberMe(checked as boolean)
+                      }
                       className="border-white/30 data-[state=checked]:bg-purple-600 data-[state=checked]:border-purple-600"
                     />
                     <label
@@ -254,7 +264,7 @@ export default function LandingPage() {
                       Signing in...
                     </>
                   ) : (
-                    'Sign in to Continue'
+                    "Sign in to Continue"
                   )}
                 </Button>
               </form>

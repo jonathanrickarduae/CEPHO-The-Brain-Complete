@@ -147,13 +147,18 @@ function getRunwayBgColor(months: number): string {
 }
 
 function StartupCard({ startup }: { startup: StartupMetrics }) {
-  const runwayPercent = Math.min((startup.runway / startup.targets.runway) * 100, 100);
-  const mrrPercent = startup.targets.mrr > 0 
-    ? Math.min((startup.mrr / startup.targets.mrr) * 100, 100) 
-    : 0;
-  const customersPercent = startup.targets.customers > 0 
-    ? Math.min((startup.customers / startup.targets.customers) * 100, 100) 
-    : 0;
+  const runwayPercent = Math.min(
+    (startup.runway / startup.targets.runway) * 100,
+    100
+  );
+  const mrrPercent =
+    startup.targets.mrr > 0
+      ? Math.min((startup.mrr / startup.targets.mrr) * 100, 100)
+      : 0;
+  const customersPercent =
+    startup.targets.customers > 0
+      ? Math.min((startup.customers / startup.targets.customers) * 100, 100)
+      : 0;
 
   return (
     <Card className="bg-gray-900/50 border-gray-800">
@@ -163,13 +168,13 @@ function StartupCard({ startup }: { startup: StartupMetrics }) {
             <Rocket className="h-5 w-5 text-fuchsia-400" />
             {startup.name}
           </CardTitle>
-          <Badge 
+          <Badge
             className={`${
-              startup.runway <= 3 
-                ? "bg-red-500/20 text-red-400 border-red-500/30" 
-                : startup.runway <= 6 
-                ? "bg-amber-500/20 text-amber-400 border-amber-500/30"
-                : "bg-green-500/20 text-green-400 border-green-500/30"
+              startup.runway <= 3
+                ? "bg-red-500/20 text-red-400 border-red-500/30"
+                : startup.runway <= 6
+                  ? "bg-amber-500/20 text-amber-400 border-amber-500/30"
+                  : "bg-green-500/20 text-green-400 border-green-500/30"
             }`}
           >
             {startup.runway}mo runway
@@ -202,7 +207,9 @@ function StartupCard({ startup }: { startup: StartupMetrics }) {
               <Users className="h-3 w-3" />
               Team Size
             </div>
-            <p className="text-lg font-semibold text-white">{startup.teamSize}</p>
+            <p className="text-lg font-semibold text-white">
+              {startup.teamSize}
+            </p>
           </div>
         </div>
 
@@ -215,7 +222,7 @@ function StartupCard({ startup }: { startup: StartupMetrics }) {
             </span>
           </div>
           <div className="h-2 bg-gray-800 rounded-full overflow-hidden">
-            <div 
+            <div
               className={`h-full ${getRunwayBgColor(startup.runway)} transition-all`}
               style={{ width: `${runwayPercent}%` }}
             />
@@ -228,7 +235,8 @@ function StartupCard({ startup }: { startup: StartupMetrics }) {
             <div className="flex items-center justify-between text-sm mb-2">
               <span className="text-foreground/70">MRR Target</span>
               <span className="text-white">
-                {formatCurrency(startup.mrr)} / {formatCurrency(startup.targets.mrr)}
+                {formatCurrency(startup.mrr)} /{" "}
+                {formatCurrency(startup.targets.mrr)}
               </span>
             </div>
             <Progress value={mrrPercent} className="h-2" />
@@ -242,8 +250,8 @@ function StartupCard({ startup }: { startup: StartupMetrics }) {
           </p>
           <div className="space-y-2">
             {startup.milestones.slice(0, 3).map((milestone, idx) => (
-              <div 
-                key={idx} 
+              <div
+                key={idx}
                 className="flex items-center justify-between text-sm bg-gray-800/30 rounded-lg px-3 py-2"
               >
                 <div className="flex items-center gap-2">
@@ -256,7 +264,9 @@ function StartupCard({ startup }: { startup: StartupMetrics }) {
                   )}
                   <span className="text-foreground/80">{milestone.name}</span>
                 </div>
-                <span className="text-foreground/60 text-xs">{milestone.target}</span>
+                <span className="text-foreground/60 text-xs">
+                  {milestone.target}
+                </span>
               </div>
             ))}
           </div>
@@ -267,7 +277,11 @@ function StartupCard({ startup }: { startup: StartupMetrics }) {
           <span className="text-xs text-foreground/60 flex items-center gap-1">
             <Clock className="h-3 w-3" /> Updated {startup.lastUpdated}
           </span>
-          <Button variant="ghost" size="sm" className="text-fuchsia-400 hover:text-fuchsia-300">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="text-fuchsia-400 hover:text-fuchsia-300"
+          >
             <Edit className="h-3 w-3 mr-1" /> Edit
           </Button>
         </div>
@@ -281,16 +295,20 @@ interface StartupHealthDashboardProps {
   projectName?: string;
 }
 
-export default function StartupHealthDashboard({ projectId, projectName }: StartupHealthDashboardProps) {
+export default function StartupHealthDashboard({
+  projectId,
+  projectName,
+}: StartupHealthDashboardProps) {
   const [startups, setStartups] = useState<StartupMetrics[]>(sampleStartups);
   const [showAddDialog, setShowAddDialog] = useState(false);
 
   // Calculate portfolio totals
   const totalBurn = startups.reduce((acc, s) => acc + s.monthlyBurn, 0);
   const totalCash = startups.reduce((acc, s) => acc + s.cashOnHand, 0);
-  const avgRunway = startups.length > 0 
-    ? startups.reduce((acc, s) => acc + s.runway, 0) / startups.length 
-    : 0;
+  const avgRunway =
+    startups.length > 0
+      ? startups.reduce((acc, s) => acc + s.runway, 0) / startups.length
+      : 0;
   const criticalRunway = startups.filter(s => s.runway <= 3).length;
 
   return (
@@ -319,29 +337,51 @@ export default function StartupHealthDashboard({ projectId, projectName }: Start
             <div className="space-y-4 pt-4">
               <div>
                 <Label>Startup Name</Label>
-                <Input placeholder="Enter startup name" className="bg-gray-800 border-gray-700" />
+                <Input
+                  placeholder="Enter startup name"
+                  className="bg-gray-800 border-gray-700"
+                />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <Label>Monthly Burn ($)</Label>
-                  <Input type="number" placeholder="50000" className="bg-gray-800 border-gray-700" />
+                  <Input
+                    type="number"
+                    placeholder="50000"
+                    className="bg-gray-800 border-gray-700"
+                  />
                 </div>
                 <div>
                   <Label>Cash on Hand ($)</Label>
-                  <Input type="number" placeholder="500000" className="bg-gray-800 border-gray-700" />
+                  <Input
+                    type="number"
+                    placeholder="500000"
+                    className="bg-gray-800 border-gray-700"
+                  />
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <Label>Team Size</Label>
-                  <Input type="number" placeholder="5" className="bg-gray-800 border-gray-700" />
+                  <Input
+                    type="number"
+                    placeholder="5"
+                    className="bg-gray-800 border-gray-700"
+                  />
                 </div>
                 <div>
                   <Label>Target Runway (months)</Label>
-                  <Input type="number" placeholder="18" className="bg-gray-800 border-gray-700" />
+                  <Input
+                    type="number"
+                    placeholder="18"
+                    className="bg-gray-800 border-gray-700"
+                  />
                 </div>
               </div>
-              <Button className="w-full bg-fuchsia-500 hover:bg-fuchsia-600" onClick={() => setShowAddDialog(false)}>
+              <Button
+                className="w-full bg-fuchsia-500 hover:bg-fuchsia-600"
+                onClick={() => setShowAddDialog(false)}
+              >
                 Add Startup
               </Button>
             </div>
@@ -358,7 +398,9 @@ export default function StartupHealthDashboard({ projectId, projectName }: Start
                 <TrendingDown className="h-5 w-5 text-red-400" />
               </div>
               <div>
-                <p className="text-xl font-bold text-white">{formatCurrency(totalBurn)}</p>
+                <p className="text-xl font-bold text-white">
+                  {formatCurrency(totalBurn)}
+                </p>
                 <p className="text-xs text-foreground/60">Total Monthly Burn</p>
               </div>
             </div>
@@ -372,7 +414,9 @@ export default function StartupHealthDashboard({ projectId, projectName }: Start
                 <DollarSign className="h-5 w-5 text-green-400" />
               </div>
               <div>
-                <p className="text-xl font-bold text-white">{formatCurrency(totalCash)}</p>
+                <p className="text-xl font-bold text-white">
+                  {formatCurrency(totalCash)}
+                </p>
                 <p className="text-xs text-foreground/60">Total Cash</p>
               </div>
             </div>
@@ -386,7 +430,9 @@ export default function StartupHealthDashboard({ projectId, projectName }: Start
                 <Calendar className="h-5 w-5 text-blue-400" />
               </div>
               <div>
-                <p className="text-xl font-bold text-white">{avgRunway.toFixed(1)}mo</p>
+                <p className="text-xl font-bold text-white">
+                  {avgRunway.toFixed(1)}mo
+                </p>
                 <p className="text-xs text-foreground/60">Avg Runway</p>
               </div>
             </div>
@@ -396,8 +442,12 @@ export default function StartupHealthDashboard({ projectId, projectName }: Start
         <Card className="bg-gray-900/50 border-gray-800">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className={`p-2 ${criticalRunway > 0 ? "bg-red-500/20" : "bg-green-500/20"} rounded-lg`}>
-                <AlertTriangle className={`h-5 w-5 ${criticalRunway > 0 ? "text-red-400" : "text-green-400"}`} />
+              <div
+                className={`p-2 ${criticalRunway > 0 ? "bg-red-500/20" : "bg-green-500/20"} rounded-lg`}
+              >
+                <AlertTriangle
+                  className={`h-5 w-5 ${criticalRunway > 0 ? "text-red-400" : "text-green-400"}`}
+                />
               </div>
               <div>
                 <p className="text-xl font-bold text-white">{criticalRunway}</p>
@@ -410,7 +460,7 @@ export default function StartupHealthDashboard({ projectId, projectName }: Start
 
       {/* Startup Cards */}
       <div className="grid md:grid-cols-2 gap-4">
-        {startups.map((startup) => (
+        {startups.map(startup => (
           <StartupCard key={startup.id} startup={startup} />
         ))}
       </div>
@@ -420,11 +470,13 @@ export default function StartupHealthDashboard({ projectId, projectName }: Start
         <Card className="bg-gray-900/50 border-gray-800 border-dashed">
           <CardContent className="p-8 text-center">
             <Rocket className="h-12 w-12 mx-auto mb-4 text-foreground/50" />
-            <h3 className="text-lg font-semibold text-white mb-2">No startups tracked yet</h3>
+            <h3 className="text-lg font-semibold text-white mb-2">
+              No startups tracked yet
+            </h3>
             <p className="text-foreground/70 mb-4">
               Add your first startup to track runway, burn rate, and key metrics
             </p>
-            <Button 
+            <Button
               className="bg-fuchsia-500 hover:bg-fuchsia-600"
               onClick={() => setShowAddDialog(true)}
             >

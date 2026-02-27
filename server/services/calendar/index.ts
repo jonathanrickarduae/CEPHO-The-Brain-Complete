@@ -1,16 +1,29 @@
 /**
  * Calendar Service
- * 
+ *
  * Handles calendar event synchronization and management
  */
 
 export const calendarService = {
-  async syncEvents(userId: string, provider: 'google' | 'outlook', daysAhead?: number) {
+  async syncEvents(
+    userId: string,
+    provider: "google" | "outlook",
+    daysAhead?: number
+  ) {
     // TODO: Implement calendar sync
-    return { success: true, eventsSynced: 0, message: 'Calendar sync not yet implemented' };
+    return {
+      success: true,
+      eventsSynced: 0,
+      message: "Calendar sync not yet implemented",
+    };
   },
 
-  async getEvents(userId: string, startTime: Date, endTime: Date, provider?: 'google' | 'outlook' | 'manual') {
+  async getEvents(
+    userId: string,
+    startTime: Date,
+    endTime: Date,
+    provider?: "google" | "outlook" | "manual"
+  ) {
     // TODO: Implement get events
     return [];
   },
@@ -25,20 +38,30 @@ export const calendarService = {
     return false;
   },
 
-  async getNextFreeSlot(userId: string, startFrom: Date, durationMinutes: number) {
+  async getNextFreeSlot(
+    userId: string,
+    startFrom: Date,
+    durationMinutes: number
+  ) {
     // TODO: Implement free slot finding
-    return { startTime: startFrom, endTime: new Date(startFrom.getTime() + durationMinutes * 60000) };
+    return {
+      startTime: startFrom,
+      endTime: new Date(startFrom.getTime() + durationMinutes * 60000),
+    };
   },
 
-  async addManualEvent(userId: string, event: {
-    title: string;
-    startTime: Date;
-    endTime: Date;
-    isAllDay: boolean;
-    location?: string;
-  }) {
+  async addManualEvent(
+    userId: string,
+    event: {
+      title: string;
+      startTime: Date;
+      endTime: Date;
+      isAllDay: boolean;
+      location?: string;
+    }
+  ) {
     // TODO: Implement manual event creation
-    return 'temp-event-id';
+    return "temp-event-id";
   },
 
   async getIntegrationStatus(userId: string) {

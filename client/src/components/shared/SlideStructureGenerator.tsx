@@ -1,10 +1,16 @@
-import { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { 
+import { useState } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import {
   Presentation,
   Plus,
   GripVertical,
@@ -22,21 +28,21 @@ import {
   DollarSign,
   Lightbulb,
   BarChart3,
-  Rocket
-} from 'lucide-react';
-import { toast } from 'sonner';
-import { cn } from '@/lib/utils';
+  Rocket,
+} from "lucide-react";
+import { toast } from "sonner";
+import { cn } from "@/lib/utils";
 
-export type SlideType = 
-  | 'title' 
-  | 'problem' 
-  | 'solution' 
-  | 'market' 
-  | 'traction' 
-  | 'team' 
-  | 'financials' 
-  | 'ask' 
-  | 'custom';
+export type SlideType =
+  | "title"
+  | "problem"
+  | "solution"
+  | "market"
+  | "traction"
+  | "team"
+  | "financials"
+  | "ask"
+  | "custom";
 
 interface Slide {
   id: string;
@@ -47,80 +53,95 @@ interface Slide {
   hasGap?: boolean;
 }
 
-const slideTemplates: Record<SlideType, {
-  label: string;
-  icon: typeof Presentation;
-  defaultTitle: string;
-  placeholder: string;
-  color: string;
-}> = {
+const slideTemplates: Record<
+  SlideType,
+  {
+    label: string;
+    icon: typeof Presentation;
+    defaultTitle: string;
+    placeholder: string;
+    color: string;
+  }
+> = {
   title: {
-    label: 'Title',
+    label: "Title",
     icon: Presentation,
-    defaultTitle: 'Company Name',
-    placeholder: 'Tagline or one-liner that captures your value proposition',
-    color: 'text-purple-400'
+    defaultTitle: "Company Name",
+    placeholder: "Tagline or one-liner that captures your value proposition",
+    color: "text-purple-400",
   },
   problem: {
-    label: 'Problem',
+    label: "Problem",
     icon: AlertTriangle,
-    defaultTitle: 'The Problem',
-    placeholder: 'What pain point are you solving? Who experiences it? How big is it?',
-    color: 'text-red-400'
+    defaultTitle: "The Problem",
+    placeholder:
+      "What pain point are you solving? Who experiences it? How big is it?",
+    color: "text-red-400",
   },
   solution: {
-    label: 'Solution',
+    label: "Solution",
     icon: Lightbulb,
-    defaultTitle: 'Our Solution',
-    placeholder: 'How does your product/service solve the problem? What makes it unique?',
-    color: 'text-green-400'
+    defaultTitle: "Our Solution",
+    placeholder:
+      "How does your product/service solve the problem? What makes it unique?",
+    color: "text-green-400",
   },
   market: {
-    label: 'Market',
+    label: "Market",
     icon: Target,
-    defaultTitle: 'Market Opportunity',
-    placeholder: 'TAM, SAM, SOM. Market size, growth rate, and your target segment.',
-    color: 'text-blue-400'
+    defaultTitle: "Market Opportunity",
+    placeholder:
+      "TAM, SAM, SOM. Market size, growth rate, and your target segment.",
+    color: "text-blue-400",
   },
   traction: {
-    label: 'Traction',
+    label: "Traction",
     icon: TrendingUp,
-    defaultTitle: 'Traction & Milestones',
-    placeholder: 'Key metrics, growth, customers, partnerships, revenue.',
-    color: 'text-cyan-400'
+    defaultTitle: "Traction & Milestones",
+    placeholder: "Key metrics, growth, customers, partnerships, revenue.",
+    color: "text-cyan-400",
   },
   team: {
-    label: 'Team',
+    label: "Team",
     icon: Users,
-    defaultTitle: 'The Team',
-    placeholder: 'Key team members, their backgrounds, and why they are the right team.',
-    color: 'text-amber-400'
+    defaultTitle: "The Team",
+    placeholder:
+      "Key team members, their backgrounds, and why they are the right team.",
+    color: "text-amber-400",
   },
   financials: {
-    label: 'Financials',
+    label: "Financials",
     icon: BarChart3,
-    defaultTitle: 'Financial Projections',
-    placeholder: 'Revenue model, unit economics, projections, key assumptions.',
-    color: 'text-emerald-400'
+    defaultTitle: "Financial Projections",
+    placeholder: "Revenue model, unit economics, projections, key assumptions.",
+    color: "text-emerald-400",
   },
   ask: {
-    label: 'The Ask',
+    label: "The Ask",
     icon: DollarSign,
-    defaultTitle: 'Investment Ask',
-    placeholder: 'How much are you raising? What will you use it for? What milestones will it achieve?',
-    color: 'text-pink-400'
+    defaultTitle: "Investment Ask",
+    placeholder:
+      "How much are you raising? What will you use it for? What milestones will it achieve?",
+    color: "text-pink-400",
   },
   custom: {
-    label: 'Custom',
+    label: "Custom",
     icon: Plus,
-    defaultTitle: 'Custom Slide',
-    placeholder: 'Add your own content',
-    color: 'text-gray-400'
-  }
+    defaultTitle: "Custom Slide",
+    placeholder: "Add your own content",
+    color: "text-gray-400",
+  },
 };
 
 const standardDeckStructure: SlideType[] = [
-  'title', 'problem', 'solution', 'market', 'traction', 'team', 'financials', 'ask'
+  "title",
+  "problem",
+  "solution",
+  "market",
+  "traction",
+  "team",
+  "financials",
+  "ask",
 ];
 
 interface SlideStructureGeneratorProps {
@@ -128,7 +149,10 @@ interface SlideStructureGeneratorProps {
   initialSlides?: Slide[];
 }
 
-export function SlideStructureGenerator({ onExport, initialSlides }: SlideStructureGeneratorProps) {
+export function SlideStructureGenerator({
+  onExport,
+  initialSlides,
+}: SlideStructureGeneratorProps) {
   const [slides, setSlides] = useState<Slide[]>(initialSlides || []);
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
@@ -140,8 +164,8 @@ export function SlideStructureGenerator({ onExport, initialSlides }: SlideStruct
       id: generateId(),
       type,
       title: template.defaultTitle,
-      content: '',
-      notes: ''
+      content: "",
+      notes: "",
     };
     setSlides([...slides, newSlide]);
   };
@@ -153,75 +177,87 @@ export function SlideStructureGenerator({ onExport, initialSlides }: SlideStruct
         id: generateId(),
         type,
         title: template.defaultTitle,
-        content: '',
-        notes: ''
+        content: "",
+        notes: "",
       };
     });
     setSlides(newSlides);
-    toast.success('Standard pitch deck structure generated');
+    toast.success("Standard pitch deck structure generated");
   };
 
   const removeSlide = (id: string) => {
     setSlides(slides.filter(s => s.id !== id));
   };
 
-  const moveSlide = (id: string, direction: 'up' | 'down') => {
+  const moveSlide = (id: string, direction: "up" | "down") => {
     const index = slides.findIndex(s => s.id === id);
     if (index === -1) return;
-    
-    const newIndex = direction === 'up' ? index - 1 : index + 1;
+
+    const newIndex = direction === "up" ? index - 1 : index + 1;
     if (newIndex < 0 || newIndex >= slides.length) return;
-    
+
     const newSlides = [...slides];
-    [newSlides[index], newSlides[newIndex]] = [newSlides[newIndex], newSlides[index]];
+    [newSlides[index], newSlides[newIndex]] = [
+      newSlides[newIndex],
+      newSlides[index],
+    ];
     setSlides(newSlides);
   };
 
   const updateSlide = (id: string, updates: Partial<Slide>) => {
-    setSlides(slides.map(s => s.id === id ? { ...s, ...updates } : s));
+    setSlides(slides.map(s => (s.id === id ? { ...s, ...updates } : s)));
   };
 
   const detectGaps = () => {
     const presentTypes = new Set(slides.map(s => s.type));
-    const missingTypes = standardDeckStructure.filter(t => !presentTypes.has(t));
-    
+    const missingTypes = standardDeckStructure.filter(
+      t => !presentTypes.has(t)
+    );
+
     if (missingTypes.length > 0) {
-      toast.warning(`Missing slides: ${missingTypes.map(t => slideTemplates[t].label).join(', ')}`);
+      toast.warning(
+        `Missing slides: ${missingTypes.map(t => slideTemplates[t].label).join(", ")}`
+      );
     } else {
-      toast.success('All standard pitch deck sections are covered');
+      toast.success("All standard pitch deck sections are covered");
     }
-    
+
     // Mark slides with empty content as having gaps
-    setSlides(slides.map(s => ({
-      ...s,
-      hasGap: !s.content.trim()
-    })));
+    setSlides(
+      slides.map(s => ({
+        ...s,
+        hasGap: !s.content.trim(),
+      }))
+    );
   };
 
   const copySlideContent = (slide: Slide) => {
-    const content = `# ${slide.title}\n\n${slide.content}${slide.notes ? `\n\n---\nNotes: ${slide.notes}` : ''}`;
+    const content = `# ${slide.title}\n\n${slide.content}${slide.notes ? `\n\n---\nNotes: ${slide.notes}` : ""}`;
     navigator.clipboard.writeText(content);
     setCopiedId(slide.id);
     setTimeout(() => setCopiedId(null), 2000);
-    toast.success('Slide content copied');
+    toast.success("Slide content copied");
   };
 
   const exportDeck = () => {
     if (onExport) {
       onExport(slides);
     } else {
-      const content = slides.map((s, i) => 
-        `## Slide ${i + 1}: ${s.title}\n\n${s.content}\n${s.notes ? `\nNotes: ${s.notes}` : ''}`
-      ).join('\n\n---\n\n');
-      
-      const blob = new Blob([content], { type: 'text/markdown' });
+      const content = slides
+        .map(
+          (s, i) =>
+            `## Slide ${i + 1}: ${s.title}\n\n${s.content}\n${s.notes ? `\nNotes: ${s.notes}` : ""}`
+        )
+        .join("\n\n---\n\n");
+
+      const blob = new Blob([content], { type: "text/markdown" });
       const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
+      const a = document.createElement("a");
       a.href = url;
-      a.download = 'pitch-deck-structure.md';
+      a.download = "pitch-deck-structure.md";
       a.click();
       URL.revokeObjectURL(url);
-      toast.success('Deck structure exported');
+      toast.success("Deck structure exported");
     }
   };
 
@@ -239,8 +275,8 @@ export function SlideStructureGenerator({ onExport, initialSlides }: SlideStruct
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <Button 
-            variant="outline" 
+          <Button
+            variant="outline"
             size="sm"
             onClick={detectGaps}
             disabled={slides.length === 0}
@@ -248,8 +284,8 @@ export function SlideStructureGenerator({ onExport, initialSlides }: SlideStruct
             <AlertTriangle className="w-4 h-4 mr-2" />
             Detect Gaps
           </Button>
-          <Button 
-            variant="outline" 
+          <Button
+            variant="outline"
             size="sm"
             onClick={exportDeck}
             disabled={slides.length === 0}
@@ -264,7 +300,7 @@ export function SlideStructureGenerator({ onExport, initialSlides }: SlideStruct
       <Card className="bg-gray-900/50 border-gray-800">
         <CardContent className="pt-6">
           <div className="flex flex-wrap gap-2">
-            <Button 
+            <Button
               onClick={generateStandardDeck}
               className="bg-gradient-to-r from-[#E91E8C] to-purple-500"
             >
@@ -280,7 +316,7 @@ export function SlideStructureGenerator({ onExport, initialSlides }: SlideStruct
                 onClick={() => addSlide(type as SlideType)}
                 className="border-gray-700"
               >
-                <config.icon className={cn('w-4 h-4 mr-1', config.color)} />
+                <config.icon className={cn("w-4 h-4 mr-1", config.color)} />
                 {config.label}
               </Button>
             ))}
@@ -293,7 +329,9 @@ export function SlideStructureGenerator({ onExport, initialSlides }: SlideStruct
         <Card className="bg-gray-900/50 border-gray-800 border-dashed">
           <CardContent className="py-12 text-center">
             <Presentation className="w-12 h-12 text-gray-600 mx-auto mb-4" />
-            <p className="text-muted-foreground mb-4">No slides yet. Generate a standard deck or add slides manually.</p>
+            <p className="text-muted-foreground mb-4">
+              No slides yet. Generate a standard deck or add slides manually.
+            </p>
             <Button onClick={generateStandardDeck}>
               <Rocket className="w-4 h-4 mr-2" />
               Get Started
@@ -305,13 +343,13 @@ export function SlideStructureGenerator({ onExport, initialSlides }: SlideStruct
           {slides.map((slide, index) => {
             const config = slideTemplates[slide.type];
             const Icon = config.icon;
-            
+
             return (
-              <Card 
-                key={slide.id} 
+              <Card
+                key={slide.id}
                 className={cn(
-                  'bg-gray-900/50 border-gray-800',
-                  slide.hasGap && 'border-amber-500/50'
+                  "bg-gray-900/50 border-gray-800",
+                  slide.hasGap && "border-amber-500/50"
                 )}
               >
                 <CardHeader className="pb-3">
@@ -321,7 +359,7 @@ export function SlideStructureGenerator({ onExport, initialSlides }: SlideStruct
                         variant="ghost"
                         size="icon"
                         className="h-6 w-6"
-                        onClick={() => moveSlide(slide.id, 'up')}
+                        onClick={() => moveSlide(slide.id, "up")}
                         disabled={index === 0}
                       >
                         <ChevronUp className="w-4 h-4" />
@@ -330,19 +368,27 @@ export function SlideStructureGenerator({ onExport, initialSlides }: SlideStruct
                         variant="ghost"
                         size="icon"
                         className="h-6 w-6"
-                        onClick={() => moveSlide(slide.id, 'down')}
+                        onClick={() => moveSlide(slide.id, "down")}
                         disabled={index === slides.length - 1}
                       >
                         <ChevronDown className="w-4 h-4" />
                       </Button>
                     </div>
-                    <Badge variant="outline" className={cn('border-gray-700', config.color)}>
+                    <Badge
+                      variant="outline"
+                      className={cn("border-gray-700", config.color)}
+                    >
                       <Icon className="w-3 h-3 mr-1" />
                       {config.label}
                     </Badge>
-                    <span className="text-sm text-muted-foreground">Slide {index + 1}</span>
+                    <span className="text-sm text-muted-foreground">
+                      Slide {index + 1}
+                    </span>
                     {slide.hasGap && (
-                      <Badge variant="outline" className="bg-amber-500/20 text-amber-400 border-amber-500/30">
+                      <Badge
+                        variant="outline"
+                        className="bg-amber-500/20 text-amber-400 border-amber-500/30"
+                      >
                         <AlertTriangle className="w-3 h-3 mr-1" />
                         Needs Content
                       </Badge>
@@ -373,19 +419,28 @@ export function SlideStructureGenerator({ onExport, initialSlides }: SlideStruct
                 <CardContent className="space-y-4">
                   <Input
                     value={slide.title}
-                    onChange={(e) => updateSlide(slide.id, { title: e.target.value })}
+                    onChange={e =>
+                      updateSlide(slide.id, { title: e.target.value })
+                    }
                     placeholder="Slide title"
                     className="bg-gray-800 border-gray-700 text-lg font-medium"
                   />
                   <Textarea
                     value={slide.content}
-                    onChange={(e) => updateSlide(slide.id, { content: e.target.value, hasGap: false })}
+                    onChange={e =>
+                      updateSlide(slide.id, {
+                        content: e.target.value,
+                        hasGap: false,
+                      })
+                    }
                     placeholder={config.placeholder}
                     className="bg-gray-800 border-gray-700 min-h-[100px]"
                   />
                   <Input
-                    value={slide.notes || ''}
-                    onChange={(e) => updateSlide(slide.id, { notes: e.target.value })}
+                    value={slide.notes || ""}
+                    onChange={e =>
+                      updateSlide(slide.id, { notes: e.target.value })
+                    }
                     placeholder="Speaker notes (optional)"
                     className="bg-gray-800/50 border-gray-700 text-sm"
                   />

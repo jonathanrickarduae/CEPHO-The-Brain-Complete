@@ -5,34 +5,41 @@
 ### Key Findings from Logs
 
 #### First Deployment (06:14:09)
+
 ```
 [OAuth] ERROR: OAUTH_SERVER_URL is not configured! Set OAUTH_SERVER_URL environment variable.
 ==> Your service is live 🎉
 ```
+
 - OAuth error appeared but server still started
 - Multiple successful HTTP requests (200 responses)
 - Files being served: 231KB, 44KB, 25KB, etc.
 
 #### Second Deployment (06:19:10)
+
 ```
 [dotenv@17.2.3] injecting env (0) from dist/.env.production
 ==> Your service is live 🎉
 ```
+
 - No OAuth error this time
 - Environment variables loaded correctly
 - Server reports as "live"
 - Successful HTTP requests logged
 
 #### Third Deployment (06:24:47)
+
 ```
 ==> Detected service running on port 10000
 ```
+
 - Server detected on correct port
 - Multiple successful requests from iPhone Safari
 
 ### Current Issue
 
 Despite Render reporting "Your service is live 🎉" and showing successful HTTP requests in logs, the browser is getting:
+
 - **503 Service Unavailable** errors
 - Blank white screen
 - JavaScript console errors showing failed resource loads
@@ -47,6 +54,7 @@ The issue appears to be **intermittent** or **timing-related**:
 4. **Environment variables loaded** - No errors in second deployment
 
 However, when accessing the site now, we get 503 errors, which suggests:
+
 - Server might be crashing after initial startup
 - Health check might be failing intermittently
 - There might be a race condition in the startup sequence
@@ -54,6 +62,7 @@ However, when accessing the site now, we get 503 errors, which suggests:
 ### Response Sizes from Logs
 
 Looking at successful requests:
+
 - 231,275 bytes (likely main JS bundle)
 - 44,424 bytes (likely vendor bundle)
 - 25,024 bytes (likely CSS)

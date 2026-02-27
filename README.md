@@ -2,7 +2,7 @@
 
 **AI-Powered Business Intelligence & Executive Decision Platform**
 
-CEPHO (from the Greek *κεφαλή* for "brain") is a comprehensive AI-powered platform that combines 50+ specialized AI agents with executive intelligence tools to automate operations, provide strategic insights, and enhance decision-making across all business functions.
+CEPHO (from the Greek _κεφαλή_ for "brain") is a comprehensive AI-powered platform that combines 50+ specialized AI agents with executive intelligence tools to automate operations, provide strategic insights, and enhance decision-making across all business functions.
 
 🌐 **Production:** https://cepho-the-brain-complete.onrender.com  
 📦 **Status:** ✅ Fully Operational  
@@ -38,13 +38,17 @@ pnpm start
 ## 📋 Core Features
 
 ### 🧠 The Nexus - Command Center
+
 Central dashboard with AI-powered insights, ClawBot assistant, and quick access to all platform features.
 
 ### 📊 Chief of Staff Dashboard
+
 Executive operations hub with task management, team coordination, and strategic oversight.
 
 ### 🤖 50+ Specialized AI Agents
+
 Automated agents across 7 categories:
+
 - Strategic Planning
 - Operations & Execution
 - Innovation & R&D
@@ -54,22 +58,29 @@ Automated agents across 7 categories:
 - Technology & Infrastructure
 
 ### 📈 Victoria's Briefing (The Signal)
+
 AI-generated daily strategic briefing with market insights, priorities, and recommendations.
 
 ### 🌙 Evening Review
+
 End-of-day summary with accomplishments, challenges, and next-day preparation.
 
 ### 💡 Innovation Hub
+
 Idea management, validation, and development pipeline with AI assistance.
 
 ### 🚀 Project Genesis
+
 Comprehensive project planning and execution with AI-powered templates and workflows.
 
 ### 📚 Document Library
+
 Centralized repository for AI-generated documents with QA workflow and version control.
 
 ### 🔗 Integrations
+
 Connect with 15+ external services:
+
 - Google Workspace, Microsoft 365
 - Slack, Teams
 - Asana, Trello, Notion
@@ -82,6 +93,7 @@ Connect with 15+ external services:
 ## 🏗️ Architecture
 
 ### Frontend
+
 - **Framework:** React 18 + TypeScript
 - **Build Tool:** Vite
 - **Styling:** Tailwind CSS + Shadcn/ui
@@ -90,6 +102,7 @@ Connect with 15+ external services:
 - **API Client:** tRPC
 
 ### Backend
+
 - **Runtime:** Node.js 22
 - **Framework:** Express
 - **API:** tRPC for type-safe APIs
@@ -99,6 +112,7 @@ Connect with 15+ external services:
 - **Security:** Row Level Security (RLS)
 
 ### Infrastructure
+
 - **Hosting:** Render
 - **Database:** Supabase (PostgreSQL)
 - **CI/CD:** GitHub + Render Auto-Deploy
@@ -165,6 +179,7 @@ SLACK_BOT_TOKEN=xoxb-...
 ## 🧪 Development
 
 ### Code Quality
+
 ```bash
 # Lint code
 pnpm lint
@@ -177,6 +192,7 @@ pnpm type-check
 ```
 
 ### Database Management
+
 ```bash
 # Generate migration
 pnpm db:generate
@@ -193,6 +209,7 @@ pnpm db:studio
 ## 🚢 Deployment
 
 ### Production Build
+
 ```bash
 # Build for production
 pnpm build
@@ -202,6 +219,7 @@ pnpm start
 ```
 
 ### Render Deployment
+
 - Automatic deployment on push to `main` branch
 - Build command: `pnpm build`
 - Start command: `pnpm start`
@@ -218,6 +236,7 @@ Proprietary - All rights reserved
 ## 🆘 Support
 
 For issues, questions, or support:
+
 - Create an issue in the GitHub repository
 - Contact: jonathanrickarduae@gmail.com
 

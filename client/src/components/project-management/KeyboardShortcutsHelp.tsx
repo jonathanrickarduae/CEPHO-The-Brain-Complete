@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
-import { X, Keyboard } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { useState, useEffect } from "react";
+import { X, Keyboard } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface ShortcutItem {
   keys: string[];
@@ -10,23 +10,67 @@ interface ShortcutItem {
 
 const SHORTCUTS: ShortcutItem[] = [
   // Navigation
-  { keys: ['⌘/Ctrl', 'D'], description: 'Go to Dashboard', category: 'Navigation' },
-  { keys: ['⌘/Ctrl', 'B'], description: 'Go to The Signal', category: 'Navigation' },
-  { keys: ['⌘/Ctrl', 'E'], description: 'Go to AI Experts', category: 'Navigation' },
-  { keys: ['⌘/Ctrl', 'T'], description: 'Go to Chief of Staff', category: 'Navigation' },
-  { keys: ['⌘/Ctrl', 'W'], description: 'Go to Workflow', category: 'Navigation' },
-  { keys: ['⌘/Ctrl', 'L'], description: 'Go to Library', category: 'Navigation' },
-  { keys: ['⌘/Ctrl', 'V'], description: 'Go to Vault', category: 'Navigation' },
-  { keys: ['⌘/Ctrl', 'R'], description: 'Go to Evening Review', category: 'Navigation' },
-  
+  {
+    keys: ["⌘/Ctrl", "D"],
+    description: "Go to Dashboard",
+    category: "Navigation",
+  },
+  {
+    keys: ["⌘/Ctrl", "B"],
+    description: "Go to The Signal",
+    category: "Navigation",
+  },
+  {
+    keys: ["⌘/Ctrl", "E"],
+    description: "Go to AI Experts",
+    category: "Navigation",
+  },
+  {
+    keys: ["⌘/Ctrl", "T"],
+    description: "Go to Chief of Staff",
+    category: "Navigation",
+  },
+  {
+    keys: ["⌘/Ctrl", "W"],
+    description: "Go to Workflow",
+    category: "Navigation",
+  },
+  {
+    keys: ["⌘/Ctrl", "L"],
+    description: "Go to Library",
+    category: "Navigation",
+  },
+  { keys: ["⌘/Ctrl", "V"], description: "Go to Vault", category: "Navigation" },
+  {
+    keys: ["⌘/Ctrl", "R"],
+    description: "Go to Evening Review",
+    category: "Navigation",
+  },
+
   // Actions
-  { keys: ['⌘/Ctrl', '/'], description: 'Focus search/voice input', category: 'Actions' },
-  { keys: ['Esc'], description: 'Close modal/dialog', category: 'Actions' },
-  { keys: ['Shift', '?'], description: 'Show keyboard shortcuts', category: 'Actions' },
-  
+  {
+    keys: ["⌘/Ctrl", "/"],
+    description: "Focus search/voice input",
+    category: "Actions",
+  },
+  { keys: ["Esc"], description: "Close modal/dialog", category: "Actions" },
+  {
+    keys: ["Shift", "?"],
+    description: "Show keyboard shortcuts",
+    category: "Actions",
+  },
+
   // Quick Actions
-  { keys: ['Space'], description: 'Start/stop voice recording (when focused)', category: 'Quick Actions' },
-  { keys: ['Enter'], description: 'Submit/confirm action', category: 'Quick Actions' },
+  {
+    keys: ["Space"],
+    description: "Start/stop voice recording (when focused)",
+    category: "Quick Actions",
+  },
+  {
+    keys: ["Enter"],
+    description: "Submit/confirm action",
+    category: "Quick Actions",
+  },
 ];
 
 interface KeyboardShortcutsHelpProps {
@@ -34,27 +78,33 @@ interface KeyboardShortcutsHelpProps {
   onClose: () => void;
 }
 
-export function KeyboardShortcutsHelp({ isOpen, onClose }: KeyboardShortcutsHelpProps) {
+export function KeyboardShortcutsHelp({
+  isOpen,
+  onClose,
+}: KeyboardShortcutsHelpProps) {
   // Close on Escape
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && isOpen) {
+      if (e.key === "Escape" && isOpen) {
         onClose();
       }
     };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
   // Group shortcuts by category
-  const groupedShortcuts = SHORTCUTS.reduce((acc, shortcut) => {
-    const category = shortcut.category || 'General';
-    if (!acc[category]) acc[category] = [];
-    acc[category].push(shortcut);
-    return acc;
-  }, {} as Record<string, ShortcutItem[]>);
+  const groupedShortcuts = SHORTCUTS.reduce(
+    (acc, shortcut) => {
+      const category = shortcut.category || "General";
+      if (!acc[category]) acc[category] = [];
+      acc[category].push(shortcut);
+      return acc;
+    },
+    {} as Record<string, ShortcutItem[]>
+  );
 
   return (
     <>
@@ -71,7 +121,9 @@ export function KeyboardShortcutsHelp({ isOpen, onClose }: KeyboardShortcutsHelp
           <div className="flex items-center justify-between p-4 border-b border-white/10">
             <div className="flex items-center gap-2">
               <Keyboard className="w-5 h-5 text-primary" />
-              <h2 className="font-display font-bold text-lg">Keyboard Shortcuts</h2>
+              <h2 className="font-display font-bold text-lg">
+                Keyboard Shortcuts
+              </h2>
             </div>
             <button
               onClick={onClose}
@@ -95,7 +147,9 @@ export function KeyboardShortcutsHelp({ isOpen, onClose }: KeyboardShortcutsHelp
                       key={index}
                       className="flex items-center justify-between py-2 px-3 rounded-lg bg-secondary/30"
                     >
-                      <span className="text-sm text-foreground">{shortcut.description}</span>
+                      <span className="text-sm text-foreground">
+                        {shortcut.description}
+                      </span>
                       <div className="flex items-center gap-1">
                         {shortcut.keys.map((key, keyIndex) => (
                           <span key={keyIndex} className="flex items-center">
@@ -103,7 +157,9 @@ export function KeyboardShortcutsHelp({ isOpen, onClose }: KeyboardShortcutsHelp
                               {key}
                             </kbd>
                             {keyIndex < shortcut.keys.length - 1 && (
-                              <span className="mx-1 text-muted-foreground/50">+</span>
+                              <span className="mx-1 text-muted-foreground/50">
+                                +
+                              </span>
                             )}
                           </span>
                         ))}
@@ -118,7 +174,15 @@ export function KeyboardShortcutsHelp({ isOpen, onClose }: KeyboardShortcutsHelp
           {/* Footer */}
           <div className="p-4 border-t border-white/10 bg-secondary/20">
             <p className="text-xs text-muted-foreground text-center">
-              Press <kbd className="px-1.5 py-0.5 text-xs font-mono bg-secondary rounded border border-white/10">Shift</kbd> + <kbd className="px-1.5 py-0.5 text-xs font-mono bg-secondary rounded border border-white/10">?</kbd> anytime to show this help
+              Press{" "}
+              <kbd className="px-1.5 py-0.5 text-xs font-mono bg-secondary rounded border border-white/10">
+                Shift
+              </kbd>{" "}
+              +{" "}
+              <kbd className="px-1.5 py-0.5 text-xs font-mono bg-secondary rounded border border-white/10">
+                ?
+              </kbd>{" "}
+              anytime to show this help
             </p>
           </div>
         </div>
@@ -134,13 +198,13 @@ export function useKeyboardShortcutsHelp() {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       // Shift + ? to toggle help
-      if (e.shiftKey && e.key === '?') {
+      if (e.shiftKey && e.key === "?") {
         e.preventDefault();
         setIsOpen(prev => !prev);
       }
     };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
   return {

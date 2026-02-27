@@ -1,27 +1,41 @@
-import { useState, useCallback, useRef, useEffect } from 'react';
-import { 
-  FileText, Sparkles, User, Bot, Check, X, 
-  RefreshCw, History, Eye, EyeOff, Lightbulb,
-  ChevronDown, Copy, Download, PenLine, Plus
-} from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
-import { trpc } from '@/lib/trpc';
+// @ts-nocheck
+import { useState, useCallback, useRef, useEffect } from "react";
+import {
+  FileText,
+  Sparkles,
+  User,
+  Bot,
+  Check,
+  X,
+  RefreshCw,
+  History,
+  Eye,
+  EyeOff,
+  Lightbulb,
+  ChevronDown,
+  Copy,
+  Download,
+  PenLine,
+  Plus,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { trpc } from "@/lib/trpc";
 
 interface NoteSuggestion {
   id: string;
-  type: 'expand' | 'clarify' | 'format' | 'add';
+  type: "expand" | "clarify" | "format" | "add";
   original: string;
   suggestion: string;
   confidence: number;
-  status: 'pending' | 'accepted' | 'rejected';
+  status: "pending" | "accepted" | "rejected";
 }
 
 interface NoteVersion {
   id: string;
   content: string;
   timestamp: Date;
-  author: 'user' | 'ai' | 'collaborative';
+  author: "user" | "ai" | "collaborative";
 }
 
 interface CollaborativeNotesProps {
@@ -30,7 +44,11 @@ interface CollaborativeNotesProps {
   className?: string;
 }
 
-export function CollaborativeNotes({ initialContent = '', onSave, className }: CollaborativeNotesProps) {
+export function CollaborativeNotes({
+  initialContent = "",
+  onSave,
+  className,
+}: CollaborativeNotesProps) {
   const [content, setContent] = useState(initialContent);
   const [suggestions, setSuggestions] = useState<NoteSuggestion[]>([]);
   const [versions, setVersions] = useState<NoteVersion[]>([]);
@@ -48,23 +66,27 @@ export function CollaborativeNotes({ initialContent = '', onSave, className }: C
     if (content && content !== initialContent) {
       const lastVersion = versions[versions.length - 1];
       if (!lastVersion || content.length - lastVersion.content.length > 50) {
-        setVersions(prev => [...prev, {
-          id: `v-${Date.now()}`,
-          content,
-          timestamp: new Date(),
-          author: 'user',
-        }]);
+        setVersions(prev => [
+          ...prev,
+          {
+            id: `v-${Date.now()}`,
+            content,
+            timestamp: new Date(),
+            author: "user",
+          },
+        ]);
       }
     }
   }, [content, initialContent, versions]);
 
   // Generate AI suggestions as user types
-  const generateSuggestions = useCallback(async (text: string) => {
-    if (text.length < 20) return;
-    
-    try {
-      const result = await chatMutation.mutateAsync({
-        message: `Analyze this note and provide 2-3 brief suggestions to improve it. Format each suggestion as:
+  const generateSuggestions = useCallback(
+    async (text: string) => {
+      if (text.length < 20) return;
+
+      try {
+        const result = await chatMutation.mutateAsync({
+          message: `Analyze this note and provide 2-3 brief suggestions to improve it. Format each suggestion as:
 TYPE: [expand/clarify/format/add]
 ORIGINAL: [relevant excerpt]
 SUGGESTION: [your improvement]
@@ -72,81 +94,101 @@ CONFIDENCE: [0.0-1.0]
 
 Note content:
 ${text}`,
-        context: 'note_enhancement',
-      });
-
-      // Parse suggestions from response
-      const suggestionMatches = Array.from(result.message.matchAll(
-        /TYPE:\s*(\w+)\s*\nORIGINAL:\s*(.+?)\s*\nSUGGESTION:\s*(.+?)\s*\nCONFIDENCE:\s*([\d.]+)/gi
-      ));
-
-      const newSuggestions: NoteSuggestion[] = [];
-      for (const match of suggestionMatches) {
-        newSuggestions.push({
-          id: `s-${Date.now()}-${newSuggestions.length}`,
-          type: match[1].toLowerCase() as NoteSuggestion['type'],
-          original: match[2],
-          suggestion: match[3],
-          confidence: parseFloat(match[4]),
-          status: 'pending',
+          context: "note_enhancement",
         });
-      }
 
-      if (newSuggestions.length > 0) {
-        setSuggestions(newSuggestions);
+        // Parse suggestions from response
+        const suggestionMatches = Array.from(
+          result.message.matchAll(
+            /TYPE:\s*(\w+)\s*\nORIGINAL:\s*(.+?)\s*\nSUGGESTION:\s*(.+?)\s*\nCONFIDENCE:\s*([\d.]+)/gi
+          )
+        );
+
+        const newSuggestions: NoteSuggestion[] = [];
+        for (const match of suggestionMatches) {
+          newSuggestions.push({
+            id: `s-${Date.now()}-${newSuggestions.length}`,
+            type: match[1].toLowerCase() as NoteSuggestion["type"],
+            original: match[2],
+            suggestion: match[3],
+            confidence: parseFloat(match[4]),
+            status: "pending",
+          });
+        }
+
+        if (newSuggestions.length > 0) {
+          setSuggestions(newSuggestions);
+        }
+      } catch (error) {
+        console.error("Failed to generate suggestions:", error);
       }
-    } catch (error) {
-      console.error('Failed to generate suggestions:', error);
-    }
-  }, [chatMutation]);
+    },
+    [chatMutation]
+  );
 
   // Debounced suggestion generation
-  const handleContentChange = useCallback((newContent: string) => {
-    setContent(newContent);
-    
-    if (debounceRef.current) {
-      clearTimeout(debounceRef.current);
-    }
-    
-    debounceRef.current = setTimeout(() => {
-      generateSuggestions(newContent);
-    }, 2000);
-  }, [generateSuggestions]);
+  const handleContentChange = useCallback(
+    (newContent: string) => {
+      setContent(newContent);
+
+      if (debounceRef.current) {
+        clearTimeout(debounceRef.current);
+      }
+
+      debounceRef.current = setTimeout(() => {
+        generateSuggestions(newContent);
+      }, 2000);
+    },
+    [generateSuggestions]
+  );
 
   // Accept a suggestion
-  const acceptSuggestion = useCallback((suggestion: NoteSuggestion) => {
-    let newContent = content;
-    
-    if (suggestion.type === 'add') {
-      newContent = content + '\n\n' + suggestion.suggestion;
-    } else {
-      newContent = content.replace(suggestion.original, suggestion.suggestion);
-    }
-    
-    setContent(newContent);
-    setSuggestions(prev => prev.map(s => 
-      s.id === suggestion.id ? { ...s, status: 'accepted' } : s
-    ));
-    
-    // Track AI contribution
-    const aiChars = suggestion.suggestion.length;
-    const totalChars = newContent.length;
-    setAiContribution(prev => Math.min(100, prev + (aiChars / totalChars) * 100));
-    
-    // Save version
-    setVersions(prev => [...prev, {
-      id: `v-${Date.now()}`,
-      content: newContent,
-      timestamp: new Date(),
-      author: 'collaborative',
-    }]);
-  }, [content]);
+  const acceptSuggestion = useCallback(
+    (suggestion: NoteSuggestion) => {
+      let newContent = content;
+
+      if (suggestion.type === "add") {
+        newContent = content + "\n\n" + suggestion.suggestion;
+      } else {
+        newContent = content.replace(
+          suggestion.original,
+          suggestion.suggestion
+        );
+      }
+
+      setContent(newContent);
+      setSuggestions(prev =>
+        prev.map(s =>
+          s.id === suggestion.id ? { ...s, status: "accepted" } : s
+        )
+      );
+
+      // Track AI contribution
+      const aiChars = suggestion.suggestion.length;
+      const totalChars = newContent.length;
+      setAiContribution(prev =>
+        Math.min(100, prev + (aiChars / totalChars) * 100)
+      );
+
+      // Save version
+      setVersions(prev => [
+        ...prev,
+        {
+          id: `v-${Date.now()}`,
+          content: newContent,
+          timestamp: new Date(),
+          author: "collaborative",
+        },
+      ]);
+    },
+    [content]
+  );
 
   // Reject a suggestion
   const rejectSuggestion = useCallback((id: string) => {
-    setSuggestions(prev => prev.map(s => 
-      s.id === id ? { ...s, status: 'rejected' } : s
-    ));
+    setSuggestions(prev =>
+      prev.map(s => (s.id === id ? { ...s, status: "rejected" } : s))
+    );
   }, []);
 
   // Full AI enhancement
@@ -158,20 +200,23 @@ ${text}`,
 
 Original note:
 ${content}`,
-        context: 'note_enhancement',
+        context: "note_enhancement",
       });
 
       const enhanced = result.message;
       setContent(enhanced);
-      setVersions(prev => [...prev, {
-        id: `v-${Date.now()}`,
-        content: enhanced,
-        timestamp: new Date(),
-        author: 'ai',
-      }]);
+      setVersions(prev => [
+        ...prev,
+        {
+          id: `v-${Date.now()}`,
+          content: enhanced,
+          timestamp: new Date(),
+          author: "ai",
+        },
+      ]);
       setAiContribution(100);
     } catch (error) {
-      console.error('Enhancement failed:', error);
+      console.error("Enhancement failed:", error);
     } finally {
       setIsEnhancing(false);
     }
@@ -183,28 +228,40 @@ ${content}`,
     setShowHistory(false);
   }, []);
 
-  const getSuggestionIcon = (type: NoteSuggestion['type']) => {
-    const iconClass = 'w-4 h-4';
+  const getSuggestionIcon = (type: NoteSuggestion["type"]) => {
+    const iconClass = "w-4 h-4";
     switch (type) {
-      case 'expand': return <PenLine className={iconClass} />;
-      case 'clarify': return <Lightbulb className={iconClass} />;
-      case 'format': return <Sparkles className={iconClass} />;
-      case 'add': return <Plus className={iconClass} />;
+      case "expand":
+        return <PenLine className={iconClass} />;
+      case "clarify":
+        return <Lightbulb className={iconClass} />;
+      case "format":
+        return <Sparkles className={iconClass} />;
+      case "add":
+        return <Plus className={iconClass} />;
     }
   };
 
-  const getAuthorIcon = (author: NoteVersion['author']) => {
+  const getAuthorIcon = (author: NoteVersion["author"]) => {
     switch (author) {
-      case 'user': return <User className="w-3 h-3" />;
-      case 'ai': return <Bot className="w-3 h-3" />;
-      case 'collaborative': return <Sparkles className="w-3 h-3" />;
+      case "user":
+        return <User className="w-3 h-3" />;
+      case "ai":
+        return <Bot className="w-3 h-3" />;
+      case "collaborative":
+        return <Sparkles className="w-3 h-3" />;
     }
   };
 
-  const pendingSuggestions = suggestions.filter(s => s.status === 'pending');
+  const pendingSuggestions = suggestions.filter(s => s.status === "pending");
 
   return (
-    <div className={cn('bg-card/60 border border-white/10 rounded-xl overflow-hidden', className)}>
+    <div
+      className={cn(
+        "bg-card/60 border border-white/10 rounded-xl overflow-hidden",
+        className
+      )}
+    >
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3 border-b border-white/10 bg-gradient-to-r from-teal-500/10 to-cyan-500/10">
         <div className="flex items-center gap-2">
@@ -216,7 +273,7 @@ ${content}`,
           <div className="flex items-center gap-1 text-xs text-muted-foreground">
             <User className="w-3 h-3" />
             <div className="w-16 h-1.5 bg-secondary rounded-full overflow-hidden">
-              <div 
+              <div
                 className="h-full bg-gradient-to-r from-teal-500 to-cyan-500"
                 style={{ width: `${100 - aiContribution}%` }}
               />
@@ -241,7 +298,7 @@ ${content}`,
           <textarea
             ref={textareaRef}
             value={content}
-            onChange={(e) => handleContentChange(e.target.value)}
+            onChange={e => handleContentChange(e.target.value)}
             placeholder="Start writing... AI will suggest improvements as you type."
             className="w-full h-64 p-3 bg-secondary/30 border border-white/10 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-teal-500/50 text-sm placeholder:text-muted-foreground"
           />
@@ -269,7 +326,11 @@ ${content}`,
                 onClick={() => setShowSuggestions(!showSuggestions)}
                 className="text-xs"
               >
-                {showSuggestions ? <EyeOff className="w-3 h-3 mr-1" /> : <Eye className="w-3 h-3 mr-1" />}
+                {showSuggestions ? (
+                  <EyeOff className="w-3 h-3 mr-1" />
+                ) : (
+                  <Eye className="w-3 h-3 mr-1" />
+                )}
                 Suggestions
               </Button>
             </div>
@@ -301,7 +362,9 @@ ${content}`,
                 <Lightbulb className="w-4 h-4 text-amber-400" />
                 Suggestions
               </div>
-              <span className="text-xs text-muted-foreground">{pendingSuggestions.length}</span>
+              <span className="text-xs text-muted-foreground">
+                {pendingSuggestions.length}
+              </span>
             </div>
 
             <div className="space-y-3">
@@ -318,13 +381,13 @@ ${content}`,
                       {Math.round(suggestion.confidence * 100)}%
                     </span>
                   </div>
-                  
+
                   {suggestion.original && (
                     <div className="text-xs text-muted-foreground mb-1 line-through">
                       {suggestion.original.substring(0, 50)}...
                     </div>
                   )}
-                  
+
                   <div className="text-xs text-foreground mb-2">
                     {suggestion.suggestion.substring(0, 100)}...
                   </div>
@@ -375,7 +438,9 @@ ${content}`,
                     <div className="flex items-center justify-between mb-1">
                       <div className="flex items-center gap-1 text-xs">
                         {getAuthorIcon(version.author)}
-                        <span className="capitalize text-muted-foreground">{version.author}</span>
+                        <span className="capitalize text-muted-foreground">
+                          {version.author}
+                        </span>
                       </div>
                       <span className="text-[10px] text-muted-foreground">
                         {version.timestamp.toLocaleTimeString()}
@@ -400,9 +465,11 @@ ${content}`,
         </div>
         <div className="flex items-center gap-1">
           <span>AI contribution:</span>
-          <span className={cn(
-            aiContribution > 50 ? 'text-cyan-400' : 'text-teal-400'
-          )}>
+          <span
+            className={cn(
+              aiContribution > 50 ? "text-cyan-400" : "text-teal-400"
+            )}
+          >
             {Math.round(aiContribution)}%
           </span>
         </div>

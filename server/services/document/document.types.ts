@@ -1,6 +1,6 @@
 /**
  * Document Service Types and DTOs
- * 
+ *
  * Data Transfer Objects for document library services.
  */
 

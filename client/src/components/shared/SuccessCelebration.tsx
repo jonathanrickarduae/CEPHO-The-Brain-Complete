@@ -1,21 +1,21 @@
-import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import confetti from 'canvas-confetti';
-import { 
-  CheckCircle2, 
-  Sparkles, 
-  PartyPopper, 
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import confetti from "canvas-confetti";
+import {
+  CheckCircle2,
+  Sparkles,
+  PartyPopper,
   Zap,
   Trophy,
-  Star
-} from 'lucide-react';
-import { cn } from '@/lib/utils';
+  Star,
+} from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface SuccessCelebrationProps {
   show: boolean;
   title?: string;
   message?: string;
-  type?: 'integration' | 'milestone' | 'achievement' | 'completion';
+  type?: "integration" | "milestone" | "achievement" | "completion";
   onComplete?: () => void;
   duration?: number;
 }
@@ -23,41 +23,41 @@ interface SuccessCelebrationProps {
 const celebrationConfig = {
   integration: {
     icon: Zap,
-    color: 'text-cyan-400',
-    bgColor: 'bg-cyan-500/20',
-    borderColor: 'border-cyan-500/50',
-    confettiColors: ['#06B6D4', '#22D3EE', '#67E8F9']
+    color: "text-cyan-400",
+    bgColor: "bg-cyan-500/20",
+    borderColor: "border-cyan-500/50",
+    confettiColors: ["#06B6D4", "#22D3EE", "#67E8F9"],
   },
   milestone: {
     icon: Trophy,
-    color: 'text-amber-400',
-    bgColor: 'bg-amber-500/20',
-    borderColor: 'border-amber-500/50',
-    confettiColors: ['#F59E0B', '#FBBF24', '#FCD34D']
+    color: "text-amber-400",
+    bgColor: "bg-amber-500/20",
+    borderColor: "border-amber-500/50",
+    confettiColors: ["#F59E0B", "#FBBF24", "#FCD34D"],
   },
   achievement: {
     icon: Star,
-    color: 'text-purple-400',
-    bgColor: 'bg-purple-500/20',
-    borderColor: 'border-purple-500/50',
-    confettiColors: ['#A855F7', '#C084FC', '#E879F9']
+    color: "text-purple-400",
+    bgColor: "bg-purple-500/20",
+    borderColor: "border-purple-500/50",
+    confettiColors: ["#A855F7", "#C084FC", "#E879F9"],
   },
   completion: {
     icon: CheckCircle2,
-    color: 'text-green-400',
-    bgColor: 'bg-green-500/20',
-    borderColor: 'border-green-500/50',
-    confettiColors: ['#22C55E', '#4ADE80', '#86EFAC']
-  }
+    color: "text-green-400",
+    bgColor: "bg-green-500/20",
+    borderColor: "border-green-500/50",
+    confettiColors: ["#22C55E", "#4ADE80", "#86EFAC"],
+  },
 };
 
-export function SuccessCelebration({ 
-  show, 
-  title = 'Success!', 
-  message = 'Great job!',
-  type = 'completion',
+export function SuccessCelebration({
+  show,
+  title = "Success!",
+  message = "Great job!",
+  type = "completion",
   onComplete,
-  duration = 3000
+  duration = 3000,
 }: SuccessCelebrationProps) {
   const [visible, setVisible] = useState(false);
   const config = celebrationConfig[type];
@@ -66,7 +66,7 @@ export function SuccessCelebration({
   useEffect(() => {
     if (show) {
       setVisible(true);
-      
+
       // Trigger confetti
       const end = Date.now() + 1000;
       const colors = config.confettiColors;
@@ -77,20 +77,20 @@ export function SuccessCelebration({
           angle: 60,
           spread: 55,
           origin: { x: 0 },
-          colors: colors
+          colors: colors,
         });
         confetti({
           particleCount: 3,
           angle: 120,
           spread: 55,
           origin: { x: 1 },
-          colors: colors
+          colors: colors,
         });
 
         if (Date.now() < end) {
           requestAnimationFrame(frame);
         }
-      }());
+      })();
 
       // Auto-hide after duration
       const timer = setTimeout(() => {
@@ -114,9 +114,9 @@ export function SuccessCelebration({
           <motion.div
             initial={{ scale: 0.5 }}
             animate={{ scale: 1 }}
-            transition={{ type: 'spring', damping: 15 }}
+            transition={{ type: "spring", damping: 15 }}
             className={cn(
-              'p-8 rounded-2xl border-2 shadow-2xl pointer-events-auto',
+              "p-8 rounded-2xl border-2 shadow-2xl pointer-events-auto",
               config.bgColor,
               config.borderColor
             )}
@@ -124,18 +124,20 @@ export function SuccessCelebration({
             <div className="text-center space-y-4">
               {/* Animated Icon */}
               <motion.div
-                animate={{ 
+                animate={{
                   rotate: [0, -10, 10, -10, 10, 0],
-                  scale: [1, 1.1, 1]
+                  scale: [1, 1.1, 1],
                 }}
                 transition={{ duration: 0.5, repeat: 2 }}
                 className="inline-block"
               >
-                <div className={cn(
-                  'w-20 h-20 rounded-full flex items-center justify-center mx-auto',
-                  config.bgColor
-                )}>
-                  <Icon className={cn('w-10 h-10', config.color)} />
+                <div
+                  className={cn(
+                    "w-20 h-20 rounded-full flex items-center justify-center mx-auto",
+                    config.bgColor
+                  )}
+                >
+                  <Icon className={cn("w-10 h-10", config.color)} />
                 </div>
               </motion.div>
 
@@ -145,9 +147,9 @@ export function SuccessCelebration({
                 transition={{ duration: 1, repeat: Infinity }}
                 className="flex justify-center gap-2"
               >
-                <Sparkles className={cn('w-5 h-5', config.color)} />
-                <PartyPopper className={cn('w-5 h-5', config.color)} />
-                <Sparkles className={cn('w-5 h-5', config.color)} />
+                <Sparkles className={cn("w-5 h-5", config.color)} />
+                <PartyPopper className={cn("w-5 h-5", config.color)} />
+                <Sparkles className={cn("w-5 h-5", config.color)} />
               </motion.div>
 
               {/* Title */}
@@ -155,7 +157,7 @@ export function SuccessCelebration({
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
-                className={cn('text-2xl font-bold', config.color)}
+                className={cn("text-2xl font-bold", config.color)}
               >
                 {title}
               </motion.h2>
@@ -183,18 +185,22 @@ export function useCelebration() {
     show: boolean;
     title: string;
     message: string;
-    type: 'integration' | 'milestone' | 'achievement' | 'completion';
+    type: "integration" | "milestone" | "achievement" | "completion";
   }>({
     show: false,
-    title: '',
-    message: '',
-    type: 'completion'
+    title: "",
+    message: "",
+    type: "completion",
   });
 
   const celebrate = (
-    title: string, 
-    message: string, 
-    type: 'integration' | 'milestone' | 'achievement' | 'completion' = 'completion'
+    title: string,
+    message: string,
+    type:
+      | "integration"
+      | "milestone"
+      | "achievement"
+      | "completion" = "completion"
   ) => {
     setCelebration({ show: true, title, message, type });
   };
@@ -209,25 +215,25 @@ export function useCelebration() {
 // Pre-built celebration triggers
 export const celebrations = {
   integrationConnected: (name: string) => ({
-    title: 'Integration Connected!',
+    title: "Integration Connected!",
     message: `${name} is now connected to your workspace`,
-    type: 'integration' as const
+    type: "integration" as const,
   }),
   milestoneReached: (milestone: string) => ({
-    title: 'Milestone Reached!',
+    title: "Milestone Reached!",
     message: milestone,
-    type: 'milestone' as const
+    type: "milestone" as const,
   }),
   taskCompleted: (task: string) => ({
-    title: 'Task Complete!',
+    title: "Task Complete!",
     message: task,
-    type: 'completion' as const
+    type: "completion" as const,
   }),
   achievementUnlocked: (achievement: string) => ({
-    title: 'Achievement Unlocked!',
+    title: "Achievement Unlocked!",
     message: achievement,
-    type: 'achievement' as const
-  })
+    type: "achievement" as const,
+  }),
 };
 
 export default SuccessCelebration;

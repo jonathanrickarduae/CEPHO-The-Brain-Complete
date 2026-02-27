@@ -1,6 +1,6 @@
 /**
  * Stripe Webhook Handler
- * 
+ *
  * Handles incoming Stripe webhook events
  */
 
@@ -9,11 +9,11 @@ const log = logger.module("StripeWebhook");
 
 import { Request, Response } from "express";
 import Stripe from "stripe";
-import { 
-  stripe, 
-  handleCheckoutComplete, 
-  handleSubscriptionUpdated, 
-  handleSubscriptionDeleted 
+import {
+  stripe,
+  handleCheckoutComplete,
+  handleSubscriptionUpdated,
+  handleSubscriptionDeleted,
 } from "./stripeService";
 
 const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET || "";
@@ -33,7 +33,9 @@ export async function handleStripeWebhook(req: Request, res: Response) {
 
   // Handle test events - CRITICAL for webhook verification
   if (event.id.startsWith("evt_test_")) {
-    log.debug("[Stripe Webhook] Test event detected, returning verification response");
+    log.debug(
+      "[Stripe Webhook] Test event detected, returning verification response"
+    );
     return res.json({ verified: true });
   }
 

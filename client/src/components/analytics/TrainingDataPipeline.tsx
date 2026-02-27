@@ -1,17 +1,27 @@
-import { useState, useRef } from 'react';
-import { 
-  Upload, FileText, MessageSquare, Brain, 
-  Check, X, Loader2, Download, Trash2,
-  ChevronRight, Info, Shield, Database
-} from 'lucide-react';
+import { useState, useRef } from "react";
+import {
+  Upload,
+  FileText,
+  MessageSquare,
+  Brain,
+  Check,
+  X,
+  Loader2,
+  Download,
+  Trash2,
+  ChevronRight,
+  Info,
+  Shield,
+  Database,
+} from "lucide-react";
 
 interface TrainingDocument {
   id: string;
   name: string;
-  type: 'document' | 'conversation' | 'preference';
+  type: "document" | "conversation" | "preference";
   size: string;
   uploadedAt: Date;
-  status: 'processing' | 'ready' | 'error';
+  status: "processing" | "ready" | "error";
   tokensExtracted?: number;
 }
 
@@ -26,21 +36,21 @@ interface TrainingStats {
 export function TrainingDataPipeline() {
   const [documents, setDocuments] = useState<TrainingDocument[]>([
     {
-      id: '1',
-      name: 'Work preferences.txt',
-      type: 'preference',
-      size: '2.4 KB',
+      id: "1",
+      name: "Work preferences.txt",
+      type: "preference",
+      size: "2.4 KB",
       uploadedAt: new Date(Date.now() - 86400000),
-      status: 'ready',
+      status: "ready",
       tokensExtracted: 1250,
     },
     {
-      id: '2',
-      name: 'Meeting notes collection',
-      type: 'document',
-      size: '156 KB',
+      id: "2",
+      name: "Meeting notes collection",
+      type: "document",
+      size: "156 KB",
       uploadedAt: new Date(Date.now() - 172800000),
-      status: 'ready',
+      status: "ready",
       tokensExtracted: 45000,
     },
   ]);
@@ -50,11 +60,13 @@ export function TrainingDataPipeline() {
     totalConversations: 847,
     totalTokens: 125000,
     lastTrainingDate: new Date(Date.now() - 3600000),
-    modelVersion: 'v2.3.1',
+    modelVersion: "v2.3.1",
   });
 
   const [uploading, setUploading] = useState(false);
-  const [activeTab, setActiveTab] = useState<'upload' | 'history' | 'export'>('upload');
+  const [activeTab, setActiveTab] = useState<"upload" | "history" | "export">(
+    "upload"
+  );
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileUpload = async (files: FileList | null) => {
@@ -66,10 +78,10 @@ export function TrainingDataPipeline() {
       const newDoc: TrainingDocument = {
         id: Math.random().toString(36).substring(7),
         name: file.name,
-        type: 'document',
+        type: "document",
         size: formatFileSize(file.size),
         uploadedAt: new Date(),
-        status: 'processing',
+        status: "processing",
       };
 
       setDocuments(prev => [newDoc, ...prev]);
@@ -77,11 +89,17 @@ export function TrainingDataPipeline() {
       // Simulate processing
       await new Promise(resolve => setTimeout(resolve, 2000));
 
-      setDocuments(prev => prev.map(doc => 
-        doc.id === newDoc.id 
-          ? { ...doc, status: 'ready', tokensExtracted: Math.floor(Math.random() * 10000) + 1000 }
-          : doc
-      ));
+      setDocuments(prev =>
+        prev.map(doc =>
+          doc.id === newDoc.id
+            ? {
+                ...doc,
+                status: "ready",
+                tokensExtracted: Math.floor(Math.random() * 10000) + 1000,
+              }
+            : doc
+        )
+      );
     }
 
     setUploading(false);
@@ -108,22 +126,28 @@ export function TrainingDataPipeline() {
         tokens: d.tokensExtracted,
       })),
     };
-    
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+
+    const blob = new Blob([JSON.stringify(data, null, 2)], {
+      type: "application/json",
+    });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
+    const a = document.createElement("a");
     a.href = url;
-    a.download = `brain-training-data-${new Date().toISOString().split('T')[0]}.json`;
+    a.download = `brain-training-data-${new Date().toISOString().split("T")[0]}.json`;
     a.click();
     URL.revokeObjectURL(url);
   };
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case 'document': return FileText;
-      case 'conversation': return MessageSquare;
-      case 'preference': return Brain;
-      default: return FileText;
+      case "document":
+        return FileText;
+      case "conversation":
+        return MessageSquare;
+      case "preference":
+        return Brain;
+      default:
+        return FileText;
     }
   };
 
@@ -145,19 +169,27 @@ export function TrainingDataPipeline() {
         {/* Stats */}
         <div className="grid grid-cols-4 gap-4">
           <div className="bg-gray-900 rounded-xl p-3 text-center">
-            <div className="text-2xl font-bold text-white">{stats.totalDocuments}</div>
+            <div className="text-2xl font-bold text-white">
+              {stats.totalDocuments}
+            </div>
             <div className="text-xs text-foreground/60">Documents</div>
           </div>
           <div className="bg-gray-900 rounded-xl p-3 text-center">
-            <div className="text-2xl font-bold text-white">{stats.totalConversations}</div>
+            <div className="text-2xl font-bold text-white">
+              {stats.totalConversations}
+            </div>
             <div className="text-xs text-foreground/60">Conversations</div>
           </div>
           <div className="bg-gray-900 rounded-xl p-3 text-center">
-            <div className="text-2xl font-bold text-white">{(stats.totalTokens / 1000).toFixed(0)}K</div>
+            <div className="text-2xl font-bold text-white">
+              {(stats.totalTokens / 1000).toFixed(0)}K
+            </div>
             <div className="text-xs text-foreground/60">Tokens</div>
           </div>
           <div className="bg-gray-900 rounded-xl p-3 text-center">
-            <div className="text-2xl font-bold text-cyan-400">{stats.modelVersion}</div>
+            <div className="text-2xl font-bold text-cyan-400">
+              {stats.modelVersion}
+            </div>
             <div className="text-xs text-foreground/60">Model</div>
           </div>
         </div>
@@ -166,17 +198,17 @@ export function TrainingDataPipeline() {
       {/* Tabs */}
       <div className="flex border-b border-gray-700">
         {[
-          { id: 'upload', label: 'Upload' },
-          { id: 'history', label: 'History' },
-          { id: 'export', label: 'Export' },
+          { id: "upload", label: "Upload" },
+          { id: "history", label: "History" },
+          { id: "export", label: "Export" },
         ].map(tab => (
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id as typeof activeTab)}
             className={`flex-1 py-3 text-sm font-medium transition-colors ${
               activeTab === tab.id
-                ? 'text-cyan-400 border-b-2 border-cyan-400'
-                : 'text-foreground/70 hover:text-foreground/80'
+                ? "text-cyan-400 border-b-2 border-cyan-400"
+                : "text-foreground/70 hover:text-foreground/80"
             }`}
           >
             {tab.label}
@@ -186,7 +218,7 @@ export function TrainingDataPipeline() {
 
       {/* Content */}
       <div className="p-6">
-        {activeTab === 'upload' && (
+        {activeTab === "upload" && (
           <div>
             {/* Upload Area */}
             <div
@@ -198,10 +230,10 @@ export function TrainingDataPipeline() {
                 type="file"
                 multiple
                 accept=".txt,.md,.pdf,.doc,.docx,.json"
-                onChange={(e) => handleFileUpload(e.target.files)}
+                onChange={e => handleFileUpload(e.target.files)}
                 className="hidden"
               />
-              
+
               {uploading ? (
                 <div className="flex flex-col items-center gap-3">
                   <Loader2 className="w-12 h-12 text-cyan-400 animate-spin" />
@@ -213,7 +245,9 @@ export function TrainingDataPipeline() {
                     <Upload className="w-8 h-8 text-cyan-400" />
                   </div>
                   <div>
-                    <p className="text-white font-medium">Drop files here or click to upload</p>
+                    <p className="text-white font-medium">
+                      Drop files here or click to upload
+                    </p>
                     <p className="text-sm text-foreground/60 mt-1">
                       Supports .txt, .md, .pdf, .doc, .docx, .json
                     </p>
@@ -240,7 +274,7 @@ export function TrainingDataPipeline() {
           </div>
         )}
 
-        {activeTab === 'history' && (
+        {activeTab === "history" && (
           <div className="space-y-3">
             {documents.length === 0 ? (
               <div className="text-center py-8 text-foreground/60">
@@ -255,28 +289,37 @@ export function TrainingDataPipeline() {
                     className="flex items-center justify-between p-4 bg-gray-900 rounded-xl"
                   >
                     <div className="flex items-center gap-3">
-                      <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
-                        doc.type === 'document' ? 'bg-blue-500/20' :
-                        doc.type === 'conversation' ? 'bg-purple-500/20' :
-                        'bg-pink-500/20'
-                      }`}>
-                        <TypeIcon className={`w-5 h-5 ${
-                          doc.type === 'document' ? 'text-blue-400' :
-                          doc.type === 'conversation' ? 'text-purple-400' :
-                          'text-pink-400'
-                        }`} />
+                      <div
+                        className={`w-10 h-10 rounded-lg flex items-center justify-center ${
+                          doc.type === "document"
+                            ? "bg-blue-500/20"
+                            : doc.type === "conversation"
+                              ? "bg-purple-500/20"
+                              : "bg-pink-500/20"
+                        }`}
+                      >
+                        <TypeIcon
+                          className={`w-5 h-5 ${
+                            doc.type === "document"
+                              ? "text-blue-400"
+                              : doc.type === "conversation"
+                                ? "text-purple-400"
+                                : "text-pink-400"
+                          }`}
+                        />
                       </div>
                       <div>
                         <div className="font-medium text-white">{doc.name}</div>
                         <div className="text-xs text-foreground/60">
-                          {doc.size} • {doc.tokensExtracted?.toLocaleString()} tokens
+                          {doc.size} • {doc.tokensExtracted?.toLocaleString()}{" "}
+                          tokens
                         </div>
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
-                      {doc.status === 'processing' ? (
+                      {doc.status === "processing" ? (
                         <Loader2 className="w-5 h-5 text-cyan-400 animate-spin" />
-                      ) : doc.status === 'ready' ? (
+                      ) : doc.status === "ready" ? (
                         <Check className="w-5 h-5 text-green-400" />
                       ) : (
                         <X className="w-5 h-5 text-red-400" />
@@ -295,13 +338,16 @@ export function TrainingDataPipeline() {
           </div>
         )}
 
-        {activeTab === 'export' && (
+        {activeTab === "export" && (
           <div className="space-y-4">
             <div className="bg-gray-900 rounded-xl p-4">
-              <h4 className="font-medium text-white mb-2">Export Your Training Data</h4>
+              <h4 className="font-medium text-white mb-2">
+                Export Your Training Data
+              </h4>
               <p className="text-sm text-foreground/70 mb-4">
-                Download all your training data including documents, conversations, and preferences.
-                This data can be used to migrate to another service or for backup purposes.
+                Download all your training data including documents,
+                conversations, and preferences. This data can be used to migrate
+                to another service or for backup purposes.
               </p>
               <button
                 onClick={exportTrainingData}
@@ -313,10 +359,13 @@ export function TrainingDataPipeline() {
             </div>
 
             <div className="bg-gray-900 rounded-xl p-4">
-              <h4 className="font-medium text-white mb-2">Delete All Training Data</h4>
+              <h4 className="font-medium text-white mb-2">
+                Delete All Training Data
+              </h4>
               <p className="text-sm text-foreground/70 mb-4">
-                Permanently delete all your training data. This action cannot be undone.
-                Your Chief of Staff will need to be retrained from scratch.
+                Permanently delete all your training data. This action cannot be
+                undone. Your Chief of Staff will need to be retrained from
+                scratch.
               </p>
               <button className="flex items-center gap-2 px-4 py-2 bg-red-500/20 hover:bg-red-500/30 text-red-400 rounded-lg transition-colors">
                 <Trash2 className="w-4 h-4" />
@@ -332,7 +381,9 @@ export function TrainingDataPipeline() {
         <div className="flex items-center justify-between text-sm">
           <div className="flex items-center gap-2 text-foreground/60">
             <Info className="w-4 h-4" />
-            <span>Last trained: {stats.lastTrainingDate?.toLocaleString()}</span>
+            <span>
+              Last trained: {stats.lastTrainingDate?.toLocaleString()}
+            </span>
           </div>
           <button className="flex items-center gap-1 text-cyan-400 hover:text-cyan-300">
             <span>Training Settings</span>

@@ -3,10 +3,10 @@
  * Prevents API abuse by limiting requests per user/IP
  */
 
-import { TRPCError } from '@trpc/server';
-import { logger } from '../utils/logger';
+import { TRPCError } from "@trpc/server";
+import { logger } from "../utils/logger";
 
-const log = logger.module('RateLimit');
+const log = logger.module("RateLimit");
 
 interface RateLimitConfig {
   windowMs: number; // Time window in milliseconds
@@ -40,11 +40,14 @@ class RateLimiter {
     }
 
     if (cleaned > 0) {
-      log.debug('Cleaned up expired rate limit entries', { cleaned });
+      log.debug("Cleaned up expired rate limit entries", { cleaned });
     }
   }
 
-  check(key: string, config: RateLimitConfig): { allowed: boolean; remaining: number; resetTime: number } {
+  check(
+    key: string,
+    config: RateLimitConfig
+  ): { allowed: boolean; remaining: number; resetTime: number } {
     const now = Date.now();
     const entry = this.store.get(key);
 
@@ -52,7 +55,7 @@ class RateLimiter {
     if (!entry || entry.resetTime < now) {
       const resetTime = now + config.windowMs;
       this.store.set(key, { count: 1, resetTime });
-      
+
       return {
         allowed: true,
         remaining: config.maxRequests - 1,
@@ -102,25 +105,25 @@ export const RATE_LIMITS = {
     windowMs: 60 * 1000, // 1 minute
     maxRequests: 100, // 100 requests per minute
   },
-  
+
   // Expensive operations (AI, document generation)
   expensive: {
     windowMs: 60 * 1000, // 1 minute
     maxRequests: 10, // 10 requests per minute
   },
-  
+
   // Authentication endpoints
   auth: {
     windowMs: 15 * 60 * 1000, // 15 minutes
     maxRequests: 5, // 5 attempts per 15 minutes
   },
-  
+
   // File uploads
   upload: {
     windowMs: 60 * 1000, // 1 minute
     maxRequests: 20, // 20 uploads per minute
   },
-  
+
   // Search/query endpoints
   search: {
     windowMs: 60 * 1000, // 1 minute
@@ -131,16 +134,23 @@ export const RATE_LIMITS = {
 /**
  * Create rate limit middleware for tRPC
  */
-export function createRateLimitMiddleware(config: RateLimitConfig = RATE_LIMITS.standard) {
-  return async (opts: { ctx: { user?: { id: number }; req?: { ip?: string } } }) => {
+export function createRateLimitMiddleware(
+  config: RateLimitConfig = RATE_LIMITS.standard
+) {
+  return async (opts: {
+    ctx: { user?: { id: number }; req?: { ip?: string } };
+  }) => {
     // Skip rate limiting in development
-    if (process.env.NODE_ENV === 'development' && process.env.DISABLE_RATE_LIMIT === 'true') {
+    if (
+      process.env.NODE_ENV === "development" &&
+      process.env.DISABLE_RATE_LIMIT === "true"
+    ) {
       return;
     }
 
     // Generate key based on user ID or IP
     const userId = opts.ctx.user?.id;
-    const ip = opts.ctx.req?.ip || 'unknown';
+    const ip = opts.ctx.req?.ip || "unknown";
     const key = userId ? `user:${userId}` : `ip:${ip}`;
 
     // Check rate limit
@@ -148,18 +158,18 @@ export function createRateLimitMiddleware(config: RateLimitConfig = RATE_LIMITS.
 
     if (!result.allowed) {
       const resetIn = Math.ceil((result.resetTime - Date.now()) / 1000);
-      
-      log.warn('Rate limit exceeded', { key, resetIn });
-      
+
+      log.warn("Rate limit exceeded", { key, resetIn });
+
       throw new TRPCError({
-        code: 'TOO_MANY_REQUESTS',
+        code: "TOO_MANY_REQUESTS",
         message: `Too many requests. Please try again in ${resetIn} seconds.`,
       });
     }
 
     // Log if getting close to limit (>80%)
     if (result.remaining < config.maxRequests * 0.2) {
-      log.debug('Approaching rate limit', { key, remaining: result.remaining });
+      log.debug("Approaching rate limit", { key, remaining: result.remaining });
     }
   };
 }
@@ -167,10 +177,15 @@ export function createRateLimitMiddleware(config: RateLimitConfig = RATE_LIMITS.
 /**
  * Express middleware for rate limiting
  */
-export function expressRateLimit(config: RateLimitConfig = RATE_LIMITS.standard) {
+export function expressRateLimit(
+  config: RateLimitConfig = RATE_LIMITS.standard
+) {
   return (req: any, res: any, next: any) => {
     // Skip rate limiting in development
-    if (process.env.NODE_ENV === 'development' && process.env.DISABLE_RATE_LIMIT === 'true') {
+    if (
+      process.env.NODE_ENV === "development" &&
+      process.env.DISABLE_RATE_LIMIT === "true"
+    ) {
       return next();
     }
 
@@ -181,17 +196,20 @@ export function expressRateLimit(config: RateLimitConfig = RATE_LIMITS.standard)
     const result = rateLimiter.check(key, config);
 
     // Set rate limit headers
-    res.setHeader('X-RateLimit-Limit', config.maxRequests);
-    res.setHeader('X-RateLimit-Remaining', result.remaining);
-    res.setHeader('X-RateLimit-Reset', new Date(result.resetTime).toISOString());
+    res.setHeader("X-RateLimit-Limit", config.maxRequests);
+    res.setHeader("X-RateLimit-Remaining", result.remaining);
+    res.setHeader(
+      "X-RateLimit-Reset",
+      new Date(result.resetTime).toISOString()
+    );
 
     if (!result.allowed) {
       const resetIn = Math.ceil((result.resetTime - Date.now()) / 1000);
-      
-      log.warn('Rate limit exceeded', { key, ip, resetIn });
-      
+
+      log.warn("Rate limit exceeded", { key, ip, resetIn });
+
       return res.status(429).json({
-        error: 'Too Many Requests',
+        error: "Too Many Requests",
         message: `Please try again in ${resetIn} seconds`,
         retryAfter: resetIn,
       });
@@ -208,12 +226,12 @@ export function resetRateLimit(userId?: number, ip?: string) {
   const key = userId ? `user:${userId}` : ip ? `ip:${ip}` : null;
   if (key) {
     rateLimiter.reset(key);
-    log.info('Rate limit reset', { key });
+    log.info("Rate limit reset", { key });
   }
 }
 
 // Clean up on process exit
-process.on('SIGTERM', () => rateLimiter.destroy());
-process.on('SIGINT', () => rateLimiter.destroy());
+process.on("SIGTERM", () => rateLimiter.destroy());
+process.on("SIGINT", () => rateLimiter.destroy());
 
 export { rateLimiter };

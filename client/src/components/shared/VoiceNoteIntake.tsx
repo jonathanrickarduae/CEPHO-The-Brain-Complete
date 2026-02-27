@@ -1,9 +1,20 @@
-import { useState, useRef, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Mic, MicOff, Upload, FileAudio, Loader2, CheckCircle, Sparkles, Brain, Clock, Volume2 } from 'lucide-react';
-import { trpc } from '@/lib/trpc';
+import { useState, useRef, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import {
+  Mic,
+  MicOff,
+  Upload,
+  FileAudio,
+  Loader2,
+  CheckCircle,
+  Sparkles,
+  Brain,
+  Clock,
+  Volume2,
+} from "lucide-react";
+import { trpc } from "@/lib/trpc";
 
 interface TranscriptionResult {
   text: string;
@@ -32,10 +43,11 @@ export function VoiceNoteIntake({ onComplete, onSkip }: VoiceNoteIntakeProps) {
   const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
-  const [transcriptionResult, setTranscriptionResult] = useState<TranscriptionResult | null>(null);
+  const [transcriptionResult, setTranscriptionResult] =
+    useState<TranscriptionResult | null>(null);
   const [recordingTime, setRecordingTime] = useState(0);
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
-  
+
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<Blob[]>([]);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
@@ -49,14 +61,14 @@ export function VoiceNoteIntake({ onComplete, onSkip }: VoiceNoteIntakeProps) {
       mediaRecorderRef.current = mediaRecorder;
       chunksRef.current = [];
 
-      mediaRecorder.ondataavailable = (e) => {
+      mediaRecorder.ondataavailable = e => {
         if (e.data.size > 0) {
           chunksRef.current.push(e.data);
         }
       };
 
       mediaRecorder.onstop = () => {
-        const blob = new Blob(chunksRef.current, { type: 'audio/webm' });
+        const blob = new Blob(chunksRef.current, { type: "audio/webm" });
         setAudioBlob(blob);
         setAudioUrl(URL.createObjectURL(blob));
         stream.getTracks().forEach(track => track.stop());
@@ -65,12 +77,12 @@ export function VoiceNoteIntake({ onComplete, onSkip }: VoiceNoteIntakeProps) {
       mediaRecorder.start();
       setIsRecording(true);
       setRecordingTime(0);
-      
+
       timerRef.current = setInterval(() => {
         setRecordingTime(prev => prev + 1);
       }, 1000);
     } catch (error) {
-      console.error('Error accessing microphone:', error);
+      console.error("Error accessing microphone:", error);
     }
   };
 
@@ -98,21 +110,21 @@ export function VoiceNoteIntake({ onComplete, onSkip }: VoiceNoteIntakeProps) {
   // Process audio and extract fields
   const processAudio = async () => {
     if (!audioBlob) return;
-    
+
     setIsProcessing(true);
-    
+
     try {
       // Convert blob to base64
       const reader = new FileReader();
       reader.readAsDataURL(audioBlob);
-      
+
       reader.onloadend = async () => {
         const base64Audio = reader.result as string;
-        
+
         // Simulate transcription and field extraction
         // In production, this would call the actual transcription API
         await new Promise(resolve => setTimeout(resolve, 3000));
-        
+
         // Mock result for demonstration
         const mockResult: TranscriptionResult = {
           text: "We want to create an award winning graduate program in the Middle East. The target audience is recent university graduates from GCC countries. We need this to be world class, comparable to top programs at McKinsey and Google. Timeline is 6 months to launch. Budget is flexible but we want maximum impact. Success metrics include graduate satisfaction scores above 90% and placement rates above 85%.",
@@ -123,26 +135,26 @@ export function VoiceNoteIntake({ onComplete, onSkip }: VoiceNoteIntakeProps) {
             objectives: [
               "Create award winning graduate program",
               "Achieve world class standards",
-              "Match quality of McKinsey and Google programs"
+              "Match quality of McKinsey and Google programs",
             ],
             timeline: "6 months to launch",
             budget: "Flexible, maximum impact focus",
             constraints: [],
             successMetrics: [
               "Graduate satisfaction scores above 90%",
-              "Placement rates above 85%"
+              "Placement rates above 85%",
             ],
             stakeholders: [],
-            industry: "Learning & Development"
+            industry: "Learning & Development",
           },
-          confidence: 0.92
+          confidence: 0.92,
         };
-        
+
         setTranscriptionResult(mockResult);
         setIsProcessing(false);
       };
     } catch (error) {
-      console.error('Error processing audio:', error);
+      console.error("Error processing audio:", error);
       setIsProcessing(false);
     }
   };
@@ -151,7 +163,7 @@ export function VoiceNoteIntake({ onComplete, onSkip }: VoiceNoteIntakeProps) {
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
+    return `${mins}:${secs.toString().padStart(2, "0")}`;
   };
 
   // Cleanup
@@ -174,9 +186,12 @@ export function VoiceNoteIntake({ onComplete, onSkip }: VoiceNoteIntakeProps) {
           <div className="w-20 h-20 rounded-full bg-gradient-to-r from-cyan-500 to-fuchsia-500 flex items-center justify-center mx-auto mb-4">
             <Brain className="w-10 h-10 text-white" />
           </div>
-          <h1 className="text-3xl font-bold text-white mb-2">Start with a Voice Note</h1>
+          <h1 className="text-3xl font-bold text-white mb-2">
+            Start with a Voice Note
+          </h1>
           <p className="text-foreground/70 max-w-lg mx-auto">
-            Describe your project idea in your own words. Our AI will transcribe it and pre-populate the project wizard for you.
+            Describe your project idea in your own words. Our AI will transcribe
+            it and pre-populate the project wizard for you.
           </p>
         </div>
 
@@ -197,9 +212,9 @@ export function VoiceNoteIntake({ onComplete, onSkip }: VoiceNoteIntakeProps) {
                     <button
                       onClick={isRecording ? stopRecording : startRecording}
                       className={`w-32 h-32 rounded-full flex items-center justify-center transition-all ${
-                        isRecording 
-                          ? 'bg-red-500 animate-pulse' 
-                          : 'bg-gradient-to-r from-cyan-500 to-fuchsia-500 hover:scale-105'
+                        isRecording
+                          ? "bg-red-500 animate-pulse"
+                          : "bg-gradient-to-r from-cyan-500 to-fuchsia-500 hover:scale-105"
                       }`}
                     >
                       {isRecording ? (
@@ -208,16 +223,20 @@ export function VoiceNoteIntake({ onComplete, onSkip }: VoiceNoteIntakeProps) {
                         <Mic className="w-12 h-12 text-white" />
                       )}
                     </button>
-                    
+
                     {isRecording && (
                       <div className="flex items-center gap-2 text-red-400">
                         <div className="w-3 h-3 rounded-full bg-red-500 animate-pulse" />
-                        <span className="font-mono text-lg">{formatTime(recordingTime)}</span>
+                        <span className="font-mono text-lg">
+                          {formatTime(recordingTime)}
+                        </span>
                       </div>
                     )}
-                    
+
                     <p className="text-foreground/70 text-sm">
-                      {isRecording ? 'Click to stop recording' : 'Click to start recording'}
+                      {isRecording
+                        ? "Click to stop recording"
+                        : "Click to start recording"}
                     </p>
                   </>
                 ) : (
@@ -230,16 +249,24 @@ export function VoiceNoteIntake({ onComplete, onSkip }: VoiceNoteIntakeProps) {
                         </div>
                         <div className="flex-1">
                           <p className="text-white font-medium">
-                            {uploadedFile ? uploadedFile.name : 'Voice Recording'}
+                            {uploadedFile
+                              ? uploadedFile.name
+                              : "Voice Recording"}
                           </p>
                           <p className="text-foreground/70 text-sm">
-                            {uploadedFile ? `${(uploadedFile.size / 1024 / 1024).toFixed(2)} MB` : formatTime(recordingTime)}
+                            {uploadedFile
+                              ? `${(uploadedFile.size / 1024 / 1024).toFixed(2)} MB`
+                              : formatTime(recordingTime)}
                           </p>
                         </div>
-                        <audio src={audioUrl || undefined} controls className="h-10" />
+                        <audio
+                          src={audioUrl || undefined}
+                          controls
+                          className="h-10"
+                        />
                       </div>
                     </div>
-                    
+
                     {/* Action Buttons */}
                     <div className="flex gap-3">
                       <Button
@@ -325,7 +352,9 @@ export function VoiceNoteIntake({ onComplete, onSkip }: VoiceNoteIntakeProps) {
             <CardContent className="space-y-6">
               {/* Full Transcription */}
               <div>
-                <h4 className="text-sm font-medium text-foreground/70 mb-2">Full Transcription</h4>
+                <h4 className="text-sm font-medium text-foreground/70 mb-2">
+                  Full Transcription
+                </h4>
                 <div className="bg-white/5 rounded-xl p-4 text-foreground/80">
                   {transcriptionResult.text}
                 </div>
@@ -333,61 +362,96 @@ export function VoiceNoteIntake({ onComplete, onSkip }: VoiceNoteIntakeProps) {
 
               {/* Extracted Fields */}
               <div>
-                <h4 className="text-sm font-medium text-foreground/70 mb-3">Extracted Project Details</h4>
+                <h4 className="text-sm font-medium text-foreground/70 mb-3">
+                  Extracted Project Details
+                </h4>
                 <div className="grid grid-cols-2 gap-4">
                   {transcriptionResult.extractedFields.projectName && (
                     <div className="bg-white/5 rounded-xl p-4">
-                      <p className="text-xs text-foreground/60 mb-1">Project Name</p>
-                      <p className="text-white font-medium">{transcriptionResult.extractedFields.projectName}</p>
+                      <p className="text-xs text-foreground/60 mb-1">
+                        Project Name
+                      </p>
+                      <p className="text-white font-medium">
+                        {transcriptionResult.extractedFields.projectName}
+                      </p>
                     </div>
                   )}
                   {transcriptionResult.extractedFields.projectType && (
                     <div className="bg-white/5 rounded-xl p-4">
-                      <p className="text-xs text-foreground/60 mb-1">Project Type</p>
-                      <p className="text-white font-medium">{transcriptionResult.extractedFields.projectType}</p>
+                      <p className="text-xs text-foreground/60 mb-1">
+                        Project Type
+                      </p>
+                      <p className="text-white font-medium">
+                        {transcriptionResult.extractedFields.projectType}
+                      </p>
                     </div>
                   )}
                   {transcriptionResult.extractedFields.industry && (
                     <div className="bg-white/5 rounded-xl p-4">
-                      <p className="text-xs text-foreground/60 mb-1">Industry</p>
-                      <p className="text-white font-medium">{transcriptionResult.extractedFields.industry}</p>
+                      <p className="text-xs text-foreground/60 mb-1">
+                        Industry
+                      </p>
+                      <p className="text-white font-medium">
+                        {transcriptionResult.extractedFields.industry}
+                      </p>
                     </div>
                   )}
                   {transcriptionResult.extractedFields.timeline && (
                     <div className="bg-white/5 rounded-xl p-4">
-                      <p className="text-xs text-foreground/60 mb-1">Timeline</p>
-                      <p className="text-white font-medium">{transcriptionResult.extractedFields.timeline}</p>
+                      <p className="text-xs text-foreground/60 mb-1">
+                        Timeline
+                      </p>
+                      <p className="text-white font-medium">
+                        {transcriptionResult.extractedFields.timeline}
+                      </p>
                     </div>
                   )}
                 </div>
 
-                {transcriptionResult.extractedFields.objectives && transcriptionResult.extractedFields.objectives.length > 0 && (
-                  <div className="mt-4 bg-white/5 rounded-xl p-4">
-                    <p className="text-xs text-foreground/60 mb-2">Objectives</p>
-                    <ul className="space-y-1">
-                      {transcriptionResult.extractedFields.objectives.map((obj, i) => (
-                        <li key={i} className="text-foreground/80 flex items-start gap-2">
-                          <CheckCircle className="w-4 h-4 text-green-400 mt-0.5 flex-shrink-0" />
-                          {obj}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
+                {transcriptionResult.extractedFields.objectives &&
+                  transcriptionResult.extractedFields.objectives.length > 0 && (
+                    <div className="mt-4 bg-white/5 rounded-xl p-4">
+                      <p className="text-xs text-foreground/60 mb-2">
+                        Objectives
+                      </p>
+                      <ul className="space-y-1">
+                        {transcriptionResult.extractedFields.objectives.map(
+                          (obj, i) => (
+                            <li
+                              key={i}
+                              className="text-foreground/80 flex items-start gap-2"
+                            >
+                              <CheckCircle className="w-4 h-4 text-green-400 mt-0.5 flex-shrink-0" />
+                              {obj}
+                            </li>
+                          )
+                        )}
+                      </ul>
+                    </div>
+                  )}
 
-                {transcriptionResult.extractedFields.successMetrics && transcriptionResult.extractedFields.successMetrics.length > 0 && (
-                  <div className="mt-4 bg-white/5 rounded-xl p-4">
-                    <p className="text-xs text-foreground/60 mb-2">Success Metrics</p>
-                    <ul className="space-y-1">
-                      {transcriptionResult.extractedFields.successMetrics.map((metric, i) => (
-                        <li key={i} className="text-foreground/80 flex items-start gap-2">
-                          <CheckCircle className="w-4 h-4 text-cyan-400 mt-0.5 flex-shrink-0" />
-                          {metric}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
+                {transcriptionResult.extractedFields.successMetrics &&
+                  transcriptionResult.extractedFields.successMetrics.length >
+                    0 && (
+                    <div className="mt-4 bg-white/5 rounded-xl p-4">
+                      <p className="text-xs text-foreground/60 mb-2">
+                        Success Metrics
+                      </p>
+                      <ul className="space-y-1">
+                        {transcriptionResult.extractedFields.successMetrics.map(
+                          (metric, i) => (
+                            <li
+                              key={i}
+                              className="text-foreground/80 flex items-start gap-2"
+                            >
+                              <CheckCircle className="w-4 h-4 text-cyan-400 mt-0.5 flex-shrink-0" />
+                              {metric}
+                            </li>
+                          )
+                        )}
+                      </ul>
+                    </div>
+                  )}
               </div>
 
               {/* Action Buttons */}

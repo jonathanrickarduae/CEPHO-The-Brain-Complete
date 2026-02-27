@@ -49,10 +49,12 @@ export function FavoriteContacts({
     <div className={cn("space-y-2", className)}>
       <div className="flex items-center gap-2 mb-3">
         <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
-        <span className="text-xs font-semibold text-muted-foreground">FAVORITES</span>
+        <span className="text-xs font-semibold text-muted-foreground">
+          FAVORITES
+        </span>
       </div>
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2">
-        {favorites.map((contact) => (
+        {favorites.map(contact => (
           <button
             key={contact.id}
             onClick={() => handleSelectContact(contact)}
@@ -61,7 +63,8 @@ export function FavoriteContacts({
           >
             <div className="relative w-12 h-12 rounded-full bg-gradient-to-br from-primary to-primary/50 flex items-center justify-center overflow-hidden">
               {contact.contactAvatar ? (
-                <img alt="Contact avatar"
+                <img
+                  alt="Contact avatar"
                   src={contact.contactAvatar}
                   alt={contact.contactName}
                   className="w-full h-full object-cover"
@@ -70,7 +73,7 @@ export function FavoriteContacts({
                 <span className="text-xs font-bold text-white">
                   {contact.contactName
                     .split(" ")
-                    .map((n) => n[0])
+                    .map(n => n[0])
                     .join("")
                     .toUpperCase()
                     .slice(0, 2)}
@@ -108,12 +111,14 @@ export function FavoriteContactsDropdown({
         className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-primary/10 transition-colors"
       >
         <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
-        <span className="text-sm font-medium">Favorites ({favoritesList.length})</span>
+        <span className="text-sm font-medium">
+          Favorites ({favoritesList.length})
+        </span>
       </button>
 
       {isOpen && (
         <div className="absolute top-full left-0 mt-2 w-48 bg-card border border-border rounded-lg shadow-lg z-50">
-          {favoritesList.map((contact) => (
+          {favoritesList.map(contact => (
             <button
               key={contact.id}
               onClick={() => {
@@ -124,7 +129,8 @@ export function FavoriteContactsDropdown({
             >
               <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-primary/50 flex items-center justify-center flex-shrink-0">
                 {contact.contactAvatar ? (
-                  <img alt="Contact profile picture"
+                  <img
+                    alt="Contact profile picture"
                     src={contact.contactAvatar}
                     alt={contact.contactName}
                     className="w-full h-full object-cover rounded-full"
@@ -133,7 +139,7 @@ export function FavoriteContactsDropdown({
                   <span className="text-xs font-bold text-white">
                     {contact.contactName
                       .split(" ")
-                      .map((n) => n[0])
+                      .map(n => n[0])
                       .join("")
                       .toUpperCase()
                       .slice(0, 2)}
@@ -141,7 +147,9 @@ export function FavoriteContactsDropdown({
                 )}
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium truncate">{contact.contactName}</p>
+                <p className="text-sm font-medium truncate">
+                  {contact.contactName}
+                </p>
                 <p className="text-xs text-muted-foreground capitalize">
                   {contact.contactType.replace(/_/g, " ")}
                 </p>

@@ -3,44 +3,44 @@
  * Selects the appropriate system prompt based on skill type
  */
 
-import { PROJECT_GENESIS_PROMPT } from './project-genesis';
-import { AI_SME_PROMPT } from './ai-sme';
-import { QUALITY_GATES_PROMPT } from './quality-gates';
-import { DUE_DILIGENCE_PROMPT } from './due-diligence';
-import { FINANCIAL_MODELING_PROMPT } from './financial-modeling';
-import { DATA_ROOM_PROMPT } from './data-room';
-import { DIGITAL_TWIN_PROMPT } from './digital-twin';
+import { PROJECT_GENESIS_PROMPT } from "./project-genesis";
+import { AI_SME_PROMPT } from "./ai-sme";
+import { QUALITY_GATES_PROMPT } from "./quality-gates";
+import { DUE_DILIGENCE_PROMPT } from "./due-diligence";
+import { FINANCIAL_MODELING_PROMPT } from "./financial-modeling";
+import { DATA_ROOM_PROMPT } from "./data-room";
+import { DIGITAL_TWIN_PROMPT } from "./digital-twin";
 
-export type SkillType = 
-  | 'project-genesis'
-  | 'ai-sme'
-  | 'quality-gates'
-  | 'due-diligence'
-  | 'financial-modeling'
-  | 'data-room'
-  | 'digital-twin'
-  | 'chief-of-staff';
+export type SkillType =
+  | "project-genesis"
+  | "ai-sme"
+  | "quality-gates"
+  | "due-diligence"
+  | "financial-modeling"
+  | "data-room"
+  | "digital-twin"
+  | "chief-of-staff";
 
 /**
  * Get system prompt for a specific skill
  */
 export function getSystemPrompt(skillType: SkillType): string {
   switch (skillType) {
-    case 'project-genesis':
+    case "project-genesis":
       return PROJECT_GENESIS_PROMPT;
-    case 'ai-sme':
+    case "ai-sme":
       return AI_SME_PROMPT;
-    case 'quality-gates':
+    case "quality-gates":
       return QUALITY_GATES_PROMPT;
-    case 'due-diligence':
+    case "due-diligence":
       return DUE_DILIGENCE_PROMPT;
-    case 'financial-modeling':
+    case "financial-modeling":
       return FINANCIAL_MODELING_PROMPT;
-    case 'data-room':
+    case "data-room":
       return DATA_ROOM_PROMPT;
-    case 'digital-twin':
+    case "digital-twin":
       return DIGITAL_TWIN_PROMPT;
-    case 'chief-of-staff':
+    case "chief-of-staff":
       return CHIEF_OF_STAFF_PROMPT;
     default:
       return DEFAULT_PROMPT;
@@ -73,20 +73,20 @@ const DEFAULT_PROMPT = `You are OpenClaw, an AI assistant within the CEPHO platf
  * Get conversation context summary for prompt enhancement
  */
 export function buildConversationContext(
-  conversationHistory: Array<{ role: 'user' | 'assistant'; content: string }>,
+  conversationHistory: Array<{ role: "user" | "assistant"; content: string }>,
   maxMessages: number = 10
 ): string {
   if (!conversationHistory || conversationHistory.length === 0) {
-    return '';
+    return "";
   }
 
   // Take the last N messages
   const recentMessages = conversationHistory.slice(-maxMessages);
-  
+
   // Format as conversation history
   const formattedHistory = recentMessages
-    .map(msg => `${msg.role === 'user' ? 'User' : 'Assistant'}: ${msg.content}`)
-    .join('\n\n');
+    .map(msg => `${msg.role === "user" ? "User" : "Assistant"}: ${msg.content}`)
+    .join("\n\n");
 
   return `\n\n## Previous Conversation\n\n${formattedHistory}\n\n## Current Request\n\n`;
 }
@@ -108,8 +108,8 @@ export function enhancePromptWithContext(
     return basePrompt;
   }
 
-  let contextAddition = '\n\n## User Context\n\n';
-  
+  let contextAddition = "\n\n## User Context\n\n";
+
   if (userContext.name) {
     contextAddition += `You are assisting ${userContext.name}`;
     if (userContext.role) {
@@ -118,7 +118,7 @@ export function enhancePromptWithContext(
     if (userContext.company) {
       contextAddition += ` at ${userContext.company}`;
     }
-    contextAddition += '.\n';
+    contextAddition += ".\n";
   }
 
   if (userContext.industry) {
@@ -143,7 +143,7 @@ export function enhancePromptWithContext(
 export function buildCompletePrompt(
   skillType: SkillType,
   userMessage: string,
-  conversationHistory?: Array<{ role: 'user' | 'assistant'; content: string }>,
+  conversationHistory?: Array<{ role: "user" | "assistant"; content: string }>,
   userContext?: {
     name?: string;
     company?: string;
@@ -151,7 +151,7 @@ export function buildCompletePrompt(
     role?: string;
     preferences?: Record<string, any>;
   }
-): Array<{ role: 'system' | 'user' | 'assistant'; content: string }> {
+): Array<{ role: "system" | "user" | "assistant"; content: string }> {
   // Get base system prompt for skill
   let systemPrompt = getSystemPrompt(skillType);
 
@@ -159,22 +159,25 @@ export function buildCompletePrompt(
   systemPrompt = enhancePromptWithContext(systemPrompt, userContext);
 
   // Build messages array
-  const messages: Array<{ role: 'system' | 'user' | 'assistant'; content: string }> = [
-    { role: 'system', content: systemPrompt }
-  ];
+  const messages: Array<{
+    role: "system" | "user" | "assistant";
+    content: string;
+  }> = [{ role: "system", content: systemPrompt }];
 
   // Add conversation history if available
   if (conversationHistory && conversationHistory.length > 0) {
     // Add last 10 messages for context
     const recentHistory = conversationHistory.slice(-10);
-    messages.push(...recentHistory.map(msg => ({
-      role: msg.role as 'user' | 'assistant',
-      content: msg.content
-    })));
+    messages.push(
+      ...recentHistory.map(msg => ({
+        role: msg.role as "user" | "assistant",
+        content: msg.content,
+      }))
+    );
   }
 
   // Add current user message
-  messages.push({ role: 'user', content: userMessage });
+  messages.push({ role: "user", content: userMessage });
 
   return messages;
 }

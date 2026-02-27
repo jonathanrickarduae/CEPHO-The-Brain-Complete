@@ -1,106 +1,57 @@
-// @ts-nocheck
 /**
  * Dependency Injection Container
- * 
- * Manages service lifecycle and dependencies to prevent runtime crashes
- * from missing or uninitialized services.
+ *
+ * Minimal DI container supporting factory registration and direct instance registration.
  */
 
-type ServiceFactory<T> = (container: DIContainer) => T;
-type ServiceInstance = any;
+type Factory<T> = (c: { get: <S>(name: string) => S }) => T;
 
-export class DIContainer {
-  private services = new Map<string, ServiceInstance>();
-  private factories = new Map<string, ServiceFactory<any>>();
-  private singletons = new Set<string>();
-  private initializing = new Set<string>();
-
-  /**
-   * Register a service factory
-   */
-  register<T>(name: string, factory: ServiceFactory<T>, singleton = true): void {
-    this.factories.set(name, factory);
-    if (singleton) {
-      this.singletons.add(name);
-    }
-  }
-
-  /**
-   * Register a service instance directly
-   */
-  registerInstance<T>(name: string, instance: T): void {
-    this.services.set(name, instance);
-    this.singletons.add(name);
-  }
-
-  /**
-   * Get a service instance
-   */
-  get<T>(name: string): T {
-    // Return cached instance if it exists
-    if (this.services.has(name)) {
-      return this.services.get(name) as T;
-    }
-
-    // Check for circular dependencies
-    if (this.initializing.has(name)) {
-      throw new Error(
-        `Circular dependency detected: ${name} is already being initialized`
-      );
-    }
-
-    // Get factory
-    const factory = this.factories.get(name);
-    if (!factory) {
-      throw new Error(
-        `Service '${name}' not found. Available services: ${Array.from(
-          this.factories.keys()
-        ).join(', ')}`
-      );
-    }
-
-    // Create instance
-    this.initializing.add(name);
-    try {
-      const instance = factory(this);
-
-      // Cache if singleton
-      if (this.singletons.has(name)) {
-        this.services.set(name, instance);
-      }
-
-      return instance as T;
-    } finally {
-      this.initializing.delete(name);
-    }
-  }
-
-  /**
-   * Check if a service is registered
-   */
-  has(name: string): boolean {
-    return this.factories.has(name) || this.services.has(name);
-  }
-
-  /**
-   * Get all registered service names
-   */
-  getServiceNames(): string[] {
-    return Array.from(
-      new Set([...this.factories.keys(), ...this.services.keys()])
-    );
-  }
-
-  /**
-   * Clear all services (useful for testing)
-   */
-  clear(): void {
-    this.services.clear();
-    this.factories.clear();
-    this.singletons.clear();
-    this.initializing.clear();
-  }
+interface Entry<T> {
+  factory?: Factory<T>;
+  instance?: T;
+  singleton: boolean;
 }
 
-// Global container instance
-export const container = new DIContainer();
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const registry = new Map<string, Entry<any>>();
+
+const resolver = {
+  get<S>(name: string): S {
+    return container.get<S>(name) as S;
+  },
+};
+
+export const container = {
+  /** Register a factory function (optionally as singleton) */
+  register<T>(name: string, factory: Factory<T>, singleton = true): void {
+    registry.set(name, { factory, singleton });
+  },
+
+  /** Register a pre-built instance directly */
+  registerInstance<T>(name: string, instance: T): void {
+    registry.set(name, { instance, singleton: true });
+  },
+
+  /** Retrieve a service by name, instantiating it if needed */
+  get<T>(name: string): T {
+    const entry = registry.get(name) as Entry<T> | undefined;
+    if (!entry) {
+      return undefined as unknown as T;
+    }
+    if (entry.instance !== undefined) {
+      return entry.instance;
+    }
+    if (entry.factory) {
+      const instance = entry.factory(resolver);
+      if (entry.singleton) {
+        entry.instance = instance;
+      }
+      return instance;
+    }
+    return undefined as unknown as T;
+  },
+
+  has(name: string): boolean {
+    return registry.has(name);
+  },
+};

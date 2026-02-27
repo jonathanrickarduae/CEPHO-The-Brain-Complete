@@ -3,20 +3,20 @@
  * Centralized state management for CEPHO.AI
  */
 
-import { create } from 'zustand';
-import { persist, createJSONStorage } from 'zustand/middleware';
+import { create } from "zustand";
+import { persist, createJSONStorage } from "zustand/middleware";
 
 // User preferences interface
 interface UserPreferences {
-  theme: 'light' | 'dark' | 'auto';
-  language: 'en' | 'es' | 'fr' | 'de';
+  theme: "light" | "dark" | "auto";
+  language: "en" | "es" | "fr" | "de";
   notifications: {
     email: boolean;
     push: boolean;
     sms: boolean;
   };
   dashboard: {
-    layout: 'grid' | 'list';
+    layout: "grid" | "list";
     widgets: string[];
   };
 }
@@ -31,7 +31,7 @@ interface UIState {
   };
   toast: {
     message: string;
-    type: 'success' | 'error' | 'info' | 'warning';
+    type: "success" | "error" | "info" | "warning";
     visible: boolean;
   } | null;
 }
@@ -41,7 +41,7 @@ interface StoreState {
   // User preferences
   preferences: UserPreferences;
   setPreferences: (preferences: Partial<UserPreferences>) => void;
-  
+
   // UI state
   ui: UIState;
   setSidebarOpen: (open: boolean) => void;
@@ -49,16 +49,19 @@ interface StoreState {
   setActiveModal: (modal: string | null) => void;
   setLoading: (key: string, loading: boolean) => void;
   setGlobalLoading: (loading: boolean) => void;
-  showToast: (message: string, type: 'success' | 'error' | 'info' | 'warning') => void;
+  showToast: (
+    message: string,
+    type: "success" | "error" | "info" | "warning"
+  ) => void;
   hideToast: () => void;
-  
+
   // Cache for optimistic updates
   cache: {
     [key: string]: any;
   };
   setCache: (key: string, value: any) => void;
   clearCache: (key?: string) => void;
-  
+
   // Recent activity tracking
   recentActivity: Array<{
     id: string;
@@ -72,16 +75,16 @@ interface StoreState {
 
 // Default preferences
 const defaultPreferences: UserPreferences = {
-  theme: 'auto',
-  language: 'en',
+  theme: "auto",
+  language: "en",
   notifications: {
     email: true,
     push: true,
     sms: false,
   },
   dashboard: {
-    layout: 'grid',
-    widgets: ['overview', 'recent-activity', 'quick-actions'],
+    layout: "grid",
+    widgets: ["overview", "recent-activity", "quick-actions"],
   },
 };
 
@@ -101,39 +104,39 @@ export const useStore = create<StoreState>()(
     (set, get) => ({
       // User preferences
       preferences: defaultPreferences,
-      setPreferences: (newPreferences) =>
-        set((state) => ({
+      setPreferences: newPreferences =>
+        set(state => ({
           preferences: {
             ...state.preferences,
             ...newPreferences,
           },
         })),
-      
+
       // UI state
       ui: defaultUIState,
-      setSidebarOpen: (open) =>
-        set((state) => ({
+      setSidebarOpen: open =>
+        set(state => ({
           ui: {
             ...state.ui,
             sidebarOpen: open,
           },
         })),
       toggleSidebar: () =>
-        set((state) => ({
+        set(state => ({
           ui: {
             ...state.ui,
             sidebarOpen: !state.ui.sidebarOpen,
           },
         })),
-      setActiveModal: (modal) =>
-        set((state) => ({
+      setActiveModal: modal =>
+        set(state => ({
           ui: {
             ...state.ui,
             activeModal: modal,
           },
         })),
       setLoading: (key, loading) =>
-        set((state) => ({
+        set(state => ({
           ui: {
             ...state.ui,
             loading: {
@@ -142,8 +145,8 @@ export const useStore = create<StoreState>()(
             },
           },
         })),
-      setGlobalLoading: (loading) =>
-        set((state) => ({
+      setGlobalLoading: loading =>
+        set(state => ({
           ui: {
             ...state.ui,
             loading: {
@@ -153,7 +156,7 @@ export const useStore = create<StoreState>()(
           },
         })),
       showToast: (message, type) =>
-        set((state) => ({
+        set(state => ({
           ui: {
             ...state.ui,
             toast: {
@@ -164,35 +167,37 @@ export const useStore = create<StoreState>()(
           },
         })),
       hideToast: () =>
-        set((state) => ({
+        set(state => ({
           ui: {
             ...state.ui,
-            toast: state.ui.toast ? { ...state.ui.toast, visible: false } : null,
+            toast: state.ui.toast
+              ? { ...state.ui.toast, visible: false }
+              : null,
           },
         })),
-      
+
       // Cache
       cache: {},
       setCache: (key, value) =>
-        set((state) => ({
+        set(state => ({
           cache: {
             ...state.cache,
             [key]: value,
           },
         })),
-      clearCache: (key) =>
-        set((state) => {
+      clearCache: key =>
+        set(state => {
           if (key) {
             const { [key]: _, ...rest } = state.cache;
             return { cache: rest };
           }
           return { cache: {} };
         }),
-      
+
       // Recent activity
       recentActivity: [],
-      addActivity: (activity) =>
-        set((state) => ({
+      addActivity: activity =>
+        set(state => ({
           recentActivity: [
             {
               id: `${Date.now()}-${Math.random()}`,
@@ -205,10 +210,10 @@ export const useStore = create<StoreState>()(
       clearActivity: () => set({ recentActivity: [] }),
     }),
     {
-      name: 'cepho-storage', // localStorage key
+      name: "cepho-storage", // localStorage key
       storage: createJSONStorage(() => localStorage),
       // Only persist preferences and some UI state
-      partialize: (state) => ({
+      partialize: state => ({
         preferences: state.preferences,
         ui: {
           sidebarOpen: state.ui.sidebarOpen,
@@ -224,8 +229,11 @@ export const selectTheme = (state: StoreState) => state.preferences.theme;
 export const selectLanguage = (state: StoreState) => state.preferences.language;
 export const selectSidebarOpen = (state: StoreState) => state.ui.sidebarOpen;
 export const selectActiveModal = (state: StoreState) => state.ui.activeModal;
-export const selectLoading = (key: string) => (state: StoreState) => state.ui.loading[key] || false;
-export const selectGlobalLoading = (state: StoreState) => state.ui.loading.global;
+export const selectLoading = (key: string) => (state: StoreState) =>
+  state.ui.loading[key] || false;
+export const selectGlobalLoading = (state: StoreState) =>
+  state.ui.loading.global;
 export const selectToast = (state: StoreState) => state.ui.toast;
-export const selectCache = (key: string) => (state: StoreState) => state.cache[key];
+export const selectCache = (key: string) => (state: StoreState) =>
+  state.cache[key];
 export const selectRecentActivity = (state: StoreState) => state.recentActivity;

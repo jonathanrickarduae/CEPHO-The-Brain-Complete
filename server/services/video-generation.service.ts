@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from "axios";
 
 interface BriefData {
   date: string;
@@ -38,7 +38,7 @@ interface BriefData {
 
 interface SynthesiaVideoResponse {
   id: string;
-  status: 'pending' | 'processing' | 'complete' | 'failed';
+  status: "pending" | "processing" | "complete" | "failed";
   videoUrl?: string;
   error?: string;
 }
@@ -46,91 +46,107 @@ interface SynthesiaVideoResponse {
 /**
  * Generate video using Synthesia API
  */
-export async function generateBriefVideo(briefData: BriefData): Promise<SynthesiaVideoResponse> {
+export async function generateBriefVideo(
+  briefData: BriefData
+): Promise<SynthesiaVideoResponse> {
   const apiKey = process.env.SYNTHESIA_API_KEY;
-  
+
   if (!apiKey) {
-    throw new Error('SYNTHESIA_API_KEY not configured. Please add to environment variables.');
+    throw new Error(
+      "SYNTHESIA_API_KEY not configured. Please add to environment variables."
+    );
   }
-  
+
   try {
     // Generate script from brief data
     const script = generateVideoScript(briefData);
-    
+
     // Call Synthesia API
     const response = await axios.post(
-      'https://api.synthesia.io/v2/videos',
+      "https://api.synthesia.io/v2/videos",
       {
         test: false, // Set to true for testing without using credits
-        visibility: 'private',
+        visibility: "private",
         title: `Victoria's Morning Brief - ${briefData.date}`,
         input: [
           {
             avatarSettings: {
               // Victoria avatar - needs to be configured in Synthesia account
-              avatar: process.env.SYNTHESIA_VICTORIA_AVATAR_ID || 'anna_costume1_cameraA',
-              style: 'rectangular',
+              avatar:
+                process.env.SYNTHESIA_VICTORIA_AVATAR_ID ||
+                "anna_costume1_cameraA",
+              style: "rectangular",
               seamless: false,
             },
             backgroundSettings: {
               videoSettings: {
-                shortBackgroundContentMatchMode: 'freeze',
-                longBackgroundContentMatchMode: 'trim',
+                shortBackgroundContentMatchMode: "freeze",
+                longBackgroundContentMatchMode: "trim",
               },
             },
             scriptText: script,
-            voice: 'en-US-JennyNeural', // Professional female voice
+            voice: "en-US-JennyNeural", // Professional female voice
           },
         ],
       },
       {
         headers: {
-          'Authorization': apiKey,
-          'Content-Type': 'application/json',
+          Authorization: apiKey,
+          "Content-Type": "application/json",
         },
       }
     );
-    
+
     return {
       id: response.data.id,
-      status: 'processing',
+      status: "processing",
     };
   } catch (error: any) {
-    console.error('Synthesia API error:', error.response?.data || error.message);
-    throw new Error(`Failed to generate video: ${error.response?.data?.message || error.message}`);
+    console.error(
+      "Synthesia API error:",
+      error.response?.data || error.message
+    );
+    throw new Error(
+      `Failed to generate video: ${error.response?.data?.message || error.message}`
+    );
   }
 }
 
 /**
  * Check status of Synthesia video generation
  */
-export async function checkVideoStatus(videoId: string): Promise<SynthesiaVideoResponse> {
+export async function checkVideoStatus(
+  videoId: string
+): Promise<SynthesiaVideoResponse> {
   const apiKey = process.env.SYNTHESIA_API_KEY;
-  
+
   if (!apiKey) {
-    throw new Error('SYNTHESIA_API_KEY not configured');
+    throw new Error("SYNTHESIA_API_KEY not configured");
   }
-  
+
   try {
     const response = await axios.get(
       `https://api.synthesia.io/v2/videos/${videoId}`,
       {
         headers: {
-          'Authorization': apiKey,
+          Authorization: apiKey,
         },
       }
     );
-    
+
     const data = response.data;
-    
+
     return {
       id: videoId,
       status: data.status,
-      videoUrl: data.status === 'complete' ? data.download : undefined,
-      error: data.status === 'failed' ? data.error : undefined,
+      videoUrl: data.status === "complete" ? data.download : undefined,
+      error: data.status === "failed" ? data.error : undefined,
     };
   } catch (error: any) {
-    console.error('Synthesia status check error:', error.response?.data || error.message);
+    console.error(
+      "Synthesia status check error:",
+      error.response?.data || error.message
+    );
     throw new Error(`Failed to check video status: ${error.message}`);
   }
 }
@@ -140,16 +156,18 @@ export async function checkVideoStatus(videoId: string): Promise<SynthesiaVideoR
  */
 function generateVideoScript(data: BriefData): string {
   const lines: string[] = [];
-  
+
   // Opening
-  lines.push(`Good morning! I'm Victoria, and this is your morning brief for ${data.date}.`);
-  lines.push('');
-  
+  lines.push(
+    `Good morning! I'm Victoria, and this is your morning brief for ${data.date}.`
+  );
+  lines.push("");
+
   // Overview
   lines.push(data.overviewSummary.headline);
   lines.push(data.overviewSummary.energyFocus);
-  lines.push('');
-  
+  lines.push("");
+
   // Schedule highlights
   if (data.schedule && data.schedule.length > 0) {
     lines.push("Here's what's on your calendar today:");
@@ -158,41 +176,47 @@ function generateVideoScript(data: BriefData): string {
       lines.push(`At ${event.time}, you have ${event.title}.`);
     }
     if (data.schedule.length > 3) {
-      lines.push(`Plus ${data.schedule.length - 3} more events throughout the day.`);
+      lines.push(
+        `Plus ${data.schedule.length - 3} more events throughout the day.`
+      );
     }
-    lines.push('');
+    lines.push("");
   }
-  
+
   // Top priorities
   if (data.priorities && data.priorities.length > 0) {
-    lines.push('Your top priorities today are:');
+    lines.push("Your top priorities today are:");
     const topPriorities = data.priorities.slice(0, 3); // Top 3 priorities
     for (let i = 0; i < topPriorities.length; i++) {
       const priority = topPriorities[i];
       lines.push(`Number ${i + 1}: ${priority.title}. ${priority.description}`);
     }
-    lines.push('');
+    lines.push("");
   }
-  
+
   // Key insights
   if (data.insights && data.insights.length > 0) {
-    lines.push('Here are some key insights for today:');
+    lines.push("Here are some key insights for today:");
     for (const insight of data.insights) {
       lines.push(`${insight.category}: ${insight.message}`);
     }
-    lines.push('');
+    lines.push("");
   }
-  
+
   // Urgent emails
   if (data.emails && data.emails.urgent && data.emails.urgent.length > 0) {
-    lines.push(`You have ${data.emails.urgent.length} urgent emails requiring your attention.`);
+    lines.push(
+      `You have ${data.emails.urgent.length} urgent emails requiring your attention.`
+    );
     const topEmail = data.emails.urgent[0];
-    lines.push(`The most urgent is from ${topEmail.from} about ${topEmail.subject}.`);
-    lines.push('');
+    lines.push(
+      `The most urgent is from ${topEmail.from} about ${topEmail.subject}.`
+    );
+    lines.push("");
   }
-  
+
   // Closing
   lines.push("That's your morning brief. Have a productive day!");
-  
-  return lines.join(' ');
+
+  return lines.join(" ");
 }

@@ -5,9 +5,11 @@ This directory contains technical documentation for the CEPHO.AI backend server.
 ## Documents
 
 ### [SQL_SAFETY.md](./SQL_SAFETY.md)
+
 **Critical security documentation** explaining why our SQL queries are safe from injection attacks.
 
 **Read this if:**
+
 - You're doing a security audit
 - You see `sql` template tags and think they're unsafe
 - You're considering converting SQL queries to query builder
@@ -18,6 +20,7 @@ This directory contains technical documentation for the CEPHO.AI backend server.
 ## Future Documentation
 
 As the codebase grows, add documentation for:
+
 - Architecture decisions (ADRs)
 - API design patterns
 - Service layer structure

@@ -35,11 +35,13 @@ CEPHO.AI uses tRPC for end-to-end type-safe API communication. All API endpoints
 ### Authentication Router (`auth`)
 
 #### `auth.me`
+
 **Type**: Query  
 **Auth**: Required  
 **Description**: Get current user information
 
 **Response**:
+
 ```typescript
 {
   id: number;
@@ -56,11 +58,13 @@ CEPHO.AI uses tRPC for end-to-end type-safe API communication. All API endpoints
 ### Mood Router (`mood`)
 
 #### `mood.create`
+
 **Type**: Mutation  
 **Auth**: Required  
 **Description**: Create a new mood entry
 
 **Input**:
+
 ```typescript
 {
   score: number;        // 0-100
@@ -72,11 +76,13 @@ CEPHO.AI uses tRPC for end-to-end type-safe API communication. All API endpoints
 **Response**: Created mood entry
 
 #### `mood.history`
+
 **Type**: Query  
 **Auth**: Required  
 **Description**: Get mood history
 
 **Input**:
+
 ```typescript
 {
   limit?: number;
@@ -87,11 +93,13 @@ CEPHO.AI uses tRPC for end-to-end type-safe API communication. All API endpoints
 **Response**: Array of mood entries
 
 #### `mood.trends`
+
 **Type**: Query  
 **Auth**: Required  
 **Description**: Get mood trends and analytics
 
 **Input**:
+
 ```typescript
 {
   days?: number;  // Default: 30
@@ -105,11 +113,13 @@ CEPHO.AI uses tRPC for end-to-end type-safe API communication. All API endpoints
 ### Projects Router (`projects`)
 
 #### `projects.list`
+
 **Type**: Query  
 **Auth**: Required  
 **Description**: List all projects for current user
 
 **Input**:
+
 ```typescript
 {
   status?: 'active' | 'completed' | 'archived';
@@ -120,11 +130,13 @@ CEPHO.AI uses tRPC for end-to-end type-safe API communication. All API endpoints
 **Response**: Array of projects
 
 #### `projects.create`
+
 **Type**: Mutation  
 **Auth**: Required  
 **Description**: Create a new project
 
 **Input**:
+
 ```typescript
 {
   name: string;
@@ -137,11 +149,13 @@ CEPHO.AI uses tRPC for end-to-end type-safe API communication. All API endpoints
 **Response**: Created project
 
 #### `projects.update`
+
 **Type**: Mutation  
 **Auth**: Required  
 **Description**: Update a project
 
 **Input**:
+
 ```typescript
 {
   id: number;
@@ -159,11 +173,13 @@ CEPHO.AI uses tRPC for end-to-end type-safe API communication. All API endpoints
 ### Expert Evolution Router (`expertEvolution`)
 
 #### `expertEvolution.storeConversation`
+
 **Type**: Mutation  
 **Auth**: Required  
 **Description**: Store a conversation with an AI expert
 
 **Input**:
+
 ```typescript
 {
   expertId: string;
@@ -180,11 +196,13 @@ CEPHO.AI uses tRPC for end-to-end type-safe API communication. All API endpoints
 **Response**: Created conversation record
 
 #### `expertEvolution.getConversations`
+
 **Type**: Query  
 **Auth**: Required  
 **Description**: Get conversation history with an expert
 
 **Input**:
+
 ```typescript
 {
   expertId: string;
@@ -196,11 +214,13 @@ CEPHO.AI uses tRPC for end-to-end type-safe API communication. All API endpoints
 **Response**: Array of conversations
 
 #### `expertEvolution.storeMemory`
+
 **Type**: Mutation  
 **Auth**: Required  
 **Description**: Store a memory/learning about the user
 
 **Input**:
+
 ```typescript
 {
   expertId: string;
@@ -215,11 +235,13 @@ CEPHO.AI uses tRPC for end-to-end type-safe API communication. All API endpoints
 **Response**: Created memory record
 
 #### `expertEvolution.createInsight`
+
 **Type**: Mutation  
 **Auth**: Required  
 **Description**: Create an insight from an expert
 
 **Input**:
+
 ```typescript
 {
   expertId: string;
@@ -241,11 +263,13 @@ CEPHO.AI uses tRPC for end-to-end type-safe API communication. All API endpoints
 ### Genesis Router (`genesis`)
 
 #### `genesis.listProjects`
+
 **Type**: Query  
 **Auth**: Required  
 **Description**: List Project Genesis entries
 
 **Input**:
+
 ```typescript
 {
   status?: string;
@@ -256,11 +280,13 @@ CEPHO.AI uses tRPC for end-to-end type-safe API communication. All API endpoints
 **Response**: Array of genesis projects
 
 #### `genesis.create`
+
 **Type**: Mutation  
 **Auth**: Required  
 **Description**: Create a new Project Genesis entry
 
 **Input**:
+
 ```typescript
 {
   projectName: string;
@@ -279,11 +305,13 @@ CEPHO.AI uses tRPC for end-to-end type-safe API communication. All API endpoints
 ### Chat Router (`chat`)
 
 #### `chat.send`
+
 **Type**: Mutation  
 **Auth**: Required  
 **Description**: Send a message to AI expert
 
 **Input**:
+
 ```typescript
 {
   expertId: string;
@@ -296,11 +324,13 @@ CEPHO.AI uses tRPC for end-to-end type-safe API communication. All API endpoints
 **Response**: AI expert response
 
 #### `chat.history`
+
 **Type**: Query  
 **Auth**: Required  
 **Description**: Get chat history
 
 **Input**:
+
 ```typescript
 {
   expertId: string;
@@ -315,11 +345,13 @@ CEPHO.AI uses tRPC for end-to-end type-safe API communication. All API endpoints
 ### Documents Router (`documentLibrary`)
 
 #### `documentLibrary.list`
+
 **Type**: Query  
 **Auth**: Required  
 **Description**: List documents
 
 **Input**:
+
 ```typescript
 {
   category?: string;
@@ -331,11 +363,13 @@ CEPHO.AI uses tRPC for end-to-end type-safe API communication. All API endpoints
 **Response**: Array of documents
 
 #### `documentLibrary.upload`
+
 **Type**: Mutation  
 **Auth**: Required  
 **Description**: Upload a new document
 
 **Input**:
+
 ```typescript
 {
   title: string;
@@ -353,6 +387,7 @@ CEPHO.AI uses tRPC for end-to-end type-safe API communication. All API endpoints
 ### Integrations Router (`integrations`)
 
 #### `integrations.list`
+
 **Type**: Query  
 **Auth**: Required  
 **Description**: List all integrations
@@ -360,11 +395,13 @@ CEPHO.AI uses tRPC for end-to-end type-safe API communication. All API endpoints
 **Response**: Array of available integrations
 
 #### `integrations.connect`
+
 **Type**: Mutation  
 **Auth**: Required  
 **Description**: Connect an integration
 
 **Input**:
+
 ```typescript
 {
   provider: 'gmail' | 'asana' | 'notion' | 'slack';
@@ -379,11 +416,13 @@ CEPHO.AI uses tRPC for end-to-end type-safe API communication. All API endpoints
 **Response**: Integration status
 
 #### `integrations.disconnect`
+
 **Type**: Mutation  
 **Auth**: Required  
 **Description**: Disconnect an integration
 
 **Input**:
+
 ```typescript
 {
   provider: string;
@@ -397,6 +436,7 @@ CEPHO.AI uses tRPC for end-to-end type-safe API communication. All API endpoints
 ### Settings Router (`settings`)
 
 #### `settings.get`
+
 **Type**: Query  
 **Auth**: Required  
 **Description**: Get user settings
@@ -404,11 +444,13 @@ CEPHO.AI uses tRPC for end-to-end type-safe API communication. All API endpoints
 **Response**: User settings object
 
 #### `settings.update`
+
 **Type**: Mutation  
 **Auth**: Required  
 **Description**: Update user settings
 
 **Input**:
+
 ```typescript
 {
   theme?: 'light' | 'dark' | 'system';
@@ -482,7 +524,7 @@ Currently, no rate limiting is implemented. Future versions will include:
 ### TypeScript Client
 
 ```typescript
-import { trpc } from './lib/trpc';
+import { trpc } from "./lib/trpc";
 
 // Query example
 const { data: user } = trpc.auth.me.useQuery();
@@ -491,13 +533,13 @@ const { data: user } = trpc.auth.me.useQuery();
 const createMood = trpc.mood.create.useMutation();
 await createMood.mutateAsync({
   score: 75,
-  timeOfDay: 'morning',
-  note: 'Feeling productive!'
+  timeOfDay: "morning",
+  note: "Feeling productive!",
 });
 
 // With options
 const { data: projects } = trpc.projects.list.useQuery(
-  { status: 'active', limit: 10 },
+  { status: "active", limit: 10 },
   { refetchOnWindowFocus: false }
 );
 ```
@@ -514,12 +556,12 @@ All inputs are validated using Zod schemas. Always provide complete type informa
 // Good
 const result = await trpc.projects.create.mutate({
   name: "My Project",
-  description: "Project description"
+  description: "Project description",
 });
 
 // Bad - Missing required fields will cause TypeScript error
 const result = await trpc.projects.create.mutate({
-  name: "My Project"
+  name: "My Project",
   // description is optional, but type-checked
 });
 ```
@@ -532,7 +574,7 @@ Always handle errors in mutations:
 try {
   await createProject.mutateAsync({ name: "New Project" });
 } catch (error) {
-  if (error.code === 'UNAUTHORIZED') {
+  if (error.code === "UNAUTHORIZED") {
     // Handle auth error
   } else {
     // Handle other errors
@@ -548,16 +590,16 @@ Use optimistic updates for better UX:
 const utils = trpc.useContext();
 
 const createMood = trpc.mood.create.useMutation({
-  onMutate: async (newMood) => {
+  onMutate: async newMood => {
     // Cancel outgoing refetches
     await utils.mood.history.cancel();
-    
+
     // Snapshot previous value
     const previous = utils.mood.history.getData();
-    
+
     // Optimistically update
-    utils.mood.history.setData(undefined, (old) => [...old, newMood]);
-    
+    utils.mood.history.setData(undefined, old => [...old, newMood]);
+
     return { previous };
   },
   onError: (err, newMood, context) => {
@@ -576,6 +618,7 @@ const createMood = trpc.mood.create.useMutation({
 ## Support
 
 For API support and questions:
+
 - Documentation: https://docs.cepho.ai
 - Support: https://help.manus.im
 - GitHub Issues: https://github.com/jonathanrickarduae/CEPHO-The-Brain-Complete

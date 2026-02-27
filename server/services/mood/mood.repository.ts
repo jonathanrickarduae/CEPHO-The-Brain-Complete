@@ -1,10 +1,14 @@
-import { getDb } from '../../db';
-import { moodHistory, InsertMoodHistory, MoodHistory } from '../../../drizzle/schema';
-import { eq, and, gte, desc, sql } from 'drizzle-orm';
+import { getDb } from "../../db";
+import {
+  moodHistory,
+  InsertMoodHistory,
+  MoodHistory,
+} from "../../../drizzle/schema";
+import { eq, and, gte, desc, sql } from "drizzle-orm";
 
 /**
  * Mood Repository
- * 
+ *
  * Handles all database operations for mood tracking.
  * Follows the repository pattern to separate data access from business logic.
  */
@@ -14,24 +18,24 @@ export class MoodRepository {
    */
   async create(data: InsertMoodHistory): Promise<MoodHistory> {
     const db = await getDb();
-    if (!db) throw new Error('Database not available');
+    if (!db) throw new Error("Database not available");
 
-    const [entry] = await db
-      .insert(moodHistory)
-      .values(data)
-      .returning();
+    const [entry] = await db.insert(moodHistory).values(data).returning();
 
     return entry;
   }
 
   /**
    * Find mood entries by user ID
-   * 
+   *
    * @param userId - User ID
    * @param days - Number of days to retrieve
    * @returns Array of mood entries
    */
-  async findByUserId(userId: number, days: number = 30): Promise<MoodHistory[]> {
+  async findByUserId(
+    userId: number,
+    days: number = 30
+  ): Promise<MoodHistory[]> {
     const db = await getDb();
     if (!db) return [];
 
@@ -52,12 +56,15 @@ export class MoodRepository {
 
   /**
    * Find mood entries for a specific date
-   * 
+   *
    * @param userId - User ID
    * @param date - Date to query
    * @returns Array of mood entries for that date
    */
-  async findByUserIdAndDate(userId: number, date: Date): Promise<MoodHistory[]> {
+  async findByUserIdAndDate(
+    userId: number,
+    date: Date
+  ): Promise<MoodHistory[]> {
     const db = await getDb();
     if (!db) return [];
 
@@ -82,7 +89,7 @@ export class MoodRepository {
 
   /**
    * Find mood entry by user ID, time of day, and date
-   * 
+   *
    * @param userId - User ID
    * @param timeOfDay - Time of day (morning/afternoon/evening)
    * @param date - Date to query
@@ -90,7 +97,7 @@ export class MoodRepository {
    */
   async findByUserIdAndTimeOfDay(
     userId: number,
-    timeOfDay: 'morning' | 'afternoon' | 'evening',
+    timeOfDay: "morning" | "afternoon" | "evening",
     date: Date
   ): Promise<MoodHistory | null> {
     const db = await getDb();
@@ -120,7 +127,7 @@ export class MoodRepository {
 
   /**
    * Delete mood entry by ID
-   * 
+   *
    * @param id - Mood entry ID
    * @param userId - User ID (for authorization)
    * @returns Deleted entry
@@ -131,12 +138,7 @@ export class MoodRepository {
 
     const [deleted] = await db
       .delete(moodHistory)
-      .where(
-        and(
-          eq(moodHistory.id, id),
-          eq(moodHistory.userId, userId)
-        )
-      )
+      .where(and(eq(moodHistory.id, id), eq(moodHistory.userId, userId)))
       .returning();
 
     return deleted || null;
@@ -144,7 +146,7 @@ export class MoodRepository {
 
   /**
    * Update mood entry
-   * 
+   *
    * @param id - Mood entry ID
    * @param userId - User ID (for authorization)
    * @param data - Updated data
@@ -161,12 +163,7 @@ export class MoodRepository {
     const [updated] = await db
       .update(moodHistory)
       .set(data)
-      .where(
-        and(
-          eq(moodHistory.id, id),
-          eq(moodHistory.userId, userId)
-        )
-      )
+      .where(and(eq(moodHistory.id, id), eq(moodHistory.userId, userId)))
       .returning();
 
     return updated || null;

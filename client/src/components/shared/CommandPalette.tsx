@@ -1,18 +1,36 @@
-import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
-import { useLocation } from 'wouter';
-import { 
-  Search, Command, ArrowRight, Sparkles, Calendar, FileText, 
-  Brain, Users, Settings, Moon, Sun, Mic, CheckCircle2,
-  Mail, Clock, Target, Zap, Home, BarChart3, Lock, BookOpen
-} from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { useState, useEffect, useCallback, useMemo, useRef } from "react";
+import { useLocation } from "wouter";
+import {
+  Search,
+  Command,
+  ArrowRight,
+  Sparkles,
+  Calendar,
+  FileText,
+  Brain,
+  Users,
+  Settings,
+  Moon,
+  Sun,
+  Mic,
+  CheckCircle2,
+  Mail,
+  Clock,
+  Target,
+  Zap,
+  Home,
+  BarChart3,
+  Lock,
+  BookOpen,
+} from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface CommandItem {
   id: string;
   title: string;
   description?: string;
   icon: React.ElementType;
-  category: 'navigation' | 'action' | 'ai' | 'settings';
+  category: "navigation" | "action" | "ai" | "settings";
   shortcut?: string;
   action: () => void;
 }
@@ -23,51 +41,262 @@ interface CommandPaletteProps {
 }
 
 export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [, setLocation] = useLocation();
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
 
   // Define all commands
-  const commands: CommandItem[] = useMemo(() => [
-    // Navigation
-    { id: 'nav-dashboard', title: 'Go to Dashboard', icon: Home, category: 'navigation', shortcut: 'G D', action: () => { setLocation('/nexus'); onClose(); } },
-    { id: 'nav-daily-brief', title: 'Go to The Signal', icon: Calendar, category: 'navigation', shortcut: 'G B', action: () => { setLocation('/daily-brief'); onClose(); } },
-    { id: 'nav-digital-twin', title: 'Go to Chief of Staff', icon: Brain, category: 'navigation', shortcut: 'G T', action: () => { setLocation('/tasks'); onClose(); } },
-    { id: 'nav-ai-experts', title: 'Go to AI Experts', icon: Users, category: 'navigation', shortcut: 'G E', action: () => { setLocation('/ai-experts'); onClose(); } },
-    { id: 'nav-workflow', title: 'Go to Workflow', icon: Target, category: 'navigation', shortcut: 'G W', action: () => { setLocation('/workflow'); onClose(); } },
-    { id: 'nav-library', title: 'Go to Library', icon: BookOpen, category: 'navigation', shortcut: 'G L', action: () => { setLocation('/library'); onClose(); } },
-    { id: 'nav-statistics', title: 'Go to Statistics', icon: BarChart3, category: 'navigation', shortcut: 'G S', action: () => { setLocation('/analytics'); onClose(); } },
-    { id: 'nav-vault', title: 'Go to Vault', icon: Lock, category: 'navigation', shortcut: 'G V', action: () => { setLocation('/vault'); onClose(); } },
-    { id: 'nav-settings', title: 'Go to Settings', icon: Settings, category: 'navigation', shortcut: 'G ,', action: () => { setLocation('/settings'); onClose(); } },
-    
-    // AI Actions
-    { id: 'ai-ask', title: 'Ask Chief of Staff', description: 'Start a conversation with your AI assistant', icon: Brain, category: 'ai', shortcut: 'A T', action: () => { setLocation('/digital-twin?focus=input'); onClose(); } },
-    { id: 'ai-draft', title: 'Draft with AI', description: 'Generate content using AI', icon: Sparkles, category: 'ai', shortcut: 'A D', action: () => { setLocation('/digital-twin?message=Help me draft'); onClose(); } },
-    { id: 'ai-summarize', title: 'Summarize', description: 'Get AI summary of current context', icon: FileText, category: 'ai', shortcut: 'A S', action: () => { setLocation('/digital-twin?message=Summarize my day so far'); onClose(); } },
-    { id: 'ai-schedule', title: 'Smart Schedule', description: 'Let AI optimize your schedule', icon: Calendar, category: 'ai', shortcut: 'A C', action: () => { setLocation('/digital-twin?message=Help me plan my schedule'); onClose(); } },
-    { id: 'ai-voice', title: 'Voice Input', description: 'Speak to your Chief of Staff', icon: Mic, category: 'ai', shortcut: 'V', action: () => { setLocation('/digital-twin?voice=true'); onClose(); } },
-    
-    // Quick Actions
-    { id: 'action-task', title: 'Create Task', description: 'Add a new task to your workflow', icon: CheckCircle2, category: 'action', shortcut: 'C T', action: () => { setLocation('/workflow?action=new-task'); onClose(); } },
-    { id: 'action-email', title: 'Draft Email', description: 'Compose a new email with AI assistance', icon: Mail, category: 'action', shortcut: 'C E', action: () => { setLocation('/digital-twin?message=Help me draft an email'); onClose(); } },
-    { id: 'action-meeting', title: 'Schedule Meeting', description: 'Set up a new meeting', icon: Clock, category: 'action', shortcut: 'C M', action: () => { setLocation('/digital-twin?message=Help me schedule a meeting'); onClose(); } },
-    { id: 'action-focus', title: 'Start Focus Session', description: 'Block distractions and focus', icon: Zap, category: 'action', shortcut: 'F', action: () => { alert('Focus mode activated for 25 minutes'); onClose(); } },
-    
-    // Settings
-    { id: 'settings-theme-dark', title: 'Switch to Dark Mode', icon: Moon, category: 'settings', action: () => { document.documentElement.classList.add('dark'); onClose(); } },
-    { id: 'settings-theme-light', title: 'Switch to Light Mode', icon: Sun, category: 'settings', action: () => { document.documentElement.classList.remove('dark'); onClose(); } },
-  ], [setLocation, onClose]);
+  const commands: CommandItem[] = useMemo(
+    () => [
+      // Navigation
+      {
+        id: "nav-dashboard",
+        title: "Go to Dashboard",
+        icon: Home,
+        category: "navigation",
+        shortcut: "G D",
+        action: () => {
+          setLocation("/nexus");
+          onClose();
+        },
+      },
+      {
+        id: "nav-daily-brief",
+        title: "Go to The Signal",
+        icon: Calendar,
+        category: "navigation",
+        shortcut: "G B",
+        action: () => {
+          setLocation("/daily-brief");
+          onClose();
+        },
+      },
+      {
+        id: "nav-digital-twin",
+        title: "Go to Chief of Staff",
+        icon: Brain,
+        category: "navigation",
+        shortcut: "G T",
+        action: () => {
+          setLocation("/tasks");
+          onClose();
+        },
+      },
+      {
+        id: "nav-ai-experts",
+        title: "Go to AI Experts",
+        icon: Users,
+        category: "navigation",
+        shortcut: "G E",
+        action: () => {
+          setLocation("/ai-experts");
+          onClose();
+        },
+      },
+      {
+        id: "nav-workflow",
+        title: "Go to Workflow",
+        icon: Target,
+        category: "navigation",
+        shortcut: "G W",
+        action: () => {
+          setLocation("/workflow");
+          onClose();
+        },
+      },
+      {
+        id: "nav-library",
+        title: "Go to Library",
+        icon: BookOpen,
+        category: "navigation",
+        shortcut: "G L",
+        action: () => {
+          setLocation("/library");
+          onClose();
+        },
+      },
+      {
+        id: "nav-statistics",
+        title: "Go to Statistics",
+        icon: BarChart3,
+        category: "navigation",
+        shortcut: "G S",
+        action: () => {
+          setLocation("/analytics");
+          onClose();
+        },
+      },
+      {
+        id: "nav-vault",
+        title: "Go to Vault",
+        icon: Lock,
+        category: "navigation",
+        shortcut: "G V",
+        action: () => {
+          setLocation("/vault");
+          onClose();
+        },
+      },
+      {
+        id: "nav-settings",
+        title: "Go to Settings",
+        icon: Settings,
+        category: "navigation",
+        shortcut: "G ,",
+        action: () => {
+          setLocation("/settings");
+          onClose();
+        },
+      },
+
+      // AI Actions
+      {
+        id: "ai-ask",
+        title: "Ask Chief of Staff",
+        description: "Start a conversation with your AI assistant",
+        icon: Brain,
+        category: "ai",
+        shortcut: "A T",
+        action: () => {
+          setLocation("/digital-twin?focus=input");
+          onClose();
+        },
+      },
+      {
+        id: "ai-draft",
+        title: "Draft with AI",
+        description: "Generate content using AI",
+        icon: Sparkles,
+        category: "ai",
+        shortcut: "A D",
+        action: () => {
+          setLocation("/digital-twin?message=Help me draft");
+          onClose();
+        },
+      },
+      {
+        id: "ai-summarize",
+        title: "Summarize",
+        description: "Get AI summary of current context",
+        icon: FileText,
+        category: "ai",
+        shortcut: "A S",
+        action: () => {
+          setLocation("/digital-twin?message=Summarize my day so far");
+          onClose();
+        },
+      },
+      {
+        id: "ai-schedule",
+        title: "Smart Schedule",
+        description: "Let AI optimize your schedule",
+        icon: Calendar,
+        category: "ai",
+        shortcut: "A C",
+        action: () => {
+          setLocation("/digital-twin?message=Help me plan my schedule");
+          onClose();
+        },
+      },
+      {
+        id: "ai-voice",
+        title: "Voice Input",
+        description: "Speak to your Chief of Staff",
+        icon: Mic,
+        category: "ai",
+        shortcut: "V",
+        action: () => {
+          setLocation("/digital-twin?voice=true");
+          onClose();
+        },
+      },
+
+      // Quick Actions
+      {
+        id: "action-task",
+        title: "Create Task",
+        description: "Add a new task to your workflow",
+        icon: CheckCircle2,
+        category: "action",
+        shortcut: "C T",
+        action: () => {
+          setLocation("/workflow?action=new-task");
+          onClose();
+        },
+      },
+      {
+        id: "action-email",
+        title: "Draft Email",
+        description: "Compose a new email with AI assistance",
+        icon: Mail,
+        category: "action",
+        shortcut: "C E",
+        action: () => {
+          setLocation("/digital-twin?message=Help me draft an email");
+          onClose();
+        },
+      },
+      {
+        id: "action-meeting",
+        title: "Schedule Meeting",
+        description: "Set up a new meeting",
+        icon: Clock,
+        category: "action",
+        shortcut: "C M",
+        action: () => {
+          setLocation("/digital-twin?message=Help me schedule a meeting");
+          onClose();
+        },
+      },
+      {
+        id: "action-focus",
+        title: "Start Focus Session",
+        description: "Block distractions and focus",
+        icon: Zap,
+        category: "action",
+        shortcut: "F",
+        action: () => {
+          alert("Focus mode activated for 25 minutes");
+          onClose();
+        },
+      },
+
+      // Settings
+      {
+        id: "settings-theme-dark",
+        title: "Switch to Dark Mode",
+        icon: Moon,
+        category: "settings",
+        action: () => {
+          document.documentElement.classList.add("dark");
+          onClose();
+        },
+      },
+      {
+        id: "settings-theme-light",
+        title: "Switch to Light Mode",
+        icon: Sun,
+        category: "settings",
+        action: () => {
+          document.documentElement.classList.remove("dark");
+          onClose();
+        },
+      },
+    ],
+    [setLocation, onClose]
+  );
 
   // Filter commands based on search
   const filteredCommands = useMemo(() => {
     if (!search) return commands;
     const lower = search.toLowerCase();
-    return commands.filter(cmd => 
-      cmd.title.toLowerCase().includes(lower) ||
-      cmd.description?.toLowerCase().includes(lower) ||
-      cmd.category.toLowerCase().includes(lower)
+    return commands.filter(
+      cmd =>
+        cmd.title.toLowerCase().includes(lower) ||
+        cmd.description?.toLowerCase().includes(lower) ||
+        cmd.category.toLowerCase().includes(lower)
     );
   }, [commands, search]);
 
@@ -86,28 +315,33 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
   }, [filteredCommands]);
 
   // Handle keyboard navigation
-  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
-    switch (e.key) {
-      case 'ArrowDown':
-        e.preventDefault();
-        setSelectedIndex(prev => Math.min(prev + 1, filteredCommands.length - 1));
-        break;
-      case 'ArrowUp':
-        e.preventDefault();
-        setSelectedIndex(prev => Math.max(prev - 1, 0));
-        break;
-      case 'Enter':
-        e.preventDefault();
-        if (filteredCommands[selectedIndex]) {
-          filteredCommands[selectedIndex].action();
-        }
-        break;
-      case 'Escape':
-        e.preventDefault();
-        onClose();
-        break;
-    }
-  }, [filteredCommands, selectedIndex, onClose]);
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      switch (e.key) {
+        case "ArrowDown":
+          e.preventDefault();
+          setSelectedIndex(prev =>
+            Math.min(prev + 1, filteredCommands.length - 1)
+          );
+          break;
+        case "ArrowUp":
+          e.preventDefault();
+          setSelectedIndex(prev => Math.max(prev - 1, 0));
+          break;
+        case "Enter":
+          e.preventDefault();
+          if (filteredCommands[selectedIndex]) {
+            filteredCommands[selectedIndex].action();
+          }
+          break;
+        case "Escape":
+          e.preventDefault();
+          onClose();
+          break;
+      }
+    },
+    [filteredCommands, selectedIndex, onClose]
+  );
 
   // Reset selection when search changes
   useEffect(() => {
@@ -117,7 +351,7 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
   // Focus input when opened
   useEffect(() => {
     if (isOpen) {
-      setSearch('');
+      setSearch("");
       setSelectedIndex(0);
       setTimeout(() => inputRef.current?.focus(), 50);
     }
@@ -125,17 +359,19 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
 
   // Scroll selected item into view
   useEffect(() => {
-    const selectedElement = listRef.current?.querySelector(`[data-index="${selectedIndex}"]`);
-    selectedElement?.scrollIntoView({ block: 'nearest' });
+    const selectedElement = listRef.current?.querySelector(
+      `[data-index="${selectedIndex}"]`
+    );
+    selectedElement?.scrollIntoView({ block: "nearest" });
   }, [selectedIndex]);
 
   if (!isOpen) return null;
 
   const categoryLabels: Record<string, string> = {
-    navigation: 'Navigation',
-    ai: 'AI Actions',
-    action: 'Quick Actions',
-    settings: 'Settings',
+    navigation: "Navigation",
+    ai: "AI Actions",
+    action: "Quick Actions",
+    settings: "Settings",
   };
 
   let flatIndex = 0;
@@ -143,13 +379,13 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center pt-[15vh]">
       {/* Backdrop */}
-      <div 
+      <div
         className="absolute inset-0 bg-black/60 backdrop-blur-sm"
         onClick={onClose}
       />
-      
+
       {/* Palette */}
-      <div 
+      <div
         className="relative w-full max-w-2xl bg-card border border-white/10 rounded-xl shadow-2xl overflow-hidden"
         onKeyDown={handleKeyDown}
       >
@@ -160,7 +396,7 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
             ref={inputRef}
             type="text"
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={e => setSearch(e.target.value)}
             placeholder="Type a command or search..."
             className="flex-1 bg-transparent text-foreground placeholder:text-muted-foreground focus:outline-none text-sm"
           />
@@ -184,11 +420,11 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
                   <div className="px-2 py-1 text-xs font-medium text-muted-foreground uppercase tracking-wider">
                     {categoryLabels[category]}
                   </div>
-                  {items.map((cmd) => {
+                  {items.map(cmd => {
                     const currentIndex = flatIndex++;
                     const isSelected = currentIndex === selectedIndex;
                     const Icon = cmd.icon;
-                    
+
                     return (
                       <button
                         key={cmd.id}
@@ -196,26 +432,35 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
                         onClick={cmd.action}
                         onMouseEnter={() => setSelectedIndex(currentIndex)}
                         className={cn(
-                          'w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left transition-colors',
-                          isSelected ? 'bg-primary/20 text-foreground' : 'text-muted-foreground hover:bg-secondary/50'
+                          "w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left transition-colors",
+                          isSelected
+                            ? "bg-primary/20 text-foreground"
+                            : "text-muted-foreground hover:bg-secondary/50"
                         )}
                       >
-                        <div className={cn(
-                          'w-8 h-8 rounded-lg flex items-center justify-center',
-                          isSelected ? 'bg-primary/30' : 'bg-secondary/50'
-                        )}>
+                        <div
+                          className={cn(
+                            "w-8 h-8 rounded-lg flex items-center justify-center",
+                            isSelected ? "bg-primary/30" : "bg-secondary/50"
+                          )}
+                        >
                           <Icon className="w-4 h-4" />
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="font-medium text-sm">{cmd.title}</div>
                           {cmd.description && (
-                            <div className="text-xs text-muted-foreground truncate">{cmd.description}</div>
+                            <div className="text-xs text-muted-foreground truncate">
+                              {cmd.description}
+                            </div>
                           )}
                         </div>
                         {cmd.shortcut && (
                           <div className="flex items-center gap-1">
-                            {cmd.shortcut.split(' ').map((key, i) => (
-                              <kbd key={i} className="px-1.5 py-0.5 bg-secondary/50 rounded text-[10px] text-muted-foreground">
+                            {cmd.shortcut.split(" ").map((key, i) => (
+                              <kbd
+                                key={i}
+                                className="px-1.5 py-0.5 bg-secondary/50 rounded text-[10px] text-muted-foreground"
+                              >
                                 {key}
                               </kbd>
                             ))}
@@ -260,14 +505,14 @@ export function useCommandPalette() {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       // Cmd+K or Ctrl+K to open
-      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
         e.preventDefault();
         setIsOpen(prev => !prev);
       }
     };
 
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
   return {

@@ -17,13 +17,13 @@ This document defines the JSDoc documentation standards for the CEPHO.AI codebas
 
 ## Basic Format
 
-```typescript
+````typescript
 /**
  * Brief description of what the function does.
- * 
+ *
  * More detailed description if needed. Can span multiple lines.
  * Explain complex logic, edge cases, or important notes.
- * 
+ *
  * @param paramName - Description of the parameter
  * @returns Description of the return value
  * @throws {ErrorType} Description of when this error is thrown
@@ -36,7 +36,7 @@ This document defines the JSDoc documentation standards for the CEPHO.AI codebas
 function functionName(paramName: string): ReturnType {
   // Implementation
 }
-```
+````
 
 ---
 
@@ -47,7 +47,7 @@ function functionName(paramName: string): ReturnType {
 ```typescript
 /**
  * Calculates the sum of two numbers.
- * 
+ *
  * @param a - The first number
  * @param b - The second number
  * @returns The sum of a and b
@@ -59,14 +59,14 @@ function add(a: number, b: number): number {
 
 ### Complex Function
 
-```typescript
+````typescript
 /**
  * Fetches user data from the API with caching support.
- * 
+ *
  * This function first checks the Redis cache for the user data.
  * If not found, it fetches from the database and caches the result.
  * Cache TTL is 5 minutes.
- * 
+ *
  * @param userId - The unique identifier of the user
  * @param options - Optional configuration
  * @param options.skipCache - If true, bypasses the cache
@@ -74,12 +74,12 @@ function add(a: number, b: number): number {
  * @returns Promise resolving to the user object
  * @throws {NotFoundError} When user doesn't exist
  * @throws {DatabaseError} When database query fails
- * 
+ *
  * @example
  * ```typescript
  * const user = await fetchUserData('user-123');
  * console.log(user.name);
- * 
+ *
  * // Skip cache
  * const freshUser = await fetchUserData('user-123', { skipCache: true });
  * ```
@@ -93,14 +93,14 @@ async function fetchUserData(
 ): Promise<User> {
   // Implementation
 }
-```
+````
 
 ### Async Function
 
 ```typescript
 /**
  * Saves a document to the database and triggers post-save hooks.
- * 
+ *
  * @async
  * @param document - The document to save
  * @returns Promise resolving to the saved document with generated ID
@@ -118,20 +118,20 @@ async function saveDocument(document: Document): Promise<Document> {
 
 ### Functional Component
 
-```typescript
+````typescript
 /**
  * Displays a user profile card with avatar, name, and bio.
- * 
+ *
  * Supports edit mode when `isEditable` is true. Changes are saved
  * automatically on blur or when the user presses Enter.
- * 
+ *
  * @component
  * @param props - Component props
  * @param props.userId - The ID of the user to display
  * @param props.isEditable - Whether the card should be editable
  * @param props.onSave - Callback fired when changes are saved
  * @returns The rendered user profile card
- * 
+ *
  * @example
  * ```tsx
  * <UserProfileCard
@@ -144,11 +144,11 @@ async function saveDocument(document: Document): Promise<Document> {
 function UserProfileCard({
   userId,
   isEditable,
-  onSave
+  onSave,
 }: UserProfileCardProps): JSX.Element {
   // Implementation
 }
-```
+````
 
 ### Component Props Interface
 
@@ -161,19 +161,19 @@ interface UserProfileCardProps {
    * The unique identifier of the user to display.
    */
   userId: string;
-  
+
   /**
    * Whether the card should be in edit mode.
    * @default false
    */
   isEditable?: boolean;
-  
+
   /**
    * Callback fired when the user saves changes.
    * @param data - The updated user data
    */
   onSave?: (data: Partial<User>) => void;
-  
+
   /**
    * Additional CSS classes to apply to the card.
    */
@@ -185,13 +185,13 @@ interface UserProfileCardProps {
 
 ## Custom Hooks
 
-```typescript
+````typescript
 /**
  * Custom hook for managing user authentication state.
- * 
+ *
  * Provides authentication status, user data, and auth actions.
  * Automatically refreshes the token when it expires.
- * 
+ *
  * @hook
  * @returns Authentication state and actions
  * @returns user - The current user object or null if not authenticated
@@ -199,16 +199,16 @@ interface UserProfileCardProps {
  * @returns isLoading - Whether authentication is being checked
  * @returns login - Function to log in with credentials
  * @returns logout - Function to log out the current user
- * 
+ *
  * @example
  * ```typescript
  * function MyComponent() {
  *   const { user, isAuthenticated, login, logout } = useAuth();
- *   
+ *
  *   if (!isAuthenticated) {
  *     return <LoginForm onSubmit={login} />;
  *   }
- *   
+ *
  *   return <div>Welcome, {user.name}!</div>;
  * }
  * ```
@@ -216,7 +216,7 @@ interface UserProfileCardProps {
 function useAuth() {
   // Implementation
 }
-```
+````
 
 ---
 
@@ -224,13 +224,13 @@ function useAuth() {
 
 ### Class
 
-```typescript
+````typescript
 /**
  * Service for managing Redis cache operations.
- * 
+ *
  * Provides a simple interface for getting, setting, and deleting
  * cached values. Automatically handles serialization and error handling.
- * 
+ *
  * @class
  * @example
  * ```typescript
@@ -245,10 +245,10 @@ class RedisCacheService {
    * @private
    */
   private client: RedisClient;
-  
+
   /**
    * Creates a new Redis cache service instance.
-   * 
+   *
    * @param config - Redis configuration options
    * @param config.url - Redis connection URL
    * @param config.password - Redis password (optional)
@@ -256,10 +256,10 @@ class RedisCacheService {
   constructor(config: RedisConfig) {
     // Implementation
   }
-  
+
   /**
    * Gets a value from the cache.
-   * 
+   *
    * @param key - The cache key
    * @returns Promise resolving to the cached value or null if not found
    * @throws {RedisError} When Redis operation fails
@@ -267,10 +267,10 @@ class RedisCacheService {
   async get<T>(key: string): Promise<T | null> {
     // Implementation
   }
-  
+
   /**
    * Sets a value in the cache with optional TTL.
-   * 
+   *
    * @param key - The cache key
    * @param value - The value to cache
    * @param ttl - Time to live in seconds (optional)
@@ -281,7 +281,7 @@ class RedisCacheService {
     // Implementation
   }
 }
-```
+````
 
 ---
 
@@ -292,7 +292,7 @@ class RedisCacheService {
 ```typescript
 /**
  * Represents a user in the system.
- * 
+ *
  * @interface
  */
 interface User {
@@ -300,31 +300,31 @@ interface User {
    * The unique identifier of the user.
    */
   id: string;
-  
+
   /**
    * The user's email address.
    * Must be unique across all users.
    */
   email: string;
-  
+
   /**
    * The user's display name.
    * @minLength 2
    * @maxLength 50
    */
   name: string;
-  
+
   /**
    * The user's role in the system.
    * @default 'USER'
    */
   role: UserRole;
-  
+
   /**
    * When the user account was created.
    */
   createdAt: Date;
-  
+
   /**
    * When the user account was last updated.
    */
@@ -337,15 +337,15 @@ interface User {
 ```typescript
 /**
  * Represents the possible statuses of a document.
- * 
+ *
  * - `draft`: Document is being edited
  * - `pending`: Document is awaiting review
  * - `approved`: Document has been approved
  * - `rejected`: Document has been rejected
- * 
+ *
  * @typedef {string} DocumentStatus
  */
-type DocumentStatus = 'draft' | 'pending' | 'approved' | 'rejected';
+type DocumentStatus = "draft" | "pending" | "approved" | "rejected";
 ```
 
 ### Enum
@@ -353,24 +353,24 @@ type DocumentStatus = 'draft' | 'pending' | 'approved' | 'rejected';
 ```typescript
 /**
  * User roles in the system.
- * 
+ *
  * @enum {string}
  */
 enum UserRole {
   /**
    * Administrator with full system access.
    */
-  ADMIN = 'ADMIN',
-  
+  ADMIN = "ADMIN",
+
   /**
    * Regular user with standard permissions.
    */
-  USER = 'USER',
-  
+  USER = "USER",
+
   /**
    * Guest user with limited read-only access.
    */
-  GUEST = 'GUEST'
+  GUEST = "GUEST",
 }
 ```
 
@@ -378,18 +378,18 @@ enum UserRole {
 
 ## Utility Functions
 
-```typescript
+````typescript
 /**
  * Formats a date according to the specified format string.
- * 
+ *
  * Supports common date formats and localization.
  * Uses Intl.DateTimeFormat for consistent formatting.
- * 
+ *
  * @param date - The date to format
  * @param format - The format string ('short', 'long', 'iso', or custom)
  * @param locale - The locale to use for formatting (default: 'en-US')
  * @returns The formatted date string
- * 
+ *
  * @example
  * ```typescript
  * formatDate(new Date(), 'short'); // "2/25/26"
@@ -399,30 +399,30 @@ enum UserRole {
  */
 export function formatDate(
   date: Date,
-  format: 'short' | 'long' | 'iso' = 'short',
-  locale: string = 'en-US'
+  format: "short" | "long" | "iso" = "short",
+  locale: string = "en-US"
 ): string {
   // Implementation
 }
-```
+````
 
 ---
 
 ## Middleware
 
-```typescript
+````typescript
 /**
  * Rate limiting middleware using token bucket algorithm.
- * 
+ *
  * Limits the number of requests per IP address within a time window.
  * Returns 429 Too Many Requests when limit is exceeded.
- * 
+ *
  * @middleware
  * @param options - Rate limiting configuration
  * @param options.windowMs - Time window in milliseconds
  * @param options.max - Maximum number of requests per window
  * @returns Express middleware function
- * 
+ *
  * @example
  * ```typescript
  * app.use(rateLimiter({
@@ -436,7 +436,7 @@ export function rateLimiter(options: RateLimiterOptions) {
     // Implementation
   };
 }
-```
+````
 
 ---
 
@@ -445,7 +445,7 @@ export function rateLimiter(options: RateLimiterOptions) {
 ```typescript
 /**
  * Maximum number of retry attempts for failed API requests.
- * 
+ *
  * @constant {number}
  * @default 3
  */
@@ -453,7 +453,7 @@ export const MAX_RETRY_ATTEMPTS = 3;
 
 /**
  * Default timeout for API requests in milliseconds.
- * 
+ *
  * @constant {number}
  * @default 5000
  */
@@ -461,14 +461,14 @@ export const DEFAULT_TIMEOUT = 5000;
 
 /**
  * Supported document types in the system.
- * 
+ *
  * @constant {string[]}
  */
 export const SUPPORTED_DOCUMENT_TYPES = [
-  'innovation-brief',
-  'project-genesis',
-  'business-plan',
-  'report'
+  "innovation-brief",
+  "project-genesis",
+  "business-plan",
+  "report",
 ] as const;
 ```
 
@@ -511,15 +511,15 @@ export const SUPPORTED_DOCUMENT_TYPES = [
 
 ### DO ✅
 
-```typescript
+````typescript
 /**
  * Validates an email address format.
- * 
+ *
  * Uses RFC 5322 compliant regex for validation.
- * 
+ *
  * @param email - The email address to validate
  * @returns True if valid, false otherwise
- * 
+ *
  * @example
  * ```typescript
  * validateEmail('user@example.com'); // true
@@ -529,7 +529,7 @@ export const SUPPORTED_DOCUMENT_TYPES = [
 function validateEmail(email: string): boolean {
   // Implementation
 }
-```
+````
 
 ### DON'T ❌
 
@@ -604,31 +604,29 @@ pnpm typedoc --out docs/api client/src server
 ```typescript
 /**
  * User management API router.
- * 
+ *
  * Provides endpoints for user CRUD operations, authentication,
  * and profile management.
- * 
+ *
  * @module routers/user
  */
 
 export const userRouter = router({
   /**
    * Gets a user by ID.
-   * 
+   *
    * @procedure
    * @param input - User ID
    * @returns User object
    * @throws {NotFoundError} When user doesn't exist
    */
-  getUser: publicProcedure
-    .input(z.string())
-    .query(async ({ input }) => {
-      // Implementation
-    }),
-  
+  getUser: publicProcedure.input(z.string()).query(async ({ input }) => {
+    // Implementation
+  }),
+
   /**
    * Creates a new user.
-   * 
+   *
    * @procedure
    * @param input - User creation data
    * @returns Created user object
@@ -639,19 +637,19 @@ export const userRouter = router({
     .input(createUserSchema)
     .mutation(async ({ input }) => {
       // Implementation
-    })
+    }),
 });
 ```
 
 ### Service Class
 
-```typescript
+````typescript
 /**
  * Image optimization service using Sharp.
- * 
+ *
  * Provides methods for resizing, converting, and optimizing images.
  * Supports WebP conversion and multiple size variants.
- * 
+ *
  * @class
  * @example
  * ```typescript
@@ -665,7 +663,7 @@ export const userRouter = router({
 export class ImageOptimizerService {
   // Implementation
 }
-```
+````
 
 ---
 

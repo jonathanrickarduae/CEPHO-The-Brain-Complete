@@ -11,13 +11,13 @@ interface PageHeaderProps {
   children?: React.ReactNode;
 }
 
-export function PageHeader({ 
-  icon: Icon, 
+export function PageHeader({
+  icon: Icon,
   avatar,
-  title, 
+  title,
   subtitle,
   iconColor = "text-primary",
-  children 
+  children,
 }: PageHeaderProps) {
   return (
     <div className="bg-black text-white px-4 sm:px-6 py-3 sticky top-0 z-20">
@@ -31,8 +31,8 @@ export function PageHeader({
           <div className="flex items-center gap-2">
             {avatar ? (
               <div className="relative">
-                <img 
-                  src={avatar} 
+                <img
+                  src={avatar}
                   alt={title}
                   className="w-8 h-8 rounded-full object-cover border-2 border-primary/50"
                 />
@@ -45,29 +45,23 @@ export function PageHeader({
             ) : null}
             <div>
               <h1 className="text-base font-semibold">{title}</h1>
-              {subtitle && (
-                <p className="text-xs text-white/60">{subtitle}</p>
-              )}
+              {subtitle && <p className="text-xs text-white/60">{subtitle}</p>}
             </div>
           </div>
         </div>
-        {children && (
-          <div className="flex items-center gap-2">
-            {children}
-          </div>
-        )}
+        {children && <div className="flex items-center gap-2">{children}</div>}
       </div>
     </div>
   );
 }
 
 // Compact version for mobile
-export function PageHeaderCompact({ 
-  icon: Icon, 
+export function PageHeaderCompact({
+  icon: Icon,
   title,
   iconColor = "text-primary",
-  children 
-}: Omit<PageHeaderProps, 'subtitle'>) {
+  children,
+}: Omit<PageHeaderProps, "subtitle">) {
   return (
     <div className="bg-black text-white px-3 py-2 sticky top-0 z-20">
       <div className="flex items-center justify-between">

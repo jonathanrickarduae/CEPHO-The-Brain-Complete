@@ -1,11 +1,17 @@
-import { useState, useEffect, useRef } from 'react';
-import { useLocation } from 'wouter';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Label } from '@/components/ui/label';
-import AnimatedBrainLogo from '@/components/ai-agents/AnimatedBrainLogo';
-import { toast } from 'sonner';
+import { useState, useEffect, useRef } from "react";
+import { useLocation } from "wouter";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import AnimatedBrainLogo from "@/components/ai-agents/AnimatedBrainLogo";
+import { toast } from "sonner";
 
 // Particle system for blue glowing effect
 function ParticleField() {
@@ -15,7 +21,7 @@ function ParticleField() {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
     // Set canvas size
@@ -24,7 +30,7 @@ function ParticleField() {
       canvas.height = window.innerHeight;
     };
     resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
+    window.addEventListener("resize", resizeCanvas);
 
     // Particle class
     class Particle {
@@ -67,13 +73,20 @@ function ParticleField() {
 
       draw() {
         if (!ctx) return;
-        
+
         // Outer glow
-        const gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.size * 4);
+        const gradient = ctx.createRadialGradient(
+          this.x,
+          this.y,
+          0,
+          this.x,
+          this.y,
+          this.size * 4
+        );
         gradient.addColorStop(0, `rgba(96, 165, 250, ${this.opacity})`);
         gradient.addColorStop(0.5, `rgba(59, 130, 246, ${this.opacity * 0.5})`);
-        gradient.addColorStop(1, 'rgba(59, 130, 246, 0)');
-        
+        gradient.addColorStop(1, "rgba(59, 130, 246, 0)");
+
         ctx.fillStyle = gradient;
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size * 4, 0, Math.PI * 2);
@@ -97,16 +110,16 @@ function ParticleField() {
     // Animation loop
     function animate() {
       if (!ctx || !canvas) return;
-      
+
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
+
       // Draw connections between nearby particles
       particles.forEach((p1, i) => {
         particles.slice(i + 1).forEach(p2 => {
           const dx = p1.x - p2.x;
           const dy = p1.y - p2.y;
           const distance = Math.sqrt(dx * dx + dy * dy);
-          
+
           if (distance < 150) {
             ctx.strokeStyle = `rgba(59, 130, 246, ${(1 - distance / 150) * 0.2 * Math.min(p1.opacity, p2.opacity)})`;
             ctx.lineWidth = 0.5;
@@ -130,7 +143,7 @@ function ParticleField() {
     animate();
 
     return () => {
-      window.removeEventListener('resize', resizeCanvas);
+      window.removeEventListener("resize", resizeCanvas);
     };
   }, []);
 
@@ -144,8 +157,8 @@ function ParticleField() {
 }
 
 export default function Login() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [, setLocation] = useLocation();
 
@@ -154,27 +167,27 @@ export default function Login() {
     setIsLoading(true);
 
     try {
-      const response = await fetch('/api/auth/login', {
-        method: 'POST',
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ email, password }),
-        credentials: 'include',
+        credentials: "include",
       });
 
       const data = await response.json();
 
       if (response.ok && data.success) {
-        toast.success('Login successful!');
+        toast.success("Login successful!");
         // Redirect to dashboard
-        setLocation('/nexus');
+        setLocation("/nexus");
       } else {
-        toast.error(data.error || 'Invalid credentials');
+        toast.error(data.error || "Invalid credentials");
       }
     } catch (error) {
-      console.error('Login error:', error);
-      toast.error('Failed to login. Please try again.');
+      console.error("Login error:", error);
+      toast.error("Failed to login. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -185,9 +198,18 @@ export default function Login() {
       {/* Intense pulsing blue glow - moved higher and more visible */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1400px] h-[1400px] bg-cyan-400/80 rounded-full blur-[250px] animate-pulse" />
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[1000px] bg-blue-500/90 rounded-full blur-[150px] animate-pulse" style={{ animationDelay: '0.5s' }} />
-        <div className="absolute top-1/6 left-1/4 w-[700px] h-[700px] bg-cyan-500/70 rounded-full blur-[120px] animate-pulse" style={{ animationDuration: '3s' }} />
-        <div className="absolute top-1/6 right-1/4 w-[700px] h-[700px] bg-blue-400/70 rounded-full blur-[120px] animate-pulse" style={{ animationDuration: '4s' }} />
+        <div
+          className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[1000px] bg-blue-500/90 rounded-full blur-[150px] animate-pulse"
+          style={{ animationDelay: "0.5s" }}
+        />
+        <div
+          className="absolute top-1/6 left-1/4 w-[700px] h-[700px] bg-cyan-500/70 rounded-full blur-[120px] animate-pulse"
+          style={{ animationDuration: "3s" }}
+        />
+        <div
+          className="absolute top-1/6 right-1/4 w-[700px] h-[700px] bg-blue-400/70 rounded-full blur-[120px] animate-pulse"
+          style={{ animationDuration: "4s" }}
+        />
       </div>
 
       {/* Animated particle field - prominent blue effect */}
@@ -205,61 +227,71 @@ export default function Login() {
               <div className="w-32 h-32 bg-cyan-400/60 rounded-full blur-[60px] animate-pulse" />
             </div>
             <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-24 h-24 bg-blue-500/80 rounded-full blur-[40px] animate-pulse" style={{ animationDuration: '2s' }} />
+              <div
+                className="w-24 h-24 bg-blue-500/80 rounded-full blur-[40px] animate-pulse"
+                style={{ animationDuration: "2s" }}
+              />
             </div>
             {/* Brain logo on top */}
             <div className="relative z-10">
               <AnimatedBrainLogo size="xl" intensity="active" color="#00d4ff" />
             </div>
           </div>
-          
+
           {/* CEPHO Title - Blended neon colors */}
           <div>
             <CardTitle className="text-5xl font-bold text-center bg-gradient-to-r from-cyan-300 via-blue-400 to-cyan-300 bg-clip-text text-transparent drop-shadow-[0_0_40px_rgba(0,212,255,0.8)] animate-pulse">
               Cepho
             </CardTitle>
-            <p className="text-center text-cyan-400/80 text-sm mt-1 drop-shadow-[0_0_10px_rgba(0,212,255,0.5)]">The Greek for Brain</p>
-            <p className="text-center text-gray-300 text-base mt-2">AI powered Executive Intelligence</p>
-
+            <p className="text-center text-cyan-400/80 text-sm mt-1 drop-shadow-[0_0_10px_rgba(0,212,255,0.5)]">
+              The Greek for Brain
+            </p>
+            <p className="text-center text-gray-300 text-base mt-2">
+              AI powered Executive Intelligence
+            </p>
           </div>
         </CardHeader>
-        
+
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-gray-300">Email</Label>
+              <Label htmlFor="email" className="text-gray-300">
+                Email
+              </Label>
               <Input
                 id="email"
                 type="email"
                 placeholder="your@email.com"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={e => setEmail(e.target.value)}
                 required
                 disabled={isLoading}
                 className="bg-white/5 border-cyan-400/30 text-white placeholder:text-gray-500 focus:border-cyan-400 focus:ring-cyan-400/50 focus:shadow-[0_0_20px_rgba(0,212,255,0.4)] transition-all duration-300"
               />
             </div>
-            
+
             <div className="space-y-2">
-              <Label htmlFor="password" className="text-gray-300">Password</Label>
+              <Label htmlFor="password" className="text-gray-300">
+                Password
+              </Label>
               <Input
                 id="password"
                 type="password"
                 placeholder="••••••••"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={e => setPassword(e.target.value)}
                 required
                 disabled={isLoading}
                 className="bg-white/5 border-cyan-400/30 text-white placeholder:text-gray-500 focus:border-cyan-400 focus:ring-cyan-400/50 focus:shadow-[0_0_20px_rgba(0,212,255,0.4)] transition-all duration-300"
               />
             </div>
-            
-            <Button 
-              type="submit" 
+
+            <Button
+              type="submit"
               className="w-full bg-gradient-to-r from-cyan-500 via-blue-500 to-cyan-500 hover:from-cyan-400 hover:via-blue-400 hover:to-cyan-400 text-white font-bold shadow-[0_0_30px_rgba(0,212,255,0.6)] hover:shadow-[0_0_50px_rgba(0,212,255,0.8)] transition-all duration-300 animate-pulse"
               disabled={isLoading}
             >
-              {isLoading ? 'Signing in...' : 'Sign In'}
+              {isLoading ? "Signing in..." : "Sign In"}
             </Button>
           </form>
         </CardContent>

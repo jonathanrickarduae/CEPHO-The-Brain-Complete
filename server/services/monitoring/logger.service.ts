@@ -1,5 +1,5 @@
-import winston from 'winston';
-import path from 'path';
+import winston from "winston";
+import path from "path";
 
 /**
  * Structured Logging Service using Winston
@@ -17,11 +17,11 @@ const levels = {
 
 // Define colors for each level
 const colors = {
-  error: 'red',
-  warn: 'yellow',
-  info: 'green',
-  http: 'magenta',
-  debug: 'blue',
+  error: "red",
+  warn: "yellow",
+  info: "green",
+  http: "magenta",
+  debug: "blue",
 };
 
 // Tell winston about our colors
@@ -29,7 +29,7 @@ winston.addColors(colors);
 
 // Define log format
 const format = winston.format.combine(
-  winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
+  winston.format.timestamp({ format: "YYYY-MM-DD HH:mm:ss" }),
   winston.format.errors({ stack: true }),
   winston.format.splat(),
   winston.format.json()
@@ -38,9 +38,9 @@ const format = winston.format.combine(
 // Define console format (pretty for development)
 const consoleFormat = winston.format.combine(
   winston.format.colorize({ all: true }),
-  winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
+  winston.format.timestamp({ format: "YYYY-MM-DD HH:mm:ss" }),
   winston.format.printf(
-    (info) => `${info.timestamp} [${info.level}]: ${info.message}`
+    info => `${info.timestamp} [${info.level}]: ${info.message}`
   )
 );
 
@@ -48,37 +48,39 @@ const consoleFormat = winston.format.combine(
 const transports = [
   // Console transport
   new winston.transports.Console({
-    format: process.env.NODE_ENV === 'production' ? format : consoleFormat,
+    format: process.env.NODE_ENV === "production" ? format : consoleFormat,
   }),
 
   // Error log file
   new winston.transports.File({
-    filename: path.join(process.cwd(), 'logs', 'error.log'),
-    level: 'error',
+    filename: path.join(process.cwd(), "logs", "error.log"),
+    level: "error",
     format,
   }),
 
   // Combined log file
   new winston.transports.File({
-    filename: path.join(process.cwd(), 'logs', 'combined.log'),
+    filename: path.join(process.cwd(), "logs", "combined.log"),
     format,
   }),
 ];
 
 // Create the logger
 const logger = winston.createLogger({
-  level: process.env.LOG_LEVEL || (process.env.NODE_ENV === 'production' ? 'info' : 'debug'),
+  level:
+    process.env.LOG_LEVEL ||
+    (process.env.NODE_ENV === "production" ? "info" : "debug"),
   levels,
   format,
   transports,
   exceptionHandlers: [
     new winston.transports.File({
-      filename: path.join(process.cwd(), 'logs', 'exceptions.log'),
+      filename: path.join(process.cwd(), "logs", "exceptions.log"),
     }),
   ],
   rejectionHandlers: [
     new winston.transports.File({
-      filename: path.join(process.cwd(), 'logs', 'rejections.log'),
+      filename: path.join(process.cwd(), "logs", "rejections.log"),
     }),
   ],
 });
@@ -158,20 +160,23 @@ export function httpLoggerMiddleware(req: any, res: any, next: any) {
     method: req.method,
     url: req.url,
     ip: req.ip,
-    userAgent: req.get('user-agent'),
+    userAgent: req.get("user-agent"),
     userId: req.user?.id,
   });
 
   // Log response when finished
-  res.on('finish', () => {
+  res.on("finish", () => {
     const duration = Date.now() - start;
-    loggerService.http(`${req.method} ${req.url} ${res.statusCode} ${duration}ms`, {
-      method: req.method,
-      url: req.url,
-      statusCode: res.statusCode,
-      duration,
-      userId: req.user?.id,
-    });
+    loggerService.http(
+      `${req.method} ${req.url} ${res.statusCode} ${duration}ms`,
+      {
+        method: req.method,
+        url: req.url,
+        statusCode: res.statusCode,
+        duration,
+        userId: req.user?.id,
+      }
+    );
   });
 
   next();
@@ -181,9 +186,9 @@ export function httpLoggerMiddleware(req: any, res: any, next: any) {
  * Request ID middleware for tracking requests
  */
 export function requestIdMiddleware(req: any, res: any, next: any) {
-  const requestId = req.headers['x-request-id'] || generateRequestId();
+  const requestId = req.headers["x-request-id"] || generateRequestId();
   req.requestId = requestId;
-  res.setHeader('X-Request-ID', requestId);
+  res.setHeader("X-Request-ID", requestId);
   next();
 }
 

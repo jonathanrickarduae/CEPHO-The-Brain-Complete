@@ -5,20 +5,33 @@ import { useFavorites } from "@/components/project-management/MyBoard";
 import { DirectExpertChat } from "@/components/expert-evolution/DirectExpertChat";
 import { CorporatePartnerChat } from "@/components/ai-agents/CorporatePartnerChat";
 import { ExpertDetailModal } from "@/components/ExpertDetailModal";
-import { 
-  Search, Users, Star, MessageSquare, Video, 
-  Filter, ChevronRight, Brain, Sparkles,
-  TrendingUp, Award, BookOpen, Building2, Target, Zap, Loader2
+import {
+  Search,
+  Users,
+  Star,
+  MessageSquare,
+  Video,
+  Filter,
+  ChevronRight,
+  Brain,
+  Sparkles,
+  TrendingUp,
+  Award,
+  BookOpen,
+  Building2,
+  Target,
+  Zap,
+  Loader2,
 } from "lucide-react";
 import { trpc } from "@/lib/trpc";
-import { 
-  AI_EXPERTS, 
-  categories, 
+import {
+  AI_EXPERTS,
+  categories,
   searchExperts,
   TOTAL_EXPERTS,
   corporatePartners,
   type AIExpert,
-  type CorporatePartner
+  type CorporatePartner,
 } from "@/data/ai-experts.data";
 import { getAvatarUrl } from "@/data/avatar-mappings.data";
 import { Button } from "@/components/ui/button";
@@ -32,35 +45,40 @@ interface ExpertDirectoryProps {
   onBack?: () => void;
 }
 
-export function ExpertDirectory({ onSelectExpert, onBack }: ExpertDirectoryProps) {
+export function ExpertDirectory({
+  onSelectExpert,
+  onBack,
+}: ExpertDirectoryProps) {
   const [, setLocation] = useLocation();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [selectedExpert, setSelectedExpert] = useState<AIExpert | null>(null);
   const [chatExpertId, setChatExpertId] = useState<string | null>(null);
   const [chatPartnerId, setChatPartnerId] = useState<string | null>(null);
-  const [selectedPartner, setSelectedPartner] = useState<CorporatePartner | null>(null);
+  const [selectedPartner, setSelectedPartner] =
+    useState<CorporatePartner | null>(null);
   const [showPartnersOnly, setShowPartnersOnly] = useState(false);
   const { isFavorite, addFavorite, removeFavorite } = useFavorites();
 
   // Fetch personalized recommendations
-  const { data: recommendations, isLoading: recommendationsLoading } = trpc.expertRecommendation.getRecommendations.useQuery(
-    { limit: 5 },
-    { staleTime: 5 * 60 * 1000 } // Cache for 5 minutes
-  );
+  const { data: recommendations, isLoading: recommendationsLoading } =
+    trpc.expertRecommendation.getRecommendations.useQuery(
+      { limit: 5 },
+      { staleTime: 5 * 60 * 1000 } // Cache for 5 minutes
+    );
 
   // Filter experts based on search and category
   const filteredExperts = useMemo(() => {
     let results = AI_EXPERTS;
-    
+
     if (searchQuery.trim()) {
       results = searchExperts(searchQuery);
     }
-    
+
     if (selectedCategory) {
       results = results.filter(e => e.category === selectedCategory);
     }
-    
+
     return results.sort((a, b) => b.performanceScore - a.performanceScore);
   }, [searchQuery, selectedCategory]);
 
@@ -68,11 +86,12 @@ export function ExpertDirectory({ onSelectExpert, onBack }: ExpertDirectoryProps
   const filteredPartners = useMemo(() => {
     if (!searchQuery.trim()) return corporatePartners;
     const query = searchQuery.toLowerCase();
-    return corporatePartners.filter(p => 
-      p.name.toLowerCase().includes(query) ||
-      p.industry.toLowerCase().includes(query) ||
-      p.methodology.toLowerCase().includes(query) ||
-      p.strengths.some(s => s.toLowerCase().includes(query))
+    return corporatePartners.filter(
+      p =>
+        p.name.toLowerCase().includes(query) ||
+        p.industry.toLowerCase().includes(query) ||
+        p.methodology.toLowerCase().includes(query) ||
+        p.strengths.some(s => s.toLowerCase().includes(query))
     );
   }, [searchQuery]);
 
@@ -94,15 +113,17 @@ export function ExpertDirectory({ onSelectExpert, onBack }: ExpertDirectoryProps
   };
 
   const handleVideoMeeting = (expert: AIExpert) => {
-    setLocation(`/video-studio?expert=${expert.id}&name=${encodeURIComponent(expert.name)}`);
+    setLocation(
+      `/video-studio?expert=${expert.id}&name=${encodeURIComponent(expert.name)}`
+    );
   };
 
   // Corporate Partner Chat View
   if (chatPartnerId) {
     return (
-      <CorporatePartnerChat 
-        partnerId={chatPartnerId} 
-        onClose={() => setChatPartnerId(null)} 
+      <CorporatePartnerChat
+        partnerId={chatPartnerId}
+        onClose={() => setChatPartnerId(null)}
       />
     );
   }
@@ -110,9 +131,9 @@ export function ExpertDirectory({ onSelectExpert, onBack }: ExpertDirectoryProps
   // Direct Chat View
   if (chatExpertId) {
     return (
-      <DirectExpertChat 
-        expertId={chatExpertId} 
-        onClose={() => setChatExpertId(null)} 
+      <DirectExpertChat
+        expertId={chatExpertId}
+        onClose={() => setChatExpertId(null)}
       />
     );
   }
@@ -123,8 +144,8 @@ export function ExpertDirectory({ onSelectExpert, onBack }: ExpertDirectoryProps
       <div className="h-full bg-background">
         <div className="border-b border-border bg-card/80 backdrop-blur-xl sticky top-0 z-10">
           <div className="max-w-4xl mx-auto px-4 py-4">
-            <Button 
-              variant="ghost" 
+            <Button
+              variant="ghost"
               onClick={() => setSelectedPartner(null)}
               className="mb-2"
             >
@@ -141,8 +162,12 @@ export function ExpertDirectory({ onSelectExpert, onBack }: ExpertDirectoryProps
                 {selectedPartner.logo}
               </div>
               <div className="flex-1">
-                <h1 className="text-3xl font-bold text-white mb-1">{selectedPartner.name}</h1>
-                <p className="text-lg text-blue-400 mb-2">{selectedPartner.industry}</p>
+                <h1 className="text-3xl font-bold text-white mb-1">
+                  {selectedPartner.name}
+                </h1>
+                <p className="text-lg text-blue-400 mb-2">
+                  {selectedPartner.industry}
+                </p>
                 <div className="flex items-center gap-3">
                   <Badge className="bg-blue-500/20 text-blue-400 border-0">
                     Corporate Partner
@@ -157,7 +182,7 @@ export function ExpertDirectory({ onSelectExpert, onBack }: ExpertDirectoryProps
 
             {/* Action Button */}
             <div className="flex gap-3 mb-8">
-              <Button 
+              <Button
                 onClick={() => handleChatWithPartner(selectedPartner)}
                 className="flex-1 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600"
               >
@@ -173,7 +198,9 @@ export function ExpertDirectory({ onSelectExpert, onBack }: ExpertDirectoryProps
                   <BookOpen className="w-5 h-5 text-blue-400" />
                   Methodology
                 </h2>
-                <p className="text-muted-foreground leading-relaxed">{selectedPartner.methodology}</p>
+                <p className="text-muted-foreground leading-relaxed">
+                  {selectedPartner.methodology}
+                </p>
               </CardContent>
             </Card>
 
@@ -185,7 +212,9 @@ export function ExpertDirectory({ onSelectExpert, onBack }: ExpertDirectoryProps
                     <Brain className="w-5 h-5 text-cyan-400" />
                     Thinking Framework
                   </h2>
-                  <p className="text-muted-foreground leading-relaxed">{selectedPartner.thinkingFramework}</p>
+                  <p className="text-muted-foreground leading-relaxed">
+                    {selectedPartner.thinkingFramework}
+                  </p>
                 </CardContent>
               </Card>
             )}
@@ -199,12 +228,19 @@ export function ExpertDirectory({ onSelectExpert, onBack }: ExpertDirectoryProps
                 </h2>
                 <div className="flex flex-wrap gap-2">
                   {selectedPartner.frameworks.map((framework, idx) => (
-                    <Badge key={idx} variant="outline" className="text-sm py-1 px-3">
+                    <Badge
+                      key={idx}
+                      variant="outline"
+                      className="text-sm py-1 px-3"
+                    >
                       {framework}
                     </Badge>
                   ))}
                   {selectedPartner.signatureTools?.map((tool, idx) => (
-                    <Badge key={`tool-${idx}`} className="bg-blue-500/10 text-blue-400 border-0 text-sm py-1 px-3">
+                    <Badge
+                      key={`tool-${idx}`}
+                      className="bg-blue-500/10 text-blue-400 border-0 text-sm py-1 px-3"
+                    >
                       {tool}
                     </Badge>
                   ))}
@@ -222,7 +258,10 @@ export function ExpertDirectory({ onSelectExpert, onBack }: ExpertDirectoryProps
                   </h2>
                   <ul className="space-y-2">
                     {selectedPartner.strengths.map((strength, idx) => (
-                      <li key={idx} className="flex items-center gap-2 text-muted-foreground">
+                      <li
+                        key={idx}
+                        className="flex items-center gap-2 text-muted-foreground"
+                      >
                         <div className="w-1.5 h-1.5 rounded-full bg-green-400" />
                         {strength}
                       </li>
@@ -240,7 +279,10 @@ export function ExpertDirectory({ onSelectExpert, onBack }: ExpertDirectoryProps
                     </h2>
                     <ul className="space-y-2">
                       {selectedPartner.keyPrinciples.map((principle, idx) => (
-                        <li key={idx} className="flex items-center gap-2 text-muted-foreground">
+                        <li
+                          key={idx}
+                          className="flex items-center gap-2 text-muted-foreground"
+                        >
                           <div className="w-1.5 h-1.5 rounded-full bg-amber-400" />
                           {principle}
                         </li>
@@ -254,14 +296,20 @@ export function ExpertDirectory({ onSelectExpert, onBack }: ExpertDirectoryProps
             {/* Stats */}
             <Card className="bg-card/60 border-border">
               <CardContent className="p-6">
-                <h2 className="text-lg font-semibold text-foreground mb-4">Performance Stats</h2>
+                <h2 className="text-lg font-semibold text-foreground mb-4">
+                  Performance Stats
+                </h2>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="text-center p-4 bg-secondary/30 rounded-xl">
-                    <p className="text-2xl font-bold text-foreground">{selectedPartner.projectsCompleted}</p>
+                    <p className="text-2xl font-bold text-foreground">
+                      {selectedPartner.projectsCompleted}
+                    </p>
                     <p className="text-sm text-muted-foreground">Projects</p>
                   </div>
                   <div className="text-center p-4 bg-secondary/30 rounded-xl">
-                    <p className="text-2xl font-bold text-foreground">{selectedPartner.performanceScore}%</p>
+                    <p className="text-2xl font-bold text-foreground">
+                      {selectedPartner.performanceScore}%
+                    </p>
                     <p className="text-sm text-muted-foreground">Score</p>
                   </div>
                 </div>
@@ -302,8 +350,13 @@ export function ExpertDirectory({ onSelectExpert, onBack }: ExpertDirectoryProps
                 <Users className="w-6 h-6 text-purple-400" />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-foreground">Expert Directory</h1>
-                <p className="text-sm text-muted-foreground">{TOTAL_EXPERTS} AI experts + {corporatePartners.length} Corporate Partners</p>
+                <h1 className="text-xl font-bold text-foreground">
+                  Expert Directory
+                </h1>
+                <p className="text-sm text-muted-foreground">
+                  {TOTAL_EXPERTS} AI experts + {corporatePartners.length}{" "}
+                  Corporate Partners
+                </p>
               </div>
             </div>
             <div className="flex-1 max-w-md">
@@ -312,7 +365,7 @@ export function ExpertDirectory({ onSelectExpert, onBack }: ExpertDirectoryProps
                 <Input
                   placeholder="Search experts, partners, or skills..."
                   value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onChange={e => setSearchQuery(e.target.value)}
                   className="pl-10 bg-secondary/50"
                 />
               </div>
@@ -334,7 +387,7 @@ export function ExpertDirectory({ onSelectExpert, onBack }: ExpertDirectoryProps
               variant={showPartnersOnly ? "default" : "outline"}
               size="sm"
               onClick={() => setShowPartnersOnly(true)}
-              className={`whitespace-nowrap ${showPartnersOnly ? 'bg-blue-500 hover:bg-blue-600' : ''}`}
+              className={`whitespace-nowrap ${showPartnersOnly ? "bg-blue-500 hover:bg-blue-600" : ""}`}
             >
               <Building2 className="w-4 h-4 mr-1" />
               Corporate Partners ({corporatePartners.length})
@@ -355,7 +408,9 @@ export function ExpertDirectory({ onSelectExpert, onBack }: ExpertDirectoryProps
               {categoryStats.map(([category, count]) => (
                 <Button
                   key={category}
-                  variant={selectedCategory === category ? "default" : "outline"}
+                  variant={
+                    selectedCategory === category ? "default" : "outline"
+                  }
                   size="sm"
                   onClick={() => setSelectedCategory(category)}
                   className="whitespace-nowrap"
@@ -371,12 +426,11 @@ export function ExpertDirectory({ onSelectExpert, onBack }: ExpertDirectoryProps
       {/* Content */}
       <ScrollArea className="h-[calc(100%-180px)]">
         <div className="max-w-7xl mx-auto px-4 py-6">
-          
           {/* Corporate Partners Section */}
           {showPartnersOnly ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {filteredPartners.map((partner) => (
-                <Card 
+              {filteredPartners.map(partner => (
+                <Card
                   key={partner.id}
                   className="bg-gradient-to-br from-blue-500/5 to-cyan-500/5 border-blue-500/20 hover:border-blue-500/50 transition-all cursor-pointer group"
                   onClick={() => setSelectedPartner(partner)}
@@ -390,10 +444,12 @@ export function ExpertDirectory({ onSelectExpert, onBack }: ExpertDirectoryProps
                         <h3 className="font-bold text-foreground group-hover:text-blue-400 transition-colors">
                           {partner.name}
                         </h3>
-                        <p className="text-sm text-blue-400/80">{partner.industry}</p>
+                        <p className="text-sm text-blue-400/80">
+                          {partner.industry}
+                        </p>
                       </div>
                     </div>
-                    
+
                     <p className="text-sm text-muted-foreground line-clamp-2 mb-4">
                       {partner.methodology}
                     </p>
@@ -425,7 +481,7 @@ export function ExpertDirectory({ onSelectExpert, onBack }: ExpertDirectoryProps
                         size="sm"
                         variant="ghost"
                         className="text-blue-400 hover:text-blue-300 hover:bg-blue-500/10"
-                        onClick={(e) => {
+                        onClick={e => {
                           e.stopPropagation();
                           handleChatWithPartner(partner);
                         }}
@@ -441,87 +497,102 @@ export function ExpertDirectory({ onSelectExpert, onBack }: ExpertDirectoryProps
           ) : (
             <>
               {/* Recommended For You Section - Made More Prominent */}
-              {!selectedCategory && !searchQuery && recommendations && recommendations.length > 0 && (
-                <div className="mb-8 p-6 rounded-2xl bg-gradient-to-br from-fuchsia-500/10 via-purple-500/5 to-pink-500/10 border-2 border-fuchsia-500/30">
-                  <div className="flex items-center justify-between mb-4">
-                    <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
-                      <div className="p-2 rounded-xl bg-fuchsia-500/20 animate-pulse">
-                        <Zap className="w-6 h-6 text-fuchsia-400" />
-                      </div>
-                      <span>Recommended For You</span>
-                      <Badge className="bg-fuchsia-500/20 text-fuchsia-400 border-0 ml-2">AI-Powered</Badge>
-                    </h2>
-                    <span className="text-sm text-muted-foreground">Based on your consultation history</span>
-                  </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-                    {recommendations.map((rec) => {
-                      // Find the actual expert from AI_EXPERTS
-                      const expert = AI_EXPERTS.find(e => 
-                        e.id === rec.expertId || 
-                        e.name.toLowerCase().replace(/\s+/g, '-') === rec.expertId
-                      );
-                      
-                      return (
-                        <Card 
-                          key={rec.expertId}
-                          className="bg-gradient-to-br from-fuchsia-500/5 to-purple-500/5 border-fuchsia-500/20 hover:border-fuchsia-500/50 transition-all cursor-pointer group"
-                          onClick={() => {
-                            if (expert) {
-                              setSelectedExpert(expert);
-                            } else {
-                              // Navigate to chat directly if expert not in local data
-                              setChatExpertId(rec.expertId);
-                            }
-                          }}
-                        >
-                          <CardContent className="p-3">
-                            <div className="flex items-start gap-3 mb-2">
-                              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-fuchsia-500/20 to-purple-500/20 border border-fuchsia-500/30 flex items-center justify-center text-xl flex-shrink-0">
-                                {rec.avatar}
+              {!selectedCategory &&
+                !searchQuery &&
+                recommendations &&
+                recommendations.length > 0 && (
+                  <div className="mb-8 p-6 rounded-2xl bg-gradient-to-br from-fuchsia-500/10 via-purple-500/5 to-pink-500/10 border-2 border-fuchsia-500/30">
+                    <div className="flex items-center justify-between mb-4">
+                      <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
+                        <div className="p-2 rounded-xl bg-fuchsia-500/20 animate-pulse">
+                          <Zap className="w-6 h-6 text-fuchsia-400" />
+                        </div>
+                        <span>Recommended For You</span>
+                        <Badge className="bg-fuchsia-500/20 text-fuchsia-400 border-0 ml-2">
+                          AI-Powered
+                        </Badge>
+                      </h2>
+                      <span className="text-sm text-muted-foreground">
+                        Based on your consultation history
+                      </span>
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+                      {recommendations.map(rec => {
+                        // Find the actual expert from AI_EXPERTS
+                        const expert = AI_EXPERTS.find(
+                          e =>
+                            e.id === rec.expertId ||
+                            e.name.toLowerCase().replace(/\s+/g, "-") ===
+                              rec.expertId
+                        );
+
+                        return (
+                          <Card
+                            key={rec.expertId}
+                            className="bg-gradient-to-br from-fuchsia-500/5 to-purple-500/5 border-fuchsia-500/20 hover:border-fuchsia-500/50 transition-all cursor-pointer group"
+                            onClick={() => {
+                              if (expert) {
+                                setSelectedExpert(expert);
+                              } else {
+                                // Navigate to chat directly if expert not in local data
+                                setChatExpertId(rec.expertId);
+                              }
+                            }}
+                          >
+                            <CardContent className="p-3">
+                              <div className="flex items-start gap-3 mb-2">
+                                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-fuchsia-500/20 to-purple-500/20 border border-fuchsia-500/30 flex items-center justify-center text-xl flex-shrink-0">
+                                  {rec.avatar}
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                  <h3 className="font-semibold text-sm text-foreground group-hover:text-fuchsia-400 transition-colors truncate">
+                                    {rec.expertName}
+                                  </h3>
+                                  <p className="text-xs text-muted-foreground truncate">
+                                    {rec.specialty}
+                                  </p>
+                                </div>
                               </div>
-                              <div className="flex-1 min-w-0">
-                                <h3 className="font-semibold text-sm text-foreground group-hover:text-fuchsia-400 transition-colors truncate">
-                                  {rec.expertName}
-                                </h3>
-                                <p className="text-xs text-muted-foreground truncate">{rec.specialty}</p>
+                              <p className="text-xs text-fuchsia-400/80 line-clamp-2 mb-2">
+                                {rec.reason}
+                              </p>
+                              <div className="flex items-center justify-between">
+                                <Badge variant="outline" className="text-xs">
+                                  {rec.category}
+                                </Badge>
+                                <Button
+                                  size="sm"
+                                  variant="ghost"
+                                  className="text-xs text-fuchsia-400 hover:text-fuchsia-300 hover:bg-fuchsia-500/10 h-7 px-2"
+                                  onClick={e => {
+                                    e.stopPropagation();
+                                    if (expert) {
+                                      handleChatWithExpert(expert);
+                                    } else {
+                                      setChatExpertId(rec.expertId);
+                                    }
+                                  }}
+                                >
+                                  <MessageSquare className="w-3 h-3 mr-1" />
+                                  Chat
+                                </Button>
                               </div>
-                            </div>
-                            <p className="text-xs text-fuchsia-400/80 line-clamp-2 mb-2">
-                              {rec.reason}
-                            </p>
-                            <div className="flex items-center justify-between">
-                              <Badge variant="outline" className="text-xs">{rec.category}</Badge>
-                              <Button
-                                size="sm"
-                                variant="ghost"
-                                className="text-xs text-fuchsia-400 hover:text-fuchsia-300 hover:bg-fuchsia-500/10 h-7 px-2"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  if (expert) {
-                                    handleChatWithExpert(expert);
-                                  } else {
-                                    setChatExpertId(rec.expertId);
-                                  }
-                                }}
-                              >
-                                <MessageSquare className="w-3 h-3 mr-1" />
-                                Chat
-                              </Button>
-                            </div>
-                          </CardContent>
-                        </Card>
-                      );
-                    })}
+                            </CardContent>
+                          </Card>
+                        );
+                      })}
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
 
               {/* Loading state for recommendations */}
               {!selectedCategory && !searchQuery && recommendationsLoading && (
                 <div className="mb-6">
                   <div className="flex items-center gap-2 mb-3">
                     <Loader2 className="w-5 h-5 text-fuchsia-400 animate-spin" />
-                    <span className="text-sm text-muted-foreground">Loading recommendations...</span>
+                    <span className="text-sm text-muted-foreground">
+                      Loading recommendations...
+                    </span>
                   </div>
                 </div>
               )}
@@ -545,8 +616,8 @@ export function ExpertDirectory({ onSelectExpert, onBack }: ExpertDirectoryProps
                     </Button>
                   </div>
                   <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
-                    {corporatePartners.slice(0, 5).map((partner) => (
-                      <Card 
+                    {corporatePartners.slice(0, 5).map(partner => (
+                      <Card
                         key={partner.id}
                         className="bg-gradient-to-br from-blue-500/5 to-cyan-500/5 border-blue-500/20 hover:border-blue-500/50 transition-all cursor-pointer group"
                         onClick={() => setSelectedPartner(partner)}
@@ -558,12 +629,14 @@ export function ExpertDirectory({ onSelectExpert, onBack }: ExpertDirectoryProps
                           <h3 className="font-semibold text-sm text-foreground group-hover:text-blue-400 transition-colors truncate">
                             {partner.name}
                           </h3>
-                          <p className="text-xs text-muted-foreground truncate">{partner.industry}</p>
+                          <p className="text-xs text-muted-foreground truncate">
+                            {partner.industry}
+                          </p>
                           <Button
                             size="sm"
                             variant="ghost"
                             className="mt-2 w-full text-xs text-blue-400 hover:text-blue-300 hover:bg-blue-500/10"
-                            onClick={(e) => {
+                            onClick={e => {
                               e.stopPropagation();
                               handleChatWithPartner(partner);
                             }}
@@ -580,8 +653,8 @@ export function ExpertDirectory({ onSelectExpert, onBack }: ExpertDirectoryProps
 
               {/* Expert Grid */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                {filteredExperts.map((expert) => (
-                  <Card 
+                {filteredExperts.map(expert => (
+                  <Card
                     key={expert.id}
                     className="bg-card/60 border-border hover:border-primary/50 transition-all cursor-pointer group"
                     onClick={() => setSelectedExpert(expert)}
@@ -590,17 +663,18 @@ export function ExpertDirectory({ onSelectExpert, onBack }: ExpertDirectoryProps
                       <div className="flex items-start gap-3 mb-3">
                         <div className="relative w-12 h-12 flex-shrink-0">
                           {expert.avatarUrl && (
-                            <img alt="Expert avatar" 
-                              src={expert.avatarUrl} 
+                            <img
+                              alt="Expert avatar"
+                              src={expert.avatarUrl}
                               alt={expert.name}
                               className="absolute inset-0 w-12 h-12 rounded-xl object-cover border border-cyan-500/30"
-                              onError={(e) => {
-                                e.currentTarget.style.display = 'none';
+                              onError={e => {
+                                e.currentTarget.style.display = "none";
                               }}
                             />
                           )}
-                          <div 
-                            className={`w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-500/20 to-purple-500/20 border border-cyan-500/30 flex items-center justify-center text-2xl ${expert.avatarUrl ? 'opacity-0' : ''}`}
+                          <div
+                            className={`w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-500/20 to-purple-500/20 border border-cyan-500/30 flex items-center justify-center text-2xl ${expert.avatarUrl ? "opacity-0" : ""}`}
                           >
                             {expert.avatar}
                           </div>
@@ -609,12 +683,16 @@ export function ExpertDirectory({ onSelectExpert, onBack }: ExpertDirectoryProps
                           <h3 className="font-semibold text-white truncate group-hover:text-primary transition-colors">
                             {expert.name}
                           </h3>
-                          <p className="text-xs text-muted-foreground truncate">{expert.specialty}</p>
+                          <p className="text-xs text-muted-foreground truncate">
+                            {expert.specialty}
+                          </p>
                         </div>
                       </div>
-                      
+
                       <div className="flex items-center gap-2 mb-3">
-                        <Badge variant="outline" className="text-xs">{expert.category}</Badge>
+                        <Badge variant="outline" className="text-xs">
+                          {expert.category}
+                        </Badge>
                         <Badge className="bg-yellow-500/10 text-yellow-400 border-0 text-xs">
                           <Star className="w-3 h-3 mr-1" />
                           {expert.performanceScore}%
@@ -628,17 +706,22 @@ export function ExpertDirectory({ onSelectExpert, onBack }: ExpertDirectoryProps
                       <div className="flex items-center justify-between">
                         <div className="flex gap-1">
                           {expert.compositeOf.slice(0, 2).map((person, idx) => (
-                            <span key={idx} className="text-xs text-muted-foreground bg-secondary/50 px-2 py-0.5 rounded">
-                              {person.split(' ')[0]}
+                            <span
+                              key={idx}
+                              className="text-xs text-muted-foreground bg-secondary/50 px-2 py-0.5 rounded"
+                            >
+                              {person.split(" ")[0]}
                             </span>
                           ))}
                           {expert.compositeOf.length > 2 && (
-                            <span className="text-xs text-muted-foreground">+{expert.compositeOf.length - 2}</span>
+                            <span className="text-xs text-muted-foreground">
+                              +{expert.compositeOf.length - 2}
+                            </span>
                           )}
                         </div>
                         <div className="flex items-center gap-1">
                           <button
-                            onClick={(e) => {
+                            onClick={e => {
                               e.stopPropagation();
                               if (isFavorite(expert.id)) {
                                 removeFavorite(expert.id);
@@ -647,13 +730,19 @@ export function ExpertDirectory({ onSelectExpert, onBack }: ExpertDirectoryProps
                               }
                             }}
                             className="p-1 hover:bg-primary/10 rounded transition-colors"
-                            title={isFavorite(expert.id) ? "Remove from board" : "Add to board"}
-                          >
-                            <Star className={`w-4 h-4 transition-colors ${
+                            title={
                               isFavorite(expert.id)
-                                ? 'fill-yellow-400 text-yellow-400'
-                                : 'text-muted-foreground hover:text-yellow-400'
-                            }`} />
+                                ? "Remove from board"
+                                : "Add to board"
+                            }
+                          >
+                            <Star
+                              className={`w-4 h-4 transition-colors ${
+                                isFavorite(expert.id)
+                                  ? "fill-yellow-400 text-yellow-400"
+                                  : "text-muted-foreground hover:text-yellow-400"
+                              }`}
+                            />
                           </button>
                           <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
                         </div>
@@ -668,14 +757,18 @@ export function ExpertDirectory({ onSelectExpert, onBack }: ExpertDirectoryProps
           {filteredExperts.length === 0 && !showPartnersOnly && (
             <div className="text-center py-12">
               <Users className="w-12 h-12 mx-auto mb-4 text-muted-foreground opacity-50" />
-              <p className="text-muted-foreground">No experts found matching your search.</p>
+              <p className="text-muted-foreground">
+                No experts found matching your search.
+              </p>
             </div>
           )}
 
           {filteredPartners.length === 0 && showPartnersOnly && (
             <div className="text-center py-12">
               <Building2 className="w-12 h-12 mx-auto mb-4 text-muted-foreground opacity-50" />
-              <p className="text-muted-foreground">No corporate partners found matching your search.</p>
+              <p className="text-muted-foreground">
+                No corporate partners found matching your search.
+              </p>
             </div>
           )}
         </div>

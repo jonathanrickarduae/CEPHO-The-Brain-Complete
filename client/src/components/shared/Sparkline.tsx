@@ -1,5 +1,5 @@
-import { useMemo } from 'react';
-import { cn } from '@/lib/utils';
+import { useMemo } from "react";
+import { cn } from "@/lib/utils";
 
 interface SparklineProps {
   data: number[];
@@ -16,22 +16,22 @@ export function Sparkline({
   data,
   width = 100,
   height = 30,
-  color = '#ff10f0',
+  color = "#ff10f0",
   fillColor,
   showArea = true,
   showDots = false,
   className,
 }: SparklineProps) {
   const { path, areaPath, points } = useMemo(() => {
-    if (data.length < 2) return { path: '', areaPath: '', points: [] };
+    if (data.length < 2) return { path: "", areaPath: "", points: [] };
 
     const min = Math.min(...data);
     const max = Math.max(...data);
     const range = max - min || 1;
     const padding = 2;
-    
+
     const xStep = (width - padding * 2) / (data.length - 1);
-    
+
     const pts = data.map((value, index) => ({
       x: padding + index * xStep,
       y: height - padding - ((value - min) / range) * (height - padding * 2),
@@ -63,8 +63,11 @@ export function Sparkline({
 
   if (data.length < 2) {
     return (
-      <div 
-        className={cn('flex items-center justify-center text-xs text-muted-foreground', className)}
+      <div
+        className={cn(
+          "flex items-center justify-center text-xs text-muted-foreground",
+          className
+        )}
         style={{ width, height }}
       >
         No data
@@ -72,21 +75,41 @@ export function Sparkline({
     );
   }
 
-  const trend = data[data.length - 1] > data[0] ? 'up' : data[data.length - 1] < data[0] ? 'down' : 'flat';
-  const trendColor = trend === 'up' ? '#22c55e' : trend === 'down' ? '#ef4444' : color;
+  const trend =
+    data[data.length - 1] > data[0]
+      ? "up"
+      : data[data.length - 1] < data[0]
+        ? "down"
+        : "flat";
+  const trendColor =
+    trend === "up" ? "#22c55e" : trend === "down" ? "#ef4444" : color;
 
   return (
-    <svg 
-      width={width} 
-      height={height} 
-      className={cn('overflow-visible', className)}
+    <svg
+      width={width}
+      height={height}
+      className={cn("overflow-visible", className)}
       viewBox={`0 0 ${width} ${height}`}
     >
       {/* Gradient definition */}
       <defs>
-        <linearGradient id={`sparkline-gradient-${color.replace('#', '')}`} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor={fillColor || trendColor} stopOpacity="0.3" />
-          <stop offset="100%" stopColor={fillColor || trendColor} stopOpacity="0" />
+        <linearGradient
+          id={`sparkline-gradient-${color.replace("#", "")}`}
+          x1="0"
+          y1="0"
+          x2="0"
+          y2="1"
+        >
+          <stop
+            offset="0%"
+            stopColor={fillColor || trendColor}
+            stopOpacity="0.3"
+          />
+          <stop
+            offset="100%"
+            stopColor={fillColor || trendColor}
+            stopOpacity="0"
+          />
         </linearGradient>
       </defs>
 
@@ -94,7 +117,7 @@ export function Sparkline({
       {showArea && (
         <path
           d={areaPath}
-          fill={`url(#sparkline-gradient-${color.replace('#', '')})`}
+          fill={`url(#sparkline-gradient-${color.replace("#", "")})`}
         />
       )}
 
@@ -109,17 +132,18 @@ export function Sparkline({
       />
 
       {/* Dots */}
-      {showDots && points.map((point, i) => (
-        <circle
-          key={i}
-          cx={point.x}
-          cy={point.y}
-          r={i === points.length - 1 ? 3 : 2}
-          fill={i === points.length - 1 ? trendColor : 'transparent'}
-          stroke={trendColor}
-          strokeWidth="1"
-        />
-      ))}
+      {showDots &&
+        points.map((point, i) => (
+          <circle
+            key={i}
+            cx={point.x}
+            cy={point.y}
+            r={i === points.length - 1 ? 3 : 2}
+            fill={i === points.length - 1 ? trendColor : "transparent"}
+            stroke={trendColor}
+            strokeWidth="1"
+          />
+        ))}
 
       {/* End dot (always show) */}
       <circle
@@ -145,7 +169,7 @@ export function MiniBarChart({
   data,
   width = 100,
   height = 30,
-  color = '#ff10f0',
+  color = "#ff10f0",
   className,
 }: MiniBarChartProps) {
   const bars = useMemo(() => {
@@ -157,15 +181,15 @@ export function MiniBarChart({
 
     return data.map((value, index) => ({
       x: index * (barWidth + 2),
-      height: ((value / max) * (height - padding * 2)) || 2,
+      height: (value / max) * (height - padding * 2) || 2,
       value,
     }));
   }, [data, width, height]);
 
   return (
-    <svg 
-      width={width} 
-      height={height} 
+    <svg
+      width={width}
+      height={height}
       className={className}
       viewBox={`0 0 ${width} ${height}`}
     >
@@ -202,8 +226,8 @@ export function DonutChart({
   max = 100,
   size = 60,
   strokeWidth = 6,
-  color = '#ff10f0',
-  backgroundColor = 'rgba(255,255,255,0.1)',
+  color = "#ff10f0",
+  backgroundColor = "rgba(255,255,255,0.1)",
   showValue = true,
   className,
 }: DonutChartProps) {
@@ -213,7 +237,12 @@ export function DonutChart({
   const strokeDashoffset = circumference - (percentage / 100) * circumference;
 
   return (
-    <div className={cn('relative inline-flex items-center justify-center', className)}>
+    <div
+      className={cn(
+        "relative inline-flex items-center justify-center",
+        className
+      )}
+    >
       <svg width={size} height={size} className="-rotate-90">
         {/* Background circle */}
         <circle
@@ -270,31 +299,37 @@ export function MetricCard({
   const isPositive = change !== undefined && change >= 0;
 
   return (
-    <div className={cn(
-      'p-4 rounded-xl bg-card/60 border border-white/10',
-      'hover:border-white/20 transition-colors',
-      className
-    )}>
+    <div
+      className={cn(
+        "p-4 rounded-xl bg-card/60 border border-white/10",
+        "hover:border-white/20 transition-colors",
+        className
+      )}
+    >
       <div className="flex items-start justify-between mb-2">
         <span className="text-xs text-muted-foreground">{title}</span>
         {icon && <div className="text-muted-foreground">{icon}</div>}
       </div>
-      
+
       <div className="flex items-end justify-between">
         <div>
           <div className="text-2xl font-bold text-foreground">{value}</div>
           {change !== undefined && (
-            <div className={cn(
-              'text-xs flex items-center gap-1',
-              isPositive ? 'text-green-400' : 'text-red-400'
-            )}>
-              <span>{isPositive ? '↑' : '↓'}</span>
+            <div
+              className={cn(
+                "text-xs flex items-center gap-1",
+                isPositive ? "text-green-400" : "text-red-400"
+              )}
+            >
+              <span>{isPositive ? "↑" : "↓"}</span>
               <span>{Math.abs(change)}%</span>
-              {changeLabel && <span className="text-muted-foreground">{changeLabel}</span>}
+              {changeLabel && (
+                <span className="text-muted-foreground">{changeLabel}</span>
+              )}
             </div>
           )}
         </div>
-        
+
         {data && data.length > 1 && (
           <Sparkline data={data} width={60} height={24} />
         )}

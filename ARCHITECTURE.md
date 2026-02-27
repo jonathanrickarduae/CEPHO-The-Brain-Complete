@@ -35,11 +35,11 @@ The platform provides a comprehensive suite of business intelligence tools inclu
 
 ### Backend
 
-The backend infrastructure is built on **Node.js 22** with **TypeScript** for type safety, utilizing **tRPC** for end-to-end type-safe APIs. The database layer employs **PostgreSQL** via Supabase with **Drizzle ORM** for type-safe queries. Authentication is handled through a **sJWT + OAuth system), while the server framework uses **Express.js** with **Vite** for development.
+The backend infrastructure is built on **Node.js 22** with **TypeScript** for type safety, utilizing **tRPC** for end-to-end type-safe APIs. The database layer employs **PostgreSQL** via Supabase with **Drizzle ORM** for type-safe queries. Authentication is handled through a **sJWT + OAuth system), while the server framework uses **Express.js** with **Vite\*\* for development.
 
 ### Frontend
 
-The frontend leverages **ReReact 18 with TypeScriptpt**, styled using **TailwindCSS** and **Radix UI componentsts. State management is handled by **TanStack Query** (React Query), with routing provided by **Wouter**. The UI components are built on **Radix UI** primitives for accessibility.
+The frontend leverages **ReReact 18 with TypeScriptpt**, styled using **TailwindCSS** and **Radix UI componentsts. State management is handled by **TanStack Query** (React Query), with routing provided by **Wouter**. The UI components are built on **Radix UI\*\* primitives for accessibility.
 
 ### Infrastructure
 
@@ -139,7 +139,7 @@ import { userRepository } from "./db/repositories";
 const user = await userRepository.create({
   email: "user@example.com",
   name: "John Doe",
-  googleId: "google-id-123"
+  googleId: "google-id-123",
 });
 
 // Find user by email
@@ -148,7 +148,7 @@ const existingUser = await userRepository.findByEmail("user@example.com");
 // Update user
 await userRepository.update(user.id, {
   name: "Jane Doe",
-  lastLoginAt: new Date()
+  lastLoginAt: new Date(),
 });
 ```
 
@@ -176,23 +176,29 @@ import { z } from "zod";
 
 export const moodRouter = router({
   create: protectedProcedure
-    .input(z.object({
-      score: z.number().min(0).max(100),
-      timeOfDay: z.enum(['morning', 'afternoon', 'evening']),
-      note: z.string().optional(),
-    }))
+    .input(
+      z.object({
+        score: z.number().min(0).max(100),
+        timeOfDay: z.enum(["morning", "afternoon", "evening"]),
+        note: z.string().optional(),
+      })
+    )
     .mutation(async ({ ctx, input }) => {
       return createMoodEntry({
         userId: ctx.user.id,
         ...input,
       });
     }),
-    
+
   history: protectedProcedure
-    .input(z.object({
-      limit: z.number().optional(),
-      days: z.number().optional(),
-    }).optional())
+    .input(
+      z
+        .object({
+          limit: z.number().optional(),
+          days: z.number().optional(),
+        })
+        .optional()
+    )
     .query(async ({ ctx, input }) => {
       return getMoodHistory(ctx.user.id, input);
     }),

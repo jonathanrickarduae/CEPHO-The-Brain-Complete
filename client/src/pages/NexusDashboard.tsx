@@ -1,50 +1,88 @@
 import { useState, useRef } from "react";
 import { useLocation } from "wouter";
-import { 
-  Sun, Users, Lock, Mic, MicOff, Send, 
-  User, FolderKanban, BookOpen, Brain, LayoutDashboard,
-  ChevronRight, AlertCircle, Shield, ShieldCheck, Rocket, TrendingUp,
-  CheckCircle2, Clock, Lightbulb, Activity, Zap, Settings as SettingsIcon
+import {
+  Sun,
+  Users,
+  Lock,
+  Mic,
+  MicOff,
+  Send,
+  User,
+  FolderKanban,
+  BookOpen,
+  Brain,
+  LayoutDashboard,
+  ChevronRight,
+  AlertCircle,
+  Shield,
+  ShieldCheck,
+  Rocket,
+  TrendingUp,
+  CheckCircle2,
+  Clock,
+  Lightbulb,
+  Activity,
+  Zap,
+  Settings as SettingsIcon,
 } from "lucide-react";
 import { useGovernance } from "@/hooks/useGovernance";
-import { LearningBadge } from '@/components/expert-evolution/LearningIndicator';
+import { LearningBadge } from "@/components/expert-evolution/LearningIndicator";
 import { useVoiceInput } from "@/hooks/useVoiceInput";
 import { toast } from "sonner";
 import { trpc } from "@/lib/trpc";
-import OpenClawChat from '@/components/ai-agents/OpenClawChat';
-import SkillCards from '@/components/expert-evolution/SkillCards';
-
+import OpenClawChat from "@/components/ai-agents/OpenClawChat";
+import SkillCards from "@/components/expert-evolution/SkillCards";
 
 // RAG Status Indicator Component
-function RAGStatus({ status, label, count }: { status: 'red' | 'amber' | 'green', label: string, count?: number }) {
+function RAGStatus({
+  status,
+  label,
+  count,
+}: {
+  status: "red" | "amber" | "green";
+  label: string;
+  count?: number;
+}) {
   const colors = {
-    red: 'bg-red-500/20 border-red-500/50 text-red-400',
-    amber: 'bg-amber-500/20 border-amber-500/50 text-amber-400',
-    green: 'bg-emerald-500/20 border-emerald-500/50 text-emerald-400',
+    red: "bg-red-500/20 border-red-500/50 text-red-400",
+    amber: "bg-amber-500/20 border-amber-500/50 text-amber-400",
+    green: "bg-emerald-500/20 border-emerald-500/50 text-emerald-400",
   };
-  
+
   const dotColors = {
-    red: 'bg-red-500',
-    amber: 'bg-amber-500',
-    green: 'bg-emerald-500',
+    red: "bg-red-500",
+    amber: "bg-amber-500",
+    green: "bg-emerald-500",
   };
 
   return (
-    <div className={`flex items-center gap-2 px-3 py-2 rounded-lg border-2 ${colors[status]}`}>
-      <div className={`w-2 h-2 rounded-full ${dotColors[status]} ${status === 'green' ? 'animate-pulse' : ''}`} />
+    <div
+      className={`flex items-center gap-2 px-3 py-2 rounded-lg border-2 ${colors[status]}`}
+    >
+      <div
+        className={`w-2 h-2 rounded-full ${dotColors[status]} ${status === "green" ? "animate-pulse" : ""}`}
+      />
       <span className="text-sm font-medium">{label}</span>
-      {count !== undefined && <span className="text-xs opacity-70">({count})</span>}
+      {count !== undefined && (
+        <span className="text-xs opacity-70">({count})</span>
+      )}
     </div>
   );
 }
 
 // Metric Card Component
-function MetricCard({ icon: Icon, label, value, trend, onClick }: { 
-  icon: any, 
-  label: string, 
-  value: string | number, 
-  trend?: 'up' | 'down' | 'stable',
-  onClick?: () => void 
+function MetricCard({
+  icon: Icon,
+  label,
+  value,
+  trend,
+  onClick,
+}: {
+  icon: any;
+  label: string;
+  value: string | number;
+  trend?: "up" | "down" | "stable";
+  onClick?: () => void;
 }) {
   return (
     <button
@@ -59,36 +97,48 @@ function MetricCard({ icon: Icon, label, value, trend, onClick }: {
         <p className="text-2xl font-bold text-foreground">{value}</p>
       </div>
       {trend && (
-        <TrendingUp className={`w-4 h-4 ${trend === 'up' ? 'text-emerald-500' : 'text-muted-foreground'}`} />
+        <TrendingUp
+          className={`w-4 h-4 ${trend === "up" ? "text-emerald-500" : "text-muted-foreground"}`}
+        />
       )}
     </button>
   );
 }
 
 // Activity Item Component
-function ActivityItem({ icon: Icon, title, subtitle, time, status }: {
-  icon: any,
-  title: string,
-  subtitle: string,
-  time: string,
-  status?: 'active' | 'complete' | 'pending'
+function ActivityItem({
+  icon: Icon,
+  title,
+  subtitle,
+  time,
+  status,
+}: {
+  icon: any;
+  title: string;
+  subtitle: string;
+  time: string;
+  status?: "active" | "complete" | "pending";
 }) {
   const statusColors = {
-    active: 'text-blue-400',
-    complete: 'text-emerald-400',
-    pending: 'text-amber-400',
+    active: "text-blue-400",
+    complete: "text-emerald-400",
+    pending: "text-amber-400",
   };
 
   return (
     <div className="flex items-start gap-3 p-3 rounded-lg hover:bg-card/50 transition-colors">
-      <div className={`p-2 rounded-lg bg-primary/10 ${status ? statusColors[status] : ''}`}>
+      <div
+        className={`p-2 rounded-lg bg-primary/10 ${status ? statusColors[status] : ""}`}
+      >
         <Icon className="w-4 h-4" />
       </div>
       <div className="flex-1 min-w-0">
         <p className="text-sm font-medium text-foreground truncate">{title}</p>
         <p className="text-xs text-muted-foreground truncate">{subtitle}</p>
       </div>
-      <span className="text-xs text-muted-foreground whitespace-nowrap">{time}</span>
+      <span className="text-xs text-muted-foreground whitespace-nowrap">
+        {time}
+      </span>
     </div>
   );
 }
@@ -98,19 +148,20 @@ export default function NexusDashboard() {
   const [inputValue, setInputValue] = useState("");
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const { mode, requestModeChange } = useGovernance();
-  
+
   // Dashboard insights from API
-  const { data: insightsData, isLoading: insightsLoading } = trpc.dashboard.getInsights.useQuery();
-  
+  const { data: insightsData, isLoading: insightsLoading } =
+    trpc.dashboard.getInsights.useQuery();
+
   // Voice input
-  const { 
-    isListening, 
-    transcript, 
-    startListening, 
-    stopListening, 
-    isSupported: voiceSupported 
+  const {
+    isListening,
+    transcript,
+    startListening,
+    stopListening,
+    isSupported: voiceSupported,
   } = useVoiceInput({
-    onResult: (text) => setInputValue(prev => prev + text),
+    onResult: text => setInputValue(prev => prev + text),
     continuous: false,
   });
 
@@ -134,7 +185,7 @@ export default function NexusDashboard() {
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       handleSubmit();
     }
@@ -142,57 +193,57 @@ export default function NexusDashboard() {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInputValue(e.target.value);
-    e.target.style.height = 'auto';
-    e.target.style.height = Math.min(e.target.scrollHeight, 100) + 'px';
+    e.target.style.height = "auto";
+    e.target.style.height = Math.min(e.target.scrollHeight, 100) + "px";
   };
 
   // Quick Access Skill Buttons
   const skillButtons = [
-    { 
-      label: "Project Genesis", 
-      icon: Rocket, 
+    {
+      label: "Project Genesis",
+      icon: Rocket,
       path: "/project-genesis",
       gradient: "from-purple-500/20 to-pink-500/20",
       border: "border-purple-500/50 hover:border-purple-400",
     },
-    { 
-      label: "AI-SME Experts", 
-      icon: Brain, 
+    {
+      label: "AI-SME Experts",
+      icon: Brain,
       path: "/ai-experts",
       gradient: "from-cyan-500/20 to-blue-500/20",
       border: "border-cyan-500/50 hover:border-cyan-400",
     },
-    { 
-      label: "Digital Twin", 
-      icon: Users, 
+    {
+      label: "Digital Twin",
+      icon: Users,
       path: "/tasks",
       gradient: "from-blue-500/20 to-indigo-500/20",
       border: "border-blue-500/50 hover:border-blue-400",
     },
-    { 
-      label: "The Signal", 
-      icon: Sun, 
+    {
+      label: "The Signal",
+      icon: Sun,
       path: "/the-signal",
       gradient: "from-amber-500/20 to-orange-500/20",
       border: "border-amber-500/50 hover:border-amber-400",
     },
-    { 
-      label: "Chief of Staff", 
-      icon: User, 
+    {
+      label: "Chief of Staff",
+      icon: User,
       path: "/chief-of-staff",
       gradient: "from-emerald-500/20 to-teal-500/20",
       border: "border-emerald-500/50 hover:border-emerald-400",
     },
-    { 
-      label: "Innovation Hub", 
-      icon: Lightbulb, 
+    {
+      label: "Innovation Hub",
+      icon: Lightbulb,
       path: "/innovation-hub",
       gradient: "from-yellow-500/20 to-amber-500/20",
       border: "border-yellow-500/50 hover:border-yellow-400",
     },
-    { 
-      label: "Knowledge Library", 
-      icon: BookOpen, 
+    {
+      label: "Knowledge Library",
+      icon: BookOpen,
       path: "/library",
       gradient: "from-indigo-500/20 to-purple-500/20",
       border: "border-indigo-500/50 hover:border-indigo-400",
@@ -208,42 +259,64 @@ export default function NexusDashboard() {
             <div>
               <h1 className="text-lg sm:text-2xl md:text-3xl font-bold text-foreground flex items-center gap-2">
                 <LayoutDashboard className="h-5 w-5 sm:h-8 sm:w-8 text-cyan-400" />
-                <span className="text-base sm:text-2xl md:text-3xl">The Nexus</span>
+                <span className="text-base sm:text-2xl md:text-3xl">
+                  The Nexus
+                </span>
               </h1>
-              <p className="text-xs sm:text-base text-muted-foreground mt-0.5">Command Center</p>
+              <p className="text-xs sm:text-base text-muted-foreground mt-0.5">
+                Command Center
+              </p>
             </div>
           </div>
-          
+
           <div className="flex flex-wrap items-center gap-2 sm:gap-4 w-full sm:w-auto">
             {/* Governance Mode Toggle */}
             <div className="flex items-center gap-2">
               <button
-                onClick={() => requestModeChange(mode === 'omni' ? 'governed' : 'omni')}
+                onClick={() =>
+                  requestModeChange(mode === "omni" ? "governed" : "omni")
+                }
                 className={`flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-1.5 sm:py-2 rounded-lg border-2 transition-all duration-300 ${
-                  mode === 'governed' 
-                    ? 'bg-emerald-500/20 border-emerald-500/50 text-emerald-400' 
-                    : 'bg-amber-500/20 border-amber-500/50 text-amber-400'
+                  mode === "governed"
+                    ? "bg-emerald-500/20 border-emerald-500/50 text-emerald-400"
+                    : "bg-amber-500/20 border-amber-500/50 text-amber-400"
                 } hover:scale-105 active:scale-95`}
-                title={mode === 'governed' ? 'Governed Mode: Only approved tools' : 'Everything Mode: All tools available'}
+                title={
+                  mode === "governed"
+                    ? "Governed Mode: Only approved tools"
+                    : "Everything Mode: All tools available"
+                }
               >
-                {mode === 'governed' ? (
-                  <><ShieldCheck className="w-4 h-4 sm:w-5 sm:h-5" /><span className="text-xs sm:text-sm font-semibold">GOVERNED</span></>
+                {mode === "governed" ? (
+                  <>
+                    <ShieldCheck className="w-4 h-4 sm:w-5 sm:h-5" />
+                    <span className="text-xs sm:text-sm font-semibold">
+                      GOVERNED
+                    </span>
+                  </>
                 ) : (
-                  <><Shield className="w-4 h-4 sm:w-5 sm:h-5" /><span className="text-xs sm:text-sm font-semibold">EVERYTHING</span></>
+                  <>
+                    <Shield className="w-4 h-4 sm:w-5 sm:h-5" />
+                    <span className="text-xs sm:text-sm font-semibold">
+                      EVERYTHING
+                    </span>
+                  </>
                 )}
               </button>
               <button
-                onClick={() => setLocation('/settings')}
+                onClick={() => setLocation("/settings")}
                 className="p-2 rounded-lg border border-border hover:bg-card/50 transition-colors"
                 title="Manage governance settings"
               >
                 <SettingsIcon className="w-4 h-4 text-muted-foreground" />
               </button>
             </div>
-            
+
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="text-xs text-foreground/70 font-mono">ONLINE</span>
+              <span className="text-xs text-foreground/70 font-mono">
+                ONLINE
+              </span>
             </div>
           </div>
         </div>
@@ -255,64 +328,72 @@ export default function NexusDashboard() {
         <div className="flex flex-col gap-6">
           {/* RAG Status Row */}
           <div>
-          <h2 className="text-sm font-semibold text-muted-foreground mb-3">SYSTEM STATUS</h2>
-          <div className="flex flex-wrap gap-3">
-            <RAGStatus status="green" label="Integrations" count={5} />
-            <RAGStatus status="green" label="AI Services" count={3} />
-            <RAGStatus status="green" label="Database" />
-            <RAGStatus status="amber" label="Pending Approvals" count={2} />
-          </div>
+            <h2 className="text-sm font-semibold text-muted-foreground mb-3">
+              SYSTEM STATUS
+            </h2>
+            <div className="flex flex-wrap gap-3">
+              <RAGStatus status="green" label="Integrations" count={5} />
+              <RAGStatus status="green" label="AI Services" count={3} />
+              <RAGStatus status="green" label="Database" />
+              <RAGStatus status="amber" label="Pending Approvals" count={2} />
+            </div>
           </div>
 
           {/* Quick Access Skills */}
           <div>
-            <h2 className="text-sm font-semibold text-muted-foreground mb-3">QUICK ACCESS</h2>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-2 sm:gap-3">
-            {skillButtons.map((skill, idx) => (
-              <button
-                key={idx}
-                onClick={() => setLocation(skill.path)}
-                className={`flex flex-col items-center gap-1 sm:gap-2 p-2 sm:p-4 rounded-xl border-2 ${skill.border} bg-gradient-to-br ${skill.gradient} hover:scale-105 active:scale-95 transition-all duration-200`}
-              >
-                <skill.icon className="w-5 h-5 sm:w-6 sm:h-6" />
-                <span className="text-[0.65rem] sm:text-xs font-medium text-center leading-tight">{skill.label}</span>
-              </button>
-            ))}
+            <h2 className="text-sm font-semibold text-muted-foreground mb-3">
+              QUICK ACCESS
+            </h2>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-2 sm:gap-3">
+              {skillButtons.map((skill, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setLocation(skill.path)}
+                  className={`flex flex-col items-center gap-1 sm:gap-2 p-2 sm:p-4 rounded-xl border-2 ${skill.border} bg-gradient-to-br ${skill.gradient} hover:scale-105 active:scale-95 transition-all duration-200`}
+                >
+                  <skill.icon className="w-5 h-5 sm:w-6 sm:h-6" />
+                  <span className="text-[0.65rem] sm:text-xs font-medium text-center leading-tight">
+                    {skill.label}
+                  </span>
+                </button>
+              ))}
             </div>
           </div>
 
           {/* Key Metrics */}
           <div>
-            <h2 className="text-sm font-semibold text-muted-foreground mb-3">KEY METRICS</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
-            <MetricCard 
-              icon={Lightbulb} 
-              label="Innovation Ideas" 
-              value="12" 
-              trend="up"
-              onClick={() => setLocation('/innovation-hub')}
-            />
-            <MetricCard 
-              icon={Brain} 
-              label="AI-SME Consultations" 
-              value="47" 
-              trend="up"
-              onClick={() => setLocation('/ai-experts')}
-            />
-            <MetricCard 
-              icon={CheckCircle2} 
-              label="Tasks Completed" 
-              value="23" 
-              trend="stable"
-              onClick={() => setLocation('/chief-of-staff')}
-            />
-            <MetricCard 
-              icon={Rocket} 
-              label="Active Projects" 
-              value="3" 
-              trend="stable"
-              onClick={() => setLocation('/project-genesis')}
-            />
+            <h2 className="text-sm font-semibold text-muted-foreground mb-3">
+              KEY METRICS
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
+              <MetricCard
+                icon={Lightbulb}
+                label="Innovation Ideas"
+                value="12"
+                trend="up"
+                onClick={() => setLocation("/innovation-hub")}
+              />
+              <MetricCard
+                icon={Brain}
+                label="AI-SME Consultations"
+                value="47"
+                trend="up"
+                onClick={() => setLocation("/ai-experts")}
+              />
+              <MetricCard
+                icon={CheckCircle2}
+                label="Tasks Completed"
+                value="23"
+                trend="stable"
+                onClick={() => setLocation("/chief-of-staff")}
+              />
+              <MetricCard
+                icon={Rocket}
+                label="Active Projects"
+                value="3"
+                trend="stable"
+                onClick={() => setLocation("/project-genesis")}
+              />
             </div>
           </div>
         </div>
@@ -321,37 +402,39 @@ export default function NexusDashboard() {
 
         {/* Bottom Section - Activity Feed (Scrollable) */}
         <div className="flex-1">
-          <h2 className="text-sm font-semibold text-muted-foreground mb-3">RECENT ACTIVITY</h2>
+          <h2 className="text-sm font-semibold text-muted-foreground mb-3">
+            RECENT ACTIVITY
+          </h2>
           <div className="border-2 border-border rounded-xl bg-card p-4 space-y-2">
-            <ActivityItem 
+            <ActivityItem
               icon={Brain}
               title="AI-SME: Dr. Sarah Chen"
               subtitle="Completed analysis on market trends"
               time="5m ago"
               status="complete"
             />
-            <ActivityItem 
+            <ActivityItem
               icon={Lightbulb}
               title="Innovation Hub"
               subtitle="New idea generated from TechCrunch article"
               time="12m ago"
               status="active"
             />
-            <ActivityItem 
+            <ActivityItem
               icon={User}
               title="Chief of Staff"
               subtitle="3 tasks require your attention"
               time="1h ago"
               status="pending"
             />
-            <ActivityItem 
+            <ActivityItem
               icon={Sun}
               title="Morning Signal"
               subtitle="Daily brief ready for review"
               time="2h ago"
               status="complete"
             />
-            <ActivityItem 
+            <ActivityItem
               icon={Rocket}
               title="Project Genesis"
               subtitle="Blueprint updated: CEPHO Platform"
@@ -366,7 +449,7 @@ export default function NexusDashboard() {
       <div className="hidden lg:block fixed bottom-6 right-6 z-50 w-96 h-[500px] border-2 border-cyan-400/50 rounded-xl overflow-hidden bg-card/95 backdrop-blur-lg shadow-[0_0_30px_rgba(0,212,255,0.3)]">
         <OpenClawChat />
       </div>
-      
+
       {/* Mobile OpenClaw - Full Width at Bottom */}
       <div className="lg:hidden fixed bottom-0 left-0 right-0 z-50 h-[50vh] border-t-2 border-cyan-400/50 bg-card/95 backdrop-blur-lg shadow-[0_-4px_20px_rgba(0,212,255,0.2)]">
         <OpenClawChat />

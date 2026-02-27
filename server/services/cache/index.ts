@@ -1,10 +1,10 @@
 /**
  * Cache Service
- * 
+ *
  * Provides a simple caching interface with Redis backend
  */
 
-import * as redisCache from './redis-cache';
+import * as redisCache from "./redis-cache";
 
 /**
  * Cache wrapper with automatic key prefixing
@@ -12,7 +12,7 @@ import * as redisCache from './redis-cache';
 export class CacheService {
   private prefix: string;
 
-  constructor(prefix: string = 'cepho') {
+  constructor(prefix: string = "cepho") {
     this.prefix = prefix;
   }
 
@@ -38,14 +38,14 @@ export class CacheService {
 
   /**
    * Cache wrapper for functions
-   * 
+   *
    * @param key - Cache key
    * @param fn - Function to execute if cache miss
    * @param ttl - Time to live in seconds
    */
   async wrap<T>(key: string, fn: () => Promise<T>, ttl?: number): Promise<T> {
     const cached = await this.get<T>(key);
-    
+
     if (cached !== null) {
       return cached;
     }
@@ -60,4 +60,4 @@ export class CacheService {
 export const cache = new CacheService();
 
 // Export Redis functions for direct use
-export * from './redis-cache';
+export * from "./redis-cache";

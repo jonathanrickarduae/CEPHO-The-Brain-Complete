@@ -1,6 +1,6 @@
 /**
  * Project Service Types and DTOs
- * 
+ *
  * Data Transfer Objects for project management services.
  */
 
@@ -10,8 +10,8 @@
 export interface CreateProjectDto {
   name: string;
   description?: string;
-  status?: 'not_started' | 'in_progress' | 'blocked' | 'review' | 'complete';
-  priority?: 'low' | 'medium' | 'high' | 'critical';
+  status?: "not_started" | "in_progress" | "blocked" | "review" | "complete";
+  priority?: "low" | "medium" | "high" | "critical";
   dueDate?: Date;
   assignedExperts?: string[];
   metadata?: Record<string, any>;
@@ -23,8 +23,8 @@ export interface CreateProjectDto {
 export interface UpdateProjectDto {
   name?: string;
   description?: string;
-  status?: 'not_started' | 'in_progress' | 'blocked' | 'review' | 'complete';
-  priority?: 'low' | 'medium' | 'high' | 'critical';
+  status?: "not_started" | "in_progress" | "blocked" | "review" | "complete";
+  priority?: "low" | "medium" | "high" | "critical";
   progress?: number;
   dueDate?: Date;
   blockerDescription?: string;
@@ -40,8 +40,8 @@ export interface ProjectDto {
   userId: number;
   name: string;
   description: string | null;
-  status: 'not_started' | 'in_progress' | 'blocked' | 'review' | 'complete';
-  priority: 'low' | 'medium' | 'high' | 'critical';
+  status: "not_started" | "in_progress" | "blocked" | "review" | "complete";
+  priority: "low" | "medium" | "high" | "critical";
   progress: number;
   dueDate: Date | null;
   blockerDescription: string | null;
@@ -68,7 +68,7 @@ export interface ProjectStatsDto {
  * DTO for project filter options
  */
 export interface ProjectFilterDto {
-  status?: 'not_started' | 'in_progress' | 'blocked' | 'review' | 'complete';
-  priority?: 'low' | 'medium' | 'high' | 'critical';
+  status?: "not_started" | "in_progress" | "blocked" | "review" | "complete";
+  priority?: "low" | "medium" | "high" | "critical";
   assignedExpert?: string;
 }

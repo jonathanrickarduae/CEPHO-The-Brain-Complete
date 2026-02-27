@@ -1,9 +1,22 @@
 // @ts-nocheck
 import { useState, useMemo } from "react";
-import { 
-  Search, ExternalLink, Zap, Building2, Newspaper, Brain, 
-  Database, GraduationCap, Briefcase, Filter, ChevronRight,
-  Globe, Link2, CheckCircle2, Clock, AlertCircle
+import {
+  Search,
+  ExternalLink,
+  Zap,
+  Building2,
+  Newspaper,
+  Brain,
+  Database,
+  GraduationCap,
+  Briefcase,
+  Filter,
+  ChevronRight,
+  Globe,
+  Link2,
+  CheckCircle2,
+  Clock,
+  AlertCircle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -11,12 +24,12 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { toast } from "sonner";
-import { 
-  EXTERNAL_SME_RESOURCES, 
+import {
+  EXTERNAL_SME_RESOURCES,
   RESOURCE_CATEGORIES,
   API_STATUS_LABELS,
   ACCESS_TYPE_LABELS,
-  type ExternalSMEResource 
+  type ExternalSMEResource,
 } from "@/data/external-s-m-e-resources.data";
 
 interface ExternalResourcesProps {
@@ -26,45 +39,56 @@ interface ExternalResourcesProps {
 export function ExternalResources({ onBack }: ExternalResourcesProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [selectedResource, setSelectedResource] = useState<ExternalSMEResource | null>(null);
+  const [selectedResource, setSelectedResource] =
+    useState<ExternalSMEResource | null>(null);
 
   // Get category icon
   const getCategoryIcon = (categoryId: string) => {
     switch (categoryId) {
-      case 'consulting': return Briefcase;
-      case 'research': return Search;
-      case 'media': return Newspaper;
-      case 'ai_platform': return Brain;
-      case 'data': return Database;
-      case 'training': return GraduationCap;
-      default: return Globe;
+      case "consulting":
+        return Briefcase;
+      case "research":
+        return Search;
+      case "media":
+        return Newspaper;
+      case "ai_platform":
+        return Brain;
+      case "data":
+        return Database;
+      case "training":
+        return GraduationCap;
+      default:
+        return Globe;
     }
   };
 
   // Filter resources based on search and category
   const filteredResources = useMemo(() => {
     let results = EXTERNAL_SME_RESOURCES;
-    
+
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase();
-      results = results.filter(r => 
-        r.name.toLowerCase().includes(query) ||
-        r.description.toLowerCase().includes(query) ||
-        r.specializations.some(s => s.toLowerCase().includes(query)) ||
-        r.features.some(f => f.toLowerCase().includes(query))
+      results = results.filter(
+        r =>
+          r.name.toLowerCase().includes(query) ||
+          r.description.toLowerCase().includes(query) ||
+          r.specializations.some(s => s.toLowerCase().includes(query)) ||
+          r.features.some(f => f.toLowerCase().includes(query))
       );
     }
-    
-    if (selectedCategory && selectedCategory !== 'all') {
+
+    if (selectedCategory && selectedCategory !== "all") {
       results = results.filter(r => r.category === selectedCategory);
     }
-    
+
     return results;
   }, [searchQuery, selectedCategory]);
 
   // Get category counts
   const categoryCounts = useMemo(() => {
-    const counts: Record<string, number> = { all: EXTERNAL_SME_RESOURCES.length };
+    const counts: Record<string, number> = {
+      all: EXTERNAL_SME_RESOURCES.length,
+    };
     EXTERNAL_SME_RESOURCES.forEach(r => {
       counts[r.category] = (counts[r.category] || 0) + 1;
     });
@@ -78,16 +102,18 @@ export function ExternalResources({ onBack }: ExternalResourcesProps) {
 
   // Handle external link
   const handleOpenPortal = (resource: ExternalSMEResource) => {
-    window.open(resource.portalUrl, '_blank');
+    window.open(resource.portalUrl, "_blank");
     toast.success(`Opening ${resource.name} portal...`);
   };
 
   // Handle API connection request
   const handleConnectAPI = (resource: ExternalSMEResource) => {
-    if (resource.apiStatus === 'connected') {
+    if (resource.apiStatus === "connected") {
       toast.success(`${resource.name} API is already connected`);
-    } else if (resource.apiStatus === 'available') {
-      toast.info(`API connection for ${resource.name} requires configuration. Contact admin.`);
+    } else if (resource.apiStatus === "available") {
+      toast.info(
+        `API connection for ${resource.name} requires configuration. Contact admin.`
+      );
     } else {
       toast.info(`${resource.name} API integration not yet implemented`);
     }
@@ -103,8 +129,8 @@ export function ExternalResources({ onBack }: ExternalResourcesProps) {
       <div className="h-full bg-background">
         <div className="border-b border-border bg-card/80 backdrop-blur-xl sticky top-0 z-10">
           <div className="max-w-4xl mx-auto px-4 py-4">
-            <Button 
-              variant="ghost" 
+            <Button
+              variant="ghost"
               onClick={() => setSelectedResource(null)}
               className="mb-2"
             >
@@ -119,12 +145,13 @@ export function ExternalResources({ onBack }: ExternalResourcesProps) {
             <div className="flex items-start gap-6 mb-8">
               <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-emerald-500/20 to-teal-500/20 border border-emerald-500/30 flex items-center justify-center overflow-hidden">
                 {selectedResource.logoUrl ? (
-                  <img alt="External resource thumbnail" 
-                    src={selectedResource.logoUrl} 
+                  <img
+                    alt="External resource thumbnail"
+                    src={selectedResource.logoUrl}
                     alt={selectedResource.name}
                     className="w-16 h-16 object-contain"
-                    onError={(e) => {
-                      e.currentTarget.style.display = 'none';
+                    onError={e => {
+                      e.currentTarget.style.display = "none";
                       e.currentTarget.parentElement!.innerHTML = `<span class="text-4xl"><CategoryIcon /></span>`;
                     }}
                   />
@@ -133,17 +160,27 @@ export function ExternalResources({ onBack }: ExternalResourcesProps) {
                 )}
               </div>
               <div className="flex-1">
-                <h1 className="text-3xl font-bold text-foreground mb-1">{selectedResource.name}</h1>
-                <p className="text-lg text-emerald-400 mb-3">{selectedResource.description}</p>
+                <h1 className="text-3xl font-bold text-foreground mb-1">
+                  {selectedResource.name}
+                </h1>
+                <p className="text-lg text-emerald-400 mb-3">
+                  {selectedResource.description}
+                </p>
                 <div className="flex items-center gap-3 flex-wrap">
                   <Badge variant="outline" className="capitalize">
                     <CategoryIcon className="w-3 h-3 mr-1" />
-                    {selectedResource.category.replace('_', ' ')}
+                    {selectedResource.category.replace("_", " ")}
                   </Badge>
                   <Badge className={apiStatus.color}>
-                    {selectedResource.apiStatus === 'connected' && <CheckCircle2 className="w-3 h-3 mr-1" />}
-                    {selectedResource.apiStatus === 'available' && <Link2 className="w-3 h-3 mr-1" />}
-                    {selectedResource.apiStatus === 'coming_soon' && <Clock className="w-3 h-3 mr-1" />}
+                    {selectedResource.apiStatus === "connected" && (
+                      <CheckCircle2 className="w-3 h-3 mr-1" />
+                    )}
+                    {selectedResource.apiStatus === "available" && (
+                      <Link2 className="w-3 h-3 mr-1" />
+                    )}
+                    {selectedResource.apiStatus === "coming_soon" && (
+                      <Clock className="w-3 h-3 mr-1" />
+                    )}
                     {apiStatus.label}
                   </Badge>
                   <Badge variant="outline" className={accessType.color}>
@@ -155,7 +192,7 @@ export function ExternalResources({ onBack }: ExternalResourcesProps) {
 
             {/* Action Buttons */}
             <div className="flex gap-3 mb-8">
-              <Button 
+              <Button
                 onClick={() => handleOpenPortal(selectedResource)}
                 className="flex-1 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600"
               >
@@ -163,13 +200,15 @@ export function ExternalResources({ onBack }: ExternalResourcesProps) {
                 Open {selectedResource.name} Portal
               </Button>
               {selectedResource.hasApi && (
-                <Button 
+                <Button
                   onClick={() => handleConnectAPI(selectedResource)}
                   variant="outline"
                   className="flex-1"
                 >
                   <Link2 className="w-4 h-4 mr-2" />
-                  {selectedResource.apiStatus === 'connected' ? 'API Connected' : 'Connect API'}
+                  {selectedResource.apiStatus === "connected"
+                    ? "API Connected"
+                    : "Connect API"}
                 </Button>
               )}
             </div>
@@ -183,7 +222,11 @@ export function ExternalResources({ onBack }: ExternalResourcesProps) {
                 </h2>
                 <div className="flex flex-wrap gap-2">
                   {selectedResource.specializations.map((spec, idx) => (
-                    <Badge key={idx} variant="outline" className="text-sm py-1 px-3">
+                    <Badge
+                      key={idx}
+                      variant="outline"
+                      className="text-sm py-1 px-3"
+                    >
                       {spec}
                     </Badge>
                   ))}
@@ -200,7 +243,10 @@ export function ExternalResources({ onBack }: ExternalResourcesProps) {
                 </h2>
                 <ul className="space-y-2">
                   {selectedResource.features.map((feature, idx) => (
-                    <li key={idx} className="flex items-center gap-2 text-muted-foreground">
+                    <li
+                      key={idx}
+                      className="flex items-center gap-2 text-muted-foreground"
+                    >
                       <div className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
                       {feature}
                     </li>
@@ -219,27 +265,27 @@ export function ExternalResources({ onBack }: ExternalResourcesProps) {
                   </h2>
                   <div className="p-4 bg-secondary/30 rounded-xl">
                     <div className="flex items-center gap-3 mb-2">
-                      {selectedResource.apiStatus === 'connected' ? (
+                      {selectedResource.apiStatus === "connected" ? (
                         <CheckCircle2 className="w-6 h-6 text-green-500" />
-                      ) : selectedResource.apiStatus === 'available' ? (
+                      ) : selectedResource.apiStatus === "available" ? (
                         <AlertCircle className="w-6 h-6 text-blue-500" />
                       ) : (
                         <Clock className="w-6 h-6 text-amber-500" />
                       )}
                       <div>
                         <p className="font-medium text-foreground">
-                          {selectedResource.apiStatus === 'connected' 
-                            ? 'API Connected & Active' 
-                            : selectedResource.apiStatus === 'available'
-                            ? 'API Available for Connection'
-                            : 'Not Yet Implemented'}
+                          {selectedResource.apiStatus === "connected"
+                            ? "API Connected & Active"
+                            : selectedResource.apiStatus === "available"
+                              ? "API Available for Connection"
+                              : "Not Yet Implemented"}
                         </p>
                         <p className="text-sm text-muted-foreground">
-                          {selectedResource.apiStatus === 'connected' 
-                            ? 'Data is being synced automatically with CEPHO' 
-                            : selectedResource.apiStatus === 'available'
-                            ? 'Configure API credentials to enable automatic data sync'
-                            : 'This integration is on our roadmap'}
+                          {selectedResource.apiStatus === "connected"
+                            ? "Data is being synced automatically with CEPHO"
+                            : selectedResource.apiStatus === "available"
+                              ? "Configure API credentials to enable automatic data sync"
+                              : "This integration is on our roadmap"}
                         </p>
                       </div>
                     </div>
@@ -270,8 +316,13 @@ export function ExternalResources({ onBack }: ExternalResourcesProps) {
                 <Globe className="w-6 h-6 text-emerald-400" />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-foreground">External Resources</h1>
-                <p className="text-sm text-muted-foreground">{EXTERNAL_SME_RESOURCES.length} real-world SME portals & integrations</p>
+                <h1 className="text-xl font-bold text-foreground">
+                  External Resources
+                </h1>
+                <p className="text-sm text-muted-foreground">
+                  {EXTERNAL_SME_RESOURCES.length} real-world SME portals &
+                  integrations
+                </p>
               </div>
             </div>
             <div className="flex-1 max-w-md">
@@ -280,7 +331,7 @@ export function ExternalResources({ onBack }: ExternalResourcesProps) {
                 <Input
                   placeholder="Search resources, specializations..."
                   value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onChange={e => setSearchQuery(e.target.value)}
                   className="pl-10 bg-secondary/50"
                 />
               </div>
@@ -289,14 +340,21 @@ export function ExternalResources({ onBack }: ExternalResourcesProps) {
 
           {/* Category Filter */}
           <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
-            {RESOURCE_CATEGORIES.map((cat) => {
+            {RESOURCE_CATEGORIES.map(cat => {
               const IconComponent = getCategoryIcon(cat.id);
               return (
                 <Button
                   key={cat.id}
-                  variant={selectedCategory === cat.id || (cat.id === 'all' && !selectedCategory) ? "default" : "outline"}
+                  variant={
+                    selectedCategory === cat.id ||
+                    (cat.id === "all" && !selectedCategory)
+                      ? "default"
+                      : "outline"
+                  }
                   size="sm"
-                  onClick={() => setSelectedCategory(cat.id === 'all' ? null : cat.id)}
+                  onClick={() =>
+                    setSelectedCategory(cat.id === "all" ? null : cat.id)
+                  }
                   className="whitespace-nowrap"
                 >
                   <IconComponent className="w-4 h-4 mr-1" />
@@ -320,15 +378,21 @@ export function ExternalResources({ onBack }: ExternalResourcesProps) {
                     <CheckCircle2 className="w-6 h-6 text-green-400" />
                   </div>
                   <span>Connected APIs</span>
-                  <Badge className="bg-green-500/20 text-green-400 border-0 ml-2">Live</Badge>
+                  <Badge className="bg-green-500/20 text-green-400 border-0 ml-2">
+                    Live
+                  </Badge>
                 </h2>
-                <span className="text-sm text-muted-foreground">Real-time data sync enabled</span>
+                <span className="text-sm text-muted-foreground">
+                  Real-time data sync enabled
+                </span>
               </div>
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-                {EXTERNAL_SME_RESOURCES.filter(r => r.apiStatus === 'connected').map((resource) => {
+                {EXTERNAL_SME_RESOURCES.filter(
+                  r => r.apiStatus === "connected"
+                ).map(resource => {
                   const CategoryIcon = getCategoryIcon(resource.category);
                   return (
-                    <Card 
+                    <Card
                       key={resource.id}
                       className="bg-gradient-to-br from-green-500/5 to-emerald-500/5 border-green-500/20 hover:border-green-500/50 transition-all cursor-pointer group"
                       onClick={() => handleResourceClick(resource)}
@@ -337,12 +401,13 @@ export function ExternalResources({ onBack }: ExternalResourcesProps) {
                         <div className="flex items-center gap-3 mb-2">
                           <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-green-500/20 to-emerald-500/20 border border-green-500/30 flex items-center justify-center overflow-hidden">
                             {resource.logoUrl ? (
-                              <img alt="Resource preview image" 
-                                src={resource.logoUrl} 
+                              <img
+                                alt="Resource preview image"
+                                src={resource.logoUrl}
                                 alt={resource.name}
                                 className="w-8 h-8 object-contain"
-                                onError={(e) => {
-                                  e.currentTarget.style.display = 'none';
+                                onError={e => {
+                                  e.currentTarget.style.display = "none";
                                 }}
                               />
                             ) : (
@@ -360,7 +425,7 @@ export function ExternalResources({ onBack }: ExternalResourcesProps) {
                           size="sm"
                           variant="ghost"
                           className="w-full text-xs text-green-400 hover:text-green-300 hover:bg-green-500/10"
-                          onClick={(e) => {
+                          onClick={e => {
                             e.stopPropagation();
                             handleOpenPortal(resource);
                           }}
@@ -378,13 +443,13 @@ export function ExternalResources({ onBack }: ExternalResourcesProps) {
 
           {/* Resource Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {filteredResources.map((resource) => {
+            {filteredResources.map(resource => {
               const CategoryIcon = getCategoryIcon(resource.category);
               const apiStatus = API_STATUS_LABELS[resource.apiStatus];
               const accessType = ACCESS_TYPE_LABELS[resource.accessType];
 
               return (
-                <Card 
+                <Card
                   key={resource.id}
                   className="bg-card/60 border-border hover:border-emerald-500/50 transition-all cursor-pointer group"
                   onClick={() => handleResourceClick(resource)}
@@ -393,12 +458,13 @@ export function ExternalResources({ onBack }: ExternalResourcesProps) {
                     <div className="flex items-start gap-4 mb-4">
                       <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-emerald-500/20 to-teal-500/20 border border-emerald-500/30 flex items-center justify-center overflow-hidden flex-shrink-0">
                         {resource.logoUrl ? (
-                          <img alt="Resource icon" 
-                            src={resource.logoUrl} 
+                          <img
+                            alt="Resource icon"
+                            src={resource.logoUrl}
                             alt={resource.name}
                             className="w-10 h-10 object-contain"
-                            onError={(e) => {
-                              e.currentTarget.style.display = 'none';
+                            onError={e => {
+                              e.currentTarget.style.display = "none";
                             }}
                           />
                         ) : (
@@ -410,11 +476,11 @@ export function ExternalResources({ onBack }: ExternalResourcesProps) {
                           {resource.name}
                         </h3>
                         <p className="text-sm text-muted-foreground capitalize">
-                          {resource.category.replace('_', ' ')}
+                          {resource.category.replace("_", " ")}
                         </p>
                       </div>
                     </div>
-                    
+
                     <p className="text-sm text-muted-foreground line-clamp-2 mb-4">
                       {resource.description}
                     </p>
@@ -445,7 +511,7 @@ export function ExternalResources({ onBack }: ExternalResourcesProps) {
                         size="sm"
                         variant="ghost"
                         className="text-emerald-400 hover:text-emerald-300 hover:bg-emerald-500/10"
-                        onClick={(e) => {
+                        onClick={e => {
                           e.stopPropagation();
                           handleOpenPortal(resource);
                         }}
@@ -463,7 +529,9 @@ export function ExternalResources({ onBack }: ExternalResourcesProps) {
           {filteredResources.length === 0 && (
             <div className="text-center py-12">
               <Globe className="w-12 h-12 mx-auto mb-4 text-muted-foreground opacity-50" />
-              <p className="text-muted-foreground">No resources found matching your search.</p>
+              <p className="text-muted-foreground">
+                No resources found matching your search.
+              </p>
             </div>
           )}
         </div>

@@ -13,41 +13,110 @@ export const FEATURE_CATEGORIES = {
   SECURITY: "security",
 } as const;
 
-export type FeatureCategory = typeof FEATURE_CATEGORIES[keyof typeof FEATURE_CATEGORIES];
+export type FeatureCategory =
+  (typeof FEATURE_CATEGORIES)[keyof typeof FEATURE_CATEGORIES];
 
 // Feature definitions with metadata
 export const FEATURES = {
   // Core features
-  MORNING_SIGNAL: { id: "morning_signal", name: "Morning Signal", category: FEATURE_CATEGORIES.CORE },
-  EVENING_REVIEW: { id: "evening_review", name: "Evening Review", category: FEATURE_CATEGORIES.CORE },
-  CHIEF_OF_STAFF: { id: "chief_of_staff", name: "Chief of Staff", category: FEATURE_CATEGORIES.CORE },
-  
+  MORNING_SIGNAL: {
+    id: "morning_signal",
+    name: "Morning Signal",
+    category: FEATURE_CATEGORIES.CORE,
+  },
+  EVENING_REVIEW: {
+    id: "evening_review",
+    name: "Evening Review",
+    category: FEATURE_CATEGORIES.CORE,
+  },
+  CHIEF_OF_STAFF: {
+    id: "chief_of_staff",
+    name: "Chief of Staff",
+    category: FEATURE_CATEGORIES.CORE,
+  },
+
   // AI Experts
-  EXPERT_CONSULTATION: { id: "expert_consultation", name: "Expert Consultation", category: FEATURE_CATEGORIES.AI_EXPERTS },
-  EXPERT_PANEL: { id: "expert_panel", name: "Expert Panel", category: FEATURE_CATEGORIES.AI_EXPERTS },
-  EXPERT_LEADERBOARD: { id: "expert_leaderboard", name: "Expert Leaderboard", category: FEATURE_CATEGORIES.AI_EXPERTS },
-  
+  EXPERT_CONSULTATION: {
+    id: "expert_consultation",
+    name: "Expert Consultation",
+    category: FEATURE_CATEGORIES.AI_EXPERTS,
+  },
+  EXPERT_PANEL: {
+    id: "expert_panel",
+    name: "Expert Panel",
+    category: FEATURE_CATEGORIES.AI_EXPERTS,
+  },
+  EXPERT_LEADERBOARD: {
+    id: "expert_leaderboard",
+    name: "Expert Leaderboard",
+    category: FEATURE_CATEGORIES.AI_EXPERTS,
+  },
+
   // Productivity
-  LIBRARY: { id: "library", name: "Library", category: FEATURE_CATEGORIES.PRODUCTIVITY },
-  DOCUMENT_UPLOAD: { id: "document_upload", name: "Document Upload", category: FEATURE_CATEGORIES.PRODUCTIVITY },
-  VAULT: { id: "vault", name: "Vault", category: FEATURE_CATEGORIES.PRODUCTIVITY },
-  
+  LIBRARY: {
+    id: "library",
+    name: "Library",
+    category: FEATURE_CATEGORIES.PRODUCTIVITY,
+  },
+  DOCUMENT_UPLOAD: {
+    id: "document_upload",
+    name: "Document Upload",
+    category: FEATURE_CATEGORIES.PRODUCTIVITY,
+  },
+  VAULT: {
+    id: "vault",
+    name: "Vault",
+    category: FEATURE_CATEGORIES.PRODUCTIVITY,
+  },
+
   // Strategy
-  INNOVATION_HUB: { id: "innovation_hub", name: "Innovation Hub", category: FEATURE_CATEGORIES.STRATEGY },
-  PROJECT_GENESIS: { id: "project_genesis", name: "Project Genesis", category: FEATURE_CATEGORIES.STRATEGY },
-  PORTFOLIO_COMMAND: { id: "portfolio_command", name: "Portfolio Command Center", category: FEATURE_CATEGORIES.STRATEGY },
-  DEVELOPMENT_PATHWAY: { id: "development_pathway", name: "Development Pathway", category: FEATURE_CATEGORIES.STRATEGY },
-  
+  INNOVATION_HUB: {
+    id: "innovation_hub",
+    name: "Innovation Hub",
+    category: FEATURE_CATEGORIES.STRATEGY,
+  },
+  PROJECT_GENESIS: {
+    id: "project_genesis",
+    name: "Project Genesis",
+    category: FEATURE_CATEGORIES.STRATEGY,
+  },
+  PORTFOLIO_COMMAND: {
+    id: "portfolio_command",
+    name: "Portfolio Command Center",
+    category: FEATURE_CATEGORIES.STRATEGY,
+  },
+  DEVELOPMENT_PATHWAY: {
+    id: "development_pathway",
+    name: "Development Pathway",
+    category: FEATURE_CATEGORIES.STRATEGY,
+  },
+
   // Finance
-  SUBSCRIPTION_TRACKER: { id: "subscription_tracker", name: "Subscription Tracker", category: FEATURE_CATEGORIES.FINANCE },
-  FUNDING_ASSESSMENT: { id: "funding_assessment", name: "Funding Assessment", category: FEATURE_CATEGORIES.FINANCE },
-  
+  SUBSCRIPTION_TRACKER: {
+    id: "subscription_tracker",
+    name: "Subscription Tracker",
+    category: FEATURE_CATEGORIES.FINANCE,
+  },
+  FUNDING_ASSESSMENT: {
+    id: "funding_assessment",
+    name: "Funding Assessment",
+    category: FEATURE_CATEGORIES.FINANCE,
+  },
+
   // Security
-  INTEGRATIONS: { id: "integrations", name: "Integrations", category: FEATURE_CATEGORIES.SECURITY },
-  CONTRACT_RENEWALS: { id: "contract_renewals", name: "Contract Renewals", category: FEATURE_CATEGORIES.SECURITY },
+  INTEGRATIONS: {
+    id: "integrations",
+    name: "Integrations",
+    category: FEATURE_CATEGORIES.SECURITY,
+  },
+  CONTRACT_RENEWALS: {
+    id: "contract_renewals",
+    name: "Contract Renewals",
+    category: FEATURE_CATEGORIES.SECURITY,
+  },
 } as const;
 
-export type FeatureId = typeof FEATURES[keyof typeof FEATURES]["id"];
+export type FeatureId = (typeof FEATURES)[keyof typeof FEATURES]["id"];
 
 interface FeatureUsageEvent {
   featureId: FeatureId;
@@ -92,15 +161,21 @@ export function getFeatureUsageStats(): {
   lastUsed: Date | null;
 }[] {
   const featureList = Object.values(FEATURES);
-  
-  return featureList.map((feature) => {
-    const featureEvents = usageStore.filter((e) => e.featureId === feature.id);
-    const views = featureEvents.filter((e) => e.action === "view").length;
-    const interactions = featureEvents.filter((e) => e.action === "interact").length;
-    const completions = featureEvents.filter((e) => e.action === "complete").length;
-    const uniqueUsers = new Set(featureEvents.map((e) => e.userId)).size;
-    const lastEvent = featureEvents.sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime())[0];
-    
+
+  return featureList.map(feature => {
+    const featureEvents = usageStore.filter(e => e.featureId === feature.id);
+    const views = featureEvents.filter(e => e.action === "view").length;
+    const interactions = featureEvents.filter(
+      e => e.action === "interact"
+    ).length;
+    const completions = featureEvents.filter(
+      e => e.action === "complete"
+    ).length;
+    const uniqueUsers = new Set(featureEvents.map(e => e.userId)).size;
+    const lastEvent = featureEvents.sort(
+      (a, b) => b.timestamp.getTime() - a.timestamp.getTime()
+    )[0];
+
     return {
       featureId: feature.id,
       name: feature.name,
@@ -124,15 +199,15 @@ export function getTopFeatures(limit: number = 10): {
   score: number;
 }[] {
   const stats = getFeatureUsageStats();
-  
+
   // Calculate engagement score: views + 2*interactions + 3*completions
-  const scored = stats.map((s) => ({
+  const scored = stats.map(s => ({
     featureId: s.featureId,
     name: s.name,
     category: s.category,
     score: s.totalViews + s.totalInteractions * 2 + s.totalCompletions * 3,
   }));
-  
+
   return scored.sort((a, b) => b.score - a.score).slice(0, limit);
 }
 
@@ -147,19 +222,21 @@ export function getUsageByCategory(): {
 }[] {
   const stats = getFeatureUsageStats();
   const categories = Object.values(FEATURE_CATEGORIES);
-  
-  return categories.map((category) => {
-    const categoryFeatures = stats.filter((s) => s.category === category);
+
+  return categories.map(category => {
+    const categoryFeatures = stats.filter(s => s.category === category);
     const totalUsage = categoryFeatures.reduce(
       (sum, f) => sum + f.totalViews + f.totalInteractions + f.totalCompletions,
       0
     );
     const topFeature = categoryFeatures.sort(
       (a, b) =>
-        b.totalViews + b.totalInteractions + b.totalCompletions -
+        b.totalViews +
+        b.totalInteractions +
+        b.totalCompletions -
         (a.totalViews + a.totalInteractions + a.totalCompletions)
     )[0];
-    
+
     return {
       category,
       totalUsage,
@@ -180,29 +257,31 @@ export function getUserEngagementMetrics(userId: number): {
   engagementScore: number;
   lastActive: Date | null;
 } {
-  const userEvents = usageStore.filter((e) => e.userId === userId);
-  const views = userEvents.filter((e) => e.action === "view").length;
-  const interactions = userEvents.filter((e) => e.action === "interact").length;
-  const completions = userEvents.filter((e) => e.action === "complete").length;
-  
+  const userEvents = usageStore.filter(e => e.userId === userId);
+  const views = userEvents.filter(e => e.action === "view").length;
+  const interactions = userEvents.filter(e => e.action === "interact").length;
+  const completions = userEvents.filter(e => e.action === "complete").length;
+
   // Find most used feature
   const featureCounts = new Map<string, number>();
-  userEvents.forEach((e) => {
+  userEvents.forEach(e => {
     featureCounts.set(e.featureId, (featureCounts.get(e.featureId) || 0) + 1);
   });
-  
+
   let mostUsedFeature: string | null = null;
   let maxCount = 0;
   featureCounts.forEach((count, featureId) => {
     if (count > maxCount) {
       maxCount = count;
-      const feature = Object.values(FEATURES).find((f) => f.id === featureId);
+      const feature = Object.values(FEATURES).find(f => f.id === featureId);
       mostUsedFeature = feature?.name || featureId;
     }
   });
-  
-  const lastEvent = userEvents.sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime())[0];
-  
+
+  const lastEvent = userEvents.sort(
+    (a, b) => b.timestamp.getTime() - a.timestamp.getTime()
+  )[0];
+
   return {
     totalFeatureViews: views,
     totalInteractions: interactions,
@@ -216,18 +295,20 @@ export function getUserEngagementMetrics(userId: number): {
 /**
  * Get feature adoption rate (percentage of users who have used each feature)
  */
-export async function getFeatureAdoptionRates(): Promise<{
-  featureId: string;
-  name: string;
-  adoptionRate: number;
-  uniqueUsers: number;
-}[]> {
+export async function getFeatureAdoptionRates(): Promise<
+  {
+    featureId: string;
+    name: string;
+    adoptionRate: number;
+    uniqueUsers: number;
+  }[]
+> {
   // Get total user count from database
   const totalUsers = 1; // Placeholder - would query actual user count
-  
+
   const stats = getFeatureUsageStats();
-  
-  return stats.map((s) => ({
+
+  return stats.map(s => ({
     featureId: s.featureId,
     name: s.name,
     adoptionRate: totalUsers > 0 ? (s.uniqueUsers / totalUsers) * 100 : 0,
@@ -246,28 +327,39 @@ export function generateAnalyticsSummary(): {
   recommendations: string[];
 } {
   const totalEvents = usageStore.length;
-  const totalUniqueUsers = new Set(usageStore.map((e) => e.userId)).size;
-  const topFeatures = getTopFeatures(5).map((f) => ({ name: f.name, score: f.score }));
-  
-  const categoryUsage = getUsageByCategory();
-  const totalCategoryUsage = categoryUsage.reduce((sum, c) => sum + c.totalUsage, 0);
-  const categoryBreakdown = categoryUsage.map((c) => ({
-    category: c.category,
-    percentage: totalCategoryUsage > 0 ? (c.totalUsage / totalCategoryUsage) * 100 : 0,
+  const totalUniqueUsers = new Set(usageStore.map(e => e.userId)).size;
+  const topFeatures = getTopFeatures(5).map(f => ({
+    name: f.name,
+    score: f.score,
   }));
-  
+
+  const categoryUsage = getUsageByCategory();
+  const totalCategoryUsage = categoryUsage.reduce(
+    (sum, c) => sum + c.totalUsage,
+    0
+  );
+  const categoryBreakdown = categoryUsage.map(c => ({
+    category: c.category,
+    percentage:
+      totalCategoryUsage > 0 ? (c.totalUsage / totalCategoryUsage) * 100 : 0,
+  }));
+
   // Generate recommendations based on usage patterns
   const recommendations: string[] = [];
-  
-  const lowUsageCategories = categoryBreakdown.filter((c) => c.percentage < 10);
-  lowUsageCategories.forEach((c) => {
-    recommendations.push(`Consider promoting ${c.category} features - currently underutilized`);
+
+  const lowUsageCategories = categoryBreakdown.filter(c => c.percentage < 10);
+  lowUsageCategories.forEach(c => {
+    recommendations.push(
+      `Consider promoting ${c.category} features - currently underutilized`
+    );
   });
-  
+
   if (topFeatures.length > 0 && topFeatures[0].score > 100) {
-    recommendations.push(`${topFeatures[0].name} is your power feature - consider expanding its capabilities`);
+    recommendations.push(
+      `${topFeatures[0].name} is your power feature - consider expanding its capabilities`
+    );
   }
-  
+
   return {
     totalEvents,
     totalUniqueUsers,

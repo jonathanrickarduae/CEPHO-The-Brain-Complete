@@ -1,4 +1,4 @@
-import { Client } from 'pg';
+import { Client } from "pg";
 
 export async function runMigrations() {
   if (!process.env.DATABASE_URL) {
@@ -7,7 +7,10 @@ export async function runMigrations() {
 
   const client = new Client({
     connectionString: process.env.DATABASE_URL,
-    ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : undefined,
+    ssl:
+      process.env.NODE_ENV === "production"
+        ? { rejectUnauthorized: false }
+        : undefined,
   });
 
   try {
@@ -46,9 +49,8 @@ export async function runMigrations() {
         "lastSignedIn" TIMESTAMP DEFAULT NOW() NOT NULL
       );
     `);
-
   } catch (error: any) {
-    console.error('[Migrations] Error running migrations:', error.message);
+    console.error("[Migrations] Error running migrations:", error.message);
     // Don't throw - allow app to start even if migrations fail
   } finally {
     await client.end();

@@ -1,6 +1,10 @@
-import * as Sentry from '@sentry/node';
-import { httpIntegration, expressIntegration, setupExpressErrorHandler } from '@sentry/node';
-import type { Express, Request, Response, NextFunction } from 'express';
+import * as Sentry from "@sentry/node";
+import {
+  httpIntegration,
+  expressIntegration,
+  setupExpressErrorHandler,
+} from "@sentry/node";
+import type { Express, Request, Response, NextFunction } from "express";
 
 /**
  * Error Tracking Service using Sentry v10
@@ -17,26 +21,23 @@ class ErrorTrackerService {
     const sentryDsn = process.env.SENTRY_DSN;
 
     if (!sentryDsn) {
-      console.warn('Sentry DSN not configured. Error tracking disabled.');
+      console.warn("Sentry DSN not configured. Error tracking disabled.");
       return;
     }
 
     try {
       Sentry.init({
         dsn: sentryDsn,
-        environment: process.env.NODE_ENV || 'development',
-        tracesSampleRate: process.env.NODE_ENV === 'production' ? 0.1 : 1.0,
+        environment: process.env.NODE_ENV || "development",
+        tracesSampleRate: process.env.NODE_ENV === "production" ? 0.1 : 1.0,
 
         // Performance monitoring - Sentry v10 API
-        integrations: [
-          httpIntegration(),
-          expressIntegration(),
-        ],
+        integrations: [httpIntegration(), expressIntegration()],
 
         // Ignore common errors
         ignoreErrors: [
-          'Non-Error exception captured',
-          'Non-Error promise rejection captured',
+          "Non-Error exception captured",
+          "Non-Error promise rejection captured",
         ],
 
         // Before send hook to filter sensitive data
@@ -56,9 +57,9 @@ class ErrorTrackerService {
       setupExpressErrorHandler(app);
 
       this.initialized = true;
-      console.log('✅ Sentry error tracking initialized');
+      console.log("✅ Sentry error tracking initialized");
     } catch (error) {
-      console.error('Failed to initialize Sentry:', error);
+      console.error("Failed to initialize Sentry:", error);
     }
   }
 
@@ -77,7 +78,7 @@ class ErrorTrackerService {
    */
   captureException(error: Error, context?: Record<string, any>) {
     if (!this.initialized) {
-      console.error('Error (Sentry not initialized):', error);
+      console.error("Error (Sentry not initialized):", error);
       return;
     }
     Sentry.captureException(error, {
@@ -88,7 +89,11 @@ class ErrorTrackerService {
   /**
    * Capture message
    */
-  captureMessage(message: string, level: Sentry.SeverityLevel = 'info', context?: Record<string, any>) {
+  captureMessage(
+    message: string,
+    level: Sentry.SeverityLevel = "info",
+    context?: Record<string, any>
+  ) {
     if (!this.initialized) {
       console.log(`Message (Sentry not initialized): ${message}`);
       return;
@@ -128,7 +133,7 @@ class ErrorTrackerService {
       message,
       category,
       data,
-      level: 'info',
+      level: "info",
     });
   }
 
@@ -164,7 +169,7 @@ class ErrorTrackerService {
     try {
       return await Sentry.flush(timeout);
     } catch (error) {
-      console.error('Sentry flush error:', error);
+      console.error("Sentry flush error:", error);
       return false;
     }
   }
@@ -177,7 +182,7 @@ class ErrorTrackerService {
     try {
       return await Sentry.close(timeout);
     } catch (error) {
-      console.error('Sentry close error:', error);
+      console.error("Sentry close error:", error);
       return false;
     }
   }
@@ -195,7 +200,7 @@ export function errorHandlerMiddleware(
   res: Response,
   _next: NextFunction
 ) {
-  console.error('Error:', err);
+  console.error("Error:", err);
 
   errorTrackerService.captureException(err, {
     url: req.url,
@@ -204,7 +209,10 @@ export function errorHandlerMiddleware(
   });
 
   res.status(500).json({
-    error: 'Internal Server Error',
-    message: process.env.NODE_ENV === 'development' ? err.message : 'An error occurred',
+    error: "Internal Server Error",
+    message:
+      process.env.NODE_ENV === "development"
+        ? err.message
+        : "An error occurred",
   });
 }

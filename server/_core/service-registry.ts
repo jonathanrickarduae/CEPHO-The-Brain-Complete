@@ -1,27 +1,22 @@
 /**
  * Service Registry
- * 
+ *
  * Central registry for all application services.
  * Registers services with the DI container on application startup.
- * 
- * Note: Services are registered lazily to avoid import errors during build.
- * They are initialized on first use.
  */
-
-import { container } from './di-container';
+import { container } from "./di-container";
 
 /**
  * Register all services with the DI container
  */
 export function registerServices(): void {
-  
-  // Services are now available via getService() throughout the application
-  // The DI container prevents runtime crashes from missing dependencies
+  // Services are registered lazily via registerService() / registerServiceInstance()
+  // They are initialized on first use via getService()
 }
 
 /**
  * Get a service from the container
- * 
+ *
  * Usage:
  *   const service = getService<MyService>('myService');
  */
@@ -31,7 +26,7 @@ export function getService<T>(name: string): T {
 
 /**
  * Register a service factory
- * 
+ *
  * Usage:
  *   registerService('myService', (c) => new MyService(c.get('dependency')));
  */
@@ -40,12 +35,12 @@ export function registerService<T>(
   factory: (c: { get: <S>(name: string) => S }) => T,
   singleton = true
 ): void {
-  container.register(name, factory as any, singleton);
+  container.register(name, factory, singleton);
 }
 
 /**
  * Register a service instance directly
- * 
+ *
  * Usage:
  *   registerServiceInstance('myService', myServiceInstance);
  */

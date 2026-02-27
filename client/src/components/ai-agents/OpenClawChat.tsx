@@ -9,16 +9,19 @@ import { trpc } from "@/lib/trpc";
 
 export default function OpenClawChat() {
   const [message, setMessage] = useState("");
-  const [messages, setMessages] = useState<Array<{ role: string; content: string }>>([
+  const [messages, setMessages] = useState<
+    Array<{ role: string; content: string }>
+  >([
     {
       role: "assistant",
-      content: "👋 Hi! I am ClawBot. I can help you with Project Genesis, AI-SME consultations, quality validation, and more. What would you like to do?",
+      content:
+        "👋 Hi! I am ClawBot. I can help you with Project Genesis, AI-SME consultations, quality validation, and more. What would you like to do?",
     },
   ]);
 
   const chatMutation = trpc.openClaw.chat.useMutation({
-    onSuccess: (data) => {
-      setMessages((prev) => [
+    onSuccess: data => {
+      setMessages(prev => [
         ...prev,
         { role: "assistant", content: data.response },
       ]);
@@ -29,7 +32,7 @@ export default function OpenClawChat() {
     if (!message.trim()) return;
 
     // Add user message
-    setMessages((prev) => [...prev, { role: "user", content: message }]);
+    setMessages(prev => [...prev, { role: "user", content: message }]);
 
     // Send to OpenClaw
     chatMutation.mutate({ message });
@@ -77,8 +80,8 @@ export default function OpenClawChat() {
           <input
             type="text"
             value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            onKeyPress={(e) => e.key === "Enter" && handleSend()}
+            onChange={e => setMessage(e.target.value)}
+            onKeyPress={e => e.key === "Enter" && handleSend()}
             placeholder="Ask me anything... (e.g., 'Start Project Genesis for TechCo')"
             className="flex-1 px-4 py-2 bg-background border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
           />
@@ -100,7 +103,9 @@ export default function OpenClawChat() {
             🚀 Start Project
           </button>
           <button
-            onClick={() => setMessage("Get expert consultation on market analysis")}
+            onClick={() =>
+              setMessage("Get expert consultation on market analysis")
+            }
             className="px-3 py-1 text-sm bg-muted text-foreground rounded-md hover:bg-muted/80"
           >
             🧠 Ask Expert

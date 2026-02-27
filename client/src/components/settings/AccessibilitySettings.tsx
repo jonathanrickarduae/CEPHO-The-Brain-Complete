@@ -1,19 +1,30 @@
-import { useState } from 'react';
-import { 
-  Accessibility, Eye, Volume2, Type, Sun, Moon, 
-  Contrast, Zap, RotateCcw, ChevronRight
-} from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Switch } from '@/components/ui/switch';
-import { cn } from '@/lib/utils';
-import { useAccessibilityPreferences } from '@/hooks/useAccessibility';
+import { useState } from "react";
+import {
+  Accessibility,
+  Eye,
+  Volume2,
+  Type,
+  Sun,
+  Moon,
+  Contrast,
+  Zap,
+  RotateCcw,
+  ChevronRight,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
+import { cn } from "@/lib/utils";
+import { useAccessibilityPreferences } from "@/hooks/useAccessibility";
 
 interface AccessibilitySettingsProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-export function AccessibilitySettings({ isOpen, onClose }: AccessibilitySettingsProps) {
+export function AccessibilitySettings({
+  isOpen,
+  onClose,
+}: AccessibilitySettingsProps) {
   const {
     reducedMotion,
     highContrast,
@@ -31,7 +42,7 @@ export function AccessibilitySettings({ isOpen, onClose }: AccessibilitySettings
   return (
     <>
       {/* Backdrop */}
-      <div 
+      <div
         className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm"
         onClick={onClose}
       />
@@ -46,8 +57,12 @@ export function AccessibilitySettings({ isOpen, onClose }: AccessibilitySettings
                 <Accessibility className="w-5 h-5 text-primary" />
               </div>
               <div>
-                <h2 className="text-lg font-bold text-foreground">Accessibility</h2>
-                <p className="text-xs text-muted-foreground">Customize your experience</p>
+                <h2 className="text-lg font-bold text-foreground">
+                  Accessibility
+                </h2>
+                <p className="text-xs text-muted-foreground">
+                  Customize your experience
+                </p>
               </div>
             </div>
             <Button variant="ghost" size="sm" onClick={onClose}>
@@ -63,7 +78,7 @@ export function AccessibilitySettings({ isOpen, onClose }: AccessibilitySettings
             <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-4">
               Motion & Animation
             </h3>
-            
+
             <div className="space-y-4">
               <SettingRow
                 icon={Zap}
@@ -80,7 +95,7 @@ export function AccessibilitySettings({ isOpen, onClose }: AccessibilitySettings
             <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-4">
               Visual
             </h3>
-            
+
             <div className="space-y-4">
               <SettingRow
                 icon={Contrast}
@@ -95,23 +110,29 @@ export function AccessibilitySettings({ isOpen, onClose }: AccessibilitySettings
                   <Type className="w-5 h-5 text-muted-foreground" />
                   <div>
                     <p className="font-medium text-foreground">Font Size</p>
-                    <p className="text-xs text-muted-foreground">Adjust text size</p>
+                    <p className="text-xs text-muted-foreground">
+                      Adjust text size
+                    </p>
                   </div>
                 </div>
-                
+
                 <div className="flex gap-2">
-                  {(['normal', 'large', 'larger'] as const).map((size) => (
+                  {(["normal", "large", "larger"] as const).map(size => (
                     <button
                       key={size}
                       onClick={() => setFontSize(size)}
                       className={cn(
-                        'flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-all',
+                        "flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-all",
                         fontSize === size
-                          ? 'bg-primary text-primary-foreground'
-                          : 'bg-secondary/50 text-muted-foreground hover:bg-secondary'
+                          ? "bg-primary text-primary-foreground"
+                          : "bg-secondary/50 text-muted-foreground hover:bg-secondary"
                       )}
                     >
-                      {size === 'normal' ? 'A' : size === 'large' ? 'A+' : 'A++'}
+                      {size === "normal"
+                        ? "A"
+                        : size === "large"
+                          ? "A+"
+                          : "A++"}
                     </button>
                   ))}
                 </div>
@@ -124,7 +145,7 @@ export function AccessibilitySettings({ isOpen, onClose }: AccessibilitySettings
             <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-4">
               Screen Reader
             </h3>
-            
+
             <div className="space-y-4">
               <SettingRow
                 icon={Volume2}
@@ -141,13 +162,28 @@ export function AccessibilitySettings({ isOpen, onClose }: AccessibilitySettings
             <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-4">
               Keyboard Navigation
             </h3>
-            
+
             <div className="p-4 rounded-xl bg-secondary/30 border border-white/5 space-y-3">
-              <ShortcutRow keys={['Tab']} description="Navigate between elements" />
-              <ShortcutRow keys={['Shift', 'Tab']} description="Navigate backwards" />
-              <ShortcutRow keys={['Enter']} description="Activate focused element" />
-              <ShortcutRow keys={['Esc']} description="Close dialogs and menus" />
-              <ShortcutRow keys={['?']} description="Show all keyboard shortcuts" />
+              <ShortcutRow
+                keys={["Tab"]}
+                description="Navigate between elements"
+              />
+              <ShortcutRow
+                keys={["Shift", "Tab"]}
+                description="Navigate backwards"
+              />
+              <ShortcutRow
+                keys={["Enter"]}
+                description="Activate focused element"
+              />
+              <ShortcutRow
+                keys={["Esc"]}
+                description="Close dialogs and menus"
+              />
+              <ShortcutRow
+                keys={["?"]}
+                description="Show all keyboard shortcuts"
+              />
             </div>
           </section>
 
@@ -177,7 +213,13 @@ interface SettingRowProps {
   onChange: (checked: boolean) => void;
 }
 
-function SettingRow({ icon: Icon, title, description, checked, onChange }: SettingRowProps) {
+function SettingRow({
+  icon: Icon,
+  title,
+  description,
+  checked,
+  onChange,
+}: SettingRowProps) {
   return (
     <div className="flex items-center justify-between p-4 rounded-xl bg-secondary/30 border border-white/5">
       <div className="flex items-center gap-3">
@@ -208,7 +250,9 @@ function ShortcutRow({ keys, description }: ShortcutRowProps) {
             <kbd className="px-2 py-1 text-xs bg-secondary rounded border border-white/10 font-mono">
               {key}
             </kbd>
-            {i < keys.length - 1 && <span className="text-muted-foreground mx-1">+</span>}
+            {i < keys.length - 1 && (
+              <span className="text-muted-foreground mx-1">+</span>
+            )}
           </span>
         ))}
       </div>
@@ -219,10 +263,7 @@ function ShortcutRow({ keys, description }: ShortcutRowProps) {
 // Skip link component
 export function SkipLink() {
   return (
-    <a
-      href="#main-content"
-      className="skip-link"
-    >
+    <a href="#main-content" className="skip-link">
       Skip to main content
     </a>
   );
@@ -230,9 +271,5 @@ export function SkipLink() {
 
 // Focus indicator component
 export function FocusIndicator({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="focus-ring rounded-lg">
-      {children}
-    </div>
-  );
+  return <div className="focus-ring rounded-lg">{children}</div>;
 }

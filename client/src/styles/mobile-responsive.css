@@ -35,14 +35,16 @@ body {
   }
 
   /* Main content areas */
-  main, [role="main"] {
+  main,
+  [role="main"] {
     padding: 1rem;
     width: 100%;
     overflow-x: hidden;
   }
 
   /* Sidebar handling on mobile */
-  aside, [role="complementary"] {
+  aside,
+  [role="complementary"] {
     width: 100%;
     max-width: 100%;
   }
@@ -74,7 +76,15 @@ body {
 
 /* Ensure text doesn't overflow on mobile */
 @media (max-width: 640px) {
-  h1, h2, h3, h4, h5, h6, p, span, div {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p,
+  span,
+  div {
     word-wrap: break-word;
     overflow-wrap: break-word;
     hyphens: auto;
@@ -96,7 +106,9 @@ body {
     line-height: 1.5rem !important;
   }
 
-  h4, h5, h6 {
+  h4,
+  h5,
+  h6 {
     font-size: 1rem !important;
     line-height: 1.25rem !important;
   }
@@ -113,7 +125,7 @@ body {
 
 /* Touch-friendly button sizes */
 @media (max-width: 640px) {
-  button, 
+  button,
   a[role="button"],
   [role="button"],
   input[type="button"],
@@ -215,19 +227,39 @@ body {
 
 @media (max-width: 640px) {
   /* Reduce spacing on mobile */
-  .space-y-8 { @apply space-y-4; }
-  .space-y-6 { @apply space-y-3; }
-  .space-y-4 { @apply space-y-2; }
-  
-  .gap-8 { @apply gap-4; }
-  .gap-6 { @apply gap-3; }
-  .gap-4 { @apply gap-2; }
-  
-  .p-8 { @apply p-4; }
-  .p-6 { @apply p-3; }
-  
-  .m-8 { @apply m-4; }
-  .m-6 { @apply m-3; }
+  .space-y-8 {
+    @apply space-y-4;
+  }
+  .space-y-6 {
+    @apply space-y-3;
+  }
+  .space-y-4 {
+    @apply space-y-2;
+  }
+
+  .gap-8 {
+    @apply gap-4;
+  }
+  .gap-6 {
+    @apply gap-3;
+  }
+  .gap-4 {
+    @apply gap-2;
+  }
+
+  .p-8 {
+    @apply p-4;
+  }
+  .p-6 {
+    @apply p-3;
+  }
+
+  .m-8 {
+    @apply m-4;
+  }
+  .m-6 {
+    @apply m-3;
+  }
 }
 
 /* ============================================
@@ -246,7 +278,9 @@ body {
     display: none;
   }
 
-  tbody, tr, td {
+  tbody,
+  tr,
+  td {
     display: block;
     width: 100%;
   }
@@ -536,9 +570,15 @@ body {
     font-size: 12pt;
   }
 
-  h1 { font-size: 18pt; }
-  h2 { font-size: 16pt; }
-  h3 { font-size: 14pt; }
+  h1 {
+    font-size: 18pt;
+  }
+  h2 {
+    font-size: 16pt;
+  }
+  h3 {
+    font-size: 14pt;
+  }
 }
 
 /* ============================================

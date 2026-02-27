@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
-import { WifiOff, Wifi, RefreshCw } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { useState, useEffect } from "react";
+import { WifiOff, Wifi, RefreshCw } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export function OfflineIndicator() {
   const [isOnline, setIsOnline] = useState(navigator.onLine);
@@ -22,19 +22,19 @@ export function OfflineIndicator() {
       setShowReconnected(false);
     };
 
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
 
     return () => {
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
     };
   }, []);
 
   // Check for pending actions in localStorage
   useEffect(() => {
     const checkPending = () => {
-      const pending = localStorage.getItem('brain-pending-actions');
+      const pending = localStorage.getItem("brain-pending-actions");
       if (pending) {
         try {
           const actions = JSON.parse(pending);
@@ -46,22 +46,22 @@ export function OfflineIndicator() {
     };
 
     checkPending();
-    window.addEventListener('storage', checkPending);
-    return () => window.removeEventListener('storage', checkPending);
+    window.addEventListener("storage", checkPending);
+    return () => window.removeEventListener("storage", checkPending);
   }, []);
 
   const processPendingActions = async () => {
-    const pending = localStorage.getItem('brain-pending-actions');
+    const pending = localStorage.getItem("brain-pending-actions");
     if (!pending) return;
 
     try {
       const actions = JSON.parse(pending);
       // Process each action (in real implementation, this would call APIs)
       // Clear pending actions after processing
-      localStorage.removeItem('brain-pending-actions');
+      localStorage.removeItem("brain-pending-actions");
       setPendingActions(0);
     } catch (error) {
-      console.error('Error processing pending actions:', error);
+      console.error("Error processing pending actions:", error);
     }
   };
 
@@ -72,11 +72,11 @@ export function OfflineIndicator() {
     <div className="fixed bottom-20 left-1/2 -translate-x-1/2 z-50 animate-in slide-in-from-bottom duration-300">
       <div
         className={cn(
-          'flex items-center gap-2 px-4 py-2 rounded-full shadow-lg backdrop-blur-sm',
-          'border transition-colors duration-300',
+          "flex items-center gap-2 px-4 py-2 rounded-full shadow-lg backdrop-blur-sm",
+          "border transition-colors duration-300",
           isOnline
-            ? 'bg-green-500/10 border-green-500/30 text-green-400'
-            : 'bg-red-500/10 border-red-500/30 text-red-400'
+            ? "bg-green-500/10 border-green-500/30 text-green-400"
+            : "bg-red-500/10 border-red-500/30 text-red-400"
         )}
       >
         {isOnline ? (
@@ -86,7 +86,7 @@ export function OfflineIndicator() {
             {pendingActions > 0 && (
               <span className="flex items-center gap-1 text-xs">
                 <RefreshCw className="w-3 h-3 animate-spin" />
-                Syncing {pendingActions} action{pendingActions > 1 ? 's' : ''}
+                Syncing {pendingActions} action{pendingActions > 1 ? "s" : ""}
               </span>
             )}
           </>
@@ -96,7 +96,7 @@ export function OfflineIndicator() {
             <span className="text-sm font-medium">You're offline</span>
             {pendingActions > 0 && (
               <span className="text-xs opacity-80">
-                {pendingActions} action{pendingActions > 1 ? 's' : ''} queued
+                {pendingActions} action{pendingActions > 1 ? "s" : ""} queued
               </span>
             )}
           </>
@@ -110,17 +110,17 @@ export function OfflineIndicator() {
 export function queueOfflineAction(action: { type: string; payload: any }) {
   if (navigator.onLine) return false;
 
-  const pending = localStorage.getItem('brain-pending-actions');
+  const pending = localStorage.getItem("brain-pending-actions");
   const actions = pending ? JSON.parse(pending) : [];
   actions.push({
     ...action,
     timestamp: Date.now(),
   });
-  localStorage.setItem('brain-pending-actions', JSON.stringify(actions));
-  
+  localStorage.setItem("brain-pending-actions", JSON.stringify(actions));
+
   // Trigger storage event for indicator update
-  window.dispatchEvent(new Event('storage'));
-  
+  window.dispatchEvent(new Event("storage"));
+
   return true;
 }
 
@@ -132,12 +132,12 @@ export function useOfflineAction() {
     const handleOnline = () => setIsOnline(true);
     const handleOffline = () => setIsOnline(false);
 
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
 
     return () => {
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
     };
   }, []);
 

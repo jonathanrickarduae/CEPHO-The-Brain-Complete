@@ -1,4 +1,4 @@
-import Redis from 'ioredis';
+import Redis from "ioredis";
 
 /**
  * Redis Cache Service
@@ -16,20 +16,20 @@ class RedisCacheService {
     try {
       // Use Upstash Redis or local Redis
       const redisUrl = process.env.REDIS_URL || process.env.UPSTASH_REDIS_URL;
-      
+
       if (!redisUrl) {
-        console.warn('Redis URL not configured. Caching disabled.');
+        console.warn("Redis URL not configured. Caching disabled.");
         return;
       }
 
       this.client = new Redis(redisUrl, {
         maxRetriesPerRequest: 3,
-        retryStrategy: (times) => {
+        retryStrategy: times => {
           const delay = Math.min(times * 50, 2000);
           return delay;
         },
-        reconnectOnError: (err) => {
-          const targetError = 'READONLY';
+        reconnectOnError: err => {
+          const targetError = "READONLY";
           if (err.message.includes(targetError)) {
             return true;
           }
@@ -37,26 +37,25 @@ class RedisCacheService {
         },
       });
 
-      this.client.on('connect', () => {
-        console.log('✅ Redis connected');
+      this.client.on("connect", () => {
+        console.log("✅ Redis connected");
         this.isConnected = true;
       });
 
-      this.client.on('error', (err) => {
-        console.error('❌ Redis error:', err);
+      this.client.on("error", err => {
+        console.error("❌ Redis error:", err);
         this.isConnected = false;
       });
 
-      this.client.on('close', () => {
-        console.log('⚠️  Redis connection closed');
+      this.client.on("close", () => {
+        console.log("⚠️  Redis connection closed");
         this.isConnected = false;
       });
 
       // Test connection
       await this.client.ping();
-      
     } catch (error) {
-      console.error('Failed to connect to Redis:', error);
+      console.error("Failed to connect to Redis:", error);
       this.client = null;
     }
   }
@@ -70,7 +69,7 @@ class RedisCacheService {
     try {
       const value = await this.client.get(key);
       if (!value) return null;
-      
+
       return JSON.parse(value) as T;
     } catch (error) {
       console.error(`Cache get error for key ${key}:`, error);
@@ -81,7 +80,11 @@ class RedisCacheService {
   /**
    * Set value in cache with TTL (time to live)
    */
-  async set(key: string, value: any, ttlSeconds: number = 3600): Promise<boolean> {
+  async set(
+    key: string,
+    value: any,
+    ttlSeconds: number = 3600
+  ): Promise<boolean> {
     if (!this.client || !this.isConnected) return false;
 
     try {
@@ -118,7 +121,7 @@ class RedisCacheService {
     try {
       const keys = await this.client.keys(pattern);
       if (keys.length === 0) return 0;
-      
+
       await this.client.del(...keys);
       return keys.length;
     } catch (error) {
@@ -158,10 +161,10 @@ class RedisCacheService {
 
     // Compute value
     const value = await factory();
-    
+
     // Cache the result
     await this.set(key, value, ttlSeconds);
-    
+
     return value;
   }
 
@@ -203,16 +206,16 @@ class RedisCacheService {
     }
 
     try {
-      const info = await this.client.info('stats');
+      const info = await this.client.info("stats");
       const dbSize = await this.client.dbsize();
-      
+
       return {
         connected: true,
         dbSize,
         info,
       };
     } catch (error) {
-      console.error('Cache stats error:', error);
+      console.error("Cache stats error:", error);
       return { connected: false, error };
     }
   }
@@ -227,7 +230,7 @@ class RedisCacheService {
       await this.client.flushdb();
       return true;
     } catch (error) {
-      console.error('Cache flush error:', error);
+      console.error("Cache flush error:", error);
       return false;
     }
   }
@@ -252,12 +255,13 @@ export const cacheService = new RedisCacheService();
  */
 export const CacheKeys = {
   user: (userId: string) => `user:${userId}`,
-  users: () => 'users:all',
+  users: () => "users:all",
   agent: (agentId: string) => `agent:${agentId}`,
-  agents: () => 'agents:all',
+  agents: () => "agents:all",
   document: (documentId: string) => `document:${documentId}`,
   documents: (userId: string) => `documents:user:${userId}`,
-  integration: (userId: string, type: string) => `integration:${userId}:${type}`,
+  integration: (userId: string, type: string) =>
+    `integration:${userId}:${type}`,
   integrations: (userId: string) => `integrations:${userId}`,
   session: (sessionId: string) => `session:${sessionId}`,
 };

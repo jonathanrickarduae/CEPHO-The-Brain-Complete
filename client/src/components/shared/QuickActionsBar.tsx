@@ -1,8 +1,17 @@
-import { useState, useEffect } from 'react';
-import { Mic, Camera, CheckCircle2, Bell, X, MicOff, Loader2, AlertCircle } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { useVoiceInput, useVoiceWaveform } from '@/hooks/useVoiceInput';
-import { haptics } from '@/lib/haptics';
+import { useState, useEffect } from "react";
+import {
+  Mic,
+  Camera,
+  CheckCircle2,
+  Bell,
+  X,
+  MicOff,
+  Loader2,
+  AlertCircle,
+} from "lucide-react";
+import { cn } from "@/lib/utils";
+import { useVoiceInput, useVoiceWaveform } from "@/hooks/useVoiceInput";
+import { haptics } from "@/lib/haptics";
 
 interface QuickActionsBarProps {
   onVoiceInput?: (transcript: string) => void;
@@ -10,7 +19,7 @@ interface QuickActionsBarProps {
   onComplete?: () => void;
   onReminder?: () => void;
   className?: string;
-  position?: 'bottom-right' | 'bottom-center';
+  position?: "bottom-right" | "bottom-center";
 }
 
 export function QuickActionsBar({
@@ -19,7 +28,7 @@ export function QuickActionsBar({
   onComplete,
   onReminder,
   className,
-  position = 'bottom-right',
+  position = "bottom-right",
 }: QuickActionsBarProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [showTranscript, setShowTranscript] = useState(false);
@@ -79,24 +88,24 @@ export function QuickActionsBar({
 
   const actions = [
     {
-      id: 'capture',
+      id: "capture",
       icon: Camera,
-      label: 'Capture',
-      color: 'bg-cyan-500 hover:bg-cyan-600',
+      label: "Capture",
+      color: "bg-cyan-500 hover:bg-cyan-600",
       onClick: onCapture,
     },
     {
-      id: 'complete',
+      id: "complete",
       icon: CheckCircle2,
-      label: 'Complete',
-      color: 'bg-green-500 hover:bg-green-600',
+      label: "Complete",
+      color: "bg-green-500 hover:bg-green-600",
       onClick: onComplete,
     },
     {
-      id: 'reminder',
+      id: "reminder",
       icon: Bell,
-      label: 'Remind',
-      color: 'bg-amber-500 hover:bg-amber-600',
+      label: "Remind",
+      color: "bg-amber-500 hover:bg-amber-600",
       onClick: onReminder,
     },
   ];
@@ -105,26 +114,26 @@ export function QuickActionsBar({
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
-      if (!target.closest('.quick-actions-container')) {
+      if (!target.closest(".quick-actions-container")) {
         setIsExpanded(false);
       }
     };
 
     if (isExpanded) {
-      document.addEventListener('click', handleClickOutside);
+      document.addEventListener("click", handleClickOutside);
     }
-    return () => document.removeEventListener('click', handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
   }, [isExpanded]);
 
   const positionClasses = {
-    'bottom-right': 'right-4 bottom-20 md:bottom-6',
-    'bottom-center': 'left-1/2 -translate-x-1/2 bottom-20 md:bottom-6',
+    "bottom-right": "right-4 bottom-20 md:bottom-6",
+    "bottom-center": "left-1/2 -translate-x-1/2 bottom-20 md:bottom-6",
   };
 
   return (
     <div
       className={cn(
-        'quick-actions-container fixed z-50 flex flex-col items-end gap-2',
+        "quick-actions-container fixed z-50 flex flex-col items-end gap-2",
         positionClasses[position],
         className
       )}
@@ -141,7 +150,9 @@ export function QuickActionsBar({
           {isListening && (
             <div className="flex items-center gap-1 mt-2">
               <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
-              <span className="text-xs text-muted-foreground">Listening...</span>
+              <span className="text-xs text-muted-foreground">
+                Listening...
+              </span>
             </div>
           )}
         </div>
@@ -176,7 +187,7 @@ export function QuickActionsBar({
       {/* Expanded Actions */}
       {isExpanded && !isListening && (
         <div className="flex flex-col gap-2 mb-2 animate-in fade-in slide-in-from-bottom-2 duration-200">
-          {actions.map((action) => (
+          {actions.map(action => (
             <button
               key={action.id}
               onClick={() => {
@@ -185,7 +196,7 @@ export function QuickActionsBar({
                 setIsExpanded(false);
               }}
               className={cn(
-                'flex items-center gap-2 px-4 py-2 rounded-full text-white text-sm font-medium shadow-lg transition-all duration-200 hover:scale-105',
+                "flex items-center gap-2 px-4 py-2 rounded-full text-white text-sm font-medium shadow-lg transition-all duration-200 hover:scale-105",
                 action.color
               )}
             >
@@ -214,15 +225,17 @@ export function QuickActionsBar({
         }}
         disabled={!isSupported}
         className={cn(
-          'flex items-center justify-center w-14 h-14 rounded-full text-white shadow-lg transition-all duration-200',
+          "flex items-center justify-center w-14 h-14 rounded-full text-white shadow-lg transition-all duration-200",
           isListening
-            ? 'bg-red-500 shadow-red-500/50 scale-110'
+            ? "bg-red-500 shadow-red-500/50 scale-110"
             : isSupported
-              ? 'bg-primary hover:bg-primary/90 hover:scale-110 shadow-primary/40'
-              : 'bg-muted cursor-not-allowed',
-          isExpanded && !isListening && 'ring-2 ring-white/30'
+              ? "bg-primary hover:bg-primary/90 hover:scale-110 shadow-primary/40"
+              : "bg-muted cursor-not-allowed",
+          isExpanded && !isListening && "ring-2 ring-white/30"
         )}
-        title={!isSupported ? 'Voice input not supported in this browser' : undefined}
+        title={
+          !isSupported ? "Voice input not supported in this browser" : undefined
+        }
       >
         {isListening ? (
           <div className="relative">
@@ -299,14 +312,14 @@ export function FloatingMicButton({
       <button
         onClick={handlePress}
         className={cn(
-          'fixed z-50 flex items-center justify-center w-16 h-16 rounded-full text-white shadow-lg transition-all duration-200',
-          'right-4 bottom-20',
+          "fixed z-50 flex items-center justify-center w-16 h-16 rounded-full text-white shadow-lg transition-all duration-200",
+          "right-4 bottom-20",
           isListening
-            ? 'bg-red-500 scale-110 shadow-red-500/50'
-            : 'bg-primary hover:bg-primary/90 hover:scale-110 shadow-primary/40',
+            ? "bg-red-500 scale-110 shadow-red-500/50"
+            : "bg-primary hover:bg-primary/90 hover:scale-110 shadow-primary/40",
           className
         )}
-        aria-label={isListening ? 'Stop recording' : 'Start voice input'}
+        aria-label={isListening ? "Stop recording" : "Start voice input"}
       >
         {isListening ? (
           <div className="relative">

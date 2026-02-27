@@ -1,6 +1,6 @@
 /**
  * NordVPN Security Integration
- * 
+ *
  * Provides VPN-based security layer for sensitive operations.
  * Note: This is a client-side integration that works with NordVPN's API
  * for status checking and connection management.
@@ -11,7 +11,7 @@ export interface NordVPNConfig {
   accessToken: string;
   autoConnect: boolean;
   apiRouting: boolean;
-  preferredRegion: 'auto' | 'uk' | 'eu' | 'us' | 'ch';
+  preferredRegion: "auto" | "uk" | "eu" | "us" | "ch";
   killSwitch: boolean;
 }
 
@@ -37,17 +37,17 @@ export interface SecurityAuditLog {
   id: string;
   timestamp: Date;
   action: string;
-  vpnStatus: 'connected' | 'disconnected' | 'connecting';
+  vpnStatus: "connected" | "disconnected" | "connecting";
   serverRegion: string | null;
-  operationType: 'api_call' | 'document_upload' | 'sensitive_data' | 'login';
+  operationType: "api_call" | "document_upload" | "sensitive_data" | "login";
   success: boolean;
   details?: string;
 }
 
 // Storage keys
 const STORAGE_KEYS = {
-  config: 'nordvpn_config',
-  auditLog: 'nordvpn_audit_log',
+  config: "nordvpn_config",
+  auditLog: "nordvpn_audit_log",
 };
 
 /**
@@ -79,7 +79,7 @@ export class NordVPNSecurityService {
         this.config = JSON.parse(stored);
       }
     } catch (e) {
-      console.error('Failed to load NordVPN config:', e);
+      console.error("Failed to load NordVPN config:", e);
     }
   }
 
@@ -91,7 +91,7 @@ export class NordVPNSecurityService {
         localStorage.removeItem(STORAGE_KEYS.config);
       }
     } catch (e) {
-      console.error('Failed to save NordVPN config:', e);
+      console.error("Failed to save NordVPN config:", e);
     }
   }
 
@@ -126,7 +126,7 @@ export class NordVPNSecurityService {
         }));
       }
     } catch (e) {
-      console.error('Failed to load audit log:', e);
+      console.error("Failed to load audit log:", e);
     }
   }
 
@@ -136,13 +136,13 @@ export class NordVPNSecurityService {
       const toSave = this.auditLog.slice(-1000);
       localStorage.setItem(STORAGE_KEYS.auditLog, JSON.stringify(toSave));
     } catch (e) {
-      console.error('Failed to save audit log:', e);
+      console.error("Failed to save audit log:", e);
     }
   }
 
   logSecurityEvent(
     action: string,
-    operationType: SecurityAuditLog['operationType'],
+    operationType: SecurityAuditLog["operationType"],
     success: boolean,
     details?: string
   ): void {
@@ -150,7 +150,7 @@ export class NordVPNSecurityService {
       id: generateId(),
       timestamp: new Date(),
       action,
-      vpnStatus: this.status.isConnected ? 'connected' : 'disconnected',
+      vpnStatus: this.status.isConnected ? "connected" : "disconnected",
       serverRegion: this.status.currentRegion,
       operationType,
       success,
@@ -184,7 +184,7 @@ export class NordVPNSecurityService {
   async checkStatus(): Promise<VPNStatus> {
     // Simulated status check - in production, this would use NordVPN's API
     // or check the system's network configuration
-    
+
     if (!this.isConfigured()) {
       this.status = {
         isConnected: false,
@@ -201,15 +201,16 @@ export class NordVPNSecurityService {
     // In production, this would make actual API calls
     try {
       // Check public IP to verify VPN status
-      const response = await fetch('https://api.ipify.org?format=json');
+      const response = await fetch("https://api.ipify.org?format=json");
       const data = await response.json();
-      
+
       this.status = {
         isConnected: true, // Would be determined by comparing IP to known VPN ranges
-        currentServer: this.config?.preferredRegion === 'uk' ? 'uk-london-001' : 'auto-best',
-        currentRegion: this.config?.preferredRegion || 'auto',
+        currentServer:
+          this.config?.preferredRegion === "uk" ? "uk-london-001" : "auto-best",
+        currentRegion: this.config?.preferredRegion || "auto",
         ip: data.ip,
-        protocol: 'NordLynx',
+        protocol: "NordLynx",
         uptime: 3600, // Would be actual uptime
       };
     } catch (e) {
@@ -225,7 +226,7 @@ export class NordVPNSecurityService {
   /**
    * Check if a sensitive operation should proceed based on VPN status
    */
-  shouldAllowOperation(operationType: SecurityAuditLog['operationType']): {
+  shouldAllowOperation(operationType: SecurityAuditLog["operationType"]): {
     allowed: boolean;
     reason?: string;
   } {
@@ -240,7 +241,8 @@ export class NordVPNSecurityService {
     if (this.config.killSwitch && !this.status.isConnected) {
       return {
         allowed: false,
-        reason: 'Kill switch enabled but VPN is disconnected. Please connect to VPN first.',
+        reason:
+          "Kill switch enabled but VPN is disconnected. Please connect to VPN first.",
       };
     }
 
@@ -251,12 +253,12 @@ export class NordVPNSecurityService {
    * Wrap a sensitive operation with VPN security checks
    */
   async secureOperation<T>(
-    operationType: SecurityAuditLog['operationType'],
+    operationType: SecurityAuditLog["operationType"],
     operation: () => Promise<T>,
     description: string
   ): Promise<T> {
     const check = this.shouldAllowOperation(operationType);
-    
+
     if (!check.allowed) {
       this.logSecurityEvent(
         description,
@@ -264,7 +266,9 @@ export class NordVPNSecurityService {
         false,
         `Blocked: ${check.reason}`
       );
-      throw new VPNSecurityError(check.reason || 'Operation blocked by VPN security');
+      throw new VPNSecurityError(
+        check.reason || "Operation blocked by VPN security"
+      );
     }
 
     try {
@@ -276,7 +280,7 @@ export class NordVPNSecurityService {
         description,
         operationType,
         false,
-        error instanceof Error ? error.message : 'Unknown error'
+        error instanceof Error ? error.message : "Unknown error"
       );
       throw error;
     }
@@ -287,25 +291,90 @@ export class NordVPNSecurityService {
   /**
    * Get recommended servers based on use case
    */
-  getRecommendedServers(useCase: 'general' | 'streaming' | 'p2p' | 'privacy'): VPNServer[] {
+  getRecommendedServers(
+    useCase: "general" | "streaming" | "p2p" | "privacy"
+  ): VPNServer[] {
     // In production, this would fetch from NordVPN's API
     const servers: Record<string, VPNServer[]> = {
       general: [
-        { id: 'uk-1', name: 'UK #1', country: 'United Kingdom', city: 'London', load: 25, features: ['standard'] },
-        { id: 'uk-2', name: 'UK #2', country: 'United Kingdom', city: 'Manchester', load: 30, features: ['standard'] },
-        { id: 'nl-1', name: 'Netherlands #1', country: 'Netherlands', city: 'Amsterdam', load: 20, features: ['standard'] },
+        {
+          id: "uk-1",
+          name: "UK #1",
+          country: "United Kingdom",
+          city: "London",
+          load: 25,
+          features: ["standard"],
+        },
+        {
+          id: "uk-2",
+          name: "UK #2",
+          country: "United Kingdom",
+          city: "Manchester",
+          load: 30,
+          features: ["standard"],
+        },
+        {
+          id: "nl-1",
+          name: "Netherlands #1",
+          country: "Netherlands",
+          city: "Amsterdam",
+          load: 20,
+          features: ["standard"],
+        },
       ],
       streaming: [
-        { id: 'uk-s1', name: 'UK Streaming #1', country: 'United Kingdom', city: 'London', load: 35, features: ['streaming'] },
-        { id: 'us-s1', name: 'US Streaming #1', country: 'United States', city: 'New York', load: 40, features: ['streaming'] },
+        {
+          id: "uk-s1",
+          name: "UK Streaming #1",
+          country: "United Kingdom",
+          city: "London",
+          load: 35,
+          features: ["streaming"],
+        },
+        {
+          id: "us-s1",
+          name: "US Streaming #1",
+          country: "United States",
+          city: "New York",
+          load: 40,
+          features: ["streaming"],
+        },
       ],
       p2p: [
-        { id: 'nl-p1', name: 'Netherlands P2P #1', country: 'Netherlands', city: 'Amsterdam', load: 45, features: ['p2p'] },
-        { id: 'ch-p1', name: 'Switzerland P2P #1', country: 'Switzerland', city: 'Zurich', load: 30, features: ['p2p'] },
+        {
+          id: "nl-p1",
+          name: "Netherlands P2P #1",
+          country: "Netherlands",
+          city: "Amsterdam",
+          load: 45,
+          features: ["p2p"],
+        },
+        {
+          id: "ch-p1",
+          name: "Switzerland P2P #1",
+          country: "Switzerland",
+          city: "Zurich",
+          load: 30,
+          features: ["p2p"],
+        },
       ],
       privacy: [
-        { id: 'ch-1', name: 'Switzerland #1', country: 'Switzerland', city: 'Zurich', load: 15, features: ['double_vpn'] },
-        { id: 'is-1', name: 'Iceland #1', country: 'Iceland', city: 'Reykjavik', load: 10, features: ['privacy'] },
+        {
+          id: "ch-1",
+          name: "Switzerland #1",
+          country: "Switzerland",
+          city: "Zurich",
+          load: 15,
+          features: ["double_vpn"],
+        },
+        {
+          id: "is-1",
+          name: "Iceland #1",
+          country: "Iceland",
+          city: "Reykjavik",
+          load: 10,
+          features: ["privacy"],
+        },
       ],
     };
 
@@ -319,7 +388,7 @@ export class NordVPNSecurityService {
 export class VPNSecurityError extends Error {
   constructor(message: string) {
     super(message);
-    this.name = 'VPNSecurityError';
+    this.name = "VPNSecurityError";
   }
 }
 
@@ -330,20 +399,20 @@ function generateId(): string {
 
 // ==================== React Hook ====================
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from "react";
 
 export interface UseNordVPNReturn {
   isConfigured: boolean;
   status: VPNStatus;
   config: NordVPNConfig | null;
   auditLog: SecurityAuditLog[];
-  
+
   // Actions
   configure: (config: NordVPNConfig) => void;
   disconnect: () => void;
   checkStatus: () => Promise<VPNStatus>;
   secureOperation: <T>(
-    type: SecurityAuditLog['operationType'],
+    type: SecurityAuditLog["operationType"],
     operation: () => Promise<T>,
     description: string
   ) => Promise<T>;
@@ -354,8 +423,12 @@ export function useNordVPN(): UseNordVPNReturn {
   const [service] = useState(() => new NordVPNSecurityService());
   const [isConfigured, setIsConfigured] = useState(service.isConfigured());
   const [status, setStatus] = useState<VPNStatus>(service.getStatus());
-  const [config, setConfig] = useState<NordVPNConfig | null>(service.getConfig());
-  const [auditLog, setAuditLog] = useState<SecurityAuditLog[]>(service.getAuditLog(50));
+  const [config, setConfig] = useState<NordVPNConfig | null>(
+    service.getConfig()
+  );
+  const [auditLog, setAuditLog] = useState<SecurityAuditLog[]>(
+    service.getAuditLog(50)
+  );
 
   // Check status periodically
   useEffect(() => {
@@ -370,12 +443,15 @@ export function useNordVPN(): UseNordVPNReturn {
     return () => clearInterval(interval);
   }, [service]);
 
-  const configure = useCallback((newConfig: NordVPNConfig) => {
-    service.setConfig(newConfig);
-    setConfig(newConfig);
-    setIsConfigured(true);
-    service.checkStatus().then(setStatus);
-  }, [service]);
+  const configure = useCallback(
+    (newConfig: NordVPNConfig) => {
+      service.setConfig(newConfig);
+      setConfig(newConfig);
+      setIsConfigured(true);
+      service.checkStatus().then(setStatus);
+    },
+    [service]
+  );
 
   const disconnect = useCallback(() => {
     service.clearConfig();
@@ -397,15 +473,22 @@ export function useNordVPN(): UseNordVPNReturn {
     return newStatus;
   }, [service]);
 
-  const secureOperation = useCallback(async <T>(
-    type: SecurityAuditLog['operationType'],
-    operation: () => Promise<T>,
-    description: string
-  ): Promise<T> => {
-    const result = await service.secureOperation(type, operation, description);
-    setAuditLog(service.getAuditLog(50));
-    return result;
-  }, [service]);
+  const secureOperation = useCallback(
+    async <T>(
+      type: SecurityAuditLog["operationType"],
+      operation: () => Promise<T>,
+      description: string
+    ): Promise<T> => {
+      const result = await service.secureOperation(
+        type,
+        operation,
+        description
+      );
+      setAuditLog(service.getAuditLog(50));
+      return result;
+    },
+    [service]
+  );
 
   const clearAuditLog = useCallback(() => {
     service.clearAuditLog();

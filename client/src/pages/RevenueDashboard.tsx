@@ -1,20 +1,39 @@
 import { useState } from "react";
-import DashboardLayout from '@/components/project-management/DashboardLayout';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import DashboardLayout from "@/components/project-management/DashboardLayout";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
-import { 
-  DollarSign, 
-  TrendingUp, 
+import {
+  DollarSign,
+  TrendingUp,
   TrendingDown,
-  Users, 
+  Users,
   Target,
   Plus,
   ArrowUpRight,
@@ -28,24 +47,76 @@ import {
   CheckCircle2,
   Clock,
   Zap,
-  RefreshCw
+  RefreshCw,
 } from "lucide-react";
 import { trpc } from "@/lib/trpc";
 import { toast } from "sonner";
 
 // Demo data for initial display
 const demoVentures = [
-  { name: "CEPHO.Ai", mrr: 0, arr: 0, status: "pre_revenue", customers: 1, stage: "MVP" },
-  { name: "Project A", mrr: 45000, arr: 540000, status: "active", customers: 12, stage: "Growth" },
-  { name: "Project B", mrr: 0, arr: 0, status: "planned", customers: 0, stage: "Concept" },
-  { name: "Perfect DXB", mrr: 28000, arr: 336000, status: "active", customers: 8, stage: "Established" },
+  {
+    name: "CEPHO.Ai",
+    mrr: 0,
+    arr: 0,
+    status: "pre_revenue",
+    customers: 1,
+    stage: "MVP",
+  },
+  {
+    name: "Project A",
+    mrr: 45000,
+    arr: 540000,
+    status: "active",
+    customers: 12,
+    stage: "Growth",
+  },
+  {
+    name: "Project B",
+    mrr: 0,
+    arr: 0,
+    status: "planned",
+    customers: 0,
+    stage: "Concept",
+  },
+  {
+    name: "Perfect DXB",
+    mrr: 28000,
+    arr: 336000,
+    status: "active",
+    customers: 8,
+    stage: "Established",
+  },
 ];
 
 const demoPipeline = [
-  { name: "Enterprise Client A", venture: "Project A", value: 120000, stage: "proposal", probability: 60 },
-  { name: "Government Contract B", venture: "Perfect DXB", value: 450000, stage: "negotiation", probability: 40 },
-  { name: "SaaS Pilot C", venture: "CEPHO.Ai", value: 24000, stage: "qualified", probability: 25 },
-  { name: "Consulting Project D", venture: "Project A", value: 85000, stage: "verbal_yes", probability: 80 },
+  {
+    name: "Enterprise Client A",
+    venture: "Project A",
+    value: 120000,
+    stage: "proposal",
+    probability: 60,
+  },
+  {
+    name: "Government Contract B",
+    venture: "Perfect DXB",
+    value: 450000,
+    stage: "negotiation",
+    probability: 40,
+  },
+  {
+    name: "SaaS Pilot C",
+    venture: "CEPHO.Ai",
+    value: 24000,
+    stage: "qualified",
+    probability: 25,
+  },
+  {
+    name: "Consulting Project D",
+    venture: "Project A",
+    value: 85000,
+    stage: "verbal_yes",
+    probability: 80,
+  },
 ];
 
 const stageColors: Record<string, string> = {
@@ -81,7 +152,10 @@ export default function RevenueDashboard() {
   const totalARR = demoVentures.reduce((sum, v) => sum + v.arr, 0);
   const totalCustomers = demoVentures.reduce((sum, v) => sum + v.customers, 0);
   const pipelineValue = demoPipeline.reduce((sum, p) => sum + p.value, 0);
-  const weightedPipeline = demoPipeline.reduce((sum, p) => sum + (p.value * p.probability / 100), 0);
+  const weightedPipeline = demoPipeline.reduce(
+    (sum, p) => sum + (p.value * p.probability) / 100,
+    0
+  );
 
   // Revenue infrastructure score
   const infrastructureScore = 35; // Current score from KPI report
@@ -95,7 +169,8 @@ export default function RevenueDashboard() {
           <div>
             <h1 className="text-2xl font-bold">Revenue Dashboard</h1>
             <p className="text-muted-foreground">
-              Track revenue streams, pipeline, and financial health across all ventures
+              Track revenue streams, pipeline, and financial health across all
+              ventures
             </p>
           </div>
           <div className="flex items-center gap-2">
@@ -118,18 +193,25 @@ export default function RevenueDashboard() {
                 <AlertTriangle className="h-5 w-5 text-amber-500" />
               </div>
               <div className="flex-1">
-                <h3 className="font-semibold text-amber-600 dark:text-amber-400">Revenue Infrastructure Gap Identified</h3>
+                <h3 className="font-semibold text-amber-600 dark:text-amber-400">
+                  Revenue Infrastructure Gap Identified
+                </h3>
                 <p className="text-sm text-muted-foreground mt-1">
-                  Current score: {infrastructureScore}% → Projected after integration: {projectedScore}%
+                  Current score: {infrastructureScore}% → Projected after
+                  integration: {projectedScore}%
                 </p>
                 <div className="mt-3 space-y-2">
                   <div className="flex items-center gap-2 text-sm">
                     <Clock className="h-4 w-4 text-muted-foreground" />
-                    <span>Stripe sandbox needs to be claimed for payment processing</span>
+                    <span>
+                      Stripe sandbox needs to be claimed for payment processing
+                    </span>
                   </div>
                   <div className="flex items-center gap-2 text-sm">
                     <Zap className="h-4 w-4 text-muted-foreground" />
-                    <span>No automated invoicing or subscription billing configured</span>
+                    <span>
+                      No automated invoicing or subscription billing configured
+                    </span>
                   </div>
                 </div>
                 <div className="mt-4 flex gap-2">
@@ -151,8 +233,12 @@ export default function RevenueDashboard() {
             <CardContent className="pt-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-muted-foreground">Monthly Recurring</p>
-                  <p className="text-2xl font-bold">AED {totalMRR.toLocaleString()}</p>
+                  <p className="text-sm text-muted-foreground">
+                    Monthly Recurring
+                  </p>
+                  <p className="text-2xl font-bold">
+                    AED {totalMRR.toLocaleString()}
+                  </p>
                 </div>
                 <div className="p-2 rounded-lg bg-green-500/10">
                   <TrendingUp className="h-5 w-5 text-green-500" />
@@ -168,15 +254,20 @@ export default function RevenueDashboard() {
             <CardContent className="pt-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-muted-foreground">Annual Recurring</p>
-                  <p className="text-2xl font-bold">AED {totalARR.toLocaleString()}</p>
+                  <p className="text-sm text-muted-foreground">
+                    Annual Recurring
+                  </p>
+                  <p className="text-2xl font-bold">
+                    AED {totalARR.toLocaleString()}
+                  </p>
                 </div>
                 <div className="p-2 rounded-lg bg-blue-500/10">
                   <DollarSign className="h-5 w-5 text-blue-500" />
                 </div>
               </div>
               <p className="text-xs text-muted-foreground mt-2">
-                Across {demoVentures.filter(v => v.status === "active").length} active ventures
+                Across {demoVentures.filter(v => v.status === "active").length}{" "}
+                active ventures
               </p>
             </CardContent>
           </Card>
@@ -185,8 +276,12 @@ export default function RevenueDashboard() {
             <CardContent className="pt-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-muted-foreground">Pipeline Value</p>
-                  <p className="text-2xl font-bold">AED {pipelineValue.toLocaleString()}</p>
+                  <p className="text-sm text-muted-foreground">
+                    Pipeline Value
+                  </p>
+                  <p className="text-2xl font-bold">
+                    AED {pipelineValue.toLocaleString()}
+                  </p>
                 </div>
                 <div className="p-2 rounded-lg bg-purple-500/10">
                   <Target className="h-5 w-5 text-purple-500" />
@@ -202,7 +297,9 @@ export default function RevenueDashboard() {
             <CardContent className="pt-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-muted-foreground">Active Customers</p>
+                  <p className="text-sm text-muted-foreground">
+                    Active Customers
+                  </p>
                   <p className="text-2xl font-bold">{totalCustomers}</p>
                 </div>
                 <div className="p-2 rounded-lg bg-cyan-500/10">
@@ -210,7 +307,11 @@ export default function RevenueDashboard() {
                 </div>
               </div>
               <p className="text-xs text-muted-foreground mt-2">
-                Avg. revenue: AED {totalCustomers > 0 ? Math.round(totalMRR / totalCustomers).toLocaleString() : 0}/mo
+                Avg. revenue: AED{" "}
+                {totalCustomers > 0
+                  ? Math.round(totalMRR / totalCustomers).toLocaleString()
+                  : 0}
+                /mo
               </p>
             </CardContent>
           </Card>
@@ -233,24 +334,36 @@ export default function RevenueDashboard() {
                   <Building2 className="h-5 w-5" />
                   Revenue by Venture
                 </CardTitle>
-                <CardDescription>Monthly recurring revenue across portfolio</CardDescription>
+                <CardDescription>
+                  Monthly recurring revenue across portfolio
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {demoVentures.map((venture) => (
+                  {demoVentures.map(venture => (
                     <div key={venture.name} className="flex items-center gap-4">
                       <div className="w-32 font-medium">{venture.name}</div>
                       <div className="flex-1">
-                        <Progress 
-                          value={totalMRR > 0 ? (venture.mrr / totalMRR) * 100 : 0} 
+                        <Progress
+                          value={
+                            totalMRR > 0 ? (venture.mrr / totalMRR) * 100 : 0
+                          }
                           className="h-2"
                         />
                       </div>
                       <div className="w-32 text-right">
-                        <span className="font-semibold">AED {venture.mrr.toLocaleString()}</span>
-                        <span className="text-xs text-muted-foreground ml-1">/mo</span>
+                        <span className="font-semibold">
+                          AED {venture.mrr.toLocaleString()}
+                        </span>
+                        <span className="text-xs text-muted-foreground ml-1">
+                          /mo
+                        </span>
                       </div>
-                      <Badge variant={venture.status === "active" ? "default" : "secondary"}>
+                      <Badge
+                        variant={
+                          venture.status === "active" ? "default" : "secondary"
+                        }
+                      >
                         {venture.stage}
                       </Badge>
                     </div>
@@ -261,7 +374,10 @@ export default function RevenueDashboard() {
 
             {/* Quick Actions */}
             <div className="grid md:grid-cols-3 gap-4">
-              <Card className="cursor-pointer hover:border-primary/50 transition-colors" onClick={() => setShowAddStream(true)}>
+              <Card
+                className="cursor-pointer hover:border-primary/50 transition-colors"
+                onClick={() => setShowAddStream(true)}
+              >
                 <CardContent className="pt-4">
                   <div className="flex items-center gap-3">
                     <div className="p-2 rounded-lg bg-green-500/10">
@@ -269,13 +385,18 @@ export default function RevenueDashboard() {
                     </div>
                     <div>
                       <p className="font-medium">Add Revenue Stream</p>
-                      <p className="text-sm text-muted-foreground">Define a new income source</p>
+                      <p className="text-sm text-muted-foreground">
+                        Define a new income source
+                      </p>
                     </div>
                   </div>
                 </CardContent>
               </Card>
 
-              <Card className="cursor-pointer hover:border-primary/50 transition-colors" onClick={() => setShowAddOpportunity(true)}>
+              <Card
+                className="cursor-pointer hover:border-primary/50 transition-colors"
+                onClick={() => setShowAddOpportunity(true)}
+              >
                 <CardContent className="pt-4">
                   <div className="flex items-center gap-3">
                     <div className="p-2 rounded-lg bg-purple-500/10">
@@ -283,7 +404,9 @@ export default function RevenueDashboard() {
                     </div>
                     <div>
                       <p className="font-medium">Add Pipeline Deal</p>
-                      <p className="text-sm text-muted-foreground">Track a new opportunity</p>
+                      <p className="text-sm text-muted-foreground">
+                        Track a new opportunity
+                      </p>
                     </div>
                   </div>
                 </CardContent>
@@ -297,7 +420,9 @@ export default function RevenueDashboard() {
                     </div>
                     <div>
                       <p className="font-medium">Connect Stripe</p>
-                      <p className="text-sm text-muted-foreground">Enable payment processing</p>
+                      <p className="text-sm text-muted-foreground">
+                        Enable payment processing
+                      </p>
                     </div>
                   </div>
                 </CardContent>
@@ -317,10 +442,34 @@ export default function RevenueDashboard() {
             <div className="grid gap-4">
               {/* Demo revenue streams */}
               {[
-                { name: "Project A Consulting", venture: "Project A", type: "consulting", mrr: 35000, status: "active" },
-                { name: "Project A Retainers", venture: "Project A", type: "recurring", mrr: 10000, status: "active" },
-                { name: "Perfect DXB Services", venture: "Perfect DXB", type: "recurring", mrr: 28000, status: "active" },
-                { name: "CEPHO.Ai Subscriptions", venture: "CEPHO.Ai", type: "subscription", mrr: 0, status: "planned" },
+                {
+                  name: "Project A Consulting",
+                  venture: "Project A",
+                  type: "consulting",
+                  mrr: 35000,
+                  status: "active",
+                },
+                {
+                  name: "Project A Retainers",
+                  venture: "Project A",
+                  type: "recurring",
+                  mrr: 10000,
+                  status: "active",
+                },
+                {
+                  name: "Perfect DXB Services",
+                  venture: "Perfect DXB",
+                  type: "recurring",
+                  mrr: 28000,
+                  status: "active",
+                },
+                {
+                  name: "CEPHO.Ai Subscriptions",
+                  venture: "CEPHO.Ai",
+                  type: "subscription",
+                  mrr: 0,
+                  status: "planned",
+                },
               ].map((stream, idx) => (
                 <Card key={idx}>
                   <CardContent className="pt-4">
@@ -331,12 +480,20 @@ export default function RevenueDashboard() {
                         </div>
                         <div>
                           <p className="font-medium">{stream.name}</p>
-                          <p className="text-sm text-muted-foreground">{stream.venture} • {stream.type}</p>
+                          <p className="text-sm text-muted-foreground">
+                            {stream.venture} • {stream.type}
+                          </p>
                         </div>
                       </div>
                       <div className="text-right">
-                        <p className="font-semibold">AED {stream.mrr.toLocaleString()}/mo</p>
-                        <Badge variant={stream.status === "active" ? "default" : "secondary"}>
+                        <p className="font-semibold">
+                          AED {stream.mrr.toLocaleString()}/mo
+                        </p>
+                        <Badge
+                          variant={
+                            stream.status === "active" ? "default" : "secondary"
+                          }
+                        >
                           {stream.status}
                         </Badge>
                       </div>
@@ -358,19 +515,30 @@ export default function RevenueDashboard() {
 
             {/* Pipeline stages visualization */}
             <div className="grid grid-cols-4 gap-2 mb-4">
-              {["qualified", "proposal", "negotiation", "verbal_yes"].map((stage) => {
-                const stageDeals = demoPipeline.filter(p => p.stage === stage);
-                const stageValue = stageDeals.reduce((sum, p) => sum + p.value, 0);
-                return (
-                  <Card key={stage} className="text-center">
-                    <CardContent className="pt-4 pb-2">
-                      <p className="text-xs text-muted-foreground uppercase">{stageLabels[stage]}</p>
-                      <p className="text-lg font-bold">{stageDeals.length}</p>
-                      <p className="text-xs text-muted-foreground">AED {stageValue.toLocaleString()}</p>
-                    </CardContent>
-                  </Card>
-                );
-              })}
+              {["qualified", "proposal", "negotiation", "verbal_yes"].map(
+                stage => {
+                  const stageDeals = demoPipeline.filter(
+                    p => p.stage === stage
+                  );
+                  const stageValue = stageDeals.reduce(
+                    (sum, p) => sum + p.value,
+                    0
+                  );
+                  return (
+                    <Card key={stage} className="text-center">
+                      <CardContent className="pt-4 pb-2">
+                        <p className="text-xs text-muted-foreground uppercase">
+                          {stageLabels[stage]}
+                        </p>
+                        <p className="text-lg font-bold">{stageDeals.length}</p>
+                        <p className="text-xs text-muted-foreground">
+                          AED {stageValue.toLocaleString()}
+                        </p>
+                      </CardContent>
+                    </Card>
+                  );
+                }
+              )}
             </div>
 
             <div className="space-y-3">
@@ -379,16 +547,24 @@ export default function RevenueDashboard() {
                   <CardContent className="pt-4">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-4">
-                        <div className={`w-2 h-12 rounded-full ${stageColors[opp.stage]}`} />
+                        <div
+                          className={`w-2 h-12 rounded-full ${stageColors[opp.stage]}`}
+                        />
                         <div>
                           <p className="font-medium">{opp.name}</p>
-                          <p className="text-sm text-muted-foreground">{opp.venture}</p>
+                          <p className="text-sm text-muted-foreground">
+                            {opp.venture}
+                          </p>
                         </div>
                       </div>
                       <div className="flex items-center gap-4">
                         <div className="text-right">
-                          <p className="font-semibold">AED {opp.value.toLocaleString()}</p>
-                          <p className="text-xs text-muted-foreground">{opp.probability}% probability</p>
+                          <p className="font-semibold">
+                            AED {opp.value.toLocaleString()}
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            {opp.probability}% probability
+                          </p>
                         </div>
                         <Badge className={stageColors[opp.stage]}>
                           {stageLabels[opp.stage]}
@@ -405,28 +581,52 @@ export default function RevenueDashboard() {
             <Card>
               <CardHeader>
                 <CardTitle>Revenue Forecast</CardTitle>
-                <CardDescription>Projected revenue for the next 12 months</CardDescription>
+                <CardDescription>
+                  Projected revenue for the next 12 months
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
                   {/* Quarterly projections */}
                   {[
-                    { period: "Q1 2026", projected: 250000, confidence: "high" },
-                    { period: "Q2 2026", projected: 320000, confidence: "medium" },
-                    { period: "Q3 2026", projected: 450000, confidence: "medium" },
+                    {
+                      period: "Q1 2026",
+                      projected: 250000,
+                      confidence: "high",
+                    },
+                    {
+                      period: "Q2 2026",
+                      projected: 320000,
+                      confidence: "medium",
+                    },
+                    {
+                      period: "Q3 2026",
+                      projected: 450000,
+                      confidence: "medium",
+                    },
                     { period: "Q4 2026", projected: 580000, confidence: "low" },
                   ].map((forecast, idx) => (
-                    <div key={idx} className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
+                    <div
+                      key={idx}
+                      className="flex items-center justify-between p-3 rounded-lg bg-muted/50"
+                    >
                       <div className="flex items-center gap-3">
                         <Calendar className="h-4 w-4 text-muted-foreground" />
                         <span className="font-medium">{forecast.period}</span>
                       </div>
                       <div className="flex items-center gap-4">
-                        <span className="font-semibold">AED {forecast.projected.toLocaleString()}</span>
-                        <Badge variant={
-                          forecast.confidence === "high" ? "default" : 
-                          forecast.confidence === "medium" ? "secondary" : "outline"
-                        }>
+                        <span className="font-semibold">
+                          AED {forecast.projected.toLocaleString()}
+                        </span>
+                        <Badge
+                          variant={
+                            forecast.confidence === "high"
+                              ? "default"
+                              : forecast.confidence === "medium"
+                                ? "secondary"
+                                : "outline"
+                          }
+                        >
                           {forecast.confidence} confidence
                         </Badge>
                       </div>
@@ -436,7 +636,8 @@ export default function RevenueDashboard() {
 
                 <div className="mt-6 p-4 rounded-lg border border-dashed">
                   <p className="text-sm text-muted-foreground text-center">
-                    Connect Stripe and add more revenue streams to improve forecast accuracy
+                    Connect Stripe and add more revenue streams to improve
+                    forecast accuracy
                   </p>
                 </div>
               </CardContent>
@@ -449,7 +650,9 @@ export default function RevenueDashboard() {
           <DialogContent>
             <DialogHeader>
               <DialogTitle>Add Revenue Stream</DialogTitle>
-              <DialogDescription>Define a new source of income for your ventures</DialogDescription>
+              <DialogDescription>
+                Define a new source of income for your ventures
+              </DialogDescription>
             </DialogHeader>
             <div className="space-y-4">
               <div className="space-y-2">
@@ -460,7 +663,9 @@ export default function RevenueDashboard() {
                   </SelectTrigger>
                   <SelectContent>
                     {demoVentures.map(v => (
-                      <SelectItem key={v.name} value={v.name}>{v.name}</SelectItem>
+                      <SelectItem key={v.name} value={v.name}>
+                        {v.name}
+                      </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
@@ -503,10 +708,13 @@ export default function RevenueDashboard() {
                   </Select>
                 </div>
               </div>
-              <Button className="w-full" onClick={() => {
-                toast.success("Revenue stream added");
-                setShowAddStream(false);
-              }}>
+              <Button
+                className="w-full"
+                onClick={() => {
+                  toast.success("Revenue stream added");
+                  setShowAddStream(false);
+                }}
+              >
                 Add Revenue Stream
               </Button>
             </div>
@@ -518,7 +726,9 @@ export default function RevenueDashboard() {
           <DialogContent>
             <DialogHeader>
               <DialogTitle>Add Pipeline Opportunity</DialogTitle>
-              <DialogDescription>Track a new sales opportunity</DialogDescription>
+              <DialogDescription>
+                Track a new sales opportunity
+              </DialogDescription>
             </DialogHeader>
             <div className="space-y-4">
               <div className="space-y-2">
@@ -534,7 +744,9 @@ export default function RevenueDashboard() {
                     </SelectTrigger>
                     <SelectContent>
                       {demoVentures.map(v => (
-                        <SelectItem key={v.name} value={v.name}>{v.name}</SelectItem>
+                        <SelectItem key={v.name} value={v.name}>
+                          {v.name}
+                        </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
@@ -573,10 +785,13 @@ export default function RevenueDashboard() {
                 <Label>Notes</Label>
                 <Textarea placeholder="Additional context..." />
               </div>
-              <Button className="w-full" onClick={() => {
-                toast.success("Opportunity added");
-                setShowAddOpportunity(false);
-              }}>
+              <Button
+                className="w-full"
+                onClick={() => {
+                  toast.success("Opportunity added");
+                  setShowAddOpportunity(false);
+                }}
+              >
                 Add Opportunity
               </Button>
             </div>

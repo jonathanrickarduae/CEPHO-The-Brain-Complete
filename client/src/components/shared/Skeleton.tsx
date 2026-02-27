@@ -1,4 +1,4 @@
-import { cn } from '@/lib/utils';
+import { cn } from "@/lib/utils";
 
 // Base skeleton with shimmer animation
 interface SkeletonProps {
@@ -9,12 +9,12 @@ export function Skeleton({ className }: SkeletonProps) {
   return (
     <div
       className={cn(
-        'animate-pulse rounded-md bg-white/10',
-        'relative overflow-hidden',
-        'after:absolute after:inset-0',
-        'after:translate-x-[-100%]',
-        'after:animate-[shimmer_2s_infinite]',
-        'after:bg-gradient-to-r after:from-transparent after:via-white/10 after:to-transparent',
+        "animate-pulse rounded-md bg-white/10",
+        "relative overflow-hidden",
+        "after:absolute after:inset-0",
+        "after:translate-x-[-100%]",
+        "after:animate-[shimmer_2s_infinite]",
+        "after:bg-gradient-to-r after:from-transparent after:via-white/10 after:to-transparent",
         className
       )}
     />
@@ -24,10 +24,12 @@ export function Skeleton({ className }: SkeletonProps) {
 // Card skeleton for dashboard boxes
 export function CardSkeleton({ className }: SkeletonProps) {
   return (
-    <div className={cn(
-      'p-4 md:p-5 rounded-xl bg-card/60 border border-white/10',
-      className
-    )}>
+    <div
+      className={cn(
+        "p-4 md:p-5 rounded-xl bg-card/60 border border-white/10",
+        className
+      )}
+    >
       <div className="flex items-start gap-3">
         <Skeleton className="w-10 h-10 rounded-lg" />
         <div className="flex-1 space-y-2">
@@ -73,13 +75,20 @@ export function DashboardSkeleton() {
 // Chat message skeleton
 export function MessageSkeleton({ isUser = false }: { isUser?: boolean }) {
   return (
-    <div className={cn('flex gap-3', isUser && 'flex-row-reverse')}>
+    <div className={cn("flex gap-3", isUser && "flex-row-reverse")}>
       <Skeleton className="w-8 h-8 rounded-full shrink-0" />
-      <div className={cn('flex-1 max-w-[85%]', isUser && 'flex flex-col items-end')}>
-        <Skeleton className={cn(
-          'h-20 rounded-2xl',
-          isUser ? 'w-48 rounded-tr-sm' : 'w-64 rounded-tl-sm'
-        )} />
+      <div
+        className={cn(
+          "flex-1 max-w-[85%]",
+          isUser && "flex flex-col items-end"
+        )}
+      >
+        <Skeleton
+          className={cn(
+            "h-20 rounded-2xl",
+            isUser ? "w-48 rounded-tr-sm" : "w-64 rounded-tl-sm"
+          )}
+        />
         <Skeleton className="h-3 w-12 mt-1" />
       </div>
     </div>
@@ -146,7 +155,10 @@ export function StatsSkeleton() {
   return (
     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
       {[...Array(4)].map((_, i) => (
-        <div key={i} className="p-4 rounded-xl bg-card/60 border border-white/10">
+        <div
+          key={i}
+          className="p-4 rounded-xl bg-card/60 border border-white/10"
+        >
           <div className="flex items-center justify-between mb-2">
             <Skeleton className="w-5 h-5 rounded" />
             <Skeleton className="w-12 h-4 rounded" />
@@ -160,7 +172,13 @@ export function StatsSkeleton() {
 }
 
 // Table skeleton
-export function TableSkeleton({ rows = 5, cols = 4 }: { rows?: number; cols?: number }) {
+export function TableSkeleton({
+  rows = 5,
+  cols = 4,
+}: {
+  rows?: number;
+  cols?: number;
+}) {
   return (
     <div className="rounded-xl border border-white/10 overflow-hidden">
       {/* Header */}
@@ -169,10 +187,13 @@ export function TableSkeleton({ rows = 5, cols = 4 }: { rows?: number; cols?: nu
           <Skeleton key={i} className="h-4 flex-1" />
         ))}
       </div>
-      
+
       {/* Rows */}
       {[...Array(rows)].map((_, rowIndex) => (
-        <div key={rowIndex} className="flex gap-4 p-4 border-b border-white/5 last:border-0">
+        <div
+          key={rowIndex}
+          className="flex gap-4 p-4 border-b border-white/5 last:border-0"
+        >
           {[...Array(cols)].map((_, colIndex) => (
             <Skeleton key={colIndex} className="h-4 flex-1" />
           ))}
@@ -224,13 +245,17 @@ export function BriefCardSkeleton() {
 }
 
 // Full page loading skeleton
-export function PageSkeleton({ type = 'default' }: { type?: 'default' | 'dashboard' | 'chat' | 'list' }) {
+export function PageSkeleton({
+  type = "default",
+}: {
+  type?: "default" | "dashboard" | "chat" | "list";
+}) {
   switch (type) {
-    case 'dashboard':
+    case "dashboard":
       return <DashboardSkeleton />;
-    case 'chat':
+    case "chat":
       return <ChatSkeleton />;
-    case 'list':
+    case "list":
       return (
         <div className="p-6 space-y-6">
           <div className="flex items-center justify-between">

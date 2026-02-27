@@ -1,12 +1,15 @@
-import { ReactNode, useEffect, useState } from 'react';
-import { useLocation } from 'wouter';
+import { ReactNode, useEffect, useState } from "react";
+import { useLocation } from "wouter";
 
 interface PageTransitionProps {
   children: ReactNode;
   className?: string;
 }
 
-export function PageTransition({ children, className = '' }: PageTransitionProps) {
+export function PageTransition({
+  children,
+  className = "",
+}: PageTransitionProps) {
   const [location] = useLocation();
   const [isVisible, setIsVisible] = useState(false);
   const [displayChildren, setDisplayChildren] = useState(children);
@@ -14,7 +17,7 @@ export function PageTransition({ children, className = '' }: PageTransitionProps
   useEffect(() => {
     // Start exit animation
     setIsVisible(false);
-    
+
     // After exit animation, update children and start enter animation
     const timer = setTimeout(() => {
       setDisplayChildren(children);
@@ -32,7 +35,7 @@ export function PageTransition({ children, className = '' }: PageTransitionProps
   return (
     <div
       className={`transition-all duration-300 ease-out ${
-        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
+        isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
       } ${className}`}
     >
       {displayChildren}
@@ -41,7 +44,10 @@ export function PageTransition({ children, className = '' }: PageTransitionProps
 }
 
 // Fade transition variant
-export function FadeTransition({ children, className = '' }: PageTransitionProps) {
+export function FadeTransition({
+  children,
+  className = "",
+}: PageTransitionProps) {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -52,7 +58,7 @@ export function FadeTransition({ children, className = '' }: PageTransitionProps
   return (
     <div
       className={`transition-opacity duration-300 ${
-        isVisible ? 'opacity-100' : 'opacity-0'
+        isVisible ? "opacity-100" : "opacity-0"
       } ${className}`}
     >
       {children}
@@ -62,13 +68,13 @@ export function FadeTransition({ children, className = '' }: PageTransitionProps
 
 // Slide transition variant
 interface SlideTransitionProps extends PageTransitionProps {
-  direction?: 'left' | 'right' | 'up' | 'down';
+  direction?: "left" | "right" | "up" | "down";
 }
 
-export function SlideTransition({ 
-  children, 
-  className = '', 
-  direction = 'up' 
+export function SlideTransition({
+  children,
+  className = "",
+  direction = "up",
 }: SlideTransitionProps) {
   const [isVisible, setIsVisible] = useState(false);
 
@@ -78,16 +84,16 @@ export function SlideTransition({
   }, []);
 
   const directionClasses = {
-    left: isVisible ? 'translate-x-0' : '-translate-x-4',
-    right: isVisible ? 'translate-x-0' : 'translate-x-4',
-    up: isVisible ? 'translate-y-0' : 'translate-y-4',
-    down: isVisible ? 'translate-y-0' : '-translate-y-4',
+    left: isVisible ? "translate-x-0" : "-translate-x-4",
+    right: isVisible ? "translate-x-0" : "translate-x-4",
+    up: isVisible ? "translate-y-0" : "translate-y-4",
+    down: isVisible ? "translate-y-0" : "-translate-y-4",
   };
 
   return (
     <div
       className={`transition-all duration-300 ease-out ${
-        isVisible ? 'opacity-100' : 'opacity-0'
+        isVisible ? "opacity-100" : "opacity-0"
       } ${directionClasses[direction]} ${className}`}
     >
       {children}
@@ -96,7 +102,10 @@ export function SlideTransition({
 }
 
 // Scale transition for modals/dialogs
-export function ScaleTransition({ children, className = '' }: PageTransitionProps) {
+export function ScaleTransition({
+  children,
+  className = "",
+}: PageTransitionProps) {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -107,7 +116,7 @@ export function ScaleTransition({ children, className = '' }: PageTransitionProp
   return (
     <div
       className={`transition-all duration-200 ease-out ${
-        isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
+        isVisible ? "opacity-100 scale-100" : "opacity-0 scale-95"
       } ${className}`}
     >
       {children}
@@ -122,10 +131,10 @@ interface StaggeredListProps {
   className?: string;
 }
 
-export function StaggeredList({ 
-  children, 
-  staggerDelay = 50, 
-  className = '' 
+export function StaggeredList({
+  children,
+  staggerDelay = 50,
+  className = "",
 }: StaggeredListProps) {
   const [visibleItems, setVisibleItems] = useState<number[]>([]);
 
@@ -144,8 +153,8 @@ export function StaggeredList({
           key={index}
           className={`transition-all duration-300 ease-out ${
             visibleItems.includes(index)
-              ? 'opacity-100 translate-y-0'
-              : 'opacity-0 translate-y-4'
+              ? "opacity-100 translate-y-0"
+              : "opacity-0 translate-y-4"
           }`}
         >
           {child}
@@ -167,9 +176,9 @@ interface AnimatedCounterProps {
 export function AnimatedCounter({
   value,
   duration = 1000,
-  className = '',
-  prefix = '',
-  suffix = '',
+  className = "",
+  prefix = "",
+  suffix = "",
 }: AnimatedCounterProps) {
   const [displayValue, setDisplayValue] = useState(0);
 
@@ -181,10 +190,10 @@ export function AnimatedCounter({
     const animate = () => {
       const elapsed = Date.now() - startTime;
       const progress = Math.min(elapsed / duration, 1);
-      
+
       // Ease out cubic
       const eased = 1 - Math.pow(1 - progress, 3);
-      
+
       setDisplayValue(Math.round(startValue + diff * eased));
 
       if (progress < 1) {
@@ -197,7 +206,9 @@ export function AnimatedCounter({
 
   return (
     <span className={className}>
-      {prefix}{displayValue}{suffix}
+      {prefix}
+      {displayValue}
+      {suffix}
     </span>
   );
 }
@@ -205,21 +216,21 @@ export function AnimatedCounter({
 // Skeleton loader with shimmer effect
 interface SkeletonProps {
   className?: string;
-  variant?: 'text' | 'circular' | 'rectangular';
+  variant?: "text" | "circular" | "rectangular";
   width?: string | number;
   height?: string | number;
 }
 
-export function Skeleton({ 
-  className = '', 
-  variant = 'text',
+export function Skeleton({
+  className = "",
+  variant = "text",
   width,
   height,
 }: SkeletonProps) {
   const variantClasses = {
-    text: 'h-4 rounded',
-    circular: 'rounded-full',
-    rectangular: 'rounded-lg',
+    text: "h-4 rounded",
+    circular: "rounded-full",
+    rectangular: "rounded-lg",
   };
 
   return (
@@ -231,10 +242,10 @@ export function Skeleton({
 }
 
 // Loading dots animation
-export function LoadingDots({ className = '' }: { className?: string }) {
+export function LoadingDots({ className = "" }: { className?: string }) {
   return (
     <div className={`flex items-center gap-1 ${className}`}>
-      {[0, 1, 2].map((i) => (
+      {[0, 1, 2].map(i => (
         <div
           key={i}
           className="w-2 h-2 bg-primary rounded-full animate-bounce"

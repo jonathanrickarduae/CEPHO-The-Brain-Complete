@@ -1,4 +1,11 @@
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { CheckCircle2, Clock, BookOpen } from "lucide-react";
 
@@ -18,11 +25,15 @@ interface TrainingModalProps {
   onClose: () => void;
 }
 
-export function TrainingModal({ module, onComplete, onClose }: TrainingModalProps) {
+export function TrainingModal({
+  module,
+  onComplete,
+  onClose,
+}: TrainingModalProps) {
   if (!module) return null;
 
   return (
-    <Dialog open={!!module} onOpenChange={(open) => !open && onClose()}>
+    <Dialog open={!!module} onOpenChange={open => !open && onClose()}>
       <DialogContent className="max-w-2xl">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-xl">
@@ -39,27 +50,33 @@ export function TrainingModal({ module, onComplete, onClose }: TrainingModalProp
             </span>
           </DialogDescription>
         </DialogHeader>
-        
+
         <div className="py-6 space-y-4">
           <div className="bg-muted/50 rounded-lg p-4 border border-border">
             <h3 className="font-medium mb-2">Module Overview</h3>
-            <p className="text-sm text-muted-foreground">{module.description}</p>
+            <p className="text-sm text-muted-foreground">
+              {module.description}
+            </p>
           </div>
 
           <div className="space-y-3">
             <h3 className="font-medium">Training Content</h3>
             <div className="bg-background rounded-lg p-4 border border-border space-y-3">
               <p className="text-sm">
-                This training module covers essential concepts and practices for <strong>{module.name}</strong>.
+                This training module covers essential concepts and practices for{" "}
+                <strong>{module.name}</strong>.
               </p>
               <p className="text-sm text-muted-foreground">
-                Complete this module to enhance your Chief of Staff's capabilities and improve assessment accuracy.
+                Complete this module to enhance your Chief of Staff's
+                capabilities and improve assessment accuracy.
               </p>
-              
+
               <div className="mt-4 p-3 bg-primary/5 rounded border border-primary/20">
                 <p className="text-xs text-muted-foreground">
-                  <strong>Note:</strong> Detailed training content, interactive exercises, and assessments will be available in the next update. 
-                  For now, you can mark this module as complete to track your progress.
+                  <strong>Note:</strong> Detailed training content, interactive
+                  exercises, and assessments will be available in the next
+                  update. For now, you can mark this module as complete to track
+                  your progress.
                 </p>
               </div>
             </div>
@@ -69,7 +86,9 @@ export function TrainingModal({ module, onComplete, onClose }: TrainingModalProp
             <div className="flex items-start gap-2">
               <CheckCircle2 className="h-5 w-5 text-amber-500 mt-0.5" />
               <div>
-                <h4 className="font-medium text-sm mb-1">Completion Requirements</h4>
+                <h4 className="font-medium text-sm mb-1">
+                  Completion Requirements
+                </h4>
                 <ul className="text-xs text-muted-foreground space-y-1">
                   <li>• Review all module content</li>
                   <li>• Understand key concepts and workflows</li>
@@ -79,7 +98,7 @@ export function TrainingModal({ module, onComplete, onClose }: TrainingModalProp
             </div>
           </div>
         </div>
-        
+
         <DialogFooter className="gap-2">
           <Button variant="outline" onClick={onClose}>
             Close

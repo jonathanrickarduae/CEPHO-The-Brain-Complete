@@ -1,6 +1,6 @@
 /**
  * Business Plan Service Types and DTOs
- * 
+ *
  * Data Transfer Objects for business plan review services.
  */
 
@@ -9,7 +9,7 @@
  */
 export interface CreateBusinessPlanReviewDto {
   businessPlanContent: string;
-  reviewType?: 'initial' | 'revision' | 'final';
+  reviewType?: "initial" | "revision" | "final";
   notes?: string;
 }
 

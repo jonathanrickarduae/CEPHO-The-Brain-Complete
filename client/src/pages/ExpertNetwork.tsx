@@ -1,19 +1,37 @@
 import { useState } from "react";
 import { useLocation } from "wouter";
-import { 
-  Users, Brain, Search, Star, MessageSquare, Award,
-  ChevronRight, Sparkles, Target, Clock, BarChart3, 
-  Shield, Zap, Globe, Rocket, Cpu, Video, TrendingUp,
-  Filter, Grid, List, Eye
+import {
+  Users,
+  Brain,
+  Search,
+  Star,
+  MessageSquare,
+  Award,
+  ChevronRight,
+  Sparkles,
+  Target,
+  Clock,
+  BarChart3,
+  Shield,
+  Zap,
+  Globe,
+  Rocket,
+  Cpu,
+  Video,
+  TrendingUp,
+  Filter,
+  Grid,
+  List,
+  Eye,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { PageHeader } from '@/components/layout/PageHeader';
+import { PageHeader } from "@/components/layout/PageHeader";
 import { toast } from "sonner";
 
-type ViewMode = 'overview' | 'ai-smes' | 'persephone-board';
+type ViewMode = "overview" | "ai-smes" | "persephone-board";
 
 interface BoardMember {
   id: string;
@@ -23,7 +41,7 @@ interface BoardMember {
   expertise: string;
   icon: any;
   color: string;
-  status: 'active' | 'available';
+  status: "active" | "available";
   lastConsultation?: string;
   contributionScore: number;
   achievements: string[];
@@ -37,170 +55,180 @@ interface SMEExpert {
   expertise: string[];
   performance: number;
   projectsCompleted: number;
-  availability: 'available' | 'busy' | 'offline';
+  availability: "available" | "busy" | "offline";
 }
 
 const BOARD_MEMBERS: BoardMember[] = [
   {
-    id: 'altman',
-    name: 'Sam Altman',
-    title: 'CEO',
-    company: 'OpenAI',
-    expertise: 'AGI Development & AI Safety',
+    id: "altman",
+    name: "Sam Altman",
+    title: "CEO",
+    company: "OpenAI",
+    expertise: "AGI Development & AI Safety",
     icon: Brain,
-    color: 'emerald',
-    status: 'active',
-    lastConsultation: '2 days ago',
+    color: "emerald",
+    status: "active",
+    lastConsultation: "2 days ago",
     contributionScore: 99,
-    achievements: ['ChatGPT Launch', 'GPT-4 Development', 'AI Safety Leadership']
+    achievements: [
+      "ChatGPT Launch",
+      "GPT-4 Development",
+      "AI Safety Leadership",
+    ],
   },
   {
-    id: 'huang',
-    name: 'Jensen Huang',
-    title: 'CEO',
-    company: 'NVIDIA',
-    expertise: 'AI Hardware & Computing Infrastructure',
+    id: "huang",
+    name: "Jensen Huang",
+    title: "CEO",
+    company: "NVIDIA",
+    expertise: "AI Hardware & Computing Infrastructure",
     icon: Cpu,
-    color: 'green',
-    status: 'active',
-    lastConsultation: '1 week ago',
+    color: "green",
+    status: "active",
+    lastConsultation: "1 week ago",
     contributionScore: 98,
-    achievements: ['GPU Revolution', 'AI Computing Platform', 'CUDA Ecosystem']
+    achievements: ["GPU Revolution", "AI Computing Platform", "CUDA Ecosystem"],
   },
   {
-    id: 'amodei',
-    name: 'Dario Amodei',
-    title: 'CEO',
-    company: 'Anthropic',
-    expertise: 'Constitutional AI & Safety Research',
+    id: "amodei",
+    name: "Dario Amodei",
+    title: "CEO",
+    company: "Anthropic",
+    expertise: "Constitutional AI & Safety Research",
     icon: Shield,
-    color: 'blue',
-    status: 'active',
-    lastConsultation: '3 days ago',
+    color: "blue",
+    status: "active",
+    lastConsultation: "3 days ago",
     contributionScore: 97,
-    achievements: ['Claude AI', 'Constitutional AI', 'AI Alignment Research']
+    achievements: ["Claude AI", "Constitutional AI", "AI Alignment Research"],
   },
   {
-    id: 'hassabis',
-    name: 'Sir Demis Hassabis',
-    title: 'CEO',
-    company: 'Google DeepMind',
-    expertise: 'AI Research & Nobel Prize Winner',
+    id: "hassabis",
+    name: "Sir Demis Hassabis",
+    title: "CEO",
+    company: "Google DeepMind",
+    expertise: "AI Research & Nobel Prize Winner",
     icon: Award,
-    color: 'purple',
-    status: 'active',
-    lastConsultation: '4 days ago',
+    color: "purple",
+    status: "active",
+    lastConsultation: "4 days ago",
     contributionScore: 99,
-    achievements: ['AlphaGo', 'AlphaFold', 'Nobel Prize in Chemistry 2024']
+    achievements: ["AlphaGo", "AlphaFold", "Nobel Prize in Chemistry 2024"],
   },
   {
-    id: 'pichai',
-    name: 'Sundar Pichai',
-    title: 'CEO',
-    company: 'Alphabet & Google',
-    expertise: 'AI Integration & Product Strategy',
+    id: "pichai",
+    name: "Sundar Pichai",
+    title: "CEO",
+    company: "Alphabet & Google",
+    expertise: "AI Integration & Product Strategy",
     icon: Globe,
-    color: 'red',
-    status: 'active',
-    lastConsultation: '5 days ago',
+    color: "red",
+    status: "active",
+    lastConsultation: "5 days ago",
     contributionScore: 96,
-    achievements: ['Gemini AI', 'Google AI Integration', 'AI-First Strategy']
+    achievements: ["Gemini AI", "Google AI Integration", "AI-First Strategy"],
   },
   {
-    id: 'musk',
-    name: 'Elon Musk',
-    title: 'Founder',
-    company: 'xAI',
-    expertise: 'AI Innovation & Grok Development',
+    id: "musk",
+    name: "Elon Musk",
+    title: "Founder",
+    company: "xAI",
+    expertise: "AI Innovation & Grok Development",
     icon: Rocket,
-    color: 'orange',
-    status: 'active',
-    lastConsultation: '1 week ago',
+    color: "orange",
+    status: "active",
+    lastConsultation: "1 week ago",
     contributionScore: 95,
-    achievements: ['xAI Launch', 'Grok AI', 'Neuralink']
-  }
+    achievements: ["xAI Launch", "Grok AI", "Neuralink"],
+  },
 ];
 
 const SME_EXPERTS: SMEExpert[] = [
   {
-    id: 'sme-1',
-    name: 'Dr. Sarah Chen',
-    role: 'Financial Strategy Expert',
-    category: 'Finance',
-    expertise: ['Financial Modeling', 'Investment Strategy', 'Risk Management'],
+    id: "sme-1",
+    name: "Dr. Sarah Chen",
+    role: "Financial Strategy Expert",
+    category: "Finance",
+    expertise: ["Financial Modeling", "Investment Strategy", "Risk Management"],
     performance: 98,
     projectsCompleted: 156,
-    availability: 'available'
+    availability: "available",
   },
   {
-    id: 'sme-2',
-    name: 'Marcus Thompson',
-    role: 'Legal Counsel',
-    category: 'Legal',
-    expertise: ['Corporate Law', 'IP Protection', 'Compliance'],
+    id: "sme-2",
+    name: "Marcus Thompson",
+    role: "Legal Counsel",
+    category: "Legal",
+    expertise: ["Corporate Law", "IP Protection", "Compliance"],
     performance: 96,
     projectsCompleted: 134,
-    availability: 'available'
+    availability: "available",
   },
   {
-    id: 'sme-3',
-    name: 'Emily Rodriguez',
-    role: 'Marketing Strategist',
-    category: 'Marketing',
-    expertise: ['Brand Strategy', 'Digital Marketing', 'Growth Hacking'],
+    id: "sme-3",
+    name: "Emily Rodriguez",
+    role: "Marketing Strategist",
+    category: "Marketing",
+    expertise: ["Brand Strategy", "Digital Marketing", "Growth Hacking"],
     performance: 94,
     projectsCompleted: 189,
-    availability: 'busy'
+    availability: "busy",
   },
   {
-    id: 'sme-4',
-    name: 'Dr. James Wilson',
-    role: 'Technology Architect',
-    category: 'Technology',
-    expertise: ['System Design', 'Cloud Architecture', 'AI Integration'],
+    id: "sme-4",
+    name: "Dr. James Wilson",
+    role: "Technology Architect",
+    category: "Technology",
+    expertise: ["System Design", "Cloud Architecture", "AI Integration"],
     performance: 97,
     projectsCompleted: 142,
-    availability: 'available'
+    availability: "available",
   },
   {
-    id: 'sme-5',
-    name: 'Lisa Park',
-    role: 'Operations Expert',
-    category: 'Operations',
-    expertise: ['Process Optimization', 'Supply Chain', 'Quality Management'],
+    id: "sme-5",
+    name: "Lisa Park",
+    role: "Operations Expert",
+    category: "Operations",
+    expertise: ["Process Optimization", "Supply Chain", "Quality Management"],
     performance: 95,
     projectsCompleted: 167,
-    availability: 'available'
-  }
+    availability: "available",
+  },
 ];
 
 export default function ExpertNetwork() {
   const [, setLocation] = useLocation();
-  const [viewMode, setViewMode] = useState<ViewMode>('overview');
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [viewMode, setViewMode] = useState<ViewMode>("overview");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("all");
 
-  const handleConsultExpert = (expertId: string, type: 'board' | 'sme') => {
+  const handleConsultExpert = (expertId: string, type: "board" | "sme") => {
     toast.success(`Opening consultation with expert...`);
     // Navigate to expert chat or consultation page
   };
 
   const filteredSMEs = SME_EXPERTS.filter(expert => {
-    const matchesSearch = searchQuery === '' || 
+    const matchesSearch =
+      searchQuery === "" ||
       expert.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       expert.role.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      expert.expertise.some(e => e.toLowerCase().includes(searchQuery.toLowerCase()));
-    
-    const matchesCategory = selectedCategory === 'all' || expert.category === selectedCategory;
-    
+      expert.expertise.some(e =>
+        e.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+
+    const matchesCategory =
+      selectedCategory === "all" || expert.category === selectedCategory;
+
     return matchesSearch && matchesCategory;
   });
 
   const filteredBoard = BOARD_MEMBERS.filter(member => {
-    return searchQuery === '' || 
+    return (
+      searchQuery === "" ||
       member.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       member.company.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      member.expertise.toLowerCase().includes(searchQuery.toLowerCase());
+      member.expertise.toLowerCase().includes(searchQuery.toLowerCase())
+    );
   });
 
   return (
@@ -224,25 +252,25 @@ export default function ExpertNetwork() {
       <div className="border-b border-border bg-card/50">
         <div className="flex items-center gap-2 px-6 py-3">
           <Button
-            variant={viewMode === 'overview' ? 'default' : 'ghost'}
+            variant={viewMode === "overview" ? "default" : "ghost"}
             size="sm"
-            onClick={() => setViewMode('overview')}
+            onClick={() => setViewMode("overview")}
           >
             <Target className="w-4 h-4 mr-2" />
             Overview
           </Button>
           <Button
-            variant={viewMode === 'ai-smes' ? 'default' : 'ghost'}
+            variant={viewMode === "ai-smes" ? "default" : "ghost"}
             size="sm"
-            onClick={() => setViewMode('ai-smes')}
+            onClick={() => setViewMode("ai-smes")}
           >
             <Brain className="w-4 h-4 mr-2" />
             AI-SME Specialists ({SME_EXPERTS.length})
           </Button>
           <Button
-            variant={viewMode === 'persephone-board' ? 'default' : 'ghost'}
+            variant={viewMode === "persephone-board" ? "default" : "ghost"}
             size="sm"
-            onClick={() => setViewMode('persephone-board')}
+            onClick={() => setViewMode("persephone-board")}
           >
             <Award className="w-4 h-4 mr-2" />
             Persephone Board ({BOARD_MEMBERS.length})
@@ -253,47 +281,69 @@ export default function ExpertNetwork() {
       {/* Main Content */}
       <div className="flex-1 overflow-auto p-6">
         {/* Overview Mode */}
-        {viewMode === 'overview' && (
+        {viewMode === "overview" && (
           <div className="space-y-6">
             {/* Stats Cards */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <Card>
                 <CardHeader className="pb-3">
-                  <CardTitle className="text-sm font-medium text-muted-foreground">Total Experts</CardTitle>
+                  <CardTitle className="text-sm font-medium text-muted-foreground">
+                    Total Experts
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-3xl font-bold">{SME_EXPERTS.length + BOARD_MEMBERS.length}</div>
-                  <p className="text-xs text-muted-foreground mt-1">Available for consultation</p>
+                  <div className="text-3xl font-bold">
+                    {SME_EXPERTS.length + BOARD_MEMBERS.length}
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Available for consultation
+                  </p>
                 </CardContent>
               </Card>
-              
+
               <Card>
                 <CardHeader className="pb-3">
-                  <CardTitle className="text-sm font-medium text-muted-foreground">AI-SME Specialists</CardTitle>
+                  <CardTitle className="text-sm font-medium text-muted-foreground">
+                    AI-SME Specialists
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="text-3xl font-bold">{SME_EXPERTS.length}</div>
-                  <p className="text-xs text-emerald-400 mt-1">{SME_EXPERTS.filter(e => e.availability === 'available').length} available now</p>
+                  <p className="text-xs text-emerald-400 mt-1">
+                    {
+                      SME_EXPERTS.filter(e => e.availability === "available")
+                        .length
+                    }{" "}
+                    available now
+                  </p>
                 </CardContent>
               </Card>
-              
+
               <Card>
                 <CardHeader className="pb-3">
-                  <CardTitle className="text-sm font-medium text-muted-foreground">Persephone Board</CardTitle>
+                  <CardTitle className="text-sm font-medium text-muted-foreground">
+                    Persephone Board
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-3xl font-bold">{BOARD_MEMBERS.length}</div>
+                  <div className="text-3xl font-bold">
+                    {BOARD_MEMBERS.length}
+                  </div>
                   <p className="text-xs text-blue-400 mt-1">Industry leaders</p>
                 </CardContent>
               </Card>
-              
+
               <Card>
                 <CardHeader className="pb-3">
-                  <CardTitle className="text-sm font-medium text-muted-foreground">Avg Performance</CardTitle>
+                  <CardTitle className="text-sm font-medium text-muted-foreground">
+                    Avg Performance
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="text-3xl font-bold">96.5%</div>
-                  <p className="text-xs text-amber-400 mt-1">Across all experts</p>
+                  <p className="text-xs text-amber-400 mt-1">
+                    Across all experts
+                  </p>
                 </CardContent>
               </Card>
             </div>
@@ -308,23 +358,39 @@ export default function ExpertNetwork() {
                       <Brain className="w-5 h-5 text-primary" />
                       AI-SME Specialists
                     </CardTitle>
-                    <Button size="sm" variant="ghost" onClick={() => setViewMode('ai-smes')}>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => setViewMode("ai-smes")}
+                    >
                       View All <ChevronRight className="w-4 h-4 ml-1" />
                     </Button>
                   </div>
                 </CardHeader>
                 <CardContent className="space-y-3">
                   {SME_EXPERTS.slice(0, 3).map(expert => (
-                    <div key={expert.id} className="flex items-center justify-between p-3 rounded-lg border border-border hover:bg-accent/50 transition-colors">
+                    <div
+                      key={expert.id}
+                      className="flex items-center justify-between p-3 rounded-lg border border-border hover:bg-accent/50 transition-colors"
+                    >
                       <div className="flex-1">
                         <h4 className="font-semibold text-sm">{expert.name}</h4>
-                        <p className="text-xs text-muted-foreground">{expert.role}</p>
+                        <p className="text-xs text-muted-foreground">
+                          {expert.role}
+                        </p>
                         <div className="flex items-center gap-2 mt-1">
-                          <Badge variant="outline" className="text-xs">{expert.category}</Badge>
-                          <span className="text-xs text-muted-foreground">{expert.performance}% performance</span>
+                          <Badge variant="outline" className="text-xs">
+                            {expert.category}
+                          </Badge>
+                          <span className="text-xs text-muted-foreground">
+                            {expert.performance}% performance
+                          </span>
                         </div>
                       </div>
-                      <Button size="sm" onClick={() => handleConsultExpert(expert.id, 'sme')}>
+                      <Button
+                        size="sm"
+                        onClick={() => handleConsultExpert(expert.id, "sme")}
+                      >
                         <MessageSquare className="w-4 h-4 mr-1" />
                         Consult
                       </Button>
@@ -341,23 +407,39 @@ export default function ExpertNetwork() {
                       <Award className="w-5 h-5 text-amber-400" />
                       Persephone Board
                     </CardTitle>
-                    <Button size="sm" variant="ghost" onClick={() => setViewMode('persephone-board')}>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => setViewMode("persephone-board")}
+                    >
                       View All <ChevronRight className="w-4 h-4 ml-1" />
                     </Button>
                   </div>
                 </CardHeader>
                 <CardContent className="space-y-3">
                   {BOARD_MEMBERS.slice(0, 3).map(member => (
-                    <div key={member.id} className="flex items-center justify-between p-3 rounded-lg border border-border hover:bg-accent/50 transition-colors">
+                    <div
+                      key={member.id}
+                      className="flex items-center justify-between p-3 rounded-lg border border-border hover:bg-accent/50 transition-colors"
+                    >
                       <div className="flex-1">
                         <h4 className="font-semibold text-sm">{member.name}</h4>
-                        <p className="text-xs text-muted-foreground">{member.title}, {member.company}</p>
+                        <p className="text-xs text-muted-foreground">
+                          {member.title}, {member.company}
+                        </p>
                         <div className="flex items-center gap-2 mt-1">
-                          <Badge variant="outline" className="text-xs">{member.contributionScore}/100</Badge>
-                          <span className="text-xs text-muted-foreground">{member.lastConsultation}</span>
+                          <Badge variant="outline" className="text-xs">
+                            {member.contributionScore}/100
+                          </Badge>
+                          <span className="text-xs text-muted-foreground">
+                            {member.lastConsultation}
+                          </span>
                         </div>
                       </div>
-                      <Button size="sm" onClick={() => handleConsultExpert(member.id, 'board')}>
+                      <Button
+                        size="sm"
+                        onClick={() => handleConsultExpert(member.id, "board")}
+                      >
                         <Video className="w-4 h-4 mr-1" />
                         Consult
                       </Button>
@@ -370,7 +452,7 @@ export default function ExpertNetwork() {
         )}
 
         {/* AI-SME Specialists Mode */}
-        {viewMode === 'ai-smes' && (
+        {viewMode === "ai-smes" && (
           <div className="space-y-4">
             {/* Search and Filters */}
             <div className="flex items-center gap-4">
@@ -379,13 +461,13 @@ export default function ExpertNetwork() {
                 <Input
                   placeholder="Search AI-SME specialists..."
                   value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onChange={e => setSearchQuery(e.target.value)}
                   className="pl-10"
                 />
               </div>
               <select
                 value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
+                onChange={e => setSelectedCategory(e.target.value)}
                 className="px-4 py-2 rounded-lg border border-border bg-background"
               >
                 <option value="all">All Categories</option>
@@ -400,38 +482,62 @@ export default function ExpertNetwork() {
             {/* SME Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {filteredSMEs.map(expert => (
-                <Card key={expert.id} className="hover:shadow-lg transition-shadow">
+                <Card
+                  key={expert.id}
+                  className="hover:shadow-lg transition-shadow"
+                >
                   <CardHeader>
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <CardTitle className="text-lg">{expert.name}</CardTitle>
-                        <p className="text-sm text-muted-foreground mt-1">{expert.role}</p>
+                        <p className="text-sm text-muted-foreground mt-1">
+                          {expert.role}
+                        </p>
                       </div>
-                      <Badge variant={expert.availability === 'available' ? 'default' : 'secondary'}>
+                      <Badge
+                        variant={
+                          expert.availability === "available"
+                            ? "default"
+                            : "secondary"
+                        }
+                      >
                         {expert.availability}
                       </Badge>
                     </div>
                   </CardHeader>
                   <CardContent className="space-y-3">
                     <div>
-                      <p className="text-xs text-muted-foreground mb-2">Expertise:</p>
+                      <p className="text-xs text-muted-foreground mb-2">
+                        Expertise:
+                      </p>
                       <div className="flex flex-wrap gap-1">
                         {expert.expertise.map((skill, idx) => (
-                          <Badge key={idx} variant="outline" className="text-xs">{skill}</Badge>
+                          <Badge
+                            key={idx}
+                            variant="outline"
+                            className="text-xs"
+                          >
+                            {skill}
+                          </Badge>
                         ))}
                       </div>
                     </div>
                     <div className="flex items-center justify-between text-sm">
                       <div>
                         <p className="text-muted-foreground">Performance</p>
-                        <p className="font-bold text-emerald-400">{expert.performance}%</p>
+                        <p className="font-bold text-emerald-400">
+                          {expert.performance}%
+                        </p>
                       </div>
                       <div>
                         <p className="text-muted-foreground">Projects</p>
                         <p className="font-bold">{expert.projectsCompleted}</p>
                       </div>
                     </div>
-                    <Button className="w-full" onClick={() => handleConsultExpert(expert.id, 'sme')}>
+                    <Button
+                      className="w-full"
+                      onClick={() => handleConsultExpert(expert.id, "sme")}
+                    >
                       <MessageSquare className="w-4 h-4 mr-2" />
                       Start Consultation
                     </Button>
@@ -443,7 +549,7 @@ export default function ExpertNetwork() {
         )}
 
         {/* Persephone Board Mode */}
-        {viewMode === 'persephone-board' && (
+        {viewMode === "persephone-board" && (
           <div className="space-y-4">
             {/* Search */}
             <div className="relative">
@@ -451,7 +557,7 @@ export default function ExpertNetwork() {
               <Input
                 placeholder="Search Persephone Board members..."
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={e => setSearchQuery(e.target.value)}
                 className="pl-10"
               />
             </div>
@@ -461,18 +567,35 @@ export default function ExpertNetwork() {
               {filteredBoard.map(member => {
                 const IconComponent = member.icon;
                 return (
-                  <Card key={member.id} className="hover:shadow-lg transition-shadow">
+                  <Card
+                    key={member.id}
+                    className="hover:shadow-lg transition-shadow"
+                  >
                     <CardHeader>
                       <div className="flex items-start gap-4">
-                        <div className={`w-16 h-16 rounded-full bg-${member.color}-500/20 flex items-center justify-center`}>
-                          <IconComponent className={`w-8 h-8 text-${member.color}-400`} />
+                        <div
+                          className={`w-16 h-16 rounded-full bg-${member.color}-500/20 flex items-center justify-center`}
+                        >
+                          <IconComponent
+                            className={`w-8 h-8 text-${member.color}-400`}
+                          />
                         </div>
                         <div className="flex-1">
-                          <CardTitle className="text-lg">{member.name}</CardTitle>
-                          <p className="text-sm text-muted-foreground">{member.title}</p>
-                          <p className="text-sm font-semibold text-primary">{member.company}</p>
+                          <CardTitle className="text-lg">
+                            {member.name}
+                          </CardTitle>
+                          <p className="text-sm text-muted-foreground">
+                            {member.title}
+                          </p>
+                          <p className="text-sm font-semibold text-primary">
+                            {member.company}
+                          </p>
                         </div>
-                        <Badge variant={member.status === 'active' ? 'default' : 'secondary'}>
+                        <Badge
+                          variant={
+                            member.status === "active" ? "default" : "secondary"
+                          }
+                        >
                           {member.status}
                         </Badge>
                       </div>
@@ -480,27 +603,48 @@ export default function ExpertNetwork() {
                     <CardContent className="space-y-3">
                       <div>
                         <p className="text-sm font-semibold mb-1">Expertise:</p>
-                        <p className="text-sm text-muted-foreground">{member.expertise}</p>
+                        <p className="text-sm text-muted-foreground">
+                          {member.expertise}
+                        </p>
                       </div>
                       <div>
-                        <p className="text-sm font-semibold mb-1">Key Achievements:</p>
+                        <p className="text-sm font-semibold mb-1">
+                          Key Achievements:
+                        </p>
                         <div className="flex flex-wrap gap-1">
                           {member.achievements.map((achievement, idx) => (
-                            <Badge key={idx} variant="outline" className="text-xs">{achievement}</Badge>
+                            <Badge
+                              key={idx}
+                              variant="outline"
+                              className="text-xs"
+                            >
+                              {achievement}
+                            </Badge>
                           ))}
                         </div>
                       </div>
                       <div className="flex items-center justify-between">
                         <div>
-                          <p className="text-xs text-muted-foreground">Contribution Score</p>
-                          <p className="text-lg font-bold text-amber-400">{member.contributionScore}/100</p>
+                          <p className="text-xs text-muted-foreground">
+                            Contribution Score
+                          </p>
+                          <p className="text-lg font-bold text-amber-400">
+                            {member.contributionScore}/100
+                          </p>
                         </div>
                         <div className="text-right">
-                          <p className="text-xs text-muted-foreground">Last Consultation</p>
-                          <p className="text-sm font-semibold">{member.lastConsultation}</p>
+                          <p className="text-xs text-muted-foreground">
+                            Last Consultation
+                          </p>
+                          <p className="text-sm font-semibold">
+                            {member.lastConsultation}
+                          </p>
                         </div>
                       </div>
-                      <Button className="w-full" onClick={() => handleConsultExpert(member.id, 'board')}>
+                      <Button
+                        className="w-full"
+                        onClick={() => handleConsultExpert(member.id, "board")}
+                      >
                         <Video className="w-4 h-4 mr-2" />
                         Request Consultation
                       </Button>

@@ -1,5 +1,5 @@
 import { trpc } from "@/lib/trpc";
-import { UNAUTHED_ERR_MSG } from '@shared/const';
+import { UNAUTHED_ERR_MSG } from "@shared/const";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { httpBatchLink, TRPCClientError } from "@trpc/client";
 import { createRoot } from "react-dom/client";
@@ -50,15 +50,19 @@ const trpcClient = trpc.createClient({
       transformer: superjson,
       async headers() {
         // Get Supabase session token
-        const { createClient } = await import('@supabase/supabase-js');
+        const { createClient } = await import("@supabase/supabase-js");
         const supabase = createClient(
-          import.meta.env.VITE_SUPABASE_URL || '',
-          import.meta.env.VITE_SUPABASE_ANON_KEY || ''
+          import.meta.env.VITE_SUPABASE_URL || "",
+          import.meta.env.VITE_SUPABASE_ANON_KEY || ""
         );
-        const { data: { session } } = await supabase.auth.getSession();
-        
+        const {
+          data: { session },
+        } = await supabase.auth.getSession();
+
         return {
-          authorization: session?.access_token ? `Bearer ${session.access_token}` : '',
+          authorization: session?.access_token
+            ? `Bearer ${session.access_token}`
+            : "",
         };
       },
       fetch(input, init) {

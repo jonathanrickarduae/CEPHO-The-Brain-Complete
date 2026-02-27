@@ -56,9 +56,9 @@ Client-side caching is implemented through TanStack Query with configurable stal
 ```typescript
 // Example: Optimized query with caching
 const { data: projects } = trpc.projects.list.useQuery(
-  { status: 'active' },
+  { status: "active" },
   {
-    staleTime: 5 * 60 * 1000,  // 5 minutes
+    staleTime: 5 * 60 * 1000, // 5 minutes
     cacheTime: 10 * 60 * 1000, // 10 minutes
     refetchOnWindowFocus: false,
   }
@@ -87,6 +87,7 @@ const ProjectGenesis = lazy(() => import('./pages/ProjectGenesis'));
 Bundle size is minimized through tree-shaking of unused code, minification and compression, removal of development-only code in production, and optimization of images and assets.
 
 **Current Bundle Sizes**:
+
 - Main bundle: ~250KB (gzipped)
 - Vendor bundle: ~180KB (gzipped)
 - Total: ~430KB (gzipped)
@@ -166,9 +167,10 @@ Optimize API calls by batching related requests, implementing debouncing for use
 ```typescript
 // Good: Debounced search
 const debouncedSearch = useMemo(
-  () => debounce((query: string) => {
-    trpc.search.query.mutate({ query });
-  }, 300),
+  () =>
+    debounce((query: string) => {
+      trpc.search.query.mutate({ query });
+    }, 300),
   []
 );
 

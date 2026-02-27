@@ -1,6 +1,13 @@
-import { useState, useEffect, useCallback, createContext, useContext, ReactNode } from 'react';
-import { createPortal } from 'react-dom';
-import { Trophy, Flame, Star, Award } from 'lucide-react';
+import {
+  useState,
+  useEffect,
+  useCallback,
+  createContext,
+  useContext,
+  ReactNode,
+} from "react";
+import { createPortal } from "react-dom";
+import { Trophy, Flame, Star, Award } from "lucide-react";
 
 // Confetti particle
 interface Particle {
@@ -30,7 +37,7 @@ export function Confetti({
   particleCount = 50,
   spread = 70,
   origin = { x: 0.5, y: 0.5 },
-  colors = ['#ff10f0', '#00d4ff', '#ffd700', '#ff6b6b', '#4ecdc4', '#a855f7'],
+  colors = ["#ff10f0", "#00d4ff", "#ffd700", "#ff6b6b", "#4ecdc4", "#a855f7"],
   onComplete,
 }: ConfettiProps) {
   const [particles, setParticles] = useState<Particle[]>([]);
@@ -42,7 +49,7 @@ export function Confetti({
     for (let i = 0; i < particleCount; i++) {
       const angle = (Math.random() * spread - spread / 2) * (Math.PI / 180);
       const velocity = 8 + Math.random() * 8;
-      
+
       newParticles.push({
         id: i,
         x: origin.x * window.innerWidth,
@@ -112,7 +119,7 @@ export function Confetti({
             backgroundColor: p.color,
             transform: `rotate(${p.rotation}deg)`,
             opacity: p.opacity,
-            borderRadius: Math.random() > 0.5 ? '50%' : '0',
+            borderRadius: Math.random() > 0.5 ? "50%" : "0",
           }}
         />
       ))}
@@ -123,11 +130,20 @@ export function Confetti({
 
 // Celebration context for global celebrations
 interface CelebrationContextType {
-  celebrate: (type: 'confetti' | 'fireworks' | 'sparkles', options?: any) => void;
-  showAchievement: (achievement: { title: string; description: string; icon?: string }) => void;
+  celebrate: (
+    type: "confetti" | "fireworks" | "sparkles",
+    options?: any
+  ) => void;
+  showAchievement: (achievement: {
+    title: string;
+    description: string;
+    icon?: string;
+  }) => void;
 }
 
-const CelebrationContext = createContext<CelebrationContextType | undefined>(undefined);
+const CelebrationContext = createContext<CelebrationContextType | undefined>(
+  undefined
+);
 
 export function CelebrationProvider({ children }: { children: ReactNode }) {
   const [activeConfetti, setActiveConfetti] = useState(false);
@@ -137,23 +153,29 @@ export function CelebrationProvider({ children }: { children: ReactNode }) {
     icon?: string;
   } | null>(null);
 
-  const celebrate = useCallback((type: 'confetti' | 'fireworks' | 'sparkles', options?: any) => {
-    if (type === 'confetti') {
-      setActiveConfetti(true);
-      // Haptic feedback
-      if (navigator.vibrate) {
-        navigator.vibrate([50, 50, 50]);
+  const celebrate = useCallback(
+    (type: "confetti" | "fireworks" | "sparkles", options?: any) => {
+      if (type === "confetti") {
+        setActiveConfetti(true);
+        // Haptic feedback
+        if (navigator.vibrate) {
+          navigator.vibrate([50, 50, 50]);
+        }
       }
-    }
-  }, []);
+    },
+    []
+  );
 
-  const showAchievement = useCallback((ach: { title: string; description: string; icon?: string }) => {
-    setAchievement(ach);
-    celebrate('confetti');
-    
-    // Auto-hide after 5 seconds
-    setTimeout(() => setAchievement(null), 5000);
-  }, [celebrate]);
+  const showAchievement = useCallback(
+    (ach: { title: string; description: string; icon?: string }) => {
+      setAchievement(ach);
+      celebrate("confetti");
+
+      // Auto-hide after 5 seconds
+      setTimeout(() => setAchievement(null), 5000);
+    },
+    [celebrate]
+  );
 
   return (
     <CelebrationContext.Provider value={{ celebrate, showAchievement }}>
@@ -174,7 +196,7 @@ export function CelebrationProvider({ children }: { children: ReactNode }) {
 export function useCelebration() {
   const context = useContext(CelebrationContext);
   if (!context) {
-    throw new Error('useCelebration must be used within a CelebrationProvider');
+    throw new Error("useCelebration must be used within a CelebrationProvider");
   }
   return context;
 }
@@ -187,13 +209,22 @@ interface AchievementToastProps {
   onClose: () => void;
 }
 
-function AchievementToast({ title, description, icon = 'trophy', onClose }: AchievementToastProps) {
+function AchievementToast({
+  title,
+  description,
+  icon = "trophy",
+  onClose,
+}: AchievementToastProps) {
   const getIcon = () => {
     switch (icon) {
-      case 'streak': return <Flame className="w-7 h-7 text-white" />;
-      case 'star': return <Star className="w-7 h-7 text-white" />;
-      case 'award': return <Award className="w-7 h-7 text-white" />;
-      default: return <Trophy className="w-7 h-7 text-white" />;
+      case "streak":
+        return <Flame className="w-7 h-7 text-white" />;
+      case "star":
+        return <Star className="w-7 h-7 text-white" />;
+      case "award":
+        return <Award className="w-7 h-7 text-white" />;
+      default:
+        return <Trophy className="w-7 h-7 text-white" />;
     }
   };
   return createPortal(
@@ -230,8 +261,14 @@ interface SparkleProps {
   color?: string;
 }
 
-export function Sparkle({ children, active = false, color = '#ffd700' }: SparkleProps) {
-  const [sparkles, setSparkles] = useState<{ id: number; x: number; y: number; size: number }[]>([]);
+export function Sparkle({
+  children,
+  active = false,
+  color = "#ffd700",
+}: SparkleProps) {
+  const [sparkles, setSparkles] = useState<
+    { id: number; x: number; y: number; size: number }[]
+  >([]);
 
   useEffect(() => {
     if (!active) {
@@ -265,8 +302,8 @@ export function Sparkle({ children, active = false, color = '#ffd700' }: Sparkle
             width: s.size,
             height: s.size,
             backgroundColor: color,
-            borderRadius: '50%',
-            transform: 'translate(-50%, -50%)',
+            borderRadius: "50%",
+            transform: "translate(-50%, -50%)",
           }}
         />
       ))}
@@ -281,7 +318,11 @@ interface SuccessAnimationProps {
   onComplete?: () => void;
 }
 
-export function SuccessAnimation({ show, message = 'Success!', onComplete }: SuccessAnimationProps) {
+export function SuccessAnimation({
+  show,
+  message = "Success!",
+  onComplete,
+}: SuccessAnimationProps) {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -315,7 +356,9 @@ export function SuccessAnimation({ show, message = 'Success!', onComplete }: Suc
             />
           </svg>
         </div>
-        <p className="text-xl font-bold text-foreground text-center">{message}</p>
+        <p className="text-xl font-bold text-foreground text-center">
+          {message}
+        </p>
       </div>
     </div>,
     document.body

@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 interface SkeletonProps {
   className?: string;
@@ -9,7 +9,7 @@ interface SkeletonProps {
  * Animated skeleton loader that matches content layout
  * Use this while data is loading to improve perceived performance
  */
-export function Skeleton({ className = '', count = 1 }: SkeletonProps) {
+export function Skeleton({ className = "", count = 1 }: SkeletonProps) {
   const skeletons = Array.from({ length: count });
 
   return (
@@ -19,8 +19,8 @@ export function Skeleton({ className = '', count = 1 }: SkeletonProps) {
           key={idx}
           className={`bg-gradient-to-r from-secondary/50 via-secondary/30 to-secondary/50 animate-pulse rounded-lg ${className}`}
           style={{
-            backgroundSize: '200% 100%',
-            animation: 'shimmer 2s infinite',
+            backgroundSize: "200% 100%",
+            animation: "shimmer 2s infinite",
           }}
         />
       ))}
@@ -37,13 +37,19 @@ export function Skeleton({ className = '', count = 1 }: SkeletonProps) {
 /**
  * Skeleton for text content
  */
-export function TextSkeleton({ lines = 3, className = '' }: { lines?: number; className?: string }) {
+export function TextSkeleton({
+  lines = 3,
+  className = "",
+}: {
+  lines?: number;
+  className?: string;
+}) {
   return (
     <div className={`space-y-2 ${className}`}>
       {Array.from({ length: lines }).map((_, idx) => (
         <Skeleton
           key={idx}
-          className={`h-4 ${idx === lines - 1 ? 'w-3/4' : 'w-full'}`}
+          className={`h-4 ${idx === lines - 1 ? "w-3/4" : "w-full"}`}
         />
       ))}
     </div>
@@ -53,11 +59,22 @@ export function TextSkeleton({ lines = 3, className = '' }: { lines?: number; cl
 /**
  * Skeleton for card layout
  */
-export function CardSkeleton({ count = 3, className = '' }: { count?: number; className?: string }) {
+export function CardSkeleton({
+  count = 3,
+  className = "",
+}: {
+  count?: number;
+  className?: string;
+}) {
   return (
-    <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 ${className}`}>
+    <div
+      className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 ${className}`}
+    >
       {Array.from({ length: count }).map((_, idx) => (
-        <div key={idx} className="bg-card border border-border rounded-lg p-4 space-y-3">
+        <div
+          key={idx}
+          className="bg-card border border-border rounded-lg p-4 space-y-3"
+        >
           {/* Header */}
           <div className="flex items-center justify-between">
             <Skeleton className="h-6 w-1/2" />
@@ -81,11 +98,20 @@ export function CardSkeleton({ count = 3, className = '' }: { count?: number; cl
 /**
  * Skeleton for list items
  */
-export function ListSkeleton({ count = 5, className = '' }: { count?: number; className?: string }) {
+export function ListSkeleton({
+  count = 5,
+  className = "",
+}: {
+  count?: number;
+  className?: string;
+}) {
   return (
     <div className={`space-y-3 ${className}`}>
       {Array.from({ length: count }).map((_, idx) => (
-        <div key={idx} className="flex items-center gap-3 p-3 bg-card border border-border rounded-lg">
+        <div
+          key={idx}
+          className="flex items-center gap-3 p-3 bg-card border border-border rounded-lg"
+        >
           {/* Avatar */}
           <Skeleton className="h-10 w-10 rounded-full flex-shrink-0" />
 
@@ -138,7 +164,10 @@ export function ExpertCardSkeleton({ count = 6 }: { count?: number }) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
       {Array.from({ length: count }).map((_, idx) => (
-        <div key={idx} className="bg-card border border-border rounded-lg p-4 space-y-4">
+        <div
+          key={idx}
+          className="bg-card border border-border rounded-lg p-4 space-y-4"
+        >
           {/* Avatar */}
           <div className="flex items-center gap-3">
             <Skeleton className="h-12 w-12 rounded-full flex-shrink-0" />

@@ -1,5 +1,5 @@
-import { useState, useRef, ReactNode, TouchEvent } from 'react';
-import { Check, X, Clock, Trash2 } from 'lucide-react';
+import { useState, useRef, ReactNode, TouchEvent } from "react";
+import { Check, X, Clock, Trash2 } from "lucide-react";
 
 interface SwipeableItemProps {
   children: ReactNode;
@@ -23,10 +23,18 @@ export function SwipeableItem({
   children,
   onSwipeLeft,
   onSwipeRight,
-  leftAction = { icon: <Check className="w-5 h-5" />, color: 'bg-green-500', label: 'Approve' },
-  rightAction = { icon: <X className="w-5 h-5" />, color: 'bg-red-500', label: 'Reject' },
+  leftAction = {
+    icon: <Check className="w-5 h-5" />,
+    color: "bg-green-500",
+    label: "Approve",
+  },
+  rightAction = {
+    icon: <X className="w-5 h-5" />,
+    color: "bg-red-500",
+    label: "Reject",
+  },
   threshold = 80,
-  className = '',
+  className = "",
 }: SwipeableItemProps) {
   const [translateX, setTranslateX] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
@@ -41,20 +49,20 @@ export function SwipeableItem({
 
   const handleTouchMove = (e: TouchEvent) => {
     if (!isDragging) return;
-    
+
     currentXRef.current = e.touches[0].clientX;
     const diff = currentXRef.current - startXRef.current;
-    
+
     // Limit the swipe distance
     const maxSwipe = 120;
     const limitedDiff = Math.max(-maxSwipe, Math.min(maxSwipe, diff));
-    
+
     setTranslateX(limitedDiff);
   };
 
   const handleTouchEnd = () => {
     setIsDragging(false);
-    
+
     if (translateX > threshold && onSwipeRight) {
       onSwipeRight();
       // Haptic feedback
@@ -67,7 +75,7 @@ export function SwipeableItem({
         navigator.vibrate(50);
       }
     }
-    
+
     setTranslateX(0);
   };
 
@@ -104,7 +112,7 @@ export function SwipeableItem({
 
       {/* Main content */}
       <div
-        className={`relative bg-card transition-transform ${isDragging ? '' : 'duration-200'}`}
+        className={`relative bg-card transition-transform ${isDragging ? "" : "duration-200"}`}
         style={{ transform: `translateX(${translateX}px)` }}
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
@@ -122,7 +130,7 @@ interface SwipeableTaskProps {
     id: string;
     title: string;
     description?: string;
-    priority?: 'low' | 'medium' | 'high';
+    priority?: "low" | "medium" | "high";
     dueDate?: Date;
   };
   onApprove: (id: string) => void;
@@ -130,11 +138,16 @@ interface SwipeableTaskProps {
   onDefer?: (id: string) => void;
 }
 
-export function SwipeableTask({ task, onApprove, onReject, onDefer }: SwipeableTaskProps) {
+export function SwipeableTask({
+  task,
+  onApprove,
+  onReject,
+  onDefer,
+}: SwipeableTaskProps) {
   const priorityColors = {
-    low: 'border-l-blue-500',
-    medium: 'border-l-yellow-500',
-    high: 'border-l-red-500',
+    low: "border-l-blue-500",
+    medium: "border-l-yellow-500",
+    high: "border-l-red-500",
   };
 
   return (
@@ -143,25 +156,27 @@ export function SwipeableTask({ task, onApprove, onReject, onDefer }: SwipeableT
       onSwipeLeft={() => onReject(task.id)}
       leftAction={{
         icon: <Check className="w-5 h-5" />,
-        color: 'bg-green-500',
-        label: 'Approve',
+        color: "bg-green-500",
+        label: "Approve",
       }}
       rightAction={{
         icon: <X className="w-5 h-5" />,
-        color: 'bg-red-500',
-        label: 'Reject',
+        color: "bg-red-500",
+        label: "Reject",
       }}
     >
       <div
         className={`p-4 border-l-4 ${
-          task.priority ? priorityColors[task.priority] : 'border-l-gray-500'
+          task.priority ? priorityColors[task.priority] : "border-l-gray-500"
         }`}
       >
         <div className="flex items-start justify-between">
           <div className="flex-1">
             <h4 className="font-medium text-foreground">{task.title}</h4>
             {task.description && (
-              <p className="text-sm text-muted-foreground mt-1">{task.description}</p>
+              <p className="text-sm text-muted-foreground mt-1">
+                {task.description}
+              </p>
             )}
           </div>
           {onDefer && (
@@ -175,7 +190,7 @@ export function SwipeableTask({ task, onApprove, onReject, onDefer }: SwipeableT
         </div>
         {task.dueDate && (
           <div className="text-xs text-muted-foreground mt-2">
-            Due: {task.dueDate.toLocaleDateString('en-GB')}
+            Due: {task.dueDate.toLocaleDateString("en-GB")}
           </div>
         )}
         <div className="text-xs text-muted-foreground mt-2 md:hidden">
@@ -210,25 +225,32 @@ export function SwipeableNotification({
       onSwipeLeft={() => onDismiss(notification.id)}
       leftAction={{
         icon: <Check className="w-5 h-5" />,
-        color: 'bg-blue-500',
-        label: 'Read',
+        color: "bg-blue-500",
+        label: "Read",
       }}
       rightAction={{
         icon: <Trash2 className="w-5 h-5" />,
-        color: 'bg-red-500',
-        label: 'Delete',
+        color: "bg-red-500",
+        label: "Delete",
       }}
     >
-      <div className={`p-4 ${notification.read ? 'opacity-60' : ''}`}>
+      <div className={`p-4 ${notification.read ? "opacity-60" : ""}`}>
         <div className="flex items-start gap-3">
           {!notification.read && (
             <div className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0" />
           )}
           <div className="flex-1">
-            <h4 className="font-medium text-foreground">{notification.title}</h4>
-            <p className="text-sm text-muted-foreground mt-1">{notification.message}</p>
+            <h4 className="font-medium text-foreground">
+              {notification.title}
+            </h4>
+            <p className="text-sm text-muted-foreground mt-1">
+              {notification.message}
+            </p>
             <div className="text-xs text-muted-foreground mt-2">
-              {notification.time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+              {notification.time.toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
             </div>
           </div>
         </div>
@@ -238,9 +260,11 @@ export function SwipeableNotification({
 }
 
 // Swipe hint indicator
-export function SwipeHint({ className = '' }: { className?: string }) {
+export function SwipeHint({ className = "" }: { className?: string }) {
   return (
-    <div className={`flex items-center justify-center gap-4 text-xs text-muted-foreground ${className}`}>
+    <div
+      className={`flex items-center justify-center gap-4 text-xs text-muted-foreground ${className}`}
+    >
       <div className="flex items-center gap-1">
         <span>←</span>
         <X className="w-3 h-3 text-red-400" />

@@ -2,7 +2,7 @@
 
 **Your AI Chief of Staff for Executive Decision Making**
 
-CEPHO (from the Greek *κεφαλή* for "brain") is an AI-powered executive assistant designed to help business leaders operate at peak performance. The platform combines a Digital Twin that learns your decision-making patterns with a team of 273+ AI Subject Matter Experts to handle everything from daily briefings to complex strategic analysis.
+CEPHO (from the Greek _κεφαλή_ for "brain") is an AI-powered executive assistant designed to help business leaders operate at peak performance. The platform combines a Digital Twin that learns your decision-making patterns with a team of 273+ AI Subject Matter Experts to handle everything from daily briefings to complex strategic analysis.
 
 🌐 **Production:** https://cepho.ai  
 📦 **Status:** ✅ Fully Operational  
@@ -19,7 +19,9 @@ CEPHO (from the Greek *κεφαλή* for "brain") is an AI-powered executive ass
 ## Key Features
 
 ### The Signal (Daily Brief)
+
 Your personalized morning briefing that prepares you for the day ahead:
+
 - Executive Summary with key priorities
 - Today's Schedule integration
 - Intelligence Feed (market, competitors, industry)
@@ -27,7 +29,9 @@ Your personalized morning briefing that prepares you for the day ahead:
 - Available as PDF, video, or audio podcast
 
 ### AI Subject Matter Experts
+
 Access to 273+ specialized AI experts across domains:
+
 - Strategy & Business Development
 - Finance & Investment
 - Legal & Compliance
@@ -38,21 +42,27 @@ Access to 273+ specialized AI experts across domains:
 - And many more...
 
 ### Chief of Staff (Digital Twin)
+
 Your AI learns your preferences through:
+
 - 200-question comprehensive questionnaire
 - Daily interaction patterns
 - Decision history analysis
 - Communication style learning
 
 ### Workflow Management
+
 Track all active projects with:
+
 - Real-time progress updates
 - QA review phases
 - Task delegation to AI teams
 - Deliverable tracking
 
 ### Evening Review
+
 End-of-day reflection system:
+
 - Task completion review
 - Tomorrow's priorities
 - Pattern analysis
@@ -63,6 +73,7 @@ End-of-day reflection system:
 ## Technical Architecture
 
 ### Frontend
+
 - **React 19.0.0** with TypeScript
 - **Vite** for build tooling
 - **TailwindCSS** with custom design system
@@ -72,6 +83,7 @@ End-of-day reflection system:
 - **Shadcn/UI** component library
 
 ### Backend
+
 - **Node.js 22.13.0** with Express
 - **tRPC** API framework
 - **TiDB Serverless** database (libSQL)
@@ -79,6 +91,7 @@ End-of-day reflection system:
 - **Manus OAuth** authentication
 
 ### AI Integration
+
 - LLM-powered expert consultations
 - Voice transcription (Whisper API)
 - Text-to-speech (ElevenLabs)
@@ -89,6 +102,7 @@ End-of-day reflection system:
 ## Database Schema
 
 The application uses a comprehensive schema including:
+
 - User management and authentication
 - Mood tracking and history
 - Training conversations
@@ -104,27 +118,32 @@ The application uses a comprehensive schema including:
 ## API Routes
 
 ### Authentication
+
 - `auth.login` - Email/password login via Manus OAuth
 - `auth.me` - Get current user
 - `auth.logout` - End session
 
 ### Mood Tracking
+
 - `mood.create` - Log mood entry
 - `mood.history` - Get mood history
 - `mood.trends` - Analyze mood patterns
 
 ### Expert System
+
 - `experts.chat` - Consult with AI expert
 - `experts.list` - Get available experts
 - `experts.recommend` - Get personalized recommendations
 
 ### Digital Twin
+
 - `questionnaire.saveResponse` - Save questionnaire answer
 - `questionnaire.getCompletion` - Get completion percentage
 - `questionnaire.getProfile` - Get calculated profile
 - `questionnaire.calculateProfile` - Recalculate from responses
 
 ### Workflow
+
 - `tasks.create` - Create new task
 - `tasks.list` - Get all tasks
 - `tasks.update` - Update task status
@@ -134,6 +153,7 @@ The application uses a comprehensive schema including:
 ## Development
 
 ### Prerequisites
+
 - Node.js 22+
 - pnpm package manager
 - TiDB Serverless database
@@ -181,6 +201,7 @@ PORT=10000
 ## Testing
 
 The project includes comprehensive test coverage:
+
 - 36 test files
 - 628+ test cases
 - Unit tests for all major features
@@ -199,15 +220,18 @@ pnpm test:unit server/questionnaire.test.ts
 ## Design System
 
 ### Colors
+
 - Primary: Magenta (#FF10F0)
 - Background: Deep black with subtle gradients
 - Accent: Cyan, Purple, Amber for different contexts
 
 ### Typography
+
 - Display: Orbitron (futuristic headings)
 - Body: Inter (readable content)
 
 ### Components
+
 - Neon Brain animation for loading states
 - Glassmorphic cards with subtle borders
 - Gradient progress indicators
@@ -227,10 +251,10 @@ pnpm test:unit server/questionnaire.test.ts
 ### Deployment Configuration
 
 ```yaml
-Build Command:  npm run build
-Start Command:  node dist/index.js
-Node Version:   22.13.0
-Auto Deploy:    Enabled (on push to main)
+Build Command: npm run build
+Start Command: node dist/index.js
+Node Version: 22.13.0
+Auto Deploy: Enabled (on push to main)
 ```
 
 ### Health Monitoring
@@ -238,6 +262,7 @@ Auto Deploy:    Enabled (on push to main)
 Health check endpoint: https://cepho.ai/health
 
 Expected response:
+
 ```json
 {
   "status": "ok",
@@ -258,6 +283,7 @@ Expected response:
 ## Progressive Web App (PWA)
 
 CEPHO.ai is a fully functional PWA with:
+
 - Installable on desktop and mobile
 - Service worker for offline capability
 - App manifest with proper icons
@@ -289,6 +315,7 @@ Comprehensive documentation is available in the repository:
 - **[DEPLOYMENT_SUCCESS_REPORT.md](./DEPLOYMENT_SUCCESS_REPORT.md)** - Deployment status report
 
 Word format versions are also available:
+
 - `COMPLETE_DEPLOYMENT_DOCUMENTATION.docx`
 - `DEPLOYMENT_SUCCESS_REPORT.docx`
 
@@ -299,16 +326,19 @@ Word format versions are also available:
 ### Common Issues
 
 **Site not loading:**
+
 1. Check health endpoint: `curl https://cepho.ai/health`
 2. Review Render logs in dashboard
 3. Verify environment variables are set
 
 **Build failures:**
+
 1. Check for TypeScript errors
 2. Test build locally: `npm run build`
 3. Review Render build logs
 
 **Database connection errors:**
+
 1. Verify DATABASE_URL and DATABASE_AUTH_TOKEN
 2. Check TiDB Serverless instance status
 3. Review connection limits
@@ -320,6 +350,7 @@ For detailed troubleshooting, see [COMPLETE_DEPLOYMENT_DOCUMENTATION.md](./COMPL
 ## Recent Updates
 
 ### February 25, 2026
+
 - ✅ Fixed missing icon imports in BrainLayout component
 - ✅ Resolved React rendering issues
 - ✅ Updated PWA manifest (removed missing screenshots/shortcuts)

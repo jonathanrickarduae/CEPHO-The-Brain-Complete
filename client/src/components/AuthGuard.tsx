@@ -1,5 +1,5 @@
-import { useEffect } from 'react';
-import { useLocation } from 'wouter';
+import { useEffect } from "react";
+import { useLocation } from "wouter";
 
 interface AuthGuardProps {
   children: React.ReactNode;

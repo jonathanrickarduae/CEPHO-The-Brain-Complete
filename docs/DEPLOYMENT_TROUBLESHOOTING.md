@@ -17,15 +17,19 @@ All critical environment variables have been added to Render:
 ## Testing Results
 
 ### Local Server Test
+
 ```bash
 node dist/index.js
 ```
+
 **Result:** ✅ Server starts successfully and serves HTML correctly
 
 ### Database Connection Test
+
 ```bash
 psql "postgresql://postgres:zftdgWR86sVaCtz6@..."
 ```
+
 **Result:** ✅ Database connection working
 
 ## Possible Causes of 503 Errors on Render
@@ -40,17 +44,21 @@ psql "postgresql://postgres:zftdgWR86sVaCtz6@..."
 ## Recommended Next Steps
 
 ### Option 1: Check Render Service Configuration
+
 - Verify health check path is correct (should be `/` or `/health`)
 - Increase health check timeout if needed
 - Check memory allocation
 
 ### Option 2: Add Health Check Endpoint
+
 Add a simple `/health` endpoint to the server that returns 200 OK immediately
 
 ### Option 3: Add Logging
+
 Add more detailed startup logging to see where the server is failing on Render
 
 ### Option 4: Check Render Dashboard
+
 - Log into Render dashboard manually
 - Check the "Events" tab for deployment logs
 - Check the "Logs" tab for runtime logs
@@ -59,7 +67,7 @@ Add more detailed startup logging to see where the server is failing on Render
 ## Files Fixed During Troubleshooting
 
 1. Statistics.tsx - Restored from working commit
-2. GoLive.tsx - Restored from working commit  
+2. GoLive.tsx - Restored from working commit
 3. Settings.tsx - Restored from working commit
 4. Commercialization.tsx - Restored from working commit
 5. PersephoneBoard.tsx - Restored from working commit

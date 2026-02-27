@@ -1,23 +1,23 @@
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
+} from "@/components/ui/dialog";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
-import { Slider } from '@/components/ui/slider';
-import { Star, ThumbsUp, ThumbsDown, AlertCircle } from 'lucide-react';
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { Slider } from "@/components/ui/slider";
+import { Star, ThumbsUp, ThumbsDown, AlertCircle } from "lucide-react";
 
 export interface OutputQualityScore {
   outputType: string;
@@ -30,7 +30,16 @@ export interface OutputQualityScore {
 }
 
 interface OutputQualityScorerProps {
-  outputType: 'report' | 'document' | 'analysis' | 'presentation' | 'email_draft' | 'summary' | 'recommendation' | 'visualization' | 'other';
+  outputType:
+    | "report"
+    | "document"
+    | "analysis"
+    | "presentation"
+    | "email_draft"
+    | "summary"
+    | "recommendation"
+    | "visualization"
+    | "other";
   outputId: string;
   outputTitle: string;
   onScoreSubmit: (score: OutputQualityScore) => void;
@@ -38,25 +47,25 @@ interface OutputQualityScorerProps {
 }
 
 const ISSUE_CATEGORIES = [
-  { value: 'template_issue', label: 'Template Issue' },
-  { value: 'formatting_problem', label: 'Formatting Problem' },
-  { value: 'design_flaw', label: 'Design Flaw' },
-  { value: 'content_inaccuracy', label: 'Content Inaccuracy' },
-  { value: 'missing_information', label: 'Missing Information' },
-  { value: 'wrong_tone', label: 'Wrong Tone' },
-  { value: 'too_long', label: 'Too Long' },
-  { value: 'too_short', label: 'Too Short' },
-  { value: 'unclear', label: 'Unclear' },
-  { value: 'other', label: 'Other' },
+  { value: "template_issue", label: "Template Issue" },
+  { value: "formatting_problem", label: "Formatting Problem" },
+  { value: "design_flaw", label: "Design Flaw" },
+  { value: "content_inaccuracy", label: "Content Inaccuracy" },
+  { value: "missing_information", label: "Missing Information" },
+  { value: "wrong_tone", label: "Wrong Tone" },
+  { value: "too_long", label: "Too Long" },
+  { value: "too_short", label: "Too Short" },
+  { value: "unclear", label: "Unclear" },
+  { value: "other", label: "Other" },
 ];
 
 const RESPONSIBLE_AREAS = [
-  { value: 'ai_generation', label: 'AI Generation' },
-  { value: 'template_design', label: 'Template Design' },
-  { value: 'data_quality', label: 'Data Quality' },
-  { value: 'user_input', label: 'User Input' },
-  { value: 'system_bug', label: 'System Bug' },
-  { value: 'unknown', label: 'Unknown' },
+  { value: "ai_generation", label: "AI Generation" },
+  { value: "template_design", label: "Template Design" },
+  { value: "data_quality", label: "Data Quality" },
+  { value: "user_input", label: "User Input" },
+  { value: "system_bug", label: "System Bug" },
+  { value: "unknown", label: "Unknown" },
 ];
 
 export function OutputQualityScorer({
@@ -64,13 +73,13 @@ export function OutputQualityScorer({
   outputId,
   outputTitle,
   onScoreSubmit,
-  compact = false
+  compact = false,
 }: OutputQualityScorerProps) {
   const [score, setScore] = useState<number>(75); // Default to 75 on 0-100 scale
   const [showFeedbackDialog, setShowFeedbackDialog] = useState(false);
-  const [issueCategory, setIssueCategory] = useState<string>('');
-  const [issueDescription, setIssueDescription] = useState('');
-  const [responsibleArea, setResponsibleArea] = useState<string>('');
+  const [issueCategory, setIssueCategory] = useState<string>("");
+  const [issueDescription, setIssueDescription] = useState("");
+  const [responsibleArea, setResponsibleArea] = useState<string>("");
   const [hasScored, setHasScored] = useState(false);
 
   const handleScoreChange = (value: number[]) => {
@@ -88,7 +97,7 @@ export function OutputQualityScorer({
 
   const submitScore = (finalScore?: number) => {
     const scoreToSubmit = finalScore ?? score;
-    
+
     onScoreSubmit({
       outputType,
       outputId,
@@ -98,29 +107,29 @@ export function OutputQualityScorer({
       issueDescription: scoreToSubmit < 40 ? issueDescription : undefined,
       responsibleArea: scoreToSubmit < 40 ? responsibleArea : undefined,
     });
-    
+
     setHasScored(true);
     setShowFeedbackDialog(false);
-    setIssueCategory('');
-    setIssueDescription('');
-    setResponsibleArea('');
+    setIssueCategory("");
+    setIssueDescription("");
+    setResponsibleArea("");
   };
 
   // Color coding based on 100% Optimization Framework
   const getScoreColor = (s: number) => {
-    if (s >= 90) return 'text-green-500';
-    if (s >= 75) return 'text-lime-500';
-    if (s >= 60) return 'text-yellow-500';
-    if (s >= 40) return 'text-orange-500';
-    return 'text-red-500';
+    if (s >= 90) return "text-green-500";
+    if (s >= 75) return "text-lime-500";
+    if (s >= 60) return "text-yellow-500";
+    if (s >= 40) return "text-orange-500";
+    return "text-red-500";
   };
 
   const getScoreLabel = (s: number) => {
-    if (s >= 90) return 'Excellent';
-    if (s >= 75) return 'Good';
-    if (s >= 60) return 'Adequate';
-    if (s >= 40) return 'Needs Work';
-    return 'Critical';
+    if (s >= 90) return "Excellent";
+    if (s >= 75) return "Good";
+    if (s >= 60) return "Adequate";
+    if (s >= 40) return "Needs Work";
+    return "Critical";
   };
 
   if (hasScored) {
@@ -145,7 +154,7 @@ export function OutputQualityScorer({
               key={s}
               variant="ghost"
               size="sm"
-              className={`w-10 h-8 p-0 ${score === s ? getScoreColor(s) : ''}`}
+              className={`w-10 h-8 p-0 ${score === s ? getScoreColor(s) : ""}`}
               onClick={() => handleQuickScore(s)}
             >
               {s}
@@ -168,7 +177,9 @@ export function OutputQualityScorer({
         <CardContent className="space-y-4">
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <span className="text-sm text-muted-foreground">Quality Score</span>
+              <span className="text-sm text-muted-foreground">
+                Quality Score
+              </span>
               <span className={`text-2xl font-bold ${getScoreColor(score)}`}>
                 {score}/100
               </span>
@@ -183,7 +194,9 @@ export function OutputQualityScorer({
             />
             <div className="flex justify-between text-xs text-muted-foreground">
               <span>Critical (0)</span>
-              <span className={getScoreColor(score)}>{getScoreLabel(score)}</span>
+              <span className={getScoreColor(score)}>
+                {getScoreLabel(score)}
+              </span>
               <span>Perfect (100)</span>
             </div>
           </div>
@@ -225,7 +238,8 @@ export function OutputQualityScorer({
               What went wrong?
             </DialogTitle>
             <DialogDescription>
-              Score below 40 requires feedback. Help us improve by describing the issue.
+              Score below 40 requires feedback. Help us improve by describing
+              the issue.
             </DialogDescription>
           </DialogHeader>
 
@@ -248,7 +262,10 @@ export function OutputQualityScorer({
 
             <div className="space-y-2">
               <label className="text-sm font-medium">Responsible Area</label>
-              <Select value={responsibleArea} onValueChange={setResponsibleArea}>
+              <Select
+                value={responsibleArea}
+                onValueChange={setResponsibleArea}
+              >
                 <SelectTrigger>
                   <SelectValue placeholder="What needs fixing?" />
                 </SelectTrigger>
@@ -267,18 +284,19 @@ export function OutputQualityScorer({
               <Textarea
                 placeholder="Describe what was wrong and how it should be improved..."
                 value={issueDescription}
-                onChange={(e) => setIssueDescription(e.target.value)}
+                onChange={e => setIssueDescription(e.target.value)}
                 rows={3}
               />
             </div>
 
             <div className="flex gap-2 justify-end">
-              <Button variant="outline" onClick={() => setShowFeedbackDialog(false)}>
+              <Button
+                variant="outline"
+                onClick={() => setShowFeedbackDialog(false)}
+              >
                 Cancel
               </Button>
-              <Button onClick={() => submitScore()}>
-                Submit Feedback
-              </Button>
+              <Button onClick={() => submitScore()}>Submit Feedback</Button>
             </div>
           </div>
         </DialogContent>

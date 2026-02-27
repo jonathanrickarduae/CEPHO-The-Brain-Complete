@@ -1,11 +1,28 @@
 // @ts-nocheck
-import { useState } from 'react';
-import { Mail, Calendar, CheckSquare, ExternalLink, Check, X, Loader2, RefreshCw, Settings, Unlink } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { trpc } from '@/lib/trpc';
+import { useState } from "react";
+import {
+  Mail,
+  Calendar,
+  CheckSquare,
+  ExternalLink,
+  Check,
+  X,
+  Loader2,
+  RefreshCw,
+  Settings,
+  Unlink,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { trpc } from "@/lib/trpc";
 
 // Integration types
-type IntegrationType = 'email_outlook' | 'email_gmail' | 'calendar_outlook' | 'calendar_google' | 'asana' | 'whatsapp';
+type IntegrationType =
+  | "email_outlook"
+  | "email_gmail"
+  | "calendar_outlook"
+  | "calendar_google"
+  | "asana"
+  | "whatsapp";
 
 interface Integration {
   id: string;
@@ -21,18 +38,22 @@ interface Integration {
 
 // OAuth URLs (placeholders - would be configured in backend)
 const OAUTH_URLS: Record<IntegrationType, string> = {
-  email_outlook: '/api/integrations/oauth/outlook',
-  email_gmail: '/api/integrations/oauth/gmail',
-  calendar_outlook: '/api/integrations/oauth/outlook-calendar',
-  calendar_google: '/api/integrations/oauth/google-calendar',
-  asana: '/api/integrations/oauth/asana',
-  whatsapp: '/api/integrations/whatsapp/setup',
+  email_outlook: "/api/integrations/oauth/outlook",
+  email_gmail: "/api/integrations/oauth/gmail",
+  calendar_outlook: "/api/integrations/oauth/outlook-calendar",
+  calendar_google: "/api/integrations/oauth/google-calendar",
+  asana: "/api/integrations/oauth/asana",
+  whatsapp: "/api/integrations/whatsapp/setup",
 };
 
 // Hook for managing integrations
 export function useIntegrations() {
-  const { data: integrations, refetch, isLoading } = trpc.integrations.list.useQuery();
-  
+  const {
+    data: integrations,
+    refetch,
+    isLoading,
+  } = trpc.integrations.list.useQuery();
+
   const connectMutation = trpc.integrations.connect.useMutation({
     onSuccess: () => refetch(),
   });
@@ -65,32 +86,38 @@ interface IntegrationCardProps {
   isSyncing?: boolean;
 }
 
-function IntegrationCard({ 
-  integration, 
-  onConnect, 
-  onDisconnect, 
+function IntegrationCard({
+  integration,
+  onConnect,
+  onDisconnect,
   onSync,
   isConnecting,
-  isSyncing 
+  isSyncing,
 }: IntegrationCardProps) {
   const [showDetails, setShowDetails] = useState(false);
 
   return (
-    <div className={`p-4 border rounded-xl transition-all ${
-      integration.connected 
-        ? 'border-green-500/30 bg-green-500/5' 
-        : 'border-border bg-card hover:border-primary/30'
-    }`}>
+    <div
+      className={`p-4 border rounded-xl transition-all ${
+        integration.connected
+          ? "border-green-500/30 bg-green-500/5"
+          : "border-border bg-card hover:border-primary/30"
+      }`}
+    >
       <div className="flex items-start justify-between">
         <div className="flex items-start gap-3">
-          <div className={`p-2.5 rounded-lg ${
-            integration.connected ? 'bg-green-500/20' : 'bg-secondary'
-          }`}>
+          <div
+            className={`p-2.5 rounded-lg ${
+              integration.connected ? "bg-green-500/20" : "bg-secondary"
+            }`}
+          >
             {integration.icon}
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h4 className="font-medium text-foreground">{integration.name}</h4>
+              <h4 className="font-medium text-foreground">
+                {integration.name}
+              </h4>
               {integration.connected && (
                 <span className="flex items-center gap-1 text-xs text-green-400">
                   <Check className="w-3 h-3" />
@@ -98,7 +125,9 @@ function IntegrationCard({
                 </span>
               )}
             </div>
-            <p className="text-sm text-muted-foreground mt-0.5">{integration.description}</p>
+            <p className="text-sm text-muted-foreground mt-0.5">
+              {integration.description}
+            </p>
             {integration.connected && integration.accountName && (
               <p className="text-xs text-muted-foreground mt-1">
                 Account: {integration.accountName}
@@ -166,10 +195,15 @@ function IntegrationCard({
       {/* Features list */}
       {showDetails && integration.connected && (
         <div className="mt-4 pt-4 border-t border-border">
-          <h5 className="text-sm font-medium text-foreground mb-2">Features enabled:</h5>
+          <h5 className="text-sm font-medium text-foreground mb-2">
+            Features enabled:
+          </h5>
           <ul className="space-y-1">
             {integration.features.map((feature, i) => (
-              <li key={i} className="flex items-center gap-2 text-sm text-muted-foreground">
+              <li
+                key={i}
+                className="flex items-center gap-2 text-sm text-muted-foreground"
+              >
                 <Check className="w-3 h-3 text-green-400" />
                 {feature}
               </li>
@@ -183,40 +217,54 @@ function IntegrationCard({
 
 // Email Integration Panel
 export function EmailIntegrationPanel() {
-  const [connectingType, setConnectingType] = useState<IntegrationType | null>(null);
+  const [connectingType, setConnectingType] = useState<IntegrationType | null>(
+    null
+  );
   const { integrations, connect, disconnect, sync } = useIntegrations();
 
   const emailIntegrations: Integration[] = [
     {
-      id: 'outlook',
-      type: 'email_outlook',
-      name: 'Microsoft Outlook',
-      description: 'Connect your Outlook inbox for unified email management',
+      id: "outlook",
+      type: "email_outlook",
+      name: "Microsoft Outlook",
+      description: "Connect your Outlook inbox for unified email management",
       icon: <Mail className="w-5 h-5 text-blue-400" />,
-      connected: integrations.some(i => i.provider === 'email_outlook' && i.status === 'active'),
-      accountName: integrations.find(i => i.provider === 'email_outlook')?.providerAccountId ?? undefined,
-      lastSync: integrations.find(i => i.provider === 'email_outlook')?.lastSyncAt ?? undefined,
+      connected: integrations.some(
+        i => i.provider === "email_outlook" && i.status === "active"
+      ),
+      accountName:
+        integrations.find(i => i.provider === "email_outlook")
+          ?.providerAccountId ?? undefined,
+      lastSync:
+        integrations.find(i => i.provider === "email_outlook")?.lastSyncAt ??
+        undefined,
       features: [
-        'Read and send emails from Cepho',
-        'Auto-categorize incoming messages',
-        'Smart reply suggestions',
-        'Meeting scheduling from emails',
+        "Read and send emails from Cepho",
+        "Auto-categorize incoming messages",
+        "Smart reply suggestions",
+        "Meeting scheduling from emails",
       ],
     },
     {
-      id: 'gmail',
-      type: 'email_gmail',
-      name: 'Google Gmail',
-      description: 'Connect your Gmail account for unified inbox',
+      id: "gmail",
+      type: "email_gmail",
+      name: "Google Gmail",
+      description: "Connect your Gmail account for unified inbox",
       icon: <Mail className="w-5 h-5 text-red-400" />,
-      connected: integrations.some(i => i.provider === 'email_gmail' && i.status === 'active'),
-      accountName: integrations.find(i => i.provider === 'email_gmail')?.providerAccountId ?? undefined,
-      lastSync: integrations.find(i => i.provider === 'email_gmail')?.lastSyncAt ?? undefined,
+      connected: integrations.some(
+        i => i.provider === "email_gmail" && i.status === "active"
+      ),
+      accountName:
+        integrations.find(i => i.provider === "email_gmail")
+          ?.providerAccountId ?? undefined,
+      lastSync:
+        integrations.find(i => i.provider === "email_gmail")?.lastSyncAt ??
+        undefined,
       features: [
-        'Read and send emails from Cepho',
-        'Auto-categorize incoming messages',
-        'Smart reply suggestions',
-        'Label and filter management',
+        "Read and send emails from Cepho",
+        "Auto-categorize incoming messages",
+        "Smart reply suggestions",
+        "Label and filter management",
       ],
     },
   ];
@@ -224,7 +272,7 @@ export function EmailIntegrationPanel() {
   const handleConnect = (type: IntegrationType) => {
     setConnectingType(type);
     // In production, this would open OAuth popup
-    window.open(OAUTH_URLS[type], '_blank', 'width=600,height=700');
+    window.open(OAUTH_URLS[type], "_blank", "width=600,height=700");
     // Simulate connection for demo
     setTimeout(() => {
       connect({ type, config: {} });
@@ -236,10 +284,13 @@ export function EmailIntegrationPanel() {
     <div className="space-y-4">
       <div className="flex items-center gap-2 mb-4">
         <Mail className="w-5 h-5 text-primary" />
-        <h3 className="text-lg font-semibold text-foreground">Email Integrations</h3>
+        <h3 className="text-lg font-semibold text-foreground">
+          Email Integrations
+        </h3>
       </div>
       <p className="text-sm text-muted-foreground mb-4">
-        Connect your email accounts to manage all communications from Cepho's Universal Inbox.
+        Connect your email accounts to manage all communications from Cepho's
+        Universal Inbox.
       </p>
       <div className="space-y-3">
         {emailIntegrations.map(integration => (
@@ -259,47 +310,61 @@ export function EmailIntegrationPanel() {
 
 // Calendar Integration Panel
 export function CalendarIntegrationPanel() {
-  const [connectingType, setConnectingType] = useState<IntegrationType | null>(null);
+  const [connectingType, setConnectingType] = useState<IntegrationType | null>(
+    null
+  );
   const { integrations, connect, disconnect, sync } = useIntegrations();
 
   const calendarIntegrations: Integration[] = [
     {
-      id: 'outlook-calendar',
-      type: 'calendar_outlook',
-      name: 'Microsoft Outlook Calendar',
-      description: 'Sync your Outlook calendar for scheduling and reminders',
+      id: "outlook-calendar",
+      type: "calendar_outlook",
+      name: "Microsoft Outlook Calendar",
+      description: "Sync your Outlook calendar for scheduling and reminders",
       icon: <Calendar className="w-5 h-5 text-blue-400" />,
-      connected: integrations.some(i => i.provider === 'calendar_outlook' && i.status === 'active'),
-      accountName: integrations.find(i => i.provider === 'calendar_outlook')?.providerAccountId ?? undefined,
-      lastSync: integrations.find(i => i.provider === 'calendar_outlook')?.lastSyncAt ?? undefined,
+      connected: integrations.some(
+        i => i.provider === "calendar_outlook" && i.status === "active"
+      ),
+      accountName:
+        integrations.find(i => i.provider === "calendar_outlook")
+          ?.providerAccountId ?? undefined,
+      lastSync:
+        integrations.find(i => i.provider === "calendar_outlook")?.lastSyncAt ??
+        undefined,
       features: [
-        'View all calendar events in The Signal',
-        'Auto-schedule meetings from emails',
-        'Meeting prep reminders',
-        'Conflict detection',
+        "View all calendar events in The Signal",
+        "Auto-schedule meetings from emails",
+        "Meeting prep reminders",
+        "Conflict detection",
       ],
     },
     {
-      id: 'google-calendar',
-      type: 'calendar_google',
-      name: 'Google Calendar',
-      description: 'Sync your Google Calendar for unified scheduling',
+      id: "google-calendar",
+      type: "calendar_google",
+      name: "Google Calendar",
+      description: "Sync your Google Calendar for unified scheduling",
       icon: <Calendar className="w-5 h-5 text-green-400" />,
-      connected: integrations.some(i => i.provider === 'calendar_google' && i.status === 'active'),
-      accountName: integrations.find(i => i.provider === 'calendar_google')?.providerAccountId ?? undefined,
-      lastSync: integrations.find(i => i.provider === 'calendar_google')?.lastSyncAt ?? undefined,
+      connected: integrations.some(
+        i => i.provider === "calendar_google" && i.status === "active"
+      ),
+      accountName:
+        integrations.find(i => i.provider === "calendar_google")
+          ?.providerAccountId ?? undefined,
+      lastSync:
+        integrations.find(i => i.provider === "calendar_google")?.lastSyncAt ??
+        undefined,
       features: [
-        'View all calendar events in The Signal',
-        'Auto-schedule meetings from emails',
-        'Meeting prep reminders',
-        'Multi-calendar support',
+        "View all calendar events in The Signal",
+        "Auto-schedule meetings from emails",
+        "Meeting prep reminders",
+        "Multi-calendar support",
       ],
     },
   ];
 
   const handleConnect = (type: IntegrationType) => {
     setConnectingType(type);
-    window.open(OAUTH_URLS[type], '_blank', 'width=600,height=700');
+    window.open(OAUTH_URLS[type], "_blank", "width=600,height=700");
     setTimeout(() => {
       connect({ type, config: {} });
       setConnectingType(null);
@@ -310,10 +375,13 @@ export function CalendarIntegrationPanel() {
     <div className="space-y-4">
       <div className="flex items-center gap-2 mb-4">
         <Calendar className="w-5 h-5 text-primary" />
-        <h3 className="text-lg font-semibold text-foreground">Calendar Integrations</h3>
+        <h3 className="text-lg font-semibold text-foreground">
+          Calendar Integrations
+        </h3>
       </div>
       <p className="text-sm text-muted-foreground mb-4">
-        Connect your calendars to see events in your The Signal and enable smart scheduling.
+        Connect your calendars to see events in your The Signal and enable smart
+        scheduling.
       </p>
       <div className="space-y-3">
         {calendarIntegrations.map(integration => (
@@ -337,28 +405,33 @@ export function AsanaIntegrationPanel() {
   const { integrations, connect, disconnect, sync } = useIntegrations();
 
   const asanaIntegration: Integration = {
-    id: 'asana',
-    type: 'asana',
-    name: 'Asana',
-    description: 'Connect Asana for project and task management',
+    id: "asana",
+    type: "asana",
+    name: "Asana",
+    description: "Connect Asana for project and task management",
     icon: <CheckSquare className="w-5 h-5 text-pink-400" />,
-    connected: integrations.some(i => i.provider === 'asana' && i.status === 'active'),
-    accountName: integrations.find(i => i.provider === 'asana')?.providerAccountId ?? undefined,
-    lastSync: integrations.find(i => i.provider === 'asana')?.lastSyncAt ?? undefined,
+    connected: integrations.some(
+      i => i.provider === "asana" && i.status === "active"
+    ),
+    accountName:
+      integrations.find(i => i.provider === "asana")?.providerAccountId ??
+      undefined,
+    lastSync:
+      integrations.find(i => i.provider === "asana")?.lastSyncAt ?? undefined,
     features: [
-      'Sync tasks to Cepho workflow',
-      'Create Asana tasks from Cepho',
-      'Project status updates',
-      'Team collaboration visibility',
-      'Due date and priority sync',
+      "Sync tasks to Cepho workflow",
+      "Create Asana tasks from Cepho",
+      "Project status updates",
+      "Team collaboration visibility",
+      "Due date and priority sync",
     ],
   };
 
   const handleConnect = () => {
     setIsConnecting(true);
-    window.open(OAUTH_URLS.asana, '_blank', 'width=600,height=700');
+    window.open(OAUTH_URLS.asana, "_blank", "width=600,height=700");
     setTimeout(() => {
-      connect({ type: 'asana', config: {} });
+      connect({ type: "asana", config: {} });
       setIsConnecting(false);
     }, 2000);
   };
@@ -367,16 +440,19 @@ export function AsanaIntegrationPanel() {
     <div className="space-y-4">
       <div className="flex items-center gap-2 mb-4">
         <CheckSquare className="w-5 h-5 text-primary" />
-        <h3 className="text-lg font-semibold text-foreground">Asana Integration</h3>
+        <h3 className="text-lg font-semibold text-foreground">
+          Asana Integration
+        </h3>
       </div>
       <p className="text-sm text-muted-foreground mb-4">
-        Connect Asana to sync your projects and tasks with Cepho's workflow system.
+        Connect Asana to sync your projects and tasks with Cepho's workflow
+        system.
       </p>
       <IntegrationCard
         integration={asanaIntegration}
         onConnect={handleConnect}
-        onDisconnect={() => disconnect({ type: 'asana' })}
-        onSync={() => sync({ type: 'asana' })}
+        onDisconnect={() => disconnect({ type: "asana" })}
+        onSync={() => sync({ type: "asana" })}
         isConnecting={isConnecting}
       />
     </div>

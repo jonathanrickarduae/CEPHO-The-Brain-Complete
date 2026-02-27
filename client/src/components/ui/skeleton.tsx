@@ -34,7 +34,9 @@ function CardSkeleton({ className }: { className?: string }) {
 // List item skeleton
 function ListItemSkeleton({ className }: { className?: string }) {
   return (
-    <div className={cn("flex items-center gap-4 p-3 rounded-lg border", className)}>
+    <div
+      className={cn("flex items-center gap-4 p-3 rounded-lg border", className)}
+    >
       <Skeleton className="h-10 w-10 rounded-full shrink-0" />
       <div className="flex-1 space-y-2">
         <Skeleton className="h-4 w-1/3" />
@@ -66,10 +68,10 @@ function ChartSkeleton({ className }: { className?: string }) {
       </div>
       <div className="h-[200px] flex items-end gap-2">
         {Array.from({ length: 7 }).map((_, i) => (
-          <Skeleton 
-            key={i} 
-            className="flex-1 rounded-t-md" 
-            style={{ height: `${30 + (i * 10) % 60}%` }}
+          <Skeleton
+            key={i}
+            className="flex-1 rounded-t-md"
+            style={{ height: `${30 + ((i * 10) % 60)}%` }}
           />
         ))}
       </div>
@@ -102,12 +104,12 @@ function MessageSkeleton({ isUser = false }: { isUser?: boolean }) {
   );
 }
 
-export { 
-  Skeleton, 
-  CardSkeleton, 
-  ListItemSkeleton, 
+export {
+  Skeleton,
+  CardSkeleton,
+  ListItemSkeleton,
   StatsSkeleton,
   ChartSkeleton,
   ExpertGridSkeleton,
-  MessageSkeleton
+  MessageSkeleton,
 };

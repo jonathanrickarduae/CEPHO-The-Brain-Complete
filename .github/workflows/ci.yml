@@ -2,9 +2,9 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [main, develop]
   pull_request:
-    branches: [ main, develop ]
+    branches: [main, develop]
 
 # Cancel in-progress runs for the same PR/branch
 concurrency:
@@ -15,50 +15,50 @@ jobs:
   lint:
     name: Lint Code
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      
+
       - name: Setup pnpm
         uses: pnpm/action-setup@v2
         with:
           version: 8
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
-          cache: 'pnpm'
-      
+          node-version: "22"
+          cache: "pnpm"
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-      
+
       - name: Run ESLint
         run: pnpm run lint || echo "⚠️ Linting completed with warnings"
 
   typecheck:
     name: TypeScript Type Check
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      
+
       - name: Setup pnpm
         uses: pnpm/action-setup@v2
         with:
           version: 8
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
-          cache: 'pnpm'
-      
+          node-version: "22"
+          cache: "pnpm"
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-      
+
       - name: Run TypeScript check
         run: pnpm exec tsc --noEmit
 
@@ -66,42 +66,42 @@ jobs:
     name: Build Application
     runs-on: ubuntu-latest
     needs: [lint, typecheck]
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      
+
       - name: Setup pnpm
         uses: pnpm/action-setup@v2
         with:
           version: 8
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
-          cache: 'pnpm'
-      
+          node-version: "22"
+          cache: "pnpm"
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-      
+
       - name: Build project
         run: pnpm run build
-      
+
       - name: Get build size
         id: build-size
         run: |
           SIZE=$(du -sh dist | cut -f1)
           echo "size=$SIZE" >> $GITHUB_OUTPUT
           echo "📦 Build size: $SIZE"
-      
+
       - name: Upload build artifacts
         uses: actions/upload-artifact@v3
         with:
           name: build-output
           path: dist/
           retention-days: 7
-      
+
       - name: Comment PR with build info
         if: github.event_name == 'pull_request'
         uses: actions/github-script@v7
@@ -118,7 +118,7 @@ jobs:
     name: Run Tests
     runs-on: ubuntu-latest
     needs: [lint, typecheck]
-    
+
     services:
       postgres:
         image: postgres:15
@@ -132,31 +132,31 @@ jobs:
           --health-retries 5
         ports:
           - 5432:5432
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      
+
       - name: Setup pnpm
         uses: pnpm/action-setup@v2
         with:
           version: 8
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
-          cache: 'pnpm'
-      
+          node-version: "22"
+          cache: "pnpm"
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-      
+
       - name: Run unit tests
         run: pnpm run test
         env:
           DATABASE_URL: postgresql://postgres:postgres@localhost:5432/test_db
           NODE_ENV: test
-      
+
       - name: Upload coverage
         uses: codecov/codecov-action@v3
         if: success()
@@ -170,7 +170,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [build, test]
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    
+
     steps:
       - name: Set deployment status to pending
         uses: actions/github-script@v7
@@ -184,7 +184,7 @@ jobs:
               description: 'Deployment in progress',
               context: 'Render Deployment'
             })
-      
+
       - name: Trigger Render deployment
         id: deploy
         run: |
@@ -193,11 +193,11 @@ jobs:
             -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
             -H "Content-Type: application/json" \
             https://api.render.com/v1/services/${{ secrets.RENDER_SERVICE_ID }}/deploys)
-          
+
           DEPLOY_ID=$(echo $RESPONSE | jq -r '.id')
           echo "deploy_id=$DEPLOY_ID" >> $GITHUB_OUTPUT
           echo "✅ Deployment triggered: $DEPLOY_ID"
-      
+
       - name: Update deployment status
         if: success()
         uses: actions/github-script@v7
@@ -212,7 +212,7 @@ jobs:
               context: 'Render Deployment',
               target_url: 'https://cepho.ai'
             })
-      
+
       - name: Update deployment status on failure
         if: failure()
         uses: actions/github-script@v7
@@ -232,7 +232,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [lint, typecheck, build, test, deploy]
     if: failure() && github.ref == 'refs/heads/main'
-    
+
     steps:
       - name: Create issue for main branch failure
         uses: actions/github-script@v7
@@ -240,17 +240,17 @@ jobs:
           script: |
             const title = `🚨 CI/CD Pipeline Failed - ${context.sha.substring(0, 7)}`;
             const body = `## Pipeline Failure Report
-            
+
             **Commit:** ${context.sha}
             **Author:** ${context.actor}
             **Workflow:** ${context.workflow}
             **Run:** ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}
-            
+
             One or more jobs in the CI/CD pipeline failed. Please investigate and fix.
-            
+
             ---
             *This issue was automatically created by the CI/CD pipeline.*`;
-            
+
             github.rest.issues.create({
               owner: context.repo.owner,
               repo: context.repo.repo,

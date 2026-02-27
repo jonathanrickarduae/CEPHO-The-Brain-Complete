@@ -2,7 +2,7 @@
 
 **Document Version:** 1.0  
 **Last Updated:** February 25, 2026  
-**Owner:** Manus AI  
+**Owner:** Manus AI
 
 ## 1. Introduction
 
@@ -12,7 +12,7 @@ This document outlines the processes and workflows for the Innovation Hub within
 
 The Innovation Hub is structured around a five-stage flywheel designed to systematically capture, evaluate, and develop ideas.
 
-![Innovation Flywheel](https://i.imgur.com/example.png)  <!-- Placeholder for a diagram -->
+![Innovation Flywheel](https://i.imgur.com/example.png) <!-- Placeholder for a diagram -->
 
 ## 3. Flywheel Stages
 
@@ -21,11 +21,13 @@ The Innovation Hub is structured around a five-stage flywheel designed to system
 **Objective:** To source and record new ideas from multiple channels.
 
 **User Actions:**
+
 - Manually submit an idea using the "Capture Idea" form.
 - Analyze an article for opportunities using the "Analyze Article" feature.
 - Generate new ideas based on trends using the "Generate Daily Ideas" button.
 
 **Backend Processes:**
+
 - `trpc.innovation.captureIdea`: Mutation to save a manually entered idea.
 - `trpc.innovation.analyzeArticle`: Mutation to process a URL and extract opportunities.
 - `trpc.innovation.generateDailyIdeas`: Mutation to generate ideas using an AI model.
@@ -35,10 +37,12 @@ The Innovation Hub is structured around a five-stage flywheel designed to system
 **Objective:** To evaluate the strategic potential of captured ideas.
 
 **User Actions:**
+
 - Select an idea from the pipeline to view its details.
 - Initiate an AI-powered assessment by clicking "Run Assessment".
 
 **Backend Processes:**
+
 - `trpc.innovation.getIdeaWithAssessments`: Query to fetch an idea and its associated assessments.
 - `trpc.innovation.runAssessment`: Mutation to perform a strategic evaluation of an idea.
 
@@ -47,9 +51,11 @@ The Innovation Hub is structured around a five-stage flywheel designed to system
 **Objective:** To gather feedback from subject matter experts (SMEs).
 
 **User Actions:**
+
 - Initiate a consultation by clicking "Consult with SMEs".
 
 **Backend Processes:**
+
 - (To be defined - likely involves the Expert Network)
 
 ### 3.4. Refine
@@ -57,9 +63,11 @@ The Innovation Hub is structured around a five-stage flywheel designed to system
 **Objective:** To iterate on ideas based on assessments and feedback.
 
 **User Actions:**
+
 - Update idea details and description.
 
 **Backend Processes:**
+
 - (To be defined - likely an `updateIdea` mutation)
 
 ### 3.5. Brief
@@ -67,10 +75,12 @@ The Innovation Hub is structured around a five-stage flywheel designed to system
 **Objective:** To create a concise, actionable summary of a validated idea.
 
 **User Actions:**
+
 - Generate a brief for a refined idea.
 - Promote the idea to Project Genesis.
 
 **Backend Processes:**
+
 - `trpc.innovation.generateBrief`: Mutation to create an idea brief.
 - `trpc.innovation.promoteToGenesis`: Mutation to transition the idea into the Project Genesis workflow.
 

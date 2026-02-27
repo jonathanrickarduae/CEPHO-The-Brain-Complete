@@ -24,7 +24,7 @@ import { useIsMobile } from "@/hooks/useMobile";
 import { LayoutDashboard, LogOut, PanelLeft, Users } from "lucide-react";
 import { CSSProperties, useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
-import { DashboardLayoutSkeleton } from '@/components/project-management/DashboardLayoutSkeleton';
+import { DashboardLayoutSkeleton } from "@/components/project-management/DashboardLayoutSkeleton";
 import { Button } from "@/components/ui/button";
 
 const menuItems = [
@@ -53,7 +53,7 @@ export default function DashboardLayout({
   }, [sidebarWidth]);
 
   if (loading) {
-    return <DashboardLayoutSkeleton />
+    return <DashboardLayoutSkeleton />;
   }
 
   // Authentication bypass - allow direct access

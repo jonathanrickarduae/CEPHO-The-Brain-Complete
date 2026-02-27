@@ -1,11 +1,17 @@
 // @ts-nocheck
 import { useState, useMemo } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { 
+import {
   Select,
   SelectContent,
   SelectItem,
@@ -21,11 +27,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { 
-  CreditCard, 
-  Plus, 
-  Trash2, 
-  Edit2, 
+import {
+  CreditCard,
+  Plus,
+  Trash2,
+  Edit2,
   TrendingUp,
   TrendingDown,
   DollarSign,
@@ -35,7 +41,7 @@ import {
   CheckCircle2,
   Loader2,
   LineChart,
-  RefreshCw
+  RefreshCw,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -60,7 +66,7 @@ const CATEGORIES = [
   { value: "other", label: "Other", color: "bg-gray-500" },
 ] as const;
 
-type CategoryValue = typeof CATEGORIES[number]['value'];
+type CategoryValue = (typeof CATEGORIES)[number]["value"];
 
 // Billing cycles
 const BILLING_CYCLES = [
@@ -71,7 +77,7 @@ const BILLING_CYCLES = [
   { value: "usage_based", label: "Usage-based" },
 ] as const;
 
-type BillingCycleValue = typeof BILLING_CYCLES[number]['value'];
+type BillingCycleValue = (typeof BILLING_CYCLES)[number]["value"];
 
 // Status options
 const STATUS_OPTIONS = [
@@ -81,7 +87,7 @@ const STATUS_OPTIONS = [
   { value: "trial", label: "Trial", color: "text-cyan-400" },
 ] as const;
 
-type StatusValue = typeof STATUS_OPTIONS[number]['value'];
+type StatusValue = (typeof STATUS_OPTIONS)[number]["value"];
 
 interface FormData {
   name: string;
@@ -104,7 +110,11 @@ const initialFormData: FormData = {
 };
 
 // Simple line chart component
-function CostTrendChart({ data }: { data: { month: string; totalCost: number; subscriptionCount: number }[] }) {
+function CostTrendChart({
+  data,
+}: {
+  data: { month: string; totalCost: number; subscriptionCount: number }[];
+}) {
   if (!data || data.length === 0) {
     return (
       <div className="h-48 flex items-center justify-center text-foreground/60">
@@ -121,20 +131,25 @@ function CostTrendChart({ data }: { data: { month: string; totalCost: number; su
   // Calculate points for the line
   const points = data.map((d, i) => {
     const x = (i / (data.length - 1 || 1)) * (chartWidth - 10) + 5;
-    const y = chartHeight - padding - ((d.totalCost / maxCost) * (chartHeight - padding * 2));
+    const y =
+      chartHeight -
+      padding -
+      (d.totalCost / maxCost) * (chartHeight - padding * 2);
     return { x, y, ...d };
   });
 
   // Create SVG path
-  const pathD = points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x}% ${p.y}`).join(' ');
-  
+  const pathD = points
+    .map((p, i) => `${i === 0 ? "M" : "L"} ${p.x}% ${p.y}`)
+    .join(" ");
+
   // Create area path (for gradient fill)
   const areaD = `${pathD} L ${points[points.length - 1]?.x || 0}% ${chartHeight - padding} L ${points[0]?.x || 0}% ${chartHeight - padding} Z`;
 
   return (
     <div className="relative">
-      <svg 
-        viewBox={`0 0 100 ${chartHeight}`} 
+      <svg
+        viewBox={`0 0 100 ${chartHeight}`}
         className="w-full h-48"
         preserveAspectRatio="none"
       >
@@ -145,24 +160,28 @@ function CostTrendChart({ data }: { data: { month: string; totalCost: number; su
             <stop offset="100%" stopColor="rgb(6, 182, 212)" stopOpacity="0" />
           </linearGradient>
         </defs>
-        
+
         {/* Grid lines */}
         {[0, 25, 50, 75, 100].map(pct => (
           <line
             key={pct}
             x1="0%"
-            y1={chartHeight - padding - ((pct / 100) * (chartHeight - padding * 2))}
+            y1={
+              chartHeight - padding - (pct / 100) * (chartHeight - padding * 2)
+            }
             x2="100%"
-            y2={chartHeight - padding - ((pct / 100) * (chartHeight - padding * 2))}
+            y2={
+              chartHeight - padding - (pct / 100) * (chartHeight - padding * 2)
+            }
             stroke="rgb(55, 65, 81)"
             strokeWidth="0.5"
             strokeDasharray="2,2"
           />
         ))}
-        
+
         {/* Area fill */}
         <path d={areaD} fill="url(#costGradient)" />
-        
+
         {/* Line */}
         <path
           d={pathD}
@@ -172,7 +191,7 @@ function CostTrendChart({ data }: { data: { month: string; totalCost: number; su
           strokeLinecap="round"
           strokeLinejoin="round"
         />
-        
+
         {/* Data points */}
         {points.map((p, i) => (
           <circle
@@ -186,12 +205,17 @@ function CostTrendChart({ data }: { data: { month: string; totalCost: number; su
           />
         ))}
       </svg>
-      
+
       {/* X-axis labels */}
       <div className="flex justify-between px-2 text-xs text-foreground/60 mt-1">
-        {data.filter((_, i) => i % Math.ceil(data.length / 6) === 0 || i === data.length - 1).map((d, i) => (
-          <span key={i}>{d.month}</span>
-        ))}
+        {data
+          .filter(
+            (_, i) =>
+              i % Math.ceil(data.length / 6) === 0 || i === data.length - 1
+          )
+          .map((d, i) => (
+            <span key={i}>{d.month}</span>
+          ))}
       </div>
     </div>
   );
@@ -206,16 +230,22 @@ export default function SubscriptionTracker() {
   const utils = trpc.useUtils();
 
   // Fetch subscriptions from database
-  const { data: subscriptions, isLoading, refetch } = trpc.subscriptionTracker.getAll.useQuery({});
-  
+  const {
+    data: subscriptions,
+    isLoading,
+    refetch,
+  } = trpc.subscriptionTracker.getAll.useQuery({});
+
   // Fetch summary statistics
   const { data: summary } = trpc.subscriptionTracker.getSummary.useQuery();
-  
+
   // Fetch cost history for trend chart
-  const { data: costHistory } = trpc.subscriptionTracker.getCostHistory.useQuery({ months: 12 });
-  
+  const { data: costHistory } =
+    trpc.subscriptionTracker.getCostHistory.useQuery({ months: 12 });
+
   // Fetch upcoming renewals
-  const { data: renewalSummary } = trpc.subscriptionTracker.getRenewalSummary.useQuery();
+  const { data: renewalSummary } =
+    trpc.subscriptionTracker.getRenewalSummary.useQuery();
 
   // Mutations
   const createMutation = trpc.subscriptionTracker.create.useMutation({
@@ -249,36 +279,40 @@ export default function SubscriptionTracker() {
 
   // Calculate local totals from subscriptions data
   const { monthlyTotal, annualTotal, categoryTotals } = useMemo(() => {
-    if (!subscriptions) return { monthlyTotal: 0, annualTotal: 0, categoryTotals: [] };
+    if (!subscriptions)
+      return { monthlyTotal: 0, annualTotal: 0, categoryTotals: [] };
 
     let monthly = 0;
     const catMap: Record<string, { total: number; count: number }> = {};
 
     subscriptions.forEach(sub => {
-      if (sub.status === 'active' || sub.status === 'trial') {
+      if (sub.status === "active" || sub.status === "trial") {
         let monthlyCost = sub.cost;
-        if (sub.billingCycle === 'annual') monthlyCost = sub.cost / 12;
-        else if (sub.billingCycle === 'quarterly') monthlyCost = sub.cost / 3;
+        if (sub.billingCycle === "annual") monthlyCost = sub.cost / 12;
+        else if (sub.billingCycle === "quarterly") monthlyCost = sub.cost / 3;
 
         monthly += monthlyCost;
 
-        const cat = sub.category || 'other';
+        const cat = sub.category || "other";
         if (!catMap[cat]) catMap[cat] = { total: 0, count: 0 };
         catMap[cat].total += monthlyCost;
         catMap[cat].count++;
       }
     });
 
-    const catTotals = CATEGORIES
-      .map(cat => ({
-        ...cat,
-        total: catMap[cat.value]?.total || 0,
-        count: catMap[cat.value]?.count || 0,
-      }))
+    const catTotals = CATEGORIES.map(cat => ({
+      ...cat,
+      total: catMap[cat.value]?.total || 0,
+      count: catMap[cat.value]?.count || 0,
+    }))
       .filter(cat => cat.count > 0)
       .sort((a, b) => b.total - a.total);
 
-    return { monthlyTotal: monthly, annualTotal: monthly * 12, categoryTotals: catTotals };
+    return {
+      monthlyTotal: monthly,
+      annualTotal: monthly * 12,
+      categoryTotals: catTotals,
+    };
   }, [subscriptions]);
 
   const handleSubmit = () => {
@@ -304,7 +338,9 @@ export default function SubscriptionTracker() {
     }
   };
 
-  const handleEdit = (sub: typeof subscriptions extends (infer T)[] | undefined ? T : never) => {
+  const handleEdit = (
+    sub: typeof subscriptions extends (infer T)[] | undefined ? T : never
+  ) => {
     if (!sub) return;
     setEditingId(sub.id);
     setFormData({
@@ -324,16 +360,26 @@ export default function SubscriptionTracker() {
   };
 
   const getCategoryInfo = (categoryValue: string) => {
-    return CATEGORIES.find(c => c.value === categoryValue) || CATEGORIES[CATEGORIES.length - 1];
+    return (
+      CATEGORIES.find(c => c.value === categoryValue) ||
+      CATEGORIES[CATEGORIES.length - 1]
+    );
   };
 
   const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(amount);
+    return new Intl.NumberFormat("en-GB", {
+      style: "currency",
+      currency: "GBP",
+    }).format(amount);
   };
 
   const formatDate = (date: Date | string | null) => {
-    if (!date) return '-';
-    return new Date(date).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    if (!date) return "-";
+    return new Date(date).toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    });
   };
 
   const isSubmitting = createMutation.isPending || updateMutation.isPending;
@@ -347,7 +393,9 @@ export default function SubscriptionTracker() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-foreground/70">Monthly Spend</p>
-                <p className="text-2xl font-bold text-white">{formatCurrency(summary?.totalMonthly || monthlyTotal)}</p>
+                <p className="text-2xl font-bold text-white">
+                  {formatCurrency(summary?.totalMonthly || monthlyTotal)}
+                </p>
               </div>
               <div className="p-3 bg-amber-500/20 rounded-full">
                 <DollarSign className="w-6 h-6 text-amber-400" />
@@ -361,7 +409,9 @@ export default function SubscriptionTracker() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-foreground/70">Annual Spend</p>
-                <p className="text-2xl font-bold text-white">{formatCurrency(summary?.totalAnnual || annualTotal)}</p>
+                <p className="text-2xl font-bold text-white">
+                  {formatCurrency(summary?.totalAnnual || annualTotal)}
+                </p>
               </div>
               <div className="p-3 bg-purple-500/20 rounded-full">
                 <TrendingUp className="w-6 h-6 text-purple-400" />
@@ -374,8 +424,14 @@ export default function SubscriptionTracker() {
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-foreground/70">Active Subscriptions</p>
-                <p className="text-2xl font-bold text-white">{summary?.activeCount || subscriptions?.filter(s => s.status === 'active').length || 0}</p>
+                <p className="text-sm text-foreground/70">
+                  Active Subscriptions
+                </p>
+                <p className="text-2xl font-bold text-white">
+                  {summary?.activeCount ||
+                    subscriptions?.filter(s => s.status === "active").length ||
+                    0}
+                </p>
               </div>
               <div className="p-3 bg-emerald-500/20 rounded-full">
                 <CheckCircle2 className="w-6 h-6 text-emerald-400" />
@@ -389,7 +445,9 @@ export default function SubscriptionTracker() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-foreground/70">On Trial</p>
-                <p className="text-2xl font-bold text-white">{subscriptions?.filter(s => s.status === 'trial').length || 0}</p>
+                <p className="text-2xl font-bold text-white">
+                  {subscriptions?.filter(s => s.status === "trial").length || 0}
+                </p>
               </div>
               <div className="p-3 bg-cyan-500/20 rounded-full">
                 <Calendar className="w-6 h-6 text-cyan-400" />
@@ -408,32 +466,64 @@ export default function SubscriptionTracker() {
                 <AlertTriangle className="w-5 h-5 text-amber-400" />
               </div>
               <div className="flex-1">
-                <h3 className="font-semibold text-amber-200">Upcoming Renewals</h3>
+                <h3 className="font-semibold text-amber-200">
+                  Upcoming Renewals
+                </h3>
                 <p className="text-sm text-amber-300/80 mt-1">
-                  {renewalSummary.upcomingCount} subscription{renewalSummary.upcomingCount > 1 ? 's' : ''} renewing in the next 30 days
+                  {renewalSummary.upcomingCount} subscription
+                  {renewalSummary.upcomingCount > 1 ? "s" : ""} renewing in the
+                  next 30 days
                   {renewalSummary.nextRenewal && (
-                    <span> — Next: <strong>{renewalSummary.nextRenewal.subscriptionName}</strong> in {renewalSummary.nextRenewal.daysUntilRenewal} day{renewalSummary.nextRenewal.daysUntilRenewal !== 1 ? 's' : ''} ({formatCurrency(renewalSummary.nextRenewal.cost)})</span>
+                    <span>
+                      {" "}
+                      — Next:{" "}
+                      <strong>
+                        {renewalSummary.nextRenewal.subscriptionName}
+                      </strong>{" "}
+                      in {renewalSummary.nextRenewal.daysUntilRenewal} day
+                      {renewalSummary.nextRenewal.daysUntilRenewal !== 1
+                        ? "s"
+                        : ""}{" "}
+                      ({formatCurrency(renewalSummary.nextRenewal.cost)})
+                    </span>
                   )}
                 </p>
                 {renewalSummary.renewals.length > 1 && (
                   <div className="mt-3 space-y-2">
-                    {renewalSummary.renewals.slice(0, 5).map((renewal) => (
-                      <div key={renewal.subscriptionId} className="flex items-center justify-between text-sm bg-amber-950/30 rounded px-3 py-2">
+                    {renewalSummary.renewals.slice(0, 5).map(renewal => (
+                      <div
+                        key={renewal.subscriptionId}
+                        className="flex items-center justify-between text-sm bg-amber-950/30 rounded px-3 py-2"
+                      >
                         <div className="flex items-center gap-2">
-                          <span className={`w-2 h-2 rounded-full ${
-                            renewal.daysUntilRenewal <= 1 ? 'bg-red-500' :
-                            renewal.daysUntilRenewal <= 3 ? 'bg-orange-500' :
-                            renewal.daysUntilRenewal <= 7 ? 'bg-yellow-500' : 'bg-blue-500'
-                          }`} />
-                          <span className="text-amber-100">{renewal.subscriptionName}</span>
-                          <span className="text-amber-400/60">({renewal.provider})</span>
+                          <span
+                            className={`w-2 h-2 rounded-full ${
+                              renewal.daysUntilRenewal <= 1
+                                ? "bg-red-500"
+                                : renewal.daysUntilRenewal <= 3
+                                  ? "bg-orange-500"
+                                  : renewal.daysUntilRenewal <= 7
+                                    ? "bg-yellow-500"
+                                    : "bg-blue-500"
+                            }`}
+                          />
+                          <span className="text-amber-100">
+                            {renewal.subscriptionName}
+                          </span>
+                          <span className="text-amber-400/60">
+                            ({renewal.provider})
+                          </span>
                         </div>
                         <div className="flex items-center gap-4">
-                          <span className="text-amber-200">{formatCurrency(renewal.cost)}</span>
+                          <span className="text-amber-200">
+                            {formatCurrency(renewal.cost)}
+                          </span>
                           <span className="text-amber-400/80">
-                            {renewal.daysUntilRenewal === 0 ? 'Today' :
-                             renewal.daysUntilRenewal === 1 ? 'Tomorrow' :
-                             `${renewal.daysUntilRenewal} days`}
+                            {renewal.daysUntilRenewal === 0
+                              ? "Today"
+                              : renewal.daysUntilRenewal === 1
+                                ? "Tomorrow"
+                                : `${renewal.daysUntilRenewal} days`}
                           </span>
                         </div>
                       </div>
@@ -454,11 +544,13 @@ export default function SubscriptionTracker() {
               <LineChart className="w-5 h-5 text-cyan-400" />
               Cost Trends
             </CardTitle>
-            <CardDescription>Monthly subscription spend over the last 12 months</CardDescription>
+            <CardDescription>
+              Monthly subscription spend over the last 12 months
+            </CardDescription>
           </div>
-          <Button 
-            variant="outline" 
-            size="sm" 
+          <Button
+            variant="outline"
+            size="sm"
             onClick={() => refetch()}
             className="border-gray-700"
           >
@@ -476,16 +568,27 @@ export default function SubscriptionTracker() {
               </div>
               {costHistory.length >= 2 && (
                 <div className="flex items-center gap-2">
-                  {costHistory[costHistory.length - 1].totalCost >= costHistory[costHistory.length - 2].totalCost ? (
+                  {costHistory[costHistory.length - 1].totalCost >=
+                  costHistory[costHistory.length - 2].totalCost ? (
                     <TrendingUp className="w-4 h-4 text-red-400" />
                   ) : (
                     <TrendingDown className="w-4 h-4 text-emerald-400" />
                   )}
-                  <span className={costHistory[costHistory.length - 1].totalCost >= costHistory[costHistory.length - 2].totalCost ? "text-red-400" : "text-emerald-400"}>
+                  <span
+                    className={
+                      costHistory[costHistory.length - 1].totalCost >=
+                      costHistory[costHistory.length - 2].totalCost
+                        ? "text-red-400"
+                        : "text-emerald-400"
+                    }
+                  >
                     {Math.abs(
-                      ((costHistory[costHistory.length - 1].totalCost - costHistory[costHistory.length - 2].totalCost) / 
-                      (costHistory[costHistory.length - 2].totalCost || 1)) * 100
-                    ).toFixed(1)}% vs last month
+                      ((costHistory[costHistory.length - 1].totalCost -
+                        costHistory[costHistory.length - 2].totalCost) /
+                        (costHistory[costHistory.length - 2].totalCost || 1)) *
+                        100
+                    ).toFixed(1)}
+                    % vs last month
                   </span>
                 </div>
               )}
@@ -504,15 +607,20 @@ export default function SubscriptionTracker() {
                 <CreditCard className="w-5 h-5 text-amber-400" />
                 Your Subscriptions
               </CardTitle>
-              <CardDescription>Manage all your productivity tools and services</CardDescription>
+              <CardDescription>
+                Manage all your productivity tools and services
+              </CardDescription>
             </div>
-            <Dialog open={isAddDialogOpen} onOpenChange={(open) => {
-              setIsAddDialogOpen(open);
-              if (!open) {
-                setEditingId(null);
-                setFormData(initialFormData);
-              }
-            }}>
+            <Dialog
+              open={isAddDialogOpen}
+              onOpenChange={open => {
+                setIsAddDialogOpen(open);
+                if (!open) {
+                  setEditingId(null);
+                  setFormData(initialFormData);
+                }
+              }}
+            >
               <DialogTrigger asChild>
                 <Button className="bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-600 hover:to-purple-600">
                   <Plus className="w-4 h-4 mr-2" />
@@ -522,55 +630,72 @@ export default function SubscriptionTracker() {
               <DialogContent className="bg-gray-900 border-gray-800">
                 <DialogHeader>
                   <DialogTitle className="text-white">
-                    {editingId ? 'Edit Subscription' : 'Add New Subscription'}
+                    {editingId ? "Edit Subscription" : "Add New Subscription"}
                   </DialogTitle>
                   <DialogDescription>
-                    {editingId ? 'Update subscription details' : 'Track a new productivity tool or service'}
+                    {editingId
+                      ? "Update subscription details"
+                      : "Track a new productivity tool or service"}
                   </DialogDescription>
                 </DialogHeader>
                 <div className="space-y-4 py-4">
                   <div className="space-y-2">
                     <Label className="text-white">Service Name *</Label>
-                    <Input 
+                    <Input
                       placeholder="e.g., Notion, Slack, GitHub"
                       value={formData.name}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      onChange={e =>
+                        setFormData({ ...formData, name: e.target.value })
+                      }
                       className="bg-gray-800 border-gray-700 text-white"
                     />
                   </div>
                   <div className="space-y-2">
                     <Label className="text-white">Provider</Label>
-                    <Input 
+                    <Input
                       placeholder="e.g., Microsoft, Google"
                       value={formData.provider}
-                      onChange={(e) => setFormData({ ...formData, provider: e.target.value })}
+                      onChange={e =>
+                        setFormData({ ...formData, provider: e.target.value })
+                      }
                       className="bg-gray-800 border-gray-700 text-white"
                     />
                   </div>
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label className="text-white">Cost (£) *</Label>
-                      <Input 
+                      <Input
                         type="number"
                         step="0.01"
                         placeholder="0.00"
                         value={formData.cost}
-                        onChange={(e) => setFormData({ ...formData, cost: e.target.value })}
+                        onChange={e =>
+                          setFormData({ ...formData, cost: e.target.value })
+                        }
                         className="bg-gray-800 border-gray-700 text-white"
                       />
                     </div>
                     <div className="space-y-2">
                       <Label className="text-white">Billing Cycle</Label>
-                      <Select 
-                        value={formData.billingCycle} 
-                        onValueChange={(v) => setFormData({ ...formData, billingCycle: v as BillingCycleValue })}
+                      <Select
+                        value={formData.billingCycle}
+                        onValueChange={v =>
+                          setFormData({
+                            ...formData,
+                            billingCycle: v as BillingCycleValue,
+                          })
+                        }
                       >
                         <SelectTrigger className="bg-gray-800 border-gray-700 text-white">
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent className="bg-gray-800 border-gray-700">
                           {BILLING_CYCLES.map(cycle => (
-                            <SelectItem key={cycle.value} value={cycle.value} className="text-white">
+                            <SelectItem
+                              key={cycle.value}
+                              value={cycle.value}
+                              className="text-white"
+                            >
                               {cycle.label}
                             </SelectItem>
                           ))}
@@ -581,16 +706,25 @@ export default function SubscriptionTracker() {
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label className="text-white">Category</Label>
-                      <Select 
-                        value={formData.category} 
-                        onValueChange={(v) => setFormData({ ...formData, category: v as CategoryValue })}
+                      <Select
+                        value={formData.category}
+                        onValueChange={v =>
+                          setFormData({
+                            ...formData,
+                            category: v as CategoryValue,
+                          })
+                        }
                       >
                         <SelectTrigger className="bg-gray-800 border-gray-700 text-white">
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent className="bg-gray-800 border-gray-700">
                           {CATEGORIES.map(cat => (
-                            <SelectItem key={cat.value} value={cat.value} className="text-white">
+                            <SelectItem
+                              key={cat.value}
+                              value={cat.value}
+                              className="text-white"
+                            >
                               {cat.label}
                             </SelectItem>
                           ))}
@@ -599,16 +733,22 @@ export default function SubscriptionTracker() {
                     </div>
                     <div className="space-y-2">
                       <Label className="text-white">Status</Label>
-                      <Select 
-                        value={formData.status} 
-                        onValueChange={(v) => setFormData({ ...formData, status: v as StatusValue })}
+                      <Select
+                        value={formData.status}
+                        onValueChange={v =>
+                          setFormData({ ...formData, status: v as StatusValue })
+                        }
                       >
                         <SelectTrigger className="bg-gray-800 border-gray-700 text-white">
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent className="bg-gray-800 border-gray-700">
                           {STATUS_OPTIONS.map(status => (
-                            <SelectItem key={status.value} value={status.value} className="text-white">
+                            <SelectItem
+                              key={status.value}
+                              value={status.value}
+                              className="text-white"
+                            >
                               {status.label}
                             </SelectItem>
                           ))}
@@ -618,33 +758,37 @@ export default function SubscriptionTracker() {
                   </div>
                   <div className="space-y-2">
                     <Label className="text-white">Notes</Label>
-                    <Input 
+                    <Input
                       placeholder="Optional notes..."
                       value={formData.notes}
-                      onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+                      onChange={e =>
+                        setFormData({ ...formData, notes: e.target.value })
+                      }
                       className="bg-gray-800 border-gray-700 text-white"
                     />
                   </div>
                 </div>
                 <DialogFooter>
-                  <Button 
-                    variant="outline" 
+                  <Button
+                    variant="outline"
                     onClick={() => {
                       setIsAddDialogOpen(false);
                       setEditingId(null);
                       setFormData(initialFormData);
-                    }} 
+                    }}
                     className="border-gray-700"
                   >
                     Cancel
                   </Button>
-                  <Button 
-                    onClick={handleSubmit} 
+                  <Button
+                    onClick={handleSubmit}
                     className="bg-cyan-500 hover:bg-cyan-600"
                     disabled={isSubmitting}
                   >
-                    {isSubmitting && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
-                    {editingId ? 'Update' : 'Add'} Subscription
+                    {isSubmitting && (
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    )}
+                    {editingId ? "Update" : "Add"} Subscription
                   </Button>
                 </DialogFooter>
               </DialogContent>
@@ -658,8 +802,10 @@ export default function SubscriptionTracker() {
             ) : !subscriptions || subscriptions.length === 0 ? (
               <div className="text-center py-12">
                 <CreditCard className="w-12 h-12 text-foreground/50 mx-auto mb-4" />
-                <p className="text-foreground/70 mb-4">No subscriptions tracked yet</p>
-                <Button 
+                <p className="text-foreground/70 mb-4">
+                  No subscriptions tracked yet
+                </p>
+                <Button
                   onClick={() => setIsAddDialogOpen(true)}
                   className="bg-gradient-to-r from-cyan-500 to-purple-500"
                 >
@@ -669,65 +815,96 @@ export default function SubscriptionTracker() {
               </div>
             ) : (
               <div className="space-y-3">
-                {subscriptions.map((sub) => {
+                {subscriptions.map(sub => {
                   const category = getCategoryInfo(sub.category);
-                  const statusInfo = STATUS_OPTIONS.find(s => s.value === sub.status);
+                  const statusInfo = STATUS_OPTIONS.find(
+                    s => s.value === sub.status
+                  );
                   return (
-                    <div 
-                      key={sub.id} 
+                    <div
+                      key={sub.id}
                       className={`p-4 bg-gray-800/50 rounded-lg border-l-4 ${
-                        sub.status === 'trial' ? 'border-cyan-500' :
-                        sub.status === 'paused' ? 'border-amber-500' :
-                        sub.status === 'cancelled' ? 'border-red-500' :
-                        'border-gray-700'
+                        sub.status === "trial"
+                          ? "border-cyan-500"
+                          : sub.status === "paused"
+                            ? "border-amber-500"
+                            : sub.status === "cancelled"
+                              ? "border-red-500"
+                              : "border-gray-700"
                       }`}
                     >
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                          <div className={`w-10 h-10 rounded-lg ${category.color} flex items-center justify-center`}>
+                          <div
+                            className={`w-10 h-10 rounded-lg ${category.color} flex items-center justify-center`}
+                          >
                             <CreditCard className="w-5 h-5 text-white" />
                           </div>
                           <div>
                             <div className="flex items-center gap-2">
-                              <span className="text-white font-medium">{sub.name}</span>
-                              {sub.status !== 'active' && (
-                                <Badge className={`${
-                                  sub.status === 'trial' ? 'bg-cyan-500/20 text-cyan-400' :
-                                  sub.status === 'paused' ? 'bg-amber-500/20 text-amber-400' :
-                                  'bg-red-500/20 text-red-400'
-                                } text-xs`}>
+                              <span className="text-white font-medium">
+                                {sub.name}
+                              </span>
+                              {sub.status !== "active" && (
+                                <Badge
+                                  className={`${
+                                    sub.status === "trial"
+                                      ? "bg-cyan-500/20 text-cyan-400"
+                                      : sub.status === "paused"
+                                        ? "bg-amber-500/20 text-amber-400"
+                                        : "bg-red-500/20 text-red-400"
+                                  } text-xs`}
+                                >
                                   {statusInfo?.label}
                                 </Badge>
                               )}
                             </div>
-                            <p className="text-sm text-foreground/70">{sub.provider || sub.name}</p>
+                            <p className="text-sm text-foreground/70">
+                              {sub.provider || sub.name}
+                            </p>
                           </div>
                         </div>
                         <div className="flex items-center gap-4">
                           <div className="text-right">
-                            <p className="text-white font-medium">{formatCurrency(sub.cost)}</p>
+                            <p className="text-white font-medium">
+                              {formatCurrency(sub.cost)}
+                            </p>
                             <p className="text-xs text-foreground/60">
-                              {BILLING_CYCLES.find(c => c.value === sub.billingCycle)?.label}
+                              {
+                                BILLING_CYCLES.find(
+                                  c => c.value === sub.billingCycle
+                                )?.label
+                              }
                             </p>
                           </div>
-                          <Badge variant="outline" className={`${category.color.replace('bg-', 'border-')}/50 ${category.color.replace('bg-', 'text-').replace('-500', '-400')}`}>
+                          <Badge
+                            variant="outline"
+                            className={`${category.color.replace("bg-", "border-")}/50 ${category.color.replace("bg-", "text-").replace("-500", "-400")}`}
+                          >
                             {category.label}
                           </Badge>
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                              <Button variant="ghost" size="icon" className="h-8 w-8">
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-8 w-8"
+                              >
                                 <MoreHorizontal className="w-4 h-4 text-foreground/70" />
                               </Button>
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end" className="bg-gray-800 border-gray-700">
-                              <DropdownMenuItem 
+                            <DropdownMenuContent
+                              align="end"
+                              className="bg-gray-800 border-gray-700"
+                            >
+                              <DropdownMenuItem
                                 className="text-white hover:bg-gray-700 cursor-pointer"
                                 onClick={() => handleEdit(sub)}
                               >
                                 <Edit2 className="w-4 h-4 mr-2" />
                                 Edit
                               </DropdownMenuItem>
-                              <DropdownMenuItem 
+                              <DropdownMenuItem
                                 className="text-red-400 hover:bg-gray-700 cursor-pointer"
                                 onClick={() => setDeleteConfirmId(sub.id)}
                               >
@@ -758,21 +935,29 @@ export default function SubscriptionTracker() {
           <CardContent>
             <div className="space-y-4">
               {categoryTotals.length === 0 ? (
-                <p className="text-foreground/60 text-center py-4">No data available</p>
+                <p className="text-foreground/60 text-center py-4">
+                  No data available
+                </p>
               ) : (
-                categoryTotals.map((cat) => (
+                categoryTotals.map(cat => (
                   <div key={cat.value} className="space-y-2">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <div className={`w-3 h-3 rounded-full ${cat.color}`} />
-                        <span className="text-sm text-foreground/80">{cat.label}</span>
+                        <span className="text-sm text-foreground/80">
+                          {cat.label}
+                        </span>
                       </div>
-                      <span className="text-sm font-medium text-white">{formatCurrency(cat.total)}</span>
+                      <span className="text-sm font-medium text-white">
+                        {formatCurrency(cat.total)}
+                      </span>
                     </div>
                     <div className="h-2 bg-gray-800 rounded-full overflow-hidden">
-                      <div 
+                      <div
                         className={`h-full ${cat.color} transition-all duration-500`}
-                        style={{ width: `${monthlyTotal > 0 ? (cat.total / monthlyTotal) * 100 : 0}%` }}
+                        style={{
+                          width: `${monthlyTotal > 0 ? (cat.total / monthlyTotal) * 100 : 0}%`,
+                        }}
                       />
                     </div>
                   </div>
@@ -788,8 +973,14 @@ export default function SubscriptionTracker() {
                   Optimization Tip
                 </h4>
                 <p className="text-sm text-foreground/70">
-                  {categoryTotals[0]?.label} accounts for {monthlyTotal > 0 ? ((categoryTotals[0]?.total / monthlyTotal) * 100).toFixed(0) : 0}% of your spend. 
-                  Consider reviewing these subscriptions for potential consolidation.
+                  {categoryTotals[0]?.label} accounts for{" "}
+                  {monthlyTotal > 0
+                    ? ((categoryTotals[0]?.total / monthlyTotal) * 100).toFixed(
+                        0
+                      )
+                    : 0}
+                  % of your spend. Consider reviewing these subscriptions for
+                  potential consolidation.
                 </p>
               </div>
             )}
@@ -798,24 +989,34 @@ export default function SubscriptionTracker() {
       </div>
 
       {/* Delete Confirmation Dialog */}
-      <Dialog open={deleteConfirmId !== null} onOpenChange={() => setDeleteConfirmId(null)}>
+      <Dialog
+        open={deleteConfirmId !== null}
+        onOpenChange={() => setDeleteConfirmId(null)}
+      >
         <DialogContent className="bg-gray-900 border-gray-800">
           <DialogHeader>
             <DialogTitle className="text-white">Confirm Deletion</DialogTitle>
             <DialogDescription>
-              Are you sure you want to remove this subscription? This action cannot be undone.
+              Are you sure you want to remove this subscription? This action
+              cannot be undone.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setDeleteConfirmId(null)} className="border-gray-700">
+            <Button
+              variant="outline"
+              onClick={() => setDeleteConfirmId(null)}
+              className="border-gray-700"
+            >
               Cancel
             </Button>
-            <Button 
-              variant="destructive" 
+            <Button
+              variant="destructive"
               onClick={() => deleteConfirmId && handleDelete(deleteConfirmId)}
               disabled={deleteMutation.isPending}
             >
-              {deleteMutation.isPending && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+              {deleteMutation.isPending && (
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+              )}
               Delete
             </Button>
           </DialogFooter>

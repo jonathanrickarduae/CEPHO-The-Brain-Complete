@@ -17,30 +17,28 @@ The CEPHO.AI backend now uses a Dependency Injection (DI) container to manage se
 ### Before (Direct Import - Can Cause Crashes)
 
 ```typescript
-import { someService } from '../services/some.service';
+import { someService } from "../services/some.service";
 
 export const myRouter = router({
-  myProcedure: publicProcedure
-    .query(async () => {
-      // If someService isn't initialized, this crashes
-      return someService.doSomething();
-    }),
+  myProcedure: publicProcedure.query(async () => {
+    // If someService isn't initialized, this crashes
+    return someService.doSomething();
+  }),
 });
 ```
 
 ### After (Using DI Container - Safe)
 
 ```typescript
-import { getService } from '../_core/service-registry';
-import type { SomeService } from '../services/some.service';
+import { getService } from "../_core/service-registry";
+import type { SomeService } from "../services/some.service";
 
 export const myRouter = router({
-  myProcedure: publicProcedure
-    .query(async () => {
-      // Service is guaranteed to be initialized
-      const someService = getService<SomeService>('someService');
-      return someService.doSomething();
-    }),
+  myProcedure: publicProcedure.query(async () => {
+    // Service is guaranteed to be initialized
+    const someService = getService<SomeService>("someService");
+    return someService.doSomething();
+  }),
 });
 ```
 
@@ -54,7 +52,7 @@ To add a new service to the DI container:
 // server/services/my-new.service.ts
 export class MyNewService {
   constructor(private dependency: SomeDependency) {}
-  
+
   doSomething() {
     return this.dependency.process();
   }
@@ -65,13 +63,13 @@ export class MyNewService {
 
 ```typescript
 // server/_core/service-registry.ts
-import { MyNewService } from '../services/my-new.service';
+import { MyNewService } from "../services/my-new.service";
 
 export function registerServices(): void {
   // ... existing registrations ...
-  
-  container.register('myNewService', (c) => {
-    const dependency = c.get<SomeDependency>('someDependency');
+
+  container.register("myNewService", c => {
+    const dependency = c.get<SomeDependency>("someDependency");
     return new MyNewService(dependency);
   });
 }
@@ -80,10 +78,10 @@ export function registerServices(): void {
 3. **Use in your router**:
 
 ```typescript
-import { getService } from '../_core/service-registry';
-import type { MyNewService } from '../services/my-new.service';
+import { getService } from "../_core/service-registry";
+import type { MyNewService } from "../services/my-new.service";
 
-const service = getService<MyNewService>('myNewService');
+const service = getService<MyNewService>("myNewService");
 ```
 
 ## Error Messages
@@ -91,11 +89,13 @@ const service = getService<MyNewService>('myNewService');
 If you see these errors, here's what they mean:
 
 ### "Service 'xyz' not found"
+
 - The service hasn't been registered in `service-registry.ts`
 - Check the available services list in the error message
 - Add the service to the registry
 
 ### "Circular dependency detected"
+
 - Service A depends on Service B, which depends on Service A
 - Refactor your services to remove the circular dependency
 - Consider using an event bus or mediator pattern
@@ -103,20 +103,20 @@ If you see these errors, here's what they mean:
 ## Testing with DI
 
 ```typescript
-import { container } from '../_core/di-container';
+import { container } from "../_core/di-container";
 
-describe('MyRouter', () => {
+describe("MyRouter", () => {
   beforeEach(() => {
     // Register mock services for testing
-    container.registerInstance('myService', mockService);
+    container.registerInstance("myService", mockService);
   });
-  
+
   afterEach(() => {
     // Clean up after tests
     container.clear();
   });
-  
-  it('should work with mocked service', () => {
+
+  it("should work with mocked service", () => {
     // Test your router with the mocked service
   });
 });

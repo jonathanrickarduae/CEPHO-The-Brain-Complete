@@ -1,16 +1,26 @@
-import { useState, useEffect } from 'react';
-import { useLocation } from 'wouter';
-import { 
-  Users, Send, Mic, MicOff, Plus, X, 
-  MessageSquare, Brain, Sparkles, Clock,
-  CheckCircle2, AlertCircle, Loader2
-} from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { allExperts, type AIExpert } from '@/data/ai-experts.data';
-import { useFavorites } from '@/components/project-management/MyBoard';
+import { useState, useEffect } from "react";
+import { useLocation } from "wouter";
+import {
+  Users,
+  Send,
+  Mic,
+  MicOff,
+  Plus,
+  X,
+  MessageSquare,
+  Brain,
+  Sparkles,
+  Clock,
+  CheckCircle2,
+  AlertCircle,
+  Loader2,
+} from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { allExperts, type AIExpert } from "@/data/ai-experts.data";
+import { useFavorites } from "@/components/project-management/MyBoard";
 
 interface Message {
   id: string;
@@ -18,7 +28,7 @@ interface Message {
   expertName: string;
   content: string;
   timestamp: Date;
-  type: 'response' | 'thinking' | 'suggestion';
+  type: "response" | "thinking" | "suggestion";
 }
 
 interface WarRoomSession {
@@ -26,7 +36,7 @@ interface WarRoomSession {
   topic: string;
   experts: string[];
   messages: Message[];
-  status: 'active' | 'completed';
+  status: "active" | "completed";
   createdAt: Date;
 }
 
@@ -34,12 +44,12 @@ export function WarRoom() {
   const [, setLocation] = useLocation();
   const { favorites } = useFavorites();
   const [selectedExperts, setSelectedExperts] = useState<string[]>([]);
-  const [topic, setTopic] = useState('');
-  const [userMessage, setUserMessage] = useState('');
+  const [topic, setTopic] = useState("");
+  const [userMessage, setUserMessage] = useState("");
   const [messages, setMessages] = useState<Message[]>([]);
   const [isThinking, setIsThinking] = useState(false);
   const [showExpertPicker, setShowExpertPicker] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const [isRecording, setIsRecording] = useState(false);
   const [sessionStarted, setSessionStarted] = useState(false);
 
@@ -47,10 +57,11 @@ export function WarRoom() {
   const getExpert = (id: string) => allExperts.find(e => e.id === id);
 
   // Filter experts for picker
-  const filteredExperts = allExperts.filter(expert => 
-    !selectedExperts.includes(expert.id) &&
-    (expert.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-     expert.specialty.toLowerCase().includes(searchQuery.toLowerCase()))
+  const filteredExperts = allExperts.filter(
+    expert =>
+      !selectedExperts.includes(expert.id) &&
+      (expert.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        expert.specialty.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
   // Add expert to war room
@@ -59,7 +70,7 @@ export function WarRoom() {
       setSelectedExperts([...selectedExperts, expertId]);
     }
     setShowExpertPicker(false);
-    setSearchQuery('');
+    setSearchQuery("");
   };
 
   // Remove expert from war room
@@ -71,25 +82,28 @@ export function WarRoom() {
   const startSession = () => {
     if (selectedExperts.length < 2 || !topic.trim()) return;
     setSessionStarted(true);
-    
+
     // Initial expert introductions
-    simulateExpertResponses('introduce');
+    simulateExpertResponses("introduce");
   };
 
   // Simulate expert responses (in production, this would call the AI API)
-  const simulateExpertResponses = async (type: 'introduce' | 'discuss') => {
+  const simulateExpertResponses = async (type: "introduce" | "discuss") => {
     setIsThinking(true);
-    
+
     for (const expertId of selectedExperts) {
       const expert = getExpert(expertId);
       if (!expert) continue;
 
       // Simulate thinking delay
-      await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 1500));
+      await new Promise(resolve =>
+        setTimeout(resolve, 1000 + Math.random() * 1500)
+      );
 
-      const content = type === 'introduce'
-        ? `As ${expert.name}, specializing in ${expert.specialty}, I'm ready to contribute my perspective on "${topic}". ${expert.bio.split('.')[0]}.`
-        : generateExpertResponse(expert, topic, userMessage);
+      const content =
+        type === "introduce"
+          ? `As ${expert.name}, specializing in ${expert.specialty}, I'm ready to contribute my perspective on "${topic}". ${expert.bio.split(".")[0]}.`
+          : generateExpertResponse(expert, topic, userMessage);
 
       const message: Message = {
         id: `${Date.now()}-${expertId}`,
@@ -97,7 +111,7 @@ export function WarRoom() {
         expertName: expert.name,
         content,
         timestamp: new Date(),
-        type: 'response'
+        type: "response",
       };
 
       setMessages(prev => [...prev, message]);
@@ -107,13 +121,17 @@ export function WarRoom() {
   };
 
   // Generate contextual expert response
-  const generateExpertResponse = (expert: AIExpert, topic: string, prompt: string): string => {
+  const generateExpertResponse = (
+    expert: AIExpert,
+    topic: string,
+    prompt: string
+  ): string => {
     const responses = [
-      `From my ${expert.specialty} perspective, I'd suggest we consider ${prompt.split(' ').slice(0, 5).join(' ')}... This aligns with ${expert.compositeOf[0]}'s approach to strategic thinking.`,
+      `From my ${expert.specialty} perspective, I'd suggest we consider ${prompt.split(" ").slice(0, 5).join(" ")}... This aligns with ${expert.compositeOf[0]}'s approach to strategic thinking.`,
       `Building on what's been said, I see an opportunity here. My experience in ${expert.category} tells me we should focus on the fundamentals first.`,
-      `Interesting point. Let me offer a contrarian view - what if we approached this from a ${expert.thinkingStyle.split(',')[0].toLowerCase()} angle?`,
-      `I agree with the direction, but we need to consider the risks. In my field, we've seen similar situations where ${expert.weaknesses[0]?.toLowerCase() || 'overconfidence'} led to suboptimal outcomes.`,
-      `This is exactly the kind of challenge where ${expert.strengths[0]?.toLowerCase() || 'analytical thinking'} becomes crucial. Here's my recommendation...`
+      `Interesting point. Let me offer a contrarian view - what if we approached this from a ${expert.thinkingStyle.split(",")[0].toLowerCase()} angle?`,
+      `I agree with the direction, but we need to consider the risks. In my field, we've seen similar situations where ${expert.weaknesses[0]?.toLowerCase() || "overconfidence"} led to suboptimal outcomes.`,
+      `This is exactly the kind of challenge where ${expert.strengths[0]?.toLowerCase() || "analytical thinking"} becomes crucial. Here's my recommendation...`,
     ];
     return responses[Math.floor(Math.random() * responses.length)];
   };
@@ -121,21 +139,21 @@ export function WarRoom() {
   // Send message to war room
   const sendMessage = () => {
     if (!userMessage.trim() || isThinking) return;
-    
+
     // Add user message
     const userMsg: Message = {
       id: `user-${Date.now()}`,
-      expertId: 'user',
-      expertName: 'You',
+      expertId: "user",
+      expertName: "You",
       content: userMessage,
       timestamp: new Date(),
-      type: 'response'
+      type: "response",
     };
     setMessages(prev => [...prev, userMsg]);
-    setUserMessage('');
+    setUserMessage("");
 
     // Trigger expert responses
-    simulateExpertResponses('discuss');
+    simulateExpertResponses("discuss");
   };
 
   // Toggle voice recording
@@ -162,13 +180,15 @@ export function WarRoom() {
           {/* Topic Input */}
           <Card className="bg-card/60 border-border">
             <CardHeader className="pb-3">
-              <CardTitle className="text-sm font-medium">Mission Topic</CardTitle>
+              <CardTitle className="text-sm font-medium">
+                Mission Topic
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <input
                 type="text"
                 value={topic}
-                onChange={(e) => setTopic(e.target.value)}
+                onChange={e => setTopic(e.target.value)}
                 placeholder="What challenge do you want your experts to tackle?"
                 className="w-full px-4 py-3 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
               />
@@ -179,7 +199,9 @@ export function WarRoom() {
           <Card className="bg-card/60 border-border">
             <CardHeader className="pb-3">
               <div className="flex items-center justify-between">
-                <CardTitle className="text-sm font-medium">Expert Team ({selectedExperts.length})</CardTitle>
+                <CardTitle className="text-sm font-medium">
+                  Expert Team ({selectedExperts.length})
+                </CardTitle>
                 <Button
                   size="sm"
                   variant="outline"
@@ -208,8 +230,12 @@ export function WarRoom() {
                       >
                         <span className="text-lg">{expert.avatar}</span>
                         <div className="flex-1 min-w-0">
-                          <div className="font-medium text-sm truncate">{expert.name}</div>
-                          <div className="text-xs text-muted-foreground truncate">{expert.specialty}</div>
+                          <div className="font-medium text-sm truncate">
+                            {expert.name}
+                          </div>
+                          <div className="text-xs text-muted-foreground truncate">
+                            {expert.specialty}
+                          </div>
                         </div>
                         <button
                           onClick={() => removeExpert(expertId)}
@@ -226,18 +252,21 @@ export function WarRoom() {
               {/* Quick add from favorites */}
               {favorites.length > 0 && (
                 <div className="mt-4 pt-4 border-t border-border">
-                  <p className="text-xs text-muted-foreground mb-2">Quick add from My Board:</p>
+                  <p className="text-xs text-muted-foreground mb-2">
+                    Quick add from My Board:
+                  </p>
                   <div className="flex flex-wrap gap-1">
                     {favorites.slice(0, 5).map(fav => {
                       const expert = getExpert(fav.id);
-                      if (!expert || selectedExperts.includes(fav.id)) return null;
+                      if (!expert || selectedExperts.includes(fav.id))
+                        return null;
                       return (
                         <button
                           key={fav.id}
                           onClick={() => addExpert(fav.id)}
                           className="px-2 py-1 text-xs bg-secondary hover:bg-secondary/80 rounded transition-colors"
                         >
-                          {expert.avatar} {expert.name.split(' ')[0]}
+                          {expert.avatar} {expert.name.split(" ")[0]}
                         </button>
                       );
                     })}
@@ -269,11 +298,15 @@ export function WarRoom() {
                   {selectedExperts.slice(0, 3).map(id => {
                     const expert = getExpert(id);
                     return expert ? (
-                      <span key={id} className="text-sm">{expert.avatar}</span>
+                      <span key={id} className="text-sm">
+                        {expert.avatar}
+                      </span>
                     ) : null;
                   })}
                   {selectedExperts.length > 3 && (
-                    <span className="text-xs text-muted-foreground">+{selectedExperts.length - 3} more</span>
+                    <span className="text-xs text-muted-foreground">
+                      +{selectedExperts.length - 3} more
+                    </span>
                   )}
                 </div>
               </div>
@@ -294,22 +327,29 @@ export function WarRoom() {
           <ScrollArea className="flex-1 p-4">
             <div className="space-y-4">
               {messages.map(message => {
-                const expert = message.expertId !== 'user' ? getExpert(message.expertId) : null;
-                const isUser = message.expertId === 'user';
-                
+                const expert =
+                  message.expertId !== "user"
+                    ? getExpert(message.expertId)
+                    : null;
+                const isUser = message.expertId === "user";
+
                 return (
                   <div
                     key={message.id}
-                    className={`flex gap-3 ${isUser ? 'flex-row-reverse' : ''}`}
+                    className={`flex gap-3 ${isUser ? "flex-row-reverse" : ""}`}
                   >
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center text-lg ${
-                      isUser 
-                        ? 'bg-primary text-primary-foreground'
-                        : 'bg-secondary'
-                    }`}>
-                      {isUser ? '👤' : expert?.avatar || '🤖'}
+                    <div
+                      className={`w-10 h-10 rounded-full flex items-center justify-center text-lg ${
+                        isUser
+                          ? "bg-primary text-primary-foreground"
+                          : "bg-secondary"
+                      }`}
+                    >
+                      {isUser ? "👤" : expert?.avatar || "🤖"}
                     </div>
-                    <div className={`flex-1 max-w-[80%] ${isUser ? 'text-right' : ''}`}>
+                    <div
+                      className={`flex-1 max-w-[80%] ${isUser ? "text-right" : ""}`}
+                    >
                       <div className="text-sm font-medium mb-1">
                         {message.expertName}
                         {expert && (
@@ -318,15 +358,20 @@ export function WarRoom() {
                           </span>
                         )}
                       </div>
-                      <div className={`inline-block px-4 py-2 rounded-2xl ${
-                        isUser 
-                          ? 'bg-primary text-primary-foreground'
-                          : 'bg-secondary'
-                      }`}>
+                      <div
+                        className={`inline-block px-4 py-2 rounded-2xl ${
+                          isUser
+                            ? "bg-primary text-primary-foreground"
+                            : "bg-secondary"
+                        }`}
+                      >
                         {message.content}
                       </div>
                       <div className="text-xs text-muted-foreground mt-1">
-                        {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                        {message.timestamp.toLocaleTimeString([], {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
                       </div>
                     </div>
                   </div>
@@ -348,18 +393,22 @@ export function WarRoom() {
               <button
                 onClick={toggleRecording}
                 className={`p-3 rounded-full transition-colors ${
-                  isRecording 
-                    ? 'bg-red-500 text-white animate-pulse'
-                    : 'bg-secondary hover:bg-secondary/80'
+                  isRecording
+                    ? "bg-red-500 text-white animate-pulse"
+                    : "bg-secondary hover:bg-secondary/80"
                 }`}
               >
-                {isRecording ? <MicOff className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
+                {isRecording ? (
+                  <MicOff className="w-5 h-5" />
+                ) : (
+                  <Mic className="w-5 h-5" />
+                )}
               </button>
               <input
                 type="text"
                 value={userMessage}
-                onChange={(e) => setUserMessage(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
+                onChange={e => setUserMessage(e.target.value)}
+                onKeyPress={e => e.key === "Enter" && sendMessage()}
                 placeholder="Ask your expert team..."
                 className="flex-1 px-4 py-2 bg-background border border-border rounded-full focus:outline-none focus:ring-2 focus:ring-primary/50"
                 disabled={isThinking}
@@ -393,7 +442,7 @@ export function WarRoom() {
               <input
                 type="text"
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={e => setSearchQuery(e.target.value)}
                 placeholder="Search experts..."
                 className="w-full px-3 py-2 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 mt-2"
                 autoFocus
@@ -410,8 +459,12 @@ export function WarRoom() {
                     >
                       <span className="text-2xl">{expert.avatar}</span>
                       <div className="flex-1 min-w-0">
-                        <div className="font-medium truncate">{expert.name}</div>
-                        <div className="text-sm text-muted-foreground truncate">{expert.specialty}</div>
+                        <div className="font-medium truncate">
+                          {expert.name}
+                        </div>
+                        <div className="text-sm text-muted-foreground truncate">
+                          {expert.specialty}
+                        </div>
                       </div>
                       <Plus className="w-4 h-4 text-muted-foreground" />
                     </button>

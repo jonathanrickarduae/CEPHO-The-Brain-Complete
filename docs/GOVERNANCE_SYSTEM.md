@@ -32,12 +32,14 @@ The Governance Mode System provides enterprise-grade security controls for API a
 ## Modes
 
 ### EVERYTHING Mode
+
 - **Security Level:** Low
 - **Use Case:** Development, testing, personal use
 - **Behavior:** All APIs and integrations are available
 - **Visual:** Amber/orange shield icon
 
 ### GOVERNED Mode
+
 - **Security Level:** High
 - **Use Case:** Production, enterprise deployment
 - **Behavior:** Only approved APIs can be used
@@ -70,6 +72,7 @@ The system supports governance for:
 ### For Administrators (Chief of Staff)
 
 1. **Manage Governance Mode:**
+
    ```
    - Navigate to Nexus dashboard
    - Click governance toggle to switch modes
@@ -78,6 +81,7 @@ The system supports governance for:
    ```
 
 2. **Approve API Keys:**
+
    ```
    - Go to Settings → Integrations
    - Scroll to "API Key Management"
@@ -129,24 +133,41 @@ deleteIntegration(integrationId: string): Promise<void>
 ### Integration Example
 
 ```typescript
-import { checkIntegrationAllowed, logIntegrationUsage } from './governance.service';
+import {
+  checkIntegrationAllowed,
+  logIntegrationUsage,
+} from "./governance.service";
 
 async function callExternalAPI(userId: string, serviceName: string, data: any) {
   // Check if allowed
   const allowed = await checkIntegrationAllowed(userId, serviceName);
-  
+
   if (!allowed.allowed) {
-    await logIntegrationUsage(userId, 'api-call', serviceName, 'call', false, allowed.reason);
+    await logIntegrationUsage(
+      userId,
+      "api-call",
+      serviceName,
+      "call",
+      false,
+      allowed.reason
+    );
     throw new Error(allowed.reason);
   }
 
   // Make API call
   try {
     const result = await externalAPI.call(data);
-    await logIntegrationUsage(userId, 'api-call', serviceName, 'call', true);
+    await logIntegrationUsage(userId, "api-call", serviceName, "call", true);
     return result;
   } catch (error) {
-    await logIntegrationUsage(userId, 'api-call', serviceName, 'call', false, error.message);
+    await logIntegrationUsage(
+      userId,
+      "api-call",
+      serviceName,
+      "call",
+      false,
+      error.message
+    );
     throw error;
   }
 }
@@ -155,16 +176,19 @@ async function callExternalAPI(userId: string, serviceName: string, data: any) {
 ## Security Considerations
 
 ### API Key Storage
+
 - **Current:** API keys stored in database (plaintext)
 - **TODO:** Encrypt API keys before storage
 - **Recommendation:** Use environment variables for system-wide keys
 
 ### Access Control
+
 - Only Chief of Staff role can approve integrations
 - All users can view their own approved integrations
 - Audit logs are immutable (insert-only)
 
 ### Compliance
+
 - All API usage is logged with timestamps
 - Logs include: user, service, action, success/failure
 - Retention policy: TBD (recommend 90 days minimum)
@@ -172,6 +196,7 @@ async function callExternalAPI(userId: string, serviceName: string, data: any) {
 ## Database Schema
 
 ### governance_settings
+
 ```sql
 CREATE TABLE governance_settings (
   id UUID PRIMARY KEY,
@@ -183,6 +208,7 @@ CREATE TABLE governance_settings (
 ```
 
 ### approved_integrations
+
 ```sql
 CREATE TABLE approved_integrations (
   id UUID PRIMARY KEY,
@@ -200,6 +226,7 @@ CREATE TABLE approved_integrations (
 ```
 
 ### integration_usage_logs
+
 ```sql
 CREATE TABLE integration_usage_logs (
   id UUID PRIMARY KEY,
@@ -217,6 +244,7 @@ CREATE TABLE integration_usage_logs (
 ## Roadmap
 
 ### Phase 1 (Complete)
+
 - ✅ Governance mode toggle
 - ✅ API key management UI
 - ✅ Enforcement service
@@ -224,6 +252,7 @@ CREATE TABLE integration_usage_logs (
 - ✅ Microsoft Copilot integration
 
 ### Phase 2 (Planned)
+
 - [ ] API key encryption
 - [ ] Role-based access control (RBAC)
 - [ ] Audit log viewer UI
@@ -231,6 +260,7 @@ CREATE TABLE integration_usage_logs (
 - [ ] Integration usage analytics
 
 ### Phase 3 (Future)
+
 - [ ] Multi-tenant support
 - [ ] Custom approval workflows
 - [ ] Integration marketplace
@@ -240,6 +270,7 @@ CREATE TABLE integration_usage_logs (
 ## Support
 
 For questions or issues with the Governance Mode System:
+
 1. Check this documentation
 2. Review audit logs for error messages
 3. Contact Chief of Staff for approval requests

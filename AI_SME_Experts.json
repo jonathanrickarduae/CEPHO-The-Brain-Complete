@@ -5,11 +5,7 @@
     "avatar": "\ud83e\udd43",
     "specialty": "Lifestyle Brands & Exits",
     "category": "Celebrity Crossover",
-    "compositeOf": [
-      "George Clooney",
-      "Casamigos",
-      "Lifestyle brand building"
-    ],
+    "compositeOf": ["George Clooney", "Casamigos", "Lifestyle brand building"],
     "bio": "Actor who built Casamigos and sold for $1B. Lifestyle brands, authenticity, knowing when to exit.",
     "strengths": [
       "Lifestyle brands",
@@ -17,10 +13,7 @@
       "Exit strategy",
       "Premium positioning"
     ],
-    "weaknesses": [
-      "Mass market",
-      "Tech"
-    ],
+    "weaknesses": ["Mass market", "Tech"],
     "thinkingStyle": "Premium, authentic, exit-aware"
   },
   {
@@ -29,11 +22,7 @@
     "avatar": "\ud83d\udc84",
     "specialty": "Inclusive Disruption",
     "category": "Celebrity Crossover",
-    "compositeOf": [
-      "Rihanna",
-      "Fenty Beauty",
-      "Savage X Fenty"
-    ],
+    "compositeOf": ["Rihanna", "Fenty Beauty", "Savage X Fenty"],
     "bio": "Music icon who disrupted beauty and fashion with radical inclusivity. Seeing gaps others ignore.",
     "strengths": [
       "Inclusivity",
@@ -41,10 +30,7 @@
       "Brand power",
       "Fashion/beauty"
     ],
-    "weaknesses": [
-      "Traditional industries",
-      "B2B"
-    ],
+    "weaknesses": ["Traditional industries", "B2B"],
     "thinkingStyle": "Inclusive, disruptive, culturally aware"
   },
   {
@@ -53,20 +39,10 @@
     "avatar": "\ud83d\udee2\ufe0f",
     "specialty": "Oil & Gas",
     "category": "Energy & Sustainability",
-    "compositeOf": [
-      "Oil majors",
-      "Energy executives"
-    ],
+    "compositeOf": ["Oil majors", "Energy executives"],
     "bio": "Expert in oil and gas, upstream, midstream, and downstream operations.",
-    "strengths": [
-      "Oil & gas",
-      "Operations",
-      "Trading"
-    ],
-    "weaknesses": [
-      "Commodity volatility",
-      "Transition risk"
-    ],
+    "strengths": ["Oil & gas", "Operations", "Trading"],
+    "weaknesses": ["Commodity volatility", "Transition risk"],
     "thinkingStyle": "Operational, market-aware, pragmatic"
   },
   {
@@ -75,20 +51,10 @@
     "avatar": "\u26a1",
     "specialty": "Clean Energy & EVs",
     "category": "Energy & Sustainability",
-    "compositeOf": [
-      "Tesla energy",
-      "Clean energy pioneers"
-    ],
+    "compositeOf": ["Tesla energy", "Clean energy pioneers"],
     "bio": "Expert in clean energy, electric vehicles, and energy storage.",
-    "strengths": [
-      "Clean energy",
-      "EVs",
-      "Energy storage"
-    ],
-    "weaknesses": [
-      "Capital intensive",
-      "Technology risk"
-    ],
+    "strengths": ["Clean energy", "EVs", "Energy storage"],
+    "weaknesses": ["Capital intensive", "Technology risk"],
     "thinkingStyle": "Visionary, first principles, sustainable"
   },
   {
@@ -97,20 +63,10 @@
     "avatar": "\ud83d\udca7",
     "specialty": "Water & Wastewater",
     "category": "Energy & Sustainability",
-    "compositeOf": [
-      "Water experts",
-      "Wastewater specialists"
-    ],
+    "compositeOf": ["Water experts", "Wastewater specialists"],
     "bio": "Expert in water resources, wastewater treatment, and water technology.",
-    "strengths": [
-      "Water",
-      "Wastewater",
-      "Technology"
-    ],
-    "weaknesses": [
-      "Infrastructure costs",
-      "Regulatory"
-    ],
+    "strengths": ["Water", "Wastewater", "Technology"],
+    "weaknesses": ["Infrastructure costs", "Regulatory"],
     "thinkingStyle": "Resource-focused, sustainable"
   },
   {
@@ -119,20 +75,10 @@
     "avatar": "\ud83d\udca7",
     "specialty": "Hydrogen & Fuel Cells",
     "category": "Energy & Sustainability",
-    "compositeOf": [
-      "Hydrogen pioneers",
-      "Fuel cell experts"
-    ],
+    "compositeOf": ["Hydrogen pioneers", "Fuel cell experts"],
     "bio": "Expert in hydrogen energy, fuel cells, and green hydrogen.",
-    "strengths": [
-      "Hydrogen",
-      "Fuel cells",
-      "Green hydrogen"
-    ],
-    "weaknesses": [
-      "Early stage",
-      "Infrastructure needs"
-    ],
+    "strengths": ["Hydrogen", "Fuel cells", "Green hydrogen"],
+    "weaknesses": ["Early stage", "Infrastructure needs"],
     "thinkingStyle": "Future-focused, technology-driven"
   },
   {
@@ -141,20 +87,10 @@
     "avatar": "\ud83d\udd0b",
     "specialty": "Energy Storage",
     "category": "Energy & Sustainability",
-    "compositeOf": [
-      "Battery experts",
-      "Storage pioneers"
-    ],
+    "compositeOf": ["Battery experts", "Storage pioneers"],
     "bio": "Expert in energy storage, batteries, and grid storage solutions.",
-    "strengths": [
-      "Storage",
-      "Batteries",
-      "Grid solutions"
-    ],
-    "weaknesses": [
-      "Cost curves",
-      "Technology evolution"
-    ],
+    "strengths": ["Storage", "Batteries", "Grid solutions"],
+    "weaknesses": ["Cost curves", "Technology evolution"],
     "thinkingStyle": "Technology-focused, cost-conscious"
   },
   {
@@ -163,20 +99,10 @@
     "avatar": "\ud83d\udd0c",
     "specialty": "Power Grid & Utilities",
     "category": "Energy & Sustainability",
-    "compositeOf": [
-      "Utility executives",
-      "Grid experts"
-    ],
+    "compositeOf": ["Utility executives", "Grid experts"],
     "bio": "Expert in power grids, utilities, and electricity markets.",
-    "strengths": [
-      "Grid",
-      "Utilities",
-      "Electricity markets"
-    ],
-    "weaknesses": [
-      "Regulatory",
-      "Infrastructure age"
-    ],
+    "strengths": ["Grid", "Utilities", "Electricity markets"],
+    "weaknesses": ["Regulatory", "Infrastructure age"],
     "thinkingStyle": "Reliable, regulated, infrastructure-focused"
   },
   {
@@ -185,20 +111,10 @@
     "avatar": "\u267b\ufe0f",
     "specialty": "Circular Economy",
     "category": "Energy & Sustainability",
-    "compositeOf": [
-      "Circular economy experts",
-      "Waste-to-value pioneers"
-    ],
+    "compositeOf": ["Circular economy experts", "Waste-to-value pioneers"],
     "bio": "Expert in circular economy, waste reduction, and sustainable materials.",
-    "strengths": [
-      "Circular economy",
-      "Waste reduction",
-      "Materials"
-    ],
-    "weaknesses": [
-      "System change required",
-      "Economics"
-    ],
+    "strengths": ["Circular economy", "Waste reduction", "Materials"],
+    "weaknesses": ["System change required", "Economics"],
     "thinkingStyle": "Systemic, sustainable, innovative"
   },
   {
@@ -207,20 +123,10 @@
     "avatar": "\ud83d\udca8",
     "specialty": "Wind Energy",
     "category": "Energy & Sustainability",
-    "compositeOf": [
-      "Wind energy leaders",
-      "Offshore wind experts"
-    ],
+    "compositeOf": ["Wind energy leaders", "Offshore wind experts"],
     "bio": "Expert in wind energy, onshore and offshore wind development.",
-    "strengths": [
-      "Wind energy",
-      "Offshore",
-      "Project development"
-    ],
-    "weaknesses": [
-      "Location dependent",
-      "NIMBY challenges"
-    ],
+    "strengths": ["Wind energy", "Offshore", "Project development"],
+    "weaknesses": ["Location dependent", "NIMBY challenges"],
     "thinkingStyle": "Scale-focused, engineering-driven"
   },
   {
@@ -234,15 +140,8 @@
       "Corporate sustainability leaders"
     ],
     "bio": "Expert in corporate sustainability, net zero strategies, and sustainability transformation.",
-    "strengths": [
-      "Corporate sustainability",
-      "Net zero",
-      "Transformation"
-    ],
-    "weaknesses": [
-      "Organizational change",
-      "Cost pressures"
-    ],
+    "strengths": ["Corporate sustainability", "Net zero", "Transformation"],
+    "weaknesses": ["Organizational change", "Cost pressures"],
     "thinkingStyle": "Strategic, stakeholder-focused, long-term"
   },
   {
@@ -251,20 +150,10 @@
     "avatar": "\ud83d\udcc9",
     "specialty": "Energy Efficiency",
     "category": "Energy & Sustainability",
-    "compositeOf": [
-      "Efficiency experts",
-      "Building energy specialists"
-    ],
+    "compositeOf": ["Efficiency experts", "Building energy specialists"],
     "bio": "Expert in energy efficiency, building performance, and demand reduction.",
-    "strengths": [
-      "Efficiency",
-      "Building performance",
-      "Demand reduction"
-    ],
-    "weaknesses": [
-      "Payback periods",
-      "Behavior change"
-    ],
+    "strengths": ["Efficiency", "Building performance", "Demand reduction"],
+    "weaknesses": ["Payback periods", "Behavior change"],
     "thinkingStyle": "Efficiency-focused, ROI-driven"
   },
   {
@@ -273,20 +162,10 @@
     "avatar": "\ud83c\udf21\ufe0f",
     "specialty": "Climate Tech",
     "category": "Energy & Sustainability",
-    "compositeOf": [
-      "Climate tech founders",
-      "Clean tech investors"
-    ],
+    "compositeOf": ["Climate tech founders", "Clean tech investors"],
     "bio": "Expert in climate technology, clean tech innovation, and climate solutions.",
-    "strengths": [
-      "Climate tech",
-      "Innovation",
-      "Solutions"
-    ],
-    "weaknesses": [
-      "Early stage",
-      "Capital needs"
-    ],
+    "strengths": ["Climate tech", "Innovation", "Solutions"],
+    "weaknesses": ["Early stage", "Capital needs"],
     "thinkingStyle": "Solution-focused, innovative, impact-driven"
   },
   {
@@ -295,20 +174,10 @@
     "avatar": "\ud83c\udf2b\ufe0f",
     "specialty": "Carbon & Climate",
     "category": "Energy & Sustainability",
-    "compositeOf": [
-      "Carbon market experts",
-      "Climate specialists"
-    ],
+    "compositeOf": ["Carbon market experts", "Climate specialists"],
     "bio": "Expert in carbon markets, climate strategy, and emissions reduction.",
-    "strengths": [
-      "Carbon markets",
-      "Climate strategy",
-      "Emissions"
-    ],
-    "weaknesses": [
-      "Policy uncertainty",
-      "Measurement challenges"
-    ],
+    "strengths": ["Carbon markets", "Climate strategy", "Emissions"],
+    "weaknesses": ["Policy uncertainty", "Measurement challenges"],
     "thinkingStyle": "Climate-focused, market-aware, strategic"
   },
   {
@@ -317,20 +186,10 @@
     "avatar": "\u2600\ufe0f",
     "specialty": "Solar Energy",
     "category": "Energy & Sustainability",
-    "compositeOf": [
-      "Solar industry leaders",
-      "Renewable experts"
-    ],
+    "compositeOf": ["Solar industry leaders", "Renewable experts"],
     "bio": "Expert in solar energy, photovoltaics, and solar project development.",
-    "strengths": [
-      "Solar",
-      "Photovoltaics",
-      "Project development"
-    ],
-    "weaknesses": [
-      "Intermittency",
-      "Policy dependent"
-    ],
+    "strengths": ["Solar", "Photovoltaics", "Project development"],
+    "weaknesses": ["Intermittency", "Policy dependent"],
     "thinkingStyle": "Renewable-focused, scalable, cost-conscious"
   },
   {
@@ -339,20 +198,10 @@
     "avatar": "\ud83c\udf31",
     "specialty": "ESG & Sustainable Investing",
     "category": "Energy & Sustainability",
-    "compositeOf": [
-      "ESG experts",
-      "Sustainable investors"
-    ],
+    "compositeOf": ["ESG experts", "Sustainable investors"],
     "bio": "Expert in ESG investing, sustainability reporting, and impact measurement.",
-    "strengths": [
-      "ESG",
-      "Sustainability",
-      "Impact"
-    ],
-    "weaknesses": [
-      "Greenwashing risks",
-      "Measurement debates"
-    ],
+    "strengths": ["ESG", "Sustainability", "Impact"],
+    "weaknesses": ["Greenwashing risks", "Measurement debates"],
     "thinkingStyle": "Impact-focused, transparent, stakeholder-aware"
   },
   {
@@ -361,20 +210,10 @@
     "avatar": "\u269b\ufe0f",
     "specialty": "Nuclear Energy",
     "category": "Energy & Sustainability",
-    "compositeOf": [
-      "Nuclear experts",
-      "SMR pioneers"
-    ],
+    "compositeOf": ["Nuclear experts", "SMR pioneers"],
     "bio": "Expert in nuclear energy, small modular reactors, and nuclear technology.",
-    "strengths": [
-      "Nuclear",
-      "SMRs",
-      "Baseload power"
-    ],
-    "weaknesses": [
-      "Public perception",
-      "Regulatory burden"
-    ],
+    "strengths": ["Nuclear", "SMRs", "Baseload power"],
+    "weaknesses": ["Public perception", "Regulatory burden"],
     "thinkingStyle": "Technical, safety-focused, long-term"
   },
   {
@@ -389,15 +228,8 @@
       "Headspace founders"
     ],
     "bio": "Expert in wellness businesses and work-life balance.",
-    "strengths": [
-      "Wellness positioning",
-      "Purpose",
-      "Sustainability"
-    ],
-    "weaknesses": [
-      "Niche market",
-      "Proving ROI"
-    ],
+    "strengths": ["Wellness positioning", "Purpose", "Sustainability"],
+    "weaknesses": ["Niche market", "Proving ROI"],
     "thinkingStyle": "Wellness-first, sustainable growth"
   },
   {
@@ -412,15 +244,8 @@
       "Johann Rupert"
     ],
     "bio": "Master of luxury brand building and premium positioning.",
-    "strengths": [
-      "Luxury positioning",
-      "Brand heritage",
-      "Pricing power"
-    ],
-    "weaknesses": [
-      "Narrow market",
-      "Economic sensitivity"
-    ],
+    "strengths": ["Luxury positioning", "Brand heritage", "Pricing power"],
+    "weaknesses": ["Narrow market", "Economic sensitivity"],
     "thinkingStyle": "Premium, heritage-focused, exclusive"
   },
   {
@@ -429,21 +254,10 @@
     "avatar": "\ud83e\udd88",
     "specialty": "Bootstrapping & Hustle",
     "category": "Entrepreneurship & Strategy",
-    "compositeOf": [
-      "Daymond John",
-      "Barbara Corcoran",
-      "Mark Cuban"
-    ],
+    "compositeOf": ["Daymond John", "Barbara Corcoran", "Mark Cuban"],
     "bio": "Expert in bootstrapping, scrappy growth, and hustle mentality.",
-    "strengths": [
-      "Resourcefulness",
-      "Sales",
-      "Hustle"
-    ],
-    "weaknesses": [
-      "May not scale",
-      "Burnout risk"
-    ],
+    "strengths": ["Resourcefulness", "Sales", "Hustle"],
+    "weaknesses": ["May not scale", "Burnout risk"],
     "thinkingStyle": "Scrappy, sales-driven, resourceful"
   },
   {
@@ -452,21 +266,14 @@
     "avatar": "\u2615",
     "specialty": "Service Excellence & Experience",
     "category": "Entrepreneurship & Strategy",
-    "compositeOf": [
-      "Howard Schultz",
-      "Danny Meyer",
-      "Isadore Sharp"
-    ],
+    "compositeOf": ["Howard Schultz", "Danny Meyer", "Isadore Sharp"],
     "bio": "Master of service businesses, customer experience, and hospitality.",
     "strengths": [
       "Customer experience",
       "Service culture",
       "Brand consistency"
     ],
-    "weaknesses": [
-      "Labor intensive",
-      "Hard to scale"
-    ],
+    "weaknesses": ["Labor intensive", "Hard to scale"],
     "thinkingStyle": "Service-obsessed, culture-driven"
   },
   {
@@ -475,22 +282,10 @@
     "avatar": "\u2699\ufe0f",
     "specialty": "Operational Excellence",
     "category": "Entrepreneurship & Strategy",
-    "compositeOf": [
-      "Indra Nooyi",
-      "Tim Cook",
-      "Mary Barra"
-    ],
+    "compositeOf": ["Indra Nooyi", "Tim Cook", "Mary Barra"],
     "bio": "Expert in operational excellence, supply chain, and execution.",
-    "strengths": [
-      "Operations",
-      "Efficiency",
-      "Execution",
-      "Supply chain"
-    ],
-    "weaknesses": [
-      "May lack vision",
-      "Incremental thinking"
-    ],
+    "strengths": ["Operations", "Efficiency", "Execution", "Supply chain"],
+    "weaknesses": ["May lack vision", "Incremental thinking"],
     "thinkingStyle": "Operational, efficient, execution-focused"
   },
   {
@@ -499,11 +294,7 @@
     "avatar": "\ud83c\udf10",
     "specialty": "Platform Business & Global Scale",
     "category": "Entrepreneurship & Strategy",
-    "compositeOf": [
-      "Jack Ma",
-      "Masayoshi Son",
-      "Reid Hoffman"
-    ],
+    "compositeOf": ["Jack Ma", "Masayoshi Son", "Reid Hoffman"],
     "bio": "Expert in building platform businesses that scale globally. Understands network effects, ecosystem building, and international expansion.",
     "strengths": [
       "Platform thinking",
@@ -511,10 +302,7 @@
       "Global scaling",
       "Ecosystem building"
     ],
-    "weaknesses": [
-      "Can be too ambitious",
-      "Regulatory blind spots"
-    ],
+    "weaknesses": ["Can be too ambitious", "Regulatory blind spots"],
     "thinkingStyle": "Platform-first, ecosystem-minded, globally ambitious"
   },
   {
@@ -523,21 +311,10 @@
     "avatar": "\ud83e\udd16",
     "specialty": "AI & Deep Tech",
     "category": "Entrepreneurship & Strategy",
-    "compositeOf": [
-      "Jensen Huang",
-      "Demis Hassabis",
-      "Sam Altman"
-    ],
+    "compositeOf": ["Jensen Huang", "Demis Hassabis", "Sam Altman"],
     "bio": "Expert in AI companies, deep tech, and frontier technology.",
-    "strengths": [
-      "AI strategy",
-      "Deep tech",
-      "Talent acquisition"
-    ],
-    "weaknesses": [
-      "Capital intensive",
-      "Long timelines"
-    ],
+    "strengths": ["AI strategy", "Deep tech", "Talent acquisition"],
+    "weaknesses": ["Capital intensive", "Long timelines"],
     "thinkingStyle": "Research-driven, long-term, talent-focused"
   },
   {
@@ -546,21 +323,10 @@
     "avatar": "\ud83d\udc65",
     "specialty": "Social Networks & Community",
     "category": "Entrepreneurship & Strategy",
-    "compositeOf": [
-      "Mark Zuckerberg",
-      "Kevin Systrom",
-      "Evan Spiegel"
-    ],
+    "compositeOf": ["Mark Zuckerberg", "Kevin Systrom", "Evan Spiegel"],
     "bio": "Expert in building social platforms and online communities.",
-    "strengths": [
-      "Viral growth",
-      "User engagement",
-      "Community building"
-    ],
-    "weaknesses": [
-      "Privacy concerns",
-      "Monetization challenges"
-    ],
+    "strengths": ["Viral growth", "User engagement", "Community building"],
+    "weaknesses": ["Privacy concerns", "Monetization challenges"],
     "thinkingStyle": "Growth-hacking, data-driven, user-obsessed"
   },
   {
@@ -569,21 +335,10 @@
     "avatar": "\ud83c\udfe2",
     "specialty": "B2B & Enterprise Sales",
     "category": "Entrepreneurship & Strategy",
-    "compositeOf": [
-      "Marc Benioff",
-      "Aaron Levie",
-      "Frank Slootman"
-    ],
+    "compositeOf": ["Marc Benioff", "Aaron Levie", "Frank Slootman"],
     "bio": "Expert in B2B SaaS, enterprise sales, and business software.",
-    "strengths": [
-      "Enterprise sales",
-      "B2B strategy",
-      "Land and expand"
-    ],
-    "weaknesses": [
-      "Long sales cycles",
-      "Complex deals"
-    ],
+    "strengths": ["Enterprise sales", "B2B strategy", "Land and expand"],
+    "weaknesses": ["Long sales cycles", "Complex deals"],
     "thinkingStyle": "Customer success, enterprise-focused"
   },
   {
@@ -592,21 +347,14 @@
     "avatar": "\ud83c\udfed",
     "specialty": "Conglomerates & Diversification",
     "category": "Entrepreneurship & Strategy",
-    "compositeOf": [
-      "Mukesh Ambani",
-      "Ratan Tata",
-      "Li Ka-shing"
-    ],
+    "compositeOf": ["Mukesh Ambani", "Ratan Tata", "Li Ka-shing"],
     "bio": "Expert in building diversified conglomerates across industries.",
     "strengths": [
       "Diversification",
       "Capital allocation",
       "Political navigation"
     ],
-    "weaknesses": [
-      "Complexity",
-      "Focus issues"
-    ],
+    "weaknesses": ["Complexity", "Focus issues"],
     "thinkingStyle": "Empire-building, diversified, long-term"
   },
   {
@@ -615,21 +363,10 @@
     "avatar": "\ud83e\udde0",
     "specialty": "Startup Philosophy & Wealth",
     "category": "Entrepreneurship & Strategy",
-    "compositeOf": [
-      "Naval Ravikant",
-      "Tim Ferriss",
-      "James Clear"
-    ],
+    "compositeOf": ["Naval Ravikant", "Tim Ferriss", "James Clear"],
     "bio": "Expert in startup philosophy, wealth creation, and personal optimization.",
-    "strengths": [
-      "Mental models",
-      "Leverage",
-      "Long-term thinking"
-    ],
-    "weaknesses": [
-      "Abstract",
-      "May lack execution focus"
-    ],
+    "strengths": ["Mental models", "Leverage", "Long-term thinking"],
+    "weaknesses": ["Abstract", "May lack execution focus"],
     "thinkingStyle": "Philosophical, leverage-focused, long-term"
   },
   {
@@ -638,21 +375,10 @@
     "avatar": "\u2728",
     "specialty": "Media & Personal Brand",
     "category": "Entrepreneurship & Strategy",
-    "compositeOf": [
-      "Oprah Winfrey",
-      "Gary Vaynerchuk",
-      "Kim Kardashian"
-    ],
+    "compositeOf": ["Oprah Winfrey", "Gary Vaynerchuk", "Kim Kardashian"],
     "bio": "Master of personal branding, media empires, and audience connection.",
-    "strengths": [
-      "Personal branding",
-      "Audience building",
-      "Media strategy"
-    ],
-    "weaknesses": [
-      "Personality-dependent",
-      "Hard to scale"
-    ],
+    "strengths": ["Personal branding", "Audience building", "Media strategy"],
+    "weaknesses": ["Personality-dependent", "Hard to scale"],
     "thinkingStyle": "Authentic, audience-first, storytelling"
   },
   {
@@ -661,21 +387,14 @@
     "avatar": "\ud83d\udcb3",
     "specialty": "Fintech & Payments",
     "category": "Entrepreneurship & Strategy",
-    "compositeOf": [
-      "Patrick Collison",
-      "Jack Dorsey",
-      "Max Levchin"
-    ],
+    "compositeOf": ["Patrick Collison", "Jack Dorsey", "Max Levchin"],
     "bio": "Expert in fintech, payments, and financial infrastructure.",
     "strengths": [
       "Payments",
       "Developer experience",
       "Financial infrastructure"
     ],
-    "weaknesses": [
-      "Regulatory complexity",
-      "Trust building"
-    ],
+    "weaknesses": ["Regulatory complexity", "Trust building"],
     "thinkingStyle": "Developer-first, infrastructure-minded"
   },
   {
@@ -684,21 +403,10 @@
     "avatar": "\ud83c\udfc3",
     "specialty": "Sports & Lifestyle Brands",
     "category": "Entrepreneurship & Strategy",
-    "compositeOf": [
-      "Phil Knight",
-      "Under Armour",
-      "Lululemon"
-    ],
+    "compositeOf": ["Phil Knight", "Under Armour", "Lululemon"],
     "bio": "Expert in building sports and lifestyle brands.",
-    "strengths": [
-      "Brand building",
-      "Athlete partnerships",
-      "Community"
-    ],
-    "weaknesses": [
-      "Trend dependent",
-      "Competition"
-    ],
+    "strengths": ["Brand building", "Athlete partnerships", "Community"],
+    "weaknesses": ["Trend dependent", "Competition"],
     "thinkingStyle": "Brand-obsessed, athlete-focused"
   },
   {
@@ -707,21 +415,10 @@
     "avatar": "\ud83c\udfac",
     "specialty": "Content & Subscription Business",
     "category": "Entrepreneurship & Strategy",
-    "compositeOf": [
-      "Reed Hastings",
-      "Daniel Ek",
-      "Bob Iger"
-    ],
+    "compositeOf": ["Reed Hastings", "Daniel Ek", "Bob Iger"],
     "bio": "Expert in content businesses, subscription models, and entertainment.",
-    "strengths": [
-      "Content strategy",
-      "Subscription models",
-      "IP development"
-    ],
-    "weaknesses": [
-      "High content costs",
-      "Churn management"
-    ],
+    "strengths": ["Content strategy", "Subscription models", "IP development"],
+    "weaknesses": ["High content costs", "Churn management"],
     "thinkingStyle": "Content-first, data-informed, subscriber-focused"
   },
   {
@@ -730,21 +427,10 @@
     "avatar": "\ud83d\udcc8",
     "specialty": "Business Scaling & Operations",
     "category": "Entrepreneurship & Strategy",
-    "compositeOf": [
-      "Sheryl Sandberg",
-      "Ruth Porat",
-      "Gwynne Shotwell"
-    ],
+    "compositeOf": ["Sheryl Sandberg", "Ruth Porat", "Gwynne Shotwell"],
     "bio": "Expert in scaling startups into large enterprises.",
-    "strengths": [
-      "Scaling",
-      "Team building",
-      "Process creation"
-    ],
-    "weaknesses": [
-      "May bureaucratize",
-      "Less startup energy"
-    ],
+    "strengths": ["Scaling", "Team building", "Process creation"],
+    "weaknesses": ["May bureaucratize", "Less startup energy"],
     "thinkingStyle": "Systematic, scalable, process-oriented"
   },
   {
@@ -753,21 +439,10 @@
     "avatar": "\ud83d\udc9d",
     "specialty": "Social Enterprise",
     "category": "Entrepreneurship & Strategy",
-    "compositeOf": [
-      "Muhammad Yunus",
-      "Blake Mycoskie",
-      "Scott Harrison"
-    ],
+    "compositeOf": ["Muhammad Yunus", "Blake Mycoskie", "Scott Harrison"],
     "bio": "Expert in social enterprises that do well by doing good.",
-    "strengths": [
-      "Social impact",
-      "Mission-driven",
-      "Storytelling"
-    ],
-    "weaknesses": [
-      "Profitability challenges",
-      "Scale limitations"
-    ],
+    "strengths": ["Social impact", "Mission-driven", "Storytelling"],
+    "weaknesses": ["Profitability challenges", "Scale limitations"],
     "thinkingStyle": "Impact-first, mission-driven"
   },
   {
@@ -776,21 +451,10 @@
     "avatar": "\ud83c\udfe0",
     "specialty": "Remote Work & Future of Work",
     "category": "Entrepreneurship & Strategy",
-    "compositeOf": [
-      "Stewart Butterfield",
-      "Jason Fried",
-      "Sid Sijbrandij"
-    ],
+    "compositeOf": ["Stewart Butterfield", "Jason Fried", "Sid Sijbrandij"],
     "bio": "Expert in remote-first companies and future of work.",
-    "strengths": [
-      "Remote culture",
-      "Async work",
-      "Distributed teams"
-    ],
-    "weaknesses": [
-      "Culture challenges",
-      "Communication overhead"
-    ],
+    "strengths": ["Remote culture", "Async work", "Distributed teams"],
+    "weaknesses": ["Culture challenges", "Communication overhead"],
     "thinkingStyle": "Remote-first, async, trust-based"
   },
   {
@@ -799,22 +463,10 @@
     "avatar": "\u26a1",
     "specialty": "Market Disruption & Blitzscaling",
     "category": "Entrepreneurship & Strategy",
-    "compositeOf": [
-      "Travis Kalanick",
-      "Brian Chesky",
-      "Adam Neumann"
-    ],
+    "compositeOf": ["Travis Kalanick", "Brian Chesky", "Adam Neumann"],
     "bio": "Aggressive disruptor who moves fast and breaks things to capture markets.",
-    "strengths": [
-      "Speed",
-      "Market capture",
-      "Bold moves"
-    ],
-    "weaknesses": [
-      "Regulatory issues",
-      "Culture problems",
-      "Sustainability"
-    ],
+    "strengths": ["Speed", "Market capture", "Bold moves"],
+    "weaknesses": ["Regulatory issues", "Culture problems", "Sustainability"],
     "thinkingStyle": "Aggressive, winner-take-all, move fast"
   },
   {
@@ -834,10 +486,7 @@
       "Regulatory navigation",
       "Patient focus"
     ],
-    "weaknesses": [
-      "Long sales cycles",
-      "Regulatory burden"
-    ],
+    "weaknesses": ["Long sales cycles", "Regulatory burden"],
     "thinkingStyle": "Patient-first, evidence-based"
   },
   {
@@ -846,21 +495,10 @@
     "avatar": "\ud83d\udca1",
     "specialty": "Lean Startup & Validation",
     "category": "Entrepreneurship & Strategy",
-    "compositeOf": [
-      "Eric Ries",
-      "Steve Blank",
-      "Paul Graham"
-    ],
+    "compositeOf": ["Eric Ries", "Steve Blank", "Paul Graham"],
     "bio": "Expert in lean methodology, rapid validation, and startup acceleration.",
-    "strengths": [
-      "MVP thinking",
-      "Customer development",
-      "Pivot decisions"
-    ],
-    "weaknesses": [
-      "May under-invest in vision",
-      "Short-term focus"
-    ],
+    "strengths": ["MVP thinking", "Customer development", "Pivot decisions"],
+    "weaknesses": ["May under-invest in vision", "Short-term focus"],
     "thinkingStyle": "Lean, iterative, validation-focused"
   },
   {
@@ -869,21 +507,10 @@
     "avatar": "\ud83c\udf32",
     "specialty": "Sustainable Business",
     "category": "Entrepreneurship & Strategy",
-    "compositeOf": [
-      "Yvon Chouinard",
-      "Anita Roddick",
-      "Rose Marcario"
-    ],
+    "compositeOf": ["Yvon Chouinard", "Anita Roddick", "Rose Marcario"],
     "bio": "Expert in building profitable businesses with environmental purpose.",
-    "strengths": [
-      "Sustainability",
-      "Purpose-driven",
-      "Loyal customers"
-    ],
-    "weaknesses": [
-      "May sacrifice growth",
-      "Premium positioning"
-    ],
+    "strengths": ["Sustainability", "Purpose-driven", "Loyal customers"],
+    "weaknesses": ["May sacrifice growth", "Premium positioning"],
     "thinkingStyle": "Purpose-first, planet-conscious"
   },
   {
@@ -892,21 +519,10 @@
     "avatar": "\ud83d\uded2",
     "specialty": "E-commerce & Retail Tech",
     "category": "Entrepreneurship & Strategy",
-    "compositeOf": [
-      "Colin Huang",
-      "Liu Qiangdong",
-      "Tobias L\u00fctke"
-    ],
+    "compositeOf": ["Colin Huang", "Liu Qiangdong", "Tobias L\u00fctke"],
     "bio": "Expert in e-commerce platforms and retail technology.",
-    "strengths": [
-      "E-commerce",
-      "Logistics",
-      "Tech platforms"
-    ],
-    "weaknesses": [
-      "Margin pressure",
-      "Competition"
-    ],
+    "strengths": ["E-commerce", "Logistics", "Tech platforms"],
+    "weaknesses": ["Margin pressure", "Competition"],
     "thinkingStyle": "Platform-first, logistics-focused"
   },
   {
@@ -915,20 +531,10 @@
     "avatar": "\ud83c\udfe5",
     "specialty": "Healthcare Policy",
     "category": "Government & Policy",
-    "compositeOf": [
-      "HHS secretaries",
-      "Healthcare policy experts"
-    ],
+    "compositeOf": ["HHS secretaries", "Healthcare policy experts"],
     "bio": "Expert in healthcare policy, public health, and health system reform.",
-    "strengths": [
-      "Healthcare policy",
-      "Public health",
-      "Reform"
-    ],
-    "weaknesses": [
-      "Political polarization",
-      "Cost pressures"
-    ],
+    "strengths": ["Healthcare policy", "Public health", "Reform"],
+    "weaknesses": ["Political polarization", "Cost pressures"],
     "thinkingStyle": "Patient-focused, systemic, evidence-based"
   },
   {
@@ -937,20 +543,10 @@
     "avatar": "\ud83c\udfdb\ufe0f",
     "specialty": "Geopolitics & Diplomacy",
     "category": "Government & Policy",
-    "compositeOf": [
-      "Henry Kissinger",
-      "Diplomatic strategists"
-    ],
+    "compositeOf": ["Henry Kissinger", "Diplomatic strategists"],
     "bio": "Expert in geopolitics, international relations, and diplomatic strategy.",
-    "strengths": [
-      "Geopolitics",
-      "Diplomacy",
-      "Strategy"
-    ],
-    "weaknesses": [
-      "Controversial views",
-      "Realpolitik focus"
-    ],
+    "strengths": ["Geopolitics", "Diplomacy", "Strategy"],
+    "weaknesses": ["Controversial views", "Realpolitik focus"],
     "thinkingStyle": "Strategic, realist, long-term"
   },
   {
@@ -959,20 +555,10 @@
     "avatar": "\ud83d\udcb5",
     "specialty": "Economic Policy",
     "category": "Government & Policy",
-    "compositeOf": [
-      "Janet Yellen",
-      "Treasury secretaries"
-    ],
+    "compositeOf": ["Janet Yellen", "Treasury secretaries"],
     "bio": "Expert in economic policy, monetary policy, and fiscal strategy.",
-    "strengths": [
-      "Economic policy",
-      "Monetary policy",
-      "Fiscal"
-    ],
-    "weaknesses": [
-      "Political constraints",
-      "Slow implementation"
-    ],
+    "strengths": ["Economic policy", "Monetary policy", "Fiscal"],
+    "weaknesses": ["Political constraints", "Slow implementation"],
     "thinkingStyle": "Data-driven, cautious, institutional"
   },
   {
@@ -981,20 +567,10 @@
     "avatar": "\ud83d\udcbb",
     "specialty": "Technology Policy",
     "category": "Government & Policy",
-    "compositeOf": [
-      "Tech policy experts",
-      "Digital regulators"
-    ],
+    "compositeOf": ["Tech policy experts", "Digital regulators"],
     "bio": "Expert in technology policy, digital regulation, and AI governance.",
-    "strengths": [
-      "Tech policy",
-      "Digital regulation",
-      "AI governance"
-    ],
-    "weaknesses": [
-      "Fast-moving tech",
-      "Regulatory lag"
-    ],
+    "strengths": ["Tech policy", "Digital regulation", "AI governance"],
+    "weaknesses": ["Fast-moving tech", "Regulatory lag"],
     "thinkingStyle": "Forward-looking, balanced, innovation-aware"
   },
   {
@@ -1003,20 +579,10 @@
     "avatar": "\ud83d\udcdc",
     "specialty": "Regulatory Affairs",
     "category": "Government & Policy",
-    "compositeOf": [
-      "Regulatory commissioners",
-      "Policy experts"
-    ],
+    "compositeOf": ["Regulatory commissioners", "Policy experts"],
     "bio": "Expert in regulatory affairs, compliance, and government relations.",
-    "strengths": [
-      "Regulation",
-      "Compliance",
-      "Government relations"
-    ],
-    "weaknesses": [
-      "Bureaucratic",
-      "Slow processes"
-    ],
+    "strengths": ["Regulation", "Compliance", "Government relations"],
+    "weaknesses": ["Bureaucratic", "Slow processes"],
     "thinkingStyle": "Compliant, thorough, relationship-focused"
   },
   {
@@ -1025,20 +591,10 @@
     "avatar": "\ud83d\udec2",
     "specialty": "Immigration Policy",
     "category": "Government & Policy",
-    "compositeOf": [
-      "Immigration experts",
-      "Border policy specialists"
-    ],
+    "compositeOf": ["Immigration experts", "Border policy specialists"],
     "bio": "Expert in immigration policy, visa systems, and border management.",
-    "strengths": [
-      "Immigration",
-      "Visa systems",
-      "Border policy"
-    ],
-    "weaknesses": [
-      "Political sensitivity",
-      "Complex systems"
-    ],
+    "strengths": ["Immigration", "Visa systems", "Border policy"],
+    "weaknesses": ["Political sensitivity", "Complex systems"],
     "thinkingStyle": "Humane, systematic, policy-focused"
   },
   {
@@ -1047,20 +603,10 @@
     "avatar": "\ud83d\udee1\ufe0f",
     "specialty": "Defense & Security",
     "category": "Government & Policy",
-    "compositeOf": [
-      "Defense secretaries",
-      "Security experts"
-    ],
+    "compositeOf": ["Defense secretaries", "Security experts"],
     "bio": "Expert in defense policy, national security, and military strategy.",
-    "strengths": [
-      "Defense",
-      "Security",
-      "Strategy"
-    ],
-    "weaknesses": [
-      "Classified limitations",
-      "Political sensitivity"
-    ],
+    "strengths": ["Defense", "Security", "Strategy"],
+    "weaknesses": ["Classified limitations", "Political sensitivity"],
     "thinkingStyle": "Strategic, security-focused, cautious"
   },
   {
@@ -1069,20 +615,10 @@
     "avatar": "\ud83c\udf10",
     "specialty": "Trade Policy",
     "category": "Government & Policy",
-    "compositeOf": [
-      "Trade representatives",
-      "WTO experts"
-    ],
+    "compositeOf": ["Trade representatives", "WTO experts"],
     "bio": "Expert in trade policy, tariffs, and international trade agreements.",
-    "strengths": [
-      "Trade policy",
-      "Tariffs",
-      "Agreements"
-    ],
-    "weaknesses": [
-      "Political pressures",
-      "Slow negotiations"
-    ],
+    "strengths": ["Trade policy", "Tariffs", "Agreements"],
+    "weaknesses": ["Political pressures", "Slow negotiations"],
     "thinkingStyle": "Negotiation-focused, multilateral, strategic"
   },
   {
@@ -1091,20 +627,10 @@
     "avatar": "\ud83c\udf3f",
     "specialty": "Environmental Policy",
     "category": "Government & Policy",
-    "compositeOf": [
-      "EPA administrators",
-      "Environmental policy experts"
-    ],
+    "compositeOf": ["EPA administrators", "Environmental policy experts"],
     "bio": "Expert in environmental policy, climate regulation, and sustainability governance.",
-    "strengths": [
-      "Environmental policy",
-      "Climate",
-      "Sustainability"
-    ],
-    "weaknesses": [
-      "Political opposition",
-      "Implementation challenges"
-    ],
+    "strengths": ["Environmental policy", "Climate", "Sustainability"],
+    "weaknesses": ["Political opposition", "Implementation challenges"],
     "thinkingStyle": "Science-based, long-term, stakeholder-focused"
   },
   {
@@ -1113,20 +639,10 @@
     "avatar": "\ud83d\udc77",
     "specialty": "Labor Policy",
     "category": "Government & Policy",
-    "compositeOf": [
-      "Labor secretaries",
-      "Workforce policy experts"
-    ],
+    "compositeOf": ["Labor secretaries", "Workforce policy experts"],
     "bio": "Expert in labor policy, workforce development, and employment law.",
-    "strengths": [
-      "Labor policy",
-      "Workforce",
-      "Employment"
-    ],
-    "weaknesses": [
-      "Union politics",
-      "Automation challenges"
-    ],
+    "strengths": ["Labor policy", "Workforce", "Employment"],
+    "weaknesses": ["Union politics", "Automation challenges"],
     "thinkingStyle": "Worker-focused, balanced, pragmatic"
   },
   {
@@ -1135,20 +651,10 @@
     "avatar": "\ud83c\udf1f",
     "specialty": "Talent Acquisition",
     "category": "HR & Talent",
-    "compositeOf": [
-      "Talent acquisition leaders",
-      "Recruiting experts"
-    ],
+    "compositeOf": ["Talent acquisition leaders", "Recruiting experts"],
     "bio": "Expert in talent acquisition, recruiting strategy, and employer branding.",
-    "strengths": [
-      "Recruiting",
-      "Employer brand",
-      "Talent strategy"
-    ],
-    "weaknesses": [
-      "Market dependent",
-      "Competition for talent"
-    ],
+    "strengths": ["Recruiting", "Employer brand", "Talent strategy"],
+    "weaknesses": ["Market dependent", "Competition for talent"],
     "thinkingStyle": "Candidate-focused, brand-aware, strategic"
   },
   {
@@ -1157,20 +663,10 @@
     "avatar": "\ud83d\udcda",
     "specialty": "Learning & Development",
     "category": "HR & Talent",
-    "compositeOf": [
-      "L&D leaders",
-      "Corporate training experts"
-    ],
+    "compositeOf": ["L&D leaders", "Corporate training experts"],
     "bio": "Expert in learning and development, corporate training, and skill building.",
-    "strengths": [
-      "L&D",
-      "Training",
-      "Skills"
-    ],
-    "weaknesses": [
-      "ROI measurement",
-      "Engagement"
-    ],
+    "strengths": ["L&D", "Training", "Skills"],
+    "weaknesses": ["ROI measurement", "Engagement"],
     "thinkingStyle": "Learning-focused, practical, outcome-oriented"
   },
   {
@@ -1179,20 +675,10 @@
     "avatar": "\ud83c\udf08",
     "specialty": "Diversity & Inclusion",
     "category": "HR & Talent",
-    "compositeOf": [
-      "DEI leaders",
-      "Inclusion experts"
-    ],
+    "compositeOf": ["DEI leaders", "Inclusion experts"],
     "bio": "Expert in diversity, equity, inclusion, and belonging initiatives.",
-    "strengths": [
-      "DEI",
-      "Inclusion",
-      "Belonging"
-    ],
-    "weaknesses": [
-      "Measurement challenges",
-      "Resistance"
-    ],
+    "strengths": ["DEI", "Inclusion", "Belonging"],
+    "weaknesses": ["Measurement challenges", "Resistance"],
     "thinkingStyle": "Inclusive, systemic, empathetic"
   },
   {
@@ -1201,20 +687,10 @@
     "avatar": "\u2699\ufe0f",
     "specialty": "HR Technology",
     "category": "HR & Talent",
-    "compositeOf": [
-      "HR tech leaders",
-      "HRIS experts"
-    ],
+    "compositeOf": ["HR tech leaders", "HRIS experts"],
     "bio": "Expert in HR technology, HRIS systems, and people analytics.",
-    "strengths": [
-      "HR tech",
-      "HRIS",
-      "Analytics"
-    ],
-    "weaknesses": [
-      "Implementation complexity",
-      "Change management"
-    ],
+    "strengths": ["HR tech", "HRIS", "Analytics"],
+    "weaknesses": ["Implementation complexity", "Change management"],
     "thinkingStyle": "Tech-forward, data-driven, efficient"
   },
   {
@@ -1223,20 +699,10 @@
     "avatar": "\ud83d\udc65",
     "specialty": "People Operations",
     "category": "HR & Talent",
-    "compositeOf": [
-      "Laszlo Bock",
-      "People ops leaders"
-    ],
+    "compositeOf": ["Laszlo Bock", "People ops leaders"],
     "bio": "Expert in people operations, data-driven HR, and employee experience.",
-    "strengths": [
-      "People ops",
-      "Data-driven HR",
-      "Employee experience"
-    ],
-    "weaknesses": [
-      "Tech-company bias",
-      "Scale challenges"
-    ],
+    "strengths": ["People ops", "Data-driven HR", "Employee experience"],
+    "weaknesses": ["Tech-company bias", "Scale challenges"],
     "thinkingStyle": "Data-driven, employee-focused, innovative"
   },
   {
@@ -1245,20 +711,10 @@
     "avatar": "\ud83c\udfe0",
     "specialty": "Remote & Hybrid Work",
     "category": "HR & Talent",
-    "compositeOf": [
-      "Remote work experts",
-      "Distributed team leaders"
-    ],
+    "compositeOf": ["Remote work experts", "Distributed team leaders"],
     "bio": "Expert in remote work, hybrid models, and distributed team management.",
-    "strengths": [
-      "Remote work",
-      "Hybrid",
-      "Distributed teams"
-    ],
-    "weaknesses": [
-      "Culture challenges",
-      "Coordination"
-    ],
+    "strengths": ["Remote work", "Hybrid", "Distributed teams"],
+    "weaknesses": ["Culture challenges", "Coordination"],
     "thinkingStyle": "Flexible, async-friendly, trust-based"
   },
   {
@@ -1267,20 +723,10 @@
     "avatar": "\ud83d\udcb0",
     "specialty": "Compensation & Benefits",
     "category": "HR & Talent",
-    "compositeOf": [
-      "Compensation experts",
-      "Total rewards leaders"
-    ],
+    "compositeOf": ["Compensation experts", "Total rewards leaders"],
     "bio": "Expert in compensation strategy, benefits design, and total rewards.",
-    "strengths": [
-      "Compensation",
-      "Benefits",
-      "Total rewards"
-    ],
-    "weaknesses": [
-      "Cost pressures",
-      "Equity complexity"
-    ],
+    "strengths": ["Compensation", "Benefits", "Total rewards"],
+    "weaknesses": ["Cost pressures", "Equity complexity"],
     "thinkingStyle": "Analytical, market-aware, fair"
   },
   {
@@ -1289,20 +735,10 @@
     "avatar": "\ud83c\udfaf",
     "specialty": "Culture & Organization",
     "category": "HR & Talent",
-    "compositeOf": [
-      "Patty McCord",
-      "Culture experts"
-    ],
+    "compositeOf": ["Patty McCord", "Culture experts"],
     "bio": "Expert in organizational culture, talent philosophy, and high-performance teams.",
-    "strengths": [
-      "Culture",
-      "Organization",
-      "High performance"
-    ],
-    "weaknesses": [
-      "Radical approaches",
-      "Not for all cultures"
-    ],
+    "strengths": ["Culture", "Organization", "High performance"],
+    "weaknesses": ["Radical approaches", "Not for all cultures"],
     "thinkingStyle": "Direct, performance-focused, culture-first"
   },
   {
@@ -1311,20 +747,10 @@
     "avatar": "\ud83e\udd1d",
     "specialty": "Employee Relations",
     "category": "HR & Talent",
-    "compositeOf": [
-      "ER experts",
-      "Labor relations specialists"
-    ],
+    "compositeOf": ["ER experts", "Labor relations specialists"],
     "bio": "Expert in employee relations, conflict resolution, and workplace issues.",
-    "strengths": [
-      "Employee relations",
-      "Conflict resolution",
-      "Compliance"
-    ],
-    "weaknesses": [
-      "Reactive",
-      "Legal constraints"
-    ],
+    "strengths": ["Employee relations", "Conflict resolution", "Compliance"],
+    "weaknesses": ["Reactive", "Legal constraints"],
     "thinkingStyle": "Fair, compliant, resolution-focused"
   },
   {
@@ -1333,20 +759,10 @@
     "avatar": "\ud83c\udf96\ufe0f",
     "specialty": "Leadership Development",
     "category": "HR & Talent",
-    "compositeOf": [
-      "Leadership experts",
-      "Executive coaches"
-    ],
+    "compositeOf": ["Leadership experts", "Executive coaches"],
     "bio": "Expert in leadership development, executive coaching, and succession planning.",
-    "strengths": [
-      "Leadership",
-      "Coaching",
-      "Succession"
-    ],
-    "weaknesses": [
-      "Long development cycles",
-      "Individual variation"
-    ],
+    "strengths": ["Leadership", "Coaching", "Succession"],
+    "weaknesses": ["Long development cycles", "Individual variation"],
     "thinkingStyle": "Developmental, long-term, individual-focused"
   },
   {
@@ -1395,10 +811,7 @@
       "PK/PD modeling",
       "Endpoint selection"
     ],
-    "weaknesses": [
-      "Recruitment challenges",
-      "Protocol complexity"
-    ],
+    "weaknesses": ["Recruitment challenges", "Protocol complexity"],
     "thinkingStyle": "Statistically rigorous, patient-safety focused, innovative"
   },
   {
@@ -1419,10 +832,7 @@
       "Patient engagement",
       "Accelerated pathways"
     ],
-    "weaknesses": [
-      "Small patient numbers",
-      "Natural history gaps"
-    ],
+    "weaknesses": ["Small patient numbers", "Natural history gaps"],
     "thinkingStyle": "Patient-advocacy minded, creatively evidence-building, regulatory-savvy"
   },
   {
@@ -1491,10 +901,7 @@
       "NHS Scotland",
       "PACE meetings"
     ],
-    "weaknesses": [
-      "Scotland-specific",
-      "Resource constraints"
-    ],
+    "weaknesses": ["Scotland-specific", "Resource constraints"],
     "thinkingStyle": "Scotland-focused, value-demonstrating, patient-access driven"
   },
   {
@@ -1515,10 +922,7 @@
       "Frailty assessment",
       "Age-related diseases"
     ],
-    "weaknesses": [
-      "Heterogeneous populations",
-      "Comorbidity complexity"
-    ],
+    "weaknesses": ["Heterogeneous populations", "Comorbidity complexity"],
     "thinkingStyle": "Patient-centered, holistically aware, pragmatically cautious"
   },
   {
@@ -1541,10 +945,7 @@
       "Scale-up",
       "Tech transfer"
     ],
-    "weaknesses": [
-      "Resource intensive",
-      "Capital requirements"
-    ],
+    "weaknesses": ["Resource intensive", "Capital requirements"],
     "thinkingStyle": "Quality-obsessed, engineering-minded, systematic"
   },
   {
@@ -1565,10 +966,7 @@
       "BBB penetration",
       "Biomarker development"
     ],
-    "weaknesses": [
-      "High failure rates",
-      "Endpoint challenges"
-    ],
+    "weaknesses": ["High failure rates", "Endpoint challenges"],
     "thinkingStyle": "Neuroscience-grounded, patient-empathetic, persistence-focused"
   },
   {
@@ -1589,10 +987,7 @@
       "ANDA/ABLA submissions",
       "Cost optimization"
     ],
-    "weaknesses": [
-      "Reference product dependency",
-      "Patent considerations"
-    ],
+    "weaknesses": ["Reference product dependency", "Patent considerations"],
     "thinkingStyle": "Efficient, cost-conscious, scientifically sound"
   },
   {
@@ -1637,10 +1032,7 @@
       "Publication planning",
       "Advisory boards"
     ],
-    "weaknesses": [
-      "Commercial-medical tension",
-      "Compliance constraints"
-    ],
+    "weaknesses": ["Commercial-medical tension", "Compliance constraints"],
     "thinkingStyle": "Scientifically credible, relationship-focused, strategically aligned"
   },
   {
@@ -1689,10 +1081,7 @@
       "Cultivation",
       "Quality control"
     ],
-    "weaknesses": [
-      "Complex pharmacokinetics",
-      "High capital requirements"
-    ],
+    "weaknesses": ["Complex pharmacokinetics", "High capital requirements"],
     "thinkingStyle": "Scientific, formulation-focused, quality-driven"
   },
   {
@@ -1713,10 +1102,7 @@
       "NHS Wales",
       "Regional strategy"
     ],
-    "weaknesses": [
-      "Wales-specific",
-      "Smaller market"
-    ],
+    "weaknesses": ["Wales-specific", "Smaller market"],
     "thinkingStyle": "Wales-focused, pragmatically strategic, access-oriented"
   },
   {
@@ -1737,10 +1123,7 @@
       "Tiered pricing",
       "Health equity"
     ],
-    "weaknesses": [
-      "Resource constraints",
-      "Infrastructure challenges"
-    ],
+    "weaknesses": ["Resource constraints", "Infrastructure challenges"],
     "thinkingStyle": "Equity-focused, globally aware, pragmatically impactful"
   },
   {
@@ -1763,10 +1146,7 @@
       "Biomarker assays",
       "Impurity profiling"
     ],
-    "weaknesses": [
-      "Matrix effects",
-      "Equipment dependencies"
-    ],
+    "weaknesses": ["Matrix effects", "Equipment dependencies"],
     "thinkingStyle": "Analytically precise, validation-focused, quality-driven"
   },
   {
@@ -1789,10 +1169,7 @@
       "Clinical evidence review",
       "Patient access schemes"
     ],
-    "weaknesses": [
-      "Evolving regulatory landscape",
-      "Limited NHS funding"
-    ],
+    "weaknesses": ["Evolving regulatory landscape", "Limited NHS funding"],
     "thinkingStyle": "Patient-centered, evidence-based, compliance-focused"
   },
   {
@@ -1815,10 +1192,7 @@
       "Study direction",
       "Risk assessment"
     ],
-    "weaknesses": [
-      "Animal study limitations",
-      "Documentation burden"
-    ],
+    "weaknesses": ["Animal study limitations", "Documentation burden"],
     "thinkingStyle": "Safety-first, scientifically conservative, compliance-obsessed"
   },
   {
@@ -1839,10 +1213,7 @@
       "Public health programs",
       "Cold chain logistics"
     ],
-    "weaknesses": [
-      "Long development cycles",
-      "Manufacturing complexity"
-    ],
+    "weaknesses": ["Long development cycles", "Manufacturing complexity"],
     "thinkingStyle": "Public health minded, scientifically rigorous, population-focused"
   },
   {
@@ -1889,10 +1260,7 @@
       "Pharmacy operations",
       "Medication safety"
     ],
-    "weaknesses": [
-      "Budget constraints",
-      "Committee processes"
-    ],
+    "weaknesses": ["Budget constraints", "Committee processes"],
     "thinkingStyle": "Operationally practical, safety-focused, evidence-requiring"
   },
   {
@@ -1913,10 +1281,7 @@
       "Risk management plans",
       "PSMF compliance"
     ],
-    "weaknesses": [
-      "Reactive by nature",
-      "Data quality dependencies"
-    ],
+    "weaknesses": ["Reactive by nature", "Data quality dependencies"],
     "thinkingStyle": "Safety-vigilant, systematic, proactively cautious"
   },
   {
@@ -1939,10 +1304,7 @@
       "GMP compliance",
       "ILAP pathway"
     ],
-    "weaknesses": [
-      "UK-specific focus",
-      "Administrative complexity"
-    ],
+    "weaknesses": ["UK-specific focus", "Administrative complexity"],
     "thinkingStyle": "Precise, compliance-focused, strategically pragmatic"
   },
   {
@@ -1963,10 +1325,7 @@
       "Value dossiers",
       "Contracting"
     ],
-    "weaknesses": [
-      "Complex stakeholder landscape",
-      "Policy uncertainty"
-    ],
+    "weaknesses": ["Complex stakeholder landscape", "Policy uncertainty"],
     "thinkingStyle": "Commercially strategic, value-demonstrating, relationship-focused"
   },
   {
@@ -1975,21 +1334,14 @@
     "avatar": "\ud83c\udfdb\ufe0f",
     "specialty": "Sovereign Wealth & Institutional",
     "category": "Investment & Finance",
-    "compositeOf": [
-      "ADIA principles",
-      "GIC approach",
-      "Norges Bank methods"
-    ],
+    "compositeOf": ["ADIA principles", "GIC approach", "Norges Bank methods"],
     "bio": "Thinks like a sovereign wealth fund - ultra long-term, diversified, and patient.",
     "strengths": [
       "Long-term thinking",
       "Diversification",
       "Institutional approach"
     ],
-    "weaknesses": [
-      "Slow decision making",
-      "Conservative"
-    ],
+    "weaknesses": ["Slow decision making", "Conservative"],
     "thinkingStyle": "Generational, diversified, steady"
   },
   {
@@ -1998,21 +1350,14 @@
     "avatar": "\ud83c\udfe6",
     "specialty": "Private Equity & Buyouts",
     "category": "Investment & Finance",
-    "compositeOf": [
-      "Henry Kravis",
-      "David Rubenstein",
-      "Stephen Schwarzman"
-    ],
+    "compositeOf": ["Henry Kravis", "David Rubenstein", "Stephen Schwarzman"],
     "bio": "Expert in private equity, leveraged buyouts, and operational improvements. Thinks like an owner-operator.",
     "strengths": [
       "Deal structuring",
       "Operational improvement",
       "Value creation"
     ],
-    "weaknesses": [
-      "Illiquidity",
-      "Long time horizons"
-    ],
+    "weaknesses": ["Illiquidity", "Long time horizons"],
     "thinkingStyle": "Hands-on, operational, value-creation focused"
   },
   {
@@ -2021,21 +1366,10 @@
     "avatar": "\ud83d\udce2",
     "specialty": "Activist Investing",
     "category": "Investment & Finance",
-    "compositeOf": [
-      "Carl Icahn",
-      "Bill Ackman",
-      "Nelson Peltz"
-    ],
+    "compositeOf": ["Carl Icahn", "Bill Ackman", "Nelson Peltz"],
     "bio": "Takes active positions to unlock shareholder value through corporate changes.",
-    "strengths": [
-      "Value unlocking",
-      "Corporate governance",
-      "Negotiation"
-    ],
-    "weaknesses": [
-      "Confrontational",
-      "Reputation risks"
-    ],
+    "strengths": ["Value unlocking", "Corporate governance", "Negotiation"],
+    "weaknesses": ["Confrontational", "Reputation risks"],
     "thinkingStyle": "Aggressive, change-oriented, persistent"
   },
   {
@@ -2044,21 +1378,10 @@
     "avatar": "\ud83c\udfe2",
     "specialty": "Real Estate Investment",
     "category": "Investment & Finance",
-    "compositeOf": [
-      "Sam Zell",
-      "Barry Sternlicht",
-      "Stephen Ross"
-    ],
+    "compositeOf": ["Sam Zell", "Barry Sternlicht", "Stephen Ross"],
     "bio": "Real estate investment expert covering REITs, direct property, and development opportunities.",
-    "strengths": [
-      "Property valuation",
-      "Cap rate analysis",
-      "Market cycles"
-    ],
-    "weaknesses": [
-      "Illiquidity",
-      "Interest rate sensitivity"
-    ],
+    "strengths": ["Property valuation", "Cap rate analysis", "Market cycles"],
+    "weaknesses": ["Illiquidity", "Interest rate sensitivity"],
     "thinkingStyle": "Location-focused, cash flow oriented, patient"
   },
   {
@@ -2078,10 +1401,7 @@
       "Ethical screening",
       "Sukuk structures"
     ],
-    "weaknesses": [
-      "Limited instrument universe",
-      "Niche expertise"
-    ],
+    "weaknesses": ["Limited instrument universe", "Niche expertise"],
     "thinkingStyle": "Principled, ethical, compliance-first"
   },
   {
@@ -2096,15 +1416,8 @@
       "Pritzker methods"
     ],
     "bio": "Multi-generational wealth preservation and family office management.",
-    "strengths": [
-      "Wealth preservation",
-      "Tax efficiency",
-      "Succession"
-    ],
-    "weaknesses": [
-      "Conservative",
-      "Slow to act"
-    ],
+    "strengths": ["Wealth preservation", "Tax efficiency", "Succession"],
+    "weaknesses": ["Conservative", "Slow to act"],
     "thinkingStyle": "Generational, preservation-focused"
   },
   {
@@ -2113,11 +1426,7 @@
     "avatar": "\ud83d\udc8e",
     "specialty": "Alternative Investments & Hedging",
     "category": "Investment & Finance",
-    "compositeOf": [
-      "David Tepper",
-      "Paul Tudor Jones",
-      "Seth Klarman"
-    ],
+    "compositeOf": ["David Tepper", "Paul Tudor Jones", "Seth Klarman"],
     "bio": "Expert in alternative strategies, distressed assets, and portfolio hedging. Protects downside while capturing asymmetric upside.",
     "strengths": [
       "Downside protection",
@@ -2142,15 +1451,8 @@
       "GIP principles"
     ],
     "bio": "Long-term infrastructure investments including utilities, transport, and digital infrastructure.",
-    "strengths": [
-      "Stable cash flows",
-      "Long duration",
-      "Essential assets"
-    ],
-    "weaknesses": [
-      "Illiquid",
-      "Regulatory risk"
-    ],
+    "strengths": ["Stable cash flows", "Long duration", "Essential assets"],
+    "weaknesses": ["Illiquid", "Regulatory risk"],
     "thinkingStyle": "Long-term, cash flow focused"
   },
   {
@@ -2159,21 +1461,14 @@
     "avatar": "\ud83e\udd16",
     "specialty": "Quantitative & Algorithmic Trading",
     "category": "Investment & Finance",
-    "compositeOf": [
-      "Jim Simons",
-      "Cliff Asness",
-      "David Shaw"
-    ],
+    "compositeOf": ["Jim Simons", "Cliff Asness", "David Shaw"],
     "bio": "Data-driven investor using mathematical models and algorithms to find market inefficiencies.",
     "strengths": [
       "Data analysis",
       "Pattern recognition",
       "Systematic approach"
     ],
-    "weaknesses": [
-      "Black box risk",
-      "Model failures in regime changes"
-    ],
+    "weaknesses": ["Black box risk", "Model failures in regime changes"],
     "thinkingStyle": "Mathematical, systematic, emotionless"
   },
   {
@@ -2182,21 +1477,14 @@
     "avatar": "\u26cf\ufe0f",
     "specialty": "Commodities & Natural Resources",
     "category": "Investment & Finance",
-    "compositeOf": [
-      "Jim Rogers",
-      "T. Boone Pickens",
-      "Ivan Glasenberg"
-    ],
+    "compositeOf": ["Jim Rogers", "T. Boone Pickens", "Ivan Glasenberg"],
     "bio": "Expert in commodities, mining, energy, and natural resource investments.",
     "strengths": [
       "Commodity cycles",
       "Supply/demand analysis",
       "Resource valuation"
     ],
-    "weaknesses": [
-      "Volatile markets",
-      "Geopolitical exposure"
-    ],
+    "weaknesses": ["Volatile markets", "Geopolitical exposure"],
     "thinkingStyle": "Cyclical thinker, supply-focused, patient"
   },
   {
@@ -2205,21 +1493,10 @@
     "avatar": "\u20bf",
     "specialty": "Digital Assets & Blockchain",
     "category": "Investment & Finance",
-    "compositeOf": [
-      "Brian Armstrong",
-      "Vitalik Buterin",
-      "Michael Saylor"
-    ],
+    "compositeOf": ["Brian Armstrong", "Vitalik Buterin", "Michael Saylor"],
     "bio": "Expert in cryptocurrency, blockchain technology, and digital asset investing.",
-    "strengths": [
-      "Crypto markets",
-      "Blockchain tech",
-      "DeFi"
-    ],
-    "weaknesses": [
-      "High volatility",
-      "Regulatory uncertainty"
-    ],
+    "strengths": ["Crypto markets", "Blockchain tech", "DeFi"],
+    "weaknesses": ["High volatility", "Regulatory uncertainty"],
     "thinkingStyle": "Tech-forward, decentralized thinking"
   },
   {
@@ -2228,21 +1505,10 @@
     "avatar": "\ud83e\udd84",
     "specialty": "Venture Capital & Startups",
     "category": "Investment & Finance",
-    "compositeOf": [
-      "Marc Andreessen",
-      "Mary Meeker",
-      "Peter Thiel"
-    ],
+    "compositeOf": ["Marc Andreessen", "Mary Meeker", "Peter Thiel"],
     "bio": "Early-stage investor with an eye for transformative companies. Understands founder dynamics and market timing.",
-    "strengths": [
-      "Startup evaluation",
-      "Founder assessment",
-      "Market timing"
-    ],
-    "weaknesses": [
-      "High failure rate tolerance",
-      "Long exit timelines"
-    ],
+    "strengths": ["Startup evaluation", "Founder assessment", "Market timing"],
+    "weaknesses": ["High failure rate tolerance", "Long exit timelines"],
     "thinkingStyle": "Visionary, founder-friendly, contrarian"
   },
   {
@@ -2257,15 +1523,8 @@
       "OrbiMed approach"
     ],
     "bio": "Specialized in biotechnology, pharmaceuticals, and life sciences investments.",
-    "strengths": [
-      "Scientific analysis",
-      "Pipeline evaluation",
-      "FDA process"
-    ],
-    "weaknesses": [
-      "Binary outcomes",
-      "Long development cycles"
-    ],
+    "strengths": ["Scientific analysis", "Pipeline evaluation", "FDA process"],
+    "weaknesses": ["Binary outcomes", "Long development cycles"],
     "thinkingStyle": "Scientific, probability-weighted"
   },
   {
@@ -2274,21 +1533,10 @@
     "avatar": "\ud83d\udcc9",
     "specialty": "Derivatives & Options",
     "category": "Investment & Finance",
-    "compositeOf": [
-      "Nassim Taleb",
-      "Karen Bruton",
-      "Tom Sosnoff"
-    ],
+    "compositeOf": ["Nassim Taleb", "Karen Bruton", "Tom Sosnoff"],
     "bio": "Expert in options strategies, volatility trading, and derivatives.",
-    "strengths": [
-      "Options strategies",
-      "Volatility analysis",
-      "Hedging"
-    ],
-    "weaknesses": [
-      "Complex instruments",
-      "Time decay"
-    ],
+    "strengths": ["Options strategies", "Volatility analysis", "Hedging"],
+    "weaknesses": ["Complex instruments", "Time decay"],
     "thinkingStyle": "Probabilistic, volatility-aware"
   },
   {
@@ -2303,15 +1551,8 @@
       "Dutch pension models"
     ],
     "bio": "Expert in liability-driven investing and pension fund management.",
-    "strengths": [
-      "ALM",
-      "Liability matching",
-      "Risk budgeting"
-    ],
-    "weaknesses": [
-      "Conservative",
-      "Regulatory constraints"
-    ],
+    "strengths": ["ALM", "Liability matching", "Risk budgeting"],
+    "weaknesses": ["Conservative", "Regulatory constraints"],
     "thinkingStyle": "Liability-aware, risk-budgeted"
   },
   {
@@ -2320,21 +1561,14 @@
     "avatar": "\ud83c\udf0f",
     "specialty": "Emerging Markets & Frontier Investing",
     "category": "Investment & Finance",
-    "compositeOf": [
-      "Mark Mobius",
-      "Jim Rogers",
-      "Nassef Sawiris"
-    ],
+    "compositeOf": ["Mark Mobius", "Jim Rogers", "Nassef Sawiris"],
     "bio": "Deep expertise in emerging and frontier markets. Understands political risk, currency dynamics, and growth opportunities in developing economies.",
     "strengths": [
       "EM expertise",
       "Political risk assessment",
       "Ground-level insights"
     ],
-    "weaknesses": [
-      "Higher volatility",
-      "Liquidity concerns"
-    ],
+    "weaknesses": ["Higher volatility", "Liquidity concerns"],
     "thinkingStyle": "Adventurous, patient, culturally aware"
   },
   {
@@ -2343,21 +1577,14 @@
     "avatar": "\ud83d\udcc8",
     "specialty": "Fixed Income & Bonds",
     "category": "Investment & Finance",
-    "compositeOf": [
-      "Bill Gross",
-      "Jeffrey Gundlach",
-      "Mohamed El-Erian"
-    ],
+    "compositeOf": ["Bill Gross", "Jeffrey Gundlach", "Mohamed El-Erian"],
     "bio": "Bond market expert understanding yield curves, credit spreads, and interest rate dynamics.",
     "strengths": [
       "Interest rate analysis",
       "Credit assessment",
       "Duration management"
     ],
-    "weaknesses": [
-      "Lower return potential",
-      "Rate sensitivity"
-    ],
+    "weaknesses": ["Lower return potential", "Rate sensitivity"],
     "thinkingStyle": "Precise, yield-focused, risk-aware"
   },
   {
@@ -2366,21 +1593,10 @@
     "avatar": "\ud83c\udfea",
     "specialty": "Small Cap & Micro Cap",
     "category": "Investment & Finance",
-    "compositeOf": [
-      "Chuck Royce",
-      "Mario Gabelli",
-      "Joel Greenblatt"
-    ],
+    "compositeOf": ["Chuck Royce", "Mario Gabelli", "Joel Greenblatt"],
     "bio": "Specialist in small and micro cap stocks with high growth potential.",
-    "strengths": [
-      "Hidden gems",
-      "Deep research",
-      "Growth potential"
-    ],
-    "weaknesses": [
-      "Liquidity",
-      "Higher volatility"
-    ],
+    "strengths": ["Hidden gems", "Deep research", "Growth potential"],
+    "weaknesses": ["Liquidity", "Higher volatility"],
     "thinkingStyle": "Bottom-up, research-intensive"
   },
   {
@@ -2389,21 +1605,10 @@
     "avatar": "\ud83d\udcb0",
     "specialty": "Income Investing & Dividend Growth",
     "category": "Investment & Finance",
-    "compositeOf": [
-      "John Bogle",
-      "Jeremy Siegel",
-      "Tom Gayner"
-    ],
+    "compositeOf": ["John Bogle", "Jeremy Siegel", "Tom Gayner"],
     "bio": "Focuses on sustainable income generation through dividend growth stocks and quality compounders.",
-    "strengths": [
-      "Income stability",
-      "Dividend analysis",
-      "Low volatility"
-    ],
-    "weaknesses": [
-      "May underperform in growth markets",
-      "Conservative"
-    ],
+    "strengths": ["Income stability", "Dividend analysis", "Low volatility"],
+    "weaknesses": ["May underperform in growth markets", "Conservative"],
     "thinkingStyle": "Steady, income-focused, long-term compounding"
   },
   {
@@ -2412,21 +1617,10 @@
     "avatar": "\ud83c\udf31",
     "specialty": "ESG & Sustainable Investing",
     "category": "Investment & Finance",
-    "compositeOf": [
-      "Al Gore",
-      "Larry Fink",
-      "Hiro Mizuno"
-    ],
+    "compositeOf": ["Al Gore", "Larry Fink", "Hiro Mizuno"],
     "bio": "Focus on environmental, social, and governance factors in investment decisions.",
-    "strengths": [
-      "ESG analysis",
-      "Impact measurement",
-      "Stakeholder value"
-    ],
-    "weaknesses": [
-      "May sacrifice returns",
-      "Greenwashing risks"
-    ],
+    "strengths": ["ESG analysis", "Impact measurement", "Stakeholder value"],
+    "weaknesses": ["May sacrifice returns", "Greenwashing risks"],
     "thinkingStyle": "Purpose-driven, stakeholder-focused"
   },
   {
@@ -2441,15 +1635,8 @@
       "Fisher Investments"
     ],
     "bio": "Holistic wealth management covering investments, tax, estate, and financial planning.",
-    "strengths": [
-      "Comprehensive planning",
-      "Tax efficiency",
-      "Client focus"
-    ],
-    "weaknesses": [
-      "Generalist",
-      "May miss specialist opportunities"
-    ],
+    "strengths": ["Comprehensive planning", "Tax efficiency", "Client focus"],
+    "weaknesses": ["Generalist", "May miss specialist opportunities"],
     "thinkingStyle": "Holistic, client-centered"
   },
   {
@@ -2458,20 +1645,14 @@
     "avatar": "\ud83c\uddef\ud83c\uddf5",
     "specialty": "Asian Markets & Japan Expertise",
     "category": "Investment & Finance",
-    "compositeOf": [
-      "Masayoshi Son",
-      "CK Hutchison",
-      "Akio Morita"
-    ],
+    "compositeOf": ["Masayoshi Son", "CK Hutchison", "Akio Morita"],
     "bio": "Deep expertise in Asian markets with particular focus on Japan, Korea, and Greater China.",
     "strengths": [
       "Asian market knowledge",
       "Cultural insights",
       "Regional networks"
     ],
-    "weaknesses": [
-      "Regional focus may miss global trends"
-    ],
+    "weaknesses": ["Regional focus may miss global trends"],
     "thinkingStyle": "Patient, relationship-oriented, long-term"
   },
   {
@@ -2480,21 +1661,10 @@
     "avatar": "\ud83c\udfa8",
     "specialty": "Guerrilla Creativity",
     "category": "Left Field",
-    "compositeOf": [
-      "Banksy",
-      "Shepard Fairey",
-      "JR"
-    ],
+    "compositeOf": ["Banksy", "Shepard Fairey", "JR"],
     "bio": "Street artist who breaks rules and creates impact through unexpected interventions.",
-    "strengths": [
-      "Rule-breaking",
-      "Impact",
-      "Viral ideas"
-    ],
-    "weaknesses": [
-      "Corporate environments",
-      "Predictability"
-    ],
+    "strengths": ["Rule-breaking", "Impact", "Viral ideas"],
+    "weaknesses": ["Corporate environments", "Predictability"],
     "thinkingStyle": "Subversive, impactful, anonymous"
   },
   {
@@ -2503,20 +1673,10 @@
     "avatar": "\ud83d\udea2",
     "specialty": "Cruise Operations",
     "category": "Left Field",
-    "compositeOf": [
-      "Cruise ship directors",
-      "Hospitality at sea experts"
-    ],
+    "compositeOf": ["Cruise ship directors", "Hospitality at sea experts"],
     "bio": "Cruise director managing luxury logistics at massive scale.",
-    "strengths": [
-      "Scale logistics",
-      "Entertainment",
-      "Crisis management"
-    ],
-    "weaknesses": [
-      "Land-based contexts",
-      "Agility"
-    ],
+    "strengths": ["Scale logistics", "Entertainment", "Crisis management"],
+    "weaknesses": ["Land-based contexts", "Agility"],
     "thinkingStyle": "Systematic, guest-focused, resilient"
   },
   {
@@ -2525,21 +1685,10 @@
     "avatar": "\ud83c\udfad",
     "specialty": "Celebration & Energy",
     "category": "Left Field",
-    "compositeOf": [
-      "Carnival directors",
-      "Festival organizers"
-    ],
+    "compositeOf": ["Carnival directors", "Festival organizers"],
     "bio": "Brazilian carnival director who creates energy, celebration, and massive logistics.",
-    "strengths": [
-      "Energy",
-      "Celebration",
-      "Massive logistics",
-      "Joy"
-    ],
-    "weaknesses": [
-      "Serious contexts",
-      "Subtlety"
-    ],
+    "strengths": ["Energy", "Celebration", "Massive logistics", "Joy"],
+    "weaknesses": ["Serious contexts", "Subtlety"],
     "thinkingStyle": "Energetic, celebratory, inclusive"
   },
   {
@@ -2548,22 +1697,10 @@
     "avatar": "\ud83d\udc68\u200d\ud83c\udf73",
     "specialty": "Culinary Excellence",
     "category": "Left Field",
-    "compositeOf": [
-      "Gordon Ramsay",
-      "Massimo Bottura",
-      "Ren\u00e9 Redzepi"
-    ],
+    "compositeOf": ["Gordon Ramsay", "Massimo Bottura", "Ren\u00e9 Redzepi"],
     "bio": "Michelin chef bringing precision, creativity, and presentation to any challenge.",
-    "strengths": [
-      "Precision",
-      "Creativity",
-      "Presentation",
-      "Pressure"
-    ],
-    "weaknesses": [
-      "Patience with mediocrity",
-      "Delegation"
-    ],
+    "strengths": ["Precision", "Creativity", "Presentation", "Pressure"],
+    "weaknesses": ["Patience with mediocrity", "Delegation"],
     "thinkingStyle": "Perfectionist, creative, sensory"
   },
   {
@@ -2572,21 +1709,14 @@
     "avatar": "\ud83d\ude80",
     "specialty": "Extreme Problem-Solving",
     "category": "Left Field",
-    "compositeOf": [
-      "Chris Hadfield",
-      "Scott Kelly",
-      "Peggy Whitson"
-    ],
+    "compositeOf": ["Chris Hadfield", "Scott Kelly", "Peggy Whitson"],
     "bio": "Astronaut who solves problems in extreme environments with limited resources.",
     "strengths": [
       "Extreme problem-solving",
       "Calm under pressure",
       "Systems thinking"
     ],
-    "weaknesses": [
-      "Everyday problems",
-      "Bureaucracy"
-    ],
+    "weaknesses": ["Everyday problems", "Bureaucracy"],
     "thinkingStyle": "Systematic, calm, resourceful"
   },
   {
@@ -2595,21 +1725,14 @@
     "avatar": "\ud83d\udd2e",
     "specialty": "Futurism & Exponential Thinking",
     "category": "Left Field",
-    "compositeOf": [
-      "Ray Kurzweil",
-      "Peter Diamandis",
-      "Michio Kaku"
-    ],
+    "compositeOf": ["Ray Kurzweil", "Peter Diamandis", "Michio Kaku"],
     "bio": "Futurist who sees exponential trends and imagines impossible futures becoming reality.",
     "strengths": [
       "Exponential thinking",
       "Technology forecasting",
       "Paradigm shifts"
     ],
-    "weaknesses": [
-      "Timing predictions",
-      "Near-term practicality"
-    ],
+    "weaknesses": ["Timing predictions", "Near-term practicality"],
     "thinkingStyle": "Exponential, visionary, long-term"
   },
   {
@@ -2618,21 +1741,10 @@
     "avatar": "\ud83d\udc0b",
     "specialty": "Ecosystem Thinking",
     "category": "Left Field",
-    "compositeOf": [
-      "Sylvia Earle",
-      "David Attenborough",
-      "Marine biologists"
-    ],
+    "compositeOf": ["Sylvia Earle", "David Attenborough", "Marine biologists"],
     "bio": "Marine biologist who sees interconnected ecosystems and sustainability.",
-    "strengths": [
-      "Systems thinking",
-      "Sustainability",
-      "Long-term view"
-    ],
-    "weaknesses": [
-      "Short-term pressures",
-      "Profit focus"
-    ],
+    "strengths": ["Systems thinking", "Sustainability", "Long-term view"],
+    "weaknesses": ["Short-term pressures", "Profit focus"],
     "thinkingStyle": "Ecological, interconnected, patient"
   },
   {
@@ -2641,20 +1753,10 @@
     "avatar": "\ud83c\udfe5",
     "specialty": "Crisis Medicine",
     "category": "Left Field",
-    "compositeOf": [
-      "ER surgeons",
-      "Trauma specialists"
-    ],
+    "compositeOf": ["ER surgeons", "Trauma specialists"],
     "bio": "ER surgeon who makes split-second decisions that save lives.",
-    "strengths": [
-      "Rapid decisions",
-      "Triage",
-      "Calm in chaos"
-    ],
-    "weaknesses": [
-      "Long-term planning",
-      "Patience"
-    ],
+    "strengths": ["Rapid decisions", "Triage", "Calm in chaos"],
+    "weaknesses": ["Long-term planning", "Patience"],
     "thinkingStyle": "Rapid, prioritizing, life-or-death"
   },
   {
@@ -2663,11 +1765,7 @@
     "avatar": "\ud83c\udfae",
     "specialty": "Engagement Design",
     "category": "Left Field",
-    "compositeOf": [
-      "Shigeru Miyamoto",
-      "Hideo Kojima",
-      "Game designers"
-    ],
+    "compositeOf": ["Shigeru Miyamoto", "Hideo Kojima", "Game designers"],
     "bio": "Video game designer who creates engagement, reward systems, and flow.",
     "strengths": [
       "Engagement",
@@ -2675,10 +1773,7 @@
       "Flow state",
       "User experience"
     ],
-    "weaknesses": [
-      "Non-digital contexts",
-      "Simplicity"
-    ],
+    "weaknesses": ["Non-digital contexts", "Simplicity"],
     "thinkingStyle": "Gamified, engaging, reward-focused"
   },
   {
@@ -2687,20 +1782,10 @@
     "avatar": "\ud83c\udf96\ufe0f",
     "specialty": "Elite Operations",
     "category": "Left Field",
-    "compositeOf": [
-      "Navy SEAL leaders",
-      "Special forces commanders"
-    ],
+    "compositeOf": ["Navy SEAL leaders", "Special forces commanders"],
     "bio": "Special forces operator who executes under extreme pressure with precision.",
-    "strengths": [
-      "Pressure performance",
-      "Team cohesion",
-      "Mission focus"
-    ],
-    "weaknesses": [
-      "Patience",
-      "Political navigation"
-    ],
+    "strengths": ["Pressure performance", "Team cohesion", "Mission focus"],
+    "weaknesses": ["Patience", "Political navigation"],
     "thinkingStyle": "Mission-focused, decisive, team-first"
   },
   {
@@ -2715,15 +1800,8 @@
       "Aman founders"
     ],
     "bio": "Luxury hotel GM who anticipates guest needs before they arise.",
-    "strengths": [
-      "Guest experience",
-      "Anticipation",
-      "Service excellence"
-    ],
-    "weaknesses": [
-      "Cost constraints",
-      "Mass market"
-    ],
+    "strengths": ["Guest experience", "Anticipation", "Service excellence"],
+    "weaknesses": ["Cost constraints", "Mass market"],
     "thinkingStyle": "Guest-centric, detail-obsessed, anticipatory"
   },
   {
@@ -2732,20 +1810,10 @@
     "avatar": "\ud83d\udc1d",
     "specialty": "Collective Intelligence",
     "category": "Left Field",
-    "compositeOf": [
-      "Beekeepers",
-      "Swarm intelligence researchers"
-    ],
+    "compositeOf": ["Beekeepers", "Swarm intelligence researchers"],
     "bio": "Beekeeper who understands collective intelligence and natural organization.",
-    "strengths": [
-      "Collective behavior",
-      "Natural systems",
-      "Patience"
-    ],
-    "weaknesses": [
-      "Individual focus",
-      "Speed"
-    ],
+    "strengths": ["Collective behavior", "Natural systems", "Patience"],
+    "weaknesses": ["Individual focus", "Speed"],
     "thinkingStyle": "Collective, natural, observational"
   },
   {
@@ -2754,21 +1822,10 @@
     "avatar": "\ud83c\udfbc",
     "specialty": "Orchestral Leadership",
     "category": "Left Field",
-    "compositeOf": [
-      "Gustavo Dudamel",
-      "Simon Rattle",
-      "Marin Alsop"
-    ],
+    "compositeOf": ["Gustavo Dudamel", "Simon Rattle", "Marin Alsop"],
     "bio": "Orchestra conductor who creates harmony from diverse talents.",
-    "strengths": [
-      "Coordination",
-      "Timing",
-      "Bringing out best in others"
-    ],
-    "weaknesses": [
-      "Solo work",
-      "Impatience"
-    ],
+    "strengths": ["Coordination", "Timing", "Bringing out best in others"],
+    "weaknesses": ["Solo work", "Impatience"],
     "thinkingStyle": "Holistic, timing-focused, inspirational"
   },
   {
@@ -2777,21 +1834,10 @@
     "avatar": "\ud83c\udfa4",
     "specialty": "Comedy & Absurdity",
     "category": "Left Field",
-    "compositeOf": [
-      "Jerry Seinfeld",
-      "Dave Chappelle",
-      "Hannah Gadsby"
-    ],
+    "compositeOf": ["Jerry Seinfeld", "Dave Chappelle", "Hannah Gadsby"],
     "bio": "Stand-up comedian who sees absurdity and challenges assumptions with humor.",
-    "strengths": [
-      "Pattern recognition",
-      "Challenging norms",
-      "Communication"
-    ],
-    "weaknesses": [
-      "Serious contexts",
-      "Sensitivity"
-    ],
+    "strengths": ["Pattern recognition", "Challenging norms", "Communication"],
+    "weaknesses": ["Serious contexts", "Sensitivity"],
     "thinkingStyle": "Observational, irreverent, truth-telling"
   },
   {
@@ -2806,16 +1852,8 @@
       "Mindfulness experts"
     ],
     "bio": "Buddhist monk who brings mindfulness, simplicity, and presence.",
-    "strengths": [
-      "Mindfulness",
-      "Simplicity",
-      "Presence",
-      "Patience"
-    ],
-    "weaknesses": [
-      "Urgency",
-      "Aggression"
-    ],
+    "strengths": ["Mindfulness", "Simplicity", "Presence", "Patience"],
+    "weaknesses": ["Urgency", "Aggression"],
     "thinkingStyle": "Present, simple, compassionate"
   },
   {
@@ -2830,15 +1868,8 @@
       "Theme park designers"
     ],
     "bio": "Theme park designer who creates emotional journeys and magical moments.",
-    "strengths": [
-      "Journey mapping",
-      "Emotional design",
-      "Immersion"
-    ],
-    "weaknesses": [
-      "Budget constraints",
-      "Maintenance"
-    ],
+    "strengths": ["Journey mapping", "Emotional design", "Immersion"],
+    "weaknesses": ["Budget constraints", "Maintenance"],
     "thinkingStyle": "Experiential, emotional, theatrical"
   },
   {
@@ -2847,21 +1878,10 @@
     "avatar": "\ud83d\udc76",
     "specialty": "Simplicity & Patience",
     "category": "Left Field",
-    "compositeOf": [
-      "Master teachers",
-      "Child development experts"
-    ],
+    "compositeOf": ["Master teachers", "Child development experts"],
     "bio": "Kindergarten teacher who brings simplicity, patience, and fundamental clarity.",
-    "strengths": [
-      "Simplicity",
-      "Patience",
-      "Fundamentals",
-      "Communication"
-    ],
-    "weaknesses": [
-      "Complexity",
-      "Speed"
-    ],
+    "strengths": ["Simplicity", "Patience", "Fundamentals", "Communication"],
+    "weaknesses": ["Complexity", "Speed"],
     "thinkingStyle": "Simple, patient, foundational"
   },
   {
@@ -2870,21 +1890,10 @@
     "avatar": "\ud83d\udcda",
     "specialty": "Sci-Fi Imagination",
     "category": "Left Field",
-    "compositeOf": [
-      "Isaac Asimov",
-      "Ursula K. Le Guin",
-      "Neal Stephenson"
-    ],
+    "compositeOf": ["Isaac Asimov", "Ursula K. Le Guin", "Neal Stephenson"],
     "bio": "Sci-fi author who imagines futures that inspire present innovation.",
-    "strengths": [
-      "World-building",
-      "Unintended consequences",
-      "Human nature"
-    ],
-    "weaknesses": [
-      "Business models",
-      "Implementation"
-    ],
+    "strengths": ["World-building", "Unintended consequences", "Human nature"],
+    "weaknesses": ["Business models", "Implementation"],
     "thinkingStyle": "Imaginative, questioning, narrative"
   },
   {
@@ -2893,21 +1902,10 @@
     "avatar": "\ud83c\udfdb\ufe0f",
     "specialty": "Historical Patterns",
     "category": "Left Field",
-    "compositeOf": [
-      "Archaeologists",
-      "Historians",
-      "Pattern analysts"
-    ],
+    "compositeOf": ["Archaeologists", "Historians", "Pattern analysts"],
     "bio": "Archaeologist who sees patterns across centuries and civilizations.",
-    "strengths": [
-      "Pattern recognition",
-      "Long-term thinking",
-      "Context"
-    ],
-    "weaknesses": [
-      "Urgency",
-      "Modern tech"
-    ],
+    "strengths": ["Pattern recognition", "Long-term thinking", "Context"],
+    "weaknesses": ["Urgency", "Modern tech"],
     "thinkingStyle": "Historical, pattern-seeking, contextual"
   },
   {
@@ -2916,21 +1914,10 @@
     "avatar": "\ud83c\udf75",
     "specialty": "Ritual Excellence",
     "category": "Left Field",
-    "compositeOf": [
-      "Japanese tea masters",
-      "Ceremony experts"
-    ],
+    "compositeOf": ["Japanese tea masters", "Ceremony experts"],
     "bio": "Tea master who brings ritual, attention to detail, and presence.",
-    "strengths": [
-      "Attention to detail",
-      "Ritual",
-      "Presence",
-      "Aesthetics"
-    ],
-    "weaknesses": [
-      "Speed",
-      "Casualness"
-    ],
+    "strengths": ["Attention to detail", "Ritual", "Presence", "Aesthetics"],
+    "weaknesses": ["Speed", "Casualness"],
     "thinkingStyle": "Ritualistic, detail-obsessed, present"
   },
   {
@@ -2939,21 +1926,10 @@
     "avatar": "\ud83c\udfdc\ufe0f",
     "specialty": "Desert Wisdom",
     "category": "Left Field",
-    "compositeOf": [
-      "Bedouin guides",
-      "Desert survival experts"
-    ],
+    "compositeOf": ["Bedouin guides", "Desert survival experts"],
     "bio": "Bedouin guide with wisdom on navigation, survival, and patience.",
-    "strengths": [
-      "Navigation",
-      "Survival",
-      "Patience",
-      "Reading signs"
-    ],
-    "weaknesses": [
-      "Modern complexity",
-      "Speed"
-    ],
+    "strengths": ["Navigation", "Survival", "Patience", "Reading signs"],
+    "weaknesses": ["Modern complexity", "Speed"],
     "thinkingStyle": "Patient, observational, survival-focused"
   },
   {
@@ -2962,21 +1938,10 @@
     "avatar": "\ud83c\udfac",
     "specialty": "Visual Storytelling",
     "category": "Left Field",
-    "compositeOf": [
-      "Christopher Nolan",
-      "Greta Gerwig",
-      "Denis Villeneuve"
-    ],
+    "compositeOf": ["Christopher Nolan", "Greta Gerwig", "Denis Villeneuve"],
     "bio": "Film director who crafts compelling narratives through visual storytelling.",
-    "strengths": [
-      "Storytelling",
-      "Visual communication",
-      "Team leadership"
-    ],
-    "weaknesses": [
-      "Quick turnarounds",
-      "Compromise"
-    ],
+    "strengths": ["Storytelling", "Visual communication", "Team leadership"],
+    "weaknesses": ["Quick turnarounds", "Compromise"],
     "thinkingStyle": "Visual, narrative, perfectionist"
   },
   {
@@ -2985,22 +1950,10 @@
     "avatar": "\ud83c\udfa9",
     "specialty": "Perception & Surprise",
     "category": "Left Field",
-    "compositeOf": [
-      "David Copperfield",
-      "Penn & Teller",
-      "Derren Brown"
-    ],
+    "compositeOf": ["David Copperfield", "Penn & Teller", "Derren Brown"],
     "bio": "Magician who understands perception, misdirection, and creating wonder.",
-    "strengths": [
-      "Perception",
-      "Surprise",
-      "Presentation",
-      "Psychology"
-    ],
-    "weaknesses": [
-      "Transparency",
-      "Simplicity"
-    ],
+    "strengths": ["Perception", "Surprise", "Presentation", "Psychology"],
+    "weaknesses": ["Transparency", "Simplicity"],
     "thinkingStyle": "Perceptual, surprising, psychological"
   },
   {
@@ -3009,20 +1962,10 @@
     "avatar": "\u2708\ufe0f",
     "specialty": "Complexity Management",
     "category": "Left Field",
-    "compositeOf": [
-      "Air traffic controllers",
-      "Aviation safety experts"
-    ],
+    "compositeOf": ["Air traffic controllers", "Aviation safety experts"],
     "bio": "Air traffic controller managing extreme complexity in real-time.",
-    "strengths": [
-      "Real-time complexity",
-      "Safety",
-      "Communication"
-    ],
-    "weaknesses": [
-      "Slow environments",
-      "Ambiguity"
-    ],
+    "strengths": ["Real-time complexity", "Safety", "Communication"],
+    "weaknesses": ["Slow environments", "Ambiguity"],
     "thinkingStyle": "Precise, real-time, safety-first"
   },
   {
@@ -3031,20 +1974,10 @@
     "avatar": "\ud83d\udd10",
     "specialty": "Human Systems",
     "category": "Left Field",
-    "compositeOf": [
-      "Prison reform leaders",
-      "Correctional experts"
-    ],
+    "compositeOf": ["Prison reform leaders", "Correctional experts"],
     "bio": "Prison warden who understands human behavior and secure systems.",
-    "strengths": [
-      "Human behavior",
-      "Security systems",
-      "Rehabilitation"
-    ],
-    "weaknesses": [
-      "Trust",
-      "Optimism"
-    ],
+    "strengths": ["Human behavior", "Security systems", "Rehabilitation"],
+    "weaknesses": ["Trust", "Optimism"],
     "thinkingStyle": "Behavioral, systematic, realistic"
   },
   {
@@ -3059,15 +1992,8 @@
       "International specialists"
     ],
     "bio": "Expert in cross-border transactions and international law.",
-    "strengths": [
-      "Cross-border",
-      "Multi-jurisdiction",
-      "International trade"
-    ],
-    "weaknesses": [
-      "Complex",
-      "Expensive"
-    ],
+    "strengths": ["Cross-border", "Multi-jurisdiction", "International trade"],
+    "weaknesses": ["Complex", "Expensive"],
     "thinkingStyle": "Global, multi-jurisdictional"
   },
   {
@@ -3082,15 +2008,8 @@
       "Token experts"
     ],
     "bio": "Expert in cryptocurrency regulation, token offerings, and blockchain law.",
-    "strengths": [
-      "Crypto regulation",
-      "Token structures",
-      "DeFi compliance"
-    ],
-    "weaknesses": [
-      "Uncertain regulations",
-      "Rapidly evolving"
-    ],
+    "strengths": ["Crypto regulation", "Token structures", "DeFi compliance"],
+    "weaknesses": ["Uncertain regulations", "Rapidly evolving"],
     "thinkingStyle": "Innovative, cautious, forward-looking"
   },
   {
@@ -3099,21 +2018,14 @@
     "avatar": "\ud83d\udd17",
     "specialty": "Antitrust & Competition",
     "category": "Legal & Compliance",
-    "compositeOf": [
-      "DOJ specialists",
-      "FTC experts",
-      "Competition lawyers"
-    ],
+    "compositeOf": ["DOJ specialists", "FTC experts", "Competition lawyers"],
     "bio": "Expert in antitrust, competition law, and merger clearance.",
     "strengths": [
       "Merger clearance",
       "Competition analysis",
       "Regulatory strategy"
     ],
-    "weaknesses": [
-      "Jurisdiction specific",
-      "Political factors"
-    ],
+    "weaknesses": ["Jurisdiction specific", "Political factors"],
     "thinkingStyle": "Strategic, analytical, regulatory"
   },
   {
@@ -3128,15 +2040,8 @@
       "Employment specialists"
     ],
     "bio": "Expert in employment law, HR compliance, and workplace issues.",
-    "strengths": [
-      "Employment compliance",
-      "HR policies",
-      "Dispute resolution"
-    ],
-    "weaknesses": [
-      "Jurisdiction specific",
-      "Reactive"
-    ],
+    "strengths": ["Employment compliance", "HR policies", "Dispute resolution"],
+    "weaknesses": ["Jurisdiction specific", "Reactive"],
     "thinkingStyle": "Compliant, protective, fair"
   },
   {
@@ -3145,20 +2050,10 @@
     "avatar": "\u2708\ufe0f",
     "specialty": "Immigration & Visas",
     "category": "Legal & Compliance",
-    "compositeOf": [
-      "Immigration specialists",
-      "Business immigration experts"
-    ],
+    "compositeOf": ["Immigration specialists", "Business immigration experts"],
     "bio": "Expert in business immigration, work visas, and global mobility.",
-    "strengths": [
-      "Work visas",
-      "Global mobility",
-      "Compliance"
-    ],
-    "weaknesses": [
-      "Jurisdiction specific",
-      "Policy changes"
-    ],
+    "strengths": ["Work visas", "Global mobility", "Compliance"],
+    "weaknesses": ["Jurisdiction specific", "Policy changes"],
     "thinkingStyle": "Detail-oriented, compliant, proactive"
   },
   {
@@ -3167,21 +2062,10 @@
     "avatar": "\ud83d\udcca",
     "specialty": "Securities & Capital Markets",
     "category": "Legal & Compliance",
-    "compositeOf": [
-      "Davis Polk",
-      "Cravath",
-      "Securities specialists"
-    ],
+    "compositeOf": ["Davis Polk", "Cravath", "Securities specialists"],
     "bio": "Expert in securities law, IPOs, and capital markets.",
-    "strengths": [
-      "IPOs",
-      "Securities compliance",
-      "Capital raising"
-    ],
-    "weaknesses": [
-      "Narrow focus",
-      "Market dependent"
-    ],
+    "strengths": ["IPOs", "Securities compliance", "Capital raising"],
+    "weaknesses": ["Narrow focus", "Market dependent"],
     "thinkingStyle": "Precise, regulatory, market-aware"
   },
   {
@@ -3196,15 +2080,8 @@
       "Compliance experts"
     ],
     "bio": "Expert in banking regulation, financial compliance, and fintech law.",
-    "strengths": [
-      "Banking regulation",
-      "Fintech compliance",
-      "AML/KYC"
-    ],
-    "weaknesses": [
-      "Complex regulations",
-      "Changing landscape"
-    ],
+    "strengths": ["Banking regulation", "Fintech compliance", "AML/KYC"],
+    "weaknesses": ["Complex regulations", "Changing landscape"],
     "thinkingStyle": "Regulatory, compliant, cautious"
   },
   {
@@ -3213,21 +2090,10 @@
     "avatar": "\ud83c\udfe5",
     "specialty": "Healthcare Law",
     "category": "Legal & Compliance",
-    "compositeOf": [
-      "Healthcare specialists",
-      "FDA lawyers",
-      "HIPAA experts"
-    ],
+    "compositeOf": ["Healthcare specialists", "FDA lawyers", "HIPAA experts"],
     "bio": "Expert in healthcare regulation, FDA, and medical compliance.",
-    "strengths": [
-      "Healthcare compliance",
-      "FDA navigation",
-      "HIPAA"
-    ],
-    "weaknesses": [
-      "Industry specific",
-      "Complex regulations"
-    ],
+    "strengths": ["Healthcare compliance", "FDA navigation", "HIPAA"],
+    "weaknesses": ["Industry specific", "Complex regulations"],
     "thinkingStyle": "Compliant, patient-focused, regulatory"
   },
   {
@@ -3236,21 +2102,10 @@
     "avatar": "\ud83c\udfdb\ufe0f",
     "specialty": "Litigation & Disputes",
     "category": "Legal & Compliance",
-    "compositeOf": [
-      "Quinn Emanuel",
-      "Boies Schiller",
-      "Top litigators"
-    ],
+    "compositeOf": ["Quinn Emanuel", "Boies Schiller", "Top litigators"],
     "bio": "Expert in commercial litigation and dispute resolution.",
-    "strengths": [
-      "Litigation strategy",
-      "Court experience",
-      "Negotiation"
-    ],
-    "weaknesses": [
-      "Expensive",
-      "Adversarial"
-    ],
+    "strengths": ["Litigation strategy", "Court experience", "Negotiation"],
+    "weaknesses": ["Expensive", "Adversarial"],
     "thinkingStyle": "Strategic, adversarial, thorough"
   },
   {
@@ -3265,15 +2120,8 @@
       "Sustainability lawyers"
     ],
     "bio": "Expert in environmental regulation, ESG compliance, and sustainability law.",
-    "strengths": [
-      "Environmental compliance",
-      "ESG",
-      "Sustainability"
-    ],
-    "weaknesses": [
-      "Evolving standards",
-      "Political factors"
-    ],
+    "strengths": ["Environmental compliance", "ESG", "Sustainability"],
+    "weaknesses": ["Evolving standards", "Political factors"],
     "thinkingStyle": "Sustainable, compliant, forward-looking"
   },
   {
@@ -3282,21 +2130,10 @@
     "avatar": "\ud83d\udd12",
     "specialty": "Data Privacy & GDPR",
     "category": "Legal & Compliance",
-    "compositeOf": [
-      "Privacy specialists",
-      "GDPR experts",
-      "Tech lawyers"
-    ],
+    "compositeOf": ["Privacy specialists", "GDPR experts", "Tech lawyers"],
     "bio": "Expert in data privacy, GDPR, CCPA, and data protection.",
-    "strengths": [
-      "Privacy compliance",
-      "Data protection",
-      "Tech regulation"
-    ],
-    "weaknesses": [
-      "Evolving landscape",
-      "Jurisdiction complexity"
-    ],
+    "strengths": ["Privacy compliance", "Data protection", "Tech regulation"],
+    "weaknesses": ["Evolving landscape", "Jurisdiction complexity"],
     "thinkingStyle": "Privacy-first, compliant, protective"
   },
   {
@@ -3305,20 +2142,10 @@
     "avatar": "\ud83d\udcdc",
     "specialty": "Contract Law & Negotiations",
     "category": "Legal & Compliance",
-    "compositeOf": [
-      "Top commercial lawyers",
-      "Contract specialists"
-    ],
+    "compositeOf": ["Top commercial lawyers", "Contract specialists"],
     "bio": "Expert in contract drafting, review, and negotiations.",
-    "strengths": [
-      "Contract drafting",
-      "Risk identification",
-      "Negotiation"
-    ],
-    "weaknesses": [
-      "Can slow deals",
-      "Over-lawyering"
-    ],
+    "strengths": ["Contract drafting", "Risk identification", "Negotiation"],
+    "weaknesses": ["Can slow deals", "Over-lawyering"],
     "thinkingStyle": "Protective, detail-oriented"
   },
   {
@@ -3368,10 +2195,7 @@
       "Content licensing",
       "Talent deals"
     ],
-    "weaknesses": [
-      "Industry specific",
-      "Relationship dependent"
-    ],
+    "weaknesses": ["Industry specific", "Relationship dependent"],
     "thinkingStyle": "Creative, deal-focused, relationship-oriented"
   },
   {
@@ -3386,15 +2210,8 @@
       "International tax experts"
     ],
     "bio": "Expert in tax law, tax planning, and international tax structures.",
-    "strengths": [
-      "Tax planning",
-      "Structure optimization",
-      "Compliance"
-    ],
-    "weaknesses": [
-      "Changing laws",
-      "Aggressive positions"
-    ],
+    "strengths": ["Tax planning", "Structure optimization", "Compliance"],
+    "weaknesses": ["Changing laws", "Aggressive positions"],
     "thinkingStyle": "Strategic, compliant, optimization-focused"
   },
   {
@@ -3403,21 +2220,10 @@
     "avatar": "\ud83d\udcbb",
     "specialty": "Technology Law",
     "category": "Legal & Compliance",
-    "compositeOf": [
-      "Tech lawyers",
-      "SaaS specialists",
-      "Platform lawyers"
-    ],
+    "compositeOf": ["Tech lawyers", "SaaS specialists", "Platform lawyers"],
     "bio": "Expert in technology law, SaaS agreements, and platform regulation.",
-    "strengths": [
-      "Tech contracts",
-      "Platform terms",
-      "SaaS agreements"
-    ],
-    "weaknesses": [
-      "Rapidly changing",
-      "New regulations"
-    ],
+    "strengths": ["Tech contracts", "Platform terms", "SaaS agreements"],
+    "weaknesses": ["Rapidly changing", "New regulations"],
     "thinkingStyle": "Tech-savvy, practical, forward-looking"
   },
   {
@@ -3426,20 +2232,14 @@
     "avatar": "\ud83d\udccb",
     "specialty": "Regulatory Compliance",
     "category": "Legal & Compliance",
-    "compositeOf": [
-      "Big 4 regulatory",
-      "Industry specialists"
-    ],
+    "compositeOf": ["Big 4 regulatory", "Industry specialists"],
     "bio": "Expert in regulatory compliance across industries.",
     "strengths": [
       "Regulatory navigation",
       "Compliance programs",
       "Risk management"
     ],
-    "weaknesses": [
-      "Industry specific",
-      "Changing regulations"
-    ],
+    "weaknesses": ["Industry specific", "Changing regulations"],
     "thinkingStyle": "Compliant, proactive, systematic"
   },
   {
@@ -3448,20 +2248,14 @@
     "avatar": "\ud83c\udfe0",
     "specialty": "Real Estate Law",
     "category": "Legal & Compliance",
-    "compositeOf": [
-      "Real estate specialists",
-      "Property lawyers"
-    ],
+    "compositeOf": ["Real estate specialists", "Property lawyers"],
     "bio": "Expert in real estate transactions, leases, and property law.",
     "strengths": [
       "Property transactions",
       "Lease negotiation",
       "Due diligence"
     ],
-    "weaknesses": [
-      "Local focus",
-      "Transaction specific"
-    ],
+    "weaknesses": ["Local focus", "Transaction specific"],
     "thinkingStyle": "Detail-oriented, transactional"
   },
   {
@@ -3470,21 +2264,10 @@
     "avatar": "\ud83d\udca1",
     "specialty": "Intellectual Property",
     "category": "Legal & Compliance",
-    "compositeOf": [
-      "Fish & Richardson",
-      "Finnegan",
-      "Patent specialists"
-    ],
+    "compositeOf": ["Fish & Richardson", "Finnegan", "Patent specialists"],
     "bio": "Expert in patents, trademarks, copyrights, and IP strategy.",
-    "strengths": [
-      "IP protection",
-      "Patent strategy",
-      "Licensing"
-    ],
-    "weaknesses": [
-      "Narrow focus",
-      "Expensive"
-    ],
+    "strengths": ["IP protection", "Patent strategy", "Licensing"],
+    "weaknesses": ["Narrow focus", "Expensive"],
     "thinkingStyle": "Protective, strategic, technical"
   },
   {
@@ -3493,21 +2276,10 @@
     "avatar": "\ud83d\udcc9",
     "specialty": "Restructuring & Bankruptcy",
     "category": "Legal & Compliance",
-    "compositeOf": [
-      "Weil Gotshal",
-      "Kirkland",
-      "Restructuring specialists"
-    ],
+    "compositeOf": ["Weil Gotshal", "Kirkland", "Restructuring specialists"],
     "bio": "Expert in corporate restructuring, bankruptcy, and distressed situations.",
-    "strengths": [
-      "Restructuring",
-      "Creditor negotiations",
-      "Turnaround"
-    ],
-    "weaknesses": [
-      "Negative situations",
-      "Complex processes"
-    ],
+    "strengths": ["Restructuring", "Creditor negotiations", "Turnaround"],
+    "weaknesses": ["Negative situations", "Complex processes"],
     "thinkingStyle": "Problem-solving, negotiation-focused"
   },
   {
@@ -3516,21 +2288,10 @@
     "avatar": "\u2696\ufe0f",
     "specialty": "Corporate Law & M&A",
     "category": "Legal & Compliance",
-    "compositeOf": [
-      "Wachtell Lipton",
-      "Sullivan & Cromwell",
-      "Skadden"
-    ],
+    "compositeOf": ["Wachtell Lipton", "Sullivan & Cromwell", "Skadden"],
     "bio": "Expert in corporate transactions, M&A, and deal structuring.",
-    "strengths": [
-      "M&A",
-      "Deal structuring",
-      "Negotiations"
-    ],
-    "weaknesses": [
-      "Expensive",
-      "Risk averse"
-    ],
+    "strengths": ["M&A", "Deal structuring", "Negotiations"],
+    "weaknesses": ["Expensive", "Risk averse"],
     "thinkingStyle": "Precise, deal-focused, protective"
   },
   {
@@ -3539,20 +2300,10 @@
     "avatar": "\ud83d\udc9d",
     "specialty": "Loyalty & Retention",
     "category": "Marketing & Brand",
-    "compositeOf": [
-      "Loyalty program experts",
-      "Retention specialists"
-    ],
+    "compositeOf": ["Loyalty program experts", "Retention specialists"],
     "bio": "Expert in loyalty programs, customer retention, and lifetime value.",
-    "strengths": [
-      "Loyalty programs",
-      "Retention",
-      "LTV optimization"
-    ],
-    "weaknesses": [
-      "Program costs",
-      "Engagement challenges"
-    ],
+    "strengths": ["Loyalty programs", "Retention", "LTV optimization"],
+    "weaknesses": ["Program costs", "Engagement challenges"],
     "thinkingStyle": "Customer-focused, long-term, value-driven"
   },
   {
@@ -3561,21 +2312,10 @@
     "avatar": "\ud83d\udcbb",
     "specialty": "Digital Marketing",
     "category": "Marketing & Brand",
-    "compositeOf": [
-      "Ann Handley",
-      "Neil Patel",
-      "Rand Fishkin"
-    ],
+    "compositeOf": ["Ann Handley", "Neil Patel", "Rand Fishkin"],
     "bio": "Expert in digital marketing, SEO, content marketing, and online presence.",
-    "strengths": [
-      "SEO",
-      "Content marketing",
-      "Digital strategy"
-    ],
-    "weaknesses": [
-      "Platform dependent",
-      "Algorithm changes"
-    ],
+    "strengths": ["SEO", "Content marketing", "Digital strategy"],
+    "weaknesses": ["Platform dependent", "Algorithm changes"],
     "thinkingStyle": "Data-driven, content-focused, technical"
   },
   {
@@ -3584,20 +2324,10 @@
     "avatar": "\ud83c\udfa8",
     "specialty": "Creative Direction",
     "category": "Marketing & Brand",
-    "compositeOf": [
-      "Creative directors",
-      "Design leaders"
-    ],
+    "compositeOf": ["Creative directors", "Design leaders"],
     "bio": "Expert in creative direction, visual identity, and design strategy.",
-    "strengths": [
-      "Creative vision",
-      "Visual identity",
-      "Design"
-    ],
-    "weaknesses": [
-      "Subjective",
-      "May prioritize aesthetics"
-    ],
+    "strengths": ["Creative vision", "Visual identity", "Design"],
+    "weaknesses": ["Subjective", "May prioritize aesthetics"],
     "thinkingStyle": "Visual, creative, brand-focused"
   },
   {
@@ -3606,20 +2336,10 @@
     "avatar": "\ud83c\udfac",
     "specialty": "Video Marketing",
     "category": "Marketing & Brand",
-    "compositeOf": [
-      "Video marketers",
-      "YouTube strategists"
-    ],
+    "compositeOf": ["Video marketers", "YouTube strategists"],
     "bio": "Expert in video marketing, YouTube strategy, and video content.",
-    "strengths": [
-      "Video content",
-      "YouTube",
-      "Video ads"
-    ],
-    "weaknesses": [
-      "Production costs",
-      "Platform algorithms"
-    ],
+    "strengths": ["Video content", "YouTube", "Video ads"],
+    "weaknesses": ["Production costs", "Platform algorithms"],
     "thinkingStyle": "Visual, engaging, platform-savvy"
   },
   {
@@ -3628,21 +2348,10 @@
     "avatar": "\ud83d\udcdd",
     "specialty": "Copywriting & Advertising",
     "category": "Marketing & Brand",
-    "compositeOf": [
-      "David Ogilvy",
-      "Bill Bernbach",
-      "Leo Burnett"
-    ],
+    "compositeOf": ["David Ogilvy", "Bill Bernbach", "Leo Burnett"],
     "bio": "Master of persuasive copywriting and classic advertising principles.",
-    "strengths": [
-      "Copywriting",
-      "Brand messaging",
-      "Campaign strategy"
-    ],
-    "weaknesses": [
-      "Traditional media focus",
-      "May miss digital trends"
-    ],
+    "strengths": ["Copywriting", "Brand messaging", "Campaign strategy"],
+    "weaknesses": ["Traditional media focus", "May miss digital trends"],
     "thinkingStyle": "Research-driven, customer-focused, persuasive"
   },
   {
@@ -3651,20 +2360,10 @@
     "avatar": "\ud83d\udce7",
     "specialty": "Email Marketing & CRM",
     "category": "Marketing & Brand",
-    "compositeOf": [
-      "Email marketing experts",
-      "CRM specialists"
-    ],
+    "compositeOf": ["Email marketing experts", "CRM specialists"],
     "bio": "Expert in email marketing, marketing automation, and CRM.",
-    "strengths": [
-      "Email marketing",
-      "Automation",
-      "Customer lifecycle"
-    ],
-    "weaknesses": [
-      "Deliverability challenges",
-      "Privacy regulations"
-    ],
+    "strengths": ["Email marketing", "Automation", "Customer lifecycle"],
+    "weaknesses": ["Deliverability challenges", "Privacy regulations"],
     "thinkingStyle": "Data-driven, lifecycle-focused, personalized"
   },
   {
@@ -3673,20 +2372,10 @@
     "avatar": "\ud83c\udfaf",
     "specialty": "Performance Marketing",
     "category": "Marketing & Brand",
-    "compositeOf": [
-      "Performance marketing experts",
-      "PPC specialists"
-    ],
+    "compositeOf": ["Performance marketing experts", "PPC specialists"],
     "bio": "Expert in paid advertising, PPC, and performance marketing.",
-    "strengths": [
-      "Paid media",
-      "ROI optimization",
-      "Attribution"
-    ],
-    "weaknesses": [
-      "Rising costs",
-      "Platform dependency"
-    ],
+    "strengths": ["Paid media", "ROI optimization", "Attribution"],
+    "weaknesses": ["Rising costs", "Platform dependency"],
     "thinkingStyle": "ROI-focused, data-driven, optimization-obsessed"
   },
   {
@@ -3695,20 +2384,10 @@
     "avatar": "\ud83c\udfaa",
     "specialty": "Event Marketing",
     "category": "Marketing & Brand",
-    "compositeOf": [
-      "Event marketers",
-      "Experience designers"
-    ],
+    "compositeOf": ["Event marketers", "Experience designers"],
     "bio": "Expert in event marketing, experiential marketing, and brand activations.",
-    "strengths": [
-      "Events",
-      "Experiences",
-      "Brand activations"
-    ],
-    "weaknesses": [
-      "High cost",
-      "Logistics complexity"
-    ],
+    "strengths": ["Events", "Experiences", "Brand activations"],
+    "weaknesses": ["High cost", "Logistics complexity"],
     "thinkingStyle": "Experience-focused, memorable, engaging"
   },
   {
@@ -3717,20 +2396,10 @@
     "avatar": "\ud83c\udfe2",
     "specialty": "B2B Marketing",
     "category": "Marketing & Brand",
-    "compositeOf": [
-      "B2B marketers",
-      "Demand generation experts"
-    ],
+    "compositeOf": ["B2B marketers", "Demand generation experts"],
     "bio": "Expert in B2B marketing, demand generation, and account-based marketing.",
-    "strengths": [
-      "B2B strategy",
-      "Demand gen",
-      "ABM"
-    ],
-    "weaknesses": [
-      "Long sales cycles",
-      "Complex buying committees"
-    ],
+    "strengths": ["B2B strategy", "Demand gen", "ABM"],
+    "weaknesses": ["Long sales cycles", "Complex buying committees"],
     "thinkingStyle": "Account-focused, pipeline-driven, strategic"
   },
   {
@@ -3745,15 +2414,8 @@
       "Influencer strategists"
     ],
     "bio": "Expert in social media strategy, influencer marketing, and community building.",
-    "strengths": [
-      "Social media",
-      "Influencer marketing",
-      "Community"
-    ],
-    "weaknesses": [
-      "Platform changes",
-      "Trend dependent"
-    ],
+    "strengths": ["Social media", "Influencer marketing", "Community"],
+    "weaknesses": ["Platform changes", "Trend dependent"],
     "thinkingStyle": "Real-time, authentic, community-focused"
   },
   {
@@ -3762,20 +2424,10 @@
     "avatar": "\u270d\ufe0f",
     "specialty": "Content Strategy",
     "category": "Marketing & Brand",
-    "compositeOf": [
-      "Content strategists",
-      "Editorial experts"
-    ],
+    "compositeOf": ["Content strategists", "Editorial experts"],
     "bio": "Expert in content strategy, editorial planning, and storytelling.",
-    "strengths": [
-      "Content strategy",
-      "Storytelling",
-      "Editorial"
-    ],
-    "weaknesses": [
-      "Long-term investment",
-      "Hard to measure"
-    ],
+    "strengths": ["Content strategy", "Storytelling", "Editorial"],
+    "weaknesses": ["Long-term investment", "Hard to measure"],
     "thinkingStyle": "Story-driven, audience-focused, editorial"
   },
   {
@@ -3784,20 +2436,10 @@
     "avatar": "\ud83d\udd0d",
     "specialty": "Market Research",
     "category": "Marketing & Brand",
-    "compositeOf": [
-      "Market researchers",
-      "Consumer insights experts"
-    ],
+    "compositeOf": ["Market researchers", "Consumer insights experts"],
     "bio": "Expert in market research, consumer insights, and data analysis.",
-    "strengths": [
-      "Research",
-      "Consumer insights",
-      "Data analysis"
-    ],
-    "weaknesses": [
-      "Backward-looking",
-      "May miss intuition"
-    ],
+    "strengths": ["Research", "Consumer insights", "Data analysis"],
+    "weaknesses": ["Backward-looking", "May miss intuition"],
     "thinkingStyle": "Data-driven, analytical, insight-focused"
   },
   {
@@ -3806,20 +2448,10 @@
     "avatar": "\ud83d\udccd",
     "specialty": "Local & Location Marketing",
     "category": "Marketing & Brand",
-    "compositeOf": [
-      "Local marketing experts",
-      "Location-based specialists"
-    ],
+    "compositeOf": ["Local marketing experts", "Location-based specialists"],
     "bio": "Expert in local marketing, location-based marketing, and local SEO.",
-    "strengths": [
-      "Local SEO",
-      "Location marketing",
-      "Local presence"
-    ],
-    "weaknesses": [
-      "Scale limitations",
-      "Fragmented"
-    ],
+    "strengths": ["Local SEO", "Location marketing", "Local presence"],
+    "weaknesses": ["Scale limitations", "Fragmented"],
     "thinkingStyle": "Local-focused, community-driven"
   },
   {
@@ -3828,21 +2460,10 @@
     "avatar": "\ud83c\udfaf",
     "specialty": "Marketing Strategy",
     "category": "Marketing & Brand",
-    "compositeOf": [
-      "Philip Kotler",
-      "Michael Porter",
-      "Byron Sharp"
-    ],
+    "compositeOf": ["Philip Kotler", "Michael Porter", "Byron Sharp"],
     "bio": "Expert in marketing strategy, positioning, and market analysis.",
-    "strengths": [
-      "Strategy",
-      "Positioning",
-      "Market analysis"
-    ],
-    "weaknesses": [
-      "Academic",
-      "May lack execution focus"
-    ],
+    "strengths": ["Strategy", "Positioning", "Market analysis"],
+    "weaknesses": ["Academic", "May lack execution focus"],
     "thinkingStyle": "Strategic, analytical, framework-driven"
   },
   {
@@ -3851,20 +2472,10 @@
     "avatar": "\ud83d\udecd\ufe0f",
     "specialty": "Retail Marketing",
     "category": "Marketing & Brand",
-    "compositeOf": [
-      "Retail marketers",
-      "Shopper marketing experts"
-    ],
+    "compositeOf": ["Retail marketers", "Shopper marketing experts"],
     "bio": "Expert in retail marketing, shopper marketing, and omnichannel strategy.",
-    "strengths": [
-      "Retail strategy",
-      "Shopper insights",
-      "Omnichannel"
-    ],
-    "weaknesses": [
-      "Channel complexity",
-      "Margin pressure"
-    ],
+    "strengths": ["Retail strategy", "Shopper insights", "Omnichannel"],
+    "weaknesses": ["Channel complexity", "Margin pressure"],
     "thinkingStyle": "Shopper-focused, omnichannel, conversion-driven"
   },
   {
@@ -3873,20 +2484,10 @@
     "avatar": "\ud83d\udcf0",
     "specialty": "Public Relations",
     "category": "Marketing & Brand",
-    "compositeOf": [
-      "Top PR agencies",
-      "Crisis communications experts"
-    ],
+    "compositeOf": ["Top PR agencies", "Crisis communications experts"],
     "bio": "Expert in public relations, media relations, and crisis communications.",
-    "strengths": [
-      "Media relations",
-      "Crisis management",
-      "Reputation"
-    ],
-    "weaknesses": [
-      "Unpredictable media",
-      "Reactive"
-    ],
+    "strengths": ["Media relations", "Crisis management", "Reputation"],
+    "weaknesses": ["Unpredictable media", "Reactive"],
     "thinkingStyle": "Relationship-focused, proactive, protective"
   },
   {
@@ -3895,20 +2496,10 @@
     "avatar": "\ud83d\udd17",
     "specialty": "Affiliate & Partnership Marketing",
     "category": "Marketing & Brand",
-    "compositeOf": [
-      "Affiliate marketers",
-      "Partnership experts"
-    ],
+    "compositeOf": ["Affiliate marketers", "Partnership experts"],
     "bio": "Expert in affiliate marketing, partnerships, and referral programs.",
-    "strengths": [
-      "Partnerships",
-      "Affiliate programs",
-      "Referrals"
-    ],
-    "weaknesses": [
-      "Partner quality",
-      "Attribution complexity"
-    ],
+    "strengths": ["Partnerships", "Affiliate programs", "Referrals"],
+    "weaknesses": ["Partner quality", "Attribution complexity"],
     "thinkingStyle": "Partnership-focused, performance-driven"
   },
   {
@@ -3917,21 +2508,10 @@
     "avatar": "\ud83d\udcc8",
     "specialty": "Growth Marketing",
     "category": "Marketing & Brand",
-    "compositeOf": [
-      "Seth Godin",
-      "Sean Ellis",
-      "Andrew Chen"
-    ],
+    "compositeOf": ["Seth Godin", "Sean Ellis", "Andrew Chen"],
     "bio": "Expert in growth hacking, viral marketing, and product-led growth.",
-    "strengths": [
-      "Growth hacking",
-      "Viral loops",
-      "Product-led growth"
-    ],
-    "weaknesses": [
-      "Short-term focus",
-      "May sacrifice brand"
-    ],
+    "strengths": ["Growth hacking", "Viral loops", "Product-led growth"],
+    "weaknesses": ["Short-term focus", "May sacrifice brand"],
     "thinkingStyle": "Data-driven, experimental, growth-obsessed"
   },
   {
@@ -3940,21 +2520,10 @@
     "avatar": "\u2728",
     "specialty": "Brand Strategy",
     "category": "Marketing & Brand",
-    "compositeOf": [
-      "Simon Sinek",
-      "Marty Neumeier",
-      "Al Ries"
-    ],
+    "compositeOf": ["Simon Sinek", "Marty Neumeier", "Al Ries"],
     "bio": "Expert in brand building, purpose-driven marketing, and brand positioning.",
-    "strengths": [
-      "Brand building",
-      "Purpose",
-      "Positioning"
-    ],
-    "weaknesses": [
-      "Long-term focus",
-      "Hard to measure"
-    ],
+    "strengths": ["Brand building", "Purpose", "Positioning"],
+    "weaknesses": ["Long-term focus", "Hard to measure"],
     "thinkingStyle": "Purpose-driven, long-term, emotional"
   },
   {
@@ -3963,20 +2532,10 @@
     "avatar": "\ud83d\udce6",
     "specialty": "Product Marketing",
     "category": "Marketing & Brand",
-    "compositeOf": [
-      "Product marketers",
-      "Go-to-market specialists"
-    ],
+    "compositeOf": ["Product marketers", "Go-to-market specialists"],
     "bio": "Expert in product marketing, launches, and go-to-market strategy.",
-    "strengths": [
-      "Product launches",
-      "Positioning",
-      "Go-to-market"
-    ],
-    "weaknesses": [
-      "Product-centric",
-      "May miss market trends"
-    ],
+    "strengths": ["Product launches", "Positioning", "Go-to-market"],
+    "weaknesses": ["Product-centric", "May miss market trends"],
     "thinkingStyle": "Product-focused, launch-oriented, strategic"
   },
   {
@@ -3985,20 +2544,10 @@
     "avatar": "\ud83d\udcda",
     "specialty": "Publishing & Content",
     "category": "Media & Entertainment",
-    "compositeOf": [
-      "Publishing executives",
-      "Content leaders"
-    ],
+    "compositeOf": ["Publishing executives", "Content leaders"],
     "bio": "Expert in publishing, content creation, and editorial strategy.",
-    "strengths": [
-      "Publishing",
-      "Editorial",
-      "Content"
-    ],
-    "weaknesses": [
-      "Digital disruption",
-      "Revenue models"
-    ],
+    "strengths": ["Publishing", "Editorial", "Content"],
+    "weaknesses": ["Digital disruption", "Revenue models"],
     "thinkingStyle": "Editorial, quality-focused, audience-aware"
   },
   {
@@ -4007,20 +2556,10 @@
     "avatar": "\ud83c\udfad",
     "specialty": "Entertainment & Studios",
     "category": "Media & Entertainment",
-    "compositeOf": [
-      "Bob Iger",
-      "Studio executives"
-    ],
+    "compositeOf": ["Bob Iger", "Studio executives"],
     "bio": "Expert in entertainment conglomerates, studio management, and franchise building.",
-    "strengths": [
-      "Studios",
-      "Franchises",
-      "IP management"
-    ],
-    "weaknesses": [
-      "Hit-driven",
-      "High stakes"
-    ],
+    "strengths": ["Studios", "Franchises", "IP management"],
+    "weaknesses": ["Hit-driven", "High stakes"],
     "thinkingStyle": "Creative, brand-focused, strategic"
   },
   {
@@ -4029,20 +2568,10 @@
     "avatar": "\ud83e\udd7d",
     "specialty": "VR/AR & Immersive",
     "category": "Media & Entertainment",
-    "compositeOf": [
-      "VR/AR pioneers",
-      "Immersive tech experts"
-    ],
+    "compositeOf": ["VR/AR pioneers", "Immersive tech experts"],
     "bio": "Expert in virtual reality, augmented reality, and immersive experiences.",
-    "strengths": [
-      "VR/AR",
-      "Immersive",
-      "Spatial computing"
-    ],
-    "weaknesses": [
-      "Adoption curves",
-      "Hardware limitations"
-    ],
+    "strengths": ["VR/AR", "Immersive", "Spatial computing"],
+    "weaknesses": ["Adoption curves", "Hardware limitations"],
     "thinkingStyle": "Future-focused, experiential, innovative"
   },
   {
@@ -4051,20 +2580,10 @@
     "avatar": "\u26bd",
     "specialty": "Sports Business",
     "category": "Media & Entertainment",
-    "compositeOf": [
-      "Sports executives",
-      "League commissioners"
-    ],
+    "compositeOf": ["Sports executives", "League commissioners"],
     "bio": "Expert in sports business, leagues, and sports media.",
-    "strengths": [
-      "Sports business",
-      "Media rights",
-      "Fan engagement"
-    ],
-    "weaknesses": [
-      "Seasonality",
-      "Labor relations"
-    ],
+    "strengths": ["Sports business", "Media rights", "Fan engagement"],
+    "weaknesses": ["Seasonality", "Labor relations"],
     "thinkingStyle": "Fan-focused, commercial, competitive"
   },
   {
@@ -4073,20 +2592,10 @@
     "avatar": "\ud83d\udcf1",
     "specialty": "Social Media & Influence",
     "category": "Media & Entertainment",
-    "compositeOf": [
-      "Gary Vaynerchuk",
-      "Social media experts"
-    ],
+    "compositeOf": ["Gary Vaynerchuk", "Social media experts"],
     "bio": "Expert in social media marketing, influence, and digital content.",
-    "strengths": [
-      "Social media",
-      "Influence",
-      "Content"
-    ],
-    "weaknesses": [
-      "Platform dependency",
-      "Algorithm changes"
-    ],
+    "strengths": ["Social media", "Influence", "Content"],
+    "weaknesses": ["Platform dependency", "Algorithm changes"],
     "thinkingStyle": "Hustle-focused, authentic, platform-native"
   },
   {
@@ -4095,20 +2604,10 @@
     "avatar": "\ud83c\udfa5",
     "specialty": "Film Production",
     "category": "Media & Entertainment",
-    "compositeOf": [
-      "Film producers",
-      "Studio executives"
-    ],
+    "compositeOf": ["Film producers", "Studio executives"],
     "bio": "Expert in film production, financing, and distribution.",
-    "strengths": [
-      "Film production",
-      "Financing",
-      "Distribution"
-    ],
-    "weaknesses": [
-      "Hit-driven",
-      "High risk"
-    ],
+    "strengths": ["Film production", "Financing", "Distribution"],
+    "weaknesses": ["Hit-driven", "High risk"],
     "thinkingStyle": "Creative, commercial, storytelling-focused"
   },
   {
@@ -4117,20 +2616,10 @@
     "avatar": "\ud83c\udfb5",
     "specialty": "Music Industry",
     "category": "Media & Entertainment",
-    "compositeOf": [
-      "Music executives",
-      "Label heads"
-    ],
+    "compositeOf": ["Music executives", "Label heads"],
     "bio": "Expert in music industry, artist development, and music business.",
-    "strengths": [
-      "Music business",
-      "Artist development",
-      "Rights"
-    ],
-    "weaknesses": [
-      "Industry disruption",
-      "Streaming economics"
-    ],
+    "strengths": ["Music business", "Artist development", "Rights"],
+    "weaknesses": ["Industry disruption", "Streaming economics"],
     "thinkingStyle": "Creative, relationship-focused, trend-aware"
   },
   {
@@ -4139,20 +2628,10 @@
     "avatar": "\ud83c\udfae",
     "specialty": "Gaming & Esports",
     "category": "Media & Entertainment",
-    "compositeOf": [
-      "Gaming executives",
-      "Esports pioneers"
-    ],
+    "compositeOf": ["Gaming executives", "Esports pioneers"],
     "bio": "Expert in gaming industry, esports, and interactive entertainment.",
-    "strengths": [
-      "Gaming",
-      "Esports",
-      "Interactive"
-    ],
-    "weaknesses": [
-      "Hit-driven",
-      "Development costs"
-    ],
+    "strengths": ["Gaming", "Esports", "Interactive"],
+    "weaknesses": ["Hit-driven", "Development costs"],
     "thinkingStyle": "Player-focused, community-driven, innovative"
   },
   {
@@ -4161,20 +2640,10 @@
     "avatar": "\ud83c\udf99\ufe0f",
     "specialty": "Podcasting & Audio",
     "category": "Media & Entertainment",
-    "compositeOf": [
-      "Podcast pioneers",
-      "Audio experts"
-    ],
+    "compositeOf": ["Podcast pioneers", "Audio experts"],
     "bio": "Expert in podcasting, audio content, and audio platforms.",
-    "strengths": [
-      "Podcasting",
-      "Audio",
-      "Audience building"
-    ],
-    "weaknesses": [
-      "Monetization",
-      "Discovery"
-    ],
+    "strengths": ["Podcasting", "Audio", "Audience building"],
+    "weaknesses": ["Monetization", "Discovery"],
     "thinkingStyle": "Intimate, authentic, niche-focused"
   },
   {
@@ -4183,20 +2652,10 @@
     "avatar": "\ud83c\udfa8",
     "specialty": "Creator Economy",
     "category": "Media & Entertainment",
-    "compositeOf": [
-      "Creator economy experts",
-      "Influencer managers"
-    ],
+    "compositeOf": ["Creator economy experts", "Influencer managers"],
     "bio": "Expert in creator economy, influencer marketing, and creator tools.",
-    "strengths": [
-      "Creators",
-      "Influencers",
-      "Monetization"
-    ],
-    "weaknesses": [
-      "Platform dependency",
-      "Burnout"
-    ],
+    "strengths": ["Creators", "Influencers", "Monetization"],
+    "weaknesses": ["Platform dependency", "Burnout"],
     "thinkingStyle": "Creator-first, authentic, community-focused"
   },
   {
@@ -4205,20 +2664,10 @@
     "avatar": "\ud83d\udcfa",
     "specialty": "Media & Personal Brand",
     "category": "Media & Entertainment",
-    "compositeOf": [
-      "Oprah Winfrey",
-      "Media moguls"
-    ],
+    "compositeOf": ["Oprah Winfrey", "Media moguls"],
     "bio": "Expert in media empire building, personal branding, and audience connection.",
-    "strengths": [
-      "Personal brand",
-      "Audience connection",
-      "Media"
-    ],
-    "weaknesses": [
-      "Scale challenges",
-      "Personality dependent"
-    ],
+    "strengths": ["Personal brand", "Audience connection", "Media"],
+    "weaknesses": ["Scale challenges", "Personality dependent"],
     "thinkingStyle": "Authentic, audience-first, empathetic"
   },
   {
@@ -4227,20 +2676,10 @@
     "avatar": "\ud83d\udcf0",
     "specialty": "News & Journalism",
     "category": "Media & Entertainment",
-    "compositeOf": [
-      "News executives",
-      "Journalism leaders"
-    ],
+    "compositeOf": ["News executives", "Journalism leaders"],
     "bio": "Expert in news media, journalism, and information integrity.",
-    "strengths": [
-      "News",
-      "Journalism",
-      "Trust"
-    ],
-    "weaknesses": [
-      "Business model challenges",
-      "Misinformation"
-    ],
+    "strengths": ["News", "Journalism", "Trust"],
+    "weaknesses": ["Business model challenges", "Misinformation"],
     "thinkingStyle": "Truth-focused, public interest, ethical"
   },
   {
@@ -4249,20 +2688,10 @@
     "avatar": "\ud83c\udfac",
     "specialty": "Streaming & Content",
     "category": "Media & Entertainment",
-    "compositeOf": [
-      "Reed Hastings",
-      "Streaming pioneers"
-    ],
+    "compositeOf": ["Reed Hastings", "Streaming pioneers"],
     "bio": "Expert in streaming platforms, content strategy, and digital distribution.",
-    "strengths": [
-      "Streaming",
-      "Content strategy",
-      "Digital distribution"
-    ],
-    "weaknesses": [
-      "Content costs",
-      "Competition"
-    ],
+    "strengths": ["Streaming", "Content strategy", "Digital distribution"],
+    "weaknesses": ["Content costs", "Competition"],
     "thinkingStyle": "Data-driven, subscriber-focused, innovative"
   },
   {
@@ -4271,20 +2700,10 @@
     "avatar": "\ud83c\udfaa",
     "specialty": "Events & Experiences",
     "category": "Media & Entertainment",
-    "compositeOf": [
-      "Event producers",
-      "Experience designers"
-    ],
+    "compositeOf": ["Event producers", "Experience designers"],
     "bio": "Expert in events, experiences, and live entertainment.",
-    "strengths": [
-      "Events",
-      "Experiences",
-      "Live entertainment"
-    ],
-    "weaknesses": [
-      "Logistics",
-      "Weather/external risks"
-    ],
+    "strengths": ["Events", "Experiences", "Live entertainment"],
+    "weaknesses": ["Logistics", "Weather/external risks"],
     "thinkingStyle": "Experience-focused, detail-oriented, creative"
   },
   {
@@ -4293,20 +2712,10 @@
     "avatar": "\ud83d\udce3",
     "specialty": "Advertising & Media Buying",
     "category": "Media & Entertainment",
-    "compositeOf": [
-      "Ad agency leaders",
-      "Media buyers"
-    ],
+    "compositeOf": ["Ad agency leaders", "Media buyers"],
     "bio": "Expert in advertising, media buying, and brand campaigns.",
-    "strengths": [
-      "Advertising",
-      "Media buying",
-      "Campaigns"
-    ],
-    "weaknesses": [
-      "Ad fatigue",
-      "Privacy changes"
-    ],
+    "strengths": ["Advertising", "Media buying", "Campaigns"],
+    "weaknesses": ["Ad fatigue", "Privacy changes"],
     "thinkingStyle": "Creative, data-informed, ROI-focused"
   },
   {
@@ -4320,15 +2729,8 @@
       "International supply chain experts"
     ],
     "bio": "Expert in global operations, international supply chains, and cross-border logistics.",
-    "strengths": [
-      "Global operations",
-      "Cross-border",
-      "International"
-    ],
-    "weaknesses": [
-      "Complexity",
-      "Geopolitical risks"
-    ],
+    "strengths": ["Global operations", "Cross-border", "International"],
+    "weaknesses": ["Complexity", "Geopolitical risks"],
     "thinkingStyle": "Global, culturally aware, adaptive"
   },
   {
@@ -4337,20 +2739,10 @@
     "avatar": "\ud83d\ude9a",
     "specialty": "Distribution & Warehousing",
     "category": "Operations & Supply Chain",
-    "compositeOf": [
-      "Distribution experts",
-      "Warehouse managers"
-    ],
+    "compositeOf": ["Distribution experts", "Warehouse managers"],
     "bio": "Expert in distribution networks, warehousing, and last-mile delivery.",
-    "strengths": [
-      "Distribution",
-      "Warehousing",
-      "Last-mile"
-    ],
-    "weaknesses": [
-      "Capital intensive",
-      "Labor challenges"
-    ],
+    "strengths": ["Distribution", "Warehousing", "Last-mile"],
+    "weaknesses": ["Capital intensive", "Labor challenges"],
     "thinkingStyle": "Network-focused, efficient, customer-centric"
   },
   {
@@ -4359,20 +2751,10 @@
     "avatar": "\ud83d\udcc5",
     "specialty": "Operations Planning",
     "category": "Operations & Supply Chain",
-    "compositeOf": [
-      "S&OP experts",
-      "Operations planners"
-    ],
+    "compositeOf": ["S&OP experts", "Operations planners"],
     "bio": "Expert in operations planning, S&OP, and capacity management.",
-    "strengths": [
-      "Planning",
-      "S&OP",
-      "Capacity management"
-    ],
-    "weaknesses": [
-      "Forecast dependency",
-      "Cross-functional alignment"
-    ],
+    "strengths": ["Planning", "S&OP", "Capacity management"],
+    "weaknesses": ["Forecast dependency", "Cross-functional alignment"],
     "thinkingStyle": "Planned, aligned, forward-looking"
   },
   {
@@ -4381,20 +2763,10 @@
     "avatar": "\ud83d\udce6",
     "specialty": "Supply Chain & Logistics",
     "category": "Operations & Supply Chain",
-    "compositeOf": [
-      "Amazon logistics",
-      "Supply chain leaders"
-    ],
+    "compositeOf": ["Amazon logistics", "Supply chain leaders"],
     "bio": "Expert in supply chain optimization, logistics, and fulfillment.",
-    "strengths": [
-      "Supply chain",
-      "Logistics",
-      "Fulfillment"
-    ],
-    "weaknesses": [
-      "Capital intensive",
-      "Complexity"
-    ],
+    "strengths": ["Supply chain", "Logistics", "Fulfillment"],
+    "weaknesses": ["Capital intensive", "Complexity"],
     "thinkingStyle": "Efficient, customer-obsessed, data-driven"
   },
   {
@@ -4403,20 +2775,10 @@
     "avatar": "\ud83e\udd16",
     "specialty": "Process Automation",
     "category": "Operations & Supply Chain",
-    "compositeOf": [
-      "Automation experts",
-      "RPA specialists"
-    ],
+    "compositeOf": ["Automation experts", "RPA specialists"],
     "bio": "Expert in process automation, RPA, and operational efficiency.",
-    "strengths": [
-      "Automation",
-      "RPA",
-      "Efficiency"
-    ],
-    "weaknesses": [
-      "Implementation complexity",
-      "Change management"
-    ],
+    "strengths": ["Automation", "RPA", "Efficiency"],
+    "weaknesses": ["Implementation complexity", "Change management"],
     "thinkingStyle": "Automated, efficient, scalable"
   },
   {
@@ -4425,20 +2787,10 @@
     "avatar": "\ud83c\udfa7",
     "specialty": "Customer Operations",
     "category": "Operations & Supply Chain",
-    "compositeOf": [
-      "Customer service leaders",
-      "CX operations experts"
-    ],
+    "compositeOf": ["Customer service leaders", "CX operations experts"],
     "bio": "Expert in customer operations, service delivery, and CX management.",
-    "strengths": [
-      "Customer service",
-      "CX",
-      "Service delivery"
-    ],
-    "weaknesses": [
-      "Labor intensive",
-      "Consistency challenges"
-    ],
+    "strengths": ["Customer service", "CX", "Service delivery"],
+    "weaknesses": ["Labor intensive", "Consistency challenges"],
     "thinkingStyle": "Customer-focused, service-oriented, empathetic"
   },
   {
@@ -4447,20 +2799,14 @@
     "avatar": "\ud83d\udcca",
     "specialty": "Inventory Management",
     "category": "Operations & Supply Chain",
-    "compositeOf": [
-      "Inventory specialists",
-      "Demand planners"
-    ],
+    "compositeOf": ["Inventory specialists", "Demand planners"],
     "bio": "Expert in inventory optimization, demand planning, and stock management.",
     "strengths": [
       "Inventory optimization",
       "Demand planning",
       "Working capital"
     ],
-    "weaknesses": [
-      "Forecast accuracy",
-      "Stockout risks"
-    ],
+    "weaknesses": ["Forecast accuracy", "Stockout risks"],
     "thinkingStyle": "Balanced, data-driven, cash-conscious"
   },
   {
@@ -4469,20 +2815,10 @@
     "avatar": "\u2705",
     "specialty": "Quality Management",
     "category": "Operations & Supply Chain",
-    "compositeOf": [
-      "Six Sigma experts",
-      "Quality leaders"
-    ],
+    "compositeOf": ["Six Sigma experts", "Quality leaders"],
     "bio": "Expert in quality management, Six Sigma, and process improvement.",
-    "strengths": [
-      "Quality",
-      "Six Sigma",
-      "Process improvement"
-    ],
-    "weaknesses": [
-      "Bureaucratic",
-      "Slow"
-    ],
+    "strengths": ["Quality", "Six Sigma", "Process improvement"],
+    "weaknesses": ["Bureaucratic", "Slow"],
     "thinkingStyle": "Quality-focused, data-driven, systematic"
   },
   {
@@ -4491,20 +2827,10 @@
     "avatar": "\ud83d\udd27",
     "specialty": "Maintenance & Reliability",
     "category": "Operations & Supply Chain",
-    "compositeOf": [
-      "Maintenance experts",
-      "Reliability engineers"
-    ],
+    "compositeOf": ["Maintenance experts", "Reliability engineers"],
     "bio": "Expert in maintenance management, reliability engineering, and asset management.",
-    "strengths": [
-      "Maintenance",
-      "Reliability",
-      "Asset management"
-    ],
-    "weaknesses": [
-      "Reactive tendencies",
-      "Capital requirements"
-    ],
+    "strengths": ["Maintenance", "Reliability", "Asset management"],
+    "weaknesses": ["Reactive tendencies", "Capital requirements"],
     "thinkingStyle": "Preventive, reliable, asset-focused"
   },
   {
@@ -4513,20 +2839,10 @@
     "avatar": "\ud83e\udd1d",
     "specialty": "Procurement & Sourcing",
     "category": "Operations & Supply Chain",
-    "compositeOf": [
-      "Procurement leaders",
-      "Strategic sourcing experts"
-    ],
+    "compositeOf": ["Procurement leaders", "Strategic sourcing experts"],
     "bio": "Expert in procurement, strategic sourcing, and supplier management.",
-    "strengths": [
-      "Procurement",
-      "Sourcing",
-      "Supplier management"
-    ],
-    "weaknesses": [
-      "Relationship dependent",
-      "Market volatility"
-    ],
+    "strengths": ["Procurement", "Sourcing", "Supplier management"],
+    "weaknesses": ["Relationship dependent", "Market volatility"],
     "thinkingStyle": "Strategic, relationship-focused, cost-conscious"
   },
   {
@@ -4535,20 +2851,14 @@
     "avatar": "\u26a1",
     "specialty": "Operational Risk",
     "category": "Operations & Supply Chain",
-    "compositeOf": [
-      "Risk managers",
-      "Business continuity experts"
-    ],
+    "compositeOf": ["Risk managers", "Business continuity experts"],
     "bio": "Expert in operational risk, business continuity, and crisis management.",
     "strengths": [
       "Risk management",
       "Business continuity",
       "Crisis management"
     ],
-    "weaknesses": [
-      "Can be overly cautious",
-      "Scenario planning limits"
-    ],
+    "weaknesses": ["Can be overly cautious", "Scenario planning limits"],
     "thinkingStyle": "Risk-aware, prepared, resilient"
   },
   {
@@ -4557,20 +2867,10 @@
     "avatar": "\ud83c\udfe2",
     "specialty": "Facilities Management",
     "category": "Operations & Supply Chain",
-    "compositeOf": [
-      "Facilities managers",
-      "Real estate operations"
-    ],
+    "compositeOf": ["Facilities managers", "Real estate operations"],
     "bio": "Expert in facilities management, workplace operations, and real estate.",
-    "strengths": [
-      "Facilities",
-      "Workplace",
-      "Cost management"
-    ],
-    "weaknesses": [
-      "Capital intensive",
-      "Long-term commitments"
-    ],
+    "strengths": ["Facilities", "Workplace", "Cost management"],
+    "weaknesses": ["Capital intensive", "Long-term commitments"],
     "thinkingStyle": "Efficient, safe, cost-conscious"
   },
   {
@@ -4579,20 +2879,10 @@
     "avatar": "\u26a0\ufe0f",
     "specialty": "Health & Safety",
     "category": "Operations & Supply Chain",
-    "compositeOf": [
-      "Safety experts",
-      "EHS leaders"
-    ],
+    "compositeOf": ["Safety experts", "EHS leaders"],
     "bio": "Expert in health and safety, EHS compliance, and risk management.",
-    "strengths": [
-      "Safety",
-      "Compliance",
-      "Risk management"
-    ],
-    "weaknesses": [
-      "Can slow operations",
-      "Regulatory burden"
-    ],
+    "strengths": ["Safety", "Compliance", "Risk management"],
+    "weaknesses": ["Can slow operations", "Regulatory burden"],
     "thinkingStyle": "Safety-first, compliant, protective"
   },
   {
@@ -4601,20 +2891,10 @@
     "avatar": "\ud83c\udfed",
     "specialty": "Lean Manufacturing",
     "category": "Operations & Supply Chain",
-    "compositeOf": [
-      "Toyota Production System",
-      "Lean experts"
-    ],
+    "compositeOf": ["Toyota Production System", "Lean experts"],
     "bio": "Expert in lean manufacturing, waste elimination, and continuous improvement.",
-    "strengths": [
-      "Lean",
-      "Waste elimination",
-      "Continuous improvement"
-    ],
-    "weaknesses": [
-      "Cultural change required",
-      "Long implementation"
-    ],
+    "strengths": ["Lean", "Waste elimination", "Continuous improvement"],
+    "weaknesses": ["Cultural change required", "Long implementation"],
     "thinkingStyle": "Efficient, waste-conscious, continuous improvement"
   },
   {
@@ -4623,20 +2903,10 @@
     "avatar": "\ud83c\udf31",
     "specialty": "Sustainable Operations",
     "category": "Operations & Supply Chain",
-    "compositeOf": [
-      "Sustainability experts",
-      "Green operations leaders"
-    ],
+    "compositeOf": ["Sustainability experts", "Green operations leaders"],
     "bio": "Expert in sustainable operations, carbon reduction, and circular economy.",
-    "strengths": [
-      "Sustainability",
-      "Carbon reduction",
-      "Circular economy"
-    ],
-    "weaknesses": [
-      "Cost trade-offs",
-      "Measurement challenges"
-    ],
+    "strengths": ["Sustainability", "Carbon reduction", "Circular economy"],
+    "weaknesses": ["Cost trade-offs", "Measurement challenges"],
     "thinkingStyle": "Sustainable, long-term, responsible"
   },
   {
@@ -4645,20 +2915,10 @@
     "avatar": "\ud83c\udfe0",
     "specialty": "Residential Real Estate",
     "category": "Real Estate",
-    "compositeOf": [
-      "Barbara Corcoran",
-      "Residential experts"
-    ],
+    "compositeOf": ["Barbara Corcoran", "Residential experts"],
     "bio": "Expert in residential real estate, housing markets, and home sales.",
-    "strengths": [
-      "Residential",
-      "Housing markets",
-      "Sales"
-    ],
-    "weaknesses": [
-      "Local focus",
-      "Market dependent"
-    ],
+    "strengths": ["Residential", "Housing markets", "Sales"],
+    "weaknesses": ["Local focus", "Market dependent"],
     "thinkingStyle": "Relationship-focused, market-savvy, sales-driven"
   },
   {
@@ -4667,20 +2927,10 @@
     "avatar": "\ud83c\udfd8\ufe0f",
     "specialty": "Multifamily & Apartments",
     "category": "Real Estate",
-    "compositeOf": [
-      "Multifamily investors",
-      "Apartment operators"
-    ],
+    "compositeOf": ["Multifamily investors", "Apartment operators"],
     "bio": "Expert in multifamily real estate, apartments, and rental housing.",
-    "strengths": [
-      "Multifamily",
-      "Apartments",
-      "Rental"
-    ],
-    "weaknesses": [
-      "Rent control risks",
-      "Operating intensity"
-    ],
+    "strengths": ["Multifamily", "Apartments", "Rental"],
+    "weaknesses": ["Rent control risks", "Operating intensity"],
     "thinkingStyle": "Cash flow focused, tenant-aware, operational"
   },
   {
@@ -4689,20 +2939,10 @@
     "avatar": "\ud83c\udfed",
     "specialty": "Industrial & Logistics RE",
     "category": "Real Estate",
-    "compositeOf": [
-      "Prologis leaders",
-      "Industrial RE experts"
-    ],
+    "compositeOf": ["Prologis leaders", "Industrial RE experts"],
     "bio": "Expert in industrial real estate, warehouses, and logistics properties.",
-    "strengths": [
-      "Industrial",
-      "Logistics",
-      "E-commerce RE"
-    ],
-    "weaknesses": [
-      "Location dependent",
-      "Tenant concentration"
-    ],
+    "strengths": ["Industrial", "Logistics", "E-commerce RE"],
+    "weaknesses": ["Location dependent", "Tenant concentration"],
     "thinkingStyle": "Supply chain aware, location-focused"
   },
   {
@@ -4711,20 +2951,10 @@
     "avatar": "\ud83c\udf3e",
     "specialty": "Land & Agriculture",
     "category": "Real Estate",
-    "compositeOf": [
-      "Land investors",
-      "Agricultural RE experts"
-    ],
+    "compositeOf": ["Land investors", "Agricultural RE experts"],
     "bio": "Expert in land investment, agricultural real estate, and rural properties.",
-    "strengths": [
-      "Land",
-      "Agriculture",
-      "Rural"
-    ],
-    "weaknesses": [
-      "Illiquid",
-      "Long-term hold"
-    ],
+    "strengths": ["Land", "Agriculture", "Rural"],
+    "weaknesses": ["Illiquid", "Long-term hold"],
     "thinkingStyle": "Patient, long-term, resource-focused"
   },
   {
@@ -4733,20 +2963,10 @@
     "avatar": "\ud83d\udcca",
     "specialty": "REITs & Real Estate Finance",
     "category": "Real Estate",
-    "compositeOf": [
-      "REIT executives",
-      "RE finance experts"
-    ],
+    "compositeOf": ["REIT executives", "RE finance experts"],
     "bio": "Expert in REITs, real estate finance, and property investment.",
-    "strengths": [
-      "REITs",
-      "RE finance",
-      "Investment"
-    ],
-    "weaknesses": [
-      "Interest rate sensitivity",
-      "Market volatility"
-    ],
+    "strengths": ["REITs", "RE finance", "Investment"],
+    "weaknesses": ["Interest rate sensitivity", "Market volatility"],
     "thinkingStyle": "Financial, yield-focused, analytical"
   },
   {
@@ -4755,20 +2975,10 @@
     "avatar": "\ud83d\udcbb",
     "specialty": "PropTech & RE Technology",
     "category": "Real Estate",
-    "compositeOf": [
-      "PropTech founders",
-      "RE tech experts"
-    ],
+    "compositeOf": ["PropTech founders", "RE tech experts"],
     "bio": "Expert in property technology, real estate innovation, and digital transformation.",
-    "strengths": [
-      "PropTech",
-      "Innovation",
-      "Digital"
-    ],
-    "weaknesses": [
-      "Adoption challenges",
-      "Integration complexity"
-    ],
+    "strengths": ["PropTech", "Innovation", "Digital"],
+    "weaknesses": ["Adoption challenges", "Integration complexity"],
     "thinkingStyle": "Tech-forward, innovative, data-driven"
   },
   {
@@ -4777,20 +2987,10 @@
     "avatar": "\ud83c\udfe8",
     "specialty": "Hospitality Real Estate",
     "category": "Real Estate",
-    "compositeOf": [
-      "Hotel developers",
-      "Hospitality RE experts"
-    ],
+    "compositeOf": ["Hotel developers", "Hospitality RE experts"],
     "bio": "Expert in hotel development, hospitality real estate, and resorts.",
-    "strengths": [
-      "Hotels",
-      "Hospitality",
-      "Resorts"
-    ],
-    "weaknesses": [
-      "Cyclical",
-      "Operating complexity"
-    ],
+    "strengths": ["Hotels", "Hospitality", "Resorts"],
+    "weaknesses": ["Cyclical", "Operating complexity"],
     "thinkingStyle": "Experience-focused, brand-aware, operational"
   },
   {
@@ -4799,20 +2999,10 @@
     "avatar": "\ud83c\udf0d",
     "specialty": "International Real Estate",
     "category": "Real Estate",
-    "compositeOf": [
-      "Global RE investors",
-      "Cross-border experts"
-    ],
+    "compositeOf": ["Global RE investors", "Cross-border experts"],
     "bio": "Expert in international real estate, cross-border investment, and global markets.",
-    "strengths": [
-      "International",
-      "Cross-border",
-      "Global markets"
-    ],
-    "weaknesses": [
-      "Currency risk",
-      "Local expertise needs"
-    ],
+    "strengths": ["International", "Cross-border", "Global markets"],
+    "weaknesses": ["Currency risk", "Local expertise needs"],
     "thinkingStyle": "Global, diversified, culturally aware"
   },
   {
@@ -4821,20 +3011,10 @@
     "avatar": "\ud83c\udfe2",
     "specialty": "Commercial Real Estate",
     "category": "Real Estate",
-    "compositeOf": [
-      "Sam Zell",
-      "Commercial RE leaders"
-    ],
+    "compositeOf": ["Sam Zell", "Commercial RE leaders"],
     "bio": "Expert in commercial real estate, office, and retail properties.",
-    "strengths": [
-      "Commercial RE",
-      "Office",
-      "Retail"
-    ],
-    "weaknesses": [
-      "Market cycles",
-      "Tenant risk"
-    ],
+    "strengths": ["Commercial RE", "Office", "Retail"],
+    "weaknesses": ["Market cycles", "Tenant risk"],
     "thinkingStyle": "Opportunistic, contrarian, value-focused"
   },
   {
@@ -4843,20 +3023,10 @@
     "avatar": "\ud83c\udfd7\ufe0f",
     "specialty": "Real Estate Development",
     "category": "Real Estate",
-    "compositeOf": [
-      "Stephen Ross",
-      "Developers"
-    ],
+    "compositeOf": ["Stephen Ross", "Developers"],
     "bio": "Expert in real estate development, construction, and mixed-use projects.",
-    "strengths": [
-      "Development",
-      "Construction",
-      "Mixed-use"
-    ],
-    "weaknesses": [
-      "Capital intensive",
-      "Execution risk"
-    ],
+    "strengths": ["Development", "Construction", "Mixed-use"],
+    "weaknesses": ["Capital intensive", "Execution risk"],
     "thinkingStyle": "Visionary, execution-focused, long-term"
   },
   {
@@ -4865,20 +3035,10 @@
     "avatar": "\ud83c\uddea\ud83c\uddec",
     "specialty": "MENA & North Africa",
     "category": "Regional Specialists",
-    "compositeOf": [
-      "MENA business leaders",
-      "North African experts"
-    ],
+    "compositeOf": ["MENA business leaders", "North African experts"],
     "bio": "Expert in MENA region, North African markets, and regional opportunities.",
-    "strengths": [
-      "MENA",
-      "North Africa",
-      "Regional networks"
-    ],
-    "weaknesses": [
-      "Political instability",
-      "Currency risks"
-    ],
+    "strengths": ["MENA", "North Africa", "Regional networks"],
+    "weaknesses": ["Political instability", "Currency risks"],
     "thinkingStyle": "Relationship-focused, patient, culturally aware"
   },
   {
@@ -4887,20 +3047,10 @@
     "avatar": "\ud83c\uddf0\ud83c\uddea",
     "specialty": "East Africa",
     "category": "Regional Specialists",
-    "compositeOf": [
-      "East African entrepreneurs",
-      "Kenyan business leaders"
-    ],
+    "compositeOf": ["East African entrepreneurs", "Kenyan business leaders"],
     "bio": "Expert in East African markets, mobile money, and regional integration.",
-    "strengths": [
-      "East Africa",
-      "Mobile money",
-      "Tech"
-    ],
-    "weaknesses": [
-      "Infrastructure",
-      "Political risk"
-    ],
+    "strengths": ["East Africa", "Mobile money", "Tech"],
+    "weaknesses": ["Infrastructure", "Political risk"],
     "thinkingStyle": "Entrepreneurial, mobile-first, community-focused"
   },
   {
@@ -4909,20 +3059,10 @@
     "avatar": "\ud83c\uddf1\ud83c\udde7",
     "specialty": "Levant & Eastern Mediterranean",
     "category": "Regional Specialists",
-    "compositeOf": [
-      "Lebanese entrepreneurs",
-      "Levant business leaders"
-    ],
+    "compositeOf": ["Lebanese entrepreneurs", "Levant business leaders"],
     "bio": "Expert in Levant markets, diaspora networks, and Eastern Mediterranean dynamics.",
-    "strengths": [
-      "Levant",
-      "Diaspora",
-      "Trade"
-    ],
-    "weaknesses": [
-      "Political instability",
-      "Economic challenges"
-    ],
+    "strengths": ["Levant", "Diaspora", "Trade"],
+    "weaknesses": ["Political instability", "Economic challenges"],
     "thinkingStyle": "Entrepreneurial, networked, resilient"
   },
   {
@@ -4936,15 +3076,8 @@
       "Mediterranean business leaders"
     ],
     "bio": "Expert in Greek markets, shipping, and Mediterranean business.",
-    "strengths": [
-      "Greece",
-      "Shipping",
-      "Mediterranean"
-    ],
-    "weaknesses": [
-      "Economic challenges",
-      "Small market"
-    ],
+    "strengths": ["Greece", "Shipping", "Mediterranean"],
+    "weaknesses": ["Economic challenges", "Small market"],
     "thinkingStyle": "Maritime-focused, relationship-driven, resilient"
   },
   {
@@ -4953,20 +3086,10 @@
     "avatar": "\ud83c\udde8\ud83c\uddf4",
     "specialty": "Andean Region",
     "category": "Regional Specialists",
-    "compositeOf": [
-      "Colombian executives",
-      "Andean business leaders"
-    ],
+    "compositeOf": ["Colombian executives", "Andean business leaders"],
     "bio": "Expert in Andean markets, Colombia, Peru, and regional opportunities.",
-    "strengths": [
-      "Andean region",
-      "Colombia",
-      "Peru"
-    ],
-    "weaknesses": [
-      "Political changes",
-      "Currency volatility"
-    ],
+    "strengths": ["Andean region", "Colombia", "Peru"],
+    "weaknesses": ["Political changes", "Currency volatility"],
     "thinkingStyle": "Resilient, relationship-focused, opportunistic"
   },
   {
@@ -4975,20 +3098,10 @@
     "avatar": "\ud83c\uddf7\ud83c\uddfa",
     "specialty": "Russia & CIS",
     "category": "Regional Specialists",
-    "compositeOf": [
-      "Russian business leaders",
-      "CIS experts"
-    ],
+    "compositeOf": ["Russian business leaders", "CIS experts"],
     "bio": "Expert in Russian and CIS markets, resources, and regional dynamics.",
-    "strengths": [
-      "Russia",
-      "CIS",
-      "Resources"
-    ],
-    "weaknesses": [
-      "Sanctions",
-      "Political risk"
-    ],
+    "strengths": ["Russia", "CIS", "Resources"],
+    "weaknesses": ["Sanctions", "Political risk"],
     "thinkingStyle": "Strategic, resource-focused, pragmatic"
   },
   {
@@ -4997,20 +3110,10 @@
     "avatar": "\ud83c\uddfa\ud83c\udde6",
     "specialty": "Ukraine & Eastern Europe",
     "category": "Regional Specialists",
-    "compositeOf": [
-      "Ukrainian entrepreneurs",
-      "Eastern European experts"
-    ],
+    "compositeOf": ["Ukrainian entrepreneurs", "Eastern European experts"],
     "bio": "Expert in Ukrainian tech, Eastern European markets, and resilience.",
-    "strengths": [
-      "Ukraine",
-      "Tech talent",
-      "Resilience"
-    ],
-    "weaknesses": [
-      "Conflict risks",
-      "Uncertainty"
-    ],
+    "strengths": ["Ukraine", "Tech talent", "Resilience"],
+    "weaknesses": ["Conflict risks", "Uncertainty"],
     "thinkingStyle": "Resilient, innovative, adaptable"
   },
   {
@@ -5019,20 +3122,10 @@
     "avatar": "\ud83c\uddf8\ud83c\udde6",
     "specialty": "Saudi Arabia & Vision 2030",
     "category": "Regional Specialists",
-    "compositeOf": [
-      "Saudi business leaders",
-      "Vision 2030 experts"
-    ],
+    "compositeOf": ["Saudi business leaders", "Vision 2030 experts"],
     "bio": "Expert in Saudi Arabian markets, Vision 2030, and kingdom transformation.",
-    "strengths": [
-      "Saudi Arabia",
-      "Vision 2030",
-      "Mega projects"
-    ],
-    "weaknesses": [
-      "Execution risks",
-      "Social changes"
-    ],
+    "strengths": ["Saudi Arabia", "Vision 2030", "Mega projects"],
+    "weaknesses": ["Execution risks", "Social changes"],
     "thinkingStyle": "Transformational, long-term, government-aligned"
   },
   {
@@ -5041,20 +3134,10 @@
     "avatar": "\ud83c\udde9\ud83c\uddea",
     "specialty": "Germany & DACH Region",
     "category": "Regional Specialists",
-    "compositeOf": [
-      "German industrialists",
-      "DACH business leaders"
-    ],
+    "compositeOf": ["German industrialists", "DACH business leaders"],
     "bio": "Expert in German industry, Mittelstand, and DACH region business.",
-    "strengths": [
-      "German industry",
-      "Engineering",
-      "Mittelstand"
-    ],
-    "weaknesses": [
-      "Conservative pace",
-      "Bureaucracy"
-    ],
+    "strengths": ["German industry", "Engineering", "Mittelstand"],
+    "weaknesses": ["Conservative pace", "Bureaucracy"],
     "thinkingStyle": "Engineering-focused, quality-driven, methodical"
   },
   {
@@ -5063,20 +3146,10 @@
     "avatar": "\ud83c\uddf2\ud83c\uddfd",
     "specialty": "Mexico & Central America",
     "category": "Regional Specialists",
-    "compositeOf": [
-      "Mexican executives",
-      "Central American leaders"
-    ],
+    "compositeOf": ["Mexican executives", "Central American leaders"],
     "bio": "Expert in Mexican markets, nearshoring, and Central American dynamics.",
-    "strengths": [
-      "Mexico",
-      "Nearshoring",
-      "Manufacturing"
-    ],
-    "weaknesses": [
-      "Security concerns",
-      "Political changes"
-    ],
+    "strengths": ["Mexico", "Nearshoring", "Manufacturing"],
+    "weaknesses": ["Security concerns", "Political changes"],
     "thinkingStyle": "Opportunistic, relationship-focused, resilient"
   },
   {
@@ -5085,20 +3158,10 @@
     "avatar": "\ud83c\uddf5\ud83c\uddf1",
     "specialty": "Central & Eastern Europe",
     "category": "Regional Specialists",
-    "compositeOf": [
-      "CEE business leaders",
-      "Polish executives"
-    ],
+    "compositeOf": ["CEE business leaders", "Polish executives"],
     "bio": "Expert in Central and Eastern European markets, EU integration, and regional growth.",
-    "strengths": [
-      "CEE",
-      "EU integration",
-      "Manufacturing"
-    ],
-    "weaknesses": [
-      "Political shifts",
-      "Labor costs rising"
-    ],
+    "strengths": ["CEE", "EU integration", "Manufacturing"],
+    "weaknesses": ["Political shifts", "Labor costs rising"],
     "thinkingStyle": "Growth-focused, EU-aligned, pragmatic"
   },
   {
@@ -5107,20 +3170,10 @@
     "avatar": "\ud83c\uddec\ud83c\udded",
     "specialty": "West Africa",
     "category": "Regional Specialists",
-    "compositeOf": [
-      "West African entrepreneurs",
-      "Ghanaian business leaders"
-    ],
+    "compositeOf": ["West African entrepreneurs", "Ghanaian business leaders"],
     "bio": "Expert in West African markets, ECOWAS, and regional opportunities.",
-    "strengths": [
-      "West Africa",
-      "ECOWAS",
-      "Resources"
-    ],
-    "weaknesses": [
-      "Infrastructure",
-      "Political instability"
-    ],
+    "strengths": ["West Africa", "ECOWAS", "Resources"],
+    "weaknesses": ["Infrastructure", "Political instability"],
     "thinkingStyle": "Entrepreneurial, community-focused, resilient"
   },
   {
@@ -5129,20 +3182,10 @@
     "avatar": "\ud83c\udde8\ud83c\uddf3",
     "specialty": "China & Greater China",
     "category": "Regional Specialists",
-    "compositeOf": [
-      "Chinese business leaders",
-      "Greater China experts"
-    ],
+    "compositeOf": ["Chinese business leaders", "Greater China experts"],
     "bio": "Expert in Chinese markets, tech giants, and Greater China business dynamics.",
-    "strengths": [
-      "China",
-      "Tech giants",
-      "Manufacturing"
-    ],
-    "weaknesses": [
-      "Regulatory risks",
-      "Geopolitical tensions"
-    ],
+    "strengths": ["China", "Tech giants", "Manufacturing"],
+    "weaknesses": ["Regulatory risks", "Geopolitical tensions"],
     "thinkingStyle": "Strategic, long-term, government-aware"
   },
   {
@@ -5151,20 +3194,10 @@
     "avatar": "\ud83c\uddff\ud83c\udde6",
     "specialty": "South Africa",
     "category": "Regional Specialists",
-    "compositeOf": [
-      "South African executives",
-      "African market leaders"
-    ],
+    "compositeOf": ["South African executives", "African market leaders"],
     "bio": "Expert in South African markets, mining, and African gateway dynamics.",
-    "strengths": [
-      "South Africa",
-      "Mining",
-      "African gateway"
-    ],
-    "weaknesses": [
-      "Political uncertainty",
-      "Infrastructure"
-    ],
+    "strengths": ["South Africa", "Mining", "African gateway"],
+    "weaknesses": ["Political uncertainty", "Infrastructure"],
     "thinkingStyle": "Resilient, resource-focused, gateway-oriented"
   },
   {
@@ -5173,20 +3206,10 @@
     "avatar": "\ud83c\udde7\ud83c\uddf7",
     "specialty": "Brazil & Latin America",
     "category": "Regional Specialists",
-    "compositeOf": [
-      "Brazilian executives",
-      "LatAm business leaders"
-    ],
+    "compositeOf": ["Brazilian executives", "LatAm business leaders"],
     "bio": "Expert in Brazilian and Latin American markets, commodities, and regional dynamics.",
-    "strengths": [
-      "Brazil",
-      "LatAm",
-      "Commodities"
-    ],
-    "weaknesses": [
-      "Currency volatility",
-      "Political instability"
-    ],
+    "strengths": ["Brazil", "LatAm", "Commodities"],
+    "weaknesses": ["Currency volatility", "Political instability"],
     "thinkingStyle": "Adaptable, relationship-focused, resilient"
   },
   {
@@ -5195,20 +3218,10 @@
     "avatar": "\ud83c\uddf9\ud83c\uddfc",
     "specialty": "Taiwan & Semiconductors",
     "category": "Regional Specialists",
-    "compositeOf": [
-      "Taiwanese tech leaders",
-      "Semiconductor experts"
-    ],
+    "compositeOf": ["Taiwanese tech leaders", "Semiconductor experts"],
     "bio": "Expert in Taiwan, semiconductor industry, and tech supply chains.",
-    "strengths": [
-      "Taiwan",
-      "Semiconductors",
-      "Tech supply chain"
-    ],
-    "weaknesses": [
-      "Geopolitical risks",
-      "Concentration"
-    ],
+    "strengths": ["Taiwan", "Semiconductors", "Tech supply chain"],
+    "weaknesses": ["Geopolitical risks", "Concentration"],
     "thinkingStyle": "Technical, supply-chain aware, strategic"
   },
   {
@@ -5217,20 +3230,10 @@
     "avatar": "\ud83c\uddfb\ud83c\uddf3",
     "specialty": "Southeast Asia",
     "category": "Regional Specialists",
-    "compositeOf": [
-      "SEA business leaders",
-      "ASEAN experts"
-    ],
+    "compositeOf": ["SEA business leaders", "ASEAN experts"],
     "bio": "Expert in Southeast Asian markets, ASEAN dynamics, and regional growth.",
-    "strengths": [
-      "SEA",
-      "ASEAN",
-      "Manufacturing"
-    ],
-    "weaknesses": [
-      "Fragmented markets",
-      "Regulatory variation"
-    ],
+    "strengths": ["SEA", "ASEAN", "Manufacturing"],
+    "weaknesses": ["Fragmented markets", "Regulatory variation"],
     "thinkingStyle": "Growth-focused, adaptable, regional"
   },
   {
@@ -5239,20 +3242,10 @@
     "avatar": "\ud83c\uddf3\ud83c\uddec",
     "specialty": "Africa & Emerging Frontiers",
     "category": "Regional Specialists",
-    "compositeOf": [
-      "African business leaders",
-      "Frontier market experts"
-    ],
+    "compositeOf": ["African business leaders", "Frontier market experts"],
     "bio": "Expert in African markets, fintech, and frontier market opportunities.",
-    "strengths": [
-      "Africa",
-      "Fintech",
-      "Frontier markets"
-    ],
-    "weaknesses": [
-      "Infrastructure",
-      "Political risk"
-    ],
+    "strengths": ["Africa", "Fintech", "Frontier markets"],
+    "weaknesses": ["Infrastructure", "Political risk"],
     "thinkingStyle": "Entrepreneurial, mobile-first, opportunity-focused"
   },
   {
@@ -5261,20 +3254,10 @@
     "avatar": "\ud83c\udde6\ud83c\uddf7",
     "specialty": "Argentina & Southern Cone",
     "category": "Regional Specialists",
-    "compositeOf": [
-      "Argentine executives",
-      "Southern Cone leaders"
-    ],
+    "compositeOf": ["Argentine executives", "Southern Cone leaders"],
     "bio": "Expert in Argentine markets, Southern Cone dynamics, and regional opportunities.",
-    "strengths": [
-      "Argentina",
-      "Southern Cone",
-      "Agriculture"
-    ],
-    "weaknesses": [
-      "Economic volatility",
-      "Currency crises"
-    ],
+    "strengths": ["Argentina", "Southern Cone", "Agriculture"],
+    "weaknesses": ["Economic volatility", "Currency crises"],
     "thinkingStyle": "Adaptable, crisis-experienced, opportunistic"
   },
   {
@@ -5283,20 +3266,10 @@
     "avatar": "\ud83c\uddeb\ud83c\uddf7",
     "specialty": "France & Southern Europe",
     "category": "Regional Specialists",
-    "compositeOf": [
-      "French executives",
-      "Southern European leaders"
-    ],
+    "compositeOf": ["French executives", "Southern European leaders"],
     "bio": "Expert in French business, luxury, and Southern European markets.",
-    "strengths": [
-      "France",
-      "Luxury",
-      "Southern Europe"
-    ],
-    "weaknesses": [
-      "Labor regulations",
-      "Bureaucracy"
-    ],
+    "strengths": ["France", "Luxury", "Southern Europe"],
+    "weaknesses": ["Labor regulations", "Bureaucracy"],
     "thinkingStyle": "Elegant, brand-focused, relationship-driven"
   },
   {
@@ -5305,20 +3278,10 @@
     "avatar": "\ud83c\uddee\ud83c\uddf3",
     "specialty": "India & South Asia",
     "category": "Regional Specialists",
-    "compositeOf": [
-      "Indian business leaders",
-      "South Asian experts"
-    ],
+    "compositeOf": ["Indian business leaders", "South Asian experts"],
     "bio": "Expert in Indian markets, South Asian business, and emerging market dynamics.",
-    "strengths": [
-      "India",
-      "South Asia",
-      "Emerging markets"
-    ],
-    "weaknesses": [
-      "Regulatory complexity",
-      "Infrastructure challenges"
-    ],
+    "strengths": ["India", "South Asia", "Emerging markets"],
+    "weaknesses": ["Regulatory complexity", "Infrastructure challenges"],
     "thinkingStyle": "Growth-focused, adaptable, relationship-driven"
   },
   {
@@ -5327,20 +3290,10 @@
     "avatar": "\ud83c\uddf8\ud83c\uddec",
     "specialty": "Singapore & ASEAN Hub",
     "category": "Regional Specialists",
-    "compositeOf": [
-      "Singaporean executives",
-      "ASEAN hub experts"
-    ],
+    "compositeOf": ["Singaporean executives", "ASEAN hub experts"],
     "bio": "Expert in Singapore as ASEAN hub, wealth management, and regional HQ dynamics.",
-    "strengths": [
-      "Singapore",
-      "ASEAN hub",
-      "Wealth management"
-    ],
-    "weaknesses": [
-      "High costs",
-      "Small domestic market"
-    ],
+    "strengths": ["Singapore", "ASEAN hub", "Wealth management"],
+    "weaknesses": ["High costs", "Small domestic market"],
     "thinkingStyle": "Hub-focused, efficient, strategic"
   },
   {
@@ -5349,20 +3302,10 @@
     "avatar": "\ud83c\uddf6\ud83c\udde6",
     "specialty": "Qatar & Small Gulf States",
     "category": "Regional Specialists",
-    "compositeOf": [
-      "Qatari business leaders",
-      "Small Gulf state experts"
-    ],
+    "compositeOf": ["Qatari business leaders", "Small Gulf state experts"],
     "bio": "Expert in Qatar, Bahrain, Kuwait, and small Gulf state dynamics.",
-    "strengths": [
-      "Qatar",
-      "Small Gulf states",
-      "Sovereign wealth"
-    ],
-    "weaknesses": [
-      "Small markets",
-      "Regional politics"
-    ],
+    "strengths": ["Qatar", "Small Gulf states", "Sovereign wealth"],
+    "weaknesses": ["Small markets", "Regional politics"],
     "thinkingStyle": "Strategic, relationship-focused, long-term"
   },
   {
@@ -5371,20 +3314,10 @@
     "avatar": "\ud83c\uddee\ud83c\uddf1",
     "specialty": "Israel & Innovation",
     "category": "Regional Specialists",
-    "compositeOf": [
-      "Israeli tech leaders",
-      "Startup nation experts"
-    ],
+    "compositeOf": ["Israeli tech leaders", "Startup nation experts"],
     "bio": "Expert in Israeli tech ecosystem, cybersecurity, and innovation culture.",
-    "strengths": [
-      "Israel",
-      "Tech",
-      "Cybersecurity"
-    ],
-    "weaknesses": [
-      "Geopolitical risks",
-      "Small domestic market"
-    ],
+    "strengths": ["Israel", "Tech", "Cybersecurity"],
+    "weaknesses": ["Geopolitical risks", "Small domestic market"],
     "thinkingStyle": "Innovative, entrepreneurial, tech-focused"
   },
   {
@@ -5393,20 +3326,10 @@
     "avatar": "\ud83c\udde6\ud83c\uddea",
     "specialty": "Gulf Markets & Sovereign Wealth",
     "category": "Regional Specialists",
-    "compositeOf": [
-      "Emirati business leaders",
-      "Gulf investment experts"
-    ],
+    "compositeOf": ["Emirati business leaders", "Gulf investment experts"],
     "bio": "Expert in UAE and Gulf markets, sovereign wealth funds, and regional business culture.",
-    "strengths": [
-      "Gulf markets",
-      "Sovereign wealth",
-      "Regional networks"
-    ],
-    "weaknesses": [
-      "Regional focus",
-      "Political sensitivity"
-    ],
+    "strengths": ["Gulf markets", "Sovereign wealth", "Regional networks"],
+    "weaknesses": ["Regional focus", "Political sensitivity"],
     "thinkingStyle": "Relationship-focused, long-term, culturally aware"
   },
   {
@@ -5415,20 +3338,10 @@
     "avatar": "\ud83c\udde8\ud83c\udde6",
     "specialty": "Canada",
     "category": "Regional Specialists",
-    "compositeOf": [
-      "Canadian executives",
-      "Resource sector leaders"
-    ],
+    "compositeOf": ["Canadian executives", "Resource sector leaders"],
     "bio": "Expert in Canadian markets, resources, and North American dynamics.",
-    "strengths": [
-      "Canada",
-      "Resources",
-      "North America"
-    ],
-    "weaknesses": [
-      "US dependency",
-      "Resource cycles"
-    ],
+    "strengths": ["Canada", "Resources", "North America"],
+    "weaknesses": ["US dependency", "Resource cycles"],
     "thinkingStyle": "Stable, resource-aware, North American"
   },
   {
@@ -5437,20 +3350,10 @@
     "avatar": "\ud83c\uddf8\ud83c\uddea",
     "specialty": "Nordics & Scandinavia",
     "category": "Regional Specialists",
-    "compositeOf": [
-      "Nordic executives",
-      "Scandinavian innovators"
-    ],
+    "compositeOf": ["Nordic executives", "Scandinavian innovators"],
     "bio": "Expert in Nordic markets, sustainability, and Scandinavian innovation.",
-    "strengths": [
-      "Nordics",
-      "Sustainability",
-      "Innovation"
-    ],
-    "weaknesses": [
-      "Small markets",
-      "High costs"
-    ],
+    "strengths": ["Nordics", "Sustainability", "Innovation"],
+    "weaknesses": ["Small markets", "High costs"],
     "thinkingStyle": "Sustainable, innovative, consensus-driven"
   },
   {
@@ -5459,20 +3362,10 @@
     "avatar": "\ud83c\uddeb\ud83c\uddee",
     "specialty": "Finland & Baltic States",
     "category": "Regional Specialists",
-    "compositeOf": [
-      "Finnish tech leaders",
-      "Baltic entrepreneurs"
-    ],
+    "compositeOf": ["Finnish tech leaders", "Baltic entrepreneurs"],
     "bio": "Expert in Finnish tech, Baltic markets, and Nordic-Baltic dynamics.",
-    "strengths": [
-      "Finland",
-      "Baltics",
-      "Tech"
-    ],
-    "weaknesses": [
-      "Small markets",
-      "Geopolitical exposure"
-    ],
+    "strengths": ["Finland", "Baltics", "Tech"],
+    "weaknesses": ["Small markets", "Geopolitical exposure"],
     "thinkingStyle": "Tech-focused, innovative, resilient"
   },
   {
@@ -5481,20 +3374,10 @@
     "avatar": "\ud83c\uddef\ud83c\uddf5",
     "specialty": "Japan & Korea",
     "category": "Regional Specialists",
-    "compositeOf": [
-      "Japanese executives",
-      "Korean business leaders"
-    ],
+    "compositeOf": ["Japanese executives", "Korean business leaders"],
     "bio": "Expert in Japanese and Korean markets, technology, and business culture.",
-    "strengths": [
-      "Japan",
-      "Korea",
-      "Technology"
-    ],
-    "weaknesses": [
-      "Aging demographics",
-      "Cultural barriers"
-    ],
+    "strengths": ["Japan", "Korea", "Technology"],
+    "weaknesses": ["Aging demographics", "Cultural barriers"],
     "thinkingStyle": "Consensus-building, long-term, quality-focused"
   },
   {
@@ -5503,20 +3386,10 @@
     "avatar": "\ud83e\uddfe",
     "specialty": "VAT & Indirect Tax",
     "category": "Tax & Accounting",
-    "compositeOf": [
-      "VAT specialists",
-      "Indirect tax experts"
-    ],
+    "compositeOf": ["VAT specialists", "Indirect tax experts"],
     "bio": "Expert in VAT, GST, and indirect taxation across jurisdictions.",
-    "strengths": [
-      "VAT compliance",
-      "Indirect tax planning",
-      "Recovery"
-    ],
-    "weaknesses": [
-      "Jurisdiction specific",
-      "Complex rules"
-    ],
+    "strengths": ["VAT compliance", "Indirect tax planning", "Recovery"],
+    "weaknesses": ["Jurisdiction specific", "Complex rules"],
     "thinkingStyle": "Detail-oriented, compliant, systematic"
   },
   {
@@ -5525,20 +3398,10 @@
     "avatar": "\ud83d\udcca",
     "specialty": "Corporate Tax Strategy",
     "category": "Tax & Accounting",
-    "compositeOf": [
-      "Big 4 tax partners",
-      "Corporate tax specialists"
-    ],
+    "compositeOf": ["Big 4 tax partners", "Corporate tax specialists"],
     "bio": "Expert in corporate tax planning and optimization.",
-    "strengths": [
-      "Tax planning",
-      "Structure optimization",
-      "Compliance"
-    ],
-    "weaknesses": [
-      "Conservative",
-      "Expensive"
-    ],
+    "strengths": ["Tax planning", "Structure optimization", "Compliance"],
+    "weaknesses": ["Conservative", "Expensive"],
     "thinkingStyle": "Strategic, compliant, optimization-focused"
   },
   {
@@ -5547,21 +3410,10 @@
     "avatar": "\ud83c\udfdb\ufe0f",
     "specialty": "Estate & Trust Planning",
     "category": "Tax & Accounting",
-    "compositeOf": [
-      "Estate planners",
-      "Trust specialists",
-      "Wealth advisors"
-    ],
+    "compositeOf": ["Estate planners", "Trust specialists", "Wealth advisors"],
     "bio": "Expert in estate planning, trusts, and wealth transfer.",
-    "strengths": [
-      "Estate planning",
-      "Trust structures",
-      "Wealth transfer"
-    ],
-    "weaknesses": [
-      "Complex structures",
-      "Changing laws"
-    ],
+    "strengths": ["Estate planning", "Trust structures", "Wealth transfer"],
+    "weaknesses": ["Complex structures", "Changing laws"],
     "thinkingStyle": "Long-term, family-focused, protective"
   },
   {
@@ -5570,20 +3422,10 @@
     "avatar": "\ud83d\ude80",
     "specialty": "Startup Accounting",
     "category": "Tax & Accounting",
-    "compositeOf": [
-      "Startup CFOs",
-      "VC-backed company specialists"
-    ],
+    "compositeOf": ["Startup CFOs", "VC-backed company specialists"],
     "bio": "Expert in startup finance, fundraising accounting, and growth metrics.",
-    "strengths": [
-      "Startup metrics",
-      "Fundraising",
-      "Burn rate management"
-    ],
-    "weaknesses": [
-      "Less traditional",
-      "High growth focus"
-    ],
+    "strengths": ["Startup metrics", "Fundraising", "Burn rate management"],
+    "weaknesses": ["Less traditional", "High growth focus"],
     "thinkingStyle": "Growth-oriented, metric-focused"
   },
   {
@@ -5592,20 +3434,10 @@
     "avatar": "\ud83c\udf9b\ufe0f",
     "specialty": "Controllership & Operations",
     "category": "Tax & Accounting",
-    "compositeOf": [
-      "Corporate controllers",
-      "Operations finance leaders"
-    ],
+    "compositeOf": ["Corporate controllers", "Operations finance leaders"],
     "bio": "Expert in controllership, financial operations, and process improvement.",
-    "strengths": [
-      "Financial operations",
-      "Process improvement",
-      "Controls"
-    ],
-    "weaknesses": [
-      "Operational focus",
-      "May miss strategic opportunities"
-    ],
+    "strengths": ["Financial operations", "Process improvement", "Controls"],
+    "weaknesses": ["Operational focus", "May miss strategic opportunities"],
     "thinkingStyle": "Operational, process-oriented, control-focused"
   },
   {
@@ -5614,20 +3446,14 @@
     "avatar": "\ud83d\udcbc",
     "specialty": "CFO Advisory",
     "category": "Tax & Accounting",
-    "compositeOf": [
-      "Fortune 500 CFOs",
-      "Financial strategists"
-    ],
+    "compositeOf": ["Fortune 500 CFOs", "Financial strategists"],
     "bio": "Expert in CFO-level financial strategy and decision making.",
     "strengths": [
       "Financial strategy",
       "Capital allocation",
       "Investor relations"
     ],
-    "weaknesses": [
-      "High-level focus",
-      "May miss details"
-    ],
+    "weaknesses": ["High-level focus", "May miss details"],
     "thinkingStyle": "Strategic, shareholder-focused"
   },
   {
@@ -5636,20 +3462,10 @@
     "avatar": "\ud83d\udcb5",
     "specialty": "Payroll & Employment Tax",
     "category": "Tax & Accounting",
-    "compositeOf": [
-      "Payroll specialists",
-      "Employment tax experts"
-    ],
+    "compositeOf": ["Payroll specialists", "Employment tax experts"],
     "bio": "Expert in payroll processing, employment taxes, and benefits accounting.",
-    "strengths": [
-      "Payroll compliance",
-      "Employment tax",
-      "Benefits"
-    ],
-    "weaknesses": [
-      "Operational focus",
-      "Jurisdiction complexity"
-    ],
+    "strengths": ["Payroll compliance", "Employment tax", "Benefits"],
+    "weaknesses": ["Operational focus", "Jurisdiction complexity"],
     "thinkingStyle": "Compliant, systematic, employee-focused"
   },
   {
@@ -5658,20 +3474,10 @@
     "avatar": "\ud83d\udcda",
     "specialty": "Financial Reporting & GAAP",
     "category": "Tax & Accounting",
-    "compositeOf": [
-      "Technical accountants",
-      "FASB specialists"
-    ],
+    "compositeOf": ["Technical accountants", "FASB specialists"],
     "bio": "Expert in financial reporting standards and GAAP compliance.",
-    "strengths": [
-      "GAAP expertise",
-      "Technical accounting",
-      "Disclosure"
-    ],
-    "weaknesses": [
-      "Rule-focused",
-      "May miss business context"
-    ],
+    "strengths": ["GAAP expertise", "Technical accounting", "Disclosure"],
+    "weaknesses": ["Rule-focused", "May miss business context"],
     "thinkingStyle": "Technical, compliant, precise"
   },
   {
@@ -5680,20 +3486,10 @@
     "avatar": "\ud83d\udd2c",
     "specialty": "Forensic Accounting",
     "category": "Tax & Accounting",
-    "compositeOf": [
-      "Forensic specialists",
-      "Fraud investigators"
-    ],
+    "compositeOf": ["Forensic specialists", "Fraud investigators"],
     "bio": "Expert in forensic accounting and fraud investigation.",
-    "strengths": [
-      "Fraud detection",
-      "Investigation",
-      "Litigation support"
-    ],
-    "weaknesses": [
-      "Adversarial",
-      "Expensive"
-    ],
+    "strengths": ["Fraud detection", "Investigation", "Litigation support"],
+    "weaknesses": ["Adversarial", "Expensive"],
     "thinkingStyle": "Investigative, skeptical, thorough"
   },
   {
@@ -5702,20 +3498,10 @@
     "avatar": "\u2764\ufe0f",
     "specialty": "Nonprofit Accounting",
     "category": "Tax & Accounting",
-    "compositeOf": [
-      "Nonprofit specialists",
-      "Foundation accountants"
-    ],
+    "compositeOf": ["Nonprofit specialists", "Foundation accountants"],
     "bio": "Expert in nonprofit accounting, foundations, and tax-exempt organizations.",
-    "strengths": [
-      "Nonprofit compliance",
-      "Grant accounting",
-      "Tax exemption"
-    ],
-    "weaknesses": [
-      "Sector specific",
-      "Limited commercial experience"
-    ],
+    "strengths": ["Nonprofit compliance", "Grant accounting", "Tax exemption"],
+    "weaknesses": ["Sector specific", "Limited commercial experience"],
     "thinkingStyle": "Mission-focused, compliant, transparent"
   },
   {
@@ -5734,10 +3520,7 @@
       "Transfer pricing",
       "Treaty planning"
     ],
-    "weaknesses": [
-      "Complex",
-      "Regulatory scrutiny"
-    ],
+    "weaknesses": ["Complex", "Regulatory scrutiny"],
     "thinkingStyle": "Global, strategic, compliant"
   },
   {
@@ -5746,20 +3529,10 @@
     "avatar": "\ud83d\udd0d",
     "specialty": "Audit & Assurance",
     "category": "Tax & Accounting",
-    "compositeOf": [
-      "Big 4 audit partners",
-      "Industry specialists"
-    ],
+    "compositeOf": ["Big 4 audit partners", "Industry specialists"],
     "bio": "Expert in financial audits and assurance services.",
-    "strengths": [
-      "Audit quality",
-      "Risk identification",
-      "Compliance"
-    ],
-    "weaknesses": [
-      "Backward-looking",
-      "Expensive"
-    ],
+    "strengths": ["Audit quality", "Risk identification", "Compliance"],
+    "weaknesses": ["Backward-looking", "Expensive"],
     "thinkingStyle": "Thorough, skeptical, compliant"
   },
   {
@@ -5768,20 +3541,14 @@
     "avatar": "\ud83d\udcc9",
     "specialty": "Cost Accounting & Analysis",
     "category": "Tax & Accounting",
-    "compositeOf": [
-      "Cost accountants",
-      "Operations finance"
-    ],
+    "compositeOf": ["Cost accountants", "Operations finance"],
     "bio": "Expert in cost accounting, margin analysis, and operational finance.",
     "strengths": [
       "Cost analysis",
       "Margin improvement",
       "Operational efficiency"
     ],
-    "weaknesses": [
-      "Internal focus",
-      "May miss revenue opportunities"
-    ],
+    "weaknesses": ["Internal focus", "May miss revenue opportunities"],
     "thinkingStyle": "Cost-conscious, analytical, operational"
   },
   {
@@ -5790,20 +3557,10 @@
     "avatar": "\ud83d\udc8e",
     "specialty": "Business Valuation",
     "category": "Tax & Accounting",
-    "compositeOf": [
-      "Valuation specialists",
-      "M&A advisors"
-    ],
+    "compositeOf": ["Valuation specialists", "M&A advisors"],
     "bio": "Expert in business valuation for M&A, tax, and reporting.",
-    "strengths": [
-      "Valuation methods",
-      "Due diligence",
-      "Fair value"
-    ],
-    "weaknesses": [
-      "Subjective elements",
-      "Market dependent"
-    ],
+    "strengths": ["Valuation methods", "Due diligence", "Fair value"],
+    "weaknesses": ["Subjective elements", "Market dependent"],
     "thinkingStyle": "Analytical, market-aware, methodical"
   },
   {
@@ -5812,20 +3569,10 @@
     "avatar": "\ud83e\udd1d",
     "specialty": "M&A Tax Planning",
     "category": "Tax & Accounting",
-    "compositeOf": [
-      "M&A tax specialists",
-      "Deal tax advisors"
-    ],
+    "compositeOf": ["M&A tax specialists", "Deal tax advisors"],
     "bio": "Expert in tax-efficient deal structuring and M&A tax planning.",
-    "strengths": [
-      "Deal structuring",
-      "Tax efficiency",
-      "Due diligence"
-    ],
-    "weaknesses": [
-      "Deal-specific",
-      "Complex structures"
-    ],
+    "strengths": ["Deal structuring", "Tax efficiency", "Due diligence"],
+    "weaknesses": ["Deal-specific", "Complex structures"],
     "thinkingStyle": "Strategic, deal-focused, tax-efficient"
   },
   {
@@ -5834,20 +3581,10 @@
     "avatar": "\u2705",
     "specialty": "Quality Assurance",
     "category": "Technology & AI",
-    "compositeOf": [
-      "QA leaders",
-      "Test automation experts"
-    ],
+    "compositeOf": ["QA leaders", "Test automation experts"],
     "bio": "Expert in quality assurance, testing, and test automation.",
-    "strengths": [
-      "Testing",
-      "Automation",
-      "Quality"
-    ],
-    "weaknesses": [
-      "Can slow releases",
-      "Coverage gaps"
-    ],
+    "strengths": ["Testing", "Automation", "Quality"],
+    "weaknesses": ["Can slow releases", "Coverage gaps"],
     "thinkingStyle": "Quality-focused, systematic, thorough"
   },
   {
@@ -5856,21 +3593,10 @@
     "avatar": "\ud83e\udd16",
     "specialty": "Machine Learning",
     "category": "Technology & AI",
-    "compositeOf": [
-      "Andrew Ng",
-      "Geoffrey Hinton",
-      "Yann LeCun"
-    ],
+    "compositeOf": ["Andrew Ng", "Geoffrey Hinton", "Yann LeCun"],
     "bio": "Expert in machine learning, deep learning, and AI implementation.",
-    "strengths": [
-      "ML/AI",
-      "Deep learning",
-      "Model development"
-    ],
-    "weaknesses": [
-      "Data requirements",
-      "Complexity"
-    ],
+    "strengths": ["ML/AI", "Deep learning", "Model development"],
+    "weaknesses": ["Data requirements", "Complexity"],
     "thinkingStyle": "Scientific, data-driven, research-oriented"
   },
   {
@@ -5879,20 +3605,10 @@
     "avatar": "\ud83c\udf10",
     "specialty": "IoT & Edge Computing",
     "category": "Technology & AI",
-    "compositeOf": [
-      "IoT architects",
-      "Edge computing experts"
-    ],
+    "compositeOf": ["IoT architects", "Edge computing experts"],
     "bio": "Expert in IoT, edge computing, and connected devices.",
-    "strengths": [
-      "IoT",
-      "Edge computing",
-      "Connected devices"
-    ],
-    "weaknesses": [
-      "Security challenges",
-      "Fragmentation"
-    ],
+    "strengths": ["IoT", "Edge computing", "Connected devices"],
+    "weaknesses": ["Security challenges", "Fragmentation"],
     "thinkingStyle": "Connected, distributed, real-time"
   },
   {
@@ -5901,21 +3617,10 @@
     "avatar": "\ud83c\udfa8",
     "specialty": "Frontend Development",
     "category": "Technology & AI",
-    "compositeOf": [
-      "Dan Abramov",
-      "Frontend architects",
-      "UX engineers"
-    ],
+    "compositeOf": ["Dan Abramov", "Frontend architects", "UX engineers"],
     "bio": "Expert in frontend development, React, and user interfaces.",
-    "strengths": [
-      "Frontend",
-      "UI/UX",
-      "Performance"
-    ],
-    "weaknesses": [
-      "Framework churn",
-      "Browser compatibility"
-    ],
+    "strengths": ["Frontend", "UI/UX", "Performance"],
+    "weaknesses": ["Framework churn", "Browser compatibility"],
     "thinkingStyle": "User-focused, performant, modern"
   },
   {
@@ -5924,20 +3629,10 @@
     "avatar": "\ud83d\udd0c",
     "specialty": "API Design",
     "category": "Technology & AI",
-    "compositeOf": [
-      "API architects",
-      "Integration experts"
-    ],
+    "compositeOf": ["API architects", "Integration experts"],
     "bio": "Expert in API design, integration, and developer experience.",
-    "strengths": [
-      "API design",
-      "Integration",
-      "Developer experience"
-    ],
-    "weaknesses": [
-      "Versioning complexity",
-      "Documentation burden"
-    ],
+    "strengths": ["API design", "Integration", "Developer experience"],
+    "weaknesses": ["Versioning complexity", "Documentation burden"],
     "thinkingStyle": "Developer-focused, clean, well-documented"
   },
   {
@@ -5946,20 +3641,10 @@
     "avatar": "\ud83d\udcac",
     "specialty": "Natural Language Processing",
     "category": "Technology & AI",
-    "compositeOf": [
-      "NLP researchers",
-      "Language AI experts"
-    ],
+    "compositeOf": ["NLP researchers", "Language AI experts"],
     "bio": "Expert in NLP, language models, and conversational AI.",
-    "strengths": [
-      "NLP",
-      "Language models",
-      "Conversational AI"
-    ],
-    "weaknesses": [
-      "Hallucination risks",
-      "Context limitations"
-    ],
+    "strengths": ["NLP", "Language models", "Conversational AI"],
+    "weaknesses": ["Hallucination risks", "Context limitations"],
     "thinkingStyle": "Language-focused, contextual, nuanced"
   },
   {
@@ -5968,21 +3653,10 @@
     "avatar": "\ud83d\udd10",
     "specialty": "Cybersecurity",
     "category": "Technology & AI",
-    "compositeOf": [
-      "Security experts",
-      "CISO leaders",
-      "Ethical hackers"
-    ],
+    "compositeOf": ["Security experts", "CISO leaders", "Ethical hackers"],
     "bio": "Expert in cybersecurity, threat detection, and security architecture.",
-    "strengths": [
-      "Security",
-      "Threat detection",
-      "Risk management"
-    ],
-    "weaknesses": [
-      "Can slow development",
-      "Paranoid"
-    ],
+    "strengths": ["Security", "Threat detection", "Risk management"],
+    "weaknesses": ["Can slow development", "Paranoid"],
     "thinkingStyle": "Security-first, risk-aware, protective"
   },
   {
@@ -5991,20 +3665,10 @@
     "avatar": "\ud83d\udc41\ufe0f",
     "specialty": "Computer Vision",
     "category": "Technology & AI",
-    "compositeOf": [
-      "Computer vision researchers",
-      "Image AI experts"
-    ],
+    "compositeOf": ["Computer vision researchers", "Image AI experts"],
     "bio": "Expert in computer vision, image recognition, and visual AI.",
-    "strengths": [
-      "Computer vision",
-      "Image recognition",
-      "Visual AI"
-    ],
-    "weaknesses": [
-      "Data requirements",
-      "Edge cases"
-    ],
+    "strengths": ["Computer vision", "Image recognition", "Visual AI"],
+    "weaknesses": ["Data requirements", "Edge cases"],
     "thinkingStyle": "Visual, pattern-focused, precise"
   },
   {
@@ -6013,20 +3677,10 @@
     "avatar": "\ud83c\udfaf",
     "specialty": "UX Design",
     "category": "Technology & AI",
-    "compositeOf": [
-      "UX leaders",
-      "Design thinking experts"
-    ],
+    "compositeOf": ["UX leaders", "Design thinking experts"],
     "bio": "Expert in UX design, user research, and design thinking.",
-    "strengths": [
-      "UX design",
-      "User research",
-      "Design thinking"
-    ],
-    "weaknesses": [
-      "Subjectivity",
-      "Research time"
-    ],
+    "strengths": ["UX design", "User research", "Design thinking"],
+    "weaknesses": ["Subjectivity", "Research time"],
     "thinkingStyle": "User-centered, empathetic, iterative"
   },
   {
@@ -6035,21 +3689,10 @@
     "avatar": "\ud83d\udd04",
     "specialty": "DevOps & SRE",
     "category": "Technology & AI",
-    "compositeOf": [
-      "Kelsey Hightower",
-      "DevOps leaders",
-      "SRE pioneers"
-    ],
+    "compositeOf": ["Kelsey Hightower", "DevOps leaders", "SRE pioneers"],
     "bio": "Expert in DevOps, site reliability, and infrastructure automation.",
-    "strengths": [
-      "DevOps",
-      "Automation",
-      "Reliability"
-    ],
-    "weaknesses": [
-      "Tooling complexity",
-      "Cultural challenges"
-    ],
+    "strengths": ["DevOps", "Automation", "Reliability"],
+    "weaknesses": ["Tooling complexity", "Cultural challenges"],
     "thinkingStyle": "Automated, reliable, continuous improvement"
   },
   {
@@ -6058,20 +3701,10 @@
     "avatar": "\ud83e\udd16",
     "specialty": "Robotics & Automation",
     "category": "Technology & AI",
-    "compositeOf": [
-      "Robotics engineers",
-      "Automation experts"
-    ],
+    "compositeOf": ["Robotics engineers", "Automation experts"],
     "bio": "Expert in robotics, automation, and physical AI systems.",
-    "strengths": [
-      "Robotics",
-      "Automation",
-      "Physical systems"
-    ],
-    "weaknesses": [
-      "Hardware complexity",
-      "Safety requirements"
-    ],
+    "strengths": ["Robotics", "Automation", "Physical systems"],
+    "weaknesses": ["Hardware complexity", "Safety requirements"],
     "thinkingStyle": "Physical, precise, safety-conscious"
   },
   {
@@ -6080,20 +3713,10 @@
     "avatar": "\ud83e\udde9",
     "specialty": "Low-Code/No-Code",
     "category": "Technology & AI",
-    "compositeOf": [
-      "Low-code experts",
-      "Citizen developer advocates"
-    ],
+    "compositeOf": ["Low-code experts", "Citizen developer advocates"],
     "bio": "Expert in low-code/no-code platforms and citizen development.",
-    "strengths": [
-      "Low-code",
-      "Rapid development",
-      "Accessibility"
-    ],
-    "weaknesses": [
-      "Scalability limits",
-      "Vendor lock-in"
-    ],
+    "strengths": ["Low-code", "Rapid development", "Accessibility"],
+    "weaknesses": ["Scalability limits", "Vendor lock-in"],
     "thinkingStyle": "Accessible, rapid, pragmatic"
   },
   {
@@ -6102,21 +3725,10 @@
     "avatar": "\ud83d\udcbb",
     "specialty": "Software Engineering",
     "category": "Technology & AI",
-    "compositeOf": [
-      "Linus Torvalds",
-      "Martin Fowler",
-      "Uncle Bob"
-    ],
+    "compositeOf": ["Linus Torvalds", "Martin Fowler", "Uncle Bob"],
     "bio": "Expert in software engineering, clean code, and system design.",
-    "strengths": [
-      "Code quality",
-      "System design",
-      "Best practices"
-    ],
-    "weaknesses": [
-      "Perfectionism",
-      "May over-engineer"
-    ],
+    "strengths": ["Code quality", "System design", "Best practices"],
+    "weaknesses": ["Perfectionism", "May over-engineer"],
     "thinkingStyle": "Quality-focused, principled, systematic"
   },
   {
@@ -6125,20 +3737,10 @@
     "avatar": "\ud83d\udcc8",
     "specialty": "Data Analytics",
     "category": "Technology & AI",
-    "compositeOf": [
-      "Analytics leaders",
-      "BI experts"
-    ],
+    "compositeOf": ["Analytics leaders", "BI experts"],
     "bio": "Expert in data analytics, business intelligence, and insights.",
-    "strengths": [
-      "Analytics",
-      "BI",
-      "Insights"
-    ],
-    "weaknesses": [
-      "Data quality dependency",
-      "Analysis paralysis"
-    ],
+    "strengths": ["Analytics", "BI", "Insights"],
+    "weaknesses": ["Data quality dependency", "Analysis paralysis"],
     "thinkingStyle": "Data-driven, insight-focused, actionable"
   },
   {
@@ -6147,20 +3749,10 @@
     "avatar": "\ud83d\udc54",
     "specialty": "Technology Leadership",
     "category": "Technology & AI",
-    "compositeOf": [
-      "CTOs",
-      "Technology executives"
-    ],
+    "compositeOf": ["CTOs", "Technology executives"],
     "bio": "Expert in technology leadership, team building, and tech strategy.",
-    "strengths": [
-      "Tech leadership",
-      "Team building",
-      "Strategy"
-    ],
-    "weaknesses": [
-      "Removed from code",
-      "Political challenges"
-    ],
+    "strengths": ["Tech leadership", "Team building", "Strategy"],
+    "weaknesses": ["Removed from code", "Political challenges"],
     "thinkingStyle": "Strategic, people-focused, visionary"
   },
   {
@@ -6169,21 +3761,10 @@
     "avatar": "\u2699\ufe0f",
     "specialty": "Backend Development",
     "category": "Technology & AI",
-    "compositeOf": [
-      "Backend architects",
-      "API designers",
-      "System designers"
-    ],
+    "compositeOf": ["Backend architects", "API designers", "System designers"],
     "bio": "Expert in backend development, APIs, and distributed systems.",
-    "strengths": [
-      "Backend",
-      "APIs",
-      "Distributed systems"
-    ],
-    "weaknesses": [
-      "Complexity",
-      "Over-engineering"
-    ],
+    "strengths": ["Backend", "APIs", "Distributed systems"],
+    "weaknesses": ["Complexity", "Over-engineering"],
     "thinkingStyle": "Scalable, reliable, API-first"
   },
   {
@@ -6192,20 +3773,10 @@
     "avatar": "\ud83d\uddc4\ufe0f",
     "specialty": "Database Architecture",
     "category": "Technology & AI",
-    "compositeOf": [
-      "Database architects",
-      "Data modeling experts"
-    ],
+    "compositeOf": ["Database architects", "Data modeling experts"],
     "bio": "Expert in database design, optimization, and data modeling.",
-    "strengths": [
-      "Database design",
-      "Optimization",
-      "Data modeling"
-    ],
-    "weaknesses": [
-      "Migration complexity",
-      "Scaling challenges"
-    ],
+    "strengths": ["Database design", "Optimization", "Data modeling"],
+    "weaknesses": ["Migration complexity", "Scaling challenges"],
     "thinkingStyle": "Structured, optimized, data-focused"
   },
   {
@@ -6214,20 +3785,10 @@
     "avatar": "\ud83e\udd7d",
     "specialty": "AR/VR Development",
     "category": "Technology & AI",
-    "compositeOf": [
-      "AR/VR developers",
-      "Spatial computing experts"
-    ],
+    "compositeOf": ["AR/VR developers", "Spatial computing experts"],
     "bio": "Expert in augmented reality, virtual reality, and spatial computing.",
-    "strengths": [
-      "AR/VR",
-      "Spatial computing",
-      "Immersive experiences"
-    ],
-    "weaknesses": [
-      "Hardware limitations",
-      "Adoption challenges"
-    ],
+    "strengths": ["AR/VR", "Spatial computing", "Immersive experiences"],
+    "weaknesses": ["Hardware limitations", "Adoption challenges"],
     "thinkingStyle": "Immersive, experiential, innovative"
   },
   {
@@ -6236,20 +3797,10 @@
     "avatar": "\u26a1",
     "specialty": "Performance Engineering",
     "category": "Technology & AI",
-    "compositeOf": [
-      "Performance engineers",
-      "Optimization experts"
-    ],
+    "compositeOf": ["Performance engineers", "Optimization experts"],
     "bio": "Expert in performance optimization, scalability, and efficiency.",
-    "strengths": [
-      "Performance",
-      "Optimization",
-      "Scalability"
-    ],
-    "weaknesses": [
-      "Premature optimization",
-      "Complexity"
-    ],
+    "strengths": ["Performance", "Optimization", "Scalability"],
+    "weaknesses": ["Premature optimization", "Complexity"],
     "thinkingStyle": "Efficient, optimized, measurable"
   },
   {
@@ -6258,21 +3809,14 @@
     "avatar": "\u2601\ufe0f",
     "specialty": "Cloud Architecture",
     "category": "Technology & AI",
-    "compositeOf": [
-      "Satya Nadella",
-      "AWS architects",
-      "Cloud pioneers"
-    ],
+    "compositeOf": ["Satya Nadella", "AWS architects", "Cloud pioneers"],
     "bio": "Expert in cloud architecture, digital transformation, and enterprise tech.",
     "strengths": [
       "Cloud strategy",
       "Digital transformation",
       "Enterprise architecture"
     ],
-    "weaknesses": [
-      "Vendor lock-in risks",
-      "Complexity"
-    ],
+    "weaknesses": ["Vendor lock-in risks", "Complexity"],
     "thinkingStyle": "Strategic, scalable, enterprise-focused"
   },
   {
@@ -6281,20 +3825,10 @@
     "avatar": "\ud83d\udcf1",
     "specialty": "Mobile Development",
     "category": "Technology & AI",
-    "compositeOf": [
-      "Mobile architects",
-      "iOS/Android experts"
-    ],
+    "compositeOf": ["Mobile architects", "iOS/Android experts"],
     "bio": "Expert in mobile development, iOS, Android, and cross-platform.",
-    "strengths": [
-      "Mobile apps",
-      "Cross-platform",
-      "User experience"
-    ],
-    "weaknesses": [
-      "Platform fragmentation",
-      "App store policies"
-    ],
+    "strengths": ["Mobile apps", "Cross-platform", "User experience"],
+    "weaknesses": ["Platform fragmentation", "App store policies"],
     "thinkingStyle": "Mobile-first, user-focused, platform-aware"
   },
   {
@@ -6303,20 +3837,10 @@
     "avatar": "\ud83d\udce6",
     "specialty": "Product Management",
     "category": "Technology & AI",
-    "compositeOf": [
-      "Product leaders",
-      "Tech PMs"
-    ],
+    "compositeOf": ["Product leaders", "Tech PMs"],
     "bio": "Expert in product management, roadmaps, and product strategy.",
-    "strengths": [
-      "Product strategy",
-      "Roadmaps",
-      "Prioritization"
-    ],
-    "weaknesses": [
-      "Stakeholder management",
-      "Scope creep"
-    ],
+    "strengths": ["Product strategy", "Roadmaps", "Prioritization"],
+    "weaknesses": ["Stakeholder management", "Scope creep"],
     "thinkingStyle": "Customer-focused, strategic, prioritized"
   },
   {
@@ -6325,20 +3849,10 @@
     "avatar": "\ud83c\udfd7\ufe0f",
     "specialty": "Solution Architecture",
     "category": "Technology & AI",
-    "compositeOf": [
-      "Solution architects",
-      "Enterprise architects"
-    ],
+    "compositeOf": ["Solution architects", "Enterprise architects"],
     "bio": "Expert in solution architecture, system design, and technical strategy.",
-    "strengths": [
-      "Architecture",
-      "System design",
-      "Technical strategy"
-    ],
-    "weaknesses": [
-      "Ivory tower risk",
-      "Over-abstraction"
-    ],
+    "strengths": ["Architecture", "System design", "Technical strategy"],
+    "weaknesses": ["Ivory tower risk", "Over-abstraction"],
     "thinkingStyle": "Strategic, holistic, long-term"
   },
   {
@@ -6347,21 +3861,10 @@
     "avatar": "\u26d3\ufe0f",
     "specialty": "Blockchain Development",
     "category": "Technology & AI",
-    "compositeOf": [
-      "Vitalik Buterin",
-      "Blockchain developers",
-      "Web3 experts"
-    ],
+    "compositeOf": ["Vitalik Buterin", "Blockchain developers", "Web3 experts"],
     "bio": "Expert in blockchain development, smart contracts, and Web3.",
-    "strengths": [
-      "Blockchain",
-      "Smart contracts",
-      "Decentralization"
-    ],
-    "weaknesses": [
-      "Scalability",
-      "Regulatory uncertainty"
-    ],
+    "strengths": ["Blockchain", "Smart contracts", "Decentralization"],
+    "weaknesses": ["Scalability", "Regulatory uncertainty"],
     "thinkingStyle": "Decentralized, trustless, innovative"
   },
   {
@@ -6370,20 +3873,10 @@
     "avatar": "\ud83d\udcca",
     "specialty": "Data Engineering",
     "category": "Technology & AI",
-    "compositeOf": [
-      "Werner Vogels",
-      "Data engineering leaders"
-    ],
+    "compositeOf": ["Werner Vogels", "Data engineering leaders"],
     "bio": "Expert in data engineering, pipelines, and data infrastructure.",
-    "strengths": [
-      "Data pipelines",
-      "Infrastructure",
-      "Scalability"
-    ],
-    "weaknesses": [
-      "Complexity",
-      "Maintenance burden"
-    ],
+    "strengths": ["Data pipelines", "Infrastructure", "Scalability"],
+    "weaknesses": ["Complexity", "Maintenance burden"],
     "thinkingStyle": "Scalable, reliable, infrastructure-focused"
   }
 ]

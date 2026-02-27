@@ -23,25 +23,75 @@ import { getLoginUrl } from "@/const";
 import { useIsMobile } from "@/hooks/useMobile";
 import { useAuth } from "@/hooks";
 import {
-  LayoutDashboard, LogOut, PanelLeft, 
-  BookOpen, BarChart3, Lock, Briefcase, Activity, Brain, Sun, Users, User, Moon, Keyboard, Settings, TrendingUp, Info, Clock, Sparkles, Rocket, Inbox, Search, Video, Bell, Mic, Podcast, Heart, Globe, Library, Workflow, FileText, ChevronDown, ChevronRight, Mail, Volume2, CheckCircle2, Star, GraduationCap, Bot
+  LayoutDashboard,
+  LogOut,
+  PanelLeft,
+  BookOpen,
+  BarChart3,
+  Lock,
+  Briefcase,
+  Activity,
+  Brain,
+  Sun,
+  Users,
+  User,
+  Moon,
+  Keyboard,
+  Settings,
+  TrendingUp,
+  Info,
+  Clock,
+  Sparkles,
+  Rocket,
+  Inbox,
+  Search,
+  Video,
+  Bell,
+  Mic,
+  Podcast,
+  Heart,
+  Globe,
+  Library,
+  Workflow,
+  FileText,
+  ChevronDown,
+  ChevronRight,
+  Mail,
+  Volume2,
+  CheckCircle2,
+  Star,
+  GraduationCap,
+  Bot,
 } from "lucide-react";
 import { CSSProperties, useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
-import { DashboardLayoutSkeleton } from '@/components/project-management/DashboardLayoutSkeleton';
+import { DashboardLayoutSkeleton } from "@/components/project-management/DashboardLayoutSkeleton";
 import { Button } from "@/components/ui/button";
 import { BottomTabBar } from "@/components/ai-agents/BottomTabBar";
 import { QuickActionsBar } from "@/components/shared/QuickActionsBar";
 import { MoodCheckModal } from "@/components/mood-tracking/MoodCheckModal";
-import { KeyboardShortcutsHelp, useKeyboardShortcutsHelp } from "@/components/project-management/KeyboardShortcutsHelp";
+import {
+  KeyboardShortcutsHelp,
+  useKeyboardShortcutsHelp,
+} from "@/components/project-management/KeyboardShortcutsHelp";
 import { useMoodCheck } from "@/hooks/useMoodCheck";
 import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
 
-import { AccessibilitySettings, SkipLink } from "@/components/settings/AccessibilitySettings";
+import {
+  AccessibilitySettings,
+  SkipLink,
+} from "@/components/settings/AccessibilitySettings";
 import { Accessibility, Command } from "lucide-react";
-import { CommandPalette, useCommandPalette } from "@/components/shared/CommandPalette";
+import {
+  CommandPalette,
+  useCommandPalette,
+} from "@/components/shared/CommandPalette";
 import { useGovernance, GovernanceModeIndicator } from "@/hooks/useGovernance";
-import { ChangelogModal, useChangelog, WhatsNewButton } from "@/components/shared/ChangelogModal";
+import {
+  ChangelogModal,
+  useChangelog,
+  WhatsNewButton,
+} from "@/components/shared/ChangelogModal";
 import { StatusPulse } from "@/components/shared/StatusPulse";
 import { GlobalSearch } from "@/components/shared/GlobalSearch";
 import NeonBrain from "@/components/ai-agents/NeonBrain";
@@ -61,40 +111,52 @@ type MenuItem = {
 
 const menuItems: MenuItem[] = [
   { icon: LayoutDashboard, label: "The Nexus", path: "/nexus" },
-  { 
-    icon: Sun, 
-    label: "The Signal", 
+  {
+    icon: Sun,
+    label: "The Signal",
     path: "/daily-brief",
     children: [
       { icon: Volume2, label: "Victoria's Briefing", path: "/daily-brief" },
       { icon: Moon, label: "Evening Review", path: "/evening-review" },
-    ]
+    ],
   },
-  { 
-    icon: User, 
-    label: "Chief of Staff", 
+  {
+    icon: User,
+    label: "Chief of Staff",
     path: "/operations",
     children: [
-      { icon: BarChart3, label: "Chief of Staff Dashboard", path: "/operations" },
+      {
+        icon: BarChart3,
+        label: "Chief of Staff Dashboard",
+        path: "/operations",
+      },
       { icon: CheckCircle2, label: "Tasks", path: "/tasks" },
-      { icon: Rocket, label: "Odyssey Management", path: "/odyssey-management" },
-      { icon: GraduationCap, label: "Digital Twin Training", path: "/twin-training" },
+      {
+        icon: Rocket,
+        label: "Odyssey Management",
+        path: "/odyssey-management",
+      },
+      {
+        icon: GraduationCap,
+        label: "Digital Twin Training",
+        path: "/twin-training",
+      },
       { icon: Bot, label: "AI Agents", path: "/ai-agents" },
       { icon: Users, label: "AI-SMEs", path: "/ai-experts" },
       { icon: TrendingUp, label: "Analytics", path: "/analytics" },
       { icon: Library, label: "Document Library", path: "/documents" },
-    ]
+    ],
   },
-  { 
-    icon: Rocket, 
-    label: "Odyssey Engine", 
+  {
+    icon: Rocket,
+    label: "Odyssey Engine",
     path: "/innovation-hub",
     children: [
       { icon: TrendingUp, label: "Innovation Hub", path: "/innovation-hub" },
       { icon: Star, label: "Project Genesis", path: "/project-genesis" },
       { icon: Workflow, label: "Workflows", path: "/workflows" },
       { icon: Users, label: "Persephone Board", path: "/persephone" },
-    ]
+    ],
   },
 
   { icon: Lock, label: "Vault", path: "/vault" },
@@ -122,7 +184,7 @@ export default function BrainLayout({
   }, [sidebarWidth]);
 
   if (loading) {
-    return <DashboardLayoutSkeleton />
+    return <DashboardLayoutSkeleton />;
   }
 
   // Removed CephoLandingPage - users go directly to login page
@@ -159,37 +221,46 @@ function BrainLayoutContent({
   const sidebarRef = useRef<HTMLDivElement>(null);
   const activeMenuItem = menuItems.find(item => item.path === location);
   const isMobile = useIsMobile();
-  
-  // Mood check state (3x daily)
-  const { shouldShowMoodCheck, currentPeriod, recordMoodCheck, dismissMoodCheck } = useMoodCheck();
-  
 
-  
+  // Mood check state (3x daily)
+  const {
+    shouldShowMoodCheck,
+    currentPeriod,
+    recordMoodCheck,
+    dismissMoodCheck,
+  } = useMoodCheck();
+
   // Accessibility settings state
-  const [showAccessibilitySettings, setShowAccessibilitySettings] = useState(false);
-  
+  const [showAccessibilitySettings, setShowAccessibilitySettings] =
+    useState(false);
+
   // Keyboard shortcuts
   const keyboardHelp = useKeyboardShortcutsHelp();
   const commandPalette = useCommandPalette();
-  
+
   // Changelog modal
   const changelog = useChangelog();
-  
+
   // Global search state
   const [showGlobalSearch, setShowGlobalSearch] = useState(false);
-  
+
   // Collapsible navigation groups state - collapsed by default for clean look
   const [expandedGroups, setExpandedGroups] = useState<string[]>([]);
-  
+
   const toggleGroup = (groupLabel: string) => {
-    setExpandedGroups(prev => 
-      prev.includes(groupLabel) 
+    setExpandedGroups(prev =>
+      prev.includes(groupLabel)
         ? prev.filter(g => g !== groupLabel)
         : [...prev, groupLabel]
     );
   };
   useKeyboardShortcuts([
-    { key: '?', shift: true, action: keyboardHelp.toggle, description: 'Show keyboard shortcuts' },
+    {
+      key: "?",
+      shift: true,
+      action: keyboardHelp.toggle,
+      description: "Show keyboard shortcuts",
+    },
   ]);
 
   useEffect(() => {
@@ -233,16 +304,16 @@ function BrainLayoutContent({
     // Voice input is processed through the Chief of Staff interface
     // Navigate to COS page with the transcript as context
     if (transcript.trim()) {
-      setLocation('/chief-of-staff?voice=' + encodeURIComponent(transcript));
+      setLocation("/chief-of-staff?voice=" + encodeURIComponent(transcript));
     }
   };
 
   return (
     <>
       <div className="relative" ref={sidebarRef}>
-          <Sidebar
-            collapsible="icon"
-            className="border-r border-sidebar-border bg-sidebar backdrop-blur-xl"
+        <Sidebar
+          collapsible="icon"
+          className="border-r border-sidebar-border bg-sidebar backdrop-blur-xl"
           disableTransition={isResizing}
         >
           <SidebarHeader className="h-16 justify-center border-b border-sidebar-border">
@@ -256,8 +327,12 @@ function BrainLayoutContent({
               </button>
               {!isCollapsed ? (
                 <div className="flex items-center gap-2 min-w-0">
-                  <AnimatedBrainLogo size="xs" intensity="active" color="#00d4ff" />
-                      <span className="font-display font-bold tracking-tight truncate text-sidebar-foreground">
+                  <AnimatedBrainLogo
+                    size="xs"
+                    intensity="active"
+                    color="#00d4ff"
+                  />
+                  <span className="font-display font-bold tracking-tight truncate text-sidebar-foreground">
                     CEPHO
                   </span>
                 </div>
@@ -270,9 +345,11 @@ function BrainLayoutContent({
               {menuItems.map(item => {
                 const isActive = location === item.path;
                 const hasChildren = item.children && item.children.length > 0;
-                const isChildActive = hasChildren && item.children?.some(child => location === child.path);
+                const isChildActive =
+                  hasChildren &&
+                  item.children?.some(child => location === child.path);
                 const isExpanded = expandedGroups.includes(item.label);
-                
+
                 return (
                   <SidebarMenuItem key={item.path}>
                     <SidebarMenuButton
@@ -285,7 +362,7 @@ function BrainLayoutContent({
                         }
                       }}
                       tooltip={item.label}
-                      className={`h-10 transition-all font-normal rounded-lg mb-0.5 ${isActive || isChildActive ? 'bg-primary/10 text-primary' : 'text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent/50'}`}
+                      className={`h-10 transition-all font-normal rounded-lg mb-0.5 ${isActive || isChildActive ? "bg-primary/10 text-primary" : "text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent/50"}`}
                     >
                       <item.icon
                         className={`h-4 w-4 ${isActive || isChildActive ? "text-primary" : "text-sidebar-foreground/50"}`}
@@ -298,16 +375,16 @@ function BrainLayoutContent({
                       )}
                       {hasChildren && (
                         <span className="ml-auto">
-                          <ChevronRight 
-                            className={`h-3 w-3 text-sidebar-foreground/50 transition-transform duration-200 ${isExpanded ? 'rotate-90' : ''}`} 
+                          <ChevronRight
+                            className={`h-3 w-3 text-sidebar-foreground/50 transition-transform duration-200 ${isExpanded ? "rotate-90" : ""}`}
                           />
                         </span>
                       )}
                     </SidebarMenuButton>
                     {/* Render children if expanded - with smooth animation */}
                     {hasChildren && (
-                      <div 
-                        className={`ml-4 mt-0.5 space-y-0.5 overflow-hidden transition-all duration-200 ease-in-out ${isExpanded ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}
+                      <div
+                        className={`ml-4 mt-0.5 space-y-0.5 overflow-hidden transition-all duration-200 ease-in-out ${isExpanded ? "max-h-96 opacity-100" : "max-h-0 opacity-0"}`}
                       >
                         {item.children?.map(child => {
                           const isChildItemActive = location === child.path;
@@ -317,7 +394,7 @@ function BrainLayoutContent({
                               isActive={isChildItemActive}
                               onClick={() => setLocation(child.path)}
                               tooltip={child.label}
-                              className={`h-9 transition-all font-normal rounded-lg ${isChildItemActive ? 'bg-primary/10 text-primary' : 'text-sidebar-foreground/60 hover:text-sidebar-foreground hover:bg-sidebar-accent/50'}`}
+                              className={`h-9 transition-all font-normal rounded-lg ${isChildItemActive ? "bg-primary/10 text-primary" : "text-sidebar-foreground/60 hover:text-sidebar-foreground hover:bg-sidebar-accent/50"}`}
                             >
                               <child.icon
                                 className={`h-3.5 w-3.5 ${isChildItemActive ? "text-primary" : "text-sidebar-foreground/40"}`}
@@ -336,10 +413,10 @@ function BrainLayoutContent({
 
           <SidebarFooter className="p-3 border-t border-sidebar-border">
             {/* Minimal footer - just user profile */}
-            
+
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                  <button className="flex items-center gap-3 rounded-xl px-2 py-2 hover:bg-sidebar-accent transition-colors w-full text-left group-data-[collapsible=icon]:justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring">
+                <button className="flex items-center gap-3 rounded-xl px-2 py-2 hover:bg-sidebar-accent transition-colors w-full text-left group-data-[collapsible=icon]:justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring">
                   <Avatar className="h-9 w-9 border border-primary/30 shrink-0">
                     <AvatarFallback className="text-xs font-bold bg-primary/20 text-primary">
                       {user?.name?.charAt(0).toUpperCase()}
@@ -355,7 +432,10 @@ function BrainLayoutContent({
                   </div>
                 </button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-48 bg-popover border-border">
+              <DropdownMenuContent
+                align="end"
+                className="w-48 bg-popover border-border"
+              >
                 <DropdownMenuItem
                   onClick={logout}
                   className="cursor-pointer text-red-400 focus:text-red-400 focus:bg-red-500/10"
@@ -379,18 +459,22 @@ function BrainLayoutContent({
 
       <SidebarInset className="bg-background">
         {isMobile && (
-            <div className="flex border-b border-border h-14 items-center justify-between bg-black px-2 backdrop-blur supports-[backdrop-filter]:backdrop-blur sticky top-0 z-40">
+          <div className="flex border-b border-border h-14 items-center justify-between bg-black px-2 backdrop-blur supports-[backdrop-filter]:backdrop-blur sticky top-0 z-40">
             <div className="flex items-center gap-2">
               <SidebarTrigger className="h-9 w-9 rounded-lg bg-white/5 text-white" />
               <div className="flex items-center gap-3">
-                <AnimatedBrainLogo size="xs" intensity="active" color="#00d4ff" />
+                <AnimatedBrainLogo
+                  size="xs"
+                  intensity="active"
+                  color="#00d4ff"
+                />
                 <span className="tracking-tight text-white font-bold">
                   CEPHO | {activeMenuItem?.label ?? "The Nexus"}
                 </span>
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <button 
+              <button
                 onClick={() => setShowGlobalSearch(true)}
                 className="flex items-center gap-2 px-3 py-1.5 text-sm text-foreground/70 bg-white/5 rounded-lg hover:bg-white/10 transition-colors"
               >
@@ -402,21 +486,21 @@ function BrainLayoutContent({
             </div>
           </div>
         )}
-        
+
         {/* Main content with bottom padding for mobile nav */}
-        <main className={`flex-1 ${isMobile ? 'pb-20' : ''}`}>{children}</main>
-        
+        <main className={`flex-1 ${isMobile ? "pb-20" : ""}`}>{children}</main>
+
         {/* Mobile bottom tab bar - horizontally scrollable */}
         {isMobile && <BottomTabBar />}
-        
+
         {/* Quick Actions FAB - always visible */}
-        <QuickActionsBar 
+        <QuickActionsBar
           onVoiceInput={handleVoiceInput}
-          position={isMobile ? 'bottom-right' : 'bottom-right'}
-          className={isMobile ? 'bottom-24' : ''}
+          position={isMobile ? "bottom-right" : "bottom-right"}
+          className={isMobile ? "bottom-24" : ""}
         />
       </SidebarInset>
-      
+
       {/* Mood Check Modal (3x daily) */}
       <MoodCheckModal
         isOpen={shouldShowMoodCheck}
@@ -424,33 +508,28 @@ function BrainLayoutContent({
         onSubmit={recordMoodCheck}
         period={currentPeriod}
       />
-      
+
       {/* Keyboard Shortcuts Help */}
       <KeyboardShortcutsHelp
         isOpen={keyboardHelp.isOpen}
         onClose={keyboardHelp.close}
       />
-      
 
-      
       {/* Accessibility Settings */}
       <AccessibilitySettings
         isOpen={showAccessibilitySettings}
         onClose={() => setShowAccessibilitySettings(false)}
       />
-      
+
       {/* Command Palette (Cmd+K) */}
       <CommandPalette
         isOpen={commandPalette.isOpen}
         onClose={commandPalette.close}
       />
-      
+
       {/* Changelog / What's New Modal */}
-      <ChangelogModal
-        isOpen={changelog.isOpen}
-        onClose={changelog.close}
-      />
-      
+      <ChangelogModal isOpen={changelog.isOpen} onClose={changelog.close} />
+
       {/* Global Search Modal */}
       <GlobalSearch
         isOpen={showGlobalSearch}

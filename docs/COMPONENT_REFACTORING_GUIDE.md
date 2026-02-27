@@ -11,6 +11,7 @@ This guide documents the refactoring strategy for large components (>500 lines) 
 ## Components Requiring Refactoring
 
 ### Critical (>1000 lines)
+
 1. **BusinessPlanReview.tsx** (1942 lines) - HIGHEST PRIORITY
 2. **AIExperts.tsx** (1500 lines)
 3. **ComponentShowcase.tsx** (1437 lines) - Can be removed if not used
@@ -18,6 +19,7 @@ This guide documents the refactoring strategy for large components (>500 lines) 
 5. **ProjectGenesis.tsx** (1079 lines)
 
 ### High (700-1000 lines)
+
 6. **DocumentLibrary.tsx** (981 lines)
 7. **DailyBrief.tsx** (887 lines)
 8. **EveningReview_OLD.tsx** (841 lines) - Can be removed if deprecated
@@ -41,6 +43,7 @@ This guide documents the refactoring strategy for large components (>500 lines) 
 ### 1. Extract Sub-Components
 
 **Before:**
+
 ```tsx
 // BusinessPlanReview.tsx (1942 lines)
 export function BusinessPlanReview() {
@@ -51,6 +54,7 @@ export function BusinessPlanReview() {
 ```
 
 **After:**
+
 ```tsx
 // BusinessPlanReview.tsx (200 lines)
 export function BusinessPlanReview() {
@@ -72,32 +76,34 @@ export function BusinessPlanReview() {
 ### 2. Extract Custom Hooks
 
 **Before:**
+
 ```tsx
 export function AIExperts() {
   const [experts, setExperts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  
+
   useEffect(() => {
     // 50 lines of data fetching logic
   }, []);
-  
+
   // 1400 more lines...
 }
 ```
 
 **After:**
+
 ```tsx
 // hooks/useExperts.ts
 export function useExperts() {
   const [experts, setExperts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  
+
   useEffect(() => {
     // Data fetching logic
   }, []);
-  
+
   return { experts, loading, error };
 }
 
@@ -111,21 +117,23 @@ export function AIExperts() {
 ### 3. Extract Utility Functions
 
 **Before:**
+
 ```tsx
 export function DocumentLibrary() {
-  const formatDate = (date) => {
+  const formatDate = date => {
     // 20 lines of date formatting
   };
-  
-  const calculateStats = (docs) => {
+
+  const calculateStats = docs => {
     // 30 lines of calculation
   };
-  
+
   // 900 more lines...
 }
 ```
 
 **After:**
+
 ```tsx
 // utils/documentHelpers.ts
 export function formatDocumentDate(date: Date): string {
@@ -137,7 +145,10 @@ export function calculateDocumentStats(docs: Document[]): Stats {
 }
 
 // DocumentLibrary.tsx
-import { formatDocumentDate, calculateDocumentStats } from '@/utils/documentHelpers';
+import {
+  formatDocumentDate,
+  calculateDocumentStats,
+} from "@/utils/documentHelpers";
 
 export function DocumentLibrary() {
   // 300 lines of UI logic
@@ -147,17 +158,15 @@ export function DocumentLibrary() {
 ### 4. Use Composition
 
 **Before:**
+
 ```tsx
 export function ProjectGenesis() {
-  return (
-    <div>
-      {/* 1000 lines of nested JSX */}
-    </div>
-  );
+  return <div>{/* 1000 lines of nested JSX */}</div>;
 }
 ```
 
 **After:**
+
 ```tsx
 export function ProjectGenesis() {
   return (
@@ -221,6 +230,7 @@ client/src/
 ## Priority Order
 
 ### Phase 1 (Immediate - 8 hours)
+
 1. **BusinessPlanReview.tsx** (1942 → 200 lines)
    - Extract: Header, Sections, Actions, Sidebar
    - Create: useBusinessPlan hook
@@ -232,11 +242,13 @@ client/src/
    - Utils: expertHelpers
 
 ### Phase 2 (This Week - 12 hours)
+
 3. **AISMEsPage.tsx** (1241 → 300 lines)
 4. **ProjectGenesis.tsx** (1079 → 250 lines)
 5. **DocumentLibrary.tsx** (981 → 300 lines)
 
 ### Phase 3 (Next Week - 16 hours)
+
 6-10. Medium-sized components (700-900 lines)
 
 ---
@@ -244,15 +256,18 @@ client/src/
 ## Naming Conventions
 
 ### Components
+
 - PascalCase: `BusinessPlanHeader`
 - Descriptive: `ExpertChatMessage` not `Message`
 - Specific: `ProjectGenesisStep1` not `Step1`
 
 ### Hooks
+
 - camelCase with `use` prefix: `useBusinessPlan`
 - Descriptive: `useExpertChat` not `useChat`
 
 ### Utils
+
 - camelCase: `formatDocumentDate`
 - Verb-first: `calculateStats` not `statsCalculation`
 
@@ -283,6 +298,7 @@ After refactoring each component:
 ## Benefits
 
 ### Before Refactoring
+
 - ❌ 1942-line components (hard to understand)
 - ❌ Duplicate logic across components
 - ❌ Difficult to test
@@ -290,6 +306,7 @@ After refactoring each component:
 - ❌ Slow IDE performance
 
 ### After Refactoring
+
 - ✅ 200-300 line components (easy to understand)
 - ✅ Reusable hooks and utils
 - ✅ Easy to test

@@ -1,11 +1,19 @@
-import { useState, useEffect } from 'react';
-import { 
-  Sun, Users, FolderKanban, User, Brain, 
-  ChevronRight, ChevronLeft, X, Sparkles, Check
-} from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
-import NeonBrain from '@/components/ai-agents/NeonBrain';
+import { useState, useEffect } from "react";
+import {
+  Sun,
+  Users,
+  FolderKanban,
+  User,
+  Brain,
+  ChevronRight,
+  ChevronLeft,
+  X,
+  Sparkles,
+  Check,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import NeonBrain from "@/components/ai-agents/NeonBrain";
 
 interface OnboardingStep {
   id: number;
@@ -20,63 +28,69 @@ interface OnboardingStep {
 const ONBOARDING_STEPS: OnboardingStep[] = [
   {
     id: 1,
-    title: 'CEPHO',
-    description: 'From the Greek for brain. Where intelligence begins. We are continuing the story of how thinking emerged in the universe.',
+    title: "CEPHO",
+    description:
+      "From the Greek for brain. Where intelligence begins. We are continuing the story of how thinking emerged in the universe.",
     icon: Brain,
-    color: 'text-primary',
+    color: "text-primary",
     useBrain: true,
   },
   {
     id: 2,
-    title: 'The Signal',
-    description: 'Every morning, your Chief of Staff prepares a personalized briefing with priorities, insights, and action items ready for your review.',
+    title: "The Signal",
+    description:
+      "Every morning, your Chief of Staff prepares a personalized briefing with priorities, insights, and action items ready for your review.",
     icon: Sun,
-    color: 'text-amber-400',
+    color: "text-amber-400",
     highlight: '[data-tour="daily-brief"]',
   },
   {
     id: 3,
-    title: 'AI-SMEs',
-    description: 'Need help with a task? Access 273+ AI-SMEs across every domain - strategists, analysts, legal, finance, marketing - your Chief of Staff assembles the right team for each task.',
+    title: "AI-SMEs",
+    description:
+      "Need help with a task? Access 273+ AI-SMEs across every domain - strategists, analysts, legal, finance, marketing - your Chief of Staff assembles the right team for each task.",
     icon: Users,
-    color: 'text-cyan-400',
+    color: "text-cyan-400",
     highlight: '[data-tour="ai-experts"]',
   },
   {
     id: 4,
-    title: 'Workflow',
-    description: 'Monitor all your active projects, see what\'s blocked, and track deliverables. Your AI team updates progress in real-time.',
+    title: "Workflow",
+    description:
+      "Monitor all your active projects, see what's blocked, and track deliverables. Your AI team updates progress in real-time.",
     icon: FolderKanban,
-    color: 'text-green-400',
+    color: "text-green-400",
     highlight: '[data-tour="workflow"]',
   },
   {
     id: 5,
-    title: 'Chief of Staff',
-    description: 'The more you interact, the smarter your Chief of Staff becomes. It learns your preferences, communication style, and decision patterns.',
+    title: "Chief of Staff",
+    description:
+      "The more you interact, the smarter your Chief of Staff becomes. It learns your preferences, communication style, and decision patterns.",
     icon: User,
-    color: 'text-purple-400',
+    color: "text-purple-400",
     highlight: '[data-tour="digital-twin"]',
   },
   {
     id: 6,
-    title: 'You\'re Ready!',
-    description: 'Start by checking The Signal, or ask your Chief of Staff anything. Cepho is here to get you to 100 every day.',
+    title: "You're Ready!",
+    description:
+      "Start by checking The Signal, or ask your Chief of Staff anything. Cepho is here to get you to 100 every day.",
     icon: Sparkles,
-    color: 'text-primary',
+    color: "text-primary",
     useBrain: true,
   },
 ];
 
-const ONBOARDING_KEY = 'cepho-onboarding-completed';
+const ONBOARDING_KEY = "cepho-onboarding-completed";
 
 export function useOnboarding() {
   const [hasCompletedOnboarding, setHasCompletedOnboarding] = useState(() => {
-    return localStorage.getItem(ONBOARDING_KEY) === 'true';
+    return localStorage.getItem(ONBOARDING_KEY) === "true";
   });
 
   const completeOnboarding = () => {
-    localStorage.setItem(ONBOARDING_KEY, 'true');
+    localStorage.setItem(ONBOARDING_KEY, "true");
     setHasCompletedOnboarding(true);
   };
 
@@ -99,7 +113,11 @@ interface OnboardingModalProps {
   onSkip: () => void;
 }
 
-export function OnboardingModal({ isOpen, onComplete, onSkip }: OnboardingModalProps) {
+export function OnboardingModal({
+  isOpen,
+  onComplete,
+  onSkip,
+}: OnboardingModalProps) {
   const [currentStep, setCurrentStep] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
 
@@ -118,8 +136,8 @@ export function OnboardingModal({ isOpen, onComplete, onSkip }: OnboardingModalP
     if (step.highlight) {
       const element = document.querySelector(step.highlight);
       if (element) {
-        element.classList.add('onboarding-highlight');
-        return () => element.classList.remove('onboarding-highlight');
+        element.classList.add("onboarding-highlight");
+        return () => element.classList.remove("onboarding-highlight");
       }
     }
   }, [step.highlight]);
@@ -127,28 +145,28 @@ export function OnboardingModal({ isOpen, onComplete, onSkip }: OnboardingModalP
   // Keyboard navigation
   useEffect(() => {
     if (!isOpen) return;
-    
+
     const handleKeyDown = (e: KeyboardEvent) => {
       switch (e.key) {
-        case 'ArrowRight':
-        case 'Enter':
-        case ' ':
+        case "ArrowRight":
+        case "Enter":
+        case " ":
           e.preventDefault();
           goToNext();
           break;
-        case 'ArrowLeft':
+        case "ArrowLeft":
           e.preventDefault();
           if (!isFirstStep) goToPrev();
           break;
-        case 'Escape':
+        case "Escape":
           e.preventDefault();
           onSkip();
           break;
       }
     };
-    
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isOpen, isFirstStep, isLastStep]);
 
   const goToNext = () => {
@@ -184,8 +202,14 @@ export function OnboardingModal({ isOpen, onComplete, onSkip }: OnboardingModalP
         {/* Background Effects */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
           <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-primary/10 rounded-full blur-[150px] animate-pulse"></div>
-          <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-purple-500/10 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '1s' }}></div>
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-cyan-500/5 rounded-full blur-[100px] animate-pulse" style={{ animationDelay: '0.5s' }}></div>
+          <div
+            className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-purple-500/10 rounded-full blur-[120px] animate-pulse"
+            style={{ animationDelay: "1s" }}
+          ></div>
+          <div
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-cyan-500/5 rounded-full blur-[100px] animate-pulse"
+            style={{ animationDelay: "0.5s" }}
+          ></div>
         </div>
       </div>
 
@@ -205,7 +229,7 @@ export function OnboardingModal({ isOpen, onComplete, onSkip }: OnboardingModalP
           <div className="relative bg-black border border-white/10 rounded-3xl shadow-2xl shadow-primary/10 overflow-hidden backdrop-blur-xl">
             {/* Top glow line */}
             <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
-            
+
             {/* Progress dots - top - positioned higher to avoid icon overlap */}
             <div className="absolute top-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
               {ONBOARDING_STEPS.map((_, index) => (
@@ -219,60 +243,72 @@ export function OnboardingModal({ isOpen, onComplete, onSkip }: OnboardingModalP
                     }, 150);
                   }}
                   className={cn(
-                    'h-2 rounded-full transition-all duration-500',
+                    "h-2 rounded-full transition-all duration-500",
                     index === currentStep
-                      ? 'bg-primary w-8 shadow-[0_0_10px_rgba(255,16,240,0.5)]'
+                      ? "bg-primary w-8 shadow-[0_0_10px_rgba(255,16,240,0.5)]"
                       : index < currentStep
-                      ? 'bg-primary/60 w-2 hover:bg-primary/80'
-                      : 'bg-white/20 w-2 hover:bg-white/30'
+                        ? "bg-primary/60 w-2 hover:bg-primary/80"
+                        : "bg-white/20 w-2 hover:bg-white/30"
                   )}
                 />
               ))}
             </div>
 
             {/* Content - Fixed height container for consistent button position */}
-            <div className={cn(
-              'px-8 md:px-12 pt-14 pb-8 transition-all duration-200 flex flex-col min-h-[520px]',
-              isAnimating ? 'opacity-0 scale-95' : 'opacity-100 scale-100'
-            )}>
+            <div
+              className={cn(
+                "px-8 md:px-12 pt-14 pb-8 transition-all duration-200 flex flex-col min-h-[520px]",
+                isAnimating ? "opacity-0 scale-95" : "opacity-100 scale-100"
+              )}
+            >
               {/* Icon / Brain - Fixed height container */}
               <div className="flex justify-center mb-6 h-40 md:h-48 items-center">
                 {step.useBrain ? (
                   <div className="relative w-32 h-32 md:w-36 md:h-36">
-                    <NeonBrain 
-                      size="lg" 
-                      className="w-32 h-32 md:w-36 md:h-36" 
-                      state="thinking" 
+                    <NeonBrain
+                      size="lg"
+                      className="w-32 h-32 md:w-36 md:h-36"
+                      state="thinking"
                     />
                     {/* Glow ring */}
                     <div className="absolute inset-0 rounded-full bg-primary/20 blur-3xl -z-10 animate-pulse" />
                   </div>
                 ) : (
-                  <div className={cn(
-                    'relative w-24 h-24 md:w-28 md:h-28 rounded-3xl flex items-center justify-center',
-                    'bg-gradient-to-br from-white/10 to-white/5 border border-white/10',
-                    'shadow-2xl'
-                  )}>
-                    <Icon className={cn('w-12 h-12 md:w-14 md:h-14', step.color)} />
+                  <div
+                    className={cn(
+                      "relative w-24 h-24 md:w-28 md:h-28 rounded-3xl flex items-center justify-center",
+                      "bg-gradient-to-br from-white/10 to-white/5 border border-white/10",
+                      "shadow-2xl"
+                    )}
+                  >
+                    <Icon
+                      className={cn("w-12 h-12 md:w-14 md:h-14", step.color)}
+                    />
                     {/* Glow effect */}
-                    <div className={cn(
-                      'absolute inset-0 rounded-3xl blur-2xl -z-10 opacity-30',
-                      step.color === 'text-amber-400' && 'bg-amber-400',
-                      step.color === 'text-cyan-400' && 'bg-cyan-400',
-                      step.color === 'text-green-400' && 'bg-green-400',
-                      step.color === 'text-purple-400' && 'bg-purple-400',
-                      step.color === 'text-primary' && 'bg-primary',
-                    )} />
+                    <div
+                      className={cn(
+                        "absolute inset-0 rounded-3xl blur-2xl -z-10 opacity-30",
+                        step.color === "text-amber-400" && "bg-amber-400",
+                        step.color === "text-cyan-400" && "bg-cyan-400",
+                        step.color === "text-green-400" && "bg-green-400",
+                        step.color === "text-purple-400" && "bg-purple-400",
+                        step.color === "text-primary" && "bg-primary"
+                      )}
+                    />
                   </div>
                 )}
               </div>
 
               {/* Text - Fixed height for consistent layout */}
               <div className="text-center mb-6 flex-grow flex flex-col justify-center">
-                <h2 className={cn(
-                  'font-display font-bold mb-4 tracking-wider',
-                  step.useBrain ? 'text-4xl md:text-5xl text-pink-500 drop-shadow-[0_0_25px_rgba(236,72,153,0.5)]' : 'text-3xl md:text-4xl text-foreground'
-                )}>
+                <h2
+                  className={cn(
+                    "font-display font-bold mb-4 tracking-wider",
+                    step.useBrain
+                      ? "text-4xl md:text-5xl text-pink-500 drop-shadow-[0_0_25px_rgba(236,72,153,0.5)]"
+                      : "text-3xl md:text-4xl text-foreground"
+                  )}
+                >
                   {step.title}
                 </h2>
                 <p className="text-lg text-white/80 leading-relaxed max-w-md mx-auto">
@@ -293,8 +329,8 @@ export function OnboardingModal({ isOpen, onComplete, onSkip }: OnboardingModalP
                   onClick={goToPrev}
                   disabled={isFirstStep}
                   className={cn(
-                    'flex items-center gap-2 px-6 rounded-xl',
-                    isFirstStep && 'invisible'
+                    "flex items-center gap-2 px-6 rounded-xl",
+                    isFirstStep && "invisible"
                   )}
                 >
                   <ChevronLeft className="w-5 h-5" />
@@ -305,10 +341,10 @@ export function OnboardingModal({ isOpen, onComplete, onSkip }: OnboardingModalP
                   size="lg"
                   onClick={goToNext}
                   className={cn(
-                    'flex items-center gap-2 px-8 py-6 rounded-xl text-lg font-bold tracking-wide',
-                    'bg-primary hover:bg-primary/90 text-primary-foreground',
-                    'shadow-[0_0_30px_rgba(255,16,240,0.4)] hover:shadow-[0_0_50px_rgba(255,16,240,0.6)]',
-                    'transition-all duration-300'
+                    "flex items-center gap-2 px-8 py-6 rounded-xl text-lg font-bold tracking-wide",
+                    "bg-primary hover:bg-primary/90 text-primary-foreground",
+                    "shadow-[0_0_30px_rgba(255,16,240,0.4)] hover:shadow-[0_0_50px_rgba(255,16,240,0.6)]",
+                    "transition-all duration-300"
                   )}
                 >
                   {isLastStep ? (
@@ -342,7 +378,7 @@ interface FeatureTooltipProps {
   description: string;
   isVisible: boolean;
   onDismiss: () => void;
-  position?: 'top' | 'bottom' | 'left' | 'right';
+  position?: "top" | "bottom" | "left" | "right";
 }
 
 export function FeatureTooltip({
@@ -351,25 +387,27 @@ export function FeatureTooltip({
   description,
   isVisible,
   onDismiss,
-  position = 'bottom',
+  position = "bottom",
 }: FeatureTooltipProps) {
   if (!isVisible) return <>{children}</>;
 
   const positionClasses = {
-    top: 'bottom-full mb-2 left-1/2 -translate-x-1/2',
-    bottom: 'top-full mt-2 left-1/2 -translate-x-1/2',
-    left: 'right-full mr-2 top-1/2 -translate-y-1/2',
-    right: 'left-full ml-2 top-1/2 -translate-y-1/2',
+    top: "bottom-full mb-2 left-1/2 -translate-x-1/2",
+    bottom: "top-full mt-2 left-1/2 -translate-x-1/2",
+    left: "right-full mr-2 top-1/2 -translate-y-1/2",
+    right: "left-full ml-2 top-1/2 -translate-y-1/2",
   };
 
   return (
     <div className="relative">
       {children}
-      <div className={cn(
-        'absolute z-50 w-64 p-4 bg-card border border-primary/30 rounded-xl shadow-lg',
-        'animate-in fade-in-0 zoom-in-95 duration-200',
-        positionClasses[position]
-      )}>
+      <div
+        className={cn(
+          "absolute z-50 w-64 p-4 bg-card border border-primary/30 rounded-xl shadow-lg",
+          "animate-in fade-in-0 zoom-in-95 duration-200",
+          positionClasses[position]
+        )}
+      >
         <button
           onClick={onDismiss}
           className="absolute top-2 right-2 p-1 text-muted-foreground hover:text-foreground"

@@ -1,21 +1,21 @@
-import { useState } from 'react';
-import { 
-  TrendingUp, 
-  TrendingDown, 
-  Brain, 
-  Clock, 
-  Target, 
+import { useState } from "react";
+import {
+  TrendingUp,
+  TrendingDown,
+  Brain,
+  Clock,
+  Target,
   Zap,
   Calendar,
   BarChart3,
   PieChart,
-  Activity
-} from 'lucide-react';
-import { cn } from '@/lib/utils';
+  Activity,
+} from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface AnalyticsData {
   productivityScore: number;
-  productivityTrend: 'up' | 'down' | 'stable';
+  productivityTrend: "up" | "down" | "stable";
   twinTrainingHours: number;
   decisionsThisWeek: number;
   tasksCompleted: number;
@@ -28,18 +28,18 @@ interface AnalyticsData {
 interface PersonalAnalyticsProps {
   data?: AnalyticsData;
   className?: string;
-  variant?: 'full' | 'compact' | 'mini';
+  variant?: "full" | "compact" | "mini";
 }
 
 // Mock data for demonstration
 const MOCK_DATA: AnalyticsData = {
   productivityScore: 87,
-  productivityTrend: 'up',
+  productivityTrend: "up",
   twinTrainingHours: 12.5,
   decisionsThisWeek: 34,
   tasksCompleted: 156,
-  avgResponseTime: '2.3 min',
-  topExpertUsed: 'Strategy Consultant',
+  avgResponseTime: "2.3 min",
+  topExpertUsed: "Strategy Consultant",
   moodAverage: 7.2,
   streakDays: 14,
 };
@@ -51,27 +51,36 @@ function StatCard({
   value,
   subValue,
   trend,
-  color = 'text-primary',
+  color = "text-primary",
 }: {
   icon: React.ComponentType<{ className?: string }>;
   label: string;
   value: string | number;
   subValue?: string;
-  trend?: 'up' | 'down' | 'stable';
+  trend?: "up" | "down" | "stable";
   color?: string;
 }) {
   return (
     <div className="p-4 rounded-xl bg-card/60 border border-white/10">
       <div className="flex items-center justify-between mb-2">
-        <Icon className={cn('w-5 h-5', color)} />
+        <Icon className={cn("w-5 h-5", color)} />
         {trend && (
-          <div className={cn(
-            'flex items-center gap-1 text-xs',
-            trend === 'up' ? 'text-green-400' : trend === 'down' ? 'text-red-400' : 'text-muted-foreground'
-          )}>
-            {trend === 'up' ? <TrendingUp className="w-3 h-3" /> : 
-             trend === 'down' ? <TrendingDown className="w-3 h-3" /> : null}
-            {trend === 'up' ? '+12%' : trend === 'down' ? '-5%' : ''}
+          <div
+            className={cn(
+              "flex items-center gap-1 text-xs",
+              trend === "up"
+                ? "text-green-400"
+                : trend === "down"
+                  ? "text-red-400"
+                  : "text-muted-foreground"
+            )}
+          >
+            {trend === "up" ? (
+              <TrendingUp className="w-3 h-3" />
+            ) : trend === "down" ? (
+              <TrendingDown className="w-3 h-3" />
+            ) : null}
+            {trend === "up" ? "+12%" : trend === "down" ? "-5%" : ""}
           </div>
         )}
       </div>
@@ -86,19 +95,21 @@ function StatCard({
 export function PersonalAnalytics({
   data = MOCK_DATA,
   className,
-  variant = 'full',
+  variant = "full",
 }: PersonalAnalyticsProps) {
-  const [timeRange, setTimeRange] = useState<'week' | 'month' | 'year'>('week');
+  const [timeRange, setTimeRange] = useState<"week" | "month" | "year">("week");
 
-  if (variant === 'mini') {
+  if (variant === "mini") {
     return (
-      <div className={cn('flex items-center gap-4', className)}>
+      <div className={cn("flex items-center gap-4", className)}>
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center">
             <Zap className="w-4 h-4 text-primary" />
           </div>
           <div>
-            <p className="text-lg font-bold text-foreground">{data.productivityScore}</p>
+            <p className="text-lg font-bold text-foreground">
+              {data.productivityScore}
+            </p>
             <p className="text-xs text-muted-foreground">Productivity</p>
           </div>
         </div>
@@ -108,7 +119,9 @@ export function PersonalAnalytics({
             <Brain className="w-4 h-4 text-cyan-400" />
           </div>
           <div>
-            <p className="text-lg font-bold text-foreground">{data.twinTrainingHours}h</p>
+            <p className="text-lg font-bold text-foreground">
+              {data.twinTrainingHours}h
+            </p>
             <p className="text-xs text-muted-foreground">Twin Training</p>
           </div>
         </div>
@@ -116,9 +129,9 @@ export function PersonalAnalytics({
     );
   }
 
-  if (variant === 'compact') {
+  if (variant === "compact") {
     return (
-      <div className={cn('grid grid-cols-2 md:grid-cols-4 gap-3', className)}>
+      <div className={cn("grid grid-cols-2 md:grid-cols-4 gap-3", className)}>
         <StatCard
           icon={Zap}
           label="Productivity Score"
@@ -151,7 +164,12 @@ export function PersonalAnalytics({
 
   // Full variant
   return (
-    <div className={cn('bg-card/60 backdrop-blur-xl border border-white/10 rounded-xl', className)}>
+    <div
+      className={cn(
+        "bg-card/60 backdrop-blur-xl border border-white/10 rounded-xl",
+        className
+      )}
+    >
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b border-white/10">
         <div className="flex items-center gap-2">
@@ -159,15 +177,15 @@ export function PersonalAnalytics({
           <h3 className="font-display font-bold">Personal Analytics</h3>
         </div>
         <div className="flex items-center gap-1 bg-secondary/50 rounded-lg p-1">
-          {(['week', 'month', 'year'] as const).map((range) => (
+          {(["week", "month", "year"] as const).map(range => (
             <button
               key={range}
               onClick={() => setTimeRange(range)}
               className={cn(
-                'px-3 py-1 text-xs font-medium rounded-md transition-colors',
+                "px-3 py-1 text-xs font-medium rounded-md transition-colors",
                 timeRange === range
-                  ? 'bg-primary text-primary-foreground'
-                  : 'text-muted-foreground hover:text-foreground'
+                  ? "bg-primary text-primary-foreground"
+                  : "text-muted-foreground hover:text-foreground"
               )}
             >
               {range.charAt(0).toUpperCase() + range.slice(1)}
@@ -212,20 +230,32 @@ export function PersonalAnalytics({
         {/* Secondary Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <div className="p-3 rounded-lg bg-secondary/30">
-            <p className="text-xs text-muted-foreground mb-1">Avg Response Time</p>
-            <p className="text-lg font-bold text-foreground">{data.avgResponseTime}</p>
+            <p className="text-xs text-muted-foreground mb-1">
+              Avg Response Time
+            </p>
+            <p className="text-lg font-bold text-foreground">
+              {data.avgResponseTime}
+            </p>
           </div>
           <div className="p-3 rounded-lg bg-secondary/30">
-            <p className="text-xs text-muted-foreground mb-1">Top Expert Used</p>
-            <p className="text-lg font-bold text-foreground truncate">{data.topExpertUsed}</p>
+            <p className="text-xs text-muted-foreground mb-1">
+              Top Expert Used
+            </p>
+            <p className="text-lg font-bold text-foreground truncate">
+              {data.topExpertUsed}
+            </p>
           </div>
           <div className="p-3 rounded-lg bg-secondary/30">
             <p className="text-xs text-muted-foreground mb-1">Mood Average</p>
-            <p className="text-lg font-bold text-foreground">{data.moodAverage}/100</p>
+            <p className="text-lg font-bold text-foreground">
+              {data.moodAverage}/100
+            </p>
           </div>
           <div className="p-3 rounded-lg bg-secondary/30">
             <p className="text-xs text-muted-foreground mb-1">Active Streak</p>
-            <p className="text-lg font-bold text-foreground">{data.streakDays} days</p>
+            <p className="text-lg font-bold text-foreground">
+              {data.streakDays} days
+            </p>
           </div>
         </div>
       </div>
@@ -236,12 +266,12 @@ export function PersonalAnalytics({
         <div className="flex items-end gap-2 h-16">
           {[70, 80, 60, 70, 90, 80, 70].map((mood, i) => (
             <div key={i} className="flex-1 flex flex-col items-center gap-1">
-              <div 
+              <div
                 className="w-full rounded-t bg-primary/60 transition-all"
                 style={{ height: `${mood}%` }}
               />
               <span className="text-[10px] text-muted-foreground">
-                {['M', 'T', 'W', 'T', 'F', 'S', 'S'][i]}
+                {["M", "T", "W", "T", "F", "S", "S"][i]}
               </span>
             </div>
           ))}
@@ -254,17 +284,17 @@ export function PersonalAnalytics({
 // Productivity ring component
 export function ProductivityRing({
   score,
-  size = 'md',
+  size = "md",
   className,
 }: {
   score: number;
-  size?: 'sm' | 'md' | 'lg';
+  size?: "sm" | "md" | "lg";
   className?: string;
 }) {
   const sizeConfig = {
-    sm: { width: 60, stroke: 4, fontSize: 'text-sm' },
-    md: { width: 100, stroke: 6, fontSize: 'text-xl' },
-    lg: { width: 140, stroke: 8, fontSize: 'text-3xl' },
+    sm: { width: 60, stroke: 4, fontSize: "text-sm" },
+    md: { width: 100, stroke: 6, fontSize: "text-xl" },
+    lg: { width: 140, stroke: 8, fontSize: "text-3xl" },
   };
 
   const config = sizeConfig[size];
@@ -273,7 +303,12 @@ export function ProductivityRing({
   const offset = circumference - (score / 100) * circumference;
 
   return (
-    <div className={cn('relative inline-flex items-center justify-center', className)}>
+    <div
+      className={cn(
+        "relative inline-flex items-center justify-center",
+        className
+      )}
+    >
       <svg width={config.width} height={config.width} className="-rotate-90">
         {/* Background circle */}
         <circle
@@ -300,7 +335,9 @@ export function ProductivityRing({
         />
       </svg>
       <div className="absolute inset-0 flex items-center justify-center">
-        <span className={cn('font-bold text-foreground', config.fontSize)}>{score}</span>
+        <span className={cn("font-bold text-foreground", config.fontSize)}>
+          {score}
+        </span>
       </div>
     </div>
   );

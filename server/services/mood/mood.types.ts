@@ -1,6 +1,6 @@
 /**
  * Mood Service Types and DTOs
- * 
+ *
  * Data Transfer Objects for the mood tracking service.
  * These types define the contract between the service layer and consumers.
  */
@@ -10,7 +10,7 @@
  */
 export interface CreateMoodDto {
   score: number; // 1-10
-  timeOfDay: 'morning' | 'afternoon' | 'evening';
+  timeOfDay: "morning" | "afternoon" | "evening";
   note?: string;
 }
 
@@ -21,7 +21,7 @@ export interface MoodEntryDto {
   id: number;
   userId: number;
   score: number;
-  timeOfDay: 'morning' | 'afternoon' | 'evening';
+  timeOfDay: "morning" | "afternoon" | "evening";
   note: string | null;
   createdAt: Date;
 }

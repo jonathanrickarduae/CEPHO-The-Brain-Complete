@@ -1,5 +1,14 @@
-import { useState, useEffect } from 'react';
-import { X, Sparkles, Zap, Shield, Bug, ArrowRight, Bell, ExternalLink } from 'lucide-react';
+import { useState, useEffect } from "react";
+import {
+  X,
+  Sparkles,
+  Zap,
+  Shield,
+  Bug,
+  ArrowRight,
+  Bell,
+  ExternalLink,
+} from "lucide-react";
 
 interface ChangelogEntry {
   version: string;
@@ -13,102 +22,105 @@ interface ChangelogEntry {
 
 const changelog: ChangelogEntry[] = [
   {
-    version: '2.5.0',
-    date: 'January 11, 2026',
-    title: 'UX Enhancement Update',
+    version: "2.5.0",
+    date: "January 11, 2026",
+    title: "UX Enhancement Update",
     highlights: [
-      'Cambridge University partnership announced',
-      '12 new UX enhancements for better experience',
+      "Cambridge University partnership announced",
+      "12 new UX enhancements for better experience",
     ],
     features: [
       {
-        title: 'Contextual Tooltips',
-        description: 'First-time user guidance with helpful tooltips throughout the app',
-        icon: '💡',
+        title: "Contextual Tooltips",
+        description:
+          "First-time user guidance with helpful tooltips throughout the app",
+        icon: "💡",
       },
       {
-        title: 'Progress Indicators',
-        description: 'Track your Chief of Staff training progress with visual indicators',
-        icon: '📊',
+        title: "Progress Indicators",
+        description:
+          "Track your Chief of Staff training progress with visual indicators",
+        icon: "📊",
       },
       {
-        title: 'Quick-Switch Conversations',
-        description: 'Easily switch between recent conversations with the new dropdown',
-        icon: '💬',
+        title: "Quick-Switch Conversations",
+        description:
+          "Easily switch between recent conversations with the new dropdown",
+        icon: "💬",
       },
       {
-        title: 'Page Transitions',
-        description: 'Smooth animations when navigating between pages',
-        icon: '✨',
+        title: "Page Transitions",
+        description: "Smooth animations when navigating between pages",
+        icon: "✨",
       },
       {
-        title: 'Status Pulses',
-        description: 'Real-time status indicators on sidebar icons',
-        icon: '🔔',
+        title: "Status Pulses",
+        description: "Real-time status indicators on sidebar icons",
+        icon: "🔔",
       },
       {
-        title: 'Dark/Light Mode',
-        description: 'Choose your preferred theme with the new toggle',
-        icon: '🌙',
+        title: "Dark/Light Mode",
+        description: "Choose your preferred theme with the new toggle",
+        icon: "🌙",
       },
     ],
     improvements: [
-      'Swipe gestures for mobile approve/reject actions',
-      'Pull-to-refresh on Dashboard and Review Queue',
-      'Collapsible sections on Statistics and Settings',
-      'Daily streak counter on Dashboard',
-      'Celebration animations for achievements',
+      "Swipe gestures for mobile approve/reject actions",
+      "Pull-to-refresh on Dashboard and Review Queue",
+      "Collapsible sections on Statistics and Settings",
+      "Daily streak counter on Dashboard",
+      "Celebration animations for achievements",
     ],
     fixes: [
-      'Fixed mood check timing edge cases',
-      'Improved voice input reliability',
-      'Better error handling for API calls',
+      "Fixed mood check timing edge cases",
+      "Improved voice input reliability",
+      "Better error handling for API calls",
     ],
   },
   {
-    version: '2.4.0',
-    date: 'January 10, 2026',
-    title: 'Security & Governance Update',
+    version: "2.4.0",
+    date: "January 10, 2026",
+    title: "Security & Governance Update",
     highlights: [
-      '2FA email verification for Vault access',
-      'Omni/Governed mode for enterprise compliance',
+      "2FA email verification for Vault access",
+      "Omni/Governed mode for enterprise compliance",
     ],
     features: [
       {
-        title: 'Vault Security Gate',
-        description: 'Two-factor authentication protects your sensitive data',
-        icon: '🔐',
+        title: "Vault Security Gate",
+        description: "Two-factor authentication protects your sensitive data",
+        icon: "🔐",
       },
       {
-        title: 'Governance Mode',
-        description: 'Enterprise compliance with feature restrictions',
-        icon: '🏢',
+        title: "Governance Mode",
+        description: "Enterprise compliance with feature restrictions",
+        icon: "🏢",
       },
     ],
     improvements: [
-      'Enhanced audit logging',
-      'Better mobile responsiveness',
-      'Improved Chief of Staff streaming',
+      "Enhanced audit logging",
+      "Better mobile responsiveness",
+      "Improved Chief of Staff streaming",
     ],
   },
   {
-    version: '2.3.0',
-    date: 'January 9, 2026',
-    title: 'Commercialization Intelligence',
+    version: "2.3.0",
+    date: "January 9, 2026",
+    title: "Commercialization Intelligence",
     highlights: [
-      'Competitive analysis dashboard',
-      'Go Live Wizard for launch preparation',
+      "Competitive analysis dashboard",
+      "Go Live Wizard for launch preparation",
     ],
     features: [
       {
-        title: 'Competitive Position Tracking',
-        description: 'Monitor your market position against competitors',
-        icon: '📈',
+        title: "Competitive Position Tracking",
+        description: "Monitor your market position against competitors",
+        icon: "📈",
       },
       {
-        title: 'Go Live Wizard',
-        description: 'Step-by-step guide to prepare for launch',
-        icon: '🚀',
+        title: "Go Live Wizard",
+        description: "Step-by-step guide to prepare for launch",
+        icon: "🚀",
       },
     ],
   },
@@ -124,7 +136,8 @@ export function ChangelogModal({ isOpen, onClose }: ChangelogModalProps) {
 
   if (!isOpen) return null;
 
-  const currentEntry = changelog.find(e => e.version === selectedVersion) || changelog[0];
+  const currentEntry =
+    changelog.find(e => e.version === selectedVersion) || changelog[0];
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
@@ -144,7 +157,9 @@ export function ChangelogModal({ isOpen, onClose }: ChangelogModalProps) {
             </div>
             <div>
               <h2 className="text-xl font-bold text-foreground">What's New</h2>
-              <p className="text-sm text-muted-foreground">Latest updates and improvements</p>
+              <p className="text-sm text-muted-foreground">
+                Latest updates and improvements
+              </p>
             </div>
           </div>
           <button
@@ -157,14 +172,14 @@ export function ChangelogModal({ isOpen, onClose }: ChangelogModalProps) {
 
         {/* Version tabs */}
         <div className="flex gap-2 p-4 border-b border-gray-700 overflow-x-auto">
-          {changelog.map((entry) => (
+          {changelog.map(entry => (
             <button
               key={entry.version}
               onClick={() => setSelectedVersion(entry.version)}
               className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors ${
                 selectedVersion === entry.version
-                  ? 'bg-primary text-primary-foreground'
-                  : 'bg-gray-800 text-muted-foreground hover:text-foreground'
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-gray-800 text-muted-foreground hover:text-foreground"
               }`}
             >
               v{entry.version}
@@ -181,7 +196,9 @@ export function ChangelogModal({ isOpen, onClose }: ChangelogModalProps) {
               <span>•</span>
               <span>Version {currentEntry.version}</span>
             </div>
-            <h3 className="text-2xl font-bold text-foreground">{currentEntry.title}</h3>
+            <h3 className="text-2xl font-bold text-foreground">
+              {currentEntry.title}
+            </h3>
           </div>
 
           {/* Highlights */}
@@ -193,7 +210,10 @@ export function ChangelogModal({ isOpen, onClose }: ChangelogModalProps) {
               </h4>
               <ul className="space-y-2">
                 {currentEntry.highlights.map((highlight, i) => (
-                  <li key={i} className="flex items-start gap-2 text-foreground">
+                  <li
+                    key={i}
+                    className="flex items-start gap-2 text-foreground"
+                  >
                     <ArrowRight className="w-4 h-4 text-cyan-400 mt-0.5 flex-shrink-0" />
                     {highlight}
                   </li>
@@ -215,10 +235,14 @@ export function ChangelogModal({ isOpen, onClose }: ChangelogModalProps) {
                     key={i}
                     className="flex items-start gap-3 p-3 bg-gray-800 rounded-lg"
                   >
-                    <span className="text-2xl">{feature.icon || '✨'}</span>
+                    <span className="text-2xl">{feature.icon || "✨"}</span>
                     <div>
-                      <h5 className="font-medium text-foreground">{feature.title}</h5>
-                      <p className="text-sm text-muted-foreground">{feature.description}</p>
+                      <h5 className="font-medium text-foreground">
+                        {feature.title}
+                      </h5>
+                      <p className="text-sm text-muted-foreground">
+                        {feature.description}
+                      </p>
                     </div>
                   </div>
                 ))}
@@ -235,7 +259,10 @@ export function ChangelogModal({ isOpen, onClose }: ChangelogModalProps) {
               </h4>
               <ul className="space-y-2">
                 {currentEntry.improvements.map((improvement, i) => (
-                  <li key={i} className="flex items-start gap-2 text-muted-foreground">
+                  <li
+                    key={i}
+                    className="flex items-start gap-2 text-muted-foreground"
+                  >
                     <span className="text-green-400">•</span>
                     {improvement}
                   </li>
@@ -253,7 +280,10 @@ export function ChangelogModal({ isOpen, onClose }: ChangelogModalProps) {
               </h4>
               <ul className="space-y-2">
                 {currentEntry.fixes.map((fix, i) => (
-                  <li key={i} className="flex items-start gap-2 text-muted-foreground">
+                  <li
+                    key={i}
+                    className="flex items-start gap-2 text-muted-foreground"
+                  >
                     <span className="text-orange-400">•</span>
                     {fix}
                   </li>
@@ -287,13 +317,15 @@ export function useChangelog() {
   const [hasNewUpdates, setHasNewUpdates] = useState(false);
 
   useEffect(() => {
-    const lastSeenVersion = localStorage.getItem('brain_last_seen_changelog');
+    const lastSeenVersion = localStorage.getItem("brain_last_seen_changelog");
     const currentVersion = changelog[0].version;
 
     if (lastSeenVersion !== currentVersion) {
       setHasNewUpdates(true);
       // Auto-show for new users or after updates
-      const hasSeenOnboarding = localStorage.getItem('brain_onboarding_complete');
+      const hasSeenOnboarding = localStorage.getItem(
+        "brain_onboarding_complete"
+      );
       if (hasSeenOnboarding && !lastSeenVersion) {
         // Don't auto-show for first-time users
       } else if (lastSeenVersion && lastSeenVersion !== currentVersion) {
@@ -306,12 +338,12 @@ export function useChangelog() {
   const open = () => {
     setIsOpen(true);
     setHasNewUpdates(false);
-    localStorage.setItem('brain_last_seen_changelog', changelog[0].version);
+    localStorage.setItem("brain_last_seen_changelog", changelog[0].version);
   };
 
   const close = () => {
     setIsOpen(false);
-    localStorage.setItem('brain_last_seen_changelog', changelog[0].version);
+    localStorage.setItem("brain_last_seen_changelog", changelog[0].version);
   };
 
   return { isOpen, hasNewUpdates, open, close };

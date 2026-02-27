@@ -1,15 +1,21 @@
-import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
-import { MorningBrief } from '@/components/shared/MorningBrief';
-import { EndOfDayWashUp } from '@/components/shared/EndOfDayWashUp';
-import { 
-  startDailyCycle, 
-  stopDailyCycle, 
-  onMorningBrief, 
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  ReactNode,
+} from "react";
+import { MorningBrief } from "@/components/shared/MorningBrief";
+import { EndOfDayWashUp } from "@/components/shared/EndOfDayWashUp";
+import {
+  startDailyCycle,
+  stopDailyCycle,
+  onMorningBrief,
   onEndOfDay,
   triggerMorningBrief,
   triggerEndOfDay,
-  getNextScheduledTimes
-} from '@/services/dailyCycle';
+  getNextScheduledTimes,
+} from "@/services/dailyCycle";
 
 interface DailyCycleContextType {
   showMorningBrief: boolean;
@@ -25,7 +31,7 @@ const DailyCycleContext = createContext<DailyCycleContextType | null>(null);
 export function useDailyCycle() {
   const context = useContext(DailyCycleContext);
   if (!context) {
-    throw new Error('useDailyCycle must be used within DailyCycleProvider');
+    throw new Error("useDailyCycle must be used within DailyCycleProvider");
   }
   return context;
 }
@@ -37,7 +43,10 @@ interface DailyCycleProviderProps {
 export function DailyCycleProvider({ children }: DailyCycleProviderProps) {
   const [showMorningBrief, setShowMorningBrief] = useState(false);
   const [showEndOfDay, setShowEndOfDay] = useState(false);
-  const [nextTimes, setNextTimes] = useState<{ morningBrief: Date; endOfDay: Date } | null>(null);
+  const [nextTimes, setNextTimes] = useState<{
+    morningBrief: Date;
+    endOfDay: Date;
+  } | null>(null);
 
   useEffect(() => {
     // Set up callbacks
@@ -65,7 +74,10 @@ export function DailyCycleProvider({ children }: DailyCycleProviderProps) {
     setNextTimes(getNextScheduledTimes());
   };
 
-  const handleEndOfDayComplete = (_rating: number, _tomorrowPriorities: string[]) => {
+  const handleEndOfDayComplete = (
+    _rating: number,
+    _tomorrowPriorities: string[]
+  ) => {
     // End of day data is saved through the evening review system
     setShowEndOfDay(false);
     setNextTimes(getNextScheduledTimes());
@@ -80,26 +92,28 @@ export function DailyCycleProvider({ children }: DailyCycleProviderProps) {
   };
 
   return (
-    <DailyCycleContext.Provider value={{
-      showMorningBrief,
-      showEndOfDay,
-      triggerMorningBriefManually,
-      triggerEndOfDayManually,
-      nextMorningBrief: nextTimes?.morningBrief || null,
-      nextEndOfDay: nextTimes?.endOfDay || null
-    }}>
+    <DailyCycleContext.Provider
+      value={{
+        showMorningBrief,
+        showEndOfDay,
+        triggerMorningBriefManually,
+        triggerEndOfDayManually,
+        nextMorningBrief: nextTimes?.morningBrief || null,
+        nextEndOfDay: nextTimes?.endOfDay || null,
+      }}
+    >
       {children}
-      
+
       {/* Morning Brief Modal */}
-      <MorningBrief 
-        isOpen={showMorningBrief} 
-        onDismiss={handleMorningBriefDismiss} 
+      <MorningBrief
+        isOpen={showMorningBrief}
+        onDismiss={handleMorningBriefDismiss}
       />
-      
+
       {/* End of Day Wash-Up Modal */}
-      <EndOfDayWashUp 
-        isOpen={showEndOfDay} 
-        onComplete={handleEndOfDayComplete} 
+      <EndOfDayWashUp
+        isOpen={showEndOfDay}
+        onComplete={handleEndOfDayComplete}
       />
     </DailyCycleContext.Provider>
   );

@@ -3,7 +3,7 @@
  * Saves drafts, scroll positions, and form state to localStorage
  */
 
-const STORAGE_PREFIX = 'brain-session-';
+const STORAGE_PREFIX = "brain-session-";
 
 interface DraftData {
   content: string;
@@ -18,7 +18,11 @@ interface ScrollPosition {
 }
 
 // Draft Management
-export function saveDraft(key: string, content: string, metadata?: Record<string, any>): void {
+export function saveDraft(
+  key: string,
+  content: string,
+  metadata?: Record<string, any>
+): void {
   const data: DraftData = {
     content,
     timestamp: Date.now(),
@@ -30,7 +34,7 @@ export function saveDraft(key: string, content: string, metadata?: Record<string
 export function getDraft(key: string): DraftData | null {
   const stored = localStorage.getItem(`${STORAGE_PREFIX}draft-${key}`);
   if (!stored) return null;
-  
+
   try {
     const data = JSON.parse(stored) as DraftData;
     // Expire drafts after 24 hours
@@ -53,18 +57,24 @@ export function hasDraft(key: string): boolean {
 }
 
 // Scroll Position Management
-export function saveScrollPosition(route: string, position: { x: number; y: number }): void {
+export function saveScrollPosition(
+  route: string,
+  position: { x: number; y: number }
+): void {
   const data: ScrollPosition = {
     ...position,
     timestamp: Date.now(),
   };
-  localStorage.setItem(`${STORAGE_PREFIX}scroll-${route}`, JSON.stringify(data));
+  localStorage.setItem(
+    `${STORAGE_PREFIX}scroll-${route}`,
+    JSON.stringify(data)
+  );
 }
 
 export function getScrollPosition(route: string): ScrollPosition | null {
   const stored = localStorage.getItem(`${STORAGE_PREFIX}scroll-${route}`);
   if (!stored) return null;
-  
+
   try {
     const data = JSON.parse(stored) as ScrollPosition;
     // Expire scroll positions after 1 hour
@@ -79,7 +89,10 @@ export function getScrollPosition(route: string): ScrollPosition | null {
 }
 
 // Form State Management
-export function saveFormState<T extends Record<string, any>>(formId: string, state: T): void {
+export function saveFormState<T extends Record<string, any>>(
+  formId: string,
+  state: T
+): void {
   const data = {
     state,
     timestamp: Date.now(),
@@ -87,10 +100,12 @@ export function saveFormState<T extends Record<string, any>>(formId: string, sta
   localStorage.setItem(`${STORAGE_PREFIX}form-${formId}`, JSON.stringify(data));
 }
 
-export function getFormState<T extends Record<string, any>>(formId: string): T | null {
+export function getFormState<T extends Record<string, any>>(
+  formId: string
+): T | null {
   const stored = localStorage.getItem(`${STORAGE_PREFIX}form-${formId}`);
   if (!stored) return null;
-  
+
   try {
     const data = JSON.parse(stored);
     // Expire form state after 1 hour
@@ -116,7 +131,7 @@ export function saveTabState(key: string, value: any): void {
 export function getTabState<T>(key: string): T | null {
   const stored = sessionStorage.getItem(`${STORAGE_PREFIX}tab-${key}`);
   if (!stored) return null;
-  
+
   try {
     return JSON.parse(stored) as T;
   } catch {
@@ -125,11 +140,14 @@ export function getTabState<T>(key: string): T | null {
 }
 
 // Recent Items
-export function addRecentItem(category: string, item: { id: string; title: string; timestamp?: number }): void {
+export function addRecentItem(
+  category: string,
+  item: { id: string; title: string; timestamp?: number }
+): void {
   const key = `${STORAGE_PREFIX}recent-${category}`;
   const stored = localStorage.getItem(key);
   let items: Array<{ id: string; title: string; timestamp: number }> = [];
-  
+
   if (stored) {
     try {
       items = JSON.parse(stored);
@@ -137,28 +155,30 @@ export function addRecentItem(category: string, item: { id: string; title: strin
       items = [];
     }
   }
-  
+
   // Remove existing entry if present
   items = items.filter(i => i.id !== item.id);
-  
+
   // Add new item at the beginning
   items.unshift({
     ...item,
     timestamp: item.timestamp || Date.now(),
   });
-  
+
   // Keep only last 10 items
   items = items.slice(0, 10);
-  
+
   localStorage.setItem(key, JSON.stringify(items));
 }
 
-export function getRecentItems(category: string): Array<{ id: string; title: string; timestamp: number }> {
+export function getRecentItems(
+  category: string
+): Array<{ id: string; title: string; timestamp: number }> {
   const key = `${STORAGE_PREFIX}recent-${category}`;
   const stored = localStorage.getItem(key);
-  
+
   if (!stored) return [];
-  
+
   try {
     return JSON.parse(stored);
   } catch {
@@ -169,16 +189,16 @@ export function getRecentItems(category: string): Array<{ id: string; title: str
 // Clear all session data
 export function clearAllSessionData(): void {
   const keysToRemove: string[] = [];
-  
+
   for (let i = 0; i < localStorage.length; i++) {
     const key = localStorage.key(i);
     if (key?.startsWith(STORAGE_PREFIX)) {
       keysToRemove.push(key);
     }
   }
-  
+
   keysToRemove.forEach(key => localStorage.removeItem(key));
-  
+
   // Clear session storage too
   for (let i = sessionStorage.length - 1; i >= 0; i--) {
     const key = sessionStorage.key(i);
@@ -189,28 +209,31 @@ export function clearAllSessionData(): void {
 }
 
 // React hooks for session persistence
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from "react";
 
-export function useDraft(key: string, initialValue: string = '') {
+export function useDraft(key: string, initialValue: string = "") {
   const [value, setValue] = useState(() => {
     const draft = getDraft(key);
     return draft?.content || initialValue;
   });
   const [hasSavedDraft, setHasSavedDraft] = useState(() => hasDraft(key));
 
-  const save = useCallback((content: string, metadata?: Record<string, any>) => {
-    setValue(content);
-    if (content.trim()) {
-      saveDraft(key, content, metadata);
-      setHasSavedDraft(true);
-    } else {
-      clearDraft(key);
-      setHasSavedDraft(false);
-    }
-  }, [key]);
+  const save = useCallback(
+    (content: string, metadata?: Record<string, any>) => {
+      setValue(content);
+      if (content.trim()) {
+        saveDraft(key, content, metadata);
+        setHasSavedDraft(true);
+      } else {
+        clearDraft(key);
+        setHasSavedDraft(false);
+      }
+    },
+    [key]
+  );
 
   const clear = useCallback(() => {
-    setValue('');
+    setValue("");
     clearDraft(key);
     setHasSavedDraft(false);
   }, [key]);
@@ -245,13 +268,16 @@ export function useFormPersistence<T extends Record<string, any>>(
     return saved || initialState;
   });
 
-  const updateState = useCallback((updates: Partial<T>) => {
-    setState(prev => {
-      const newState = { ...prev, ...updates };
-      saveFormState(formId, newState);
-      return newState;
-    });
-  }, [formId]);
+  const updateState = useCallback(
+    (updates: Partial<T>) => {
+      setState(prev => {
+        const newState = { ...prev, ...updates };
+        saveFormState(formId, newState);
+        return newState;
+      });
+    },
+    [formId]
+  );
 
   const resetState = useCallback(() => {
     setState(initialState);

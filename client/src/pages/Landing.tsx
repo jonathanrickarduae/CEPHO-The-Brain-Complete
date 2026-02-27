@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "wouter";
 import { motion, AnimatePresence } from "framer-motion";
-import NeonBrain from '@/components/ai-agents/NeonBrain';
+import NeonBrain from "@/components/ai-agents/NeonBrain";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Sun, Moon, Blend } from "lucide-react";
@@ -47,7 +47,9 @@ function CephoNameAnimation() {
             <h1 className="font-display font-bold text-5xl md:text-7xl tracking-wider bg-gradient-to-r from-primary via-pink-400 to-primary bg-clip-text text-transparent drop-shadow-[0_0_30px_rgba(236,72,153,0.6)]">
               Cepho
             </h1>
-            <p className="text-sm text-muted-foreground mt-1 italic">From the Greek for brain</p>
+            <p className="text-sm text-muted-foreground mt-1 italic">
+              From the Greek for brain
+            </p>
           </motion.div>
         )}
       </AnimatePresence>
@@ -60,17 +62,17 @@ function shouldShowMoodCheck(): boolean {
   const now = new Date();
   const hour = now.getHours();
   const today = now.toDateString();
-  
+
   // Determine current period
   let period: string;
   if (hour >= 5 && hour < 12) {
-    period = 'morning';
+    period = "morning";
   } else if (hour >= 12 && hour < 17) {
-    period = 'afternoon';
+    period = "afternoon";
   } else {
-    period = 'evening';
+    period = "evening";
   }
-  
+
   const key = `mood_${today}_${period}`;
   return !localStorage.getItem(key);
 }
@@ -79,18 +81,21 @@ function saveMoodCheck(mood: number): void {
   const now = new Date();
   const hour = now.getHours();
   const today = now.toDateString();
-  
+
   let period: string;
   if (hour >= 5 && hour < 12) {
-    period = 'morning';
+    period = "morning";
   } else if (hour >= 12 && hour < 17) {
-    period = 'afternoon';
+    period = "afternoon";
   } else {
-    period = 'evening';
+    period = "evening";
   }
-  
+
   const key = `mood_${today}_${period}`;
-  localStorage.setItem(key, JSON.stringify({ mood, timestamp: now.toISOString() }));
+  localStorage.setItem(
+    key,
+    JSON.stringify({ mood, timestamp: now.toISOString() })
+  );
 }
 
 export default function Landing() {
@@ -150,7 +155,7 @@ export default function Landing() {
       {/* Theme Selector - Top Right */}
       <div className="absolute top-6 right-6 z-20">
         <div className="flex items-center gap-1 p-1 bg-white/5 backdrop-blur-sm border border-white/10 rounded-full">
-          {themeOptions.map((option) => {
+          {themeOptions.map(option => {
             const Icon = option.icon;
             const isActive = theme === option.id;
             return (
@@ -159,14 +164,17 @@ export default function Landing() {
                 onClick={() => setTheme(option.id)}
                 className={`
                   flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-300
-                  ${isActive 
-                    ? "bg-primary text-primary-foreground shadow-[0_0_15px_rgba(255,16,240,0.4)]" 
-                    : "text-muted-foreground hover:text-foreground hover:bg-white/5"
+                  ${
+                    isActive
+                      ? "bg-primary text-primary-foreground shadow-[0_0_15px_rgba(255,16,240,0.4)]"
+                      : "text-muted-foreground hover:text-foreground hover:bg-white/5"
                   }
                 `}
               >
                 <Icon className="w-4 h-4" />
-                <span className="text-sm font-medium tracking-wide">{option.label}</span>
+                <span className="text-sm font-medium tracking-wide">
+                  {option.label}
+                </span>
               </button>
             );
           })}
@@ -182,15 +190,28 @@ export default function Landing() {
             exit={{ opacity: 0, scale: 1.1 }}
             className="z-10 flex flex-col items-center text-center"
           >
-            <NeonBrain size="xl" className="w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 mb-8" state="thinking" />
-            
+            <NeonBrain
+              size="xl"
+              className="w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 mb-8"
+              state="thinking"
+            />
+
             <CephoNameAnimation />
-            
+
             {/* Loading indicator */}
             <div className="mt-8 flex items-center gap-2">
-              <div className="w-2 h-2 rounded-full bg-primary animate-bounce" style={{ animationDelay: '0ms' }}></div>
-              <div className="w-2 h-2 rounded-full bg-primary animate-bounce" style={{ animationDelay: '150ms' }}></div>
-              <div className="w-2 h-2 rounded-full bg-primary animate-bounce" style={{ animationDelay: '300ms' }}></div>
+              <div
+                className="w-2 h-2 rounded-full bg-primary animate-bounce"
+                style={{ animationDelay: "0ms" }}
+              ></div>
+              <div
+                className="w-2 h-2 rounded-full bg-primary animate-bounce"
+                style={{ animationDelay: "150ms" }}
+              ></div>
+              <div
+                className="w-2 h-2 rounded-full bg-primary animate-bounce"
+                style={{ animationDelay: "300ms" }}
+              ></div>
             </div>
           </motion.div>
         ) : (
@@ -201,17 +222,26 @@ export default function Landing() {
             exit={{ opacity: 0, scale: 1.1 }}
             className="z-10 flex flex-col items-center text-center max-w-xl px-6 w-full"
           >
-            <NeonBrain size="lg" className="w-48 h-48 md:w-56 md:h-56 mb-6" mood={mood[0]} state="thinking" />
-            
-            <h2 className="font-display font-bold text-3xl md:text-4xl mb-2">How are you feeling?</h2>
-            <p className="text-muted-foreground mb-8 text-sm">Quick check-in to calibrate your day</p>
+            <NeonBrain
+              size="lg"
+              className="w-48 h-48 md:w-56 md:h-56 mb-6"
+              mood={mood[0]}
+              state="thinking"
+            />
+
+            <h2 className="font-display font-bold text-3xl md:text-4xl mb-2">
+              How are you feeling?
+            </h2>
+            <p className="text-muted-foreground mb-8 text-sm">
+              Quick check-in to calibrate your day
+            </p>
 
             <div className="w-full max-w-md mb-8 relative">
               <div className="flex justify-between text-xs font-mono text-muted-foreground mb-4 uppercase tracking-widest">
                 <span>0</span>
                 <span>100</span>
               </div>
-              
+
               <Slider
                 value={mood}
                 onValueChange={setMood}
@@ -220,26 +250,32 @@ export default function Landing() {
                 step={5}
                 className="py-4"
               />
-              
+
               <div className="mt-4 text-center">
                 <span className="font-display font-bold text-5xl text-primary neon-text">
                   {mood[0]}
                 </span>
                 <span className="block text-sm text-muted-foreground mt-1">
-                  {mood[0] <= 30 ? "Let's work on that" : mood[0] <= 60 ? "Room to grow" : mood[0] <= 80 ? "Looking good" : "Peak state!"}
+                  {mood[0] <= 30
+                    ? "Let's work on that"
+                    : mood[0] <= 60
+                      ? "Room to grow"
+                      : mood[0] <= 80
+                        ? "Looking good"
+                        : "Peak state!"}
                 </span>
               </div>
             </div>
 
             <div className="flex flex-col gap-3 w-full max-w-xs">
-              <Button 
+              <Button
                 onClick={handleMoodSubmit}
                 className="w-full py-5 bg-primary hover:bg-primary/90 text-primary-foreground font-bold tracking-widest rounded-xl shadow-[0_0_20px_rgba(255,16,240,0.4)] hover:shadow-[0_0_40px_rgba(255,16,240,0.6)] transition-all duration-300"
               >
                 {mood[0] < 60 ? "LET'S GET YOU TO 100" : "LET'S GO"}
               </Button>
-              
-              <button 
+
+              <button
                 onClick={handleSkip}
                 className="text-sm text-muted-foreground hover:text-foreground transition-colors"
               >

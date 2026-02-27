@@ -1,8 +1,22 @@
-import { useState } from 'react';
-import { Share2, Copy, Check, Twitter, Linkedin, Download, Eye, BarChart3, Heart, Star, Trophy, Lightbulb, Brain } from 'lucide-react';
+import { useState } from "react";
+import {
+  Share2,
+  Copy,
+  Check,
+  Twitter,
+  Linkedin,
+  Download,
+  Eye,
+  BarChart3,
+  Heart,
+  Star,
+  Trophy,
+  Lightbulb,
+  Brain,
+} from "lucide-react";
 
 interface ShareableInsightProps {
-  type: 'productivity' | 'mood' | 'wellness' | 'achievement' | 'consultation';
+  type: "productivity" | "mood" | "wellness" | "achievement" | "consultation";
   title: string;
   data: {
     score?: number;
@@ -14,7 +28,12 @@ interface ShareableInsightProps {
   onShare?: (platform: string) => void;
 }
 
-export function ShareableInsight({ type, title, data, onShare }: ShareableInsightProps) {
+export function ShareableInsight({
+  type,
+  title,
+  data,
+  onShare,
+}: ShareableInsightProps) {
   const [copied, setCopied] = useState(false);
   const [showShareMenu, setShowShareMenu] = useState(false);
 
@@ -26,16 +45,16 @@ export function ShareableInsight({ type, title, data, onShare }: ShareableInsigh
 
   const generateShareText = () => {
     switch (type) {
-      case 'productivity':
-        return `My productivity score this ${data.period || 'week'}: ${data.score}/100\n\n${data.highlights?.join('\n') || ''}\n\nPowered by Cepho`;
-      case 'mood':
-        return `My mood trend is ${data.trend}\n\n${data.highlights?.join('\n') || ''}\n\nTracking my wellness with Cepho`;
-      case 'wellness':
-        return `Wellness Score: ${data.score}/100\n\n${data.highlights?.join('\n') || ''}\n\nGetting to 100 with Cepho`;
-      case 'achievement':
-        return `${title}\n\n${data.highlights?.join('\n') || ''}\n\nAchieved with Cepho`;
-      case 'consultation':
-        return `Just consulted with ${data.expertName} on Cepho\n\nKey insight: ${data.highlights?.[0] || ''}\n\nAI-SMEs at Cepho`;
+      case "productivity":
+        return `My productivity score this ${data.period || "week"}: ${data.score}/100\n\n${data.highlights?.join("\n") || ""}\n\nPowered by Cepho`;
+      case "mood":
+        return `My mood trend is ${data.trend}\n\n${data.highlights?.join("\n") || ""}\n\nTracking my wellness with Cepho`;
+      case "wellness":
+        return `Wellness Score: ${data.score}/100\n\n${data.highlights?.join("\n") || ""}\n\nGetting to 100 with Cepho`;
+      case "achievement":
+        return `${title}\n\n${data.highlights?.join("\n") || ""}\n\nAchieved with Cepho`;
+      case "consultation":
+        return `Just consulted with ${data.expertName} on Cepho\n\nKey insight: ${data.highlights?.[0] || ""}\n\nAI-SMEs at Cepho`;
       default:
         return `${title}\n\nPowered by Cepho`;
     }
@@ -46,48 +65,66 @@ export function ShareableInsight({ type, title, data, onShare }: ShareableInsigh
     await navigator.clipboard.writeText(text);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
-    onShare?.('copy');
+    onShare?.("copy");
   };
 
   const shareToTwitter = () => {
     const text = encodeURIComponent(generateShareText());
     const url = encodeURIComponent(generateShareUrl());
-    window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank');
-    onShare?.('twitter');
+    window.open(
+      `https://twitter.com/intent/tweet?text=${text}&url=${url}`,
+      "_blank"
+    );
+    onShare?.("twitter");
   };
 
   const shareToLinkedIn = () => {
     const url = encodeURIComponent(generateShareUrl());
-    const title = encodeURIComponent(generateShareText().split('\n')[0]);
-    window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${url}&title=${title}`, '_blank');
-    onShare?.('linkedin');
+    const title = encodeURIComponent(generateShareText().split("\n")[0]);
+    window.open(
+      `https://www.linkedin.com/sharing/share-offsite/?url=${url}&title=${title}`,
+      "_blank"
+    );
+    onShare?.("linkedin");
   };
 
   const downloadAsImage = () => {
     // In production, this would generate an image of the insight card
-    onShare?.('download');
+    onShare?.("download");
   };
 
   const getTypeIcon = () => {
-    const iconClass = 'w-5 h-5';
+    const iconClass = "w-5 h-5";
     switch (type) {
-      case 'productivity': return <BarChart3 className={iconClass} />;
-      case 'mood': return <Heart className={iconClass} />;
-      case 'wellness': return <Star className={iconClass} />;
-      case 'achievement': return <Trophy className={iconClass} />;
-      case 'consultation': return <Lightbulb className={iconClass} />;
-      default: return <Brain className={iconClass} />;
+      case "productivity":
+        return <BarChart3 className={iconClass} />;
+      case "mood":
+        return <Heart className={iconClass} />;
+      case "wellness":
+        return <Star className={iconClass} />;
+      case "achievement":
+        return <Trophy className={iconClass} />;
+      case "consultation":
+        return <Lightbulb className={iconClass} />;
+      default:
+        return <Brain className={iconClass} />;
     }
   };
 
   const getTypeColor = () => {
     switch (type) {
-      case 'productivity': return 'from-blue-500 to-cyan-500';
-      case 'mood': return 'from-pink-500 to-rose-500';
-      case 'wellness': return 'from-green-500 to-emerald-500';
-      case 'achievement': return 'from-yellow-500 to-orange-500';
-      case 'consultation': return 'from-purple-500 to-violet-500';
-      default: return 'from-gray-500 to-slate-500';
+      case "productivity":
+        return "from-blue-500 to-cyan-500";
+      case "mood":
+        return "from-pink-500 to-rose-500";
+      case "wellness":
+        return "from-green-500 to-emerald-500";
+      case "achievement":
+        return "from-yellow-500 to-orange-500";
+      case "consultation":
+        return "from-purple-500 to-violet-500";
+      default:
+        return "from-gray-500 to-slate-500";
     }
   };
 
@@ -123,14 +160,20 @@ export function ShareableInsight({ type, title, data, onShare }: ShareableInsigh
                 <span className="text-2xl text-foreground/70">/10</span>
               </div>
               {data.trend && (
-                <div className={`px-3 py-1 rounded-full text-sm font-medium ${
-                  data.trend === 'improving' ? 'bg-green-500/20 text-green-400' :
-                  data.trend === 'declining' ? 'bg-red-500/20 text-red-400' :
-                  'bg-gray-500/20 text-foreground/70'
-                }`}>
-                  {data.trend === 'improving' ? '↑ Improving' :
-                   data.trend === 'declining' ? '↓ Declining' :
-                   '→ Stable'}
+                <div
+                  className={`px-3 py-1 rounded-full text-sm font-medium ${
+                    data.trend === "improving"
+                      ? "bg-green-500/20 text-green-400"
+                      : data.trend === "declining"
+                        ? "bg-red-500/20 text-red-400"
+                        : "bg-gray-500/20 text-foreground/70"
+                  }`}
+                >
+                  {data.trend === "improving"
+                    ? "↑ Improving"
+                    : data.trend === "declining"
+                      ? "↓ Declining"
+                      : "→ Stable"}
                 </div>
               )}
             </div>
@@ -152,7 +195,9 @@ export function ShareableInsight({ type, title, data, onShare }: ShareableInsigh
           <div className="flex items-center justify-between pt-4 border-t border-gray-700">
             <div className="flex items-center gap-2">
               <Brain className="w-5 h-5 text-pink-500" />
-              <span className="text-sm text-foreground/70">Powered by Cepho</span>
+              <span className="text-sm text-foreground/70">
+                Powered by Cepho
+              </span>
             </div>
             <div className="flex items-center gap-1 text-sm text-foreground/60">
               <Eye className="w-4 h-4" />
@@ -169,8 +214,12 @@ export function ShareableInsight({ type, title, data, onShare }: ShareableInsigh
             onClick={copyToClipboard}
             className="w-full flex items-center gap-3 px-4 py-3 text-left text-foreground/80 hover:bg-gray-700 transition-colors"
           >
-            {copied ? <Check className="w-5 h-5 text-green-400" /> : <Copy className="w-5 h-5" />}
-            <span>{copied ? 'Copied!' : 'Copy text'}</span>
+            {copied ? (
+              <Check className="w-5 h-5 text-green-400" />
+            ) : (
+              <Copy className="w-5 h-5" />
+            )}
+            <span>{copied ? "Copied!" : "Copy text"}</span>
           </button>
           <button
             onClick={shareToTwitter}
@@ -219,15 +268,20 @@ export function generateProductivityInsight(data: {
   streak: number;
   period: string;
 }): ShareableInsightProps {
-  const score = Math.min(100, Math.round((data.tasksCompleted / 10 + data.focusHours / 4 + data.streak / 7) * 33)); // 0-100 scale
-  
+  const score = Math.min(
+    100,
+    Math.round(
+      (data.tasksCompleted / 10 + data.focusHours / 4 + data.streak / 7) * 33
+    )
+  ); // 0-100 scale
+
   return {
-    type: 'productivity',
-    title: 'Productivity Report',
+    type: "productivity",
+    title: "Productivity Report",
     data: {
       score,
       period: data.period,
-      trend: score >= 70 ? 'improving' : score >= 50 ? 'stable' : 'declining',
+      trend: score >= 70 ? "improving" : score >= 50 ? "stable" : "declining",
       highlights: [
         `Completed ${data.tasksCompleted} tasks`,
         `${data.focusHours} hours of deep focus`,
@@ -244,11 +298,11 @@ export function generateWellnessInsight(data: {
   recommendations: string[];
 }): ShareableInsightProps {
   return {
-    type: 'wellness',
-    title: 'Wellness Score',
+    type: "wellness",
+    title: "Wellness Score",
     data: {
       score: data.score,
-      trend: data.trend as 'improving' | 'stable' | 'declining',
+      trend: data.trend as "improving" | "stable" | "declining",
       highlights: [
         `Average mood: ${Math.round(data.moodAverage)}/100`,
         ...data.recommendations.slice(0, 2),

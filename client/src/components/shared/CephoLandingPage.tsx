@@ -6,7 +6,7 @@ import NeonBrain from "@/components/ai-agents/NeonBrain";
 
 /**
  * Cepho Landing Page
- * Features animated transition between "Cepho" and "The Brain" 
+ * Features animated transition between "Cepho" and "The Brain"
  * to connect the Greek etymology with the English meaning
  */
 export function CephoLandingPage() {
@@ -26,11 +26,11 @@ export function CephoLandingPage() {
       <div className="absolute inset-0 opacity-20">
         <div className="absolute inset-0 bg-gradient-radial from-primary/20 via-transparent to-transparent" />
       </div>
-      
+
       <div className="flex flex-col items-center gap-6 p-8 max-w-xl w-full relative z-10">
         {/* Animated Brain Logo with Neural Nodes */}
         <NeonBrain size="xl" state="thinking" mood={85} />
-        
+
         {/* Animated Brand Name Transition */}
         <div className="flex flex-col items-center gap-2 mt-4 min-h-[140px]">
           <AnimatePresence mode="wait">
@@ -46,9 +46,7 @@ export function CephoLandingPage() {
                 <h1 className="text-6xl md:text-7xl font-display font-bold tracking-tight text-center text-white">
                   The Brain
                 </h1>
-                <p className="text-sm text-white/40 mt-3 italic">
-                  English
-                </p>
+                <p className="text-sm text-white/40 mt-3 italic">English</p>
               </motion.div>
             ) : (
               <motion.div
@@ -71,7 +69,7 @@ export function CephoLandingPage() {
         </div>
 
         {/* Main Tagline */}
-        <motion.div 
+        <motion.div
           className="text-center space-y-4 mt-2"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -81,11 +79,12 @@ export function CephoLandingPage() {
             Get you operating at 100
           </p>
           <p className="text-sm text-white/50 max-w-md mx-auto leading-relaxed">
-            Your AI-powered Chief of Staff. One interface to manage your life, 
-            amplified by intelligence that learns from you and works alongside you.
+            Your AI-powered Chief of Staff. One interface to manage your life,
+            amplified by intelligence that learns from you and works alongside
+            you.
           </p>
         </motion.div>
-        
+
         {/* Sign In Button */}
         <Button
           onClick={() => {
@@ -96,8 +95,6 @@ export function CephoLandingPage() {
         >
           Sign in to Continue
         </Button>
-
-
       </div>
     </div>
   );

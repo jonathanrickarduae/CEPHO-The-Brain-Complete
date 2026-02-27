@@ -78,7 +78,7 @@ export default function SkillCards() {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-      {skills.map((skill) => (
+      {skills.map(skill => (
         <div
           key={skill.id}
           onClick={() => setActiveSkill(skill.id)}
@@ -98,8 +98,8 @@ export default function SkillCards() {
             <p className="text-sm text-muted-foreground">{skill.description}</p>
 
             {/* Action button */}
-            <button 
-              onClick={(e) => handleLaunch(e, skill.path, skill.id)}
+            <button
+              onClick={e => handleLaunch(e, skill.path, skill.id)}
               className="mt-4 w-full px-4 py-2 bg-primary text-primary-foreground rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:bg-primary/90"
             >
               Launch

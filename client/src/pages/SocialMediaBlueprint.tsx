@@ -1,9 +1,15 @@
-import { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { 
+import { useState } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
   Share2,
   Calendar,
   Sparkles,
@@ -12,17 +18,17 @@ import {
   FileText,
   ArrowLeft,
   Download,
-  CheckCircle2
-} from 'lucide-react';
-import { useLocation } from 'wouter';
-import { ContentCalendar } from '@/components/integrations/ContentCalendar';
-import { CaptionGenerator } from '@/components/content/CaptionGenerator';
-import { BioTemplates } from '@/components/shared/BioTemplates';
-import { ImageSpecifications } from '@/components/shared/ImageSpecifications';
+  CheckCircle2,
+} from "lucide-react";
+import { useLocation } from "wouter";
+import { ContentCalendar } from "@/components/integrations/ContentCalendar";
+import { CaptionGenerator } from "@/components/content/CaptionGenerator";
+import { BioTemplates } from "@/components/shared/BioTemplates";
+import { ImageSpecifications } from "@/components/shared/ImageSpecifications";
 
 /**
  * Social Media Blueprint Page
- * 
+ *
  * Comprehensive social media planning and content creation hub that integrates:
  * - Content Calendar for scheduling posts
  * - AI Caption Generator for platform-optimized captions
@@ -32,13 +38,33 @@ import { ImageSpecifications } from '@/components/shared/ImageSpecifications';
 
 export default function SocialMediaBlueprint() {
   const [, setLocation] = useLocation();
-  const [activeTab, setActiveTab] = useState('calendar');
+  const [activeTab, setActiveTab] = useState("calendar");
 
   const tabs = [
-    { id: 'calendar', label: 'Content Calendar', icon: Calendar, description: 'Plan and schedule your posts' },
-    { id: 'captions', label: 'Caption Generator', icon: Sparkles, description: 'AI-powered captions' },
-    { id: 'bios', label: 'Bio Templates', icon: User, description: 'Profile optimization' },
-    { id: 'images', label: 'Image Specs', icon: Image, description: 'Size guidelines' }
+    {
+      id: "calendar",
+      label: "Content Calendar",
+      icon: Calendar,
+      description: "Plan and schedule your posts",
+    },
+    {
+      id: "captions",
+      label: "Caption Generator",
+      icon: Sparkles,
+      description: "AI-powered captions",
+    },
+    {
+      id: "bios",
+      label: "Bio Templates",
+      icon: User,
+      description: "Profile optimization",
+    },
+    {
+      id: "images",
+      label: "Image Specs",
+      icon: Image,
+      description: "Size guidelines",
+    },
   ];
 
   return (
@@ -47,31 +73,36 @@ export default function SocialMediaBlueprint() {
       <div className="border-b border-gray-800 bg-gray-900/50">
         <div className="container py-6">
           <div className="flex items-center gap-4 mb-4">
-            <Button 
-              variant="ghost" 
+            <Button
+              variant="ghost"
               size="sm"
-              onClick={() => setLocation('/library')}
+              onClick={() => setLocation("/library")}
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back to Library
             </Button>
           </div>
-          
+
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-pink-500/20 to-purple-500/20 flex items-center justify-center">
                 <Share2 className="w-7 h-7 text-pink-400" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-white">Social Media Blueprint</h1>
+                <h1 className="text-2xl font-bold text-white">
+                  Social Media Blueprint
+                </h1>
                 <p className="text-muted-foreground">
                   Plan, create, and optimize your social media presence
                 </p>
               </div>
             </div>
-            
+
             <div className="flex items-center gap-3">
-              <Badge variant="outline" className="bg-green-500/10 text-green-400 border-green-500/30">
+              <Badge
+                variant="outline"
+                className="bg-green-500/10 text-green-400 border-green-500/30"
+              >
                 <CheckCircle2 className="w-3 h-3 mr-1" />
                 Active
               </Badge>
@@ -93,9 +124,13 @@ export default function SocialMediaBlueprint() {
               return (
                 <Button
                   key={tab.id}
-                  variant={activeTab === tab.id ? 'default' : 'ghost'}
+                  variant={activeTab === tab.id ? "default" : "ghost"}
                   size="sm"
-                  className={activeTab === tab.id ? 'bg-gradient-to-r from-pink-500 to-purple-500' : ''}
+                  className={
+                    activeTab === tab.id
+                      ? "bg-gradient-to-r from-pink-500 to-purple-500"
+                      : ""
+                  }
                   onClick={() => setActiveTab(tab.id)}
                 >
                   <Icon className="w-4 h-4 mr-2" />
@@ -109,7 +144,7 @@ export default function SocialMediaBlueprint() {
 
       {/* Content */}
       <div className="container py-6">
-        {activeTab === 'calendar' && (
+        {activeTab === "calendar" && (
           <div className="space-y-6">
             <Card className="bg-gray-900/50 border-gray-800">
               <CardHeader>
@@ -118,7 +153,8 @@ export default function SocialMediaBlueprint() {
                   Content Calendar
                 </CardTitle>
                 <CardDescription>
-                  Plan and schedule your social media content across all platforms
+                  Plan and schedule your social media content across all
+                  platforms
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -126,17 +162,11 @@ export default function SocialMediaBlueprint() {
           </div>
         )}
 
-        {activeTab === 'captions' && (
-          <CaptionGenerator />
-        )}
+        {activeTab === "captions" && <CaptionGenerator />}
 
-        {activeTab === 'bios' && (
-          <BioTemplates />
-        )}
+        {activeTab === "bios" && <BioTemplates />}
 
-        {activeTab === 'images' && (
-          <ImageSpecifications />
-        )}
+        {activeTab === "images" && <ImageSpecifications />}
       </div>
     </div>
   );

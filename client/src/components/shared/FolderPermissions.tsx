@@ -1,22 +1,35 @@
-import { useState } from 'react';
-import { 
-  Folder, Users, Lock, Eye, Edit2, Trash2, 
-  Plus, Check, X, Shield, UserPlus, Settings,
-  ChevronRight, FolderLock, Globe, UserCheck
-} from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { toast } from 'sonner';
+import { useState } from "react";
+import {
+  Folder,
+  Users,
+  Lock,
+  Eye,
+  Edit2,
+  Trash2,
+  Plus,
+  Check,
+  X,
+  Shield,
+  UserPlus,
+  Settings,
+  ChevronRight,
+  FolderLock,
+  Globe,
+  UserCheck,
+} from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { toast } from "sonner";
 
-type PermissionLevel = 'owner' | 'admin' | 'editor' | 'viewer' | 'none';
+type PermissionLevel = "owner" | "admin" | "editor" | "viewer" | "none";
 
 interface FolderPermission {
   id: string;
   name: string;
   path: string;
-  visibility: 'private' | 'team' | 'public';
+  visibility: "private" | "team" | "public";
   owner: string;
   permissions: {
     userId: string;
@@ -40,53 +53,102 @@ interface User {
 // Mock data
 const MOCK_FOLDERS: FolderPermission[] = [
   {
-    id: 'f1',
-    name: 'Project A Acquisition',
-    path: '/Projects/Project A',
-    visibility: 'team',
-    owner: 'Jonathan',
+    id: "f1",
+    name: "Project A Acquisition",
+    path: "/Projects/Project A",
+    visibility: "team",
+    owner: "Jonathan",
     permissions: [
-      { userId: 'u1', userName: 'Jonathan', email: 'jonathan@company.com', level: 'owner', grantedAt: new Date(), grantedBy: 'System' },
-      { userId: 'u2', userName: 'Sarah L.', email: 'sarah@company.com', level: 'editor', grantedAt: new Date(), grantedBy: 'Jonathan' },
-      { userId: 'u3', userName: 'Marcus T.', email: 'marcus@company.com', level: 'viewer', grantedAt: new Date(), grantedBy: 'Jonathan' },
+      {
+        userId: "u1",
+        userName: "Jonathan",
+        email: "jonathan@company.com",
+        level: "owner",
+        grantedAt: new Date(),
+        grantedBy: "System",
+      },
+      {
+        userId: "u2",
+        userName: "Sarah L.",
+        email: "sarah@company.com",
+        level: "editor",
+        grantedAt: new Date(),
+        grantedBy: "Jonathan",
+      },
+      {
+        userId: "u3",
+        userName: "Marcus T.",
+        email: "marcus@company.com",
+        level: "viewer",
+        grantedAt: new Date(),
+        grantedBy: "Jonathan",
+      },
     ],
     inheritFromParent: false,
-    itemCount: 24
+    itemCount: 24,
   },
   {
-    id: 'f2',
-    name: 'Confidential Documents',
-    path: '/Vault/Confidential',
-    visibility: 'private',
-    owner: 'Jonathan',
+    id: "f2",
+    name: "Confidential Documents",
+    path: "/Vault/Confidential",
+    visibility: "private",
+    owner: "Jonathan",
     permissions: [
-      { userId: 'u1', userName: 'Jonathan', email: 'jonathan@company.com', level: 'owner', grantedAt: new Date(), grantedBy: 'System' },
+      {
+        userId: "u1",
+        userName: "Jonathan",
+        email: "jonathan@company.com",
+        level: "owner",
+        grantedAt: new Date(),
+        grantedBy: "System",
+      },
     ],
     inheritFromParent: false,
-    itemCount: 8
+    itemCount: 8,
   },
   {
-    id: 'f3',
-    name: 'Team Resources',
-    path: '/Shared/Team Resources',
-    visibility: 'team',
-    owner: 'Jonathan',
+    id: "f3",
+    name: "Team Resources",
+    path: "/Shared/Team Resources",
+    visibility: "team",
+    owner: "Jonathan",
     permissions: [
-      { userId: 'u1', userName: 'Jonathan', email: 'jonathan@company.com', level: 'owner', grantedAt: new Date(), grantedBy: 'System' },
-      { userId: 'u2', userName: 'Sarah L.', email: 'sarah@company.com', level: 'admin', grantedAt: new Date(), grantedBy: 'Jonathan' },
-      { userId: 'u4', userName: 'Dev Team', email: 'dev@company.com', level: 'editor', grantedAt: new Date(), grantedBy: 'Sarah L.' },
+      {
+        userId: "u1",
+        userName: "Jonathan",
+        email: "jonathan@company.com",
+        level: "owner",
+        grantedAt: new Date(),
+        grantedBy: "System",
+      },
+      {
+        userId: "u2",
+        userName: "Sarah L.",
+        email: "sarah@company.com",
+        level: "admin",
+        grantedAt: new Date(),
+        grantedBy: "Jonathan",
+      },
+      {
+        userId: "u4",
+        userName: "Dev Team",
+        email: "dev@company.com",
+        level: "editor",
+        grantedAt: new Date(),
+        grantedBy: "Sarah L.",
+      },
     ],
     inheritFromParent: true,
-    itemCount: 156
-  }
+    itemCount: 156,
+  },
 ];
 
 const MOCK_USERS: User[] = [
-  { id: 'u1', name: 'Jonathan', email: 'jonathan@company.com' },
-  { id: 'u2', name: 'Sarah L.', email: 'sarah@company.com' },
-  { id: 'u3', name: 'Marcus T.', email: 'marcus@company.com' },
-  { id: 'u4', name: 'Dev Team', email: 'dev@company.com' },
-  { id: 'u5', name: 'James K.', email: 'james@external.com' },
+  { id: "u1", name: "Jonathan", email: "jonathan@company.com" },
+  { id: "u2", name: "Sarah L.", email: "sarah@company.com" },
+  { id: "u3", name: "Marcus T.", email: "marcus@company.com" },
+  { id: "u4", name: "Dev Team", email: "dev@company.com" },
+  { id: "u5", name: "James K.", email: "james@external.com" },
 ];
 
 interface FolderPermissionsProps {
@@ -98,53 +160,69 @@ export function FolderPermissions({ folderId }: FolderPermissionsProps) {
     folderId ? MOCK_FOLDERS.find(f => f.id === folderId) || null : null
   );
   const [showAddUser, setShowAddUser] = useState(false);
-  const [searchEmail, setSearchEmail] = useState('');
+  const [searchEmail, setSearchEmail] = useState("");
 
   const getVisibilityIcon = (visibility: string) => {
     switch (visibility) {
-      case 'private': return FolderLock;
-      case 'team': return Users;
-      case 'public': return Globe;
-      default: return Folder;
+      case "private":
+        return FolderLock;
+      case "team":
+        return Users;
+      case "public":
+        return Globe;
+      default:
+        return Folder;
     }
   };
 
   const getVisibilityColor = (visibility: string) => {
     switch (visibility) {
-      case 'private': return 'bg-red-500/20 text-red-400 border-red-500/30';
-      case 'team': return 'bg-blue-500/20 text-blue-400 border-blue-500/30';
-      case 'public': return 'bg-green-500/20 text-green-400 border-green-500/30';
-      default: return 'bg-gray-500/20 text-foreground/70 border-gray-500/30';
+      case "private":
+        return "bg-red-500/20 text-red-400 border-red-500/30";
+      case "team":
+        return "bg-blue-500/20 text-blue-400 border-blue-500/30";
+      case "public":
+        return "bg-green-500/20 text-green-400 border-green-500/30";
+      default:
+        return "bg-gray-500/20 text-foreground/70 border-gray-500/30";
     }
   };
 
   const getPermissionColor = (level: PermissionLevel) => {
     switch (level) {
-      case 'owner': return 'bg-purple-500/20 text-purple-400 border-purple-500/30';
-      case 'admin': return 'bg-red-500/20 text-red-400 border-red-500/30';
-      case 'editor': return 'bg-blue-500/20 text-blue-400 border-blue-500/30';
-      case 'viewer': return 'bg-green-500/20 text-green-400 border-green-500/30';
-      default: return 'bg-gray-500/20 text-foreground/70 border-gray-500/30';
+      case "owner":
+        return "bg-purple-500/20 text-purple-400 border-purple-500/30";
+      case "admin":
+        return "bg-red-500/20 text-red-400 border-red-500/30";
+      case "editor":
+        return "bg-blue-500/20 text-blue-400 border-blue-500/30";
+      case "viewer":
+        return "bg-green-500/20 text-green-400 border-green-500/30";
+      default:
+        return "bg-gray-500/20 text-foreground/70 border-gray-500/30";
     }
   };
 
   const handleAddUser = (user: User, level: PermissionLevel) => {
     toast.success(`Added ${user.name} as ${level}`);
     setShowAddUser(false);
-    setSearchEmail('');
+    setSearchEmail("");
   };
 
   const handleRemoveUser = (userId: string, userName: string) => {
     toast.success(`Removed ${userName} from folder`);
   };
 
-  const handleChangePermission = (userId: string, newLevel: PermissionLevel) => {
+  const handleChangePermission = (
+    userId: string,
+    newLevel: PermissionLevel
+  ) => {
     toast.success(`Updated permission to ${newLevel}`);
   };
 
   if (selectedFolder) {
     const VisibilityIcon = getVisibilityIcon(selectedFolder.visibility);
-    
+
     return (
       <div className="space-y-4">
         {/* Folder Header */}
@@ -156,11 +234,18 @@ export function FolderPermissions({ folderId }: FolderPermissionsProps) {
                   <VisibilityIcon className="w-6 h-6 text-primary" />
                 </div>
                 <div>
-                  <h2 className="text-lg font-semibold text-foreground">{selectedFolder.name}</h2>
-                  <p className="text-sm text-muted-foreground">{selectedFolder.path}</p>
+                  <h2 className="text-lg font-semibold text-foreground">
+                    {selectedFolder.name}
+                  </h2>
+                  <p className="text-sm text-muted-foreground">
+                    {selectedFolder.path}
+                  </p>
                 </div>
               </div>
-              <Badge variant="outline" className={getVisibilityColor(selectedFolder.visibility)}>
+              <Badge
+                variant="outline"
+                className={getVisibilityColor(selectedFolder.visibility)}
+              >
                 {selectedFolder.visibility}
               </Badge>
             </div>
@@ -202,66 +287,99 @@ export function FolderPermissions({ folderId }: FolderPermissionsProps) {
                   <Input
                     placeholder="Search by email..."
                     value={searchEmail}
-                    onChange={(e) => setSearchEmail(e.target.value)}
+                    onChange={e => setSearchEmail(e.target.value)}
                     className="flex-1"
                   />
-                  <Button variant="ghost" size="sm" onClick={() => setShowAddUser(false)}>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setShowAddUser(false)}
+                  >
                     <X className="w-4 h-4" />
                   </Button>
                 </div>
                 <div className="space-y-2">
-                  {MOCK_USERS.filter(u => 
-                    !selectedFolder.permissions.find(p => p.userId === u.id) &&
-                    (searchEmail === '' || u.email.toLowerCase().includes(searchEmail.toLowerCase()))
-                  ).slice(0, 3).map((user) => (
-                    <div key={user.id} className="flex items-center justify-between p-2 rounded hover:bg-background/80">
-                      <div>
-                        <div className="font-medium text-foreground">{user.name}</div>
-                        <div className="text-xs text-muted-foreground">{user.email}</div>
+                  {MOCK_USERS.filter(
+                    u =>
+                      !selectedFolder.permissions.find(
+                        p => p.userId === u.id
+                      ) &&
+                      (searchEmail === "" ||
+                        u.email
+                          .toLowerCase()
+                          .includes(searchEmail.toLowerCase()))
+                  )
+                    .slice(0, 3)
+                    .map(user => (
+                      <div
+                        key={user.id}
+                        className="flex items-center justify-between p-2 rounded hover:bg-background/80"
+                      >
+                        <div>
+                          <div className="font-medium text-foreground">
+                            {user.name}
+                          </div>
+                          <div className="text-xs text-muted-foreground">
+                            {user.email}
+                          </div>
+                        </div>
+                        <div className="flex gap-1">
+                          {(
+                            ["viewer", "editor", "admin"] as PermissionLevel[]
+                          ).map(level => (
+                            <Button
+                              key={level}
+                              variant="outline"
+                              size="sm"
+                              className="text-xs"
+                              onClick={() => handleAddUser(user, level)}
+                            >
+                              {level}
+                            </Button>
+                          ))}
+                        </div>
                       </div>
-                      <div className="flex gap-1">
-                        {(['viewer', 'editor', 'admin'] as PermissionLevel[]).map((level) => (
-                          <Button
-                            key={level}
-                            variant="outline"
-                            size="sm"
-                            className="text-xs"
-                            onClick={() => handleAddUser(user, level)}
-                          >
-                            {level}
-                          </Button>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
+                    ))}
                 </div>
               </div>
             )}
-            
+
             <div className="space-y-2">
-              {selectedFolder.permissions.map((perm) => (
-                <div 
+              {selectedFolder.permissions.map(perm => (
+                <div
                   key={perm.userId}
                   className="flex items-center justify-between p-3 rounded-lg bg-background/50"
                 >
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary font-semibold">
-                      {perm.userName.split(' ').map(n => n[0]).join('')}
+                      {perm.userName
+                        .split(" ")
+                        .map(n => n[0])
+                        .join("")}
                     </div>
                     <div>
-                      <div className="font-medium text-foreground">{perm.userName}</div>
-                      <div className="text-xs text-muted-foreground">{perm.email}</div>
+                      <div className="font-medium text-foreground">
+                        {perm.userName}
+                      </div>
+                      <div className="text-xs text-muted-foreground">
+                        {perm.email}
+                      </div>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Badge variant="outline" className={getPermissionColor(perm.level)}>
+                    <Badge
+                      variant="outline"
+                      className={getPermissionColor(perm.level)}
+                    >
                       {perm.level}
                     </Badge>
-                    {perm.level !== 'owner' && (
+                    {perm.level !== "owner" && (
                       <Button
                         variant="ghost"
                         size="sm"
-                        onClick={() => handleRemoveUser(perm.userId, perm.userName)}
+                        onClick={() =>
+                          handleRemoveUser(perm.userId, perm.userName)
+                        }
                       >
                         <Trash2 className="w-4 h-4 text-muted-foreground hover:text-red-400" />
                       </Button>
@@ -284,27 +402,55 @@ export function FolderPermissions({ folderId }: FolderPermissionsProps) {
           <CardContent>
             <div className="grid grid-cols-2 gap-3 text-sm">
               <div className="flex items-start gap-2">
-                <Badge variant="outline" className={getPermissionColor('owner')}>owner</Badge>
-                <span className="text-muted-foreground">Full control, can delete folder</span>
+                <Badge
+                  variant="outline"
+                  className={getPermissionColor("owner")}
+                >
+                  owner
+                </Badge>
+                <span className="text-muted-foreground">
+                  Full control, can delete folder
+                </span>
               </div>
               <div className="flex items-start gap-2">
-                <Badge variant="outline" className={getPermissionColor('admin')}>admin</Badge>
-                <span className="text-muted-foreground">Manage permissions, edit all</span>
+                <Badge
+                  variant="outline"
+                  className={getPermissionColor("admin")}
+                >
+                  admin
+                </Badge>
+                <span className="text-muted-foreground">
+                  Manage permissions, edit all
+                </span>
               </div>
               <div className="flex items-start gap-2">
-                <Badge variant="outline" className={getPermissionColor('editor')}>editor</Badge>
-                <span className="text-muted-foreground">Add, edit, delete files</span>
+                <Badge
+                  variant="outline"
+                  className={getPermissionColor("editor")}
+                >
+                  editor
+                </Badge>
+                <span className="text-muted-foreground">
+                  Add, edit, delete files
+                </span>
               </div>
               <div className="flex items-start gap-2">
-                <Badge variant="outline" className={getPermissionColor('viewer')}>viewer</Badge>
-                <span className="text-muted-foreground">View and download only</span>
+                <Badge
+                  variant="outline"
+                  className={getPermissionColor("viewer")}
+                >
+                  viewer
+                </Badge>
+                <span className="text-muted-foreground">
+                  View and download only
+                </span>
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Button 
-          variant="outline" 
+        <Button
+          variant="outline"
           onClick={() => setSelectedFolder(null)}
           className="w-full"
         >
@@ -324,10 +470,10 @@ export function FolderPermissions({ folderId }: FolderPermissionsProps) {
       </CardHeader>
       <CardContent>
         <div className="space-y-2">
-          {MOCK_FOLDERS.map((folder) => {
+          {MOCK_FOLDERS.map(folder => {
             const VisibilityIcon = getVisibilityIcon(folder.visibility);
             return (
-              <div 
+              <div
                 key={folder.id}
                 onClick={() => setSelectedFolder(folder)}
                 className="flex items-center gap-3 p-3 rounded-lg bg-background/50 hover:bg-background/80 cursor-pointer transition-colors"
@@ -336,13 +482,17 @@ export function FolderPermissions({ folderId }: FolderPermissionsProps) {
                   <VisibilityIcon className="w-5 h-5 text-primary" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <div className="font-medium text-foreground truncate">{folder.name}</div>
-                  <div className="text-xs text-muted-foreground truncate">{folder.path}</div>
+                  <div className="font-medium text-foreground truncate">
+                    {folder.name}
+                  </div>
+                  <div className="text-xs text-muted-foreground truncate">
+                    {folder.path}
+                  </div>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="flex -space-x-2">
                     {folder.permissions.slice(0, 3).map((perm, i) => (
-                      <div 
+                      <div
                         key={perm.userId}
                         className="w-6 h-6 rounded-full bg-primary/20 border-2 border-card flex items-center justify-center text-xs text-primary"
                       >

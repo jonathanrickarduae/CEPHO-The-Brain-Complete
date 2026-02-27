@@ -44,7 +44,9 @@
   }
 
   /* Text readability */
-  p, span, div {
+  p,
+  span,
+  div {
     font-size: 0.9rem;
     line-height: 1.5;
   }
@@ -58,7 +60,9 @@
   }
 
   /* Input fields */
-  input, textarea, select {
+  input,
+  textarea,
+  select {
     font-size: 16px !important; /* Prevents zoom on iOS */
     min-height: 44px !important;
     padding: 0.75rem !important;
@@ -157,7 +161,9 @@
   }
 
   /* Touch-friendly spacing */
-  a, button, [role="button"] {
+  a,
+  button,
+  [role="button"] {
     margin: 0.25rem;
   }
 
@@ -199,11 +205,13 @@
 /* Landscape mode on mobile - minimal adjustments */
 @media (max-height: 500px) and (orientation: landscape) {
   /* Reduce vertical spacing in landscape */
-  .p-6, .p-4 {
+  .p-6,
+  .p-4 {
     padding: 0.5rem !important;
   }
 
-  .gap-6, .gap-4 {
+  .gap-6,
+  .gap-4 {
     gap: 0.5rem !important;
   }
 

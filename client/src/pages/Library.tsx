@@ -1,29 +1,54 @@
-import { useState } from 'react';
-import type { LibraryDocument } from '@shared/types';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { trpc } from '@/lib/trpc';
-import { toast } from 'sonner';
-import { Streamdown } from 'streamdown';
-import { 
-  FolderOpen, FileText, Image, BarChart3, Presentation, Search,
-  Plus, Upload, Download, Clock, LayoutGrid, List,
-  ChevronRight, ChevronLeft, File, ArrowUpRight, BookOpen,
-  MessageSquare, User, Trash2, Calendar, Loader2, Eye, FolderPlus
-} from 'lucide-react';
+import { useState } from "react";
+import type { LibraryDocument } from "@shared/types";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { trpc } from "@/lib/trpc";
+import { toast } from "sonner";
+import { Streamdown } from "streamdown";
+import {
+  FolderOpen,
+  FileText,
+  Image,
+  BarChart3,
+  Presentation,
+  Search,
+  Plus,
+  Upload,
+  Download,
+  Clock,
+  LayoutGrid,
+  List,
+  ChevronRight,
+  ChevronLeft,
+  File,
+  ArrowUpRight,
+  BookOpen,
+  MessageSquare,
+  User,
+  Trash2,
+  Calendar,
+  Loader2,
+  Eye,
+  FolderPlus,
+} from "lucide-react";
 
 // No projects until real ones are added
 const projects: any[] = [];
 
 export default function Library() {
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [selectedProject, setSelectedProject] = useState<string | null>(null);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [activeTab, setActiveTab] = useState('all');
+  const [searchQuery, setSearchQuery] = useState("");
+  const [activeTab, setActiveTab] = useState("all");
 
   return (
     <div className="h-full flex flex-col bg-background">
@@ -40,17 +65,12 @@ export default function Library() {
             </p>
           </div>
           <div className="flex items-center gap-3">
-            <Button 
-              size="sm" 
-              variant="outline" 
-              className="gap-2"
-              disabled
-            >
+            <Button size="sm" variant="outline" className="gap-2" disabled>
               <Upload className="w-4 h-4" />
               <span className="hidden md:inline">Upload</span>
             </Button>
-            <Button 
-              size="sm" 
+            <Button
+              size="sm"
               className="gap-2 bg-primary hover:bg-primary/90"
               disabled
             >
@@ -71,21 +91,21 @@ export default function Library() {
                 placeholder="Search documents..."
                 className="pl-10"
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={e => setSearchQuery(e.target.value)}
               />
             </div>
             <div className="flex items-center gap-2">
               <Button
-                variant={viewMode === 'grid' ? 'default' : 'outline'}
+                variant={viewMode === "grid" ? "default" : "outline"}
                 size="icon"
-                onClick={() => setViewMode('grid')}
+                onClick={() => setViewMode("grid")}
               >
                 <LayoutGrid className="w-4 h-4" />
               </Button>
               <Button
-                variant={viewMode === 'list' ? 'default' : 'outline'}
+                variant={viewMode === "list" ? "default" : "outline"}
                 size="icon"
-                onClick={() => setViewMode('list')}
+                onClick={() => setViewMode("list")}
               >
                 <List className="w-4 h-4" />
               </Button>
@@ -99,10 +119,11 @@ export default function Library() {
             </div>
             <h3 className="text-xl font-semibold mb-2">No Projects Yet</h3>
             <p className="text-muted-foreground mb-6 max-w-md">
-              Your library is empty. Start by creating a project in Project Genesis to organize your documents and knowledge base.
+              Your library is empty. Start by creating a project in Project
+              Genesis to organize your documents and knowledge base.
             </p>
-            <Button 
-              onClick={() => window.location.href = '/project-genesis'}
+            <Button
+              onClick={() => (window.location.href = "/project-genesis")}
               className="gap-2"
             >
               <Plus className="w-4 h-4" />

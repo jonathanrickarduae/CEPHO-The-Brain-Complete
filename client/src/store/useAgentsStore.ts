@@ -3,13 +3,13 @@
  * State management for AI agents monitoring and performance
  */
 
-import { create } from 'zustand';
+import { create } from "zustand";
 
 // Agent status
-export type AgentStatus = 'active' | 'idle' | 'training' | 'error' | 'offline';
+export type AgentStatus = "active" | "idle" | "training" | "error" | "offline";
 
 // Agent type
-export type AgentType = 'digital-twin' | 'chief-of-staff' | 'sme' | 'expert';
+export type AgentType = "digital-twin" | "chief-of-staff" | "sme" | "expert";
 
 // Agent interface
 export interface Agent {
@@ -42,7 +42,7 @@ export interface Agent {
       id: string;
       type: string;
       description: string;
-      status: 'pending' | 'approved' | 'denied';
+      status: "pending" | "approved" | "denied";
     }>;
   };
 }
@@ -52,34 +52,41 @@ interface AgentsStoreState {
   // Agents data
   agents: Agent[];
   selectedAgent: string | null;
-  
+
   // Actions
   setAgents: (agents: Agent[]) => void;
   updateAgent: (id: string, updates: Partial<Agent>) => void;
   selectAgent: (id: string | null) => void;
-  
+
   // Performance tracking
-  trackPerformance: (agentId: string, metric: 'responseTime' | 'successRate' | 'userSatisfaction', value: number) => void;
+  trackPerformance: (
+    agentId: string,
+    metric: "responseTime" | "successRate" | "userSatisfaction",
+    value: number
+  ) => void;
   rateAgent: (agentId: string, rating: number) => void;
-  
+
   // Training
-  updateTraining: (agentId: string, progress: Partial<Agent['training']>) => void;
-  
+  updateTraining: (
+    agentId: string,
+    progress: Partial<Agent["training"]>
+  ) => void;
+
   // Daily reports
-  addDailyReport: (agentId: string, report: Agent['dailyReport']) => void;
+  addDailyReport: (agentId: string, report: Agent["dailyReport"]) => void;
   approveRequest: (agentId: string, requestId: string) => void;
   denyRequest: (agentId: string, requestId: string) => void;
-  
+
   // Filters and sorting
   filters: {
-    type: AgentType | 'all';
-    status: AgentStatus | 'all';
+    type: AgentType | "all";
+    status: AgentStatus | "all";
     minRating: number;
   };
-  setFilters: (filters: Partial<AgentsStoreState['filters']>) => void;
-  sortBy: 'name' | 'rating' | 'performance' | 'lastActive';
-  setSortBy: (sortBy: AgentsStoreState['sortBy']) => void;
-  
+  setFilters: (filters: Partial<AgentsStoreState["filters"]>) => void;
+  sortBy: "name" | "rating" | "performance" | "lastActive";
+  setSortBy: (sortBy: AgentsStoreState["sortBy"]) => void;
+
   // Computed values
   getFilteredAgents: () => Agent[];
   getAgentById: (id: string) => Agent | undefined;
@@ -93,28 +100,28 @@ export const useAgentsStore = create<AgentsStoreState>((set, get) => ({
   agents: [],
   selectedAgent: null,
   filters: {
-    type: 'all',
-    status: 'all',
+    type: "all",
+    status: "all",
     minRating: 0,
   },
-  sortBy: 'rating',
-  
+  sortBy: "rating",
+
   // Actions
-  setAgents: (agents) => set({ agents }),
-  
+  setAgents: agents => set({ agents }),
+
   updateAgent: (id, updates) =>
-    set((state) => ({
-      agents: state.agents.map((agent) =>
+    set(state => ({
+      agents: state.agents.map(agent =>
         agent.id === id ? { ...agent, ...updates } : agent
       ),
     })),
-  
-  selectAgent: (id) => set({ selectedAgent: id }),
-  
+
+  selectAgent: id => set({ selectedAgent: id }),
+
   // Performance tracking
   trackPerformance: (agentId, metric, value) =>
-    set((state) => ({
-      agents: state.agents.map((agent) =>
+    set(state => ({
+      agents: state.agents.map(agent =>
         agent.id === agentId
           ? {
               ...agent,
@@ -126,18 +133,18 @@ export const useAgentsStore = create<AgentsStoreState>((set, get) => ({
           : agent
       ),
     })),
-  
+
   rateAgent: (agentId, rating) =>
-    set((state) => ({
-      agents: state.agents.map((agent) =>
+    set(state => ({
+      agents: state.agents.map(agent =>
         agent.id === agentId ? { ...agent, rating } : agent
       ),
     })),
-  
+
   // Training
   updateTraining: (agentId, progress) =>
-    set((state) => ({
-      agents: state.agents.map((agent) =>
+    set(state => ({
+      agents: state.agents.map(agent =>
         agent.id === agentId
           ? {
               ...agent,
@@ -149,98 +156,105 @@ export const useAgentsStore = create<AgentsStoreState>((set, get) => ({
           : agent
       ),
     })),
-  
+
   // Daily reports
   addDailyReport: (agentId, report) =>
-    set((state) => ({
-      agents: state.agents.map((agent) =>
+    set(state => ({
+      agents: state.agents.map(agent =>
         agent.id === agentId ? { ...agent, dailyReport: report } : agent
       ),
     })),
-  
+
   approveRequest: (agentId, requestId) =>
-    set((state) => ({
-      agents: state.agents.map((agent) =>
+    set(state => ({
+      agents: state.agents.map(agent =>
         agent.id === agentId && agent.dailyReport
           ? {
               ...agent,
               dailyReport: {
                 ...agent.dailyReport,
-                requestsForApproval: agent.dailyReport.requestsForApproval.map((req) =>
-                  req.id === requestId ? { ...req, status: 'approved' as const } : req
+                requestsForApproval: agent.dailyReport.requestsForApproval.map(
+                  req =>
+                    req.id === requestId
+                      ? { ...req, status: "approved" as const }
+                      : req
                 ),
               },
             }
           : agent
       ),
     })),
-  
+
   denyRequest: (agentId, requestId) =>
-    set((state) => ({
-      agents: state.agents.map((agent) =>
+    set(state => ({
+      agents: state.agents.map(agent =>
         agent.id === agentId && agent.dailyReport
           ? {
               ...agent,
               dailyReport: {
                 ...agent.dailyReport,
-                requestsForApproval: agent.dailyReport.requestsForApproval.map((req) =>
-                  req.id === requestId ? { ...req, status: 'denied' as const } : req
+                requestsForApproval: agent.dailyReport.requestsForApproval.map(
+                  req =>
+                    req.id === requestId
+                      ? { ...req, status: "denied" as const }
+                      : req
                 ),
               },
             }
           : agent
       ),
     })),
-  
+
   // Filters and sorting
-  setFilters: (filters) =>
-    set((state) => ({
+  setFilters: filters =>
+    set(state => ({
       filters: {
         ...state.filters,
         ...filters,
       },
     })),
-  
-  setSortBy: (sortBy) => set({ sortBy }),
-  
+
+  setSortBy: sortBy => set({ sortBy }),
+
   // Computed values
   getFilteredAgents: () => {
     const { agents, filters, sortBy } = get();
-    
-    let filtered = agents.filter((agent) => {
-      if (filters.type !== 'all' && agent.type !== filters.type) return false;
-      if (filters.status !== 'all' && agent.status !== filters.status) return false;
+
+    let filtered = agents.filter(agent => {
+      if (filters.type !== "all" && agent.type !== filters.type) return false;
+      if (filters.status !== "all" && agent.status !== filters.status)
+        return false;
       if (agent.rating < filters.minRating) return false;
       return true;
     });
-    
+
     // Sort
     filtered.sort((a, b) => {
       switch (sortBy) {
-        case 'name':
+        case "name":
           return a.name.localeCompare(b.name);
-        case 'rating':
+        case "rating":
           return b.rating - a.rating;
-        case 'performance':
+        case "performance":
           return b.performance.successRate - a.performance.successRate;
-        case 'lastActive':
+        case "lastActive":
           return b.lastActive - a.lastActive;
         default:
           return 0;
       }
     });
-    
+
     return filtered;
   },
-  
-  getAgentById: (id) => {
-    return get().agents.find((agent) => agent.id === id);
+
+  getAgentById: id => {
+    return get().agents.find(agent => agent.id === id);
   },
-  
-  getAgentsByType: (type) => {
-    return get().agents.filter((agent) => agent.type === type);
+
+  getAgentsByType: type => {
+    return get().agents.filter(agent => agent.type === type);
   },
-  
+
   getTopPerformers: (limit = 5) => {
     return [...get().agents]
       .sort((a, b) => b.performance.successRate - a.performance.successRate)
@@ -250,7 +264,7 @@ export const useAgentsStore = create<AgentsStoreState>((set, get) => ({
 
 // Selectors
 export const selectAgents = (state: AgentsStoreState) => state.agents;
-export const selectSelectedAgent = (state: AgentsStoreState) => 
+export const selectSelectedAgent = (state: AgentsStoreState) =>
   state.agents.find(a => a.id === state.selectedAgent);
 export const selectFilters = (state: AgentsStoreState) => state.filters;
 export const selectSortBy = (state: AgentsStoreState) => state.sortBy;

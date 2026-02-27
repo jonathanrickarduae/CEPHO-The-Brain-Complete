@@ -1,29 +1,38 @@
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { 
-  Users, Brain, MessageSquare, Check, AlertCircle,
-  ChevronDown, ChevronUp, Sparkles, ThumbsUp, ThumbsDown,
-  RotateCcw, Send
-} from 'lucide-react';
-import { AIExpert, CorporatePartner } from '@/data/ai-experts.data';
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import {
+  Users,
+  Brain,
+  MessageSquare,
+  Check,
+  AlertCircle,
+  ChevronDown,
+  ChevronUp,
+  Sparkles,
+  ThumbsUp,
+  ThumbsDown,
+  RotateCcw,
+  Send,
+} from "lucide-react";
+import { AIExpert, CorporatePartner } from "@/data/ai-experts.data";
 
 interface SMEContribution {
   id: string;
   expertId: string;
   section: string;
-  type: 'insight' | 'recommendation' | 'question' | 'concern' | 'approval';
+  type: "insight" | "recommendation" | "question" | "concern" | "approval";
   content: string;
   timestamp: Date;
   weight: number; // 1-10 authority on this topic
-  userFeedback?: 'accepted' | 'rejected' | 'modified';
+  userFeedback?: "accepted" | "rejected" | "modified";
   modifiedContent?: string;
 }
 
 interface ActiveSME {
   expert: AIExpert | CorporatePartner;
   isCorporate: boolean;
-  status: 'listening' | 'thinking' | 'contributing' | 'awaiting_response';
+  status: "listening" | "thinking" | "contributing" | "awaiting_response";
   contributions: SMEContribution[];
   weight: number; // Overall authority weight
 }
@@ -43,64 +52,87 @@ export function SMEPanel({
   onAcceptContribution,
   onRejectContribution,
   onModifyContribution,
-  onRequestClarification
+  onRequestClarification,
 }: SMEPanelProps) {
   const [expandedExperts, setExpandedExperts] = useState<string[]>([]);
-  const [clarificationInput, setClarificationInput] = useState<Record<string, string>>({});
+  const [clarificationInput, setClarificationInput] = useState<
+    Record<string, string>
+  >({});
 
   const toggleExpanded = (expertId: string) => {
-    setExpandedExperts(prev => 
-      prev.includes(expertId) 
+    setExpandedExperts(prev =>
+      prev.includes(expertId)
         ? prev.filter(id => id !== expertId)
         : [...prev, expertId]
     );
   };
 
-  const getStatusColor = (status: ActiveSME['status']) => {
+  const getStatusColor = (status: ActiveSME["status"]) => {
     switch (status) {
-      case 'contributing': return 'text-green-400 border-green-500/30';
-      case 'thinking': return 'text-yellow-400 border-yellow-500/30';
-      case 'awaiting_response': return 'text-fuchsia-400 border-fuchsia-500/30';
-      default: return 'text-foreground/70 border-white/20';
+      case "contributing":
+        return "text-green-400 border-green-500/30";
+      case "thinking":
+        return "text-yellow-400 border-yellow-500/30";
+      case "awaiting_response":
+        return "text-fuchsia-400 border-fuchsia-500/30";
+      default:
+        return "text-foreground/70 border-white/20";
     }
   };
 
-  const getStatusLabel = (status: ActiveSME['status']) => {
+  const getStatusLabel = (status: ActiveSME["status"]) => {
     switch (status) {
-      case 'contributing': return '💬 Contributing';
-      case 'thinking': return '🤔 Analyzing';
-      case 'awaiting_response': return '❓ Needs Input';
-      default: return '👂 Listening';
+      case "contributing":
+        return "💬 Contributing";
+      case "thinking":
+        return "🤔 Analyzing";
+      case "awaiting_response":
+        return "❓ Needs Input";
+      default:
+        return "👂 Listening";
     }
   };
 
-  const getContributionIcon = (type: SMEContribution['type']) => {
+  const getContributionIcon = (type: SMEContribution["type"]) => {
     switch (type) {
-      case 'insight': return <Sparkles className="w-3 h-3 text-cyan-400" />;
-      case 'recommendation': return <ThumbsUp className="w-3 h-3 text-green-400" />;
-      case 'question': return <MessageSquare className="w-3 h-3 text-yellow-400" />;
-      case 'concern': return <AlertCircle className="w-3 h-3 text-orange-400" />;
-      case 'approval': return <Check className="w-3 h-3 text-green-400" />;
+      case "insight":
+        return <Sparkles className="w-3 h-3 text-cyan-400" />;
+      case "recommendation":
+        return <ThumbsUp className="w-3 h-3 text-green-400" />;
+      case "question":
+        return <MessageSquare className="w-3 h-3 text-yellow-400" />;
+      case "concern":
+        return <AlertCircle className="w-3 h-3 text-orange-400" />;
+      case "approval":
+        return <Check className="w-3 h-3 text-green-400" />;
     }
   };
 
-  const getContributionBg = (type: SMEContribution['type']) => {
+  const getContributionBg = (type: SMEContribution["type"]) => {
     switch (type) {
-      case 'insight': return 'bg-cyan-500/10 border-cyan-500/20';
-      case 'recommendation': return 'bg-green-500/10 border-green-500/20';
-      case 'question': return 'bg-yellow-500/10 border-yellow-500/20';
-      case 'concern': return 'bg-orange-500/10 border-orange-500/20';
-      case 'approval': return 'bg-green-500/10 border-green-500/20';
+      case "insight":
+        return "bg-cyan-500/10 border-cyan-500/20";
+      case "recommendation":
+        return "bg-green-500/10 border-green-500/20";
+      case "question":
+        return "bg-yellow-500/10 border-yellow-500/20";
+      case "concern":
+        return "bg-orange-500/10 border-orange-500/20";
+      case "approval":
+        return "bg-green-500/10 border-green-500/20";
     }
   };
 
-  const relevantSMEs = activeSMEs.filter(sme => 
-    sme.contributions.some(c => c.section === currentSection) || 
-    sme.status !== 'listening'
+  const relevantSMEs = activeSMEs.filter(
+    sme =>
+      sme.contributions.some(c => c.section === currentSection) ||
+      sme.status !== "listening"
   );
 
-  const pendingContributions = activeSMEs.flatMap(sme => 
-    sme.contributions.filter(c => !c.userFeedback && c.section === currentSection)
+  const pendingContributions = activeSMEs.flatMap(sme =>
+    sme.contributions.filter(
+      c => !c.userFeedback && c.section === currentSection
+    )
   );
 
   return (
@@ -110,7 +142,10 @@ export function SMEPanel({
         <div className="flex items-center gap-2">
           <Users className="w-5 h-5 text-fuchsia-400" />
           <h3 className="font-semibold text-white">Expert Panel</h3>
-          <Badge variant="outline" className="border-white/20 text-foreground/70 text-xs">
+          <Badge
+            variant="outline"
+            className="border-white/20 text-foreground/70 text-xs"
+          >
             {activeSMEs.length} active
           </Badge>
         </div>
@@ -125,11 +160,13 @@ export function SMEPanel({
       <div className="space-y-3">
         {activeSMEs.map(sme => {
           const isExpanded = expandedExperts.includes(sme.expert.id);
-          const sectionContributions = sme.contributions.filter(c => c.section === currentSection);
+          const sectionContributions = sme.contributions.filter(
+            c => c.section === currentSection
+          );
           const hasUnreviewed = sectionContributions.some(c => !c.userFeedback);
 
           return (
-            <div 
+            <div
               key={sme.expert.id}
               className="bg-white/5 border border-white/10 rounded-xl overflow-hidden"
             >
@@ -139,8 +176,8 @@ export function SMEPanel({
                 className="w-full p-3 flex items-center gap-3 hover:bg-white/5 transition-colors"
               >
                 <span className="text-2xl">
-                  {sme.isCorporate 
-                    ? (sme.expert as CorporatePartner).logo 
+                  {sme.isCorporate
+                    ? (sme.expert as CorporatePartner).logo
                     : (sme.expert as AIExpert).avatar}
                 </span>
                 <div className="flex-1 text-left min-w-0">
@@ -149,20 +186,23 @@ export function SMEPanel({
                       {sme.expert.name}
                     </p>
                     {sme.isCorporate && (
-                      <Badge variant="outline" className="text-[10px] border-fuchsia-500/30 text-fuchsia-400">
+                      <Badge
+                        variant="outline"
+                        className="text-[10px] border-fuchsia-500/30 text-fuchsia-400"
+                      >
                         Corporate
                       </Badge>
                     )}
                   </div>
                   <p className="text-xs text-foreground/70 truncate">
-                    {sme.isCorporate 
-                      ? (sme.expert as CorporatePartner).methodology 
+                    {sme.isCorporate
+                      ? (sme.expert as CorporatePartner).methodology
                       : (sme.expert as AIExpert).specialty}
                   </p>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Badge 
-                    variant="outline" 
+                  <Badge
+                    variant="outline"
                     className={`text-[10px] ${getStatusColor(sme.status)}`}
                   >
                     {getStatusLabel(sme.status)}
@@ -183,13 +223,15 @@ export function SMEPanel({
                 <div className="border-t border-white/10 p-3 space-y-3">
                   {/* Weight Indicator */}
                   <div className="flex items-center gap-2 text-xs">
-                    <span className="text-foreground/60">Authority on this topic:</span>
+                    <span className="text-foreground/60">
+                      Authority on this topic:
+                    </span>
                     <div className="flex gap-0.5">
                       {[...Array(10)].map((_, i) => (
-                        <div 
+                        <div
                           key={i}
                           className={`w-2 h-2 rounded-sm ${
-                            i < sme.weight ? 'bg-fuchsia-500' : 'bg-white/10'
+                            i < sme.weight ? "bg-fuchsia-500" : "bg-white/10"
                           }`}
                         />
                       ))}
@@ -201,22 +243,26 @@ export function SMEPanel({
                   {sectionContributions.length > 0 ? (
                     <div className="space-y-2">
                       {sectionContributions.map(contribution => (
-                        <div 
+                        <div
                           key={contribution.id}
                           className={`p-3 rounded-lg border ${getContributionBg(contribution.type)} ${
-                            contribution.userFeedback === 'rejected' ? 'opacity-50' : ''
+                            contribution.userFeedback === "rejected"
+                              ? "opacity-50"
+                              : ""
                           }`}
                         >
                           <div className="flex items-start gap-2">
                             {getContributionIcon(contribution.type)}
                             <div className="flex-1">
                               <p className="text-sm text-gray-200">
-                                {contribution.userFeedback === 'modified' 
-                                  ? contribution.modifiedContent 
+                                {contribution.userFeedback === "modified"
+                                  ? contribution.modifiedContent
                                   : contribution.content}
                               </p>
                               <p className="text-[10px] text-foreground/60 mt-1">
-                                {new Date(contribution.timestamp).toLocaleTimeString()}
+                                {new Date(
+                                  contribution.timestamp
+                                ).toLocaleTimeString()}
                               </p>
                             </div>
                           </div>
@@ -227,7 +273,9 @@ export function SMEPanel({
                               <Button
                                 size="sm"
                                 variant="ghost"
-                                onClick={() => onAcceptContribution(contribution.id)}
+                                onClick={() =>
+                                  onAcceptContribution(contribution.id)
+                                }
                                 className="h-7 text-xs text-green-400 hover:text-green-300 hover:bg-green-500/10"
                               >
                                 <Check className="w-3 h-3 mr-1" />
@@ -236,7 +284,9 @@ export function SMEPanel({
                               <Button
                                 size="sm"
                                 variant="ghost"
-                                onClick={() => onRejectContribution(contribution.id)}
+                                onClick={() =>
+                                  onRejectContribution(contribution.id)
+                                }
                                 className="h-7 text-xs text-red-400 hover:text-red-300 hover:bg-red-500/10"
                               >
                                 <ThumbsDown className="w-3 h-3 mr-1" />
@@ -256,19 +306,22 @@ export function SMEPanel({
                           {/* Feedback Status */}
                           {contribution.userFeedback && (
                             <div className="mt-2 pt-2 border-t border-white/10">
-                              <Badge 
-                                variant="outline" 
+                              <Badge
+                                variant="outline"
                                 className={`text-[10px] ${
-                                  contribution.userFeedback === 'accepted' 
-                                    ? 'border-green-500/30 text-green-400'
-                                    : contribution.userFeedback === 'rejected'
-                                    ? 'border-red-500/30 text-red-400'
-                                    : 'border-yellow-500/30 text-yellow-400'
+                                  contribution.userFeedback === "accepted"
+                                    ? "border-green-500/30 text-green-400"
+                                    : contribution.userFeedback === "rejected"
+                                      ? "border-red-500/30 text-red-400"
+                                      : "border-yellow-500/30 text-yellow-400"
                                 }`}
                               >
-                                {contribution.userFeedback === 'accepted' && '✓ Accepted'}
-                                {contribution.userFeedback === 'rejected' && '✗ Rejected'}
-                                {contribution.userFeedback === 'modified' && '✎ Modified'}
+                                {contribution.userFeedback === "accepted" &&
+                                  "✓ Accepted"}
+                                {contribution.userFeedback === "rejected" &&
+                                  "✗ Rejected"}
+                                {contribution.userFeedback === "modified" &&
+                                  "✎ Modified"}
                               </Badge>
                             </div>
                           )}
@@ -286,11 +339,13 @@ export function SMEPanel({
                     <div className="flex gap-2">
                       <input
                         type="text"
-                        value={clarificationInput[sme.expert.id] || ''}
-                        onChange={(e) => setClarificationInput(prev => ({
-                          ...prev,
-                          [sme.expert.id]: e.target.value
-                        }))}
+                        value={clarificationInput[sme.expert.id] || ""}
+                        onChange={e =>
+                          setClarificationInput(prev => ({
+                            ...prev,
+                            [sme.expert.id]: e.target.value,
+                          }))
+                        }
                         placeholder="Ask for clarification..."
                         className="flex-1 bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-fuchsia-500/50"
                       />
@@ -298,8 +353,14 @@ export function SMEPanel({
                         size="sm"
                         onClick={() => {
                           if (clarificationInput[sme.expert.id]) {
-                            onRequestClarification(sme.expert.id, clarificationInput[sme.expert.id]);
-                            setClarificationInput(prev => ({ ...prev, [sme.expert.id]: '' }));
+                            onRequestClarification(
+                              sme.expert.id,
+                              clarificationInput[sme.expert.id]
+                            );
+                            setClarificationInput(prev => ({
+                              ...prev,
+                              [sme.expert.id]: "",
+                            }));
                           }
                         }}
                         className="h-7 bg-fuchsia-500/20 hover:bg-fuchsia-500/30 text-fuchsia-300"
@@ -330,7 +391,9 @@ export function SMEPanel({
 
       {/* Legend */}
       <div className="pt-3 border-t border-white/10">
-        <p className="text-[10px] text-foreground/60 mb-2">Contribution Types:</p>
+        <p className="text-[10px] text-foreground/60 mb-2">
+          Contribution Types:
+        </p>
         <div className="flex flex-wrap gap-2">
           <div className="flex items-center gap-1 text-[10px] text-foreground/70">
             <Sparkles className="w-3 h-3 text-cyan-400" /> Insight

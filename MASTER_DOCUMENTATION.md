@@ -103,21 +103,21 @@ CEPHO is deployed to Render.com via a CI/CD pipeline. Pushing to the `main` bran
 
 The database schema consists of 166 tables. Below is a summary of key tables and their purpose:
 
-| Table Name                | Purpose                                                                 |
-|---------------------------|-------------------------------------------------------------------------|
-| `users`                   | Core user table for authentication and profile information.             |
-| `mood_history`            | Tracks the user's emotional state throughout the day.                   |
-| `training_conversations`  | Logs full conversations with the Digital Twin for training purposes.    |
-| `decision_patterns`       | Records every choice the user makes to learn their preferences.         |
-| `user_preferences`        | Stores preferences extracted from user behavior.                        |
-| `vocabulary_patterns`     | Manages the user's specific terms and phrases.                          |
-| `feedback_history`        | Stores user feedback on AI expert work.                                 |
-| `twin_activity_log`       | Logs autonomous actions taken by the Digital Twin.                      |
-| `expert_performance`      | Tracks the performance scores of AI experts.                            |
-| `projects`                | Manages the user's active projects.                                     |
-| `daily_brief_items`       | Stores items for the daily briefing.                                    |
-| `user_settings`           | Manages user-specific settings and application state.                   |
-| `library_documents`       | Stores documents in the user's library.                                 |
+| Table Name               | Purpose                                                              |
+| ------------------------ | -------------------------------------------------------------------- |
+| `users`                  | Core user table for authentication and profile information.          |
+| `mood_history`           | Tracks the user's emotional state throughout the day.                |
+| `training_conversations` | Logs full conversations with the Digital Twin for training purposes. |
+| `decision_patterns`      | Records every choice the user makes to learn their preferences.      |
+| `user_preferences`       | Stores preferences extracted from user behavior.                     |
+| `vocabulary_patterns`    | Manages the user's specific terms and phrases.                       |
+| `feedback_history`       | Stores user feedback on AI expert work.                              |
+| `twin_activity_log`      | Logs autonomous actions taken by the Digital Twin.                   |
+| `expert_performance`     | Tracks the performance scores of AI experts.                         |
+| `projects`               | Manages the user's active projects.                                  |
+| `daily_brief_items`      | Stores items for the daily briefing.                                 |
+| `user_settings`          | Manages user-specific settings and application state.                |
+| `library_documents`      | Stores documents in the user's library.                              |
 
 ---
 
@@ -151,8 +151,8 @@ All code, documentation, and audit reports are available in the GitHub repositor
 
 [https://github.com/jonathanrickarduae/CEPHO-The-Brain-Complete](https://github.com/jonathanrickarduae/CEPHO-The-Brain-Complete)
 
-
 **Key Documents:**
+
 - `README.md`
 - `ARCHITECTURE.md`
 - `FEATURES.md`

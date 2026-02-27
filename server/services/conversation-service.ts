@@ -1,36 +1,44 @@
-import { getPool } from '../db-pool';
+import { getPool } from "../db-pool";
 import { logger } from "../utils/logger";
 const log = logger.module("ConversationService");
 
 export interface ConversationMessage {
-  role: 'user' | 'assistant' | 'system';
+  role: "user" | "assistant" | "system";
   content: string;
   metadata?: any;
 }
 
 export class ConversationService {
-  async addMessage(userId: number, role: 'user' | 'assistant' | 'system', content: string, metadata?: any) {
+  async addMessage(
+    userId: number,
+    role: "user" | "assistant" | "system",
+    content: string,
+    metadata?: any
+  ) {
     try {
       const pool = getPool();
-      
+
       const result = await pool.query(
         `INSERT INTO conversations ("userId", role, content, metadata, "createdAt") 
          VALUES ($1, $2, $3, $4, NOW()) RETURNING *`,
         [userId, role, content, metadata ? JSON.stringify(metadata) : null]
       );
-      
-      log.debug('[Conversation] Message saved:', { userId, role });
+
+      log.debug("[Conversation] Message saved:", { userId, role });
       return result.rows[0];
     } catch (error: any) {
-      log.error('[Conversation] Error saving message:', error.message);
+      log.error("[Conversation] Error saving message:", error.message);
       throw error;
     }
   }
 
-  async getConversationHistory(userId: number, limit: number = 10): Promise<ConversationMessage[]> {
+  async getConversationHistory(
+    userId: number,
+    limit: number = 10
+  ): Promise<ConversationMessage[]> {
     try {
       const pool = getPool();
-      
+
       const result = await pool.query(
         `SELECT role, content, metadata, "createdAt" 
          FROM conversations 
@@ -39,18 +47,21 @@ export class ConversationService {
          LIMIT $2`,
         [userId, limit]
       );
-      
+
       // Reverse to get chronological order (oldest first)
       const messages = result.rows.reverse().map((row: any) => ({
         role: row.role,
         content: row.content,
         metadata: row.metadata,
       }));
-      
-      log.debug('[Conversation] Retrieved history:', { userId, count: messages.length });
+
+      log.debug("[Conversation] Retrieved history:", {
+        userId,
+        count: messages.length,
+      });
       return messages;
     } catch (error: any) {
-      log.error('[Conversation] Error retrieving history:', error.message);
+      log.error("[Conversation] Error retrieving history:", error.message);
       return [];
     }
   }
@@ -58,15 +69,14 @@ export class ConversationService {
   async clearConversationHistory(userId: number) {
     try {
       const pool = getPool();
-      
-      await pool.query(
-        `DELETE FROM conversations WHERE "userId" = $1`,
-        [userId]
-      );
-      
-      log.debug('[Conversation] History cleared:', { userId });
+
+      await pool.query(`DELETE FROM conversations WHERE "userId" = $1`, [
+        userId,
+      ]);
+
+      log.debug("[Conversation] History cleared:", { userId });
     } catch (error: any) {
-      log.error('[Conversation] Error clearing history:', error.message);
+      log.error("[Conversation] Error clearing history:", error.message);
       throw error;
     }
   }
@@ -74,7 +84,7 @@ export class ConversationService {
   async getConversationStats(userId: number) {
     try {
       const pool = getPool();
-      
+
       const result = await pool.query(
         `SELECT 
           COUNT(*) as "totalMessages",
@@ -86,12 +96,12 @@ export class ConversationService {
          WHERE "userId" = $1`,
         [userId]
       );
-      
+
       const stats = result.rows[0] || {};
-      log.debug('[Conversation] Stats retrieved:', { userId, stats });
+      log.debug("[Conversation] Stats retrieved:", { userId, stats });
       return stats;
     } catch (error: any) {
-      log.error('[Conversation] Error retrieving stats:', error.message);
+      log.error("[Conversation] Error retrieving stats:", error.message);
       return null;
     }
   }

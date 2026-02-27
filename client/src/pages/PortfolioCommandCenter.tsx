@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import StartupHealthDashboard from '@/components/project-management/StartupHealthDashboard';
+import StartupHealthDashboard from "@/components/project-management/StartupHealthDashboard";
 import {
   Building2,
   TrendingUp,
@@ -58,7 +58,8 @@ const ventures: Venture[] = [
   {
     id: "celadon",
     name: "Project A Ajman",
-    description: "Medical cannabis facility in UAE - manufacturing, testing, R&D",
+    description:
+      "Medical cannabis facility in UAE - manufacturing, testing, R&D",
     status: "active",
     health: "green",
     stage: "Series A",
@@ -172,8 +173,8 @@ const ventures: Venture[] = [
 // Calculate portfolio summary
 const portfolioSummary = {
   totalVentures: ventures.length,
-  activeVentures: ventures.filter((v) => v.status === "active").length,
-  healthyVentures: ventures.filter((v) => v.health === "green").length,
+  activeVentures: ventures.filter(v => v.status === "active").length,
+  healthyVentures: ventures.filter(v => v.health === "green").length,
   totalBlockers: ventures.reduce((acc, v) => acc + v.blockers.length, 0),
   totalNextActions: ventures.reduce((acc, v) => acc + v.nextActions.length, 0),
 };
@@ -194,13 +195,29 @@ function getHealthColor(health: string) {
 function getStatusBadge(status: string) {
   switch (status) {
     case "active":
-      return <Badge className="bg-green-500/20 text-green-400 border-green-500/30">Active</Badge>;
+      return (
+        <Badge className="bg-green-500/20 text-green-400 border-green-500/30">
+          Active
+        </Badge>
+      );
     case "planning":
-      return <Badge className="bg-blue-500/20 text-blue-400 border-blue-500/30">Planning</Badge>;
+      return (
+        <Badge className="bg-blue-500/20 text-blue-400 border-blue-500/30">
+          Planning
+        </Badge>
+      );
     case "on-hold":
-      return <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30">On Hold</Badge>;
+      return (
+        <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30">
+          On Hold
+        </Badge>
+      );
     case "completed":
-      return <Badge className="bg-gray-500/20 text-foreground/70 border-gray-500/30">Completed</Badge>;
+      return (
+        <Badge className="bg-gray-500/20 text-foreground/70 border-gray-500/30">
+          Completed
+        </Badge>
+      );
     default:
       return null;
   }
@@ -217,11 +234,15 @@ function VentureCard({ venture }: { venture: Venture }) {
               <CardTitle className="text-lg font-semibold text-white">
                 {venture.name}
               </CardTitle>
-              <p className="text-sm text-foreground/70 mt-0.5">{venture.description}</p>
+              <p className="text-sm text-foreground/70 mt-0.5">
+                {venture.description}
+              </p>
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <div className={`w-3 h-3 rounded-full ${getHealthColor(venture.health)}`} />
+            <div
+              className={`w-3 h-3 rounded-full ${getHealthColor(venture.health)}`}
+            />
             {getStatusBadge(venture.status)}
           </div>
         </div>
@@ -233,9 +254,15 @@ function VentureCard({ venture }: { venture: Venture }) {
             <div key={idx} className="bg-gray-800/50 rounded-lg p-2.5">
               <p className="text-xs text-foreground/60">{metric.label}</p>
               <div className="flex items-center gap-1.5 mt-0.5">
-                <span className="text-sm font-semibold text-white">{metric.value}</span>
-                {metric.trend === "up" && <TrendingUp className="h-3 w-3 text-green-500" />}
-                {metric.trend === "down" && <TrendingDown className="h-3 w-3 text-red-500" />}
+                <span className="text-sm font-semibold text-white">
+                  {metric.value}
+                </span>
+                {metric.trend === "up" && (
+                  <TrendingUp className="h-3 w-3 text-green-500" />
+                )}
+                {metric.trend === "down" && (
+                  <TrendingDown className="h-3 w-3 text-red-500" />
+                )}
               </div>
             </div>
           ))}
@@ -249,7 +276,10 @@ function VentureCard({ venture }: { venture: Venture }) {
             </p>
             <ul className="space-y-1">
               {venture.nextActions.slice(0, 2).map((action, idx) => (
-                <li key={idx} className="text-sm text-foreground/80 flex items-start gap-2">
+                <li
+                  key={idx}
+                  className="text-sm text-foreground/80 flex items-start gap-2"
+                >
                   <ArrowRight className="h-3 w-3 mt-1 text-fuchsia-500 shrink-0" />
                   {action}
                 </li>
@@ -296,7 +326,11 @@ function VentureCard({ venture }: { venture: Venture }) {
               <Clock className="h-3 w-3" /> {venture.lastUpdated}
             </span>
           </div>
-          <Button variant="ghost" size="sm" className="text-fuchsia-400 hover:text-fuchsia-300">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="text-fuchsia-400 hover:text-fuchsia-300"
+          >
             View Details <ArrowRight className="h-3 w-3 ml-1" />
           </Button>
         </div>
@@ -332,7 +366,9 @@ export default function PortfolioCommandCenter() {
                 <Building2 className="h-5 w-5 text-blue-400" />
               </div>
               <div>
-                <p className="text-2xl font-bold">{portfolioSummary.totalVentures}</p>
+                <p className="text-2xl font-bold">
+                  {portfolioSummary.totalVentures}
+                </p>
                 <p className="text-xs text-foreground/60">Total Ventures</p>
               </div>
             </div>
@@ -346,7 +382,9 @@ export default function PortfolioCommandCenter() {
                 <Rocket className="h-5 w-5 text-green-400" />
               </div>
               <div>
-                <p className="text-2xl font-bold">{portfolioSummary.activeVentures}</p>
+                <p className="text-2xl font-bold">
+                  {portfolioSummary.activeVentures}
+                </p>
                 <p className="text-xs text-foreground/60">Active</p>
               </div>
             </div>
@@ -360,7 +398,9 @@ export default function PortfolioCommandCenter() {
                 <CheckCircle2 className="h-5 w-5 text-emerald-400" />
               </div>
               <div>
-                <p className="text-2xl font-bold">{portfolioSummary.healthyVentures}</p>
+                <p className="text-2xl font-bold">
+                  {portfolioSummary.healthyVentures}
+                </p>
                 <p className="text-xs text-foreground/60">Healthy</p>
               </div>
             </div>
@@ -374,7 +414,9 @@ export default function PortfolioCommandCenter() {
                 <AlertTriangle className="h-5 w-5 text-amber-400" />
               </div>
               <div>
-                <p className="text-2xl font-bold">{portfolioSummary.totalBlockers}</p>
+                <p className="text-2xl font-bold">
+                  {portfolioSummary.totalBlockers}
+                </p>
                 <p className="text-xs text-foreground/60">Blockers</p>
               </div>
             </div>
@@ -388,7 +430,9 @@ export default function PortfolioCommandCenter() {
                 <Target className="h-5 w-5 text-fuchsia-400" />
               </div>
               <div>
-                <p className="text-2xl font-bold">{portfolioSummary.totalNextActions}</p>
+                <p className="text-2xl font-bold">
+                  {portfolioSummary.totalNextActions}
+                </p>
                 <p className="text-xs text-foreground/60">Actions</p>
               </div>
             </div>
@@ -397,21 +441,40 @@ export default function PortfolioCommandCenter() {
       </div>
 
       {/* Tabs */}
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
+      <Tabs
+        value={activeTab}
+        onValueChange={setActiveTab}
+        className="space-y-4"
+      >
         <TabsList className="bg-gray-900/50 border border-gray-800">
-          <TabsTrigger value="overview" className="data-[state=active]:bg-fuchsia-500/20">
+          <TabsTrigger
+            value="overview"
+            className="data-[state=active]:bg-fuchsia-500/20"
+          >
             <BarChart3 className="h-4 w-4 mr-2" /> Overview
           </TabsTrigger>
-          <TabsTrigger value="ventures" className="data-[state=active]:bg-fuchsia-500/20">
+          <TabsTrigger
+            value="ventures"
+            className="data-[state=active]:bg-fuchsia-500/20"
+          >
             <Building2 className="h-4 w-4 mr-2" /> Ventures
           </TabsTrigger>
-          <TabsTrigger value="actions" className="data-[state=active]:bg-fuchsia-500/20">
+          <TabsTrigger
+            value="actions"
+            className="data-[state=active]:bg-fuchsia-500/20"
+          >
             <Target className="h-4 w-4 mr-2" /> Actions
           </TabsTrigger>
-          <TabsTrigger value="blockers" className="data-[state=active]:bg-fuchsia-500/20">
+          <TabsTrigger
+            value="blockers"
+            className="data-[state=active]:bg-fuchsia-500/20"
+          >
             <AlertTriangle className="h-4 w-4 mr-2" /> Blockers
           </TabsTrigger>
-          <TabsTrigger value="health" className="data-[state=active]:bg-fuchsia-500/20">
+          <TabsTrigger
+            value="health"
+            className="data-[state=active]:bg-fuchsia-500/20"
+          >
             <Rocket className="h-4 w-4 mr-2" /> Health
           </TabsTrigger>
         </TabsList>
@@ -419,7 +482,7 @@ export default function PortfolioCommandCenter() {
         <TabsContent value="overview" className="space-y-4">
           {/* Venture Cards Grid */}
           <div className="grid md:grid-cols-2 gap-4">
-            {ventures.map((venture) => (
+            {ventures.map(venture => (
               <VentureCard key={venture.id} venture={venture} />
             ))}
           </div>
@@ -427,7 +490,7 @@ export default function PortfolioCommandCenter() {
 
         <TabsContent value="ventures" className="space-y-4">
           <div className="grid md:grid-cols-2 gap-4">
-            {ventures.map((venture) => (
+            {ventures.map(venture => (
               <VentureCard key={venture.id} venture={venture} />
             ))}
           </div>
@@ -443,18 +506,26 @@ export default function PortfolioCommandCenter() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {ventures.map((venture) =>
+                {ventures.map(venture =>
                   venture.nextActions.map((action, idx) => (
                     <div
                       key={`${venture.id}-${idx}`}
                       className="flex items-start gap-3 p-3 bg-gray-800/50 rounded-lg"
                     >
-                      <div className="p-1.5 bg-gray-700 rounded">{venture.icon}</div>
+                      <div className="p-1.5 bg-gray-700 rounded">
+                        {venture.icon}
+                      </div>
                       <div className="flex-1">
                         <p className="text-sm text-white">{action}</p>
-                        <p className="text-xs text-foreground/60 mt-1">{venture.name}</p>
+                        <p className="text-xs text-foreground/60 mt-1">
+                          {venture.name}
+                        </p>
                       </div>
-                      <Button variant="ghost" size="sm" className="text-fuchsia-400">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="text-fuchsia-400"
+                      >
                         <CheckCircle2 className="h-4 w-4" />
                       </Button>
                     </div>
@@ -482,8 +553,8 @@ export default function PortfolioCommandCenter() {
               ) : (
                 <div className="space-y-4">
                   {ventures
-                    .filter((v) => v.blockers.length > 0)
-                    .map((venture) =>
+                    .filter(v => v.blockers.length > 0)
+                    .map(venture =>
                       venture.blockers.map((blocker, idx) => (
                         <div
                           key={`${venture.id}-${idx}`}
@@ -494,9 +565,15 @@ export default function PortfolioCommandCenter() {
                           </div>
                           <div className="flex-1">
                             <p className="text-sm text-white">{blocker}</p>
-                            <p className="text-xs text-foreground/60 mt-1">{venture.name}</p>
+                            <p className="text-xs text-foreground/60 mt-1">
+                              {venture.name}
+                            </p>
                           </div>
-                          <Button variant="ghost" size="sm" className="text-red-400">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="text-red-400"
+                          >
                             Resolve
                           </Button>
                         </div>
@@ -516,25 +593,37 @@ export default function PortfolioCommandCenter() {
       {/* Quick Links */}
       <div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-3">
         <Link href="/innovation-hub">
-          <Button variant="outline" className="w-full justify-start border-gray-800 hover:bg-gray-900">
+          <Button
+            variant="outline"
+            className="w-full justify-start border-gray-800 hover:bg-gray-900"
+          >
             <Sparkles className="h-4 w-4 mr-2 text-purple-400" />
             Innovation Hub
           </Button>
         </Link>
         <Link href="/project-genesis">
-          <Button variant="outline" className="w-full justify-start border-gray-800 hover:bg-gray-900">
+          <Button
+            variant="outline"
+            className="w-full justify-start border-gray-800 hover:bg-gray-900"
+          >
             <Rocket className="h-4 w-4 mr-2 text-green-400" />
             Project Genesis
           </Button>
         </Link>
         <Link href="/workflow">
-          <Button variant="outline" className="w-full justify-start border-gray-800 hover:bg-gray-900">
+          <Button
+            variant="outline"
+            className="w-full justify-start border-gray-800 hover:bg-gray-900"
+          >
             <BarChart3 className="h-4 w-4 mr-2 text-blue-400" />
             Workflow
           </Button>
         </Link>
         <Link href="/library">
-          <Button variant="outline" className="w-full justify-start border-gray-800 hover:bg-gray-900">
+          <Button
+            variant="outline"
+            className="w-full justify-start border-gray-800 hover:bg-gray-900"
+          >
             <FileText className="h-4 w-4 mr-2 text-amber-400" />
             Library
           </Button>

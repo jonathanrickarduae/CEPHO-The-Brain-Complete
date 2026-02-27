@@ -16,7 +16,7 @@ We use Drizzle ORM's `sql` template tag for complex queries. This is **NOT** vul
 
 ```typescript
 // ✅ SAFE - Using sql template tag (parameterized)
-import { sql } from 'drizzle-orm';
+import { sql } from "drizzle-orm";
 
 await db.execute(sql`DELETE FROM users WHERE id = ${userId}`);
 // Compiles to: DELETE FROM users WHERE id = $1
@@ -32,12 +32,14 @@ await db.execute(`DELETE FROM users WHERE id = ${userId}`);
 ### When to Use `sql` Template Tag vs Query Builder
 
 #### Use `sql` Template Tag When:
+
 - Complex queries with multiple JOINs
 - Database-specific features (e.g., `RETURNING *`)
 - Bulk operations (DELETE, UPDATE without WHERE)
 - Performance-critical raw SQL
 
 **Example:**
+
 ```typescript
 // Complex cleanup operation
 await db.execute(sql`DELETE FROM integration_logs`);
@@ -46,19 +48,17 @@ await db.execute(sql`DELETE FROM integrations`);
 ```
 
 #### Use Query Builder When:
+
 - Simple CRUD operations
 - Type safety is critical
 - Need IntelliSense/autocomplete
 - Building dynamic queries
 
 **Example:**
+
 ```typescript
 // Simple query with type safety
-const user = await db
-  .select()
-  .from(users)
-  .where(eq(users.id, userId))
-  .limit(1);
+const user = await db.select().from(users).where(eq(users.id, userId)).limit(1);
 ```
 
 ## Code Review Notes
@@ -74,11 +74,11 @@ const user = await db
 
 ### Common Misconceptions
 
-| Misconception | Reality |
-|---------------|---------|
-| "Raw SQL is always unsafe" | `sql` template tag is parameterized and safe |
-| "Must use query builder for everything" | `sql` tag is valid for complex queries |
-| "This needs refactoring" | Only refactor if there's a clear benefit |
+| Misconception                           | Reality                                      |
+| --------------------------------------- | -------------------------------------------- |
+| "Raw SQL is always unsafe"              | `sql` template tag is parameterized and safe |
+| "Must use query builder for everything" | `sql` tag is valid for complex queries       |
+| "This needs refactoring"                | Only refactor if there's a clear benefit     |
 
 ## Security Audit Results
 
@@ -90,6 +90,7 @@ const user = await db
 ### Audit Details
 
 All 86 SQL queries use the `sql` template tag from Drizzle ORM:
+
 - ✅ `routers/cleanup.router.ts`: 60+ DELETE queries (all safe)
 - ✅ `routers/project-genesis.router.ts`: Safe
 - ✅ `routers/quality-gates.router.ts`: Safe
@@ -133,6 +134,7 @@ await db.execute(sql`DELETE FROM integration_logs`);
 ### If You Need to Convert `sql` to Query Builder
 
 Only do this if:
+
 - Query is simple enough for query builder
 - Type safety would provide clear benefit
 - Performance is not impacted
@@ -156,6 +158,7 @@ await db.delete(users).where(eq(users.id, userId));
 ## Questions?
 
 If you're unsure about SQL safety in this codebase:
+
 1. Read this document
 2. Check if the query uses `sql` template tag
 3. Verify no string concatenation is used

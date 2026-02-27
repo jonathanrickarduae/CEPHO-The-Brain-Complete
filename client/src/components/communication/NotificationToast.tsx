@@ -1,11 +1,24 @@
-import { useEffect, useState } from 'react';
-import { X, Bell, Lightbulb, Trophy, Clock, AlertTriangle, ChevronRight } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
-import { haptics } from '@/lib/haptics';
+import { useEffect, useState } from "react";
+import {
+  X,
+  Bell,
+  Lightbulb,
+  Trophy,
+  Clock,
+  AlertTriangle,
+  ChevronRight,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { haptics } from "@/lib/haptics";
 
-type NotificationType = 'reminder' | 'insight' | 'achievement' | 'nudge' | 'alert';
-type NotificationPriority = 'low' | 'medium' | 'high' | 'urgent';
+type NotificationType =
+  | "reminder"
+  | "insight"
+  | "achievement"
+  | "nudge"
+  | "alert";
+type NotificationPriority = "low" | "medium" | "high" | "urgent";
 
 interface NotificationToastProps {
   id: string;
@@ -22,7 +35,10 @@ interface NotificationToastProps {
   autoDismissDelay?: number;
 }
 
-const TYPE_ICONS: Record<NotificationType, React.ComponentType<{ className?: string }>> = {
+const TYPE_ICONS: Record<
+  NotificationType,
+  React.ComponentType<{ className?: string }>
+> = {
   reminder: Clock,
   insight: Lightbulb,
   achievement: Trophy,
@@ -31,18 +47,18 @@ const TYPE_ICONS: Record<NotificationType, React.ComponentType<{ className?: str
 };
 
 const TYPE_COLORS: Record<NotificationType, string> = {
-  reminder: 'border-amber-500/30 bg-amber-500/10',
-  insight: 'border-cyan-500/30 bg-cyan-500/10',
-  achievement: 'border-purple-500/30 bg-purple-500/10',
-  nudge: 'border-primary/30 bg-primary/10',
-  alert: 'border-red-500/30 bg-red-500/10',
+  reminder: "border-amber-500/30 bg-amber-500/10",
+  insight: "border-cyan-500/30 bg-cyan-500/10",
+  achievement: "border-purple-500/30 bg-purple-500/10",
+  nudge: "border-primary/30 bg-primary/10",
+  alert: "border-red-500/30 bg-red-500/10",
 };
 
 const PRIORITY_STYLES: Record<NotificationPriority, string> = {
-  low: '',
-  medium: '',
-  high: 'ring-1 ring-primary/50',
-  urgent: 'ring-2 ring-red-500 animate-pulse',
+  low: "",
+  medium: "",
+  high: "ring-1 ring-primary/50",
+  urgent: "ring-2 ring-red-500 animate-pulse",
 };
 
 export function NotificationToast({
@@ -67,18 +83,18 @@ export function NotificationToast({
   useEffect(() => {
     // Animate in
     requestAnimationFrame(() => setIsVisible(true));
-    
+
     // Haptic feedback
-    if (priority === 'urgent') {
+    if (priority === "urgent") {
       haptics.warning();
-    } else if (priority === 'high') {
+    } else if (priority === "high") {
       haptics.press();
     } else {
       haptics.tap();
     }
 
     // Auto dismiss
-    if (autoDismiss && priority !== 'urgent') {
+    if (autoDismiss && priority !== "urgent") {
       const timer = setTimeout(() => {
         handleDismiss();
       }, autoDismissDelay);
@@ -104,28 +120,28 @@ export function NotificationToast({
   return (
     <div
       className={cn(
-        'fixed bottom-20 md:bottom-6 right-4 md:right-6 z-50',
-        'w-[calc(100%-2rem)] md:w-96 max-w-sm',
-        'transform transition-all duration-300 ease-out',
+        "fixed bottom-20 md:bottom-6 right-4 md:right-6 z-50",
+        "w-[calc(100%-2rem)] md:w-96 max-w-sm",
+        "transform transition-all duration-300 ease-out",
         isVisible && !isExiting
-          ? 'translate-y-0 opacity-100'
-          : 'translate-y-4 opacity-0'
+          ? "translate-y-0 opacity-100"
+          : "translate-y-4 opacity-0"
       )}
     >
       <div
         className={cn(
-          'relative overflow-hidden rounded-xl border backdrop-blur-xl shadow-lg',
+          "relative overflow-hidden rounded-xl border backdrop-blur-xl shadow-lg",
           TYPE_COLORS[type],
           PRIORITY_STYLES[priority]
         )}
       >
         {/* Progress bar for auto-dismiss */}
-        {autoDismiss && priority !== 'urgent' && (
+        {autoDismiss && priority !== "urgent" && (
           <div className="absolute top-0 left-0 right-0 h-0.5 bg-white/10">
             <div
               className="h-full bg-primary transition-all ease-linear"
               style={{
-                width: '100%',
+                width: "100%",
                 animation: `shrink ${autoDismissDelay}ms linear forwards`,
               }}
             />
@@ -135,10 +151,12 @@ export function NotificationToast({
         <div className="p-4">
           <div className="flex items-start gap-3">
             {/* Icon */}
-            <div className={cn(
-              'shrink-0 w-10 h-10 rounded-lg flex items-center justify-center',
-              'bg-white/10'
-            )}>
+            <div
+              className={cn(
+                "shrink-0 w-10 h-10 rounded-lg flex items-center justify-center",
+                "bg-white/10"
+              )}
+            >
               {icon ? (
                 <span className="text-xl">{icon}</span>
               ) : (
@@ -264,7 +282,7 @@ export function NotificationCenter({
             </div>
           ) : (
             <div className="divide-y divide-white/5">
-              {notifications.map((notification) => (
+              {notifications.map(notification => (
                 <NotificationItem
                   key={notification.id}
                   {...notification}
@@ -324,8 +342,8 @@ function NotificationItem({
   return (
     <div
       className={cn(
-        'relative p-4 hover:bg-secondary/30 transition-colors cursor-pointer',
-        !read && 'bg-primary/5'
+        "relative p-4 hover:bg-secondary/30 transition-colors cursor-pointer",
+        !read && "bg-primary/5"
       )}
       onClick={handleClick}
     >
@@ -336,10 +354,12 @@ function NotificationItem({
 
       <div className="flex items-start gap-3 pl-4">
         {/* Icon */}
-        <div className={cn(
-          'shrink-0 w-8 h-8 rounded-lg flex items-center justify-center',
-          TYPE_COLORS[type]
-        )}>
+        <div
+          className={cn(
+            "shrink-0 w-8 h-8 rounded-lg flex items-center justify-center",
+            TYPE_COLORS[type]
+          )}
+        >
           {icon ? (
             <span className="text-lg">{icon}</span>
           ) : (
@@ -350,10 +370,12 @@ function NotificationItem({
         {/* Content */}
         <div className="flex-1 min-w-0">
           <div className="flex items-start justify-between gap-2">
-            <h4 className={cn(
-              'text-sm',
-              read ? 'text-muted-foreground' : 'font-medium text-foreground'
-            )}>
+            <h4
+              className={cn(
+                "text-sm",
+                read ? "text-muted-foreground" : "font-medium text-foreground"
+              )}
+            >
               {title}
             </h4>
             <span className="shrink-0 text-xs text-muted-foreground">
@@ -373,7 +395,7 @@ function NotificationItem({
 
         {/* Dismiss */}
         <button
-          onClick={(e) => {
+          onClick={e => {
             e.stopPropagation();
             onDismiss(id);
           }}
@@ -394,21 +416,21 @@ function formatTimeAgo(date: Date): string {
   const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
   const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
 
-  if (diffMins < 1) return 'Just now';
+  if (diffMins < 1) return "Just now";
   if (diffMins < 60) return `${diffMins}m`;
   if (diffHours < 24) return `${diffHours}h`;
   if (diffDays < 7) return `${diffDays}d`;
-  return date.toLocaleDateString('en-GB');
+  return date.toLocaleDateString("en-GB");
 }
 
 // Add CSS for shrink animation
-const style = document.createElement('style');
+const style = document.createElement("style");
 style.textContent = `
   @keyframes shrink {
     from { width: 100%; }
     to { width: 0%; }
   }
 `;
-if (typeof document !== 'undefined') {
+if (typeof document !== "undefined") {
   document.head.appendChild(style);
 }

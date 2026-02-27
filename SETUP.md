@@ -94,12 +94,10 @@ CEPHO is configured for seamless deployment to **Render.com**. The following ste
 ### Step-by-Step Deployment
 
 1.  **Create a New Web Service on Render**
-
     - Log in to your Render dashboard and create a new **Web Service**.
     - Connect your GitHub account and select the CEPHO repository.
 
 2.  **Configure the Service**
-
     - **Name:** Choose a name for your service (e.g., `cepho-production`).
     - **Region:** Select a region close to your users.
     - **Branch:** Set the branch to `main` for automatic deployments.

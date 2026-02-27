@@ -11,16 +11,25 @@ export const ALL_FUNDING_PROGRAMS = [
     type: "grant",
     description: "Government grant for innovative technology projects",
     maxAmount: 500000,
-    eligibility: ["UAE-based companies", "Technology focus", "Innovation component"],
+    eligibility: [
+      "UAE-based companies",
+      "Technology focus",
+      "Innovation component",
+    ],
   },
   {
     id: "uk-innovate-uk",
     country: "UK",
     name: "Innovate UK Smart Grants",
     type: "grant",
-    description: "Funding for game-changing and commercially viable R&D innovation",
+    description:
+      "Funding for game-changing and commercially viable R&D innovation",
     maxAmount: 1000000,
-    eligibility: ["UK-registered companies", "R&D project", "Commercial viability"],
+    eligibility: [
+      "UK-registered companies",
+      "R&D project",
+      "Commercial viability",
+    ],
   },
 ];
 

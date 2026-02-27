@@ -1,21 +1,32 @@
-import { useState } from 'react';
-import { 
-  CheckCircle2, XCircle, Settings, ExternalLink, Search,
-  Cpu, Mail, MessageSquare, Calendar, FileText, 
-  Database, Shield, Globe, Sparkles
-} from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import { toast } from 'sonner';
+import { useState } from "react";
+import {
+  CheckCircle2,
+  XCircle,
+  Settings,
+  ExternalLink,
+  Search,
+  Cpu,
+  Mail,
+  MessageSquare,
+  Calendar,
+  FileText,
+  Database,
+  Shield,
+  Globe,
+  Sparkles,
+} from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { toast } from "sonner";
 
 interface Integration {
   id: string;
   name: string;
   category: string;
   icon: React.ReactNode;
-  status: 'active' | 'inactive';
+  status: "active" | "inactive";
   description: string;
   documentationUrl?: string;
 }
@@ -23,135 +34,141 @@ interface Integration {
 const INTEGRATIONS: Integration[] = [
   // AI Services
   {
-    id: 'openai',
-    name: 'OpenAI',
-    category: 'AI Services',
+    id: "openai",
+    name: "OpenAI",
+    category: "AI Services",
     icon: <Cpu className="w-4 h-4" />,
-    status: 'active',
-    description: 'GPT-4, GPT-3.5, DALL-E, Whisper APIs',
-    documentationUrl: 'https://platform.openai.com/docs',
+    status: "active",
+    description: "GPT-4, GPT-3.5, DALL-E, Whisper APIs",
+    documentationUrl: "https://platform.openai.com/docs",
   },
   {
-    id: 'claude',
-    name: 'Anthropic Claude',
-    category: 'AI Services',
+    id: "claude",
+    name: "Anthropic Claude",
+    category: "AI Services",
     icon: <Sparkles className="w-4 h-4" />,
-    status: 'active',
-    description: 'Claude 3 Opus, Sonnet, Haiku',
-    documentationUrl: 'https://docs.anthropic.com',
+    status: "active",
+    description: "Claude 3 Opus, Sonnet, Haiku",
+    documentationUrl: "https://docs.anthropic.com",
   },
   {
-    id: 'gemini',
-    name: 'Google Gemini',
-    category: 'AI Services',
+    id: "gemini",
+    name: "Google Gemini",
+    category: "AI Services",
     icon: <Sparkles className="w-4 h-4" />,
-    status: 'active',
-    description: 'Gemini Pro, Gemini Ultra',
-    documentationUrl: 'https://ai.google.dev/docs',
+    status: "active",
+    description: "Gemini Pro, Gemini Ultra",
+    documentationUrl: "https://ai.google.dev/docs",
   },
   {
-    id: 'perplexity',
-    name: 'Perplexity AI',
-    category: 'AI Services',
+    id: "perplexity",
+    name: "Perplexity AI",
+    category: "AI Services",
     icon: <Globe className="w-4 h-4" />,
-    status: 'inactive',
-    description: 'Real-time search and reasoning',
-    documentationUrl: 'https://docs.perplexity.ai'
+    status: "inactive",
+    description: "Real-time search and reasoning",
+    documentationUrl: "https://docs.perplexity.ai",
   },
   {
-    id: 'elevenlabs',
-    name: 'ElevenLabs',
-    category: 'AI Services',
+    id: "elevenlabs",
+    name: "ElevenLabs",
+    category: "AI Services",
     icon: <MessageSquare className="w-4 h-4" />,
-    status: 'active',
-    description: 'Voice synthesis and cloning',
-    documentationUrl: 'https://elevenlabs.io/docs',
+    status: "active",
+    description: "Voice synthesis and cloning",
+    documentationUrl: "https://elevenlabs.io/docs",
   },
-  
+
   // Communication
   {
-    id: 'gmail',
-    name: 'Gmail API',
-    category: 'Communication',
+    id: "gmail",
+    name: "Gmail API",
+    category: "Communication",
     icon: <Mail className="w-4 h-4" />,
-    status: 'active',
-    description: 'Email management and automation',
-    documentationUrl: 'https://developers.google.com/gmail/api',
+    status: "active",
+    description: "Email management and automation",
+    documentationUrl: "https://developers.google.com/gmail/api",
   },
   {
-    id: 'sendgrid',
-    name: 'SendGrid',
-    category: 'Communication',
+    id: "sendgrid",
+    name: "SendGrid",
+    category: "Communication",
     icon: <Mail className="w-4 h-4" />,
-    status: 'inactive',
-    description: 'Transactional email service',
-    documentationUrl: 'https://docs.sendgrid.com'
+    status: "inactive",
+    description: "Transactional email service",
+    documentationUrl: "https://docs.sendgrid.com",
   },
   {
-    id: 'twilio',
-    name: 'Twilio',
-    category: 'Communication',
+    id: "twilio",
+    name: "Twilio",
+    category: "Communication",
     icon: <MessageSquare className="w-4 h-4" />,
-    status: 'inactive',
-    description: 'SMS, voice, and messaging',
-    documentationUrl: 'https://www.twilio.com/docs'
+    status: "inactive",
+    description: "SMS, voice, and messaging",
+    documentationUrl: "https://www.twilio.com/docs",
   },
   {
-    id: 'slack',
-    name: 'Slack',
-    category: 'Communication',
+    id: "slack",
+    name: "Slack",
+    category: "Communication",
     icon: <MessageSquare className="w-4 h-4" />,
-    status: 'active',
-    description: 'Team communication and bots',
-    documentationUrl: 'https://api.slack.com',
+    status: "active",
+    description: "Team communication and bots",
+    documentationUrl: "https://api.slack.com",
   },
-  
+
   // Productivity
   {
-    id: 'notion',
-    name: 'Notion',
-    category: 'Productivity',
+    id: "notion",
+    name: "Notion",
+    category: "Productivity",
     icon: <FileText className="w-4 h-4" />,
-    status: 'active',
-    description: 'Database and content management',
-    documentationUrl: 'https://developers.notion.com',
+    status: "active",
+    description: "Database and content management",
+    documentationUrl: "https://developers.notion.com",
   },
   {
-    id: 'airtable',
-    name: 'Airtable',
-    category: 'Productivity',
+    id: "airtable",
+    name: "Airtable",
+    category: "Productivity",
     icon: <Database className="w-4 h-4" />,
-    status: 'inactive',
-    description: 'Spreadsheet-database hybrid',
-    documentationUrl: 'https://airtable.com/developers'
+    status: "inactive",
+    description: "Spreadsheet-database hybrid",
+    documentationUrl: "https://airtable.com/developers",
   },
   {
-    id: 'google-calendar',
-    name: 'Google Calendar',
-    category: 'Productivity',
+    id: "google-calendar",
+    name: "Google Calendar",
+    category: "Productivity",
     icon: <Calendar className="w-4 h-4" />,
-    status: 'active',
-    description: 'Calendar integration and scheduling',
-    documentationUrl: 'https://developers.google.com/calendar'
+    status: "active",
+    description: "Calendar integration and scheduling",
+    documentationUrl: "https://developers.google.com/calendar",
   },
 ];
 
 export function IntegrationsManager() {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [filterStatus, setFilterStatus] = useState<'all' | 'active' | 'inactive'>('all');
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filterStatus, setFilterStatus] = useState<
+    "all" | "active" | "inactive"
+  >("all");
 
   const filteredIntegrations = INTEGRATIONS.filter(integration => {
-    const matchesSearch = integration.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         integration.category.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesStatus = filterStatus === 'all' || integration.status === filterStatus;
+    const matchesSearch =
+      integration.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      integration.category.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesStatus =
+      filterStatus === "all" || integration.status === filterStatus;
     return matchesSearch && matchesStatus;
   });
 
-  const activeCount = INTEGRATIONS.filter(i => i.status === 'active').length;
-  const inactiveCount = INTEGRATIONS.filter(i => i.status === 'inactive').length;
+  const activeCount = INTEGRATIONS.filter(i => i.status === "active").length;
+  const inactiveCount = INTEGRATIONS.filter(
+    i => i.status === "inactive"
+  ).length;
 
   const handleToggleStatus = (id: string) => {
-    toast.info('Integration status toggled (demo mode)');
+    toast.info("Integration status toggled (demo mode)");
   };
 
   return (
@@ -159,7 +176,9 @@ export function IntegrationsManager() {
       {/* Header */}
       <div>
         <h3 className="text-lg font-semibold text-foreground">Integrations</h3>
-        <p className="text-sm text-muted-foreground">Manage your API keys and service connections</p>
+        <p className="text-sm text-muted-foreground">
+          Manage your API keys and service connections
+        </p>
       </div>
 
       {/* Search and Filters */}
@@ -169,30 +188,34 @@ export function IntegrationsManager() {
           <Input
             placeholder="Search integrations..."
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={e => setSearchQuery(e.target.value)}
             className="pl-9"
           />
         </div>
         <div className="flex gap-2">
           <Button
-            variant={filterStatus === 'all' ? 'default' : 'outline'}
+            variant={filterStatus === "all" ? "default" : "outline"}
             size="sm"
-            onClick={() => setFilterStatus('all')}
+            onClick={() => setFilterStatus("all")}
           >
             All ({INTEGRATIONS.length})
           </Button>
           <Button
-            variant={filterStatus === 'active' ? 'default' : 'outline'}
+            variant={filterStatus === "active" ? "default" : "outline"}
             size="sm"
-            onClick={() => setFilterStatus('active')}
-            className={filterStatus === 'active' ? 'bg-emerald-600 hover:bg-emerald-700' : ''}
+            onClick={() => setFilterStatus("active")}
+            className={
+              filterStatus === "active"
+                ? "bg-emerald-600 hover:bg-emerald-700"
+                : ""
+            }
           >
             Active ({activeCount})
           </Button>
           <Button
-            variant={filterStatus === 'inactive' ? 'default' : 'outline'}
+            variant={filterStatus === "inactive" ? "default" : "outline"}
             size="sm"
-            onClick={() => setFilterStatus('inactive')}
+            onClick={() => setFilterStatus("inactive")}
           >
             Inactive ({inactiveCount})
           </Button>
@@ -201,7 +224,7 @@ export function IntegrationsManager() {
 
       {/* Integrations List */}
       <div className="space-y-2">
-        {filteredIntegrations.map((integration) => (
+        {filteredIntegrations.map(integration => (
           <div
             key={integration.id}
             className="flex items-center justify-between p-4 rounded-lg border border-border bg-card hover:bg-accent/50 transition-colors"
@@ -212,17 +235,21 @@ export function IntegrationsManager() {
               </div>
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-1">
-                  <h4 className="font-medium text-foreground">{integration.name}</h4>
+                  <h4 className="font-medium text-foreground">
+                    {integration.name}
+                  </h4>
                   <Badge variant="outline" className="text-xs">
                     {integration.category}
                   </Badge>
                 </div>
-                <p className="text-sm text-muted-foreground">{integration.description}</p>
+                <p className="text-sm text-muted-foreground">
+                  {integration.description}
+                </p>
               </div>
             </div>
-            
+
             <div className="flex items-center gap-3">
-              {integration.status === 'active' ? (
+              {integration.status === "active" ? (
                 <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/50">
                   <CheckCircle2 className="w-3 h-3 mr-1" />
                   Active
@@ -233,18 +260,20 @@ export function IntegrationsManager() {
                   Inactive
                 </Badge>
               )}
-              
+
               {integration.documentationUrl && (
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={() => window.open(integration.documentationUrl, '_blank')}
+                  onClick={() =>
+                    window.open(integration.documentationUrl, "_blank")
+                  }
                   title="View documentation"
                 >
                   <ExternalLink className="w-4 h-4" />
                 </Button>
               )}
-              
+
               <Button
                 variant="outline"
                 size="sm"
@@ -261,7 +290,9 @@ export function IntegrationsManager() {
       {filteredIntegrations.length === 0 && (
         <div className="text-center py-12">
           <Search className="w-12 h-12 text-muted-foreground mx-auto mb-3" />
-          <p className="text-muted-foreground">No integrations match your search</p>
+          <p className="text-muted-foreground">
+            No integrations match your search
+          </p>
         </div>
       )}
     </div>

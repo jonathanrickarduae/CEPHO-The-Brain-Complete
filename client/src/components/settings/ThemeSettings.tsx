@@ -1,22 +1,41 @@
 // @ts-nocheck
-import React from 'react';
-import { useTheme } from '../hooks/useTheme';
-import { Moon, Sun, Monitor } from 'lucide-react';
+import React from "react";
+import { useTheme } from "../hooks/useTheme";
+import { Moon, Sun, Monitor } from "lucide-react";
 
 export function ThemeSettings() {
   const { theme, setTheme } = useTheme();
 
   const themes = [
-    { value: 'light' as const, label: 'Light', icon: Sun, description: 'Always use light mode' },
-    { value: 'dark' as const, label: 'Dark', icon: Moon, description: 'Always use dark mode' },
-    { value: 'system' as const, label: 'System', icon: Monitor, description: 'Follow system preference' },
+    {
+      value: "light" as const,
+      label: "Light",
+      icon: Sun,
+      description: "Always use light mode",
+    },
+    {
+      value: "dark" as const,
+      label: "Dark",
+      icon: Moon,
+      description: "Always use dark mode",
+    },
+    {
+      value: "system" as const,
+      label: "System",
+      icon: Monitor,
+      description: "Follow system preference",
+    },
   ];
 
   return (
     <div className="space-y-4">
       <div>
-        <h3 className="text-lg font-semibold text-foreground mb-2">Theme Preference</h3>
-        <p className="text-sm text-muted-foreground mb-4">Choose how you want the app to look</p>
+        <h3 className="text-lg font-semibold text-foreground mb-2">
+          Theme Preference
+        </h3>
+        <p className="text-sm text-muted-foreground mb-4">
+          Choose how you want the app to look
+        </p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
@@ -26,15 +45,19 @@ export function ThemeSettings() {
             onClick={() => setTheme(value)}
             className={`p-4 rounded-lg border-2 transition-all duration-200 ${
               theme === value
-                ? 'border-primary bg-primary/10'
-                : 'border-border bg-card hover:border-primary/50'
+                ? "border-primary bg-primary/10"
+                : "border-border bg-card hover:border-primary/50"
             }`}
           >
             <Icon className="w-6 h-6 mb-2 mx-auto" />
             <div className="font-medium text-sm">{label}</div>
-            <div className="text-xs text-muted-foreground mt-1">{description}</div>
+            <div className="text-xs text-muted-foreground mt-1">
+              {description}
+            </div>
             {theme === value && (
-              <div className="mt-2 text-xs font-semibold text-primary">✓ Selected</div>
+              <div className="mt-2 text-xs font-semibold text-primary">
+                ✓ Selected
+              </div>
             )}
           </button>
         ))}

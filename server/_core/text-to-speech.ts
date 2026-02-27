@@ -1,18 +1,18 @@
 /**
  * Text-to-Speech helper using ElevenLabs API
- * 
+ *
  * This module provides voice synthesis capabilities for Victoria Stirling,
  * the Virtual Chief of Staff, using ElevenLabs' high-quality voice synthesis.
- * 
+ *
  * Example usage:
  * ```ts
  * import { synthesizeSpeech, VICTORIA_VOICE_ID } from "./_core/text-to-speech";
- * 
+ *
  * const result = await synthesizeSpeech({
  *   text: "Good morning. Here is your daily briefing.",
  *   voiceId: VICTORIA_VOICE_ID,
  * });
- * 
+ *
  * if ('audioUrl' in result) {
  *   // Play or return the audio URL
  * }
@@ -57,7 +57,7 @@ export type SynthesisError = {
 
 /**
  * Synthesize speech from text using ElevenLabs API
- * 
+ *
  * @param options - Text and voice configuration
  * @returns Audio URL or error
  */
@@ -70,7 +70,7 @@ export async function synthesizeSpeech(
       return {
         error: "ElevenLabs API key is not configured",
         code: "SERVICE_ERROR",
-        details: "ELEVENLABS_API_KEY environment variable is not set"
+        details: "ELEVENLABS_API_KEY environment variable is not set",
       };
     }
 
@@ -79,7 +79,7 @@ export async function synthesizeSpeech(
       return {
         error: "Text is required for speech synthesis",
         code: "INVALID_INPUT",
-        details: "The text parameter cannot be empty"
+        details: "The text parameter cannot be empty",
       };
     }
 
@@ -89,7 +89,7 @@ export async function synthesizeSpeech(
 
     // Use Victoria's voice by default
     const voiceId = options.voiceId || VICTORIA_VOICE_ID;
-    
+
     // Model selection - using eleven_multilingual_v2 for best quality
     const modelId = options.modelId || "eleven_multilingual_v2";
 
@@ -107,7 +107,7 @@ export async function synthesizeSpeech(
       {
         method: "POST",
         headers: {
-          "Accept": "audio/mpeg",
+          Accept: "audio/mpeg",
           "Content-Type": "application/json",
           "xi-api-key": process.env.ELEVENLABS_API_KEY ?? "",
         },
@@ -121,41 +121,46 @@ export async function synthesizeSpeech(
 
     if (!response.ok) {
       const errorText = await response.text().catch(() => "");
-      
+
       // Check for quota exceeded
       if (response.status === 401) {
         return {
           error: "Invalid ElevenLabs API key",
           code: "API_ERROR",
-          details: "Please check your ELEVENLABS_API_KEY configuration"
+          details: "Please check your ELEVENLABS_API_KEY configuration",
         };
       }
-      
+
       if (response.status === 429) {
         return {
           error: "ElevenLabs quota exceeded",
           code: "QUOTA_EXCEEDED",
-          details: "You have exceeded your character quota. Please upgrade your plan or wait for quota reset."
+          details:
+            "You have exceeded your character quota. Please upgrade your plan or wait for quota reset.",
         };
       }
 
       return {
         error: "Speech synthesis failed",
         code: "API_ERROR",
-        details: `${response.status} ${response.statusText}${errorText ? `: ${errorText}` : ""}`
+        details: `${response.status} ${response.statusText}${errorText ? `: ${errorText}` : ""}`,
       };
     }
 
     // Get audio data
     const audioBuffer = Buffer.from(await response.arrayBuffer());
-    
+
     // Generate unique filename
     const timestamp = Date.now();
     const randomSuffix = Math.random().toString(36).substring(2, 8);
     const audioKey = `voice/victoria-${timestamp}-${randomSuffix}.mp3`;
 
     // Upload to S3
-    const { url: audioUrl } = await storagePut(audioKey, audioBuffer, "audio/mpeg");
+    const { url: audioUrl } = await storagePut(
+      audioKey,
+      audioBuffer,
+      "audio/mpeg"
+    );
 
     // Estimate duration (rough estimate: ~150 words per minute, ~5 characters per word)
     const estimatedWords = characterCount / 5;
@@ -167,30 +172,31 @@ export async function synthesizeSpeech(
       duration: Math.round(estimatedDuration),
       characterCount,
     };
-
   } catch (error) {
     return {
       error: "Speech synthesis failed",
       code: "SERVICE_ERROR",
-      details: error instanceof Error ? error.message : "An unexpected error occurred"
+      details:
+        error instanceof Error ? error.message : "An unexpected error occurred",
     };
   }
 }
 
 /**
  * Get available voices from ElevenLabs
- * 
+ *
  * @returns List of available voices or error
  */
 export async function getAvailableVoices(): Promise<
-  { voices: Array<{ voice_id: string; name: string; category: string }> } | SynthesisError
+  | { voices: Array<{ voice_id: string; name: string; category: string }> }
+  | SynthesisError
 > {
   try {
     if (!(process.env.ELEVENLABS_API_KEY ?? "")) {
       return {
         error: "ElevenLabs API key is not configured",
         code: "SERVICE_ERROR",
-        details: "ELEVENLABS_API_KEY environment variable is not set"
+        details: "ELEVENLABS_API_KEY environment variable is not set",
       };
     }
 
@@ -204,7 +210,7 @@ export async function getAvailableVoices(): Promise<
       return {
         error: "Failed to fetch voices",
         code: "API_ERROR",
-        details: `${response.status} ${response.statusText}`
+        details: `${response.status} ${response.statusText}`,
       };
     }
 
@@ -216,44 +222,48 @@ export async function getAvailableVoices(): Promise<
         category: v.category,
       })),
     };
-
   } catch (error) {
     return {
       error: "Failed to fetch voices",
       code: "SERVICE_ERROR",
-      details: error instanceof Error ? error.message : "An unexpected error occurred"
+      details:
+        error instanceof Error ? error.message : "An unexpected error occurred",
     };
   }
 }
 
 /**
  * Check ElevenLabs subscription status and remaining characters
- * 
+ *
  * @returns Subscription info or error
  */
 export async function getSubscriptionInfo(): Promise<
-  { character_count: number; character_limit: number; tier: string } | SynthesisError
+  | { character_count: number; character_limit: number; tier: string }
+  | SynthesisError
 > {
   try {
     if (!(process.env.ELEVENLABS_API_KEY ?? "")) {
       return {
         error: "ElevenLabs API key is not configured",
         code: "SERVICE_ERROR",
-        details: "ELEVENLABS_API_KEY environment variable is not set"
+        details: "ELEVENLABS_API_KEY environment variable is not set",
       };
     }
 
-    const response = await fetch("https://api.elevenlabs.io/v1/user/subscription", {
-      headers: {
-        "xi-api-key": process.env.ELEVENLABS_API_KEY ?? "",
-      },
-    });
+    const response = await fetch(
+      "https://api.elevenlabs.io/v1/user/subscription",
+      {
+        headers: {
+          "xi-api-key": process.env.ELEVENLABS_API_KEY ?? "",
+        },
+      }
+    );
 
     if (!response.ok) {
       return {
         error: "Failed to fetch subscription info",
         code: "API_ERROR",
-        details: `${response.status} ${response.statusText}`
+        details: `${response.status} ${response.statusText}`,
       };
     }
 
@@ -263,12 +273,12 @@ export async function getSubscriptionInfo(): Promise<
       character_limit: data.character_limit,
       tier: data.tier,
     };
-
   } catch (error) {
     return {
       error: "Failed to fetch subscription info",
       code: "SERVICE_ERROR",
-      details: error instanceof Error ? error.message : "An unexpected error occurred"
+      details:
+        error instanceof Error ? error.message : "An unexpected error occurred",
     };
   }
 }

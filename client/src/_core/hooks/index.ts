@@ -1,2 +1,2 @@
-export { useAuth } from './useAuth';
-export { useSupabaseAuth } from './useSupabaseAuth';
+export { useAuth } from "./useAuth";
+export { useSupabaseAuth } from "./useSupabaseAuth";

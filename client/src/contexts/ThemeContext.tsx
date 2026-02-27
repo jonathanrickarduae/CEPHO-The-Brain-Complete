@@ -26,12 +26,16 @@ export function ThemeProvider({
     if (defaultTheme === "dark" && switchable) {
       const stored = localStorage.getItem("theme");
       // Only use stored theme if it exists AND is different from default
-      if (stored && stored !== defaultTheme && (stored === "light" || stored === "dark" || stored === "mix")) {
+      if (
+        stored &&
+        stored !== defaultTheme &&
+        (stored === "light" || stored === "dark" || stored === "mix")
+      ) {
         return stored;
       }
       return defaultTheme;
     }
-    
+
     if (switchable) {
       const stored = localStorage.getItem("theme");
       if (stored === "light" || stored === "dark" || stored === "mix") {
@@ -45,7 +49,7 @@ export function ThemeProvider({
     const root = document.documentElement;
     // Remove all theme classes first
     root.classList.remove("dark", "light", "mix");
-    
+
     if (theme === "dark") {
       root.classList.add("dark");
     } else if (theme === "mix") {

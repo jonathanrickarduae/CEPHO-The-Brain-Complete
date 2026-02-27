@@ -1,5 +1,5 @@
-import { useState, useCallback, useRef } from 'react';
-import { haptics } from '@/lib/haptics';
+import { useState, useCallback, useRef } from "react";
+import { haptics } from "@/lib/haptics";
 
 interface DragItem<T> {
   id: string;
@@ -39,7 +39,7 @@ export function useDragAndDrop<T>({
   const handleDragStart = useCallback(
     (e: React.DragEvent, item: T, index: number) => {
       haptics.impact();
-      
+
       draggedItemRef.current = {
         id: getItemId(item),
         data: item,
@@ -53,13 +53,13 @@ export function useDragAndDrop<T>({
       });
 
       // Set drag data
-      e.dataTransfer.effectAllowed = 'move';
-      e.dataTransfer.setData('text/plain', getItemId(item));
+      e.dataTransfer.effectAllowed = "move";
+      e.dataTransfer.setData("text/plain", getItemId(item));
 
       // Create custom drag image
       const dragImage = e.currentTarget.cloneNode(true) as HTMLElement;
-      dragImage.style.opacity = '0.8';
-      dragImage.style.transform = 'scale(1.05)';
+      dragImage.style.opacity = "0.8";
+      dragImage.style.transform = "scale(1.05)";
       document.body.appendChild(dragImage);
       e.dataTransfer.setDragImage(dragImage, 0, 0);
       setTimeout(() => document.body.removeChild(dragImage), 0);
@@ -72,11 +72,11 @@ export function useDragAndDrop<T>({
   const handleDragOver = useCallback(
     (e: React.DragEvent, index: number) => {
       e.preventDefault();
-      e.dataTransfer.dropEffect = 'move';
+      e.dataTransfer.dropEffect = "move";
 
       if (dragState.overIndex !== index) {
         haptics.selection();
-        setDragState((prev) => ({
+        setDragState(prev => ({
           ...prev,
           overIndex: index,
         }));
@@ -89,7 +89,7 @@ export function useDragAndDrop<T>({
     (e: React.DragEvent, index: number) => {
       e.preventDefault();
       if (dragState.draggedIndex !== index) {
-        setDragState((prev) => ({
+        setDragState(prev => ({
           ...prev,
           overIndex: index,
         }));
@@ -155,8 +155,9 @@ export function useDragAndDrop<T>({
       onDragLeave: handleDragLeave,
       onDrop: (e: React.DragEvent) => handleDrop(e, index),
       onDragEnd: handleDragEnd,
-      'data-dragging': dragState.draggedIndex === index,
-      'data-drag-over': dragState.overIndex === index && dragState.draggedIndex !== index,
+      "data-dragging": dragState.draggedIndex === index,
+      "data-drag-over":
+        dragState.overIndex === index && dragState.draggedIndex !== index,
     }),
     [
       handleDragStart,
@@ -243,7 +244,7 @@ export function useTouchDrag<T>({
       if (!touchState.isDragging) return;
 
       const touch = e.touches[0];
-      setTouchState((prev) => ({
+      setTouchState(prev => ({
         ...prev,
         currentY: touch.clientY,
       }));
@@ -286,9 +287,17 @@ export function useTouchDrag<T>({
       haptics.success();
       const newItems = [...items];
       const [removed] = newItems.splice(touchState.draggedIndex, 1);
-      newItems.splice(dropIndex > touchState.draggedIndex ? dropIndex - 1 : dropIndex, 0, removed);
+      newItems.splice(
+        dropIndex > touchState.draggedIndex ? dropIndex - 1 : dropIndex,
+        0,
+        removed
+      );
       onReorder(newItems);
-      onDragEnd?.(items[touchState.draggedIndex], touchState.draggedIndex, dropIndex);
+      onDragEnd?.(
+        items[touchState.draggedIndex],
+        touchState.draggedIndex,
+        dropIndex
+      );
     }
 
     setTouchState({
@@ -305,15 +314,22 @@ export function useTouchDrag<T>({
       onTouchStart: (e: React.TouchEvent) => handleTouchStart(e, item, index),
       onTouchMove: handleTouchMove,
       onTouchEnd: handleTouchEnd,
-      style: touchState.isDragging && touchState.draggedIndex === index
-        ? {
-            transform: `translateY(${touchState.currentY - touchState.startY}px)`,
-            zIndex: 1000,
-            opacity: 0.9,
-          }
-        : undefined,
+      style:
+        touchState.isDragging && touchState.draggedIndex === index
+          ? {
+              transform: `translateY(${touchState.currentY - touchState.startY}px)`,
+              zIndex: 1000,
+              opacity: 0.9,
+            }
+          : undefined,
     }),
-    [registerItem, handleTouchStart, handleTouchMove, handleTouchEnd, touchState]
+    [
+      registerItem,
+      handleTouchStart,
+      handleTouchMove,
+      handleTouchEnd,
+      touchState,
+    ]
   );
 
   return {

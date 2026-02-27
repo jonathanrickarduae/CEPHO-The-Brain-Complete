@@ -1,10 +1,23 @@
-import { useState, useEffect } from 'react';
-import { 
-  CheckSquare, Clock, Users, AlertTriangle, 
-  ChevronRight, ExternalLink, RefreshCw, Filter,
-  Calendar, Target, TrendingUp, BarChart3,
-  FolderOpen, User, CheckCircle, Circle, Loader2
-} from 'lucide-react';
+import { useState, useEffect } from "react";
+import {
+  CheckSquare,
+  Clock,
+  Users,
+  AlertTriangle,
+  ChevronRight,
+  ExternalLink,
+  RefreshCw,
+  Filter,
+  Calendar,
+  Target,
+  TrendingUp,
+  BarChart3,
+  FolderOpen,
+  User,
+  CheckCircle,
+  Circle,
+  Loader2,
+} from "lucide-react";
 
 // Asana data types
 interface AsanaWorkspace {
@@ -24,7 +37,7 @@ interface AsanaProject {
   overdueCount: number;
   teamMembers: AsanaTeamMember[];
   dueDate?: Date;
-  status: 'on_track' | 'at_risk' | 'off_track';
+  status: "on_track" | "at_risk" | "off_track";
   lastUpdated: Date;
 }
 
@@ -36,7 +49,7 @@ interface AsanaTask {
   assignee?: AsanaTeamMember;
   dueDate?: Date;
   completed: boolean;
-  priority: 'high' | 'medium' | 'low';
+  priority: "high" | "medium" | "low";
   tags: string[];
   subtasks: number;
   completedSubtasks: number;
@@ -55,7 +68,12 @@ interface AsanaUpdate {
   id: string;
   projectId: string;
   projectName: string;
-  type: 'task_completed' | 'task_created' | 'comment' | 'status_update' | 'due_date_changed';
+  type:
+    | "task_completed"
+    | "task_created"
+    | "comment"
+    | "status_update"
+    | "due_date_changed";
   description: string;
   user: AsanaTeamMember;
   timestamp: Date;
@@ -75,9 +93,15 @@ interface AsanaIntegrationProps {
 export function AsanaIntegration({ onConnect }: AsanaIntegrationProps) {
   const [isConnected, setIsConnected] = useState(true); // Mock connected state
   const [isConnecting, setIsConnecting] = useState(false);
-  const [activeView, setActiveView] = useState<'dashboard' | 'projects' | 'tasks' | 'updates'>('dashboard');
-  const [selectedProject, setSelectedProject] = useState<AsanaProject | null>(null);
-  const [filterStatus, setFilterStatus] = useState<'all' | 'on_track' | 'at_risk' | 'off_track'>('all');
+  const [activeView, setActiveView] = useState<
+    "dashboard" | "projects" | "tasks" | "updates"
+  >("dashboard");
+  const [selectedProject, setSelectedProject] = useState<AsanaProject | null>(
+    null
+  );
+  const [filterStatus, setFilterStatus] = useState<
+    "all" | "on_track" | "at_risk" | "off_track"
+  >("all");
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   const handleConnect = async () => {
@@ -95,23 +119,31 @@ export function AsanaIntegration({ onConnect }: AsanaIntegrationProps) {
     setIsRefreshing(false);
   };
 
-  const filteredProjects = MOCK_PROJECTS.filter(p => 
-    filterStatus === 'all' || p.status === filterStatus
+  const filteredProjects = MOCK_PROJECTS.filter(
+    p => filterStatus === "all" || p.status === filterStatus
   );
 
   const totalTasks = MOCK_PROJECTS.reduce((sum, p) => sum + p.taskCount, 0);
-  const completedTasks = MOCK_PROJECTS.reduce((sum, p) => sum + p.completedCount, 0);
-  const overdueTasks = MOCK_PROJECTS.reduce((sum, p) => sum + p.overdueCount, 0);
-  const atRiskProjects = MOCK_PROJECTS.filter(p => p.status !== 'on_track').length;
+  const completedTasks = MOCK_PROJECTS.reduce(
+    (sum, p) => sum + p.completedCount,
+    0
+  );
+  const overdueTasks = MOCK_PROJECTS.reduce(
+    (sum, p) => sum + p.overdueCount,
+    0
+  );
+  const atRiskProjects = MOCK_PROJECTS.filter(
+    p => p.status !== "on_track"
+  ).length;
 
   const formatDate = (date: Date) => {
     const now = new Date();
     const diff = date.getTime() - now.getTime();
     const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
-    
+
     if (days < 0) return `${Math.abs(days)} days overdue`;
-    if (days === 0) return 'Due today';
-    if (days === 1) return 'Due tomorrow';
+    if (days === 0) return "Due today";
+    if (days === 1) return "Due tomorrow";
     return `${days} days left`;
   };
 
@@ -120,37 +152,50 @@ export function AsanaIntegration({ onConnect }: AsanaIntegrationProps) {
     const diff = now.getTime() - date.getTime();
     const minutes = Math.floor(diff / (1000 * 60));
     const hours = Math.floor(diff / (1000 * 60 * 60));
-    
+
     if (minutes < 60) return `${minutes}m ago`;
     if (hours < 24) return `${hours}h ago`;
-    return date.toLocaleDateString('en-GB');
+    return date.toLocaleDateString("en-GB");
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'on_track': return 'text-green-400 bg-green-500/20';
-      case 'at_risk': return 'text-yellow-400 bg-yellow-500/20';
-      case 'off_track': return 'text-red-400 bg-red-500/20';
-      default: return 'text-foreground/70 bg-gray-500/20';
+      case "on_track":
+        return "text-green-400 bg-green-500/20";
+      case "at_risk":
+        return "text-yellow-400 bg-yellow-500/20";
+      case "off_track":
+        return "text-red-400 bg-red-500/20";
+      default:
+        return "text-foreground/70 bg-gray-500/20";
     }
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'high': return 'text-red-400 bg-red-500/20';
-      case 'medium': return 'text-yellow-400 bg-yellow-500/20';
-      case 'low': return 'text-blue-400 bg-blue-500/20';
-      default: return 'text-foreground/70 bg-gray-500/20';
+      case "high":
+        return "text-red-400 bg-red-500/20";
+      case "medium":
+        return "text-yellow-400 bg-yellow-500/20";
+      case "low":
+        return "text-blue-400 bg-blue-500/20";
+      default:
+        return "text-foreground/70 bg-gray-500/20";
     }
   };
 
   const getUpdateIcon = (type: string) => {
     switch (type) {
-      case 'task_completed': return <CheckCircle className="w-4 h-4 text-green-400" />;
-      case 'task_created': return <Circle className="w-4 h-4 text-blue-400" />;
-      case 'status_update': return <AlertTriangle className="w-4 h-4 text-yellow-400" />;
-      case 'due_date_changed': return <Calendar className="w-4 h-4 text-purple-400" />;
-      default: return <CheckSquare className="w-4 h-4 text-foreground/70" />;
+      case "task_completed":
+        return <CheckCircle className="w-4 h-4 text-green-400" />;
+      case "task_created":
+        return <Circle className="w-4 h-4 text-blue-400" />;
+      case "status_update":
+        return <AlertTriangle className="w-4 h-4 text-yellow-400" />;
+      case "due_date_changed":
+        return <Calendar className="w-4 h-4 text-purple-400" />;
+      default:
+        return <CheckSquare className="w-4 h-4 text-foreground/70" />;
     }
   };
 
@@ -160,9 +205,12 @@ export function AsanaIntegration({ onConnect }: AsanaIntegrationProps) {
         <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center mx-auto mb-4">
           <CheckSquare className="w-8 h-8 text-white" />
         </div>
-        <h3 className="text-xl font-bold text-foreground mb-2">Connect Asana</h3>
+        <h3 className="text-xl font-bold text-foreground mb-2">
+          Connect Asana
+        </h3>
         <p className="text-muted-foreground mb-6 max-w-md mx-auto">
-          Connect your Asana account to sync projects, track tasks, and get real-time updates across all your workspaces.
+          Connect your Asana account to sync projects, track tasks, and get
+          real-time updates across all your workspaces.
         </p>
         <button
           onClick={handleConnect}
@@ -195,9 +243,12 @@ export function AsanaIntegration({ onConnect }: AsanaIntegrationProps) {
               <CheckSquare className="w-7 h-7 text-white" />
             </div>
             <div>
-              <h2 className="text-xl font-bold text-foreground">Asana Projects</h2>
+              <h2 className="text-xl font-bold text-foreground">
+                Asana Projects
+              </h2>
               <p className="text-sm text-muted-foreground">
-                {MOCK_PROJECTS.length} projects • Last synced {formatTimeAgo(new Date())}
+                {MOCK_PROJECTS.length} projects • Last synced{" "}
+                {formatTimeAgo(new Date())}
               </p>
             </div>
           </div>
@@ -206,7 +257,9 @@ export function AsanaIntegration({ onConnect }: AsanaIntegrationProps) {
             disabled={isRefreshing}
             className="p-2 rounded-lg hover:bg-white/10 transition-colors"
           >
-            <RefreshCw className={`w-5 h-5 text-muted-foreground ${isRefreshing ? 'animate-spin' : ''}`} />
+            <RefreshCw
+              className={`w-5 h-5 text-muted-foreground ${isRefreshing ? "animate-spin" : ""}`}
+            />
           </button>
         </div>
 
@@ -227,7 +280,9 @@ export function AsanaIntegration({ onConnect }: AsanaIntegrationProps) {
               <span className="text-xs">Overdue</span>
             </div>
             <p className="text-2xl font-bold text-red-400">{overdueTasks}</p>
-            <p className="text-xs text-muted-foreground">tasks need attention</p>
+            <p className="text-xs text-muted-foreground">
+              tasks need attention
+            </p>
           </div>
 
           <div className="bg-black/20 rounded-xl p-4">
@@ -235,7 +290,9 @@ export function AsanaIntegration({ onConnect }: AsanaIntegrationProps) {
               <FolderOpen className="w-4 h-4" />
               <span className="text-xs">Projects</span>
             </div>
-            <p className="text-2xl font-bold text-foreground">{MOCK_PROJECTS.length}</p>
+            <p className="text-2xl font-bold text-foreground">
+              {MOCK_PROJECTS.length}
+            </p>
             <p className="text-xs text-yellow-400">{atRiskProjects} at risk</p>
           </div>
 
@@ -254,14 +311,14 @@ export function AsanaIntegration({ onConnect }: AsanaIntegrationProps) {
 
       {/* Tabs */}
       <div className="flex border-b border-border">
-        {(['dashboard', 'projects', 'tasks', 'updates'] as const).map(view => (
+        {(["dashboard", "projects", "tasks", "updates"] as const).map(view => (
           <button
             key={view}
             onClick={() => setActiveView(view)}
             className={`flex-1 px-4 py-3 text-sm font-medium capitalize transition-colors ${
               activeView === view
-                ? 'text-orange-400 border-b-2 border-orange-400'
-                : 'text-muted-foreground hover:text-foreground'
+                ? "text-orange-400 border-b-2 border-orange-400"
+                : "text-muted-foreground hover:text-foreground"
             }`}
           >
             {view}
@@ -271,45 +328,64 @@ export function AsanaIntegration({ onConnect }: AsanaIntegrationProps) {
 
       {/* Content */}
       <div className="p-6">
-        {activeView === 'dashboard' && (
+        {activeView === "dashboard" && (
           <div className="space-y-6">
             {/* At Risk Projects Alert */}
             {atRiskProjects > 0 && (
               <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-4">
                 <div className="flex items-center gap-2 mb-3">
                   <AlertTriangle className="w-5 h-5 text-yellow-400" />
-                  <h3 className="font-semibold text-yellow-400">Projects Needing Attention</h3>
+                  <h3 className="font-semibold text-yellow-400">
+                    Projects Needing Attention
+                  </h3>
                 </div>
                 <div className="space-y-2">
-                  {MOCK_PROJECTS.filter(p => p.status !== 'on_track').map(project => (
-                    <div key={project.id} className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <div 
-                          className="w-3 h-3 rounded-full" 
-                          style={{ backgroundColor: project.color }}
-                        />
-                        <span className="text-foreground">{project.name}</span>
+                  {MOCK_PROJECTS.filter(p => p.status !== "on_track").map(
+                    project => (
+                      <div
+                        key={project.id}
+                        className="flex items-center justify-between"
+                      >
+                        <div className="flex items-center gap-2">
+                          <div
+                            className="w-3 h-3 rounded-full"
+                            style={{ backgroundColor: project.color }}
+                          />
+                          <span className="text-foreground">
+                            {project.name}
+                          </span>
+                        </div>
+                        <span
+                          className={`text-xs px-2 py-0.5 rounded-full ${getStatusColor(project.status)}`}
+                        >
+                          {project.status.replace("_", " ")}
+                        </span>
                       </div>
-                      <span className={`text-xs px-2 py-0.5 rounded-full ${getStatusColor(project.status)}`}>
-                        {project.status.replace('_', ' ')}
-                      </span>
-                    </div>
-                  ))}
+                    )
+                  )}
                 </div>
               </div>
             )}
 
             {/* Recent Updates */}
             <div>
-              <h3 className="font-semibold text-foreground mb-3">Recent Activity</h3>
+              <h3 className="font-semibold text-foreground mb-3">
+                Recent Activity
+              </h3>
               <div className="space-y-3">
                 {MOCK_UPDATES.slice(0, 5).map(update => (
-                  <div key={update.id} className="flex items-start gap-3 p-3 bg-gray-800/50 rounded-lg">
+                  <div
+                    key={update.id}
+                    className="flex items-start gap-3 p-3 bg-gray-800/50 rounded-lg"
+                  >
                     {getUpdateIcon(update.type)}
                     <div className="flex-1">
-                      <p className="text-sm text-foreground">{update.description}</p>
+                      <p className="text-sm text-foreground">
+                        {update.description}
+                      </p>
                       <p className="text-xs text-muted-foreground">
-                        {update.user.name} • {update.projectName} • {formatTimeAgo(update.timestamp)}
+                        {update.user.name} • {update.projectName} •{" "}
+                        {formatTimeAgo(update.timestamp)}
                       </p>
                     </div>
                   </div>
@@ -319,23 +395,38 @@ export function AsanaIntegration({ onConnect }: AsanaIntegrationProps) {
 
             {/* Urgent Tasks */}
             <div>
-              <h3 className="font-semibold text-foreground mb-3">Urgent Tasks</h3>
+              <h3 className="font-semibold text-foreground mb-3">
+                Urgent Tasks
+              </h3>
               <div className="space-y-2">
-                {MOCK_TASKS.filter(t => !t.completed && t.priority === 'high').map(task => (
-                  <div key={task.id} className="flex items-center justify-between p-3 bg-gray-800/50 rounded-lg">
+                {MOCK_TASKS.filter(
+                  t => !t.completed && t.priority === "high"
+                ).map(task => (
+                  <div
+                    key={task.id}
+                    className="flex items-center justify-between p-3 bg-gray-800/50 rounded-lg"
+                  >
                     <div className="flex items-center gap-3">
                       <Circle className="w-4 h-4 text-muted-foreground" />
                       <div>
                         <p className="text-sm text-foreground">{task.name}</p>
-                        <p className="text-xs text-muted-foreground">{task.projectName}</p>
+                        <p className="text-xs text-muted-foreground">
+                          {task.projectName}
+                        </p>
                       </div>
                     </div>
                     <div className="text-right">
-                      <span className={`text-xs px-2 py-0.5 rounded-full ${getPriorityColor(task.priority)}`}>
+                      <span
+                        className={`text-xs px-2 py-0.5 rounded-full ${getPriorityColor(task.priority)}`}
+                      >
                         {task.priority}
                       </span>
-                      <p className={`text-xs mt-1 ${task.dueDate && task.dueDate < new Date() ? 'text-red-400' : 'text-muted-foreground'}`}>
-                        {task.dueDate ? formatDate(task.dueDate) : 'No due date'}
+                      <p
+                        className={`text-xs mt-1 ${task.dueDate && task.dueDate < new Date() ? "text-red-400" : "text-muted-foreground"}`}
+                      >
+                        {task.dueDate
+                          ? formatDate(task.dueDate)
+                          : "No due date"}
                       </p>
                     </div>
                   </div>
@@ -345,14 +436,14 @@ export function AsanaIntegration({ onConnect }: AsanaIntegrationProps) {
           </div>
         )}
 
-        {activeView === 'projects' && (
+        {activeView === "projects" && (
           <div className="space-y-4">
             {/* Filter */}
             <div className="flex items-center gap-2 mb-4">
               <Filter className="w-4 h-4 text-muted-foreground" />
               <select
                 value={filterStatus}
-                onChange={(e) => setFilterStatus(e.target.value as any)}
+                onChange={e => setFilterStatus(e.target.value as any)}
                 className="bg-gray-800 border border-gray-700 rounded-lg px-3 py-1.5 text-sm text-foreground"
               >
                 <option value="all">All Projects</option>
@@ -364,24 +455,30 @@ export function AsanaIntegration({ onConnect }: AsanaIntegrationProps) {
 
             {/* Project Cards */}
             {filteredProjects.map(project => (
-              <div 
+              <div
                 key={project.id}
                 className="p-4 bg-gray-800/50 border border-gray-700 rounded-xl hover:border-gray-600 transition-colors cursor-pointer"
                 onClick={() => setSelectedProject(project)}
               >
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex items-center gap-3">
-                    <div 
-                      className="w-4 h-4 rounded" 
+                    <div
+                      className="w-4 h-4 rounded"
                       style={{ backgroundColor: project.color }}
                     />
                     <div>
-                      <h4 className="font-medium text-foreground">{project.name}</h4>
-                      <p className="text-xs text-muted-foreground">{project.workspaceName}</p>
+                      <h4 className="font-medium text-foreground">
+                        {project.name}
+                      </h4>
+                      <p className="text-xs text-muted-foreground">
+                        {project.workspaceName}
+                      </p>
                     </div>
                   </div>
-                  <span className={`text-xs px-2 py-0.5 rounded-full ${getStatusColor(project.status)}`}>
-                    {project.status.replace('_', ' ')}
+                  <span
+                    className={`text-xs px-2 py-0.5 rounded-full ${getStatusColor(project.status)}`}
+                  >
+                    {project.status.replace("_", " ")}
                   </span>
                 </div>
 
@@ -394,11 +491,11 @@ export function AsanaIntegration({ onConnect }: AsanaIntegrationProps) {
                     </span>
                   </div>
                   <div className="h-2 bg-gray-700 rounded-full overflow-hidden">
-                    <div 
+                    <div
                       className="h-full transition-all"
-                      style={{ 
+                      style={{
                         width: `${(project.completedCount / project.taskCount) * 100}%`,
-                        backgroundColor: project.color
+                        backgroundColor: project.color,
                       }}
                     />
                   </div>
@@ -429,13 +526,13 @@ export function AsanaIntegration({ onConnect }: AsanaIntegrationProps) {
           </div>
         )}
 
-        {activeView === 'tasks' && (
+        {activeView === "tasks" && (
           <div className="space-y-3">
             {MOCK_TASKS.map(task => (
-              <div 
+              <div
                 key={task.id}
                 className={`p-4 bg-gray-800/50 border border-gray-700 rounded-xl ${
-                  task.completed ? 'opacity-60' : ''
+                  task.completed ? "opacity-60" : ""
                 }`}
               >
                 <div className="flex items-start gap-3">
@@ -449,16 +546,22 @@ export function AsanaIntegration({ onConnect }: AsanaIntegrationProps) {
                   <div className="flex-1">
                     <div className="flex items-start justify-between">
                       <div>
-                        <h4 className={`font-medium ${task.completed ? 'line-through text-muted-foreground' : 'text-foreground'}`}>
+                        <h4
+                          className={`font-medium ${task.completed ? "line-through text-muted-foreground" : "text-foreground"}`}
+                        >
                           {task.name}
                         </h4>
-                        <p className="text-xs text-muted-foreground">{task.projectName}</p>
+                        <p className="text-xs text-muted-foreground">
+                          {task.projectName}
+                        </p>
                       </div>
-                      <span className={`text-xs px-2 py-0.5 rounded-full ${getPriorityColor(task.priority)}`}>
+                      <span
+                        className={`text-xs px-2 py-0.5 rounded-full ${getPriorityColor(task.priority)}`}
+                      >
                         {task.priority}
                       </span>
                     </div>
-                    
+
                     <div className="flex items-center gap-4 mt-2 text-xs">
                       {task.assignee && (
                         <span className="flex items-center gap-1 text-muted-foreground">
@@ -467,9 +570,13 @@ export function AsanaIntegration({ onConnect }: AsanaIntegrationProps) {
                         </span>
                       )}
                       {task.dueDate && (
-                        <span className={`flex items-center gap-1 ${
-                          !task.completed && task.dueDate < new Date() ? 'text-red-400' : 'text-muted-foreground'
-                        }`}>
+                        <span
+                          className={`flex items-center gap-1 ${
+                            !task.completed && task.dueDate < new Date()
+                              ? "text-red-400"
+                              : "text-muted-foreground"
+                          }`}
+                        >
                           <Calendar className="w-3 h-3" />
                           {formatDate(task.dueDate)}
                         </span>
@@ -484,7 +591,10 @@ export function AsanaIntegration({ onConnect }: AsanaIntegrationProps) {
                     {task.tags.length > 0 && (
                       <div className="flex gap-1 mt-2">
                         {task.tags.map(tag => (
-                          <span key={tag} className="text-xs px-2 py-0.5 bg-gray-700 rounded text-muted-foreground">
+                          <span
+                            key={tag}
+                            className="text-xs px-2 py-0.5 bg-gray-700 rounded text-muted-foreground"
+                          >
                             {tag}
                           </span>
                         ))}
@@ -497,21 +607,30 @@ export function AsanaIntegration({ onConnect }: AsanaIntegrationProps) {
           </div>
         )}
 
-        {activeView === 'updates' && (
+        {activeView === "updates" && (
           <div className="space-y-3">
             {MOCK_UPDATES.map(update => (
-              <div key={update.id} className="flex items-start gap-3 p-4 bg-gray-800/50 border border-gray-700 rounded-xl">
+              <div
+                key={update.id}
+                className="flex items-start gap-3 p-4 bg-gray-800/50 border border-gray-700 rounded-xl"
+              >
                 <div className="w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center">
                   {getUpdateIcon(update.type)}
                 </div>
                 <div className="flex-1">
                   <p className="text-foreground">{update.description}</p>
                   <div className="flex items-center gap-2 mt-1">
-                    <span className="text-xs text-muted-foreground">{update.user.name}</span>
+                    <span className="text-xs text-muted-foreground">
+                      {update.user.name}
+                    </span>
                     <span className="text-xs text-muted-foreground">•</span>
-                    <span className="text-xs text-primary">{update.projectName}</span>
+                    <span className="text-xs text-primary">
+                      {update.projectName}
+                    </span>
                     <span className="text-xs text-muted-foreground">•</span>
-                    <span className="text-xs text-muted-foreground">{formatTimeAgo(update.timestamp)}</span>
+                    <span className="text-xs text-muted-foreground">
+                      {formatTimeAgo(update.timestamp)}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -525,8 +644,12 @@ export function AsanaIntegration({ onConnect }: AsanaIntegrationProps) {
 
 // Compact widget for Dashboard
 export function AsanaWidget() {
-  const urgentTasks = MOCK_TASKS.filter(t => !t.completed && t.priority === 'high').length;
-  const atRiskProjects = MOCK_PROJECTS.filter(p => p.status !== 'on_track').length;
+  const urgentTasks = MOCK_TASKS.filter(
+    t => !t.completed && t.priority === "high"
+  ).length;
+  const atRiskProjects = MOCK_PROJECTS.filter(
+    p => p.status !== "on_track"
+  ).length;
 
   return (
     <div className="bg-card rounded-xl border border-border p-4">
@@ -537,26 +660,33 @@ export function AsanaWidget() {
           </div>
           <h3 className="font-semibold text-foreground">Asana</h3>
         </div>
-        <a href="/settings" className="text-xs text-primary hover:underline">View All</a>
+        <a href="/settings" className="text-xs text-primary hover:underline">
+          View All
+        </a>
       </div>
 
       <div className="space-y-3">
         {urgentTasks > 0 && (
           <div className="flex items-center justify-between p-2 bg-red-500/10 border border-red-500/30 rounded-lg">
-            <span className="text-sm text-red-400">{urgentTasks} urgent tasks</span>
+            <span className="text-sm text-red-400">
+              {urgentTasks} urgent tasks
+            </span>
             <ChevronRight className="w-4 h-4 text-red-400" />
           </div>
         )}
-        
+
         {atRiskProjects > 0 && (
           <div className="flex items-center justify-between p-2 bg-yellow-500/10 border border-yellow-500/30 rounded-lg">
-            <span className="text-sm text-yellow-400">{atRiskProjects} projects at risk</span>
+            <span className="text-sm text-yellow-400">
+              {atRiskProjects} projects at risk
+            </span>
             <ChevronRight className="w-4 h-4 text-yellow-400" />
           </div>
         )}
 
         <div className="text-xs text-muted-foreground text-center">
-          {MOCK_PROJECTS.length} projects • {MOCK_TASKS.filter(t => !t.completed).length} open tasks
+          {MOCK_PROJECTS.length} projects •{" "}
+          {MOCK_TASKS.filter(t => !t.completed).length} open tasks
         </div>
       </div>
     </div>

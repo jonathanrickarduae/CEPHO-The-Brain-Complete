@@ -39,11 +39,11 @@ export function getSessionCookieOptions(
   let domain: string | undefined = undefined;
   if (shouldSetDomain) {
     // If hostname is cepho.ai or *.cepho.ai, set domain to .cepho.ai
-    if (hostname.endsWith('cepho.ai')) {
-      domain = '.cepho.ai';
+    if (hostname.endsWith("cepho.ai")) {
+      domain = ".cepho.ai";
     }
     // If hostname is *.onrender.com, set domain to the full hostname
-    else if (hostname.endsWith('.onrender.com')) {
+    else if (hostname.endsWith(".onrender.com")) {
       domain = hostname;
     }
     // For other domains, use the hostname as-is

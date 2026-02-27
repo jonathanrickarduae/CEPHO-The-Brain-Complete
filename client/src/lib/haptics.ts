@@ -3,7 +3,14 @@
  * Provides tactile feedback on supported devices
  */
 
-type HapticPattern = 'light' | 'medium' | 'heavy' | 'success' | 'warning' | 'error' | 'selection';
+type HapticPattern =
+  | "light"
+  | "medium"
+  | "heavy"
+  | "success"
+  | "warning"
+  | "error"
+  | "selection";
 
 interface HapticOptions {
   pattern: HapticPattern;
@@ -25,18 +32,19 @@ const VIBRATION_PATTERNS: Record<HapticPattern, number | number[]> = {
  * Check if haptic feedback is supported
  */
 export function isHapticSupported(): boolean {
-  return 'vibrate' in navigator;
+  return "vibrate" in navigator;
 }
 
 /**
  * Trigger haptic feedback
  */
-export function haptic(options: HapticOptions | HapticPattern = 'light'): void {
-  const pattern = typeof options === 'string' ? options : options.pattern;
-  const fallback = typeof options === 'object' ? options.fallbackVibration !== false : true;
+export function haptic(options: HapticOptions | HapticPattern = "light"): void {
+  const pattern = typeof options === "string" ? options : options.pattern;
+  const fallback =
+    typeof options === "object" ? options.fallbackVibration !== false : true;
 
   // Try native haptic feedback first (iOS)
-  if ('haptics' in navigator) {
+  if ("haptics" in navigator) {
     try {
       // @ts-ignore - Experimental API
       navigator.haptics.play(pattern);
@@ -62,34 +70,34 @@ export function haptic(options: HapticOptions | HapticPattern = 'light'): void {
  */
 export const haptics = {
   /** Light tap for selections and toggles */
-  tap: () => haptic('light'),
-  
+  tap: () => haptic("light"),
+
   /** Medium feedback for button presses */
-  press: () => haptic('medium'),
-  
+  press: () => haptic("medium"),
+
   /** Heavy feedback for important actions */
-  impact: () => haptic('heavy'),
-  
+  impact: () => haptic("heavy"),
+
   /** Success pattern for completed actions */
-  success: () => haptic('success'),
-  
+  success: () => haptic("success"),
+
   /** Warning pattern for alerts */
-  warning: () => haptic('warning'),
-  
+  warning: () => haptic("warning"),
+
   /** Error pattern for failures */
-  error: () => haptic('error'),
-  
+  error: () => haptic("error"),
+
   /** Ultra-light for list selections */
-  selection: () => haptic('selection'),
+  selection: () => haptic("selection"),
 };
 
 /**
  * Hook for haptic feedback with reduced motion support
  */
 export function useHaptics() {
-  const prefersReducedMotion = 
-    typeof window !== 'undefined' && 
-    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const prefersReducedMotion =
+    typeof window !== "undefined" &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   // If user prefers reduced motion, disable haptics
   if (prefersReducedMotion) {
@@ -116,7 +124,7 @@ export function useHaptics() {
  */
 export function createHapticHandler<T extends (...args: any[]) => any>(
   handler: T | undefined,
-  pattern: HapticPattern = 'light'
+  pattern: HapticPattern = "light"
 ): T {
   return ((...args: Parameters<T>) => {
     haptic(pattern);

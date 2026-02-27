@@ -9,12 +9,11 @@ import * as schema from "../../drizzle/schema";
  */
 async function runMigrations() {
   const connectionString = process.env.DATABASE_URL;
-  
+
   if (!connectionString) {
     console.error("❌ DATABASE_URL environment variable is not set");
     process.exit(1);
   }
-
 
   // Create migration client with single connection
   const migrationClient = postgres(connectionString, { max: 1 });

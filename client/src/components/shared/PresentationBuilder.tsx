@@ -1,14 +1,30 @@
-import { useState } from 'react';
+import { useState } from "react";
 import {
-  Presentation, ChevronLeft, ChevronRight, Plus, Trash2,
-  Edit2, Check, X, Sparkles, RefreshCw, Download, Play,
-  Type, Image, BarChart3, List, Quote, Layout, Palette
-} from 'lucide-react';
-import { BrandSelector } from '@/components/content/BrandKit';
+  Presentation,
+  ChevronLeft,
+  ChevronRight,
+  Plus,
+  Trash2,
+  Edit2,
+  Check,
+  X,
+  Sparkles,
+  RefreshCw,
+  Download,
+  Play,
+  Type,
+  Image,
+  BarChart3,
+  List,
+  Quote,
+  Layout,
+  Palette,
+} from "lucide-react";
+import { BrandSelector } from "@/components/content/BrandKit";
 
 interface Slide {
   id: string;
-  type: 'title' | 'content' | 'bullets' | 'image' | 'chart' | 'quote' | 'split';
+  type: "title" | "content" | "bullets" | "image" | "chart" | "quote" | "split";
   title: string;
   content?: string;
   bullets?: string[];
@@ -23,31 +39,56 @@ interface PresentationProject {
   brandId: string;
   slides: Slide[];
   createdAt: Date;
-  status: 'draft' | 'in-progress' | 'complete';
+  status: "draft" | "in-progress" | "complete";
 }
 
 export function PresentationBuilder() {
   const [project, setProject] = useState<PresentationProject>({
-    id: 'pres-1',
-    name: 'Q1 Strategy Presentation',
-    brandId: 'celadon',
+    id: "pres-1",
+    name: "Q1 Strategy Presentation",
+    brandId: "celadon",
     slides: [],
     createdAt: new Date(),
-    status: 'draft'
+    status: "draft",
   });
 
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const [isGenerating, setIsGenerating] = useState(false);
-  const [briefDescription, setBriefDescription] = useState('');
+  const [briefDescription, setBriefDescription] = useState("");
   const [showSlideOptions, setShowSlideOptions] = useState(false);
 
   const slideTypes = [
-    { type: 'title', label: 'Title Slide', icon: Type, desc: 'Opening slide with main title' },
-    { type: 'content', label: 'Content', icon: Layout, desc: 'Text-focused slide' },
-    { type: 'bullets', label: 'Bullet Points', icon: List, desc: 'Key points list' },
-    { type: 'image', label: 'Image', icon: Image, desc: 'Visual-focused slide' },
-    { type: 'chart', label: 'Chart/Data', icon: BarChart3, desc: 'Data visualisation' },
-    { type: 'quote', label: 'Quote', icon: Quote, desc: 'Highlighted quote' },
+    {
+      type: "title",
+      label: "Title Slide",
+      icon: Type,
+      desc: "Opening slide with main title",
+    },
+    {
+      type: "content",
+      label: "Content",
+      icon: Layout,
+      desc: "Text-focused slide",
+    },
+    {
+      type: "bullets",
+      label: "Bullet Points",
+      icon: List,
+      desc: "Key points list",
+    },
+    {
+      type: "image",
+      label: "Image",
+      icon: Image,
+      desc: "Visual-focused slide",
+    },
+    {
+      type: "chart",
+      label: "Chart/Data",
+      icon: BarChart3,
+      desc: "Data visualisation",
+    },
+    { type: "quote", label: "Quote", icon: Quote, desc: "Highlighted quote" },
   ];
 
   const generateNextSlide = () => {
@@ -63,46 +104,47 @@ export function PresentationBuilder() {
       if (slideNumber === 1) {
         newSlide = {
           id: `slide-${slideNumber}`,
-          type: 'title',
-          title: briefDescription || 'Q1 Strategy Overview',
-          content: 'Quarterly Business Review',
-          approved: false
+          type: "title",
+          title: briefDescription || "Q1 Strategy Overview",
+          content: "Quarterly Business Review",
+          approved: false,
         };
       } else if (slideNumber === 2) {
         newSlide = {
           id: `slide-${slideNumber}`,
-          type: 'bullets',
-          title: 'Key Objectives',
+          type: "bullets",
+          title: "Key Objectives",
           bullets: [
-            'Revenue growth target: 25%',
-            'Market expansion into 3 new regions',
-            'Product launch: Phase 2 features',
-            'Team scaling: 15 new hires'
+            "Revenue growth target: 25%",
+            "Market expansion into 3 new regions",
+            "Product launch: Phase 2 features",
+            "Team scaling: 15 new hires",
           ],
-          approved: false
+          approved: false,
         };
       } else if (slideNumber === 3) {
         newSlide = {
           id: `slide-${slideNumber}`,
-          type: 'chart',
-          title: 'Performance Metrics',
-          content: 'Q4 vs Q1 comparison showing 18% improvement',
-          approved: false
+          type: "chart",
+          title: "Performance Metrics",
+          content: "Q4 vs Q1 comparison showing 18% improvement",
+          approved: false,
         };
       } else {
         newSlide = {
           id: `slide-${slideNumber}`,
-          type: 'content',
+          type: "content",
           title: `Section ${slideNumber - 2}`,
-          content: 'Generated content based on your presentation brief and previous slides.',
-          approved: false
+          content:
+            "Generated content based on your presentation brief and previous slides.",
+          approved: false,
         };
       }
 
       setProject(prev => ({
         ...prev,
         slides: [...prev.slides, newSlide],
-        status: 'in-progress'
+        status: "in-progress",
       }));
       setCurrentSlideIndex(project.slides.length);
       setIsGenerating(false);
@@ -112,18 +154,16 @@ export function PresentationBuilder() {
   const approveSlide = (slideId: string) => {
     setProject(prev => ({
       ...prev,
-      slides: prev.slides.map(s => 
+      slides: prev.slides.map(s =>
         s.id === slideId ? { ...s, approved: true } : s
-      )
+      ),
     }));
   };
 
   const rejectSlide = (slideId: string, feedback: string) => {
     setProject(prev => ({
       ...prev,
-      slides: prev.slides.map(s => 
-        s.id === slideId ? { ...s, feedback } : s
-      )
+      slides: prev.slides.map(s => (s.id === slideId ? { ...s, feedback } : s)),
     }));
   };
 
@@ -132,9 +172,9 @@ export function PresentationBuilder() {
     setTimeout(() => {
       setProject(prev => ({
         ...prev,
-        slides: prev.slides.map(s => 
+        slides: prev.slides.map(s =>
           s.id === slideId ? { ...s, approved: false, feedback: undefined } : s
-        )
+        ),
       }));
       setIsGenerating(false);
     }, 1500);
@@ -145,11 +185,13 @@ export function PresentationBuilder() {
 
   // Brand colours (would come from BrandKit in production)
   const brandColors = {
-    celadon: { primary: '#10B981', bg: '#0F172A', text: '#F8FAFC' },
-    boundless: { primary: '#8B5CF6', bg: '#1E1B4B', text: '#F8FAFC' },
-    personal: { primary: '#3B82F6', bg: '#0F172A', text: '#F8FAFC' },
+    celadon: { primary: "#10B981", bg: "#0F172A", text: "#F8FAFC" },
+    boundless: { primary: "#8B5CF6", bg: "#1E1B4B", text: "#F8FAFC" },
+    personal: { primary: "#3B82F6", bg: "#0F172A", text: "#F8FAFC" },
   };
-  const colors = brandColors[project.brandId as keyof typeof brandColors] || brandColors.celadon;
+  const colors =
+    brandColors[project.brandId as keyof typeof brandColors] ||
+    brandColors.celadon;
 
   return (
     <div className="h-full flex flex-col">
@@ -163,7 +205,9 @@ export function PresentationBuilder() {
             <input
               type="text"
               value={project.name}
-              onChange={(e) => setProject(prev => ({ ...prev, name: e.target.value }))}
+              onChange={e =>
+                setProject(prev => ({ ...prev, name: e.target.value }))
+              }
               className="text-lg font-bold text-foreground bg-transparent border-none focus:outline-none"
             />
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
@@ -174,9 +218,9 @@ export function PresentationBuilder() {
           </div>
         </div>
         <div className="flex items-center gap-3">
-          <BrandSelector 
+          <BrandSelector
             selectedBrandId={project.brandId}
-            onSelect={(id) => setProject(prev => ({ ...prev, brandId: id }))}
+            onSelect={id => setProject(prev => ({ ...prev, brandId: id }))}
           />
           <button className="px-3 py-1.5 bg-gray-700 text-foreground rounded-lg hover:bg-gray-600 transition-colors text-sm flex items-center gap-2">
             <Play className="w-4 h-4" />
@@ -199,15 +243,18 @@ export function PresentationBuilder() {
                 onClick={() => setCurrentSlideIndex(index)}
                 className={`w-full aspect-video rounded-lg border-2 transition-all relative overflow-hidden ${
                   index === currentSlideIndex
-                    ? 'border-primary'
+                    ? "border-primary"
                     : slide.approved
-                    ? 'border-green-500/50'
-                    : 'border-border hover:border-gray-600'
+                      ? "border-green-500/50"
+                      : "border-border hover:border-gray-600"
                 }`}
                 style={{ backgroundColor: colors.bg }}
               >
                 <div className="absolute inset-0 p-2">
-                  <p className="text-[8px] font-bold truncate" style={{ color: colors.primary }}>
+                  <p
+                    className="text-[8px] font-bold truncate"
+                    style={{ color: colors.primary }}
+                  >
                     {slide.title}
                   </p>
                 </div>
@@ -240,14 +287,17 @@ export function PresentationBuilder() {
               <div className="max-w-lg w-full">
                 <div className="text-center mb-6">
                   <Sparkles className="w-12 h-12 text-primary mx-auto mb-4" />
-                  <h2 className="text-xl font-bold text-foreground mb-2">Start Your Presentation</h2>
+                  <h2 className="text-xl font-bold text-foreground mb-2">
+                    Start Your Presentation
+                  </h2>
                   <p className="text-muted-foreground">
-                    Describe what you want to present. Slides will be generated one at a time for your review.
+                    Describe what you want to present. Slides will be generated
+                    one at a time for your review.
                   </p>
                 </div>
                 <textarea
                   value={briefDescription}
-                  onChange={(e) => setBriefDescription(e.target.value)}
+                  onChange={e => setBriefDescription(e.target.value)}
                   placeholder="E.g., Q1 strategy presentation for the board. Cover revenue targets, market expansion plans, and team growth. Professional tone, data-driven."
                   className="w-full h-32 px-4 py-3 bg-gray-900 border border-gray-700 rounded-xl text-foreground placeholder:text-muted-foreground resize-none focus:outline-none focus:border-primary"
                 />
@@ -275,31 +325,34 @@ export function PresentationBuilder() {
             <>
               {/* Slide Preview */}
               <div className="flex-1 p-8 flex items-center justify-center">
-                <div 
+                <div
                   className="w-full max-w-4xl aspect-video rounded-xl shadow-2xl overflow-hidden"
                   style={{ backgroundColor: colors.bg }}
                 >
                   {currentSlide && (
                     <div className="h-full p-12 flex flex-col">
-                      {currentSlide.type === 'title' && (
+                      {currentSlide.type === "title" && (
                         <div className="flex-1 flex flex-col items-center justify-center text-center">
-                          <h1 
+                          <h1
                             className="text-4xl font-bold mb-4"
                             style={{ color: colors.primary }}
                           >
                             {currentSlide.title}
                           </h1>
                           {currentSlide.content && (
-                            <p className="text-xl" style={{ color: colors.text }}>
+                            <p
+                              className="text-xl"
+                              style={{ color: colors.text }}
+                            >
                               {currentSlide.content}
                             </p>
                           )}
                         </div>
                       )}
 
-                      {currentSlide.type === 'bullets' && (
+                      {currentSlide.type === "bullets" && (
                         <>
-                          <h2 
+                          <h2
                             className="text-2xl font-bold mb-8"
                             style={{ color: colors.primary }}
                           >
@@ -307,12 +360,12 @@ export function PresentationBuilder() {
                           </h2>
                           <ul className="space-y-4">
                             {currentSlide.bullets?.map((bullet, i) => (
-                              <li 
+                              <li
                                 key={i}
                                 className="flex items-start gap-3 text-lg"
                                 style={{ color: colors.text }}
                               >
-                                <span 
+                                <span
                                   className="w-2 h-2 rounded-full mt-2.5 flex-shrink-0"
                                   style={{ backgroundColor: colors.primary }}
                                 />
@@ -323,23 +376,26 @@ export function PresentationBuilder() {
                         </>
                       )}
 
-                      {currentSlide.type === 'content' && (
+                      {currentSlide.type === "content" && (
                         <>
-                          <h2 
+                          <h2
                             className="text-2xl font-bold mb-6"
                             style={{ color: colors.primary }}
                           >
                             {currentSlide.title}
                           </h2>
-                          <p className="text-lg leading-relaxed" style={{ color: colors.text }}>
+                          <p
+                            className="text-lg leading-relaxed"
+                            style={{ color: colors.text }}
+                          >
                             {currentSlide.content}
                           </p>
                         </>
                       )}
 
-                      {currentSlide.type === 'chart' && (
+                      {currentSlide.type === "chart" && (
                         <>
-                          <h2 
+                          <h2
                             className="text-2xl font-bold mb-6"
                             style={{ color: colors.primary }}
                           >
@@ -351,7 +407,10 @@ export function PresentationBuilder() {
                             </div>
                           </div>
                           {currentSlide.content && (
-                            <p className="text-sm mt-4 text-center" style={{ color: colors.text }}>
+                            <p
+                              className="text-sm mt-4 text-center"
+                              style={{ color: colors.text }}
+                            >
                               {currentSlide.content}
                             </p>
                           )}
@@ -368,7 +427,9 @@ export function PresentationBuilder() {
                   {/* Navigation */}
                   <div className="flex items-center gap-2">
                     <button
-                      onClick={() => setCurrentSlideIndex(Math.max(0, currentSlideIndex - 1))}
+                      onClick={() =>
+                        setCurrentSlideIndex(Math.max(0, currentSlideIndex - 1))
+                      }
                       disabled={currentSlideIndex === 0}
                       className="p-2 hover:bg-gray-700 rounded-lg transition-colors disabled:opacity-50"
                     >
@@ -378,7 +439,14 @@ export function PresentationBuilder() {
                       Slide {currentSlideIndex + 1} of {project.slides.length}
                     </span>
                     <button
-                      onClick={() => setCurrentSlideIndex(Math.min(project.slides.length - 1, currentSlideIndex + 1))}
+                      onClick={() =>
+                        setCurrentSlideIndex(
+                          Math.min(
+                            project.slides.length - 1,
+                            currentSlideIndex + 1
+                          )
+                        )
+                      }
                       disabled={currentSlideIndex === project.slides.length - 1}
                       className="p-2 hover:bg-gray-700 rounded-lg transition-colors disabled:opacity-50"
                     >
@@ -394,11 +462,15 @@ export function PresentationBuilder() {
                         disabled={isGenerating}
                         className="px-3 py-1.5 bg-gray-700 text-foreground rounded-lg hover:bg-gray-600 transition-colors text-sm flex items-center gap-2"
                       >
-                        <RefreshCw className={`w-4 h-4 ${isGenerating ? 'animate-spin' : ''}`} />
+                        <RefreshCw
+                          className={`w-4 h-4 ${isGenerating ? "animate-spin" : ""}`}
+                        />
                         Regenerate
                       </button>
                       <button
-                        onClick={() => rejectSlide(currentSlide.id, 'Needs revision')}
+                        onClick={() =>
+                          rejectSlide(currentSlide.id, "Needs revision")
+                        }
                         className="px-3 py-1.5 bg-red-500/20 text-red-400 border border-red-500/30 rounded-lg hover:bg-red-500/30 transition-colors text-sm flex items-center gap-2"
                       >
                         <X className="w-4 h-4" />
@@ -450,7 +522,9 @@ export function PresentationBuilder() {
       {showSlideOptions && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
           <div className="bg-card border border-border rounded-2xl w-full max-w-md p-6">
-            <h2 className="text-lg font-semibold text-foreground mb-4">Add Slide</h2>
+            <h2 className="text-lg font-semibold text-foreground mb-4">
+              Add Slide
+            </h2>
             <div className="grid grid-cols-2 gap-3">
               {slideTypes.map(st => (
                 <button
@@ -462,7 +536,9 @@ export function PresentationBuilder() {
                   className="p-4 bg-gray-800/50 hover:bg-gray-700/50 rounded-xl transition-colors text-left"
                 >
                   <st.icon className="w-6 h-6 text-primary mb-2" />
-                  <p className="font-medium text-foreground text-sm">{st.label}</p>
+                  <p className="font-medium text-foreground text-sm">
+                    {st.label}
+                  </p>
                   <p className="text-xs text-muted-foreground">{st.desc}</p>
                 </button>
               ))}

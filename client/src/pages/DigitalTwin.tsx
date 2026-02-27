@@ -1,65 +1,110 @@
 import { useState, useRef, useEffect } from "react";
 import { useSearch } from "wouter";
-import { 
-  User, Mic, MicOff, Send,
-  Sparkles, Activity, Trash2, Paperclip, Link2, Check, X, FileAudio, GraduationCap
+import {
+  User,
+  Mic,
+  MicOff,
+  Send,
+  Sparkles,
+  Activity,
+  Trash2,
+  Paperclip,
+  Link2,
+  Check,
+  X,
+  FileAudio,
+  GraduationCap,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import { LearningPanel, LearningToast, useLearningNotifications } from '@/components/expert-evolution/LearningIndicator';
-import { ActivityLog } from '@/components/shared/ActivityLog';
-import { ProgressBar, CircularProgress, DigitalTwinTrainingProgress } from '@/components/shared/ProgressIndicator';
-import { ConversationSwitcher } from '@/components/communication/ConversationSwitcher';
-import { DigitalTwinAccelerator } from '@/components/shared/DigitalTwinAccelerator';
-import { BusinessGuardian } from '@/components/business-plan/BusinessGuardian';
-import { DigitalTwinDevelopment } from '@/components/expert-evolution/DigitalTwinDevelopment';
-import { BusinessPlanReview } from '@/components/business-plan/BusinessPlanReview';
+import {
+  LearningPanel,
+  LearningToast,
+  useLearningNotifications,
+} from "@/components/expert-evolution/LearningIndicator";
+import { ActivityLog } from "@/components/shared/ActivityLog";
+import {
+  ProgressBar,
+  CircularProgress,
+  DigitalTwinTrainingProgress,
+} from "@/components/shared/ProgressIndicator";
+import { ConversationSwitcher } from "@/components/communication/ConversationSwitcher";
+import { DigitalTwinAccelerator } from "@/components/shared/DigitalTwinAccelerator";
+import { BusinessGuardian } from "@/components/business-plan/BusinessGuardian";
+import { DigitalTwinDevelopment } from "@/components/expert-evolution/DigitalTwinDevelopment";
+import { BusinessPlanReview } from "@/components/business-plan/BusinessPlanReview";
 import { useDigitalTwinChat } from "@/hooks/useDigitalTwinChat";
 import { useVoiceInput } from "@/hooks/useVoiceInput";
 
 export default function DigitalTwin() {
   const search = useSearch();
   const searchParams = new URLSearchParams(search);
-  const initialMessage = searchParams.get('message');
-  
+  const initialMessage = searchParams.get("message");
+
   const [messageInput, setMessageInput] = useState(initialMessage || "");
   const [showRightPanel, setShowRightPanel] = useState(true);
-  const [rightPanelTab, setRightPanelTab] = useState<'learning' | 'activity' | 'training' | 'guardian' | 'growth' | 'review'>('training');
+  const [rightPanelTab, setRightPanelTab] = useState<
+    "learning" | "activity" | "training" | "guardian" | "growth" | "review"
+  >("training");
   const [showBusinessPlanReview, setShowBusinessPlanReview] = useState(false);
   const [showTrainingModal, setShowTrainingModal] = useState(false);
-  const [currentConversationId, setCurrentConversationId] = useState('current');
-  
+  const [currentConversationId, setCurrentConversationId] = useState("current");
+
   // Mock conversation history for ConversationSwitcher
   const mockConversations = [
-    { id: 'current', title: 'Current Session', lastMessage: 'How can I help you today?', timestamp: new Date(), starred: true },
-    { id: 'conv-1', title: 'Project Planning', lastMessage: 'Let me break down the timeline...', timestamp: new Date(Date.now() - 3600000) },
-    { id: 'conv-2', title: 'Email Drafts', lastMessage: 'Here\'s the revised version...', timestamp: new Date(Date.now() - 86400000), starred: true },
-    { id: 'conv-3', title: 'Meeting Prep', lastMessage: 'Key points to cover...', timestamp: new Date(Date.now() - 172800000) },
+    {
+      id: "current",
+      title: "Current Session",
+      lastMessage: "How can I help you today?",
+      timestamp: new Date(),
+      starred: true,
+    },
+    {
+      id: "conv-1",
+      title: "Project Planning",
+      lastMessage: "Let me break down the timeline...",
+      timestamp: new Date(Date.now() - 3600000),
+    },
+    {
+      id: "conv-2",
+      title: "Email Drafts",
+      lastMessage: "Here's the revised version...",
+      timestamp: new Date(Date.now() - 86400000),
+      starred: true,
+    },
+    {
+      id: "conv-3",
+      title: "Meeting Prep",
+      lastMessage: "Key points to cover...",
+      timestamp: new Date(Date.now() - 172800000),
+    },
   ];
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
-  
+
   // Chief of Staff chat hook with real API
-  const { messages, isTyping, sendMessage, clearHistory, isLoading } = useDigitalTwinChat();
-  
+  const { messages, isTyping, sendMessage, clearHistory, isLoading } =
+    useDigitalTwinChat();
+
   // Voice input hook
-  const { 
-    isListening, 
-    transcript, 
-    startListening, 
-    stopListening, 
+  const {
+    isListening,
+    transcript,
+    startListening,
+    stopListening,
     isSupported: voiceSupported,
-    error: voiceError 
+    error: voiceError,
   } = useVoiceInput({
-    onResult: (text) => {
+    onResult: text => {
       setMessageInput(prev => prev + text);
     },
     continuous: false,
   });
-  
+
   // Learning notifications
-  const { notifications, currentToast, addLearning, dismissToast } = useLearningNotifications();
+  const { notifications, currentToast, addLearning, dismissToast } =
+    useLearningNotifications();
 
   // Auto-scroll to bottom when new messages arrive
   useEffect(() => {
@@ -69,7 +114,7 @@ export default function DigitalTwin() {
   // Process initial message from URL
   useEffect(() => {
     if (initialMessage) {
-      window.history.replaceState({}, '', '/tasks');
+      window.history.replaceState({}, "", "/tasks");
       inputRef.current?.focus();
     }
   }, [initialMessage]);
@@ -77,8 +122,8 @@ export default function DigitalTwin() {
   // Auto-resize textarea
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setMessageInput(e.target.value);
-    e.target.style.height = 'auto';
-    e.target.style.height = Math.min(e.target.scrollHeight, 120) + 'px';
+    e.target.style.height = "auto";
+    e.target.style.height = Math.min(e.target.scrollHeight, 120) + "px";
   };
 
   // Toggle voice recording
@@ -98,27 +143,30 @@ export default function DigitalTwin() {
   // Send text message
   const handleSendMessage = () => {
     if (!messageInput.trim() || isLoading) return;
-    
+
     sendMessage(messageInput);
     setMessageInput("");
-    
+
     // Reset textarea height
     if (inputRef.current) {
-      inputRef.current.style.height = 'auto';
+      inputRef.current.style.height = "auto";
     }
-    
+
     // Add learning notification for patterns
-    if (messageInput.toLowerCase().includes('priority') || messageInput.toLowerCase().includes('urgent')) {
+    if (
+      messageInput.toLowerCase().includes("priority") ||
+      messageInput.toLowerCase().includes("urgent")
+    ) {
       addLearning({
-        type: 'pattern',
-        message: 'Noted: This topic is high priority for you',
+        type: "pattern",
+        message: "Noted: This topic is high priority for you",
       });
     }
   };
 
   // Handle Enter key
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       handleSendMessage();
     }
@@ -126,10 +174,25 @@ export default function DigitalTwin() {
 
   // Quick action buttons
   const quickActions = [
-    { label: "Show The Signal", action: () => toast.info("Opening The Signal...") },
-    { label: "Check pending items", action: () => toast.info("5 items pending your review") },
-    { label: "Review Business Plan", action: () => setShowBusinessPlanReview(true) },
-    { label: "View activity log", action: () => { setShowRightPanel(true); setRightPanelTab('activity'); } },
+    {
+      label: "Show The Signal",
+      action: () => toast.info("Opening The Signal..."),
+    },
+    {
+      label: "Check pending items",
+      action: () => toast.info("5 items pending your review"),
+    },
+    {
+      label: "Review Business Plan",
+      action: () => setShowBusinessPlanReview(true),
+    },
+    {
+      label: "View activity log",
+      action: () => {
+        setShowRightPanel(true);
+        setRightPanelTab("activity");
+      },
+    },
   ];
 
   return (
@@ -147,22 +210,28 @@ export default function DigitalTwin() {
                 <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-background" />
               </div>
               <div>
-                <h1 className="text-base sm:text-lg font-semibold text-foreground">Chief of Staff</h1>
-                <p className="text-xs text-muted-foreground">Online • AI-Powered • Learning from you</p>
+                <h1 className="text-base sm:text-lg font-semibold text-foreground">
+                  Chief of Staff
+                </h1>
+                <p className="text-xs text-muted-foreground">
+                  Online • AI-Powered • Learning from you
+                </p>
               </div>
               {/* Conversation Switcher */}
               <div className="hidden md:block ml-4">
                 <ConversationSwitcher
                   conversations={mockConversations}
                   currentConversationId={currentConversationId}
-                  onSelect={(id) => {
+                  onSelect={id => {
                     setCurrentConversationId(id);
-                    toast.info(`Switched to: ${mockConversations.find(c => c.id === id)?.title}`);
+                    toast.info(
+                      `Switched to: ${mockConversations.find(c => c.id === id)?.title}`
+                    );
                   }}
                   onNewConversation={() => {
                     clearHistory();
-                    setCurrentConversationId('new-' + Date.now());
-                    toast.success('Started new conversation');
+                    setCurrentConversationId("new-" + Date.now());
+                    toast.success("Started new conversation");
                   }}
                 />
               </div>
@@ -170,26 +239,42 @@ export default function DigitalTwin() {
             <div className="flex items-center gap-2">
               {/* Training Button */}
               <button
-                onClick={() => { setShowRightPanel(true); setRightPanelTab('training'); }}
+                onClick={() => {
+                  setShowRightPanel(true);
+                  setRightPanelTab("training");
+                }}
                 className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-gradient-to-r from-emerald-500/10 to-cyan-500/10 border border-emerald-500/20 hover:border-emerald-500/40 transition-colors"
               >
                 <GraduationCap className="w-4 h-4 text-emerald-400" />
-                <span className="text-xs text-emerald-400 font-medium">Training</span>
+                <span className="text-xs text-emerald-400 font-medium">
+                  Training
+                </span>
               </button>
               {/* Training Progress Mini Badge */}
               <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-gradient-to-r from-cyan-500/10 to-purple-500/10 border border-cyan-500/20">
-                <CircularProgress value={25} max={100} size={24} strokeWidth={3} showValue={false} />
-                <span className="text-xs text-muted-foreground">12.5h trained</span>
+                <CircularProgress
+                  value={25}
+                  max={100}
+                  size={24}
+                  strokeWidth={3}
+                  showValue={false}
+                />
+                <span className="text-xs text-muted-foreground">
+                  12.5h trained
+                </span>
               </div>
-              <Badge variant="outline" className="bg-purple-500/10 text-purple-400 border-purple-500/30">
+              <Badge
+                variant="outline"
+                className="bg-purple-500/10 text-purple-400 border-purple-500/30"
+              >
                 <Sparkles className="w-3 h-3 mr-1" />
                 {messages.length} messages
               </Badge>
               <button
                 onClick={() => {
-                  if (confirm('Clear all conversation history?')) {
+                  if (confirm("Clear all conversation history?")) {
                     clearHistory();
-                    toast.success('Conversation cleared');
+                    toast.success("Conversation cleared");
                   }
                 }}
                 className="p-2 rounded-lg hover:bg-secondary/50 transition-colors"
@@ -210,35 +295,46 @@ export default function DigitalTwin() {
         {/* Messages Area - Scrollable */}
         <div className="flex-1 overflow-y-auto">
           <div className="max-w-3xl mx-auto px-3 sm:px-4 py-4 sm:py-6 space-y-4 sm:space-y-6">
-            {messages.map((msg) => (
-              <div key={msg.id} className={`flex gap-3 ${msg.from === "user" ? "justify-end" : ""}`}>
+            {messages.map(msg => (
+              <div
+                key={msg.id}
+                className={`flex gap-3 ${msg.from === "user" ? "justify-end" : ""}`}
+              >
                 {/* Avatar - only for assistant */}
                 {msg.from === "twin" && (
                   <div className="shrink-0 w-7 h-7 rounded-full flex items-center justify-center bg-primary/20 border border-primary/30">
                     <User className="w-3.5 h-3.5 text-primary" />
                   </div>
                 )}
-                
+
                 {/* Message */}
                 <div className={`max-w-[80%] ${msg.from === "user" ? "" : ""}`}>
-                  <div className={`px-4 py-2.5 rounded-2xl ${
-                    msg.from === "twin" 
-                      ? "bg-card/40 border border-white/5" 
-                      : "bg-primary/15 border border-primary/20"
-                  }`}>
-                    <p className="text-sm text-foreground/90 whitespace-pre-wrap leading-relaxed"
-                       dangerouslySetInnerHTML={{ 
-                         __html: msg.message
-                           .replace(/\*\*(.*?)\*\*/g, '<strong class="text-foreground font-medium">$1</strong>')
-                           .replace(/\n/g, '<br/>')
-                       }} 
+                  <div
+                    className={`px-4 py-2.5 rounded-2xl ${
+                      msg.from === "twin"
+                        ? "bg-card/40 border border-white/5"
+                        : "bg-primary/15 border border-primary/20"
+                    }`}
+                  >
+                    <p
+                      className="text-sm text-foreground/90 whitespace-pre-wrap leading-relaxed"
+                      dangerouslySetInnerHTML={{
+                        __html: msg.message
+                          .replace(
+                            /\*\*(.*?)\*\*/g,
+                            '<strong class="text-foreground font-medium">$1</strong>'
+                          )
+                          .replace(/\n/g, "<br/>"),
+                      }}
                     />
                   </div>
-                  <p className="text-[10px] text-muted-foreground/60 mt-1 px-2">{msg.time}</p>
+                  <p className="text-[10px] text-muted-foreground/60 mt-1 px-2">
+                    {msg.time}
+                  </p>
                 </div>
               </div>
             ))}
-            
+
             {/* Enhanced Typing/Thinking indicator */}
             {isTyping && (
               <div className="flex gap-3 items-start">
@@ -248,16 +344,27 @@ export default function DigitalTwin() {
                 <div className="bg-card/60 border border-primary/20 rounded-2xl px-4 py-3 shadow-lg shadow-primary/5">
                   <div className="flex items-center gap-3">
                     <div className="flex gap-1.5">
-                      <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                      <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                      <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                      <div
+                        className="w-2 h-2 bg-primary rounded-full animate-bounce"
+                        style={{ animationDelay: "0ms" }}
+                      />
+                      <div
+                        className="w-2 h-2 bg-primary rounded-full animate-bounce"
+                        style={{ animationDelay: "150ms" }}
+                      />
+                      <div
+                        className="w-2 h-2 bg-primary rounded-full animate-bounce"
+                        style={{ animationDelay: "300ms" }}
+                      />
                     </div>
-                    <span className="text-xs text-muted-foreground animate-pulse">Chief of Staff is thinking...</span>
+                    <span className="text-xs text-muted-foreground animate-pulse">
+                      Chief of Staff is thinking...
+                    </span>
                   </div>
                 </div>
               </div>
             )}
-            
+
             <div ref={messagesEndRef} />
           </div>
         </div>
@@ -286,11 +393,22 @@ export default function DigitalTwin() {
               {isTyping && (
                 <div className="px-4 py-2 border-b border-white/5 flex items-center gap-2">
                   <div className="flex gap-1">
-                    <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                    <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                    <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                    <div
+                      className="w-2 h-2 bg-primary rounded-full animate-bounce"
+                      style={{ animationDelay: "0ms" }}
+                    />
+                    <div
+                      className="w-2 h-2 bg-primary rounded-full animate-bounce"
+                      style={{ animationDelay: "150ms" }}
+                    />
+                    <div
+                      className="w-2 h-2 bg-primary rounded-full animate-bounce"
+                      style={{ animationDelay: "300ms" }}
+                    />
                   </div>
-                  <span className="text-xs text-muted-foreground">Chief of Staff is thinking...</span>
+                  <span className="text-xs text-muted-foreground">
+                    Chief of Staff is thinking...
+                  </span>
                 </div>
               )}
               {/* Text input - increased height for better UX */}
@@ -302,9 +420,9 @@ export default function DigitalTwin() {
                 placeholder="Message Chief of Staff..."
                 rows={2}
                 className="w-full px-4 py-4 bg-transparent resize-none focus:outline-none text-sm placeholder:text-muted-foreground/60"
-                style={{ minHeight: '60px', maxHeight: '120px' }}
+                style={{ minHeight: "60px", maxHeight: "120px" }}
               />
-              
+
               {/* Action bar */}
               <div className="flex items-center justify-between px-3 py-2 border-t border-white/5">
                 {/* Left actions */}
@@ -324,13 +442,17 @@ export default function DigitalTwin() {
                   <button
                     onClick={toggleRecording}
                     className={`p-3 rounded-xl transition-all ${
-                      isListening 
-                        ? "text-red-400 bg-red-500/20 animate-pulse scale-110" 
+                      isListening
+                        ? "text-red-400 bg-red-500/20 animate-pulse scale-110"
                         : "text-primary hover:text-primary hover:bg-primary/20 hover:scale-105"
                     }`}
                     title={isListening ? "Stop recording" : "Voice input"}
                   >
-                    {isListening ? <MicOff className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
+                    {isListening ? (
+                      <MicOff className="w-5 h-5" />
+                    ) : (
+                      <Mic className="w-5 h-5" />
+                    )}
                   </button>
                   <button
                     className="p-2 rounded-lg text-primary/70 hover:text-primary hover:bg-primary/10 transition-colors"
@@ -339,12 +461,12 @@ export default function DigitalTwin() {
                     <FileAudio className="w-4 h-4" />
                   </button>
                 </div>
-                
+
                 {/* Right actions */}
                 <div className="flex items-center gap-1">
                   {messageInput.trim() && (
                     <button
-                      onClick={() => setMessageInput('')}
+                      onClick={() => setMessageInput("")}
                       className="p-2 rounded-lg text-muted-foreground hover:text-red-400 hover:bg-red-500/10 transition-colors"
                       title="Clear"
                     >
@@ -362,7 +484,7 @@ export default function DigitalTwin() {
                 </div>
               </div>
             </div>
-            
+
             {/* Voice status */}
             {isListening && (
               <div className="mt-2 flex items-center gap-2 text-xs text-red-400">
@@ -370,7 +492,7 @@ export default function DigitalTwin() {
                 Listening... {transcript && `"${transcript}"`}
               </div>
             )}
-            
+
             {voiceError && (
               <p className="mt-2 text-xs text-red-400">{voiceError}</p>
             )}
@@ -386,7 +508,9 @@ export default function DigitalTwin() {
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <GraduationCap className="w-5 h-5 text-purple-400" />
-                <h3 className="font-semibold text-foreground">Training Center</h3>
+                <h3 className="font-semibold text-foreground">
+                  Training Center
+                </h3>
               </div>
               <button
                 onClick={() => setShowRightPanel(false)}
@@ -399,67 +523,65 @@ export default function DigitalTwin() {
           {/* Panel Tabs */}
           <div className="flex border-b border-white/10">
             <button
-              onClick={() => setRightPanelTab('learning')}
+              onClick={() => setRightPanelTab("learning")}
               className={`flex-1 px-4 py-3 text-sm font-medium transition-colors ${
-                rightPanelTab === 'learning' 
-                  ? 'text-purple-400 border-b-2 border-purple-400' 
-                  : 'text-muted-foreground hover:text-foreground'
+                rightPanelTab === "learning"
+                  ? "text-purple-400 border-b-2 border-purple-400"
+                  : "text-muted-foreground hover:text-foreground"
               }`}
             >
               Learning
             </button>
             <button
-              onClick={() => setRightPanelTab('activity')}
+              onClick={() => setRightPanelTab("activity")}
               className={`flex-1 px-4 py-3 text-sm font-medium transition-colors ${
-                rightPanelTab === 'activity' 
-                  ? 'text-purple-400 border-b-2 border-purple-400' 
-                  : 'text-muted-foreground hover:text-foreground'
+                rightPanelTab === "activity"
+                  ? "text-purple-400 border-b-2 border-purple-400"
+                  : "text-muted-foreground hover:text-foreground"
               }`}
             >
               Activity
             </button>
             <button
-              onClick={() => setRightPanelTab('training')}
+              onClick={() => setRightPanelTab("training")}
               className={`flex-1 px-4 py-3 text-sm font-medium transition-colors ${
-                rightPanelTab === 'training' 
-                  ? 'text-purple-400 border-b-2 border-purple-400 flex items-center justify-center gap-2' 
-                  : 'text-muted-foreground hover:text-foreground'
+                rightPanelTab === "training"
+                  ? "text-purple-400 border-b-2 border-purple-400 flex items-center justify-center gap-2"
+                  : "text-muted-foreground hover:text-foreground"
               }`}
             >
               <GraduationCap className="w-4 h-4" />
               Train
             </button>
             <button
-              onClick={() => setRightPanelTab('guardian')}
+              onClick={() => setRightPanelTab("guardian")}
               className={`flex-1 px-4 py-3 text-sm font-medium transition-colors ${
-                rightPanelTab === 'guardian' 
-                  ? 'text-fuchsia-400 border-b-2 border-fuchsia-400 flex items-center justify-center gap-2' 
-                  : 'text-muted-foreground hover:text-foreground'
+                rightPanelTab === "guardian"
+                  ? "text-fuchsia-400 border-b-2 border-fuchsia-400 flex items-center justify-center gap-2"
+                  : "text-muted-foreground hover:text-foreground"
               }`}
             >
               Guardian
             </button>
             <button
-              onClick={() => setRightPanelTab('growth')}
+              onClick={() => setRightPanelTab("growth")}
               className={`flex-1 px-4 py-3 text-sm font-medium transition-colors ${
-                rightPanelTab === 'growth' 
-                  ? 'text-emerald-400 border-b-2 border-emerald-400' 
-                  : 'text-muted-foreground hover:text-foreground'
+                rightPanelTab === "growth"
+                  ? "text-emerald-400 border-b-2 border-emerald-400"
+                  : "text-muted-foreground hover:text-foreground"
               }`}
             >
               Growth
             </button>
           </div>
-          
+
           {/* Panel Content */}
           <div className="flex-1 overflow-y-auto p-4">
-            {rightPanelTab === 'learning' && (
+            {rightPanelTab === "learning" && (
               <LearningPanel learningItems={notifications} />
             )}
-            {rightPanelTab === 'activity' && (
-              <ActivityLog />
-            )}
-            {rightPanelTab === 'training' && (
+            {rightPanelTab === "activity" && <ActivityLog />}
+            {rightPanelTab === "training" && (
               <div className="space-y-4">
                 <button
                   onClick={() => setShowTrainingModal(true)}
@@ -467,11 +589,15 @@ export default function DigitalTwin() {
                 >
                   <div className="flex items-center gap-2 mb-2">
                     <Sparkles className="w-5 h-5 text-purple-300" />
-                    <h4 className="font-semibold text-white">Training Accelerator</h4>
+                    <h4 className="font-semibold text-white">
+                      Training Accelerator
+                    </h4>
                   </div>
-                  <p className="text-sm text-purple-200">Speed up your Chief of Staff's learning</p>
+                  <p className="text-sm text-purple-200">
+                    Speed up your Chief of Staff's learning
+                  </p>
                 </button>
-                <DigitalTwinTrainingProgress 
+                <DigitalTwinTrainingProgress
                   hoursLogged={127}
                   conversationsCount={45}
                   feedbackCount={23}
@@ -479,19 +605,19 @@ export default function DigitalTwin() {
                 />
               </div>
             )}
-            {rightPanelTab === 'guardian' && (
-              <BusinessGuardian />
-            )}
-            {rightPanelTab === 'growth' && (
-              <DigitalTwinDevelopment />
-            )}
+            {rightPanelTab === "guardian" && <BusinessGuardian />}
+            {rightPanelTab === "growth" && <DigitalTwinDevelopment />}
           </div>
         </div>
       )}
 
       {/* Learning Toast */}
       {currentToast && (
-        <LearningToast message={currentToast.message} type={currentToast.type} onClose={dismissToast} />
+        <LearningToast
+          message={currentToast.message}
+          type={currentToast.type}
+          onClose={dismissToast}
+        />
       )}
 
       {/* Training Accelerator Modal */}
@@ -505,7 +631,9 @@ export default function DigitalTwin() {
               >
                 <span className="text-xl text-muted-foreground">×</span>
               </button>
-              <DigitalTwinAccelerator onComplete={() => setShowTrainingModal(false)} />
+              <DigitalTwinAccelerator
+                onComplete={() => setShowTrainingModal(false)}
+              />
             </div>
           </div>
         </div>
@@ -522,10 +650,10 @@ export default function DigitalTwin() {
               >
                 <span className="text-xl text-muted-foreground">×</span>
               </button>
-              <BusinessPlanReview 
+              <BusinessPlanReview
                 projectName="Current Business Plan"
-                onComplete={(reviews) => {
-                  toast.success('Business plan review complete!');
+                onComplete={reviews => {
+                  toast.success("Business plan review complete!");
                 }}
               />
             </div>

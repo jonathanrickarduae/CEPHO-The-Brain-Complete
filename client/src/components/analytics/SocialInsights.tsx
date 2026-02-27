@@ -1,12 +1,23 @@
-import { useState } from 'react';
-import { 
-  Users, Mail, Calendar, MessageSquare, Briefcase, 
-  TrendingUp, Clock, Star, ExternalLink, Phone,
-  Linkedin, Twitter, Building2, MapPin
-} from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { useState } from "react";
+import {
+  Users,
+  Mail,
+  Calendar,
+  MessageSquare,
+  Briefcase,
+  TrendingUp,
+  Clock,
+  Star,
+  ExternalLink,
+  Phone,
+  Linkedin,
+  Twitter,
+  Building2,
+  MapPin,
+} from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 
 interface ContactInsight {
   id: string;
@@ -15,10 +26,10 @@ interface ContactInsight {
   company: string;
   role: string;
   avatar?: string;
-  relationship: 'strong' | 'moderate' | 'new';
+  relationship: "strong" | "moderate" | "new";
   lastInteraction: string;
   interactionCount: number;
-  sentiment: 'positive' | 'neutral' | 'needs-attention';
+  sentiment: "positive" | "neutral" | "needs-attention";
   upcomingMeetings: number;
   pendingEmails: number;
   notes: string[];
@@ -34,72 +45,76 @@ interface ContactInsight {
 // Mock contact data
 const MOCK_CONTACTS: ContactInsight[] = [
   {
-    id: '1',
-    name: 'James K.',
-    email: 'james.k@vcpartners.com',
-    company: 'VC Partners',
-    role: 'Managing Partner',
-    relationship: 'strong',
-    lastInteraction: '2 days ago',
+    id: "1",
+    name: "James K.",
+    email: "james.k@vcpartners.com",
+    company: "VC Partners",
+    role: "Managing Partner",
+    relationship: "strong",
+    lastInteraction: "2 days ago",
     interactionCount: 45,
-    sentiment: 'positive',
+    sentiment: "positive",
     upcomingMeetings: 1,
     pendingEmails: 0,
-    notes: ['Interested in Series B', 'Prefers morning meetings', 'Golf enthusiast'],
-    tags: ['Investor', 'Key Relationship', 'Decision Maker'],
-    socialLinks: { linkedin: '#', twitter: '#' },
-    location: 'San Francisco, CA',
-    phone: '+1 (555) 123-4567'
+    notes: [
+      "Interested in Series B",
+      "Prefers morning meetings",
+      "Golf enthusiast",
+    ],
+    tags: ["Investor", "Key Relationship", "Decision Maker"],
+    socialLinks: { linkedin: "#", twitter: "#" },
+    location: "San Francisco, CA",
+    phone: "+1 (555) 123-4567",
   },
   {
-    id: '2',
-    name: 'Sarah L.',
-    email: 'sarah.l@company.com',
-    company: 'Internal',
-    role: 'Head of Product',
-    relationship: 'strong',
-    lastInteraction: 'Today',
+    id: "2",
+    name: "Sarah L.",
+    email: "sarah.l@company.com",
+    company: "Internal",
+    role: "Head of Product",
+    relationship: "strong",
+    lastInteraction: "Today",
     interactionCount: 234,
-    sentiment: 'positive',
+    sentiment: "positive",
     upcomingMeetings: 3,
     pendingEmails: 2,
-    notes: ['Key stakeholder for roadmap', 'Prefers Slack over email'],
-    tags: ['Team', 'Product', 'Leadership'],
-    location: 'Remote'
+    notes: ["Key stakeholder for roadmap", "Prefers Slack over email"],
+    tags: ["Team", "Product", "Leadership"],
+    location: "Remote",
   },
   {
-    id: '3',
-    name: 'Dr. Chen',
-    email: 'chen@research.edu',
-    company: 'University Research Lab',
-    role: 'Research Director',
-    relationship: 'moderate',
-    lastInteraction: '2 weeks ago',
+    id: "3",
+    name: "Dr. Chen",
+    email: "chen@research.edu",
+    company: "University Research Lab",
+    role: "Research Director",
+    relationship: "moderate",
+    lastInteraction: "2 weeks ago",
     interactionCount: 12,
-    sentiment: 'neutral',
+    sentiment: "neutral",
     upcomingMeetings: 0,
     pendingEmails: 1,
-    notes: ['Potential research partnership', 'Published paper on AI ethics'],
-    tags: ['Academic', 'Research', 'Partnership'],
-    socialLinks: { linkedin: '#' },
-    location: 'Cambridge, UK'
+    notes: ["Potential research partnership", "Published paper on AI ethics"],
+    tags: ["Academic", "Research", "Partnership"],
+    socialLinks: { linkedin: "#" },
+    location: "Cambridge, UK",
   },
   {
-    id: '4',
-    name: 'Marcus T.',
-    email: 'marcus@competitor.com',
-    company: 'Competitor Inc',
-    role: 'CTO',
-    relationship: 'new',
-    lastInteraction: '1 month ago',
+    id: "4",
+    name: "Marcus T.",
+    email: "marcus@competitor.com",
+    company: "Competitor Inc",
+    role: "CTO",
+    relationship: "new",
+    lastInteraction: "1 month ago",
     interactionCount: 3,
-    sentiment: 'needs-attention',
+    sentiment: "needs-attention",
     upcomingMeetings: 0,
     pendingEmails: 0,
-    notes: ['Met at conference', 'Potential talent acquisition target'],
-    tags: ['Industry', 'Networking'],
-    socialLinks: { linkedin: '#', twitter: '#' }
-  }
+    notes: ["Met at conference", "Potential talent acquisition target"],
+    tags: ["Industry", "Networking"],
+    socialLinks: { linkedin: "#", twitter: "#" },
+  },
 ];
 
 interface SocialInsightsProps {
@@ -107,26 +122,41 @@ interface SocialInsightsProps {
   compact?: boolean;
 }
 
-export function SocialInsights({ contactName, compact = false }: SocialInsightsProps) {
+export function SocialInsights({
+  contactName,
+  compact = false,
+}: SocialInsightsProps) {
   const [selectedContact, setSelectedContact] = useState<ContactInsight | null>(
-    contactName ? MOCK_CONTACTS.find(c => c.name.toLowerCase().includes(contactName.toLowerCase())) || null : null
+    contactName
+      ? MOCK_CONTACTS.find(c =>
+          c.name.toLowerCase().includes(contactName.toLowerCase())
+        ) || null
+      : null
   );
 
   const getRelationshipColor = (relationship: string) => {
     switch (relationship) {
-      case 'strong': return 'bg-green-500/20 text-green-400 border-green-500/30';
-      case 'moderate': return 'bg-blue-500/20 text-blue-400 border-blue-500/30';
-      case 'new': return 'bg-purple-500/20 text-purple-400 border-purple-500/30';
-      default: return 'bg-gray-500/20 text-foreground/70 border-gray-500/30';
+      case "strong":
+        return "bg-green-500/20 text-green-400 border-green-500/30";
+      case "moderate":
+        return "bg-blue-500/20 text-blue-400 border-blue-500/30";
+      case "new":
+        return "bg-purple-500/20 text-purple-400 border-purple-500/30";
+      default:
+        return "bg-gray-500/20 text-foreground/70 border-gray-500/30";
     }
   };
 
   const getSentimentColor = (sentiment: string) => {
     switch (sentiment) {
-      case 'positive': return 'text-green-400';
-      case 'neutral': return 'text-blue-400';
-      case 'needs-attention': return 'text-orange-400';
-      default: return 'text-foreground/70';
+      case "positive":
+        return "text-green-400";
+      case "neutral":
+        return "text-blue-400";
+      case "needs-attention":
+        return "text-orange-400";
+      default:
+        return "text-foreground/70";
     }
   };
 
@@ -135,13 +165,23 @@ export function SocialInsights({ contactName, compact = false }: SocialInsightsP
       <div className="p-3 bg-card/60 rounded-lg border border-border">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary font-semibold">
-            {selectedContact.name.split(' ').map(n => n[0]).join('')}
+            {selectedContact.name
+              .split(" ")
+              .map(n => n[0])
+              .join("")}
           </div>
           <div className="flex-1 min-w-0">
-            <div className="font-medium text-foreground truncate">{selectedContact.name}</div>
-            <div className="text-xs text-muted-foreground truncate">{selectedContact.role} at {selectedContact.company}</div>
+            <div className="font-medium text-foreground truncate">
+              {selectedContact.name}
+            </div>
+            <div className="text-xs text-muted-foreground truncate">
+              {selectedContact.role} at {selectedContact.company}
+            </div>
           </div>
-          <Badge variant="outline" className={getRelationshipColor(selectedContact.relationship)}>
+          <Badge
+            variant="outline"
+            className={getRelationshipColor(selectedContact.relationship)}
+          >
             {selectedContact.relationship}
           </Badge>
         </div>
@@ -178,23 +218,35 @@ export function SocialInsights({ contactName, compact = false }: SocialInsightsP
             {/* Contact Header */}
             <div className="flex items-start gap-4">
               <div className="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center text-primary text-xl font-semibold">
-                {selectedContact.name.split(' ').map(n => n[0]).join('')}
+                {selectedContact.name
+                  .split(" ")
+                  .map(n => n[0])
+                  .join("")}
               </div>
               <div className="flex-1">
-                <h3 className="text-lg font-semibold text-foreground">{selectedContact.name}</h3>
+                <h3 className="text-lg font-semibold text-foreground">
+                  {selectedContact.name}
+                </h3>
                 <p className="text-muted-foreground">{selectedContact.role}</p>
                 <div className="flex items-center gap-2 mt-1">
                   <Building2 className="w-4 h-4 text-muted-foreground" />
-                  <span className="text-sm text-muted-foreground">{selectedContact.company}</span>
+                  <span className="text-sm text-muted-foreground">
+                    {selectedContact.company}
+                  </span>
                 </div>
                 {selectedContact.location && (
                   <div className="flex items-center gap-2 mt-1">
                     <MapPin className="w-4 h-4 text-muted-foreground" />
-                    <span className="text-sm text-muted-foreground">{selectedContact.location}</span>
+                    <span className="text-sm text-muted-foreground">
+                      {selectedContact.location}
+                    </span>
                   </div>
                 )}
               </div>
-              <Badge variant="outline" className={getRelationshipColor(selectedContact.relationship)}>
+              <Badge
+                variant="outline"
+                className={getRelationshipColor(selectedContact.relationship)}
+              >
                 {selectedContact.relationship} relationship
               </Badge>
             </div>
@@ -202,20 +254,34 @@ export function SocialInsights({ contactName, compact = false }: SocialInsightsP
             {/* Quick Stats */}
             <div className="grid grid-cols-4 gap-3">
               <div className="bg-background/50 rounded-lg p-3 text-center">
-                <div className="text-2xl font-bold text-foreground">{selectedContact.interactionCount}</div>
-                <div className="text-xs text-muted-foreground">Interactions</div>
+                <div className="text-2xl font-bold text-foreground">
+                  {selectedContact.interactionCount}
+                </div>
+                <div className="text-xs text-muted-foreground">
+                  Interactions
+                </div>
               </div>
               <div className="bg-background/50 rounded-lg p-3 text-center">
-                <div className="text-2xl font-bold text-foreground">{selectedContact.upcomingMeetings}</div>
+                <div className="text-2xl font-bold text-foreground">
+                  {selectedContact.upcomingMeetings}
+                </div>
                 <div className="text-xs text-muted-foreground">Upcoming</div>
               </div>
               <div className="bg-background/50 rounded-lg p-3 text-center">
-                <div className="text-2xl font-bold text-foreground">{selectedContact.pendingEmails}</div>
+                <div className="text-2xl font-bold text-foreground">
+                  {selectedContact.pendingEmails}
+                </div>
                 <div className="text-xs text-muted-foreground">Pending</div>
               </div>
               <div className="bg-background/50 rounded-lg p-3 text-center">
-                <div className={`text-2xl font-bold ${getSentimentColor(selectedContact.sentiment)}`}>
-                  {selectedContact.sentiment === 'positive' ? '😊' : selectedContact.sentiment === 'neutral' ? '😐' : '⚠️'}
+                <div
+                  className={`text-2xl font-bold ${getSentimentColor(selectedContact.sentiment)}`}
+                >
+                  {selectedContact.sentiment === "positive"
+                    ? "😊"
+                    : selectedContact.sentiment === "neutral"
+                      ? "😐"
+                      : "⚠️"}
                 </div>
                 <div className="text-xs text-muted-foreground">Sentiment</div>
               </div>
@@ -259,10 +325,15 @@ export function SocialInsights({ contactName, compact = false }: SocialInsightsP
 
             {/* Notes */}
             <div>
-              <h4 className="text-sm font-medium text-foreground mb-2">Notes & Context</h4>
+              <h4 className="text-sm font-medium text-foreground mb-2">
+                Notes & Context
+              </h4>
               <ul className="space-y-1">
                 {selectedContact.notes.map((note, i) => (
-                  <li key={i} className="text-sm text-muted-foreground flex items-start gap-2">
+                  <li
+                    key={i}
+                    className="text-sm text-muted-foreground flex items-start gap-2"
+                  >
                     <span className="text-primary">•</span>
                     {note}
                   </li>
@@ -279,9 +350,9 @@ export function SocialInsights({ contactName, compact = false }: SocialInsightsP
               ))}
             </div>
 
-            <Button 
-              variant="ghost" 
-              size="sm" 
+            <Button
+              variant="ghost"
+              size="sm"
               onClick={() => setSelectedContact(null)}
               className="w-full"
             >
@@ -290,24 +361,36 @@ export function SocialInsights({ contactName, compact = false }: SocialInsightsP
           </div>
         ) : (
           <div className="space-y-3">
-            {MOCK_CONTACTS.map((contact) => (
-              <div 
+            {MOCK_CONTACTS.map(contact => (
+              <div
                 key={contact.id}
                 onClick={() => setSelectedContact(contact)}
                 className="flex items-center gap-3 p-3 rounded-lg bg-background/50 hover:bg-background/80 cursor-pointer transition-colors"
               >
                 <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary font-semibold">
-                  {contact.name.split(' ').map(n => n[0]).join('')}
+                  {contact.name
+                    .split(" ")
+                    .map(n => n[0])
+                    .join("")}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <div className="font-medium text-foreground truncate">{contact.name}</div>
-                  <div className="text-xs text-muted-foreground truncate">{contact.role} • {contact.company}</div>
+                  <div className="font-medium text-foreground truncate">
+                    {contact.name}
+                  </div>
+                  <div className="text-xs text-muted-foreground truncate">
+                    {contact.role} • {contact.company}
+                  </div>
                 </div>
                 <div className="text-right">
-                  <Badge variant="outline" className={`${getRelationshipColor(contact.relationship)} text-xs`}>
+                  <Badge
+                    variant="outline"
+                    className={`${getRelationshipColor(contact.relationship)} text-xs`}
+                  >
                     {contact.relationship}
                   </Badge>
-                  <div className="text-xs text-muted-foreground mt-1">{contact.lastInteraction}</div>
+                  <div className="text-xs text-muted-foreground mt-1">
+                    {contact.lastInteraction}
+                  </div>
                 </div>
               </div>
             ))}

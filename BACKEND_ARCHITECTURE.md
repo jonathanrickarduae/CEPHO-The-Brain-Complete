@@ -103,23 +103,27 @@ server/
 The backend is organized into the following core domains:
 
 #### 1. **Authentication & Authorization**
+
 - User registration and login
 - Session management
 - OAuth integration
 - Role-based access control
 
 **Files:**
+
 - `routers/auth.router.ts`
 - `services/auth.service.ts`
 - `middleware/auth.ts`
 
 #### 2. **AI Agents**
+
 - Digital Twin
 - Chief of Staff
 - SME Network
 - Expert Team
 
 **Files:**
+
 - `routers/digital-twin.router.ts`
 - `routers/chief-of-staff.router.ts`
 - `routers/sme.router.ts`
@@ -128,35 +132,41 @@ The backend is organized into the following core domains:
 - `services/sme-service.ts`
 
 #### 3. **Training Systems**
+
 - Digital Twin training
 - Chief of Staff training
 - Knowledge accumulation
 - Learning feedback
 
 **Files:**
+
 - `routers/digital-twin-training.router.ts`
 - `routers/chief-of-staff-training.router.ts`
 - `services/digital-twin-training.service.ts`
 - `services/chief-of-staff-training.service.ts`
 
 #### 4. **Innovation Hub**
+
 - Idea management
 - Workflow automation
 - Multi-source submissions
 - Conversion tracking
 
 **Files:**
+
 - `routers/innovation.router.ts`
 - `routers/innovation-hub-workflow.router.ts`
 - `services/innovation-hub-workflow.service.ts`
 
 #### 5. **Project Management**
+
 - Project Genesis
 - Blueprints
 - Quality Gates
 - Deep Dives
 
 **Files:**
+
 - `routers/project-genesis.router.ts`
 - `routers/blueprint.router.ts`
 - `routers/quality-gates.router.ts`
@@ -164,41 +174,49 @@ The backend is organized into the following core domains:
 - `services/project/`
 
 #### 6. **Business Planning**
+
 - Business plan generation
 - Review workflows
 - Template management
 
 **Files:**
+
 - `routers/business-plan.router.ts`
 - `services/business-plan/`
 
 #### 7. **Document Management**
+
 - Document library
 - Templates
 - PDF export
 - Collaborative review
 
 **Files:**
+
 - `routers/document-library.router.ts`
 - `routers/collaborative-review.router.ts`
 - `services/document/`
 
 #### 8. **Analytics & Monitoring**
+
 - Feature analytics
 - Performance metrics
 - User behavior tracking
 
 **Files:**
+
 - `routers/analytics.router.ts`
 - `services/analytics/`
 - `services/metrics/`
 
 #### 9. **Integrations**
+
 - Asana integration
 - External APIs
 - Webhooks
 
 **Files:**
+
 - `routers/asana.router.ts`
 - `routers/integrations.router.ts`
 - `services/asana-integration.ts`
@@ -227,10 +245,10 @@ export class ProjectRepository {
 // Service (business logic)
 export class ProjectService {
   constructor(private repo: ProjectRepository) {}
-  
+
   async getProject(id: number): Promise<Project> {
     const project = await this.repo.findById(id);
-    if (!project) throw new Error('Project not found');
+    if (!project) throw new Error("Project not found");
     return project;
   }
 }
@@ -242,11 +260,11 @@ Services are registered and injected via DI container.
 
 ```typescript
 // Register services
-DIContainer.register('ProjectRepository', ProjectRepository);
-DIContainer.register('ProjectService', ProjectService, ['ProjectRepository']);
+DIContainer.register("ProjectRepository", ProjectRepository);
+DIContainer.register("ProjectService", ProjectService, ["ProjectRepository"]);
 
 // Use services
-const projectService = DIContainer.get<ProjectService>('ProjectService');
+const projectService = DIContainer.get<ProjectService>("ProjectService");
 ```
 
 ### 3. **Service Layer Pattern**
@@ -258,7 +276,7 @@ export class AnalyticsService {
   async trackEvent(userId: number, event: string): Promise<void> {
     // Business logic here
   }
-  
+
   async getStats(userId: number): Promise<Stats> {
     // Business logic here
   }
@@ -276,7 +294,7 @@ export const projectRouter = router({
     .mutation(async ({ input }) => {
       return projectService.create(input);
     }),
-    
+
   getById: publicProcedure
     .input(z.object({ id: z.number() }))
     .query(async ({ input }) => {
@@ -315,6 +333,7 @@ services/
 ### Service Responsibilities
 
 Each service should:
+
 - ✅ Handle one domain or bounded context
 - ✅ Encapsulate business logic
 - ✅ Use repositories for data access
@@ -344,26 +363,26 @@ export const projectRouter = router({
     .query(async ({ input }) => {
       return projectService.getById(input.id);
     }),
-  
+
   list: publicProcedure
     .input(z.object({ limit: z.number().optional() }))
     .query(async ({ input }) => {
       return projectService.list(input.limit);
     }),
-  
+
   // Mutations (write operations)
   create: publicProcedure
     .input(z.object({ name: z.string() }))
     .mutation(async ({ input }) => {
       return projectService.create(input);
     }),
-  
+
   update: publicProcedure
     .input(z.object({ id: z.number(), name: z.string() }))
     .mutation(async ({ input }) => {
       return projectService.update(input.id, input);
     }),
-  
+
   delete: publicProcedure
     .input(z.object({ id: z.number() }))
     .mutation(async ({ input }) => {
@@ -375,6 +394,7 @@ export const projectRouter = router({
 ### Router Responsibilities
 
 Routers should:
+
 - ✅ Define API endpoints
 - ✅ Validate input with Zod
 - ✅ Delegate to services
@@ -431,11 +451,11 @@ pnpm db:studio
 export class ProjectService {
   async getProject(id: number): Promise<Project> {
     const project = await this.repo.findById(id);
-    
+
     if (!project) {
-      throw new Error('Project not found');
+      throw new Error("Project not found");
     }
-    
+
     return project;
   }
 }
@@ -463,10 +483,10 @@ export const projectRouter = router({
 Errors are automatically captured by Sentry:
 
 ```typescript
-import * as Sentry from '@sentry/node';
+import * as Sentry from "@sentry/node";
 
 // Errors are automatically captured
-throw new Error('Something went wrong');
+throw new Error("Something went wrong");
 ```
 
 ---
@@ -478,11 +498,11 @@ throw new Error('Something went wrong');
 Test services in isolation:
 
 ```typescript
-describe('ProjectService', () => {
-  it('should create a project', async () => {
+describe("ProjectService", () => {
+  it("should create a project", async () => {
     const service = new ProjectService();
-    const project = await service.create({ name: 'Test' });
-    expect(project.name).toBe('Test');
+    const project = await service.create({ name: "Test" });
+    expect(project.name).toBe("Test");
   });
 });
 ```
@@ -492,12 +512,12 @@ describe('ProjectService', () => {
 Test routers with database:
 
 ```typescript
-describe('projectRouter', () => {
-  it('should create and retrieve project', async () => {
+describe("projectRouter", () => {
+  it("should create and retrieve project", async () => {
     const caller = appRouter.createCaller({});
-    const created = await caller.project.create({ name: 'Test' });
+    const created = await caller.project.create({ name: "Test" });
     const retrieved = await caller.project.getById({ id: created.id });
-    expect(retrieved.name).toBe('Test');
+    expect(retrieved.name).toBe("Test");
   });
 });
 ```
@@ -531,7 +551,9 @@ const projects = await db.execute(sql`
 // ❌ Bad: N+1 queries
 const projects = await db.execute(sql`SELECT * FROM projects`);
 for (const project of projects.rows) {
-  const user = await db.execute(sql`SELECT * FROM users WHERE id = ${project.user_id}`);
+  const user = await db.execute(
+    sql`SELECT * FROM users WHERE id = ${project.user_id}`
+  );
 }
 ```
 
@@ -540,14 +562,14 @@ for (const project of projects.rows) {
 Use Redis for caching:
 
 ```typescript
-import { RedisCache } from '../services/cache/redis-cache';
+import { RedisCache } from "../services/cache/redis-cache";
 
 const cache = new RedisCache();
-const cached = await cache.get('key');
+const cached = await cache.get("key");
 if (cached) return cached;
 
 const data = await fetchData();
-await cache.set('key', data, 3600); // 1 hour TTL
+await cache.set("key", data, 3600); // 1 hour TTL
 return data;
 ```
 
@@ -573,7 +595,7 @@ Protected routes use authentication middleware:
 ```typescript
 export const protectedProcedure = publicProcedure.use(async ({ ctx, next }) => {
   if (!ctx.user) {
-    throw new Error('Unauthorized');
+    throw new Error("Unauthorized");
   }
   return next({ ctx: { ...ctx, user: ctx.user } });
 });
@@ -599,10 +621,13 @@ export const apiRateLimit = rateLimit({
 Metrics are exposed at `/api/metrics`:
 
 ```typescript
-import { metricsMiddleware, metricsHandler } from '../services/metrics/prometheus';
+import {
+  metricsMiddleware,
+  metricsHandler,
+} from "../services/metrics/prometheus";
 
 app.use(metricsMiddleware);
-app.get('/api/metrics', metricsHandler);
+app.get("/api/metrics", metricsHandler);
 ```
 
 ### Logging
@@ -610,11 +635,11 @@ app.get('/api/metrics', metricsHandler);
 Structured logging with Winston:
 
 ```typescript
-import { logger } from '../utils/logger';
+import { logger } from "../utils/logger";
 
-const log = logger.module('ProjectService');
-log.info('Project created', { projectId: project.id });
-log.error('Failed to create project', { error });
+const log = logger.module("ProjectService");
+log.info("Project created", { projectId: project.id });
+log.error("Failed to create project", { error });
 ```
 
 ### Error Tracking
@@ -622,7 +647,7 @@ log.error('Failed to create project', { error });
 Sentry captures all errors:
 
 ```typescript
-import * as Sentry from '@sentry/node';
+import * as Sentry from "@sentry/node";
 
 Sentry.captureException(error);
 ```
@@ -656,6 +681,7 @@ Sentry.captureException(error);
 ## Support
 
 For architecture questions or suggestions:
+
 - GitHub Discussions
 - Team Slack channel
 - Architecture review meetings

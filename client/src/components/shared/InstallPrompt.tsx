@@ -1,21 +1,22 @@
-import { useState, useEffect } from 'react';
-import { X, Download, Smartphone } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { useState, useEffect } from "react";
+import { X, Download, Smartphone } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
-  userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
+  userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
 }
 
 export function InstallPrompt() {
-  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
+  const [deferredPrompt, setDeferredPrompt] =
+    useState<BeforeInstallPromptEvent | null>(null);
   const [showPrompt, setShowPrompt] = useState(false);
   const [isIOS, setIsIOS] = useState(false);
   const [isStandalone, setIsStandalone] = useState(false);
 
   useEffect(() => {
     // Check if already installed
-    const standalone = window.matchMedia('(display-mode: standalone)').matches;
+    const standalone = window.matchMedia("(display-mode: standalone)").matches;
     setIsStandalone(standalone);
 
     // Check if iOS
@@ -23,7 +24,7 @@ export function InstallPrompt() {
     setIsIOS(iOS);
 
     // Check if dismissed recently
-    const dismissed = localStorage.getItem('pwa-install-dismissed');
+    const dismissed = localStorage.getItem("pwa-install-dismissed");
     if (dismissed) {
       const dismissedTime = parseInt(dismissed, 10);
       // Don't show for 7 days after dismissal
@@ -40,7 +41,7 @@ export function InstallPrompt() {
       setTimeout(() => setShowPrompt(true), 3000);
     };
 
-    window.addEventListener('beforeinstallprompt', handler);
+    window.addEventListener("beforeinstallprompt", handler);
 
     // For iOS, show manual instructions after delay
     if (iOS && !standalone) {
@@ -48,7 +49,7 @@ export function InstallPrompt() {
     }
 
     return () => {
-      window.removeEventListener('beforeinstallprompt', handler);
+      window.removeEventListener("beforeinstallprompt", handler);
     };
   }, []);
 
@@ -57,17 +58,17 @@ export function InstallPrompt() {
 
     deferredPrompt.prompt();
     const { outcome } = await deferredPrompt.userChoice;
-    
-    if (outcome === 'accepted') {
+
+    if (outcome === "accepted") {
       setShowPrompt(false);
     }
-    
+
     setDeferredPrompt(null);
   };
 
   const handleDismiss = () => {
     setShowPrompt(false);
-    localStorage.setItem('pwa-install-dismissed', Date.now().toString());
+    localStorage.setItem("pwa-install-dismissed", Date.now().toString());
   };
 
   if (!showPrompt || isStandalone) return null;
@@ -86,14 +87,13 @@ export function InstallPrompt() {
           <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-fuchsia-500 to-violet-600 flex items-center justify-center flex-shrink-0">
             <Smartphone className="w-6 h-6 text-white" />
           </div>
-          
+
           <div className="flex-1 min-w-0">
             <h3 className="font-semibold text-white text-sm">Install CEPHO</h3>
             <p className="text-xs text-zinc-400 mt-0.5">
-              {isIOS 
+              {isIOS
                 ? 'Tap the share button and "Add to Home Screen"'
-                : 'Add to your home screen for quick access'
-              }
+                : "Add to your home screen for quick access"}
             </p>
           </div>
         </div>
@@ -123,7 +123,8 @@ export function InstallPrompt() {
 
 export function useInstallPrompt() {
   const [canInstall, setCanInstall] = useState(false);
-  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
+  const [deferredPrompt, setDeferredPrompt] =
+    useState<BeforeInstallPromptEvent | null>(null);
 
   useEffect(() => {
     const handler = (e: Event) => {
@@ -132,10 +133,10 @@ export function useInstallPrompt() {
       setCanInstall(true);
     };
 
-    window.addEventListener('beforeinstallprompt', handler);
+    window.addEventListener("beforeinstallprompt", handler);
 
     return () => {
-      window.removeEventListener('beforeinstallprompt', handler);
+      window.removeEventListener("beforeinstallprompt", handler);
     };
   }, []);
 
@@ -146,8 +147,8 @@ export function useInstallPrompt() {
     const { outcome } = await deferredPrompt.userChoice;
     setDeferredPrompt(null);
     setCanInstall(false);
-    
-    return outcome === 'accepted';
+
+    return outcome === "accepted";
   };
 
   return { canInstall, install };

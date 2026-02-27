@@ -1,10 +1,25 @@
-import { useState } from 'react';
-import { Shield, ShieldCheck, Plus, Trash2, Eye, EyeOff, Check, X } from 'lucide-react';
-import { Button } from '../ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
-import { Input } from '../ui/input';
-import { Label } from '../ui/label';
-import { toast } from 'sonner';
+import { useState } from "react";
+import {
+  Shield,
+  ShieldCheck,
+  Plus,
+  Trash2,
+  Eye,
+  EyeOff,
+  Check,
+  X,
+} from "lucide-react";
+import { Button } from "../ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "../ui/card";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import { toast } from "sonner";
 
 interface APIKey {
   id: string;
@@ -17,55 +32,71 @@ interface APIKey {
 }
 
 const AVAILABLE_SERVICES = [
-  { name: 'Microsoft Copilot', type: 'ai', description: 'AI-powered coding assistant' },
-  { name: 'Microsoft Outlook', type: 'email', description: 'Email and calendar integration' },
-  { name: 'OpenAI GPT-4', type: 'ai', description: 'Advanced language model' },
-  { name: 'ElevenLabs', type: 'voice', description: 'Text-to-speech generation' },
-  { name: 'Synthesia', type: 'video', description: 'AI video generation' },
-  { name: 'Google Workspace', type: 'productivity', description: 'Gmail, Drive, Calendar' },
-  { name: 'Slack', type: 'communication', description: 'Team messaging' },
-  { name: 'Asana', type: 'productivity', description: 'Project management' },
+  {
+    name: "Microsoft Copilot",
+    type: "ai",
+    description: "AI-powered coding assistant",
+  },
+  {
+    name: "Microsoft Outlook",
+    type: "email",
+    description: "Email and calendar integration",
+  },
+  { name: "OpenAI GPT-4", type: "ai", description: "Advanced language model" },
+  {
+    name: "ElevenLabs",
+    type: "voice",
+    description: "Text-to-speech generation",
+  },
+  { name: "Synthesia", type: "video", description: "AI video generation" },
+  {
+    name: "Google Workspace",
+    type: "productivity",
+    description: "Gmail, Drive, Calendar",
+  },
+  { name: "Slack", type: "communication", description: "Team messaging" },
+  { name: "Asana", type: "productivity", description: "Project management" },
 ];
 
 export function APIKeyManagement() {
   const [apiKeys, setApiKeys] = useState<APIKey[]>([
     {
-      id: '1',
-      serviceName: 'OpenAI GPT-4',
-      serviceType: 'ai',
+      id: "1",
+      serviceName: "OpenAI GPT-4",
+      serviceType: "ai",
       isApproved: true,
-      approvedBy: 'Chief of Staff',
-      description: 'Advanced language model',
+      approvedBy: "Chief of Staff",
+      description: "Advanced language model",
       hasKey: true,
     },
     {
-      id: '2',
-      serviceName: 'ElevenLabs',
-      serviceType: 'voice',
+      id: "2",
+      serviceName: "ElevenLabs",
+      serviceType: "voice",
       isApproved: true,
-      approvedBy: 'Chief of Staff',
-      description: 'Text-to-speech generation',
+      approvedBy: "Chief of Staff",
+      description: "Text-to-speech generation",
       hasKey: true,
     },
     {
-      id: '3',
-      serviceName: 'Synthesia',
-      serviceType: 'video',
+      id: "3",
+      serviceName: "Synthesia",
+      serviceType: "video",
       isApproved: true,
-      approvedBy: 'Chief of Staff',
-      description: 'AI video generation',
+      approvedBy: "Chief of Staff",
+      description: "AI video generation",
       hasKey: true,
     },
   ]);
-  
+
   const [showAddModal, setShowAddModal] = useState(false);
-  const [selectedService, setSelectedService] = useState('');
-  const [apiKeyValue, setApiKeyValue] = useState('');
+  const [selectedService, setSelectedService] = useState("");
+  const [apiKeyValue, setApiKeyValue] = useState("");
   const [showKey, setShowKey] = useState<string | null>(null);
 
   const handleAddAPIKey = () => {
     if (!selectedService || !apiKeyValue) {
-      toast.error('Please select a service and enter an API key');
+      toast.error("Please select a service and enter an API key");
       return;
     }
 
@@ -83,28 +114,36 @@ export function APIKeyManagement() {
 
     setApiKeys([...apiKeys, newKey]);
     setShowAddModal(false);
-    setSelectedService('');
-    setApiKeyValue('');
+    setSelectedService("");
+    setApiKeyValue("");
     toast.success(`${service.name} API key added. Pending approval.`);
   };
 
   const handleApprove = (id: string) => {
-    setApiKeys(apiKeys.map(key => 
-      key.id === id ? { ...key, isApproved: true, approvedBy: 'Chief of Staff' } : key
-    ));
-    toast.success('API key approved for use in Governed Mode');
+    setApiKeys(
+      apiKeys.map(key =>
+        key.id === id
+          ? { ...key, isApproved: true, approvedBy: "Chief of Staff" }
+          : key
+      )
+    );
+    toast.success("API key approved for use in Governed Mode");
   };
 
   const handleRevoke = (id: string) => {
-    setApiKeys(apiKeys.map(key => 
-      key.id === id ? { ...key, isApproved: false, approvedBy: undefined } : key
-    ));
-    toast.warning('API key approval revoked');
+    setApiKeys(
+      apiKeys.map(key =>
+        key.id === id
+          ? { ...key, isApproved: false, approvedBy: undefined }
+          : key
+      )
+    );
+    toast.warning("API key approval revoked");
   };
 
   const handleDelete = (id: string) => {
     setApiKeys(apiKeys.filter(key => key.id !== id));
-    toast.success('API key deleted');
+    toast.success("API key deleted");
   };
 
   const approvedCount = apiKeys.filter(k => k.isApproved).length;
@@ -136,7 +175,9 @@ export function APIKeyManagement() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Approved APIs</p>
-                <p className="text-3xl font-bold text-emerald-500">{approvedCount}</p>
+                <p className="text-3xl font-bold text-emerald-500">
+                  {approvedCount}
+                </p>
               </div>
               <ShieldCheck className="w-8 h-8 text-emerald-500" />
             </div>
@@ -146,8 +187,12 @@ export function APIKeyManagement() {
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-muted-foreground">Pending Approval</p>
-                <p className="text-3xl font-bold text-amber-500">{pendingCount}</p>
+                <p className="text-sm text-muted-foreground">
+                  Pending Approval
+                </p>
+                <p className="text-3xl font-bold text-amber-500">
+                  {pendingCount}
+                </p>
               </div>
               <Shield className="w-8 h-8 text-amber-500" />
             </div>
@@ -160,7 +205,8 @@ export function APIKeyManagement() {
         <CardHeader>
           <CardTitle>Configured API Keys</CardTitle>
           <CardDescription>
-            Approved keys can be used in Governed Mode. Unapproved keys require Chief of Staff approval.
+            Approved keys can be used in Governed Mode. Unapproved keys require
+            Chief of Staff approval.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -170,19 +216,21 @@ export function APIKeyManagement() {
                 No API keys configured. Click "Add API Key" to get started.
               </p>
             ) : (
-              apiKeys.map((key) => (
+              apiKeys.map(key => (
                 <div
                   key={key.id}
                   className={`p-4 rounded-lg border-2 ${
                     key.isApproved
-                      ? 'border-emerald-500/50 bg-emerald-500/10'
-                      : 'border-amber-500/50 bg-amber-500/10'
+                      ? "border-emerald-500/50 bg-emerald-500/10"
+                      : "border-amber-500/50 bg-amber-500/10"
                   }`}
                 >
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-1">
-                        <h3 className="font-semibold text-foreground">{key.serviceName}</h3>
+                        <h3 className="font-semibold text-foreground">
+                          {key.serviceName}
+                        </h3>
                         {key.isApproved ? (
                           <span className="flex items-center gap-1 text-xs bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded-full">
                             <ShieldCheck className="w-3 h-3" />
@@ -195,7 +243,9 @@ export function APIKeyManagement() {
                           </span>
                         )}
                       </div>
-                      <p className="text-sm text-muted-foreground">{key.description}</p>
+                      <p className="text-sm text-muted-foreground">
+                        {key.description}
+                      </p>
                       {key.approvedBy && (
                         <p className="text-xs text-muted-foreground mt-1">
                           Approved by: {key.approvedBy}
@@ -255,11 +305,11 @@ export function APIKeyManagement() {
                 <select
                   id="service"
                   value={selectedService}
-                  onChange={(e) => setSelectedService(e.target.value)}
+                  onChange={e => setSelectedService(e.target.value)}
                   className="w-full mt-1 px-3 py-2 bg-background border border-border rounded-md text-foreground"
                 >
                   <option value="">Select a service...</option>
-                  {AVAILABLE_SERVICES.map((service) => (
+                  {AVAILABLE_SERVICES.map(service => (
                     <option key={service.name} value={service.name}>
                       {service.name} - {service.description}
                     </option>
@@ -272,18 +322,19 @@ export function APIKeyManagement() {
                   id="apiKey"
                   type="password"
                   value={apiKeyValue}
-                  onChange={(e) => setApiKeyValue(e.target.value)}
+                  onChange={e => setApiKeyValue(e.target.value)}
                   placeholder="Enter API key..."
                   className="mt-1"
                 />
               </div>
               <div className="flex gap-2 justify-end">
-                <Button variant="outline" onClick={() => setShowAddModal(false)}>
+                <Button
+                  variant="outline"
+                  onClick={() => setShowAddModal(false)}
+                >
                   Cancel
                 </Button>
-                <Button onClick={handleAddAPIKey}>
-                  Add API Key
-                </Button>
+                <Button onClick={handleAddAPIKey}>Add API Key</Button>
               </div>
             </CardContent>
           </Card>

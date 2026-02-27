@@ -1,6 +1,6 @@
 /**
  * Stripe Products Configuration
- * 
+ *
  * Define products and prices for CEPHO subscription tiers
  */
 

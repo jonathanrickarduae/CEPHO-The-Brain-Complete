@@ -1,9 +1,9 @@
 /**
  * Base Repository Class
- * 
+ *
  * Provides common database operations and utilities for all repositories.
  * All domain-specific repositories should extend this class.
- * 
+ *
  * @module db/repositories/base
  */
 
@@ -12,17 +12,17 @@ import { logger } from "../../utils/logger";
 
 /**
  * Base repository with common CRUD operations
- * 
+ *
  * @abstract
  * @class BaseRepository
- * 
+ *
  * @example
  * ```typescript
  * class UserRepository extends BaseRepository {
  *   constructor() {
  *     super("UserRepository");
  *   }
- *   
+ *
  *   async findByEmail(email: string) {
  *     const db = await this.getDatabase();
  *     // ... implementation
@@ -35,7 +35,7 @@ export abstract class BaseRepository {
 
   /**
    * Create a new repository instance
-   * 
+   *
    * @param {string} repositoryName - Name of the repository for logging
    */
   constructor(repositoryName: string) {
@@ -44,7 +44,7 @@ export abstract class BaseRepository {
 
   /**
    * Get database instance with error handling
-   * 
+   *
    * @protected
    * @returns {Promise<ReturnType<typeof drizzle>>} Database instance
    * @throws {Error} If database is not available
@@ -61,7 +61,7 @@ export abstract class BaseRepository {
 
   /**
    * Log repository operation
-   * 
+   *
    * @protected
    * @param {string} operation - Operation name
    * @param {any} data - Operation data
@@ -72,7 +72,7 @@ export abstract class BaseRepository {
 
   /**
    * Log repository error
-   * 
+   *
    * @protected
    * @param {string} operation - Operation name
    * @param {Error} error - Error object
@@ -88,7 +88,7 @@ export abstract class BaseRepository {
 
   /**
    * Handle repository errors with consistent logging
-   * 
+   *
    * @protected
    * @param {string} operation - Operation name
    * @param {Error} error - Error object

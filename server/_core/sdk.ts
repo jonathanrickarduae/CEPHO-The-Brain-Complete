@@ -153,15 +153,17 @@ class SDKServer {
   }
 
   private static _generatedSecret: string | null = null;
-  
+
   private getSessionSecret() {
     let secret = process.env.JWT_SECRET;
     if (!secret || secret.length === 0) {
       // Generate a random secret once and reuse it
       if (!SDKServer._generatedSecret) {
-        const crypto = require('crypto');
-        SDKServer._generatedSecret = crypto.randomBytes(32).toString('hex');
-        console.warn('[Auth] JWT_SECRET not set, generated and cached secret for this session');
+        const crypto = require("crypto");
+        SDKServer._generatedSecret = crypto.randomBytes(32).toString("hex");
+        console.warn(
+          "[Auth] JWT_SECRET not set, generated and cached secret for this session"
+        );
       }
       secret = SDKServer._generatedSecret!;
     }
@@ -202,7 +204,6 @@ class SDKServer {
       name: payload.name || "User",
     };
 
-
     return new SignJWT(jwtPayload)
       .setProtectedHeader({ alg: "HS256", typ: "JWT" })
       .setExpirationTime(expirationSeconds)
@@ -224,12 +225,12 @@ class SDKServer {
       });
       const { openId, appId, name } = payload as Record<string, unknown>;
 
-
-      if (
-        !isNonEmptyString(openId) ||
-        !isNonEmptyString(name)
-      ) {
-        console.warn("[Auth] Session payload missing required fields", { openId, appId, name });
+      if (!isNonEmptyString(openId) || !isNonEmptyString(name)) {
+        console.warn("[Auth] Session payload missing required fields", {
+          openId,
+          appId,
+          name,
+        });
         return null;
       }
 

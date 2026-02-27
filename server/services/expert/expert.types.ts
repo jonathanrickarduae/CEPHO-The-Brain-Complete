@@ -1,6 +1,6 @@
 /**
  * Expert Service Types and DTOs
- * 
+ *
  * Data Transfer Objects for AI expert services.
  */
 
@@ -17,7 +17,7 @@ export interface CreateExpertChatSessionDto {
  */
 export interface CreateExpertChatMessageDto {
   sessionId: number;
-  role: 'user' | 'expert';
+  role: "user" | "expert";
   content: string;
   metadata?: Record<string, any>;
 }
@@ -30,7 +30,7 @@ export interface ExpertChatSessionDto {
   userId: number;
   expertId: string;
   topic: string | null;
-  status: 'active' | 'completed' | 'archived';
+  status: "active" | "completed" | "archived";
   createdAt: Date;
   updatedAt: Date;
 }
@@ -41,7 +41,7 @@ export interface ExpertChatSessionDto {
 export interface ExpertChatMessageDto {
   id: number;
   sessionId: number;
-  role: 'user' | 'expert';
+  role: "user" | "expert";
   content: string;
   metadata: Record<string, any> | null;
   createdAt: Date;
@@ -54,7 +54,7 @@ export interface CreateExpertConsultationDto {
   expertId: string;
   topic: string;
   description?: string;
-  priority?: 'low' | 'medium' | 'high' | 'urgent';
+  priority?: "low" | "medium" | "high" | "urgent";
 }
 
 /**
@@ -66,8 +66,8 @@ export interface ExpertConsultationDto {
   expertId: string;
   topic: string;
   description: string | null;
-  status: 'pending' | 'in_progress' | 'completed' | 'cancelled';
-  priority: 'low' | 'medium' | 'high' | 'urgent';
+  status: "pending" | "in_progress" | "completed" | "cancelled";
+  priority: "low" | "medium" | "high" | "urgent";
   startedAt: Date | null;
   completedAt: Date | null;
   createdAt: Date;
@@ -85,7 +85,7 @@ export interface ExpertPerformanceDto {
   positiveFeedback: number;
   negativeFeedback: number;
   lastUsed: Date | null;
-  status: 'active' | 'training' | 'fired';
+  status: "active" | "training" | "fired";
   notes: string | null;
 }
 
@@ -97,7 +97,7 @@ export interface UpdateExpertPerformanceDto {
   projectsCompleted?: number;
   positiveFeedback?: number;
   negativeFeedback?: number;
-  status?: 'active' | 'training' | 'fired';
+  status?: "active" | "training" | "fired";
   notes?: string;
 }
 
@@ -108,7 +108,7 @@ export interface ExpertConversationDto {
   id: number;
   userId: number;
   expertId: string;
-  conversationType: 'chat' | 'consultation' | 'coaching' | 'research';
+  conversationType: "chat" | "consultation" | "coaching" | "research";
   content: string;
   response: string | null;
   metadata: Record<string, any> | null;
@@ -120,7 +120,7 @@ export interface ExpertConversationDto {
  */
 export interface CreateExpertMemoryDto {
   expertId: string;
-  memoryType: 'fact' | 'preference' | 'pattern' | 'insight';
+  memoryType: "fact" | "preference" | "pattern" | "insight";
   content: string;
   context?: string;
   importance?: number;
@@ -133,7 +133,7 @@ export interface ExpertMemoryDto {
   id: number;
   userId: number;
   expertId: string;
-  memoryType: 'fact' | 'preference' | 'pattern' | 'insight';
+  memoryType: "fact" | "preference" | "pattern" | "insight";
   content: string;
   context: string | null;
   importance: number;

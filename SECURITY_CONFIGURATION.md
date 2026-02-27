@@ -13,6 +13,7 @@ CEPHO.AI implements comprehensive security measures to protect against common we
 **Current Implementation**: Enhanced nonce-based CSP
 
 The application uses a strict Content Security Policy that:
+
 - **Removes** `unsafe-inline` and `unsafe-eval` directives
 - **Uses** cryptographically secure nonces for inline scripts
 - **Restricts** script sources to trusted domains only
@@ -20,35 +21,35 @@ The application uses a strict Content Security Policy that:
 
 #### CSP Directives
 
-| Directive | Value | Purpose |
-|-----------|-------|---------|
-| `default-src` | `'self'` | Default policy for all resources |
-| `script-src` | `'self' 'nonce-{random}' trusted-domains` | Scripts from self and trusted sources only |
-| `style-src` | `'self' 'nonce-{random}' fonts.googleapis.com` | Styles from self and Google Fonts |
-| `font-src` | `'self' fonts.gstatic.com data:` | Fonts from self and Google |
-| `img-src` | `'self' data: https: blob:` | Images from various sources |
-| `connect-src` | `'self' trusted-apis` | API connections to trusted endpoints |
-| `frame-src` | `'self' accounts.google.com` | Frames only from self and Google |
-| `object-src` | `'none'` | No plugins allowed |
-| `base-uri` | `'self'` | Prevent base tag hijacking |
-| `form-action` | `'self'` | Forms can only submit to self |
-| `frame-ancestors` | `'none'` | Prevent clickjacking |
-| `worker-src` | `'self' blob:` | Service workers from self |
-| `manifest-src` | `'self'` | PWA manifest from self |
+| Directive         | Value                                          | Purpose                                    |
+| ----------------- | ---------------------------------------------- | ------------------------------------------ |
+| `default-src`     | `'self'`                                       | Default policy for all resources           |
+| `script-src`      | `'self' 'nonce-{random}' trusted-domains`      | Scripts from self and trusted sources only |
+| `style-src`       | `'self' 'nonce-{random}' fonts.googleapis.com` | Styles from self and Google Fonts          |
+| `font-src`        | `'self' fonts.gstatic.com data:`               | Fonts from self and Google                 |
+| `img-src`         | `'self' data: https: blob:`                    | Images from various sources                |
+| `connect-src`     | `'self' trusted-apis`                          | API connections to trusted endpoints       |
+| `frame-src`       | `'self' accounts.google.com`                   | Frames only from self and Google           |
+| `object-src`      | `'none'`                                       | No plugins allowed                         |
+| `base-uri`        | `'self'`                                       | Prevent base tag hijacking                 |
+| `form-action`     | `'self'`                                       | Forms can only submit to self              |
+| `frame-ancestors` | `'none'`                                       | Prevent clickjacking                       |
+| `worker-src`      | `'self' blob:`                                 | Service workers from self                  |
+| `manifest-src`    | `'self'`                                       | PWA manifest from self                     |
 
 ### Other Security Headers
 
-| Header | Value | Purpose |
-|--------|-------|---------|
-| `X-Frame-Options` | `DENY` | Prevent clickjacking |
-| `X-Content-Type-Options` | `nosniff` | Prevent MIME sniffing |
-| `X-XSS-Protection` | `1; mode=block` | Enable XSS filter (legacy) |
-| `Referrer-Policy` | `strict-origin-when-cross-origin` | Control referrer information |
-| `Strict-Transport-Security` | `max-age=31536000; includeSubDomains; preload` | Force HTTPS (production only) |
-| `Permissions-Policy` | Restrictive | Disable unnecessary browser features |
-| `Cross-Origin-Embedder-Policy` | `require-corp` | Prevent cross-origin resource loading |
-| `Cross-Origin-Opener-Policy` | `same-origin` | Isolate browsing context |
-| `Cross-Origin-Resource-Policy` | `same-origin` | Restrict resource sharing |
+| Header                         | Value                                          | Purpose                               |
+| ------------------------------ | ---------------------------------------------- | ------------------------------------- |
+| `X-Frame-Options`              | `DENY`                                         | Prevent clickjacking                  |
+| `X-Content-Type-Options`       | `nosniff`                                      | Prevent MIME sniffing                 |
+| `X-XSS-Protection`             | `1; mode=block`                                | Enable XSS filter (legacy)            |
+| `Referrer-Policy`              | `strict-origin-when-cross-origin`              | Control referrer information          |
+| `Strict-Transport-Security`    | `max-age=31536000; includeSubDomains; preload` | Force HTTPS (production only)         |
+| `Permissions-Policy`           | Restrictive                                    | Disable unnecessary browser features  |
+| `Cross-Origin-Embedder-Policy` | `require-corp`                                 | Prevent cross-origin resource loading |
+| `Cross-Origin-Opener-Policy`   | `same-origin`                                  | Isolate browsing context              |
+| `Cross-Origin-Resource-Policy` | `same-origin`                                  | Restrict resource sharing             |
 
 ---
 
@@ -64,6 +65,7 @@ The application uses a strict Content Security Policy that:
 ### Example
 
 **Request 1:**
+
 ```html
 <!-- CSP Header -->
 Content-Security-Policy: script-src 'self' 'nonce-abc123xyz'
@@ -79,6 +81,7 @@ Content-Security-Policy: script-src 'self' 'nonce-abc123xyz'
 ```
 
 **Request 2:**
+
 ```html
 <!-- CSP Header -->
 Content-Security-Policy: script-src 'self' 'nonce-def456uvw'
@@ -103,11 +106,13 @@ Content-Security-Policy: script-src 'self' 'nonce-def456uvw'
 ### Allowed Origins
 
 **Production:**
+
 - `https://cepho.ai`
 - `https://www.cepho.ai`
 - `https://cepho-the-brain-complete.onrender.com`
 
 **Development:**
+
 - `http://localhost:5173`
 - `http://localhost:3000`
 
@@ -187,18 +192,21 @@ Restricts browser features to prevent abuse:
 ## Migration from Legacy CSP
 
 ### Phase 1: Enhanced Headers (Current)
+
 - Implement nonce generation
 - Add nonce to CSP headers
 - Inject nonce into HTML
 - Test with both old and new CSP
 
 ### Phase 2: Remove unsafe-inline (Next)
+
 - Update all inline scripts to use nonce
 - Remove `unsafe-inline` from CSP
 - Remove `unsafe-eval` from CSP
 - Comprehensive testing
 
 ### Phase 3: Monitoring (Ongoing)
+
 - Monitor CSP violation reports
 - Track blocked resources
 - Adjust CSP as needed
@@ -223,6 +231,7 @@ curl -I https://cepho.ai
 ### Automated Testing
 
 Use security header testing tools:
+
 - [Security Headers](https://securityheaders.com)
 - [Mozilla Observatory](https://observatory.mozilla.org)
 - [CSP Evaluator](https://csp-evaluator.withgoogle.com)
@@ -254,12 +263,13 @@ Configure CSP reporting to track violations:
 
 ```javascript
 // Add to CSP directives
-"report-uri /api/csp-report"
+"report-uri /api/csp-report";
 ```
 
 ### Sentry Integration
 
 Security errors are automatically reported to Sentry:
+
 - CSP violations
 - Authentication failures
 - Rate limit violations
@@ -291,6 +301,7 @@ Security errors are automatically reported to Sentry:
 ## Support
 
 For security concerns or questions:
+
 - Email: security@cepho.ai
 - GitHub Issues: Security label
 - Emergency: Contact development team directly

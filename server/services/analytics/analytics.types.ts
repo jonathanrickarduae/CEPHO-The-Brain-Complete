@@ -1,6 +1,6 @@
 /**
  * Analytics Service Types and DTOs
- * 
+ *
  * Data Transfer Objects for analytics and metrics services.
  */
 
@@ -98,5 +98,5 @@ export interface TimeSeriesDataDto {
 export interface AnalyticsDateRangeDto {
   startDate: Date;
   endDate: Date;
-  granularity?: 'day' | 'week' | 'month' | 'year';
+  granularity?: "day" | "week" | "month" | "year";
 }

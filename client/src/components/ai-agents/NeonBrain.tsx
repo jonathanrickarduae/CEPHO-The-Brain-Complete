@@ -35,14 +35,14 @@ function generateConnections(count: number) {
   }));
 }
 
-export default function NeonBrain({ 
+export default function NeonBrain({
   mood = 75, // Default to 75 on 0-100 scale
-  state = "idle", 
+  state = "idle",
   className = "",
-  size = "lg"
+  size = "lg",
 }: NeonBrainProps) {
   const [color, setColor] = useState("var(--color-primary)");
-  
+
   // Memoize particles and connections so they don't regenerate on every render
   const particles = useMemo(() => generateParticles(25), []);
   const connections = useMemo(() => generateConnections(8), []);
@@ -53,24 +53,31 @@ export default function NeonBrain({
     sm: "w-24 h-24",
     md: "w-40 h-40",
     lg: "w-56 h-56",
-    xl: "w-72 h-72"
+    xl: "w-72 h-72",
   };
 
   // Determine color based on mood (0-100 scale)
   useEffect(() => {
-    if (mood >= 90) setColor("#10b981"); // Bright Emerald - Excellent
-    else if (mood >= 75) setColor("#06b6d4"); // Bright Cyan - Good
-    else if (mood >= 60) setColor("#a855f7"); // Bright Purple - Adequate
-    else if (mood >= 40) setColor("#f59e0b"); // Bright Amber - Needs Work
+    if (mood >= 90)
+      setColor("#10b981"); // Bright Emerald - Excellent
+    else if (mood >= 75)
+      setColor("#06b6d4"); // Bright Cyan - Good
+    else if (mood >= 60)
+      setColor("#a855f7"); // Bright Purple - Adequate
+    else if (mood >= 40)
+      setColor("#f59e0b"); // Bright Amber - Needs Work
     else setColor("#ef4444"); // Bright Red - Critical
   }, [mood]);
 
   // Animation speed based on state
-  const pulseSpeed = state === "thinking" ? 0.8 : state === "processing" ? 1.2 : 2;
+  const pulseSpeed =
+    state === "thinking" ? 0.8 : state === "processing" ? 1.2 : 2;
   const particleSpeed = state === "thinking" ? 0.6 : 1;
 
   return (
-    <div className={`relative flex items-center justify-center ${sizeClasses[size]} ${className}`}>
+    <div
+      className={`relative flex items-center justify-center ${sizeClasses[size]} ${className}`}
+    >
       {/* Intense Outer Glow Layer 1 */}
       <motion.div
         className="absolute inset-[-20%] rounded-full blur-[60px]"
@@ -120,10 +127,18 @@ export default function NeonBrain({
       <svg
         viewBox="0 0 200 200"
         className="w-full h-full relative z-10 overflow-visible"
-        style={{ filter: `drop-shadow(0 0 25px ${color}) drop-shadow(0 0 50px ${color})` }}
+        style={{
+          filter: `drop-shadow(0 0 25px ${color}) drop-shadow(0 0 50px ${color})`,
+        }}
       >
         <defs>
-          <filter id="glow-intense" x="-100%" y="-100%" width="300%" height="300%">
+          <filter
+            id="glow-intense"
+            x="-100%"
+            y="-100%"
+            width="300%"
+            height="300%"
+          >
             <feGaussianBlur stdDeviation="4" result="coloredBlur" />
             <feMerge>
               <feMergeNode in="coloredBlur" />
@@ -139,9 +154,15 @@ export default function NeonBrain({
               <feMergeNode in="SourceGraphic" />
             </feMerge>
           </filter>
-          
+
           {/* Gradient for connections */}
-          <linearGradient id="connectionGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+          <linearGradient
+            id="connectionGradient"
+            x1="0%"
+            y1="0%"
+            x2="100%"
+            y2="100%"
+          >
             <stop offset="0%" stopColor={color} stopOpacity="0" />
             <stop offset="50%" stopColor={color} stopOpacity="0.8" />
             <stop offset="100%" stopColor={color} stopOpacity="0" />
@@ -149,7 +170,7 @@ export default function NeonBrain({
         </defs>
 
         {/* Neural Connections - Always animating */}
-        {connections.map((conn) => (
+        {connections.map(conn => (
           <motion.line
             key={`conn-${conn.id}`}
             x1={conn.x1}
@@ -271,23 +292,23 @@ export default function NeonBrain({
         />
 
         {/* Neural Activity Particles - Always firing */}
-        {particles.map((particle) => (
+        {particles.map(particle => (
           <motion.circle
             key={`particle-${particle.id}`}
             r={particle.radius}
             fill="white"
             filter="url(#glow-intense)"
-            initial={{ 
-              cx: particle.startX, 
-              cy: particle.startY, 
+            initial={{
+              cx: particle.startX,
+              cy: particle.startY,
               opacity: 0,
-              scale: 0
+              scale: 0,
             }}
             animate={{
               cx: [particle.startX, particle.endX, particle.endX],
               cy: [particle.startY, particle.endY, particle.endY],
               opacity: [0, 1, 0],
-              scale: [0, 1.5, 0]
+              scale: [0, 1.5, 0],
             }}
             transition={{
               duration: particle.duration * particleSpeed,
@@ -305,7 +326,7 @@ export default function NeonBrain({
             r={3}
             fill={color}
             filter="url(#glow-intense)"
-            initial={{ 
+            initial={{
               cx: 100 + 50 * Math.cos((i * Math.PI * 2) / 6),
               cy: 100 + 50 * Math.sin((i * Math.PI * 2) / 6),
             }}
@@ -313,14 +334,14 @@ export default function NeonBrain({
               cx: [
                 100 + 50 * Math.cos((i * Math.PI * 2) / 6),
                 100 + 55 * Math.cos((i * Math.PI * 2) / 6 + Math.PI / 3),
-                100 + 50 * Math.cos((i * Math.PI * 2) / 6 + Math.PI * 2 / 3),
+                100 + 50 * Math.cos((i * Math.PI * 2) / 6 + (Math.PI * 2) / 3),
                 100 + 45 * Math.cos((i * Math.PI * 2) / 6 + Math.PI),
                 100 + 50 * Math.cos((i * Math.PI * 2) / 6),
               ],
               cy: [
                 100 + 50 * Math.sin((i * Math.PI * 2) / 6),
                 100 + 55 * Math.sin((i * Math.PI * 2) / 6 + Math.PI / 3),
-                100 + 50 * Math.sin((i * Math.PI * 2) / 6 + Math.PI * 2 / 3),
+                100 + 50 * Math.sin((i * Math.PI * 2) / 6 + (Math.PI * 2) / 3),
                 100 + 45 * Math.sin((i * Math.PI * 2) / 6 + Math.PI),
                 100 + 50 * Math.sin((i * Math.PI * 2) / 6),
               ],

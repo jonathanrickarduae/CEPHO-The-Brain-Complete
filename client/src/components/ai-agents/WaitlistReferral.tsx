@@ -1,5 +1,16 @@
-import { useState } from 'react';
-import { Users, Gift, ArrowUp, Copy, Check, Share2, Mail, Twitter, Linkedin, Brain } from 'lucide-react';
+import { useState } from "react";
+import {
+  Users,
+  Gift,
+  ArrowUp,
+  Copy,
+  Check,
+  Share2,
+  Mail,
+  Twitter,
+  Linkedin,
+  Brain,
+} from "lucide-react";
 
 interface WaitlistPosition {
   position: number;
@@ -18,9 +29,13 @@ interface ReferralStats {
 }
 
 // Waitlist signup component for new users
-export function WaitlistSignup({ onJoin }: { onJoin?: (email: string, referralCode?: string) => void }) {
-  const [email, setEmail] = useState('');
-  const [referralCode, setReferralCode] = useState('');
+export function WaitlistSignup({
+  onJoin,
+}: {
+  onJoin?: (email: string, referralCode?: string) => void;
+}) {
+  const [email, setEmail] = useState("");
+  const [referralCode, setReferralCode] = useState("");
   const [showReferralInput, setShowReferralInput] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [joined, setJoined] = useState(false);
@@ -29,10 +44,10 @@ export function WaitlistSignup({ onJoin }: { onJoin?: (email: string, referralCo
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
+
     // Simulate API call
     await new Promise(resolve => setTimeout(resolve, 1000));
-    
+
     // Mock response
     setPosition({
       position: Math.floor(Math.random() * 5000) + 1000,
@@ -41,7 +56,7 @@ export function WaitlistSignup({ onJoin }: { onJoin?: (email: string, referralCo
       referralsCount: 0,
       positionsGained: referralCode ? 500 : 0,
     });
-    
+
     setJoined(true);
     setIsSubmitting(false);
     onJoin?.(email, referralCode || undefined);
@@ -57,10 +72,13 @@ export function WaitlistSignup({ onJoin }: { onJoin?: (email: string, referralCo
         <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-cyan-500 to-purple-600 mb-4">
           <Brain className="w-8 h-8 text-white" />
         </div>
-        <h2 className="text-2xl font-bold text-white mb-2">Join the Cepho Waitlist</h2>
+        <h2 className="text-2xl font-bold text-white mb-2">
+          Join the Cepho Waitlist
+        </h2>
         <p className="text-foreground/70">
-          Get early access to your AI-powered Chief of Staff. 
-          <span className="text-cyan-400"> 15,000+ people</span> are already waiting.
+          Get early access to your AI-powered Chief of Staff.
+          <span className="text-cyan-400"> 15,000+ people</span> are already
+          waiting.
         </p>
       </div>
 
@@ -69,7 +87,7 @@ export function WaitlistSignup({ onJoin }: { onJoin?: (email: string, referralCo
           <input
             type="email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={e => setEmail(e.target.value)}
             placeholder="Enter your email"
             required
             className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500 transition-colors"
@@ -81,7 +99,7 @@ export function WaitlistSignup({ onJoin }: { onJoin?: (email: string, referralCo
             <input
               type="text"
               value={referralCode}
-              onChange={(e) => setReferralCode(e.target.value.toUpperCase())}
+              onChange={e => setReferralCode(e.target.value.toUpperCase())}
               placeholder="Referral code (optional)"
               className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500 transition-colors"
             />
@@ -104,7 +122,7 @@ export function WaitlistSignup({ onJoin }: { onJoin?: (email: string, referralCo
           disabled={isSubmitting}
           className="w-full py-3 bg-gradient-to-r from-cyan-500 to-purple-600 text-white font-semibold rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50"
         >
-          {isSubmitting ? 'Joining...' : 'Join the Waitlist'}
+          {isSubmitting ? "Joining..." : "Join the Waitlist"}
         </button>
       </form>
 
@@ -127,17 +145,31 @@ export function WaitlistStatus({ position }: { position: WaitlistPosition }) {
   };
 
   const shareToTwitter = () => {
-    const text = encodeURIComponent(`I just joined the Cepho waitlist. Get early access to your AI-powered Chief of Staff. Use my referral link to skip ahead:`);
-    const url = encodeURIComponent(`${window.location.origin}/join?ref=${position.referralCode}`);
-    window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank');
+    const text = encodeURIComponent(
+      `I just joined the Cepho waitlist. Get early access to your AI-powered Chief of Staff. Use my referral link to skip ahead:`
+    );
+    const url = encodeURIComponent(
+      `${window.location.origin}/join?ref=${position.referralCode}`
+    );
+    window.open(
+      `https://twitter.com/intent/tweet?text=${text}&url=${url}`,
+      "_blank"
+    );
   };
 
   const shareToLinkedIn = () => {
-    const url = encodeURIComponent(`${window.location.origin}/join?ref=${position.referralCode}`);
-    window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${url}`, '_blank');
+    const url = encodeURIComponent(
+      `${window.location.origin}/join?ref=${position.referralCode}`
+    );
+    window.open(
+      `https://www.linkedin.com/sharing/share-offsite/?url=${url}`,
+      "_blank"
+    );
   };
 
-  const percentile = Math.round((1 - position.position / position.totalWaiting) * 100);
+  const percentile = Math.round(
+    (1 - position.position / position.totalWaiting) * 100
+  );
 
   return (
     <div className="max-w-md mx-auto">
@@ -166,7 +198,7 @@ export function WaitlistStatus({ position }: { position: WaitlistPosition }) {
             <span>Top {percentile}%</span>
           </div>
           <div className="h-2 bg-gray-700 rounded-full overflow-hidden">
-            <div 
+            <div
               className="h-full bg-gradient-to-r from-cyan-500 to-purple-600 rounded-full transition-all duration-500"
               style={{ width: `${percentile}%` }}
             />
@@ -205,7 +237,9 @@ export function WaitlistStatus({ position }: { position: WaitlistPosition }) {
 
         {/* Referral Code */}
         <div className="mb-4">
-          <div className="text-sm text-foreground/70 mb-2">Your referral code</div>
+          <div className="text-sm text-foreground/70 mb-2">
+            Your referral code
+          </div>
           <div className="flex gap-2">
             <div className="flex-1 px-4 py-2 bg-gray-900 rounded-lg font-mono text-white">
               {position.referralCode}
@@ -214,7 +248,11 @@ export function WaitlistStatus({ position }: { position: WaitlistPosition }) {
               onClick={copyReferralLink}
               className="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors"
             >
-              {copied ? <Check className="w-5 h-5 text-green-400" /> : <Copy className="w-5 h-5 text-foreground/80" />}
+              {copied ? (
+                <Check className="w-5 h-5 text-green-400" />
+              ) : (
+                <Copy className="w-5 h-5 text-foreground/80" />
+              )}
             </button>
           </div>
         </div>
@@ -275,22 +313,30 @@ export function ReferralDashboard({ stats }: { stats: ReferralStats }) {
         <h3 className="text-lg font-semibold text-white">Referral Program</h3>
         <div className="flex items-center gap-2 px-3 py-1 bg-cyan-500/20 rounded-full">
           <Gift className="w-4 h-4 text-cyan-400" />
-          <span className="text-sm text-cyan-400">{stats.creditsEarned} credits earned</span>
+          <span className="text-sm text-cyan-400">
+            {stats.creditsEarned} credits earned
+          </span>
         </div>
       </div>
 
       {/* Stats Grid */}
       <div className="grid grid-cols-3 gap-4 mb-6">
         <div className="bg-gray-900 rounded-xl p-4 text-center">
-          <div className="text-2xl font-bold text-white">{stats.totalReferrals}</div>
+          <div className="text-2xl font-bold text-white">
+            {stats.totalReferrals}
+          </div>
           <div className="text-sm text-foreground/70">Total Referrals</div>
         </div>
         <div className="bg-gray-900 rounded-xl p-4 text-center">
-          <div className="text-2xl font-bold text-yellow-400">{stats.pendingReferrals}</div>
+          <div className="text-2xl font-bold text-yellow-400">
+            {stats.pendingReferrals}
+          </div>
           <div className="text-sm text-foreground/70">Pending</div>
         </div>
         <div className="bg-gray-900 rounded-xl p-4 text-center">
-          <div className="text-2xl font-bold text-green-400">{stats.convertedReferrals}</div>
+          <div className="text-2xl font-bold text-green-400">
+            {stats.convertedReferrals}
+          </div>
           <div className="text-sm text-foreground/70">Converted</div>
         </div>
       </div>
@@ -316,7 +362,9 @@ export function ReferralDashboard({ stats }: { stats: ReferralStats }) {
 
       {/* Referral Link */}
       <div>
-        <div className="text-sm text-foreground/70 mb-2">Your referral link</div>
+        <div className="text-sm text-foreground/70 mb-2">
+          Your referral link
+        </div>
         <div className="flex gap-2">
           <div className="flex-1 px-4 py-2 bg-gray-900 rounded-lg text-sm text-foreground/80 truncate">
             {window.location.host}/join?ref={stats.referralCode}
@@ -325,7 +373,11 @@ export function ReferralDashboard({ stats }: { stats: ReferralStats }) {
             onClick={copyReferralLink}
             className="px-4 py-2 bg-cyan-500 hover:bg-cyan-600 rounded-lg transition-colors"
           >
-            {copied ? <Check className="w-5 h-5 text-white" /> : <Copy className="w-5 h-5 text-white" />}
+            {copied ? (
+              <Check className="w-5 h-5 text-white" />
+            ) : (
+              <Copy className="w-5 h-5 text-white" />
+            )}
           </button>
         </div>
       </div>
@@ -334,16 +386,16 @@ export function ReferralDashboard({ stats }: { stats: ReferralStats }) {
 }
 
 // Invite modal for quick sharing
-export function InviteModal({ 
-  isOpen, 
+export function InviteModal({
+  isOpen,
   onClose,
-  referralCode 
-}: { 
-  isOpen: boolean; 
+  referralCode,
+}: {
+  isOpen: boolean;
   onClose: () => void;
   referralCode: string;
 }) {
-  const [emails, setEmails] = useState('');
+  const [emails, setEmails] = useState("");
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
 
@@ -364,7 +416,9 @@ export function InviteModal({
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
       <div className="bg-gray-800 rounded-2xl p-6 max-w-md w-full">
-        <h3 className="text-xl font-semibold text-white mb-2">Invite Friends</h3>
+        <h3 className="text-xl font-semibold text-white mb-2">
+          Invite Friends
+        </h3>
         <p className="text-foreground/70 text-sm mb-6">
           Share Cepho with friends and earn rewards when they join.
         </p>
@@ -375,7 +429,7 @@ export function InviteModal({
           </label>
           <textarea
             value={emails}
-            onChange={(e) => setEmails(e.target.value)}
+            onChange={e => setEmails(e.target.value)}
             placeholder="friend1@email.com, friend2@email.com"
             rows={3}
             className="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500 transition-colors resize-none"
@@ -395,7 +449,7 @@ export function InviteModal({
             className="flex-1 py-2 bg-cyan-500 hover:bg-cyan-600 text-white rounded-lg transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
           >
             {sending ? (
-              'Sending...'
+              "Sending..."
             ) : sent ? (
               <>
                 <Check className="w-4 h-4" />

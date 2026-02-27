@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { useParams, useLocation } from 'wouter';
+import { useState, useEffect } from "react";
+import { useParams, useLocation } from "wouter";
 import {
   ArrowLeft,
   Play,
@@ -9,7 +9,7 @@ import {
   FileText,
   Download,
   AlertCircle,
-} from 'lucide-react';
+} from "lucide-react";
 
 interface Workflow {
   id: string;
@@ -46,7 +46,8 @@ export default function WorkflowDetailPage() {
   const [, setLocation] = useLocation();
   const [workflow, setWorkflow] = useState<Workflow | null>(null);
   const [steps, setSteps] = useState<WorkflowStep[]>([]);
-  const [currentStepGuidance, setCurrentStepGuidance] = useState<StepGuidance | null>(null);
+  const [currentStepGuidance, setCurrentStepGuidance] =
+    useState<StepGuidance | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -64,7 +65,7 @@ export default function WorkflowDetailPage() {
         setWorkflow(data.workflow);
       }
     } catch (error) {
-      console.error('Failed to fetch workflow:', error);
+      console.error("Failed to fetch workflow:", error);
     } finally {
       setLoading(false);
     }
@@ -76,21 +77,25 @@ export default function WorkflowDetailPage() {
       const data = await response.json();
       if (data.success) {
         setSteps(data.steps || []);
-        
+
         // Fetch guidance for current step
-        const currentStep = data.steps.find((s: WorkflowStep) => s.status === 'in_progress');
+        const currentStep = data.steps.find(
+          (s: WorkflowStep) => s.status === "in_progress"
+        );
         if (currentStep) {
           fetchStepGuidance(currentStep.id);
         }
       }
     } catch (error) {
-      console.error('Failed to fetch steps:', error);
+      console.error("Failed to fetch steps:", error);
     }
   };
 
   const fetchStepGuidance = async (stepId: string) => {
     try {
-      const response = await fetch(`/api/workflows/${id}/steps/${stepId}/guidance`);
+      const response = await fetch(
+        `/api/workflows/${id}/steps/${stepId}/guidance`
+      );
       const data = await response.json();
       if (data.success) {
         setCurrentStepGuidance({
@@ -100,56 +105,62 @@ export default function WorkflowDetailPage() {
         });
       }
     } catch (error) {
-      console.error('Failed to fetch step guidance:', error);
+      console.error("Failed to fetch step guidance:", error);
     }
   };
 
   const handleStartWorkflow = async () => {
     try {
-      const response = await fetch(`/api/workflows/${id}/start`, { method: 'POST' });
+      const response = await fetch(`/api/workflows/${id}/start`, {
+        method: "POST",
+      });
       const data = await response.json();
       if (data.success) {
         fetchWorkflow();
         fetchSteps();
       }
     } catch (error) {
-      console.error('Failed to start workflow:', error);
+      console.error("Failed to start workflow:", error);
     }
   };
 
   const handlePauseWorkflow = async () => {
     try {
-      const response = await fetch(`/api/workflows/${id}/pause`, { method: 'POST' });
+      const response = await fetch(`/api/workflows/${id}/pause`, {
+        method: "POST",
+      });
       const data = await response.json();
       if (data.success) {
         fetchWorkflow();
       }
     } catch (error) {
-      console.error('Failed to pause workflow:', error);
+      console.error("Failed to pause workflow:", error);
     }
   };
 
   const handleResumeWorkflow = async () => {
     try {
-      const response = await fetch(`/api/workflows/${id}/resume`, { method: 'POST' });
+      const response = await fetch(`/api/workflows/${id}/resume`, {
+        method: "POST",
+      });
       const data = await response.json();
       if (data.success) {
         fetchWorkflow();
       }
     } catch (error) {
-      console.error('Failed to resume workflow:', error);
+      console.error("Failed to resume workflow:", error);
     }
   };
 
   const getStepStatusIcon = (status: string) => {
     switch (status) {
-      case 'completed':
+      case "completed":
         return <CheckCircle className="w-5 h-5 text-green-500" />;
-      case 'in_progress':
+      case "in_progress":
         return <Play className="w-5 h-5 text-blue-500" />;
-      case 'pending':
+      case "pending":
         return <Clock className="w-5 h-5 text-gray-400" />;
-      case 'failed':
+      case "failed":
         return <AlertCircle className="w-5 h-5 text-red-500" />;
       default:
         return <Clock className="w-5 h-5 text-gray-400" />;
@@ -164,8 +175,8 @@ export default function WorkflowDetailPage() {
     );
   }
 
-  const currentStep = steps.find(s => s.status === 'in_progress');
-  const completedSteps = steps.filter(s => s.status === 'completed').length;
+  const currentStep = steps.find(s => s.status === "in_progress");
+  const completedSteps = steps.filter(s => s.status === "completed").length;
   const totalSteps = steps.length;
   const progress = totalSteps > 0 ? (completedSteps / totalSteps) * 100 : 0;
 
@@ -174,20 +185,22 @@ export default function WorkflowDetailPage() {
       {/* Header */}
       <div className="flex items-center gap-4 mb-8">
         <button
-          onClick={() => setLocation('/workflows')}
+          onClick={() => setLocation("/workflows")}
           className="p-2 hover:bg-gray-800 rounded-lg transition-colors"
         >
           <ArrowLeft className="w-6 h-6 text-gray-400" />
         </button>
         <div className="flex-1">
-          <h1 className="text-3xl font-bold text-white mb-2">{workflow.name}</h1>
+          <h1 className="text-3xl font-bold text-white mb-2">
+            {workflow.name}
+          </h1>
           <p className="text-gray-400">
-            {workflow.skillType.replace('_', ' ').charAt(0).toUpperCase() + 
-             workflow.skillType.slice(1).replace('_', ' ')}
+            {workflow.skillType.replace("_", " ").charAt(0).toUpperCase() +
+              workflow.skillType.slice(1).replace("_", " ")}
           </p>
         </div>
         <div className="flex gap-2">
-          {workflow.status === 'not_started' && (
+          {workflow.status === "not_started" && (
             <button
               onClick={handleStartWorkflow}
               className="flex items-center gap-2 px-4 py-2 bg-fuchsia-500 hover:bg-fuchsia-600 text-white rounded-lg transition-colors"
@@ -196,7 +209,7 @@ export default function WorkflowDetailPage() {
               Start
             </button>
           )}
-          {workflow.status === 'in_progress' && (
+          {workflow.status === "in_progress" && (
             <button
               onClick={handlePauseWorkflow}
               className="flex items-center gap-2 px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg transition-colors"
@@ -205,7 +218,7 @@ export default function WorkflowDetailPage() {
               Pause
             </button>
           )}
-          {workflow.status === 'paused' && (
+          {workflow.status === "paused" && (
             <button
               onClick={handleResumeWorkflow}
               className="flex items-center gap-2 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors"
@@ -221,12 +234,16 @@ export default function WorkflowDetailPage() {
       <div className="bg-gray-800 rounded-lg p-6 mb-8">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h3 className="text-lg font-semibold text-white mb-1">Overall Progress</h3>
+            <h3 className="text-lg font-semibold text-white mb-1">
+              Overall Progress
+            </h3>
             <p className="text-sm text-gray-400">
               {completedSteps} of {totalSteps} steps completed
             </p>
           </div>
-          <div className="text-3xl font-bold text-fuchsia-500">{Math.round(progress)}%</div>
+          <div className="text-3xl font-bold text-fuchsia-500">
+            {Math.round(progress)}%
+          </div>
         </div>
         <div className="w-full bg-gray-700 rounded-full h-3">
           <div
@@ -241,13 +258,13 @@ export default function WorkflowDetailPage() {
         <div className="lg:col-span-2">
           <h2 className="text-2xl font-bold text-white mb-6">Workflow Steps</h2>
           <div className="space-y-4">
-            {steps.map((step) => (
+            {steps.map(step => (
               <div
                 key={step.id}
                 className={`bg-gray-800 rounded-lg p-6 border ${
-                  step.status === 'in_progress'
-                    ? 'border-fuchsia-500'
-                    : 'border-gray-700'
+                  step.status === "in_progress"
+                    ? "border-fuchsia-500"
+                    : "border-gray-700"
                 }`}
               >
                 <div className="flex items-start gap-4">
@@ -259,19 +276,20 @@ export default function WorkflowDetailPage() {
                       </h3>
                       <span
                         className={`px-3 py-1 rounded-full text-xs font-medium ${
-                          step.status === 'completed'
-                            ? 'bg-green-500/20 text-green-400'
-                            : step.status === 'in_progress'
-                            ? 'bg-blue-500/20 text-blue-400'
-                            : 'bg-gray-500/20 text-gray-400'
+                          step.status === "completed"
+                            ? "bg-green-500/20 text-green-400"
+                            : step.status === "in_progress"
+                              ? "bg-blue-500/20 text-blue-400"
+                              : "bg-gray-500/20 text-gray-400"
                         }`}
                       >
-                        {step.status.replace('_', ' ')}
+                        {step.status.replace("_", " ")}
                       </span>
                     </div>
                     {step.completedAt && (
                       <p className="text-sm text-gray-400">
-                        Completed {new Date(step.completedAt).toLocaleDateString()}
+                        Completed{" "}
+                        {new Date(step.completedAt).toLocaleDateString()}
                       </p>
                     )}
                   </div>
@@ -286,11 +304,17 @@ export default function WorkflowDetailPage() {
           <h2 className="text-2xl font-bold text-white mb-6">Current Step</h2>
           {currentStep && currentStepGuidance ? (
             <div className="bg-gray-800 rounded-lg p-6 border border-gray-700 sticky top-4">
-              <h3 className="text-xl font-semibold text-white mb-4">{currentStep.stepName}</h3>
-              
+              <h3 className="text-xl font-semibold text-white mb-4">
+                {currentStep.stepName}
+              </h3>
+
               <div className="mb-6">
-                <h4 className="text-sm font-semibold text-gray-400 uppercase mb-2">Guidance</h4>
-                <p className="text-gray-300 whitespace-pre-line">{currentStepGuidance.guidance}</p>
+                <h4 className="text-sm font-semibold text-gray-400 uppercase mb-2">
+                  Guidance
+                </h4>
+                <p className="text-gray-300 whitespace-pre-line">
+                  {currentStepGuidance.guidance}
+                </p>
               </div>
 
               {currentStepGuidance.recommendations.length > 0 && (
@@ -300,7 +324,10 @@ export default function WorkflowDetailPage() {
                   </h4>
                   <ul className="space-y-2">
                     {currentStepGuidance.recommendations.map((rec, index) => (
-                      <li key={index} className="flex items-start gap-2 text-gray-300">
+                      <li
+                        key={index}
+                        className="flex items-start gap-2 text-gray-300"
+                      >
                         <span className="text-fuchsia-500 mt-1">•</span>
                         <span>{rec}</span>
                       </li>
@@ -315,18 +342,25 @@ export default function WorkflowDetailPage() {
                     Deliverables
                   </h4>
                   <ul className="space-y-2">
-                    {currentStepGuidance.deliverables.map((deliverable, index) => (
-                      <li key={index} className="flex items-center gap-2 text-gray-300">
-                        <FileText className="w-4 h-4 text-fuchsia-500" />
-                        <span>{deliverable}</span>
-                      </li>
-                    ))}
+                    {currentStepGuidance.deliverables.map(
+                      (deliverable, index) => (
+                        <li
+                          key={index}
+                          className="flex items-center gap-2 text-gray-300"
+                        >
+                          <FileText className="w-4 h-4 text-fuchsia-500" />
+                          <span>{deliverable}</span>
+                        </li>
+                      )
+                    )}
                   </ul>
                 </div>
               )}
 
               <button
-                onClick={() => setLocation(`/workflows/${id}/steps/${currentStep.id}`)}
+                onClick={() =>
+                  setLocation(`/workflows/${id}/steps/${currentStep.id}`)
+                }
                 className="w-full mt-6 px-4 py-3 bg-fuchsia-500 hover:bg-fuchsia-600 text-white rounded-lg transition-colors font-semibold"
               >
                 Work on This Step
@@ -334,7 +368,9 @@ export default function WorkflowDetailPage() {
             </div>
           ) : (
             <div className="bg-gray-800 rounded-lg p-6 border border-gray-700 text-center">
-              <p className="text-gray-400">No active step. Start the workflow to begin.</p>
+              <p className="text-gray-400">
+                No active step. Start the workflow to begin.
+              </p>
             </div>
           )}
         </div>

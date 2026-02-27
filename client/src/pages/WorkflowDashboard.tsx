@@ -1,10 +1,10 @@
 // @ts-nocheck
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Card } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Dialog,
   DialogContent,
@@ -12,62 +12,76 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { 
-  Rocket, CheckCircle2, Clock, AlertCircle, Play, Eye,
-  TrendingUp, Shield, Brain, Users, DollarSign, FileText,
-  BarChart3, ChevronRight, Loader2, Plus, X
-} from 'lucide-react';
-import { trpc } from '@/lib/trpc';
-import { useLocation } from 'wouter';
-import { toast } from 'sonner';
+} from "@/components/ui/dialog";
+import {
+  Rocket,
+  CheckCircle2,
+  Clock,
+  AlertCircle,
+  Play,
+  Eye,
+  TrendingUp,
+  Shield,
+  Brain,
+  Users,
+  DollarSign,
+  FileText,
+  BarChart3,
+  ChevronRight,
+  Loader2,
+  Plus,
+  X,
+} from "lucide-react";
+import { trpc } from "@/lib/trpc";
+import { useLocation } from "wouter";
+import { toast } from "sonner";
 
 const WORKFLOW_TYPES = {
   project_genesis: {
     icon: Rocket,
-    label: 'Project Genesis',
-    description: '6-Phase Venture Development',
-    color: 'cyan',
+    label: "Project Genesis",
+    description: "6-Phase Venture Development",
+    color: "cyan",
     phases: 6,
     steps: 24,
   },
   quality_gates: {
     icon: Shield,
-    label: 'Quality Gates',
-    description: 'QMS Validation & Compliance',
-    color: 'emerald',
+    label: "Quality Gates",
+    description: "QMS Validation & Compliance",
+    color: "emerald",
     phases: 1,
     steps: 4,
   },
   digital_twin: {
     icon: Brain,
-    label: 'Digital Twin',
-    description: 'Daily AI Assistant',
-    color: 'purple',
+    label: "Digital Twin",
+    description: "Daily AI Assistant",
+    color: "purple",
     phases: 1,
     steps: 4,
   },
   ai_sme: {
     icon: Users,
-    label: 'AI-SME Consultation',
-    description: 'Expert Consultation Process',
-    color: 'amber',
+    label: "AI-SME Consultation",
+    description: "Expert Consultation Process",
+    color: "amber",
     phases: 1,
     steps: 4,
   },
   due_diligence: {
     icon: FileText,
-    label: 'Due Diligence',
-    description: 'Comprehensive DD Process',
-    color: 'blue',
+    label: "Due Diligence",
+    description: "Comprehensive DD Process",
+    color: "blue",
     phases: 1,
     steps: 6,
   },
   financial_modeling: {
     icon: DollarSign,
-    label: 'Financial Modeling',
-    description: '3-5 Year Projections',
-    color: 'green',
+    label: "Financial Modeling",
+    description: "3-5 Year Projections",
+    color: "green",
     phases: 1,
     steps: 5,
   },
@@ -75,63 +89,79 @@ const WORKFLOW_TYPES = {
 
 export default function WorkflowDashboard() {
   const [, navigate] = useLocation();
-  const [selectedStatus, setSelectedStatus] = useState<string>('all');
+  const [selectedStatus, setSelectedStatus] = useState<string>("all");
   const [showCreateModal, setShowCreateModal] = useState(false);
-  const [selectedWorkflowType, setSelectedWorkflowType] = useState<string>('');
-  const [workflowName, setWorkflowName] = useState('');
-  const [workflowDescription, setWorkflowDescription] = useState('');
+  const [selectedWorkflowType, setSelectedWorkflowType] = useState<string>("");
+  const [workflowName, setWorkflowName] = useState("");
+  const [workflowDescription, setWorkflowDescription] = useState("");
 
   // Fetch workflows from backend
-  const { data: workflows = [], isLoading, refetch } = trpc.workflows.list.useQuery({
-    status: selectedStatus === 'all' ? undefined : selectedStatus as any,
+  const {
+    data: workflows = [],
+    isLoading,
+    refetch,
+  } = trpc.workflows.list.useQuery({
+    status: selectedStatus === "all" ? undefined : (selectedStatus as any),
   });
 
   // Create workflow mutation
   const createWorkflowMutation = trpc.workflows.create.useMutation({
-    onSuccess: (data) => {
+    onSuccess: data => {
       toast.success(`Created workflow: ${data.name}`);
       setShowCreateModal(false);
-      setWorkflowName('');
-      setWorkflowDescription('');
-      setSelectedWorkflowType('');
+      setWorkflowName("");
+      setWorkflowDescription("");
+      setSelectedWorkflowType("");
       refetch();
       // Navigate to the new workflow
       navigate(`/workflow/${data.type}/${data.id}`);
     },
-    onError: (error) => {
+    onError: error => {
       toast.error(`Failed to create workflow: ${error.message}`);
     },
   });
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'in_progress': return 'bg-emerald-500/20 text-emerald-400 border-emerald-500/50';
-      case 'completed': return 'bg-blue-500/20 text-blue-400 border-blue-500/50';
-      case 'paused': return 'bg-amber-500/20 text-amber-400 border-amber-500/50';
-      case 'not_started': return 'bg-gray-500/20 text-gray-400 border-gray-500/50';
-      case 'failed': return 'bg-red-500/20 text-red-400 border-red-500/50';
-      default: return 'bg-gray-500/20 text-gray-400 border-gray-500/50';
+      case "in_progress":
+        return "bg-emerald-500/20 text-emerald-400 border-emerald-500/50";
+      case "completed":
+        return "bg-blue-500/20 text-blue-400 border-blue-500/50";
+      case "paused":
+        return "bg-amber-500/20 text-amber-400 border-amber-500/50";
+      case "not_started":
+        return "bg-gray-500/20 text-gray-400 border-gray-500/50";
+      case "failed":
+        return "bg-red-500/20 text-red-400 border-red-500/50";
+      default:
+        return "bg-gray-500/20 text-gray-400 border-gray-500/50";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'in_progress': return <Clock className="w-4 h-4" />;
-      case 'completed': return <CheckCircle2 className="w-4 h-4" />;
-      case 'paused': return <AlertCircle className="w-4 h-4" />;
-      case 'not_started': return <Loader2 className="w-4 h-4" />;
-      case 'failed': return <AlertCircle className="w-4 h-4" />;
-      default: return <Clock className="w-4 h-4" />;
+      case "in_progress":
+        return <Clock className="w-4 h-4" />;
+      case "completed":
+        return <CheckCircle2 className="w-4 h-4" />;
+      case "paused":
+        return <AlertCircle className="w-4 h-4" />;
+      case "not_started":
+        return <Loader2 className="w-4 h-4" />;
+      case "failed":
+        return <AlertCircle className="w-4 h-4" />;
+      default:
+        return <Clock className="w-4 h-4" />;
     }
   };
 
   const handleCreateWorkflow = () => {
     if (!workflowName.trim()) {
-      toast.error('Please enter a workflow name');
+      toast.error("Please enter a workflow name");
       return;
     }
     if (!selectedWorkflowType) {
-      toast.error('Please select a workflow type');
+      toast.error("Please select a workflow type");
       return;
     }
 
@@ -146,11 +176,14 @@ export default function WorkflowDashboard() {
     navigate(`/workflow/${type}/${workflowId}`);
   };
 
-  const activeCount = workflows.filter(w => w.status === 'in_progress').length;
-  const completedCount = workflows.filter(w => w.status === 'completed').length;
-  const avgProgress = workflows.length > 0
-    ? Math.round(workflows.reduce((sum, w) => sum + w.progress, 0) / workflows.length)
-    : 0;
+  const activeCount = workflows.filter(w => w.status === "in_progress").length;
+  const completedCount = workflows.filter(w => w.status === "completed").length;
+  const avgProgress =
+    workflows.length > 0
+      ? Math.round(
+          workflows.reduce((sum, w) => sum + w.progress, 0) / workflows.length
+        )
+      : 0;
   const totalSteps = workflows.reduce((sum, w) => sum + w.totalSteps, 0);
 
   return (
@@ -194,7 +227,9 @@ export default function WorkflowDashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-gray-400 text-sm mb-1">Completed</p>
-                <p className="text-3xl font-bold text-white">{completedCount}</p>
+                <p className="text-3xl font-bold text-white">
+                  {completedCount}
+                </p>
               </div>
               <div className="p-3 rounded-lg bg-blue-500/20">
                 <CheckCircle2 className="w-6 h-6 text-blue-400" />
@@ -229,15 +264,27 @@ export default function WorkflowDashboard() {
 
         {/* Filter Tabs */}
         <div className="flex items-center gap-2 mb-8">
-          {['all', 'not_started', 'in_progress', 'paused', 'completed', 'failed'].map((status) => (
+          {[
+            "all",
+            "not_started",
+            "in_progress",
+            "paused",
+            "completed",
+            "failed",
+          ].map(status => (
             <Button
               key={status}
-              variant={selectedStatus === status ? 'default' : 'outline'}
+              variant={selectedStatus === status ? "default" : "outline"}
               size="sm"
               onClick={() => setSelectedStatus(status)}
-              className={selectedStatus === status ? 'bg-cyan-500 hover:bg-cyan-600' : 'border-gray-600 hover:border-cyan-500'}
+              className={
+                selectedStatus === status
+                  ? "bg-cyan-500 hover:bg-cyan-600"
+                  : "border-gray-600 hover:border-cyan-500"
+              }
             >
-              {status.replace('_', ' ').charAt(0).toUpperCase() + status.slice(1).replace('_', ' ')}
+              {status.replace("_", " ").charAt(0).toUpperCase() +
+                status.slice(1).replace("_", " ")}
             </Button>
           ))}
         </div>
@@ -253,8 +300,12 @@ export default function WorkflowDashboard() {
               <div className="w-16 h-16 rounded-full bg-gray-700/50 flex items-center justify-center mx-auto mb-4">
                 <TrendingUp className="w-8 h-8 text-gray-500" />
               </div>
-              <h3 className="text-xl font-semibold text-white mb-2">No workflows found</h3>
-              <p className="text-gray-400 mb-6">Get started by creating your first workflow</p>
+              <h3 className="text-xl font-semibold text-white mb-2">
+                No workflows found
+              </h3>
+              <p className="text-gray-400 mb-6">
+                Get started by creating your first workflow
+              </p>
               <Button
                 onClick={() => setShowCreateModal(true)}
                 className="bg-cyan-500 hover:bg-cyan-600 text-white"
@@ -266,10 +317,11 @@ export default function WorkflowDashboard() {
           </Card>
         ) : (
           <div className="space-y-4">
-            {workflows.map((workflow) => {
-              const config = WORKFLOW_TYPES[workflow.type as keyof typeof WORKFLOW_TYPES];
+            {workflows.map(workflow => {
+              const config =
+                WORKFLOW_TYPES[workflow.type as keyof typeof WORKFLOW_TYPES];
               const Icon = config?.icon || Rocket;
-              
+
               return (
                 <Card
                   key={workflow.id}
@@ -277,21 +329,40 @@ export default function WorkflowDashboard() {
                 >
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex items-start gap-4">
-                      <div className={`p-3 rounded-lg bg-${config?.color || 'cyan'}-500/20`}>
-                        <Icon className={`w-6 h-6 text-${config?.color || 'cyan'}-400`} />
+                      <div
+                        className={`p-3 rounded-lg bg-${config?.color || "cyan"}-500/20`}
+                      >
+                        <Icon
+                          className={`w-6 h-6 text-${config?.color || "cyan"}-400`}
+                        />
                       </div>
                       <div>
-                        <h3 className="text-xl font-semibold text-white mb-1">{workflow.name}</h3>
-                        <p className="text-sm text-gray-400 mb-2">{config?.label || workflow.type}</p>
+                        <h3 className="text-xl font-semibold text-white mb-1">
+                          {workflow.name}
+                        </h3>
+                        <p className="text-sm text-gray-400 mb-2">
+                          {config?.label || workflow.type}
+                        </p>
                         <div className="flex items-center gap-2">
-                          <Badge variant="outline" className={getStatusColor(workflow.status)}>
+                          <Badge
+                            variant="outline"
+                            className={getStatusColor(workflow.status)}
+                          >
                             {getStatusIcon(workflow.status)}
-                            <span className="ml-1 capitalize">{workflow.status.replace('_', ' ')}</span>
+                            <span className="ml-1 capitalize">
+                              {workflow.status.replace("_", " ")}
+                            </span>
                           </Badge>
-                          <Badge variant="outline" className="bg-gray-700/50 text-gray-300 border-gray-600">
+                          <Badge
+                            variant="outline"
+                            className="bg-gray-700/50 text-gray-300 border-gray-600"
+                          >
                             Phase {workflow.currentPhase}/{workflow.totalPhases}
                           </Badge>
-                          <Badge variant="outline" className="bg-gray-700/50 text-gray-300 border-gray-600">
+                          <Badge
+                            variant="outline"
+                            className="bg-gray-700/50 text-gray-300 border-gray-600"
+                          >
                             Step {workflow.currentStep}/{workflow.totalSteps}
                           </Badge>
                         </div>
@@ -322,7 +393,9 @@ export default function WorkflowDashboard() {
                   <div className="mb-2">
                     <div className="flex items-center justify-between text-sm mb-2">
                       <span className="text-gray-400">Progress</span>
-                      <span className="text-cyan-400 font-semibold">{workflow.progress}%</span>
+                      <span className="text-cyan-400 font-semibold">
+                        {workflow.progress}%
+                      </span>
                     </div>
                     <div className="w-full h-2 bg-gray-700 rounded-full overflow-hidden">
                       <div
@@ -334,9 +407,15 @@ export default function WorkflowDashboard() {
 
                   {/* Timeline */}
                   <div className="flex items-center gap-4 text-xs text-gray-500">
-                    <span>Started: {new Date(workflow.createdAt).toLocaleDateString()}</span>
+                    <span>
+                      Started:{" "}
+                      {new Date(workflow.createdAt).toLocaleDateString()}
+                    </span>
                     <span>•</span>
-                    <span>Updated: {new Date(workflow.updatedAt).toLocaleDateString()}</span>
+                    <span>
+                      Updated:{" "}
+                      {new Date(workflow.updatedAt).toLocaleDateString()}
+                    </span>
                   </div>
                 </Card>
               );
@@ -364,7 +443,7 @@ export default function WorkflowDashboard() {
               <Input
                 placeholder="e.g., CEPHO.AI Platform Development"
                 value={workflowName}
-                onChange={(e) => setWorkflowName(e.target.value)}
+                onChange={e => setWorkflowName(e.target.value)}
                 className="bg-gray-900/50 border-gray-700 text-white"
               />
             </div>
@@ -377,7 +456,7 @@ export default function WorkflowDashboard() {
               <Textarea
                 placeholder="Describe the purpose of this workflow..."
                 value={workflowDescription}
-                onChange={(e) => setWorkflowDescription(e.target.value)}
+                onChange={e => setWorkflowDescription(e.target.value)}
                 className="bg-gray-900/50 border-gray-700 text-white"
                 rows={3}
               />
@@ -398,17 +477,25 @@ export default function WorkflowDashboard() {
                       onClick={() => setSelectedWorkflowType(type)}
                       className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
                         isSelected
-                          ? 'border-cyan-500 bg-cyan-500/10'
-                          : 'border-gray-700 bg-gray-900/30 hover:border-gray-600'
+                          ? "border-cyan-500 bg-cyan-500/10"
+                          : "border-gray-700 bg-gray-900/30 hover:border-gray-600"
                       }`}
                     >
                       <div className="flex items-start gap-3">
-                        <div className={`p-2 rounded-lg bg-${config.color}-500/20`}>
-                          <Icon className={`w-5 h-5 text-${config.color}-400`} />
+                        <div
+                          className={`p-2 rounded-lg bg-${config.color}-500/20`}
+                        >
+                          <Icon
+                            className={`w-5 h-5 text-${config.color}-400`}
+                          />
                         </div>
                         <div className="flex-1">
-                          <h4 className="font-semibold text-white mb-1">{config.label}</h4>
-                          <p className="text-xs text-gray-400 mb-2">{config.description}</p>
+                          <h4 className="font-semibold text-white mb-1">
+                            {config.label}
+                          </h4>
+                          <p className="text-xs text-gray-400 mb-2">
+                            {config.description}
+                          </p>
                           <div className="flex items-center gap-3 text-xs text-gray-500">
                             <span>{config.phases} Phases</span>
                             <span>•</span>

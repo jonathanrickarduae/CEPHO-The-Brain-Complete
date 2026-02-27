@@ -25,19 +25,20 @@ server.listen(port, () => {
   console.log(`[Server] CEPHO.AI server listening on port ${port}`);
   console.log(`[Server] Environment: ${process.env.NODE_ENV}`);
   console.log(`[Server] Static files: ${staticPath}`);
-  
+
   // Start 24-hour automation system with error handling
   try {
     startAutomation();
-    console.log('[Server] Automation scheduler started successfully');
+    console.log("[Server] Automation scheduler started successfully");
   } catch (error) {
-    console.error('[Server] Failed to start automation scheduler:', error);
-    console.log('[Server] Continuing without automation scheduler...');
+    console.error("[Server] Failed to start automation scheduler:", error);
+    console.log("[Server] Continuing without automation scheduler...");
   }
 });
 ```
 
 **Key Changes:**
+
 - Added detailed logging for server startup
 - Wrapped `startAutomation()` in try-catch
 - Server continues running even if automation scheduler fails
@@ -51,7 +52,7 @@ Added multi-level error handling in the scheduler:
 public start() {
   try {
     console.log('[AutomationScheduler] Starting 24-hour automation system...');
-    
+
     for (const taskDef of this.taskDefinitions) {
       if (taskDef.enabled) {
         try {
@@ -69,7 +70,7 @@ public start() {
               });
             }
           });
-          
+
           this.tasks.set(taskDef.id, task);
           console.log(`[AutomationScheduler] Scheduled: ${taskDef.name} (${taskDef.schedule})`);
         } catch (error) {
@@ -78,7 +79,7 @@ public start() {
         }
       }
     }
-    
+
     console.log(`[AutomationScheduler] Started ${this.tasks.size} scheduled tasks`);
   } catch (error) {
     console.error('[AutomationScheduler] Critical error during startup:', error);
@@ -88,6 +89,7 @@ public start() {
 ```
 
 **Key Changes:**
+
 - Wrapped entire start method in try-catch
 - Added try-catch for each individual task scheduling
 - Added .catch() for database logging operations

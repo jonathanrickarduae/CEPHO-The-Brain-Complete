@@ -1,4 +1,11 @@
-import { pgTable, text, timestamp, integer, boolean, uuid } from "drizzle-orm/pg-core";
+import {
+  pgTable,
+  text,
+  timestamp,
+  integer,
+  boolean,
+  uuid,
+} from "drizzle-orm/pg-core";
 import { users } from "./schema";
 
 // Waitlist entries for users waiting to join
@@ -18,7 +25,9 @@ export const waitlist = pgTable("waitlist", {
 // Referral tracking for active users
 export const referrals = pgTable("referrals", {
   id: uuid("id").defaultRandom().primaryKey(),
-  referrerId: text("referrer_id").notNull().references(() => users.id),
+  referrerId: text("referrer_id")
+    .notNull()
+    .references(() => users.id),
   referredEmail: text("referred_email").notNull(),
   referralCode: text("referral_code").notNull(),
   status: text("status").notNull().default("pending"), // pending, joined, converted
@@ -31,7 +40,10 @@ export const referrals = pgTable("referrals", {
 // User credits for gamification
 export const userCredits = pgTable("user_credits", {
   id: uuid("id").defaultRandom().primaryKey(),
-  userId: text("user_id").notNull().references(() => users.id).unique(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => users.id)
+    .unique(),
   totalCredits: integer("total_credits").notNull().default(0),
   usedCredits: integer("used_credits").notNull().default(0),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
@@ -40,7 +52,9 @@ export const userCredits = pgTable("user_credits", {
 // Credit transactions log
 export const creditTransactions = pgTable("credit_transactions", {
   id: uuid("id").defaultRandom().primaryKey(),
-  userId: text("user_id").notNull().references(() => users.id),
+  userId: text("user_id")
+    .notNull()
+    .references(() => users.id),
   amount: integer("amount").notNull(), // positive for earned, negative for spent
   type: text("type").notNull(), // referral_sent, referral_joined, referral_converted, ai_usage, bonus
   description: text("description"),
@@ -51,7 +65,9 @@ export const creditTransactions = pgTable("credit_transactions", {
 // Shareable insights for viral content
 export const sharedInsights = pgTable("shared_insights", {
   id: uuid("id").defaultRandom().primaryKey(),
-  userId: text("user_id").notNull().references(() => users.id),
+  userId: text("user_id")
+    .notNull()
+    .references(() => users.id),
   type: text("type").notNull(), // productivity_report, mood_summary, goal_achievement, ai_consultation
   title: text("title").notNull(),
   content: text("content").notNull(), // JSON content of the insight

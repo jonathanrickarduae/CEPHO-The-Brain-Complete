@@ -1,16 +1,23 @@
-import { useState } from 'react';
-import { 
-  MessageSquare, Sparkles, Send, Clock, 
-  ThumbsUp, ThumbsDown, Edit2, Copy, Check
-} from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { toast } from 'sonner';
+import { useState } from "react";
+import {
+  MessageSquare,
+  Sparkles,
+  Send,
+  Clock,
+  ThumbsUp,
+  ThumbsDown,
+  Edit2,
+  Copy,
+  Check,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { toast } from "sonner";
 
 interface SmartReply {
   id: string;
   text: string;
-  tone: 'professional' | 'friendly' | 'brief' | 'detailed';
+  tone: "professional" | "friendly" | "brief" | "detailed";
   confidence: number;
   estimatedReadTime: string;
 }
@@ -23,83 +30,95 @@ interface SmartReplySuggestionsProps {
 }
 
 // Generate contextual smart replies
-function generateSmartReplies(context?: string, recipientName?: string): SmartReply[] {
+function generateSmartReplies(
+  context?: string,
+  recipientName?: string
+): SmartReply[] {
   // In production, this would call the AI API
-  const name = recipientName || 'there';
-  
+  const name = recipientName || "there";
+
   return [
     {
-      id: '1',
+      id: "1",
       text: `Hi ${name}, thanks for reaching out. I've reviewed the details and would be happy to discuss further. When works best for a quick call?`,
-      tone: 'professional',
+      tone: "professional",
       confidence: 92,
-      estimatedReadTime: '10s'
+      estimatedReadTime: "10s",
     },
     {
-      id: '2',
+      id: "2",
       text: `Thanks for this! Let me take a closer look and get back to you by end of day.`,
-      tone: 'brief',
+      tone: "brief",
       confidence: 88,
-      estimatedReadTime: '5s'
+      estimatedReadTime: "5s",
     },
     {
-      id: '3',
+      id: "3",
       text: `Hi ${name}! Great to hear from you. I've gone through everything and have a few thoughts to share. Would love to set up some time to walk through my feedback in detail. Does tomorrow afternoon work for you?`,
-      tone: 'friendly',
+      tone: "friendly",
       confidence: 85,
-      estimatedReadTime: '15s'
+      estimatedReadTime: "15s",
     },
     {
-      id: '4',
+      id: "4",
       text: `Thank you for sending this over. I've completed my review and have compiled detailed feedback on each section. Here are my key observations:\n\n1. The overall approach is solid\n2. I'd suggest reconsidering the timeline\n3. Budget allocation looks appropriate\n\nHappy to discuss any of these points further.`,
-      tone: 'detailed',
+      tone: "detailed",
       confidence: 78,
-      estimatedReadTime: '30s'
-    }
+      estimatedReadTime: "30s",
+    },
   ];
 }
 
-export function SmartReplySuggestions({ 
-  context, 
-  recipientName, 
-  onSelect, 
-  onEdit 
+export function SmartReplySuggestions({
+  context,
+  recipientName,
+  onSelect,
+  onEdit,
 }: SmartReplySuggestionsProps) {
-  const [replies] = useState(() => generateSmartReplies(context, recipientName));
+  const [replies] = useState(() =>
+    generateSmartReplies(context, recipientName)
+  );
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [copiedId, setCopiedId] = useState<string | null>(null);
-  const [feedbackGiven, setFeedbackGiven] = useState<Record<string, 'up' | 'down'>>({});
+  const [feedbackGiven, setFeedbackGiven] = useState<
+    Record<string, "up" | "down">
+  >({});
 
   const handleSelect = (reply: SmartReply) => {
     setSelectedId(reply.id);
     onSelect?.(reply.text);
-    toast.success('Reply selected');
+    toast.success("Reply selected");
   };
 
   const handleCopy = async (reply: SmartReply) => {
     await navigator.clipboard.writeText(reply.text);
     setCopiedId(reply.id);
     setTimeout(() => setCopiedId(null), 2000);
-    toast.success('Copied to clipboard');
+    toast.success("Copied to clipboard");
   };
 
   const handleEdit = (reply: SmartReply) => {
     onEdit?.(reply.text);
-    toast.info('Opening editor...');
+    toast.info("Opening editor...");
   };
 
-  const handleFeedback = (replyId: string, type: 'up' | 'down') => {
+  const handleFeedback = (replyId: string, type: "up" | "down") => {
     setFeedbackGiven(prev => ({ ...prev, [replyId]: type }));
-    toast.success('Thanks for your feedback!');
+    toast.success("Thanks for your feedback!");
   };
 
   const getToneColor = (tone: string) => {
     switch (tone) {
-      case 'professional': return 'bg-blue-500/20 text-blue-400 border-blue-500/30';
-      case 'friendly': return 'bg-green-500/20 text-green-400 border-green-500/30';
-      case 'brief': return 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30';
-      case 'detailed': return 'bg-purple-500/20 text-purple-400 border-purple-500/30';
-      default: return 'bg-gray-500/20 text-foreground/70 border-gray-500/30';
+      case "professional":
+        return "bg-blue-500/20 text-blue-400 border-blue-500/30";
+      case "friendly":
+        return "bg-green-500/20 text-green-400 border-green-500/30";
+      case "brief":
+        return "bg-yellow-500/20 text-yellow-400 border-yellow-500/30";
+      case "detailed":
+        return "bg-purple-500/20 text-purple-400 border-purple-500/30";
+      default:
+        return "bg-gray-500/20 text-foreground/70 border-gray-500/30";
     }
   };
 
@@ -109,21 +128,24 @@ export function SmartReplySuggestions({
         <Sparkles className="w-4 h-4 text-primary" />
         <span>AI-suggested replies</span>
       </div>
-      
+
       <div className="space-y-2">
-        {replies.map((reply) => (
-          <div 
+        {replies.map(reply => (
+          <div
             key={reply.id}
             className={`p-3 rounded-lg border transition-colors cursor-pointer ${
-              selectedId === reply.id 
-                ? 'bg-primary/10 border-primary' 
-                : 'bg-background/50 border-border hover:border-primary/30'
+              selectedId === reply.id
+                ? "bg-primary/10 border-primary"
+                : "bg-background/50 border-border hover:border-primary/30"
             }`}
             onClick={() => handleSelect(reply)}
           >
             <div className="flex items-start justify-between gap-2 mb-2">
               <div className="flex items-center gap-2">
-                <Badge variant="outline" className={`${getToneColor(reply.tone)} text-xs`}>
+                <Badge
+                  variant="outline"
+                  className={`${getToneColor(reply.tone)} text-xs`}
+                >
                   {reply.tone}
                 </Badge>
                 <span className="text-xs text-muted-foreground flex items-center gap-1">
@@ -135,45 +157,49 @@ export function SmartReplySuggestions({
                 {reply.confidence}% match
               </span>
             </div>
-            
+
             <p className="text-sm text-foreground whitespace-pre-line line-clamp-3">
               {reply.text}
             </p>
-            
+
             <div className="flex items-center justify-between mt-3">
               <div className="flex items-center gap-1">
                 <Button
                   variant="ghost"
                   size="sm"
                   className="h-7 px-2"
-                  onClick={(e) => {
+                  onClick={e => {
                     e.stopPropagation();
-                    handleFeedback(reply.id, 'up');
+                    handleFeedback(reply.id, "up");
                   }}
                   disabled={!!feedbackGiven[reply.id]}
                 >
-                  <ThumbsUp className={`w-3 h-3 ${feedbackGiven[reply.id] === 'up' ? 'text-green-400' : ''}`} />
+                  <ThumbsUp
+                    className={`w-3 h-3 ${feedbackGiven[reply.id] === "up" ? "text-green-400" : ""}`}
+                  />
                 </Button>
                 <Button
                   variant="ghost"
                   size="sm"
                   className="h-7 px-2"
-                  onClick={(e) => {
+                  onClick={e => {
                     e.stopPropagation();
-                    handleFeedback(reply.id, 'down');
+                    handleFeedback(reply.id, "down");
                   }}
                   disabled={!!feedbackGiven[reply.id]}
                 >
-                  <ThumbsDown className={`w-3 h-3 ${feedbackGiven[reply.id] === 'down' ? 'text-red-400' : ''}`} />
+                  <ThumbsDown
+                    className={`w-3 h-3 ${feedbackGiven[reply.id] === "down" ? "text-red-400" : ""}`}
+                  />
                 </Button>
               </div>
-              
+
               <div className="flex items-center gap-1">
                 <Button
                   variant="ghost"
                   size="sm"
                   className="h-7 px-2"
-                  onClick={(e) => {
+                  onClick={e => {
                     e.stopPropagation();
                     handleCopy(reply);
                   }}
@@ -188,7 +214,7 @@ export function SmartReplySuggestions({
                   variant="ghost"
                   size="sm"
                   className="h-7 px-2"
-                  onClick={(e) => {
+                  onClick={e => {
                     e.stopPropagation();
                     handleEdit(reply);
                   }}
@@ -199,7 +225,7 @@ export function SmartReplySuggestions({
                   variant="ghost"
                   size="sm"
                   className="h-7 px-2"
-                  onClick={(e) => {
+                  onClick={e => {
                     e.stopPropagation();
                     handleSelect(reply);
                   }}
@@ -211,7 +237,7 @@ export function SmartReplySuggestions({
           </div>
         ))}
       </div>
-      
+
       <Button variant="outline" size="sm" className="w-full">
         <Sparkles className="w-4 h-4 mr-2" />
         Generate More Options
@@ -226,9 +252,14 @@ interface QuickRepliesProps {
   onSelect?: (reply: string) => void;
 }
 
-export function QuickReplies({ 
-  replies = ['Sounds good!', 'Let me check and get back to you', 'Can we schedule a call?', 'Thanks for the update'],
-  onSelect 
+export function QuickReplies({
+  replies = [
+    "Sounds good!",
+    "Let me check and get back to you",
+    "Can we schedule a call?",
+    "Thanks for the update",
+  ],
+  onSelect,
 }: QuickRepliesProps) {
   return (
     <div className="flex flex-wrap gap-2">
@@ -240,7 +271,7 @@ export function QuickReplies({
           className="text-xs"
           onClick={() => {
             onSelect?.(reply);
-            toast.success('Reply inserted');
+            toast.success("Reply inserted");
           }}
         >
           {reply}

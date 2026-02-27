@@ -1,7 +1,7 @@
 // @ts-nocheck
-import { useState, useEffect, useCallback, useMemo } from 'react';
-import { useLocation } from 'wouter';
-import { trpc } from '@/lib/trpc';
+import { useState, useEffect, useCallback, useMemo } from "react";
+import { useLocation } from "wouter";
+import { trpc } from "@/lib/trpc";
 
 interface ReviewContext {
   pendingTasks: number;
@@ -26,7 +26,7 @@ interface TimingPattern {
 
 interface ChiefOfStaffState {
   isPromptVisible: boolean;
-  promptType: 'evening_review' | 'morning_brief' | 'task_reminder' | null;
+  promptType: "evening_review" | "morning_brief" | "task_reminder" | null;
   context: ReviewContext | null;
   autoStartCountdown: number | null; // seconds until auto-start
   hasUserResponded: boolean;
@@ -34,7 +34,7 @@ interface ChiefOfStaffState {
   timingPatterns: TimingPattern[];
 }
 
-const DEFAULT_REVIEW_TIME = '19:00'; // 7 PM
+const DEFAULT_REVIEW_TIME = "19:00"; // 7 PM
 const AUTO_START_DELAY = 3600; // 1 hour after prompt (8 PM)
 const PROMPT_CHECK_INTERVAL = 60000; // Check every minute
 const CALENDAR_CONFLICT_BUFFER = 15; // Minutes buffer after meeting
@@ -53,18 +53,20 @@ export function useChiefOfStaffAutomation() {
 
   // Fetch user settings for preferred review time
   const { data: userSettings } = trpc.settings.get.useQuery();
-  
+
   // Fetch tasks to count pending items
   const { data: taskItems } = trpc.tasks.list.useQuery();
-  
+
   // Fetch projects
   const { data: projects } = trpc.projects.list.useQuery();
 
   // Fetch timing patterns for learning
-  const { data: timingPatterns } = trpc.eveningReview.getTimingPatterns.useQuery();
+  const { data: timingPatterns } =
+    trpc.eveningReview.getTimingPatterns.useQuery();
 
   // Fetch predicted review time
-  const { data: predictedTimeData } = trpc.eveningReview.getPredictedTime.useQuery();
+  const { data: predictedTimeData } =
+    trpc.eveningReview.getPredictedTime.useQuery();
 
   // Get latest review session
   const { data: latestReview } = trpc.eveningReview.getLatest.useQuery();
@@ -73,14 +75,14 @@ export function useChiefOfStaffAutomation() {
   const reviewWindow = useMemo(() => {
     const now = new Date();
     const reviewTime = userSettings?.eveningReviewTime || DEFAULT_REVIEW_TIME;
-    const [reviewHour, reviewMinute] = reviewTime.split(':').map(Number);
-    
+    const [reviewHour, reviewMinute] = reviewTime.split(":").map(Number);
+
     const windowStart = new Date(now);
     windowStart.setHours(reviewHour, reviewMinute || 0, 0, 0);
-    
+
     const windowEnd = new Date(windowStart);
     windowEnd.setHours(windowEnd.getHours() + 2); // 2 hour window
-    
+
     return {
       start: windowStart.toISOString(),
       end: windowEnd.toISOString(),
@@ -88,27 +90,36 @@ export function useChiefOfStaffAutomation() {
   }, [userSettings?.eveningReviewTime]);
 
   // Check for calendar conflicts
-  const { data: calendarConflicts } = trpc.eveningReview.checkCalendarConflicts.useQuery({
-    windowStart: reviewWindow.start,
-    windowEnd: reviewWindow.end,
-  });
+  const { data: calendarConflicts } =
+    trpc.eveningReview.checkCalendarConflicts.useQuery({
+      windowStart: reviewWindow.start,
+      windowEnd: reviewWindow.end,
+    });
 
   // Calculate smart review time based on patterns and calendar
-  const getSmartReviewTime = useCallback((): { time: string; reason: string } => {
+  const getSmartReviewTime = useCallback((): {
+    time: string;
+    reason: string;
+  } => {
     const baseTime = userSettings?.eveningReviewTime || DEFAULT_REVIEW_TIME;
     const predictedTime = predictedTimeData?.predictedTime;
     const dayOfWeek = new Date().getDay();
-    
+
     // Find pattern for today
     const todayPattern = timingPatterns?.find(p => p.dayOfWeek === dayOfWeek);
-    
+
     // If we have a learned pattern with good sample size, use it
-    if (todayPattern && todayPattern.sampleCount >= 3 && todayPattern.averageStartTime) {
+    if (
+      todayPattern &&
+      todayPattern.sampleCount >= 3 &&
+      todayPattern.averageStartTime
+    ) {
       // If user usually auto-processes on this day, suggest earlier time
       if ((todayPattern.autoProcessRate || 0) > 0.5) {
         return {
           time: todayPattern.averageStartTime,
-          reason: 'Based on your pattern, you often delegate reviews on this day',
+          reason:
+            "Based on your pattern, you often delegate reviews on this day",
         };
       }
       return {
@@ -116,36 +127,42 @@ export function useChiefOfStaffAutomation() {
         reason: `You typically start reviews at ${todayPattern.averageStartTime} on this day`,
       };
     }
-    
+
     // Use predicted time if available
     if (predictedTime) {
       return {
         time: predictedTime,
-        reason: 'Based on your recent review patterns',
+        reason: "Based on your recent review patterns",
       };
     }
-    
+
     // Fall back to user setting
     return {
       time: baseTime,
-      reason: 'Your configured review time',
+      reason: "Your configured review time",
     };
   }, [userSettings, predictedTimeData, timingPatterns]);
 
   // Calculate review context with enhanced data
   const getReviewContext = useCallback((): ReviewContext => {
-    const pendingTasks = taskItems?.filter(
-      (item: { status: string }) => item.status !== 'completed' && item.status !== 'cancelled'
-    ).length || 0;
-    
-    const activeProjects = projects?.filter(
-      (p: { status: string }) => p.status === 'in_progress'
-    ).length || 0;
-    
+    const pendingTasks =
+      taskItems?.filter(
+        (item: { status: string }) =>
+          item.status !== "completed" && item.status !== "cancelled"
+      ).length || 0;
+
+    const activeProjects =
+      projects?.filter((p: { status: string }) => p.status === "in_progress")
+        .length || 0;
+
     // Outstanding items that need attention
-    const outstandingItems = taskItems?.filter(
-      (item: { status: string; priority: string | null }) => item.status === 'blocked' || item.priority === 'high' || item.priority === 'critical'
-    ).length || 0;
+    const outstandingItems =
+      taskItems?.filter(
+        (item: { status: string; priority: string | null }) =>
+          item.status === "blocked" ||
+          item.priority === "high" ||
+          item.priority === "critical"
+      ).length || 0;
 
     const smartTime = getSmartReviewTime();
 
@@ -154,28 +171,39 @@ export function useChiefOfStaffAutomation() {
       activeProjects,
       upcomingMeetings: 0, // Would integrate with calendar API
       outstandingItems,
-      lastReviewDate: latestReview?.reviewDate ? new Date(latestReview.reviewDate) : null,
-      userTypicalReviewTime: userSettings?.eveningReviewTime || DEFAULT_REVIEW_TIME,
+      lastReviewDate: latestReview?.reviewDate
+        ? new Date(latestReview.reviewDate)
+        : null,
+      userTypicalReviewTime:
+        userSettings?.eveningReviewTime || DEFAULT_REVIEW_TIME,
       predictedReviewTime: smartTime.time,
       hasCalendarConflict: calendarConflicts?.hasConflicts || false,
       conflictEndTime: null, // Would be set from calendar data
     };
-  }, [taskItems, projects, userSettings, latestReview, calendarConflicts, getSmartReviewTime]);
+  }, [
+    taskItems,
+    projects,
+    userSettings,
+    latestReview,
+    calendarConflicts,
+    getSmartReviewTime,
+  ]);
 
   // Check if it's time to show the Evening Review prompt
   const checkEveningReviewTrigger = useCallback(() => {
     const now = new Date();
     const currentHour = now.getHours();
     const currentMinute = now.getMinutes();
-    
+
     const smartTime = getSmartReviewTime();
-    const [reviewHour, reviewMinute] = smartTime.time.split(':').map(Number);
-    
+    const [reviewHour, reviewMinute] = smartTime.time.split(":").map(Number);
+
     // Check if we're within the review window (review time to review time + 1 hour)
-    const isInReviewWindow = 
-      (currentHour > reviewHour || (currentHour === reviewHour && currentMinute >= (reviewMinute || 0))) &&
+    const isInReviewWindow =
+      (currentHour > reviewHour ||
+        (currentHour === reviewHour && currentMinute >= (reviewMinute || 0))) &&
       currentHour < reviewHour + 1;
-    
+
     // Don't show if user has already responded today
     if (state.hasUserResponded) {
       return false;
@@ -199,17 +227,17 @@ export function useChiefOfStaffAutomation() {
       // Don't show prompt during meetings, will check again later
       return false;
     }
-    
+
     // Check if we should show the prompt
     if (isInReviewWindow && !state.isPromptVisible) {
       const context = getReviewContext();
-      
+
       // Only show if there are tasks to review
       if (context.pendingTasks > 0 || context.outstandingItems > 0) {
         setState(prev => ({
           ...prev,
           isPromptVisible: true,
-          promptType: 'evening_review',
+          promptType: "evening_review",
           context,
           autoStartCountdown: AUTO_START_DELAY,
           timingPatterns: timingPatterns || [],
@@ -217,9 +245,18 @@ export function useChiefOfStaffAutomation() {
         return true;
       }
     }
-    
+
     return false;
-  }, [userSettings, state.hasUserResponded, state.isPromptVisible, getReviewContext, getSmartReviewTime, latestReview, calendarConflicts, timingPatterns]);
+  }, [
+    userSettings,
+    state.hasUserResponded,
+    state.isPromptVisible,
+    getReviewContext,
+    getSmartReviewTime,
+    latestReview,
+    calendarConflicts,
+    timingPatterns,
+  ]);
 
   // Auto-start countdown
   useEffect(() => {
@@ -230,9 +267,9 @@ export function useChiefOfStaffAutomation() {
     const interval = setInterval(() => {
       setState(prev => {
         if (prev.autoStartCountdown === null) return prev;
-        
+
         const newCountdown = prev.autoStartCountdown - 1;
-        
+
         if (newCountdown <= 0) {
           // Auto-start the evening review
           handleAutoStart();
@@ -242,7 +279,7 @@ export function useChiefOfStaffAutomation() {
             isPromptVisible: false,
           };
         }
-        
+
         return {
           ...prev,
           autoStartCountdown: newCountdown,
@@ -257,7 +294,7 @@ export function useChiefOfStaffAutomation() {
   useEffect(() => {
     // Initial check
     checkEveningReviewTrigger();
-    
+
     // Set up periodic checks
     const interval = setInterval(() => {
       checkEveningReviewTrigger();
@@ -274,9 +311,9 @@ export function useChiefOfStaffAutomation() {
       hasUserResponded: true,
       autoStartCountdown: null,
     }));
-    
+
     // Navigate to Evening Review
-    setLocation('/evening-review');
+    setLocation("/evening-review");
   }, [setLocation]);
 
   // Handle user dismissing the prompt (will auto-start later)
@@ -295,9 +332,9 @@ export function useChiefOfStaffAutomation() {
       isPromptVisible: false,
       hasUserResponded: true,
     }));
-    
+
     // Navigate to Evening Review with auto-start flag
-    setLocation('/evening-review?autostart=true');
+    setLocation("/evening-review?autostart=true");
   }, [setLocation]);
 
   // Handle user choosing to let Chief of Staff handle it
@@ -308,9 +345,9 @@ export function useChiefOfStaffAutomation() {
       hasUserResponded: true,
       autoStartCountdown: null,
     }));
-    
+
     // Navigate to Evening Review with delegate flag
-    setLocation('/evening-review?delegate=true');
+    setLocation("/evening-review?delegate=true");
   }, [setLocation]);
 
   // Reset for new day
@@ -331,7 +368,7 @@ export function useChiefOfStaffAutomation() {
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
     const secs = seconds % 60;
-    
+
     if (hours > 0) {
       return `${hours}h ${minutes}m`;
     }
@@ -349,25 +386,29 @@ export function useChiefOfStaffAutomation() {
 
     const dayOfWeek = new Date().getDay();
     const todayPattern = timingPatterns.find(p => p.dayOfWeek === dayOfWeek);
-    
+
     if (!todayPattern || todayPattern.sampleCount < 2) {
       return null;
     }
 
     const insights: string[] = [];
-    
+
     if (todayPattern.averageStartTime) {
-      insights.push(`You typically start reviews at ${todayPattern.averageStartTime}`);
+      insights.push(
+        `You typically start reviews at ${todayPattern.averageStartTime}`
+      );
     }
-    
+
     if (todayPattern.averageDuration) {
-      insights.push(`Average review duration: ${todayPattern.averageDuration} minutes`);
+      insights.push(
+        `Average review duration: ${todayPattern.averageDuration} minutes`
+      );
     }
-    
+
     if ((todayPattern.completionRate || 0) > 0.8) {
-      insights.push('You usually complete reviews manually on this day');
+      insights.push("You usually complete reviews manually on this day");
     } else if ((todayPattern.autoProcessRate || 0) > 0.5) {
-      insights.push('You often delegate reviews on this day');
+      insights.push("You often delegate reviews on this day");
     }
 
     return insights.length > 0 ? insights : null;
@@ -380,8 +421,8 @@ export function useChiefOfStaffAutomation() {
     handleDelegateToChief,
     handleAutoStart,
     resetForNewDay,
-    formatCountdown: state.autoStartCountdown 
-      ? formatCountdown(state.autoStartCountdown) 
+    formatCountdown: state.autoStartCountdown
+      ? formatCountdown(state.autoStartCountdown)
       : null,
     reviewContext: state.context,
     smartReviewTime: getSmartReviewTime(),

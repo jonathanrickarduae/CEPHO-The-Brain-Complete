@@ -1,4 +1,4 @@
-import { getDb } from '../../db';
+import { getDb } from "../../db";
 import {
   revenueMetricsSnapshots,
   qualityMetricsSnapshots,
@@ -9,20 +9,22 @@ import {
   RevenueMetricsSnapshot,
   QualityMetricsSnapshot,
   CosLearningMetrics,
-} from '../../../drizzle/schema';
-import { eq, and, desc, gte, lte, between } from 'drizzle-orm';
+} from "../../../drizzle/schema";
+import { eq, and, desc, gte, lte, between } from "drizzle-orm";
 
 /**
  * Analytics Repository
- * 
+ *
  * Handles all database operations for analytics and metrics.
  */
 export class AnalyticsRepository {
   // ===== Revenue Metrics =====
 
-  async createRevenueSnapshot(data: InsertRevenueMetricsSnapshot): Promise<RevenueMetricsSnapshot> {
+  async createRevenueSnapshot(
+    data: InsertRevenueMetricsSnapshot
+  ): Promise<RevenueMetricsSnapshot> {
     const db = await getDb();
-    if (!db) throw new Error('Database not available');
+    if (!db) throw new Error("Database not available");
 
     const [snapshot] = await db
       .insert(revenueMetricsSnapshots)
@@ -32,7 +34,9 @@ export class AnalyticsRepository {
     return snapshot;
   }
 
-  async findLatestRevenueSnapshot(userId: number): Promise<RevenueMetricsSnapshot | null> {
+  async findLatestRevenueSnapshot(
+    userId: number
+  ): Promise<RevenueMetricsSnapshot | null> {
     const db = await getDb();
     if (!db) return null;
 
@@ -68,9 +72,11 @@ export class AnalyticsRepository {
 
   // ===== Quality Metrics =====
 
-  async createQualitySnapshot(data: InsertQualityMetricsSnapshot): Promise<QualityMetricsSnapshot> {
+  async createQualitySnapshot(
+    data: InsertQualityMetricsSnapshot
+  ): Promise<QualityMetricsSnapshot> {
     const db = await getDb();
-    if (!db) throw new Error('Database not available');
+    if (!db) throw new Error("Database not available");
 
     const [snapshot] = await db
       .insert(qualityMetricsSnapshots)
@@ -80,7 +86,9 @@ export class AnalyticsRepository {
     return snapshot;
   }
 
-  async findLatestQualitySnapshot(userId: number): Promise<QualityMetricsSnapshot | null> {
+  async findLatestQualitySnapshot(
+    userId: number
+  ): Promise<QualityMetricsSnapshot | null> {
     const db = await getDb();
     if (!db) return null;
 
@@ -116,9 +124,11 @@ export class AnalyticsRepository {
 
   // ===== Learning Metrics =====
 
-  async createLearningMetrics(data: InsertCosLearningMetrics): Promise<CosLearningMetrics> {
+  async createLearningMetrics(
+    data: InsertCosLearningMetrics
+  ): Promise<CosLearningMetrics> {
     const db = await getDb();
-    if (!db) throw new Error('Database not available');
+    if (!db) throw new Error("Database not available");
 
     const [metrics] = await db
       .insert(cosLearningMetrics)
@@ -128,7 +138,9 @@ export class AnalyticsRepository {
     return metrics;
   }
 
-  async findLatestLearningMetrics(userId: number): Promise<CosLearningMetrics | null> {
+  async findLatestLearningMetrics(
+    userId: number
+  ): Promise<CosLearningMetrics | null> {
     const db = await getDb();
     if (!db) return null;
 

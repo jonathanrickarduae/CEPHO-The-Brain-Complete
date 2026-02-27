@@ -1,6 +1,6 @@
-import { useEffect } from 'react';
-import { useLocation } from 'wouter';
-import BrainLayout from '@/components/ai-agents/BrainLayout';
+import { useEffect } from "react";
+import { useLocation } from "wouter";
+import BrainLayout from "@/components/ai-agents/BrainLayout";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;

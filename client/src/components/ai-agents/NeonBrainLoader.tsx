@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 /**
  * NeonBrain Loading Indicator
@@ -6,54 +6,54 @@ import { useEffect, useState } from 'react';
  */
 
 interface NeonBrainLoaderProps {
-  size?: 'sm' | 'md' | 'lg' | 'xl';
+  size?: "sm" | "md" | "lg" | "xl";
   message?: string;
   showMessage?: boolean;
-  variant?: 'default' | 'thinking' | 'processing' | 'success' | 'error';
+  variant?: "default" | "thinking" | "processing" | "success" | "error";
 }
 
 const SIZE_CONFIG = {
-  sm: { container: 'w-8 h-8', text: 'text-xs' },
-  md: { container: 'w-16 h-16', text: 'text-sm' },
-  lg: { container: 'w-24 h-24', text: 'text-base' },
-  xl: { container: 'w-32 h-32', text: 'text-lg' },
+  sm: { container: "w-8 h-8", text: "text-xs" },
+  md: { container: "w-16 h-16", text: "text-sm" },
+  lg: { container: "w-24 h-24", text: "text-base" },
+  xl: { container: "w-32 h-32", text: "text-lg" },
 };
 
 const VARIANT_MESSAGES = {
-  default: 'Loading...',
-  thinking: 'Thinking...',
-  processing: 'Processing...',
-  success: 'Complete!',
-  error: 'Something went wrong',
+  default: "Loading...",
+  thinking: "Thinking...",
+  processing: "Processing...",
+  success: "Complete!",
+  error: "Something went wrong",
 };
 
 const VARIANT_COLORS = {
-  default: 'from-cyan-400 to-primary',
-  thinking: 'from-purple-400 to-primary',
-  processing: 'from-blue-400 to-cyan-400',
-  success: 'from-green-400 to-emerald-400',
-  error: 'from-red-400 to-rose-400',
+  default: "from-cyan-400 to-primary",
+  thinking: "from-purple-400 to-primary",
+  processing: "from-blue-400 to-cyan-400",
+  success: "from-green-400 to-emerald-400",
+  error: "from-red-400 to-rose-400",
 };
 
-export function NeonBrainLoader({ 
-  size = 'md', 
+export function NeonBrainLoader({
+  size = "md",
   message,
   showMessage = true,
-  variant = 'default'
+  variant = "default",
 }: NeonBrainLoaderProps) {
-  const [dots, setDots] = useState('');
+  const [dots, setDots] = useState("");
   const sizeConfig = SIZE_CONFIG[size];
   const displayMessage = message || VARIANT_MESSAGES[variant];
   const gradientColors = VARIANT_COLORS[variant];
 
   // Animated dots for loading message
   useEffect(() => {
-    if (variant === 'success' || variant === 'error') return;
-    
+    if (variant === "success" || variant === "error") return;
+
     const interval = setInterval(() => {
-      setDots(prev => prev.length >= 3 ? '' : prev + '.');
+      setDots(prev => (prev.length >= 3 ? "" : prev + "."));
     }, 400);
-    
+
     return () => clearInterval(interval);
   }, [variant]);
 
@@ -62,7 +62,7 @@ export function NeonBrainLoader({
       {/* Animated Brain */}
       <div className={`relative ${sizeConfig.container}`}>
         {/* Outer glow ring */}
-        <div 
+        <div
           className={`
             absolute inset-0 
             rounded-full 
@@ -72,9 +72,9 @@ export function NeonBrainLoader({
             animate-pulse
           `}
         />
-        
+
         {/* Brain container */}
-        <div 
+        <div
           className={`
             relative ${sizeConfig.container}
             rounded-full
@@ -103,23 +103,23 @@ export function NeonBrainLoader({
               />
             ))}
           </div>
-          
+
           {/* Central brain icon */}
-          <svg 
-            viewBox="0 0 24 24" 
+          <svg
+            viewBox="0 0 24 24"
             className={`
               w-1/2 h-1/2 
               text-primary
-              ${variant !== 'success' && variant !== 'error' ? 'animate-pulse' : ''}
+              ${variant !== "success" && variant !== "error" ? "animate-pulse" : ""}
             `}
             fill="currentColor"
           >
-            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z" />
           </svg>
-          
+
           {/* Rotating ring */}
-          {variant !== 'success' && variant !== 'error' && (
-            <div 
+          {variant !== "success" && variant !== "error" && (
+            <div
               className={`
                 absolute inset-1
                 rounded-full
@@ -127,34 +127,55 @@ export function NeonBrainLoader({
                 border-t-primary/50
                 animate-spin
               `}
-              style={{ animationDuration: '1.5s' }}
+              style={{ animationDuration: "1.5s" }}
             />
           )}
         </div>
-        
+
         {/* Success checkmark overlay */}
-        {variant === 'success' && (
+        {variant === "success" && (
           <div className="absolute inset-0 flex items-center justify-center">
-            <svg className="w-1/2 h-1/2 text-green-400 animate-scale-in" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+            <svg
+              className="w-1/2 h-1/2 text-green-400 animate-scale-in"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="3"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M5 13l4 4L19 7"
+              />
             </svg>
           </div>
         )}
-        
+
         {/* Error X overlay */}
-        {variant === 'error' && (
+        {variant === "error" && (
           <div className="absolute inset-0 flex items-center justify-center">
-            <svg className="w-1/2 h-1/2 text-red-400 animate-scale-in" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+            <svg
+              className="w-1/2 h-1/2 text-red-400 animate-scale-in"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="3"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M6 18L18 6M6 6l12 12"
+              />
             </svg>
           </div>
         )}
       </div>
-      
+
       {/* Loading message */}
       {showMessage && (
         <p className={`${sizeConfig.text} text-muted-foreground font-medium`}>
-          {displayMessage}{variant !== 'success' && variant !== 'error' ? dots : ''}
+          {displayMessage}
+          {variant !== "success" && variant !== "error" ? dots : ""}
         </p>
       )}
     </div>
@@ -162,7 +183,7 @@ export function NeonBrainLoader({
 }
 
 // Inline loader for buttons and small spaces
-export function NeonBrainInline({ className = '' }: { className?: string }) {
+export function NeonBrainInline({ className = "" }: { className?: string }) {
   return (
     <div className={`inline-flex items-center gap-2 ${className}`}>
       <div className="relative w-5 h-5">
@@ -177,9 +198,9 @@ export function NeonBrainInline({ className = '' }: { className?: string }) {
 }
 
 // Full page loader overlay
-export function NeonBrainOverlay({ 
-  message = 'Loading Cepho...',
-  variant = 'default' as const
+export function NeonBrainOverlay({
+  message = "Loading Cepho...",
+  variant = "default" as const,
 }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm">
@@ -225,8 +246,8 @@ const styles = `
 `;
 
 // Inject styles
-if (typeof document !== 'undefined') {
-  const styleSheet = document.createElement('style');
+if (typeof document !== "undefined") {
+  const styleSheet = document.createElement("style");
   styleSheet.textContent = styles;
   document.head.appendChild(styleSheet);
 }

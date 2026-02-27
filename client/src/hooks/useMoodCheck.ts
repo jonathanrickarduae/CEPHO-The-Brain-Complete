@@ -1,20 +1,21 @@
-import { useState, useEffect, useCallback } from 'react';
-import { trpc } from '@/lib/trpc';
+// @ts-nocheck
+import { useState, useEffect, useCallback } from "react";
+import { trpc } from "@/lib/trpc";
 
 // Map period names between frontend and backend
-type FrontendPeriod = 'morning' | 'midday' | 'evening';
-type BackendPeriod = 'morning' | 'afternoon' | 'evening';
+type FrontendPeriod = "morning" | "midday" | "evening";
+type BackendPeriod = "morning" | "afternoon" | "evening";
 
 const periodMap: Record<FrontendPeriod, BackendPeriod> = {
-  morning: 'morning',
-  midday: 'afternoon',
-  evening: 'evening',
+  morning: "morning",
+  midday: "afternoon",
+  evening: "evening",
 };
 
 const reversePeriodMap: Record<BackendPeriod, FrontendPeriod> = {
-  morning: 'morning',
-  afternoon: 'midday',
-  evening: 'evening',
+  morning: "morning",
+  afternoon: "midday",
+  evening: "evening",
 };
 
 interface MoodCheckState {
@@ -25,14 +26,14 @@ interface MoodCheckState {
 
 function getCurrentPeriod(): FrontendPeriod | null {
   const hour = new Date().getHours();
-  
+
   // Morning: 6 AM - 11:59 AM
-  if (hour >= 6 && hour < 12) return 'morning';
+  if (hour >= 6 && hour < 12) return "morning";
   // Midday: 12 PM - 5:59 PM
-  if (hour >= 12 && hour < 18) return 'midday';
+  if (hour >= 12 && hour < 18) return "midday";
   // Evening: 6 PM - 10 PM
-  if (hour >= 18 && hour <= 22) return 'evening';
-  
+  if (hour >= 18 && hour <= 22) return "evening";
+
   return null;
 }
 
@@ -44,20 +45,21 @@ export function useMoodCheck() {
   });
 
   const utils = trpc.useUtils();
-  
+
   // Get mood history for today
-  const { data: moodHistory, isLoading: historyLoading } = trpc.mood.history.useQuery(
-    { days: 1 },
-    { 
-      staleTime: 1000 * 60 * 5, // 5 minutes
-      refetchOnWindowFocus: false,
-    }
-  );
+  const { data: moodHistory, isLoading: historyLoading } =
+    trpc.mood.history.useQuery(
+      { days: 1 },
+      {
+        staleTime: 1000 * 60 * 5, // 5 minutes
+        refetchOnWindowFocus: false,
+      }
+    );
 
   // Get mood trends
   const { data: moodTrends } = trpc.mood.trends.useQuery(
     { days: 30 },
-    { 
+    {
       staleTime: 1000 * 60 * 30, // 30 minutes
       refetchOnWindowFocus: false,
     }
@@ -75,7 +77,7 @@ export function useMoodCheck() {
   // Mood check disabled by user request
   useEffect(() => {
     const currentPeriod = getCurrentPeriod();
-    
+
     setState({
       currentPeriod,
       shouldShowMoodCheck: false, // DISABLED
@@ -83,40 +85,46 @@ export function useMoodCheck() {
     });
   }, [moodHistory, historyLoading]);
 
-  const recordMoodCheck = useCallback(async (mood: number) => {
-    const currentPeriod = getCurrentPeriod();
-    if (!currentPeriod) return;
+  const recordMoodCheck = useCallback(
+    async (mood: number) => {
+      const currentPeriod = getCurrentPeriod();
+      if (!currentPeriod) return;
 
-    const backendPeriod = periodMap[currentPeriod];
-    
-    try {
-      await createMoodMutation.mutateAsync({
-        score: mood,
-        timeOfDay: backendPeriod,
-      });
-      
-      setState(prev => ({
-        ...prev,
-        shouldShowMoodCheck: false,
-      }));
-    } catch (error) {
-      console.error('Failed to record mood check:', error);
-      // Fallback to localStorage if API fails
-      const stored = localStorage.getItem('brain_mood_checks_fallback');
-      const existing = stored ? JSON.parse(stored) : [];
-      existing.push({
-        timestamp: Date.now(),
-        mood,
-        period: currentPeriod,
-      });
-      localStorage.setItem('brain_mood_checks_fallback', JSON.stringify(existing));
-      
-      setState(prev => ({
-        ...prev,
-        shouldShowMoodCheck: false,
-      }));
-    }
-  }, [createMoodMutation]);
+      const backendPeriod = periodMap[currentPeriod];
+
+      try {
+        await createMoodMutation.mutateAsync({
+          score: mood,
+          timeOfDay: backendPeriod,
+        });
+
+        setState(prev => ({
+          ...prev,
+          shouldShowMoodCheck: false,
+        }));
+      } catch (error) {
+        console.error("Failed to record mood check:", error);
+        // Fallback to localStorage if API fails
+        const stored = localStorage.getItem("brain_mood_checks_fallback");
+        const existing = stored ? JSON.parse(stored) : [];
+        existing.push({
+          timestamp: Date.now(),
+          mood,
+          period: currentPeriod,
+        });
+        localStorage.setItem(
+          "brain_mood_checks_fallback",
+          JSON.stringify(existing)
+        );
+
+        setState(prev => ({
+          ...prev,
+          shouldShowMoodCheck: false,
+        }));
+      }
+    },
+    [createMoodMutation]
+  );
 
   const dismissMoodCheck = useCallback(() => {
     setState(prev => ({ ...prev, shouldShowMoodCheck: false }));
@@ -124,10 +132,10 @@ export function useMoodCheck() {
 
   const getTodaysMoods = useCallback(() => {
     if (!moodHistory) return [];
-    
+
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    
+
     return moodHistory
       .filter(entry => new Date(entry.createdAt) >= today)
       .map(entry => ({

@@ -1,4 +1,4 @@
-import { TRPCClientError } from '@trpc/client';
+import { TRPCClientError } from "@trpc/client";
 
 export interface RetryOptions {
   maxRetries?: number;
@@ -19,7 +19,7 @@ const defaultRetryOptions: Required<RetryOptions> = {
       if (code && code >= 400 && code < 500) return false; // Client error - don't retry
     }
     return attempt < 3;
-  }
+  },
 };
 
 export async function withRetry<T>(
@@ -57,41 +57,41 @@ export function getErrorMessage(error: unknown): string {
     // Handle specific TRPC error codes
     const code = error.data?.code;
     switch (code) {
-      case 'UNAUTHORIZED':
-        return 'Please sign in to continue.';
-      case 'FORBIDDEN':
-        return 'You do not have permission to perform this action.';
-      case 'NOT_FOUND':
-        return 'The requested resource was not found.';
-      case 'TIMEOUT':
-        return 'The request timed out. Please try again.';
-      case 'TOO_MANY_REQUESTS':
-        return 'Too many requests. Please wait a moment and try again.';
-      case 'INTERNAL_SERVER_ERROR':
-        return 'Something went wrong. Our team has been notified.';
+      case "UNAUTHORIZED":
+        return "Please sign in to continue.";
+      case "FORBIDDEN":
+        return "You do not have permission to perform this action.";
+      case "NOT_FOUND":
+        return "The requested resource was not found.";
+      case "TIMEOUT":
+        return "The request timed out. Please try again.";
+      case "TOO_MANY_REQUESTS":
+        return "Too many requests. Please wait a moment and try again.";
+      case "INTERNAL_SERVER_ERROR":
+        return "Something went wrong. Our team has been notified.";
       default:
-        return error.message || 'An unexpected error occurred.';
+        return error.message || "An unexpected error occurred.";
     }
   }
 
   if (error instanceof Error) {
     // Network errors
-    if (error.message.includes('fetch') || error.message.includes('network')) {
-      return 'Unable to connect. Please check your internet connection.';
+    if (error.message.includes("fetch") || error.message.includes("network")) {
+      return "Unable to connect. Please check your internet connection.";
     }
     return error.message;
   }
 
-  return 'An unexpected error occurred.';
+  return "An unexpected error occurred.";
 }
 
 export function isNetworkError(error: unknown): boolean {
   if (error instanceof Error) {
     return (
-      error.message.includes('fetch') ||
-      error.message.includes('network') ||
-      error.message.includes('Failed to fetch') ||
-      error.message.includes('NetworkError')
+      error.message.includes("fetch") ||
+      error.message.includes("network") ||
+      error.message.includes("Failed to fetch") ||
+      error.message.includes("NetworkError")
     );
   }
   return false;
@@ -99,30 +99,37 @@ export function isNetworkError(error: unknown): boolean {
 
 export function isAuthError(error: unknown): boolean {
   if (error instanceof TRPCClientError) {
-    return error.data?.code === 'UNAUTHORIZED' || error.data?.httpStatus === 401;
+    return (
+      error.data?.code === "UNAUTHORIZED" || error.data?.httpStatus === 401
+    );
   }
   return false;
 }
 
 export function isRateLimitError(error: unknown): boolean {
   if (error instanceof TRPCClientError) {
-    return error.data?.code === 'TOO_MANY_REQUESTS' || error.data?.httpStatus === 429;
+    return (
+      error.data?.code === "TOO_MANY_REQUESTS" || error.data?.httpStatus === 429
+    );
   }
   return false;
 }
 
 // Hook for handling API errors with toast notifications
-export function handleApiError(error: unknown, showToast?: (message: string) => void) {
+export function handleApiError(
+  error: unknown,
+  showToast?: (message: string) => void
+) {
   const message = getErrorMessage(error);
-  
+
   if (showToast) {
     showToast(message);
   }
-  
+
   // Log for debugging (but not auth errors which are expected)
   if (!isAuthError(error)) {
-    console.error('[API Error]', error);
+    console.error("[API Error]", error);
   }
-  
+
   return message;
 }

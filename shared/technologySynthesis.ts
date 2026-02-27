@@ -1,9 +1,9 @@
 /**
  * Technology Synthesis Framework
- * 
+ *
  * Core USP: The art of business is pulling 2-5 existing things together
  * that no one else is looking at to solve a problem.
- * 
+ *
  * Benefits over pure R&D:
  * - Lower cost (using existing tech)
  * - Faster to market (not building from scratch)
@@ -47,16 +47,16 @@ export type TechnologyCategory =
   | "data";
 
 export type MaturityLevel =
-  | "emerging"      // Early stage, high risk
-  | "developing"    // Growing adoption
-  | "mature"        // Widely adopted
-  | "declining";    // Being replaced
+  | "emerging" // Early stage, high risk
+  | "developing" // Growing adoption
+  | "mature" // Widely adopted
+  | "declining"; // Being replaced
 
 export type CostRange =
-  | "low"           // < $10k
-  | "medium"        // $10k - $100k
-  | "high"          // $100k - $1M
-  | "very_high";    // > $1M
+  | "low" // < $10k
+  | "medium" // $10k - $100k
+  | "high" // $100k - $1M
+  | "very_high"; // > $1M
 
 export interface Problem {
   id: string;
@@ -74,27 +74,27 @@ export interface SynthesisOpportunity {
   id: string;
   title: string;
   description: string;
-  
+
   // The combination
   technologies: Technology[];
   problem: Problem;
-  
+
   // How they combine
   synthesisApproach: string;
   noveltyFactor: string; // What makes this combination unique
-  
+
   // Feasibility
   technicalFeasibility: number; // 0-100
   marketFeasibility: number; // 0-100
   financialFeasibility: number; // 0-100
   overallScore: number; // 0-100
-  
+
   // Implementation
   estimatedCost: CostRange;
   timeToMarket: string;
   keyRisks: string[];
   requiredPartnerships: string[];
-  
+
   // Validation
   smeValidation?: SMEValidation;
   cosValidation?: COSValidation;
@@ -131,13 +131,13 @@ export interface COSValidation {
 export interface TechnologyScanner {
   // Scan for technologies in a category
   scanCategory(category: TechnologyCategory): Promise<Technology[]>;
-  
+
   // Search for technologies matching criteria
   searchTechnologies(query: string): Promise<Technology[]>;
-  
+
   // Get emerging technologies
   getEmergingTechnologies(): Promise<Technology[]>;
-  
+
   // Track technology trends
   getTechnologyTrends(): Promise<TechnologyTrend[]>;
 }
@@ -157,13 +157,13 @@ export interface TechnologyTrend {
 export interface ProblemMapper {
   // Identify problems in a market
   mapProblems(market: string): Promise<Problem[]>;
-  
+
   // Find unsolved problems
   findUnsolvedProblems(): Promise<Problem[]>;
-  
+
   // Analyze problem gaps
   analyzeGaps(problem: Problem): Promise<string[]>;
-  
+
   // Prioritize problems by opportunity
   prioritizeProblems(problems: Problem[]): Promise<Problem[]>;
 }
@@ -175,19 +175,19 @@ export interface ProblemMapper {
 export interface SynthesisEngine {
   // Find potential combinations for a problem
   findCombinations(problem: Problem): Promise<SynthesisOpportunity[]>;
-  
+
   // Evaluate a specific combination
   evaluateCombination(
     technologies: Technology[],
     problem: Problem
   ): Promise<SynthesisOpportunity>;
-  
+
   // Generate novel combinations
   generateNovelCombinations(
     technologies: Technology[],
     count: number
   ): Promise<SynthesisOpportunity[]>;
-  
+
   // Score a synthesis opportunity
   scoreOpportunity(opportunity: SynthesisOpportunity): Promise<number>;
 }
@@ -199,13 +199,13 @@ export interface SynthesisEngine {
 export interface GapIdentifier {
   // Find technology gaps
   findTechnologyGaps(): Promise<TechnologyGap[]>;
-  
+
   // Find market gaps
   findMarketGaps(): Promise<MarketGap[]>;
-  
+
   // Find combination gaps (unexplored combinations)
   findCombinationGaps(): Promise<CombinationGap[]>;
-  
+
   // Analyze competitive blind spots
   analyzeBlindSpots(market: string): Promise<string[]>;
 }
@@ -239,8 +239,9 @@ export interface CombinationGap {
 export const DEMENTIA_GLASSES_EXAMPLE: SynthesisOpportunity = {
   id: "dementia-glasses-001",
   title: "Smart Safety Glasses for Dementia Care",
-  description: "AR glasses that help dementia patients stay safe and remind them of names and faces",
-  
+  description:
+    "AR glasses that help dementia patients stay safe and remind them of names and faces",
+
   technologies: [
     {
       id: "ar-glasses",
@@ -261,8 +262,16 @@ export const DEMENTIA_GLASSES_EXAMPLE: SynthesisOpportunity = {
       category: "ai_ml",
       maturityLevel: "mature",
       description: "AI-powered face detection and recognition",
-      capabilities: ["Face detection", "Identity matching", "Emotion detection"],
-      limitations: ["Privacy concerns", "Accuracy varies", "Lighting dependent"],
+      capabilities: [
+        "Face detection",
+        "Identity matching",
+        "Emotion detection",
+      ],
+      limitations: [
+        "Privacy concerns",
+        "Accuracy varies",
+        "Lighting dependent",
+      ],
       costRange: "low",
       timeToImplement: "1-3 months",
       providers: ["AWS Rekognition", "Azure Face", "Google Cloud Vision"],
@@ -287,7 +296,11 @@ export const DEMENTIA_GLASSES_EXAMPLE: SynthesisOpportunity = {
       category: "ai_ml",
       maturityLevel: "mature",
       description: "Text-to-speech and voice interaction",
-      capabilities: ["Speech synthesis", "Voice commands", "Contextual responses"],
+      capabilities: [
+        "Speech synthesis",
+        "Voice commands",
+        "Contextual responses",
+      ],
       limitations: ["Accent handling", "Noise environments"],
       costRange: "low",
       timeToImplement: "1-2 months",
@@ -295,11 +308,12 @@ export const DEMENTIA_GLASSES_EXAMPLE: SynthesisOpportunity = {
       openSource: true,
     },
   ],
-  
+
   problem: {
     id: "dementia-safety",
     title: "Dementia Patient Safety and Recognition",
-    description: "Dementia patients struggle to recognize family members and can become lost or disoriented",
+    description:
+      "Dementia patients struggle to recognize family members and can become lost or disoriented",
     targetMarket: "Healthcare / Elderly Care",
     painPoints: [
       "Patients forget names and faces of loved ones",
@@ -320,26 +334,28 @@ export const DEMENTIA_GLASSES_EXAMPLE: SynthesisOpportunity = {
     marketSize: "$50B+ elderly care market",
     urgency: "high",
   },
-  
-  synthesisApproach: "Combine AR glasses with facial recognition to display names when the patient looks at someone. Add GPS for safety tracking and voice prompts for gentle reminders. Package in a normal-looking glasses form factor to reduce stigma.",
-  
-  noveltyFactor: "No one has combined these four mature technologies specifically for dementia care in a glasses form factor. Current solutions are fragmented (separate tracker, separate photos, etc.)",
-  
+
+  synthesisApproach:
+    "Combine AR glasses with facial recognition to display names when the patient looks at someone. Add GPS for safety tracking and voice prompts for gentle reminders. Package in a normal-looking glasses form factor to reduce stigma.",
+
+  noveltyFactor:
+    "No one has combined these four mature technologies specifically for dementia care in a glasses form factor. Current solutions are fragmented (separate tracker, separate photos, etc.)",
+
   technicalFeasibility: 75,
   marketFeasibility: 85,
   financialFeasibility: 70,
   overallScore: 77,
-  
+
   estimatedCost: "medium",
   timeToMarket: "12-18 months",
-  
+
   keyRisks: [
     "User acceptance (will patients wear them?)",
     "Battery life for all-day use",
     "Accuracy of facial recognition",
     "Regulatory approval for medical device",
   ],
-  
+
   requiredPartnerships: [
     "AR glasses manufacturer",
     "Healthcare/elderly care providers",

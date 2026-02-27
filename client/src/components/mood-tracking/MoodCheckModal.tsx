@@ -1,39 +1,44 @@
-import { useState } from 'react';
-import { X, Sun, CloudSun, Moon } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
+import { useState } from "react";
+import { X, Sun, CloudSun, Moon } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 interface MoodCheckModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSubmit: (mood: number) => void;
-  period: 'morning' | 'midday' | 'evening' | null;
+  period: "morning" | "midday" | "evening" | null;
 }
 
 const PERIOD_CONFIG = {
   morning: {
     icon: Sun,
-    greeting: 'Good Morning',
-    question: 'How are you feeling as you start your day?',
-    color: 'text-amber-400',
+    greeting: "Good Morning",
+    question: "How are you feeling as you start your day?",
+    color: "text-amber-400",
   },
   midday: {
     icon: CloudSun,
-    greeting: 'Good Afternoon',
-    question: 'How is your day going so far?',
-    color: 'text-cyan-400',
+    greeting: "Good Afternoon",
+    question: "How is your day going so far?",
+    color: "text-cyan-400",
   },
   evening: {
     icon: Moon,
-    greeting: 'Good Evening',
-    question: 'How are you feeling as the day winds down?',
-    color: 'text-purple-400',
+    greeting: "Good Evening",
+    question: "How are you feeling as the day winds down?",
+    color: "text-purple-400",
   },
 };
 
 // No labels - just the number
 
-export function MoodCheckModal({ isOpen, onClose, onSubmit, period }: MoodCheckModalProps) {
+export function MoodCheckModal({
+  isOpen,
+  onClose,
+  onSubmit,
+  period,
+}: MoodCheckModalProps) {
   const [selectedMood, setSelectedMood] = useState<number>(50); // 0-100 scale
 
   if (!isOpen || !period) return null;
@@ -71,9 +76,16 @@ export function MoodCheckModal({ isOpen, onClose, onSubmit, period }: MoodCheckM
 
           {/* Header */}
           <div className="p-6 pb-4 text-center">
-            <div className={cn('inline-flex items-center gap-2 mb-3', config.color)}>
+            <div
+              className={cn(
+                "inline-flex items-center gap-2 mb-3",
+                config.color
+              )}
+            >
               <PeriodIcon className="w-6 h-6" />
-              <span className="text-lg font-display font-bold">{config.greeting}</span>
+              <span className="text-lg font-display font-bold">
+                {config.greeting}
+              </span>
             </div>
             <h2 className="text-xl font-bold text-foreground mb-2">
               How are you today?
@@ -94,7 +106,7 @@ export function MoodCheckModal({ isOpen, onClose, onSubmit, period }: MoodCheckM
               {/* Background track */}
               <div className="h-2 rounded-full bg-secondary/50 relative overflow-hidden">
                 {/* Gradient fill */}
-                <div 
+                <div
                   className="absolute inset-y-0 left-0 rounded-full transition-all duration-150"
                   style={{
                     width: `${gradientPosition}%`,
@@ -116,15 +128,15 @@ export function MoodCheckModal({ isOpen, onClose, onSubmit, period }: MoodCheckM
                 max="100"
                 step="5"
                 value={selectedMood}
-                onChange={(e) => setSelectedMood(parseInt(e.target.value))}
+                onChange={e => setSelectedMood(parseInt(e.target.value))}
                 className="absolute inset-0 w-full h-2 opacity-0 cursor-pointer"
                 style={{ margin: 0 }}
               />
 
               {/* Custom Thumb */}
-              <div 
+              <div
                 className="absolute top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-white shadow-lg border-2 border-primary pointer-events-none transition-all duration-150"
-                style={{ 
+                style={{
                   left: `calc(${gradientPosition}% - 12px)`,
                 }}
               />
@@ -140,11 +152,7 @@ export function MoodCheckModal({ isOpen, onClose, onSubmit, period }: MoodCheckM
 
           {/* Actions */}
           <div className="p-6 pt-2 flex gap-3">
-            <Button
-              variant="ghost"
-              onClick={onClose}
-              className="flex-1"
-            >
+            <Button variant="ghost" onClick={onClose} className="flex-1">
               Skip
             </Button>
             <Button

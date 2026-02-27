@@ -1,6 +1,6 @@
-import { useState, useEffect, useCallback } from 'react';
-import { Flame, Calendar, Trophy, Star, Zap } from 'lucide-react';
-import { useCelebration } from '@/components/shared/CelebrationAnimations';
+import { useState, useEffect, useCallback } from "react";
+import { Flame, Calendar, Trophy, Star, Zap } from "lucide-react";
+import { useCelebration } from "@/components/shared/CelebrationAnimations";
 
 interface DailyStreakProps {
   currentStreak: number;
@@ -20,16 +20,20 @@ export function DailyStreak({
   const [isAnimating, setIsAnimating] = useState(false);
 
   // Check if streak is at risk (last active was yesterday)
-  const isAtRisk = lastActiveDate && !todayCompleted && (() => {
-    const today = new Date();
-    const yesterday = new Date(today);
-    yesterday.setDate(yesterday.getDate() - 1);
-    return lastActiveDate.toDateString() === yesterday.toDateString();
-  })();
+  const isAtRisk =
+    lastActiveDate &&
+    !todayCompleted &&
+    (() => {
+      const today = new Date();
+      const yesterday = new Date(today);
+      yesterday.setDate(yesterday.getDate() - 1);
+      return lastActiveDate.toDateString() === yesterday.toDateString();
+    })();
 
   // Milestone check
   const milestones = [7, 14, 30, 60, 90, 180, 365];
-  const nextMilestone = milestones.find(m => m > currentStreak) || currentStreak + 1;
+  const nextMilestone =
+    milestones.find(m => m > currentStreak) || currentStreak + 1;
   const isAtMilestone = milestones.includes(currentStreak);
 
   useEffect(() => {
@@ -47,21 +51,23 @@ export function DailyStreak({
           <div
             className={`w-12 h-12 rounded-xl flex items-center justify-center ${
               isAtMilestone
-                ? 'bg-gradient-to-br from-yellow-500 to-orange-500'
+                ? "bg-gradient-to-br from-yellow-500 to-orange-500"
                 : currentStreak > 0
-                ? 'bg-gradient-to-br from-orange-500/20 to-red-500/20'
-                : 'bg-gray-700'
-            } ${isAnimating ? 'animate-bounce' : ''}`}
+                  ? "bg-gradient-to-br from-orange-500/20 to-red-500/20"
+                  : "bg-gray-700"
+            } ${isAnimating ? "animate-bounce" : ""}`}
           >
             <Flame
               className={`w-6 h-6 ${
-                currentStreak > 0 ? 'text-orange-400' : 'text-foreground/60'
+                currentStreak > 0 ? "text-orange-400" : "text-foreground/60"
               }`}
             />
           </div>
           <div>
             <div className="flex items-baseline gap-2">
-              <span className="text-3xl font-bold text-foreground">{currentStreak}</span>
+              <span className="text-3xl font-bold text-foreground">
+                {currentStreak}
+              </span>
               <span className="text-sm text-muted-foreground">day streak</span>
             </div>
             {isAtRisk && (
@@ -72,7 +78,7 @@ export function DailyStreak({
             )}
           </div>
         </div>
-        
+
         {todayCompleted && (
           <div className="flex items-center gap-1 px-2 py-1 bg-green-500/20 text-green-400 rounded-full text-xs">
             <Star className="w-3 h-3 fill-green-400" />
@@ -85,7 +91,9 @@ export function DailyStreak({
       <div className="mb-4">
         <div className="flex justify-between text-xs text-muted-foreground mb-1">
           <span>Progress to {nextMilestone} days</span>
-          <span>{currentStreak}/{nextMilestone}</span>
+          <span>
+            {currentStreak}/{nextMilestone}
+          </span>
         </div>
         <div className="h-2 bg-gray-700 rounded-full overflow-hidden">
           <div
@@ -123,21 +131,25 @@ export function DailyStreak({
 // Compact streak badge for header/sidebar
 interface StreakBadgeProps {
   streak: number;
-  size?: 'sm' | 'md' | 'lg';
+  size?: "sm" | "md" | "lg";
   showLabel?: boolean;
 }
 
-export function StreakBadge({ streak, size = 'md', showLabel = true }: StreakBadgeProps) {
+export function StreakBadge({
+  streak,
+  size = "md",
+  showLabel = true,
+}: StreakBadgeProps) {
   const sizeClasses = {
-    sm: 'text-xs px-2 py-0.5',
-    md: 'text-sm px-2.5 py-1',
-    lg: 'text-base px-3 py-1.5',
+    sm: "text-xs px-2 py-0.5",
+    md: "text-sm px-2.5 py-1",
+    lg: "text-base px-3 py-1.5",
   };
 
   const iconSizes = {
-    sm: 'w-3 h-3',
-    md: 'w-4 h-4',
-    lg: 'w-5 h-5',
+    sm: "w-3 h-3",
+    md: "w-4 h-4",
+    lg: "w-5 h-5",
   };
 
   if (streak === 0) return null;
@@ -148,7 +160,9 @@ export function StreakBadge({ streak, size = 'md', showLabel = true }: StreakBad
     >
       <Flame className={iconSizes[size]} />
       <span className="font-bold">{streak}</span>
-      {showLabel && <span className="text-orange-400/70">day{streak !== 1 ? 's' : ''}</span>}
+      {showLabel && (
+        <span className="text-orange-400/70">day{streak !== 1 ? "s" : ""}</span>
+      )}
     </div>
   );
 }
@@ -159,8 +173,8 @@ interface WeeklyActivityProps {
 }
 
 export function WeeklyActivity({ activities }: WeeklyActivityProps) {
-  const days = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
-  
+  const days = ["S", "M", "T", "W", "T", "F", "S"];
+
   // Get last 7 days
   const last7Days = Array.from({ length: 7 }, (_, i) => {
     const date = new Date();
@@ -188,10 +202,10 @@ export function WeeklyActivity({ activities }: WeeklyActivityProps) {
           <div
             className={`w-6 h-6 rounded-md flex items-center justify-center text-xs ${
               isCompleted(date)
-                ? 'bg-green-500 text-white'
+                ? "bg-green-500 text-white"
                 : isToday(date)
-                ? 'bg-primary/20 text-primary border border-primary'
-                : 'bg-gray-700 text-muted-foreground'
+                  ? "bg-primary/20 text-primary border border-primary"
+                  : "bg-gray-700 text-muted-foreground"
             }`}
           >
             {date.getDate()}
@@ -215,20 +229,21 @@ export function useStreak() {
 
   useEffect(() => {
     // Load from localStorage
-    const saved = localStorage.getItem('brain_streak_data');
+    const saved = localStorage.getItem("brain_streak_data");
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
         setStreak({
           ...parsed,
           lastActive: parsed.lastActive ? new Date(parsed.lastActive) : null,
-          activities: parsed.activities?.map((a: any) => ({
-            ...a,
-            date: new Date(a.date),
-          })) || [],
+          activities:
+            parsed.activities?.map((a: any) => ({
+              ...a,
+              date: new Date(a.date),
+            })) || [],
         });
       } catch (e) {
-        console.error('Failed to parse streak data:', e);
+        console.error("Failed to parse streak data:", e);
       }
     }
   }, []);
@@ -239,7 +254,7 @@ export function useStreak() {
     yesterday.setDate(yesterday.getDate() - 1);
 
     let newCurrent = 1;
-    
+
     // Check if continuing streak from yesterday
     if (streak.lastActive?.toDateString() === yesterday.toDateString()) {
       newCurrent = streak.current + 1;
@@ -262,24 +277,24 @@ export function useStreak() {
     };
 
     setStreak(newStreak);
-    localStorage.setItem('brain_streak_data', JSON.stringify(newStreak));
+    localStorage.setItem("brain_streak_data", JSON.stringify(newStreak));
 
     // Trigger celebration only for meaningful milestones (not first day)
     const milestones = [7, 14, 30, 60, 90, 180, 365];
     if (milestones.includes(newCurrent)) {
       const milestoneNames: Record<number, string> = {
-        7: 'Week Warrior',
-        14: 'Fortnight Fighter',
-        30: 'Monthly Master',
-        60: 'Two Month Titan',
-        90: 'Quarter Champion',
-        180: 'Half Year Hero',
-        365: 'Annual Legend',
+        7: "Week Warrior",
+        14: "Fortnight Fighter",
+        30: "Monthly Master",
+        60: "Two Month Titan",
+        90: "Quarter Champion",
+        180: "Half Year Hero",
+        365: "Annual Legend",
       };
       showAchievement({
         title: milestoneNames[newCurrent] || `${newCurrent} Day Streak!`,
         description: `You've maintained a ${newCurrent}-day streak! Keep it up!`,
-        icon: 'streak',
+        icon: "streak",
       });
     }
     // Note: Removed "Streak Started" toast for day 1 - too early in user journey

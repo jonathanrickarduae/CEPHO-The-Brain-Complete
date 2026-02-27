@@ -1,15 +1,15 @@
-import { useState, useEffect } from 'react';
-import { Mic, MicOff, Loader2, AlertCircle } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
-import { useVoiceInput, useVoiceWaveform } from '@/hooks/useVoiceInput';
+import { useState, useEffect } from "react";
+import { Mic, MicOff, Loader2, AlertCircle } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { useVoiceInput, useVoiceWaveform } from "@/hooks/useVoiceInput";
 
 interface VoiceInputButtonProps {
   onTranscript: (transcript: string) => void;
   onListeningChange?: (isListening: boolean) => void;
   className?: string;
-  size?: 'sm' | 'md' | 'lg';
-  variant?: 'default' | 'floating' | 'minimal';
+  size?: "sm" | "md" | "lg";
+  variant?: "default" | "floating" | "minimal";
   showWaveform?: boolean;
   continuous?: boolean;
   placeholder?: string;
@@ -19,11 +19,11 @@ export function VoiceInputButton({
   onTranscript,
   onListeningChange,
   className,
-  size = 'md',
-  variant = 'default',
+  size = "md",
+  variant = "default",
   showWaveform = true,
   continuous = false,
-  placeholder = 'Tap to speak...',
+  placeholder = "Tap to speak...",
 }: VoiceInputButtonProps) {
   const [showError, setShowError] = useState(false);
 
@@ -51,7 +51,8 @@ export function VoiceInputButton({
     },
   });
 
-  const { audioLevel, waveformData, startWaveform, stopWaveform } = useVoiceWaveform();
+  const { audioLevel, waveformData, startWaveform, stopWaveform } =
+    useVoiceWaveform();
 
   // Sync waveform with listening state
   useEffect(() => {
@@ -68,15 +69,15 @@ export function VoiceInputButton({
   }, [isListening, onListeningChange]);
 
   const sizeClasses = {
-    sm: 'h-8 w-8',
-    md: 'h-10 w-10',
-    lg: 'h-14 w-14',
+    sm: "h-8 w-8",
+    md: "h-10 w-10",
+    lg: "h-14 w-14",
   };
 
   const iconSizes = {
-    sm: 'h-4 w-4',
-    md: 'h-5 w-5',
-    lg: 'h-6 w-6',
+    sm: "h-4 w-4",
+    md: "h-5 w-5",
+    lg: "h-6 w-6",
   };
 
   if (!isSupported) {
@@ -84,7 +85,11 @@ export function VoiceInputButton({
       <Button
         variant="ghost"
         size="icon"
-        className={cn(sizeClasses[size], 'opacity-50 cursor-not-allowed', className)}
+        className={cn(
+          sizeClasses[size],
+          "opacity-50 cursor-not-allowed",
+          className
+        )}
         disabled
         title="Voice input not supported in this browser"
       >
@@ -93,9 +98,9 @@ export function VoiceInputButton({
     );
   }
 
-  if (variant === 'floating') {
+  if (variant === "floating") {
     return (
-      <div className={cn('relative', className)}>
+      <div className={cn("relative", className)}>
         {/* Waveform visualization */}
         {isListening && showWaveform && (
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
@@ -118,17 +123,17 @@ export function VoiceInputButton({
         <button
           onClick={toggleListening}
           className={cn(
-            'relative z-10 rounded-full flex items-center justify-center transition-all',
+            "relative z-10 rounded-full flex items-center justify-center transition-all",
             sizeClasses[size],
             isListening
-              ? 'bg-red-500 text-white shadow-lg shadow-red-500/30 scale-110'
-              : 'bg-primary text-primary-foreground shadow-lg shadow-primary/30 hover:scale-105',
-            showError && 'bg-destructive'
+              ? "bg-red-500 text-white shadow-lg shadow-red-500/30 scale-110"
+              : "bg-primary text-primary-foreground shadow-lg shadow-primary/30 hover:scale-105",
+            showError && "bg-destructive"
           )}
         >
           {isListening ? (
             <div className="relative">
-              <Mic className={cn(iconSizes[size], 'animate-pulse')} />
+              <Mic className={cn(iconSizes[size], "animate-pulse")} />
               {/* Pulsing ring */}
               <div className="absolute inset-0 rounded-full bg-white/30 animate-ping" />
             </div>
@@ -156,27 +161,27 @@ export function VoiceInputButton({
     );
   }
 
-  if (variant === 'minimal') {
+  if (variant === "minimal") {
     return (
       <button
         onClick={toggleListening}
         className={cn(
-          'p-2 rounded-lg transition-all',
+          "p-2 rounded-lg transition-all",
           isListening
-            ? 'text-red-500 bg-red-500/10'
-            : 'text-muted-foreground hover:text-foreground hover:bg-secondary/50',
+            ? "text-red-500 bg-red-500/10"
+            : "text-muted-foreground hover:text-foreground hover:bg-secondary/50",
           className
         )}
-        title={isListening ? 'Stop listening' : 'Start voice input'}
+        title={isListening ? "Stop listening" : "Start voice input"}
       >
-        <Mic className={cn(iconSizes[size], isListening && 'animate-pulse')} />
+        <Mic className={cn(iconSizes[size], isListening && "animate-pulse")} />
       </button>
     );
   }
 
   // Default variant
   return (
-    <div className={cn('flex flex-col items-center gap-2', className)}>
+    <div className={cn("flex flex-col items-center gap-2", className)}>
       {/* Waveform */}
       {isListening && showWaveform && (
         <div className="flex items-end justify-center gap-1 h-8">
@@ -195,15 +200,12 @@ export function VoiceInputButton({
       {/* Button */}
       <Button
         onClick={toggleListening}
-        variant={isListening ? 'destructive' : 'default'}
-        size={size === 'lg' ? 'lg' : 'default'}
-        className={cn(
-          'gap-2',
-          isListening && 'animate-pulse'
-        )}
+        variant={isListening ? "destructive" : "default"}
+        size={size === "lg" ? "lg" : "default"}
+        className={cn("gap-2", isListening && "animate-pulse")}
       >
         <Mic className={iconSizes[size]} />
-        {isListening ? 'Listening...' : placeholder}
+        {isListening ? "Listening..." : placeholder}
       </Button>
 
       {/* Error message */}
@@ -219,7 +221,9 @@ export function VoiceInputButton({
         <div className="text-sm text-muted-foreground max-w-xs text-center">
           <span className="text-foreground">{transcript}</span>
           {interimTranscript && (
-            <span className="text-muted-foreground/60">{interimTranscript}</span>
+            <span className="text-muted-foreground/60">
+              {interimTranscript}
+            </span>
           )}
         </div>
       )}
@@ -243,39 +247,41 @@ export function VoiceInputField({
   value,
   onChange,
   onSubmit,
-  placeholder = 'Type or speak...',
+  placeholder = "Type or speak...",
   className,
   disabled,
 }: VoiceInputFieldProps) {
   const [isListening, setIsListening] = useState(false);
 
   const handleTranscript = (transcript: string) => {
-    onChange(value + (value ? ' ' : '') + transcript);
+    onChange(value + (value ? " " : "") + transcript);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       onSubmit?.(value);
     }
   };
 
   return (
-    <div className={cn(
-      'flex items-center gap-2 rounded-xl border border-white/10 bg-secondary/30 px-4 py-2',
-      isListening && 'border-primary/50 bg-primary/5',
-      className
-    )}>
+    <div
+      className={cn(
+        "flex items-center gap-2 rounded-xl border border-white/10 bg-secondary/30 px-4 py-2",
+        isListening && "border-primary/50 bg-primary/5",
+        className
+      )}
+    >
       <input
         type="text"
         value={value}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={e => onChange(e.target.value)}
         onKeyDown={handleKeyDown}
         placeholder={placeholder}
         disabled={disabled || isListening}
         className="flex-1 bg-transparent text-foreground placeholder:text-muted-foreground focus:outline-none"
       />
-      
+
       <VoiceInputButton
         onTranscript={handleTranscript}
         onListeningChange={setIsListening}

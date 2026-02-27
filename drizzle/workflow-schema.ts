@@ -1,4 +1,11 @@
-import { pgTable, serial, text, timestamp, varchar, jsonb } from "drizzle-orm/pg-core";
+import {
+  pgTable,
+  serial,
+  text,
+  timestamp,
+  varchar,
+  jsonb,
+} from "drizzle-orm/pg-core";
 
 /**
  * Workflow instances - tracks active and completed workflows
@@ -52,5 +59,7 @@ export const cephoWorkflowValidations = pgTable("cepho_workflow_validations", {
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 
-export type CephoWorkflowValidation = typeof cephoWorkflowValidations.$inferSelect;
-export type InsertCephoWorkflowValidation = typeof cephoWorkflowValidations.$inferInsert;
+export type CephoWorkflowValidation =
+  typeof cephoWorkflowValidations.$inferSelect;
+export type InsertCephoWorkflowValidation =
+  typeof cephoWorkflowValidations.$inferInsert;

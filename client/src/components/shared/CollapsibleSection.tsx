@@ -1,5 +1,5 @@
-import { useState, ReactNode, useRef, useEffect } from 'react';
-import { ChevronDown, ChevronRight } from 'lucide-react';
+import { useState, ReactNode, useRef, useEffect } from "react";
+import { ChevronDown, ChevronRight } from "lucide-react";
 
 interface CollapsibleSectionProps {
   title: string;
@@ -19,13 +19,15 @@ export function CollapsibleSection({
   defaultOpen = true,
   icon,
   badge,
-  className = '',
-  headerClassName = '',
-  contentClassName = '',
+  className = "",
+  headerClassName = "",
+  contentClassName = "",
   onToggle,
 }: CollapsibleSectionProps) {
   const [isOpen, setIsOpen] = useState(defaultOpen);
-  const [height, setHeight] = useState<number | 'auto'>(defaultOpen ? 'auto' : 0);
+  const [height, setHeight] = useState<number | "auto">(
+    defaultOpen ? "auto" : 0
+  );
   const contentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -34,7 +36,7 @@ export function CollapsibleSection({
         const contentHeight = contentRef.current.scrollHeight;
         setHeight(contentHeight);
         // After animation, set to auto for dynamic content
-        const timer = setTimeout(() => setHeight('auto'), 300);
+        const timer = setTimeout(() => setHeight("auto"), 300);
         return () => clearTimeout(timer);
       } else {
         // First set to actual height, then animate to 0
@@ -53,7 +55,9 @@ export function CollapsibleSection({
   };
 
   return (
-    <div className={`border border-border rounded-xl overflow-hidden ${className}`}>
+    <div
+      className={`border border-border rounded-xl overflow-hidden ${className}`}
+    >
       <button
         onClick={handleToggle}
         className={`w-full flex items-center justify-between p-4 bg-card hover:bg-card/80 transition-colors ${headerClassName}`}
@@ -69,7 +73,7 @@ export function CollapsibleSection({
         </div>
         <ChevronDown
           className={`w-5 h-5 text-muted-foreground transition-transform duration-300 ${
-            isOpen ? 'rotate-180' : ''
+            isOpen ? "rotate-180" : ""
           }`}
         />
       </button>
@@ -99,19 +103,23 @@ interface AccordionProps {
   className?: string;
 }
 
-export function Accordion({ sections, defaultOpenId, className = '' }: AccordionProps) {
+export function Accordion({
+  sections,
+  defaultOpenId,
+  className = "",
+}: AccordionProps) {
   const [openId, setOpenId] = useState<string | null>(defaultOpenId || null);
 
   return (
     <div className={`space-y-2 ${className}`}>
-      {sections.map((section) => (
+      {sections.map(section => (
         <CollapsibleSection
           key={section.id}
           title={section.title}
           icon={section.icon}
           badge={section.badge}
           defaultOpen={section.id === openId}
-          onToggle={(isOpen) => {
+          onToggle={isOpen => {
             if (isOpen) {
               setOpenId(section.id);
             } else if (openId === section.id) {
@@ -140,12 +148,14 @@ export function ExpandableCard({
   preview,
   children,
   icon,
-  className = '',
+  className = "",
 }: ExpandableCardProps) {
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
-    <div className={`bg-card border border-border rounded-xl overflow-hidden ${className}`}>
+    <div
+      className={`bg-card border border-border rounded-xl overflow-hidden ${className}`}
+    >
       <div className="p-4">
         <div className="flex items-start justify-between mb-3">
           <div className="flex items-center gap-3">
@@ -156,19 +166,19 @@ export function ExpandableCard({
             onClick={() => setIsExpanded(!isExpanded)}
             className="text-sm text-primary hover:text-primary/80 transition-colors"
           >
-            {isExpanded ? 'Show less' : 'Show more'}
+            {isExpanded ? "Show less" : "Show more"}
           </button>
         </div>
-        
+
         {/* Preview content */}
-        <div className={isExpanded ? 'hidden' : 'block'}>
-          {preview}
-        </div>
-        
+        <div className={isExpanded ? "hidden" : "block"}>{preview}</div>
+
         {/* Full content */}
         <div
           className={`transition-all duration-300 ${
-            isExpanded ? 'opacity-100 max-h-[1000px]' : 'opacity-0 max-h-0 overflow-hidden'
+            isExpanded
+              ? "opacity-100 max-h-[1000px]"
+              : "opacity-0 max-h-0 overflow-hidden"
           }`}
         >
           {children}
@@ -190,7 +200,7 @@ export function SidebarSection({
   title,
   children,
   defaultOpen = true,
-  className = '',
+  className = "",
 }: SidebarSectionProps) {
   const [isOpen, setIsOpen] = useState(defaultOpen);
 
@@ -203,13 +213,13 @@ export function SidebarSection({
         {title}
         <ChevronRight
           className={`w-4 h-4 transition-transform duration-200 ${
-            isOpen ? 'rotate-90' : ''
+            isOpen ? "rotate-90" : ""
           }`}
         />
       </button>
       <div
         className={`overflow-hidden transition-all duration-200 ${
-          isOpen ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'
+          isOpen ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
         }`}
       >
         {children}
@@ -230,7 +240,7 @@ export function Details({
   summary,
   children,
   defaultOpen = false,
-  className = '',
+  className = "",
 }: DetailsProps) {
   const [isOpen, setIsOpen] = useState(defaultOpen);
 
@@ -242,14 +252,14 @@ export function Details({
       >
         <ChevronRight
           className={`w-4 h-4 transition-transform duration-200 ${
-            isOpen ? 'rotate-90' : ''
+            isOpen ? "rotate-90" : ""
           }`}
         />
         {summary}
       </button>
       <div
         className={`ml-6 mt-2 overflow-hidden transition-all duration-200 ${
-          isOpen ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'
+          isOpen ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
         }`}
       >
         {children}

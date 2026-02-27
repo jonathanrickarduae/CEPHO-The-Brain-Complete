@@ -1,6 +1,10 @@
-import { db } from '../db';
-import { governanceSettings, approvedIntegrations, integrationUsageLogs } from '../../drizzle/governance-schema';
-import { eq, and } from 'drizzle-orm';
+import { db } from "../db";
+import {
+  governanceSettings,
+  approvedIntegrations,
+  integrationUsageLogs,
+} from "../../drizzle/governance-schema";
+import { eq, and } from "drizzle-orm";
 
 /**
  * Governance Service
@@ -8,7 +12,7 @@ import { eq, and } from 'drizzle-orm';
  */
 
 export interface GovernanceMode {
-  mode: 'everything' | 'governed';
+  mode: "everything" | "governed";
   userId: string;
 }
 
@@ -20,7 +24,9 @@ export interface IntegrationCheck {
 /**
  * Get user's current governance mode
  */
-export async function getGovernanceMode(userId: string): Promise<GovernanceMode> {
+export async function getGovernanceMode(
+  userId: string
+): Promise<GovernanceMode> {
   const settings = await db
     .select()
     .from(governanceSettings)
@@ -29,11 +35,11 @@ export async function getGovernanceMode(userId: string): Promise<GovernanceMode>
 
   if (settings.length === 0) {
     // Default to 'everything' mode
-    return { mode: 'everything', userId };
+    return { mode: "everything", userId };
   }
 
   return {
-    mode: settings[0].mode as 'everything' | 'governed',
+    mode: settings[0].mode as "everything" | "governed",
     userId,
   };
 }
@@ -41,7 +47,10 @@ export async function getGovernanceMode(userId: string): Promise<GovernanceMode>
 /**
  * Set user's governance mode
  */
-export async function setGovernanceMode(userId: string, mode: 'everything' | 'governed'): Promise<void> {
+export async function setGovernanceMode(
+  userId: string,
+  mode: "everything" | "governed"
+): Promise<void> {
   const existing = await db
     .select()
     .from(governanceSettings)
@@ -71,7 +80,7 @@ export async function checkIntegrationAllowed(
   const mode = await getGovernanceMode(userId);
 
   // In 'everything' mode, all services are allowed
-  if (mode.mode === 'everything') {
+  if (mode.mode === "everything") {
     return { allowed: true };
   }
 

@@ -17,7 +17,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 <div className="absolute inset-0 bg-primary/20 rounded-full blur-md group-hover:bg-primary/40 transition-all duration-500"></div>
                 <Brain className="w-8 h-8 text-primary relative z-10 group-hover:scale-110 transition-transform duration-300" />
               </div>
-              <span className="font-display font-bold text-2xl tracking-wider text-foreground neon-text">CEPHO</span>
+              <span className="font-display font-bold text-2xl tracking-wider text-foreground neon-text">
+                CEPHO
+              </span>
             </div>
           </Link>
         </div>
@@ -27,8 +29,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             <div className="absolute inset-0 bg-primary/10 rounded-full blur-sm group-hover:bg-primary/20 transition-all duration-300"></div>
             <div className="relative flex items-center">
               <Search className="absolute left-3 w-4 h-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
-              <Input 
-                placeholder="Search your thoughts..." 
+              <Input
+                placeholder="Search your thoughts..."
                 className="pl-10 bg-black/20 border-white/10 rounded-full focus:ring-primary/50 focus:border-primary/50 transition-all duration-300"
               />
             </div>
@@ -36,10 +38,18 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         </div>
 
         <div className="flex items-center gap-3">
-          <Button variant="ghost" size="icon" className="rounded-full hover:bg-white/10 hover:text-primary transition-colors">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="rounded-full hover:bg-white/10 hover:text-primary transition-colors"
+          >
             <Share2 className="w-5 h-5" />
           </Button>
-          <Button variant="ghost" size="icon" className="rounded-full hover:bg-white/10 hover:text-primary transition-colors">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="rounded-full hover:bg-white/10 hover:text-primary transition-colors"
+          >
             <Settings className="w-5 h-5" />
           </Button>
           <Button className="rounded-full bg-primary hover:bg-primary/80 text-primary-foreground shadow-[0_0_15px_rgba(0,240,255,0.3)] hover:shadow-[0_0_25px_rgba(0,240,255,0.5)] transition-all duration-300 font-display font-bold tracking-wide">
@@ -49,9 +59,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       </header>
 
       {/* Main Content Area */}
-      <main className="flex-1 pt-16 relative z-10">
-        {children}
-      </main>
+      <main className="flex-1 pt-16 relative z-10">{children}</main>
 
       {/* Background Particles (CSS only for now, could be canvas later) */}
       <div className="fixed inset-0 pointer-events-none z-0">

@@ -1,27 +1,55 @@
 // @ts-nocheck
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect } from "react";
 import { useLocation } from "wouter";
-import { 
-  Users, Brain, Search, Star, MessageSquare, FileText,
-  ChevronRight, Plus, Mic, MicOff, Send, Eye, CheckCircle2,
-  Sparkles, Target, Clock, BarChart3, Filter, Grid, List, Trash2, Loader2,
-  X, Activity, Trophy, TrendingUp, ArrowUpDown, SortAsc, SortDesc,
-  Shield, Zap, AlertTriangle, Globe
+import {
+  Users,
+  Brain,
+  Search,
+  Star,
+  MessageSquare,
+  FileText,
+  ChevronRight,
+  Plus,
+  Mic,
+  MicOff,
+  Send,
+  Eye,
+  CheckCircle2,
+  Sparkles,
+  Target,
+  Clock,
+  BarChart3,
+  Filter,
+  Grid,
+  List,
+  Trash2,
+  Loader2,
+  X,
+  Activity,
+  Trophy,
+  TrendingUp,
+  ArrowUpDown,
+  SortAsc,
+  SortDesc,
+  Shield,
+  Zap,
+  AlertTriangle,
+  Globe,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { PageHeader } from '@/components/layout/PageHeader';
+import { PageHeader } from "@/components/layout/PageHeader";
 import { toast } from "sonner";
 import { useIsMobile } from "@/hooks/useMobile";
 import { trpc } from "@/lib/trpc";
-import { 
-  AI_EXPERTS, 
-  categories as expertCategories, 
+import {
+  AI_EXPERTS,
+  categories as expertCategories,
   searchExperts,
   getExpertsByCategory,
   TOTAL_EXPERTS,
-  type AIExpert 
+  type AIExpert,
 } from "@/data/ai-experts.data";
 import {
   panelTypes,
@@ -29,7 +57,7 @@ import {
   getExpertPanelType,
   getPanelStats,
   getTopPerformersByPanel,
-  type PanelType
+  type PanelType,
 } from "@/data/sme-panels.data";
 import {
   expertTypes,
@@ -37,36 +65,40 @@ import {
   getExpertTypeCounts,
   getSubcategoriesForType,
   getCorporatePartners,
-  type ExpertType
+  type ExpertType,
 } from "@/data/expert-types.data";
 import { corporatePartners } from "@/data/ai-experts.data";
-import { ExternalResources } from '@/components/shared/ExternalResources';
-import { ExpertDetailModal } from '@/components/ExpertDetailModal';
+import { ExternalResources } from "@/components/shared/ExternalResources";
+import { ExpertDetailModal } from "@/components/ExpertDetailModal";
 
 // Build categories from real expert data
 const CATEGORIES = [
-  { id: 'all', label: 'All Experts', count: TOTAL_EXPERTS },
+  { id: "all", label: "All Experts", count: TOTAL_EXPERTS },
   ...expertCategories.map(cat => {
     const count = AI_EXPERTS.filter(e => e.category === cat).length;
     return {
-      id: cat.toLowerCase().replace(/[^a-z0-9]/g, '-'),
+      id: cat.toLowerCase().replace(/[^a-z0-9]/g, "-"),
       label: cat,
-      count
+      count,
     };
-  })
+  }),
 ];
 
 // Sort options
-type SortOption = 'performance' | 'name' | 'projects' | 'recent';
+type SortOption = "performance" | "name" | "projects" | "recent";
 
-const SORT_OPTIONS: { id: SortOption; label: string; icon: typeof TrendingUp }[] = [
-  { id: 'performance', label: 'Performance', icon: TrendingUp },
-  { id: 'name', label: 'Name A-Z', icon: SortAsc },
-  { id: 'projects', label: 'Projects', icon: BarChart3 },
-  { id: 'recent', label: 'Recently Used', icon: Clock },
+const SORT_OPTIONS: {
+  id: SortOption;
+  label: string;
+  icon: typeof TrendingUp;
+}[] = [
+  { id: "performance", label: "Performance", icon: TrendingUp },
+  { id: "name", label: "Name A-Z", icon: SortAsc },
+  { id: "projects", label: "Projects", icon: BarChart3 },
+  { id: "recent", label: "Recently Used", icon: Clock },
 ];
 
-type ViewMode = 'browse' | 'leaderboard' | 'teams' | 'assemble' | 'external';
+type ViewMode = "browse" | "leaderboard" | "teams" | "assemble" | "external";
 
 interface SelectedExpert {
   id: string;
@@ -77,25 +109,29 @@ interface SelectedExpert {
 
 export default function AISMEsPage() {
   const isMobile = useIsMobile();
-  const [viewMode, setViewMode] = useState<ViewMode>('browse');
+  const [viewMode, setViewMode] = useState<ViewMode>("browse");
   const [, setLocation] = useLocation();
-  const [selectedCategory, setSelectedCategory] = useState('all');
-  const [selectedExpertType, setSelectedExpertType] = useState<ExpertType | 'all'>('all');
-  const [expandedTypes, setExpandedTypes] = useState<ExpertType[]>(['individuals']);
-  const [selectedPanel, setSelectedPanel] = useState<PanelType | 'all'>('all');
-  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [selectedExpertType, setSelectedExpertType] = useState<
+    ExpertType | "all"
+  >("all");
+  const [expandedTypes, setExpandedTypes] = useState<ExpertType[]>([
+    "individuals",
+  ]);
+  const [selectedPanel, setSelectedPanel] = useState<PanelType | "all">("all");
+  const [searchQuery, setSearchQuery] = useState("");
   const [selectedExperts, setSelectedExperts] = useState<SelectedExpert[]>([]);
   const [showExpertDetail, setShowExpertDetail] = useState<string | null>(null);
-  const [taskDescription, setTaskDescription] = useState('');
-  const [viewStyle, setViewStyle] = useState<'grid' | 'list'>('grid');
-  const [teamName, setTeamName] = useState('');
-  const [teamPurpose, setTeamPurpose] = useState('');
-  const [sortBy, setSortBy] = useState<SortOption>('performance');
-  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
+  const [taskDescription, setTaskDescription] = useState("");
+  const [viewStyle, setViewStyle] = useState<"grid" | "list">("grid");
+  const [teamName, setTeamName] = useState("");
+  const [teamPurpose, setTeamPurpose] = useState("");
+  const [sortBy, setSortBy] = useState<SortOption>("performance");
+  const [sortDirection, setSortDirection] = useState<"asc" | "desc">("desc");
   const [compareExperts, setCompareExperts] = useState<string[]>([]);
   const [showCompareModal, setShowCompareModal] = useState(false);
   const [favoriteExperts, setFavoriteExperts] = useState<string[]>(() => {
-    const saved = localStorage.getItem('favoriteExperts');
+    const saved = localStorage.getItem("favoriteExperts");
     return saved ? JSON.parse(saved) : [];
   });
   const [currentPage, setCurrentPage] = useState(1);
@@ -103,17 +139,22 @@ export default function AISMEsPage() {
 
   // tRPC hooks for team management
   const utils = trpc.useUtils();
-  const { data: savedTeams, isLoading: teamsLoading } = trpc.smeTeam.list.useQuery();
-  
+  const { data: savedTeams, isLoading: teamsLoading } =
+    trpc.smeTeam.list.useQuery();
+
   // Consultation history
-  const { data: consultationHistory } = trpc.expertConsultation.list.useQuery({ limit: 10 });
-  const { data: consultationCounts } = trpc.expertConsultation.counts.useQuery();
-  
+  const { data: consultationHistory } = trpc.expertConsultation.list.useQuery({
+    limit: 10,
+  });
+  const { data: consultationCounts } =
+    trpc.expertConsultation.counts.useQuery();
+
   // Expert recommendations
-  const { data: recommendations } = trpc.expertRecommendation.getRecommendations.useQuery({ limit: 5 });
-  
+  const { data: recommendations } =
+    trpc.expertRecommendation.getRecommendations.useQuery({ limit: 5 });
+
   const createTeamMutation = trpc.smeTeam.create.useMutation({
-    onSuccess: async (team) => {
+    onSuccess: async team => {
       if (team) {
         for (const expert of selectedExperts) {
           await addMemberMutation.mutateAsync({
@@ -122,28 +163,30 @@ export default function AISMEsPage() {
             role: expert.role,
           });
         }
-        toast.success(`Team "${team.name}" created with ${selectedExperts.length} members`);
+        toast.success(
+          `Team "${team.name}" created with ${selectedExperts.length} members`
+        );
         setSelectedExperts([]);
-        setTeamName('');
-        setTeamPurpose('');
-        setTaskDescription('');
-        setViewMode('teams');
+        setTeamName("");
+        setTeamPurpose("");
+        setTaskDescription("");
+        setViewMode("teams");
         utils.smeTeam.list.invalidate();
       }
     },
-    onError: (error) => {
+    onError: error => {
       toast.error(`Failed to create team: ${error.message}`);
     },
   });
 
   const addMemberMutation = trpc.smeTeam.addMember.useMutation();
-  
+
   const deleteTeamMutation = trpc.smeTeam.delete.useMutation({
     onSuccess: () => {
-      toast.success('Team deleted');
+      toast.success("Team deleted");
       utils.smeTeam.list.invalidate();
     },
-    onError: (error) => {
+    onError: error => {
       toast.error(`Failed to delete team: ${error.message}`);
     },
   });
@@ -154,47 +197,48 @@ export default function AISMEsPage() {
   // Filter and sort experts
   const filteredExperts = useMemo(() => {
     let experts = AI_EXPERTS;
-    
+
     // Filter by panel type
-    if (selectedPanel !== 'all') {
+    if (selectedPanel !== "all") {
       experts = getExpertsByPanelType(selectedPanel);
     }
-    
+
     // Filter by category
-    if (selectedCategory !== 'all') {
+    if (selectedCategory !== "all") {
       const selectedCat = CATEGORIES.find(c => c.id === selectedCategory);
       if (selectedCat) {
         experts = experts.filter(exp => exp.category === selectedCat.label);
       }
     }
-    
+
     // Filter by search
     if (searchQuery) {
       const searchResults = searchExperts(searchQuery);
       const expertIds = new Set(experts.map(e => e.id));
       experts = searchResults.filter(e => expertIds.has(e.id));
     }
-    
+
     // Sort
     experts = [...experts].sort((a, b) => {
       let comparison = 0;
       switch (sortBy) {
-        case 'performance':
+        case "performance":
           comparison = b.performanceScore - a.performanceScore;
           break;
-        case 'name':
+        case "name":
           comparison = a.name.localeCompare(b.name);
           break;
-        case 'projects':
+        case "projects":
           comparison = b.projectsCompleted - a.projectsCompleted;
           break;
-        case 'recent':
-          comparison = new Date(b.lastUsed).getTime() - new Date(a.lastUsed).getTime();
+        case "recent":
+          comparison =
+            new Date(b.lastUsed).getTime() - new Date(a.lastUsed).getTime();
           break;
       }
-      return sortDirection === 'desc' ? comparison : -comparison;
+      return sortDirection === "desc" ? comparison : -comparison;
     });
-    
+
     return experts;
   }, [selectedCategory, selectedPanel, searchQuery, sortBy, sortDirection]);
 
@@ -207,7 +251,13 @@ export default function AISMEsPage() {
   // Reset to page 1 when filters change
   useEffect(() => {
     setCurrentPage(1);
-  }, [selectedCategory, selectedPanel, searchQuery, sortBy, selectedExpertType]);
+  }, [
+    selectedCategory,
+    selectedPanel,
+    searchQuery,
+    sortBy,
+    selectedExpertType,
+  ]);
 
   // Toggle expert selection
   const toggleExpertSelection = (expert: AIExpert) => {
@@ -215,12 +265,15 @@ export default function AISMEsPage() {
     if (isSelected) {
       setSelectedExperts(prev => prev.filter(e => e.id !== expert.id));
     } else {
-      setSelectedExperts(prev => [...prev, { 
-        id: expert.id, 
-        name: expert.name, 
-        role: expert.specialty, 
-        avatar: expert.avatar 
-      }]);
+      setSelectedExperts(prev => [
+        ...prev,
+        {
+          id: expert.id,
+          name: expert.name,
+          role: expert.specialty,
+          avatar: expert.avatar,
+        },
+      ]);
     }
   };
 
@@ -244,8 +297,12 @@ export default function AISMEsPage() {
       const newFavorites = prev.includes(expertId)
         ? prev.filter(id => id !== expertId)
         : [...prev, expertId];
-      localStorage.setItem('favoriteExperts', JSON.stringify(newFavorites));
-      toast.success(prev.includes(expertId) ? 'Removed from favorites' : 'Added to favorites');
+      localStorage.setItem("favoriteExperts", JSON.stringify(newFavorites));
+      toast.success(
+        prev.includes(expertId)
+          ? "Removed from favorites"
+          : "Added to favorites"
+      );
       return newFavorites;
     });
   };
@@ -260,7 +317,7 @@ export default function AISMEsPage() {
       toast.error("Please select at least one expert");
       return;
     }
-    
+
     createTeamMutation.mutate({
       name: teamName,
       description: taskDescription,
@@ -270,18 +327,26 @@ export default function AISMEsPage() {
 
   // Delete a team
   const handleDeleteTeam = (teamId: number) => {
-    if (confirm('Are you sure you want to delete this team?')) {
+    if (confirm("Are you sure you want to delete this team?")) {
       deleteTeamMutation.mutate({ teamId });
     }
   };
 
-  const selectedExpert = showExpertDetail ? AI_EXPERTS.find(e => e.id === showExpertDetail) : null;
-  const compareExpertData = compareExperts.map(id => AI_EXPERTS.find(e => e.id === id)).filter(Boolean) as typeof AI_EXPERTS;
+  const selectedExpert = showExpertDetail
+    ? AI_EXPERTS.find(e => e.id === showExpertDetail)
+    : null;
+  const compareExpertData = compareExperts
+    .map(id => AI_EXPERTS.find(e => e.id === id))
+    .filter(Boolean) as typeof AI_EXPERTS;
 
   // Format date to UK format
   const formatDate = (dateStr: string) => {
     const date = new Date(dateStr);
-    return date.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    return date.toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    });
   };
 
   return (
@@ -300,8 +365,8 @@ export default function AISMEsPage() {
           </div>
           <div className="flex items-center gap-3">
             {compareExperts.length > 0 && (
-              <Button 
-                size="sm" 
+              <Button
+                size="sm"
                 onClick={() => setShowCompareModal(true)}
                 className="gap-2 bg-gradient-to-r from-purple-500 to-pink-500"
               >
@@ -322,19 +387,19 @@ export default function AISMEsPage() {
       <div className="shrink-0 border-b border-white/10 bg-white/5 px-4 overflow-x-auto scrollbar-hide">
         <div className="max-w-7xl mx-auto flex gap-1">
           {[
-            { id: 'browse', label: 'Browse', icon: Search },
-            { id: 'leaderboard', label: 'Leaderboard', icon: Trophy },
-            { id: 'teams', label: 'My Teams', icon: Users },
-            { id: 'assemble', label: 'Assemble', icon: Plus },
-            { id: 'external', label: 'External SMEs', icon: Globe },
+            { id: "browse", label: "Browse", icon: Search },
+            { id: "leaderboard", label: "Leaderboard", icon: Trophy },
+            { id: "teams", label: "My Teams", icon: Users },
+            { id: "assemble", label: "Assemble", icon: Plus },
+            { id: "external", label: "External SMEs", icon: Globe },
           ].map(tab => (
             <button
               key={tab.id}
               onClick={() => setViewMode(tab.id as ViewMode)}
               className={`flex items-center gap-2 px-4 py-3 text-sm font-medium transition-colors border-b-2 whitespace-nowrap ${
                 viewMode === tab.id
-                  ? 'text-cyan-400 border-cyan-400'
-                  : 'text-foreground/70 border-transparent hover:text-white'
+                  ? "text-cyan-400 border-cyan-400"
+                  : "text-foreground/70 border-transparent hover:text-white"
               }`}
             >
               <tab.icon className="w-4 h-4" />
@@ -347,13 +412,15 @@ export default function AISMEsPage() {
       {/* Panel Type Filter Bar */}
       <div className="shrink-0 border-b border-white/10 bg-white/5 px-4 py-2 overflow-x-auto scrollbar-hide">
         <div className="max-w-7xl mx-auto flex items-center gap-2">
-          <span className="text-xs text-foreground/70 mr-2 shrink-0">Panel:</span>
+          <span className="text-xs text-foreground/70 mr-2 shrink-0">
+            Panel:
+          </span>
           <button
-            onClick={() => setSelectedPanel('all')}
+            onClick={() => setSelectedPanel("all")}
             className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors shrink-0 ${
-              selectedPanel === 'all'
-                ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/30'
-                : 'bg-white/5 text-foreground/70 hover:bg-white/10'
+              selectedPanel === "all"
+                ? "bg-cyan-500/20 text-cyan-400 border border-cyan-500/30"
+                : "bg-white/5 text-foreground/70 hover:bg-white/10"
             }`}
           >
             All Panels ({TOTAL_EXPERTS})
@@ -368,7 +435,7 @@ export default function AISMEsPage() {
                 className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium transition-colors shrink-0 ${
                   selectedPanel === panelKey
                     ? `${panel.bgColor} ${panel.color} border ${panel.borderColor}`
-                    : 'bg-white/5 text-foreground/70 hover:bg-white/10'
+                    : "bg-white/5 text-foreground/70 hover:bg-white/10"
                 }`}
               >
                 <span>{panel.icon}</span>
@@ -383,7 +450,7 @@ export default function AISMEsPage() {
       {/* Main Content */}
       <div className="flex-1 overflow-hidden flex">
         {/* Browse View */}
-        {viewMode === 'browse' && (
+        {viewMode === "browse" && (
           <>
             {/* Hierarchical Category Sidebar - Desktop */}
             {!isMobile && (
@@ -392,22 +459,30 @@ export default function AISMEsPage() {
                   {/* Recent Consultations */}
                   {consultationHistory && consultationHistory.length > 0 && (
                     <div className="mb-4">
-                      <h3 className="text-xs font-semibold text-foreground/70 uppercase tracking-wider mb-2">Recent Chats</h3>
+                      <h3 className="text-xs font-semibold text-foreground/70 uppercase tracking-wider mb-2">
+                        Recent Chats
+                      </h3>
                       <div className="space-y-1">
                         {consultationHistory.slice(0, 3).map(consultation => {
-                          const expert = AI_EXPERTS.find(e => e.id === consultation.expertId);
+                          const expert = AI_EXPERTS.find(
+                            e => e.id === consultation.expertId
+                          );
                           if (!expert) return null;
                           return (
                             <button
                               key={consultation.id}
-                              onClick={() => setLocation(`/expert-chat/${expert.id}`)}
+                              onClick={() =>
+                                setLocation(`/expert-chat/${expert.id}`)
+                              }
                               className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-sm hover:bg-white/5 text-foreground/70 hover:text-white transition-colors"
                             >
                               <span className="text-lg">{expert.avatar}</span>
                               <div className="flex-1 text-left truncate">
                                 <div className="truncate">{expert.name}</div>
                                 <div className="text-xs text-foreground/60">
-                                  {formatDate(consultation.updatedAt.toString())}
+                                  {formatDate(
+                                    consultation.updatedAt.toString()
+                                  )}
                                 </div>
                               </div>
                             </button>
@@ -416,41 +491,48 @@ export default function AISMEsPage() {
                       </div>
                     </div>
                   )}
-                  
+
                   {/* Expert Types - Hierarchical */}
-                  <h3 className="text-xs font-semibold text-foreground/70 uppercase tracking-wider mb-2">Browse By Type</h3>
+                  <h3 className="text-xs font-semibold text-foreground/70 uppercase tracking-wider mb-2">
+                    Browse By Type
+                  </h3>
                   <div className="space-y-1">
                     {/* All Experts */}
                     <button
-                      onClick={() => { setSelectedExpertType('all'); setSelectedCategory('all'); }}
+                      onClick={() => {
+                        setSelectedExpertType("all");
+                        setSelectedCategory("all");
+                      }}
                       className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm transition-colors ${
-                        selectedExpertType === 'all'
-                          ? 'bg-gradient-to-r from-cyan-500/20 to-blue-500/20 text-cyan-400 border border-cyan-500/30'
-                          : 'hover:bg-white/5 text-foreground/70 hover:text-white'
+                        selectedExpertType === "all"
+                          ? "bg-gradient-to-r from-cyan-500/20 to-blue-500/20 text-cyan-400 border border-cyan-500/30"
+                          : "hover:bg-white/5 text-foreground/70 hover:text-white"
                       }`}
                     >
                       <span className="flex items-center gap-2">
                         <span>🌐</span>
                         <span>All Experts</span>
                       </span>
-                      <span className="text-xs">{TOTAL_EXPERTS + corporatePartners.length}</span>
+                      <span className="text-xs">
+                        {TOTAL_EXPERTS + corporatePartners.length}
+                      </span>
                     </button>
-                    
+
                     {/* Expert Type Categories */}
                     {(Object.keys(expertTypes) as ExpertType[]).map(typeKey => {
                       const typeConfig = expertTypes[typeKey];
                       const counts = getExpertTypeCounts();
                       const isExpanded = expandedTypes.includes(typeKey);
                       const subcategories = getSubcategoriesForType(typeKey);
-                      
+
                       return (
                         <div key={typeKey}>
                           <button
                             onClick={() => {
                               setSelectedExpertType(typeKey);
-                              setSelectedCategory('all');
-                              setExpandedTypes(prev => 
-                                prev.includes(typeKey) 
+                              setSelectedCategory("all");
+                              setExpandedTypes(prev =>
+                                prev.includes(typeKey)
                                   ? prev.filter(t => t !== typeKey)
                                   : [...prev, typeKey]
                               );
@@ -458,7 +540,7 @@ export default function AISMEsPage() {
                             className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm transition-colors ${
                               selectedExpertType === typeKey
                                 ? `${typeConfig.bgColor} ${typeConfig.color} border ${typeConfig.borderColor}`
-                                : 'hover:bg-white/5 text-foreground/70 hover:text-white'
+                                : "hover:bg-white/5 text-foreground/70 hover:text-white"
                             }`}
                           >
                             <span className="flex items-center gap-2">
@@ -467,30 +549,43 @@ export default function AISMEsPage() {
                             </span>
                             <span className="flex items-center gap-1">
                               <span className="text-xs">{counts[typeKey]}</span>
-                              <ChevronRight className={`w-3 h-3 transition-transform ${isExpanded ? 'rotate-90' : ''}`} />
+                              <ChevronRight
+                                className={`w-3 h-3 transition-transform ${isExpanded ? "rotate-90" : ""}`}
+                              />
                             </span>
                           </button>
-                          
+
                           {/* Subcategories */}
                           {isExpanded && subcategories.length > 0 && (
                             <div className="ml-4 mt-1 space-y-0.5 border-l border-white/10 pl-2">
                               {subcategories.map(subcat => {
-                                const subcatId = subcat.toLowerCase().replace(/[^a-z0-9]/g, '-');
-                                const subcatCount = typeKey === 'companies' 
-                                  ? corporatePartners.filter(c => c.industry === subcat).length
-                                  : AI_EXPERTS.filter(e => e.category === subcat).length;
+                                const subcatId = subcat
+                                  .toLowerCase()
+                                  .replace(/[^a-z0-9]/g, "-");
+                                const subcatCount =
+                                  typeKey === "companies"
+                                    ? corporatePartners.filter(
+                                        c => c.industry === subcat
+                                      ).length
+                                    : AI_EXPERTS.filter(
+                                        e => e.category === subcat
+                                      ).length;
                                 return (
                                   <button
                                     key={subcatId}
-                                    onClick={() => setSelectedCategory(subcatId)}
+                                    onClick={() =>
+                                      setSelectedCategory(subcatId)
+                                    }
                                     className={`w-full flex items-center justify-between px-2 py-1.5 rounded-lg text-xs transition-colors ${
                                       selectedCategory === subcatId
-                                        ? 'bg-white/10 text-white'
-                                        : 'text-foreground/60 hover:text-foreground/80 hover:bg-white/5'
+                                        ? "bg-white/10 text-white"
+                                        : "text-foreground/60 hover:text-foreground/80 hover:bg-white/5"
                                     }`}
                                   >
                                     <span className="truncate">{subcat}</span>
-                                    <span className="text-xs opacity-60">{subcatCount}</span>
+                                    <span className="text-xs opacity-60">
+                                      {subcatCount}
+                                    </span>
                                   </button>
                                 );
                               })}
@@ -514,42 +609,54 @@ export default function AISMEsPage() {
                     <Input
                       placeholder="Search experts by name or specialty..."
                       value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
+                      onChange={e => setSearchQuery(e.target.value)}
                       className="pl-10"
                     />
                   </div>
-                  
+
                   {/* Sort Dropdown */}
                   <div className="flex items-center gap-2">
                     <span className="text-xs text-foreground/70">Sort:</span>
                     <select
                       value={sortBy}
-                      onChange={(e) => setSortBy(e.target.value as SortOption)}
+                      onChange={e => setSortBy(e.target.value as SortOption)}
                       className="bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-sm text-white"
                     >
                       {SORT_OPTIONS.map(opt => (
-                        <option key={opt.id} value={opt.id} className="bg-gray-900">{opt.label}</option>
+                        <option
+                          key={opt.id}
+                          value={opt.id}
+                          className="bg-gray-900"
+                        >
+                          {opt.label}
+                        </option>
                       ))}
                     </select>
                     <button
-                      onClick={() => setSortDirection(d => d === 'asc' ? 'desc' : 'asc')}
+                      onClick={() =>
+                        setSortDirection(d => (d === "asc" ? "desc" : "asc"))
+                      }
                       className="p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors"
                     >
-                      {sortDirection === 'desc' ? <SortDesc className="w-4 h-4" /> : <SortAsc className="w-4 h-4" />}
+                      {sortDirection === "desc" ? (
+                        <SortDesc className="w-4 h-4" />
+                      ) : (
+                        <SortAsc className="w-4 h-4" />
+                      )}
                     </button>
                   </div>
-                  
+
                   {/* View Style Toggle */}
                   <div className="flex items-center gap-1 border border-white/20 rounded-lg p-1">
                     <button
-                      onClick={() => setViewStyle('grid')}
-                      className={`p-2 rounded ${viewStyle === 'grid' ? 'bg-cyan-500/20 text-cyan-400' : 'text-foreground/70'}`}
+                      onClick={() => setViewStyle("grid")}
+                      className={`p-2 rounded ${viewStyle === "grid" ? "bg-cyan-500/20 text-cyan-400" : "text-foreground/70"}`}
                     >
                       <Grid className="w-4 h-4" />
                     </button>
                     <button
-                      onClick={() => setViewStyle('list')}
-                      className={`p-2 rounded ${viewStyle === 'list' ? 'bg-cyan-500/20 text-cyan-400' : 'text-foreground/70'}`}
+                      onClick={() => setViewStyle("list")}
+                      className={`p-2 rounded ${viewStyle === "list" ? "bg-cyan-500/20 text-cyan-400" : "text-foreground/70"}`}
                     >
                       <List className="w-4 h-4" />
                     </button>
@@ -565,8 +672,8 @@ export default function AISMEsPage() {
                         onClick={() => setSelectedCategory(cat.id)}
                         className={`shrink-0 px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
                           selectedCategory === cat.id
-                            ? 'bg-primary text-primary-foreground'
-                            : 'bg-secondary text-muted-foreground'
+                            ? "bg-primary text-primary-foreground"
+                            : "bg-secondary text-muted-foreground"
                         }`}
                       >
                         {cat.label}
@@ -578,125 +685,165 @@ export default function AISMEsPage() {
                 {/* Results Count */}
                 <div className="flex items-center justify-between mb-4">
                   <p className="text-sm text-foreground/70">
-                    Showing {startIndex + 1}-{Math.min(endIndex, filteredExperts.length)} of {filteredExperts.length} expert{filteredExperts.length !== 1 ? 's' : ''}
+                    Showing {startIndex + 1}-
+                    {Math.min(endIndex, filteredExperts.length)} of{" "}
+                    {filteredExperts.length} expert
+                    {filteredExperts.length !== 1 ? "s" : ""}
                   </p>
                 </div>
 
                 {/* Expert Cards */}
-                <div className={viewStyle === 'grid' 
-                  ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3"
-                  : "space-y-2"
-                }>
+                <div
+                  className={
+                    viewStyle === "grid"
+                      ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3"
+                      : "space-y-2"
+                  }
+                >
                   {paginatedExperts.map(expert => {
-                    const isSelected = selectedExperts.some(e => e.id === expert.id);
-                    const isAvailable = expert.status === 'active';
+                    const isSelected = selectedExperts.some(
+                      e => e.id === expert.id
+                    );
+                    const isAvailable = expert.status === "active";
                     const isInCompare = compareExperts.includes(expert.id);
                     const expertPanel = getExpertPanelType(expert);
                     const panelInfo = panelTypes[expertPanel];
-                    
+
                     return (
                       <div
                         key={expert.id}
                         className={`p-4 bg-white/5 border-2 rounded-2xl transition-all cursor-pointer group relative ${
                           isInCompare
-                            ? 'border-purple-500/50 bg-gradient-to-br from-purple-500/10 to-pink-500/10'
-                            : isSelected 
-                              ? 'border-cyan-500/50 bg-gradient-to-br from-cyan-500/10 to-blue-500/10' 
-                              : 'border-white/10 hover:border-cyan-500/30'
-                        } ${viewStyle === 'list' ? 'flex items-center gap-4' : ''}`}
+                            ? "border-purple-500/50 bg-gradient-to-br from-purple-500/10 to-pink-500/10"
+                            : isSelected
+                              ? "border-cyan-500/50 bg-gradient-to-br from-cyan-500/10 to-blue-500/10"
+                              : "border-white/10 hover:border-cyan-500/30"
+                        } ${viewStyle === "list" ? "flex items-center gap-4" : ""}`}
                         onClick={() => setShowExpertDetail(expert.id)}
                       >
                         {/* Panel Badge */}
-                        <div className={`absolute top-2 left-2 px-2 py-0.5 rounded-full text-[10px] font-medium ${panelInfo.bgColor} ${panelInfo.color} border ${panelInfo.borderColor}`}>
+                        <div
+                          className={`absolute top-2 left-2 px-2 py-0.5 rounded-full text-[10px] font-medium ${panelInfo.bgColor} ${panelInfo.color} border ${panelInfo.borderColor}`}
+                        >
                           {panelInfo.icon} {panelInfo.name}
                         </div>
-                        
-                        <div className={`flex items-center gap-3 ${viewStyle === 'grid' ? 'mb-3 mt-6' : ''}`}>
-                          <div className={`relative w-12 h-12 rounded-xl overflow-hidden group-hover:scale-110 transition-transform ${!isAvailable ? 'opacity-50' : ''}`}>
+
+                        <div
+                          className={`flex items-center gap-3 ${viewStyle === "grid" ? "mb-3 mt-6" : ""}`}
+                        >
+                          <div
+                            className={`relative w-12 h-12 rounded-xl overflow-hidden group-hover:scale-110 transition-transform ${!isAvailable ? "opacity-50" : ""}`}
+                          >
                             {expert.avatarUrl ? (
-                              <img alt="SME expert profile" 
-                                src={expert.avatarUrl} 
+                              <img
+                                alt="SME expert profile"
+                                src={expert.avatarUrl}
                                 alt={expert.name}
                                 className="w-full h-full object-cover"
-                                onError={(e) => {
-                                  e.currentTarget.style.display = 'none';
-                                  const fallback = e.currentTarget.nextElementSibling as HTMLElement;
-                                  if (fallback) fallback.style.display = 'flex';
+                                onError={e => {
+                                  e.currentTarget.style.display = "none";
+                                  const fallback = e.currentTarget
+                                    .nextElementSibling as HTMLElement;
+                                  if (fallback) fallback.style.display = "flex";
                                 }}
                               />
                             ) : null}
-                            <div 
+                            <div
                               className="absolute inset-0 bg-gradient-to-br from-cyan-500/30 to-blue-500/30 flex items-center justify-center text-lg"
-                              style={{ display: expert.avatarUrl ? 'none' : 'flex' }}
+                              style={{
+                                display: expert.avatarUrl ? "none" : "flex",
+                              }}
                             >
                               {expert.avatar}
                             </div>
                           </div>
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2">
-                              <h4 className="font-medium truncate">{expert.name}</h4>
+                              <h4 className="font-medium truncate">
+                                {expert.name}
+                              </h4>
                               {!isAvailable && (
-                                <Badge variant="outline" className="text-xs">{expert.status}</Badge>
+                                <Badge variant="outline" className="text-xs">
+                                  {expert.status}
+                                </Badge>
                               )}
                             </div>
-                            <p className="text-sm text-muted-foreground truncate">{expert.category}</p>
+                            <p className="text-sm text-muted-foreground truncate">
+                              {expert.category}
+                            </p>
                           </div>
-                          {viewStyle === 'list' && (
+                          {viewStyle === "list" && (
                             <div className="flex items-center gap-4">
                               <div className="flex items-center gap-1">
                                 <Activity className="w-4 h-4 text-cyan-400" />
-                                <span className="text-sm">{expert.performanceScore}%</span>
+                                <span className="text-sm">
+                                  {expert.performanceScore}%
+                                </span>
                               </div>
                               <button
-                                onClick={(e) => {
+                                onClick={e => {
                                   e.stopPropagation();
                                   toggleExpertSelection(expert);
                                 }}
                                 className={`p-2 rounded-lg transition-colors ${
-                                  isSelected ? 'bg-gradient-to-r from-cyan-500 to-blue-500 text-white' : 'bg-white/10 hover:bg-white/20 text-foreground/70'
+                                  isSelected
+                                    ? "bg-gradient-to-r from-cyan-500 to-blue-500 text-white"
+                                    : "bg-white/10 hover:bg-white/20 text-foreground/70"
                                 }`}
                               >
-                                {isSelected ? <CheckCircle2 className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
+                                {isSelected ? (
+                                  <CheckCircle2 className="w-4 h-4" />
+                                ) : (
+                                  <Plus className="w-4 h-4" />
+                                )}
                               </button>
                             </div>
                           )}
                         </div>
-                        
+
                         {/* Favorite and Compare buttons */}
                         <div className="absolute top-2 right-2 flex items-center gap-1">
                           <button
-                            onClick={(e) => {
+                            onClick={e => {
                               e.stopPropagation();
                               toggleFavorite(expert.id);
                             }}
                             className={`p-1.5 rounded-lg transition-colors ${
                               favoriteExperts.includes(expert.id)
-                                ? 'bg-yellow-500/20 text-yellow-400' 
-                                : 'bg-white/10 hover:bg-white/20 text-foreground/70 opacity-0 group-hover:opacity-100'
+                                ? "bg-yellow-500/20 text-yellow-400"
+                                : "bg-white/10 hover:bg-white/20 text-foreground/70 opacity-0 group-hover:opacity-100"
                             }`}
-                            title={favoriteExperts.includes(expert.id) ? 'Remove from favorites' : 'Add to favorites'}
+                            title={
+                              favoriteExperts.includes(expert.id)
+                                ? "Remove from favorites"
+                                : "Add to favorites"
+                            }
                           >
-                            <Star className={`w-3 h-3 ${favoriteExperts.includes(expert.id) ? 'fill-current' : ''}`} />
+                            <Star
+                              className={`w-3 h-3 ${favoriteExperts.includes(expert.id) ? "fill-current" : ""}`}
+                            />
                           </button>
                           <button
-                            onClick={(e) => {
+                            onClick={e => {
                               e.stopPropagation();
                               toggleCompareExpert(expert.id);
                             }}
                             className={`p-1.5 rounded-lg transition-colors ${
-                              isInCompare 
-                                ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white' 
-                                : 'bg-white/10 hover:bg-white/20 text-foreground/70 opacity-0 group-hover:opacity-100'
+                              isInCompare
+                                ? "bg-gradient-to-r from-purple-500 to-pink-500 text-white"
+                                : "bg-white/10 hover:bg-white/20 text-foreground/70 opacity-0 group-hover:opacity-100"
                             }`}
                             title="Add to comparison"
                           >
                             <BarChart3 className="w-3 h-3" />
                           </button>
                         </div>
-                        
-                        {viewStyle === 'grid' && (
+
+                        {viewStyle === "grid" && (
                           <>
-                            <p className="text-xs text-muted-foreground mb-3 line-clamp-2">{expert.specialty}</p>
+                            <p className="text-xs text-muted-foreground mb-3 line-clamp-2">
+                              {expert.specialty}
+                            </p>
                             <div className="flex items-center justify-between">
                               <div className="flex items-center gap-3 text-xs text-muted-foreground">
                                 <span className="flex items-center gap-1">
@@ -706,15 +853,21 @@ export default function AISMEsPage() {
                                 <span>{expert.projectsCompleted} projects</span>
                               </div>
                               <button
-                                onClick={(e) => {
+                                onClick={e => {
                                   e.stopPropagation();
                                   toggleExpertSelection(expert);
                                 }}
                                 className={`p-1.5 rounded-lg transition-colors ${
-                                  isSelected ? 'bg-gradient-to-r from-cyan-500 to-blue-500 text-white' : 'bg-white/10 hover:bg-white/20 text-foreground/70'
+                                  isSelected
+                                    ? "bg-gradient-to-r from-cyan-500 to-blue-500 text-white"
+                                    : "bg-white/10 hover:bg-white/20 text-foreground/70"
                                 }`}
                               >
-                                {isSelected ? <CheckCircle2 className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
+                                {isSelected ? (
+                                  <CheckCircle2 className="w-4 h-4" />
+                                ) : (
+                                  <Plus className="w-4 h-4" />
+                                )}
                               </button>
                             </div>
                           </>
@@ -736,22 +889,30 @@ export default function AISMEsPage() {
                       Previous
                     </Button>
                     <div className="flex items-center gap-1">
-                      {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
-                        <Button
-                          key={page}
-                          variant={currentPage === page ? "default" : "ghost"}
-                          size="sm"
-                          onClick={() => setCurrentPage(page)}
-                          className={currentPage === page ? "bg-gradient-to-r from-cyan-500 to-blue-500" : ""}
-                        >
-                          {page}
-                        </Button>
-                      ))}
+                      {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                        page => (
+                          <Button
+                            key={page}
+                            variant={currentPage === page ? "default" : "ghost"}
+                            size="sm"
+                            onClick={() => setCurrentPage(page)}
+                            className={
+                              currentPage === page
+                                ? "bg-gradient-to-r from-cyan-500 to-blue-500"
+                                : ""
+                            }
+                          >
+                            {page}
+                          </Button>
+                        )
+                      )}
                     </div>
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                      onClick={() =>
+                        setCurrentPage(p => Math.min(totalPages, p + 1))
+                      }
                       disabled={currentPage === totalPages}
                     >
                       Next
@@ -764,7 +925,7 @@ export default function AISMEsPage() {
         )}
 
         {/* Leaderboard View */}
-        {viewMode === 'leaderboard' && (
+        {viewMode === "leaderboard" && (
           <div className="flex-1 overflow-y-auto p-4 sm:p-6">
             <div className="max-w-4xl mx-auto space-y-6">
               {/* Recommended For You Section */}
@@ -775,23 +936,35 @@ export default function AISMEsPage() {
                       <Sparkles className="w-5 h-5 text-white" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-pink-400">Recommended For You</h3>
-                      <p className="text-xs text-foreground/70">Based on your consultation history</p>
+                      <h3 className="font-semibold text-pink-400">
+                        Recommended For You
+                      </h3>
+                      <p className="text-xs text-foreground/70">
+                        Based on your consultation history
+                      </p>
                     </div>
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                     {recommendations.slice(0, 5).map((rec: any) => {
-                      const expert = AI_EXPERTS.find(e => e.id === rec.expertId);
+                      const expert = AI_EXPERTS.find(
+                        e => e.id === rec.expertId
+                      );
                       if (!expert) return null;
                       return (
-                        <div 
+                        <div
                           key={rec.expertId}
                           className="flex items-center gap-3 p-3 bg-white/5 rounded-xl hover:bg-white/10 cursor-pointer transition-colors"
-                          onClick={() => setLocation(`/expert-chat/${expert.id}`)}
+                          onClick={() =>
+                            setLocation(`/expert-chat/${expert.id}`)
+                          }
                         >
                           <div className="w-10 h-10 rounded-xl overflow-hidden">
                             {expert.avatarUrl ? (
-                              <img src={expert.avatarUrl} alt={expert.name} className="w-full h-full object-cover" />
+                              <img
+                                src={expert.avatarUrl}
+                                alt={expert.name}
+                                className="w-full h-full object-cover"
+                              />
                             ) : (
                               <div className="w-full h-full bg-gradient-to-br from-cyan-500/30 to-blue-500/30 flex items-center justify-center text-lg">
                                 {expert.avatar}
@@ -799,10 +972,18 @@ export default function AISMEsPage() {
                             )}
                           </div>
                           <div className="flex-1 min-w-0">
-                            <h4 className="font-medium text-sm truncate">{expert.name}</h4>
-                            <p className="text-xs text-pink-400 truncate">{rec.reason}</p>
+                            <h4 className="font-medium text-sm truncate">
+                              {expert.name}
+                            </h4>
+                            <p className="text-xs text-pink-400 truncate">
+                              {rec.reason}
+                            </p>
                           </div>
-                          <Button size="sm" variant="ghost" className="shrink-0">
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            className="shrink-0"
+                          >
                             <MessageSquare className="w-4 h-4" />
                           </Button>
                         </div>
@@ -819,32 +1000,44 @@ export default function AISMEsPage() {
                     <Trophy className="w-5 h-5 text-cyan-400" />
                     <h3 className="font-semibold">Top 10 Overall Performers</h3>
                   </div>
-                  <Badge className="bg-cyan-500/20 text-cyan-400">All Panels</Badge>
+                  <Badge className="bg-cyan-500/20 text-cyan-400">
+                    All Panels
+                  </Badge>
                 </div>
                 <div className="divide-y divide-white/10">
-                  {AI_EXPERTS
-                    .sort((a, b) => b.performanceScore - a.performanceScore)
+                  {AI_EXPERTS.sort(
+                    (a, b) => b.performanceScore - a.performanceScore
+                  )
                     .slice(0, 10)
                     .map((expert, index) => {
                       const expertPanel = getExpertPanelType(expert);
                       const panelInfo = panelTypes[expertPanel];
                       return (
-                        <div 
+                        <div
                           key={expert.id}
                           className="flex items-center gap-4 p-4 hover:bg-white/5 cursor-pointer transition-colors"
                           onClick={() => setShowExpertDetail(expert.id)}
                         >
-                          <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold ${
-                            index === 0 ? 'bg-yellow-500/20 text-yellow-400' :
-                            index === 1 ? 'bg-gray-400/20 text-foreground/80' :
-                            index === 2 ? 'bg-amber-600/20 text-amber-500' :
-                            'bg-white/10 text-foreground/70'
-                          }`}>
+                          <div
+                            className={`w-8 h-8 rounded-full flex items-center justify-center font-bold ${
+                              index === 0
+                                ? "bg-yellow-500/20 text-yellow-400"
+                                : index === 1
+                                  ? "bg-gray-400/20 text-foreground/80"
+                                  : index === 2
+                                    ? "bg-amber-600/20 text-amber-500"
+                                    : "bg-white/10 text-foreground/70"
+                            }`}
+                          >
                             {index + 1}
                           </div>
                           <div className="w-10 h-10 rounded-xl overflow-hidden">
                             {expert.avatarUrl ? (
-                              <img src={expert.avatarUrl} alt={expert.name} className="w-full h-full object-cover" />
+                              <img
+                                src={expert.avatarUrl}
+                                alt={expert.name}
+                                className="w-full h-full object-cover"
+                              />
                             ) : (
                               <div className="w-full h-full bg-gradient-to-br from-cyan-500/30 to-blue-500/30 flex items-center justify-center text-lg">
                                 {expert.avatar}
@@ -852,15 +1045,25 @@ export default function AISMEsPage() {
                             )}
                           </div>
                           <div className="flex-1 min-w-0">
-                            <h4 className="font-medium truncate">{expert.name}</h4>
-                            <p className="text-sm text-foreground/70 truncate">{expert.specialty}</p>
+                            <h4 className="font-medium truncate">
+                              {expert.name}
+                            </h4>
+                            <p className="text-sm text-foreground/70 truncate">
+                              {expert.specialty}
+                            </p>
                           </div>
-                          <div className={`px-2 py-0.5 rounded-full text-[10px] ${panelInfo.bgColor} ${panelInfo.color}`}>
+                          <div
+                            className={`px-2 py-0.5 rounded-full text-[10px] ${panelInfo.bgColor} ${panelInfo.color}`}
+                          >
                             {panelInfo.icon} {panelInfo.name}
                           </div>
                           <div className="text-right">
-                            <div className="text-lg font-bold text-cyan-400">{expert.performanceScore}%</div>
-                            <div className="text-xs text-foreground/70">{expert.projectsCompleted} projects</div>
+                            <div className="text-lg font-bold text-cyan-400">
+                              {expert.performanceScore}%
+                            </div>
+                            <div className="text-xs text-foreground/70">
+                              {expert.projectsCompleted} projects
+                            </div>
                           </div>
                         </div>
                       );
@@ -874,25 +1077,37 @@ export default function AISMEsPage() {
                   const panel = panelTypes[panelKey];
                   const stats = panelStats[panelKey];
                   return (
-                    <div 
+                    <div
                       key={panelKey}
                       className={`p-4 rounded-2xl ${panel.bgColor} border ${panel.borderColor}`}
                     >
                       <div className="flex items-center gap-3 mb-3">
                         <span className="text-2xl">{panel.icon}</span>
                         <div>
-                          <h3 className={`font-semibold ${panel.color}`}>{panel.name}</h3>
-                          <p className="text-xs text-foreground/70">{panel.description}</p>
+                          <h3 className={`font-semibold ${panel.color}`}>
+                            {panel.name}
+                          </h3>
+                          <p className="text-xs text-foreground/70">
+                            {panel.description}
+                          </p>
                         </div>
                       </div>
                       <div className="grid grid-cols-2 gap-4 text-center">
                         <div>
-                          <div className="text-2xl font-bold">{stats.count}</div>
-                          <div className="text-xs text-foreground/70">Experts</div>
+                          <div className="text-2xl font-bold">
+                            {stats.count}
+                          </div>
+                          <div className="text-xs text-foreground/70">
+                            Experts
+                          </div>
                         </div>
                         <div>
-                          <div className="text-2xl font-bold">{stats.avgScore}%</div>
-                          <div className="text-xs text-foreground/70">Avg Score</div>
+                          <div className="text-2xl font-bold">
+                            {stats.avgScore}%
+                          </div>
+                          <div className="text-xs text-foreground/70">
+                            Avg Score
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -904,38 +1119,58 @@ export default function AISMEsPage() {
               {(Object.keys(panelTypes) as PanelType[]).map(panelKey => {
                 const panel = panelTypes[panelKey];
                 const topExperts = getTopPerformersByPanel(panelKey, 5);
-                
+
                 return (
-                  <div key={panelKey} className="bg-white/5 rounded-2xl border border-white/10 overflow-hidden">
-                    <div className={`px-4 py-3 ${panel.bgColor} border-b ${panel.borderColor} flex items-center gap-2`}>
+                  <div
+                    key={panelKey}
+                    className="bg-white/5 rounded-2xl border border-white/10 overflow-hidden"
+                  >
+                    <div
+                      className={`px-4 py-3 ${panel.bgColor} border-b ${panel.borderColor} flex items-center gap-2`}
+                    >
                       <Trophy className={`w-5 h-5 ${panel.color}`} />
-                      <h3 className="font-semibold">{panel.name} Leaderboard</h3>
+                      <h3 className="font-semibold">
+                        {panel.name} Leaderboard
+                      </h3>
                     </div>
                     <div className="divide-y divide-white/10">
                       {topExperts.map((expert, index) => (
-                        <div 
+                        <div
                           key={expert.id}
                           className="flex items-center gap-4 p-4 hover:bg-white/5 cursor-pointer transition-colors"
                           onClick={() => setShowExpertDetail(expert.id)}
                         >
-                          <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold ${
-                            index === 0 ? 'bg-yellow-500/20 text-yellow-400' :
-                            index === 1 ? 'bg-gray-400/20 text-foreground/80' :
-                            index === 2 ? 'bg-amber-600/20 text-amber-500' :
-                            'bg-white/10 text-foreground/70'
-                          }`}>
+                          <div
+                            className={`w-8 h-8 rounded-full flex items-center justify-center font-bold ${
+                              index === 0
+                                ? "bg-yellow-500/20 text-yellow-400"
+                                : index === 1
+                                  ? "bg-gray-400/20 text-foreground/80"
+                                  : index === 2
+                                    ? "bg-amber-600/20 text-amber-500"
+                                    : "bg-white/10 text-foreground/70"
+                            }`}
+                          >
                             {index + 1}
                           </div>
                           <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500/30 to-blue-500/30 flex items-center justify-center text-lg">
                             {expert.avatar}
                           </div>
                           <div className="flex-1 min-w-0">
-                            <h4 className="font-medium truncate">{expert.name}</h4>
-                            <p className="text-sm text-foreground/70 truncate">{expert.specialty}</p>
+                            <h4 className="font-medium truncate">
+                              {expert.name}
+                            </h4>
+                            <p className="text-sm text-foreground/70 truncate">
+                              {expert.specialty}
+                            </p>
                           </div>
                           <div className="text-right">
-                            <div className="text-lg font-bold text-cyan-400">{expert.performanceScore}%</div>
-                            <div className="text-xs text-foreground/70">{expert.projectsCompleted} projects</div>
+                            <div className="text-lg font-bold text-cyan-400">
+                              {expert.performanceScore}%
+                            </div>
+                            <div className="text-xs text-foreground/70">
+                              {expert.projectsCompleted} projects
+                            </div>
                           </div>
                         </div>
                       ))}
@@ -948,13 +1183,16 @@ export default function AISMEsPage() {
         )}
 
         {/* Teams View */}
-        {viewMode === 'teams' && (
+        {viewMode === "teams" && (
           <div className="flex-1 overflow-y-auto p-4 sm:p-6">
             <div className="max-w-4xl mx-auto">
               {teamsLoading ? (
                 <div className="space-y-4">
                   {Array.from({ length: 3 }).map((_, i) => (
-                    <div key={i} className="bg-white/5 border border-white/10 rounded-2xl p-4 animate-pulse">
+                    <div
+                      key={i}
+                      className="bg-white/5 border border-white/10 rounded-2xl p-4 animate-pulse"
+                    >
                       <div className="flex items-center justify-between mb-3">
                         <div className="space-y-2">
                           <div className="h-5 w-40 bg-white/10 rounded" />
@@ -964,7 +1202,10 @@ export default function AISMEsPage() {
                       </div>
                       <div className="flex gap-2">
                         {Array.from({ length: 4 }).map((_, j) => (
-                          <div key={j} className="w-10 h-10 rounded-full bg-white/10" />
+                          <div
+                            key={j}
+                            className="w-10 h-10 rounded-full bg-white/10"
+                          />
                         ))}
                       </div>
                     </div>
@@ -973,14 +1214,21 @@ export default function AISMEsPage() {
               ) : savedTeams && savedTeams.length > 0 ? (
                 <div className="space-y-4">
                   {savedTeams.map(team => (
-                    <div key={team.id} className="bg-white/5 border border-white/10 rounded-2xl p-4">
+                    <div
+                      key={team.id}
+                      className="bg-white/5 border border-white/10 rounded-2xl p-4"
+                    >
                       <div className="flex items-center justify-between mb-3">
                         <div>
                           <h3 className="font-semibold">{team.name}</h3>
-                          <p className="text-sm text-foreground/70">{team.purpose || team.description}</p>
+                          <p className="text-sm text-foreground/70">
+                            {team.purpose || team.description}
+                          </p>
                         </div>
                         <div className="flex items-center gap-2">
-                          <Badge className="bg-emerald-500/10 text-emerald-400">Active</Badge>
+                          <Badge className="bg-emerald-500/10 text-emerald-400">
+                            Active
+                          </Badge>
                           <Button
                             variant="ghost"
                             size="icon"
@@ -1001,8 +1249,13 @@ export default function AISMEsPage() {
                 <div className="text-center py-12">
                   <Users className="w-12 h-12 mx-auto mb-4 text-foreground/50" />
                   <h3 className="text-lg font-medium mb-2">No Teams Yet</h3>
-                  <p className="text-foreground/70 mb-4">Assemble your first expert team to get started</p>
-                  <Button onClick={() => setViewMode('assemble')} className="gap-2">
+                  <p className="text-foreground/70 mb-4">
+                    Assemble your first expert team to get started
+                  </p>
+                  <Button
+                    onClick={() => setViewMode("assemble")}
+                    className="gap-2"
+                  >
                     <Plus className="w-4 h-4" />
                     Assemble Team
                   </Button>
@@ -1013,31 +1266,37 @@ export default function AISMEsPage() {
         )}
 
         {/* Assemble View */}
-        {viewMode === 'assemble' && (
+        {viewMode === "assemble" && (
           <div className="flex-1 overflow-y-auto p-4 sm:p-6">
             <div className="max-w-2xl mx-auto">
               <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
-                <h2 className="text-xl font-semibold mb-4">Assemble Expert Team</h2>
-                
+                <h2 className="text-xl font-semibold mb-4">
+                  Assemble Expert Team
+                </h2>
+
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium mb-2">Team Name</label>
+                    <label className="block text-sm font-medium mb-2">
+                      Team Name
+                    </label>
                     <Input
                       placeholder="e.g., Due Diligence Team"
                       value={teamName}
-                      onChange={(e) => setTeamName(e.target.value)}
+                      onChange={e => setTeamName(e.target.value)}
                     />
                   </div>
-                  
+
                   <div>
-                    <label className="block text-sm font-medium mb-2">Purpose</label>
+                    <label className="block text-sm font-medium mb-2">
+                      Purpose
+                    </label>
                     <Input
                       placeholder="What will this team work on?"
                       value={teamPurpose}
-                      onChange={(e) => setTeamPurpose(e.target.value)}
+                      onChange={e => setTeamPurpose(e.target.value)}
                     />
                   </div>
-                  
+
                   <div>
                     <label className="block text-sm font-medium mb-2">
                       Selected Experts ({selectedExperts.length})
@@ -1045,14 +1304,18 @@ export default function AISMEsPage() {
                     {selectedExperts.length > 0 ? (
                       <div className="flex flex-wrap gap-2">
                         {selectedExperts.map(expert => (
-                          <div 
+                          <div
                             key={expert.id}
                             className="flex items-center gap-2 px-3 py-2 bg-cyan-500/10 border border-cyan-500/30 rounded-full"
                           >
                             <span>{expert.avatar}</span>
                             <span className="text-sm">{expert.name}</span>
                             <button
-                              onClick={() => setSelectedExperts(prev => prev.filter(e => e.id !== expert.id))}
+                              onClick={() =>
+                                setSelectedExperts(prev =>
+                                  prev.filter(e => e.id !== expert.id)
+                                )
+                              }
                               className="text-foreground/70 hover:text-white"
                             >
                               <X className="w-4 h-4" />
@@ -1066,10 +1329,14 @@ export default function AISMEsPage() {
                       </p>
                     )}
                   </div>
-                  
-                  <Button 
+
+                  <Button
                     onClick={submitTaskToTeam}
-                    disabled={!teamName.trim() || selectedExperts.length === 0 || createTeamMutation.isPending}
+                    disabled={
+                      !teamName.trim() ||
+                      selectedExperts.length === 0 ||
+                      createTeamMutation.isPending
+                    }
                     className="w-full gap-2"
                   >
                     {createTeamMutation.isPending ? (
@@ -1086,7 +1353,7 @@ export default function AISMEsPage() {
         )}
 
         {/* External Resources View */}
-        {viewMode === 'external' && (
+        {viewMode === "external" && (
           <div className="flex-1 overflow-hidden">
             <ExternalResources />
           </div>
@@ -1114,30 +1381,45 @@ export default function AISMEsPage() {
                 </div>
                 <div>
                   <h2 className="text-lg font-semibold">Expert Comparison</h2>
-                  <p className="text-sm text-foreground/70">Comparing {compareExpertData.length} experts</p>
+                  <p className="text-sm text-foreground/70">
+                    Comparing {compareExpertData.length} experts
+                  </p>
                 </div>
               </div>
-              <Button variant="ghost" size="icon" onClick={() => setShowCompareModal(false)}>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setShowCompareModal(false)}
+              >
                 <X className="w-5 h-5" />
               </Button>
             </div>
 
             <div className="p-4 overflow-y-auto max-h-[calc(90vh-140px)]">
-              <div className={`grid gap-4 ${compareExpertData.length === 2 ? 'grid-cols-2' : 'grid-cols-3'}`}>
+              <div
+                className={`grid gap-4 ${compareExpertData.length === 2 ? "grid-cols-2" : "grid-cols-3"}`}
+              >
                 {compareExpertData.map(expert => {
                   const expertPanel = getExpertPanelType(expert);
                   const panelInfo = panelTypes[expertPanel];
-                  
+
                   return (
-                    <div key={expert.id} className="bg-white/5 border border-white/10 rounded-xl p-4">
+                    <div
+                      key={expert.id}
+                      className="bg-white/5 border border-white/10 rounded-xl p-4"
+                    >
                       <div className="flex items-center gap-3 mb-4 pb-4 border-b border-white/10">
                         <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-cyan-500/30 to-blue-500/30 flex items-center justify-center text-2xl">
                           {expert.avatar}
                         </div>
                         <div>
                           <h3 className="font-semibold">{expert.name}</h3>
-                          <p className="text-sm text-foreground/70">{expert.category}</p>
-                          <div className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] mt-1 ${panelInfo.bgColor} ${panelInfo.color}`}>
+                          <p className="text-sm text-foreground/70">
+                            {expert.category}
+                          </p>
+                          <div
+                            className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] mt-1 ${panelInfo.bgColor} ${panelInfo.color}`}
+                          >
                             {panelInfo.icon} {panelInfo.name}
                           </div>
                         </div>
@@ -1145,11 +1427,15 @@ export default function AISMEsPage() {
 
                       <div className="mb-4">
                         <div className="flex items-center justify-between mb-1">
-                          <span className="text-xs text-foreground/70">Performance</span>
-                          <span className="text-sm font-semibold text-cyan-400">{expert.performanceScore}%</span>
+                          <span className="text-xs text-foreground/70">
+                            Performance
+                          </span>
+                          <span className="text-sm font-semibold text-cyan-400">
+                            {expert.performanceScore}%
+                          </span>
                         </div>
                         <div className="h-2 bg-white/10 rounded-full overflow-hidden">
-                          <div 
+                          <div
                             className="h-full bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full"
                             style={{ width: `${expert.performanceScore}%` }}
                           />
@@ -1157,10 +1443,16 @@ export default function AISMEsPage() {
                       </div>
 
                       <div className="mb-4">
-                        <h4 className="text-xs text-foreground/70 uppercase tracking-wider mb-2">Strengths</h4>
+                        <h4 className="text-xs text-foreground/70 uppercase tracking-wider mb-2">
+                          Strengths
+                        </h4>
                         <div className="flex flex-wrap gap-1">
                           {expert.strengths.slice(0, 4).map((strength, i) => (
-                            <Badge key={i} variant="outline" className="text-xs bg-emerald-500/10 border-emerald-500/30 text-emerald-400">
+                            <Badge
+                              key={i}
+                              variant="outline"
+                              className="text-xs bg-emerald-500/10 border-emerald-500/30 text-emerald-400"
+                            >
                               {strength}
                             </Badge>
                           ))}
@@ -1169,30 +1461,42 @@ export default function AISMEsPage() {
 
                       <div className="grid grid-cols-2 gap-2 text-center pt-4 border-t border-white/10">
                         <div>
-                          <div className="text-lg font-semibold">{expert.projectsCompleted}</div>
-                          <div className="text-xs text-foreground/70">Projects</div>
+                          <div className="text-lg font-semibold">
+                            {expert.projectsCompleted}
+                          </div>
+                          <div className="text-xs text-foreground/70">
+                            Projects
+                          </div>
                         </div>
                         <div>
-                          <div className="text-lg font-semibold">{expert.performanceScore}</div>
-                          <div className="text-xs text-foreground/70">Rating</div>
+                          <div className="text-lg font-semibold">
+                            {expert.performanceScore}
+                          </div>
+                          <div className="text-xs text-foreground/70">
+                            Rating
+                          </div>
                         </div>
                       </div>
 
                       <div className="flex gap-2 mt-4 pt-4 border-t border-white/10">
-                        <Button 
-                          size="sm" 
+                        <Button
+                          size="sm"
                           className="flex-1 gap-1"
                           onClick={() => toggleExpertSelection(expert)}
                         >
                           {selectedExperts.some(e => e.id === expert.id) ? (
-                            <><CheckCircle2 className="w-3 h-3" /> Selected</>
+                            <>
+                              <CheckCircle2 className="w-3 h-3" /> Selected
+                            </>
                           ) : (
-                            <><Plus className="w-3 h-3" /> Add</>
+                            <>
+                              <Plus className="w-3 h-3" /> Add
+                            </>
                           )}
                         </Button>
-                        <Button 
-                          size="sm" 
-                          variant="outline" 
+                        <Button
+                          size="sm"
+                          variant="outline"
                           className="gap-1"
                           onClick={() => {
                             setShowCompareModal(false);
@@ -1209,23 +1513,26 @@ export default function AISMEsPage() {
             </div>
 
             <div className="flex items-center justify-between p-4 border-t border-white/10 bg-white/5">
-              <Button 
-                variant="ghost" 
+              <Button
+                variant="ghost"
                 onClick={() => setCompareExperts([])}
                 className="text-foreground/70"
               >
                 Clear All
               </Button>
               <div className="flex gap-2">
-                <Button variant="outline" onClick={() => setShowCompareModal(false)}>
+                <Button
+                  variant="outline"
+                  onClick={() => setShowCompareModal(false)}
+                >
                   Close
                 </Button>
                 {selectedExperts.length > 0 && (
-                  <Button 
+                  <Button
                     className="gap-2 bg-gradient-to-r from-cyan-500 to-blue-500"
                     onClick={() => {
                       setShowCompareModal(false);
-                      setViewMode('assemble');
+                      setViewMode("assemble");
                     }}
                   >
                     <Users className="w-4 h-4" />

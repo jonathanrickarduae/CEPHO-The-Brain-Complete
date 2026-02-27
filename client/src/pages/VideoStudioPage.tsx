@@ -1,4 +1,4 @@
-import { VideoCreationPipeline } from '@/components/shared/VideoCreationPipeline';
+import { VideoCreationPipeline } from "@/components/shared/VideoCreationPipeline";
 
 export default function VideoStudioPage() {
   return (

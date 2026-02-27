@@ -1,18 +1,24 @@
-import { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { 
-  useIdealsDataroom, 
-  type IdealsProject, 
+import { useState } from "react";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  useIdealsDataroom,
+  type IdealsProject,
   type IdealsFolder,
   type IdealsDocument,
-  type FolderMapping 
-} from '@/lib/idealsDataroom';
+  type FolderMapping,
+} from "@/lib/idealsDataroom";
 import {
   Database,
   FolderOpen,
@@ -30,8 +36,8 @@ import {
   Key,
   FolderPlus,
   ArrowRight,
-  Settings
-} from 'lucide-react';
+  Settings,
+} from "lucide-react";
 
 export function IdealsDataroomIntegration() {
   const {
@@ -55,17 +61,17 @@ export function IdealsDataroomIntegration() {
     removeMapping,
   } = useIdealsDataroom();
 
-  const [apiKeyInput, setApiKeyInput] = useState('');
+  const [apiKeyInput, setApiKeyInput] = useState("");
   const [showApiKey, setShowApiKey] = useState(false);
-  const [newFolderName, setNewFolderName] = useState('');
-  const [selectedBrainFolder, setSelectedBrainFolder] = useState<string>('');
-  const [selectedIdealsFolder, setSelectedIdealsFolder] = useState<string>('');
+  const [newFolderName, setNewFolderName] = useState("");
+  const [selectedBrainFolder, setSelectedBrainFolder] = useState<string>("");
+  const [selectedIdealsFolder, setSelectedIdealsFolder] = useState<string>("");
 
   const handleConnect = async () => {
     if (!apiKeyInput.trim()) return;
     try {
       await connect(apiKeyInput);
-      setApiKeyInput('');
+      setApiKeyInput("");
     } catch (e) {
       // Error is handled by the hook
     }
@@ -79,7 +85,7 @@ export function IdealsDataroomIntegration() {
       await uploadDocument(selectedIdealsFolder, file);
       await loadDocuments(selectedIdealsFolder);
     } catch (error) {
-      console.error('Upload failed:', error);
+      console.error("Upload failed:", error);
     }
   };
 
@@ -87,19 +93,19 @@ export function IdealsDataroomIntegration() {
     if (!newFolderName.trim()) return;
     try {
       await createFolder(newFolderName);
-      setNewFolderName('');
+      setNewFolderName("");
     } catch (error) {
-      console.error('Failed to create folder:', error);
+      console.error("Failed to create folder:", error);
     }
   };
 
   // Mock Brain folders for demo
   const brainFolders = [
-    { id: 'contracts', name: 'Contracts' },
-    { id: 'financials', name: 'Financial Models' },
-    { id: 'legal', name: 'Legal Documents' },
-    { id: 'presentations', name: 'Investor Presentations' },
-    { id: 'due-diligence', name: 'Due Diligence' },
+    { id: "contracts", name: "Contracts" },
+    { id: "financials", name: "Financial Models" },
+    { id: "legal", name: "Legal Documents" },
+    { id: "presentations", name: "Investor Presentations" },
+    { id: "due-diligence", name: "Due Diligence" },
   ];
 
   return (
@@ -124,11 +130,11 @@ export function IdealsDataroomIntegration() {
                   <span className="font-medium">Secure Connection</span>
                 </div>
                 <p className="text-sm text-muted-foreground">
-                  Your API key is stored locally and used only to authenticate with iDeals.
-                  Get your API key from{' '}
-                  <a 
-                    href="https://www.idealsvdr.com" 
-                    target="_blank" 
+                  Your API key is stored locally and used only to authenticate
+                  with iDeals. Get your API key from{" "}
+                  <a
+                    href="https://www.idealsvdr.com"
+                    target="_blank"
                     rel="noopener noreferrer"
                     className="text-primary hover:underline"
                   >
@@ -144,9 +150,9 @@ export function IdealsDataroomIntegration() {
                     <Key className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                     <Input
                       id="apiKey"
-                      type={showApiKey ? 'text' : 'password'}
+                      type={showApiKey ? "text" : "password"}
                       value={apiKeyInput}
-                      onChange={(e) => setApiKeyInput(e.target.value)}
+                      onChange={e => setApiKeyInput(e.target.value)}
                       placeholder="Enter your iDeals API key"
                       className="pl-10"
                     />
@@ -155,13 +161,13 @@ export function IdealsDataroomIntegration() {
                     variant="outline"
                     onClick={() => setShowApiKey(!showApiKey)}
                   >
-                    {showApiKey ? 'Hide' : 'Show'}
+                    {showApiKey ? "Hide" : "Show"}
                   </Button>
                 </div>
               </div>
 
-              <Button 
-                onClick={handleConnect} 
+              <Button
+                onClick={handleConnect}
                 disabled={!apiKeyInput.trim() || isLoading}
                 className="w-full"
               >
@@ -201,19 +207,25 @@ export function IdealsDataroomIntegration() {
               <div className="space-y-2">
                 <Label>Select Project</Label>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                  {projects.map((project) => (
+                  {projects.map(project => (
                     <button
                       key={project.id}
                       onClick={() => selectProject(project.id)}
                       className={`p-3 rounded-lg border text-left transition-all ${
                         selectedProject?.id === project.id
-                          ? 'border-primary bg-primary/10'
-                          : 'border-border hover:border-primary/50'
+                          ? "border-primary bg-primary/10"
+                          : "border-border hover:border-primary/50"
                       }`}
                     >
                       <div className="flex items-center justify-between">
                         <span className="font-medium">{project.name}</span>
-                        <Badge variant={project.status === 'Active' ? 'default' : 'secondary'}>
+                        <Badge
+                          variant={
+                            project.status === "Active"
+                              ? "default"
+                              : "secondary"
+                          }
+                        >
                           {project.status}
                         </Badge>
                       </div>
@@ -257,7 +269,7 @@ export function IdealsDataroomIntegration() {
                     <Input
                       placeholder="New folder name"
                       value={newFolderName}
-                      onChange={(e) => setNewFolderName(e.target.value)}
+                      onChange={e => setNewFolderName(e.target.value)}
                       className="w-48"
                     />
                     <Button size="sm" onClick={handleCreateFolder}>
@@ -278,7 +290,7 @@ export function IdealsDataroomIntegration() {
                   </div>
                 ) : (
                   <div className="space-y-2">
-                    {folders.map((folder) => (
+                    {folders.map(folder => (
                       <div
                         key={folder.id}
                         onClick={() => {
@@ -287,8 +299,8 @@ export function IdealsDataroomIntegration() {
                         }}
                         className={`p-3 rounded-lg border cursor-pointer transition-all ${
                           selectedIdealsFolder === folder.id
-                            ? 'border-primary bg-primary/10'
-                            : 'border-border hover:border-primary/50'
+                            ? "border-primary bg-primary/10"
+                            : "border-border hover:border-primary/50"
                         }`}
                       >
                         <div className="flex items-center gap-3">
@@ -313,7 +325,11 @@ export function IdealsDataroomIntegration() {
               <CardHeader>
                 <CardTitle className="flex items-center justify-between">
                   <span>Documents</span>
-                  <Button variant="outline" size="sm" onClick={() => loadDocuments(selectedIdealsFolder)}>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => loadDocuments(selectedIdealsFolder)}
+                  >
                     <RefreshCw className="h-4 w-4 mr-2" />
                     Refresh
                   </Button>
@@ -330,27 +346,36 @@ export function IdealsDataroomIntegration() {
                   </div>
                 ) : (
                   <div className="space-y-2">
-                    {documents.filter(d => d.dataType === 'File').map((doc) => (
-                      <div
-                        key={doc.id}
-                        className="p-3 rounded-lg border border-border hover:border-primary/50 transition-all"
-                      >
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-3">
-                            <FileText className="h-5 w-5 text-blue-500" />
-                            <div>
-                              <div className="font-medium">{doc.name}</div>
-                              <div className="text-xs text-muted-foreground">
-                                {doc.fileExtensionType} • {(doc.size / 1024).toFixed(1)} KB
+                    {documents
+                      .filter(d => d.dataType === "File")
+                      .map(doc => (
+                        <div
+                          key={doc.id}
+                          className="p-3 rounded-lg border border-border hover:border-primary/50 transition-all"
+                        >
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                              <FileText className="h-5 w-5 text-blue-500" />
+                              <div>
+                                <div className="font-medium">{doc.name}</div>
+                                <div className="text-xs text-muted-foreground">
+                                  {doc.fileExtensionType} •{" "}
+                                  {(doc.size / 1024).toFixed(1)} KB
+                                </div>
                               </div>
                             </div>
+                            <Badge
+                              variant={
+                                doc.publicationStatus === "Published"
+                                  ? "default"
+                                  : "secondary"
+                              }
+                            >
+                              {doc.publicationStatus}
+                            </Badge>
                           </div>
-                          <Badge variant={doc.publicationStatus === 'Published' ? 'default' : 'secondary'}>
-                            {doc.publicationStatus}
-                          </Badge>
                         </div>
-                      </div>
-                    ))}
+                      ))}
                   </div>
                 )}
               </CardContent>
@@ -362,7 +387,8 @@ export function IdealsDataroomIntegration() {
               <CardHeader>
                 <CardTitle>Folder Mappings</CardTitle>
                 <CardDescription>
-                  Link Brain Library folders to iDeals dataroom folders for automatic sync
+                  Link Brain Library folders to iDeals dataroom folders for
+                  automatic sync
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -373,41 +399,49 @@ export function IdealsDataroomIntegration() {
                       <Label>Brain Folder</Label>
                       <select
                         value={selectedBrainFolder}
-                        onChange={(e) => setSelectedBrainFolder(e.target.value)}
+                        onChange={e => setSelectedBrainFolder(e.target.value)}
                         className="w-full px-3 py-2 rounded-md border border-input bg-background"
                       >
                         <option value="">Select folder...</option>
-                        {brainFolders.map((f) => (
-                          <option key={f.id} value={f.id}>{f.name}</option>
+                        {brainFolders.map(f => (
+                          <option key={f.id} value={f.id}>
+                            {f.name}
+                          </option>
                         ))}
                       </select>
                     </div>
-                    
+
                     <div className="flex items-center justify-center">
                       <ArrowRight className="h-5 w-5 text-muted-foreground" />
                     </div>
-                    
+
                     <div className="space-y-2">
                       <Label>iDeals Folder</Label>
                       <select
                         value={selectedIdealsFolder}
-                        onChange={(e) => setSelectedIdealsFolder(e.target.value)}
+                        onChange={e => setSelectedIdealsFolder(e.target.value)}
                         className="w-full px-3 py-2 rounded-md border border-input bg-background"
                       >
                         <option value="">Select folder...</option>
-                        {folders.map((f) => (
-                          <option key={f.id} value={f.id}>{f.name}</option>
+                        {folders.map(f => (
+                          <option key={f.id} value={f.id}>
+                            {f.name}
+                          </option>
                         ))}
                       </select>
                     </div>
                   </div>
-                  
+
                   <Button
                     className="mt-4 w-full"
                     disabled={!selectedBrainFolder || !selectedIdealsFolder}
                     onClick={() => {
-                      const brainFolder = brainFolders.find(f => f.id === selectedBrainFolder);
-                      const idealsFolder = folders.find(f => f.id === selectedIdealsFolder);
+                      const brainFolder = brainFolders.find(
+                        f => f.id === selectedBrainFolder
+                      );
+                      const idealsFolder = folders.find(
+                        f => f.id === selectedIdealsFolder
+                      );
                       if (brainFolder && idealsFolder) {
                         addMapping({
                           brainFolderId: brainFolder.id,
@@ -416,8 +450,8 @@ export function IdealsDataroomIntegration() {
                           idealsFolderName: idealsFolder.name,
                           autoSync: false,
                         });
-                        setSelectedBrainFolder('');
-                        setSelectedIdealsFolder('');
+                        setSelectedBrainFolder("");
+                        setSelectedIdealsFolder("");
                       }
                     }}
                   >
@@ -429,7 +463,7 @@ export function IdealsDataroomIntegration() {
                 {/* Existing Mappings */}
                 {mappings.length > 0 ? (
                   <div className="space-y-2">
-                    {mappings.map((mapping) => (
+                    {mappings.map(mapping => (
                       <div
                         key={mapping.brainFolderId}
                         className="p-3 rounded-lg border border-border flex items-center justify-between"
@@ -494,23 +528,41 @@ export function IdealsDataroomIntegration() {
                     {uploadProgress && (
                       <div className="p-4 rounded-lg border border-border">
                         <div className="flex items-center justify-between mb-2">
-                          <span className="font-medium">{uploadProgress.fileName}</span>
-                          <Badge variant={
-                            uploadProgress.status === 'completed' ? 'default' :
-                            uploadProgress.status === 'failed' ? 'destructive' :
-                            'secondary'
-                          }>
+                          <span className="font-medium">
+                            {uploadProgress.fileName}
+                          </span>
+                          <Badge
+                            variant={
+                              uploadProgress.status === "completed"
+                                ? "default"
+                                : uploadProgress.status === "failed"
+                                  ? "destructive"
+                                  : "secondary"
+                            }
+                          >
                             {uploadProgress.status}
                           </Badge>
                         </div>
-                        <Progress 
-                          value={(uploadProgress.uploadedSize / uploadProgress.totalSize) * 100} 
+                        <Progress
+                          value={
+                            (uploadProgress.uploadedSize /
+                              uploadProgress.totalSize) *
+                            100
+                          }
                         />
                         <div className="text-xs text-muted-foreground mt-1">
-                          {(uploadProgress.uploadedSize / 1024 / 1024).toFixed(2)} MB / 
-                          {(uploadProgress.totalSize / 1024 / 1024).toFixed(2)} MB
+                          {(uploadProgress.uploadedSize / 1024 / 1024).toFixed(
+                            2
+                          )}{" "}
+                          MB /
+                          {(uploadProgress.totalSize / 1024 / 1024).toFixed(2)}{" "}
+                          MB
                           {uploadProgress.chunksTotal > 1 && (
-                            <span> • Chunk {uploadProgress.chunksUploaded}/{uploadProgress.chunksTotal}</span>
+                            <span>
+                              {" "}
+                              • Chunk {uploadProgress.chunksUploaded}/
+                              {uploadProgress.chunksTotal}
+                            </span>
                           )}
                         </div>
                       </div>
@@ -542,8 +594,16 @@ export function IdealsDataroomIntegration() {
                 <RefreshCw className="h-5 w-5 mb-1" />
                 <span className="text-xs">Refresh</span>
               </Button>
-              <Button variant="outline" className="h-auto py-3 flex-col" asChild>
-                <a href="https://www.idealsvdr.com" target="_blank" rel="noopener noreferrer">
+              <Button
+                variant="outline"
+                className="h-auto py-3 flex-col"
+                asChild
+              >
+                <a
+                  href="https://www.idealsvdr.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <ExternalLink className="h-5 w-5 mb-1" />
                   <span className="text-xs">Open iDeals</span>
                 </a>

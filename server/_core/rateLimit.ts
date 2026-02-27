@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response, NextFunction } from "express";
 
 interface RateLimitStore {
   [key: string]: {
@@ -20,8 +20,8 @@ export function rateLimit(options: RateLimitOptions = {}) {
   const {
     windowMs = 60 * 1000, // 1 minute default
     maxRequests = 100, // 100 requests per window
-    message = 'Too many requests, please try again later.',
-    keyGenerator = (req) => req.ip || 'unknown'
+    message = "Too many requests, please try again later.",
+    keyGenerator = req => req.ip || "unknown",
   } = options;
 
   const storeName = `${windowMs}-${maxRequests}`;
@@ -47,7 +47,7 @@ export function rateLimit(options: RateLimitOptions = {}) {
     if (!store[key] || store[key].resetTime < now) {
       store[key] = {
         count: 1,
-        resetTime: now + windowMs
+        resetTime: now + windowMs,
       };
     } else {
       store[key].count++;
@@ -56,15 +56,15 @@ export function rateLimit(options: RateLimitOptions = {}) {
     const remaining = Math.max(0, maxRequests - store[key].count);
     const resetTime = Math.ceil((store[key].resetTime - now) / 1000);
 
-    res.setHeader('X-RateLimit-Limit', maxRequests.toString());
-    res.setHeader('X-RateLimit-Remaining', remaining.toString());
-    res.setHeader('X-RateLimit-Reset', resetTime.toString());
+    res.setHeader("X-RateLimit-Limit", maxRequests.toString());
+    res.setHeader("X-RateLimit-Remaining", remaining.toString());
+    res.setHeader("X-RateLimit-Reset", resetTime.toString());
 
     if (store[key].count > maxRequests) {
       res.status(429).json({
-        error: 'RATE_LIMIT_EXCEEDED',
+        error: "RATE_LIMIT_EXCEEDED",
         message,
-        retryAfter: resetTime
+        retryAfter: resetTime,
       });
       return;
     }
@@ -77,23 +77,24 @@ export function rateLimit(options: RateLimitOptions = {}) {
 export const apiRateLimit = rateLimit({
   windowMs: 60 * 1000, // 1 minute
   maxRequests: 100,
-  message: 'API rate limit exceeded. Please wait before making more requests.'
+  message: "API rate limit exceeded. Please wait before making more requests.",
 });
 
 export const authRateLimit = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   maxRequests: 10,
-  message: 'Too many authentication attempts. Please try again later.'
+  message: "Too many authentication attempts. Please try again later.",
 });
 
 export const aiRateLimit = rateLimit({
   windowMs: 60 * 1000, // 1 minute
   maxRequests: 20,
-  message: 'AI request limit reached. Please wait before sending more messages.'
+  message:
+    "AI request limit reached. Please wait before sending more messages.",
 });
 
 export const uploadRateLimit = rateLimit({
   windowMs: 60 * 1000, // 1 minute
   maxRequests: 10,
-  message: 'Upload limit reached. Please wait before uploading more files.'
+  message: "Upload limit reached. Please wait before uploading more files.",
 });

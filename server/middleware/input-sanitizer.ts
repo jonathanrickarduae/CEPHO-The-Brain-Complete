@@ -1,5 +1,5 @@
-import validator from 'validator';
-import type { Request, Response, NextFunction } from 'express';
+import validator from "validator";
+import type { Request, Response, NextFunction } from "express";
 
 /**
  * Input Sanitization Middleware
@@ -10,8 +10,8 @@ import type { Request, Response, NextFunction } from 'express';
  * Sanitize string input to prevent XSS
  */
 export function sanitizeString(input: string): string {
-  if (typeof input !== 'string') return input;
-  
+  if (typeof input !== "string") return input;
+
   // Escape HTML entities
   return validator.escape(input);
 }
@@ -20,15 +20,15 @@ export function sanitizeString(input: string): string {
  * Sanitize object recursively
  */
 export function sanitizeObject(obj: any): any {
-  if (typeof obj === 'string') {
+  if (typeof obj === "string") {
     return sanitizeString(obj);
   }
-  
+
   if (Array.isArray(obj)) {
     return obj.map(item => sanitizeObject(item));
   }
-  
-  if (obj && typeof obj === 'object') {
+
+  if (obj && typeof obj === "object") {
     const sanitized: any = {};
     for (const key in obj) {
       if (obj.hasOwnProperty(key)) {
@@ -37,7 +37,7 @@ export function sanitizeObject(obj: any): any {
     }
     return sanitized;
   }
-  
+
   return obj;
 }
 
@@ -55,7 +55,12 @@ export function sanitizeEmail(email: string): string | null {
  * Validate and sanitize URL
  */
 export function sanitizeURL(url: string): string | null {
-  if (!validator.isURL(url, { protocols: ['http', 'https'], require_protocol: true })) {
+  if (
+    !validator.isURL(url, {
+      protocols: ["http", "https"],
+      require_protocol: true,
+    })
+  ) {
     return null;
   }
   return url;
@@ -65,7 +70,7 @@ export function sanitizeURL(url: string): string | null {
  * Validate and sanitize phone number
  */
 export function sanitizePhone(phone: string): string | null {
-  if (!validator.isMobilePhone(phone, 'any')) {
+  if (!validator.isMobilePhone(phone, "any")) {
     return null;
   }
   return phone;
@@ -75,7 +80,7 @@ export function sanitizePhone(phone: string): string | null {
  * Middleware to sanitize request body
  */
 export function sanitizeBody(req: Request, res: Response, next: NextFunction) {
-  if (req.body && typeof req.body === 'object') {
+  if (req.body && typeof req.body === "object") {
     req.body = sanitizeObject(req.body);
   }
   next();
@@ -85,7 +90,7 @@ export function sanitizeBody(req: Request, res: Response, next: NextFunction) {
  * Middleware to sanitize query parameters
  */
 export function sanitizeQuery(req: Request, res: Response, next: NextFunction) {
-  if (req.query && typeof req.query === 'object') {
+  if (req.query && typeof req.query === "object") {
     req.query = sanitizeObject(req.query);
   }
   next();
@@ -94,8 +99,12 @@ export function sanitizeQuery(req: Request, res: Response, next: NextFunction) {
 /**
  * Middleware to sanitize URL parameters
  */
-export function sanitizeParams(req: Request, res: Response, next: NextFunction) {
-  if (req.params && typeof req.params === 'object') {
+export function sanitizeParams(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  if (req.params && typeof req.params === "object") {
     req.params = sanitizeObject(req.params);
   }
   next();
@@ -116,12 +125,12 @@ export function applySanitizationMiddleware(app: any) {
 export const validators = {
   isEmail: (email: string) => validator.isEmail(email),
   isURL: (url: string) => validator.isURL(url),
-  isPhone: (phone: string) => validator.isMobilePhone(phone, 'any'),
+  isPhone: (phone: string) => validator.isMobilePhone(phone, "any"),
   isAlphanumeric: (str: string) => validator.isAlphanumeric(str),
   isNumeric: (str: string) => validator.isNumeric(str),
-  isLength: (str: string, min: number, max: number) => 
+  isLength: (str: string, min: number, max: number) =>
     validator.isLength(str, { min, max }),
-  isStrongPassword: (password: string) => 
+  isStrongPassword: (password: string) =>
     validator.isStrongPassword(password, {
       minLength: 12,
       minLowercase: 1,

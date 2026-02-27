@@ -18,30 +18,30 @@
   --cepho-black: #000000;
   --cepho-pink-neon: #ff006e;
   --cepho-white: #ffffff;
-  
+
   /* Grey Scale */
-  --cepho-light-grey: #F3F4F6;
+  --cepho-light-grey: #f3f4f6;
   --cepho-mid-grey: #666666;
   --cepho-dark-grey: #333333;
-  --cepho-alt-row: #FAFAFA;
-  
+  --cepho-alt-row: #fafafa;
+
   /* Heat Map Colors - 0-100 Scale */
   /* Dark backgrounds MUST use white text */
-  --score-excellent: #22c55e;      /* 80-100: Green - white text */
-  --score-good: #84cc16;           /* 70-79: Light Green - black text */
-  --score-satisfactory: #eab308;   /* 60-69: Yellow - black text */
-  --score-attention: #f97316;      /* 40-59: Orange - white text */
-  --score-critical: #ef4444;       /* 30-39: Red - white text */
-  --score-severe: #dc2626;         /* 0-29: Dark Red - white text */
-  
+  --score-excellent: #22c55e; /* 80-100: Green - white text */
+  --score-good: #84cc16; /* 70-79: Light Green - black text */
+  --score-satisfactory: #eab308; /* 60-69: Yellow - black text */
+  --score-attention: #f97316; /* 40-59: Orange - white text */
+  --score-critical: #ef4444; /* 30-39: Red - white text */
+  --score-severe: #dc2626; /* 0-29: Dark Red - white text */
+
   /* Typography */
-  --font-primary: 'Calibri', 'Segoe UI', Arial, sans-serif;
-  
+  --font-primary: "Calibri", "Segoe UI", Arial, sans-serif;
+
   /* Spacing */
   --margin-page: 2.54cm;
   --spacing-section: 2rem;
   --spacing-paragraph: 1rem;
-  
+
   /* SME Avatar Sizes */
   --avatar-small: 40px;
   --avatar-medium: 64px;
@@ -532,25 +532,25 @@
     padding: 0;
     margin: 0;
   }
-  
+
   .cepho-report h1,
   .cepho-report h2,
   .cepho-report h3 {
     page-break-after: avoid;
   }
-  
+
   .cepho-report table {
     page-break-inside: avoid;
   }
-  
+
   .cepho-report .sme-expert-card {
     page-break-inside: avoid;
   }
-  
+
   .cepho-report .no-print {
     display: none;
   }
-  
+
   /* Ensure colors print correctly */
   .cepho-report .score-cell {
     -webkit-print-color-adjust: exact;
@@ -581,9 +581,21 @@
   color: var(--cepho-black) !important;
 }
 
-.cepho-report .mt-0 { margin-top: 0; }
-.cepho-report .mb-0 { margin-bottom: 0; }
-.cepho-report .mt-1 { margin-top: 0.5rem; }
-.cepho-report .mb-1 { margin-bottom: 0.5rem; }
-.cepho-report .mt-2 { margin-top: 1rem; }
-.cepho-report .mb-2 { margin-bottom: 1rem; }
+.cepho-report .mt-0 {
+  margin-top: 0;
+}
+.cepho-report .mb-0 {
+  margin-bottom: 0;
+}
+.cepho-report .mt-1 {
+  margin-top: 0.5rem;
+}
+.cepho-report .mb-1 {
+  margin-bottom: 0.5rem;
+}
+.cepho-report .mt-2 {
+  margin-top: 1rem;
+}
+.cepho-report .mb-2 {
+  margin-bottom: 1rem;
+}

@@ -1,7 +1,7 @@
 // Document Generator Service
 // Uses AI to generate project documents based on templates and project data
 
-import { trpc } from '@/lib/trpc';
+import { trpc } from "@/lib/trpc";
 
 export interface ProjectContext {
   projectName: string;
@@ -27,7 +27,7 @@ export interface GeneratedDocument {
   name: string;
   type: string;
   content: string;
-  format: 'markdown' | 'html' | 'text';
+  format: "markdown" | "html" | "text";
   generatedAt: Date;
   qaStatus: {
     twinReviewed: boolean;
@@ -39,14 +39,16 @@ export interface GeneratedDocument {
 // Document templates with prompts for AI generation
 const DOCUMENT_TEMPLATES = {
   nda: {
-    name: 'Non-Disclosure Agreement',
-    prompt: (ctx: ProjectContext) => `Generate a professional Non-Disclosure Agreement (NDA) for the following context:
+    name: "Non-Disclosure Agreement",
+    prompt: (
+      ctx: ProjectContext
+    ) => `Generate a professional Non-Disclosure Agreement (NDA) for the following context:
 
 Project: ${ctx.projectName}
 Description: ${ctx.oneLineDescription}
 Industry: ${ctx.industry}
 Jurisdiction: ${ctx.jurisdiction}
-${ctx.counterparty ? `Counterparty: ${ctx.counterparty}` : ''}
+${ctx.counterparty ? `Counterparty: ${ctx.counterparty}` : ""}
 
 The NDA should:
 1. Be mutual (bilateral) protecting both parties
@@ -60,16 +62,18 @@ Format the output in Markdown with clear sections.`,
   },
 
   teaser: {
-    name: 'One-Page Teaser',
-    prompt: (ctx: ProjectContext) => `Generate a compelling one-page investment teaser for:
+    name: "One-Page Teaser",
+    prompt: (
+      ctx: ProjectContext
+    ) => `Generate a compelling one-page investment teaser for:
 
 Company: ${ctx.projectName}
 Description: ${ctx.oneLineDescription}
 Industry: ${ctx.industry}
-${ctx.targetMarket ? `Target Market: ${ctx.targetMarket}` : ''}
-${ctx.revenueModel ? `Revenue Model: ${ctx.revenueModel}` : ''}
-${ctx.competitiveAdvantage ? `Competitive Advantage: ${ctx.competitiveAdvantage}` : ''}
-${ctx.dealValue ? `Investment Sought: ${ctx.currency || 'USD'} ${ctx.dealValue.toLocaleString()}` : ''}
+${ctx.targetMarket ? `Target Market: ${ctx.targetMarket}` : ""}
+${ctx.revenueModel ? `Revenue Model: ${ctx.revenueModel}` : ""}
+${ctx.competitiveAdvantage ? `Competitive Advantage: ${ctx.competitiveAdvantage}` : ""}
+${ctx.dealValue ? `Investment Sought: ${ctx.currency || "USD"} ${ctx.dealValue.toLocaleString()}` : ""}
 
 The teaser should include:
 1. Executive Summary (2-3 sentences)
@@ -85,12 +89,14 @@ Keep it concise, compelling, and professional. Format in Markdown.`,
   },
 
   financialModel: {
-    name: 'Financial Model Structure',
-    prompt: (ctx: ProjectContext) => `Create a detailed financial model structure for:
+    name: "Financial Model Structure",
+    prompt: (
+      ctx: ProjectContext
+    ) => `Create a detailed financial model structure for:
 
 Company: ${ctx.projectName}
 Industry: ${ctx.industry}
-${ctx.revenueModel ? `Revenue Model: ${ctx.revenueModel}` : ''}
+${ctx.revenueModel ? `Revenue Model: ${ctx.revenueModel}` : ""}
 
 Generate a comprehensive financial model outline including:
 
@@ -131,8 +137,10 @@ Format as a detailed Markdown document with tables where appropriate.`,
   },
 
   ddChecklist: {
-    name: 'Due Diligence Checklist',
-    prompt: (ctx: ProjectContext) => `Generate a comprehensive due diligence checklist for:
+    name: "Due Diligence Checklist",
+    prompt: (
+      ctx: ProjectContext
+    ) => `Generate a comprehensive due diligence checklist for:
 
 Company: ${ctx.projectName}
 Industry: ${ctx.industry}
@@ -183,8 +191,10 @@ Format as a Markdown checklist with [ ] checkboxes for each item.`,
   },
 
   riskRegister: {
-    name: 'Risk Register',
-    prompt: (ctx: ProjectContext) => `Generate a comprehensive risk register for:
+    name: "Risk Register",
+    prompt: (
+      ctx: ProjectContext
+    ) => `Generate a comprehensive risk register for:
 
 Company: ${ctx.projectName}
 Industry: ${ctx.industry}
@@ -227,14 +237,16 @@ Format as a Markdown table.`,
   },
 
   investmentDeck: {
-    name: 'Investment Deck Outline',
-    prompt: (ctx: ProjectContext) => `Generate a detailed investment deck outline for:
+    name: "Investment Deck Outline",
+    prompt: (
+      ctx: ProjectContext
+    ) => `Generate a detailed investment deck outline for:
 
 Company: ${ctx.projectName}
 Description: ${ctx.oneLineDescription}
 Industry: ${ctx.industry}
-${ctx.targetMarket ? `Target Market: ${ctx.targetMarket}` : ''}
-${ctx.dealValue ? `Raising: ${ctx.currency || 'USD'} ${ctx.dealValue.toLocaleString()}` : ''}
+${ctx.targetMarket ? `Target Market: ${ctx.targetMarket}` : ""}
+${ctx.dealValue ? `Raising: ${ctx.currency || "USD"} ${ctx.dealValue.toLocaleString()}` : ""}
 
 Create a 15-20 slide deck outline with:
 
@@ -264,12 +276,14 @@ Format in Markdown with clear slide separators.`,
   },
 
   shareholderAgreement: {
-    name: 'Shareholder Agreement (Draft)',
-    prompt: (ctx: ProjectContext) => `Generate a draft shareholder agreement outline for:
+    name: "Shareholder Agreement (Draft)",
+    prompt: (
+      ctx: ProjectContext
+    ) => `Generate a draft shareholder agreement outline for:
 
 Company: ${ctx.projectName}
 Jurisdiction: ${ctx.jurisdiction}
-${ctx.founders ? `Founders: ${ctx.founders.map(f => `${f.name} (${f.shareholding}%)`).join(', ')}` : ''}
+${ctx.founders ? `Founders: ${ctx.founders.map(f => `${f.name} (${f.shareholding}%)`).join(", ")}` : ""}
 
 Create a comprehensive shareholder agreement covering:
 
@@ -320,15 +334,15 @@ export async function generateDocument(
   // Use the chat API to generate the document
   // In a real implementation, this would call a dedicated document generation endpoint
   // For now, we'll simulate the response structure
-  
+
   const id = `doc_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-  
+
   return {
     id,
     name: template.name,
     type,
     content: `# ${template.name}\n\n*Generated for ${context.projectName}*\n\n---\n\n[Document content would be generated by AI based on the prompt]\n\nPrompt used:\n\`\`\`\n${prompt}\n\`\`\``,
-    format: 'markdown',
+    format: "markdown",
     generatedAt: new Date(),
     qaStatus: {
       twinReviewed: false,
@@ -338,27 +352,40 @@ export async function generateDocument(
 }
 
 // Get available document types for an engagement type
-export function getDocumentTypesForEngagement(engagementType: string): DocumentType[] {
+export function getDocumentTypesForEngagement(
+  engagementType: string
+): DocumentType[] {
   switch (engagementType) {
-    case 'full_genesis':
-      return ['nda', 'teaser', 'financialModel', 'ddChecklist', 'riskRegister', 'investmentDeck', 'shareholderAgreement'];
-    case 'financial_review':
-      return ['financialModel', 'riskRegister'];
-    case 'due_diligence':
-      return ['ddChecklist', 'riskRegister', 'nda'];
-    case 'legal_docs':
-      return ['nda', 'shareholderAgreement'];
-    case 'strategic_review':
-      return ['teaser', 'investmentDeck'];
+    case "full_genesis":
+      return [
+        "nda",
+        "teaser",
+        "financialModel",
+        "ddChecklist",
+        "riskRegister",
+        "investmentDeck",
+        "shareholderAgreement",
+      ];
+    case "financial_review":
+      return ["financialModel", "riskRegister"];
+    case "due_diligence":
+      return ["ddChecklist", "riskRegister", "nda"];
+    case "legal_docs":
+      return ["nda", "shareholderAgreement"];
+    case "strategic_review":
+      return ["teaser", "investmentDeck"];
     default:
-      return ['nda', 'teaser'];
+      return ["nda", "teaser"];
   }
 }
 
 // Export document to different formats
-export function exportDocument(doc: GeneratedDocument, format: 'md' | 'html' | 'txt'): string {
+export function exportDocument(
+  doc: GeneratedDocument,
+  format: "md" | "html" | "txt"
+): string {
   switch (format) {
-    case 'html':
+    case "html":
       // Simple markdown to HTML conversion
       return `<!DOCTYPE html>
 <html>
@@ -377,14 +404,14 @@ export function exportDocument(doc: GeneratedDocument, format: 'md' | 'html' | '
 ${doc.content}
 </body>
 </html>`;
-    case 'txt':
+    case "txt":
       // Strip markdown formatting
       return doc.content
-        .replace(/#{1,6}\s/g, '')
-        .replace(/\*\*/g, '')
-        .replace(/\*/g, '')
-        .replace(/`{1,3}/g, '')
-        .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1');
+        .replace(/#{1,6}\s/g, "")
+        .replace(/\*\*/g, "")
+        .replace(/\*/g, "")
+        .replace(/`{1,3}/g, "")
+        .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1");
     default:
       return doc.content;
   }

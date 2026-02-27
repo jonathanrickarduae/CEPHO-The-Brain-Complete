@@ -1,6 +1,6 @@
 /**
  * iDeals Virtual Data Room Integration
- * 
+ *
  * Provides seamless document upload and management for investor datarooms.
  * API Documentation: https://gateway.idealsvdr.com/api-docs
  */
@@ -14,7 +14,7 @@ export interface IdealsConfig {
 export interface IdealsProject {
   id: string;
   name: string;
-  status: 'Active' | 'Locked' | 'Archived' | 'Closed';
+  status: "Active" | "Locked" | "Archived" | "Closed";
   createdAt: string;
   documentsCount?: number;
   participantsCount?: number;
@@ -37,9 +37,9 @@ export interface IdealsDocument {
   index: string;
   isFavorite: boolean;
   isAttachment: boolean;
-  dataType: 'File' | 'Folder';
+  dataType: "File" | "Folder";
   createdAt: string;
-  publicationStatus: 'Published' | 'Unpublished';
+  publicationStatus: "Published" | "Unpublished";
   size: number;
   fileExtensionType: string;
   permissions?: string;
@@ -52,7 +52,7 @@ export interface UploadProgress {
   uploadedSize: number;
   chunksTotal: number;
   chunksUploaded: number;
-  status: 'pending' | 'uploading' | 'completed' | 'failed';
+  status: "pending" | "uploading" | "completed" | "failed";
   error?: string;
 }
 
@@ -66,15 +66,15 @@ export interface FolderMapping {
 }
 
 // Constants
-const DEFAULT_BASE_URL = 'https://gateway.idealsvdr.com/api/v1';
+const DEFAULT_BASE_URL = "https://gateway.idealsvdr.com/api/v1";
 const CHUNK_SIZE = 20 * 1024 * 1024; // 20 MiB
 const MAX_SINGLE_UPLOAD_SIZE = 20 * 1024 * 1024; // 20 MiB
 
 // Helper to generate UUID
 function generateUUID(): string {
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
-    const r = Math.random() * 16 | 0;
-    const v = c === 'x' ? r : (r & 0x3 | 0x8);
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, c => {
+    const r = (Math.random() * 16) | 0;
+    const v = c === "x" ? r : (r & 0x3) | 0x8;
     return v.toString(16);
   });
 }
@@ -96,18 +96,20 @@ export class IdealsClient {
     options: RequestInit = {}
   ): Promise<T> {
     const url = `${this.baseUrl}${endpoint}`;
-    
+
     const response = await fetch(url, {
       ...options,
       headers: {
-        'Authorization': this.apiKey,
-        'Content-Type': 'application/json',
+        Authorization: this.apiKey,
+        "Content-Type": "application/json",
         ...options.headers,
       },
     });
 
     if (!response.ok) {
-      const error = await response.json().catch(() => ({ message: response.statusText }));
+      const error = await response
+        .json()
+        .catch(() => ({ message: response.statusText }));
       throw new IdealsError(
         error.message || `Request failed: ${response.status}`,
         response.status,
@@ -124,7 +126,9 @@ export class IdealsClient {
    * Get list of all accessible projects
    */
   async getProjects(): Promise<IdealsProject[]> {
-    const response = await this.request<{ items: IdealsProject[] }>('/projects');
+    const response = await this.request<{ items: IdealsProject[] }>(
+      "/projects"
+    );
     return response.items;
   }
 
@@ -139,8 +143,8 @@ export class IdealsClient {
    * Create a new project
    */
   async createProject(name: string): Promise<IdealsProject> {
-    return this.request<IdealsProject>('/projects', {
-      method: 'POST',
+    return this.request<IdealsProject>("/projects", {
+      method: "POST",
       body: JSON.stringify({ name }),
     });
   }
@@ -150,8 +154,11 @@ export class IdealsClient {
   /**
    * Get list of folders in a project
    */
-  async getFolders(projectId: string, parentId?: string): Promise<IdealsFolder[]> {
-    const params = parentId ? `?parentId=${parentId}` : '';
+  async getFolders(
+    projectId: string,
+    parentId?: string
+  ): Promise<IdealsFolder[]> {
+    const params = parentId ? `?parentId=${parentId}` : "";
     const response = await this.request<{ items: IdealsFolder[] }>(
       `/projects/${projectId}/folders${params}`
     );
@@ -167,7 +174,7 @@ export class IdealsClient {
     parentId?: string
   ): Promise<IdealsFolder> {
     return this.request<IdealsFolder>(`/projects/${projectId}/folders`, {
-      method: 'POST',
+      method: "POST",
       body: JSON.stringify({ name, parentId }),
     });
   }
@@ -181,7 +188,7 @@ export class IdealsClient {
     projectId: string,
     folderId?: string
   ): Promise<IdealsDocument[]> {
-    const params = folderId ? `?folderId=${folderId}` : '';
+    const params = folderId ? `?folderId=${folderId}` : "";
     const response = await this.request<{ items: IdealsDocument[] }>(
       `/projects/${projectId}/documents${params}`
     );
@@ -209,7 +216,7 @@ export class IdealsClient {
       uploadedSize: 0,
       chunksTotal: Math.ceil(totalSize / CHUNK_SIZE),
       chunksUploaded: 0,
-      status: 'uploading',
+      status: "uploading",
     };
 
     onProgress?.(progress);
@@ -230,7 +237,7 @@ export class IdealsClient {
 
         progress.uploadedSize = totalSize;
         progress.chunksUploaded = 1;
-        progress.status = 'completed';
+        progress.status = "completed";
         onProgress?.(progress);
 
         return result;
@@ -264,13 +271,13 @@ export class IdealsClient {
         onProgress?.(progress);
       }
 
-      progress.status = 'completed';
+      progress.status = "completed";
       onProgress?.(progress);
 
       return result!;
     } catch (error) {
-      progress.status = 'failed';
-      progress.error = error instanceof Error ? error.message : 'Upload failed';
+      progress.status = "failed";
+      progress.error = error instanceof Error ? error.message : "Upload failed";
       onProgress?.(progress);
       throw error;
     }
@@ -288,21 +295,28 @@ export class IdealsClient {
     const url = `${this.baseUrl}/projects/${projectId}/documents/upload`;
 
     const response = await fetch(url, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Authorization': this.apiKey,
-        'Content-Type': 'application/octet-stream',
-        'Folder-Id': folderId,
-        'Document-Name': fileName,
-        'Document-Id': documentId,
-        'Chunk-Number': chunkNumber.toString(),
-        'Document-Size': totalSize.toString(),
+        Authorization: this.apiKey,
+        "Content-Type": "application/octet-stream",
+        "Folder-Id": folderId,
+        "Document-Name": fileName,
+        "Document-Id": documentId,
+        "Chunk-Number": chunkNumber.toString(),
+        "Document-Size": totalSize.toString(),
       },
-      body: new Blob([data.buffer.slice(data.byteOffset, data.byteOffset + data.byteLength) as ArrayBuffer]),
+      body: new Blob([
+        data.buffer.slice(
+          data.byteOffset,
+          data.byteOffset + data.byteLength
+        ) as ArrayBuffer,
+      ]),
     });
 
     if (!response.ok) {
-      const error = await response.json().catch(() => ({ message: response.statusText }));
+      const error = await response
+        .json()
+        .catch(() => ({ message: response.statusText }));
       throw new IdealsError(
         error.message || `Upload failed: ${response.status}`,
         response.status,
@@ -316,15 +330,12 @@ export class IdealsClient {
   /**
    * Download a document
    */
-  async downloadDocument(
-    projectId: string,
-    documentId: string
-  ): Promise<Blob> {
+  async downloadDocument(projectId: string, documentId: string): Promise<Blob> {
     const url = `${this.baseUrl}/projects/${projectId}/documents/${documentId}/download`;
 
     const response = await fetch(url, {
       headers: {
-        'Authorization': this.apiKey,
+        Authorization: this.apiKey,
       },
     });
 
@@ -341,12 +352,9 @@ export class IdealsClient {
   /**
    * Delete a document
    */
-  async deleteDocument(
-    projectId: string,
-    documentId: string
-  ): Promise<void> {
+  async deleteDocument(projectId: string, documentId: string): Promise<void> {
     await this.request(`/projects/${projectId}/documents`, {
-      method: 'DELETE',
+      method: "DELETE",
       body: JSON.stringify({ documentIds: [documentId] }),
     });
   }
@@ -362,7 +370,7 @@ export class IdealsError extends Error {
     public errorCode?: string
   ) {
     super(message);
-    this.name = 'IdealsError';
+    this.name = "IdealsError";
   }
 }
 
@@ -373,7 +381,7 @@ export class IdealsError extends Error {
  */
 export class FolderMappingService {
   private mappings: Map<string, FolderMapping> = new Map();
-  private storageKey = 'ideals_folder_mappings';
+  private storageKey = "ideals_folder_mappings";
 
   constructor() {
     this.loadMappings();
@@ -387,7 +395,7 @@ export class FolderMappingService {
         data.forEach(m => this.mappings.set(m.brainFolderId, m));
       }
     } catch (e) {
-      console.error('Failed to load folder mappings:', e);
+      console.error("Failed to load folder mappings:", e);
     }
   }
 
@@ -396,7 +404,7 @@ export class FolderMappingService {
       const data = Array.from(this.mappings.values());
       localStorage.setItem(this.storageKey, JSON.stringify(data));
     } catch (e) {
-      console.error('Failed to save folder mappings:', e);
+      console.error("Failed to save folder mappings:", e);
     }
   }
 
@@ -484,16 +492,14 @@ export class DocumentSyncService {
 
     for (const file of files) {
       try {
-        await this.syncDocument(
-          brainFolderId,
-          file,
-          (progress) => onProgress?.(file.name, progress)
+        await this.syncDocument(brainFolderId, file, progress =>
+          onProgress?.(file.name, progress)
         );
         result.documentsUploaded++;
       } catch (error) {
         result.documentsFailed++;
         result.errors.push(
-          `${file.name}: ${error instanceof Error ? error.message : 'Unknown error'}`
+          `${file.name}: ${error instanceof Error ? error.message : "Unknown error"}`
         );
       }
     }
@@ -519,7 +525,7 @@ export class DocumentSyncService {
 
 // ==================== React Hook ====================
 
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect } from "react";
 
 export interface UseIdealsDataroomOptions {
   apiKey?: string;
@@ -534,7 +540,7 @@ export interface UseIdealsDataroomReturn {
   folders: IdealsFolder[];
   documents: IdealsDocument[];
   uploadProgress: UploadProgress | null;
-  
+
   // Actions
   connect: (apiKey: string) => Promise<void>;
   disconnect: () => void;
@@ -543,10 +549,10 @@ export interface UseIdealsDataroomReturn {
   loadDocuments: (folderId?: string) => Promise<void>;
   uploadDocument: (folderId: string, file: File) => Promise<IdealsDocument>;
   createFolder: (name: string, parentId?: string) => Promise<IdealsFolder>;
-  
+
   // Mapping
   mappings: FolderMapping[];
-  addMapping: (mapping: Omit<FolderMapping, 'projectId'>) => void;
+  addMapping: (mapping: Omit<FolderMapping, "projectId">) => void;
   removeMapping: (brainFolderId: string) => void;
 }
 
@@ -558,15 +564,19 @@ export function useIdealsDataroom(
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [projects, setProjects] = useState<IdealsProject[]>([]);
-  const [selectedProject, setSelectedProject] = useState<IdealsProject | null>(null);
+  const [selectedProject, setSelectedProject] = useState<IdealsProject | null>(
+    null
+  );
   const [folders, setFolders] = useState<IdealsFolder[]>([]);
   const [documents, setDocuments] = useState<IdealsDocument[]>([]);
-  const [uploadProgress, setUploadProgress] = useState<UploadProgress | null>(null);
+  const [uploadProgress, setUploadProgress] = useState<UploadProgress | null>(
+    null
+  );
   const [mappings, setMappings] = useState<FolderMapping[]>([]);
 
   // Initialize with stored API key
   useEffect(() => {
-    const storedKey = localStorage.getItem('ideals_api_key');
+    const storedKey = localStorage.getItem("ideals_api_key");
     if (storedKey || options.apiKey) {
       connect(storedKey || options.apiKey!).catch(console.error);
     }
@@ -580,12 +590,12 @@ export function useIdealsDataroom(
     try {
       const newClient = new IdealsClient({ apiKey });
       const projectList = await newClient.getProjects();
-      
+
       setClient(newClient);
       setProjects(projectList);
-      localStorage.setItem('ideals_api_key', apiKey);
+      localStorage.setItem("ideals_api_key", apiKey);
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Failed to connect');
+      setError(e instanceof Error ? e.message : "Failed to connect");
       throw e;
     } finally {
       setIsLoading(false);
@@ -598,102 +608,124 @@ export function useIdealsDataroom(
     setSelectedProject(null);
     setFolders([]);
     setDocuments([]);
-    localStorage.removeItem('ideals_api_key');
+    localStorage.removeItem("ideals_api_key");
   }, []);
 
-  const selectProject = useCallback(async (projectId: string) => {
-    if (!client) return;
-    
-    setIsLoading(true);
-    try {
-      const project = await client.getProject(projectId);
-      setSelectedProject(project);
-      
-      const folderList = await client.getFolders(projectId);
-      setFolders(folderList);
-      
-      const docList = await client.getDocuments(projectId);
-      setDocuments(docList);
-    } catch (e) {
-      setError(e instanceof Error ? e.message : 'Failed to load project');
-    } finally {
-      setIsLoading(false);
-    }
-  }, [client]);
+  const selectProject = useCallback(
+    async (projectId: string) => {
+      if (!client) return;
 
-  const loadFolders = useCallback(async (parentId?: string) => {
-    if (!client || !selectedProject) return;
-    
-    setIsLoading(true);
-    try {
-      const folderList = await client.getFolders(selectedProject.id, parentId);
-      setFolders(folderList);
-    } catch (e) {
-      setError(e instanceof Error ? e.message : 'Failed to load folders');
-    } finally {
-      setIsLoading(false);
-    }
-  }, [client, selectedProject]);
+      setIsLoading(true);
+      try {
+        const project = await client.getProject(projectId);
+        setSelectedProject(project);
 
-  const loadDocuments = useCallback(async (folderId?: string) => {
-    if (!client || !selectedProject) return;
-    
-    setIsLoading(true);
-    try {
-      const docList = await client.getDocuments(selectedProject.id, folderId);
-      setDocuments(docList);
-    } catch (e) {
-      setError(e instanceof Error ? e.message : 'Failed to load documents');
-    } finally {
-      setIsLoading(false);
-    }
-  }, [client, selectedProject]);
+        const folderList = await client.getFolders(projectId);
+        setFolders(folderList);
 
-  const uploadDocument = useCallback(async (
-    folderId: string,
-    file: File
-  ): Promise<IdealsDocument> => {
-    if (!client || !selectedProject) {
-      throw new Error('Not connected to iDeals');
-    }
+        const docList = await client.getDocuments(projectId);
+        setDocuments(docList);
+      } catch (e) {
+        setError(e instanceof Error ? e.message : "Failed to load project");
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [client]
+  );
 
-    return client.uploadDocument(
-      selectedProject.id,
-      folderId,
-      file,
-      setUploadProgress
-    );
-  }, [client, selectedProject]);
+  const loadFolders = useCallback(
+    async (parentId?: string) => {
+      if (!client || !selectedProject) return;
 
-  const createFolder = useCallback(async (
-    name: string,
-    parentId?: string
-  ): Promise<IdealsFolder> => {
-    if (!client || !selectedProject) {
-      throw new Error('Not connected to iDeals');
-    }
+      setIsLoading(true);
+      try {
+        const folderList = await client.getFolders(
+          selectedProject.id,
+          parentId
+        );
+        setFolders(folderList);
+      } catch (e) {
+        setError(e instanceof Error ? e.message : "Failed to load folders");
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [client, selectedProject]
+  );
 
-    const folder = await client.createFolder(selectedProject.id, name, parentId);
-    await loadFolders(parentId);
-    return folder;
-  }, [client, selectedProject, loadFolders]);
+  const loadDocuments = useCallback(
+    async (folderId?: string) => {
+      if (!client || !selectedProject) return;
 
-  const addMapping = useCallback((mapping: Omit<FolderMapping, 'projectId'>) => {
-    if (!selectedProject) return;
-    
-    const fullMapping: FolderMapping = {
-      ...mapping,
-      projectId: selectedProject.id,
-    };
-    
-    mappingService.addMapping(fullMapping);
-    setMappings(mappingService.getAllMappings());
-  }, [selectedProject, mappingService]);
+      setIsLoading(true);
+      try {
+        const docList = await client.getDocuments(selectedProject.id, folderId);
+        setDocuments(docList);
+      } catch (e) {
+        setError(e instanceof Error ? e.message : "Failed to load documents");
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [client, selectedProject]
+  );
 
-  const removeMapping = useCallback((brainFolderId: string) => {
-    mappingService.removeMapping(brainFolderId);
-    setMappings(mappingService.getAllMappings());
-  }, [mappingService]);
+  const uploadDocument = useCallback(
+    async (folderId: string, file: File): Promise<IdealsDocument> => {
+      if (!client || !selectedProject) {
+        throw new Error("Not connected to iDeals");
+      }
+
+      return client.uploadDocument(
+        selectedProject.id,
+        folderId,
+        file,
+        setUploadProgress
+      );
+    },
+    [client, selectedProject]
+  );
+
+  const createFolder = useCallback(
+    async (name: string, parentId?: string): Promise<IdealsFolder> => {
+      if (!client || !selectedProject) {
+        throw new Error("Not connected to iDeals");
+      }
+
+      const folder = await client.createFolder(
+        selectedProject.id,
+        name,
+        parentId
+      );
+      await loadFolders(parentId);
+      return folder;
+    },
+    [client, selectedProject, loadFolders]
+  );
+
+  const addMapping = useCallback(
+    (mapping: Omit<FolderMapping, "projectId">) => {
+      if (!selectedProject) return;
+
+      const fullMapping: FolderMapping = {
+        ...mapping,
+        projectId: selectedProject.id,
+      };
+
+      mappingService.addMapping(fullMapping);
+      setMappings(mappingService.getAllMappings());
+    },
+    [selectedProject, mappingService]
+  );
+
+  const removeMapping = useCallback(
+    (brainFolderId: string) => {
+      mappingService.removeMapping(brainFolderId);
+      setMappings(mappingService.getAllMappings());
+    },
+    [mappingService]
+  );
 
   return {
     isConnected: client !== null,
@@ -704,7 +736,7 @@ export function useIdealsDataroom(
     folders,
     documents,
     uploadProgress,
-    
+
     connect,
     disconnect,
     selectProject,
@@ -712,7 +744,7 @@ export function useIdealsDataroom(
     loadDocuments,
     uploadDocument,
     createFolder,
-    
+
     mappings,
     addMapping,
     removeMapping,

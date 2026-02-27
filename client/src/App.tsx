@@ -4,18 +4,21 @@ import { Switch, Route, useLocation } from "wouter";
 import { lazy, Suspense, useEffect } from "react";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import ErrorBoundary from '@/components/shared/ErrorBoundary';
+import ErrorBoundary from "@/components/shared/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
-import BrainLayout from '@/components/ai-agents/BrainLayout';
-import { GovernanceProvider, GovernanceModeChangeModal } from "./hooks/useGovernance";
-import { AIRouterProvider } from '@/components/ai-agents/AIRouter';
-import { CelebrationProvider } from '@/components/shared/CelebrationAnimations';
-import { DailyCycleProvider } from '@/components/ai-agents/DailyCycleProvider';
-import { PageTransition } from '@/components/shared/PageTransition';
-import AuthGuard from '@/components/AuthGuard';
-import { PinGate } from '@/components/PinGate';
-import { KeyboardShortcutsGuide } from '@/components/project-management/KeyboardShortcutsGuide';
-import { ChiefOfStaffNotification } from '@/components/communication/ChiefOfStaffNotification';
+import BrainLayout from "@/components/ai-agents/BrainLayout";
+import {
+  GovernanceProvider,
+  GovernanceModeChangeModal,
+} from "./hooks/useGovernance";
+import { AIRouterProvider } from "@/components/ai-agents/AIRouter";
+import { CelebrationProvider } from "@/components/shared/CelebrationAnimations";
+import { DailyCycleProvider } from "@/components/ai-agents/DailyCycleProvider";
+import { PageTransition } from "@/components/shared/PageTransition";
+import AuthGuard from "@/components/AuthGuard";
+import { PinGate } from "@/components/PinGate";
+import { KeyboardShortcutsGuide } from "@/components/project-management/KeyboardShortcutsGuide";
+import { ChiefOfStaffNotification } from "@/components/communication/ChiefOfStaffNotification";
 
 // Loading fallback component
 function PageLoader() {
@@ -35,7 +38,9 @@ const DigitalTwin = lazy(() => import("@/pages/DigitalTwin"));
 const ChiefOfStaff = lazy(() => import("@/pages/ChiefOfStaff"));
 const Workflow = lazy(() => import("@/pages/Workflow"));
 const Library = lazy(() => import("./pages/Library"));
-const DocumentLibraryEnhanced = lazy(() => import("@/components/DocumentLibraryEnhanced"));
+const DocumentLibraryEnhanced = lazy(
+  () => import("@/components/DocumentLibraryEnhanced")
+);
 const DashboardEnhanced = lazy(() => import("@/components/DashboardEnhanced"));
 const Statistics = lazy(() => import("./pages/Statistics"));
 const Vault = lazy(() => import("./pages/Vault"));
@@ -70,7 +75,9 @@ const InnovationHub = lazy(() => import("./pages/InnovationHub"));
 const DocumentLibrary = lazy(() => import("./pages/DocumentLibrary"));
 const DevelopmentPathway = lazy(() => import("./pages/DevelopmentPathway"));
 const COSTraining = lazy(() => import("./pages/COSTraining"));
-const PortfolioCommandCenter = lazy(() => import("./pages/PortfolioCommandCenter"));
+const PortfolioCommandCenter = lazy(
+  () => import("./pages/PortfolioCommandCenter")
+);
 const RevenueDashboard = lazy(() => import("./pages/RevenueDashboard"));
 const KpiDashboard = lazy(() => import("./pages/KpiDashboard"));
 const OperationsPage = lazy(() => import("./pages/OperationsPage"));
@@ -82,16 +89,26 @@ const WorkflowDetailPage = lazy(() => import("./pages/WorkflowDetailPage"));
 const SocialMediaBlueprint = lazy(() => import("./pages/SocialMediaBlueprint"));
 const BusinessModelPage = lazy(() => import("./pages/BusinessModelPage"));
 const QuestionnaireOnline = lazy(() => import("./pages/QuestionnaireOnline"));
-const StrategicFrameworkQuestionnaire = lazy(() => import("./pages/StrategicFrameworkQuestionnaire"));
+const StrategicFrameworkQuestionnaire = lazy(
+  () => import("./pages/StrategicFrameworkQuestionnaire")
+);
 const AgentsMonitoring = lazy(() => import("./pages/AgentsMonitoring"));
-const AIAgentsMonitoringPage = lazy(() => import("./pages/AIAgentsMonitoringPage"));
+const AIAgentsMonitoringPage = lazy(
+  () => import("./pages/AIAgentsMonitoringPage")
+);
 const PersephoneBoard = lazy(() => import("./pages/PersephoneBoard"));
 const ExpertNetwork = lazy(() => import("./pages/ExpertNetwork"));
 const TheSignal = lazy(() => import("./pages/TheSignal"));
-const EmailAccountsManager = lazy(() => import("./components/email/EmailAccountsManager"));
+const EmailAccountsManager = lazy(
+  () => import("./components/email/EmailAccountsManager")
+);
 const EmailList = lazy(() => import("./components/email/EmailList"));
-const VictoriaBriefing = lazy(() => import("./components/victoria/VictoriaBriefing"));
-const EnhancedChiefOfStaff = lazy(() => import("./components/chief-of-staff/EnhancedChiefOfStaff"));
+const VictoriaBriefing = lazy(
+  () => import("./components/victoria/VictoriaBriefing")
+);
+const EnhancedChiefOfStaff = lazy(
+  () => import("./components/chief-of-staff/EnhancedChiefOfStaff")
+);
 const WorkflowDashboard = lazy(() => import("./pages/WorkflowDashboard"));
 const ProjectGenesisWizard = lazy(() => import("./pages/ProjectGenesisWizard"));
 
@@ -99,9 +116,7 @@ const ProjectGenesisWizard = lazy(() => import("./pages/ProjectGenesisWizard"));
 function WithLayout({ children }: { children: React.ReactNode }) {
   return (
     <BrainLayout>
-      <PageTransition className="h-full">
-        {children}
-      </PageTransition>
+      <PageTransition className="h-full">{children}</PageTransition>
     </BrainLayout>
   );
 }
@@ -112,190 +127,289 @@ function Router() {
       <Switch>
         {/* Landing page */}
         <Route path="/" exact>
-          <WithLayout><NexusDashboard /></WithLayout>
+          <WithLayout>
+            <NexusDashboard />
+          </WithLayout>
         </Route>
-        
+
         {/* Login page */}
         <Route path="/login" component={LandingPage} />
-        
+
         {/* Waitlist page without sidebar */}
         <Route path="/waitlist" component={Waitlist} />
-        
+
         {/* Dashboard pages with sidebar - Protected */}
         <Route path="/nexus">
-          <WithLayout><NexusDashboard /></WithLayout>
+          <WithLayout>
+            <NexusDashboard />
+          </WithLayout>
         </Route>
         <Route path="/tasks">
-          <WithLayout><ChiefOfStaff /></WithLayout>
+          <WithLayout>
+            <ChiefOfStaff />
+          </WithLayout>
         </Route>
 
         <Route path="/chief-of-staff-role">
-          <WithLayout><ChiefOfStaffRole /></WithLayout>
+          <WithLayout>
+            <ChiefOfStaffRole />
+          </WithLayout>
         </Route>
         <Route path="/workflow">
-          <WithLayout><Workflow /></WithLayout>
+          <WithLayout>
+            <Workflow />
+          </WithLayout>
         </Route>
-
-
 
         <Route path="/analytics">
-          <WithLayout><Statistics /></WithLayout>
+          <WithLayout>
+            <Statistics />
+          </WithLayout>
         </Route>
         <Route path="/vault">
-          <WithLayout><Vault /></WithLayout>
+          <WithLayout>
+            <Vault />
+          </WithLayout>
         </Route>
         <Route path="/daily-brief">
-          <WithLayout><DailyBrief /></WithLayout>
+          <WithLayout>
+            <DailyBrief />
+          </WithLayout>
         </Route>
         <Route path="/ai-experts">
-          <WithLayout><AISMEsPage /></WithLayout>
+          <WithLayout>
+            <AISMEsPage />
+          </WithLayout>
         </Route>
 
         <Route path="/ai-agents-monitoring">
-          <WithLayout><AIAgentsMonitoringPage /></WithLayout>
+          <WithLayout>
+            <AIAgentsMonitoringPage />
+          </WithLayout>
         </Route>
         <Route path="/workflows">
-          <WithLayout><WorkflowDashboard /></WithLayout>
+          <WithLayout>
+            <WorkflowDashboard />
+          </WithLayout>
         </Route>
         <Route path="/workflow/project_genesis/new">
-          <WithLayout><ProjectGenesisWizard /></WithLayout>
+          <WithLayout>
+            <ProjectGenesisWizard />
+          </WithLayout>
         </Route>
         <Route path="/workflow/project_genesis/:workflowId">
-          <WithLayout><ProjectGenesisWizard /></WithLayout>
+          <WithLayout>
+            <ProjectGenesisWizard />
+          </WithLayout>
         </Route>
         <Route path="/expert-chat/:expertId">
           <ExpertChatPage />
         </Route>
         <Route path="/evening-review">
-          <WithLayout><EveningReview /></WithLayout>
+          <WithLayout>
+            <EveningReview />
+          </WithLayout>
         </Route>
-
 
         <Route path="/ai-agents">
-          <WithLayout><AIAgentsPage /></WithLayout>
+          <WithLayout>
+            <AIAgentsPage />
+          </WithLayout>
         </Route>
         <Route path="/ai-agents/:id">
-          <WithLayout><AgentDetailPage /></WithLayout>
+          <WithLayout>
+            <AgentDetailPage />
+          </WithLayout>
         </Route>
         <Route path="/persephone">
-          <WithLayout><PersephoneBoard /></WithLayout>
+          <WithLayout>
+            <PersephoneBoard />
+          </WithLayout>
         </Route>
         <Route path="/settings">
-          <WithLayout><Settings /></WithLayout>
+          <WithLayout>
+            <Settings />
+          </WithLayout>
         </Route>
         <Route path="/commercialization">
-          <WithLayout><Commercialization /></WithLayout>
+          <WithLayout>
+            <Commercialization />
+          </WithLayout>
         </Route>
         <Route path="/go-live">
-          <WithLayout><GoLive /></WithLayout>
+          <WithLayout>
+            <GoLive />
+          </WithLayout>
         </Route>
         <Route path="/about">
-          <WithLayout><About /></WithLayout>
+          <WithLayout>
+            <About />
+          </WithLayout>
         </Route>
         <Route path="/review-queue">
-          <WithLayout><ReviewQueue /></WithLayout>
+          <WithLayout>
+            <ReviewQueue />
+          </WithLayout>
         </Route>
         <Route path="/project-genesis">
-          <WithLayout><ProjectGenesisPage /></WithLayout>
+          <WithLayout>
+            <ProjectGenesisPage />
+          </WithLayout>
         </Route>
         <Route path="/innovation-hub">
-          <WithLayout><InnovationHub /></WithLayout>
+          <WithLayout>
+            <InnovationHub />
+          </WithLayout>
         </Route>
         <Route path="/documents">
-          <WithLayout><DocumentLibrary /></WithLayout>
+          <WithLayout>
+            <DocumentLibrary />
+          </WithLayout>
         </Route>
         <Route path="/odyssey-management">
-          <WithLayout><DevelopmentPathway /></WithLayout>
+          <WithLayout>
+            <DevelopmentPathway />
+          </WithLayout>
         </Route>
         <Route path="/twin-training">
-          <WithLayout><COSTraining /></WithLayout>
+          <WithLayout>
+            <COSTraining />
+          </WithLayout>
         </Route>
         <Route path="/questionnaire">
-          <WithLayout><QuestionnaireOnline /></WithLayout>
+          <WithLayout>
+            <QuestionnaireOnline />
+          </WithLayout>
         </Route>
         <Route path="/strategic-framework">
           <StrategicFrameworkQuestionnaire />
         </Route>
         <Route path="/portfolio">
-          <WithLayout><PortfolioCommandCenter /></WithLayout>
+          <WithLayout>
+            <PortfolioCommandCenter />
+          </WithLayout>
         </Route>
         <Route path="/revenue">
-          <WithLayout><RevenueDashboard /></WithLayout>
+          <WithLayout>
+            <RevenueDashboard />
+          </WithLayout>
         </Route>
         <Route path="/kpi-dashboard">
-          <WithLayout><KpiDashboard /></WithLayout>
+          <WithLayout>
+            <KpiDashboard />
+          </WithLayout>
         </Route>
         <Route path="/operations">
-          <WithLayout><OperationsPage /></WithLayout>
+          <WithLayout>
+            <OperationsPage />
+          </WithLayout>
         </Route>
         <Route path="/growth">
-          <WithLayout><GrowthPage /></WithLayout>
+          <WithLayout>
+            <GrowthPage />
+          </WithLayout>
         </Route>
         <Route path="/social-media-blueprint">
-          <WithLayout><SocialMediaBlueprint /></WithLayout>
+          <WithLayout>
+            <SocialMediaBlueprint />
+          </WithLayout>
         </Route>
         <Route path="/business-model">
-          <WithLayout><BusinessModelPage /></WithLayout>
+          <WithLayout>
+            <BusinessModelPage />
+          </WithLayout>
         </Route>
         <Route path="/due-diligence">
-          <WithLayout><DueDiligencePage /></WithLayout>
+          <WithLayout>
+            <DueDiligencePage />
+          </WithLayout>
         </Route>
         <Route path="/inbox">
-          <WithLayout><InboxPage /></WithLayout>
+          <WithLayout>
+            <InboxPage />
+          </WithLayout>
         </Route>
-        
+
         <Route path="/video-studio">
-          <WithLayout><VideoStudioPage /></WithLayout>
+          <WithLayout>
+            <VideoStudioPage />
+          </WithLayout>
         </Route>
         <Route path="/qa-dashboard">
-          <WithLayout><QADashboardPage /></WithLayout>
+          <WithLayout>
+            <QADashboardPage />
+          </WithLayout>
         </Route>
         <Route path="/voice-notepad">
-          <WithLayout><VoiceNotepadPage /></WithLayout>
+          <WithLayout>
+            <VoiceNotepadPage />
+          </WithLayout>
         </Route>
         <Route path="/integrations">
-          <WithLayout><IntegrationsPage /></WithLayout>
+          <WithLayout>
+            <IntegrationsPage />
+          </WithLayout>
         </Route>
 
         <Route path="/podcast">
-          <WithLayout><PodcastPage /></WithLayout>
+          <WithLayout>
+            <PodcastPage />
+          </WithLayout>
         </Route>
         <Route path="/wellness">
-          <WithLayout><WellnessPage /></WithLayout>
+          <WithLayout>
+            <WellnessPage />
+          </WithLayout>
         </Route>
         <Route path="/reference-library">
-          <WithLayout><ReferenceLibrary /></WithLayout>
+          <WithLayout>
+            <ReferenceLibrary />
+          </WithLayout>
         </Route>
         <Route path="/workflows/:id">
-          <WithLayout><WorkflowDetailPage /></WithLayout>
+          <WithLayout>
+            <WorkflowDetailPage />
+          </WithLayout>
         </Route>
         <Route path="/workflows">
-          <WithLayout><WorkflowsPage /></WithLayout>
+          <WithLayout>
+            <WorkflowsPage />
+          </WithLayout>
         </Route>
-        
+
         {/* Email Management */}
         <Route path="/email/accounts">
-          <WithLayout><EmailAccountsManager /></WithLayout>
+          <WithLayout>
+            <EmailAccountsManager />
+          </WithLayout>
         </Route>
         <Route path="/email/inbox">
-          <WithLayout><EmailList /></WithLayout>
+          <WithLayout>
+            <EmailList />
+          </WithLayout>
         </Route>
-        
+
         {/* Victoria's Briefing - Redirects to Morning Signal */}
         <Route path="/victoria">
-          <WithLayout><MorningSignal /></WithLayout>
+          <WithLayout>
+            <MorningSignal />
+          </WithLayout>
         </Route>
-        
+
         {/* The Signal */}
         <Route path="/signal">
-          <WithLayout><TheSignal /></WithLayout>
+          <WithLayout>
+            <TheSignal />
+          </WithLayout>
         </Route>
-        
+
         {/* Enhanced Chief of Staff */}
         <Route path="/chief-of-staff-enhanced">
-          <WithLayout><EnhancedChiefOfStaff /></WithLayout>
+          <WithLayout>
+            <EnhancedChiefOfStaff />
+          </WithLayout>
         </Route>
-        
+
         {/* Fallback */}
         <Route path={"/404"} component={NotFound} />
         <Route component={NotFound} />
@@ -307,25 +421,25 @@ function Router() {
 function App() {
   return (
     <PinGate>
-    <ErrorBoundary>
-      <ThemeProvider defaultTheme="dark" switchable>
-        <GovernanceProvider>
-          <AIRouterProvider>
-            <DailyCycleProvider>
-              <CelebrationProvider>
-                <TooltipProvider>
-                  <Toaster />
-                  <Router />
-                  <GovernanceModeChangeModal />
-                  <KeyboardShortcutsGuide />
-                  <ChiefOfStaffNotification />
-                </TooltipProvider>
-              </CelebrationProvider>
-            </DailyCycleProvider>
-          </AIRouterProvider>
-        </GovernanceProvider>
-      </ThemeProvider>
-    </ErrorBoundary>
+      <ErrorBoundary>
+        <ThemeProvider defaultTheme="dark" switchable>
+          <GovernanceProvider>
+            <AIRouterProvider>
+              <DailyCycleProvider>
+                <CelebrationProvider>
+                  <TooltipProvider>
+                    <Toaster />
+                    <Router />
+                    <GovernanceModeChangeModal />
+                    <KeyboardShortcutsGuide />
+                    <ChiefOfStaffNotification />
+                  </TooltipProvider>
+                </CelebrationProvider>
+              </DailyCycleProvider>
+            </AIRouterProvider>
+          </GovernanceProvider>
+        </ThemeProvider>
+      </ErrorBoundary>
     </PinGate>
   );
 }

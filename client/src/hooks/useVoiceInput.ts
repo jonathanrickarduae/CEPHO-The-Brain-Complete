@@ -1,5 +1,5 @@
-import { useState, useCallback, useRef, useEffect } from 'react';
-import { haptics } from '@/lib/haptics';
+import { useState, useCallback, useRef, useEffect } from "react";
+import { haptics } from "@/lib/haptics";
 
 // Types for Web Speech API
 interface SpeechRecognitionEvent extends Event {
@@ -59,7 +59,7 @@ export function useVoiceInput(options: UseVoiceInputOptions = {}) {
   const {
     continuous = false,
     interimResults = true,
-    language = 'en-US',
+    language = "en-US",
     onResult,
     onError,
     onStart,
@@ -69,8 +69,8 @@ export function useVoiceInput(options: UseVoiceInputOptions = {}) {
   const [state, setState] = useState<VoiceInputState>({
     isListening: false,
     isSupported: false,
-    transcript: '',
-    interimTranscript: '',
+    transcript: "",
+    interimTranscript: "",
     error: null,
     confidence: 0,
   });
@@ -80,11 +80,12 @@ export function useVoiceInput(options: UseVoiceInputOptions = {}) {
 
   // Check browser support and initialize
   useEffect(() => {
-    const SpeechRecognitionAPI = window.SpeechRecognition || window.webkitSpeechRecognition;
-    
+    const SpeechRecognitionAPI =
+      window.SpeechRecognition || window.webkitSpeechRecognition;
+
     if (SpeechRecognitionAPI) {
       setState(prev => ({ ...prev, isSupported: true }));
-      
+
       if (!isInitializedRef.current) {
         recognitionRef.current = new SpeechRecognitionAPI();
         recognitionRef.current.continuous = continuous;
@@ -93,10 +94,10 @@ export function useVoiceInput(options: UseVoiceInputOptions = {}) {
         isInitializedRef.current = true;
       }
     } else {
-      setState(prev => ({ 
-        ...prev, 
+      setState(prev => ({
+        ...prev,
         isSupported: false,
-        error: 'Speech recognition is not supported in this browser',
+        error: "Speech recognition is not supported in this browser",
       }));
     }
 
@@ -114,19 +115,19 @@ export function useVoiceInput(options: UseVoiceInputOptions = {}) {
 
     recognition.onstart = () => {
       haptics.tap();
-      setState(prev => ({ 
-        ...prev, 
-        isListening: true, 
+      setState(prev => ({
+        ...prev,
+        isListening: true,
         error: null,
-        transcript: '',
-        interimTranscript: '',
+        transcript: "",
+        interimTranscript: "",
       }));
       onStart?.();
     };
 
     recognition.onresult = (event: SpeechRecognitionEvent) => {
-      let finalTranscript = '';
-      let interimTranscript = '';
+      let finalTranscript = "";
+      let interimTranscript = "";
       let maxConfidence = 0;
 
       for (let i = event.resultIndex; i < event.results.length; i++) {
@@ -160,8 +161,8 @@ export function useVoiceInput(options: UseVoiceInputOptions = {}) {
     recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
       haptics.error();
       const errorMessage = getErrorMessage(event.error);
-      setState(prev => ({ 
-        ...prev, 
+      setState(prev => ({
+        ...prev,
         error: errorMessage,
         isListening: false,
       }));
@@ -178,18 +179,18 @@ export function useVoiceInput(options: UseVoiceInputOptions = {}) {
     const recognition = recognitionRef.current;
     if (!recognition || state.isListening) return;
 
-    setState(prev => ({ 
-      ...prev, 
+    setState(prev => ({
+      ...prev,
       error: null,
-      transcript: '',
-      interimTranscript: '',
+      transcript: "",
+      interimTranscript: "",
     }));
 
     try {
       recognition.start();
     } catch (error) {
       // Recognition might already be running
-      console.warn('Speech recognition start error:', error);
+      console.warn("Speech recognition start error:", error);
     }
   }, [state.isListening]);
 
@@ -200,7 +201,7 @@ export function useVoiceInput(options: UseVoiceInputOptions = {}) {
     try {
       recognition.stop();
     } catch (error) {
-      console.warn('Speech recognition stop error:', error);
+      console.warn("Speech recognition stop error:", error);
     }
   }, [state.isListening]);
 
@@ -215,8 +216,8 @@ export function useVoiceInput(options: UseVoiceInputOptions = {}) {
   const resetTranscript = useCallback(() => {
     setState(prev => ({
       ...prev,
-      transcript: '',
-      interimTranscript: '',
+      transcript: "",
+      interimTranscript: "",
       confidence: 0,
     }));
   }, []);
@@ -233,20 +234,20 @@ export function useVoiceInput(options: UseVoiceInputOptions = {}) {
 // Helper to get user-friendly error messages
 function getErrorMessage(error: string): string {
   switch (error) {
-    case 'no-speech':
-      return 'No speech was detected. Please try again.';
-    case 'audio-capture':
-      return 'No microphone was found. Please check your device.';
-    case 'not-allowed':
-      return 'Microphone access was denied. Please allow microphone access.';
-    case 'network':
-      return 'Network error occurred. Please check your connection.';
-    case 'aborted':
-      return 'Speech recognition was aborted.';
-    case 'language-not-supported':
-      return 'The selected language is not supported.';
-    case 'service-not-allowed':
-      return 'Speech recognition service is not allowed.';
+    case "no-speech":
+      return "No speech was detected. Please try again.";
+    case "audio-capture":
+      return "No microphone was found. Please check your device.";
+    case "not-allowed":
+      return "Microphone access was denied. Please allow microphone access.";
+    case "network":
+      return "Network error occurred. Please check your connection.";
+    case "aborted":
+      return "Speech recognition was aborted.";
+    case "language-not-supported":
+      return "The selected language is not supported.";
+    case "service-not-allowed":
+      return "Speech recognition service is not allowed.";
     default:
       return `Speech recognition error: ${error}`;
   }
@@ -257,7 +258,9 @@ function getErrorMessage(error: string): string {
  */
 export function useVoiceWaveform() {
   const [audioLevel, setAudioLevel] = useState(0);
-  const [waveformData, setWaveformData] = useState<number[]>(new Array(20).fill(0));
+  const [waveformData, setWaveformData] = useState<number[]>(
+    new Array(20).fill(0)
+  );
   const analyserRef = useRef<AnalyserNode | null>(null);
   const animationRef = useRef<number | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
@@ -280,7 +283,7 @@ export function useVoiceWaveform() {
         if (!analyserRef.current) return;
 
         analyserRef.current.getByteFrequencyData(dataArray);
-        
+
         // Calculate average level
         const average = dataArray.reduce((a, b) => a + b, 0) / dataArray.length;
         setAudioLevel(average / 255);
@@ -294,7 +297,7 @@ export function useVoiceWaveform() {
 
       updateWaveform();
     } catch (error) {
-      console.error('Failed to start waveform:', error);
+      console.error("Failed to start waveform:", error);
     }
   }, []);
 

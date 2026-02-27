@@ -1,14 +1,26 @@
-import { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Badge } from '@/components/ui/badge';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { platformIntelligence } from '@/lib/PlatformIntelligence';
-import { Target, Users, BarChart3, Lightbulb, Plus, X } from 'lucide-react';
+import { useState } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Badge } from "@/components/ui/badge";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { platformIntelligence } from "@/lib/PlatformIntelligence";
+import { Target, Users, BarChart3, Lightbulb, Plus, X } from "lucide-react";
 
 interface ContentPillar {
   id: string;
@@ -39,33 +51,55 @@ export interface SocialMediaStrategyData {
 }
 
 const defaultPillars: ContentPillar[] = [
-  { id: '1', name: 'Educational', percentage: 40, examples: ['How to guides', 'Tips and tricks', 'Industry insights'] },
-  { id: '2', name: 'Entertaining', percentage: 25, examples: ['Behind the scenes', 'Team moments', 'Trending content'] },
-  { id: '3', name: 'Promotional', percentage: 20, examples: ['Product features', 'Customer testimonials', 'Offers'] },
-  { id: '4', name: 'Inspirational', percentage: 15, examples: ['Success stories', 'Motivational quotes', 'Case studies'] },
+  {
+    id: "1",
+    name: "Educational",
+    percentage: 40,
+    examples: ["How to guides", "Tips and tricks", "Industry insights"],
+  },
+  {
+    id: "2",
+    name: "Entertaining",
+    percentage: 25,
+    examples: ["Behind the scenes", "Team moments", "Trending content"],
+  },
+  {
+    id: "3",
+    name: "Promotional",
+    percentage: 20,
+    examples: ["Product features", "Customer testimonials", "Offers"],
+  },
+  {
+    id: "4",
+    name: "Inspirational",
+    percentage: 15,
+    examples: ["Success stories", "Motivational quotes", "Case studies"],
+  },
 ];
 
-export function SocialMediaStrategy({ onStrategyComplete }: SocialMediaStrategyProps) {
+export function SocialMediaStrategy({
+  onStrategyComplete,
+}: SocialMediaStrategyProps) {
   const [step, setStep] = useState(1);
   const [strategy, setStrategy] = useState<SocialMediaStrategyData>({
-    businessObjective: '',
+    businessObjective: "",
     targetAudience: {
-      demographics: '',
+      demographics: "",
       interests: [],
       painPoints: [],
     },
     platforms: [],
     contentPillars: defaultPillars,
     kpis: [
-      { metric: 'Follower Growth', target: '', timeframe: '3 months' },
-      { metric: 'Engagement Rate', target: '', timeframe: '3 months' },
-      { metric: 'Website Traffic', target: '', timeframe: '3 months' },
+      { metric: "Follower Growth", target: "", timeframe: "3 months" },
+      { metric: "Engagement Rate", target: "", timeframe: "3 months" },
+      { metric: "Website Traffic", target: "", timeframe: "3 months" },
     ],
     postingFrequency: {},
   });
 
-  const [newInterest, setNewInterest] = useState('');
-  const [newPainPoint, setNewPainPoint] = useState('');
+  const [newInterest, setNewInterest] = useState("");
+  const [newPainPoint, setNewPainPoint] = useState("");
 
   const platforms = Object.keys(platformIntelligence);
 
@@ -87,7 +121,7 @@ export function SocialMediaStrategy({ onStrategyComplete }: SocialMediaStrategyP
           interests: [...prev.targetAudience.interests, newInterest.trim()],
         },
       }));
-      setNewInterest('');
+      setNewInterest("");
     }
   };
 
@@ -110,7 +144,7 @@ export function SocialMediaStrategy({ onStrategyComplete }: SocialMediaStrategyP
           painPoints: [...prev.targetAudience.painPoints, newPainPoint.trim()],
         },
       }));
-      setNewPainPoint('');
+      setNewPainPoint("");
     }
   };
 
@@ -153,7 +187,10 @@ export function SocialMediaStrategy({ onStrategyComplete }: SocialMediaStrategyP
     onStrategyComplete?.(strategy);
   };
 
-  const totalPillarPercentage = strategy.contentPillars.reduce((sum, p) => sum + p.percentage, 0);
+  const totalPillarPercentage = strategy.contentPillars.reduce(
+    (sum, p) => sum + p.percentage,
+    0
+  );
 
   return (
     <div className="space-y-6">
@@ -163,13 +200,17 @@ export function SocialMediaStrategy({ onStrategyComplete }: SocialMediaStrategyP
           <div key={s} className="flex items-center">
             <div
               className={`w-10 h-10 rounded-full flex items-center justify-center font-bold ${
-                s <= step ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'
+                s <= step
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-muted text-muted-foreground"
               }`}
             >
               {s}
             </div>
             {s < 4 && (
-              <div className={`w-20 h-1 ${s < step ? 'bg-primary' : 'bg-muted'}`} />
+              <div
+                className={`w-20 h-1 ${s < step ? "bg-primary" : "bg-muted"}`}
+              />
             )}
           </div>
         ))}
@@ -192,18 +233,28 @@ export function SocialMediaStrategy({ onStrategyComplete }: SocialMediaStrategyP
               <Label>Primary Objective</Label>
               <Select
                 value={strategy.businessObjective}
-                onValueChange={v => setStrategy(prev => ({ ...prev, businessObjective: v }))}
+                onValueChange={v =>
+                  setStrategy(prev => ({ ...prev, businessObjective: v }))
+                }
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Select your main goal" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="brand_awareness">Build Brand Awareness</SelectItem>
-                  <SelectItem value="lead_generation">Generate Leads</SelectItem>
+                  <SelectItem value="brand_awareness">
+                    Build Brand Awareness
+                  </SelectItem>
+                  <SelectItem value="lead_generation">
+                    Generate Leads
+                  </SelectItem>
                   <SelectItem value="sales">Drive Sales</SelectItem>
                   <SelectItem value="community">Build Community</SelectItem>
-                  <SelectItem value="thought_leadership">Establish Thought Leadership</SelectItem>
-                  <SelectItem value="customer_support">Customer Support</SelectItem>
+                  <SelectItem value="thought_leadership">
+                    Establish Thought Leadership
+                  </SelectItem>
+                  <SelectItem value="customer_support">
+                    Customer Support
+                  </SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -216,15 +267,21 @@ export function SocialMediaStrategy({ onStrategyComplete }: SocialMediaStrategyP
                     key={platform}
                     className={`p-4 border rounded-lg cursor-pointer transition-colors ${
                       strategy.platforms.includes(platform)
-                        ? 'border-primary bg-primary/5'
-                        : 'border-border hover:border-primary/50'
+                        ? "border-primary bg-primary/5"
+                        : "border-border hover:border-primary/50"
                     }`}
                     onClick={() => handlePlatformToggle(platform)}
                   >
                     <div className="flex items-center gap-2">
-                      <Checkbox checked={strategy.platforms.includes(platform)} />
-                      <span className="text-lg">{platformIntelligence[platform].icon}</span>
-                      <span className="font-medium">{platformIntelligence[platform].name}</span>
+                      <Checkbox
+                        checked={strategy.platforms.includes(platform)}
+                      />
+                      <span className="text-lg">
+                        {platformIntelligence[platform].icon}
+                      </span>
+                      <span className="font-medium">
+                        {platformIntelligence[platform].name}
+                      </span>
                     </div>
                   </div>
                 ))}
@@ -233,7 +290,9 @@ export function SocialMediaStrategy({ onStrategyComplete }: SocialMediaStrategyP
 
             <Button
               onClick={() => setStep(2)}
-              disabled={!strategy.businessObjective || strategy.platforms.length === 0}
+              disabled={
+                !strategy.businessObjective || strategy.platforms.length === 0
+              }
               className="w-full"
             >
               Continue
@@ -250,9 +309,7 @@ export function SocialMediaStrategy({ onStrategyComplete }: SocialMediaStrategyP
               <Users className="h-5 w-5" />
               Target Audience
             </CardTitle>
-            <CardDescription>
-              Define who you want to reach
-            </CardDescription>
+            <CardDescription>Define who you want to reach</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
@@ -263,7 +320,10 @@ export function SocialMediaStrategy({ onStrategyComplete }: SocialMediaStrategyP
                 onChange={e =>
                   setStrategy(prev => ({
                     ...prev,
-                    targetAudience: { ...prev.targetAudience, demographics: e.target.value },
+                    targetAudience: {
+                      ...prev.targetAudience,
+                      demographics: e.target.value,
+                    },
                   }))
                 }
               />
@@ -276,7 +336,7 @@ export function SocialMediaStrategy({ onStrategyComplete }: SocialMediaStrategyP
                   placeholder="Add an interest"
                   value={newInterest}
                   onChange={e => setNewInterest(e.target.value)}
-                  onKeyPress={e => e.key === 'Enter' && addInterest()}
+                  onKeyPress={e => e.key === "Enter" && addInterest()}
                 />
                 <Button onClick={addInterest} size="icon">
                   <Plus className="h-4 w-4" />
@@ -286,7 +346,10 @@ export function SocialMediaStrategy({ onStrategyComplete }: SocialMediaStrategyP
                 {strategy.targetAudience.interests.map(interest => (
                   <Badge key={interest} variant="secondary" className="gap-1">
                     {interest}
-                    <X className="h-3 w-3 cursor-pointer" onClick={() => removeInterest(interest)} />
+                    <X
+                      className="h-3 w-3 cursor-pointer"
+                      onClick={() => removeInterest(interest)}
+                    />
                   </Badge>
                 ))}
               </div>
@@ -299,7 +362,7 @@ export function SocialMediaStrategy({ onStrategyComplete }: SocialMediaStrategyP
                   placeholder="Add a pain point"
                   value={newPainPoint}
                   onChange={e => setNewPainPoint(e.target.value)}
-                  onKeyPress={e => e.key === 'Enter' && addPainPoint()}
+                  onKeyPress={e => e.key === "Enter" && addPainPoint()}
                 />
                 <Button onClick={addPainPoint} size="icon">
                   <Plus className="h-4 w-4" />
@@ -309,14 +372,21 @@ export function SocialMediaStrategy({ onStrategyComplete }: SocialMediaStrategyP
                 {strategy.targetAudience.painPoints.map(painPoint => (
                   <Badge key={painPoint} variant="outline" className="gap-1">
                     {painPoint}
-                    <X className="h-3 w-3 cursor-pointer" onClick={() => removePainPoint(painPoint)} />
+                    <X
+                      className="h-3 w-3 cursor-pointer"
+                      onClick={() => removePainPoint(painPoint)}
+                    />
                   </Badge>
                 ))}
               </div>
             </div>
 
             <div className="flex gap-2">
-              <Button variant="outline" onClick={() => setStep(1)} className="flex-1">
+              <Button
+                variant="outline"
+                onClick={() => setStep(1)}
+                className="flex-1"
+              >
                 Back
               </Button>
               <Button
@@ -354,7 +424,12 @@ export function SocialMediaStrategy({ onStrategyComplete }: SocialMediaStrategyP
                       min="0"
                       max="100"
                       value={pillar.percentage}
-                      onChange={e => updatePillarPercentage(pillar.id, parseInt(e.target.value) || 0)}
+                      onChange={e =>
+                        updatePillarPercentage(
+                          pillar.id,
+                          parseInt(e.target.value) || 0
+                        )
+                      }
                       className="w-20 text-center"
                     />
                     <span>%</span>
@@ -370,13 +445,19 @@ export function SocialMediaStrategy({ onStrategyComplete }: SocialMediaStrategyP
               </div>
             ))}
 
-            <div className={`text-center font-medium ${totalPillarPercentage === 100 ? 'text-green-500' : 'text-red-500'}`}>
+            <div
+              className={`text-center font-medium ${totalPillarPercentage === 100 ? "text-green-500" : "text-red-500"}`}
+            >
               Total: {totalPillarPercentage}%
-              {totalPillarPercentage !== 100 && ' (should be 100%)'}
+              {totalPillarPercentage !== 100 && " (should be 100%)"}
             </div>
 
             <div className="flex gap-2">
-              <Button variant="outline" onClick={() => setStep(2)} className="flex-1">
+              <Button
+                variant="outline"
+                onClick={() => setStep(2)}
+                className="flex-1"
+              >
                 Back
               </Button>
               <Button
@@ -412,12 +493,12 @@ export function SocialMediaStrategy({ onStrategyComplete }: SocialMediaStrategyP
                   <Input
                     placeholder="Target"
                     value={kpi.target}
-                    onChange={e => updateKPI(index, 'target', e.target.value)}
+                    onChange={e => updateKPI(index, "target", e.target.value)}
                     className="flex-1"
                   />
                   <Select
                     value={kpi.timeframe}
-                    onValueChange={v => updateKPI(index, 'timeframe', v)}
+                    onValueChange={v => updateKPI(index, "timeframe", v)}
                   >
                     <SelectTrigger className="w-32">
                       <SelectValue />
@@ -446,16 +527,27 @@ export function SocialMediaStrategy({ onStrategyComplete }: SocialMediaStrategyP
                     min="1"
                     max="21"
                     value={strategy.postingFrequency[platform] || 3}
-                    onChange={e => updatePostingFrequency(platform, parseInt(e.target.value) || 1)}
+                    onChange={e =>
+                      updatePostingFrequency(
+                        platform,
+                        parseInt(e.target.value) || 1
+                      )
+                    }
                     className="w-20"
                   />
-                  <span className="text-sm text-muted-foreground">per week</span>
+                  <span className="text-sm text-muted-foreground">
+                    per week
+                  </span>
                 </div>
               ))}
             </div>
 
             <div className="flex gap-2">
-              <Button variant="outline" onClick={() => setStep(3)} className="flex-1">
+              <Button
+                variant="outline"
+                onClick={() => setStep(3)}
+                className="flex-1"
+              >
                 Back
               </Button>
               <Button onClick={handleComplete} className="flex-1">

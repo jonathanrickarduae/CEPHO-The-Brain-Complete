@@ -1,6 +1,6 @@
 /**
  * Pagination & Limits Constants
- * 
+ *
  * Standard pagination, limits, and threshold values
  */
 

@@ -1,18 +1,24 @@
 /**
  * CEPHO.Ai Organizational Chart
- * 
+ *
  * Visual representation of the unique CEPHO.Ai structure:
  * - One CEO (human at center)
  * - Virtual AI Chief of Staff (bridge layer)
  * - AI SME Expert Team (functional layer)
  * - Advisory Network (external world feeding in)
  * - AI Infrastructure (backend powering everything)
- * 
+ *
  * Structure: 1 Employee + 1 Virtual COS + AI SME Team
  */
 
 import { useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -40,7 +46,7 @@ import {
   ChevronDown,
   ChevronUp,
   Mic,
-  Volume2
+  Volume2,
 } from "lucide-react";
 
 // =============================================================================
@@ -60,14 +66,62 @@ interface SMEExpert {
 // =============================================================================
 
 const SME_EXPERTS: SMEExpert[] = [
-  { id: "finance", name: "Finance", role: "CFO Expert", icon: BarChart3, color: "text-green-400" },
-  { id: "legal", name: "Legal", role: "Legal Counsel", icon: Scale, color: "text-blue-400" },
-  { id: "strategy", name: "Strategy", role: "Strategy Director", icon: Target, color: "text-purple-400" },
-  { id: "operations", name: "Operations", role: "COO Expert", icon: Zap, color: "text-amber-400" },
-  { id: "marketing", name: "Marketing", role: "CMO Expert", icon: TrendingUp, color: "text-pink-400" },
-  { id: "hr", name: "People", role: "HR Director", icon: Users, color: "text-cyan-400" },
-  { id: "tech", name: "Technology", role: "CTO Expert", icon: Server, color: "text-orange-400" },
-  { id: "risk", name: "Risk", role: "Risk Manager", icon: Shield, color: "text-red-400" },
+  {
+    id: "finance",
+    name: "Finance",
+    role: "CFO Expert",
+    icon: BarChart3,
+    color: "text-green-400",
+  },
+  {
+    id: "legal",
+    name: "Legal",
+    role: "Legal Counsel",
+    icon: Scale,
+    color: "text-blue-400",
+  },
+  {
+    id: "strategy",
+    name: "Strategy",
+    role: "Strategy Director",
+    icon: Target,
+    color: "text-purple-400",
+  },
+  {
+    id: "operations",
+    name: "Operations",
+    role: "COO Expert",
+    icon: Zap,
+    color: "text-amber-400",
+  },
+  {
+    id: "marketing",
+    name: "Marketing",
+    role: "CMO Expert",
+    icon: TrendingUp,
+    color: "text-pink-400",
+  },
+  {
+    id: "hr",
+    name: "People",
+    role: "HR Director",
+    icon: Users,
+    color: "text-cyan-400",
+  },
+  {
+    id: "tech",
+    name: "Technology",
+    role: "CTO Expert",
+    icon: Server,
+    color: "text-orange-400",
+  },
+  {
+    id: "risk",
+    name: "Risk",
+    role: "Risk Manager",
+    icon: Shield,
+    color: "text-red-400",
+  },
 ];
 
 const ADVISORY_SOURCES = [
@@ -78,7 +132,7 @@ const ADVISORY_SOURCES = [
   "News & Media",
   "Company Filings",
   "Economic Indicators",
-  "Competitor Intel"
+  "Competitor Intel",
 ];
 
 // =============================================================================
@@ -90,7 +144,10 @@ interface CEPHOOrgChartProps {
   showDetails?: boolean;
 }
 
-export function CEPHOOrgChart({ variant = "full", showDetails = true }: CEPHOOrgChartProps) {
+export function CEPHOOrgChart({
+  variant = "full",
+  showDetails = true,
+}: CEPHOOrgChartProps) {
   const [expanded, setExpanded] = useState(true);
 
   if (variant === "minimal") {
@@ -127,19 +184,35 @@ export function CEPHOOrgChart({ variant = "full", showDetails = true }: CEPHOOrg
     <div className="space-y-6">
       {/* Header */}
       <div className="text-center">
-        <h2 className="text-2xl font-bold text-white mb-2">CEPHO.Ai Organization</h2>
-        <p className="text-muted-foreground">The AI-Powered Executive Structure</p>
+        <h2 className="text-2xl font-bold text-white mb-2">
+          CEPHO.Ai Organization
+        </h2>
+        <p className="text-muted-foreground">
+          The AI-Powered Executive Structure
+        </p>
         <div className="flex justify-center gap-4 mt-4 flex-wrap">
-          <Badge variant="outline" className="bg-[#E91E8C]/20 text-[#E91E8C] border-[#E91E8C]/30">
+          <Badge
+            variant="outline"
+            className="bg-[#E91E8C]/20 text-[#E91E8C] border-[#E91E8C]/30"
+          >
             1 Employee
           </Badge>
-          <Badge variant="outline" className="bg-purple-500/20 text-purple-400 border-purple-500/30">
+          <Badge
+            variant="outline"
+            className="bg-purple-500/20 text-purple-400 border-purple-500/30"
+          >
             Virtual COS
           </Badge>
-          <Badge variant="outline" className="bg-amber-500/20 text-amber-400 border-amber-500/30">
+          <Badge
+            variant="outline"
+            className="bg-amber-500/20 text-amber-400 border-amber-500/30"
+          >
             Head of Briefings
           </Badge>
-          <Badge variant="outline" className="bg-cyan-500/20 text-cyan-400 border-cyan-500/30">
+          <Badge
+            variant="outline"
+            className="bg-cyan-500/20 text-cyan-400 border-cyan-500/30"
+          >
             AI SME Team
           </Badge>
         </div>
@@ -151,14 +224,16 @@ export function CEPHOOrgChart({ variant = "full", showDetails = true }: CEPHOOrg
         <div className="mb-8">
           <div className="flex items-center justify-center gap-2 mb-4">
             <Globe className="h-5 w-5 text-gray-400" />
-            <span className="text-sm text-gray-400 uppercase tracking-wider">Advisory Network</span>
+            <span className="text-sm text-gray-400 uppercase tracking-wider">
+              Advisory Network
+            </span>
             <Globe className="h-5 w-5 text-gray-400" />
           </div>
           <div className="flex flex-wrap justify-center gap-2 max-w-2xl mx-auto">
             {ADVISORY_SOURCES.map((source, idx) => (
-              <Badge 
-                key={idx} 
-                variant="outline" 
+              <Badge
+                key={idx}
+                variant="outline"
                 className="bg-gray-800/50 text-gray-400 border-gray-700 text-xs"
               >
                 {source}
@@ -206,11 +281,23 @@ export function CEPHOOrgChart({ variant = "full", showDetails = true }: CEPHOOrg
               <div className="w-16 h-16 rounded-full bg-purple-500/30 border-2 border-purple-500 flex items-center justify-center mx-auto mb-3">
                 <Brain className="h-8 w-8 text-purple-400" />
               </div>
-              <h3 className="text-lg font-bold text-white">Virtual Chief of Staff</h3>
+              <h3 className="text-lg font-bold text-white">
+                Virtual Chief of Staff
+              </h3>
               <p className="text-sm text-purple-400">Research & Coordination</p>
               <div className="mt-3 flex flex-wrap justify-center gap-1">
-                <Badge variant="outline" className="text-xs border-purple-500/30 text-purple-300">Analysis</Badge>
-                <Badge variant="outline" className="text-xs border-purple-500/30 text-purple-300">Execution</Badge>
+                <Badge
+                  variant="outline"
+                  className="text-xs border-purple-500/30 text-purple-300"
+                >
+                  Analysis
+                </Badge>
+                <Badge
+                  variant="outline"
+                  className="text-xs border-purple-500/30 text-purple-300"
+                >
+                  Execution
+                </Badge>
               </div>
             </CardContent>
           </Card>
@@ -224,8 +311,18 @@ export function CEPHOOrgChart({ variant = "full", showDetails = true }: CEPHOOrg
               <h3 className="text-lg font-bold text-white">Victoria</h3>
               <p className="text-sm text-amber-400">Head of Briefings</p>
               <div className="mt-3 flex flex-wrap justify-center gap-1">
-                <Badge variant="outline" className="text-xs border-amber-500/30 text-amber-300">Voice Briefings</Badge>
-                <Badge variant="outline" className="text-xs border-amber-500/30 text-amber-300">Updates</Badge>
+                <Badge
+                  variant="outline"
+                  className="text-xs border-amber-500/30 text-amber-300"
+                >
+                  Voice Briefings
+                </Badge>
+                <Badge
+                  variant="outline"
+                  className="text-xs border-amber-500/30 text-amber-300"
+                >
+                  Updates
+                </Badge>
               </div>
             </CardContent>
           </Card>
@@ -235,13 +332,17 @@ export function CEPHOOrgChart({ variant = "full", showDetails = true }: CEPHOOrg
         <div className="flex justify-center mb-4">
           <div className="flex flex-col items-center">
             <div className="w-0.5 h-8 bg-gradient-to-b from-purple-500 to-cyan-500"></div>
-            <Button 
-              variant="outline" 
-              size="sm" 
+            <Button
+              variant="outline"
+              size="sm"
               className="border-gray-700 text-gray-400"
               onClick={() => setExpanded(!expanded)}
             >
-              {expanded ? <ChevronUp className="h-4 w-4 mr-1" /> : <ChevronDown className="h-4 w-4 mr-1" />}
+              {expanded ? (
+                <ChevronUp className="h-4 w-4 mr-1" />
+              ) : (
+                <ChevronDown className="h-4 w-4 mr-1" />
+              )}
               {expanded ? "Collapse" : "Expand"} SME Team
             </Button>
           </div>
@@ -252,19 +353,30 @@ export function CEPHOOrgChart({ variant = "full", showDetails = true }: CEPHOOrg
           <div className="mb-8">
             <div className="flex items-center justify-center gap-2 mb-4">
               <Users className="h-5 w-5 text-cyan-400" />
-              <span className="text-sm text-cyan-400 uppercase tracking-wider">AI SME Expert Team</span>
+              <span className="text-sm text-cyan-400 uppercase tracking-wider">
+                AI SME Expert Team
+              </span>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 max-w-3xl mx-auto">
-              {SME_EXPERTS.map((expert) => {
+              {SME_EXPERTS.map(expert => {
                 const Icon = expert.icon;
                 return (
-                  <Card key={expert.id} className="bg-gray-900/50 border-gray-800 hover:border-cyan-500/50 transition-colors">
+                  <Card
+                    key={expert.id}
+                    className="bg-gray-900/50 border-gray-800 hover:border-cyan-500/50 transition-colors"
+                  >
                     <CardContent className="pt-4 text-center">
-                      <div className={`w-10 h-10 rounded-lg bg-gray-800 flex items-center justify-center mx-auto mb-2`}>
+                      <div
+                        className={`w-10 h-10 rounded-lg bg-gray-800 flex items-center justify-center mx-auto mb-2`}
+                      >
                         <Icon className={`h-5 w-5 ${expert.color}`} />
                       </div>
-                      <p className="text-sm font-medium text-white">{expert.name}</p>
-                      <p className="text-xs text-muted-foreground">{expert.role}</p>
+                      <p className="text-sm font-medium text-white">
+                        {expert.name}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        {expert.role}
+                      </p>
                     </CardContent>
                   </Card>
                 );
@@ -277,19 +389,33 @@ export function CEPHOOrgChart({ variant = "full", showDetails = true }: CEPHOOrg
         <div className="mt-8 pt-8 border-t border-gray-800">
           <div className="flex items-center justify-center gap-2 mb-4">
             <Server className="h-5 w-5 text-gray-500" />
-            <span className="text-sm text-gray-500 uppercase tracking-wider">AI Infrastructure Layer</span>
+            <span className="text-sm text-gray-500 uppercase tracking-wider">
+              AI Infrastructure Layer
+            </span>
           </div>
           <div className="flex justify-center gap-4 flex-wrap">
-            <Badge variant="outline" className="bg-gray-900 text-gray-500 border-gray-800">
+            <Badge
+              variant="outline"
+              className="bg-gray-900 text-gray-500 border-gray-800"
+            >
               <Database className="h-3 w-3 mr-1" /> Knowledge Base
             </Badge>
-            <Badge variant="outline" className="bg-gray-900 text-gray-500 border-gray-800">
+            <Badge
+              variant="outline"
+              className="bg-gray-900 text-gray-500 border-gray-800"
+            >
               <Network className="h-3 w-3 mr-1" /> Neural Networks
             </Badge>
-            <Badge variant="outline" className="bg-gray-900 text-gray-500 border-gray-800">
+            <Badge
+              variant="outline"
+              className="bg-gray-900 text-gray-500 border-gray-800"
+            >
               <Zap className="h-3 w-3 mr-1" /> Processing Engine
             </Badge>
-            <Badge variant="outline" className="bg-gray-900 text-gray-500 border-gray-800">
+            <Badge
+              variant="outline"
+              className="bg-gray-900 text-gray-500 border-gray-800"
+            >
               <Shield className="h-3 w-3 mr-1" /> Security Layer
             </Badge>
           </div>
@@ -311,7 +437,9 @@ export function CEPHOOrgChart({ variant = "full", showDetails = true }: CEPHOOrg
               </div>
               <div>
                 <p className="text-3xl font-bold text-amber-400">1</p>
-                <p className="text-sm text-muted-foreground">Head of Briefings</p>
+                <p className="text-sm text-muted-foreground">
+                  Head of Briefings
+                </p>
               </div>
               <div>
                 <p className="text-3xl font-bold text-cyan-400">8+</p>
@@ -320,9 +448,11 @@ export function CEPHOOrgChart({ variant = "full", showDetails = true }: CEPHOOrg
             </div>
             <div className="mt-6 pt-6 border-t border-gray-800 text-center">
               <p className="text-sm text-muted-foreground">
-                <span className="text-white font-medium">The CEPHO Model:</span> One human CEO amplified by AI infrastructure, 
-                with a Virtual Chief of Staff handling research and coordination, Victoria delivering all briefings, 
-                and an unlimited AI expert team connected to the world's advisory network.
+                <span className="text-white font-medium">The CEPHO Model:</span>{" "}
+                One human CEO amplified by AI infrastructure, with a Virtual
+                Chief of Staff handling research and coordination, Victoria
+                delivering all briefings, and an unlimited AI expert team
+                connected to the world's advisory network.
               </p>
             </div>
           </CardContent>

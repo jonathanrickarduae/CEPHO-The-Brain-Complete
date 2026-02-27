@@ -1,4 +1,4 @@
-import { DueDiligenceWizard } from '@/components/onboarding/DueDiligenceWizard';
+import { DueDiligenceWizard } from "@/components/onboarding/DueDiligenceWizard";
 
 export default function DueDiligencePage() {
   return (
@@ -12,7 +12,7 @@ export default function DueDiligencePage() {
             Comprehensive M&A analysis powered by AI-SMEs
           </p>
         </div>
-        
+
         <DueDiligenceWizard />
       </div>
     </div>

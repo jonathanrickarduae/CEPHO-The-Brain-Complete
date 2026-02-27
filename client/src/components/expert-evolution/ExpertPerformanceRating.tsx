@@ -1,5 +1,5 @@
-import { Star, TrendingUp, CheckCircle2, Award } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
+import { Star, TrendingUp, CheckCircle2, Award } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 
 interface ExpertPerformanceData {
   rating: number; // 1-5 stars
@@ -18,7 +18,11 @@ interface ExpertPerformanceRatingProps {
   compact?: boolean; // Compact view for grid display
 }
 
-export function ExpertPerformanceRating({ expert, performance, compact = false }: ExpertPerformanceRatingProps) {
+export function ExpertPerformanceRating({
+  expert,
+  performance,
+  compact = false,
+}: ExpertPerformanceRatingProps) {
   const renderStars = (rating: number) => {
     return (
       <div className="flex items-center gap-1">
@@ -27,10 +31,10 @@ export function ExpertPerformanceRating({ expert, performance, compact = false }
             key={i}
             className={`w-4 h-4 ${
               i < Math.floor(rating)
-                ? 'fill-amber-400 text-amber-400'
+                ? "fill-amber-400 text-amber-400"
                 : i < rating
-                ? 'fill-amber-400/50 text-amber-400'
-                : 'text-border'
+                  ? "fill-amber-400/50 text-amber-400"
+                  : "text-border"
             }`}
           />
         ))}
@@ -42,10 +46,25 @@ export function ExpertPerformanceRating({ expert, performance, compact = false }
   };
 
   const getQualityBadge = (score: number) => {
-    if (score >= 90) return { label: 'Excellent', color: 'bg-green-500/20 text-green-400 border-green-500/30' };
-    if (score >= 75) return { label: 'Good', color: 'bg-blue-500/20 text-blue-400 border-blue-500/30' };
-    if (score >= 60) return { label: 'Fair', color: 'bg-amber-500/20 text-amber-400 border-amber-500/30' };
-    return { label: 'Needs Work', color: 'bg-red-500/20 text-red-400 border-red-500/30' };
+    if (score >= 90)
+      return {
+        label: "Excellent",
+        color: "bg-green-500/20 text-green-400 border-green-500/30",
+      };
+    if (score >= 75)
+      return {
+        label: "Good",
+        color: "bg-blue-500/20 text-blue-400 border-blue-500/30",
+      };
+    if (score >= 60)
+      return {
+        label: "Fair",
+        color: "bg-amber-500/20 text-amber-400 border-amber-500/30",
+      };
+    return {
+      label: "Needs Work",
+      color: "bg-red-500/20 text-red-400 border-red-500/30",
+    };
   };
 
   const qualityBadge = getQualityBadge(performance.qualityScore);
@@ -76,7 +95,10 @@ export function ExpertPerformanceRating({ expert, performance, compact = false }
 
         {/* Most popular badge */}
         {performance.isMostPopular && (
-          <Badge variant="outline" className="bg-amber-500/20 text-amber-400 border-amber-500/30 text-xs gap-1">
+          <Badge
+            variant="outline"
+            className="bg-amber-500/20 text-amber-400 border-amber-500/30 text-xs gap-1"
+          >
             <Award className="w-3 h-3" />
             Most Popular
           </Badge>
@@ -113,32 +135,50 @@ export function ExpertPerformanceRating({ expert, performance, compact = false }
         <div className="bg-secondary/30 rounded-lg p-3 border border-border">
           <div className="flex items-center gap-2 mb-1">
             <CheckCircle2 className="w-4 h-4 text-green-400" />
-            <span className="text-xs font-medium text-muted-foreground">Success Rate</span>
+            <span className="text-xs font-medium text-muted-foreground">
+              Success Rate
+            </span>
           </div>
-          <p className="text-lg font-bold text-foreground">{performance.successRate}%</p>
+          <p className="text-lg font-bold text-foreground">
+            {performance.successRate}%
+          </p>
         </div>
 
         {/* Quality score */}
         <div className="bg-secondary/30 rounded-lg p-3 border border-border">
           <div className="flex items-center gap-2 mb-1">
             <TrendingUp className="w-4 h-4 text-blue-400" />
-            <span className="text-xs font-medium text-muted-foreground">Quality</span>
+            <span className="text-xs font-medium text-muted-foreground">
+              Quality
+            </span>
           </div>
-          <p className="text-lg font-bold text-foreground">{performance.qualityScore}%</p>
+          <p className="text-lg font-bold text-foreground">
+            {performance.qualityScore}%
+          </p>
         </div>
       </div>
 
       {/* Quality badge */}
-      <Badge variant="outline" className={`w-full justify-center py-2 ${qualityBadge.color}`}>
+      <Badge
+        variant="outline"
+        className={`w-full justify-center py-2 ${qualityBadge.color}`}
+      >
         {qualityBadge.label}
       </Badge>
 
       {/* Performance trend */}
       <div className="text-xs text-muted-foreground bg-secondary/20 rounded-lg p-3 border border-border">
         <p>
-          This expert has helped {performance.reviewCount} users with an average success rate of{' '}
-          <span className="font-medium text-foreground">{performance.successRate}%</span> and quality score of{' '}
-          <span className="font-medium text-foreground">{performance.qualityScore}%</span>.
+          This expert has helped {performance.reviewCount} users with an average
+          success rate of{" "}
+          <span className="font-medium text-foreground">
+            {performance.successRate}%
+          </span>{" "}
+          and quality score of{" "}
+          <span className="font-medium text-foreground">
+            {performance.qualityScore}%
+          </span>
+          .
         </p>
       </div>
     </div>

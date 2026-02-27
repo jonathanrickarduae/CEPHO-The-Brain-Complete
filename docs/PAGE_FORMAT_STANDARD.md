@@ -7,15 +7,15 @@ All main pages MUST use the consistent PageHeader component from `/components/la
 ### Standard Format
 
 ```tsx
-import { PageHeader } from '@/components/layout/PageHeader';
-import { IconName } from 'lucide-react';
+import { PageHeader } from "@/components/layout/PageHeader";
+import { IconName } from "lucide-react";
 
 export default function PageName() {
   return (
     <div className="h-[calc(100vh-56px)] md:h-screen flex flex-col bg-gradient-to-br from-gray-900 via-gray-900 to-gray-800">
       {/* Header */}
-      <PageHeader 
-        icon={IconName} 
+      <PageHeader
+        icon={IconName}
         title="Page Title"
         subtitle="Optional subtitle describing the page"
       >
@@ -24,9 +24,7 @@ export default function PageName() {
       </PageHeader>
 
       {/* Main Content */}
-      <div className="flex-1 overflow-auto">
-        {/* Page content here */}
-      </div>
+      <div className="flex-1 overflow-auto">{/* Page content here */}</div>
     </div>
   );
 }
@@ -64,21 +62,19 @@ CEPHO | [Icon] Page Title
 ### Examples
 
 #### Simple Page
+
 ```tsx
-<PageHeader 
-  icon={Settings} 
+<PageHeader
+  icon={Settings}
   title="Settings"
   subtitle="Manage your account and preferences"
 />
 ```
 
 #### Page with Actions
+
 ```tsx
-<PageHeader 
-  icon={Users} 
-  title="AI-SMEs"
-  subtitle="Expert AI specialists"
->
+<PageHeader icon={Users} title="AI-SMEs" subtitle="Expert AI specialists">
   <Button variant="outline" size="sm">
     <Plus className="w-4 h-4 mr-2" />
     Add Expert
@@ -87,12 +83,9 @@ CEPHO | [Icon] Page Title
 ```
 
 #### Page with Status Badge
+
 ```tsx
-<PageHeader 
-  icon={Shield} 
-  title="The Vault"
-  subtitle="Secure encrypted storage"
->
+<PageHeader icon={Shield} title="The Vault" subtitle="Secure encrypted storage">
   <Badge variant="outline" className="bg-emerald-500/20 text-emerald-400">
     <Lock className="w-3 h-3 mr-1" />
     Encrypted
@@ -113,27 +106,27 @@ The following pages are currently using the old Breadcrumbs PageHeader and need 
 ## Migration Steps
 
 1. Change import from:
+
    ```tsx
-   import { PageHeader } from '@/components/layout/Breadcrumbs';
+   import { PageHeader } from "@/components/layout/Breadcrumbs";
    ```
-   
+
    To:
+
    ```tsx
-   import { PageHeader } from '@/components/layout/PageHeader';
+   import { PageHeader } from "@/components/layout/PageHeader";
    ```
 
 2. Add an icon import:
+
    ```tsx
-   import { IconName } from 'lucide-react';
+   import { IconName } from "lucide-react";
    ```
 
 3. Update PageHeader usage to include icon:
+
    ```tsx
-   <PageHeader 
-     icon={IconName}
-     title="Page Title"
-     subtitle="Description"
-   />
+   <PageHeader icon={IconName} title="Page Title" subtitle="Description" />
    ```
 
 4. Wrap page in standard container if not already:
