@@ -58,14 +58,14 @@ export default function ProjectGenesisPage() {
   // Fetch projects from backend
   const { data: apiProjects, isLoading: projectsLoading, refetch: refetchProjects } = trpc.projectGenesis.listProjects.useQuery(
     undefined,
-    { retry: 1, retryDelay: 1000 }
+    { retry: 0, retryDelay: 0 }
   );
   
   // Timeout to prevent infinite spinner if DB is unavailable
   const [loadingTimedOut, setLoadingTimedOut] = React.useState(false);
   React.useEffect(() => {
     if (projectsLoading) {
-      const timer = setTimeout(() => setLoadingTimedOut(true), 5000);
+      const timer = setTimeout(() => setLoadingTimedOut(true), 3000);
       return () => clearTimeout(timer);
     } else {
       setLoadingTimedOut(false);

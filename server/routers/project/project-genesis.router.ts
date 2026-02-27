@@ -151,7 +151,10 @@ export const projectGenesisRouter = router({
   listProjects: protectedProcedure
     .query(async ({ ctx }) => {
       const db = await getRawClient();
-      if (!db) throw new Error('Database connection not available');
+      if (!db) {
+        console.warn('[projectGenesis.listProjects] DB unavailable, returning empty array');
+        return [];
+      }
       
       try {
         const projects = await db`

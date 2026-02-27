@@ -66,7 +66,7 @@ export function IntegrationsStatusReal() {
   
   const { data: integrations, isLoading, refetch } = trpc.integrations.getAll.useQuery(
     undefined,
-    { retry: 1, retryDelay: 1000 }
+    { retry: 0, retryDelay: 0 }
   );
   const initializeAll = trpc.integrations.initializeAll.useMutation();
 

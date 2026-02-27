@@ -122,10 +122,28 @@ export default function AgentDetailPage() {
     }
   };
 
-  if (loading || !agent) {
+  if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="text-xl">Loading agent details...</div>
+        <div className="text-center">
+          <div className="w-8 h-8 border-2 border-cyan-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <div className="text-xl text-gray-400">Loading agent details...</div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!agent) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="text-6xl mb-4">🤖</div>
+          <div className="text-xl text-white mb-2">Agent Not Found</div>
+          <div className="text-gray-400 mb-6">This agent may not be available yet or the database is not connected.</div>
+          <Link href="/ai-agents-monitoring" className="px-4 py-2 bg-cyan-500 text-white rounded-lg hover:bg-cyan-600 transition-colors">
+            Back to Monitoring
+          </Link>
+        </div>
       </div>
     );
   }

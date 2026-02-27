@@ -46,7 +46,7 @@ export async function initializeDatabase(): Promise<void> {
     rawClient = postgres(connectionString, {
       max: 10, // Maximum pool size
       idle_timeout: 20,
-      connect_timeout: 10,
+      connect_timeout: 5, // Reduced from 10s to fail faster
     });
 
     dbInstance = drizzle(rawClient, { schema, logger: false });

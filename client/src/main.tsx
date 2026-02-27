@@ -12,7 +12,15 @@ import { checkAppVersion } from "./utils/cacheBuster";
 // Check app version and force reload if changed
 checkAppVersion();
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 0,
+      retryDelay: 0,
+      staleTime: 30000,
+    },
+  },
+});
 
 const redirectToLoginIfUnauthorized = (_error: unknown) => {
   // Authentication bypass - do not redirect to login
