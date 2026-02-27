@@ -64,7 +64,10 @@ export function IntegrationsStatusReal() {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [isInitializing, setIsInitializing] = useState(false);
   
-  const { data: integrations, isLoading, refetch } = trpc.integrations.getAll.useQuery();
+  const { data: integrations, isLoading, refetch } = trpc.integrations.getAll.useQuery(
+    undefined,
+    { retry: 1, retryDelay: 1000 }
+  );
   const initializeAll = trpc.integrations.initializeAll.useMutation();
 
   const handleInitialize = async () => {
@@ -134,13 +137,8 @@ export function IntegrationsStatusReal() {
   const connectedCount = services.filter(s => s.status === 'connected').length;
   const disconnectedCount = services.filter(s => s.status === 'disconnected').length;
 
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center p-12">
-        <Loader2 className="w-8 h-8 animate-spin text-cyan-500" />
-      </div>
-    );
-  }
+  // Don't block rendering if loading takes too long - just show disconnected state
+  // isLoading spinner is skipped intentionally to avoid infinite spinner on DB unavailability
 
   return (
     <div className="space-y-6">

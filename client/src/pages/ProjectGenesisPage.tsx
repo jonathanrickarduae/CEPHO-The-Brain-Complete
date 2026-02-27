@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { 
@@ -56,7 +56,21 @@ export default function ProjectGenesisPage() {
   
   // ===== NEW: Real API Integration =====
   // Fetch projects from backend
-  const { data: apiProjects, isLoading: projectsLoading, refetch: refetchProjects } = trpc.projectGenesis.listProjects.useQuery();
+  const { data: apiProjects, isLoading: projectsLoading, refetch: refetchProjects } = trpc.projectGenesis.listProjects.useQuery(
+    undefined,
+    { retry: 1, retryDelay: 1000 }
+  );
+  
+  // Timeout to prevent infinite spinner if DB is unavailable
+  const [loadingTimedOut, setLoadingTimedOut] = React.useState(false);
+  React.useEffect(() => {
+    if (projectsLoading) {
+      const timer = setTimeout(() => setLoadingTimedOut(true), 5000);
+      return () => clearTimeout(timer);
+    } else {
+      setLoadingTimedOut(false);
+    }
+  }, [projectsLoading]);
   
   // Create project mutation
   const createProjectMutation = trpc.projectGenesis.initiate.useMutation({
@@ -258,7 +272,7 @@ export default function ProjectGenesisPage() {
           </div>
 
           {/* Loading State */}
-          {projectsLoading && (
+          {projectsLoading && !loadingTimedOut && (
             <div className="flex items-center justify-center py-12">
               <Loader2 className="w-8 h-8 text-purple-400 animate-spin" />
               <span className="ml-3 text-gray-400">Loading projects...</span>
@@ -327,7 +341,7 @@ export default function ProjectGenesisPage() {
           )}
 
           {/* Empty State */}
-          {!projectsLoading && savedProjects.length === 0 && (
+          {(!projectsLoading || loadingTimedOut) && savedProjects.length === 0 && (
             <div className="text-center py-12">
               <Brain className="w-16 h-16 text-gray-600 mx-auto mb-4" />
               <h3 className="text-xl font-semibold text-gray-400 mb-2">
