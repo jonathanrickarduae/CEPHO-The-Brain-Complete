@@ -32,6 +32,8 @@ import { partnershipsRouter as partnershipsRealRouter } from "./routers/partners
 import { voiceNotesRouter } from "./routers/voiceNotes.router";
 import { subscriptionTrackerRouter as subscriptionTrackerRealRouter } from "./routers/subscriptionTracker.router";
 import { projectGenesisRouter as projectGenesisRealRouter } from "./routers/projectGenesis.router";
+import { documentLibraryRouter as documentLibraryRealRouter } from "./routers/documentLibrary.router";
+import { workflowsRouter as workflowsRealRouter } from "./routers/workflows.router";
 
 // ─── Functional Stubs ────────────────────────────────────────────────────────
 import {
@@ -44,14 +46,14 @@ import {
   calendarRouter,
   gmailRouter,
   integrationsRouter,
-  workflowsRouter,
+
   cosTasksRouter,
   qaRouter,
   qualityGateRouter,
   smeTeamRouter,
   teamCapabilitiesRouter,
 
-  documentLibraryRouter,
+
   libraryRouter,
 
   collaborativeReviewRouter,
@@ -117,7 +119,7 @@ export const appRouter = router({
   integrations: integrationsRouter,
 
   // ─── Workflows & Operations ─────────────────────────────────────────────
-  workflows: workflowsRouter,
+  workflows: workflowsRealRouter,
   cosTasks: cosTasksRouter,
   qa: qaRouter,
   qualityGate: qualityGateRouter,
@@ -127,7 +129,7 @@ export const appRouter = router({
   morningSignal: morningSignalRealRouter,
 
   // ─── Documents & Library ────────────────────────────────────────────────
-  documentLibrary: documentLibraryRouter,
+  documentLibrary: documentLibraryRealRouter,
   library: libraryRouter,
 
   // ─── Business Tools ─────────────────────────────────────────────────────
