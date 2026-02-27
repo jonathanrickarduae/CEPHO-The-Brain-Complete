@@ -15,7 +15,8 @@ export const ENV = {
 // Only validate at runtime, not during build
 export function validateEnvironment() {
   const requiredEnv = [
-    "DATABASE_URL",
+    // DATABASE_URL is optional - app works without it, DB features return empty data
+    // "DATABASE_URL",
     // Temporarily commented out to allow deployment without Forge API
     // "BUILT_IN_FORGE_API_URL",
     // "BUILT_IN_FORGE_API_KEY",
