@@ -283,14 +283,14 @@ class SDKServer {
     const db = await import("../db");
     let user = await db.getUserByOpenId(sessionUserId);
 
-    // If user not in DB, create them (for hardcoded admin or OAuth users)
+    // If user not in DB, create them (for admin or OAuth users)
     if (!user) {
-      // Check if this is the hardcoded admin user
-      if (sessionUserId === "hardcoded_admin_001") {
+      // Check if this is the admin user (identified by openId from JWT)
+      if (sessionUserId === "admin_001") {
         await db.upsertUser({
           openId: sessionUserId,
           name: session.name,
-          email: "jonathanrickarduae@gmail.com",
+          email: process.env.ADMIN_EMAIL || session.name || "",
           loginMethod: "email",
           role: "admin",
           themePreference: "dark",
