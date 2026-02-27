@@ -12,6 +12,7 @@ import { CelebrationProvider } from '@/components/shared/CelebrationAnimations';
 import { DailyCycleProvider } from '@/components/ai-agents/DailyCycleProvider';
 import { PageTransition } from '@/components/shared/PageTransition';
 import AuthGuard from '@/components/AuthGuard';
+import { PinGate } from '@/components/PinGate';
 import { KeyboardShortcutsGuide } from '@/components/project-management/KeyboardShortcutsGuide';
 import { ChiefOfStaffNotification } from '@/components/communication/ChiefOfStaffNotification';
 
@@ -304,6 +305,7 @@ function Router() {
 
 function App() {
   return (
+    <PinGate>
     <ErrorBoundary>
       <ThemeProvider defaultTheme="dark" switchable>
         <GovernanceProvider>
@@ -323,6 +325,7 @@ function App() {
         </GovernanceProvider>
       </ThemeProvider>
     </ErrorBoundary>
+    </PinGate>
   );
 }
 
