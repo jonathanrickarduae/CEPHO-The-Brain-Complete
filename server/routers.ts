@@ -26,6 +26,9 @@ import {
   victoriaBriefingRouter,
   victoriasBriefRouter,
 } from "./routers/victoriaBriefing.router";
+import { innovationRouter } from "./routers/innovation.router";
+import { eveningReviewRouter, morningSignalRouter as morningSignalRealRouter } from "./routers/eveningReview.router";
+import { partnershipsRouter as partnershipsRealRouter } from "./routers/partnerships.router";
 
 // ─── Functional Stubs ────────────────────────────────────────────────────────
 import {
@@ -44,15 +47,13 @@ import {
   qualityGateRouter,
   smeTeamRouter,
   teamCapabilitiesRouter,
-  morningSignalRouter,
-  eveningReviewRouter,
+
   documentLibraryRouter,
   libraryRouter,
   subscriptionTrackerRouter,
   collaborativeReviewRouter,
   businessPlanReviewRouter,
-  partnershipsRouter,
-  innovationRouter,
+
   genesisRouter,
   projectGenesisRouter,
   optimizationRouter,
@@ -120,7 +121,7 @@ export const appRouter = router({
   smeTeam: smeTeamRouter,
   teamCapabilities: teamCapabilitiesRouter,
   eveningReview: eveningReviewRouter,
-  morningSignal: morningSignalRouter,
+  morningSignal: morningSignalRealRouter,
 
   // ─── Documents & Library ────────────────────────────────────────────────
   documentLibrary: documentLibraryRouter,
@@ -130,7 +131,7 @@ export const appRouter = router({
   subscriptionTracker: subscriptionTrackerRouter,
   collaborativeReview: collaborativeReviewRouter,
   businessPlanReview: businessPlanReviewRouter,
-  partnerships: partnershipsRouter,
+  partnerships: partnershipsRealRouter,
   innovation: innovationRouter,
   genesis: genesisRouter,
   projectGenesis: projectGenesisRouter,
