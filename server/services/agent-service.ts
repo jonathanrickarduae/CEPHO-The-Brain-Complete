@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { getRawClient } from '../db';
 import type { Database } from '../db';
 

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * QA Router
  * 

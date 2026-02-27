@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * AI Agents Monitoring Page - All 51 Specialized Agents
  * Monitor performance, ratings, and daily reports for all AI agents

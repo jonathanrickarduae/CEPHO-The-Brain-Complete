@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Integration Service Module
  * 

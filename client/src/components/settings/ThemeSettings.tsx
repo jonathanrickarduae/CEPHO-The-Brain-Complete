@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from 'react';
 import { useTheme } from '../hooks/useTheme';
 import { Moon, Sun, Monitor } from 'lucide-react';

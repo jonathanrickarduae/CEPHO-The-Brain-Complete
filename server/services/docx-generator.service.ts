@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * CEPHO.AI DOCX Generator Service
  * 

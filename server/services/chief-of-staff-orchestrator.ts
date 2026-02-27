@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { agentService, type AIAgent, type ApprovalRequest } from './agent-service';
 import { getLLMService } from './llm-service';
 

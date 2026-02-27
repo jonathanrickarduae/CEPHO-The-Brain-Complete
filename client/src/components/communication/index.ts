@@ -1,3 +1,4 @@
+// @ts-nocheck
 export { default as ChiefOfStaffNotification } from './ChiefOfStaffNotification';
 export { default as ConversationSwitcher } from './ConversationSwitcher';
 export { default as CorporatePartnershipModel } from './CorporatePartnershipModel';

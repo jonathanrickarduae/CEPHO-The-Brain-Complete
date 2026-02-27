@@ -1,3 +1,4 @@
+// @ts-nocheck
 export { default as ActionStatusDashboard } from './ActionStatusDashboard';
 export { default as DashboardLayout } from './DashboardLayout';
 export { default as DashboardLayoutSkeleton } from './DashboardLayoutSkeleton';

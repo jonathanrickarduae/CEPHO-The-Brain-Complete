@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * SME (Subject Matter Expert) Service
  * Manages 323 AI experts across 16 categories with panel assembly

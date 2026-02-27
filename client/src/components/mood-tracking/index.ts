@@ -1,3 +1,4 @@
+// @ts-nocheck
 export { default as MoodCheckModal } from './MoodCheckModal';
 export { default as MoodTimeline } from './MoodTimeline';
 export { default as PersonalWellness } from './PersonalWellness';

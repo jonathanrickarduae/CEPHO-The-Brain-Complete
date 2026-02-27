@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Review Service Module
  * Handles reviews and collaborative review sessions

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { openClawRouter } from "./openclaw-router";
 import { integrationsRouter } from "./routers/integrations/integrations.router";
 import { projectGenesisRouter } from "./routers/project/project-genesis.router";

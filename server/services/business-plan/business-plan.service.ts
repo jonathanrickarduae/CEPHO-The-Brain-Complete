@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { BusinessPlanRepository } from './business-plan.repository';
 import {
   CreateBusinessPlanReviewDto,

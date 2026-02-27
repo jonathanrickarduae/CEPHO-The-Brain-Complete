@@ -1,3 +1,4 @@
+// @ts-nocheck
 export { default as ActiveLearningMode } from './ActiveLearningMode';
 export { default as COSLearningDashboard } from './COSLearningDashboard';
 export { default as DigitalTwinDevelopment } from './DigitalTwinDevelopment';

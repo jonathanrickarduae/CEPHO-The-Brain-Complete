@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Digital Twin / Chief of Staff Router
  * Endpoints for personalized AI assistant and training

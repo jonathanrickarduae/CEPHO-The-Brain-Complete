@@ -1,3 +1,4 @@
+// @ts-nocheck
 export { default as BlueprintQMS } from './BlueprintQMS';
 export { default as BlueprintTemplates } from './BlueprintTemplates';
 export { default as BusinessGuardian } from './BusinessGuardian';

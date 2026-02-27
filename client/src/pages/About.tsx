@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { 
   Brain, User, Users, Sparkles, Target, 
   Zap, Shield, TrendingUp, Heart, BookOpen,

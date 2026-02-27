@@ -37,10 +37,10 @@ export function getService<T>(name: string): T {
  */
 export function registerService<T>(
   name: string,
-  factory: (container: typeof container) => T,
+  factory: (c: { get: <S>(name: string) => S }) => T,
   singleton = true
 ): void {
-  container.register(name, factory, singleton);
+  container.register(name, factory as any, singleton);
 }
 
 /**

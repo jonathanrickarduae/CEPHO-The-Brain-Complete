@@ -1,8 +1,9 @@
 import * as Sentry from '@sentry/node';
+import { httpIntegration, expressIntegration, setupExpressErrorHandler } from '@sentry/node';
 import type { Express, Request, Response, NextFunction } from 'express';
 
 /**
- * Error Tracking Service using Sentry
+ * Error Tracking Service using Sentry v10
  * Catches and reports production errors for debugging
  */
 
@@ -25,13 +26,11 @@ class ErrorTrackerService {
         dsn: sentryDsn,
         environment: process.env.NODE_ENV || 'development',
         tracesSampleRate: process.env.NODE_ENV === 'production' ? 0.1 : 1.0,
-        
-        // Performance monitoring
+
+        // Performance monitoring - Sentry v10 API
         integrations: [
-          // HTTP integration
-          new Sentry.Integrations.Http({ tracing: true }),
-          // Express integration
-          new Sentry.Integrations.Express({ app }),
+          httpIntegration(),
+          expressIntegration(),
         ],
 
         // Ignore common errors
@@ -41,24 +40,20 @@ class ErrorTrackerService {
         ],
 
         // Before send hook to filter sensitive data
-        beforeSend(event, hint) {
-          // Remove sensitive data from error context
+        beforeSend(event, _hint) {
           if (event.request) {
             delete event.request.cookies;
             if (event.request.headers) {
-              delete event.request.headers.authorization;
-              delete event.request.headers.cookie;
+              delete (event.request.headers as any).authorization;
+              delete (event.request.headers as any).cookie;
             }
           }
           return event;
         },
       });
 
-      // Request handler must be the first middleware
-      app.use(Sentry.Handlers.requestHandler());
-
-      // TracingHandler creates a trace for every incoming request
-      app.use(Sentry.Handlers.tracingHandler());
+      // Setup express error handler (Sentry v10 API)
+      setupExpressErrorHandler(app);
 
       this.initialized = true;
       console.log('✅ Sentry error tracking initialized');
@@ -71,12 +66,10 @@ class ErrorTrackerService {
    * Error handler middleware (must be added after all routes)
    */
   errorHandler() {
-    return Sentry.Handlers.errorHandler({
-      shouldHandleError(error) {
-        // Capture all errors with status code >= 500
-        return true;
-      },
-    });
+    return (err: Error, req: Request, res: Response, next: NextFunction) => {
+      Sentry.captureException(err);
+      next(err);
+    };
   }
 
   /**
@@ -87,7 +80,6 @@ class ErrorTrackerService {
       console.error('Error (Sentry not initialized):', error);
       return;
     }
-
     Sentry.captureException(error, {
       extra: context,
     });
@@ -101,7 +93,6 @@ class ErrorTrackerService {
       console.log(`Message (Sentry not initialized): ${message}`);
       return;
     }
-
     Sentry.captureMessage(message, {
       level,
       extra: context,
@@ -113,7 +104,6 @@ class ErrorTrackerService {
    */
   setUser(user: { id: string; email?: string; username?: string }) {
     if (!this.initialized) return;
-
     Sentry.setUser({
       id: user.id,
       email: user.email,
@@ -134,7 +124,6 @@ class ErrorTrackerService {
    */
   addBreadcrumb(message: string, category: string, data?: Record<string, any>) {
     if (!this.initialized) return;
-
     Sentry.addBreadcrumb({
       message,
       category,
@@ -160,15 +149,11 @@ class ErrorTrackerService {
   }
 
   /**
-   * Start transaction for performance monitoring
+   * Start a span for performance monitoring (Sentry v10 API)
    */
-  startTransaction(name: string, op: string) {
+  startSpan(name: string, op: string) {
     if (!this.initialized) return null;
-
-    return Sentry.startTransaction({
-      name,
-      op,
-    });
+    return Sentry.startInactiveSpan({ name, op });
   }
 
   /**
@@ -176,7 +161,6 @@ class ErrorTrackerService {
    */
   async flush(timeout: number = 2000): Promise<boolean> {
     if (!this.initialized) return true;
-
     try {
       return await Sentry.flush(timeout);
     } catch (error) {
@@ -190,7 +174,6 @@ class ErrorTrackerService {
    */
   async close(timeout: number = 2000): Promise<boolean> {
     if (!this.initialized) return true;
-
     try {
       return await Sentry.close(timeout);
     } catch (error) {
@@ -210,19 +193,16 @@ export function errorHandlerMiddleware(
   err: Error,
   req: Request,
   res: Response,
-  next: NextFunction
+  _next: NextFunction
 ) {
-  // Log error
   console.error('Error:', err);
 
-  // Capture in Sentry
   errorTrackerService.captureException(err, {
     url: req.url,
     method: req.method,
     userId: (req as any).user?.id,
   });
 
-  // Send error response
   res.status(500).json({
     error: 'Internal Server Error',
     message: process.env.NODE_ENV === 'development' ? err.message : 'An error occurred',

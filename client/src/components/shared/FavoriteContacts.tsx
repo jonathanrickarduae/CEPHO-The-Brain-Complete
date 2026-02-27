@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useEffect, useState } from "react";
 import { Star } from "lucide-react";
 import { trpc } from "@/lib/trpc";

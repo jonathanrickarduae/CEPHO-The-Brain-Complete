@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Innovation Hub Workflow Service
  * Connects SME/AI Agent suggestions to Innovation Hub

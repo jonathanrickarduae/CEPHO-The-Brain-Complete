@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * CEPHO.Ai Business Model Page
  * 

@@ -115,7 +115,7 @@ export function apmMiddleware(req: Request, res: Response, next: NextFunction) {
     activeConnections.dec();
 
     // Call original end
-    return originalEnd.apply(res, args);
+    return originalEnd.apply(res, args as [any, BufferEncoding, () => void]);
   };
 
   next();

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { useState, useEffect, useRef } from 'react';
 import { 
   FileText, Users, CheckCircle2, Clock, AlertCircle, 

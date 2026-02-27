@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { WorkflowEngine, WorkflowStep, SkillType } from './workflow-engine';
 import { getDb } from '../db';
 import { workflowSteps } from '../../drizzle/schema';

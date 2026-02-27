@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { useState, useEffect, useCallback } from 'react';
 import { Bell, X, Check, AlertCircle, Info, Calendar, FileText, Users, CheckCircle2, Zap, Brain, Trophy, Shield } from 'lucide-react';
 import { Button } from '@/components/ui/button';

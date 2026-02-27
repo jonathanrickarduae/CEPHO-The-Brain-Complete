@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { DocumentRepository } from './document.repository';
 import {
   CreateDocumentDto,

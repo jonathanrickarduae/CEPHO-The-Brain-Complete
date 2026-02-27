@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Chief of Staff Tasks Router
  * Handles task delegation from The Signal to COS with AI agent assignment

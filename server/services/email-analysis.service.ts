@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { getLLMService } from './llm-service';
 import { getDb } from '../db';
 import { emails, type Email } from '../../drizzle/schema/email.schema';

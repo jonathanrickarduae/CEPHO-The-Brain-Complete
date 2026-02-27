@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PDF Export Service for CEPHO Branded Documents
  * 

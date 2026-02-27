@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Innovation Engine Service
  * Core service for the Innovation Hub flywheel

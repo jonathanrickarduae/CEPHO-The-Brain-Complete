@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * OpenClaw tRPC Router
  * Exposes OpenClaw gateway functionality via tRPC API

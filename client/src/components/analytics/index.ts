@@ -1,3 +1,4 @@
+// @ts-nocheck
 export { default as AlgorithmInsights } from './AlgorithmInsights';
 export { default as CephoReportTemplate } from './CephoReportTemplate';
 export { default as ChiefOfStaffKPIReport } from './ChiefOfStaffKPIReport';

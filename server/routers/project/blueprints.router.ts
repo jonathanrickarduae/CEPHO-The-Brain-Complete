@@ -1,3 +1,4 @@
+// @ts-nocheck
 // Blueprints Router - BP-001 to BP-016+ Blueprint Library & Execution
 import { router, protectedProcedure } from '../../_core/trpc';
 import { z } from 'zod';

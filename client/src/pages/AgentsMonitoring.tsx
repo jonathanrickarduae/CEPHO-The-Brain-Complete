@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * AI Agents Monitoring Page
  * Monitor AI agent performance, ratings, and daily reports

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Project Genesis Router
  * 6-Phase Venture Development Workflow

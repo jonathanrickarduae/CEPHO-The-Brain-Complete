@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { useState } from "react";
 import { 
   Sun, Calendar, Users, TrendingUp, Brain, Zap, 

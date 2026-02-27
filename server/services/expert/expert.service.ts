@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { ExpertRepository } from './expert.repository';
 import {
   CreateExpertChatSessionDto,

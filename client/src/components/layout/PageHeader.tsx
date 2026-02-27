@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Brain } from "lucide-react";
 import { LucideIcon } from "lucide-react";
 

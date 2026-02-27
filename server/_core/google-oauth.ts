@@ -148,6 +148,8 @@ export function registerGoogleOAuthRoutes(app: Express) {
           name: userInfo.name || null,
           email: userInfo.email,
           loginMethod: "google",
+          role: "user",
+          themePreference: "dark",
           lastSignedIn: new Date(),
         });
         log.info('User upserted successfully', { userId, email: userInfo.email });

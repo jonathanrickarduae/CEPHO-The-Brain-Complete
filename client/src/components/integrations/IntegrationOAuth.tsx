@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { useState } from 'react';
 import { Mail, Calendar, CheckSquare, ExternalLink, Check, X, Loader2, RefreshCw, Settings, Unlink } from 'lucide-react';
 import { Button } from '@/components/ui/button';

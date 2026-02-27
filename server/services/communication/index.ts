@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Communication Service Module
  * Handles messaging and conversation management

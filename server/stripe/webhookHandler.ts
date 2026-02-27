@@ -1,10 +1,11 @@
 /**
-import { logger } from "../utils/logger";
-const log = logger.module("StripeWebhook");
  * Stripe Webhook Handler
  * 
  * Handles incoming Stripe webhook events
  */
+
+import { logger } from "../utils/logger";
+const log = logger.module("StripeWebhook");
 
 import { Request, Response } from "express";
 import Stripe from "stripe";
@@ -62,14 +63,12 @@ export async function handleStripeWebhook(req: Request, res: Response) {
       case "invoice.paid": {
         const invoice = event.data.object as Stripe.Invoice;
         log.debug(`[Stripe Webhook] Invoice paid: ${invoice.id}`);
-        // Could trigger email notification, update credits, etc.
         break;
       }
 
       case "invoice.payment_failed": {
         const invoice = event.data.object as Stripe.Invoice;
         log.debug(`[Stripe Webhook] Invoice payment failed: ${invoice.id}`);
-        // Could trigger dunning email, pause subscription, etc.
         break;
       }
 

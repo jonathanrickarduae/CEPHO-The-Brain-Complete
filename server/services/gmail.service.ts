@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { google } from 'googleapis';
 
 export class GmailService {

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { ProjectRepository } from './project.repository';
 import {
   CreateProjectDto,

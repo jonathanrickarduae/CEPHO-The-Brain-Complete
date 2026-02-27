@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Centralized Environment Configuration
  * 

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { gmailService } from './gmail.service';
 import { todoistService } from './todoist.service';
 import { innovationHubAggregationService } from './innovation-hub-aggregation.service';

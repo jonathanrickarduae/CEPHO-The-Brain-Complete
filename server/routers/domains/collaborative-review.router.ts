@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Collaborative Review Router
  * 

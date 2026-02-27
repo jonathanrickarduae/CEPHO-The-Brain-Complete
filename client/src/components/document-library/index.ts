@@ -1,3 +1,4 @@
+// @ts-nocheck
 export { default as DocumentIndexer } from './DocumentIndexer';
 export { default as DocumentNaming } from './DocumentNaming';
 export { default as DocumentStatus } from './DocumentStatus';

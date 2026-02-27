@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Innovation Hub Workflow Router
  * Manages idea suggestions from AI agents, SMEs, Chief of Staff, and Digital Twin

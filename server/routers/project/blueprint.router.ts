@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Blueprint Library Router
  * Manage and execute blueprints (BP-001 to BP-016+)

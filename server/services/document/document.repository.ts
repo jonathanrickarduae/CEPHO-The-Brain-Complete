@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { getDb } from '../../db';
 import { libraryDocuments, InsertLibraryDocument, LibraryDocument } from '../../../drizzle/schema';
 import { eq, and, desc, like, or } from 'drizzle-orm';

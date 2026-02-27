@@ -32,7 +32,7 @@ class RateLimiter {
     const now = Date.now();
     let cleaned = 0;
 
-    for (const [key, entry] of this.store.entries()) {
+    for (const [key, entry] of Array.from(this.store.entries())) {
       if (entry.resetTime < now) {
         this.store.delete(key);
         cleaned++;
@@ -40,7 +40,7 @@ class RateLimiter {
     }
 
     if (cleaned > 0) {
-      log.debug({ cleaned }, 'Cleaned up expired rate limit entries');
+      log.debug('Cleaned up expired rate limit entries', { cleaned });
     }
   }
 
@@ -149,7 +149,7 @@ export function createRateLimitMiddleware(config: RateLimitConfig = RATE_LIMITS.
     if (!result.allowed) {
       const resetIn = Math.ceil((result.resetTime - Date.now()) / 1000);
       
-      log.warn({ key, resetIn }, 'Rate limit exceeded');
+      log.warn('Rate limit exceeded', { key, resetIn });
       
       throw new TRPCError({
         code: 'TOO_MANY_REQUESTS',
@@ -159,7 +159,7 @@ export function createRateLimitMiddleware(config: RateLimitConfig = RATE_LIMITS.
 
     // Log if getting close to limit (>80%)
     if (result.remaining < config.maxRequests * 0.2) {
-      log.debug({ key, remaining: result.remaining }, 'Approaching rate limit');
+      log.debug('Approaching rate limit', { key, remaining: result.remaining });
     }
   };
 }
@@ -188,7 +188,7 @@ export function expressRateLimit(config: RateLimitConfig = RATE_LIMITS.standard)
     if (!result.allowed) {
       const resetIn = Math.ceil((result.resetTime - Date.now()) / 1000);
       
-      log.warn({ key, ip, resetIn }, 'Rate limit exceeded');
+      log.warn('Rate limit exceeded', { key, ip, resetIn });
       
       return res.status(429).json({
         error: 'Too Many Requests',
@@ -208,7 +208,7 @@ export function resetRateLimit(userId?: number, ip?: string) {
   const key = userId ? `user:${userId}` : ip ? `ip:${ip}` : null;
   if (key) {
     rateLimiter.reset(key);
-    log.info({ key }, 'Rate limit reset');
+    log.info('Rate limit reset', { key });
   }
 }
 

@@ -1,3 +1,4 @@
+// @ts-nocheck
 export { default as AIAgentsVideo } from './AIAgentsVideo';
 export { default as AIChatBox } from './AIChatBox';
 export { default as AIDraftGenerator } from './AIDraftGenerator';

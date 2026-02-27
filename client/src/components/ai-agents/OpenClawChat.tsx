@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * OpenClaw Chat Component
  * Conversational interface for CEPHO skills

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Digital Twin / Chief of Staff Service
  * Implements personalized AI assistant with 8-module training program

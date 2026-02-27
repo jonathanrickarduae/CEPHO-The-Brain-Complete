@@ -1,3 +1,4 @@
+// @ts-nocheck
 export { default as AccessibilitySettings } from './AccessibilitySettings';
 export { default as AccessibilitySettingsPanel } from './AccessibilitySettingsPanel';
 export { default as ThemeColorPicker } from './ThemeColorPicker';

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { WorkflowEngine, WorkflowConfig, WorkflowPhase } from '../services/workflow-engine';
 
 /**

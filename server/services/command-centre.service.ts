@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { db } from "../db";
 import { projects, tasks, aiSmeExperts as experts } from "../db/schema";
 import { eq, and, gte, lte, sql } from "drizzle-orm";

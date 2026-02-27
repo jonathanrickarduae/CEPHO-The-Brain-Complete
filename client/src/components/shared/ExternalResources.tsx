@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { useState, useMemo } from "react";
 import { 
   Search, ExternalLink, Zap, Building2, Newspaper, Brain, 

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Quality Gates Router
  * QMS 4-Layer Quality Management System

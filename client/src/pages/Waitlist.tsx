@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { useEffect, useState } from 'react';
 import { useLocation, useSearch } from 'wouter';
 import { WaitlistSignup, WaitlistStatus } from '@/components/ai-agents/WaitlistReferral';

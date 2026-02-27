@@ -163,9 +163,9 @@ class SDKServer {
         SDKServer._generatedSecret = crypto.randomBytes(32).toString('hex');
         console.warn('[Auth] JWT_SECRET not set, generated and cached secret for this session');
       }
-      secret = SDKServer._generatedSecret;
+      secret = SDKServer._generatedSecret!;
     }
-    return new TextEncoder().encode(secret);
+    return new TextEncoder().encode(secret!);
   }
 
   /**
@@ -235,8 +235,8 @@ class SDKServer {
 
       return {
         openId,
-        appId: appId || "",
-        name,
+        appId: String(appId || ""),
+        name: name ?? undefined,
       };
     } catch (error) {
       console.warn("[Auth] Session verification failed", String(error));
@@ -292,6 +292,8 @@ class SDKServer {
           name: session.name,
           email: "jonathanrickarduae@gmail.com",
           loginMethod: "email",
+          role: "admin",
+          themePreference: "dark",
           lastSignedIn: signedInAt,
         });
         user = await db.getUserByOpenId(sessionUserId);
@@ -304,6 +306,8 @@ class SDKServer {
             name: userInfo.name || null,
             email: userInfo.email ?? null,
             loginMethod: userInfo.loginMethod ?? userInfo.platform ?? null,
+            role: "user",
+            themePreference: "dark",
             lastSignedIn: signedInAt,
           });
           user = await db.getUserByOpenId(userInfo.openId);
@@ -320,6 +324,8 @@ class SDKServer {
 
     await db.upsertUser({
       openId: user.openId,
+      role: user.role,
+      themePreference: user.themePreference,
       lastSignedIn: signedInAt,
     });
 

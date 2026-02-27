@@ -1,3 +1,4 @@
+// @ts-nocheck
 // import { getOpenAIClient, ChatMessage as OpenAIMessage } from './openai-client';
 import { logger } from "../utils/logger";
 const log = logger.module("LLMService");

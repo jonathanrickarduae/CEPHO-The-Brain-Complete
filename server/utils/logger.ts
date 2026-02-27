@@ -12,9 +12,8 @@ export enum LogLevel {
   ERROR = 'ERROR',
 }
 
-interface LogContext {
-  [key: string]: any;
-}
+// Accept any value as context - objects, strings, booleans, etc.
+type LogContext = any;
 
 class Logger {
   private isDevelopment = process.env.NODE_ENV !== 'production';
@@ -27,17 +26,22 @@ class Logger {
 
   private formatMessage(level: LogLevel, message: string, context?: LogContext): string {
     const timestamp = new Date().toISOString();
-    const contextStr = context ? ` ${JSON.stringify(context)}` : '';
+    let contextStr = '';
+    if (context !== undefined && context !== null) {
+      contextStr = typeof context === 'object' ? ` ${JSON.stringify(context)}` : ` ${context}`;
+    }
     return `[${timestamp}] [${level}] ${message}${contextStr}`;
   }
 
   debug(message: string, context?: LogContext): void {
     if (this.shouldLog(LogLevel.DEBUG)) {
+      console.debug(this.formatMessage(LogLevel.DEBUG, message, context));
     }
   }
 
   info(message: string, context?: LogContext): void {
     if (this.shouldLog(LogLevel.INFO)) {
+      console.info(this.formatMessage(LogLevel.INFO, message, context));
     }
   }
 
@@ -50,8 +54,8 @@ class Logger {
   error(message: string, error?: Error | unknown, context?: LogContext): void {
     if (this.shouldLog(LogLevel.ERROR)) {
       const errorContext = error instanceof Error
-        ? { ...context, error: error.message, stack: error.stack }
-        : { ...context, error };
+        ? { ...(typeof context === 'object' ? context : { context }), error: error.message, stack: error.stack }
+        : { ...(typeof context === 'object' ? context : { context }), error };
       console.error(this.formatMessage(LogLevel.ERROR, message, errorContext));
     }
   }

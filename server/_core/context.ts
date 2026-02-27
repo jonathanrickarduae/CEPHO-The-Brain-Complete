@@ -43,9 +43,11 @@ export async function createContext(
       } else {
         // Create new user from Supabase auth
         const [newUser] = await db.insert(users).values({
+          openId: supabaseUser.id,
           email: supabaseUser.email!,
           name: supabaseUser.user_metadata?.name || supabaseUser.email!.split('@')[0],
-          password: '', // Not used with Supabase Auth
+          role: 'user',
+          themePreference: 'dark',
         }).returning();
         user = newUser;
       }
