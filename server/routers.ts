@@ -29,6 +29,9 @@ import {
 import { innovationRouter } from "./routers/innovation.router";
 import { eveningReviewRouter, morningSignalRouter as morningSignalRealRouter } from "./routers/eveningReview.router";
 import { partnershipsRouter as partnershipsRealRouter } from "./routers/partnerships.router";
+import { voiceNotesRouter } from "./routers/voiceNotes.router";
+import { subscriptionTrackerRouter as subscriptionTrackerRealRouter } from "./routers/subscriptionTracker.router";
+import { projectGenesisRouter as projectGenesisRealRouter } from "./routers/projectGenesis.router";
 
 // ─── Functional Stubs ────────────────────────────────────────────────────────
 import {
@@ -37,7 +40,7 @@ import {
   favoritesRouter,
   feedbackRouter,
   npsRouter,
-  voiceNotesRouter,
+
   calendarRouter,
   gmailRouter,
   integrationsRouter,
@@ -50,12 +53,12 @@ import {
 
   documentLibraryRouter,
   libraryRouter,
-  subscriptionTrackerRouter,
+
   collaborativeReviewRouter,
   businessPlanReviewRouter,
 
   genesisRouter,
-  projectGenesisRouter,
+
   optimizationRouter,
   openClawRouter,
   aiRouter,
@@ -128,13 +131,13 @@ export const appRouter = router({
   library: libraryRouter,
 
   // ─── Business Tools ─────────────────────────────────────────────────────
-  subscriptionTracker: subscriptionTrackerRouter,
+  subscriptionTracker: subscriptionTrackerRealRouter,
   collaborativeReview: collaborativeReviewRouter,
   businessPlanReview: businessPlanReviewRouter,
   partnerships: partnershipsRealRouter,
   innovation: innovationRouter,
   genesis: genesisRouter,
-  projectGenesis: projectGenesisRouter,
+  projectGenesis: projectGenesisRealRouter,
   optimization: optimizationRouter,
 });
 
