@@ -8,9 +8,12 @@
  *   ADMIN_NAME     - Display name (optional, defaults to "Admin")
  *   JWT_SECRET     - Secret used to sign JWT tokens
  */
-
 import { Router } from "express";
 import jwt from "jsonwebtoken";
+import {
+  logSecurityEvent,
+  getClientIp,
+} from "../services/security/security-logger";
 
 const router = Router();
 
@@ -25,8 +28,7 @@ function getAdminUser() {
 
   if (!email || !password) {
     console.error(
-      "[Auth] CRITICAL: ADMIN_EMAIL and ADMIN_PASSWORD environment variables must be set. " +
-        "The server will not accept logins until these are configured."
+      "[Auth] CRITICAL: ADMIN_EMAIL and ADMIN_PASSWORD environment variables must be set."
     );
     return null;
   }
@@ -42,8 +44,11 @@ function getAdminUser() {
 }
 
 router.post("/login", async (req, res) => {
+  const ip = getClientIp(req as Parameters<typeof getClientIp>[0]);
+  const userAgent = (req.headers["user-agent"] as string) ?? "unknown";
+
   try {
-    const { email, password } = req.body;
+    const { email, password } = req.body as { email?: string; password?: string };
 
     if (!email || !password) {
       return res.status(400).json({ error: "Email and password required" });
@@ -51,28 +56,31 @@ router.post("/login", async (req, res) => {
 
     const adminUser = getAdminUser();
     if (!adminUser) {
-      return res
-        .status(503)
-        .json({
-          error: "Authentication is not configured. Contact the administrator.",
-        });
+      return res.status(503).json({
+        error: "Authentication is not configured. Contact the administrator.",
+      });
     }
 
     if (
       email.toLowerCase() !== adminUser.email.toLowerCase() ||
       password !== adminUser.password
     ) {
+      logSecurityEvent({
+        type: "login_failed",
+        email,
+        ip,
+        userAgent,
+        path: "/api/auth/login",
+      });
       return res.status(401).json({ error: "Invalid credentials" });
     }
 
     const secret = process.env.JWT_SECRET;
     if (!secret) {
       console.error("[Auth] JWT_SECRET is not set — cannot issue tokens.");
-      return res
-        .status(503)
-        .json({
-          error: "Authentication misconfigured. Contact the administrator.",
-        });
+      return res.status(503).json({
+        error: "Authentication misconfigured. Contact the administrator.",
+      });
     }
 
     const token = jwt.sign(
@@ -94,6 +102,15 @@ router.post("/login", async (req, res) => {
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     });
 
+    logSecurityEvent({
+      type: "login_success",
+      email: adminUser.email,
+      userId: adminUser.id,
+      ip,
+      userAgent,
+      path: "/api/auth/login",
+    });
+
     return res.json({
       success: true,
       user: {
@@ -108,15 +125,27 @@ router.post("/login", async (req, res) => {
   }
 });
 
-router.post("/logout", (_req, res) => {
+router.post("/logout", (req, res) => {
+  const ip = getClientIp(req as Parameters<typeof getClientIp>[0]);
+  const userAgent = (req.headers["user-agent"] as string) ?? "unknown";
+
+  logSecurityEvent({
+    type: "logout",
+    ip,
+    userAgent,
+    path: "/api/auth/logout",
+  });
+
   res.clearCookie("session_token");
   res.json({ success: true });
 });
 
 router.get("/me", async (req, res) => {
-  try {
-    const token = req.cookies?.session_token;
+  const ip = getClientIp(req as Parameters<typeof getClientIp>[0]);
+  const userAgent = (req.headers["user-agent"] as string) ?? "unknown";
 
+  try {
+    const token = req.cookies?.session_token as string | undefined;
     if (!token) {
       return res.status(401).json({ error: "Not authenticated" });
     }
@@ -125,7 +154,14 @@ router.get("/me", async (req, res) => {
     if (!secret) {
       return res.status(503).json({ error: "Authentication misconfigured." });
     }
-    const decoded = jwt.verify(token, secret) as any;
+
+    const decoded = jwt.verify(token, secret) as {
+      id: number;
+      email: string;
+      name: string;
+      openId: string;
+      appId: string;
+    };
 
     return res.json({
       id: decoded.id,
@@ -134,7 +170,13 @@ router.get("/me", async (req, res) => {
       openId: decoded.openId,
       appId: decoded.appId,
     });
-  } catch (error) {
+  } catch {
+    logSecurityEvent({
+      type: "invalid_token",
+      ip,
+      userAgent,
+      path: "/api/auth/me",
+    });
     return res.status(401).json({ error: "Invalid token" });
   }
 });
