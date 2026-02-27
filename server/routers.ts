@@ -34,6 +34,7 @@ import { subscriptionTrackerRouter as subscriptionTrackerRealRouter } from "./ro
 import { projectGenesisRouter as projectGenesisRealRouter } from "./routers/projectGenesis.router";
 import { documentLibraryRouter as documentLibraryRealRouter } from "./routers/documentLibrary.router";
 import { workflowsRouter as workflowsRealRouter } from "./routers/workflows.router";
+import { businessPlanReviewRouter as businessPlanReviewRealRouter, collaborativeReviewRouter as collaborativeReviewRealRouter } from "./routers/businessPlanReview.router";
 
 // ─── Functional Stubs ────────────────────────────────────────────────────────
 import {
@@ -56,8 +57,8 @@ import {
 
   libraryRouter,
 
-  collaborativeReviewRouter,
-  businessPlanReviewRouter,
+
+
 
   genesisRouter,
 
@@ -134,8 +135,8 @@ export const appRouter = router({
 
   // ─── Business Tools ─────────────────────────────────────────────────────
   subscriptionTracker: subscriptionTrackerRealRouter,
-  collaborativeReview: collaborativeReviewRouter,
-  businessPlanReview: businessPlanReviewRouter,
+  collaborativeReview: collaborativeReviewRealRouter,
+  businessPlanReview: businessPlanReviewRealRouter,
   partnerships: partnershipsRealRouter,
   innovation: innovationRouter,
   genesis: genesisRouter,
