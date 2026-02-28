@@ -8,7 +8,6 @@ export { default as KeyboardShortcutsGuide } from "./KeyboardShortcutsGuide";
 export { default as KeyboardShortcutsHelp } from "./KeyboardShortcutsHelp";
 export { default as MyBoard } from "./MyBoard";
 export { default as Onboarding } from "./Onboarding";
-export { default as OnboardingOverlay } from "./OnboardingOverlay";
 export { default as ProjectGenesis } from "./ProjectGenesis";
 export { default as ProjectSummary } from "./ProjectSummary";
 export { default as QAAccuracyDashboard } from "./QAAccuracyDashboard";

@@ -11,7 +11,7 @@ export class AppError extends Error {
     message: string,
     public code: string = "INTERNAL_SERVER_ERROR",
     public statusCode: number = 500,
-    public details?: any
+    public details?: unknown
   ) {
     super(message);
     this.name = "AppError";
@@ -19,7 +19,7 @@ export class AppError extends Error {
 }
 
 export class ValidationError extends AppError {
-  constructor(message: string, details?: any) {
+  constructor(message: string, details?: unknown) {
     super(message, "VALIDATION_ERROR", 400, details);
     this.name = "ValidationError";
   }
@@ -51,7 +51,7 @@ export class ForbiddenError extends AppError {
 }
 
 export class ConflictError extends AppError {
-  constructor(message: string, details?: any) {
+  constructor(message: string, details?: unknown) {
     super(message, "CONFLICT", 409, details);
     this.name = "ConflictError";
   }
@@ -64,7 +64,7 @@ export class ConflictError extends AppError {
 export function sanitizeError(error: unknown): {
   message: string;
   code: string;
-  details?: any;
+  details?: unknown;
 } {
   const isDevelopment = process.env.NODE_ENV === "development";
 
@@ -155,7 +155,7 @@ export function handleTRPCError(error: unknown, context?: string): never {
 /**
  * Async error wrapper for services
  */
-export function asyncHandler<T extends (...args: any[]) => Promise<any>>(
+export function asyncHandler<T extends (...args: Parameters<T>) => Promise<ReturnType<T>>>(
   fn: T,
   context?: string
 ): T {
@@ -172,7 +172,7 @@ export function asyncHandler<T extends (...args: any[]) => Promise<any>>(
  * Validate required fields
  */
 export function validateRequired(
-  data: Record<string, any>,
+  data: Record<string, unknown>,
   fields: string[]
 ): void {
   const missing = fields.filter(field => !data[field]);

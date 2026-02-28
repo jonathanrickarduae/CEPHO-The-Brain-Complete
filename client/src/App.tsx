@@ -20,7 +20,6 @@ import AuthGuard from "@/components/AuthGuard";
 import { PinGate } from "@/components/PinGate";
 import { KeyboardShortcutsGuide } from "@/components/project-management/KeyboardShortcutsGuide";
 import { ChiefOfStaffNotification } from "@/components/communication/ChiefOfStaffNotification";
-import { FeedbackWidget } from "@/components/shared/FeedbackWidget";
 
 // Loading fallback component
 function PageLoader() {
@@ -70,7 +69,6 @@ const PodcastPage = lazy(() => import("./pages/PodcastPage"));
 const WellnessPage = lazy(() => import("./pages/WellnessPage"));
 const ChiefOfStaffRole = lazy(() => import("./pages/ChiefOfStaffRole"));
 const ReferenceLibrary = lazy(() => import("./pages/ReferenceLibrary"));
-const DueDiligencePage = lazy(() => import("./pages/DueDiligencePage"));
 
 const ExpertChatPage = lazy(() => import("./pages/ExpertChatPage"));
 const InnovationHub = lazy(() => import("./pages/InnovationHub"));
@@ -336,7 +334,6 @@ function Router() {
         </Route>
         <Route path="/due-diligence">
           <WithLayout>
-            <DueDiligencePage />
           </WithLayout>
         </Route>
         <Route path="/inbox">
@@ -476,7 +473,6 @@ function App() {
                     <GovernanceModeChangeModal />
                     <KeyboardShortcutsGuide />
                     <ChiefOfStaffNotification />
-                    <FeedbackWidget />
                   </TooltipProvider>
                 </CelebrationProvider>
               </DailyCycleProvider>

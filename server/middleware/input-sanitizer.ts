@@ -1,5 +1,5 @@
 import validator from "validator";
-import type { Request, Response, NextFunction } from "express";
+import type { Request, Response, NextFunction, Application } from "express";
 
 /**
  * Input Sanitization Middleware
@@ -19,7 +19,7 @@ export function sanitizeString(input: string): string {
 /**
  * Sanitize object recursively
  */
-export function sanitizeObject(obj: any): any {
+export function sanitizeObject(obj: unknown): unknown {
   if (typeof obj === "string") {
     return sanitizeString(obj);
   }
@@ -29,11 +29,10 @@ export function sanitizeObject(obj: any): any {
   }
 
   if (obj && typeof obj === "object") {
-    const sanitized: any = {};
-    for (const key in obj) {
-      if (obj.hasOwnProperty(key)) {
-        sanitized[key] = sanitizeObject(obj[key]);
-      }
+    const record = obj as Record<string, unknown>;
+    const sanitized: Record<string, unknown> = {};
+    for (const key of Object.keys(record)) {
+      sanitized[key] = sanitizeObject(record[key]);
     }
     return sanitized;
   }
@@ -91,7 +90,7 @@ export function sanitizeBody(req: Request, res: Response, next: NextFunction) {
  */
 export function sanitizeQuery(req: Request, res: Response, next: NextFunction) {
   if (req.query && typeof req.query === "object") {
-    req.query = sanitizeObject(req.query);
+    req.query = sanitizeObject(req.query) as typeof req.query;
   }
   next();
 }
@@ -105,7 +104,7 @@ export function sanitizeParams(
   next: NextFunction
 ) {
   if (req.params && typeof req.params === "object") {
-    req.params = sanitizeObject(req.params);
+    req.params = sanitizeObject(req.params) as typeof req.params;
   }
   next();
 }
@@ -113,7 +112,7 @@ export function sanitizeParams(
 /**
  * Apply all sanitization middleware
  */
-export function applySanitizationMiddleware(app: any) {
+export function applySanitizationMiddleware(app: Application) {
   app.use(sanitizeBody);
   app.use(sanitizeQuery);
   app.use(sanitizeParams);

@@ -43,7 +43,6 @@ import {
   businessPlanReviewRouter as businessPlanReviewRealRouter,
   collaborativeReviewRouter as collaborativeReviewRealRouter,
 } from "./routers/businessPlanReview.router";
-import { feedbackRouter as feedbackRealRouter } from "./routers/feedback.router";
 import {
   authRouter as authRealRouter,
   themeRouter as themeRealRouter,
@@ -69,7 +68,6 @@ import {
   authRouter,
   themeRouter,
   favoritesRouter,
-  feedbackRouter,
   npsRouter,
   calendarRouter,
   gmailRouter,
@@ -130,7 +128,6 @@ export const appRouter = router({
   auth: authRealRouter,
   theme: themeRealRouter,
   favorites: favoritesRealRouter,
-  feedback: feedbackRealRouter,
 
   // ─── Communication ──────────────────────────────────────────────────────
   calendar: calendarRealRouter,

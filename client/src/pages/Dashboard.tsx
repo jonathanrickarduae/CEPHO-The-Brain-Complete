@@ -40,11 +40,9 @@ import { VoiceInterfaceToggle } from "@/components/shared/VoiceInterfaceToggle";
 import { FloatingVoiceNoteButton } from "@/components/shared/VoiceNotepad";
 import { PerformanceBoost } from "@/components/analytics/PerformanceBoost";
 import { TwinBreakApproval } from "@/components/shared/TwinBreakApproval";
-import { TourPrompt } from "@/components/onboarding/TourAndDemoMode";
 import { NeuralNetworkViz } from "@/components/shared/NeuralNetworkViz";
 import { TaskProgressTracker } from "@/components/project-management/TaskProgressTracker";
 import { FavoriteContacts } from "@/components/shared/FavoriteContacts";
-import { OnboardingOverlay } from "@/components/project-management/OnboardingOverlay";
 import {
   isDemoModeEnabled,
   getDemoData,
@@ -526,7 +524,6 @@ export default function Dashboard() {
           <FloatingVoiceNoteButton />
 
           {/* Onboarding Overlay */}
-          <OnboardingOverlay />
         </div>
       </PullToRefresh>
     </>

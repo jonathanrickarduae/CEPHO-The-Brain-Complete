@@ -200,7 +200,7 @@ export function sanitizeJson(input: string): string {
 /**
  * Sanitize number input
  */
-export function sanitizeNumber(input: any): number | null {
+export function sanitizeNumber(input: unknown): number | null {
   const num = Number(input);
   return isNaN(num) || !isFinite(num) ? null : num;
 }
@@ -208,7 +208,7 @@ export function sanitizeNumber(input: any): number | null {
 /**
  * Sanitize boolean input
  */
-export function sanitizeBoolean(input: any): boolean {
+export function sanitizeBoolean(input: unknown): boolean {
   if (typeof input === "boolean") return input;
   if (typeof input === "string") {
     const lower = input.toLowerCase();
