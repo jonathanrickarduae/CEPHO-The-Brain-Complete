@@ -216,7 +216,7 @@ export async function getAvailableVoices(): Promise<
 
     const data = await response.json();
     return {
-      voices: data.voices.map((v: any) => ({
+      voices: data.voices.map((v: { voice_id: string; name: string; category: string }) => ({
         voice_id: v.voice_id,
         name: v.name,
         category: v.category,

@@ -287,10 +287,21 @@ const gtmPhases: GTMPhase[] = [
   },
 ];
 
+interface ExportedBlueprint {
+  projectId?: string;
+  projectName?: string;
+  createdAt: string;
+  progress: number;
+  phases: (GTMPhase & {
+    completedTasks: number;
+    totalTasks: number;
+  })[];
+}
+
 interface GoToMarketBlueprintProps {
   projectId?: string;
   projectName?: string;
-  onComplete?: (blueprint: any) => void;
+  onComplete?: (blueprint: ExportedBlueprint) => void;
 }
 
 export function GoToMarketBlueprint({

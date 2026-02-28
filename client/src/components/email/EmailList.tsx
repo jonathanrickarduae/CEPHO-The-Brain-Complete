@@ -38,7 +38,19 @@ export function EmailList({ onEmailSelect }: EmailListProps) {
 
   const markAsReadMutation = trpc.gmail.markAsRead.useMutation();
 
-  const handleEmailClick = async (email: any) => {
+  interface Email {
+  id: number;
+  subject: string;
+  from: string;
+  snippet: string;
+  isRead: boolean;
+  receivedAt: string;
+  priority?: string;
+  category?: string;
+  actionItems?: string[];
+}
+
+const handleEmailClick = async (email: Email) => {
     if (!email.isRead) {
       await markAsReadMutation.mutateAsync({ emailId: email.id });
       refetch();

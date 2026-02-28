@@ -166,7 +166,7 @@ export function configureSecurityHeaders(app: Express) {
 /**
  * Apply all security middleware
  */
-export function applySecurityMiddleware(app: any) {
+export function applySecurityMiddleware(app: Express) {
   configureSecurityHeaders(app);
   app.use(removeServerHeaders);
   app.use(corsHeaders);

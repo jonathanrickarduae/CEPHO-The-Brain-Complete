@@ -66,7 +66,7 @@ export abstract class BaseRepository {
    * @param {string} operation - Operation name
    * @param {any} data - Operation data
    */
-  protected logOperation(operation: string, data?: any) {
+  protected logOperation(operation: string, data?: unknown) {
     logger.info(`${this.repositoryName}.${operation}`, data);
   }
 
@@ -78,11 +78,11 @@ export abstract class BaseRepository {
    * @param {Error} error - Error object
    * @param {any} context - Additional context
    */
-  protected logError(operation: string, error: Error, context?: any) {
+  protected logError(operation: string, error: Error, context?: unknown) {
     logger.error(`${this.repositoryName}.${operation} failed`, {
       error: error.message,
       stack: error.stack,
-      ...context,
+       ...(typeof context === 'object' && context !== null ? context : {}),
     });
   }
 
@@ -95,7 +95,7 @@ export abstract class BaseRepository {
    * @param {any} context - Additional context
    * @throws {Error} Rethrows the error after logging
    */
-  protected handleError(operation: string, error: Error, context?: any): never {
+  protected handleError(operation: string, error: Error, context?: unknown): never {
     this.logError(operation, error, context);
     throw error;
   }

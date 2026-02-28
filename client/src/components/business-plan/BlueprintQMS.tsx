@@ -30,8 +30,8 @@ import {
 interface BlueprintChange {
   id: string;
   field: string;
-  oldValue: any;
-  newValue: any;
+  oldValue: unknown;
+  newValue: unknown;
   timestamp: Date;
   changedBy: "user" | "sme" | "digital_twin";
   smeId?: string;

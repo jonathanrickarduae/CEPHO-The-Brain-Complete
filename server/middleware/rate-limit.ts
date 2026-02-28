@@ -4,6 +4,7 @@
  */
 
 import { TRPCError } from "@trpc/server";
+import { Request, Response, NextFunction } from "express";
 import { logger } from "../utils/logger";
 
 const log = logger.module("RateLimit");
@@ -180,7 +181,7 @@ export function createRateLimitMiddleware(
 export function expressRateLimit(
   config: RateLimitConfig = RATE_LIMITS.standard
 ) {
-  return (req: any, res: any, next: any) => {
+  return (req: Request, res: Response, next: NextFunction) => {
     // Skip rate limiting in development
     if (
       process.env.NODE_ENV === "development" &&

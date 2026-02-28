@@ -237,8 +237,7 @@ export function useStreak() {
           ...parsed,
           lastActive: parsed.lastActive ? new Date(parsed.lastActive) : null,
           activities:
-            parsed.activities?.map((a: any) => ({
-              ...a,
+           parsed.activities?.map((a: { date: string; completed: boolean }) => ({              ...a,
               date: new Date(a.date),
             })) || [],
         });

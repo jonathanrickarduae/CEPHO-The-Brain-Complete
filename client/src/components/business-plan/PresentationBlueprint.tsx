@@ -75,7 +75,7 @@ interface DesignTheme {
 const slideTypes: {
   type: SlideType;
   label: string;
-  icon: any;
+  icon: React.FC<{ className?: string; }>;
   description: string;
 }[] = [
   {
@@ -293,7 +293,7 @@ export function PresentationBlueprint() {
 
   // Map genesis projects to available projects format
   const dynamicProjects =
-    genesisProjects?.map((p: any) => ({
+    genesisProjects?.map((p: { id: number; name: string; description: string | null; type: string; counterparty: string | null; updatedAt: string | null; }) => ({
       id: p.id.toString(),
       name: p.name,
       description:
@@ -540,7 +540,7 @@ export function PresentationBlueprint() {
                     </span>
                   </div>
                 ) : dynamicProjects.length > 0 ? (
-                  dynamicProjects.map((project: any) => (
+                  dynamicProjects.map((project: { id: string; name: string; description: string; lastUpdated: string; }) => (
                     <button
                       key={project.id}
                       onClick={() => startWithProject(project.id)}

@@ -211,7 +211,7 @@ export function GenesisBlueprintWizard({
     setDigitalTwinMessages(prev => [...prev, message]);
   };
 
-  const handleAnswer = (value: any) => {
+  const handleAnswer = (value: string | string[] | number) => {
     setAnswers(prev => ({
       ...prev,
       [currentQuestion.id]: value,
@@ -239,7 +239,7 @@ export function GenesisBlueprintWizard({
 
   const getSmEContribution = (
     question: WizardQuestion,
-    answer: any
+    answer: string | string[] | number
   ): string => {
     const contributions: Record<string, string[]> = {
       industry: [

@@ -102,7 +102,7 @@ import { ThemeToggle } from "@/components/settings/ThemeToggle";
 
 // Core navigation - streamlined for professional use (COS-centric view)
 type MenuItem = {
-  icon: any;
+  icon: React.FC<{ className?: string; }>;
   label: string;
   path: string;
   count?: number;

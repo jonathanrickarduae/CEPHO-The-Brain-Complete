@@ -668,7 +668,7 @@ export function BusinessPlanReview({
           const page = await pdf.getPage(i);
           const textContent = await page.getTextContent();
           const pageText = textContent.items
-            .map((item: any) => item.str)
+            .map((item: string) => item)
             .join(" ");
           fullText += pageText + "\n\n";
         }
@@ -2305,7 +2305,7 @@ export function BusinessPlanReview({
                   Current Participants
                 </h4>
                 <div className="space-y-2">
-                  {sessionQuery.data.participants.map((p: any) => (
+                  {sessionQuery.data.participants.map((p: { id: string; name: string; avatar: string; }) => (
                     <div
                       key={p.id}
                       className="flex items-center justify-between text-sm"

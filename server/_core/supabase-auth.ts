@@ -68,16 +68,21 @@ export async function verifySupabaseSession(req: Request) {
 
     console.log("[Auth] Session verified for user:", user.email);
     return user;
-  } catch (error: any) {
-    if (error.name === "TokenExpiredError") {
-      console.log("[Auth] Token expired");
-    } else if (error.name === "JsonWebTokenError") {
-      console.error("[Auth] JWT verification failed:", error.message);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      if (error.name === "TokenExpiredError") {
+        console.log("[Auth] Token expired");
+      } else if (error.name === "JsonWebTokenError") {
+        console.error("[Auth] JWT verification failed:", error.message);
+      } else {
+        console.error("[Auth] Unexpected error verifying session:", error);
+      }
     } else {
-      console.error("[Auth] Unexpected error verifying session:", error);
+      console.error("[Auth] An unknown error occurred:", error);
     }
     return null;
   }
 }
 
 export { supabase };
+
