@@ -12,6 +12,7 @@ import {
   GovernanceModeChangeModal,
 } from "./hooks/useGovernance";
 import { AIRouterProvider } from "@/components/ai-agents/AIRouter";
+import { usePageViewTracking } from "@/hooks/useAnalytics";
 import { CelebrationProvider } from "@/components/shared/CelebrationAnimations";
 import { DailyCycleProvider } from "@/components/ai-agents/DailyCycleProvider";
 import { PageTransition } from "@/components/shared/PageTransition";
@@ -123,6 +124,7 @@ function WithLayout({ children }: { children: React.ReactNode }) {
 }
 
 function Router() {
+  usePageViewTracking();
   return (
     <Suspense fallback={<PageLoader />}>
       <Switch>

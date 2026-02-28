@@ -6,6 +6,8 @@
  */
 import { router } from "./_core/trpc";
 import { systemRouter } from "./_core/systemRouter";
+import { twoFactorRouter } from "./routers/twoFactor.router";
+import { analyticsRouter, featureFlagsRouter } from "./routers/analytics.router";
 
 // ─── Real Implementations ────────────────────────────────────────────────────
 import { chatRouter } from "./routers/chat.router";
@@ -94,6 +96,8 @@ export const appRouter = router({
 
   // ─── Dashboard & Analytics ──────────────────────────────────────────────
   dashboard: dashboardRouter,
+  analytics: analyticsRouter,
+  featureFlags: featureFlagsRouter,
 
   // ─── Chief of Staff / Digital Twin ──────────────────────────────────────
   chiefOfStaff: chiefOfStaffRouter,
@@ -122,6 +126,7 @@ export const appRouter = router({
   settings: settingsRouter,
 
   // ─── Auth & User ────────────────────────────────────────────────────────
+  twoFactor: twoFactorRouter,
   auth: authRealRouter,
   theme: themeRealRouter,
   favorites: favoritesRealRouter,

@@ -32,6 +32,10 @@ export const users = pgTable(
       .$onUpdate(() => new Date())
       .notNull(),
     lastSignedIn: timestamp("lastSignedIn").defaultNow().notNull(),
+    totpSecret: text("totpSecret"),
+    totpEnabled: boolean("totpEnabled").notNull().default(false),
+    totpVerifiedAt: timestamp("totpVerifiedAt"),
+    backupCodes: text("backupCodes"), // JSON array of hashed backup codes
   },
   table => ({
     emailIdx: index("users_email_idx").on(table.email),

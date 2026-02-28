@@ -39,6 +39,7 @@ import { SecureStorageDashboard } from "@/components/project-management/SecureSt
 import { BrandKitManager } from "@/components/content/BrandKit";
 import { DataGovernanceDashboard } from "@/components/project-management/DataGovernanceDashboard";
 import { GovernanceSettings } from "@/components/settings/GovernanceSettings";
+import { TwoFactorSettings } from "@/components/settings/TwoFactorSettings";
 import {
   Plug,
   Wallet,
@@ -291,8 +292,11 @@ export default function Settings() {
             )}
 
             {activeTab === "storage" && (
-              <div className="bg-gray-800 rounded-xl border border-gray-700 p-6">
-                <SecureStorageDashboard />
+              <div className="space-y-6">
+                <TwoFactorSettings />
+                <div className="bg-gray-800 rounded-xl border border-gray-700 p-6">
+                  <SecureStorageDashboard />
+                </div>
               </div>
             )}
 
