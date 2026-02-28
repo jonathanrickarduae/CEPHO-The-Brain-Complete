@@ -775,7 +775,7 @@ export const optimizationRouter = router({
     return { suggestions: [], lastAnalyzed: null };
   }),
 
-  apply: protectedProcedure
+  applyOptimization: protectedProcedure
     .input(z.object({ suggestionId: z.string() }))
     .mutation(async () => {
       return { success: true };

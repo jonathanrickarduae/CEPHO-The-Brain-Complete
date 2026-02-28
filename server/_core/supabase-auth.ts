@@ -1,4 +1,4 @@
-import { createClient } from "@supabase/supabase-js";
+import { createClient, SupabaseClient } from "@supabase/supabase-js";
 import { Request } from "express";
 import jwt from "jsonwebtoken";
 
@@ -6,28 +6,40 @@ const supabaseUrl = process.env.SUPABASE_URL || "";
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || "";
 const supabaseJwtSecret = process.env.SUPABASE_JWT_SECRET || "";
 
-if (!supabaseUrl || !supabaseServiceKey) {
-  console.error("Missing Supabase environment variables");
+const supabaseConfigured = !!(supabaseUrl && supabaseServiceKey);
+
+if (!supabaseConfigured) {
+  console.warn(
+    "[Auth] Supabase not configured — running in simple-auth mode only"
+  );
 }
 
-if (!supabaseJwtSecret) {
-  console.error("Missing SUPABASE_JWT_SECRET - JWT verification will fail");
+if (!supabaseJwtSecret && supabaseConfigured) {
+  console.warn("[Auth] Missing SUPABASE_JWT_SECRET - JWT verification will fail");
 }
 
-const supabase = createClient(supabaseUrl, supabaseServiceKey, {
-  auth: {
-    autoRefreshToken: false,
-    persistSession: false,
-  },
-});
+// Only create the Supabase client if credentials are available
+let supabase: SupabaseClient | null = null;
+if (supabaseConfigured) {
+  supabase = createClient(supabaseUrl, supabaseServiceKey, {
+    auth: {
+      autoRefreshToken: false,
+      persistSession: false,
+    },
+  });
+}
 
 export async function verifySupabaseSession(req: Request) {
+  // If Supabase is not configured, skip
+  if (!supabase || !supabaseConfigured) {
+    return null;
+  }
+
   // Get the access token from the Authorization header
   const authHeader = req.headers.authorization;
   const token = authHeader?.replace("Bearer ", "");
 
   if (!token) {
-    console.log("[Auth] No token provided");
     return null;
   }
 
@@ -36,7 +48,6 @@ export async function verifySupabaseSession(req: Request) {
     const decoded = jwt.verify(token, supabaseJwtSecret) as any;
 
     if (!decoded || !decoded.sub) {
-      console.log("[Auth] Invalid token payload");
       return null;
     }
 
@@ -52,11 +63,10 @@ export async function verifySupabaseSession(req: Request) {
     }
 
     if (!user) {
-      console.log("[Auth] No user found for token");
       return null;
     }
 
-    console.log("[Auth] Session verified successfully for user:", user.email);
+    console.log("[Auth] Session verified for user:", user.email);
     return user;
   } catch (error: any) {
     if (error.name === "TokenExpiredError") {
