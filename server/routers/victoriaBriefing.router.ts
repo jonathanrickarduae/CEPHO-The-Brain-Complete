@@ -165,7 +165,7 @@ Keep it concise, professional, and actionable. Format with clear sections.`;
  */
 export const victoriasBriefRouter = router({
   generatePdf: protectedProcedure
-    .input(z.object({ content: z.string().optional() }))
+    .input(z.object({ date: z.string().optional(), content: z.any().optional() }))
     .mutation(async () => {
       // PDF generation would use a PDF library in production
       return {
@@ -177,7 +177,7 @@ export const victoriasBriefRouter = router({
     }),
 
   generateVideo: protectedProcedure
-    .input(z.object({ content: z.string().optional() }))
+    .input(z.object({ script: z.string().optional(), avatarId: z.string().optional(), content: z.string().optional() }))
     .mutation(async () => {
       const syntesiaKey = process.env.SYNTHESIA_API_KEY;
       if (!syntesiaKey) {
@@ -195,7 +195,7 @@ export const victoriasBriefRouter = router({
     }),
 
   generateAudio: protectedProcedure
-    .input(z.object({ text: z.string().min(1).max(3000) }))
+    .input(z.object({ text: z.string().min(1).max(3000), voiceId: z.string().optional() }))
     .mutation(async ({ input }) => {
       const elevenLabsKey = process.env.ELEVENLABS_API_KEY;
       if (!elevenLabsKey) {

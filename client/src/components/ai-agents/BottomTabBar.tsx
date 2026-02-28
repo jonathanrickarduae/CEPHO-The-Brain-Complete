@@ -4,10 +4,10 @@ import {
   Sun,
   Users,
   User,
-  FolderKanban,
   Rocket,
-  BookOpen,
   Lock,
+  TrendingUp,
+  Moon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -18,15 +18,15 @@ interface TabItem {
   path: string;
 }
 
-// Navigation order: Signal → Chief of Staff → AI SMEs → Workflow → Project Genesis
+// Mobile bottom nav — mirrors the desktop sidebar navigation
 const getTabs = (): TabItem[] => [
-  { id: "dashboard", label: "Home", icon: LayoutDashboard, path: "/nexus" },
-  { id: "brief", label: "Signal", icon: Sun, path: "/the-signal" },
-  { id: "twin", label: "Chief of Staff", icon: User, path: "/chief-of-staff" },
-  { id: "experts", label: "AI SMEs", icon: Users, path: "/ai-experts" },
-  { id: "workflow", label: "Workflow", icon: FolderKanban, path: "/workflow" },
+  { id: "nexus", label: "Nexus", icon: LayoutDashboard, path: "/nexus" },
+  { id: "brief", label: "Briefing", icon: Sun, path: "/daily-brief" },
+  { id: "cos", label: "Chief of Staff", icon: User, path: "/operations" },
+  { id: "experts", label: "AI-SMEs", icon: Users, path: "/ai-experts" },
   { id: "genesis", label: "Genesis", icon: Rocket, path: "/project-genesis" },
-  { id: "library", label: "Library", icon: BookOpen, path: "/library" },
+  { id: "innovation", label: "Innovation", icon: TrendingUp, path: "/innovation-hub" },
+  { id: "evening", label: "Evening", icon: Moon, path: "/evening-review" },
   { id: "vault", label: "Vault", icon: Lock, path: "/vault" },
 ];
 
@@ -90,7 +90,7 @@ export function BottomTabBar({ className }: BottomTabBarProps) {
   );
 }
 
-// More menu sheet for additional navigation options
+// More menu sheet — additional navigation options
 export function MoreMenuSheet({
   isOpen,
   onClose,
@@ -101,26 +101,22 @@ export function MoreMenuSheet({
   const [, setLocation] = useLocation();
 
   const moreItems = [
-    { label: "Workflow", path: "/workflow", icon: FolderKanban },
-    { label: "Library", path: "/library", icon: FolderKanban },
-    { label: "The Vault", path: "/vault", icon: FolderKanban },
-    { label: "Evening Review", path: "/evening-review", icon: Sun },
+    { label: "Workflows", path: "/workflows", icon: Rocket },
+    { label: "Documents", path: "/documents", icon: TrendingUp },
+    { label: "Persephone", path: "/persephone", icon: Users },
+    { label: "Evening Review", path: "/evening-review", icon: Moon },
   ];
 
   if (!isOpen) return null;
 
   return (
     <>
-      {/* Backdrop */}
       <div
         className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm md:hidden"
         onClick={onClose}
       />
-
-      {/* Sheet */}
       <div className="fixed bottom-16 left-0 right-0 z-50 bg-card border-t border-white/10 rounded-t-2xl p-4 md:hidden animate-in slide-in-from-bottom duration-200">
         <div className="w-12 h-1 bg-muted-foreground/30 rounded-full mx-auto mb-4" />
-
         <div className="grid grid-cols-4 gap-4">
           {moreItems.map(item => (
             <button
@@ -134,9 +130,7 @@ export function MoreMenuSheet({
               <div className="w-12 h-12 rounded-xl bg-secondary/50 flex items-center justify-center">
                 <item.icon className="w-6 h-6 text-muted-foreground" />
               </div>
-              <span className="text-xs text-muted-foreground">
-                {item.label}
-              </span>
+              <span className="text-xs text-muted-foreground">{item.label}</span>
             </button>
           ))}
         </div>
