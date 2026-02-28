@@ -32,6 +32,7 @@ import { Badge } from "@/components/ui/badge";
 import { QuickActionsPanel } from "@/components/shared/QuickActionsPanel";
 import { toast } from "sonner";
 import { trpc } from "@/lib/trpc";
+import { Skeleton } from "@/components/ui/skeleton";
 
 // Types for actioned items
 interface ActionedItem {
@@ -351,6 +352,12 @@ export default function DailyBrief() {
 
   const [showVideoBriefing, setShowVideoBriefing] = useState(false);
 
+  // Live briefing data from AI
+  const { data: liveBrief, isLoading: briefLoading } = trpc.victoriaBriefing.getDailyBriefing.useQuery(undefined, {
+    staleTime: 5 * 60 * 1000, // Cache for 5 minutes
+    retry: 1,
+  });
+
   const generatePdfMutation = trpc.victoriasBrief.generatePdf.useMutation();
   const generateVideoMutation = trpc.victoriasBrief.generateVideo.useMutation();
   const generateAudioMutation = trpc.victoriasBrief.generateAudio.useMutation();
@@ -596,7 +603,10 @@ export default function DailyBrief() {
                 Victoria's Briefing
               </h1>
               <p className="text-muted-foreground mt-1">
-                Your daily executive briefing • {BRIEF_DATA.date}
+                Your daily executive briefing •{" "}
+                {liveBrief
+                  ? new Date(liveBrief.date).toLocaleDateString("en-GB", { weekday: "long", year: "numeric", month: "long", day: "numeric" })
+                  : BRIEF_DATA.date}
               </p>
             </div>
 
@@ -701,16 +711,48 @@ export default function DailyBrief() {
                       </span>
                     </div>
 
-                    <p className="text-foreground/90 leading-relaxed mb-4">
-                      "Good morning. Here's your brief for today.{" "}
-                      {BRIEF_DATA.overviewSummary.headline}. You have{" "}
-                      {
-                        BRIEF_DATA.schedule.filter(s => s.type === "meeting")
-                          .length
-                      }{" "}
-                      meetings scheduled, including your investor lunch at noon.{" "}
-                      {BRIEF_DATA.overviewSummary.energyFocus}."
-                    </p>
+                    {briefLoading ? (
+                      <div className="space-y-2 mb-4">
+                        <Skeleton className="h-4 w-full" />
+                        <Skeleton className="h-4 w-5/6" />
+                        <Skeleton className="h-4 w-4/6" />
+                      </div>
+                    ) : liveBrief ? (
+                      <div className="mb-4">
+                        <p className="text-foreground/90 leading-relaxed font-medium mb-2">
+                          {liveBrief.greeting}
+                        </p>
+                        <p
+                          className="text-sm text-muted-foreground whitespace-pre-wrap leading-relaxed"
+                          dangerouslySetInnerHTML={{
+                            __html: liveBrief.briefing
+                              .replace(/\*\*(.*?)\*\*/g, '<strong class="font-medium text-foreground">$1</strong>')
+                              .replace(/\n/g, "<br/>")
+                              .replace(/---/g, '<hr class="border-border my-2" />'),
+                          }}
+                        />
+                        {liveBrief.stats && (
+                          <div className="flex gap-4 mt-3 text-xs text-muted-foreground">
+                            <span className="flex items-center gap-1"><CheckCircle2 className="w-3 h-3 text-primary" /> {liveBrief.stats.activeProjects} active projects</span>
+                            <span className="flex items-center gap-1"><Clock className="w-3 h-3 text-yellow-400" /> {liveBrief.stats.pendingTasks} pending tasks</span>
+                            {liveBrief.stats.highPriorityTasks > 0 && (
+                              <span className="flex items-center gap-1"><AlertTriangle className="w-3 h-3 text-red-400" /> {liveBrief.stats.highPriorityTasks} high priority</span>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      <p className="text-foreground/90 leading-relaxed mb-4">
+                        "Good morning. Here's your brief for today.{" "}
+                        {BRIEF_DATA.overviewSummary.headline}. You have{" "}
+                        {
+                          BRIEF_DATA.schedule.filter(s => s.type === "meeting")
+                            .length
+                        }{" "}
+                        meetings scheduled, including your investor lunch at noon.{" "}
+                        {BRIEF_DATA.overviewSummary.energyFocus}."
+                      </p>
+                    )}
 
                     <div className="flex gap-2">
                       <Button
