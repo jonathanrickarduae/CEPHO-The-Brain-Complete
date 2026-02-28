@@ -7,7 +7,6 @@ import {
   CheckCircle,
   Clock,
   FileText,
-  Download,
   AlertCircle,
 } from "lucide-react";
 
@@ -18,8 +17,8 @@ interface Workflow {
   status: string;
   currentPhase: number;
   currentStep: number;
-  data: Record<string, any>;
-  metadata: Record<string, any>;
+  data: Record<string, unknown>;
+  metadata: Record<string, unknown>;
   createdAt: string;
   updatedAt: string;
 }
@@ -30,7 +29,7 @@ interface WorkflowStep {
   stepNumber: number;
   stepName: string;
   status: string;
-  data: Record<string, any>;
+  data: Record<string, unknown>;
   completedAt: string | null;
   createdAt: string;
 }
@@ -55,6 +54,7 @@ export default function WorkflowDetailPage() {
       fetchWorkflow();
       fetchSteps();
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   const fetchWorkflow = async () => {

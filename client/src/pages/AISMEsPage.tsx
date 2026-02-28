@@ -3,23 +3,15 @@ import { useState, useMemo, useEffect } from "react";
 import { useLocation } from "wouter";
 import {
   Users,
-  Brain,
   Search,
   Star,
   MessageSquare,
-  FileText,
   ChevronRight,
   Plus,
-  Mic,
-  MicOff,
-  Send,
-  Eye,
   CheckCircle2,
   Sparkles,
-  Target,
   Clock,
   BarChart3,
-  Filter,
   Grid,
   List,
   Trash2,
@@ -28,18 +20,13 @@ import {
   Activity,
   Trophy,
   TrendingUp,
-  ArrowUpDown,
   SortAsc,
   SortDesc,
-  Shield,
-  Zap,
-  AlertTriangle,
   Globe,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { PageHeader } from "@/components/layout/PageHeader";
 import { toast } from "sonner";
 import { useIsMobile } from "@/hooks/useMobile";
 import { trpc } from "@/lib/trpc";
@@ -47,7 +34,6 @@ import {
   AI_EXPERTS,
   categories as expertCategories,
   searchExperts,
-  getExpertsByCategory,
   TOTAL_EXPERTS,
   type AIExpert,
 } from "@/data/ai-experts.data";
@@ -61,10 +47,8 @@ import {
 } from "@/data/sme-panels.data";
 import {
   expertTypes,
-  getExpertsByType,
   getExpertTypeCounts,
   getSubcategoriesForType,
-  getCorporatePartners,
   type ExpertType,
 } from "@/data/expert-types.data";
 import { corporatePartners } from "@/data/ai-experts.data";
@@ -146,7 +130,7 @@ export default function AISMEsPage() {
   const { data: consultationHistory } = trpc.expertConsultation.list.useQuery({
     limit: 10,
   });
-  const { data: consultationCounts } =
+  const { data: _consultationCounts } =
     trpc.expertConsultation.counts.useQuery();
 
   // Expert recommendations
@@ -944,7 +928,7 @@ export default function AISMEsPage() {
                     </div>
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                    {recommendations.slice(0, 5).map((rec: any) => {
+                    {recommendations.slice(0, 5).map((rec: { expertId: string; reason?: string; score?: number }) => {
                       const expert = AI_EXPERTS.find(
                         e => e.id === rec.expertId
                       );

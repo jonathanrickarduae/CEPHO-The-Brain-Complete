@@ -57,6 +57,7 @@ export default function AgentDetailPage() {
       loadReports();
       loadApprovals();
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [agentId]);
 
   const loadAgentDetails = async () => {

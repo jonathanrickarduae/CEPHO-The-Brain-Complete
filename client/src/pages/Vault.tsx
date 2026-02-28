@@ -21,8 +21,6 @@ import {
   Clock,
   Bell,
 } from "lucide-react";
-import { useState } from "react";
-import { toast } from "sonner";
 
 export default function Vault() {
   // Integration health data

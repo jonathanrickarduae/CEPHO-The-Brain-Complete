@@ -4,24 +4,12 @@
  * Manages software subscriptions: CRUD, cost analysis, renewal tracking.
  */
 import { z } from "zod";
-import { desc, eq, and, gte } from "drizzle-orm";
+import { desc, eq, and } from "drizzle-orm";
 import { protectedProcedure, router } from "../_core/trpc";
 import { db } from "../db";
 import { subscriptions } from "../../drizzle/schema";
 
 const BILLING_CYCLES = ["monthly", "quarterly", "annual", "one_time"] as const;
-const CATEGORIES = [
-  "productivity",
-  "communication",
-  "development",
-  "design",
-  "marketing",
-  "finance",
-  "hr",
-  "analytics",
-  "infrastructure",
-  "other",
-] as const;
 const STATUSES = ["active", "trial", "cancelled", "paused"] as const;
 
 export const subscriptionTrackerRouter = router({
@@ -120,9 +108,8 @@ export const subscriptionTrackerRouter = router({
         name: s.name,
         cost: s.cost,
         currency: s.currency,
-        renewalDate: s.renewalDate!.toISOString(),
+        renewalDate: s.renewalDate?.toISOString() ?? null,
       }));
-
     return {
       totalMonthlyCost: Math.round(totalMonthlyCost * 100) / 100,
       totalAnnualCost: Math.round(totalMonthlyCost * 12 * 100) / 100,
@@ -201,7 +188,7 @@ export const subscriptionTrackerRouter = router({
         cost: s.cost,
         currency: s.currency,
         billingCycle: s.billingCycle,
-        renewalDate: s.renewalDate!.toISOString(),
+        renewalDate: s.renewalDate?.toISOString() ?? null,
         daysUntilRenewal: Math.ceil(
           ((s.renewalDate?.getTime() ?? 0) - Date.now()) / (1000 * 60 * 60 * 24)
         ),

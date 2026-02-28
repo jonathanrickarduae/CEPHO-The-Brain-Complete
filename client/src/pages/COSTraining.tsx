@@ -332,7 +332,7 @@ export default function COSTraining() {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {TRAINING_MODULES.map((module, index) => {
+                {TRAINING_MODULES.map((module, _index) => {
                   const isCompleted = completedModules.has(module.id);
                   const isLocked = module.level > currentLevel.level + 1;
                   const isAvailable = !isLocked; // Allow clicking completed modules to review

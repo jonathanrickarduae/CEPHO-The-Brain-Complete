@@ -5,7 +5,7 @@
  * retrieves completion status for the Digital Twin profile.
  */
 import { z } from "zod";
-import { eq, and, count } from "drizzle-orm";
+import { eq, count } from "drizzle-orm";
 import { protectedProcedure, router } from "../_core/trpc";
 import { db } from "../db";
 import { questionnaireResponses } from "../../drizzle/schema";

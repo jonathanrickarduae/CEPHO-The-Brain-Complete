@@ -3,36 +3,10 @@ import { useState } from "react";
 import { Link } from "wouter";
 import {
   Bot,
-  Activity,
-  CheckCircle,
-  Clock,
-  TrendingUp,
-  AlertCircle,
 } from "lucide-react";
 import AIAgentsVideo from "@/components/ai-agents/AIAgentsVideo";
 import { trpc } from "@/lib/trpc";
 
-interface AIAgent {
-  id: string;
-  name: string;
-  category: string;
-  specialization: string;
-  status: "active" | "idle" | "learning" | "offline";
-  performanceRating: number;
-  successRate: number;
-  tasksCompleted: number;
-  avgResponseTime: number;
-  lastActive: string;
-}
-
-interface AgentStats {
-  totalAgents: number;
-  activeAgents: number;
-  avgPerformance: number;
-  totalTasksCompleted: number;
-  pendingReports: number;
-  pendingApprovals: number;
-}
 
 export default function AIAgentsPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
@@ -240,7 +214,7 @@ export default function AIAgentsPage() {
             <label className="text-sm font-medium mr-2">Sort by:</label>
             <select
               value={sortBy}
-              onChange={e => setSortBy(e.target.value as any)}
+              onChange={e => setSortBy(e.target.value as "name" | "performance" | "tasks")}
               className="px-3 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600"
             >
               <option value="performance">Performance</option>

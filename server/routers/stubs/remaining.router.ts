@@ -6,7 +6,7 @@
  * Each will be replaced with a real implementation in subsequent phases.
  */
 import { z } from "zod";
-import { publicProcedure, protectedProcedure, router } from "../../_core/trpc";
+import { protectedProcedure, router } from "../../_core/trpc";
 
 // ─── Auth Router ────────────────────────────────────────────────────────────
 export const authRouter = router({

@@ -27,7 +27,7 @@ export const workflowsRouter = router({
    */
   get: protectedProcedure
     .input(z.object({ id: z.string() }))
-    .query(async ({ input, ctx }) => {
+    .query(async ({ input, ctx: _ctx }) => {
       // Try to parse as numeric project ID
       const projectId = parseInt(input.id, 10);
       if (isNaN(projectId)) return null;

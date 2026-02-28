@@ -6,14 +6,8 @@ import {
   Mic,
   MicOff,
   Send,
-  Brain,
-  Sparkles,
-  Activity,
-  Trash2,
   Paperclip,
-  Link2,
   X,
-  FileAudio,
   GraduationCap,
   CheckCircle2,
   Clock,
@@ -23,18 +17,9 @@ import {
   Users,
   FolderKanban,
   ChevronRight,
-  BarChart3,
   MessageSquare,
-  Play,
-  Pause,
-  RefreshCw,
-  ThumbsUp,
-  ThumbsDown,
   Eye,
-  FileCheck,
   Bot,
-  Zap,
-  Loader2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -235,15 +220,15 @@ export default function ChiefOfStaff() {
 
   // tRPC hooks for QA workflow
   const utils = trpc.useUtils();
-  const { data: tasksWithQA, isLoading: tasksLoading } =
+  const { data: tasksWithQA, isLoading: _tasksLoading } =
     trpc.qa.getTasksWithStatus.useQuery();
 
   // Fetch delegated tasks from Signal
-  const { data: delegatedTasks, isLoading: delegatedTasksLoading } =
+  const { data: delegatedTasks, isLoading: _delegatedTasksLoading } =
     trpc.cosTasks.getTasks.useQuery({ status: "delegated" });
 
   // Fetch active AI agents
-  const { data: activeAgents, isLoading: agentsLoading } =
+  const { data: _activeAgents, isLoading: _agentsLoading } =
     trpc.cosTasks.getActiveAgents.useQuery();
 
   const submitCoSReviewMutation = trpc.qa.submitCoSReview.useMutation({
@@ -304,13 +289,13 @@ export default function ChiefOfStaff() {
       dbId: t.id,
       title: t.title || "",
       description: t.description || "",
-      project: (t.metadata as any)?.category || "Signal Task",
+      project: (t.metadata as Record<string, unknown>)?.category as string || "Signal Task",
       status:
         t.status === "delegated" ? "active" : (t.status as Task["status"]),
       progress: t.progress || 0,
       qaStatus: (t.qaStatus || "pending") as QAStatus,
       assignedExperts: Array.isArray(t.assignedExperts)
-        ? t.assignedExperts.map((e: any) => e.name || e)
+        ? t.assignedExperts.map((e: { name?: string } | string) => typeof e === 'string' ? e : e.name || '')
         : [],
       cosScore: t.cosScore || undefined,
       secondaryAIScore: t.secondaryAiScore || undefined,
@@ -327,7 +312,8 @@ export default function ChiefOfStaff() {
     ];
   }, [tasksWithQA, delegatedTasks]);
 
-  // Handle CoS review submission
+  // Handle CoS review submission (reserved for direct call)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleSubmitCoSReview = (taskId: number, approved: boolean) => {
     submitCoSReviewMutation.mutate({
       taskId,
@@ -337,7 +323,8 @@ export default function ChiefOfStaff() {
     });
   };
 
-  // Handle Secondary AI verification
+  // Handle Secondary AI verification (reserved for direct call)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleSecondaryVerification = (taskId: number) => {
     // Simulate AI verification with a score
     const aiScore = Math.floor(Math.random() * 3) + 8; // 8-10 score
@@ -363,7 +350,7 @@ export default function ChiefOfStaff() {
     startListening,
     stopListening,
     isSupported: voiceSupported,
-    error: voiceError,
+    error: _voiceError,
   } = useVoiceInput({
     onResult: text => setMessageInput(prev => prev + text),
     continuous: false,
@@ -423,7 +410,7 @@ export default function ChiefOfStaff() {
     verified: tasks.filter(t => t.qaStatus === "verified").length,
   };
 
-  const currentConversation = conversations.find(
+  const _currentConversation = conversations.find(
     c => c.id === currentConversationId
   );
 

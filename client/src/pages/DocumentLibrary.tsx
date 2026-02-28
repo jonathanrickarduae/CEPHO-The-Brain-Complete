@@ -1,7 +1,6 @@
 // @ts-nocheck
 import { useState } from "react";
 import { trpc } from "@/lib/trpc";
-import BrainLayout from "@/components/ai-agents/BrainLayout";
 import {
   Card,
   CardContent,
@@ -11,7 +10,7 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import {
   FileText,
@@ -33,7 +32,6 @@ import {
   Plus,
   X,
   History,
-  FileDown,
   AlertTriangle,
   ThumbsUp,
   ThumbsDown,
@@ -57,13 +55,24 @@ import {
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+
+type LibraryDocument = {
+  id: number;
+  documentId: string;
+  title: string;
+  type: string;
+  classification: string | null;
+  qaStatus: string | null;
+  qaApprovedBy: string | null;
+  qaApprovedAt: string | null;
+  qaNotes: string | null;
+  markdownUrl: string | null;
+  htmlUrl: string | null;
+  pdfUrl: string | null;
+  metadata: unknown;
+  createdAt: string;
+  updatedAt: string;
+};
 
 type DocumentType =
   | "all"
@@ -77,7 +86,7 @@ export default function DocumentLibrary() {
   const [activeType, setActiveType] = useState<DocumentType>("all");
   const [qaFilter, setQaFilter] = useState<QAStatus>("all");
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedDocument, setSelectedDocument] = useState<any>(null);
+  const [selectedDocument, setSelectedDocument] = useState<LibraryDocument | null>(null);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
 
   // Email dialog state
@@ -89,17 +98,17 @@ export default function DocumentLibrary() {
   const [newRecipientName, setNewRecipientName] = useState("");
   const [emailSubject, setEmailSubject] = useState("");
   const [emailMessage, setEmailMessage] = useState("");
-  const [emailDocument, setEmailDocument] = useState<any>(null);
+  const [emailDocument, setEmailDocument] = useState<LibraryDocument | null>(null);
 
   // QA Approval dialog state
   const [isQADialogOpen, setIsQADialogOpen] = useState(false);
-  const [qaDocument, setQaDocument] = useState<any>(null);
+  const [qaDocument, setQaDocument] = useState<LibraryDocument | null>(null);
   const [qaAction, setQaAction] = useState<"approve" | "reject">("approve");
   const [qaNotes, setQaNotes] = useState("");
 
   // Email history dialog state
   const [isEmailHistoryOpen, setIsEmailHistoryOpen] = useState(false);
-  const [emailHistoryDocument, setEmailHistoryDocument] = useState<any>(null);
+  const [emailHistoryDocument, setEmailHistoryDocument] = useState<LibraryDocument | null>(null);
 
   const {
     data: documents,
@@ -193,7 +202,7 @@ export default function DocumentLibrary() {
     setEmailDocument(null);
   };
 
-  const handleOpenEmailDialog = (doc: any) => {
+  const handleOpenEmailDialog = (doc: LibraryDocument) => {
     setEmailDocument(doc);
     setEmailSubject(`Document Shared: ${doc.title}`);
     setIsEmailDialogOpen(true);
@@ -232,7 +241,7 @@ export default function DocumentLibrary() {
     });
   };
 
-  const handleOpenQADialog = (doc: any, action: "approve" | "reject") => {
+  const handleOpenQADialog = (doc: LibraryDocument, action: "approve" | "reject") => {
     setQaDocument(doc);
     setQaAction(action);
     setQaNotes("");
@@ -249,7 +258,7 @@ export default function DocumentLibrary() {
     });
   };
 
-  const handleOpenEmailHistory = (doc: any) => {
+  const handleOpenEmailHistory = (doc: LibraryDocument) => {
     setEmailHistoryDocument(doc);
     setIsEmailHistoryOpen(true);
   };
@@ -320,7 +329,7 @@ export default function DocumentLibrary() {
     );
   };
 
-  const handleGeneratePDF = (doc: any) => {
+  const handleGeneratePDF = (doc: LibraryDocument) => {
     generatePDFMutation.mutate({
       documentId: doc.documentId,
       type: doc.type,
@@ -333,7 +342,7 @@ export default function DocumentLibrary() {
     }
   };
 
-  const handlePreview = (doc: any) => {
+  const handlePreview = (doc: LibraryDocument) => {
     setSelectedDocument(doc);
     setIsPreviewOpen(true);
   };
@@ -358,7 +367,7 @@ export default function DocumentLibrary() {
                 Assessments
               </h4>
               <div className="space-y-2">
-                {parsed.assessments.map((a: any, i: number) => (
+                {parsed.assessments.map((a: { type?: string; score: number }, i: number) => (
                   <div
                     key={i}
                     className="flex items-center justify-between p-2 bg-muted rounded"
@@ -411,7 +420,7 @@ export default function DocumentLibrary() {
                 Investment Scenarios
               </h4>
               <div className="space-y-2">
-                {parsed.scenarios.map((s: any, i: number) => (
+                {parsed.scenarios.map((s: { name: string; isRecommended?: boolean; amount?: number; description?: string }, i: number) => (
                   <div key={i} className="p-2 bg-muted rounded">
                     <div className="flex items-center justify-between">
                       <span className="text-sm font-medium">{s.name}</span>
@@ -1063,7 +1072,7 @@ export default function DocumentLibrary() {
 
           <div className="space-y-3 max-h-[400px] overflow-y-auto">
             {emailHistory && emailHistory.length > 0 ? (
-              emailHistory.map((entry: any, index: number) => (
+              emailHistory.map((entry: { recipientName?: string; recipientEmail: string; sentAt?: string; subject?: string }, index: number) => (
                 <div
                   key={index}
                   className="flex items-center justify-between p-3 bg-muted rounded-lg"

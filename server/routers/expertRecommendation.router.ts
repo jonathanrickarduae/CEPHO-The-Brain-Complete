@@ -149,7 +149,7 @@ export const expertRecommendationRouter = router({
 
       if (input.category) {
         experts = experts.filter(e =>
-          e.category.toLowerCase().includes(input.category!.toLowerCase())
+          e.category.toLowerCase().includes((input.category ?? "").toLowerCase())
         );
       }
 

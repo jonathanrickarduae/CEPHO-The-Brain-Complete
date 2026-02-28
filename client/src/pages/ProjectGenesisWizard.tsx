@@ -7,14 +7,10 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import {
   Rocket,
-  CheckCircle2,
-  Circle,
   ChevronRight,
   ChevronLeft,
   FileText,
-  Download,
   Upload,
-  AlertCircle,
   Sparkles,
   Loader2,
 } from "lucide-react";
@@ -220,7 +216,7 @@ export default function ProjectGenesisWizard() {
 
   const [currentPhase, setCurrentPhase] = useState(1);
   const [currentStep, setCurrentStep] = useState(1);
-  const [formData, setFormData] = useState<Record<number, any>>({});
+  const [formData, setFormData] = useState<Record<number, Record<string, unknown>>>({});
 
   // Load workflow if workflowId exists
   const { data: workflow, isLoading: isLoadingWorkflow } =
@@ -236,8 +232,8 @@ export default function ProjectGenesisWizard() {
       setCurrentStep(workflow.currentStep);
 
       // Load form data from workflow steps
-      const stepData: Record<number, any> = {};
-      workflow.steps?.forEach((step: any) => {
+      const stepData: Record<number, Record<string, unknown>> = {};
+      workflow.steps?.forEach((step: { stepNumber: number; formData?: Record<string, unknown> }) => {
         if (step.formData) {
           stepData[step.stepNumber] = step.formData;
         }
@@ -332,7 +328,7 @@ export default function ProjectGenesisWizard() {
     }
   };
 
-  const handleInputChange = (field: string, value: any) => {
+  const handleInputChange = (field: string, value: unknown) => {
     const newFormData = {
       ...formData,
       [currentStep]: {

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -20,7 +20,6 @@ import {
   Video,
   MessageSquare,
 } from "lucide-react";
-import { PageHeader } from "@/components/layout/Breadcrumbs";
 
 interface BoardMember {
   id: string;
@@ -28,7 +27,7 @@ interface BoardMember {
   title: string;
   company: string;
   expertise: string;
-  icon: any;
+  icon: React.ElementType;
   color: string;
   status: "active" | "available";
   lastConsultation?: string;
@@ -274,7 +273,7 @@ const RECENT_DECISIONS = [
 ];
 
 export default function PersephoneBoard() {
-  const [selectedMember, setSelectedMember] = useState<BoardMember | null>(
+  const [_selectedMember, _setSelectedMember] = useState<BoardMember | null>(
     null
   );
 
@@ -491,7 +490,7 @@ export default function PersephoneBoard() {
                   <Card
                     key={member.id}
                     className={`border ${colors.border} ${colors.bg} hover:bg-opacity-20 transition-all cursor-pointer`}
-                    onClick={() => setSelectedMember(member)}
+                    onClick={() => _setSelectedMember(member)}
                   >
                     <CardContent className="p-4">
                       <div className="flex items-start gap-3 mb-3">

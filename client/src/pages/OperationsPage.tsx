@@ -4,7 +4,6 @@ import { NPSSurvey, NPSStatsDashboard } from "@/components/shared/NPSSurvey";
 import { PartnershipPipeline } from "@/components/communication/PartnershipPipeline";
 import { TeamCapabilityMatrix } from "@/components/team-management/TeamCapabilityMatrix";
 import { CommandCentre } from "@/components/operations/CommandCentre";
-import { PageHeader } from "@/components/layout/PageHeader";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Users, Handshake, TrendingUp, BarChart3 } from "lucide-react";
 

@@ -10,15 +10,12 @@ import {
   Palette,
   CreditCard,
   Users,
-  ChevronRight,
-  Check,
   Search,
   Plus,
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { PageHeader } from "@/components/layout/Breadcrumbs";
 import {
   ThemeSelector,
   ThemeProvider,
@@ -28,8 +25,6 @@ import { TrainingDataPipeline } from "@/components/analytics/TrainingDataPipelin
 import { ReferralDashboard } from "@/components/ai-agents/WaitlistReferral";
 import { AccessibilitySettingsPanel } from "@/components/settings/AccessibilitySettingsPanel";
 
-import { IntegrationWizard } from "@/components/integrations/IntegrationWizard";
-import { IntegrationsStatus } from "@/components/integrations/IntegrationsStatus";
 import { IntegrationsStatusReal } from "@/components/integrations/IntegrationsStatusReal";
 import { SubscriptionManager } from "@/components/shared/SubscriptionManager";
 import { SignatureManager } from "@/components/shared/SignatureManager";

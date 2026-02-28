@@ -9,24 +9,18 @@ import {
   Volume2,
   VolumeX,
   Sparkles,
-  Clock,
   Star,
   MessageSquare,
   Loader2,
   User,
   Bot,
-  ChevronDown,
-  Download,
-  FileText,
   BookOpen,
-  Check,
 } from "lucide-react";
 import { toast } from "sonner";
 import { useVoiceInput, useVoiceWaveform } from "@/hooks/useVoiceInput";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { PageHeader } from "@/components/layout/PageHeader";
 import { trpc } from "@/lib/trpc";
 import { AI_EXPERTS, type AIExpert } from "@/data/ai-experts.data";
 import { Streamdown } from "streamdown";
@@ -67,7 +61,7 @@ export default function ExpertChatPage() {
   const [, setLocation] = useLocation();
   const [message, setMessage] = useState("");
   const [isRecording, setIsRecording] = useState(false);
-  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [_isSpeaking, _setIsSpeaking] = useState(false);
   const [speakingMessageIndex, setSpeakingMessageIndex] = useState<
     number | null
   >(null);
@@ -99,11 +93,11 @@ export default function ExpertChatPage() {
   const {
     isListening,
     isSupported: voiceSupported,
-    transcript,
-    interimTranscript,
+    transcript: _transcript,
+    interimTranscript: _interimTranscript,
     startListening,
     stopListening,
-    resetTranscript,
+    resetTranscript: _resetTranscript,
   } = useVoiceInput({
     continuous: true,
     onResult: (text, isFinal) => {
@@ -113,7 +107,7 @@ export default function ExpertChatPage() {
     },
   });
 
-  const { audioLevel, waveformData, startWaveform, stopWaveform } =
+  const { audioLevel: _audioLevel, waveformData: _waveformData, startWaveform, stopWaveform } =
     useVoiceWaveform();
 
   // Initialize chat session
@@ -141,6 +135,7 @@ export default function ExpertChatPage() {
         }
       );
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [expert]);
 
   // Scroll to bottom on new messages

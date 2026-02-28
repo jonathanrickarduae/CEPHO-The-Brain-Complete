@@ -27,7 +27,7 @@ router.get("/health", async (req, res) => {
  * GET /health/ready
  */
 router.get("/health/ready", async (req, res) => {
-  const checks: Record<string, any> = {
+  const checks: Record<string, Record<string, unknown>> = {
     database: { status: "unknown" },
     cache: { status: "unknown" },
   };
@@ -91,7 +91,7 @@ router.get("/health/live", (req, res) => {
  * GET /health/detailed
  */
 router.get("/health/detailed", async (req, res) => {
-  const checks: Record<string, any> = {
+  const checks: Record<string, Record<string, unknown>> = {
     database: { status: "unknown" },
     cache: { status: "unknown" },
   };

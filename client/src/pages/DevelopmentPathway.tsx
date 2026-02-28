@@ -42,7 +42,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Brain, Gauge, Map } from "lucide-react";
+import { Gauge, Map } from "lucide-react";
 
 // Stage configuration for the development pipeline
 const PIPELINE_STAGES = [

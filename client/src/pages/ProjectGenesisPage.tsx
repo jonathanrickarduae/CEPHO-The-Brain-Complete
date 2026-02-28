@@ -4,32 +4,22 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
   Brain,
-  Rocket,
   FileText,
-  GitBranch,
   Plus,
   ChevronRight,
   Sparkles,
   Clock,
   Check,
-  Share2,
-  PresentationIcon,
   DollarSign,
   Shield,
   BarChart3,
   Loader2,
 } from "lucide-react";
-import ProjectGenesis from "@/components/project-management/ProjectGenesis";
 import { GenesisBlueprintWizard } from "@/components/business-plan/GenesisBlueprintWizard";
 import { BlueprintQMS } from "@/components/business-plan/BlueprintQMS";
 import { SocialMediaBlueprint } from "@/components/business-plan/SocialMediaBlueprint";
-import { QMSProcessLog } from "@/components/shared/QMSProcessLog";
 import { PresentationBlueprint } from "@/components/business-plan/PresentationBlueprint";
 import { GenesisBlueprint } from "@/data/genesis-blueprint.data";
-import { VoiceNoteIntake } from "@/components/shared/VoiceNoteIntake";
-import { ExpertTeamAssemblyWizard } from "@/components/expert-evolution/ExpertTeamAssemblyWizard";
-import { IdeaScoringDashboard } from "@/components/project-management/IdeaScoringDashboard";
-import { ValidationEngine } from "@/components/shared/ValidationEngine";
 import {
   ValueChainProgress,
   ValueChainProgressCompact,
@@ -39,11 +29,7 @@ import {
   type ProjectPhaseProgress,
   type ProjectPhaseStatus,
 } from "@/data/value-chain.data";
-import {
-  BlueprintTemplatesDashboard,
-  defaultTemplates,
-  type BlueprintTemplate,
-} from "@/components/business-plan/BlueprintTemplates";
+
 import { trpc } from "@/lib/trpc";
 import { toast } from "sonner";
 
@@ -492,10 +478,10 @@ export default function ProjectGenesisPage() {
             <BlueprintQMS
               genesisBlueprint={currentBlueprint as GenesisBlueprint}
               pendingChanges={[]}
-              onApplyChanges={(changes, cascadeTargets) => {
+              onApplyChanges={(_changes, _cascadeTargets) => {
                 toast.success("Changes applied successfully!");
               }}
-              onRejectChanges={changeIds => {
+              onRejectChanges={(_changeIds) => {
                 toast.info("Changes rejected");
               }}
               onViewBlueprint={blueprintId => {

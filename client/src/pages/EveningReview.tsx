@@ -9,13 +9,7 @@ import {
   ChevronUp,
   Mic,
   MicOff,
-  Send,
-  Play,
-  Folder,
-  Target,
   CheckCircle2,
-  XCircle,
-  ArrowRight,
   AlertCircle,
   Brain,
   Zap,
@@ -150,8 +144,8 @@ interface TaskDecision {
 export default function EveningReview() {
   // Check for URL parameters (autostart or delegate mode)
   const urlParams = new URLSearchParams(window.location.search);
-  const isAutoStart = urlParams.get("autostart") === "true";
-  const isDelegateMode = urlParams.get("delegate") === "true";
+  const _isAutoStart = urlParams.get("autostart") === "true";
+  const _isDelegateMode = urlParams.get("delegate") === "true";
 
   const [taskDecisions, setTaskDecisions] = useState<TaskDecision[]>([]);
   const [expandedProjects, setExpandedProjects] = useState<string[]>([]);
@@ -204,6 +198,7 @@ export default function EveningReview() {
     }, 1000);
 
     return () => clearInterval(interval);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [autoProcessingStarted, isReadyToStart]);
 
   // Auto-start prompt at 7 PM
@@ -219,6 +214,7 @@ export default function EveningReview() {
       }, 2000);
       return () => clearTimeout(timer);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [reviewState]);
 
   // Handle auto-start at 8 PM
@@ -450,6 +446,7 @@ export default function EveningReview() {
     }
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const getReviewStateText = () => {
     switch (reviewState) {
       case "before_window":

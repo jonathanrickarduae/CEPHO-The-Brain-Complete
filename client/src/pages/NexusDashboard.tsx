@@ -1,37 +1,25 @@
-import { useState, useRef } from "react";
+import React, { useState, useRef } from "react";
 import { useLocation } from "wouter";
 import {
   Sun,
   Users,
-  Lock,
-  Mic,
-  MicOff,
-  Send,
   User,
-  FolderKanban,
   BookOpen,
   Brain,
   LayoutDashboard,
-  ChevronRight,
-  AlertCircle,
   Shield,
   ShieldCheck,
   Rocket,
   TrendingUp,
   CheckCircle2,
-  Clock,
   Lightbulb,
-  Activity,
-  Zap,
   Settings as SettingsIcon,
 } from "lucide-react";
 import { useGovernance } from "@/hooks/useGovernance";
-import { LearningBadge } from "@/components/expert-evolution/LearningIndicator";
 import { useVoiceInput } from "@/hooks/useVoiceInput";
 import { toast } from "sonner";
 import { trpc } from "@/lib/trpc";
 import OpenClawChat from "@/components/ai-agents/OpenClawChat";
-import SkillCards from "@/components/expert-evolution/SkillCards";
 
 // RAG Status Indicator Component
 function RAGStatus({
@@ -78,7 +66,7 @@ function MetricCard({
   trend,
   onClick,
 }: {
-  icon: any;
+  icon: React.ElementType;
   label: string;
   value: string | number;
   trend?: "up" | "down" | "stable";
@@ -113,7 +101,7 @@ function ActivityItem({
   time,
   status,
 }: {
-  icon: any;
+  icon: React.ElementType;
   title: string;
   subtitle: string;
   time: string;
@@ -146,17 +134,17 @@ function ActivityItem({
 export default function NexusDashboard() {
   const [, setLocation] = useLocation();
   const [inputValue, setInputValue] = useState("");
-  const inputRef = useRef<HTMLTextAreaElement>(null);
+  const _inputRef = useRef<HTMLTextAreaElement>(null); // reserved for future textarea binding
   const { mode, requestModeChange } = useGovernance();
 
   // Dashboard insights from API
-  const { data: insightsData, isLoading: insightsLoading } =
+  const { data: _insightsData, isLoading: _insightsLoading } =
     trpc.dashboard.getInsights.useQuery();
 
   // Voice input
   const {
     isListening,
-    transcript,
+    transcript: _transcript,
     startListening,
     stopListening,
     isSupported: voiceSupported,
@@ -165,7 +153,7 @@ export default function NexusDashboard() {
     continuous: false,
   });
 
-  const toggleRecording = () => {
+  const toggleRecording = () => { // eslint-disable-line @typescript-eslint/no-unused-vars
     if (isListening) {
       stopListening();
     } else {
@@ -184,14 +172,14 @@ export default function NexusDashboard() {
     }
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
+  const handleKeyDown = (e: React.KeyboardEvent) => { // eslint-disable-line @typescript-eslint/no-unused-vars
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       handleSubmit();
     }
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => { // eslint-disable-line @typescript-eslint/no-unused-vars
     setInputValue(e.target.value);
     e.target.style.height = "auto";
     e.target.style.height = Math.min(e.target.scrollHeight, 100) + "px";

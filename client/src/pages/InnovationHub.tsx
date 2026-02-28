@@ -36,21 +36,15 @@ import {
   Plus,
   ArrowRight,
   Search,
-  TrendingUp,
-  Target,
   DollarSign,
   FileText,
   Rocket,
   RefreshCw,
   ExternalLink,
   CheckCircle,
-  XCircle,
-  Clock,
   Sparkles,
   Brain,
   Users,
-  BarChart3,
-  AlertTriangle,
 } from "lucide-react";
 
 // Flywheel stages
@@ -104,7 +98,7 @@ const STATUS_COLORS: Record<string, string> = {
 
 export default function InnovationHub() {
   const [, setLocation] = useLocation();
-  const [activeTab, setActiveTab] = useState("ideas");
+  const [_activeTab, _setActiveTab] = useState("ideas");
   const [showNewIdeaDialog, setShowNewIdeaDialog] = useState(false);
   const [showArticleDialog, setShowArticleDialog] = useState(false);
   const [selectedIdea, setSelectedIdea] = useState<number | null>(null);
@@ -190,7 +184,7 @@ export default function InnovationHub() {
 
   const promoteToGenesisMutation = trpc.innovation.promoteToGenesis.useMutation(
     {
-      onSuccess: (data) => {
+      onSuccess: (_data) => {
         toast.success("Idea promoted to Project Genesis!");
         refetchIdeas();
         setSelectedIdea(null);
@@ -599,7 +593,7 @@ export default function InnovationHub() {
                               onClick={() =>
                                 runAssessmentMutation.mutate({
                                   ideaId: selectedIdea,
-                                  assessmentType: type as any,
+                                  assessmentType: type as "market" | "financial" | "technical" | "risk" | "competitive",
                                 })
                               }
                               disabled={runAssessmentMutation.isPending}
@@ -736,8 +730,8 @@ export default function InnovationHub() {
                                   <span className="text-green-400">
                                     £
                                     {(
-                                      (scenario.projectedProfit as any)
-                                        ?.year1 || 0
+                      (scenario.projectedProfit as { year1?: number })
+                        ?.year1 || 0
                                     ).toLocaleString()}
                                   </span>
                                 </div>

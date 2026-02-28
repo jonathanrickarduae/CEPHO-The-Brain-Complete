@@ -1,7 +1,6 @@
 // @ts-nocheck
 import { useState } from "react";
 import {
-  Sun,
   Calendar,
   Users,
   TrendingUp,
@@ -13,18 +12,15 @@ import {
   Download,
   Play,
   Headphones,
-  ChevronRight,
   AlertTriangle,
   Lightbulb,
   Video,
-  FileText,
   ThumbsUp,
   RotateCcw,
   UserPlus,
   User,
   ListChecks,
   Eye,
-  Mail,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -919,7 +915,7 @@ export default function DailyBrief() {
                 <div className="absolute left-[76px] top-0 bottom-0 w-px bg-border"></div>
 
                 <div className="space-y-4">
-                  {BRIEF_DATA.schedule.map((item, idx) => (
+                  {BRIEF_DATA.schedule.map((item) => (
                     <div
                       key={item.id}
                       className="flex items-start gap-4 relative"

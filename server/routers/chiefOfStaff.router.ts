@@ -5,7 +5,6 @@
  * Uses the user's questionnaire responses, task history, and
  * project context to provide personalised executive support.
  */
-import { z } from "zod";
 import { desc, eq, and, gte } from "drizzle-orm";
 import OpenAI from "openai";
 import { protectedProcedure, router } from "../_core/trpc";
@@ -13,10 +12,8 @@ import { db } from "../db";
 import {
   tasks,
   projects,
-  conversations,
   questionnaireResponses,
   activityFeed,
-  moodHistory,
 } from "../../drizzle/schema";
 
 function getOpenAIClient(): OpenAI {

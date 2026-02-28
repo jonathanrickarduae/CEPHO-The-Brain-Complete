@@ -5,13 +5,12 @@
  * and the Morning Signal (daily briefing from previous evening review).
  */
 import { z } from "zod";
-import { desc, eq, and, gte } from "drizzle-orm";
+import { desc, eq, and } from "drizzle-orm";
 import OpenAI from "openai";
 import { protectedProcedure, router } from "../_core/trpc";
 import { db } from "../db";
 import {
   eveningReviewSessions,
-  eveningReviewTaskDecisions,
   tasks,
   activityFeed,
 } from "../../drizzle/schema";
@@ -202,7 +201,7 @@ export const morningSignalRouter = router({
   /**
    * Generate a morning signal PDF.
    */
-  generatePdf: protectedProcedure.mutation(async ({ ctx }) => {
+  generatePdf: protectedProcedure.mutation(async (_opts) => {
     // In production this would generate a PDF from the morning briefing
     // For now return a success response with a placeholder URL
     return {

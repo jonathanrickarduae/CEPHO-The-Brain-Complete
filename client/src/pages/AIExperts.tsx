@@ -7,10 +7,6 @@ import { ExpertAnalytics } from "@/components/expert-evolution/ExpertAnalytics";
 import { ExpertScheduling } from "@/components/expert-evolution/ExpertScheduling";
 import { ExternalResources } from "@/components/shared/ExternalResources";
 import {
-  ExpertPerformanceRating,
-  generateMockPerformance,
-} from "@/components/expert-evolution/ExpertPerformanceRating";
-import {
   Users,
   Brain,
   Zap,
@@ -21,23 +17,17 @@ import {
   Play,
   Pause,
   Calendar,
-  Target,
   Lightbulb,
   Send,
   ThumbsUp,
   ThumbsDown,
-  RotateCcw,
-  Sparkles,
-  Timer,
   FileText,
   Mail,
-  Code,
   Search,
   Mic,
   MicOff,
   User,
   Eye,
-  ChevronRight,
   AlertCircle,
   ListChecks,
   RefreshCw,
@@ -46,15 +36,6 @@ import {
   Swords,
   Globe,
 } from "lucide-react";
-import {
-  AI_EXPERTS,
-  categories,
-  searchExperts,
-  getTopPerformers,
-  getExpertsByCategory,
-  generateExpertSystemPrompt,
-  TOTAL_EXPERTS,
-} from "@/data/ai-experts.data";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -67,23 +48,15 @@ import {
   RestrictedBadge,
 } from "@/hooks/useGovernance";
 import {
-  InsightCard,
-  ValidationSummary,
-  DigitalTwinQA,
   ConfidenceBadge,
-  VerificationBadge,
 } from "@/components/analytics/InsightValidation";
 import {
-  BatchVerificationPanel,
-  TruthVerificationSummary,
   ClassificationBadge,
   type ClassifiedStatement,
   type StatementClassification,
 } from "@/components/shared/TruthVerification";
 import {
-  type Insight,
   type ConfidenceLevel,
-  type VerificationStatus,
   QA_CHALLENGE_PROMPTS,
 } from "@/lib/insightValidation";
 
@@ -259,7 +232,7 @@ interface KickoffQuestion {
 }
 
 export default function AIExperts() {
-  const { mode, isFeatureAvailable } = useGovernance();
+  const { mode, isFeatureAvailable: _isFeatureAvailable } = useGovernance();
   const searchString = useSearch();
   const [phase, setPhase] = useState<Phase>("queue");
   const [tasks, setTasks] = useState<PendingTask[]>(MOCK_PENDING_TASKS);
@@ -292,10 +265,10 @@ export default function AIExperts() {
   const [validationMode, setValidationMode] = useState<
     "off" | "review" | "challenge"
   >("off");
-  const [pendingInsights, setPendingInsights] = useState<ClassifiedStatement[]>(
+  const [_pendingInsights, _setPendingInsights] = useState<ClassifiedStatement[]>(
     []
   );
-  const [validatedInsights, setValidatedInsights] = useState<
+  const [_validatedInsights, _setValidatedInsights] = useState<
     ClassifiedStatement[]
   >([]);
 
@@ -628,7 +601,8 @@ export default function AIExperts() {
     }
   };
 
-  // Create new task from voice/template
+  // Create new task from voice/template (reserved for future use)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const createNewTask = () => {
     if (!mission.trim()) return;
 

@@ -7,26 +7,19 @@ import {
   Server,
   Clock,
   CheckCircle2,
-  AlertTriangle,
   ArrowUpRight,
   Cpu,
   Target,
-  Sparkles,
   Calendar,
   BarChart3,
 } from "lucide-react";
 import {
   PersonalAnalytics,
-  ProductivityRing,
 } from "@/components/analytics/PersonalAnalytics";
-import { PageHeader } from "@/components/layout/Breadcrumbs";
 import { useMoodCheck } from "@/hooks/useMoodCheck";
 import { MoodTimeline } from "@/components/mood-tracking/MoodTimeline";
 import { WellnessScoreDashboard } from "@/components/mood-tracking/WellnessScoreDashboard";
-import {
-  ShareableInsight,
-  generateProductivityInsight,
-} from "@/components/analytics/ShareableInsight";
+
 import { CollapsibleSection } from "@/components/shared/CollapsibleSection";
 
 export default function Statistics() {
@@ -91,8 +84,8 @@ export default function Statistics() {
     },
   ];
 
-  // Weekly mood data (mock)
-  const weeklyMoods = [
+  // Weekly mood data (mock) - reserved for future chart
+  const _weeklyMoods = [
     70,
     80,
     60,
