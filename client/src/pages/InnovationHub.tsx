@@ -1,5 +1,6 @@
 // @ts-nocheck
 import { useState } from "react";
+import { useLocation } from "wouter";
 import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
 import {
@@ -102,6 +103,7 @@ const STATUS_COLORS: Record<string, string> = {
 };
 
 export default function InnovationHub() {
+  const [, setLocation] = useLocation();
   const [activeTab, setActiveTab] = useState("ideas");
   const [showNewIdeaDialog, setShowNewIdeaDialog] = useState(false);
   const [showArticleDialog, setShowArticleDialog] = useState(false);
@@ -115,8 +117,9 @@ export default function InnovationHub() {
   const [articleContext, setArticleContext] = useState("");
 
   // API calls
-  const { data: ideas, refetch: refetchIdeas } =
+  const { data: ideasData, refetch: refetchIdeas } =
     trpc.innovation.getIdeas.useQuery({});
+  const ideas = ideasData?.ideas;
   const { data: selectedIdeaData, refetch: refetchSelectedIdea } =
     trpc.innovation.getIdeaWithAssessments.useQuery(
       { ideaId: selectedIdea! },
@@ -124,13 +127,18 @@ export default function InnovationHub() {
     );
 
   const captureIdeaMutation = trpc.innovation.captureIdea.useMutation({
-    onSuccess: () => {
-      toast.success("Idea captured successfully!");
+    onSuccess: (data) => {
+      toast.success("Idea captured! Running initial assessment...");
       setShowNewIdeaDialog(false);
       setNewIdeaTitle("");
       setNewIdeaDescription("");
       setNewIdeaCategory("");
       refetchIdeas();
+      // Auto-trigger initial assessment after capture
+      if (data?.id) {
+        setSelectedIdea(data.id);
+        runAssessmentMutation.mutate({ ideaId: data.id, assessmentType: "market_analysis" });
+      }
     },
     onError: error => toast.error(error.message),
   });
@@ -182,10 +190,12 @@ export default function InnovationHub() {
 
   const promoteToGenesisMutation = trpc.innovation.promoteToGenesis.useMutation(
     {
-      onSuccess: () => {
+      onSuccess: (data) => {
         toast.success("Idea promoted to Project Genesis!");
         refetchIdeas();
         setSelectedIdea(null);
+        // Navigate to Project Genesis to see the new project
+        setTimeout(() => setLocation("/project-genesis"), 1000);
       },
       onError: error => toast.error(error.message),
     }

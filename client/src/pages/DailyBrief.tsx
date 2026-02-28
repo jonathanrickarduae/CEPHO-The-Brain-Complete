@@ -561,7 +561,6 @@ export default function DailyBrief() {
               <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6">
                 <div className="flex items-center gap-3">
                   <img
-                    alt="Daily brief illustration"
                     src="/avatars/victoria-stirling.jpg"
                     alt="Victoria Stirling"
                     className="w-10 h-10 rounded-full border-2 border-blue-500"

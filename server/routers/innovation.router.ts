@@ -9,7 +9,7 @@ import { desc, eq, and } from "drizzle-orm";
 import OpenAI from "openai";
 import { protectedProcedure, router } from "../_core/trpc";
 import { db } from "../db";
-import { innovationIdeas } from "../../drizzle/schema";
+import { innovationIdeas, projectGenesis, projectGenesisPhases, ideaAssessments, investmentScenarios } from "../../drizzle/schema";
 
 function getOpenAIClient(): OpenAI {
   const apiKey = process.env.OPENAI_API_KEY;
@@ -60,14 +60,14 @@ export const innovationRouter = router({
    * Get a single idea with all its assessments.
    */
   getIdeaWithAssessments: protectedProcedure
-    .input(z.object({ id: z.number() }))
+    .input(z.object({ ideaId: z.number() }))
     .query(async ({ input, ctx }) => {
       const rows = await db
         .select()
         .from(innovationIdeas)
         .where(
           and(
-            eq(innovationIdeas.id, input.id),
+            eq(innovationIdeas.id, input.ideaId),
             eq(innovationIdeas.userId, ctx.user.id)
           )
         )
@@ -76,23 +76,32 @@ export const innovationRouter = router({
       if (rows.length === 0) return null;
       const idea = rows[0];
 
+      // Fetch assessments and scenarios from DB
+      const [assessmentRows, scenarioRows] = await Promise.all([
+        db.select().from(ideaAssessments).where(eq(ideaAssessments.ideaId, idea.id)),
+        db.select().from(investmentScenarios).where(eq(investmentScenarios.ideaId, idea.id)),
+      ]);
+
       return {
-        id: idea.id,
-        title: idea.title,
-        description: idea.description,
-        source: idea.source,
-        status: idea.status,
-        currentStage: idea.currentStage,
-        priority: idea.priority,
-        category: idea.category,
-        confidenceScore: idea.confidenceScore,
-        briefDocument: idea.briefDocument,
-        estimatedInvestment: idea.estimatedInvestment,
-        estimatedReturn: idea.estimatedReturn,
-        tags: idea.tags,
-        promotedToProjectId: idea.promotedToProjectId,
-        createdAt: idea.createdAt.toISOString(),
-        assessments: [], // Will be populated when assessment tables are wired
+        idea: {
+          id: idea.id,
+          title: idea.title,
+          description: idea.description,
+          source: idea.source,
+          status: idea.status,
+          currentStage: idea.currentStage,
+          priority: idea.priority,
+          category: idea.category,
+          confidenceScore: idea.confidenceScore,
+          briefDocument: idea.briefDocument,
+          estimatedInvestment: idea.estimatedInvestment,
+          estimatedReturn: idea.estimatedReturn,
+          tags: idea.tags,
+          promotedToProjectId: idea.promotedToProjectId,
+          createdAt: idea.createdAt.toISOString(),
+        },
+        assessments: assessmentRows,
+        scenarios: scenarioRows,
       };
     }),
 
@@ -214,7 +223,10 @@ Format as JSON array: [{"title": "...", "description": "...", "category": "...",
    * Run an AI assessment on an idea.
    */
   runAssessment: protectedProcedure
-    .input(z.object({ ideaId: z.number() }))
+    .input(z.object({
+      ideaId: z.number(),
+      assessmentType: z.enum(["market_analysis", "feasibility", "competitive_landscape", "financial_viability", "risk_assessment"]).optional(),
+    }))
     .mutation(async ({ input, ctx }) => {
       const rows = await db
         .select()
@@ -231,14 +243,18 @@ Format as JSON array: [{"title": "...", "description": "...", "category": "...",
       const idea = rows[0];
 
       const openai = getOpenAIClient();
-      const prompt = `Assess this business idea for CEPHO:
+      const assessmentFocus = input.assessmentType?.replace(/_/g, " ") ?? "general viability";
+      const prompt = `Perform a ${assessmentFocus} assessment for this business idea:
 
 Title: ${idea.title}
 Description: ${idea.description ?? "No description provided"}
 Category: ${idea.category ?? "general"}
 
-Provide a JSON assessment with:
+Provide a JSON assessment focused on ${assessmentFocus} with:
 {
+  "assessmentType": "${input.assessmentType ?? "general"}",
+  "score": 0-100,
+  "findings": "2-3 sentence summary of key findings",
   "viabilityScore": 0-100,
   "marketPotential": "low|medium|high",
   "implementationComplexity": "low|medium|high",
@@ -270,6 +286,21 @@ Provide a JSON assessment with:
         };
       }
 
+      // Save assessment to ideaAssessments table
+      const [savedAssessment] = await db
+        .insert(ideaAssessments)
+        .values({
+          ideaId: input.ideaId,
+          assessmentType: input.assessmentType ?? "general",
+          stage: 2,
+          assessorType: "ai",
+          findings: (assessment.findings as string) ?? "Assessment complete",
+          score: (assessment.score as number) ?? (assessment.viabilityScore as number) ?? 70,
+          recommendation: (assessment.recommendation as string) ?? "investigate",
+          metadata: assessment,
+        })
+        .returning();
+
       // Update idea with confidence score
       await db
         .update(innovationIdeas)
@@ -283,7 +314,11 @@ Provide a JSON assessment with:
 
       return {
         success: true,
-        assessment,
+        assessment: {
+          ...savedAssessment,
+          ...assessment,
+          assessmentType: input.assessmentType ?? "general",
+        },
         assessedAt: new Date().toISOString(),
       };
     }),
@@ -570,14 +605,60 @@ Return as JSON: { "title": "...", "description": "...", "category": "...", "prio
         .limit(1);
 
       if (rows.length === 0) throw new Error("Idea not found");
+      const idea = rows[0];
 
+      // Create a real project in Project Genesis
+      const [project] = await db
+        .insert(projectGenesis)
+        .values({
+          userId: ctx.user.id,
+          name: idea.title,
+          type: "startup",
+          stage: "discovery",
+          status: "active",
+          description: idea.description ?? null,
+          metadata: {
+            sourceIdeaId: idea.id,
+            category: idea.category ?? "general",
+            promotedFrom: "innovation_hub",
+          },
+        })
+        .returning();
+
+      // Create all 6 phases for the project
+      const GENESIS_PHASES = [
+        { id: 1, name: "Discovery & Validation" },
+        { id: 2, name: "Business Model Design" },
+        { id: 3, name: "Go-to-Market Strategy" },
+        { id: 4, name: "Financial Projections" },
+        { id: 5, name: "Team & Operations" },
+        { id: 6, name: "Launch Preparation" },
+      ];
+      await db.insert(projectGenesisPhases).values(
+        GENESIS_PHASES.map(phase => ({
+          projectId: project.id,
+          phaseNumber: phase.id,
+          phaseName: phase.name,
+          status: phase.id === 1 ? "in_progress" : "not_started",
+          startedAt: phase.id === 1 ? new Date() : null,
+        }))
+      );
+
+      // Mark idea as promoted and link to the new project
       await db
         .update(innovationIdeas)
-        .set({ status: "promoted", currentStage: 5, updatedAt: new Date() })
+        .set({
+          status: "promoted",
+          currentStage: 5,
+          promotedToProjectId: project.id,
+          updatedAt: new Date(),
+        })
         .where(eq(innovationIdeas.id, input.ideaId));
 
       return {
         success: true,
+        projectId: project.id,
+        projectName: project.name,
         message: "Idea promoted to Project Genesis",
         promotedAt: new Date().toISOString(),
       };

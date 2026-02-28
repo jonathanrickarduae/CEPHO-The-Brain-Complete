@@ -460,31 +460,61 @@ export default function ProjectGenesisPage() {
         />
       )}
 
-      {viewMode === "qms" && currentBlueprint && (
-        <BlueprintQMS
-          genesisBlueprint={currentBlueprint as GenesisBlueprint}
-          pendingChanges={[]}
-          onApplyChanges={(changes, cascadeTargets) => {
-            toast.success("Changes applied successfully!");
-          }}
-          onRejectChanges={changeIds => {
-            toast.info("Changes rejected");
-          }}
-          onViewBlueprint={blueprintId => {
-            if (blueprintId === "edit") {
-              setViewMode("edit_blueprint");
-            } else if (blueprintId === "presentation") {
-              setViewMode("presentation");
-            } else if (blueprintId === "social") {
-              setViewMode("social_media");
-            } else if (blueprintId === "financial") {
-              setViewMode("financial");
-            } else {
-              toast.info(`Opening ${blueprintId} blueprint...`);
-            }
-          }}
-        />
-      )}
+      {viewMode === "qms" && currentBlueprint && (() => {
+        const qmsProject = savedProjects.find(p => String(p.id) === String(currentBlueprint.id));
+        return (
+          <div className="space-y-6 max-w-7xl mx-auto">
+            {/* Back button */}
+            <Button variant="outline" onClick={() => setViewMode("dashboard")} className="mb-2">
+              ← Back to Projects
+            </Button>
+            {/* Phase Progression — wired to live updatePhase endpoint */}
+            {qmsProject && (
+              <ValueChainProgress
+                phaseProgress={qmsProject.phaseProgress}
+                currentPhaseId={qmsProject.currentPhaseId}
+                onStartPhase={(phaseId) => {
+                  updatePhaseMutation.mutate({
+                    projectId: qmsProject.id,
+                    phaseNumber: phaseId,
+                    status: "in_progress",
+                  });
+                }}
+                onRequestReview={(phaseId) => {
+                  updatePhaseMutation.mutate({
+                    projectId: qmsProject.id,
+                    phaseNumber: phaseId,
+                    status: "completed",
+                  });
+                }}
+              />
+            )}
+            <BlueprintQMS
+              genesisBlueprint={currentBlueprint as GenesisBlueprint}
+              pendingChanges={[]}
+              onApplyChanges={(changes, cascadeTargets) => {
+                toast.success("Changes applied successfully!");
+              }}
+              onRejectChanges={changeIds => {
+                toast.info("Changes rejected");
+              }}
+              onViewBlueprint={blueprintId => {
+                if (blueprintId === "edit") {
+                  setViewMode("edit_blueprint");
+                } else if (blueprintId === "presentation") {
+                  setViewMode("presentation");
+                } else if (blueprintId === "social") {
+                  setViewMode("social_media");
+                } else if (blueprintId === "financial") {
+                  setViewMode("financial");
+                } else {
+                  toast.info(`Opening ${blueprintId} blueprint...`);
+                }
+              }}
+            />
+          </div>
+        );
+      })()}
 
       {viewMode === "edit_blueprint" && currentBlueprint && (
         <div className="max-w-7xl mx-auto">

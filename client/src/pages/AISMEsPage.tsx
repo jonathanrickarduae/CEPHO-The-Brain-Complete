@@ -736,7 +736,6 @@ export default function AISMEsPage() {
                           >
                             {expert.avatarUrl ? (
                               <img
-                                alt="SME expert profile"
                                 src={expert.avatarUrl}
                                 alt={expert.name}
                                 className="w-full h-full object-cover"
