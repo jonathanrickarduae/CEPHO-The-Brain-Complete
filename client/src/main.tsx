@@ -57,13 +57,28 @@ queryClient.getMutationCache().subscribe(event => {
   }
 });
 
+// Cache CSRF token to avoid fetching it on every request
+let cachedCsrfToken: string | null = null;
+async function getCsrfToken(): Promise<string> {
+  if (cachedCsrfToken) return cachedCsrfToken;
+  try {
+    const resp = await fetch("/api/csrf-token", { credentials: "include" });
+    const data = await resp.json();
+    cachedCsrfToken = data.csrfToken || "";
+    return cachedCsrfToken as string;
+  } catch {
+    return "";
+  }
+}
+
 const trpcClient = trpc.createClient({
   links: [
     httpBatchLink({
       url: "/api/trpc",
       transformer: superjson,
       async headers() {
-        // Get Supabase session token
+        // Get CSRF token and Supabase session token
+        const csrfToken = await getCsrfToken();
         const { createClient } = await import("@supabase/supabase-js");
         const supabase = createClient(
           import.meta.env.VITE_SUPABASE_URL || "",
@@ -77,6 +92,7 @@ const trpcClient = trpc.createClient({
           authorization: session?.access_token
             ? `Bearer ${session.access_token}`
             : "",
+          "x-csrf-token": csrfToken,
         };
       },
       fetch(input, init) {
