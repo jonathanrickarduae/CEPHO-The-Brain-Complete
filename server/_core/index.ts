@@ -117,6 +117,10 @@ async function startServer() {
   const agentsRoutes = await import("../routes/agents");
   app.use("/api/agents", agentsRoutes.default);
 
+  // Workflows REST routes (for WorkflowsPage and WorkflowDetailPage)
+  const workflowsRoutes = await import("../routes/workflows");
+  app.use("/api/workflows", workflowsRoutes.default);
+
   // tRPC API (mounted at both /api/trpc and /api/v1/trpc for versioning)
   const trpcMiddleware = createExpressMiddleware({
     router: appRouter,
