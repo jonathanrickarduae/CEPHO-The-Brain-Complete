@@ -4,7 +4,7 @@
  * Provides real-time metrics, activity feed, and insights
  * from the database for the Nexus Dashboard.
  */
-import { desc, eq, sql, count } from "drizzle-orm";
+import { desc, eq, count, and, gte } from "drizzle-orm";
 import { protectedProcedure, router } from "../_core/trpc";
 import { db } from "../db";
 import {
@@ -65,7 +65,10 @@ export const dashboardRouter = router({
         .select({ count: count() })
         .from(conversations)
         .where(
-          sql`${conversations.userId} = ${userId} AND ${conversations.createdAt} >= ${thirtyDaysAgo}`
+          and(
+            eq(conversations.userId, userId),
+            gte(conversations.createdAt, thirtyDaysAgo)
+          )
         ),
 
       // Unread notifications
@@ -73,7 +76,10 @@ export const dashboardRouter = router({
         .select({ count: count() })
         .from(notifications)
         .where(
-          sql`${notifications.userId} = ${userId} AND ${notifications.read} = false`
+          and(
+            eq(notifications.userId, userId),
+            eq(notifications.read, false)
+          )
         ),
     ]);
 
