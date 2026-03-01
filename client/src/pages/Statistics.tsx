@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { trpc } from "@/lib/trpc";
 import {
   Activity,
   TrendingUp,
@@ -18,6 +19,16 @@ import { CollapsibleSection } from "@/components/shared/CollapsibleSection";
 import { PageShell } from "@/components/layout/PageShell";
 
 export default function Statistics() {
+  const { data: insights } = trpc.dashboard.getInsights.useQuery();
+  const { data: agentsData } = trpc.aiAgentsMonitoring.getAllStatus.useQuery(undefined, { retry: false });
+
+  // Merge live data into KPI cards where available
+  const liveTasksCompleted = insights?.taskSummary?.completed ?? null;
+  const liveTasksTotal = insights?.taskSummary?.total ?? null;
+  const liveActiveProjects = insights?.projectSummary?.active ?? null;
+  const liveAiConversations = insights?.metrics?.find(m => m.id === "ai_conversations")?.value ?? null;
+  const liveActiveAgents = agentsData?.activeAgents ?? null;
+
   const kpis = [
     {
       id: 1,

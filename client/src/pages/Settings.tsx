@@ -1,6 +1,7 @@
 import { PageShell } from "@/components/layout/PageShell";
 import { useState, useEffect } from "react";
 import { useSearch } from "wouter";
+import { trpc } from "@/lib/trpc";
 import {
   Settings as SettingsIcon,
   Settings2,
@@ -219,6 +220,71 @@ function VaultPanel() {
     </div>
   );
 }
+
+// ─── Profile Tab (wired to real auth.updateProfile) ──────────────────────────
+function ProfileTab() {
+  const { data: me } = trpc.auth.me.useQuery();
+  const utils = trpc.useUtils();
+  const updateProfile = trpc.auth.updateProfile.useMutation({
+    onSuccess: () => utils.auth.me.invalidate(),
+  });
+  const [name, setName] = useState("");
+  const [saved, setSaved] = useState(false);
+
+  useEffect(() => {
+    if (me?.name) setName(me.name);
+  }, [me?.name]);
+
+  const handleSave = () => {
+    updateProfile.mutate({ name }, {
+      onSuccess: () => {
+        setSaved(true);
+        setTimeout(() => setSaved(false), 2000);
+      },
+    });
+  };
+
+  return (
+    <div className="bg-card rounded-xl border border-border p-6">
+      <h3 className="text-lg font-semibold text-white mb-6">Profile Settings</h3>
+      <div className="space-y-6">
+        <div className="flex items-center gap-4">
+          <div className="w-20 h-20 rounded-full bg-gradient-to-br from-cyan-500 to-purple-600 flex items-center justify-center">
+            <span className="text-3xl">🧠</span>
+          </div>
+        </div>
+        <div className="grid gap-4">
+          <div>
+            <label className="block text-sm text-foreground/70 mb-2">Display Name</label>
+            <input
+              type="text"
+              value={name}
+              onChange={e => setName(e.target.value)}
+              className="w-full px-4 py-2 bg-background border border-border rounded-lg text-white focus:outline-none focus:border-[var(--brain-cyan)]"
+            />
+          </div>
+          <div>
+            <label className="block text-sm text-foreground/70 mb-2">Email</label>
+            <input
+              type="email"
+              value={me?.email ?? ""}
+              readOnly
+              className="w-full px-4 py-2 bg-background border border-border rounded-lg text-white/50 cursor-not-allowed"
+            />
+          </div>
+        </div>
+        <button
+          onClick={handleSave}
+          disabled={updateProfile.isPending}
+          className="px-6 py-2 bg-cyan-500 hover:bg-cyan-600 disabled:opacity-50 text-white rounded-lg transition-colors"
+        >
+          {updateProfile.isPending ? "Saving…" : saved ? "✓ Saved" : "Save Changes"}
+        </button>
+      </div>
+    </div>
+  );
+}
+
 
 export default function Settings() {
   const search = useSearch();

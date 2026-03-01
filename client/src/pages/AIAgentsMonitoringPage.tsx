@@ -33,6 +33,12 @@ export default function AIAgentsMonitoringPage() {
   } = trpc.aiAgentsMonitoring.getAllStatus.useQuery(undefined, { retry: 2 });
 
   const { data: reportsData } = trpc.aiAgentsMonitoring.getDailyReports.useQuery({});
+  const utils = trpc.useUtils();
+  const reviewRequest = trpc.aiAgentsMonitoring.reviewRequest.useMutation({
+    onSuccess: () => {
+      utils.aiAgentsMonitoring.getDailyReports.invalidate();
+    },
+  });
 
   const agents = agentsData?.agents || [];
   const reports = reportsData?.reports || [];
@@ -292,11 +298,22 @@ export default function AIAgentsMonitoringPage() {
                         </div>
                         {request.status === "pending" && (
                           <div className="flex gap-2 mt-2">
-                            <Button size="sm" className="flex-1 bg-green-600 hover:bg-green-700 text-white gap-1.5">
+                            <Button
+                              size="sm"
+                              className="flex-1 bg-green-600 hover:bg-green-700 text-white gap-1.5"
+                              disabled={reviewRequest.isPending}
+                              onClick={() => reviewRequest.mutate({ requestId: request.id, agentId: selectedAgent!, decision: "approved" })}
+                            >
                               <CheckCircle className="w-3.5 h-3.5" />
                               Approve
                             </Button>
-                            <Button size="sm" variant="destructive" className="flex-1 gap-1.5">
+                            <Button
+                              size="sm"
+                              variant="destructive"
+                              className="flex-1 gap-1.5"
+                              disabled={reviewRequest.isPending}
+                              onClick={() => reviewRequest.mutate({ requestId: request.id, agentId: selectedAgent!, decision: "denied" })}
+                            >
                               <XCircle className="w-3.5 h-3.5" />
                               Deny
                             </Button>

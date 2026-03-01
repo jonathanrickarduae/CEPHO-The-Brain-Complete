@@ -7,7 +7,7 @@ import { z } from "zod";
 import { desc, eq, and, inArray } from "drizzle-orm";
 import { protectedProcedure, publicProcedure, router } from "../_core/trpc";
 import { db } from "../db";
-import { integrations, tasks, smeTeams } from "../../drizzle/schema";
+import { integrations, tasks, smeTeams, users } from "../../drizzle/schema";
 
 // ─── Auth Router ─────────────────────────────────────────────────────────────
 export const authRouter = router({
@@ -25,6 +25,29 @@ export const authRouter = router({
     // Session is managed by simple-auth cookie — client clears it
     return { success: true };
   }),
+
+  updateProfile: protectedProcedure
+    .input(
+      z.object({
+        name: z.string().min(1).max(128).optional(),
+        timezone: z.string().optional(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const updates: Record<string, unknown> = { updatedAt: new Date() };
+      if (input.name !== undefined) updates.name = input.name;
+      const [updated] = await db
+        .update(users)
+        .set(updates)
+        .where(eq(users.id, ctx.user.id))
+        .returning();
+      return {
+        id: updated.id,
+        name: updated.name,
+        email: updated.email,
+        role: updated.role,
+      };
+    }),
 });
 
 // ─── Theme Router ─────────────────────────────────────────────────────────────
