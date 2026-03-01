@@ -34,9 +34,14 @@ const queryClient = new QueryClient({
   },
 });
 
-const redirectToLoginIfUnauthorized = (_error: unknown) => {
-  // Authentication bypass - do not redirect to login
-  return;
+const redirectToLoginIfUnauthorized = (error: unknown) => {
+  // P1-SEC-01: Redirect to login page on UNAUTHORIZED or FORBIDDEN errors
+  if (
+    error instanceof TRPCClientError &&
+    (error.data?.code === "UNAUTHORIZED" || error.data?.code === "FORBIDDEN")
+  ) {
+    window.location.href = getLoginUrl();
+  }
 };
 
 queryClient.getQueryCache().subscribe(event => {

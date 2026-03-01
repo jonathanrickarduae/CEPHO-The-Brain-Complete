@@ -276,7 +276,7 @@ function BrainLayoutContent({
     <>
       <div className="relative" ref={sidebarRef}>
         <Sidebar
-          collapsible="icon"
+          collapsible={isMobile ? "offcanvas" : "icon"}
           className="border-r border-sidebar-border bg-sidebar backdrop-blur-xl"
           disableTransition={isResizing}
         >

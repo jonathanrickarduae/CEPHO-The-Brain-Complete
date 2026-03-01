@@ -58,21 +58,22 @@ export default function DevelopmentPathway() {
   const [activeTab, setActiveTab] = useState("overview");
 
   // Fetch ideas from Innovation Hub
-  const { data: ideas, isLoading: ideasLoading } =
+  // getIdeas returns { ideas: [...] } — unwrap the array safely (P1-BUG-01)
+  const { data: ideasData, isLoading: ideasLoading } =
     trpc.innovation.getIdeas.useQuery({});
+  const ideas = ideasData?.ideas ?? [];
 
   // Calculate pipeline statistics
   const pipelineStats = {
-    total: ideas?.length || 0,
-    captured: ideas?.filter(i => i.status === "captured").length || 0,
-    assessing: ideas?.filter(i => i.status === "assessing").length || 0,
-    validated: ideas?.filter(i => i.status === "validated").length || 0,
-    promoted:
-      ideas?.filter(i => i.status === "promoted_to_genesis").length || 0,
+    total: ideas.length,
+    captured: ideas.filter(i => i.status === "captured").length,
+    assessing: ideas.filter(i => i.status === "assessing").length,
+    validated: ideas.filter(i => i.status === "validated").length,
+    promoted: ideas.filter(i => i.status === "promoted_to_genesis").length,
   };
 
   // Get recent ideas for quick view
-  const recentIdeas = ideas?.slice(0, 5) || [];
+  const recentIdeas = ideas.slice(0, 5);
 
   // Next review date (Monday or Thursday, whichever is next)
   const getNextReviewDate = () => {

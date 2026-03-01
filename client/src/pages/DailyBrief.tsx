@@ -359,37 +359,48 @@ export default function DailyBrief() {
   const generateAudioMutation = trpc.victoriasBrief.generateAudio.useMutation();
 
   const handleExport = async (format: "pdf" | "video" | "audio") => {
+    // P1-BUG-02: Guard against null URLs before calling window.open
+    const briefDate = liveBrief?.date ?? new Date().toISOString();
+    const briefText = liveBrief?.briefing ?? `Good morning! Here's your daily brief for ${new Date().toLocaleDateString()}.`;
     try {
       if (format === "pdf") {
-        toast.info("Generating 2-page PDF brief...");
+        toast.info("Generating PDF brief...");
         const result = await generatePdfMutation.mutateAsync({
-          date: BRIEF_DATA.date,
-          content: BRIEF_DATA,
+          date: briefDate,
+          content: liveBrief ?? BRIEF_DATA,
         });
-        window.open(result.pdfUrl, "_blank");
-        toast.success("PDF generated successfully!");
+        if (result.pdfUrl) {
+          window.open(result.pdfUrl, "_blank");
+          toast.success("PDF generated successfully!");
+        } else {
+          toast.info(result.message || "PDF generation queued. Check back shortly.");
+        }
       } else if (format === "video") {
         toast.info("Creating video brief with Victoria...");
         const result = await generateVideoMutation.mutateAsync({
-          script: `Good morning! Here's your brief for ${BRIEF_DATA.date}...`,
+          script: briefText,
           avatarId: "victoria",
         });
         if (result.status === "processing") {
-          toast.info(
-            "Video is being generated. You'll be notified when ready."
-          );
-        } else {
+          toast.info("Video is being generated. You'll be notified when ready.");
+        } else if (result.videoUrl) {
           window.open(result.videoUrl, "_blank");
           toast.success("Video generated successfully!");
+        } else {
+          toast.info(result.message || "Video generation requires Synthesia API key.");
         }
       } else if (format === "audio") {
         toast.info("Creating podcast version with Victoria's voice...");
         const result = await generateAudioMutation.mutateAsync({
-          text: `Good morning! Here's your brief for ${BRIEF_DATA.date}...`,
+          text: briefText.slice(0, 800),
           voiceId: "victoria",
         });
-        window.open(result.audioUrl, "_blank");
-        toast.success("Audio generated successfully!");
+        if (result.audioUrl) {
+          window.open(result.audioUrl, "_blank");
+          toast.success("Audio generated successfully!");
+        } else {
+          toast.info(result.message || "Audio generation requires ElevenLabs API key.");
+        }
       }
     } catch {
       toast.error(`Failed to generate ${format}. Please try again.`);

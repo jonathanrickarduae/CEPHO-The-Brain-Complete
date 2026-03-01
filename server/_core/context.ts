@@ -11,19 +11,9 @@ export type TrpcContext = {
   user: User | null;
 };
 
-// Mock admin user for PIN-gated access (no Supabase auth required)
-const MOCK_ADMIN_USER = {
-  id: 1,
-  openId: "mock-admin-openid",
-  email: "admin@cepho.ai",
-  name: "Victoria",
-  loginMethod: "pin",
-  role: "admin",
-  themePreference: "dark",
-  createdAt: new Date(),
-  updatedAt: new Date(),
-  lastSignedIn: new Date(),
-} as unknown as User;
+// P1-SEC-01: MOCK_ADMIN_USER removed. All unauthenticated requests will have
+// ctx.user = null and will be rejected by the protectedProcedure middleware.
+// This closes the critical security vulnerability where any visitor had admin access.
 
 export async function createContext(
   opts: CreateExpressContextOptions
@@ -59,13 +49,12 @@ export async function createContext(
           .returning();
         user = newUser;
       }
-    } else {
-      // No Supabase session — use mock admin user (PIN gate handles access control)
-      user = MOCK_ADMIN_USER;
     }
+    // No Supabase session — user is unauthenticated. ctx.user remains null.
+    // protectedProcedure will throw UNAUTHORIZED for all protected routes.
   } catch (error) {
-    // On any error, fall back to mock admin user so the app remains functional
-    user = MOCK_ADMIN_USER;
+    // On any auth error, treat as unauthenticated.
+    user = null;
   }
 
   return {
