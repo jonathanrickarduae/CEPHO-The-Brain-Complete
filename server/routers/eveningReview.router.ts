@@ -94,19 +94,34 @@ export const eveningReviewRouter = router({
         tasksAccepted: z.number().default(0),
         tasksDeferred: z.number().default(0),
         tasksRejected: z.number().default(0),
+        decisions: z.array(
+          z.object({
+            taskTitle: z.string(),
+            projectName: z.string().optional(),
+            decision: z.enum(["accepted", "deferred", "rejected"]),
+            priority: z.string().optional(),
+            estimatedTime: z.string().optional(),
+          })
+        ).optional(),
       })
     )
     .mutation(async ({ input, ctx }) => {
-      await db
+      // Count decisions if provided
+      const accepted = input.decisions?.filter(d => d.decision === "accepted").length ?? input.tasksAccepted;
+      const deferred = input.decisions?.filter(d => d.decision === "deferred").length ?? input.tasksDeferred;
+      const rejected = input.decisions?.filter(d => d.decision === "rejected").length ?? input.tasksRejected;
+      const signalItems = accepted; // Each accepted task becomes a signal item
+        await db
         .update(eveningReviewSessions)
         .set({
           completedAt: new Date(),
           moodScore: input.moodScore ?? null,
           wentWellNotes: input.wentWellNotes ?? null,
           didntGoWellNotes: input.didntGoWellNotes ?? null,
-          tasksAccepted: input.tasksAccepted,
-          tasksDeferred: input.tasksDeferred,
-          tasksRejected: input.tasksRejected,
+          tasksAccepted: accepted,
+          tasksDeferred: deferred,
+          tasksRejected: rejected,
+          signalItemsGenerated: signalItems,
         })
         .where(
           and(
@@ -114,7 +129,6 @@ export const eveningReviewRouter = router({
             eq(eveningReviewSessions.userId, ctx.user.id)
           )
         );
-
       // Log to activity feed
       await db.insert(activityFeed).values({
         userId: ctx.user.id,
@@ -124,10 +138,9 @@ export const eveningReviewRouter = router({
         targetType: "evening_review",
         targetId: input.sessionId,
         targetName: "Evening Review",
-        description: `Completed evening review: ${input.tasksAccepted} accepted, ${input.tasksDeferred} deferred, ${input.tasksRejected} rejected`,
+        description: `Completed evening review: ${accepted} accepted, ${deferred} deferred, ${rejected} rejected`,
       });
-
-      return { success: true, completedAt: new Date().toISOString() };
+      return { success: true, completedAt: new Date().toISOString(), signalItemsGenerated: signalItems };
     }),
 
   /**

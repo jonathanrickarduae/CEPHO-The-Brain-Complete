@@ -142,51 +142,86 @@ Format as a professional Markdown document with:
     }),
 
   /**
-   * Delete a document.
+   * Delete a document — accepts either numeric id or string documentId.
    */
   delete: protectedProcedure
-    .input(z.object({ id: z.number() }))
+    .input(
+      z.object({
+        id: z.number().optional(),
+        documentId: z.string().optional(),
+      })
+    )
     .mutation(async ({ input, ctx }) => {
-      await db
-        .delete(generatedDocuments)
-        .where(
-          and(
-            eq(generatedDocuments.id, input.id),
-            eq(generatedDocuments.userId, ctx.user.id)
-          )
-        );
-
+      if (input.id) {
+        await db
+          .delete(generatedDocuments)
+          .where(
+            and(
+              eq(generatedDocuments.id, input.id),
+              eq(generatedDocuments.userId, ctx.user.id)
+            )
+          );
+      } else if (input.documentId) {
+        await db
+          .delete(generatedDocuments)
+          .where(
+            and(
+              eq(generatedDocuments.documentId, input.documentId),
+              eq(generatedDocuments.userId, ctx.user.id)
+            )
+          );
+      }
       return { success: true };
     }),
 
   /**
-   * Update QA status of a document.
+   * Update QA status — accepts either numeric id or string documentId.
    */
   updateQAStatus: protectedProcedure
     .input(
       z.object({
-        id: z.number(),
-        qaStatus: z.enum(["pending", "approved", "rejected", "needs_revision"]),
+        id: z.number().optional(),
+        documentId: z.string().optional(),
+        qaStatus: z.enum(["pending", "approved", "rejected", "needs_revision"]).optional(),
+        status: z.enum(["pending", "approved", "rejected", "needs_revision"]).optional(),
         qaNotes: z.string().optional(),
+        notes: z.string().optional(),
         qaApprovedBy: z.string().optional(),
       })
     )
     .mutation(async ({ input, ctx }) => {
-      await db
-        .update(generatedDocuments)
-        .set({
-          qaStatus: input.qaStatus,
-          qaNotes: input.qaNotes ?? null,
-          qaApprovedBy: input.qaApprovedBy ?? null,
-          qaApprovedAt: input.qaStatus === "approved" ? new Date() : null,
-          updatedAt: new Date(),
-        })
-        .where(
-          and(
-            eq(generatedDocuments.id, input.id),
-            eq(generatedDocuments.userId, ctx.user.id)
-          )
-        );
+      const newStatus = input.qaStatus ?? input.status ?? "pending";
+      const newNotes = input.qaNotes ?? input.notes ?? null;
+
+      const updateData = {
+        qaStatus: newStatus,
+        qaNotes: newNotes,
+        qaApprovedBy: input.qaApprovedBy ?? null,
+        qaApprovedAt: newStatus === "approved" ? new Date() : null,
+        updatedAt: new Date(),
+      };
+
+      if (input.id) {
+        await db
+          .update(generatedDocuments)
+          .set(updateData)
+          .where(
+            and(
+              eq(generatedDocuments.id, input.id),
+              eq(generatedDocuments.userId, ctx.user.id)
+            )
+          );
+      } else if (input.documentId) {
+        await db
+          .update(generatedDocuments)
+          .set(updateData)
+          .where(
+            and(
+              eq(generatedDocuments.documentId, input.documentId),
+              eq(generatedDocuments.userId, ctx.user.id)
+            )
+          );
+      }
 
       return { success: true };
     }),
@@ -197,19 +232,25 @@ Format as a professional Markdown document with:
   sendEmail: protectedProcedure
     .input(
       z.object({
-        documentId: z.number(),
-        recipients: z.array(z.string().email()),
+        documentId: z.union([z.number(), z.string()]),
+        recipients: z.array(
+          z.union([
+            z.string().email(),
+            z.object({ email: z.string().email(), name: z.string().optional() }),
+          ])
+        ),
         subject: z.string().optional(),
         message: z.string().optional(),
+        includeAsLink: z.boolean().optional(),
       })
     )
     .mutation(async ({ input }) => {
       // In production this would use SendGrid/SES
       // For now, log the intent and return success
-
+      const recipientCount = input.recipients.length;
       return {
         success: true,
-        sent: input.recipients.length,
+        sent: recipientCount,
         message: "Email queued for delivery",
       };
     }),
@@ -218,7 +259,7 @@ Format as a professional Markdown document with:
    * Get email history for a document.
    */
   getEmailHistory: protectedProcedure
-    .input(z.object({ documentId: z.number() }))
+    .input(z.object({ documentId: z.union([z.number(), z.string()]) }))
     .query(async () => {
       // Returns empty history until email tracking is implemented
       return { history: [] };
