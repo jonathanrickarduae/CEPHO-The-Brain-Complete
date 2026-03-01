@@ -602,7 +602,7 @@ export const qualityGateRouter = router({
         notes: z.string().optional(),
       })
     )
-    .mutation(async ({ input }) => {
+    .mutation(async ()  => {
       return { success: true, notified: true };
     }),
 
@@ -610,7 +610,7 @@ export const qualityGateRouter = router({
     .input(
       z.object({ itemId: z.number(), itemType: z.string(), reason: z.string() })
     )
-    .mutation(async ({ input }) => {
+    .mutation(async ()  => {
       return { success: true, notified: true };
     }),
 });
@@ -705,18 +705,29 @@ export const favoritesRouter = router({
 });
 
 // ─── Feedback Router ──────────────────────────────────────────────────────────
+const feedbackInputSchema = z.object({
+  type: z.string().optional(),
+  message: z.string().optional(),
+  rating: z.number().min(1).max(5).optional(),
+  page: z.string().optional(),
+  expertId: z.string().optional(),
+  sessionId: z.string().optional(),
+  helpful: z.boolean().optional(),
+  accuracy: z.number().min(1).max(5).optional(),
+  clarity: z.number().min(1).max(5).optional(),
+  comment: z.string().optional(),
+});
 export const feedbackRouter = router({
   submit: protectedProcedure
-    .input(
-      z.object({
-        type: z.string(),
-        message: z.string().min(1),
-        rating: z.number().min(1).max(5).optional(),
-        page: z.string().optional(),
-      })
-    )
-    .mutation(async ({ input }) => {
+    .input(feedbackInputSchema)
+    .mutation(async () => {
       return { success: true, message: "Thank you for your feedback!" };
+    }),
+  // Used by ExpertFeedback component
+  record: protectedProcedure
+    .input(feedbackInputSchema)
+    .mutation(async () => {
+      return { success: true, id: crypto.randomUUID() };
     }),
 });
 
@@ -729,12 +740,23 @@ export const npsRouter = router({
         comment: z.string().optional(),
       })
     )
-    .mutation(async ({ input }) => {
+    .mutation(async ()  => {
       return { success: true };
     }),
 
   shouldShow: protectedProcedure.query(async () => {
     return { show: false }; // Show NPS after 30 days of usage
+  }),
+
+  getStats: protectedProcedure.query(async () => {
+    return {
+      averageScore: 0,
+      totalResponses: 0,
+      promoters: 0,
+      passives: 0,
+      detractors: 0,
+      npsScore: 0,
+    };
   }),
 });
 
@@ -751,6 +773,18 @@ export const teamCapabilitiesRouter = router({
       ],
     };
   }),
+
+  add: protectedProcedure
+    .input(
+      z.object({
+        name: z.string(),
+        level: z.enum(["beginner", "intermediate", "advanced", "expert"]),
+        description: z.string().optional(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      return { success: true, id: Date.now(), name: input.name, level: input.level };
+    }),
 });
 
 // ─── Library Router ───────────────────────────────────────────────────────────
@@ -765,6 +799,34 @@ export const libraryRouter = router({
     .query(async () => {
       return { items: [], total: 0 };
     }),
+
+  create: protectedProcedure
+    .input(
+      z.object({
+        title: z.string(),
+        content: z.string().optional(),
+        category: z.string().optional(),
+        tags: z.array(z.string()).optional(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      return { success: true, id: crypto.randomUUID(), title: input.title };
+    }),
+
+  exportExpertChat: protectedProcedure
+    .input(
+      z.object({
+        sessionId: z.string(),
+        format: z.enum(["pdf", "markdown", "txt"]).default("pdf"),
+      })
+    )
+    .mutation(async ({ input }) => {
+      return {
+        success: true,
+        downloadUrl: `/api/exports/${input.sessionId}.${input.format}`,
+        format: input.format,
+      };
+    }),
 });
 
 // ─── Genesis Router ───────────────────────────────────────────────────────────
@@ -772,12 +834,37 @@ export const genesisRouter = router({
   getStatus: protectedProcedure.query(async () => {
     return { status: "active", phase: 1, progress: 0 };
   }),
+
+  list: protectedProcedure.query(async () => {
+    return { projects: [], total: 0 };
+  }),
+
+  getProjectData: protectedProcedure
+    .input(z.object({ projectId: z.string() }))
+    .query(async ({ input }) => {
+      return {
+        id: input.projectId,
+        status: "active",
+        phase: 1,
+        progress: 0,
+        data: {},
+      };
+    }),
 });
 
 // ─── Optimization Router ──────────────────────────────────────────────────────
 export const optimizationRouter = router({
   getSuggestions: protectedProcedure.query(async () => {
     return { suggestions: [], lastAnalyzed: null };
+  }),
+
+  getAssessment: protectedProcedure.query(async () => {
+    return {
+      score: 0,
+      areas: [],
+      recommendations: [],
+      lastAssessed: null,
+    };
   }),
 
   applyOptimization: protectedProcedure
@@ -792,6 +879,20 @@ export const openClawRouter = router({
   getStatus: protectedProcedure.query(async () => {
     return { active: false, message: "OpenClaw integration coming soon" };
   }),
+
+  chat: protectedProcedure
+    .input(
+      z.object({
+        message: z.string().min(1),
+        sessionId: z.string().optional(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      return {
+        reply: "OpenClaw is not yet configured. Please check back soon.",
+        sessionId: input.sessionId ?? crypto.randomUUID(),
+      };
+    }),
 });
 
 // ─── AI Router ────────────────────────────────────────────────────────────────

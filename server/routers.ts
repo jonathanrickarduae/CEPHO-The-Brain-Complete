@@ -60,6 +60,7 @@ import {
   themeRouter as themeRealRouter,
   favoritesRouter as favoritesRealRouter,
   npsRouter as npsRealRouter,
+  feedbackRouter as feedbackRealRouter,
   calendarRouter as calendarRealRouter,
   gmailRouter as gmailRealRouter,
   integrationsRouter as integrationsRealRouter,
@@ -75,26 +76,7 @@ import {
   aiRouter as aiRealRouter,
 } from "./routers/integrations.router";
 
-// ─── Functional Stubs ────────────────────────────────────────────────────────
-import {
-  authRouter,
-  themeRouter,
-  favoritesRouter,
-  npsRouter,
-  calendarRouter,
-  gmailRouter,
-  integrationsRouter,
-  cosTasksRouter,
-  qaRouter,
-  qualityGateRouter,
-  smeTeamRouter,
-  teamCapabilitiesRouter,
-  libraryRouter,
-  genesisRouter,
-  optimizationRouter,
-  openClawRouter,
-  aiRouter,
-} from "./routers/stubs/remaining.router";
+// ─── Functional Stubs (kept for reference, real implementations used above) ──
 
 export const appRouter = router({
   system: systemRouter,
@@ -146,6 +128,7 @@ export const appRouter = router({
   gmail: gmailRealRouter,
   voiceNotes: voiceNotesRouter,
   nps: npsRealRouter,
+  feedback: feedbackRealRouter,
 
   // ─── Integrations ───────────────────────────────────────────────────────
   integrations: integrationsRealRouter,

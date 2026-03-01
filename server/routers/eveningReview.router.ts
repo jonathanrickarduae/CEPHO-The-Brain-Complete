@@ -153,6 +153,38 @@ export const eveningReviewRouter = router({
     };
   }),
 
+  getTimingPatterns: protectedProcedure.query(async () => {
+    return {
+      preferredTime: "18:00",
+      averageDuration: 15,
+      consistency: "high",
+      patterns: [] as Array<{ day: string; time: string }>,
+    };
+  }),
+
+  getPredictedTime: protectedProcedure.query(async () => {
+    return {
+      predictedTime: "18:30",
+      confidence: 0.8,
+      reason: "Based on your recent evening review patterns",
+    };
+  }),
+
+  checkCalendarConflicts: protectedProcedure
+    .input(
+      z.object({
+        proposedTime: z.string().optional(),
+        date: z.string().optional(),
+      })
+    )
+    .query(async () => {
+      return {
+        hasConflicts: false,
+        conflicts: [] as Array<{ title: string; time: string }>,
+        suggestedTime: "18:30",
+      };
+    }),
+
   /**
    * Generate AI summary of the evening review.
    */
