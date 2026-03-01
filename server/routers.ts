@@ -44,6 +44,18 @@ import {
   collaborativeReviewRouter as collaborativeReviewRealRouter,
 } from "./routers/businessPlanReview.router";
 import {
+  notionRouter,
+  trelloRouter,
+  calendlyRouter,
+  zoomRouter,
+  githubRouter,
+  emailRouter,
+  anthropicRouter,
+  synthesiaRouter,
+  todoistRouter,
+  asanaRouter,
+} from "./routers/externalIntegrations.router";
+import {
   authRouter as authRealRouter,
   themeRouter as themeRealRouter,
   favoritesRouter as favoritesRealRouter,
@@ -151,6 +163,18 @@ export const appRouter = router({
   // ─── Documents & Library ────────────────────────────────────────────────
   documentLibrary: documentLibraryRealRouter,
   library: libraryRealRouter,
+
+  // ─── External API Integrations ─────────────────────────────────────────
+  notion: notionRouter,
+  trello: trelloRouter,
+  calendly: calendlyRouter,
+  zoom: zoomRouter,
+  github: githubRouter,
+  email: emailRouter,
+  anthropic: anthropicRouter,
+  synthesia: synthesiaRouter,
+  todoist: todoistRouter,
+  asana: asanaRouter,
 
   // ─── Business Tools ─────────────────────────────────────────────────────
   subscriptionTracker: subscriptionTrackerRealRouter,

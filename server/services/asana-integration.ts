@@ -1,5 +1,6 @@
 import axios from "axios";
 import { logger } from "../utils/logger";
+import { ENV } from "../_core/env";
 const log = logger.module("AsanaIntegration");
 
 interface AsanaProject {
@@ -35,11 +36,22 @@ export class AsanaIntegrationService {
   private apiKey: string;
   private baseUrl = "https://app.asana.com/api/1.0";
 
-  constructor(apiKey: string) {
-    if (!apiKey) {
-      throw new Error("Asana API key is required");
+  constructor(apiKey?: string) {
+    this.apiKey = apiKey ?? ENV.asanaApiKey;
+  }
+
+  isConfigured(): boolean {
+    return !!this.apiKey;
+  }
+
+  /** Test connection by fetching workspaces */
+  async testConnection(): Promise<{ ok: boolean; workspaceCount?: number; error?: string }> {
+    try {
+      const workspaces = await this.getWorkspaces();
+      return { ok: true, workspaceCount: workspaces.length };
+    } catch (err) {
+      return { ok: false, error: String(err) };
     }
-    this.apiKey = apiKey;
   }
 
   private getHeaders() {
@@ -58,12 +70,12 @@ export class AsanaIntegrationService {
         headers: this.getHeaders(),
       });
       return response.data.data;
-    } catch (error: any) {
+    } catch (error: unknown) {
       log.error(
         "[Asana] Failed to get workspaces:",
-        error.response?.data || error.message
+        (error as { response?: { data?: unknown }; message?: string }).response?.data || (error as Error).message
       );
-      throw new Error(`Failed to get Asana workspaces: ${error.message}`);
+      throw new Error(`Failed to get Asana workspaces: ${(error as Error).message}`);
     }
   }
 
@@ -79,12 +91,12 @@ export class AsanaIntegrationService {
         },
       });
       return response.data.data;
-    } catch (error: any) {
+    } catch (error: unknown) {
       log.error(
         "[Asana] Failed to get projects:",
-        error.response?.data || error.message
+        (error as { response?: { data?: unknown }; message?: string }).response?.data || (error as Error).message
       );
-      throw new Error(`Failed to get Asana projects: ${error.message}`);
+      throw new Error(`Failed to get Asana projects: ${(error as Error).message}`);
     }
   }
 
@@ -122,12 +134,12 @@ export class AsanaIntegrationService {
         `[Asana] Created project: ${options.name} (${response.data.data.gid})`
       );
       return response.data.data;
-    } catch (error: any) {
+    } catch (error: unknown) {
       log.error(
         "[Asana] Failed to create project:",
-        error.response?.data || error.message
+        (error as { response?: { data?: unknown }; message?: string }).response?.data || (error as Error).message
       );
-      throw new Error(`Failed to create Asana project: ${error.message}`);
+      throw new Error(`Failed to create Asana project: ${(error as Error).message}`);
     }
   }
 
@@ -143,12 +155,12 @@ export class AsanaIntegrationService {
         },
       });
       return response.data.data;
-    } catch (error: any) {
+    } catch (error: unknown) {
       log.error(
         "[Asana] Failed to get tasks:",
-        error.response?.data || error.message
+        (error as { response?: { data?: unknown }; message?: string }).response?.data || (error as Error).message
       );
-      throw new Error(`Failed to get Asana tasks: ${error.message}`);
+      throw new Error(`Failed to get Asana tasks: ${(error as Error).message}`);
     }
   }
 
@@ -157,7 +169,7 @@ export class AsanaIntegrationService {
    */
   async createTask(options: CreateTaskOptions): Promise<AsanaTask> {
     try {
-      const taskData: any = {
+      const taskData: Record<string, unknown> = {
         name: options.name,
         notes: options.notes || "",
         projects: [options.projectGid],
@@ -185,12 +197,12 @@ export class AsanaIntegrationService {
         `[Asana] Created task: ${options.name} (${response.data.data.gid})`
       );
       return response.data.data;
-    } catch (error: any) {
+    } catch (error: unknown) {
       log.error(
         "[Asana] Failed to create task:",
-        error.response?.data || error.message
+        (error as { response?: { data?: unknown }; message?: string }).response?.data || (error as Error).message
       );
-      throw new Error(`Failed to create Asana task: ${error.message}`);
+      throw new Error(`Failed to create Asana task: ${(error as Error).message}`);
     }
   }
 
@@ -218,12 +230,12 @@ export class AsanaIntegrationService {
         `[Asana] Updated task ${taskGid} status to: ${completed ? "completed" : "incomplete"}`
       );
       return response.data.data;
-    } catch (error: any) {
+    } catch (error: unknown) {
       log.error(
         "[Asana] Failed to update task:",
-        error.response?.data || error.message
+        (error as { response?: { data?: unknown }; message?: string }).response?.data || (error as Error).message
       );
-      throw new Error(`Failed to update Asana task: ${error.message}`);
+      throw new Error(`Failed to update Asana task: ${(error as Error).message}`);
     }
   }
 
@@ -275,23 +287,21 @@ export class AsanaIntegrationService {
         project: asanaProject,
         tasks: createdTasks,
       };
-    } catch (error: any) {
-      log.error("[Asana] Failed to sync project:", error.message);
+    } catch (error: unknown) {
+      log.error("[Asana] Failed to sync project:", (error as Error).message);
       throw error;
     }
   }
 }
 
-// Singleton instance
-let asanaService: AsanaIntegrationService | null = null;
+// Singleton instance — uses ENV.asanaApiKey (ASANA_API env var)
+let _asanaService: AsanaIntegrationService | null = null;
 
 export function getAsanaService(): AsanaIntegrationService {
-  if (!asanaService) {
-    const apiKey = process.env.ASANA_API_KEY;
-    if (!apiKey) {
-      throw new Error("ASANA_API_KEY environment variable is not set");
-    }
-    asanaService = new AsanaIntegrationService(apiKey);
+  if (!_asanaService) {
+    _asanaService = new AsanaIntegrationService();
   }
-  return asanaService;
+  return _asanaService;
 }
+
+export const asanaService = new AsanaIntegrationService();

@@ -42,19 +42,28 @@ export const themeRouter = router({
 
 // ─── Integrations Router ──────────────────────────────────────────────────────
 const SUPPORTED_PROVIDERS = [
+  // Productivity
   { id: "asana", name: "Asana", category: "productivity", icon: "asana" },
-  {
-    id: "google",
-    name: "Google Calendar",
-    category: "calendar",
-    icon: "google",
-  },
-  { id: "outlook", name: "Outlook", category: "calendar", icon: "microsoft" },
-  { id: "slack", name: "Slack", category: "communication", icon: "slack" },
-  { id: "zoom", name: "Zoom", category: "communication", icon: "zoom" },
   { id: "todoist", name: "Todoist", category: "productivity", icon: "todoist" },
   { id: "notion", name: "Notion", category: "productivity", icon: "notion" },
+  { id: "trello", name: "Trello", category: "productivity", icon: "trello" },
+  // Calendar & Scheduling
+  { id: "google", name: "Google Calendar", category: "calendar", icon: "google" },
+  { id: "outlook", name: "Outlook", category: "calendar", icon: "microsoft" },
+  { id: "calendly", name: "Calendly", category: "calendar", icon: "calendly" },
+  // Communication
+  { id: "slack", name: "Slack", category: "communication", icon: "slack" },
+  { id: "zoom", name: "Zoom", category: "communication", icon: "zoom" },
+  // Development
   { id: "github", name: "GitHub", category: "development", icon: "github" },
+  // AI
+  { id: "openai", name: "OpenAI", category: "ai", icon: "openai" },
+  { id: "anthropic", name: "Anthropic (Claude)", category: "ai", icon: "anthropic" },
+  { id: "elevenlabs", name: "ElevenLabs", category: "ai", icon: "elevenlabs" },
+  { id: "synthesia", name: "Synthesia", category: "ai", icon: "synthesia" },
+  // Email
+  { id: "gmail", name: "Gmail / SMTP", category: "email", icon: "gmail" },
+  // CRM
   { id: "salesforce", name: "Salesforce", category: "crm", icon: "salesforce" },
   { id: "hubspot", name: "HubSpot", category: "crm", icon: "hubspot" },
 ];
@@ -191,10 +200,18 @@ export const integrationsRouter = router({
 
   initializeAll: protectedProcedure.mutation(async ({ ctx }) => {
     // Check which integrations have env var tokens configured
+    const { ENV: env } = await import("../_core/env");
     const autoConnect: string[] = [];
-    if (process.env.ASANA_ACCESS_TOKEN) autoConnect.push("asana");
-    if (process.env.ZOOM_API_KEY) autoConnect.push("zoom");
-    if (process.env.TODOIST_API_TOKEN) autoConnect.push("todoist");
+    if (env.asanaApiKey) autoConnect.push("asana");
+    if (env.todoistApiKey) autoConnect.push("todoist");
+    if (env.notionApiKey) autoConnect.push("notion");
+    if (env.trelloApiKey) autoConnect.push("trello");
+    if (env.calendlyApiKey) autoConnect.push("calendly");
+    if (env.zoomAccountId && env.zoomClientId && env.zoomClientSecret) autoConnect.push("zoom");
+    if (env.githubToken) autoConnect.push("github");
+    if (env.smtpUser && env.smtpPass) autoConnect.push("gmail");
+    if (env.anthropicApiKey) autoConnect.push("anthropic");
+    if (env.synthesiaApiKey) autoConnect.push("synthesia");
 
     for (const provider of autoConnect) {
       const existing = await db
