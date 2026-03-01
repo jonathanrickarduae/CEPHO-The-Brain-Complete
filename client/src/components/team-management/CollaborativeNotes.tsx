@@ -120,7 +120,6 @@ ${text}`,
           setSuggestions(newSuggestions);
         }
       } catch (error) {
-        console.error("Failed to generate suggestions:", error);
       }
     },
     [chatMutation]
@@ -216,7 +215,6 @@ ${content}`,
       ]);
       setAiContribution(100);
     } catch (error) {
-      console.error("Enhancement failed:", error);
     } finally {
       setIsEnhancing(false);
     }

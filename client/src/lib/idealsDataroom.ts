@@ -395,7 +395,6 @@ export class FolderMappingService {
         data.forEach(m => this.mappings.set(m.brainFolderId, m));
       }
     } catch (e) {
-      console.error("Failed to load folder mappings:", e);
     }
   }
 
@@ -404,7 +403,6 @@ export class FolderMappingService {
       const data = Array.from(this.mappings.values());
       localStorage.setItem(this.storageKey, JSON.stringify(data));
     } catch (e) {
-      console.error("Failed to save folder mappings:", e);
     }
   }
 
@@ -578,7 +576,6 @@ export function useIdealsDataroom(
   useEffect(() => {
     const storedKey = localStorage.getItem("ideals_api_key");
     if (storedKey || options.apiKey) {
-      connect(storedKey || options.apiKey!).catch(console.error);
     }
     setMappings(mappingService.getAllMappings());
   }, []);

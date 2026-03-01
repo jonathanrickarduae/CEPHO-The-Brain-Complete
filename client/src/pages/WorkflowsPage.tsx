@@ -39,7 +39,6 @@ export default function WorkflowsPage() {
         setWorkflows(data.workflows || []);
       }
     } catch (error) {
-      console.error("Failed to fetch workflows:", error);
     } finally {
       setLoading(false);
     }

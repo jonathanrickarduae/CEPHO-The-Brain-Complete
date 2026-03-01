@@ -117,7 +117,6 @@ function useVoiceRecording() {
         setDuration(d => d + 1);
       }, 1000);
     } catch (err) {
-      console.error("Failed to start recording:", err);
     }
   };
 

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Brain, TrendingUp, Users, Heart, Sparkles, Globe } from "lucide-react";
+import { Brain, TrendingUp, Users, BarChart3, Sparkles, Globe } from "lucide-react";
 
 /**
  * Neural Network Visualization
@@ -46,12 +46,12 @@ const NETWORK_NODES: NetworkNode[] = [
     position: { x: 85, y: 40 },
   },
   {
-    id: "wellness",
-    label: "Wellness AI",
-    icon: Heart,
+    id: "performance",
+    label: "Performance",
+    icon: BarChart3,
     color: "text-rose-400",
     bgColor: "bg-rose-100",
-    description: "Monitors wellbeing and suggests balance",
+    description: "Tracks KPIs, productivity metrics, and system performance",
     position: { x: 20, y: 75 },
   },
   {
@@ -78,11 +78,11 @@ const NETWORK_NODES: NetworkNode[] = [
 const CONNECTIONS = [
   { from: "core", to: "analytics" },
   { from: "core", to: "insights" },
-  { from: "core", to: "wellness" },
+  { from: "core", to: "performance" },
   { from: "core", to: "experts" },
   { from: "core", to: "global" },
   { from: "analytics", to: "insights" },
-  { from: "wellness", to: "experts" },
+  { from: "performance", to: "experts" },
 ];
 
 export function NeuralNetworkViz() {

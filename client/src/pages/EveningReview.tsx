@@ -256,7 +256,6 @@ export default function EveningReview() {
         });
       }
     } catch (error) {
-      console.error("Failed to save auto-processed session:", error);
     }
 
     toast.info(
@@ -391,7 +390,6 @@ export default function EveningReview() {
         "Overnight tasks confirmed! Chief of Staff will process while you rest."
       );
     } catch (error) {
-      console.error("Failed to save review session:", error);
       // Still allow completion even if API fails
       setIsReadyToStart(true);
       toast.success(

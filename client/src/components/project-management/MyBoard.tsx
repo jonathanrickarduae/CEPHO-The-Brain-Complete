@@ -19,7 +19,6 @@ export function MyBoard() {
       try {
         setFavorites(JSON.parse(saved));
       } catch (error) {
-        console.error("Failed to load favorites:", error);
       }
     }
   }, []);
@@ -165,7 +164,6 @@ export function useFavorites() {
       try {
         setFavorites(JSON.parse(saved));
       } catch (error) {
-        console.error("Failed to load favorites:", error);
       }
     }
   }, []);

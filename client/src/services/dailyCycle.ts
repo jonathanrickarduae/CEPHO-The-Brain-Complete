@@ -83,7 +83,6 @@ export async function sendWhatsAppReminder(message: string) {
     if (response.ok) {
     }
   } catch (error) {
-    console.error("Failed to send WhatsApp reminder:", error);
   }
 }
 

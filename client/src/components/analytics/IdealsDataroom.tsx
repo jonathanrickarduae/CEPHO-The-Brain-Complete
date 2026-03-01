@@ -85,7 +85,6 @@ export function IdealsDataroomIntegration() {
       await uploadDocument(selectedIdealsFolder, file);
       await loadDocuments(selectedIdealsFolder);
     } catch (error) {
-      console.error("Upload failed:", error);
     }
   };
 
@@ -95,7 +94,6 @@ export function IdealsDataroomIntegration() {
       await createFolder(newFolderName);
       setNewFolderName("");
     } catch (error) {
-      console.error("Failed to create folder:", error);
     }
   };
 

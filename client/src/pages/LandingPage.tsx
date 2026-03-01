@@ -61,7 +61,6 @@ export default function LandingPage() {
         navigate("/nexus");
       }
     } catch (error) {
-      console.error("Login error:", error);
       toast.error("An unexpected error occurred");
       setIsLoading(false);
     }

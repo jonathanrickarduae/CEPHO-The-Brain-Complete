@@ -206,9 +206,6 @@ Format as a professional Markdown document with:
     .mutation(async ({ input }) => {
       // In production this would use SendGrid/SES
       // For now, log the intent and return success
-      console.log(
-        `[DocumentLibrary] Email send requested for doc ${input.documentId} to ${input.recipients.join(", ")}`
-      );
 
       return {
         success: true,

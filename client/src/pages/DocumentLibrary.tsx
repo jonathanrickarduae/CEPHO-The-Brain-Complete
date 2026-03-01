@@ -125,7 +125,6 @@ export default function DocumentLibrary() {
     {
       retry: false,
       onError: err => {
-        console.error("Failed to load documents:", err);
         toast.error("Failed to load documents");
       },
     }

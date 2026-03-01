@@ -79,7 +79,6 @@ export class NordVPNSecurityService {
         this.config = JSON.parse(stored);
       }
     } catch (e) {
-      console.error("Failed to load NordVPN config:", e);
     }
   }
 
@@ -91,7 +90,6 @@ export class NordVPNSecurityService {
         localStorage.removeItem(STORAGE_KEYS.config);
       }
     } catch (e) {
-      console.error("Failed to save NordVPN config:", e);
     }
   }
 
@@ -126,7 +124,6 @@ export class NordVPNSecurityService {
         }));
       }
     } catch (e) {
-      console.error("Failed to load audit log:", e);
     }
   }
 
@@ -136,7 +133,6 @@ export class NordVPNSecurityService {
       const toSave = this.auditLog.slice(-1000);
       localStorage.setItem(STORAGE_KEYS.auditLog, JSON.stringify(toSave));
     } catch (e) {
-      console.error("Failed to save audit log:", e);
     }
   }
 

@@ -70,7 +70,6 @@ Please write only the ${type} content, no explanations or meta-commentary.`;
       setDraft(result.message);
       onDraftGenerated?.(result.message);
     } catch (error) {
-      console.error("Draft generation failed:", error);
       setDraft("Failed to generate draft. Please try again.");
     } finally {
       setIsGenerating(false);

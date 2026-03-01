@@ -186,7 +186,6 @@ export default function ProjectGenesisPage() {
         setViewMode("dashboard");
       }, 1500);
     } catch (error) {
-      console.error("Failed to create project:", error);
     }
   };
 

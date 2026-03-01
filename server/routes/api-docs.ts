@@ -43,7 +43,6 @@ function loadSpec() {
       paths: {},
     };
   } catch (err) {
-    console.error("[API Docs] Failed to load OpenAPI spec:", err);
     return null;
   }
 }

@@ -102,10 +102,6 @@ export async function generateBriefVideo(
       status: "processing",
     };
   } catch (error: any) {
-    console.error(
-      "Synthesia API error:",
-      error.response?.data || error.message
-    );
     throw new Error(
       `Failed to generate video: ${error.response?.data?.message || error.message}`
     );
@@ -143,10 +139,6 @@ export async function checkVideoStatus(
       error: data.status === "failed" ? data.error : undefined,
     };
   } catch (error: any) {
-    console.error(
-      "Synthesia status check error:",
-      error.response?.data || error.message
-    );
     throw new Error(`Failed to check video status: ${error.message}`);
   }
 }

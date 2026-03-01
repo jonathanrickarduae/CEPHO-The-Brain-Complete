@@ -82,7 +82,6 @@ export function ExpertFeedback({
       setShowFeedbackModal(false);
       setFeedbackText("");
     } catch (error) {
-      console.error("Feedback submission error:", error);
       toast.error("Failed to submit feedback");
     } finally {
       setIsSubmitting(false);
@@ -245,7 +244,6 @@ export function InlineExpertFeedback({
       });
       onFeedbackSubmitted?.(rating);
     } catch (error) {
-      console.error("Quick rating error:", error);
     }
   };
 

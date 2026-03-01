@@ -30,9 +30,6 @@ class OAuthService {
   constructor(private client: ReturnType<typeof axios.create>) {
     const oAuthServerUrl = process.env.OAUTH_SERVER_URL ?? "";
     if (!oAuthServerUrl) {
-      console.error(
-        "[OAuth] ERROR: OAUTH_SERVER_URL is not configured! Set OAUTH_SERVER_URL environment variable."
-      );
     }
   }
 
@@ -161,9 +158,6 @@ class SDKServer {
       if (!SDKServer._generatedSecret) {
         const crypto = require("crypto");
         SDKServer._generatedSecret = crypto.randomBytes(32).toString("hex");
-        console.warn(
-          "[Auth] JWT_SECRET not set, generated and cached secret for this session"
-        );
       }
       secret = SDKServer._generatedSecret!;
     }
@@ -214,7 +208,6 @@ class SDKServer {
     cookieValue: string | undefined | null
   ): Promise<{ openId: string; appId: string; name: string } | null> {
     if (!cookieValue) {
-      console.warn("[Auth] Missing session cookie");
       return null;
     }
 
@@ -226,11 +219,6 @@ class SDKServer {
       const { openId, appId, name } = payload as Record<string, unknown>;
 
       if (!isNonEmptyString(openId) || !isNonEmptyString(name)) {
-        console.warn("[Auth] Session payload missing required fields", {
-          openId,
-          appId,
-          name,
-        });
         return null;
       }
 
@@ -240,7 +228,6 @@ class SDKServer {
         name: name ?? undefined,
       };
     } catch (error) {
-      console.warn("[Auth] Session verification failed", String(error));
       return null;
     }
   }
@@ -313,7 +300,6 @@ class SDKServer {
           });
           user = await db.getUserByOpenId(userInfo.openId);
         } catch (error) {
-          console.error("[Auth] Failed to sync user from OAuth:", error);
           throw ForbiddenError("Failed to sync user info");
         }
       }

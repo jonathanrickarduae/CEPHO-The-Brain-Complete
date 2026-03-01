@@ -393,7 +393,6 @@ export default function DailyBrief() {
       }
     } catch (error) {
       toast.error(`Failed to generate ${format}. Please try again.`);
-      console.error(error);
     }
   };
 

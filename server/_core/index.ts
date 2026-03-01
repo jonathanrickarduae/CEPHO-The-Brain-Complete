@@ -153,17 +153,11 @@ async function startServer() {
   }
 
   server.listen(port, () => {
-    console.log(`========================================`);
-    console.log(`[CEPHO.AI] Server started successfully`);
-    console.log(`[CEPHO.AI] Environment: ${process.env.NODE_ENV}`);
-    console.log(`[CEPHO.AI] Port: ${port}`);
-    console.log(
-      `[CEPHO.AI] Database: ${process.env.DATABASE_URL ? "Connected" : "Not configured"}`
-    );
-    console.log(`[CEPHO.AI] Time: ${new Date().toISOString()}`);
-    console.log(`========================================`);
     log.debug(`Server running on http://localhost:${port}/`);
   });
 }
 
-startServer().catch(console.error);
+startServer().catch((err: unknown) => {
+  process.stderr.write(`[CEPHO.AI] Fatal startup error: ${String(err)}\n`);
+  process.exit(1);
+});

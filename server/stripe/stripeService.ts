@@ -128,7 +128,6 @@ export async function handleCheckoutComplete(session: Stripe.Checkout.Session) {
 
   const userId = parseInt(session.client_reference_id || "0");
   if (!userId) {
-    console.error("[Stripe] No user ID in checkout session");
     return;
   }
 

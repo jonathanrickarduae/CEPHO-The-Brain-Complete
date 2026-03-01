@@ -178,7 +178,6 @@ export function CorporatePartnerChat({
       });
     },
     onError: (error: unknown) => {
-      console.error("Partner chat error:", error);
       // Fallback to local response on error
       if (partner) {
         const fallbackResponse = generatePartnerResponse(partner, inputValue);

@@ -164,7 +164,6 @@ export default function ExpertChatPage() {
         { role: "expert", content: response.response },
       ]);
     } catch (error) {
-      console.error("Failed to send message:", error);
       setMessages(prev => [
         ...prev,
         {
@@ -359,7 +358,6 @@ ${messages
       setShowExportMenu(false);
       toast.success(`Saved to Library: ${result.documentName}`);
     } catch (error) {
-      console.error("Failed to export to library:", error);
       toast.error("Could not save to library. Please try again.");
     } finally {
       setIsExporting(false);

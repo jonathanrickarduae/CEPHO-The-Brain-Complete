@@ -133,7 +133,6 @@ export default function FundingAssessment() {
           programId: program.programId,
         });
       } catch (error) {
-        console.error(`Failed to assess ${program.name}:`, error);
       }
     }
 

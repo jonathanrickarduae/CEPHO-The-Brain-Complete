@@ -127,7 +127,6 @@ export function SMEFeedbackRating({
       // Store reference to stop later
       (window as any).currentRecorder = mediaRecorder;
     } catch (err) {
-      console.error("Failed to start recording:", err);
     }
   };
 

@@ -65,7 +65,6 @@ export default function WorkflowDetailPage() {
         setWorkflow(data.workflow);
       }
     } catch (error) {
-      console.error("Failed to fetch workflow:", error);
     } finally {
       setLoading(false);
     }
@@ -87,7 +86,6 @@ export default function WorkflowDetailPage() {
         }
       }
     } catch (error) {
-      console.error("Failed to fetch steps:", error);
     }
   };
 
@@ -105,7 +103,6 @@ export default function WorkflowDetailPage() {
         });
       }
     } catch (error) {
-      console.error("Failed to fetch step guidance:", error);
     }
   };
 
@@ -120,7 +117,6 @@ export default function WorkflowDetailPage() {
         fetchSteps();
       }
     } catch (error) {
-      console.error("Failed to start workflow:", error);
     }
   };
 
@@ -134,7 +130,6 @@ export default function WorkflowDetailPage() {
         fetchWorkflow();
       }
     } catch (error) {
-      console.error("Failed to pause workflow:", error);
     }
   };
 
@@ -148,7 +143,6 @@ export default function WorkflowDetailPage() {
         fetchWorkflow();
       }
     } catch (error) {
-      console.error("Failed to resume workflow:", error);
     }
   };
 

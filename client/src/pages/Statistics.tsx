@@ -9,22 +9,14 @@ import {
   CheckCircle2,
   ArrowUpRight,
   Cpu,
-  Target,
-  Calendar,
   BarChart3,
 } from "lucide-react";
 import {
   PersonalAnalytics,
 } from "@/components/analytics/PersonalAnalytics";
-import { useMoodCheck } from "@/hooks/useMoodCheck";
-import { MoodTimeline } from "@/components/mood-tracking/MoodTimeline";
-import { WellnessScoreDashboard } from "@/components/mood-tracking/WellnessScoreDashboard";
-
 import { CollapsibleSection } from "@/components/shared/CollapsibleSection";
 
 export default function Statistics() {
-  const { todaysMoods } = useMoodCheck();
-
   const kpis = [
     {
       id: 1,
@@ -84,17 +76,6 @@ export default function Statistics() {
     },
   ];
 
-  // Weekly mood data (mock) - reserved for future chart
-  const _weeklyMoods = [
-    70,
-    80,
-    60,
-    70,
-    90,
-    80,
-    todaysMoods.length > 0 ? todaysMoods[todaysMoods.length - 1].mood : 70,
-  ]; // 0-100 scale
-
   return (
     <div className="p-4 md:p-6 overflow-auto">
       <div className="max-w-6xl mx-auto">
@@ -119,18 +100,8 @@ export default function Statistics() {
           <PersonalAnalytics variant="full" />
         </CollapsibleSection>
 
-        {/* Wellness Score Dashboard */}
-        <CollapsibleSection
-          title="Wellness Score"
-          icon={<Target className="w-5 h-5" />}
-          defaultOpen={true}
-          className="mb-6"
-        >
-          <WellnessScoreDashboard />
-        </CollapsibleSection>
-
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Left Column: KPIs */}
+          {/* Left Column: KPIs + Training */}
           <div className="lg:col-span-2 space-y-8">
             {/* KPI Grid */}
             <CollapsibleSection
@@ -174,16 +145,6 @@ export default function Statistics() {
                   </div>
                 ))}
               </div>
-            </CollapsibleSection>
-
-            {/* Mood Timeline - Real Data */}
-            <CollapsibleSection
-              title="Mood Timeline"
-              icon={<Calendar className="w-5 h-5" />}
-              defaultOpen={true}
-              className="mb-6"
-            >
-              <MoodTimeline days={7} />
             </CollapsibleSection>
 
             {/* Chief of Staff Training Progress */}

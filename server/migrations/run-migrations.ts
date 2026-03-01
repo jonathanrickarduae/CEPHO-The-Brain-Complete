@@ -10,7 +10,6 @@ export async function runMigrations(): Promise<void> {
   try {
     const db = await getDb();
     if (!db) {
-      console.warn("[Migrations] Database not available, skipping migrations");
       return;
     }
 
@@ -51,24 +50,12 @@ export async function runMigrations(): Promise<void> {
             // Ignore "already exists" errors
             if (error.message?.includes("already exists")) {
             } else {
-              console.error(
-                `[Migrations] ✗ Failed: ${statement.substring(0, 50)}...`
-              );
-              console.error(`[Migrations] Error: ${error.message}`);
             }
           }
         }
       } catch (error: any) {
-        console.error(
-          `[Migrations] Failed to run ${migration.name}:`,
-          error.message
-        );
       }
     }
   } catch (error: any) {
-    console.warn("[Migrations] Failed to run migrations:", error.message);
-    console.warn(
-      "[Migrations] Continuing server startup despite migration errors"
-    );
   }
 }

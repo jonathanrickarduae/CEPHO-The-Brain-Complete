@@ -518,11 +518,6 @@ Provide your expert assessment.`;
       timestamp: new Date(),
     };
   } catch (error) {
-    console.error(
-      `[BusinessPlanReview] Error analyzing section ${sectionId} with expert ${expertId}:`,
-      error
-    );
-
     // Return a fallback analysis
     return {
       expertId: expert.id,
@@ -784,8 +779,6 @@ ${businessPlanContent || "No specific content provided. Please select a balanced
       ),
     };
   } catch (error) {
-    console.error("[BusinessPlanReview] Error selecting expert team:", error);
-
     // Return default balanced team
     return {
       selectedExperts: [

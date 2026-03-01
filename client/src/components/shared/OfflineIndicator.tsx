@@ -61,7 +61,6 @@ export function OfflineIndicator() {
       localStorage.removeItem("brain-pending-actions");
       setPendingActions(0);
     } catch (error) {
-      console.error("Error processing pending actions:", error);
     }
   };
 

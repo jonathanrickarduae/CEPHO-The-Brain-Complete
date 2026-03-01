@@ -242,7 +242,6 @@ export function useStreak() {
             })) || [],
         });
       } catch (e) {
-        console.error("Failed to parse streak data:", e);
       }
     }
   }, []);

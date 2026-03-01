@@ -190,7 +190,6 @@ export function useVoiceInput(options: UseVoiceInputOptions = {}) {
       recognition.start();
     } catch (error) {
       // Recognition might already be running
-      console.warn("Speech recognition start error:", error);
     }
   }, [state.isListening]);
 
@@ -201,7 +200,6 @@ export function useVoiceInput(options: UseVoiceInputOptions = {}) {
     try {
       recognition.stop();
     } catch (error) {
-      console.warn("Speech recognition stop error:", error);
     }
   }, [state.isListening]);
 
@@ -297,7 +295,6 @@ export function useVoiceWaveform() {
 
       updateWaveform();
     } catch (error) {
-      console.error("Failed to start waveform:", error);
     }
   }, []);
 

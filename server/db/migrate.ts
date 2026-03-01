@@ -11,7 +11,6 @@ async function runMigrations() {
   const connectionString = process.env.DATABASE_URL;
 
   if (!connectionString) {
-    console.error("❌ DATABASE_URL environment variable is not set");
     process.exit(1);
   }
 
@@ -24,7 +23,6 @@ async function runMigrations() {
     await migrationClient.end();
     process.exit(0);
   } catch (error) {
-    console.error("❌ Migration failed:", error);
     await migrationClient.end();
     process.exit(1);
   }

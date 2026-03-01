@@ -519,7 +519,6 @@ export function BusinessPlanReview({
         });
         toast.success("Chief of Staff has assembled the expert team");
       } catch (error) {
-        console.error("Error selecting team:", error);
         toast.error("Failed to select team, using default experts");
       } finally {
         setIsSelectingTeam(false);
@@ -595,7 +594,6 @@ export function BusinessPlanReview({
 
       toast.success(`${section.name} review complete`);
     } catch (error) {
-      console.error("Error analyzing section:", error);
       toast.error(`Failed to analyze ${section.name}`);
 
       // Mark as completed with error state
@@ -707,7 +705,6 @@ export function BusinessPlanReview({
         );
       }
     } catch (error) {
-      console.error("Error reading file:", error);
       toast.error("Failed to read file");
       setBusinessPlanContent(
         `[Document: ${file.name}]\n\nDocument uploaded for analysis. Text extraction failed.`
@@ -820,7 +817,6 @@ export function BusinessPlanReview({
 
       toast.success("Review saved to Library!");
     } catch (error) {
-      console.error("Error saving to library:", error);
       toast.error("Failed to save to Library");
     }
   };
@@ -921,7 +917,6 @@ export function BusinessPlanReview({
       toast.success(`Saved as Version ${result.versionNumber}`);
       setVersionLabel("");
     } catch (error) {
-      console.error("Error saving version:", error);
       toast.error("Failed to save version");
     }
   };
@@ -958,7 +953,6 @@ export function BusinessPlanReview({
       setFollowUpQuestion("");
       toast.success("Expert responded!");
     } catch (error) {
-      console.error("Error asking follow-up:", error);
       toast.error("Failed to get response");
     }
   };
@@ -1000,7 +994,6 @@ export function BusinessPlanReview({
         `Document added to ${BUSINESS_PLAN_SECTIONS.find(s => s.id === sectionId)?.name}`
       );
     } catch (error) {
-      console.error("Error uploading section document:", error);
       toast.error("Failed to upload document");
     }
   };
@@ -1065,7 +1058,6 @@ export function BusinessPlanReview({
 
       toast.success("Report exported successfully!");
     } catch (error) {
-      console.error("Error exporting report:", error);
       toast.error("Failed to export report");
     }
   };
@@ -1112,7 +1104,6 @@ export function BusinessPlanReview({
         "Collaborative session started! You can now invite team members."
       );
     } catch (error) {
-      console.error("Error starting collaborative session:", error);
       toast.error("Failed to start collaborative session");
     }
   };
@@ -1133,7 +1124,6 @@ export function BusinessPlanReview({
       setInviteUserId("");
       setShowInviteDialog(false);
     } catch (error) {
-      console.error("Error inviting participant:", error);
       toast.error("Failed to invite participant");
     }
   };
@@ -1154,7 +1144,6 @@ export function BusinessPlanReview({
       setNewComment("");
       setCommentSection(null);
     } catch (error) {
-      console.error("Error adding comment:", error);
       toast.error("Failed to add comment");
     }
   };

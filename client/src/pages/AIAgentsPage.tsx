@@ -21,7 +21,6 @@ export default function AIAgentsPage() {
     error: agentsError,
   } = trpc.aiAgentsMonitoring.getAllStatus.useQuery(undefined, {
     retry: false,
-    onError: err => console.error("Failed to load agents:", err),
   });
 
   const agents = agentsData?.agents || [];

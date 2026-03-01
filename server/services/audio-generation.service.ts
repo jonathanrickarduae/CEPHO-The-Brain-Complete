@@ -90,7 +90,6 @@ export async function generateBriefAudio(
 
     return tempAudioPath;
   } catch (error: any) {
-    console.error("11Labs API error:", error.response?.data || error.message);
     throw new Error(
       `Failed to generate audio: ${error.response?.data?.detail?.message || error.message}`
     );

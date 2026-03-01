@@ -18,7 +18,6 @@ class RedisCacheService {
       const redisUrl = process.env.REDIS_URL || process.env.UPSTASH_REDIS_URL;
 
       if (!redisUrl) {
-        console.warn("Redis URL not configured. Caching disabled.");
         return;
       }
 
@@ -38,24 +37,20 @@ class RedisCacheService {
       });
 
       this.client.on("connect", () => {
-        console.log("✅ Redis connected");
         this.isConnected = true;
       });
 
       this.client.on("error", err => {
-        console.error("❌ Redis error:", err);
         this.isConnected = false;
       });
 
       this.client.on("close", () => {
-        console.log("⚠️  Redis connection closed");
         this.isConnected = false;
       });
 
       // Test connection
       await this.client.ping();
     } catch (error) {
-      console.error("Failed to connect to Redis:", error);
       this.client = null;
     }
   }
@@ -72,7 +67,6 @@ class RedisCacheService {
 
       return JSON.parse(value) as T;
     } catch (error) {
-      console.error(`Cache get error for key ${key}:`, error);
       return null;
     }
   }
@@ -92,7 +86,6 @@ class RedisCacheService {
       await this.client.setex(key, ttlSeconds, serialized);
       return true;
     } catch (error) {
-      console.error(`Cache set error for key ${key}:`, error);
       return false;
     }
   }
@@ -107,7 +100,6 @@ class RedisCacheService {
       await this.client.del(key);
       return true;
     } catch (error) {
-      console.error(`Cache delete error for key ${key}:`, error);
       return false;
     }
   }
@@ -125,7 +117,6 @@ class RedisCacheService {
       await this.client.del(...keys);
       return keys.length;
     } catch (error) {
-      console.error(`Cache delete pattern error for ${pattern}:`, error);
       return 0;
     }
   }
@@ -140,7 +131,6 @@ class RedisCacheService {
       const result = await this.client.exists(key);
       return result === 1;
     } catch (error) {
-      console.error(`Cache exists error for key ${key}:`, error);
       return false;
     }
   }
@@ -177,7 +167,6 @@ class RedisCacheService {
     try {
       return await this.client.incrby(key, amount);
     } catch (error) {
-      console.error(`Cache increment error for key ${key}:`, error);
       return 0;
     }
   }
@@ -192,7 +181,6 @@ class RedisCacheService {
       await this.client.expire(key, ttlSeconds);
       return true;
     } catch (error) {
-      console.error(`Cache expire error for key ${key}:`, error);
       return false;
     }
   }
@@ -215,7 +203,6 @@ class RedisCacheService {
         info,
       };
     } catch (error) {
-      console.error("Cache stats error:", error);
       return { connected: false, error };
     }
   }
@@ -230,7 +217,6 @@ class RedisCacheService {
       await this.client.flushdb();
       return true;
     } catch (error) {
-      console.error("Cache flush error:", error);
       return false;
     }
   }

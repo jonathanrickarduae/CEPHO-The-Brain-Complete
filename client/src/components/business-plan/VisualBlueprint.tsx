@@ -294,7 +294,6 @@ export function VisualBlueprint({
       link.href = canvas.toDataURL("image/png");
       link.click();
     } catch (error) {
-      console.error("Export failed:", error);
       alert("Export failed. Please try again.");
     } finally {
       setIsExporting(false);

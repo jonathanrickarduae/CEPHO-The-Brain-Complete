@@ -25,7 +25,6 @@ export function getPool(): Pool {
     });
 
     pool.on("error", err => {
-      console.error("[DB Pool] Unexpected error on idle client", err);
     });
   }
 

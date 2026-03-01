@@ -51,7 +51,6 @@ export function VoiceInterface({
       };
 
       recognitionRef.current.onerror = (event: any) => {
-        console.error("Speech recognition error:", event.error);
         setState("idle");
       };
     }
@@ -91,7 +90,6 @@ export function VoiceInterface({
       setTranscript("");
       setIsExpanded(true);
     } catch (error) {
-      console.error("Failed to start recognition:", error);
     }
   };
 

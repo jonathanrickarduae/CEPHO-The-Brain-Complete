@@ -67,7 +67,6 @@ export function MermaidDiagram({ code, title, onExport }: MermaidDiagramProps) {
         containerRef.current.innerHTML = svg;
       }
     } catch (err) {
-      console.error("Mermaid render error:", err);
       setError(err instanceof Error ? err.message : "Failed to render diagram");
     }
   };

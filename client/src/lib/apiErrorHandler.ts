@@ -128,7 +128,6 @@ export function handleApiError(
 
   // Log for debugging (but not auth errors which are expected)
   if (!isAuthError(error)) {
-    console.error("[API Error]", error);
   }
 
   return message;

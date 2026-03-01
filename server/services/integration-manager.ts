@@ -23,7 +23,6 @@ function encrypt(text: string): string {
     encrypted += cipher.final("hex");
     return iv.toString("hex") + ":" + encrypted;
   } catch (error) {
-    console.error("[IntegrationManager] Encryption error:", error);
     throw error;
   }
 }
@@ -43,7 +42,6 @@ function decrypt(encrypted: string): string {
     decrypted += decipher.final("utf8");
     return decrypted;
   } catch (error) {
-    console.error("[IntegrationManager] Decryption error:", error);
     throw error;
   }
 }

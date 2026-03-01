@@ -149,7 +149,6 @@ export async function textToSpeech(
       voiceName: voiceConfig.voiceName,
     };
   } catch (error) {
-    console.error("ElevenLabs TTS error:", error);
     throw error;
   }
 }

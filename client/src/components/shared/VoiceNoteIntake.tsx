@@ -82,7 +82,6 @@ export function VoiceNoteIntake({ onComplete, onSkip }: VoiceNoteIntakeProps) {
         setRecordingTime(prev => prev + 1);
       }, 1000);
     } catch (error) {
-      console.error("Error accessing microphone:", error);
     }
   };
 
@@ -154,7 +153,6 @@ export function VoiceNoteIntake({ onComplete, onSkip }: VoiceNoteIntakeProps) {
         setIsProcessing(false);
       };
     } catch (error) {
-      console.error("Error processing audio:", error);
       setIsProcessing(false);
     }
   };

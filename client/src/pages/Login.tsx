@@ -191,7 +191,6 @@ export default function Login() {
         toast.error(data.error || "Invalid credentials");
       }
     } catch (error) {
-      console.error("Login error:", error);
       toast.error("Failed to login. Please try again.");
     } finally {
       setIsLoading(false);

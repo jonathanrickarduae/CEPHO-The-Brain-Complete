@@ -43,7 +43,6 @@ export default function AIAgentsMonitoringPage() {
   } = trpc.aiAgentsMonitoring.getAllStatus.useQuery(undefined, {
     retry: 2,
     onError: err => {
-      console.error("Failed to load AI agents:", err);
     },
   });
 

@@ -422,9 +422,6 @@ export const collaborativeReviewRouter = router({
       })
     )
     .mutation(async ({ input }) => {
-      console.log(
-        `[CollaborativeReview] Invite sent to ${input.email} for session ${input.sessionId}`
-      );
       return { success: true, invited: input.email };
     }),
 

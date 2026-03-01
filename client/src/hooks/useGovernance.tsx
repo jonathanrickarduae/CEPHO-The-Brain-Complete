@@ -158,7 +158,6 @@ export function GovernanceProvider({ children }: { children: ReactNode }) {
           }))
         );
       } catch (e) {
-        console.error("Failed to parse audit log", e);
       }
     }
   }, []);

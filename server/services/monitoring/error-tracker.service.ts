@@ -21,7 +21,6 @@ class ErrorTrackerService {
     const sentryDsn = process.env.SENTRY_DSN;
 
     if (!sentryDsn) {
-      console.warn("Sentry DSN not configured. Error tracking disabled.");
       return;
     }
 
@@ -57,9 +56,7 @@ class ErrorTrackerService {
       setupExpressErrorHandler(app);
 
       this.initialized = true;
-      console.log("✅ Sentry error tracking initialized");
     } catch (error) {
-      console.error("Failed to initialize Sentry:", error);
     }
   }
 
@@ -169,7 +166,6 @@ class ErrorTrackerService {
     try {
       return await Sentry.flush(timeout);
     } catch (error) {
-      console.error("Sentry flush error:", error);
       return false;
     }
   }
@@ -182,7 +178,6 @@ class ErrorTrackerService {
     try {
       return await Sentry.close(timeout);
     } catch (error) {
-      console.error("Sentry close error:", error);
       return false;
     }
   }
@@ -200,8 +195,6 @@ export function errorHandlerMiddleware(
   res: Response,
   _next: NextFunction
 ) {
-  console.error("Error:", err);
-
   errorTrackerService.captureException(err, {
     url: req.url,
     method: req.method,

@@ -251,7 +251,6 @@ export default function ProjectGenesisWizard() {
       onSuccess: data => {
         toast.success(`Generated: ${data.deliverableName}`);
         // TODO: Show deliverable content in modal
-        console.log("Deliverable content:", data.content);
       },
       onError: error => {
         toast.error(`Failed to generate: ${error.message}`);

@@ -215,7 +215,6 @@ export function useConversationHistory() {
           }))
         );
       } catch (e) {
-        console.error("Failed to parse conversations:", e);
       }
     }
   }, []);

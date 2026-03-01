@@ -60,7 +60,6 @@ export async function generateBriefPDF(briefData: BriefData): Promise<string> {
     try {
       await execAsync(`manus-md-to-pdf "${tempMdPath}" "${tempPdfPath}"`);
     } catch (error) {
-      console.error("PDF generation failed:", error);
       throw new Error(
         "PDF generation utility failed. Ensure manus-md-to-pdf is available."
       );
@@ -72,7 +71,6 @@ export async function generateBriefPDF(briefData: BriefData): Promise<string> {
     // Return path to PDF (caller should handle file serving/cleanup)
     return tempPdfPath;
   } catch (error) {
-    console.error("Error generating PDF:", error);
     throw error;
   }
 }

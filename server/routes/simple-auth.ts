@@ -27,9 +27,6 @@ function getAdminUser() {
   const name = process.env.ADMIN_NAME || "Admin";
 
   if (!email || !password) {
-    console.error(
-      "[Auth] CRITICAL: ADMIN_EMAIL and ADMIN_PASSWORD environment variables must be set."
-    );
     return null;
   }
 
@@ -80,7 +77,6 @@ router.post("/login", async (req, res) => {
 
     const secret = process.env.JWT_SECRET;
     if (!secret) {
-      console.error("[Auth] JWT_SECRET is not set — cannot issue tokens.");
       return res.status(503).json({
         error: "Authentication misconfigured. Contact the administrator.",
       });
@@ -123,7 +119,6 @@ router.post("/login", async (req, res) => {
       },
     });
   } catch (error) {
-    console.error("[Auth] Login error:", error);
     return res.status(500).json({ error: "Internal server error" });
   }
 });

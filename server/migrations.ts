@@ -51,9 +51,7 @@ export async function runMigrations() {
     `);
   } catch (error: unknown) {
     if (error instanceof Error) {
-      console.error("[Migrations] Error running migrations:", error.message);
     } else {
-      console.error("[Migrations] An unknown error occurred:", error);
     }
     // Don't throw - allow app to start even if migrations fail
   } finally {

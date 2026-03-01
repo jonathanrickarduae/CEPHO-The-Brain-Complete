@@ -603,9 +603,6 @@ export const qualityGateRouter = router({
       })
     )
     .mutation(async ({ input }) => {
-      console.log(
-        `[QualityGate] Approval notification for ${input.itemType} #${input.itemId}`
-      );
       return { success: true, notified: true };
     }),
 
@@ -614,9 +611,6 @@ export const qualityGateRouter = router({
       z.object({ itemId: z.number(), itemType: z.string(), reason: z.string() })
     )
     .mutation(async ({ input }) => {
-      console.log(
-        `[QualityGate] Rejection notification for ${input.itemType} #${input.itemId}: ${input.reason}`
-      );
       return { success: true, notified: true };
     }),
 });
@@ -722,9 +716,6 @@ export const feedbackRouter = router({
       })
     )
     .mutation(async ({ input }) => {
-      console.log(
-        `[Feedback] ${input.type}: ${input.message} (rating: ${input.rating ?? "N/A"})`
-      );
       return { success: true, message: "Thank you for your feedback!" };
     }),
 });
@@ -739,9 +730,6 @@ export const npsRouter = router({
       })
     )
     .mutation(async ({ input }) => {
-      console.log(
-        `[NPS] Score: ${input.score}, Comment: ${input.comment ?? "none"}`
-      );
       return { success: true };
     }),
 

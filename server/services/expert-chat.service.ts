@@ -313,7 +313,6 @@ export async function chatWithExpert(
       voiceStyle,
     };
   } catch (error) {
-    console.error("Expert chat error:", error);
     throw new Error("Failed to generate expert response");
   }
 }

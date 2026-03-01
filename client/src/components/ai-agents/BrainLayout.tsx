@@ -69,12 +69,10 @@ import { DashboardLayoutSkeleton } from "@/components/project-management/Dashboa
 import { Button } from "@/components/ui/button";
 import { BottomTabBar } from "@/components/ai-agents/BottomTabBar";
 import { QuickActionsBar } from "@/components/shared/QuickActionsBar";
-import { MoodCheckModal } from "@/components/mood-tracking/MoodCheckModal";
 import {
   KeyboardShortcutsHelp,
   useKeyboardShortcutsHelp,
 } from "@/components/project-management/KeyboardShortcutsHelp";
-import { useMoodCheck } from "@/hooks/useMoodCheck";
 import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
 
 import {
@@ -221,14 +219,6 @@ function BrainLayoutContent({
   const sidebarRef = useRef<HTMLDivElement>(null);
   const activeMenuItem = menuItems.find(item => item.path === location);
   const isMobile = useIsMobile();
-
-  // Mood check state (3x daily)
-  const {
-    shouldShowMoodCheck,
-    currentPeriod,
-    recordMoodCheck,
-    dismissMoodCheck,
-  } = useMoodCheck();
 
   // Accessibility settings state
   const [showAccessibilitySettings, setShowAccessibilitySettings] =
@@ -500,14 +490,6 @@ function BrainLayoutContent({
           className={isMobile ? "bottom-24" : ""}
         />
       </SidebarInset>
-
-      {/* Mood Check Modal (3x daily) */}
-      <MoodCheckModal
-        isOpen={shouldShowMoodCheck}
-        onClose={dismissMoodCheck}
-        onSubmit={recordMoodCheck}
-        period={currentPeriod}
-      />
 
       {/* Keyboard Shortcuts Help */}
       <KeyboardShortcutsHelp

@@ -103,7 +103,6 @@ export function DirectExpertChat({ expertId, onClose }: DirectExpertChatProps) {
       }
     },
     onError: error => {
-      console.error("Voice generation error:", error);
       // Remove generating state on error
       setMessages(prev =>
         prev.map(msg => ({
@@ -135,7 +134,6 @@ export function DirectExpertChat({ expertId, onClose }: DirectExpertChatProps) {
       };
 
       audio.play().catch(err => {
-        console.error("Audio playback error:", err);
         setCurrentlyPlayingId(null);
       });
     },
@@ -350,7 +348,6 @@ export function DirectExpertChat({ expertId, onClose }: DirectExpertChatProps) {
       }
     },
     onError: (error: unknown) => {
-      console.error("Expert chat error:", error);
       // Fallback to local response on error
       if (expert) {
         const fallbackResponse = generateExpertResponse(expert, inputValue);

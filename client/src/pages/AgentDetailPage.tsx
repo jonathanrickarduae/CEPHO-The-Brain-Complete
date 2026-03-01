@@ -68,7 +68,6 @@ export default function AgentDetailPage() {
         setAgent(data);
       }
     } catch (error) {
-      console.error("Failed to load agent:", error);
     } finally {
       setLoading(false);
     }
@@ -82,7 +81,6 @@ export default function AgentDetailPage() {
         setReports(data);
       }
     } catch (error) {
-      console.error("Failed to load reports:", error);
     }
   };
 
@@ -94,7 +92,6 @@ export default function AgentDetailPage() {
         setApprovals(data);
       }
     } catch (error) {
-      console.error("Failed to load approvals:", error);
     }
   };
 
@@ -105,7 +102,6 @@ export default function AgentDetailPage() {
       });
       loadReports();
     } catch (error) {
-      console.error("Failed to approve report:", error);
     }
   };
 
@@ -116,7 +112,6 @@ export default function AgentDetailPage() {
       });
       loadApprovals();
     } catch (error) {
-      console.error("Failed to approve request:", error);
     }
   };
 
@@ -127,7 +122,6 @@ export default function AgentDetailPage() {
       });
       loadApprovals();
     } catch (error) {
-      console.error("Failed to reject request:", error);
     }
   };
 
