@@ -31,7 +31,7 @@ import {
   X,
 } from "lucide-react";
 import { trpc } from "@/lib/trpc";
-import { useToast } from "@/components/shared/Toast";
+import { toast } from "sonner";
 
 interface BoardMember {
   id: string;
@@ -276,8 +276,6 @@ const RECENT_DECISIONS = [
 ];
 
 export default function PersephoneBoard() {
-  const { error: toastError } = useToast();
-
   // Consultation modal state
   const [consultingMember, setConsultingMember] = useState<BoardMember | null>(null);
   const [sessionId, setSessionId] = useState<number | null>(null);
@@ -318,7 +316,7 @@ export default function PersephoneBoard() {
         },
       ]);
     } catch {
-      toastError("Connection failed", "Could not connect to the board member. Please try again.");
+      toast.error("Connection failed: Could not connect to the board member. Please try again.");
       setConsultingMember(null);
     } finally {
       setIsStarting(false);
@@ -362,7 +360,7 @@ export default function PersephoneBoard() {
         },
       ]);
     } catch {
-      toastError("Message failed", "Could not send your message. Please try again.");
+      toast.error("Message failed: Could not send your message. Please try again.");
     }
   };
 
