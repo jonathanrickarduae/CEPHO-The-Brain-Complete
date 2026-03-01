@@ -2,8 +2,6 @@ import { useState } from "react";
 import {
   Shield,
   ShieldCheck,
-  ShieldAlert,
-  ShieldQuestion,
   AlertTriangle,
   CheckCircle,
   XCircle,
@@ -17,8 +15,6 @@ import {
   User,
   Brain,
   BookOpen,
-  Quote,
-  Scale,
   Sparkles,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -29,8 +25,6 @@ import {
   type Insight,
   type Challenge,
   type Reference,
-  type Citation,
-  type ValidationResult,
   type ConfidenceLevel,
   type VerificationStatus,
   CONFIDENCE_INDICATORS,
@@ -126,10 +120,10 @@ export function InsightCard({
   const suggestedQuestions = generateChallengeQuestions(insight);
 
   const typeIcons = {
-    fact: <CheckCircle className="w-4 h-4 text-blue-500" />,
+    fact: <CheckCircle className="w-4 h-4 text-primary" />,
     opinion: <MessageSquare className="w-4 h-4 text-purple-500" />,
     recommendation: <Sparkles className="w-4 h-4 text-yellow-500" />,
-    analysis: <Brain className="w-4 h-4 text-cyan-500" />,
+    analysis: <Brain className="w-4 h-4 text-[var(--brain-cyan)]" />,
     prediction: <HelpCircle className="w-4 h-4 text-orange-500" />,
   };
 
@@ -583,7 +577,7 @@ export function ValidationSummary({
             <div className="text-xs text-muted-foreground">Challenged</div>
           </div>
           <div className="text-center p-3 rounded-lg bg-secondary/30">
-            <div className="text-2xl font-bold text-cyan-500">{citedCount}</div>
+            <div className="text-2xl font-bold text-[var(--brain-cyan)]">{citedCount}</div>
             <div className="text-xs text-muted-foreground">With Citations</div>
           </div>
         </div>

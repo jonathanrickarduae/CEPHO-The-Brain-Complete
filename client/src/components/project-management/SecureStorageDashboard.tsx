@@ -48,7 +48,7 @@ export function SecureStorageDashboard() {
       used: 45.2,
       total: 100,
       description: "Active projects, recent documents",
-      color: "bg-blue-500",
+      color: "bg-primary",
     },
     {
       name: "Warm Storage",
@@ -341,7 +341,7 @@ export function SecureStorageDashboard() {
             <p className="text-sm text-foreground/50">
               Automatic backups are enabled
             </p>
-            <button className="px-3 py-1.5 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+            <button className="px-3 py-1.5 text-sm bg-blue-600 text-white rounded-lg hover:bg-primary/80">
               Create Backup Now
             </button>
           </div>

@@ -265,7 +265,7 @@ export function ChiefOfStaffNotification({
 
   return (
     <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-      <Card className="max-w-md w-full border-2 border-indigo-400/50 shadow-2xl bg-gradient-to-br from-gray-900 to-gray-800">
+      <Card className="max-w-md w-full border-2 border-indigo-400/50 shadow-2xl bg-gradient-to-br from-background to-gray-800">
         <CardContent className="p-6 space-y-5">
           {/* Header */}
           <div className="flex items-start justify-between">
@@ -322,7 +322,7 @@ export function ChiefOfStaffNotification({
             {reviewContext && (
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
                 <div className="bg-white/5 rounded-xl p-3 text-center">
-                  <div className="flex items-center justify-center gap-1 text-cyan-400 mb-1">
+                  <div className="flex items-center justify-center gap-1 text-[var(--brain-cyan)] mb-1">
                     <ListTodo className="w-4 h-4" />
                   </div>
                   <div className="text-xl font-bold text-white">

@@ -17,7 +17,6 @@ import {
   Building2,
   CheckCircle2,
   Clock,
-  Lock,
   Sparkles,
   Bot,
   MessageSquare,
@@ -96,7 +95,7 @@ const CAPABILITY_CATEGORIES: CapabilityCategory[] = [
     name: "CEPHO.Ai for Business",
     description: "Core business management with AI SME experts",
     icon: Briefcase,
-    color: "text-blue-500",
+    color: "text-primary",
     capabilities: [
       {
         id: "b1",
@@ -214,7 +213,7 @@ const CAPABILITY_CATEGORIES: CapabilityCategory[] = [
     name: "AI Agent Integration",
     description: "Communicate with external AI systems on your behalf",
     icon: Bot,
-    color: "text-cyan-500",
+    color: "text-[var(--brain-cyan)]",
     capabilities: [
       {
         id: "a1",
@@ -434,7 +433,7 @@ const getStatusBadge = (status: Capability["status"]) => {
       );
     case "in_development":
       return (
-        <Badge className="bg-blue-500/20 text-blue-500 border-blue-500/30">
+        <Badge className="bg-primary/20 text-primary border-blue-500/30">
           In Development
         </Badge>
       );
@@ -446,7 +445,7 @@ const getStatusBadge = (status: Capability["status"]) => {
       );
     case "future":
       return (
-        <Badge className="bg-gray-500/20 text-gray-400 border-gray-500/30">
+        <Badge className="bg-gray-500/20 text-muted-foreground border-gray-500/30">
           Future
         </Badge>
       );
@@ -477,9 +476,9 @@ export function ChiefOfStaffRoadmap() {
   const [expandedCapability, setExpandedCapability] = useState<string | null>(
     "p4"
   );
-  const [expandedPhases, setExpandedPhases] = useState<number[]>([1, 2]); // Default: show current phases
+  const [_expandedPhases, setExpandedPhases] = useState<number[]>([1, 2]); // Default: show current phases
 
-  const togglePhase = (phase: number) => {
+  const _togglePhase = (phase: number) => {
     setExpandedPhases(prev =>
       prev.includes(phase) ? prev.filter(p => p !== phase) : [...prev, phase]
     );
@@ -504,10 +503,10 @@ export function ChiefOfStaffRoadmap() {
     <div className="space-y-6">
       {/* Overview Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card className="bg-gray-900/50 border-gray-800">
+        <Card className="bg-gray-900/50 border-border/50">
           <CardContent className="pt-6">
             <div className="text-center">
-              <div className="text-3xl font-bold text-white">
+              <div className="text-2xl md:text-3xl font-bold text-foreground">
                 {totalCapabilities}
               </div>
               <div className="text-sm text-muted-foreground">
@@ -516,7 +515,7 @@ export function ChiefOfStaffRoadmap() {
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-gray-900/50 border-gray-800">
+        <Card className="bg-gray-900/50 border-border/50">
           <CardContent className="pt-6">
             <div className="text-center">
               <div className="text-3xl font-bold text-green-500">
@@ -526,10 +525,10 @@ export function ChiefOfStaffRoadmap() {
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-gray-900/50 border-gray-800">
+        <Card className="bg-gray-900/50 border-border/50">
           <CardContent className="pt-6">
             <div className="text-center">
-              <div className="text-3xl font-bold text-blue-500">
+              <div className="text-3xl font-bold text-primary">
                 {inDevelopment}
               </div>
               <div className="text-sm text-muted-foreground">
@@ -538,7 +537,7 @@ export function ChiefOfStaffRoadmap() {
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-gray-900/50 border-gray-800">
+        <Card className="bg-gray-900/50 border-border/50">
           <CardContent className="pt-6">
             <div className="text-center">
               <div className="text-3xl font-bold text-purple-500">6</div>
@@ -551,7 +550,7 @@ export function ChiefOfStaffRoadmap() {
       </div>
 
       {/* Progress */}
-      <Card className="bg-gray-900/50 border-gray-800">
+      <Card className="bg-gray-900/50 border-border/50">
         <CardHeader>
           <CardTitle className="text-white flex items-center gap-2">
             <Sparkles className="h-5 w-5 text-[#E91E8C]" />
@@ -565,7 +564,7 @@ export function ChiefOfStaffRoadmap() {
                 {availableCapabilities} of {totalCapabilities} capabilities
                 available
               </span>
-              <span className="text-white">
+              <span className="text-foreground">
                 {Math.round((availableCapabilities / totalCapabilities) * 100)}%
               </span>
             </div>
@@ -579,12 +578,12 @@ export function ChiefOfStaffRoadmap() {
 
       {/* Category Tabs */}
       <Tabs value={activeCategory} onValueChange={setActiveCategory}>
-        <TabsList className="bg-gray-900/50 border border-gray-800 w-full justify-start">
+        <TabsList className="bg-gray-900/50 border border-border/50 w-full justify-start">
           {CAPABILITY_CATEGORIES.map(cat => (
             <TabsTrigger
               key={cat.id}
               value={cat.id}
-              className="data-[state=active]:bg-gray-800"
+              className="data-[state=active]:bg-card"
             >
               <cat.icon className={`w-4 h-4 mr-2 ${cat.color}`} />
               {cat.name}
@@ -594,7 +593,7 @@ export function ChiefOfStaffRoadmap() {
 
         {CAPABILITY_CATEGORIES.map(category => (
           <TabsContent key={category.id} value={category.id} className="mt-4">
-            <Card className="bg-gray-900/50 border-gray-800">
+            <Card className="bg-gray-900/50 border-border/50">
               <CardHeader>
                 <CardTitle className="text-white flex items-center gap-2">
                   <category.icon className={`h-5 w-5 ${category.color}`} />
@@ -608,8 +607,8 @@ export function ChiefOfStaffRoadmap() {
                     key={capability.id}
                     className={`p-4 rounded-lg border transition-all ${
                       expandedCapability === capability.id
-                        ? "bg-gray-800 border-[#E91E8C]/50"
-                        : "bg-gray-800/50 border-gray-700 hover:border-gray-600"
+                        ? "bg-card border-[#E91E8C]/50"
+                        : "bg-card/50 border-border hover:border-border"
                     }`}
                   >
                     <div
@@ -624,14 +623,14 @@ export function ChiefOfStaffRoadmap() {
                     >
                       <div className="flex items-start gap-4">
                         <div
-                          className={`w-10 h-10 rounded-lg bg-gray-700 flex items-center justify-center ${
+                          className={`w-10 h-10 rounded-lg bg-muted flex items-center justify-center ${
                             capability.status === "available"
                               ? "text-green-500"
                               : capability.status === "in_development"
-                                ? "text-blue-500"
+                                ? "text-primary"
                                 : capability.status === "planned"
                                   ? "text-purple-500"
-                                  : "text-gray-500"
+                                  : "text-muted-foreground/70"
                           }`}
                         >
                           <capability.icon className="h-5 w-5" />
@@ -644,7 +643,7 @@ export function ChiefOfStaffRoadmap() {
                             {capability.aiAgentIntegration && (
                               <Badge
                                 variant="outline"
-                                className="border-cyan-500/50 text-cyan-400 text-xs"
+                                className="border-cyan-500/50 text-[var(--brain-cyan)] text-xs"
                               >
                                 <Bot className="h-3 w-3 mr-1" />
                                 AI Agent
@@ -658,7 +657,7 @@ export function ChiefOfStaffRoadmap() {
                             {getStatusBadge(capability.status)}
                             <Badge
                               variant="outline"
-                              className="border-gray-600 text-gray-400"
+                              className="border-border text-muted-foreground"
                             >
                               {getPhaseLabel(capability.phase)}
                             </Badge>
@@ -676,7 +675,7 @@ export function ChiefOfStaffRoadmap() {
 
                     {expandedCapability === capability.id &&
                       capability.features && (
-                        <div className="mt-4 pt-4 border-t border-gray-700">
+                        <div className="mt-4 pt-4 border-t border-border">
                           <h5 className="text-sm font-medium text-white mb-3">
                             Workflow Features:
                           </h5>
@@ -691,8 +690,8 @@ export function ChiefOfStaffRoadmap() {
                             ))}
                           </div>
                           {capability.aiAgentIntegration && (
-                            <div className="mt-4 p-3 bg-cyan-500/10 rounded-lg border border-cyan-500/20">
-                              <div className="flex items-center gap-2 text-cyan-400 mb-2">
+                            <div className="mt-4 p-3 bg-[var(--brain-cyan)]/10 rounded-lg border border-cyan-500/20">
+                              <div className="flex items-center gap-2 text-[var(--brain-cyan)] mb-2">
                                 <Bot className="h-4 w-4" />
                                 <span className="text-sm font-medium">
                                   AI Agent Integration
@@ -739,7 +738,7 @@ export function ChiefOfStaffRoadmap() {
               {PERSONAL_SMES.map(sme => (
                 <div
                   key={sme.id}
-                  className="p-3 bg-gray-800/50 rounded-lg text-center"
+                  className="p-3 bg-card/50 rounded-lg text-center"
                 >
                   <sme.icon className="h-6 w-6 text-purple-400 mx-auto mb-2" />
                   <p className="text-xs font-medium text-white">{sme.name}</p>
@@ -749,7 +748,7 @@ export function ChiefOfStaffRoadmap() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="p-4 bg-gray-800/50 rounded-lg">
+            <div className="p-4 bg-card/50 rounded-lg">
               <h4 className="font-medium text-white mb-2 flex items-center gap-2">
                 <Utensils className="h-4 w-4 text-purple-400" />
                 Autonomous Booking Workflow
@@ -761,9 +760,9 @@ export function ChiefOfStaffRoadmap() {
                 bookings upon approval.
               </p>
             </div>
-            <div className="p-4 bg-gray-800/50 rounded-lg">
+            <div className="p-4 bg-card/50 rounded-lg">
               <h4 className="font-medium text-white mb-2 flex items-center gap-2">
-                <Bot className="h-4 w-4 text-cyan-400" />
+                <Bot className="h-4 w-4 text-[var(--brain-cyan)]" />
                 AI-to-AI Communication
               </h4>
               <p className="text-sm text-muted-foreground">

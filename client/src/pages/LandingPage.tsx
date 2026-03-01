@@ -48,7 +48,7 @@ export default function LandingPage() {
       }
 
       // Sign in with Supabase
-      const { data, error } = await signIn(email, password);
+      const { data} = await signIn(email, password);
 
       if (error) {
         toast.error(error.message || "Failed to sign in");
@@ -60,7 +60,7 @@ export default function LandingPage() {
         toast.success("Welcome to CEPHO.AI");
         navigate("/nexus");
       }
-    } catch (error) {
+    } catch {
       toast.error("An unexpected error occurred");
       setIsLoading(false);
     }
@@ -177,7 +177,7 @@ export default function LandingPage() {
 
           {/* Tagline - white, smaller */}
           <p
-            className="text-white/80 mb-2"
+            className="text-foreground/80 mb-2"
             style={{
               fontSize: "clamp(0.875rem, 2vw, 1rem)",
               fontFamily: "system-ui, -apple-system, sans-serif",
@@ -211,26 +211,26 @@ export default function LandingPage() {
               <form onSubmit={handleLogin} className="space-y-4">
                 <div className="space-y-3">
                   <div className="relative group">
-                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-purple-400 transition-colors" />
+                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground group-focus-within:text-purple-400 transition-colors" />
                     <Input
                       type="email"
                       placeholder="Email"
                       value={email}
                       onChange={e => setEmail(e.target.value)}
                       required
-                      className="pl-12 h-12 bg-white/5 border-white/10 text-white placeholder:text-gray-400 focus:border-purple-400/50 focus:ring-1 focus:ring-purple-400/30 rounded-lg transition-all"
+                      className="pl-12 h-12 bg-white/5 border-white/10 text-white placeholder:text-muted-foreground focus:border-purple-400/50 focus:ring-1 focus:ring-purple-400/30 rounded-lg transition-all"
                     />
                   </div>
 
                   <div className="relative group">
-                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-purple-400 transition-colors" />
+                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground group-focus-within:text-purple-400 transition-colors" />
                     <Input
                       type="password"
                       placeholder="Password"
                       value={password}
                       onChange={e => setPassword(e.target.value)}
                       required
-                      className="pl-12 h-12 bg-white/5 border-white/10 text-white placeholder:text-gray-400 focus:border-purple-400/50 focus:ring-1 focus:ring-purple-400/30 rounded-lg transition-all"
+                      className="pl-12 h-12 bg-white/5 border-white/10 text-white placeholder:text-muted-foreground focus:border-purple-400/50 focus:ring-1 focus:ring-purple-400/30 rounded-lg transition-all"
                     />
                   </div>
 
@@ -245,7 +245,7 @@ export default function LandingPage() {
                     />
                     <label
                       htmlFor="remember"
-                      className="text-sm text-gray-400 cursor-pointer select-none"
+                      className="text-sm text-muted-foreground cursor-pointer select-none"
                     >
                       Remember me
                     </label>

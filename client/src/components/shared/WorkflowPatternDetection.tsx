@@ -14,7 +14,7 @@ import {
   Lightbulb,
   RefreshCw,
 } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -207,7 +207,7 @@ export function WorkflowPatternDetection() {
       case "risk":
         return "text-orange-400 bg-orange-500/20";
       case "efficiency":
-        return "text-cyan-400 bg-cyan-500/20";
+        return "text-[var(--brain-cyan)] bg-[var(--brain-cyan)]/20";
       default:
         return "text-foreground/70 bg-gray-500/20";
     }
@@ -231,7 +231,7 @@ export function WorkflowPatternDetection() {
       case "warning":
         return "bg-yellow-500/20 text-yellow-400 border-yellow-500/30";
       default:
-        return "bg-blue-500/20 text-blue-400 border-blue-500/30";
+        return "bg-primary/20 text-primary border-blue-500/30";
     }
   };
 
@@ -382,7 +382,7 @@ export function WorkflowPatternDetection() {
                         ? "bg-green-500/20 text-green-400"
                         : anomaly.status === "investigating"
                           ? "bg-yellow-500/20 text-yellow-400"
-                          : "bg-blue-500/20 text-blue-400"
+                          : "bg-primary/20 text-primary"
                     }
                   >
                     {anomaly.status}

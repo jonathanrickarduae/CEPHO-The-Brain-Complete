@@ -23,15 +23,15 @@ export function AccessibilitySettingsPanel() {
   } = useAccessibilityPreferences();
 
   return (
-    <div className="bg-gray-800 rounded-xl border border-gray-700 p-6">
+    <div className="bg-card rounded-xl border border-border p-6">
       <div className="flex items-center justify-between mb-6">
         <h3 className="text-lg font-semibold text-white flex items-center gap-2">
-          <Accessibility className="w-5 h-5 text-cyan-400" />
+          <Accessibility className="w-5 h-5 text-[var(--brain-cyan)]" />
           Accessibility Settings
         </h3>
         <button
           onClick={resetToDefaults}
-          className="flex items-center gap-2 px-3 py-1.5 bg-gray-700 hover:bg-gray-600 rounded-lg text-sm text-foreground/80 transition-colors"
+          className="flex items-center gap-2 px-3 py-1.5 bg-muted hover:bg-gray-600 rounded-lg text-sm text-foreground/80 transition-colors"
         >
           <RotateCcw className="w-4 h-4" />
           Reset
@@ -40,7 +40,7 @@ export function AccessibilitySettingsPanel() {
 
       <div className="space-y-6">
         {/* Reduced Motion */}
-        <div className="flex items-center justify-between p-4 bg-gray-900 rounded-xl">
+        <div className="flex items-center justify-between p-4 bg-background rounded-xl">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-lg bg-purple-500/20 flex items-center justify-center">
               <Zap className="w-5 h-5 text-purple-400" />
@@ -55,7 +55,7 @@ export function AccessibilitySettingsPanel() {
           <button
             onClick={() => setReducedMotion(!reducedMotion)}
             className={`w-12 h-6 rounded-full transition-colors ${
-              reducedMotion ? "bg-cyan-500" : "bg-gray-700"
+              reducedMotion ? "bg-[var(--brain-cyan)]" : "bg-muted"
             }`}
           >
             <div
@@ -67,7 +67,7 @@ export function AccessibilitySettingsPanel() {
         </div>
 
         {/* High Contrast */}
-        <div className="flex items-center justify-between p-4 bg-gray-900 rounded-xl">
+        <div className="flex items-center justify-between p-4 bg-background rounded-xl">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-lg bg-yellow-500/20 flex items-center justify-center">
               <Contrast className="w-5 h-5 text-yellow-400" />
@@ -82,7 +82,7 @@ export function AccessibilitySettingsPanel() {
           <button
             onClick={() => setHighContrast(!highContrast)}
             className={`w-12 h-6 rounded-full transition-colors ${
-              highContrast ? "bg-cyan-500" : "bg-gray-700"
+              highContrast ? "bg-[var(--brain-cyan)]" : "bg-muted"
             }`}
           >
             <div
@@ -94,10 +94,10 @@ export function AccessibilitySettingsPanel() {
         </div>
 
         {/* Screen Reader Mode */}
-        <div className="flex items-center justify-between p-4 bg-gray-900 rounded-xl">
+        <div className="flex items-center justify-between p-4 bg-background rounded-xl">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center">
-              <Volume2 className="w-5 h-5 text-blue-400" />
+            <div className="w-10 h-10 rounded-lg bg-primary/20 flex items-center justify-center">
+              <Volume2 className="w-5 h-5 text-primary" />
             </div>
             <div>
               <div className="font-medium text-white">Screen Reader Mode</div>
@@ -109,7 +109,7 @@ export function AccessibilitySettingsPanel() {
           <button
             onClick={() => setScreenReaderMode(!screenReaderMode)}
             className={`w-12 h-6 rounded-full transition-colors ${
-              screenReaderMode ? "bg-cyan-500" : "bg-gray-700"
+              screenReaderMode ? "bg-[var(--brain-cyan)]" : "bg-muted"
             }`}
           >
             <div
@@ -121,7 +121,7 @@ export function AccessibilitySettingsPanel() {
         </div>
 
         {/* Font Size */}
-        <div className="p-4 bg-gray-900 rounded-xl">
+        <div className="p-4 bg-background rounded-xl">
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 rounded-lg bg-green-500/20 flex items-center justify-center">
               <Type className="w-5 h-5 text-green-400" />
@@ -141,7 +141,7 @@ export function AccessibilitySettingsPanel() {
                 className={`flex-1 py-2 rounded-lg text-sm font-medium transition-colors ${
                   fontSize === size
                     ? "bg-cyan-500 text-white"
-                    : "bg-gray-800 text-foreground/70 hover:bg-gray-700"
+                    : "bg-card text-foreground/70 hover:bg-muted"
                 }`}
               >
                 {size === "normal"
@@ -155,7 +155,7 @@ export function AccessibilitySettingsPanel() {
         </div>
 
         {/* Preview */}
-        <div className="p-4 bg-gray-900 rounded-xl">
+        <div className="p-4 bg-background rounded-xl">
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 rounded-lg bg-pink-500/20 flex items-center justify-center">
               <Eye className="w-5 h-5 text-pink-400" />
@@ -171,7 +171,7 @@ export function AccessibilitySettingsPanel() {
             className={`p-4 rounded-lg border ${
               highContrast
                 ? "bg-black border-white"
-                : "bg-gray-800 border-gray-700"
+                : "bg-card border-border"
             }`}
           >
             <p

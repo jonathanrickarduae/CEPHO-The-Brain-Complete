@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 import {
   FileText,
   Users,
@@ -17,7 +17,6 @@ import {
   TrendingUp,
   DollarSign,
   Shield,
-  Scale,
   Briefcase,
   Globe,
   Zap,
@@ -381,7 +380,7 @@ export function BusinessPlanReview({
   >(new Map());
   const [isReviewing, setIsReviewing] = useState(false);
   const [currentReviewIndex, setCurrentReviewIndex] = useState(0);
-  const [selectedExpertInsight, setSelectedExpertInsight] =
+  const [_setSelectedExpertInsight] =
     useState<ExpertInsight | null>(null);
 
   // File upload state
@@ -436,7 +435,7 @@ export function BusinessPlanReview({
   const [inviteRole, setInviteRole] = useState<"reviewer" | "viewer">(
     "reviewer"
   );
-  const [showCollaborativeSessions, setShowCollaborativeSessions] =
+  const [showCollaborativeSessions, _setShowCollaborativeSessions] =
     useState(false);
   const [newComment, setNewComment] = useState("");
   const [commentSection, setCommentSection] = useState<string | null>(null);
@@ -449,7 +448,7 @@ export function BusinessPlanReview({
     (completedSections / BUSINESS_PLAN_SECTIONS.length) * 100;
 
   // Get experts for a section
-  const getExpertsForSection = (sectionId: string) => {
+  const _getExpertsForSection = (sectionId: string) => {
     const section = BUSINESS_PLAN_SECTIONS.find(s => s.id === sectionId);
     if (!section) return [];
     return REVIEW_EXPERTS.filter(e =>
@@ -489,7 +488,7 @@ export function BusinessPlanReview({
   const inviteParticipantMutation =
     trpc.collaborativeReview.inviteParticipant.useMutation();
   const addCommentMutation = trpc.collaborativeReview.addComment.useMutation();
-  const sessionsQuery = trpc.collaborativeReview.getSessions.useQuery(
+  const _sessionsQuery = trpc.collaborativeReview.getSessions.useQuery(
     undefined,
     { enabled: showCollaborativeSessions }
   );
@@ -518,7 +517,7 @@ export function BusinessPlanReview({
           teamComposition: result.teamComposition,
         });
         toast.success("Chief of Staff has assembled the expert team");
-      } catch (error) {
+      } catch {
         toast.error("Failed to select team, using default experts");
       } finally {
         setIsSelectingTeam(false);
@@ -593,7 +592,7 @@ export function BusinessPlanReview({
       setSectionReviews(new Map(reviews));
 
       toast.success(`${section.name} review complete`);
-    } catch (error) {
+    } catch {
       toast.error(`Failed to analyze ${section.name}`);
 
       // Mark as completed with error state
@@ -704,7 +703,7 @@ export function BusinessPlanReview({
           "Unsupported file type. Please upload PDF, Word, or text files."
         );
       }
-    } catch (error) {
+    } catch {
       toast.error("Failed to read file");
       setBusinessPlanContent(
         `[Document: ${file.name}]\n\nDocument uploaded for analysis. Text extraction failed.`
@@ -816,7 +815,7 @@ export function BusinessPlanReview({
       });
 
       toast.success("Review saved to Library!");
-    } catch (error) {
+    } catch {
       toast.error("Failed to save to Library");
     }
   };
@@ -916,7 +915,7 @@ export function BusinessPlanReview({
       setCurrentVersionId(result.versionId);
       toast.success(`Saved as Version ${result.versionNumber}`);
       setVersionLabel("");
-    } catch (error) {
+    } catch {
       toast.error("Failed to save version");
     }
   };
@@ -952,7 +951,7 @@ export function BusinessPlanReview({
       ]);
       setFollowUpQuestion("");
       toast.success("Expert responded!");
-    } catch (error) {
+    } catch {
       toast.error("Failed to get response");
     }
   };
@@ -993,7 +992,7 @@ export function BusinessPlanReview({
       toast.success(
         `Document added to ${BUSINESS_PLAN_SECTIONS.find(s => s.id === sectionId)?.name}`
       );
-    } catch (error) {
+    } catch {
       toast.error("Failed to upload document");
     }
   };
@@ -1057,7 +1056,7 @@ export function BusinessPlanReview({
       URL.revokeObjectURL(url);
 
       toast.success("Report exported successfully!");
-    } catch (error) {
+    } catch {
       toast.error("Failed to export report");
     }
   };
@@ -1068,7 +1067,7 @@ export function BusinessPlanReview({
     : null;
 
   // Get weighted score for a section
-  const getWeightedScore = (sectionId: string, score: number): number => {
+  const _getWeightedScore = (sectionId: string, score: number): number => {
     if (!currentTemplate) return score;
     const weights = currentTemplate.sectionWeights as {
       [key: string]: number | undefined;
@@ -1078,7 +1077,7 @@ export function BusinessPlanReview({
   };
 
   // Get template guidance for a section
-  const getTemplateGuidance = (sectionId: string): string | null => {
+  const _getTemplateGuidance = (sectionId: string): string | null => {
     if (!currentTemplate) return null;
     const guidance = currentTemplate.guidance as {
       [key: string]: string | undefined;
@@ -1103,7 +1102,7 @@ export function BusinessPlanReview({
       toast.success(
         "Collaborative session started! You can now invite team members."
       );
-    } catch (error) {
+    } catch {
       toast.error("Failed to start collaborative session");
     }
   };
@@ -1123,13 +1122,13 @@ export function BusinessPlanReview({
       toast.success(`Invited user as ${inviteRole}`);
       setInviteUserId("");
       setShowInviteDialog(false);
-    } catch (error) {
+    } catch {
       toast.error("Failed to invite participant");
     }
   };
 
   // Add comment to section
-  const handleAddComment = async () => {
+  const _handleAddComment = async () => {
     if (!collaborativeSessionId || !commentSection || !newComment.trim()) {
       toast.error("Please enter a comment");
       return;
@@ -1143,7 +1142,7 @@ export function BusinessPlanReview({
       toast.success("Comment added");
       setNewComment("");
       setCommentSection(null);
-    } catch (error) {
+    } catch {
       toast.error("Failed to add comment");
     }
   };
@@ -1438,7 +1437,7 @@ export function BusinessPlanReview({
           <TabsContent value="sections" className="flex-1 overflow-hidden p-4">
             <ScrollArea className="h-full">
               <div className="space-y-3">
-                {BUSINESS_PLAN_SECTIONS.map((section, index) => {
+                {BUSINESS_PLAN_SECTIONS.map((section, _index) => {
                   const review = sectionReviews.get(section.id);
                   const Icon = section.icon;
                   const isActive = activeSection === section.id;
@@ -2178,7 +2177,7 @@ export function BusinessPlanReview({
                 {followUpHistory.map((item, i) => (
                   <div key={i} className="space-y-2">
                     <div className="flex items-start gap-2">
-                      <div className="w-6 h-6 rounded-full bg-blue-500/20 flex items-center justify-center text-xs">
+                      <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center text-xs">
                         Q
                       </div>
                       <p className="text-sm text-foreground flex-1">

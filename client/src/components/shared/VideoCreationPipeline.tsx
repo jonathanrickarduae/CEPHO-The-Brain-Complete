@@ -4,26 +4,14 @@ import {
   Film,
   Wand2,
   Play,
-  Pause,
-  SkipBack,
-  SkipForward,
   Volume2,
-  VolumeX,
   Download,
-  Share2,
   Layers,
   Type,
   Image,
   Music,
   Mic,
-  Clock,
-  Settings,
   Plus,
-  Trash2,
-  Move,
-  Copy,
-  ChevronDown,
-  ChevronRight,
   Sparkles,
   FileVideo,
   Upload,
@@ -68,8 +56,8 @@ export function VideoCreationPipeline() {
   const [selectedProject, setSelectedProject] = useState<VideoProject | null>(
     null
   );
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [currentTime, setCurrentTime] = useState(0);
+  const [_setIsPlaying] = useState(false);
+  const [_setCurrentTime] = useState(0);
   const [showExportModal, setShowExportModal] = useState(false);
 
   // Mock projects
@@ -273,7 +261,7 @@ export function VideoCreationPipeline() {
                 }`}
               >
                 <div className="flex items-start gap-4">
-                  <div className="w-32 h-20 bg-gray-800 rounded-lg flex items-center justify-center">
+                  <div className="w-32 h-20 bg-card rounded-lg flex items-center justify-center">
                     <Film className="w-8 h-8 text-muted-foreground" />
                   </div>
                   <div className="flex-1">
@@ -288,7 +276,7 @@ export function VideoCreationPipeline() {
                             : project.status === "generating"
                               ? "bg-yellow-500/20 text-yellow-400"
                               : project.status === "exported"
-                                ? "bg-blue-500/20 text-blue-400"
+                                ? "bg-primary/20 text-primary"
                                 : "bg-gray-500/20 text-foreground/70"
                         }`}
                       >
@@ -304,7 +292,7 @@ export function VideoCreationPipeline() {
                     </p>
                   </div>
                   <div className="flex gap-2">
-                    <button className="p-2 hover:bg-gray-700 rounded-lg transition-colors">
+                    <button className="p-2 hover:bg-muted rounded-lg transition-colors">
                       <Play className="w-4 h-4 text-muted-foreground" />
                     </button>
                     <button
@@ -312,7 +300,7 @@ export function VideoCreationPipeline() {
                         e.stopPropagation();
                         setShowExportModal(true);
                       }}
-                      className="p-2 hover:bg-gray-700 rounded-lg transition-colors"
+                      className="p-2 hover:bg-muted rounded-lg transition-colors"
                     >
                       <Download className="w-4 h-4 text-muted-foreground" />
                     </button>
@@ -339,17 +327,17 @@ export function VideoCreationPipeline() {
               </p>
               <textarea
                 placeholder="E.g., Create a 60-second product launch video for Project A. Professional tone, modern visuals, highlight key features: AI integration, real-time analytics, team collaboration. Include animated transitions and upbeat background music."
-                className="w-full h-32 px-4 py-3 bg-gray-900 border border-gray-700 rounded-xl text-foreground placeholder:text-muted-foreground resize-none focus:outline-none focus:border-purple-500"
+                className="w-full h-32 px-4 py-3 bg-background border border-border rounded-xl text-foreground placeholder:text-muted-foreground resize-none focus:outline-none focus:border-purple-500"
               />
               <div className="flex items-center justify-between mt-4">
                 <div className="flex items-center gap-4">
-                  <select className="px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-sm text-foreground">
+                  <select className="px-3 py-2 bg-card border border-border rounded-lg text-sm text-foreground">
                     <option>30 seconds</option>
                     <option>60 seconds</option>
                     <option>90 seconds</option>
                     <option>2 minutes</option>
                   </select>
-                  <select className="px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-sm text-foreground">
+                  <select className="px-3 py-2 bg-card border border-border rounded-lg text-sm text-foreground">
                     <option>Professional</option>
                     <option>Casual</option>
                     <option>Energetic</option>
@@ -366,7 +354,7 @@ export function VideoCreationPipeline() {
             {/* Manual Creation Options */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <button className="p-6 bg-card border border-border rounded-xl hover:border-primary/50 transition-colors text-left">
-                <Type className="w-8 h-8 text-cyan-400 mb-3" />
+                <Type className="w-8 h-8 text-[var(--brain-cyan)] mb-3" />
                 <h3 className="font-semibold text-foreground mb-1">
                   Text to Video
                 </h3>
@@ -401,14 +389,14 @@ export function VideoCreationPipeline() {
                 Voice-over Options
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="p-4 bg-gray-800/50 rounded-lg">
+                <div className="p-4 bg-card/50 rounded-lg">
                   <h4 className="font-medium text-foreground mb-2">
                     AI Voice Generation
                   </h4>
                   <p className="text-sm text-muted-foreground mb-3">
                     Generate professional voice-over from your script
                   </p>
-                  <select className="w-full px-3 py-2 bg-gray-900 border border-gray-700 rounded-lg text-sm text-foreground">
+                  <select className="w-full px-3 py-2 bg-background border border-border rounded-lg text-sm text-foreground">
                     <option>British Male - Professional</option>
                     <option>British Female - Professional</option>
                     <option>British Male - Casual</option>
@@ -417,7 +405,7 @@ export function VideoCreationPipeline() {
                     <option>American Female - Professional</option>
                   </select>
                 </div>
-                <div className="p-4 bg-gray-800/50 rounded-lg">
+                <div className="p-4 bg-card/50 rounded-lg">
                   <h4 className="font-medium text-foreground mb-2">
                     Record Your Own
                   </h4>
@@ -441,7 +429,7 @@ export function VideoCreationPipeline() {
                 key={template.id}
                 className="bg-card border border-border rounded-xl overflow-hidden hover:border-primary/50 transition-colors cursor-pointer"
               >
-                <div className="h-32 bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
+                <div className="h-32 bg-gradient-to-br from-gray-800 to-background flex items-center justify-center">
                   <Film className="w-12 h-12 text-muted-foreground" />
                 </div>
                 <div className="p-4">
@@ -449,7 +437,7 @@ export function VideoCreationPipeline() {
                     <h3 className="font-semibold text-foreground">
                       {template.name}
                     </h3>
-                    <span className="text-xs px-2 py-0.5 bg-gray-700 text-muted-foreground rounded-full">
+                    <span className="text-xs px-2 py-0.5 bg-muted text-muted-foreground rounded-full">
                       {formatDuration(template.duration)}
                     </span>
                   </div>
@@ -471,7 +459,7 @@ export function VideoCreationPipeline() {
               <h2 className="text-lg font-semibold text-foreground">
                 Video Assets
               </h2>
-              <button className="px-3 py-1.5 bg-gray-700 text-foreground rounded-lg hover:bg-gray-600 transition-colors text-sm flex items-center gap-2">
+              <button className="px-3 py-1.5 bg-muted text-foreground rounded-lg hover:bg-gray-600 transition-colors text-sm flex items-center gap-2">
                 <Upload className="w-4 h-4" />
                 Upload
               </button>
@@ -488,7 +476,7 @@ export function VideoCreationPipeline() {
                   key={category}
                   className="p-4 bg-card border border-border rounded-xl text-center"
                 >
-                  <div className="w-12 h-12 mx-auto mb-3 rounded-xl bg-gray-700 flex items-center justify-center">
+                  <div className="w-12 h-12 mx-auto mb-3 rounded-xl bg-muted flex items-center justify-center">
                     {i === 0 && (
                       <Video className="w-6 h-6 text-muted-foreground" />
                     )}
@@ -537,7 +525,7 @@ export function VideoCreationPipeline() {
               {exportFormats.map(format => (
                 <button
                   key={format.id}
-                  className="w-full p-4 bg-gray-800/50 hover:bg-gray-700/50 rounded-xl transition-colors flex items-center gap-4 text-left"
+                  className="w-full p-4 bg-card/50 hover:bg-muted/50 rounded-xl transition-colors flex items-center gap-4 text-left"
                 >
                   <format.icon className="w-6 h-6 text-primary" />
                   <div>
@@ -573,7 +561,7 @@ export function VideoCreationPipeline() {
 export function VideoCard({ project }: { project: VideoProject }) {
   return (
     <div className="bg-card border border-border rounded-xl overflow-hidden hover:border-primary/50 transition-colors">
-      <div className="h-24 bg-gray-800 flex items-center justify-center relative">
+      <div className="h-24 bg-card flex items-center justify-center relative">
         <Film className="w-8 h-8 text-muted-foreground" />
         <span className="absolute bottom-2 right-2 text-xs bg-black/70 px-1.5 py-0.5 rounded">
           {Math.floor(project.duration / 60)}:

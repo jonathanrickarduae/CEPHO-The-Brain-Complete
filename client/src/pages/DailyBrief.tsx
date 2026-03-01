@@ -403,7 +403,7 @@ export default function DailyBrief() {
       case "medium":
         return "text-yellow-400 bg-yellow-500/10 border-yellow-500/30";
       default:
-        return "text-blue-400 bg-blue-500/10 border-blue-500/30";
+        return "text-primary bg-primary/10 border-blue-500/30";
     }
   };
 
@@ -414,7 +414,7 @@ export default function DailyBrief() {
       case "warning":
         return "text-orange-400 bg-orange-500/10 border-orange-500/30";
       default:
-        return "text-blue-400 bg-blue-500/10 border-blue-500/30";
+        return "text-primary bg-primary/10 border-blue-500/30";
     }
   };
 
@@ -443,7 +443,7 @@ export default function DailyBrief() {
       case "defer":
         return { label: "Deferred", color: "text-yellow-400 bg-yellow-500/20" };
       case "delegate":
-        return { label: "Delegated", color: "text-blue-400 bg-blue-500/20" };
+        return { label: "Delegated", color: "text-primary bg-primary/20" };
       case "twin":
         return { label: "Chief of Staff", color: "text-primary bg-primary/20" };
       default:
@@ -505,7 +505,7 @@ export default function DailyBrief() {
         <Button
           size="sm"
           variant="ghost"
-          className="h-8 px-2 hover:bg-blue-500/20 hover:text-blue-400"
+          className="h-8 px-2 hover:bg-primary/20 hover:text-primary"
           onClick={e => {
             e.stopPropagation();
             handleAction(
@@ -565,10 +565,10 @@ export default function DailyBrief() {
                   <img
                     src="/avatars/victoria-stirling.jpg"
                     alt="Victoria Stirling"
-                    className="w-10 h-10 rounded-full border-2 border-blue-500"
+                    className="w-10 h-10 rounded-full border-2 border-primary"
                   />
                   <div>
-                    <p className="text-white font-semibold">
+                    <p className="text-foreground font-semibold">
                       Victoria Stirling
                     </p>
                     <p className="text-white/70 text-sm">
@@ -594,7 +594,7 @@ export default function DailyBrief() {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-xl md:text-3xl font-bold text-foreground flex items-center gap-3">
-                <Zap className="h-8 w-8 text-blue-400" />
+                <Zap className="h-8 w-8 text-primary" />
                 Victoria's Briefing
               </h1>
               <p className="text-muted-foreground mt-1">
@@ -904,7 +904,7 @@ export default function DailyBrief() {
           <Card className="bg-card/60 border-border">
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-foreground">
-                <Calendar className="w-5 h-5 text-blue-400" />
+                <Calendar className="w-5 h-5 text-primary" />
                 Today's Schedule
               </CardTitle>
             </CardHeader>
@@ -937,7 +937,7 @@ export default function DailyBrief() {
                               ? "bg-green-500"
                               : item.type === "focus"
                                 ? "bg-purple-500"
-                                : "bg-blue-500"
+                                : "bg-primary"
                         }`}
                       ></div>
 
@@ -983,7 +983,7 @@ export default function DailyBrief() {
           <Card className="bg-card/60 border-border">
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-foreground">
-                <TrendingUp className="w-5 h-5 text-cyan-400" />
+                <TrendingUp className="w-5 h-5 text-[var(--brain-cyan)]" />
                 Intelligence Feed
               </CardTitle>
             </CardHeader>
@@ -1149,7 +1149,7 @@ export default function DailyBrief() {
                               priority.status === "ahead"
                                 ? "bg-green-500"
                                 : priority.status === "on-track"
-                                  ? "bg-blue-500"
+                                  ? "bg-primary"
                                   : "bg-orange-500"
                             }`}
                             style={{ width: `${priority.progress}%` }}
@@ -1216,8 +1216,8 @@ export default function DailyBrief() {
                   label: "Delegated",
                   count: actionedItems.filter(i => i.action === "delegate")
                     .length,
-                  color: "text-blue-400",
-                  bg: "bg-blue-500/10",
+                  color: "text-primary",
+                  bg: "bg-primary/10",
                 },
                 {
                   label: "Chief of Staff",

@@ -19,8 +19,6 @@ import {
   Target,
   Lightbulb,
   MessageSquare,
-  Calendar,
-  ArrowRight,
   Download,
   RefreshCw,
   Building2,
@@ -69,10 +67,10 @@ interface ProjectSummaryProps {
 
 const categoryConfig = {
   strategy: { icon: Target, color: "text-purple-400", bg: "bg-purple-500/20" },
-  product: { icon: Lightbulb, color: "text-cyan-400", bg: "bg-cyan-500/20" },
+  product: { icon: Lightbulb, color: "text-[var(--brain-cyan)]", bg: "bg-[var(--brain-cyan)]/20" },
   finance: { icon: DollarSign, color: "text-green-400", bg: "bg-green-500/20" },
   team: { icon: Users, color: "text-amber-400", bg: "bg-amber-500/20" },
-  operations: { icon: Building2, color: "text-blue-400", bg: "bg-blue-500/20" },
+  operations: { icon: Building2, color: "text-primary", bg: "bg-primary/20" },
 };
 
 // Sample data for demonstration
@@ -167,7 +165,6 @@ const sampleQuestions: OpenQuestion[] = [
 ];
 
 export function ProjectSummary({
-  projectId,
   projectName = "Project",
   decisions = sampleDecisions,
   milestones = sampleMilestones,
@@ -192,7 +189,7 @@ export function ProjectSummary({
   );
 
   const exportSummary = () => {
-    const summary = {
+    const _summary = {
       projectName,
       generatedAt: new Date().toISOString(),
       stats,
@@ -242,7 +239,7 @@ ${openQuestions.map(q => `- [${q.priority.toUpperCase()}] ${q.question} (Raised 
   return (
     <div className="space-y-6">
       {/* Header */}
-      <Card className="bg-gray-900/50 border-gray-800">
+      <Card className="bg-gray-900/50 border-border/50">
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
@@ -271,7 +268,7 @@ ${openQuestions.map(q => `- [${q.priority.toUpperCase()}] ${q.question} (Raised 
         <CardContent>
           {/* Stats Grid */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="p-4 bg-gray-800/50 rounded-lg">
+            <div className="p-4 bg-card/50 rounded-lg">
               <div className="flex items-center gap-2 mb-2">
                 <CheckCircle2 className="w-4 h-4 text-green-400" />
                 <span className="text-sm text-muted-foreground">Decisions</span>
@@ -283,9 +280,9 @@ ${openQuestions.map(q => `- [${q.priority.toUpperCase()}] ${q.question} (Raised 
                 {stats.finalDecisions} final
               </div>
             </div>
-            <div className="p-4 bg-gray-800/50 rounded-lg">
+            <div className="p-4 bg-card/50 rounded-lg">
               <div className="flex items-center gap-2 mb-2">
-                <TrendingUp className="w-4 h-4 text-cyan-400" />
+                <TrendingUp className="w-4 h-4 text-[var(--brain-cyan)]" />
                 <span className="text-sm text-muted-foreground">
                   Milestones
                 </span>
@@ -297,7 +294,7 @@ ${openQuestions.map(q => `- [${q.priority.toUpperCase()}] ${q.question} (Raised 
                 {stats.highImpactMilestones} high impact
               </div>
             </div>
-            <div className="p-4 bg-gray-800/50 rounded-lg">
+            <div className="p-4 bg-card/50 rounded-lg">
               <div className="flex items-center gap-2 mb-2">
                 <MessageSquare className="w-4 h-4 text-amber-400" />
                 <span className="text-sm text-muted-foreground">
@@ -311,7 +308,7 @@ ${openQuestions.map(q => `- [${q.priority.toUpperCase()}] ${q.question} (Raised 
                 {stats.urgentQuestions} urgent
               </div>
             </div>
-            <div className="p-4 bg-gray-800/50 rounded-lg">
+            <div className="p-4 bg-card/50 rounded-lg">
               <div className="flex items-center gap-2 mb-2">
                 <Clock className="w-4 h-4 text-purple-400" />
                 <span className="text-sm text-muted-foreground">Pending</span>
@@ -327,7 +324,7 @@ ${openQuestions.map(q => `- [${q.priority.toUpperCase()}] ${q.question} (Raised 
 
       {/* Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="bg-gray-800/50">
+        <TabsList className="bg-card/50">
           <TabsTrigger value="decisions">
             <CheckCircle2 className="w-4 h-4 mr-2" />
             Decisions ({decisions.length})
@@ -352,7 +349,7 @@ ${openQuestions.map(q => `- [${q.priority.toUpperCase()}] ${q.question} (Raised 
                 return (
                   <Card
                     key={decision.id}
-                    className="bg-gray-900/50 border-gray-800"
+                    className="bg-gray-900/50 border-border/50"
                   >
                     <CardContent className="p-4">
                       <div className="flex items-start gap-3">
@@ -372,7 +369,7 @@ ${openQuestions.map(q => `- [${q.priority.toUpperCase()}] ${q.question} (Raised 
                                 decision.status === "pending_review" &&
                                   "bg-amber-500/20 text-amber-400 border-amber-500/30",
                                 decision.status === "superseded" &&
-                                  "bg-gray-500/20 text-gray-400 border-gray-500/30"
+                                  "bg-gray-500/20 text-muted-foreground border-gray-500/30"
                               )}
                             >
                               {decision.status.replace("_", " ")}
@@ -410,18 +407,18 @@ ${openQuestions.map(q => `- [${q.priority.toUpperCase()}] ${q.question} (Raised 
               {milestones.map(milestone => (
                 <div
                   key={milestone.id}
-                  className="flex items-center gap-3 p-3 bg-gray-800/50 rounded-lg"
+                  className="flex items-center gap-3 p-3 bg-card/50 rounded-lg"
                 >
                   <CheckCircle2
                     className={cn(
                       "w-5 h-5",
                       milestone.impact === "high" && "text-green-400",
                       milestone.impact === "medium" && "text-amber-400",
-                      milestone.impact === "low" && "text-gray-400"
+                      milestone.impact === "low" && "text-muted-foreground"
                     )}
                   />
                   <div className="flex-1">
-                    <p className="text-white font-medium">{milestone.title}</p>
+                    <p className="text-foreground font-medium">{milestone.title}</p>
                     <p className="text-xs text-muted-foreground">
                       {milestone.category}
                     </p>
@@ -434,7 +431,7 @@ ${openQuestions.map(q => `- [${q.priority.toUpperCase()}] ${q.question} (Raised 
                       milestone.impact === "medium" &&
                         "border-amber-500/30 text-amber-400",
                       milestone.impact === "low" &&
-                        "border-gray-500/30 text-gray-400"
+                        "border-gray-500/30 text-muted-foreground"
                     )}
                   >
                     {milestone.impact}
@@ -455,7 +452,7 @@ ${openQuestions.map(q => `- [${q.priority.toUpperCase()}] ${q.question} (Raised 
                 <Card
                   key={question.id}
                   className={cn(
-                    "bg-gray-900/50 border-gray-800",
+                    "bg-gray-900/50 border-border/50",
                     question.priority === "urgent" && "border-red-500/50"
                   )}
                 >
@@ -466,12 +463,12 @@ ${openQuestions.map(q => `- [${q.priority.toUpperCase()}] ${q.question} (Raised 
                           "w-5 h-5 mt-0.5",
                           question.priority === "urgent" && "text-red-400",
                           question.priority === "high" && "text-amber-400",
-                          question.priority === "medium" && "text-blue-400",
-                          question.priority === "low" && "text-gray-400"
+                          question.priority === "medium" && "text-primary",
+                          question.priority === "low" && "text-muted-foreground"
                         )}
                       />
                       <div className="flex-1">
-                        <p className="text-white">{question.question}</p>
+                        <p className="text-foreground">{question.question}</p>
                         <div className="flex items-center gap-4 mt-2 text-xs text-muted-foreground">
                           <span>Raised by {question.raisedBy}</span>
                           <span>
@@ -492,9 +489,9 @@ ${openQuestions.map(q => `- [${q.priority.toUpperCase()}] ${q.question} (Raised 
                           question.priority === "high" &&
                             "bg-amber-500/20 text-amber-400 border-amber-500/30",
                           question.priority === "medium" &&
-                            "bg-blue-500/20 text-blue-400 border-blue-500/30",
+                            "bg-primary/20 text-primary border-blue-500/30",
                           question.priority === "low" &&
-                            "bg-gray-500/20 text-gray-400 border-gray-500/30"
+                            "bg-gray-500/20 text-muted-foreground border-gray-500/30"
                         )}
                       >
                         {question.priority}

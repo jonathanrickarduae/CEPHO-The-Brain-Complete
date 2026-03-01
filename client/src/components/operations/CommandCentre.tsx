@@ -105,7 +105,7 @@ export function CommandCentre() {
       case "delayed":
         return "bg-red-500/20 text-red-400 border-red-500/30";
       case "completed":
-        return "bg-blue-500/20 text-blue-400 border-blue-500/30";
+        return "bg-primary/20 text-primary border-blue-500/30";
     }
   };
 
@@ -154,11 +154,11 @@ export function CommandCentre() {
           className="h-auto p-6 flex-col items-start bg-gradient-to-br from-cyan-500/10 to-blue-500/10 border-cyan-500/30 hover:border-cyan-500/50 transition-all"
         >
           <div className="flex items-center justify-between w-full mb-2">
-            <Target className="w-8 h-8 text-cyan-400" />
-            <ChevronRight className="w-5 h-5 text-cyan-400/50" />
+            <Target className="w-8 h-8 text-[var(--brain-cyan)]" />
+            <ChevronRight className="w-5 h-5 text-[var(--brain-cyan)]/50" />
           </div>
           <p className="text-sm text-muted-foreground">Active Projects</p>
-          <p className="text-3xl font-bold text-cyan-400">
+          <p className="text-3xl font-bold text-[var(--brain-cyan)]">
             {mockProjects.length}
           </p>
         </Button>
@@ -217,7 +217,7 @@ export function CommandCentre() {
       {/* Projects Grid - Button Style Cards */}
       <div>
         <h2 className="text-2xl font-bold text-foreground mb-6 flex items-center gap-2">
-          <Target className="w-6 h-6 text-cyan-400" />
+          <Target className="w-6 h-6 text-[var(--brain-cyan)]" />
           Project Status
         </h2>
         <div className="grid grid-cols-1 gap-3 sm:gap-4">
@@ -225,9 +225,9 @@ export function CommandCentre() {
             <Button
               key={project.id}
               variant="outline"
-              className={`h-auto p-6 flex-col items-start text-left bg-gray-900/50 border-gray-700 hover:border-cyan-500/50 transition-all ${
+              className={`h-auto p-6 flex-col items-start text-left bg-gray-900/50 border-border hover:border-cyan-500/50 transition-all ${
                 selectedProject === project.id
-                  ? "ring-2 ring-cyan-500 border-cyan-500"
+                  ? "ring-2 ring-cyan-500 border-[var(--brain-cyan)]"
                   : ""
               }`}
               onClick={() =>
@@ -260,10 +260,10 @@ export function CommandCentre() {
                       href={project.asanaLink}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="p-2 hover:bg-cyan-500/10 rounded-lg transition-colors"
+                      className="p-2 hover:bg-[var(--brain-cyan)]/10 rounded-lg transition-colors"
                       onClick={e => e.stopPropagation()}
                     >
-                      <ExternalLink className="w-5 h-5 text-cyan-400" />
+                      <ExternalLink className="w-5 h-5 text-[var(--brain-cyan)]" />
                     </a>
                   )}
                 </div>
@@ -272,13 +272,13 @@ export function CommandCentre() {
                 <div className="w-full">
                   <div className="flex items-center justify-between text-sm mb-2">
                     <span className="text-muted-foreground">Progress</span>
-                    <span className="font-bold text-cyan-400">
+                    <span className="font-bold text-[var(--brain-cyan)]">
                       {project.progress}%
                     </span>
                   </div>
                   <Progress
                     value={project.progress}
-                    className="h-3 bg-gray-800"
+                    className="h-3 bg-card"
                   />
                 </div>
 
@@ -302,7 +302,7 @@ export function CommandCentre() {
 
                 {/* Expanded Details */}
                 {selectedProject === project.id && (
-                  <div className="pt-4 border-t border-gray-700 space-y-3 w-full">
+                  <div className="pt-4 border-t border-border space-y-3 w-full">
                     <p className="text-sm font-semibold text-foreground">
                       Teams Involved:
                     </p>
@@ -310,7 +310,7 @@ export function CommandCentre() {
                       {project.team.map(team => (
                         <Badge
                           key={team}
-                          className="bg-cyan-500/20 text-cyan-400 border-cyan-500/30"
+                          className="bg-[var(--brain-cyan)]/20 text-[var(--brain-cyan)] border-cyan-500/30"
                         >
                           {team}
                         </Badge>
@@ -335,7 +335,7 @@ export function CommandCentre() {
             <Button
               key={team.name}
               variant="outline"
-              className="h-auto p-6 flex-col items-start bg-gradient-to-br from-gray-900/80 to-gray-800/50 border-gray-700 hover:border-purple-500/50 transition-all"
+              className="h-auto p-6 flex-col items-start bg-gradient-to-br from-background/80 to-gray-800/50 border-border hover:border-purple-500/50 transition-all"
             >
               <div className="w-full space-y-3">
                 <div className="flex items-center justify-between w-full">
@@ -347,7 +347,7 @@ export function CommandCentre() {
                     <TrendingDown className="w-5 h-5 text-red-400" />
                   )}
                   {team.trend === "stable" && (
-                    <Activity className="w-5 h-5 text-gray-400" />
+                    <Activity className="w-5 h-5 text-muted-foreground" />
                   )}
                 </div>
                 <div className="w-full">
@@ -359,7 +359,7 @@ export function CommandCentre() {
                   </div>
                   <Progress
                     value={team.performance}
-                    className="h-3 bg-gray-800"
+                    className="h-3 bg-card"
                   />
                 </div>
                 <div className="text-sm text-muted-foreground">

@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { X, Keyboard } from "lucide-react";
-import { cn } from "@/lib/utils";
 
 interface ShortcutItem {
   keys: string[];

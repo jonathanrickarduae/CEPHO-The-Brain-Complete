@@ -19,13 +19,11 @@ import {
   SidebarTrigger,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { getLoginUrl } from "@/const";
 import { useIsMobile } from "@/hooks/useMobile";
 import { LayoutDashboard, LogOut, PanelLeft, Users } from "lucide-react";
 import { CSSProperties, useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
 import { DashboardLayoutSkeleton } from "@/components/project-management/DashboardLayoutSkeleton";
-import { Button } from "@/components/ui/button";
 
 const menuItems = [
   { icon: LayoutDashboard, label: "Page 1", path: "/" },
@@ -46,7 +44,7 @@ export default function DashboardLayout({
     const saved = localStorage.getItem(SIDEBAR_WIDTH_KEY);
     return saved ? parseInt(saved, 10) : DEFAULT_WIDTH;
   });
-  const { loading, user } = useAuth();
+  const { loading} = useAuth();
 
   useEffect(() => {
     localStorage.setItem(SIDEBAR_WIDTH_KEY, sidebarWidth.toString());
@@ -82,7 +80,7 @@ function DashboardLayoutContent({
   children,
   setSidebarWidth,
 }: DashboardLayoutContentProps) {
-  const { user, logout } = useAuth();
+  const { logout, user } = useAuth();
   const [location, setLocation] = useLocation();
   const { state, toggleSidebar } = useSidebar();
   const isCollapsed = state === "collapsed";

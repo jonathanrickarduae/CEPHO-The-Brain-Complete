@@ -129,7 +129,7 @@ export function ThemeToggle({
   if (!context) {
     return (
       <button
-        className={`p-2 rounded-lg hover:bg-gray-800 transition-colors ${className}`}
+        className={`p-2 rounded-lg hover:bg-card transition-colors ${className}`}
         title="Theme toggle"
       >
         <Moon className="w-5 h-5 text-muted-foreground" />
@@ -150,7 +150,7 @@ export function ThemeToggle({
     return (
       <button
         onClick={cycleTheme}
-        className={`p-2 rounded-lg hover:bg-gray-800 transition-colors ${className}`}
+        className={`p-2 rounded-lg hover:bg-card transition-colors ${className}`}
         title={`Current theme: ${theme}`}
       >
         {resolvedTheme === "dark" ? (
@@ -167,7 +167,7 @@ export function ThemeToggle({
       <div className="relative">
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className={`flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-800 transition-colors ${className}`}
+          className={`flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-card transition-colors ${className}`}
         >
           {resolvedTheme === "dark" ? (
             <Moon className="w-4 h-4" />
@@ -178,7 +178,7 @@ export function ThemeToggle({
         </button>
 
         {isOpen && (
-          <div className="absolute top-full right-0 mt-2 w-36 bg-gray-900 border border-gray-700 rounded-lg shadow-xl z-50 overflow-hidden">
+          <div className="absolute top-full right-0 mt-2 w-36 bg-background border border-border rounded-lg shadow-xl z-50 overflow-hidden">
             {[
               { value: "light", icon: Sun, label: "Light" },
               { value: "dark", icon: Moon, label: "Dark" },
@@ -190,9 +190,9 @@ export function ThemeToggle({
                   setTheme(option.value as Theme);
                   setIsOpen(false);
                 }}
-                className={`w-full flex items-center gap-3 px-4 py-2.5 hover:bg-gray-800 transition-colors ${
+                className={`w-full flex items-center gap-3 px-4 py-2.5 hover:bg-card transition-colors ${
                   theme === option.value
-                    ? "bg-gray-800 text-primary"
+                    ? "bg-card text-primary"
                     : "text-foreground"
                 }`}
               >
@@ -209,7 +209,7 @@ export function ThemeToggle({
   // Button variant
   return (
     <div
-      className={`flex items-center gap-1 p-1 bg-gray-800 rounded-lg ${className}`}
+      className={`flex items-center gap-1 p-1 bg-card rounded-lg ${className}`}
     >
       {[
         { value: "light", icon: Sun },
@@ -252,7 +252,7 @@ export function ThemeSelector() {
             className={`flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all ${
               theme === option.value
                 ? "border-primary bg-primary/10"
-                : "border-gray-700 hover:border-gray-600"
+                : "border-border hover:border-border"
             }`}
           >
             <option.icon

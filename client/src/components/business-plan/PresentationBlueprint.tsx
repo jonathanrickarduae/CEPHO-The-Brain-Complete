@@ -17,13 +17,11 @@ import {
   Rocket,
   Download,
   Eye,
-  Edit3,
   Palette,
   Layout,
   Wand2,
   RefreshCw,
   CheckCircle2,
-  Clock,
   Brain,
   MessageSquare,
   AlertTriangle,
@@ -36,7 +34,6 @@ import {
 import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
 interface SlideContent {
@@ -271,14 +268,14 @@ export function PresentationBlueprint() {
   const [selectedTheme, setSelectedTheme] = useState<string>("professional");
   const [activeSlide, setActiveSlide] = useState<number>(0);
   const [isGenerating, setIsGenerating] = useState(false);
-  const [projectData, setProjectData] = useState<any>(null);
+  const [_projectData, setProjectData] = useState<any>(null);
 
   // Fetch projects list from Genesis
   const { data: genesisProjects, isLoading: loadingProjects } =
     trpc.genesis.list.useQuery();
 
   // Fetch specific project data when selected
-  const { data: fetchedProjectData, isLoading: loadingProjectData } =
+  const { data: fetchedProjectData, isLoading: _loadingProjectData } =
     trpc.genesis.getProjectData.useQuery(
       { projectId: selectedProject || "" },
       { enabled: !!selectedProject && startMode === "project" }
@@ -467,7 +464,7 @@ export function PresentationBlueprint() {
         {/* Header */}
         <div className="text-center mb-8">
           <h2 className="text-2xl font-bold text-foreground flex items-center justify-center gap-2">
-            <PresentationIcon className="w-7 h-7 text-blue-400" />
+            <PresentationIcon className="w-7 h-7 text-primary" />
             Presentation Blueprint
           </h2>
           <p className="text-muted-foreground mt-2">
@@ -509,8 +506,8 @@ export function PresentationBlueprint() {
           {/* Link to Project Option */}
           <div className="p-6 bg-gradient-to-br from-blue-500/10 to-purple-500/10 border-2 border-blue-500/30 rounded-2xl">
             <div className="flex items-center gap-3 mb-4">
-              <div className="p-3 bg-blue-500/20 rounded-xl">
-                <Link2 className="w-6 h-6 text-blue-400" />
+              <div className="p-3 bg-primary/20 rounded-xl">
+                <Link2 className="w-6 h-6 text-primary" />
               </div>
               <div>
                 <h3 className="font-semibold text-lg text-foreground">
@@ -534,7 +531,7 @@ export function PresentationBlueprint() {
               <div className="space-y-2 max-h-48 overflow-y-auto">
                 {loadingProjects ? (
                   <div className="flex items-center justify-center p-4">
-                    <Loader2 className="w-5 h-5 animate-spin text-blue-400" />
+                    <Loader2 className="w-5 h-5 animate-spin text-primary" />
                     <span className="ml-2 text-sm text-muted-foreground">
                       Loading projects...
                     </span>
@@ -544,16 +541,16 @@ export function PresentationBlueprint() {
                     <button
                       key={project.id}
                       onClick={() => startWithProject(project.id)}
-                      className="w-full p-3 bg-background/50 border border-white/10 rounded-lg text-left hover:border-blue-500/50 hover:bg-blue-500/5 transition-all group"
+                      className="w-full p-3 bg-background/50 border border-white/10 rounded-lg text-left hover:border-blue-500/50 hover:bg-primary/5 transition-all group"
                     >
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
-                          <FolderOpen className="w-4 h-4 text-blue-400" />
+                          <FolderOpen className="w-4 h-4 text-primary" />
                           <span className="font-medium text-foreground">
                             {project.name}
                           </span>
                         </div>
-                        <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-blue-400 transition-colors" />
+                        <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
                       </div>
                       <p className="text-xs text-muted-foreground mt-1 ml-6">
                         {project.description}
@@ -594,7 +591,7 @@ export function PresentationBlueprint() {
           </button>
           <div>
             <h2 className="text-2xl font-bold text-foreground flex items-center gap-2">
-              <PresentationIcon className="w-6 h-6 text-blue-400" />
+              <PresentationIcon className="w-6 h-6 text-primary" />
               Quick Start
             </h2>
             <p className="text-sm text-muted-foreground mt-1">
@@ -661,7 +658,7 @@ export function PresentationBlueprint() {
           </button>
           <div>
             <h2 className="text-2xl font-bold text-foreground flex items-center gap-2">
-              <PresentationIcon className="w-6 h-6 text-blue-400" />
+              <PresentationIcon className="w-6 h-6 text-primary" />
               Presentation Blueprint
             </h2>
             <p className="text-sm text-muted-foreground mt-1">
@@ -674,7 +671,7 @@ export function PresentationBlueprint() {
         {selectedProject && (
           <Badge
             variant="outline"
-            className="bg-blue-500/10 text-blue-400 border-blue-500/30"
+            className="bg-primary/10 text-primary border-blue-500/30"
           >
             <Brain className="w-3 h-3 mr-1" />
             {availableProjects.find(p => p.id === selectedProject)?.name}
@@ -690,7 +687,7 @@ export function PresentationBlueprint() {
               onClick={() => setCurrentStep(step.id as any)}
               className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${
                 currentStep === step.id
-                  ? "bg-blue-500/20 text-blue-400 border border-blue-500/30"
+                  ? "bg-primary/20 text-primary border border-blue-500/30"
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
@@ -709,7 +706,7 @@ export function PresentationBlueprint() {
         <div className="space-y-6">
           <div className="p-4 bg-gradient-to-r from-blue-500/10 to-cyan-500/10 rounded-xl border border-blue-500/20">
             <div className="flex items-center gap-2 mb-2">
-              <Sparkles className="w-5 h-5 text-blue-400" />
+              <Sparkles className="w-5 h-5 text-primary" />
               <span className="font-medium text-foreground">
                 Inherited from Genesis Master
               </span>
@@ -731,19 +728,19 @@ export function PresentationBlueprint() {
                   onClick={() => toggleSlide(slide.type)}
                   className={`p-4 rounded-xl border text-left transition-all ${
                     selectedSlides.includes(slide.type)
-                      ? "bg-blue-500/20 border-blue-500/30"
+                      ? "bg-primary/20 border-blue-500/30"
                       : "bg-card/50 border-white/10 hover:border-white/20"
                   }`}
                 >
                   <div className="flex items-center gap-3 mb-2">
                     <slide.icon
-                      className={`w-5 h-5 ${selectedSlides.includes(slide.type) ? "text-blue-400" : "text-muted-foreground"}`}
+                      className={`w-5 h-5 ${selectedSlides.includes(slide.type) ? "text-primary" : "text-muted-foreground"}`}
                     />
                     <span className="font-medium text-foreground">
                       {slide.label}
                     </span>
                     {selectedSlides.includes(slide.type) && (
-                      <Check className="w-4 h-4 text-blue-400 ml-auto" />
+                      <Check className="w-4 h-4 text-primary ml-auto" />
                     )}
                   </div>
                   <p className="text-xs text-muted-foreground">
@@ -790,7 +787,7 @@ export function PresentationBlueprint() {
                 onClick={() => setActiveSlide(index)}
                 className={`w-full p-3 rounded-lg border text-left transition-all ${
                   activeSlide === index
-                    ? "bg-blue-500/20 border-blue-500/30"
+                    ? "bg-primary/20 border-blue-500/30"
                     : "bg-card/50 border-white/10 hover:border-white/20"
                 }`}
               >
@@ -903,7 +900,7 @@ export function PresentationBlueprint() {
                 onClick={() => setSelectedTheme(theme.id)}
                 className={`p-6 rounded-xl border text-left transition-all ${
                   selectedTheme === theme.id
-                    ? "bg-blue-500/20 border-blue-500/30"
+                    ? "bg-primary/20 border-blue-500/30"
                     : "bg-card/50 border-white/10 hover:border-white/20"
                 }`}
               >
@@ -923,7 +920,7 @@ export function PresentationBlueprint() {
                     />
                   </div>
                   {selectedTheme === theme.id && (
-                    <Check className="w-5 h-5 text-blue-400 ml-auto" />
+                    <Check className="w-5 h-5 text-primary ml-auto" />
                   )}
                 </div>
                 <h4 className="font-semibold text-foreground mb-1">

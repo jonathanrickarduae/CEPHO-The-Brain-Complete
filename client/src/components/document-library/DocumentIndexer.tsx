@@ -6,10 +6,6 @@ import {
   Zap,
   RefreshCw,
   CheckCircle2,
-  Clock,
-  AlertTriangle,
-  Filter,
-  BarChart3,
   File,
   Image,
   FileSpreadsheet,
@@ -146,7 +142,7 @@ export function DocumentIndexer() {
   const getTypeColor = (type: string) => {
     switch (type) {
       case "document":
-        return "bg-blue-500/20 text-blue-400";
+        return "bg-primary/20 text-primary";
       case "spreadsheet":
         return "bg-green-500/20 text-green-400";
       case "presentation":
@@ -154,7 +150,7 @@ export function DocumentIndexer() {
       case "image":
         return "bg-purple-500/20 text-purple-400";
       case "ai_output":
-        return "bg-cyan-500/20 text-cyan-400";
+        return "bg-[var(--brain-cyan)]/20 text-[var(--brain-cyan)]";
       case "contract":
         return "bg-red-500/20 text-red-400";
       default:

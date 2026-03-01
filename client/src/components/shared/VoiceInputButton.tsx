@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Mic, MicOff, Loader2, AlertCircle } from "lucide-react";
+import { Mic, MicOff, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useVoiceInput, useVoiceWaveform } from "@/hooks/useVoiceInput";
@@ -34,10 +34,7 @@ export function VoiceInputButton({
     interimTranscript,
     error,
     confidence,
-    startListening,
-    stopListening,
     toggleListening,
-    resetTranscript,
   } = useVoiceInput({
     continuous,
     onResult: (text, isFinal) => {
@@ -51,7 +48,7 @@ export function VoiceInputButton({
     },
   });
 
-  const { audioLevel, waveformData, startWaveform, stopWaveform } =
+  const { waveformData, startWaveform, stopWaveform } =
     useVoiceWaveform();
 
   // Sync waveform with listening state

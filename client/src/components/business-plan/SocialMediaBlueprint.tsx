@@ -15,15 +15,11 @@ import {
   FileText,
   Image,
   Video,
-  Mic,
   BarChart3,
   CheckCircle2,
   ChevronRight,
   ChevronDown,
-  Play,
-  Pause,
   RefreshCw,
-  AlertCircle,
   Zap,
   Globe,
   Hash,
@@ -69,7 +65,7 @@ export function SocialMediaBlueprint() {
   const [activeTab, setActiveTab] = useState<
     "strategy" | "platforms" | "content" | "schedule" | "analytics"
   >("strategy");
-  const [selectedPlatform, setSelectedPlatform] = useState<string | null>(null);
+  const [_setSelectedPlatform] = useState<string | null>(null);
   const [expandedPlatform, setExpandedPlatform] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
 
@@ -215,7 +211,7 @@ export function SocialMediaBlueprint() {
       case "published":
         return "bg-green-500/20 text-green-400 border-green-500/30";
       case "scheduled":
-        return "bg-blue-500/20 text-blue-400 border-blue-500/30";
+        return "bg-primary/20 text-primary border-blue-500/30";
       case "generating":
         return "bg-purple-500/20 text-purple-400 border-purple-500/30";
       default:
@@ -350,7 +346,7 @@ export function SocialMediaBlueprint() {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
             <div className="p-4 bg-card/50 rounded-xl border border-white/10">
               <h4 className="font-medium text-foreground mb-3 flex items-center gap-2">
-                <Users className="w-4 h-4 text-cyan-400" />
+                <Users className="w-4 h-4 text-[var(--brain-cyan)]" />
                 Target Audience
               </h4>
               <ul className="space-y-2 text-sm text-muted-foreground">
@@ -489,7 +485,7 @@ export function SocialMediaBlueprint() {
                       {/* Optimal Posting Times */}
                       <div>
                         <h5 className="font-medium text-foreground mb-3 flex items-center gap-2">
-                          <Clock className="w-4 h-4 text-cyan-400" />
+                          <Clock className="w-4 h-4 text-[var(--brain-cyan)]" />
                           Optimal Posting Times
                         </h5>
                         <div className="flex flex-wrap gap-2">
@@ -498,7 +494,7 @@ export function SocialMediaBlueprint() {
                               <Badge
                                 key={i}
                                 variant="outline"
-                                className="bg-cyan-500/10 text-cyan-400 border-cyan-500/30"
+                                className="bg-[var(--brain-cyan)]/10 text-[var(--brain-cyan)] border-cyan-500/30"
                               >
                                 {window.day}: {window.times.join(", ")}
                               </Badge>

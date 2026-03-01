@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
 import {
   RotateCcw,
   Zap,
@@ -122,7 +121,7 @@ export function FlipCard({
 
               {/* Composite Influences */}
               <div>
-                <div className="flex items-center gap-1 text-cyan-400 text-xs font-medium mb-1">
+                <div className="flex items-center gap-1 text-[var(--brain-cyan)] text-xs font-medium mb-1">
                   <Users className="w-3 h-3" />
                   Composite Of
                 </div>
@@ -130,7 +129,7 @@ export function FlipCard({
                   {expert.compositeOf.map(inf => (
                     <Badge
                       key={inf}
-                      className="text-[9px] bg-cyan-500/10 text-cyan-300 px-1.5 py-0"
+                      className="text-[9px] bg-[var(--brain-cyan)]/10 text-cyan-300 px-1.5 py-0"
                     >
                       {inf}
                     </Badge>
@@ -284,7 +283,7 @@ export function FlipCard({
               <div className="flex items-center gap-3 border-b border-white/10 pb-3">
                 <span className="text-3xl">{corporate.logo}</span>
                 <div>
-                  <h4 className="font-bold text-white">{corporate.name}</h4>
+                  <h4 className="font-bold text-foreground">{corporate.name}</h4>
                   <p className="text-xs text-fuchsia-400">
                     Research Methodology
                   </p>
@@ -293,7 +292,7 @@ export function FlipCard({
 
               {/* Thinking Framework */}
               <div>
-                <div className="flex items-center gap-2 text-cyan-400 text-sm font-medium mb-2">
+                <div className="flex items-center gap-2 text-[var(--brain-cyan)] text-sm font-medium mb-2">
                   <Brain className="w-4 h-4" />
                   How They Think
                 </div>

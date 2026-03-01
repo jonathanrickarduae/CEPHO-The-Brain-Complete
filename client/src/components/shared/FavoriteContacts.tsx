@@ -25,7 +25,7 @@ export function FavoriteContacts({
   className,
 }: FavoriteContactsProps) {
   const [favorites, setFavorites] = useState<FavoriteContact[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [_setIsLoading] = useState(false);
 
   const { data: favoritesList } = trpc.favorites.list.useQuery();
 

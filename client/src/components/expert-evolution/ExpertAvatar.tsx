@@ -58,7 +58,7 @@ export function ExpertAvatar({
   status = "online",
   className = "",
 }: ExpertAvatarProps) {
-  const [imageError, setImageError] = useState(false);
+  const [imageError, _setImageError] = useState(false);
 
   const gradient = CATEGORY_GRADIENTS[category] || CATEGORY_GRADIENTS.default;
   const sizeConfig = SIZE_CONFIG[size];

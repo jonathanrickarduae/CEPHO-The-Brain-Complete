@@ -5,7 +5,6 @@ import {
   Lock,
   AlertTriangle,
   Clock,
-  Users,
   FileText,
   Shield,
 } from "lucide-react";
@@ -18,7 +17,8 @@ import {
   type ProjectPhaseProgress,
   type ProjectPhaseStatus,
 } from "@/data/value-chain.data";
-import { panelTypes, type PanelType } from "@/data/sme-panels.data";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { type PanelType } from "@/data/sme-panels.data";
 
 interface ValueChainProgressProps {
   projectName: string;
@@ -61,7 +61,7 @@ export function ValueChainProgress({
         );
       case "in_progress":
         return (
-          <Badge className="bg-blue-500/20 text-blue-400 border-blue-500/30">
+          <Badge className="bg-primary/20 text-primary border-blue-500/30">
             In Progress
           </Badge>
         );
@@ -86,12 +86,12 @@ export function ValueChainProgress({
     }
   };
 
-  const getStatusIcon = (status: ProjectPhaseStatus) => {
+  const _getStatusIcon = (status: ProjectPhaseStatus) => {
     switch (status) {
       case "approved":
         return <Check className="w-5 h-5 text-emerald-400" />;
       case "in_progress":
-        return <Clock className="w-5 h-5 text-blue-400 animate-pulse" />;
+        return <Clock className="w-5 h-5 text-primary animate-pulse" />;
       case "pending_review":
         return <Shield className="w-5 h-5 text-amber-400" />;
       case "blocked":
@@ -106,7 +106,7 @@ export function ValueChainProgress({
       {/* Header */}
       <div className="p-4 border-b border-white/10 bg-gradient-to-r from-cyan-500/10 to-fuchsia-500/10">
         <h2 className="text-lg font-semibold text-white flex items-center gap-2">
-          <FileText className="w-5 h-5 text-cyan-400" />
+          <FileText className="w-5 h-5 text-[var(--brain-cyan)]" />
           Value Chain Progress
         </h2>
         <p className="text-sm text-foreground/70 mt-1">{projectName}</p>
@@ -177,7 +177,7 @@ export function ValueChainProgress({
                         </span>
                         {getStatusBadge(status)}
                       </div>
-                      <h3 className="font-semibold text-white">{phase.name}</h3>
+                      <h3 className="font-semibold text-foreground">{phase.name}</h3>
                       <p className="text-sm text-foreground/70 truncate">
                         {phase.description}
                       </p>

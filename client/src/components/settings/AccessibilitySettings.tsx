@@ -1,15 +1,10 @@
-import { useState } from "react";
 import {
   Accessibility,
-  Eye,
   Volume2,
   Type,
-  Sun,
-  Moon,
   Contrast,
   Zap,
   RotateCcw,
-  ChevronRight,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";

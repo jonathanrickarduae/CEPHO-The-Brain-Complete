@@ -138,7 +138,7 @@ export function IntegrationsStatusReal() {
       );
     }
     return (
-      <span className="flex items-center gap-1 px-2 py-1 bg-gray-500/10 text-gray-400 rounded-full text-xs font-medium">
+      <span className="flex items-center gap-1 px-2 py-1 bg-gray-500/10 text-muted-foreground rounded-full text-xs font-medium">
         <X className="w-3 h-3" />
         Disconnected
       </span>
@@ -151,7 +151,7 @@ export function IntegrationsStatusReal() {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold text-white">Integrations</h2>
-          <p className="text-sm text-gray-400 mt-1">
+          <p className="text-sm text-muted-foreground mt-1">
             {isLoading
               ? "Loading..."
               : `${connectedCount} of ${integrations.length} services connected`}
@@ -177,7 +177,7 @@ export function IntegrationsStatusReal() {
           </button>
           <button
             onClick={() => void refetch()}
-            className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors flex items-center gap-2 text-sm"
+            className="px-4 py-2 bg-muted hover:bg-gray-600 text-white rounded-lg transition-colors flex items-center gap-2 text-sm"
           >
             <RefreshCw className="w-4 h-4" />
             Refresh
@@ -194,7 +194,7 @@ export function IntegrationsStatusReal() {
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap ${
               selectedCategory === cat
                 ? "bg-cyan-500 text-white"
-                : "bg-gray-800 text-gray-400 hover:bg-gray-700"
+                : "bg-card text-muted-foreground hover:bg-muted"
             }`}
           >
             {CATEGORY_LABELS[cat] ?? cat}{" "}
@@ -207,15 +207,15 @@ export function IntegrationsStatusReal() {
       {isLoading && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className="bg-gray-800 border border-gray-700 rounded-xl p-4 animate-pulse">
+            <div key={i} className="bg-card border border-border rounded-xl p-4 animate-pulse">
               <div className="flex items-center gap-3 mb-3">
-                <div className="w-10 h-10 rounded-lg bg-gray-700" />
+                <div className="w-10 h-10 rounded-lg bg-muted" />
                 <div className="flex-1">
-                  <div className="h-4 bg-gray-700 rounded w-2/3 mb-1" />
-                  <div className="h-3 bg-gray-700 rounded w-1/3" />
+                  <div className="h-4 bg-muted rounded w-2/3 mb-1" />
+                  <div className="h-3 bg-muted rounded w-1/3" />
                 </div>
               </div>
-              <div className="h-8 bg-gray-700 rounded" />
+              <div className="h-8 bg-muted rounded" />
             </div>
           ))}
         </div>
@@ -231,10 +231,10 @@ export function IntegrationsStatusReal() {
             return (
               <div
                 key={service.id}
-                className={`bg-gray-800 border rounded-xl p-4 transition-all ${
+                className={`bg-card border rounded-xl p-4 transition-all ${
                   service.connected
                     ? "border-green-500/30 hover:border-green-500/50"
-                    : "border-gray-700 hover:border-cyan-500/30"
+                    : "border-border hover:border-cyan-500/30"
                 }`}
               >
                 <div className="flex items-start justify-between mb-3">
@@ -244,14 +244,14 @@ export function IntegrationsStatusReal() {
                     </div>
                     <div>
                       <p className="text-sm font-semibold text-white">{service.name}</p>
-                      <p className="text-xs text-gray-400 capitalize">{CATEGORY_LABELS[service.category] ?? service.category}</p>
+                      <p className="text-xs text-muted-foreground capitalize">{CATEGORY_LABELS[service.category] ?? service.category}</p>
                     </div>
                   </div>
                   {getStatusBadge(service.connected, service.status)}
                 </div>
 
                 {service.lastSyncAt && (
-                  <p className="text-xs text-gray-500 mb-3">
+                  <p className="text-xs text-muted-foreground/70 mb-3">
                     Last sync: {new Date(service.lastSyncAt).toLocaleString()}
                   </p>
                 )}
@@ -275,7 +275,7 @@ export function IntegrationsStatusReal() {
                     <button
                       onClick={() => connectMutation.mutate({ provider: service.id })}
                       disabled={connectMutation.isPending}
-                      className="flex-1 px-3 py-2 bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-400 rounded-lg text-sm transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
+                      className="flex-1 px-3 py-2 bg-[var(--brain-cyan)]/10 hover:bg-[var(--brain-cyan)]/20 text-[var(--brain-cyan)] rounded-lg text-sm transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
                     >
                       <Link className="w-4 h-4" />
                       Connect
@@ -290,16 +290,16 @@ export function IntegrationsStatusReal() {
 
       {/* Summary Stats */}
       {!isLoading && integrations.length > 0 && (
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-4 border-t border-gray-800">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-4 border-t border-border/50">
           <div className="bg-green-500/10 border border-green-500/20 rounded-xl p-4">
             <div className="text-2xl font-bold text-green-400">{connectedCount}</div>
             <div className="text-sm text-green-400/70">Connected</div>
           </div>
           <div className="bg-gray-500/10 border border-gray-500/20 rounded-xl p-4">
-            <div className="text-2xl font-bold text-gray-400">
+            <div className="text-2xl font-bold text-muted-foreground">
               {integrations.filter(i => !i.connected && i.status !== "error").length}
             </div>
-            <div className="text-sm text-gray-400/70">Disconnected</div>
+            <div className="text-sm text-muted-foreground/70">Disconnected</div>
           </div>
           <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-4">
             <div className="text-2xl font-bold text-red-400">

@@ -7,8 +7,6 @@ import {
   Shield,
   Activity,
   Briefcase,
-  Cloud,
-  Database,
   Zap,
   ChevronRight,
   Check,
@@ -172,16 +170,16 @@ export function IntegrationSuggestions({
       case "recommended":
         return "bg-yellow-500/20 text-yellow-400 border-yellow-500/30";
       default:
-        return "bg-blue-500/20 text-blue-400 border-blue-500/30";
+        return "bg-primary/20 text-primary border-blue-500/30";
     }
   };
 
   const getCategoryColor = (category: string) => {
     switch (category) {
       case "productivity":
-        return "text-cyan-400";
+        return "text-[var(--brain-cyan)]";
       case "communication":
-        return "text-blue-400";
+        return "text-primary";
       case "security":
         return "text-green-400";
       case "wellness":

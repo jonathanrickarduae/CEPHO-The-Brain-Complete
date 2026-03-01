@@ -1,5 +1,4 @@
 import { useState, useCallback } from "react";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import {
@@ -60,7 +59,7 @@ export function DocumentUploadZone({
       case "pdf":
         return <FileText className="w-5 h-5 text-red-400" />;
       case "doc":
-        return <File className="w-5 h-5 text-blue-400" />;
+        return <File className="w-5 h-5 text-primary" />;
       case "ppt":
         return <Presentation className="w-5 h-5 text-orange-400" />;
       case "xls":
@@ -357,7 +356,7 @@ export function DocumentUploadZone({
 
                   {doc.status === "processing" && (
                     <div className="mt-2">
-                      <div className="flex items-center gap-2 text-xs text-cyan-400 mb-1">
+                      <div className="flex items-center gap-2 text-xs text-[var(--brain-cyan)] mb-1">
                         <Brain className="w-3 h-3 animate-pulse" />
                         AI extracting insights...
                       </div>
@@ -462,8 +461,8 @@ export function DocumentUploadZone({
       )}
 
       {/* Help Text */}
-      <div className="flex items-start gap-2 p-3 bg-cyan-500/10 rounded-xl border border-cyan-500/20">
-        <Brain className="w-4 h-4 text-cyan-400 mt-0.5 flex-shrink-0" />
+      <div className="flex items-start gap-2 p-3 bg-[var(--brain-cyan)]/10 rounded-xl border border-cyan-500/20">
+        <Brain className="w-4 h-4 text-[var(--brain-cyan)] mt-0.5 flex-shrink-0" />
         <div className="text-xs text-cyan-200">
           <p className="font-medium mb-1">AI Document Analysis</p>
           <p className="text-cyan-300/70">

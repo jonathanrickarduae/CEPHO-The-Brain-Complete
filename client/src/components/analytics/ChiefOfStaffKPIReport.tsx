@@ -12,7 +12,6 @@ import {
   TrendingDown,
   Minus,
   Download,
-  RefreshCw,
   Users,
   Target,
   Zap,
@@ -177,14 +176,14 @@ export function ChiefOfStaffKPIReport() {
 
   const getScoreColor = (score: number) => {
     if (score >= 80) return "bg-emerald-500";
-    if (score >= 70) return "bg-cyan-500";
+    if (score >= 70) return "bg-[var(--brain-cyan)]";
     if (score >= 60) return "bg-amber-500";
     return "bg-red-500";
   };
 
   const getScoreTextColor = (score: number) => {
     if (score >= 80) return "text-emerald-400";
-    if (score >= 70) return "text-cyan-400";
+    if (score >= 70) return "text-[var(--brain-cyan)]";
     if (score >= 60) return "text-amber-400";
     return "text-red-400";
   };
@@ -227,7 +226,7 @@ export function ChiefOfStaffKPIReport() {
       }
 
       toast.success("KPI Report opened for export");
-    } catch (error) {
+    } catch {
       toast.error("Failed to export report");
     } finally {
       setIsExporting(false);
@@ -334,7 +333,7 @@ export function ChiefOfStaffKPIReport() {
     return (
       <Card className="bg-slate-900/50 border-slate-700">
         <CardContent className="p-8 flex items-center justify-center">
-          <Loader2 className="h-8 w-8 animate-spin text-cyan-400" />
+          <Loader2 className="h-8 w-8 animate-spin text-[var(--brain-cyan)]" />
         </CardContent>
       </Card>
     );
@@ -346,7 +345,7 @@ export function ChiefOfStaffKPIReport() {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="p-2 rounded-xl bg-gradient-to-br from-cyan-500/20 to-pink-500/20 border border-cyan-500/30">
-            <Brain className="h-6 w-6 text-cyan-400" />
+            <Brain className="h-6 w-6 text-[var(--brain-cyan)]" />
           </div>
           <div>
             <h2 className="text-xl font-bold text-foreground">
@@ -377,21 +376,21 @@ export function ChiefOfStaffKPIReport() {
         <TabsList className="bg-slate-800/50">
           <TabsTrigger
             value="heatmap"
-            className="data-[state=active]:bg-cyan-500/20"
+            className="data-[state=active]:bg-[var(--brain-cyan)]/20"
           >
             <BarChart3 className="h-4 w-4 mr-2" />
             Performance Heatmap
           </TabsTrigger>
           <TabsTrigger
             value="sme"
-            className="data-[state=active]:bg-cyan-500/20"
+            className="data-[state=active]:bg-[var(--brain-cyan)]/20"
           >
             <Users className="h-4 w-4 mr-2" />
             SME Performance
           </TabsTrigger>
           <TabsTrigger
             value="enhancements"
-            className="data-[state=active]:bg-cyan-500/20"
+            className="data-[state=active]:bg-[var(--brain-cyan)]/20"
           >
             <Zap className="h-4 w-4 mr-2" />
             Enhancements
@@ -403,7 +402,7 @@ export function ChiefOfStaffKPIReport() {
           <Card className="bg-slate-900/50 border-slate-700">
             <CardHeader>
               <CardTitle className="text-lg flex items-center gap-2">
-                <Target className="h-5 w-5 text-cyan-400" />
+                <Target className="h-5 w-5 text-[var(--brain-cyan)]" />
                 Business Area Scoring
               </CardTitle>
             </CardHeader>
@@ -451,7 +450,7 @@ export function ChiefOfStaffKPIReport() {
           <Card className="bg-slate-900/50 border-slate-700">
             <CardHeader>
               <CardTitle className="text-lg flex items-center gap-2">
-                <Users className="h-5 w-5 text-cyan-400" />
+                <Users className="h-5 w-5 text-[var(--brain-cyan)]" />
                 Top Performing SMEs
               </CardTitle>
             </CardHeader>
@@ -494,7 +493,7 @@ export function ChiefOfStaffKPIReport() {
                         <td className="py-3 px-4">
                           <Badge
                             variant="outline"
-                            className="border-cyan-500/30 text-cyan-400"
+                            className="border-cyan-500/30 text-[var(--brain-cyan)]"
                           >
                             {sme.specialty}
                           </Badge>
@@ -504,7 +503,7 @@ export function ChiefOfStaffKPIReport() {
                         </td>
                         <td className="py-3 px-4 text-center">
                           <span
-                            className={`font-medium ${sme.avgRating >= 4.5 ? "text-emerald-400" : sme.avgRating >= 4 ? "text-cyan-400" : "text-amber-400"}`}
+                            className={`font-medium ${sme.avgRating >= 4.5 ? "text-emerald-400" : sme.avgRating >= 4 ? "text-[var(--brain-cyan)]" : "text-amber-400"}`}
                           >
                             {sme.avgRating.toFixed(1)}
                           </span>
@@ -529,7 +528,7 @@ export function ChiefOfStaffKPIReport() {
           <Card className="bg-slate-900/50 border-slate-700">
             <CardHeader>
               <CardTitle className="text-lg flex items-center gap-2">
-                <Zap className="h-5 w-5 text-cyan-400" />
+                <Zap className="h-5 w-5 text-[var(--brain-cyan)]" />
                 Enhancement Recommendations
               </CardTitle>
             </CardHeader>
@@ -545,7 +544,7 @@ export function ChiefOfStaffKPIReport() {
                         <div className="flex items-center gap-2 mb-2">
                           <Badge
                             variant="outline"
-                            className="border-cyan-500/30 text-cyan-400"
+                            className="border-cyan-500/30 text-[var(--brain-cyan)]"
                           >
                             {enhancement.area}
                           </Badge>

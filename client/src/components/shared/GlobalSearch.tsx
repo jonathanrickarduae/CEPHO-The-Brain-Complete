@@ -61,7 +61,7 @@ export function GlobalSearch({
   const inputRef = useRef<HTMLInputElement>(null);
 
   const typeConfig = {
-    document: { icon: FileText, color: "text-blue-400", label: "Document" },
+    document: { icon: FileText, color: "text-primary", label: "Document" },
     conversation: {
       icon: MessageSquare,
       color: "text-green-400",
@@ -69,7 +69,7 @@ export function GlobalSearch({
     },
     project: { icon: FolderKanban, color: "text-purple-400", label: "Project" },
     vault: { icon: Lock, color: "text-red-400", label: "Vault" },
-    expert: { icon: Users, color: "text-cyan-400", label: "AI Expert" },
+    expert: { icon: Users, color: "text-[var(--brain-cyan)]", label: "AI Expert" },
     task: { icon: Hash, color: "text-orange-400", label: "Task" },
     event: { icon: Calendar, color: "text-yellow-400", label: "Event" },
   };
@@ -231,12 +231,12 @@ export function GlobalSearch({
           {query && (
             <button
               onClick={() => setQuery("")}
-              className="p-1 hover:bg-gray-700 rounded transition-colors"
+              className="p-1 hover:bg-muted rounded transition-colors"
             >
               <X className="w-4 h-4 text-muted-foreground" />
             </button>
           )}
-          <div className="flex items-center gap-1 px-2 py-1 bg-gray-700 rounded text-xs text-muted-foreground">
+          <div className="flex items-center gap-1 px-2 py-1 bg-muted rounded text-xs text-muted-foreground">
             <Command className="w-3 h-3" />
             <span>K</span>
           </div>
@@ -258,7 +258,7 @@ export function GlobalSearch({
                 className={`px-2.5 py-1 rounded-full text-xs whitespace-nowrap transition-colors ${
                   (type === "all" && !filters.type) || filters.type === type
                     ? "bg-primary text-primary-foreground"
-                    : "bg-gray-700 text-muted-foreground hover:text-foreground"
+                    : "bg-muted text-muted-foreground hover:text-foreground"
                 }`}
               >
                 {type === "all"
@@ -294,12 +294,12 @@ export function GlobalSearch({
                     onClick={() => handleResultClick(result)}
                     className={`w-full px-4 py-3 flex items-start gap-3 transition-colors ${
                       index === selectedIndex
-                        ? "bg-gray-800"
-                        : "hover:bg-gray-800/50"
+                        ? "bg-card"
+                        : "hover:bg-card/50"
                     }`}
                   >
                     <div
-                      className={`w-8 h-8 rounded-lg bg-gray-700 flex items-center justify-center flex-shrink-0`}
+                      className={`w-8 h-8 rounded-lg bg-muted flex items-center justify-center flex-shrink-0`}
                     >
                       <Icon className={`w-4 h-4 ${config.color}`} />
                     </div>
@@ -339,7 +339,7 @@ export function GlobalSearch({
                       <button
                         key={i}
                         onClick={() => setQuery(search)}
-                        className="w-full px-3 py-2 flex items-center gap-2 hover:bg-gray-800 rounded-lg transition-colors text-left"
+                        className="w-full px-3 py-2 flex items-center gap-2 hover:bg-card rounded-lg transition-colors text-left"
                       >
                         <Clock className="w-4 h-4 text-muted-foreground" />
                         <span className="text-sm text-foreground">
@@ -377,7 +377,7 @@ export function GlobalSearch({
                         window.location.href = action.path;
                         onClose();
                       }}
-                      className="px-3 py-2 flex items-center gap-2 bg-gray-800/50 hover:bg-gray-700 rounded-lg transition-colors"
+                      className="px-3 py-2 flex items-center gap-2 bg-card/50 hover:bg-muted rounded-lg transition-colors"
                     >
                       <action.icon className="w-4 h-4 text-muted-foreground" />
                       <span className="text-sm text-foreground">
@@ -395,15 +395,15 @@ export function GlobalSearch({
         <div className="px-4 py-2 border-t border-border flex items-center justify-between text-xs text-muted-foreground">
           <div className="flex items-center gap-4">
             <span className="flex items-center gap-1">
-              <span className="px-1.5 py-0.5 bg-gray-700 rounded">↑↓</span>
+              <span className="px-1.5 py-0.5 bg-muted rounded">↑↓</span>
               Navigate
             </span>
             <span className="flex items-center gap-1">
-              <span className="px-1.5 py-0.5 bg-gray-700 rounded">↵</span>
+              <span className="px-1.5 py-0.5 bg-muted rounded">↵</span>
               Open
             </span>
             <span className="flex items-center gap-1">
-              <span className="px-1.5 py-0.5 bg-gray-700 rounded">esc</span>
+              <span className="px-1.5 py-0.5 bg-muted rounded">esc</span>
               Close
             </span>
           </div>

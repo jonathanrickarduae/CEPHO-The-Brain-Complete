@@ -9,14 +9,10 @@ import {
   Send,
   Paperclip,
   AtSign,
-  Hash,
   MoreHorizontal,
   Eye,
   Edit3,
-  Trash2,
   Pin,
-  Bell,
-  BellOff,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -135,7 +131,7 @@ const SAMPLE_ACTIVITY: ActivityType[] = [
 ];
 
 // Collaborators Panel
-export function CollaboratorsPanel({ projectId }: { projectId?: string }) {
+export function CollaboratorsPanel({ projectId: _projectId }: { projectId?: string }) {
   const [showInvite, setShowInvite] = useState(false);
   const collaborators = SAMPLE_COLLABORATORS;
 
@@ -214,8 +210,7 @@ export function CollaboratorsPanel({ projectId }: { projectId?: string }) {
 
 // Comments Thread
 export function CommentsThread({
-  entityId,
-  entityType,
+  entityType: _entityType,
 }: {
   entityId?: string;
   entityType?: string;
@@ -332,7 +327,7 @@ export function CommentsThread({
 }
 
 // Activity Feed
-export function ActivityFeed({ projectId }: { projectId?: string }) {
+export function ActivityFeed({ projectId: _projectId }: { projectId?: string }) {
   const activities = SAMPLE_ACTIVITY;
 
   const formatTime = (date: Date) => {
@@ -394,7 +389,7 @@ export function ActivityFeed({ projectId }: { projectId?: string }) {
 }
 
 // Version Control Panel
-export function VersionControlPanel({ documentId }: { documentId?: string }) {
+export function VersionControlPanel({ documentId: _documentId }: { documentId?: string }) {
   const versions = [
     {
       id: "1",

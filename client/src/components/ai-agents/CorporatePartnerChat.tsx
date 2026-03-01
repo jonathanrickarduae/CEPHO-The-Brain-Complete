@@ -5,12 +5,8 @@ import {
   Send,
   X,
   ArrowLeft,
-  Building2,
-  Sparkles,
   Lightbulb,
   Target,
-  FileText,
-  ChevronRight,
   History,
   Trash2,
 } from "lucide-react";
@@ -99,7 +95,7 @@ export function CorporatePartnerChat({
     // Use partner's thinking framework and methodology
     const frameworks = partner.frameworks || [];
     const principles = partner.keyPrinciples || [];
-    const tools = partner.signatureTools || [];
+    const _tools = partner.signatureTools || [];
 
     // Context-aware responses based on partner
     if (partner.name === "McKinsey & Company") {
@@ -177,7 +173,7 @@ export function CorporatePartnerChat({
         content: data.response,
       });
     },
-    onError: (error: unknown) => {
+    onError: (_error: unknown) => {
       // Fallback to local response on error
       if (partner) {
         const fallbackResponse = generatePartnerResponse(partner, inputValue);
@@ -229,7 +225,7 @@ export function CorporatePartnerChat({
     }));
 
     // Build system prompt from corporate partner data
-    const systemPromptParts = [
+    const _systemPromptParts = [
       `You are a senior consultant from ${partner.name}, a leading firm in ${partner.industry}.`,
       `Your methodology: ${partner.methodology}`,
       partner.thinkingFramework
@@ -298,7 +294,7 @@ export function CorporatePartnerChat({
           <div className="flex-1">
             <h2 className="font-bold text-foreground flex items-center gap-2">
               {partner.name}
-              <Badge className="bg-blue-500/20 text-blue-400 border-0 text-xs">
+              <Badge className="bg-primary/20 text-primary border-0 text-xs">
                 Corporate Partner
               </Badge>
             </h2>
@@ -366,13 +362,13 @@ export function CorporatePartnerChat({
           {!isLoadingHistory && messages.length === 0 && (
             <div className="bg-gradient-to-br from-blue-500/10 to-cyan-500/10 rounded-2xl p-6 border border-blue-500/20">
               <div className="flex items-start gap-4">
-                <div className="w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center text-xl">
+                <div className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center text-xl">
                   {partner.logo}
                 </div>
                 <div className="flex-1">
                   <p className="text-foreground mb-3">
                     Welcome. I'm a senior consultant from{" "}
-                    <span className="font-semibold text-blue-400">
+                    <span className="font-semibold text-primary">
                       {partner.name}
                     </span>
                     . I bring expertise in {partner.industry.toLowerCase()} and
@@ -384,7 +380,7 @@ export function CorporatePartnerChat({
                         key={idx}
                         className="flex items-center gap-2 text-sm text-muted-foreground"
                       >
-                        <Target className="w-3 h-3 text-blue-400" />
+                        <Target className="w-3 h-3 text-primary" />
                         {strength}
                       </div>
                     ))}
@@ -415,7 +411,7 @@ export function CorporatePartnerChat({
                       onClick={() => {
                         setInputValue(suggestion);
                       }}
-                      className="text-xs px-3 py-1.5 rounded-full bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 transition-colors"
+                      className="text-xs px-3 py-1.5 rounded-full bg-primary/10 hover:bg-primary/20 text-primary transition-colors"
                     >
                       {suggestion}
                     </button>
@@ -441,7 +437,7 @@ export function CorporatePartnerChat({
                 {message.role === "partner" && (
                   <div className="flex items-center gap-2 mb-2">
                     <span className="text-lg">{partner.logo}</span>
-                    <span className="text-sm font-medium text-blue-400">
+                    <span className="text-sm font-medium text-primary">
                       {partner.name}
                     </span>
                   </div>

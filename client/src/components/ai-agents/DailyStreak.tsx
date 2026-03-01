@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect} from "react";
 import { Flame, Calendar, Trophy, Star, Zap } from "lucide-react";
 import { useCelebration } from "@/components/shared/CelebrationAnimations";
 
@@ -15,7 +15,6 @@ export function DailyStreak({
   longestStreak,
   lastActiveDate,
   todayCompleted = false,
-  onStreakUpdate,
 }: DailyStreakProps) {
   const [isAnimating, setIsAnimating] = useState(false);
 
@@ -54,7 +53,7 @@ export function DailyStreak({
                 ? "bg-gradient-to-br from-yellow-500 to-orange-500"
                 : currentStreak > 0
                   ? "bg-gradient-to-br from-orange-500/20 to-red-500/20"
-                  : "bg-gray-700"
+                  : "bg-muted"
             } ${isAnimating ? "animate-bounce" : ""}`}
           >
             <Flame
@@ -95,7 +94,7 @@ export function DailyStreak({
             {currentStreak}/{nextMilestone}
           </span>
         </div>
-        <div className="h-2 bg-gray-700 rounded-full overflow-hidden">
+        <div className="h-2 bg-muted rounded-full overflow-hidden">
           <div
             className="h-full bg-gradient-to-r from-orange-500 to-red-500 rounded-full transition-all duration-500"
             style={{ width: `${(currentStreak / nextMilestone) * 100}%` }}
@@ -205,7 +204,7 @@ export function WeeklyActivity({ activities }: WeeklyActivityProps) {
                 ? "bg-green-500 text-white"
                 : isToday(date)
                   ? "bg-primary/20 text-primary border border-primary"
-                  : "bg-gray-700 text-muted-foreground"
+                  : "bg-muted text-muted-foreground"
             }`}
           >
             {date.getDate()}
@@ -218,7 +217,7 @@ export function WeeklyActivity({ activities }: WeeklyActivityProps) {
 
 // Hook for managing streak data
 export function useStreak() {
-  const { celebrate, showAchievement } = useCelebration();
+  const { showAchievement } = useCelebration();
   const [streak, setStreak] = useState({
     current: 0,
     longest: 0,
@@ -241,7 +240,7 @@ export function useStreak() {
               date: new Date(a.date),
             })) || [],
         });
-      } catch (e) {
+      } catch {
       }
     }
   }, []);

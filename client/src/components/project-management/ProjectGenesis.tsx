@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState} from "react";
 import {
   Rocket,
   Target,
@@ -14,7 +14,6 @@ import {
   ChevronDown,
   Eye,
   ThumbsUp,
-  ThumbsDown,
   MessageSquare,
   Download,
   Share2,
@@ -518,13 +517,13 @@ export function ProjectGenesis() {
     regulatoryRequirements: [],
     existingContracts: [],
   });
-  const [currentQuestionPhase, setCurrentQuestionPhase] = useState(0);
+  const [_setCurrentQuestionPhase] = useState(0);
   const [expandedCategories, setExpandedCategories] = useState<string[]>([
     "legal",
     "financial",
   ]);
   const [qaFeedback, setQaFeedback] = useState<Record<string, string>>({});
-  const [isGenerating, setIsGenerating] = useState(false);
+  const [_isGenerating, setIsGenerating] = useState(false);
 
   // ==================== HANDLERS ====================
 
@@ -558,7 +557,7 @@ export function ProjectGenesis() {
 
   const generateDeliverables = (
     type: EngagementType,
-    practices: BestPracticeItem[]
+    _practices: BestPracticeItem[]
   ): Deliverable[] => {
     const base: Deliverable[] = [];
 
@@ -1375,7 +1374,7 @@ export function ProjectGenesis() {
                                     : bp.priority === "high"
                                       ? "bg-amber-500/20 text-amber-400"
                                       : bp.priority === "medium"
-                                        ? "bg-blue-500/20 text-blue-400"
+                                        ? "bg-primary/20 text-primary"
                                         : "bg-gray-500/20 text-foreground/70"
                                 }`}
                               >
@@ -1539,13 +1538,13 @@ export function ProjectGenesis() {
                 {d.type === "blueprint" ? (
                   <GitBranch className="w-4 h-4 text-purple-500" />
                 ) : d.type === "visual" ? (
-                  <Eye className="w-4 h-4 text-cyan-500" />
+                  <Eye className="w-4 h-4 text-[var(--brain-cyan)]" />
                 ) : d.type === "model" ? (
                   <TrendingUp className="w-4 h-4 text-green-500" />
                 ) : d.type === "checklist" ? (
                   <FileCheck className="w-4 h-4 text-amber-500" />
                 ) : (
-                  <FileText className="w-4 h-4 text-blue-500" />
+                  <FileText className="w-4 h-4 text-primary" />
                 )}
                 <span className="text-sm font-medium text-foreground">
                   {d.name}
@@ -1607,7 +1606,7 @@ export function ProjectGenesis() {
         </div>
       </div>
 
-      <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4">
+      <div className="bg-primary/10 border border-blue-500/30 rounded-lg p-4">
         <p className="text-sm text-blue-200">
           <strong>QA Workflow:</strong> Your Chief of Staff has reviewed each
           deliverable first. Review the Twin's notes, then approve or request
@@ -1633,13 +1632,13 @@ export function ProjectGenesis() {
                 {d.type === "blueprint" ? (
                   <GitBranch className="w-5 h-5 text-purple-500" />
                 ) : d.type === "visual" ? (
-                  <Eye className="w-5 h-5 text-cyan-500" />
+                  <Eye className="w-5 h-5 text-[var(--brain-cyan)]" />
                 ) : d.type === "model" ? (
                   <TrendingUp className="w-5 h-5 text-green-500" />
                 ) : d.type === "checklist" ? (
                   <FileCheck className="w-5 h-5 text-amber-500" />
                 ) : (
-                  <FileText className="w-5 h-5 text-blue-500" />
+                  <FileText className="w-5 h-5 text-primary" />
                 )}
                 <div>
                   <h4 className="font-medium text-foreground">{d.name}</h4>

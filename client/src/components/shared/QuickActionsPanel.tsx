@@ -39,7 +39,7 @@ export function QuickActionsPanel({
       icon: <Calendar className="w-5 h-5" />,
       description: "Open calendar with auto-filled time slot",
       color:
-        "bg-blue-500/20 text-blue-400 border-blue-500/30 hover:bg-blue-500/30",
+        "bg-primary/20 text-primary border-blue-500/30 hover:bg-primary/30",
       action: onScheduleMeeting || (() => {}),
     },
     {

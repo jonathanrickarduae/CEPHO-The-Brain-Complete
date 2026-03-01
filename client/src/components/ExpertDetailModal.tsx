@@ -1,7 +1,5 @@
 import {
-  X,
   Star,
-  TrendingUp,
   Brain,
   Target,
   AlertTriangle,
@@ -13,7 +11,6 @@ import {
   Sparkles,
   Award,
   Activity,
-  Calendar,
   Users,
   Zap,
 } from "lucide-react";
@@ -202,7 +199,7 @@ export function ExpertDetailModal({
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <span className="text-4xl font-bold">
+                    <span className="text-2xl md:text-4xl font-bold">
                       {expert.performanceScore}%
                     </span>
                     <Badge

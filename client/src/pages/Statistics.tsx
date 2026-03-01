@@ -82,7 +82,7 @@ export default function Statistics() {
         {/* Header */}
         <div className="mb-6">
           <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
-            <BarChart3 className="h-8 w-8 text-blue-400" />
+            <BarChart3 className="h-8 w-8 text-primary" />
             Analytics
           </h1>
           <p className="text-muted-foreground mt-1">
@@ -155,7 +155,7 @@ export default function Statistics() {
             >
               <div className="p-6 rounded-xl bg-card/60 border border-white/10">
                 <div className="flex items-center gap-2 mb-4">
-                  <Brain className="w-5 h-5 text-cyan-400" />
+                  <Brain className="w-5 h-5 text-[var(--brain-cyan)]" />
                   <h3 className="font-display font-bold">
                     Chief of Staff Training
                   </h3>

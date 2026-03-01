@@ -40,7 +40,7 @@ const NETWORK_NODES: NetworkNode[] = [
     id: "insights",
     label: "User Insights",
     icon: Users,
-    color: "text-cyan-500",
+    color: "text-[var(--brain-cyan)]",
     bgColor: "bg-cyan-100",
     description: "Learns your preferences and working style",
     position: { x: 85, y: 40 },

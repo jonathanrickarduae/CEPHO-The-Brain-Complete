@@ -38,14 +38,14 @@ export function Sparkline({
     }));
 
     // Create smooth curve using quadratic bezier
-    let linePath = `M ${pts[0].x} ${pts[0].y}`;
+    let _linePath = `M ${pts[0].x} ${pts[0].y}`;
     for (let i = 1; i < pts.length; i++) {
       const prev = pts[i - 1];
       const curr = pts[i];
       const cpX = (prev.x + curr.x) / 2;
-      linePath += ` Q ${cpX} ${prev.y} ${cpX} ${(prev.y + curr.y) / 2}`;
+      _linePath += ` Q ${cpX} ${prev.y} ${cpX} ${(prev.y + curr.y) / 2}`;
       if (i === pts.length - 1) {
-        linePath += ` T ${curr.x} ${curr.y}`;
+        _linePath += ` T ${curr.x} ${curr.y}`;
       }
     }
 

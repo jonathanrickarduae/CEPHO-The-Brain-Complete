@@ -3,13 +3,11 @@ import {
   Brain,
   TrendingUp,
   Target,
-  Award,
   Clock,
   CheckCircle2,
   AlertCircle,
   Zap,
   BookOpen,
-  MessageSquare,
   Shield,
   Eye,
   ChevronRight,
@@ -18,7 +16,6 @@ import {
 } from "lucide-react";
 import {
   MATURITY_MODEL,
-  MaturityLevel,
 } from "@/data/digital-twin-job-description.data";
 
 interface DevelopmentMetrics {
@@ -132,7 +129,7 @@ export function DigitalTwinDevelopment() {
       case "high":
         return "text-green-400";
       case "medium":
-        return "text-blue-400";
+        return "text-primary";
       case "low":
         return "text-foreground/70";
       default:
@@ -145,7 +142,7 @@ export function DigitalTwinDevelopment() {
       case "active":
         return <BookOpen className="w-4 h-4 text-purple-400" />;
       case "passive":
-        return <Eye className="w-4 h-4 text-blue-400" />;
+        return <Eye className="w-4 h-4 text-primary" />;
       case "corrective":
         return <AlertCircle className="w-4 h-4 text-amber-400" />;
       case "expert":
@@ -231,7 +228,7 @@ export function DigitalTwinDevelopment() {
                     <div className="text-sm text-foreground/70 mb-1">
                       Hours Logged
                     </div>
-                    <div className="text-white font-medium">
+                    <div className="text-foreground font-medium">
                       {metrics.hoursLogged} /{" "}
                       {nextMaturity.unlockCriteria.hoursLogged}
                     </div>
@@ -240,7 +237,7 @@ export function DigitalTwinDevelopment() {
                     <div className="text-sm text-foreground/70 mb-1">
                       Decisions Validated
                     </div>
-                    <div className="text-white font-medium">
+                    <div className="text-foreground font-medium">
                       {metrics.decisionsValidated} /{" "}
                       {nextMaturity.unlockCriteria.decisionsValidated}
                     </div>
@@ -249,7 +246,7 @@ export function DigitalTwinDevelopment() {
                     <div className="text-sm text-foreground/70 mb-1">
                       Accuracy Score
                     </div>
-                    <div className="text-white font-medium">
+                    <div className="text-foreground font-medium">
                       {metrics.accuracyScore}% /{" "}
                       {nextMaturity.unlockCriteria.accuracyScore}%
                     </div>
@@ -258,7 +255,7 @@ export function DigitalTwinDevelopment() {
                     <div className="text-sm text-foreground/70 mb-1">
                       Trust Score
                     </div>
-                    <div className="text-white font-medium">
+                    <div className="text-foreground font-medium">
                       {metrics.userTrustScore} /{" "}
                       {nextMaturity.unlockCriteria.userTrustScore}
                     </div>
@@ -271,7 +268,7 @@ export function DigitalTwinDevelopment() {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <div className="bg-white/5 rounded-xl p-4 border border-white/10">
                 <div className="flex items-center gap-2 mb-2">
-                  <Clock className="w-4 h-4 text-blue-400" />
+                  <Clock className="w-4 h-4 text-primary" />
                   <span className="text-sm text-foreground/70">
                     Training Hours
                   </span>
@@ -350,7 +347,7 @@ export function DigitalTwinDevelopment() {
 
         {activeTab === "maturity" && (
           <div className="space-y-4">
-            {MATURITY_MODEL.map((level, index) => {
+            {MATURITY_MODEL.map((level, _index) => {
               const isCurrentLevel = level.level === currentLevel;
               const isUnlocked = level.level <= currentLevel;
               const color = getLevelColor(level.level);
@@ -625,7 +622,7 @@ export function DigitalTwinDevelopment() {
                   </ul>
                 </div>
                 <div>
-                  <h4 className="text-sm font-medium text-blue-400 mb-3">
+                  <h4 className="text-sm font-medium text-primary mb-3">
                     AI Expert Team
                   </h4>
                   <ul className="space-y-2">

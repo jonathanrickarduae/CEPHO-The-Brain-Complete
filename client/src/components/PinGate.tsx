@@ -43,7 +43,7 @@ export function PinGate({ children }: { children: React.ReactNode }) {
           <h1 className="text-white text-2xl font-semibold tracking-tight">
             CEPHO
           </h1>
-          <p className="text-gray-500 text-sm">
+          <p className="text-muted-foreground/70 text-sm">
             Enter your access code to continue
           </p>
         </div>

@@ -9,18 +9,14 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
 import {
   Building2,
   Loader2,
   CheckCircle2,
   AlertCircle,
-  ArrowRight,
-  FileText,
   ExternalLink,
   Sparkles,
   Target,
-  TrendingUp,
   ChevronDown,
   ChevronUp,
   Lightbulb,
@@ -66,7 +62,7 @@ interface AssessmentResult {
   applicationReadiness: number;
 }
 
-interface IdeaAssessment {
+interface _IdeaAssessment {
   ideaId: number;
   ideaTitle: string;
   assessments: {
@@ -132,7 +128,7 @@ export default function FundingAssessment() {
           ideaId,
           programId: program.programId,
         });
-      } catch (error) {
+      } catch {
       }
     }
 
@@ -151,7 +147,7 @@ export default function FundingAssessment() {
       case "highly_eligible":
         return "text-emerald-400 bg-emerald-500/20";
       case "eligible":
-        return "text-cyan-400 bg-cyan-500/20";
+        return "text-[var(--brain-cyan)] bg-[var(--brain-cyan)]/20";
       case "partially_eligible":
         return "text-amber-400 bg-amber-500/20";
       default:
@@ -210,7 +206,7 @@ export default function FundingAssessment() {
   if (ideasLoading || programsLoading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <Loader2 className="w-8 h-8 animate-spin text-cyan-400" />
+        <Loader2 className="w-8 h-8 animate-spin text-[var(--brain-cyan)]" />
       </div>
     );
   }
@@ -220,7 +216,7 @@ export default function FundingAssessment() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <Card className="bg-gray-900/50 border-gray-800">
+      <Card className="bg-gray-900/50 border-border/50">
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
@@ -239,7 +235,7 @@ export default function FundingAssessment() {
                 size="sm"
                 onClick={() => setSelectedCountry("all")}
                 className={
-                  selectedCountry === "all" ? "bg-gray-700" : "border-gray-700"
+                  selectedCountry === "all" ? "bg-muted" : "border-border"
                 }
               >
                 All
@@ -251,7 +247,7 @@ export default function FundingAssessment() {
                 className={
                   selectedCountry === "UAE"
                     ? "bg-emerald-600"
-                    : "border-gray-700"
+                    : "border-border"
                 }
               >
                 🇦🇪 UAE
@@ -261,7 +257,7 @@ export default function FundingAssessment() {
                 size="sm"
                 onClick={() => setSelectedCountry("UK")}
                 className={
-                  selectedCountry === "UK" ? "bg-blue-600" : "border-gray-700"
+                  selectedCountry === "UK" ? "bg-primary/90" : "border-border"
                 }
               >
                 🇬🇧 UK
@@ -273,7 +269,7 @@ export default function FundingAssessment() {
 
       {/* Ideas with Assessment */}
       {validIdeas.length === 0 ? (
-        <Card className="bg-gray-900/50 border-gray-800">
+        <Card className="bg-gray-900/50 border-border/50">
           <CardContent className="py-12 text-center">
             <Lightbulb className="w-12 h-12 text-foreground/50 mx-auto mb-4" />
             <p className="text-foreground/70 mb-4">No ideas to assess yet</p>
@@ -292,7 +288,7 @@ export default function FundingAssessment() {
             const bestMatch = getBestMatch(idea.id);
 
             return (
-              <Card key={idea.id} className="bg-gray-900/50 border-gray-800">
+              <Card key={idea.id} className="bg-gray-900/50 border-border/50">
                 <Collapsible
                   open={isExpanded}
                   onOpenChange={() => toggleIdeaExpanded(idea.id)}
@@ -301,7 +297,7 @@ export default function FundingAssessment() {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-cyan-500/20 to-purple-500/20 flex items-center justify-center">
-                          <Lightbulb className="w-5 h-5 text-cyan-400" />
+                          <Lightbulb className="w-5 h-5 text-[var(--brain-cyan)]" />
                         </div>
                         <div>
                           <CardTitle className="text-white text-lg">
@@ -310,7 +306,7 @@ export default function FundingAssessment() {
                           <CardDescription className="flex items-center gap-2">
                             <Badge
                               variant="outline"
-                              className="border-gray-700 text-xs"
+                              className="border-border text-xs"
                             >
                               {idea.category}
                             </Badge>
@@ -339,7 +335,7 @@ export default function FundingAssessment() {
                             assessIdeaForAllPrograms(idea.id);
                           }}
                           disabled={isAssessing}
-                          className="border-cyan-500/50 text-cyan-400 hover:bg-cyan-500/10"
+                          className="border-cyan-500/50 text-[var(--brain-cyan)] hover:bg-[var(--brain-cyan)]/10"
                         >
                           {isAssessing ? (
                             <>
@@ -378,7 +374,7 @@ export default function FundingAssessment() {
                   <CollapsibleContent>
                     <CardContent className="pt-0">
                       {assessments.length === 0 ? (
-                        <div className="p-6 bg-gray-800/30 rounded-lg text-center">
+                        <div className="p-6 bg-card/30 rounded-lg text-center">
                           <Target className="w-8 h-8 text-foreground/50 mx-auto mb-2" />
                           <p className="text-foreground/70 text-sm">
                             Click "Assess Eligibility" to analyse this idea
@@ -410,7 +406,7 @@ export default function FundingAssessment() {
                                   <span className="text-foreground/70">
                                     Estimated Funding:
                                   </span>
-                                  <p className="text-white font-medium">
+                                  <p className="text-foreground font-medium">
                                     {formatCurrency(
                                       bestMatch.result.estimatedFunding
                                     )}
@@ -420,7 +416,7 @@ export default function FundingAssessment() {
                                   <span className="text-foreground/70">
                                     Application Readiness:
                                   </span>
-                                  <p className="text-white font-medium">
+                                  <p className="text-foreground font-medium">
                                     {bestMatch.result.applicationReadiness}%
                                   </p>
                                 </div>
@@ -428,7 +424,7 @@ export default function FundingAssessment() {
                                   <span className="text-foreground/70">
                                     Provider:
                                   </span>
-                                  <p className="text-white font-medium">
+                                  <p className="text-foreground font-medium">
                                     {bestMatch.program.provider}
                                   </p>
                                 </div>
@@ -460,7 +456,7 @@ export default function FundingAssessment() {
                               .map(({ program, result }) => (
                                 <div
                                   key={program.programId}
-                                  className="p-3 bg-gray-800/50 rounded-lg"
+                                  className="p-3 bg-card/50 rounded-lg"
                                 >
                                   <div className="flex items-center justify-between">
                                     <div className="flex items-center gap-3">
@@ -470,7 +466,7 @@ export default function FundingAssessment() {
                                           : "🇬🇧"}
                                       </span>
                                       <div>
-                                        <span className="text-white font-medium">
+                                        <span className="text-foreground font-medium">
                                           {program.name}
                                         </span>
                                         <p className="text-xs text-foreground/60">
@@ -504,7 +500,7 @@ export default function FundingAssessment() {
                                         href={program.websiteUrl}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="text-foreground/70 hover:text-cyan-400"
+                                        className="text-foreground/70 hover:text-[var(--brain-cyan)]"
                                       >
                                         <ExternalLink className="w-4 h-4" />
                                       </a>
@@ -512,7 +508,7 @@ export default function FundingAssessment() {
                                   </div>
 
                                   {result && (
-                                    <div className="mt-3 pt-3 border-t border-gray-700">
+                                    <div className="mt-3 pt-3 border-t border-border">
                                       <div className="flex gap-6">
                                         {/* Strengths */}
                                         {result.strengths.length > 0 && (
@@ -565,7 +561,7 @@ export default function FundingAssessment() {
       )}
 
       {/* Programs Overview */}
-      <Card className="bg-gray-900/50 border-gray-800">
+      <Card className="bg-gray-900/50 border-border/50">
         <CardHeader>
           <CardTitle className="text-white flex items-center gap-2">
             <Building2 className="w-5 h-5 text-emerald-400" />
@@ -589,10 +585,10 @@ export default function FundingAssessment() {
                   .map(program => (
                     <div
                       key={program.programId}
-                      className="p-3 bg-gray-800/50 rounded-lg"
+                      className="p-3 bg-card/50 rounded-lg"
                     >
                       <div className="flex items-center justify-between">
-                        <span className="text-white font-medium">
+                        <span className="text-foreground font-medium">
                           {program.name}
                         </span>
                         <Badge
@@ -624,15 +620,15 @@ export default function FundingAssessment() {
                   .map(program => (
                     <div
                       key={program.programId}
-                      className="p-3 bg-gray-800/50 rounded-lg"
+                      className="p-3 bg-card/50 rounded-lg"
                     >
                       <div className="flex items-center justify-between">
-                        <span className="text-white font-medium">
+                        <span className="text-foreground font-medium">
                           {program.name}
                         </span>
                         <Badge
                           variant="outline"
-                          className="border-blue-500/50 text-blue-400 capitalize"
+                          className="border-blue-500/50 text-primary capitalize"
                         >
                           {program.type.replace("_", " ")}
                         </Badge>

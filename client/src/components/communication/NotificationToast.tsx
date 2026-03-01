@@ -48,7 +48,7 @@ const TYPE_ICONS: Record<
 
 const TYPE_COLORS: Record<NotificationType, string> = {
   reminder: "border-amber-500/30 bg-amber-500/10",
-  insight: "border-cyan-500/30 bg-cyan-500/10",
+  insight: "border-cyan-500/30 bg-[var(--brain-cyan)]/10",
   achievement: "border-purple-500/30 bg-purple-500/10",
   nudge: "border-primary/30 bg-primary/10",
   alert: "border-red-500/30 bg-red-500/10",

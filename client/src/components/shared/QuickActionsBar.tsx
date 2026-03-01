@@ -4,9 +4,7 @@ import {
   Camera,
   CheckCircle2,
   Bell,
-  X,
   MicOff,
-  Loader2,
   AlertCircle,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -91,7 +89,7 @@ export function QuickActionsBar({
       id: "capture",
       icon: Camera,
       label: "Capture",
-      color: "bg-cyan-500 hover:bg-cyan-600",
+      color: "bg-cyan-500 hover:bg-[var(--brain-cyan)]/90",
       onClick: onCapture,
     },
     {

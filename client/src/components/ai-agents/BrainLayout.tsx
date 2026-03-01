@@ -19,44 +19,25 @@ import {
   SidebarTrigger,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { getLoginUrl } from "@/const";
 import { useIsMobile } from "@/hooks/useMobile";
 import { useAuth } from "@/hooks";
 import {
   LayoutDashboard,
   LogOut,
   PanelLeft,
-  BookOpen,
   BarChart3,
   Lock,
-  Briefcase,
-  Activity,
-  Brain,
   Sun,
   Users,
   User,
   Moon,
-  Keyboard,
   Settings,
   TrendingUp,
-  Info,
-  Clock,
-  Sparkles,
   Rocket,
-  Inbox,
   Search,
-  Video,
-  Bell,
-  Mic,
-  Podcast,
-  Heart,
-  Globe,
   Library,
   Workflow,
-  FileText,
-  ChevronDown,
   ChevronRight,
-  Mail,
   Volume2,
   CheckCircle2,
   Star,
@@ -66,7 +47,6 @@ import {
 import { CSSProperties, useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
 import { DashboardLayoutSkeleton } from "@/components/project-management/DashboardLayoutSkeleton";
-import { Button } from "@/components/ui/button";
 import { BottomTabBar } from "@/components/ai-agents/BottomTabBar";
 import { QuickActionsBar } from "@/components/shared/QuickActionsBar";
 import {
@@ -77,25 +57,19 @@ import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
 
 import {
   AccessibilitySettings,
-  SkipLink,
 } from "@/components/settings/AccessibilitySettings";
-import { Accessibility, Command } from "lucide-react";
 import {
   CommandPalette,
   useCommandPalette,
 } from "@/components/shared/CommandPalette";
-import { useGovernance, GovernanceModeIndicator } from "@/hooks/useGovernance";
 import {
   ChangelogModal,
   useChangelog,
-  WhatsNewButton,
 } from "@/components/shared/ChangelogModal";
-import { StatusPulse } from "@/components/shared/StatusPulse";
 import { GlobalSearch } from "@/components/shared/GlobalSearch";
-import NeonBrain from "@/components/ai-agents/NeonBrain";
+import _NeonBrain from "@/components/ai-agents/NeonBrain";
 import AnimatedBrainLogo from "@/components/ai-agents/AnimatedBrainLogo";
 import { NotificationBell } from "@/components/communication/NotificationCenter";
-import { CephoLandingPage } from "@/components/shared/CephoLandingPage";
 import { ThemeToggle } from "@/components/settings/ThemeToggle";
 
 // Core navigation - streamlined for professional use (COS-centric view)
@@ -175,7 +149,7 @@ export default function BrainLayout({
     const saved = localStorage.getItem(SIDEBAR_WIDTH_KEY);
     return saved ? parseInt(saved, 10) : DEFAULT_WIDTH;
   });
-  const { loading, user } = useSupabaseAuth();
+  const { loading} = useSupabaseAuth();
 
   useEffect(() => {
     localStorage.setItem(SIDEBAR_WIDTH_KEY, sidebarWidth.toString());
@@ -211,7 +185,7 @@ function BrainLayoutContent({
   children,
   setSidebarWidth,
 }: BrainLayoutContentProps) {
-  const { user, logout } = useAuth();
+  const { logout, user } = useAuth();
   const [location, setLocation] = useLocation();
   const { state, toggleSidebar } = useSidebar();
   const isCollapsed = state === "collapsed";

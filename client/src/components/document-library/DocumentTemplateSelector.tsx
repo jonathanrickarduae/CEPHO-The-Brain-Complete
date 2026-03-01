@@ -20,13 +20,10 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   FileText,
   BarChart3,
-  Briefcase,
   Users,
   Sun,
   TrendingUp,
@@ -167,7 +164,7 @@ const DOCUMENT_TEMPLATES: DocumentTemplate[] = [
 
 const CATEGORY_COLORS = {
   executive: "bg-purple-500/20 text-purple-400 border-purple-500/30",
-  operational: "bg-blue-500/20 text-blue-400 border-blue-500/30",
+  operational: "bg-primary/20 text-primary border-blue-500/30",
   strategic: "bg-amber-500/20 text-amber-400 border-amber-500/30",
   investor: "bg-green-500/20 text-green-400 border-green-500/30",
 };
@@ -241,7 +238,7 @@ export function DocumentTemplateSelector({
           variant={filter === "operational" ? "default" : "outline"}
           size="sm"
           onClick={() => setFilter("operational")}
-          className={filter === "operational" ? "bg-blue-500" : ""}
+          className={filter === "operational" ? "bg-primary" : ""}
         >
           Operational
         </Button>
@@ -270,12 +267,12 @@ export function DocumentTemplateSelector({
           return (
             <Card
               key={template.id}
-              className="bg-gray-900/50 border-gray-800 hover:border-[#E91E8C]/50 transition-all cursor-pointer group"
+              className="bg-gray-900/50 border-border/50 hover:border-[#E91E8C]/50 transition-all cursor-pointer group"
               onClick={() => handleSelectTemplate(template)}
             >
               <CardHeader className="pb-3">
                 <div className="flex items-start justify-between">
-                  <div className="p-2 rounded-lg bg-gray-800 group-hover:bg-[#E91E8C]/20 transition-colors">
+                  <div className="p-2 rounded-lg bg-card group-hover:bg-[#E91E8C]/20 transition-colors">
                     <Icon className="h-5 w-5 text-[#E91E8C]" />
                   </div>
                   <Badge
@@ -310,7 +307,7 @@ export function DocumentTemplateSelector({
         open={!!selectedTemplate}
         onOpenChange={open => !open && setSelectedTemplate(null)}
       >
-        <DialogContent className="bg-gray-900 border-gray-800 max-w-2xl">
+        <DialogContent className="bg-background border-border/50 max-w-2xl">
           {selectedTemplate && (
             <>
               <DialogHeader>
@@ -319,7 +316,7 @@ export function DocumentTemplateSelector({
                     <selectedTemplate.icon className="h-6 w-6 text-[#E91E8C]" />
                   </div>
                   <div>
-                    <DialogTitle className="text-white">
+                    <DialogTitle className="text-foreground">
                       {selectedTemplate.name}
                     </DialogTitle>
                     <DialogDescription>
@@ -340,7 +337,7 @@ export function DocumentTemplateSelector({
                       <Badge
                         key={field}
                         variant="outline"
-                        className="text-gray-300 border-gray-700"
+                        className="text-foreground/80 border-border"
                       >
                         {field}
                       </Badge>
@@ -359,7 +356,7 @@ export function DocumentTemplateSelector({
                 </div>
 
                 {/* Actions */}
-                <div className="flex gap-3 pt-4 border-t border-gray-800">
+                <div className="flex gap-3 pt-4 border-t border-border/50">
                   <Button
                     className="flex-1 bg-[#E91E8C] hover:bg-[#E91E8C]/90"
                     onClick={() =>
@@ -369,11 +366,11 @@ export function DocumentTemplateSelector({
                     <Sparkles className="h-4 w-4 mr-2" />
                     Generate with AI
                   </Button>
-                  <Button variant="outline" className="border-gray-700">
+                  <Button variant="outline" className="border-border">
                     <Eye className="h-4 w-4 mr-2" />
                     Preview
                   </Button>
-                  <Button variant="outline" className="border-gray-700">
+                  <Button variant="outline" className="border-border">
                     <Download className="h-4 w-4 mr-2" />
                     Download Blank
                   </Button>

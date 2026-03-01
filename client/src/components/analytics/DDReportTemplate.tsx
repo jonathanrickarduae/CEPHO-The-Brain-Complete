@@ -6,8 +6,6 @@ import {
   CheckCircle,
   AlertTriangle,
   AlertCircle,
-  TrendingUp,
-  TrendingDown,
   Minus,
 } from "lucide-react";
 
@@ -50,7 +48,7 @@ interface DDReportTemplateProps {
 }
 
 export function DDReportTemplate({ data, onExport }: DDReportTemplateProps) {
-  const [currentPage, setCurrentPage] = useState(1);
+  const [_setCurrentPage] = useState(1);
 
   const formatCurrency = (value: number, currency: string) => {
     return new Intl.NumberFormat("en-US", {
@@ -94,7 +92,7 @@ export function DDReportTemplate({ data, onExport }: DDReportTemplateProps) {
       case "medium":
         return <AlertTriangle className="w-4 h-4 text-amber-500" />;
       case "low":
-        return <Minus className="w-4 h-4 text-blue-500" />;
+        return <Minus className="w-4 h-4 text-primary" />;
       default:
         return null;
     }
@@ -572,7 +570,7 @@ export function DDReportTemplate({ data, onExport }: DDReportTemplateProps) {
                 style={{ width: "100%" }}
               />
               <div
-                className="absolute top-0 h-full w-1 bg-gray-900"
+                className="absolute top-0 h-full w-1 bg-background"
                 style={{ left: "50%", transform: "translateX(-50%)" }}
               />
             </div>

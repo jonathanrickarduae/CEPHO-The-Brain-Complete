@@ -60,7 +60,7 @@ const FLYWHEEL_STAGES = [
     id: 2,
     name: "Assess",
     icon: Search,
-    color: "text-blue-500",
+    color: "text-primary",
     description: "Strategic framework evaluation",
   },
   {
@@ -88,7 +88,7 @@ const FLYWHEEL_STAGES = [
 
 const STATUS_COLORS: Record<string, string> = {
   captured: "bg-yellow-500/20 text-yellow-400",
-  assessing: "bg-blue-500/20 text-blue-400",
+  assessing: "bg-primary/20 text-primary",
   refining: "bg-orange-500/20 text-orange-400",
   validated: "bg-green-500/20 text-green-400",
   rejected: "bg-red-500/20 text-red-400",
@@ -237,7 +237,7 @@ export default function InnovationHub() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
-              <Sparkles className="h-8 w-8 text-cyan-400" />
+              <Sparkles className="h-8 w-8 text-[var(--brain-cyan)]" />
               Innovation Hub
             </h1>
             <p className="text-muted-foreground mt-1">
@@ -374,8 +374,8 @@ export default function InnovationHub() {
           </Card>
           <Card className="bg-card/50 border-border/50">
             <CardContent className="p-4 flex items-center gap-4">
-              <div className="p-3 rounded-lg bg-blue-500/20">
-                <RefreshCw className="h-6 w-6 text-blue-400" />
+              <div className="p-3 rounded-lg bg-primary/20">
+                <RefreshCw className="h-6 w-6 text-primary" />
               </div>
               <div>
                 <p className="text-2xl font-bold">{activeIdeas}</p>
@@ -413,7 +413,7 @@ export default function InnovationHub() {
         <Card className="bg-card/50 border-border/50">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <RefreshCw className="h-5 w-5 text-cyan-400" />
+              <RefreshCw className="h-5 w-5 text-[var(--brain-cyan)]" />
               Innovation Flywheel
             </CardTitle>
             <CardDescription>
@@ -475,7 +475,7 @@ export default function InnovationHub() {
                       onClick={() => setSelectedIdea(idea.id)}
                       className={`p-3 rounded-lg border cursor-pointer transition-all ${
                         selectedIdea === idea.id
-                          ? "border-cyan-500 bg-cyan-500/10"
+                          ? "border-[var(--brain-cyan)] bg-[var(--brain-cyan)]/10"
                           : "border-border hover:border-border/80 hover:bg-card"
                       }`}
                     >
@@ -683,7 +683,7 @@ export default function InnovationHub() {
                           {selectedIdeaData.scenarios.map(scenario => (
                             <Card
                               key={scenario.id}
-                              className={`${scenario.isRecommended ? "border-cyan-500 bg-cyan-500/5" : "border-border"}`}
+                              className={`${scenario.isRecommended ? "border-[var(--brain-cyan)] bg-[var(--brain-cyan)]/5" : "border-border"}`}
                             >
                               <CardHeader className="pb-2">
                                 <div className="flex items-center justify-between">
@@ -691,7 +691,7 @@ export default function InnovationHub() {
                                     {scenario.scenarioName}
                                   </CardTitle>
                                   {scenario.isRecommended && (
-                                    <Badge className="bg-cyan-600">
+                                    <Badge className="bg-[var(--brain-cyan)]/90">
                                       Recommended
                                     </Badge>
                                   )}

@@ -1,6 +1,5 @@
 import { useState } from "react";
 import {
-  Star,
   Mic,
   MicOff,
   Send,
@@ -126,7 +125,7 @@ export function SMEFeedbackRating({
 
       // Store reference to stop later
       (window as any).currentRecorder = mediaRecorder;
-    } catch (err) {
+    } catch {
     }
   };
 
@@ -154,7 +153,7 @@ export function SMEFeedbackRating({
   };
 
   return (
-    <div className="bg-gray-900/80 backdrop-blur-sm border border-gray-800 rounded-2xl p-6 max-w-md mx-auto">
+    <div className="bg-gray-900/80 backdrop-blur-sm border border-border/50 rounded-2xl p-6 max-w-md mx-auto">
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
@@ -170,7 +169,7 @@ export function SMEFeedbackRating({
             </div>
           )}
           <div>
-            <h3 className="text-white font-medium">Rate this conversation</h3>
+            <h3 className="text-foreground font-medium">Rate this conversation</h3>
             <p className="text-sm text-foreground/70">with {expertName}</p>
           </div>
         </div>
@@ -213,7 +212,7 @@ export function SMEFeedbackRating({
                       : value <= 7
                         ? "bg-yellow-500"
                         : "bg-green-500"
-                  : "bg-gray-700 hover:bg-gray-600"
+                  : "bg-muted hover:bg-gray-600"
               }`}
             />
           ))}
@@ -234,7 +233,7 @@ export function SMEFeedbackRating({
           className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl border transition-all ${
             quickFeedback === "helpful"
               ? "bg-green-500/20 border-green-500 text-green-400"
-              : "bg-gray-800 border-gray-700 text-foreground/70 hover:border-gray-600"
+              : "bg-card border-border text-foreground/70 hover:border-border"
           }`}
         >
           <ThumbsUp className="w-4 h-4" />
@@ -250,7 +249,7 @@ export function SMEFeedbackRating({
           className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl border transition-all ${
             quickFeedback === "not_helpful"
               ? "bg-red-500/20 border-red-500 text-red-400"
-              : "bg-gray-800 border-gray-700 text-foreground/70 hover:border-gray-600"
+              : "bg-card border-border text-foreground/70 hover:border-border"
           }`}
         >
           <ThumbsDown className="w-4 h-4" />
@@ -274,7 +273,7 @@ export function SMEFeedbackRating({
                   className={`px-3 py-1.5 rounded-full text-sm transition-all ${
                     selectedImprovements.includes(option.id)
                       ? "bg-purple-500/30 border border-purple-500 text-purple-300"
-                      : "bg-gray-800 border border-gray-700 text-foreground/70 hover:border-gray-600"
+                      : "bg-card border border-border text-foreground/70 hover:border-border"
                   }`}
                 >
                   {option.label}
@@ -292,7 +291,7 @@ export function SMEFeedbackRating({
               value={textFeedback}
               onChange={e => setTextFeedback(e.target.value)}
               placeholder="Tell us more about your experience..."
-              className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none"
+              className="w-full px-4 py-3 bg-card border border-border rounded-xl text-white placeholder:text-muted-foreground focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none"
               rows={3}
             />
           </div>
@@ -308,7 +307,7 @@ export function SMEFeedbackRating({
                 className={`flex items-center gap-2 px-4 py-2 rounded-xl transition-all ${
                   isRecording
                     ? "bg-red-500 text-white animate-pulse"
-                    : "bg-gray-800 border border-gray-700 text-foreground/70 hover:border-gray-600"
+                    : "bg-card border border-border text-foreground/70 hover:border-border"
                 }`}
               >
                 {isRecording ? (
@@ -373,7 +372,6 @@ export function SMEFeedbackRating({
 
 // Compact inline rating for quick feedback
 export function SMEQuickRating({
-  expertId,
   expertName,
   onRate,
 }: {
@@ -419,7 +417,7 @@ export function SMEQuickRating({
                     : value <= 7
                       ? "bg-yellow-500"
                       : "bg-green-500"
-                : "bg-gray-700 hover:bg-gray-600"
+                : "bg-muted hover:bg-gray-600"
             }`}
           />
         ))}
@@ -496,7 +494,7 @@ export function ExpertPerformanceCard({
   };
 
   return (
-    <div className="bg-gray-900/50 border border-gray-800 rounded-xl p-4">
+    <div className="bg-gray-900/50 border border-border/50 rounded-xl p-4">
       <div className="flex items-start justify-between mb-3">
         <div className="flex items-center gap-3">
           {expert.avatar ? (
@@ -511,7 +509,7 @@ export function ExpertPerformanceCard({
             </div>
           )}
           <div>
-            <h4 className="text-white font-medium">{expert.name}</h4>
+            <h4 className="text-foreground font-medium">{expert.name}</h4>
             <p className="text-xs text-foreground/60">{expert.category}</p>
           </div>
         </div>
@@ -578,7 +576,7 @@ export function ExpertPerformanceCard({
           <>
             <button
               onClick={() => onAction("enhance")}
-              className="flex-1 px-3 py-1.5 bg-blue-500/20 text-blue-400 text-xs rounded-lg hover:bg-blue-500/30 transition-colors"
+              className="flex-1 px-3 py-1.5 bg-primary/20 text-primary text-xs rounded-lg hover:bg-primary/30 transition-colors"
             >
               Enhance
             </button>

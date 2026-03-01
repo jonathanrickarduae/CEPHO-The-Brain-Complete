@@ -10,8 +10,6 @@ import {
   Check,
   AlertCircle,
   Lock,
-  Eye,
-  EyeOff,
   Download,
   RefreshCw,
   Sparkles,
@@ -212,7 +210,7 @@ export function TrainingStudio({ className }: TrainingStudioProps) {
       case "personal":
         return "bg-purple-500/20 text-purple-400";
       case "work":
-        return "bg-blue-500/20 text-blue-400";
+        return "bg-primary/20 text-primary";
       case "preferences":
         return "bg-amber-500/20 text-amber-400";
       case "relationships":
@@ -316,7 +314,7 @@ export function TrainingStudio({ className }: TrainingStudioProps) {
                 >
                   <div className="flex-shrink-0">
                     {data.type === "document" && (
-                      <FileText className="w-4 h-4 text-blue-400" />
+                      <FileText className="w-4 h-4 text-primary" />
                     )}
                     {data.type === "conversation" && (
                       <MessageSquare className="w-4 h-4 text-purple-400" />

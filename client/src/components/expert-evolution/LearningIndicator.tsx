@@ -16,14 +16,14 @@ interface LearningItem {
   timestamp: Date;
 }
 
-interface LearningIndicatorProps {
+interface _LearningIndicatorProps {
   className?: string;
   variant?: "badge" | "panel" | "toast";
   learningItems?: LearningItem[];
 }
 
 const TYPE_CONFIG = {
-  pattern: { icon: TrendingUp, label: "Pattern", color: "text-cyan-400" },
+  pattern: { icon: TrendingUp, label: "Pattern", color: "text-[var(--brain-cyan)]" },
   preference: { icon: Sparkles, label: "Preference", color: "text-purple-400" },
   vocabulary: {
     icon: MessageSquare,
@@ -40,8 +40,8 @@ export function LearningBadge({ className }: { className?: string }) {
     <div
       className={cn(
         "inline-flex items-center gap-2 px-3 py-1.5 rounded-lg",
-        "bg-cyan-500/10 border border-cyan-500/20",
-        "text-xs text-cyan-400",
+        "bg-[var(--brain-cyan)]/10 border border-cyan-500/20",
+        "text-xs text-[var(--brain-cyan)]",
         className
       )}
     >
@@ -92,7 +92,7 @@ export function LearningPanel({
       )}
     >
       <div className="flex items-center gap-2 mb-4">
-        <Brain className="w-5 h-5 text-cyan-400" />
+        <Brain className="w-5 h-5 text-[var(--brain-cyan)]" />
         <h3 className="font-display font-bold text-sm">
           Chief of Staff Learning
         </h3>
@@ -172,13 +172,13 @@ export function LearningToast({
         className
       )}
     >
-      <div className={cn("p-2 rounded-lg bg-cyan-500/20", config.color)}>
+      <div className={cn("p-2 rounded-lg bg-[var(--brain-cyan)]/20", config.color)}>
         <Icon className="w-5 h-5" />
       </div>
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 mb-0.5">
-          <Brain className="w-3.5 h-3.5 text-cyan-400" />
-          <span className="text-xs font-medium text-cyan-400">
+          <Brain className="w-3.5 h-3.5 text-[var(--brain-cyan)]" />
+          <span className="text-xs font-medium text-[var(--brain-cyan)]">
             Chief of Staff Learned
           </span>
         </div>

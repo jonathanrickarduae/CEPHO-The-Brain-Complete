@@ -185,22 +185,22 @@ export default function ProjectGenesisPage() {
       setTimeout(() => {
         setViewMode("dashboard");
       }, 1500);
-    } catch (error) {
+    } catch {
     }
   };
 
   const getStatusColor = (status: GenesisBlueprint["status"]) => {
     switch (status) {
       case "draft":
-        return "bg-gray-500/20 text-gray-300";
+        return "bg-gray-500/20 text-foreground/80";
       case "in_progress":
-        return "bg-blue-500/20 text-blue-300";
+        return "bg-primary/20 text-blue-300";
       case "in_review":
         return "bg-yellow-500/20 text-yellow-300";
       case "approved":
         return "bg-green-500/20 text-green-300";
       default:
-        return "bg-gray-500/20 text-gray-300";
+        return "bg-gray-500/20 text-foreground/80";
     }
   };
 
@@ -223,7 +223,7 @@ export default function ProjectGenesisPage() {
   // (Keep all existing UI rendering logic)
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900/20 to-gray-900 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-background via-purple-900/20 to-background p-6">
       {viewMode === "dashboard" && (
         <div className="max-w-7xl mx-auto space-y-6">
           {/* Header */}
@@ -233,7 +233,7 @@ export default function ProjectGenesisPage() {
                 <Brain className="w-8 h-8 text-purple-400" />
                 Project Genesis
               </h1>
-              <p className="text-gray-400 mt-1">
+              <p className="text-muted-foreground mt-1">
                 6-Phase Venture Development Framework
               </p>
             </div>
@@ -257,15 +257,15 @@ export default function ProjectGenesisPage() {
           </div>
 
           {/* AI Agents Section */}
-          <div className="bg-gray-800/30 backdrop-blur-sm rounded-xl border border-gray-700/50 p-6">
+          <div className="bg-card/30 backdrop-blur-sm rounded-xl border border-border/50 p-6">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-xl font-semibold text-white flex items-center gap-2">
-                <Brain className="w-5 h-5 text-cyan-400" />
+                <Brain className="w-5 h-5 text-[var(--brain-cyan)]" />
                 AI Agents Working on Projects
               </h2>
               <Badge
                 variant="outline"
-                className="bg-cyan-500/20 text-cyan-400 border-cyan-500/50"
+                className="bg-[var(--brain-cyan)]/20 text-[var(--brain-cyan)] border-cyan-500/50"
               >
                 {savedProjects.length} Active
               </Badge>
@@ -273,16 +273,16 @@ export default function ProjectGenesisPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {/* Financial Analyst Agent */}
-              <div className="bg-gray-900/50 rounded-lg border border-gray-700/50 p-4 hover:border-cyan-500/50 transition-all">
+              <div className="bg-gray-900/50 rounded-lg border border-border/50 p-4 hover:border-cyan-500/50 transition-all">
                 <div className="flex items-start gap-3">
-                  <div className="p-2 rounded-lg bg-cyan-500/20">
-                    <DollarSign className="w-5 h-5 text-cyan-400" />
+                  <div className="p-2 rounded-lg bg-[var(--brain-cyan)]/20">
+                    <DollarSign className="w-5 h-5 text-[var(--brain-cyan)]" />
                   </div>
                   <div className="flex-1">
                     <h3 className="font-semibold text-white mb-1">
                       Financial Analyst
                     </h3>
-                    <p className="text-xs text-gray-400 mb-2">
+                    <p className="text-xs text-muted-foreground mb-2">
                       Analyzing market trends & projections
                     </p>
                     <div className="flex items-center gap-2">
@@ -294,7 +294,7 @@ export default function ProjectGenesisPage() {
               </div>
 
               {/* Market Research Agent */}
-              <div className="bg-gray-900/50 rounded-lg border border-gray-700/50 p-4 hover:border-purple-500/50 transition-all">
+              <div className="bg-gray-900/50 rounded-lg border border-border/50 p-4 hover:border-purple-500/50 transition-all">
                 <div className="flex items-start gap-3">
                   <div className="p-2 rounded-lg bg-purple-500/20">
                     <BarChart3 className="w-5 h-5 text-purple-400" />
@@ -303,7 +303,7 @@ export default function ProjectGenesisPage() {
                     <h3 className="font-semibold text-white mb-1">
                       Market Researcher
                     </h3>
-                    <p className="text-xs text-gray-400 mb-2">
+                    <p className="text-xs text-muted-foreground mb-2">
                       Gathering competitive intelligence
                     </p>
                     <div className="flex items-center gap-2">
@@ -315,7 +315,7 @@ export default function ProjectGenesisPage() {
               </div>
 
               {/* Legal Compliance Agent */}
-              <div className="bg-gray-900/50 rounded-lg border border-gray-700/50 p-4 hover:border-amber-500/50 transition-all">
+              <div className="bg-gray-900/50 rounded-lg border border-border/50 p-4 hover:border-amber-500/50 transition-all">
                 <div className="flex items-start gap-3">
                   <div className="p-2 rounded-lg bg-amber-500/20">
                     <Shield className="w-5 h-5 text-amber-400" />
@@ -324,7 +324,7 @@ export default function ProjectGenesisPage() {
                     <h3 className="font-semibold text-white mb-1">
                       Legal Advisor
                     </h3>
-                    <p className="text-xs text-gray-400 mb-2">
+                    <p className="text-xs text-muted-foreground mb-2">
                       Reviewing compliance requirements
                     </p>
                     <div className="flex items-center gap-2">
@@ -341,7 +341,7 @@ export default function ProjectGenesisPage() {
           {projectsLoading && !loadingTimedOut && (
             <div className="flex items-center justify-center py-12">
               <Loader2 className="w-8 h-8 text-purple-400 animate-spin" />
-              <span className="ml-3 text-gray-400">Loading projects...</span>
+              <span className="ml-3 text-muted-foreground">Loading projects...</span>
             </div>
           )}
 
@@ -351,7 +351,7 @@ export default function ProjectGenesisPage() {
               {savedProjects.map(project => (
                 <div
                   key={project.id}
-                  className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700/50 p-6 hover:border-purple-500/50 transition-all cursor-pointer"
+                  className="bg-card/50 backdrop-blur-sm rounded-xl border border-border/50 p-6 hover:border-purple-500/50 transition-all cursor-pointer"
                   onClick={() => {
                     setCurrentBlueprint({
                       id: project.id,
@@ -374,7 +374,7 @@ export default function ProjectGenesisPage() {
                           </span>
                         </Badge>
                       </div>
-                      <p className="text-gray-400 text-sm mb-4">
+                      <p className="text-muted-foreground text-sm mb-4">
                         {project.industry} • Created{" "}
                         {project.createdAt.toLocaleDateString()}
                       </p>
@@ -382,14 +382,14 @@ export default function ProjectGenesisPage() {
                       {/* Progress Bar */}
                       <div className="mb-4">
                         <div className="flex items-center justify-between text-sm mb-2">
-                          <span className="text-gray-400">
+                          <span className="text-muted-foreground">
                             Overall Progress
                           </span>
                           <span className="text-purple-400 font-medium">
                             {project.completionPercentage}%
                           </span>
                         </div>
-                        <div className="h-2 bg-gray-700 rounded-full overflow-hidden">
+                        <div className="h-2 bg-muted rounded-full overflow-hidden">
                           <div
                             className="h-full bg-gradient-to-r from-purple-600 to-pink-600 transition-all duration-500"
                             style={{
@@ -406,7 +406,7 @@ export default function ProjectGenesisPage() {
                       />
                     </div>
 
-                    <ChevronRight className="w-5 h-5 text-gray-400 ml-4" />
+                    <ChevronRight className="w-5 h-5 text-muted-foreground ml-4" />
                   </div>
                 </div>
               ))}
@@ -418,10 +418,10 @@ export default function ProjectGenesisPage() {
             savedProjects.length === 0 && (
               <div className="text-center py-12">
                 <Brain className="w-16 h-16 text-gray-600 mx-auto mb-4" />
-                <h3 className="text-xl font-semibold text-gray-400 mb-2">
+                <h3 className="text-xl font-semibold text-muted-foreground mb-2">
                   No projects yet
                 </h3>
-                <p className="text-gray-500 mb-6">
+                <p className="text-muted-foreground/70 mb-6">
                   Start your first Project Genesis to build a comprehensive
                   venture plan
                 </p>

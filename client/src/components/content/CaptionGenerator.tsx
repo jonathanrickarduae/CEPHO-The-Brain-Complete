@@ -11,13 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
 } from "@/components/ui/select";
-import { Slider } from "@/components/ui/slider";
 import {
   Sparkles,
   Copy,
@@ -34,7 +28,6 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
-import { trpc } from "@/lib/trpc";
 
 interface PlatformConfig {
   id: string;
@@ -54,8 +47,8 @@ const platforms: PlatformConfig[] = [
     id: "linkedin",
     name: "LinkedIn",
     icon: Linkedin,
-    color: "text-blue-400",
-    bgColor: "bg-blue-500/20",
+    color: "text-primary",
+    bgColor: "bg-primary/20",
     maxLength: 3000,
     tone: "Professional, insightful, thought-leadership focused",
     hashtagStyle: "end",
@@ -105,8 +98,8 @@ const platforms: PlatformConfig[] = [
     id: "facebook",
     name: "Facebook",
     icon: Facebook,
-    color: "text-blue-500",
-    bgColor: "bg-blue-600/20",
+    color: "text-primary",
+    bgColor: "bg-primary/90/20",
     maxLength: 63206,
     tone: "Friendly, community-focused, shareable",
     hashtagStyle: "minimal",
@@ -127,7 +120,7 @@ interface CaptionGeneratorProps {
 export function CaptionGenerator({ onGenerate }: CaptionGeneratorProps) {
   const [topic, setTopic] = useState("");
   const [platform, setPlatform] = useState("linkedin");
-  const [tone, setTone] = useState("professional");
+  const [_setTone] = useState("professional");
   const [includeHashtags, setIncludeHashtags] = useState(true);
   const [includeEmojis, setIncludeEmojis] = useState(true);
   const [includeCTA, setIncludeCTA] = useState(true);
@@ -147,7 +140,7 @@ export function CaptionGenerator({ onGenerate }: CaptionGeneratorProps) {
 
     // Simulate AI generation - in production this would call the LLM
     setTimeout(() => {
-      const platformConfig = platforms.find(p => p.id === platform);
+      const _platformConfig = platforms.find(p => p.id === platform);
       let caption = "";
 
       if (platform === "linkedin") {
@@ -215,7 +208,7 @@ ${includeHashtags ? "#motivation #community" : ""}`;
   return (
     <div className="space-y-6">
       {/* Header */}
-      <Card className="bg-gray-900/50 border-gray-800">
+      <Card className="bg-gray-900/50 border-border/50">
         <CardHeader>
           <CardTitle className="text-white flex items-center gap-2">
             <Sparkles className="w-5 h-5 text-[#E91E8C]" />
@@ -229,9 +222,9 @@ ${includeHashtags ? "#motivation #community" : ""}`;
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Input Section */}
-        <Card className="bg-gray-900/50 border-gray-800">
+        <Card className="bg-gray-900/50 border-border/50">
           <CardHeader>
-            <CardTitle className="text-white text-sm">
+            <CardTitle className="text-foreground/80 text-sm">
               Configure Your Caption
             </CardTitle>
           </CardHeader>
@@ -268,7 +261,7 @@ ${includeHashtags ? "#motivation #community" : ""}`;
 
             {/* Platform Info */}
             {currentPlatform && (
-              <div className="p-3 bg-gray-800/50 rounded-lg space-y-2">
+              <div className="p-3 bg-card/50 rounded-lg space-y-2">
                 <div className="flex items-center gap-2">
                   <Badge variant="outline" className="text-xs">
                     Max {currentPlatform.maxLength} chars
@@ -292,7 +285,7 @@ ${includeHashtags ? "#motivation #community" : ""}`;
                 value={topic}
                 onChange={e => setTopic(e.target.value)}
                 placeholder="What do you want to post about? E.g., 'The importance of work-life balance for entrepreneurs'"
-                className="bg-gray-800 border-gray-700 min-h-[100px]"
+                className="bg-card border-border min-h-[100px]"
               />
             </div>
 
@@ -349,13 +342,13 @@ ${includeHashtags ? "#motivation #community" : ""}`;
         {/* Output Section */}
         <Card
           className={cn(
-            "bg-gray-900/50 border-gray-800",
+            "bg-gray-900/50 border-border/50",
             generatedCaption && "border-green-500/30"
           )}
         >
           <CardHeader>
             <div className="flex items-center justify-between">
-              <CardTitle className="text-white text-sm">
+              <CardTitle className="text-foreground/80 text-sm">
                 Generated Caption
               </CardTitle>
               {generatedCaption && (
@@ -377,7 +370,7 @@ ${includeHashtags ? "#motivation #community" : ""}`;
           <CardContent>
             {generatedCaption ? (
               <div className="space-y-4">
-                <div className="p-4 bg-gray-800/50 rounded-lg">
+                <div className="p-4 bg-card/50 rounded-lg">
                   <p className="text-white whitespace-pre-wrap">
                     {generatedCaption}
                   </p>
@@ -412,9 +405,9 @@ ${includeHashtags ? "#motivation #community" : ""}`;
       </div>
 
       {/* Platform Tips */}
-      <Card className="bg-gray-900/50 border-gray-800">
+      <Card className="bg-gray-900/50 border-border/50">
         <CardHeader>
-          <CardTitle className="text-white text-sm">
+          <CardTitle className="text-foreground/80 text-sm">
             Platform-Specific Tips
           </CardTitle>
         </CardHeader>

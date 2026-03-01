@@ -20,10 +20,8 @@ import {
 } from "@/components/ui/select";
 import {
   Calendar,
-  Clock,
   User,
   Mail,
-  Phone,
   Building2,
   CheckCircle2,
   Plus,
@@ -100,7 +98,7 @@ export function CustomerValidationScheduler() {
     status: "pending",
     interviewType: "discovery",
   });
-  const [selectedInterview, setSelectedInterview] = useState<Interview | null>(
+  const [_selectedInterview, setSelectedInterview] = useState<Interview | null>(
     null
   );
 
@@ -141,7 +139,7 @@ export function CustomerValidationScheduler() {
     toast.success("Interview removed");
   };
 
-  const addInsight = (id: string, insight: string) => {
+  const _addInsight = (id: string, insight: string) => {
     setInterviews(
       interviews.map(i =>
         i.id === id ? { ...i, insights: [...(i.insights || []), insight] } : i
@@ -154,7 +152,7 @@ export function CustomerValidationScheduler() {
       case "completed":
         return "bg-green-500/20 text-green-500 border-green-500/30";
       case "scheduled":
-        return "bg-blue-500/20 text-blue-500 border-blue-500/30";
+        return "bg-primary/20 text-primary border-blue-500/30";
       case "cancelled":
         return "bg-red-500/20 text-red-500 border-red-500/30";
       default:
@@ -196,7 +194,7 @@ export function CustomerValidationScheduler() {
         <Card>
           <CardContent className="pt-6">
             <div className="text-center">
-              <div className="text-3xl font-bold text-blue-500">
+              <div className="text-3xl font-bold text-primary">
                 {stats.scheduled}
               </div>
               <div className="text-sm text-muted-foreground">Scheduled</div>

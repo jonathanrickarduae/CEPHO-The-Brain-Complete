@@ -1,12 +1,9 @@
 import { useState } from "react";
 import {
   Calendar,
-  Check,
   X,
   RefreshCw,
-  Settings,
   ChevronRight,
-  ExternalLink,
   Clock,
   Users,
   Video,
@@ -160,17 +157,17 @@ export function CalendarIntegration() {
   };
 
   return (
-    <div className="bg-gray-800 rounded-2xl p-6 border border-gray-700">
+    <div className="bg-card rounded-2xl p-6 border border-border">
       <div className="flex items-center justify-between mb-6">
         <h3 className="text-lg font-semibold text-white flex items-center gap-2">
-          <Calendar className="w-5 h-5 text-cyan-400" />
+          <Calendar className="w-5 h-5 text-[var(--brain-cyan)]" />
           Calendar Integration
         </h3>
         {accounts.length > 0 && (
           <button
             onClick={syncNow}
             disabled={syncing}
-            className="flex items-center gap-2 px-3 py-1.5 bg-gray-700 hover:bg-gray-600 rounded-lg text-sm text-foreground/80 transition-colors disabled:opacity-50"
+            className="flex items-center gap-2 px-3 py-1.5 bg-muted hover:bg-gray-600 rounded-lg text-sm text-foreground/80 transition-colors disabled:opacity-50"
           >
             <RefreshCw className={`w-4 h-4 ${syncing ? "animate-spin" : ""}`} />
             {syncing ? "Syncing..." : "Sync Now"}
@@ -182,7 +179,7 @@ export function CalendarIntegration() {
       {accounts.length > 0 && (
         <div className="space-y-4 mb-6">
           {accounts.map(account => (
-            <div key={account.id} className="bg-gray-900 rounded-xl p-4">
+            <div key={account.id} className="bg-background rounded-xl p-4">
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-3">
                   {getProviderIcon(account.provider)}
@@ -197,7 +194,7 @@ export function CalendarIntegration() {
                 </div>
                 <button
                   onClick={() => disconnectAccount(account.id)}
-                  className="p-2 rounded-lg hover:bg-gray-800 text-foreground/70 hover:text-red-400 transition-colors"
+                  className="p-2 rounded-lg hover:bg-card text-foreground/70 hover:text-red-400 transition-colors"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -208,13 +205,13 @@ export function CalendarIntegration() {
                 {account.calendars.map(calendar => (
                   <label
                     key={calendar.id}
-                    className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-800 cursor-pointer"
+                    className="flex items-center gap-3 p-2 rounded-lg hover:bg-card cursor-pointer"
                   >
                     <input
                       type="checkbox"
                       checked={calendar.enabled}
                       onChange={() => toggleCalendar(account.id, calendar.id)}
-                      className="w-4 h-4 rounded border-gray-600 bg-gray-700 text-cyan-500 focus:ring-cyan-500"
+                      className="w-4 h-4 rounded border-border bg-muted text-[var(--brain-cyan)] focus:ring-cyan-500"
                     />
                     <div
                       className="w-3 h-3 rounded-full"
@@ -237,11 +234,11 @@ export function CalendarIntegration() {
           <button
             onClick={connectGoogle}
             disabled={connecting === "google"}
-            className="w-full flex items-center justify-between p-4 bg-gray-900 hover:bg-gray-850 rounded-xl border border-gray-700 hover:border-gray-600 transition-colors disabled:opacity-50"
+            className="w-full flex items-center justify-between p-4 bg-background hover:bg-gray-850 rounded-xl border border-border hover:border-border transition-colors disabled:opacity-50"
           >
             <div className="flex items-center gap-3">
               {getProviderIcon("google")}
-              <span className="text-white">Connect Google Calendar</span>
+              <span className="text-foreground">Connect Google Calendar</span>
             </div>
             {connecting === "google" ? (
               <RefreshCw className="w-5 h-5 text-foreground/70 animate-spin" />
@@ -255,11 +252,11 @@ export function CalendarIntegration() {
           <button
             onClick={connectMicrosoft}
             disabled={connecting === "microsoft"}
-            className="w-full flex items-center justify-between p-4 bg-gray-900 hover:bg-gray-850 rounded-xl border border-gray-700 hover:border-gray-600 transition-colors disabled:opacity-50"
+            className="w-full flex items-center justify-between p-4 bg-background hover:bg-gray-850 rounded-xl border border-border hover:border-border transition-colors disabled:opacity-50"
           >
             <div className="flex items-center gap-3">
               {getProviderIcon("microsoft")}
-              <span className="text-white">Connect Outlook Calendar</span>
+              <span className="text-foreground">Connect Outlook Calendar</span>
             </div>
             {connecting === "microsoft" ? (
               <RefreshCw className="w-5 h-5 text-foreground/70 animate-spin" />
@@ -322,13 +319,13 @@ export function UpcomingEvents() {
   };
 
   return (
-    <div className="bg-gray-800 rounded-2xl p-6 border border-gray-700">
+    <div className="bg-card rounded-2xl p-6 border border-border">
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-lg font-semibold text-white flex items-center gap-2">
-          <Clock className="w-5 h-5 text-cyan-400" />
+          <Clock className="w-5 h-5 text-[var(--brain-cyan)]" />
           Upcoming
         </h3>
-        <a href="#" className="text-sm text-cyan-400 hover:text-cyan-300">
+        <a href="#" className="text-sm text-[var(--brain-cyan)] hover:text-cyan-300">
           View all
         </a>
       </div>
@@ -339,14 +336,14 @@ export function UpcomingEvents() {
             key={event.id}
             className={`p-3 rounded-xl ${
               index === 0
-                ? "bg-cyan-500/10 border border-cyan-500/20"
-                : "bg-gray-900"
+                ? "bg-[var(--brain-cyan)]/10 border border-cyan-500/20"
+                : "bg-background"
             }`}
           >
             <div className="flex items-start justify-between mb-1">
               <div className="font-medium text-white">{event.title}</div>
               <div
-                className={`text-xs ${index === 0 ? "text-cyan-400" : "text-foreground/60"}`}
+                className={`text-xs ${index === 0 ? "text-[var(--brain-cyan)]" : "text-foreground/60"}`}
               >
                 {getTimeUntil(event.start)}
               </div>
@@ -361,7 +358,7 @@ export function UpcomingEvents() {
                   {event.attendees}
                 </span>
               )}
-              {event.isVideoCall && <Video className="w-3 h-3 text-blue-400" />}
+              {event.isVideoCall && <Video className="w-3 h-3 text-primary" />}
             </div>
           </div>
         ))}

@@ -18,18 +18,9 @@ import {
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
-import { Textarea } from "@/components/ui/textarea";
-import { Slider } from "@/components/ui/slider";
 import {
   CUSTOMER_PERSONAS,
-  getPersonasByAgeRange,
-  getPersonasByIndustry,
   getRandomPersonas,
   type CustomerPersona,
 } from "@shared/customerPersonas";
@@ -57,7 +48,7 @@ interface CustomerFocusGroupProps {
 export function CustomerFocusGroup({
   onSurveyComplete,
   productName = "Product",
-  productDescription = "",
+  productDescription: _productDescription = "",
 }: CustomerFocusGroupProps) {
   const [selectedPersonas, setSelectedPersonas] = useState<CustomerPersona[]>(
     []
@@ -182,7 +173,7 @@ export function CustomerFocusGroup({
           reasoning = `Based on ${persona.name}'s ${persona.decisionStyle} decision style and ${persona.riskTolerance} risk tolerance.`;
         } else if (question.type === "price_point") {
           // Generate price sensitivity based on income and buying motivation
-          const incomeMultiplier = {
+          const _incomeMultiplier = {
             low: 0.5,
             medium: 1,
             high: 1.5,
@@ -254,7 +245,7 @@ export function CustomerFocusGroup({
   const getIncomeColor = (level: string) => {
     const colors = {
       low: "bg-gray-500",
-      medium: "bg-blue-500",
+      medium: "bg-primary",
       high: "bg-green-500",
       very_high: "bg-purple-500",
     };

@@ -66,7 +66,7 @@ export function useVoiceInterface() {
         setIsListening(false);
       };
 
-      recognitionRef.current.onerror = (event: any) => {
+      recognitionRef.current.onerror = (_event: any) => {
         setIsListening(false);
       };
     }
@@ -162,7 +162,7 @@ export function VoiceInterfaceToggle() {
 
   if (!isSupported) {
     return (
-      <div className="flex items-center gap-2 px-3 py-2 bg-gray-800/50 rounded-lg text-foreground/60 text-sm">
+      <div className="flex items-center gap-2 px-3 py-2 bg-card/50 rounded-lg text-foreground/60 text-sm">
         <MicOff className="w-4 h-4" />
         <span>Voice not supported</span>
       </div>
@@ -171,7 +171,7 @@ export function VoiceInterfaceToggle() {
 
   return (
     <div className="relative">
-      <div className="flex items-center gap-2 p-2 bg-gray-800/50 rounded-lg">
+      <div className="flex items-center gap-2 p-2 bg-card/50 rounded-lg">
         {/* Main toggle */}
         <Button
           variant={settings.enabled ? "default" : "ghost"}
@@ -231,7 +231,7 @@ export function VoiceInterfaceToggle() {
 
       {/* Settings panel */}
       {showSettings && settings.enabled && (
-        <div className="absolute top-full left-0 mt-2 w-72 p-4 bg-gray-900 border border-gray-700 rounded-lg shadow-xl z-50">
+        <div className="absolute top-full left-0 mt-2 w-72 p-4 bg-background border border-border rounded-lg shadow-xl z-50">
           <h4 className="text-sm font-medium text-white mb-3">
             Voice Settings
           </h4>
@@ -245,7 +245,7 @@ export function VoiceInterfaceToggle() {
               <select
                 value={settings.language}
                 onChange={e => updateSettings({ language: e.target.value })}
-                className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded text-sm text-white"
+                className="w-full px-3 py-2 bg-card border border-border rounded text-sm text-white"
               >
                 <option value="en-GB">English (UK)</option>
                 <option value="en-US">English (US)</option>
@@ -277,7 +277,7 @@ export function VoiceInterfaceToggle() {
                 type="checkbox"
                 checked={settings.autoListen}
                 onChange={e => updateSettings({ autoListen: e.target.checked })}
-                className="rounded border-gray-600"
+                className="rounded border-border"
               />
               Auto-listen after response
             </label>

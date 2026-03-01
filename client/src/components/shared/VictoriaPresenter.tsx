@@ -1,7 +1,6 @@
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Play, Pause, Volume2, Video, Loader2 } from "lucide-react";
+import { Pause, Volume2, Video, Loader2 } from "lucide-react";
 
 interface VictoriaPresenterProps {
   onPlayAudio: () => void;
@@ -76,7 +75,7 @@ export function VictoriaPresenter({
               size="sm"
               onClick={onPlayAudio}
               disabled={isGenerating}
-              className="border-cyan-500/50 text-cyan-400 hover:bg-cyan-500/20 min-w-[140px]"
+              className="border-cyan-500/50 text-[var(--brain-cyan)] hover:bg-[var(--brain-cyan)]/20 min-w-[140px]"
             >
               {isGenerating ? (
                 <>

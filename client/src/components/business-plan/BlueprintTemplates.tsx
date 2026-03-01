@@ -2,9 +2,7 @@ import { useState } from "react";
 import {
   FileText,
   Plus,
-  Copy,
   Edit,
-  Trash2,
   ChevronRight,
   Lightbulb,
   Rocket,
@@ -16,12 +14,10 @@ import {
   CheckCircle2,
   Clock,
   Users,
-  AlertTriangle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 
 // Value Chain Phase type
@@ -96,7 +92,7 @@ const phaseConfig: Record<
   },
   innovation: {
     label: "Innovation",
-    color: "text-blue-400 bg-blue-500/20 border-blue-500/30",
+    color: "text-primary bg-primary/20 border-blue-500/30",
     icon: <Rocket className="w-5 h-5" />,
     description: "Develop business case and feasibility",
   },
@@ -114,7 +110,7 @@ const phaseConfig: Record<
   },
   operations: {
     label: "Operations",
-    color: "text-cyan-400 bg-cyan-500/20 border-cyan-500/30",
+    color: "text-[var(--brain-cyan)] bg-[var(--brain-cyan)]/20 border-cyan-500/30",
     icon: <Settings className="w-5 h-5" />,
     description: "Scale and optimize delivery",
   },
@@ -133,7 +129,7 @@ const phaseConfig: Record<
 };
 
 // Status configuration
-const statusConfig: Record<
+const _statusConfig: Record<
   BlueprintStatus,
   { label: string; color: string; icon: React.ReactNode }
 > = {
@@ -144,7 +140,7 @@ const statusConfig: Record<
   },
   in_progress: {
     label: "In Progress",
-    color: "text-blue-400 bg-blue-500/20",
+    color: "text-primary bg-primary/20",
     icon: <Clock className="w-3 h-3" />,
   },
   review: {
@@ -802,7 +798,7 @@ function TemplateCard({ template, onUseTemplate }: TemplateCardProps) {
                   />
                   <span className="text-foreground/80">{section.title}</span>
                   {section.required && (
-                    <span className="text-xs text-cyan-400">(required)</span>
+                    <span className="text-xs text-[var(--brain-cyan)]">(required)</span>
                   )}
                 </div>
               ))}
@@ -924,7 +920,7 @@ export function BlueprintTemplatesDashboard({
               : "Standardized process documents for each Value Chain phase"}
           </p>
         </div>
-        <Badge className="bg-cyan-500/20 text-cyan-400 border-cyan-500/30">
+        <Badge className="bg-[var(--brain-cyan)]/20 text-[var(--brain-cyan)] border-cyan-500/30">
           {defaultTemplates.length} templates
         </Badge>
       </div>
@@ -1000,7 +996,7 @@ export function BlueprintTemplatesDashboard({
       {/* Create Blueprint Modal */}
       {showCreateModal && selectedTemplate && (
         <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
-          <div className="bg-gray-900 rounded-xl border border-white/10 max-w-lg w-full p-6">
+          <div className="bg-background rounded-xl border border-white/10 max-w-lg w-full p-6">
             <h3 className="text-lg font-bold text-white mb-4">
               Create Blueprint
             </h3>

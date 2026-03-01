@@ -69,7 +69,7 @@ const categoryConfig: Record<
   market_analysis: {
     label: "Market Analysis",
     icon: Target,
-    color: "text-blue-400",
+    color: "text-primary",
     description: "TAM/SAM/SOM, market research, trends",
   },
   competitive_analysis: {
@@ -87,7 +87,7 @@ const categoryConfig: Record<
   product_specs: {
     label: "Product Specs",
     icon: FileText,
-    color: "text-cyan-400",
+    color: "text-[var(--brain-cyan)]",
     description: "Technical specifications, roadmap",
   },
   legal_docs: {
@@ -214,14 +214,14 @@ export function GapDetection({
 
   const criticalGaps = analysis.gaps.filter(g => g.severity === "critical");
   const importantGaps = analysis.gaps.filter(g => g.severity === "important");
-  const niceToHaveGaps = analysis.gaps.filter(
+  const _niceToHaveGaps = analysis.gaps.filter(
     g => g.severity === "nice_to_have"
   );
 
   return (
     <div className="space-y-6">
       {/* Summary Card */}
-      <Card className="bg-gray-900/50 border-gray-800">
+      <Card className="bg-gray-900/50 border-border/50">
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
@@ -285,19 +285,19 @@ export function GapDetection({
 
           {/* Quick Stats */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-            <div className="p-3 bg-gray-800/50 rounded-lg text-center">
+            <div className="p-3 bg-card/50 rounded-lg text-center">
               <div className="text-2xl font-bold text-green-400">
                 {analysis.covered.length}
               </div>
               <div className="text-xs text-muted-foreground">Covered</div>
             </div>
-            <div className="p-3 bg-gray-800/50 rounded-lg text-center">
+            <div className="p-3 bg-card/50 rounded-lg text-center">
               <div className="text-2xl font-bold text-red-400">
                 {criticalGaps.length}
               </div>
               <div className="text-xs text-muted-foreground">Critical Gaps</div>
             </div>
-            <div className="p-3 bg-gray-800/50 rounded-lg text-center">
+            <div className="p-3 bg-card/50 rounded-lg text-center">
               <div className="text-2xl font-bold text-amber-400">
                 {importantGaps.length}
               </div>
@@ -329,7 +329,7 @@ export function GapDetection({
                 >
                   <Icon className={cn("w-5 h-5 mt-0.5", config.color)} />
                   <div className="flex-1">
-                    <p className="text-white font-medium">{gap.message}</p>
+                    <p className="text-foreground font-medium">{gap.message}</p>
                     <p className="text-sm text-muted-foreground mt-1">
                       {gap.suggestion}
                     </p>
@@ -372,7 +372,7 @@ export function GapDetection({
                 >
                   <Icon className={cn("w-5 h-5 mt-0.5", config.color)} />
                   <div className="flex-1">
-                    <p className="text-white font-medium">{gap.message}</p>
+                    <p className="text-foreground font-medium">{gap.message}</p>
                     <p className="text-sm text-muted-foreground mt-1">
                       {gap.suggestion}
                     </p>
@@ -396,7 +396,7 @@ export function GapDetection({
 
       {/* Covered Categories */}
       {analysis.covered.length > 0 && (
-        <Card className="bg-gray-900/50 border-gray-800">
+        <Card className="bg-gray-900/50 border-border/50">
           <CardHeader className="pb-3">
             <CardTitle className="text-green-400 text-base flex items-center gap-2">
               <CheckCircle2 className="w-4 h-4" />

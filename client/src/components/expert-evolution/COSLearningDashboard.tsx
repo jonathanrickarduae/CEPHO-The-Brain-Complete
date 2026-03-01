@@ -31,9 +31,7 @@ import {
   BookOpen,
   Settings,
   RefreshCw,
-  ChevronRight,
   User,
-  Calendar,
   Zap,
 } from "lucide-react";
 
@@ -262,20 +260,20 @@ const getLevelColor = (level: TrainingProgress["level"]) => {
     case "master":
       return "text-purple-400 bg-purple-500/20 border-purple-500/30";
     case "expert":
-      return "text-blue-400 bg-blue-500/20 border-blue-500/30";
+      return "text-primary bg-primary/20 border-blue-500/30";
     case "proficient":
       return "text-green-400 bg-green-500/20 border-green-500/30";
     case "learning":
       return "text-amber-400 bg-amber-500/20 border-amber-500/30";
     default:
-      return "text-gray-400 bg-gray-500/20 border-gray-500/30";
+      return "text-muted-foreground bg-gray-500/20 border-gray-500/30";
   }
 };
 
 const getLessonTypeIcon = (type: LearnedLesson["type"]) => {
   switch (type) {
     case "preference":
-      return <Settings className="h-4 w-4 text-blue-400" />;
+      return <Settings className="h-4 w-4 text-primary" />;
     case "correction":
       return <AlertCircle className="h-4 w-4 text-amber-400" />;
     case "pattern":
@@ -283,7 +281,7 @@ const getLessonTypeIcon = (type: LearnedLesson["type"]) => {
     case "exception":
       return <Zap className="h-4 w-4 text-purple-400" />;
     case "context_rule":
-      return <Target className="h-4 w-4 text-cyan-400" />;
+      return <Target className="h-4 w-4 text-[var(--brain-cyan)]" />;
     case "communication_style":
       return <MessageSquare className="h-4 w-4 text-pink-400" />;
   }
@@ -294,7 +292,7 @@ const getPatternTypeIcon = (type: Pattern["type"]) => {
     case "time_based":
       return <Clock className="h-4 w-4 text-amber-400" />;
     case "context_based":
-      return <Target className="h-4 w-4 text-blue-400" />;
+      return <Target className="h-4 w-4 text-primary" />;
     case "content_based":
       return <BookOpen className="h-4 w-4 text-green-400" />;
     case "decision_based":
@@ -352,7 +350,7 @@ export function COSLearningDashboard() {
       </div>
 
       {/* Training Level Card */}
-      <Card className="bg-gradient-to-br from-gray-900 to-gray-800 border-gray-700">
+      <Card className="bg-gradient-to-br from-background to-gray-800 border-border">
         <CardContent className="pt-6">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-4">
@@ -383,13 +381,13 @@ export function COSLearningDashboard() {
               <span className="text-muted-foreground">
                 Progress to next level
               </span>
-              <span className="text-white">{progress.overallConfidence}%</span>
+              <span className="text-foreground">{progress.overallConfidence}%</span>
             </div>
             <Progress value={progress.overallConfidence} className="h-2" />
           </div>
 
           {/* Milestones */}
-          <div className="mt-4 pt-4 border-t border-gray-700">
+          <div className="mt-4 pt-4 border-t border-border">
             <p className="text-sm text-muted-foreground mb-3">
               Learning Milestones ({milestonesCompleted}/{totalMilestones})
             </p>
@@ -397,15 +395,15 @@ export function COSLearningDashboard() {
               {Object.entries(progress.milestones).map(([key, achieved]) => (
                 <div
                   key={key}
-                  className={`flex items-center gap-2 p-2 rounded-lg ${achieved ? "bg-green-500/10" : "bg-gray-800"}`}
+                  className={`flex items-center gap-2 p-2 rounded-lg ${achieved ? "bg-green-500/10" : "bg-card"}`}
                 >
                   {achieved ? (
                     <CheckCircle2 className="h-4 w-4 text-green-400" />
                   ) : (
-                    <Clock className="h-4 w-4 text-gray-500" />
+                    <Clock className="h-4 w-4 text-muted-foreground/70" />
                   )}
                   <span
-                    className={`text-xs ${achieved ? "text-green-400" : "text-gray-500"}`}
+                    className={`text-xs ${achieved ? "text-green-400" : "text-muted-foreground/70"}`}
                   >
                     {key
                       .replace(/([A-Z])/g, " $1")
@@ -420,31 +418,31 @@ export function COSLearningDashboard() {
 
       {/* Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="bg-gray-900/50 border border-gray-800">
+        <TabsList className="bg-gray-900/50 border border-border/50">
           <TabsTrigger
             value="overview"
-            className="data-[state=active]:bg-gray-800"
+            className="data-[state=active]:bg-card"
           >
             <Sparkles className="h-4 w-4 mr-2" />
             Overview
           </TabsTrigger>
           <TabsTrigger
             value="lessons"
-            className="data-[state=active]:bg-gray-800"
+            className="data-[state=active]:bg-card"
           >
             <BookOpen className="h-4 w-4 mr-2" />
             Lessons ({mockLessons.length})
           </TabsTrigger>
           <TabsTrigger
             value="preferences"
-            className="data-[state=active]:bg-gray-800"
+            className="data-[state=active]:bg-card"
           >
             <User className="h-4 w-4 mr-2" />
             Preferences
           </TabsTrigger>
           <TabsTrigger
             value="patterns"
-            className="data-[state=active]:bg-gray-800"
+            className="data-[state=active]:bg-card"
           >
             <TrendingUp className="h-4 w-4 mr-2" />
             Patterns
@@ -455,7 +453,7 @@ export function COSLearningDashboard() {
         <TabsContent value="overview" className="mt-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Recent Lessons */}
-            <Card className="bg-gray-900/50 border-gray-800">
+            <Card className="bg-gray-900/50 border-border/50">
               <CardHeader>
                 <CardTitle className="text-white text-base flex items-center gap-2">
                   <Lightbulb className="h-4 w-4 text-amber-400" />
@@ -467,7 +465,7 @@ export function COSLearningDashboard() {
                   {mockLessons.slice(0, 3).map(lesson => (
                     <div
                       key={lesson.id}
-                      className="flex items-start gap-3 p-3 rounded-lg bg-gray-800/50"
+                      className="flex items-start gap-3 p-3 rounded-lg bg-card/50"
                     >
                       {getLessonTypeIcon(lesson.type)}
                       <div className="flex-1 min-w-0">
@@ -485,10 +483,10 @@ export function COSLearningDashboard() {
             </Card>
 
             {/* Top Preferences */}
-            <Card className="bg-gray-900/50 border-gray-800">
+            <Card className="bg-gray-900/50 border-border/50">
               <CardHeader>
                 <CardTitle className="text-white text-base flex items-center gap-2">
-                  <Settings className="h-4 w-4 text-blue-400" />
+                  <Settings className="h-4 w-4 text-primary" />
                   Key Preferences
                 </CardTitle>
               </CardHeader>
@@ -497,17 +495,17 @@ export function COSLearningDashboard() {
                   {mockPreferences.slice(0, 4).map((pref, idx) => (
                     <div
                       key={idx}
-                      className="flex items-center justify-between p-3 rounded-lg bg-gray-800/50"
+                      className="flex items-center justify-between p-3 rounded-lg bg-card/50"
                     >
                       <div>
-                        <p className="text-sm text-white">{pref.preference}</p>
+                        <p className="text-sm text-foreground/80">{pref.preference}</p>
                         <p className="text-xs text-muted-foreground">
                           {pref.category}
                         </p>
                       </div>
                       <Badge
                         variant="outline"
-                        className="text-cyan-400 border-cyan-500/30"
+                        className="text-[var(--brain-cyan)] border-cyan-500/30"
                       >
                         {pref.value}
                       </Badge>
@@ -521,9 +519,9 @@ export function COSLearningDashboard() {
 
         {/* Lessons Tab */}
         <TabsContent value="lessons" className="mt-4">
-          <Card className="bg-gray-900/50 border-gray-800">
+          <Card className="bg-gray-900/50 border-border/50">
             <CardHeader>
-              <CardTitle className="text-white">Learned Lessons</CardTitle>
+              <CardTitle className="text-foreground">Learned Lessons</CardTitle>
               <CardDescription>
                 Specific insights COS has learned from interactions
               </CardDescription>
@@ -534,7 +532,7 @@ export function COSLearningDashboard() {
                   {mockLessons.map(lesson => (
                     <div
                       key={lesson.id}
-                      className="p-4 rounded-lg bg-gray-800/50 border border-gray-700 hover:border-gray-600 transition-colors"
+                      className="p-4 rounded-lg bg-card/50 border border-border hover:border-border transition-colors"
                     >
                       <div className="flex items-start gap-3">
                         {getLessonTypeIcon(lesson.type)}
@@ -569,9 +567,9 @@ export function COSLearningDashboard() {
 
         {/* Preferences Tab */}
         <TabsContent value="preferences" className="mt-4">
-          <Card className="bg-gray-900/50 border-gray-800">
+          <Card className="bg-gray-900/50 border-border/50">
             <CardHeader>
-              <CardTitle className="text-white">Preference Profile</CardTitle>
+              <CardTitle className="text-foreground">Preference Profile</CardTitle>
               <CardDescription>
                 Your working style and communication preferences
               </CardDescription>
@@ -590,7 +588,7 @@ export function COSLearningDashboard() {
                           .map((pref, idx) => (
                             <div
                               key={idx}
-                              className="p-3 rounded-lg bg-gray-800/50 border border-gray-700"
+                              className="p-3 rounded-lg bg-card/50 border border-border"
                             >
                               <div className="flex items-center justify-between mb-2">
                                 <span className="text-sm text-muted-foreground">
@@ -625,9 +623,9 @@ export function COSLearningDashboard() {
 
         {/* Patterns Tab */}
         <TabsContent value="patterns" className="mt-4">
-          <Card className="bg-gray-900/50 border-gray-800">
+          <Card className="bg-gray-900/50 border-border/50">
             <CardHeader>
-              <CardTitle className="text-white">Identified Patterns</CardTitle>
+              <CardTitle className="text-foreground">Identified Patterns</CardTitle>
               <CardDescription>
                 Behavioral patterns detected from your interactions
               </CardDescription>
@@ -637,7 +635,7 @@ export function COSLearningDashboard() {
                 {mockPatterns.map(pattern => (
                   <div
                     key={pattern.id}
-                    className="p-4 rounded-lg bg-gray-800/50 border border-gray-700"
+                    className="p-4 rounded-lg bg-card/50 border border-border"
                   >
                     <div className="flex items-start gap-3">
                       {getPatternTypeIcon(pattern.type)}

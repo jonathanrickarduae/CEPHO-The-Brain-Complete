@@ -750,7 +750,7 @@ export default function AIExperts() {
               {mode === "governed" && <RestrictedBadge />}
               <div className="flex items-center gap-4">
                 <div className="p-3 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-purple-500/20 border border-cyan-500/30">
-                  <Zap className="w-6 h-6 md:w-8 md:h-8 text-cyan-400" />
+                  <Zap className="w-6 h-6 md:w-8 md:h-8 text-[var(--brain-cyan)]" />
                 </div>
                 <div>
                   <div className="flex items-center gap-3">
@@ -799,8 +799,8 @@ export default function AIExperts() {
                         className={`px-3 py-1 text-sm rounded-full border transition-colors flex items-center gap-1 ${
                           // @ts-ignore - viewMode type is correct
                           viewMode === "analytics"
-                            ? "bg-blue-500/30 text-blue-400 border-blue-500/50"
-                            : "bg-blue-500/10 hover:bg-blue-500/20 text-blue-400/70 border-blue-500/20"
+                            ? "bg-primary/30 text-primary border-blue-500/50"
+                            : "bg-primary/10 hover:bg-primary/20 text-primary/70 border-blue-500/20"
                         }`}
                       >
                         <BarChart3 className="w-3 h-3" />
@@ -906,14 +906,14 @@ export default function AIExperts() {
                         className={`p-3 rounded-xl ${
                           template.type === "twin"
                             ? "bg-purple-500/20"
-                            : "bg-cyan-500/20"
+                            : "bg-[var(--brain-cyan)]/20"
                         }`}
                       >
                         <template.icon
                           className={`w-5 h-5 ${
                             template.type === "twin"
                               ? "text-purple-400"
-                              : "text-cyan-400"
+                              : "text-[var(--brain-cyan)]"
                           }`}
                         />
                       </div>
@@ -929,7 +929,7 @@ export default function AIExperts() {
                         className={
                           template.type === "twin"
                             ? "bg-purple-500/20 text-purple-400"
-                            : "bg-cyan-500/20 text-cyan-400"
+                            : "bg-[var(--brain-cyan)]/20 text-[var(--brain-cyan)]"
                         }
                       >
                         {template.type === "twin"
@@ -969,7 +969,7 @@ export default function AIExperts() {
                           key={task.id}
                           className={`p-4 rounded-xl border transition-all ${
                             task.status === "active"
-                              ? "bg-cyan-500/5 border-cyan-500/30"
+                              ? "bg-[var(--brain-cyan)]/5 border-cyan-500/30"
                               : task.status === "review"
                                 ? "bg-yellow-500/5 border-yellow-500/30"
                                 : "bg-secondary/30 border-border hover:border-primary/30"
@@ -985,7 +985,7 @@ export default function AIExperts() {
                                   className={
                                     task.type === "twin"
                                       ? "bg-purple-500/20 text-purple-400 border-0"
-                                      : "bg-cyan-500/20 text-cyan-400 border-0"
+                                      : "bg-[var(--brain-cyan)]/20 text-[var(--brain-cyan)] border-0"
                                   }
                                 >
                                   {task.type === "twin" ? (
@@ -1209,7 +1209,7 @@ export default function AIExperts() {
                             isApproved
                               ? "bg-primary/10 border-primary"
                               : isRecommended
-                                ? "bg-cyan-500/5 border-cyan-500/30 hover:border-primary"
+                                ? "bg-[var(--brain-cyan)]/5 border-cyan-500/30 hover:border-primary"
                                 : "bg-secondary/30 border-border hover:border-primary/30"
                           }`}
                         >
@@ -1232,7 +1232,7 @@ export default function AIExperts() {
                               </p>
                             </div>
                             {isRecommended && !isApproved && (
-                              <Badge className="bg-cyan-500/20 text-cyan-400 border-0 text-xs">
+                              <Badge className="bg-[var(--brain-cyan)]/20 text-[var(--brain-cyan)] border-0 text-xs">
                                 Recommended
                               </Badge>
                             )}
@@ -1465,7 +1465,7 @@ export default function AIExperts() {
                                   ? "bg-purple-500/20 text-purple-400"
                                   : msg.from === "user"
                                     ? "bg-primary text-primary-foreground"
-                                    : "bg-cyan-500/20 text-cyan-400"
+                                    : "bg-[var(--brain-cyan)]/20 text-[var(--brain-cyan)]"
                               }`}
                             >
                               {msg.from === "twin" ? (
@@ -1872,7 +1872,7 @@ export default function AIExperts() {
 
                       <div className="p-4 rounded-xl bg-secondary/30 border border-border">
                         <div className="flex items-center gap-2 mb-2">
-                          <Brain className="w-4 h-4 text-cyan-400" />
+                          <Brain className="w-4 h-4 text-[var(--brain-cyan)]" />
                           <span className="text-sm font-medium text-foreground">
                             Expert Response Required
                           </span>
@@ -1924,7 +1924,7 @@ export default function AIExperts() {
                                 ? "bg-purple-500/20 text-purple-400"
                                 : msg.from === "user"
                                   ? "bg-primary/20 text-primary"
-                                  : "bg-cyan-500/20 text-cyan-400"
+                                  : "bg-[var(--brain-cyan)]/20 text-[var(--brain-cyan)]"
                             }`}
                           >
                             {msg.name.charAt(0)}

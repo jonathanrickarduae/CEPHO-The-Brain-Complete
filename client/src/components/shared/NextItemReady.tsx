@@ -6,12 +6,10 @@ import {
   Clock,
   CheckCircle2,
   Loader2,
-  Bell,
   ArrowRight,
   Pause,
   Play,
 } from "lucide-react";
-import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 
 interface NextItemReadyProps {
@@ -91,12 +89,12 @@ export function NextItemReady({
   }
 
   return (
-    <div className="p-3 bg-gray-800/50 border border-gray-700 rounded-lg space-y-3">
+    <div className="p-3 bg-card/50 border border-border rounded-lg space-y-3">
       <div className="flex items-center gap-3">
         {isPaused ? (
           <Pause className="w-5 h-5 text-amber-400" />
         ) : (
-          <Loader2 className="w-5 h-5 text-cyan-400 animate-spin" />
+          <Loader2 className="w-5 h-5 text-[var(--brain-cyan)] animate-spin" />
         )}
         <div className="flex-1">
           <p className="text-sm font-medium text-white">Next: {itemName}</p>
@@ -202,7 +200,7 @@ export function ReviewQueue({ items, onItemReady }: ReviewQueueProps) {
       {/* Queue Summary */}
       <div className="flex items-center gap-4 text-sm">
         <div className="flex items-center gap-1">
-          <Loader2 className="w-4 h-4 text-cyan-400" />
+          <Loader2 className="w-4 h-4 text-[var(--brain-cyan)]" />
           <span className="text-muted-foreground">
             Processing: {currentItem ? 1 : 0}
           </span>
@@ -230,10 +228,10 @@ export function ReviewQueue({ items, onItemReady }: ReviewQueueProps) {
           {pendingItems.slice(0, 3).map((item, index) => (
             <div
               key={item.id}
-              className="flex items-center gap-2 p-2 bg-gray-800/30 rounded-lg text-sm"
+              className="flex items-center gap-2 p-2 bg-card/30 rounded-lg text-sm"
             >
               <span className="text-muted-foreground">{index + 1}.</span>
-              <span className="text-white">{item.name}</span>
+              <span className="text-foreground">{item.name}</span>
               <span className="text-xs text-muted-foreground ml-auto">
                 ~{item.estimatedMinutes} min
               </span>

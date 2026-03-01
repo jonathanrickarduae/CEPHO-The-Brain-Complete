@@ -9,12 +9,9 @@ import {
   CheckCircle2,
   AlertCircle,
   Loader2,
-  Sparkles,
   Navigation,
   Brain,
-  Calendar,
   FileText,
-  Users,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -36,18 +33,17 @@ export function VoiceCommands({ onCommand, className }: VoiceCommandsProps) {
   const [, setLocation] = useLocation();
   const [isListening, setIsListening] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
-  const [lastCommand, setLastCommand] = useState<string | null>(null);
+  const [, setLastCommand] = useState<string | null>(null);
   const [lastResult, setLastResult] = useState<string | null>(null);
   const [isHandsFree, setIsHandsFree] = useState(false);
   const [wakeWordDetected, setWakeWordDetected] = useState(false);
   const synthRef = useRef<SpeechSynthesis | null>(null);
 
   const {
-    isListening: voiceIsListening,
+    isListening: isSupported,
     transcript,
     startListening,
     stopListening,
-    isSupported,
     error,
   } = useVoiceInput();
 
@@ -177,7 +173,7 @@ export function VoiceCommands({ onCommand, className }: VoiceCommandsProps) {
     },
     {
       patterns: ["schedule meeting", "book meeting", "set up meeting"],
-      action: transcript => {
+      action: _transcript => {
         speak("Opening meeting scheduler");
         setLocation(
           "/digital-twin?message=" +
@@ -303,7 +299,7 @@ export function VoiceCommands({ onCommand, className }: VoiceCommandsProps) {
     if (transcript && isListening) {
       processCommand(transcript);
     }
-  }, [transcript, isListening, processCommand]);
+  }, [isListening, processCommand]);
 
   // Toggle listening
   const toggleListening = useCallback(() => {
@@ -314,7 +310,7 @@ export function VoiceCommands({ onCommand, className }: VoiceCommandsProps) {
       startListening();
       setIsListening(true);
     }
-  }, [isListening, startListening, stopListening]);
+  }, [isListening, stopListening]);
 
   // Stop speaking
   const stopSpeaking = useCallback(() => {
@@ -471,7 +467,7 @@ export function VoiceCommands({ onCommand, className }: VoiceCommandsProps) {
 // Floating voice button for global access
 export function FloatingVoiceButton() {
   const [isExpanded, setIsExpanded] = useState(false);
-  const { isListening, startListening, stopListening, isSupported } =
+  const { isListening, isSupported } =
     useVoiceInput();
 
   if (!isSupported) return null;

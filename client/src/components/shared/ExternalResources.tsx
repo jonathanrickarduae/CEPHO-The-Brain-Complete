@@ -4,14 +4,11 @@ import {
   Search,
   ExternalLink,
   Zap,
-  Building2,
   Newspaper,
   Brain,
   Database,
   GraduationCap,
   Briefcase,
-  Filter,
-  ChevronRight,
   Globe,
   Link2,
   CheckCircle2,
@@ -268,7 +265,7 @@ export function ExternalResources({ onBack }: ExternalResourcesProps) {
                       {selectedResource.apiStatus === "connected" ? (
                         <CheckCircle2 className="w-6 h-6 text-green-500" />
                       ) : selectedResource.apiStatus === "available" ? (
-                        <AlertCircle className="w-6 h-6 text-blue-500" />
+                        <AlertCircle className="w-6 h-6 text-primary" />
                       ) : (
                         <Clock className="w-6 h-6 text-amber-500" />
                       )}

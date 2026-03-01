@@ -2,9 +2,7 @@ import { useState } from "react";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -13,7 +11,6 @@ import { Textarea } from "@/components/ui/textarea";
 import {
   Presentation,
   Plus,
-  GripVertical,
   Trash2,
   ChevronUp,
   ChevronDown,
@@ -92,14 +89,14 @@ const slideTemplates: Record<
     defaultTitle: "Market Opportunity",
     placeholder:
       "TAM, SAM, SOM. Market size, growth rate, and your target segment.",
-    color: "text-blue-400",
+    color: "text-primary",
   },
   traction: {
     label: "Traction",
     icon: TrendingUp,
     defaultTitle: "Traction & Milestones",
     placeholder: "Key metrics, growth, customers, partnerships, revenue.",
-    color: "text-cyan-400",
+    color: "text-[var(--brain-cyan)]",
   },
   team: {
     label: "Team",
@@ -129,7 +126,7 @@ const slideTemplates: Record<
     icon: Plus,
     defaultTitle: "Custom Slide",
     placeholder: "Add your own content",
-    color: "text-gray-400",
+    color: "text-muted-foreground",
   },
 };
 
@@ -297,7 +294,7 @@ export function SlideStructureGenerator({
       </div>
 
       {/* Quick Actions */}
-      <Card className="bg-gray-900/50 border-gray-800">
+      <Card className="bg-gray-900/50 border-border/50">
         <CardContent className="pt-6">
           <div className="flex flex-wrap gap-2">
             <Button
@@ -314,7 +311,7 @@ export function SlideStructureGenerator({
                 variant="outline"
                 size="sm"
                 onClick={() => addSlide(type as SlideType)}
-                className="border-gray-700"
+                className="border-border"
               >
                 <config.icon className={cn("w-4 h-4 mr-1", config.color)} />
                 {config.label}
@@ -326,7 +323,7 @@ export function SlideStructureGenerator({
 
       {/* Slides List */}
       {slides.length === 0 ? (
-        <Card className="bg-gray-900/50 border-gray-800 border-dashed">
+        <Card className="bg-gray-900/50 border-border/50 border-dashed">
           <CardContent className="py-12 text-center">
             <Presentation className="w-12 h-12 text-gray-600 mx-auto mb-4" />
             <p className="text-muted-foreground mb-4">
@@ -348,7 +345,7 @@ export function SlideStructureGenerator({
               <Card
                 key={slide.id}
                 className={cn(
-                  "bg-gray-900/50 border-gray-800",
+                  "bg-gray-900/50 border-border/50",
                   slide.hasGap && "border-amber-500/50"
                 )}
               >
@@ -376,7 +373,7 @@ export function SlideStructureGenerator({
                     </div>
                     <Badge
                       variant="outline"
-                      className={cn("border-gray-700", config.color)}
+                      className={cn("border-border", config.color)}
                     >
                       <Icon className="w-3 h-3 mr-1" />
                       {config.label}
@@ -423,7 +420,7 @@ export function SlideStructureGenerator({
                       updateSlide(slide.id, { title: e.target.value })
                     }
                     placeholder="Slide title"
-                    className="bg-gray-800 border-gray-700 text-lg font-medium"
+                    className="bg-card border-border text-lg font-medium"
                   />
                   <Textarea
                     value={slide.content}
@@ -434,7 +431,7 @@ export function SlideStructureGenerator({
                       })
                     }
                     placeholder={config.placeholder}
-                    className="bg-gray-800 border-gray-700 min-h-[100px]"
+                    className="bg-card border-border min-h-[100px]"
                   />
                   <Input
                     value={slide.notes || ""}
@@ -442,7 +439,7 @@ export function SlideStructureGenerator({
                       updateSlide(slide.id, { notes: e.target.value })
                     }
                     placeholder="Speaker notes (optional)"
-                    className="bg-gray-800/50 border-gray-700 text-sm"
+                    className="bg-card/50 border-border text-sm"
                   />
                 </CardContent>
               </Card>

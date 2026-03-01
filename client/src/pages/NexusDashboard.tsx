@@ -108,7 +108,7 @@ function ActivityItem({
   status?: "active" | "complete" | "pending";
 }) {
   const statusColors = {
-    active: "text-blue-400",
+    active: "text-primary",
     complete: "text-emerald-400",
     pending: "text-amber-400",
   };
@@ -246,7 +246,7 @@ export default function NexusDashboard() {
           <div className="flex items-center gap-3">
             <div>
               <h1 className="text-lg sm:text-2xl md:text-3xl font-bold text-foreground flex items-center gap-2">
-                <LayoutDashboard className="h-5 w-5 sm:h-8 sm:w-8 text-cyan-400" />
+                <LayoutDashboard className="h-5 w-5 sm:h-8 sm:w-8 text-[var(--brain-cyan)]" />
                 <span className="text-base sm:text-2xl md:text-3xl">
                   The Nexus
                 </span>

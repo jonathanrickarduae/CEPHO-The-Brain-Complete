@@ -3,17 +3,14 @@ import { useState, useEffect, useCallback } from "react";
 import {
   Bell,
   X,
-  Check,
   AlertCircle,
   Info,
   Calendar,
   FileText,
-  Users,
   CheckCircle2,
   Zap,
   Brain,
   Trophy,
-  Shield,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { trpc } from "@/lib/trpc";
@@ -213,7 +210,7 @@ const NotificationIcon = ({ type }: { type: Notification["type"] }) => {
       return <CheckCircle2 className="w-4 h-4 text-green-400" />;
     case "daily_brief":
     case "reminder":
-      return <Calendar className="w-4 h-4 text-blue-400" />;
+      return <Calendar className="w-4 h-4 text-primary" />;
     case "project_update":
     case "task_assigned":
       return <FileText className="w-4 h-4 text-purple-400" />;

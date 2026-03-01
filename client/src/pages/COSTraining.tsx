@@ -171,7 +171,7 @@ export default function COSTraining() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
-            <GraduationCap className="h-8 w-8 text-cyan-400" />
+            <GraduationCap className="h-8 w-8 text-[var(--brain-cyan)]" />
             Digital Twin Training
           </h1>
           <p className="text-muted-foreground mt-1">
@@ -493,7 +493,7 @@ export default function COSTraining() {
                   <Card className="border-2 hover:border-primary/50 transition-all cursor-pointer">
                     <CardHeader>
                       <CardTitle className="text-base flex items-center gap-2">
-                        <Target className="h-4 w-4 text-blue-500" />
+                        <Target className="h-4 w-4 text-primary" />
                         Decision Patterns
                       </CardTitle>
                     </CardHeader>

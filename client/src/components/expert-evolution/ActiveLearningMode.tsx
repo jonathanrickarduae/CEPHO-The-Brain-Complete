@@ -12,8 +12,6 @@ import {
   AlertTriangle,
   CheckCircle2,
   Monitor,
-  Smartphone,
-  Globe,
   Lock,
   TrendingUp,
 } from "lucide-react";
@@ -137,7 +135,7 @@ export function ActiveLearningMode() {
       case "productivity":
         return "bg-green-500/20 text-green-400";
       case "communication":
-        return "bg-blue-500/20 text-blue-400";
+        return "bg-primary/20 text-primary";
       case "entertainment":
         return "bg-purple-500/20 text-purple-400";
       default:
@@ -425,8 +423,8 @@ export function ActiveLearningMode() {
                 </p>
               </div>
             </div>
-            <div className="flex items-start gap-2 p-2 bg-blue-500/10 rounded text-sm">
-              <TrendingUp className="w-4 h-4 text-blue-400 mt-0.5" />
+            <div className="flex items-start gap-2 p-2 bg-primary/10 rounded text-sm">
+              <TrendingUp className="w-4 h-4 text-primary mt-0.5" />
               <div>
                 <span className="font-medium text-foreground">
                   Efficiency improving

@@ -132,7 +132,7 @@ export function ShareableInsight({
     <div className="relative">
       {/* Insight Card */}
       <div className={`rounded-2xl bg-gradient-to-br ${getTypeColor()} p-1`}>
-        <div className="bg-gray-900 rounded-xl p-6">
+        <div className="bg-background rounded-xl p-6">
           {/* Header */}
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
@@ -192,7 +192,7 @@ export function ShareableInsight({
           )}
 
           {/* Branding */}
-          <div className="flex items-center justify-between pt-4 border-t border-gray-700">
+          <div className="flex items-center justify-between pt-4 border-t border-border">
             <div className="flex items-center gap-2">
               <Brain className="w-5 h-5 text-pink-500" />
               <span className="text-sm text-foreground/70">
@@ -209,10 +209,10 @@ export function ShareableInsight({
 
       {/* Share Menu */}
       {showShareMenu && (
-        <div className="absolute top-full right-0 mt-2 w-48 bg-gray-800 rounded-lg shadow-xl border border-gray-700 overflow-hidden z-50">
+        <div className="absolute top-full right-0 mt-2 w-48 bg-card rounded-lg shadow-xl border border-border overflow-hidden z-50">
           <button
             onClick={copyToClipboard}
-            className="w-full flex items-center gap-3 px-4 py-3 text-left text-foreground/80 hover:bg-gray-700 transition-colors"
+            className="w-full flex items-center gap-3 px-4 py-3 text-left text-foreground/80 hover:bg-muted transition-colors"
           >
             {copied ? (
               <Check className="w-5 h-5 text-green-400" />
@@ -223,21 +223,21 @@ export function ShareableInsight({
           </button>
           <button
             onClick={shareToTwitter}
-            className="w-full flex items-center gap-3 px-4 py-3 text-left text-foreground/80 hover:bg-gray-700 transition-colors"
+            className="w-full flex items-center gap-3 px-4 py-3 text-left text-foreground/80 hover:bg-muted transition-colors"
           >
             <Twitter className="w-5 h-5" />
             <span>Share on X</span>
           </button>
           <button
             onClick={shareToLinkedIn}
-            className="w-full flex items-center gap-3 px-4 py-3 text-left text-foreground/80 hover:bg-gray-700 transition-colors"
+            className="w-full flex items-center gap-3 px-4 py-3 text-left text-foreground/80 hover:bg-muted transition-colors"
           >
             <Linkedin className="w-5 h-5" />
             <span>Share on LinkedIn</span>
           </button>
           <button
             onClick={downloadAsImage}
-            className="w-full flex items-center gap-3 px-4 py-3 text-left text-foreground/80 hover:bg-gray-700 transition-colors"
+            className="w-full flex items-center gap-3 px-4 py-3 text-left text-foreground/80 hover:bg-muted transition-colors"
           >
             <Download className="w-5 h-5" />
             <span>Download image</span>
@@ -253,7 +253,7 @@ export function ShareButton({ onClick }: { onClick: () => void }) {
   return (
     <button
       onClick={onClick}
-      className="flex items-center gap-2 px-3 py-1.5 text-sm text-foreground/70 hover:text-white bg-gray-800 hover:bg-gray-700 rounded-lg transition-colors"
+      className="flex items-center gap-2 px-3 py-1.5 text-sm text-foreground/70 hover:text-white bg-card hover:bg-muted rounded-lg transition-colors"
     >
       <Share2 className="w-4 h-4" />
       <span>Share</span>

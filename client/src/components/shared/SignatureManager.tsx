@@ -5,12 +5,9 @@ import {
   Upload,
   Trash2,
   Check,
-  X,
   Shield,
   Lock,
   FileSignature,
-  Download,
-  Edit3,
   Type,
   Image as ImageIcon,
 } from "lucide-react";
@@ -50,7 +47,7 @@ export function SignatureManager({
   const [typedName, setTypedName] = useState("");
   const [selectedFont, setSelectedFont] = useState("cursive");
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [showManager, setShowManager] = useState(false);
+  const [_showManager, setShowManager] = useState(false);
 
   // Canvas drawing logic
   useEffect(() => {
@@ -238,7 +235,7 @@ export function SignatureManager({
             {signatures.slice(0, 2).map(sig => (
               <div
                 key={sig.id}
-                className="flex items-center justify-between p-2 bg-gray-800/50 rounded-lg"
+                className="flex items-center justify-between p-2 bg-card/50 rounded-lg"
               >
                 <div className="flex items-center gap-2">
                   {sig.dataUrl ? (
@@ -346,7 +343,7 @@ export function SignatureManager({
                 ref={canvasRef}
                 width={400}
                 height={150}
-                className="w-full border-2 border-dashed border-gray-600 rounded-xl bg-gray-900 cursor-crosshair touch-none"
+                className="w-full border-2 border-dashed border-border rounded-xl bg-background cursor-crosshair touch-none"
                 onMouseDown={startDrawing}
                 onMouseMove={draw}
                 onMouseUp={stopDrawing}
@@ -355,12 +352,12 @@ export function SignatureManager({
                 onTouchMove={draw}
                 onTouchEnd={stopDrawing}
               />
-              <div className="absolute bottom-2 left-2 right-2 border-t border-gray-600" />
+              <div className="absolute bottom-2 left-2 right-2 border-t border-border" />
             </div>
             <div className="flex gap-2">
               <button
                 onClick={clearCanvas}
-                className="flex-1 py-2 bg-gray-700 rounded-lg text-muted-foreground hover:bg-gray-600 transition-colors flex items-center justify-center gap-2"
+                className="flex-1 py-2 bg-muted rounded-lg text-muted-foreground hover:bg-gray-600 transition-colors flex items-center justify-center gap-2"
               >
                 <Trash2 className="w-4 h-4" />
                 Clear
@@ -381,7 +378,7 @@ export function SignatureManager({
             <p className="text-sm text-muted-foreground">
               Upload an image of your signature (PNG, JPG, or SVG)
             </p>
-            <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-gray-600 rounded-xl bg-gray-900 cursor-pointer hover:border-primary/50 transition-colors">
+            <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-border rounded-xl bg-background cursor-pointer hover:border-primary/50 transition-colors">
               <div className="flex flex-col items-center justify-center pt-5 pb-6">
                 <ImageIcon className="w-10 h-10 text-muted-foreground mb-3" />
                 <p className="text-sm text-muted-foreground">
@@ -411,7 +408,7 @@ export function SignatureManager({
               value={typedName}
               onChange={e => setTypedName(e.target.value)}
               placeholder="Type your name..."
-              className="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary"
+              className="w-full px-4 py-3 bg-background border border-border rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary"
             />
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {fonts.map(font => (
@@ -421,7 +418,7 @@ export function SignatureManager({
                   className={`p-3 rounded-lg border transition-colors ${
                     selectedFont === font.value
                       ? "border-primary bg-primary/10"
-                      : "border-gray-700 hover:border-gray-600"
+                      : "border-border hover:border-border"
                   }`}
                 >
                   <span
@@ -457,10 +454,10 @@ export function SignatureManager({
               {signatures.map(sig => (
                 <div
                   key={sig.id}
-                  className="flex items-center justify-between p-4 bg-gray-800/50 border border-gray-700 rounded-xl"
+                  className="flex items-center justify-between p-4 bg-card/50 border border-border rounded-xl"
                 >
                   <div className="flex items-center gap-4">
-                    <div className="w-24 h-12 bg-gray-900 rounded-lg flex items-center justify-center p-2">
+                    <div className="w-24 h-12 bg-background rounded-lg flex items-center justify-center p-2">
                       {sig.dataUrl ? (
                         <img
                           alt="Signature preview"
@@ -490,7 +487,7 @@ export function SignatureManager({
                     ) : (
                       <button
                         onClick={() => setDefaultSignature(sig.id)}
-                        className="text-xs px-2 py-1 bg-gray-700 text-muted-foreground rounded-full hover:bg-gray-600 transition-colors"
+                        className="text-xs px-2 py-1 bg-muted text-muted-foreground rounded-full hover:bg-gray-600 transition-colors"
                       >
                         Set Default
                       </button>
@@ -509,11 +506,11 @@ export function SignatureManager({
         )}
 
         {/* Usage Info */}
-        <div className="mt-6 p-4 bg-blue-500/10 border border-blue-500/30 rounded-xl">
+        <div className="mt-6 p-4 bg-primary/10 border border-blue-500/30 rounded-xl">
           <div className="flex items-start gap-3">
-            <Lock className="w-5 h-5 text-blue-400 mt-0.5" />
+            <Lock className="w-5 h-5 text-primary mt-0.5" />
             <div>
-              <h4 className="font-medium text-blue-400 mb-1">
+              <h4 className="font-medium text-primary mb-1">
                 How signatures are used
               </h4>
               <p className="text-sm text-muted-foreground">

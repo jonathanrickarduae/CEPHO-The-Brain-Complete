@@ -146,8 +146,8 @@ export default function Settings() {
                     onClick={() => setActiveTab(tab.id)}
                     className={`w-full flex items-center gap-3 px-4 py-3 text-left transition-colors ${
                       activeTab === tab.id
-                        ? "bg-cyan-500/10 text-cyan-400 border-l-2 border-cyan-400"
-                        : "text-foreground/70 hover:bg-gray-700/50 hover:text-foreground/80"
+                        ? "bg-[var(--brain-cyan)]/10 text-[var(--brain-cyan)] border-l-2 border-cyan-400"
+                        : "text-foreground/70 hover:bg-muted/50 hover:text-foreground/80"
                     }`}
                   >
                     <tab.icon className="w-5 h-5" />
@@ -160,13 +160,13 @@ export default function Settings() {
           {/* Content */}
           <div className="flex-1">
             {activeTab === "governance" && (
-              <div className="bg-gray-800 rounded-xl border border-gray-700 p-6">
+              <div className="bg-card rounded-xl border border-border p-6">
                 <GovernanceSettings />
               </div>
             )}
 
             {activeTab === "email-accounts" && (
-              <div className="bg-gray-800 rounded-xl border border-gray-700 p-6">
+              <div className="bg-card rounded-xl border border-border p-6">
                 <h3 className="text-lg font-semibold text-white mb-6">
                   Email Accounts
                 </h3>
@@ -176,8 +176,8 @@ export default function Settings() {
                 <div className="space-y-4">
                   <div className="flex items-center justify-between p-4 rounded-lg border border-border bg-card">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center">
-                        <Bell className="w-5 h-5 text-blue-400" />
+                      <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
+                        <Bell className="w-5 h-5 text-primary" />
                       </div>
                       <div>
                         <div className="font-medium text-foreground">
@@ -205,7 +205,7 @@ export default function Settings() {
 
             {activeTab === "profile" && (
               <>
-                <div className="bg-gray-800 rounded-xl border border-gray-700 p-6">
+                <div className="bg-card rounded-xl border border-border p-6">
                   <h3 className="text-lg font-semibold text-white mb-6">
                     Profile Settings
                   </h3>
@@ -216,7 +216,7 @@ export default function Settings() {
                         <span className="text-3xl">🧠</span>
                       </div>
                       <div>
-                        <button className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg text-sm transition-colors">
+                        <button className="px-4 py-2 bg-muted hover:bg-gray-600 text-white rounded-lg text-sm transition-colors">
                           Change Avatar
                         </button>
                       </div>
@@ -230,7 +230,7 @@ export default function Settings() {
                         <input
                           type="text"
                           defaultValue="User"
-                          className="w-full px-4 py-2 bg-gray-900 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-cyan-500"
+                          className="w-full px-4 py-2 bg-background border border-border rounded-lg text-white focus:outline-none focus:border-[var(--brain-cyan)]"
                         />
                       </div>
                       <div>
@@ -240,14 +240,14 @@ export default function Settings() {
                         <input
                           type="email"
                           defaultValue="user@example.com"
-                          className="w-full px-4 py-2 bg-gray-900 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-cyan-500"
+                          className="w-full px-4 py-2 bg-background border border-border rounded-lg text-white focus:outline-none focus:border-[var(--brain-cyan)]"
                         />
                       </div>
                       <div>
                         <label className="block text-sm text-foreground/70 mb-2">
                           Timezone
                         </label>
-                        <select className="w-full px-4 py-2 bg-gray-900 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-cyan-500">
+                        <select className="w-full px-4 py-2 bg-background border border-border rounded-lg text-white focus:outline-none focus:border-[var(--brain-cyan)]">
                           <option>UTC-8 (Pacific Time)</option>
                           <option>UTC-5 (Eastern Time)</option>
                           <option>UTC+0 (GMT)</option>
@@ -265,7 +265,7 @@ export default function Settings() {
             )}
 
             {activeTab === "integrations" && (
-              <div className="bg-gray-800 rounded-xl border border-gray-700 p-6">
+              <div className="bg-card rounded-xl border border-border p-6">
                 <IntegrationsStatusReal />
               </div>
             )}
@@ -275,13 +275,13 @@ export default function Settings() {
             {activeTab === "signatures" && <SignatureManager />}
 
             {activeTab === "ai-providers" && (
-              <div className="bg-gray-800 rounded-xl border border-gray-700 p-6">
+              <div className="bg-card rounded-xl border border-border p-6">
                 <AIProviderSettings />
               </div>
             )}
 
             {activeTab === "api-costs" && (
-              <div className="bg-gray-800 rounded-xl border border-gray-700 p-6">
+              <div className="bg-card rounded-xl border border-border p-6">
                 <APICostCalculator />
               </div>
             )}
@@ -289,20 +289,20 @@ export default function Settings() {
             {activeTab === "storage" && (
               <div className="space-y-6">
                 <TwoFactorSettings />
-                <div className="bg-gray-800 rounded-xl border border-gray-700 p-6">
+                <div className="bg-card rounded-xl border border-border p-6">
                   <SecureStorageDashboard />
                 </div>
               </div>
             )}
 
             {activeTab === "brand-kit" && (
-              <div className="bg-gray-800 rounded-xl border border-gray-700 p-6">
+              <div className="bg-card rounded-xl border border-border p-6">
                 <BrandKitManager />
               </div>
             )}
 
             {activeTab === "data-governance" && (
-              <div className="bg-gray-800 rounded-xl border border-gray-700 p-6">
+              <div className="bg-card rounded-xl border border-border p-6">
                 <DataGovernanceDashboard />
               </div>
             )}
@@ -318,12 +318,12 @@ export default function Settings() {
             {activeTab === "notifications" && (
               <div className="space-y-6">
                 {/* Do Not Disturb */}
-                <div className="bg-gray-800 rounded-xl border border-gray-700 p-6">
+                <div className="bg-card rounded-xl border border-border p-6">
                   <h3 className="text-lg font-semibold text-white mb-4">
                     Do Not Disturb
                   </h3>
                   <div className="space-y-4">
-                    <div className="flex items-center justify-between p-4 bg-gray-900 rounded-xl">
+                    <div className="flex items-center justify-between p-4 bg-background rounded-xl">
                       <div>
                         <div className="font-medium text-white">
                           Enable Do Not Disturb
@@ -332,11 +332,11 @@ export default function Settings() {
                           Pause all notifications
                         </div>
                       </div>
-                      <button className="w-12 h-6 rounded-full transition-colors bg-gray-700">
+                      <button className="w-12 h-6 rounded-full transition-colors bg-muted">
                         <div className="w-5 h-5 rounded-full bg-white transition-transform translate-x-0.5" />
                       </button>
                     </div>
-                    <div className="p-4 bg-gray-900 rounded-xl">
+                    <div className="p-4 bg-background rounded-xl">
                       <div className="font-medium text-white mb-3">
                         Schedule Quiet Hours
                       </div>
@@ -345,7 +345,7 @@ export default function Settings() {
                           <label className="text-sm text-foreground/70 block mb-1">
                             Start Time
                           </label>
-                          <select className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white">
+                          <select className="w-full bg-card border border-border rounded-lg px-3 py-2 text-white">
                             <option>10:00 PM</option>
                             <option>11:00 PM</option>
                             <option>12:00 AM</option>
@@ -355,7 +355,7 @@ export default function Settings() {
                           <label className="text-sm text-foreground/70 block mb-1">
                             End Time
                           </label>
-                          <select className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white">
+                          <select className="w-full bg-card border border-border rounded-lg px-3 py-2 text-white">
                             <option>6:00 AM</option>
                             <option>7:00 AM</option>
                             <option>8:00 AM</option>
@@ -367,7 +367,7 @@ export default function Settings() {
                 </div>
 
                 {/* Email Digest Options */}
-                <div className="bg-gray-800 rounded-xl border border-gray-700 p-6">
+                <div className="bg-card rounded-xl border border-border p-6">
                   <h3 className="text-lg font-semibold text-white mb-4">
                     Email Digest
                   </h3>
@@ -396,13 +396,13 @@ export default function Settings() {
                     ].map((option, index) => (
                       <label
                         key={index}
-                        className="flex items-center gap-3 p-3 bg-gray-900 rounded-lg cursor-pointer hover:bg-gray-850 transition-colors"
+                        className="flex items-center gap-3 p-3 bg-background rounded-lg cursor-pointer hover:bg-gray-850 transition-colors"
                       >
                         <input
                           type="radio"
                           name="emailDigest"
                           defaultChecked={option.selected}
-                          className="w-4 h-4 text-cyan-500 bg-gray-800 border-gray-600 focus:ring-cyan-500"
+                          className="w-4 h-4 text-[var(--brain-cyan)] bg-card border-border focus:ring-cyan-500"
                         />
                         <div>
                           <div className="font-medium text-white">
@@ -418,7 +418,7 @@ export default function Settings() {
                 </div>
 
                 {/* Notification Preferences */}
-                <div className="bg-gray-800 rounded-xl border border-gray-700 p-6">
+                <div className="bg-card rounded-xl border border-border p-6">
                   <h3 className="text-lg font-semibold text-white mb-6">
                     Notification Preferences
                   </h3>
@@ -468,7 +468,7 @@ export default function Settings() {
                     ].map((item, index) => (
                       <div
                         key={index}
-                        className="flex items-center justify-between p-4 bg-gray-900 rounded-xl"
+                        className="flex items-center justify-between p-4 bg-background rounded-xl"
                       >
                         <div>
                           <div className="font-medium text-white">
@@ -480,7 +480,7 @@ export default function Settings() {
                         </div>
                         <button
                           className={`w-12 h-6 rounded-full transition-colors ${
-                            item.enabled ? "bg-cyan-500" : "bg-gray-700"
+                            item.enabled ? "bg-[var(--brain-cyan)]" : "bg-muted"
                           }`}
                         >
                           <div
@@ -497,13 +497,13 @@ export default function Settings() {
             )}
 
             {activeTab === "privacy" && (
-              <div className="bg-gray-800 rounded-xl border border-gray-700 p-6">
+              <div className="bg-card rounded-xl border border-border p-6">
                 <h3 className="text-lg font-semibold text-white mb-6">
                   Privacy Settings
                 </h3>
 
                 <div className="space-y-6">
-                  <div className="p-4 bg-gray-900 rounded-xl">
+                  <div className="p-4 bg-background rounded-xl">
                     <h4 className="font-medium text-white mb-2">
                       Data Collection
                     </h4>
@@ -525,7 +525,7 @@ export default function Settings() {
                           <input
                             type="checkbox"
                             defaultChecked={item.enabled}
-                            className="w-4 h-4 rounded border-gray-600 bg-gray-700 text-cyan-500 focus:ring-cyan-500"
+                            className="w-4 h-4 rounded border-border bg-muted text-[var(--brain-cyan)] focus:ring-cyan-500"
                           />
                           <span className="text-foreground/80">
                             {item.label}
@@ -535,14 +535,14 @@ export default function Settings() {
                     </div>
                   </div>
 
-                  <div className="p-4 bg-gray-900 rounded-xl">
+                  <div className="p-4 bg-background rounded-xl">
                     <h4 className="font-medium text-white mb-2">
                       Data Retention
                     </h4>
                     <p className="text-sm text-foreground/70 mb-4">
                       Choose how long to keep your data.
                     </p>
-                    <select className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-cyan-500">
+                    <select className="w-full px-4 py-2 bg-card border border-border rounded-lg text-white focus:outline-none focus:border-[var(--brain-cyan)]">
                       <option>Keep forever</option>
                       <option>1 year</option>
                       <option>6 months</option>
@@ -566,7 +566,7 @@ export default function Settings() {
             )}
 
             {activeTab === "appearance" && (
-              <div className="bg-gray-800 rounded-xl border border-gray-700 p-6">
+              <div className="bg-card rounded-xl border border-border p-6">
                 <h3 className="text-lg font-semibold text-white mb-6">
                   Appearance
                 </h3>
@@ -577,13 +577,13 @@ export default function Settings() {
                     <ThemeSelector />
                   </ThemeProvider>
 
-                  <div className="border-t border-gray-700 pt-6">
+                  <div className="border-t border-border pt-6">
                     <label className="block text-sm font-medium text-foreground mb-3">
                       Accent Color
                     </label>
                     <div className="flex gap-3">
                       {[
-                        { color: "cyan", class: "bg-cyan-500" },
+                        { color: "cyan", class: "bg-[var(--brain-cyan)]" },
                         { color: "purple", class: "bg-purple-500" },
                         { color: "pink", class: "bg-pink-500" },
                         { color: "green", class: "bg-green-500" },
@@ -605,7 +605,7 @@ export default function Settings() {
                     </div>
                   </div>
 
-                  <div className="border-t border-gray-700 pt-6">
+                  <div className="border-t border-border pt-6">
                     <label className="block text-sm font-medium text-foreground mb-3">
                       Font Size
                     </label>
@@ -616,7 +616,7 @@ export default function Settings() {
                         min="12"
                         max="20"
                         defaultValue="16"
-                        className="flex-1 h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer"
+                        className="flex-1 h-2 bg-muted rounded-lg appearance-none cursor-pointer"
                       />
                       <span className="text-lg text-muted-foreground">A</span>
                     </div>

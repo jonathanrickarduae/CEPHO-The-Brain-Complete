@@ -3,11 +3,7 @@ import {
   Folder,
   Users,
   Lock,
-  Eye,
-  Edit2,
   Trash2,
-  Plus,
-  Check,
   X,
   Shield,
   UserPlus,
@@ -15,7 +11,6 @@ import {
   ChevronRight,
   FolderLock,
   Globe,
-  UserCheck,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -180,7 +175,7 @@ export function FolderPermissions({ folderId }: FolderPermissionsProps) {
       case "private":
         return "bg-red-500/20 text-red-400 border-red-500/30";
       case "team":
-        return "bg-blue-500/20 text-blue-400 border-blue-500/30";
+        return "bg-primary/20 text-primary border-blue-500/30";
       case "public":
         return "bg-green-500/20 text-green-400 border-green-500/30";
       default:
@@ -195,7 +190,7 @@ export function FolderPermissions({ folderId }: FolderPermissionsProps) {
       case "admin":
         return "bg-red-500/20 text-red-400 border-red-500/30";
       case "editor":
-        return "bg-blue-500/20 text-blue-400 border-blue-500/30";
+        return "bg-primary/20 text-primary border-blue-500/30";
       case "viewer":
         return "bg-green-500/20 text-green-400 border-green-500/30";
       default:
@@ -213,7 +208,7 @@ export function FolderPermissions({ folderId }: FolderPermissionsProps) {
     toast.success(`Removed ${userName} from folder`);
   };
 
-  const handleChangePermission = (
+  const _handleChangePermission = (
     userId: string,
     newLevel: PermissionLevel
   ) => {
@@ -491,7 +486,7 @@ export function FolderPermissions({ folderId }: FolderPermissionsProps) {
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="flex -space-x-2">
-                    {folder.permissions.slice(0, 3).map((perm, i) => (
+                    {folder.permissions.slice(0, 3).map((perm, _i) => (
                       <div
                         key={perm.userId}
                         className="w-6 h-6 rounded-full bg-primary/20 border-2 border-card flex items-center justify-center text-xs text-primary"

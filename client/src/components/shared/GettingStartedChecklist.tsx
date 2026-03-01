@@ -216,7 +216,7 @@ export function GettingStartedChecklist({
 
       {/* Progress bar */}
       <div className="mb-4">
-        <div className="h-2 bg-gray-700 rounded-full overflow-hidden">
+        <div className="h-2 bg-muted rounded-full overflow-hidden">
           <div
             className="h-full bg-gradient-to-r from-primary to-purple-500 transition-all duration-500"
             style={{ width: `${progress}%` }}

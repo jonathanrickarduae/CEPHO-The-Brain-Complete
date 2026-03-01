@@ -54,7 +54,7 @@ export function ExpertPerformanceRating({
     if (score >= 75)
       return {
         label: "Good",
-        color: "bg-blue-500/20 text-blue-400 border-blue-500/30",
+        color: "bg-primary/20 text-primary border-blue-500/30",
       };
     if (score >= 60)
       return {
@@ -147,7 +147,7 @@ export function ExpertPerformanceRating({
         {/* Quality score */}
         <div className="bg-secondary/30 rounded-lg p-3 border border-border">
           <div className="flex items-center gap-2 mb-1">
-            <TrendingUp className="w-4 h-4 text-blue-400" />
+            <TrendingUp className="w-4 h-4 text-primary" />
             <span className="text-xs font-medium text-muted-foreground">
               Quality
             </span>

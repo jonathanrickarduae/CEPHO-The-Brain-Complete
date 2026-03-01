@@ -235,7 +235,7 @@ export function Skeleton({
 
   return (
     <div
-      className={`bg-gray-700 animate-pulse ${variantClasses[variant]} ${className}`}
+      className={`bg-muted animate-pulse ${variantClasses[variant]} ${className}`}
       style={{ width, height }}
     />
   );

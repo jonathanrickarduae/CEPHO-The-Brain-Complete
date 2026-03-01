@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { Mic, MicOff, Volume2, VolumeX, X, Loader2 } from "lucide-react";
+import { Mic, Volume2, VolumeX, X, Loader2 } from "lucide-react";
 
 type VoiceState = "idle" | "listening" | "processing" | "speaking";
 
@@ -50,7 +50,7 @@ export function VoiceInterface({
         setState("idle");
       };
 
-      recognitionRef.current.onerror = (event: any) => {
+      recognitionRef.current.onerror = (_event: any) => {
         setState("idle");
       };
     }
@@ -89,7 +89,7 @@ export function VoiceInterface({
       setState("listening");
       setTranscript("");
       setIsExpanded(true);
-    } catch (error) {
+    } catch {
     }
   };
 
@@ -158,7 +158,7 @@ export function VoiceInterface({
             <div className="flex items-center gap-1">
               <button
                 onClick={() => setIsMuted(!isMuted)}
-                className="p-1.5 hover:bg-gray-700 rounded-lg transition-colors"
+                className="p-1.5 hover:bg-muted rounded-lg transition-colors"
               >
                 {isMuted ? (
                   <VolumeX className="w-4 h-4 text-muted-foreground" />
@@ -168,7 +168,7 @@ export function VoiceInterface({
               </button>
               <button
                 onClick={() => setIsExpanded(false)}
-                className="p-1.5 hover:bg-gray-700 rounded-lg transition-colors"
+                className="p-1.5 hover:bg-muted rounded-lg transition-colors"
               >
                 <X className="w-4 h-4 text-muted-foreground" />
               </button>
@@ -212,7 +212,7 @@ export function VoiceInterface({
                   <button
                     key={cmd}
                     onClick={() => handleCommand(cmd, 1)}
-                    className="px-2 py-1 bg-gray-800 hover:bg-gray-700 rounded text-xs text-foreground transition-colors"
+                    className="px-2 py-1 bg-card hover:bg-muted rounded text-xs text-foreground transition-colors"
                   >
                     {cmd}
                   </button>
@@ -228,7 +228,7 @@ export function VoiceInterface({
                   {recentCommands.slice(0, 3).map((cmd, i) => (
                     <div
                       key={i}
-                      className="px-2 py-1.5 bg-gray-800/50 rounded text-xs text-muted-foreground"
+                      className="px-2 py-1.5 bg-card/50 rounded text-xs text-muted-foreground"
                     >
                       "{cmd.transcript}"
                     </div>
@@ -239,10 +239,10 @@ export function VoiceInterface({
           </div>
 
           {/* Footer */}
-          <div className="px-4 py-2 bg-gray-800/50 text-center">
+          <div className="px-4 py-2 bg-card/50 text-center">
             <p className="text-xs text-muted-foreground">
               Press and hold{" "}
-              <kbd className="px-1 py-0.5 bg-gray-700 rounded text-[10px]">
+              <kbd className="px-1 py-0.5 bg-muted rounded text-[10px]">
                 Space
               </kbd>{" "}
               to talk

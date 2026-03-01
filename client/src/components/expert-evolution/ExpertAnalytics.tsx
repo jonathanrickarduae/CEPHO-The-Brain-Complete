@@ -12,15 +12,11 @@ import {
   PieChart,
   Activity,
   Zap,
-  ThumbsUp,
-  ThumbsDown,
-  Target,
-  Brain,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { allExperts, categories, type AIExpert } from "@/data/ai-experts.data";
+import { allExperts } from "@/data/ai-experts.data";
 import { useFavorites } from "@/components/project-management/MyBoard";
 
 interface ExpertInteraction {
@@ -41,7 +37,7 @@ interface ExpertStats {
 }
 
 export function ExpertAnalytics() {
-  const { favorites } = useFavorites();
+  const { favorites: _favorites } = useFavorites();
 
   // Mock interaction data - in production, this would come from the database
   const [interactions] = useState<ExpertInteraction[]>(() => {
@@ -50,7 +46,7 @@ export function ExpertAnalytics() {
     const now = new Date();
 
     // Generate interactions for some experts
-    allExperts.slice(0, 30).forEach((expert, idx) => {
+    allExperts.slice(0, 30).forEach((expert, _idx) => {
       const numInteractions = Math.floor(Math.random() * 10) + 1;
       for (let i = 0; i < numInteractions; i++) {
         mockData.push({
@@ -172,7 +168,7 @@ export function ExpertAnalytics() {
       {/* Header */}
       <div className="flex items-center gap-4">
         <div className="p-3 rounded-2xl bg-gradient-to-br from-blue-500/20 to-cyan-500/20 border border-blue-500/30">
-          <BarChart3 className="w-8 h-8 text-blue-400" />
+          <BarChart3 className="w-8 h-8 text-primary" />
         </div>
         <div>
           <h2 className="text-2xl font-display font-bold">Expert Analytics</h2>
@@ -296,7 +292,7 @@ export function ExpertAnalytics() {
         <Card className="bg-card/60 border-border">
           <CardHeader className="pb-3">
             <CardTitle className="flex items-center gap-2 text-base">
-              <PieChart className="w-5 h-5 text-blue-500" />
+              <PieChart className="w-5 h-5 text-primary" />
               Category Usage
             </CardTitle>
           </CardHeader>

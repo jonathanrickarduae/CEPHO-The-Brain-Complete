@@ -55,12 +55,12 @@ export function OfflineIndicator() {
     if (!pending) return;
 
     try {
-      const actions = JSON.parse(pending);
+      const _actions = JSON.parse(pending);
       // Process each action (in real implementation, this would call APIs)
       // Clear pending actions after processing
       localStorage.removeItem("brain-pending-actions");
       setPendingActions(0);
-    } catch (error) {
+    } catch {
     }
   };
 

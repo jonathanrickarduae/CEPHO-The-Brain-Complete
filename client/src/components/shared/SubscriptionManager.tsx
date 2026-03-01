@@ -1,21 +1,14 @@
-import { useState, useEffect } from "react";
+import { useState} from "react";
 import {
   CreditCard,
   TrendingDown,
-  TrendingUp,
-  AlertTriangle,
   Check,
   X,
-  ExternalLink,
   Calendar,
   DollarSign,
   BarChart3,
-  Zap,
   Shield,
-  Clock,
-  Users,
   RefreshCw,
-  ChevronRight,
   Sparkles,
   PiggyBank,
   AlertCircle,
@@ -253,14 +246,14 @@ interface SubscriptionManagerProps {
 export function SubscriptionManager({
   compact = false,
 }: SubscriptionManagerProps) {
-  const [subscriptions, setSubscriptions] =
+  const [subscriptions, _setSubscriptions] =
     useState<Subscription[]>(MOCK_SUBSCRIPTIONS);
-  const [suggestions, setSuggestions] =
+  const [suggestions, _setSuggestions] =
     useState<OptimizationSuggestion[]>(MOCK_SUGGESTIONS);
   const [activeTab, setActiveTab] = useState<
     "overview" | "subscriptions" | "optimize" | "vault"
   >("overview");
-  const [selectedSubscription, setSelectedSubscription] =
+  const [_setSelectedSubscription] =
     useState<Subscription | null>(null);
 
   // Calculate totals
@@ -507,13 +500,13 @@ export function SubscriptionManager({
                   .map(sug => (
                     <div
                       key={sug.id}
-                      className="p-4 bg-gray-800/50 border border-gray-700 rounded-xl hover:border-primary/50 transition-colors cursor-pointer"
+                      className="p-4 bg-card/50 border border-border rounded-xl hover:border-primary/50 transition-colors cursor-pointer"
                     >
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-1">
                             {sug.type === "downgrade" && (
-                              <TrendingDown className="w-4 h-4 text-blue-400" />
+                              <TrendingDown className="w-4 h-4 text-primary" />
                             )}
                             {sug.type === "cancel" && (
                               <X className="w-4 h-4 text-red-400" />
@@ -561,7 +554,7 @@ export function SubscriptionManager({
                           {formatCurrency(amount)}/mo
                         </span>
                       </div>
-                      <div className="h-2 bg-gray-800 rounded-full overflow-hidden">
+                      <div className="h-2 bg-card rounded-full overflow-hidden">
                         <div
                           className="h-full bg-gradient-to-r from-primary to-cyan-500"
                           style={{ width: `${(amount / totalMonthly) * 100}%` }}
@@ -579,7 +572,7 @@ export function SubscriptionManager({
             {subscriptions.map(sub => (
               <div
                 key={sub.id}
-                className="p-4 bg-gray-800/50 border border-gray-700 rounded-xl hover:border-gray-600 transition-colors"
+                className="p-4 bg-card/50 border border-border rounded-xl hover:border-border transition-colors"
               >
                 <div className="flex items-start justify-between">
                   <div className="flex items-center gap-3">
@@ -589,7 +582,7 @@ export function SubscriptionManager({
                         <h4 className="font-medium text-foreground">
                           {sub.name}
                         </h4>
-                        <span className="text-xs px-2 py-0.5 bg-gray-700 rounded-full text-muted-foreground">
+                        <span className="text-xs px-2 py-0.5 bg-muted rounded-full text-muted-foreground">
                           {sub.plan}
                         </span>
                         {sub.status === "expiring" && (
@@ -627,7 +620,7 @@ export function SubscriptionManager({
                         {sub.usagePercent}%
                       </span>
                     </div>
-                    <div className="h-1.5 bg-gray-700 rounded-full overflow-hidden">
+                    <div className="h-1.5 bg-muted rounded-full overflow-hidden">
                       <div
                         className={`h-full ${getUsageBgColor(sub.usagePercent)}`}
                         style={{ width: `${sub.usagePercent}%` }}
@@ -645,9 +638,9 @@ export function SubscriptionManager({
                         {sub.featuresUsed}/{sub.featuresTotal}
                       </span>
                     </div>
-                    <div className="h-1.5 bg-gray-700 rounded-full overflow-hidden">
+                    <div className="h-1.5 bg-muted rounded-full overflow-hidden">
                       <div
-                        className="h-full bg-blue-500"
+                        className="h-full bg-primary"
                         style={{
                           width: `${(sub.featuresUsed / sub.featuresTotal) * 100}%`,
                         }}
@@ -666,7 +659,7 @@ export function SubscriptionManager({
                           {sub.seats.used}/{sub.seats.total}
                         </span>
                       </div>
-                      <div className="h-1.5 bg-gray-700 rounded-full overflow-hidden">
+                      <div className="h-1.5 bg-muted rounded-full overflow-hidden">
                         <div
                           className="h-full bg-purple-500"
                           style={{
@@ -712,7 +705,7 @@ export function SubscriptionManager({
                       ? "bg-green-500/5 border-green-500/30"
                       : sug.priority === "medium"
                         ? "bg-yellow-500/5 border-yellow-500/30"
-                        : "bg-gray-800/50 border-gray-700"
+                        : "bg-card/50 border-border"
                   }`}
                 >
                   <div className="flex items-start justify-between mb-3">
@@ -729,7 +722,7 @@ export function SubscriptionManager({
                                 ? "bg-green-500/20 text-green-400"
                                 : sug.priority === "medium"
                                   ? "bg-yellow-500/20 text-yellow-400"
-                                  : "bg-gray-700 text-muted-foreground"
+                                  : "bg-muted text-muted-foreground"
                             }`}
                           >
                             {sug.priority} priority
@@ -779,7 +772,7 @@ export function SubscriptionManager({
                         {sug.alternative.features.map((feature, i) => (
                           <span
                             key={i}
-                            className="text-xs px-2 py-1 bg-gray-700 rounded text-muted-foreground"
+                            className="text-xs px-2 py-1 bg-muted rounded text-muted-foreground"
                           >
                             {feature}
                           </span>
@@ -792,7 +785,7 @@ export function SubscriptionManager({
                     <button className="flex-1 py-2 bg-primary/10 border border-primary/30 rounded-lg text-primary text-sm hover:bg-primary/20 transition-colors">
                       Apply Suggestion
                     </button>
-                    <button className="px-4 py-2 bg-gray-700 rounded-lg text-muted-foreground text-sm hover:bg-gray-600 transition-colors">
+                    <button className="px-4 py-2 bg-muted rounded-lg text-muted-foreground text-sm hover:bg-gray-600 transition-colors">
                       Dismiss
                     </button>
                   </div>
@@ -823,7 +816,7 @@ export function SubscriptionManager({
               {subscriptions.map(sub => (
                 <div
                   key={sub.id}
-                  className="p-4 bg-gray-800/50 border border-gray-700 rounded-xl"
+                  className="p-4 bg-card/50 border border-border rounded-xl"
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
@@ -878,7 +871,7 @@ export function SubscriptionROI({
   const roi = ((valueGenerated - subscription.cost) / subscription.cost) * 100;
 
   return (
-    <div className="p-4 bg-gray-800/50 border border-gray-700 rounded-xl">
+    <div className="p-4 bg-card/50 border border-border rounded-xl">
       <h4 className="font-medium text-foreground mb-3">
         ROI Analysis: {subscription.name}
       </h4>

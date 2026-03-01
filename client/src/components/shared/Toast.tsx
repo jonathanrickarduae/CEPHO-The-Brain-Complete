@@ -49,7 +49,7 @@ const toastStyles = {
   success: "bg-green-500/10 border-green-500/30 text-green-400",
   error: "bg-red-500/10 border-red-500/30 text-red-400",
   warning: "bg-amber-500/10 border-amber-500/30 text-amber-400",
-  info: "bg-cyan-500/10 border-cyan-500/30 text-cyan-400",
+  info: "bg-[var(--brain-cyan)]/10 border-cyan-500/30 text-[var(--brain-cyan)]",
 };
 
 function ToastItem({

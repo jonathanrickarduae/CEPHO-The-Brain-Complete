@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  const [location] = useLocation();
+  const [_location] = useLocation();
 
   return (
     <div className="min-h-screen flex flex-col relative overflow-hidden">

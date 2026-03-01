@@ -335,7 +335,7 @@ export function KpiHeatMap({
                                 }}
                               >
                                 <div className="flex items-start justify-between">
-                                  <span className="text-xs font-medium text-white/90 line-clamp-2">
+                                  <span className="text-xs font-medium text-foreground/90 line-clamp-2">
                                     {category.id}. {category.name}
                                   </span>
                                   {hasOutlierFlag && (

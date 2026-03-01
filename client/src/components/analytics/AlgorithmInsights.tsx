@@ -121,7 +121,6 @@ function PlatformContent({
   platform,
   expandedFactors,
   toggleFactor,
-  getWeightColor,
   getWeightValue,
 }: PlatformContentProps) {
   return (

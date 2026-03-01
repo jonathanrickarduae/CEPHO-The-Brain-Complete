@@ -14,7 +14,6 @@ import {
   Clock,
   Volume2,
 } from "lucide-react";
-import { trpc } from "@/lib/trpc";
 
 interface TranscriptionResult {
   text: string;
@@ -81,7 +80,7 @@ export function VoiceNoteIntake({ onComplete, onSkip }: VoiceNoteIntakeProps) {
       timerRef.current = setInterval(() => {
         setRecordingTime(prev => prev + 1);
       }, 1000);
-    } catch (error) {
+    } catch {
     }
   };
 
@@ -118,7 +117,7 @@ export function VoiceNoteIntake({ onComplete, onSkip }: VoiceNoteIntakeProps) {
       reader.readAsDataURL(audioBlob);
 
       reader.onloadend = async () => {
-        const base64Audio = reader.result as string;
+        const _base64Audio = reader.result as string;
 
         // Simulate transcription and field extraction
         // In production, this would call the actual transcription API
@@ -152,7 +151,7 @@ export function VoiceNoteIntake({ onComplete, onSkip }: VoiceNoteIntakeProps) {
         setTranscriptionResult(mockResult);
         setIsProcessing(false);
       };
-    } catch (error) {
+    } catch {
       setIsProcessing(false);
     }
   };
@@ -177,7 +176,7 @@ export function VoiceNoteIntake({ onComplete, onSkip }: VoiceNoteIntakeProps) {
   }, [audioUrl]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-900 to-gray-800 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-gray-800 p-6">
       <div className="max-w-3xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8">
@@ -246,7 +245,7 @@ export function VoiceNoteIntake({ onComplete, onSkip }: VoiceNoteIntakeProps) {
                           <Volume2 className="w-6 h-6 text-fuchsia-400" />
                         </div>
                         <div className="flex-1">
-                          <p className="text-white font-medium">
+                          <p className="text-foreground font-medium">
                             {uploadedFile
                               ? uploadedFile.name
                               : "Voice Recording"}
@@ -369,7 +368,7 @@ export function VoiceNoteIntake({ onComplete, onSkip }: VoiceNoteIntakeProps) {
                       <p className="text-xs text-foreground/60 mb-1">
                         Project Name
                       </p>
-                      <p className="text-white font-medium">
+                      <p className="text-foreground font-medium">
                         {transcriptionResult.extractedFields.projectName}
                       </p>
                     </div>
@@ -379,7 +378,7 @@ export function VoiceNoteIntake({ onComplete, onSkip }: VoiceNoteIntakeProps) {
                       <p className="text-xs text-foreground/60 mb-1">
                         Project Type
                       </p>
-                      <p className="text-white font-medium">
+                      <p className="text-foreground font-medium">
                         {transcriptionResult.extractedFields.projectType}
                       </p>
                     </div>
@@ -389,7 +388,7 @@ export function VoiceNoteIntake({ onComplete, onSkip }: VoiceNoteIntakeProps) {
                       <p className="text-xs text-foreground/60 mb-1">
                         Industry
                       </p>
-                      <p className="text-white font-medium">
+                      <p className="text-foreground font-medium">
                         {transcriptionResult.extractedFields.industry}
                       </p>
                     </div>
@@ -399,7 +398,7 @@ export function VoiceNoteIntake({ onComplete, onSkip }: VoiceNoteIntakeProps) {
                       <p className="text-xs text-foreground/60 mb-1">
                         Timeline
                       </p>
-                      <p className="text-white font-medium">
+                      <p className="text-foreground font-medium">
                         {transcriptionResult.extractedFields.timeline}
                       </p>
                     </div>
@@ -442,7 +441,7 @@ export function VoiceNoteIntake({ onComplete, onSkip }: VoiceNoteIntakeProps) {
                               key={i}
                               className="text-foreground/80 flex items-start gap-2"
                             >
-                              <CheckCircle className="w-4 h-4 text-cyan-400 mt-0.5 flex-shrink-0" />
+                              <CheckCircle className="w-4 h-4 text-[var(--brain-cyan)] mt-0.5 flex-shrink-0" />
                               {metric}
                             </li>
                           )
@@ -486,13 +485,13 @@ export function VoiceNoteIntake({ onComplete, onSkip }: VoiceNoteIntakeProps) {
 
         {/* Tips */}
         <div className="mt-8 bg-white/5 border border-white/10 rounded-xl p-6">
-          <h3 className="text-white font-medium mb-4 flex items-center gap-2">
+          <h3 className="text-foreground font-medium mb-4 flex items-center gap-2">
             <Sparkles className="w-5 h-5 text-fuchsia-400" />
             Tips for Better Results
           </h3>
           <ul className="space-y-2 text-foreground/70 text-sm">
             <li className="flex items-start gap-2">
-              <Clock className="w-4 h-4 mt-0.5 text-cyan-400" />
+              <Clock className="w-4 h-4 mt-0.5 text-[var(--brain-cyan)]" />
               Aim for 2 to 5 minutes of clear explanation
             </li>
             <li className="flex items-start gap-2">

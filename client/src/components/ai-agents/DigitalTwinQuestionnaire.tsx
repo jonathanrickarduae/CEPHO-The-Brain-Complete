@@ -20,7 +20,7 @@ interface Question {
   scaleLabels?: { low: string; high: string };
 }
 
-const SECTIONS = [
+const _SECTIONS = [
   { id: 1, name: "Leadership & Vision", questions: 10 },
   { id: 2, name: "Risk & Decision Making", questions: 10 },
   { id: 3, name: "Team & Culture", questions: 10 },

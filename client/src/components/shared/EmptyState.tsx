@@ -62,7 +62,7 @@ const EMPTY_STATE_CONFIGS: Record<EmptyStateType, EmptyStateConfig> = {
     title: "No experts assigned",
     description: "Assemble your AI expert team to tackle this project.",
     actionLabel: "Browse Experts",
-    color: "text-cyan-400",
+    color: "text-[var(--brain-cyan)]",
     bgGradient: "from-cyan-500/10 to-cyan-500/5",
   },
   inbox: {
@@ -114,7 +114,7 @@ const EMPTY_STATE_CONFIGS: Record<EmptyStateType, EmptyStateConfig> = {
       "Your calendar is clear. Add meetings or let your Twin manage your schedule.",
     actionLabel: "Add Event",
     secondaryActionLabel: "Sync Calendar",
-    color: "text-blue-400",
+    color: "text-primary",
     bgGradient: "from-blue-500/10 to-blue-500/5",
   },
   goals: {

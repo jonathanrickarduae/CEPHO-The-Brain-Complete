@@ -29,7 +29,7 @@ function generatePreviewResponse(
   prompt: string,
   settings: PersonalitySettings
 ): string {
-  const { formality, verbosity, creativity, proactivity, tone } = settings;
+  const { formality, verbosity, proactivity} = settings;
 
   // Response templates based on prompt and settings
   const responses: Record<string, Record<string, string>> = {

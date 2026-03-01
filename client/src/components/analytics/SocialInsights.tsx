@@ -4,11 +4,7 @@ import {
   Mail,
   Calendar,
   MessageSquare,
-  Briefcase,
-  TrendingUp,
   Clock,
-  Star,
-  ExternalLink,
   Phone,
   Linkedin,
   Twitter,
@@ -139,7 +135,7 @@ export function SocialInsights({
       case "strong":
         return "bg-green-500/20 text-green-400 border-green-500/30";
       case "moderate":
-        return "bg-blue-500/20 text-blue-400 border-blue-500/30";
+        return "bg-primary/20 text-primary border-blue-500/30";
       case "new":
         return "bg-purple-500/20 text-purple-400 border-purple-500/30";
       default:
@@ -152,7 +148,7 @@ export function SocialInsights({
       case "positive":
         return "text-green-400";
       case "neutral":
-        return "text-blue-400";
+        return "text-primary";
       case "needs-attention":
         return "text-orange-400";
       default:
@@ -309,13 +305,13 @@ export function SocialInsights({
             {selectedContact.socialLinks && (
               <div className="flex gap-2">
                 {selectedContact.socialLinks.linkedin && (
-                  <Button size="sm" variant="ghost" className="text-blue-400">
+                  <Button size="sm" variant="ghost" className="text-primary">
                     <Linkedin className="w-4 h-4 mr-2" />
                     LinkedIn
                   </Button>
                 )}
                 {selectedContact.socialLinks.twitter && (
-                  <Button size="sm" variant="ghost" className="text-cyan-400">
+                  <Button size="sm" variant="ghost" className="text-[var(--brain-cyan)]">
                     <Twitter className="w-4 h-4 mr-2" />
                     Twitter
                   </Button>

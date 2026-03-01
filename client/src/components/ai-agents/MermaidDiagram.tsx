@@ -3,7 +3,6 @@ import {
   Download,
   ZoomIn,
   ZoomOut,
-  Maximize2,
   Copy,
   Check,
   RefreshCw,
@@ -16,7 +15,7 @@ interface MermaidDiagramProps {
 }
 
 // Mermaid diagram component that renders diagrams from Mermaid syntax
-export function MermaidDiagram({ code, title, onExport }: MermaidDiagramProps) {
+export function MermaidDiagram({ code, title}: MermaidDiagramProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [zoom, setZoom] = useState(1);
   const [copied, setCopied] = useState(false);

@@ -190,7 +190,7 @@ export default function Login() {
       } else {
         toast.error(data.error || "Invalid credentials");
       }
-    } catch (error) {
+    } catch {
       toast.error("Failed to login. Please try again.");
     } finally {
       setIsLoading(false);
@@ -203,11 +203,11 @@ export default function Login() {
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1400px] h-[1400px] bg-cyan-400/80 rounded-full blur-[250px] animate-pulse" />
         <div
-          className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[1000px] bg-blue-500/90 rounded-full blur-[150px] animate-pulse"
+          className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[1000px] bg-primary/90 rounded-full blur-[150px] animate-pulse"
           style={{ animationDelay: "0.5s" }}
         />
         <div
-          className="absolute top-1/6 left-1/4 w-[700px] h-[700px] bg-cyan-500/70 rounded-full blur-[120px] animate-pulse"
+          className="absolute top-1/6 left-1/4 w-[700px] h-[700px] bg-[var(--brain-cyan)]/70 rounded-full blur-[120px] animate-pulse"
           style={{ animationDuration: "3s" }}
         />
         <div
@@ -232,7 +232,7 @@ export default function Login() {
             </div>
             <div className="absolute inset-0 flex items-center justify-center">
               <div
-                className="w-24 h-24 bg-blue-500/80 rounded-full blur-[40px] animate-pulse"
+                className="w-24 h-24 bg-primary/80 rounded-full blur-[40px] animate-pulse"
                 style={{ animationDuration: "2s" }}
               />
             </div>
@@ -247,10 +247,10 @@ export default function Login() {
             <CardTitle className="text-5xl font-bold text-center bg-gradient-to-r from-cyan-300 via-blue-400 to-cyan-300 bg-clip-text text-transparent drop-shadow-[0_0_40px_rgba(0,212,255,0.8)] animate-pulse">
               Cepho
             </CardTitle>
-            <p className="text-center text-cyan-400/80 text-sm mt-1 drop-shadow-[0_0_10px_rgba(0,212,255,0.5)]">
+            <p className="text-center text-[var(--brain-cyan)]/80 text-sm mt-1 drop-shadow-[0_0_10px_rgba(0,212,255,0.5)]">
               The Greek for Brain
             </p>
-            <p className="text-center text-gray-300 text-base mt-2">
+            <p className="text-center text-foreground/80 text-base mt-2">
               AI powered Executive Intelligence
             </p>
           </div>
@@ -259,7 +259,7 @@ export default function Login() {
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-gray-300">
+              <Label htmlFor="email" className="text-foreground/80">
                 Email
               </Label>
               <Input
@@ -270,12 +270,12 @@ export default function Login() {
                 onChange={e => setEmail(e.target.value)}
                 required
                 disabled={isLoading}
-                className="bg-white/5 border-cyan-400/30 text-white placeholder:text-gray-500 focus:border-cyan-400 focus:ring-cyan-400/50 focus:shadow-[0_0_20px_rgba(0,212,255,0.4)] transition-all duration-300"
+                className="bg-white/5 border-cyan-400/30 text-white placeholder:text-muted-foreground/70 focus:border-cyan-400 focus:ring-cyan-400/50 focus:shadow-[0_0_20px_rgba(0,212,255,0.4)] transition-all duration-300"
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password" className="text-gray-300">
+              <Label htmlFor="password" className="text-foreground/80">
                 Password
               </Label>
               <Input
@@ -286,7 +286,7 @@ export default function Login() {
                 onChange={e => setPassword(e.target.value)}
                 required
                 disabled={isLoading}
-                className="bg-white/5 border-cyan-400/30 text-white placeholder:text-gray-500 focus:border-cyan-400 focus:ring-cyan-400/50 focus:shadow-[0_0_20px_rgba(0,212,255,0.4)] transition-all duration-300"
+                className="bg-white/5 border-cyan-400/30 text-white placeholder:text-muted-foreground/70 focus:border-cyan-400 focus:ring-cyan-400/50 focus:shadow-[0_0_20px_rgba(0,212,255,0.4)] transition-all duration-300"
               />
             </div>
 

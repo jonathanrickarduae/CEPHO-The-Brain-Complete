@@ -110,7 +110,7 @@ export function EnhancedChiefOfStaff() {
             <Brain className="h-8 w-8 text-purple-500" />
             Chief of Staff Command Center
           </h1>
-          <p className="text-gray-400 mt-1">
+          <p className="text-muted-foreground mt-1">
             Your AI-powered executive assistant with complete visibility into
             your work
           </p>
@@ -118,7 +118,7 @@ export function EnhancedChiefOfStaff() {
         <Button
           onClick={() => refetchBriefing()}
           variant="outline"
-          className="border-gray-700"
+          className="border-border"
         >
           <RefreshCw className="h-4 w-4 mr-2" />
           Refresh
@@ -252,7 +252,7 @@ export function EnhancedChiefOfStaff() {
                     {index + 1}
                   </Badge>
                   <div className="flex-1">
-                    <h3 className="text-white font-semibold mb-1">
+                    <h3 className="text-foreground font-semibold mb-1">
                       {priority.title}
                     </h3>
                     <p className="text-purple-200 text-sm">
@@ -284,7 +284,7 @@ export function EnhancedChiefOfStaff() {
 
       {/* Intelligent Recommendations */}
       {briefing && briefing.recommendations && (
-        <Card className="bg-gray-800 border-gray-700">
+        <Card className="bg-card border-border">
           <CardHeader>
             <CardTitle className="text-white flex items-center gap-2">
               <Brain className="h-5 w-5 text-purple-500" />
@@ -299,8 +299,8 @@ export function EnhancedChiefOfStaff() {
               >
                 <Sparkles className="h-5 w-5 text-yellow-500 flex-shrink-0 mt-0.5" />
                 <div className="flex-1">
-                  <p className="text-white font-medium mb-1">{rec.title}</p>
-                  <p className="text-gray-400 text-sm">{rec.description}</p>
+                  <p className="text-foreground font-medium mb-1">{rec.title}</p>
+                  <p className="text-muted-foreground text-sm">{rec.description}</p>
                   {rec.action && (
                     <Button
                       size="sm"
@@ -333,7 +333,7 @@ export function EnhancedChiefOfStaff() {
               >
                 <AlertCircle className="h-5 w-5 text-red-400 flex-shrink-0 mt-0.5" />
                 <div className="flex-1">
-                  <p className="text-white font-medium">{alert.title}</p>
+                  <p className="text-foreground font-medium">{alert.title}</p>
                   <p className="text-red-200 text-sm">{alert.message}</p>
                 </div>
               </div>

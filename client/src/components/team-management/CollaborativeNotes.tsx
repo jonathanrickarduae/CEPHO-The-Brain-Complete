@@ -12,9 +12,7 @@ import {
   Eye,
   EyeOff,
   Lightbulb,
-  ChevronDown,
   Copy,
-  Download,
   PenLine,
   Plus,
 } from "lucide-react";
@@ -119,7 +117,7 @@ ${text}`,
         if (newSuggestions.length > 0) {
           setSuggestions(newSuggestions);
         }
-      } catch (error) {
+      } catch {
       }
     },
     [chatMutation]
@@ -214,7 +212,7 @@ ${content}`,
         },
       ]);
       setAiContribution(100);
-    } catch (error) {
+    } catch {
     } finally {
       setIsEnhancing(false);
     }
@@ -465,7 +463,7 @@ ${content}`,
           <span>AI contribution:</span>
           <span
             className={cn(
-              aiContribution > 50 ? "text-cyan-400" : "text-teal-400"
+              aiContribution > 50 ? "text-[var(--brain-cyan)]" : "text-teal-400"
             )}
           >
             {Math.round(aiContribution)}%

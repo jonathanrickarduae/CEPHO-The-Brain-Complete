@@ -8,23 +8,14 @@ import {
   Image,
   Mic,
   Link2,
-  Filter,
   Search,
   Check,
-  X,
   FolderPlus,
   MoreHorizontal,
   Clock,
-  Tag,
   User,
   Sparkles,
-  ChevronDown,
-  File,
   Play,
-  Pause,
-  Volume2,
-  ExternalLink,
-  Trash2,
 } from "lucide-react";
 
 type ItemType =
@@ -132,7 +123,7 @@ export function UniversalInbox() {
   const [newProjectName, setNewProjectName] = useState("");
   const [isDragging, setIsDragging] = useState(false);
 
-  const projects: Project[] = [
+  const _projects: Project[] = [
     { id: "proj-1", name: "WasteGen Opportunity", itemCount: 3 },
     { id: "proj-2", name: "Project A Development", itemCount: 12 },
   ];
@@ -141,11 +132,11 @@ export function UniversalInbox() {
     ItemType,
     { icon: typeof FileText; color: string; label: string }
   > = {
-    email: { icon: Mail, color: "text-blue-400", label: "Email" },
+    email: { icon: Mail, color: "text-primary", label: "Email" },
     document: { icon: FileText, color: "text-orange-400", label: "Document" },
     voice: { icon: Mic, color: "text-purple-400", label: "Voice Note" },
     image: { icon: Image, color: "text-green-400", label: "Image" },
-    link: { icon: Link2, color: "text-cyan-400", label: "Link" },
+    link: { icon: Link2, color: "text-[var(--brain-cyan)]", label: "Link" },
     text: { icon: MessageSquare, color: "text-yellow-400", label: "Text" },
     whatsapp: {
       icon: MessageSquare,
@@ -155,7 +146,7 @@ export function UniversalInbox() {
   };
 
   const statusConfig: Record<ItemStatus, { color: string; label: string }> = {
-    new: { color: "bg-blue-500", label: "New" },
+    new: { color: "bg-primary", label: "New" },
     processing: { color: "bg-yellow-500", label: "Processing" },
     ready: { color: "bg-green-500", label: "Ready" },
     archived: { color: "bg-gray-500", label: "Archived" },
@@ -256,7 +247,7 @@ export function UniversalInbox() {
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <button className="px-3 py-1.5 bg-gray-700 text-foreground rounded-lg hover:bg-gray-600 transition-colors text-sm flex items-center gap-2">
+            <button className="px-3 py-1.5 bg-muted text-foreground rounded-lg hover:bg-gray-600 transition-colors text-sm flex items-center gap-2">
               <Mail className="w-4 h-4" />
               Connect Email
             </button>
@@ -272,15 +263,15 @@ export function UniversalInbox() {
               placeholder="Search inbox..."
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary text-sm"
+              className="w-full pl-9 pr-4 py-2 bg-card border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary text-sm"
             />
           </div>
-          <div className="flex items-center gap-1 bg-gray-800 rounded-lg p-1">
+          <div className="flex items-center gap-1 bg-card rounded-lg p-1">
             <button
               onClick={() => setFilter("all")}
               className={`px-3 py-1.5 rounded text-sm transition-colors ${
                 filter === "all"
-                  ? "bg-gray-700 text-foreground"
+                  ? "bg-muted text-foreground"
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
@@ -295,7 +286,7 @@ export function UniversalInbox() {
                     onClick={() => setFilter(type)}
                     className={`px-3 py-1.5 rounded text-sm transition-colors flex items-center gap-1 ${
                       filter === type
-                        ? "bg-gray-700 text-foreground"
+                        ? "bg-muted text-foreground"
                         : "text-muted-foreground hover:text-foreground"
                     }`}
                   >
@@ -333,7 +324,7 @@ export function UniversalInbox() {
               <FolderPlus className="w-4 h-4" />
               Create Project
             </button>
-            <button className="px-3 py-1.5 bg-gray-700 text-foreground rounded-lg hover:bg-gray-600 transition-colors text-sm flex items-center gap-2">
+            <button className="px-3 py-1.5 bg-muted text-foreground rounded-lg hover:bg-gray-600 transition-colors text-sm flex items-center gap-2">
               <Sparkles className="w-4 h-4" />
               Analyse
             </button>
@@ -373,7 +364,7 @@ export function UniversalInbox() {
               return (
                 <div
                   key={item.id}
-                  className={`p-4 hover:bg-gray-800/50 transition-colors ${
+                  className={`p-4 hover:bg-card/50 transition-colors ${
                     isSelected ? "bg-primary/5" : ""
                   }`}
                 >
@@ -384,7 +375,7 @@ export function UniversalInbox() {
                       className={`w-5 h-5 rounded border-2 flex items-center justify-center flex-shrink-0 mt-0.5 transition-colors ${
                         isSelected
                           ? "bg-primary border-primary"
-                          : "border-gray-600 hover:border-gray-500"
+                          : "border-border hover:border-border"
                       }`}
                     >
                       {isSelected && <Check className="w-3 h-3 text-white" />}
@@ -392,7 +383,7 @@ export function UniversalInbox() {
 
                     {/* Icon */}
                     <div
-                      className={`w-10 h-10 rounded-lg bg-gray-800 flex items-center justify-center flex-shrink-0`}
+                      className={`w-10 h-10 rounded-lg bg-card flex items-center justify-center flex-shrink-0`}
                     >
                       <Icon className={`w-5 h-5 ${config.color}`} />
                     </div>
@@ -448,7 +439,7 @@ export function UniversalInbox() {
                           {item.tags.map(tag => (
                             <span
                               key={tag}
-                              className="px-2 py-0.5 bg-gray-700 text-muted-foreground rounded text-xs"
+                              className="px-2 py-0.5 bg-muted text-muted-foreground rounded text-xs"
                             >
                               {tag}
                             </span>
@@ -458,7 +449,7 @@ export function UniversalInbox() {
 
                       {/* Extracted Content Preview */}
                       {item.extractedText && item.status === "ready" && (
-                        <div className="mt-2 p-2 bg-gray-800/50 rounded-lg">
+                        <div className="mt-2 p-2 bg-card/50 rounded-lg">
                           <p className="text-xs text-muted-foreground line-clamp-2">
                             {item.extractedText}
                           </p>
@@ -468,10 +459,10 @@ export function UniversalInbox() {
 
                     {/* Actions */}
                     <div className="flex items-center gap-1">
-                      <button className="p-2 hover:bg-gray-700 rounded-lg transition-colors">
+                      <button className="p-2 hover:bg-muted rounded-lg transition-colors">
                         <Sparkles className="w-4 h-4 text-muted-foreground" />
                       </button>
-                      <button className="p-2 hover:bg-gray-700 rounded-lg transition-colors">
+                      <button className="p-2 hover:bg-muted rounded-lg transition-colors">
                         <MoreHorizontal className="w-4 h-4 text-muted-foreground" />
                       </button>
                     </div>
@@ -485,7 +476,7 @@ export function UniversalInbox() {
 
       {/* Upload Button (Mobile) */}
       <div className="p-4 border-t border-border">
-        <label className="w-full py-3 bg-gray-800 hover:bg-gray-700 rounded-xl transition-colors flex items-center justify-center gap-2 cursor-pointer">
+        <label className="w-full py-3 bg-card hover:bg-muted rounded-xl transition-colors flex items-center justify-center gap-2 cursor-pointer">
           <Upload className="w-5 h-5 text-muted-foreground" />
           <span className="text-foreground">Upload files</span>
           <input
@@ -539,10 +530,10 @@ export function UniversalInbox() {
               placeholder="Project name (e.g., WasteGen Opportunity)"
               value={newProjectName}
               onChange={e => setNewProjectName(e.target.value)}
-              className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary mb-4"
+              className="w-full px-4 py-2 bg-card border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary mb-4"
             />
 
-            <div className="bg-gray-800/50 rounded-lg p-3 mb-4">
+            <div className="bg-card/50 rounded-lg p-3 mb-4">
               <p className="text-xs text-muted-foreground mb-2">
                 Chief of Staff will:
               </p>

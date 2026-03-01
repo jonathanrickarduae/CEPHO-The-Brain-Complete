@@ -13,7 +13,6 @@ import {
   MessageSquare,
   Plus,
   AlertTriangle,
-  Lightbulb,
   FileText,
   ExternalLink,
 } from "lucide-react";
@@ -160,17 +159,17 @@ export function SMEOrchestration({
       <div className="p-4 border-b border-border bg-gradient-to-r from-cyan-500/10 to-transparent">
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-cyan-500/20 flex items-center justify-center">
-              <Users className="w-5 h-5 text-cyan-400" />
+            <div className="w-10 h-10 rounded-lg bg-[var(--brain-cyan)]/20 flex items-center justify-center">
+              <Users className="w-5 h-5 text-[var(--brain-cyan)]" />
             </div>
             <div>
-              <h3 className="font-semibold text-white">{taskTitle}</h3>
+              <h3 className="font-semibold text-foreground">{taskTitle}</h3>
               <p className="text-sm text-foreground/70">{taskDescription}</p>
             </div>
           </div>
           <Badge
             variant="outline"
-            className="bg-cyan-500/20 text-cyan-400 border-cyan-500/30"
+            className="bg-[var(--brain-cyan)]/20 text-[var(--brain-cyan)] border-cyan-500/30"
           >
             {completedCount}/{totalCount} Experts Complete
           </Badge>
@@ -189,7 +188,7 @@ export function SMEOrchestration({
             variant="ghost"
             size="sm"
             onClick={onAddExpert}
-            className="text-cyan-400 hover:text-cyan-300"
+            className="text-[var(--brain-cyan)] hover:text-cyan-300"
           >
             <Plus className="w-4 h-4 mr-1" />
             Add Expert
@@ -218,7 +217,7 @@ export function SMEOrchestration({
                   {expert.status === "working" && (
                     <Badge
                       variant="outline"
-                      className="bg-blue-500/20 text-blue-400 border-blue-500/30"
+                      className="bg-primary/20 text-primary border-blue-500/30"
                     >
                       <Loader2 className="w-3 h-3 mr-1 animate-spin" />
                       Working

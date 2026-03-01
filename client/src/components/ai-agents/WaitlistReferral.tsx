@@ -5,7 +5,6 @@ import {
   ArrowUp,
   Copy,
   Check,
-  Share2,
   Mail,
   Twitter,
   Linkedin,
@@ -77,7 +76,7 @@ export function WaitlistSignup({
         </h2>
         <p className="text-foreground/70">
           Get early access to your AI-powered Chief of Staff.
-          <span className="text-cyan-400"> 15,000+ people</span> are already
+          <span className="text-[var(--brain-cyan)]"> 15,000+ people</span> are already
           waiting.
         </p>
       </div>
@@ -90,7 +89,7 @@ export function WaitlistSignup({
             onChange={e => setEmail(e.target.value)}
             placeholder="Enter your email"
             required
-            className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500 transition-colors"
+            className="w-full px-4 py-3 bg-card border border-border rounded-lg text-white placeholder:text-muted-foreground focus:outline-none focus:border-[var(--brain-cyan)] transition-colors"
           />
         </div>
 
@@ -101,7 +100,7 @@ export function WaitlistSignup({
               value={referralCode}
               onChange={e => setReferralCode(e.target.value.toUpperCase())}
               placeholder="Referral code (optional)"
-              className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500 transition-colors"
+              className="w-full px-4 py-3 bg-card border border-border rounded-lg text-white placeholder:text-muted-foreground focus:outline-none focus:border-[var(--brain-cyan)] transition-colors"
             />
             <p className="text-xs text-foreground/60 mt-1">
               Have a referral code? Enter it to skip ahead in the queue!
@@ -111,7 +110,7 @@ export function WaitlistSignup({
           <button
             type="button"
             onClick={() => setShowReferralInput(true)}
-            className="text-sm text-cyan-400 hover:text-cyan-300"
+            className="text-sm text-[var(--brain-cyan)] hover:text-cyan-300"
           >
             Have a referral code?
           </button>
@@ -173,7 +172,7 @@ export function WaitlistStatus({ position }: { position: WaitlistPosition }) {
 
   return (
     <div className="max-w-md mx-auto">
-      <div className="bg-gray-800 rounded-2xl p-6 border border-gray-700">
+      <div className="bg-card rounded-2xl p-6 border border-border">
         {/* Position Display */}
         <div className="text-center mb-6">
           <div className="text-sm text-foreground/70 mb-1">Your position</div>
@@ -197,7 +196,7 @@ export function WaitlistStatus({ position }: { position: WaitlistPosition }) {
             <span>Queue progress</span>
             <span>Top {percentile}%</span>
           </div>
-          <div className="h-2 bg-gray-700 rounded-full overflow-hidden">
+          <div className="h-2 bg-muted rounded-full overflow-hidden">
             <div
               className="h-full bg-gradient-to-r from-cyan-500 to-purple-600 rounded-full transition-all duration-500"
               style={{ width: `${percentile}%` }}
@@ -206,13 +205,13 @@ export function WaitlistStatus({ position }: { position: WaitlistPosition }) {
         </div>
 
         {/* Skip Ahead Section */}
-        <div className="bg-gray-900 rounded-xl p-4 mb-6">
+        <div className="bg-background rounded-xl p-4 mb-6">
           <div className="flex items-center gap-3 mb-3">
-            <div className="p-2 bg-cyan-500/20 rounded-lg">
-              <Gift className="w-5 h-5 text-cyan-400" />
+            <div className="p-2 bg-[var(--brain-cyan)]/20 rounded-lg">
+              <Gift className="w-5 h-5 text-[var(--brain-cyan)]" />
             </div>
             <div>
-              <div className="font-semibold text-white">Skip ahead!</div>
+              <div className="font-semibold text-foreground">Skip ahead!</div>
               <div className="text-sm text-foreground/70">
                 Invite friends to move up the queue
               </div>
@@ -222,15 +221,15 @@ export function WaitlistStatus({ position }: { position: WaitlistPosition }) {
           <div className="space-y-2 text-sm text-foreground/80">
             <div className="flex justify-between">
               <span>Each invite sent</span>
-              <span className="text-cyan-400">+50 spots</span>
+              <span className="text-[var(--brain-cyan)]">+50 spots</span>
             </div>
             <div className="flex justify-between">
               <span>Friend joins waitlist</span>
-              <span className="text-cyan-400">+200 spots</span>
+              <span className="text-[var(--brain-cyan)]">+200 spots</span>
             </div>
             <div className="flex justify-between">
               <span>Friend becomes user</span>
-              <span className="text-cyan-400">+500 spots</span>
+              <span className="text-[var(--brain-cyan)]">+500 spots</span>
             </div>
           </div>
         </div>
@@ -241,12 +240,12 @@ export function WaitlistStatus({ position }: { position: WaitlistPosition }) {
             Your referral code
           </div>
           <div className="flex gap-2">
-            <div className="flex-1 px-4 py-2 bg-gray-900 rounded-lg font-mono text-white">
+            <div className="flex-1 px-4 py-2 bg-background rounded-lg font-mono text-white">
               {position.referralCode}
             </div>
             <button
               onClick={copyReferralLink}
-              className="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors"
+              className="px-4 py-2 bg-muted hover:bg-gray-600 rounded-lg transition-colors"
             >
               {copied ? (
                 <Check className="w-5 h-5 text-green-400" />
@@ -261,21 +260,21 @@ export function WaitlistStatus({ position }: { position: WaitlistPosition }) {
         <div className="flex gap-2">
           <button
             onClick={copyReferralLink}
-            className="flex-1 flex items-center justify-center gap-2 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg text-foreground/80 transition-colors"
+            className="flex-1 flex items-center justify-center gap-2 py-2 bg-muted hover:bg-gray-600 rounded-lg text-foreground/80 transition-colors"
           >
             <Copy className="w-4 h-4" />
             <span>Copy link</span>
           </button>
           <button
             onClick={shareToTwitter}
-            className="flex-1 flex items-center justify-center gap-2 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg text-foreground/80 transition-colors"
+            className="flex-1 flex items-center justify-center gap-2 py-2 bg-muted hover:bg-gray-600 rounded-lg text-foreground/80 transition-colors"
           >
             <Twitter className="w-4 h-4" />
             <span>Tweet</span>
           </button>
           <button
             onClick={shareToLinkedIn}
-            className="flex-1 flex items-center justify-center gap-2 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg text-foreground/80 transition-colors"
+            className="flex-1 flex items-center justify-center gap-2 py-2 bg-muted hover:bg-gray-600 rounded-lg text-foreground/80 transition-colors"
           >
             <Linkedin className="w-4 h-4" />
             <span>Share</span>
@@ -284,7 +283,7 @@ export function WaitlistStatus({ position }: { position: WaitlistPosition }) {
 
         {/* Referral Stats */}
         {position.referralsCount > 0 && (
-          <div className="mt-4 pt-4 border-t border-gray-700">
+          <div className="mt-4 pt-4 border-t border-border">
             <div className="flex items-center gap-2 text-sm text-foreground/70">
               <Users className="w-4 h-4" />
               <span>{position.referralsCount} friends referred</span>
@@ -308,12 +307,12 @@ export function ReferralDashboard({ stats }: { stats: ReferralStats }) {
   };
 
   return (
-    <div className="bg-gray-800 rounded-2xl p-6 border border-gray-700">
+    <div className="bg-card rounded-2xl p-6 border border-border">
       <div className="flex items-center justify-between mb-6">
         <h3 className="text-lg font-semibold text-white">Referral Program</h3>
-        <div className="flex items-center gap-2 px-3 py-1 bg-cyan-500/20 rounded-full">
-          <Gift className="w-4 h-4 text-cyan-400" />
-          <span className="text-sm text-cyan-400">
+        <div className="flex items-center gap-2 px-3 py-1 bg-[var(--brain-cyan)]/20 rounded-full">
+          <Gift className="w-4 h-4 text-[var(--brain-cyan)]" />
+          <span className="text-sm text-[var(--brain-cyan)]">
             {stats.creditsEarned} credits earned
           </span>
         </div>
@@ -321,19 +320,19 @@ export function ReferralDashboard({ stats }: { stats: ReferralStats }) {
 
       {/* Stats Grid */}
       <div className="grid grid-cols-3 gap-4 mb-6">
-        <div className="bg-gray-900 rounded-xl p-4 text-center">
+        <div className="bg-background rounded-xl p-4 text-center">
           <div className="text-2xl font-bold text-white">
             {stats.totalReferrals}
           </div>
           <div className="text-sm text-foreground/70">Total Referrals</div>
         </div>
-        <div className="bg-gray-900 rounded-xl p-4 text-center">
+        <div className="bg-background rounded-xl p-4 text-center">
           <div className="text-2xl font-bold text-yellow-400">
             {stats.pendingReferrals}
           </div>
           <div className="text-sm text-foreground/70">Pending</div>
         </div>
-        <div className="bg-gray-900 rounded-xl p-4 text-center">
+        <div className="bg-background rounded-xl p-4 text-center">
           <div className="text-2xl font-bold text-green-400">
             {stats.convertedReferrals}
           </div>
@@ -347,15 +346,15 @@ export function ReferralDashboard({ stats }: { stats: ReferralStats }) {
         <div className="space-y-2 text-sm">
           <div className="flex justify-between text-foreground/80">
             <span>Friend joins waitlist</span>
-            <span className="text-cyan-400">+50 credits</span>
+            <span className="text-[var(--brain-cyan)]">+50 credits</span>
           </div>
           <div className="flex justify-between text-foreground/80">
             <span>Friend becomes active user</span>
-            <span className="text-cyan-400">+200 credits</span>
+            <span className="text-[var(--brain-cyan)]">+200 credits</span>
           </div>
           <div className="flex justify-between text-foreground/80">
             <span>Friend upgrades to Pro</span>
-            <span className="text-cyan-400">+1 month free</span>
+            <span className="text-[var(--brain-cyan)]">+1 month free</span>
           </div>
         </div>
       </div>
@@ -366,7 +365,7 @@ export function ReferralDashboard({ stats }: { stats: ReferralStats }) {
           Your referral link
         </div>
         <div className="flex gap-2">
-          <div className="flex-1 px-4 py-2 bg-gray-900 rounded-lg text-sm text-foreground/80 truncate">
+          <div className="flex-1 px-4 py-2 bg-background rounded-lg text-sm text-foreground/80 truncate">
             {window.location.host}/join?ref={stats.referralCode}
           </div>
           <button
@@ -389,7 +388,6 @@ export function ReferralDashboard({ stats }: { stats: ReferralStats }) {
 export function InviteModal({
   isOpen,
   onClose,
-  referralCode,
 }: {
   isOpen: boolean;
   onClose: () => void;
@@ -415,7 +413,7 @@ export function InviteModal({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-gray-800 rounded-2xl p-6 max-w-md w-full">
+      <div className="bg-card rounded-2xl p-6 max-w-md w-full">
         <h3 className="text-xl font-semibold text-white mb-2">
           Invite Friends
         </h3>
@@ -432,14 +430,14 @@ export function InviteModal({
             onChange={e => setEmails(e.target.value)}
             placeholder="friend1@email.com, friend2@email.com"
             rows={3}
-            className="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500 transition-colors resize-none"
+            className="w-full px-4 py-3 bg-background border border-border rounded-lg text-white placeholder:text-muted-foreground focus:outline-none focus:border-[var(--brain-cyan)] transition-colors resize-none"
           />
         </div>
 
         <div className="flex gap-3">
           <button
             onClick={onClose}
-            className="flex-1 py-2 bg-gray-700 hover:bg-gray-600 text-foreground/80 rounded-lg transition-colors"
+            className="flex-1 py-2 bg-muted hover:bg-gray-600 text-foreground/80 rounded-lg transition-colors"
           >
             Cancel
           </button>

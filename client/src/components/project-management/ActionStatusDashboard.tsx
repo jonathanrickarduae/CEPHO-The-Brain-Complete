@@ -16,19 +16,16 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   CheckCircle2,
   Clock,
   AlertCircle,
-  ArrowRight,
   TrendingUp,
   Calendar,
   Target,
   Zap,
   ChevronRight,
   Play,
-  Pause,
   RotateCcw,
 } from "lucide-react";
 
@@ -194,7 +191,7 @@ const getStatusIcon = (status: ActionItem["status"]) => {
     case "completed":
       return <CheckCircle2 className="h-4 w-4 text-green-400" />;
     case "in_progress":
-      return <Play className="h-4 w-4 text-blue-400" />;
+      return <Play className="h-4 w-4 text-primary" />;
     case "pending":
       return <Clock className="h-4 w-4 text-amber-400" />;
     case "blocked":
@@ -207,7 +204,7 @@ const getStatusColor = (status: ActionItem["status"]) => {
     case "completed":
       return "bg-green-500/20 text-green-400 border-green-500/30";
     case "in_progress":
-      return "bg-blue-500/20 text-blue-400 border-blue-500/30";
+      return "bg-primary/20 text-primary border-blue-500/30";
     case "pending":
       return "bg-amber-500/20 text-amber-400 border-amber-500/30";
     case "blocked":
@@ -222,7 +219,7 @@ const getPriorityColor = (priority: ActionItem["priority"]) => {
     case "medium":
       return "text-amber-400";
     case "low":
-      return "text-gray-400";
+      return "text-muted-foreground";
   }
 };
 
@@ -256,7 +253,7 @@ export function ActionStatusDashboard() {
     <div className="space-y-6">
       {/* Header Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <Card className="bg-gray-900/50 border-gray-800">
+        <Card className="bg-gray-900/50 border-border/50">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
@@ -275,7 +272,7 @@ export function ActionStatusDashboard() {
           </CardContent>
         </Card>
 
-        <Card className="bg-gray-900/50 border-gray-800">
+        <Card className="bg-gray-900/50 border-border/50">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
@@ -289,21 +286,21 @@ export function ActionStatusDashboard() {
           </CardContent>
         </Card>
 
-        <Card className="bg-gray-900/50 border-gray-800">
+        <Card className="bg-gray-900/50 border-border/50">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-2xl font-bold text-blue-400">
+                <p className="text-2xl font-bold text-primary">
                   {inProgressActions}
                 </p>
                 <p className="text-sm text-muted-foreground">In Progress</p>
               </div>
-              <Play className="h-8 w-8 text-blue-400/50" />
+              <Play className="h-8 w-8 text-primary/50" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gray-900/50 border-gray-800">
+        <Card className="bg-gray-900/50 border-border/50">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
@@ -324,11 +321,11 @@ export function ActionStatusDashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Action List */}
         <div className="lg:col-span-2">
-          <Card className="bg-gray-900/50 border-gray-800">
+          <Card className="bg-gray-900/50 border-border/50">
             <CardHeader>
               <div className="flex items-center justify-between">
                 <div>
-                  <CardTitle className="text-white">Action Items</CardTitle>
+                  <CardTitle className="text-foreground">Action Items</CardTitle>
                   <CardDescription>
                     Track progress on priority actions
                   </CardDescription>
@@ -346,7 +343,7 @@ export function ActionStatusDashboard() {
                     variant={filter === "in_progress" ? "default" : "outline"}
                     size="sm"
                     onClick={() => setFilter("in_progress")}
-                    className={filter === "in_progress" ? "bg-blue-500" : ""}
+                    className={filter === "in_progress" ? "bg-primary" : ""}
                   >
                     In Progress
                   </Button>
@@ -367,7 +364,7 @@ export function ActionStatusDashboard() {
                   {filteredActions.map(action => (
                     <div
                       key={action.id}
-                      className="p-4 rounded-lg bg-gray-800/50 border border-gray-700 hover:border-gray-600 transition-colors"
+                      className="p-4 rounded-lg bg-card/50 border border-border hover:border-border transition-colors"
                     >
                       <div className="flex items-start gap-3">
                         {getStatusIcon(action.status)}
@@ -431,9 +428,9 @@ export function ActionStatusDashboard() {
 
         {/* Category Breakdown */}
         <div>
-          <Card className="bg-gray-900/50 border-gray-800">
+          <Card className="bg-gray-900/50 border-border/50">
             <CardHeader>
-              <CardTitle className="text-white">By Category</CardTitle>
+              <CardTitle className="text-foreground">By Category</CardTitle>
               <CardDescription>Progress across business areas</CardDescription>
             </CardHeader>
             <CardContent>
@@ -445,7 +442,7 @@ export function ActionStatusDashboard() {
                   return (
                     <div key={category.name} className="space-y-2">
                       <div className="flex items-center justify-between">
-                        <span className="text-sm text-white">
+                        <span className="text-sm text-foreground/80">
                           {category.name}
                         </span>
                         <span className="text-xs text-muted-foreground">
@@ -455,7 +452,7 @@ export function ActionStatusDashboard() {
                       <Progress value={progress} className="h-2" />
                       <div className="flex gap-2 text-xs">
                         {category.inProgress > 0 && (
-                          <span className="text-blue-400">
+                          <span className="text-primary">
                             {category.inProgress} active
                           </span>
                         )}
@@ -473,7 +470,7 @@ export function ActionStatusDashboard() {
           </Card>
 
           {/* Quick Actions */}
-          <Card className="bg-gray-900/50 border-gray-800 mt-4">
+          <Card className="bg-gray-900/50 border-border/50 mt-4">
             <CardHeader>
               <CardTitle className="text-white text-base">
                 Quick Actions
@@ -483,21 +480,21 @@ export function ActionStatusDashboard() {
               <div className="space-y-2">
                 <Button
                   variant="outline"
-                  className="w-full justify-start border-gray-700 hover:border-[#E91E8C]/50"
+                  className="w-full justify-start border-border hover:border-[#E91E8C]/50"
                 >
                   <Zap className="h-4 w-4 mr-2 text-[#E91E8C]" />
                   Start Next Priority
                 </Button>
                 <Button
                   variant="outline"
-                  className="w-full justify-start border-gray-700 hover:border-[#E91E8C]/50"
+                  className="w-full justify-start border-border hover:border-[#E91E8C]/50"
                 >
                   <Target className="h-4 w-4 mr-2 text-[#E91E8C]" />
                   Review Blocked Items
                 </Button>
                 <Button
                   variant="outline"
-                  className="w-full justify-start border-gray-700 hover:border-[#E91E8C]/50"
+                  className="w-full justify-start border-border hover:border-[#E91E8C]/50"
                 >
                   <RotateCcw className="h-4 w-4 mr-2 text-[#E91E8C]" />
                   Refresh Status

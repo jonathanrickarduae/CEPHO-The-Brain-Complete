@@ -17,20 +17,19 @@ import {
   Calendar,
   RefreshCw,
   CheckCircle,
-  XCircle,
   ExternalLink,
   Clock,
   Loader2,
 } from "lucide-react";
 
 // Google Calendar OAuth URL (would be configured in production)
-const GOOGLE_OAUTH_URL = "https://accounts.google.com/o/oauth2/v2/auth";
-const OUTLOOK_OAUTH_URL =
+const _GOOGLE_OAUTH_URL = "https://accounts.google.com/o/oauth2/v2/auth";
+const _OUTLOOK_OAUTH_URL =
   "https://login.microsoftonline.com/common/oauth2/v2.0/authorize";
 
 export function CalendarSettings() {
   const [autoSync, setAutoSync] = useState(true);
-  const [syncInterval, setSyncInterval] = useState(15);
+  const [syncInterval, _setSyncInterval] = useState(15);
 
   // Get integration status
   const { data: integrationStatus, refetch: refetchStatus } =
@@ -92,7 +91,7 @@ export function CalendarSettings() {
       <Card className="bg-card/50 border-border/50">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Calendar className="h-5 w-5 text-cyan-400" />
+            <Calendar className="h-5 w-5 text-[var(--brain-cyan)]" />
             Calendar Connections
           </CardTitle>
           <CardDescription>
@@ -210,7 +209,7 @@ export function CalendarSettings() {
       <Card className="bg-card/50 border-border/50">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <RefreshCw className="h-5 w-5 text-cyan-400" />
+            <RefreshCw className="h-5 w-5 text-[var(--brain-cyan)]" />
             Sync Settings
           </CardTitle>
           <CardDescription>
@@ -260,7 +259,7 @@ export function CalendarSettings() {
         <Card className="bg-card/50 border-border/50">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Clock className="h-5 w-5 text-cyan-400" />
+              <Clock className="h-5 w-5 text-[var(--brain-cyan)]" />
               Today's Schedule
             </CardTitle>
           </CardHeader>
@@ -286,12 +285,12 @@ export function CalendarSettings() {
               </div>
             </div>
             {todaySummary.nextEvent && (
-              <div className="mt-4 p-3 rounded-lg bg-cyan-500/10 border border-cyan-500/20">
+              <div className="mt-4 p-3 rounded-lg bg-[var(--brain-cyan)]/10 border border-cyan-500/20">
                 <p className="text-sm text-muted-foreground">Next Event</p>
                 <p className="font-medium text-foreground">
                   {todaySummary.nextEvent.title}
                 </p>
-                <p className="text-sm text-cyan-400">
+                <p className="text-sm text-[var(--brain-cyan)]">
                   {new Date(
                     todaySummary.nextEvent.startTime
                   ).toLocaleTimeString([], {

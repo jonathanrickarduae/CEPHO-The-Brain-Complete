@@ -364,47 +364,47 @@ export default function ProjectGenesisWizard() {
 
   if (isLoadingWorkflow) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 flex items-center justify-center">
-        <Loader2 className="w-8 h-8 text-cyan-400 animate-spin" />
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <Loader2 className="w-8 h-8 text-[var(--brain-cyan)] animate-spin" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-6">
+    <div className="min-h-screen bg-background p-6">
       <div className="max-w-5xl mx-auto">
         {/* Header */}
         <div className="mb-8">
           <Button
             variant="ghost"
             onClick={() => navigate("/workflows")}
-            className="mb-4 text-gray-400 hover:text-white"
+            className="mb-4 text-muted-foreground hover:text-white"
           >
             <ChevronLeft className="w-4 h-4 mr-2" />
             Back to Workflows
           </Button>
           <h1 className="text-4xl font-bold text-white mb-2 flex items-center gap-3">
-            <Rocket className="w-10 h-10 text-cyan-400" />
+            <Rocket className="w-10 h-10 text-[var(--brain-cyan)]" />
             {workflow?.name || "Project Genesis Wizard"}
           </h1>
-          <p className="text-gray-400">6-Phase Venture Development Process</p>
+          <p className="text-muted-foreground">6-Phase Venture Development Process</p>
         </div>
 
         {/* Progress Bar */}
-        <Card className="bg-gray-800/50 border-gray-700/50 p-6 mb-8">
+        <Card className="bg-card/50 border-border/50 p-6 mb-8">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm text-gray-400">Overall Progress</span>
-            <span className="text-sm font-semibold text-cyan-400">
+            <span className="text-sm text-muted-foreground">Overall Progress</span>
+            <span className="text-sm font-semibold text-[var(--brain-cyan)]">
               {progress}%
             </span>
           </div>
-          <div className="w-full h-3 bg-gray-700 rounded-full overflow-hidden mb-4">
+          <div className="w-full h-3 bg-muted rounded-full overflow-hidden mb-4">
             <div
               className="h-full bg-gradient-to-r from-cyan-500 to-blue-500 transition-all duration-500"
               style={{ width: `${progress}%` }}
             />
           </div>
-          <div className="flex items-center justify-between text-xs text-gray-500">
+          <div className="flex items-center justify-between text-xs text-muted-foreground/70">
             <span>
               Phase {currentPhase}/6: {phase?.phaseName}
             </span>
@@ -419,10 +419,10 @@ export default function ProjectGenesisWizard() {
               key={p.phaseNumber}
               className={`p-3 rounded-lg border transition-all cursor-pointer ${
                 p.phaseNumber === currentPhase
-                  ? "bg-cyan-500/20 border-cyan-500/50 text-cyan-400"
+                  ? "bg-[var(--brain-cyan)]/20 border-cyan-500/50 text-[var(--brain-cyan)]"
                   : p.phaseNumber < currentPhase
                     ? "bg-emerald-500/20 border-emerald-500/50 text-emerald-400"
-                    : "bg-gray-800/30 border-gray-700/50 text-gray-500"
+                    : "bg-card/30 border-border/50 text-muted-foreground/70"
               }`}
               onClick={() => {
                 setCurrentPhase(p.phaseNumber);
@@ -438,12 +438,12 @@ export default function ProjectGenesisWizard() {
         </div>
 
         {/* Step Content */}
-        <Card className="bg-gray-800/30 border-gray-700/50 p-8 mb-8">
+        <Card className="bg-card/30 border-border/50 p-8 mb-8">
           <div className="mb-6">
             <div className="flex items-center gap-2 mb-2">
               <Badge
                 variant="outline"
-                className="bg-cyan-500/20 text-cyan-400 border-cyan-500/50"
+                className="bg-[var(--brain-cyan)]/20 text-[var(--brain-cyan)] border-cyan-500/50"
               >
                 Step {currentStep}
               </Badge>
@@ -451,7 +451,7 @@ export default function ProjectGenesisWizard() {
                 {step?.stepName}
               </h2>
             </div>
-            <p className="text-gray-400">{step?.description}</p>
+            <p className="text-muted-foreground">{step?.description}</p>
           </div>
 
           {/* Step Form */}
@@ -460,12 +460,12 @@ export default function ProjectGenesisWizard() {
             {currentStep === 1 && (
               <>
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                  <label className="block text-sm font-medium text-foreground/80 mb-2">
                     Target Market Definition
                   </label>
                   <Textarea
                     placeholder="Describe your target market..."
-                    className="bg-gray-900/50 border-gray-700 text-white"
+                    className="bg-gray-900/50 border-border text-white"
                     rows={4}
                     value={formData[currentStep]?.target_market || ""}
                     onChange={e =>
@@ -474,12 +474,12 @@ export default function ProjectGenesisWizard() {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                  <label className="block text-sm font-medium text-foreground/80 mb-2">
                     Market Size Estimate (TAM, SAM, SOM)
                   </label>
                   <Input
                     placeholder="e.g., TAM: $10B, SAM: $1B, SOM: $100M"
-                    className="bg-gray-900/50 border-gray-700 text-white"
+                    className="bg-gray-900/50 border-border text-white"
                     value={formData[currentStep]?.market_size || ""}
                     onChange={e =>
                       handleInputChange("market_size", e.target.value)
@@ -487,12 +487,12 @@ export default function ProjectGenesisWizard() {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                  <label className="block text-sm font-medium text-foreground/80 mb-2">
                     Key Market Trends
                   </label>
                   <Textarea
                     placeholder="List key trends affecting your market..."
-                    className="bg-gray-900/50 border-gray-700 text-white"
+                    className="bg-gray-900/50 border-border text-white"
                     rows={4}
                     value={formData[currentStep]?.trends || ""}
                     onChange={e => handleInputChange("trends", e.target.value)}
@@ -505,27 +505,27 @@ export default function ProjectGenesisWizard() {
             {currentStep !== 1 && (
               <>
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                  <label className="block text-sm font-medium text-foreground/80 mb-2">
                     Notes & Findings
                   </label>
                   <Textarea
                     placeholder={`Enter your notes for ${step?.stepName}...`}
-                    className="bg-gray-900/50 border-gray-700 text-white"
+                    className="bg-gray-900/50 border-border text-white"
                     rows={6}
                     value={formData[currentStep]?.notes || ""}
                     onChange={e => handleInputChange("notes", e.target.value)}
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                  <label className="block text-sm font-medium text-foreground/80 mb-2">
                     Upload Supporting Documents
                   </label>
-                  <div className="border-2 border-dashed border-gray-700 rounded-lg p-8 text-center hover:border-cyan-500/50 transition-all cursor-pointer">
-                    <Upload className="w-8 h-8 text-gray-500 mx-auto mb-2" />
-                    <p className="text-sm text-gray-400">
+                  <div className="border-2 border-dashed border-border rounded-lg p-8 text-center hover:border-cyan-500/50 transition-all cursor-pointer">
+                    <Upload className="w-8 h-8 text-muted-foreground/70 mx-auto mb-2" />
+                    <p className="text-sm text-muted-foreground">
                       Click to upload or drag and drop
                     </p>
-                    <p className="text-xs text-gray-500 mt-1">
+                    <p className="text-xs text-muted-foreground/70 mt-1">
                       PDF, DOC, XLS, or images
                     </p>
                   </div>
@@ -536,24 +536,24 @@ export default function ProjectGenesisWizard() {
 
           {/* Deliverables */}
           {step?.deliverables && step.deliverables.length > 0 && (
-            <div className="mt-8 pt-6 border-t border-gray-700">
+            <div className="mt-8 pt-6 border-t border-border">
               <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-                <FileText className="w-5 h-5 text-cyan-400" />
+                <FileText className="w-5 h-5 text-[var(--brain-cyan)]" />
                 Deliverables
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 {step.deliverables.map((deliverable, idx) => (
                   <div
                     key={idx}
-                    className="flex items-center justify-between p-4 bg-gray-900/50 rounded-lg border border-gray-700/50"
+                    className="flex items-center justify-between p-4 bg-gray-900/50 rounded-lg border border-border/50"
                   >
-                    <span className="text-sm text-gray-300">{deliverable}</span>
+                    <span className="text-sm text-foreground/80">{deliverable}</span>
                     <Button
                       size="sm"
                       variant="outline"
                       onClick={() => generateDeliverable(deliverable)}
                       disabled={generateDeliverableMutation.isLoading}
-                      className="border-cyan-500/50 text-cyan-400 hover:bg-cyan-500/20"
+                      className="border-cyan-500/50 text-[var(--brain-cyan)] hover:bg-[var(--brain-cyan)]/20"
                     >
                       {generateDeliverableMutation.isLoading ? (
                         <Loader2 className="w-4 h-4 animate-spin" />
@@ -577,7 +577,7 @@ export default function ProjectGenesisWizard() {
             variant="outline"
             onClick={handlePrevious}
             disabled={currentPhase === 1 && stepIndex === 0}
-            className="border-gray-600 hover:border-cyan-500 hover:text-cyan-400"
+            className="border-border hover:border-[var(--brain-cyan)] hover:text-[var(--brain-cyan)]"
           >
             <ChevronLeft className="w-4 h-4 mr-2" />
             Previous

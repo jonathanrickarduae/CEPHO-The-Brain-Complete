@@ -38,7 +38,7 @@ export default function WorkflowsPage() {
       if (data.success) {
         setWorkflows(data.workflows || []);
       }
-    } catch (error) {
+    } catch {
     } finally {
       setLoading(false);
     }
@@ -49,13 +49,13 @@ export default function WorkflowsPage() {
       case "completed":
         return <CheckCircle className="w-5 h-5 text-green-400" />;
       case "in_progress":
-        return <Play className="w-5 h-5 text-cyan-400" />;
+        return <Play className="w-5 h-5 text-[var(--brain-cyan)]" />;
       case "paused":
         return <Clock className="w-5 h-5 text-yellow-400" />;
       case "failed":
         return <AlertCircle className="w-5 h-5 text-red-400" />;
       default:
-        return <Workflow className="w-5 h-5 text-gray-400" />;
+        return <Workflow className="w-5 h-5 text-muted-foreground" />;
     }
   };
 
@@ -64,13 +64,13 @@ export default function WorkflowsPage() {
       case "completed":
         return "bg-green-500/10 text-green-400 border-green-500/20";
       case "in_progress":
-        return "bg-cyan-500/10 text-cyan-400 border-cyan-500/20";
+        return "bg-[var(--brain-cyan)]/10 text-[var(--brain-cyan)] border-cyan-500/20";
       case "paused":
         return "bg-yellow-500/10 text-yellow-400 border-yellow-500/20";
       case "failed":
         return "bg-red-500/10 text-red-400 border-red-500/20";
       default:
-        return "bg-gray-500/10 text-gray-400 border-gray-500/20";
+        return "bg-gray-500/10 text-muted-foreground border-gray-500/20";
     }
   };
 
@@ -94,14 +94,14 @@ export default function WorkflowsPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-900">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-500"></div>
+      <div className="flex items-center justify-center min-h-screen bg-background">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[var(--brain-cyan)]"></div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 p-4 sm:p-6 lg:p-8">
+    <div className="min-h-screen bg-background p-4 sm:p-6 lg:p-8">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
@@ -109,7 +109,7 @@ export default function WorkflowsPage() {
             <h1 className="text-2xl sm:text-3xl font-bold text-white mb-2">
               Workflows
             </h1>
-            <p className="text-sm sm:text-base text-gray-400">
+            <p className="text-sm sm:text-base text-muted-foreground">
               Manage your process workflows and track progress
             </p>
           </div>
@@ -139,7 +139,7 @@ export default function WorkflowsPage() {
               className={`px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all ${
                 filter === status
                   ? "bg-cyan-500 text-white shadow-lg shadow-cyan-500/25"
-                  : "bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white border border-gray-700"
+                  : "bg-card text-muted-foreground hover:bg-muted hover:text-white border border-border"
               }`}
             >
               {status === "all"
@@ -153,12 +153,12 @@ export default function WorkflowsPage() {
 
         {/* Workflows Grid */}
         {filteredWorkflows.length === 0 ? (
-          <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl p-8 sm:p-12 text-center">
+          <div className="bg-card/50 backdrop-blur-sm border border-border rounded-xl p-8 sm:p-12 text-center">
             <Workflow className="w-12 h-12 sm:w-16 sm:h-16 text-gray-600 mx-auto mb-4" />
             <h3 className="text-lg sm:text-xl font-semibold text-white mb-2">
               No workflows found
             </h3>
-            <p className="text-sm sm:text-base text-gray-400 mb-6">
+            <p className="text-sm sm:text-base text-muted-foreground mb-6">
               {filter === "all"
                 ? "Get started by creating your first workflow"
                 : `No workflows with status "${filter.replace("_", " ")}"`}
@@ -179,22 +179,22 @@ export default function WorkflowsPage() {
               <button
                 key={workflow.id}
                 onClick={() => setLocation(`/workflows/${workflow.id}`)}
-                className="group bg-gray-800/50 backdrop-blur-sm border border-gray-700 hover:border-cyan-500/50 rounded-xl p-4 sm:p-6 text-left transition-all hover:shadow-lg hover:shadow-cyan-500/10 hover:translate-y-[-2px]"
+                className="group bg-card/50 backdrop-blur-sm border border-border hover:border-cyan-500/50 rounded-xl p-4 sm:p-6 text-left transition-all hover:shadow-lg hover:shadow-cyan-500/10 hover:translate-y-[-2px]"
               >
                 {/* Header */}
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-center gap-3">
                     {getStatusIcon(workflow.status)}
                     <div>
-                      <h3 className="text-base sm:text-lg font-semibold text-white group-hover:text-cyan-400 transition-colors line-clamp-1">
+                      <h3 className="text-base sm:text-lg font-semibold text-white group-hover:text-[var(--brain-cyan)] transition-colors line-clamp-1">
                         {workflow.name}
                       </h3>
-                      <p className="text-xs sm:text-sm text-gray-400 mt-1">
+                      <p className="text-xs sm:text-sm text-muted-foreground mt-1">
                         {getSkillTypeLabel(workflow.skillType)}
                       </p>
                     </div>
                   </div>
-                  <ArrowRight className="w-5 h-5 text-gray-600 group-hover:text-cyan-400 transition-all group-hover:translate-x-1" />
+                  <ArrowRight className="w-5 h-5 text-gray-600 group-hover:text-[var(--brain-cyan)] transition-all group-hover:translate-x-1" />
                 </div>
 
                 {/* Status Badge */}
@@ -208,11 +208,11 @@ export default function WorkflowsPage() {
 
                 {/* Progress */}
                 <div className="space-y-2">
-                  <div className="flex justify-between text-xs sm:text-sm text-gray-400">
+                  <div className="flex justify-between text-xs sm:text-sm text-muted-foreground">
                     <span>Phase {workflow.currentPhase}</span>
                     <span>Step {workflow.currentStep}</span>
                   </div>
-                  <div className="w-full bg-gray-700 rounded-full h-2">
+                  <div className="w-full bg-muted rounded-full h-2">
                     <div
                       className="bg-gradient-to-r from-cyan-500 to-blue-500 h-2 rounded-full transition-all"
                       style={{ width: `${(workflow.currentStep / 10) * 100}%` }}
@@ -221,7 +221,7 @@ export default function WorkflowsPage() {
                 </div>
 
                 {/* Footer */}
-                <div className="mt-4 pt-4 border-t border-gray-700 flex justify-between text-xs text-gray-500">
+                <div className="mt-4 pt-4 border-t border-border flex justify-between text-xs text-muted-foreground/70">
                   <span>
                     Created {new Date(workflow.createdAt).toLocaleDateString()}
                   </span>

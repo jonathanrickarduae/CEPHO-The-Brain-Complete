@@ -2,7 +2,6 @@ import { useState } from "react";
 import {
   Shield,
   ShieldCheck,
-  ShieldAlert,
   ShieldQuestion,
   AlertTriangle,
   CheckCircle,
@@ -14,11 +13,8 @@ import {
   User,
   ChevronDown,
   ChevronUp,
-  Sparkles,
   Scale,
   Eye,
-  ThumbsUp,
-  ThumbsDown,
   RefreshCw,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -27,17 +23,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { Progress } from "@/components/ui/progress";
 import {
-  type Insight,
   type ConfidenceLevel,
-  type VerificationStatus,
   CONFIDENCE_INDICATORS,
-  TRUTH_VERIFICATION_PROMPT,
   EXPERT_VALIDATION_PROMPT,
   QA_CHALLENGE_PROMPTS,
 } from "@/lib/insightValidation";
 import {
   ConfidenceBadge,
-  VerificationBadge,
 } from "@/components/analytics/InsightValidation";
 
 // ============================================================================
@@ -70,16 +62,16 @@ export interface ClassifiedStatement {
 const CLASSIFICATION_CONFIG = {
   fact: {
     label: "Fact",
-    color: "text-blue-500",
-    bgColor: "bg-blue-500/10",
+    color: "text-primary",
+    bgColor: "bg-primary/10",
     borderColor: "border-blue-500/30",
     icon: CheckCircle,
     description: "Objectively verifiable, backed by data/documents",
   },
   analysis: {
     label: "Analysis",
-    color: "text-cyan-500",
-    bgColor: "bg-cyan-500/10",
+    color: "text-[var(--brain-cyan)]",
+    bgColor: "bg-[var(--brain-cyan)]/10",
     borderColor: "border-cyan-500/30",
     icon: Brain,
     description: "Logical conclusion from facts, requires reasoning chain",
@@ -604,7 +596,7 @@ export function BatchVerificationPanel({
         {/* List View */}
         {viewMode === "list" && (
           <div className="space-y-3 max-h-96 overflow-y-auto">
-            {statements.map((statement, idx) => (
+            {statements.map((statement) => (
               <StatementVerificationCard
                 key={statement.id}
                 statement={statement}

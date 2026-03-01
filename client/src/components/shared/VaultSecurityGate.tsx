@@ -3,13 +3,9 @@ import {
   Shield,
   Lock,
   Mail,
-  Smartphone,
-  Eye,
-  EyeOff,
   CheckCircle,
   AlertCircle,
   Loader2,
-  User,
   KeyRound,
   Clock,
   RefreshCw,
@@ -17,7 +13,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import NeonBrain from "@/components/ai-agents/NeonBrain";
+import _NeonBrain from "@/components/ai-agents/NeonBrain";
 
 interface VaultSecurityGateProps {
   isOpen: boolean;
@@ -151,7 +147,7 @@ export function VaultSecurityGate({
       {/* Backdrop */}
       <div className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md">
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-[150px] animate-pulse"></div>
+          <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-[var(--brain-cyan)]/10 rounded-full blur-[150px] animate-pulse"></div>
           <div
             className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-primary/10 rounded-full blur-[120px] animate-pulse"
             style={{ animationDelay: "1s" }}
@@ -180,7 +176,7 @@ export function VaultSecurityGate({
               <div className="flex items-center justify-center mb-6">
                 <div className="relative">
                   <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-primary/20 border border-cyan-500/30 flex items-center justify-center">
-                    <Shield className="w-10 h-10 text-cyan-400" />
+                    <Shield className="w-10 h-10 text-[var(--brain-cyan)]" />
                   </div>
                   <div className="absolute -bottom-1 -right-1 w-8 h-8 rounded-full bg-card border border-white/10 flex items-center justify-center">
                     <Lock className="w-4 h-4 text-primary" />
@@ -206,14 +202,14 @@ export function VaultSecurityGate({
                 <div className="space-y-4">
                   <div className="p-4 bg-secondary/30 rounded-xl border border-white/5">
                     <div className="flex items-center gap-3 mb-3">
-                      <Mail className="w-5 h-5 text-cyan-400" />
+                      <Mail className="w-5 h-5 text-[var(--brain-cyan)]" />
                       <span className="text-sm text-muted-foreground">
                         Email Verification
                       </span>
                     </div>
                     <p className="text-sm text-foreground">
                       We'll send a verification code to{" "}
-                      <span className="font-mono text-cyan-400">
+                      <span className="font-mono text-[var(--brain-cyan)]">
                         {maskedEmail}
                       </span>
                     </p>
@@ -286,7 +282,7 @@ export function VaultSecurityGate({
 
                   {/* Verifying indicator */}
                   {step === "verifying" && (
-                    <div className="flex items-center justify-center gap-2 text-cyan-400">
+                    <div className="flex items-center justify-center gap-2 text-[var(--brain-cyan)]">
                       <Loader2 className="w-5 h-5 animate-spin" />
                       <span>Verifying...</span>
                     </div>
@@ -299,7 +295,7 @@ export function VaultSecurityGate({
                         type="checkbox"
                         checked={trustDevice}
                         onChange={e => setTrustDevice(e.target.checked)}
-                        className="w-4 h-4 rounded border-white/20 bg-secondary text-cyan-500 focus:ring-cyan-500/50"
+                        className="w-4 h-4 rounded border-white/20 bg-secondary text-[var(--brain-cyan)] focus:ring-cyan-500/50"
                       />
                       <span className="text-sm text-muted-foreground">
                         Trust this device for 24 hours
@@ -318,7 +314,7 @@ export function VaultSecurityGate({
                       ) : (
                         <button
                           onClick={handleResendCode}
-                          className="text-sm text-cyan-400 hover:text-cyan-300 flex items-center justify-center gap-1 mx-auto"
+                          className="text-sm text-[var(--brain-cyan)] hover:text-cyan-300 flex items-center justify-center gap-1 mx-auto"
                         >
                           <RefreshCw className="w-4 h-4" />
                           Resend code
@@ -426,9 +422,9 @@ export function useVaultSecurity() {
 export function SecurityBadges({ className }: { className?: string }) {
   return (
     <div className={cn("flex items-center gap-3", className)}>
-      <div className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20">
-        <Shield className="w-3 h-3 text-cyan-400" />
-        <span className="text-xs text-cyan-400 font-medium">Encrypted</span>
+      <div className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-[var(--brain-cyan)]/10 border border-cyan-500/20">
+        <Shield className="w-3 h-3 text-[var(--brain-cyan)]" />
+        <span className="text-xs text-[var(--brain-cyan)] font-medium">Encrypted</span>
       </div>
       <div className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-green-500/10 border border-green-500/20">
         <CheckCircle className="w-3 h-3 text-green-400" />

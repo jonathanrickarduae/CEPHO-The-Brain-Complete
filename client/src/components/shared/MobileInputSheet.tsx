@@ -3,10 +3,8 @@ import { motion, AnimatePresence, useDragControls } from "framer-motion";
 import {
   Mic,
   Send,
-  X,
   ChevronUp,
   Sparkles,
-  Camera,
   FileText,
   Calendar,
 } from "lucide-react";
@@ -69,7 +67,7 @@ export function MobileInputSheet({
       icon: FileText,
       label: "Task",
       type: "task" as const,
-      color: "text-cyan-400",
+      color: "text-[var(--brain-cyan)]",
     },
     {
       icon: Sparkles,

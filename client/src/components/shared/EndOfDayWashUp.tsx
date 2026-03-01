@@ -51,8 +51,8 @@ export function EndOfDayWashUp({ isOpen, onComplete }: EndOfDayWashUpProps) {
       carryForward: false,
     },
   ]);
-  const [tomorrowPriorities, setTomorrowPriorities] = useState<string[]>([]);
-  const [voiceInput, setVoiceInput] = useState("");
+  const [tomorrowPriorities, _setTomorrowPriorities] = useState<string[]>([]);
+  const [_setVoiceInput] = useState("");
   const [rating, setRating] = useState<number | null>(null);
   const [isRecording, setIsRecording] = useState(false);
 
@@ -123,7 +123,7 @@ export function EndOfDayWashUp({ isOpen, onComplete }: EndOfDayWashUpProps) {
                         : "bg-white/5 border border-white/10"
                     )}
                   >
-                    <span className="text-white text-sm">{task.title}</span>
+                    <span className="text-foreground/80 text-sm">{task.title}</span>
                     {task.carryForward ? (
                       <span className="text-xs text-purple-400 flex items-center gap-1">
                         Tomorrow <ArrowRight className="w-3 h-3" />
@@ -150,7 +150,7 @@ export function EndOfDayWashUp({ isOpen, onComplete }: EndOfDayWashUpProps) {
         {step === "tomorrow" && (
           <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
             <div className="text-center mb-6">
-              <Sparkles className="w-10 h-10 text-cyan-400 mx-auto mb-3" />
+              <Sparkles className="w-10 h-10 text-[var(--brain-cyan)] mx-auto mb-3" />
               <h2 className="text-2xl font-bold text-white mb-1">Tomorrow</h2>
               <p className="text-foreground/70 text-sm">
                 What should I prepare?

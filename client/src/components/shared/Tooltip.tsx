@@ -110,7 +110,7 @@ export function Tooltip({
       {isVisible &&
         createPortal(
           <div
-            className={`fixed z-[9999] px-3 py-2 text-sm text-white bg-gray-800 rounded-lg shadow-lg max-w-xs animate-in fade-in duration-200 ${positionClasses[position]}`}
+            className={`fixed z-[9999] px-3 py-2 text-sm text-white bg-card rounded-lg shadow-lg max-w-xs animate-in fade-in duration-200 ${positionClasses[position]}`}
             style={{ top: coords.top, left: coords.left }}
           >
             {content}

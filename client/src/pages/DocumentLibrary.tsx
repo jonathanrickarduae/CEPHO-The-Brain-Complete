@@ -124,7 +124,7 @@ export default function DocumentLibrary() {
     },
     {
       retry: false,
-      onError: err => {
+      onError: _err => {
         toast.error("Failed to load documents");
       },
     }
@@ -276,7 +276,7 @@ export default function DocumentLibrary() {
       case "innovation_brief":
         return <Lightbulb className="h-4 w-4 text-amber-500" />;
       case "project_genesis":
-        return <Rocket className="h-4 w-4 text-blue-500" />;
+        return <Rocket className="h-4 w-4 text-primary" />;
       case "report":
         return <FileSpreadsheet className="h-4 w-4 text-green-500" />;
       default:
@@ -477,7 +477,7 @@ export default function DocumentLibrary() {
       <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
-            <FileText className="h-8 w-8 text-blue-400" />
+            <FileText className="h-8 w-8 text-primary" />
             Document Library
           </h1>
           <p className="text-muted-foreground mt-1">
@@ -927,7 +927,7 @@ export default function DocumentLibrary() {
         <DialogContent className="max-w-lg">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <Mail className="h-5 w-5 text-cyan-500" />
+              <Mail className="h-5 w-5 text-[var(--brain-cyan)]" />
               Send Document via Email
             </DialogTitle>
             <DialogDescription>

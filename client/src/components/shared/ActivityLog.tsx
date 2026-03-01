@@ -4,7 +4,6 @@ import {
   Brain,
   CheckCircle2,
   Clock,
-  MessageSquare,
   Undo2,
   Filter,
   ChevronDown,
@@ -37,8 +36,8 @@ const TYPE_CONFIG = {
   twin_action: {
     icon: Bot,
     label: "Chief of Staff",
-    color: "text-cyan-400",
-    bgColor: "bg-cyan-500/20",
+    color: "text-[var(--brain-cyan)]",
+    bgColor: "bg-[var(--brain-cyan)]/20",
   },
   user_action: {
     icon: User,

@@ -3,12 +3,9 @@ import {
   TrendingUp,
   TrendingDown,
   Brain,
-  Clock,
   Target,
   Zap,
-  Calendar,
   BarChart3,
-  PieChart,
   Activity,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -115,8 +112,8 @@ export function PersonalAnalytics({
         </div>
         <div className="h-8 w-px bg-border" />
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-full bg-cyan-500/20 flex items-center justify-center">
-            <Brain className="w-4 h-4 text-cyan-400" />
+          <div className="w-8 h-8 rounded-full bg-[var(--brain-cyan)]/20 flex items-center justify-center">
+            <Brain className="w-4 h-4 text-[var(--brain-cyan)]" />
           </div>
           <div>
             <p className="text-lg font-bold text-foreground">
@@ -143,7 +140,7 @@ export function PersonalAnalytics({
           icon={Brain}
           label="Twin Training"
           value={`${data.twinTrainingHours}h`}
-          color="text-cyan-400"
+          color="text-[var(--brain-cyan)]"
         />
         <StatCard
           icon={Target}
@@ -209,7 +206,7 @@ export function PersonalAnalytics({
             label="Twin Training"
             value={`${data.twinTrainingHours}h`}
             subValue="Total hours"
-            color="text-cyan-400"
+            color="text-[var(--brain-cyan)]"
           />
           <StatCard
             icon={Target}

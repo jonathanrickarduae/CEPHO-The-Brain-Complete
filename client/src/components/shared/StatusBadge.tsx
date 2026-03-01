@@ -80,26 +80,26 @@ const statusConfig: Record<
   in_progress: {
     label: "In Progress",
     icon: Loader2,
-    colors: "bg-cyan-500/10 text-cyan-400 border-cyan-500/30",
-    iconColors: "text-cyan-400",
+    colors: "bg-[var(--brain-cyan)]/10 text-[var(--brain-cyan)] border-cyan-500/30",
+    iconColors: "text-[var(--brain-cyan)]",
   },
   active: {
     label: "Active",
     icon: Play,
-    colors: "bg-cyan-500/10 text-cyan-400 border-cyan-500/30",
-    iconColors: "text-cyan-400",
+    colors: "bg-[var(--brain-cyan)]/10 text-[var(--brain-cyan)] border-cyan-500/30",
+    iconColors: "text-[var(--brain-cyan)]",
   },
   running: {
     label: "Running",
     icon: Loader2,
-    colors: "bg-cyan-500/10 text-cyan-400 border-cyan-500/30",
-    iconColors: "text-cyan-400",
+    colors: "bg-[var(--brain-cyan)]/10 text-[var(--brain-cyan)] border-cyan-500/30",
+    iconColors: "text-[var(--brain-cyan)]",
   },
   processing: {
     label: "Processing",
     icon: Loader2,
-    colors: "bg-cyan-500/10 text-cyan-400 border-cyan-500/30",
-    iconColors: "text-cyan-400",
+    colors: "bg-[var(--brain-cyan)]/10 text-[var(--brain-cyan)] border-cyan-500/30",
+    iconColors: "text-[var(--brain-cyan)]",
   },
 
   // Pending states
@@ -337,7 +337,7 @@ const priorityConfig: Record<PriorityType, { label: string; colors: string }> =
     },
     medium: {
       label: "Medium",
-      colors: "bg-cyan-500/10 text-cyan-400 border-cyan-500/30",
+      colors: "bg-[var(--brain-cyan)]/10 text-[var(--brain-cyan)] border-cyan-500/30",
     },
     low: {
       label: "Low",

@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo} from "react";
 import { useLocation } from "wouter";
 import { useFavorites } from "@/components/project-management/MyBoard";
 import { DirectExpertChat } from "@/components/expert-evolution/DirectExpertChat";
@@ -10,13 +10,10 @@ import {
   Users,
   Star,
   MessageSquare,
-  Video,
-  Filter,
   ChevronRight,
   Brain,
   Sparkles,
   TrendingUp,
-  Award,
   BookOpen,
   Building2,
   Target,
@@ -26,14 +23,12 @@ import {
 import { trpc } from "@/lib/trpc";
 import {
   AI_EXPERTS,
-  categories,
   searchExperts,
   TOTAL_EXPERTS,
   corporatePartners,
   type AIExpert,
   type CorporatePartner,
 } from "@/data/ai-experts.data";
-import { getAvatarUrl } from "@/data/avatar-mappings.data";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -46,7 +41,6 @@ interface ExpertDirectoryProps {
 }
 
 export function ExpertDirectory({
-  onSelectExpert,
   onBack,
 }: ExpertDirectoryProps) {
   const [, setLocation] = useLocation();
@@ -112,7 +106,7 @@ export function ExpertDirectory({
     setChatPartnerId(partner.id);
   };
 
-  const handleVideoMeeting = (expert: AIExpert) => {
+  const _handleVideoMeeting = (expert: AIExpert) => {
     setLocation(
       `/video-studio?expert=${expert.id}&name=${encodeURIComponent(expert.name)}`
     );
@@ -165,11 +159,11 @@ export function ExpertDirectory({
                 <h1 className="text-3xl font-bold text-white mb-1">
                   {selectedPartner.name}
                 </h1>
-                <p className="text-lg text-blue-400 mb-2">
+                <p className="text-lg text-primary mb-2">
                   {selectedPartner.industry}
                 </p>
                 <div className="flex items-center gap-3">
-                  <Badge className="bg-blue-500/20 text-blue-400 border-0">
+                  <Badge className="bg-primary/20 text-primary border-0">
                     Corporate Partner
                   </Badge>
                   <Badge className="bg-yellow-500/20 text-yellow-400 border-0">
@@ -195,7 +189,7 @@ export function ExpertDirectory({
             <Card className="mb-6 bg-card/60 border-border">
               <CardContent className="p-6">
                 <h2 className="text-lg font-semibold text-foreground mb-3 flex items-center gap-2">
-                  <BookOpen className="w-5 h-5 text-blue-400" />
+                  <BookOpen className="w-5 h-5 text-primary" />
                   Methodology
                 </h2>
                 <p className="text-muted-foreground leading-relaxed">
@@ -209,7 +203,7 @@ export function ExpertDirectory({
               <Card className="mb-6 bg-card/60 border-border">
                 <CardContent className="p-6">
                   <h2 className="text-lg font-semibold text-foreground mb-3 flex items-center gap-2">
-                    <Brain className="w-5 h-5 text-cyan-400" />
+                    <Brain className="w-5 h-5 text-[var(--brain-cyan)]" />
                     Thinking Framework
                   </h2>
                   <p className="text-muted-foreground leading-relaxed">
@@ -239,7 +233,7 @@ export function ExpertDirectory({
                   {selectedPartner.signatureTools?.map((tool, idx) => (
                     <Badge
                       key={`tool-${idx}`}
-                      className="bg-blue-500/10 text-blue-400 border-0 text-sm py-1 px-3"
+                      className="bg-primary/10 text-primary border-0 text-sm py-1 px-3"
                     >
                       {tool}
                     </Badge>
@@ -387,7 +381,7 @@ export function ExpertDirectory({
               variant={showPartnersOnly ? "default" : "outline"}
               size="sm"
               onClick={() => setShowPartnersOnly(true)}
-              className={`whitespace-nowrap ${showPartnersOnly ? "bg-blue-500 hover:bg-blue-600" : ""}`}
+              className={`whitespace-nowrap ${showPartnersOnly ? "bg-blue-500 hover:bg-primary/90" : ""}`}
             >
               <Building2 className="w-4 h-4 mr-1" />
               Corporate Partners ({corporatePartners.length})
@@ -441,10 +435,10 @@ export function ExpertDirectory({
                         {partner.logo}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h3 className="font-bold text-foreground group-hover:text-blue-400 transition-colors">
+                        <h3 className="font-bold text-foreground group-hover:text-primary transition-colors">
                           {partner.name}
                         </h3>
-                        <p className="text-sm text-blue-400/80">
+                        <p className="text-sm text-primary/80">
                           {partner.industry}
                         </p>
                       </div>
@@ -480,7 +474,7 @@ export function ExpertDirectory({
                       <Button
                         size="sm"
                         variant="ghost"
-                        className="text-blue-400 hover:text-blue-300 hover:bg-blue-500/10"
+                        className="text-primary hover:text-blue-300 hover:bg-primary/10"
                         onClick={e => {
                           e.stopPropagation();
                           handleChatWithPartner(partner);
@@ -602,14 +596,14 @@ export function ExpertDirectory({
                 <div className="mb-6">
                   <div className="flex items-center justify-between mb-3">
                     <h2 className="text-lg font-semibold text-foreground flex items-center gap-2">
-                      <Building2 className="w-5 h-5 text-blue-400" />
+                      <Building2 className="w-5 h-5 text-primary" />
                       Corporate Partners
                     </h2>
                     <Button
                       variant="ghost"
                       size="sm"
                       onClick={() => setShowPartnersOnly(true)}
-                      className="text-blue-400 hover:text-blue-300"
+                      className="text-primary hover:text-blue-300"
                     >
                       View All
                       <ChevronRight className="w-4 h-4 ml-1" />
@@ -626,7 +620,7 @@ export function ExpertDirectory({
                           <div className="w-12 h-12 mx-auto rounded-xl bg-gradient-to-br from-blue-500/20 to-cyan-500/20 border border-blue-500/30 flex items-center justify-center text-2xl mb-2">
                             {partner.logo}
                           </div>
-                          <h3 className="font-semibold text-sm text-foreground group-hover:text-blue-400 transition-colors truncate">
+                          <h3 className="font-semibold text-sm text-foreground group-hover:text-primary transition-colors truncate">
                             {partner.name}
                           </h3>
                           <p className="text-xs text-muted-foreground truncate">
@@ -635,7 +629,7 @@ export function ExpertDirectory({
                           <Button
                             size="sm"
                             variant="ghost"
-                            className="mt-2 w-full text-xs text-blue-400 hover:text-blue-300 hover:bg-blue-500/10"
+                            className="mt-2 w-full text-xs text-primary hover:text-blue-300 hover:bg-primary/10"
                             onClick={e => {
                               e.stopPropagation();
                               handleChatWithPartner(partner);

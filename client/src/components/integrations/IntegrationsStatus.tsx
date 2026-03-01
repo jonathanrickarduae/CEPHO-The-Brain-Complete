@@ -298,7 +298,7 @@ export function IntegrationsStatus() {
         );
       case "disconnected":
         return (
-          <span className="flex items-center gap-1 px-2 py-1 bg-gray-500/10 text-gray-400 rounded-full text-xs">
+          <span className="flex items-center gap-1 px-2 py-1 bg-gray-500/10 text-muted-foreground rounded-full text-xs">
             <X className="w-3 h-3" />
             Disconnected
           </span>
@@ -325,7 +325,7 @@ export function IntegrationsStatus() {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold text-white">Integrations</h2>
-          <p className="text-sm text-gray-400 mt-1">
+          <p className="text-sm text-muted-foreground mt-1">
             {INTEGRATION_SERVICES.filter(s => s.status === "connected").length}{" "}
             of {INTEGRATION_SERVICES.length} services connected
           </p>
@@ -343,7 +343,7 @@ export function IntegrationsStatus() {
           className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap ${
             selectedCategory === "all"
               ? "bg-cyan-500 text-white"
-              : "bg-gray-800 text-gray-400 hover:bg-gray-700"
+              : "bg-card text-muted-foreground hover:bg-muted"
           }`}
         >
           All ({INTEGRATION_SERVICES.length})
@@ -355,7 +355,7 @@ export function IntegrationsStatus() {
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap ${
               selectedCategory === cat
                 ? "bg-cyan-500 text-white"
-                : "bg-gray-800 text-gray-400 hover:bg-gray-700"
+                : "bg-card text-muted-foreground hover:bg-muted"
             }`}
           >
             {categoryLabels[cat]} (
@@ -369,7 +369,7 @@ export function IntegrationsStatus() {
         {filteredServices.map(service => (
           <div
             key={service.id}
-            className="bg-gray-800 border border-gray-700 rounded-xl p-4 hover:border-cyan-500/50 transition-all"
+            className="bg-card border border-border rounded-xl p-4 hover:border-cyan-500/50 transition-all"
           >
             <div className="flex items-start justify-between mb-3">
               <div className="flex items-center gap-3">
@@ -379,8 +379,8 @@ export function IntegrationsStatus() {
                   {service.icon}
                 </div>
                 <div>
-                  <h3 className="font-semibold text-white">{service.name}</h3>
-                  <p className="text-xs text-gray-400">
+                  <h3 className="font-semibold text-foreground">{service.name}</h3>
+                  <p className="text-xs text-muted-foreground">
                     {categoryLabels[service.category]}
                   </p>
                 </div>
@@ -389,13 +389,13 @@ export function IntegrationsStatus() {
             </div>
 
             {service.email && (
-              <div className="text-xs text-gray-400 mb-2">
+              <div className="text-xs text-muted-foreground mb-2">
                 <Mail className="w-3 h-3 inline mr-1" />
                 {service.email}
               </div>
             )}
 
-            <div className="flex items-center gap-2 text-xs text-gray-500 mb-3">
+            <div className="flex items-center gap-2 text-xs text-muted-foreground/70 mb-3">
               {service.hasPassword && (
                 <span className="flex items-center gap-1">
                   <Key className="w-3 h-3" />
@@ -411,11 +411,11 @@ export function IntegrationsStatus() {
             </div>
 
             <div className="flex gap-2">
-              <button className="flex-1 px-3 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg text-sm transition-colors flex items-center justify-center gap-2">
+              <button className="flex-1 px-3 py-2 bg-muted hover:bg-gray-600 text-white rounded-lg text-sm transition-colors flex items-center justify-center gap-2">
                 <Settings className="w-4 h-4" />
                 Configure
               </button>
-              <button className="px-3 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg text-sm transition-colors">
+              <button className="px-3 py-2 bg-muted hover:bg-gray-600 text-white rounded-lg text-sm transition-colors">
                 <ExternalLink className="w-4 h-4" />
               </button>
             </div>
@@ -432,13 +432,13 @@ export function IntegrationsStatus() {
           <div className="text-sm text-green-400/70">Connected</div>
         </div>
         <div className="bg-gray-500/10 border border-gray-500/20 rounded-xl p-4">
-          <div className="text-2xl font-bold text-gray-400">
+          <div className="text-2xl font-bold text-muted-foreground">
             {
               INTEGRATION_SERVICES.filter(s => s.status === "disconnected")
                 .length
             }
           </div>
-          <div className="text-sm text-gray-400/70">Disconnected</div>
+          <div className="text-sm text-muted-foreground/70">Disconnected</div>
         </div>
         <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-xl p-4">
           <div className="text-2xl font-bold text-yellow-400">

@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { X, Send, Clock, CheckCircle2, AlertCircle } from "lucide-react";
+import { X, Send} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";

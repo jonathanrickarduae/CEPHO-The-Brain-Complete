@@ -1,20 +1,12 @@
 import { useState, useEffect } from "react";
 import {
   Lightbulb,
-  Calendar,
   Clock,
   TrendingUp,
   AlertCircle,
   ChevronRight,
   X,
-  Bell,
-  Zap,
   Target,
-  BarChart3,
-  FolderKanban,
-  Users,
-  FileText,
-  Settings,
   ArrowRight,
 } from "lucide-react";
 
@@ -52,8 +44,8 @@ function NudgeCard({
     },
     reminder: {
       icon: Clock,
-      color: "text-blue-400",
-      bg: "bg-blue-500/10",
+      color: "text-primary",
+      bg: "bg-primary/10",
       border: "border-blue-500/20",
     },
     suggestion: {
@@ -97,7 +89,7 @@ function NudgeCard({
             {nudge.dismissable && (
               <button
                 onClick={onDismiss}
-                className="p-1 hover:bg-gray-700 rounded transition-colors flex-shrink-0"
+                className="p-1 hover:bg-muted rounded transition-colors flex-shrink-0"
               >
                 <X className="w-3 h-3 text-muted-foreground" />
               </button>
@@ -211,7 +203,7 @@ export function InsightsPanel() {
     <div className="bg-card border border-border rounded-xl overflow-hidden">
       <button
         onClick={() => setIsExpanded(!isExpanded)}
-        className="w-full px-4 py-3 flex items-center justify-between hover:bg-gray-800/50 transition-colors"
+        className="w-full px-4 py-3 flex items-center justify-between hover:bg-card/50 transition-colors"
       >
         <div className="flex items-center gap-2">
           <Lightbulb className="w-4 h-4 text-yellow-400" />
@@ -269,8 +261,8 @@ export function InlineNudge({
     },
     reminder: {
       icon: Clock,
-      color: "text-blue-400",
-      bg: "bg-blue-500/5",
+      color: "text-primary",
+      bg: "bg-primary/5",
       border: "border-blue-500/20",
     },
     suggestion: {
@@ -311,7 +303,7 @@ export function InlineNudge({
         </button>
       )}
       {onDismiss && (
-        <button onClick={onDismiss} className="p-1 hover:bg-gray-700 rounded">
+        <button onClick={onDismiss} className="p-1 hover:bg-muted rounded">
           <X className="w-3 h-3 text-muted-foreground" />
         </button>
       )}
@@ -453,7 +445,7 @@ export function NudgePreferences() {
         ].map(item => (
           <div
             key={item.key}
-            className="flex items-center justify-between p-4 bg-gray-800/50 rounded-xl"
+            className="flex items-center justify-between p-4 bg-card/50 rounded-xl"
           >
             <div>
               <h4 className="font-medium text-foreground">{item.label}</h4>
@@ -507,7 +499,7 @@ export function NudgePreferences() {
               className={`flex-1 p-3 rounded-xl border transition-colors ${
                 preferences.frequency === option.value
                   ? "border-primary bg-primary/10"
-                  : "border-border hover:border-gray-600"
+                  : "border-border hover:border-border"
               }`}
             >
               <div className="font-medium text-foreground text-sm">

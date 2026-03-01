@@ -163,7 +163,7 @@ export default function ExpertChatPage() {
         ...prev,
         { role: "expert", content: response.response },
       ]);
-    } catch (error) {
+    } catch {
       setMessages(prev => [
         ...prev,
         {
@@ -357,7 +357,7 @@ ${messages
 
       setShowExportMenu(false);
       toast.success(`Saved to Library: ${result.documentName}`);
-    } catch (error) {
+    } catch {
       toast.error("Could not save to library. Please try again.");
     } finally {
       setIsExporting(false);
@@ -401,8 +401,8 @@ ${messages
                 .slice(0, 2)}
             </div>
             <div>
-              <h1 className="text-white font-semibold">{expert.name}</h1>
-              <p className="text-white/60 text-sm">{expert.specialty}</p>
+              <h1 className="text-foreground font-semibold">{expert.name}</h1>
+              <p className="text-muted-foreground text-sm">{expert.specialty}</p>
             </div>
           </div>
 
@@ -455,7 +455,7 @@ ${messages
                     .slice(0, 2)}
                 </div>
                 <div className="flex-1">
-                  <p className="text-white/90 mb-3">
+                  <p className="text-foreground/90 mb-3">
                     Hello! I'm {expert.name}, your {expert.specialty}. I
                     specialize in {expert.category.toLowerCase()}
                     and bring the combined perspectives of{" "}
@@ -509,7 +509,7 @@ ${messages
                       )}
                     </div>
                   )}
-                  <div className="flex-1 text-white/90">
+                  <div className="flex-1 text-foreground/90">
                     <Streamdown>{msg.content}</Streamdown>
                   </div>
                   {msg.role === "user" && (
@@ -528,7 +528,7 @@ ${messages
                       className={`text-xs h-7 px-2 ${
                         speakingMessageIndex === index
                           ? "text-fuchsia-300 bg-fuchsia-500/20"
-                          : "text-white/50 hover:text-white/80 hover:bg-white/10"
+                          : "text-white/50 hover:text-foreground/80 hover:bg-white/10"
                       }`}
                     >
                       {speakingMessageIndex === index ? (
@@ -557,7 +557,7 @@ ${messages
                   <div className="w-8 h-8 rounded-full bg-gradient-to-br from-fuchsia-500 to-purple-600 flex items-center justify-center">
                     <Loader2 className="w-4 h-4 text-white animate-spin" />
                   </div>
-                  <span className="text-white/60">Thinking...</span>
+                  <span className="text-muted-foreground">Thinking...</span>
                 </div>
               </div>
             </div>
@@ -577,7 +577,7 @@ ${messages
                 variant="ghost"
                 size="icon"
                 onClick={toggleVoiceRecording}
-                className={`relative ${isRecording ? "bg-red-500/20 text-red-400" : "text-white/60 hover:text-white"} hover:bg-white/10`}
+                className={`relative ${isRecording ? "bg-red-500/20 text-red-400" : "text-muted-foreground hover:text-white"} hover:bg-white/10`}
               >
                 {isRecording ? (
                   <>
@@ -598,7 +598,7 @@ ${messages
                   variant="ghost"
                   size="icon"
                   onClick={() => setShowExportMenu(!showExportMenu)}
-                  className="text-white/60 hover:text-white hover:bg-white/10"
+                  className="text-muted-foreground hover:text-white hover:bg-white/10"
                   title="Export conversation"
                 >
                   {isExporting ? (
@@ -613,7 +613,7 @@ ${messages
                   <div className="absolute bottom-full mb-2 right-0 bg-slate-800 border border-white/20 rounded-lg shadow-xl py-1 min-w-[180px] z-50">
                     <button
                       onClick={handleExportDownload}
-                      className="w-full px-4 py-2 text-left text-white/80 hover:bg-white/10 flex items-center gap-2 text-sm"
+                      className="w-full px-4 py-2 text-left text-foreground/80 hover:bg-white/10 flex items-center gap-2 text-sm"
                     >
                       <Download className="w-4 h-4" />
                       Download as Markdown
@@ -621,7 +621,7 @@ ${messages
                     <button
                       onClick={handleExportToLibrary}
                       disabled={isExporting}
-                      className="w-full px-4 py-2 text-left text-white/80 hover:bg-white/10 flex items-center gap-2 text-sm disabled:opacity-50"
+                      className="w-full px-4 py-2 text-left text-foreground/80 hover:bg-white/10 flex items-center gap-2 text-sm disabled:opacity-50"
                     >
                       <BookOpen className="w-4 h-4" />
                       Save to Library
@@ -638,7 +638,7 @@ ${messages
                 onChange={e => setMessage(e.target.value)}
                 onKeyPress={handleKeyPress}
                 placeholder={`Ask ${expert.name.split(" ")[0]} anything...`}
-                className="bg-white/10 border-white/20 text-white placeholder:text-white/40 pr-12 h-12 rounded-xl"
+                className="bg-white/10 border-white/20 text-white placeholder:text-muted-foreground/60 pr-12 h-12 rounded-xl"
                 disabled={isLoading || !sessionId}
               />
             </div>

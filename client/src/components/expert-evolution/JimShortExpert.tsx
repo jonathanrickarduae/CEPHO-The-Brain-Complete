@@ -21,23 +21,14 @@ import {
 } from "@/components/ui/select";
 import {
   Crown,
-  MessageSquare,
-  ThumbsUp,
-  ThumbsDown,
-  AlertTriangle,
-  CheckCircle2,
   Target,
   TrendingUp,
-  Shield,
   Loader2,
   Send,
-  Star,
   Award,
   Zap,
-  Eye,
   Brain,
   Wrench,
-  ListChecks,
   BarChart3,
   Users,
   DollarSign,
@@ -224,7 +215,7 @@ export function JimShortExpert({
   const stageInfo = STAGE_FOCUS[selectedStage];
 
   // Jim's enhanced system prompt - always provides fix suggestions
-  const jimSystemPrompt = `You are Jim Short - the ultimate gatekeeper. The 100 out of 100 on Top Trumps. The gold standard.
+  const _jimSystemPrompt = `You are Jim Short - the ultimate gatekeeper. The 100 out of 100 on Top Trumps. The gold standard.
 
 You've been there. Seen it all. Got the scars to prove it. 30+ years across every business function: strategy, operations, finance, product, go-to-market, team building. You've seen every mistake, every shortcut that backfires, every failure mode.
 
@@ -322,7 +313,7 @@ Project: ${projectName || "Not specified"}`;
       setFeedback(mockFeedback);
       onFeedback?.(mockFeedback);
     },
-    onError: error => {
+    onError: _error => {
       toast.error("Failed to get response from Jim");
       setIsLoading(false);
     },
@@ -424,7 +415,7 @@ Remember: For every issue you identify, provide a specific "How to fix" suggesti
   };
 
   return (
-    <Card className="bg-gradient-to-br from-gray-900 to-gray-900/50 border-amber-500/30 border-2">
+    <Card className="bg-gradient-to-br from-background to-background/50 border-amber-500/30 border-2">
       <CardHeader>
         <div className="flex items-start gap-4">
           {/* Jim's Avatar with Gold Ring */}
@@ -468,7 +459,7 @@ Remember: For every issue you identify, provide a specific "How to fix" suggesti
 
         {/* Top Trumps Stats */}
         {showStats && (
-          <div className="mt-4 p-4 bg-gray-800/50 rounded-lg border border-amber-500/20">
+          <div className="mt-4 p-4 bg-card/50 rounded-lg border border-amber-500/20">
             <h4 className="text-sm font-medium text-amber-400 mb-3 flex items-center gap-2">
               <Award className="w-4 h-4" />
               Top Trumps Stats (All 100/100)
@@ -482,7 +473,7 @@ Remember: For every issue you identify, provide a specific "How to fix" suggesti
                     </span>
                     <span className="text-amber-400 font-bold">{value}</span>
                   </div>
-                  <Progress value={value} className="h-1.5 bg-gray-700" />
+                  <Progress value={value} className="h-1.5 bg-muted" />
                 </div>
               ))}
             </div>
@@ -500,7 +491,7 @@ Remember: For every issue you identify, provide a specific "How to fix" suggesti
             value={selectedStage}
             onValueChange={v => setSelectedStage(v as ReviewStage)}
           >
-            <SelectTrigger className="bg-gray-800 border-amber-500/30">
+            <SelectTrigger className="bg-card border-amber-500/30">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -550,7 +541,7 @@ Remember: For every issue you identify, provide a specific "How to fix" suggesti
             value={question}
             onChange={e => setQuestion(e.target.value)}
             placeholder={`Submit your ${stageInfo.label.toLowerCase()} work for Jim's review. He'll tell you what's wrong AND how to fix it...`}
-            className="bg-gray-800 border-amber-500/30 min-h-[80px] focus:border-amber-500"
+            className="bg-card border-amber-500/30 min-h-[80px] focus:border-amber-500"
           />
           <div className="flex justify-end">
             <Button
@@ -570,7 +561,7 @@ Remember: For every issue you identify, provide a specific "How to fix" suggesti
 
         {/* Response */}
         {response && (
-          <div className="p-4 bg-gray-800/50 rounded-lg border border-amber-500/30">
+          <div className="p-4 bg-card/50 rounded-lg border border-amber-500/30">
             <div className="flex items-start gap-3">
               <Avatar className="w-10 h-10 border-2 border-amber-500">
                 <AvatarFallback className="bg-gradient-to-br from-amber-500 to-amber-700 text-white font-bold">
@@ -627,7 +618,7 @@ Remember: For every issue you identify, provide a specific "How to fix" suggesti
             </div>
 
             {/* Fix Suggestions Indicator */}
-            <div className="p-3 bg-gray-800/50 rounded-lg border border-gray-700">
+            <div className="p-3 bg-card/50 rounded-lg border border-border">
               <div className="flex items-center gap-2 text-amber-400 mb-2">
                 <Wrench className="w-4 h-4" />
                 <span className="text-sm font-medium">

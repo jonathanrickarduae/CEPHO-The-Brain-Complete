@@ -2,13 +2,11 @@ import { useState } from "react";
 import {
   FlaskConical,
   Play,
-  RotateCcw,
   CheckCircle,
   XCircle,
   ThumbsUp,
   ThumbsDown,
   MessageSquare,
-  Settings,
   Sliders,
   BarChart3,
   Clock,
@@ -207,7 +205,7 @@ export function DigitalTwinSandbox() {
 
         {/* Quick Stats */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="bg-gray-800/50 rounded-xl p-4">
+          <div className="bg-card/50 rounded-xl p-4">
             <div className="flex items-center gap-2 text-muted-foreground mb-1">
               <BarChart3 className="w-4 h-4" />
               <span className="text-xs">Tests Run</span>
@@ -216,14 +214,14 @@ export function DigitalTwinSandbox() {
               {testResults.length}
             </p>
           </div>
-          <div className="bg-gray-800/50 rounded-xl p-4">
+          <div className="bg-card/50 rounded-xl p-4">
             <div className="flex items-center gap-2 text-muted-foreground mb-1">
               <CheckCircle className="w-4 h-4 text-green-400" />
               <span className="text-xs">Approval Rate</span>
             </div>
             <p className="text-xl font-bold text-green-400">{approvalRate}%</p>
           </div>
-          <div className="bg-gray-800/50 rounded-xl p-4">
+          <div className="bg-card/50 rounded-xl p-4">
             <div className="flex items-center gap-2 text-muted-foreground mb-1">
               <Zap className="w-4 h-4 text-yellow-400" />
               <span className="text-xs">Avg Confidence</span>
@@ -232,7 +230,7 @@ export function DigitalTwinSandbox() {
               {avgConfidence}%
             </p>
           </div>
-          <div className="bg-gray-800/50 rounded-xl p-4">
+          <div className="bg-card/50 rounded-xl p-4">
             <div className="flex items-center gap-2 text-muted-foreground mb-1">
               <Clock className="w-4 h-4" />
               <span className="text-xs">Last Test</span>
@@ -278,7 +276,7 @@ export function DigitalTwinSandbox() {
                 value={testInput}
                 onChange={e => setTestInput(e.target.value)}
                 placeholder="Enter a test query for your Chief of Staff..."
-                className="w-full h-24 px-4 py-3 bg-gray-900 border border-gray-700 rounded-xl text-foreground placeholder:text-muted-foreground resize-none focus:outline-none focus:border-primary"
+                className="w-full h-24 px-4 py-3 bg-background border border-border rounded-xl text-foreground placeholder:text-muted-foreground resize-none focus:outline-none focus:border-primary"
               />
               <div className="flex items-center justify-between mt-4">
                 <p className="text-xs text-muted-foreground">
@@ -327,7 +325,7 @@ export function DigitalTwinSandbox() {
                   </div>
                 </div>
 
-                <div className="p-4 bg-gray-800/50 rounded-lg mb-4">
+                <div className="p-4 bg-card/50 rounded-lg mb-4">
                   <p className="text-foreground">{currentResponse}</p>
                 </div>
 
@@ -365,7 +363,7 @@ export function DigitalTwinSandbox() {
                   <button
                     key={scenario.id}
                     onClick={() => setTestInput(scenario.prompt)}
-                    className="w-full p-3 bg-gray-800/50 hover:bg-gray-700/50 rounded-lg transition-colors text-left flex items-center justify-between"
+                    className="w-full p-3 bg-card/50 hover:bg-muted/50 rounded-lg transition-colors text-left flex items-center justify-between"
                   >
                     <div>
                       <span className="text-xs text-primary">
@@ -416,7 +414,7 @@ export function DigitalTwinSandbox() {
                       setTestInput(scenario.prompt);
                       setActiveTab("test");
                     }}
-                    className="px-3 py-1.5 bg-gray-700 text-foreground rounded-lg hover:bg-gray-600 transition-colors text-sm flex items-center gap-1"
+                    className="px-3 py-1.5 bg-muted text-foreground rounded-lg hover:bg-gray-600 transition-colors text-sm flex items-center gap-1"
                   >
                     <Play className="w-3 h-3" />
                     Run
@@ -492,7 +490,7 @@ export function DigitalTwinSandbox() {
                     min="0"
                     max="100"
                     defaultValue="25"
-                    className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer"
+                    className="w-full h-2 bg-muted rounded-lg appearance-none cursor-pointer"
                   />
                   <div className="flex justify-between text-xs text-muted-foreground mt-1">
                     <span>Brief</span>
@@ -512,7 +510,7 @@ export function DigitalTwinSandbox() {
                     min="0"
                     max="100"
                     defaultValue="70"
-                    className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer"
+                    className="w-full h-2 bg-muted rounded-lg appearance-none cursor-pointer"
                   />
                   <p className="text-xs text-muted-foreground mt-1">
                     Actions below this threshold require manual approval
@@ -533,7 +531,7 @@ export function DigitalTwinSandbox() {
                     min="0"
                     max="100"
                     defaultValue="40"
-                    className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer"
+                    className="w-full h-2 bg-muted rounded-lg appearance-none cursor-pointer"
                   />
                   <div className="flex justify-between text-xs text-muted-foreground mt-1">
                     <span>Manual</span>

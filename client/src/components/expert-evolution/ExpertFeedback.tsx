@@ -81,7 +81,7 @@ export function ExpertFeedback({
       onFeedbackSubmitted?.(feedbackRating, details);
       setShowFeedbackModal(false);
       setFeedbackText("");
-    } catch (error) {
+    } catch {
       toast.error("Failed to submit feedback");
     } finally {
       setIsSubmitting(false);
@@ -169,7 +169,7 @@ export function ExpertFeedback({
                     className={`px-3 py-1.5 text-xs rounded-full transition-colors ${
                       feedbackText === option
                         ? "bg-primary text-primary-foreground"
-                        : "bg-gray-800 hover:bg-gray-700 text-muted-foreground hover:text-foreground"
+                        : "bg-card hover:bg-muted text-muted-foreground hover:text-foreground"
                     }`}
                   >
                     {option}
@@ -181,7 +181,7 @@ export function ExpertFeedback({
                 value={feedbackText}
                 onChange={e => setFeedbackText(e.target.value)}
                 placeholder="Or type your own feedback..."
-                className="w-full h-20 px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary text-sm resize-none"
+                className="w-full h-20 px-3 py-2 bg-card border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary text-sm resize-none"
               />
 
               <div className="flex justify-end gap-2">
@@ -243,7 +243,7 @@ export function InlineExpertFeedback({
         originalOutput: responseContent.slice(0, 200),
       });
       onFeedbackSubmitted?.(rating);
-    } catch (error) {
+    } catch {
     }
   };
 

@@ -3,10 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import {
   Mic,
   MicOff,
-  Play,
-  Pause,
   Trash2,
-  Tag,
   Calendar,
   CheckSquare,
   Lightbulb,
@@ -14,7 +11,6 @@ import {
   Search,
   Filter,
   ChevronDown,
-  MoreVertical,
   Brain,
   Sparkles,
 } from "lucide-react";
@@ -30,7 +26,7 @@ type NoteCategory =
   | "question"
   | "follow_up";
 
-interface VoiceNote {
+interface _VoiceNote {
   id: number;
   content: string;
   category: NoteCategory;
@@ -52,7 +48,7 @@ const CATEGORIES: Record<
   task: {
     label: "Task",
     icon: <CheckSquare className="w-3.5 h-3.5" />,
-    color: "text-blue-400 bg-blue-500/20",
+    color: "text-primary bg-primary/20",
   },
   idea: {
     label: "Idea",
@@ -116,7 +112,7 @@ function useVoiceRecording() {
       timerRef.current = setInterval(() => {
         setDuration(d => d + 1);
       }, 1000);
-    } catch (err) {
+    } catch {
     }
   };
 

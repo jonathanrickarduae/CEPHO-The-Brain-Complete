@@ -47,7 +47,6 @@ interface WorkflowTrackerProps {
 }
 
 export function WorkflowTracker({
-  projectId,
   phases,
   onCOSReview,
   onUserApprove,
@@ -59,7 +58,7 @@ export function WorkflowTracker({
       case "completed":
         return "text-emerald-400 bg-emerald-500/20 border-emerald-500/50";
       case "in_progress":
-        return "text-blue-400 bg-blue-500/20 border-blue-500/50";
+        return "text-primary bg-primary/20 border-blue-500/50";
       case "awaiting_cos_review":
         return "text-amber-400 bg-amber-500/20 border-amber-500/50";
       case "awaiting_user_approval":

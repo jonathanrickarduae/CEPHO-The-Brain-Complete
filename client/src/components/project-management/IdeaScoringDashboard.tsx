@@ -7,16 +7,11 @@ import {
   ThumbsDown,
   MessageSquare,
   Star,
-  ChevronUp,
-  ChevronDown,
   Filter,
   Check,
-  X,
   Sparkles,
   Brain,
-  Users,
   Clock,
-  AlertTriangle,
   TrendingUp,
   Award,
   Lightbulb,
@@ -182,7 +177,6 @@ const MOCK_IDEAS: Idea[] = [
 ];
 
 export function IdeaScoringDashboard({
-  projectId,
   projectName,
   onComplete,
   onBack,
@@ -280,7 +274,7 @@ export function IdeaScoringDashboard({
       case "medium":
         return "bg-yellow-500/20 text-yellow-400 border-yellow-500/30";
       case "low":
-        return "bg-blue-500/20 text-blue-400 border-blue-500/30";
+        return "bg-primary/20 text-primary border-blue-500/30";
     }
   };
 
@@ -302,7 +296,7 @@ export function IdeaScoringDashboard({
   const pendingIdeas = ideas.filter(i => i.status === "pending");
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-900 to-gray-800 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-gray-800 p-6">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
@@ -343,8 +337,8 @@ export function IdeaScoringDashboard({
           <Card className="bg-white/5 border-white/10">
             <CardContent className="pt-4">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center">
-                  <Lightbulb className="w-5 h-5 text-blue-400" />
+                <div className="w-10 h-10 rounded-lg bg-primary/20 flex items-center justify-center">
+                  <Lightbulb className="w-5 h-5 text-primary" />
                 </div>
                 <div>
                   <p className="text-2xl font-bold text-white">
@@ -490,7 +484,7 @@ export function IdeaScoringDashboard({
                       {/* Content */}
                       <div className="flex-1 min-w-0">
                         <div className="flex items-start justify-between gap-2 mb-2">
-                          <h3 className="font-semibold text-white">
+                          <h3 className="font-semibold text-foreground">
                             {idea.title}
                           </h3>
                           <div className="flex items-center gap-2 flex-shrink-0">
@@ -559,7 +553,7 @@ export function IdeaScoringDashboard({
                               }}
                             />
                           </div>
-                          <span className="text-white font-medium text-sm">
+                          <span className="text-foreground font-medium text-sm">
                             {selectedIdea.estimatedImpact}/10
                           </span>
                         </div>
@@ -577,7 +571,7 @@ export function IdeaScoringDashboard({
                               }}
                             />
                           </div>
-                          <span className="text-white font-medium text-sm">
+                          <span className="text-foreground font-medium text-sm">
                             {selectedIdea.estimatedEffort}/10
                           </span>
                         </div>
@@ -594,12 +588,12 @@ export function IdeaScoringDashboard({
                           {selectedIdea.scores.map((score, i) => (
                             <div key={i} className="bg-white/5 rounded-lg p-3">
                               <div className="flex items-center justify-between mb-1">
-                                <span className="text-sm text-white">
+                                <span className="text-sm text-foreground/80">
                                   {score.expertName}
                                 </span>
                                 <div className="flex items-center gap-1">
                                   <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
-                                  <span className="text-white font-medium">
+                                  <span className="text-foreground font-medium">
                                     {score.score}
                                   </span>
                                 </div>

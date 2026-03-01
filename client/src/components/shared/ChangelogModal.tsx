@@ -7,7 +7,6 @@ import {
   Bug,
   ArrowRight,
   Bell,
-  ExternalLink,
 } from "lucide-react";
 
 interface ChangelogEntry {
@@ -148,9 +147,9 @@ export function ChangelogModal({ isOpen, onClose }: ChangelogModalProps) {
       />
 
       {/* Modal */}
-      <div className="relative w-full max-w-2xl max-h-[80vh] bg-gray-900 border border-gray-700 rounded-2xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
+      <div className="relative w-full max-w-2xl max-h-[80vh] bg-background border border-border rounded-2xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-700 bg-gradient-to-r from-cyan-500/10 to-purple-500/10">
+        <div className="flex items-center justify-between p-6 border-b border-border bg-gradient-to-r from-cyan-500/10 to-purple-500/10">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500 to-purple-600 flex items-center justify-center">
               <Sparkles className="w-5 h-5 text-white" />
@@ -164,14 +163,14 @@ export function ChangelogModal({ isOpen, onClose }: ChangelogModalProps) {
           </div>
           <button
             onClick={onClose}
-            className="p-2 text-muted-foreground hover:text-foreground rounded-lg hover:bg-gray-800 transition-colors"
+            className="p-2 text-muted-foreground hover:text-foreground rounded-lg hover:bg-card transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Version tabs */}
-        <div className="flex gap-2 p-4 border-b border-gray-700 overflow-x-auto">
+        <div className="flex gap-2 p-4 border-b border-border overflow-x-auto">
           {changelog.map(entry => (
             <button
               key={entry.version}
@@ -179,7 +178,7 @@ export function ChangelogModal({ isOpen, onClose }: ChangelogModalProps) {
               className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors ${
                 selectedVersion === entry.version
                   ? "bg-primary text-primary-foreground"
-                  : "bg-gray-800 text-muted-foreground hover:text-foreground"
+                  : "bg-card text-muted-foreground hover:text-foreground"
               }`}
             >
               v{entry.version}
@@ -204,7 +203,7 @@ export function ChangelogModal({ isOpen, onClose }: ChangelogModalProps) {
           {/* Highlights */}
           {currentEntry.highlights && (
             <div className="mb-6 p-4 bg-gradient-to-r from-cyan-500/10 to-purple-500/10 rounded-xl border border-cyan-500/20">
-              <h4 className="text-sm font-semibold text-cyan-400 mb-3 flex items-center gap-2">
+              <h4 className="text-sm font-semibold text-[var(--brain-cyan)] mb-3 flex items-center gap-2">
                 <Sparkles className="w-4 h-4" />
                 Highlights
               </h4>
@@ -214,7 +213,7 @@ export function ChangelogModal({ isOpen, onClose }: ChangelogModalProps) {
                     key={i}
                     className="flex items-start gap-2 text-foreground"
                   >
-                    <ArrowRight className="w-4 h-4 text-cyan-400 mt-0.5 flex-shrink-0" />
+                    <ArrowRight className="w-4 h-4 text-[var(--brain-cyan)] mt-0.5 flex-shrink-0" />
                     {highlight}
                   </li>
                 ))}
@@ -233,7 +232,7 @@ export function ChangelogModal({ isOpen, onClose }: ChangelogModalProps) {
                 {currentEntry.features.map((feature, i) => (
                   <div
                     key={i}
-                    className="flex items-start gap-3 p-3 bg-gray-800 rounded-lg"
+                    className="flex items-start gap-3 p-3 bg-card rounded-lg"
                   >
                     <span className="text-2xl">{feature.icon || "✨"}</span>
                     <div>
@@ -294,7 +293,7 @@ export function ChangelogModal({ isOpen, onClose }: ChangelogModalProps) {
         </div>
 
         {/* Footer */}
-        <div className="flex items-center justify-between p-4 border-t border-gray-700 bg-gray-800/50">
+        <div className="flex items-center justify-between p-4 border-t border-border bg-card/50">
           <button className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
             <Bell className="w-4 h-4" />
             Get notified of updates
@@ -359,7 +358,7 @@ export function WhatsNewButton({ hasUpdates, onClick }: WhatsNewButtonProps) {
   return (
     <button
       onClick={onClick}
-      className="relative flex items-center gap-2 px-3 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-gray-800 rounded-lg transition-colors"
+      className="relative flex items-center gap-2 px-3 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-card rounded-lg transition-colors"
     >
       <Sparkles className="w-4 h-4" />
       <span>What's New</span>

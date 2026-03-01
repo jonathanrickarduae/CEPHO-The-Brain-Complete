@@ -7,8 +7,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Image,
   Linkedin,
@@ -54,8 +52,8 @@ const platformSpecs: PlatformSpecs[] = [
     id: "linkedin",
     name: "LinkedIn",
     icon: Linkedin,
-    color: "text-blue-400",
-    bgColor: "bg-blue-500/20",
+    color: "text-primary",
+    bgColor: "bg-primary/20",
     specs: {
       profile: {
         name: "Profile Photo",
@@ -125,8 +123,8 @@ const platformSpecs: PlatformSpecs[] = [
     id: "facebook",
     name: "Facebook",
     icon: Facebook,
-    color: "text-blue-500",
-    bgColor: "bg-blue-600/20",
+    color: "text-primary",
+    bgColor: "bg-primary/90/20",
     specs: {
       profile: {
         name: "Profile Picture",
@@ -296,7 +294,7 @@ ${platformSpecs
 
 ${Object.entries(platform.specs)
   .map(
-    ([key, spec]) => `
+    ([, spec]) => `
 ### ${spec.name}
 - **Dimensions:** ${spec.width} x ${spec.height} pixels
 - **Aspect Ratio:** ${spec.aspectRatio}
@@ -330,7 +328,7 @@ ${platformSpecs.map(p => `| ${p.name} | ${p.specs.profile.width}x${p.specs.profi
   return (
     <div className="space-y-6">
       {/* Header */}
-      <Card className="bg-gray-900/50 border-gray-800">
+      <Card className="bg-gray-900/50 border-border/50">
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
@@ -384,7 +382,7 @@ ${platformSpecs.map(p => `| ${p.name} | ${p.specs.profile.width}x${p.specs.profi
           {Object.entries(currentPlatform.specs).map(([key, spec]) => {
             const Icon = currentPlatform.icon;
             return (
-              <Card key={key} className="bg-gray-900/50 border-gray-800">
+              <Card key={key} className="bg-gray-900/50 border-border/50">
                 <CardHeader className="pb-3">
                   <div className="flex items-center justify-between">
                     <CardTitle className="text-white text-sm flex items-center gap-2">
@@ -413,7 +411,7 @@ ${platformSpecs.map(p => `| ${p.name} | ${p.specs.profile.width}x${p.specs.profi
                 <CardContent className="space-y-3">
                   {/* Visual Preview */}
                   <div
-                    className="bg-gray-800 rounded-lg flex items-center justify-center overflow-hidden"
+                    className="bg-card rounded-lg flex items-center justify-center overflow-hidden"
                     style={{
                       aspectRatio: spec.aspectRatio.replace(":", "/"),
                       maxHeight: "120px",
@@ -431,21 +429,21 @@ ${platformSpecs.map(p => `| ${p.name} | ${p.specs.profile.width}x${p.specs.profi
 
                   {/* Specs Grid */}
                   <div className="grid grid-cols-2 gap-2 text-sm">
-                    <div className="p-2 bg-gray-800/50 rounded">
+                    <div className="p-2 bg-card/50 rounded">
                       <p className="text-xs text-muted-foreground">
                         Dimensions
                       </p>
-                      <p className="text-white font-mono">
+                      <p className="text-foreground font-mono">
                         {spec.width}×{spec.height}px
                       </p>
                     </div>
-                    <div className="p-2 bg-gray-800/50 rounded">
+                    <div className="p-2 bg-card/50 rounded">
                       <p className="text-xs text-muted-foreground">
                         Aspect Ratio
                       </p>
-                      <p className="text-white font-mono">{spec.aspectRatio}</p>
+                      <p className="text-foreground font-mono">{spec.aspectRatio}</p>
                     </div>
-                    <div className="p-2 bg-gray-800/50 rounded">
+                    <div className="p-2 bg-card/50 rounded">
                       <p className="text-xs text-muted-foreground">
                         File Types
                       </p>
@@ -453,9 +451,9 @@ ${platformSpecs.map(p => `| ${p.name} | ${p.specs.profile.width}x${p.specs.profi
                         {spec.fileTypes.join(", ")}
                       </p>
                     </div>
-                    <div className="p-2 bg-gray-800/50 rounded">
+                    <div className="p-2 bg-card/50 rounded">
                       <p className="text-xs text-muted-foreground">Max Size</p>
-                      <p className="text-white">{spec.maxSize}</p>
+                      <p className="text-foreground">{spec.maxSize}</p>
                     </div>
                   </div>
 
@@ -473,15 +471,15 @@ ${platformSpecs.map(p => `| ${p.name} | ${p.specs.profile.width}x${p.specs.profi
       )}
 
       {/* Quick Reference */}
-      <Card className="bg-gray-900/50 border-gray-800">
+      <Card className="bg-gray-900/50 border-border/50">
         <CardHeader>
-          <CardTitle className="text-white text-sm">Quick Reference</CardTitle>
+          <CardTitle className="text-foreground/80 text-sm">Quick Reference</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-gray-800">
+                <tr className="border-b border-border/50">
                   <th className="text-left py-2 text-muted-foreground">
                     Platform
                   </th>
@@ -505,7 +503,7 @@ ${platformSpecs.map(p => `| ${p.name} | ${p.specs.profile.width}x${p.specs.profi
                       <td className="py-2">
                         <div className="flex items-center gap-2">
                           <Icon className={cn("w-4 h-4", platform.color)} />
-                          <span className="text-white">{platform.name}</span>
+                          <span className="text-foreground">{platform.name}</span>
                         </div>
                       </td>
                       <td className="py-2 font-mono text-xs text-white">

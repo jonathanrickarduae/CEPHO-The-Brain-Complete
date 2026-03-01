@@ -11,7 +11,6 @@ import {
   AlertTriangle,
   BarChart3,
   LineChart,
-  Clock,
   Zap,
   Shield,
 } from "lucide-react";
@@ -177,7 +176,7 @@ export function QAAccuracyDashboard() {
         icon: <AlertTriangle className="w-3 h-3" />,
       },
       moderate: {
-        color: "bg-blue-500/20 text-blue-400 border-blue-500/30",
+        color: "bg-primary/20 text-primary border-blue-500/30",
         label: "Moderate Autonomy",
         icon: <Shield className="w-3 h-3" />,
       },
@@ -289,7 +288,7 @@ export function QAAccuracyDashboard() {
             <span className="text-sm text-muted-foreground">
               Avg. Revisions
             </span>
-            <BarChart3 className="w-4 h-4 text-blue-500" />
+            <BarChart3 className="w-4 h-4 text-primary" />
           </div>
           <div className="flex items-baseline gap-2">
             <span className="text-3xl font-bold text-foreground">
@@ -328,7 +327,7 @@ export function QAAccuracyDashboard() {
           </h3>
         </div>
         <div className="h-48 flex items-end gap-2">
-          {learningProgress.map((point, index) => (
+          {learningProgress.map((point, _index) => (
             <div
               key={point.date}
               className="flex-1 flex flex-col items-center gap-2"
@@ -473,7 +472,7 @@ export function QAAccuracyDashboard() {
             </div>
           </div>
           <div className="flex items-start gap-3 p-3 bg-card/50 rounded-lg">
-            <Target className="w-5 h-5 text-blue-500 mt-0.5" />
+            <Target className="w-5 h-5 text-primary mt-0.5" />
             <div>
               <p className="text-sm font-medium text-foreground">
                 Focus area: Shareholder Agreements

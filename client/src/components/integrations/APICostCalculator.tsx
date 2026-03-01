@@ -6,15 +6,12 @@ import {
   CardTitle,
   CardDescription,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Calculator,
-  Zap,
   Brain,
   DollarSign,
   TrendingUp,
@@ -92,7 +89,7 @@ const providers: ProviderPricing[] = [
     strengths: ["Cost-effective", "Good reasoning", "Multimodal"],
     bestFor: ["Budget-conscious tasks", "Document processing"],
     freeAllowance: 1000000, // 1M tokens free
-    color: "bg-blue-500",
+    color: "bg-primary",
   },
   {
     id: "gemini-ultra",

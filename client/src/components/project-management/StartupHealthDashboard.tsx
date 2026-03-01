@@ -6,11 +6,6 @@ import { Progress } from "@/components/ui/progress";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
 } from "@/components/ui/select";
 import {
   Dialog,
@@ -20,7 +15,6 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import {
-  TrendingUp,
   TrendingDown,
   DollarSign,
   Calendar,
@@ -29,8 +23,6 @@ import {
   CheckCircle2,
   Clock,
   BarChart3,
-  PieChart,
-  ArrowRight,
   Plus,
   Edit,
   Sparkles,
@@ -155,13 +147,13 @@ function StartupCard({ startup }: { startup: StartupMetrics }) {
     startup.targets.mrr > 0
       ? Math.min((startup.mrr / startup.targets.mrr) * 100, 100)
       : 0;
-  const customersPercent =
+  const _customersPercent =
     startup.targets.customers > 0
       ? Math.min((startup.customers / startup.targets.customers) * 100, 100)
       : 0;
 
   return (
-    <Card className="bg-gray-900/50 border-gray-800">
+    <Card className="bg-gray-900/50 border-border/50">
       <CardHeader className="pb-2">
         <div className="flex items-center justify-between">
           <CardTitle className="text-lg font-semibold text-white flex items-center gap-2">
@@ -184,7 +176,7 @@ function StartupCard({ startup }: { startup: StartupMetrics }) {
       <CardContent className="space-y-4">
         {/* Key Metrics Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-          <div className="bg-gray-800/50 rounded-lg p-3">
+          <div className="bg-card/50 rounded-lg p-3">
             <div className="flex items-center gap-2 text-foreground/70 text-xs mb-1">
               <DollarSign className="h-3 w-3" />
               Monthly Burn
@@ -193,7 +185,7 @@ function StartupCard({ startup }: { startup: StartupMetrics }) {
               {formatCurrency(startup.monthlyBurn)}
             </p>
           </div>
-          <div className="bg-gray-800/50 rounded-lg p-3">
+          <div className="bg-card/50 rounded-lg p-3">
             <div className="flex items-center gap-2 text-foreground/70 text-xs mb-1">
               <BarChart3 className="h-3 w-3" />
               Cash on Hand
@@ -202,7 +194,7 @@ function StartupCard({ startup }: { startup: StartupMetrics }) {
               {formatCurrency(startup.cashOnHand)}
             </p>
           </div>
-          <div className="bg-gray-800/50 rounded-lg p-3">
+          <div className="bg-card/50 rounded-lg p-3">
             <div className="flex items-center gap-2 text-foreground/70 text-xs mb-1">
               <Users className="h-3 w-3" />
               Team Size
@@ -221,7 +213,7 @@ function StartupCard({ startup }: { startup: StartupMetrics }) {
               {startup.runway} / {startup.targets.runway} months
             </span>
           </div>
-          <div className="h-2 bg-gray-800 rounded-full overflow-hidden">
+          <div className="h-2 bg-card rounded-full overflow-hidden">
             <div
               className={`h-full ${getRunwayBgColor(startup.runway)} transition-all`}
               style={{ width: `${runwayPercent}%` }}
@@ -234,7 +226,7 @@ function StartupCard({ startup }: { startup: StartupMetrics }) {
           <div>
             <div className="flex items-center justify-between text-sm mb-2">
               <span className="text-foreground/70">MRR Target</span>
-              <span className="text-white">
+              <span className="text-foreground">
                 {formatCurrency(startup.mrr)} /{" "}
                 {formatCurrency(startup.targets.mrr)}
               </span>
@@ -252,7 +244,7 @@ function StartupCard({ startup }: { startup: StartupMetrics }) {
             {startup.milestones.slice(0, 3).map((milestone, idx) => (
               <div
                 key={idx}
-                className="flex items-center justify-between text-sm bg-gray-800/30 rounded-lg px-3 py-2"
+                className="flex items-center justify-between text-sm bg-card/30 rounded-lg px-3 py-2"
               >
                 <div className="flex items-center gap-2">
                   {milestone.status === "completed" ? (
@@ -260,7 +252,7 @@ function StartupCard({ startup }: { startup: StartupMetrics }) {
                   ) : milestone.status === "in-progress" ? (
                     <Clock className="h-4 w-4 text-amber-500" />
                   ) : (
-                    <div className="h-4 w-4 rounded-full border-2 border-gray-600" />
+                    <div className="h-4 w-4 rounded-full border-2 border-border" />
                   )}
                   <span className="text-foreground/80">{milestone.name}</span>
                 </div>
@@ -273,7 +265,7 @@ function StartupCard({ startup }: { startup: StartupMetrics }) {
         </div>
 
         {/* Footer */}
-        <div className="flex items-center justify-between pt-2 border-t border-gray-800">
+        <div className="flex items-center justify-between pt-2 border-t border-border/50">
           <span className="text-xs text-foreground/60 flex items-center gap-1">
             <Clock className="h-3 w-3" /> Updated {startup.lastUpdated}
           </span>
@@ -296,10 +288,9 @@ interface StartupHealthDashboardProps {
 }
 
 export default function StartupHealthDashboard({
-  projectId,
-  projectName,
+  projectName: _projectName,
 }: StartupHealthDashboardProps) {
-  const [startups, setStartups] = useState<StartupMetrics[]>(sampleStartups);
+  const [startups, _setStartups] = useState<StartupMetrics[]>(sampleStartups);
   const [showAddDialog, setShowAddDialog] = useState(false);
 
   // Calculate portfolio totals
@@ -330,7 +321,7 @@ export default function StartupHealthDashboard({
               <Plus className="h-4 w-4 mr-2" /> Add Startup
             </Button>
           </DialogTrigger>
-          <DialogContent className="bg-gray-900 border-gray-800">
+          <DialogContent className="bg-background border-border/50">
             <DialogHeader>
               <DialogTitle>Add New Startup</DialogTitle>
             </DialogHeader>
@@ -339,7 +330,7 @@ export default function StartupHealthDashboard({
                 <Label>Startup Name</Label>
                 <Input
                   placeholder="Enter startup name"
-                  className="bg-gray-800 border-gray-700"
+                  className="bg-card border-border"
                 />
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -348,7 +339,7 @@ export default function StartupHealthDashboard({
                   <Input
                     type="number"
                     placeholder="50000"
-                    className="bg-gray-800 border-gray-700"
+                    className="bg-card border-border"
                   />
                 </div>
                 <div>
@@ -356,7 +347,7 @@ export default function StartupHealthDashboard({
                   <Input
                     type="number"
                     placeholder="500000"
-                    className="bg-gray-800 border-gray-700"
+                    className="bg-card border-border"
                   />
                 </div>
               </div>
@@ -366,7 +357,7 @@ export default function StartupHealthDashboard({
                   <Input
                     type="number"
                     placeholder="5"
-                    className="bg-gray-800 border-gray-700"
+                    className="bg-card border-border"
                   />
                 </div>
                 <div>
@@ -374,7 +365,7 @@ export default function StartupHealthDashboard({
                   <Input
                     type="number"
                     placeholder="18"
-                    className="bg-gray-800 border-gray-700"
+                    className="bg-card border-border"
                   />
                 </div>
               </div>
@@ -391,7 +382,7 @@ export default function StartupHealthDashboard({
 
       {/* Portfolio Summary */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        <Card className="bg-gray-900/50 border-gray-800">
+        <Card className="bg-gray-900/50 border-border/50">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-red-500/20 rounded-lg">
@@ -407,7 +398,7 @@ export default function StartupHealthDashboard({
           </CardContent>
         </Card>
 
-        <Card className="bg-gray-900/50 border-gray-800">
+        <Card className="bg-gray-900/50 border-border/50">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-green-500/20 rounded-lg">
@@ -423,11 +414,11 @@ export default function StartupHealthDashboard({
           </CardContent>
         </Card>
 
-        <Card className="bg-gray-900/50 border-gray-800">
+        <Card className="bg-gray-900/50 border-border/50">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-blue-500/20 rounded-lg">
-                <Calendar className="h-5 w-5 text-blue-400" />
+              <div className="p-2 bg-primary/20 rounded-lg">
+                <Calendar className="h-5 w-5 text-primary" />
               </div>
               <div>
                 <p className="text-xl font-bold text-white">
@@ -439,7 +430,7 @@ export default function StartupHealthDashboard({
           </CardContent>
         </Card>
 
-        <Card className="bg-gray-900/50 border-gray-800">
+        <Card className="bg-gray-900/50 border-border/50">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
               <div
@@ -467,7 +458,7 @@ export default function StartupHealthDashboard({
 
       {/* Empty State */}
       {startups.length === 0 && (
-        <Card className="bg-gray-900/50 border-gray-800 border-dashed">
+        <Card className="bg-gray-900/50 border-border/50 border-dashed">
           <CardContent className="p-8 text-center">
             <Rocket className="h-12 w-12 mx-auto mb-4 text-foreground/50" />
             <h3 className="text-lg font-semibold text-white mb-2">

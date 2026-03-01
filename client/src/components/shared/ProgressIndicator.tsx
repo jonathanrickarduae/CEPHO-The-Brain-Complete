@@ -49,7 +49,7 @@ export function ProgressBar({
         </div>
       )}
       <div
-        className={`w-full bg-gray-700 rounded-full overflow-hidden ${sizeClasses[size]}`}
+        className={`w-full bg-muted rounded-full overflow-hidden ${sizeClasses[size]}`}
       >
         <div
           className={`${sizeClasses[size]} rounded-full ${variantClasses[variant]} ${
@@ -218,7 +218,7 @@ export function DigitalTwinTrainingProgress({
           showPercentage={false}
         />
         <div className="flex justify-between mt-2">
-          {milestones.map((milestone, i) => (
+          {milestones.map((milestone, _i) => (
             <div
               key={milestone.hours}
               className={`flex flex-col items-center ${
@@ -251,7 +251,7 @@ export function DigitalTwinTrainingProgress({
           <div className="text-xs text-muted-foreground">Feedback Given</div>
         </div>
         <div className="bg-background rounded-lg p-3 text-center">
-          <CheckCircle className="w-5 h-5 text-cyan-400 mx-auto mb-1" />
+          <CheckCircle className="w-5 h-5 text-[var(--brain-cyan)] mx-auto mb-1" />
           <div className="text-lg font-bold text-foreground">
             {accuracyScore}%
           </div>
@@ -300,7 +300,7 @@ export function StepProgress({
                     ? "bg-primary text-primary-foreground"
                     : index === currentStep
                       ? "bg-primary/20 text-primary border-2 border-primary"
-                      : "bg-gray-700 text-foreground/70"
+                      : "bg-muted text-foreground/70"
                 }`}
               >
                 {index < currentStep ? (
@@ -312,7 +312,7 @@ export function StepProgress({
               {index < steps.length - 1 && (
                 <div
                   className={`w-0.5 h-8 mt-2 ${
-                    index < currentStep ? "bg-primary" : "bg-gray-700"
+                    index < currentStep ? "bg-primary" : "bg-muted"
                   }`}
                 />
               )}
@@ -345,7 +345,7 @@ export function StepProgress({
                   ? "bg-primary text-primary-foreground"
                   : index === currentStep
                     ? "bg-primary/20 text-primary border-2 border-primary"
-                    : "bg-gray-700 text-foreground/70"
+                    : "bg-muted text-foreground/70"
               }`}
             >
               {index < currentStep ? (
@@ -367,7 +367,7 @@ export function StepProgress({
           {index < steps.length - 1 && (
             <div
               className={`flex-1 h-0.5 mx-2 ${
-                index < currentStep ? "bg-primary" : "bg-gray-700"
+                index < currentStep ? "bg-primary" : "bg-muted"
               }`}
             />
           )}

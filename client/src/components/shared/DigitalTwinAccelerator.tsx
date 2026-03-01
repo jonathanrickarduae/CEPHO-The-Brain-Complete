@@ -1,8 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import {
   Brain,
-  Sparkles,
-  ChevronRight,
   ChevronLeft,
   Check,
   X,
@@ -13,13 +11,9 @@ import {
   Clock,
   Target,
   Mic,
-  Volume2,
   Palette,
-  User,
   Zap,
   Trophy,
-  Play,
-  Pause,
 } from "lucide-react";
 import { useCelebration } from "@/components/shared/CelebrationAnimations";
 
@@ -341,7 +335,7 @@ interface DigitalTwinAcceleratorProps {
 }
 
 export function DigitalTwinAccelerator({
-  onComplete,
+  onComplete: _onComplete,
 }: DigitalTwinAcceleratorProps) {
   const { showAchievement, celebrate } = useCelebration();
 
@@ -368,8 +362,8 @@ export function DigitalTwinAccelerator({
 
   // Quick-fire state
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [sessionStartTime, setSessionStartTime] = useState<number | null>(null);
-  const [isSessionActive, setIsSessionActive] = useState(false);
+  const [_sessionStartTime, setSessionStartTime] = useState<number | null>(null);
+  const [_isSessionActive, setIsSessionActive] = useState(false);
 
   // Scenario state
   const [currentScenarioIndex, setCurrentScenarioIndex] = useState(0);
@@ -380,7 +374,7 @@ export function DigitalTwinAccelerator({
   }, [progress]);
 
   const addTrainingHours = useCallback(
-    (hours: number, type: string) => {
+    (hours: number, _type: string) => {
       setProgress(prev => {
         const newTotal = prev.totalHours + hours;
         const newProgress = { ...prev, totalHours: newTotal };
@@ -533,7 +527,7 @@ export function DigitalTwinAccelerator({
               full autonomy
             </span>
           </div>
-          <div className="h-3 bg-gray-800 rounded-full overflow-hidden">
+          <div className="h-3 bg-card rounded-full overflow-hidden">
             <div
               className="h-full bg-gradient-to-r from-primary via-purple-500 to-cyan-500 transition-all duration-500"
               style={{ width: `${progressPercentage}%` }}
@@ -587,8 +581,8 @@ export function DigitalTwinAccelerator({
                 className="p-5 bg-gradient-to-br from-blue-500/10 to-cyan-500/10 border border-blue-500/30 rounded-xl text-left hover:border-blue-500/50 transition-all group"
               >
                 <div className="flex items-center gap-3 mb-3">
-                  <div className="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <Target className="w-5 h-5 text-blue-400" />
+                  <div className="w-10 h-10 rounded-lg bg-primary/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <Target className="w-5 h-5 text-primary" />
                   </div>
                   <div>
                     <h3 className="font-semibold text-foreground">
@@ -603,7 +597,7 @@ export function DigitalTwinAccelerator({
                   Real-world scenarios to understand your decision-making style.
                 </p>
                 <div className="flex items-center justify-between">
-                  <span className="text-xs text-blue-400">
+                  <span className="text-xs text-primary">
                     +{TRAINING_VALUES.scenarioQuestion}hrs per scenario
                   </span>
                   <span className="text-xs text-muted-foreground">
@@ -712,9 +706,9 @@ export function DigitalTwinAccelerator({
               </button>
 
               {/* Training Stats */}
-              <div className="p-5 bg-gray-800/50 border border-gray-700 rounded-xl">
+              <div className="p-5 bg-card/50 border border-border rounded-xl">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-lg bg-gray-700 flex items-center justify-center">
+                  <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center">
                     <Trophy className="w-5 h-5 text-foreground/70" />
                   </div>
                   <h3 className="font-semibold text-foreground">
@@ -790,7 +784,7 @@ export function DigitalTwinAccelerator({
             </div>
 
             {/* Progress */}
-            <div className="h-1 bg-gray-800 rounded-full mb-8">
+            <div className="h-1 bg-card rounded-full mb-8">
               <div
                 className="h-full bg-orange-500 rounded-full transition-all"
                 style={{
@@ -830,9 +824,9 @@ export function DigitalTwinAccelerator({
             </div>
 
             <p className="text-center text-xs text-muted-foreground mt-6">
-              Press <kbd className="px-1.5 py-0.5 bg-gray-800 rounded">Y</kbd>{" "}
+              Press <kbd className="px-1.5 py-0.5 bg-card rounded">Y</kbd>{" "}
               for Yes or{" "}
-              <kbd className="px-1.5 py-0.5 bg-gray-800 rounded">N</kbd> for No
+              <kbd className="px-1.5 py-0.5 bg-card rounded">N</kbd> for No
             </p>
           </div>
         )}
@@ -855,7 +849,7 @@ export function DigitalTwinAccelerator({
             </div>
 
             {/* Progress */}
-            <div className="h-1 bg-gray-800 rounded-full mb-8">
+            <div className="h-1 bg-card rounded-full mb-8">
               <div
                 className="h-full bg-blue-500 rounded-full transition-all"
                 style={{
@@ -865,8 +859,8 @@ export function DigitalTwinAccelerator({
             </div>
 
             {/* Scenario */}
-            <div className="bg-blue-500/10 border border-blue-500/30 rounded-xl p-6 mb-6">
-              <span className="text-xs text-blue-400 uppercase tracking-wider mb-2 block">
+            <div className="bg-primary/10 border border-blue-500/30 rounded-xl p-6 mb-6">
+              <span className="text-xs text-primary uppercase tracking-wider mb-2 block">
                 {SCENARIO_QUESTIONS[currentScenarioIndex].category}
               </span>
               <p className="text-lg text-foreground mb-2">
@@ -883,10 +877,10 @@ export function DigitalTwinAccelerator({
                 <button
                   key={option.id}
                   onClick={() => handleScenarioAnswer(option.id)}
-                  className="w-full p-4 bg-gray-800/50 border border-gray-700 rounded-xl text-left hover:border-blue-500/50 hover:bg-gray-800 transition-all group"
+                  className="w-full p-4 bg-card/50 border border-border rounded-xl text-left hover:border-blue-500/50 hover:bg-card transition-all group"
                 >
                   <div className="flex items-center gap-3">
-                    <span className="w-8 h-8 rounded-lg bg-gray-700 flex items-center justify-center text-sm font-medium text-muted-foreground group-hover:bg-blue-500/20 group-hover:text-blue-400 transition-colors">
+                    <span className="w-8 h-8 rounded-lg bg-muted flex items-center justify-center text-sm font-medium text-muted-foreground group-hover:bg-primary/20 group-hover:text-primary transition-colors">
                       {option.id.toUpperCase()}
                     </span>
                     <span className="text-foreground">{option.text}</span>
@@ -920,7 +914,7 @@ export function DigitalTwinAccelerator({
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* Email Upload */}
-              <div className="p-6 bg-gray-800/50 border border-gray-700 rounded-xl">
+              <div className="p-6 bg-card/50 border border-border rounded-xl">
                 <div className="flex items-center gap-3 mb-4">
                   <Mail className="w-6 h-6 text-green-400" />
                   <h4 className="font-semibold text-foreground">
@@ -944,7 +938,7 @@ export function DigitalTwinAccelerator({
               </div>
 
               {/* Document Upload */}
-              <div className="p-6 bg-gray-800/50 border border-gray-700 rounded-xl">
+              <div className="p-6 bg-card/50 border border-border rounded-xl">
                 <div className="flex items-center gap-3 mb-4">
                   <FileText className="w-6 h-6 text-purple-400" />
                   <h4 className="font-semibold text-foreground">Documents</h4>
@@ -966,7 +960,7 @@ export function DigitalTwinAccelerator({
               </div>
 
               {/* Voice Sample */}
-              <div className="p-6 bg-gray-800/50 border border-gray-700 rounded-xl">
+              <div className="p-6 bg-card/50 border border-border rounded-xl">
                 <div className="flex items-center gap-3 mb-4">
                   <Mic className="w-6 h-6 text-orange-400" />
                   <h4 className="font-semibold text-foreground">
@@ -987,9 +981,9 @@ export function DigitalTwinAccelerator({
               </div>
 
               {/* Text Messages */}
-              <div className="p-6 bg-gray-800/50 border border-gray-700 rounded-xl">
+              <div className="p-6 bg-card/50 border border-border rounded-xl">
                 <div className="flex items-center gap-3 mb-4">
-                  <MessageSquare className="w-6 h-6 text-cyan-400" />
+                  <MessageSquare className="w-6 h-6 text-[var(--brain-cyan)]" />
                   <h4 className="font-semibold text-foreground">
                     Text Messages
                   </h4>
@@ -998,7 +992,7 @@ export function DigitalTwinAccelerator({
                   Export WhatsApp or iMessage conversations to learn casual
                   communication.
                 </p>
-                <button className="w-full py-3 bg-cyan-500/10 border border-cyan-500/30 rounded-lg text-cyan-400 hover:bg-cyan-500/20 transition-colors">
+                <button className="w-full py-3 bg-[var(--brain-cyan)]/10 border border-cyan-500/30 rounded-lg text-[var(--brain-cyan)] hover:bg-[var(--brain-cyan)]/20 transition-colors">
                   <Upload className="w-4 h-4 inline mr-2" />
                   Upload Chat Export
                 </button>
@@ -1037,7 +1031,7 @@ export function DigitalTwinAccelerator({
                     className={`p-4 rounded-xl border-2 transition-all ${
                       progress.avatar === avatar.id
                         ? "border-primary bg-primary/10"
-                        : "border-gray-700 hover:border-gray-600"
+                        : "border-border hover:border-border"
                     }`}
                   >
                     <span className="text-3xl block mb-1">{avatar.emoji}</span>
@@ -1062,7 +1056,7 @@ export function DigitalTwinAccelerator({
                     className={`w-full p-4 rounded-xl border-2 text-left transition-all ${
                       progress.voiceTone === voice.id
                         ? "border-primary bg-primary/10"
-                        : "border-gray-700 hover:border-gray-600"
+                        : "border-border hover:border-border"
                     }`}
                   >
                     <div className="flex items-center justify-between">

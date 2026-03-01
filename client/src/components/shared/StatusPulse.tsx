@@ -99,7 +99,7 @@ export function SidebarIconStatus({
       className={`relative flex flex-col items-center gap-1 p-2 rounded-lg transition-colors ${
         isActive
           ? "bg-primary/20 text-primary"
-          : "text-muted-foreground hover:bg-gray-800 hover:text-foreground"
+          : "text-muted-foreground hover:bg-card hover:text-foreground"
       }`}
       title={label}
     >

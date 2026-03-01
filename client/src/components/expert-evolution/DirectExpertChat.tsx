@@ -6,17 +6,11 @@ import {
   Send,
   Mic,
   MicOff,
-  X,
   ArrowLeft,
   Video,
-  Phone,
   MoreVertical,
   Paperclip,
-  Image,
   Smile,
-  ThumbsUp,
-  Copy,
-  Share2,
   Volume2,
   VolumeX,
   Pause,
@@ -102,7 +96,7 @@ export function DirectExpertChat({ expertId, onClose }: DirectExpertChatProps) {
         playAudio(audioUrl, variables.text);
       }
     },
-    onError: error => {
+    onError: _error => {
       // Remove generating state on error
       setMessages(prev =>
         prev.map(msg => ({
@@ -133,7 +127,7 @@ export function DirectExpertChat({ expertId, onClose }: DirectExpertChatProps) {
         setCurrentlyPlayingId(null);
       };
 
-      audio.play().catch(err => {
+      audio.play().catch(()=> {
         setCurrentlyPlayingId(null);
       });
     },
@@ -347,7 +341,7 @@ export function DirectExpertChat({ expertId, onClose }: DirectExpertChatProps) {
         }, 500);
       }
     },
-    onError: (error: unknown) => {
+    onError: (_error: unknown) => {
       // Fallback to local response on error
       if (expert) {
         const fallbackResponse = generateExpertResponse(expert, inputValue);

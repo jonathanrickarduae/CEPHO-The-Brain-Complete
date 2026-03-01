@@ -9,7 +9,6 @@ import {
   Brain,
   Target,
   Coffee,
-  Moon,
   Sun,
   RefreshCw,
   Sparkles,
@@ -78,8 +77,8 @@ function generateOptimalSchedule(
   }
 
   // Schedule high-priority tasks during peak hours
-  const peakHourStart = preferences.peakHoursStart;
-  const peakHourEnd = preferences.peakHoursEnd;
+  const _peakHourStart = preferences.peakHoursStart;
+  const _peakHourEnd = preferences.peakHoursEnd;
 
   for (const task of sortedTasks) {
     // Add buffer between tasks
@@ -189,7 +188,7 @@ export function SmartScheduler({
       case "focus":
         return "bg-purple-500/20 border-purple-500/30";
       case "meeting":
-        return "bg-blue-500/20 border-blue-500/30";
+        return "bg-primary/20 border-blue-500/30";
       case "break":
         return "bg-green-500/20 border-green-500/30";
       case "buffer":
@@ -202,7 +201,7 @@ export function SmartScheduler({
       case "focus":
         return <Zap className="w-4 h-4 text-purple-400" />;
       case "meeting":
-        return <Calendar className="w-4 h-4 text-blue-400" />;
+        return <Calendar className="w-4 h-4 text-primary" />;
       case "break":
         return <Coffee className="w-4 h-4 text-green-400" />;
       case "buffer":
@@ -230,7 +229,7 @@ export function SmartScheduler({
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3 border-b border-white/10 bg-gradient-to-r from-cyan-500/10 to-blue-500/10">
         <div className="flex items-center gap-2">
-          <Brain className="w-5 h-5 text-cyan-400" />
+          <Brain className="w-5 h-5 text-[var(--brain-cyan)]" />
           <h3 className="font-medium text-foreground">Smart Scheduler</h3>
         </div>
         <div className="flex items-center gap-2">
@@ -396,7 +395,7 @@ export function SmartScheduler({
             </span>
           </div>
           <div className="flex items-center gap-1">
-            <Target className="w-3 h-3 text-cyan-400" />
+            <Target className="w-3 h-3 text-[var(--brain-cyan)]" />
             <span className="text-muted-foreground">
               {tasks.length} tasks scheduled
             </span>

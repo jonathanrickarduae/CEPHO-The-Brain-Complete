@@ -143,7 +143,7 @@ export function ThemeColorPicker() {
                 );
                 localStorage.setItem("cepho_primary_color", "custom");
                 setSelectedColor("custom");
-              } catch (error) {
+              } catch {
               }
             }}
             className="flex-1 px-3 py-2 rounded border border-border bg-background text-foreground text-sm"

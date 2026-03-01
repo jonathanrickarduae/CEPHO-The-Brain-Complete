@@ -63,8 +63,8 @@ export function ConfirmProvider({ children }: { children: React.ReactNode }) {
       button: "bg-amber-500 hover:bg-amber-600 text-white",
     },
     info: {
-      icon: <AlertTriangle className="w-6 h-6 text-cyan-400" />,
-      iconBg: "bg-cyan-500/10",
+      icon: <AlertTriangle className="w-6 h-6 text-[var(--brain-cyan)]" />,
+      iconBg: "bg-[var(--brain-cyan)]/10",
       button: "bg-cyan-500 hover:bg-cyan-600 text-white",
     },
   };
@@ -86,11 +86,11 @@ export function ConfirmProvider({ children }: { children: React.ReactNode }) {
           />
 
           {/* Dialog */}
-          <div className="relative bg-gray-900 border border-gray-700 rounded-xl shadow-2xl max-w-md w-full animate-in zoom-in-95 duration-200">
+          <div className="relative bg-background border border-border rounded-xl shadow-2xl max-w-md w-full animate-in zoom-in-95 duration-200">
             {/* Close button */}
             <button
               onClick={handleCancel}
-              className="absolute top-4 right-4 p-1 rounded-lg hover:bg-gray-800 transition-colors"
+              className="absolute top-4 right-4 p-1 rounded-lg hover:bg-card transition-colors"
             >
               <X className="w-5 h-5 text-foreground/70" />
             </button>

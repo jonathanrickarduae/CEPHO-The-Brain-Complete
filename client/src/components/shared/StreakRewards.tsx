@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState} from "react";
 import {
   Flame,
   Trophy,
@@ -154,7 +154,7 @@ export function StreakRewards({
                     ? "bg-gradient-to-br " +
                       reward.color +
                       "/10 border-primary/30 hover:border-primary/50 cursor-pointer"
-                    : "bg-gray-800/50 border-gray-700 opacity-60"
+                    : "bg-card/50 border-border opacity-60"
               }`}
             >
               {/* Status indicator */}
@@ -187,7 +187,7 @@ export function StreakRewards({
 
               {/* Progress or status */}
               {status === "locked" ? (
-                <div className="w-full bg-gray-700 rounded-full h-1.5">
+                <div className="w-full bg-muted rounded-full h-1.5">
                   <div
                     className={`h-1.5 rounded-full bg-gradient-to-r ${reward.color}`}
                     style={{

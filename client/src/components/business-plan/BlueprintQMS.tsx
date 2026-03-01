@@ -1,13 +1,11 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
 import {
   GitBranch,
   RefreshCw,
   AlertTriangle,
   Check,
-  ChevronRight,
   FileText,
   Presentation,
   Share2,
@@ -112,7 +110,7 @@ export function BlueprintQMS({
 
   const determineSeverity = (
     field: string,
-    blueprintType: string
+    _blueprintType: string
   ): CascadeImpact["severity"] => {
     // High severity fields
     if (
@@ -265,7 +263,7 @@ export function BlueprintQMS({
         <Button
           onClick={() => onViewBlueprint("social")}
           variant="outline"
-          className="border-cyan-500/50 hover:bg-cyan-500/10"
+          className="border-cyan-500/50 hover:bg-[var(--brain-cyan)]/10"
         >
           <Share2 className="w-4 h-4 mr-2" />
           Social Media Plan
@@ -283,7 +281,7 @@ export function BlueprintQMS({
       {/* Blueprint Network Visualization */}
       <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
         <h3 className="text-sm font-medium text-white mb-4 flex items-center gap-2">
-          <Brain className="w-4 h-4 text-cyan-400" />
+          <Brain className="w-4 h-4 text-[var(--brain-cyan)]" />
           Blueprint Network
         </h3>
 
@@ -323,7 +321,7 @@ export function BlueprintQMS({
 
           {/* Sub-Blueprints */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-            {linkedBlueprints.map((blueprint, index) => {
+            {linkedBlueprints.map((blueprint, _index) => {
               const impact = cascadeImpacts.find(
                 i => i.blueprintId === blueprint.id
               );
@@ -570,7 +568,7 @@ export function BlueprintQMS({
       {pendingChanges.length === 0 && (
         <div className="bg-white/5 border border-white/10 rounded-2xl p-8 text-center">
           <Check className="w-12 h-12 mx-auto text-green-400 mb-3" />
-          <p className="text-white font-medium">All blueprints are in sync</p>
+          <p className="text-foreground font-medium">All blueprints are in sync</p>
           <p className="text-foreground/70 text-sm mt-1">
             No pending changes to review
           </p>

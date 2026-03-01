@@ -131,7 +131,7 @@ const defaultSteps: ProcessStep[] = [
 
 const statusConfig = {
   not_started: {
-    color: "text-gray-400",
+    color: "text-muted-foreground",
     bg: "bg-gray-500/20",
     icon: Circle,
     label: "Not Started",
@@ -211,7 +211,7 @@ ${step.notes ? `\n**Notes:** ${step.notes}` : ""}
   return (
     <div className="space-y-6">
       {/* Header */}
-      <Card className="bg-gray-900/50 border-gray-800">
+      <Card className="bg-gray-900/50 border-border/50">
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
@@ -232,11 +232,11 @@ ${step.notes ? `\n**Notes:** ${step.notes}` : ""}
           <div className="space-y-2">
             <div className="flex justify-between text-sm">
               <span className="text-muted-foreground">Overall Progress</span>
-              <span className="text-white">
+              <span className="text-foreground">
                 {completedSteps}/{steps.length} steps ({progress}%)
               </span>
             </div>
-            <div className="h-2 bg-gray-800 rounded-full overflow-hidden">
+            <div className="h-2 bg-card rounded-full overflow-hidden">
               <div
                 className="h-full bg-gradient-to-r from-[#E91E8C] to-purple-500 transition-all duration-500"
                 style={{ width: `${progress}%` }}
@@ -249,7 +249,7 @@ ${step.notes ? `\n**Notes:** ${step.notes}` : ""}
       {/* Process Steps */}
       <div className="relative">
         {/* Connecting Line */}
-        <div className="absolute left-6 top-0 bottom-0 w-0.5 bg-gray-700" />
+        <div className="absolute left-6 top-0 bottom-0 w-0.5 bg-muted" />
 
         <div className="space-y-4">
           {steps.map((step, index) => {
@@ -273,7 +273,7 @@ ${step.notes ? `\n**Notes:** ${step.notes}` : ""}
                 {/* Step Card */}
                 <Card
                   className={cn(
-                    "ml-16 bg-gray-900/50 border-gray-800 cursor-pointer transition-all",
+                    "ml-16 bg-gray-900/50 border-border/50 cursor-pointer transition-all",
                     isExpanded && "border-[#E91E8C]/50"
                   )}
                   onClick={() => setExpandedStep(isExpanded ? null : step.id)}
@@ -315,14 +315,14 @@ ${step.notes ? `\n**Notes:** ${step.notes}` : ""}
                             <span className="text-muted-foreground">
                               Owner:
                             </span>
-                            <span className="text-white">{step.owner}</span>
+                            <span className="text-foreground">{step.owner}</span>
                           </div>
                           <div className="flex items-center gap-2 text-sm">
                             <Clock className="w-4 h-4 text-muted-foreground" />
                             <span className="text-muted-foreground">
                               Duration:
                             </span>
-                            <span className="text-white">{step.duration}</span>
+                            <span className="text-foreground">{step.duration}</span>
                           </div>
                         </div>
 
@@ -347,7 +347,7 @@ ${step.notes ? `\n**Notes:** ${step.notes}` : ""}
 
                       {/* Inputs & Outputs */}
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                        <div className="p-3 bg-gray-800/50 rounded-lg">
+                        <div className="p-3 bg-card/50 rounded-lg">
                           <p className="text-sm text-muted-foreground mb-2">
                             Inputs:
                           </p>
@@ -357,13 +357,13 @@ ${step.notes ? `\n**Notes:** ${step.notes}` : ""}
                                 key={i}
                                 className="text-sm text-white flex items-center gap-2"
                               >
-                                <ArrowRight className="w-3 h-3 text-cyan-400" />
+                                <ArrowRight className="w-3 h-3 text-[var(--brain-cyan)]" />
                                 {input}
                               </li>
                             ))}
                           </ul>
                         </div>
-                        <div className="p-3 bg-gray-800/50 rounded-lg">
+                        <div className="p-3 bg-card/50 rounded-lg">
                           <p className="text-sm text-muted-foreground mb-2">
                             Outputs:
                           </p>

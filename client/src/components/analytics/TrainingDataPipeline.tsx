@@ -152,12 +152,12 @@ export function TrainingDataPipeline() {
   };
 
   return (
-    <div className="bg-gray-800 rounded-2xl border border-gray-700 overflow-hidden">
+    <div className="bg-card rounded-2xl border border-border overflow-hidden">
       {/* Header */}
-      <div className="p-6 border-b border-gray-700">
+      <div className="p-6 border-b border-border">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-semibold text-white flex items-center gap-2">
-            <Database className="w-5 h-5 text-cyan-400" />
+            <Database className="w-5 h-5 text-[var(--brain-cyan)]" />
             Training Data Pipeline
           </h3>
           <div className="flex items-center gap-2 text-sm text-foreground/70">
@@ -168,26 +168,26 @@ export function TrainingDataPipeline() {
 
         {/* Stats */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="bg-gray-900 rounded-xl p-3 text-center">
+          <div className="bg-background rounded-xl p-3 text-center">
             <div className="text-2xl font-bold text-white">
               {stats.totalDocuments}
             </div>
             <div className="text-xs text-foreground/60">Documents</div>
           </div>
-          <div className="bg-gray-900 rounded-xl p-3 text-center">
+          <div className="bg-background rounded-xl p-3 text-center">
             <div className="text-2xl font-bold text-white">
               {stats.totalConversations}
             </div>
             <div className="text-xs text-foreground/60">Conversations</div>
           </div>
-          <div className="bg-gray-900 rounded-xl p-3 text-center">
+          <div className="bg-background rounded-xl p-3 text-center">
             <div className="text-2xl font-bold text-white">
               {(stats.totalTokens / 1000).toFixed(0)}K
             </div>
             <div className="text-xs text-foreground/60">Tokens</div>
           </div>
-          <div className="bg-gray-900 rounded-xl p-3 text-center">
-            <div className="text-2xl font-bold text-cyan-400">
+          <div className="bg-background rounded-xl p-3 text-center">
+            <div className="text-2xl font-bold text-[var(--brain-cyan)]">
               {stats.modelVersion}
             </div>
             <div className="text-xs text-foreground/60">Model</div>
@@ -196,7 +196,7 @@ export function TrainingDataPipeline() {
       </div>
 
       {/* Tabs */}
-      <div className="flex border-b border-gray-700">
+      <div className="flex border-b border-border">
         {[
           { id: "upload", label: "Upload" },
           { id: "history", label: "History" },
@@ -207,7 +207,7 @@ export function TrainingDataPipeline() {
             onClick={() => setActiveTab(tab.id as typeof activeTab)}
             className={`flex-1 py-3 text-sm font-medium transition-colors ${
               activeTab === tab.id
-                ? "text-cyan-400 border-b-2 border-cyan-400"
+                ? "text-[var(--brain-cyan)] border-b-2 border-cyan-400"
                 : "text-foreground/70 hover:text-foreground/80"
             }`}
           >
@@ -223,7 +223,7 @@ export function TrainingDataPipeline() {
             {/* Upload Area */}
             <div
               onClick={() => fileInputRef.current?.click()}
-              className="border-2 border-dashed border-gray-700 hover:border-cyan-500/50 rounded-xl p-8 text-center cursor-pointer transition-colors"
+              className="border-2 border-dashed border-border hover:border-cyan-500/50 rounded-xl p-8 text-center cursor-pointer transition-colors"
             >
               <input
                 ref={fileInputRef}
@@ -236,16 +236,16 @@ export function TrainingDataPipeline() {
 
               {uploading ? (
                 <div className="flex flex-col items-center gap-3">
-                  <Loader2 className="w-12 h-12 text-cyan-400 animate-spin" />
+                  <Loader2 className="w-12 h-12 text-[var(--brain-cyan)] animate-spin" />
                   <p className="text-foreground/70">Processing files...</p>
                 </div>
               ) : (
                 <div className="flex flex-col items-center gap-3">
-                  <div className="w-16 h-16 rounded-full bg-cyan-500/10 flex items-center justify-center">
-                    <Upload className="w-8 h-8 text-cyan-400" />
+                  <div className="w-16 h-16 rounded-full bg-[var(--brain-cyan)]/10 flex items-center justify-center">
+                    <Upload className="w-8 h-8 text-[var(--brain-cyan)]" />
                   </div>
                   <div>
-                    <p className="text-white font-medium">
+                    <p className="text-foreground font-medium">
                       Drop files here or click to upload
                     </p>
                     <p className="text-sm text-foreground/60 mt-1">
@@ -258,15 +258,15 @@ export function TrainingDataPipeline() {
 
             {/* Quick Actions */}
             <div className="grid grid-cols-3 gap-3 mt-6">
-              <button className="flex items-center gap-2 p-3 bg-gray-900 hover:bg-gray-850 rounded-xl text-sm text-foreground/80 transition-colors">
+              <button className="flex items-center gap-2 p-3 bg-background hover:bg-gray-850 rounded-xl text-sm text-foreground/80 transition-colors">
                 <MessageSquare className="w-4 h-4 text-purple-400" />
                 <span>Import Conversations</span>
               </button>
-              <button className="flex items-center gap-2 p-3 bg-gray-900 hover:bg-gray-850 rounded-xl text-sm text-foreground/80 transition-colors">
-                <FileText className="w-4 h-4 text-blue-400" />
+              <button className="flex items-center gap-2 p-3 bg-background hover:bg-gray-850 rounded-xl text-sm text-foreground/80 transition-colors">
+                <FileText className="w-4 h-4 text-primary" />
                 <span>Connect Notes App</span>
               </button>
-              <button className="flex items-center gap-2 p-3 bg-gray-900 hover:bg-gray-850 rounded-xl text-sm text-foreground/80 transition-colors">
+              <button className="flex items-center gap-2 p-3 bg-background hover:bg-gray-850 rounded-xl text-sm text-foreground/80 transition-colors">
                 <Brain className="w-4 h-4 text-pink-400" />
                 <span>Add Preferences</span>
               </button>
@@ -286,13 +286,13 @@ export function TrainingDataPipeline() {
                 return (
                   <div
                     key={doc.id}
-                    className="flex items-center justify-between p-4 bg-gray-900 rounded-xl"
+                    className="flex items-center justify-between p-4 bg-background rounded-xl"
                   >
                     <div className="flex items-center gap-3">
                       <div
                         className={`w-10 h-10 rounded-lg flex items-center justify-center ${
                           doc.type === "document"
-                            ? "bg-blue-500/20"
+                            ? "bg-primary/20"
                             : doc.type === "conversation"
                               ? "bg-purple-500/20"
                               : "bg-pink-500/20"
@@ -301,7 +301,7 @@ export function TrainingDataPipeline() {
                         <TypeIcon
                           className={`w-5 h-5 ${
                             doc.type === "document"
-                              ? "text-blue-400"
+                              ? "text-primary"
                               : doc.type === "conversation"
                                 ? "text-purple-400"
                                 : "text-pink-400"
@@ -318,7 +318,7 @@ export function TrainingDataPipeline() {
                     </div>
                     <div className="flex items-center gap-2">
                       {doc.status === "processing" ? (
-                        <Loader2 className="w-5 h-5 text-cyan-400 animate-spin" />
+                        <Loader2 className="w-5 h-5 text-[var(--brain-cyan)] animate-spin" />
                       ) : doc.status === "ready" ? (
                         <Check className="w-5 h-5 text-green-400" />
                       ) : (
@@ -326,7 +326,7 @@ export function TrainingDataPipeline() {
                       )}
                       <button
                         onClick={() => deleteDocument(doc.id)}
-                        className="p-2 rounded-lg hover:bg-gray-800 text-foreground/70 hover:text-red-400 transition-colors"
+                        className="p-2 rounded-lg hover:bg-card text-foreground/70 hover:text-red-400 transition-colors"
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>
@@ -340,7 +340,7 @@ export function TrainingDataPipeline() {
 
         {activeTab === "export" && (
           <div className="space-y-4">
-            <div className="bg-gray-900 rounded-xl p-4">
+            <div className="bg-background rounded-xl p-4">
               <h4 className="font-medium text-white mb-2">
                 Export Your Training Data
               </h4>
@@ -358,7 +358,7 @@ export function TrainingDataPipeline() {
               </button>
             </div>
 
-            <div className="bg-gray-900 rounded-xl p-4">
+            <div className="bg-background rounded-xl p-4">
               <h4 className="font-medium text-white mb-2">
                 Delete All Training Data
               </h4>
@@ -377,7 +377,7 @@ export function TrainingDataPipeline() {
       </div>
 
       {/* Footer */}
-      <div className="px-6 py-4 bg-gray-900/50 border-t border-gray-700">
+      <div className="px-6 py-4 bg-gray-900/50 border-t border-border">
         <div className="flex items-center justify-between text-sm">
           <div className="flex items-center gap-2 text-foreground/60">
             <Info className="w-4 h-4" />
@@ -385,7 +385,7 @@ export function TrainingDataPipeline() {
               Last trained: {stats.lastTrainingDate?.toLocaleString()}
             </span>
           </div>
-          <button className="flex items-center gap-1 text-cyan-400 hover:text-cyan-300">
+          <button className="flex items-center gap-1 text-[var(--brain-cyan)] hover:text-cyan-300">
             <span>Training Settings</span>
             <ChevronRight className="w-4 h-4" />
           </button>

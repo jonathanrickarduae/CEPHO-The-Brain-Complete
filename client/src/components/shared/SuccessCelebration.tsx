@@ -23,8 +23,8 @@ interface SuccessCelebrationProps {
 const celebrationConfig = {
   integration: {
     icon: Zap,
-    color: "text-cyan-400",
-    bgColor: "bg-cyan-500/20",
+    color: "text-[var(--brain-cyan)]",
+    bgColor: "bg-[var(--brain-cyan)]/20",
     borderColor: "border-cyan-500/50",
     confettiColors: ["#06B6D4", "#22D3EE", "#67E8F9"],
   },
@@ -167,7 +167,7 @@ export function SuccessCelebration({
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
-                className="text-white/80"
+                className="text-foreground/80"
               >
                 {message}
               </motion.p>

@@ -4,11 +4,9 @@ import {
   Plus,
   Play,
   Pause,
-  Settings2,
   Trash2,
   CheckCircle2,
   Clock,
-  AlertTriangle,
   Zap,
   Mail,
   Calendar,
@@ -19,7 +17,6 @@ import {
   ChevronRight,
   Eye,
   Edit2,
-  Copy,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -228,7 +225,7 @@ export function AgentBuilder({ className }: AgentBuilderProps) {
     "agents"
   );
   const [expandedAgent, setExpandedAgent] = useState<string | null>(null);
-  const [isCreating, setIsCreating] = useState(false);
+  const [_setIsCreating] = useState(false);
 
   const toggleAgentStatus = useCallback((id: string) => {
     setAgents(prev =>
@@ -462,7 +459,7 @@ export function AgentBuilder({ className }: AgentBuilderProps) {
                     <div className="p-3 border-t border-white/10 space-y-3">
                       {/* Workflow */}
                       <div className="flex items-center gap-2 text-sm">
-                        <div className="px-3 py-1.5 bg-blue-500/20 text-blue-400 rounded-lg flex items-center gap-2">
+                        <div className="px-3 py-1.5 bg-primary/20 text-primary rounded-lg flex items-center gap-2">
                           <Clock className="w-3 h-3" />
                           {agent.trigger.name}
                         </div>

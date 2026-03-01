@@ -4,8 +4,6 @@ import {
   ShieldCheck,
   Plus,
   Trash2,
-  Eye,
-  EyeOff,
   Check,
   X,
 } from "lucide-react";
@@ -92,7 +90,7 @@ export function APIKeyManagement() {
   const [showAddModal, setShowAddModal] = useState(false);
   const [selectedService, setSelectedService] = useState("");
   const [apiKeyValue, setApiKeyValue] = useState("");
-  const [showKey, setShowKey] = useState<string | null>(null);
+  const [_setShowKey] = useState<string | null>(null);
 
   const handleAddAPIKey = () => {
     if (!selectedService || !apiKeyValue) {

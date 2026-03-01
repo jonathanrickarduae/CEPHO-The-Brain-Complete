@@ -99,7 +99,7 @@ export function DocumentNaming({ onGenerate }: DocumentNamingProps) {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <Card className="bg-gray-900/50 border-gray-800">
+      <Card className="bg-gray-900/50 border-border/50">
         <CardHeader>
           <CardTitle className="text-white flex items-center gap-2">
             <FileText className="w-5 h-5 text-[#E91E8C]" />
@@ -114,7 +114,7 @@ export function DocumentNaming({ onGenerate }: DocumentNamingProps) {
           <div className="flex flex-wrap gap-2 mb-4">
             <Badge
               variant="outline"
-              className="bg-blue-500/20 text-blue-400 border-blue-500/30"
+              className="bg-primary/20 text-primary border-blue-500/30"
             >
               <Calendar className="w-3 h-3 mr-1" />
               YYYY-MM-DD
@@ -153,14 +153,14 @@ export function DocumentNaming({ onGenerate }: DocumentNamingProps) {
                 type="date"
                 value={date}
                 onChange={e => setDate(e.target.value)}
-                className="bg-gray-800 border-gray-700"
+                className="bg-card border-border"
               />
             </div>
 
             <div className="space-y-2">
               <Label className="text-sm text-muted-foreground">Type</Label>
               <Select value={type} onValueChange={setType}>
-                <SelectTrigger className="bg-gray-800 border-gray-700">
+                <SelectTrigger className="bg-card border-border">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -181,7 +181,7 @@ export function DocumentNaming({ onGenerate }: DocumentNamingProps) {
                 placeholder="e.g., Investment Strategy"
                 value={description}
                 onChange={e => setDescription(e.target.value)}
-                className="bg-gray-800 border-gray-700"
+                className="bg-card border-border"
               />
             </div>
 
@@ -192,7 +192,7 @@ export function DocumentNaming({ onGenerate }: DocumentNamingProps) {
                 min="1"
                 value={version}
                 onChange={e => setVersion(e.target.value)}
-                className="bg-gray-800 border-gray-700"
+                className="bg-card border-border"
               />
             </div>
           </div>
@@ -227,9 +227,9 @@ export function DocumentNaming({ onGenerate }: DocumentNamingProps) {
       </Card>
 
       {/* Document Types Reference */}
-      <Card className="bg-gray-900/50 border-gray-800">
+      <Card className="bg-gray-900/50 border-border/50">
         <CardHeader>
-          <CardTitle className="text-white text-sm">
+          <CardTitle className="text-foreground/80 text-sm">
             Document Types Reference
           </CardTitle>
         </CardHeader>
@@ -242,7 +242,7 @@ export function DocumentNaming({ onGenerate }: DocumentNamingProps) {
                   "p-3 rounded-lg border cursor-pointer transition-all",
                   type === dt.value
                     ? "bg-[#E91E8C]/20 border-[#E91E8C]/50"
-                    : "bg-gray-800/50 border-gray-700 hover:border-gray-600"
+                    : "bg-card/50 border-border hover:border-border"
                 )}
                 onClick={() => setType(dt.value)}
               >
@@ -257,10 +257,10 @@ export function DocumentNaming({ onGenerate }: DocumentNamingProps) {
       </Card>
 
       {/* Examples */}
-      <Card className="bg-gray-900/50 border-gray-800">
+      <Card className="bg-gray-900/50 border-border/50">
         <CardHeader>
           <CardTitle className="text-white text-sm flex items-center gap-2">
-            <Info className="w-4 h-4 text-blue-400" />
+            <Info className="w-4 h-4 text-primary" />
             Examples
           </CardTitle>
         </CardHeader>
@@ -269,7 +269,7 @@ export function DocumentNaming({ onGenerate }: DocumentNamingProps) {
             {examples.map((example, index) => (
               <div
                 key={index}
-                className="flex items-center justify-between p-2 bg-gray-800/50 rounded-lg"
+                className="flex items-center justify-between p-2 bg-card/50 rounded-lg"
               >
                 <code className="text-sm text-white font-mono">{example}</code>
                 <Button
@@ -289,9 +289,9 @@ export function DocumentNaming({ onGenerate }: DocumentNamingProps) {
       </Card>
 
       {/* Best Practices */}
-      <Card className="bg-gray-900/50 border-gray-800">
+      <Card className="bg-gray-900/50 border-border/50">
         <CardHeader>
-          <CardTitle className="text-white text-sm">
+          <CardTitle className="text-foreground/80 text-sm">
             Naming Best Practices
           </CardTitle>
         </CardHeader>

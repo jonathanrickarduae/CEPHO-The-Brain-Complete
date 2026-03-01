@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect} from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -25,7 +25,6 @@ import {
 import {
   genesisWizardQuestions,
   WizardQuestion,
-  smeMapping,
   corporatePartnerMapping,
   GenesisBlueprint,
 } from "@/data/genesis-blueprint.data";
@@ -60,7 +59,6 @@ interface DigitalTwinMessage {
 
 export function GenesisBlueprintWizard({
   onComplete,
-  existingBlueprint,
 }: GenesisBlueprintWizardProps) {
   const [currentSection, setCurrentSection] = useState("entry");
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -239,7 +237,7 @@ export function GenesisBlueprintWizard({
 
   const getSmEContribution = (
     question: WizardQuestion,
-    answer: string | string[] | number
+    _answer: string | string[] | number
   ): string => {
     const contributions: Record<string, string[]> = {
       industry: [
@@ -643,7 +641,7 @@ export function GenesisBlueprintWizard({
   const SectionIcon = sectionIcons[currentSection] || FileText;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-900 to-gray-800">
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-gray-800">
       {/* Progress Header */}
       <div className="border-b border-white/10 bg-black/20 backdrop-blur-sm sticky top-0 z-10">
         <div className="max-w-6xl mx-auto px-6 py-4">
@@ -776,7 +774,7 @@ export function GenesisBlueprintWizard({
             <div className="bg-white/5 border border-white/10 rounded-2xl p-5">
               <div className="flex items-center gap-2 mb-4">
                 <Users className="w-5 h-5 text-fuchsia-400" />
-                <h3 className="font-semibold text-white">Active Experts</h3>
+                <h3 className="font-semibold text-foreground">Active Experts</h3>
               </div>
 
               {activeSMEs.length > 0 ? (
@@ -854,8 +852,8 @@ export function GenesisBlueprintWizard({
             <div className="bg-white/5 border border-white/10 rounded-2xl p-5">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2">
-                  <Brain className="w-5 h-5 text-cyan-400" />
-                  <h3 className="font-semibold text-white">Chief of Staff</h3>
+                  <Brain className="w-5 h-5 text-[var(--brain-cyan)]" />
+                  <h3 className="font-semibold text-foreground">Chief of Staff</h3>
                 </div>
                 <button
                   onClick={() => setShowTwinChat(!showTwinChat)}
@@ -876,7 +874,7 @@ export function GenesisBlueprintWizard({
                       key={msg.id}
                       className={`p-3 rounded-xl text-sm ${
                         msg.type === "insight"
-                          ? "bg-cyan-500/10 border border-cyan-500/20 text-cyan-200"
+                          ? "bg-[var(--brain-cyan)]/10 border border-cyan-500/20 text-cyan-200"
                           : msg.type === "suggestion"
                             ? "bg-fuchsia-500/10 border border-fuchsia-500/20 text-fuchsia-200"
                             : msg.type === "escalation"
@@ -920,7 +918,7 @@ export function GenesisBlueprintWizard({
       {/* Processing Overlay */}
       {isProcessing && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50">
-          <div className="bg-gray-900 border border-white/10 rounded-2xl p-8 max-w-md text-center">
+          <div className="bg-background border border-white/10 rounded-2xl p-8 max-w-md text-center">
             <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-r from-cyan-500 to-fuchsia-500 flex items-center justify-center animate-pulse">
               <Brain className="w-8 h-8 text-white" />
             </div>

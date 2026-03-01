@@ -14,10 +14,6 @@ import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   useIdealsDataroom,
-  type IdealsProject,
-  type IdealsFolder,
-  type IdealsDocument,
-  type FolderMapping,
 } from "@/lib/idealsDataroom";
 import {
   Database,
@@ -43,7 +39,6 @@ export function IdealsDataroomIntegration() {
   const {
     isConnected,
     isLoading,
-    error,
     projects,
     selectedProject,
     folders,
@@ -52,7 +47,6 @@ export function IdealsDataroomIntegration() {
     connect,
     disconnect,
     selectProject,
-    loadFolders,
     loadDocuments,
     uploadDocument,
     createFolder,
@@ -66,14 +60,16 @@ export function IdealsDataroomIntegration() {
   const [newFolderName, setNewFolderName] = useState("");
   const [selectedBrainFolder, setSelectedBrainFolder] = useState<string>("");
   const [selectedIdealsFolder, setSelectedIdealsFolder] = useState<string>("");
+  const [error, setError] = useState<string | null>(null);
 
   const handleConnect = async () => {
     if (!apiKeyInput.trim()) return;
+    setError(null);
     try {
       await connect(apiKeyInput);
       setApiKeyInput("");
-    } catch (e) {
-      // Error is handled by the hook
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Connection failed");
     }
   };
 
@@ -84,7 +80,7 @@ export function IdealsDataroomIntegration() {
     try {
       await uploadDocument(selectedIdealsFolder, file);
       await loadDocuments(selectedIdealsFolder);
-    } catch (error) {
+    } catch {
     }
   };
 
@@ -93,7 +89,7 @@ export function IdealsDataroomIntegration() {
     try {
       await createFolder(newFolderName);
       setNewFolderName("");
-    } catch (error) {
+    } catch {
     }
   };
 
@@ -353,7 +349,7 @@ export function IdealsDataroomIntegration() {
                         >
                           <div className="flex items-center justify-between">
                             <div className="flex items-center gap-3">
-                              <FileText className="h-5 w-5 text-blue-500" />
+                              <FileText className="h-5 w-5 text-primary" />
                               <div>
                                 <div className="font-medium">{doc.name}</div>
                                 <div className="text-xs text-muted-foreground">
@@ -468,7 +464,7 @@ export function IdealsDataroomIntegration() {
                       >
                         <div className="flex items-center gap-4">
                           <div className="flex items-center gap-2">
-                            <FolderOpen className="h-4 w-4 text-cyan-500" />
+                            <FolderOpen className="h-4 w-4 text-[var(--brain-cyan)]" />
                             <span>{mapping.brainFolderName}</span>
                           </div>
                           <ArrowRight className="h-4 w-4 text-muted-foreground" />

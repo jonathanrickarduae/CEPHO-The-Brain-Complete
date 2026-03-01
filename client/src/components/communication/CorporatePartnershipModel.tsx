@@ -8,10 +8,8 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Building2,
-  Users,
   Handshake,
   DollarSign,
   Target,
@@ -108,8 +106,8 @@ const partnershipTiers: PartnershipTier[] = [
     id: "technology",
     name: "Technology Partners",
     icon: Gem,
-    color: "text-cyan-400",
-    bgColor: "bg-cyan-500/20",
+    color: "text-[var(--brain-cyan)]",
+    bgColor: "bg-[var(--brain-cyan)]/20",
     description: "API and integration partners that enhance the ecosystem",
     benefits: [
       "API access and documentation",
@@ -193,7 +191,7 @@ ${tier.examples.map(e => `- ${e}`).join("\n")}
   return (
     <div className="space-y-6">
       {/* Header */}
-      <Card className="bg-gradient-to-r from-amber-500/10 via-purple-500/10 to-cyan-500/10 border-gray-800">
+      <Card className="bg-gradient-to-r from-amber-500/10 via-purple-500/10 to-cyan-500/10 border-border/50">
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
@@ -227,7 +225,7 @@ ${tier.examples.map(e => `- ${e}`).join("\n")}
                 "cursor-pointer transition-all",
                 isActive
                   ? `${tier.bgColor} border-2`
-                  : "bg-gray-900/50 border-gray-800 hover:border-gray-700"
+                  : "bg-gray-900/50 border-border/50 hover:border-border"
               )}
               style={{
                 borderColor: isActive
@@ -276,14 +274,14 @@ ${tier.examples.map(e => `- ${e}`).join("\n")}
         const Icon = tier.icon;
 
         return (
-          <Card key={tier.id} className="bg-gray-900/50 border-gray-800">
+          <Card key={tier.id} className="bg-gray-900/50 border-border/50">
             <CardHeader>
               <div className="flex items-center gap-3">
                 <div className={cn("p-3 rounded-lg", tier.bgColor)}>
                   <Icon className={cn("w-6 h-6", tier.color)} />
                 </div>
                 <div>
-                  <CardTitle className="text-white">{tier.name}</CardTitle>
+                  <CardTitle className="text-foreground">{tier.name}</CardTitle>
                   <CardDescription>{tier.revenueModel}</CardDescription>
                 </div>
               </div>
@@ -312,7 +310,7 @@ ${tier.examples.map(e => `- ${e}`).join("\n")}
                 {/* Requirements */}
                 <div className="space-y-3">
                   <h4 className="text-sm font-medium text-white flex items-center gap-2">
-                    <Target className="w-4 h-4 text-cyan-400" />
+                    <Target className="w-4 h-4 text-[var(--brain-cyan)]" />
                     Requirements
                   </h4>
                   <ul className="space-y-2">
@@ -330,7 +328,7 @@ ${tier.examples.map(e => `- ${e}`).join("\n")}
               </div>
 
               {/* Examples */}
-              <div className="mt-6 p-4 bg-gray-800/50 rounded-lg">
+              <div className="mt-6 p-4 bg-card/50 rounded-lg">
                 <h4 className="text-sm font-medium text-white mb-3">
                   Example Partners
                 </h4>
@@ -352,7 +350,7 @@ ${tier.examples.map(e => `- ${e}`).join("\n")}
       })}
 
       {/* Partnership Lifecycle */}
-      <Card className="bg-gray-900/50 border-gray-800">
+      <Card className="bg-gray-900/50 border-border/50">
         <CardHeader>
           <CardTitle className="text-white text-sm flex items-center gap-2">
             <TrendingUp className="w-4 h-4 text-green-400" />
@@ -362,11 +360,11 @@ ${tier.examples.map(e => `- ${e}`).join("\n")}
         <CardContent>
           <div className="flex flex-wrap gap-2 items-center">
             {[
-              { step: "Identify", color: "bg-blue-500/20 text-blue-400" },
+              { step: "Identify", color: "bg-primary/20 text-primary" },
               { step: "Qualify", color: "bg-purple-500/20 text-purple-400" },
               { step: "Engage", color: "bg-pink-500/20 text-pink-400" },
               { step: "Agreement", color: "bg-amber-500/20 text-amber-400" },
-              { step: "Onboard", color: "bg-cyan-500/20 text-cyan-400" },
+              { step: "Onboard", color: "bg-[var(--brain-cyan)]/20 text-[var(--brain-cyan)]" },
               { step: "Activate", color: "bg-green-500/20 text-green-400" },
               { step: "Grow", color: "bg-emerald-500/20 text-emerald-400" },
               { step: "Review", color: "bg-indigo-500/20 text-indigo-400" },
@@ -385,7 +383,7 @@ ${tier.examples.map(e => `- ${e}`).join("\n")}
       </Card>
 
       {/* Key Metrics */}
-      <Card className="bg-gray-900/50 border-gray-800">
+      <Card className="bg-gray-900/50 border-border/50">
         <CardHeader>
           <CardTitle className="text-white text-sm flex items-center gap-2">
             <DollarSign className="w-4 h-4 text-green-400" />
@@ -418,7 +416,7 @@ ${tier.examples.map(e => `- ${e}`).join("\n")}
             ].map((metric, index) => (
               <div
                 key={index}
-                className="p-3 bg-gray-800/50 rounded-lg text-center"
+                className="p-3 bg-card/50 rounded-lg text-center"
               >
                 <p className="text-2xl font-bold text-white">{metric.target}</p>
                 <p className="text-sm text-muted-foreground">{metric.label}</p>

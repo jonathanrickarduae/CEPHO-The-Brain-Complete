@@ -10,10 +10,6 @@ import {
   Check,
   ChevronLeft,
   ChevronRight,
-  Users,
-  Trash2,
-  Edit2,
-  AlertCircle,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -316,7 +312,7 @@ export function ExpertScheduling() {
                             key={i}
                             className={`w-1.5 h-1.5 rounded-full ${
                               s.type === "video"
-                                ? "bg-blue-500"
+                                ? "bg-primary"
                                 : "bg-green-500"
                             }`}
                           />
@@ -334,7 +330,7 @@ export function ExpertScheduling() {
         <Card className="bg-card/60 border-border">
           <CardHeader className="pb-3">
             <CardTitle className="flex items-center gap-2 text-base">
-              <Clock className="w-5 h-5 text-blue-500" />
+              <Clock className="w-5 h-5 text-primary" />
               Upcoming Sessions
             </CardTitle>
           </CardHeader>
@@ -476,7 +472,7 @@ export function ExpertScheduling() {
                       </div>
                       <div className="flex items-center gap-2">
                         {session.type === "video" ? (
-                          <Video className="w-4 h-4 text-blue-500" />
+                          <Video className="w-4 h-4 text-primary" />
                         ) : (
                           <MessageSquare className="w-4 h-4 text-green-500" />
                         )}
@@ -591,7 +587,7 @@ export function ExpertScheduling() {
                       onClick={() => setSessionType("video")}
                       className={`flex-1 flex items-center justify-center gap-2 p-3 rounded-lg border transition-colors ${
                         sessionType === "video"
-                          ? "bg-blue-500/20 border-blue-500/50 text-blue-400"
+                          ? "bg-primary/20 border-blue-500/50 text-primary"
                           : "border-border hover:bg-secondary"
                       }`}
                     >

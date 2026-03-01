@@ -13,14 +13,11 @@ import {
   CheckSquare,
   Zap,
   Video,
-  Shield,
-  Database,
   GitBranch,
   Clock,
   BarChart3,
   MessageSquare,
   Mic,
-  Building2,
   Users,
   FolderOpen,
   Lock,
@@ -76,7 +73,7 @@ const phaseConfig: Record<
   },
   innovation: {
     label: "Innovation",
-    color: "text-blue-400 bg-blue-500/20",
+    color: "text-primary bg-primary/20",
     icon: "🚀",
   },
   development: {
@@ -91,7 +88,7 @@ const phaseConfig: Record<
   },
   operations: {
     label: "Operations",
-    color: "text-cyan-400 bg-cyan-500/20",
+    color: "text-[var(--brain-cyan)] bg-[var(--brain-cyan)]/20",
     icon: "⚙️",
   },
   retention: {
@@ -113,7 +110,7 @@ export const toolIntegrations: ToolIntegration[] = [
     id: "trello",
     name: "Trello",
     description: "Project management with boards, lists, and cards",
-    icon: <Trello className="w-5 h-5 text-blue-400" />,
+    icon: <Trello className="w-5 h-5 text-primary" />,
     category: "project_management",
     phases: ["ideation", "development"],
     status: "disconnected",
@@ -195,7 +192,7 @@ export const toolIntegrations: ToolIntegration[] = [
     id: "gemini",
     name: "Google Gemini",
     description: "Google AI for multimodal analysis",
-    icon: <MessageSquare className="w-5 h-5 text-blue-400" />,
+    icon: <MessageSquare className="w-5 h-5 text-primary" />,
     category: "ai_engines",
     phases: ["ideation", "innovation"],
     status: "disconnected",
@@ -211,7 +208,7 @@ export const toolIntegrations: ToolIntegration[] = [
     id: "copilot",
     name: "Microsoft Copilot",
     description: "AI assistant for productivity",
-    icon: <MessageSquare className="w-5 h-5 text-cyan-400" />,
+    icon: <MessageSquare className="w-5 h-5 text-[var(--brain-cyan)]" />,
     category: "ai_engines",
     phases: ["ideation", "innovation"],
     status: "disconnected",
@@ -265,7 +262,7 @@ export const toolIntegrations: ToolIntegration[] = [
     id: "canva",
     name: "Canva",
     description: "Design and graphics creation",
-    icon: <BarChart3 className="w-5 h-5 text-cyan-400" />,
+    icon: <BarChart3 className="w-5 h-5 text-[var(--brain-cyan)]" />,
     category: "content_creation",
     phases: ["go_to_market"],
     status: "disconnected",
@@ -317,7 +314,7 @@ export const toolIntegrations: ToolIntegration[] = [
     id: "lightfield",
     name: "Lightfield CRM",
     description: "Customer relationship management",
-    icon: <Users className="w-5 h-5 text-blue-400" />,
+    icon: <Users className="w-5 h-5 text-primary" />,
     category: "business_crm",
     phases: ["go_to_market", "operations", "retention"],
     status: "disconnected",
@@ -333,7 +330,7 @@ export const toolIntegrations: ToolIntegration[] = [
     id: "calendly",
     name: "Calendly",
     description: "Meeting scheduling",
-    icon: <Calendar className="w-5 h-5 text-blue-400" />,
+    icon: <Calendar className="w-5 h-5 text-primary" />,
     category: "business_crm",
     phases: ["go_to_market", "operations", "retention"],
     status: "disconnected",
@@ -367,7 +364,7 @@ export const toolIntegrations: ToolIntegration[] = [
     id: "bitwarden",
     name: "Bitwarden",
     description: "Password management",
-    icon: <Lock className="w-5 h-5 text-blue-400" />,
+    icon: <Lock className="w-5 h-5 text-primary" />,
     category: "security",
     phases: ["operations"],
     status: "disconnected",
@@ -439,7 +436,7 @@ export function ToolCard({
                 variant="outline"
                 className={`text-xs ${
                   tool.priority === "high"
-                    ? "border-cyan-500/50 text-cyan-400"
+                    ? "border-cyan-500/50 text-[var(--brain-cyan)]"
                     : tool.priority === "medium"
                       ? "border-yellow-500/50 text-yellow-400"
                       : "border-gray-500/50 text-foreground/70"
@@ -646,7 +643,7 @@ export function ToolIntegrationsDashboard({
           <div className="text-sm text-foreground/70">Available</div>
         </div>
         <div className="p-4 bg-white/5 rounded-xl border border-white/10">
-          <div className="text-2xl font-bold text-cyan-400">
+          <div className="text-2xl font-bold text-[var(--brain-cyan)]">
             {tools.filter(t => t.priority === "high").length}
           </div>
           <div className="text-sm text-foreground/70">High Priority</div>

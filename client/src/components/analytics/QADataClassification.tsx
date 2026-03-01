@@ -9,9 +9,6 @@ import {
   Clock,
   User,
   ThumbsUp,
-  ThumbsDown,
-  Eye,
-  Edit3,
   RefreshCw,
   ExternalLink,
   BookOpen,
@@ -81,8 +78,8 @@ const classificationConfig: Record<
   assumption: {
     label: "Assumption",
     icon: HelpCircle,
-    color: "text-blue-400",
-    bgColor: "bg-blue-500/10",
+    color: "text-primary",
+    bgColor: "bg-primary/10",
     borderColor: "border-blue-500/30",
     description: "Reasonable assumption, needs validation",
   },
@@ -97,8 +94,8 @@ const classificationConfig: Record<
   ai_generated: {
     label: "AI Generated",
     icon: RefreshCw,
-    color: "text-cyan-400",
-    bgColor: "bg-cyan-500/10",
+    color: "text-[var(--brain-cyan)]",
+    bgColor: "bg-[var(--brain-cyan)]/10",
     borderColor: "border-cyan-500/30",
     description: "AI-generated, not independently verified",
   },
@@ -151,12 +148,11 @@ export function QADataClassificationBadge({
 
 export function QADataClassification({
   data,
-  onClassificationChange,
   onVerify,
   onRequestSource,
   compact = false,
 }: QADataClassificationProps) {
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [_setIsExpanded] = useState(false);
   const config = classificationConfig[data.classification];
   const Icon = config.icon;
 
@@ -210,7 +206,7 @@ export function QADataClassification({
                   href={data.sourceUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-cyan-400 hover:text-cyan-300 flex items-center gap-1"
+                  className="text-[var(--brain-cyan)] hover:text-cyan-300 flex items-center gap-1"
                 >
                   <ExternalLink className="w-3 h-3" />
                   View

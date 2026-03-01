@@ -23,18 +23,13 @@ import {
   Calendar,
   Plus,
   Trash2,
-  Edit2,
   CheckCircle2,
-  Clock,
   Linkedin,
   Twitter,
   FileText,
   Video,
-  Image as ImageIcon,
-  Mic,
+  Image as Mic,
   Target,
-  TrendingUp,
-  Copy,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -193,7 +188,7 @@ export function ContentCalendar() {
 
   const getPlatformColor = (platform: string) => {
     const p = platforms.find(pl => pl.value === platform);
-    return p?.color || "text-gray-500";
+    return p?.color || "text-muted-foreground/70";
   };
 
   const getStatusColor = (status: ContentItem["status"]) => {
@@ -201,13 +196,13 @@ export function ContentCalendar() {
       case "published":
         return "bg-green-500/20 text-green-500";
       case "scheduled":
-        return "bg-blue-500/20 text-blue-500";
+        return "bg-primary/20 text-primary";
       case "review":
         return "bg-purple-500/20 text-purple-500";
       case "drafting":
         return "bg-yellow-500/20 text-yellow-500";
       default:
-        return "bg-gray-500/20 text-gray-500";
+        return "bg-gray-500/20 text-muted-foreground/70";
     }
   };
 
@@ -247,7 +242,7 @@ export function ContentCalendar() {
         <Card>
           <CardContent className="pt-6">
             <div className="text-center">
-              <div className="text-3xl font-bold text-blue-500">
+              <div className="text-3xl font-bold text-primary">
                 {stats.scheduled}
               </div>
               <div className="text-sm text-muted-foreground">Scheduled</div>

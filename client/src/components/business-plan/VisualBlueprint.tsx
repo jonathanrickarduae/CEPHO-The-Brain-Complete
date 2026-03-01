@@ -1,19 +1,15 @@
 import { useState, useRef } from "react";
 import {
   Download,
-  Share2,
   ZoomIn,
   ZoomOut,
   Maximize2,
   FileText,
   Users,
-  TrendingUp,
-  Scale,
   Shield,
   Building2,
   GitBranch,
   Layers,
-  ArrowRight,
   CheckCircle2,
   AlertTriangle,
   Clock,
@@ -293,7 +289,7 @@ export function VisualBlueprint({
       link.download = `${blueprint.projectName.replace(/\s+/g, "_")}_blueprint.png`;
       link.href = canvas.toDataURL("image/png");
       link.click();
-    } catch (error) {
+    } catch {
       alert("Export failed. Please try again.");
     } finally {
       setIsExporting(false);
@@ -347,11 +343,11 @@ export function VisualBlueprint({
       case "complete":
         return "border-green-500 bg-green-500/20";
       case "in_progress":
-        return "border-blue-500 bg-blue-500/20";
+        return "border-primary bg-primary/20";
       case "blocked":
         return "border-red-500 bg-red-500/20";
       default:
-        return "border-gray-500 bg-gray-500/20";
+        return "border-border bg-gray-500/20";
     }
   };
 
@@ -360,7 +356,7 @@ export function VisualBlueprint({
       case "complete":
         return <CheckCircle2 className="w-3 h-3 text-green-500" />;
       case "in_progress":
-        return <Clock className="w-3 h-3 text-blue-500" />;
+        return <Clock className="w-3 h-3 text-primary" />;
       case "blocked":
         return <AlertTriangle className="w-3 h-3 text-red-500" />;
       default:
@@ -548,7 +544,7 @@ export function VisualBlueprint({
                 {
                   status: "in_progress",
                   label: "In Progress",
-                  color: "text-blue-500",
+                  color: "text-primary",
                 },
                 {
                   status: "pending",

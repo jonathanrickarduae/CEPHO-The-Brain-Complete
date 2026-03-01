@@ -1,7 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState} from "react";
 import {
   CheckSquare,
-  Clock,
   Users,
   AlertTriangle,
   ChevronRight,
@@ -11,7 +10,6 @@ import {
   Calendar,
   Target,
   TrendingUp,
-  BarChart3,
   FolderOpen,
   User,
   CheckCircle,
@@ -20,7 +18,7 @@ import {
 } from "lucide-react";
 
 // Asana data types
-interface AsanaWorkspace {
+interface _AsanaWorkspace {
   id: string;
   name: string;
   isOrganization: boolean;
@@ -96,7 +94,7 @@ export function AsanaIntegration({ onConnect }: AsanaIntegrationProps) {
   const [activeView, setActiveView] = useState<
     "dashboard" | "projects" | "tasks" | "updates"
   >("dashboard");
-  const [selectedProject, setSelectedProject] = useState<AsanaProject | null>(
+  const [_selectedProject, setSelectedProject] = useState<AsanaProject | null>(
     null
   );
   const [filterStatus, setFilterStatus] = useState<
@@ -178,7 +176,7 @@ export function AsanaIntegration({ onConnect }: AsanaIntegrationProps) {
       case "medium":
         return "text-yellow-400 bg-yellow-500/20";
       case "low":
-        return "text-blue-400 bg-blue-500/20";
+        return "text-primary bg-primary/20";
       default:
         return "text-foreground/70 bg-gray-500/20";
     }
@@ -189,7 +187,7 @@ export function AsanaIntegration({ onConnect }: AsanaIntegrationProps) {
       case "task_completed":
         return <CheckCircle className="w-4 h-4 text-green-400" />;
       case "task_created":
-        return <Circle className="w-4 h-4 text-blue-400" />;
+        return <Circle className="w-4 h-4 text-primary" />;
       case "status_update":
         return <AlertTriangle className="w-4 h-4 text-yellow-400" />;
       case "due_date_changed":
@@ -376,7 +374,7 @@ export function AsanaIntegration({ onConnect }: AsanaIntegrationProps) {
                 {MOCK_UPDATES.slice(0, 5).map(update => (
                   <div
                     key={update.id}
-                    className="flex items-start gap-3 p-3 bg-gray-800/50 rounded-lg"
+                    className="flex items-start gap-3 p-3 bg-card/50 rounded-lg"
                   >
                     {getUpdateIcon(update.type)}
                     <div className="flex-1">
@@ -404,7 +402,7 @@ export function AsanaIntegration({ onConnect }: AsanaIntegrationProps) {
                 ).map(task => (
                   <div
                     key={task.id}
-                    className="flex items-center justify-between p-3 bg-gray-800/50 rounded-lg"
+                    className="flex items-center justify-between p-3 bg-card/50 rounded-lg"
                   >
                     <div className="flex items-center gap-3">
                       <Circle className="w-4 h-4 text-muted-foreground" />
@@ -444,7 +442,7 @@ export function AsanaIntegration({ onConnect }: AsanaIntegrationProps) {
               <select
                 value={filterStatus}
                 onChange={e => setFilterStatus(e.target.value as any)}
-                className="bg-gray-800 border border-gray-700 rounded-lg px-3 py-1.5 text-sm text-foreground"
+                className="bg-card border border-border rounded-lg px-3 py-1.5 text-sm text-foreground"
               >
                 <option value="all">All Projects</option>
                 <option value="on_track">On Track</option>
@@ -457,7 +455,7 @@ export function AsanaIntegration({ onConnect }: AsanaIntegrationProps) {
             {filteredProjects.map(project => (
               <div
                 key={project.id}
-                className="p-4 bg-gray-800/50 border border-gray-700 rounded-xl hover:border-gray-600 transition-colors cursor-pointer"
+                className="p-4 bg-card/50 border border-border rounded-xl hover:border-border transition-colors cursor-pointer"
                 onClick={() => setSelectedProject(project)}
               >
                 <div className="flex items-start justify-between mb-3">
@@ -490,7 +488,7 @@ export function AsanaIntegration({ onConnect }: AsanaIntegrationProps) {
                       {project.completedCount}/{project.taskCount} tasks
                     </span>
                   </div>
-                  <div className="h-2 bg-gray-700 rounded-full overflow-hidden">
+                  <div className="h-2 bg-muted rounded-full overflow-hidden">
                     <div
                       className="h-full transition-all"
                       style={{
@@ -531,7 +529,7 @@ export function AsanaIntegration({ onConnect }: AsanaIntegrationProps) {
             {MOCK_TASKS.map(task => (
               <div
                 key={task.id}
-                className={`p-4 bg-gray-800/50 border border-gray-700 rounded-xl ${
+                className={`p-4 bg-card/50 border border-border rounded-xl ${
                   task.completed ? "opacity-60" : ""
                 }`}
               >
@@ -593,7 +591,7 @@ export function AsanaIntegration({ onConnect }: AsanaIntegrationProps) {
                         {task.tags.map(tag => (
                           <span
                             key={tag}
-                            className="text-xs px-2 py-0.5 bg-gray-700 rounded text-muted-foreground"
+                            className="text-xs px-2 py-0.5 bg-muted rounded text-muted-foreground"
                           >
                             {tag}
                           </span>
@@ -612,9 +610,9 @@ export function AsanaIntegration({ onConnect }: AsanaIntegrationProps) {
             {MOCK_UPDATES.map(update => (
               <div
                 key={update.id}
-                className="flex items-start gap-3 p-4 bg-gray-800/50 border border-gray-700 rounded-xl"
+                className="flex items-start gap-3 p-4 bg-card/50 border border-border rounded-xl"
               >
-                <div className="w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center">
+                <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center">
                   {getUpdateIcon(update.type)}
                 </div>
                 <div className="flex-1">

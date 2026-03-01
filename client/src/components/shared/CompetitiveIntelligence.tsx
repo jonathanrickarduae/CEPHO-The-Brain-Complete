@@ -2,20 +2,14 @@ import { useState } from "react";
 import {
   Target,
   TrendingUp,
-  TrendingDown,
   AlertTriangle,
   Building2,
-  Users,
-  DollarSign,
   Zap,
-  Globe,
   BarChart3,
   PieChart,
   ArrowUpRight,
-  ArrowDownRight,
   RefreshCw,
   FileText,
-  ExternalLink,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -200,8 +194,8 @@ export function CompetitiveIntelligence() {
       default:
         return {
           icon: BarChart3,
-          color: "text-blue-400",
-          bg: "bg-blue-500/20",
+          color: "text-primary",
+          bg: "bg-primary/20",
         };
     }
   };
@@ -330,7 +324,7 @@ export function CompetitiveIntelligence() {
               <div className="text-sm text-muted-foreground">
                 Categories Led
               </div>
-              <div className="flex items-center justify-center gap-1 mt-1 text-sm text-blue-400">
+              <div className="flex items-center justify-center gap-1 mt-1 text-sm text-primary">
                 Competitive advantage
               </div>
             </CardContent>

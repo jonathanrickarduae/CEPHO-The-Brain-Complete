@@ -6,7 +6,6 @@ import {
   CheckSquare,
   ExternalLink,
   Check,
-  X,
   Loader2,
   RefreshCw,
   Settings,
@@ -228,7 +227,7 @@ export function EmailIntegrationPanel() {
       type: "email_outlook",
       name: "Microsoft Outlook",
       description: "Connect your Outlook inbox for unified email management",
-      icon: <Mail className="w-5 h-5 text-blue-400" />,
+      icon: <Mail className="w-5 h-5 text-primary" />,
       connected: integrations.some(
         i => i.provider === "email_outlook" && i.status === "active"
       ),
@@ -321,7 +320,7 @@ export function CalendarIntegrationPanel() {
       type: "calendar_outlook",
       name: "Microsoft Outlook Calendar",
       description: "Sync your Outlook calendar for scheduling and reminders",
-      icon: <Calendar className="w-5 h-5 text-blue-400" />,
+      icon: <Calendar className="w-5 h-5 text-primary" />,
       connected: integrations.some(
         i => i.provider === "calendar_outlook" && i.status === "active"
       ),

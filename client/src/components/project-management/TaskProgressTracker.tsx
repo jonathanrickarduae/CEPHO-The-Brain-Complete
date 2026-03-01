@@ -41,7 +41,7 @@ interface TaskProgressTrackerProps {
 
 const STAGE_CONFIG = {
   queued: { label: "Queued", color: "bg-gray-500", icon: Clock },
-  researching: { label: "Researching", color: "bg-blue-500", icon: Loader2 },
+  researching: { label: "Researching", color: "bg-primary", icon: Loader2 },
   drafting: { label: "Drafting", color: "bg-purple-500", icon: FileText },
   qa_review: { label: "QA Review", color: "bg-amber-500", icon: Brain },
   complete: { label: "Complete", color: "bg-green-500", icon: CheckCircle2 },
@@ -54,7 +54,7 @@ const ASSIGNEE_CONFIG = {
     icon: Brain,
     color: "text-fuchsia-400",
   },
-  ai_sme: { label: "AI-SME", icon: Users, color: "text-cyan-400" },
+  ai_sme: { label: "AI-SME", icon: Users, color: "text-[var(--brain-cyan)]" },
   expert_team: { label: "Expert Team", icon: Users, color: "text-amber-400" },
 };
 
@@ -161,7 +161,7 @@ export function TaskProgressTracker({
             <Loader2 className="w-5 h-5 text-fuchsia-400 animate-spin" />
           </div>
           <div>
-            <h3 className="font-semibold text-white">Active Tasks</h3>
+            <h3 className="font-semibold text-foreground">Active Tasks</h3>
             <p className="text-sm text-foreground/70">
               {inProgressTasks.length} in progress • Next ready in ~
               {Math.ceil(nextCompletion)} min

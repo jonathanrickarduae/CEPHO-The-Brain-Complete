@@ -32,7 +32,7 @@ export default function Vault() {
       health: 100,
       lastSync: "2 mins ago",
       icon: Mail,
-      color: "text-blue-400",
+      color: "text-primary",
       category: "Communication",
     },
     {
@@ -73,7 +73,7 @@ export default function Vault() {
       health: 100,
       lastSync: "Just now",
       icon: Globe,
-      color: "text-cyan-400",
+      color: "text-[var(--brain-cyan)]",
       category: "AI Tools",
     },
     {
@@ -191,7 +191,7 @@ export default function Vault() {
   ).length;
 
   return (
-    <div className="h-[calc(100vh-56px)] md:h-screen flex flex-col bg-gradient-to-br from-gray-900 via-gray-900 to-gray-800">
+    <div className="h-[calc(100vh-56px)] md:h-screen flex flex-col bg-gradient-to-br from-background via-background to-gray-800">
       {/* Header */}
       <div className="border-b border-white/10 px-4 sm:px-6 py-4">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
@@ -200,7 +200,7 @@ export default function Vault() {
               <Shield className="h-8 w-8 text-slate-400" />
               The Vault
             </h1>
-            <p className="text-gray-400 mt-1">Security & Integrations</p>
+            <p className="text-muted-foreground mt-1">Security & Integrations</p>
           </div>
           <div className="flex items-center gap-3">
             <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-green-500/10 border border-green-500/30">
@@ -281,7 +281,7 @@ export default function Vault() {
           <Card className="bg-white/5 border-white/10 flex flex-col min-h-0">
             <div className="flex items-center justify-between p-4 border-b border-white/10 shrink-0">
               <div className="flex items-center gap-2">
-                <Activity className="w-5 h-5 text-cyan-400" />
+                <Activity className="w-5 h-5 text-[var(--brain-cyan)]" />
                 <h3 className="font-semibold">Integrations</h3>
               </div>
               <Button size="sm" variant="outline" className="gap-1 h-8">

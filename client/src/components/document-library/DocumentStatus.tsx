@@ -5,7 +5,6 @@ import {
   CheckCircle2,
   Archive,
   AlertCircle,
-  Clock,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -35,13 +34,13 @@ const statusConfig: Record<
   draft: {
     label: "Draft",
     icon: FileEdit,
-    className: "bg-gray-500/20 text-gray-400 border-gray-500/30",
+    className: "bg-gray-500/20 text-muted-foreground border-gray-500/30",
     description: "Document is being worked on",
   },
   in_review: {
     label: "In Review",
     icon: Eye,
-    className: "bg-blue-500/20 text-blue-400 border-blue-500/30",
+    className: "bg-primary/20 text-primary border-blue-500/30",
     description: "Document is under review",
   },
   approved: {
@@ -140,7 +139,7 @@ export function DocumentStatusSelector({
               isSelected
                 ? config.className +
                     " ring-2 ring-offset-2 ring-offset-gray-900"
-                : "bg-gray-800/50 border-gray-700 text-gray-400 hover:border-gray-600",
+                : "bg-card/50 border-border text-muted-foreground hover:border-border",
               disabled && "opacity-50 cursor-not-allowed"
             )}
           >
@@ -184,7 +183,7 @@ export function DocumentWorkflow({
                 isCurrent && config.className,
                 !isCompleted &&
                   !isCurrent &&
-                  "bg-gray-800/50 border-gray-700 text-gray-500"
+                  "bg-card/50 border-border text-muted-foreground/70"
               )}
             >
               {isCompleted ? (
@@ -198,7 +197,7 @@ export function DocumentWorkflow({
               <div
                 className={cn(
                   "w-8 h-0.5 mx-1",
-                  index < currentIndex ? "bg-green-500" : "bg-gray-700"
+                  index < currentIndex ? "bg-green-500" : "bg-muted"
                 )}
               />
             )}

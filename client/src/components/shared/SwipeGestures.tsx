@@ -225,7 +225,7 @@ export function SwipeableNotification({
       onSwipeLeft={() => onDismiss(notification.id)}
       leftAction={{
         icon: <Check className="w-5 h-5" />,
-        color: "bg-blue-500",
+        color: "bg-primary",
         label: "Read",
       }}
       rightAction={{

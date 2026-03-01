@@ -69,7 +69,7 @@ export function Confetti({
 
     // Animation loop
     let animationFrame: number;
-    let startTime = Date.now();
+    const startTime = Date.now();
 
     const animate = () => {
       const elapsed = Date.now() - startTime;
@@ -154,7 +154,7 @@ export function CelebrationProvider({ children }: { children: ReactNode }) {
   } | null>(null);
 
   const celebrate = useCallback(
-    (type: "confetti" | "fireworks" | "sparkles", options?: any) => {
+    (type: "confetti" | "fireworks" | "sparkles", _options?: any) => {
       if (type === "confetti") {
         setActiveConfetti(true);
         // Haptic feedback

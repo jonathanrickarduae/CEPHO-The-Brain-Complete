@@ -11,7 +11,6 @@ import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   User,
   Copy,
@@ -143,7 +142,7 @@ We've helped 10,000 businesses save an average of 20 hours per week, and we're l
 ];
 
 const platformConfig = {
-  linkedin: { icon: Linkedin, color: "text-blue-400", bg: "bg-blue-500/20" },
+  linkedin: { icon: Linkedin, color: "text-primary", bg: "bg-primary/20" },
   twitter: { icon: Twitter, color: "text-sky-400", bg: "bg-sky-500/20" },
   website: { icon: Globe, color: "text-green-400", bg: "bg-green-500/20" },
   email: { icon: Mail, color: "text-amber-400", bg: "bg-amber-500/20" },
@@ -200,7 +199,7 @@ export function BioTemplates({ onGenerate }: BioTemplatesProps) {
         setGeneratedBio(bio);
       }
       toast.success("Bio generated");
-    } catch (error) {
+    } catch {
       toast.error("Failed to generate bio");
     } finally {
       setIsGenerating(false);
@@ -210,7 +209,7 @@ export function BioTemplates({ onGenerate }: BioTemplatesProps) {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <Card className="bg-gray-900/50 border-gray-800">
+      <Card className="bg-gray-900/50 border-border/50">
         <CardHeader>
           <CardTitle className="text-white flex items-center gap-2">
             <User className="w-5 h-5 text-[#E91E8C]" />
@@ -255,7 +254,7 @@ export function BioTemplates({ onGenerate }: BioTemplatesProps) {
       {currentTemplate && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Template Info & Inputs */}
-          <Card className="bg-gray-900/50 border-gray-800">
+          <Card className="bg-gray-900/50 border-border/50">
             <CardHeader>
               <div className="flex items-center gap-3">
                 {(() => {
@@ -288,7 +287,7 @@ export function BioTemplates({ onGenerate }: BioTemplatesProps) {
               </div>
 
               {/* Template Structure */}
-              <div className="p-3 bg-gray-800/50 rounded-lg">
+              <div className="p-3 bg-card/50 rounded-lg">
                 <p className="text-xs text-muted-foreground mb-2">
                   Template Structure:
                 </p>
@@ -309,7 +308,7 @@ export function BioTemplates({ onGenerate }: BioTemplatesProps) {
                     onChange={e =>
                       setInputs({ ...inputs, name: e.target.value })
                     }
-                    className="bg-gray-800 border-gray-700"
+                    className="bg-card border-border"
                   />
                   <Input
                     placeholder="Your Role"
@@ -317,7 +316,7 @@ export function BioTemplates({ onGenerate }: BioTemplatesProps) {
                     onChange={e =>
                       setInputs({ ...inputs, role: e.target.value })
                     }
-                    className="bg-gray-800 border-gray-700"
+                    className="bg-card border-border"
                   />
                   <Input
                     placeholder="Company Name"
@@ -325,7 +324,7 @@ export function BioTemplates({ onGenerate }: BioTemplatesProps) {
                     onChange={e =>
                       setInputs({ ...inputs, company: e.target.value })
                     }
-                    className="bg-gray-800 border-gray-700"
+                    className="bg-card border-border"
                   />
                   <Input
                     placeholder="Key Achievement"
@@ -333,7 +332,7 @@ export function BioTemplates({ onGenerate }: BioTemplatesProps) {
                     onChange={e =>
                       setInputs({ ...inputs, achievement: e.target.value })
                     }
-                    className="bg-gray-800 border-gray-700"
+                    className="bg-card border-border"
                   />
                 </div>
                 <Input
@@ -342,7 +341,7 @@ export function BioTemplates({ onGenerate }: BioTemplatesProps) {
                   onChange={e =>
                     setInputs({ ...inputs, focus: e.target.value })
                   }
-                  className="bg-gray-800 border-gray-700"
+                  className="bg-card border-border"
                 />
               </div>
 
@@ -364,10 +363,10 @@ export function BioTemplates({ onGenerate }: BioTemplatesProps) {
           {/* Example & Generated */}
           <div className="space-y-4">
             {/* Example */}
-            <Card className="bg-gray-900/50 border-gray-800">
+            <Card className="bg-gray-900/50 border-border/50">
               <CardHeader className="pb-3">
                 <div className="flex items-center justify-between">
-                  <CardTitle className="text-white text-sm">Example</CardTitle>
+                  <CardTitle className="text-foreground/80 text-sm">Example</CardTitle>
                   <Button
                     variant="ghost"
                     size="sm"
@@ -419,7 +418,7 @@ export function BioTemplates({ onGenerate }: BioTemplatesProps) {
                   <Textarea
                     value={generatedBio}
                     onChange={e => setGeneratedBio(e.target.value)}
-                    className="bg-gray-800 border-gray-700 min-h-[150px]"
+                    className="bg-card border-border min-h-[150px]"
                   />
                   <p
                     className={cn(
@@ -442,9 +441,9 @@ export function BioTemplates({ onGenerate }: BioTemplatesProps) {
       )}
 
       {/* Guidelines */}
-      <Card className="bg-gray-900/50 border-gray-800">
+      <Card className="bg-gray-900/50 border-border/50">
         <CardHeader>
-          <CardTitle className="text-white text-sm">
+          <CardTitle className="text-foreground/80 text-sm">
             Bio Writing Guidelines
           </CardTitle>
         </CardHeader>

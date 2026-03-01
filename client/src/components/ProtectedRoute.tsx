@@ -1,5 +1,3 @@
-import { useEffect } from "react";
-import { useLocation } from "wouter";
 import BrainLayout from "@/components/ai-agents/BrainLayout";
 
 interface ProtectedRouteProps {

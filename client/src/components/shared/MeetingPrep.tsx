@@ -4,7 +4,6 @@ import {
   Users,
   FileText,
   Clock,
-  MapPin,
   Video,
   Phone,
   Building2,

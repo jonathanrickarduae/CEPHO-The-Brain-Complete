@@ -51,7 +51,6 @@ export function SMEPanel({
   currentSection,
   onAcceptContribution,
   onRejectContribution,
-  onModifyContribution,
   onRequestClarification,
 }: SMEPanelProps) {
   const [expandedExperts, setExpandedExperts] = useState<string[]>([]);
@@ -96,7 +95,7 @@ export function SMEPanel({
   const getContributionIcon = (type: SMEContribution["type"]) => {
     switch (type) {
       case "insight":
-        return <Sparkles className="w-3 h-3 text-cyan-400" />;
+        return <Sparkles className="w-3 h-3 text-[var(--brain-cyan)]" />;
       case "recommendation":
         return <ThumbsUp className="w-3 h-3 text-green-400" />;
       case "question":
@@ -111,7 +110,7 @@ export function SMEPanel({
   const getContributionBg = (type: SMEContribution["type"]) => {
     switch (type) {
       case "insight":
-        return "bg-cyan-500/10 border-cyan-500/20";
+        return "bg-[var(--brain-cyan)]/10 border-cyan-500/20";
       case "recommendation":
         return "bg-green-500/10 border-green-500/20";
       case "question":
@@ -123,7 +122,7 @@ export function SMEPanel({
     }
   };
 
-  const relevantSMEs = activeSMEs.filter(
+  const _relevantSMEs = activeSMEs.filter(
     sme =>
       sme.contributions.some(c => c.section === currentSection) ||
       sme.status !== "listening"
@@ -141,7 +140,7 @@ export function SMEPanel({
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Users className="w-5 h-5 text-fuchsia-400" />
-          <h3 className="font-semibold text-white">Expert Panel</h3>
+          <h3 className="font-semibold text-foreground">Expert Panel</h3>
           <Badge
             variant="outline"
             className="border-white/20 text-foreground/70 text-xs"
@@ -347,7 +346,7 @@ export function SMEPanel({
                           }))
                         }
                         placeholder="Ask for clarification..."
-                        className="flex-1 bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-fuchsia-500/50"
+                        className="flex-1 bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-xs text-white placeholder:text-muted-foreground focus:outline-none focus:border-fuchsia-500/50"
                       />
                       <Button
                         size="sm"
@@ -396,7 +395,7 @@ export function SMEPanel({
         </p>
         <div className="flex flex-wrap gap-2">
           <div className="flex items-center gap-1 text-[10px] text-foreground/70">
-            <Sparkles className="w-3 h-3 text-cyan-400" /> Insight
+            <Sparkles className="w-3 h-3 text-[var(--brain-cyan)]" /> Insight
           </div>
           <div className="flex items-center gap-1 text-[10px] text-foreground/70">
             <ThumbsUp className="w-3 h-3 text-green-400" /> Recommendation

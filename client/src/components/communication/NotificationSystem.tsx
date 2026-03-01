@@ -8,18 +8,12 @@ import {
 import {
   Bell,
   X,
-  Check,
   AlertTriangle,
   Info,
   CheckCircle,
   Clock,
   Calendar,
-  FileText,
-  FolderKanban,
-  Settings,
   ChevronRight,
-  Trash2,
-  MoreHorizontal,
 } from "lucide-react";
 
 type NotificationType = "info" | "success" | "warning" | "action" | "reminder";
@@ -172,7 +166,7 @@ export function NotificationBell() {
     NotificationType,
     { icon: typeof Info; color: string }
   > = {
-    info: { icon: Info, color: "text-blue-400" },
+    info: { icon: Info, color: "text-primary" },
     success: { icon: CheckCircle, color: "text-green-400" },
     warning: { icon: AlertTriangle, color: "text-yellow-400" },
     action: { icon: Clock, color: "text-orange-400" },
@@ -198,7 +192,7 @@ export function NotificationBell() {
     <div className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="relative p-2 hover:bg-gray-700 rounded-lg transition-colors"
+        className="relative p-2 hover:bg-muted rounded-lg transition-colors"
       >
         <Bell className="w-5 h-5 text-muted-foreground" />
         {unreadCount > 0 && (
@@ -234,7 +228,7 @@ export function NotificationBell() {
                   className={`px-3 py-1 rounded-full text-xs transition-colors ${
                     filter === "all"
                       ? "bg-primary text-primary-foreground"
-                      : "bg-gray-700 text-muted-foreground hover:text-foreground"
+                      : "bg-muted text-muted-foreground hover:text-foreground"
                   }`}
                 >
                   All
@@ -244,7 +238,7 @@ export function NotificationBell() {
                   className={`px-3 py-1 rounded-full text-xs transition-colors ${
                     filter === "unread"
                       ? "bg-primary text-primary-foreground"
-                      : "bg-gray-700 text-muted-foreground hover:text-foreground"
+                      : "bg-muted text-muted-foreground hover:text-foreground"
                   }`}
                 >
                   Unread ({unreadCount})
@@ -270,14 +264,14 @@ export function NotificationBell() {
                     return (
                       <div
                         key={notification.id}
-                        className={`p-4 hover:bg-gray-800/50 transition-colors ${
+                        className={`p-4 hover:bg-card/50 transition-colors ${
                           !notification.read ? "bg-primary/5" : ""
                         }`}
                         onClick={() => markAsRead(notification.id)}
                       >
                         <div className="flex gap-3">
                           <div
-                            className={`w-8 h-8 rounded-lg bg-gray-800 flex items-center justify-center flex-shrink-0`}
+                            className={`w-8 h-8 rounded-lg bg-card flex items-center justify-center flex-shrink-0`}
                           >
                             <Icon className={`w-4 h-4 ${config.color}`} />
                           </div>
@@ -300,7 +294,7 @@ export function NotificationBell() {
                                   e.stopPropagation();
                                   removeNotification(notification.id);
                                 }}
-                                className="p-1 hover:bg-gray-700 rounded transition-colors"
+                                className="p-1 hover:bg-muted rounded transition-colors"
                               >
                                 <X className="w-3 h-3 text-muted-foreground" />
                               </button>
@@ -360,7 +354,7 @@ export function ToastNotification({
     NotificationType,
     { icon: typeof Info; bgColor: string }
   > = {
-    info: { icon: Info, bgColor: "bg-blue-500/10 border-blue-500/30" },
+    info: { icon: Info, bgColor: "bg-primary/10 border-blue-500/30" },
     success: {
       icon: CheckCircle,
       bgColor: "bg-green-500/10 border-green-500/30",
@@ -401,7 +395,7 @@ export function ToastNotification({
       </div>
       <button
         onClick={onDismiss}
-        className="p-1 hover:bg-gray-700 rounded transition-colors"
+        className="p-1 hover:bg-muted rounded transition-colors"
       >
         <X className="w-4 h-4 text-muted-foreground" />
       </button>

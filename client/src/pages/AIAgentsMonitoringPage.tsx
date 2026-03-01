@@ -70,13 +70,13 @@ export default function AIAgentsMonitoringPage() {
       case "active":
         return "bg-green-500/20 text-green-400";
       case "learning":
-        return "bg-blue-500/20 text-blue-400";
+        return "bg-primary/20 text-primary";
       case "idle":
-        return "bg-gray-500/20 text-gray-400";
+        return "bg-gray-500/20 text-muted-foreground";
       case "error":
         return "bg-red-500/20 text-red-400";
       default:
-        return "bg-gray-500/20 text-gray-400";
+        return "bg-gray-500/20 text-muted-foreground";
     }
   };
 
@@ -95,9 +95,9 @@ export default function AIAgentsMonitoringPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white flex items-center justify-center">
+      <div className="min-h-screen bg-background text-white flex items-center justify-center">
         <div className="text-center">
-          <Brain className="w-16 h-16 text-blue-400 animate-pulse mx-auto mb-4" />
+          <Brain className="w-16 h-16 text-primary animate-pulse mx-auto mb-4" />
           <p className="text-xl">Loading AI Agents...</p>
         </div>
       </div>
@@ -106,27 +106,27 @@ export default function AIAgentsMonitoringPage() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white flex items-center justify-center">
-        <div className="max-w-md bg-gray-800/50 rounded-lg p-8 border border-red-500/50">
+      <div className="min-h-screen bg-background text-white flex items-center justify-center">
+        <div className="max-w-md bg-card/50 rounded-lg p-8 border border-red-500/50">
           <div className="flex items-center gap-3 mb-4">
             <XCircle className="w-8 h-8 text-red-400" />
             <h2 className="text-2xl font-bold text-red-400">
               Failed to load AI Agents
             </h2>
           </div>
-          <p className="text-gray-300 mb-4">
+          <p className="text-foreground/80 mb-4">
             The AI Agents monitoring system is currently unavailable.
           </p>
-          <p className="text-sm text-gray-400 mb-6">
+          <p className="text-sm text-muted-foreground mb-6">
             Error: {error.message || "Unknown error"}
           </p>
           <button
             onClick={() => refetch()}
-            className="w-full px-6 py-3 bg-blue-500 hover:bg-blue-600 rounded-lg font-semibold transition-colors"
+            className="w-full px-6 py-3 bg-blue-500 hover:bg-primary/90 rounded-lg font-semibold transition-colors"
           >
             Try Again
           </button>
-          <p className="text-xs text-gray-500 mt-4 text-center">
+          <p className="text-xs text-muted-foreground/70 mt-4 text-center">
             Please try again later or contact support.
           </p>
         </div>
@@ -135,12 +135,12 @@ export default function AIAgentsMonitoringPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white">
+    <div className="min-h-screen bg-background text-white">
       <div className="container mx-auto px-4 md:px-6 py-6 md:py-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold mb-2">AI Agents Monitoring</h1>
-          <p className="text-gray-400">
+          <h1 className="text-2xl md:text-4xl font-bold mb-2">AI Agents Monitoring</h1>
+          <p className="text-muted-foreground">
             Monitor all 51 specialized AI agents - Performance, ratings, and
             daily reports
           </p>
@@ -148,31 +148,31 @@ export default function AIAgentsMonitoringPage() {
 
         {/* Stats Overview */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <div className="bg-gray-800/50 rounded-lg p-6 border border-gray-700/50">
+          <div className="bg-card/50 rounded-lg p-6 border border-border/50">
             <div className="flex items-center gap-3 mb-2">
-              <Users className="w-8 h-8 text-blue-400" />
+              <Users className="w-8 h-8 text-primary" />
               <div>
                 <p className="text-3xl font-bold">
                   {agentsData?.totalAgents || 0}
                 </p>
-                <p className="text-sm text-gray-400">Total Agents</p>
+                <p className="text-sm text-muted-foreground">Total Agents</p>
               </div>
             </div>
           </div>
 
-          <div className="bg-gray-800/50 rounded-lg p-6 border border-gray-700/50">
+          <div className="bg-card/50 rounded-lg p-6 border border-border/50">
             <div className="flex items-center gap-3 mb-2">
               <Activity className="w-8 h-8 text-green-400" />
               <div>
                 <p className="text-3xl font-bold">
                   {agentsData?.activeAgents || 0}
                 </p>
-                <p className="text-sm text-gray-400">Active Now</p>
+                <p className="text-sm text-muted-foreground">Active Now</p>
               </div>
             </div>
           </div>
 
-          <div className="bg-gray-800/50 rounded-lg p-6 border border-gray-700/50">
+          <div className="bg-card/50 rounded-lg p-6 border border-border/50">
             <div className="flex items-center gap-3 mb-2">
               <Award className="w-8 h-8 text-yellow-400" />
               <div>
@@ -186,12 +186,12 @@ export default function AIAgentsMonitoringPage() {
                       ).toFixed(1)
                     : "0"}
                 </p>
-                <p className="text-sm text-gray-400">Avg Rating</p>
+                <p className="text-sm text-muted-foreground">Avg Rating</p>
               </div>
             </div>
           </div>
 
-          <div className="bg-gray-800/50 rounded-lg p-6 border border-gray-700/50">
+          <div className="bg-card/50 rounded-lg p-6 border border-border/50">
             <div className="flex items-center gap-3 mb-2">
               <TrendingUp className="w-8 h-8 text-purple-400" />
               <div>
@@ -201,29 +201,29 @@ export default function AIAgentsMonitoringPage() {
                     0
                   )}
                 </p>
-                <p className="text-sm text-gray-400">Tasks Completed</p>
+                <p className="text-sm text-muted-foreground">Tasks Completed</p>
               </div>
             </div>
           </div>
         </div>
 
         {/* Filters */}
-        <div className="bg-gray-800/50 rounded-lg p-6 mb-6 border border-gray-700/50">
+        <div className="bg-card/50 rounded-lg p-6 mb-6 border border-border/50">
           <div className="flex items-center gap-2 mb-4">
-            <Filter className="w-5 h-5 text-gray-400" />
+            <Filter className="w-5 h-5 text-muted-foreground" />
             <h2 className="text-lg font-semibold">Filters</h2>
           </div>
 
           <div className="flex flex-wrap gap-4">
             {/* Category Filter */}
             <div className="flex-1 min-w-[200px]">
-              <label className="block text-sm text-gray-400 mb-2">
+              <label className="block text-sm text-muted-foreground mb-2">
                 Category
               </label>
               <select
                 value={selectedCategory}
                 onChange={e => setSelectedCategory(e.target.value)}
-                className="w-full bg-gray-700 rounded px-4 py-2 text-sm"
+                className="w-full bg-muted rounded px-4 py-2 text-sm"
               >
                 {AGENT_CATEGORIES.map(cat => (
                   <option key={cat} value={cat}>
@@ -235,11 +235,11 @@ export default function AIAgentsMonitoringPage() {
 
             {/* Status Filter */}
             <div className="flex-1 min-w-[200px]">
-              <label className="block text-sm text-gray-400 mb-2">Status</label>
+              <label className="block text-sm text-muted-foreground mb-2">Status</label>
               <select
                 value={statusFilter}
                 onChange={e => setStatusFilter(e.target.value)}
-                className="w-full bg-gray-700 rounded px-4 py-2 text-sm"
+                className="w-full bg-muted rounded px-4 py-2 text-sm"
               >
                 <option value="all">All Status</option>
                 <option value="active">Active</option>
@@ -251,8 +251,8 @@ export default function AIAgentsMonitoringPage() {
 
             {/* Results Count */}
             <div className="flex items-end">
-              <div className="bg-gray-700/50 rounded px-4 py-2">
-                <p className="text-sm text-gray-400">Showing</p>
+              <div className="bg-muted/50 rounded px-4 py-2">
+                <p className="text-sm text-muted-foreground">Showing</p>
                 <p className="text-xl font-bold">{filteredAgents.length}</p>
               </div>
             </div>
@@ -265,10 +265,10 @@ export default function AIAgentsMonitoringPage() {
             <div
               key={agent.id}
               onClick={() => setSelectedAgent(agent.id)}
-              className={`bg-gray-800/50 rounded-lg p-4 cursor-pointer hover:bg-gray-800/70 transition-all border ${
+              className={`bg-card/50 rounded-lg p-4 cursor-pointer hover:bg-card/70 transition-all border ${
                 selectedAgent === agent.id
-                  ? "border-blue-500 ring-2 ring-blue-500/50"
-                  : "border-gray-700/50"
+                  ? "border-primary ring-2 ring-primary/50"
+                  : "border-border/50"
               }`}
             >
               <div className="flex items-start justify-between mb-3">
@@ -290,26 +290,26 @@ export default function AIAgentsMonitoringPage() {
                 </div>
               </div>
 
-              <p className="text-xs text-gray-400 mb-3 line-clamp-2">
+              <p className="text-xs text-muted-foreground mb-3 line-clamp-2">
                 {agent.specialization}
               </p>
 
               <div className="grid grid-cols-2 gap-2 mb-3">
                 <div>
-                  <p className="text-xs text-gray-500">Tasks</p>
+                  <p className="text-xs text-muted-foreground/70">Tasks</p>
                   <p className="text-sm font-semibold">
                     {agent.performance.tasksCompleted}
                   </p>
                 </div>
                 <div>
-                  <p className="text-xs text-gray-500">Success</p>
+                  <p className="text-xs text-muted-foreground/70">Success</p>
                   <p className="text-sm font-semibold text-green-400">
                     {agent.performance.successRate}%
                   </p>
                 </div>
               </div>
 
-              <p className="text-xs text-gray-500 flex items-center gap-1">
+              <p className="text-xs text-muted-foreground/70 flex items-center gap-1">
                 <Clock className="w-3 h-3" />
                 {formatTimestamp(agent.lastActive)}
               </p>
@@ -319,22 +319,22 @@ export default function AIAgentsMonitoringPage() {
 
         {/* Selected Agent Details */}
         {selectedAgentData && selectedAgentReport && (
-          <div className="bg-gray-800/50 rounded-lg p-6 border border-blue-500/50">
+          <div className="bg-card/50 rounded-lg p-6 border border-blue-500/50">
             <div className="flex justify-between items-start mb-6">
               <div>
                 <h2 className="text-2xl font-bold mb-1">
                   {selectedAgentData.name}
                 </h2>
-                <p className="text-gray-400">
+                <p className="text-muted-foreground">
                   {selectedAgentData.specialization}
                 </p>
-                <p className="text-sm text-gray-500 mt-2">
+                <p className="text-sm text-muted-foreground/70 mt-2">
                   Daily Report - {selectedAgentReport.date}
                 </p>
               </div>
               <button
                 onClick={() => setSelectedAgent(null)}
-                className="text-gray-400 hover:text-white transition-colors text-2xl"
+                className="text-muted-foreground hover:text-white transition-colors text-2xl"
               >
                 ✕
               </button>
@@ -342,26 +342,26 @@ export default function AIAgentsMonitoringPage() {
 
             {/* Performance Metrics */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-              <div className="bg-gray-700/30 rounded p-3">
-                <p className="text-xs text-gray-400 mb-1">Rating</p>
+              <div className="bg-muted/30 rounded p-3">
+                <p className="text-xs text-muted-foreground mb-1">Rating</p>
                 <p className="text-2xl font-bold text-yellow-400">
                   {selectedAgentData.performance.rating}/100
                 </p>
               </div>
-              <div className="bg-gray-700/30 rounded p-3">
-                <p className="text-xs text-gray-400 mb-1">Tasks Completed</p>
+              <div className="bg-muted/30 rounded p-3">
+                <p className="text-xs text-muted-foreground mb-1">Tasks Completed</p>
                 <p className="text-2xl font-bold">
                   {selectedAgentData.performance.tasksCompleted}
                 </p>
               </div>
-              <div className="bg-gray-700/30 rounded p-3">
-                <p className="text-xs text-gray-400 mb-1">Success Rate</p>
+              <div className="bg-muted/30 rounded p-3">
+                <p className="text-xs text-muted-foreground mb-1">Success Rate</p>
                 <p className="text-2xl font-bold text-green-400">
                   {selectedAgentData.performance.successRate}%
                 </p>
               </div>
-              <div className="bg-gray-700/30 rounded p-3">
-                <p className="text-xs text-gray-400 mb-1">Response Time</p>
+              <div className="bg-muted/30 rounded p-3">
+                <p className="text-xs text-muted-foreground mb-1">Response Time</p>
                 <p className="text-2xl font-bold">
                   {selectedAgentData.performance.averageResponseTime.toFixed(2)}
                   s
@@ -380,7 +380,7 @@ export default function AIAgentsMonitoringPage() {
                   {selectedAgentReport.improvements.map((improvement, i) => (
                     <li
                       key={i}
-                      className="text-sm text-gray-300 flex items-start gap-2"
+                      className="text-sm text-foreground/80 flex items-start gap-2"
                     >
                       <span className="text-green-400 mt-1">•</span>
                       {improvement}
@@ -391,16 +391,16 @@ export default function AIAgentsMonitoringPage() {
 
               <div>
                 <h3 className="text-lg font-semibold mb-3 flex items-center gap-2">
-                  <Brain className="w-5 h-5 text-blue-400" />
+                  <Brain className="w-5 h-5 text-primary" />
                   New Learnings
                 </h3>
                 <ul className="space-y-2">
                   {selectedAgentReport.newLearnings.map((learning, i) => (
                     <li
                       key={i}
-                      className="text-sm text-gray-300 flex items-start gap-2"
+                      className="text-sm text-foreground/80 flex items-start gap-2"
                     >
-                      <span className="text-blue-400 mt-1">•</span>
+                      <span className="text-primary mt-1">•</span>
                       {learning}
                     </li>
                   ))}
@@ -413,7 +413,7 @@ export default function AIAgentsMonitoringPage() {
                   {selectedAgentReport.suggestions.map((suggestion, i) => (
                     <li
                       key={i}
-                      className="text-sm text-gray-300 flex items-start gap-2"
+                      className="text-sm text-foreground/80 flex items-start gap-2"
                     >
                       <span className="text-yellow-400 mt-1">•</span>
                       {suggestion}
@@ -428,7 +428,7 @@ export default function AIAgentsMonitoringPage() {
                   {selectedAgentReport.researchTopics.map((topic, i) => (
                     <li
                       key={i}
-                      className="text-sm text-gray-300 flex items-start gap-2"
+                      className="text-sm text-foreground/80 flex items-start gap-2"
                     >
                       <span className="text-purple-400 mt-1">•</span>
                       {topic}
@@ -448,18 +448,18 @@ export default function AIAgentsMonitoringPage() {
                   {selectedAgentReport.requestsForApproval.map(request => (
                     <div
                       key={request.id}
-                      className="bg-gray-700/50 rounded p-4"
+                      className="bg-muted/50 rounded p-4"
                     >
                       <div className="flex items-start justify-between mb-2">
                         <div>
                           <p className="font-medium">{request.type}</p>
-                          <p className="text-sm text-gray-400 mt-1">
+                          <p className="text-sm text-muted-foreground mt-1">
                             {request.description}
                           </p>
-                          <p className="text-xs text-gray-500 mt-2">
+                          <p className="text-xs text-muted-foreground/70 mt-2">
                             {request.reasoning}
                           </p>
-                          <p className="text-xs text-blue-400 mt-1">
+                          <p className="text-xs text-primary mt-1">
                             Impact: {request.estimatedImpact}
                           </p>
                         </div>

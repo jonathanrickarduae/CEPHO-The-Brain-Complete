@@ -3,26 +3,13 @@ import {
   Shield,
   AlertTriangle,
   TrendingUp,
-  Zap,
-  Eye,
   CheckCircle2,
   XCircle,
   Clock,
   RefreshCw,
   Lightbulb,
-  Target,
   ArrowUpRight,
-  ArrowDownRight,
   Link2,
-  Unplug,
-  Activity,
-  Bell,
-  ChevronRight,
-  Brain,
-  Sparkles,
-  Lock,
-  Globe,
-  Server,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -295,7 +282,7 @@ const getSeverityColor = (severity: Threat["severity"]) => {
     case "medium":
       return "text-amber-500 bg-amber-500/10 border-amber-500/30";
     case "low":
-      return "text-blue-500 bg-blue-500/10 border-blue-500/30";
+      return "text-primary bg-primary/10 border-blue-500/30";
   }
 };
 
@@ -304,7 +291,7 @@ const getPotentialColor = (potential: Opportunity["potential"]) => {
     case "high":
       return "text-green-500 bg-green-500/10 border-green-500/30";
     case "medium":
-      return "text-blue-500 bg-blue-500/10 border-blue-500/30";
+      return "text-primary bg-primary/10 border-blue-500/30";
     case "low":
       return "text-foreground/60 bg-gray-500/10 border-gray-500/30";
   }
@@ -503,11 +490,11 @@ export function BusinessGuardian() {
             onClick={() => setActiveTab("strengthen")}
             className={`p-2 rounded-lg text-center transition-all ${
               activeTab === "strengthen"
-                ? "bg-blue-500/20 border border-blue-500/30"
+                ? "bg-primary/20 border border-blue-500/30"
                 : "bg-secondary/50 hover:bg-secondary"
             }`}
           >
-            <div className="text-lg font-bold text-blue-400">
+            <div className="text-lg font-bold text-primary">
               {pendingStrengths}
             </div>
             <div className="text-xs text-muted-foreground">Suggestions</div>
@@ -668,7 +655,7 @@ export function BusinessGuardian() {
         {activeTab === "strengthen" && (
           <div className="space-y-3">
             <div className="flex items-center gap-2 mb-3">
-              <Lightbulb className="w-4 h-4 text-blue-400" />
+              <Lightbulb className="w-4 h-4 text-primary" />
               <span className="text-sm font-medium">
                 Business Strengthening Suggestions
               </span>
@@ -682,7 +669,7 @@ export function BusinessGuardian() {
                     strength.status === "completed"
                       ? "bg-green-500/5"
                       : strength.status === "in_progress"
-                        ? "bg-blue-500/5"
+                        ? "bg-primary/5"
                         : "bg-secondary/30"
                   }`}
                 >
@@ -698,7 +685,7 @@ export function BusinessGuardian() {
                             strength.impact === "high"
                               ? "text-green-400 border-green-400/30"
                               : strength.impact === "medium"
-                                ? "text-blue-400 border-blue-400/30"
+                                ? "text-primary border-blue-400/30"
                                 : "text-foreground/70 border-gray-400/30"
                           }`}
                         >

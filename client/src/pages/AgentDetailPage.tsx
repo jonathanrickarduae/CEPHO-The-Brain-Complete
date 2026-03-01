@@ -67,7 +67,7 @@ export default function AgentDetailPage() {
         const data = await response.json();
         setAgent(data);
       }
-    } catch (error) {
+    } catch {
     } finally {
       setLoading(false);
     }
@@ -80,7 +80,7 @@ export default function AgentDetailPage() {
         const data = await response.json();
         setReports(data);
       }
-    } catch (error) {
+    } catch {
     }
   };
 
@@ -91,7 +91,7 @@ export default function AgentDetailPage() {
         const data = await response.json();
         setApprovals(data);
       }
-    } catch (error) {
+    } catch {
     }
   };
 
@@ -101,7 +101,7 @@ export default function AgentDetailPage() {
         method: "POST",
       });
       loadReports();
-    } catch (error) {
+    } catch {
     }
   };
 
@@ -111,7 +111,7 @@ export default function AgentDetailPage() {
         method: "POST",
       });
       loadApprovals();
-    } catch (error) {
+    } catch {
     }
   };
 
@@ -121,7 +121,7 @@ export default function AgentDetailPage() {
         method: "POST",
       });
       loadApprovals();
-    } catch (error) {
+    } catch {
     }
   };
 
@@ -129,8 +129,8 @@ export default function AgentDetailPage() {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
-          <div className="w-8 h-8 border-2 border-cyan-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <div className="text-xl text-gray-400">Loading agent details...</div>
+          <div className="w-8 h-8 border-2 border-[var(--brain-cyan)] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <div className="text-xl text-muted-foreground">Loading agent details...</div>
         </div>
       </div>
     );
@@ -142,7 +142,7 @@ export default function AgentDetailPage() {
         <div className="text-center">
           <div className="text-6xl mb-4">🤖</div>
           <div className="text-xl text-white mb-2">Agent Not Found</div>
-          <div className="text-gray-400 mb-6">
+          <div className="text-muted-foreground mb-6">
             This agent may not be available yet or the database is not
             connected.
           </div>
@@ -162,7 +162,7 @@ export default function AgentDetailPage() {
       case "active":
         return "bg-green-500";
       case "learning":
-        return "bg-blue-500";
+        return "bg-primary";
       case "idle":
         return "bg-yellow-500";
       case "offline":
@@ -195,14 +195,14 @@ export default function AgentDetailPage() {
       </Link>
 
       {/* Agent Header */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow mb-6">
+      <div className="bg-white dark:bg-card rounded-lg p-6 shadow mb-6">
         <div className="flex items-start justify-between mb-4">
           <div>
-            <h1 className="text-3xl font-bold mb-2">{agent.name}</h1>
-            <p className="text-lg text-gray-600 dark:text-gray-400 mb-2">
+            <h1 className="text-2xl md:text-3xl font-bold mb-2">{agent.name}</h1>
+            <p className="text-lg text-gray-600 dark:text-muted-foreground mb-2">
               {agent.specialization}
             </p>
-            <p className="text-sm text-gray-500">{agent.description}</p>
+            <p className="text-sm text-muted-foreground/70">{agent.description}</p>
           </div>
           <div className="flex items-center gap-2">
             <div
@@ -215,7 +215,7 @@ export default function AgentDetailPage() {
         {/* Performance Metrics */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
           <div>
-            <div className="text-sm text-gray-600 dark:text-gray-400">
+            <div className="text-sm text-gray-600 dark:text-muted-foreground">
               Performance Rating
             </div>
             <div className="text-2xl font-bold text-blue-600">
@@ -223,7 +223,7 @@ export default function AgentDetailPage() {
             </div>
           </div>
           <div>
-            <div className="text-sm text-gray-600 dark:text-gray-400">
+            <div className="text-sm text-gray-600 dark:text-muted-foreground">
               Success Rate
             </div>
             <div className="text-2xl font-bold text-green-600">
@@ -231,13 +231,13 @@ export default function AgentDetailPage() {
             </div>
           </div>
           <div>
-            <div className="text-sm text-gray-600 dark:text-gray-400">
+            <div className="text-sm text-gray-600 dark:text-muted-foreground">
               Tasks Completed
             </div>
             <div className="text-2xl font-bold">{agent.tasksCompleted}</div>
           </div>
           <div>
-            <div className="text-sm text-gray-600 dark:text-gray-400">
+            <div className="text-sm text-gray-600 dark:text-muted-foreground">
               Avg Response Time
             </div>
             <div className="text-2xl font-bold">{agent.avgResponseTime}ms</div>
@@ -246,14 +246,14 @@ export default function AgentDetailPage() {
       </div>
 
       {/* Tabs */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow mb-6">
-        <div className="flex border-b border-gray-200 dark:border-gray-700">
+      <div className="bg-white dark:bg-card rounded-lg shadow mb-6">
+        <div className="flex border-b border-gray-200 dark:border-border">
           <button
             onClick={() => setActiveTab("overview")}
             className={`px-6 py-3 font-medium ${
               activeTab === "overview"
                 ? "border-b-2 border-blue-600 text-blue-600"
-                : "text-gray-600 dark:text-gray-400"
+                : "text-gray-600 dark:text-muted-foreground"
             }`}
           >
             Overview
@@ -263,7 +263,7 @@ export default function AgentDetailPage() {
             className={`px-6 py-3 font-medium ${
               activeTab === "reports"
                 ? "border-b-2 border-blue-600 text-blue-600"
-                : "text-gray-600 dark:text-gray-400"
+                : "text-gray-600 dark:text-muted-foreground"
             }`}
           >
             Daily Reports ({reports.filter(r => r.status === "pending").length})
@@ -273,7 +273,7 @@ export default function AgentDetailPage() {
             className={`px-6 py-3 font-medium ${
               activeTab === "approvals"
                 ? "border-b-2 border-blue-600 text-blue-600"
-                : "text-gray-600 dark:text-gray-400"
+                : "text-gray-600 dark:text-muted-foreground"
             }`}
           >
             Approval Requests (
@@ -289,7 +289,7 @@ export default function AgentDetailPage() {
                 <h3 className="text-lg font-bold mb-2">Agent Information</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <div className="text-sm text-gray-600 dark:text-gray-400">
+                    <div className="text-sm text-gray-600 dark:text-muted-foreground">
                       Category
                     </div>
                     <div className="font-medium capitalize">
@@ -297,7 +297,7 @@ export default function AgentDetailPage() {
                     </div>
                   </div>
                   <div>
-                    <div className="text-sm text-gray-600 dark:text-gray-400">
+                    <div className="text-sm text-gray-600 dark:text-muted-foreground">
                       Created
                     </div>
                     <div className="font-medium">
@@ -305,7 +305,7 @@ export default function AgentDetailPage() {
                     </div>
                   </div>
                   <div>
-                    <div className="text-sm text-gray-600 dark:text-gray-400">
+                    <div className="text-sm text-gray-600 dark:text-muted-foreground">
                       Last Active
                     </div>
                     <div className="font-medium">
@@ -323,14 +323,14 @@ export default function AgentDetailPage() {
               {reports.map(report => (
                 <div
                   key={report.id}
-                  className="border border-gray-200 dark:border-gray-700 rounded-lg p-4"
+                  className="border border-gray-200 dark:border-border rounded-lg p-4"
                 >
                   <div className="flex justify-between items-start mb-4">
                     <div>
                       <h4 className="font-bold">
                         {new Date(report.date).toLocaleDateString()}
                       </h4>
-                      <div className="text-sm text-gray-600 dark:text-gray-400">
+                      <div className="text-sm text-gray-600 dark:text-muted-foreground">
                         {report.tasksCompleted} tasks • {report.successRate}%
                         success rate
                       </div>
@@ -355,7 +355,7 @@ export default function AgentDetailPage() {
                       <div className="text-sm font-medium mb-1">
                         Highlights:
                       </div>
-                      <ul className="list-disc list-inside text-sm text-gray-700 dark:text-gray-300">
+                      <ul className="list-disc list-inside text-sm text-gray-700 dark:text-foreground/80">
                         {report.highlights.map((h, i) => (
                           <li key={i}>{h}</li>
                         ))}
@@ -366,7 +366,7 @@ export default function AgentDetailPage() {
                   {report.learnings.length > 0 && (
                     <div className="mb-3">
                       <div className="text-sm font-medium mb-1">Learnings:</div>
-                      <ul className="list-disc list-inside text-sm text-gray-700 dark:text-gray-300">
+                      <ul className="list-disc list-inside text-sm text-gray-700 dark:text-foreground/80">
                         {report.learnings.map((l, i) => (
                           <li key={i}>{l}</li>
                         ))}
@@ -379,7 +379,7 @@ export default function AgentDetailPage() {
                       <div className="text-sm font-medium mb-1">
                         Improvements:
                       </div>
-                      <ul className="list-disc list-inside text-sm text-gray-700 dark:text-gray-300">
+                      <ul className="list-disc list-inside text-sm text-gray-700 dark:text-foreground/80">
                         {report.improvements.map((imp, i) => (
                           <li key={i}>{imp}</li>
                         ))}
@@ -389,7 +389,7 @@ export default function AgentDetailPage() {
                 </div>
               ))}
               {reports.length === 0 && (
-                <div className="text-center py-8 text-gray-500">
+                <div className="text-center py-8 text-muted-foreground/70">
                   No reports yet
                 </div>
               )}
@@ -402,14 +402,14 @@ export default function AgentDetailPage() {
               {approvals.map(approval => (
                 <div
                   key={approval.id}
-                  className="border border-gray-200 dark:border-gray-700 rounded-lg p-4"
+                  className="border border-gray-200 dark:border-border rounded-lg p-4"
                 >
                   <div className="flex justify-between items-start mb-3">
                     <div>
                       <h4 className="font-bold capitalize">
                         {approval.requestType.replace("_", " ")}
                       </h4>
-                      <div className="text-sm text-gray-600 dark:text-gray-400">
+                      <div className="text-sm text-gray-600 dark:text-muted-foreground">
                         {new Date(approval.createdAt).toLocaleDateString()}
                       </div>
                     </div>
@@ -445,7 +445,7 @@ export default function AgentDetailPage() {
 
                   <div className="grid grid-cols-3 gap-4 text-sm">
                     <div>
-                      <div className="text-gray-600 dark:text-gray-400">
+                      <div className="text-gray-600 dark:text-muted-foreground">
                         Benefit
                       </div>
                       <div className="font-medium">
@@ -453,7 +453,7 @@ export default function AgentDetailPage() {
                       </div>
                     </div>
                     <div>
-                      <div className="text-gray-600 dark:text-gray-400">
+                      <div className="text-gray-600 dark:text-muted-foreground">
                         Cost
                       </div>
                       <div className="font-medium">
@@ -461,7 +461,7 @@ export default function AgentDetailPage() {
                       </div>
                     </div>
                     <div>
-                      <div className="text-gray-600 dark:text-gray-400">
+                      <div className="text-gray-600 dark:text-muted-foreground">
                         Risk
                       </div>
                       <div
@@ -474,7 +474,7 @@ export default function AgentDetailPage() {
                 </div>
               ))}
               {approvals.length === 0 && (
-                <div className="text-center py-8 text-gray-500">
+                <div className="text-center py-8 text-muted-foreground/70">
                   No approval requests
                 </div>
               )}

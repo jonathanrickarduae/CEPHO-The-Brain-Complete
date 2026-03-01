@@ -4,7 +4,7 @@ import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
   Dialog,
@@ -42,8 +42,8 @@ const PARTNERSHIP_STATUSES = [
 const PRIORITIES = ["low", "medium", "high", "critical"] as const;
 
 const statusColors: Record<string, string> = {
-  prospect: "bg-gray-500/20 text-gray-400",
-  contacted: "bg-blue-500/20 text-blue-400",
+  prospect: "bg-gray-500/20 text-muted-foreground",
+  contacted: "bg-primary/20 text-primary",
   negotiating: "bg-yellow-500/20 text-yellow-400",
   active: "bg-green-500/20 text-green-400",
   inactive: "bg-orange-500/20 text-orange-400",
@@ -51,8 +51,8 @@ const statusColors: Record<string, string> = {
 };
 
 const priorityColors: Record<string, string> = {
-  low: "border-gray-500",
-  medium: "border-blue-500",
+  low: "border-border",
+  medium: "border-primary",
   high: "border-yellow-500",
   critical: "border-red-500",
 };

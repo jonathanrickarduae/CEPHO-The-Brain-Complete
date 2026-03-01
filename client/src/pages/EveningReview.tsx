@@ -255,7 +255,7 @@ export default function EveningReview() {
           decisions,
         });
       }
-    } catch (error) {
+    } catch {
     }
 
     toast.info(
@@ -389,7 +389,7 @@ export default function EveningReview() {
       toast.success(
         "Overnight tasks confirmed! Chief of Staff will process while you rest."
       );
-    } catch (error) {
+    } catch {
       // Still allow completion even if API fails
       setIsReadyToStart(true);
       toast.success(
@@ -423,14 +423,14 @@ export default function EveningReview() {
       case "low":
         return "bg-green-500/20 text-green-400 border-green-500/30";
       default:
-        return "bg-gray-500/20 text-gray-400 border-gray-500/30";
+        return "bg-gray-500/20 text-muted-foreground border-gray-500/30";
     }
   };
 
   const getReviewStateColor = () => {
     switch (reviewState) {
       case "before_window":
-        return "bg-gray-500/20 text-gray-400 border-gray-500/30";
+        return "bg-gray-500/20 text-muted-foreground border-gray-500/30";
       case "in_window":
         return "bg-green-500/20 text-green-400 border-green-500/30";
       case "cutoff_warning":
@@ -438,9 +438,9 @@ export default function EveningReview() {
       case "auto_processing":
         return "bg-purple-500/20 text-purple-400 border-purple-500/30";
       case "completed":
-        return "bg-blue-500/20 text-blue-400 border-blue-500/30";
+        return "bg-primary/20 text-primary border-blue-500/30";
       default:
-        return "bg-gray-500/20 text-gray-400 border-gray-500/30";
+        return "bg-gray-500/20 text-muted-foreground border-gray-500/30";
     }
   };
 
@@ -477,17 +477,17 @@ export default function EveningReview() {
     reviewState !== "completed"
   ) {
     return (
-      <div className="h-full bg-gradient-to-br from-gray-900 via-gray-900 to-indigo-900 text-foreground flex items-center justify-center p-4">
+      <div className="h-full bg-gradient-to-br from-background via-background to-indigo-900 text-foreground flex items-center justify-center p-4">
         <Card className="max-w-md w-full border-2 border-indigo-500/30 shadow-[0_0_50px_rgba(99,102,241,0.3)] bg-black/80 backdrop-blur-xl">
           <CardContent className="p-6 text-center space-y-4">
             <div className="w-16 h-16 mx-auto rounded-full bg-indigo-500/20 flex items-center justify-center">
               <Brain className="w-8 h-8 text-indigo-400" />
             </div>
             <h2 className="text-xl font-bold text-white">Chief of Staff</h2>
-            <p className="text-gray-300">
+            <p className="text-foreground/80">
               It's {formatTime()}. Ready to start your Evening Review?
             </p>
-            <p className="text-sm text-gray-400">
+            <p className="text-sm text-muted-foreground">
               You have {stats.total} tasks across {OVERNIGHT_TASKS.length}{" "}
               projects to review.
             </p>
@@ -509,7 +509,7 @@ export default function EveningReview() {
                 No, auto-process for me
               </Button>
             </div>
-            <p className="text-xs text-gray-500">
+            <p className="text-xs text-muted-foreground/70">
               Auto-processing will start at 8:00 PM if no action is taken
             </p>
           </CardContent>
@@ -521,7 +521,7 @@ export default function EveningReview() {
   // Completed state
   if (isReadyToStart || autoProcessingStarted) {
     return (
-      <div className="h-full bg-gradient-to-br from-gray-900 via-gray-900 to-green-900 text-foreground flex items-center justify-center p-4">
+      <div className="h-full bg-gradient-to-br from-background via-background to-green-900 text-foreground flex items-center justify-center p-4">
         <Card className="max-w-md w-full border-2 border-green-500/30 shadow-[0_0_50px_rgba(34,197,94,0.3)] bg-black/80 backdrop-blur-xl">
           <CardContent className="p-6 text-center space-y-4">
             <div className="w-16 h-16 mx-auto rounded-full bg-green-500/20 flex items-center justify-center">
@@ -534,34 +534,34 @@ export default function EveningReview() {
             </h2>
             <div className="space-y-2 text-left bg-white/5 rounded-lg p-4 border border-white/10">
               <div className="flex justify-between text-sm">
-                <span className="text-gray-400">Tasks Accepted:</span>
+                <span className="text-muted-foreground">Tasks Accepted:</span>
                 <span className="font-medium text-green-400">
                   {stats.accepted}
                 </span>
               </div>
               <div className="flex justify-between text-sm">
-                <span className="text-gray-400">Tasks Deferred:</span>
+                <span className="text-muted-foreground">Tasks Deferred:</span>
                 <span className="font-medium text-amber-400">
                   {stats.deferred}
                 </span>
               </div>
               <div className="flex justify-between text-sm">
-                <span className="text-gray-400">Tasks Rejected:</span>
+                <span className="text-muted-foreground">Tasks Rejected:</span>
                 <span className="font-medium text-red-400">
                   {stats.rejected}
                 </span>
               </div>
             </div>
             <div className="pt-4 space-y-2">
-              <div className="flex items-center gap-2 text-sm text-gray-300">
+              <div className="flex items-center gap-2 text-sm text-foreground/80">
                 <Zap className="w-4 h-4 text-indigo-400" />
                 <span>Chief of Staff is processing overnight tasks</span>
               </div>
-              <div className="flex items-center gap-2 text-sm text-gray-300">
+              <div className="flex items-center gap-2 text-sm text-foreground/80">
                 <Clock className="w-4 h-4 text-indigo-400" />
                 <span>Signal briefing will be ready by 7:00 AM</span>
               </div>
-              <div className="flex items-center gap-2 text-sm text-gray-300">
+              <div className="flex items-center gap-2 text-sm text-foreground/80">
                 <Moon className="w-4 h-4 text-indigo-400" />
                 <span>Have a restful evening!</span>
               </div>
@@ -580,7 +580,7 @@ export default function EveningReview() {
   }
 
   return (
-    <div className="h-full bg-gradient-to-br from-gray-900 via-gray-900 to-indigo-900 text-white overflow-auto">
+    <div className="h-full bg-gradient-to-br from-background via-background to-indigo-900 text-white overflow-auto">
       {/* Compact Header */}
       <div className="border-b border-white/10 bg-black/20 backdrop-blur-sm sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-6 py-4">
@@ -590,7 +590,7 @@ export default function EveningReview() {
                 <Moon className="h-8 w-8 text-indigo-400" />
                 Evening Review
               </h1>
-              <p className="text-gray-400 mt-1 text-sm">
+              <p className="text-muted-foreground mt-1 text-sm">
                 {formatDate()} • {stats.total} tasks across{" "}
                 {OVERNIGHT_TASKS.length} projects
               </p>
@@ -608,7 +608,7 @@ export default function EveningReview() {
                 <Badge className="bg-red-500/20 text-red-400 border-red-500/30">
                   {stats.rejected} ✕
                 </Badge>
-                <Badge className="bg-gray-500/20 text-gray-400 border-gray-500/30">
+                <Badge className="bg-gray-500/20 text-muted-foreground border-gray-500/30">
                   {stats.pending} ⋯
                 </Badge>
               </div>
@@ -671,10 +671,10 @@ export default function EveningReview() {
                         style={{ backgroundColor: project.projectColor }}
                       />
                       <div>
-                        <h3 className="font-semibold text-white">
+                        <h3 className="font-semibold text-foreground">
                           {project.projectName}
                         </h3>
-                        <p className="text-xs text-gray-400">
+                        <p className="text-xs text-muted-foreground">
                           {projectStats.accepted}/{projectStats.total} accepted
                         </p>
                       </div>
@@ -694,9 +694,9 @@ export default function EveningReview() {
                         </Button>
                       )}
                       {isExpanded ? (
-                        <ChevronUp className="w-5 h-5 text-gray-400" />
+                        <ChevronUp className="w-5 h-5 text-muted-foreground" />
                       ) : (
-                        <ChevronDown className="w-5 h-5 text-gray-400" />
+                        <ChevronDown className="w-5 h-5 text-muted-foreground" />
                       )}
                     </div>
                   </div>
@@ -714,7 +714,7 @@ export default function EveningReview() {
                             <div className="flex items-start justify-between gap-3">
                               <div className="flex-1 min-w-0">
                                 <p
-                                  className={`text-sm ${status === "rejected" ? "line-through text-gray-500" : "text-white"}`}
+                                  className={`text-sm ${status === "rejected" ? "line-through text-muted-foreground/70" : "text-white"}`}
                                 >
                                   {task.text}
                                 </p>
@@ -725,7 +725,7 @@ export default function EveningReview() {
                                   >
                                     {task.priority}
                                   </Badge>
-                                  <span className="text-xs text-gray-500">
+                                  <span className="text-xs text-muted-foreground/70">
                                     {task.estimatedTime}
                                   </span>
                                 </div>
@@ -809,7 +809,7 @@ export default function EveningReview() {
                   step={1}
                   className="w-full"
                 />
-                <div className="flex justify-between text-xs text-gray-500">
+                <div className="flex justify-between text-xs text-muted-foreground/70">
                   <span>Challenging</span>
                   <span>Great</span>
                 </div>
@@ -835,7 +835,7 @@ export default function EveningReview() {
                   size="sm"
                   variant="ghost"
                   onClick={toggleRecordingWentWell}
-                  className={`w-full ${isRecordingWentWell ? "bg-red-500/20 text-red-400" : "text-gray-400"}`}
+                  className={`w-full ${isRecordingWentWell ? "bg-red-500/20 text-red-400" : "text-muted-foreground"}`}
                 >
                   {isRecordingWentWell ? (
                     <MicOff className="w-4 h-4 mr-2" />
@@ -865,7 +865,7 @@ export default function EveningReview() {
                   size="sm"
                   variant="ghost"
                   onClick={toggleRecordingDidntGo}
-                  className={`w-full ${isRecordingDidntGo ? "bg-red-500/20 text-red-400" : "text-gray-400"}`}
+                  className={`w-full ${isRecordingDidntGo ? "bg-red-500/20 text-red-400" : "text-muted-foreground"}`}
                 >
                   {isRecordingDidntGo ? (
                     <MicOff className="w-4 h-4 mr-2" />

@@ -77,7 +77,7 @@ export default function DesktopLayout({ children }: DesktopLayoutProps) {
                 <span className="truncate">Project Alpha Merger</span>
               </div>
               <div className="flex items-center gap-3 text-sm text-muted-foreground hover:text-white cursor-pointer group">
-                <FileText className="w-4 h-4 group-hover:text-cyan-400 transition-colors" />
+                <FileText className="w-4 h-4 group-hover:text-[var(--brain-cyan)] transition-colors" />
                 <span className="truncate">Mars Colony Legal...</span>
               </div>
               <div className="flex items-center gap-3 text-sm text-muted-foreground hover:text-white cursor-pointer group">

@@ -1,6 +1,5 @@
 import { useState } from "react";
 import {
-  MessageSquare,
   Sparkles,
   Send,
   Clock,
@@ -110,7 +109,7 @@ export function SmartReplySuggestions({
   const getToneColor = (tone: string) => {
     switch (tone) {
       case "professional":
-        return "bg-blue-500/20 text-blue-400 border-blue-500/30";
+        return "bg-primary/20 text-primary border-blue-500/30";
       case "friendly":
         return "bg-green-500/20 text-green-400 border-green-500/30";
       case "brief":

@@ -54,10 +54,10 @@ import { trpc } from "@/lib/trpc";
 // Subscription categories with colors
 const CATEGORIES = [
   { value: "ai_ml", label: "AI & Machine Learning", color: "bg-purple-500" },
-  { value: "productivity", label: "Productivity", color: "bg-blue-500" },
+  { value: "productivity", label: "Productivity", color: "bg-primary" },
   { value: "development", label: "Development Tools", color: "bg-emerald-500" },
   { value: "marketing", label: "Marketing", color: "bg-pink-500" },
-  { value: "communication", label: "Communication", color: "bg-cyan-500" },
+  { value: "communication", label: "Communication", color: "bg-[var(--brain-cyan)]" },
   { value: "storage", label: "Storage & Cloud", color: "bg-amber-500" },
   { value: "design", label: "Design", color: "bg-red-500" },
   { value: "analytics", label: "Analytics", color: "bg-indigo-500" },
@@ -84,7 +84,7 @@ const STATUS_OPTIONS = [
   { value: "active", label: "Active", color: "text-emerald-400" },
   { value: "paused", label: "Paused", color: "text-amber-400" },
   { value: "cancelled", label: "Cancelled", color: "text-red-400" },
-  { value: "trial", label: "Trial", color: "text-cyan-400" },
+  { value: "trial", label: "Trial", color: "text-[var(--brain-cyan)]" },
 ] as const;
 
 type StatusValue = (typeof STATUS_OPTIONS)[number]["value"];
@@ -373,7 +373,7 @@ export default function SubscriptionTracker() {
     }).format(amount);
   };
 
-  const formatDate = (date: Date | string | null) => {
+  const _formatDate = (date: Date | string | null) => {
     if (!date) return "-";
     return new Date(date).toLocaleDateString("en-GB", {
       day: "2-digit",
@@ -388,7 +388,7 @@ export default function SubscriptionTracker() {
     <div className="space-y-6">
       {/* Summary Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card className="bg-gray-900/50 border-gray-800">
+        <Card className="bg-gray-900/50 border-border/50">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
@@ -404,7 +404,7 @@ export default function SubscriptionTracker() {
           </CardContent>
         </Card>
 
-        <Card className="bg-gray-900/50 border-gray-800">
+        <Card className="bg-gray-900/50 border-border/50">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
@@ -420,7 +420,7 @@ export default function SubscriptionTracker() {
           </CardContent>
         </Card>
 
-        <Card className="bg-gray-900/50 border-gray-800">
+        <Card className="bg-gray-900/50 border-border/50">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
@@ -440,7 +440,7 @@ export default function SubscriptionTracker() {
           </CardContent>
         </Card>
 
-        <Card className="bg-gray-900/50 border-gray-800">
+        <Card className="bg-gray-900/50 border-border/50">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
@@ -449,8 +449,8 @@ export default function SubscriptionTracker() {
                   {subscriptions?.filter(s => s.status === "trial").length || 0}
                 </p>
               </div>
-              <div className="p-3 bg-cyan-500/20 rounded-full">
-                <Calendar className="w-6 h-6 text-cyan-400" />
+              <div className="p-3 bg-[var(--brain-cyan)]/20 rounded-full">
+                <Calendar className="w-6 h-6 text-[var(--brain-cyan)]" />
               </div>
             </div>
           </CardContent>
@@ -504,7 +504,7 @@ export default function SubscriptionTracker() {
                                   ? "bg-orange-500"
                                   : renewal.daysUntilRenewal <= 7
                                     ? "bg-yellow-500"
-                                    : "bg-blue-500"
+                                    : "bg-primary"
                             }`}
                           />
                           <span className="text-amber-100">
@@ -537,11 +537,11 @@ export default function SubscriptionTracker() {
       )}
 
       {/* Cost Trend Chart */}
-      <Card className="bg-gray-900/50 border-gray-800">
+      <Card className="bg-gray-900/50 border-border/50">
         <CardHeader className="flex flex-row items-center justify-between">
           <div>
             <CardTitle className="text-white flex items-center gap-2">
-              <LineChart className="w-5 h-5 text-cyan-400" />
+              <LineChart className="w-5 h-5 text-[var(--brain-cyan)]" />
               Cost Trends
             </CardTitle>
             <CardDescription>
@@ -552,7 +552,7 @@ export default function SubscriptionTracker() {
             variant="outline"
             size="sm"
             onClick={() => refetch()}
-            className="border-gray-700"
+            className="border-border"
           >
             <RefreshCw className="w-4 h-4 mr-2" />
             Refresh
@@ -563,7 +563,7 @@ export default function SubscriptionTracker() {
           {costHistory && costHistory.length > 1 && (
             <div className="mt-4 flex items-center justify-center gap-6 text-sm">
               <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-cyan-500" />
+                <div className="w-3 h-3 rounded-full bg-[var(--brain-cyan)]" />
                 <span className="text-foreground/70">Monthly Cost</span>
               </div>
               {costHistory.length >= 2 && (
@@ -600,7 +600,7 @@ export default function SubscriptionTracker() {
       {/* Main Content */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         {/* Subscriptions List */}
-        <Card className="bg-gray-900/50 border-gray-800 col-span-2">
+        <Card className="bg-gray-900/50 border-border/50 col-span-2">
           <CardHeader className="flex flex-row items-center justify-between">
             <div>
               <CardTitle className="text-white flex items-center gap-2">
@@ -627,9 +627,9 @@ export default function SubscriptionTracker() {
                   Add Subscription
                 </Button>
               </DialogTrigger>
-              <DialogContent className="bg-gray-900 border-gray-800">
+              <DialogContent className="bg-background border-border/50">
                 <DialogHeader>
-                  <DialogTitle className="text-white">
+                  <DialogTitle className="text-foreground">
                     {editingId ? "Edit Subscription" : "Add New Subscription"}
                   </DialogTitle>
                   <DialogDescription>
@@ -640,30 +640,30 @@ export default function SubscriptionTracker() {
                 </DialogHeader>
                 <div className="space-y-4 py-4">
                   <div className="space-y-2">
-                    <Label className="text-white">Service Name *</Label>
+                    <Label className="text-foreground">Service Name *</Label>
                     <Input
                       placeholder="e.g., Notion, Slack, GitHub"
                       value={formData.name}
                       onChange={e =>
                         setFormData({ ...formData, name: e.target.value })
                       }
-                      className="bg-gray-800 border-gray-700 text-white"
+                      className="bg-card border-border text-white"
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-white">Provider</Label>
+                    <Label className="text-foreground">Provider</Label>
                     <Input
                       placeholder="e.g., Microsoft, Google"
                       value={formData.provider}
                       onChange={e =>
                         setFormData({ ...formData, provider: e.target.value })
                       }
-                      className="bg-gray-800 border-gray-700 text-white"
+                      className="bg-card border-border text-white"
                     />
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label className="text-white">Cost (£) *</Label>
+                      <Label className="text-foreground">Cost (£) *</Label>
                       <Input
                         type="number"
                         step="0.01"
@@ -672,11 +672,11 @@ export default function SubscriptionTracker() {
                         onChange={e =>
                           setFormData({ ...formData, cost: e.target.value })
                         }
-                        className="bg-gray-800 border-gray-700 text-white"
+                        className="bg-card border-border text-white"
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label className="text-white">Billing Cycle</Label>
+                      <Label className="text-foreground">Billing Cycle</Label>
                       <Select
                         value={formData.billingCycle}
                         onValueChange={v =>
@@ -686,15 +686,15 @@ export default function SubscriptionTracker() {
                           })
                         }
                       >
-                        <SelectTrigger className="bg-gray-800 border-gray-700 text-white">
+                        <SelectTrigger className="bg-card border-border text-white">
                           <SelectValue />
                         </SelectTrigger>
-                        <SelectContent className="bg-gray-800 border-gray-700">
+                        <SelectContent className="bg-card border-border">
                           {BILLING_CYCLES.map(cycle => (
                             <SelectItem
                               key={cycle.value}
                               value={cycle.value}
-                              className="text-white"
+                              className="text-foreground"
                             >
                               {cycle.label}
                             </SelectItem>
@@ -705,7 +705,7 @@ export default function SubscriptionTracker() {
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label className="text-white">Category</Label>
+                      <Label className="text-foreground">Category</Label>
                       <Select
                         value={formData.category}
                         onValueChange={v =>
@@ -715,15 +715,15 @@ export default function SubscriptionTracker() {
                           })
                         }
                       >
-                        <SelectTrigger className="bg-gray-800 border-gray-700 text-white">
+                        <SelectTrigger className="bg-card border-border text-white">
                           <SelectValue />
                         </SelectTrigger>
-                        <SelectContent className="bg-gray-800 border-gray-700">
+                        <SelectContent className="bg-card border-border">
                           {CATEGORIES.map(cat => (
                             <SelectItem
                               key={cat.value}
                               value={cat.value}
-                              className="text-white"
+                              className="text-foreground"
                             >
                               {cat.label}
                             </SelectItem>
@@ -732,22 +732,22 @@ export default function SubscriptionTracker() {
                       </Select>
                     </div>
                     <div className="space-y-2">
-                      <Label className="text-white">Status</Label>
+                      <Label className="text-foreground">Status</Label>
                       <Select
                         value={formData.status}
                         onValueChange={v =>
                           setFormData({ ...formData, status: v as StatusValue })
                         }
                       >
-                        <SelectTrigger className="bg-gray-800 border-gray-700 text-white">
+                        <SelectTrigger className="bg-card border-border text-white">
                           <SelectValue />
                         </SelectTrigger>
-                        <SelectContent className="bg-gray-800 border-gray-700">
+                        <SelectContent className="bg-card border-border">
                           {STATUS_OPTIONS.map(status => (
                             <SelectItem
                               key={status.value}
                               value={status.value}
-                              className="text-white"
+                              className="text-foreground"
                             >
                               {status.label}
                             </SelectItem>
@@ -757,14 +757,14 @@ export default function SubscriptionTracker() {
                     </div>
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-white">Notes</Label>
+                    <Label className="text-foreground">Notes</Label>
                     <Input
                       placeholder="Optional notes..."
                       value={formData.notes}
                       onChange={e =>
                         setFormData({ ...formData, notes: e.target.value })
                       }
-                      className="bg-gray-800 border-gray-700 text-white"
+                      className="bg-card border-border text-white"
                     />
                   </div>
                 </div>
@@ -776,13 +776,13 @@ export default function SubscriptionTracker() {
                       setEditingId(null);
                       setFormData(initialFormData);
                     }}
-                    className="border-gray-700"
+                    className="border-border"
                   >
                     Cancel
                   </Button>
                   <Button
                     onClick={handleSubmit}
-                    className="bg-cyan-500 hover:bg-cyan-600"
+                    className="bg-cyan-500 hover:bg-[var(--brain-cyan)]/90"
                     disabled={isSubmitting}
                   >
                     {isSubmitting && (
@@ -797,7 +797,7 @@ export default function SubscriptionTracker() {
           <CardContent>
             {isLoading ? (
               <div className="flex items-center justify-center py-12">
-                <Loader2 className="w-8 h-8 animate-spin text-cyan-400" />
+                <Loader2 className="w-8 h-8 animate-spin text-[var(--brain-cyan)]" />
               </div>
             ) : !subscriptions || subscriptions.length === 0 ? (
               <div className="text-center py-12">
@@ -823,14 +823,14 @@ export default function SubscriptionTracker() {
                   return (
                     <div
                       key={sub.id}
-                      className={`p-4 bg-gray-800/50 rounded-lg border-l-4 ${
+                      className={`p-4 bg-card/50 rounded-lg border-l-4 ${
                         sub.status === "trial"
-                          ? "border-cyan-500"
+                          ? "border-[var(--brain-cyan)]"
                           : sub.status === "paused"
                             ? "border-amber-500"
                             : sub.status === "cancelled"
                               ? "border-red-500"
-                              : "border-gray-700"
+                              : "border-border"
                       }`}
                     >
                       <div className="flex items-center justify-between">
@@ -842,14 +842,14 @@ export default function SubscriptionTracker() {
                           </div>
                           <div>
                             <div className="flex items-center gap-2">
-                              <span className="text-white font-medium">
+                              <span className="text-foreground font-medium">
                                 {sub.name}
                               </span>
                               {sub.status !== "active" && (
                                 <Badge
                                   className={`${
                                     sub.status === "trial"
-                                      ? "bg-cyan-500/20 text-cyan-400"
+                                      ? "bg-[var(--brain-cyan)]/20 text-[var(--brain-cyan)]"
                                       : sub.status === "paused"
                                         ? "bg-amber-500/20 text-amber-400"
                                         : "bg-red-500/20 text-red-400"
@@ -866,7 +866,7 @@ export default function SubscriptionTracker() {
                         </div>
                         <div className="flex items-center gap-4">
                           <div className="text-right">
-                            <p className="text-white font-medium">
+                            <p className="text-foreground font-medium">
                               {formatCurrency(sub.cost)}
                             </p>
                             <p className="text-xs text-foreground/60">
@@ -895,17 +895,17 @@ export default function SubscriptionTracker() {
                             </DropdownMenuTrigger>
                             <DropdownMenuContent
                               align="end"
-                              className="bg-gray-800 border-gray-700"
+                              className="bg-card border-border"
                             >
                               <DropdownMenuItem
-                                className="text-white hover:bg-gray-700 cursor-pointer"
+                                className="text-white hover:bg-muted cursor-pointer"
                                 onClick={() => handleEdit(sub)}
                               >
                                 <Edit2 className="w-4 h-4 mr-2" />
                                 Edit
                               </DropdownMenuItem>
                               <DropdownMenuItem
-                                className="text-red-400 hover:bg-gray-700 cursor-pointer"
+                                className="text-red-400 hover:bg-muted cursor-pointer"
                                 onClick={() => setDeleteConfirmId(sub.id)}
                               >
                                 <Trash2 className="w-4 h-4 mr-2" />
@@ -924,7 +924,7 @@ export default function SubscriptionTracker() {
         </Card>
 
         {/* Category Breakdown */}
-        <Card className="bg-gray-900/50 border-gray-800">
+        <Card className="bg-gray-900/50 border-border/50">
           <CardHeader>
             <CardTitle className="text-white flex items-center gap-2">
               <TrendingUp className="w-5 h-5 text-purple-400" />
@@ -952,7 +952,7 @@ export default function SubscriptionTracker() {
                         {formatCurrency(cat.total)}
                       </span>
                     </div>
-                    <div className="h-2 bg-gray-800 rounded-full overflow-hidden">
+                    <div className="h-2 bg-card rounded-full overflow-hidden">
                       <div
                         className={`h-full ${cat.color} transition-all duration-500`}
                         style={{
@@ -968,7 +968,7 @@ export default function SubscriptionTracker() {
             {/* Optimization Tips */}
             {categoryTotals.length > 0 && (
               <div className="mt-6 p-4 bg-gradient-to-r from-amber-500/10 to-purple-500/10 rounded-lg border border-amber-500/20">
-                <h4 className="text-white font-medium mb-2 flex items-center gap-2">
+                <h4 className="text-foreground font-medium mb-2 flex items-center gap-2">
                   <TrendingDown className="w-4 h-4 text-amber-400" />
                   Optimization Tip
                 </h4>
@@ -993,9 +993,9 @@ export default function SubscriptionTracker() {
         open={deleteConfirmId !== null}
         onOpenChange={() => setDeleteConfirmId(null)}
       >
-        <DialogContent className="bg-gray-900 border-gray-800">
+        <DialogContent className="bg-background border-border/50">
           <DialogHeader>
-            <DialogTitle className="text-white">Confirm Deletion</DialogTitle>
+            <DialogTitle className="text-foreground">Confirm Deletion</DialogTitle>
             <DialogDescription>
               Are you sure you want to remove this subscription? This action
               cannot be undone.
@@ -1005,7 +1005,7 @@ export default function SubscriptionTracker() {
             <Button
               variant="outline"
               onClick={() => setDeleteConfirmId(null)}
-              className="border-gray-700"
+              className="border-border"
             >
               Cancel
             </Button>

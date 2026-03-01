@@ -46,7 +46,7 @@ export function CephoLandingPage() {
                 <h1 className="text-6xl md:text-7xl font-display font-bold tracking-tight text-center text-white">
                   The Brain
                 </h1>
-                <p className="text-sm text-white/40 mt-3 italic">English</p>
+                <p className="text-sm text-muted-foreground/60 mt-3 italic">English</p>
               </motion.div>
             ) : (
               <motion.div
@@ -60,7 +60,7 @@ export function CephoLandingPage() {
                 <h1 className="text-6xl md:text-7xl font-display font-bold tracking-tight text-center bg-gradient-to-r from-primary via-pink-400 to-primary bg-clip-text text-transparent">
                   Cepho
                 </h1>
-                <p className="text-sm text-white/40 mt-3 italic">
+                <p className="text-sm text-muted-foreground/60 mt-3 italic">
                   From the Greek for brain
                 </p>
               </motion.div>
@@ -75,7 +75,7 @@ export function CephoLandingPage() {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5 }}
         >
-          <p className="text-xl text-white/80 font-medium">
+          <p className="text-xl text-foreground/80 font-medium">
             Get you operating at 100
           </p>
           <p className="text-sm text-white/50 max-w-md mx-auto leading-relaxed">

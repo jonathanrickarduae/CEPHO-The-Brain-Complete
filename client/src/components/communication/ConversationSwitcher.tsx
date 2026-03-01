@@ -87,7 +87,7 @@ export function ConversationSwitcher({
       {/* Trigger button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 px-3 py-2 bg-gray-800 hover:bg-gray-700 rounded-lg transition-colors w-full max-w-xs"
+        className="flex items-center gap-2 px-3 py-2 bg-card hover:bg-muted rounded-lg transition-colors w-full max-w-xs"
       >
         <MessageSquare className="w-4 h-4 text-primary flex-shrink-0" />
         <div className="flex-1 text-left truncate">
@@ -102,9 +102,9 @@ export function ConversationSwitcher({
 
       {/* Dropdown */}
       {isOpen && (
-        <div className="absolute top-full left-0 mt-2 w-80 bg-gray-900 border border-gray-700 rounded-xl shadow-xl z-50 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
+        <div className="absolute top-full left-0 mt-2 w-80 bg-background border border-border rounded-xl shadow-xl z-50 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
           {/* Search */}
-          <div className="p-3 border-b border-gray-700">
+          <div className="p-3 border-b border-border">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <input
@@ -112,7 +112,7 @@ export function ConversationSwitcher({
                 placeholder="Search conversations..."
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
-                className="w-full pl-9 pr-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary"
+                className="w-full pl-9 pr-4 py-2 bg-card border border-border rounded-lg text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary"
               />
             </div>
           </div>
@@ -123,7 +123,7 @@ export function ConversationSwitcher({
               onNewConversation();
               setIsOpen(false);
             }}
-            className="w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-800 transition-colors border-b border-gray-700"
+            className="w-full flex items-center gap-3 px-4 py-3 hover:bg-card transition-colors border-b border-border"
           >
             <div className="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center">
               <Plus className="w-4 h-4 text-primary" />
@@ -147,11 +147,11 @@ export function ConversationSwitcher({
                     onSelect(conv.id);
                     setIsOpen(false);
                   }}
-                  className={`w-full flex items-start gap-3 px-4 py-3 hover:bg-gray-800 transition-colors text-left ${
-                    conv.id === currentConversationId ? "bg-gray-800" : ""
+                  className={`w-full flex items-start gap-3 px-4 py-3 hover:bg-card transition-colors text-left ${
+                    conv.id === currentConversationId ? "bg-card" : ""
                   }`}
                 >
-                  <div className="w-8 h-8 rounded-lg bg-gray-700 flex items-center justify-center flex-shrink-0">
+                  <div className="w-8 h-8 rounded-lg bg-muted flex items-center justify-center flex-shrink-0">
                     {conv.expertName ? (
                       <Brain className="w-4 h-4 text-pink-500" />
                     ) : (
@@ -186,7 +186,7 @@ export function ConversationSwitcher({
           </div>
 
           {/* Footer */}
-          <div className="p-2 border-t border-gray-700 bg-gray-800/50">
+          <div className="p-2 border-t border-border bg-card/50">
             <div className="text-xs text-center text-muted-foreground">
               {conversations.length} conversation
               {conversations.length !== 1 ? "s" : ""}
@@ -214,7 +214,7 @@ export function useConversationHistory() {
             timestamp: new Date(c.timestamp),
           }))
         );
-      } catch (e) {
+      } catch {
       }
     }
   }, []);

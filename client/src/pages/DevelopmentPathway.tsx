@@ -47,7 +47,7 @@ import { Gauge, Map } from "lucide-react";
 // Stage configuration for the development pipeline
 const PIPELINE_STAGES = [
   { id: 1, name: "Captured", color: "bg-slate-500" },
-  { id: 2, name: "Assessing", color: "bg-blue-500" },
+  { id: 2, name: "Assessing", color: "bg-primary" },
   { id: 3, name: "Refining", color: "bg-amber-500" },
   { id: 4, name: "Validated", color: "bg-emerald-500" },
   { id: 5, name: "Promoted", color: "bg-purple-500" },
@@ -105,14 +105,14 @@ export default function DevelopmentPathway() {
             <Rocket className="h-8 w-8 text-emerald-400" />
             Odyssey Management
           </h1>
-          <p className="text-gray-400 mt-1">
+          <p className="text-muted-foreground mt-1">
             Track ideas from capture to launch with Chief of Staff oversight
           </p>
         </div>
         <div className="flex items-center gap-3">
           <div className="text-right">
             <p className="text-xs text-foreground/60">Next Review</p>
-            <p className="text-sm font-medium text-cyan-400">
+            <p className="text-sm font-medium text-[var(--brain-cyan)]">
               {getNextReviewDate()}
             </p>
           </div>
@@ -141,7 +141,7 @@ export default function DevelopmentPathway() {
           return (
             <Card
               key={stage.id}
-              className="bg-gray-900/50 border-gray-800 relative overflow-hidden"
+              className="bg-gray-900/50 border-border/50 relative overflow-hidden"
             >
               <div
                 className={`absolute top-0 left-0 right-0 h-1 ${stage.color}`}
@@ -168,59 +168,59 @@ export default function DevelopmentPathway() {
         onValueChange={setActiveTab}
         className="space-y-4"
       >
-        <TabsList className="bg-gray-900/50 border border-gray-800">
+        <TabsList className="bg-gray-900/50 border border-border/50">
           <TabsTrigger
             value="overview"
-            className="data-[state=active]:bg-gray-800"
+            className="data-[state=active]:bg-card"
           >
             <Target className="w-4 h-4 mr-2" />
             Overview
           </TabsTrigger>
           <TabsTrigger
             value="innovation"
-            className="data-[state=active]:bg-gray-800"
+            className="data-[state=active]:bg-card"
           >
             <Lightbulb className="w-4 h-4 mr-2" />
             Innovation Hub
           </TabsTrigger>
           <TabsTrigger
             value="funding"
-            className="data-[state=active]:bg-gray-800"
+            className="data-[state=active]:bg-card"
           >
             <Building2 className="w-4 h-4 mr-2" />
             Government Funding
           </TabsTrigger>
           <TabsTrigger
             value="subscriptions"
-            className="data-[state=active]:bg-gray-800"
+            className="data-[state=active]:bg-card"
           >
             <CreditCard className="w-4 h-4 mr-2" />
             Subscriptions
           </TabsTrigger>
           <TabsTrigger
             value="reviews"
-            className="data-[state=active]:bg-gray-800"
+            className="data-[state=active]:bg-card"
           >
             <Calendar className="w-4 h-4 mr-2" />
             Chief of Staff Reviews
           </TabsTrigger>
           <TabsTrigger
             value="optimization"
-            className="data-[state=active]:bg-gray-800"
+            className="data-[state=active]:bg-card"
           >
             <Gauge className="w-4 h-4 mr-2" />
             System Optimization
           </TabsTrigger>
           <TabsTrigger
             value="5phase"
-            className="data-[state=active]:bg-gray-800"
+            className="data-[state=active]:bg-card"
           >
             <Rocket className="w-4 h-4 mr-2" />
             5-Phase Roadmap
           </TabsTrigger>
           <TabsTrigger
             value="roadmap"
-            className="data-[state=active]:bg-gray-800"
+            className="data-[state=active]:bg-card"
           >
             <Map className="w-4 h-4 mr-2" />
             CoS Roadmap
@@ -231,10 +231,10 @@ export default function DevelopmentPathway() {
         <TabsContent value="overview" className="space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
             {/* Pipeline Health */}
-            <Card className="bg-gray-900/50 border-gray-800 col-span-2">
+            <Card className="bg-gray-900/50 border-border/50 col-span-2">
               <CardHeader>
                 <CardTitle className="text-white flex items-center gap-2">
-                  <TrendingUp className="w-5 h-5 text-cyan-400" />
+                  <TrendingUp className="w-5 h-5 text-[var(--brain-cyan)]" />
                   Pipeline Health
                 </CardTitle>
                 <CardDescription>
@@ -243,7 +243,7 @@ export default function DevelopmentPathway() {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                  <div className="p-4 bg-gray-800/50 rounded-lg">
+                  <div className="p-4 bg-card/50 rounded-lg">
                     <div className="flex items-center gap-2 text-emerald-400 mb-2">
                       <CheckCircle2 className="w-4 h-4" />
                       <span className="text-sm">On Track</span>
@@ -255,7 +255,7 @@ export default function DevelopmentPathway() {
                       Validated ideas ready for action
                     </p>
                   </div>
-                  <div className="p-4 bg-gray-800/50 rounded-lg">
+                  <div className="p-4 bg-card/50 rounded-lg">
                     <div className="flex items-center gap-2 text-amber-400 mb-2">
                       <Clock className="w-4 h-4" />
                       <span className="text-sm">In Progress</span>
@@ -267,8 +267,8 @@ export default function DevelopmentPathway() {
                       Ideas being assessed
                     </p>
                   </div>
-                  <div className="p-4 bg-gray-800/50 rounded-lg">
-                    <div className="flex items-center gap-2 text-blue-400 mb-2">
+                  <div className="p-4 bg-card/50 rounded-lg">
+                    <div className="flex items-center gap-2 text-primary mb-2">
                       <AlertCircle className="w-4 h-4" />
                       <span className="text-sm">Awaiting Review</span>
                     </div>
@@ -287,7 +287,7 @@ export default function DevelopmentPathway() {
                     <span className="text-foreground/70">
                       Pipeline Progress
                     </span>
-                    <span className="text-white">
+                    <span className="text-foreground">
                       {pipelineStats.total > 0
                         ? Math.round(
                             (pipelineStats.validated / pipelineStats.total) *
@@ -310,7 +310,7 @@ export default function DevelopmentPathway() {
             </Card>
 
             {/* Quick Actions */}
-            <Card className="bg-gray-900/50 border-gray-800">
+            <Card className="bg-gray-900/50 border-border/50">
               <CardHeader>
                 <CardTitle className="text-white flex items-center gap-2">
                   <Rocket className="w-5 h-5 text-purple-400" />
@@ -321,15 +321,15 @@ export default function DevelopmentPathway() {
                 <Link href="/innovation-hub">
                   <Button
                     variant="outline"
-                    className="w-full justify-start border-gray-700 hover:bg-gray-800"
+                    className="w-full justify-start border-border hover:bg-card"
                   >
-                    <Lightbulb className="w-4 h-4 mr-2 text-cyan-400" />
+                    <Lightbulb className="w-4 h-4 mr-2 text-[var(--brain-cyan)]" />
                     Open Innovation Hub
                   </Button>
                 </Link>
                 <Button
                   variant="outline"
-                  className="w-full justify-start border-gray-700 hover:bg-gray-800"
+                  className="w-full justify-start border-border hover:bg-card"
                   onClick={() => setActiveTab("funding")}
                 >
                   <Building2 className="w-4 h-4 mr-2 text-emerald-400" />
@@ -337,7 +337,7 @@ export default function DevelopmentPathway() {
                 </Button>
                 <Button
                   variant="outline"
-                  className="w-full justify-start border-gray-700 hover:bg-gray-800"
+                  className="w-full justify-start border-border hover:bg-card"
                   onClick={() => setActiveTab("subscriptions")}
                 >
                   <CreditCard className="w-4 h-4 mr-2 text-amber-400" />
@@ -345,7 +345,7 @@ export default function DevelopmentPathway() {
                 </Button>
                 <Button
                   variant="outline"
-                  className="w-full justify-start border-gray-700 hover:bg-gray-800"
+                  className="w-full justify-start border-border hover:bg-card"
                   onClick={() => setActiveTab("reviews")}
                 >
                   <Calendar className="w-4 h-4 mr-2 text-purple-400" />
@@ -356,11 +356,11 @@ export default function DevelopmentPathway() {
           </div>
 
           {/* Recent Ideas */}
-          <Card className="bg-gray-900/50 border-gray-800">
+          <Card className="bg-gray-900/50 border-border/50">
             <CardHeader className="flex flex-row items-center justify-between">
               <div>
                 <CardTitle className="text-white flex items-center gap-2">
-                  <Lightbulb className="w-5 h-5 text-cyan-400" />
+                  <Lightbulb className="w-5 h-5 text-[var(--brain-cyan)]" />
                   Recent Ideas
                 </CardTitle>
                 <CardDescription>
@@ -371,7 +371,7 @@ export default function DevelopmentPathway() {
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="text-cyan-400 hover:text-cyan-300"
+                  className="text-[var(--brain-cyan)] hover:text-cyan-300"
                 >
                   View All
                   <ArrowRight className="w-4 h-4 ml-1" />
@@ -399,7 +399,7 @@ export default function DevelopmentPathway() {
                   {recentIdeas.map(idea => (
                     <div
                       key={idea.id}
-                      className="flex items-center justify-between p-3 bg-gray-800/50 rounded-lg hover:bg-gray-800 transition-colors"
+                      className="flex items-center justify-between p-3 bg-card/50 rounded-lg hover:bg-card transition-colors"
                     >
                       <div className="flex items-center gap-3">
                         <div
@@ -407,14 +407,14 @@ export default function DevelopmentPathway() {
                             idea.status === "validated"
                               ? "bg-emerald-500"
                               : idea.status === "assessing"
-                                ? "bg-blue-500"
+                                ? "bg-primary"
                                 : idea.status === "captured"
                                   ? "bg-slate-500"
                                   : "bg-gray-500"
                           }`}
                         />
                         <div>
-                          <p className="text-white font-medium">{idea.title}</p>
+                          <p className="text-foreground font-medium">{idea.title}</p>
                           <p className="text-xs text-foreground/60">
                             Stage {idea.currentStage} • {idea.status}
                           </p>
@@ -422,7 +422,7 @@ export default function DevelopmentPathway() {
                       </div>
                       <div className="flex items-center gap-2">
                         {idea.confidenceScore && (
-                          <Badge variant="outline" className="border-gray-700">
+                          <Badge variant="outline" className="border-border">
                             {Math.round(idea.confidenceScore)}%
                           </Badge>
                         )}
@@ -438,7 +438,7 @@ export default function DevelopmentPathway() {
                           </DropdownMenuTrigger>
                           <DropdownMenuContent
                             align="end"
-                            className="bg-gray-900 border-gray-800"
+                            className="bg-background border-border/50"
                           >
                             <Link href="/innovation-hub">
                               <DropdownMenuItem className="cursor-pointer">
@@ -463,10 +463,10 @@ export default function DevelopmentPathway() {
 
         {/* Innovation Hub Tab */}
         <TabsContent value="innovation">
-          <Card className="bg-gray-900/50 border-gray-800">
+          <Card className="bg-gray-900/50 border-border/50">
             <CardHeader>
               <CardTitle className="text-white flex items-center gap-2">
-                <Lightbulb className="w-5 h-5 text-cyan-400" />
+                <Lightbulb className="w-5 h-5 text-[var(--brain-cyan)]" />
                 Innovation Hub
               </CardTitle>
               <CardDescription>
@@ -475,7 +475,7 @@ export default function DevelopmentPathway() {
               </CardDescription>
             </CardHeader>
             <CardContent className="text-center py-8">
-              <Lightbulb className="w-16 h-16 text-cyan-400/50 mx-auto mb-4" />
+              <Lightbulb className="w-16 h-16 text-[var(--brain-cyan)]/50 mx-auto mb-4" />
               <p className="text-foreground/70 mb-4">
                 Access the full Innovation Hub to manage your ideas pipeline
               </p>
@@ -516,7 +516,7 @@ export default function DevelopmentPathway() {
 
         {/* Chief of Staff Reviews Tab */}
         <TabsContent value="reviews">
-          <Card className="bg-gray-900/50 border-gray-800">
+          <Card className="bg-gray-900/50 border-border/50">
             <CardHeader>
               <CardTitle className="text-white flex items-center gap-2">
                 <Calendar className="w-5 h-5 text-purple-400" />
@@ -534,12 +534,12 @@ export default function DevelopmentPathway() {
                     Review Schedule
                   </h3>
                   <div className="space-y-3">
-                    <div className="p-4 bg-gray-800/50 rounded-lg border-l-4 border-cyan-500">
+                    <div className="p-4 bg-card/50 rounded-lg border-l-4 border-[var(--brain-cyan)]">
                       <div className="flex items-center justify-between">
-                        <span className="text-white font-medium">
+                        <span className="text-foreground font-medium">
                           Monday Review
                         </span>
-                        <Badge className="bg-cyan-500/20 text-cyan-400">
+                        <Badge className="bg-[var(--brain-cyan)]/20 text-[var(--brain-cyan)]">
                           Weekly
                         </Badge>
                       </div>
@@ -547,9 +547,9 @@ export default function DevelopmentPathway() {
                         Start of week planning & priority setting
                       </p>
                     </div>
-                    <div className="p-4 bg-gray-800/50 rounded-lg border-l-4 border-purple-500">
+                    <div className="p-4 bg-card/50 rounded-lg border-l-4 border-purple-500">
                       <div className="flex items-center justify-between">
-                        <span className="text-white font-medium">
+                        <span className="text-foreground font-medium">
                           Thursday Review
                         </span>
                         <Badge className="bg-purple-500/20 text-purple-400">
@@ -564,7 +564,7 @@ export default function DevelopmentPathway() {
 
                   <div className="p-4 bg-gradient-to-r from-cyan-500/10 to-purple-500/10 rounded-lg border border-cyan-500/20">
                     <p className="text-sm text-foreground/80">
-                      <strong className="text-white">Next Review:</strong>{" "}
+                      <strong className="text-foreground">Next Review:</strong>{" "}
                       {getNextReviewDate()}
                     </p>
                     <p className="text-xs text-foreground/60 mt-1">
@@ -603,7 +603,7 @@ export default function DevelopmentPathway() {
                     ].map((item, i) => (
                       <div
                         key={i}
-                        className="flex items-center justify-between p-3 bg-gray-800/50 rounded-lg"
+                        className="flex items-center justify-between p-3 bg-card/50 rounded-lg"
                       >
                         <div className="flex items-center gap-3">
                           <item.icon className="w-5 h-5 text-foreground/70" />
@@ -611,7 +611,7 @@ export default function DevelopmentPathway() {
                             {item.label}
                           </span>
                         </div>
-                        <Badge variant="outline" className="border-gray-700">
+                        <Badge variant="outline" className="border-border">
                           {item.count}
                         </Badge>
                       </div>

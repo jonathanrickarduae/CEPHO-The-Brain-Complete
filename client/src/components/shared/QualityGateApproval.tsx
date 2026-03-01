@@ -81,7 +81,7 @@ const reviewLevelConfig: Record<
 > = {
   automated: {
     label: "Automated Check",
-    color: "text-blue-400 bg-blue-500/20 border-blue-500/30",
+    color: "text-primary bg-primary/20 border-blue-500/30",
     icon: <Shield className="w-4 h-4" />,
     description: "System-verified criteria and compliance checks",
   },
@@ -99,7 +99,7 @@ const reviewLevelConfig: Record<
   },
   final: {
     label: "Final Decision",
-    color: "text-cyan-400 bg-cyan-500/20 border-cyan-500/30",
+    color: "text-[var(--brain-cyan)] bg-[var(--brain-cyan)]/20 border-cyan-500/30",
     icon: <CheckCircle2 className="w-4 h-4" />,
     description: "Chief of Staff final approval",
   },
@@ -338,7 +338,7 @@ export function QualityGateCard({
                   ? "bg-green-500/20"
                   : gate.status === "rejected"
                     ? "bg-red-500/20"
-                    : "bg-cyan-500/20"
+                    : "bg-[var(--brain-cyan)]/20"
               }`}
             >
               <FileText
@@ -347,7 +347,7 @@ export function QualityGateCard({
                     ? "text-green-400"
                     : gate.status === "rejected"
                       ? "text-red-400"
-                      : "text-cyan-400"
+                      : "text-[var(--brain-cyan)]"
                 }`}
               />
             </div>
@@ -356,7 +356,7 @@ export function QualityGateCard({
               <div className="flex items-center gap-2 text-sm text-foreground/70">
                 <span>{gate.fromPhase}</span>
                 <ArrowRight className="w-4 h-4" />
-                <span className="text-cyan-400">{gate.toPhase}</span>
+                <span className="text-[var(--brain-cyan)]">{gate.toPhase}</span>
               </div>
             </div>
           </div>
@@ -386,7 +386,7 @@ export function QualityGateCard({
                 ? "bg-red-500"
                 : allApproved
                   ? "bg-green-500"
-                  : "bg-cyan-500"
+                  : "bg-[var(--brain-cyan)]"
             }`}
             style={{ width: `${(approvedCount / totalCount) * 100}%` }}
           />
@@ -490,7 +490,7 @@ export function QualityGateCard({
                       {entry.timestamp.toLocaleString("en-GB")}
                     </span>
                     <span className="text-foreground/70">
-                      <span className="text-white">{entry.actor}</span>{" "}
+                      <span className="text-foreground">{entry.actor}</span>{" "}
                       {entry.action}
                       {entry.details && (
                         <span className="text-foreground/60">
@@ -792,7 +792,7 @@ export function QualityGateApprovalQueue({
           </p>
         </div>
         {pendingCount > 0 && (
-          <Badge className="bg-cyan-500/20 text-cyan-400 border-cyan-500/30">
+          <Badge className="bg-[var(--brain-cyan)]/20 text-[var(--brain-cyan)] border-cyan-500/30">
             {pendingCount} pending
           </Badge>
         )}

@@ -64,7 +64,7 @@ export default function WorkflowDetailPage() {
       if (data.success) {
         setWorkflow(data.workflow);
       }
-    } catch (error) {
+    } catch {
     } finally {
       setLoading(false);
     }
@@ -85,7 +85,7 @@ export default function WorkflowDetailPage() {
           fetchStepGuidance(currentStep.id);
         }
       }
-    } catch (error) {
+    } catch {
     }
   };
 
@@ -102,7 +102,7 @@ export default function WorkflowDetailPage() {
           deliverables: data.deliverables,
         });
       }
-    } catch (error) {
+    } catch {
     }
   };
 
@@ -116,7 +116,7 @@ export default function WorkflowDetailPage() {
         fetchWorkflow();
         fetchSteps();
       }
-    } catch (error) {
+    } catch {
     }
   };
 
@@ -129,7 +129,7 @@ export default function WorkflowDetailPage() {
       if (data.success) {
         fetchWorkflow();
       }
-    } catch (error) {
+    } catch {
     }
   };
 
@@ -142,7 +142,7 @@ export default function WorkflowDetailPage() {
       if (data.success) {
         fetchWorkflow();
       }
-    } catch (error) {
+    } catch {
     }
   };
 
@@ -151,13 +151,13 @@ export default function WorkflowDetailPage() {
       case "completed":
         return <CheckCircle className="w-5 h-5 text-green-500" />;
       case "in_progress":
-        return <Play className="w-5 h-5 text-blue-500" />;
+        return <Play className="w-5 h-5 text-primary" />;
       case "pending":
-        return <Clock className="w-5 h-5 text-gray-400" />;
+        return <Clock className="w-5 h-5 text-muted-foreground" />;
       case "failed":
         return <AlertCircle className="w-5 h-5 text-red-500" />;
       default:
-        return <Clock className="w-5 h-5 text-gray-400" />;
+        return <Clock className="w-5 h-5 text-muted-foreground" />;
     }
   };
 
@@ -180,15 +180,15 @@ export default function WorkflowDetailPage() {
       <div className="flex items-center gap-4 mb-8">
         <button
           onClick={() => setLocation("/workflows")}
-          className="p-2 hover:bg-gray-800 rounded-lg transition-colors"
+          className="p-2 hover:bg-card rounded-lg transition-colors"
         >
-          <ArrowLeft className="w-6 h-6 text-gray-400" />
+          <ArrowLeft className="w-6 h-6 text-muted-foreground" />
         </button>
         <div className="flex-1">
           <h1 className="text-3xl font-bold text-white mb-2">
             {workflow.name}
           </h1>
-          <p className="text-gray-400">
+          <p className="text-muted-foreground">
             {workflow.skillType.replace("_", " ").charAt(0).toUpperCase() +
               workflow.skillType.slice(1).replace("_", " ")}
           </p>
@@ -215,7 +215,7 @@ export default function WorkflowDetailPage() {
           {workflow.status === "paused" && (
             <button
               onClick={handleResumeWorkflow}
-              className="flex items-center gap-2 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors"
+              className="flex items-center gap-2 px-4 py-2 bg-blue-500 hover:bg-primary/90 text-white rounded-lg transition-colors"
             >
               <Play className="w-5 h-5" />
               Resume
@@ -225,13 +225,13 @@ export default function WorkflowDetailPage() {
       </div>
 
       {/* Progress Bar */}
-      <div className="bg-gray-800 rounded-lg p-6 mb-8">
+      <div className="bg-card rounded-lg p-6 mb-8">
         <div className="flex items-center justify-between mb-4">
           <div>
             <h3 className="text-lg font-semibold text-white mb-1">
               Overall Progress
             </h3>
-            <p className="text-sm text-gray-400">
+            <p className="text-sm text-muted-foreground">
               {completedSteps} of {totalSteps} steps completed
             </p>
           </div>
@@ -239,7 +239,7 @@ export default function WorkflowDetailPage() {
             {Math.round(progress)}%
           </div>
         </div>
-        <div className="w-full bg-gray-700 rounded-full h-3">
+        <div className="w-full bg-muted rounded-full h-3">
           <div
             className="bg-fuchsia-500 h-3 rounded-full transition-all"
             style={{ width: `${progress}%` }}
@@ -255,10 +255,10 @@ export default function WorkflowDetailPage() {
             {steps.map(step => (
               <div
                 key={step.id}
-                className={`bg-gray-800 rounded-lg p-6 border ${
+                className={`bg-card rounded-lg p-6 border ${
                   step.status === "in_progress"
                     ? "border-fuchsia-500"
-                    : "border-gray-700"
+                    : "border-border"
                 }`}
               >
                 <div className="flex items-start gap-4">
@@ -273,15 +273,15 @@ export default function WorkflowDetailPage() {
                           step.status === "completed"
                             ? "bg-green-500/20 text-green-400"
                             : step.status === "in_progress"
-                              ? "bg-blue-500/20 text-blue-400"
-                              : "bg-gray-500/20 text-gray-400"
+                              ? "bg-primary/20 text-primary"
+                              : "bg-gray-500/20 text-muted-foreground"
                         }`}
                       >
                         {step.status.replace("_", " ")}
                       </span>
                     </div>
                     {step.completedAt && (
-                      <p className="text-sm text-gray-400">
+                      <p className="text-sm text-muted-foreground">
                         Completed{" "}
                         {new Date(step.completedAt).toLocaleDateString()}
                       </p>
@@ -297,30 +297,30 @@ export default function WorkflowDetailPage() {
         <div>
           <h2 className="text-2xl font-bold text-white mb-6">Current Step</h2>
           {currentStep && currentStepGuidance ? (
-            <div className="bg-gray-800 rounded-lg p-6 border border-gray-700 sticky top-4">
+            <div className="bg-card rounded-lg p-6 border border-border sticky top-4">
               <h3 className="text-xl font-semibold text-white mb-4">
                 {currentStep.stepName}
               </h3>
 
               <div className="mb-6">
-                <h4 className="text-sm font-semibold text-gray-400 uppercase mb-2">
+                <h4 className="text-sm font-semibold text-muted-foreground uppercase mb-2">
                   Guidance
                 </h4>
-                <p className="text-gray-300 whitespace-pre-line">
+                <p className="text-foreground/80 whitespace-pre-line">
                   {currentStepGuidance.guidance}
                 </p>
               </div>
 
               {currentStepGuidance.recommendations.length > 0 && (
                 <div className="mb-6">
-                  <h4 className="text-sm font-semibold text-gray-400 uppercase mb-2">
+                  <h4 className="text-sm font-semibold text-muted-foreground uppercase mb-2">
                     Recommendations
                   </h4>
                   <ul className="space-y-2">
                     {currentStepGuidance.recommendations.map((rec, index) => (
                       <li
                         key={index}
-                        className="flex items-start gap-2 text-gray-300"
+                        className="flex items-start gap-2 text-foreground/80"
                       >
                         <span className="text-fuchsia-500 mt-1">•</span>
                         <span>{rec}</span>
@@ -332,7 +332,7 @@ export default function WorkflowDetailPage() {
 
               {currentStepGuidance.deliverables.length > 0 && (
                 <div>
-                  <h4 className="text-sm font-semibold text-gray-400 uppercase mb-2">
+                  <h4 className="text-sm font-semibold text-muted-foreground uppercase mb-2">
                     Deliverables
                   </h4>
                   <ul className="space-y-2">
@@ -340,7 +340,7 @@ export default function WorkflowDetailPage() {
                       (deliverable, index) => (
                         <li
                           key={index}
-                          className="flex items-center gap-2 text-gray-300"
+                          className="flex items-center gap-2 text-foreground/80"
                         >
                           <FileText className="w-4 h-4 text-fuchsia-500" />
                           <span>{deliverable}</span>
@@ -361,8 +361,8 @@ export default function WorkflowDetailPage() {
               </button>
             </div>
           ) : (
-            <div className="bg-gray-800 rounded-lg p-6 border border-gray-700 text-center">
-              <p className="text-gray-400">
+            <div className="bg-card rounded-lg p-6 border border-border text-center">
+              <p className="text-muted-foreground">
                 No active step. Start the workflow to begin.
               </p>
             </div>

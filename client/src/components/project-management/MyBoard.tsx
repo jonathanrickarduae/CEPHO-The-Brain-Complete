@@ -18,7 +18,7 @@ export function MyBoard() {
     if (saved) {
       try {
         setFavorites(JSON.parse(saved));
-      } catch (error) {
+      } catch {
       }
     }
   }, []);
@@ -29,7 +29,7 @@ export function MyBoard() {
     localStorage.setItem("favoriteExperts", JSON.stringify(newFavorites));
   };
 
-  const addFavorite = (expertId: string) => {
+  const _addFavorite = (expertId: string) => {
     if (!favorites.find(f => f.id === expertId)) {
       saveFavorites([...favorites, { id: expertId, addedAt: Date.now() }]);
     }
@@ -39,7 +39,7 @@ export function MyBoard() {
     saveFavorites(favorites.filter(f => f.id !== expertId));
   };
 
-  const isFavorite = (expertId: string) => {
+  const _isFavorite = (expertId: string) => {
     return favorites.some(f => f.id === expertId);
   };
 
@@ -163,12 +163,12 @@ export function useFavorites() {
     if (saved) {
       try {
         setFavorites(JSON.parse(saved));
-      } catch (error) {
+      } catch {
       }
     }
   }, []);
 
-  const addFavorite = (expertId: string) => {
+  const _addFavorite = (expertId: string) => {
     setFavorites(prev => {
       if (!prev.find(f => f.id === expertId)) {
         const newFavorites = [...prev, { id: expertId, addedAt: Date.now() }];
@@ -187,9 +187,9 @@ export function useFavorites() {
     });
   };
 
-  const isFavorite = (expertId: string) => {
+  const _isFavorite = (expertId: string) => {
     return favorites.some(f => f.id === expertId);
   };
 
-  return { favorites, addFavorite, removeFavorite, isFavorite };
+  return { favorites, removeFavorite};
 }

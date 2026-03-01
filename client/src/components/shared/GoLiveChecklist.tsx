@@ -20,7 +20,6 @@ import {
   FileText,
   Palette,
   Zap,
-  Users,
   Settings,
   Rocket,
 } from "lucide-react";

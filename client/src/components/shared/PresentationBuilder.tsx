@@ -4,8 +4,6 @@ import {
   ChevronLeft,
   ChevronRight,
   Plus,
-  Trash2,
-  Edit2,
   Check,
   X,
   Sparkles,
@@ -18,7 +16,6 @@ import {
   List,
   Quote,
   Layout,
-  Palette,
 } from "lucide-react";
 import { BrandSelector } from "@/components/content/BrandKit";
 
@@ -222,7 +219,7 @@ export function PresentationBuilder() {
             selectedBrandId={project.brandId}
             onSelect={id => setProject(prev => ({ ...prev, brandId: id }))}
           />
-          <button className="px-3 py-1.5 bg-gray-700 text-foreground rounded-lg hover:bg-gray-600 transition-colors text-sm flex items-center gap-2">
+          <button className="px-3 py-1.5 bg-muted text-foreground rounded-lg hover:bg-gray-600 transition-colors text-sm flex items-center gap-2">
             <Play className="w-4 h-4" />
             Preview
           </button>
@@ -246,7 +243,7 @@ export function PresentationBuilder() {
                     ? "border-primary"
                     : slide.approved
                       ? "border-green-500/50"
-                      : "border-border hover:border-gray-600"
+                      : "border-border hover:border-border"
                 }`}
                 style={{ backgroundColor: colors.bg }}
               >
@@ -272,7 +269,7 @@ export function PresentationBuilder() {
             {/* Add Slide Button */}
             <button
               onClick={() => setShowSlideOptions(true)}
-              className="w-full aspect-video rounded-lg border-2 border-dashed border-gray-700 hover:border-gray-600 transition-colors flex items-center justify-center"
+              className="w-full aspect-video rounded-lg border-2 border-dashed border-border hover:border-border transition-colors flex items-center justify-center"
             >
               <Plus className="w-6 h-6 text-muted-foreground" />
             </button>
@@ -299,7 +296,7 @@ export function PresentationBuilder() {
                   value={briefDescription}
                   onChange={e => setBriefDescription(e.target.value)}
                   placeholder="E.g., Q1 strategy presentation for the board. Cover revenue targets, market expansion plans, and team growth. Professional tone, data-driven."
-                  className="w-full h-32 px-4 py-3 bg-gray-900 border border-gray-700 rounded-xl text-foreground placeholder:text-muted-foreground resize-none focus:outline-none focus:border-primary"
+                  className="w-full h-32 px-4 py-3 bg-background border border-border rounded-xl text-foreground placeholder:text-muted-foreground resize-none focus:outline-none focus:border-primary"
                 />
                 <button
                   onClick={generateNextSlide}
@@ -402,7 +399,7 @@ export function PresentationBuilder() {
                             {currentSlide.title}
                           </h2>
                           <div className="flex-1 flex items-center justify-center">
-                            <div className="w-full h-48 bg-gray-800/50 rounded-xl flex items-center justify-center">
+                            <div className="w-full h-48 bg-card/50 rounded-xl flex items-center justify-center">
                               <BarChart3 className="w-16 h-16 text-muted-foreground" />
                             </div>
                           </div>
@@ -431,7 +428,7 @@ export function PresentationBuilder() {
                         setCurrentSlideIndex(Math.max(0, currentSlideIndex - 1))
                       }
                       disabled={currentSlideIndex === 0}
-                      className="p-2 hover:bg-gray-700 rounded-lg transition-colors disabled:opacity-50"
+                      className="p-2 hover:bg-muted rounded-lg transition-colors disabled:opacity-50"
                     >
                       <ChevronLeft className="w-5 h-5 text-muted-foreground" />
                     </button>
@@ -448,7 +445,7 @@ export function PresentationBuilder() {
                         )
                       }
                       disabled={currentSlideIndex === project.slides.length - 1}
-                      className="p-2 hover:bg-gray-700 rounded-lg transition-colors disabled:opacity-50"
+                      className="p-2 hover:bg-muted rounded-lg transition-colors disabled:opacity-50"
                     >
                       <ChevronRight className="w-5 h-5 text-muted-foreground" />
                     </button>
@@ -460,7 +457,7 @@ export function PresentationBuilder() {
                       <button
                         onClick={() => regenerateSlide(currentSlide.id)}
                         disabled={isGenerating}
-                        className="px-3 py-1.5 bg-gray-700 text-foreground rounded-lg hover:bg-gray-600 transition-colors text-sm flex items-center gap-2"
+                        className="px-3 py-1.5 bg-muted text-foreground rounded-lg hover:bg-gray-600 transition-colors text-sm flex items-center gap-2"
                       >
                         <RefreshCw
                           className={`w-4 h-4 ${isGenerating ? "animate-spin" : ""}`}
@@ -533,7 +530,7 @@ export function PresentationBuilder() {
                     setShowSlideOptions(false);
                     generateNextSlide();
                   }}
-                  className="p-4 bg-gray-800/50 hover:bg-gray-700/50 rounded-xl transition-colors text-left"
+                  className="p-4 bg-card/50 hover:bg-muted/50 rounded-xl transition-colors text-left"
                 >
                   <st.icon className="w-6 h-6 text-primary mb-2" />
                   <p className="font-medium text-foreground text-sm">

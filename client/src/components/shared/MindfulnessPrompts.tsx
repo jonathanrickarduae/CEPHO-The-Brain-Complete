@@ -35,8 +35,8 @@ const EXERCISES: MindfulnessExercise[] = [
     description: "A calming technique used by Navy SEALs",
     duration: 120,
     icon: Wind,
-    color: "text-blue-400",
-    bgColor: "bg-blue-500/20",
+    color: "text-primary",
+    bgColor: "bg-primary/20",
     steps: [
       "Breathe in for 4 seconds",
       "Hold for 4 seconds",

@@ -3,7 +3,6 @@ import {
   ChevronRight,
   ChevronLeft,
   Check,
-  X,
   Lock,
   Shield,
   Calendar,
@@ -772,7 +771,6 @@ interface IntegrationWizardProps {
 
 export function IntegrationWizard({
   onComplete,
-  initialIntegration,
 }: IntegrationWizardProps) {
   const { mode: governanceMode } = useGovernance();
   const isGoverned = governanceMode === "governed";
@@ -832,8 +830,8 @@ export function IntegrationWizard({
     },
     standard: {
       label: "Standard",
-      color: "text-blue-400",
-      bg: "bg-blue-500/10",
+      color: "text-primary",
+      bg: "bg-primary/10",
       desc: "Popular tools for teams",
     },
     advanced: {
@@ -910,14 +908,14 @@ export function IntegrationWizard({
                     ? "bg-green-500 text-white"
                     : i === currentSetupStep
                       ? "bg-primary text-white"
-                      : "bg-gray-700 text-foreground/70"
+                      : "bg-muted text-foreground/70"
                 }`}
               >
                 {i < currentSetupStep ? <Check className="w-4 h-4" /> : i + 1}
               </div>
               {i < selectedIntegration.setupSteps.length - 1 && (
                 <div
-                  className={`w-8 h-0.5 ${i < currentSetupStep ? "bg-green-500" : "bg-gray-700"}`}
+                  className={`w-8 h-0.5 ${i < currentSetupStep ? "bg-green-500" : "bg-muted"}`}
                 />
               )}
             </div>
@@ -989,7 +987,7 @@ export function IntegrationWizard({
                         handleFieldChange(field.id, e.target.value)
                       }
                       placeholder={field.placeholder}
-                      className="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg text-foreground focus:outline-none focus:border-primary"
+                      className="w-full px-4 py-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:border-primary"
                     />
                   )}
 
@@ -1002,7 +1000,7 @@ export function IntegrationWizard({
                           handleFieldChange(field.id, e.target.value)
                         }
                         placeholder={field.placeholder}
-                        className="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg text-foreground focus:outline-none focus:border-primary pr-12"
+                        className="w-full px-4 py-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:border-primary pr-12"
                       />
                       <button
                         type="button"
@@ -1029,7 +1027,7 @@ export function IntegrationWizard({
                       onChange={e =>
                         handleFieldChange(field.id, e.target.value)
                       }
-                      className="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg text-foreground focus:outline-none focus:border-primary"
+                      className="w-full px-4 py-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:border-primary"
                     >
                       <option value="">Select...</option>
                       {field.options.map(opt => (
@@ -1048,7 +1046,7 @@ export function IntegrationWizard({
                         onChange={e =>
                           handleFieldChange(field.id, e.target.checked)
                         }
-                        className="w-5 h-5 rounded border-gray-700 bg-gray-900 text-primary focus:ring-primary"
+                        className="w-5 h-5 rounded border-border bg-background text-primary focus:ring-primary"
                       />
                       <span className="text-foreground">{field.label}</span>
                     </label>
@@ -1137,7 +1135,7 @@ export function IntegrationWizard({
               className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors ${
                 selectedTier === "all"
                   ? "bg-primary text-white"
-                  : "bg-gray-800 text-muted-foreground hover:text-foreground"
+                  : "bg-card text-muted-foreground hover:text-foreground"
               }`}
             >
               All Integrations
@@ -1149,7 +1147,7 @@ export function IntegrationWizard({
                 className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors ${
                   selectedTier === tier
                     ? `${tierLabels[tier].bg} ${tierLabels[tier].color}`
-                    : "bg-gray-800 text-muted-foreground hover:text-foreground"
+                    : "bg-card text-muted-foreground hover:text-foreground"
                 }`}
               >
                 {tierLabels[tier].label}
@@ -1195,7 +1193,7 @@ export function IntegrationWizard({
                               ? "bg-green-500/10 border-green-500/30 cursor-default"
                               : isPending
                                 ? "bg-yellow-500/10 border-yellow-500/30 cursor-default"
-                                : "bg-gray-800/50 border-gray-700 hover:border-primary/50 hover:bg-gray-800"
+                                : "bg-card/50 border-border hover:border-primary/50 hover:bg-card"
                           }`}
                         >
                           <div className="flex items-start gap-3">
@@ -1327,7 +1325,7 @@ export function IntegrationWizard({
                 setStep("select");
                 setSelectedIntegration(null);
               }}
-              className="px-6 py-3 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors"
+              className="px-6 py-3 bg-muted hover:bg-gray-600 text-white rounded-lg transition-colors"
             >
               Connect Another
             </button>

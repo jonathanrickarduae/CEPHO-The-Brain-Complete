@@ -33,7 +33,7 @@ export function WhyThisMatters({
   children,
   explanation,
   impact = "medium",
-  category = "general",
+  category: _category = "general",
   side = "top",
   className,
 }: WhyThisMattersProps) {
@@ -62,14 +62,14 @@ export function WhyThisMatters({
                 Why This Matters
               </span>
             </div>
-            <p className="text-sm text-white">{explanation}</p>
-            <div className="flex items-center gap-2 pt-1 border-t border-gray-700">
+            <p className="text-sm text-foreground/80">{explanation}</p>
+            <div className="flex items-center gap-2 pt-1 border-t border-border">
               <span
                 className={cn(
                   "text-xs px-2 py-0.5 rounded",
                   impact === "high" && "bg-green-500/20 text-green-400",
                   impact === "medium" && "bg-amber-500/20 text-amber-400",
-                  impact === "low" && "bg-gray-500/20 text-gray-400"
+                  impact === "low" && "bg-gray-500/20 text-muted-foreground"
                 )}
               >
                 {impactLabels[impact]}
@@ -169,7 +169,7 @@ export function InfoBadge({
     <TooltipProvider>
       <Tooltip delayDuration={200}>
         <TooltipTrigger asChild>
-          <span className="inline-flex items-center gap-1 px-2 py-1 bg-gray-800 rounded-md text-sm cursor-help">
+          <span className="inline-flex items-center gap-1 px-2 py-1 bg-card rounded-md text-sm cursor-help">
             {text}
             <Info className="w-3 h-3 text-muted-foreground" />
           </span>

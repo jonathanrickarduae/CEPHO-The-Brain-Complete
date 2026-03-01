@@ -26,7 +26,7 @@ export function PageHeader({
           <div className="flex items-center gap-2">
             <Brain className="w-5 h-5 text-primary" />
             <span className="font-bold text-sm tracking-wide">CEPHO</span>
-            <span className="text-white/40">|</span>
+            <span className="text-muted-foreground/60">|</span>
           </div>
           <div className="flex items-center gap-2">
             {avatar ? (
@@ -45,7 +45,7 @@ export function PageHeader({
             ) : null}
             <div>
               <h1 className="text-base font-semibold">{title}</h1>
-              {subtitle && <p className="text-xs text-white/60">{subtitle}</p>}
+              {subtitle && <p className="text-xs text-muted-foreground">{subtitle}</p>}
             </div>
           </div>
         </div>
@@ -68,7 +68,7 @@ export function PageHeaderCompact({
         <div className="flex items-center gap-2">
           <Brain className="w-4 h-4 text-primary" />
           <span className="font-bold text-xs tracking-wide">CEPHO</span>
-          <span className="text-white/40 text-xs">|</span>
+          <span className="text-muted-foreground/60 text-xs">|</span>
           <Icon className={`w-4 h-4 ${iconColor}`} />
           <span className="text-sm font-medium">{title}</span>
         </div>

@@ -5,12 +5,9 @@ import {
   Users,
   Heart,
   Sparkles,
-  Database,
-  Shield,
   Zap,
   Network,
   ChevronRight,
-  Info,
   X,
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
@@ -50,8 +47,8 @@ const ARCHITECTURE_NODES: ArchitectureNode[] = [
     name: "Analytics Engine",
     description: "Real-time data processing and pattern recognition",
     icon: Activity,
-    color: "text-blue-400",
-    bgColor: "bg-blue-500/20",
+    color: "text-primary",
+    bgColor: "bg-primary/20",
     connections: ["core", "insights"],
     features: [
       "Workflow patterns",
@@ -258,10 +255,10 @@ export function BrainArchitectureDiagram() {
               }
             >
               <div
-                className={`w-20 h-20 rounded-full ${ARCHITECTURE_NODES[1].bgColor} border-2 border-blue-500/50 flex flex-col items-center justify-center cursor-pointer transition-all duration-300 hover:scale-110 ${hoveredNode === "analytics" || isConnected("analytics") ? "ring-4 ring-blue-500/30" : "opacity-70"}`}
+                className={`w-20 h-20 rounded-full ${ARCHITECTURE_NODES[1].bgColor} border-2 border-blue-500/50 flex flex-col items-center justify-center cursor-pointer transition-all duration-300 hover:scale-110 ${hoveredNode === "analytics" || isConnected("analytics") ? "ring-4 ring-primary/30" : "opacity-70"}`}
               >
-                <Activity className="w-6 h-6 text-blue-400" />
-                <span className="text-xs font-medium text-blue-400 mt-1">
+                <Activity className="w-6 h-6 text-primary" />
+                <span className="text-xs font-medium text-primary mt-1">
                   Analytics
                 </span>
               </div>

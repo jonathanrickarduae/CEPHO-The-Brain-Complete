@@ -5,9 +5,7 @@ import {
   Image,
   Plus,
   Edit2,
-  Trash2,
   Check,
-  Copy,
   Download,
   Upload,
   Eye,
@@ -45,7 +43,7 @@ interface Brand {
 }
 
 export function BrandKitManager() {
-  const [brands, setBrands] = useState<Brand[]>([
+  const [brands, _setBrands] = useState<Brand[]>([
     {
       id: "celadon",
       name: "Project A",
@@ -121,7 +119,7 @@ export function BrandKitManager() {
   }) => (
     <div className="flex items-center gap-3">
       <div
-        className="w-10 h-10 rounded-lg border border-gray-600 cursor-pointer hover:scale-105 transition-transform"
+        className="w-10 h-10 rounded-lg border border-border cursor-pointer hover:scale-105 transition-transform"
         style={{ backgroundColor: color }}
       />
       <div>
@@ -129,7 +127,7 @@ export function BrandKitManager() {
         <p className="text-xs text-muted-foreground font-mono">{color}</p>
       </div>
       {editable && (
-        <button className="ml-auto p-1.5 hover:bg-gray-700 rounded transition-colors">
+        <button className="ml-auto p-1.5 hover:bg-muted rounded transition-colors">
           <Edit2 className="w-3 h-3 text-muted-foreground" />
         </button>
       )}
@@ -144,7 +142,7 @@ export function BrandKitManager() {
           <h2 className="font-semibold text-foreground">Brands</h2>
           <button
             onClick={() => setShowAddModal(true)}
-            className="p-1.5 hover:bg-gray-700 rounded-lg transition-colors"
+            className="p-1.5 hover:bg-muted rounded-lg transition-colors"
           >
             <Plus className="w-4 h-4 text-muted-foreground" />
           </button>
@@ -158,7 +156,7 @@ export function BrandKitManager() {
               className={`w-full p-3 rounded-xl flex items-center gap-3 transition-colors ${
                 selectedBrand?.id === brand.id
                   ? "bg-primary/10 border border-primary/30"
-                  : "hover:bg-gray-800"
+                  : "hover:bg-card"
               }`}
             >
               <div
@@ -202,7 +200,7 @@ export function BrandKitManager() {
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <button className="px-3 py-1.5 bg-gray-700 text-foreground rounded-lg hover:bg-gray-600 transition-colors text-sm flex items-center gap-2">
+              <button className="px-3 py-1.5 bg-muted text-foreground rounded-lg hover:bg-gray-600 transition-colors text-sm flex items-center gap-2">
                 <Download className="w-4 h-4" />
                 Export
               </button>
@@ -259,7 +257,7 @@ export function BrandKitManager() {
                 <h3 className="font-semibold text-foreground">Typography</h3>
               </div>
               <div className="space-y-4">
-                <div className="p-4 bg-gray-800/50 rounded-lg">
+                <div className="p-4 bg-card/50 rounded-lg">
                   <p className="text-xs text-muted-foreground mb-1">
                     Heading Font
                   </p>
@@ -276,7 +274,7 @@ export function BrandKitManager() {
                     The quick brown fox jumps over the lazy dog
                   </p>
                 </div>
-                <div className="p-4 bg-gray-800/50 rounded-lg">
+                <div className="p-4 bg-card/50 rounded-lg">
                   <p className="text-xs text-muted-foreground mb-1">
                     Body Font
                   </p>
@@ -302,7 +300,7 @@ export function BrandKitManager() {
                 <Image className="w-5 h-5 text-primary" />
                 <h3 className="font-semibold text-foreground">Logo</h3>
               </div>
-              <div className="border-2 border-dashed border-gray-700 rounded-xl p-8 text-center">
+              <div className="border-2 border-dashed border-border rounded-xl p-8 text-center">
                 {selectedBrand.logo ? (
                   <img
                     src={selectedBrand.logo}
@@ -345,7 +343,7 @@ export function BrandKitManager() {
                         item.key as keyof typeof selectedBrand.templates
                       ]
                         ? "bg-primary/10 border-primary/30"
-                        : "bg-gray-800/50 border-gray-700"
+                        : "bg-card/50 border-border"
                     }`}
                   >
                     <item.icon
@@ -440,7 +438,7 @@ export function BrandKitManager() {
                 <input
                   type="text"
                   placeholder="e.g., Company Name"
-                  className="w-full mt-1 px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary"
+                  className="w-full mt-1 px-4 py-2 bg-card border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary"
                 />
               </div>
               <div>
@@ -456,7 +454,7 @@ export function BrandKitManager() {
                   <input
                     type="text"
                     defaultValue="#3B82F6"
-                    className="flex-1 px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-foreground font-mono text-sm focus:outline-none focus:border-primary"
+                    className="flex-1 px-4 py-2 bg-card border border-border rounded-lg text-foreground font-mono text-sm focus:outline-none focus:border-primary"
                   />
                 </div>
               </div>
@@ -501,7 +499,7 @@ export function BrandSelector({
     <div className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg hover:border-gray-600 transition-colors"
+        className="flex items-center gap-2 px-3 py-2 bg-card border border-border rounded-lg hover:border-border transition-colors"
       >
         <div
           className="w-4 h-4 rounded"
@@ -527,8 +525,8 @@ export function BrandSelector({
                   onSelect(brand.id);
                   setIsOpen(false);
                 }}
-                className={`w-full px-3 py-2 flex items-center gap-2 hover:bg-gray-800 transition-colors ${
-                  brand.id === selectedBrandId ? "bg-gray-800" : ""
+                className={`w-full px-3 py-2 flex items-center gap-2 hover:bg-card transition-colors ${
+                  brand.id === selectedBrandId ? "bg-card" : ""
                 }`}
               >
                 <div

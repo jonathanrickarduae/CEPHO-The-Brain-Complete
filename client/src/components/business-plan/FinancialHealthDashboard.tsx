@@ -10,7 +10,6 @@ import {
   CheckCircle2,
   BarChart3,
   ArrowUpRight,
-  ArrowDownRight,
   Wallet,
   Calculator,
 } from "lucide-react";
@@ -18,7 +17,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { toast } from "sonner";
 
 interface FinancialGoal {
   id: string;
@@ -173,7 +171,7 @@ export function FinancialHealthDashboard() {
       case "on-track":
         return "bg-green-500/20 text-green-400 border-green-500/30";
       case "ahead":
-        return "bg-blue-500/20 text-blue-400 border-blue-500/30";
+        return "bg-primary/20 text-primary border-blue-500/30";
       case "behind":
         return "bg-red-500/20 text-red-400 border-red-500/30";
       default:
@@ -302,7 +300,7 @@ export function FinancialHealthDashboard() {
               <div className="text-sm text-muted-foreground">
                 AI Costs This Month
               </div>
-              <div className="flex items-center justify-center gap-1 mt-1 text-sm text-blue-400">
+              <div className="flex items-center justify-center gap-1 mt-1 text-sm text-primary">
                 {costEstimates.reduce((sum, c) => sum + c.queriesThisMonth, 0)}{" "}
                 queries
               </div>

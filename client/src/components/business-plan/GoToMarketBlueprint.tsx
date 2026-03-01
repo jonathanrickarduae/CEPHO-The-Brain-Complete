@@ -9,25 +9,16 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import {
   Rocket,
   Target,
-  Users,
   DollarSign,
-  Megaphone,
-  BarChart3,
   CheckCircle2,
   ArrowRight,
-  Lightbulb,
-  TrendingUp,
   Globe,
-  Building2,
   UserCheck,
   MessageSquare,
-  Calendar,
   Zap,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -56,7 +47,7 @@ const gtmPhases: GTMPhase[] = [
     title: "Market Definition",
     description: "Define your target market and ideal customer profile",
     icon: Target,
-    color: "text-blue-400",
+    color: "text-primary",
     tasks: [
       {
         id: "m1",
@@ -134,7 +125,7 @@ const gtmPhases: GTMPhase[] = [
     title: "Channel Strategy",
     description: "Identify and prioritize your go-to-market channels",
     icon: Globe,
-    color: "text-cyan-400",
+    color: "text-[var(--brain-cyan)]",
     tasks: [
       {
         id: "c1",
@@ -416,7 +407,7 @@ export function GoToMarketBlueprint({
           <div className="space-y-2">
             <div className="flex justify-between text-sm">
               <span className="text-muted-foreground">Overall Progress</span>
-              <span className="text-white font-medium">
+              <span className="text-foreground font-medium">
                 {completedTasks}/{totalTasks} tasks ({progress}%)
               </span>
             </div>
@@ -469,14 +460,14 @@ export function GoToMarketBlueprint({
         const Icon = phase.icon;
 
         return (
-          <Card key={phase.id} className="bg-gray-900/50 border-gray-800">
+          <Card key={phase.id} className="bg-gray-900/50 border-border/50">
             <CardHeader>
               <div className="flex items-center gap-3">
-                <div className={cn("p-3 rounded-lg bg-gray-800", phase.color)}>
+                <div className={cn("p-3 rounded-lg bg-card", phase.color)}>
                   <Icon className="w-6 h-6" />
                 </div>
                 <div>
-                  <CardTitle className="text-white">{phase.title}</CardTitle>
+                  <CardTitle className="text-foreground">{phase.title}</CardTitle>
                   <CardDescription>{phase.description}</CardDescription>
                 </div>
               </div>
@@ -489,7 +480,7 @@ export function GoToMarketBlueprint({
                     "p-4 rounded-lg border transition-all",
                     task.completed
                       ? "bg-green-500/10 border-green-500/30"
-                      : "bg-gray-800/50 border-gray-700 hover:border-gray-600"
+                      : "bg-card/50 border-border hover:border-border"
                   )}
                 >
                   <div className="flex items-start gap-3">
@@ -499,7 +490,7 @@ export function GoToMarketBlueprint({
                         "mt-1 w-5 h-5 rounded border-2 flex items-center justify-center transition-colors",
                         task.completed
                           ? "bg-green-500 border-green-500"
-                          : "border-gray-600 hover:border-gray-500"
+                          : "border-border hover:border-border"
                       )}
                     >
                       {task.completed && (
@@ -533,7 +524,7 @@ export function GoToMarketBlueprint({
                             value={taskOutput}
                             onChange={e => setTaskOutput(e.target.value)}
                             placeholder={`Enter your ${task.title.toLowerCase()}...`}
-                            className="bg-gray-800 border-gray-700"
+                            className="bg-card border-border"
                           />
                           <div className="flex gap-2">
                             <Button
@@ -578,7 +569,7 @@ export function GoToMarketBlueprint({
       })}
 
       {/* AI Assistance */}
-      <Card className="bg-gray-900/50 border-gray-800">
+      <Card className="bg-gray-900/50 border-border/50">
         <CardContent className="py-4">
           <div className="flex items-center gap-3">
             <div className="p-2 bg-purple-500/20 rounded-lg">

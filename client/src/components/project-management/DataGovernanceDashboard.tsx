@@ -3,25 +3,17 @@ import {
   Shield,
   Lock,
   Eye,
-  EyeOff,
   Download,
-  Trash2,
   Clock,
   Database,
   Users,
   Key,
-  FileText,
   AlertTriangle,
   Check,
-  ChevronRight,
   Search,
   Filter,
   Calendar,
   Globe,
-  Server,
-  HardDrive,
-  RefreshCw,
-  Settings,
   Info,
 } from "lucide-react";
 
@@ -196,8 +188,8 @@ export function DataGovernanceDashboard() {
     twin: {
       label: "Chief of Staff",
       icon: Eye,
-      color: "text-blue-400",
-      bg: "bg-blue-500/10",
+      color: "text-primary",
+      bg: "bg-primary/10",
     },
     shared: {
       label: "Shared",
@@ -210,10 +202,10 @@ export function DataGovernanceDashboard() {
   const actionConfig = {
     view: { label: "Viewed", color: "text-foreground/70" },
     create: { label: "Created", color: "text-green-400" },
-    update: { label: "Updated", color: "text-blue-400" },
+    update: { label: "Updated", color: "text-primary" },
     delete: { label: "Deleted", color: "text-red-400" },
     export: { label: "Exported", color: "text-purple-400" },
-    share: { label: "Shared", color: "text-cyan-400" },
+    share: { label: "Shared", color: "text-[var(--brain-cyan)]" },
   };
 
   const actorConfig = {
@@ -253,7 +245,7 @@ export function DataGovernanceDashboard() {
 
         {/* Quick Stats */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="bg-gray-800/50 rounded-xl p-4">
+          <div className="bg-card/50 rounded-xl p-4">
             <div className="flex items-center gap-2 text-muted-foreground mb-1">
               <Database className="w-4 h-4" />
               <span className="text-xs">Total Data</span>
@@ -262,21 +254,21 @@ export function DataGovernanceDashboard() {
               {totalSize.toFixed(1)} MB
             </p>
           </div>
-          <div className="bg-gray-800/50 rounded-xl p-4">
+          <div className="bg-card/50 rounded-xl p-4">
             <div className="flex items-center gap-2 text-muted-foreground mb-1">
               <Lock className="w-4 h-4 text-green-400" />
               <span className="text-xs">Encrypted</span>
             </div>
             <p className="text-xl font-bold text-green-400">100%</p>
           </div>
-          <div className="bg-gray-800/50 rounded-xl p-4">
+          <div className="bg-card/50 rounded-xl p-4">
             <div className="flex items-center gap-2 text-muted-foreground mb-1">
               <Globe className="w-4 h-4" />
               <span className="text-xs">Data Region</span>
             </div>
             <p className="text-xl font-bold text-foreground">UK/EU</p>
           </div>
-          <div className="bg-gray-800/50 rounded-xl p-4">
+          <div className="bg-card/50 rounded-xl p-4">
             <div className="flex items-center gap-2 text-muted-foreground mb-1">
               <Clock className="w-4 h-4" />
               <span className="text-xs">Last Backup</span>
@@ -326,7 +318,7 @@ export function DataGovernanceDashboard() {
                     placeholder="Search data..."
                     value={searchQuery}
                     onChange={e => setSearchQuery(e.target.value)}
-                    className="pl-9 pr-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary"
+                    className="pl-9 pr-4 py-2 bg-card border border-border rounded-lg text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary"
                   />
                 </div>
               </div>
@@ -343,7 +335,7 @@ export function DataGovernanceDashboard() {
                 >
                   <div className="flex items-start justify-between">
                     <div className="flex items-start gap-4">
-                      <div className="w-10 h-10 rounded-lg bg-gray-700 flex items-center justify-center">
+                      <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center">
                         <Database className="w-5 h-5 text-muted-foreground" />
                       </div>
                       <div>
@@ -395,11 +387,11 @@ export function DataGovernanceDashboard() {
                 Activity Log
               </h2>
               <div className="flex items-center gap-2">
-                <button className="px-3 py-1.5 bg-gray-700 text-foreground rounded-lg hover:bg-gray-600 transition-colors text-sm flex items-center gap-2">
+                <button className="px-3 py-1.5 bg-muted text-foreground rounded-lg hover:bg-gray-600 transition-colors text-sm flex items-center gap-2">
                   <Filter className="w-4 h-4" />
                   Filter
                 </button>
-                <button className="px-3 py-1.5 bg-gray-700 text-foreground rounded-lg hover:bg-gray-600 transition-colors text-sm flex items-center gap-2">
+                <button className="px-3 py-1.5 bg-muted text-foreground rounded-lg hover:bg-gray-600 transition-colors text-sm flex items-center gap-2">
                   <Download className="w-4 h-4" />
                   Export
                 </button>
@@ -431,7 +423,7 @@ export function DataGovernanceDashboard() {
                   {auditLog.map(entry => (
                     <tr
                       key={entry.id}
-                      className="border-b border-border last:border-0 hover:bg-gray-800/30"
+                      className="border-b border-border last:border-0 hover:bg-card/30"
                     >
                       <td className="px-4 py-3 text-sm text-muted-foreground">
                         {entry.timestamp.toLocaleTimeString()}
@@ -472,11 +464,11 @@ export function DataGovernanceDashboard() {
 
         {activeTab === "access" && (
           <div className="space-y-6">
-            <div className="bg-blue-500/10 border border-blue-500/30 rounded-xl p-4">
+            <div className="bg-primary/10 border border-blue-500/30 rounded-xl p-4">
               <div className="flex items-start gap-3">
-                <Info className="w-5 h-5 text-blue-400 mt-0.5" />
+                <Info className="w-5 h-5 text-primary mt-0.5" />
                 <div>
-                  <h3 className="font-medium text-blue-400 mb-1">
+                  <h3 className="font-medium text-primary mb-1">
                     Access Hierarchy
                   </h3>
                   <p className="text-sm text-muted-foreground">
@@ -616,7 +608,7 @@ export function DataGovernanceDashboard() {
                   <Download className="w-4 h-4" />
                   Export All Data (JSON)
                 </button>
-                <button className="px-4 py-2 bg-gray-700 text-foreground rounded-lg hover:bg-gray-600 transition-colors flex items-center gap-2">
+                <button className="px-4 py-2 bg-muted text-foreground rounded-lg hover:bg-gray-600 transition-colors flex items-center gap-2">
                   <Download className="w-4 h-4" />
                   Export as ZIP
                 </button>
@@ -637,7 +629,7 @@ export function DataGovernanceDashboard() {
                 {dataCategories.map(category => (
                   <div
                     key={category.id}
-                    className="flex items-center justify-between p-3 bg-gray-800/50 rounded-lg"
+                    className="flex items-center justify-between p-3 bg-card/50 rounded-lg"
                   >
                     <div>
                       <span className="text-sm text-foreground">

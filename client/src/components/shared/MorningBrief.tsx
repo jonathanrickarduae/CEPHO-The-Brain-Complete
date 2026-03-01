@@ -2,8 +2,6 @@ import { useState } from "react";
 import {
   Sun,
   CheckCircle,
-  AlertCircle,
-  Clock,
   ChevronRight,
   Shield,
   TrendingUp,
@@ -11,7 +9,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-interface BriefItem {
+interface _BriefItem {
   id: string;
   title: string;
   type: "review" | "info" | "action";
@@ -68,7 +66,7 @@ export function MorningBrief({ isOpen, onDismiss }: MorningBriefProps) {
     {
       title: "Today's priorities",
       icon: TrendingUp,
-      color: "text-cyan-400",
+      color: "text-[var(--brain-cyan)]",
       content: (
         <div className="space-y-3">
           <BriefCard
@@ -191,7 +189,7 @@ function BriefCard({
       className={cn(
         "p-3 rounded-lg border transition-all hover:scale-[1.02]",
         type === "review" && "bg-green-500/10 border-green-500/30",
-        type === "info" && "bg-blue-500/10 border-blue-500/30",
+        type === "info" && "bg-primary/10 border-blue-500/30",
         type === "action" && "bg-purple-500/10 border-purple-500/30"
       )}
     >

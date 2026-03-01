@@ -123,10 +123,10 @@ export function ValidationBadge({
 // Validation header for reports
 export function ValidationHeader({ report }: { report: ValidationReport }) {
   return (
-    <div className="bg-gray-900/50 border border-gray-700 rounded-lg p-4 mb-6">
+    <div className="bg-gray-900/50 border border-border rounded-lg p-4 mb-6">
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-3">
-          <Shield className="w-6 h-6 text-cyan-400" />
+          <Shield className="w-6 h-6 text-[var(--brain-cyan)]" />
           <span className="text-lg font-semibold text-white">
             Validation Status
           </span>
@@ -137,21 +137,21 @@ export function ValidationHeader({ report }: { report: ValidationReport }) {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
         <div>
           <span className="text-foreground/70">Validated:</span>
-          <p className="text-white font-medium">
+          <p className="text-foreground font-medium">
             {new Date(report.validatedAt).toLocaleString()}
           </p>
         </div>
         <div>
           <span className="text-foreground/70">Validator:</span>
-          <p className="text-white font-medium">{report.validatedBy}</p>
+          <p className="text-foreground font-medium">{report.validatedBy}</p>
         </div>
         <div>
           <span className="text-foreground/70">Confidence:</span>
-          <p className="text-white font-medium">{report.overallConfidence}%</p>
+          <p className="text-foreground font-medium">{report.overallConfidence}%</p>
         </div>
         <div>
           <span className="text-foreground/70">Sources:</span>
-          <p className="text-white font-medium">
+          <p className="text-foreground font-medium">
             <span className="text-green-400">
               {report.verifiedClaims} verified
             </span>
@@ -183,8 +183,8 @@ export function SourceReferenceCard({
   index: number;
 }) {
   return (
-    <div className="flex items-start gap-3 p-3 bg-gray-800/50 rounded-lg border border-gray-700">
-      <span className="flex-shrink-0 w-6 h-6 rounded-full bg-cyan-500/20 text-cyan-400 text-xs flex items-center justify-center font-medium">
+    <div className="flex items-start gap-3 p-3 bg-card/50 rounded-lg border border-border">
+      <span className="flex-shrink-0 w-6 h-6 rounded-full bg-[var(--brain-cyan)]/20 text-[var(--brain-cyan)] text-xs flex items-center justify-center font-medium">
         {index}
       </span>
       <div className="flex-1 min-w-0">
@@ -193,7 +193,7 @@ export function SourceReferenceCard({
             href={source.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-white font-medium hover:text-cyan-400 transition-colors truncate"
+            className="text-foreground font-medium hover:text-[var(--brain-cyan)] transition-colors truncate"
           >
             {source.title}
           </a>
@@ -232,14 +232,14 @@ export function ClaimValidationCard({ claim }: { claim: ClaimValidation }) {
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <div className="border border-gray-700 rounded-lg overflow-hidden">
+    <div className="border border-border rounded-lg overflow-hidden">
       <button
         onClick={() => setExpanded(!expanded)}
-        className="w-full p-4 flex items-start gap-3 text-left hover:bg-gray-800/50 transition-colors"
+        className="w-full p-4 flex items-start gap-3 text-left hover:bg-card/50 transition-colors"
       >
         <ValidationBadge status={claim.status} size="sm" />
         <div className="flex-1">
-          <p className="text-white text-sm">{claim.claim}</p>
+          <p className="text-foreground/80 text-sm">{claim.claim}</p>
           <p className="text-foreground/60 text-xs mt-1">
             {claim.sources.length} source(s) • {claim.confidence}% confidence
           </p>
@@ -247,11 +247,11 @@ export function ClaimValidationCard({ claim }: { claim: ClaimValidation }) {
       </button>
 
       {expanded && (
-        <div className="px-4 pb-4 space-y-3 border-t border-gray-700 pt-3">
+        <div className="px-4 pb-4 space-y-3 border-t border-border pt-3">
           {claim.crossValidation && (
-            <div className="bg-gray-800/50 rounded-lg p-3">
+            <div className="bg-card/50 rounded-lg p-3">
               <div className="flex items-center gap-2 mb-2">
-                <RefreshCw className="w-4 h-4 text-cyan-400" />
+                <RefreshCw className="w-4 h-4 text-[var(--brain-cyan)]" />
                 <span className="text-sm font-medium text-white">
                   Cross-Validation
                 </span>
@@ -317,16 +317,16 @@ export function ValidationSummary({ report }: { report: ValidationReport }) {
   ];
 
   return (
-    <div className="bg-gray-900/50 border border-gray-700 rounded-lg p-4">
+    <div className="bg-gray-900/50 border border-border rounded-lg p-4">
       <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-        <FileText className="w-5 h-5 text-cyan-400" />
+        <FileText className="w-5 h-5 text-[var(--brain-cyan)]" />
         Validation Summary
       </h3>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {metrics.map((metric, idx) => (
           <div
             key={idx}
-            className="flex justify-between items-center py-2 border-b border-gray-700 last:border-0"
+            className="flex justify-between items-center py-2 border-b border-border last:border-0"
           >
             <span className="text-foreground/70 text-sm">{metric.label}</span>
             <span className={`font-medium ${metric.className || "text-white"}`}>
@@ -350,7 +350,6 @@ interface ValidationEngineProps {
 export function ValidationEngine({
   projectId,
   projectName,
-  content,
   onValidationComplete,
 }: ValidationEngineProps) {
   const [isValidating, setIsValidating] = useState(false);
@@ -470,7 +469,7 @@ export function ValidationEngine({
     <div className="space-y-6">
       {!report ? (
         <div className="text-center py-12">
-          <Shield className="w-16 h-16 mx-auto text-cyan-400 mb-4" />
+          <Shield className="w-16 h-16 mx-auto text-[var(--brain-cyan)] mb-4" />
           <h2 className="text-xl font-semibold text-white mb-2">
             Chief of Staff Validation
           </h2>

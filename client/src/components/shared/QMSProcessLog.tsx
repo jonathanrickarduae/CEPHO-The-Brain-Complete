@@ -1,8 +1,6 @@
 import { useState } from "react";
 import {
   FileText,
-  Clock,
-  User,
   CheckCircle2,
   AlertTriangle,
   GitBranch,
@@ -17,9 +15,6 @@ import {
   Filter,
   Download,
   Shield,
-  Zap,
-  Bell,
-  Calendar,
   ArrowRight,
   History,
 } from "lucide-react";
@@ -293,8 +288,8 @@ const statusConfig: Record<
   },
   approved: {
     label: "Approved",
-    color: "text-blue-400",
-    bgColor: "bg-blue-500/10",
+    color: "text-primary",
+    bgColor: "bg-primary/10",
     borderColor: "border-blue-500/30",
   },
   published: {
@@ -356,9 +351,9 @@ export function QMSProcessLog() {
   const getActionColor = (action: AuditLogEntry["action"]) => {
     switch (action) {
       case "created":
-        return "text-cyan-400";
+        return "text-[var(--brain-cyan)]";
       case "updated":
-        return "text-blue-400";
+        return "text-primary";
       case "reviewed":
         return "text-purple-400";
       case "approved":
@@ -515,7 +510,7 @@ export function QMSProcessLog() {
                       {/* Version History */}
                       <div className="mb-4">
                         <h5 className="text-sm font-medium text-foreground mb-2 flex items-center gap-2">
-                          <GitCommit className="w-4 h-4 text-cyan-400" />
+                          <GitCommit className="w-4 h-4 text-[var(--brain-cyan)]" />
                           Version History
                         </h5>
                         <div className="space-y-2">

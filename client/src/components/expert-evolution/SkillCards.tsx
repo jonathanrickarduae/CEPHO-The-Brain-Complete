@@ -3,7 +3,6 @@
  * Quick access to all 7 OpenClaw skills
  */
 
-import { trpc } from "@/lib/trpc";
 import { useState } from "react";
 import { useLocation } from "wouter";
 

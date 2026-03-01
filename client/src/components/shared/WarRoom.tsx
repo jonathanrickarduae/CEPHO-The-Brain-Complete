@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState} from "react";
 import { useLocation } from "wouter";
 import {
   Users,
@@ -7,17 +7,11 @@ import {
   MicOff,
   Plus,
   X,
-  MessageSquare,
-  Brain,
   Sparkles,
-  Clock,
-  CheckCircle2,
-  AlertCircle,
   Loader2,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { allExperts, type AIExpert } from "@/data/ai-experts.data";
 import { useFavorites } from "@/components/project-management/MyBoard";
@@ -31,7 +25,7 @@ interface Message {
   type: "response" | "thinking" | "suggestion";
 }
 
-interface WarRoomSession {
+interface _WarRoomSession {
   id: string;
   topic: string;
   experts: string[];
@@ -41,7 +35,7 @@ interface WarRoomSession {
 }
 
 export function WarRoom() {
-  const [, setLocation] = useLocation();
+  const [, _setLocation] = useLocation();
   const { favorites } = useFavorites();
   const [selectedExperts, setSelectedExperts] = useState<string[]>([]);
   const [topic, setTopic] = useState("");

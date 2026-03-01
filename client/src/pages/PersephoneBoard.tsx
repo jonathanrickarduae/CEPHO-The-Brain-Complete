@@ -291,8 +291,8 @@ export default function PersephoneBoard() {
           border: "border-green-500/30",
         },
         blue: {
-          bg: "bg-blue-500/10",
-          text: "text-blue-400",
+          bg: "bg-primary/10",
+          text: "text-primary",
           border: "border-blue-500/30",
         },
         purple: {
@@ -321,8 +321,8 @@ export default function PersephoneBoard() {
           border: "border-amber-500/30",
         },
         cyan: {
-          bg: "bg-cyan-500/10",
-          text: "text-cyan-400",
+          bg: "bg-[var(--brain-cyan)]/10",
+          text: "text-[var(--brain-cyan)]",
           border: "border-cyan-500/30",
         },
         pink: {
@@ -390,7 +390,7 @@ export default function PersephoneBoard() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold text-blue-400">Feb 28</div>
+              <div className="text-3xl font-bold text-primary">Feb 28</div>
               <p className="text-xs text-muted-foreground mt-1">
                 AI Strategy Review
               </p>
@@ -444,9 +444,9 @@ export default function PersephoneBoard() {
             </div>
           </Button>
 
-          <Button className="h-auto py-4 bg-blue-500/20 hover:bg-blue-500/30 border-blue-500/30">
+          <Button className="h-auto py-4 bg-primary/20 hover:bg-primary/30 border-blue-500/30">
             <div className="flex items-center gap-3">
-              <MessageSquare className="w-5 h-5 text-blue-400" />
+              <MessageSquare className="w-5 h-5 text-primary" />
               <div className="text-left">
                 <div className="font-semibold text-foreground">
                   Consult Individual Leader
@@ -556,7 +556,7 @@ export default function PersephoneBoard() {
           <Card className="border-border/50">
             <CardHeader>
               <CardTitle className="text-lg text-foreground flex items-center gap-2">
-                <Calendar className="w-5 h-5 text-blue-400" />
+                <Calendar className="w-5 h-5 text-primary" />
                 Upcoming Board Meetings
               </CardTitle>
             </CardHeader>

@@ -2,7 +2,6 @@ import { useState } from "react";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -17,15 +16,10 @@ import {
   Target,
   Rocket,
   Users,
-  Building2,
   Globe,
   Zap,
   Brain,
-  FileText,
-  Shield,
   Briefcase,
-  CreditCard,
-  Bot,
   Sparkles,
 } from "lucide-react";
 
@@ -376,13 +370,13 @@ const getStatusBadge = (status: "complete" | "in_progress" | "planned") => {
       );
     case "in_progress":
       return (
-        <Badge className="bg-blue-500/20 text-blue-400 border-blue-500/30">
+        <Badge className="bg-primary/20 text-primary border-blue-500/30">
           In Progress
         </Badge>
       );
     case "planned":
       return (
-        <Badge className="bg-gray-500/20 text-gray-400 border-gray-500/30">
+        <Badge className="bg-gray-500/20 text-muted-foreground border-gray-500/30">
           Planned
         </Badge>
       );
@@ -393,7 +387,7 @@ const getPhaseStatusBadge = (status: "current" | "complete" | "upcoming") => {
   switch (status) {
     case "current":
       return (
-        <Badge className="bg-cyan-500/20 text-cyan-400 border-cyan-500/30">
+        <Badge className="bg-[var(--brain-cyan)]/20 text-[var(--brain-cyan)] border-cyan-500/30">
           Current Phase
         </Badge>
       );
@@ -405,7 +399,7 @@ const getPhaseStatusBadge = (status: "current" | "complete" | "upcoming") => {
       );
     case "upcoming":
       return (
-        <Badge className="bg-gray-500/20 text-gray-400 border-gray-500/30">
+        <Badge className="bg-gray-500/20 text-muted-foreground border-gray-500/30">
           Upcoming
         </Badge>
       );
@@ -418,9 +412,9 @@ const getColorClasses = (color: string) => {
     { bg: string; border: string; text: string; gradient: string }
   > = {
     cyan: {
-      bg: "bg-cyan-500/10",
+      bg: "bg-[var(--brain-cyan)]/10",
       border: "border-cyan-500/30",
-      text: "text-cyan-400",
+      text: "text-[var(--brain-cyan)]",
       gradient: "from-cyan-500/20 to-cyan-500/5",
     },
     purple: {
@@ -448,9 +442,9 @@ const getColorClasses = (color: string) => {
       gradient: "from-amber-500/20 to-amber-500/5",
     },
     blue: {
-      bg: "bg-blue-500/10",
+      bg: "bg-primary/10",
       border: "border-blue-500/30",
-      text: "text-blue-400",
+      text: "text-primary",
       gradient: "from-blue-500/20 to-blue-500/5",
     },
   };
@@ -489,23 +483,23 @@ export function FivePhaseRoadmap() {
     <div className="space-y-6">
       {/* Header Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card className="bg-gray-900/50 border-gray-800">
+        <Card className="bg-gray-900/50 border-border/50">
           <CardContent className="pt-6">
             <div className="text-center">
-              <div className="text-3xl font-bold text-white">6</div>
+              <div className="text-2xl md:text-3xl font-bold text-foreground">6</div>
               <div className="text-sm text-muted-foreground">Total Phases</div>
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-gray-900/50 border-gray-800">
+        <Card className="bg-gray-900/50 border-border/50">
           <CardContent className="pt-6">
             <div className="text-center">
-              <div className="text-3xl font-bold text-cyan-400">1</div>
+              <div className="text-3xl font-bold text-[var(--brain-cyan)]">1</div>
               <div className="text-sm text-muted-foreground">Current Phase</div>
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-gray-900/50 border-gray-800">
+        <Card className="bg-gray-900/50 border-border/50">
           <CardContent className="pt-6">
             <div className="text-center">
               <div className="text-3xl font-bold text-green-400">
@@ -517,7 +511,7 @@ export function FivePhaseRoadmap() {
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-gray-900/50 border-gray-800">
+        <Card className="bg-gray-900/50 border-border/50">
           <CardContent className="pt-6">
             <div className="text-center">
               <div className="text-3xl font-bold text-purple-400">
@@ -532,7 +526,7 @@ export function FivePhaseRoadmap() {
       </div>
 
       {/* Progress Bar */}
-      <Card className="bg-gray-900/50 border-gray-800">
+      <Card className="bg-gray-900/50 border-border/50">
         <CardHeader className="pb-2">
           <div className="flex items-center justify-between">
             <CardTitle className="text-white flex items-center gap-2">
@@ -544,7 +538,7 @@ export function FivePhaseRoadmap() {
                 variant="outline"
                 size="sm"
                 onClick={expandAll}
-                className="border-gray-700 hover:bg-gray-800"
+                className="border-border hover:bg-card"
               >
                 Expand All
               </Button>
@@ -552,7 +546,7 @@ export function FivePhaseRoadmap() {
                 variant="outline"
                 size="sm"
                 onClick={collapseAll}
-                className="border-gray-700 hover:bg-gray-800"
+                className="border-border hover:bg-card"
               >
                 Collapse All
               </Button>
@@ -566,7 +560,7 @@ export function FivePhaseRoadmap() {
                 {completedDeliverables} of {totalDeliverables} deliverables
                 complete
               </span>
-              <span className="text-white">{overallProgress}%</span>
+              <span className="text-foreground">{overallProgress}%</span>
             </div>
             <Progress value={overallProgress} className="h-3" />
           </div>
@@ -642,7 +636,7 @@ export function FivePhaseRoadmap() {
                       <h4 className="text-sm font-medium text-muted-foreground mb-2">
                         Objective
                       </h4>
-                      <p className="text-white">{phase.objective}</p>
+                      <p className="text-foreground">{phase.objective}</p>
                     </div>
 
                     {/* Deliverables */}
@@ -654,16 +648,16 @@ export function FivePhaseRoadmap() {
                         {phase.deliverables.map((deliverable, idx) => (
                           <div
                             key={idx}
-                            className="p-3 bg-gray-800/50 rounded-lg border border-gray-700"
+                            className="p-3 bg-card/50 rounded-lg border border-border"
                           >
                             <div className="flex items-start justify-between gap-2">
                               <div className="flex items-center gap-2">
                                 {deliverable.status === "complete" ? (
                                   <CheckCircle2 className="h-4 w-4 text-green-400 flex-shrink-0" />
                                 ) : deliverable.status === "in_progress" ? (
-                                  <Clock className="h-4 w-4 text-blue-400 flex-shrink-0" />
+                                  <Clock className="h-4 w-4 text-primary flex-shrink-0" />
                                 ) : (
-                                  <Target className="h-4 w-4 text-gray-400 flex-shrink-0" />
+                                  <Target className="h-4 w-4 text-muted-foreground flex-shrink-0" />
                                 )}
                                 <span className="text-sm font-medium text-white">
                                   {deliverable.name}
@@ -721,7 +715,7 @@ export function FivePhaseRoadmap() {
                           <Badge
                             key={idx}
                             variant="outline"
-                            className="border-gray-600 text-gray-300"
+                            className="border-border text-foreground/80"
                           >
                             {milestone}
                           </Badge>

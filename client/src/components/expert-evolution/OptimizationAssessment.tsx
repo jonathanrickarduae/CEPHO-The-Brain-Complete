@@ -42,7 +42,7 @@ interface OptimizationCategory {
   recommendations: string[];
 }
 
-interface OptimizationAssessmentData {
+interface _OptimizationAssessmentData {
   overallScore: number;
   overallPercentage: number;
   overallStatus: "excellent" | "good" | "needs-attention" | "critical";
@@ -61,8 +61,8 @@ const statusConfig = {
     label: "Excellent",
   },
   good: {
-    color: "text-cyan-400",
-    bgColor: "bg-cyan-500/20",
+    color: "text-[var(--brain-cyan)]",
+    bgColor: "bg-[var(--brain-cyan)]/20",
     borderColor: "border-cyan-500/50",
     icon: CheckCircle2,
     label: "Good",
@@ -133,7 +133,7 @@ function ScoreGauge({
         />
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <span className={cn("text-4xl font-bold", config.color)}>
+        <span className={cn("text-2xl md:text-4xl font-bold", config.color)}>
           {percentage}%
         </span>
         <span className="text-xs text-foreground/60 mt-1">Optimized</span>
@@ -172,7 +172,7 @@ function CategoryCard({
             <Icon className={cn("w-5 h-5", config.color)} />
           </div>
           <div>
-            <h4 className="text-white font-medium">{category.name}</h4>
+            <h4 className="text-foreground font-medium">{category.name}</h4>
             <div className="flex items-center gap-2 mt-1">
               <Progress value={category.percentage} className="w-24 h-1.5" />
               <span className={cn("text-sm font-medium", config.color)}>
@@ -195,7 +195,7 @@ function CategoryCard({
       </button>
 
       {isExpanded && (
-        <div className="px-4 pb-4 space-y-4 border-t border-gray-800 pt-4">
+        <div className="px-4 pb-4 space-y-4 border-t border-border/50 pt-4">
           {/* Findings */}
           {category.findings.length > 0 && (
             <div>
@@ -269,10 +269,10 @@ export default function OptimizationAssessment() {
 
   if (isLoading) {
     return (
-      <Card className="bg-gray-900/50 border-gray-800">
+      <Card className="bg-gray-900/50 border-border/50">
         <CardContent className="py-12">
           <div className="flex flex-col items-center justify-center">
-            <Brain className="w-12 h-12 text-cyan-400 animate-pulse mb-4" />
+            <Brain className="w-12 h-12 text-[var(--brain-cyan)] animate-pulse mb-4" />
             <p className="text-foreground/70">
               Chief of Staff is analysing your system...
             </p>
@@ -284,7 +284,7 @@ export default function OptimizationAssessment() {
 
   if (!assessment) {
     return (
-      <Card className="bg-gray-900/50 border-gray-800">
+      <Card className="bg-gray-900/50 border-border/50">
         <CardContent className="py-12">
           <div className="flex flex-col items-center justify-center">
             <AlertCircle className="w-12 h-12 text-amber-400 mb-4" />
@@ -308,7 +308,7 @@ export default function OptimizationAssessment() {
   return (
     <div className="space-y-6">
       {/* Overall Score Card */}
-      <Card className="bg-gray-900/50 border-gray-800 overflow-hidden">
+      <Card className="bg-gray-900/50 border-border/50 overflow-hidden">
         <div
           className={cn(
             "absolute top-0 left-0 right-0 h-1",
@@ -340,7 +340,7 @@ export default function OptimizationAssessment() {
               size="sm"
               onClick={() => refetch()}
               disabled={isFetching}
-              className="border-gray-700"
+              className="border-border"
             >
               <RefreshCw
                 className={cn("w-4 h-4 mr-2", isFetching && "animate-spin")}
@@ -361,9 +361,9 @@ export default function OptimizationAssessment() {
 
             {/* Summary */}
             <div className="col-span-2 space-y-4">
-              <div className="p-4 bg-gray-800/50 rounded-lg">
+              <div className="p-4 bg-card/50 rounded-lg">
                 <div className="flex items-start gap-3">
-                  <Sparkles className="w-5 h-5 text-cyan-400 mt-0.5 shrink-0" />
+                  <Sparkles className="w-5 h-5 text-[var(--brain-cyan)] mt-0.5 shrink-0" />
                   <p className="text-foreground/80 text-sm leading-relaxed">
                     {assessment.summary}
                   </p>
@@ -387,7 +387,7 @@ export default function OptimizationAssessment() {
                               ? "bg-red-500/20 text-red-400"
                               : i === 1
                                 ? "bg-amber-500/20 text-amber-400"
-                                : "bg-cyan-500/20 text-cyan-400"
+                                : "bg-[var(--brain-cyan)]/20 text-[var(--brain-cyan)]"
                           )}
                         >
                           {i + 1}
@@ -404,9 +404,9 @@ export default function OptimizationAssessment() {
       </Card>
 
       {/* Category Breakdown */}
-      <Card className="bg-gray-900/50 border-gray-800">
+      <Card className="bg-gray-900/50 border-border/50">
         <CardHeader>
-          <CardTitle className="text-white">Category Breakdown</CardTitle>
+          <CardTitle className="text-foreground">Category Breakdown</CardTitle>
           <CardDescription>
             Detailed analysis of each system component
           </CardDescription>

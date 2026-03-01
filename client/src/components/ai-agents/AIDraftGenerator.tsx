@@ -69,7 +69,7 @@ Please write only the ${type} content, no explanations or meta-commentary.`;
 
       setDraft(result.message);
       onDraftGenerated?.(result.message);
-    } catch (error) {
+    } catch {
       setDraft("Failed to generate draft. Please try again.");
     } finally {
       setIsGenerating(false);

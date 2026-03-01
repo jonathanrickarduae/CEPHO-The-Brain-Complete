@@ -444,8 +444,8 @@ export function AIProviderSettings() {
               key={provider.id}
               className={`p-4 rounded-lg border ${
                 isConfigured
-                  ? "border-cyan-500/50 bg-cyan-500/10"
-                  : "border-gray-700 bg-gray-800/50"
+                  ? "border-cyan-500/50 bg-[var(--brain-cyan)]/10"
+                  : "border-border bg-card/50"
               }`}
             >
               <div className="flex items-start justify-between">
@@ -467,7 +467,7 @@ export function AIProviderSettings() {
                     {provider.bestFor.map(task => (
                       <span
                         key={task}
-                        className="px-2 py-0.5 text-xs bg-gray-700 text-gray-300 rounded"
+                        className="px-2 py-0.5 text-xs bg-muted text-foreground/80 rounded"
                       >
                         {task}
                       </span>
@@ -479,7 +479,7 @@ export function AIProviderSettings() {
                   {!isConfigured && provider.apiKeyRequired && (
                     <button
                       onClick={() => setSelectedProvider(provider.id)}
-                      className="px-3 py-1.5 text-sm bg-cyan-500 text-white rounded hover:bg-cyan-600"
+                      className="px-3 py-1.5 text-sm bg-cyan-500 text-white rounded hover:bg-[var(--brain-cyan)]/90"
                     >
                       Configure
                     </button>
@@ -505,8 +505,8 @@ export function AIProviderSettings() {
                         key={i}
                         className={`w-2 h-2 rounded-full mx-0.5 ${
                           i < Math.round(provider.qualityScore / 20)
-                            ? "bg-cyan-500"
-                            : "bg-gray-700"
+                            ? "bg-[var(--brain-cyan)]"
+                            : "bg-muted"
                         }`}
                       />
                     ))}
@@ -521,7 +521,7 @@ export function AIProviderSettings() {
                         className={`w-2 h-2 rounded-full mx-0.5 ${
                           i < Math.round(provider.costPerToken / 20)
                             ? "bg-amber-500"
-                            : "bg-gray-700"
+                            : "bg-muted"
                         }`}
                       />
                     ))}
@@ -536,20 +536,20 @@ export function AIProviderSettings() {
       {/* API Key Modal */}
       {selectedProvider && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-gray-800 rounded-xl p-6 w-full max-w-md border border-gray-700">
+          <div className="bg-card rounded-xl p-6 w-full max-w-md border border-border">
             <h3 className="text-lg font-semibold mb-4">
               Configure {providers.find(p => p.id === selectedProvider)?.name}
             </h3>
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-1">
+                <label className="block text-sm font-medium text-foreground/80 mb-1">
                   API Key
                 </label>
                 <input
                   type="password"
                   value={apiKey}
                   onChange={e => setApiKey(e.target.value)}
-                  className="w-full px-3 py-2 bg-gray-900 border border-gray-700 text-white rounded-lg focus:ring-2 focus:ring-cyan-500 focus:outline-none"
+                  className="w-full px-3 py-2 bg-background border border-border text-white rounded-lg focus:ring-2 focus:ring-cyan-500 focus:outline-none"
                   placeholder="Enter your API key"
                 />
                 <p className="text-xs text-foreground/60 mt-1">
@@ -559,7 +559,7 @@ export function AIProviderSettings() {
               <div className="flex gap-3">
                 <button
                   onClick={() => setSelectedProvider(null)}
-                  className="flex-1 px-4 py-2 border border-gray-700 rounded-lg hover:bg-gray-700 text-white"
+                  className="flex-1 px-4 py-2 border border-border rounded-lg hover:bg-muted text-white"
                 >
                   Cancel
                 </button>

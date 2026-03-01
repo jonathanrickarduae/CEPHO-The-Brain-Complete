@@ -72,7 +72,7 @@ export default function AIAgentsPage() {
       case "active":
         return "bg-green-500";
       case "learning":
-        return "bg-blue-500";
+        return "bg-primary";
       case "idle":
         return "bg-yellow-500";
       case "offline":
@@ -134,8 +134,8 @@ export default function AIAgentsPage() {
       </div>
 
       <div className="mb-8" style={{ display: "none" }}>
-        <h1 className="text-4xl font-bold mb-2">AI Agents Dashboard</h1>
-        <p className="text-gray-600 dark:text-gray-400">
+        <h1 className="text-2xl md:text-4xl font-bold mb-2">AI Agents Dashboard</h1>
+        <p className="text-gray-600 dark:text-muted-foreground">
           Monitor and manage your 50 specialized AI agents
         </p>
       </div>
@@ -143,46 +143,46 @@ export default function AIAgentsPage() {
       {/* Stats Overview */}
       {stats && (
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
-          <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow">
-            <div className="text-sm text-gray-600 dark:text-gray-400">
+          <div className="bg-white dark:bg-card rounded-lg p-4 shadow">
+            <div className="text-sm text-gray-600 dark:text-muted-foreground">
               Total Agents
             </div>
             <div className="text-2xl font-bold">{stats.totalAgents}</div>
           </div>
-          <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow">
-            <div className="text-sm text-gray-600 dark:text-gray-400">
+          <div className="bg-white dark:bg-card rounded-lg p-4 shadow">
+            <div className="text-sm text-gray-600 dark:text-muted-foreground">
               Active
             </div>
             <div className="text-2xl font-bold text-green-600">
               {stats.activeAgents}
             </div>
           </div>
-          <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow">
-            <div className="text-sm text-gray-600 dark:text-gray-400">
+          <div className="bg-white dark:bg-card rounded-lg p-4 shadow">
+            <div className="text-sm text-gray-600 dark:text-muted-foreground">
               Avg Performance
             </div>
             <div className="text-2xl font-bold text-blue-600">
               {stats.avgPerformance}/100
             </div>
           </div>
-          <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow">
-            <div className="text-sm text-gray-600 dark:text-gray-400">
+          <div className="bg-white dark:bg-card rounded-lg p-4 shadow">
+            <div className="text-sm text-gray-600 dark:text-muted-foreground">
               Tasks Completed
             </div>
             <div className="text-2xl font-bold">
               {stats.totalTasksCompleted}
             </div>
           </div>
-          <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow">
-            <div className="text-sm text-gray-600 dark:text-gray-400">
+          <div className="bg-white dark:bg-card rounded-lg p-4 shadow">
+            <div className="text-sm text-gray-600 dark:text-muted-foreground">
               Pending Reports
             </div>
             <div className="text-2xl font-bold text-yellow-600">
               {stats.pendingReports}
             </div>
           </div>
-          <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow">
-            <div className="text-sm text-gray-600 dark:text-gray-400">
+          <div className="bg-white dark:bg-card rounded-lg p-4 shadow">
+            <div className="text-sm text-gray-600 dark:text-muted-foreground">
               Pending Approvals
             </div>
             <div className="text-2xl font-bold text-orange-600">
@@ -193,14 +193,14 @@ export default function AIAgentsPage() {
       )}
 
       {/* Filters */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow mb-6">
+      <div className="bg-white dark:bg-card rounded-lg p-4 shadow mb-6">
         <div className="flex flex-wrap gap-4 items-center">
           <div>
             <label className="text-sm font-medium mr-2">Category:</label>
             <select
               value={selectedCategory}
               onChange={e => setSelectedCategory(e.target.value)}
-              className="px-3 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600"
+              className="px-3 py-2 border rounded-lg dark:bg-muted dark:border-border"
             >
               {categories.map(cat => (
                 <option key={cat} value={cat}>
@@ -214,7 +214,7 @@ export default function AIAgentsPage() {
             <select
               value={sortBy}
               onChange={e => setSortBy(e.target.value as "name" | "performance" | "tasks")}
-              className="px-3 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600"
+              className="px-3 py-2 border rounded-lg dark:bg-muted dark:border-border"
             >
               <option value="performance">Performance</option>
               <option value="tasks">Tasks Completed</option>
@@ -228,12 +228,12 @@ export default function AIAgentsPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredAgents.map(agent => (
           <Link key={agent.id} href={`/agents/${agent.id}`}>
-            <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow hover:shadow-lg transition-shadow cursor-pointer">
+            <div className="bg-white dark:bg-card rounded-lg p-6 shadow hover:shadow-lg transition-shadow cursor-pointer">
               {/* Agent Header */}
               <div className="flex items-start justify-between mb-4">
                 <div className="flex-1">
                   <h3 className="text-lg font-bold mb-1">{agent.name}</h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                  <p className="text-sm text-gray-600 dark:text-muted-foreground">
                     {agent.specialization}
                   </p>
                 </div>
@@ -252,7 +252,7 @@ export default function AIAgentsPage() {
                     {agent.performanceRating}/100
                   </span>
                 </div>
-                <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                <div className="w-full bg-gray-200 dark:bg-muted rounded-full h-2">
                   <div
                     className="bg-blue-600 h-2 rounded-full transition-all"
                     style={{ width: `${agent.performanceRating}%` }}
@@ -263,25 +263,25 @@ export default function AIAgentsPage() {
               {/* Stats */}
               <div className="grid grid-cols-2 gap-4 text-sm">
                 <div>
-                  <div className="text-gray-600 dark:text-gray-400">
+                  <div className="text-gray-600 dark:text-muted-foreground">
                     Success Rate
                   </div>
                   <div className="font-bold">{agent.successRate}%</div>
                 </div>
                 <div>
-                  <div className="text-gray-600 dark:text-gray-400">
+                  <div className="text-gray-600 dark:text-muted-foreground">
                     Tasks Done
                   </div>
                   <div className="font-bold">{agent.tasksCompleted}</div>
                 </div>
                 <div>
-                  <div className="text-gray-600 dark:text-gray-400">
+                  <div className="text-gray-600 dark:text-muted-foreground">
                     Avg Response
                   </div>
                   <div className="font-bold">{agent.avgResponseTime}ms</div>
                 </div>
                 <div>
-                  <div className="text-gray-600 dark:text-gray-400">
+                  <div className="text-gray-600 dark:text-muted-foreground">
                     Category
                   </div>
                   <div className="font-bold capitalize">{agent.category}</div>
@@ -289,8 +289,8 @@ export default function AIAgentsPage() {
               </div>
 
               {/* Last Active */}
-              <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
-                <div className="text-xs text-gray-500">
+              <div className="mt-4 pt-4 border-t border-gray-200 dark:border-border">
+                <div className="text-xs text-muted-foreground/70">
                   Last active: {new Date(agent.lastActive).toLocaleString()}
                 </div>
               </div>
@@ -300,7 +300,7 @@ export default function AIAgentsPage() {
       </div>
 
       {filteredAgents.length === 0 && (
-        <div className="text-center py-12 text-gray-500">
+        <div className="text-center py-12 text-muted-foreground/70">
           No agents found in this category
         </div>
       )}

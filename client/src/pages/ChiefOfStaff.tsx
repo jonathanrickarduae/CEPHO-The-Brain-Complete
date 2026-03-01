@@ -181,7 +181,7 @@ const QA_STATUS_CONFIG: Record<
   },
   cos_approved: {
     label: "CoS Approved",
-    color: "text-blue-400 bg-blue-500/10",
+    color: "text-primary bg-primary/10",
     icon: CheckCircle2,
   },
   secondary_reviewing: {
@@ -415,7 +415,7 @@ export default function ChiefOfStaff() {
   );
 
   return (
-    <div className="h-[calc(100vh-56px)] md:h-screen flex flex-col bg-gradient-to-br from-gray-900 via-gray-900 to-gray-800">
+    <div className="h-[calc(100vh-56px)] md:h-screen flex flex-col bg-gradient-to-br from-background via-background to-gray-800">
       {/* Header */}
       <div className="bg-gradient-to-r from-purple-900/20 to-pink-900/20 border-b border-white/10 px-4 sm:px-6 py-4">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
@@ -424,7 +424,7 @@ export default function ChiefOfStaff() {
               <User className="h-8 w-8 text-purple-400" />
               Tasks
             </h1>
-            <p className="text-gray-400 mt-1">
+            <p className="text-muted-foreground mt-1">
               Manage your tasks with Chief of Staff
             </p>
           </div>
@@ -727,8 +727,8 @@ export default function ChiefOfStaff() {
                   {
                     label: "Active",
                     value: taskStats.active,
-                    color: "text-blue-400",
-                    bg: "bg-blue-500/10",
+                    color: "text-primary",
+                    bg: "bg-primary/10",
                   },
                   {
                     label: "In Review",
@@ -898,7 +898,7 @@ export default function ChiefOfStaff() {
                         <CheckCircle2 className="w-6 h-6 text-emerald-400" />
                       </div>
                       <div>
-                        <h4 className="font-semibold text-white">
+                        <h4 className="font-semibold text-foreground">
                           Type A Questions (Scale 1-10)
                         </h4>
                         <p className="text-sm text-foreground/70">
@@ -919,7 +919,7 @@ export default function ChiefOfStaff() {
                         <Clock className="w-6 h-6 text-amber-400" />
                       </div>
                       <div>
-                        <h4 className="font-semibold text-white">
+                        <h4 className="font-semibold text-foreground">
                           Type B Questions (Yes/No)
                         </h4>
                         <p className="text-sm text-foreground/70">

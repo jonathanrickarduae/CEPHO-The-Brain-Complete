@@ -322,18 +322,18 @@ export function ExpertTeamAssemblyWizard({
       case "leadership":
         return "bg-amber-500/20 text-amber-400 border-amber-500/30";
       case "cultural":
-        return "bg-blue-500/20 text-blue-400 border-blue-500/30";
+        return "bg-primary/20 text-primary border-blue-500/30";
       case "functional":
         return "bg-emerald-500/20 text-emerald-400 border-emerald-500/30";
       case "creative":
         return "bg-fuchsia-500/20 text-fuchsia-400 border-fuchsia-500/30";
       case "quality":
-        return "bg-cyan-500/20 text-cyan-400 border-cyan-500/30";
+        return "bg-[var(--brain-cyan)]/20 text-[var(--brain-cyan)] border-cyan-500/30";
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-900 to-gray-800 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-gray-800 p-6">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="flex items-center gap-4 mb-8">

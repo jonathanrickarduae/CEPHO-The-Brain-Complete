@@ -1,10 +1,7 @@
 import { useState, useMemo } from "react";
 import {
   Search,
-  Filter,
   Tag,
-  Calendar,
-  User,
   Star,
   Bookmark,
   TrendingUp,
@@ -15,19 +12,15 @@ import {
   ChevronDown,
   ChevronRight,
   ChevronUp,
-  ExternalLink,
   Copy,
-  Share2,
   ThumbsUp,
   ThumbsDown,
-  MoreHorizontal,
   Plus,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card, CardContent} from "@/components/ui/card";
 import {
   Select,
   SelectContent,
@@ -216,7 +209,7 @@ const TYPE_CONFIG: Record<
 > = {
   market_trend: {
     label: "Market Trend",
-    color: "bg-blue-500/20 text-blue-400",
+    color: "bg-primary/20 text-primary",
     icon: <TrendingUp className="w-4 h-4" />,
   },
   competitor_intel: {
@@ -241,7 +234,7 @@ const TYPE_CONFIG: Record<
   },
   operational_learning: {
     label: "Operational Learning",
-    color: "bg-cyan-500/20 text-cyan-400",
+    color: "bg-[var(--brain-cyan)]/20 text-[var(--brain-cyan)]",
     icon: <FileText className="w-4 h-4" />,
   },
   risk_signal: {
@@ -477,8 +470,8 @@ export function InsightsRepository() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <Card className="bg-card/50">
           <CardContent className="p-4 flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-blue-500/20">
-              <FileText className="h-5 w-5 text-blue-400" />
+            <div className="p-2 rounded-lg bg-primary/20">
+              <FileText className="h-5 w-5 text-primary" />
             </div>
             <div>
               <p className="text-2xl font-bold">{insights.length}</p>

@@ -11,11 +11,6 @@ import {
   Database,
   Link2,
   Folder,
-  Calendar,
-  User,
-  Building2,
-  Hash,
-  Star,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -48,7 +43,7 @@ const MOCK_TAGS: Tag[] = [
   {
     id: "t1",
     name: "Project A",
-    color: "bg-blue-500",
+    color: "bg-primary",
     category: "project",
     count: 24,
   },
@@ -119,7 +114,7 @@ const MOCK_TAGS: Tag[] = [
   {
     id: "t12",
     name: "Q1 2024",
-    color: "bg-cyan-500",
+    color: "bg-[var(--brain-cyan)]",
     category: "custom",
     count: 35,
   },
@@ -176,7 +171,7 @@ interface MetadataTaggingProps {
   assetId?: string;
 }
 
-export function MetadataTagging({ assetId }: MetadataTaggingProps) {
+export function MetadataTagging({ assetId: _assetId }: MetadataTaggingProps) {
   const [tags] = useState<Tag[]>(MOCK_TAGS);
   const [assets] = useState<Asset[]>(MOCK_ASSETS);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
