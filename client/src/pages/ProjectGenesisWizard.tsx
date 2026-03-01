@@ -371,19 +371,19 @@ export default function ProjectGenesisWizard() {
   }
 
   return (
-    <div className="min-h-screen bg-background p-6">
+    <div className="min-h-screen bg-background">
       <div className="max-w-5xl mx-auto">
         {/* Header */}
         <div className="mb-8">
           <Button
             variant="ghost"
             onClick={() => navigate("/workflows")}
-            className="mb-4 text-muted-foreground hover:text-white"
+            className="mb-4 text-muted-foreground hover:text-foreground"
           >
             <ChevronLeft className="w-4 h-4 mr-2" />
             Back to Workflows
           </Button>
-          <h1 className="text-4xl font-bold text-white mb-2 flex items-center gap-3">
+          <h1 className="text-xl sm:text-2xl md:text-4xl font-bold text-foreground mb-2 flex items-center gap-3">
             <Rocket className="w-10 h-10 text-[var(--brain-cyan)]" />
             {workflow?.name || "Project Genesis Wizard"}
           </h1>
@@ -447,7 +447,7 @@ export default function ProjectGenesisWizard() {
               >
                 Step {currentStep}
               </Badge>
-              <h2 className="text-2xl font-bold text-white">
+              <h2 className="text-2xl font-bold text-foreground">
                 {step?.stepName}
               </h2>
             </div>
@@ -465,7 +465,7 @@ export default function ProjectGenesisWizard() {
                   </label>
                   <Textarea
                     placeholder="Describe your target market..."
-                    className="bg-gray-900/50 border-border text-white"
+                    className="bg-background border-border text-foreground"
                     rows={4}
                     value={formData[currentStep]?.target_market || ""}
                     onChange={e =>
@@ -479,7 +479,7 @@ export default function ProjectGenesisWizard() {
                   </label>
                   <Input
                     placeholder="e.g., TAM: $10B, SAM: $1B, SOM: $100M"
-                    className="bg-gray-900/50 border-border text-white"
+                    className="bg-background border-border text-foreground"
                     value={formData[currentStep]?.market_size || ""}
                     onChange={e =>
                       handleInputChange("market_size", e.target.value)
@@ -492,7 +492,7 @@ export default function ProjectGenesisWizard() {
                   </label>
                   <Textarea
                     placeholder="List key trends affecting your market..."
-                    className="bg-gray-900/50 border-border text-white"
+                    className="bg-background border-border text-foreground"
                     rows={4}
                     value={formData[currentStep]?.trends || ""}
                     onChange={e => handleInputChange("trends", e.target.value)}
@@ -510,7 +510,7 @@ export default function ProjectGenesisWizard() {
                   </label>
                   <Textarea
                     placeholder={`Enter your notes for ${step?.stepName}...`}
-                    className="bg-gray-900/50 border-border text-white"
+                    className="bg-background border-border text-foreground"
                     rows={6}
                     value={formData[currentStep]?.notes || ""}
                     onChange={e => handleInputChange("notes", e.target.value)}
@@ -537,7 +537,7 @@ export default function ProjectGenesisWizard() {
           {/* Deliverables */}
           {step?.deliverables && step.deliverables.length > 0 && (
             <div className="mt-8 pt-6 border-t border-border">
-              <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+              <h3 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
                 <FileText className="w-5 h-5 text-[var(--brain-cyan)]" />
                 Deliverables
               </h3>
@@ -585,7 +585,7 @@ export default function ProjectGenesisWizard() {
           <Button
             onClick={handleNext}
             disabled={currentPhase === 6 && isLastStepInPhase}
-            className="bg-cyan-500 hover:bg-cyan-600 text-white"
+            className="bg-primary hover:bg-primary/90 text-primary-foreground"
           >
             {isLastStepInPhase && isLastPhase ? "Complete" : "Next"}
             <ChevronRight className="w-4 h-4 ml-2" />

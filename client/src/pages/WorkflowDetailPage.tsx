@@ -163,8 +163,8 @@ export default function WorkflowDetailPage() {
 
   if (loading || !workflow) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-fuchsia-500"></div>
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
       </div>
     );
   }
@@ -175,9 +175,10 @@ export default function WorkflowDetailPage() {
   const progress = totalSteps > 0 ? (completedSteps / totalSteps) * 100 : 0;
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="min-h-screen bg-background">
       {/* Header */}
-      <div className="flex items-center gap-4 mb-8">
+      <div className="border-b border-border px-4 sm:px-6 py-4">
+      <div className="flex items-center gap-4">
         <button
           onClick={() => setLocation("/workflows")}
           className="p-2 hover:bg-card rounded-lg transition-colors"
@@ -185,7 +186,7 @@ export default function WorkflowDetailPage() {
           <ArrowLeft className="w-6 h-6 text-muted-foreground" />
         </button>
         <div className="flex-1">
-          <h1 className="text-3xl font-bold text-white mb-2">
+          <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground">
             {workflow.name}
           </h1>
           <p className="text-muted-foreground">
@@ -197,7 +198,7 @@ export default function WorkflowDetailPage() {
           {workflow.status === "not_started" && (
             <button
               onClick={handleStartWorkflow}
-              className="flex items-center gap-2 px-4 py-2 bg-fuchsia-500 hover:bg-fuchsia-600 text-white rounded-lg transition-colors"
+              className="flex items-center gap-2 px-4 py-2 bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg transition-colors"
             >
               <Play className="w-5 h-5" />
               Start
@@ -215,7 +216,7 @@ export default function WorkflowDetailPage() {
           {workflow.status === "paused" && (
             <button
               onClick={handleResumeWorkflow}
-              className="flex items-center gap-2 px-4 py-2 bg-blue-500 hover:bg-primary/90 text-white rounded-lg transition-colors"
+              className="flex items-center gap-2 px-4 py-2 bg-primary/80 hover:bg-primary text-primary-foreground rounded-lg transition-colors"
             >
               <Play className="w-5 h-5" />
               Resume
@@ -223,34 +224,36 @@ export default function WorkflowDetailPage() {
           )}
         </div>
       </div>
+      </div>
 
+      <div className="p-4 sm:p-6 space-y-6">
       {/* Progress Bar */}
-      <div className="bg-card rounded-lg p-6 mb-8">
+      <div className="bg-card rounded-lg p-6 border border-border">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h3 className="text-lg font-semibold text-white mb-1">
+            <h3 className="text-lg font-semibold text-foreground mb-1">
               Overall Progress
             </h3>
             <p className="text-sm text-muted-foreground">
               {completedSteps} of {totalSteps} steps completed
             </p>
           </div>
-          <div className="text-3xl font-bold text-fuchsia-500">
+          <div className="text-3xl font-bold text-primary">
             {Math.round(progress)}%
           </div>
         </div>
         <div className="w-full bg-muted rounded-full h-3">
           <div
-            className="bg-fuchsia-500 h-3 rounded-full transition-all"
+            className="bg-primary h-3 rounded-full transition-all"
             style={{ width: `${progress}%` }}
           ></div>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Steps List */}
         <div className="lg:col-span-2">
-          <h2 className="text-2xl font-bold text-white mb-6">Workflow Steps</h2>
+          <h2 className="text-2xl font-bold text-foreground mb-6">Workflow Steps</h2>
           <div className="space-y-4">
             {steps.map(step => (
               <div
@@ -265,7 +268,7 @@ export default function WorkflowDetailPage() {
                   {getStepStatusIcon(step.status)}
                   <div className="flex-1">
                     <div className="flex items-center justify-between mb-2">
-                      <h3 className="text-lg font-semibold text-white">
+                      <h3 className="text-lg font-semibold text-foreground">
                         {step.stepNumber}. {step.stepName}
                       </h3>
                       <span
@@ -295,10 +298,10 @@ export default function WorkflowDetailPage() {
 
         {/* Current Step Guidance */}
         <div>
-          <h2 className="text-2xl font-bold text-white mb-6">Current Step</h2>
+          <h2 className="text-2xl font-bold text-foreground mb-6">Current Step</h2>
           {currentStep && currentStepGuidance ? (
             <div className="bg-card rounded-lg p-6 border border-border sticky top-4">
-              <h3 className="text-xl font-semibold text-white mb-4">
+              <h3 className="text-xl font-semibold text-foreground mb-4">
                 {currentStep.stepName}
               </h3>
 
@@ -322,7 +325,7 @@ export default function WorkflowDetailPage() {
                         key={index}
                         className="flex items-start gap-2 text-foreground/80"
                       >
-                        <span className="text-fuchsia-500 mt-1">•</span>
+                        <span className="text-primary mt-1">•</span>
                         <span>{rec}</span>
                       </li>
                     ))}
@@ -342,7 +345,7 @@ export default function WorkflowDetailPage() {
                           key={index}
                           className="flex items-center gap-2 text-foreground/80"
                         >
-                          <FileText className="w-4 h-4 text-fuchsia-500" />
+                          <FileText className="w-4 h-4 text-primary" />
                           <span>{deliverable}</span>
                         </li>
                       )
@@ -355,7 +358,7 @@ export default function WorkflowDetailPage() {
                 onClick={() =>
                   setLocation(`/workflows/${id}/steps/${currentStep.id}`)
                 }
-                className="w-full mt-6 px-4 py-3 bg-fuchsia-500 hover:bg-fuchsia-600 text-white rounded-lg transition-colors font-semibold"
+                className="w-full mt-6 px-4 py-3 bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg transition-colors font-semibold"
               >
                 Work on This Step
               </button>
@@ -368,6 +371,7 @@ export default function WorkflowDetailPage() {
             </div>
           )}
         </div>
+      </div>
       </div>
     </div>
   );

@@ -17,7 +17,7 @@ export default function OperationsPage() {
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0">
           <div>
             <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground flex items-center gap-2 sm:gap-3">
-              <BarChart3 className="h-6 w-6 sm:h-8 sm:w-8 text-[#E91E8C]" />
+              <BarChart3 className="h-6 w-6 sm:h-8 sm:w-8 text-primary" />
               Chief of Staff Dashboard
             </h1>
             <p className="text-sm sm:text-base text-muted-foreground mt-1">

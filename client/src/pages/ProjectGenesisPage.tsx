@@ -223,23 +223,24 @@ export default function ProjectGenesisPage() {
   // (Keep all existing UI rendering logic)
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-purple-900/20 to-background p-6">
+    <div className="min-h-screen bg-background">
       {viewMode === "dashboard" && (
-        <div className="max-w-7xl mx-auto space-y-6">
+        <div>
           {/* Header */}
+          <div className="border-b border-border px-4 sm:px-6 py-4">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-white flex items-center gap-3">
-                <Brain className="w-8 h-8 text-purple-400" />
+              <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground flex items-center gap-3">
+                <Brain className="w-6 h-6 sm:w-8 sm:h-8 text-purple-400" />
                 Project Genesis
               </h1>
-              <p className="text-muted-foreground mt-1">
+              <p className="text-sm sm:text-base text-muted-foreground mt-1">
                 6-Phase Venture Development Framework
               </p>
             </div>
             <Button
               onClick={() => setViewMode("new_project")}
-              className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+              className="bg-primary hover:bg-primary/90 text-primary-foreground"
               disabled={createProjectMutation.isLoading}
             >
               {createProjectMutation.isLoading ? (
@@ -256,10 +257,12 @@ export default function ProjectGenesisPage() {
             </Button>
           </div>
 
+          </div>
+          <div className="p-4 sm:p-6 space-y-6">
           {/* AI Agents Section */}
           <div className="bg-card/30 backdrop-blur-sm rounded-xl border border-border/50 p-6">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-semibold text-white flex items-center gap-2">
+              <h2 className="text-xl font-semibold text-foreground flex items-center gap-2">
                 <Brain className="w-5 h-5 text-[var(--brain-cyan)]" />
                 AI Agents Working on Projects
               </h2>
@@ -279,7 +282,7 @@ export default function ProjectGenesisPage() {
                     <DollarSign className="w-5 h-5 text-[var(--brain-cyan)]" />
                   </div>
                   <div className="flex-1">
-                    <h3 className="font-semibold text-white mb-1">
+                    <h3 className="font-semibold text-foreground mb-1">
                       Financial Analyst
                     </h3>
                     <p className="text-xs text-muted-foreground mb-2">
@@ -300,7 +303,7 @@ export default function ProjectGenesisPage() {
                     <BarChart3 className="w-5 h-5 text-purple-400" />
                   </div>
                   <div className="flex-1">
-                    <h3 className="font-semibold text-white mb-1">
+                    <h3 className="font-semibold text-foreground mb-1">
                       Market Researcher
                     </h3>
                     <p className="text-xs text-muted-foreground mb-2">
@@ -321,7 +324,7 @@ export default function ProjectGenesisPage() {
                     <Shield className="w-5 h-5 text-amber-400" />
                   </div>
                   <div className="flex-1">
-                    <h3 className="font-semibold text-white mb-1">
+                    <h3 className="font-semibold text-foreground mb-1">
                       Legal Advisor
                     </h3>
                     <p className="text-xs text-muted-foreground mb-2">
@@ -364,7 +367,7 @@ export default function ProjectGenesisPage() {
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-2">
-                        <h3 className="text-xl font-semibold text-white">
+                        <h3 className="text-xl font-semibold text-foreground">
                           {project.name}
                         </h3>
                         <Badge className={getStatusColor(project.status)}>
@@ -434,6 +437,7 @@ export default function ProjectGenesisPage() {
                 </Button>
               </div>
             )}
+        </div>
         </div>
       )}
 

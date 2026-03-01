@@ -196,7 +196,7 @@ export default function Vault() {
       <div className="border-b border-white/10 px-4 sm:px-6 py-4">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-white flex items-center gap-3">
+            <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground flex items-center gap-3">
               <Shield className="h-8 w-8 text-slate-400" />
               The Vault
             </h1>

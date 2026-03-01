@@ -231,16 +231,16 @@ export default function InnovationHub() {
     ideas?.filter(i => i.status === "promoted_to_genesis").length || 0;
 
   return (
-    <div className="min-h-screen bg-background p-6">
-      <div className="max-w-7xl mx-auto space-y-6">
-        {/* Header */}
+    <div className="min-h-screen bg-background">
+      {/* Header */}
+      <div className="border-b border-border px-4 sm:px-6 py-4">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
-              <Sparkles className="h-8 w-8 text-[var(--brain-cyan)]" />
+            <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground flex items-center gap-3">
+              <Sparkles className="h-6 w-6 sm:h-8 sm:w-8 text-[var(--brain-cyan)]" />
               Innovation Hub
             </h1>
-            <p className="text-muted-foreground mt-1">
+            <p className="text-sm sm:text-base text-muted-foreground mt-1">
               Capture, assess, and refine ideas through the strategic flywheel
             </p>
           </div>
@@ -304,7 +304,7 @@ export default function InnovationHub() {
               onOpenChange={setShowNewIdeaDialog}
             >
               <DialogTrigger asChild>
-                <Button className="gap-2 bg-cyan-600 hover:bg-cyan-700">
+                <Button className="gap-2 bg-primary hover:bg-primary/90 text-primary-foreground">
                   <Plus className="h-4 w-4" />
                   Capture Idea
                 </Button>
@@ -358,6 +358,8 @@ export default function InnovationHub() {
             </Dialog>
           </div>
         </div>
+      </div>
+      <div className="p-4 sm:p-6 space-y-6">
 
         {/* Stats Row */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">

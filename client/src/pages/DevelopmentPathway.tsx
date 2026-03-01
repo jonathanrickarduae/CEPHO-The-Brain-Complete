@@ -101,7 +101,7 @@ export default function DevelopmentPathway() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-white flex items-center gap-3">
+          <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground flex items-center gap-3">
             <Rocket className="h-8 w-8 text-emerald-400" />
             Odyssey Management
           </h1>
@@ -155,7 +155,7 @@ export default function DevelopmentPathway() {
                     <ArrowRight className="w-4 h-4 text-foreground/50" />
                   )}
                 </div>
-                <p className="text-2xl font-bold text-white mt-1">{count}</p>
+                <p className="text-2xl font-bold text-foreground mt-1">{count}</p>
               </CardContent>
             </Card>
           );
@@ -233,7 +233,7 @@ export default function DevelopmentPathway() {
             {/* Pipeline Health */}
             <Card className="bg-gray-900/50 border-border/50 col-span-2">
               <CardHeader>
-                <CardTitle className="text-white flex items-center gap-2">
+                <CardTitle className="text-foreground flex items-center gap-2">
                   <TrendingUp className="w-5 h-5 text-[var(--brain-cyan)]" />
                   Pipeline Health
                 </CardTitle>
@@ -248,7 +248,7 @@ export default function DevelopmentPathway() {
                       <CheckCircle2 className="w-4 h-4" />
                       <span className="text-sm">On Track</span>
                     </div>
-                    <p className="text-2xl font-bold text-white">
+                    <p className="text-2xl font-bold text-foreground">
                       {pipelineStats.validated}
                     </p>
                     <p className="text-xs text-foreground/60">
@@ -260,7 +260,7 @@ export default function DevelopmentPathway() {
                       <Clock className="w-4 h-4" />
                       <span className="text-sm">In Progress</span>
                     </div>
-                    <p className="text-2xl font-bold text-white">
+                    <p className="text-2xl font-bold text-foreground">
                       {pipelineStats.assessing}
                     </p>
                     <p className="text-xs text-foreground/60">
@@ -272,7 +272,7 @@ export default function DevelopmentPathway() {
                       <AlertCircle className="w-4 h-4" />
                       <span className="text-sm">Awaiting Review</span>
                     </div>
-                    <p className="text-2xl font-bold text-white">
+                    <p className="text-2xl font-bold text-foreground">
                       {pipelineStats.captured}
                     </p>
                     <p className="text-xs text-foreground/60">
@@ -312,7 +312,7 @@ export default function DevelopmentPathway() {
             {/* Quick Actions */}
             <Card className="bg-gray-900/50 border-border/50">
               <CardHeader>
-                <CardTitle className="text-white flex items-center gap-2">
+                <CardTitle className="text-foreground flex items-center gap-2">
                   <Rocket className="w-5 h-5 text-purple-400" />
                   Quick Actions
                 </CardTitle>
@@ -359,7 +359,7 @@ export default function DevelopmentPathway() {
           <Card className="bg-gray-900/50 border-border/50">
             <CardHeader className="flex flex-row items-center justify-between">
               <div>
-                <CardTitle className="text-white flex items-center gap-2">
+                <CardTitle className="text-foreground flex items-center gap-2">
                   <Lightbulb className="w-5 h-5 text-[var(--brain-cyan)]" />
                   Recent Ideas
                 </CardTitle>
@@ -465,7 +465,7 @@ export default function DevelopmentPathway() {
         <TabsContent value="innovation">
           <Card className="bg-gray-900/50 border-border/50">
             <CardHeader>
-              <CardTitle className="text-white flex items-center gap-2">
+              <CardTitle className="text-foreground flex items-center gap-2">
                 <Lightbulb className="w-5 h-5 text-[var(--brain-cyan)]" />
                 Innovation Hub
               </CardTitle>
@@ -518,7 +518,7 @@ export default function DevelopmentPathway() {
         <TabsContent value="reviews">
           <Card className="bg-gray-900/50 border-border/50">
             <CardHeader>
-              <CardTitle className="text-white flex items-center gap-2">
+              <CardTitle className="text-foreground flex items-center gap-2">
                 <Calendar className="w-5 h-5 text-purple-400" />
                 Chief of Staff Reviews
               </CardTitle>
@@ -530,7 +530,7 @@ export default function DevelopmentPathway() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 {/* Schedule */}
                 <div className="space-y-4">
-                  <h3 className="text-lg font-semibold text-white">
+                  <h3 className="text-lg font-semibold text-foreground">
                     Review Schedule
                   </h3>
                   <div className="space-y-3">
@@ -575,7 +575,7 @@ export default function DevelopmentPathway() {
 
                 {/* Review Focus Areas */}
                 <div className="space-y-4">
-                  <h3 className="text-lg font-semibold text-white">
+                  <h3 className="text-lg font-semibold text-foreground">
                     Review Focus Areas
                   </h3>
                   <div className="space-y-2">
