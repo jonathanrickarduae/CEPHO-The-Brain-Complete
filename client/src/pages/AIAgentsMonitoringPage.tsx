@@ -180,7 +180,7 @@ export default function AIAgentsMonitoringPage() {
                   {agents.length > 0
                     ? (
                         agents.reduce(
-                          (sum, a) => sum + a.performance.rating,
+                          (sum, a) => sum + a.performanceRating,
                           0
                         ) / agents.length
                       ).toFixed(1)
@@ -197,7 +197,7 @@ export default function AIAgentsMonitoringPage() {
               <div>
                 <p className="text-3xl font-bold">
                   {agents.reduce(
-                    (sum, a) => sum + a.performance.tasksCompleted,
+                    (sum, a) => sum + a.tasksCompleted,
                     0
                   )}
                 </p>
@@ -284,7 +284,7 @@ export default function AIAgentsMonitoringPage() {
                   <div className="flex items-center gap-1 text-yellow-400">
                     <Award className="w-3 h-3" />
                     <span className="text-sm font-semibold">
-                      {agent.performance.rating}
+                      {agent.performanceRating}
                     </span>
                   </div>
                 </div>
@@ -298,13 +298,13 @@ export default function AIAgentsMonitoringPage() {
                 <div>
                   <p className="text-xs text-muted-foreground/70">Tasks</p>
                   <p className="text-sm font-semibold">
-                    {agent.performance.tasksCompleted}
+                    {agent.tasksCompleted}
                   </p>
                 </div>
                 <div>
                   <p className="text-xs text-muted-foreground/70">Success</p>
                   <p className="text-sm font-semibold text-green-400">
-                    {agent.performance.successRate}%
+                    {agent.successRate}%
                   </p>
                 </div>
               </div>
@@ -345,25 +345,25 @@ export default function AIAgentsMonitoringPage() {
               <div className="bg-muted/30 rounded p-3">
                 <p className="text-xs text-muted-foreground mb-1">Rating</p>
                 <p className="text-2xl font-bold text-yellow-400">
-                  {selectedAgentData.performance.rating}/100
+                  {selectedAgentData.performanceRating}/100
                 </p>
               </div>
               <div className="bg-muted/30 rounded p-3">
                 <p className="text-xs text-muted-foreground mb-1">Tasks Completed</p>
                 <p className="text-2xl font-bold">
-                  {selectedAgentData.performance.tasksCompleted}
+                  {selectedAgentData.tasksCompleted}
                 </p>
               </div>
               <div className="bg-muted/30 rounded p-3">
                 <p className="text-xs text-muted-foreground mb-1">Success Rate</p>
                 <p className="text-2xl font-bold text-green-400">
-                  {selectedAgentData.performance.successRate}%
+                  {selectedAgentData.successRate}%
                 </p>
               </div>
               <div className="bg-muted/30 rounded p-3">
                 <p className="text-xs text-muted-foreground mb-1">Response Time</p>
                 <p className="text-2xl font-bold">
-                  {selectedAgentData.performance.averageResponseTime.toFixed(2)}
+                  {selectedAgentData.avgResponseTime.toFixed(2)}
                   s
                 </p>
               </div>

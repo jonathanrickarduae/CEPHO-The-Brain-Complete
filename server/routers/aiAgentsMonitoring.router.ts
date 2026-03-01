@@ -490,14 +490,30 @@ function generateDailyReport(
 
 export const aiAgentsMonitoringRouter = router({
   getAllStatus: protectedProcedure.query(async () => {
-    const agents = AGENTS.map(agent => ({
+    const rawAgents = AGENTS.map(agent => ({
       ...agent,
       ...getAgentMetrics(agent.id),
     }));
 
+    // Flatten nested performance object so client receives flat fields
+    const agents = rawAgents.map(a => ({
+      id: a.id,
+      name: a.name,
+      category: a.category,
+      specialization: a.specialization,
+      description: a.description,
+      status: a.status,
+      lastActive: a.lastActive,
+      improvementRequests: a.improvementRequests,
+      performanceRating: a.performance.rating,
+      tasksCompleted: a.performance.tasksCompleted,
+      successRate: a.performance.successRate,
+      avgResponseTime: a.performance.averageResponseTime,
+    }));
+
     const activeAgents = agents.filter(a => a.status === "active").length;
     const avgRating =
-      agents.reduce((sum, a) => sum + a.performance.rating, 0) / agents.length;
+      agents.reduce((sum, a) => sum + a.performanceRating, 0) / agents.length;
 
     return {
       agents,

@@ -113,6 +113,10 @@ async function startServer() {
   // API v1 versioned alias (backwards-compatible)
   app.use("/api/v1/auth", simpleAuthRoutes.default);
 
+  // AI Agents REST routes (for AgentDetailPage)
+  const agentsRoutes = await import("../routes/agents");
+  app.use("/api/agents", agentsRoutes.default);
+
   // tRPC API (mounted at both /api/trpc and /api/v1/trpc for versioning)
   const trpcMiddleware = createExpressMiddleware({
     router: appRouter,
