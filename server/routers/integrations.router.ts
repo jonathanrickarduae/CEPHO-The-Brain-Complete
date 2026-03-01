@@ -564,46 +564,61 @@ export const qaRouter = router({
     .input(
       z.object({
         taskId: z.number(),
-        approved: z.boolean(),
+        approved: z.boolean().optional(),
+        score: z.number().min(1).max(10).optional(),
+        feedback: z.string().optional(),
+        status: z.enum(["approved", "rejected", "pending"]).optional(),
         notes: z.string().optional(),
       })
     )
     .mutation(async ({ input, ctx }) => {
+      const isApproved = input.approved ?? input.status === "approved";
       await db
         .update(tasks)
         .set({
-          status: input.approved ? "completed" : "in_progress",
+          status: isApproved ? "completed" : "in_progress",
+          secondaryAiScore: input.score ?? null,
           updatedAt: new Date(),
         })
         .where(and(eq(tasks.id, input.taskId), eq(tasks.userId, ctx.user.id)));
 
-      return { success: true, approved: input.approved };
+      return { success: true, approved: isApproved };
     }),
 
   submitCoSReview: protectedProcedure
     .input(
       z.object({
         taskId: z.number(),
-        decision: z.enum(["approve", "reject", "request_changes"]),
+        decision: z.enum(["approve", "reject", "request_changes"]).optional(),
+        score: z.number().min(1).max(10).optional(),
         feedback: z.string().optional(),
+        status: z.enum(["approved", "rejected", "pending"]).optional(),
       })
     )
     .mutation(async ({ input, ctx }) => {
-      const statusMap = {
+      const statusMap: Record<string, string> = {
         approve: "completed",
         reject: "cancelled",
         request_changes: "in_progress",
+        approved: "completed",
+        rejected: "cancelled",
+        pending: "in_progress",
       };
+      const newStatus = input.decision
+        ? statusMap[input.decision]
+        : input.status
+        ? (statusMap[input.status] ?? input.status)
+        : "completed";
 
       await db
         .update(tasks)
         .set({
-          status: statusMap[input.decision],
+          status: newStatus,
           updatedAt: new Date(),
         })
         .where(and(eq(tasks.id, input.taskId), eq(tasks.userId, ctx.user.id)));
 
-      return { success: true, decision: input.decision };
+      return { success: true, decision: input.decision ?? input.status };
     }),
 });
 

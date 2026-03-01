@@ -131,7 +131,7 @@ const menuItems: MenuItem[] = [
     ],
   },
 
-  { icon: Lock, label: "Vault", path: "/vault" },
+  { icon: Lock, label: "Vault", path: "/settings?tab=vault" },
   { icon: Settings, label: "Settings", path: "/settings" },
 ];
 
