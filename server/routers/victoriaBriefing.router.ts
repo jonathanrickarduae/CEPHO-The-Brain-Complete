@@ -172,7 +172,8 @@ export const victoriasBriefRouter = router({
         success: true,
         message:
           "PDF generation queued. This feature requires server-side PDF generation.",
-        downloadUrl: null,
+        downloadUrl: null as string | null,
+        pdfUrl: null as string | null,
       };
     }),
 
@@ -184,13 +185,15 @@ export const victoriasBriefRouter = router({
         return {
           success: false,
           message: "Video generation not configured",
-          videoUrl: null,
+          videoUrl: null as string | null,
+          status: "error" as string,
         };
       }
       return {
         success: true,
         message: "Video generation initiated via Synthesia",
-        videoUrl: null,
+        videoUrl: null as string | null,
+        status: "processing" as string,
       };
     }),
 
