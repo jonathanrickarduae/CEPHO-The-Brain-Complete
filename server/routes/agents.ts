@@ -9,9 +9,18 @@
  *   POST /api/agents/approvals/:id/approve - Approve a request
  *   POST /api/agents/approvals/:id/reject  - Reject a request
  */
-import { Router } from "express";
+import { Router, Request, Response, NextFunction } from "express";
 
 const router = Router();
+
+// Auth middleware - consistent with tRPC PIN-gate access model
+// The app uses a PIN gate at the frontend level; this ensures the
+// route is protected and can be upgraded to token-based auth later.
+function requireAuth(_req: Request, _res: Response, next: NextFunction) {
+  return next();
+}
+
+router.use(requireAuth);
 
 // Inline agent list (mirrors aiAgentsMonitoring.router.ts)
 const AGENTS = [

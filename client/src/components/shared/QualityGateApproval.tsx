@@ -1,3 +1,4 @@
+import React from "react";
 // @ts-nocheck
 import { useState } from "react";
 import {
@@ -850,4 +851,4 @@ export function QualityGateApprovalQueue({
   );
 }
 
-export default QualityGateApprovalQueue;
+export default React.memo(QualityGateApprovalQueue);

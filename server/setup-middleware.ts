@@ -78,7 +78,15 @@ export async function setupMiddleware(app: Express) {
   }
 
   // 12. Metrics endpoint (before health checks)
-  app.get("/api/metrics", metricsHandler);
+  // Metrics endpoint - restricted to internal/localhost access only
+  app.get("/api/metrics", (req, res, next) => {
+    const ip = (req.headers["x-forwarded-for"] as string || req.socket?.remoteAddress || "").split(",")[0].trim();
+    const isInternal = ip === "127.0.0.1" || ip === "::1" || ip === "::ffff:127.0.0.1" || ip.startsWith("10.") || ip.startsWith("172.") || ip.startsWith("192.168.");
+    if (!isInternal) {
+      return res.status(403).json({ error: "Forbidden" });
+    }
+    return next();
+  }, metricsHandler);
   // 13. Health check routes
   app.use(healthRouter);
 }

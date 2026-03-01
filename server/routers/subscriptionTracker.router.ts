@@ -9,7 +9,7 @@ import { protectedProcedure, router } from "../_core/trpc";
 import { db } from "../db";
 import { subscriptions } from "../../drizzle/schema";
 
-const BILLING_CYCLES = ["monthly", "quarterly", "annual", "one_time"] as const;
+const BILLING_CYCLES = ["monthly", "quarterly", "annual", "one_time", "usage_based"] as const;
 const STATUSES = ["active", "trial", "cancelled", "paused"] as const;
 
 export const subscriptionTrackerRouter = router({
@@ -113,6 +113,9 @@ export const subscriptionTrackerRouter = router({
     return {
       totalMonthlyCost: Math.round(totalMonthlyCost * 100) / 100,
       totalAnnualCost: Math.round(totalMonthlyCost * 12 * 100) / 100,
+      // Aliases for client compatibility
+      totalMonthly: Math.round(totalMonthlyCost * 100) / 100,
+      totalAnnual: Math.round(totalMonthlyCost * 12 * 100) / 100,
       activeCount: rows.length,
       byCategory,
       upcomingRenewals,
@@ -156,7 +159,14 @@ export const subscriptionTrackerRouter = router({
         return { month: label, cost: Math.round(cost * 100) / 100 };
       });
 
-      return { history };
+      // Return both the nested shape and a flat array for client compatibility
+      const flatHistory = history.map(h => ({
+        month: h.month,
+        cost: h.cost,
+        totalCost: h.cost,
+        subscriptionCount: 0,
+      }));
+      return flatHistory;
     }),
 
   /**
@@ -194,9 +204,26 @@ export const subscriptionTrackerRouter = router({
         ),
       }));
 
+    const nextRenewal = upcoming.length > 0 ? {
+      subscriptionName: upcoming[0].name,
+      daysUntilRenewal: upcoming[0].daysUntilRenewal,
+      cost: upcoming[0].cost,
+    } : null;
     return {
       upcoming,
       totalUpcomingCost: upcoming.reduce((sum, s) => sum + s.cost, 0),
+      // Client-compatible aliases
+      upcomingCount: upcoming.length,
+      nextRenewal,
+      renewals: upcoming.map(s => ({
+        subscriptionId: s.id,
+        subscriptionName: s.name,
+        cost: s.cost,
+        currency: s.currency,
+        billingCycle: s.billingCycle,
+        renewalDate: s.renewalDate,
+        daysUntilRenewal: s.daysUntilRenewal,
+      })),
     };
   }),
 

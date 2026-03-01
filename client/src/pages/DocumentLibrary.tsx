@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { useState } from "react";
+import { useState , useMemo } from "react";
 import { trpc } from "@/lib/trpc";
 import {
   Card,
@@ -262,14 +262,17 @@ export default function DocumentLibrary() {
     setIsEmailHistoryOpen(true);
   };
 
-  const filteredDocuments =
-    documents?.filter(doc => {
-      if (!searchQuery) return true;
-      return (
-        doc.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        doc.documentId.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-    }) || [];
+  const filteredDocuments = useMemo(
+    () =>
+      documents?.filter(doc => {
+        if (!searchQuery) return true;
+        return (
+          doc.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          doc.documentId.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+      }) || [],
+    [documents, searchQuery]
+  );
 
   const getTypeIcon = (type: string) => {
     switch (type) {

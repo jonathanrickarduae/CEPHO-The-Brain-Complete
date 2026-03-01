@@ -219,16 +219,15 @@ export default function InnovationHub() {
     });
   };
 
-  // Stats
-  const totalIdeas = ideas?.length || 0;
-  const activeIdeas =
-    ideas?.filter(
+  // Stats - memoized to avoid recomputing on every render
+  const { totalIdeas, activeIdeas, validatedIdeas, promotedIdeas } = useMemo(() => ({
+    totalIdeas: ideas?.length || 0,
+    activeIdeas: ideas?.filter(
       i => !["rejected", "archived", "promoted_to_genesis"].includes(i.status)
-    ).length || 0;
-  const validatedIdeas =
-    ideas?.filter(i => i.status === "validated").length || 0;
-  const promotedIdeas =
-    ideas?.filter(i => i.status === "promoted_to_genesis").length || 0;
+    ).length || 0,
+    validatedIdeas: ideas?.filter(i => i.status === "validated").length || 0,
+    promotedIdeas: ideas?.filter(i => i.status === "promoted_to_genesis").length || 0,
+  }), [ideas]);
 
   return (
     <div className="min-h-screen bg-background">

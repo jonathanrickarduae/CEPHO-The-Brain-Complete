@@ -5,7 +5,7 @@
  * business model → go-to-market → financial → launch.
  */
 import { z } from "zod";
-import { desc, eq, and } from "drizzle-orm";
+import { desc, eq, and, inArray } from "drizzle-orm";
 import { protectedProcedure, router } from "../_core/trpc";
 import { db } from "../db";
 import { projectGenesis, projectGenesisPhases } from "../../drizzle/schema";
@@ -38,9 +38,7 @@ export const projectGenesisRouter = router({
             .select()
             .from(projectGenesisPhases)
             .where(
-              projectIds.length === 1
-                ? eq(projectGenesisPhases.projectId, projectIds[0])
-                : eq(projectGenesisPhases.projectId, projectIds[0]) // simplified
+              inArray(projectGenesisPhases.projectId, projectIds)
             )
         : [];
 

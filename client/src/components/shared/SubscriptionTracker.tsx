@@ -1,4 +1,5 @@
 // @ts-nocheck
+import React from "react";
 import { useState, useMemo } from "react";
 import {
   Card,
@@ -221,7 +222,7 @@ function CostTrendChart({
   );
 }
 
-export default function SubscriptionTracker() {
+function SubscriptionTracker() {
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [formData, setFormData] = useState<FormData>(initialFormData);
@@ -1025,3 +1026,5 @@ export default function SubscriptionTracker() {
     </div>
   );
 }
+
+export default React.memo(SubscriptionTracker);

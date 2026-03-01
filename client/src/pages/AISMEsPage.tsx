@@ -316,12 +316,14 @@ export default function AISMEsPage() {
     }
   };
 
-  const selectedExpert = showExpertDetail
-    ? AI_EXPERTS.find(e => e.id === showExpertDetail)
-    : null;
-  const compareExpertData = compareExperts
-    .map(id => AI_EXPERTS.find(e => e.id === id))
-    .filter(Boolean) as typeof AI_EXPERTS;
+  const selectedExpert = useMemo(
+    () => (showExpertDetail ? AI_EXPERTS.find(e => e.id === showExpertDetail) ?? null : null),
+    [showExpertDetail]
+  );
+  const compareExpertData = useMemo(
+    () => compareExperts.map(id => AI_EXPERTS.find(e => e.id === id)).filter(Boolean) as typeof AI_EXPERTS,
+    [compareExperts]
+  );
 
   // Format date to UK format
   const formatDate = (dateStr: string) => {

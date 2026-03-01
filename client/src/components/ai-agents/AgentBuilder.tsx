@@ -1,3 +1,4 @@
+import React from "react";
 import { useState, useCallback } from "react";
 import {
   Bot,
@@ -140,7 +141,7 @@ interface AgentBuilderProps {
   className?: string;
 }
 
-export function AgentBuilder({ className }: AgentBuilderProps) {
+function AgentBuilder({ className }: AgentBuilderProps) {
   const [agents, setAgents] = useState<Agent[]>([
     {
       id: "1",
@@ -673,3 +674,6 @@ export function AgentBuilder({ className }: AgentBuilderProps) {
     </div>
   );
 }
+
+export default React.memo(AgentBuilder);
+export { AgentBuilder };

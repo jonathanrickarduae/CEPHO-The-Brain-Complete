@@ -84,6 +84,7 @@ export const expertConsultationRouter = router({
         positiveFeedback: r.positiveFeedback,
         lastUsed: r.lastUsed?.toISOString() ?? null,
         status: r.status,
+        updatedAt: r.updatedAt?.toISOString() ?? r.lastUsed?.toISOString() ?? new Date().toISOString(),
       }));
     }),
 

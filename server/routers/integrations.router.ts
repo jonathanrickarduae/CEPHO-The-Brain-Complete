@@ -490,11 +490,19 @@ export const cosTasksRouter = router({
       return rows.map(t => ({
         id: t.id,
         title: t.title,
+        description: t.description ?? "",
         status: t.status,
         priority: t.priority,
+        progress: t.progress ?? 0,
         assignedTo: t.assignedTo,
+        assignedExperts: (t.assignedExperts as string[] | null) ?? [],
+        qaStatus: t.qaStatus ?? "pending",
+        cosScore: t.cosScore ?? null,
+        secondaryAiScore: t.secondaryAiScore ?? null,
+        metadata: t.metadata as Record<string, unknown> | null,
         dueDate: t.dueDate?.toISOString() ?? null,
         createdAt: t.createdAt.toISOString(),
+        updatedAt: t.updatedAt.toISOString(),
       }));
     }),
 
@@ -538,9 +546,16 @@ export const qaRouter = router({
     return rows.map(t => ({
       id: t.id,
       title: t.title,
+      description: t.description ?? "",
       status: t.status,
       priority: t.priority,
-      qaStatus: t.status === "completed" ? "passed" : "pending",
+      progress: t.progress ?? 0,
+      qaStatus: t.qaStatus ?? (t.status === "completed" ? "passed" : "pending"),
+      cosScore: t.cosScore ?? null,
+      secondaryAiScore: t.secondaryAiScore ?? null,
+      assignedExperts: (t.assignedExperts as string[] | null) ?? [],
+      metadata: t.metadata as Record<string, unknown> | null,
+      createdAt: t.createdAt.toISOString(),
       updatedAt: t.updatedAt.toISOString(),
     }));
   }),
@@ -597,9 +612,13 @@ export const qualityGateRouter = router({
   notifyApproval: protectedProcedure
     .input(
       z.object({
-        itemId: z.number(),
-        itemType: z.string(),
+        itemId: z.number().optional(),
+        itemType: z.string().optional(),
         notes: z.string().optional(),
+        projectId: z.string().optional(),
+        projectName: z.string().optional(),
+        phase: z.union([z.number(), z.string()]).optional(),
+        approvedBy: z.string().optional(),
       })
     )
     .mutation(async ()  => {
@@ -608,7 +627,15 @@ export const qualityGateRouter = router({
 
   notifyRejection: protectedProcedure
     .input(
-      z.object({ itemId: z.number(), itemType: z.string(), reason: z.string() })
+      z.object({
+        itemId: z.number().optional(),
+        itemType: z.string().optional(),
+        reason: z.string().optional(),
+        projectId: z.string().optional(),
+        projectName: z.string().optional(),
+        phase: z.union([z.number(), z.string()]).optional(),
+        rejectedBy: z.string().optional(),
+      })
     )
     .mutation(async ()  => {
       return { success: true, notified: true };
