@@ -17,6 +17,7 @@ import { chiefOfStaffRouter } from "./routers/chiefOfStaff.router";
 import { moodRouter } from "./routers/mood.router";
 import { tasksRouter } from "./routers/tasks.router";
 import { aiAgentsMonitoringRouter } from "./routers/aiAgentsMonitoring.router";
+import { agentEngineRouter } from "./routers/agentEngine.router";
 import { expertEvolutionRouter } from "./routers/expertEvolution.router";
 import { expertRecommendationRouter } from "./routers/expertRecommendation.router";
 import { expertChatRouter } from "./routers/expertChat.router";
@@ -100,6 +101,7 @@ export const appRouter = router({
 
   // ─── AI Agents Monitoring ───────────────────────────────────────────────
   aiAgentsMonitoring: aiAgentsMonitoringRouter,
+  agentEngine: agentEngineRouter,
 
   // ─── Expert System ──────────────────────────────────────────────────────
   expertEvolution: expertEvolutionRouter,

@@ -1,4 +1,5 @@
 // @ts-nocheck
+import { PageShell } from "@/components/layout/PageShell";
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useParams, useLocation } from "wouter";
 import {
@@ -379,56 +380,22 @@ ${messages
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex flex-col">
-      {/* Header */}
-      <div className="bg-black/40 backdrop-blur-sm border-b border-white/10 px-4 py-3">
-        <div className="max-w-4xl mx-auto flex items-center gap-4">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => setLocation("/ai-experts")}
-            className="text-white/70 hover:text-white hover:bg-white/10"
-          >
-            <ArrowLeft className="w-5 h-5" />
+    <PageShell
+      icon={MessageSquare}
+      title={expert?.name || "Expert Chat"}
+      subtitle={expert?.specialty || ""}
+      actions={
+        <div className="flex items-center gap-2">
+          <Button variant="outline" size="sm" onClick={() => setShowExportModal(true)}>
+            <Download className="w-4 h-4 mr-1" /> Export
           </Button>
-
-          <div className="flex items-center gap-3 flex-1">
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-fuchsia-500 to-purple-600 flex items-center justify-center text-white font-bold text-sm">
-              {expert.name
-                .split(" ")
-                .map(n => n[0])
-                .join("")
-                .slice(0, 2)}
-            </div>
-            <div>
-              <h1 className="text-foreground font-semibold">{expert.name}</h1>
-              <p className="text-muted-foreground text-sm">{expert.specialty}</p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={toggleTts}
-              className={`text-white/70 hover:text-white hover:bg-white/10 ${ttsEnabled ? "bg-fuchsia-500/20 text-fuchsia-300" : ""}`}
-              title={
-                ttsEnabled ? "Disable text-to-speech" : "Enable text-to-speech"
-              }
-            >
-              {ttsEnabled ? (
-                <Volume2 className="w-4 h-4" />
-              ) : (
-                <VolumeX className="w-4 h-4" />
-              )}
-            </Button>
-            <Badge className="bg-fuchsia-500/20 text-fuchsia-300 border-fuchsia-500/30">
-              <Star className="w-3 h-3 mr-1" />
-              {expert.performanceScore}/100
-            </Badge>
-          </div>
+          <Button variant="ghost" size="sm" onClick={() => setLocation("/ai-experts")}>
+            <ArrowLeft className="w-4 h-4 mr-1" /> Back
+          </Button>
         </div>
-      </div>
+      }
+      fillHeight
+    >
 
       {/* Expert Info Banner */}
       <div className="bg-black/20 border-b border-white/5 px-4 py-2">
@@ -657,6 +624,6 @@ ${messages
           </div>
         </div>
       </div>
-    </div>
+    </PageShell>
   );
 }

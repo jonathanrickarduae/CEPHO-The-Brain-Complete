@@ -1,4 +1,5 @@
 // @ts-nocheck
+import { PageShell } from "@/components/layout/PageShell";
 import { useState, useEffect } from "react";
 import {
   Moon,
@@ -580,48 +581,19 @@ export default function EveningReview() {
   }
 
   return (
-    <div className="h-full bg-gradient-to-br from-background via-background to-indigo-900 text-white overflow-auto">
-      {/* Compact Header */}
-      <div className="border-b border-white/10 bg-black/20 backdrop-blur-sm sticky top-0 z-10">
-        <div className="max-w-7xl mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold flex items-center gap-3">
-                <Moon className="h-8 w-8 text-indigo-400" />
-                Evening Review
-              </h1>
-              <p className="text-muted-foreground mt-1 text-sm">
-                {formatDate()} • {stats.total} tasks across{" "}
-                {OVERNIGHT_TASKS.length} projects
-              </p>
-            </div>
-
-            {/* Compact Stats + Timer */}
-            <div className="flex items-center gap-3">
-              <div className="flex gap-2">
-                <Badge className="bg-green-500/20 text-green-400 border-green-500/30">
-                  {stats.accepted} ✓
-                </Badge>
-                <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30">
-                  {stats.deferred} ⏸
-                </Badge>
-                <Badge className="bg-red-500/20 text-red-400 border-red-500/30">
-                  {stats.rejected} ✕
-                </Badge>
-                <Badge className="bg-gray-500/20 text-muted-foreground border-gray-500/30">
-                  {stats.pending} ⋯
-                </Badge>
-              </div>
-              <div
-                className={`flex items-center gap-2 px-3 py-1.5 rounded-full border ${getReviewStateColor()}`}
-              >
-                <Clock className="w-4 h-4" />
-                <span className="text-sm font-medium">{timeUntilCutoff}</span>
-              </div>
-            </div>
-          </div>
+    <PageShell
+      icon={Moon}
+      title="Evening Review"
+      subtitle={`${formatDate()} • ${stats.total} tasks`}
+      actions={
+        <div className="flex items-center gap-3">
+          <Badge className="bg-green-500/20 text-green-400 border-green-500/30">{stats.accepted} ✓</Badge>
+          <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30">{stats.deferred} ⏸</Badge>
+          <Badge className="bg-red-500/20 text-red-400 border-red-500/30">{stats.rejected} ✕</Badge>
         </div>
-      </div>
+      }
+      fillHeight
+    >
 
       {/* Warning Banner for Cutoff */}
       {reviewState === "cutoff_warning" && (
@@ -898,6 +870,6 @@ export default function EveningReview() {
           </div>
         </div>
       </div>
-    </div>
+    </PageShell>
   );
 }

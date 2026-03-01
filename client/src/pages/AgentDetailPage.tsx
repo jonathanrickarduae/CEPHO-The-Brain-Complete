@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { useRoute, Link } from "wouter";
+import { Bot, ArrowLeft } from "lucide-react";
+import { PageShell } from "@/components/layout/PageShell";
 
 interface AgentDetail {
   id: string;
@@ -176,23 +178,21 @@ export default function AgentDetailPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <div className="border-b border-border px-4 sm:px-6 py-4">
-        <div className="flex items-center gap-3">
-          <Link href="/ai-agents">
-            <button className="text-muted-foreground hover:text-foreground transition-colors text-sm">
-              ← Back to Agents
-            </button>
-          </Link>
-          <span className="text-border">/</span>
-          <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground">
-            {agent.name}
-          </h1>
-        </div>
-      </div>
-
-      <div className="p-4 sm:p-6 space-y-6">
+    <PageShell
+      icon={Bot}
+      title={agent.name}
+      subtitle={agent.specialization}
+      actions={
+        <Link href="/ai-agents">
+          <button className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground border border-border rounded-lg transition-colors">
+            <ArrowLeft className="w-4 h-4" />
+            Back to Agents
+          </button>
+        </Link>
+      }
+      fillHeight
+    >
+      <div className="space-y-6">
         {/* Agent Header Card */}
         <div className="bg-card rounded-lg p-6 border border-border">
           <div className="flex items-start justify-between mb-4">
@@ -417,6 +417,6 @@ export default function AgentDetailPage() {
           </div>
         </div>
       </div>
-    </div>
+    </PageShell>
   );
 }

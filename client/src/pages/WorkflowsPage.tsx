@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "wouter";
+import { PageShell } from "@/components/layout/PageShell";
 import {
   Plus,
   Workflow,
@@ -101,30 +102,22 @@ export default function WorkflowsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <div className="border-b border-border px-4 sm:px-6 py-4">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-          <div>
-            <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground">
-              Workflows
-            </h1>
-            <p className="text-sm sm:text-base text-muted-foreground mt-1">
-              Manage your process workflows and track progress
-            </p>
-          </div>
-          <button
-            onClick={() => setLocation("/workflows/new")}
-            className="flex items-center justify-center gap-2 px-4 py-2 bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg transition-colors font-medium"
-          >
-            <Plus className="w-5 h-5" />
-            <span className="hidden sm:inline">New Workflow</span>
-            <span className="sm:hidden">New</span>
-          </button>
-        </div>
-      </div>
-
-      <div className="p-4 sm:p-6 space-y-6">
+    <PageShell
+      icon={Workflow}
+      title="Workflows"
+      subtitle="Manage your process workflows and track progress"
+      actions={
+        <button
+          onClick={() => setLocation("/workflows/new")}
+          className="flex items-center gap-2 px-3 py-1.5 bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg transition-colors text-sm font-medium"
+        >
+          <Plus className="w-4 h-4" />
+          New Workflow
+        </button>
+      }
+      fillHeight
+    >
+      <div className="space-y-6">
         {/* Filters */}
         <div className="flex flex-wrap gap-2">
           {["all", "not_started", "in_progress", "paused", "completed", "failed"].map(status => (
@@ -221,6 +214,6 @@ export default function WorkflowsPage() {
           </div>
         )}
       </div>
-    </div>
+    </PageShell>
   );
 }

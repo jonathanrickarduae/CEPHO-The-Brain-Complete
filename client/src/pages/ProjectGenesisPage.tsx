@@ -1,5 +1,6 @@
 // @ts-nocheck
 import React, { useState, useEffect } from "react";
+import { PageShell } from "@/components/layout/PageShell";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -223,42 +224,34 @@ export default function ProjectGenesisPage() {
   // (Keep all existing UI rendering logic)
 
   return (
-    <div className="min-h-screen bg-background">
+    <PageShell
+      icon={Brain}
+      title="Project Genesis"
+      subtitle="6-Phase Venture Development Framework"
+      actions={
+        viewMode === "dashboard" ? (
+          <Button
+            size="sm"
+            onClick={() => setViewMode("new_project")}
+            className="bg-primary hover:bg-primary/90 text-primary-foreground"
+            disabled={createProjectMutation.isLoading}
+          >
+            {createProjectMutation.isLoading ? (
+              <><Loader2 className="w-4 h-4 mr-1 animate-spin" />Creating...</>
+            ) : (
+              <><Plus className="w-4 h-4 mr-1" />New Project</>
+            )}
+          </Button>
+        ) : (
+          <Button size="sm" variant="outline" onClick={() => setViewMode("dashboard")}>
+            ← Back
+          </Button>
+        )
+      }
+      fillHeight
+    >
       {viewMode === "dashboard" && (
-        <div>
-          {/* Header */}
-          <div className="border-b border-border px-4 sm:px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground flex items-center gap-3">
-                <Brain className="w-6 h-6 sm:w-8 sm:h-8 text-purple-400" />
-                Project Genesis
-              </h1>
-              <p className="text-sm sm:text-base text-muted-foreground mt-1">
-                6-Phase Venture Development Framework
-              </p>
-            </div>
-            <Button
-              onClick={() => setViewMode("new_project")}
-              className="bg-primary hover:bg-primary/90 text-primary-foreground"
-              disabled={createProjectMutation.isLoading}
-            >
-              {createProjectMutation.isLoading ? (
-                <>
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  Creating...
-                </>
-              ) : (
-                <>
-                  <Plus className="w-4 h-4 mr-2" />
-                  New Project
-                </>
-              )}
-            </Button>
-          </div>
-
-          </div>
-          <div className="p-4 sm:p-6 space-y-6">
+        <div className="space-y-6">
           {/* AI Agents Section */}
           <div className="bg-card/30 backdrop-blur-sm rounded-xl border border-border/50 p-6">
             <div className="flex items-center justify-between mb-4">
@@ -438,7 +431,6 @@ export default function ProjectGenesisPage() {
               </div>
             )}
         </div>
-        </div>
       )}
 
       {/* Other view modes remain the same */}
@@ -571,6 +563,6 @@ export default function ProjectGenesisPage() {
       )}
 
       {/* Add other view mode components as needed */}
-    </div>
+    </PageShell>
   );
 }

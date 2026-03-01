@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useLocation } from "wouter";
+import { Loader2 } from "lucide-react";
 
 /**
  * The Vault page has been merged into Settings → "The Vault" tab.
@@ -13,8 +14,11 @@ export default function Vault() {
   }, [setLocation]);
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center">
-      <p className="text-muted-foreground text-sm">Redirecting to Settings → The Vault…</p>
+    <div className="flex items-center justify-center h-full min-h-[200px]">
+      <div className="flex items-center gap-2 text-muted-foreground text-sm">
+        <Loader2 className="w-4 h-4 animate-spin" />
+        Redirecting to Settings → The Vault…
+      </div>
     </div>
   );
 }

@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react";
 import { useLocation } from "wouter";
+import { PageShell } from "@/components/layout/PageShell";
 import {
   Sun,
   Users,
@@ -239,77 +240,64 @@ export default function NexusDashboard() {
   ];
 
   return (
-    <div className="h-[calc(100vh-56px)] md:h-screen flex flex-col bg-background">
-      {/* Header */}
-      <div className="border-b border-border bg-card/50 backdrop-blur-sm">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between px-4 sm:px-6 py-4 gap-3 sm:gap-0">
-          <div className="flex items-center gap-3">
-            <div>
-              <h1 className="text-lg sm:text-2xl md:text-3xl font-bold text-foreground flex items-center gap-2">
-                <LayoutDashboard className="h-5 w-5 sm:h-8 sm:w-8 text-[var(--brain-cyan)]" />
-                <span className="text-base sm:text-2xl md:text-3xl">
-                  The Nexus
+    <PageShell
+      icon={LayoutDashboard}
+      title="The Nexus"
+      subtitle="Command Center"
+      actions={
+        <div className="flex flex-wrap items-center gap-2 sm:gap-4">
+              {/* Governance Mode Toggle */}
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() =>
+                    requestModeChange(mode === "omni" ? "governed" : "omni")
+                  }
+                  className={`flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-1.5 sm:py-2 rounded-lg border-2 transition-all duration-300 ${
+                    mode === "governed"
+                      ? "bg-emerald-500/20 border-emerald-500/50 text-emerald-400"
+                      : "bg-amber-500/20 border-amber-500/50 text-amber-400"
+                  } hover:scale-105 active:scale-95`}
+                  title={
+                    mode === "governed"
+                      ? "Governed Mode: Only approved tools"
+                      : "Everything Mode: All tools available"
+                  }
+                >
+                  {mode === "governed" ? (
+                    <>
+                      <ShieldCheck className="w-4 h-4 sm:w-5 sm:h-5" />
+                      <span className="text-xs sm:text-sm font-semibold">
+                        GOVERNED
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      <Shield className="w-4 h-4 sm:w-5 sm:h-5" />
+                      <span className="text-xs sm:text-sm font-semibold">
+                        EVERYTHING
+                      </span>
+                    </>
+                  )}
+                </button>
+                <button
+                  onClick={() => setLocation("/settings")}
+                  className="p-2 rounded-lg border border-border hover:bg-card/50 transition-colors"
+                  title="Manage governance settings"
+                >
+                  <SettingsIcon className="w-4 h-4 text-muted-foreground" />
+                </button>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                <span className="text-xs text-foreground/70 font-mono">
+                  ONLINE
                 </span>
-              </h1>
-              <p className="text-xs sm:text-base text-muted-foreground mt-0.5">
-                Command Center
-              </p>
-            </div>
-          </div>
-
-          <div className="flex flex-wrap items-center gap-2 sm:gap-4 w-full sm:w-auto">
-            {/* Governance Mode Toggle */}
-            <div className="flex items-center gap-2">
-              <button
-                onClick={() =>
-                  requestModeChange(mode === "omni" ? "governed" : "omni")
-                }
-                className={`flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-1.5 sm:py-2 rounded-lg border-2 transition-all duration-300 ${
-                  mode === "governed"
-                    ? "bg-emerald-500/20 border-emerald-500/50 text-emerald-400"
-                    : "bg-amber-500/20 border-amber-500/50 text-amber-400"
-                } hover:scale-105 active:scale-95`}
-                title={
-                  mode === "governed"
-                    ? "Governed Mode: Only approved tools"
-                    : "Everything Mode: All tools available"
-                }
-              >
-                {mode === "governed" ? (
-                  <>
-                    <ShieldCheck className="w-4 h-4 sm:w-5 sm:h-5" />
-                    <span className="text-xs sm:text-sm font-semibold">
-                      GOVERNED
-                    </span>
-                  </>
-                ) : (
-                  <>
-                    <Shield className="w-4 h-4 sm:w-5 sm:h-5" />
-                    <span className="text-xs sm:text-sm font-semibold">
-                      EVERYTHING
-                    </span>
-                  </>
-                )}
-              </button>
-              <button
-                onClick={() => setLocation("/settings")}
-                className="p-2 rounded-lg border border-border hover:bg-card/50 transition-colors"
-                title="Manage governance settings"
-              >
-                <SettingsIcon className="w-4 h-4 text-muted-foreground" />
-              </button>
-            </div>
-
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="text-xs text-foreground/70 font-mono">
-                ONLINE
-              </span>
-            </div>
-          </div>
+              </div>
         </div>
-      </div>
-
+      }
+      fillHeight
+    >
       {/* Main Content - Single Column Layout */}
       <div className="flex-1 flex flex-col gap-4 sm:gap-4 p-3 sm:p-4 md:p-6 pb-[50vh] lg:pb-6 overflow-auto">
         {/* Top Section - Dashboard Info */}
@@ -442,6 +430,6 @@ export default function NexusDashboard() {
       <div className="lg:hidden fixed bottom-0 left-0 right-0 z-50 h-[50vh] border-t-2 border-cyan-400/50 bg-card/95 backdrop-blur-lg shadow-[0_-4px_20px_rgba(0,212,255,0.2)]">
         <OpenClawChat />
       </div>
-    </div>
+    </PageShell>
   );
 }

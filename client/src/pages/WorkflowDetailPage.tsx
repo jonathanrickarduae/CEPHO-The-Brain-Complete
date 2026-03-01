@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useLocation } from "wouter";
+import { PageShell } from "@/components/layout/PageShell";
 import {
   ArrowLeft,
   Play,
@@ -175,26 +176,19 @@ export default function WorkflowDetailPage() {
   const progress = totalSteps > 0 ? (completedSteps / totalSteps) * 100 : 0;
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <div className="border-b border-border px-4 sm:px-6 py-4">
-      <div className="flex items-center gap-4">
-        <button
-          onClick={() => setLocation("/workflows")}
-          className="p-2 hover:bg-card rounded-lg transition-colors"
-        >
-          <ArrowLeft className="w-6 h-6 text-muted-foreground" />
-        </button>
-        <div className="flex-1">
-          <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground">
-            {workflow.name}
-          </h1>
-          <p className="text-muted-foreground">
-            {workflow.skillType.replace("_", " ").charAt(0).toUpperCase() +
-              workflow.skillType.slice(1).replace("_", " ")}
-          </p>
-        </div>
-        <div className="flex gap-2">
+    <PageShell
+      icon={FileText}
+      title={workflow.name}
+      subtitle={workflow.skillType.replace("_", " ").charAt(0).toUpperCase() + workflow.skillType.slice(1).replace("_", " ")}
+      actions={
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setLocation("/workflows")}
+            className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground border border-border rounded-lg transition-colors"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Back
+          </button>
           {workflow.status === "not_started" && (
             <button
               onClick={handleStartWorkflow}
@@ -223,10 +217,10 @@ export default function WorkflowDetailPage() {
             </button>
           )}
         </div>
-      </div>
-      </div>
-
-      <div className="p-4 sm:p-6 space-y-6">
+      }
+      fillHeight
+    >
+      <div className="space-y-6">
       {/* Progress Bar */}
       <div className="bg-card rounded-lg p-6 border border-border">
         <div className="flex items-center justify-between mb-4">
@@ -373,6 +367,6 @@ export default function WorkflowDetailPage() {
         </div>
       </div>
       </div>
-    </div>
+    </PageShell>
   );
 }
