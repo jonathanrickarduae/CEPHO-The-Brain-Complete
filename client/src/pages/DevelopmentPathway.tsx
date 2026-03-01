@@ -126,7 +126,7 @@ export default function DevelopmentPathway() {
       </div>
 
       {/* Pipeline Overview Cards */}
-      <div className="grid grid-cols-5 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
         {PIPELINE_STAGES.map((stage, index) => {
           const count =
             stage.id === 1
@@ -229,7 +229,7 @@ export default function DevelopmentPathway() {
 
         {/* Overview Tab */}
         <TabsContent value="overview" className="space-y-4">
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
             {/* Pipeline Health */}
             <Card className="bg-gray-900/50 border-gray-800 col-span-2">
               <CardHeader>
@@ -242,7 +242,7 @@ export default function DevelopmentPathway() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="grid grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                   <div className="p-4 bg-gray-800/50 rounded-lg">
                     <div className="flex items-center gap-2 text-emerald-400 mb-2">
                       <CheckCircle2 className="w-4 h-4" />
@@ -527,7 +527,7 @@ export default function DevelopmentPathway() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 {/* Schedule */}
                 <div className="space-y-4">
                   <h3 className="text-lg font-semibold text-white">

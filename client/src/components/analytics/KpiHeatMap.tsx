@@ -204,7 +204,7 @@ export function KpiHeatMap({
 
   return (
     <div className="space-y-6">
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <Card>
           <CardContent className="pt-4">
             <div className="text-2xl font-bold">{overallStats.average}%</div>
@@ -404,7 +404,7 @@ export function KpiHeatMap({
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                 {(["cos", "sme", "customer"] as const).map(type => {
                   const scores = scoresByCategory.get(selectedCategory);
                   const score = scores?.[type] ?? 0;

@@ -882,7 +882,7 @@ export function SubscriptionROI({
       <h4 className="font-medium text-foreground mb-3">
         ROI Analysis: {subscription.name}
       </h4>
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
           <span className="text-xs text-muted-foreground">Time Saved</span>
           <p className="text-lg font-bold text-foreground">

@@ -240,7 +240,7 @@ export function ThemeSelector() {
   return (
     <div className="space-y-3">
       <label className="text-sm font-medium text-foreground">Appearance</label>
-      <div className="grid grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
         {[
           { value: "light", icon: Sun, label: "Light" },
           { value: "dark", icon: Moon, label: "Dark" },

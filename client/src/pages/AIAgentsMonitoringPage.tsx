@@ -42,7 +42,7 @@ export default function AIAgentsMonitoringPage() {
     refetch,
   } = trpc.aiAgentsMonitoring.getAllStatus.useQuery(undefined, {
     retry: 2,
-    onError: err => {
+    onError: () => {
     },
   });
 
@@ -136,7 +136,7 @@ export default function AIAgentsMonitoringPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white">
-      <div className="container mx-auto px-6 py-8">
+      <div className="container mx-auto px-4 md:px-6 py-6 md:py-8">
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-4xl font-bold mb-2">AI Agents Monitoring</h1>

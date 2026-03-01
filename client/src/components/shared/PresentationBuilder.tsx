@@ -525,7 +525,7 @@ export function PresentationBuilder() {
             <h2 className="text-lg font-semibold text-foreground mb-4">
               Add Slide
             </h2>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {slideTypes.map(st => (
                 <button
                   key={st.type}

@@ -117,7 +117,7 @@ export function MoreMenuSheet({
       />
       <div className="fixed bottom-16 left-0 right-0 z-50 bg-card border-t border-white/10 rounded-t-2xl p-4 md:hidden animate-in slide-in-from-bottom duration-200">
         <div className="w-12 h-1 bg-muted-foreground/30 rounded-full mx-auto mb-4" />
-        <div className="grid grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {moreItems.map(item => (
             <button
               key={item.path}

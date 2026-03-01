@@ -503,7 +503,7 @@ export function ChiefOfStaffRoadmap() {
   return (
     <div className="space-y-6">
       {/* Overview Stats */}
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <Card className="bg-gray-900/50 border-gray-800">
           <CardContent className="pt-6">
             <div className="text-center">

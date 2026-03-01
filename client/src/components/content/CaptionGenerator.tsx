@@ -239,7 +239,7 @@ ${includeHashtags ? "#motivation #community" : ""}`;
             {/* Platform Selection */}
             <div className="space-y-2">
               <Label className="text-sm text-muted-foreground">Platform</Label>
-              <div className="grid grid-cols-4 gap-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
                 {platforms.map(p => {
                   const Icon = p.icon;
                   return (
@@ -297,7 +297,7 @@ ${includeHashtags ? "#motivation #community" : ""}`;
             </div>
 
             {/* Options */}
-            <div className="grid grid-cols-3 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
               <Button
                 variant={includeHashtags ? "default" : "outline"}
                 size="sm"

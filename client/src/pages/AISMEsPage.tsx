@@ -1380,7 +1380,7 @@ export default function AISMEsPage() {
 
             <div className="p-4 overflow-y-auto max-h-[calc(90vh-140px)]">
               <div
-                className={`grid gap-4 ${compareExpertData.length === 2 ? "grid-cols-2" : "grid-cols-3"}`}
+                className={`grid gap-4 grid-cols-1 sm:${compareExpertData.length === 2 ? "grid-cols-2" : "grid-cols-3"}`}
               >
                 {compareExpertData.map(expert => {
                   const expertPanel = getExpertPanelType(expert);

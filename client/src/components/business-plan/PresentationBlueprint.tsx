@@ -724,7 +724,7 @@ export function PresentationBlueprint() {
             <h3 className="text-lg font-semibold text-foreground mb-4">
               Select Slide Types
             </h3>
-            <div className="grid grid-cols-3 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
               {slideTypes.map(slide => (
                 <button
                   key={slide.type}
@@ -778,7 +778,7 @@ export function PresentationBlueprint() {
 
       {/* Step 2: Content */}
       {currentStep === "content" && slides.length > 0 && (
-        <div className="grid grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
           {/* Slide Navigator */}
           <div className="space-y-2">
             <h3 className="text-sm font-medium text-muted-foreground mb-3">
@@ -896,7 +896,7 @@ export function PresentationBlueprint() {
           <h3 className="text-lg font-semibold text-foreground">
             Choose Design Theme
           </h3>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {designThemes.map(theme => (
               <button
                 key={theme.id}

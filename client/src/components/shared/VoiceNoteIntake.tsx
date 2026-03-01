@@ -363,7 +363,7 @@ export function VoiceNoteIntake({ onComplete, onSkip }: VoiceNoteIntakeProps) {
                 <h4 className="text-sm font-medium text-foreground/70 mb-3">
                   Extracted Project Details
                 </h4>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {transcriptionResult.extractedFields.projectName && (
                     <div className="bg-white/5 rounded-xl p-4">
                       <p className="text-xs text-foreground/60 mb-1">

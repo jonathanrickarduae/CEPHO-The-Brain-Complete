@@ -320,7 +320,7 @@ export function ChiefOfStaffNotification({
 
             {/* Context Stats */}
             {reviewContext && (
-              <div className="grid grid-cols-3 gap-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
                 <div className="bg-white/5 rounded-xl p-3 text-center">
                   <div className="flex items-center justify-center gap-1 text-cyan-400 mb-1">
                     <ListTodo className="w-4 h-4" />

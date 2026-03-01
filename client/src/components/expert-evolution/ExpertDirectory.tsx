@@ -299,7 +299,7 @@ export function ExpertDirectory({
                 <h2 className="text-lg font-semibold text-foreground mb-4">
                   Performance Stats
                 </h2>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="text-center p-4 bg-secondary/30 rounded-xl">
                     <p className="text-2xl font-bold text-foreground">
                       {selectedPartner.projectsCompleted}

@@ -542,7 +542,7 @@ export function GenesisBlueprintWizard({
       case "multiselect":
         const selectedValues = answers[currentQuestion.id] || [];
         return (
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {currentQuestion.options?.map(option => (
               <button
                 key={option}

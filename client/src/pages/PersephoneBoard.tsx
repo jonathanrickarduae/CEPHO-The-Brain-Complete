@@ -364,7 +364,7 @@ export default function PersephoneBoard() {
         </div>
       </div>
 
-      <div className="container mx-auto px-6 py-8 space-y-8">
+      <div className="container mx-auto px-4 md:px-6 py-6 md:py-8 space-y-6 md:space-y-8">
         {/* Board Overview Stats */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           <Card className="border-purple-500/30 bg-gradient-to-br from-purple-500/10 to-background">

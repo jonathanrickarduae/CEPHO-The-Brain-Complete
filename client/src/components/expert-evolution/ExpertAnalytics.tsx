@@ -370,7 +370,7 @@ export function ExpertAnalytics() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
             {(["chat", "video", "warroom"] as const).map(type => {
               const typeInteractions = interactions.filter(
                 i => i.type === type

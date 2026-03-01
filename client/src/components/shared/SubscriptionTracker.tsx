@@ -387,7 +387,7 @@ export default function SubscriptionTracker() {
   return (
     <div className="space-y-6">
       {/* Summary Cards */}
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <Card className="bg-gray-900/50 border-gray-800">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
@@ -598,7 +598,7 @@ export default function SubscriptionTracker() {
       </Card>
 
       {/* Main Content */}
-      <div className="grid grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         {/* Subscriptions List */}
         <Card className="bg-gray-900/50 border-gray-800 col-span-2">
           <CardHeader className="flex flex-row items-center justify-between">
@@ -661,7 +661,7 @@ export default function SubscriptionTracker() {
                       className="bg-gray-800 border-gray-700 text-white"
                     />
                   </div>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label className="text-white">Cost (£) *</Label>
                       <Input
@@ -703,7 +703,7 @@ export default function SubscriptionTracker() {
                       </Select>
                     </div>
                   </div>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label className="text-white">Category</Label>
                       <Select

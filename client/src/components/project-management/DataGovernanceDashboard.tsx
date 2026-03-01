@@ -252,7 +252,7 @@ export function DataGovernanceDashboard() {
         </div>
 
         {/* Quick Stats */}
-        <div className="grid grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="bg-gray-800/50 rounded-xl p-4">
             <div className="flex items-center gap-2 text-muted-foreground mb-1">
               <Database className="w-4 h-4" />
@@ -495,7 +495,7 @@ export function DataGovernanceDashboard() {
               </div>
             </div>
 
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
               {Object.entries(accessLevelConfig).map(([level, config]) => {
                 const Icon = config.icon;
                 const count = dataCategories.filter(

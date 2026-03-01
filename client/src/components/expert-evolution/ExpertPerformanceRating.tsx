@@ -130,7 +130,7 @@ export function ExpertPerformanceRating({
       </div>
 
       {/* Metrics grid */}
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         {/* Success rate */}
         <div className="bg-secondary/30 rounded-lg p-3 border border-border">
           <div className="flex items-center gap-2 mb-1">

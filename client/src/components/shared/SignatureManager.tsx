@@ -413,7 +413,7 @@ export function SignatureManager({
               placeholder="Type your name..."
               className="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary"
             />
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {fonts.map(font => (
                 <button
                   key={font.value}

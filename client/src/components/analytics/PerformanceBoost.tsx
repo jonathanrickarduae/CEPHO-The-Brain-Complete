@@ -61,7 +61,7 @@ export function PerformanceBoost() {
 
       {/* Quick Boost Options */}
       <p className="text-sm text-muted-foreground mb-3">15 mins to boost:</p>
-      <div className="grid grid-cols-2 gap-2">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
         {BOOST_OPTIONS.map(option => {
           const Icon = option.icon;
           const isSelected = selectedBoost === option.id;

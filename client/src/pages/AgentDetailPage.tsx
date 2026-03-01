@@ -287,7 +287,7 @@ export default function AgentDetailPage() {
             <div className="space-y-6">
               <div>
                 <h3 className="text-lg font-bold mb-2">Agent Information</h3>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <div className="text-sm text-gray-600 dark:text-gray-400">
                       Category

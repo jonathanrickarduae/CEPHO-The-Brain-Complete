@@ -457,7 +457,7 @@ export function IdeaScoringDashboard({
           </div>
         </div>
 
-        <div className="grid grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
           {/* Ideas List */}
           <div className="col-span-2 space-y-4">
             {filteredIdeas.map(idea => {
@@ -545,7 +545,7 @@ export function IdeaScoringDashboard({
                     </p>
 
                     {/* Impact/Effort Matrix */}
-                    <div className="grid grid-cols-2 gap-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       <div className="bg-white/5 rounded-lg p-3">
                         <p className="text-xs text-foreground/60 mb-1">
                           Impact
@@ -658,7 +658,7 @@ export function IdeaScoringDashboard({
                     <p className="text-xs text-foreground/60 mb-3">
                       Leadership Decision
                     </p>
-                    <div className="grid grid-cols-3 gap-2">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
                       <Button
                         onClick={() =>
                           updateIdeaStatus(selectedIdea.id, "approved")

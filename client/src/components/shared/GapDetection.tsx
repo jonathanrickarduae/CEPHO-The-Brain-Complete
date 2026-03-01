@@ -284,7 +284,7 @@ export function GapDetection({
           </div>
 
           {/* Quick Stats */}
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
             <div className="p-3 bg-gray-800/50 rounded-lg text-center">
               <div className="text-2xl font-bold text-green-400">
                 {analysis.covered.length}

@@ -206,7 +206,7 @@ export function DigitalTwinSandbox() {
         </div>
 
         {/* Quick Stats */}
-        <div className="grid grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="bg-gray-800/50 rounded-xl p-4">
             <div className="flex items-center gap-2 text-muted-foreground mb-1">
               <BarChart3 className="w-4 h-4" />

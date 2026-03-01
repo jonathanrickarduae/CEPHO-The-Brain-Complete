@@ -533,7 +533,7 @@ export function BatchVerificationPanel({
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-3 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
           <div className="text-center p-2 rounded-lg bg-green-500/10">
             <div className="text-lg font-bold text-green-500">
               {approvedCount}
@@ -756,7 +756,7 @@ export function TruthVerificationSummary({
           <span className="text-sm font-medium text-foreground mb-2 block">
             By Classification
           </span>
-          <div className="grid grid-cols-5 gap-2">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2">
             {(
               Object.entries(byClassification) as [
                 StatementClassification,
@@ -785,7 +785,7 @@ export function TruthVerificationSummary({
           <span className="text-sm font-medium text-foreground mb-2 block">
             By Confidence
           </span>
-          <div className="grid grid-cols-4 gap-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
             {(Object.entries(byConfidence) as [ConfidenceLevel, number][]).map(
               ([conf, count]) => (
                 <div

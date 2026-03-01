@@ -313,7 +313,7 @@ export function SecureStorageDashboard() {
           </div>
 
           {/* Quick Stats */}
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
             <div className="p-4 bg-green-50 rounded-lg text-center">
               <p className="text-2xl font-bold text-green-600">
                 {securityScore}%

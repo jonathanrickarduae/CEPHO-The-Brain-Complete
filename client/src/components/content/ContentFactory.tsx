@@ -240,7 +240,7 @@ export function ContentFactory({ onContentCreate }: ContentFactoryProps) {
         </CardHeader>
         <CardContent className="space-y-6">
           {/* Platform & Type Selection */}
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label>Platform</Label>
               <Select
@@ -441,7 +441,7 @@ export function ContentFactory({ onContentCreate }: ContentFactoryProps) {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
             {platformIntelligence[selectedPlatform].contentTypes
               .slice(0, 3)
               .map((type, i) => (

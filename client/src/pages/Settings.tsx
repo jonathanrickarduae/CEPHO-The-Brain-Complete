@@ -340,7 +340,7 @@ export default function Settings() {
                       <div className="font-medium text-white mb-3">
                         Schedule Quiet Hours
                       </div>
-                      <div className="grid grid-cols-2 gap-4">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                           <label className="text-sm text-foreground/70 block mb-1">
                             Start Time

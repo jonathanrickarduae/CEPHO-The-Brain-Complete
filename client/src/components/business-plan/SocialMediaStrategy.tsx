@@ -261,7 +261,7 @@ export function SocialMediaStrategy({
 
             <div className="space-y-2">
               <Label>Select Platforms</Label>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {platforms.map(platform => (
                   <div
                     key={platform}

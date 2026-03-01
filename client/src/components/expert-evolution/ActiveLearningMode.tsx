@@ -211,7 +211,7 @@ export function ActiveLearningMode() {
           </div>
 
           {isActive && (
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
               <div className="text-center p-3 bg-background/50 rounded-lg">
                 <div className="text-2xl font-bold text-foreground">
                   {Math.round(totalProductiveTime / 60)}h{" "}

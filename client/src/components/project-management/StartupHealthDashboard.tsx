@@ -183,7 +183,7 @@ function StartupCard({ startup }: { startup: StartupMetrics }) {
       </CardHeader>
       <CardContent className="space-y-4">
         {/* Key Metrics Grid */}
-        <div className="grid grid-cols-3 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
           <div className="bg-gray-800/50 rounded-lg p-3">
             <div className="flex items-center gap-2 text-foreground/70 text-xs mb-1">
               <DollarSign className="h-3 w-3" />
@@ -342,7 +342,7 @@ export default function StartupHealthDashboard({
                   className="bg-gray-800 border-gray-700"
                 />
               </div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <Label>Monthly Burn ($)</Label>
                   <Input
@@ -360,7 +360,7 @@ export default function StartupHealthDashboard({
                   />
                 </div>
               </div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <Label>Team Size</Label>
                   <Input

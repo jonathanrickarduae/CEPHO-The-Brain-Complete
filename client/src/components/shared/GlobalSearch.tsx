@@ -356,7 +356,7 @@ export function GlobalSearch({
                 <p className="text-xs text-muted-foreground mb-2">
                   Quick Actions
                 </p>
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   {[
                     { label: "New task", icon: Hash, path: "/review-queue" },
                     {

@@ -360,7 +360,7 @@ export default function InnovationHub() {
         </div>
 
         {/* Stats Row */}
-        <div className="grid grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <Card className="bg-card/50 border-border/50">
             <CardContent className="p-4 flex items-center gap-4">
               <div className="p-3 rounded-lg bg-yellow-500/20">
@@ -422,7 +422,7 @@ export default function InnovationHub() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="flex items-center justify-between px-8 py-4">
+            <div className="flex items-center justify-between px-4 md:px-8 py-4">
               {FLYWHEEL_STAGES.map((stage, index) => (
                 <div key={stage.id} className="flex items-center">
                   <div className="flex flex-col items-center">
@@ -452,7 +452,7 @@ export default function InnovationHub() {
         </Card>
 
         {/* Main Content */}
-        <div className="grid grid-cols-5 gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6">
           {/* Ideas List */}
           <div className="col-span-2">
             <Card className="bg-card/50 border-border/50 h-full">
@@ -679,7 +679,7 @@ export default function InnovationHub() {
                           </Button>
                         </div>
                       ) : (
-                        <div className="grid grid-cols-3 gap-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                           {selectedIdeaData.scenarios.map(scenario => (
                             <Card
                               key={scenario.id}

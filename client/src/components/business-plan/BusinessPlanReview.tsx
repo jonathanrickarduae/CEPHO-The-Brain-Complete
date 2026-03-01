@@ -2087,7 +2087,7 @@ export function BusinessPlanReview({
                             <h4 className="text-sm font-medium text-foreground mb-2">
                               Section Scores Comparison
                             </h4>
-                            <div className="grid grid-cols-2 gap-2">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                               {Object.entries(
                                 (versionByIdQuery.data.sectionScores as Record<
                                   string,

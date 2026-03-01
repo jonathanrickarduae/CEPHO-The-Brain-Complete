@@ -258,7 +258,7 @@ export function FinancialHealthDashboard() {
 
       {/* Overview Tab */}
       {activeTab === "overview" && (
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Card className="bg-card/60 border-border">
             <CardContent className="p-4 text-center">
               <div className="text-2xl font-bold text-foreground">

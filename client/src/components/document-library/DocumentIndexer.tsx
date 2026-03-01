@@ -249,7 +249,7 @@ export function DocumentIndexer() {
             </div>
           )}
 
-          <div className="grid grid-cols-5 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
             <div className="text-center">
               <div className="text-xl font-bold text-foreground">
                 {stats.totalDocuments}

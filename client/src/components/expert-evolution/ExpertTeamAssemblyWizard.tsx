@@ -404,7 +404,7 @@ export function ExpertTeamAssemblyWizard({
               )}
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {TEAM_TEMPLATES.map(template => (
                 <button
                   key={template.id}
@@ -495,7 +495,7 @@ export function ExpertTeamAssemblyWizard({
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="grid grid-cols-2 gap-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       {categoryRoles.map(role => {
                         const isSelected = selectedRoles.includes(role.id);
                         return (
@@ -575,7 +575,7 @@ export function ExpertTeamAssemblyWizard({
 
             <Card className="bg-white/5 border-white/10">
               <CardContent className="pt-6">
-                <div className="grid grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                   {selectedExperts.map(expert => {
                     const role = EXPERT_ROLES.find(r => r.id === expert.roleId);
                     return (

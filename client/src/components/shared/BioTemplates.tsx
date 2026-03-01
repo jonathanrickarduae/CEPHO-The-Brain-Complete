@@ -302,7 +302,7 @@ export function BioTemplates({ onGenerate }: BioTemplatesProps) {
                 <Label className="text-sm text-muted-foreground">
                   Your Information
                 </Label>
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <Input
                     placeholder="Your Name"
                     value={inputs.name}

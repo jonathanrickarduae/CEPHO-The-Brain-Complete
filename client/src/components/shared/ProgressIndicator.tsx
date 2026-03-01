@@ -235,7 +235,7 @@ export function DigitalTwinTrainingProgress({
       </div>
 
       {/* Stats grid */}
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         <div className="bg-background rounded-lg p-3 text-center">
           <Sparkles className="w-5 h-5 text-yellow-400 mx-auto mb-1" />
           <div className="text-lg font-bold text-foreground">

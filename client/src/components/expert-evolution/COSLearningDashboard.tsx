@@ -393,7 +393,7 @@ export function COSLearningDashboard() {
             <p className="text-sm text-muted-foreground mb-3">
               Learning Milestones ({milestonesCompleted}/{totalMilestones})
             </p>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {Object.entries(progress.milestones).map(([key, achieved]) => (
                 <div
                   key={key}

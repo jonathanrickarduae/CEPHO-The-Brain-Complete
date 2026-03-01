@@ -1056,7 +1056,7 @@ export default function ChiefOfStaff() {
 
               {/* Scores */}
               {(selectedTask.cosScore || selectedTask.secondaryAIScore) && (
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {selectedTask.cosScore && (
                     <div className="p-4 bg-secondary/30 rounded-xl">
                       <p className="text-sm text-muted-foreground mb-1">

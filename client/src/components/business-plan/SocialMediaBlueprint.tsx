@@ -313,7 +313,7 @@ export function SocialMediaBlueprint() {
               <Target className="w-5 h-5 text-purple-400" />
               Campaign Goals (from Project Genesis)
             </h3>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {campaignGoals.map(goal => (
                 <div
                   key={goal.id}
@@ -347,7 +347,7 @@ export function SocialMediaBlueprint() {
           </div>
 
           {/* Strategy Overview */}
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
             <div className="p-4 bg-card/50 rounded-xl border border-white/10">
               <h4 className="font-medium text-foreground mb-3 flex items-center gap-2">
                 <Users className="w-4 h-4 text-cyan-400" />
@@ -441,7 +441,7 @@ export function SocialMediaBlueprint() {
 
                 {isExpanded && intel && (
                   <div className="p-4 border-t border-white/10 bg-black/20">
-                    <div className="grid grid-cols-2 gap-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                       {/* Algorithm Insights */}
                       <div>
                         <h5 className="font-medium text-foreground mb-3 flex items-center gap-2">
@@ -648,7 +648,7 @@ export function SocialMediaBlueprint() {
 
       {/* Analytics Tab */}
       {activeTab === "analytics" && (
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="p-4 bg-card/50 rounded-xl border border-white/10">
             <h4 className="font-medium text-foreground mb-4 flex items-center gap-2">
               <TrendingUp className="w-4 h-4 text-emerald-400" />

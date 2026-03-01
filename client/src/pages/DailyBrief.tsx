@@ -391,7 +391,7 @@ export default function DailyBrief() {
         window.open(result.audioUrl, "_blank");
         toast.success("Audio generated successfully!");
       }
-    } catch (error) {
+    } catch {
       toast.error(`Failed to generate ${format}. Please try again.`);
     }
   };
@@ -593,7 +593,7 @@ export default function DailyBrief() {
         <div className="max-w-7xl mx-auto px-4 md:px-6 py-4">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
+              <h1 className="text-xl md:text-3xl font-bold text-foreground flex items-center gap-3">
                 <Zap className="h-8 w-8 text-blue-400" />
                 Victoria's Briefing
               </h1>
@@ -727,7 +727,7 @@ export default function DailyBrief() {
                           }}
                         />
                         {liveBrief.stats && (
-                          <div className="flex gap-4 mt-3 text-xs text-muted-foreground">
+                          <div className="flex flex-wrap gap-2 md:gap-4 mt-3 text-xs text-muted-foreground">
                             <span className="flex items-center gap-1"><CheckCircle2 className="w-3 h-3 text-primary" /> {liveBrief.stats.activeProjects} active projects</span>
                             <span className="flex items-center gap-1"><Clock className="w-3 h-3 text-yellow-400" /> {liveBrief.stats.pendingTasks} pending tasks</span>
                             {liveBrief.stats.highPriorityTasks > 0 && (
@@ -749,7 +749,7 @@ export default function DailyBrief() {
                       </p>
                     )}
 
-                    <div className="flex gap-2">
+                    <div className="flex flex-wrap gap-2">
                       <Button
                         size="lg"
                         className="bg-primary hover:bg-primary/90 shadow-lg shadow-primary/30 text-base"

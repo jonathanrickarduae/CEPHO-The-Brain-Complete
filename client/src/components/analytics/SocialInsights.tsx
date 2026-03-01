@@ -252,7 +252,7 @@ export function SocialInsights({
             </div>
 
             {/* Quick Stats */}
-            <div className="grid grid-cols-4 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
               <div className="bg-background/50 rounded-lg p-3 text-center">
                 <div className="text-2xl font-bold text-foreground">
                   {selectedContact.interactionCount}

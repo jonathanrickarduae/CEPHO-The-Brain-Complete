@@ -126,7 +126,7 @@ export function TeamCapabilityMatrix() {
               <DialogTitle>Add Team Capability</DialogTitle>
             </DialogHeader>
             <div className="space-y-4 mt-4">
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <Label>Team Member *</Label>
                   <Input
@@ -154,7 +154,7 @@ export function TeamCapabilityMatrix() {
                   />
                 </div>
               </div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <Label>Skill Category</Label>
                   <Select
