@@ -1,3 +1,4 @@
+import { PageShell } from "@/components/layout/PageShell";
 import { useState, useEffect } from "react";
 import { useSearch } from "wouter";
 import {
@@ -269,18 +270,13 @@ export default function Settings() {
   };
 
   return (
-    <div className="p-4 md:p-6 overflow-auto">
+    <PageShell
+      icon={Settings2}
+      iconClass="bg-slate-500/15 text-slate-400"
+      title="Settings"
+      subtitle="Manage your account and preferences"
+    >
       <div className="max-w-6xl mx-auto">
-        {/* Header */}
-        <div className="mb-6">
-          <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
-            <Settings2 className="h-8 w-8 text-slate-400" />
-            Settings
-          </h1>
-          <p className="text-muted-foreground mt-1">
-            Manage your account and preferences
-          </p>
-        </div>
 
         <div className="flex flex-col lg:flex-row gap-6">
           {/* Sidebar */}
@@ -795,6 +791,6 @@ export default function Settings() {
           </div>
         </div>
       </div>
-    </div>
+    </PageShell>
   );
 }

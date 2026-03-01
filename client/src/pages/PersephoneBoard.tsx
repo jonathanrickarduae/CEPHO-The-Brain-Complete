@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import { PageShell } from "@/components/layout/PageShell";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -401,19 +402,13 @@ export default function PersephoneBoard() {
   const ActiveIcon = activeMember?.icon;
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <div className="border-b border-border px-4 sm:px-6 py-4">
-        <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground flex items-center gap-3">
-          <Users className="h-6 w-6 sm:h-8 sm:w-8 text-purple-400" />
-          Persephone Board
-        </h1>
-        <p className="text-sm sm:text-base text-muted-foreground mt-1">
-          Virtual Board of 14 Top AI Leaders — Strategic Oversight &amp; Industry Guidance
-        </p>
-      </div>
-
-      <div className="p-4 sm:p-6 space-y-6">
+    <PageShell
+      icon={Users}
+      iconClass="bg-purple-500/15 text-purple-400"
+      title="Persephone Board"
+      subtitle="Virtual Board of 14 Top AI Leaders — Strategic Oversight & Industry Guidance"
+    >
+      <div className="space-y-5">
         {/* Board Overview Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <Card className="border-purple-500/30 bg-gradient-to-br from-purple-500/10 to-background">
@@ -653,7 +648,6 @@ export default function PersephoneBoard() {
             </CardContent>
           </Card>
         </div>
-      </div>
 
       {/* ─── Consultation Modal ─────────────────────────────────────────────── */}
       <Dialog open={consultingMember !== null} onOpenChange={open => { if (!open) handleCloseConsultation(); }}>
@@ -772,6 +766,7 @@ export default function PersephoneBoard() {
           )}
         </DialogContent>
       </Dialog>
-    </div>
+      </div>
+    </PageShell>
   );
 }

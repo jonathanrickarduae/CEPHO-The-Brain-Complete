@@ -46,6 +46,7 @@ import {
   Brain,
   Users,
 } from "lucide-react";
+import { PageShell } from "@/components/layout/PageShell";
 
 // Flywheel stages
 const FLYWHEEL_STAGES = [
@@ -230,20 +231,12 @@ export default function InnovationHub() {
   }), [ideas]);
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <div className="border-b border-border px-4 sm:px-6 py-4">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground flex items-center gap-3">
-              <Sparkles className="h-6 w-6 sm:h-8 sm:w-8 text-[var(--brain-cyan)]" />
-              Innovation Hub
-            </h1>
-            <p className="text-sm sm:text-base text-muted-foreground mt-1">
-              Capture, assess, and refine ideas through the strategic flywheel
-            </p>
-          </div>
-          <div className="flex gap-3">
+    <PageShell
+      icon={Sparkles}
+      iconClass="bg-cyan-500/15 text-cyan-400"
+      title="Innovation Hub"
+      subtitle="Capture, assess, and refine ideas through the strategic flywheel"
+      actions={<div className="flex gap-2">
             <Button
               variant="outline"
               className="gap-2"
@@ -356,9 +349,9 @@ export default function InnovationHub() {
               </DialogContent>
             </Dialog>
           </div>
-        </div>
-      </div>
-      <div className="p-4 sm:p-6 space-y-6">
+        }
+      >
+        <div className="space-y-5">
 
         {/* Stats Row */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -841,7 +834,7 @@ export default function InnovationHub() {
             )}
           </div>
         </div>
-      </div>
-    </div>
+        </div>
+    </PageShell>
   );
 }

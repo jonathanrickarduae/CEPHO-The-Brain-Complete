@@ -15,6 +15,7 @@ import {
   PersonalAnalytics,
 } from "@/components/analytics/PersonalAnalytics";
 import { CollapsibleSection } from "@/components/shared/CollapsibleSection";
+import { PageShell } from "@/components/layout/PageShell";
 
 export default function Statistics() {
   const kpis = [
@@ -77,18 +78,13 @@ export default function Statistics() {
   ];
 
   return (
-    <div className="p-4 md:p-6 overflow-auto">
-      <div className="max-w-6xl mx-auto">
-        {/* Header */}
-        <div className="mb-6">
-          <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
-            <BarChart3 className="h-8 w-8 text-primary" />
-            Analytics
-          </h1>
-          <p className="text-muted-foreground mt-1">
-            Personal performance metrics and system evolution
-          </p>
-        </div>
+    <PageShell
+      icon={BarChart3}
+      iconClass="bg-green-500/15 text-green-400"
+      title="Analytics"
+      subtitle="Personal performance metrics and system evolution"
+    >
+      <div className="max-w-6xl mx-auto space-y-5">
 
         {/* Personal Analytics Section */}
         <CollapsibleSection
@@ -257,6 +253,6 @@ export default function Statistics() {
           </div>
         </div>
       </div>
-    </div>
+    </PageShell>
   );
 }

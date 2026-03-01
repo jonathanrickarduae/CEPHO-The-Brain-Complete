@@ -1,27 +1,22 @@
 // @ts-nocheck
 import { useState } from "react";
 import { Link } from "wouter";
-import {
-  Bot,
-} from "lucide-react";
+import { Bot, RefreshCw } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import AIAgentsVideo from "@/components/ai-agents/AIAgentsVideo";
 import { trpc } from "@/lib/trpc";
-
+import { PageShell } from "@/components/layout/PageShell";
 
 export default function AIAgentsPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
-  const [sortBy, setSortBy] = useState<"name" | "performance" | "tasks">(
-    "performance"
-  );
+  const [sortBy, setSortBy] = useState<"name" | "performance" | "tasks">("performance");
 
-  // Use tRPC to fetch agents and stats with error handling
   const {
     data: agentsData,
     isLoading: agentsLoading,
     error: agentsError,
-  } = trpc.aiAgentsMonitoring.getAllStatus.useQuery(undefined, {
-    retry: false,
-  });
+    refetch,
+  } = trpc.aiAgentsMonitoring.getAllStatus.useQuery(undefined, { retry: false });
 
   const agents = agentsData?.agents || [];
   const stats = agentsData
@@ -30,55 +25,31 @@ export default function AIAgentsPage() {
         activeAgents: agentsData.activeAgents,
         avgPerformance:
           agents.length > 0
-            ? agents.reduce((sum, a) => sum + a.performanceRating, 0) /
-              agents.length
+            ? agents.reduce((sum, a) => sum + a.performanceRating, 0) / agents.length
             : 0,
-        totalTasksCompleted: agents.reduce(
-          (sum, a) => sum + a.tasksCompleted,
-          0
-        ),
+        totalTasksCompleted: agents.reduce((sum, a) => sum + a.tasksCompleted, 0),
         pendingReports: 0,
         pendingApprovals: 0,
       }
     : null;
-  const loading = agentsLoading;
-  const hasError = agentsError;
 
-  const categories = [
-    "all",
-    "communication",
-    "content",
-    "analysis",
-    "operations",
-    "strategy",
-    "workflow",
-    "learning",
-  ];
+  const categories = ["all", "communication", "content", "analysis", "operations", "strategy", "workflow", "learning"];
 
   const filteredAgents = agents
-    .filter(
-      agent => selectedCategory === "all" || agent.category === selectedCategory
-    )
+    .filter(agent => selectedCategory === "all" || agent.category === selectedCategory)
     .sort((a, b) => {
       if (sortBy === "name") return a.name.localeCompare(b.name);
-      if (sortBy === "performance")
-        return b.performanceRating - a.performanceRating;
+      if (sortBy === "performance") return b.performanceRating - a.performanceRating;
       if (sortBy === "tasks") return b.tasksCompleted - a.tasksCompleted;
       return 0;
     });
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "active":
-        return "bg-green-500";
-      case "learning":
-        return "bg-primary";
-      case "idle":
-        return "bg-yellow-500";
-      case "offline":
-        return "bg-gray-500";
-      default:
-        return "bg-gray-500";
+      case "active":   return "bg-green-500";
+      case "learning": return "bg-primary";
+      case "idle":     return "bg-yellow-500";
+      default:         return "bg-gray-500";
     }
   };
 
@@ -89,16 +60,24 @@ export default function AIAgentsPage() {
     return "text-red-400";
   };
 
-  if (loading) {
-    return (
-      <div className="p-4 sm:p-6 space-y-6">
-        <div className="flex items-center justify-between border-b pb-4">
-          <div className="h-8 w-48 bg-muted rounded animate-pulse" />
-          <div className="h-9 w-32 bg-muted rounded animate-pulse" />
-        </div>
+  return (
+    <PageShell
+      icon={Bot}
+      iconClass="bg-purple-500/15 text-purple-400"
+      title="AI Agents Dashboard"
+      subtitle={`${agents.length || 50} specialised agents · ${stats?.activeAgents ?? 0} active`}
+      actions={
+        <Button variant="outline" size="sm" onClick={() => refetch()} className="gap-1.5">
+          <RefreshCw className="w-3.5 h-3.5" />
+          Refresh
+        </Button>
+      }
+    >
+      {/* Loading skeleton */}
+      {agentsLoading && (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {Array.from({ length: 8 }).map((_, i) => (
-            <div key={i} className="rounded-lg border bg-card p-4 space-y-3 animate-pulse">
+            <div key={i} className="rounded-xl border bg-card p-4 space-y-3 animate-pulse">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-muted" />
                 <div className="space-y-1 flex-1">
@@ -106,185 +85,140 @@ export default function AIAgentsPage() {
                   <div className="h-3 w-1/2 bg-muted rounded" />
                 </div>
               </div>
-              <div className="h-3 w-full bg-muted rounded" />
+              <div className="h-2 w-full bg-muted rounded-full" />
               <div className="h-3 w-2/3 bg-muted rounded" />
-              <div className="flex gap-2 pt-1">
-                <div className="h-6 w-16 bg-muted rounded-full" />
-                <div className="h-6 w-20 bg-muted rounded-full" />
-              </div>
             </div>
           ))}
         </div>
-      </div>
-    );
-  }
+      )}
 
-  if (hasError) {
-    return (
-      <div className="flex items-center justify-center min-h-[60vh]">
-        <div className="text-center">
-          <div className="text-xl text-destructive mb-4">
-            Failed to load AI Agents
+      {/* Error state */}
+      {agentsError && !agentsLoading && (
+        <div className="flex flex-col items-center justify-center py-16 text-center gap-3">
+          <div className="p-3 rounded-full bg-destructive/10">
+            <Bot className="w-8 h-8 text-destructive" />
           </div>
-          <p className="text-muted-foreground">
-            The AI Agents monitoring system is currently unavailable.
+          <p className="text-base font-medium text-foreground">Failed to load AI Agents</p>
+          <p className="text-sm text-muted-foreground max-w-sm">
+            The AI Agents monitoring system is currently unavailable. This is usually resolved by refreshing.
           </p>
-          <p className="text-sm text-muted-foreground mt-2">
-            Please try again later or contact support.
-          </p>
+          <Button variant="outline" size="sm" onClick={() => refetch()} className="gap-1.5 mt-2">
+            <RefreshCw className="w-3.5 h-3.5" />
+            Try Again
+          </Button>
         </div>
-      </div>
-    );
-  }
+      )}
 
-  return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <div className="border-b border-border px-4 sm:px-6 py-4">
-        <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground flex items-center gap-3">
-          <Bot className="h-6 w-6 sm:h-8 sm:w-8 text-purple-400" />
-          AI Agents Dashboard
-        </h1>
-        <p className="text-sm sm:text-base text-muted-foreground mt-1">
-          Monitor and manage your 50 specialized AI agents
-        </p>
-      </div>
+      {/* Content */}
+      {!agentsLoading && !agentsError && (
+        <div className="space-y-5">
+          {/* Video */}
+          <AIAgentsVideo />
 
-      <div className="p-4 sm:p-6 space-y-6">
-        {/* Educational Video Section */}
-        <AIAgentsVideo />
+          {/* Stats row */}
+          {stats && (
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+              {[
+                { label: "Total Agents",      value: stats.totalAgents,                   color: "text-foreground" },
+                { label: "Active",            value: stats.activeAgents,                  color: "text-green-400" },
+                { label: "Avg Performance",   value: `${Math.round(stats.avgPerformance)}/100`, color: "text-blue-400" },
+                { label: "Tasks Completed",   value: stats.totalTasksCompleted,           color: "text-foreground" },
+                { label: "Pending Reports",   value: stats.pendingReports,                color: "text-yellow-400" },
+                { label: "Pending Approvals", value: stats.pendingApprovals,              color: "text-orange-400" },
+              ].map(s => (
+                <div key={s.label} className="bg-card rounded-xl p-3 border border-border">
+                  <div className="text-xs text-muted-foreground mb-1">{s.label}</div>
+                  <div className={`text-xl font-bold ${s.color}`}>{s.value}</div>
+                </div>
+              ))}
+            </div>
+          )}
 
-        {/* Stats Overview */}
-        {stats && (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-            <div className="bg-card rounded-lg p-4 border border-border">
-              <div className="text-sm text-muted-foreground">Total Agents</div>
-              <div className="text-2xl font-bold text-foreground">{stats.totalAgents}</div>
-            </div>
-            <div className="bg-card rounded-lg p-4 border border-border">
-              <div className="text-sm text-muted-foreground">Active</div>
-              <div className="text-2xl font-bold text-green-400">{stats.activeAgents}</div>
-            </div>
-            <div className="bg-card rounded-lg p-4 border border-border">
-              <div className="text-sm text-muted-foreground">Avg Performance</div>
-              <div className="text-2xl font-bold text-blue-400">
-                {Math.round(stats.avgPerformance)}/100
-              </div>
-            </div>
-            <div className="bg-card rounded-lg p-4 border border-border">
-              <div className="text-sm text-muted-foreground">Tasks Completed</div>
-              <div className="text-2xl font-bold text-foreground">{stats.totalTasksCompleted}</div>
-            </div>
-            <div className="bg-card rounded-lg p-4 border border-border">
-              <div className="text-sm text-muted-foreground">Pending Reports</div>
-              <div className="text-2xl font-bold text-yellow-400">{stats.pendingReports}</div>
-            </div>
-            <div className="bg-card rounded-lg p-4 border border-border">
-              <div className="text-sm text-muted-foreground">Pending Approvals</div>
-              <div className="text-2xl font-bold text-orange-400">{stats.pendingApprovals}</div>
-            </div>
-          </div>
-        )}
-
-        {/* Filters */}
-        <div className="bg-card rounded-lg p-4 border border-border">
-          <div className="flex flex-wrap gap-4 items-center">
-            <div>
-              <label className="text-sm font-medium text-foreground mr-2">Category:</label>
+          {/* Filters */}
+          <div className="flex flex-wrap gap-3 items-center bg-card rounded-xl p-3 border border-border">
+            <div className="flex items-center gap-2">
+              <label className="text-xs font-medium text-muted-foreground">Category</label>
               <select
                 value={selectedCategory}
                 onChange={e => setSelectedCategory(e.target.value)}
-                className="px-3 py-2 border border-border rounded-lg bg-background text-foreground"
+                className="text-sm px-2 py-1.5 border border-border rounded-lg bg-background text-foreground"
               >
                 {categories.map(cat => (
-                  <option key={cat} value={cat}>
-                    {cat.charAt(0).toUpperCase() + cat.slice(1)}
-                  </option>
+                  <option key={cat} value={cat}>{cat.charAt(0).toUpperCase() + cat.slice(1)}</option>
                 ))}
               </select>
             </div>
-            <div>
-              <label className="text-sm font-medium text-foreground mr-2">Sort by:</label>
+            <div className="flex items-center gap-2">
+              <label className="text-xs font-medium text-muted-foreground">Sort by</label>
               <select
                 value={sortBy}
-                onChange={e => setSortBy(e.target.value as "name" | "performance" | "tasks")}
-                className="px-3 py-2 border border-border rounded-lg bg-background text-foreground"
+                onChange={e => setSortBy(e.target.value as any)}
+                className="text-sm px-2 py-1.5 border border-border rounded-lg bg-background text-foreground"
               >
                 <option value="performance">Performance</option>
                 <option value="tasks">Tasks Completed</option>
                 <option value="name">Name</option>
               </select>
             </div>
+            <span className="ml-auto text-xs text-muted-foreground">{filteredAgents.length} agents</span>
           </div>
-        </div>
 
-        {/* Agents Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-          {filteredAgents.map(agent => (
-            <Link key={agent.id} href={`/agents/${agent.id}`}>
-              <div className="bg-card rounded-lg p-6 border border-border hover:border-primary/50 hover:shadow-lg transition-all cursor-pointer">
-                {/* Agent Header */}
-                <div className="flex items-start justify-between mb-4">
-                  <div className="flex-1">
-                    <h3 className="text-lg font-bold text-foreground mb-1">{agent.name}</h3>
-                    <p className="text-sm text-muted-foreground">{agent.specialization}</p>
+          {/* Agents grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {filteredAgents.map(agent => (
+              <Link key={agent.id} href={`/agents/${agent.id}`}>
+                <div className="bg-card rounded-xl p-4 border border-border hover:border-primary/40 hover:shadow-md transition-all cursor-pointer card-interactive">
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-sm font-semibold text-foreground truncate">{agent.name}</h3>
+                      <p className="text-xs text-muted-foreground truncate">{agent.specialization}</p>
+                    </div>
+                    <div className={`w-2.5 h-2.5 rounded-full shrink-0 mt-1 ml-2 ${getStatusColor(agent.status)}`} />
                   </div>
-                  <div className={`w-3 h-3 rounded-full ${getStatusColor(agent.status)}`} />
-                </div>
 
-                {/* Performance Rating */}
-                <div className="mb-4">
-                  <div className="flex justify-between items-center mb-1">
-                    <span className="text-sm font-medium text-foreground">Performance</span>
-                    <span className={`text-sm font-bold ${getPerformanceColor(agent.performanceRating)}`}>
-                      {agent.performanceRating}/100
-                    </span>
+                  <div className="mb-3">
+                    <div className="flex justify-between items-center mb-1">
+                      <span className="text-xs text-muted-foreground">Performance</span>
+                      <span className={`text-xs font-bold ${getPerformanceColor(agent.performanceRating)}`}>
+                        {agent.performanceRating}/100
+                      </span>
+                    </div>
+                    <div className="w-full bg-muted rounded-full h-1.5">
+                      <div
+                        className="bg-primary h-1.5 rounded-full transition-all"
+                        style={{ width: `${agent.performanceRating}%` }}
+                      />
+                    </div>
                   </div>
-                  <div className="w-full bg-muted rounded-full h-2">
-                    <div
-                      className="bg-primary h-2 rounded-full transition-all"
-                      style={{ width: `${agent.performanceRating}%` }}
-                    />
-                  </div>
-                </div>
 
-                {/* Stats */}
-                <div className="grid grid-cols-2 gap-4 text-sm">
-                  <div>
-                    <div className="text-muted-foreground">Success Rate</div>
-                    <div className="font-bold text-foreground">{agent.successRate}%</div>
+                  <div className="grid grid-cols-2 gap-2 text-xs">
+                    <div>
+                      <div className="text-muted-foreground">Success Rate</div>
+                      <div className="font-semibold text-foreground">{agent.successRate}%</div>
+                    </div>
+                    <div>
+                      <div className="text-muted-foreground">Tasks Done</div>
+                      <div className="font-semibold text-foreground">{agent.tasksCompleted}</div>
+                    </div>
                   </div>
-                  <div>
-                    <div className="text-muted-foreground">Tasks Done</div>
-                    <div className="font-bold text-foreground">{agent.tasksCompleted}</div>
-                  </div>
-                  <div>
-                    <div className="text-muted-foreground">Avg Response</div>
-                    <div className="font-bold text-foreground">{agent.avgResponseTime}ms</div>
-                  </div>
-                  <div>
-                    <div className="text-muted-foreground">Category</div>
-                    <div className="font-bold text-foreground capitalize">{agent.category}</div>
+
+                  <div className="mt-3 pt-3 border-t border-border/50">
+                    <div className="text-xs text-muted-foreground">
+                      Last active: {new Date(agent.lastActive).toLocaleString()}
+                    </div>
                   </div>
                 </div>
-
-                {/* Last Active */}
-                <div className="mt-4 pt-4 border-t border-border">
-                  <div className="text-xs text-muted-foreground">
-                    Last active: {new Date(agent.lastActive).toLocaleString()}
-                  </div>
-                </div>
-              </div>
-            </Link>
-          ))}
-        </div>
-
-        {filteredAgents.length === 0 && (
-          <div className="text-center py-6 text-muted-foreground">
-            No agents found in this category
+              </Link>
+            ))}
           </div>
-        )}
-      </div>
-    </div>
+
+          {filteredAgents.length === 0 && (
+            <div className="text-center py-8 text-muted-foreground text-sm">
+              No agents found in this category
+            </div>
+          )}
+        </div>
+      )}
+    </PageShell>
   );
 }

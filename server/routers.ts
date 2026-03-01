@@ -39,6 +39,7 @@ import { subscriptionTrackerRouter as subscriptionTrackerRealRouter } from "./ro
 import { projectGenesisRouter as projectGenesisRealRouter } from "./routers/projectGenesis.router";
 import { documentLibraryRouter as documentLibraryRealRouter } from "./routers/documentLibrary.router";
 import { workflowsRouter as workflowsRealRouter } from "./routers/workflows.router";
+import { cosTrainingRouter } from "./routers/cosTraining.router";
 import {
   businessPlanReviewRouter as businessPlanReviewRealRouter,
   collaborativeReviewRouter as collaborativeReviewRealRouter,
@@ -168,6 +169,7 @@ export const appRouter = router({
   genesis: genesisRealRouter,
   projectGenesis: projectGenesisRealRouter,
   optimization: optimizationRealRouter,
+  cosTraining: cosTrainingRouter,
 });
 
 export type AppRouter = typeof appRouter;

@@ -1,5 +1,6 @@
 // @ts-nocheck
 import { useState , useMemo } from "react";
+import { PageShell } from "@/components/layout/PageShell";
 import { trpc } from "@/lib/trpc";
 import {
   Card,
@@ -448,57 +449,27 @@ export default function DocumentLibrary() {
     }
   };
 
-  if (error) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <Card className="max-w-md">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-red-500">
-              <AlertTriangle className="w-6 h-6" />
-              Failed to load Document Library
-            </CardTitle>
-            <CardDescription>
-              The document library system is currently unavailable.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <p className="text-sm text-muted-foreground">
-              Error: {error.message || "Unknown error"}
-            </p>
-            <Button onClick={() => refetch()} className="w-full">
-              Try Again
-            </Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
+
 
   return (
-    <div className="p-6 space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
-            <FileText className="h-8 w-8 text-primary" />
-            Document Library
-          </h1>
-          <p className="text-muted-foreground mt-1">
-            All CEPHO generated documents with QA status tracking
-          </p>
+    <PageShell
+      icon={FileText}
+      iconClass="bg-primary/15 text-primary"
+      title="Document Library"
+      subtitle="All CEPHO generated documents with QA status tracking"
+      actions={
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input
+            placeholder="Search documents..."
+            value={searchQuery}
+            onChange={e => setSearchQuery(e.target.value)}
+            className="pl-10 w-64"
+          />
         </div>
-        <div className="flex items-center gap-3">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input
-              placeholder="Search documents..."
-              value={searchQuery}
-              onChange={e => setSearchQuery(e.target.value)}
-              className="pl-10 w-64"
-            />
-          </div>
-        </div>
-      </div>
+      }
+    >
+      <div className="space-y-5">
 
       {/* Stats Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -1131,6 +1102,7 @@ export default function DocumentLibrary() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </div>
+      </div>
+    </PageShell>
   );
 }

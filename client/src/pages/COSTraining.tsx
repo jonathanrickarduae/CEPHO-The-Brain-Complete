@@ -1,5 +1,7 @@
 // @ts-nocheck
+import { PageShell } from "@/components/layout/PageShell";
 import { useState } from "react";
+import { trpc } from "@/lib/trpc";
 import {
   Card,
   CardContent,
@@ -33,13 +35,7 @@ import {
   calculateOverallScore,
 } from "@shared/cosTrainingScore";
 
-// Mock current training state - would come from database
-const CURRENT_COS_TRAINING = {
-  percentage: 40,
-  completedModules: 8,
-  totalModules: 20,
-  lastActivity: new Date().toISOString(),
-};
+// Training state is now fetched from the database via tRPC (see component below)
 
 // Training modules
 const TRAINING_MODULES = [
@@ -137,13 +133,37 @@ const TRAINING_MODULES = [
 
 export default function COSTraining() {
   const [selectedModule, setSelectedModule] = useState<number | null>(null);
-  const [completedModules, setCompletedModules] = useState<Set<number>>(
+  const [localCompleted, setLocalCompleted] = useState<Set<number>>(
     new Set([1, 2, 3, 4, 5, 6, 7, 8])
   );
+  const utils = trpc.useUtils();
+
+  // Fetch real progress from DB
+  const { data: progressData } = trpc.cosTraining.getProgress.useQuery(undefined, {
+    staleTime: 30000,
+    onSuccess: (data) => {
+      // Sync local state with DB on first load
+      if (data?.completedModuleIds?.length) {
+        setLocalCompleted(new Set(data.completedModuleIds.map(Number)));
+      }
+    },
+  });
+
+  const completeModuleMutation = trpc.cosTraining.completeModule.useMutation({
+    onSuccess: () => utils.cosTraining.getProgress.invalidate(),
+  });
+
+  const dbPercentage = progressData?.percentage ?? 40;
+  const completedModules = localCompleted;
 
   const handleCompleteModule = (moduleId: number) => {
-    setCompletedModules(prev => new Set([...prev, moduleId]));
-    const newCompleted = completedModules.size + 1;
+    setLocalCompleted(prev => new Set([...prev, moduleId]));
+    // Persist to DB using module number as key
+    const dbModule = progressData?.modules?.find(m => m.moduleNumber === moduleId);
+    if (dbModule?.id) {
+      completeModuleMutation.mutate({ moduleId: String(dbModule.id) });
+    }
+    const newCompleted = localCompleted.size + 1;
     const newPercentage = Math.round(
       (newCompleted / TRAINING_MODULES.length) * 100
     );
@@ -151,14 +171,14 @@ export default function COSTraining() {
     setSelectedModule(null);
   };
 
-  const currentLevel = getCOSLevel(CURRENT_COS_TRAINING.percentage);
-  const progress = getProgressToNextLevel(CURRENT_COS_TRAINING.percentage);
+  const currentLevel = getCOSLevel(dbPercentage);
+  const progress = getProgressToNextLevel(dbPercentage);
 
   // Example: Show how COS training affects a sample score
   const sampleScores = [63, 72, 58, 81, 45]; // Sample KPI scores
   const scoreImpact = calculateOverallScore(
     sampleScores,
-    CURRENT_COS_TRAINING.percentage
+    dbPercentage
   );
 
   const [trainingMode, setTrainingMode] = useState<"cos" | "digital-twin">(
@@ -166,20 +186,12 @@ export default function COSTraining() {
   );
 
   return (
-    <div className="p-4 sm:p-6 space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
-            <GraduationCap className="h-8 w-8 text-[var(--brain-cyan)]" />
-            Digital Twin Training
-          </h1>
-          <p className="text-muted-foreground mt-1">
-            Train your Chief of Staff and Digital Twin to unlock full
-            capabilities
-          </p>
-        </div>
-        <div className="flex items-center gap-3">
+    <PageShell
+      icon={GraduationCap}
+      iconClass="bg-cyan-500/15 text-cyan-400"
+      title="Digital Twin Training"
+      subtitle="Train your Chief of Staff and Digital Twin to unlock full capabilities"
+      actions={<div className="flex items-center gap-3">
           <Button
             variant={trainingMode === "cos" ? "default" : "outline"}
             onClick={() => setTrainingMode("cos")}
@@ -204,8 +216,8 @@ export default function COSTraining() {
               Level {currentLevel.level}: {currentLevel.name}
             </Badge>
           )}
-        </div>
-      </div>
+        </div>}
+      >
 
       {/* Training Progress Overview */}
       {trainingMode === "cos" ? (
@@ -226,11 +238,11 @@ export default function COSTraining() {
                   <div className="flex justify-between text-sm">
                     <span>Overall Progress</span>
                     <span className="font-medium">
-                      {CURRENT_COS_TRAINING.percentage}%
+                      {dbPercentage}%
                     </span>
                   </div>
                   <Progress
-                    value={CURRENT_COS_TRAINING.percentage}
+                    value={dbPercentage}
                     className="h-3"
                   />
                 </div>
@@ -579,6 +591,6 @@ export default function COSTraining() {
           </div>
         </>
       )}
-    </div>
+    </PageShell>
   );
 }

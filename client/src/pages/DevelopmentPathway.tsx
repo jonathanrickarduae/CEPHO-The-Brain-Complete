@@ -1,5 +1,6 @@
 // @ts-nocheck
 import { useState } from "react";
+import { PageShell } from "@/components/layout/PageShell";
 import {
   Card,
   CardContent,
@@ -97,19 +98,12 @@ export default function DevelopmentPathway() {
   };
 
   return (
-    <div className="space-y-6 p-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground flex items-center gap-3">
-            <Rocket className="h-8 w-8 text-emerald-400" />
-            Odyssey Management
-          </h1>
-          <p className="text-muted-foreground mt-1">
-            Track ideas from capture to launch with Chief of Staff oversight
-          </p>
-        </div>
-        <div className="flex items-center gap-3">
+    <PageShell
+      icon={Rocket}
+      iconClass="bg-emerald-500/15 text-emerald-400"
+      title="Odyssey Management"
+      subtitle="Track ideas from capture to launch with Chief of Staff oversight"
+      actions={<div className="flex items-center gap-3">
           <div className="text-right">
             <p className="text-xs text-foreground/60">Next Review</p>
             <p className="text-sm font-medium text-[var(--brain-cyan)]">
@@ -122,9 +116,9 @@ export default function DevelopmentPathway() {
               Capture Idea
             </Button>
           </Link>
-        </div>
-      </div>
-
+        </div>}
+      >
+      <div className="space-y-5">
       {/* Pipeline Overview Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
         {PIPELINE_STAGES.map((stage, index) => {
@@ -623,6 +617,7 @@ export default function DevelopmentPathway() {
           </Card>
         </TabsContent>
       </Tabs>
-    </div>
+      </div>
+    </PageShell>
   );
 }

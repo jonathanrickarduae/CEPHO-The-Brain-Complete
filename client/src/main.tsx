@@ -73,21 +73,26 @@ const trpcClient = trpc.createClient({
       url: "/api/trpc",
       transformer: superjson,
       async headers() {
-        // Get CSRF token and Supabase session token
+        // Get CSRF token and (optionally) Supabase session token
         const csrfToken = await getCsrfToken();
-        const { createClient } = await import("@supabase/supabase-js");
-        const supabase = createClient(
-          import.meta.env.VITE_SUPABASE_URL || "",
-          import.meta.env.VITE_SUPABASE_ANON_KEY || ""
-        );
-        const {
-          data: { session },
-        } = await supabase.auth.getSession();
-
+        const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || "";
+        const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || "";
+        let accessToken = "";
+        // Only attempt Supabase auth if both URL and anon key are configured
+        if (supabaseUrl && supabaseAnonKey) {
+          try {
+            const { createClient } = await import("@supabase/supabase-js");
+            const supabase = createClient(supabaseUrl, supabaseAnonKey);
+            const {
+              data: { session },
+            } = await supabase.auth.getSession();
+            accessToken = session?.access_token || "";
+          } catch {
+            // Supabase not available — app uses PIN-gate auth instead
+          }
+        }
         return {
-          authorization: session?.access_token
-            ? `Bearer ${session.access_token}`
-            : "",
+          authorization: accessToken ? `Bearer ${accessToken}` : "",
           "x-csrf-token": csrfToken,
         };
       },
