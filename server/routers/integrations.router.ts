@@ -7,7 +7,7 @@ import { z } from "zod";
 import { desc, eq, and, inArray } from "drizzle-orm";
 import { protectedProcedure, publicProcedure, router } from "../_core/trpc";
 import { db } from "../db";
-import { integrations, tasks, smeTeams, users } from "../../drizzle/schema";
+import { integrations, tasks, smeTeams, users, npsResponses, feedbackHistory, favoriteContacts, libraryDocuments, userSettings, teamCapabilities } from "../../drizzle/schema";
 
 // ─── Auth Router ─────────────────────────────────────────────────────────────
 export const authRouter = router({
@@ -52,13 +52,35 @@ export const authRouter = router({
 
 // ─── Theme Router ─────────────────────────────────────────────────────────────
 export const themeRouter = router({
-  get: protectedProcedure.query(async () => {
-    return { theme: "dark", primaryColor: "#e91e8c" };
+  get: protectedProcedure.query(async ({ ctx }) => {
+    const rows = await db
+      .select()
+      .from(userSettings)
+      .where(eq(userSettings.userId, ctx.user.id))
+      .limit(1);
+    return { theme: rows[0]?.theme ?? "dark", primaryColor: "#e91e8c" };
   }),
 
   set: protectedProcedure
     .input(z.object({ theme: z.enum(["light", "dark", "system"]) }))
-    .mutation(async ({ input }) => {
+    .mutation(async ({ input, ctx }) => {
+      const existing = await db
+        .select()
+        .from(userSettings)
+        .where(eq(userSettings.userId, ctx.user.id))
+        .limit(1);
+      if (existing.length === 0) {
+        await db.insert(userSettings).values({
+          userId: ctx.user.id,
+          theme: input.theme,
+          governanceMode: "standard",
+        });
+      } else {
+        await db
+          .update(userSettings)
+          .set({ theme: input.theme, updatedAt: new Date() })
+          .where(eq(userSettings.userId, ctx.user.id));
+      }
       return { theme: input.theme };
     }),
 });
@@ -752,19 +774,38 @@ export const smeTeamRouter = router({
 
 // ─── Favorites Router ─────────────────────────────────────────────────────────
 export const favoritesRouter = router({
-  list: protectedProcedure.query(async () => {
-    return { favorites: [] };
+  list: protectedProcedure.query(async ({ ctx }) => {
+    const rows = await db
+      .select()
+      .from(favoriteContacts)
+      .where(eq(favoriteContacts.userId, ctx.user.id))
+      .orderBy(desc(favoriteContacts.createdAt));
+    return { favorites: rows };
   }),
 
   add: protectedProcedure
-    .input(z.object({ itemId: z.string(), itemType: z.string() }))
-    .mutation(async () => {
+    .input(z.object({ itemId: z.string(), itemType: z.string(), name: z.string().optional() }))
+    .mutation(async ({ input, ctx }) => {
+      await db.insert(favoriteContacts).values({
+        userId: ctx.user.id,
+        contactId: input.itemId,
+        contactType: input.itemType,
+        contactName: input.name ?? input.itemId,
+      });
       return { success: true };
     }),
 
   remove: protectedProcedure
     .input(z.object({ itemId: z.string(), itemType: z.string() }))
-    .mutation(async () => {
+    .mutation(async ({ input, ctx }) => {
+      await db
+        .delete(favoriteContacts)
+        .where(
+          and(
+            eq(favoriteContacts.userId, ctx.user.id),
+            eq(favoriteContacts.contactType, input.itemType)
+          )
+        );
       return { success: true };
     }),
 });
@@ -785,14 +826,28 @@ const feedbackInputSchema = z.object({
 export const feedbackRouter = router({
   submit: protectedProcedure
     .input(feedbackInputSchema)
-    .mutation(async () => {
+    .mutation(async ({ input, ctx }) => {
+      await db.insert(feedbackHistory).values({
+        userId: ctx.user.id,
+        expertId: input.expertId ?? null,
+        rating: input.rating ?? null,
+        feedbackType: input.type ?? "general",
+        feedbackText: input.comment ?? input.message ?? null,
+      });
       return { success: true, message: "Thank you for your feedback!" };
     }),
   // Used by ExpertFeedback component
   record: protectedProcedure
     .input(feedbackInputSchema)
-    .mutation(async () => {
-      return { success: true, id: crypto.randomUUID() };
+    .mutation(async ({ input, ctx }) => {
+      const [row] = await db.insert(feedbackHistory).values({
+        userId: ctx.user.id,
+        expertId: input.expertId ?? null,
+        rating: input.rating ?? null,
+        feedbackType: input.type ?? "expert_feedback",
+        feedbackText: input.comment ?? input.message ?? null,
+      }).returning();
+      return { success: true, id: row.id.toString() };
     }),
 });
 
@@ -803,55 +858,83 @@ export const npsRouter = router({
       z.object({
         score: z.number().min(0).max(10),
         comment: z.string().optional(),
+        category: z.string().optional(),
       })
     )
-    .mutation(async ()  => {
+    .mutation(async ({ input, ctx }) => {
+      await db.insert(npsResponses).values({
+        userId: ctx.user.id,
+        score: input.score,
+        category: input.category ?? "general",
+        feedback: input.comment ?? null,
+      });
       return { success: true };
     }),
 
-  shouldShow: protectedProcedure.query(async () => {
-    return { show: false }; // Show NPS after 30 days of usage
+  shouldShow: protectedProcedure.query(async ({ ctx }) => {
+    // Show NPS if user has been active for 30+ days and hasn't responded in 90 days
+    const user = await db.select().from(users).where(eq(users.id, ctx.user.id)).limit(1);
+    if (!user[0]) return { show: false };
+    const daysSinceCreation = (Date.now() - user[0].createdAt.getTime()) / (1000 * 60 * 60 * 24);
+    if (daysSinceCreation < 30) return { show: false };
+    const recentResponse = await db
+      .select()
+      .from(npsResponses)
+      .where(eq(npsResponses.userId, ctx.user.id))
+      .orderBy(desc(npsResponses.createdAt))
+      .limit(1);
+    if (recentResponse.length > 0) {
+      const daysSinceLastResponse = (Date.now() - recentResponse[0].createdAt.getTime()) / (1000 * 60 * 60 * 24);
+      if (daysSinceLastResponse < 90) return { show: false };
+    }
+    return { show: true };
   }),
 
   getStats: protectedProcedure.query(async () => {
-    return {
-      averageScore: 0,
-      totalResponses: 0,
-      promoters: 0,
-      passives: 0,
-      detractors: 0,
-      npsScore: 0,
-    };
+    const all = await db.select().from(npsResponses);
+    if (all.length === 0) return { averageScore: 0, totalResponses: 0, promoters: 0, passives: 0, detractors: 0, npsScore: 0 };
+    const promoters = all.filter(r => r.score >= 9).length;
+    const passives = all.filter(r => r.score >= 7 && r.score <= 8).length;
+    const detractors = all.filter(r => r.score <= 6).length;
+    const avg = all.reduce((s, r) => s + r.score, 0) / all.length;
+    const npsScore = Math.round(((promoters - detractors) / all.length) * 100);
+    return { averageScore: Math.round(avg * 10) / 10, totalResponses: all.length, promoters, passives, detractors, npsScore };
   }),
 });
 
-// ─── Team Capabilities Router ─────────────────────────────────────────────────
+// ─── Team Capabilities Router ──────────────────────────────────────// ─── Team Capabilities Router ─────────────────────────────────────────────────
 export const teamCapabilitiesRouter = router({
   list: protectedProcedure.query(async () => {
-    return {
-      capabilities: [
-        { id: 1, name: "AI Strategy", level: "expert", agents: 8 },
-        { id: 2, name: "Data Analysis", level: "advanced", agents: 12 },
-        { id: 3, name: "Content Creation", level: "expert", agents: 6 },
-        { id: 4, name: "Research", level: "expert", agents: 15 },
-        { id: 5, name: "Project Management", level: "advanced", agents: 4 },
-      ],
-    };
+    const rows = await db.select().from(teamCapabilities).orderBy(desc(teamCapabilities.createdAt)).limit(100);
+    return { capabilities: rows };
   }),
 
   add: protectedProcedure
     .input(
       z.object({
-        name: z.string(),
-        level: z.enum(["beginner", "intermediate", "advanced", "expert"]),
-        description: z.string().optional(),
+        teamMember: z.string(),
+        role: z.string(),
+        skillCategory: z.string(),
+        skillName: z.string(),
+        currentLevel: z.number().min(1).max(5),
+        targetLevel: z.number().min(1).max(5).optional(),
+        developmentPlan: z.string().optional(),
       })
     )
     .mutation(async ({ input }) => {
-      return { success: true, id: Date.now(), name: input.name, level: input.level };
+      const [row] = await db.insert(teamCapabilities).values({
+        teamMember: input.teamMember,
+        role: input.role,
+        skillCategory: input.skillCategory,
+        skillName: input.skillName,
+        currentLevel: input.currentLevel,
+        targetLevel: input.targetLevel ?? null,
+        gap: input.targetLevel ? input.targetLevel - input.currentLevel : null,
+        developmentPlan: input.developmentPlan ?? null,
+      }).returning();
+       return { success: true, id: row.id, name: row.skillName, level: row.currentLevel };
     }),
 });
-
 // ─── Library Router ───────────────────────────────────────────────────────────
 export const libraryRouter = router({
   list: protectedProcedure
@@ -861,8 +944,19 @@ export const libraryRouter = router({
         limit: z.number().default(20),
       })
     )
-    .query(async () => {
-      return { items: [], total: 0 };
+    .query(async ({ input, ctx }) => {
+      const rows = await db
+        .select()
+        .from(libraryDocuments)
+        .where(
+          and(
+            eq(libraryDocuments.userId, ctx.user.id),
+            input.category ? eq(libraryDocuments.folder, input.category) : undefined
+          )
+        )
+        .orderBy(desc(libraryDocuments.createdAt))
+        .limit(input.limit);
+      return { items: rows, total: rows.length };
     }),
 
   create: protectedProcedure
@@ -872,10 +966,21 @@ export const libraryRouter = router({
         content: z.string().optional(),
         category: z.string().optional(),
         tags: z.array(z.string()).optional(),
+        type: z.string().optional(),
+        fileUrl: z.string().optional(),
       })
     )
-    .mutation(async ({ input }) => {
-      return { success: true, id: crypto.randomUUID(), title: input.title };
+    .mutation(async ({ input, ctx }) => {
+      const [row] = await db.insert(libraryDocuments).values({
+        userId: ctx.user.id,
+        name: input.title,
+        folder: input.category ?? "personal",
+        type: input.type ?? "document",
+        status: "active",
+        fileUrl: input.fileUrl ?? null,
+        metadata: input.tags ? { tags: input.tags } : null,
+      }).returning();
+      return { success: true, id: row.id.toString(), title: row.name };
     }),
 
   exportExpertChat: protectedProcedure
@@ -895,40 +1000,72 @@ export const libraryRouter = router({
 });
 
 // ─── Genesis Router ───────────────────────────────────────────────────────────
+import { projects, projectGenesisPhases } from "../../drizzle/schema";
 export const genesisRouter = router({
-  getStatus: protectedProcedure.query(async () => {
-    return { status: "active", phase: 1, progress: 0 };
+  getStatus: protectedProcedure.query(async ({ ctx }) => {
+    const activeProjects = await db
+      .select()
+      .from(projects)
+      .where(and(eq(projects.userId, ctx.user.id), eq(projects.status, "active")))
+      .limit(1);
+    return { status: "active", phase: 1, progress: activeProjects[0]?.progress ?? 0 };
   }),
 
-  list: protectedProcedure.query(async () => {
-    return { projects: [], total: 0 };
+  list: protectedProcedure.query(async ({ ctx }) => {
+    const rows = await db
+      .select()
+      .from(projects)
+      .where(eq(projects.userId, ctx.user.id))
+      .orderBy(desc(projects.createdAt))
+      .limit(50);
+    return { projects: rows, total: rows.length };
   }),
 
   getProjectData: protectedProcedure
     .input(z.object({ projectId: z.string() }))
     .query(async ({ input }) => {
-      return {
-        id: input.projectId,
-        status: "active",
-        phase: 1,
-        progress: 0,
-        data: {},
-      };
+      const id = parseInt(input.projectId);
+      if (isNaN(id)) return null;
+      const [project] = await db.select().from(projects).where(eq(projects.id, id)).limit(1);
+      if (!project) return null;
+      const phases = await db.select().from(projectGenesisPhases).where(eq(projectGenesisPhases.projectId, id));
+      return { ...project, phases };
     }),
 });
 
 // ─── Optimization Router ──────────────────────────────────────────────────────
 export const optimizationRouter = router({
-  getSuggestions: protectedProcedure.query(async () => {
-    return { suggestions: [], lastAnalyzed: null };
+  getSuggestions: protectedProcedure.query(async ({ ctx }) => {
+    // Generate AI-powered optimization suggestions based on user data
+    const taskRows = await db.select().from(tasks).where(eq(tasks.userId, ctx.user.id)).limit(20);
+    const completedTasks = taskRows.filter(t => t.status === "completed").length;
+    const totalTasks = taskRows.length;
+    const completionRate = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
+    const suggestions = [];
+    if (completionRate < 70) suggestions.push({ id: "1", area: "Task Completion", suggestion: "Your task completion rate is below 70%. Consider breaking large tasks into smaller subtasks.", priority: "high" });
+    if (totalTasks === 0) suggestions.push({ id: "2", area: "Getting Started", suggestion: "Create your first task to start tracking your work.", priority: "high" });
+    suggestions.push({ id: "3", area: "Digital Twin", suggestion: "Complete your Digital Twin questionnaire to improve AI personalisation.", priority: "medium" });
+    return { suggestions, lastAnalyzed: new Date().toISOString() };
   }),
 
-  getAssessment: protectedProcedure.query(async () => {
+  getAssessment: protectedProcedure.query(async ({ ctx }) => {
+    const taskRows = await db.select().from(tasks).where(eq(tasks.userId, ctx.user.id)).limit(50);
+    const completedTasks = taskRows.filter(t => t.status === "completed").length;
+    const totalTasks = taskRows.length;
+    const score = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
     return {
-      score: 0,
-      areas: [],
-      recommendations: [],
-      lastAssessed: null,
+      score,
+      areas: [
+        { name: "Task Management", score: score, status: score >= 70 ? "good" : "needs_improvement" },
+        { name: "Digital Twin Calibration", score: 0, status: "not_started" },
+        { name: "Integration Coverage", score: 0, status: "not_started" },
+      ],
+      recommendations: [
+        "Complete your Digital Twin questionnaire to improve personalisation",
+        "Connect your calendar for better scheduling insights",
+        "Set up integrations with your project management tools",
+      ],
+      lastAssessed: new Date().toISOString(),
     };
   }),
 
@@ -942,7 +1079,8 @@ export const optimizationRouter = router({
 // ─── OpenClaw Router ──────────────────────────────────────────────────────────
 export const openClawRouter = router({
   getStatus: protectedProcedure.query(async () => {
-    return { active: false, message: "OpenClaw integration coming soon" };
+    const hasAnthropicKey = !!process.env.ANTHROPIC_API_KEY;
+    return { active: hasAnthropicKey, message: hasAnthropicKey ? "OpenClaw (Claude) is active" : "ANTHROPIC_API_KEY not configured" };
   }),
 
   chat: protectedProcedure
@@ -950,13 +1088,24 @@ export const openClawRouter = router({
       z.object({
         message: z.string().min(1),
         sessionId: z.string().optional(),
+        context: z.string().optional(),
       })
     )
     .mutation(async ({ input }) => {
-      return {
-        reply: "OpenClaw is not yet configured. Please check back soon.",
-        sessionId: input.sessionId ?? crypto.randomUUID(),
-      };
+      const apiKey = process.env.ANTHROPIC_API_KEY;
+      if (!apiKey) {
+        return { reply: "Anthropic API key not configured.", sessionId: input.sessionId ?? crypto.randomUUID() };
+      }
+      const { default: Anthropic } = await import("@anthropic-ai/sdk");
+      const client = new Anthropic({ apiKey });
+      const response = await client.messages.create({
+        model: "claude-3-5-haiku-20241022",
+        max_tokens: 1024,
+        system: input.context ?? "You are CEPHO, an intelligent AI Chief of Staff assistant. Be concise, strategic, and action-oriented.",
+        messages: [{ role: "user", content: input.message }],
+      });
+      const reply = response.content[0]?.type === "text" ? response.content[0].text : "No response generated.";
+      return { reply, sessionId: input.sessionId ?? crypto.randomUUID() };
     }),
 });
 

@@ -38,6 +38,7 @@ import {
 } from "../services/metrics/prometheus";
 import cookieParser from "cookie-parser";
 import { setupMiddleware, setupErrorHandlers } from "../setup-middleware";
+import { startScheduler } from "../services/scheduler";
 
 function isPortAvailable(port: number): Promise<boolean> {
   return new Promise(resolve => {
@@ -162,6 +163,8 @@ async function startServer() {
 
   server.listen(port, () => {
     log.debug(`Server running on http://localhost:${port}/`);
+    // Start all 12 server-side cron jobs
+    startScheduler();
   });
 }
 
