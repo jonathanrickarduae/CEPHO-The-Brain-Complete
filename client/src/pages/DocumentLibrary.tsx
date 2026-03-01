@@ -625,7 +625,7 @@ export default function DocumentLibrary() {
               ))}
             </div>
           ) : filteredDocuments.length === 0 ? (
-            <div className="text-center py-12">
+            <div className="text-center py-6">
               <FileText className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
               <h3 className="text-lg font-medium">No documents found</h3>
               <p className="text-muted-foreground">

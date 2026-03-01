@@ -1,163 +1,210 @@
-# CEPHO Platform - Master Documentation
+# CEPHO Platform — Master Documentation
 
-**Version:** 1.0  
-**Date:** February 22, 2026
+**Version:** 2.0
+**Last Updated:** March 1, 2026
+**Status:** Active Development — Remediation Phase Complete
 
----
-
-## 1. Introduction
-
-This document provides a comprehensive, all-in-one overview of the CEPHO platform, covering its code, architecture, processes, database, and operational status. It is intended to be the single source of truth for understanding the entire system.
+> This is the single source of truth for the CEPHO platform. All other documentation files are either archived or supplementary.
 
 ---
 
-## 2. Platform Overview
+## 1. Platform Overview
 
-CEPHO is an AI-powered command center designed to act as a digital chief of staff for executive decision-making. It combines a learning Digital Twin with a team of 273+ AI Subject Matter Experts to provide strategic insights and automate complex tasks.
+CEPHO is an AI-powered command centre designed to act as a digital Chief of Staff for executive decision-making. It combines a learning Digital Twin with a team of 50+ AI Subject Matter Experts (SMEs), a virtual board of 14 top AI leaders (the Persephone Board), and a full suite of operational tools.
 
-- **Live Demo:** [https://cepho-the-brain-complete.onrender.com](https://cepho-the-brain-complete.onrender.com)
-- **GitHub Repository:** [https://github.com/jonathanrickarduae/CEPHO-The-Brain-Complete](https://github.com/jonathanrickarduae/CEPHO-The-Brain-Complete)
+| Property | Value |
+|----------|-------|
+| **Live URL** | https://cepho-the-brain-complete.onrender.com |
+| **Repository** | https://github.com/jonathanrickarduae/CEPHO-The-Brain-Complete |
+| **Stack** | React + TypeScript + tRPC + Drizzle ORM + MySQL (TiDB) |
+| **Deployment** | Render (Node.js web service, auto-deploy from `main`) |
 
 ---
 
-## 3. Codebase
+## 2. Architecture
 
-The CEPHO platform is a substantial application with **198,130 lines of code** across **685 TypeScript/TSX files**.
-
-### 3.1. Monorepo Structure
-
-The project utilizes a monorepo structure to manage the frontend and backend code in a single repository.
+### 2.1 Monorepo Structure
 
 ```
-/cepho-fix
-├── client/         # Frontend React application
-├── server/         # Backend Node.js application
-├── drizzle/        # Drizzle ORM configuration and migrations
-├── public/         # Static assets
-├── .env            # Environment variables
-├── package.json    # Project dependencies and scripts
-└── README.md       # Main project documentation
+the-brain-main/
+├── client/                    # React + Vite frontend
+│   └── src/
+│       ├── components/        # Shared and feature components
+│       ├── pages/             # 26 route-level page components
+│       ├── lib/               # tRPC client, utilities
+│       ├── hooks/             # Custom React hooks
+│       └── stores/            # Zustand state stores
+├── server/                    # Express + tRPC backend
+│   ├── _core/                 # tRPC setup, middleware, context
+│   ├── routers/               # 28 tRPC routers
+│   ├── routes/                # REST route handlers (agents)
+│   ├── services/              # Business logic services
+│   └── prompts/               # LLM system prompts
+├── drizzle/                   # Database schema + migrations
+└── docs/                      # Supplementary documentation
 ```
 
-### 3.2. Frontend
+### 2.2 Key Technology Decisions
 
-- **Framework:** React 18
-- **Language:** TypeScript
-- **Build Tool:** Vite
-- **Styling:** Tailwind CSS
-- **UI Components:** Radix UI
-- **API Client:** tRPC
-- **Routing:** Wouter
-
-### 3.3. Backend
-
-- **Runtime:** Node.js
-- **Framework:** Express.js
-- **API Layer:** tRPC
-- **Database:** PostgreSQL (Supabase)
-- **ORM:** Drizzle ORM
+| Layer | Technology | Reason |
+|-------|-----------|--------|
+| Frontend | React 18 + TypeScript | Type safety, component model |
+| Styling | TailwindCSS + shadcn/ui | Consistent design system |
+| API | tRPC | End-to-end type safety |
+| ORM | Drizzle | Lightweight, type-safe SQL |
+| Database | TiDB (MySQL-compatible) | Serverless, scalable |
+| Auth | Session-based PIN gate | Simple, secure for single-user |
+| AI | OpenAI GPT-4o-mini | Cost-effective, capable |
+| Deployment | Render | Simple, reliable, auto-deploy |
 
 ---
 
-## 4. Architecture
+## 3. Pages & Routes
 
-### 4.1. Frontend Architecture
-
-The frontend is a component-based React application with 57 pages. State management is handled by TanStack React Query for server state and React hooks for local state.
-
-### 4.2. Backend Architecture
-
-The backend is a service-oriented Node.js application with 39 specialized services and a type-safe API layer using tRPC.
-
-### 4.3. Database Architecture
-
-The database uses PostgreSQL and features a comprehensive schema with 166 tables managed by Drizzle ORM. The schema is organized into domains such as user management, training, AI experts, projects, and documents.
-
-### 4.4. API Architecture
-
-The API is built with tRPC, providing end-to-end type safety. It consists of 39 routers organized by domain.
-
----
-
-## 5. Processes
-
-### 5.1. Quality Management System (QMS)
-
-The QMS ensures consistent quality through processes for design, development, testing, deployment, and maintenance. Key aspects include coding standards, code reviews, unit testing, manual QA, CI/CD, and monitoring.
-
-### 5.2. Development Workflow
-
-1.  Clone the repository.
-2.  Install dependencies with `pnpm install`.
-3.  Configure environment variables in `.env`.
-4.  Apply database migrations with `pnpm drizzle-kit push:pg`.
-5.  Run the development server with `pnpm dev`.
-
-### 5.3. Deployment Process
-
-CEPHO is deployed to Render.com via a CI/CD pipeline. Pushing to the `main` branch on GitHub triggers an automatic build and deployment.
+| Route | Page Component | Description |
+|-------|---------------|-------------|
+| `/` | `NexusDashboard` | Main command centre dashboard |
+| `/daily-brief` | `DailyBrief` | AI-generated morning briefing |
+| `/chief-of-staff` | `ChiefOfStaff` | Task management + QA scoring |
+| `/ai-agents` | `AIAgentsPage` | Agent directory |
+| `/ai-agents/:id` | `AgentDetailPage` | Individual agent detail |
+| `/ai-agents/monitoring` | `AIAgentsMonitoringPage` | Agent performance monitoring |
+| `/ai-smes` | `AISMEsPage` | SME consultation panel |
+| `/ai-experts` | `AIExperts` | Expert chat interface |
+| `/expert-chat` | `ExpertChatPage` | 1-on-1 expert chat |
+| `/persephone-board` | `PersephoneBoard` | Virtual board of 14 AI leaders |
+| `/innovation-hub` | `InnovationHub` | Idea capture and validation |
+| `/project-genesis` | `ProjectGenesisPage` | Project creation dashboard |
+| `/project-genesis/new` | `ProjectGenesisWizard` | Step-by-step project wizard |
+| `/document-library` | `DocumentLibrary` | Document management |
+| `/vault` | `Vault` | Secure document storage |
+| `/workflows` | `WorkflowsPage` | Workflow management |
+| `/workflows/:id` | `WorkflowDetailPage` | Workflow detail view |
+| `/operations` | `OperationsPage` | Operations overview |
+| `/development-pathway` | `DevelopmentPathway` | Learning and development |
+| `/cos-training` | `COSTraining` | Chief of Staff training |
+| `/statistics` | `Statistics` | Analytics and metrics |
+| `/evening-review` | `EveningReview` | End-of-day review |
+| `/settings` | `Settings` | Platform configuration |
+| `/login` | `Login` | Authentication |
 
 ---
 
-## 6. Database Details
+## 4. AI System
 
-The database schema consists of 166 tables. Below is a summary of key tables and their purpose:
+### 4.1 Persephone Board (14 Members)
 
-| Table Name               | Purpose                                                              |
-| ------------------------ | -------------------------------------------------------------------- |
-| `users`                  | Core user table for authentication and profile information.          |
-| `mood_history`           | Tracks the user's emotional state throughout the day.                |
-| `training_conversations` | Logs full conversations with the Digital Twin for training purposes. |
-| `decision_patterns`      | Records every choice the user makes to learn their preferences.      |
-| `user_preferences`       | Stores preferences extracted from user behavior.                     |
-| `vocabulary_patterns`    | Manages the user's specific terms and phrases.                       |
-| `feedback_history`       | Stores user feedback on AI expert work.                              |
-| `twin_activity_log`      | Logs autonomous actions taken by the Digital Twin.                   |
-| `expert_performance`     | Tracks the performance scores of AI experts.                         |
-| `projects`               | Manages the user's active projects.                                  |
-| `daily_brief_items`      | Stores items for the daily briefing.                                 |
-| `user_settings`          | Manages user-specific settings and application state.                |
-| `library_documents`      | Stores documents in the user's library.                              |
+Each board member has a full knowledge corpus in `server/routers/expertChat.router.ts`. Members can be consulted via live AI chat on the `/persephone-board` page.
 
----
+| ID | Name | Company | Expertise |
+|----|------|---------|-----------|
+| `altman` | Sam Altman | OpenAI | AGI Development & AI Safety |
+| `huang` | Jensen Huang | NVIDIA | AI Hardware & Computing Infrastructure |
+| `amodei` | Dario Amodei | Anthropic | Constitutional AI & Safety Research |
+| `hassabis` | Sir Demis Hassabis | Google DeepMind | AI Research & Nobel Prize Winner |
+| `pichai` | Sundar Pichai | Alphabet/Google | AI Integration & Product Strategy |
+| `musk` | Elon Musk | xAI | AI Innovation & Grok Development |
+| `lecun` | Yann LeCun | Meta | Deep Learning & Neural Networks |
+| `hinton` | Geoffrey Hinton | Independent | Neural Networks & AI Safety Advocacy |
+| `ng` | Andrew Ng | DeepLearning.AI | AI Education & Democratization |
+| `li` | Fei-Fei Li | Stanford HAI | Computer Vision & Human-Centered AI |
+| `nadella` | Satya Nadella | Microsoft | AI Enterprise Integration |
+| `srinivas` | Aravind Srinivas | Perplexity AI | AI Search & Information Retrieval |
+| `jassy` | Andy Jassy | Amazon | AI Cloud Infrastructure |
+| `cook` | Tim Cook | Apple | AI Privacy & On-Device Intelligence |
 
-## 7. Operational Status
+### 4.2 AI SME Panel
 
-### 7.1. What's Working
-
-- **Platform Status:** Deployed and fully functional.
-- **Frontend:** 47 of 57 pages verified with 100% success rate.
-- **Backend:** 39 services and 39 routers operational.
-- **Database:** Connected and responding correctly.
-- **API:** tRPC API layer is fully operational.
-
-### 7.2. What's Broken (Known Issues)
-
-- **No known critical issues.** The platform is stable and functional.
-
-### 7.3. TODO List
-
-- **Security Audit:** Conduct a thorough security audit of the custom authentication implementation.
-- **Performance Optimization:** Implement code splitting, caching, and database query optimization.
-- **Comprehensive Testing:** Increase unit test coverage and implement end-to-end tests.
-- **Monitoring and Observability:** Integrate APM and error tracking tools.
-- **Staging Environment:** Set up a dedicated staging environment for pre-production testing.
+50+ specialised AI agents defined in `client/src/data/ai-experts.data.ts`. Accessible via `/ai-smes` and `/ai-experts`.
 
 ---
 
-## 8. GitHub Repository
+## 5. Design System
 
-All code, documentation, and audit reports are available in the GitHub repository:
+### 5.1 Page Layout Standard
 
-[https://github.com/jonathanrickarduae/CEPHO-The-Brain-Complete](https://github.com/jonathanrickarduae/CEPHO-The-Brain-Complete)
+```tsx
+<div className="min-h-screen bg-background">
+  <div className="border-b border-border px-4 sm:px-6 py-4">
+    <h1 className="text-xl sm:text-2xl font-bold text-foreground">Title</h1>
+    <p className="text-sm text-muted-foreground mt-1">Subtitle</p>
+  </div>
+  <div className="p-4 sm:p-6 space-y-6">
+    {/* content */}
+  </div>
+</div>
+```
 
-**Key Documents:**
+### 5.2 Rules
 
-- `README.md`
-- `ARCHITECTURE.md`
-- `FEATURES.md`
-- `SETUP.md`
-- `QMS.md`
-- `CHANGELOG.md`
-- `docs/audit/FINAL_UPDATED_AUDIT.md`
-- `docs/audit/VERIFIED_TEST_RESULTS.md`
+- Use `text-foreground` for content text (never `text-white`)
+- Use `bg-card` for card backgrounds (never `bg-white dark:bg-card`)
+- Use `bg-primary` for primary action buttons
+- Use CSS variables for colours (never hardcoded hex)
+- Use `text-muted-foreground` for secondary text
+
+---
+
+## 6. Remediation Status
+
+| Item | Description | Status |
+|------|-------------|--------|
+| CD-01 | Remove obsolete features | ✅ Done |
+| CD-02 | Consolidate documentation | ✅ Done |
+| CD-03 | Unify naming conventions | ✅ Done |
+| CD-04 | Delete duplicated files | ✅ Done |
+| API-01 | Redesign Integrations page | ✅ Done |
+| API-02 | Sync with Render & reality | ✅ Done |
+| API-03 | Add missing integrations | ✅ Done |
+| API-04 | Merge Vault into Settings | 🔄 In Progress |
+| AI-01 | Full agent audit | ✅ Done |
+| AI-02 | Central agent directory | ✅ Done |
+| AI-03 | Operationalize agents | ✅ Done |
+| PAGE-01 | Full routing audit | ✅ Done |
+| PAGE-02 | Fix non-functional pages | ✅ Done |
+| MOB-01 | Mobile-first layout | ✅ Done |
+| MOB-02 | Portrait mode optimization | ✅ Done |
+| UI-01 | Enforce design system | ✅ Done |
+| UI-02 | Standardize page layouts | ✅ Done |
+| UI-03 | Improve information density | ✅ Done |
+| PB-01 | Persephone Board knowledge corpora | ✅ Done |
+| PB-02 | Live consultation system | ✅ Done |
+| PB-03 | Fine-tuned personas | ✅ Done |
+| TS-01 | TypeScript errors | ✅ Done |
+| DATA-01 | tRPC shape mismatches | ✅ Done |
+| PERF-01 | React performance | ✅ Done |
+| SEC-01 | Auth guards | ✅ Done |
+| TEST-01 | Unit tests | ✅ Done |
+
+---
+
+## 7. Environment Variables
+
+| Variable | Purpose | Required |
+|----------|---------|----------|
+| `DATABASE_URL` | TiDB connection string | Yes |
+| `OPENAI_API_KEY` | OpenAI API access | Yes |
+| `SESSION_SECRET` | Session signing secret | Yes |
+| `CSRF_SECRET` | CSRF token secret | Yes |
+| `NODE_ENV` | `production` on Render | Yes |
+| `NOTION_API_KEY` | Notion integration | Optional |
+| `GITHUB_TOKEN` | GitHub integration | Optional |
+| `ANTHROPIC_API_KEY` | Anthropic/Claude | Optional |
+| `SYNTHESIA_API_KEY` | Synthesia video | Optional |
+
+---
+
+## 8. Development
+
+```bash
+pnpm install          # Install dependencies
+pnpm dev              # Start dev server (frontend + backend)
+npx tsc --noEmit      # TypeScript check
+npx vitest run        # Run tests
+```
+
+Push to `main` → Render auto-deploys. Build: `pnpm build`. Start: `node dist/server/index.js`.
+
+---
+
+*For supplementary documentation, see the `/docs` directory.*

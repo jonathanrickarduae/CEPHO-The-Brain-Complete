@@ -342,7 +342,7 @@ export default function ProjectGenesisPage() {
 
           {/* Loading State */}
           {projectsLoading && !loadingTimedOut && (
-            <div className="flex items-center justify-center py-12">
+            <div className="flex items-center justify-center py-6">
               <Loader2 className="w-8 h-8 text-purple-400 animate-spin" />
               <span className="ml-3 text-muted-foreground">Loading projects...</span>
             </div>
@@ -419,7 +419,7 @@ export default function ProjectGenesisPage() {
           {/* Empty State */}
           {(!projectsLoading || loadingTimedOut) &&
             savedProjects.length === 0 && (
-              <div className="text-center py-12">
+              <div className="text-center py-6">
                 <Brain className="w-16 h-16 text-gray-600 mx-auto mb-4" />
                 <h3 className="text-xl font-semibold text-muted-foreground mb-2">
                   No projects yet

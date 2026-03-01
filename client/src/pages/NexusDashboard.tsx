@@ -311,9 +311,9 @@ export default function NexusDashboard() {
       </div>
 
       {/* Main Content - Single Column Layout */}
-      <div className="flex-1 flex flex-col gap-4 sm:gap-6 p-3 sm:p-4 md:p-6 pb-[50vh] lg:pb-6 overflow-auto">
+      <div className="flex-1 flex flex-col gap-4 sm:gap-4 p-3 sm:p-4 md:p-6 pb-[50vh] lg:pb-6 overflow-auto">
         {/* Top Section - Dashboard Info */}
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-4">
           {/* RAG Status Row */}
           <div>
             <h2 className="text-sm font-semibold text-muted-foreground mb-3">

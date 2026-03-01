@@ -258,7 +258,7 @@ export default function AIAgentsPage() {
         </div>
 
         {filteredAgents.length === 0 && (
-          <div className="text-center py-12 text-muted-foreground">
+          <div className="text-center py-6 text-muted-foreground">
             No agents found in this category
           </div>
         )}

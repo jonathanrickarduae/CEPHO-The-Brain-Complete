@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearch } from "wouter";
 import {
   Settings as SettingsIcon,
   Settings2,
@@ -12,6 +13,18 @@ import {
   Users,
   Search,
   Plus,
+  CheckCircle2,
+  AlertTriangle,
+  XCircle,
+  Activity,
+  ShieldAlert,
+  RefreshCw,
+  Globe,
+  Mail,
+  MessageSquare,
+  Zap,
+  FileText,
+  Clock,
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -63,10 +76,158 @@ type SettingsTab =
   | "privacy"
   | "appearance"
   | "accessibility"
-  | "profile";
+  | "profile"
+  | "vault";
+
+// ─── Vault Panel (merged from /vault) ──────────────────────────────────────
+function VaultPanel() {
+  const integrations = [
+    { id: 1, name: "Outlook 365", status: "healthy", health: 100, lastSync: "2 mins ago", icon: Mail, color: "text-primary", category: "Communication" },
+    { id: 2, name: "Microsoft Teams", status: "healthy", health: 100, lastSync: "5 mins ago", icon: MessageSquare, color: "text-purple-400", category: "Communication" },
+    { id: 3, name: "Gamma App", status: "warning", health: 85, lastSync: "1 hour ago", icon: Zap, color: "text-amber-400", category: "Productivity", alert: "Consider switching to Pitch.com" },
+    { id: 4, name: "Manus AI", status: "healthy", health: 100, lastSync: "Just now", icon: Globe, color: "text-green-400", category: "AI Tools" },
+    { id: 5, name: "Microsoft Copilot", status: "healthy", health: 100, lastSync: "Just now", icon: Globe, color: "text-cyan-400", category: "AI Tools" },
+    { id: 6, name: "Salesforce", status: "broken", health: 0, lastSync: "Failed", icon: Globe, color: "text-red-400", category: "CRM", alert: "API Token Expired" },
+  ];
+  const contractRenewals = [
+    { id: 1, name: "AWS Enterprise Agreement", vendor: "Amazon Web Services", renewalDate: "2026-02-15", value: "$45,000/yr", status: "upcoming", daysUntil: 29, autoRenew: true },
+    { id: 2, name: "Salesforce CRM License", vendor: "Salesforce", renewalDate: "2026-01-25", value: "$12,000/yr", status: "urgent", daysUntil: 8, autoRenew: false },
+    { id: 3, name: "Microsoft 365 Business", vendor: "Microsoft", renewalDate: "2026-03-01", value: "$8,400/yr", status: "upcoming", daysUntil: 43, autoRenew: true },
+    { id: 4, name: "Slack Business+", vendor: "Slack", renewalDate: "2026-04-15", value: "$6,000/yr", status: "ok", daysUntil: 88, autoRenew: true },
+    { id: 5, name: "Legal Retainer", vendor: "Henderson & Partners", renewalDate: "2026-01-31", value: "$25,000/yr", status: "urgent", daysUntil: 14, autoRenew: false },
+  ];
+  const securityEvents = [
+    { id: 1, type: "blocked", message: "Suspicious login blocked", location: "Unknown IP", time: "2 hours ago", severity: "high" },
+    { id: 2, type: "blocked", message: "Brute force prevented", location: "Bot Network", time: "5 hours ago", severity: "high" },
+    { id: 3, type: "warning", message: "Unusual API pattern", location: "Internal", time: "Yesterday", severity: "medium" },
+  ];
+  const healthyCount = integrations.filter(i => i.status === "healthy").length;
+  const warningCount = integrations.filter(i => i.status === "warning").length;
+  const brokenCount = integrations.filter(i => i.status === "broken").length;
+  const blockedThreats = securityEvents.filter(e => e.type === "blocked").length;
+  const urgentContracts = contractRenewals.filter(c => c.status === "urgent").length;
+
+  return (
+    <div className="space-y-6">
+      {/* Stats */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div className="p-4 rounded-xl border border-green-500/30 bg-green-500/10 flex items-center gap-3">
+          <CheckCircle2 className="w-7 h-7 text-green-500 flex-shrink-0" />
+          <div><div className="text-2xl font-bold text-green-500">{healthyCount}</div><div className="text-xs text-muted-foreground">Healthy</div></div>
+        </div>
+        <div className="p-4 rounded-xl border border-amber-500/30 bg-amber-500/10 flex items-center gap-3">
+          <AlertTriangle className="w-7 h-7 text-amber-500 flex-shrink-0" />
+          <div><div className="text-2xl font-bold text-amber-500">{warningCount}</div><div className="text-xs text-muted-foreground">Warning</div></div>
+        </div>
+        <div className="p-4 rounded-xl border border-red-500/30 bg-red-500/10 flex items-center gap-3">
+          <XCircle className="w-7 h-7 text-red-500 flex-shrink-0" />
+          <div><div className="text-2xl font-bold text-red-500">{brokenCount}</div><div className="text-xs text-muted-foreground">Broken</div></div>
+        </div>
+        <div className="p-4 rounded-xl border border-purple-500/30 bg-purple-500/10 flex items-center gap-3">
+          <ShieldAlert className="w-7 h-7 text-purple-500 flex-shrink-0" />
+          <div><div className="text-2xl font-bold text-purple-500">{blockedThreats}</div><div className="text-xs text-muted-foreground">Blocked</div></div>
+        </div>
+      </div>
+
+      {/* Integrations */}
+      <div className="bg-card rounded-xl border border-border p-5">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="font-semibold text-foreground flex items-center gap-2"><Activity className="w-4 h-4 text-cyan-400" /> Integrations</h3>
+          <Button size="sm" variant="outline" className="h-7 gap-1 text-xs"><Plus className="w-3 h-3" /> Add</Button>
+        </div>
+        <div className="space-y-2">
+          {integrations.map(integration => (
+            <div key={integration.id} className={`p-3 rounded-lg border flex items-center justify-between ${
+              integration.status === "healthy" ? "border-border bg-muted/20" :
+              integration.status === "warning" ? "border-amber-500/30 bg-amber-500/5" :
+              "border-red-500/30 bg-red-500/5"
+            }`}>
+              <div className="flex items-center gap-3">
+                <div className={`w-8 h-8 rounded-lg bg-muted flex items-center justify-center ${integration.color}`}>
+                  <integration.icon className="w-4 h-4" />
+                </div>
+                <div>
+                  <div className="font-medium text-sm text-foreground">{integration.name}</div>
+                  <div className="text-xs text-muted-foreground">{integration.lastSync}</div>
+                  {"alert" in integration && integration.alert && <div className="text-xs text-amber-400 mt-0.5">{integration.alert as string}</div>}
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className={`text-xs font-medium ${
+                  integration.status === "healthy" ? "text-green-400" :
+                  integration.status === "warning" ? "text-amber-400" : "text-red-400"
+                }`}>{integration.health}%</div>
+                <Button size="sm" variant="ghost" className="h-7 w-7 p-0"><RefreshCw className="w-3 h-3" /></Button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Contract Renewals */}
+      <div className="bg-card rounded-xl border border-border p-5">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="font-semibold text-foreground flex items-center gap-2"><FileText className="w-4 h-4 text-primary" /> Contract Renewals {urgentContracts > 0 && <Badge className="bg-red-500/20 text-red-400 border-0 text-xs">{urgentContracts} urgent</Badge>}</h3>
+        </div>
+        <div className="space-y-2">
+          {contractRenewals.map(contract => (
+            <div key={contract.id} className={`p-3 rounded-lg border flex items-center justify-between ${
+              contract.status === "urgent" ? "border-red-500/30 bg-red-500/5" :
+              contract.status === "upcoming" ? "border-amber-500/30 bg-amber-500/5" :
+              "border-border bg-muted/20"
+            }`}>
+              <div>
+                <div className="font-medium text-sm text-foreground">{contract.name}</div>
+                <div className="text-xs text-muted-foreground">{contract.vendor} · {contract.value}</div>
+              </div>
+              <div className="text-right">
+                <div className={`text-xs font-medium ${
+                  contract.status === "urgent" ? "text-red-400" :
+                  contract.status === "upcoming" ? "text-amber-400" : "text-green-400"
+                }`}>{contract.daysUntil}d</div>
+                <div className="text-xs text-muted-foreground">{contract.autoRenew ? "Auto-renews" : "Manual"}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Security Events */}
+      <div className="bg-card rounded-xl border border-border p-5">
+        <h3 className="font-semibold text-foreground flex items-center gap-2 mb-4"><Shield className="w-4 h-4 text-purple-400" /> Security Events</h3>
+        <div className="space-y-2">
+          {securityEvents.map(event => (
+            <div key={event.id} className="p-3 rounded-lg border border-border bg-muted/20 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className={`w-2 h-2 rounded-full flex-shrink-0 ${
+                  event.severity === "high" ? "bg-red-500" : "bg-amber-500"
+                }`} />
+                <div>
+                  <div className="text-sm font-medium text-foreground">{event.message}</div>
+                  <div className="text-xs text-muted-foreground">{event.location}</div>
+                </div>
+              </div>
+              <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                <Clock className="w-3 h-3" />
+                {event.time}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default function Settings() {
+  const search = useSearch();
   const [activeTab, setActiveTab] = useState<SettingsTab>("integrations");
+
+  useEffect(() => {
+    const params = new URLSearchParams(search);
+    const tab = params.get("tab") as SettingsTab | null;
+    if (tab) setActiveTab(tab);
+  }, [search]);
   const [searchQuery, setSearchQuery] = useState("");
 
   const tabs = [
@@ -96,6 +257,7 @@ export default function Settings() {
       icon: SettingsIcon,
     },
     { id: "profile" as const, label: "Profile", icon: User },
+    { id: "vault" as const, label: "The Vault", icon: Shield },
   ];
 
   const mockReferralStats = {
@@ -571,7 +733,7 @@ export default function Settings() {
                   Appearance
                 </h3>
 
-                <div className="space-y-8">
+                <div className="space-y-6">
                   {/* Theme Selector Component */}
                   <ThemeProvider>
                     <ThemeSelector />
@@ -626,6 +788,10 @@ export default function Settings() {
             )}
 
             {activeTab === "accessibility" && <AccessibilitySettingsPanel />}
+
+            {activeTab === "vault" && (
+              <VaultPanel />
+            )}
           </div>
         </div>
       </div>

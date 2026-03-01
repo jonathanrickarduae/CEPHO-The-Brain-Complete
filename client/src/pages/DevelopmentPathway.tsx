@@ -380,11 +380,11 @@ export default function DevelopmentPathway() {
             </CardHeader>
             <CardContent>
               {ideasLoading ? (
-                <div className="text-center py-8 text-foreground/60">
+                <div className="text-center py-6 text-foreground/60">
                   Loading ideas...
                 </div>
               ) : recentIdeas.length === 0 ? (
-                <div className="text-center py-8">
+                <div className="text-center py-6">
                   <Lightbulb className="w-12 h-12 text-foreground/50 mx-auto mb-3" />
                   <p className="text-foreground/70">No ideas captured yet</p>
                   <Link href="/innovation-hub">
@@ -474,7 +474,7 @@ export default function DevelopmentPathway() {
                 flywheel
               </CardDescription>
             </CardHeader>
-            <CardContent className="text-center py-8">
+            <CardContent className="text-center py-6">
               <Lightbulb className="w-16 h-16 text-[var(--brain-cyan)]/50 mx-auto mb-4" />
               <p className="text-foreground/70 mb-4">
                 Access the full Innovation Hub to manage your ideas pipeline

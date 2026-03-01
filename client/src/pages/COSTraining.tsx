@@ -166,7 +166,7 @@ export default function COSTraining() {
   );
 
   return (
-    <div className="container py-8 space-y-8">
+    <div className="p-4 sm:p-6 space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -210,7 +210,7 @@ export default function COSTraining() {
       {/* Training Progress Overview */}
       {trainingMode === "cos" ? (
         <>
-          <div className="grid gap-6 md:grid-cols-3">
+          <div className="grid gap-4 md:grid-cols-3">
             <Card className="md:col-span-2">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">

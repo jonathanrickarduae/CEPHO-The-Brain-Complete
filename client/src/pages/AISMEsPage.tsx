@@ -1231,7 +1231,7 @@ export default function AISMEsPage() {
                   ))}
                 </div>
               ) : (
-                <div className="text-center py-12">
+                <div className="text-center py-6">
                   <Users className="w-12 h-12 mx-auto mb-4 text-foreground/50" />
                   <h3 className="text-lg font-medium mb-2">No Teams Yet</h3>
                   <p className="text-foreground/70 mb-4">

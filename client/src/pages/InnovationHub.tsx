@@ -827,7 +827,7 @@ export default function InnovationHub() {
               </Card>
             ) : (
               <Card className="bg-card/50 border-border/50 h-full flex items-center justify-center">
-                <div className="text-center py-16">
+                <div className="text-center py-8">
                   <Brain className="h-16 w-16 mx-auto mb-4 text-muted-foreground opacity-50" />
                   <h3 className="text-lg font-medium text-foreground">
                     Select an Idea
