@@ -413,7 +413,7 @@ export default function ProjectGenesisWizard() {
         </Card>
 
         {/* Phase Navigation */}
-        <div className="grid grid-cols-6 gap-2 mb-8">
+        <div className="grid grid-cols-3 sm:grid-cols-6 gap-2 mb-8">
           {PROJECT_GENESIS_PHASES.map(p => (
             <div
               key={p.phaseNumber}
