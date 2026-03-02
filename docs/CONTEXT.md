@@ -1,10 +1,10 @@
 # CEPHO.AI — Project Context & State
 
 > **Last Updated:** 2026-03-02
-> **Current Build State:** ALL PHASES COMPLETE (Phase 0 through Phase 8)
+> **Current Build State:** ALL PHASES COMPLETE (Phase 0 through Phase 8) + Post-Phase Maintenance
 > **Active Plan:** Grand Master Plan v10.0 — `/docs/plan/CEPHO_Grand_Master_Plan_v10_FINAL.docx`
 > **TypeScript:** CLEAN (0 errors)
-> **Last Commit:** 61e1ee2 — Phase 7 & Phase 8 complete
+> **Last Commit:** 1593c48 — Add cepho_workflows migration + fix REST route
 
 ---
 
@@ -65,6 +65,15 @@ CEPHO.AI is an autonomous AI Chief of Staff platform for a single executive (Vic
 | Phase 6 | Enhancements (agent ratings, API keys, War Room) | COMPLETE |
 | Phase 7 | Full Autonomy (Persephone Board, Autonomous Execution Engine) | COMPLETE |
 | Phase 8 | Admin & Governance (Admin Dashboard, God Mode) | COMPLETE |
+| Post-Phase | CI/CD Fixes, Schema Corrections, Workflow Tables | COMPLETE |
+
+---
+
+## CI/CD Status
+- **ci-cd.yml:** PASSING (pnpm v10, lockfile v9 compatible)
+- **ci.yml:** PASSING (all jobs: Lint, TypeScript, Build, Tests, Security, Deploy)
+- **db-backup.yml:** PASSING
+- **Key fix:** Updated all workflows from pnpm v8 → v10 to match `packageManager` field in package.json
 
 ---
 
@@ -81,10 +90,12 @@ CEPHO.AI is an autonomous AI Chief of Staff platform for a single executive (Vic
 - `apiKeys.router.ts` — Public REST API key management
 - `auditLog.router.ts` — Full audit trail
 - `admin.router.ts` — Platform stats, system health, agent performance, activity
+- `victoriaBriefing.router.ts` — Victoria's daily briefing + Synthesia video generation (wired)
 
 ### New Services (server/services/)
 - `scheduler.ts` — Server-side cron scheduler (12 automated jobs)
 - `documentTemplating.ts` — Document templating engine
+- `synthesia.ts` — Synthesia video generation service (wired into victoriaBriefing)
 
 ### New Pages (client/src/pages/)
 - `Onboarding.tsx` — Multi-step onboarding wizard (Digital Twin calibration)
@@ -104,13 +115,17 @@ CEPHO.AI is an autonomous AI Chief of Staff platform for a single executive (Vic
 - `VoiceInterface.tsx` — Wired to real tRPC voiceCommand router
 - `Settings.tsx` — Developer/API keys tab added, notifications wired to DB
 - `AdminDashboard.tsx` — Wired to admin.getPlatformStats, getSystemHealth, getAgentPerformance, getRecentActivity
+- `server/routes/workflows.ts` — Fixed success flag, column names (stepNumber→step), ordering
+- `server/migrations/run-migrations.ts` — Auto-discovers all drizzle/*.sql files, proper logging
 
-### Schema Additions (drizzle/schema.ts + migration 0037)
-- `agentRatings` table — agent performance ratings
-- `apiKeys` table — public REST API key management
+### Schema Additions (drizzle/schema.ts + migrations)
+- Migration 0037: `agentRatings` table, `apiKeys` table
+- Migration 0038: Fixed agent_ratings/api_keys/audit_logs to use camelCase columns (matching Drizzle schema)
+- Migration 0039: `cepho_workflows` and `cepho_workflow_steps` tables (for WorkflowsPage REST route)
 
 ### CI/CD & DevOps
-- `.github/workflows/ci.yml` — Upgraded with Snyk security scanning
+- `.github/workflows/ci.yml` — Upgraded with Snyk security scanning, pnpm v10, commit status optional
+- `.github/workflows/ci-cd.yml` — Fixed pnpm version (v10), removed explicit version conflict
 - `.github/pull_request_template.md` — PR template
 - `docs/TESTING.md` — Test strategy document
 - `docs/decisions/001-trpc-and-drizzle.md` — Architecture Decision Record
@@ -125,7 +140,8 @@ CEPHO.AI is an autonomous AI Chief of Staff platform for a single executive (Vic
 4. **Autonomous Execution testing** — Test the one-sentence execution engine end-to-end
 5. **Render deployment verification** — Confirm the latest build deployed successfully
 6. **OPENAI_API_KEY** — Confirm it is set correctly on Render (check the dashboard)
-7. **Snyk first run** — Trigger a CI run to validate Snyk security scanning is working
+7. **WorkflowsPage** — Test that the new cepho_workflows table is populated and workflows display correctly
+8. **Video generation** — Test Synthesia video generation end-to-end via the DailyBrief page
 
 ---
 
@@ -140,3 +156,4 @@ CEPHO.AI is an autonomous AI Chief of Staff platform for a single executive (Vic
 - **Automation:** Server-side cron via node-cron in `server/services/scheduler.ts`
 - **Digital Twin:** Stored in `digitalTwinProfile` table, injected into every agent prompt
 - **CEPHO Score:** Composite of task completion, project health, mood, innovation, and engagement
+- **Migration runner:** Auto-discovers all `drizzle/*.sql` files sorted numerically; idempotent (ignores "already exists")
