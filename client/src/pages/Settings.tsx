@@ -90,8 +90,24 @@ type SettingsTab =
 function DeveloperPanel() {
   const [newKeyName, setNewKeyName] = useState("");
   const [createdKey, setCreatedKey] = useState<string | null>(null);
+  const [exportRequested, setExportRequested] = useState(false);
   const utils = trpc.useUtils();
   const { data: keysData } = trpc.apiKeys.listKeys.useQuery();
+  const { data: gdprExport } = trpc.gdpr.exportMyData.useQuery(undefined, {
+    enabled: exportRequested,
+  });
+  useEffect(() => {
+    if (gdprExport && exportRequested) {
+      const blob = new Blob([JSON.stringify(gdprExport, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "cepho-my-data-export.json";
+      a.click();
+      URL.revokeObjectURL(url);
+      setExportRequested(false);
+    }
+  }, [gdprExport, exportRequested]);
   const createKey = trpc.apiKeys.createKey.useMutation({
     onSuccess: (data) => {
       setCreatedKey(data.key);
@@ -176,7 +192,7 @@ function DeveloperPanel() {
         </h4>
         <p className="text-sm text-muted-foreground mb-4">Export all your data or permanently delete your account under GDPR rights.</p>
         <div className="flex gap-3">
-          <Button variant="outline" size="sm" onClick={() => trpc.gdpr.exportMyData.useQuery()}>Export My Data</Button>
+          <Button variant="outline" size="sm" onClick={() => setExportRequested(true)}>Export My Data</Button>
           <Button variant="destructive" size="sm" onClick={() => {
             const phrase = prompt("Type DELETE MY ACCOUNT to confirm permanent deletion:");
             if (phrase === "DELETE MY ACCOUNT") {

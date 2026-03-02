@@ -5,6 +5,35 @@ import {
   integrationUsageLogs,
 } from "../../drizzle/governance-schema";
 import { eq, and } from "drizzle-orm";
+import { createCipheriv, createDecipheriv, randomBytes, createHash } from "crypto";
+
+// Encrypt/decrypt API keys at rest using AES-256-GCM
+const ENCRYPTION_KEY = createHash("sha256")
+  .update(process.env.SESSION_SECRET ?? "cepho-default-key-change-in-production")
+  .digest(); // 32 bytes
+
+function encryptApiKey(plaintext: string): string {
+  const iv = randomBytes(12);
+  const cipher = createCipheriv("aes-256-gcm", ENCRYPTION_KEY, iv);
+  const encrypted = Buffer.concat([cipher.update(plaintext, "utf8"), cipher.final()]);
+  const tag = cipher.getAuthTag();
+  return Buffer.concat([iv, tag, encrypted]).toString("base64");
+}
+
+export function decryptApiKey(ciphertext: string): string {
+  try {
+    const buf = Buffer.from(ciphertext, "base64");
+    const iv = buf.subarray(0, 12);
+    const tag = buf.subarray(12, 28);
+    const encrypted = buf.subarray(28);
+    const decipher = createDecipheriv("aes-256-gcm", ENCRYPTION_KEY, iv);
+    decipher.setAuthTag(tag);
+    return decipher.update(encrypted) + decipher.final("utf8");
+  } catch {
+    // If decryption fails (e.g., legacy plaintext key), return as-is
+    return ciphertext;
+  }
+}
 
 /**
  * Governance Service
@@ -159,7 +188,7 @@ export async function addIntegration(
     userId,
     serviceName,
     serviceType,
-    apiKey, // TODO: Encrypt this before storing
+    apiKey: encryptApiKey(apiKey), // Encrypted with AES-256-GCM
     description,
     isApproved: false,
   });

@@ -49,6 +49,7 @@ export default function AdminDashboard() {
   const { data: systemHealth } = trpc.admin.getSystemHealth.useQuery(undefined, { retry: false, refetchInterval: 30000 });
   const { data: agentPerformance } = trpc.admin.getAgentPerformance.useQuery(undefined, { retry: false });
   const { data: recentActivity } = trpc.admin.getRecentActivity.useQuery(undefined, { retry: false });
+  const { data: innovationSummary } = trpc.admin.getInnovationSummary.useQuery(undefined, { retry: false });
 
   return (
     <div className="min-h-screen bg-background p-6">
@@ -112,8 +113,8 @@ export default function AdminDashboard() {
               <StatCard
                 icon={Zap}
                 label="Ideas in Flywheel"
-                value={flywheelStats?.total ?? "—"}
-                sub={`${flywheelStats?.approved ?? 0} approved`}
+                value={flywheelStats?.total ?? innovationSummary?.byStage?.reduce((a: number, s: any) => a + Number(s.count), 0) ?? "—"}
+                sub={`${flywheelStats?.approved ?? 0} approved · ${innovationSummary?.byStage?.length ?? 0} stages`}
                 color="text-amber-500"
               />
               <StatCard
