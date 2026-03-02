@@ -238,7 +238,7 @@ Safety is implemented via a three-layered model:
 
 1.  **Technical Guardrails:** Hard-coded limits on resource consumption, action sandboxing, and rate limiting.
 2.  **Procedural Guardrails:** Mandatory human approval gates, pre-computation of high-stakes actions for user review, and phased rollouts.
-3.  **Operational Guardrails:** Comprehensive audit logs, real-time alerting for anomalous behavior, and a master 
+3.  **Operational Guardrails:** Comprehensive audit logs, real-time alerting for anomalous behavior, and a master "Big Red Button" kill switch that allows administrators to halt all autonomous activity immediately in an emergency.
 
 
 ---
