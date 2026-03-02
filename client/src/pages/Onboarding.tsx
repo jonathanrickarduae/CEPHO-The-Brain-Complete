@@ -89,7 +89,7 @@ export default function Onboarding() {
   const [formData, setFormData] = useState<Record<string, string>>({});
   const [selectedAnswers, setSelectedAnswers] = useState<Record<string, string>>({});
 
-  const calibrateMutation = trpc.digitalTwin.calibrate.useMutation({
+  const calibrateMutation = trpc.digitalTwin.recalibrate.useMutation({
     onError: () => {
       // Non-blocking — continue even if calibration fails
     },

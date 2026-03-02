@@ -45,6 +45,7 @@ import {
   Bot,
   AlertTriangle,
   Shield,
+  Activity,
 } from "lucide-react";
 import { CSSProperties, useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
@@ -116,6 +117,7 @@ const menuItems: MenuItem[] = [
         path: "/twin-training",
       },
       { icon: Bot, label: "AI Agents", path: "/ai-agents" },
+      { icon: Activity, label: "Agent Monitoring", path: "/ai-agents-monitoring" },
       { icon: Users, label: "AI-SMEs", path: "/ai-experts" },
       { icon: TrendingUp, label: "Analytics", path: "/analytics" },
       { icon: Library, label: "Document Library", path: "/documents" },
