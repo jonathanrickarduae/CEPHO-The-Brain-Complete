@@ -148,6 +148,24 @@ export default function EveningReview() {
   const _isAutoStart = urlParams.get("autostart") === "true";
   const _isDelegateMode = urlParams.get("delegate") === "true";
 
+  // Fetch real pending tasks from tRPC
+  const { data: pendingTasksData } = trpc.eveningReview.getPendingTasks.useQuery();
+  // Use real tasks if available, otherwise fall back to mock data for demo
+  const activeTasks = pendingTasksData?.tasks?.length
+    ? [{
+        projectId: "real",
+        projectName: "Your Tasks",
+        projectColor: "#6366f1",
+        tasks: pendingTasksData.tasks.map(t => ({
+          id: String(t.id),
+          text: t.title,
+          priority: (t.priority ?? "medium") as string,
+          estimatedTime: "15 min",
+          status: "pending",
+        })),
+      }]
+    : OVERNIGHT_TASKS;
+
   const [taskDecisions, setTaskDecisions] = useState<TaskDecision[]>([]);
   const [expandedProjects, setExpandedProjects] = useState<string[]>([]);
   const [currentMood, setCurrentMood] = useState([60]); // 0-100 scale
@@ -223,7 +241,7 @@ export default function EveningReview() {
     setAutoProcessingStarted(true);
 
     // Auto-accept all pending tasks
-    const allTasks = OVERNIGHT_TASKS.flatMap(p => p.tasks);
+    const allTasks = activeTasks.flatMap(p => p.tasks);
     allTasks.forEach(task => {
       if (getTaskStatus(task.id) === "pending") {
         setTaskStatus(task.id, "accepted");
@@ -238,7 +256,7 @@ export default function EveningReview() {
       const { sessionId } = await createSession.mutateAsync({ mode: "auto" });
 
       if (sessionId) {
-        const decisions = OVERNIGHT_TASKS.flatMap(project =>
+        const decisions = activeTasks.flatMap(project =>
           project.tasks.map(task => ({
             taskTitle: task.text,
             projectName: project.projectName,
@@ -288,7 +306,7 @@ export default function EveningReview() {
   };
 
   const acceptAll = (projectId: string) => {
-    const project = OVERNIGHT_TASKS.find(p => p.projectId === projectId);
+    const project = activeTasks.find(p => p.projectId === projectId);
     if (project) {
       project.tasks.forEach(task => {
         setTaskStatus(task.id, "accepted");
@@ -298,7 +316,7 @@ export default function EveningReview() {
   };
 
   const getTotalStats = () => {
-    const allTasks = OVERNIGHT_TASKS.flatMap(p => p.tasks);
+    const allTasks = activeTasks.flatMap(p => p.tasks);
     const accepted = allTasks.filter(
       t => getTaskStatus(t.id) === "accepted"
     ).length;
@@ -357,7 +375,7 @@ export default function EveningReview() {
 
       if (sessionId) {
         // Prepare decisions for API
-        const decisions = OVERNIGHT_TASKS.flatMap(project =>
+        const decisions = activeTasks.flatMap(project =>
           project.tasks.map(task => ({
             taskTitle: task.text,
             projectName: project.projectName,
@@ -489,7 +507,7 @@ export default function EveningReview() {
               It's {formatTime()}. Ready to start your Evening Review?
             </p>
             <p className="text-sm text-muted-foreground">
-              You have {stats.total} tasks across {OVERNIGHT_TASKS.length}{" "}
+              You have {stats.total} tasks across {activeTasks.length}{" "}
               projects to review.
             </p>
             <div className="flex flex-col gap-2 pt-4">
@@ -615,7 +633,7 @@ export default function EveningReview() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Left Column - Tasks (2/3 width) */}
           <div className="lg:col-span-2 space-y-4">
-            {OVERNIGHT_TASKS.map(project => {
+            {activeTasks.map(project => {
               const isExpanded = expandedProjects.includes(project.projectId);
               const projectStats = {
                 total: project.tasks.length,

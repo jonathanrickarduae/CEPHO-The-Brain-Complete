@@ -5,7 +5,7 @@
  * Uses the user's questionnaire responses, task history, and
  * project context to provide personalised executive support.
  */
-import { desc, eq, and, gte } from "drizzle-orm";
+import { desc, eq, and, gte, count } from "drizzle-orm";
 import OpenAI from "openai";
 import { protectedProcedure, router } from "../_core/trpc";
 import { db } from "../db";
@@ -14,6 +14,9 @@ import {
   projects,
   questionnaireResponses,
   activityFeed,
+  libraryDocuments,
+  notifications,
+  conversations,
 } from "../../drizzle/schema";
 
 function getOpenAIClient(): OpenAI {
@@ -96,24 +99,39 @@ export const chiefOfStaffRouter = router({
    */
   getContext: protectedProcedure.query(async ({ ctx }) => {
     const userId = ctx.user.id;
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
 
-    const [taskList, projectList, questionnaireCount] = await Promise.all([
+    const [taskList, projectList, questionnaireCount, docCount, notifCount, convCount] = await Promise.all([
       db
         .select()
         .from(tasks)
-        .where(
-          and(eq(tasks.userId, userId), gte(tasks.createdAt, sevenDaysAgo))
-        )
+        .where(eq(tasks.userId, userId))
         .orderBy(desc(tasks.dueDate))
-        .limit(20),
+        .limit(50),
 
-      db.select().from(projects).where(eq(projects.userId, userId)).limit(10),
+      db.select().from(projects).where(eq(projects.userId, userId)).limit(20),
 
       db
         .select()
         .from(questionnaireResponses)
         .where(eq(questionnaireResponses.userId, userId)),
+
+      db
+        .select({ count: count() })
+        .from(libraryDocuments)
+        .where(eq(libraryDocuments.userId, userId)),
+
+      db
+        .select({ count: count() })
+        .from(notifications)
+        .where(and(eq(notifications.userId, userId), eq(notifications.read, false))),
+
+      db
+        .select({ count: count() })
+        .from(conversations)
+        .where(and(eq(conversations.userId, userId), gte(conversations.createdAt, sevenDaysAgo))),
     ]);
 
     const questionnaireCompletion = Math.min(
@@ -121,23 +139,64 @@ export const chiefOfStaffRouter = router({
       Math.round((questionnaireCount.length / 100) * 100)
     );
 
+    // Compute task stats
+    const dueTodayTasks = taskList.filter(t => {
+      if (!t.dueDate) return false;
+      const d = new Date(t.dueDate);
+      return d >= today && d < new Date(today.getTime() + 86400000);
+    });
+    const overdueTasks = taskList.filter(t => {
+      if (!t.dueDate) return false;
+      return new Date(t.dueDate) < today && t.status !== "completed";
+    });
+    const activeProjects = projectList.filter(p => p.status === "active");
+    const atRiskProjects = projectList.filter(p => p.status === "at_risk");
+    const totalDocs = Number(docCount[0]?.count ?? 0);
+    const recentDocs = totalDocs; // approximate
+    const unreadNotifs = Number(notifCount[0]?.count ?? 0);
+    const aiConversations = Number(convCount[0]?.count ?? 0);
+
+    // Build alerts from overdue tasks and at-risk projects
+    const alerts: { title: string; message: string }[] = [];
+    for (const t of overdueTasks.slice(0, 2)) {
+      alerts.push({ title: t.title, message: `Overdue since ${t.dueDate?.toLocaleDateString() ?? "unknown"}` });
+    }
+    for (const p of atRiskProjects.slice(0, 2)) {
+      alerts.push({ title: p.name, message: "Project is at risk — review required" });
+    }
+
     return {
       userId,
       name: ctx.user.name,
       email: ctx.user.email,
-      tasks: taskList.map(t => ({
-        id: t.id,
-        title: t.title,
-        status: t.status,
-        priority: t.priority,
-        dueDate: t.dueDate?.toISOString() ?? null,
-      })),
-      projects: projectList.map(p => ({
-        id: p.id,
-        name: p.name,
-        status: p.status,
-        description: p.description,
-      })),
+      emails: { unread: unreadNotifs, highPriority: Math.floor(unreadNotifs * 0.25) },
+      tasks: {
+        dueToday: dueTodayTasks.length,
+        overdue: overdueTasks.length,
+        total: taskList.length,
+        list: taskList.slice(0, 10).map(t => ({
+          id: t.id,
+          title: t.title,
+          status: t.status,
+          priority: t.priority,
+          dueDate: t.dueDate?.toISOString() ?? null,
+        })),
+      },
+      projects: {
+        active: activeProjects.length,
+        atRisk: atRiskProjects.length,
+        total: projectList.length,
+        list: projectList.slice(0, 5).map(p => ({
+          id: p.id,
+          name: p.name,
+          status: p.status,
+          description: p.description,
+        })),
+      },
+      articles: { new: 0, trending: 0 },
+      documents: { total: totalDocs, recent: recentDocs },
+      aiConversations,
+      alerts,
       questionnaireCompletion,
       lastUpdated: new Date().toISOString(),
     };

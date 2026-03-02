@@ -306,10 +306,12 @@ export default function ChiefOfStaff() {
       isFromDb: true,
     }));
 
+    // Only show mock tasks when no real data is available (empty onboarding state)
+    const hasTasks = realTasks.length > 0 || signalTasks.length > 0;
     return [
       ...realTasks,
       ...signalTasks,
-      ...MOCK_TASKS.map(t => ({ ...t, isFromDb: false, dbId: undefined })),
+      ...(hasTasks ? [] : MOCK_TASKS.map(t => ({ ...t, isFromDb: false, dbId: undefined }))),
     ];
   }, [tasksWithQA, delegatedTasks]);
 

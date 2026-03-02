@@ -8,6 +8,7 @@ import { desc, eq, and, inArray } from "drizzle-orm";
 import { protectedProcedure, publicProcedure, router } from "../_core/trpc";
 import { db } from "../db";
 import { integrations, tasks, smeTeams, users, npsResponses, feedbackHistory, favoriteContacts, libraryDocuments, userSettings, teamCapabilities } from "../../drizzle/schema";
+import { calendarService } from "../services/calendar";
 
 // ─── Auth Router ─────────────────────────────────────────────────────────────
 export const authRouter = router({
@@ -321,20 +322,25 @@ export const calendarRouter = router({
     };
   }),
 
-  getTodaySummary: protectedProcedure.query(async () => {
+  getTodaySummary: protectedProcedure.query(async ({ ctx }) => {
     const now = new Date();
     const today = now.toLocaleDateString("en-GB", {
       weekday: "long",
       day: "numeric",
       month: "long",
     });
-
+    const summary = await calendarService.getTodaySummary(ctx.user.id);
     return {
       date: today,
-      eventCount: 0,
-      nextEvent: null,
-      message: "Connect Google Calendar or Outlook to see your schedule here.",
-      connected: false,
+      eventCount: summary.totalEvents,
+      nextEvent: summary.nextEvent,
+      message:
+        summary.totalEvents === 0
+          ? "Connect Google Calendar or Outlook to see your schedule here."
+          : `You have ${summary.totalEvents} event${
+              summary.totalEvents === 1 ? "" : "s"
+            } today.`,
+      connected: summary.totalEvents > 0,
     };
   }),
 

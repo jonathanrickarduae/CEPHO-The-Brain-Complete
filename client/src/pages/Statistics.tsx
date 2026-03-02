@@ -33,32 +33,34 @@ export default function Statistics() {
     {
       id: 1,
       label: "Productivity Score",
-      value: "94%",
-      change: "+2.4%",
-      status: "green",
+      value: insights ? `${insights.completionRate ?? 0}%` : "—",
+      change: insights ? (insights.completionRate >= 70 ? "On Track" : "Needs Attention") : "Loading...",
+      status: insights ? (insights.completionRate >= 70 ? "green" : "amber") : "green",
       icon: Activity,
     },
     {
       id: 2,
       label: "Task Completion",
-      value: "12/15",
-      change: "On Track",
+      value: liveTasksCompleted !== null && liveTasksTotal !== null
+        ? `${liveTasksCompleted}/${liveTasksTotal}`
+        : "—",
+      change: liveTasksTotal ? `${Math.round((liveTasksCompleted ?? 0) / liveTasksTotal * 100)}%` : "On Track",
       status: "green",
       icon: CheckCircle2,
     },
     {
       id: 3,
-      label: "Focus Time",
-      value: "4h 12m",
-      change: "-15m",
+      label: "Active Projects",
+      value: liveActiveProjects !== null ? String(liveActiveProjects) : "—",
+      change: liveActiveProjects !== null ? `${liveActiveProjects} running` : "Loading...",
       status: "amber",
       icon: Clock,
     },
     {
       id: 4,
-      label: "System Latency",
-      value: "12ms",
-      change: "Optimal",
+      label: "AI Conversations (30d)",
+      value: liveAiConversations !== null ? String(liveAiConversations) : "—",
+      change: liveActiveAgents !== null ? `${liveActiveAgents} agents active` : "Optimal",
       status: "green",
       icon: Zap,
     },
@@ -104,7 +106,20 @@ export default function Statistics() {
           defaultOpen={true}
           className="mb-6"
         >
-          <PersonalAnalytics variant="full" />
+          <PersonalAnalytics
+            variant="full"
+            data={insights ? {
+              productivityScore: insights.completionRate ?? 0,
+              productivityTrend: (insights.completionRate ?? 0) >= 70 ? "up" : "down",
+              twinTrainingHours: 0,
+              decisionsThisWeek: liveAiConversations ?? 0,
+              tasksCompleted: liveTasksCompleted ?? 0,
+              avgResponseTime: "< 1 min",
+              topExpertUsed: "Victoria (Chief of Staff)",
+              moodAverage: 0,
+              streakDays: 0,
+            } : undefined}
+          />
         </CollapsibleSection>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

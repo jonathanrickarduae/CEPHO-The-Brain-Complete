@@ -1,4 +1,5 @@
-import { useState} from "react";
+import { useState, useEffect } from "react";
+import { trpc } from "@/lib/trpc";
 import {
   CreditCard,
   TrendingDown,
@@ -246,10 +247,37 @@ interface SubscriptionManagerProps {
 export function SubscriptionManager({
   compact = false,
 }: SubscriptionManagerProps) {
-  const [subscriptions, _setSubscriptions] =
+  const { data: subsData } = trpc.subscriptionTracker.getAll.useQuery({});
+  const { data: summaryData } = trpc.subscriptionTracker.getSummary.useQuery();
+  const [subscriptions, setSubscriptions] =
     useState<Subscription[]>(MOCK_SUBSCRIPTIONS);
   const [suggestions, _setSuggestions] =
     useState<OptimizationSuggestion[]>(MOCK_SUGGESTIONS);
+
+  // Sync real subscription data when available
+  useEffect(() => {
+    if (subsData && subsData.length > 0) {
+      setSubscriptions(
+        subsData.map(s => ({
+          id: String(s.id),
+          name: s.name,
+          logo: "📋",
+          category: (s.category as Subscription["category"]) ?? "other",
+          plan: s.provider ?? s.name,
+          cost: Number(s.cost ?? 0),
+          billingCycle: (s.billingCycle as Subscription["billingCycle"]) ?? "monthly",
+          renewalDate: s.renewalDate ? new Date(s.renewalDate) : new Date(Date.now() + 30 * 86400000),
+          usagePercent: s.usagePercent ?? 0,
+          featuresUsed: 0,
+          featuresTotal: 0,
+          status: (s.status as Subscription["status"]) ?? "active",
+          lastUsed: new Date(),
+        }))
+      );
+    }
+  }, [subsData]);
+
+  const _summaryData = summaryData; // available for future use
   const [activeTab, setActiveTab] = useState<
     "overview" | "subscriptions" | "optimize" | "vault"
   >("overview");
