@@ -29,4 +29,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Persephone Board Content:** Changed the content of the Persephone Board from business experts to the top 14 AI leaders.
 
+## [1.1.0] - 2026-03-02
+
+### Changed
+
+- **`chiefOfStaff.getContext`:** Reshaped return value to match `EnhancedChiefOfStaff` component expectations — now returns real `emails`, `tasks`, `projects`, `documents`, `alerts`, and `aiConversations` counts from the database.
+- **`SubscriptionManager`:** Wired to `trpc.subscriptionTracker.getAll` and `getSummary`; demo data used only when no subscriptions exist.
+- **`Statistics.tsx`:** `PersonalAnalytics` and all four KPI cards now use live data from `dashboard.getInsights` and `aiAgentsMonitoring.getAllStatus`.
+- **`ChiefOfStaff.tsx`:** Mock tasks suppressed when real tasks exist; only shown during empty onboarding state.
+- **`EveningReview.tsx`:** Pending tasks fetched via `trpc.eveningReview.getPendingTasks`; `OVERNIGHT_TASKS` used as fallback only.
+
+### Fixed
+
+- Duplicate `count` import in `chiefOfStaff.router.ts` merged into single `drizzle-orm` import.
+- TypeScript: 0 errors across full codebase.
+
 '''
