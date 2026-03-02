@@ -18,6 +18,8 @@ import {
   Loader2,
   Link,
   Link2Off,
+  Eye,
+  EyeOff,
 } from "lucide-react";
 import { trpc } from "@/lib/trpc";
 import { toast } from "sonner";
@@ -53,6 +55,52 @@ const CATEGORY_COLORS: Record<string, string> = {
   crm: "from-rose-500 to-red-500",
 };
 
+// ─── Providers that require a user-supplied API key ───────────────────────────
+const PROVIDERS_NEEDING_KEY: Record<string, { label: string; placeholder: string; hint: string }> = {
+  notion: { label: "Notion API Key", placeholder: "secret_...", hint: "Get from notion.so/my-integrations" },
+  asana: { label: "Asana Personal Access Token", placeholder: "1/...", hint: "Get from app.asana.com/0/my-apps" },
+  calendly: { label: "Calendly API Key", placeholder: "eyJ...", hint: "Get from calendly.com/integrations/api_webhooks" },
+  zoom: { label: "Zoom Account ID", placeholder: "Your Zoom Account ID", hint: "Get from marketplace.zoom.us" },
+  github: { label: "GitHub Personal Access Token", placeholder: "ghp_...", hint: "Get from github.com/settings/tokens" },
+  gmail: { label: "Gmail App Password", placeholder: "App password", hint: "Use an App Password from myaccount.google.com/security" },
+};
+
+function ApiKeyDialog({ provider, providerName, onConfirm, onCancel }: { provider: string; providerName: string; onConfirm: (token: string) => void; onCancel: () => void; }) {
+  const [token, setToken] = useState("");
+  const [showToken, setShowToken] = useState(false);
+  const config = PROVIDERS_NEEDING_KEY[provider];
+  return (
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+      <div className="bg-card border border-border rounded-2xl p-6 w-full max-w-md shadow-2xl">
+        <div className="flex items-center gap-3 mb-4">
+          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-cyan-500 to-purple-500 flex items-center justify-center">
+            <Key className="w-5 h-5 text-white" />
+          </div>
+          <div>
+            <h3 className="text-lg font-bold text-white">Connect {providerName}</h3>
+            <p className="text-xs text-muted-foreground">{config?.hint}</p>
+          </div>
+        </div>
+        <div className="space-y-3">
+          <label className="text-sm font-medium text-muted-foreground">{config?.label ?? "API Key"}</label>
+          <div className="relative">
+            <input type={showToken ? "text" : "password"} value={token} onChange={e => setToken(e.target.value)} placeholder={config?.placeholder ?? "Paste your API key here"} className="w-full bg-muted border border-border rounded-lg px-3 py-2 pr-10 text-sm text-white placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-cyan-500/50" autoFocus />
+            <button type="button" onClick={() => setShowToken(v => !v)} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-white">
+              {showToken ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+            </button>
+          </div>
+        </div>
+        <div className="flex gap-3 mt-5">
+          <button onClick={onCancel} className="flex-1 px-4 py-2 bg-muted hover:bg-muted/80 text-muted-foreground rounded-lg text-sm transition-colors">Cancel</button>
+          <button onClick={() => token.trim() && onConfirm(token.trim())} disabled={!token.trim()} className="flex-1 px-4 py-2 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg text-sm transition-colors disabled:opacity-50 flex items-center justify-center gap-2">
+            <Link className="w-4 h-4" />Connect
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 const CATEGORY_LABELS: Record<string, string> = {
   all: "All",
   ai: "AI Services",
@@ -67,6 +115,7 @@ const CATEGORY_LABELS: Record<string, string> = {
 export function IntegrationsStatusReal() {
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [isInitializing, setIsInitializing] = useState(false);
+  const [pendingConnect, setPendingConnect] = useState<{ provider: string; name: string } | null>(null);
 
   const {
     data: integrations = [],
@@ -100,6 +149,20 @@ export function IntegrationsStatusReal() {
       void refetch();
     },
   });
+
+  const handleConnectClick = (provider: string, name: string) => {
+    if (PROVIDERS_NEEDING_KEY[provider]) {
+      setPendingConnect({ provider, name });
+    } else {
+      connectMutation.mutate({ provider });
+    }
+  };
+
+  const handleApiKeyConfirm = (token: string) => {
+    if (!pendingConnect) return;
+    connectMutation.mutate({ provider: pendingConnect.provider, accessToken: token });
+    setPendingConnect(null);
+  };
 
   const handleInitialize = async () => {
     setIsInitializing(true);
@@ -147,6 +210,14 @@ export function IntegrationsStatusReal() {
 
   return (
     <div className="space-y-6">
+      {pendingConnect && (
+        <ApiKeyDialog
+          provider={pendingConnect.provider}
+          providerName={pendingConnect.name}
+          onConfirm={handleApiKeyConfirm}
+          onCancel={() => setPendingConnect(null)}
+        />
+      )}
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -227,6 +298,7 @@ export function IntegrationsStatusReal() {
           {filtered.map(service => {
             const colorClass = CATEGORY_COLORS[service.category] ?? "from-gray-500 to-slate-500";
             const icon = PROVIDER_ICONS[service.id] ?? <Cpu className="w-5 h-5 text-white" />;
+            const needsKey = !!PROVIDERS_NEEDING_KEY[service.id];
 
             return (
               <div
@@ -261,24 +333,30 @@ export function IntegrationsStatusReal() {
                     {service.syncError}
                   </p>
                 )}
-
+                {needsKey && !service.connected && (
+                  <p className="text-xs text-amber-400/70 mb-2 flex items-center gap-1">
+                    <Key className="w-3 h-3" />
+                    Requires your API key
+                  </p>
+                )}
                 <div className="flex gap-2 mt-3">
                   {service.connected ? (
                     <button
                       onClick={() => disconnectMutation.mutate({ provider: service.id })}
                       disabled={disconnectMutation.isPending}
                       className="flex-1 px-3 py-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded-lg text-sm transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
-                    >                      <Link2Off className="w-4 h-4" />
+                    >
+                      <Link2Off className="w-4 h-4" />
                       Disconnect
                     </button>
                   ) : (
                     <button
-                      onClick={() => connectMutation.mutate({ provider: service.id })}
+                      onClick={() => handleConnectClick(service.id, service.name)}
                       disabled={connectMutation.isPending}
                       className="flex-1 px-3 py-2 bg-[var(--brain-cyan)]/10 hover:bg-[var(--brain-cyan)]/20 text-[var(--brain-cyan)] rounded-lg text-sm transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
                     >
-                      <Link className="w-4 h-4" />
-                      Connect
+                      {needsKey ? <Key className="w-4 h-4" /> : <Link className="w-4 h-4" />}
+                      {needsKey ? "Enter API Key" : "Connect"}
                     </button>
                   )}
                 </div>
