@@ -140,15 +140,21 @@ const PHASES = [
   {
     id: 'ph0', label: 'Phase 0', title: 'Pre-Conditions & Foundation', color: '#7c3aed',
     tasks: [
-      { id: 'p0-1', name: 'CI/CD pipeline setup (GitHub Actions)', tags: ['precond'], status: 'not-started' },
-      { id: 'p0-2', name: 'Branch strategy (main / develop / feature/*)', tags: ['precond'], status: 'not-started' },
-      { id: 'p0-3', name: 'Environment variables fully documented in .env.example', tags: ['precond'], status: 'not-started' },
-      { id: 'p0-4', name: 'Seed data scripts for all core tables', tags: ['precond'], status: 'not-started' },
-      { id: 'p0-5', name: 'Architectural Decision Records (ADRs) directory created', tags: ['precond'], status: 'not-started' },
-      { id: 'p0-6', name: 'Pre-commit hooks (lint + type-check)', tags: ['precond'], status: 'not-started' },
-      { id: 'p0-7', name: 'Staging environment on Render configured', tags: ['precond'], status: 'not-started' },
-      { id: 'p0-8', name: 'Testing strategy defined (unit, integration, E2E targets)', tags: ['precond', 'gap'], status: 'not-started', gap: true },
-      { id: 'p0-9', name: 'Security penetration testing plan (OWASP Top 10)', tags: ['precond', 'gap'], status: 'not-started', gap: true },
+      { id: 'p0-1', name: 'CI/CD pipeline setup — 4-job pipeline: lint, typecheck, tests, deploy', tags: ['precond'], status: 'done' },
+      { id: 'p0-2', name: 'Branch strategy (main / develop / feature/*) — develop branch created & pushed', tags: ['precond'], status: 'done' },
+      { id: 'p0-3', name: 'Environment variables fully documented in .env.example (50+ vars)', tags: ['precond'], status: 'done' },
+      { id: 'p0-4', name: 'Seed data scripts for all core tables (scripts/seed.ts)', tags: ['precond'], status: 'done' },
+      { id: 'p0-5', name: 'Architectural Decision Records (ADRs) — 5 ADRs created (001-005)', tags: ['precond'], status: 'done' },
+      { id: 'p0-6', name: 'Pre-commit hooks (TypeScript + ESLint + Prettier)', tags: ['precond'], status: 'done' },
+      { id: 'p0-7', name: 'Staging environment on Render configured (develop to staging)', tags: ['precond'], status: 'done' },
+      { id: 'p0-8', name: 'Testing strategy defined — TESTING_STRATEGY.md (unit, integration, E2E, 80% coverage)', tags: ['precond'], status: 'done' },
+      { id: 'p0-9', name: 'Security penetration testing plan — PENETRATION_TESTING_PLAN.md (OWASP Top 10)', tags: ['precond'], status: 'done' },
+      { id: 'p0-10', name: 'Product Metrics & KPI Framework — KPI_FRAMEWORK.md (North Star: WAU, PostHog)', tags: ['precond'], status: 'done' },
+      { id: 'p0-11', name: 'On-Call & Incident Management Playbook — ON_CALL_PLAYBOOK.md (SEV1/2/3, PagerDuty)', tags: ['precond'], status: 'done' },
+      { id: 'p0-12', name: 'Developer Onboarding & 30-Day Plan — DEVELOPER_ONBOARDING_30_DAY_PLAN.md', tags: ['precond'], status: 'done' },
+      { id: 'p0-13', name: 'Storybook Component Library Plan — STORYBOOK_PLAN.md (Calm Cockpit live library)', tags: ['precond'], status: 'done' },
+      { id: 'p0-14', name: 'Observability Strategy & SLOs — OBSERVABILITY_STRATEGY.md (4 golden signals, Datadog)', tags: ['precond'], status: 'done' },
+      { id: 'p0-15', name: 'AI & Cloud Cost Management Plan — COST_MANAGEMENT_PLAN.md (per-feature budgets)', tags: ['precond'], status: 'done' },
     ]
   },
   {
@@ -313,6 +319,13 @@ const PHASES = [
       { id: 'app-ab', name: 'Appendix AB: AI Agents Roles & Responsibilities', tags: ['appendix'], status: 'not-started' },
       { id: 'app-ac', name: 'Appendix AC: Persephone Board Integration Specs', tags: ['appendix'], status: 'not-started' },
       { id: 'app-ad', name: 'Appendix AD: Gap Analysis (20 identified gaps)', tags: ['appendix'], status: 'not-started' },
+      { id: 'app-ae', name: 'Appendix AE: Design Principles — The Calm Cockpit design system', tags: ['appendix'], status: 'done' },
+      { id: 'app-ap', name: 'Appendix AP: Product Metrics & KPI Framework (North Star: WAU, PostHog)', tags: ['appendix'], status: 'done' },
+      { id: 'app-aq', name: 'Appendix AQ: On-Call & Incident Management Playbook (SEV1/2/3, PagerDuty)', tags: ['appendix'], status: 'done' },
+      { id: 'app-ar', name: 'Appendix AR: Developer Onboarding & 30-Day Plan', tags: ['appendix'], status: 'done' },
+      { id: 'app-as', name: 'Appendix AS: Storybook Component Library Plan (Calm Cockpit live library)', tags: ['appendix'], status: 'done' },
+      { id: 'app-at', name: 'Appendix AT: Observability Strategy & SLOs (4 golden signals, Datadog, 99.95% uptime)', tags: ['appendix'], status: 'done' },
+      { id: 'app-au', name: 'Appendix AU: AI & Cloud Cost Management Plan (per-feature budgets, anomaly detection)', tags: ['appendix'], status: 'done' },
     ]
   }
 ];
