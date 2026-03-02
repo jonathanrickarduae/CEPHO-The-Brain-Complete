@@ -153,7 +153,7 @@ export const eveningReviewRouter = router({
     const pendingTasks = await db
       .select()
       .from(tasks)
-      .where(and(eq(tasks.userId, ctx.user.id), eq(tasks.status, "pending")))
+      .where(and(eq(tasks.userId, ctx.user.id), eq(tasks.status, "not_started")))
       .orderBy(desc(tasks.createdAt))
       .limit(20);
 
@@ -316,7 +316,7 @@ export const morningSignalRouter = router({
     const pendingTasks = await db
       .select()
       .from(tasks)
-      .where(and(eq(tasks.userId, ctx.user.id), eq(tasks.status, "pending")))
+      .where(and(eq(tasks.userId, ctx.user.id), eq(tasks.status, "not_started")))
       .orderBy(desc(tasks.createdAt))
       .limit(10);
 
