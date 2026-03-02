@@ -112,9 +112,9 @@ export default function DocumentLibrary() {
   const [emailHistoryDocument, setEmailHistoryDocument] = useState<LibraryDocument | null>(null);
 
   const {
-    data: documents,
+    data: listData,
     isLoading,
-    error,
+    error: _listError,
     refetch,
   } = trpc.documentLibrary.list.useQuery(
     {
@@ -263,15 +263,22 @@ export default function DocumentLibrary() {
     setIsEmailHistoryOpen(true);
   };
 
+  // The router returns { documents: [...], total: N } — extract the array safely.
+  // Memoised to give a stable reference and satisfy react-hooks/exhaustive-deps.
+  const documents = useMemo(
+    () => listData?.documents ?? [],
+    [listData]
+  );
+
   const filteredDocuments = useMemo(
     () =>
-      documents?.filter(doc => {
+      documents.filter(doc => {
         if (!searchQuery) return true;
         return (
           doc.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
           doc.documentId.toLowerCase().includes(searchQuery.toLowerCase())
         );
-      }) || [],
+      }),
     [documents, searchQuery]
   );
 
@@ -334,8 +341,10 @@ export default function DocumentLibrary() {
 
   const handleGeneratePDF = (doc: LibraryDocument) => {
     generatePDFMutation.mutate({
-      documentId: doc.documentId,
+      title: doc.title,
       type: doc.type,
+      prompt: `Regenerate the document titled "${doc.title}" as a professional PDF-ready report.`,
+      classification: doc.classification ?? "internal",
     });
   };
 

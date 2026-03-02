@@ -1,8 +1,8 @@
 import type { Express } from "express";
-import express from "express";
 import { logger } from "./utils/logger";
 import { globalRateLimiter, authRateLimiter } from "./middleware/rate-limiter";
 import { configureSecurityHeaders } from "./middleware/security-headers";
+import { cspNonceMiddleware } from "./middleware/csp-nonce";
 import { applySanitizationMiddleware } from "./middleware/input-sanitizer";
 import {
   errorTrackerService,
@@ -46,7 +46,9 @@ export async function setupMiddleware(app: Express) {
   } else {
   }
 
-  // 6. Security headers (Helmet.js)
+  // 6a. Generate per-request CSP nonce (MUST be before Helmet so res.locals.cspNonce is set)
+  app.use(cspNonceMiddleware);
+  // 6b. Security headers (Helmet.js) — reads nonce from res.locals.cspNonce via callback
   configureSecurityHeaders(app);
   // 7. Body parsing is handled in server/_core/index.ts
   // (Removed duplicate to avoid conflicts)
@@ -75,7 +77,8 @@ export async function setupMiddleware(app: Express) {
     if (stats.connected) {
     } else {
     }
-  } catch (error) {
+  } catch {
+    // Cache connection failure is non-fatal — app continues without Redis
   }
 
   // 12. Metrics endpoint (before health checks)
@@ -138,7 +141,7 @@ export async function gracefulShutdown() {
     // Disconnect Redis
     await cacheService.disconnect();
     process.exit(0);
-  } catch (error) {
+  } catch {
     process.exit(1);
   }
 }

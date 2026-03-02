@@ -13,13 +13,15 @@ export default tseslint.config(
   // TypeScript recommended rules
   ...tseslint.configs.recommended,
 
-  // Node globals for server files
+  // Node globals and quality rules for the critical server path + actively maintained client pages
   {
     files: [
       "server/_core/**/*.ts",
       "server/middleware/**/*.ts",
       "server/routes/**/*.ts",
       "server/utils/**/*.ts",
+      "server/setup-middleware.ts",
+      "client/src/pages/DocumentLibrary.tsx",
     ],
     languageOptions: {
       globals: {
@@ -31,27 +33,6 @@ export default tseslint.config(
       "@typescript-eslint/no-unused-vars": [
         "warn",
         {
-          argsIgnorePattern: "^_",
-          varsIgnorePattern: "^_",
-          caughtErrorsIgnorePattern: "^_",
-        },
-      ],
-      "no-console": ["warn", { allow: ["warn", "error"] }],
-    },
-  },
-
-  // Global override: allow underscore-prefixed catch variables across all scoped files
-  {
-    files: [
-      "server/_core/**/*.ts",
-      "server/middleware/**/*.ts",
-      "server/routes/**/*.ts",
-      "server/utils/**/*.ts",
-    ],
-    rules: {
-      "@typescript-eslint/no-unused-vars": [
-        "warn",
-        {
           args: "all",
           argsIgnorePattern: "^_",
           varsIgnorePattern: "^_",
@@ -60,6 +41,7 @@ export default tseslint.config(
           ignoreRestSiblings: true,
         },
       ],
+      "no-console": ["warn", { allow: ["warn", "error"] }],
     },
   },
 
@@ -75,8 +57,9 @@ export default tseslint.config(
       "coverage/**",
       "*.tsbuildinfo",
       "drizzle/**",
-      // Ignore all client code until it is actively refactored
+      // Ignore all client code until it is actively refactored (except actively fixed pages)
       "client/**",
+      "!client/src/pages/DocumentLibrary.tsx",
       // Ignore legacy server files not on the critical path
       "server/services/**",
       "server/workflows/**",

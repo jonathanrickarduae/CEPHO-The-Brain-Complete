@@ -1,4 +1,4 @@
-import express, { type Express } from "express";
+import express, { type Express, type Request, type Response } from "express";
 import fs from "fs";
 import { type Server } from "http";
 import { nanoid } from "nanoid";
@@ -21,7 +21,7 @@ export async function setupVite(app: Express, server: Server) {
   });
 
   app.use(vite.middlewares);
-  app.use("*", async (req, res, next) => {
+  app.use("*", async (req: Request, res: Response, next) => {
     const url = req.originalUrl;
 
     try {
@@ -32,12 +32,24 @@ export async function setupVite(app: Express, server: Server) {
         "index.html"
       );
 
-      // always reload the index.html file from disk incase it changes
+      // always reload the index.html file from disk in case it changes
       let template = await fs.promises.readFile(clientTemplate, "utf-8");
       template = template.replace(
         `src="/src/main.tsx"`,
         `src="/src/main.tsx?v=${nanoid()}"`
       );
+
+      // Inject the per-request CSP nonce into inline <script> tags so they are
+      // permitted by the nonce-based Content-Security-Policy header.
+      const nonce = (res.locals.cspNonce as string) || "";
+      if (nonce) {
+        // Add nonce to any <script> tag that does not already have one
+        template = template.replace(
+          /<script(?![^>]*\snonce=)([^>]*)>/g,
+          `<script nonce="${nonce}"$1>`
+        );
+      }
+
       const page = await vite.transformIndexHtml(url, template);
       res.status(200).set({ "Content-Type": "text/html" }).end(page);
     } catch (e) {
