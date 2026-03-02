@@ -96,4 +96,41 @@ export const projectsRouter = router({
       if (!updated) throw new Error("Project not found or access denied");
       return { id: updated.id, status: updated.status };
     }),
+
+  /**
+   * Get a single project by ID.
+   */
+  get: protectedProcedure
+    .input(z.object({ id: z.number() }))
+    .query(async ({ input, ctx }) => {
+      const rows = await db
+        .select()
+        .from(projects)
+        .where(and(eq(projects.id, input.id), eq(projects.userId, ctx.user.id)))
+        .limit(1);
+      if (rows.length === 0) return null;
+      const p = rows[0];
+      return {
+        id: p.id,
+        name: p.name,
+        description: p.description,
+        status: p.status,
+        priority: p.priority,
+        progress: p.progress,
+        dueDate: p.dueDate?.toISOString() ?? null,
+        createdAt: p.createdAt.toISOString(),
+      };
+    }),
+
+  /**
+   * Delete a project.
+   */
+  delete: protectedProcedure
+    .input(z.object({ id: z.number() }))
+    .mutation(async ({ input, ctx }) => {
+      await db
+        .delete(projects)
+        .where(and(eq(projects.id, input.id), eq(projects.userId, ctx.user.id)));
+      return { success: true, id: input.id };
+    }),
 });

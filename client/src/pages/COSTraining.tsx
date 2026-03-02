@@ -139,7 +139,7 @@ export default function COSTraining() {
   const utils = trpc.useUtils();
 
   // Fetch real progress from DB
-  const { data: progressData } = trpc.cosTraining.getProgress.useQuery(undefined, {
+  const { data: progressData, isLoading: _progressLoading } = trpc.cosTraining.getProgress.useQuery(undefined, {
     staleTime: 30000,
     onSuccess: (data) => {
       // Sync local state with DB on first load

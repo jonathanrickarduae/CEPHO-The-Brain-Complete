@@ -11,6 +11,7 @@ import {
   ArrowUpRight,
   Cpu,
   BarChart3,
+  RefreshCw,
 } from "lucide-react";
 import {
   PersonalAnalytics,
@@ -19,7 +20,7 @@ import { CollapsibleSection } from "@/components/shared/CollapsibleSection";
 import { PageShell } from "@/components/layout/PageShell";
 
 export default function Statistics() {
-  const { data: insights } = trpc.dashboard.getInsights.useQuery();
+  const { data: insights, isLoading: insightsLoading } = trpc.dashboard.getInsights.useQuery();
   const { data: agentsData } = trpc.aiAgentsMonitoring.getAllStatus.useQuery(undefined, { retry: false });
 
   // Merge live data into KPI cards where available
@@ -89,6 +90,16 @@ export default function Statistics() {
       status: "In Progress",
     },
   ];
+
+  if (insightsLoading) {
+    return (
+      <PageShell icon={BarChart3} iconClass="bg-green-500/15 text-green-400" title="Analytics" subtitle="Personal performance metrics and system evolution">
+        <div className="flex items-center justify-center py-16">
+          <RefreshCw className="animate-spin h-8 w-8 text-primary" />
+        </div>
+      </PageShell>
+    );
+  }
 
   return (
     <PageShell

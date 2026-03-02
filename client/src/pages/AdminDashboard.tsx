@@ -45,7 +45,7 @@ export default function AdminDashboard() {
 
   const { data: cephoScore } = trpc.cephoScore.get.useQuery(undefined, { retry: false });
   const { data: flywheelStats } = trpc.innovation.getFlywheelStats.useQuery(undefined, { retry: false });
-  const { data: platformStats } = trpc.admin.getPlatformStats.useQuery(undefined, { retry: false });
+  const { data: platformStats, isLoading: _statsLoading } = trpc.admin.getPlatformStats.useQuery(undefined, { retry: false });
   const { data: systemHealth } = trpc.admin.getSystemHealth.useQuery(undefined, { retry: false, refetchInterval: 30000 });
   const { data: agentPerformance } = trpc.admin.getAgentPerformance.useQuery(undefined, { retry: false });
   const { data: recentActivity } = trpc.admin.getRecentActivity.useQuery(undefined, { retry: false });

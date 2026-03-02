@@ -149,7 +149,7 @@ export default function EveningReview() {
   const _isDelegateMode = urlParams.get("delegate") === "true";
 
   // Fetch real pending tasks from tRPC
-  const { data: pendingTasksData } = trpc.eveningReview.getPendingTasks.useQuery();
+  const { data: pendingTasksData, isLoading: _tasksLoading } = trpc.eveningReview.getPendingTasks.useQuery();
   // Use real tasks if available, otherwise fall back to mock data for demo
   const activeTasks = pendingTasksData?.tasks?.length
     ? [{

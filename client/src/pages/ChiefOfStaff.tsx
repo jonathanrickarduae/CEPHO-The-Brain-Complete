@@ -213,7 +213,19 @@ export default function ChiefOfStaff() {
   const [viewMode, setViewMode] = useState<ViewMode>("chat");
   const [messageInput, setMessageInput] = useState(initialMessage || "");
   const [currentConversationId, setCurrentConversationId] = useState("conv-1");
-  const [conversations] = useState<Conversation[]>(MOCK_CONVERSATIONS);
+  const { data: chatHistory } = trpc.chat.history.useQuery({ limit: 50 });
+  // Build conversation list from real chat history; fall back to mock when empty
+  const conversations: Conversation[] = chatHistory && chatHistory.length > 0
+    ? [{
+        id: "current",
+        title: "Current Session",
+        project: undefined,
+        lastMessage: chatHistory[chatHistory.length - 1]?.content?.slice(0, 60) ?? "Start a new conversation",
+        timestamp: new Date(chatHistory[chatHistory.length - 1]?.timestamp ?? Date.now()),
+        unread: 0,
+        starred: true,
+      }]
+    : MOCK_CONVERSATIONS;
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [showTaskDetail, setShowTaskDetail] = useState(false);
   const [reviewScore, setReviewScore] = useState<number>(8);

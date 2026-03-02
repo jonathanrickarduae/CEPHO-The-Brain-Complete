@@ -141,4 +141,42 @@ export const tasksRouter = router({
         progress: updated.progress,
       };
     }),
+
+  /**
+   * Get a single task by ID.
+   */
+  get: protectedProcedure
+    .input(z.object({ id: z.number() }))
+    .query(async ({ input, ctx }) => {
+      const rows = await db
+        .select()
+        .from(tasks)
+        .where(and(eq(tasks.id, input.id), eq(tasks.userId, ctx.user.id)))
+        .limit(1);
+      if (rows.length === 0) return null;
+      const t = rows[0];
+      return {
+        id: t.id,
+        title: t.title,
+        description: t.description,
+        status: t.status,
+        priority: t.priority,
+        progress: t.progress,
+        dueDate: t.dueDate?.toISOString() ?? null,
+        assignedTo: t.assignedTo,
+        createdAt: t.createdAt.toISOString(),
+      };
+    }),
+
+  /**
+   * Delete a task.
+   */
+  delete: protectedProcedure
+    .input(z.object({ id: z.number() }))
+    .mutation(async ({ input, ctx }) => {
+      await db
+        .delete(tasks)
+        .where(and(eq(tasks.id, input.id), eq(tasks.userId, ctx.user.id)));
+      return { success: true, id: input.id };
+    }),
 });
