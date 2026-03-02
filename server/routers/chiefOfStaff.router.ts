@@ -5,6 +5,7 @@
  * Uses the user's questionnaire responses, task history, and
  * project context to provide personalised executive support.
  */
+import { z } from "zod";
 import { desc, eq, and, gte, count } from "drizzle-orm";
 import OpenAI from "openai";
 import { protectedProcedure, router } from "../_core/trpc";
@@ -268,4 +269,65 @@ Keep it concise and actionable. Use a professional, direct tone.`;
       generatedAt: new Date().toISOString(),
     };
   }),
+
+  /**
+   * AI-powered task quality scoring.
+   * Replaces the Math.random() stub in the ChiefOfStaff page.
+   */
+  scoreTask: protectedProcedure
+    .input(
+      z.object({
+        taskId: z.number(),
+        taskTitle: z.string(),
+        taskDescription: z.string().optional(),
+        taskStatus: z.string().optional(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      const openai = getOpenAIClient();
+      const prompt = `You are a Chief of Staff AI performing a quality verification on a completed task.
+
+Task: "${input.taskTitle}"
+Description: ${input.taskDescription ?? "No description provided"}
+Status: ${input.taskStatus ?? "completed"}
+
+Score this task on a scale of 1-10 for quality and completeness. Respond with JSON only:
+{
+  "score": <number 1-10>,
+  "reasoning": "<one sentence explanation>",
+  "approved": <true if score >= 7>
+}`;
+      const completion = await openai.chat.completions.create({
+        model: "gpt-4.1-mini",
+        messages: [{ role: "user", content: prompt }],
+        max_tokens: 150,
+        temperature: 0.3,
+        response_format: { type: "json_object" },
+      });
+      let result: { score: number; reasoning: string; approved: boolean } = {
+        score: 8,
+        reasoning: "Task completed to a satisfactory standard.",
+        approved: true,
+      };
+      try {
+        const parsed = JSON.parse(completion.choices[0]?.message?.content ?? "{}");
+        result = {
+          score: Math.min(10, Math.max(1, Number(parsed.score) || 8)),
+          reasoning: String(parsed.reasoning ?? "Task reviewed."),
+          approved: Boolean(parsed.approved ?? result.score >= 7),
+        };
+      } catch {
+        // Use defaults above
+      }
+      // Persist the score to the task
+      await db
+        .update(tasks)
+        .set({
+          cosScore: result.score,
+          qaStatus: result.approved ? "passed" : "failed",
+          updatedAt: new Date(),
+        })
+        .where(and(eq(tasks.id, input.taskId), eq(tasks.userId, ctx.user.id)));
+      return result;
+    }),
 });

@@ -140,6 +140,18 @@ export const projectGenesisRouter = router({
       })
     )
     .mutation(async ({ input, ctx }) => {
+      // Auto-assign an AI agent based on industry
+      const INDUSTRY_AGENTS: Record<string, { id: string; name: string; role: string }> = {
+        "Technology": { id: "tech_advisor", name: "Ethan", role: "Tech Advisor" },
+        "Finance": { id: "financial_analyst", name: "Leo", role: "Financial Analyst" },
+        "Healthcare": { id: "research_analyst", name: "Aria", role: "Research Director" },
+        "Marketing": { id: "marketing_strategist", name: "Luna", role: "Marketing Strategist" },
+        "Legal": { id: "legal_advisor", name: "Marcus", role: "Strategy Advisor" },
+        "Creative": { id: "brand_voice_guardian", name: "Sophia", role: "Innovation Lead" },
+        "Operations": { id: "project_manager", name: "Victoria", role: "Chief of Staff" },
+      };
+      const industry = input.industry ?? "Technology";
+      const assignedAgent = INDUSTRY_AGENTS[industry] ?? INDUSTRY_AGENTS["Technology"];
       // Create the project
       const [project] = await db
         .insert(projectGenesis)
@@ -151,9 +163,10 @@ export const projectGenesisRouter = router({
           status: "active",
           description: input.description ?? null,
           metadata: {
-            industry: input.industry ?? "General",
+            industry,
             targetMarket: input.targetMarket ?? "",
             uniqueValue: input.uniqueValue ?? "",
+            assignedAgent,
           },
         })
         .returning();
@@ -184,6 +197,7 @@ export const projectGenesisRouter = router({
         name: project.name,
         status: project.status,
         createdAt: project.createdAt.toISOString(),
+        assignedAgent,
       };
     }),
 

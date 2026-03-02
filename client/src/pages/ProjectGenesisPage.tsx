@@ -105,7 +105,10 @@ export default function ProjectGenesisPage() {
   // Create project mutation
   const createProjectMutation = trpc.projectGenesis.initiate.useMutation({
     onSuccess: data => {
-      toast.success(`Project "${data.name}" created successfully!`);
+      const agentMsg = data.assignedAgent
+        ? ` ${data.assignedAgent.name} (${data.assignedAgent.role}) has been assigned as your lead agent.`
+        : "";
+      toast.success(`Project "${data.name}" created successfully!${agentMsg}`);
       refetchProjects();
     },
     onError: error => {

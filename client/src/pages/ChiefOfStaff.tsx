@@ -267,6 +267,20 @@ export default function ChiefOfStaff() {
         toast.error(`Failed to submit verification: ${error.message}`);
       },
     });
+  // Real AI task scoring — replaces the Math.random() stub
+  const scoreTaskMutation = trpc.chiefOfStaff.scoreTask.useMutation({
+    onSuccess: (result, variables) => {
+      submitSecondaryReviewMutation.mutate({
+        taskId: variables.taskId,
+        score: result.score,
+        feedback: result.reasoning,
+        status: result.approved ? "approved" : "rejected",
+      });
+    },
+    onError: error => {
+      toast.error(`AI scoring failed: ${error.message}`);
+    },
+  });
 
   // Combine real tasks with mock tasks for display
   const tasks = useMemo(() => {
@@ -338,16 +352,16 @@ export default function ChiefOfStaff() {
     });
   };
 
-  // Handle Secondary AI verification (reserved for direct call)
+  // Handle Secondary AI verification — uses real AI scoring via chiefOfStaff.scoreTask
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleSecondaryVerification = (taskId: number) => {
-    // Simulate AI verification with a score
-    const aiScore = Math.floor(Math.random() * 3) + 8; // 8-10 score
-    submitSecondaryReviewMutation.mutate({
+    const task = tasks.find(t => t.dbId === taskId);
+    if (!task) return;
+    scoreTaskMutation.mutate({
       taskId,
-      score: aiScore,
-      feedback: "Automated verification complete. All quality criteria met.",
-      status: "approved",
+      taskTitle: task.title,
+      taskDescription: task.description ?? undefined,
+      taskStatus: task.status,
     });
   };
 

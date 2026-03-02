@@ -557,6 +557,49 @@ export const cosTasksRouter = router({
       }));
     }),
 
+  /**
+   * Create a new task via the Chief of Staff interface.
+   * Includes proper Zod validation with descriptive error messages.
+   */
+  create: protectedProcedure
+    .input(
+      z.object({
+        title: z.string()
+          .min(3, "Title must be at least 3 characters")
+          .max(500, "Title must be under 500 characters"),
+        description: z.string()
+          .max(2000, "Description must be under 2000 characters")
+          .optional(),
+        priority: z.enum(["low", "medium", "high", "urgent"]).default("medium"),
+        dueDate: z.string().optional(),
+        agentId: z.number().optional(),
+        projectId: z.number().optional(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      const [task] = await db
+        .insert(tasks)
+        .values({
+          userId: ctx.user.id,
+          title: input.title,
+          description: input.description ?? null,
+          priority: input.priority,
+          status: input.agentId ? "delegated" : "not_started",
+          progress: 0,
+          dueDate: input.dueDate ? new Date(input.dueDate) : null,
+          projectId: input.projectId ?? null,
+          assignedTo: input.agentId ? `agent:${input.agentId}` : null,
+        })
+        .returning();
+      return {
+        success: true,
+        id: task.id,
+        title: task.title,
+        status: task.status,
+        createdAt: task.createdAt.toISOString(),
+      };
+    }),
+
   delegateTask: protectedProcedure
     .input(
       z.object({
