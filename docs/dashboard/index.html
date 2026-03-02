@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CEPHO.AI — Grand Master Plan v11 Dashboard</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #1a1d27;
+    --surface2: #22263a;
+    --border: #2e3250;
+    --accent: #6c63ff;
+    --accent2: #00d4aa;
+    --warn: #f59e0b;
+    --danger: #ef4444;
+    --text: #e2e8f0;
+    --muted: #8892a4;
+    --done: #10b981;
+    --inprog: #6c63ff;
+    --notstarted: #374151;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Inter', system-ui, sans-serif; font-size: 14px; }
+  header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+  header h1 { font-size: 18px; font-weight: 700; color: var(--accent); letter-spacing: -0.3px; }
+  header .subtitle { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .overall-bar { background: var(--surface2); border-radius: 8px; height: 8px; width: 200px; overflow: hidden; }
+  .overall-bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 8px; transition: width 0.5s; }
+  .overall-pct { font-size: 13px; font-weight: 700; color: var(--accent2); margin-left: 10px; }
+  main { max-width: 1200px; margin: 0 auto; padding: 24px 16px; }
+  .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 28px; }
+  .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+  .stat-card .label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+  .stat-card .value { font-size: 26px; font-weight: 800; margin-top: 4px; }
+  .stat-card .value.done { color: var(--done); }
+  .stat-card .value.inprog { color: var(--inprog); }
+  .stat-card .value.notstarted { color: var(--muted); }
+  .stat-card .value.total { color: var(--text); }
+  .filters { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+  .filter-btn { background: var(--surface); border: 1px solid var(--border); color: var(--muted); padding: 6px 14px; border-radius: 20px; cursor: pointer; font-size: 12px; transition: all 0.2s; }
+  .filter-btn:hover, .filter-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .phase-block { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 16px; overflow: hidden; }
+  .phase-header { padding: 16px 20px; cursor: pointer; display: flex; align-items: center; gap: 12px; user-select: none; }
+  .phase-header:hover { background: var(--surface2); }
+  .phase-badge { background: var(--accent); color: #fff; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 4px; white-space: nowrap; }
+  .phase-badge.ph0 { background: #7c3aed; }
+  .phase-badge.ph1 { background: #2563eb; }
+  .phase-badge.ph2 { background: #0891b2; }
+  .phase-badge.ph3 { background: #059669; }
+  .phase-badge.ph4 { background: #d97706; }
+  .phase-badge.ph5 { background: #dc2626; }
+  .phase-badge.ph6 { background: #7c3aed; }
+  .phase-badge.ph7 { background: #be185d; }
+  .phase-badge.phapp { background: #374151; }
+  .phase-title { font-weight: 700; font-size: 15px; flex: 1; }
+  .phase-progress { display: flex; align-items: center; gap: 8px; min-width: 160px; }
+  .phase-bar { background: var(--surface2); border-radius: 4px; height: 6px; flex: 1; overflow: hidden; }
+  .phase-bar-fill { height: 100%; border-radius: 4px; transition: width 0.5s; }
+  .phase-pct { font-size: 12px; font-weight: 700; color: var(--muted); min-width: 32px; text-align: right; }
+  .phase-toggle { color: var(--muted); font-size: 16px; transition: transform 0.2s; }
+  .phase-toggle.open { transform: rotate(90deg); }
+  .task-list { padding: 0 20px 16px; display: none; }
+  .task-list.open { display: block; }
+  .task-item { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--border); }
+  .task-item:last-child { border-bottom: none; }
+  .task-status { width: 20px; height: 20px; border-radius: 50%; flex-shrink: 0; margin-top: 1px; cursor: pointer; border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 10px; transition: all 0.2s; }
+  .task-status.done { background: var(--done); border-color: var(--done); }
+  .task-status.in-progress { background: var(--inprog); border-color: var(--inprog); }
+  .task-status.not-started { background: transparent; border-color: var(--muted); }
+  .task-status.gap { background: transparent; border-color: var(--warn); }
+  .task-info { flex: 1; }
+  .task-name { font-size: 13px; font-weight: 500; line-height: 1.4; }
+  .task-meta { display: flex; gap: 6px; margin-top: 4px; flex-wrap: wrap; }
+  .task-tag { font-size: 10px; padding: 2px 6px; border-radius: 3px; font-weight: 600; }
+  .tag-gap { background: rgba(245,158,11,0.15); color: var(--warn); border: 1px solid rgba(245,158,11,0.3); }
+  .tag-spec { background: rgba(108,99,255,0.15); color: #a78bfa; border: 1px solid rgba(108,99,255,0.3); }
+  .tag-precond { background: rgba(16,185,129,0.15); color: var(--done); border: 1px solid rgba(16,185,129,0.3); }
+  .tag-appendix { background: rgba(55,65,81,0.5); color: var(--muted); border: 1px solid var(--border); }
+  .status-cycle { display: flex; gap: 6px; margin-top: 6px; }
+  .status-btn { font-size: 10px; padding: 2px 8px; border-radius: 3px; cursor: pointer; border: 1px solid var(--border); background: var(--surface2); color: var(--muted); transition: all 0.15s; }
+  .status-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .status-btn.active-done { background: rgba(16,185,129,0.2); border-color: var(--done); color: var(--done); }
+  .status-btn.active-inprog { background: rgba(108,99,255,0.2); border-color: var(--inprog); color: #a78bfa; }
+  .status-btn.active-notstarted { background: var(--surface2); border-color: var(--muted); color: var(--muted); }
+  .legend { display: flex; gap: 16px; margin-bottom: 20px; flex-wrap: wrap; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); }
+  .legend-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .search-bar { width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; color: var(--text); font-size: 13px; margin-bottom: 20px; outline: none; }
+  .search-bar:focus { border-color: var(--accent); }
+  @media (max-width: 600px) {
+    header { flex-direction: column; align-items: flex-start; gap: 10px; }
+    .phase-progress { min-width: 100px; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>CEPHO.AI — Grand Master Plan v11</h1>
+    <div class="subtitle">Live Project Dashboard · All Phases · All Tasks · All Gaps</div>
+  </div>
+  <div style="display:flex;align-items:center;gap:10px;">
+    <div class="overall-bar"><div class="overall-bar-fill" id="overall-fill" style="width:0%"></div></div>
+    <span class="overall-pct" id="overall-pct">0%</span>
+  </div>
+</header>
+
+<main>
+  <div class="summary-grid">
+    <div class="stat-card"><div class="label">Total Tasks</div><div class="value total" id="s-total">0</div></div>
+    <div class="stat-card"><div class="label">Done</div><div class="value done" id="s-done">0</div></div>
+    <div class="stat-card"><div class="label">In Progress</div><div class="value inprog" id="s-inprog">0</div></div>
+    <div class="stat-card"><div class="label">Not Started</div><div class="value notstarted" id="s-notstarted">0</div></div>
+    <div class="stat-card"><div class="label">Gap Items</div><div class="value" style="color:var(--warn)" id="s-gaps">0</div></div>
+  </div>
+
+  <input class="search-bar" type="text" id="search" placeholder="Search tasks, phases, or keywords..." oninput="filterTasks()" />
+
+  <div class="filters">
+    <button class="filter-btn active" onclick="setFilter('all',this)">All</button>
+    <button class="filter-btn" onclick="setFilter('not-started',this)">Not Started</button>
+    <button class="filter-btn" onclick="setFilter('in-progress',this)">In Progress</button>
+    <button class="filter-btn" onclick="setFilter('done',this)">Done</button>
+    <button class="filter-btn" onclick="setFilter('gap',this)">Gap Items</button>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:var(--done)"></div>Done</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--inprog)"></div>In Progress</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--muted);border:1px solid var(--muted)"></div>Not Started</div>
+    <div class="legend-item"><div class="legend-dot" style="background:transparent;border:2px solid var(--warn)"></div>Gap Item</div>
+  </div>
+
+  <div id="phases-container"></div>
+</main>
+
+<script>
+const PHASES = [
+  {
+    id: 'ph0', label: 'Phase 0', title: 'Pre-Conditions & Foundation', color: '#7c3aed',
+    tasks: [
+      { id: 'p0-1', name: 'CI/CD pipeline setup (GitHub Actions)', tags: ['precond'], status: 'not-started' },
+      { id: 'p0-2', name: 'Branch strategy (main / develop / feature/*)', tags: ['precond'], status: 'not-started' },
+      { id: 'p0-3', name: 'Environment variables fully documented in .env.example', tags: ['precond'], status: 'not-started' },
+      { id: 'p0-4', name: 'Seed data scripts for all core tables', tags: ['precond'], status: 'not-started' },
+      { id: 'p0-5', name: 'Architectural Decision Records (ADRs) directory created', tags: ['precond'], status: 'not-started' },
+      { id: 'p0-6', name: 'Pre-commit hooks (lint + type-check)', tags: ['precond'], status: 'not-started' },
+      { id: 'p0-7', name: 'Staging environment on Render configured', tags: ['precond'], status: 'not-started' },
+      { id: 'p0-8', name: 'Testing strategy defined (unit, integration, E2E targets)', tags: ['precond', 'gap'], status: 'not-started', gap: true },
+      { id: 'p0-9', name: 'Security penetration testing plan (OWASP Top 10)', tags: ['precond', 'gap'], status: 'not-started', gap: true },
+    ]
+  },
+  {
+    id: 'ph1', label: 'Phase 1', title: 'Security, Stability & Code Cleanup', color: '#2563eb',
+    tasks: [
+      { id: 'p1-1', name: 'Fix all broken API routes and 500 errors', tags: ['spec'], status: 'not-started' },
+      { id: 'p1-2', name: 'Remove all stub/placeholder implementations', tags: ['spec'], status: 'not-started' },
+      { id: 'p1-3', name: 'Migrate authentication fully to Supabase Auth', tags: ['spec'], status: 'not-started' },
+      { id: 'p1-4', name: 'Implement Row-Level Security (RLS) on all tables', tags: ['spec'], status: 'not-started' },
+      { id: 'p1-5', name: 'Remove 105 orphaned database tables', tags: ['spec'], status: 'not-started' },
+      { id: 'p1-6', name: 'Fix all TypeScript type errors (zero tolerance)', tags: ['spec'], status: 'not-started' },
+      { id: 'p1-7', name: 'Implement Content Security Policy (CSP) headers', tags: ['spec'], status: 'not-started' },
+      { id: 'p1-8', name: 'Rate limiting on all sensitive endpoints', tags: ['spec'], status: 'not-started' },
+      { id: 'p1-9', name: 'Remove RENDER_ENV_VARS.txt and all hardcoded secrets', tags: ['spec'], status: 'not-started' },
+      { id: 'p1-10', name: 'Security penetration testing (OWASP checklist)', tags: ['gap'], status: 'not-started', gap: true },
+      { id: 'p1-11', name: 'Dependency vulnerability scanning (Snyk / pnpm audit)', tags: ['gap'], status: 'not-started', gap: true },
+    ]
+  },
+  {
+    id: 'ph2', label: 'Phase 2', title: 'AI Agents, Memory & Digital Twin', color: '#0891b2',
+    tasks: [
+      { id: 'p2-1', name: 'pgvector setup for agent memory', tags: ['spec'], status: 'not-started' },
+      { id: 'p2-2', name: 'Model router (GPT-4o → GPT-4o-mini fallback)', tags: ['spec'], status: 'not-started' },
+      { id: 'p2-3', name: 'Expert agent prompts for all 50+ agents', tags: ['spec'], status: 'not-started' },
+      { id: 'p2-4', name: 'Confidence scoring on all agent outputs', tags: ['spec'], status: 'not-started' },
+      { id: 'p2-5', name: 'Agent memory persistence (store + retrieve context)', tags: ['spec'], status: 'not-started' },
+      { id: 'p2-6', name: 'Digital Twin questionnaire → user profile pipeline', tags: ['gap'], status: 'not-started', gap: true },
+      { id: 'p2-7', name: 'Digital Twin → agent prompt injection mechanism', tags: ['gap'], status: 'not-started', gap: true },
+      { id: 'p2-8', name: 'Quarterly Digital Twin recalibration flow', tags: ['gap'], status: 'not-started', gap: true },
+      { id: 'p2-9', name: 'Data ingestion pipeline (PDF, Word, Excel → knowledge base)', tags: ['gap'], status: 'not-started', gap: true },
+      { id: 'p2-10', name: 'URL ingestion (scrape → embed → knowledge base)', tags: ['gap'], status: 'not-started', gap: true },
+      { id: 'p2-11', name: 'CSV data import (financial, project data)', tags: ['gap'], status: 'not-started', gap: true },
+      { id: 'p2-12', name: 'Mobile responsiveness (MOB-01, MOB-02)', tags: ['spec'], status: 'not-started' },
+      { id: 'p2-13', name: 'Integration Hub: Google Workspace, Microsoft 365, Slack', tags: ['spec'], status: 'not-started' },
+    ]
+  },
+  {
+    id: 'ph3', label: 'Phase 3', title: 'Autonomous Operations & Intelligence', color: '#059669',
+    tasks: [
+      { id: 'p3-1', name: 'Cron jobs for autonomous agent tasks', tags: ['spec'], status: 'not-started' },
+      { id: 'p3-2', name: 'Anomaly detection engine', tags: ['spec'], status: 'not-started' },
+      { id: 'p3-3', name: 'Natural language command bar', tags: ['spec'], status: 'not-started' },
+      { id: 'p3-4', name: 'Webhook infrastructure for real-time events', tags: ['spec'], status: 'not-started' },
+      { id: 'p3-5', name: 'KPIs / OKRs tracking engine', tags: ['spec'], status: 'not-started' },
+      { id: 'p3-6', name: 'Email intelligence: Gmail/Outlook triage + AI summarisation', tags: ['gap'], status: 'not-started', gap: true },
+      { id: 'p3-7', name: 'AI email drafting (Victoria dictates → agent drafts)', tags: ['gap'], status: 'not-started', gap: true },
+      { id: 'p3-8', name: 'Smart follow-up reminders (unanswered email detection)', tags: ['gap'], status: 'not-started', gap: true },
+      { id: 'p3-9', name: 'Pre-meeting briefs (auto-generated 5 min before)', tags: ['gap'], status: 'not-started', gap: true },
+      { id: 'p3-10', name: 'Post-meeting action item extraction from transcript', tags: ['gap'], status: 'not-started', gap: true },
+      { id: 'p3-11', name: 'Zoom/Teams integration for automatic meeting notes', tags: ['gap'], status: 'not-started', gap: true },
+      { id: 'p3-12', name: "Victoria's Briefing personalisation engine (length, tone, sections)", tags: ['gap'], status: 'not-started', gap: true },
+      { id: 'p3-13', name: 'Briefing feedback loop (Victoria rates sections → influences next)', tags: ['gap'], status: 'not-started', gap: true },
+      { id: 'p3-14', name: 'Agent orchestration for complex multi-step tasks', tags: ['gap'], status: 'not-started', gap: true },
+      { id: 'p3-15', name: 'Parallel agent execution + result synthesis', tags: ['gap'], status: 'not-started', gap: true },
+    ]
+  },
+  {
+    id: 'ph4', label: 'Phase 4', title: 'UX, Design System & Scale', color: '#d97706',
+    tasks: [
+      { id: 'p4-1', name: 'Design system implementation (UI-01)', tags: ['spec'], status: 'not-started' },
+      { id: 'p4-2', name: 'Page layout standards (UI-02)', tags: ['spec'], status: 'not-started' },
+      { id: 'p4-3', name: 'Information density & actionability (UI-03)', tags: ['spec'], status: 'not-started' },
+      { id: 'p4-4', name: 'Pagination on all list views', tags: ['spec'], status: 'not-started' },
+      { id: 'p4-5', name: 'Redis caching layer', tags: ['spec'], status: 'not-started' },
+      { id: 'p4-6', name: 'Multi-workspace support', tags: ['spec'], status: 'not-started' },
+      { id: 'p4-7', name: 'Notification architecture (push, email digest, Slack)', tags: ['gap'], status: 'not-started', gap: true },
+      { id: 'p4-8', name: 'In-app notification preferences and batching', tags: ['gap'], status: 'not-started', gap: true },
+      { id: 'p4-9', name: 'Global full-text search (tasks, projects, documents, briefings)', tags: ['gap'], status: 'not-started', gap: true },
+      { id: 'p4-10', name: 'Semantic search using pgvector', tags: ['gap'], status: 'not-started', gap: true },
+      { id: 'p4-11', name: 'Accessibility: WCAG 2.1 AA compliance', tags: ['gap'], status: 'not-started', gap: true },
+      { id: 'p4-12', name: 'Keyboard navigation + screen reader support (ARIA)', tags: ['gap'], status: 'not-started', gap: true },
+      { id: 'p4-13', name: 'Internationalisation (i18n): English, Arabic, French, Spanish', tags: ['gap'], status: 'not-started', gap: true },
+      { id: 'p4-14', name: 'RTL support for Arabic', tags: ['gap'], status: 'not-started', gap: true },
+    ]
+  },
+  {
+    id: 'ph5', label: 'Phase 5', title: 'Ops Excellence & Observability', color: '#dc2626',
+    tasks: [
+      { id: 'p5-1', name: 'Health check endpoint (/health)', tags: ['spec'], status: 'not-started' },
+      { id: 'p5-2', name: 'Sentry error monitoring integration', tags: ['spec'], status: 'not-started' },
+      { id: 'p5-3', name: 'Audit log (all user actions recorded)', tags: ['spec'], status: 'not-started' },
+      { id: 'p5-4', name: 'GDPR compliance (data export + deletion)', tags: ['spec'], status: 'not-started' },
+      { id: 'p5-5', name: 'Guided onboarding wizard (/welcome flow)', tags: ['spec'], status: 'not-started' },
+      { id: 'p5-6', name: 'Error boundaries on all React components', tags: ['spec'], status: 'not-started' },
+      { id: 'p5-7', name: 'Offline banner + PWA service worker', tags: ['spec'], status: 'not-started' },
+      { id: 'p5-8', name: 'Structured logging (JSON format, log levels)', tags: ['spec'], status: 'not-started' },
+      { id: 'p5-9', name: 'AI cost tracking per user (token usage dashboard)', tags: ['gap'], status: 'not-started', gap: true },
+      { id: 'p5-10', name: 'Monthly AI cost dashboard + spend alerts', tags: ['gap'], status: 'not-started', gap: true },
+      { id: 'p5-11', name: 'Token budget per user tier (Starter / Pro / Enterprise)', tags: ['gap'], status: 'not-started', gap: true },
+      { id: 'p5-12', name: 'Disaster recovery plan (backup schedule, RTO/RPO)', tags: ['gap'], status: 'not-started', gap: true },
+      { id: 'p5-13', name: 'Database backup + point-in-time recovery (Supabase)', tags: ['gap'], status: 'not-started', gap: true },
+      { id: 'p5-14', name: 'Performance budgets: LCP<2.5s, FID<100ms, CLS<0.1', tags: ['gap'], status: 'not-started', gap: true },
+      { id: 'p5-15', name: 'Bundle size budget (<500KB initial JS) + code splitting', tags: ['gap'], status: 'not-started', gap: true },
+    ]
+  },
+  {
+    id: 'ph6', label: 'Phase 6', title: 'Enhancements, Agents & Innovation', color: '#7c3aed',
+    tasks: [
+      { id: 'p6-1', name: 'Agent ratings system (ENH-01)', tags: ['spec'], status: 'not-started' },
+      { id: 'p6-2', name: 'Competitor intelligence engine', tags: ['spec'], status: 'not-started' },
+      { id: 'p6-3', name: 'Persephone Board training (PB-01, PB-02, PB-03)', tags: ['spec'], status: 'not-started' },
+      { id: 'p6-4', name: 'Scheduled reports (daily/weekly/monthly)', tags: ['spec'], status: 'not-started' },
+      { id: 'p6-5', name: 'Feature flags system', tags: ['spec'], status: 'not-started' },
+      { id: 'p6-6', name: 'Public API + developer documentation', tags: ['spec'], status: 'not-started' },
+      { id: 'p6-7', name: 'Status page (uptime monitoring)', tags: ['spec'], status: 'not-started' },
+      { id: 'p6-8', name: 'Agent Performance & Monitoring Dashboard (/ai-agents/performance)', tags: ['gap'], status: 'not-started', gap: true },
+      { id: 'p6-9', name: 'Real-time agent activity feed + per-agent metrics', tags: ['gap'], status: 'not-started', gap: true },
+      { id: 'p6-10', name: 'Agent continuous learning: daily research + improvement suggestions', tags: ['gap'], status: 'not-started', gap: true },
+      { id: 'p6-11', name: 'CoS approval workflow for agent self-improvement requests', tags: ['gap'], status: 'not-started', gap: true },
+      { id: 'p6-12', name: 'Agent prompt version history + rollback', tags: ['gap'], status: 'not-started', gap: true },
+      { id: 'p6-13', name: 'Innovation Hub Flywheel (6-step pipeline)', tags: ['spec'], status: 'not-started' },
+      { id: 'p6-14', name: 'Offline / PWA capability (full service worker + push notifications)', tags: ['gap'], status: 'not-started', gap: true },
+    ]
+  },
+  {
+    id: 'ph7', label: 'Phase 7', title: 'Monetisation & Enterprise Scale', color: '#be185d',
+    tasks: [
+      { id: 'p7-1', name: 'Stripe subscription tiers (Starter / Pro / Enterprise)', tags: ['gap'], status: 'not-started', gap: true },
+      { id: 'p7-2', name: 'Freemium tier definition (what is free vs paid)', tags: ['gap'], status: 'not-started', gap: true },
+      { id: 'p7-3', name: 'Usage-based billing for AI tokens', tags: ['gap'], status: 'not-started', gap: true },
+      { id: 'p7-4', name: '14-day free trial logic + upgrade prompts', tags: ['gap'], status: 'not-started', gap: true },
+      { id: 'p7-5', name: 'Stripe webhook handling (subscription lifecycle)', tags: ['gap'], status: 'not-started', gap: true },
+      { id: 'p7-6', name: 'White-label / custom domain support (client.cepho.ai)', tags: ['gap'], status: 'not-started', gap: true },
+      { id: 'p7-7', name: 'Custom branding per workspace (logo, colours)', tags: ['gap'], status: 'not-started', gap: true },
+      { id: 'p7-8', name: 'Admin panel for managing enterprise clients', tags: ['gap'], status: 'not-started', gap: true },
+      { id: 'p7-9', name: 'Enterprise SSO (SAML/OIDC)', tags: ['gap'], status: 'not-started', gap: true },
+      { id: 'p7-10', name: '"God Mode" Admin Dashboard (/admin route)', tags: ['spec'], status: 'not-started' },
+      { id: 'p7-11', name: 'RBAC (Role-Based Access Control) full implementation', tags: ['spec'], status: 'not-started' },
+      { id: 'p7-12', name: 'Document Templating Engine (Handlebars + WeasyPrint)', tags: ['spec'], status: 'not-started' },
+    ]
+  },
+  {
+    id: 'phapp', label: 'Appendices', title: 'Reference Specs & Supporting Documents', color: '#374151',
+    tasks: [
+      { id: 'app-a', name: 'Appendix A: Phase 0 Pre-Conditions (full spec)', tags: ['appendix'], status: 'not-started' },
+      { id: 'app-b', name: 'Appendix B: Phase 5 Ops Excellence (full spec)', tags: ['appendix'], status: 'not-started' },
+      { id: 'app-c', name: 'Appendix C: Phase 6 Enhancements (full spec)', tags: ['appendix'], status: 'not-started' },
+      { id: 'app-d', name: 'Appendix D: Digital Twin Architecture (DT-MOD-01 to DT-MOD-04)', tags: ['appendix'], status: 'not-started' },
+      { id: 'app-e', name: 'Appendix E: Autonomous Execution Engine', tags: ['appendix'], status: 'not-started' },
+      { id: 'app-f', name: 'Appendix F: Innovation Hub Flywheel Architecture', tags: ['appendix'], status: 'not-started' },
+      { id: 'app-g', name: 'Appendix G: Final Gaps Specification (RBAC, Templating, Admin, DevOps)', tags: ['appendix'], status: 'not-started' },
+      { id: 'app-h', name: 'Appendix H: CEPHO Remediation Plan 2026-02-28', tags: ['appendix'], status: 'not-started' },
+      { id: 'app-i', name: 'Appendix I: Complete Expert Remediation Plan (10-expert, 6-phase)', tags: ['appendix'], status: 'not-started' },
+      { id: 'app-j', name: 'Appendix J: Full API Documentation', tags: ['appendix'], status: 'not-started' },
+      { id: 'app-k', name: 'Appendix K: Full Data Dictionary (20 table schemas)', tags: ['appendix'], status: 'not-started' },
+      { id: 'app-l', name: 'Appendix L: Developer Onboarding Process', tags: ['appendix'], status: 'not-started' },
+      { id: 'app-m', name: 'Appendix M: Incident Response Playbook', tags: ['appendix'], status: 'not-started' },
+      { id: 'app-n', name: 'Appendix N: Quality Review Cadence', tags: ['appendix'], status: 'not-started' },
+      { id: 'app-o', name: 'Appendix O: Release Process (full detail)', tags: ['appendix'], status: 'not-started' },
+      { id: 'app-p', name: 'Appendix P: Operations Runbook (full detail)', tags: ['appendix'], status: 'not-started' },
+      { id: 'app-q', name: 'Appendix Q: Phase 5 Consolidated Design (9 sub-documents)', tags: ['appendix'], status: 'not-started' },
+      { id: 'app-r', name: 'Appendix R: Privacy Policy', tags: ['appendix'], status: 'not-started' },
+      { id: 'app-s', name: 'Appendix S: Terms of Service', tags: ['appendix'], status: 'not-started' },
+      { id: 'app-t', name: 'Appendix T: User Manual', tags: ['appendix'], status: 'not-started' },
+      { id: 'app-u', name: 'Appendix U: Integrated Remediation Checklist', tags: ['appendix'], status: 'not-started' },
+      { id: 'app-v', name: 'Appendix V: Validated Remediation Plan v2', tags: ['appendix'], status: 'not-started' },
+      { id: 'app-w', name: 'Appendix W: GitHub Findings & Audit Report', tags: ['appendix'], status: 'not-started' },
+      { id: 'app-x', name: 'Appendix X: Changelog', tags: ['appendix'], status: 'not-started' },
+      { id: 'app-y', name: 'Appendix Y: Quality Grades (GRADES.md)', tags: ['appendix'], status: 'not-started' },
+      { id: 'app-z', name: 'Appendix Z: Security Policy', tags: ['appendix'], status: 'not-started' },
+      { id: 'app-aa', name: 'Appendix AA: Product Requirements Document (PRD)', tags: ['appendix'], status: 'not-started' },
+      { id: 'app-ab', name: 'Appendix AB: AI Agents Roles & Responsibilities', tags: ['appendix'], status: 'not-started' },
+      { id: 'app-ac', name: 'Appendix AC: Persephone Board Integration Specs', tags: ['appendix'], status: 'not-started' },
+      { id: 'app-ad', name: 'Appendix AD: Gap Analysis (20 identified gaps)', tags: ['appendix'], status: 'not-started' },
+    ]
+  }
+];
+
+// Load saved state from localStorage
+function loadState() {
+  const saved = localStorage.getItem('cepho-dashboard-v11');
+  if (saved) {
+    const state = JSON.parse(saved);
+    PHASES.forEach(phase => {
+      phase.tasks.forEach(task => {
+        if (state[task.id]) task.status = state[task.id];
+      });
+    });
+  }
+}
+
+function saveState() {
+  const state = {};
+  PHASES.forEach(phase => {
+    phase.tasks.forEach(task => {
+      state[task.id] = task.status;
+    });
+  });
+  localStorage.setItem('cepho-dashboard-v11', JSON.stringify(state));
+}
+
+function setStatus(taskId, status) {
+  PHASES.forEach(phase => {
+    phase.tasks.forEach(task => {
+      if (task.id === taskId) task.status = status;
+    });
+  });
+  saveState();
+  render();
+}
+
+let currentFilter = 'all';
+let currentSearch = '';
+
+function setFilter(filter, btn) {
+  currentFilter = filter;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  render();
+}
+
+function filterTasks() {
+  currentSearch = document.getElementById('search').value.toLowerCase();
+  render();
+}
+
+function getPhaseColor(id) {
+  const phase = PHASES.find(p => p.id === id);
+  return phase ? phase.color : '#6c63ff';
+}
+
+function render() {
+  let totalDone = 0, totalInprog = 0, totalNotStarted = 0, totalGaps = 0, totalAll = 0;
+
+  PHASES.forEach(phase => {
+    phase.tasks.forEach(task => {
+      totalAll++;
+      if (task.gap) totalGaps++;
+      if (task.status === 'done') totalDone++;
+      else if (task.status === 'in-progress') totalInprog++;
+      else totalNotStarted++;
+    });
+  });
+
+  document.getElementById('s-total').textContent = totalAll;
+  document.getElementById('s-done').textContent = totalDone;
+  document.getElementById('s-inprog').textContent = totalInprog;
+  document.getElementById('s-notstarted').textContent = totalNotStarted;
+  document.getElementById('s-gaps').textContent = totalGaps;
+
+  const pct = totalAll > 0 ? Math.round((totalDone / totalAll) * 100) : 0;
+  document.getElementById('overall-fill').style.width = pct + '%';
+  document.getElementById('overall-pct').textContent = pct + '%';
+
+  const container = document.getElementById('phases-container');
+  container.innerHTML = '';
+
+  PHASES.forEach(phase => {
+    let phaseDone = 0;
+    const filteredTasks = phase.tasks.filter(task => {
+      const matchFilter = currentFilter === 'all' ||
+        (currentFilter === 'gap' && task.gap) ||
+        task.status === currentFilter;
+      const matchSearch = !currentSearch ||
+        task.name.toLowerCase().includes(currentSearch) ||
+        phase.title.toLowerCase().includes(currentSearch) ||
+        phase.label.toLowerCase().includes(currentSearch);
+      return matchFilter && matchSearch;
+    });
+
+    phase.tasks.forEach(t => { if (t.status === 'done') phaseDone++; });
+    const phasePct = phase.tasks.length > 0 ? Math.round((phaseDone / phase.tasks.length) * 100) : 0;
+
+    if (filteredTasks.length === 0 && currentSearch) return;
+
+    const block = document.createElement('div');
+    block.className = 'phase-block';
+
+    const isOpen = localStorage.getItem('open-' + phase.id) !== 'false';
+
+    block.innerHTML = `
+      <div class="phase-header" onclick="togglePhase('${phase.id}')">
+        <span class="phase-badge ${phase.id}" style="background:${phase.color}">${phase.label}</span>
+        <span class="phase-title">${phase.title}</span>
+        <div class="phase-progress">
+          <div class="phase-bar"><div class="phase-bar-fill" style="width:${phasePct}%;background:${phase.color}"></div></div>
+          <span class="phase-pct">${phasePct}%</span>
+        </div>
+        <span class="phase-toggle ${isOpen ? 'open' : ''}">▶</span>
+      </div>
+      <div class="task-list ${isOpen ? 'open' : ''}" id="tasks-${phase.id}">
+        ${filteredTasks.map(task => `
+          <div class="task-item" data-id="${task.id}" data-status="${task.status}" data-gap="${task.gap || false}">
+            <div class="task-status ${task.status} ${task.gap ? 'gap' : ''}" title="Click to cycle status" onclick="cycleStatus('${task.id}')">
+              ${task.status === 'done' ? '✓' : task.status === 'in-progress' ? '●' : ''}
+            </div>
+            <div class="task-info">
+              <div class="task-name" style="${task.status === 'done' ? 'text-decoration:line-through;opacity:0.5' : ''}">${task.name}</div>
+              <div class="task-meta">
+                ${task.tags.map(tag => `<span class="task-tag tag-${tag}">${tag}</span>`).join('')}
+              </div>
+              <div class="status-cycle">
+                <span class="status-btn ${task.status === 'not-started' ? 'active-notstarted' : ''}" onclick="setStatus('${task.id}','not-started')">Not Started</span>
+                <span class="status-btn ${task.status === 'in-progress' ? 'active-inprog' : ''}" onclick="setStatus('${task.id}','in-progress')">In Progress</span>
+                <span class="status-btn ${task.status === 'done' ? 'active-done' : ''}" onclick="setStatus('${task.id}','done')">Done</span>
+              </div>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+    container.appendChild(block);
+  });
+}
+
+function togglePhase(id) {
+  const list = document.getElementById('tasks-' + id);
+  const isOpen = list.classList.toggle('open');
+  const toggle = list.previousElementSibling.querySelector('.phase-toggle');
+  toggle.classList.toggle('open', isOpen);
+  localStorage.setItem('open-' + id, isOpen);
+}
+
+function cycleStatus(taskId) {
+  let current;
+  PHASES.forEach(phase => {
+    phase.tasks.forEach(task => {
+      if (task.id === taskId) current = task.status;
+    });
+  });
+  const next = current === 'not-started' ? 'in-progress' : current === 'in-progress' ? 'done' : 'not-started';
+  setStatus(taskId, next);
+}
+
+loadState();
+render();
+</script>
+</body>
+</html>
