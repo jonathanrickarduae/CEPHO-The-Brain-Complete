@@ -1,6 +1,6 @@
 # CEPHO.AI: The Grand Master Plan (The Bible)
 
-**Version:** 10.1 (Audit-Enhanced)
+**Version:** 11.0 (Audit-Enhanced)
 **Date:** March 2, 2026
 **Status:** This document is the single, definitive source of truth for all CEPHO platform development. It supersedes and consolidates all previous plans, specs, and audit findings.
 
@@ -17,57 +17,11 @@ To ensure real, measurable progress, all work will be measured against the follo
 
 ---
 
-## 2. The Active Remediation Plan (Post-Audit)
+## 2. The Grand Master Plan (v10.0)
 
-This is the immediate, active plan to address the gaps identified in the March 2nd independent audit. It is organized into four sprints, prioritizing foundational stability, then fixing fake logic, then implementing AI, and finally polishing.
+*This is the full, original v10.0 plan, preserved exactly as it was written. It provides the complete architectural vision for the platform.*
 
-### Sprint 1: Data & Stability (The Foundation)
-**Goal:** Every page loads gracefully and shows realistic data. No more empty states or jarring loading spinners.
-
-| Task ID | Description | Status | Verification |
-|---|---|---|---|
-| S1-01 | **Seed All Empty Tables** | Not Started | - [ ] `voice_notes`, `partnerships`, `nps_responses`, `brand_kit`, `memory_bank`, and 5 other key tables have realistic seed data. |
-| S1-02 | **Implement Skeleton Loading** | Not Started | - [ ] All 29 pages use `Skeleton` components during `isLoading` states. No more simple spinners. |
-| S1-03 | **Implement Error Boundaries** | Not Started | - [ ] A global error boundary is implemented to prevent full-page crashes. |
-| S1-04 | **Contextual Empty States** | Not Started | - [ ] All empty states are replaced with contextual messages and a clear Call to Action (CTA). |
-
-### Sprint 2: Fix Stubs & Broken Interactions (Make it Real)
-**Goal:** Eliminate all fake logic. Every button and data point is connected to a real, working backend.
-
-| Task ID | Description | Status | Verification |
-|---|---|---|---|
-| S2-01 | **Rewrite `aiAgentsMonitoring`** | Not Started | - [ ] The hardcoded `getAgentMetrics` function is deleted. <br>- [ ] The router queries a new `agent_metrics` table in the DB. |
-| S2-02 | **Fix `externalIntegrations`** | Not Started | - [ ] The router is rewritten to check for real OAuth tokens in the `integrations` table. <br>- [ ] Hardcoded `isConfigured: false` is removed. |
-| S2-03 | **Fix Project Genesis Agent Assignment** | Not Started | - [ ] The wizard correctly assigns a real AI agent ID when a new project is created. |
-| S2-04 | **Fix Theme Persistence** | Not Started | - [ ] The theme color selection is saved to the `user_settings` table via `settings.update` and persists on refresh. |
-| S2-05 | **Fix Vault Sidebar Link** | Not Started | - [ ] The main sidebar link for "The Vault" correctly navigates to `/settings?tab=vault`. |
-
-### Sprint 3: Real AI Everywhere
-**Goal:** Every feature that claims to use AI is connected to a real large language model.
-
-| Task ID | Description | Status | Verification |
-|---|---|---|---|
-| S3-01 | **Wire AI SME Consultation** | Not Started | - [ ] The `expertConsultation.create` mutation sends a real prompt to an LLM and returns a streaming response. |
-| S3-02 | **Wire Victoria's Briefing Generation** | Not Started | - [ ] The "Generate Briefing" button uses an LLM to generate content based on user context. |
-| S3-03 | **Wire Evening Review AI Summary** | Not Started | - [ ] The evening review session generates a real AI-powered summary of the day's events. |
-| S3-04 | **Wire Memory Bank Population** | Not Started | - [ ] The `memory_bank` table is populated with key insights and facts derived from user interactions and documents. |
-
-### Sprint 4: Integrations & Polish
-**Goal:** Connect to the outside world and apply a final layer of professional polish.
-
-| Task ID | Description | Status | Verification |
-|---|---|---|---|
-| S4-01 | **Implement Notion Integration** | Not Started | - [ ] Full OAuth 2.0 flow is implemented. <br>- [ ] Users can connect their Notion account and sync pages. |
-| S4-02 | **Implement Google Calendar Integration** | Not Started | - [ ] Full OAuth 2.0 flow is implemented. <br>- [ ] Users can connect their calendar and see events. |
-| S4-03 | **Fix All Mobile Overflow Issues** | Not Started | - [ ] All 29 pages are fully responsive and have no horizontal scroll on a standard mobile viewport. |
-
----
-
-## 3. The Original Grand Master Plan (v10.0)
-
-*The following sections from the original v10.0 plan are preserved for historical context and to provide the full architectural vision.*
-
-### 3.1. Executive Summary
+### 2.1. Executive Summary
 
 CEPHO.AI is an autonomous platform designed to replicate and automate the core functions of a world-class Chief of Staff. This Grand Master Plan is the single, definitive roadmap for transforming the platform from its current Grade E state to Grade A+ — a genuinely intelligent, fully autonomous, enterprise-ready platform with no features missing.
 
@@ -85,34 +39,7 @@ This definitive v10.0 plan is the final and most complete version. It incorporat
 | Phase 7 | Full Autonomy | The Autonomous Execution Engine and Persephone Board, enabling true One-Sentence Execution. | A+** → A+*** |
 | Phase 8 | Admin & Governance | The secure admin dashboard, user management, system analytics, and agent oversight. | A+*** → A+**** |
 
-### 3.2. The 20 Gaps (From v6.0 Gap Analysis)
-
-*This section archives the 20 gaps identified in the v6.0 analysis, which informed the creation of the v10.0 plan.*
-
-1.  **Agent Performance & Monitoring Dashboard**
-2.  **Digital Twin / Personality Calibration**
-3.  **Monetisation Architecture**
-4.  **Email Intelligence**
-5.  **Meeting Intelligence**
-6.  **AI Agent Continuous Learning Architecture**
-7.  **Data Ingestion Pipeline**
-8.  **Notification & Communication Architecture**
-9.  **Search Architecture**
-10. **White-Label / Multi-Tenant Architecture**
-11. **Testing Strategy**
-12. **AI Cost Management & Observability**
-13. **Disaster Recovery & Business Continuity**
-14. **Accessibility (WCAG 2.1 AA)**
-15. **Internationalisation (i18n)**
-16. **Performance Budgets & Core Web Vitals**
-17. **Victoria's Briefing — Personalisation Engine**
-18. **Offline / PWA Capability**
-19. **Security Penetration Testing Plan**
-20. **Agent Orchestration for Complex Multi-Step Tasks**
-
-### 3.3. The 5 Final Gaps (From v10.0 Final Gaps Spec)
-
-*This section archives the 5 final gaps closed in the v10.0 plan.*
+### 2.2. The 5 Final Gaps Closed in v10.0
 
 1.  **No Central Settings & Permissions Engine** (Solved by Appendix T)
 2.  **No Standardized Document Templating** (Solved by Appendix U)
@@ -122,9 +49,66 @@ This definitive v10.0 plan is the final and most complete version. It incorporat
 
 ---
 
-## 4. Appendix: Core Architectural Specifications
+## 3. v11 Additions: The Active Remediation Plan (Post-Audit)
 
-*This section contains the full, original specifications for the platform's core architectural pillars.*
+*This new section contains the immediate, active plan to address the gaps identified in the March 2nd independent audit. It is organized into four sprints, prioritizing foundational stability, then fixing fake logic, then implementing AI, and finally polishing.*
+
+### 3.1. Live Completion Tracker
+
+| Sprint | Tasks | Status |
+|---|---|---|
+| Sprint 1: Data & Stability | 4 | **0%** (0/4) |
+| Sprint 2: Fix Stubs & Interactions | 5 | **0%** (0/5) |
+| Sprint 3: Real AI Everywhere | 4 | **0%** (0/4) |
+| Sprint 4: Integrations & Polish | 4 | **0%** (0/4) |
+| **TOTAL** | **17** | **0%** (0/17) |
+
+### 3.2. Sprint 1: Data & Stability (The Foundation)
+**Goal:** Every page loads gracefully and shows realistic data. No more empty states or jarring loading spinners.
+
+| Task ID | Description | Status | Verification |
+|---|---|---|---|
+| S1-01 | **Seed All Empty Tables** | Not Started | - [ ] `voice_notes`, `partnerships`, `nps_responses`, `brand_kit`, `memory_bank`, and 5 other key tables have realistic seed data. |
+| S1-02 | **Implement Skeleton Loading** | Not Started | - [ ] All 29 pages use `Skeleton` components during `isLoading` states. No more simple spinners. |
+| S1-03 | **Implement Error Boundaries** | Not Started | - [ ] A global error boundary is implemented to prevent full-page crashes. |
+| S1-04 | **Contextual Empty States** | Not Started | - [ ] All empty states are replaced with contextual messages and a clear Call to Action (CTA). |
+
+### 3.3. Sprint 2: Fix Stubs & Broken Interactions (Make it Real)
+**Goal:** Eliminate all fake logic. Every button and data point is connected to a real, working backend.
+
+| Task ID | Description | Status | Verification |
+|---|---|---|---|
+| S2-01 | **Rewrite `aiAgentsMonitoring`** | Not Started | - [ ] The hardcoded `getAgentMetrics` function is deleted. <br>- [ ] The router queries a new `agent_metrics` table in the DB. |
+| S2-02 | **Fix `externalIntegrations`** | Not Started | - [ ] The router is rewritten to check for real OAuth tokens in the `integrations` table. <br>- [ ] Hardcoded `isConfigured: false` is removed. |
+| S2-03 | **Fix Project Genesis Agent Assignment** | Not Started | - [ ] The wizard correctly assigns a real AI agent ID when a new project is created. |
+| S2-04 | **Fix Theme Persistence** | Not Started | - [ ] The theme color selection is saved to the `user_settings` table via `settings.update` and persists on refresh. |
+| S2-05 | **Fix Vault Sidebar Link** | Not Started | - [ ] The main sidebar link for "The Vault" correctly navigates to `/settings?tab=vault`. |
+
+### 3.4. Sprint 3: Real AI Everywhere
+**Goal:** Every feature that claims to use AI is connected to a real large language model.
+
+| Task ID | Description | Status | Verification |
+|---|---|---|---|
+| S3-01 | **Wire AI SME Consultation** | Not Started | - [ ] The `expertConsultation.create` mutation sends a real prompt to an LLM and returns a streaming response. |
+| S3-02 | **Wire Victoria's Briefing Generation** | Not Started | - [ ] The "Generate Briefing" button uses an LLM to generate content based on user context. |
+| S3-03 | **Wire Evening Review AI Summary** | Not Started | - [ ] The evening review session generates a real AI-powered summary of the day's events. |
+| S3-04 | **Wire Memory Bank Population** | Not Started | - [ ] The `memory_bank` table is populated with key insights and facts derived from user interactions and documents. |
+
+### 3.5. Sprint 4: Integrations & Polish
+**Goal:** Connect to the outside world and apply a final layer of professional polish.
+
+| Task ID | Description | Status | Verification |
+|---|---|---|---|
+| S4-01 | **Implement Notion Integration** | Not Started | - [ ] Full OAuth 2.0 flow is implemented. <br>- [ ] Users can connect their Notion account and sync pages. |
+| S4-02 | **Implement Google Calendar Integration** | Not Started | - [ ] Full OAuth 2.0 flow is implemented. <br>- [ ] Users can connect their calendar and see events. |
+| S4-03 | **Fix All Mobile Overflow Issues** | Not Started | - [ ] All 29 pages are fully responsive and have no horizontal scroll on a standard mobile viewport. |
+| S4-04 | **Update `README.md`** | Not Started | - [ ] The root `README.md` is updated with the project's current status, tech stack, and setup instructions. |
+
+---
+
+## 4. Appendix: Core Architectural Specifications (from v10)
+
+*This section contains the full, original specifications for the platform's core architectural pillars, preserved from the v10.0 plan.*
 
 ### Appendix Q: The Digital Twin Architecture
 
