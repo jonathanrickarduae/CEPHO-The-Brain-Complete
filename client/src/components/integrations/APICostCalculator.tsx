@@ -21,7 +21,7 @@ import {
   Sparkles,
 } from "lucide-react";
 
-// API Provider pricing (per 1M tokens, as of 2024)
+// API Provider pricing (per 1M tokens, as of 2025)
 interface ProviderPricing {
   id: string;
   name: string;
@@ -33,73 +33,57 @@ interface ProviderPricing {
   freeAllowance?: number; // free tokens per month
   color: string;
 }
-
 const providers: ProviderPricing[] = [
   {
-    id: "claude",
-    name: "Claude (Anthropic)",
-    logo: "🟣",
-    inputPrice: 3.0,
-    outputPrice: 15.0,
-    strengths: [
-      "Scientific reasoning",
-      "Safety-critical analysis",
-      "Long context",
-      "Nuanced writing",
-    ],
-    bestFor: [
-      "Medical/Pharmaceutical",
-      "Legal",
-      "Research",
-      "Complex analysis",
-    ],
-    color: "bg-purple-500",
-  },
-  {
-    id: "gpt4",
-    name: "GPT-4 (OpenAI)",
+    id: "gpt-4.1-mini",
+    name: "GPT-4.1 Mini (OpenAI)",
     logo: "🟢",
-    inputPrice: 10.0,
-    outputPrice: 30.0,
-    strengths: [
-      "General intelligence",
-      "Code generation",
-      "Broad knowledge",
-      "Creative tasks",
-    ],
-    bestFor: ["Software development", "Creative writing", "General queries"],
+    inputPrice: 0.4,
+    outputPrice: 1.6,
+    strengths: ["CEPHO default model", "Fast & cost-efficient", "Strong reasoning", "Code generation"],
+    bestFor: ["Daily operations", "Bulk AI tasks", "Cost-optimised workflows"],
     color: "bg-green-500",
   },
   {
-    id: "gpt4-turbo",
-    name: "GPT-4 Turbo",
+    id: "gpt-4.1-nano",
+    name: "GPT-4.1 Nano (OpenAI)",
     logo: "🟢",
-    inputPrice: 10.0,
-    outputPrice: 30.0,
-    strengths: ["Faster than GPT-4", "Updated knowledge", "Vision capable"],
-    bestFor: ["Time-sensitive tasks", "Image analysis"],
+    inputPrice: 0.1,
+    outputPrice: 0.4,
+    strengths: ["Ultra low cost", "Fast responses", "Simple tasks"],
+    bestFor: ["High-volume classification", "Simple Q&A", "Cost elimination"],
     color: "bg-emerald-500",
   },
   {
-    id: "gemini-pro",
-    name: "Gemini Pro (Google)",
+    id: "gemini-2.5-flash",
+    name: "Gemini 2.5 Flash (Google)",
     logo: "🔵",
-    inputPrice: 0.5,
-    outputPrice: 1.5,
-    strengths: ["Cost-effective", "Good reasoning", "Multimodal"],
-    bestFor: ["Budget-conscious tasks", "Document processing"],
-    freeAllowance: 1000000, // 1M tokens free
+    inputPrice: 0.15,
+    outputPrice: 0.6,
+    strengths: ["Fastest model", "Cost-effective", "Multimodal", "Long context"],
+    bestFor: ["Real-time tasks", "Document processing", "Budget-conscious"],
+    freeAllowance: 1000000,
     color: "bg-primary",
   },
   {
-    id: "gemini-ultra",
-    name: "Gemini Ultra",
-    logo: "🔵",
-    inputPrice: 7.0,
-    outputPrice: 21.0,
-    strengths: ["Top-tier performance", "Complex reasoning", "Multimodal"],
-    bestFor: ["Complex tasks requiring Google's best"],
-    color: "bg-indigo-500",
+    id: "claude-3.7-sonnet",
+    name: "Claude 3.7 Sonnet (Anthropic)",
+    logo: "🟣",
+    inputPrice: 3.0,
+    outputPrice: 15.0,
+    strengths: ["Scientific reasoning", "Safety-critical analysis", "Long context", "Nuanced writing"],
+    bestFor: ["Medical/Pharmaceutical", "Legal", "Research", "Complex analysis"],
+    color: "bg-purple-500",
+  },
+  {
+    id: "gpt-4.1",
+    name: "GPT-4.1 (OpenAI)",
+    logo: "🟢",
+    inputPrice: 2.0,
+    outputPrice: 8.0,
+    strengths: ["Top OpenAI intelligence", "Code generation", "Broad knowledge", "Creative tasks"],
+    bestFor: ["Complex reasoning", "Creative writing", "Advanced code"],
+    color: "bg-teal-500",
   },
   {
     id: "mistral-large",
@@ -179,63 +163,63 @@ interface CategoryRecommendation {
 const categoryRecommendations: CategoryRecommendation[] = [
   {
     category: "Healthcare & Biotech",
-    recommended: "claude",
+    recommended: "claude-3.7-sonnet",
     alternative: "gpt4",
     rationale:
       "Claude excels at scientific reasoning and safety-critical medical analysis",
   },
   {
     category: "Legal & Compliance",
-    recommended: "claude",
+    recommended: "claude-3.7-sonnet",
     alternative: "gpt4",
     rationale: "Precise language interpretation and conservative reasoning",
   },
   {
     category: "Finance & Investment",
     recommended: "gpt4",
-    alternative: "claude",
+    alternative: "claude-3.7-sonnet",
     rationale: "Strong quantitative analysis and financial modeling",
   },
   {
     category: "Technology & Engineering",
     recommended: "gpt4",
-    alternative: "claude",
+    alternative: "claude-3.7-sonnet",
     rationale: "Superior code generation and technical documentation",
   },
   {
     category: "Marketing & Sales",
     recommended: "gpt4-turbo",
-    alternative: "gemini-pro",
+    alternative: "gemini-2.5-flash",
     rationale: "Creative content and fast iteration",
   },
   {
     category: "Operations & Supply Chain",
-    recommended: "gemini-pro",
+    recommended: "gemini-2.5-flash",
     alternative: "mistral-large",
     rationale: "Cost-effective for high-volume operational queries",
   },
   {
     category: "Strategy & Consulting",
-    recommended: "claude",
+    recommended: "claude-3.7-sonnet",
     alternative: "gpt4",
     rationale: "Nuanced strategic analysis and long-form reasoning",
   },
   {
     category: "Real Estate",
-    recommended: "gemini-pro",
+    recommended: "gemini-2.5-flash",
     alternative: "gpt4-turbo",
     rationale: "Good balance of capability and cost for property analysis",
   },
   {
     category: "Energy & Sustainability",
-    recommended: "claude",
-    alternative: "gemini-pro",
+    recommended: "claude-3.7-sonnet",
+    alternative: "gemini-2.5-flash",
     rationale: "Technical accuracy for energy and environmental topics",
   },
   {
     category: "Corporate Partners",
     recommended: "gpt4",
-    alternative: "claude",
+    alternative: "claude-3.7-sonnet",
     rationale: "Broad knowledge of corporate practices and frameworks",
   },
 ];
@@ -245,9 +229,9 @@ export function APICostCalculator() {
   const [customQueries, setCustomQueries] = useState<number>(75);
   const [useCustom, setUseCustom] = useState(false);
   const [selectedProviders, setSelectedProviders] = useState<string[]>([
-    "claude",
+    "claude-3.7-sonnet",
     "gpt4",
-    "gemini-pro",
+    "gemini-2.5-flash",
   ]);
 
   const profile =
@@ -538,7 +522,7 @@ export function APICostCalculator() {
                 2
               </div>
               <div>
-                <div className="font-medium">GPT-4 (OpenAI)</div>
+                <div className="font-medium">GPT-4.1 Mini (OpenAI)</div>
                 <div className="text-sm text-muted-foreground">
                   Sign up at{" "}
                   <a
@@ -581,7 +565,7 @@ export function APICostCalculator() {
             <div className="text-sm text-muted-foreground mt-1">
               Start with <strong>Claude</strong> for pharmaceutical/medical work
               and <strong>Gemini Pro</strong> for general queries to balance
-              quality and cost. Add GPT-4 later for specialized code or creative
+              quality and cost. Add GPT-4.1 for specialized code or creative
               tasks.
             </div>
           </div>

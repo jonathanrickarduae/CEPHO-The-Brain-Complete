@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { trpc } from "@/lib/trpc";
 import {
   Palette,
   Type,
@@ -43,66 +44,27 @@ interface Brand {
 }
 
 export function BrandKitManager() {
-  const [brands, _setBrands] = useState<Brand[]>([
-    {
-      id: "celadon",
-      name: "Project A",
-      colors: {
-        primary: "#10B981",
-        secondary: "#059669",
-        accent: "#34D399",
-        background: "#0F172A",
-        text: "#F8FAFC",
-      },
-      fonts: { heading: "Inter", body: "Inter" },
-      templates: {
-        presentation: true,
-        document: true,
-        video: true,
-        email: true,
-      },
-      createdAt: new Date(),
-      isDefault: true,
+  const { data: brandKitData, refetch: refetchBrands } = trpc.brandKit.list.useQuery();
+  const createBrandMutation = trpc.brandKit.create.useMutation({ onSuccess: () => { void refetchBrands(); } });
+  const updateBrandMutation = trpc.brandKit.update.useMutation({ onSuccess: () => { void refetchBrands(); } });
+  const deleteBrandMutation = trpc.brandKit.delete.useMutation({ onSuccess: () => { void refetchBrands(); } });
+
+  // Map DB records to local Brand shape
+  const brands: Brand[] = (brandKitData ?? []).map(r => ({
+    id: String(r.id),
+    name: r.companyName,
+    colors: {
+      primary: r.primaryColor ?? "#10B981",
+      secondary: r.secondaryColor ?? "#059669",
+      accent: r.accentColor ?? "#34D399",
+      background: "#0F172A",
+      text: "#F8FAFC",
     },
-    {
-      id: "boundless",
-      name: "Project B",
-      colors: {
-        primary: "#8B5CF6",
-        secondary: "#7C3AED",
-        accent: "#A78BFA",
-        background: "#1E1B4B",
-        text: "#F8FAFC",
-      },
-      fonts: { heading: "Poppins", body: "Inter" },
-      templates: {
-        presentation: true,
-        document: true,
-        video: false,
-        email: true,
-      },
-      createdAt: new Date(),
-    },
-    {
-      id: "personal",
-      name: "Personal",
-      colors: {
-        primary: "#3B82F6",
-        secondary: "#2563EB",
-        accent: "#60A5FA",
-        background: "#0F172A",
-        text: "#F8FAFC",
-      },
-      fonts: { heading: "Inter", body: "Inter" },
-      templates: {
-        presentation: true,
-        document: true,
-        video: true,
-        email: true,
-      },
-      createdAt: new Date(),
-    },
-  ]);
+    fonts: { heading: (r.fontFamily ?? "Inter"), body: "Inter" },
+    templates: { presentation: true, document: true, video: true, email: true },
+    createdAt: new Date(r.createdAt),
+    isDefault: r.isDefault ?? false,
+  }));
 
   const [selectedBrand, setSelectedBrand] = useState<Brand | null>(brands[0]);
   const [isEditing, setIsEditing] = useState(false);

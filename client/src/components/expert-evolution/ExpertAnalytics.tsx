@@ -18,6 +18,7 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { allExperts } from "@/data/ai-experts.data";
 import { useFavorites } from "@/components/project-management/MyBoard";
+import { trpc } from "@/lib/trpc";
 
 interface ExpertInteraction {
   expertId: string;
@@ -39,33 +40,26 @@ interface ExpertStats {
 export function ExpertAnalytics() {
   const { favorites: _favorites } = useFavorites();
 
-  // Mock interaction data - in production, this would come from the database
-  const [interactions] = useState<ExpertInteraction[]>(() => {
-    // Generate mock data for demo
-    const mockData: ExpertInteraction[] = [];
-    const now = new Date();
+  // Real expert performance data from the database
+  const { data: expertPerfList } = trpc.expertConsultation.list.useQuery({ limit: 100 });
 
-    // Generate interactions for some experts
-    allExperts.slice(0, 30).forEach((expert, _idx) => {
-      const numInteractions = Math.floor(Math.random() * 10) + 1;
-      for (let i = 0; i < numInteractions; i++) {
-        mockData.push({
-          expertId: expert.id,
-          type: ["chat", "video", "warroom"][Math.floor(Math.random() * 3)] as
-            | "chat"
-            | "video"
-            | "warroom",
-          duration: Math.floor(Math.random() * 45) + 5,
-          satisfaction: Math.floor(Math.random() * 2) + 4, // 4-5 mostly
-          timestamp: new Date(
-            now.getTime() - Math.random() * 30 * 24 * 60 * 60 * 1000
-          ), // Last 30 days
+  const interactions = useMemo<ExpertInteraction[]>(() => {
+    if (!expertPerfList) return [];
+    const result: ExpertInteraction[] = [];
+    expertPerfList.forEach(row => {
+      const count = row.projectsCompleted ?? 1;
+      for (let i = 0; i < Math.min(count, 10); i++) {
+        result.push({
+          expertId: row.expertId ?? "unknown",
+          type: "chat" as "chat" | "video" | "warroom",
+          duration: 20,
+          satisfaction: Math.min(5, Math.round((row.score ?? 80) / 20)),
+          timestamp: new Date(row.lastUsed ?? Date.now()),
         });
       }
     });
-
-    return mockData;
-  });
+    return result;
+  }, [expertPerfList]);
 
   // Calculate expert stats
   const expertStats = useMemo(() => {
