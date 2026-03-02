@@ -13,6 +13,7 @@ import {
   businessPlanReviewVersions,
   collaborativeReviewSessions,
   collaborativeReviewComments,
+  collaborativeReviewParticipants,
 } from "../../drizzle/schema";
 
 function getOpenAIClient(): OpenAI {
@@ -492,7 +493,8 @@ export const collaborativeReviewRouter = router({
     }),
 
   /**
-   * Invite a participant to a session (stub — no email sent yet).
+   * Invite a participant to a review session.
+   * Records the invitation in the database.
    */
   inviteParticipant: protectedProcedure
     .input(
@@ -502,8 +504,25 @@ export const collaborativeReviewRouter = router({
         role: z.string().default("reviewer"),
       })
     )
-    .mutation(async ({ input }) => {
-      return { success: true, invited: input.email };
+    .mutation(async ({ input, ctx }) => {
+      // Find the user by email if they exist in the system
+      const { users } = await import("../../drizzle/schema");
+      const [invitedUser] = await db
+        .select({ id: users.id })
+        .from(users)
+        .where(eq(users.email, input.email))
+        .limit(1);
+      if (invitedUser) {
+        // Record the participant invitation
+        await db.insert(collaborativeReviewParticipants).values({
+          sessionId: input.sessionId,
+          userId: invitedUser.id,
+          role: input.role,
+          invitedBy: ctx.user.id,
+        }).onConflictDoNothing();
+      }
+      // In production: send email invitation via SendGrid/SES
+      return { success: true, invited: input.email, userFound: !!invitedUser };
     }),
 
   /**

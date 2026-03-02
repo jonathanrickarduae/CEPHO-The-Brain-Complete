@@ -4,6 +4,9 @@ services:
     runtime: node
     buildCommand: pnpm install && pnpm run build
     startCommand: NODE_ENV=production node dist/index.js
+    healthCheckPath: /health
     envVars:
       - key: NODE_ENV
         value: production
+      - key: NODE_VERSION
+        value: "22.13.0"
