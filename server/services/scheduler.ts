@@ -40,8 +40,9 @@ function scheduleMorningBriefing() {
   cron.schedule("0 6 * * *", async () => {
     log.info("[Cron] Morning Briefing Generation — starting");
     try {
-      const allUsers = await db.select({ id: users.id, name: users.name }).from(users);
+      const allUsers = await db.select({ id: users.id, name: users.name, email: users.email }).from(users);
       for (const user of allUsers) {
+        // 1. Log to activity feed
         await db.insert(activityFeed).values({
           userId: user.id,
           actorType: "system",
@@ -53,6 +54,21 @@ function scheduleMorningBriefing() {
           description: `Good morning ${user.name ?? ""}! Your daily briefing has been prepared.`,
           metadata: { automated: true, jobId: "morning-briefing" },
         });
+
+        // 2. Proactive push email
+        if (user.email) {
+          try {
+            const { emailService } = await import("./email.service");
+            const today = new Date().toLocaleDateString("en-GB", { weekday: "long", year: "numeric", month: "long", day: "numeric" });
+            await emailService.sendHtml(
+              user.email,
+              `Your CEPHO Morning Briefing — ${today}`,
+              `<div style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:24px;"><h1 style="color:#7c3aed;">Good morning, ${user.name ?? "Executive"}.</h1><p style="color:#6b7280;">Your AI Chief of Staff has prepared your daily briefing. Log in to review your priorities, tasks, and strategic insights for today.</p><a href="${process.env.VITE_APP_URL ?? 'https://cepho.ai'}" style="display:inline-block;background:#7c3aed;color:white;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:bold;">View Your Briefing</a><p style="color:#9ca3af;font-size:12px;margin-top:24px;">CEPHO.AI — Your Autonomous AI Chief of Staff</p></div>`
+            );
+          } catch (emailErr) {
+            log.warn(`[Cron] Morning Briefing — email failed for user ${user.id}:`, emailErr);
+          }
+        }
       }
       log.info(`[Cron] Morning Briefing — generated for ${allUsers.length} users`);
     } catch (err) {

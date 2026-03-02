@@ -62,6 +62,8 @@ const PersephoneBoard = lazy(() => import("./pages/PersephoneBoard"));
 const Vault = lazy(() => import("./pages/Vault"));
 const Settings = lazy(() => import("./pages/Settings"));
 const ExpertChatPage = lazy(() => import("./pages/ExpertChatPage"));
+const Onboarding = lazy(() => import("./pages/Onboarding"));
+const WarRoom = lazy(() => import("./pages/WarRoom"));
 
 // Wrapper: pages that need the sidebar layout
 function WithLayout({ children }: { children: React.ReactNode }) {
@@ -79,6 +81,9 @@ function Router() {
       <Switch>
         {/* Auth */}
         <Route path="/login" component={LandingPage} />
+        <Route path="/onboarding">
+          <Onboarding />
+        </Route>
 
         {/* Root → Nexus */}
         <Route path="/" exact>
@@ -154,6 +159,9 @@ function Router() {
         {/* Standalone */}
         <Route path="/vault">
           <WithLayout><Vault /></WithLayout>
+        </Route>
+        <Route path="/war-room">
+          <WithLayout><WarRoom /></WithLayout>
         </Route>
         <Route path="/settings">
           <WithLayout><Settings /></WithLayout>

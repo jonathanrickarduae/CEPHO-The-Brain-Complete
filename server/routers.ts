@@ -41,6 +41,10 @@ import { projectGenesisRouter as projectGenesisRealRouter } from "./routers/proj
 import { documentLibraryRouter as documentLibraryRealRouter } from "./routers/documentLibrary.router";
 import { workflowsRouter as workflowsRealRouter } from "./routers/workflows.router";
 import { cosTrainingRouter } from "./routers/cosTraining.router";
+import { digitalTwinRouter } from "./routers/digitalTwin.router";
+import { voiceCommandRouter } from "./routers/voiceCommand.router";
+import { cephoScoreRouter } from "./routers/cephoScore.router";
+import { autonomousExecutionRouter } from "./routers/autonomousExecution.router";
 import {
   businessPlanReviewRouter as businessPlanReviewRealRouter,
   collaborativeReviewRouter as collaborativeReviewRealRouter,
@@ -172,6 +176,18 @@ export const appRouter = router({
   projectGenesis: projectGenesisRealRouter,
   optimization: optimizationRealRouter,
   cosTraining: cosTrainingRouter,
+
+  // ─── Digital Twin ────────────────────────────────────────────────────────
+  digitalTwin: digitalTwinRouter,
+
+  // ─── Voice Command (Talk to CEPHO) ───────────────────────────────────────
+  voiceCommand: voiceCommandRouter,
+
+  // ─── CEPHO Score ─────────────────────────────────────────────────────────
+  cephoScore: cephoScoreRouter,
+
+  // ─── Autonomous Execution Engine ────────────────────────────────────────────
+  autonomousExecution: autonomousExecutionRouter,
 });
 
 export type AppRouter = typeof appRouter;

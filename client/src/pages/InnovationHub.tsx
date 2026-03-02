@@ -196,6 +196,17 @@ export default function InnovationHub() {
     }
   );
 
+  // Flywheel stats and stage advancement
+  const { data: flywheelStats, refetch: refetchFlywheelStats } = trpc.innovation.getFlywheelStats.useQuery();
+  const advanceStageMutation = trpc.innovation.advanceFlywheelStage.useMutation({
+    onSuccess: (data) => {
+      toast.success(`Idea advanced to stage ${data.newStage}: ${data.stageLabel}`);
+      refetchIdeas();
+      refetchFlywheelStats();
+    },
+    onError: error => toast.error(error.message),
+  });
+
   const handleCaptureIdea = () => {
     if (!newIdeaTitle.trim()) {
       toast.error("Please enter an idea title");

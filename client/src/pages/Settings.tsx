@@ -289,13 +289,23 @@ function ProfileTab() {
 export default function Settings() {
   const search = useSearch();
   const [activeTab, setActiveTab] = useState<SettingsTab>("integrations");
-
   useEffect(() => {
     const params = new URLSearchParams(search);
     const tab = params.get("tab") as SettingsTab | null;
     if (tab) setActiveTab(tab);
   }, [search]);
   const [searchQuery, setSearchQuery] = useState("");
+
+  // ─── Settings persistence via tRPC ───────────────────────────────────────
+  const { data: userSettings } = trpc.settings.get.useQuery();
+  const utils = trpc.useUtils();
+  const updateSettings = trpc.settings.update.useMutation({
+    onSuccess: () => utils.settings.get.invalidate(),
+  });
+  const [notificationsEnabled, setNotificationsEnabled] = useState(true);
+  useEffect(() => {
+    if (userSettings) setNotificationsEnabled(userSettings.notificationsEnabled ?? true);
+  }, [userSettings]);;
 
   const tabs = [
     { id: "governance" as const, label: "Governance", icon: ShieldCheck },
@@ -556,8 +566,15 @@ export default function Settings() {
                           Pause all notifications
                         </div>
                       </div>
-                      <button className="w-12 h-6 rounded-full transition-colors bg-muted">
-                        <div className="w-5 h-5 rounded-full bg-white transition-transform translate-x-0.5" />
+                      <button
+                        onClick={() => {
+                          const next = !notificationsEnabled;
+                          setNotificationsEnabled(next);
+                          updateSettings.mutate({ notificationsEnabled: next });
+                        }}
+                        className={`w-12 h-6 rounded-full transition-colors ${notificationsEnabled ? "bg-[var(--brain-cyan)]" : "bg-muted"}`}
+                      >
+                        <div className={`w-5 h-5 rounded-full bg-white transition-transform ${notificationsEnabled ? "translate-x-6" : "translate-x-0.5"}`} />
                       </button>
                     </div>
                     <div className="p-4 bg-background rounded-xl">

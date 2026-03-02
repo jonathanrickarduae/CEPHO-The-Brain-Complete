@@ -289,6 +289,19 @@ export default function PersephoneBoard() {
   const startSession = trpc.expertChat.startSession.useMutation();
   const sendMessage = trpc.expertChat.sendMessage.useMutation();
 
+  // ─── Autonomous Execution Engine ─────────────────────────────────────────────────
+  const [executionGoal, setExecutionGoal] = useState("");
+  const [executionResult, setExecutionResult] = useState<null | { projectName: string; tasksCreated: number; phasesCreated: number; plan: { estimatedDuration: string; phases: { name: string; agent: string; taskCount: number }[] } }>(null);
+  const executeGoal = trpc.autonomousExecution.execute.useMutation({
+    onSuccess: (data) => {
+      setExecutionResult(data.plan ? { projectName: data.project.name, tasksCreated: data.tasksCreated, phasesCreated: data.phasesCreated, plan: data.plan } : null);
+      toast.success(`Project "${data.project.name}" created with ${data.tasksCreated} tasks across ${data.phasesCreated} phases.`);
+      setExecutionGoal("");
+    },
+    onError: () => toast.error("Execution failed: Could not process your goal. Please try again."),
+  });
+  const { data: recentExecutions } = trpc.autonomousExecution.getRecentExecutions.useQuery();
+
   // Auto-scroll to bottom when new messages arrive
   useEffect(() => {
     if (scrollRef.current) {
@@ -409,6 +422,63 @@ export default function PersephoneBoard() {
       subtitle="Virtual Board of 14 Top AI Leaders — Strategic Oversight & Industry Guidance"
     >
       <div className="space-y-5">
+        {/* ─── Autonomous Execution Command Bar ─────────────────────────────── */}
+        <Card className="border-primary/40 bg-gradient-to-br from-primary/10 via-purple-500/5 to-background">
+          <CardHeader className="pb-3">
+            <CardTitle className="flex items-center gap-2 text-base">
+              <Rocket className="w-5 h-5 text-primary" />
+              Autonomous Execution Engine
+              <Badge variant="outline" className="ml-auto text-xs border-primary/40 text-primary">One-Sentence Execution</Badge>
+            </CardTitle>
+            <p className="text-xs text-muted-foreground">State your goal in one sentence. CEPHO will consult your Digital Twin, decompose the goal, and create a full project plan with tasks assigned to specialist agents.</p>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <div className="flex gap-2">
+              <input
+                className="flex-1 bg-background border border-border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
+                placeholder="e.g. Launch a new B2B SaaS product in the UAE market within 6 months..."
+                value={executionGoal}
+                onChange={e => setExecutionGoal(e.target.value)}
+                onKeyDown={e => e.key === "Enter" && !executeGoal.isPending && executionGoal.trim().length >= 5 && executeGoal.mutate({ goal: executionGoal, autoApprove: true })}
+                disabled={executeGoal.isPending}
+              />
+              <Button
+                onClick={() => executeGoal.mutate({ goal: executionGoal, autoApprove: true })}
+                disabled={executeGoal.isPending || executionGoal.trim().length < 5}
+                className="gap-2"
+              >
+                {executeGoal.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Rocket className="w-4 h-4" />}
+                {executeGoal.isPending ? "Executing..." : "Execute"}
+              </Button>
+            </div>
+            {executionResult && (
+              <div className="rounded-md border border-emerald-500/30 bg-emerald-500/5 p-3 space-y-2">
+                <div className="flex items-center gap-2 text-sm font-medium text-emerald-400">
+                  <Sparkles className="w-4 h-4" />
+                  Project Created: {executionResult.projectName}
+                </div>
+                <div className="text-xs text-muted-foreground">{executionResult.tasksCreated} tasks across {executionResult.phasesCreated} phases &bull; Est. {executionResult.plan.estimatedDuration}</div>
+                <div className="flex flex-wrap gap-1">
+                  {executionResult.plan.phases.map(p => (
+                    <Badge key={p.name} variant="outline" className="text-xs">{p.agent}: {p.taskCount} tasks</Badge>
+                  ))}
+                </div>
+              </div>
+            )}
+            {recentExecutions && recentExecutions.length > 0 && (
+              <div className="space-y-1">
+                <p className="text-xs text-muted-foreground font-medium">Recent Executions</p>
+                {recentExecutions.slice(0, 3).map(ex => (
+                  <div key={ex.id} className="flex items-center justify-between text-xs p-2 rounded bg-muted/30">
+                    <span className="font-medium truncate max-w-[60%]">{ex.name}</span>
+                    <Badge variant="outline" className="text-xs">{ex.status}</Badge>
+                  </div>
+                ))}
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
         {/* Board Overview Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <Card className="border-purple-500/30 bg-gradient-to-br from-purple-500/10 to-background">

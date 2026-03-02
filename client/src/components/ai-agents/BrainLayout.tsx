@@ -43,6 +43,7 @@ import {
   Star,
   GraduationCap,
   Bot,
+  AlertTriangle,
 } from "lucide-react";
 import { CSSProperties, useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
@@ -128,6 +129,7 @@ const menuItems: MenuItem[] = [
       { icon: Star, label: "Project Genesis", path: "/project-genesis" },
       { icon: Workflow, label: "Workflows", path: "/workflows" },
       { icon: Users, label: "Persephone Board", path: "/persephone" },
+      { icon: AlertTriangle, label: "War Room", path: "/war-room" },
     ],
   },
 

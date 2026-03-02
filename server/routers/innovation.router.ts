@@ -663,4 +663,46 @@ Return as JSON: { "title": "...", "description": "...", "category": "...", "prio
         promotedAt: new Date().toISOString(),
       };
     }),
+
+  /**
+   * Advance an idea to the next flywheel stage (1→5).
+   * Stage 1: Capture → Stage 2: Assess → Stage 3: Brief → Stage 4: Fund → Stage 5: Launch
+   */
+  advanceFlywheelStage: protectedProcedure
+    .input(z.object({ ideaId: z.number() }))
+    .mutation(async ({ input, ctx }) => {
+      const [idea] = await db
+        .select()
+        .from(innovationIdeas)
+        .where(and(eq(innovationIdeas.id, input.ideaId), eq(innovationIdeas.userId, ctx.user.id)))
+        .limit(1);
+      if (!idea) throw new Error("Idea not found");
+      const nextStage = Math.min(5, (idea.currentStage ?? 1) + 1);
+      const stageLabels: Record<number, string> = {
+        1: "capture", 2: "assess", 3: "brief", 4: "fund", 5: "launch",
+      };
+      await db
+        .update(innovationIdeas)
+        .set({ currentStage: nextStage, status: nextStage === 5 ? "ready_to_launch" : "in_progress", updatedAt: new Date() })
+        .where(eq(innovationIdeas.id, input.ideaId));
+      return { success: true, newStage: nextStage, stageLabel: stageLabels[nextStage] };
+    }),
+
+  /**
+   * Get flywheel statistics for the Innovation Hub dashboard.
+   */
+  getFlywheelStats: protectedProcedure.query(async ({ ctx }) => {
+    const ideas = await db
+      .select()
+      .from(innovationIdeas)
+      .where(eq(innovationIdeas.userId, ctx.user.id));
+    const byStage = [1, 2, 3, 4, 5].map(stage => ({
+      stage,
+      label: ["Capture", "Assess", "Brief", "Fund", "Launch"][stage - 1],
+      count: ideas.filter(i => i.currentStage === stage).length,
+    }));
+    const promoted = ideas.filter(i => i.status === "promoted").length;
+    const avgConfidence = ideas.length === 0 ? 0 : Math.round(ideas.reduce((s, i) => s + (i.confidenceScore ?? 0), 0) / ideas.length);
+    return { total: ideas.length, byStage, promoted, avgConfidence };
+  }),
 });

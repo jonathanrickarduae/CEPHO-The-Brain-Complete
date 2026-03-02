@@ -142,6 +142,18 @@ export default function NexusDashboard() {
   const { data: _insightsData, isLoading: _insightsLoading } =
     trpc.dashboard.getInsights.useQuery();
 
+  // CEPHO Score — the single executive performance metric
+  const { data: cephoScoreData } = trpc.cephoScore.get.useQuery();
+
+  // Real task and project counts
+  const { data: tasksData } = trpc.tasks.list.useQuery({ limit: 100 });
+  const { data: projectsData } = trpc.projects.list.useQuery({});
+  const { data: flywheelStats } = trpc.innovation.getFlywheelStats.useQuery();
+
+  const completedTasks = (Array.isArray(tasksData) ? tasksData : (tasksData as any)?.tasks ?? []).filter((t: any) => t.status === 'completed').length;
+  const activeProjects = (Array.isArray(projectsData) ? projectsData : (projectsData as any)?.projects ?? []).filter((p: any) => p.status === 'active').length;
+  const totalIdeas = (flywheelStats as any)?.total ?? 0;
+
   // Voice input
   const {
     isListening,
@@ -345,28 +357,28 @@ export default function NexusDashboard() {
               <MetricCard
                 icon={Lightbulb}
                 label="Innovation Ideas"
-                value="12"
+                value={totalIdeas}
                 trend="up"
                 onClick={() => setLocation("/innovation-hub")}
               />
               <MetricCard
                 icon={Brain}
-                label="AI-SME Consultations"
-                value="47"
-                trend="up"
-                onClick={() => setLocation("/ai-experts")}
+                label="CEPHO Score"
+                value={cephoScoreData?.total ? `${cephoScoreData.total}/100` : '--'}
+                trend="stable"
+                onClick={() => setLocation("/statistics")}
               />
               <MetricCard
                 icon={CheckCircle2}
                 label="Tasks Completed"
-                value="23"
+                value={completedTasks}
                 trend="stable"
                 onClick={() => setLocation("/chief-of-staff")}
               />
               <MetricCard
                 icon={Rocket}
                 label="Active Projects"
-                value="3"
+                value={activeProjects}
                 trend="stable"
                 onClick={() => setLocation("/project-genesis")}
               />
