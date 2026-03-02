@@ -172,3 +172,15 @@ startServer().catch((err: unknown) => {
   process.stderr.write(`[CEPHO.AI] Fatal startup error: ${String(err)}\n`);
   process.exit(1);
 });
+
+// Prevent unhandled promise rejections from crashing the server
+process.on("unhandledRejection", (reason: unknown) => {
+  process.stderr.write(`[CEPHO.AI] Unhandled rejection: ${String(reason)}\n`);
+  // Do NOT exit — log and continue
+});
+
+process.on("uncaughtException", (err: Error) => {
+  process.stderr.write(`[CEPHO.AI] Uncaught exception: ${err.message}\n${err.stack ?? ""}\n`);
+  // Exit on truly uncaught exceptions to avoid undefined state
+  process.exit(1);
+});

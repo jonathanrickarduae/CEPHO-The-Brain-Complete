@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { trpc } from "@/lib/trpc";
 import {
   Shield,
   Lock,
