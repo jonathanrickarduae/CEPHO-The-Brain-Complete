@@ -1,0 +1,494 @@
+CEPHO.AI
+Grand Master Plan — v11
+Version 11.0 | March 2026 | CONFIDENTIAL
+The Single Source of Truth. AI Foundations First. Automation by Design.
+
+---
+
+Executive Summary
+CEPHO.AI is an autonomous platform designed to replicate and automate the core functions of a world-
+class Chief of Staff. This Grand Master Plan is the single, definitive roadmap for transforming the
+platform from its current Grade E state to Grade A+ — a genuinely intelligent, fully automated,
+enterprise-ready platform.
+This version restructures the phases so that AI architecture foundations are built early — in Phase 2 —
+rather than bolted on at the end. The deep automation layer (autonomous task creation, anomaly
+detection, natural language commands, vector knowledge base) is built in Phase 3, before the scaling
+and operational work begins. This ensures every subsequent phase builds on a solid AI foundation
+rather than retrofitting AI into a system that was not designed for it.
+
+Phase Name Core Focus Grade
+Phase 0 Pre-Conditions CI/CD, branch strategy, E → D
+env vars, seed data,
+ADRs
+Phase 1 Stabilise & Fix All crashes, security D → B
+holes, broken routes,
+orphaned tables
+Phase 2 AI Foundations + Vector DB, agent B → B+
+Enterprise memory, model routing,
+prompt engineering,
+Settings tabs, mobile
+Phase 3 Deep Automation Cron jobs, autonomous B+ → A-
+tasks, anomaly detection,
+NL commands, inbound
+webhooks, KPIs
+Phase 4 Scale & Growth Design system, caching, A- → A
+pagination, audit logging,
+multi-workspace
+Phase 5 Operational Excellence Runbook, alerting, rate A → A+
+limiting, GDPR,
+onboarding, error
+boundaries
+Phase 6 Enhancements Agent ratings, competitor A+ → A+*
+intelligence, board
+reports, public API,
+feature flags
+
+---
+
+Graded Scorecard
+Update GRADES.md in GitHub after every production deployment. No deployment is complete without
+updating this table.
+Workstrea Now P1 P2 P3 P4 P5 P6
+m
+Security & E B B B A A+ A+
+Authenticati
+on
+Database & E B B+ A A A A
+Supabase
+AI E E B A A A A+
+Architectur
+e &
+Memory
+Agent D D B A A A A+
+Intelligence
+& Learning
+API & D B B+ A A A A
+Routers
+Frontend D B B+ A A A+ A+
+Stability
+Settings & E D A A A A A
+Configurati
+on
+Mobile / D D A A A A A
+Portrait
+Design
+Third-Party E D B A A A A
+Integrations
+Automation E D C A A A A+
+&
+Scheduling
+Code D B A A A A A
+Structure &
+Hygiene
+Documenta D B A A A A A
+tion & Repo
+Performanc D D C C A A A
+e &
+Scalability
+Compliance E E D D C A A+
+
+---
+
+&
+Governanc
+e
+Observabilit E E D C B A A
+y &
+Monitoring
+Data E D B A A A A
+Architectur
+e
+
+---
+
+Deployment Gate Protocol
+No deployment reaches production without all 8 gates passing. Gates 1–5 are enforced automatically by
+the CI/CD pipeline. Gates 6–8 require human sign-off.
+Gate Check Enforced By
+1 TypeScript compilation: tsc --noEmit CI/CD automatic
+passes with zero errors
+2 ESLint passes with zero errors CI/CD automatic
+3 All unit and contract tests pass: CI/CD automatic
+pnpm test
+4 Build succeeds: pnpm build CI/CD automatic
+5 Security scan: pnpm audit --audit- CI/CD automatic
+level=critical passes
+6 Validation script passes: python3 Developer manual
+scripts/validate.py --check ALL
+7 GRADES.md updated with new Developer manual
+grade and evidence of improvement
+8 CHANGELOG.md updated with Developer manual
+summary of changes in this
+deployment
+
+---
+
+Phase 0: Pre-Conditions
+These items must be completed BEFORE any Phase 1 code changes begin. They establish the
+infrastructure, process, and tooling that all subsequent work depends on.
+P0-01: GitHub Actions CI/CD Pipeline
+Priority Effort Grade Impact
+BLOCKER Medium (4 hours) All Workstreams E→D
+Current State
+No CI/CD pipeline exists. All deployments are manual. There is no automated enforcement of code
+quality, tests, or security checks. A broken deployment can reach production with no safeguard.
+Fix / Implementation Required
+Commit .github/workflows/ci.yml from the GitHub Package to the repository. The pipeline runs on every
+PR and every push to main. It executes: (1) pnpm install, (2) tsc --noEmit, (3) eslint ., (4) pnpm test, (5)
+pnpm build, (6) pnpm audit --audit-level=critical. Deployment to Render only triggers when all steps
+pass.
+Expected Outcome
+Every PR and merge to main automatically runs all quality checks. No broken code can be merged. No
+deployment happens without all gates passing.
+Validation Check
+Open a PR with a deliberate TypeScript error (e.g., const x: number = "string"). The CI pipeline must fail
+and block the merge.
+P0-02: Branch Strategy and PR Template
+Priority Effort Grade Impact
+BLOCKER Low (1 hour) Process Discipline
+Current State
+
+---
+
+No branching strategy is defined. Developers commit directly to main. No PR template exists. Changes
+cannot be traced to plan items.
+Fix / Implementation Required
+In GitHub Settings > Branches: protect main and develop, require PR reviews, require CI to pass before
+merging. Commit .github/PULL_REQUEST_TEMPLATE.md from the GitHub Package. Branch naming:
+feature/<item-id>-<description> and hotfix/<item-id>-<description>.
+Expected Outcome
+No developer can push directly to main or develop. Every PR must reference a Grand Master Plan item
+ID and include validation output.
+Validation Check
+Attempt to push directly to main. GitHub must reject with a branch protection error.
+P0-03: All Environment Variables Set in Render
+Priority Effort Grade Impact
+BLOCKER Low (1 hour) Security A, Integrations D→C
+Current State
+Multiple required environment variables are missing from the Render deployment. Features that depend
+on them silently fail with no error message to the user.
+Fix / Implementation Required
+Log in to Render dashboard. Navigate to the service > Environment. Add every variable listed in
+Appendix E. For secrets, generate new values: openssl rand -hex 32. Never commit secrets to the
+repository.
+Expected Outcome
+All features that depend on environment variables work correctly. No silent failures due to missing
+configuration.
+Validation Check
+
+---
+
+Run python3 scripts/validate.py --check ENV. All 31 environment variables must be present and non-
+empty.
+P0-04: Database Seed Script
+Priority Effort Grade Impact
+High Medium (4 hours) Testing D→B
+Current State
+No seed script exists. Every developer creates their own test data inconsistently. There is no way to test
+features end-to-end without manually creating records.
+Fix / Implementation Required
+Commit scripts/seed.ts from the GitHub Package. Run with: npx tsx scripts/seed.ts. Creates one realistic
+record in every active table. Creates test user: email test@cepho.ai, PIN 1234 (bcrypt hashed).
+Expected Outcome
+Any developer can run the seed script and immediately have a fully populated database. Every feature
+can be tested end-to-end.
+Validation Check
+Run npx tsx scripts/seed.ts on a fresh database. Log in with test@cepho.ai / PIN 1234. Victoria's
+Briefing must show a briefing. Tasks must show tasks. Projects must show projects.
+P0-05: Architecture Decision Records
+Priority Effort Grade Impact
+Medium Low (2 hours) Documentation C→B
+Current State
+No record of why key technical decisions were made. New developers cannot understand the reasoning
+behind the architecture.
+Fix / Implementation Required
+
+---
+
+Create /docs/decisions/ folder. Write ADR-001 (tRPC), ADR-002 (Supabase), ADR-003 (Drizzle ORM),
+ADR-004 (Render), ADR-005 (Vite + React), ADR-006 (TailwindCSS). Each ADR has: Context, Decision,
+Alternatives Considered, Consequences.
+Expected Outcome
+New developers understand why the platform is built the way it is. Technical debates are not repeated.
+Validation Check
+The /docs/decisions/ folder contains at least 6 ADR files, each with all four required sections.
+
+
+---
+
+# Appendix A: Phase 0 Pre-Conditions Detailed Specification
+
+This appendix provides a detailed breakdown of the pre-conditions that must be met before Phase 1 begins. These are non-negotiable infrastructure and process requirements.
+
+**P0-01: GitHub Actions CI/CD Pipeline**
+- **File:** `.github/workflows/ci.yml`
+- **Implementation:** The CI pipeline must run on every pull request and every push to the `main` branch. It must execute the following steps in order: `pnpm install`, `tsc --noEmit`, `eslint .`, `pnpm test`, `pnpm build`, and `pnpm audit --audit-level=critical`. A failure in any step must block the PR from being merged and prevent deployment.
+
+**P0-02: Branch Strategy and PR Template**
+- **Files:** `.github/PULL_REQUEST_TEMPLATE.md`
+- **Implementation:** Branch protection rules must be enabled for `main` and `develop` branches, requiring at least one peer review and a passing CI build before merging. The pull request template must require a link to the corresponding Grand Master Plan item ID.
+
+**P0-03: Environment Variables**
+- **Location:** Render Dashboard > Environment
+- **Implementation:** All 31 environment variables listed in the main plan must be set in the Render production environment. Sensitive keys must be generated with `openssl rand -hex 32` and never committed to the repository.
+
+**P0-04: Database Seed Script**
+- **File:** `scripts/seed.ts`
+- **Implementation:** The seed script must create a consistent set of test data across all active database tables, including a test user with a known password, to enable repeatable end-to-end testing.
+
+**P0-05: Architecture Decision Records (ADRs)**
+- **Location:** `/docs/decisions/`
+- **Implementation:** At least six initial ADRs must be created, documenting the rationale behind the core technology choices (tRPC, Supabase, Drizzle, Render, Vite, TailwindCSS).
+
+
+
+---
+
+# Appendix B: Phase 5 Operational Excellence Detailed Specification
+
+This appendix details the workstreams for achieving operational excellence, transforming the platform into a mature, enterprise-grade service.
+
+**Workstream 15: Architecture & Documentation**
+- **OPS-01: Architecture Decision Records (ADRs):** Create and maintain a `/docs/decisions/` folder with detailed records for every significant technical decision.
+- **OPS-02: Operational Runbook:** Develop a comprehensive `/docs/RUNBOOK.md` detailing incident response procedures for all foreseeable issues.
+- **OPS-03: Changelog:** Maintain a `CHANGELOG.md` in the root directory, following the Keep a Changelog standard.
+
+**Workstream 16: Observability & Monitoring**
+- **OPS-04: Structured Logging:** Implement structured JSON logging for all API calls using `pino` or `winston`.
+- **OPS-05: Metrics Dashboard:** Expose a `/api/health` endpoint to provide real-time platform health metrics.
+- **OPS-06: Alerting:** Configure Sentry or Render alerts for critical issues like high error rates or database connection failures.
+
+**Workstream 17: Security Hardening**
+- **OPS-07: API Rate Limiting:** Implement per-user rate limits on all AI-powered endpoints to prevent abuse and control costs.
+- **OPS-08: Dependency Audit Policy:** Integrate `npm audit` into the CI/CD pipeline to block deployments with critical or high severity vulnerabilities.
+
+**Workstream 18: Data & Compliance**
+- **OPS-09: Data Backup & Recovery Plan:** Document and test the Supabase database backup and recovery procedure.
+- **OPS-10: GDPR Data Deletion Flow:** Implement a compliant "Delete My Account" feature that purges all user data from the system.
+
+**Workstream 19: User Experience**
+- **OPS-11: First-Time User Onboarding Flow:** Create a guided onboarding wizard for new users to improve activation and retention.
+- **OPS-12: Granular Error Boundaries & Offline Mode:** Implement component-level error boundaries and a service worker for offline detection.
+
+
+
+---
+
+# Appendix C: Phase 6 Enhancements Detailed Specification
+
+This appendix outlines the key enhancements that will differentiate the platform and provide a world-class user experience.
+
+**Category A: Platform Resilience**
+- **ENH-01: Error Boundaries on Every Page:** Implement component-level error boundaries to prevent full-page crashes.
+- **ENH-02: Offline/Degraded Mode Banner:** Provide clear visual feedback to the user when the application is offline or the server is unreachable.
+- **ENH-03: Structured Logging:** Implement structured JSON logging for all server-side operations to enable effective debugging and monitoring.
+- **ENH-04: Architecture Decision Records (ADRs):** Formalize the process of documenting significant architectural decisions.
+
+**Category B: User Experience**
+- **ENH-05: Onboarding Wizard:** Create a guided, multi-step onboarding process for new users to drive activation.
+- **ENH-06: In-App Notifications (Real-Time):** Use Supabase Realtime to provide instant feedback and notifications to the user.
+
+**Category C: Enterprise Requirements**
+- **ENH-07: Audit Log:** Implement a comprehensive audit log for all user and system actions to meet enterprise compliance requirements.
+
+
+
+---
+
+# Appendix D: Digital Twin Architecture Detailed Specification
+
+This appendix describes the architecture of the Digital Twin, the cognitive core of the CEPHO.AI platform.
+
+**Core Components:**
+- **DT-MOD-01: Ingestion & Calibration Engine:** Continuously gathers data from various sources to build and refine the twin's understanding of the user.
+- **DT-MOD-02: Cognitive & Personality Model:** A structured, queryable data model representing the user's personality, priorities, and communication style.
+- **DT-MOD-03: Behavioral Simulation & Prediction:** Uses the Cognitive Model to predict user reactions and simulate behavior.
+- **DT-MOD-04: Dynamic Prompt Assembler:** Translates the Cognitive Model into real-time, context-aware system prompts for all AI agent interactions.
+
+
+
+---
+
+# Appendix E: Autonomous Execution Engine Detailed Specification
+
+This appendix details the architecture for the Autonomous Execution Engine, which enables one-sentence task execution.
+
+**Core Components:**
+- **Command Bar:** The single entry point for all user-directed autonomous tasks.
+- **Chief of Staff Agent:** The master AI agent that receives the user's goal, consults the Digital Twin, and orchestrates the entire operation.
+- **Specialist Agents:** The team of 49+ specialist agents who are delegated tasks by the Chief of Staff.
+- **Persephone Board:** A master visualization dashboard providing a real-time, multi-layered view of the entire autonomous workflow.
+
+
+
+---
+
+# Appendix F: Innovation Hub & Flywheel Architecture Detailed Specification
+
+This appendix describes the architecture of the Innovation Hub and Flywheel, an engine for proactive, strategic growth.
+
+**The Flywheel Steps:**
+1.  **Capture:** Ideas are captured from any source (user, agents, system).
+2.  **Enrich:** An AI agent researches and scores each idea.
+3.  **Prioritize:** The user approves, rejects, or defers ideas in a central hub.
+4.  **Convert:** Approved ideas are automatically converted into actionable projects and tasks.
+5.  **Execute:** Agents (or the user) complete the tasks and projects.
+6.  **Learn:** The outcomes and data from execution are fed back into the system, making it smarter.
+
+
+
+---
+
+# Appendix G: The 5 Final Gaps Detailed Specification
+
+This appendix addresses the five final architectural gaps that must be closed to achieve a Grade A+ rating.
+
+**Gap 1: No Central Settings & Permissions Engine**
+- **Solution:** Implement a robust Role-Based Access Control (RBAC) system, a hierarchical settings engine, and a dedicated settings API.
+
+**Gap 2: No Standardized Document Templating**
+- **Solution:** Create a centralized templating microservice that uses a BrandKit to produce professionally formatted documents (PDF, DOCX) from structured data.
+
+**Gap 3: No "God Mode" Admin Dashboard**
+- **Solution:** Build a separate, admin-only dashboard for user management, system-wide analytics, agent oversight, and content moderation.
+
+**Gap 4: No Guided Onboarding Flow**
+- **Solution:** Develop a multi-step onboarding wizard to guide new users through profile setup, Digital Twin calibration, and initial platform usage.
+
+**Gap 5: Incomplete DevOps & Environments**
+- **Solution:** Establish distinct staging and production environments, implement automated database migrations with Drizzle Kit, and define a clear rollback strategy.
+
+
+
+---
+
+# Appendix H: CEPHO Remediation Plan (Feb 28, 2026)
+
+This appendix summarizes the key objectives and tasks from the remediation plan created on February 28, 2026.
+
+**Objective 1: Code & Documentation Cleanup**
+- **Tasks:** Remove obsolete features, consolidate master documentation, unify naming conventions, delete duplicated files, remove all `console.log` statements, and add JSDoc comments to all functions.
+
+**Objective 2: API Cleanup & Integration**
+- **Tasks:** Redesign and fix the integrations page, sync integration status with reality, add missing critical integrations (Synthesia, ElevenLabs, etc.), and create a unified API key and credential management system.
+
+**Objective 3: AI Agents Recovery & Mapping**
+- **Tasks:** Conduct a full agent audit and recovery, create a central AI agent directory UI, and operationalize all 50+ core agents.
+
+**Objective 4: Fix Broken Pages & Routing**
+- **Tasks:** Conduct a full routing audit and fix all non-functional pages.
+
+**Objective 5: Mobile Responsiveness**
+- **Tasks:** Implement a mobile-first and responsive layout, and optimize every page for portrait mode.
+
+**Objective 6: UI/UX Redesign & Standardization**
+- **Tasks:** Enforce a single, consistent design system, standardize all page layouts, and improve information density and actionability.
+
+**Objective 7: Persephone Board Training**
+- **Tasks:** Create a knowledge corpus for each board member, implement a Retrieval-Augmented Generation (RAG) system, and fine-tune agent personas for authenticity.
+
+
+---
+
+# Appendix I: Comprehensive Expert Remediation Plan
+
+This appendix outlines the 6-phase plan to elevate the platform from a B+ to an A+ grade, as defined by the 10-person expert team.
+
+**Phase 1: Critical Fixes (Week 1)**
+- **Focus:** Security, Login, Code Quality Baseline.
+
+**Phase 2: Foundation (Weeks 2-3)**
+- **Focus:** Architecture, Testing, Documentation.
+
+**Phase 3: Optimization (Weeks 4-5)**
+- **Focus:** Performance, Database, API.
+
+**Phase 4: Enhancement (Week 6)**
+- **Focus:** UX/UI, Accessibility, Polish.
+
+**Phase 5: Governance (Week 7)**
+- **Focus:** Monitoring, Reliability, Operations.
+
+**Phase 6: Product & AI Agents (Week 8)**
+- **Focus:** Product analytics, AI agents, continuous improvement.
+
+
+---
+
+# Appendix J: Recommended Execution Plan (Feb 28, 2026)
+
+This appendix details the 3-phase execution plan focused on stability and incremental progress.
+
+**Phase 1: Infrastructure & Configuration**
+- **Goal:** Restore basic connectivity by wiring up the database and all required API keys.
+
+**Phase 2: Code Cleanup & Consolidation**
+- **Goal:** Remove all dead, orphaned, and duplicated code.
+
+**Phase 3: Core Feature Implementation**
+- **Goal:** Implement the two most critical end-to-end user workflows: Innovation Hub and Project Genesis.
+
+
+---
+
+# Appendix K: Integrated Remediation Checklist
+
+This appendix provides a consolidated checklist of remediation tasks.
+
+**1. Code & Documentation Cleanup**
+- [ ] CD-01: Remove Obsolete Features
+- [ ] CD-02: Consolidate Documentation
+- [ ] CD-03: Unify Naming Conventions
+- [ ] CD-04: Delete Duplicated Files
+
+**2. API Cleanup & Integration**
+- [ ] API-01: Redesign Integrations Page
+- [ ] API-02: Sync with Render & Reality
+- [ ] API-03: Add Missing Integrations
+- [ ] API-04: Consolidate Integration Points
+
+**3. AI Agents Recovery & Mapping**
+- [ ] AI-01: Full Agent Audit & Recovery
+- [ ] AI-02: Create a Central Agent Directory
+- [ ] AI-03: Operationalize All Agents
+
+**4. Fix Broken Pages & Routing**
+- [ ] PAGE-01: Full Routing Audit
+- [ ] PAGE-02: Fix Non-Functional Pages
+
+**5. Mobile Responsiveness**
+- [ ] MOB-01: Implement Mobile-First Layout
+- [ ] MOB-02: Optimize for Portrait Mode
+
+**6. UI/UX Redesign & Standardization**
+- [ ] UI-01: Enforce a Single Design System
+- [ ] UI-02: Standardize Page Layouts
+- [ ] UI-03: Improve Information Density
+
+**7. Persephone Board Training**
+- [ ] PB-01: Create a Knowledge Corpus
+- [ ] PB-02: Implement a RAG System
+- [ ] PB-03: Fine-Tune Agent Personas
+
+
+---
+
+# Appendix L: Project README
+
+This appendix contains the content of the main project README file, providing a high-level overview of the project, its features, and technical architecture.
+
+**Core Features:**
+- **The Nexus:** Central command center with AI-powered insights.
+- **Chief of Staff Dashboard:** Executive operations hub.
+- **50+ Specialized AI Agents:** Automated agents across 7 categories.
+- **Victoria's Briefing:** AI-generated daily strategic briefing.
+- **Evening Review:** End-of-day summary and next-day preparation.
+- **Innovation Hub:** Idea management and validation pipeline.
+- **Project Genesis:** Comprehensive project planning and execution.
+- **Document Library:** Centralized repository for AI-generated documents.
+- **Integrations:** Connections with 15+ external services.
+
+**Architecture:**
+- **Frontend:** React 18, Vite, TypeScript, Tailwind CSS, TanStack Query, React Router v6, tRPC.
+- **Backend:** Node.js 22, Express, tRPC, PostgreSQL (Supabase), Drizzle ORM, JWT/OAuth.
+- **Infrastructure:** Render (hosting), Supabase (database), GitHub + Render Auto-Deploy (CI/CD).
