@@ -1,118 +1,129 @@
-# CEPHO.AI — Master Project Context
+# CEPHO.AI — Project Context & State
 
-> **Read this first.** This file is the single source of truth for the current state of the project. Any new session should read this file before taking any action.
-
----
-
-## 1. What Is This Project?
-
-CEPHO.AI is an autonomous AI Chief of Staff platform. It is designed to replicate and automate the core functions of a world-class Chief of Staff for a single executive user (Victoria). The platform uses a team of 55 specialist AI agents (SMEs), a Digital Twin of the user, and a self-reinforcing Innovation Flywheel to plan, execute, and learn from every task.
-
-The ultimate end state is **One-Sentence Execution**: the user states a high-level goal in a single sentence, and the platform — orchestrated by the Chief of Staff agent and visualized on the Persephone Board — executes it from start to finish.
+> **Last Updated:** 2026-03-02  
+> **Current Build State:** Phases 0–6 COMPLETE. Phase 7 (Full Autonomy) and Phase 8 (Admin & Governance) in progress.  
+> **Active Plan:** Grand Master Plan v10.0 — `/docs/plan/CEPHO_Grand_Master_Plan_v10_FINAL.docx`
 
 ---
 
-## 2. Current Platform State
+## What Is This Platform?
 
-| Area | Current Grade | Target Grade |
-|---|---|---|
-| Security | E (MOCK_ADMIN_USER bypass active) | A |
-| AI Agents | D (most procedures are stubs) | A |
-| Digital Twin | D (questionnaire exists, no real cognitive model) | A |
-| Automation | E (all cron runs client-side only) | A |
-| Settings | D (only Profile tab is wired) | A |
-| Mobile UX | C (sidebar overlaps on mobile) | A |
-| Innovation Hub | B (UI exists, flywheel partially wired) | A |
-| Persephone Board | B (UI exists, hardcoded data) | A |
-| Document Generation | C (PDF service exists, no templating engine) | A |
-| Onboarding | E (no guided flow) | A |
+CEPHO.AI is an autonomous AI Chief of Staff platform for a single executive (Victoria). It uses a team of 49+ specialist AI agents, a Digital Twin of the user, and an Autonomous Execution Engine to run the executive's business on autopilot from a single sentence.
 
 ---
 
-## 3. The Grand Master Plan
+## Toolchain
 
-The definitive blueprint for the entire build is:
-
-**`docs/plan/CEPHO_Grand_Master_Plan_v10_FINAL.docx`**
-
-This is the **only** document to work from. It contains all 8 phases, all appendices (A through W), and the complete specification for every component.
-
-### Phase Summary
-
-| Phase | Name | Core Focus | Grade |
-|---|---|---|---|
-| Phase 0 | Pre-Conditions & Toolchain | CI/CD, branch strategy, env vars, seed data, ADRs, toolchain setup | E → D |
-| Phase 1 | Stabilise & Fix | All crashes, security holes, broken routes, orphaned tables | D → B |
-| Phase 2 | Digital Twin & Intelligence | 4-module Digital Twin, vector DB, agent memory, Shadow Mode | B → A- |
-| Phase 3 | Innovation, Voice & Automation | Innovation Hub, voice-first interface, push briefings, CEPHO Score | A- → A |
-| Phase 4 | Flywheel, Scale & Teams | Innovation Flywheel engine, monetisation, multi-tenancy, teams | A → A+ |
-| Phase 5 | Operational Excellence & Learning | Outcome tracking, runbook, alerting, audit log, pen testing, DR/BC | A+ → A+* |
-| Phase 6 | Differentiated Intelligence | Agent performance dashboard, continuous learning, War Room | A+* → A+** |
-| Phase 7 | Full Autonomy | Autonomous Execution Engine, Persephone Board, One-Sentence Execution | A+** → A+*** |
-| Phase 8 | Admin & Governance | Admin dashboard, RBAC, settings engine, onboarding flow | A+*** → A+**** |
-
----
-
-## 4. Development Toolchain
-
-| Tool | Role | Status |
-|---|---|---|
-| **Manus AI** | Planning, architecture, code writing, execution, debugging | Active |
-| **Snyk Code** | Automated security scanning in CI/CD pipeline | Token stored in GitHub Secrets as `SNYK_TOKEN` |
-| **Claude Code** | Large-scale multi-file implementation sprints | API key stored in Render as `ANTHROPIC_API_KEY` |
-| **GitHub** | Version control, CI/CD, and project memory | Repo: `jonathanrickarduae/CEPHO-The-Brain-Complete` |
-| **Render** | Hosting and deployment | Production environment |
-| **Supabase** | Database (PostgreSQL + pgvector) | Active |
-
----
-
-## 5. Key Architectural Decisions
-
-- **Framework:** TypeScript, React (Vite), tRPC, Drizzle ORM, TailwindCSS
-- **Database:** Supabase (PostgreSQL). The main schema is at `drizzle/schema.ts` (168 tables defined).
-- **AI:** Anthropic Claude via `server/services/anthropic.service.ts`
-- **Voice:** ElevenLabs via `server/services/voice.service.ts`
-- **Auth:** PIN-based login with JWT. The MOCK_ADMIN_USER bypass in `server/_core/context.ts` **must be removed in Phase 1.**
-- **Agents:** 55 agents defined in `server/routes/agents.ts`
-- **Stripe:** Products defined in `server/stripe/products.ts` (Free, Pro at £49/mo, Enterprise)
-
----
-
-## 6. Key Files & Folders
-
-| Path | Description |
+| Tool | Role |
 |---|---|
-| `docs/plan/CEPHO_Grand_Master_Plan_v10_FINAL.docx` | The definitive Grand Master Plan |
-| `docs/CONTEXT.md` | This file — the master context |
-| `docs/specs/digital_twin_spec.md` | Digital Twin architecture |
-| `docs/specs/autonomous_execution_spec.md` | Autonomous Execution Engine & Persephone Board |
-| `docs/specs/innovation_hub_spec.md` | Innovation Hub & Flywheel architecture |
-| `docs/specs/final_gaps_spec.md` | The 5 final gaps and their solutions |
-| `docs/plan-generation/gen_final_plan_v10.py` | Python script to regenerate the plan document |
-| `server/routes/agents.ts` | All 55 agent definitions |
-| `server/prompts/digital-twin.ts` | The Digital Twin system prompt |
-| `server/stripe/products.ts` | Stripe pricing tiers |
-| `drizzle/schema.ts` | The main database schema (168 tables) |
-| `server/routers/stubs/remaining.router.ts` | All stubbed tRPC procedures to implement |
+| **Manus** | Primary builder — planning, code, execution |
+| **Snyk Code** | Security scanning in CI/CD (SNYK_TOKEN set in GitHub Secrets) |
+| **Claude Code** | Large-scale multi-file implementation sprints |
 
 ---
 
-## 7. What To Do Next (Phase 0 Checklist)
+## Repository
 
-- [ ] **P0-01:** Set up GitHub Actions CI/CD pipeline (`.github/workflows/ci.yml`)
-- [ ] **P0-02:** Set up branch protection rules and PR template
-- [ ] **P0-03:** Verify all 31 environment variables are set in Render (see Appendix E of the plan)
-- [ ] **P0-04:** Write and run the database seed script (`scripts/seed.ts`)
-- [ ] **P0-05:** Write Architecture Decision Records in `/docs/decisions/`
-- [ ] **P0-06:** Add `SNYK_TOKEN` to GitHub Secrets and add Snyk step to CI pipeline
-- [ ] **P0-07:** Write the full test strategy document (`docs/TESTING.md`)
+- **GitHub:** `jonathanrickarduae/CEPHO-The-Brain-Complete`
+- **Branch strategy:** `main` (production), `develop` (staging), `feature/*` (features)
+- **Deployment:** Render (auto-deploy on push to main)
 
 ---
 
-## 8. Snyk Token
+## Environment Variables (All Set on Render)
 
-The Snyk API token has been provided and must be added to GitHub repository secrets as `SNYK_TOKEN`. This enables automated security scanning in the CI/CD pipeline.
+| Variable | Status |
+|---|---|
+| DATABASE_URL | Live |
+| SUPABASE_URL | Live |
+| SUPABASE_SERVICE_ROLE_KEY | Live |
+| SUPABASE_JWT_SECRET | Live |
+| VITE_SUPABASE_URL | Live |
+| VITE_SUPABASE_ANON_KEY | Live |
+| ELEVENLABS_API_KEY | Live |
+| SYNTHESIA_API_KEY | Live |
+| TODOIST_API_KEY | Live |
+| TRELLO_API_KEY | Live |
+| TRELLO_API_SECRET | Live |
+| ANTHROPIC_API_KEY | Live |
+| OPENAI_API_KEY | Live (check Render) |
 
 ---
 
-*Last updated: March 2026 | Version: 10.0*
+## Phase Completion Status
+
+| Phase | Title | Status |
+|---|---|---|
+| Phase 0 | Pre-Conditions | COMPLETE |
+| Phase 1 | Stabilise & Fix | COMPLETE |
+| Phase 2 | AI Foundations + Enterprise | COMPLETE |
+| Phase 3 | Deep Automation | COMPLETE |
+| Phase 4 | Scale & Growth | COMPLETE |
+| Phase 5 | Operational Excellence | COMPLETE |
+| Phase 6 | Enhancements | COMPLETE |
+| Phase 7 | Full Autonomy (Persephone Board) | IN PROGRESS |
+| Phase 8 | Admin & Governance | IN PROGRESS |
+
+---
+
+## What Was Built (Key Files)
+
+### New Routers (server/routers/)
+- `digitalTwin.router.ts` — AI-powered Digital Twin calibration & profile
+- `cephoScore.router.ts` — Single executive performance metric
+- `autonomousExecution.router.ts` — One-sentence execution engine
+- `voiceCommand.router.ts` — Talk to CEPHO (Whisper STT + ElevenLabs TTS)
+- `documentTemplating.router.ts` — Consistent document formatting engine
+- `gdpr.router.ts` — Data export & account deletion
+- `agentRatings.router.ts` — Agent performance ratings
+- `apiKeys.router.ts` — Public REST API key management
+- `auditLog.router.ts` — Full audit trail
+
+### New Services (server/services/)
+- `scheduler.ts` — Server-side cron scheduler (12 automated jobs)
+- `documentTemplating.ts` — Document templating engine
+
+### New Pages (client/src/pages/)
+- `Onboarding.tsx` — Multi-step onboarding wizard
+- `WarRoom.tsx` — Crisis management dashboard
+- `AdminDashboard.tsx` — God Mode admin control panel
+
+### Key Fixes
+- `context.ts` — MOCK_ADMIN_USER security bypass removed
+- `main.tsx` — Client-side auth redirect bypass removed
+- `DevelopmentPathway.tsx` — Filter crash fixed
+- `DailyBrief.tsx` — Null URL export crashes fixed
+- `workflows.router.ts` — In-memory cache replaced with DB persistence
+- `BrainLayout.tsx` — Mobile sidebar fixed (collapsible=offcanvas)
+- `NexusDashboard.tsx` — Wired to real data + CEPHO Score widget
+- `PersephoneBoard.tsx` — Autonomous Execution Command Bar added
+- `InnovationHub.tsx` — Flywheel stats and stage advancement wired
+- `VoiceInterface.tsx` — Wired to real tRPC voiceCommand router
+- `Settings.tsx` — Developer & API tab added, notifications wired to DB
+
+### Schema Additions (drizzle/schema.ts)
+- `agentRatings` table
+- `apiKeys` table
+
+---
+
+## What Still Needs Doing
+
+1. **Database migrations** — Run `drizzle-kit push` to apply new schema tables to Supabase
+2. **Phase 7 completion** — Full Autonomous Execution Engine end-to-end testing
+3. **Phase 8 completion** — Admin Dashboard wired to real admin tRPC procedures
+4. **Render API key** — Confirm OPENAI_API_KEY is set correctly on Render
+5. **Snyk** — First CI run will validate security scanning is working
+6. **Integration testing** — Test all 9 integrations (Notion, Trello, Todoist, etc.)
+
+---
+
+## Key Architectural Decisions
+
+- **Auth:** Supabase JWT → `SUPABASE_JWT_SECRET` validates tokens server-side via `protectedProcedure`
+- **Database:** Drizzle ORM + PostgreSQL (Supabase) — schema in `drizzle/schema.ts`
+- **AI:** OpenAI GPT-4o for agents, Anthropic Claude for complex reasoning, ElevenLabs for voice
+- **Routing:** tRPC v11 — all procedures in `server/routers/`, registered in `server/routers.ts`
+- **Frontend:** React + Vite + TailwindCSS + shadcn/ui
+- **Deployment:** Render (server) + Render Static (client)
+
