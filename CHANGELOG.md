@@ -64,4 +64,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Only two legitimate `fetch()` calls remain: `Login.tsx` (auth) and `main.tsx` (CSRF bootstrap).
 - TypeScript: 0 errors.
 
+## [1.3.0] — Session 6 — CRUD Completeness & Loading States
+
+### Server — New tRPC Endpoints
+
+- `tasks.get(id)` — fetch a single task by ID (user-scoped).
+- `tasks.delete(id)` — delete a task (user-scoped).
+- `projects.get(id)` — fetch a single project by ID (user-scoped).
+- `projects.delete(id)` — delete a project (user-scoped).
+
+### Frontend — Loading States & UX Hardening
+
+- **`Statistics.tsx`** — full-page spinner while `dashboard.getInsights` loads.
+- **`EveningReview.tsx`** — `isLoading` wired to `eveningReview.getPendingTasks`.
+- **`AdminDashboard.tsx`** — `isLoading` wired to `admin.getPlatformStats`.
+- **`COSTraining.tsx`** — `isLoading` wired to `cosTraining.getProgress`.
+- **`ChiefOfStaff.tsx`** — conversation sidebar now reads from `chat.history` tRPC query; falls back to mock only when history is empty.
+- **`CommandCentre.tsx`** — fixed task status filter values (`not_started` / `in_progress` / `completed` instead of incorrect `pending`).
+
+### TypeScript: 0 errors
+
 '''
