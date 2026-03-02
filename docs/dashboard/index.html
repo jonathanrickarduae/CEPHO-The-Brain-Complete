@@ -182,6 +182,12 @@ const PHASES = [
   {
     id: 'ph2', label: 'Phase 2', title: 'AI Agents, Memory & Digital Twin', color: '#0891b2',
     tasks: [
+      { id: 'p2-s1-1', name: 'Comprehensive seed data — all pages show real content (seed-phase2.ts)', tags: ['fix'], status: 'done' },
+      { id: 'p2-s1-2', name: 'Evening Review status bug fixed (pending → not_started)', tags: ['fix'], status: 'done' },
+      { id: 'p2-s2-1', name: 'CoS task scoring — real AI via chiefOfStaff.scoreTask (replaces Math.random)', tags: ['fix'], status: 'done' },
+      { id: 'p2-s2-2', name: 'Theme persistence — saves to DB + localStorage, @ts-nocheck removed', tags: ['fix'], status: 'done' },
+      { id: 'p2-s3-1', name: 'Project Genesis — auto-assign AI agent based on industry on initiate', tags: ['fix'], status: 'done' },
+      { id: 'p2-s3-2', name: 'CoS tasks — create procedure with Zod validation + descriptive error messages', tags: ['fix'], status: 'done' },
       { id: 'p2-1', name: 'pgvector setup for agent memory', tags: ['spec'], status: 'not-started' },
       { id: 'p2-2', name: 'Model router (GPT-4o → GPT-4o-mini fallback)', tags: ['spec'], status: 'not-started' },
       { id: 'p2-3', name: 'Expert agent prompts for all 50+ agents', tags: ['spec'], status: 'not-started' },
