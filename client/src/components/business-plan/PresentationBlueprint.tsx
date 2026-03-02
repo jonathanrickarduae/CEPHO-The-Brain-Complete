@@ -288,6 +288,31 @@ export function PresentationBlueprint() {
     }
   }, [fetchedProjectData]);
 
+  // Real AI slide generation mutation
+  const generateSlidesMutation = trpc.genesis.generateSlides.useMutation({
+    onSuccess: (data) => {
+      const generatedSlides: SlideContent[] = selectedSlides.map(type => {
+        const slideInfo = slideTypes.find(s => s.type === type)!;
+        const aiData = data.slides[type];
+        return {
+          id: `slide-${type}`,
+          type,
+          title: slideInfo?.label ?? type,
+          content: aiData?.content ?? `Content for ${type}`,
+          notes: "",
+          aiSuggestions: aiData?.aiSuggestions ?? ["Add relevant data", "Include visuals"],
+          status: "draft",
+        };
+      });
+      setSlides(generatedSlides);
+      setIsGenerating(false);
+      setCurrentStep("content");
+    },
+    onError: () => {
+      setIsGenerating(false);
+    },
+  });
+
   // Map genesis projects to available projects format
   const dynamicProjects =
     genesisProjects?.map((p: { id: number; name: string; description: string | null; type: string; counterparty: string | null; updatedAt: string | null; }) => ({
@@ -306,96 +331,13 @@ export function PresentationBlueprint() {
     );
   };
 
-  const generateSlideContent = async () => {
+  const generateSlideContent = () => {
     setIsGenerating(true);
-
-    // Simulate AI generation
-    await new Promise(resolve => setTimeout(resolve, 2000));
-
-    const generatedSlides: SlideContent[] = selectedSlides.map(type => {
-      const slideInfo = slideTypes.find(s => s.type === type)!;
-      let content = "";
-      let aiSuggestions: string[] = [];
-
-      switch (type) {
-        case "title":
-          content = `${genesisData.companyName}\n\n${genesisData.tagline}`;
-          aiSuggestions = [
-            "Add a compelling visual metaphor",
-            "Include a brief credibility statement",
-          ];
-          break;
-        case "problem":
-          content = genesisData.problem;
-          aiSuggestions = [
-            "Add specific statistics about the problem",
-            "Include a customer quote",
-            "Show the cost of inaction",
-          ];
-          break;
-        case "solution":
-          content = genesisData.solution;
-          aiSuggestions = [
-            "Add a product screenshot or demo",
-            "Highlight 3 key differentiators",
-            "Include a before/after comparison",
-          ];
-          break;
-        case "market":
-          content = `Total Addressable Market: ${genesisData.market.tam}\nServiceable Addressable Market: ${genesisData.market.sam}\nServiceable Obtainable Market: ${genesisData.market.som}\n\nMarket Growth: ${genesisData.market.growth}`;
-          aiSuggestions = [
-            "Add market trend visualization",
-            "Include analyst quotes",
-            "Show market timing rationale",
-          ];
-          break;
-        case "traction":
-          content = `Active Users: ${genesisData.traction.users}\nMonthly Recurring Revenue: ${genesisData.traction.revenue}\nGrowth Rate: ${genesisData.traction.growth}`;
-          aiSuggestions = [
-            "Add a growth chart",
-            "Include customer logos",
-            "Show retention metrics",
-          ];
-          break;
-        case "team":
-          content = genesisData.team
-            .map(t => `${t.name}: ${t.role}`)
-            .join("\n");
-          aiSuggestions = [
-            "Add professional headshots",
-            "Highlight relevant experience",
-            "Include advisors and investors",
-          ];
-          break;
-        case "ask":
-          content = `Raising: ${genesisData.ask.amount} ${genesisData.ask.stage}\n\nUse of Funds:\n${genesisData.ask.useOfFunds.map(u => `• ${u}`).join("\n")}`;
-          aiSuggestions = [
-            "Add a timeline for milestones",
-            "Show what this funding unlocks",
-            "Include terms if appropriate",
-          ];
-          break;
-        default:
-          content = `Content for ${slideInfo.label}`;
-          aiSuggestions = ["Add relevant data points", "Include visuals"];
-      }
-
-      return {
-        id: `slide-${type}`,
-        type,
-        title: slideInfo.label,
-        content,
-        notes: "",
-        aiSuggestions,
-        status: "draft",
-      };
+    generateSlidesMutation.mutate({
+      projectId: selectedProject || "0",
+      slideTypes: selectedSlides,
     });
-
-    setSlides(generatedSlides);
-    setIsGenerating(false);
-    setCurrentStep("content");
   };
-
   const updateSlideContent = (
     index: number,
     field: keyof SlideContent,

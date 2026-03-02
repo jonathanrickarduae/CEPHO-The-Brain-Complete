@@ -259,7 +259,7 @@ Include relevant sections, analysis, and actionable recommendations.
 Keep it concise but thorough — maximum 800 words.`;
 
       const completion = await openai.chat.completions.create({
-        model: "gpt-4o-mini",
+        model: "gpt-4.1-mini",
         messages: [{ role: "user", content: prompt }],
         max_tokens: 1200,
         temperature: 0.7,

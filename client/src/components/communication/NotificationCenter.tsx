@@ -90,6 +90,12 @@ export function useNotifications() {
   const markAllReadMutation = trpc.notifications.markAllRead.useMutation({
     onSuccess: () => refetch(),
   });
+  const deleteMutation = trpc.notifications.delete.useMutation({
+    onSuccess: () => refetch(),
+  });
+  const deleteAllMutation = trpc.notifications.deleteAll.useMutation({
+    onSuccess: () => refetch(),
+  });
 
   useEffect(() => {
     setUnreadCount(notifications.filter(n => !n.read).length);
@@ -118,12 +124,17 @@ export function useNotifications() {
 
   const dismiss = useCallback(
     (id: number) => {
-      // Mark as read when dismissed
-      markAsRead(id);
+      // Delete the notification from the server
+      deleteMutation.mutate({ id });
+      // Optimistic update
       setNotifications(prev => prev.filter(n => n.id !== id));
     },
-    [markAsRead]
+    [deleteMutation]
   );
+  const dismissAll = useCallback(() => {
+    deleteAllMutation.mutate();
+    setNotifications([]);
+  }, [deleteAllMutation]);
 
   return {
     notifications,
@@ -131,6 +142,7 @@ export function useNotifications() {
     markAsRead,
     markAllAsRead,
     dismiss,
+    dismissAll,
     isLoading,
     refetch,
   };
@@ -260,7 +272,7 @@ export function NotificationCenter({
   isOpen,
   onClose,
 }: NotificationCenterProps) {
-  const { notifications, markAsRead, markAllAsRead, dismiss, isLoading } =
+  const { notifications, markAsRead, markAllAsRead, dismiss, dismissAll, isLoading } =
     useNotifications();
 
   if (!isOpen) return null;
@@ -300,6 +312,16 @@ export function NotificationCenter({
               className="text-xs text-muted-foreground hover:text-foreground"
             >
               Mark all read
+            </Button>
+          )}
+          {notifications.length > 0 && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={dismissAll}
+              className="text-xs text-muted-foreground hover:text-destructive"
+            >
+              Clear all
             </Button>
           )}
           <Button

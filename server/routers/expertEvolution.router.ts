@@ -105,7 +105,7 @@ export const expertEvolutionRouter = router({
       ];
 
       const completion = await openai.chat.completions.create({
-        model: "gpt-4o-mini",
+        model: "gpt-4.1-mini",
         messages,
         max_tokens: 1200,
         temperature: 0.7,

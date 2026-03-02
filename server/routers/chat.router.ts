@@ -86,7 +86,7 @@ export const chatRouter = router({
       // Call OpenAI
       const openai = getOpenAIClient();
       const completion = await openai.chat.completions.create({
-        model: "gpt-4o-mini",
+        model: "gpt-4.1-mini",
         messages,
         max_tokens: 1500,
         temperature: 0.7,

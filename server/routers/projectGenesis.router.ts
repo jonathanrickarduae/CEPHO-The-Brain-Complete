@@ -7,8 +7,12 @@
 import { z } from "zod";
 import { desc, eq, and, inArray } from "drizzle-orm";
 import { protectedProcedure, router } from "../_core/trpc";
+import { createNotification } from "./notifications.router";
 import { db } from "../db";
 import { projectGenesis, projectGenesisPhases } from "../../drizzle/schema";
+import OpenAI from "openai";
+
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 const GENESIS_PHASES = [
   { id: 1, name: "Discovery & Validation" },
@@ -165,6 +169,16 @@ export const projectGenesisRouter = router({
         }))
       );
 
+      // Notify user that project was created (non-blocking)
+      createNotification({
+        userId: ctx.user.id,
+        type: "genesis",
+        title: "Project Created",
+        message: `"${project.name}" has been created and is ready for Phase 1: Discovery & Validation.`,
+        actionUrl: "/project-genesis",
+        actionLabel: "View Project",
+      }).catch(() => {});
+
       return {
         id: project.id,
         name: project.name,
@@ -218,6 +232,19 @@ export const projectGenesisRouter = router({
           )
         );
 
+      // Notify on phase completion (non-blocking)
+      if (input.status === "completed") {
+        const phaseName = GENESIS_PHASES.find(p => p.id === input.phaseNumber)?.name ?? `Phase ${input.phaseNumber}`;
+        createNotification({
+          userId: ctx.user.id,
+          type: "genesis",
+          title: "Phase Completed",
+          message: `${phaseName} has been completed for project "${projects[0].name}".`,
+          actionUrl: "/project-genesis",
+          actionLabel: "View Project",
+        }).catch(() => {});
+      }
+
       // If phase completed, advance to next phase
       if (input.status === "completed" && input.phaseNumber < 6) {
         await db
@@ -267,5 +294,66 @@ export const projectGenesisRouter = router({
         );
 
       return { success: true };
+    }),
+
+  /**
+   * Generate AI-powered presentation slide content for a genesis project.
+   */
+  generatePresentationSlides: protectedProcedure
+    .input(
+      z.object({
+        projectId: z.number(),
+        slideTypes: z.array(z.string()),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      // Verify project belongs to user
+      const rows = await db
+        .select()
+        .from(projectGenesis)
+        .where(
+          and(
+            eq(projectGenesis.id, input.projectId),
+            eq(projectGenesis.userId, ctx.user.id)
+          )
+        )
+        .limit(1);
+
+      if (rows.length === 0) throw new Error("Project not found");
+      const project = rows[0];
+      const meta = project.metadata as Record<string, string> | null;
+
+      const prompt = `You are a startup pitch deck expert. Generate concise, compelling slide content for a ${project.type} project.
+
+Project: ${project.name}
+Description: ${project.description ?? "Not provided"}
+Industry: ${meta?.industry ?? "General"}
+Target Market: ${meta?.targetMarket ?? "Not specified"}
+Unique Value: ${meta?.uniqueValue ?? "Not specified"}
+
+Generate content for these slides: ${input.slideTypes.join(", ")}
+
+Return a JSON object where each key is a slide type and the value is an object with:
+- content: the main slide text (2-4 sentences)
+- aiSuggestions: array of 3 brief improvement tips
+
+Return ONLY valid JSON, no markdown.`;
+
+      const response = await openai.chat.completions.create({
+        model: "gpt-4.1-mini",
+        messages: [{ role: "user", content: prompt }],
+        response_format: { type: "json_object" },
+        max_tokens: 1500,
+      });
+
+      const raw = response.choices[0]?.message?.content ?? "{}";
+      let slides: Record<string, { content: string; aiSuggestions: string[] }> = {};
+      try {
+        slides = JSON.parse(raw);
+      } catch {
+        slides = {};
+      }
+
+      return { slides };
     }),
 });

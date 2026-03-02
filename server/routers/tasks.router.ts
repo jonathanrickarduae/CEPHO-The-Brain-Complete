@@ -8,6 +8,7 @@ import { desc, eq, and, asc } from "drizzle-orm";
 import { protectedProcedure, router } from "../_core/trpc";
 import { db } from "../db";
 import { tasks, activityFeed } from "../../drizzle/schema";
+import { createNotification } from "./notifications.router";
 
 export const tasksRouter = router({
   /**
@@ -120,6 +121,18 @@ export const tasksRouter = router({
 
       if (!updated) {
         throw new Error("Task not found or access denied");
+      }
+
+      // Notify on task completion (non-blocking)
+      if (input.status === "completed") {
+        createNotification({
+          userId: ctx.user.id,
+          type: "task",
+          title: "Task Completed",
+          message: `"${updated.title}" has been marked as completed.`,
+          actionUrl: "/tasks",
+          actionLabel: "View Tasks",
+        }).catch(() => {});
       }
 
       return {

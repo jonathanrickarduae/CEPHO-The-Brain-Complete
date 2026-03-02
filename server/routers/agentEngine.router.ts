@@ -647,7 +647,7 @@ export const agentEngineRouter = router({
       ];
 
       const completion = await openai.chat.completions.create({
-        model: "gpt-4o-mini",
+        model: "gpt-4.1-mini",
         messages,
         max_tokens: 1000,
         temperature: 0.7,
@@ -717,7 +717,7 @@ Format as JSON with these exact keys:
 }`;
 
       const completion = await openai.chat.completions.create({
-        model: "gpt-4o-mini",
+        model: "gpt-4.1-mini",
         messages: [
           { role: "system", content: agent.systemPrompt },
           { role: "user", content: prompt },

@@ -135,7 +135,7 @@ export const businessPlanReviewRouter = router({
       const analyses = await Promise.all(
         experts.map(async expert => {
           const completion = await openai.chat.completions.create({
-            model: "gpt-4o-mini",
+            model: "gpt-4.1-mini",
             messages: [
               {
                 role: "system",
@@ -223,7 +223,7 @@ Format as JSON: { "score": number, "strengths": string[], "improvements": string
         // AI selects the best team based on context
         const openai = getOpenAIClient();
         const completion = await openai.chat.completions.create({
-          model: "gpt-4o-mini",
+          model: "gpt-4.1-mini",
           messages: [
             {
               role: "user",
@@ -346,7 +346,7 @@ Follow-up question: ${input.question}
 Provide a concise, expert response (2-3 sentences).`;
 
       const completion = await openai.chat.completions.create({
-        model: "gpt-4o-mini",
+        model: "gpt-4.1-mini",
         messages: [{ role: "user", content: prompt }],
         max_tokens: 200,
         temperature: 0.7,

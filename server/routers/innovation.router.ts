@@ -8,6 +8,7 @@ import { z } from "zod";
 import { desc, eq, and } from "drizzle-orm";
 import OpenAI from "openai";
 import { protectedProcedure, router } from "../_core/trpc";
+import { createNotification } from "./notifications.router";
 import { db } from "../db";
 import { innovationIdeas, projectGenesis, projectGenesisPhases, ideaAssessments, investmentScenarios } from "../../drizzle/schema";
 
@@ -137,6 +138,16 @@ export const innovationRouter = router({
         })
         .returning();
 
+      // Notify user that idea was captured (non-blocking)
+      createNotification({
+        userId: ctx.user.id,
+        type: "innovation",
+        title: "Idea Captured",
+        message: `"${idea.title}" has been added to your Innovation Flywheel.`,
+        actionUrl: "/innovation",
+        actionLabel: "View Idea",
+      }).catch(() => {});
+
       return {
         id: idea.id,
         title: idea.title,
@@ -165,7 +176,7 @@ For each idea provide:
 Format as JSON array: [{"title": "...", "description": "...", "category": "...", "priority": "..."}]`;
 
     const completion = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
+      model: "gpt-4.1-mini",
       messages: [{ role: "user", content: prompt }],
       max_tokens: 1000,
       temperature: 0.9,
@@ -266,7 +277,7 @@ Provide a JSON assessment focused on ${assessmentFocus} with:
 }`;
 
       const completion = await openai.chat.completions.create({
-        model: "gpt-4o-mini",
+        model: "gpt-4.1-mini",
         messages: [{ role: "user", content: prompt }],
         max_tokens: 600,
         temperature: 0.5,
@@ -360,7 +371,7 @@ Include:
 Keep it professional and actionable. Max 400 words.`;
 
       const completion = await openai.chat.completions.create({
-        model: "gpt-4o-mini",
+        model: "gpt-4.1-mini",
         messages: [{ role: "user", content: prompt }],
         max_tokens: 600,
         temperature: 0.6,
@@ -423,7 +434,7 @@ Provide JSON with 3 scenarios (conservative, moderate, optimistic):
 }`;
 
       const completion = await openai.chat.completions.create({
-        model: "gpt-4o-mini",
+        model: "gpt-4.1-mini",
         messages: [{ role: "user", content: prompt }],
         max_tokens: 700,
         temperature: 0.5,
@@ -462,7 +473,7 @@ Since I cannot access the URL directly, provide a framework for analysis:
 Return as JSON: { "title": "...", "description": "...", "category": "...", "priority": "medium" }`;
 
       const completion = await openai.chat.completions.create({
-        model: "gpt-4o-mini",
+        model: "gpt-4.1-mini",
         messages: [{ role: "user", content: prompt }],
         max_tokens: 400,
         temperature: 0.7,
@@ -685,6 +696,19 @@ Return as JSON: { "title": "...", "description": "...", "category": "...", "prio
         .update(innovationIdeas)
         .set({ currentStage: nextStage, status: nextStage === 5 ? "ready_to_launch" : "in_progress", updatedAt: new Date() })
         .where(eq(innovationIdeas.id, input.ideaId));
+
+      // Notify on stage advancement (non-blocking)
+      createNotification({
+        userId: ctx.user.id,
+        type: "innovation",
+        title: nextStage === 5 ? "Idea Ready to Launch!" : "Idea Advanced",
+        message: nextStage === 5
+          ? `"${idea.title}" has reached the Launch stage and is ready for execution.`
+          : `"${idea.title}" has advanced to the ${stageLabels[nextStage]} stage.`,
+        actionUrl: "/innovation-hub",
+        actionLabel: "View Innovation Hub",
+      }).catch(() => {});
+
       return { success: true, newStage: nextStage, stageLabel: stageLabels[nextStage] };
     }),
 

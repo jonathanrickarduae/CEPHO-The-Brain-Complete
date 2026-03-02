@@ -7,6 +7,35 @@ import { protectedProcedure, router } from "../_core/trpc";
 import { db } from "../db";
 import { notifications } from "../../drizzle/schema";
 
+/**
+ * Server-side utility to create a notification for a user.
+ * Call this from any router to push a notification to the user's feed.
+ */
+export async function createNotification(params: {
+  userId: number;
+  type: string;
+  title: string;
+  message: string;
+  actionUrl?: string;
+  actionLabel?: string;
+  metadata?: Record<string, unknown>;
+}) {
+  const [notification] = await db
+    .insert(notifications)
+    .values({
+      userId: params.userId,
+      type: params.type,
+      title: params.title,
+      message: params.message,
+      actionUrl: params.actionUrl ?? null,
+      actionLabel: params.actionLabel ?? null,
+      metadata: params.metadata ?? null,
+      read: false,
+    })
+    .returning();
+  return notification;
+}
+
 export const notificationsRouter = router({
   list: protectedProcedure
     .input(
@@ -58,5 +87,39 @@ export const notificationsRouter = router({
       .set({ read: true, readAt: new Date() })
       .where(eq(notifications.userId, ctx.user.id));
     return { success: true };
+  }),
+
+  delete: protectedProcedure
+    .input(z.object({ id: z.number() }))
+    .mutation(async ({ input, ctx }) => {
+      await db
+        .delete(notifications)
+        .where(
+          and(
+            eq(notifications.id, input.id),
+            eq(notifications.userId, ctx.user.id)
+          )
+        );
+      return { success: true };
+    }),
+
+  deleteAll: protectedProcedure.mutation(async ({ ctx }) => {
+    await db
+      .delete(notifications)
+      .where(eq(notifications.userId, ctx.user.id));
+    return { success: true };
+  }),
+
+  getUnreadCount: protectedProcedure.query(async ({ ctx }) => {
+    const rows = await db
+      .select()
+      .from(notifications)
+      .where(
+        and(
+          eq(notifications.userId, ctx.user.id),
+          eq(notifications.read, false)
+        )
+      );
+    return { count: rows.length };
   }),
 });

@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { trpc } from "@/lib/trpc";
+import { toast } from "@/components/shared";
 import {
   Calendar,
   X,
@@ -38,55 +40,50 @@ export function CalendarIntegration() {
   const [connecting, setConnecting] = useState<string | null>(null);
   const [syncing, setSyncing] = useState(false);
 
-  const connectGoogle = async () => {
+  // Real tRPC queries
+  const { data: integrationStatus } = trpc.calendar.getIntegrationStatus.useQuery();
+  const { data: todaySummary } = trpc.calendar.getTodaySummary.useQuery();
+  const syncMutation = trpc.calendar.sync.useMutation({
+    onSuccess: () => {
+      setSyncing(false);
+      toast.success("Calendar synced", "Your calendar is up to date.");
+    },
+    onError: (err) => {
+      setSyncing(false);
+      toast.error("Sync failed", err.message);
+    },
+  });
+  const connectIntegration = trpc.integrations.connect.useMutation({
+    onSuccess: (_data, vars) => {
+      const newAccount: CalendarAccount = {
+        id: `${vars.provider}-${Date.now()}`,
+        email: (vars.metadata as Record<string, string> | undefined)?.email ?? `${vars.provider}@connected`,
+        provider: vars.provider === "outlook" ? "microsoft" : "google",
+        connected: true,
+        lastSync: new Date(),
+        calendars: [
+          { id: "primary", name: "Primary Calendar", color: vars.provider === "google" ? "#4285f4" : "#0078d4", enabled: true },
+        ],
+      };
+      setAccounts(prev => [...prev, newAccount]);
+      setConnecting(null);
+      toast.success("Calendar connected", `${vars.provider} calendar connected successfully.`);
+    },
+    onError: (err) => {
+      setConnecting(null);
+      toast.error("Connection failed", err.message);
+    },
+  });
+
+  const connectGoogle = () => {
     setConnecting("google");
-
-    // In production, this would redirect to Google OAuth
-    // For demo, we'll simulate the connection
-    await new Promise(resolve => setTimeout(resolve, 2000));
-
-    const newAccount: CalendarAccount = {
-      id: "google-1",
-      email: "user@gmail.com",
-      provider: "google",
-      connected: true,
-      lastSync: new Date(),
-      calendars: [
-        {
-          id: "primary",
-          name: "Primary Calendar",
-          color: "#4285f4",
-          enabled: true,
-        },
-        { id: "work", name: "Work", color: "#0f9d58", enabled: true },
-        { id: "personal", name: "Personal", color: "#db4437", enabled: false },
-      ],
-    };
-
-    setAccounts([...accounts, newAccount]);
-    setConnecting(null);
+    connectIntegration.mutate({ provider: "google", metadata: { email: "user@gmail.com" } });
   };
-
-  const connectMicrosoft = async () => {
+  const connectMicrosoft = () => {
     setConnecting("microsoft");
-    await new Promise(resolve => setTimeout(resolve, 2000));
-
-    const newAccount: CalendarAccount = {
-      id: "microsoft-1",
-      email: "user@outlook.com",
-      provider: "microsoft",
-      connected: true,
-      lastSync: new Date(),
-      calendars: [
-        { id: "calendar", name: "Calendar", color: "#0078d4", enabled: true },
-      ],
-    };
-
-    setAccounts([...accounts, newAccount]);
-    setConnecting(null);
+    connectIntegration.mutate({ provider: "outlook", metadata: { email: "user@outlook.com" } });
   };
-
-  const disconnectAccount = (accountId: string) => {
+    const disconnectAccount = (accountId: string) => {
     setAccounts(accounts.filter(a => a.id !== accountId));
   };
 
@@ -106,11 +103,10 @@ export function CalendarIntegration() {
     );
   };
 
-  const syncNow = async () => {
+  const syncNow = () => {
     setSyncing(true);
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    setAccounts(accounts.map(a => ({ ...a, lastSync: new Date() })));
-    setSyncing(false);
+    const provider = accounts[0]?.provider === "microsoft" ? "outlook" : "google";
+    syncMutation.mutate({ provider });
   };
 
   const getProviderIcon = (provider: string) => {

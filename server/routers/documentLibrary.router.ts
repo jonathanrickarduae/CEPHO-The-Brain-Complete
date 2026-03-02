@@ -9,6 +9,7 @@ import OpenAI from "openai";
 import { protectedProcedure, router } from "../_core/trpc";
 import { db } from "../db";
 import { generatedDocuments, documentEmailHistory } from "../../drizzle/schema";
+import { emailService } from "../services/email.service";
 
 function getOpenAIClient(): OpenAI {
   const apiKey = process.env.OPENAI_API_KEY;
@@ -99,7 +100,7 @@ Format as a professional Markdown document with:
 - Next steps (if applicable)`;
 
       const completion = await openai.chat.completions.create({
-        model: "gpt-4o-mini",
+        model: "gpt-4.1-mini",
         messages: [
           { role: "system", content: systemPrompt },
           { role: "user", content: userPrompt },
@@ -124,7 +125,7 @@ Format as a professional Markdown document with:
           content: markdownContent,
           classification: input.classification,
           qaStatus: "pending",
-          metadata: { generatedBy: "openai", model: "gpt-4o-mini" },
+          metadata: { generatedBy: "openai", model: "gpt-4.1-mini" },
         })
         .returning();
 
@@ -227,7 +228,7 @@ Format as a professional Markdown document with:
     }),
 
   /**
-   * Send document via email (stub — logs intent, no actual email sent without SMTP config).
+   * Send document via email — uses SMTP when configured, otherwise records intent.
    */
   sendEmail: protectedProcedure
     .input(
@@ -249,19 +250,53 @@ Format as a professional Markdown document with:
       const normalised = input.recipients.map(r =>
         typeof r === "string" ? { email: r } : r
       );
+      const docId = typeof input.documentId === "string" ? parseInt(input.documentId, 10) : input.documentId;
+
+      // Fetch document details for the email body
+      const [doc] = await db
+        .select()
+        .from(generatedDocuments)
+        .where(eq(generatedDocuments.id, docId))
+        .limit(1);
+
+      const subject = input.subject ?? (doc ? `Document: ${doc.title}` : "Document from CEPHO");
+      const emailBody = input.message
+        ? `${input.message}\n\n${doc?.content ? doc.content.substring(0, 500) + "..." : ""}`
+        : doc?.content ?? "Please find the attached document.";
+
+      // Attempt real email delivery if SMTP is configured
+      let emailStatus: "sent" | "failed" | "queued" = "queued";
+      if (emailService.isConfigured()) {
+        const toAddresses = normalised.map(r => r.email);
+        const result = await emailService.send({
+          to: toAddresses,
+          subject,
+          text: emailBody,
+          html: doc?.content
+            ? `<pre style="font-family:sans-serif;white-space:pre-wrap">${emailBody}</pre>`
+            : undefined,
+        });
+        emailStatus = result.success ? "sent" : "failed";
+      }
+
       // Record the email send in the history table
       await db.insert(documentEmailHistory).values({
-        documentId: typeof input.documentId === "string" ? parseInt(input.documentId, 10) : input.documentId,
+        documentId: docId,
         userId: ctx.user.id,
         recipients: normalised,
-        subject: input.subject ?? null,
+        subject,
         message: input.message ?? null,
-        status: "sent",
+        status: emailStatus,
       });
+
       return {
-        success: true,
+        success: emailStatus !== "failed",
         sent: normalised.length,
-        message: `Email sent to ${normalised.length} recipient${normalised.length !== 1 ? "s" : ""}`,
+        message: emailStatus === "sent"
+          ? `Email sent to ${normalised.length} recipient${normalised.length !== 1 ? "s" : ""}`
+          : emailStatus === "queued"
+          ? `Email queued (SMTP not configured) — ${normalised.length} recipient${normalised.length !== 1 ? "s" : ""} recorded`
+          : `Email delivery failed`,
       };
     }),
 

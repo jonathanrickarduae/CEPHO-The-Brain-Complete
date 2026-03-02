@@ -191,7 +191,7 @@ Provide:
 Keep it concise and actionable. Use a professional, direct tone.`;
 
     const completion = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
+      model: "gpt-4.1-mini",
       messages: [{ role: "user", content: prompt }],
       max_tokens: 600,
       temperature: 0.6,

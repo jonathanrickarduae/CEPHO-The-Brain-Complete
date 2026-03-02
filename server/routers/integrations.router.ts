@@ -1031,6 +1031,29 @@ export const genesisRouter = router({
       const phases = await db.select().from(projectGenesisPhases).where(eq(projectGenesisPhases.projectId, id));
       return { ...project, phases };
     }),
+  generateSlides: protectedProcedure
+    .input(z.object({ projectId: z.string(), slideTypes: z.array(z.string()) }))
+    .mutation(async ({ input }) => {
+      const id = parseInt(input.projectId);
+      if (isNaN(id)) return { slides: {} };
+      const [project] = await db.select().from(projects).where(eq(projects.id, id)).limit(1);
+      if (!project) return { slides: {} };
+      // Return structured slide content based on project data
+      const slides: Record<string, { content: string; aiSuggestions: string[] }> = {};
+      for (const slideType of input.slideTypes) {
+        switch (slideType) {
+          case "title":
+            slides[slideType] = { content: `${project.name}\n\nBuilding the future`, aiSuggestions: ["Add a compelling visual", "Include a tagline", "Show your logo"] };
+            break;
+          case "problem":
+            slides[slideType] = { content: project.description ?? "Define the problem you are solving.", aiSuggestions: ["Add statistics", "Include customer quotes", "Show cost of inaction"] };
+            break;
+          default:
+            slides[slideType] = { content: `${slideType.charAt(0).toUpperCase() + slideType.slice(1)} slide for ${project.name}`, aiSuggestions: ["Add data points", "Include visuals", "Keep it concise"] };
+        }
+      }
+      return { slides };
+    }),
 });
 
 // ─── Optimization Router ──────────────────────────────────────────────────────
@@ -1113,7 +1136,7 @@ export const openClawRouter = router({
 export const aiRouter = router({
   getCapabilities: protectedProcedure.query(async () => {
     return {
-      models: ["gpt-4o-mini", "gpt-4o"],
+      models: ["gpt-4.1-mini", "gpt-4.1-nano", "gemini-2.5-flash"],
       features: ["chat", "analysis", "generation", "research"],
       status: "operational",
     };
@@ -1128,7 +1151,7 @@ export const aiRouter = router({
       const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
       const completion = await openai.chat.completions.create({
-        model: "gpt-4o-mini",
+        model: "gpt-4.1-mini",
         messages: [
           ...(input.context
             ? [{ role: "system" as const, content: input.context }]

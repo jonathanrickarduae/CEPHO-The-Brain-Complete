@@ -78,7 +78,7 @@ export const voiceNotesRouter = router({
       try {
         const openai = getOpenAIClient();
         const completion = await openai.chat.completions.create({
-          model: "gpt-4o-mini",
+          model: "gpt-4.1-mini",
           messages: [
             {
               role: "user",
