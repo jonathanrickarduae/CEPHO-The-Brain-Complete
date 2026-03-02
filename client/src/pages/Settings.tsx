@@ -207,31 +207,21 @@ function DeveloperPanel() {
 
 // ─── Vault Panel (merged from /vault) ──────────────────────────────────────
 function VaultPanel() {
-  const integrations = [
-    { id: 1, name: "Outlook 365", status: "healthy", health: 100, lastSync: "2 mins ago", icon: Mail, color: "text-primary", category: "Communication" },
-    { id: 2, name: "Microsoft Teams", status: "healthy", health: 100, lastSync: "5 mins ago", icon: MessageSquare, color: "text-purple-400", category: "Communication" },
-    { id: 3, name: "Gamma App", status: "warning", health: 85, lastSync: "1 hour ago", icon: Zap, color: "text-amber-400", category: "Productivity", alert: "Consider switching to Pitch.com" },
-    { id: 4, name: "Manus AI", status: "healthy", health: 100, lastSync: "Just now", icon: Globe, color: "text-green-400", category: "AI Tools" },
-    { id: 5, name: "Microsoft Copilot", status: "healthy", health: 100, lastSync: "Just now", icon: Globe, color: "text-cyan-400", category: "AI Tools" },
-    { id: 6, name: "Salesforce", status: "broken", health: 0, lastSync: "Failed", icon: Globe, color: "text-red-400", category: "CRM", alert: "API Token Expired" },
-  ];
-  const contractRenewals = [
-    { id: 1, name: "AWS Enterprise Agreement", vendor: "Amazon Web Services", renewalDate: "2026-02-15", value: "$45,000/yr", status: "upcoming", daysUntil: 29, autoRenew: true },
-    { id: 2, name: "Salesforce CRM License", vendor: "Salesforce", renewalDate: "2026-01-25", value: "$12,000/yr", status: "urgent", daysUntil: 8, autoRenew: false },
-    { id: 3, name: "Microsoft 365 Business", vendor: "Microsoft", renewalDate: "2026-03-01", value: "$8,400/yr", status: "upcoming", daysUntil: 43, autoRenew: true },
-    { id: 4, name: "Slack Business+", vendor: "Slack", renewalDate: "2026-04-15", value: "$6,000/yr", status: "ok", daysUntil: 88, autoRenew: true },
-    { id: 5, name: "Legal Retainer", vendor: "Henderson & Partners", renewalDate: "2026-01-31", value: "$25,000/yr", status: "urgent", daysUntil: 14, autoRenew: false },
-  ];
-  const securityEvents = [
-    { id: 1, type: "blocked", message: "Suspicious login blocked", location: "Unknown IP", time: "2 hours ago", severity: "high" },
-    { id: 2, type: "blocked", message: "Brute force prevented", location: "Bot Network", time: "5 hours ago", severity: "high" },
-    { id: 3, type: "warning", message: "Unusual API pattern", location: "Internal", time: "Yesterday", severity: "medium" },
-  ];
-  const healthyCount = integrations.filter(i => i.status === "healthy").length;
-  const warningCount = integrations.filter(i => i.status === "warning").length;
-  const brokenCount = integrations.filter(i => i.status === "broken").length;
-  const blockedThreats = securityEvents.filter(e => e.type === "blocked").length;
-  const urgentContracts = contractRenewals.filter(c => c.status === "urgent").length;
+  // Real data from subscriptionTracker and integrations routers
+  const { data: subscriptionSummary } = trpc.subscriptionTracker.getSummary.useQuery(undefined, { retry: false });
+  const { data: renewalSummary } = trpc.subscriptionTracker.getRenewalSummary.useQuery(undefined, { retry: false });
+  const { data: integrationsData } = trpc.integrations.list.useQuery(undefined, { retry: false });
+  const { data: auditData } = trpc.auditLog.getMyLogs.useQuery({ limit: 5 }, { retry: false });
+
+  // Derive stats from real data, fall back to sensible defaults
+  const integrations = integrationsData ?? [];
+  const contractRenewals = renewalSummary?.upcoming ?? [];
+  const securityEvents = auditData?.logs ?? [];
+  const healthyCount = integrations.filter((i: any) => i.status === "active").length;
+  const warningCount = integrations.filter((i: any) => i.status === "warning").length;
+  const brokenCount = integrations.filter((i: any) => i.status === "error").length;
+  const blockedThreats = securityEvents.filter((e: any) => e.action === "blocked").length;
+  const urgentContracts = contractRenewals.filter((c: any) => c.status === "urgent").length;
 
   return (
     <div className="space-y-6">
@@ -262,27 +252,26 @@ function VaultPanel() {
           <Button size="sm" variant="outline" className="h-7 gap-1 text-xs"><Plus className="w-3 h-3" /> Add</Button>
         </div>
         <div className="space-y-2">
-          {integrations.map(integration => (
+          {integrations.map((integration: any) => (
             <div key={integration.id} className={`p-3 rounded-lg border flex items-center justify-between ${
-              integration.status === "healthy" ? "border-border bg-muted/20" :
+              integration.status === "active" ? "border-border bg-muted/20" :
               integration.status === "warning" ? "border-amber-500/30 bg-amber-500/5" :
               "border-red-500/30 bg-red-500/5"
             }`}>
               <div className="flex items-center gap-3">
-                <div className={`w-8 h-8 rounded-lg bg-muted flex items-center justify-center ${integration.color}`}>
-                  <integration.icon className="w-4 h-4" />
+                <div className="w-8 h-8 rounded-lg bg-muted flex items-center justify-center text-primary">
+                  <Globe className="w-4 h-4" />
                 </div>
                 <div>
-                  <div className="font-medium text-sm text-foreground">{integration.name}</div>
-                  <div className="text-xs text-muted-foreground">{integration.lastSync}</div>
-                  {"alert" in integration && integration.alert && <div className="text-xs text-amber-400 mt-0.5">{integration.alert as string}</div>}
+                  <div className="font-medium text-sm text-foreground capitalize">{integration.provider}</div>
+                  <div className="text-xs text-muted-foreground">{integration.lastSyncAt ? new Date(integration.lastSyncAt).toLocaleString() : "Never synced"}</div>
                 </div>
               </div>
               <div className="flex items-center gap-2">
                 <div className={`text-xs font-medium ${
-                  integration.status === "healthy" ? "text-green-400" :
+                  integration.status === "active" ? "text-green-400" :
                   integration.status === "warning" ? "text-amber-400" : "text-red-400"
-                }`}>{integration.health}%</div>
+                }`}>{integration.status}</div>
                 <Button size="sm" variant="ghost" className="h-7 w-7 p-0"><RefreshCw className="w-3 h-3" /></Button>
               </div>
             </div>
@@ -296,25 +285,28 @@ function VaultPanel() {
           <h3 className="font-semibold text-foreground flex items-center gap-2"><FileText className="w-4 h-4 text-primary" /> Contract Renewals {urgentContracts > 0 && <Badge className="bg-red-500/20 text-red-400 border-0 text-xs">{urgentContracts} urgent</Badge>}</h3>
         </div>
         <div className="space-y-2">
-          {contractRenewals.map(contract => (
-            <div key={contract.id} className={`p-3 rounded-lg border flex items-center justify-between ${
-              contract.status === "urgent" ? "border-red-500/30 bg-red-500/5" :
-              contract.status === "upcoming" ? "border-amber-500/30 bg-amber-500/5" :
-              "border-border bg-muted/20"
-            }`}>
-              <div>
-                <div className="font-medium text-sm text-foreground">{contract.name}</div>
-                <div className="text-xs text-muted-foreground">{contract.vendor} · {contract.value}</div>
+          {contractRenewals.map((contract: any) => {
+            const isUrgent = contract.daysUntilRenewal <= 14;
+            const isUpcoming = contract.daysUntilRenewal <= 30;
+            return (
+              <div key={contract.id} className={`p-3 rounded-lg border flex items-center justify-between ${
+                isUrgent ? "border-red-500/30 bg-red-500/5" :
+                isUpcoming ? "border-amber-500/30 bg-amber-500/5" :
+                "border-border bg-muted/20"
+              }`}>
+                <div>
+                  <div className="font-medium text-sm text-foreground">{contract.name}</div>
+                  <div className="text-xs text-muted-foreground">{contract.billingCycle} · {contract.currency}{contract.cost?.toLocaleString()}/yr</div>
+                </div>
+                <div className="text-right">
+                  <div className={`text-xs font-medium ${
+                    isUrgent ? "text-red-400" : isUpcoming ? "text-amber-400" : "text-green-400"
+                  }`}>{contract.daysUntilRenewal}d</div>
+                  <div className="text-xs text-muted-foreground">{contract.renewalDate ? new Date(contract.renewalDate).toLocaleDateString() : "—"}</div>
+                </div>
               </div>
-              <div className="text-right">
-                <div className={`text-xs font-medium ${
-                  contract.status === "urgent" ? "text-red-400" :
-                  contract.status === "upcoming" ? "text-amber-400" : "text-green-400"
-                }`}>{contract.daysUntil}d</div>
-                <div className="text-xs text-muted-foreground">{contract.autoRenew ? "Auto-renews" : "Manual"}</div>
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
 
@@ -322,20 +314,20 @@ function VaultPanel() {
       <div className="bg-card rounded-xl border border-border p-5">
         <h3 className="font-semibold text-foreground flex items-center gap-2 mb-4"><Shield className="w-4 h-4 text-purple-400" /> Security Events</h3>
         <div className="space-y-2">
-          {securityEvents.map(event => (
+          {securityEvents.map((event: any) => (
             <div key={event.id} className="p-3 rounded-lg border border-border bg-muted/20 flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className={`w-2 h-2 rounded-full flex-shrink-0 ${
-                  event.severity === "high" ? "bg-red-500" : "bg-amber-500"
+                  event.severity === "critical" ? "bg-red-500" : event.severity === "warning" ? "bg-amber-500" : "bg-blue-500"
                 }`} />
                 <div>
-                  <div className="text-sm font-medium text-foreground">{event.message}</div>
-                  <div className="text-xs text-muted-foreground">{event.location}</div>
+                  <div className="text-sm font-medium text-foreground capitalize">{event.action?.replace(/_/g, " ")}</div>
+                  <div className="text-xs text-muted-foreground">{event.resourceType ?? "System"}{event.ipAddress ? ` · ${event.ipAddress}` : ""}</div>
                 </div>
               </div>
               <div className="flex items-center gap-2 text-xs text-muted-foreground">
                 <Clock className="w-3 h-3" />
-                {event.time}
+                {event.createdAt ? new Date(event.createdAt).toLocaleTimeString() : "—"}
               </div>
             </div>
           ))}
