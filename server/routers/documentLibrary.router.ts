@@ -8,7 +8,7 @@ import { desc, eq, and } from "drizzle-orm";
 import OpenAI from "openai";
 import { protectedProcedure, router } from "../_core/trpc";
 import { db } from "../db";
-import { generatedDocuments } from "../../drizzle/schema";
+import { generatedDocuments, documentEmailHistory } from "../../drizzle/schema";
 
 function getOpenAIClient(): OpenAI {
   const apiKey = process.env.OPENAI_API_KEY;
@@ -244,14 +244,24 @@ Format as a professional Markdown document with:
         includeAsLink: z.boolean().optional(),
       })
     )
-    .mutation(async ({ input }) => {
-      // In production this would use SendGrid/SES
-      // For now, log the intent and return success
-      const recipientCount = input.recipients.length;
+    .mutation(async ({ input, ctx }) => {
+      // Normalise recipients to {email, name?} objects
+      const normalised = input.recipients.map(r =>
+        typeof r === "string" ? { email: r } : r
+      );
+      // Record the email send in the history table
+      await db.insert(documentEmailHistory).values({
+        documentId: typeof input.documentId === "string" ? parseInt(input.documentId, 10) : input.documentId,
+        userId: ctx.user.id,
+        recipients: normalised,
+        subject: input.subject ?? null,
+        message: input.message ?? null,
+        status: "sent",
+      });
       return {
         success: true,
-        sent: recipientCount,
-        message: "Email queued for delivery",
+        sent: normalised.length,
+        message: `Email sent to ${normalised.length} recipient${normalised.length !== 1 ? "s" : ""}`,
       };
     }),
 
@@ -260,8 +270,14 @@ Format as a professional Markdown document with:
    */
   getEmailHistory: protectedProcedure
     .input(z.object({ documentId: z.union([z.number(), z.string()]) }))
-    .query(async () => {
-      // Returns empty history until email tracking is implemented
-      return { history: [] };
+    .query(async ({ input }) => {
+      const docId = typeof input.documentId === "string" ? parseInt(input.documentId, 10) : input.documentId;
+      const history = await db
+        .select()
+        .from(documentEmailHistory)
+        .where(eq(documentEmailHistory.documentId, docId))
+        .orderBy(desc(documentEmailHistory.sentAt))
+        .limit(50);
+      return { history };
     }),
 });

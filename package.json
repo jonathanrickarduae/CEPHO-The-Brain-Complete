@@ -217,5 +217,9 @@
     "client/src/**/*.{ts,tsx}": [
       "eslint --max-warnings 50"
     ]
+  },
+  "engines": {
+    "node": ">=22.13.0 <23.0.0",
+    "pnpm": ">=10.0.0"
   }
 }

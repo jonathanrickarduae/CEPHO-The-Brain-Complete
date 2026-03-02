@@ -347,6 +347,7 @@ export default function DailyBrief() {
     actionedItems.some(item => item.id === itemId);
 
   const [showVideoBriefing, setShowVideoBriefing] = useState(false);
+  const [pendingVideoId, setPendingVideoId] = useState<string | null>(null);
 
   // Live briefing data from AI
   const { data: liveBrief, isLoading: briefLoading } = trpc.victoriaBriefing.getDailyBriefing.useQuery(undefined, {
@@ -354,6 +355,24 @@ export default function DailyBrief() {
     retry: 1,
   });
 
+  // Poll for video status when a video is being generated
+  const { data: videoStatus } = trpc.victoriasBrief.getVideoStatus.useQuery(
+    { videoId: pendingVideoId! },
+    {
+      enabled: !!pendingVideoId,
+      refetchInterval: (query) => {
+        const s = (query as any)?.state?.data?.status;
+        if (s === 'complete' || s === 'error') return false;
+        return 5000;
+      },
+    }
+  );
+  // Auto-open video when Synthesia finishes rendering
+  if (videoStatus?.status === 'complete' && videoStatus?.downloadUrl && pendingVideoId) {
+    window.open(videoStatus.downloadUrl, '_blank');
+    toast.success('Your Victoria video brief is ready!');
+    setPendingVideoId(null);
+  }
   const generatePdfMutation = trpc.victoriasBrief.generatePdf.useMutation();
   const generateVideoMutation = trpc.victoriasBrief.generateVideo.useMutation();
   const generateAudioMutation = trpc.victoriasBrief.generateAudio.useMutation();
@@ -381,8 +400,9 @@ export default function DailyBrief() {
           script: briefText,
           avatarId: "victoria",
         });
-        if (result.status === "processing") {
-          toast.info("Video is being generated. You'll be notified when ready.");
+        if (result.status === "processing" && result.videoId) {
+          setPendingVideoId(result.videoId);
+          toast.info("Video is being generated. This page will auto-open it when ready.");
         } else if (result.videoUrl) {
           window.open(result.videoUrl, "_blank");
           toast.success("Video generated successfully!");

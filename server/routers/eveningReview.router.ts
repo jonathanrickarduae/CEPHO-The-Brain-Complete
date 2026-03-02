@@ -14,6 +14,9 @@ import {
   tasks,
   activityFeed,
 } from "../../drizzle/schema";
+import { generateBriefPDF } from "../services/pdf-generation.service";
+import { readFile, unlink } from "fs/promises";
+import { existsSync } from "fs";
 
 function getOpenAIClient(): OpenAI {
   const apiKey = process.env.OPENAI_API_KEY;
@@ -246,15 +249,60 @@ export const morningSignalRouter = router({
   /**
    * Generate a morning signal PDF.
    */
-  generatePdf: protectedProcedure.mutation(async (_opts) => {
-    // In production this would generate a PDF from the morning briefing
-    // For now return a success response with a placeholder URL
-    return {
-      success: true,
-      pdfUrl: null,
-      message: "Morning Signal PDF generation is being set up",
-      generatedAt: new Date().toISOString(),
-    };
+  generatePdf: protectedProcedure.mutation(async ({ ctx }) => {
+    try {
+      // Get today's signal data to populate the PDF
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const pendingTasks = await db
+        .select()
+        .from(tasks)
+        .where(eq(tasks.userId, ctx.user.id))
+        .limit(10);
+      const briefData = {
+        date: today.toLocaleDateString("en-GB", {
+          weekday: "long", year: "numeric", month: "long", day: "numeric",
+        }),
+        overviewSummary: {
+          headline: "Your morning signal — priorities and focus for today",
+          energyFocus: "Review your top tasks and set your intention for the day",
+        },
+        schedule: [],
+        priorities: pendingTasks.slice(0, 5).map(t => ({
+          title: t.title,
+          description: t.description ?? "",
+          urgency: t.priority ?? "medium",
+          estimatedTime: "30 minutes",
+        })),
+        insights: [],
+      };
+      const pdfPath = await generateBriefPDF(briefData);
+      if (existsSync(pdfPath)) {
+        const pdfBuffer = await readFile(pdfPath);
+        const base64 = pdfBuffer.toString("base64");
+        await unlink(pdfPath).catch(() => {});
+        return {
+          success: true,
+          pdfUrl: `data:application/pdf;base64,${base64}`,
+          message: "Morning Signal PDF generated successfully",
+          generatedAt: new Date().toISOString(),
+        };
+      }
+      return {
+        success: false,
+        pdfUrl: null,
+        message: "PDF generation failed",
+        generatedAt: new Date().toISOString(),
+      };
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : "Unknown error";
+      return {
+        success: false,
+        pdfUrl: null,
+        message: `PDF generation failed: ${msg}`,
+        generatedAt: new Date().toISOString(),
+      };
+    }
   }),
 
   /**

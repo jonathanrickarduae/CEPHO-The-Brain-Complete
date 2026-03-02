@@ -308,6 +308,22 @@ export type LibraryDocument = typeof libraryDocuments.$inferSelect;
 export type InsertLibraryDocument = typeof libraryDocuments.$inferInsert;
 
 /**
+ * Document email history — tracks every time a document is emailed
+ */
+export const documentEmailHistory = pgTable("document_email_history", {
+  id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
+  documentId: integer("documentId").notNull(),
+  userId: integer("userId").notNull(),
+  recipients: json("recipients").notNull().$type<Array<{ email: string; name?: string }>>(),
+  subject: text("subject"),
+  message: text("message"),
+  sentAt: timestamp("sentAt").defaultNow().notNull(),
+  status: text("status").notNull().default("sent"),
+});
+export type DocumentEmailHistory = typeof documentEmailHistory.$inferSelect;
+export type InsertDocumentEmailHistory = typeof documentEmailHistory.$inferInsert;
+
+/**
  * Digital Twin conversation history
  */
 export const conversations = pgTable(

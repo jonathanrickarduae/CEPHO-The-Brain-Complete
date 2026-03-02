@@ -11,6 +11,9 @@ import { protectedProcedure, router } from "../_core/trpc";
 import { db } from "../db";
 import { tasks, projects } from "../../drizzle/schema";
 import { synthesiaService } from "../services/synthesia.service";
+import { generateBriefPDF } from "../services/pdf-generation.service";
+import { readFile, unlink } from "fs/promises";
+import { existsSync } from "fs";
 
 function getOpenAIClient(): OpenAI {
   const apiKey = process.env.OPENAI_API_KEY;
@@ -167,15 +170,65 @@ Keep it concise, professional, and actionable. Format with clear sections.`;
 export const victoriasBriefRouter = router({
   generatePdf: protectedProcedure
     .input(z.object({ date: z.string().optional(), content: z.any().optional() }))
-    .mutation(async () => {
-      // PDF generation would use a PDF library in production
-      return {
-        success: true,
-        message:
-          "PDF generation queued. This feature requires server-side PDF generation.",
-        downloadUrl: null as string | null,
-        pdfUrl: null as string | null,
-      };
+    .mutation(async ({ input }) => {
+      try {
+        const briefDate = input.date ?? new Date().toLocaleDateString("en-GB", {
+          weekday: "long", year: "numeric", month: "long", day: "numeric",
+        });
+        const content = input.content ?? {};
+        // Build BriefData from whatever content was passed
+        const briefData = {
+          date: briefDate,
+          overviewSummary: {
+            headline: content.overviewSummary?.headline ?? "Your daily executive brief",
+            energyFocus: content.overviewSummary?.energyFocus ?? "Stay focused on high-impact priorities",
+          },
+          schedule: content.schedule ?? [],
+          priorities: (content.keyThings ?? []).map((k: any) => ({
+            title: k.title ?? "Priority",
+            description: k.description ?? "",
+            urgency: k.priority ?? "medium",
+            estimatedTime: "30 minutes",
+          })),
+          insights: (content.intelligence ?? []).map((i: any) => ({
+            category: i.source ?? "Intelligence",
+            message: i.summary ?? i.title ?? "",
+          })),
+          emails: content.emailSummary ? {
+            unread: content.emailSummary.unread ?? 0,
+            requireResponse: content.emailSummary.requiresResponse ?? 0,
+            highPriority: content.emailSummary.highPriority ?? 0,
+            urgent: content.emailSummary.urgent ?? [],
+          } : undefined,
+        };
+        const pdfPath = await generateBriefPDF(briefData);
+        // Read the PDF and return as base64 data URL
+        if (existsSync(pdfPath)) {
+          const pdfBuffer = await readFile(pdfPath);
+          const base64 = pdfBuffer.toString("base64");
+          await unlink(pdfPath).catch(() => {});
+          return {
+            success: true,
+            message: "PDF generated successfully",
+            pdfUrl: `data:application/pdf;base64,${base64}`,
+            downloadUrl: `data:application/pdf;base64,${base64}`,
+          };
+        }
+        return {
+          success: false,
+          message: "PDF generation failed — file not created",
+          pdfUrl: null as string | null,
+          downloadUrl: null as string | null,
+        };
+      } catch (err) {
+        const msg = err instanceof Error ? err.message : "Unknown error";
+        return {
+          success: false,
+          message: `PDF generation failed: ${msg}`,
+          pdfUrl: null as string | null,
+          downloadUrl: null as string | null,
+        };
+      }
     }),
 
   generateVideo: protectedProcedure
