@@ -64,6 +64,7 @@ const Settings = lazy(() => import("./pages/Settings"));
 const ExpertChatPage = lazy(() => import("./pages/ExpertChatPage"));
 const Onboarding = lazy(() => import("./pages/Onboarding"));
 const WarRoom = lazy(() => import("./pages/WarRoom"));
+const AdminDashboard = lazy(() => import("./pages/AdminDashboard"));
 
 // Wrapper: pages that need the sidebar layout
 function WithLayout({ children }: { children: React.ReactNode }) {
@@ -162,6 +163,9 @@ function Router() {
         </Route>
         <Route path="/war-room">
           <WithLayout><WarRoom /></WithLayout>
+        </Route>
+        <Route path="/admin">
+          <WithLayout><AdminDashboard /></WithLayout>
         </Route>
         <Route path="/settings">
           <WithLayout><Settings /></WithLayout>

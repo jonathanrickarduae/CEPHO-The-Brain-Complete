@@ -44,6 +44,7 @@ import {
   GraduationCap,
   Bot,
   AlertTriangle,
+  Shield,
 } from "lucide-react";
 import { CSSProperties, useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
@@ -135,6 +136,7 @@ const menuItems: MenuItem[] = [
 
   { icon: Lock, label: "Vault", path: "/settings?tab=vault" },
   { icon: Settings, label: "Settings", path: "/settings" },
+  { icon: Shield, label: "Admin", path: "/admin" },
 ];
 
 const SIDEBAR_WIDTH_KEY = "cepho-sidebar-width";

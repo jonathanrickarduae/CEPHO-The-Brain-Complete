@@ -45,6 +45,7 @@ import { digitalTwinRouter } from "./routers/digitalTwin.router";
 import { voiceCommandRouter } from "./routers/voiceCommand.router";
 import { cephoScoreRouter } from "./routers/cephoScore.router";
 import { autonomousExecutionRouter } from "./routers/autonomousExecution.router";
+import { documentTemplatingRouter } from "./routers/documentTemplating.router";
 import {
   businessPlanReviewRouter as businessPlanReviewRealRouter,
   collaborativeReviewRouter as collaborativeReviewRealRouter,
@@ -188,6 +189,9 @@ export const appRouter = router({
 
   // ─── Autonomous Execution Engine ────────────────────────────────────────────
   autonomousExecution: autonomousExecutionRouter,
+
+  // ─── Document Templating Engine ──────────────────────────────────────────────
+  documentTemplating: documentTemplatingRouter,
 });
 
 export type AppRouter = typeof appRouter;
