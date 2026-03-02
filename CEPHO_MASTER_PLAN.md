@@ -1,7 +1,8 @@
-# CEPHO Master Plan (The Bible)
+# CEPHO.AI: The Grand Master Plan (The Bible)
 
+**Version:** 10.1 (Audit-Enhanced)
 **Date:** March 2, 2026
-**Status:** This document is the single source of truth for all CEPHO platform development. It supersedes and consolidates all previous plans and audit findings.
+**Status:** This document is the single, definitive source of truth for all CEPHO platform development. It supersedes and consolidates all previous plans, specs, and audit findings.
 
 ---
 
@@ -16,9 +17,9 @@ To ensure real, measurable progress, all work will be measured against the follo
 
 ---
 
-## 2. The Master Execution Plan
+## 2. The Active Remediation Plan (Post-Audit)
 
-This plan is organized into four sprints, prioritizing foundational stability, then fixing fake logic, then implementing AI, and finally polishing.
+This is the immediate, active plan to address the gaps identified in the March 2nd independent audit. It is organized into four sprints, prioritizing foundational stability, then fixing fake logic, then implementing AI, and finally polishing.
 
 ### Sprint 1: Data & Stability (The Foundation)
 **Goal:** Every page loads gracefully and shows realistic data. No more empty states or jarring loading spinners.
@@ -62,138 +63,93 @@ This plan is organized into four sprints, prioritizing foundational stability, t
 
 ---
 
-## 3. Completion Tracker
+## 3. The Original Grand Master Plan (v10.0)
 
-| Sprint | Tasks | Completed | % |
+*The following sections from the original v10.0 plan are preserved for historical context and to provide the full architectural vision.*
+
+### 3.1. Executive Summary
+
+CEPHO.AI is an autonomous platform designed to replicate and automate the core functions of a world-class Chief of Staff. This Grand Master Plan is the single, definitive roadmap for transforming the platform from its current Grade E state to Grade A+ — a genuinely intelligent, fully autonomous, enterprise-ready platform with no features missing.
+
+This definitive v10.0 plan is the final and most complete version. It incorporates a deep, comprehensive review to close the final 5 architectural gaps, ensuring the platform is not only intelligent and autonomous but also robust, manageable, and operationally excellent from day one. This is the final, executable blueprint. There are no gaps remaining.
+
+| Phase | Name | Core Focus | Grade |
 |---|---|---|---|
-| Sprint 1: Data & Stability | 4 | 0 | 0% |
-| Sprint 2: Fix Stubs | 5 | 0 | 0% |
-| Sprint 3: Real AI | 4 | 0 | 0% |
-| Sprint 4: Integrations & Polish | 3 | 0 | 0% |
-| **Total** | **16** | **0** | **0%** |
+| Phase 0 | Pre-Conditions & Toolchain | CI/CD, branch strategy, env vars, seed data, ADRs, full test strategy, toolchain setup. | E → D |
+| Phase 1 | Stabilise & Fix | All crashes, security holes, broken routes, orphaned tables. | D → B |
+| Phase 2 | Digital Twin & Intelligence | The complete 4-module Digital Twin, vector DB, agent memory, Shadow Mode, email/meeting intelligence. | B → A- |
+| Phase 3 | Innovation, Voice & Automation | The Innovation Hub & Idea Portal, voice-first interface, push briefings, CEPHO Score, cron jobs. | A- → A |
+| Phase 4 | Flywheel, Scale & Teams | The Innovation Flywheel engine, monetisation, multi-tenancy, team workspaces, performance optimisation. | A → A+ |
+| Phase 5 | Operational Excellence & Learning | The Innovation Flywheel feedback loop, outcome tracking, runbook, alerting, audit log, pen testing, DR/BC. | A+ → A+* |
+| Phase 6 | Differentiated Intelligence | Agent performance dashboard, continuous learning, War Room, network & regulatory intelligence. | A+* → A+** |
+| Phase 7 | Full Autonomy | The Autonomous Execution Engine and Persephone Board, enabling true One-Sentence Execution. | A+** → A+*** |
+| Phase 8 | Admin & Governance | The secure admin dashboard, user management, system analytics, and agent oversight. | A+*** → A+**** |
+
+### 3.2. The 20 Gaps (From v6.0 Gap Analysis)
+
+*This section archives the 20 gaps identified in the v6.0 analysis, which informed the creation of the v10.0 plan.*
+
+1.  **Agent Performance & Monitoring Dashboard**
+2.  **Digital Twin / Personality Calibration**
+3.  **Monetisation Architecture**
+4.  **Email Intelligence**
+5.  **Meeting Intelligence**
+6.  **AI Agent Continuous Learning Architecture**
+7.  **Data Ingestion Pipeline**
+8.  **Notification & Communication Architecture**
+9.  **Search Architecture**
+10. **White-Label / Multi-Tenant Architecture**
+11. **Testing Strategy**
+12. **AI Cost Management & Observability**
+13. **Disaster Recovery & Business Continuity**
+14. **Accessibility (WCAG 2.1 AA)**
+15. **Internationalisation (i18n)**
+16. **Performance Budgets & Core Web Vitals**
+17. **Victoria's Briefing — Personalisation Engine**
+18. **Offline / PWA Capability**
+19. **Security Penetration Testing Plan**
+20. **Agent Orchestration for Complex Multi-Step Tasks**
+
+### 3.3. The 5 Final Gaps (From v10.0 Final Gaps Spec)
+
+*This section archives the 5 final gaps closed in the v10.0 plan.*
+
+1.  **No Central Settings & Permissions Engine** (Solved by Appendix T)
+2.  **No Standardized Document Templating** (Solved by Appendix U)
+3.  **No "God Mode" Admin Dashboard** (Solved by Phase 8)
+4.  **No Guided Onboarding Flow** (Solved by Appendix V)
+5.  **Incomplete DevOps & Environments** (Solved by Appendix W)
 
 ---
 
-## 4. Appendix: Original Plans (Archived)
+## 4. Appendix: Core Architectural Specifications
 
-*The following sections are preserved for historical context but are no longer the active plan.*
+*This section contains the full, original specifications for the platform's core architectural pillars.*
 
-### 4.1. Original Remediation Master Plan (2026-02-28)
+### Appendix Q: The Digital Twin Architecture
 
-This plan was organized into 7 key remediation areas, with a detailed breakdown of tasks for each. The status of each task will be updated here as it is completed.
+*Full specification for the 4-module Digital Twin: Ingestion & Calibration, Cognitive & Personality Model, Behavioral Simulation, and Dynamic Prompt Assembler.*
 
-#### 4.1.1. Code & Documentation Cleanup
+### Appendix R: The Innovation Hub & Flywheel Architecture
 
-**Objective:** To create a lean and understandable codebase by systematically removing all outdated, duplicated, and irrelevant files, code, and documentation.
+*Full specification for the 6-step Innovation Flywheel: Capture, Enrich, Prioritize, Convert, Execute, and Learn.*
 
-| Task ID | Description | Status | Verification |
-|---|---|---|---|
-| CD-01 | Remove Obsolete Features | Not Started | - [ ] Code removed from GitHub<br>- [ ] Live site audit confirms removal<br>- [ ] Supabase schema updated |
-| CD-02 | Consolidate Documentation | Not Started | - [ ] Master docs created in GitHub<br>- [ ] All duplicates removed |
-| CD-03 | Unify Naming Conventions | Not Started | - [ ] All files/folders renamed in GitHub |
-| CD-04 | Delete Duplicated Files | Not Started | - [ ] Full audit confirms no duplicates remain |
+### Appendix S: The Autonomous Execution Engine & Persephone Board
 
-#### 4.1.2. API Cleanup & Integration
+*Full specification for the One-Sentence Execution workflow, the Chief of Staff orchestrator agent, and the Persephone Board visualization layer.*
 
-**Objective:** To fix the non-functional API integrations page, creating a clear and accurate representation of all connected services, and to add missing critical integrations.
+### Appendix T: The Settings & RBAC Engine
 
-| Task ID | Description | Status | Verification |
-|---|---|---|---|
-| API-01 | Redesign Integrations Page | Not Started | - [ ] New page live on website<br>- [ ] All integrations listed |
-| API-02 | Sync with Render & Reality | Not Started | - [ ] Live status is accurate on website |
-| API-03 | Add Missing Integrations | Not Started | - [ ] All new APIs are on integrations page |
-| API-04 | Consolidate Integration Points | Not Started | - [ ] Vault is merged into Settings page |
+*Full specification for the Role-Based Access Control system, the hierarchical settings engine, and the dedicated settings API.*
 
-#### 4.1.3. AI Agents Recovery & Mapping
+### Appendix U: The Document & Templating Engine
 
-**Objective:** To recover, map, and make fully operational the 50+ AI agents that are a core feature of the CEPHO system.
+*Full specification for the centralized microservice for generating professionally branded and formatted documents.*
 
-| Task ID | Description | Status | Verification |
-|---|---|---|---|
-| AI-01 | Full Agent Audit & Recovery | Not Started | - [ ] All 50+ agents are in the codebase |
-| AI-02 | Create a Central Agent Directory | Not Started | - [ ] `/ai-agents` page is live<br>- [ ] All agents are listed |
-| AI-03 | Operationalize All Agents | Not Started | - [ ] All agents are functional on live site |
+### Appendix V: The User Onboarding & Activation Flow
 
-#### 4.1.4. Fix Broken Pages & Routing
+*Full specification for the multi-step welcome wizard to guide new users through setup and demonstrate immediate value.*
 
-**Objective:** To ensure all pages within the application are functional and correctly routed.
+### Appendix W: The DevOps & Environments Lifecycle
 
-| Task ID | Description | Status | Verification |
-|---|---|---|---|
-| PAGE-01 | Full Routing Audit | Not Started | - [ ] All routes in `App.tsx` are correct |
-| PAGE-02 | Fix Non-Functional Pages | Not Started | - [ ] All pages are functional on live site |
-
-#### 4.1.5. Mobile Responsiveness
-
-**Objective:** To make the entire application fully responsive and usable on mobile devices, with a specific focus on a clean portrait mode experience.
-
-| Task ID | Description | Status | Verification |
-|---|---|---|---|
-| MOB-01 | Implement Mobile-First Layout | Not Started | - [ ] Layout is responsive on all devices |
-| MOB-02 | Optimize for Portrait Mode | Not Started | - [ ] No horizontal scrolling on mobile |
-
-#### 4.1.6. UI/UX Redesign & Standardization
-
-**Objective:** To create a slick, consistent, and action-oriented user experience by implementing a unified design system.
-
-| Task ID | Description | Status | Verification |
-|---|---|---|---|
-| UI-01 | Enforce a Single Design System | Not Started | - [ ] All components use the design system |
-| UI-02 | Standardize Page Layouts | Not Started | - [ ] All pages have a consistent layout |
-| UI-03 | Improve Information Density | Not Started | - [ ] Pages are more compact and action-oriented |
-
-#### 4.1.7. Persephone Board Training
-
-**Objective:** To train the 14 Persephone Board AI agents to think, act, and communicate in a way that is authentically representative of their real-world counterparts.
-
-| Task ID | Description | Status | Verification |
-|---|---|---|---|
-| PB-01 | Create a Knowledge Corpus | Not Started | - [ ] All 14 corpora are created |
-| PB-02 | Implement a RAG System | Not Started | - [ ] RAG system is functional |
-| PB-03 | Fine-Tune Agent Personas | Not Started | - [ ] All 14 agents have unique personas |
-
-### 4.2. Original Phase 2 Remediation Plan (2026-03-01)
-
-This plan was created after the initial live audit and identified 24 specific issues to be addressed.
-
-#### 4.2.1. Audit Summary: What Was Actually Broken
-
-##### CRITICAL — Pages crash or show nothing
-| ID | Page | Root Cause |
-|----|------|-----------|
-| P2-01 | **Innovation Hub** | `useMemo is not defined` runtime crash (fixed in latest deploy) |
-| P2-02 | **Persephone Board** | `useToast must be used within ToastProvider` crash (fixed in latest deploy) |
-| P2-03 | **AI Agents page** | `useCallback` duplicate import crash (fixed in latest deploy) |
-| P2-04 | **Sidebar/Dialog/Chart UI** | Missing `useMemo`/`useCallback` imports in core UI components (fixed in latest deploy) |
-
-##### HIGH — Features exist but produce no output
-| ID | Feature | Root Cause |
-|----|---------|-----------|
-| P2-05 | **Persephone Board chat** | `expertChat.startSession` POST blocked by CSRF in browser (needs session cookie) — works once logged in |
-| P2-06 | **Evening Review** | `eveningReview.createSession` — no seed data; creates empty session but shows nothing |
-| P2-07 | **Document Library** | No documents seeded in DB — page loads but shows empty state |
-| P2-08 | **Innovation Hub ideas** | Only 12 ideas seeded — page loads but most filter tabs show empty |
-| P2-09 | **Workflows page** | No workflows in DB — page shows empty state |
-| P2-10 | **Notifications** | No notifications seeded — bell icon shows 0 |
-| P2-11 | **Subscription Tracker** | No subscriptions seeded — shows empty state |
-| P2-12 | **Victoria's Briefing actions** | "Generate Briefing" button calls mutation but no AI key configured for briefing generation |
-| P2-13 | **AI Agents detail page** | REST `/api/agents/:id` returns mock data, not real agent metrics from DB |
-
-##### MEDIUM — Pages load but have broken interactions
-| ID | Feature | Root Cause |
-|----|---------|-----------|
-| P2-14 | **Chief of Staff task creation** | `cosTasks.create` mutation — no form validation feedback on error |
-| P2-15 | **Project Genesis wizard** | Wizard steps work but `projectGenesis.initiate` creates project with no AI agent assigned |
-| P2-16 | **AI SMEs consultation** | `expertConsultation.create` works but no real AI response — returns stub |
-| P2-17 | **Expert Recommendation** | Returns static recommendations, not personalised to user context |
-| P2-18 | **Analytics page** | Feature flags load but charts show no real usage data |
-| P2-19 | **Settings — integrations** | Integration status shows "Disconnected" for all — OAuth flows not implemented |
-| P2-20 | **Vault tab in Settings** | Redirects correctly but the vault content is static mock data |
-
-##### LOW — Minor UX issues
-| ID | Issue | Detail |
-|----|-------|--------|
-| P2-21 | Sidebar nav `/vault` link | Still points to `/vault` not `/settings?tab=vault` |
-| P2-22 | Theme picker | Colour changes apply but don't persist on page refresh |
-| P2-23 | Mobile layout | Several pages overflow on mobile viewport |
-| P2-24 | Empty state messages | Generic "No data" messages — need contextual empty states with CTAs |
+*Full specification for managing dev, staging, and production environments, with automated database migrations and a safe rollback strategy.*
