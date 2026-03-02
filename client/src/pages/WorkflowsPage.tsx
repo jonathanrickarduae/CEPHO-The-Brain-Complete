@@ -1,6 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useLocation } from "wouter";
 import { PageShell } from "@/components/layout/PageShell";
+import { trpc } from "@/lib/trpc";
 import {
   Plus,
   Workflow,
@@ -9,41 +10,14 @@ import {
   AlertCircle,
   Play,
   ArrowRight,
+  RefreshCw,
 } from "lucide-react";
-
-interface Workflow {
-  id: string;
-  name: string;
-  skillType: string;
-  status: string;
-  currentPhase: number;
-  currentStep: number;
-  createdAt: string;
-  updatedAt: string;
-}
 
 export default function WorkflowsPage() {
   const [, setLocation] = useLocation();
-  const [workflows, setWorkflows] = useState<Workflow[]>([]);
-  const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<string>("all");
 
-  useEffect(() => {
-    fetchWorkflows();
-  }, []);
-
-  const fetchWorkflows = async () => {
-    try {
-      const response = await fetch("/api/workflows");
-      const data = await response.json();
-      if (data.success) {
-        setWorkflows(data.workflows || []);
-      }
-    } catch {
-    } finally {
-      setLoading(false);
-    }
-  };
+  const { data: workflows = [], isLoading, refetch } = trpc.workflows.list.useQuery();
 
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -84,6 +58,7 @@ export default function WorkflowsPage() {
       financial_modeling: "Financial Modeling",
       data_room: "Data Room",
       digital_twin: "Digital Twin",
+      custom: "Custom Workflow",
     };
     return labels[skillType] || skillType;
   };
@@ -93,10 +68,10 @@ export default function WorkflowsPage() {
     return w.status === filter;
   });
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+        <RefreshCw className="animate-spin h-10 w-10 text-primary" />
       </div>
     );
   }
@@ -107,13 +82,21 @@ export default function WorkflowsPage() {
       title="Workflows"
       subtitle="Manage your process workflows and track progress"
       actions={
-        <button
-          onClick={() => setLocation("/workflows/new")}
-          className="flex items-center gap-2 px-3 py-1.5 bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg transition-colors text-sm font-medium"
-        >
-          <Plus className="w-4 h-4" />
-          New Workflow
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => refetch()}
+            className="flex items-center gap-2 px-3 py-1.5 bg-card border border-border hover:bg-muted text-foreground rounded-lg transition-colors text-sm font-medium"
+          >
+            <RefreshCw className="w-4 h-4" />
+          </button>
+          <button
+            onClick={() => setLocation("/workflows/new")}
+            className="flex items-center gap-2 px-3 py-1.5 bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg transition-colors text-sm font-medium"
+          >
+            <Plus className="w-4 h-4" />
+            New Workflow
+          </button>
+        </div>
       }
       fillHeight
     >
@@ -199,7 +182,7 @@ export default function WorkflowsPage() {
                   <div className="w-full bg-muted rounded-full h-2">
                     <div
                       className="bg-primary h-2 rounded-full transition-all"
-                      style={{ width: `${(workflow.currentStep / 10) * 100}%` }}
+                      style={{ width: `${Math.min(100, (workflow.currentStep / 10) * 100)}%` }}
                     />
                   </div>
                 </div>

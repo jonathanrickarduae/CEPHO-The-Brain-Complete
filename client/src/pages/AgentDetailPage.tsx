@@ -1,139 +1,49 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRoute, Link } from "wouter";
-import { Bot, ArrowLeft } from "lucide-react";
+import { Bot, ArrowLeft, RefreshCw, CheckCircle, XCircle } from "lucide-react";
 import { PageShell } from "@/components/layout/PageShell";
-
-interface AgentDetail {
-  id: string;
-  name: string;
-  category: string;
-  specialization: string;
-  description: string;
-  status: "active" | "idle" | "learning" | "offline";
-  performanceRating: number;
-  successRate: number;
-  tasksCompleted: number;
-  avgResponseTime: number;
-  lastActive: string;
-  createdAt: string;
-}
-
-interface DailyReport {
-  id: string;
-  date: string;
-  tasksCompleted: number;
-  successRate: number;
-  learnings: string[];
-  improvements: string[];
-  highlights: string[];
-  concerns: string[];
-  status: "pending" | "approved" | "rejected";
-}
-
-interface ApprovalRequest {
-  id: string;
-  requestType: string;
-  description: string;
-  benefitEstimate: string;
-  costEstimate: number;
-  riskLevel: "low" | "medium" | "high";
-  status: "pending" | "approved" | "rejected";
-  createdAt: string;
-}
+import { trpc } from "@/lib/trpc";
+import { toast } from "sonner";
 
 export default function AgentDetailPage() {
   const [, params] = useRoute("/agents/:id");
-  const agentId = params?.id;
+  const agentId = params?.id ?? "";
+  const [activeTab, setActiveTab] = useState<"overview" | "reports" | "approvals">("overview");
 
-  const [agent, setAgent] = useState<AgentDetail | null>(null);
-  const [reports, setReports] = useState<DailyReport[]>([]);
-  const [approvals, setApprovals] = useState<ApprovalRequest[]>([]);
-  const [activeTab, setActiveTab] = useState<
-    "overview" | "reports" | "approvals"
-  >("overview");
-  const [loading, setLoading] = useState(true);
+  // Fetch all agents from tRPC and find the one matching agentId
+  const { data: agentsData, isLoading, refetch } = trpc.aiAgentsMonitoring.getAllStatus.useQuery();
+  const agent = agentsData?.agents?.find(a => a.id === agentId) ?? null;
 
-  useEffect(() => {
-    if (agentId) {
-      loadAgentDetails();
-      loadReports();
-      loadApprovals();
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [agentId]);
+  // Fetch daily reports for this agent
+  const { data: reportsData, refetch: refetchReports } = trpc.aiAgentsMonitoring.getDailyReports.useQuery(
+    { agentId },
+    { enabled: !!agentId }
+  );
 
-  const loadAgentDetails = async () => {
-    try {
-      const response = await fetch(`/api/agents/${agentId}`);
-      if (response.ok) {
-        const data = await response.json();
-        setAgent(data);
-      }
-    } catch {
-    } finally {
-      setLoading(false);
+  const reviewMutation = trpc.aiAgentsMonitoring.reviewRequest.useMutation({
+    onSuccess: () => { toast.success("Decision recorded"); refetch(); refetchReports(); },
+    onError: () => toast.error("Failed to process decision"),
+  });
+
+  const handleReview = async (requestId: string, decision: "approved" | "denied") => {
+    await reviewMutation.mutateAsync({ requestId, agentId, decision });
+  };
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case "active": return "bg-green-500";
+      case "learning": return "bg-primary";
+      case "idle": return "bg-yellow-500";
+      case "offline": return "bg-gray-500";
+      default: return "bg-gray-500";
     }
   };
 
-  const loadReports = async () => {
-    try {
-      const response = await fetch(`/api/agents/${agentId}/reports`);
-      if (response.ok) {
-        const data = await response.json();
-        setReports(data);
-      }
-    } catch {
-    }
-  };
 
-  const loadApprovals = async () => {
-    try {
-      const response = await fetch(`/api/agents/${agentId}/approvals`);
-      if (response.ok) {
-        const data = await response.json();
-        setApprovals(data);
-      }
-    } catch {
-    }
-  };
-
-  const approveReport = async (reportId: string) => {
-    try {
-      await fetch(`/api/agents/reports/${reportId}/approve`, {
-        method: "POST",
-      });
-      loadReports();
-    } catch {
-    }
-  };
-
-  const approveRequest = async (requestId: string) => {
-    try {
-      await fetch(`/api/agents/approvals/${requestId}/approve`, {
-        method: "POST",
-      });
-      loadApprovals();
-    } catch {
-    }
-  };
-
-  const rejectRequest = async (requestId: string) => {
-    try {
-      await fetch(`/api/agents/approvals/${requestId}/reject`, {
-        method: "POST",
-      });
-      loadApprovals();
-    } catch {
-    }
-  };
-
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
-        <div className="text-center">
-          <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <div className="text-xl text-muted-foreground">Loading agent details...</div>
-        </div>
+        <RefreshCw className="animate-spin h-10 w-10 text-primary" />
       </div>
     );
   }
@@ -145,7 +55,7 @@ export default function AgentDetailPage() {
           <div className="text-6xl mb-4">🤖</div>
           <div className="text-xl text-foreground mb-2">Agent Not Found</div>
           <div className="text-muted-foreground mb-6">
-            This agent may not be available yet or the database is not connected.
+            Agent &quot;{agentId}&quot; was not found in the system.
           </div>
           <Link
             href="/ai-agents"
@@ -158,24 +68,9 @@ export default function AgentDetailPage() {
     );
   }
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "active": return "bg-green-500";
-      case "learning": return "bg-primary";
-      case "idle": return "bg-yellow-500";
-      case "offline": return "bg-gray-500";
-      default: return "bg-gray-500";
-    }
-  };
-
-  const getRiskColor = (risk: string) => {
-    switch (risk) {
-      case "low": return "text-green-400";
-      case "medium": return "text-yellow-400";
-      case "high": return "text-red-400";
-      default: return "text-muted-foreground";
-    }
-  };
+  const reports = reportsData?.reports ?? [];
+  const pendingReports = reports.filter(r => r.requestsForApproval.length > 0);
+  const allApprovals = reports.flatMap(r => r.requestsForApproval);
 
   return (
     <PageShell
@@ -248,7 +143,7 @@ export default function AgentDetailPage() {
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
-              Daily Reports ({reports.filter(r => r.status === "pending").length})
+              Daily Reports ({pendingReports.length})
             </button>
             <button
               onClick={() => setActiveTab("approvals")}
@@ -258,7 +153,7 @@ export default function AgentDetailPage() {
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
-              Approvals ({approvals.filter(a => a.status === "pending").length})
+              Approvals ({allApprovals.length})
             </button>
           </div>
 
@@ -274,16 +169,14 @@ export default function AgentDetailPage() {
                       <div className="font-medium text-foreground capitalize">{agent.category}</div>
                     </div>
                     <div>
-                      <div className="text-sm text-muted-foreground">Created</div>
-                      <div className="font-medium text-foreground">
-                        {new Date(agent.createdAt).toLocaleDateString()}
-                      </div>
-                    </div>
-                    <div>
                       <div className="text-sm text-muted-foreground">Last Active</div>
                       <div className="font-medium text-foreground">
                         {new Date(agent.lastActive).toLocaleString()}
                       </div>
+                    </div>
+                    <div>
+                      <div className="text-sm text-muted-foreground">Improvement Requests</div>
+                      <div className="font-medium text-foreground">{agent.improvementRequests}</div>
                     </div>
                   </div>
                 </div>
@@ -293,60 +186,45 @@ export default function AgentDetailPage() {
             {/* Reports Tab */}
             {activeTab === "reports" && (
               <div className="space-y-4">
-                {reports.map(report => (
-                  <div key={report.id} className="border border-border rounded-lg p-4">
-                    <div className="flex justify-between items-start mb-4">
-                      <div>
-                        <h4 className="font-bold text-foreground">
-                          {new Date(report.date).toLocaleDateString()}
-                        </h4>
-                        <div className="text-sm text-muted-foreground">
-                          {report.tasksCompleted} tasks · {report.successRate}% success rate
+                {reports.length === 0 ? (
+                  <p className="text-muted-foreground text-center py-8">No reports available.</p>
+                ) : (
+                  reports.map(report => (
+                    <div key={report.agentId + report.date} className="border border-border rounded-lg p-4">
+                      <div className="flex justify-between items-start mb-4">
+                        <div>
+                          <h4 className="font-bold text-foreground">{report.date}</h4>
+                          <div className="text-sm text-muted-foreground">
+                            {report.tasksCompleted} tasks · {report.performanceRating}/100 rating
+                          </div>
                         </div>
                       </div>
-                      {report.status === "pending" && (
-                        <button
-                          onClick={() => approveReport(report.id)}
-                          className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 text-sm"
-                        >
-                          Approve
-                        </button>
+                      {report.improvements.length > 0 && (
+                        <div className="mb-3">
+                          <div className="text-xs font-semibold text-muted-foreground uppercase mb-1">Improvements</div>
+                          <ul className="space-y-1">
+                            {report.improvements.map((h: string, i: number) => (
+                              <li key={i} className="text-sm text-foreground/80 flex gap-2">
+                                <span className="text-green-400">•</span>{h}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
                       )}
-                      {report.status === "approved" && (
-                        <span className="text-green-400 font-medium text-sm">✓ Approved</span>
+                      {report.suggestions.length > 0 && (
+                        <div>
+                          <div className="text-xs font-semibold text-muted-foreground uppercase mb-1">Suggestions</div>
+                          <ul className="space-y-1">
+                            {report.suggestions.map((c: string, i: number) => (
+                              <li key={i} className="text-sm text-foreground/80 flex gap-2">
+                                <span className="text-yellow-400">•</span>{c}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
                       )}
                     </div>
-
-                    {report.highlights.length > 0 && (
-                      <div className="mb-3">
-                        <div className="text-sm font-medium text-foreground mb-1">Highlights:</div>
-                        <ul className="list-disc list-inside text-sm text-foreground/80">
-                          {report.highlights.map((h, i) => <li key={i}>{h}</li>)}
-                        </ul>
-                      </div>
-                    )}
-
-                    {report.learnings.length > 0 && (
-                      <div className="mb-3">
-                        <div className="text-sm font-medium text-foreground mb-1">Learnings:</div>
-                        <ul className="list-disc list-inside text-sm text-foreground/80">
-                          {report.learnings.map((l, i) => <li key={i}>{l}</li>)}
-                        </ul>
-                      </div>
-                    )}
-
-                    {report.improvements.length > 0 && (
-                      <div>
-                        <div className="text-sm font-medium text-foreground mb-1">Improvements:</div>
-                        <ul className="list-disc list-inside text-sm text-foreground/80">
-                          {report.improvements.map((imp, i) => <li key={i}>{imp}</li>)}
-                        </ul>
-                      </div>
-                    )}
-                  </div>
-                ))}
-                {reports.length === 0 && (
-                  <div className="text-center py-8 text-muted-foreground">No reports yet</div>
+                  ))
                 )}
               </div>
             )}
@@ -354,63 +232,45 @@ export default function AgentDetailPage() {
             {/* Approvals Tab */}
             {activeTab === "approvals" && (
               <div className="space-y-4">
-                {approvals.map(approval => (
-                  <div key={approval.id} className="border border-border rounded-lg p-4">
-                    <div className="flex justify-between items-start mb-3">
-                      <div>
-                        <h4 className="font-bold text-foreground capitalize">
-                          {approval.requestType.replace("_", " ")}
-                        </h4>
-                        <div className="text-sm text-muted-foreground">
-                          {new Date(approval.createdAt).toLocaleDateString()}
+                {allApprovals.length === 0 ? (
+                  <p className="text-muted-foreground text-center py-8">No pending approval requests.</p>
+                ) : (
+                  allApprovals.map(req => (
+                    <div key={req.id} className="border border-border rounded-lg p-4">
+                      <div className="flex justify-between items-start mb-3">
+                        <div>
+                          <h4 className="font-bold text-foreground">{req.type}</h4>
+                          <p className="text-sm text-muted-foreground mt-1">{req.description}</p>
                         </div>
+                        <span className="text-xs font-semibold uppercase text-yellow-400">
+                          pending
+                        </span>
                       </div>
-                      {approval.status === "pending" && (
+                      <div className="flex items-center justify-between mt-4">
+                        <div className="text-sm text-muted-foreground">
+                          Impact: {req.estimatedImpact}
+                        </div>
                         <div className="flex gap-2">
                           <button
-                            onClick={() => approveRequest(approval.id)}
-                            className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 text-sm"
+                            onClick={() => handleReview(req.id, "approved")}
+                            disabled={reviewMutation.isPending}
+                            className="flex items-center gap-1.5 px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white rounded text-sm disabled:opacity-50"
                           >
+                            <CheckCircle className="w-4 h-4" />
                             Approve
                           </button>
                           <button
-                            onClick={() => rejectRequest(approval.id)}
-                            className="px-4 py-2 bg-destructive text-destructive-foreground rounded hover:bg-destructive/90 text-sm"
+                            onClick={() => handleReview(req.id, "denied")}
+                            disabled={reviewMutation.isPending}
+                            className="flex items-center gap-1.5 px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white rounded text-sm disabled:opacity-50"
                           >
+                            <XCircle className="w-4 h-4" />
                             Reject
                           </button>
                         </div>
-                      )}
-                      {approval.status === "approved" && (
-                        <span className="text-green-400 font-medium text-sm">✓ Approved</span>
-                      )}
-                      {approval.status === "rejected" && (
-                        <span className="text-destructive font-medium text-sm">✗ Rejected</span>
-                      )}
-                    </div>
-
-                    <p className="text-sm text-foreground/80 mb-3">{approval.description}</p>
-
-                    <div className="grid grid-cols-3 gap-4 text-sm">
-                      <div>
-                        <div className="text-muted-foreground">Benefit</div>
-                        <div className="font-medium text-foreground">{approval.benefitEstimate}</div>
-                      </div>
-                      <div>
-                        <div className="text-muted-foreground">Cost</div>
-                        <div className="font-medium text-foreground">${approval.costEstimate}</div>
-                      </div>
-                      <div>
-                        <div className="text-muted-foreground">Risk</div>
-                        <div className={`font-medium capitalize ${getRiskColor(approval.riskLevel)}`}>
-                          {approval.riskLevel}
-                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
-                {approvals.length === 0 && (
-                  <div className="text-center py-8 text-muted-foreground">No approval requests</div>
+                  ))
                 )}
               </div>
             )}

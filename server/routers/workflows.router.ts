@@ -23,6 +23,30 @@ function getOpenAIClient(): OpenAI {
 
 export const workflowsRouter = router({
   /**
+   * List all workflows (project genesis records) for the current user.
+   */
+  list: protectedProcedure.query(async ({ ctx }) => {
+    const rows = await db
+      .select()
+      .from(projectGenesis)
+      .where(eq(projectGenesis.userId, ctx.user.id))
+      .orderBy(projectGenesis.createdAt);
+    return rows.map(r => {
+      const meta = (r.metadata ?? {}) as Record<string, unknown>;
+      return {
+        id: String(r.id),
+        name: r.name,
+        skillType: (meta.skillType as string) ?? "custom",
+        status: r.status ?? "active",
+        currentPhase: (meta.currentPhase as number) ?? 1,
+        currentStep: (meta.currentStep as number) ?? 1,
+        createdAt: r.createdAt?.toISOString() ?? new Date().toISOString(),
+        updatedAt: r.updatedAt?.toISOString() ?? new Date().toISOString(),
+      };
+    });
+  }),
+
+  /**
    * Get a workflow by ID (maps to a project genesis record).
    * Step form data is read from projectGenesisPhases.metadata (DB-persisted).
    */
@@ -275,5 +299,103 @@ Keep it concise but thorough — maximum 800 words.`;
         content,
         generatedAt: new Date().toISOString(),
       };
+    }),
+
+  /**
+   * Start a workflow (set status to in_progress).
+   */
+  start: protectedProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ input, ctx }) => {
+      const projectId = parseInt(input.id, 10);
+      if (isNaN(projectId)) return { success: false };
+      await db
+        .update(projectGenesis)
+        .set({ status: "in_progress", updatedAt: new Date() })
+        .where(
+          and(
+            eq(projectGenesis.id, projectId),
+            eq(projectGenesis.userId, ctx.user.id)
+          )
+        );
+      return { success: true };
+    }),
+
+  /**
+   * Pause a workflow.
+   */
+  pause: protectedProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ input, ctx }) => {
+      const projectId = parseInt(input.id, 10);
+      if (isNaN(projectId)) return { success: false };
+      await db
+        .update(projectGenesis)
+        .set({ status: "paused", updatedAt: new Date() })
+        .where(
+          and(
+            eq(projectGenesis.id, projectId),
+            eq(projectGenesis.userId, ctx.user.id)
+          )
+        );
+      return { success: true };
+    }),
+
+  /**
+   * Resume a paused workflow.
+   */
+  resume: protectedProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ input, ctx }) => {
+      const projectId = parseInt(input.id, 10);
+      if (isNaN(projectId)) return { success: false };
+      await db
+        .update(projectGenesis)
+        .set({ status: "in_progress", updatedAt: new Date() })
+        .where(
+          and(
+            eq(projectGenesis.id, projectId),
+            eq(projectGenesis.userId, ctx.user.id)
+          )
+        );
+      return { success: true };
+    }),
+
+  /**
+   * Get AI guidance for a specific workflow step.
+   */
+  getStepGuidance: protectedProcedure
+    .input(z.object({ workflowId: z.string(), stepNumber: z.number() }))
+    .query(async ({ input }) => {
+      const openai = getOpenAIClient();
+      const prompt = `You are an expert workflow advisor for CEPHO. Provide concise guidance for step ${input.stepNumber} of workflow ${input.workflowId}.
+
+Provide:
+1. A brief guidance paragraph (2-3 sentences)
+2. Three key recommendations
+3. Two expected deliverables
+
+Respond in JSON: { "guidance": string, "recommendations": string[], "deliverables": string[] }`;
+      try {
+        const completion = await openai.chat.completions.create({
+          model: "gpt-4.1-mini",
+          messages: [{ role: "user", content: prompt }],
+          max_tokens: 400,
+          temperature: 0.5,
+          response_format: { type: "json_object" },
+        });
+        const parsed = JSON.parse(completion.choices[0]?.message?.content ?? "{}");
+        return {
+          guidance: parsed.guidance ?? "Follow the workflow steps carefully.",
+          recommendations: parsed.recommendations ?? [],
+          deliverables: parsed.deliverables ?? [],
+        };
+      } catch {
+        return {
+          guidance: "Complete this step according to the workflow requirements.",
+          recommendations: ["Review requirements", "Gather necessary information", "Document your progress"],
+          deliverables: ["Completed step documentation", "Progress report"],
+        };
+      }
     }),
 });

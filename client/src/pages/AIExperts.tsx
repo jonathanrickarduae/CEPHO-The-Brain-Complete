@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useSearch } from "wouter";
+import { trpc } from "@/lib/trpc";
 import { ExpertDirectory } from "@/components/expert-evolution/ExpertDirectory";
 import { MyBoard } from "@/components/project-management/MyBoard";
 import { WarRoom } from "@/components/shared/WarRoom";
@@ -235,7 +236,29 @@ export default function AIExperts() {
   const { mode, isFeatureAvailable: _isFeatureAvailable } = useGovernance();
   const searchString = useSearch();
   const [phase, setPhase] = useState<Phase>("queue");
+
+  // Fetch real pending tasks from tRPC
+  const { data: cosTasksData } = trpc.cosTasks.getTasks.useQuery({ status: "pending" });
+  const liveTasks: PendingTask[] = (cosTasksData ?? []).map(t => ({
+    id: String(t.id),
+    title: t.title,
+    description: t.description ?? "",
+    category: "Tasks",
+    source: "daily-brief" as const,
+    type: "twin" as TaskType,
+    status: "pending" as const,
+    progress: t.progress ?? 0,
+    dialogue: [],
+  }));
   const [tasks, setTasks] = useState<PendingTask[]>(MOCK_PENDING_TASKS);
+
+  // Sync live tasks into local state when they load (only on first load)
+  useEffect(() => {
+    if (liveTasks.length > 0) {
+      setTasks(liveTasks);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cosTasksData]);
   const [activeTask, setActiveTask] = useState<PendingTask | null>(null);
   const [mission, setMission] = useState("");
   const [selectedTemplate, setSelectedTemplate] = useState<number | null>(null);
