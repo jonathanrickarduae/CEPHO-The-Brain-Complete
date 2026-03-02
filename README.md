@@ -1,247 +1,59 @@
-# CEPHO.AI - The Brain
+# CEPHO.AI — The Brain (v11)
 
-**AI-Powered Business Intelligence & Executive Decision Platform**
-
-CEPHO (from the Greek _κεφαλή_ for "brain") is a comprehensive AI-powered platform that combines 50+ specialized AI agents with executive intelligence tools to automate operations, provide strategic insights, and enhance decision-making across all business functions.
-
-🌐 **Production:** https://cepho-the-brain-complete.onrender.com  
-📦 **Status:** ✅ Fully Operational  
-🚀 **Platform:** Render.com
+**Version**: 11.0.0
+**Status**: Production Ready
 
 ---
 
-## 🚀 Quick Start
+CEPHO.AI is an autonomous platform designed to replicate and automate the core functions of a world-class Chief of Staff. It provides strategic insights, manages projects, automates workflows, and learns continuously to enhance executive decision-making and operational efficiency.
+
+This repository contains the complete source code and documentation for the CEPHO.AI platform.
+
+## Quick Links
+
+- **The Grand Master Plan v11:** [`./CEPHO_Grand_Master_Plan_v11_FINAL.docx`](./CEPHO_Grand_Master_Plan_v11_FINAL.docx)
+- **Live Quality Grades:** [`./GRADES.md`](./GRADES.md)
+- **Changelog:** [`./CHANGELOG.md`](./CHANGELOG.md)
+- **Security Policy:** [`./SECURITY.md`](./SECURITY.md)
+
+## Documentation Hub
+
+All project documentation is now consolidated in the `/docs` directory.
+
+| Category | Path | Description |
+| :--- | :--- | :--- |
+| **The Plan** | [`/docs/plan/`](./docs/plan/) | Contains a copy of the Grand Master Plan v11. |
+| **Specifications** | [`/docs/specs/`](./docs/specs/) | Contains all 41+ individual specification documents (PRD, Data Dictionary, API Docs, etc.). |
+| **Processes** | [`/docs/processes/`](./docs/processes/) | Contains all process and governance documents (Runbook, Release Process, Governance, etc.). |
+| **Architecture** | [`/docs/architecture/`](./docs/architecture/) | Contains the System Architecture, diagrams, and Architectural Decision Records (ADRs). |
+| **Archive** | [`/docs/archive/`](./docs/archive/) | Contains all historical and outdated documents from previous versions. |
+
+## Development
+
+### Setup
 
 ```bash
-# Install dependencies
+# 1. Install dependencies
 pnpm install
 
-# Set up environment variables
+# 2. Set up environment variables
 cp .env.example .env
-# Edit .env with your credentials
 
-# Run database migrations
-pnpm db:push
+# 3. Run database migrations
+pnpm drizzle-kit push:pg
 
-# Start development server
+# 4. Start the development server
 pnpm dev
-
-# Build for production
-pnpm build
-
-# Start production server
-pnpm start
 ```
 
----
+### Key Scripts
 
-## 📋 Core Features
+- `pnpm dev`: Start the development server for client and server.
+- `pnpm build`: Build the project for production.
+- `pnpm test:unit`: Run all unit tests.
+- `pnpm check`: Run TypeScript type checking.
+- `pnpm db:studio`: Open Drizzle Studio to view the database.
 
-### 🧠 The Nexus - Command Center
+## Deployment
 
-Central dashboard with AI-powered insights, ClawBot assistant, and quick access to all platform features.
-
-### 📊 Chief of Staff Dashboard
-
-Executive operations hub with task management, team coordination, and strategic oversight.
-
-### 🤖 50+ Specialized AI Agents
-
-Automated agents across 7 categories:
-
-- Strategic Planning
-- Operations & Execution
-- Innovation & R&D
-- Marketing & Sales
-- Finance & Analytics
-- HR & Culture
-- Technology & Infrastructure
-
-### 📈 Victoria's Briefing (The Signal)
-
-AI-generated daily strategic briefing with market insights, priorities, and recommendations.
-
-### 🌙 Evening Review
-
-End-of-day summary with accomplishments, challenges, and next-day preparation.
-
-### 💡 Innovation Hub
-
-Idea management, validation, and development pipeline with AI assistance.
-
-### 🚀 Project Genesis
-
-Comprehensive project planning and execution with AI-powered templates and workflows.
-
-### 📚 Document Library
-
-Centralized repository for AI-generated documents with QA workflow and version control.
-
-### 🔗 Integrations
-
-Connect with 15+ external services:
-
-- Google Workspace, Microsoft 365
-- Slack, Teams
-- Asana, Trello, Notion
-- GitHub, GitLab
-- Zoom, Calendly
-- And more...
-
----
-
-## 🏗️ Architecture
-
-### Frontend
-
-- **Framework:** React 18 + TypeScript
-- **Build Tool:** Vite
-- **Styling:** Tailwind CSS + Shadcn/ui
-- **State Management:** TanStack Query (React Query)
-- **Routing:** React Router v6
-- **API Client:** tRPC
-
-### Backend
-
-- **Runtime:** Node.js 22
-- **Framework:** Express
-- **API:** tRPC for type-safe APIs
-- **Database:** PostgreSQL (Supabase)
-- **ORM:** Drizzle ORM
-- **Authentication:** JWT + OAuth 2.0
-- **Security:** Row Level Security (RLS)
-
-### Infrastructure
-
-- **Hosting:** Render
-- **Database:** Supabase (PostgreSQL)
-- **CI/CD:** GitHub + Render Auto-Deploy
-
----
-
-## 📁 Project Structure
-
-```
-the-brain-main/
-├── client/               # Frontend React application
-│   ├── src/
-│   │   ├── components/  # Reusable UI components
-│   │   ├── pages/       # Page components
-│   │   ├── hooks/       # Custom React hooks
-│   │   ├── lib/         # Utilities and helpers
-│   │   └── styles/      # Global styles and CSS
-│   └── index.html
-├── server/              # Backend Node.js application
-│   ├── routers/         # tRPC API routers
-│   │   ├── domains/     # Feature-specific routers
-│   │   └── integrations/# Integration routers
-│   ├── services/        # Business logic layer
-│   ├── db.ts            # Database client and queries
-│   └── index.ts         # Server entry point
-├── shared/              # Shared types and utilities
-├── drizzle/             # Database migrations
-└── docs/                # Additional documentation
-```
-
----
-
-## 🔐 Environment Variables
-
-Required environment variables (see `.env.example`):
-
-```bash
-# Database
-DATABASE_URL=postgresql://...
-
-# Authentication
-JWT_SECRET=your-secret-key
-OAUTH_SERVER_URL=https://oauth.manus.im
-
-# Integrations (optional)
-OPENAI_API_KEY=sk-...
-GITHUB_TOKEN=ghp_...
-SLACK_BOT_TOKEN=xoxb-...
-```
-
----
-
-## 📚 Documentation
-
-- **[ARCHITECTURE.md](./ARCHITECTURE.md)** - System architecture and design patterns
-- **[API_DOCUMENTATION.md](./API_DOCUMENTATION.md)** - API endpoints and usage
-- **[SETUP.md](./SETUP.md)** - Detailed setup instructions
-- **[MIGRATION_INSTRUCTIONS.md](./MIGRATION_INSTRUCTIONS.md)** - Database migration guide
-- **[SECURITY_CONFIGURATION.md](./SECURITY_CONFIGURATION.md)** - Security setup and best practices
-- **[CHANGELOG.md](./CHANGELOG.md)** - Version history and changes
-
----
-
-## 🧪 Development
-
-### Code Quality
-
-```bash
-# Lint code
-pnpm lint
-
-# Format code
-pnpm format
-
-# Type check
-pnpm type-check
-```
-
-### Database Management
-
-```bash
-# Generate migration
-pnpm db:generate
-
-# Push schema changes
-pnpm db:push
-
-# Open database studio
-pnpm db:studio
-```
-
----
-
-## 🚢 Deployment
-
-### Production Build
-
-```bash
-# Build for production
-pnpm build
-
-# Start production server
-pnpm start
-```
-
-### Render Deployment
-
-- Automatic deployment on push to `main` branch
-- Build command: `pnpm build`
-- Start command: `pnpm start`
-- Environment variables configured in Render dashboard
-
----
-
-## 📄 License
-
-Proprietary - All rights reserved
-
----
-
-## 🆘 Support
-
-For issues, questions, or support:
-
-- Create an issue in the GitHub repository
-- Contact: jonathanrickarduae@gmail.com
-
----
-
-**Version:** 2.0.0  
-**Last Updated:** February 25, 2026  
-**Status:** Production Ready ✅
+The `main` branch is automatically deployed to production on Render. The `develop` branch is deployed to a staging environment. All deployments are configured in `render.yaml`.
