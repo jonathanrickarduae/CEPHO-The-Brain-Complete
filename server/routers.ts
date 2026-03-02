@@ -46,6 +46,10 @@ import { voiceCommandRouter } from "./routers/voiceCommand.router";
 import { cephoScoreRouter } from "./routers/cephoScore.router";
 import { autonomousExecutionRouter } from "./routers/autonomousExecution.router";
 import { documentTemplatingRouter } from "./routers/documentTemplating.router";
+import { gdprRouter } from "./routers/gdpr.router";
+import { agentRatingsRouter } from "./routers/agentRatings.router";
+import { apiKeysRouter } from "./routers/apiKeys.router";
+import { auditLogRouter } from "./routers/auditLog.router";
 import {
   businessPlanReviewRouter as businessPlanReviewRealRouter,
   collaborativeReviewRouter as collaborativeReviewRealRouter,
@@ -192,6 +196,15 @@ export const appRouter = router({
 
   // ─── Document Templating Engine ──────────────────────────────────────────────
   documentTemplating: documentTemplatingRouter,
+
+  // ─── GDPR Compliance ─────────────────────────────────────────────────────────
+  gdpr: gdprRouter,
+  // ─── Agent Ratings ───────────────────────────────────────────────────────────
+  agentRatings: agentRatingsRouter,
+  // ─── Public API Keys ─────────────────────────────────────────────────────────
+  apiKeys: apiKeysRouter,
+  // ─── Audit Log ───────────────────────────────────────────────────────────────
+  auditLog: auditLogRouter,
 });
 
 export type AppRouter = typeof appRouter;

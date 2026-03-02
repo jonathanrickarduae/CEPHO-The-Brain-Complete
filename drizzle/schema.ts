@@ -4599,3 +4599,52 @@ export const aiSmeConsultations = pgTable("ai_sme_consultations", {
 });
 export type AiSmeConsultation = typeof aiSmeConsultations.$inferSelect;
 export type InsertAiSmeConsultation = typeof aiSmeConsultations.$inferInsert;
+
+// ─── Phase 6: Agent Ratings ──────────────────────────────────────────────────
+export const agentRatings = pgTable("agent_ratings", {
+  id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
+  userId: integer("userId").notNull(),
+  agentId: varchar("agentId", { length: 100 }).notNull(),
+  agentName: varchar("agentName", { length: 200 }).notNull(),
+  sessionId: varchar("sessionId", { length: 100 }),
+  rating: integer("rating").notNull(),
+  feedback: text("feedback"),
+  taskType: varchar("taskType", { length: 100 }),
+  wasHelpful: boolean("wasHelpful"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+export type AgentRating = typeof agentRatings.$inferSelect;
+export type InsertAgentRating = typeof agentRatings.$inferInsert;
+
+// ─── Phase 6: Public API Keys ────────────────────────────────────────────────
+export const apiKeys = pgTable("api_keys", {
+  id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
+  userId: integer("userId").notNull(),
+  name: varchar("name", { length: 200 }).notNull(),
+  keyHash: varchar("keyHash", { length: 255 }).notNull(),
+  keyPrefix: varchar("keyPrefix", { length: 20 }).notNull(),
+  scopes: json("scopes").$type<string[]>().default([]),
+  lastUsedAt: timestamp("lastUsedAt"),
+  expiresAt: timestamp("expiresAt"),
+  isActive: boolean("isActive").default(true).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  revokedAt: timestamp("revokedAt"),
+});
+export type ApiKey = typeof apiKeys.$inferSelect;
+export type InsertApiKey = typeof apiKeys.$inferInsert;
+
+// ─── Phase 5: Audit Log ──────────────────────────────────────────────────────
+export const auditLogs = pgTable("audit_logs", {
+  id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
+  userId: integer("userId"),
+  action: varchar("action", { length: 100 }).notNull(),
+  resourceType: varchar("resourceType", { length: 50 }),
+  resourceId: varchar("resourceId", { length: 100 }),
+  ipAddress: varchar("ipAddress", { length: 45 }),
+  userAgent: text("userAgent"),
+  metadata: json("metadata"),
+  severity: text("severity").default("info").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+export type AuditLog = typeof auditLogs.$inferSelect;
+export type InsertAuditLog = typeof auditLogs.$inferInsert;
