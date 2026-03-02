@@ -97,12 +97,12 @@ export async function notifyOwner(
     });
 
     if (!response.ok) {
-      const detail = await response.text().catch(() => "");
+      await response.text().catch(() => "");
       return false;
     }
 
     return true;
-  } catch (error) {
+  } catch {
     return false;
   }
 }

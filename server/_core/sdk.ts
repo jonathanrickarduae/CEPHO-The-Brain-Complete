@@ -129,12 +129,13 @@ class SDKServer {
     const data = await this.oauthService.getUserInfoByToken({
       accessToken,
     } as ExchangeTokenResponse);
+    const rawData = data as unknown as Record<string, unknown>;
     const loginMethod = this.deriveLoginMethod(
-      (data as any)?.platforms,
-      (data as any)?.platform ?? data.platform ?? null
+      rawData?.platforms as string[] | undefined,
+      (rawData?.platform as string) ?? null
     );
     return {
-      ...(data as any),
+      ...rawData,
       platform: loginMethod,
       loginMethod,
     } as GetUserInfoResponse;
@@ -159,9 +160,9 @@ class SDKServer {
         const crypto = require("crypto");
         SDKServer._generatedSecret = crypto.randomBytes(32).toString("hex");
       }
-      secret = SDKServer._generatedSecret!;
+      secret = SDKServer._generatedSecret ?? "";
     }
-    return new TextEncoder().encode(secret!);
+    return new TextEncoder().encode(secret);
   }
 
   /**
@@ -227,7 +228,7 @@ class SDKServer {
         appId: String(appId || ""),
         name: name ?? undefined,
       };
-    } catch (error) {
+    } catch {
       return null;
     }
   }
@@ -245,12 +246,13 @@ class SDKServer {
       payload
     );
 
+    const rawData2 = data as unknown as Record<string, unknown>;
     const loginMethod = this.deriveLoginMethod(
-      (data as any)?.platforms,
-      (data as any)?.platform ?? data.platform ?? null
+      rawData2?.platforms as string[] | undefined,
+      (rawData2?.platform as string) ?? null
     );
     return {
-      ...(data as any),
+      ...rawData2,
       platform: loginMethod,
       loginMethod,
     } as GetUserInfoWithJwtResponse;
@@ -299,7 +301,7 @@ class SDKServer {
             lastSignedIn: signedInAt,
           });
           user = await db.getUserByOpenId(userInfo.openId);
-        } catch (error) {
+        } catch {
           throw ForbiddenError("Failed to sync user info");
         }
       }

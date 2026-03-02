@@ -12,7 +12,8 @@ export enum LogLevel {
   ERROR = "ERROR",
 }
 
-// Accept any value as context - objects, strings, booleans, etc.
+// Accept any value as context — the logger handles serialisation internally
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type LogContext = any;
 
 class Logger {

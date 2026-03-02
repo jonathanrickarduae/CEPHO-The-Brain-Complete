@@ -1,5 +1,6 @@
 import type { Express } from "express";
 import express from "express";
+import { logger } from "./utils/logger";
 import { globalRateLimiter, authRateLimiter } from "./middleware/rate-limiter";
 import { configureSecurityHeaders } from "./middleware/security-headers";
 import { applySanitizationMiddleware } from "./middleware/input-sanitizer";
@@ -89,6 +90,25 @@ export async function setupMiddleware(app: Express) {
   }, metricsHandler);
   // 13. Health check routes
   app.use(healthRouter);
+
+  // 14. Client-side error logging endpoint
+  // Receives structured error logs from the frontend ErrorBoundary and logger
+  app.post("/api/client-log", (req, res) => {
+    const entry = req.body;
+    if (entry && entry.level === "ERROR") {
+      logger.error(
+        `[ClientLog] ${entry.message}`,
+        new Error(entry.error?.message ?? "Unknown client error"),
+        {
+          boundary: entry.context?.boundary,
+          componentStack: entry.context?.componentStack,
+          timestamp: entry.timestamp,
+          userAgent: req.headers["user-agent"],
+        }
+      );
+    }
+    res.status(204).end();
+  });
 }
 
 /**

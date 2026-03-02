@@ -29,7 +29,7 @@ export async function createContext(
       const existingUsers = await db
         .select()
         .from(users)
-        .where(eq(users.email, supabaseUser.email!));
+        .where(eq(users.email, supabaseUser.email ?? ""));
 
       if (existingUsers.length > 0) {
         user = existingUsers[0];
@@ -39,10 +39,10 @@ export async function createContext(
           .insert(users)
           .values({
             openId: supabaseUser.id,
-            email: supabaseUser.email!,
+            email: supabaseUser.email ?? "",
             name:
               supabaseUser.user_metadata?.name ||
-              supabaseUser.email!.split("@")[0],
+              (supabaseUser.email ?? "").split("@")[0],
             role: "user",
             themePreference: "dark",
           })
@@ -52,7 +52,7 @@ export async function createContext(
     }
     // No Supabase session — user is unauthenticated. ctx.user remains null.
     // protectedProcedure will throw UNAUTHORIZED for all protected routes.
-  } catch (error) {
+  } catch {
     // On any auth error, treat as unauthenticated.
     user = null;
   }

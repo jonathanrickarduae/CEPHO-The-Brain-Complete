@@ -30,9 +30,36 @@ export default tseslint.config(
       "@typescript-eslint/no-explicit-any": "warn",
       "@typescript-eslint/no-unused-vars": [
         "warn",
-        { argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
+        {
+          argsIgnorePattern: "^_",
+          varsIgnorePattern: "^_",
+          caughtErrorsIgnorePattern: "^_",
+        },
       ],
       "no-console": ["warn", { allow: ["warn", "error"] }],
+    },
+  },
+
+  // Global override: allow underscore-prefixed catch variables across all scoped files
+  {
+    files: [
+      "server/_core/**/*.ts",
+      "server/middleware/**/*.ts",
+      "server/routes/**/*.ts",
+      "server/utils/**/*.ts",
+    ],
+    rules: {
+      "@typescript-eslint/no-unused-vars": [
+        "warn",
+        {
+          args: "all",
+          argsIgnorePattern: "^_",
+          varsIgnorePattern: "^_",
+          caughtErrors: "all",
+          caughtErrorsIgnorePattern: "^_",
+          ignoreRestSiblings: true,
+        },
+      ],
     },
   },
 

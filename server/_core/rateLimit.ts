@@ -28,7 +28,8 @@ export function rateLimit(options: RateLimitOptions = {}) {
   if (!stores.has(storeName)) {
     stores.set(storeName, {});
   }
-  const store = stores.get(storeName)!;
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const store = stores.get(storeName)!; // Safe: we just set it above
 
   // Clean up old entries periodically
   setInterval(() => {

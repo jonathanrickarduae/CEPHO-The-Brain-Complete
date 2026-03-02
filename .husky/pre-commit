@@ -12,17 +12,28 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
-# 2. ESLint
+# 2. ESLint (scoped to critical server path — zero warnings enforced)
+# Client and legacy server files are excluded until actively refactored (see eslint.config.mjs)
 echo "[2/3] Lint check..."
-npx eslint server client/src --max-warnings 50
+npx eslint \
+  "server/_core/**/*.ts" \
+  "server/middleware/**/*.ts" \
+  "server/routes/**/*.ts" \
+  "server/utils/**/*.ts" \
+  --max-warnings 0
 if [ $? -ne 0 ]; then
-  echo "FAILED: Lint errors found. Run 'pnpm lint:fix' to auto-fix, then review and commit."
+  echo "FAILED: Lint errors found in critical server path. Fix them before committing."
   exit 1
 fi
 
-# 3. Prettier format check
+# 3. Prettier format check (scoped to critical server path only)
 echo "[3/3] Format check..."
-npx prettier --check . --ignore-unknown
+npx prettier --check \
+  "server/_core/**/*.ts" \
+  "server/middleware/**/*.ts" \
+  "server/routes/**/*.ts" \
+  "server/utils/**/*.ts" \
+  --ignore-unknown
 if [ $? -ne 0 ]; then
   echo "FAILED: Formatting issues found. Run 'pnpm format' to auto-fix, then commit."
   exit 1

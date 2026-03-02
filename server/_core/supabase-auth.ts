@@ -41,7 +41,11 @@ export async function verifySupabaseSession(req: Request) {
 
   try {
     // Verify JWT token using the JWT secret
-    const decoded = jwt.verify(token, supabaseJwtSecret) as any;
+    interface JwtPayload {
+      sub?: string;
+      [key: string]: unknown;
+    }
+    const decoded = jwt.verify(token, supabaseJwtSecret) as JwtPayload;
 
     if (!decoded || !decoded.sub) {
       return null;
@@ -74,4 +78,3 @@ export async function verifySupabaseSession(req: Request) {
 }
 
 export { supabase };
-

@@ -118,7 +118,7 @@ router.post("/login", async (req, res) => {
         name: adminUser.name,
       },
     });
-  } catch (error) {
+  } catch {
     return res.status(500).json({ error: "Internal server error" });
   }
 });

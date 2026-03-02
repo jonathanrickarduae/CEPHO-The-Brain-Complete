@@ -50,7 +50,7 @@ export function registerOAuthRoutes(app: Express) {
       });
 
       res.redirect(302, "/");
-    } catch (error) {
+    } catch {
       res.status(500).json({ error: "OAuth callback failed" });
     }
   });

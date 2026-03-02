@@ -42,7 +42,7 @@ function loadSpec() {
       },
       paths: {},
     };
-  } catch (err) {
+  } catch {
     return null;
   }
 }

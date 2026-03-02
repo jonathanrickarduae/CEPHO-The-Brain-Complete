@@ -221,14 +221,26 @@ export function sanitizeBoolean(input: unknown): boolean {
  * Sanitize object recursively
  * Applies appropriate sanitization to each field
  */
+type SanitizeFieldType =
+  | "text"
+  | "html"
+  | "email"
+  | "url"
+  | "number"
+  | "boolean";
+type SanitizableValue =
+  | string
+  | number
+  | boolean
+  | null
+  | undefined
+  | Record<string, unknown>;
+
 export function sanitizeObject(
-  obj: Record<string, any>,
-  schema?: Record<
-    string,
-    "text" | "html" | "email" | "url" | "number" | "boolean"
-  >
-): Record<string, any> {
-  const sanitized: Record<string, any> = {};
+  obj: Record<string, SanitizableValue>,
+  schema?: Record<string, SanitizeFieldType>
+): Record<string, SanitizableValue> {
+  const sanitized: Record<string, SanitizableValue> = {};
 
   for (const [key, value] of Object.entries(obj)) {
     if (value === null || value === undefined) {
@@ -262,7 +274,9 @@ export function sanitizeObject(
         if (typeof value === "string") {
           sanitized[key] = sanitizeText(value);
         } else if (typeof value === "object" && !Array.isArray(value)) {
-          sanitized[key] = sanitizeObject(value);
+          sanitized[key] = sanitizeObject(
+            value as Record<string, SanitizableValue>
+          );
         } else {
           sanitized[key] = value;
         }

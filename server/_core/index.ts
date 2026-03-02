@@ -180,7 +180,9 @@ process.on("unhandledRejection", (reason: unknown) => {
 });
 
 process.on("uncaughtException", (err: Error) => {
-  process.stderr.write(`[CEPHO.AI] Uncaught exception: ${err.message}\n${err.stack ?? ""}\n`);
+  process.stderr.write(
+    `[CEPHO.AI] Uncaught exception: ${err.message}\n${err.stack ?? ""}\n`
+  );
   // Exit on truly uncaught exceptions to avoid undefined state
   process.exit(1);
 });

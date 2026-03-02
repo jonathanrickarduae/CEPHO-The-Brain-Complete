@@ -155,10 +155,9 @@ export function handleTRPCError(error: unknown, context?: string): never {
 /**
  * Async error wrapper for services
  */
-export function asyncHandler<T extends (...args: Parameters<T>) => Promise<ReturnType<T>>>(
-  fn: T,
-  context?: string
-): T {
+export function asyncHandler<
+  T extends (...args: Parameters<T>) => Promise<ReturnType<T>>,
+>(fn: T, context?: string): T {
   return (async (...args: Parameters<T>) => {
     try {
       return await fn(...args);
