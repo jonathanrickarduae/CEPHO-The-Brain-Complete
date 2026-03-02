@@ -492,3 +492,48 @@ This appendix contains the content of the main project README file, providing a 
 - **Frontend:** React 18, Vite, TypeScript, Tailwind CSS, TanStack Query, React Router v6, tRPC.
 - **Backend:** Node.js 22, Express, tRPC, PostgreSQL (Supabase), Drizzle ORM, JWT/OAuth.
 - **Infrastructure:** Render (hosting), Supabase (database), GitHub + Render Auto-Deploy (CI/CD).
+
+
+---
+
+# Appendix M: Changelog
+
+This appendix provides a summary of the project's version history and notable changes.
+
+**[1.0.0] - 2026-02-22**
+- **Added:** Comprehensive documentation, Persephone Board feature.
+- **Fixed:** Critical build failures, database schema issues, and various syntax errors.
+- **Changed:** Persephone Board content updated to top 14 AI leaders.
+
+**[1.1.0] - 2026-03-02**
+- **Changed:** Wired several components to live data, including `chiefOfStaff.getContext`, `SubscriptionManager`, `Statistics.tsx`, `ChiefOfStaff.tsx`, and `EveningReview.tsx`.
+- **Fixed:** Merged duplicate imports and achieved zero TypeScript errors.
+
+**[1.2.0] — Session 5 — Raw-Fetch Elimination & tRPC Wiring**
+- **Server:** Added new tRPC procedures for workflows (`list`, `start`, `pause`, `resume`, `getStepGuidance`).
+- **Frontend:** Replaced raw `fetch` calls with tRPC hooks in `WorkflowsPage`, `WorkflowDetailPage`, `AgentDetailPage`, and `AIExperts`.
+
+**[1.3.0] — Session 6 — CRUD Completeness & Loading States**
+- **Server:** Added new tRPC endpoints for tasks and projects (`get`, `delete`).
+- **Frontend:** Implemented loading states and UX hardening for several components like `Statistics.tsx`, `EveningReview.tsx`, `AdminDashboard.tsx`, and `COSTraining.tsx`.
+
+
+---
+
+# Appendix N: Security Configuration
+
+This appendix details the comprehensive security measures implemented in the CEPHO.AI platform.
+
+**Security Headers:**
+- **Content Security Policy (CSP):** A strict nonce-based policy is used to prevent XSS attacks.
+- **Other Headers:** `X-Frame-Options`, `X-Content-Type-Options`, `Strict-Transport-Security`, and others are implemented to protect against clickjacking, MIME sniffing, and other vulnerabilities.
+
+**CORS Configuration:**
+- Allowed origins are restricted to production and development domains.
+
+**Rate Limiting:**
+- A rate limit of 100 requests per 15 minutes per IP is enforced.
+
+**Authentication Security:**
+- **Session Management:** Secure, HttpOnly, SameSite=Strict cookies are used.
+- **Password Security:** Passwords are hashed using bcrypt with a salt.
