@@ -25,7 +25,7 @@ router.get("/", async (_req, res) => {
       GROUP BY w.id
       ORDER BY w."updatedAt" DESC
     `);
-    res.json({ workflows: Array.from(workflows) });
+    res.json({ success: true, workflows: Array.from(workflows) });
   } catch (err) {
     console.error("GET /api/workflows error:", err);
     res.status(500).json({ error: "Failed to fetch workflows" });
@@ -55,7 +55,7 @@ router.get("/:id/steps", async (req, res) => {
     const result = await db.execute(sql`
       SELECT * FROM cepho_workflow_steps 
       WHERE "workflowId" = ${parseInt(id, 10)}
-      ORDER BY "stepNumber" ASC
+      ORDER BY "phase" ASC, "step" ASC
     `);
     res.json({ steps: Array.from(result) });
   } catch (err) {
@@ -114,9 +114,9 @@ router.post("/:id/start", async (req, res) => {
     `);
     // Mark first pending step as in_progress
     await db.execute(sql`
-      UPDATE cepho_workflow_steps SET status = 'in_progress', "updatedAt" = now()
+      UPDATE cepho_workflow_steps SET status = 'in_progress'
       WHERE "workflowId" = ${parseInt(id, 10)} AND status = 'pending'
-      AND "stepNumber" = (SELECT MIN("stepNumber") FROM cepho_workflow_steps WHERE "workflowId" = ${parseInt(id, 10)} AND status = 'pending')
+      AND "step" = (SELECT MIN("step") FROM cepho_workflow_steps WHERE "workflowId" = ${parseInt(id, 10)} AND status = 'pending')
     `);
     res.json({ success: true, message: "Workflow started" });
   } catch (err) {
