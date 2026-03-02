@@ -31,7 +31,8 @@ import { appRouter } from "../routers"; // FULL ROUTER - all functionality resto
 import { createContext } from "./context";
 import { serveStatic, setupVite } from "./vite";
 import { apiRateLimit } from "./rateLimit";
-import { runMigrations } from "../migrations/run-migrations";
+// Migrations are run at deploy time via `pnpm run db:migrate` in render.yaml buildCommand.
+// Do NOT run ad-hoc SQL migrations at server startup — drizzle is the single source of truth.
 import {
   metricsHandler,
   metricsMiddleware,
@@ -60,9 +61,6 @@ async function findAvailablePort(startPort: number = 3000): Promise<number> {
 }
 
 async function startServer() {
-  // Run database migrations first
-  await runMigrations();
-
   log.info("[Server] Starting Priority 1 middleware initialization...");
 
   // Register all services with DI container

@@ -6,7 +6,8 @@ services:
     name: cepho-the-brain-production
     runtime: node
     branch: main
-    buildCommand: pnpm install && pnpm run build
+    # db:migrate runs drizzle migrations before the app starts — single source of truth
+    buildCommand: pnpm install && pnpm run build && pnpm run db:migrate
     startCommand: NODE_ENV=production node dist/index.js
     healthCheckPath: /health
     envVars:
@@ -24,7 +25,8 @@ services:
     name: cepho-the-brain-staging
     runtime: node
     branch: develop
-    buildCommand: pnpm install && pnpm run build
+    # db:migrate runs drizzle migrations before the app starts — single source of truth
+    buildCommand: pnpm install && pnpm run build && pnpm run db:migrate
     startCommand: NODE_ENV=staging node dist/index.js
     healthCheckPath: /health
     envVars:
