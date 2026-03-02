@@ -44,4 +44,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Duplicate `count` import in `chiefOfStaff.router.ts` merged into single `drizzle-orm` import.
 - TypeScript: 0 errors across full codebase.
 
+## [1.2.0] — Session 5 — Raw-Fetch Elimination & tRPC Wiring
+
+### Server — New tRPC Procedures
+
+- `workflows.list` — query returning all user workflows with phase progress.
+- `workflows.start` / `workflows.pause` / `workflows.resume` — mutations to update workflow status in `projectGenesis`.
+- `workflows.getStepGuidance` — AI-powered per-step guidance using `gpt-4.1-mini` (JSON mode).
+
+### Frontend — Raw `fetch()` → tRPC
+
+- **`WorkflowsPage`** — replaced `fetch('/api/workflows')` with `trpc.workflows.list`.
+- **`WorkflowDetailPage`** — all five raw `fetch` calls replaced with `workflows.get`, `workflows.start/pause/resume`, and `workflows.getStepGuidance`.
+- **`AgentDetailPage`** — all six raw `fetch` calls replaced with `aiAgentsMonitoring.getAllStatus`, `getDailyReports`, and `reviewRequest`.
+- **`AIExperts`** — `MOCK_PENDING_TASKS` replaced by `trpc.cosTasks.getTasks({ status: 'pending' })` on load; mock data retained as empty-state fallback.
+
+### Quality
+
+- Only two legitimate `fetch()` calls remain: `Login.tsx` (auth) and `main.tsx` (CSRF bootstrap).
+- TypeScript: 0 errors.
+
 '''
