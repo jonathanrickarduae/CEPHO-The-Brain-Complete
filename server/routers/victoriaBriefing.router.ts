@@ -10,6 +10,7 @@ import OpenAI from "openai";
 import { protectedProcedure, router } from "../_core/trpc";
 import { db } from "../db";
 import { tasks, projects } from "../../drizzle/schema";
+import { synthesiaService } from "../services/synthesia.service";
 
 function getOpenAIClient(): OpenAI {
   const apiKey = process.env.OPENAI_API_KEY;
@@ -179,22 +180,62 @@ export const victoriasBriefRouter = router({
 
   generateVideo: protectedProcedure
     .input(z.object({ script: z.string().optional(), avatarId: z.string().optional(), content: z.string().optional() }))
-    .mutation(async () => {
-      const syntesiaKey = process.env.SYNTHESIA_API_KEY;
-      if (!syntesiaKey) {
+    .mutation(async ({ input }) => {
+      if (!synthesiaService.isConfigured()) {
         return {
           success: false,
-          message: "Video generation not configured",
+          message: "Video generation not configured — SYNTHESIA_API_KEY is missing",
           videoUrl: null as string | null,
+          videoId: null as string | null,
           status: "error" as string,
         };
       }
-      return {
-        success: true,
-        message: "Video generation initiated via Synthesia",
-        videoUrl: null as string | null,
-        status: "processing" as string,
-      };
+      try {
+        const script = input.script ?? input.content ?? "Good morning. Your CEPHO briefing is ready.";
+        const video = await synthesiaService.createVideo({
+          title: `CEPHO Briefing — ${new Date().toLocaleDateString()}`,
+          test: true, // Use test mode to avoid billing during development
+          input: [{
+            avatarId: input.avatarId ?? "anna_costume1_cameraA",
+            script: script.slice(0, 1500), // Synthesia limit
+            backgroundColor: "#0f172a",
+          }],
+        });
+        return {
+          success: true,
+          message: "Video generation started. Check status with getVideoStatus.",
+          videoUrl: video.downloadUrl,
+          videoId: video.id,
+          status: video.status as string,
+        };
+      } catch (err) {
+        return {
+          success: false,
+          message: err instanceof Error ? err.message : "Video generation failed",
+          videoUrl: null as string | null,
+          videoId: null as string | null,
+          status: "error" as string,
+        };
+      }
+    }),
+
+  getVideoStatus: protectedProcedure
+    .input(z.object({ videoId: z.string() }))
+    .query(async ({ input }) => {
+      if (!synthesiaService.isConfigured()) {
+        return { status: "error", downloadUrl: null, thumbnailUrl: null, duration: null };
+      }
+      try {
+        const video = await synthesiaService.getVideo(input.videoId);
+        return {
+          status: video.status,
+          downloadUrl: video.downloadUrl,
+          thumbnailUrl: video.thumbnailUrl,
+          duration: video.duration,
+        };
+      } catch {
+        return { status: "error", downloadUrl: null, thumbnailUrl: null, duration: null };
+      }
     }),
 
   generateAudio: protectedProcedure
