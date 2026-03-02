@@ -78,7 +78,6 @@ export default function AIAgentsVideo() {
           >
             <div className="aspect-video bg-background relative group">
               <img
-                alt="AI agents demonstration video thumbnail"
                 src={asset.image}
                 alt={asset.title}
                 className="w-full h-full object-cover"

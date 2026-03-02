@@ -64,7 +64,6 @@ export function FavoriteContacts({
             <div className="relative w-12 h-12 rounded-full bg-gradient-to-br from-primary to-primary/50 flex items-center justify-center overflow-hidden">
               {contact.contactAvatar ? (
                 <img
-                  alt="Contact avatar"
                   src={contact.contactAvatar}
                   alt={contact.contactName}
                   className="w-full h-full object-cover"
@@ -130,7 +129,6 @@ export function FavoriteContactsDropdown({
               <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-primary/50 flex items-center justify-center flex-shrink-0">
                 {contact.contactAvatar ? (
                   <img
-                    alt="Contact profile picture"
                     src={contact.contactAvatar}
                     alt={contact.contactName}
                     className="w-full h-full object-cover rounded-full"

@@ -1,6 +1,4 @@
-import { supabase } from "@/lib/supabase";
 import { User, Session } from "@supabase/supabase-js";
-import { useEffect, useState } from "react";
 
 export function useSupabaseAuth() {
   // BYPASS AUTH FOR DEVELOPMENT - Always return authenticated user

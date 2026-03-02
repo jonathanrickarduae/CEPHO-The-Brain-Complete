@@ -173,7 +173,7 @@ export function assemblePanelForTopic(
   } = options;
 
   // Get all experts eligible for this panel type
-  let eligibleExperts = getExpertsByPanelType(panelType).filter(
+  const eligibleExperts = getExpertsByPanelType(panelType).filter(
     e => !excludeExperts.includes(e.id)
   );
 

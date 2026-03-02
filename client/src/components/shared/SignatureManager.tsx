@@ -460,7 +460,6 @@ export function SignatureManager({
                     <div className="w-24 h-12 bg-background rounded-lg flex items-center justify-center p-2">
                       {sig.dataUrl ? (
                         <img
-                          alt="Signature preview"
                           src={sig.dataUrl}
                           alt={sig.name}
                           className="max-w-full max-h-full object-contain"

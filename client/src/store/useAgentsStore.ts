@@ -220,7 +220,7 @@ export const useAgentsStore = create<AgentsStoreState>((set, get) => ({
   getFilteredAgents: () => {
     const { agents, filters, sortBy } = get();
 
-    let filtered = agents.filter(agent => {
+    const filtered = agents.filter(agent => {
       if (filters.type !== "all" && agent.type !== filters.type) return false;
       if (filters.status !== "all" && agent.status !== filters.status)
         return false;

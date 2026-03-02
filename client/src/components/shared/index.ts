@@ -1,11 +1,9 @@
 // @ts-nocheck
-export { ActivityLog, ActivityIndicator } from "./ActivityLog";
+export { ActivityLog } from "./ActivityLog";
 export {
-  Confetti,
   SuccessCheck,
   PulseRing,
   ThinkingDots,
-  Sparkle,
 } from "./Animations";
 export { default as BioTemplates } from "./BioTemplates";
 export {
@@ -32,8 +30,7 @@ export { default as CustomerFocusGroup } from "./CustomerFocusGroup";
 export { default as CustomerValidationScheduler } from "./CustomerValidationScheduler";
 export { DigitalTwinAccelerator } from "./DigitalTwinAccelerator";
 export { DigitalTwinSandbox } from "./DigitalTwinSandbox";
-export { default as DueDiligenceChecklist } from "./DueDiligenceChecklist";
-export { EmptyState, InlineEmptyState, SuccessState } from "./EmptyState";
+export { InlineEmptyState, SuccessState } from "./EmptyState";
 export { default as EndOfDayWashUp } from "./EndOfDayWashUp";
 export {
   EmptyState,
@@ -65,11 +62,8 @@ export {
 } from "./IntelligentNudges";
 export { LoadingButton, LoadingIconButton, AsyncButton } from "./LoadingButton";
 export {
-  Skeleton,
   TextSkeleton,
-  CardSkeleton,
   ListSkeleton,
-  DashboardSkeleton,
 } from "./LoadingSkeleton";
 export { default as ManusCollaboration } from "./ManusCollaboration";
 export { ManusDialog } from "./ManusDialog";

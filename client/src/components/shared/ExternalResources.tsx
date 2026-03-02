@@ -143,7 +143,6 @@ export function ExternalResources({ onBack }: ExternalResourcesProps) {
               <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-emerald-500/20 to-teal-500/20 border border-emerald-500/30 flex items-center justify-center overflow-hidden">
                 {selectedResource.logoUrl ? (
                   <img
-                    alt="External resource thumbnail"
                     src={selectedResource.logoUrl}
                     alt={selectedResource.name}
                     className="w-16 h-16 object-contain"
@@ -399,7 +398,6 @@ export function ExternalResources({ onBack }: ExternalResourcesProps) {
                           <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-green-500/20 to-emerald-500/20 border border-green-500/30 flex items-center justify-center overflow-hidden">
                             {resource.logoUrl ? (
                               <img
-                                alt="Resource preview image"
                                 src={resource.logoUrl}
                                 alt={resource.name}
                                 className="w-8 h-8 object-contain"
@@ -456,7 +454,6 @@ export function ExternalResources({ onBack }: ExternalResourcesProps) {
                       <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-emerald-500/20 to-teal-500/20 border border-emerald-500/30 flex items-center justify-center overflow-hidden flex-shrink-0">
                         {resource.logoUrl ? (
                           <img
-                            alt="Resource icon"
                             src={resource.logoUrl}
                             alt={resource.name}
                             className="w-10 h-10 object-contain"
