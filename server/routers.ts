@@ -50,6 +50,7 @@ import { gdprRouter } from "./routers/gdpr.router";
 import { agentRatingsRouter } from "./routers/agentRatings.router";
 import { apiKeysRouter } from "./routers/apiKeys.router";
 import { auditLogRouter } from "./routers/auditLog.router";
+import { adminRouter } from "./routers/admin.router";
 import {
   businessPlanReviewRouter as businessPlanReviewRealRouter,
   collaborativeReviewRouter as collaborativeReviewRealRouter,
@@ -203,8 +204,10 @@ export const appRouter = router({
   agentRatings: agentRatingsRouter,
   // ─── Public API Keys ─────────────────────────────────────────────────────────
   apiKeys: apiKeysRouter,
-  // ─── Audit Log ───────────────────────────────────────────────────────────────
+  //  // ─── Audit Log ───────────────────────────────────────────────────────────
   auditLog: auditLogRouter,
+  // ─── Admin & Governance ──────────────────────────────────────────────────────
+  admin: adminRouter,
 });
 
 export type AppRouter = typeof appRouter;
