@@ -1,7 +1,11 @@
 services:
+  # ─────────────────────────────────────────────
+  # Production Service (deploys from main branch)
+  # ─────────────────────────────────────────────
   - type: web
-    name: cepho-the-brain-fresh
+    name: cepho-the-brain-production
     runtime: node
+    branch: main
     buildCommand: pnpm install && pnpm run build
     startCommand: NODE_ENV=production node dist/index.js
     healthCheckPath: /health
@@ -10,3 +14,23 @@ services:
         value: production
       - key: NODE_VERSION
         value: "22.13.0"
+    # All other secrets (DATABASE_URL, JWT_SECRET, API keys, etc.)
+    # are managed via Render's Environment Groups in the dashboard.
+
+  # ─────────────────────────────────────────────
+  # Staging Service (deploys from develop branch)
+  # ─────────────────────────────────────────────
+  - type: web
+    name: cepho-the-brain-staging
+    runtime: node
+    branch: develop
+    buildCommand: pnpm install && pnpm run build
+    startCommand: NODE_ENV=staging node dist/index.js
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: staging
+      - key: NODE_VERSION
+        value: "22.13.0"
+    # Staging environment variables are managed via a separate
+    # Render Environment Group: "cepho-staging"
