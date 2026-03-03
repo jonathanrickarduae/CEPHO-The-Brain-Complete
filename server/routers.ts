@@ -58,6 +58,7 @@ import { auditLogRouter } from "./routers/auditLog.router";
 import { adminRouter } from "./routers/admin.router";
 import { nlCommandRouter } from "./routers/nlCommand.router";
 import { kpiOkrRouter } from "./routers/kpiOkr.router";
+import { dataIngestionRouter } from "./routers/dataIngestion.router";
 import {
   businessPlanReviewRouter as businessPlanReviewRealRouter,
   collaborativeReviewRouter as collaborativeReviewRealRouter,
@@ -222,6 +223,8 @@ export const appRouter = router({
   nlCommand: nlCommandRouter,
   // ─── KPI & OKR Tracking (AUTO-05) ────────────────────────────────────────────
   kpiOkr: kpiOkrRouter,
+  // ─── Data Ingestion Pipeline (P2-9/10/11) ───────────────────────────────────
+  dataIngestion: dataIngestionRouter,
 });
 
 export type AppRouter = typeof appRouter;

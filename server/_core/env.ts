@@ -42,8 +42,19 @@ export const ENV = {
   notionApiKey: process.env.NOTION_API_KEY ?? "",
   trelloApiKey: process.env.TRELLO_API_KEY ?? "",
   trelloApiSecret: process.env.TRELLO_API_SECRET ?? "",
+  trelloToken: process.env.TRELLO_TOKEN ?? "",
   githubToken: process.env.GITHUB_TOKEN ?? process.env.GITHUB_API_KEY ?? "",
   githubEmail: process.env.GITHUB_EMAIL ?? "",
+
+  // ── Slack ─────────────────────────────────────────────────────────────────
+  slackBotToken: process.env.SLACK_BOT_TOKEN ?? "",
+  slackWebhookUrl: process.env.SLACK_WEBHOOK_URL ?? "",
+  slackSigningSecret: process.env.SLACK_SIGNING_SECRET ?? "",
+
+  // ── Webhook Secrets ───────────────────────────────────────────────────────
+  githubWebhookSecret: process.env.GITHUB_WEBHOOK_SECRET ?? "",
+  trelloWebhookSecret: process.env.TRELLO_WEBHOOK_SECRET ?? "",
+  googleCalendarWebhookSecret: process.env.GOOGLE_CALENDAR_WEBHOOK_SECRET ?? "",
 
   // ── Calendar / Scheduling ─────────────────────────────────────────────────
   calendlyApiKey: process.env.CALENDLY_API_KEY ?? "",

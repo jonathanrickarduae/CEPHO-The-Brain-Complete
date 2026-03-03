@@ -47,6 +47,8 @@ import {
   Shield,
   Activity,
   Target,
+  Database,
+  Zap,
 } from "lucide-react";
 import { CSSProperties, useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
@@ -124,7 +126,9 @@ const menuItems: MenuItem[] = [
       { icon: Users, label: "AI-SMEs", path: "/ai-experts" },
       { icon: TrendingUp, label: "Analytics", path: "/analytics" },
       { icon: Target, label: "KPIs & OKRs", path: "/kpis" },
+      { icon: Database, label: "Knowledge Base", path: "/knowledge-base" },
       { icon: Library, label: "Document Library", path: "/documents" },
+      { icon: Zap, label: "Integration Hub", path: "/integrations" },
     ],
   },
   {

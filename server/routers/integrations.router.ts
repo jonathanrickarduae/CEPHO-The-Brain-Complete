@@ -4,6 +4,7 @@ import { getModelForTask } from "../utils/modelRouter";
  *
  * Real implementations for all remaining high-value stubs.
  */
+import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { desc, eq, and, inArray } from "drizzle-orm";
 import { protectedProcedure, publicProcedure, router } from "../_core/trpc";
@@ -306,6 +307,225 @@ export const integrationsRouter = router({
 
     return { initialized: autoConnect, count: autoConnect.length };
   }),
+
+  // ── GET WEBHOOK STATUS ────────────────────────────────────────────────────
+  getWebhookStatus: protectedProcedure
+    .input(z.object({ provider: z.string() }))
+    .query(async ({ input, ctx }) => {
+      const rows = await db
+        .select()
+        .from(integrations)
+        .where(
+          and(
+            eq(integrations.userId, ctx.user.id),
+            eq(integrations.provider, input.provider)
+          )
+        )
+        .limit(1);
+
+      if (!rows[0]) return { active: false, webhookUrl: null, lastEvent: null, eventsReceived: 0 };
+      const meta = (rows[0].metadata as Record<string, unknown>) ?? {};
+      return {
+        active: rows[0].status === "active",
+        webhookUrl: (meta.webhookUrl as string) ?? null,
+        lastEvent: (meta.lastWebhookEvent as string) ?? null,
+        eventsReceived: (meta.webhookEventCount as number) ?? 0,
+      };
+    }),
+
+  // ── TEST CONNECTION ───────────────────────────────────────────────────────
+  testConnection: protectedProcedure
+    .input(z.object({ provider: z.string() }))
+    .mutation(async ({ input, ctx }) => {
+      const rows = await db
+        .select()
+        .from(integrations)
+        .where(
+          and(
+            eq(integrations.userId, ctx.user.id),
+            eq(integrations.provider, input.provider)
+          )
+        )
+        .limit(1);
+
+      if (!rows[0] || rows[0].status !== "active") {
+        return { success: false, message: "Integration not connected" };
+      }
+
+      try {
+        const { ENV: env } = await import("../_core/env");
+        let ok = false;
+        switch (input.provider) {
+          case "notion": {
+            if (!env.notionApiKey) break;
+            const r = await fetch("https://api.notion.com/v1/users/me", {
+              headers: { Authorization: `Bearer ${env.notionApiKey}`, "Notion-Version": "2022-06-28" },
+            });
+            ok = r.ok;
+            break;
+          }
+          case "trello": {
+            if (!env.trelloApiKey || !env.trelloToken) break;
+            const r = await fetch(
+              `https://api.trello.com/1/members/me?key=${env.trelloApiKey}&token=${env.trelloToken}`
+            );
+            ok = r.ok;
+            break;
+          }
+          case "github": {
+            if (!env.githubToken) break;
+            const r = await fetch("https://api.github.com/user", {
+              headers: { Authorization: `Bearer ${env.githubToken}` },
+            });
+            ok = r.ok;
+            break;
+          }
+          case "slack": {
+            if (!env.slackBotToken) break;
+            const r = await fetch("https://slack.com/api/auth.test", {
+              headers: { Authorization: `Bearer ${env.slackBotToken}` },
+            });
+            const data = (await r.json()) as { ok: boolean };
+            ok = data.ok;
+            break;
+          }
+          default:
+            ok = rows[0].status === "active";
+        }
+        await db
+          .update(integrations)
+          .set({ syncError: ok ? null : "Connection test failed", updatedAt: new Date() })
+          .where(eq(integrations.id, rows[0].id));
+        return { success: ok, message: ok ? "Connection successful" : "Connection test failed" };
+      } catch (err) {
+        return { success: false, message: String(err) };
+      }
+    }),
+
+  // ── EXPORT TO NOTION ──────────────────────────────────────────────────────
+  exportToNotion: protectedProcedure
+    .input(
+      z.object({
+        title: z.string(),
+        content: z.string(),
+        parentPageId: z.string().optional(),
+        type: z.enum(["task", "note", "briefing", "report"]).default("note"),
+      })
+    )
+    .mutation(async ({ input }) => {
+      const { ENV: env } = await import("../_core/env");
+      if (!env.notionApiKey) {
+        throw new TRPCError({ code: "PRECONDITION_FAILED", message: "Notion API key not configured" });
+      }
+
+      const body: Record<string, unknown> = {
+        parent: input.parentPageId
+          ? { page_id: input.parentPageId }
+          : { type: "workspace", workspace: true },
+        properties: {
+          title: { title: [{ text: { content: input.title } }] },
+        },
+        children: [
+          {
+            object: "block",
+            type: "paragraph",
+            paragraph: {
+              rich_text: [{ type: "text", text: { content: input.content.substring(0, 2000) } }],
+            },
+          },
+        ],
+      };
+
+      const r = await fetch("https://api.notion.com/v1/pages", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${env.notionApiKey}`,
+          "Content-Type": "application/json",
+          "Notion-Version": "2022-06-28",
+        },
+        body: JSON.stringify(body),
+      });
+
+      if (!r.ok) {
+        const errText = await r.text();
+        throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: `Notion error: ${errText}` });
+      }
+
+      const data = (await r.json()) as { id: string; url: string };
+      return { success: true, pageId: data.id, url: data.url };
+    }),
+
+  // ── SYNC TO TRELLO ────────────────────────────────────────────────────────
+  syncToTrello: protectedProcedure
+    .input(
+      z.object({
+        name: z.string(),
+        description: z.string().optional(),
+        listId: z.string(),
+        dueDate: z.string().optional(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      const { ENV: env } = await import("../_core/env");
+      if (!env.trelloApiKey || !env.trelloToken) {
+        throw new TRPCError({ code: "PRECONDITION_FAILED", message: "Trello API key/token not configured" });
+      }
+
+      const params = new URLSearchParams({
+        key: env.trelloApiKey,
+        token: env.trelloToken,
+        name: input.name,
+        idList: input.listId,
+        ...(input.description ? { desc: input.description } : {}),
+        ...(input.dueDate ? { due: input.dueDate } : {}),
+      });
+
+      const r = await fetch(`https://api.trello.com/1/cards?${params.toString()}`, { method: "POST" });
+
+      if (!r.ok) {
+        const errText = await r.text();
+        throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: `Trello error: ${errText}` });
+      }
+
+      const card = (await r.json()) as { id: string; shortUrl: string };
+      return { success: true, cardId: card.id, url: card.shortUrl };
+    }),
+
+  // ── SEND SLACK MESSAGE ────────────────────────────────────────────────────
+  sendSlackMessage: protectedProcedure
+    .input(
+      z.object({
+        channel: z.string(),
+        text: z.string(),
+        blocks: z.array(z.unknown()).optional(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      const { ENV: env } = await import("../_core/env");
+      if (!env.slackBotToken) {
+        throw new TRPCError({ code: "PRECONDITION_FAILED", message: "Slack bot token not configured" });
+      }
+
+      const r = await fetch("https://slack.com/api/chat.postMessage", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${env.slackBotToken}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          channel: input.channel,
+          text: input.text,
+          ...(input.blocks ? { blocks: input.blocks } : {}),
+        }),
+      });
+
+      const data = (await r.json()) as { ok: boolean; ts?: string; error?: string };
+      if (!data.ok) {
+        throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: `Slack error: ${data.error}` });
+      }
+
+      return { success: true, messageTs: data.ts };
+    }),
 });
 
 // ─── Calendar Router ──────────────────────────────────────────────────────────

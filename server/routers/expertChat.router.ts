@@ -1,4 +1,6 @@
 import { getModelForTask } from "../utils/modelRouter";
+import { generateExpertPrompt } from "../services/expertPrompts";
+import { assembleDTPersonalityInjection } from "../services/dynamicPromptAssembler";
 /**
  * Expert Chat Router
  *
@@ -1001,11 +1003,21 @@ const GENERIC_EXPERT_PROMPTS: Record<string, string> = {
   retrospective_facilitator: `You are a Retrospective Facilitator who helps teams learn from experience. You design and run retrospectives that surface honest insights, identify root causes, and generate actionable improvements. You create psychological safety and ensure retrospectives lead to real change.`,
 };
 
-// Combined lookup: board members take priority over generic prompts
-function getSystemPrompt(expertId: string): string {
+// Combined lookup: board members → individual overrides → category-based → generic fallback
+function getSystemPrompt(
+  expertId: string,
+  expertName?: string,
+  specialty?: string
+): string {
+  // 1. Persephone Board personas (highest priority)
   const boardMember = PERSEPHONE_BOARD_PERSONAS[expertId];
   if (boardMember) return boardMember.systemPrompt;
-  return GENERIC_EXPERT_PROMPTS[expertId] ?? GENERIC_EXPERT_PROMPTS.default;
+
+  // 2. Legacy descriptive-key prompts (e.g. strategy_advisor, legal_counsel)
+  if (GENERIC_EXPERT_PROMPTS[expertId]) return GENERIC_EXPERT_PROMPTS[expertId];
+
+  // 3. Category-based prompt for all 320 numbered agents (inv-001, ent-025, etc.)
+  return generateExpertPrompt(expertId, expertName, specialty);
 }
 
 function getBoardMemberGreeting(expertId: string, expertName?: string): string {
@@ -1065,6 +1077,8 @@ export const expertChatRouter = router({
       z.object({
         sessionId: z.number(),
         expertId: z.string(),
+        expertName: z.string().optional(),
+        specialty: z.string().optional(),
         message: z.string().min(1).max(4000),
         conversationHistory: z
           .array(
@@ -1079,7 +1093,11 @@ export const expertChatRouter = router({
     )
     .mutation(async ({ input, ctx }) => {
       const openai = getOpenAIClient();
-      const baseSystemPrompt = getSystemPrompt(input.expertId);
+      const baseSystemPrompt = getSystemPrompt(
+        input.expertId,
+        input.expertName,
+        input.specialty
+      );
 
       // Inject Digital Twin profile context so the expert tailors advice
       // to the user's specific leadership style, preferences, and scores.
@@ -1116,7 +1134,14 @@ Tailor your advice, examples, and communication style to match this profile. Ref
         // Non-blocking — proceed without profile if query fails
       }
 
-      const systemPrompt = baseSystemPrompt + digitalTwinContext;
+      // DT-MOD-04: Inject Dynamic Prompt Assembler personalisation (Appendix Q)
+      let dtPersonalityInjection = "";
+      try {
+        dtPersonalityInjection = await assembleDTPersonalityInjection(ctx.user.id);
+      } catch {
+        // Non-blocking — proceed without DT injection if query fails
+      }
+      const systemPrompt = baseSystemPrompt + digitalTwinContext + dtPersonalityInjection;
 
       const messages: OpenAI.ChatCompletionMessageParam[] = [
         { role: "system", content: systemPrompt },
@@ -1129,11 +1154,32 @@ Tailor your advice, examples, and communication style to match this profile. Ref
         messages,
         max_tokens: 1200,
         temperature: 0.75,
+        logprobs: true,
+        top_logprobs: 1,
       });
 
       const response =
         completion.choices[0]?.message?.content ??
         "I apologise, I was unable to generate a response. Please try again.";
+
+      // Compute confidence score from log probabilities.
+      // Average the top-1 log-prob for each token, convert to 0–100 scale.
+      // Score ≥ 80 = high confidence, 60–79 = medium, < 60 = low.
+      let confidenceScore = 75; // default when logprobs unavailable
+      try {
+        const logprobsData = completion.choices[0]?.logprobs?.content;
+        if (logprobsData && logprobsData.length > 0) {
+          const avgLogProb =
+            logprobsData.reduce((sum, t) => sum + t.logprob, 0) /
+            logprobsData.length;
+          // logprob 0 → 100%, logprob -4 → 0%
+          confidenceScore = Math.round(
+            Math.min(100, Math.max(0, (1 + avgLogProb / 4) * 100))
+          );
+        }
+      } catch {
+        // Non-blocking — use default score
+      }
 
       // Persist both messages
       await db.insert(trainingConversations).values({
@@ -1158,6 +1204,15 @@ Tailor your advice, examples, and communication style to match this profile. Ref
         role: "expert" as const,
         content: response,
         timestamp: new Date().toISOString(),
+        confidenceScore,
+        confidenceLabel:
+          confidenceScore >= 80
+            ? ("high" as const)
+            : confidenceScore >= 60
+              ? ("medium" as const)
+              : ("low" as const),
+        model: completion.model,
+        tokensUsed: completion.usage?.total_tokens ?? 0,
       };
     }),
 

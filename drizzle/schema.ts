@@ -4742,3 +4742,86 @@ export const okrKeyResults = pgTable("okr_key_results", {
 });
 export type OkrKeyResult = typeof okrKeyResults.$inferSelect;
 export type InsertOkrKeyResult = typeof okrKeyResults.$inferInsert;
+
+// =============================================================================
+// DT-MOD-02: COGNITIVE & PERSONALITY MODEL (Appendix Q)
+// =============================================================================
+
+/**
+ * Digital Twin Cognitive Model - stores the user's personality, priorities,
+ * communication style, and decision-making heuristics.
+ */
+export const digitalTwinCognitiveModel = pgTable(
+  "digital_twin_cognitive_model",
+  {
+    id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
+    userId: integer("userId").notNull().unique(),
+    communicationStyle: json("communicationStyle")
+      .$type<{
+        formality: number;
+        verbosity: number;
+        humor: number;
+        useEmoji: boolean;
+      }>()
+      .default({ formality: 0.7, verbosity: 0.5, humor: 0.3, useEmoji: false }),
+    riskTolerance: text("riskTolerance").default("0.5"),
+    decisionHeuristics: json("decisionHeuristics").$type<string[]>().default([]),
+    strategicPriorities: json("strategicPriorities")
+      .$type<{ priority: string; weight: number }[]>()
+      .default([]),
+    values: json("values").$type<string[]>().default([]),
+    calibrationScore: integer("calibrationScore").default(0),
+    lastCalibratedAt: timestamp("lastCalibratedAt"),
+    dataSourcesUsed: json("dataSourcesUsed").$type<string[]>().default([]),
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+    updatedAt: timestamp("updatedAt")
+      .defaultNow()
+      .$onUpdate(() => new Date())
+      .notNull(),
+  }
+);
+
+export type DigitalTwinCognitiveModel = typeof digitalTwinCognitiveModel.$inferSelect;
+export type InsertDigitalTwinCognitiveModel = typeof digitalTwinCognitiveModel.$inferInsert;
+
+/**
+ * Digital Twin Vocabulary - stores preferred/avoided terms and writing samples.
+ */
+export const digitalTwinVocabulary = pgTable("digital_twin_vocabulary", {
+  id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
+  userId: integer("userId").notNull().unique(),
+  preferredTerms: json("preferredTerms").$type<Record<string, string>>().default({}),
+  avoidedTerms: json("avoidedTerms").$type<string[]>().default([]),
+  commonPhrases: json("commonPhrases").$type<string[]>().default([]),
+  writingSamples: json("writingSamples").$type<string[]>().default([]),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
+});
+
+export type DigitalTwinVocabulary = typeof digitalTwinVocabulary.$inferSelect;
+export type InsertDigitalTwinVocabulary = typeof digitalTwinVocabulary.$inferInsert;
+
+/**
+ * Digital Twin Decision Log - logs every user decision for model calibration.
+ */
+export const digitalTwinDecisionLog = pgTable("digital_twin_decision_log", {
+  id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
+  userId: integer("userId").notNull(),
+  scenarioType: varchar("scenarioType", { length: 100 }).notNull(),
+  scenarioContext: json("scenarioContext").$type<any>(),
+  agentProposal: text("agentProposal"),
+  agentId: varchar("agentId", { length: 100 }),
+  decision: varchar("decision", { length: 50 }).notNull(),
+  modifiedTo: text("modifiedTo"),
+  decisionRationale: text("decisionRationale"),
+  outcome: varchar("outcome", { length: 50 }),
+  outcomeNotes: text("outcomeNotes"),
+  outcomeRecordedAt: timestamp("outcomeRecordedAt"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type DigitalTwinDecisionLog = typeof digitalTwinDecisionLog.$inferSelect;
+export type InsertDigitalTwinDecisionLog = typeof digitalTwinDecisionLog.$inferInsert;

@@ -15,7 +15,14 @@ import {
   questionnaireResponses,
   userSettings,
   activityFeed,
+  digitalTwinCognitiveModel,
+  digitalTwinVocabulary,
+  digitalTwinDecisionLog,
 } from "../../drizzle/schema";
+import {
+  getCognitiveModelSnapshot,
+  assembleDTPersonalityInjection,
+} from "../services/dynamicPromptAssembler";
 
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY ?? "",
@@ -317,4 +324,140 @@ Respond in JSON: { "insights": "narrative here", "recommendations": ["rec1", "re
 
       return { success: true, level: input.level };
     }),
+
+  /**
+   * DT-MOD-02: Get the Cognitive Model snapshot for the current user.
+   */
+  getCognitiveModel: protectedProcedure.query(async ({ ctx }) => {
+    return getCognitiveModelSnapshot(ctx.user.id);
+  }),
+
+  /**
+   * DT-MOD-02: Update the Cognitive Model with new values.
+   */
+  updateCognitiveModel: protectedProcedure
+    .input(
+      z.object({
+        communicationStyle: z
+          .object({
+            formality: z.number().min(0).max(1),
+            verbosity: z.number().min(0).max(1),
+            humor: z.number().min(0).max(1),
+            useEmoji: z.boolean(),
+          })
+          .optional(),
+        riskTolerance: z.number().min(0).max(1).optional(),
+        decisionHeuristics: z.array(z.string()).optional(),
+        strategicPriorities: z
+          .array(z.object({ priority: z.string(), weight: z.number() }))
+          .optional(),
+        values: z.array(z.string()).optional(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      const existing = await db
+        .select()
+        .from(digitalTwinCognitiveModel)
+        .where(eq(digitalTwinCognitiveModel.userId, ctx.user.id))
+        .limit(1);
+
+      const updateData: Record<string, unknown> = { updatedAt: new Date() };
+      if (input.communicationStyle) updateData.communicationStyle = input.communicationStyle;
+      if (input.riskTolerance !== undefined) updateData.riskTolerance = input.riskTolerance.toFixed(2);
+      if (input.decisionHeuristics) updateData.decisionHeuristics = input.decisionHeuristics;
+      if (input.strategicPriorities) updateData.strategicPriorities = input.strategicPriorities;
+      if (input.values) updateData.values = input.values;
+
+      if (existing.length === 0) {
+        await db.insert(digitalTwinCognitiveModel).values({ userId: ctx.user.id, ...updateData });
+      } else {
+        await db
+          .update(digitalTwinCognitiveModel)
+          .set(updateData)
+          .where(eq(digitalTwinCognitiveModel.userId, ctx.user.id));
+      }
+      return { success: true };
+    }),
+
+  /**
+   * DT-MOD-02: Get the Vocabulary model for the current user.
+   */
+  getVocabulary: protectedProcedure.query(async ({ ctx }) => {
+    const [vocab] = await db
+      .select()
+      .from(digitalTwinVocabulary)
+      .where(eq(digitalTwinVocabulary.userId, ctx.user.id))
+      .limit(1);
+    return vocab ?? { preferredTerms: {}, avoidedTerms: [], commonPhrases: [], writingSamples: [] };
+  }),
+
+  /**
+   * DT-MOD-02: Update the Vocabulary model.
+   */
+  updateVocabulary: protectedProcedure
+    .input(
+      z.object({
+        preferredTerms: z.record(z.string(), z.string()).optional(),
+        avoidedTerms: z.array(z.string()).optional(),
+        commonPhrases: z.array(z.string()).optional(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      const existing = await db
+        .select()
+        .from(digitalTwinVocabulary)
+        .where(eq(digitalTwinVocabulary.userId, ctx.user.id))
+        .limit(1);
+
+      if (existing.length === 0) {
+        await db.insert(digitalTwinVocabulary).values({
+          userId: ctx.user.id,
+          preferredTerms: (input.preferredTerms ?? {}) as Record<string, string>,
+          avoidedTerms: input.avoidedTerms ?? [],
+          commonPhrases: input.commonPhrases ?? [],
+        });
+      } else {
+        const setData: Record<string, unknown> = { updatedAt: new Date() };
+        if (input.preferredTerms !== undefined) setData.preferredTerms = input.preferredTerms;
+        if (input.avoidedTerms !== undefined) setData.avoidedTerms = input.avoidedTerms;
+        if (input.commonPhrases !== undefined) setData.commonPhrases = input.commonPhrases;
+        await db
+          .update(digitalTwinVocabulary)
+          .set(setData)
+          .where(eq(digitalTwinVocabulary.userId, ctx.user.id));
+      }
+      return { success: true };
+    }),
+
+  /**
+   * DT-MOD-02: Log a user decision for model calibration.
+   */
+  logDecision: protectedProcedure
+    .input(
+      z.object({
+        scenarioType: z.string(),
+        scenarioContext: z.any().optional(),
+        agentProposal: z.string().optional(),
+        agentId: z.string().optional(),
+        decision: z.enum(["approved", "rejected", "modified", "deferred", "delegated"]),
+        modifiedTo: z.string().optional(),
+        decisionRationale: z.string().optional(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      const [log] = await db
+        .insert(digitalTwinDecisionLog)
+        .values({ userId: ctx.user.id, ...input })
+        .returning();
+      return { success: true, id: log.id };
+    }),
+
+  /**
+   * DT-MOD-04: Get the assembled personality injection string.
+   * Used by the frontend to preview how the Digital Twin personalises responses.
+   */
+  getPersonalityInjection: protectedProcedure.query(async ({ ctx }) => {
+    const injection = await assembleDTPersonalityInjection(ctx.user.id);
+    return { injection };
+  }),
 });

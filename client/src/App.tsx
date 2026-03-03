@@ -63,6 +63,12 @@ const PersephoneBoard = lazy(() => import("./pages/PersephoneBoard"));
 // ── Phase 3: KPI & OKR Dashboard ────────────────────────────────────────────
 const KpiOkrPage = lazy(() => import("./pages/KpiOkrPage"));
 
+// ── Phase 2: Knowledge Base (P2-9, P2-10, P2-11) ─────────────────────────────
+const KnowledgeBasePage = lazy(() => import("./pages/KnowledgeBasePage"));
+
+// ── Phase 2: Integration Hub (P2-13) ───────────────────────────────────
+const IntegrationHubPage = lazy(() => import("./pages/IntegrationHubPage"));
+
 // ── Standalone ───────────────────────────────────────────────────────────────
 const Vault = lazy(() => import("./pages/Vault"));
 const Settings = lazy(() => import("./pages/Settings"));
@@ -204,6 +210,18 @@ function Router() {
           </WithLayout>
         </Route>
 
+        {/* Integration Hub */}
+        <Route path="/integrations">
+          <WithLayout>
+            <IntegrationHubPage />
+          </WithLayout>
+        </Route>
+        {/* Knowledge Base */}
+        <Route path="/knowledge-base">
+          <WithLayout>
+            <KnowledgeBasePage />
+          </WithLayout>
+        </Route>
         {/* KPI & OKR Dashboard */}
         <Route path="/kpis">
           <WithLayout>
