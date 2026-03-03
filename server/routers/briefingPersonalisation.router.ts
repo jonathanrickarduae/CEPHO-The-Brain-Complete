@@ -32,7 +32,13 @@ import {
 } from "../../drizzle/schema";
 import OpenAI from "openai";
 
-const openai = new OpenAI();
+let _openai: OpenAI | null = null;
+function getOpenAI(): OpenAI {
+  if (!_openai) {
+    _openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+  }
+  return _openai;
+}
 
 // ─── 10-Step Briefing Assembler ───────────────────────────────────────────────
 
@@ -127,7 +133,7 @@ async function assembleBriefing(
         : "Use a professional, executive tone.";
 
   // Step 9: Assemble with GPT-4o
-  const completion = await openai.chat.completions.create({
+  const completion = await getOpenAI().chat.completions.create({
     model: "gpt-4o-mini",
     messages: [
       {

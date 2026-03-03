@@ -19,9 +19,13 @@ import {
   activityFeed,
 } from "../../drizzle/schema";
 
-const anthropic = new Anthropic({
-  apiKey: process.env.ANTHROPIC_API_KEY ?? "",
-});
+let _anthropic: Anthropic | null = null;
+function getAnthropic(): Anthropic {
+  if (!_anthropic) {
+    _anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY ?? "" });
+  }
+  return _anthropic;
+}
 
 // ─── SME Agent definitions ────────────────────────────────────────────────────
 const SME_AGENTS = [
@@ -97,7 +101,7 @@ async function decomposeGoal(
     ? `Executive profile: measurement-driven (${twinProfile.measurementDriven ?? 5}/10), automation preference (${twinProfile.automationPreference ?? 5}/10), structure preference (${twinProfile.structurePreference ?? 5}/10).`
     : "Executive profile: not yet calibrated, use balanced defaults.";
 
-  const message = await anthropic.messages.create({
+  const message = await getAnthropic().messages.create({
     model: "claude-opus-4-5",
     max_tokens: 2000,
     messages: [

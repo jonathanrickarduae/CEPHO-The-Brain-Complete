@@ -24,9 +24,13 @@ import {
   assembleDTPersonalityInjection,
 } from "../services/dynamicPromptAssembler";
 
-const anthropic = new Anthropic({
-  apiKey: process.env.ANTHROPIC_API_KEY ?? "",
-});
+let _anthropic: Anthropic | null = null;
+function getAnthropic(): Anthropic {
+  if (!_anthropic) {
+    _anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY ?? "" });
+  }
+  return _anthropic;
+}
 
 // ─── Helper: build a cognitive summary from questionnaire responses ──────────
 function buildCognitiveSummary(
@@ -196,7 +200,7 @@ Digital Twin Profile:
 - Questionnaire Completion: ${profile.questionnaireCompletion ?? 0}%
     `.trim();
 
-    const message = await anthropic.messages.create({
+    const message = await getAnthropic().messages.create({
       model: "claude-opus-4-5",
       max_tokens: 800,
       messages: [

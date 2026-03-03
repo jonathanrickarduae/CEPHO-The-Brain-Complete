@@ -15,7 +15,13 @@ import { db } from "../db";
 import { meetingNotes } from "../../drizzle/schema";
 import OpenAI from "openai";
 
-const openai = new OpenAI();
+let _openai: OpenAI | null = null;
+function getOpenAI(): OpenAI {
+  if (!_openai) {
+    _openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+  }
+  return _openai;
+}
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -25,7 +31,7 @@ async function generatePreMeetingBrief(
   agenda: string,
   context: string
 ): Promise<string> {
-  const completion = await openai.chat.completions.create({
+  const completion = await getOpenAI().chat.completions.create({
     model: "gpt-4o-mini",
     messages: [
       {
@@ -60,7 +66,7 @@ async function extractMeetingNotes(
   actionItems: { task: string; owner: string; dueDate?: string }[];
   nextSteps: string[];
 }> {
-  const completion = await openai.chat.completions.create({
+  const completion = await getOpenAI().chat.completions.create({
     model: "gpt-4o-mini",
     messages: [
       {

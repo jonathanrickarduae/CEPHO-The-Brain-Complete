@@ -13,7 +13,13 @@ import { db } from "../db";
 import { projectGenesis, projectGenesisPhases } from "../../drizzle/schema";
 import OpenAI from "openai";
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+let _openai: OpenAI | null = null;
+function getOpenAI(): OpenAI {
+  if (!_openai) {
+    _openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+  }
+  return _openai;
+}
 
 const GENESIS_PHASES = [
   { id: 1, name: "Discovery & Validation" },
@@ -382,7 +388,7 @@ Return a JSON object where each key is a slide type and the value is an object w
 
 Return ONLY valid JSON, no markdown.`;
 
-      const response = await openai.chat.completions.create({
+      const response = await getOpenAI().chat.completions.create({
         model: getModelForTask("generate"),
         messages: [{ role: "user", content: prompt }],
         response_format: { type: "json_object" },
