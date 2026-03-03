@@ -104,9 +104,7 @@ export const notificationsRouter = router({
     }),
 
   deleteAll: protectedProcedure.mutation(async ({ ctx }) => {
-    await db
-      .delete(notifications)
-      .where(eq(notifications.userId, ctx.user.id));
+    await db.delete(notifications).where(eq(notifications.userId, ctx.user.id));
     return { success: true };
   }),
 

@@ -364,7 +364,10 @@ ${tier.examples.map(e => `- ${e}`).join("\n")}
               { step: "Qualify", color: "bg-purple-500/20 text-purple-400" },
               { step: "Engage", color: "bg-pink-500/20 text-pink-400" },
               { step: "Agreement", color: "bg-amber-500/20 text-amber-400" },
-              { step: "Onboard", color: "bg-[var(--brain-cyan)]/20 text-[var(--brain-cyan)]" },
+              {
+                step: "Onboard",
+                color: "bg-[var(--brain-cyan)]/20 text-[var(--brain-cyan)]",
+              },
               { step: "Activate", color: "bg-green-500/20 text-green-400" },
               { step: "Grow", color: "bg-emerald-500/20 text-emerald-400" },
               { step: "Review", color: "bg-indigo-500/20 text-indigo-400" },

@@ -20,7 +20,8 @@ import {
 export function CommandCentre() {
   const [selectedProject, setSelectedProject] = useState<string | null>(null);
 
-  const { data: projectsData, isLoading: projectsLoading } = trpc.projects.list.useQuery({ limit: 50 });
+  const { data: projectsData, isLoading: projectsLoading } =
+    trpc.projects.list.useQuery({ limit: 50 });
   const { data: tasksData } = trpc.tasks.list.useQuery({ limit: 100 });
 
   const liveProjects = projectsData ?? [];
@@ -28,13 +29,21 @@ export function CommandCentre() {
 
   // Derive KPI counts from live data
   const activeProjects = liveProjects.filter(p => p.status === "active").length;
-  const onTrackProjects = liveProjects.filter(p => p.status === "active" && (p.progress ?? 0) >= 50).length;
-  const atRiskProjects = liveProjects.filter(p => p.status === "at-risk" || p.status === "delayed").length;
+  const onTrackProjects = liveProjects.filter(
+    p => p.status === "active" && (p.progress ?? 0) >= 50
+  ).length;
+  const atRiskProjects = liveProjects.filter(
+    p => p.status === "at-risk" || p.status === "delayed"
+  ).length;
   const completedTasks = liveTasks.filter(t => t.status === "completed").length;
   const totalTasks = liveTasks.length;
-  const avgProgress = liveProjects.length > 0
-    ? Math.round(liveProjects.reduce((s, p) => s + (p.progress ?? 0), 0) / liveProjects.length)
-    : 0;
+  const avgProgress =
+    liveProjects.length > 0
+      ? Math.round(
+          liveProjects.reduce((s, p) => s + (p.progress ?? 0), 0) /
+            liveProjects.length
+        )
+      : 0;
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -71,11 +80,23 @@ export function CommandCentre() {
   const getPriorityBadge = (priority: string | null) => {
     switch (priority) {
       case "high":
-        return <Badge className="bg-red-500/20 text-red-400 border-red-500/30">High Priority</Badge>;
+        return (
+          <Badge className="bg-red-500/20 text-red-400 border-red-500/30">
+            High Priority
+          </Badge>
+        );
       case "medium":
-        return <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-500/30">Medium</Badge>;
+        return (
+          <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-500/30">
+            Medium
+          </Badge>
+        );
       case "low":
-        return <Badge className="bg-green-500/20 text-green-400 border-green-500/30">Low</Badge>;
+        return (
+          <Badge className="bg-green-500/20 text-green-400 border-green-500/30">
+            Low
+          </Badge>
+        );
       default:
         return null;
     }
@@ -102,7 +123,9 @@ export function CommandCentre() {
             <ChevronRight className="w-5 h-5 text-[var(--brain-cyan)]/50" />
           </div>
           <p className="text-sm text-muted-foreground">Active Projects</p>
-          <p className="text-3xl font-bold text-[var(--brain-cyan)]">{activeProjects}</p>
+          <p className="text-3xl font-bold text-[var(--brain-cyan)]">
+            {activeProjects}
+          </p>
         </Button>
 
         <Button
@@ -148,11 +171,20 @@ export function CommandCentre() {
           <div className="flex items-center gap-3">
             <CheckCircle2 className="w-5 h-5 text-green-400" />
             <span className="text-sm text-muted-foreground">
-              <span className="font-semibold text-foreground">{completedTasks}</span> of{" "}
-              <span className="font-semibold text-foreground">{totalTasks}</span> tasks completed
+              <span className="font-semibold text-foreground">
+                {completedTasks}
+              </span>{" "}
+              of{" "}
+              <span className="font-semibold text-foreground">
+                {totalTasks}
+              </span>{" "}
+              tasks completed
             </span>
           </div>
-          <Progress value={totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0} className="w-32 h-2" />
+          <Progress
+            value={totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0}
+            className="w-32 h-2"
+          />
         </div>
       )}
 
@@ -166,7 +198,9 @@ export function CommandCentre() {
         {liveProjects.length === 0 ? (
           <div className="bg-card rounded-lg p-12 border border-border text-center">
             <Target className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-            <p className="text-lg font-medium text-foreground mb-2">No projects yet</p>
+            <p className="text-lg font-medium text-foreground mb-2">
+              No projects yet
+            </p>
             <p className="text-sm text-muted-foreground">
               Create your first project in Project Genesis to see it here.
             </p>
@@ -184,7 +218,9 @@ export function CommandCentre() {
                 }`}
                 onClick={() =>
                   setSelectedProject(
-                    String(project.id) === selectedProject ? null : String(project.id)
+                    String(project.id) === selectedProject
+                      ? null
+                      : String(project.id)
                   )
                 }
               >
@@ -192,10 +228,14 @@ export function CommandCentre() {
                   {/* Header */}
                   <div className="flex items-start justify-between w-full">
                     <div className="flex-1 space-y-2">
-                      <h3 className="text-lg font-semibold text-foreground">{project.name}</h3>
+                      <h3 className="text-lg font-semibold text-foreground">
+                        {project.name}
+                      </h3>
                       <div className="flex items-center gap-2 flex-wrap">
                         {getPriorityBadge(project.priority)}
-                        <Badge className={`${getStatusColor(project.status)} border`}>
+                        <Badge
+                          className={`${getStatusColor(project.status)} border`}
+                        >
                           <span className="flex items-center gap-1">
                             {getStatusIcon(project.status)}
                             {project.status.replace(/-/g, " ")}
@@ -213,7 +253,10 @@ export function CommandCentre() {
                         {project.progress ?? 0}%
                       </span>
                     </div>
-                    <Progress value={project.progress ?? 0} className="h-3 bg-card" />
+                    <Progress
+                      value={project.progress ?? 0}
+                      className="h-3 bg-card"
+                    />
                   </div>
 
                   {/* Meta Info */}
@@ -221,21 +264,29 @@ export function CommandCentre() {
                     {project.dueDate && (
                       <div className="flex items-center gap-2 text-muted-foreground">
                         <Clock className="w-4 h-4" />
-                        <span>Due: {new Date(project.dueDate).toLocaleDateString()}</span>
+                        <span>
+                          Due: {new Date(project.dueDate).toLocaleDateString()}
+                        </span>
                       </div>
                     )}
                     <div className="flex items-center gap-2 text-muted-foreground">
                       <Clock className="w-4 h-4" />
-                      <span>Created {new Date(project.createdAt).toLocaleDateString()}</span>
+                      <span>
+                        Created{" "}
+                        {new Date(project.createdAt).toLocaleDateString()}
+                      </span>
                     </div>
                   </div>
 
                   {/* Expanded Details */}
-                  {selectedProject === String(project.id) && project.description && (
-                    <div className="pt-4 border-t border-border space-y-3 w-full">
-                      <p className="text-sm text-muted-foreground">{project.description}</p>
-                    </div>
-                  )}
+                  {selectedProject === String(project.id) &&
+                    project.description && (
+                      <div className="pt-4 border-t border-border space-y-3 w-full">
+                        <p className="text-sm text-muted-foreground">
+                          {project.description}
+                        </p>
+                      </div>
+                    )}
                 </div>
               </Button>
             ))}
@@ -251,22 +302,42 @@ export function CommandCentre() {
             Task Breakdown
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            {(["not_started", "in_progress", "completed"] as const).map(status => {
-              const count = liveTasks.filter(t => t.status === status).length;
-              const pct = totalTasks > 0 ? Math.round((count / totalTasks) * 100) : 0;
-              const labels: Record<string, string> = { not_started: "Not Started", in_progress: "In Progress", completed: "Completed" };
-              const colors: Record<string, string> = { not_started: "text-yellow-400", in_progress: "text-blue-400", completed: "text-green-400" };
-              return (
-                <div key={status} className="bg-card rounded-lg p-4 border border-border">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm text-muted-foreground">{labels[status]}</span>
-                    <span className={`text-2xl font-bold ${colors[status]}`}>{count}</span>
+            {(["not_started", "in_progress", "completed"] as const).map(
+              status => {
+                const count = liveTasks.filter(t => t.status === status).length;
+                const pct =
+                  totalTasks > 0 ? Math.round((count / totalTasks) * 100) : 0;
+                const labels: Record<string, string> = {
+                  not_started: "Not Started",
+                  in_progress: "In Progress",
+                  completed: "Completed",
+                };
+                const colors: Record<string, string> = {
+                  not_started: "text-yellow-400",
+                  in_progress: "text-blue-400",
+                  completed: "text-green-400",
+                };
+                return (
+                  <div
+                    key={status}
+                    className="bg-card rounded-lg p-4 border border-border"
+                  >
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-sm text-muted-foreground">
+                        {labels[status]}
+                      </span>
+                      <span className={`text-2xl font-bold ${colors[status]}`}>
+                        {count}
+                      </span>
+                    </div>
+                    <Progress value={pct} className="h-2" />
+                    <p className="text-xs text-muted-foreground mt-1">
+                      {pct}% of all tasks
+                    </p>
                   </div>
-                  <Progress value={pct} className="h-2" />
-                  <p className="text-xs text-muted-foreground mt-1">{pct}% of all tasks</p>
-                </div>
-              );
-            })}
+                );
+              }
+            )}
           </div>
         </div>
       )}

@@ -1,4 +1,5 @@
 # Handover to Phase 6
+
 Phase: 5
 Status: Draft
 
@@ -13,6 +14,7 @@ The goal of Phase 5 was to create a comprehensive and robust design blueprint. P
 The Phase 5 architecture is designed around a modular, agent-based system governed by a central Orchestrator. This design provides a clear separation of concerns and allows for the independent development and scaling of different components.
 
 **Key Pillars of the Architecture:**
+
 - **Autonomous Workflows:** High-level state machines that define business processes.
 - **Agent Orchestration:** A central Orchestrator that decomposes workflows into tasks and assigns them to specialized agents.
 - **Human-in-the-Loop:** A non-negotiable system of approval gates that ensures human oversight of all critical decisions.

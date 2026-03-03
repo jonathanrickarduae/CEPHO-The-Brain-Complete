@@ -139,15 +139,16 @@ export default function COSTraining() {
   const utils = trpc.useUtils();
 
   // Fetch real progress from DB
-  const { data: progressData, isLoading: _progressLoading } = trpc.cosTraining.getProgress.useQuery(undefined, {
-    staleTime: 30000,
-    onSuccess: (data) => {
-      // Sync local state with DB on first load
-      if (data?.completedModuleIds?.length) {
-        setLocalCompleted(new Set(data.completedModuleIds.map(Number)));
-      }
-    },
-  });
+  const { data: progressData, isLoading: _progressLoading } =
+    trpc.cosTraining.getProgress.useQuery(undefined, {
+      staleTime: 30000,
+      onSuccess: data => {
+        // Sync local state with DB on first load
+        if (data?.completedModuleIds?.length) {
+          setLocalCompleted(new Set(data.completedModuleIds.map(Number)));
+        }
+      },
+    });
 
   const completeModuleMutation = trpc.cosTraining.completeModule.useMutation({
     onSuccess: () => utils.cosTraining.getProgress.invalidate(),
@@ -159,7 +160,9 @@ export default function COSTraining() {
   const handleCompleteModule = (moduleId: number) => {
     setLocalCompleted(prev => new Set([...prev, moduleId]));
     // Persist to DB using module number as key
-    const dbModule = progressData?.modules?.find(m => m.moduleNumber === moduleId);
+    const dbModule = progressData?.modules?.find(
+      m => m.moduleNumber === moduleId
+    );
     if (dbModule?.id) {
       completeModuleMutation.mutate({ moduleId: String(dbModule.id) });
     }
@@ -176,10 +179,7 @@ export default function COSTraining() {
 
   // Example: Show how COS training affects a sample score
   const sampleScores = [63, 72, 58, 81, 45]; // Sample KPI scores
-  const scoreImpact = calculateOverallScore(
-    sampleScores,
-    dbPercentage
-  );
+  const scoreImpact = calculateOverallScore(sampleScores, dbPercentage);
 
   const [trainingMode, setTrainingMode] = useState<"cos" | "digital-twin">(
     "cos"
@@ -191,7 +191,8 @@ export default function COSTraining() {
       iconClass="bg-cyan-500/15 text-cyan-400"
       title="Digital Twin Training"
       subtitle="Train your Chief of Staff and Digital Twin to unlock full capabilities"
-      actions={<div className="flex items-center gap-3">
+      actions={
+        <div className="flex items-center gap-3">
           <Button
             variant={trainingMode === "cos" ? "default" : "outline"}
             onClick={() => setTrainingMode("cos")}
@@ -216,9 +217,9 @@ export default function COSTraining() {
               Level {currentLevel.level}: {currentLevel.name}
             </Badge>
           )}
-        </div>}
-      >
-
+        </div>
+      }
+    >
       {/* Training Progress Overview */}
       {trainingMode === "cos" ? (
         <>
@@ -237,14 +238,9 @@ export default function COSTraining() {
                 <div className="space-y-2">
                   <div className="flex justify-between text-sm">
                     <span>Overall Progress</span>
-                    <span className="font-medium">
-                      {dbPercentage}%
-                    </span>
+                    <span className="font-medium">{dbPercentage}%</span>
                   </div>
-                  <Progress
-                    value={dbPercentage}
-                    className="h-3"
-                  />
+                  <Progress value={dbPercentage} className="h-3" />
                 </div>
 
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2">

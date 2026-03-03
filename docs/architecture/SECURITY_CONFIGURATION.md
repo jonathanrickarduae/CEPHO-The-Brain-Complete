@@ -23,26 +23,26 @@ This document outlines the definitive security configuration for the CEPHO.AI v1
 
 A strict, nonce-based CSP is enforced to mitigate XSS attacks. `unsafe-inline` and `unsafe-eval` are disallowed.
 
-| Directive | Value |
-| :--- | :--- |
-| `default-src` | `self` |
-| `script-src` | `self`, `nonce-{random}` |
-| `style-src` | `self`, `nonce-{random}` |
-| `img-src` | `self`, data:, blob: |
-| `connect-src` | `self`, `*.supabase.co` |
+| Directive         | Value                          |
+| :---------------- | :----------------------------- |
+| `default-src`     | `self`                         |
+| `script-src`      | `self`, `nonce-{random}`       |
+| `style-src`       | `self`, `nonce-{random}`       |
+| `img-src`         | `self`, data:, blob:           |
+| `connect-src`     | `self`, `*.supabase.co`        |
 | `frame-ancestors` | `none` (prevents clickjacking) |
-| `form-action` | `self` |
-| `object-src` | `none` |
+| `form-action`     | `self`                         |
+| `object-src`      | `none`                         |
 
 ### 3.2. Other Security Headers
 
-| Header | Value | Purpose |
-| :--- | :--- | :--- |
-| `Strict-Transport-Security` | `max-age=31536000; includeSubDomains; preload` | Enforces HTTPS. |
-| `X-Content-Type-Options` | `nosniff` | Prevents MIME sniffing. |
-| `X-Frame-Options` | `DENY` | Prevents clickjacking. |
-| `Referrer-Policy` | `strict-origin-when-cross-origin` | Controls referrer information. |
-| `Permissions-Policy` | Restrictive (camera, microphone, etc. disabled) | Disables unnecessary browser features. |
+| Header                      | Value                                           | Purpose                                |
+| :-------------------------- | :---------------------------------------------- | :------------------------------------- |
+| `Strict-Transport-Security` | `max-age=31536000; includeSubDomains; preload`  | Enforces HTTPS.                        |
+| `X-Content-Type-Options`    | `nosniff`                                       | Prevents MIME sniffing.                |
+| `X-Frame-Options`           | `DENY`                                          | Prevents clickjacking.                 |
+| `Referrer-Policy`           | `strict-origin-when-cross-origin`               | Controls referrer information.         |
+| `Permissions-Policy`        | Restrictive (camera, microphone, etc. disabled) | Disables unnecessary browser features. |
 
 ### 3.3. CORS Configuration
 

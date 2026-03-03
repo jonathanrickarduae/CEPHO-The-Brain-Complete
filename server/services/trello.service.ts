@@ -111,7 +111,13 @@ export class TrelloService {
   /** Update a card */
   async updateCard(
     cardId: string,
-    updates: Partial<{ name: string; desc: string; due: string; closed: boolean; idList: string }>
+    updates: Partial<{
+      name: string;
+      desc: string;
+      due: string;
+      closed: boolean;
+      idList: string;
+    }>
   ): Promise<TrelloCard> {
     const params = new URLSearchParams({
       ...Object.fromEntries(
@@ -135,7 +141,11 @@ export class TrelloService {
   }
 
   /** Test connection */
-  async testConnection(): Promise<{ ok: boolean; username?: string; error?: string }> {
+  async testConnection(): Promise<{
+    ok: boolean;
+    username?: string;
+    error?: string;
+  }> {
     try {
       const res = await fetch(
         `${TRELLO_API_BASE}/members/me?${this.authParams()}&fields=username,fullName`

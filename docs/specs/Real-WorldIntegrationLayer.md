@@ -1,4 +1,5 @@
 # Real-World Integration Layer
+
 Phase: 5
 Status: Draft
 
@@ -30,13 +31,13 @@ The integration layer is designed as a set of standardized adapters, where each 
 
 Phase 5 will prioritize the development of adapters for a core set of services essential for launching and operating a digital venture.
 
-| Category | Service | Key Actions |
-|---|---|---|
-| **Payments** | Stripe | Process credit card charges, manage subscriptions, handle refunds. |
-| **Cloud Infrastructure** | Amazon Web Services (AWS) | Provision servers (EC2), manage databases (RDS), host static assets (S3). |
-| **Domain & DNS** | GoDaddy, Namecheap | Register new domain names, update DNS records. |
-| **Digital Advertising** | Google Ads, Facebook Ads | Create and manage ad campaigns, monitor performance and spend. |
-| **Legal Services** | Clerky, Stripe Atlas | Company formation, generation of standard legal documents (e.g., privacy policy). |
+| Category                 | Service                   | Key Actions                                                                       |
+| ------------------------ | ------------------------- | --------------------------------------------------------------------------------- |
+| **Payments**             | Stripe                    | Process credit card charges, manage subscriptions, handle refunds.                |
+| **Cloud Infrastructure** | Amazon Web Services (AWS) | Provision servers (EC2), manage databases (RDS), host static assets (S3).         |
+| **Domain & DNS**         | GoDaddy, Namecheap        | Register new domain names, update DNS records.                                    |
+| **Digital Advertising**  | Google Ads, Facebook Ads  | Create and manage ad campaigns, monitor performance and spend.                    |
+| **Legal Services**       | Clerky, Stripe Atlas      | Company formation, generation of standard legal documents (e.g., privacy policy). |
 
 ## 4. API and Data Model
 
@@ -62,13 +63,13 @@ This model stores the configuration and state for each user-connected third-part
 
 - **Description:** Connects a new third-party service to the user's account.
 - **Request Body:**
-    ```json
-    {
-      "provider": "stripe",
-      "apiKey": "sk_test_..."
-    }
-    ```
+  ```json
+  {
+    "provider": "stripe",
+    "apiKey": "sk_test_..."
+  }
+  ```
 - **Response:**
-    - `201 Created`: Returns the new `Integration` object.
+  - `201 Created`: Returns the new `Integration` object.
 
 ---

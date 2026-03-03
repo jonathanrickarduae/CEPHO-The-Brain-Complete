@@ -76,8 +76,8 @@ export function WaitlistSignup({
         </h2>
         <p className="text-foreground/70">
           Get early access to your AI-powered Chief of Staff.
-          <span className="text-[var(--brain-cyan)]"> 15,000+ people</span> are already
-          waiting.
+          <span className="text-[var(--brain-cyan)]"> 15,000+ people</span> are
+          already waiting.
         </p>
       </div>
 

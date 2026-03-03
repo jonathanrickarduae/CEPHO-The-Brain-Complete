@@ -100,7 +100,8 @@ const reviewLevelConfig: Record<
   },
   final: {
     label: "Final Decision",
-    color: "text-[var(--brain-cyan)] bg-[var(--brain-cyan)]/20 border-cyan-500/30",
+    color:
+      "text-[var(--brain-cyan)] bg-[var(--brain-cyan)]/20 border-cyan-500/30",
     icon: <CheckCircle2 className="w-4 h-4" />,
     description: "Chief of Staff final approval",
   },

@@ -18,7 +18,12 @@ export const calendarService = {
     await db
       .update(integrations)
       .set({ lastSyncAt: new Date(), updatedAt: new Date() })
-      .where(and(eq(integrations.userId, userId), eq(integrations.provider, provider)));
+      .where(
+        and(
+          eq(integrations.userId, userId),
+          eq(integrations.provider, provider)
+        )
+      );
     return {
       success: true,
       eventsSynced: 0,
@@ -49,7 +54,11 @@ export const calendarService = {
 
   async getTodaySummary(userId: number) {
     const now = new Date();
-    const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const startOfDay = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate()
+    );
     const endOfDay = new Date(startOfDay.getTime() + 86400000);
 
     const events = await db
@@ -93,7 +102,11 @@ export const calendarService = {
     return events.length > 0;
   },
 
-  async getNextFreeSlot(userId: number, startFrom: Date, durationMinutes: number) {
+  async getNextFreeSlot(
+    userId: number,
+    startFrom: Date,
+    durationMinutes: number
+  ) {
     const endSearch = new Date(startFrom.getTime() + 7 * 86400000); // search 7 days ahead
     const events = await db
       .select()
@@ -154,15 +167,21 @@ export const calendarService = {
       .from(integrations)
       .where(
         and(
-          eq(integrations.userId, userId),
+          eq(integrations.userId, userId)
           // provider in ('google', 'outlook')
         )
       );
     const google = rows.find(r => r.provider === "google");
     const outlook = rows.find(r => r.provider === "outlook");
     return {
-      google: { connected: google?.status === "active", hasToken: !!google?.accessToken },
-      outlook: { connected: outlook?.status === "active", hasToken: !!outlook?.accessToken },
+      google: {
+        connected: google?.status === "active",
+        hasToken: !!google?.accessToken,
+      },
+      outlook: {
+        connected: outlook?.status === "active",
+        hasToken: !!outlook?.accessToken,
+      },
     };
   },
 };

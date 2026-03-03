@@ -441,7 +441,9 @@ ${platformSpecs.map(p => `| ${p.name} | ${p.specs.profile.width}x${p.specs.profi
                       <p className="text-xs text-muted-foreground">
                         Aspect Ratio
                       </p>
-                      <p className="text-foreground font-mono">{spec.aspectRatio}</p>
+                      <p className="text-foreground font-mono">
+                        {spec.aspectRatio}
+                      </p>
                     </div>
                     <div className="p-2 bg-card/50 rounded">
                       <p className="text-xs text-muted-foreground">
@@ -473,7 +475,9 @@ ${platformSpecs.map(p => `| ${p.name} | ${p.specs.profile.width}x${p.specs.profi
       {/* Quick Reference */}
       <Card className="bg-gray-900/50 border-border/50">
         <CardHeader>
-          <CardTitle className="text-foreground/80 text-sm">Quick Reference</CardTitle>
+          <CardTitle className="text-foreground/80 text-sm">
+            Quick Reference
+          </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="overflow-x-auto">
@@ -503,7 +507,9 @@ ${platformSpecs.map(p => `| ${p.name} | ${p.specs.profile.width}x${p.specs.profi
                       <td className="py-2">
                         <div className="flex items-center gap-2">
                           <Icon className={cn("w-4 h-4", platform.color)} />
-                          <span className="text-foreground">{platform.name}</span>
+                          <span className="text-foreground">
+                            {platform.name}
+                          </span>
                         </div>
                       </td>
                       <td className="py-2 font-mono text-xs text-white">

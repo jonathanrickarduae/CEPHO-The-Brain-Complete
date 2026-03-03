@@ -379,7 +379,9 @@ export function IntegrationsStatus() {
                   {service.icon}
                 </div>
                 <div>
-                  <h3 className="font-semibold text-foreground">{service.name}</h3>
+                  <h3 className="font-semibold text-foreground">
+                    {service.name}
+                  </h3>
                   <p className="text-xs text-muted-foreground">
                     {categoryLabels[service.category]}
                   </p>

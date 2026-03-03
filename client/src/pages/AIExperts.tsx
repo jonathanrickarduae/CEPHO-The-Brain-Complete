@@ -48,9 +48,7 @@ import {
   FeatureGate,
   RestrictedBadge,
 } from "@/hooks/useGovernance";
-import {
-  ConfidenceBadge,
-} from "@/components/analytics/InsightValidation";
+import { ConfidenceBadge } from "@/components/analytics/InsightValidation";
 import {
   ClassificationBadge,
   type ClassifiedStatement,
@@ -238,7 +236,9 @@ export default function AIExperts() {
   const [phase, setPhase] = useState<Phase>("queue");
 
   // Fetch real pending tasks from tRPC
-  const { data: cosTasksData } = trpc.cosTasks.getTasks.useQuery({ status: "pending" });
+  const { data: cosTasksData } = trpc.cosTasks.getTasks.useQuery({
+    status: "pending",
+  });
   const liveTasks: PendingTask[] = (cosTasksData ?? []).map(t => ({
     id: String(t.id),
     title: t.title,
@@ -257,7 +257,7 @@ export default function AIExperts() {
     if (liveTasks.length > 0) {
       setTasks(liveTasks);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cosTasksData]);
   const [activeTask, setActiveTask] = useState<PendingTask | null>(null);
   const [mission, setMission] = useState("");
@@ -288,9 +288,9 @@ export default function AIExperts() {
   const [validationMode, setValidationMode] = useState<
     "off" | "review" | "challenge"
   >("off");
-  const [_pendingInsights, _setPendingInsights] = useState<ClassifiedStatement[]>(
-    []
-  );
+  const [_pendingInsights, _setPendingInsights] = useState<
+    ClassifiedStatement[]
+  >([]);
   const [_validatedInsights, _setValidatedInsights] = useState<
     ClassifiedStatement[]
   >([]);

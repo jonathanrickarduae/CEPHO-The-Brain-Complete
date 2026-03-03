@@ -38,7 +38,8 @@ class EmailService {
     if (!this.configured) {
       return {
         success: false,
-        error: "Email service not configured — SMTP_USER and SMTP_PASS required",
+        error:
+          "Email service not configured — SMTP_USER and SMTP_PASS required",
       };
     }
 
@@ -106,7 +107,11 @@ class EmailService {
   }
 
   /** Test connection by verifying SMTP credentials */
-  async testConnection(): Promise<{ ok: boolean; user?: string; error?: string }> {
+  async testConnection(): Promise<{
+    ok: boolean;
+    user?: string;
+    error?: string;
+  }> {
     if (!this.configured) {
       return { ok: false, error: "SMTP credentials not configured" };
     }

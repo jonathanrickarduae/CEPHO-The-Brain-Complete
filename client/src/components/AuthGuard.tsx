@@ -1,4 +1,3 @@
-
 interface AuthGuardProps {
   children: React.ReactNode;
 }

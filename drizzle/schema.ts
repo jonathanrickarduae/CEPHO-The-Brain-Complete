@@ -11,6 +11,7 @@ import {
   real,
   index,
   uniqueIndex,
+  vector,
 } from "drizzle-orm/pg-core";
 
 /**
@@ -314,14 +315,17 @@ export const documentEmailHistory = pgTable("document_email_history", {
   id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
   documentId: integer("documentId").notNull(),
   userId: integer("userId").notNull(),
-  recipients: json("recipients").notNull().$type<Array<{ email: string; name?: string }>>(),
+  recipients: json("recipients")
+    .notNull()
+    .$type<Array<{ email: string; name?: string }>>(),
   subject: text("subject"),
   message: text("message"),
   sentAt: timestamp("sentAt").defaultNow().notNull(),
   status: text("status").notNull().default("sent"),
 });
 export type DocumentEmailHistory = typeof documentEmailHistory.$inferSelect;
-export type InsertDocumentEmailHistory = typeof documentEmailHistory.$inferInsert;
+export type InsertDocumentEmailHistory =
+  typeof documentEmailHistory.$inferInsert;
 
 /**
  * Digital Twin conversation history
@@ -456,6 +460,7 @@ export const memoryBank = pgTable("memory_bank", {
   value: text("value").notNull(),
   confidence: real("confidence").default(1.0),
   source: varchar("source", { length: 100 }), // Where this memory came from
+  embedding: vector("embedding", { dimensions: 1536 }), // pgvector embedding for semantic search
   lastAccessed: timestamp("lastAccessed"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt")

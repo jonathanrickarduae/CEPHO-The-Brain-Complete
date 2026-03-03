@@ -52,10 +52,7 @@ class ErrorBoundary extends Component<Props, State> {
     return { hasError: true, error };
   }
 
-  componentDidCatch(
-    error: Error,
-    errorInfo: { componentStack: string }
-  ): void {
+  componentDidCatch(error: Error, errorInfo: { componentStack: string }): void {
     this.setState({ errorInfo });
     // Log to server via the client logger (sends to /api/client-log in production)
     this.log.error("Unhandled render error caught by ErrorBoundary", error, {

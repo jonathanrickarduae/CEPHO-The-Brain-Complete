@@ -283,7 +283,9 @@ export function FlipCard({
               <div className="flex items-center gap-3 border-b border-white/10 pb-3">
                 <span className="text-3xl">{corporate.logo}</span>
                 <div>
-                  <h4 className="font-bold text-foreground">{corporate.name}</h4>
+                  <h4 className="font-bold text-foreground">
+                    {corporate.name}
+                  </h4>
                   <p className="text-xs text-fuchsia-400">
                     Research Methodology
                   </p>

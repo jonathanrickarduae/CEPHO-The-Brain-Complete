@@ -216,7 +216,9 @@ export default function ProjectGenesisWizard() {
 
   const [currentPhase, setCurrentPhase] = useState(1);
   const [currentStep, setCurrentStep] = useState(1);
-  const [formData, setFormData] = useState<Record<number, Record<string, unknown>>>({});
+  const [formData, setFormData] = useState<
+    Record<number, Record<string, unknown>>
+  >({});
 
   // Load workflow if workflowId exists
   const { data: workflow, isLoading: isLoadingWorkflow } =
@@ -233,11 +235,13 @@ export default function ProjectGenesisWizard() {
 
       // Load form data from workflow steps
       const stepData: Record<number, Record<string, unknown>> = {};
-      workflow.steps?.forEach((step: { stepNumber: number; formData?: Record<string, unknown> }) => {
-        if (step.formData) {
-          stepData[step.stepNumber] = step.formData;
+      workflow.steps?.forEach(
+        (step: { stepNumber: number; formData?: Record<string, unknown> }) => {
+          if (step.formData) {
+            stepData[step.stepNumber] = step.formData;
+          }
         }
-      });
+      );
       setFormData(stepData);
     }
   }, [workflow]);
@@ -387,13 +391,17 @@ export default function ProjectGenesisWizard() {
             <Rocket className="w-10 h-10 text-[var(--brain-cyan)]" />
             {workflow?.name || "Project Genesis Wizard"}
           </h1>
-          <p className="text-muted-foreground">6-Phase Venture Development Process</p>
+          <p className="text-muted-foreground">
+            6-Phase Venture Development Process
+          </p>
         </div>
 
         {/* Progress Bar */}
         <Card className="bg-card/50 border-border/50 p-6 mb-8">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm text-muted-foreground">Overall Progress</span>
+            <span className="text-sm text-muted-foreground">
+              Overall Progress
+            </span>
             <span className="text-sm font-semibold text-[var(--brain-cyan)]">
               {progress}%
             </span>
@@ -547,7 +555,9 @@ export default function ProjectGenesisWizard() {
                     key={idx}
                     className="flex items-center justify-between p-4 bg-gray-900/50 rounded-lg border border-border/50"
                   >
-                    <span className="text-sm text-foreground/80">{deliverable}</span>
+                    <span className="text-sm text-foreground/80">
+                      {deliverable}
+                    </span>
                     <Button
                       size="sm"
                       variant="outline"

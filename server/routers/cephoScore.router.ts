@@ -38,22 +38,26 @@ async function computeScore(userId: number): Promise<{
     .select()
     .from(tasks)
     .where(and(eq(tasks.userId, userId), gte(tasks.createdAt, thirtyDaysAgo)));
-  const completedTasks = allTasks.filter(t => t.status === "done" || t.status === "completed");
-  const taskScore = allTasks.length === 0
-    ? 50
-    : Math.round((completedTasks.length / allTasks.length) * 100);
+  const completedTasks = allTasks.filter(
+    t => t.status === "done" || t.status === "completed"
+  );
+  const taskScore =
+    allTasks.length === 0
+      ? 50
+      : Math.round((completedTasks.length / allTasks.length) * 100);
 
   // 2. Project health (25 points)
   const activeProjects = await db
     .select()
     .from(projects)
     .where(and(eq(projects.userId, userId), eq(projects.status, "active")));
-  const avgProgress = activeProjects.length === 0
-    ? 50
-    : Math.round(
-        activeProjects.reduce((sum, p) => sum + (p.progress ?? 0), 0) /
-          activeProjects.length
-      );
+  const avgProgress =
+    activeProjects.length === 0
+      ? 50
+      : Math.round(
+          activeProjects.reduce((sum, p) => sum + (p.progress ?? 0), 0) /
+            activeProjects.length
+        );
   const blockedCount = activeProjects.filter(p => p.blockerDescription).length;
   const projectScore = Math.max(0, avgProgress - blockedCount * 10);
 
@@ -69,31 +73,42 @@ async function computeScore(userId: number): Promise<{
   const recentMoods = await db
     .select()
     .from(moodHistory)
-    .where(and(eq(moodHistory.userId, userId), gte(moodHistory.createdAt, sevenDaysAgo)))
+    .where(
+      and(
+        eq(moodHistory.userId, userId),
+        gte(moodHistory.createdAt, sevenDaysAgo)
+      )
+    )
     .orderBy(desc(moodHistory.createdAt))
     .limit(14);
-  const moodScore = recentMoods.length === 0
-    ? 50
-    : Math.round(
-        (recentMoods.reduce((sum, m) => sum + (m.score ?? 5), 0) /
-          recentMoods.length) *
-          10
-      );
+  const moodScore =
+    recentMoods.length === 0
+      ? 50
+      : Math.round(
+          (recentMoods.reduce((sum, m) => sum + (m.score ?? 5), 0) /
+            recentMoods.length) *
+            10
+        );
 
   // 5. Innovation activity (15 points)
   const recentIdeas = await db
     .select()
     .from(innovationIdeas)
-    .where(and(eq(innovationIdeas.userId, userId), gte(innovationIdeas.createdAt, thirtyDaysAgo)));
+    .where(
+      and(
+        eq(innovationIdeas.userId, userId),
+        gte(innovationIdeas.createdAt, thirtyDaysAgo)
+      )
+    );
   const innovationScore = Math.min(100, recentIdeas.length * 10);
 
   // Weighted composite
   const total = Math.round(
     taskScore * 0.25 +
-    projectScore * 0.25 +
-    twinScore * 0.20 +
-    moodScore * 0.15 +
-    innovationScore * 0.15
+      projectScore * 0.25 +
+      twinScore * 0.2 +
+      moodScore * 0.15 +
+      innovationScore * 0.15
   );
 
   return {
@@ -116,7 +131,16 @@ export const cephoScoreRouter = router({
     const score = await computeScore(ctx.user.id);
     return {
       ...score,
-      grade: score.total >= 90 ? "A+" : score.total >= 80 ? "A" : score.total >= 70 ? "B" : score.total >= 60 ? "C" : "D",
+      grade:
+        score.total >= 90
+          ? "A+"
+          : score.total >= 80
+            ? "A"
+            : score.total >= 70
+              ? "B"
+              : score.total >= 60
+                ? "C"
+                : "D",
       calculatedAt: new Date().toISOString(),
     };
   }),
@@ -129,7 +153,16 @@ export const cephoScoreRouter = router({
     const score = await computeScore(ctx.user.id);
     return {
       ...score,
-      grade: score.total >= 90 ? "A+" : score.total >= 80 ? "A" : score.total >= 70 ? "B" : score.total >= 60 ? "C" : "D",
+      grade:
+        score.total >= 90
+          ? "A+"
+          : score.total >= 80
+            ? "A"
+            : score.total >= 70
+              ? "B"
+              : score.total >= 60
+                ? "C"
+                : "D",
       calculatedAt: new Date().toISOString(),
     };
   }),

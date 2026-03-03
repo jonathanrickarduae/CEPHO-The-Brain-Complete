@@ -34,7 +34,7 @@ export function VoiceInterface({
 
   // Wire to the real tRPC voice command processor
   const processCommandMutation = trpc.voiceCommand.processCommand.useMutation({
-    onSuccess: (data) => {
+    onSuccess: data => {
       setLastResponse(data.responseText);
 
       // Play the ElevenLabs audio response if not muted
@@ -52,7 +52,7 @@ export function VoiceInterface({
       // Also call the optional onCommand callback for navigation
       onCommand?.(transcript);
     },
-    onError: (error) => {
+    onError: error => {
       toast.error(`CEPHO: ${error.message}`);
       setState("idle");
     },
@@ -242,7 +242,9 @@ export function VoiceInterface({
 
             {/* Quick Commands */}
             <div className="mb-4">
-              <p className="text-xs text-muted-foreground mb-2">Quick commands</p>
+              <p className="text-xs text-muted-foreground mb-2">
+                Quick commands
+              </p>
               <div className="flex flex-wrap gap-1">
                 {[
                   "What's on my agenda today?",
@@ -284,7 +286,9 @@ export function VoiceInterface({
           <div className="px-4 py-2 bg-card/50 text-center">
             <p className="text-xs text-muted-foreground">
               Press{" "}
-              <kbd className="px-1 py-0.5 bg-muted rounded text-[10px]">Space</kbd>{" "}
+              <kbd className="px-1 py-0.5 bg-muted rounded text-[10px]">
+                Space
+              </kbd>{" "}
               to talk to CEPHO
             </p>
           </div>

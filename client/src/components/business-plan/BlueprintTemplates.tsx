@@ -110,7 +110,8 @@ const phaseConfig: Record<
   },
   operations: {
     label: "Operations",
-    color: "text-[var(--brain-cyan)] bg-[var(--brain-cyan)]/20 border-cyan-500/30",
+    color:
+      "text-[var(--brain-cyan)] bg-[var(--brain-cyan)]/20 border-cyan-500/30",
     icon: <Settings className="w-5 h-5" />,
     description: "Scale and optimize delivery",
   },
@@ -798,7 +799,9 @@ function TemplateCard({ template, onUseTemplate }: TemplateCardProps) {
                   />
                   <span className="text-foreground/80">{section.title}</span>
                   {section.required && (
-                    <span className="text-xs text-[var(--brain-cyan)]">(required)</span>
+                    <span className="text-xs text-[var(--brain-cyan)]">
+                      (required)
+                    </span>
                   )}
                 </div>
               ))}

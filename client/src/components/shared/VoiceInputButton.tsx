@@ -48,8 +48,7 @@ export function VoiceInputButton({
     },
   });
 
-  const { waveformData, startWaveform, stopWaveform } =
-    useVoiceWaveform();
+  const { waveformData, startWaveform, stopWaveform } = useVoiceWaveform();
 
   // Sync waveform with listening state
   useEffect(() => {

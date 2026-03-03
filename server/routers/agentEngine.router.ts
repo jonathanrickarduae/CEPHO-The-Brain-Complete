@@ -1,3 +1,4 @@
+import { getModelForTask } from "../utils/modelRouter";
 /**
  * Agent Engine Router — Real AI Integration
  *
@@ -29,14 +30,17 @@ function getOpenAI(): OpenAI {
 // ─── Agent Registry ───────────────────────────────────────────────────────────
 // Each agent has an id, name, category, specialization, and a system prompt
 // that defines its persona, capabilities, and operating principles.
-const AGENT_REGISTRY: Record<string, {
-  name: string;
-  category: string;
-  specialization: string;
-  systemPrompt: string;
-  dailyTasks: string[];
-  capabilities: string[];
-}> = {
+const AGENT_REGISTRY: Record<
+  string,
+  {
+    name: string;
+    category: string;
+    specialization: string;
+    systemPrompt: string;
+    dailyTasks: string[];
+    capabilities: string[];
+  }
+> = {
   // ── COMMUNICATION ──────────────────────────────────────────────────────────
   email_composer: {
     name: "Email Composer",
@@ -46,8 +50,19 @@ const AGENT_REGISTRY: Record<string, {
 Your role: Draft clear, concise, and impactful emails for any business context.
 Your principles: Be professional, direct, and empathetic. Adapt tone to context.
 Your output: Always return structured, ready-to-send email drafts.`,
-    dailyTasks: ["Review pending email drafts", "Process incoming communication queue", "Update email templates", "Analyse communication patterns"],
-    capabilities: ["Draft professional emails", "Respond to inquiries", "Manage follow-up sequences", "Create email templates", "Analyse email effectiveness"],
+    dailyTasks: [
+      "Review pending email drafts",
+      "Process incoming communication queue",
+      "Update email templates",
+      "Analyse communication patterns",
+    ],
+    capabilities: [
+      "Draft professional emails",
+      "Respond to inquiries",
+      "Manage follow-up sequences",
+      "Create email templates",
+      "Analyse email effectiveness",
+    ],
   },
   meeting_summariser: {
     name: "Meeting Summariser",
@@ -57,8 +72,19 @@ Your output: Always return structured, ready-to-send email drafts.`,
 Your role: Transform meeting transcripts and notes into clear, actionable summaries.
 Your principles: Capture decisions, action items, and key discussion points accurately.
 Your output: Structured summaries with decisions, action items, and next steps.`,
-    dailyTasks: ["Process meeting recordings", "Extract action items", "Send follow-up summaries", "Update project boards"],
-    capabilities: ["Summarise meetings", "Extract action items", "Identify decisions", "Create follow-up agendas", "Track meeting outcomes"],
+    dailyTasks: [
+      "Process meeting recordings",
+      "Extract action items",
+      "Send follow-up summaries",
+      "Update project boards",
+    ],
+    capabilities: [
+      "Summarise meetings",
+      "Extract action items",
+      "Identify decisions",
+      "Create follow-up agendas",
+      "Track meeting outcomes",
+    ],
   },
   stakeholder_comms: {
     name: "Stakeholder Communications",
@@ -68,8 +94,19 @@ Your output: Structured summaries with decisions, action items, and next steps.`
 Your role: Ensure all stakeholders receive timely, accurate, and appropriate communications.
 Your principles: Transparency, consistency, and strategic messaging.
 Your output: Tailored stakeholder updates, board communications, and investor relations content.`,
-    dailyTasks: ["Review stakeholder communication schedule", "Draft board updates", "Monitor stakeholder sentiment", "Prepare investor communications"],
-    capabilities: ["Board communications", "Investor relations", "Partner updates", "Stakeholder mapping", "Crisis communications"],
+    dailyTasks: [
+      "Review stakeholder communication schedule",
+      "Draft board updates",
+      "Monitor stakeholder sentiment",
+      "Prepare investor communications",
+    ],
+    capabilities: [
+      "Board communications",
+      "Investor relations",
+      "Partner updates",
+      "Stakeholder mapping",
+      "Crisis communications",
+    ],
   },
   proposal_writer: {
     name: "Proposal Writer",
@@ -79,8 +116,19 @@ Your output: Tailored stakeholder updates, board communications, and investor re
 Your role: Transform business opportunities into persuasive, well-structured proposals.
 Your principles: Evidence-based, client-focused, and commercially astute.
 Your output: Professional proposals, pitch decks, and RFP responses.`,
-    dailyTasks: ["Review active proposals", "Research prospect backgrounds", "Update proposal templates", "Track proposal outcomes"],
-    capabilities: ["Business proposals", "Pitch decks", "RFP responses", "Grant applications", "Partnership proposals"],
+    dailyTasks: [
+      "Review active proposals",
+      "Research prospect backgrounds",
+      "Update proposal templates",
+      "Track proposal outcomes",
+    ],
+    capabilities: [
+      "Business proposals",
+      "Pitch decks",
+      "RFP responses",
+      "Grant applications",
+      "Partnership proposals",
+    ],
   },
   newsletter_editor: {
     name: "Newsletter Editor",
@@ -90,8 +138,19 @@ Your output: Professional proposals, pitch decks, and RFP responses.`,
 Your role: Create compelling internal and external newsletters that inform and engage.
 Your principles: Relevant, timely, and engaging content that drives action.
 Your output: Ready-to-publish newsletter content with curated insights.`,
-    dailyTasks: ["Curate industry news", "Draft newsletter sections", "Review subscriber engagement", "Update content calendar"],
-    capabilities: ["Newsletter curation", "Content editing", "Subscriber management", "Engagement analytics", "Content scheduling"],
+    dailyTasks: [
+      "Curate industry news",
+      "Draft newsletter sections",
+      "Review subscriber engagement",
+      "Update content calendar",
+    ],
+    capabilities: [
+      "Newsletter curation",
+      "Content editing",
+      "Subscriber management",
+      "Engagement analytics",
+      "Content scheduling",
+    ],
   },
   linkedin_manager: {
     name: "LinkedIn Manager",
@@ -101,8 +160,19 @@ Your output: Ready-to-publish newsletter content with curated insights.`,
 Your role: Build and maintain a strong professional brand on LinkedIn.
 Your principles: Authentic, thought-leadership focused, and engagement-driven.
 Your output: LinkedIn posts, connection strategies, and engagement reports.`,
-    dailyTasks: ["Draft LinkedIn posts", "Review connection requests", "Monitor engagement metrics", "Research trending topics"],
-    capabilities: ["LinkedIn content", "Profile optimisation", "Connection strategy", "Thought leadership", "Engagement management"],
+    dailyTasks: [
+      "Draft LinkedIn posts",
+      "Review connection requests",
+      "Monitor engagement metrics",
+      "Research trending topics",
+    ],
+    capabilities: [
+      "LinkedIn content",
+      "Profile optimisation",
+      "Connection strategy",
+      "Thought leadership",
+      "Engagement management",
+    ],
   },
   press_release_writer: {
     name: "Press Release Writer",
@@ -112,8 +182,19 @@ Your output: LinkedIn posts, connection strategies, and engagement reports.`,
 Your role: Create newsworthy press releases that generate media coverage.
 Your principles: Newsworthiness, clarity, and strategic media positioning.
 Your output: Publication-ready press releases and media pitches.`,
-    dailyTasks: ["Monitor news opportunities", "Draft press releases", "Update media contact list", "Track media coverage"],
-    capabilities: ["Press releases", "Media pitches", "Crisis statements", "Executive quotes", "Media monitoring"],
+    dailyTasks: [
+      "Monitor news opportunities",
+      "Draft press releases",
+      "Update media contact list",
+      "Track media coverage",
+    ],
+    capabilities: [
+      "Press releases",
+      "Media pitches",
+      "Crisis statements",
+      "Executive quotes",
+      "Media monitoring",
+    ],
   },
   crisis_comms: {
     name: "Crisis Communications",
@@ -123,8 +204,19 @@ Your output: Publication-ready press releases and media pitches.`,
 Your role: Protect and manage the organisation's reputation during challenging situations.
 Your principles: Speed, accuracy, transparency, and strategic messaging.
 Your output: Crisis response plans, holding statements, and stakeholder communications.`,
-    dailyTasks: ["Monitor brand mentions", "Review risk indicators", "Update crisis playbooks", "Brief leadership on risks"],
-    capabilities: ["Crisis response", "Reputation management", "Media relations", "Stakeholder briefings", "Risk monitoring"],
+    dailyTasks: [
+      "Monitor brand mentions",
+      "Review risk indicators",
+      "Update crisis playbooks",
+      "Brief leadership on risks",
+    ],
+    capabilities: [
+      "Crisis response",
+      "Reputation management",
+      "Media relations",
+      "Stakeholder briefings",
+      "Risk monitoring",
+    ],
   },
   // ── CONTENT ────────────────────────────────────────────────────────────────
   report_writer: {
@@ -135,8 +227,19 @@ Your output: Crisis response plans, holding statements, and stakeholder communic
 Your role: Transform data and insights into clear, professional reports.
 Your principles: Evidence-based, structured, and actionable.
 Your output: Professional reports, white papers, and analysis documents.`,
-    dailyTasks: ["Draft scheduled reports", "Gather data for analysis", "Review report templates", "Update report library"],
-    capabilities: ["Business reports", "White papers", "Analysis documents", "Executive summaries", "Annual reports"],
+    dailyTasks: [
+      "Draft scheduled reports",
+      "Gather data for analysis",
+      "Review report templates",
+      "Update report library",
+    ],
+    capabilities: [
+      "Business reports",
+      "White papers",
+      "Analysis documents",
+      "Executive summaries",
+      "Annual reports",
+    ],
   },
   blog_writer: {
     name: "Blog Writer",
@@ -146,8 +249,19 @@ Your output: Professional reports, white papers, and analysis documents.`,
 Your role: Create engaging, SEO-optimised blog content that positions CEPHO as an industry leader.
 Your principles: Insightful, engaging, and strategically aligned with business goals.
 Your output: Publication-ready blog posts and thought leadership articles.`,
-    dailyTasks: ["Research trending topics", "Draft blog posts", "Review content calendar", "Optimise existing content"],
-    capabilities: ["Blog articles", "Thought leadership", "SEO optimisation", "Content strategy", "Editorial calendar"],
+    dailyTasks: [
+      "Research trending topics",
+      "Draft blog posts",
+      "Review content calendar",
+      "Optimise existing content",
+    ],
+    capabilities: [
+      "Blog articles",
+      "Thought leadership",
+      "SEO optimisation",
+      "Content strategy",
+      "Editorial calendar",
+    ],
   },
   social_media_manager: {
     name: "Social Media Manager",
@@ -157,8 +271,19 @@ Your output: Publication-ready blog posts and thought leadership articles.`,
 Your role: Build brand awareness and engagement through strategic social media content.
 Your principles: Platform-native, engaging, and brand-consistent.
 Your output: Social media posts, campaign plans, and engagement reports.`,
-    dailyTasks: ["Schedule social posts", "Monitor engagement", "Respond to comments", "Analyse performance metrics"],
-    capabilities: ["Social content", "Campaign management", "Community management", "Analytics", "Platform strategy"],
+    dailyTasks: [
+      "Schedule social posts",
+      "Monitor engagement",
+      "Respond to comments",
+      "Analyse performance metrics",
+    ],
+    capabilities: [
+      "Social content",
+      "Campaign management",
+      "Community management",
+      "Analytics",
+      "Platform strategy",
+    ],
   },
   video_scriptwriter: {
     name: "Video Scriptwriter",
@@ -168,8 +293,19 @@ Your output: Social media posts, campaign plans, and engagement reports.`,
 Your role: Create engaging video scripts that communicate key messages effectively.
 Your principles: Visual storytelling, clear messaging, and audience engagement.
 Your output: Production-ready video scripts and storyboards.`,
-    dailyTasks: ["Draft video scripts", "Review production briefs", "Update script templates", "Research video trends"],
-    capabilities: ["Video scripts", "Storyboards", "Explainer videos", "Testimonial scripts", "Webinar content"],
+    dailyTasks: [
+      "Draft video scripts",
+      "Review production briefs",
+      "Update script templates",
+      "Research video trends",
+    ],
+    capabilities: [
+      "Video scripts",
+      "Storyboards",
+      "Explainer videos",
+      "Testimonial scripts",
+      "Webinar content",
+    ],
   },
   case_study_writer: {
     name: "Case Study Writer",
@@ -179,8 +315,19 @@ Your output: Production-ready video scripts and storyboards.`,
 Your role: Transform client successes into compelling case studies that drive new business.
 Your principles: Results-focused, authentic, and commercially valuable.
 Your output: Professional case studies and success stories.`,
-    dailyTasks: ["Interview clients for stories", "Draft case studies", "Review outcome data", "Update case study library"],
-    capabilities: ["Case studies", "Success stories", "ROI documentation", "Client testimonials", "Impact reports"],
+    dailyTasks: [
+      "Interview clients for stories",
+      "Draft case studies",
+      "Review outcome data",
+      "Update case study library",
+    ],
+    capabilities: [
+      "Case studies",
+      "Success stories",
+      "ROI documentation",
+      "Client testimonials",
+      "Impact reports",
+    ],
   },
   seo_specialist: {
     name: "SEO Specialist",
@@ -190,8 +337,19 @@ Your output: Professional case studies and success stories.`,
 Your role: Ensure all digital content ranks well and drives organic traffic.
 Your principles: Data-driven, user-intent focused, and technically sound.
 Your output: SEO recommendations, keyword strategies, and optimised content.`,
-    dailyTasks: ["Review keyword rankings", "Audit content for SEO", "Research competitor keywords", "Update meta data"],
-    capabilities: ["Keyword research", "On-page SEO", "Technical SEO", "Content optimisation", "Ranking analysis"],
+    dailyTasks: [
+      "Review keyword rankings",
+      "Audit content for SEO",
+      "Research competitor keywords",
+      "Update meta data",
+    ],
+    capabilities: [
+      "Keyword research",
+      "On-page SEO",
+      "Technical SEO",
+      "Content optimisation",
+      "Ranking analysis",
+    ],
   },
   brand_voice_guardian: {
     name: "Brand Voice Guardian",
@@ -201,8 +359,19 @@ Your output: SEO recommendations, keyword strategies, and optimised content.`,
 Your role: Maintain and enforce CEPHO's brand voice across all communications.
 Your principles: Consistency, authenticity, and brand integrity.
 Your output: Brand guidelines, tone reviews, and style recommendations.`,
-    dailyTasks: ["Review content for brand consistency", "Update brand guidelines", "Train other agents on brand voice", "Audit published content"],
-    capabilities: ["Brand guidelines", "Tone of voice", "Style guides", "Content review", "Brand training"],
+    dailyTasks: [
+      "Review content for brand consistency",
+      "Update brand guidelines",
+      "Train other agents on brand voice",
+      "Audit published content",
+    ],
+    capabilities: [
+      "Brand guidelines",
+      "Tone of voice",
+      "Style guides",
+      "Content review",
+      "Brand training",
+    ],
   },
   // ── ANALYSIS ───────────────────────────────────────────────────────────────
   market_analyst: {
@@ -213,8 +382,19 @@ Your output: Brand guidelines, tone reviews, and style recommendations.`,
 Your role: Provide strategic market intelligence to inform business decisions.
 Your principles: Data-driven, forward-looking, and commercially relevant.
 Your output: Market analysis reports, competitive intelligence, and strategic recommendations.`,
-    dailyTasks: ["Monitor market news", "Update competitive analysis", "Research emerging trends", "Brief leadership on opportunities"],
-    capabilities: ["Market analysis", "Competitive intelligence", "Trend forecasting", "Opportunity identification", "Strategic recommendations"],
+    dailyTasks: [
+      "Monitor market news",
+      "Update competitive analysis",
+      "Research emerging trends",
+      "Brief leadership on opportunities",
+    ],
+    capabilities: [
+      "Market analysis",
+      "Competitive intelligence",
+      "Trend forecasting",
+      "Opportunity identification",
+      "Strategic recommendations",
+    ],
   },
   financial_analyst: {
     name: "Financial Analyst",
@@ -224,8 +404,19 @@ Your output: Market analysis reports, competitive intelligence, and strategic re
 Your role: Support financial decision-making with rigorous analysis and clear insights.
 Your principles: Accuracy, transparency, and commercial acumen.
 Your output: Financial models, analysis reports, and investment recommendations.`,
-    dailyTasks: ["Review financial metrics", "Update financial models", "Analyse budget variances", "Prepare financial briefings"],
-    capabilities: ["Financial modelling", "Budget analysis", "Investment analysis", "Cash flow forecasting", "Financial reporting"],
+    dailyTasks: [
+      "Review financial metrics",
+      "Update financial models",
+      "Analyse budget variances",
+      "Prepare financial briefings",
+    ],
+    capabilities: [
+      "Financial modelling",
+      "Budget analysis",
+      "Investment analysis",
+      "Cash flow forecasting",
+      "Financial reporting",
+    ],
   },
   competitive_intelligence: {
     name: "Competitive Intelligence",
@@ -235,8 +426,19 @@ Your output: Financial models, analysis reports, and investment recommendations.
 Your role: Provide actionable competitive intelligence to maintain strategic advantage.
 Your principles: Comprehensive, timely, and strategically relevant.
 Your output: Competitor profiles, battle cards, and strategic alerts.`,
-    dailyTasks: ["Monitor competitor news", "Update competitor profiles", "Analyse competitor strategies", "Brief sales team"],
-    capabilities: ["Competitor monitoring", "Battle cards", "Win/loss analysis", "Market positioning", "Strategic alerts"],
+    dailyTasks: [
+      "Monitor competitor news",
+      "Update competitor profiles",
+      "Analyse competitor strategies",
+      "Brief sales team",
+    ],
+    capabilities: [
+      "Competitor monitoring",
+      "Battle cards",
+      "Win/loss analysis",
+      "Market positioning",
+      "Strategic alerts",
+    ],
   },
   data_interpreter: {
     name: "Data Interpreter",
@@ -246,8 +448,19 @@ Your output: Competitor profiles, battle cards, and strategic alerts.`,
 Your role: Make data accessible and actionable for decision-makers.
 Your principles: Clarity, accuracy, and business relevance.
 Your output: Data visualisations, insight reports, and recommendations.`,
-    dailyTasks: ["Process data feeds", "Generate insight reports", "Update dashboards", "Identify data anomalies"],
-    capabilities: ["Data analysis", "Visualisation", "Statistical analysis", "Insight generation", "Dashboard management"],
+    dailyTasks: [
+      "Process data feeds",
+      "Generate insight reports",
+      "Update dashboards",
+      "Identify data anomalies",
+    ],
+    capabilities: [
+      "Data analysis",
+      "Visualisation",
+      "Statistical analysis",
+      "Insight generation",
+      "Dashboard management",
+    ],
   },
   risk_assessor: {
     name: "Risk Assessor",
@@ -257,8 +470,19 @@ Your output: Data visualisations, insight reports, and recommendations.`,
 Your role: Protect the organisation by identifying and mitigating risks proactively.
 Your principles: Comprehensive, proactive, and proportionate.
 Your output: Risk assessments, mitigation plans, and risk registers.`,
-    dailyTasks: ["Review risk register", "Monitor risk indicators", "Update risk assessments", "Brief leadership on emerging risks"],
-    capabilities: ["Risk identification", "Risk assessment", "Mitigation planning", "Risk monitoring", "Compliance review"],
+    dailyTasks: [
+      "Review risk register",
+      "Monitor risk indicators",
+      "Update risk assessments",
+      "Brief leadership on emerging risks",
+    ],
+    capabilities: [
+      "Risk identification",
+      "Risk assessment",
+      "Mitigation planning",
+      "Risk monitoring",
+      "Compliance review",
+    ],
   },
   trend_spotter: {
     name: "Trend Spotter",
@@ -268,8 +492,19 @@ Your output: Risk assessments, mitigation plans, and risk registers.`,
 Your role: Keep CEPHO ahead of the curve by identifying relevant trends early.
 Your principles: Forward-looking, evidence-based, and commercially relevant.
 Your output: Trend reports, technology briefings, and strategic recommendations.`,
-    dailyTasks: ["Scan technology news", "Research emerging trends", "Update trend radar", "Brief innovation team"],
-    capabilities: ["Trend identification", "Technology scouting", "Innovation radar", "Future scenarios", "Strategic foresight"],
+    dailyTasks: [
+      "Scan technology news",
+      "Research emerging trends",
+      "Update trend radar",
+      "Brief innovation team",
+    ],
+    capabilities: [
+      "Trend identification",
+      "Technology scouting",
+      "Innovation radar",
+      "Future scenarios",
+      "Strategic foresight",
+    ],
   },
   research_synthesiser: {
     name: "Research Synthesiser",
@@ -279,8 +514,19 @@ Your output: Trend reports, technology briefings, and strategic recommendations.
 Your role: Transform complex research into clear, actionable briefs for decision-makers.
 Your principles: Comprehensive, balanced, and actionable.
 Your output: Research briefs, literature reviews, and evidence-based recommendations.`,
-    dailyTasks: ["Review new research publications", "Synthesise research findings", "Update knowledge base", "Brief relevant teams"],
-    capabilities: ["Research synthesis", "Literature review", "Evidence analysis", "Knowledge management", "Research briefings"],
+    dailyTasks: [
+      "Review new research publications",
+      "Synthesise research findings",
+      "Update knowledge base",
+      "Brief relevant teams",
+    ],
+    capabilities: [
+      "Research synthesis",
+      "Literature review",
+      "Evidence analysis",
+      "Knowledge management",
+      "Research briefings",
+    ],
   },
   kpi_tracker: {
     name: "KPI Tracker",
@@ -290,8 +536,19 @@ Your output: Research briefs, literature reviews, and evidence-based recommendat
 Your role: Ensure the organisation stays on track with its strategic objectives.
 Your principles: Accurate, timely, and actionable.
 Your output: KPI dashboards, performance reports, and variance analysis.`,
-    dailyTasks: ["Update KPI dashboards", "Calculate performance metrics", "Identify underperforming areas", "Prepare performance reports"],
-    capabilities: ["KPI monitoring", "Performance reporting", "Variance analysis", "Goal tracking", "Dashboard management"],
+    dailyTasks: [
+      "Update KPI dashboards",
+      "Calculate performance metrics",
+      "Identify underperforming areas",
+      "Prepare performance reports",
+    ],
+    capabilities: [
+      "KPI monitoring",
+      "Performance reporting",
+      "Variance analysis",
+      "Goal tracking",
+      "Dashboard management",
+    ],
   },
   // ── OPERATIONS ─────────────────────────────────────────────────────────────
   calendar_manager: {
@@ -302,8 +559,19 @@ Your output: KPI dashboards, performance reports, and variance analysis.`,
 Your role: Ensure time is used effectively and meetings are productive.
 Your principles: Efficiency, prioritisation, and respect for time.
 Your output: Optimised schedules, meeting briefs, and calendar recommendations.`,
-    dailyTasks: ["Review upcoming meetings", "Optimise calendar", "Send meeting briefs", "Identify scheduling conflicts"],
-    capabilities: ["Calendar optimisation", "Meeting scheduling", "Conflict resolution", "Meeting briefs", "Time management"],
+    dailyTasks: [
+      "Review upcoming meetings",
+      "Optimise calendar",
+      "Send meeting briefs",
+      "Identify scheduling conflicts",
+    ],
+    capabilities: [
+      "Calendar optimisation",
+      "Meeting scheduling",
+      "Conflict resolution",
+      "Meeting briefs",
+      "Time management",
+    ],
   },
   task_manager: {
     name: "Task Manager",
@@ -313,8 +581,19 @@ Your output: Optimised schedules, meeting briefs, and calendar recommendations.`
 Your role: Ensure all tasks are tracked, prioritised, and completed on time.
 Your principles: Clarity, prioritisation, and accountability.
 Your output: Task lists, priority recommendations, and completion reports.`,
-    dailyTasks: ["Review task backlog", "Prioritise tasks", "Update task status", "Identify blocked tasks"],
-    capabilities: ["Task tracking", "Priority management", "Deadline monitoring", "Resource allocation", "Progress reporting"],
+    dailyTasks: [
+      "Review task backlog",
+      "Prioritise tasks",
+      "Update task status",
+      "Identify blocked tasks",
+    ],
+    capabilities: [
+      "Task tracking",
+      "Priority management",
+      "Deadline monitoring",
+      "Resource allocation",
+      "Progress reporting",
+    ],
   },
   inbox_manager: {
     name: "Inbox Manager",
@@ -324,8 +603,19 @@ Your output: Task lists, priority recommendations, and completion reports.`,
 Your role: Ensure no important communication is missed and responses are timely.
 Your principles: Efficiency, prioritisation, and responsiveness.
 Your output: Prioritised inbox, draft responses, and action items.`,
-    dailyTasks: ["Triage incoming emails", "Draft responses", "Flag urgent items", "Archive processed emails"],
-    capabilities: ["Email triage", "Response drafting", "Priority flagging", "Inbox zero", "Communication routing"],
+    dailyTasks: [
+      "Triage incoming emails",
+      "Draft responses",
+      "Flag urgent items",
+      "Archive processed emails",
+    ],
+    capabilities: [
+      "Email triage",
+      "Response drafting",
+      "Priority flagging",
+      "Inbox zero",
+      "Communication routing",
+    ],
   },
   document_organiser: {
     name: "Document Organiser",
@@ -335,8 +625,19 @@ Your output: Prioritised inbox, draft responses, and action items.`,
 Your role: Ensure all documents are properly organised, versioned, and accessible.
 Your principles: Organisation, accessibility, and version control.
 Your output: Document taxonomies, filing recommendations, and document summaries.`,
-    dailyTasks: ["Review new documents", "Update filing system", "Create document summaries", "Archive old documents"],
-    capabilities: ["Document management", "Filing systems", "Version control", "Document search", "Archive management"],
+    dailyTasks: [
+      "Review new documents",
+      "Update filing system",
+      "Create document summaries",
+      "Archive old documents",
+    ],
+    capabilities: [
+      "Document management",
+      "Filing systems",
+      "Version control",
+      "Document search",
+      "Archive management",
+    ],
   },
   expense_tracker: {
     name: "Expense Tracker",
@@ -346,8 +647,19 @@ Your output: Document taxonomies, filing recommendations, and document summaries
 Your role: Ensure all expenses are tracked, categorised, and within budget.
 Your principles: Accuracy, compliance, and cost consciousness.
 Your output: Expense reports, budget variance analysis, and cost recommendations.`,
-    dailyTasks: ["Process expense submissions", "Update budget tracking", "Flag budget overruns", "Prepare expense reports"],
-    capabilities: ["Expense tracking", "Budget monitoring", "Cost analysis", "Compliance checking", "Financial reporting"],
+    dailyTasks: [
+      "Process expense submissions",
+      "Update budget tracking",
+      "Flag budget overruns",
+      "Prepare expense reports",
+    ],
+    capabilities: [
+      "Expense tracking",
+      "Budget monitoring",
+      "Cost analysis",
+      "Compliance checking",
+      "Financial reporting",
+    ],
   },
   travel_coordinator: {
     name: "Travel Coordinator",
@@ -357,8 +669,19 @@ Your output: Expense reports, budget variance analysis, and cost recommendations
 Your role: Ensure all business travel is efficient, cost-effective, and well-organised.
 Your principles: Efficiency, cost-effectiveness, and traveller wellbeing.
 Your output: Travel itineraries, booking recommendations, and travel briefings.`,
-    dailyTasks: ["Review upcoming travel", "Research travel options", "Update travel policies", "Prepare travel briefings"],
-    capabilities: ["Travel planning", "Itinerary management", "Cost optimisation", "Visa requirements", "Travel briefings"],
+    dailyTasks: [
+      "Review upcoming travel",
+      "Research travel options",
+      "Update travel policies",
+      "Prepare travel briefings",
+    ],
+    capabilities: [
+      "Travel planning",
+      "Itinerary management",
+      "Cost optimisation",
+      "Visa requirements",
+      "Travel briefings",
+    ],
   },
   feedback_collector: {
     name: "Feedback Collector",
@@ -368,8 +691,19 @@ Your output: Travel itineraries, booking recommendations, and travel briefings.`
 Your role: Ensure the organisation has a continuous feedback loop for improvement.
 Your principles: Comprehensive, unbiased, and actionable.
 Your output: Feedback reports, NPS analysis, and improvement recommendations.`,
-    dailyTasks: ["Review feedback submissions", "Analyse NPS scores", "Identify improvement themes", "Prepare feedback reports"],
-    capabilities: ["Feedback collection", "NPS analysis", "Sentiment analysis", "Improvement identification", "Stakeholder surveys"],
+    dailyTasks: [
+      "Review feedback submissions",
+      "Analyse NPS scores",
+      "Identify improvement themes",
+      "Prepare feedback reports",
+    ],
+    capabilities: [
+      "Feedback collection",
+      "NPS analysis",
+      "Sentiment analysis",
+      "Improvement identification",
+      "Stakeholder surveys",
+    ],
   },
   performance_tracker: {
     name: "Performance Tracker",
@@ -379,8 +713,19 @@ Your output: Feedback reports, NPS analysis, and improvement recommendations.`,
 Your role: Ensure all teams and individuals are performing at their best.
 Your principles: Fairness, transparency, and continuous improvement.
 Your output: Performance dashboards, review reports, and development recommendations.`,
-    dailyTasks: ["Update performance metrics", "Review team KPIs", "Identify performance gaps", "Prepare performance reports"],
-    capabilities: ["Performance monitoring", "KPI tracking", "Team analytics", "Development planning", "Performance reviews"],
+    dailyTasks: [
+      "Update performance metrics",
+      "Review team KPIs",
+      "Identify performance gaps",
+      "Prepare performance reports",
+    ],
+    capabilities: [
+      "Performance monitoring",
+      "KPI tracking",
+      "Team analytics",
+      "Development planning",
+      "Performance reviews",
+    ],
   },
   meeting_preparer: {
     name: "Meeting Preparer",
@@ -390,8 +735,19 @@ Your output: Performance dashboards, review reports, and development recommendat
 Your role: Ensure every meeting is productive with proper preparation and context.
 Your principles: Thoroughness, relevance, and efficiency.
 Your output: Meeting agendas, briefing packs, and pre-read materials.`,
-    dailyTasks: ["Review upcoming meetings", "Prepare briefing packs", "Research attendees", "Draft agendas"],
-    capabilities: ["Meeting agendas", "Briefing packs", "Attendee research", "Pre-read materials", "Meeting objectives"],
+    dailyTasks: [
+      "Review upcoming meetings",
+      "Prepare briefing packs",
+      "Research attendees",
+      "Draft agendas",
+    ],
+    capabilities: [
+      "Meeting agendas",
+      "Briefing packs",
+      "Attendee research",
+      "Pre-read materials",
+      "Meeting objectives",
+    ],
   },
   daily_summariser: {
     name: "Daily Summariser",
@@ -401,8 +757,19 @@ Your output: Meeting agendas, briefing packs, and pre-read materials.`,
 Your role: Ensure leadership has a clear picture of daily activities and outcomes.
 Your principles: Clarity, completeness, and actionability.
 Your output: Daily summaries, activity reports, and next-day priorities.`,
-    dailyTasks: ["Compile daily activities", "Summarise key outcomes", "Identify priorities for tomorrow", "Prepare evening brief"],
-    capabilities: ["Daily summaries", "Activity reporting", "Priority setting", "Evening briefs", "Progress tracking"],
+    dailyTasks: [
+      "Compile daily activities",
+      "Summarise key outcomes",
+      "Identify priorities for tomorrow",
+      "Prepare evening brief",
+    ],
+    capabilities: [
+      "Daily summaries",
+      "Activity reporting",
+      "Priority setting",
+      "Evening briefs",
+      "Progress tracking",
+    ],
   },
   // ── STRATEGY ───────────────────────────────────────────────────────────────
   goal_strategist: {
@@ -413,8 +780,19 @@ Your output: Daily summaries, activity reports, and next-day priorities.`,
 Your role: Ensure the organisation has clear, achievable, and aligned strategic goals.
 Your principles: Strategic alignment, measurability, and ambition.
 Your output: Strategic goal frameworks, OKRs, and goal tracking reports.`,
-    dailyTasks: ["Review strategic goals", "Track OKR progress", "Identify goal risks", "Update strategic roadmap"],
-    capabilities: ["Goal setting", "OKR management", "Strategic planning", "Goal tracking", "Alignment analysis"],
+    dailyTasks: [
+      "Review strategic goals",
+      "Track OKR progress",
+      "Identify goal risks",
+      "Update strategic roadmap",
+    ],
+    capabilities: [
+      "Goal setting",
+      "OKR management",
+      "Strategic planning",
+      "Goal tracking",
+      "Alignment analysis",
+    ],
   },
   decision_analyst: {
     name: "Decision Analyst",
@@ -424,8 +802,19 @@ Your output: Strategic goal frameworks, OKRs, and goal tracking reports.`,
 Your role: Provide structured analysis and frameworks to support better decisions.
 Your principles: Evidence-based, structured, and unbiased.
 Your output: Decision frameworks, option analyses, and recommendation reports.`,
-    dailyTasks: ["Review pending decisions", "Prepare decision briefs", "Analyse options", "Document decision rationale"],
-    capabilities: ["Decision frameworks", "Option analysis", "Risk-benefit analysis", "Decision documentation", "Scenario planning"],
+    dailyTasks: [
+      "Review pending decisions",
+      "Prepare decision briefs",
+      "Analyse options",
+      "Document decision rationale",
+    ],
+    capabilities: [
+      "Decision frameworks",
+      "Option analysis",
+      "Risk-benefit analysis",
+      "Decision documentation",
+      "Scenario planning",
+    ],
   },
   scenario_planner: {
     name: "Scenario Planner",
@@ -435,8 +824,19 @@ Your output: Decision frameworks, option analyses, and recommendation reports.`,
 Your role: Prepare the organisation for multiple possible futures.
 Your principles: Comprehensive, realistic, and actionable.
 Your output: Scenario analyses, contingency plans, and strategic options.`,
-    dailyTasks: ["Update scenario models", "Monitor scenario triggers", "Review contingency plans", "Brief leadership on scenarios"],
-    capabilities: ["Scenario development", "Contingency planning", "Strategic options", "Risk scenarios", "Future planning"],
+    dailyTasks: [
+      "Update scenario models",
+      "Monitor scenario triggers",
+      "Review contingency plans",
+      "Brief leadership on scenarios",
+    ],
+    capabilities: [
+      "Scenario development",
+      "Contingency planning",
+      "Strategic options",
+      "Risk scenarios",
+      "Future planning",
+    ],
   },
   resource_allocator: {
     name: "Resource Allocator",
@@ -446,8 +846,19 @@ Your output: Scenario analyses, contingency plans, and strategic options.`,
 Your role: Ensure resources are allocated to the highest-value activities.
 Your principles: Efficiency, strategic alignment, and fairness.
 Your output: Resource allocation plans, capacity analyses, and optimisation recommendations.`,
-    dailyTasks: ["Review resource utilisation", "Identify resource conflicts", "Update capacity plans", "Prepare allocation reports"],
-    capabilities: ["Resource planning", "Capacity management", "Allocation optimisation", "Budget allocation", "Team planning"],
+    dailyTasks: [
+      "Review resource utilisation",
+      "Identify resource conflicts",
+      "Update capacity plans",
+      "Prepare allocation reports",
+    ],
+    capabilities: [
+      "Resource planning",
+      "Capacity management",
+      "Allocation optimisation",
+      "Budget allocation",
+      "Team planning",
+    ],
   },
   innovation_scout: {
     name: "Innovation Scout",
@@ -457,8 +868,19 @@ Your output: Resource allocation plans, capacity analyses, and optimisation reco
 Your role: Keep CEPHO at the forefront of innovation in its industry.
 Your principles: Curiosity, commercial relevance, and strategic fit.
 Your output: Innovation reports, opportunity assessments, and technology briefings.`,
-    dailyTasks: ["Scan innovation landscape", "Evaluate new technologies", "Update innovation pipeline", "Brief innovation team"],
-    capabilities: ["Innovation scouting", "Technology evaluation", "Opportunity assessment", "Innovation pipeline", "Tech briefings"],
+    dailyTasks: [
+      "Scan innovation landscape",
+      "Evaluate new technologies",
+      "Update innovation pipeline",
+      "Brief innovation team",
+    ],
+    capabilities: [
+      "Innovation scouting",
+      "Technology evaluation",
+      "Opportunity assessment",
+      "Innovation pipeline",
+      "Tech briefings",
+    ],
   },
   strategic_advisor: {
     name: "Strategic Advisor",
@@ -468,8 +890,19 @@ Your output: Innovation reports, opportunity assessments, and technology briefin
 Your role: Act as a trusted strategic advisor to leadership.
 Your principles: Strategic thinking, commercial acumen, and long-term perspective.
 Your output: Strategic recommendations, advisory briefs, and strategic reviews.`,
-    dailyTasks: ["Review strategic priorities", "Prepare advisory briefs", "Monitor strategic risks", "Update strategic roadmap"],
-    capabilities: ["Strategic advice", "Executive briefings", "Strategic reviews", "Board presentations", "Strategic planning"],
+    dailyTasks: [
+      "Review strategic priorities",
+      "Prepare advisory briefs",
+      "Monitor strategic risks",
+      "Update strategic roadmap",
+    ],
+    capabilities: [
+      "Strategic advice",
+      "Executive briefings",
+      "Strategic reviews",
+      "Board presentations",
+      "Strategic planning",
+    ],
   },
   knowledge_manager: {
     name: "Knowledge Manager",
@@ -479,8 +912,19 @@ Your output: Strategic recommendations, advisory briefs, and strategic reviews.`
 Your role: Ensure the right knowledge reaches the right people at the right time.
 Your principles: Accessibility, accuracy, and continuous improvement.
 Your output: Knowledge bases, learning resources, and knowledge reports.`,
-    dailyTasks: ["Update knowledge base", "Review knowledge gaps", "Curate learning resources", "Prepare knowledge reports"],
-    capabilities: ["Knowledge management", "Learning resources", "Knowledge bases", "Best practices", "Knowledge sharing"],
+    dailyTasks: [
+      "Update knowledge base",
+      "Review knowledge gaps",
+      "Curate learning resources",
+      "Prepare knowledge reports",
+    ],
+    capabilities: [
+      "Knowledge management",
+      "Learning resources",
+      "Knowledge bases",
+      "Best practices",
+      "Knowledge sharing",
+    ],
   },
   // ── WORKFLOW ───────────────────────────────────────────────────────────────
   workflow_automator: {
@@ -491,8 +935,19 @@ Your output: Knowledge bases, learning resources, and knowledge reports.`,
 Your role: Eliminate manual, repetitive tasks through intelligent automation.
 Your principles: Efficiency, reliability, and scalability.
 Your output: Automation recommendations, workflow designs, and implementation plans.`,
-    dailyTasks: ["Identify automation opportunities", "Review existing automations", "Update workflow documentation", "Monitor automation performance"],
-    capabilities: ["Workflow automation", "Process mapping", "Tool integration", "Automation design", "Performance monitoring"],
+    dailyTasks: [
+      "Identify automation opportunities",
+      "Review existing automations",
+      "Update workflow documentation",
+      "Monitor automation performance",
+    ],
+    capabilities: [
+      "Workflow automation",
+      "Process mapping",
+      "Tool integration",
+      "Automation design",
+      "Performance monitoring",
+    ],
   },
   process_documenter: {
     name: "Process Documenter",
@@ -502,8 +957,19 @@ Your output: Automation recommendations, workflow designs, and implementation pl
 Your role: Ensure all business processes are clearly documented and accessible.
 Your principles: Clarity, completeness, and usability.
 Your output: Process documentation, SOPs, and process maps.`,
-    dailyTasks: ["Document new processes", "Review existing documentation", "Update process maps", "Identify documentation gaps"],
-    capabilities: ["Process documentation", "SOPs", "Process mapping", "Version control", "Documentation standards"],
+    dailyTasks: [
+      "Document new processes",
+      "Review existing documentation",
+      "Update process maps",
+      "Identify documentation gaps",
+    ],
+    capabilities: [
+      "Process documentation",
+      "SOPs",
+      "Process mapping",
+      "Version control",
+      "Documentation standards",
+    ],
   },
   qa_specialist: {
     name: "QA Specialist",
@@ -513,8 +979,19 @@ Your output: Process documentation, SOPs, and process maps.`,
 Your role: Maintain the highest quality standards across all CEPHO activities.
 Your principles: Rigour, consistency, and continuous improvement.
 Your output: Quality reviews, QA reports, and improvement recommendations.`,
-    dailyTasks: ["Review outputs for quality", "Run quality checks", "Update QA standards", "Prepare QA reports"],
-    capabilities: ["Quality assurance", "Quality reviews", "Standards management", "Process improvement", "Compliance checking"],
+    dailyTasks: [
+      "Review outputs for quality",
+      "Run quality checks",
+      "Update QA standards",
+      "Prepare QA reports",
+    ],
+    capabilities: [
+      "Quality assurance",
+      "Quality reviews",
+      "Standards management",
+      "Process improvement",
+      "Compliance checking",
+    ],
   },
   workflow_orchestrator: {
     name: "Workflow Orchestrator",
@@ -524,8 +1001,19 @@ Your output: Quality reviews, QA reports, and improvement recommendations.`,
 Your role: Ensure complex workflows run smoothly and efficiently.
 Your principles: Coordination, visibility, and efficiency.
 Your output: Workflow status reports, bottleneck analyses, and orchestration plans.`,
-    dailyTasks: ["Monitor active workflows", "Identify bottlenecks", "Coordinate cross-team workflows", "Update workflow status"],
-    capabilities: ["Workflow coordination", "Bottleneck identification", "Cross-team coordination", "Workflow monitoring", "Process optimisation"],
+    dailyTasks: [
+      "Monitor active workflows",
+      "Identify bottlenecks",
+      "Coordinate cross-team workflows",
+      "Update workflow status",
+    ],
+    capabilities: [
+      "Workflow coordination",
+      "Bottleneck identification",
+      "Cross-team coordination",
+      "Workflow monitoring",
+      "Process optimisation",
+    ],
   },
   integration_specialist: {
     name: "Integration Specialist",
@@ -535,8 +1023,19 @@ Your output: Workflow status reports, bottleneck analyses, and orchestration pla
 Your role: Ensure all systems are properly integrated and data flows seamlessly.
 Your principles: Reliability, security, and efficiency.
 Your output: Integration plans, API documentation, and integration status reports.`,
-    dailyTasks: ["Monitor integration health", "Review API connections", "Update integration documentation", "Identify integration issues"],
-    capabilities: ["System integration", "API management", "Data flows", "Integration monitoring", "Technical documentation"],
+    dailyTasks: [
+      "Monitor integration health",
+      "Review API connections",
+      "Update integration documentation",
+      "Identify integration issues",
+    ],
+    capabilities: [
+      "System integration",
+      "API management",
+      "Data flows",
+      "Integration monitoring",
+      "Technical documentation",
+    ],
   },
   process_optimiser: {
     name: "Process Optimiser",
@@ -546,8 +1045,19 @@ Your output: Integration plans, API documentation, and integration status report
 Your role: Identify and implement process improvements across the organisation.
 Your principles: Continuous improvement, data-driven, and pragmatic.
 Your output: Process improvement plans, efficiency reports, and optimisation recommendations.`,
-    dailyTasks: ["Analyse process performance", "Identify improvement opportunities", "Implement quick wins", "Prepare optimisation reports"],
-    capabilities: ["Process improvement", "Efficiency analysis", "Lean methodology", "Change management", "Performance optimisation"],
+    dailyTasks: [
+      "Analyse process performance",
+      "Identify improvement opportunities",
+      "Implement quick wins",
+      "Prepare optimisation reports",
+    ],
+    capabilities: [
+      "Process improvement",
+      "Efficiency analysis",
+      "Lean methodology",
+      "Change management",
+      "Performance optimisation",
+    ],
   },
   // ── LEARNING ───────────────────────────────────────────────────────────────
   continuous_learner: {
@@ -558,8 +1068,19 @@ Your output: Process improvement plans, efficiency reports, and optimisation rec
 Your role: Ensure CEPHO continuously learns and improves from all experiences.
 Your principles: Growth mindset, evidence-based learning, and practical application.
 Your output: Learning reports, improvement recommendations, and training plans.`,
-    dailyTasks: ["Review recent outcomes", "Identify learning opportunities", "Update learning resources", "Prepare learning reports"],
-    capabilities: ["Learning management", "Knowledge capture", "Improvement identification", "Training development", "Learning analytics"],
+    dailyTasks: [
+      "Review recent outcomes",
+      "Identify learning opportunities",
+      "Update learning resources",
+      "Prepare learning reports",
+    ],
+    capabilities: [
+      "Learning management",
+      "Knowledge capture",
+      "Improvement identification",
+      "Training development",
+      "Learning analytics",
+    ],
   },
   best_practice_researcher: {
     name: "Best Practice Researcher",
@@ -569,8 +1090,19 @@ Your output: Learning reports, improvement recommendations, and training plans.`
 Your role: Ensure CEPHO adopts the best practices from across its industry.
 Your principles: Evidence-based, practical, and commercially relevant.
 Your output: Best practice reports, implementation guides, and benchmarking analyses.`,
-    dailyTasks: ["Research industry best practices", "Benchmark against competitors", "Update best practice library", "Brief relevant teams"],
-    capabilities: ["Best practice research", "Benchmarking", "Implementation guidance", "Industry analysis", "Knowledge transfer"],
+    dailyTasks: [
+      "Research industry best practices",
+      "Benchmark against competitors",
+      "Update best practice library",
+      "Brief relevant teams",
+    ],
+    capabilities: [
+      "Best practice research",
+      "Benchmarking",
+      "Implementation guidance",
+      "Industry analysis",
+      "Knowledge transfer",
+    ],
   },
   morning_briefing_specialist: {
     name: "Morning Briefing Specialist",
@@ -580,8 +1112,19 @@ Your output: Best practice reports, implementation guides, and benchmarking anal
 Your role: Ensure leadership starts each day with a clear picture of priorities and context.
 Your principles: Clarity, relevance, and actionability.
 Your output: Daily briefings, priority lists, and context summaries.`,
-    dailyTasks: ["Compile overnight updates", "Prioritise daily actions", "Prepare briefing content", "Distribute morning brief"],
-    capabilities: ["Morning briefings", "Priority setting", "Context summaries", "Daily planning", "Leadership support"],
+    dailyTasks: [
+      "Compile overnight updates",
+      "Prioritise daily actions",
+      "Prepare briefing content",
+      "Distribute morning brief",
+    ],
+    capabilities: [
+      "Morning briefings",
+      "Priority setting",
+      "Context summaries",
+      "Daily planning",
+      "Leadership support",
+    ],
   },
 };
 
@@ -602,11 +1145,14 @@ export const agentEngineRouter = router({
       capabilityCount: agent.capabilities.length,
     }));
 
-    const byCategory = agents.reduce((acc, agent) => {
-      if (!acc[agent.category]) acc[agent.category] = [];
-      acc[agent.category].push(agent);
-      return acc;
-    }, {} as Record<string, typeof agents>);
+    const byCategory = agents.reduce(
+      (acc, agent) => {
+        if (!acc[agent.category]) acc[agent.category] = [];
+        acc[agent.category].push(agent);
+        return acc;
+      },
+      {} as Record<string, typeof agents>
+    );
 
     return {
       agents,
@@ -625,11 +1171,13 @@ export const agentEngineRouter = router({
    * Execute a task with a specific agent using real OpenAI
    */
   executeTask: protectedProcedure
-    .input(z.object({
-      agentId: z.string(),
-      taskDescription: z.string(),
-      context: z.string().optional(),
-    }))
+    .input(
+      z.object({
+        agentId: z.string(),
+        taskDescription: z.string(),
+        context: z.string().optional(),
+      })
+    )
     .mutation(async ({ input, ctx }) => {
       const agent = AGENT_REGISTRY[input.agentId];
       if (!agent) throw new Error(`Agent ${input.agentId} not found`);
@@ -647,13 +1195,14 @@ export const agentEngineRouter = router({
       ];
 
       const completion = await openai.chat.completions.create({
-        model: "gpt-4.1-mini",
+        model: getModelForTask("chat"),
         messages,
         max_tokens: 1000,
         temperature: 0.7,
       });
 
-      const result = completion.choices[0]?.message?.content ?? "No response generated";
+      const result =
+        completion.choices[0]?.message?.content ?? "No response generated";
 
       // Log to activity feed
       await db.insert(activityFeed).values({
@@ -681,10 +1230,12 @@ export const agentEngineRouter = router({
    * Generate a real AI-written daily report for an agent
    */
   generateDailyReport: protectedProcedure
-    .input(z.object({
-      agentId: z.string(),
-      date: z.string().optional(),
-    }))
+    .input(
+      z.object({
+        agentId: z.string(),
+        date: z.string().optional(),
+      })
+    )
     .mutation(async ({ input }) => {
       const agent = AGENT_REGISTRY[input.agentId];
       if (!agent) throw new Error(`Agent ${input.agentId} not found`);
@@ -717,7 +1268,7 @@ Format as JSON with these exact keys:
 }`;
 
       const completion = await openai.chat.completions.create({
-        model: "gpt-4.1-mini",
+        model: getModelForTask("chat"),
         messages: [
           { role: "system", content: agent.systemPrompt },
           { role: "user", content: prompt },
@@ -729,14 +1280,21 @@ Format as JSON with these exact keys:
 
       let reportData: Record<string, unknown> = {};
       try {
-        reportData = JSON.parse(completion.choices[0]?.message?.content ?? "{}");
+        reportData = JSON.parse(
+          completion.choices[0]?.message?.content ?? "{}"
+        );
       } catch {
         reportData = {
           tasksCompleted: agent.dailyTasks.slice(0, 3),
           achievements: `${agent.name} completed all scheduled tasks for ${today}.`,
           challenges: "No significant challenges encountered.",
-          newLearnings: ["Reviewed latest industry developments", "Updated knowledge base"],
-          suggestions: ["Continue monitoring industry trends for new opportunities"],
+          newLearnings: [
+            "Reviewed latest industry developments",
+            "Updated knowledge base",
+          ],
+          suggestions: [
+            "Continue monitoring industry trends for new opportunities",
+          ],
           capabilityRequest: null,
         };
       }
@@ -763,9 +1321,11 @@ Format as JSON with these exact keys:
     const selectedIds = agentIds.sort(() => Math.random() - 0.5).slice(0, 5);
 
     const learningItems = await Promise.all(
-      selectedIds.map(async (agentId) => {
+      selectedIds.map(async agentId => {
         const agent = AGENT_REGISTRY[agentId];
-        const seed = agentId.split("").reduce((acc, c) => acc + c.charCodeAt(0), 0);
+        const seed = agentId
+          .split("")
+          .reduce((acc, c) => acc + c.charCodeAt(0), 0);
 
         // Use deterministic "research topics" based on the agent's specialization
         const researchAreas = [
@@ -781,7 +1341,9 @@ Format as JSON with these exact keys:
           researchTopic: researchAreas[seed % researchAreas.length],
           status: "researching" as const,
           startedAt: new Date(Date.now() - (seed % 3600000)).toISOString(),
-          estimatedCompletion: new Date(Date.now() + (seed % 7200000)).toISOString(),
+          estimatedCompletion: new Date(
+            Date.now() + (seed % 7200000)
+          ).toISOString(),
         };
       })
     );
@@ -844,9 +1406,11 @@ Format as JSON with these exact keys:
       pendingRequests,
       recentHistory,
       pendingCount: pendingRequests.length,
-      approvedToday: recentDecisions.filter(d =>
-        d.action === "approved" &&
-        d.createdAt && d.createdAt > new Date(Date.now() - 86400000)
+      approvedToday: recentDecisions.filter(
+        d =>
+          d.action === "approved" &&
+          d.createdAt &&
+          d.createdAt > new Date(Date.now() - 86400000)
       ).length,
     };
   }),
@@ -855,12 +1419,14 @@ Format as JSON with these exact keys:
    * Process a CoS approval decision
    */
   processApproval: protectedProcedure
-    .input(z.object({
-      requestId: z.string(),
-      agentId: z.string(),
-      decision: z.enum(["approved", "denied"]),
-      notes: z.string().optional(),
-    }))
+    .input(
+      z.object({
+        requestId: z.string(),
+        agentId: z.string(),
+        decision: z.enum(["approved", "denied"]),
+        notes: z.string().optional(),
+      })
+    )
     .mutation(async ({ input, ctx }) => {
       const agent = AGENT_REGISTRY[input.agentId];
       const agentName = agent?.name ?? input.agentId;
@@ -908,7 +1474,8 @@ Format as JSON with these exact keys:
     return {
       leaderboard: agents.sort((a, b) => b.rating - a.rating),
       topPerformer: agents.sort((a, b) => b.rating - a.rating)[0],
-      averageRating: agents.reduce((sum, a) => sum + a.rating, 0) / agents.length,
+      averageRating:
+        agents.reduce((sum, a) => sum + a.rating, 0) / agents.length,
       totalTasksCompleted: agents.reduce((sum, a) => sum + a.tasksCompleted, 0),
     };
   }),

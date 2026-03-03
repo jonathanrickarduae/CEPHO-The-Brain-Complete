@@ -16,6 +16,7 @@
 <!-- Describe what was changed and why. Be specific. -->
 
 **Files modified:**
+
 - `path/to/file.ts` — reason
 - `path/to/file.tsx` — reason
 
@@ -37,6 +38,7 @@
 - [ ] Validation script passed: `python3 scripts/validate.py --check <ITEM_ID>`
 
 **Validation output:**
+
 ```
 Paste output of validate.py here
 ```
@@ -56,8 +58,8 @@ Paste output of validate.py here
 
 <!-- Does this fix improve a grade? If so, which workstream and by how much? -->
 
-| Workstream | Before | After |
-| :--- | :--- | :--- |
+| Workstream                       | Before          | After           |
+| :------------------------------- | :-------------- | :-------------- |
 | <!-- e.g. Frontend Stability --> | <!-- e.g. E --> | <!-- e.g. D --> |
 
 ---

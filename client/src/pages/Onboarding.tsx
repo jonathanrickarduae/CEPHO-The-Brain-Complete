@@ -30,9 +30,21 @@ const STEPS = [
     description: "This helps your AI Chief of Staff understand your context.",
     icon: Target,
     fields: [
-      { key: "role", label: "Your Title / Role", placeholder: "e.g. CEO, Founder, Managing Director" },
-      { key: "company", label: "Company / Organisation", placeholder: "e.g. Acme Corp" },
-      { key: "industry", label: "Industry", placeholder: "e.g. Technology, Finance, Healthcare" },
+      {
+        key: "role",
+        label: "Your Title / Role",
+        placeholder: "e.g. CEO, Founder, Managing Director",
+      },
+      {
+        key: "company",
+        label: "Company / Organisation",
+        placeholder: "e.g. Acme Corp",
+      },
+      {
+        key: "industry",
+        label: "Industry",
+        placeholder: "e.g. Technology, Finance, Healthcare",
+      },
       { key: "teamSize", label: "Team Size", placeholder: "e.g. 10, 50, 200+" },
     ],
   },
@@ -40,23 +52,39 @@ const STEPS = [
     id: 3,
     title: "Your Leadership Style",
     subtitle: "Calibrate your Digital Twin",
-    description: "Your Digital Twin learns how you think and make decisions. Answer these questions honestly.",
+    description:
+      "Your Digital Twin learns how you think and make decisions. Answer these questions honestly.",
     icon: Brain,
     questions: [
       {
         key: "decisionStyle",
         question: "How do you prefer to make decisions?",
-        options: ["Data-driven — I need the numbers", "Intuition-led — I trust my gut", "Collaborative — I consult my team", "Hybrid — depends on the situation"],
+        options: [
+          "Data-driven — I need the numbers",
+          "Intuition-led — I trust my gut",
+          "Collaborative — I consult my team",
+          "Hybrid — depends on the situation",
+        ],
       },
       {
         key: "communicationStyle",
         question: "How do you prefer to communicate?",
-        options: ["Direct and concise", "Detailed and thorough", "Visual and structured", "Conversational and informal"],
+        options: [
+          "Direct and concise",
+          "Detailed and thorough",
+          "Visual and structured",
+          "Conversational and informal",
+        ],
       },
       {
         key: "priorityFocus",
         question: "What is your primary focus right now?",
-        options: ["Growth and revenue", "Operational efficiency", "Team and culture", "Innovation and product"],
+        options: [
+          "Growth and revenue",
+          "Operational efficiency",
+          "Team and culture",
+          "Innovation and product",
+        ],
       },
     ],
   },
@@ -64,13 +92,26 @@ const STEPS = [
     id: 4,
     title: "Connect Your Tools",
     subtitle: "Integrate your existing workflow",
-    description: "Connect your tools to give CEPHO.AI full context. You can skip this and connect later in Settings.",
+    description:
+      "Connect your tools to give CEPHO.AI full context. You can skip this and connect later in Settings.",
     icon: Zap,
     integrations: [
-      { key: "notion", label: "Notion", description: "Sync your notes and documents" },
-      { key: "trello", label: "Trello", description: "Import your project boards" },
+      {
+        key: "notion",
+        label: "Notion",
+        description: "Sync your notes and documents",
+      },
+      {
+        key: "trello",
+        label: "Trello",
+        description: "Import your project boards",
+      },
       { key: "todoist", label: "Todoist", description: "Sync your task lists" },
-      { key: "zoom", label: "Zoom", description: "Meeting intelligence and summaries" },
+      {
+        key: "zoom",
+        label: "Zoom",
+        description: "Meeting intelligence and summaries",
+      },
     ],
   },
   {
@@ -87,7 +128,9 @@ export default function Onboarding() {
   const [, setLocation] = useLocation();
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState<Record<string, string>>({});
-  const [selectedAnswers, setSelectedAnswers] = useState<Record<string, string>>({});
+  const [selectedAnswers, setSelectedAnswers] = useState<
+    Record<string, string>
+  >({});
 
   const calibrateMutation = trpc.digitalTwin.recalibrate.useMutation({
     onError: () => {
@@ -172,9 +215,15 @@ export default function Onboarding() {
 
           {/* Header */}
           <div className="text-center mb-8">
-            <h1 className="text-2xl font-bold text-foreground mb-2">{step.title}</h1>
-            <p className="text-sm font-medium text-primary mb-3">{step.subtitle}</p>
-            <p className="text-muted-foreground text-sm leading-relaxed">{step.description}</p>
+            <h1 className="text-2xl font-bold text-foreground mb-2">
+              {step.title}
+            </h1>
+            <p className="text-sm font-medium text-primary mb-3">
+              {step.subtitle}
+            </p>
+            <p className="text-muted-foreground text-sm leading-relaxed">
+              {step.description}
+            </p>
           </div>
 
           {/* Step 2: Profile Fields */}
@@ -190,7 +239,10 @@ export default function Onboarding() {
                     placeholder={field.placeholder}
                     value={formData[field.key] ?? ""}
                     onChange={e =>
-                      setFormData(prev => ({ ...prev, [field.key]: e.target.value }))
+                      setFormData(prev => ({
+                        ...prev,
+                        [field.key]: e.target.value,
+                      }))
                     }
                     className="w-full px-4 py-3 bg-background border border-border rounded-xl text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
                   />
@@ -204,13 +256,18 @@ export default function Onboarding() {
             <div className="space-y-6 mb-8">
               {step.questions.map(q => (
                 <div key={q.key}>
-                  <p className="text-sm font-medium text-foreground mb-3">{q.question}</p>
+                  <p className="text-sm font-medium text-foreground mb-3">
+                    {q.question}
+                  </p>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     {q.options.map(option => (
                       <button
                         key={option}
                         onClick={() =>
-                          setSelectedAnswers(prev => ({ ...prev, [q.key]: option }))
+                          setSelectedAnswers(prev => ({
+                            ...prev,
+                            [q.key]: option,
+                          }))
                         }
                         className={`px-4 py-3 rounded-xl border-2 text-sm text-left transition-all ${
                           selectedAnswers[q.key] === option
@@ -236,8 +293,12 @@ export default function Onboarding() {
                   className="flex items-center justify-between p-4 rounded-xl border border-border bg-background"
                 >
                   <div>
-                    <p className="text-sm font-medium text-foreground">{integration.label}</p>
-                    <p className="text-xs text-muted-foreground">{integration.description}</p>
+                    <p className="text-sm font-medium text-foreground">
+                      {integration.label}
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      {integration.description}
+                    </p>
                   </div>
                   <button
                     onClick={() => setLocation("/settings")}
@@ -262,7 +323,10 @@ export default function Onboarding() {
                 { icon: Mic, label: "Voice interface ready (Space bar)" },
                 { icon: Target, label: "Morning briefing scheduled for 06:00" },
               ].map(item => (
-                <div key={item.label} className="flex items-center gap-3 p-3 rounded-xl bg-primary/10 border border-primary/20">
+                <div
+                  key={item.label}
+                  className="flex items-center gap-3 p-3 rounded-xl bg-primary/10 border border-primary/20"
+                >
                   <item.icon className="w-5 h-5 text-primary flex-shrink-0" />
                   <span className="text-sm text-foreground">{item.label}</span>
                   <CheckCircle2 className="w-4 h-4 text-emerald-500 ml-auto flex-shrink-0" />

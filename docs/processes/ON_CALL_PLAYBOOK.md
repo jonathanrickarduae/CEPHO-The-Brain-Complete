@@ -4,19 +4,19 @@ This document defines the process for responding to and managing incidents on th
 
 ## 1. On-Call Rotation
 
-*   **Schedule:** A weekly on-call rotation will be established, with one primary and one secondary engineer on call at all times.
-*   **Tool:** We will use **PagerDuty** to manage the on-call schedule and alerting.
-*   **Responsibilities:** The on-call engineer is responsible for acknowledging alerts, assessing the impact, and either resolving the issue or escalating it.
+- **Schedule:** A weekly on-call rotation will be established, with one primary and one secondary engineer on call at all times.
+- **Tool:** We will use **PagerDuty** to manage the on-call schedule and alerting.
+- **Responsibilities:** The on-call engineer is responsible for acknowledging alerts, assessing the impact, and either resolving the issue or escalating it.
 
 ## 2. Severity Levels (SEVs)
 
 Incidents are classified into three severity levels:
 
-| Level | Description | Response Time | Resolution Target |
-| :--- | :--- | :--- | :--- |
-| **SEV1** | Critical impact. Platform is down, major data loss, or security breach. | **< 5 minutes** | **< 1 hour** |
-| **SEV2** | Major impact. A core feature is broken for a large number of users. | **< 15 minutes** | **< 4 hours** |
-| **SEV3** | Minor impact. A non-critical feature is broken or a bug is affecting a small number of users. | **< 1 hour** | **< 24 hours** |
+| Level    | Description                                                                                   | Response Time    | Resolution Target |
+| :------- | :-------------------------------------------------------------------------------------------- | :--------------- | :---------------- |
+| **SEV1** | Critical impact. Platform is down, major data loss, or security breach.                       | **< 5 minutes**  | **< 1 hour**      |
+| **SEV2** | Major impact. A core feature is broken for a large number of users.                           | **< 15 minutes** | **< 4 hours**     |
+| **SEV3** | Minor impact. A non-critical feature is broken or a bug is affecting a small number of users. | **< 1 hour**     | **< 24 hours**    |
 
 ## 3. Incident Response Process
 

@@ -1,3 +1,4 @@
+import { getModelForTask } from "../utils/modelRouter";
 /**
  * Document Library Router — Real Implementation
  *
@@ -100,7 +101,7 @@ Format as a professional Markdown document with:
 - Next steps (if applicable)`;
 
       const completion = await openai.chat.completions.create({
-        model: "gpt-4.1-mini",
+        model: getModelForTask("generate"),
         messages: [
           { role: "system", content: systemPrompt },
           { role: "user", content: userPrompt },
@@ -125,7 +126,10 @@ Format as a professional Markdown document with:
           content: markdownContent,
           classification: input.classification,
           qaStatus: "pending",
-          metadata: { generatedBy: "openai", model: "gpt-4.1-mini" },
+          metadata: {
+            generatedBy: "openai",
+            model: getModelForTask("generate"),
+          },
         })
         .returning();
 
@@ -183,8 +187,12 @@ Format as a professional Markdown document with:
       z.object({
         id: z.number().optional(),
         documentId: z.string().optional(),
-        qaStatus: z.enum(["pending", "approved", "rejected", "needs_revision"]).optional(),
-        status: z.enum(["pending", "approved", "rejected", "needs_revision"]).optional(),
+        qaStatus: z
+          .enum(["pending", "approved", "rejected", "needs_revision"])
+          .optional(),
+        status: z
+          .enum(["pending", "approved", "rejected", "needs_revision"])
+          .optional(),
         qaNotes: z.string().optional(),
         notes: z.string().optional(),
         qaApprovedBy: z.string().optional(),
@@ -237,7 +245,10 @@ Format as a professional Markdown document with:
         recipients: z.array(
           z.union([
             z.string().email(),
-            z.object({ email: z.string().email(), name: z.string().optional() }),
+            z.object({
+              email: z.string().email(),
+              name: z.string().optional(),
+            }),
           ])
         ),
         subject: z.string().optional(),
@@ -250,7 +261,10 @@ Format as a professional Markdown document with:
       const normalised = input.recipients.map(r =>
         typeof r === "string" ? { email: r } : r
       );
-      const docId = typeof input.documentId === "string" ? parseInt(input.documentId, 10) : input.documentId;
+      const docId =
+        typeof input.documentId === "string"
+          ? parseInt(input.documentId, 10)
+          : input.documentId;
 
       // Fetch document details for the email body
       const [doc] = await db
@@ -259,10 +273,12 @@ Format as a professional Markdown document with:
         .where(eq(generatedDocuments.id, docId))
         .limit(1);
 
-      const subject = input.subject ?? (doc ? `Document: ${doc.title}` : "Document from CEPHO");
+      const subject =
+        input.subject ??
+        (doc ? `Document: ${doc.title}` : "Document from CEPHO");
       const emailBody = input.message
         ? `${input.message}\n\n${doc?.content ? doc.content.substring(0, 500) + "..." : ""}`
-        : doc?.content ?? "Please find the attached document.";
+        : (doc?.content ?? "Please find the attached document.");
 
       // Attempt real email delivery if SMTP is configured
       let emailStatus: "sent" | "failed" | "queued" = "queued";
@@ -292,11 +308,12 @@ Format as a professional Markdown document with:
       return {
         success: emailStatus !== "failed",
         sent: normalised.length,
-        message: emailStatus === "sent"
-          ? `Email sent to ${normalised.length} recipient${normalised.length !== 1 ? "s" : ""}`
-          : emailStatus === "queued"
-          ? `Email queued (SMTP not configured) — ${normalised.length} recipient${normalised.length !== 1 ? "s" : ""} recorded`
-          : `Email delivery failed`,
+        message:
+          emailStatus === "sent"
+            ? `Email sent to ${normalised.length} recipient${normalised.length !== 1 ? "s" : ""}`
+            : emailStatus === "queued"
+              ? `Email queued (SMTP not configured) — ${normalised.length} recipient${normalised.length !== 1 ? "s" : ""} recorded`
+              : `Email delivery failed`,
       };
     }),
 
@@ -306,7 +323,10 @@ Format as a professional Markdown document with:
   getEmailHistory: protectedProcedure
     .input(z.object({ documentId: z.union([z.number(), z.string()]) }))
     .query(async ({ input }) => {
-      const docId = typeof input.documentId === "string" ? parseInt(input.documentId, 10) : input.documentId;
+      const docId =
+        typeof input.documentId === "string"
+          ? parseInt(input.documentId, 10)
+          : input.documentId;
       const history = await db
         .select()
         .from(documentEmailHistory)

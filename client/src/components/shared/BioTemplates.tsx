@@ -366,7 +366,9 @@ export function BioTemplates({ onGenerate }: BioTemplatesProps) {
             <Card className="bg-gray-900/50 border-border/50">
               <CardHeader className="pb-3">
                 <div className="flex items-center justify-between">
-                  <CardTitle className="text-foreground/80 text-sm">Example</CardTitle>
+                  <CardTitle className="text-foreground/80 text-sm">
+                    Example
+                  </CardTitle>
                   <Button
                     variant="ghost"
                     size="sm"

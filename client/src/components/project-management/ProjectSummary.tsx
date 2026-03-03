@@ -67,7 +67,11 @@ interface ProjectSummaryProps {
 
 const categoryConfig = {
   strategy: { icon: Target, color: "text-purple-400", bg: "bg-purple-500/20" },
-  product: { icon: Lightbulb, color: "text-[var(--brain-cyan)]", bg: "bg-[var(--brain-cyan)]/20" },
+  product: {
+    icon: Lightbulb,
+    color: "text-[var(--brain-cyan)]",
+    bg: "bg-[var(--brain-cyan)]/20",
+  },
   finance: { icon: DollarSign, color: "text-green-400", bg: "bg-green-500/20" },
   team: { icon: Users, color: "text-amber-400", bg: "bg-amber-500/20" },
   operations: { icon: Building2, color: "text-primary", bg: "bg-primary/20" },
@@ -418,7 +422,9 @@ ${openQuestions.map(q => `- [${q.priority.toUpperCase()}] ${q.question} (Raised 
                     )}
                   />
                   <div className="flex-1">
-                    <p className="text-foreground font-medium">{milestone.title}</p>
+                    <p className="text-foreground font-medium">
+                      {milestone.title}
+                    </p>
                     <p className="text-xs text-muted-foreground">
                       {milestone.category}
                     </p>

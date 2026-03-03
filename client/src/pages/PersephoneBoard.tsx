@@ -67,7 +67,11 @@ const BOARD_MEMBERS: BoardMember[] = [
     status: "active",
     lastConsultation: "2 days ago",
     contributionScore: 99,
-    achievements: ["ChatGPT Launch", "GPT-4 Development", "AI Safety Leadership"],
+    achievements: [
+      "ChatGPT Launch",
+      "GPT-4 Development",
+      "AI Safety Leadership",
+    ],
   },
   {
     id: "huang",
@@ -145,7 +149,11 @@ const BOARD_MEMBERS: BoardMember[] = [
     status: "active",
     lastConsultation: "6 days ago",
     contributionScore: 98,
-    achievements: ["Turing Award", "Convolutional Neural Networks", "Meta AI Research"],
+    achievements: [
+      "Turing Award",
+      "Convolutional Neural Networks",
+      "Meta AI Research",
+    ],
   },
   {
     id: "hinton",
@@ -247,7 +255,11 @@ const UPCOMING_MEETINGS = [
     date: "March 15, 2026",
     time: "10:00 AM",
     attendees: 14,
-    agenda: ["AGI Timeline Discussion", "Competitive Landscape", "Safety & Ethics"],
+    agenda: [
+      "AGI Timeline Discussion",
+      "Competitive Landscape",
+      "Safety & Ethics",
+    ],
   },
   {
     id: 2,
@@ -255,7 +267,11 @@ const UPCOMING_MEETINGS = [
     date: "April 1, 2026",
     time: "2:00 PM",
     attendees: 14,
-    agenda: ["Infrastructure Scaling", "Model Architecture", "Research Priorities"],
+    agenda: [
+      "Infrastructure Scaling",
+      "Model Architecture",
+      "Research Priorities",
+    ],
   },
 ];
 
@@ -278,7 +294,9 @@ const RECENT_DECISIONS = [
 
 export default function PersephoneBoard() {
   // Consultation modal state
-  const [consultingMember, setConsultingMember] = useState<BoardMember | null>(null);
+  const [consultingMember, setConsultingMember] = useState<BoardMember | null>(
+    null
+  );
   const [sessionId, setSessionId] = useState<number | null>(null);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [inputMessage, setInputMessage] = useState("");
@@ -291,16 +309,39 @@ export default function PersephoneBoard() {
 
   // ─── Autonomous Execution Engine ─────────────────────────────────────────────────
   const [executionGoal, setExecutionGoal] = useState("");
-  const [executionResult, setExecutionResult] = useState<null | { projectName: string; tasksCreated: number; phasesCreated: number; plan: { estimatedDuration: string; phases: { name: string; agent: string; taskCount: number }[] } }>(null);
+  const [executionResult, setExecutionResult] = useState<null | {
+    projectName: string;
+    tasksCreated: number;
+    phasesCreated: number;
+    plan: {
+      estimatedDuration: string;
+      phases: { name: string; agent: string; taskCount: number }[];
+    };
+  }>(null);
   const executeGoal = trpc.autonomousExecution.execute.useMutation({
-    onSuccess: (data) => {
-      setExecutionResult(data.plan ? { projectName: data.project.name, tasksCreated: data.tasksCreated, phasesCreated: data.phasesCreated, plan: data.plan } : null);
-      toast.success(`Project "${data.project.name}" created with ${data.tasksCreated} tasks across ${data.phasesCreated} phases.`);
+    onSuccess: data => {
+      setExecutionResult(
+        data.plan
+          ? {
+              projectName: data.project.name,
+              tasksCreated: data.tasksCreated,
+              phasesCreated: data.phasesCreated,
+              plan: data.plan,
+            }
+          : null
+      );
+      toast.success(
+        `Project "${data.project.name}" created with ${data.tasksCreated} tasks across ${data.phasesCreated} phases.`
+      );
       setExecutionGoal("");
     },
-    onError: () => toast.error("Execution failed: Could not process your goal. Please try again."),
+    onError: () =>
+      toast.error(
+        "Execution failed: Could not process your goal. Please try again."
+      ),
   });
-  const { data: recentExecutions } = trpc.autonomousExecution.getRecentExecutions.useQuery();
+  const { data: recentExecutions } =
+    trpc.autonomousExecution.getRecentExecutions.useQuery();
 
   // Auto-scroll to bottom when new messages arrive
   useEffect(() => {
@@ -330,7 +371,9 @@ export default function PersephoneBoard() {
         },
       ]);
     } catch {
-      toast.error("Connection failed: Could not connect to the board member. Please try again.");
+      toast.error(
+        "Connection failed: Could not connect to the board member. Please try again."
+      );
       setConsultingMember(null);
     } finally {
       setIsStarting(false);
@@ -350,7 +393,9 @@ export default function PersephoneBoard() {
     const history = messages
       .filter(m => m.role === "user" || m.role === "expert")
       .map(m => ({
-        role: (m.role === "expert" ? "assistant" : "user") as "user" | "assistant",
+        role: (m.role === "expert" ? "assistant" : "user") as
+          | "user"
+          | "assistant",
         content: m.content,
       }));
 
@@ -374,7 +419,9 @@ export default function PersephoneBoard() {
         },
       ]);
     } catch {
-      toast.error("Message failed: Could not send your message. Please try again.");
+      toast.error(
+        "Message failed: Could not send your message. Please try again."
+      );
     }
   };
 
@@ -393,25 +440,76 @@ export default function PersephoneBoard() {
   };
 
   const getColorClasses = (color: string) => {
-    const colors: Record<string, { bg: string; text: string; border: string }> = {
-      emerald: { bg: "bg-emerald-500/10", text: "text-emerald-400", border: "border-emerald-500/30" },
-      green: { bg: "bg-green-500/10", text: "text-green-400", border: "border-green-500/30" },
-      blue: { bg: "bg-primary/10", text: "text-primary", border: "border-blue-500/30" },
-      purple: { bg: "bg-purple-500/10", text: "text-purple-400", border: "border-purple-500/30" },
-      red: { bg: "bg-red-500/10", text: "text-red-400", border: "border-red-500/30" },
-      orange: { bg: "bg-orange-500/10", text: "text-orange-400", border: "border-orange-500/30" },
-      indigo: { bg: "bg-indigo-500/10", text: "text-indigo-400", border: "border-indigo-500/30" },
-      amber: { bg: "bg-amber-500/10", text: "text-amber-400", border: "border-amber-500/30" },
-      cyan: { bg: "bg-cyan-500/10", text: "text-cyan-400", border: "border-cyan-500/30" },
-      pink: { bg: "bg-pink-500/10", text: "text-pink-400", border: "border-pink-500/30" },
-      violet: { bg: "bg-violet-500/10", text: "text-violet-400", border: "border-violet-500/30" },
-      slate: { bg: "bg-slate-500/10", text: "text-slate-400", border: "border-slate-500/30" },
-    };
+    const colors: Record<string, { bg: string; text: string; border: string }> =
+      {
+        emerald: {
+          bg: "bg-emerald-500/10",
+          text: "text-emerald-400",
+          border: "border-emerald-500/30",
+        },
+        green: {
+          bg: "bg-green-500/10",
+          text: "text-green-400",
+          border: "border-green-500/30",
+        },
+        blue: {
+          bg: "bg-primary/10",
+          text: "text-primary",
+          border: "border-blue-500/30",
+        },
+        purple: {
+          bg: "bg-purple-500/10",
+          text: "text-purple-400",
+          border: "border-purple-500/30",
+        },
+        red: {
+          bg: "bg-red-500/10",
+          text: "text-red-400",
+          border: "border-red-500/30",
+        },
+        orange: {
+          bg: "bg-orange-500/10",
+          text: "text-orange-400",
+          border: "border-orange-500/30",
+        },
+        indigo: {
+          bg: "bg-indigo-500/10",
+          text: "text-indigo-400",
+          border: "border-indigo-500/30",
+        },
+        amber: {
+          bg: "bg-amber-500/10",
+          text: "text-amber-400",
+          border: "border-amber-500/30",
+        },
+        cyan: {
+          bg: "bg-cyan-500/10",
+          text: "text-cyan-400",
+          border: "border-cyan-500/30",
+        },
+        pink: {
+          bg: "bg-pink-500/10",
+          text: "text-pink-400",
+          border: "border-pink-500/30",
+        },
+        violet: {
+          bg: "bg-violet-500/10",
+          text: "text-violet-400",
+          border: "border-violet-500/30",
+        },
+        slate: {
+          bg: "bg-slate-500/10",
+          text: "text-slate-400",
+          border: "border-slate-500/30",
+        },
+      };
     return colors[color] || colors.blue;
   };
 
   const activeMember = consultingMember;
-  const activeColors = activeMember ? getColorClasses(activeMember.color) : null;
+  const activeColors = activeMember
+    ? getColorClasses(activeMember.color)
+    : null;
   const ActiveIcon = activeMember?.icon;
 
   return (
@@ -428,9 +526,18 @@ export default function PersephoneBoard() {
             <CardTitle className="flex items-center gap-2 text-base">
               <Rocket className="w-5 h-5 text-primary" />
               Autonomous Execution Engine
-              <Badge variant="outline" className="ml-auto text-xs border-primary/40 text-primary">One-Sentence Execution</Badge>
+              <Badge
+                variant="outline"
+                className="ml-auto text-xs border-primary/40 text-primary"
+              >
+                One-Sentence Execution
+              </Badge>
             </CardTitle>
-            <p className="text-xs text-muted-foreground">State your goal in one sentence. CEPHO will consult your Digital Twin, decompose the goal, and create a full project plan with tasks assigned to specialist agents.</p>
+            <p className="text-xs text-muted-foreground">
+              State your goal in one sentence. CEPHO will consult your Digital
+              Twin, decompose the goal, and create a full project plan with
+              tasks assigned to specialist agents.
+            </p>
           </CardHeader>
           <CardContent className="space-y-3">
             <div className="flex gap-2">
@@ -439,15 +546,28 @@ export default function PersephoneBoard() {
                 placeholder="e.g. Launch a new B2B SaaS product in the UAE market within 6 months..."
                 value={executionGoal}
                 onChange={e => setExecutionGoal(e.target.value)}
-                onKeyDown={e => e.key === "Enter" && !executeGoal.isPending && executionGoal.trim().length >= 5 && executeGoal.mutate({ goal: executionGoal, autoApprove: true })}
+                onKeyDown={e =>
+                  e.key === "Enter" &&
+                  !executeGoal.isPending &&
+                  executionGoal.trim().length >= 5 &&
+                  executeGoal.mutate({ goal: executionGoal, autoApprove: true })
+                }
                 disabled={executeGoal.isPending}
               />
               <Button
-                onClick={() => executeGoal.mutate({ goal: executionGoal, autoApprove: true })}
-                disabled={executeGoal.isPending || executionGoal.trim().length < 5}
+                onClick={() =>
+                  executeGoal.mutate({ goal: executionGoal, autoApprove: true })
+                }
+                disabled={
+                  executeGoal.isPending || executionGoal.trim().length < 5
+                }
                 className="gap-2"
               >
-                {executeGoal.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Rocket className="w-4 h-4" />}
+                {executeGoal.isPending ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  <Rocket className="w-4 h-4" />
+                )}
                 {executeGoal.isPending ? "Executing..." : "Execute"}
               </Button>
             </div>
@@ -457,21 +577,36 @@ export default function PersephoneBoard() {
                   <Sparkles className="w-4 h-4" />
                   Project Created: {executionResult.projectName}
                 </div>
-                <div className="text-xs text-muted-foreground">{executionResult.tasksCreated} tasks across {executionResult.phasesCreated} phases &bull; Est. {executionResult.plan.estimatedDuration}</div>
+                <div className="text-xs text-muted-foreground">
+                  {executionResult.tasksCreated} tasks across{" "}
+                  {executionResult.phasesCreated} phases &bull; Est.{" "}
+                  {executionResult.plan.estimatedDuration}
+                </div>
                 <div className="flex flex-wrap gap-1">
                   {executionResult.plan.phases.map(p => (
-                    <Badge key={p.name} variant="outline" className="text-xs">{p.agent}: {p.taskCount} tasks</Badge>
+                    <Badge key={p.name} variant="outline" className="text-xs">
+                      {p.agent}: {p.taskCount} tasks
+                    </Badge>
                   ))}
                 </div>
               </div>
             )}
             {recentExecutions && recentExecutions.length > 0 && (
               <div className="space-y-1">
-                <p className="text-xs text-muted-foreground font-medium">Recent Executions</p>
+                <p className="text-xs text-muted-foreground font-medium">
+                  Recent Executions
+                </p>
                 {recentExecutions.slice(0, 3).map(ex => (
-                  <div key={ex.id} className="flex items-center justify-between text-xs p-2 rounded bg-muted/30">
-                    <span className="font-medium truncate max-w-[60%]">{ex.name}</span>
-                    <Badge variant="outline" className="text-xs">{ex.status}</Badge>
+                  <div
+                    key={ex.id}
+                    className="flex items-center justify-between text-xs p-2 rounded bg-muted/30"
+                  >
+                    <span className="font-medium truncate max-w-[60%]">
+                      {ex.name}
+                    </span>
+                    <Badge variant="outline" className="text-xs">
+                      {ex.status}
+                    </Badge>
                   </div>
                 ))}
               </div>
@@ -490,7 +625,9 @@ export default function PersephoneBoard() {
             </CardHeader>
             <CardContent>
               <div className="text-3xl font-bold text-purple-400">14</div>
-              <p className="text-xs text-muted-foreground mt-1">Active members</p>
+              <p className="text-xs text-muted-foreground mt-1">
+                Active members
+              </p>
             </CardContent>
           </Card>
 
@@ -503,7 +640,9 @@ export default function PersephoneBoard() {
             </CardHeader>
             <CardContent>
               <div className="text-3xl font-bold text-primary">247</div>
-              <p className="text-xs text-muted-foreground mt-1">Total sessions</p>
+              <p className="text-xs text-muted-foreground mt-1">
+                Total sessions
+              </p>
             </CardContent>
           </Card>
 
@@ -516,7 +655,9 @@ export default function PersephoneBoard() {
             </CardHeader>
             <CardContent>
               <div className="text-3xl font-bold text-primary">Mar 15</div>
-              <p className="text-xs text-muted-foreground mt-1">AI Strategy Review</p>
+              <p className="text-xs text-muted-foreground mt-1">
+                AI Strategy Review
+              </p>
             </CardContent>
           </Card>
 
@@ -536,30 +677,51 @@ export default function PersephoneBoard() {
 
         {/* Quick Actions */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <Button variant="outline" className="h-auto py-4 border-purple-500/30 hover:bg-purple-500/10">
+          <Button
+            variant="outline"
+            className="h-auto py-4 border-purple-500/30 hover:bg-purple-500/10"
+          >
             <div className="flex items-center gap-3">
               <Video className="w-5 h-5 text-purple-400" />
               <div className="text-left">
-                <div className="font-semibold text-foreground">Schedule Board Meeting</div>
-                <div className="text-xs text-muted-foreground">Convene all 14 leaders</div>
+                <div className="font-semibold text-foreground">
+                  Schedule Board Meeting
+                </div>
+                <div className="text-xs text-muted-foreground">
+                  Convene all 14 leaders
+                </div>
               </div>
             </div>
           </Button>
-          <Button variant="outline" className="h-auto py-4 border-primary/30 hover:bg-primary/10">
+          <Button
+            variant="outline"
+            className="h-auto py-4 border-primary/30 hover:bg-primary/10"
+          >
             <div className="flex items-center gap-3">
               <Vote className="w-5 h-5 text-primary" />
               <div className="text-left">
-                <div className="font-semibold text-foreground">Request Board Vote</div>
-                <div className="text-xs text-muted-foreground">Submit a resolution</div>
+                <div className="font-semibold text-foreground">
+                  Request Board Vote
+                </div>
+                <div className="text-xs text-muted-foreground">
+                  Submit a resolution
+                </div>
               </div>
             </div>
           </Button>
-          <Button variant="outline" className="h-auto py-4 border-emerald-500/30 hover:bg-emerald-500/10">
+          <Button
+            variant="outline"
+            className="h-auto py-4 border-emerald-500/30 hover:bg-emerald-500/10"
+          >
             <div className="flex items-center gap-3">
               <MessageSquare className="w-5 h-5 text-emerald-400" />
               <div className="text-left">
-                <div className="font-semibold text-foreground">Board Briefing</div>
-                <div className="text-xs text-muted-foreground">Submit strategic update</div>
+                <div className="font-semibold text-foreground">
+                  Board Briefing
+                </div>
+                <div className="text-xs text-muted-foreground">
+                  Submit strategic update
+                </div>
               </div>
             </div>
           </Button>
@@ -589,15 +751,21 @@ export default function PersephoneBoard() {
                   >
                     <CardContent className="p-4">
                       <div className="flex items-start gap-3 mb-3">
-                        <div className={`p-2 rounded-lg ${colors.bg} border ${colors.border} flex-shrink-0`}>
+                        <div
+                          className={`p-2 rounded-lg ${colors.bg} border ${colors.border} flex-shrink-0`}
+                        >
                           <Icon className={`w-5 h-5 ${colors.text}`} />
                         </div>
                         <div className="min-w-0">
                           <h3 className="font-semibold text-foreground text-sm leading-tight">
                             {member.name}
                           </h3>
-                          <p className="text-xs text-muted-foreground">{member.title}</p>
-                          <p className={`text-xs font-medium ${colors.text}`}>{member.company}</p>
+                          <p className="text-xs text-muted-foreground">
+                            {member.title}
+                          </p>
+                          <p className={`text-xs font-medium ${colors.text}`}>
+                            {member.company}
+                          </p>
                         </div>
                       </div>
                       <p className="text-xs text-muted-foreground mb-3 line-clamp-2">
@@ -605,7 +773,9 @@ export default function PersephoneBoard() {
                       </p>
                       <div className="space-y-2">
                         <div className="flex items-center justify-between">
-                          <Badge className={`${colors.bg} ${colors.text} border-0 text-xs`}>
+                          <Badge
+                            className={`${colors.bg} ${colors.text} border-0 text-xs`}
+                          >
                             Impact: {member.contributionScore}
                           </Badge>
                           {member.lastConsultation && (
@@ -616,11 +786,16 @@ export default function PersephoneBoard() {
                         </div>
                         <div className="pt-2 border-t border-border/30">
                           <ul className="space-y-0.5">
-                            {member.achievements.slice(0, 2).map((achievement, idx) => (
-                              <li key={idx} className="text-xs text-muted-foreground truncate">
-                                • {achievement}
-                              </li>
-                            ))}
+                            {member.achievements
+                              .slice(0, 2)
+                              .map((achievement, idx) => (
+                                <li
+                                  key={idx}
+                                  className="text-xs text-muted-foreground truncate"
+                                >
+                                  • {achievement}
+                                </li>
+                              ))}
                           </ul>
                         </div>
                         <Button
@@ -655,10 +830,15 @@ export default function PersephoneBoard() {
             </CardHeader>
             <CardContent className="space-y-4">
               {UPCOMING_MEETINGS.map(meeting => (
-                <div key={meeting.id} className="p-4 border border-border/50 rounded-lg bg-muted/20">
+                <div
+                  key={meeting.id}
+                  className="p-4 border border-border/50 rounded-lg bg-muted/20"
+                >
                   <div className="flex items-start justify-between mb-3">
                     <div>
-                      <h4 className="font-semibold text-foreground">{meeting.title}</h4>
+                      <h4 className="font-semibold text-foreground">
+                        {meeting.title}
+                      </h4>
                       <p className="text-sm text-muted-foreground mt-1">
                         {meeting.date} at {meeting.time}
                       </p>
@@ -671,7 +851,9 @@ export default function PersephoneBoard() {
                     </div>
                   </div>
                   <div className="pt-3 border-t border-border/30">
-                    <p className="text-xs text-muted-foreground mb-2">Agenda:</p>
+                    <p className="text-xs text-muted-foreground mb-2">
+                      Agenda:
+                    </p>
                     <div className="flex flex-wrap gap-2">
                       {meeting.agenda.map((item, idx) => (
                         <Badge key={idx} variant="outline" className="text-xs">
@@ -694,11 +876,18 @@ export default function PersephoneBoard() {
             </CardHeader>
             <CardContent className="space-y-4">
               {RECENT_DECISIONS.map(decision => (
-                <div key={decision.id} className="p-4 border border-border/50 rounded-lg bg-muted/20">
+                <div
+                  key={decision.id}
+                  className="p-4 border border-border/50 rounded-lg bg-muted/20"
+                >
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex-1">
-                      <h4 className="font-semibold text-foreground">{decision.title}</h4>
-                      <p className="text-sm text-muted-foreground mt-1">{decision.date}</p>
+                      <h4 className="font-semibold text-foreground">
+                        {decision.title}
+                      </h4>
+                      <p className="text-sm text-muted-foreground mt-1">
+                        {decision.date}
+                      </p>
                     </div>
                     <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30">
                       {decision.outcome}
@@ -706,10 +895,16 @@ export default function PersephoneBoard() {
                   </div>
                   <div className="pt-3 border-t border-border/30">
                     <div className="flex items-center gap-4 text-sm">
-                      <span className="text-emerald-400">For: {decision.votes.for}</span>
-                      <span className="text-red-400">Against: {decision.votes.against}</span>
+                      <span className="text-emerald-400">
+                        For: {decision.votes.for}
+                      </span>
+                      <span className="text-red-400">
+                        Against: {decision.votes.against}
+                      </span>
                       {decision.votes.abstain > 0 && (
-                        <span className="text-muted-foreground">Abstain: {decision.votes.abstain}</span>
+                        <span className="text-muted-foreground">
+                          Abstain: {decision.votes.abstain}
+                        </span>
                       )}
                     </div>
                   </div>
@@ -719,123 +914,160 @@ export default function PersephoneBoard() {
           </Card>
         </div>
 
-      {/* ─── Consultation Modal ─────────────────────────────────────────────── */}
-      <Dialog open={consultingMember !== null} onOpenChange={open => { if (!open) handleCloseConsultation(); }}>
-        <DialogContent className="max-w-2xl h-[80vh] flex flex-col p-0 gap-0">
-          {activeMember && activeColors && ActiveIcon && (
-            <>
-              {/* Modal Header */}
-              <DialogHeader className={`px-6 py-4 border-b border-border ${activeColors.bg} flex-shrink-0`}>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className={`p-2 rounded-lg border ${activeColors.border} ${activeColors.bg}`}>
-                      <ActiveIcon className={`w-5 h-5 ${activeColors.text}`} />
-                    </div>
-                    <div>
-                      <DialogTitle className="text-foreground text-base font-bold">
-                        {activeMember.name}
-                      </DialogTitle>
-                      <p className="text-xs text-muted-foreground">
-                        {activeMember.title} · {activeMember.company}
-                      </p>
-                    </div>
-                  </div>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="h-8 w-8"
-                    onClick={handleCloseConsultation}
-                  >
-                    <X className="w-4 h-4" />
-                  </Button>
-                </div>
-                <p className="text-xs text-muted-foreground mt-1 italic">
-                  {activeMember.expertise}
-                </p>
-              </DialogHeader>
-
-              {/* Chat Messages */}
-              <div
-                ref={scrollRef}
-                className="flex-1 overflow-y-auto px-6 py-4 space-y-4"
-              >
-                {isStarting ? (
-                  <div className="flex items-center justify-center h-full">
-                    <div className="flex flex-col items-center gap-3 text-muted-foreground">
-                      <Loader2 className="w-8 h-8 animate-spin text-primary" />
-                      <p className="text-sm">Connecting to {activeMember.name}…</p>
-                    </div>
-                  </div>
-                ) : (
-                  messages.map(msg => (
-                    <div
-                      key={msg.id}
-                      className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
-                    >
-                      {msg.role === "expert" && (
-                        <div className={`p-1.5 rounded-full border ${activeColors.border} ${activeColors.bg} mr-2 flex-shrink-0 self-start mt-1`}>
-                          <ActiveIcon className={`w-3.5 h-3.5 ${activeColors.text}`} />
-                        </div>
-                      )}
+        {/* ─── Consultation Modal ─────────────────────────────────────────────── */}
+        <Dialog
+          open={consultingMember !== null}
+          onOpenChange={open => {
+            if (!open) handleCloseConsultation();
+          }}
+        >
+          <DialogContent className="max-w-2xl h-[80vh] flex flex-col p-0 gap-0">
+            {activeMember && activeColors && ActiveIcon && (
+              <>
+                {/* Modal Header */}
+                <DialogHeader
+                  className={`px-6 py-4 border-b border-border ${activeColors.bg} flex-shrink-0`}
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
                       <div
-                        className={`max-w-[80%] rounded-2xl px-4 py-3 text-sm leading-relaxed ${
-                          msg.role === "user"
-                            ? "bg-primary text-primary-foreground rounded-br-sm"
-                            : `${activeColors.bg} border ${activeColors.border} text-foreground rounded-bl-sm`
-                        }`}
+                        className={`p-2 rounded-lg border ${activeColors.border} ${activeColors.bg}`}
                       >
-                        {msg.content}
+                        <ActiveIcon
+                          className={`w-5 h-5 ${activeColors.text}`}
+                        />
+                      </div>
+                      <div>
+                        <DialogTitle className="text-foreground text-base font-bold">
+                          {activeMember.name}
+                        </DialogTitle>
+                        <p className="text-xs text-muted-foreground">
+                          {activeMember.title} · {activeMember.company}
+                        </p>
                       </div>
                     </div>
-                  ))
-                )}
-                {sendMessage.isPending && (
-                  <div className="flex justify-start">
-                    <div className={`p-1.5 rounded-full border ${activeColors.border} ${activeColors.bg} mr-2 flex-shrink-0 self-start mt-1`}>
-                      <ActiveIcon className={`w-3.5 h-3.5 ${activeColors.text}`} />
-                    </div>
-                    <div className={`${activeColors.bg} border ${activeColors.border} rounded-2xl rounded-bl-sm px-4 py-3`}>
-                      <div className="flex gap-1 items-center">
-                        <div className="w-2 h-2 rounded-full bg-muted-foreground animate-bounce" style={{ animationDelay: "0ms" }} />
-                        <div className="w-2 h-2 rounded-full bg-muted-foreground animate-bounce" style={{ animationDelay: "150ms" }} />
-                        <div className="w-2 h-2 rounded-full bg-muted-foreground animate-bounce" style={{ animationDelay: "300ms" }} />
-                      </div>
-                    </div>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-8 w-8"
+                      onClick={handleCloseConsultation}
+                    >
+                      <X className="w-4 h-4" />
+                    </Button>
                   </div>
-                )}
-              </div>
+                  <p className="text-xs text-muted-foreground mt-1 italic">
+                    {activeMember.expertise}
+                  </p>
+                </DialogHeader>
 
-              {/* Input Area */}
-              <div className="px-6 py-4 border-t border-border flex-shrink-0">
-                <div className="flex gap-3 items-end">
-                  <Textarea
-                    value={inputMessage}
-                    onChange={e => setInputMessage(e.target.value)}
-                    onKeyDown={handleKeyDown}
-                    placeholder={`Ask ${activeMember.name} anything…`}
-                    className="flex-1 min-h-[60px] max-h-[120px] resize-none text-sm"
-                    disabled={isStarting || sendMessage.isPending}
-                  />
-                  <Button
-                    onClick={() => void handleSend()}
-                    disabled={!inputMessage.trim() || isStarting || sendMessage.isPending || sessionId === null}
-                    className="bg-primary hover:bg-primary/90 h-10 w-10 p-0 flex-shrink-0"
-                  >
-                    {sendMessage.isPending ? (
-                      <Loader2 className="w-4 h-4 animate-spin" />
-                    ) : (
-                      <Send className="w-4 h-4" />
-                    )}
-                  </Button>
+                {/* Chat Messages */}
+                <div
+                  ref={scrollRef}
+                  className="flex-1 overflow-y-auto px-6 py-4 space-y-4"
+                >
+                  {isStarting ? (
+                    <div className="flex items-center justify-center h-full">
+                      <div className="flex flex-col items-center gap-3 text-muted-foreground">
+                        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+                        <p className="text-sm">
+                          Connecting to {activeMember.name}…
+                        </p>
+                      </div>
+                    </div>
+                  ) : (
+                    messages.map(msg => (
+                      <div
+                        key={msg.id}
+                        className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
+                      >
+                        {msg.role === "expert" && (
+                          <div
+                            className={`p-1.5 rounded-full border ${activeColors.border} ${activeColors.bg} mr-2 flex-shrink-0 self-start mt-1`}
+                          >
+                            <ActiveIcon
+                              className={`w-3.5 h-3.5 ${activeColors.text}`}
+                            />
+                          </div>
+                        )}
+                        <div
+                          className={`max-w-[80%] rounded-2xl px-4 py-3 text-sm leading-relaxed ${
+                            msg.role === "user"
+                              ? "bg-primary text-primary-foreground rounded-br-sm"
+                              : `${activeColors.bg} border ${activeColors.border} text-foreground rounded-bl-sm`
+                          }`}
+                        >
+                          {msg.content}
+                        </div>
+                      </div>
+                    ))
+                  )}
+                  {sendMessage.isPending && (
+                    <div className="flex justify-start">
+                      <div
+                        className={`p-1.5 rounded-full border ${activeColors.border} ${activeColors.bg} mr-2 flex-shrink-0 self-start mt-1`}
+                      >
+                        <ActiveIcon
+                          className={`w-3.5 h-3.5 ${activeColors.text}`}
+                        />
+                      </div>
+                      <div
+                        className={`${activeColors.bg} border ${activeColors.border} rounded-2xl rounded-bl-sm px-4 py-3`}
+                      >
+                        <div className="flex gap-1 items-center">
+                          <div
+                            className="w-2 h-2 rounded-full bg-muted-foreground animate-bounce"
+                            style={{ animationDelay: "0ms" }}
+                          />
+                          <div
+                            className="w-2 h-2 rounded-full bg-muted-foreground animate-bounce"
+                            style={{ animationDelay: "150ms" }}
+                          />
+                          <div
+                            className="w-2 h-2 rounded-full bg-muted-foreground animate-bounce"
+                            style={{ animationDelay: "300ms" }}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
-                <p className="text-xs text-muted-foreground mt-2">
-                  Press Enter to send · Shift+Enter for new line
-                </p>
-              </div>
-            </>
-          )}
-        </DialogContent>
-      </Dialog>
+
+                {/* Input Area */}
+                <div className="px-6 py-4 border-t border-border flex-shrink-0">
+                  <div className="flex gap-3 items-end">
+                    <Textarea
+                      value={inputMessage}
+                      onChange={e => setInputMessage(e.target.value)}
+                      onKeyDown={handleKeyDown}
+                      placeholder={`Ask ${activeMember.name} anything…`}
+                      className="flex-1 min-h-[60px] max-h-[120px] resize-none text-sm"
+                      disabled={isStarting || sendMessage.isPending}
+                    />
+                    <Button
+                      onClick={() => void handleSend()}
+                      disabled={
+                        !inputMessage.trim() ||
+                        isStarting ||
+                        sendMessage.isPending ||
+                        sessionId === null
+                      }
+                      className="bg-primary hover:bg-primary/90 h-10 w-10 p-0 flex-shrink-0"
+                    >
+                      {sendMessage.isPending ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : (
+                        <Send className="w-4 h-4" />
+                      )}
+                    </Button>
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-2">
+                    Press Enter to send · Shift+Enter for new line
+                  </p>
+                </div>
+              </>
+            )}
+          </DialogContent>
+        </Dialog>
       </div>
     </PageShell>
   );

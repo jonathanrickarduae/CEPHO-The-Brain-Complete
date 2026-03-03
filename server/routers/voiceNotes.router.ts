@@ -1,3 +1,4 @@
+import { getModelForTask } from "../utils/modelRouter";
 /**
  * Voice Notes Router — Real Implementation
  *
@@ -78,7 +79,7 @@ export const voiceNotesRouter = router({
       try {
         const openai = getOpenAIClient();
         const completion = await openai.chat.completions.create({
-          model: "gpt-4.1-mini",
+          model: getModelForTask("summarise"),
           messages: [
             {
               role: "user",

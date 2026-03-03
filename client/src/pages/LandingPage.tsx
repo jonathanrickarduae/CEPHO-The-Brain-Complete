@@ -48,7 +48,7 @@ export default function LandingPage() {
       }
 
       // Sign in with Supabase
-      const { data} = await signIn(email, password);
+      const { data } = await signIn(email, password);
 
       if (error) {
         toast.error(error.message || "Failed to sign in");

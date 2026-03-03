@@ -1,6 +1,6 @@
 # Terms of Service
 
-*Last Updated: 2026-03-01*
+_Last Updated: 2026-03-01_
 
 These Terms of Service ("Terms") govern your access to and use of the CEPHO.AI services. Please read them carefully.
 

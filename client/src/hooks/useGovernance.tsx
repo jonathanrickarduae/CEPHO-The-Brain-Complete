@@ -157,8 +157,7 @@ export function GovernanceProvider({ children }: { children: ReactNode }) {
             timestamp: new Date(e.timestamp),
           }))
         );
-      } catch (e) {
-      }
+      } catch (e) {}
     }
   }, []);
 

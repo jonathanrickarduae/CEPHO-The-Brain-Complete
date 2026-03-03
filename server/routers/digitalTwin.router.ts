@@ -22,7 +22,13 @@ const anthropic = new Anthropic({
 });
 
 // ─── Helper: build a cognitive summary from questionnaire responses ──────────
-function buildCognitiveSummary(responses: { questionId: string; scaleValue: number | null; booleanValue: boolean | null }[]) {
+function buildCognitiveSummary(
+  responses: {
+    questionId: string;
+    scaleValue: number | null;
+    booleanValue: boolean | null;
+  }[]
+) {
   const map: Record<string, number | boolean | null> = {};
   for (const r of responses) {
     map[r.questionId] = r.scaleValue ?? r.booleanValue ?? null;
@@ -72,22 +78,54 @@ export const digitalTwinRouter = router({
     const profileUpdate: Record<string, number | null> = {
       questionnaireCompletion: completion,
       cosUnderstandingLevel: Math.min(100, completion + 10),
-      measurementDriven: typeof map["q_measurement_driven"] === "number" ? map["q_measurement_driven"] : null,
-      processStandardization: typeof map["q_process_std"] === "number" ? map["q_process_std"] : null,
-      automationPreference: typeof map["q_automation"] === "number" ? map["q_automation"] : null,
-      ambiguityTolerance: typeof map["q_ambiguity"] === "number" ? map["q_ambiguity"] : null,
-      techAdoptionSpeed: typeof map["q_tech_adoption"] === "number" ? map["q_tech_adoption"] : null,
-      aiBeliefLevel: typeof map["q_ai_belief"] === "number" ? map["q_ai_belief"] : null,
-      dataVsIntuition: typeof map["q_data_intuition"] === "number" ? map["q_data_intuition"] : null,
-      nicheVsMass: typeof map["q_niche_mass"] === "number" ? map["q_niche_mass"] : null,
-      firstMoverVsFollower: typeof map["q_first_mover"] === "number" ? map["q_first_mover"] : null,
-      structurePreference: typeof map["q_structure"] === "number" ? map["q_structure"] : null,
-      interruptionTolerance: typeof map["q_interruption"] === "number" ? map["q_interruption"] : null,
-      batchingPreference: typeof map["q_batching"] === "number" ? map["q_batching"] : null,
-      scenarioPlanningLevel: typeof map["q_scenario_planning"] === "number" ? map["q_scenario_planning"] : null,
-      pivotComfort: typeof map["q_pivot_comfort"] === "number" ? map["q_pivot_comfort"] : null,
-      trendLeadership: typeof map["q_trend_leadership"] === "number" ? map["q_trend_leadership"] : null,
-      portfolioDiversification: typeof map["q_portfolio_div"] === "number" ? map["q_portfolio_div"] : null,
+      measurementDriven:
+        typeof map["q_measurement_driven"] === "number"
+          ? map["q_measurement_driven"]
+          : null,
+      processStandardization:
+        typeof map["q_process_std"] === "number" ? map["q_process_std"] : null,
+      automationPreference:
+        typeof map["q_automation"] === "number" ? map["q_automation"] : null,
+      ambiguityTolerance:
+        typeof map["q_ambiguity"] === "number" ? map["q_ambiguity"] : null,
+      techAdoptionSpeed:
+        typeof map["q_tech_adoption"] === "number"
+          ? map["q_tech_adoption"]
+          : null,
+      aiBeliefLevel:
+        typeof map["q_ai_belief"] === "number" ? map["q_ai_belief"] : null,
+      dataVsIntuition:
+        typeof map["q_data_intuition"] === "number"
+          ? map["q_data_intuition"]
+          : null,
+      nicheVsMass:
+        typeof map["q_niche_mass"] === "number" ? map["q_niche_mass"] : null,
+      firstMoverVsFollower:
+        typeof map["q_first_mover"] === "number" ? map["q_first_mover"] : null,
+      structurePreference:
+        typeof map["q_structure"] === "number" ? map["q_structure"] : null,
+      interruptionTolerance:
+        typeof map["q_interruption"] === "number"
+          ? map["q_interruption"]
+          : null,
+      batchingPreference:
+        typeof map["q_batching"] === "number" ? map["q_batching"] : null,
+      scenarioPlanningLevel:
+        typeof map["q_scenario_planning"] === "number"
+          ? map["q_scenario_planning"]
+          : null,
+      pivotComfort:
+        typeof map["q_pivot_comfort"] === "number"
+          ? map["q_pivot_comfort"]
+          : null,
+      trendLeadership:
+        typeof map["q_trend_leadership"] === "number"
+          ? map["q_trend_leadership"]
+          : null,
+      portfolioDiversification:
+        typeof map["q_portfolio_div"] === "number"
+          ? map["q_portfolio_div"]
+          : null,
     };
 
     // Upsert the profile
@@ -106,7 +144,11 @@ export const digitalTwinRouter = router({
     } else {
       await db
         .update(digitalTwinProfile)
-        .set({ ...profileUpdate, lastCalculated: new Date(), updatedAt: new Date() })
+        .set({
+          ...profileUpdate,
+          lastCalculated: new Date(),
+          updatedAt: new Date(),
+        })
         .where(eq(digitalTwinProfile.userId, ctx.user.id));
     }
 
@@ -126,7 +168,8 @@ export const digitalTwinRouter = router({
 
     if (!profile) {
       return {
-        insights: "Complete the Digital Twin questionnaire to unlock personalised insights.",
+        insights:
+          "Complete the Digital Twin questionnaire to unlock personalised insights.",
         recommendations: [],
         generatedAt: new Date().toISOString(),
       };
@@ -171,7 +214,8 @@ Respond in JSON: { "insights": "narrative here", "recommendations": ["rec1", "re
         result = parsed;
       }
     } catch {
-      result.insights = "Your Digital Twin profile is being calibrated. Check back after completing more of the questionnaire.";
+      result.insights =
+        "Your Digital Twin profile is being calibrated. Check back after completing more of the questionnaire.";
       result.recommendations = [
         "Complete the Digital Twin questionnaire for personalised insights",
         "Connect your calendar to improve scheduling intelligence",

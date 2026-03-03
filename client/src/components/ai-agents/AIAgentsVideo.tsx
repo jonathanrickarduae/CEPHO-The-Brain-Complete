@@ -88,7 +88,9 @@ export default function AIAgentsVideo() {
             </div>
             <div className="p-4">
               <h4 className="font-semibold text-white mb-1">{asset.title}</h4>
-              <p className="text-sm text-muted-foreground">{asset.description}</p>
+              <p className="text-sm text-muted-foreground">
+                {asset.description}
+              </p>
             </div>
           </Card>
         ))}
@@ -101,7 +103,9 @@ export default function AIAgentsVideo() {
           <div className="flex items-start gap-3">
             <div className="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
             <div>
-              <p className="text-foreground font-medium">50 Specialized Agents</p>
+              <p className="text-foreground font-medium">
+                50 Specialized Agents
+              </p>
               <p className="text-sm text-muted-foreground">
                 Across 7 categories, each world-class in their domain
               </p>
@@ -110,7 +114,9 @@ export default function AIAgentsVideo() {
           <div className="flex items-start gap-3">
             <div className="w-2 h-2 bg-purple-500 rounded-full mt-2"></div>
             <div>
-              <p className="text-foreground font-medium">Daily Self-Improvement</p>
+              <p className="text-foreground font-medium">
+                Daily Self-Improvement
+              </p>
               <p className="text-sm text-muted-foreground">
                 Agents research, learn, and propose enhancements
               </p>

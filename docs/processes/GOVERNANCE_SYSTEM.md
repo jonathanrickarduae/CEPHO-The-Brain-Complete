@@ -46,10 +46,10 @@ This section governs how the CEPHO.AI platform and its users interact with exter
 
 The platform operates in two distinct security modes, managed from the Nexus Dashboard:
 
-| Mode | Security Level | Use Case | Behavior | Visual |
-| :--- | :--- | :--- | :--- | :--- |
-| **EVERYTHING** | Low | Development, Personal Use | All APIs and integrations are available. | Amber Shield |
-| **GOVERNED** | High | Production, Enterprise | Only explicitly approved APIs can be used. | Green Shield |
+| Mode           | Security Level | Use Case                  | Behavior                                   | Visual       |
+| :------------- | :------------- | :------------------------ | :----------------------------------------- | :----------- |
+| **EVERYTHING** | Low            | Development, Personal Use | All APIs and integrations are available.   | Amber Shield |
+| **GOVERNED**   | High           | Production, Enterprise    | Only explicitly approved APIs can be used. | Green Shield |
 
 ### 3.2. API Key Management & Approval
 

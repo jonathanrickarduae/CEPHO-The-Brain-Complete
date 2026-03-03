@@ -24,8 +24,7 @@ export function getPool(): Pool {
       options: "-c client_encoding=UTF8",
     });
 
-    pool.on("error", err => {
-    });
+    pool.on("error", err => {});
   }
 
   if (!pool) {

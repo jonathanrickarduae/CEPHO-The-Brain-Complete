@@ -83,10 +83,10 @@ export class AnthropicService {
     systemPrompt?: string,
     model?: string
   ): Promise<string> {
-    const response = await this.complete(
-      [{ role: "user", content: prompt }],
-      { system: systemPrompt, model }
-    );
+    const response = await this.complete([{ role: "user", content: prompt }], {
+      system: systemPrompt,
+      model,
+    });
     return response.content;
   }
 
@@ -150,7 +150,11 @@ export class AnthropicService {
   }
 
   /** Test connection */
-  async testConnection(): Promise<{ ok: boolean; model?: string; error?: string }> {
+  async testConnection(): Promise<{
+    ok: boolean;
+    model?: string;
+    error?: string;
+  }> {
     try {
       const response = await this.complete(
         [{ role: "user", content: "Say 'ok' in one word." }],

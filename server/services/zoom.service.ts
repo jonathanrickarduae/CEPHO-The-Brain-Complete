@@ -69,7 +69,8 @@ export class ZoomService {
     const data = await res.json();
     this.accessToken = data.access_token;
     this.tokenExpiry = Date.now() + (data.expires_in - 60) * 1000;
-    if (!this.accessToken) throw new Error("Zoom: failed to obtain access token");
+    if (!this.accessToken)
+      throw new Error("Zoom: failed to obtain access token");
     return this.accessToken;
   }
 
@@ -108,8 +109,7 @@ export class ZoomService {
       `${ZOOM_API_BASE}/users/me/meetings?type=${type}&page_size=50`,
       { headers: await this.authHeaders() }
     );
-    if (!res.ok)
-      throw new Error(`Zoom listMeetings failed: ${res.statusText}`);
+    if (!res.ok) throw new Error(`Zoom listMeetings failed: ${res.statusText}`);
     const data = await res.json();
     return (data.meetings ?? []).map((m: Record<string, unknown>) => ({
       id: m.id as number,
@@ -183,7 +183,11 @@ export class ZoomService {
   }
 
   /** Test connection */
-  async testConnection(): Promise<{ ok: boolean; email?: string; error?: string }> {
+  async testConnection(): Promise<{
+    ok: boolean;
+    email?: string;
+    error?: string;
+  }> {
     try {
       const user = await this.getCurrentUser();
       return { ok: true, email: user.email };

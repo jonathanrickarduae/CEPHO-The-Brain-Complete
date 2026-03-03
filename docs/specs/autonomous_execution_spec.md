@@ -6,42 +6,42 @@ This appendix describes the ultimate architecture of the CEPHO.AI platform, achi
 
 ## 2. The Core Components
 
-| Component | Description |
-|---|---|
-| **Command Bar (The "One Sentence")** | The single entry point for all user-directed autonomous tasks. This is where the user states their "rocket plan." |
-| **Chief of Staff Agent (The Orchestrator)** | The master AI agent that receives the user's goal, consults the Digital Twin, and directs the entire operation. |
-| **Specialist Agents (The SMEs)** | The team of 49+ specialist agents who are delegated tasks by the Chief of Staff and execute them. |
-| **Persephone Board (The "God View")** | A new, master visualization dashboard that provides a real-time, multi-layered view of the entire autonomous workflow, from goal to outcome. |
+| Component                                   | Description                                                                                                                                  |
+| ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Command Bar (The "One Sentence")**        | The single entry point for all user-directed autonomous tasks. This is where the user states their "rocket plan."                            |
+| **Chief of Staff Agent (The Orchestrator)** | The master AI agent that receives the user's goal, consults the Digital Twin, and directs the entire operation.                              |
+| **Specialist Agents (The SMEs)**            | The team of 49+ specialist agents who are delegated tasks by the Chief of Staff and execute them.                                            |
+| **Persephone Board (The "God View")**       | A new, master visualization dashboard that provides a real-time, multi-layered view of the entire autonomous workflow, from goal to outcome. |
 
 ## 3. The Autonomous Workflow: From Sentence to Outcome
 
-This is the step-by-step process that occurs when the user enters a goal into the Command Bar (e.g., "*Launch a new marketing campaign for Project X in Q3*.")
+This is the step-by-step process that occurs when the user enters a goal into the Command Bar (e.g., "_Launch a new marketing campaign for Project X in Q3_.")
 
 **Step 1: Goal Ingestion & Deconstruction (Chief of Staff Agent)**
 
 1.  The user types the goal into the Command Bar (accessible via Cmd+K on any page).
 2.  The input is sent to the **Chief of Staff (CoS) Agent**.
-3.  The CoS Agent's first action is to consult the **Digital Twin (Appendix Q)** to understand the *true intent* behind the sentence. It asks the Digital Twin: "*Given Victoria's priorities, risk tolerance, and past decisions, what does she really mean by this? What does success look like for her?*"
+3.  The CoS Agent's first action is to consult the **Digital Twin (Appendix Q)** to understand the _true intent_ behind the sentence. It asks the Digital Twin: "_Given Victoria's priorities, risk tolerance, and past decisions, what does she really mean by this? What does success look like for her?_"
 4.  The CoS Agent then uses a recursive planning algorithm to deconstruct the high-level goal into a hierarchical plan of phases, milestones, and individual tasks. This becomes the initial structure of the project.
 
 **Step 2: SME Delegation & Parallel Execution (Chief of Staff & Specialist Agents)**
 
 1.  The CoS Agent analyzes the task list from the deconstruction phase.
 2.  For each task, it identifies the required skills and delegates it to the appropriate **Specialist Agent (SME)**. For the marketing campaign example:
-    *   "*Analyze budget implications*" → **Financial Analyst Agent**
-    *   "*Research competitor campaigns*" → **Market Analyst Agent**
-    *   "*Draft initial ad copy*" → **Marketing Agent**
-    *   "*Identify legal risks*" → **Legal Advisor Agent**
+    - "_Analyze budget implications_" → **Financial Analyst Agent**
+    - "_Research competitor campaigns_" → **Market Analyst Agent**
+    - "_Draft initial ad copy_" → **Marketing Agent**
+    - "_Identify legal risks_" → **Legal Advisor Agent**
 3.  The CoS Agent executes these delegations in parallel where possible, dramatically accelerating the planning phase.
 
 **Step 3: Real-Time Visualization (The Persephone Board)**
 
 1.  As soon as the goal is ingested, a new entry is created on the **Persephone Board** (a new page at `/persephone`).
 2.  This board is a dynamic, multi-layered interface:
-    *   **Layer 1 (The Goal):** The user's original one-sentence goal is displayed at the top.
-    *   **Layer 2 (The Plan):** The CoS Agent's hierarchical plan is shown as a real-time Gantt chart or project timeline.
-    *   **Layer 3 (The Agents):** A real-time view of the agent team, showing which agent is working on which task, their current status (e.g., *researching*, *writing*, *waiting for data*), and their confidence score.
-    *   **Layer 4 (The Artifacts):** As agents produce work (documents, code, analysis), the artifacts appear on the board, linked to the relevant tasks.
+    - **Layer 1 (The Goal):** The user's original one-sentence goal is displayed at the top.
+    - **Layer 2 (The Plan):** The CoS Agent's hierarchical plan is shown as a real-time Gantt chart or project timeline.
+    - **Layer 3 (The Agents):** A real-time view of the agent team, showing which agent is working on which task, their current status (e.g., _researching_, _writing_, _waiting for data_), and their confidence score.
+    - **Layer 4 (The Artifacts):** As agents produce work (documents, code, analysis), the artifacts appear on the board, linked to the relevant tasks.
 3.  The user can click on any element to drill down, viewing the agent's thought process, the data it's using, and the intermediate results.
 
 **Step 4: Synthesis & Review (Chief of Staff Agent)**
@@ -60,8 +60,8 @@ This is the step-by-step process that occurs when the user enters a goal into th
 
 This autonomous layer is not isolated. It transforms every page of the platform:
 
-*   **Dashboard:** The main dashboard will feature a prominent Command Bar and a summary view of the top 3 active projects on the Persephone Board.
-*   **Innovation Hub:** Any idea approved in the hub can now be sent directly to the Autonomous Execution Engine with a single click: "*Execute this idea*."
-*   **Daily Briefing:** The briefing will include a section: "*Persephone Board Update: Here is the current status of your active autonomous projects*."
-*   **Settings:** A new tab will be added to control the autonomy level (e.g., "*Require approval for all agent actions*" vs. "*Fully autonomous execution*").
-*   **Agent Performance Dashboard:** This dashboard will now show not just individual agent metrics, but also team performance on autonomous projects, tracking the efficiency of the entire orchestrated workflow.
+- **Dashboard:** The main dashboard will feature a prominent Command Bar and a summary view of the top 3 active projects on the Persephone Board.
+- **Innovation Hub:** Any idea approved in the hub can now be sent directly to the Autonomous Execution Engine with a single click: "_Execute this idea_."
+- **Daily Briefing:** The briefing will include a section: "_Persephone Board Update: Here is the current status of your active autonomous projects_."
+- **Settings:** A new tab will be added to control the autonomy level (e.g., "_Require approval for all agent actions_" vs. "_Fully autonomous execution_").
+- **Agent Performance Dashboard:** This dashboard will now show not just individual agent metrics, but also team performance on autonomous projects, tracking the efficiency of the entire orchestrated workflow.

@@ -568,7 +568,9 @@ export function BlueprintQMS({
       {pendingChanges.length === 0 && (
         <div className="bg-white/5 border border-white/10 rounded-2xl p-8 text-center">
           <Check className="w-12 h-12 mx-auto text-green-400 mb-3" />
-          <p className="text-foreground font-medium">All blueprints are in sync</p>
+          <p className="text-foreground font-medium">
+            All blueprints are in sync
+          </p>
           <p className="text-foreground/70 text-sm mt-1">
             No pending changes to review
           </p>

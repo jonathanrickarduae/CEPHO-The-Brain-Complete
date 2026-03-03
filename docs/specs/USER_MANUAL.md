@@ -2,8 +2,8 @@
 
 **CEPHO.AI — Your Autonomous Chief of Staff**
 
-*Version: 1.0*
-*Last Updated: 2026-03-01*
+_Version: 1.0_
+_Last Updated: 2026-03-01_
 
 ---
 
@@ -89,5 +89,6 @@ A: Yes. Navigate to **Settings > Integrations** to connect a wide range of tools
 ## 5. Getting Help
 
 If you need help, you can:
+
 - **Consult the Persephone Board:** Ask your AI-SME (Subject Matter Expert) for advice on any topic.
 - **Contact Support:** Email support@cepho.ai for technical issues or use the chat widget in the bottom right corner of the app.

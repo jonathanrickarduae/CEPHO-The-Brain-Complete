@@ -18,16 +18,66 @@ import { eq, and, sql } from "drizzle-orm";
 
 // Default training modules (seeded on first call)
 const DEFAULT_MODULES = [
-  { moduleNumber: 1, title: "CEPHO Foundation", objective: "Understanding the CEPHO.Ai platform and philosophy", duration: 30 },
-  { moduleNumber: 2, title: "The Signal System", objective: "Morning and Evening briefing protocols", duration: 25 },
-  { moduleNumber: 3, title: "SME Panel Management", objective: "Coordinating AI Subject Matter Experts", duration: 45 },
-  { moduleNumber: 4, title: "Project Genesis Workflow", objective: "7-phase project lifecycle management", duration: 60 },
-  { moduleNumber: 5, title: "Quality Gate System", objective: "4-level review and approval process", duration: 40 },
-  { moduleNumber: 6, title: "KPI Assessment Framework", objective: "50-category scoring methodology", duration: 90 },
-  { moduleNumber: 7, title: "Document Generation", objective: "CEPHO design guidelines and templates", duration: 45 },
-  { moduleNumber: 8, title: "Innovation Hub Operations", objective: "Idea scoring and pipeline management", duration: 50 },
-  { moduleNumber: 9, title: "Strategic Advisory Support", objective: "Executive-level decision support", duration: 75 },
-  { moduleNumber: 10, title: "Cross-Domain Coordination", objective: "Managing complex multi-team initiatives", duration: 60 },
+  {
+    moduleNumber: 1,
+    title: "CEPHO Foundation",
+    objective: "Understanding the CEPHO.Ai platform and philosophy",
+    duration: 30,
+  },
+  {
+    moduleNumber: 2,
+    title: "The Signal System",
+    objective: "Morning and Evening briefing protocols",
+    duration: 25,
+  },
+  {
+    moduleNumber: 3,
+    title: "SME Panel Management",
+    objective: "Coordinating AI Subject Matter Experts",
+    duration: 45,
+  },
+  {
+    moduleNumber: 4,
+    title: "Project Genesis Workflow",
+    objective: "7-phase project lifecycle management",
+    duration: 60,
+  },
+  {
+    moduleNumber: 5,
+    title: "Quality Gate System",
+    objective: "4-level review and approval process",
+    duration: 40,
+  },
+  {
+    moduleNumber: 6,
+    title: "KPI Assessment Framework",
+    objective: "50-category scoring methodology",
+    duration: 90,
+  },
+  {
+    moduleNumber: 7,
+    title: "Document Generation",
+    objective: "CEPHO design guidelines and templates",
+    duration: 45,
+  },
+  {
+    moduleNumber: 8,
+    title: "Innovation Hub Operations",
+    objective: "Idea scoring and pipeline management",
+    duration: 50,
+  },
+  {
+    moduleNumber: 9,
+    title: "Strategic Advisory Support",
+    objective: "Executive-level decision support",
+    duration: 75,
+  },
+  {
+    moduleNumber: 10,
+    title: "Cross-Domain Coordination",
+    objective: "Managing complex multi-team initiatives",
+    duration: 60,
+  },
 ];
 
 export const cosTrainingRouter = router({
@@ -49,9 +99,10 @@ export const cosTrainingRouter = router({
         );
       }
 
-      const modules = existingModules.length > 0
-        ? existingModules
-        : await db.select().from(cosTrainingModulesPg);
+      const modules =
+        existingModules.length > 0
+          ? existingModules
+          : await db.select().from(cosTrainingModulesPg);
 
       // Get user progress — userId stored as uuid-formatted string of the integer id
       const userIdStr = String(ctx.user.id);
@@ -61,16 +112,13 @@ export const cosTrainingRouter = router({
         .where(sql`${cosModuleProgressPg.userId}::text = ${userIdStr}`);
 
       const completedModuleIds = new Set(
-        progress
-          .filter(p => p.status === "completed")
-          .map(p => p.moduleId)
+        progress.filter(p => p.status === "completed").map(p => p.moduleId)
       );
 
       const completedCount = completedModuleIds.size;
       const totalCount = modules.length;
-      const percentage = totalCount > 0
-        ? Math.round((completedCount / totalCount) * 100)
-        : 0;
+      const percentage =
+        totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
 
       return {
         percentage,

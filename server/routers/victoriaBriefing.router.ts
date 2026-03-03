@@ -1,3 +1,4 @@
+import { getModelForTask } from "../utils/modelRouter";
 /**
  * Victoria Briefing Router
  *
@@ -75,7 +76,7 @@ Generate a structured daily briefing with:
 Keep it concise, professional, and actionable. Format with clear sections.`;
 
     const completion = await openai.chat.completions.create({
-      model: "gpt-4.1-mini",
+      model: getModelForTask("generate"),
       messages: [{ role: "user", content: prompt }],
       max_tokens: 700,
       temperature: 0.6,
@@ -169,19 +170,29 @@ Keep it concise, professional, and actionable. Format with clear sections.`;
  */
 export const victoriasBriefRouter = router({
   generatePdf: protectedProcedure
-    .input(z.object({ date: z.string().optional(), content: z.any().optional() }))
+    .input(
+      z.object({ date: z.string().optional(), content: z.any().optional() })
+    )
     .mutation(async ({ input }) => {
       try {
-        const briefDate = input.date ?? new Date().toLocaleDateString("en-GB", {
-          weekday: "long", year: "numeric", month: "long", day: "numeric",
-        });
+        const briefDate =
+          input.date ??
+          new Date().toLocaleDateString("en-GB", {
+            weekday: "long",
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          });
         const content = input.content ?? {};
         // Build BriefData from whatever content was passed
         const briefData = {
           date: briefDate,
           overviewSummary: {
-            headline: content.overviewSummary?.headline ?? "Your daily executive brief",
-            energyFocus: content.overviewSummary?.energyFocus ?? "Stay focused on high-impact priorities",
+            headline:
+              content.overviewSummary?.headline ?? "Your daily executive brief",
+            energyFocus:
+              content.overviewSummary?.energyFocus ??
+              "Stay focused on high-impact priorities",
           },
           schedule: content.schedule ?? [],
           priorities: (content.keyThings ?? []).map((k: any) => ({
@@ -194,12 +205,14 @@ export const victoriasBriefRouter = router({
             category: i.source ?? "Intelligence",
             message: i.summary ?? i.title ?? "",
           })),
-          emails: content.emailSummary ? {
-            unread: content.emailSummary.unread ?? 0,
-            requireResponse: content.emailSummary.requiresResponse ?? 0,
-            highPriority: content.emailSummary.highPriority ?? 0,
-            urgent: content.emailSummary.urgent ?? [],
-          } : undefined,
+          emails: content.emailSummary
+            ? {
+                unread: content.emailSummary.unread ?? 0,
+                requireResponse: content.emailSummary.requiresResponse ?? 0,
+                highPriority: content.emailSummary.highPriority ?? 0,
+                urgent: content.emailSummary.urgent ?? [],
+              }
+            : undefined,
         };
         const pdfPath = await generateBriefPDF(briefData);
         // Read the PDF and return as base64 data URL
@@ -232,31 +245,44 @@ export const victoriasBriefRouter = router({
     }),
 
   generateVideo: protectedProcedure
-    .input(z.object({ script: z.string().optional(), avatarId: z.string().optional(), content: z.string().optional() }))
+    .input(
+      z.object({
+        script: z.string().optional(),
+        avatarId: z.string().optional(),
+        content: z.string().optional(),
+      })
+    )
     .mutation(async ({ input }) => {
       if (!synthesiaService.isConfigured()) {
         return {
           success: false,
-          message: "Video generation not configured — SYNTHESIA_API_KEY is missing",
+          message:
+            "Video generation not configured — SYNTHESIA_API_KEY is missing",
           videoUrl: null as string | null,
           videoId: null as string | null,
           status: "error" as string,
         };
       }
       try {
-        const script = input.script ?? input.content ?? "Good morning. Your CEPHO briefing is ready.";
+        const script =
+          input.script ??
+          input.content ??
+          "Good morning. Your CEPHO briefing is ready.";
         const video = await synthesiaService.createVideo({
           title: `CEPHO Briefing — ${new Date().toLocaleDateString()}`,
           test: true, // Use test mode to avoid billing during development
-          input: [{
-            avatarId: input.avatarId ?? "anna_costume1_cameraA",
-            script: script.slice(0, 1500), // Synthesia limit
-            backgroundColor: "#0f172a",
-          }],
+          input: [
+            {
+              avatarId: input.avatarId ?? "anna_costume1_cameraA",
+              script: script.slice(0, 1500), // Synthesia limit
+              backgroundColor: "#0f172a",
+            },
+          ],
         });
         return {
           success: true,
-          message: "Video generation started. Check status with getVideoStatus.",
+          message:
+            "Video generation started. Check status with getVideoStatus.",
           videoUrl: video.downloadUrl,
           videoId: video.id,
           status: video.status as string,
@@ -264,7 +290,8 @@ export const victoriasBriefRouter = router({
       } catch (err) {
         return {
           success: false,
-          message: err instanceof Error ? err.message : "Video generation failed",
+          message:
+            err instanceof Error ? err.message : "Video generation failed",
           videoUrl: null as string | null,
           videoId: null as string | null,
           status: "error" as string,
@@ -276,7 +303,12 @@ export const victoriasBriefRouter = router({
     .input(z.object({ videoId: z.string() }))
     .query(async ({ input }) => {
       if (!synthesiaService.isConfigured()) {
-        return { status: "error", downloadUrl: null, thumbnailUrl: null, duration: null };
+        return {
+          status: "error",
+          downloadUrl: null,
+          thumbnailUrl: null,
+          duration: null,
+        };
       }
       try {
         const video = await synthesiaService.getVideo(input.videoId);
@@ -287,12 +319,22 @@ export const victoriasBriefRouter = router({
           duration: video.duration,
         };
       } catch {
-        return { status: "error", downloadUrl: null, thumbnailUrl: null, duration: null };
+        return {
+          status: "error",
+          downloadUrl: null,
+          thumbnailUrl: null,
+          duration: null,
+        };
       }
     }),
 
   generateAudio: protectedProcedure
-    .input(z.object({ text: z.string().min(1).max(3000), voiceId: z.string().optional() }))
+    .input(
+      z.object({
+        text: z.string().min(1).max(3000),
+        voiceId: z.string().optional(),
+      })
+    )
     .mutation(async ({ input }) => {
       const elevenLabsKey = process.env.ELEVENLABS_API_KEY;
       if (!elevenLabsKey) {

@@ -125,8 +125,7 @@ export function SMEFeedbackRating({
 
       // Store reference to stop later
       (window as any).currentRecorder = mediaRecorder;
-    } catch {
-    }
+    } catch {}
   };
 
   const stopRecording = () => {
@@ -169,7 +168,9 @@ export function SMEFeedbackRating({
             </div>
           )}
           <div>
-            <h3 className="text-foreground font-medium">Rate this conversation</h3>
+            <h3 className="text-foreground font-medium">
+              Rate this conversation
+            </h3>
             <p className="text-sm text-foreground/70">with {expertName}</p>
           </div>
         </div>

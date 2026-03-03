@@ -17,7 +17,11 @@ export default function WorkflowsPage() {
   const [, setLocation] = useLocation();
   const [filter, setFilter] = useState<string>("all");
 
-  const { data: workflows = [], isLoading, refetch } = trpc.workflows.list.useQuery();
+  const {
+    data: workflows = [],
+    isLoading,
+    refetch,
+  } = trpc.workflows.list.useQuery();
 
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -70,9 +74,44 @@ export default function WorkflowsPage() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-[60vh]">
-        <RefreshCw className="animate-spin h-10 w-10 text-primary" />
-      </div>
+      <PageShell
+        icon={Workflow}
+        title="Workflows"
+        subtitle="Manage your process workflows and track progress"
+        fillHeight
+      >
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <div
+              key={i}
+              className="bg-card border border-border rounded-xl p-4 sm:p-6 space-y-4 animate-pulse"
+            >
+              <div className="flex items-start justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="h-5 w-5 rounded bg-muted" />
+                  <div className="space-y-2">
+                    <div className="h-4 w-32 bg-muted rounded" />
+                    <div className="h-3 w-24 bg-muted rounded" />
+                  </div>
+                </div>
+                <div className="h-5 w-5 rounded bg-muted" />
+              </div>
+              <div className="h-6 w-28 bg-muted rounded" />
+              <div className="space-y-2">
+                <div className="flex justify-between">
+                  <div className="h-3 w-16 bg-muted rounded" />
+                  <div className="h-3 w-16 bg-muted rounded" />
+                </div>
+                <div className="h-2 w-full bg-muted rounded-full" />
+              </div>
+              <div className="pt-4 border-t border-border flex justify-between">
+                <div className="h-3 w-24 bg-muted rounded" />
+                <div className="h-3 w-24 bg-muted rounded" />
+              </div>
+            </div>
+          ))}
+        </div>
+      </PageShell>
     );
   }
 
@@ -103,7 +142,14 @@ export default function WorkflowsPage() {
       <div className="space-y-6">
         {/* Filters */}
         <div className="flex flex-wrap gap-2">
-          {["all", "not_started", "in_progress", "paused", "completed", "failed"].map(status => (
+          {[
+            "all",
+            "not_started",
+            "in_progress",
+            "paused",
+            "completed",
+            "failed",
+          ].map(status => (
             <button
               key={status}
               onClick={() => setFilter(status)}
@@ -115,7 +161,9 @@ export default function WorkflowsPage() {
             >
               {status === "all"
                 ? "All"
-                : status.replace("_", " ").replace(/\b\w/g, l => l.toUpperCase())}
+                : status
+                    .replace("_", " ")
+                    .replace(/\b\w/g, l => l.toUpperCase())}
             </button>
           ))}
         </div>
@@ -170,7 +218,9 @@ export default function WorkflowsPage() {
                 <div
                   className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium border mb-4 ${getStatusColor(workflow.status)}`}
                 >
-                  {workflow.status.replace("_", " ").replace(/\b\w/g, l => l.toUpperCase())}
+                  {workflow.status
+                    .replace("_", " ")
+                    .replace(/\b\w/g, l => l.toUpperCase())}
                 </div>
 
                 {/* Progress */}
@@ -182,15 +232,21 @@ export default function WorkflowsPage() {
                   <div className="w-full bg-muted rounded-full h-2">
                     <div
                       className="bg-primary h-2 rounded-full transition-all"
-                      style={{ width: `${Math.min(100, (workflow.currentStep / 10) * 100)}%` }}
+                      style={{
+                        width: `${Math.min(100, (workflow.currentStep / 10) * 100)}%`,
+                      }}
                     />
                   </div>
                 </div>
 
                 {/* Footer */}
                 <div className="mt-4 pt-4 border-t border-border flex justify-between text-xs text-muted-foreground">
-                  <span>Created {new Date(workflow.createdAt).toLocaleDateString()}</span>
-                  <span>Updated {new Date(workflow.updatedAt).toLocaleDateString()}</span>
+                  <span>
+                    Created {new Date(workflow.createdAt).toLocaleDateString()}
+                  </span>
+                  <span>
+                    Updated {new Date(workflow.updatedAt).toLocaleDateString()}
+                  </span>
                 </div>
               </button>
             ))}

@@ -86,9 +86,11 @@ export const agentRatingsRouter = router({
       .groupBy(agentRatings.agentId, agentRatings.agentName);
 
     return {
-      stats: stats.map((s) => ({
+      stats: stats.map(s => ({
         ...s,
-        averageRating: s.averageRating ? Number(s.averageRating).toFixed(1) : null,
+        averageRating: s.averageRating
+          ? Number(s.averageRating).toFixed(1)
+          : null,
         totalRatings: Number(s.totalRatings),
       })),
     };

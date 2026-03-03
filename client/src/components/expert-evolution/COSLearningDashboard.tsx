@@ -381,7 +381,9 @@ export function COSLearningDashboard() {
               <span className="text-muted-foreground">
                 Progress to next level
               </span>
-              <span className="text-foreground">{progress.overallConfidence}%</span>
+              <span className="text-foreground">
+                {progress.overallConfidence}%
+              </span>
             </div>
             <Progress value={progress.overallConfidence} className="h-2" />
           </div>
@@ -419,17 +421,11 @@ export function COSLearningDashboard() {
       {/* Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
         <TabsList className="bg-gray-900/50 border border-border/50">
-          <TabsTrigger
-            value="overview"
-            className="data-[state=active]:bg-card"
-          >
+          <TabsTrigger value="overview" className="data-[state=active]:bg-card">
             <Sparkles className="h-4 w-4 mr-2" />
             Overview
           </TabsTrigger>
-          <TabsTrigger
-            value="lessons"
-            className="data-[state=active]:bg-card"
-          >
+          <TabsTrigger value="lessons" className="data-[state=active]:bg-card">
             <BookOpen className="h-4 w-4 mr-2" />
             Lessons ({mockLessons.length})
           </TabsTrigger>
@@ -440,10 +436,7 @@ export function COSLearningDashboard() {
             <User className="h-4 w-4 mr-2" />
             Preferences
           </TabsTrigger>
-          <TabsTrigger
-            value="patterns"
-            className="data-[state=active]:bg-card"
-          >
+          <TabsTrigger value="patterns" className="data-[state=active]:bg-card">
             <TrendingUp className="h-4 w-4 mr-2" />
             Patterns
           </TabsTrigger>
@@ -498,7 +491,9 @@ export function COSLearningDashboard() {
                       className="flex items-center justify-between p-3 rounded-lg bg-card/50"
                     >
                       <div>
-                        <p className="text-sm text-foreground/80">{pref.preference}</p>
+                        <p className="text-sm text-foreground/80">
+                          {pref.preference}
+                        </p>
                         <p className="text-xs text-muted-foreground">
                           {pref.category}
                         </p>
@@ -569,7 +564,9 @@ export function COSLearningDashboard() {
         <TabsContent value="preferences" className="mt-4">
           <Card className="bg-gray-900/50 border-border/50">
             <CardHeader>
-              <CardTitle className="text-foreground">Preference Profile</CardTitle>
+              <CardTitle className="text-foreground">
+                Preference Profile
+              </CardTitle>
               <CardDescription>
                 Your working style and communication preferences
               </CardDescription>
@@ -625,7 +622,9 @@ export function COSLearningDashboard() {
         <TabsContent value="patterns" className="mt-4">
           <Card className="bg-gray-900/50 border-border/50">
             <CardHeader>
-              <CardTitle className="text-foreground">Identified Patterns</CardTitle>
+              <CardTitle className="text-foreground">
+                Identified Patterns
+              </CardTitle>
               <CardDescription>
                 Behavioral patterns detected from your interactions
               </CardDescription>

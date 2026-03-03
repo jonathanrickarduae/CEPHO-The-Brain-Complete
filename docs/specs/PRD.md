@@ -2,9 +2,9 @@
 
 **CEPHO.AI — The Autonomous Chief of Staff**
 
-*Version: 1.0*
-*Status: Draft*
-*Last Updated: 2026-03-01*
+_Version: 1.0_
+_Status: Draft_
+_Last Updated: 2026-03-01_
 
 ---
 
@@ -27,12 +27,12 @@ This document outlines the product requirements for the CEPHO.AI platform, cover
 
 ## 3. User Personas
 
-| Persona | Description |
-| :--- | :--- |
+| Persona                     | Description                                                                                                                                       |
+| :-------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------ |
 | **Victoria Chen (Primary)** | CEO of a mid-sized tech company. Time-poor, data-driven, needs to focus on high-level strategy. Relies on CEPHO.AI as her digital Chief of Staff. |
-| **Project Manager** | Responsible for executing projects defined in Project Genesis. Needs clear tasks, timelines, and progress tracking. |
-| **Team Member** | Receives tasks from CEPHO.AI agents. Needs clear instructions and a simple way to report progress. |
-| **System Administrator** | Manages users, integrations, and billing. Needs a secure and intuitive settings interface. |
+| **Project Manager**         | Responsible for executing projects defined in Project Genesis. Needs clear tasks, timelines, and progress tracking.                               |
+| **Team Member**             | Receives tasks from CEPHO.AI agents. Needs clear instructions and a simple way to report progress.                                                |
+| **System Administrator**    | Manages users, integrations, and billing. Needs a secure and intuitive settings interface.                                                        |
 
 ---
 
@@ -92,14 +92,14 @@ This document outlines the product requirements for the CEPHO.AI platform, cover
 
 ## 5. Non-Functional Requirements
 
-| Category | Requirement |
-| :--- | :--- |
-| **Performance** | All pages must load in under 2 seconds. API responses must be under 500ms (p95). |
-| **Security** | Must pass all checks in `SECURITY.md`. No unauthenticated access to any resource. |
-| **Scalability** | Must support 1,000 concurrent users with no degradation in performance. |
-| **Reliability** | 99.9% uptime. All deployments must be zero-downtime. |
-| **Accessibility** | Must be WCAG 2.1 AA compliant. |
-| **Mobile** | All pages must be fully responsive and usable on a mobile portrait screen. |
+| Category          | Requirement                                                                       |
+| :---------------- | :-------------------------------------------------------------------------------- |
+| **Performance**   | All pages must load in under 2 seconds. API responses must be under 500ms (p95).  |
+| **Security**      | Must pass all checks in `SECURITY.md`. No unauthenticated access to any resource. |
+| **Scalability**   | Must support 1,000 concurrent users with no degradation in performance.           |
+| **Reliability**   | 99.9% uptime. All deployments must be zero-downtime.                              |
+| **Accessibility** | Must be WCAG 2.1 AA compliant.                                                    |
+| **Mobile**        | All pages must be fully responsive and usable on a mobile portrait screen.        |
 
 ---
 

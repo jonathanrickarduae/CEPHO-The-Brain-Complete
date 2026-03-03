@@ -28,9 +28,7 @@ import {
   EXPERT_VALIDATION_PROMPT,
   QA_CHALLENGE_PROMPTS,
 } from "@/lib/insightValidation";
-import {
-  ConfidenceBadge,
-} from "@/components/analytics/InsightValidation";
+import { ConfidenceBadge } from "@/components/analytics/InsightValidation";
 
 // ============================================================================
 // TRUTH CLASSIFICATION TYPES
@@ -596,7 +594,7 @@ export function BatchVerificationPanel({
         {/* List View */}
         {viewMode === "list" && (
           <div className="space-y-3 max-h-96 overflow-y-auto">
-            {statements.map((statement) => (
+            {statements.map(statement => (
               <StatementVerificationCard
                 key={statement.id}
                 statement={statement}

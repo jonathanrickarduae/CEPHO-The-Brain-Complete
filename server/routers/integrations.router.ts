@@ -1,3 +1,4 @@
+import { getModelForTask } from "../utils/modelRouter";
 /**
  * Integrations, Calendar, Gmail, Auth, CoSTasks, QA, QualityGate, SMETeam Routers
  *
@@ -7,7 +8,18 @@ import { z } from "zod";
 import { desc, eq, and, inArray } from "drizzle-orm";
 import { protectedProcedure, publicProcedure, router } from "../_core/trpc";
 import { db } from "../db";
-import { integrations, tasks, smeTeams, users, npsResponses, feedbackHistory, favoriteContacts, libraryDocuments, userSettings, teamCapabilities } from "../../drizzle/schema";
+import {
+  integrations,
+  tasks,
+  smeTeams,
+  users,
+  npsResponses,
+  feedbackHistory,
+  favoriteContacts,
+  libraryDocuments,
+  userSettings,
+  teamCapabilities,
+} from "../../drizzle/schema";
 import { calendarService } from "../services/calendar";
 
 // ─── Auth Router ─────────────────────────────────────────────────────────────
@@ -94,7 +106,12 @@ const SUPPORTED_PROVIDERS = [
   { id: "notion", name: "Notion", category: "productivity", icon: "notion" },
   { id: "trello", name: "Trello", category: "productivity", icon: "trello" },
   // Calendar & Scheduling
-  { id: "google", name: "Google Calendar", category: "calendar", icon: "google" },
+  {
+    id: "google",
+    name: "Google Calendar",
+    category: "calendar",
+    icon: "google",
+  },
   { id: "outlook", name: "Outlook", category: "calendar", icon: "microsoft" },
   { id: "calendly", name: "Calendly", category: "calendar", icon: "calendly" },
   // Communication
@@ -104,7 +121,12 @@ const SUPPORTED_PROVIDERS = [
   { id: "github", name: "GitHub", category: "development", icon: "github" },
   // AI
   { id: "openai", name: "OpenAI", category: "ai", icon: "openai" },
-  { id: "anthropic", name: "Anthropic (Claude)", category: "ai", icon: "anthropic" },
+  {
+    id: "anthropic",
+    name: "Anthropic (Claude)",
+    category: "ai",
+    icon: "anthropic",
+  },
   { id: "elevenlabs", name: "ElevenLabs", category: "ai", icon: "elevenlabs" },
   { id: "synthesia", name: "Synthesia", category: "ai", icon: "synthesia" },
   // Email
@@ -253,7 +275,8 @@ export const integrationsRouter = router({
     if (env.notionApiKey) autoConnect.push("notion");
     if (env.trelloApiKey) autoConnect.push("trello");
     if (env.calendlyApiKey) autoConnect.push("calendly");
-    if (env.zoomAccountId && env.zoomClientId && env.zoomClientSecret) autoConnect.push("zoom");
+    if (env.zoomAccountId && env.zoomClientId && env.zoomClientSecret)
+      autoConnect.push("zoom");
     if (env.githubToken) autoConnect.push("github");
     if (env.smtpUser && env.smtpPass) autoConnect.push("gmail");
     if (env.anthropicApiKey) autoConnect.push("anthropic");
@@ -564,10 +587,12 @@ export const cosTasksRouter = router({
   create: protectedProcedure
     .input(
       z.object({
-        title: z.string()
+        title: z
+          .string()
           .min(3, "Title must be at least 3 characters")
           .max(500, "Title must be under 500 characters"),
-        description: z.string()
+        description: z
+          .string()
           .max(2000, "Description must be under 2000 characters")
           .optional(),
         priority: z.enum(["low", "medium", "high", "urgent"]).default("medium"),
@@ -701,8 +726,8 @@ export const qaRouter = router({
       const newStatus = input.decision
         ? statusMap[input.decision]
         : input.status
-        ? (statusMap[input.status] ?? input.status)
-        : "completed";
+          ? (statusMap[input.status] ?? input.status)
+          : "completed";
 
       await db
         .update(tasks)
@@ -730,7 +755,7 @@ export const qualityGateRouter = router({
         approvedBy: z.string().optional(),
       })
     )
-    .mutation(async ()  => {
+    .mutation(async () => {
       return { success: true, notified: true };
     }),
 
@@ -746,7 +771,7 @@ export const qualityGateRouter = router({
         rejectedBy: z.string().optional(),
       })
     )
-    .mutation(async ()  => {
+    .mutation(async () => {
       return { success: true, notified: true };
     }),
 });
@@ -833,7 +858,13 @@ export const favoritesRouter = router({
   }),
 
   add: protectedProcedure
-    .input(z.object({ itemId: z.string(), itemType: z.string(), name: z.string().optional() }))
+    .input(
+      z.object({
+        itemId: z.string(),
+        itemType: z.string(),
+        name: z.string().optional(),
+      })
+    )
     .mutation(async ({ input, ctx }) => {
       await db.insert(favoriteContacts).values({
         userId: ctx.user.id,
@@ -889,13 +920,16 @@ export const feedbackRouter = router({
   record: protectedProcedure
     .input(feedbackInputSchema)
     .mutation(async ({ input, ctx }) => {
-      const [row] = await db.insert(feedbackHistory).values({
-        userId: ctx.user.id,
-        expertId: input.expertId ?? null,
-        rating: input.rating ?? null,
-        feedbackType: input.type ?? "expert_feedback",
-        feedbackText: input.comment ?? input.message ?? null,
-      }).returning();
+      const [row] = await db
+        .insert(feedbackHistory)
+        .values({
+          userId: ctx.user.id,
+          expertId: input.expertId ?? null,
+          rating: input.rating ?? null,
+          feedbackType: input.type ?? "expert_feedback",
+          feedbackText: input.comment ?? input.message ?? null,
+        })
+        .returning();
       return { success: true, id: row.id.toString() };
     }),
 });
@@ -922,9 +956,14 @@ export const npsRouter = router({
 
   shouldShow: protectedProcedure.query(async ({ ctx }) => {
     // Show NPS if user has been active for 30+ days and hasn't responded in 90 days
-    const user = await db.select().from(users).where(eq(users.id, ctx.user.id)).limit(1);
+    const user = await db
+      .select()
+      .from(users)
+      .where(eq(users.id, ctx.user.id))
+      .limit(1);
     if (!user[0]) return { show: false };
-    const daysSinceCreation = (Date.now() - user[0].createdAt.getTime()) / (1000 * 60 * 60 * 24);
+    const daysSinceCreation =
+      (Date.now() - user[0].createdAt.getTime()) / (1000 * 60 * 60 * 24);
     if (daysSinceCreation < 30) return { show: false };
     const recentResponse = await db
       .select()
@@ -933,7 +972,9 @@ export const npsRouter = router({
       .orderBy(desc(npsResponses.createdAt))
       .limit(1);
     if (recentResponse.length > 0) {
-      const daysSinceLastResponse = (Date.now() - recentResponse[0].createdAt.getTime()) / (1000 * 60 * 60 * 24);
+      const daysSinceLastResponse =
+        (Date.now() - recentResponse[0].createdAt.getTime()) /
+        (1000 * 60 * 60 * 24);
       if (daysSinceLastResponse < 90) return { show: false };
     }
     return { show: true };
@@ -941,20 +982,39 @@ export const npsRouter = router({
 
   getStats: protectedProcedure.query(async () => {
     const all = await db.select().from(npsResponses);
-    if (all.length === 0) return { averageScore: 0, totalResponses: 0, promoters: 0, passives: 0, detractors: 0, npsScore: 0 };
+    if (all.length === 0)
+      return {
+        averageScore: 0,
+        totalResponses: 0,
+        promoters: 0,
+        passives: 0,
+        detractors: 0,
+        npsScore: 0,
+      };
     const promoters = all.filter(r => r.score >= 9).length;
     const passives = all.filter(r => r.score >= 7 && r.score <= 8).length;
     const detractors = all.filter(r => r.score <= 6).length;
     const avg = all.reduce((s, r) => s + r.score, 0) / all.length;
     const npsScore = Math.round(((promoters - detractors) / all.length) * 100);
-    return { averageScore: Math.round(avg * 10) / 10, totalResponses: all.length, promoters, passives, detractors, npsScore };
+    return {
+      averageScore: Math.round(avg * 10) / 10,
+      totalResponses: all.length,
+      promoters,
+      passives,
+      detractors,
+      npsScore,
+    };
   }),
 });
 
 // ─── Team Capabilities Router ──────────────────────────────────────// ─── Team Capabilities Router ─────────────────────────────────────────────────
 export const teamCapabilitiesRouter = router({
   list: protectedProcedure.query(async () => {
-    const rows = await db.select().from(teamCapabilities).orderBy(desc(teamCapabilities.createdAt)).limit(100);
+    const rows = await db
+      .select()
+      .from(teamCapabilities)
+      .orderBy(desc(teamCapabilities.createdAt))
+      .limit(100);
     return { capabilities: rows };
   }),
 
@@ -971,17 +1031,27 @@ export const teamCapabilitiesRouter = router({
       })
     )
     .mutation(async ({ input }) => {
-      const [row] = await db.insert(teamCapabilities).values({
-        teamMember: input.teamMember,
-        role: input.role,
-        skillCategory: input.skillCategory,
-        skillName: input.skillName,
-        currentLevel: input.currentLevel,
-        targetLevel: input.targetLevel ?? null,
-        gap: input.targetLevel ? input.targetLevel - input.currentLevel : null,
-        developmentPlan: input.developmentPlan ?? null,
-      }).returning();
-       return { success: true, id: row.id, name: row.skillName, level: row.currentLevel };
+      const [row] = await db
+        .insert(teamCapabilities)
+        .values({
+          teamMember: input.teamMember,
+          role: input.role,
+          skillCategory: input.skillCategory,
+          skillName: input.skillName,
+          currentLevel: input.currentLevel,
+          targetLevel: input.targetLevel ?? null,
+          gap: input.targetLevel
+            ? input.targetLevel - input.currentLevel
+            : null,
+          developmentPlan: input.developmentPlan ?? null,
+        })
+        .returning();
+      return {
+        success: true,
+        id: row.id,
+        name: row.skillName,
+        level: row.currentLevel,
+      };
     }),
 });
 // ─── Library Router ───────────────────────────────────────────────────────────
@@ -1000,7 +1070,9 @@ export const libraryRouter = router({
         .where(
           and(
             eq(libraryDocuments.userId, ctx.user.id),
-            input.category ? eq(libraryDocuments.folder, input.category) : undefined
+            input.category
+              ? eq(libraryDocuments.folder, input.category)
+              : undefined
           )
         )
         .orderBy(desc(libraryDocuments.createdAt))
@@ -1020,15 +1092,18 @@ export const libraryRouter = router({
       })
     )
     .mutation(async ({ input, ctx }) => {
-      const [row] = await db.insert(libraryDocuments).values({
-        userId: ctx.user.id,
-        name: input.title,
-        folder: input.category ?? "personal",
-        type: input.type ?? "document",
-        status: "active",
-        fileUrl: input.fileUrl ?? null,
-        metadata: input.tags ? { tags: input.tags } : null,
-      }).returning();
+      const [row] = await db
+        .insert(libraryDocuments)
+        .values({
+          userId: ctx.user.id,
+          name: input.title,
+          folder: input.category ?? "personal",
+          type: input.type ?? "document",
+          status: "active",
+          fileUrl: input.fileUrl ?? null,
+          metadata: input.tags ? { tags: input.tags } : null,
+        })
+        .returning();
       return { success: true, id: row.id.toString(), title: row.name };
     }),
 
@@ -1055,9 +1130,15 @@ export const genesisRouter = router({
     const activeProjects = await db
       .select()
       .from(projects)
-      .where(and(eq(projects.userId, ctx.user.id), eq(projects.status, "active")))
+      .where(
+        and(eq(projects.userId, ctx.user.id), eq(projects.status, "active"))
+      )
       .limit(1);
-    return { status: "active", phase: 1, progress: activeProjects[0]?.progress ?? 0 };
+    return {
+      status: "active",
+      phase: 1,
+      progress: activeProjects[0]?.progress ?? 0,
+    };
   }),
 
   list: protectedProcedure.query(async ({ ctx }) => {
@@ -1075,9 +1156,16 @@ export const genesisRouter = router({
     .query(async ({ input }) => {
       const id = parseInt(input.projectId);
       if (isNaN(id)) return null;
-      const [project] = await db.select().from(projects).where(eq(projects.id, id)).limit(1);
+      const [project] = await db
+        .select()
+        .from(projects)
+        .where(eq(projects.id, id))
+        .limit(1);
       if (!project) return null;
-      const phases = await db.select().from(projectGenesisPhases).where(eq(projectGenesisPhases.projectId, id));
+      const phases = await db
+        .select()
+        .from(projectGenesisPhases)
+        .where(eq(projectGenesisPhases.projectId, id));
       return { ...project, phases };
     }),
   generateSlides: protectedProcedure
@@ -1085,20 +1173,49 @@ export const genesisRouter = router({
     .mutation(async ({ input }) => {
       const id = parseInt(input.projectId);
       if (isNaN(id)) return { slides: {} };
-      const [project] = await db.select().from(projects).where(eq(projects.id, id)).limit(1);
+      const [project] = await db
+        .select()
+        .from(projects)
+        .where(eq(projects.id, id))
+        .limit(1);
       if (!project) return { slides: {} };
       // Return structured slide content based on project data
-      const slides: Record<string, { content: string; aiSuggestions: string[] }> = {};
+      const slides: Record<
+        string,
+        { content: string; aiSuggestions: string[] }
+      > = {};
       for (const slideType of input.slideTypes) {
         switch (slideType) {
           case "title":
-            slides[slideType] = { content: `${project.name}\n\nBuilding the future`, aiSuggestions: ["Add a compelling visual", "Include a tagline", "Show your logo"] };
+            slides[slideType] = {
+              content: `${project.name}\n\nBuilding the future`,
+              aiSuggestions: [
+                "Add a compelling visual",
+                "Include a tagline",
+                "Show your logo",
+              ],
+            };
             break;
           case "problem":
-            slides[slideType] = { content: project.description ?? "Define the problem you are solving.", aiSuggestions: ["Add statistics", "Include customer quotes", "Show cost of inaction"] };
+            slides[slideType] = {
+              content:
+                project.description ?? "Define the problem you are solving.",
+              aiSuggestions: [
+                "Add statistics",
+                "Include customer quotes",
+                "Show cost of inaction",
+              ],
+            };
             break;
           default:
-            slides[slideType] = { content: `${slideType.charAt(0).toUpperCase() + slideType.slice(1)} slide for ${project.name}`, aiSuggestions: ["Add data points", "Include visuals", "Keep it concise"] };
+            slides[slideType] = {
+              content: `${slideType.charAt(0).toUpperCase() + slideType.slice(1)} slide for ${project.name}`,
+              aiSuggestions: [
+                "Add data points",
+                "Include visuals",
+                "Keep it concise",
+              ],
+            };
         }
       }
       return { slides };
@@ -1109,26 +1226,63 @@ export const genesisRouter = router({
 export const optimizationRouter = router({
   getSuggestions: protectedProcedure.query(async ({ ctx }) => {
     // Generate AI-powered optimization suggestions based on user data
-    const taskRows = await db.select().from(tasks).where(eq(tasks.userId, ctx.user.id)).limit(20);
-    const completedTasks = taskRows.filter(t => t.status === "completed").length;
+    const taskRows = await db
+      .select()
+      .from(tasks)
+      .where(eq(tasks.userId, ctx.user.id))
+      .limit(20);
+    const completedTasks = taskRows.filter(
+      t => t.status === "completed"
+    ).length;
     const totalTasks = taskRows.length;
-    const completionRate = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
+    const completionRate =
+      totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
     const suggestions = [];
-    if (completionRate < 70) suggestions.push({ id: "1", area: "Task Completion", suggestion: "Your task completion rate is below 70%. Consider breaking large tasks into smaller subtasks.", priority: "high" });
-    if (totalTasks === 0) suggestions.push({ id: "2", area: "Getting Started", suggestion: "Create your first task to start tracking your work.", priority: "high" });
-    suggestions.push({ id: "3", area: "Digital Twin", suggestion: "Complete your Digital Twin questionnaire to improve AI personalisation.", priority: "medium" });
+    if (completionRate < 70)
+      suggestions.push({
+        id: "1",
+        area: "Task Completion",
+        suggestion:
+          "Your task completion rate is below 70%. Consider breaking large tasks into smaller subtasks.",
+        priority: "high",
+      });
+    if (totalTasks === 0)
+      suggestions.push({
+        id: "2",
+        area: "Getting Started",
+        suggestion: "Create your first task to start tracking your work.",
+        priority: "high",
+      });
+    suggestions.push({
+      id: "3",
+      area: "Digital Twin",
+      suggestion:
+        "Complete your Digital Twin questionnaire to improve AI personalisation.",
+      priority: "medium",
+    });
     return { suggestions, lastAnalyzed: new Date().toISOString() };
   }),
 
   getAssessment: protectedProcedure.query(async ({ ctx }) => {
-    const taskRows = await db.select().from(tasks).where(eq(tasks.userId, ctx.user.id)).limit(50);
-    const completedTasks = taskRows.filter(t => t.status === "completed").length;
+    const taskRows = await db
+      .select()
+      .from(tasks)
+      .where(eq(tasks.userId, ctx.user.id))
+      .limit(50);
+    const completedTasks = taskRows.filter(
+      t => t.status === "completed"
+    ).length;
     const totalTasks = taskRows.length;
-    const score = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
+    const score =
+      totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
     return {
       score,
       areas: [
-        { name: "Task Management", score: score, status: score >= 70 ? "good" : "needs_improvement" },
+        {
+          name: "Task Management",
+          score: score,
+          status: score >= 70 ? "good" : "needs_improvement",
+        },
         { name: "Digital Twin Calibration", score: 0, status: "not_started" },
         { name: "Integration Coverage", score: 0, status: "not_started" },
       ],
@@ -1152,7 +1306,12 @@ export const optimizationRouter = router({
 export const openClawRouter = router({
   getStatus: protectedProcedure.query(async () => {
     const hasAnthropicKey = !!process.env.ANTHROPIC_API_KEY;
-    return { active: hasAnthropicKey, message: hasAnthropicKey ? "OpenClaw (Claude) is active" : "ANTHROPIC_API_KEY not configured" };
+    return {
+      active: hasAnthropicKey,
+      message: hasAnthropicKey
+        ? "OpenClaw (Claude) is active"
+        : "ANTHROPIC_API_KEY not configured",
+    };
   }),
 
   chat: protectedProcedure
@@ -1166,17 +1325,25 @@ export const openClawRouter = router({
     .mutation(async ({ input }) => {
       const apiKey = process.env.ANTHROPIC_API_KEY;
       if (!apiKey) {
-        return { reply: "Anthropic API key not configured.", sessionId: input.sessionId ?? crypto.randomUUID() };
+        return {
+          reply: "Anthropic API key not configured.",
+          sessionId: input.sessionId ?? crypto.randomUUID(),
+        };
       }
       const { default: Anthropic } = await import("@anthropic-ai/sdk");
       const client = new Anthropic({ apiKey });
       const response = await client.messages.create({
         model: "claude-3-5-haiku-20241022",
         max_tokens: 1024,
-        system: input.context ?? "You are CEPHO, an intelligent AI Chief of Staff assistant. Be concise, strategic, and action-oriented.",
+        system:
+          input.context ??
+          "You are CEPHO, an intelligent AI Chief of Staff assistant. Be concise, strategic, and action-oriented.",
         messages: [{ role: "user", content: input.message }],
       });
-      const reply = response.content[0]?.type === "text" ? response.content[0].text : "No response generated.";
+      const reply =
+        response.content[0]?.type === "text"
+          ? response.content[0].text
+          : "No response generated.";
       return { reply, sessionId: input.sessionId ?? crypto.randomUUID() };
     }),
 });
@@ -1200,7 +1367,7 @@ export const aiRouter = router({
       const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
       const completion = await openai.chat.completions.create({
-        model: "gpt-4.1-mini",
+        model: getModelForTask("summarise"),
         messages: [
           ...(input.context
             ? [{ role: "system" as const, content: input.context }]

@@ -150,8 +150,14 @@ export default function NexusDashboard() {
   const { data: projectsData } = trpc.projects.list.useQuery({});
   const { data: flywheelStats } = trpc.innovation.getFlywheelStats.useQuery();
 
-  const completedTasks = (Array.isArray(tasksData) ? tasksData : (tasksData as any)?.tasks ?? []).filter((t: any) => t.status === 'completed').length;
-  const activeProjects = (Array.isArray(projectsData) ? projectsData : (projectsData as any)?.projects ?? []).filter((p: any) => p.status === 'active').length;
+  const completedTasks = (
+    Array.isArray(tasksData) ? tasksData : ((tasksData as any)?.tasks ?? [])
+  ).filter((t: any) => t.status === "completed").length;
+  const activeProjects = (
+    Array.isArray(projectsData)
+      ? projectsData
+      : ((projectsData as any)?.projects ?? [])
+  ).filter((p: any) => p.status === "active").length;
   const totalIdeas = (flywheelStats as any)?.total ?? 0;
 
   // Voice input
@@ -166,7 +172,8 @@ export default function NexusDashboard() {
     continuous: false,
   });
 
-  const toggleRecording = () => { // eslint-disable-line @typescript-eslint/no-unused-vars
+  const toggleRecording = () => {
+    // eslint-disable-line @typescript-eslint/no-unused-vars
     if (isListening) {
       stopListening();
     } else {
@@ -185,14 +192,16 @@ export default function NexusDashboard() {
     }
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent) => { // eslint-disable-line @typescript-eslint/no-unused-vars
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    // eslint-disable-line @typescript-eslint/no-unused-vars
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       handleSubmit();
     }
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => { // eslint-disable-line @typescript-eslint/no-unused-vars
+  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    // eslint-disable-line @typescript-eslint/no-unused-vars
     setInputValue(e.target.value);
     e.target.style.height = "auto";
     e.target.style.height = Math.min(e.target.scrollHeight, 100) + "px";
@@ -258,54 +267,52 @@ export default function NexusDashboard() {
       subtitle="Command Center"
       actions={
         <div className="flex flex-wrap items-center gap-2 sm:gap-4">
-              {/* Governance Mode Toggle */}
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={() =>
-                    requestModeChange(mode === "omni" ? "governed" : "omni")
-                  }
-                  className={`flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-1.5 sm:py-2 rounded-lg border-2 transition-all duration-300 ${
-                    mode === "governed"
-                      ? "bg-emerald-500/20 border-emerald-500/50 text-emerald-400"
-                      : "bg-amber-500/20 border-amber-500/50 text-amber-400"
-                  } hover:scale-105 active:scale-95`}
-                  title={
-                    mode === "governed"
-                      ? "Governed Mode: Only approved tools"
-                      : "Everything Mode: All tools available"
-                  }
-                >
-                  {mode === "governed" ? (
-                    <>
-                      <ShieldCheck className="w-4 h-4 sm:w-5 sm:h-5" />
-                      <span className="text-xs sm:text-sm font-semibold">
-                        GOVERNED
-                      </span>
-                    </>
-                  ) : (
-                    <>
-                      <Shield className="w-4 h-4 sm:w-5 sm:h-5" />
-                      <span className="text-xs sm:text-sm font-semibold">
-                        EVERYTHING
-                      </span>
-                    </>
-                  )}
-                </button>
-                <button
-                  onClick={() => setLocation("/settings")}
-                  className="p-2 rounded-lg border border-border hover:bg-card/50 transition-colors"
-                  title="Manage governance settings"
-                >
-                  <SettingsIcon className="w-4 h-4 text-muted-foreground" />
-                </button>
-              </div>
+          {/* Governance Mode Toggle */}
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() =>
+                requestModeChange(mode === "omni" ? "governed" : "omni")
+              }
+              className={`flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-1.5 sm:py-2 rounded-lg border-2 transition-all duration-300 ${
+                mode === "governed"
+                  ? "bg-emerald-500/20 border-emerald-500/50 text-emerald-400"
+                  : "bg-amber-500/20 border-amber-500/50 text-amber-400"
+              } hover:scale-105 active:scale-95`}
+              title={
+                mode === "governed"
+                  ? "Governed Mode: Only approved tools"
+                  : "Everything Mode: All tools available"
+              }
+            >
+              {mode === "governed" ? (
+                <>
+                  <ShieldCheck className="w-4 h-4 sm:w-5 sm:h-5" />
+                  <span className="text-xs sm:text-sm font-semibold">
+                    GOVERNED
+                  </span>
+                </>
+              ) : (
+                <>
+                  <Shield className="w-4 h-4 sm:w-5 sm:h-5" />
+                  <span className="text-xs sm:text-sm font-semibold">
+                    EVERYTHING
+                  </span>
+                </>
+              )}
+            </button>
+            <button
+              onClick={() => setLocation("/settings")}
+              className="p-2 rounded-lg border border-border hover:bg-card/50 transition-colors"
+              title="Manage governance settings"
+            >
+              <SettingsIcon className="w-4 h-4 text-muted-foreground" />
+            </button>
+          </div>
 
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                <span className="text-xs text-foreground/70 font-mono">
-                  ONLINE
-                </span>
-              </div>
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="text-xs text-foreground/70 font-mono">ONLINE</span>
+          </div>
         </div>
       }
       fillHeight
@@ -364,7 +371,9 @@ export default function NexusDashboard() {
               <MetricCard
                 icon={Brain}
                 label="CEPHO Score"
-                value={cephoScoreData?.total ? `${cephoScoreData.total}/100` : '--'}
+                value={
+                  cephoScoreData?.total ? `${cephoScoreData.total}/100` : "--"
+                }
                 trend="stable"
                 onClick={() => setLocation("/statistics")}
               />

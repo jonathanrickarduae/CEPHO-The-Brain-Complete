@@ -577,7 +577,9 @@ export function ValidationSummary({
             <div className="text-xs text-muted-foreground">Challenged</div>
           </div>
           <div className="text-center p-3 rounded-lg bg-secondary/30">
-            <div className="text-2xl font-bold text-[var(--brain-cyan)]">{citedCount}</div>
+            <div className="text-2xl font-bold text-[var(--brain-cyan)]">
+              {citedCount}
+            </div>
             <div className="text-xs text-muted-foreground">With Citations</div>
           </div>
         </div>

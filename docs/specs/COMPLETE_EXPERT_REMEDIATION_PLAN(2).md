@@ -1,4 +1,5 @@
 # CEPHO.AI - Complete Expert-Led Remediation Plan
+
 **Version:** 3.0 - COMPREHENSIVE  
 **Date:** February 26, 2026  
 **Scope:** ALL 90+ Expert Recommendations  
@@ -20,60 +21,70 @@
 ## 👥 EXPERT TEAM (10 Specialists)
 
 ### 1. Sarah Chen - Chief Architect
+
 **Background:** 15 years at Google, AWS, Stripe  
 **Expertise:** System architecture, scalability, microservices  
 **Standards:** Domain-Driven Design, C4 Model, Event Sourcing  
 **Owns:** Architecture, API Gateway, Event-Driven Systems
 
 ### 2. Marcus Rodriguez - Security Engineer
+
 **Background:** 12 years at CrowdStrike, Cloudflare  
 **Expertise:** Application security, penetration testing, compliance  
 **Standards:** OWASP Top 10, NIST Cybersecurity Framework  
 **Owns:** All security implementations and audits
 
 ### 3. Emily Watson - Senior Full Stack Developer
+
 **Background:** 10 years at Airbnb, Meta  
 **Expertise:** React, Node.js, TypeScript, code quality  
 **Standards:** Airbnb Style Guide, Clean Code, SOLID principles  
 **Owns:** Code quality, linting, type safety, component architecture
 
 ### 4. Dr. Rajesh Kumar - Database Architect
+
 **Background:** PhD in Database Systems, 18 years at Oracle, MongoDB  
 **Expertise:** PostgreSQL, query optimization, data modeling  
 **Standards:** Database normalization, indexing best practices  
 **Owns:** Database design, optimization, monitoring, backups
 
 ### 5. Alex Thompson - Performance Engineer
+
 **Background:** 11 years at Cloudflare, Vercel  
 **Expertise:** Web performance, CDN, caching, optimization  
 **Standards:** Core Web Vitals, Performance Budget methodology  
 **Owns:** Performance optimization, CDN, caching, monitoring
 
 ### 6. Jennifer Park - API Architect
+
 **Background:** 13 years at Stripe, Twilio  
 **Expertise:** API design, GraphQL, REST, versioning  
 **Standards:** OpenAPI 3.0, API-first design, HATEOAS  
 **Owns:** API design, documentation, gateway, analytics
 
 ### 7. Lisa Thompson - UX/UI Designer
+
 **Background:** 9 years UX design, accessibility advocate  
 **Expertise:** WCAG compliance, design systems, usability  
 **Standards:** WCAG 2.1 AA, Material Design, Nielsen's Heuristics  
 **Owns:** Accessibility, design system, UX improvements
 
 ### 8. Rachel Kim - QA Engineer
+
 **Background:** 8 years in QA, test automation specialist  
 **Expertise:** Jest, Cypress, Playwright, test strategy  
 **Standards:** Test Pyramid, 80% coverage minimum  
 **Owns:** All testing infrastructure and strategies
 
 ### 9. David Park - DevOps Engineer
+
 **Background:** 10 years DevOps, Kubernetes certified  
 **Expertise:** Docker, CI/CD, infrastructure as code, monitoring  
 **Standards:** 12-Factor App, GitOps, SRE practices  
 **Owns:** Infrastructure, deployment, monitoring, reliability
 
 ### 10. Michael Chen - Product Manager
+
 **Background:** 12 years product management at Atlassian, Notion  
 **Expertise:** Product strategy, analytics, user research  
 **Standards:** Jobs-to-be-Done, OKRs, Lean Product Development  
@@ -84,36 +95,42 @@
 ## 📋 PHASE OVERVIEW
 
 ### Phase 1: CRITICAL FIXES (Week 1)
+
 **Duration:** 5 days  
 **Focus:** Security, Login, Code Quality Baseline  
 **Tasks:** 15 critical items  
 **Deployment:** Daily
 
 ### Phase 2: FOUNDATION (Weeks 2-3)
+
 **Duration:** 10 days  
 **Focus:** Architecture, Testing, Documentation  
 **Tasks:** 25 foundational items  
 **Deployment:** Every 2 days
 
 ### Phase 3: OPTIMIZATION (Weeks 4-5)
+
 **Duration:** 10 days  
 **Focus:** Performance, Database, API  
 **Tasks:** 20 optimization items  
 **Deployment:** Every 3 days
 
 ### Phase 4: ENHANCEMENT (Week 6)
+
 **Duration:** 5 days  
 **Focus:** UX/UI, Accessibility, Polish  
 **Tasks:** 15 enhancement items  
 **Deployment:** End of phase
 
 ### Phase 5: GOVERNANCE (Week 7)
+
 **Duration:** 5 days  
 **Focus:** Monitoring, Reliability, Operations  
 **Tasks:** 10 governance items  
 **Deployment:** End of phase
 
 ### Phase 6: PRODUCT & AI AGENTS (Week 8)
+
 **Duration:** 5 days  
 **Focus:** Product analytics, AI agents, continuous improvement  
 **Tasks:** 10 product items  
@@ -124,6 +141,7 @@
 ## 🔥 PHASE 1: CRITICAL FIXES (Week 1)
 
 ### BLOCKER: Task 1.0 - Fix Login
+
 **Owner:** Marcus Rodriguez (Security)  
 **Peer Review:** Emily Watson  
 **Duration:** 3 hours  
@@ -132,6 +150,7 @@
 **Problem:** Login page not accessible, routing broken
 
 **Implementation:**
+
 1. Diagnose routing issue in React Router
 2. Fix catch-all route in server/vite.ts
 3. Ensure /login route properly registered
@@ -139,6 +158,7 @@
 5. Add error handling and user feedback
 
 **Acceptance Criteria:**
+
 - [ ] /login route loads login form
 - [ ] Email: jonathanrickarduae@gmail.com works
 - [ ] Password: test authenticates successfully
@@ -152,6 +172,7 @@
 ---
 
 ### Task 1.1 - Remove Hardcoded Credentials
+
 **Owner:** Marcus Rodriguez (Security)  
 **Peer Review:** Sarah Chen  
 **Duration:** 2 hours  
@@ -160,6 +181,7 @@
 **Current Issue:** Admin password "Cepho44" hardcoded in `server/routes/simple-auth.ts`
 
 **Implementation:**
+
 1. Remove hardcoded credentials from source code
 2. Implement proper user management system
 3. Create admin user via database migration
@@ -169,6 +191,7 @@
 7. Rotate any exposed secrets
 
 **Acceptance Criteria:**
+
 - [ ] No hardcoded passwords in codebase
 - [ ] Admin user created via migration
 - [ ] Passwords properly hashed
@@ -182,31 +205,35 @@
 ---
 
 ### Task 1.2 - Add CSP Headers
+
 **Owner:** Marcus Rodriguez (Security)  
 **Peer Review:** Alex Thompson  
 **Duration:** 1 hour  
 **Priority:** HIGH
 
 **Implementation:**
+
 ```typescript
 // server/middleware/security-headers.ts
 export const cspHeaders = (req: Request, res: Response, next: NextFunction) => {
-  res.setHeader('Content-Security-Policy', 
+  res.setHeader(
+    "Content-Security-Policy",
     "default-src 'self'; " +
-    "script-src 'self' 'unsafe-inline' 'unsafe-eval'; " +
-    "style-src 'self' 'unsafe-inline'; " +
-    "img-src 'self' data: https:; " +
-    "font-src 'self' data:; " +
-    "connect-src 'self' https://api.openai.com; " +
-    "frame-ancestors 'none'; " +
-    "base-uri 'self'; " +
-    "form-action 'self'"
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval'; " +
+      "style-src 'self' 'unsafe-inline'; " +
+      "img-src 'self' data: https:; " +
+      "font-src 'self' data:; " +
+      "connect-src 'self' https://api.openai.com; " +
+      "frame-ancestors 'none'; " +
+      "base-uri 'self'; " +
+      "form-action 'self'"
   );
   next();
 };
 ```
 
 **Acceptance Criteria:**
+
 - [ ] CSP headers implemented
 - [ ] XSS attacks blocked
 - [ ] Inline scripts whitelisted where necessary
@@ -220,23 +247,31 @@ export const cspHeaders = (req: Request, res: Response, next: NextFunction) => {
 ---
 
 ### Task 1.3 - Security Event Logging
+
 **Owner:** Marcus Rodriguez (Security)  
 **Peer Review:** David Park  
 **Duration:** 3 hours  
 **Priority:** HIGH
 
 **Implementation:**
+
 1. Create security event logger:
+
 ```typescript
 // server/services/security-logger.ts
 export const logSecurityEvent = (event: {
-  type: 'login_failed' | 'login_success' | 'permission_denied' | 'password_reset' | 'account_locked';
+  type:
+    | "login_failed"
+    | "login_success"
+    | "permission_denied"
+    | "password_reset"
+    | "account_locked";
   userId?: string;
   ip: string;
   userAgent: string;
   metadata?: Record<string, any>;
 }) => {
-  winston.log('security', {
+  winston.log("security", {
     ...event,
     timestamp: new Date().toISOString(),
   });
@@ -248,6 +283,7 @@ export const logSecurityEvent = (event: {
 4. Create security dashboard
 
 **Acceptance Criteria:**
+
 - [ ] All security events logged
 - [ ] Failed login attempts tracked
 - [ ] Permission denials logged
@@ -261,13 +297,16 @@ export const logSecurityEvent = (event: {
 ---
 
 ### Task 1.4 - Add ESLint with Strict TypeScript
+
 **Owner:** Emily Watson (Code Quality)  
 **Peer Review:** Marcus Rodriguez  
 **Duration:** 3 hours  
 **Priority:** HIGH
 
 **Implementation:**
+
 1. Install dependencies:
+
 ```bash
 npm install --save-dev \
   eslint@8 \
@@ -280,6 +319,7 @@ npm install --save-dev \
 ```
 
 2. Create `.eslintrc.json`:
+
 ```json
 {
   "extends": [
@@ -306,6 +346,7 @@ npm install --save-dev \
 ```
 
 3. Add scripts:
+
 ```json
 {
   "scripts": {
@@ -317,12 +358,14 @@ npm install --save-dev \
 ```
 
 4. Add pre-commit hook:
+
 ```bash
 npm install --save-dev husky lint-staged
 npx husky install
 ```
 
 **Acceptance Criteria:**
+
 - [ ] ESLint installed and configured
 - [ ] Security plugin active
 - [ ] CI/CD includes linting
@@ -336,13 +379,16 @@ npx husky install
 ---
 
 ### Task 1.5 - Remove Console.logs
+
 **Owner:** Emily Watson (Code Quality)  
 **Peer Review:** David Park  
 **Duration:** 2 hours  
 **Priority:** MEDIUM
 
 **Implementation:**
+
 1. Find all console.logs:
+
 ```bash
 grep -r "console\.log" client/ server/ --include="*.ts" --include="*.tsx" > console-logs.txt
 ```
@@ -354,16 +400,18 @@ grep -r "console\.log" client/ server/ --include="*.ts" --include="*.tsx" > cons
 3. Add ESLint rule (already in Task 1.4)
 
 4. Create debug mode for development:
+
 ```typescript
 // client/src/utils/debug.ts
 export const debug = (...args: any[]) => {
   if (import.meta.env.DEV) {
-    console.log('[DEBUG]', ...args);
+    console.log("[DEBUG]", ...args);
   }
 };
 ```
 
 **Acceptance Criteria:**
+
 - [ ] All console.logs removed from production
 - [ ] Debug utility created
 - [ ] ESLint prevents new console.logs
@@ -375,13 +423,16 @@ export const debug = (...args: any[]) => {
 ---
 
 ### Task 1.6 - Automated Security Scanning
+
 **Owner:** Marcus Rodriguez (Security)  
 **Peer Review:** David Park  
 **Duration:** 2 hours  
 **Priority:** HIGH
 
 **Implementation:**
+
 1. Add Snyk to CI/CD:
+
 ```yaml
 # .github/workflows/security.yml
 name: Security Scan
@@ -397,11 +448,13 @@ jobs:
 ```
 
 2. Add OWASP Dependency Check:
+
 ```bash
 npm install --save-dev dependency-check
 ```
 
 3. Add npm audit to CI:
+
 ```json
 {
   "scripts": {
@@ -414,6 +467,7 @@ npm install --save-dev dependency-check
 4. Schedule weekly security scans
 
 **Acceptance Criteria:**
+
 - [ ] Snyk integrated in CI/CD
 - [ ] OWASP dependency check running
 - [ ] npm audit in pipeline
@@ -427,18 +481,21 @@ npm install --save-dev dependency-check
 ---
 
 ### Task 1.7 - API Key Rotation Mechanism
+
 **Owner:** Marcus Rodriguez (Security)  
 **Peer Review:** Jennifer Park  
 **Duration:** 4 hours  
 **Priority:** MEDIUM
 
 **Implementation:**
+
 1. Create API key management system:
+
 ```typescript
 // server/services/api-key-manager.ts
 export class APIKeyManager {
   async generateKey(userId: string, name: string): Promise<string> {
-    const key = crypto.randomBytes(32).toString('hex');
+    const key = crypto.randomBytes(32).toString("hex");
     await db.insert(apiKeys).values({
       userId,
       name,
@@ -450,16 +507,25 @@ export class APIKeyManager {
   }
 
   async rotateKey(keyId: string): Promise<string> {
-    const oldKey = await db.query.apiKeys.findFirst({ where: eq(apiKeys.id, keyId) });
+    const oldKey = await db.query.apiKeys.findFirst({
+      where: eq(apiKeys.id, keyId),
+    });
     const newKey = await this.generateKey(oldKey.userId, oldKey.name);
-    await db.update(apiKeys).set({ revokedAt: new Date() }).where(eq(apiKeys.id, keyId));
+    await db
+      .update(apiKeys)
+      .set({ revokedAt: new Date() })
+      .where(eq(apiKeys.id, keyId));
     return newKey;
   }
 
   async validateKey(key: string): Promise<boolean> {
     const keys = await db.query.apiKeys.findMany();
     for (const k of keys) {
-      if (await bcrypt.compare(key, k.key) && !k.revokedAt && k.expiresAt > new Date()) {
+      if (
+        (await bcrypt.compare(key, k.key)) &&
+        !k.revokedAt &&
+        k.expiresAt > new Date()
+      ) {
         return true;
       }
     }
@@ -474,6 +540,7 @@ export class APIKeyManager {
 5. Add rotation reminders
 
 **Acceptance Criteria:**
+
 - [ ] API key generation working
 - [ ] Key rotation implemented
 - [ ] Automatic expiration (90 days)
@@ -487,22 +554,25 @@ export class APIKeyManager {
 ---
 
 ### Task 1.8 - Rate Limiting on ALL Endpoints
+
 **Owner:** Marcus Rodriguez (Security)  
 **Peer Review:** Alex Thompson  
 **Duration:** 2 hours  
 **Priority:** HIGH
 
 **Implementation:**
+
 1. Audit current rate limiting coverage
 2. Apply global rate limiter:
+
 ```typescript
 // server/middleware/rate-limit.ts
-import rateLimit from 'express-rate-limit';
+import rateLimit from "express-rate-limit";
 
 export const globalRateLimit = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 100, // 100 requests per window
-  message: 'Too many requests, please try again later',
+  message: "Too many requests, please try again later",
   standardHeaders: true,
   legacyHeaders: false,
 });
@@ -520,9 +590,10 @@ export const apiRateLimit = rateLimit({
 ```
 
 3. Apply to all routes:
+
 ```typescript
-app.use('/api', apiRateLimit);
-app.use('/api/auth/login', authRateLimit);
+app.use("/api", apiRateLimit);
+app.use("/api/auth/login", authRateLimit);
 app.use(globalRateLimit);
 ```
 
@@ -530,6 +601,7 @@ app.use(globalRateLimit);
 5. Document rate limits in API docs
 
 **Acceptance Criteria:**
+
 - [ ] All endpoints have rate limiting
 - [ ] Different limits for different routes
 - [ ] Rate limit headers returned
@@ -542,32 +614,39 @@ app.use(globalRateLimit);
 ---
 
 ### Task 1.9 - 2FA for Admin Accounts
+
 **Owner:** Marcus Rodriguez (Security)  
 **Peer Review:** Emily Watson  
 **Duration:** 6 hours  
 **Priority:** MEDIUM
 
 **Implementation:**
+
 1. Install 2FA library:
+
 ```bash
 npm install speakeasy qrcode
 ```
 
 2. Create 2FA setup flow:
+
 ```typescript
 // server/routes/2fa.ts
-import speakeasy from 'speakeasy';
-import QRCode from 'qrcode';
+import speakeasy from "speakeasy";
+import QRCode from "qrcode";
 
 export const setup2FA = async (req: Request, res: Response) => {
   const secret = speakeasy.generateSecret({
     name: `CEPHO (${req.user.email})`,
   });
-  
-  await db.update(users).set({
-    twoFactorSecret: secret.base32,
-  }).where(eq(users.id, req.user.id));
-  
+
+  await db
+    .update(users)
+    .set({
+      twoFactorSecret: secret.base32,
+    })
+    .where(eq(users.id, req.user.id));
+
   const qrCode = await QRCode.toDataURL(secret.otpauth_url);
   res.json({ qrCode, secret: secret.base32 });
 };
@@ -575,18 +654,21 @@ export const setup2FA = async (req: Request, res: Response) => {
 export const verify2FA = (req: Request, res: Response) => {
   const { token } = req.body;
   const user = req.user;
-  
+
   const verified = speakeasy.totp.verify({
     secret: user.twoFactorSecret,
-    encoding: 'base32',
+    encoding: "base32",
     token,
   });
-  
+
   if (verified) {
-    await db.update(users).set({ twoFactorEnabled: true }).where(eq(users.id, user.id));
+    await db
+      .update(users)
+      .set({ twoFactorEnabled: true })
+      .where(eq(users.id, user.id));
     res.json({ success: true });
   } else {
-    res.status(400).json({ error: 'Invalid token' });
+    res.status(400).json({ error: "Invalid token" });
   }
 };
 ```
@@ -596,6 +678,7 @@ export const verify2FA = (req: Request, res: Response) => {
 5. Create UI for setup and verification
 
 **Acceptance Criteria:**
+
 - [ ] 2FA setup flow working
 - [ ] QR code generation
 - [ ] Token verification
@@ -609,13 +692,16 @@ export const verify2FA = (req: Request, res: Response) => {
 ---
 
 ### Task 1.10 - Add security.txt
+
 **Owner:** Marcus Rodriguez (Security)  
 **Peer Review:** David Park  
 **Duration:** 30 minutes  
 **Priority:** LOW
 
 **Implementation:**
+
 1. Create `public/.well-known/security.txt`:
+
 ```
 Contact: security@cepho.ai
 Expires: 2027-12-31T23:59:59.000Z
@@ -630,6 +716,7 @@ Policy: https://cepho.ai/security-policy
 4. Configure server to serve .well-known
 
 **Acceptance Criteria:**
+
 - [ ] security.txt accessible
 - [ ] PGP key published
 - [ ] Security policy page created
@@ -642,20 +729,22 @@ Policy: https://cepho.ai/security-policy
 ---
 
 ### Task 1.11 - Input Sanitization Middleware
+
 **Owner:** Marcus Rodriguez (Security)  
 **Peer Review:** Emily Watson  
 **Duration:** 2 hours  
 **Priority:** HIGH
 
 **Implementation:**
+
 ```typescript
 // server/middleware/input-sanitization.ts
-import { Request, Response, NextFunction } from 'express';
-import xss from 'xss';
-import validator from 'validator';
+import { Request, Response, NextFunction } from "express";
+import xss from "xss";
+import validator from "validator";
 
 const sanitizeValue = (value: any): any => {
-  if (typeof value === 'string') {
+  if (typeof value === "string") {
     // Remove XSS
     let sanitized = xss(value);
     // Escape HTML entities
@@ -664,40 +753,45 @@ const sanitizeValue = (value: any): any => {
     sanitized = sanitized.trim();
     return sanitized;
   }
-  
+
   if (Array.isArray(value)) {
     return value.map(sanitizeValue);
   }
-  
-  if (typeof value === 'object' && value !== null) {
+
+  if (typeof value === "object" && value !== null) {
     const sanitized: any = {};
     for (const key in value) {
       sanitized[key] = sanitizeValue(value[key]);
     }
     return sanitized;
   }
-  
+
   return value;
 };
 
-export const sanitizeInput = (req: Request, res: Response, next: NextFunction) => {
+export const sanitizeInput = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   if (req.body) {
     req.body = sanitizeValue(req.body);
   }
-  
+
   if (req.query) {
     req.query = sanitizeValue(req.query);
   }
-  
+
   if (req.params) {
     req.params = sanitizeValue(req.params);
   }
-  
+
   next();
 };
 ```
 
 **Acceptance Criteria:**
+
 - [ ] Middleware created
 - [ ] Applied globally before routes
 - [ ] XSS attacks blocked
@@ -711,13 +805,16 @@ export const sanitizeInput = (req: Request, res: Response, next: NextFunction) =
 ---
 
 ### Task 1.12 - Fix 377 `: any` Types (Phase 1)
+
 **Owner:** Emily Watson (Code Quality)  
 **Peer Review:** Marcus Rodriguez  
 **Duration:** 10 hours (spread over week)  
 **Priority:** HIGH
 
 **Implementation:**
+
 1. Generate list of all `any` types:
+
 ```bash
 grep -rn ": any" client/ server/ --include="*.ts" --include="*.tsx" > any-types.txt
 ```
@@ -738,6 +835,7 @@ grep -rn ": any" client/ server/ --include="*.ts" --include="*.tsx" > any-types.
 4. Create tracking document
 
 **Acceptance Criteria:**
+
 - [ ] 100 any types fixed (26% reduction)
 - [ ] All API responses typed
 - [ ] All database queries typed
@@ -751,13 +849,16 @@ grep -rn ": any" client/ server/ --include="*.ts" --include="*.tsx" > any-types.
 ---
 
 ### Task 1.13 - Add Test Coverage Reporting
+
 **Owner:** Rachel Kim (QA)  
 **Peer Review:** Emily Watson  
 **Duration:** 2 hours  
 **Priority:** HIGH
 
 **Implementation:**
+
 1. Configure Jest coverage:
+
 ```json
 // jest.config.js
 module.exports = {
@@ -783,6 +884,7 @@ module.exports = {
 ```
 
 2. Add coverage scripts:
+
 ```json
 {
   "scripts": {
@@ -793,10 +895,11 @@ module.exports = {
 ```
 
 3. Add to CI/CD:
+
 ```yaml
 - name: Test with coverage
   run: npm run test:coverage
-  
+
 - name: Upload coverage to Codecov
   uses: codecov/codecov-action@v3
 ```
@@ -804,6 +907,7 @@ module.exports = {
 4. Set up Codecov or Coveralls
 
 **Acceptance Criteria:**
+
 - [ ] Coverage reporting configured
 - [ ] Minimum thresholds set (50%)
 - [ ] CI/CD includes coverage
@@ -817,13 +921,16 @@ module.exports = {
 ---
 
 ### Task 1.14 - Pre-commit Hooks
+
 **Owner:** Emily Watson (Code Quality)  
 **Peer Review:** David Park  
 **Duration:** 1 hour  
 **Priority:** MEDIUM
 
 **Implementation:**
+
 1. Install husky and lint-staged:
+
 ```bash
 npm install --save-dev husky lint-staged
 npx husky install
@@ -831,11 +938,13 @@ npm pkg set scripts.prepare="husky install"
 ```
 
 2. Create pre-commit hook:
+
 ```bash
 npx husky add .husky/pre-commit "npx lint-staged"
 ```
 
 3. Configure lint-staged:
+
 ```json
 // package.json
 {
@@ -845,20 +954,20 @@ npx husky add .husky/pre-commit "npx lint-staged"
       "prettier --write",
       "jest --bail --findRelatedTests"
     ],
-    "*.{json,md,yml}": [
-      "prettier --write"
-    ]
+    "*.{json,md,yml}": ["prettier --write"]
   }
 }
 ```
 
 4. Add commit message linting:
+
 ```bash
 npm install --save-dev @commitlint/cli @commitlint/config-conventional
 npx husky add .husky/commit-msg 'npx --no -- commitlint --edit "$1"'
 ```
 
 **Acceptance Criteria:**
+
 - [ ] Pre-commit hooks installed
 - [ ] Linting runs on staged files
 - [ ] Tests run on related files
@@ -872,13 +981,16 @@ npx husky add .husky/commit-msg 'npx --no -- commitlint --edit "$1"'
 ---
 
 ### Task 1.15 - Add SonarQube
+
 **Owner:** Emily Watson (Code Quality)  
 **Peer Review:** David Park  
 **Duration:** 3 hours  
 **Priority:** MEDIUM
 
 **Implementation:**
+
 1. Set up SonarCloud (cloud version):
+
 ```yaml
 # .github/workflows/sonar.yml
 name: SonarCloud
@@ -902,6 +1014,7 @@ jobs:
 ```
 
 2. Create sonar-project.properties:
+
 ```properties
 sonar.projectKey=cepho-ai_the-brain
 sonar.organization=cepho-ai
@@ -916,6 +1029,7 @@ sonar.typescript.tsconfigPath=tsconfig.json
 4. Add SonarCloud badge to README
 
 **Acceptance Criteria:**
+
 - [ ] SonarCloud integrated
 - [ ] Quality gates configured
 - [ ] Code smells tracked
@@ -931,12 +1045,14 @@ sonar.typescript.tsconfigPath=tsconfig.json
 ## 🏗️ PHASE 2: FOUNDATION (Weeks 2-3)
 
 ### Task 2.1 - Domain-Driven Design Refactoring
+
 **Owner:** Sarah Chen (Architecture)  
 **Peer Review:** Emily Watson, Dr. Rajesh Kumar  
 **Duration:** 20 hours  
 **Priority:** HIGH
 
 **Implementation:**
+
 1. Identify bounded contexts:
    - User Management (auth, profiles, permissions)
    - Mood Tracking (mood history, wellness scores, insights)
@@ -946,6 +1062,7 @@ sonar.typescript.tsconfigPath=tsconfig.json
    - Business Intelligence (analytics, reports, dashboards)
 
 2. Create domain modules:
+
 ```
 server/
   domains/
@@ -963,12 +1080,13 @@ server/
 ```
 
 3. Define domain events:
+
 ```typescript
 // server/domains/shared/events.ts
 export type DomainEvent =
-  | { type: 'user.created'; userId: string }
-  | { type: 'mood.recorded'; userId: string; moodScore: number }
-  | { type: 'conversation.started'; userId: string; conversationId: string };
+  | { type: "user.created"; userId: string }
+  | { type: "mood.recorded"; userId: string; moodScore: number }
+  | { type: "conversation.started"; userId: string; conversationId: string };
 ```
 
 4. Implement event bus
@@ -976,6 +1094,7 @@ export type DomainEvent =
 6. Create C4 diagrams
 
 **Acceptance Criteria:**
+
 - [ ] Bounded contexts identified
 - [ ] Domain modules created
 - [ ] Event bus implemented
@@ -989,36 +1108,45 @@ export type DomainEvent =
 ---
 
 ### Task 2.2 - API Gateway Implementation
+
 **Owner:** Sarah Chen (Architecture) + Jennifer Park (API)  
 **Peer Review:** Alex Thompson  
 **Duration:** 12 hours  
 **Priority:** HIGH
 
 **Implementation:**
+
 1. Choose API gateway (Express Gateway or custom)
 2. Implement gateway:
+
 ```typescript
 // server/gateway/index.ts
-import express from 'express';
-import { createProxyMiddleware } from 'http-proxy-middleware';
+import express from "express";
+import { createProxyMiddleware } from "http-proxy-middleware";
 
 const gateway = express();
 
 // Authentication
-gateway.use('/api/auth', createProxyMiddleware({
-  target: 'http://localhost:5001',
-  changeOrigin: true,
-}));
+gateway.use(
+  "/api/auth",
+  createProxyMiddleware({
+    target: "http://localhost:5001",
+    changeOrigin: true,
+  })
+);
 
 // User domain
-gateway.use('/api/users', createProxyMiddleware({
-  target: 'http://localhost:5002',
-  changeOrigin: true,
-}));
+gateway.use(
+  "/api/users",
+  createProxyMiddleware({
+    target: "http://localhost:5002",
+    changeOrigin: true,
+  })
+);
 
 // Unified logging
 gateway.use((req, res, next) => {
-  logger.info('API Request', {
+  logger.info("API Request", {
     method: req.method,
     path: req.path,
     userId: req.user?.id,
@@ -1040,6 +1168,7 @@ gateway.listen(5000);
 5. Add API analytics
 
 **Acceptance Criteria:**
+
 - [ ] API gateway implemented
 - [ ] All requests routed through gateway
 - [ ] Unified logging working
@@ -1053,13 +1182,16 @@ gateway.listen(5000);
 ---
 
 ### Task 2.3 - Event Sourcing for Audit Trails
+
 **Owner:** Sarah Chen (Architecture)  
 **Peer Review:** Dr. Rajesh Kumar  
 **Duration:** 15 hours  
 **Priority:** MEDIUM
 
 **Implementation:**
+
 1. Create event store:
+
 ```typescript
 // server/event-store/index.ts
 export interface Event {
@@ -1108,6 +1240,7 @@ export class EventStore {
 5. Create audit trail UI
 
 **Acceptance Criteria:**
+
 - [ ] Event store implemented
 - [ ] Critical events captured
 - [ ] Event replay working
@@ -1121,12 +1254,14 @@ export class EventStore {
 ---
 
 ### Task 2.4 - Database Sharding Strategy
+
 **Owner:** Dr. Rajesh Kumar (Database) + Sarah Chen (Architecture)  
 **Peer Review:** Alex Thompson  
 **Duration:** 10 hours  
 **Priority:** LOW (Planning only)
 
 **Implementation:**
+
 1. Analyze data distribution:
    - User data (shard by userId)
    - Mood history (shard by userId)
@@ -1147,6 +1282,7 @@ export class EventStore {
 5. Estimate costs and timeline
 
 **Acceptance Criteria:**
+
 - [ ] Data distribution analyzed
 - [ ] Sharding strategy designed
 - [ ] Migration plan created
@@ -1160,19 +1296,23 @@ export class EventStore {
 ---
 
 ### Task 2.5 - E2E Test Suite (80% Coverage)
+
 **Owner:** Rachel Kim (QA)  
 **Peer Review:** Emily Watson  
 **Duration:** 20 hours  
 **Priority:** HIGH
 
 **Implementation:**
+
 1. Install Playwright:
+
 ```bash
 npm install --save-dev @playwright/test
 npx playwright install
 ```
 
 2. Create test structure:
+
 ```
 tests/
   e2e/
@@ -1205,6 +1345,7 @@ tests/
 6. Configure CI/CD
 
 **Acceptance Criteria:**
+
 - [ ] 80% of critical paths covered
 - [ ] All tests passing
 - [ ] Visual regression tests added
@@ -1218,30 +1359,33 @@ tests/
 ---
 
 ### Task 2.6 - Integration Tests for All API Endpoints
+
 **Owner:** Rachel Kim (QA)  
 **Peer Review:** Jennifer Park  
 **Duration:** 15 hours  
 **Priority:** HIGH
 
 **Implementation:**
+
 1. Create integration test structure:
+
 ```typescript
 // tests/integration/api/auth.test.ts
-describe('Auth API', () => {
-  it('should login with valid credentials', async () => {
+describe("Auth API", () => {
+  it("should login with valid credentials", async () => {
     const response = await request(app)
-      .post('/api/auth/login')
-      .send({ email: 'test@example.com', password: 'password' })
+      .post("/api/auth/login")
+      .send({ email: "test@example.com", password: "password" })
       .expect(200);
-    
-    expect(response.body).toHaveProperty('token');
-    expect(response.headers['set-cookie']).toBeDefined();
+
+    expect(response.body).toHaveProperty("token");
+    expect(response.headers["set-cookie"]).toBeDefined();
   });
 
-  it('should reject invalid credentials', async () => {
+  it("should reject invalid credentials", async () => {
     await request(app)
-      .post('/api/auth/login')
-      .send({ email: 'test@example.com', password: 'wrong' })
+      .post("/api/auth/login")
+      .send({ email: "test@example.com", password: "wrong" })
       .expect(401);
   });
 });
@@ -1253,6 +1397,7 @@ describe('Auth API', () => {
 5. Add performance assertions
 
 **Acceptance Criteria:**
+
 - [ ] All API endpoints tested
 - [ ] Happy paths covered
 - [ ] Error cases covered
@@ -1266,33 +1411,37 @@ describe('Auth API', () => {
 ---
 
 ### Task 2.7 - Visual Regression Testing
+
 **Owner:** Rachel Kim (QA) + Lisa Thompson (UX)  
 **Peer Review:** Emily Watson  
 **Duration:** 8 hours  
 **Priority:** MEDIUM
 
 **Implementation:**
+
 1. Choose tool (Percy or Chromatic)
 2. Install and configure:
+
 ```bash
 npm install --save-dev @percy/cli @percy/playwright
 ```
 
 3. Add visual tests:
+
 ```typescript
 // tests/visual/pages.spec.ts
-import { test } from '@playwright/test';
-import percySnapshot from '@percy/playwright';
+import { test } from "@playwright/test";
+import percySnapshot from "@percy/playwright";
 
-test('Login page visual', async ({ page }) => {
-  await page.goto('/login');
-  await percySnapshot(page, 'Login Page');
+test("Login page visual", async ({ page }) => {
+  await page.goto("/login");
+  await percySnapshot(page, "Login Page");
 });
 
-test('Dashboard visual', async ({ page }) => {
+test("Dashboard visual", async ({ page }) => {
   await login(page);
-  await page.goto('/dashboard');
-  await percySnapshot(page, 'Dashboard');
+  await page.goto("/dashboard");
+  await percySnapshot(page, "Dashboard");
 });
 ```
 
@@ -1301,6 +1450,7 @@ test('Dashboard visual', async ({ page }) => {
 6. Set up review workflow
 
 **Acceptance Criteria:**
+
 - [ ] Visual testing tool integrated
 - [ ] All pages have visual tests
 - [ ] Baseline images captured
@@ -1314,18 +1464,22 @@ test('Dashboard visual', async ({ page }) => {
 ---
 
 ### Task 2.8 - Accessibility Testing (jest-axe)
+
 **Owner:** Rachel Kim (QA) + Lisa Thompson (UX)  
 **Peer Review:** Emily Watson  
 **Duration:** 6 hours  
 **Priority:** HIGH
 
 **Implementation:**
+
 1. Install jest-axe:
+
 ```bash
 npm install --save-dev jest-axe @axe-core/playwright
 ```
 
 2. Add accessibility tests:
+
 ```typescript
 // tests/accessibility/pages.test.tsx
 import { axe, toHaveNoViolations } from 'jest-axe';
@@ -1341,13 +1495,14 @@ test('Login page should have no accessibility violations', async () => {
 ```
 
 3. Add Playwright axe tests:
+
 ```typescript
 // tests/e2e/accessibility.spec.ts
-import { test, expect } from '@playwright/test';
-import AxeBuilder from '@axe-core/playwright';
+import { test, expect } from "@playwright/test";
+import AxeBuilder from "@axe-core/playwright";
 
-test('should not have accessibility violations', async ({ page }) => {
-  await page.goto('/');
+test("should not have accessibility violations", async ({ page }) => {
+  await page.goto("/");
   const accessibilityScanResults = await new AxeBuilder({ page }).analyze();
   expect(accessibilityScanResults.violations).toEqual([]);
 });
@@ -1357,6 +1512,7 @@ test('should not have accessibility violations', async ({ page }) => {
 5. Fix all violations
 
 **Acceptance Criteria:**
+
 - [ ] jest-axe integrated
 - [ ] All pages tested
 - [ ] All violations fixed
@@ -1370,44 +1526,46 @@ test('should not have accessibility violations', async ({ page }) => {
 ---
 
 ### Task 2.9 - API Contract Testing (Pact)
+
 **Owner:** Rachel Kim (QA) + Jennifer Park (API)  
 **Peer Review:** Emily Watson  
 **Duration:** 10 hours  
 **Priority:** MEDIUM
 
 **Implementation:**
+
 1. Install Pact:
+
 ```bash
 npm install --save-dev @pact-foundation/pact
 ```
 
 2. Create consumer tests:
+
 ```typescript
 // tests/contract/mood-api.pact.test.ts
-import { Pact } from '@pact-foundation/pact';
+import { Pact } from "@pact-foundation/pact";
 
 const provider = new Pact({
-  consumer: 'CEPHO-Frontend',
-  provider: 'CEPHO-API',
+  consumer: "CEPHO-Frontend",
+  provider: "CEPHO-API",
 });
 
-describe('Mood API Contract', () => {
+describe("Mood API Contract", () => {
   beforeAll(() => provider.setup());
   afterAll(() => provider.finalize());
 
-  it('should get mood history', async () => {
+  it("should get mood history", async () => {
     await provider.addInteraction({
-      state: 'user has mood history',
-      uponReceiving: 'a request for mood history',
+      state: "user has mood history",
+      uponReceiving: "a request for mood history",
       withRequest: {
-        method: 'GET',
-        path: '/api/mood/history',
+        method: "GET",
+        path: "/api/mood/history",
       },
       willRespondWith: {
         status: 200,
-        body: [
-          { date: '2026-02-26', score: 8, note: 'Feeling great' },
-        ],
+        body: [{ date: "2026-02-26", score: 8, note: "Feeling great" }],
       },
     });
 
@@ -1421,6 +1579,7 @@ describe('Mood API Contract', () => {
 5. Set up Pact Broker
 
 **Acceptance Criteria:**
+
 - [ ] Pact integrated
 - [ ] Consumer tests created
 - [ ] Provider verification working
@@ -1434,42 +1593,48 @@ describe('Mood API Contract', () => {
 ---
 
 ### Task 2.10 - Performance Testing (k6)
+
 **Owner:** Rachel Kim (QA) + Alex Thompson (Performance)  
 **Peer Review:** David Park  
 **Duration:** 8 hours  
 **Priority:** MEDIUM
 
 **Implementation:**
+
 1. Install k6:
+
 ```bash
 brew install k6  # or download from k6.io
 ```
 
 2. Create load tests:
+
 ```javascript
 // tests/performance/api-load.js
-import http from 'k6/http';
-import { check, sleep } from 'k6';
+import http from "k6/http";
+import { check, sleep } from "k6";
 
 export const options = {
   stages: [
-    { duration: '2m', target: 100 }, // Ramp up
-    { duration: '5m', target: 100 }, // Stay at 100 users
-    { duration: '2m', target: 200 }, // Ramp to 200
-    { duration: '5m', target: 200 }, // Stay at 200
-    { duration: '2m', target: 0 },   // Ramp down
+    { duration: "2m", target: 100 }, // Ramp up
+    { duration: "5m", target: 100 }, // Stay at 100 users
+    { duration: "2m", target: 200 }, // Ramp to 200
+    { duration: "5m", target: 200 }, // Stay at 200
+    { duration: "2m", target: 0 }, // Ramp down
   ],
   thresholds: {
-    http_req_duration: ['p(95)<500'], // 95% of requests under 500ms
-    http_req_failed: ['rate<0.01'],   // Error rate under 1%
+    http_req_duration: ["p(95)<500"], // 95% of requests under 500ms
+    http_req_failed: ["rate<0.01"], // Error rate under 1%
   },
 };
 
 export default function () {
-  const res = http.get('https://cepho-the-brain-complete.onrender.com/api/health');
+  const res = http.get(
+    "https://cepho-the-brain-complete.onrender.com/api/health"
+  );
   check(res, {
-    'status is 200': (r) => r.status === 200,
-    'response time < 500ms': (r) => r.timings.duration < 500,
+    "status is 200": r => r.status === 200,
+    "response time < 500ms": r => r.timings.duration < 500,
   });
   sleep(1);
 }
@@ -1480,6 +1645,7 @@ export default function () {
 5. Add to CI/CD (weekly)
 
 **Acceptance Criteria:**
+
 - [ ] k6 installed
 - [ ] Load tests created
 - [ ] Stress tests created
@@ -1493,18 +1659,22 @@ export default function () {
 ---
 
 ### Task 2.11 - Mutation Testing (Stryker)
+
 **Owner:** Rachel Kim (QA)  
 **Peer Review:** Emily Watson  
 **Duration:** 4 hours  
 **Priority:** LOW
 
 **Implementation:**
+
 1. Install Stryker:
+
 ```bash
 npm install --save-dev @stryker-mutator/core @stryker-mutator/typescript-checker @stryker-mutator/jest-runner
 ```
 
 2. Configure Stryker:
+
 ```javascript
 // stryker.conf.json
 {
@@ -1524,6 +1694,7 @@ npm install --save-dev @stryker-mutator/core @stryker-mutator/typescript-checker
 5. Add to CI/CD (weekly)
 
 **Acceptance Criteria:**
+
 - [ ] Stryker configured
 - [ ] Mutation score >70%
 - [ ] Weak tests identified
@@ -1537,12 +1708,14 @@ npm install --save-dev @stryker-mutator/core @stryker-mutator/typescript-checker
 ---
 
 ### Task 2.12 - Testing Strategy Documentation
+
 **Owner:** Rachel Kim (QA)  
 **Peer Review:** All experts  
 **Duration:** 4 hours  
 **Priority:** MEDIUM
 
 **Implementation:**
+
 1. Create `docs/TESTING_STRATEGY.md`:
    - Test pyramid overview
    - Unit testing guidelines
@@ -1560,6 +1733,7 @@ npm install --save-dev @stryker-mutator/core @stryker-mutator/typescript-checker
 4. Create testing checklist for PRs
 
 **Acceptance Criteria:**
+
 - [ ] Testing strategy documented
 - [ ] Test pyramid explained
 - [ ] All testing types covered
@@ -1573,13 +1747,16 @@ npm install --save-dev @stryker-mutator/core @stryker-mutator/typescript-checker
 ---
 
 ### Task 2.13 - Database Schema Documentation
+
 **Owner:** Dr. Rajesh Kumar (Database)  
 **Peer Review:** Sarah Chen  
 **Duration:** 12 hours  
 **Priority:** HIGH
 
 **Implementation:**
+
 1. Generate ER diagrams:
+
 ```bash
 npm install --save-dev @databases/pg-schema-print-types
 npx @databases/pg-schema-print-types --database $DATABASE_URL > docs/schema.md
@@ -1601,18 +1778,24 @@ npx @databases/pg-schema-print-types --database $DATABASE_URL > docs/schema.md
    - Workflows (89 tables)
 
 4. Add inline schema comments:
+
 ```typescript
 // drizzle/schema.ts
-export const users = pgTable('users', {
-  id: uuid('id').primaryKey(),
-  email: text('email').notNull().unique(),
-  // ... more fields with comments
-}, (table) => ({
-  emailIdx: index('users_email_idx').on(table.email),
-}));
+export const users = pgTable(
+  "users",
+  {
+    id: uuid("id").primaryKey(),
+    email: text("email").notNull().unique(),
+    // ... more fields with comments
+  },
+  table => ({
+    emailIdx: index("users_email_idx").on(table.email),
+  })
+);
 ```
 
 **Acceptance Criteria:**
+
 - [ ] ER diagrams generated
 - [ ] All 169 tables documented
 - [ ] Relationships explained
@@ -1626,29 +1809,34 @@ export const users = pgTable('users', {
 ---
 
 ### Task 2.14 - Database Backup Scheduling
+
 **Owner:** Dr. Rajesh Kumar (Database) + David Park (DevOps)  
 **Peer Review:** Sarah Chen  
 **Duration:** 4 hours  
 **Priority:** HIGH
 
 **Implementation:**
+
 1. Set up automated backups on Render/Supabase
 2. Create backup verification script:
+
 ```typescript
 // scripts/verify-backup.ts
 async function verifyBackup() {
   const latestBackup = await getLatestBackup();
   const testRestore = await restoreToTestDB(latestBackup);
-  
+
   // Verify table counts
-  const tables = await testRestore.query('SELECT COUNT(*) FROM information_schema.tables');
-  assert(tables.count === 169, 'Table count mismatch');
-  
+  const tables = await testRestore.query(
+    "SELECT COUNT(*) FROM information_schema.tables"
+  );
+  assert(tables.count === 169, "Table count mismatch");
+
   // Verify data integrity
-  const users = await testRestore.query('SELECT COUNT(*) FROM users');
-  assert(users.count > 0, 'No users in backup');
-  
-  console.log('✅ Backup verified successfully');
+  const users = await testRestore.query("SELECT COUNT(*) FROM users");
+  assert(users.count > 0, "No users in backup");
+
+  console.log("✅ Backup verified successfully");
 }
 ```
 
@@ -1658,6 +1846,7 @@ async function verifyBackup() {
 6. Test restore procedure
 
 **Acceptance Criteria:**
+
 - [ ] Automated backups scheduled (daily)
 - [ ] Backup verification script created
 - [ ] Backups monitored
@@ -1671,21 +1860,25 @@ async function verifyBackup() {
 ---
 
 ### Task 2.15 - Database Monitoring (pg_stat_statements)
+
 **Owner:** Dr. Rajesh Kumar (Database)  
 **Peer Review:** Alex Thompson  
 **Duration:** 6 hours  
 **Priority:** HIGH
 
 **Implementation:**
+
 1. Enable pg_stat_statements:
+
 ```sql
 CREATE EXTENSION IF NOT EXISTS pg_stat_statements;
 ```
 
 2. Create monitoring queries:
+
 ```sql
 -- Slowest queries
-SELECT 
+SELECT
   query,
   calls,
   total_exec_time,
@@ -1696,7 +1889,7 @@ ORDER BY mean_exec_time DESC
 LIMIT 20;
 
 -- Most frequent queries
-SELECT 
+SELECT
   query,
   calls,
   total_exec_time
@@ -1710,6 +1903,7 @@ LIMIT 20;
 5. Create query optimization guide
 
 **Acceptance Criteria:**
+
 - [ ] pg_stat_statements enabled
 - [ ] Monitoring queries created
 - [ ] Dashboard set up
@@ -1722,13 +1916,14 @@ LIMIT 20;
 
 ---
 
-*[Continuing with remaining tasks in next section due to length...]*
+_[Continuing with remaining tasks in next section due to length...]_
 
 ---
 
 ## 📊 SUMMARY OF ALL 90+ TASKS
 
 ### Phase 1: Critical Fixes (15 tasks)
+
 1. Fix Login
 2. Remove Hardcoded Credentials
 3. Add CSP Headers
@@ -1747,6 +1942,7 @@ LIMIT 20;
 16. SonarQube
 
 ### Phase 2: Foundation (25 tasks)
+
 17. Domain-Driven Design
 18. API Gateway
 19. Event Sourcing
@@ -1774,6 +1970,7 @@ LIMIT 20;
 41. Deployment Documentation
 
 ### Phase 3: Optimization (20 tasks)
+
 42. Lighthouse CI
 43. CDN Implementation
 44. Service Worker
@@ -1796,6 +1993,7 @@ LIMIT 20;
 61. Fix Remaining any Types
 
 ### Phase 4: Enhancement (15 tasks)
+
 62. WCAG 2.1 AA Audit
 63. Design System (Storybook)
 64. Design Tokens
@@ -1813,6 +2011,7 @@ LIMIT 20;
 76. User Testing Report
 
 ### Phase 5: Governance (10 tasks)
+
 77. Docker + docker-compose
 78. Infrastructure as Code (Terraform)
 79. Staging Environment
@@ -1825,6 +2024,7 @@ LIMIT 20;
 86. Chaos Engineering Framework
 
 ### Phase 6: Product & AI Agents (10 tasks)
+
 87. Product Vision & Metrics
 88. Product Analytics (PostHog)
 89. User Personas
@@ -1838,7 +2038,7 @@ LIMIT 20;
 97. AI Agent System (per Phase 6 requirements)
 98. AI Agent Monitoring Dashboard
 99. Daily AI Agent Reports
-100. Chief of Staff Approval System
+100.  Chief of Staff Approval System
 
 ---
 
@@ -1846,8 +2046,8 @@ LIMIT 20;
 
 This is the COMPLETE remediation plan with ALL expert recommendations included. Would you like me to continue detailing the implementation for Phases 3-6?
 
-
 ### 11. Jessica Martinez - Mobile UX Specialist
+
 **Background:** 10 years mobile design, iOS & Android HIG expert  
 **Expertise:** Mobile-first design, responsive layouts, touch interfaces  
 **Standards:** iOS Human Interface Guidelines, Material Design, Mobile-First  
@@ -1858,48 +2058,53 @@ This is the COMPLETE remediation plan with ALL expert recommendations included. 
 ## 🚀 PHASE 3: OPTIMIZATION (Weeks 4-5)
 
 ### Task 3.1 - Lighthouse CI for Core Web Vitals
+
 **Owner:** Alex Thompson (Performance)  
 **Peer Review:** David Park  
 **Duration:** 3 hours  
 **Priority:** HIGH
 
 **Implementation:**
+
 1. Install Lighthouse CI:
+
 ```bash
 npm install --save-dev @lhci/cli
 ```
 
 2. Create Lighthouse CI configuration:
+
 ```javascript
 // lighthouserc.js
 module.exports = {
   ci: {
     collect: {
-      startServerCommand: 'npm run preview',
-      url: ['http://localhost:4173/'],
+      startServerCommand: "npm run preview",
+      url: ["http://localhost:4173/"],
       numberOfRuns: 3,
     },
     assert: {
-      preset: 'lighthouse:recommended',
+      preset: "lighthouse:recommended",
       assertions: {
-        'categories:performance': ['error', { minScore: 0.9 }],
-        'categories:accessibility': ['error', { minScore: 0.9 }],
-        'categories:best-practices': ['error', { minScore: 0.9 }],
-        'categories:seo': ['error', { minScore: 0.9 }],
-        'first-contentful-paint': ['error', { maxNumericValue: 2000 }],
-        'largest-contentful-paint': ['error', { maxNumericValue: 2500 }],
-        'cumulative-layout-shift': ['error', { maxNumericValue: 0.1 }],
-        'total-blocking-time': ['error', { maxNumericValue: 300 }],
+        "categories:performance": ["error", { minScore: 0.9 }],
+        "categories:accessibility": ["error", { minScore: 0.9 }],
+        "categories:best-practices": ["error", { minScore: 0.9 }],
+        "categories:seo": ["error", { minScore: 0.9 }],
+        "first-contentful-paint": ["error", { maxNumericValue: 2000 }],
+        "largest-contentful-paint": ["error", { maxNumericValue: 2500 }],
+        "cumulative-layout-shift": ["error", { maxNumericValue: 0.1 }],
+        "total-blocking-time": ["error", { maxNumericValue: 300 }],
       },
     },
     upload: {
-      target: 'temporary-public-storage',
+      target: "temporary-public-storage",
     },
   },
 };
 ```
 
 3. Add to CI/CD:
+
 ```yaml
 # .github/workflows/lighthouse.yml
 name: Lighthouse CI
@@ -1919,6 +2124,7 @@ jobs:
 5. Configure performance budgets
 
 **Acceptance Criteria:**
+
 - [ ] Lighthouse CI installed
 - [ ] Performance score >90
 - [ ] Accessibility score >90
@@ -1933,16 +2139,19 @@ jobs:
 ---
 
 ### Task 3.2 - CDN Implementation (Cloudflare)
+
 **Owner:** Alex Thompson (Performance)  
 **Peer Review:** David Park  
 **Duration:** 4 hours  
 **Priority:** HIGH
 
 **Implementation:**
+
 1. Sign up for Cloudflare
 2. Add domain to Cloudflare
 3. Update DNS records
 4. Configure caching rules:
+
 ```javascript
 // Cloudflare Page Rules
 // Rule 1: Cache static assets
@@ -1971,6 +2180,7 @@ jobs:
 6. Configure cache purging strategy
 
 **Acceptance Criteria:**
+
 - [ ] Cloudflare configured
 - [ ] DNS propagated
 - [ ] Static assets cached
@@ -1986,33 +2196,41 @@ jobs:
 ---
 
 ### Task 3.3 - Service Worker for Offline Support
+
 **Owner:** Alex Thompson (Performance)  
 **Peer Review:** Emily Watson  
 **Duration:** 6 hours  
 **Priority:** MEDIUM
 
 **Implementation:**
+
 1. Install Workbox:
+
 ```bash
 npm install --save-dev workbox-webpack-plugin
 ```
 
 2. Create service worker:
+
 ```typescript
 // client/src/service-worker.ts
-import { precacheAndRoute } from 'workbox-precaching';
-import { registerRoute } from 'workbox-routing';
-import { CacheFirst, NetworkFirst, StaleWhileRevalidate } from 'workbox-strategies';
-import { ExpirationPlugin } from 'workbox-expiration';
+import { precacheAndRoute } from "workbox-precaching";
+import { registerRoute } from "workbox-routing";
+import {
+  CacheFirst,
+  NetworkFirst,
+  StaleWhileRevalidate,
+} from "workbox-strategies";
+import { ExpirationPlugin } from "workbox-expiration";
 
 // Precache build assets
 precacheAndRoute(self.__WB_MANIFEST);
 
 // Cache images
 registerRoute(
-  ({ request }) => request.destination === 'image',
+  ({ request }) => request.destination === "image",
   new CacheFirst({
-    cacheName: 'images',
+    cacheName: "images",
     plugins: [
       new ExpirationPlugin({
         maxEntries: 60,
@@ -2024,9 +2242,9 @@ registerRoute(
 
 // Cache API responses
 registerRoute(
-  ({ url }) => url.pathname.startsWith('/api/'),
+  ({ url }) => url.pathname.startsWith("/api/"),
   new NetworkFirst({
-    cacheName: 'api',
+    cacheName: "api",
     plugins: [
       new ExpirationPlugin({
         maxEntries: 50,
@@ -2038,19 +2256,21 @@ registerRoute(
 
 // Cache static assets
 registerRoute(
-  ({ request }) => request.destination === 'script' || request.destination === 'style',
+  ({ request }) =>
+    request.destination === "script" || request.destination === "style",
   new StaleWhileRevalidate({
-    cacheName: 'static-resources',
+    cacheName: "static-resources",
   })
 );
 ```
 
 3. Register service worker:
+
 ```typescript
 // client/src/main.tsx
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/service-worker.js');
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("/service-worker.js");
   });
 }
 ```
@@ -2059,6 +2279,7 @@ if ('serviceWorker' in navigator) {
 5. Test offline functionality
 
 **Acceptance Criteria:**
+
 - [ ] Service worker registered
 - [ ] Static assets cached
 - [ ] Images cached
@@ -2073,28 +2294,31 @@ if ('serviceWorker' in navigator) {
 ---
 
 ### Task 3.4 - Brotli Compression
+
 **Owner:** Alex Thompson (Performance)  
 **Peer Review:** David Park  
 **Duration:** 2 hours  
 **Priority:** MEDIUM
 
 **Implementation:**
+
 1. Enable Brotli in Vite:
+
 ```typescript
 // vite.config.ts
-import viteCompression from 'vite-plugin-compression';
+import viteCompression from "vite-plugin-compression";
 
 export default defineConfig({
   plugins: [
     viteCompression({
-      algorithm: 'brotliCompress',
-      ext: '.br',
+      algorithm: "brotliCompress",
+      ext: ".br",
       threshold: 1024, // Only compress files >1KB
       deleteOriginFile: false,
     }),
     viteCompression({
-      algorithm: 'gzip',
-      ext: '.gz',
+      algorithm: "gzip",
+      ext: ".gz",
       threshold: 1024,
     }),
   ],
@@ -2102,14 +2326,15 @@ export default defineConfig({
 ```
 
 2. Configure server to serve Brotli:
+
 ```typescript
 // server/_core/index.ts
-import expressStaticGzip from 'express-static-gzip';
+import expressStaticGzip from "express-static-gzip";
 
 app.use(
   expressStaticGzip(distPath, {
     enableBrotli: true,
-    orderPreference: ['br', 'gz'],
+    orderPreference: ["br", "gz"],
   })
 );
 ```
@@ -2118,6 +2343,7 @@ app.use(
 4. Measure compression ratios
 
 **Acceptance Criteria:**
+
 - [ ] Brotli compression enabled
 - [ ] .br files generated
 - [ ] Server serves .br files
@@ -2131,34 +2357,44 @@ app.use(
 ---
 
 ### Task 3.5 - Resource Hints (preconnect, prefetch, preload)
+
 **Owner:** Alex Thompson (Performance)  
 **Peer Review:** Emily Watson  
 **Duration:** 2 hours  
 **Priority:** MEDIUM
 
 **Implementation:**
+
 1. Add resource hints to HTML:
+
 ```html
 <!-- client/index.html -->
 <head>
   <!-- Preconnect to external origins -->
-  <link rel="preconnect" href="https://api.openai.com">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  
+  <link rel="preconnect" href="https://api.openai.com" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
   <!-- DNS prefetch for other origins -->
-  <link rel="dns-prefetch" href="https://analytics.google.com">
-  
+  <link rel="dns-prefetch" href="https://analytics.google.com" />
+
   <!-- Preload critical resources -->
-  <link rel="preload" href="/assets/logo.svg" as="image">
-  <link rel="preload" href="/assets/fonts/inter.woff2" as="font" type="font/woff2" crossorigin>
-  
+  <link rel="preload" href="/assets/logo.svg" as="image" />
+  <link
+    rel="preload"
+    href="/assets/fonts/inter.woff2"
+    as="font"
+    type="font/woff2"
+    crossorigin
+  />
+
   <!-- Prefetch next page -->
-  <link rel="prefetch" href="/dashboard">
+  <link rel="prefetch" href="/dashboard" />
 </head>
 ```
 
 2. Add dynamic prefetching:
+
 ```typescript
 // client/src/utils/prefetch.ts
 export const prefetchRoute = (path: string) => {
@@ -2169,8 +2405,8 @@ export const prefetchRoute = (path: string) => {
 };
 
 // Use on hover
-<Link 
-  to="/dashboard" 
+<Link
+  to="/dashboard"
   onMouseEnter={() => prefetchRoute('/dashboard')}
 >
   Dashboard
@@ -2180,6 +2416,7 @@ export const prefetchRoute = (path: string) => {
 3. Measure impact on FCP and LCP
 
 **Acceptance Criteria:**
+
 - [ ] Preconnect to external origins
 - [ ] Critical resources preloaded
 - [ ] Next pages prefetched
@@ -2193,33 +2430,38 @@ export const prefetchRoute = (path: string) => {
 ---
 
 ### Task 3.6 - CSS Optimization (PurgeCSS)
+
 **Owner:** Alex Thompson (Performance) + Lisa Thompson (UX)  
 **Peer Review:** Emily Watson  
 **Duration:** 4 hours  
 **Priority:** HIGH
 
 **Implementation:**
+
 1. Audit current CSS:
+
 ```bash
 # Current: 25,000 lines
 find client/src/styles -name "*.css" | xargs wc -l
 ```
 
 2. Install PurgeCSS:
+
 ```bash
 npm install --save-dev @fullhuman/postcss-purgecss
 ```
 
 3. Configure PurgeCSS:
+
 ```javascript
 // postcss.config.js
-const purgecss = require('@fullhuman/postcss-purgecss');
+const purgecss = require("@fullhuman/postcss-purgecss");
 
 module.exports = {
   plugins: [
     purgecss({
-      content: ['./client/**/*.html', './client/**/*.tsx', './client/**/*.ts'],
-      safelist: ['dark', 'light', /^data-/, /^aria-/],
+      content: ["./client/**/*.html", "./client/**/*.tsx", "./client/**/*.ts"],
+      safelist: ["dark", "light", /^data-/, /^aria-/],
       defaultExtractor: content => content.match(/[\w-/:]+(?<!:)/g) || [],
     }),
   ],
@@ -2231,6 +2473,7 @@ module.exports = {
 6. Measure bundle size reduction
 
 **Acceptance Criteria:**
+
 - [ ] PurgeCSS configured
 - [ ] CSS bundle reduced by >50%
 - [ ] No visual regressions
@@ -2244,13 +2487,16 @@ module.exports = {
 ---
 
 ### Task 3.7 - Performance Budgets in CI/CD
+
 **Owner:** Alex Thompson (Performance)  
 **Peer Review:** David Park  
 **Duration:** 2 hours  
 **Priority:** MEDIUM
 
 **Implementation:**
+
 1. Create performance budget:
+
 ```json
 // performance-budget.json
 {
@@ -2280,6 +2526,7 @@ module.exports = {
 ```
 
 2. Add budget checking to CI:
+
 ```yaml
 # .github/workflows/performance.yml
 - name: Check performance budget
@@ -2290,6 +2537,7 @@ module.exports = {
 4. Add budget dashboard
 
 **Acceptance Criteria:**
+
 - [ ] Performance budget defined
 - [ ] CI checks budget
 - [ ] Builds fail on budget violations
@@ -2303,16 +2551,19 @@ module.exports = {
 ---
 
 ### Task 3.8 - Activate Redis Caching
+
 **Owner:** Alex Thompson (Performance)  
 **Peer Review:** Dr. Rajesh Kumar  
 **Duration:** 6 hours  
 **Priority:** HIGH
 
 **Implementation:**
+
 1. Redis service already exists, activate it:
+
 ```typescript
 // server/services/cache.ts
-import Redis from 'ioredis';
+import Redis from "ioredis";
 
 const redis = new Redis(process.env.REDIS_URL);
 
@@ -2337,6 +2588,7 @@ export const cache = {
 ```
 
 2. Add caching middleware:
+
 ```typescript
 // server/middleware/cache.ts
 export const cacheMiddleware = (ttl: number = 300) => {
@@ -2360,15 +2612,17 @@ export const cacheMiddleware = (ttl: number = 300) => {
 ```
 
 3. Apply to frequently accessed endpoints:
+
 ```typescript
-app.get('/api/mood/history', cacheMiddleware(300), getMoodHistory);
-app.get('/api/analytics/dashboard', cacheMiddleware(600), getDashboard);
+app.get("/api/mood/history", cacheMiddleware(300), getMoodHistory);
+app.get("/api/analytics/dashboard", cacheMiddleware(600), getDashboard);
 ```
 
 4. Add cache invalidation strategy
 5. Monitor cache hit rates
 
 **Acceptance Criteria:**
+
 - [ ] Redis activated
 - [ ] Caching middleware created
 - [ ] Applied to 20+ endpoints
@@ -2382,37 +2636,48 @@ app.get('/api/analytics/dashboard', cacheMiddleware(600), getDashboard);
 ---
 
 ### Task 3.9 - Edge Caching with Cache Headers
+
 **Owner:** Alex Thompson (Performance)  
 **Peer Review:** David Park  
 **Duration:** 3 hours  
 **Priority:** MEDIUM
 
 **Implementation:**
+
 1. Add cache headers to static assets:
+
 ```typescript
 // server/_core/index.ts
-app.use('/assets', express.static(path.join(distPath, 'assets'), {
-  maxAge: '1y',
-  immutable: true,
-}));
+app.use(
+  "/assets",
+  express.static(path.join(distPath, "assets"), {
+    maxAge: "1y",
+    immutable: true,
+  })
+);
 ```
 
 2. Add cache headers to API responses:
+
 ```typescript
 // server/middleware/cache-headers.ts
-export const setCacheHeaders = (req: Request, res: Response, next: NextFunction) => {
-  if (req.path.startsWith('/api/')) {
+export const setCacheHeaders = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  if (req.path.startsWith("/api/")) {
     // API responses: short cache
-    res.set('Cache-Control', 'private, max-age=300, stale-while-revalidate=60');
+    res.set("Cache-Control", "private, max-age=300, stale-while-revalidate=60");
   } else if (req.path.match(/\.(jpg|jpeg|png|gif|webp|svg)$/)) {
     // Images: long cache
-    res.set('Cache-Control', 'public, max-age=31536000, immutable');
+    res.set("Cache-Control", "public, max-age=31536000, immutable");
   } else if (req.path.match(/\.(js|css)$/)) {
     // JS/CSS: long cache (versioned)
-    res.set('Cache-Control', 'public, max-age=31536000, immutable');
+    res.set("Cache-Control", "public, max-age=31536000, immutable");
   } else {
     // HTML: no cache (always fresh)
-    res.set('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.set("Cache-Control", "no-cache, no-store, must-revalidate");
   }
   next();
 };
@@ -2423,6 +2688,7 @@ export const setCacheHeaders = (req: Request, res: Response, next: NextFunction)
 5. Configure CDN caching rules
 
 **Acceptance Criteria:**
+
 - [ ] Cache headers on all responses
 - [ ] Static assets cached 1 year
 - [ ] API responses cached 5 min
@@ -2436,21 +2702,25 @@ export const setCacheHeaders = (req: Request, res: Response, next: NextFunction)
 ---
 
 ### Task 3.10 - Image Optimization Pipeline
+
 **Owner:** Alex Thompson (Performance)  
 **Peer Review:** Lisa Thompson  
 **Duration:** 5 hours  
 **Priority:** MEDIUM
 
 **Implementation:**
+
 1. Install image optimization tools:
+
 ```bash
 npm install --save-dev vite-plugin-imagemin imagemin-webp imagemin-mozjpeg imagemin-pngquant
 ```
 
 2. Configure Vite plugin:
+
 ```typescript
 // vite.config.ts
-import viteImagemin from 'vite-plugin-imagemin';
+import viteImagemin from "vite-plugin-imagemin";
 
 export default defineConfig({
   plugins: [
@@ -2460,8 +2730,8 @@ export default defineConfig({
       pngquant: { quality: [0.8, 0.9], speed: 4 },
       svgo: {
         plugins: [
-          { name: 'removeViewBox', active: false },
-          { name: 'removeEmptyAttrs', active: true },
+          { name: "removeViewBox", active: false },
+          { name: "removeEmptyAttrs", active: true },
         ],
       },
       webp: { quality: 80 },
@@ -2471,6 +2741,7 @@ export default defineConfig({
 ```
 
 3. Create responsive image component:
+
 ```typescript
 // client/src/components/ResponsiveImage.tsx
 export const ResponsiveImage = ({ src, alt }: { src: string; alt: string }) => {
@@ -2488,6 +2759,7 @@ export const ResponsiveImage = ({ src, alt }: { src: string; alt: string }) => {
 5. Generate multiple sizes for responsive images
 
 **Acceptance Criteria:**
+
 - [ ] Image optimization configured
 - [ ] WebP format generated
 - [ ] Images compressed >30%
@@ -2501,6 +2773,7 @@ export const ResponsiveImage = ({ src, alt }: { src: string; alt: string }) => {
 ---
 
 ### Task 3.11 - API Design Guidelines Documentation
+
 **Owner:** Jennifer Park (API)  
 **Peer Review:** Sarah Chen  
 **Duration:** 4 hours  
@@ -2509,18 +2782,20 @@ export const ResponsiveImage = ({ src, alt }: { src: string; alt: string }) => {
 **Implementation:**
 Create `docs/API_DESIGN_GUIDELINES.md`:
 
-```markdown
+````markdown
 # API Design Guidelines
 
 ## When to Use tRPC vs REST
 
 ### Use tRPC for:
+
 - Internal client-server communication
 - Type-safe API calls
 - Rapid development
 - Real-time subscriptions
 
 ### Use REST for:
+
 - Public APIs
 - Third-party integrations
 - Webhooks
@@ -2529,11 +2804,13 @@ Create `docs/API_DESIGN_GUIDELINES.md`:
 ## Naming Conventions
 
 ### tRPC Procedures
+
 - Use camelCase: `getMoodHistory`, `createWorkflow`
 - Prefix with verb: get, create, update, delete, list
 - Group by domain: `mood.getHistory`, `workflow.create`
 
 ### REST Endpoints
+
 - Use kebab-case: `/api/mood-history`, `/api/workflows`
 - Use HTTP verbs: GET, POST, PUT, DELETE
 - Version APIs: `/api/v1/mood-history`
@@ -2541,15 +2818,18 @@ Create `docs/API_DESIGN_GUIDELINES.md`:
 ## Error Handling
 
 ### tRPC Errors
+
 ```typescript
 throw new TRPCError({
-  code: 'NOT_FOUND',
-  message: 'Mood entry not found',
+  code: "NOT_FOUND",
+  message: "Mood entry not found",
   cause: error,
 });
 ```
+````
 
 ### REST Errors
+
 ```json
 {
   "error": {
@@ -2563,6 +2843,7 @@ throw new TRPCError({
 ## Pagination
 
 ### Cursor-based (preferred)
+
 ```typescript
 {
   items: [...],
@@ -2572,6 +2853,7 @@ throw new TRPCError({
 ```
 
 ### Offset-based
+
 ```typescript
 {
   items: [...],
@@ -2601,7 +2883,8 @@ throw new TRPCError({
 - Implement rate limiting
 - Add authentication
 - Log security events
-```
+
+````
 
 **Acceptance Criteria:**
 - [ ] Guidelines documented
@@ -2611,15 +2894,15 @@ throw new TRPCError({
 - [ ] Pagination patterns defined
 - [ ] Security requirements listed
 
-**Testing:** Documentation review  
+**Testing:** Documentation review
 **Deployment:** Documentation only
 
 ---
 
 ### Task 3.12 - Request/Response Validation (Zod)
-**Owner:** Jennifer Park (API)  
-**Peer Review:** Marcus Rodriguez  
-**Duration:** 8 hours  
+**Owner:** Jennifer Park (API)
+**Peer Review:** Marcus Rodriguez
+**Duration:** 8 hours
 **Priority:** HIGH
 
 **Implementation:**
@@ -2641,9 +2924,10 @@ export const getMoodHistorySchema = z.object({
   limit: z.number().min(1).max(100).default(20),
   cursor: z.string().optional(),
 });
-```
+````
 
 2. Create validation middleware:
+
 ```typescript
 // server/middleware/validate.ts
 export const validate = (schema: z.ZodSchema) => {
@@ -2655,8 +2939,8 @@ export const validate = (schema: z.ZodSchema) => {
       if (error instanceof z.ZodError) {
         return res.status(400).json({
           error: {
-            code: 'VALIDATION_ERROR',
-            message: 'Invalid request data',
+            code: "VALIDATION_ERROR",
+            message: "Invalid request data",
             details: error.errors,
           },
         });
@@ -2668,15 +2952,17 @@ export const validate = (schema: z.ZodSchema) => {
 ```
 
 3. Apply to all REST endpoints:
+
 ```typescript
-app.post('/api/mood', validate(createMoodSchema), createMood);
-app.get('/api/mood/history', validate(getMoodHistorySchema), getMoodHistory);
+app.post("/api/mood", validate(createMoodSchema), createMood);
+app.get("/api/mood/history", validate(getMoodHistorySchema), getMoodHistory);
 ```
 
 4. Add response validation (development only)
 5. Generate OpenAPI schemas from Zod
 
 **Acceptance Criteria:**
+
 - [ ] All REST endpoints validated
 - [ ] Zod schemas created
 - [ ] Validation middleware applied
@@ -2690,38 +2976,46 @@ app.get('/api/mood/history', validate(getMoodHistorySchema), getMoodHistory);
 ---
 
 ### Task 3.13 - API Analytics Implementation
+
 **Owner:** Jennifer Park (API)  
 **Peer Review:** Michael Chen  
 **Duration:** 6 hours  
 **Priority:** MEDIUM
 
 **Implementation:**
+
 1. Create analytics middleware:
+
 ```typescript
 // server/middleware/api-analytics.ts
-export const apiAnalytics = async (req: Request, res: Response, next: NextFunction) => {
+export const apiAnalytics = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const start = Date.now();
-  
-  res.on('finish', async () => {
+
+  res.on("finish", async () => {
     const duration = Date.now() - start;
-    
+
     await db.insert(apiAnalytics).values({
       endpoint: req.path,
       method: req.method,
       statusCode: res.statusCode,
       duration,
       userId: req.user?.id,
-      userAgent: req.get('user-agent'),
+      userAgent: req.get("user-agent"),
       ip: req.ip,
       timestamp: new Date(),
     });
   });
-  
+
   next();
 };
 ```
 
 2. Create analytics dashboard:
+
 ```typescript
 // server/routes/analytics.ts
 export const getAPIAnalytics = async (req: Request, res: Response) => {
@@ -2736,7 +3030,7 @@ export const getAPIAnalytics = async (req: Request, res: Response) => {
     .from(apiAnalytics)
     .groupBy(apiAnalytics.endpoint)
     .orderBy(desc(sql`count(*)`));
-  
+
   res.json(stats);
 };
 ```
@@ -2746,6 +3040,7 @@ export const getAPIAnalytics = async (req: Request, res: Response) => {
 5. Create public API status page
 
 **Acceptance Criteria:**
+
 - [ ] Analytics middleware active
 - [ ] All endpoints tracked
 - [ ] Dashboard created
@@ -2759,35 +3054,47 @@ export const getAPIAnalytics = async (req: Request, res: Response) => {
 ---
 
 ### Task 3.14 - API Deprecation Strategy
+
 **Owner:** Jennifer Park (API)  
 **Peer Review:** Sarah Chen  
 **Duration:** 3 hours  
 **Priority:** LOW
 
 **Implementation:**
+
 1. Add deprecation headers:
+
 ```typescript
 // server/middleware/deprecation.ts
-export const deprecate = (version: string, sunset: Date, replacement: string) => {
+export const deprecate = (
+  version: string,
+  sunset: Date,
+  replacement: string
+) => {
   return (req: Request, res: Response, next: NextFunction) => {
-    res.set('Deprecation', 'true');
-    res.set('Sunset', sunset.toUTCString());
-    res.set('Link', `<${replacement}>; rel="alternate"`);
-    
-    logger.warn('Deprecated API accessed', {
+    res.set("Deprecation", "true");
+    res.set("Sunset", sunset.toUTCString());
+    res.set("Link", `<${replacement}>; rel="alternate"`);
+
+    logger.warn("Deprecated API accessed", {
       endpoint: req.path,
       version,
       userId: req.user?.id,
     });
-    
+
     next();
   };
 };
 ```
 
 2. Apply to deprecated endpoints:
+
 ```typescript
-app.get('/api/v1/mood', deprecate('v1', new Date('2027-01-01'), '/api/v2/mood'), getMood);
+app.get(
+  "/api/v1/mood",
+  deprecate("v1", new Date("2027-01-01"), "/api/v2/mood"),
+  getMood
+);
 ```
 
 3. Create deprecation policy document
@@ -2795,6 +3102,7 @@ app.get('/api/v1/mood', deprecate('v1', new Date('2027-01-01'), '/api/v2/mood'),
 5. Email users of deprecated APIs
 
 **Acceptance Criteria:**
+
 - [ ] Deprecation headers added
 - [ ] Policy documented
 - [ ] Notices in docs
@@ -2808,37 +3116,45 @@ app.get('/api/v1/mood', deprecate('v1', new Date('2027-01-01'), '/api/v2/mood'),
 ---
 
 ### Task 3.15 - GraphQL Consideration (Planning)
+
 **Owner:** Jennifer Park (API) + Sarah Chen (Architecture)  
 **Peer Review:** Emily Watson  
 **Duration:** 6 hours  
 **Priority:** LOW
 
 **Implementation:**
+
 1. Evaluate GraphQL need:
    - Current: 497 tRPC procedures
    - Use case: Complex nested queries
    - Mobile apps: May benefit from GraphQL
 
 2. Create proof of concept:
+
 ```typescript
 // server/graphql/schema.ts
-import { GraphQLObjectType, GraphQLSchema, GraphQLString, GraphQLInt } from 'graphql';
+import {
+  GraphQLObjectType,
+  GraphQLSchema,
+  GraphQLString,
+  GraphQLInt,
+} from "graphql";
 
 const UserType = new GraphQLObjectType({
-  name: 'User',
+  name: "User",
   fields: {
     id: { type: GraphQLString },
     email: { type: GraphQLString },
     moodHistory: {
       type: new GraphQLList(MoodType),
-      resolve: (user) => getMoodHistory(user.id),
+      resolve: user => getMoodHistory(user.id),
     },
   },
 });
 
 const schema = new GraphQLSchema({
   query: new GraphQLObjectType({
-    name: 'Query',
+    name: "Query",
     fields: {
       user: {
         type: UserType,
@@ -2855,6 +3171,7 @@ const schema = new GraphQLSchema({
 5. Document decision
 
 **Acceptance Criteria:**
+
 - [ ] Use cases identified
 - [ ] POC created
 - [ ] Performance compared
@@ -2868,19 +3185,26 @@ const schema = new GraphQLSchema({
 ---
 
 ### Task 3.16 - Webhook Support
+
 **Owner:** Jennifer Park (API)  
 **Peer Review:** David Park  
 **Duration:** 10 hours  
 **Priority:** MEDIUM
 
 **Implementation:**
+
 1. Create webhook system:
+
 ```typescript
 // server/services/webhooks.ts
 export class WebhookService {
-  async register(userId: string, url: string, events: string[]): Promise<Webhook> {
-    const secret = crypto.randomBytes(32).toString('hex');
-    
+  async register(
+    userId: string,
+    url: string,
+    events: string[]
+  ): Promise<Webhook> {
+    const secret = crypto.randomBytes(32).toString("hex");
+
     return db.insert(webhooks).values({
       userId,
       url,
@@ -2892,10 +3216,7 @@ export class WebhookService {
 
   async trigger(event: string, data: any): Promise<void> {
     const hooks = await db.query.webhooks.findMany({
-      where: and(
-        eq(webhooks.active, true),
-        sql`${event} = ANY(events)`
-      ),
+      where: and(eq(webhooks.active, true), sql`${event} = ANY(events)`),
     });
 
     await Promise.all(hooks.map(hook => this.send(hook, event, data)));
@@ -2904,20 +3225,20 @@ export class WebhookService {
   private async send(hook: Webhook, event: string, data: any): Promise<void> {
     const payload = JSON.stringify({ event, data, timestamp: new Date() });
     const signature = crypto
-      .createHmac('sha256', hook.secret)
+      .createHmac("sha256", hook.secret)
       .update(payload)
-      .digest('hex');
+      .digest("hex");
 
     try {
       await fetch(hook.url, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
-          'X-Webhook-Signature': signature,
+          "Content-Type": "application/json",
+          "X-Webhook-Signature": signature,
         },
         body: payload,
       });
-      
+
       await this.logSuccess(hook.id);
     } catch (error) {
       await this.logFailure(hook.id, error);
@@ -2937,6 +3258,7 @@ export class WebhookService {
 5. Add webhook logs and debugging
 
 **Acceptance Criteria:**
+
 - [ ] Webhook system implemented
 - [ ] 10+ events supported
 - [ ] Signature verification working
@@ -2950,48 +3272,55 @@ export class WebhookService {
 ---
 
 ### Task 3.17 - API Playground (Swagger UI)
+
 **Owner:** Jennifer Park (API)  
 **Peer Review:** Emily Watson  
 **Duration:** 4 hours  
 **Priority:** MEDIUM
 
 **Implementation:**
+
 1. Install Swagger UI:
+
 ```bash
 npm install --save swagger-ui-express
 ```
 
 2. Generate OpenAPI spec:
+
 ```typescript
 // server/openapi/spec.ts
 export const openAPISpec = {
-  openapi: '3.0.0',
+  openapi: "3.0.0",
   info: {
-    title: 'CEPHO.AI API',
-    version: '1.0.0',
-    description: 'AI-powered personal assistant API',
+    title: "CEPHO.AI API",
+    version: "1.0.0",
+    description: "AI-powered personal assistant API",
   },
   servers: [
-    { url: 'https://cepho-the-brain-complete.onrender.com', description: 'Production' },
-    { url: 'http://localhost:5000', description: 'Development' },
+    {
+      url: "https://cepho-the-brain-complete.onrender.com",
+      description: "Production",
+    },
+    { url: "http://localhost:5000", description: "Development" },
   ],
   paths: {
-    '/api/mood': {
+    "/api/mood": {
       post: {
-        summary: 'Create mood entry',
+        summary: "Create mood entry",
         requestBody: {
           content: {
-            'application/json': {
-              schema: { $ref: '#/components/schemas/CreateMood' },
+            "application/json": {
+              schema: { $ref: "#/components/schemas/CreateMood" },
             },
           },
         },
         responses: {
-          '200': {
-            description: 'Mood created',
+          "200": {
+            description: "Mood created",
             content: {
-              'application/json': {
-                schema: { $ref: '#/components/schemas/Mood' },
+              "application/json": {
+                schema: { $ref: "#/components/schemas/Mood" },
               },
             },
           },
@@ -3002,11 +3331,11 @@ export const openAPISpec = {
   components: {
     schemas: {
       CreateMood: {
-        type: 'object',
-        required: ['score'],
+        type: "object",
+        required: ["score"],
         properties: {
-          score: { type: 'integer', minimum: 1, maximum: 10 },
-          note: { type: 'string', maxLength: 500 },
+          score: { type: "integer", minimum: 1, maximum: 10 },
+          note: { type: "string", maxLength: 500 },
         },
       },
     },
@@ -3015,18 +3344,20 @@ export const openAPISpec = {
 ```
 
 3. Set up Swagger UI:
+
 ```typescript
 // server/_core/index.ts
-import swaggerUi from 'swagger-ui-express';
-import { openAPISpec } from './openapi/spec';
+import swaggerUi from "swagger-ui-express";
+import { openAPISpec } from "./openapi/spec";
 
-app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(openAPISpec));
+app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(openAPISpec));
 ```
 
 4. Add authentication to playground
 5. Add example requests
 
 **Acceptance Criteria:**
+
 - [ ] OpenAPI spec generated
 - [ ] Swagger UI accessible
 - [ ] All endpoints documented
@@ -3040,13 +3371,16 @@ app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(openAPISpec));
 ---
 
 ### Task 3.18 - API Key Management UI
+
 **Owner:** Jennifer Park (API) + Emily Watson (Frontend)  
 **Peer Review:** Marcus Rodriguez  
 **Duration:** 6 hours  
 **Priority:** MEDIUM
 
 **Implementation:**
+
 1. Create API key management page:
+
 ```typescript
 // client/src/pages/APIKeys.tsx
 export const APIKeysPage = () => {
@@ -3068,7 +3402,7 @@ export const APIKeysPage = () => {
     <div>
       <h1>API Keys</h1>
       <button onClick={() => setShowCreateModal(true)}>Create New Key</button>
-      
+
       <table>
         <thead>
           <tr>
@@ -3103,6 +3437,7 @@ export const APIKeysPage = () => {
 4. Add key scopes/permissions
 
 **Acceptance Criteria:**
+
 - [ ] API key UI created
 - [ ] Create key working
 - [ ] Revoke key working
@@ -3116,12 +3451,14 @@ export const APIKeysPage = () => {
 ---
 
 ### Task 3.19 - Fix Remaining `: any` Types (Phase 2)
+
 **Owner:** Emily Watson (Code Quality)  
 **Peer Review:** Marcus Rodriguez  
 **Duration:** 15 hours  
 **Priority:** MEDIUM
 
 **Implementation:**
+
 1. Continue from Phase 1 (100 fixed)
 2. Fix next 150 any types (total 250/377 = 66%)
 3. Focus on:
@@ -3131,10 +3468,11 @@ export const APIKeysPage = () => {
    - Third-party library types
 
 4. Create type definitions:
+
 ```typescript
 // client/src/types/events.ts
 export type MoodEvent = {
-  type: 'mood.created' | 'mood.updated' | 'mood.deleted';
+  type: "mood.created" | "mood.updated" | "mood.deleted";
   data: {
     id: string;
     score: number;
@@ -3144,11 +3482,11 @@ export type MoodEvent = {
 };
 
 export type WorkflowEvent = {
-  type: 'workflow.triggered' | 'workflow.completed' | 'workflow.failed';
+  type: "workflow.triggered" | "workflow.completed" | "workflow.failed";
   data: {
     id: string;
     name: string;
-    status: 'running' | 'completed' | 'failed';
+    status: "running" | "completed" | "failed";
   };
 };
 
@@ -3158,6 +3496,7 @@ export type AppEvent = MoodEvent | WorkflowEvent;
 5. Update ESLint to error on new any types
 
 **Acceptance Criteria:**
+
 - [ ] 250 any types fixed (66% reduction)
 - [ ] Component props typed
 - [ ] Event handlers typed
@@ -3171,43 +3510,47 @@ export type AppEvent = MoodEvent | WorkflowEvent;
 ---
 
 ### Task 3.20 - Database Query Performance Budgets
+
 **Owner:** Dr. Rajesh Kumar (Database)  
 **Peer Review:** Alex Thompson  
 **Duration:** 4 hours  
 **Priority:** MEDIUM
 
 **Implementation:**
+
 1. Define query performance budgets:
+
 ```typescript
 // server/config/query-budgets.ts
 export const queryBudgets = {
-  'SELECT FROM users': 50, // ms
-  'SELECT FROM mood_history': 100,
-  'SELECT FROM workflows': 200,
-  'JOIN queries': 300,
-  'Aggregations': 500,
-  'Full-text search': 1000,
+  "SELECT FROM users": 50, // ms
+  "SELECT FROM mood_history": 100,
+  "SELECT FROM workflows": 200,
+  "JOIN queries": 300,
+  Aggregations: 500,
+  "Full-text search": 1000,
 };
 ```
 
 2. Add query monitoring:
+
 ```typescript
 // server/middleware/query-monitor.ts
 export const monitorQuery = async (query: string, fn: () => Promise<any>) => {
   const start = Date.now();
   const result = await fn();
   const duration = Date.now() - start;
-  
+
   const budget = getQueryBudget(query);
   if (duration > budget) {
-    logger.warn('Query exceeded budget', {
+    logger.warn("Query exceeded budget", {
       query,
       duration,
       budget,
       exceeded: duration - budget,
     });
   }
-  
+
   return result;
 };
 ```
@@ -3217,6 +3560,7 @@ export const monitorQuery = async (query: string, fn: () => Promise<any>) => {
 5. Set up alerts for budget violations
 
 **Acceptance Criteria:**
+
 - [ ] Query budgets defined
 - [ ] Monitoring implemented
 - [ ] Slow queries logged
@@ -3232,6 +3576,7 @@ export const monitorQuery = async (query: string, fn: () => Promise<any>) => {
 ## 🎨 PHASE 4: ENHANCEMENT (Week 6)
 
 ### Task 4.1 - UI/UX Design System & Consistency Audit
+
 **Owner:** Lisa Thompson (UX) + Jessica Martinez (Mobile)  
 **Peer Review:** Emily Watson  
 **Duration:** 12 hours  
@@ -3240,23 +3585,28 @@ export const monitorQuery = async (query: string, fn: () => Promise<any>) => {
 **Problem:** Inconsistent design across pages - mismatched logo placement, varying button styles, unclear status indicators
 
 **Implementation:**
+
 1. Create comprehensive design system document:
-```markdown
+
+````markdown
 # CEPHO.AI Design System
 
 ## Brand Colors
 
 ### Primary Palette
+
 - **Primary Purple**: #8B5CF6 (actions, CTAs, primary buttons)
 - **Primary Pink**: #EC4899 (hover states, accents)
 - **Purple-Pink Gradient**: linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%)
 
 ### Status Colors
+
 - **Success Green**: #10B981 (✓ completed, success states)
 - **Warning Amber**: #F59E0B (⚠ warnings, pending states)
 - **Error Red**: #EF4444 (✗ errors, critical alerts)
 
 ### Neutral Palette
+
 - **Text Primary**: #1F2937
 - **Text Secondary**: #6B7280
 - **Background**: #FFFFFF
@@ -3266,10 +3616,12 @@ export const monitorQuery = async (query: string, fn: () => Promise<any>) => {
 ## Typography
 
 ### Font Family
+
 - Primary: Inter, system-ui, sans-serif
 - Monospace: 'Fira Code', monospace
 
 ### Font Sizes
+
 - xs: 0.75rem (12px)
 - sm: 0.875rem (14px)
 - base: 1rem (16px)
@@ -3280,6 +3632,7 @@ export const monitorQuery = async (query: string, fn: () => Promise<any>) => {
 - 4xl: 2.25rem (36px)
 
 ### Line Heights
+
 - tight: 1.25
 - normal: 1.5
 - relaxed: 1.75
@@ -3297,12 +3650,14 @@ export const monitorQuery = async (query: string, fn: () => Promise<any>) => {
 ## Logo Usage
 
 ### Brain Logo Placement
+
 - **Header**: Top left, 40px height, 16px margin
 - **Loading States**: Center, 80px height
 - **Favicon**: 32x32px, simplified version
 - **Never**: Bottom of page, right side, or inline with text
 
 ### Logo Variations
+
 - Full color: Default
 - White: On dark backgrounds
 - Monochrome: Print materials
@@ -3310,9 +3665,10 @@ export const monitorQuery = async (query: string, fn: () => Promise<any>) => {
 ## Button System
 
 ### Primary Action Button (Purple-Pink)
+
 ```css
 .btn-primary {
-  background: linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%);
+  background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
   color: white;
   padding: 12px 24px;
   border-radius: 8px;
@@ -3328,19 +3684,22 @@ export const monitorQuery = async (query: string, fn: () => Promise<any>) => {
   box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
 }
 ```
+````
 
 ### Secondary Button
+
 ```css
 .btn-secondary {
   background: white;
-  color: #8B5CF6;
-  border: 2px solid #8B5CF6;
+  color: #8b5cf6;
+  border: 2px solid #8b5cf6;
   padding: 12px 24px;
   border-radius: 8px;
 }
 ```
 
 ### Button Placement Rules
+
 - Primary action: Top right of content area
 - Secondary actions: Below primary, left-aligned
 - Destructive actions: Always require confirmation
@@ -3349,18 +3708,21 @@ export const monitorQuery = async (query: string, fn: () => Promise<any>) => {
 ## Status Indicators
 
 ### Size Standards
+
 - Small (inline): 12px circle
 - Medium (cards): 16px circle
 - Large (headers): 24px circle
 
 ### Usage
+
 - **Green**: Task completed, sync successful, healthy status
 - **Amber**: In progress, warning, needs attention
 - **Red**: Failed, error, critical issue
 
 ### Implementation
+
 ```typescript
-<StatusIndicator 
+<StatusIndicator
   status="success" // "success" | "warning" | "error"
   size="md" // "sm" | "md" | "lg"
   label="Sync complete"
@@ -3370,6 +3732,7 @@ export const monitorQuery = async (query: string, fn: () => Promise<any>) => {
 ## Layout Standards
 
 ### Page Structure
+
 ```
 ┌─────────────────────────────────────┐
 │ Header (64px height)                │
@@ -3388,6 +3751,7 @@ export const monitorQuery = async (query: string, fn: () => Promise<any>) => {
 ```
 
 ### Banner Placement
+
 - Position: Below header, above main content
 - Height: 48px
 - Background: Gradient or solid color
@@ -3397,10 +3761,11 @@ export const monitorQuery = async (query: string, fn: () => Promise<any>) => {
 ## Component Consistency
 
 ### Cards
+
 ```css
 .card {
   background: white;
-  border: 1px solid #E5E7EB;
+  border: 1px solid #e5e7eb;
   border-radius: 12px;
   padding: 24px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
@@ -3408,6 +3773,7 @@ export const monitorQuery = async (query: string, fn: () => Promise<any>) => {
 ```
 
 ### Forms
+
 - Label: Above input, 14px, font-weight 500
 - Input height: 44px (touch-friendly)
 - Input padding: 12px 16px
@@ -3415,12 +3781,14 @@ export const monitorQuery = async (query: string, fn: () => Promise<any>) => {
 - Focus state: 2px purple border
 
 ### Modals
+
 - Max width: 600px
 - Padding: 32px
 - Border radius: 16px
 - Backdrop: rgba(0, 0, 0, 0.5)
 - Close button: Top right, 16px from edge
-```
+
+````
 
 2. Audit all 289 components for violations
 3. Create component refactoring checklist
@@ -3439,15 +3807,15 @@ export const monitorQuery = async (query: string, fn: () => Promise<any>) => {
 - [ ] Design tokens generated
 - [ ] Figma library created
 
-**Testing:** Visual regression tests  
+**Testing:** Visual regression tests
 **Deployment:** With component updates
 
 ---
 
 ### Task 4.2 - Mobile-First Responsive Design Overhaul
-**Owner:** Jessica Martinez (Mobile UX)  
-**Peer Review:** Lisa Thompson, Emily Watson  
-**Duration:** 20 hours  
+**Owner:** Jessica Martinez (Mobile UX)
+**Peer Review:** Lisa Thompson, Emily Watson
+**Duration:** 20 hours
 **Priority:** CRITICAL
 
 **Problem:** Mobile portrait mode completely broken, unusable interface
@@ -3460,9 +3828,10 @@ export const monitorQuery = async (query: string, fn: () => Promise<any>) => {
 - iPhone SE (375x667)
 - Samsung Galaxy S21 (360x800)
 - iPad Mini (768x1024)
-```
+````
 
 2. Create mobile-first breakpoints:
+
 ```css
 /* Mobile First Approach */
 /* Base styles: Mobile (320px+) */
@@ -3505,6 +3874,7 @@ export const monitorQuery = async (query: string, fn: () => Promise<any>) => {
 ```
 
 3. Fix mobile navigation:
+
 ```typescript
 // client/src/components/MobileNav.tsx
 export const MobileNav = () => {
@@ -3513,7 +3883,7 @@ export const MobileNav = () => {
   return (
     <>
       {/* Hamburger Menu */}
-      <button 
+      <button
         className="md:hidden fixed top-4 right-4 z-50"
         onClick={() => setIsOpen(!isOpen)}
       >
@@ -3542,6 +3912,7 @@ export const MobileNav = () => {
 ```
 
 4. Fix mobile forms:
+
 ```css
 /* Mobile-optimized form inputs */
 .form-input {
@@ -3554,7 +3925,7 @@ export const MobileNav = () => {
 /* Mobile-friendly select */
 .form-select {
   appearance: none;
-  background-image: url('data:image/svg+xml...');
+  background-image: url("data:image/svg+xml...");
   background-position: right 12px center;
   background-repeat: no-repeat;
   padding-right: 40px;
@@ -3569,22 +3940,42 @@ input[type="time"] {
 ```
 
 5. Fix mobile typography:
+
 ```css
 /* Mobile typography */
-h1 { font-size: 24px; line-height: 1.2; }
-h2 { font-size: 20px; line-height: 1.3; }
-h3 { font-size: 18px; line-height: 1.4; }
-body { font-size: 16px; line-height: 1.5; }
+h1 {
+  font-size: 24px;
+  line-height: 1.2;
+}
+h2 {
+  font-size: 20px;
+  line-height: 1.3;
+}
+h3 {
+  font-size: 18px;
+  line-height: 1.4;
+}
+body {
+  font-size: 16px;
+  line-height: 1.5;
+}
 
 /* Tablet+ */
 @media (min-width: 768px) {
-  h1 { font-size: 36px; }
-  h2 { font-size: 30px; }
-  h3 { font-size: 24px; }
+  h1 {
+    font-size: 36px;
+  }
+  h2 {
+    font-size: 30px;
+  }
+  h3 {
+    font-size: 24px;
+  }
 }
 ```
 
 6. Fix mobile tables (convert to cards):
+
 ```typescript
 // client/src/components/ResponsiveTable.tsx
 export const ResponsiveTable = ({ data }: { data: any[] }) => {
@@ -3615,9 +4006,12 @@ export const ResponsiveTable = ({ data }: { data: any[] }) => {
 ```
 
 7. Add touch-friendly interactions:
+
 ```css
 /* Touch targets minimum 44x44px */
-.btn, .link, .icon-button {
+.btn,
+.link,
+.icon-button {
   min-width: 44px;
   min-height: 44px;
   display: inline-flex;
@@ -3643,6 +4037,7 @@ export const ResponsiveTable = ({ data }: { data: any[] }) => {
 10. Add mobile performance optimizations
 
 **Acceptance Criteria:**
+
 - [ ] All 64 pages work on mobile portrait
 - [ ] Touch targets ≥44px
 - [ ] Forms usable on mobile
@@ -3660,13 +4055,16 @@ export const ResponsiveTable = ({ data }: { data: any[] }) => {
 ---
 
 ### Task 4.3 - WCAG 2.1 AA Accessibility Audit
+
 **Owner:** Lisa Thompson (UX) + Rachel Kim (QA)  
 **Peer Review:** Jessica Martinez  
 **Duration:** 10 hours  
 **Priority:** HIGH
 
 **Implementation:**
+
 1. Run automated accessibility audit:
+
 ```bash
 npx pa11y-ci --sitemap https://cepho-the-brain-complete.onrender.com/sitemap.xml
 ```
@@ -3681,6 +4079,7 @@ npx pa11y-ci --sitemap https://cepho-the-brain-complete.onrender.com/sitemap.xml
    - [ ] 4.1.2 Name, Role, Value (ARIA labels)
 
 3. Fix color contrast issues:
+
 ```typescript
 // Check all color combinations
 const checkContrast = (foreground: string, background: string) => {
@@ -3694,24 +4093,24 @@ const checkContrast = (foreground: string, background: string) => {
 ```
 
 4. Add ARIA labels:
+
 ```typescript
 <button aria-label="Close modal">
   <X />
 </button>
 
-<input 
-  type="text" 
-  aria-label="Search" 
+<input
+  type="text"
+  aria-label="Search"
   aria-describedby="search-help"
 />
 <span id="search-help">Enter keywords to search</span>
 ```
 
 5. Add skip links:
+
 ```html
-<a href="#main-content" class="skip-link">
-  Skip to main content
-</a>
+<a href="#main-content" class="skip-link"> Skip to main content </a>
 ```
 
 6. Fix keyboard navigation
@@ -3719,6 +4118,7 @@ const checkContrast = (foreground: string, background: string) => {
 8. Test with screen readers
 
 **Acceptance Criteria:**
+
 - [ ] All automated tests pass
 - [ ] WCAG 2.1 AA compliant
 - [ ] Color contrast ≥4.5:1
@@ -3733,7 +4133,7 @@ const checkContrast = (foreground: string, background: string) => {
 
 ---
 
-*[Continuing with remaining Phase 4-6 tasks...]*
+_[Continuing with remaining Phase 4-6 tasks...]_
 
 ---
 
@@ -3742,9 +4142,10 @@ const checkContrast = (foreground: string, background: string) => {
 **Total Tasks:** 100  
 **Total Duration:** 400+ hours  
 **Timeline:** 6-8 weeks  
-**Team:** 11 experts  
+**Team:** 11 experts
 
 **Key Additions:**
+
 - ✅ Mobile UX Specialist (Jessica Martinez)
 - ✅ UI/UX Design System & Consistency (Task 4.1)
 - ✅ Mobile-First Responsive Design (Task 4.2)
@@ -3753,65 +4154,67 @@ const checkContrast = (foreground: string, background: string) => {
 
 Would you like me to continue with the remaining Phase 4-6 tasks (4.3-6.14)?
 
-
 ### Task 4.4 - Design Tokens System
+
 **Owner:** Lisa Thompson (UX)  
 **Peer Review:** Emily Watson  
 **Duration:** 6 hours  
 **Priority:** HIGH
 
 **Implementation:**
+
 1. Create design tokens file:
+
 ```typescript
 // client/src/design-tokens.ts
 export const tokens = {
   colors: {
     primary: {
-      purple: '#8B5CF6',
-      pink: '#EC4899',
-      gradient: 'linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%)',
+      purple: "#8B5CF6",
+      pink: "#EC4899",
+      gradient: "linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%)",
     },
     status: {
-      success: '#10B981',
-      warning: '#F59E0B',
-      error: '#EF4444',
+      success: "#10B981",
+      warning: "#F59E0B",
+      error: "#EF4444",
     },
     neutral: {
-      50: '#F9FAFB',
-      100: '#F3F4F6',
-      200: '#E5E7EB',
-      300: '#D1D5DB',
-      400: '#9CA3AF',
-      500: '#6B7280',
-      600: '#4B5563',
-      700: '#374151',
-      800: '#1F2937',
-      900: '#111827',
+      50: "#F9FAFB",
+      100: "#F3F4F6",
+      200: "#E5E7EB",
+      300: "#D1D5DB",
+      400: "#9CA3AF",
+      500: "#6B7280",
+      600: "#4B5563",
+      700: "#374151",
+      800: "#1F2937",
+      900: "#111827",
     },
   },
   spacing: {
-    xs: '4px',
-    sm: '8px',
-    md: '16px',
-    lg: '24px',
-    xl: '32px',
-    '2xl': '48px',
-    '3xl': '64px',
+    xs: "4px",
+    sm: "8px",
+    md: "16px",
+    lg: "24px",
+    xl: "32px",
+    "2xl": "48px",
+    "3xl": "64px",
   },
   typography: {
     fontFamily: {
-      sans: 'Inter, system-ui, sans-serif',
-      mono: 'Fira Code, monospace',
+      sans: "Inter, system-ui, sans-serif",
+      mono: "Fira Code, monospace",
     },
     fontSize: {
-      xs: '0.75rem',
-      sm: '0.875rem',
-      base: '1rem',
-      lg: '1.125rem',
-      xl: '1.25rem',
-      '2xl': '1.5rem',
-      '3xl': '1.875rem',
-      '4xl': '2.25rem',
+      xs: "0.75rem",
+      sm: "0.875rem",
+      base: "1rem",
+      lg: "1.125rem",
+      xl: "1.25rem",
+      "2xl": "1.5rem",
+      "3xl": "1.875rem",
+      "4xl": "2.25rem",
     },
     lineHeight: {
       tight: 1.25,
@@ -3820,49 +4223,51 @@ export const tokens = {
     },
   },
   borderRadius: {
-    sm: '4px',
-    md: '8px',
-    lg: '12px',
-    xl: '16px',
-    full: '9999px',
+    sm: "4px",
+    md: "8px",
+    lg: "12px",
+    xl: "16px",
+    full: "9999px",
   },
   shadows: {
-    sm: '0 1px 2px rgba(0, 0, 0, 0.05)',
-    md: '0 4px 6px rgba(0, 0, 0, 0.1)',
-    lg: '0 10px 15px rgba(0, 0, 0, 0.1)',
-    xl: '0 20px 25px rgba(0, 0, 0, 0.1)',
+    sm: "0 1px 2px rgba(0, 0, 0, 0.05)",
+    md: "0 4px 6px rgba(0, 0, 0, 0.1)",
+    lg: "0 10px 15px rgba(0, 0, 0, 0.1)",
+    xl: "0 20px 25px rgba(0, 0, 0, 0.1)",
   },
 };
 ```
 
 2. Generate CSS variables:
+
 ```css
 /* client/src/styles/tokens.css */
 :root {
-  --color-primary-purple: #8B5CF6;
-  --color-primary-pink: #EC4899;
-  --color-status-success: #10B981;
-  --color-status-warning: #F59E0B;
-  --color-status-error: #EF4444;
-  
+  --color-primary-purple: #8b5cf6;
+  --color-primary-pink: #ec4899;
+  --color-status-success: #10b981;
+  --color-status-warning: #f59e0b;
+  --color-status-error: #ef4444;
+
   --spacing-xs: 4px;
   --spacing-sm: 8px;
   --spacing-md: 16px;
   --spacing-lg: 24px;
   --spacing-xl: 32px;
-  
+
   --font-size-base: 1rem;
   --font-size-lg: 1.125rem;
-  
+
   --border-radius-md: 8px;
   --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 ```
 
 3. Update Tailwind config:
+
 ```javascript
 // tailwind.config.js
-import { tokens } from './client/src/design-tokens';
+import { tokens } from "./client/src/design-tokens";
 
 export default {
   theme: {
@@ -3880,6 +4285,7 @@ export default {
 4. Refactor components to use tokens
 
 **Acceptance Criteria:**
+
 - [ ] Design tokens defined
 - [ ] CSS variables generated
 - [ ] Tailwind config updated
@@ -3893,13 +4299,16 @@ export default {
 ---
 
 ### Task 4.5 - Skeleton Screens for Loading States
+
 **Owner:** Lisa Thompson (UX)  
 **Peer Review:** Emily Watson  
 **Duration:** 8 hours  
 **Priority:** MEDIUM
 
 **Implementation:**
+
 1. Create skeleton components:
+
 ```typescript
 // client/src/components/Skeleton.tsx
 export const Skeleton = ({ className }: { className?: string }) => (
@@ -3929,6 +4338,7 @@ export const SkeletonTable = ({ rows = 5 }: { rows?: number }) => (
 ```
 
 2. Add to loading states:
+
 ```typescript
 // client/src/pages/Dashboard.tsx
 export const Dashboard = () => {
@@ -3952,6 +4362,7 @@ export const Dashboard = () => {
 4. Add progressive loading (show partial data)
 
 **Acceptance Criteria:**
+
 - [ ] Skeleton components created
 - [ ] All loading states have skeletons
 - [ ] Progressive loading implemented
@@ -3965,22 +4376,25 @@ export const Dashboard = () => {
 ---
 
 ### Task 4.6 - Comprehensive Error State Designs
+
 **Owner:** Lisa Thompson (UX)  
 **Peer Review:** Emily Watson  
 **Duration:** 6 hours  
 **Priority:** MEDIUM
 
 **Implementation:**
+
 1. Create error components:
+
 ```typescript
 // client/src/components/ErrorState.tsx
-export const ErrorState = ({ 
-  title, 
-  message, 
-  action 
-}: { 
-  title: string; 
-  message: string; 
+export const ErrorState = ({
+  title,
+  message,
+  action
+}: {
+  title: string;
+  message: string;
   action?: { label: string; onClick: () => void };
 }) => (
   <div className="flex flex-col items-center justify-center py-12">
@@ -3997,13 +4411,13 @@ export const ErrorState = ({
   </div>
 );
 
-export const EmptyState = ({ 
-  title, 
-  message, 
-  action 
-}: { 
-  title: string; 
-  message: string; 
+export const EmptyState = ({
+  title,
+  message,
+  action
+}: {
+  title: string;
+  message: string;
   action?: { label: string; onClick: () => void };
 }) => (
   <div className="flex flex-col items-center justify-center py-12">
@@ -4022,6 +4436,7 @@ export const EmptyState = ({
 ```
 
 2. Add error boundaries:
+
 ```typescript
 // client/src/components/ErrorBoundary.tsx
 export class ErrorBoundary extends React.Component<
@@ -4063,6 +4478,7 @@ export class ErrorBoundary extends React.Component<
 6. Design offline page
 
 **Acceptance Criteria:**
+
 - [ ] Error components created
 - [ ] Error boundaries added
 - [ ] Empty states designed
@@ -4077,12 +4493,14 @@ export class ErrorBoundary extends React.Component<
 ---
 
 ### Task 4.7 - Usability Testing with Real Users
+
 **Owner:** Lisa Thompson (UX) + Michael Chen (Product)  
 **Peer Review:** Jessica Martinez  
 **Duration:** 12 hours  
 **Priority:** HIGH
 
 **Implementation:**
+
 1. Recruit 10 users:
    - 5 existing users
    - 5 new users
@@ -4112,6 +4530,7 @@ export class ErrorBoundary extends React.Component<
 5. Implement top 20 fixes
 
 **Acceptance Criteria:**
+
 - [ ] 10 users tested
 - [ ] 6 scenarios completed
 - [ ] Findings documented
@@ -4126,49 +4545,53 @@ export class ErrorBoundary extends React.Component<
 ---
 
 ### Task 4.8 - Keyboard Navigation Support
+
 **Owner:** Lisa Thompson (UX)  
 **Peer Review:** Rachel Kim  
 **Duration:** 8 hours  
 **Priority:** HIGH
 
 **Implementation:**
+
 1. Add keyboard shortcuts:
+
 ```typescript
 // client/src/hooks/useKeyboardShortcuts.ts
 export const useKeyboardShortcuts = () => {
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
       // Cmd/Ctrl + K: Search
-      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
         e.preventDefault();
         openSearch();
       }
 
       // Cmd/Ctrl + N: New mood entry
-      if ((e.metaKey || e.ctrlKey) && e.key === 'n') {
+      if ((e.metaKey || e.ctrlKey) && e.key === "n") {
         e.preventDefault();
         openMoodEntry();
       }
 
       // Cmd/Ctrl + /: Show shortcuts
-      if ((e.metaKey || e.ctrlKey) && e.key === '/') {
+      if ((e.metaKey || e.ctrlKey) && e.key === "/") {
         e.preventDefault();
         showShortcuts();
       }
 
       // Escape: Close modal
-      if (e.key === 'Escape') {
+      if (e.key === "Escape") {
         closeModal();
       }
     };
 
-    window.addEventListener('keydown', handleKeyPress);
-    return () => window.removeEventListener('keydown', handleKeyPress);
+    window.addEventListener("keydown", handleKeyPress);
+    return () => window.removeEventListener("keydown", handleKeyPress);
   }, []);
 };
 ```
 
 2. Add focus management:
+
 ```typescript
 // client/src/components/Modal.tsx
 export const Modal = ({ children, onClose }: ModalProps) => {
@@ -4217,6 +4640,7 @@ export const Modal = ({ children, onClose }: ModalProps) => {
 5. Test all interactions
 
 **Acceptance Criteria:**
+
 - [ ] All features keyboard accessible
 - [ ] Shortcuts implemented
 - [ ] Focus management working
@@ -4231,41 +4655,47 @@ export const Modal = ({ children, onClose }: ModalProps) => {
 ---
 
 ### Task 4.9 - Dark Mode Implementation
+
 **Owner:** Lisa Thompson (UX) + Emily Watson (Frontend)  
 **Peer Review:** Jessica Martinez  
 **Duration:** 10 hours  
 **Priority:** MEDIUM
 
 **Implementation:**
+
 1. Add dark mode colors to tokens:
+
 ```typescript
 // client/src/design-tokens.ts
 export const darkTokens = {
   colors: {
-    background: '#111827',
-    backgroundSecondary: '#1F2937',
-    text: '#F9FAFB',
-    textSecondary: '#D1D5DB',
-    border: '#374151',
+    background: "#111827",
+    backgroundSecondary: "#1F2937",
+    text: "#F9FAFB",
+    textSecondary: "#D1D5DB",
+    border: "#374151",
   },
 };
 ```
 
 2. Implement theme switcher:
+
 ```typescript
 // client/src/hooks/useTheme.ts
 export const useTheme = () => {
-  const [theme, setTheme] = useState<'light' | 'dark'>('light');
+  const [theme, setTheme] = useState<"light" | "dark">("light");
 
   useEffect(() => {
-    const saved = localStorage.getItem('theme');
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    setTheme(saved === 'dark' || (!saved && prefersDark) ? 'dark' : 'light');
+    const saved = localStorage.getItem("theme");
+    const prefersDark = window.matchMedia(
+      "(prefers-color-scheme: dark)"
+    ).matches;
+    setTheme(saved === "dark" || (!saved && prefersDark) ? "dark" : "light");
   }, []);
 
   useEffect(() => {
-    document.documentElement.classList.toggle('dark', theme === 'dark');
-    localStorage.setItem('theme', theme);
+    document.documentElement.classList.toggle("dark", theme === "dark");
+    localStorage.setItem("theme", theme);
   }, [theme]);
 
   return { theme, setTheme };
@@ -4273,16 +4703,17 @@ export const useTheme = () => {
 ```
 
 3. Add dark mode styles:
+
 ```css
 /* client/src/styles/dark-mode.css */
 .dark {
   --color-background: #111827;
-  --color-text: #F9FAFB;
+  --color-text: #f9fafb;
   --color-border: #374151;
 }
 
 .dark .card {
-  background: #1F2937;
+  background: #1f2937;
   border-color: #374151;
 }
 
@@ -4296,6 +4727,7 @@ export const useTheme = () => {
 6. Test all pages in dark mode
 
 **Acceptance Criteria:**
+
 - [ ] Dark mode implemented
 - [ ] All pages support dark mode
 - [ ] Theme toggle working
@@ -4310,44 +4742,48 @@ export const useTheme = () => {
 ---
 
 ### Task 4.10 - Internationalization (i18n) Support
+
 **Owner:** Lisa Thompson (UX) + Emily Watson (Frontend)  
 **Peer Review:** Michael Chen  
 **Duration:** 12 hours  
 **Priority:** LOW
 
 **Implementation:**
+
 1. Install i18n library:
+
 ```bash
 npm install i18next react-i18next
 ```
 
 2. Set up i18n:
+
 ```typescript
 // client/src/i18n.ts
-import i18n from 'i18next';
-import { initReactI18next } from 'react-i18next';
+import i18n from "i18next";
+import { initReactI18next } from "react-i18next";
 
 i18n.use(initReactI18next).init({
   resources: {
     en: {
       translation: {
-        'welcome': 'Welcome to CEPHO.AI',
-        'mood.record': 'Record Mood',
-        'mood.history': 'Mood History',
-        'chat.start': 'Start Conversation',
+        welcome: "Welcome to CEPHO.AI",
+        "mood.record": "Record Mood",
+        "mood.history": "Mood History",
+        "chat.start": "Start Conversation",
       },
     },
     es: {
       translation: {
-        'welcome': 'Bienvenido a CEPHO.AI',
-        'mood.record': 'Registrar Estado de Ánimo',
-        'mood.history': 'Historial de Estado de Ánimo',
-        'chat.start': 'Iniciar Conversación',
+        welcome: "Bienvenido a CEPHO.AI",
+        "mood.record": "Registrar Estado de Ánimo",
+        "mood.history": "Historial de Estado de Ánimo",
+        "chat.start": "Iniciar Conversación",
       },
     },
   },
-  lng: 'en',
-  fallbackLng: 'en',
+  lng: "en",
+  fallbackLng: "en",
   interpolation: {
     escapeValue: false,
   },
@@ -4357,6 +4793,7 @@ export default i18n;
 ```
 
 3. Use translations:
+
 ```typescript
 // client/src/pages/Dashboard.tsx
 import { useTranslation } from 'react-i18next';
@@ -4378,6 +4815,7 @@ export const Dashboard = () => {
 6. Support RTL languages
 
 **Acceptance Criteria:**
+
 - [ ] i18n configured
 - [ ] English translations complete
 - [ ] Spanish translations added
@@ -4392,35 +4830,39 @@ export const Dashboard = () => {
 ---
 
 ### Task 4.11 - Component Documentation (Storybook)
+
 **Owner:** Emily Watson (Code Quality)  
 **Peer Review:** Lisa Thompson  
 **Duration:** 15 hours  
 **Priority:** MEDIUM
 
 **Implementation:**
+
 1. Install Storybook:
+
 ```bash
 npx storybook@latest init
 ```
 
 2. Create stories:
+
 ```typescript
 // client/src/components/Button.stories.tsx
-import type { Meta, StoryObj } from '@storybook/react';
-import { Button } from './Button';
+import type { Meta, StoryObj } from "@storybook/react";
+import { Button } from "./Button";
 
 const meta: Meta<typeof Button> = {
-  title: 'Components/Button',
+  title: "Components/Button",
   component: Button,
-  tags: ['autodocs'],
+  tags: ["autodocs"],
   argTypes: {
     variant: {
-      control: 'select',
-      options: ['primary', 'secondary', 'danger'],
+      control: "select",
+      options: ["primary", "secondary", "danger"],
     },
     size: {
-      control: 'select',
-      options: ['sm', 'md', 'lg'],
+      control: "select",
+      options: ["sm", "md", "lg"],
     },
   },
 };
@@ -4430,22 +4872,22 @@ type Story = StoryObj<typeof Button>;
 
 export const Primary: Story = {
   args: {
-    variant: 'primary',
-    children: 'Click me',
+    variant: "primary",
+    children: "Click me",
   },
 };
 
 export const Secondary: Story = {
   args: {
-    variant: 'secondary',
-    children: 'Click me',
+    variant: "secondary",
+    children: "Click me",
   },
 };
 
 export const Large: Story = {
   args: {
-    size: 'lg',
-    children: 'Large Button',
+    size: "lg",
+    children: "Large Button",
   },
 };
 ```
@@ -4456,6 +4898,7 @@ export const Large: Story = {
 6. Add to CI/CD
 
 **Acceptance Criteria:**
+
 - [ ] Storybook installed
 - [ ] 50+ components documented
 - [ ] Interaction tests added
@@ -4469,6 +4912,7 @@ export const Large: Story = {
 ---
 
 ### Task 4.12 - Style Guide Documentation
+
 **Owner:** Lisa Thompson (UX)  
 **Peer Review:** Emily Watson  
 **Duration:** 6 hours  
@@ -4483,12 +4927,14 @@ Create `docs/STYLE_GUIDE.md`:
 ## Voice & Tone
 
 ### Voice (consistent)
+
 - Friendly and supportive
 - Professional but approachable
 - Empathetic and understanding
 - Clear and concise
 
 ### Tone (varies by context)
+
 - **Onboarding**: Welcoming, encouraging
 - **Errors**: Apologetic, helpful
 - **Success**: Celebratory, positive
@@ -4497,22 +4943,26 @@ Create `docs/STYLE_GUIDE.md`:
 ## Writing Guidelines
 
 ### Buttons
+
 - Use action verbs: "Save Changes", "Start Conversation"
 - Keep short: 1-3 words
 - Be specific: "Delete Mood Entry" not "Delete"
 
 ### Error Messages
+
 - Explain what happened
 - Explain why it happened
 - Suggest how to fix it
 - Example: "We couldn't save your mood entry because you're offline. Please check your connection and try again."
 
 ### Empty States
+
 - Explain why it's empty
 - Suggest next action
 - Example: "You haven't recorded any moods yet. Track your first mood to see insights."
 
 ### Form Labels
+
 - Use sentence case
 - Be descriptive
 - Avoid jargon
@@ -4555,6 +5005,7 @@ Create `docs/STYLE_GUIDE.md`:
 ```
 
 **Acceptance Criteria:**
+
 - [ ] Style guide documented
 - [ ] Voice & tone defined
 - [ ] Writing guidelines created
@@ -4568,6 +5019,7 @@ Create `docs/STYLE_GUIDE.md`:
 ---
 
 ### Task 4.13 - Accessibility Statement
+
 **Owner:** Lisa Thompson (UX)  
 **Peer Review:** Rachel Kim  
 **Duration:** 3 hours  
@@ -4579,53 +5031,77 @@ Create `public/accessibility.html`:
 ```html
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <title>Accessibility Statement - CEPHO.AI</title>
-</head>
-<body>
-  <h1>Accessibility Statement for CEPHO.AI</h1>
-  
-  <p>Last updated: February 26, 2026</p>
-  
-  <h2>Our Commitment</h2>
-  <p>CEPHO.AI is committed to ensuring digital accessibility for people with disabilities. We are continually improving the user experience for everyone and applying the relevant accessibility standards.</p>
-  
-  <h2>Conformance Status</h2>
-  <p>The Web Content Accessibility Guidelines (WCAG) defines requirements for designers and developers to improve accessibility for people with disabilities. It defines three levels of conformance: Level A, Level AA, and Level AAA.</p>
-  
-  <p>CEPHO.AI is fully conformant with WCAG 2.1 Level AA. Fully conformant means that the content fully conforms to the accessibility standard without any exceptions.</p>
-  
-  <h2>Feedback</h2>
-  <p>We welcome your feedback on the accessibility of CEPHO.AI. Please let us know if you encounter accessibility barriers:</p>
-  <ul>
-    <li>Email: accessibility@cepho.ai</li>
-    <li>Phone: +1 (555) 123-4567</li>
-  </ul>
-  
-  <p>We try to respond to feedback within 2 business days.</p>
-  
-  <h2>Technical Specifications</h2>
-  <p>Accessibility of CEPHO.AI relies on the following technologies to work with the particular combination of web browser and any assistive technologies or plugins installed on your computer:</p>
-  <ul>
-    <li>HTML</li>
-    <li>WAI-ARIA</li>
-    <li>CSS</li>
-    <li>JavaScript</li>
-  </ul>
-  
-  <h2>Assessment Approach</h2>
-  <p>CEPHO.AI assessed the accessibility of this website by the following approaches:</p>
-  <ul>
-    <li>Self-evaluation</li>
-    <li>External evaluation by accessibility experts</li>
-    <li>Automated testing tools</li>
-    <li>User testing with people with disabilities</li>
-  </ul>
-</body>
+  <head>
+    <title>Accessibility Statement - CEPHO.AI</title>
+  </head>
+  <body>
+    <h1>Accessibility Statement for CEPHO.AI</h1>
+
+    <p>Last updated: February 26, 2026</p>
+
+    <h2>Our Commitment</h2>
+    <p>
+      CEPHO.AI is committed to ensuring digital accessibility for people with
+      disabilities. We are continually improving the user experience for
+      everyone and applying the relevant accessibility standards.
+    </p>
+
+    <h2>Conformance Status</h2>
+    <p>
+      The Web Content Accessibility Guidelines (WCAG) defines requirements for
+      designers and developers to improve accessibility for people with
+      disabilities. It defines three levels of conformance: Level A, Level AA,
+      and Level AAA.
+    </p>
+
+    <p>
+      CEPHO.AI is fully conformant with WCAG 2.1 Level AA. Fully conformant
+      means that the content fully conforms to the accessibility standard
+      without any exceptions.
+    </p>
+
+    <h2>Feedback</h2>
+    <p>
+      We welcome your feedback on the accessibility of CEPHO.AI. Please let us
+      know if you encounter accessibility barriers:
+    </p>
+    <ul>
+      <li>Email: accessibility@cepho.ai</li>
+      <li>Phone: +1 (555) 123-4567</li>
+    </ul>
+
+    <p>We try to respond to feedback within 2 business days.</p>
+
+    <h2>Technical Specifications</h2>
+    <p>
+      Accessibility of CEPHO.AI relies on the following technologies to work
+      with the particular combination of web browser and any assistive
+      technologies or plugins installed on your computer:
+    </p>
+    <ul>
+      <li>HTML</li>
+      <li>WAI-ARIA</li>
+      <li>CSS</li>
+      <li>JavaScript</li>
+    </ul>
+
+    <h2>Assessment Approach</h2>
+    <p>
+      CEPHO.AI assessed the accessibility of this website by the following
+      approaches:
+    </p>
+    <ul>
+      <li>Self-evaluation</li>
+      <li>External evaluation by accessibility experts</li>
+      <li>Automated testing tools</li>
+      <li>User testing with people with disabilities</li>
+    </ul>
+  </body>
 </html>
 ```
 
 **Acceptance Criteria:**
+
 - [ ] Accessibility statement created
 - [ ] WCAG conformance documented
 - [ ] Feedback channels listed
@@ -4639,6 +5115,7 @@ Create `public/accessibility.html`:
 ---
 
 ### Task 4.14 - User Testing Report
+
 **Owner:** Lisa Thompson (UX) + Michael Chen (Product)  
 **Peer Review:** Sarah Chen  
 **Duration:** 4 hours  
@@ -4661,11 +5138,13 @@ Create `docs/USER_TESTING_REPORT.md`:
 ## Key Findings
 
 ### What Worked Well ✅
+
 1. **Mood tracking** - 100% success rate, average 45 seconds
 2. **AI chat** - 90% success rate, users loved the conversational interface
 3. **Design** - Users praised the purple-pink gradient and modern design
 
 ### Pain Points ❌
+
 1. **Mobile navigation** - 40% struggled to find settings on mobile
 2. **Workflow creation** - 60% found it confusing, average 8 minutes
 3. **Integration setup** - 50% needed help connecting calendar
@@ -4681,16 +5160,19 @@ Create `docs/USER_TESTING_REPORT.md`:
 ## Recommendations
 
 ### High Priority
+
 1. Redesign mobile navigation (hamburger + bottom nav)
 2. Simplify workflow creation (wizard interface)
 3. Add onboarding tutorial
 
 ### Medium Priority
+
 4. Improve integration setup UX
 5. Add contextual help tooltips
 6. Create video tutorials
 
 ### Low Priority
+
 7. Add keyboard shortcuts
 8. Improve search functionality
 9. Add dark mode
@@ -4711,6 +5193,7 @@ Create `docs/USER_TESTING_REPORT.md`:
 ```
 
 **Acceptance Criteria:**
+
 - [ ] Report created
 - [ ] Findings documented
 - [ ] Recommendations prioritized
@@ -4726,13 +5209,16 @@ Create `docs/USER_TESTING_REPORT.md`:
 ## 🏛️ PHASE 5: GOVERNANCE (Week 7)
 
 ### Task 5.1 - Docker + docker-compose Setup
+
 **Owner:** David Park (DevOps)  
 **Peer Review:** Sarah Chen  
 **Duration:** 6 hours  
 **Priority:** HIGH
 
 **Implementation:**
+
 1. Create Dockerfile:
+
 ```dockerfile
 # Dockerfile
 FROM node:22-alpine AS builder
@@ -4765,9 +5251,10 @@ CMD ["node", "dist/server/index.js"]
 ```
 
 2. Create docker-compose.yml:
+
 ```yaml
 # docker-compose.yml
-version: '3.8'
+version: "3.8"
 
 services:
   app:
@@ -4813,6 +5300,7 @@ volumes:
 5. Document Docker setup
 
 **Acceptance Criteria:**
+
 - [ ] Dockerfile created
 - [ ] docker-compose.yml created
 - [ ] Local development working
@@ -4826,13 +5314,16 @@ volumes:
 ---
 
 ### Task 5.2 - Infrastructure as Code (Terraform)
+
 **Owner:** David Park (DevOps)  
 **Peer Review:** Sarah Chen  
 **Duration:** 12 hours  
 **Priority:** MEDIUM
 
 **Implementation:**
+
 1. Create Terraform configuration:
+
 ```hcl
 # terraform/main.tf
 terraform {
@@ -4890,6 +5381,7 @@ resource "render_redis" "cepho_cache" {
 5. Document Terraform usage
 
 **Acceptance Criteria:**
+
 - [ ] Terraform configured
 - [ ] Infrastructure codified
 - [ ] Remote state configured
@@ -4903,16 +5395,19 @@ resource "render_redis" "cepho_cache" {
 ---
 
 ### Task 5.3 - Staging Environment
+
 **Owner:** David Park (DevOps)  
 **Peer Review:** Sarah Chen  
 **Duration:** 8 hours  
 **Priority:** HIGH
 
 **Implementation:**
+
 1. Create staging environment on Render
 2. Configure staging database (copy of production schema)
 3. Set up staging environment variables
 4. Create staging deployment pipeline:
+
 ```yaml
 # .github/workflows/deploy-staging.yml
 name: Deploy to Staging
@@ -4929,7 +5424,7 @@ jobs:
       - run: npm ci
       - run: npm run build
       - run: npm test
-      
+
       - name: Deploy to Render Staging
         env:
           RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
@@ -4942,6 +5437,7 @@ jobs:
 6. Test staging deployment
 
 **Acceptance Criteria:**
+
 - [ ] Staging environment created
 - [ ] Staging database configured
 - [ ] Deployment pipeline working
@@ -4955,13 +5451,16 @@ jobs:
 ---
 
 ### Task 5.4 - Blue-Green Deployment Strategy
+
 **Owner:** David Park (DevOps)  
 **Peer Review:** Sarah Chen  
 **Duration:** 10 hours  
 **Priority:** MEDIUM
 
 **Implementation:**
+
 1. Set up blue-green deployment:
+
 ```yaml
 # .github/workflows/blue-green-deploy.yml
 name: Blue-Green Deployment
@@ -4977,7 +5476,7 @@ jobs:
         run: |
           # Deploy new version to green environment
           curl -X POST https://api.render.com/v1/services/$GREEN_SERVICE_ID/deploys
-          
+
       - name: Health Check Green
         run: |
           # Wait for green to be healthy
@@ -4988,17 +5487,17 @@ jobs:
             fi
             sleep 10
           done
-          
+
       - name: Switch Traffic to Green
         run: |
           # Update DNS/load balancer to point to green
           # This is platform-specific
-          
+
       - name: Monitor for 10 minutes
         run: |
           # Monitor error rates, response times
           sleep 600
-          
+
       - name: Rollback if Issues
         if: failure()
         run: |
@@ -5012,6 +5511,7 @@ jobs:
 5. Document deployment process
 
 **Acceptance Criteria:**
+
 - [ ] Blue-green deployment configured
 - [ ] Health checks working
 - [ ] Traffic switching automated
@@ -5025,29 +5525,33 @@ jobs:
 ---
 
 ### Task 5.5 - Distributed Tracing (OpenTelemetry)
+
 **Owner:** David Park (DevOps)  
 **Peer Review:** Alex Thompson  
 **Duration:** 8 hours  
 **Priority:** MEDIUM
 
 **Implementation:**
+
 1. Install OpenTelemetry:
+
 ```bash
 npm install @opentelemetry/sdk-node @opentelemetry/auto-instrumentations-node
 ```
 
 2. Configure tracing:
+
 ```typescript
 // server/tracing.ts
-import { NodeSDK } from '@opentelemetry/sdk-node';
-import { getNodeAutoInstrumentations } from '@opentelemetry/auto-instrumentations-node';
-import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http';
+import { NodeSDK } from "@opentelemetry/sdk-node";
+import { getNodeAutoInstrumentations } from "@opentelemetry/auto-instrumentations-node";
+import { OTLPTraceExporter } from "@opentelemetry/exporter-trace-otlp-http";
 
 const sdk = new NodeSDK({
   traceExporter: new OTLPTraceExporter({
-    url: 'https://api.honeycomb.io/v1/traces',
+    url: "https://api.honeycomb.io/v1/traces",
     headers: {
-      'x-honeycomb-team': process.env.HONEYCOMB_API_KEY,
+      "x-honeycomb-team": process.env.HONEYCOMB_API_KEY,
     },
   }),
   instrumentations: [getNodeAutoInstrumentations()],
@@ -5057,21 +5561,22 @@ sdk.start();
 ```
 
 3. Add custom spans:
-```typescript
-import { trace } from '@opentelemetry/api';
 
-const tracer = trace.getTracer('cepho-api');
+```typescript
+import { trace } from "@opentelemetry/api";
+
+const tracer = trace.getTracer("cepho-api");
 
 export const getMoodHistory = async (userId: string) => {
-  const span = tracer.startSpan('getMoodHistory');
-  span.setAttribute('user.id', userId);
-  
+  const span = tracer.startSpan("getMoodHistory");
+  span.setAttribute("user.id", userId);
+
   try {
     const history = await db.query.moodHistory.findMany({
       where: eq(moodHistory.userId, userId),
     });
-    
-    span.setAttribute('result.count', history.length);
+
+    span.setAttribute("result.count", history.length);
     return history;
   } finally {
     span.end();
@@ -5084,6 +5589,7 @@ export const getMoodHistory = async (userId: string) => {
 6. Add trace IDs to logs
 
 **Acceptance Criteria:**
+
 - [ ] OpenTelemetry configured
 - [ ] Auto-instrumentation working
 - [ ] Custom spans added
@@ -5097,19 +5603,25 @@ export const getMoodHistory = async (userId: string) => {
 ---
 
 ### Task 5.6 - Secrets Management (Vault/AWS Secrets Manager)
+
 **Owner:** David Park (DevOps) + Marcus Rodriguez (Security)  
 **Peer Review:** Sarah Chen  
 **Duration:** 10 hours  
 **Priority:** MEDIUM
 
 **Implementation:**
+
 1. Choose secrets manager (AWS Secrets Manager)
 2. Migrate secrets:
+
 ```typescript
 // server/config/secrets.ts
-import { SecretsManagerClient, GetSecretValueCommand } from '@aws-sdk/client-secrets-manager';
+import {
+  SecretsManagerClient,
+  GetSecretValueCommand,
+} from "@aws-sdk/client-secrets-manager";
 
-const client = new SecretsManagerClient({ region: 'us-west-2' });
+const client = new SecretsManagerClient({ region: "us-west-2" });
 
 export const getSecret = async (secretName: string): Promise<string> => {
   const command = new GetSecretValueCommand({ SecretId: secretName });
@@ -5118,21 +5630,24 @@ export const getSecret = async (secretName: string): Promise<string> => {
 };
 
 // Usage
-const jwtSecret = await getSecret('cepho/jwt-secret');
-const databaseUrl = await getSecret('cepho/database-url');
+const jwtSecret = await getSecret("cepho/jwt-secret");
+const databaseUrl = await getSecret("cepho/database-url");
 ```
 
 3. Set up secret rotation:
+
 ```typescript
 // scripts/rotate-secrets.ts
 export const rotateJWTSecret = async () => {
-  const newSecret = crypto.randomBytes(32).toString('hex');
-  
-  await client.send(new PutSecretValueCommand({
-    SecretId: 'cepho/jwt-secret',
-    SecretString: newSecret,
-  }));
-  
+  const newSecret = crypto.randomBytes(32).toString("hex");
+
+  await client.send(
+    new PutSecretValueCommand({
+      SecretId: "cepho/jwt-secret",
+      SecretString: newSecret,
+    })
+  );
+
   // Trigger deployment to pick up new secret
   await triggerDeployment();
 };
@@ -5143,6 +5658,7 @@ export const rotateJWTSecret = async () => {
 6. Document secrets management
 
 **Acceptance Criteria:**
+
 - [ ] Secrets manager configured
 - [ ] All secrets migrated
 - [ ] Rotation implemented
@@ -5156,61 +5672,71 @@ export const rotateJWTSecret = async () => {
 ---
 
 ### Task 5.7 - Automated Backup Testing
+
 **Owner:** David Park (DevOps) + Dr. Rajesh Kumar (Database)  
 **Peer Review:** Sarah Chen  
 **Duration:** 6 hours  
 **Priority:** HIGH
 
 **Implementation:**
+
 1. Create backup test script:
+
 ```typescript
 // scripts/test-backup.ts
 export const testBackup = async () => {
-  console.log('Starting backup test...');
-  
+  console.log("Starting backup test...");
+
   // 1. Get latest backup
   const backup = await getLatestBackup();
   console.log(`Testing backup: ${backup.id} from ${backup.createdAt}`);
-  
+
   // 2. Restore to test database
   const testDb = await createTestDatabase();
   await restoreBackup(backup, testDb);
-  console.log('Backup restored to test database');
-  
+  console.log("Backup restored to test database");
+
   // 3. Verify schema
   const tables = await testDb.query(`
     SELECT COUNT(*) FROM information_schema.tables 
     WHERE table_schema = 'public'
   `);
-  assert(tables[0].count === 169, `Expected 169 tables, got ${tables[0].count}`);
-  console.log('✓ Schema verified');
-  
+  assert(
+    tables[0].count === 169,
+    `Expected 169 tables, got ${tables[0].count}`
+  );
+  console.log("✓ Schema verified");
+
   // 4. Verify data integrity
-  const users = await testDb.query('SELECT COUNT(*) FROM users');
-  assert(users[0].count > 0, 'No users found in backup');
+  const users = await testDb.query("SELECT COUNT(*) FROM users");
+  assert(users[0].count > 0, "No users found in backup");
   console.log(`✓ Data verified (${users[0].count} users)`);
-  
+
   // 5. Verify indexes
   const indexes = await testDb.query(`
     SELECT COUNT(*) FROM pg_indexes 
     WHERE schemaname = 'public'
   `);
-  assert(indexes[0].count >= 40, `Expected ≥40 indexes, got ${indexes[0].count}`);
-  console.log('✓ Indexes verified');
-  
+  assert(
+    indexes[0].count >= 40,
+    `Expected ≥40 indexes, got ${indexes[0].count}`
+  );
+  console.log("✓ Indexes verified");
+
   // 6. Clean up
   await dropTestDatabase(testDb);
-  console.log('✓ Backup test passed');
+  console.log("✓ Backup test passed");
 };
 ```
 
 2. Schedule weekly backup tests:
+
 ```yaml
 # .github/workflows/test-backup.yml
 name: Test Database Backup
 on:
   schedule:
-    - cron: '0 2 * * 0' # Every Sunday at 2 AM
+    - cron: "0 2 * * 0" # Every Sunday at 2 AM
 
 jobs:
   test-backup:
@@ -5220,7 +5746,7 @@ jobs:
       - uses: actions/setup-node@v3
       - run: npm ci
       - run: npm run test:backup
-      
+
       - name: Notify on failure
         if: failure()
         run: |
@@ -5233,6 +5759,7 @@ jobs:
 5. Test restore procedure quarterly
 
 **Acceptance Criteria:**
+
 - [ ] Backup test script created
 - [ ] Weekly tests scheduled
 - [ ] Alerts configured
@@ -5246,13 +5773,16 @@ jobs:
 ---
 
 ### Task 5.8 - Auto-scaling Policies
+
 **Owner:** David Park (DevOps)  
 **Peer Review:** Alex Thompson  
 **Duration:** 6 hours  
 **Priority:** MEDIUM
 
 **Implementation:**
+
 1. Configure auto-scaling on Render:
+
 ```hcl
 # terraform/autoscaling.tf
 resource "render_web_service" "cepho" {
@@ -5260,10 +5790,10 @@ resource "render_web_service" "cepho" {
     enabled       = true
     min_instances = 1
     max_instances = 10
-    
+
     target_cpu_percent    = 70
     target_memory_percent = 80
-    
+
     scale_up_cooldown   = 60  # seconds
     scale_down_cooldown = 300 # seconds
   }
@@ -5278,6 +5808,7 @@ resource "render_web_service" "cepho" {
    - Request rate >1000/min → scale up
 
 4. Test scaling:
+
 ```bash
 # Load test to trigger scaling
 k6 run --vus 100 --duration 10m load-test.js
@@ -5287,6 +5818,7 @@ k6 run --vus 100 --duration 10m load-test.js
 6. Set up cost alerts
 
 **Acceptance Criteria:**
+
 - [ ] Auto-scaling configured
 - [ ] Metrics monitored
 - [ ] Scaling triggers defined
@@ -5300,6 +5832,7 @@ k6 run --vus 100 --duration 10m load-test.js
 ---
 
 ### Task 5.9 - Incident Response Runbooks
+
 **Owner:** David Park (DevOps)  
 **Peer Review:** All experts  
 **Duration:** 8 hours  
@@ -5312,11 +5845,13 @@ Create `docs/runbooks/`:
 # Runbook: Database Connection Failure
 
 ## Symptoms
+
 - API returns 500 errors
 - Logs show "ECONNREFUSED" or "Connection timeout"
 - Database health check failing
 
 ## Diagnosis
+
 1. Check database status: `curl https://api.render.com/v1/postgres/$DB_ID`
 2. Check connection pool: `SELECT count(*) FROM pg_stat_activity`
 3. Check database logs
@@ -5324,32 +5859,38 @@ Create `docs/runbooks/`:
 ## Resolution
 
 ### If database is down:
+
 1. Check Render status page
 2. Contact Render support
 3. Restore from backup if needed
 
 ### If connection pool exhausted:
+
 1. Restart application: `curl -X POST https://api.render.com/v1/services/$SERVICE_ID/restart`
 2. Increase pool size in DATABASE_URL
 3. Investigate connection leaks
 
 ### If network issue:
+
 1. Check DNS resolution
 2. Check firewall rules
 3. Check VPC configuration
 
 ## Prevention
+
 - Monitor connection pool usage
 - Set up alerts for pool >80%
 - Implement connection retry logic
 - Regular database maintenance
 
 ## Escalation
+
 - If unresolved in 30 minutes, page on-call engineer
 - If data loss risk, escalate to CTO immediately
 ```
 
 Create runbooks for:
+
 1. Database connection failure
 2. High memory usage
 3. High CPU usage
@@ -5360,6 +5901,7 @@ Create runbooks for:
 8. DDoS attack
 
 **Acceptance Criteria:**
+
 - [ ] 8 runbooks created
 - [ ] All scenarios covered
 - [ ] Escalation paths defined
@@ -5373,20 +5915,25 @@ Create runbooks for:
 ---
 
 ### Task 5.10 - Architecture Review Board (ARB)
+
 **Owner:** Sarah Chen (Architecture)  
 **Peer Review:** All experts  
 **Duration:** 8 hours  
 **Priority:** HIGH
 
 **Implementation:**
+
 1. Create ARB charter:
+
 ```markdown
 # Architecture Review Board Charter
 
 ## Purpose
+
 The Architecture Review Board (ARB) ensures technical decisions align with CEPHO.AI's long-term vision, maintain code quality, and follow best practices.
 
 ## Membership
+
 - Sarah Chen (Chair) - Chief Architect
 - Marcus Rodriguez - Security Engineer
 - Emily Watson - Senior Full Stack Developer
@@ -5400,6 +5947,7 @@ The Architecture Review Board (ARB) ensures technical decisions align with CEPHO
 - Michael Chen - Product Manager
 
 ## Responsibilities
+
 1. Review and approve major architectural changes
 2. Ensure consistency across the platform
 3. Maintain technical standards
@@ -5408,6 +5956,7 @@ The Architecture Review Board (ARB) ensures technical decisions align with CEPHO
 6. Mentor team on best practices
 
 ## Decision-Making Process
+
 - Proposals submitted via RFC (Request for Comments)
 - Minimum 1 week review period
 - Quorum: 6/11 members
@@ -5415,11 +5964,13 @@ The Architecture Review Board (ARB) ensures technical decisions align with CEPHO
 - Chair breaks ties
 
 ## Meeting Schedule
+
 - Bi-weekly on Tuesdays, 2:00 PM GMT
 - Emergency meetings as needed
 - Async reviews via GitHub Discussions
 
 ## RFC Process
+
 1. Author creates RFC document
 2. RFC posted to GitHub Discussions
 3. 1-week comment period
@@ -5429,6 +5980,7 @@ The Architecture Review Board (ARB) ensures technical decisions align with CEPHO
 ```
 
 2. Create RFC template:
+
 ```markdown
 # RFC-XXX: [Title]
 
@@ -5437,29 +5989,36 @@ The Architecture Review Board (ARB) ensures technical decisions align with CEPHO
 **Status:** Draft | Review | Approved | Rejected
 
 ## Summary
+
 Brief description of the proposal.
 
 ## Motivation
+
 Why is this change needed?
 
 ## Proposal
+
 Detailed description of the proposed change.
 
 ## Alternatives Considered
+
 What other options were evaluated?
 
 ## Impact
+
 - Performance impact
 - Security impact
 - User experience impact
 - Development effort
 
 ## Implementation Plan
+
 1. Step 1
 2. Step 2
 3. Step 3
 
 ## Open Questions
+
 - Question 1?
 - Question 2?
 ```
@@ -5472,6 +6031,7 @@ What other options were evaluated?
    - RFC-003: Database Sharding Strategy
 
 **Acceptance Criteria:**
+
 - [ ] ARB charter created
 - [ ] RFC process defined
 - [ ] GitHub Discussions configured
@@ -5485,18 +6045,22 @@ What other options were evaluated?
 ---
 
 ### Task 5.11 - Chaos Engineering Framework
+
 **Owner:** David Park (DevOps) + Alex Thompson (Performance)  
 **Peer Review:** Sarah Chen  
 **Duration:** 12 hours  
 **Priority:** HIGH
 
 **Implementation:**
+
 1. Install Chaos Toolkit:
+
 ```bash
 pip install chaostoolkit chaostoolkit-kubernetes
 ```
 
 2. Create chaos experiments:
+
 ```yaml
 # chaos/database-failure.yaml
 version: 1.0.0
@@ -5537,6 +6101,7 @@ rollbacks:
 ```
 
 3. Create more experiments:
+
 ```yaml
 # chaos/high-cpu.yaml
 title: High CPU Usage
@@ -5578,12 +6143,13 @@ method:
 ```
 
 4. Schedule weekly chaos experiments:
+
 ```yaml
 # .github/workflows/chaos.yml
 name: Chaos Engineering
 on:
   schedule:
-    - cron: '0 3 * * 6' # Every Saturday at 3 AM
+    - cron: "0 3 * * 6" # Every Saturday at 3 AM
 
 jobs:
   chaos:
@@ -5594,7 +6160,7 @@ jobs:
       - run: chaos run chaos/database-failure.yaml
       - run: chaos run chaos/high-cpu.yaml
       - run: chaos run chaos/network-latency.yaml
-      
+
       - name: Report results
         run: |
           # Send results to Slack
@@ -5606,6 +6172,7 @@ jobs:
 6. Fix discovered issues
 
 **Acceptance Criteria:**
+
 - [ ] Chaos Toolkit installed
 - [ ] 3 experiments created
 - [ ] Weekly schedule configured
@@ -5621,6 +6188,7 @@ jobs:
 ## 🤖 PHASE 6: PRODUCT & AI AGENTS (Week 8)
 
 ### Task 6.1 - Product Vision & Success Metrics
+
 **Owner:** Michael Chen (Product)  
 **Peer Review:** Sarah Chen  
 **Duration:** 6 hours  
@@ -5633,26 +6201,31 @@ Create `docs/PRODUCT_VISION.md`:
 # CEPHO.AI Product Vision
 
 ## Vision Statement
+
 CEPHO.AI is the world's most empathetic AI personal assistant, helping people achieve peak mental wellness and productivity through intelligent mood tracking, contextual conversations, and automated workflows.
 
 ## Mission
+
 Empower 10 million people to live happier, healthier, more productive lives by 2030.
 
 ## Target Audience
 
 ### Primary
+
 - **Wellness Enthusiasts** (25-45 years old)
   - Track mood and mental health
   - Seek self-improvement
   - Early adopters of AI technology
 
 ### Secondary
+
 - **Busy Professionals** (30-50 years old)
   - Need productivity tools
   - Struggle with work-life balance
   - Value automation
 
 ### Tertiary
+
 - **Students** (18-25 years old)
   - Manage stress and anxiety
   - Need study/task management
@@ -5661,45 +6234,55 @@ Empower 10 million people to live happier, healthier, more productive lives by 2
 ## Success Metrics (OKRs)
 
 ### Q1 2026
+
 **Objective**: Achieve product-market fit
 
 **Key Results**:
+
 - 1,000 active users (40% retention)
 - NPS score >50
 - 500 daily mood entries
 - 100 AI conversations per day
 
 ### Q2 2026
+
 **Objective**: Drive user engagement
 
 **Key Results**:
+
 - 5,000 active users (50% retention)
 - Average 3 mood entries per week per user
 - 50% of users connect ≥1 integration
 - 30% of users create ≥1 workflow
 
 ### Q3 2026
+
 **Objective**: Monetization
 
 **Key Results**:
+
 - Launch premium tier
 - 500 paying customers
 - $25,000 MRR
 - <5% churn rate
 
 ### Q4 2026
+
 **Objective**: Scale
 
 **Key Results**:
+
 - 25,000 active users
 - 2,500 paying customers
 - $125,000 MRR
 - NPS score >60
 
 ## North Star Metric
+
 **Weekly Active Users (WAU)** with ≥3 mood entries per week
 
 ## Product Principles
+
 1. **Privacy First** - User data is sacred
 2. **Empathy Always** - AI should be supportive, never judgmental
 3. **Simplicity Wins** - Complex features, simple UX
@@ -5708,6 +6291,7 @@ Empower 10 million people to live happier, healthier, more productive lives by 2
 ```
 
 **Acceptance Criteria:**
+
 - [ ] Vision documented
 - [ ] Target audience defined
 - [ ] OKRs set for 4 quarters
@@ -5721,24 +6305,28 @@ Empower 10 million people to live happier, healthier, more productive lives by 2
 ---
 
 ### Task 6.2 - Product Analytics (PostHog)
+
 **Owner:** Michael Chen (Product)  
 **Peer Review:** David Park  
 **Duration:** 8 hours  
 **Priority:** HIGH
 
 **Implementation:**
+
 1. Install PostHog:
+
 ```bash
 npm install posthog-js posthog-node
 ```
 
 2. Set up PostHog client:
+
 ```typescript
 // client/src/analytics.ts
-import posthog from 'posthog-js';
+import posthog from "posthog-js";
 
 posthog.init(import.meta.env.VITE_POSTHOG_KEY, {
-  api_host: 'https://app.posthog.com',
+  api_host: "https://app.posthog.com",
   autocapture: false, // Manual tracking for privacy
   capture_pageview: true,
   disable_session_recording: false,
@@ -5754,32 +6342,33 @@ export const analytics = {
   },
 
   page: (name: string, properties?: Record<string, any>) => {
-    posthog.capture('$pageview', { ...properties, page: name });
+    posthog.capture("$pageview", { ...properties, page: name });
   },
 };
 ```
 
 3. Track key events:
+
 ```typescript
 // Track mood entry
-analytics.track('Mood Recorded', {
+analytics.track("Mood Recorded", {
   score: 8,
   hasNote: true,
-  tags: ['happy', 'productive'],
+  tags: ["happy", "productive"],
 });
 
 // Track AI conversation
-analytics.track('Conversation Started', {
-  context: 'mood_insights',
+analytics.track("Conversation Started", {
+  context: "mood_insights",
 });
 
 // Track integration connection
-analytics.track('Integration Connected', {
-  integration: 'google_calendar',
+analytics.track("Integration Connected", {
+  integration: "google_calendar",
 });
 
 // Track workflow creation
-analytics.track('Workflow Created', {
+analytics.track("Workflow Created", {
   triggers: 2,
   actions: 3,
 });
@@ -5793,6 +6382,7 @@ analytics.track('Workflow Created', {
 6. Create analytics dashboard
 
 **Acceptance Criteria:**
+
 - [ ] PostHog installed
 - [ ] 20+ events tracked
 - [ ] Funnels configured
@@ -5806,6 +6396,7 @@ analytics.track('Workflow Created', {
 ---
 
 ### Task 6.3 - User Personas & Journey Maps
+
 **Owner:** Michael Chen (Product) + Lisa Thompson (UX)  
 **Peer Review:** Jessica Martinez  
 **Duration:** 8 hours  
@@ -5820,18 +6411,21 @@ Create `docs/USER_PERSONAS.md`:
 ## Persona 1: Sarah - The Wellness Enthusiast
 
 **Demographics**
+
 - Age: 32
 - Occupation: Marketing Manager
 - Location: San Francisco, CA
 - Income: $95,000/year
 
 **Goals**
+
 - Track mental health trends
 - Identify mood triggers
 - Improve work-life balance
 - Practice mindfulness
 
 **Pain Points**
+
 - Forgets to track mood regularly
 - Struggles to identify patterns
 - Too many separate apps
@@ -5841,6 +6435,7 @@ Create `docs/USER_PERSONAS.md`:
 **Motivation**: Self-improvement
 
 **Journey Map**:
+
 1. **Awareness**: Sees ad on Instagram
 2. **Consideration**: Reads reviews, watches demo
 3. **Signup**: Creates account, connects Google Calendar
@@ -5854,18 +6449,21 @@ Create `docs/USER_PERSONAS.md`:
 ## Persona 2: Mike - The Busy Professional
 
 **Demographics**
+
 - Age: 42
 - Occupation: Software Engineering Manager
 - Location: Austin, TX
 - Income: $180,000/year
 
 **Goals**
+
 - Reduce stress and burnout
 - Automate repetitive tasks
 - Improve team productivity
 - Better time management
 
 **Pain Points**
+
 - Too many meetings
 - Context switching
 - Email overload
@@ -5875,6 +6473,7 @@ Create `docs/USER_PERSONAS.md`:
 **Motivation**: Productivity
 
 **Journey Map**:
+
 1. **Awareness**: Recommended by colleague
 2. **Consideration**: Tries free tier
 3. **Signup**: Creates account, connects Slack + Calendar
@@ -5888,18 +6487,21 @@ Create `docs/USER_PERSONAS.md`:
 ## Persona 3: Emma - The Stressed Student
 
 **Demographics**
+
 - Age: 21
 - Occupation: College Student (Psychology major)
 - Location: Boston, MA
 - Income: $0 (student loans)
 
 **Goals**
+
 - Manage anxiety
 - Track study habits
 - Improve focus
 - Better sleep
 
 **Pain Points**
+
 - Limited budget
 - Overwhelmed by coursework
 - Social anxiety
@@ -5909,6 +6511,7 @@ Create `docs/USER_PERSONAS.md`:
 **Motivation**: Mental health
 
 **Journey Map**:
+
 1. **Awareness**: TikTok video
 2. **Consideration**: Free tier, no credit card
 3. **Signup**: Simple email signup
@@ -5919,6 +6522,7 @@ Create `docs/USER_PERSONAS.md`:
 ```
 
 **Acceptance Criteria:**
+
 - [ ] 3 personas created
 - [ ] Demographics defined
 - [ ] Goals documented
@@ -5932,25 +6536,29 @@ Create `docs/USER_PERSONAS.md`:
 ---
 
 ### Task 6.4 - Feature Flags (LaunchDarkly/Unleash)
+
 **Owner:** Michael Chen (Product) + David Park (DevOps)  
 **Peer Review:** Emily Watson  
 **Duration:** 6 hours  
 **Priority:** MEDIUM
 
 **Implementation:**
+
 1. Install Unleash:
+
 ```bash
 npm install unleash-client unleash-proxy-client
 ```
 
 2. Set up feature flags:
+
 ```typescript
 // server/feature-flags.ts
-import { initialize } from 'unleash-client';
+import { initialize } from "unleash-client";
 
 const unleash = initialize({
-  url: 'https://unleash.cepho.ai/api/',
-  appName: 'cepho-api',
+  url: "https://unleash.cepho.ai/api/",
+  appName: "cepho-api",
   customHeaders: {
     Authorization: process.env.UNLEASH_API_KEY,
   },
@@ -5962,10 +6570,11 @@ export const isFeatureEnabled = (feature: string, userId?: string): boolean => {
 ```
 
 3. Use feature flags:
+
 ```typescript
 // server/routes/ai-chat.ts
 export const startConversation = async (req: Request, res: Response) => {
-  if (!isFeatureEnabled('ai-chat-v2', req.user.id)) {
+  if (!isFeatureEnabled("ai-chat-v2", req.user.id)) {
     // Use old chat implementation
     return oldChatHandler(req, res);
   }
@@ -5976,21 +6585,22 @@ export const startConversation = async (req: Request, res: Response) => {
 ```
 
 4. Client-side feature flags:
+
 ```typescript
 // client/src/feature-flags.ts
-import { UnleashClient } from 'unleash-proxy-client';
+import { UnleashClient } from "unleash-proxy-client";
 
 const unleash = new UnleashClient({
-  url: 'https://unleash.cepho.ai/api/frontend',
+  url: "https://unleash.cepho.ai/api/frontend",
   clientKey: import.meta.env.VITE_UNLEASH_CLIENT_KEY,
-  appName: 'cepho-web',
+  appName: "cepho-web",
 });
 
 export const useFeatureFlag = (flag: string): boolean => {
   const [enabled, setEnabled] = useState(false);
 
   useEffect(() => {
-    unleash.on('update', () => {
+    unleash.on("update", () => {
       setEnabled(unleash.isEnabled(flag));
     });
   }, [flag]);
@@ -6008,6 +6618,7 @@ export const useFeatureFlag = (flag: string): boolean => {
 6. Set up gradual rollouts
 
 **Acceptance Criteria:**
+
 - [ ] Feature flags configured
 - [ ] Server-side flags working
 - [ ] Client-side flags working
@@ -6021,13 +6632,16 @@ export const useFeatureFlag = (flag: string): boolean => {
 ---
 
 ### Task 6.5 - User Feedback Mechanism
+
 **Owner:** Michael Chen (Product)  
 **Peer Review:** Lisa Thompson  
 **Duration:** 6 hours  
 **Priority:** MEDIUM
 
 **Implementation:**
+
 1. Add feedback widget:
+
 ```typescript
 // client/src/components/FeedbackWidget.tsx
 export const FeedbackWidget = () => {
@@ -6049,7 +6663,7 @@ export const FeedbackWidget = () => {
 
   return (
     <>
-      <button 
+      <button
         className="fixed bottom-4 right-4 btn-primary rounded-full p-4"
         onClick={() => setIsOpen(true)}
       >
@@ -6059,9 +6673,9 @@ export const FeedbackWidget = () => {
       {isOpen && (
         <div className="fixed bottom-20 right-4 w-96 bg-white rounded-lg shadow-xl p-6">
           <h3 className="text-lg font-semibold mb-4">Send Feedback</h3>
-          
-          <select 
-            value={type} 
+
+          <select
+            value={type}
             onChange={(e) => setType(e.target.value as any)}
             className="form-select mb-4"
           >
@@ -6094,6 +6708,7 @@ export const FeedbackWidget = () => {
 ```
 
 2. Create feedback dashboard:
+
 ```typescript
 // server/routes/feedback.ts
 export const getFeedback = async (req: Request, res: Response) => {
@@ -6105,9 +6720,9 @@ export const getFeedback = async (req: Request, res: Response) => {
   const stats = {
     total: feedback.length,
     byType: {
-      bug: feedback.filter(f => f.type === 'bug').length,
-      feature: feedback.filter(f => f.type === 'feature').length,
-      other: feedback.filter(f => f.type === 'other').length,
+      bug: feedback.filter(f => f.type === "bug").length,
+      feature: feedback.filter(f => f.type === "feature").length,
+      other: feedback.filter(f => f.type === "other").length,
     },
   };
 
@@ -6120,6 +6735,7 @@ export const getFeedback = async (req: Request, res: Response) => {
 5. Set up feedback notifications
 
 **Acceptance Criteria:**
+
 - [ ] Feedback widget added
 - [ ] Feedback dashboard created
 - [ ] NPS survey implemented
@@ -6133,6 +6749,7 @@ export const getFeedback = async (req: Request, res: Response) => {
 ---
 
 ### Task 6.6 - User Documentation
+
 **Owner:** Michael Chen (Product) + Lisa Thompson (UX)  
 **Peer Review:** Emily Watson  
 **Duration:** 12 hours  
@@ -6177,6 +6794,7 @@ Create comprehensive user documentation:
 8. Add feedback on docs
 
 **Acceptance Criteria:**
+
 - [ ] Documentation site created
 - [ ] 20+ guides written
 - [ ] 5+ videos recorded
@@ -6191,13 +6809,16 @@ Create comprehensive user documentation:
 ---
 
 ### Task 6.7 - User Onboarding Flow
+
 **Owner:** Michael Chen (Product) + Lisa Thompson (UX)  
 **Peer Review:** Jessica Martinez  
 **Duration:** 10 hours  
 **Priority:** HIGH
 
 **Implementation:**
+
 1. Create onboarding flow:
+
 ```typescript
 // client/src/pages/Onboarding.tsx
 export const Onboarding = () => {
@@ -6209,7 +6830,7 @@ export const Onboarding = () => {
       <div className="mb-8">
         <div className="flex justify-between mb-2">
           {[1, 2, 3, 4, 5].map(s => (
-            <div 
+            <div
               key={s}
               className={`w-12 h-12 rounded-full flex items-center justify-center ${
                 s <= step ? 'bg-purple-600 text-white' : 'bg-gray-200'
@@ -6246,7 +6867,7 @@ const WelcomeStep = ({ onNext }: { onNext: () => void }) => (
 const FirstMoodStep = ({ onNext }: { onNext: () => void }) => (
   <div>
     <h2 className="text-2xl font-bold mb-4">How are you feeling today?</h2>
-    <MoodSlider 
+    <MoodSlider
       value={7}
       onChange={(value) => {
         // Save first mood
@@ -6264,6 +6885,7 @@ const FirstMoodStep = ({ onNext }: { onNext: () => void }) => (
 5. A/B test onboarding variations
 
 **Acceptance Criteria:**
+
 - [ ] Onboarding flow created
 - [ ] 5 steps implemented
 - [ ] Product tour added
@@ -6278,13 +6900,16 @@ const FirstMoodStep = ({ onNext }: { onNext: () => void }) => (
 ---
 
 ### Task 6.8 - Analytics Dashboard
+
 **Owner:** Michael Chen (Product)  
 **Peer Review:** Alex Thompson  
 **Duration:** 8 hours  
 **Priority:** MEDIUM
 
 **Implementation:**
+
 1. Create admin analytics dashboard:
+
 ```typescript
 // client/src/pages/admin/Analytics.tsx
 export const AnalyticsDashboard = () => {
@@ -6293,20 +6918,20 @@ export const AnalyticsDashboard = () => {
   return (
     <div className="grid grid-cols-3 gap-6">
       {/* KPIs */}
-      <StatCard 
-        title="Active Users" 
+      <StatCard
+        title="Active Users"
         value={stats.activeUsers}
         change="+12%"
         trend="up"
       />
-      <StatCard 
-        title="Mood Entries Today" 
+      <StatCard
+        title="Mood Entries Today"
         value={stats.moodEntries}
         change="+5%"
         trend="up"
       />
-      <StatCard 
-        title="AI Conversations" 
+      <StatCard
+        title="AI Conversations"
         value={stats.conversations}
         change="+18%"
         trend="up"
@@ -6341,6 +6966,7 @@ export const AnalyticsDashboard = () => {
 5. Export reports
 
 **Acceptance Criteria:**
+
 - [ ] Dashboard created
 - [ ] 10+ metrics displayed
 - [ ] Real-time updates
@@ -6354,6 +6980,7 @@ export const AnalyticsDashboard = () => {
 ---
 
 ### Task 6.9 - Competitive Analysis
+
 **Owner:** Michael Chen (Product)  
 **Peer Review:** Sarah Chen  
 **Duration:** 8 hours  
@@ -6368,12 +6995,15 @@ Create `docs/COMPETITIVE_ANALYSIS.md`:
 ## Competitors
 
 ### 1. Headspace
+
 **Strengths:**
+
 - Strong brand recognition
 - Excellent meditation content
 - Beautiful UX
 
 **Weaknesses:**
+
 - No AI features
 - Limited integrations
 - No workflow automation
@@ -6385,12 +7015,15 @@ Create `docs/COMPETITIVE_ANALYSIS.md`:
 ---
 
 ### 2. Notion
+
 **Strengths:**
+
 - Powerful workspace
 - Extensive integrations
 - Large community
 
 **Weaknesses:**
+
 - Steep learning curve
 - No mood tracking
 - No AI conversations
@@ -6402,12 +7035,15 @@ Create `docs/COMPETITIVE_ANALYSIS.md`:
 ---
 
 ### 3. Todoist
+
 **Strengths:**
+
 - Simple task management
 - Cross-platform
 - Affordable
 
 **Weaknesses:**
+
 - No mood tracking
 - Limited AI
 - Basic analytics
@@ -6418,15 +7054,15 @@ Create `docs/COMPETITIVE_ANALYSIS.md`:
 
 ## Feature Comparison Matrix
 
-| Feature | CEPHO.AI | Headspace | Notion | Todoist |
-|---------|----------|-----------|--------|---------|
-| Mood Tracking | ✅ | ❌ | ❌ | ❌ |
-| AI Conversations | ✅ | ❌ | ❌ | ❌ |
-| Workflow Automation | ✅ | ❌ | ⚠️ | ⚠️ |
-| Calendar Integration | ✅ | ❌ | ✅ | ✅ |
-| Analytics | ✅ | ⚠️ | ⚠️ | ⚠️ |
-| Mobile App | ⚠️ | ✅ | ✅ | ✅ |
-| Pricing | $9.99 | $12.99 | $10 | $4 |
+| Feature              | CEPHO.AI | Headspace | Notion | Todoist |
+| -------------------- | -------- | --------- | ------ | ------- |
+| Mood Tracking        | ✅       | ❌        | ❌     | ❌      |
+| AI Conversations     | ✅       | ❌        | ❌     | ❌      |
+| Workflow Automation  | ✅       | ❌        | ⚠️     | ⚠️      |
+| Calendar Integration | ✅       | ❌        | ✅     | ✅      |
+| Analytics            | ✅       | ⚠️        | ⚠️     | ⚠️      |
+| Mobile App           | ⚠️       | ✅        | ✅     | ✅      |
+| Pricing              | $9.99    | $12.99    | $10    | $4      |
 
 ## Market Positioning
 
@@ -6449,6 +7085,7 @@ We combine mental wellness (Headspace) with productivity (Notion) and add AI sup
 ```
 
 **Acceptance Criteria:**
+
 - [ ] 5+ competitors analyzed
 - [ ] Feature matrix created
 - [ ] Positioning defined
@@ -6462,6 +7099,7 @@ We combine mental wellness (Headspace) with productivity (Notion) and add AI sup
 ---
 
 ### Task 6.10 - Pricing Strategy
+
 **Owner:** Michael Chen (Product)  
 **Peer Review:** Sarah Chen  
 **Duration:** 6 hours  
@@ -6476,10 +7114,12 @@ Create `docs/PRICING_STRATEGY.md`:
 ## Tiers
 
 ### Free Tier
+
 **Price:** $0/month  
 **Target:** Students, trial users
 
 **Features:**
+
 - 10 mood entries per month
 - 5 AI conversations per month
 - 1 integration
@@ -6491,10 +7131,12 @@ Create `docs/PRICING_STRATEGY.md`:
 ---
 
 ### Premium Tier
+
 **Price:** $9.99/month or $99/year (17% discount)  
 **Target:** Individuals, wellness enthusiasts
 
 **Features:**
+
 - ✅ Unlimited mood entries
 - ✅ Unlimited AI conversations
 - ✅ Unlimited integrations
@@ -6510,10 +7152,12 @@ Create `docs/PRICING_STRATEGY.md`:
 ---
 
 ### Team Tier
+
 **Price:** $19.99/user/month (minimum 5 users)  
 **Target:** Small teams, startups
 
 **Features:**
+
 - Everything in Premium
 - ✅ Team analytics
 - ✅ Admin controls
@@ -6540,6 +7184,7 @@ Create `docs/PRICING_STRATEGY.md`:
 ## Revenue Projections
 
 ### Year 1 (2026)
+
 - Free users: 20,000
 - Premium users: 2,000 (10% conversion)
 - Team users: 100 (5 teams × 20 users)
@@ -6547,6 +7192,7 @@ Create `docs/PRICING_STRATEGY.md`:
 - **ARR:** $263,760
 
 ### Year 2 (2027)
+
 - Free users: 100,000
 - Premium users: 15,000 (15% conversion)
 - Team users: 1,000 (50 teams × 20 users)
@@ -6555,6 +7201,7 @@ Create `docs/PRICING_STRATEGY.md`:
 ```
 
 **Acceptance Criteria:**
+
 - [ ] Pricing tiers defined
 - [ ] Features per tier documented
 - [ ] Pricing psychology applied
@@ -6568,13 +7215,16 @@ Create `docs/PRICING_STRATEGY.md`:
 ---
 
 ### Task 6.11 - AI Agent System (Phase 6 Requirement)
+
 **Owner:** Sarah Chen (Architecture) + All Experts  
 **Peer Review:** Michael Chen  
 **Duration:** 40 hours  
 **Priority:** CRITICAL
 
 **Implementation:**
+
 1. Create AI Agent framework:
+
 ```typescript
 // server/ai-agents/base-agent.ts
 export abstract class BaseAgent {
@@ -6600,16 +7250,17 @@ export abstract class BaseAgent {
 ```
 
 2. Implement domain-specific agents:
+
 ```typescript
 // server/ai-agents/security-agent.ts
 export class SecurityAgent extends BaseAgent {
-  name = 'Marcus';
-  role = 'Security Engineer';
-  expertise = ['OWASP', 'penetration testing', 'security best practices'];
+  name = "Marcus";
+  role = "Security Engineer";
+  expertise = ["OWASP", "penetration testing", "security best practices"];
 
   async dailyReport(): Promise<AgentReport> {
     const vulnerabilities = await this.scanForVulnerabilities();
-    const newThreats = await this.research('latest security threats 2026');
+    const newThreats = await this.research("latest security threats 2026");
     const recommendations = await this.generateRecommendations();
 
     return {
@@ -6620,9 +7271,9 @@ export class SecurityAgent extends BaseAgent {
       suggestions: recommendations,
       requestsApproval: [
         {
-          title: 'Upgrade to Snyk Pro',
-          reason: 'Better vulnerability detection',
-          cost: '$99/month',
+          title: "Upgrade to Snyk Pro",
+          reason: "Better vulnerability detection",
+          cost: "$99/month",
         },
       ],
     };
@@ -6630,8 +7281,8 @@ export class SecurityAgent extends BaseAgent {
 
   private async scanForVulnerabilities() {
     // Run security scans
-    const npmAudit = await exec('npm audit --json');
-    const snykTest = await exec('snyk test --json');
+    const npmAudit = await exec("npm audit --json");
+    const snykTest = await exec("snyk test --json");
     return { npmAudit, snykTest };
   }
 }
@@ -6651,6 +7302,7 @@ export class SecurityAgent extends BaseAgent {
    - ProductAgent (Michael)
 
 4. Implement daily report system:
+
 ```typescript
 // server/ai-agents/report-system.ts
 export const generateDailyReports = async () => {
@@ -6661,9 +7313,7 @@ export const generateDailyReports = async () => {
     // ... all agents
   ];
 
-  const reports = await Promise.all(
-    agents.map(agent => agent.dailyReport())
-  );
+  const reports = await Promise.all(agents.map(agent => agent.dailyReport()));
 
   // Send to Chief of Staff
   await sendToChiefOfStaff(reports);
@@ -6673,15 +7323,16 @@ export const generateDailyReports = async () => {
 };
 
 // Schedule daily at 9 AM
-cron.schedule('0 9 * * *', generateDailyReports);
+cron.schedule("0 9 * * *", generateDailyReports);
 ```
 
 5. Create Chief of Staff approval system:
+
 ```typescript
 // server/routes/agent-approvals.ts
 export const getPendingApprovals = async (req: Request, res: Response) => {
   const approvals = await db.query.agentApprovals.findMany({
-    where: eq(agentApprovals.status, 'pending'),
+    where: eq(agentApprovals.status, "pending"),
   });
 
   res.json(approvals);
@@ -6690,8 +7341,9 @@ export const getPendingApprovals = async (req: Request, res: Response) => {
 export const approveRequest = async (req: Request, res: Response) => {
   const { id, decision, notes } = req.body;
 
-  await db.update(agentApprovals)
-    .set({ 
+  await db
+    .update(agentApprovals)
+    .set({
       status: decision, // 'approved' | 'rejected'
       reviewedBy: req.user.id,
       reviewNotes: notes,
@@ -6707,6 +7359,7 @@ export const approveRequest = async (req: Request, res: Response) => {
 ```
 
 6. Create AI Agent monitoring dashboard:
+
 ```typescript
 // client/src/pages/admin/AIAgents.tsx
 export const AIAgentsDashboard = () => {
@@ -6715,7 +7368,7 @@ export const AIAgentsDashboard = () => {
   return (
     <div>
       <h1>AI Agents</h1>
-      
+
       <div className="grid grid-cols-3 gap-6">
         {agents.map(agent => (
           <AgentCard key={agent.id} agent={agent}>
@@ -6747,7 +7400,7 @@ export const AIAgentsDashboard = () => {
               </div>
             </div>
 
-            <button 
+            <button
               className="btn-primary w-full mt-4"
               onClick={() => viewAgentDetails(agent.id)}
             >
@@ -6762,6 +7415,7 @@ export const AIAgentsDashboard = () => {
 ```
 
 7. Implement continuous learning:
+
 ```typescript
 // server/ai-agents/learning-system.ts
 export const agentLearningLoop = async (agent: BaseAgent) => {
@@ -6773,7 +7427,9 @@ export const agentLearningLoop = async (agent: BaseAgent) => {
     where: eq(agentSuggestions.agentId, agent.id),
   });
 
-  const successRate = pastSuggestions.filter(s => s.status === 'approved').length / pastSuggestions.length;
+  const successRate =
+    pastSuggestions.filter(s => s.status === "approved").length /
+    pastSuggestions.length;
 
   // 3. Update knowledge base
   await db.insert(agentKnowledge).values({
@@ -6792,13 +7448,14 @@ export const agentLearningLoop = async (agent: BaseAgent) => {
 };
 
 // Run daily for each agent
-cron.schedule('0 10 * * *', async () => {
+cron.schedule("0 10 * * *", async () => {
   const agents = getAllAgents();
   await Promise.all(agents.map(agentLearningLoop));
 });
 ```
 
 **Acceptance Criteria:**
+
 - [ ] 11 AI agents implemented
 - [ ] Daily report system working
 - [ ] Chief of Staff approval system
@@ -6814,70 +7471,77 @@ cron.schedule('0 10 * * *', async () => {
 ---
 
 ### Task 6.12 - AI Agent Monitoring & Ratings
+
 **Owner:** Michael Chen (Product) + Sarah Chen (Architecture)  
 **Peer Review:** All experts  
 **Duration:** 12 hours  
 **Priority:** HIGH
 
 **Implementation:**
+
 1. Create agent rating system:
+
 ```typescript
 // server/ai-agents/rating-system.ts
-export const calculateAgentRating = async (agentId: string): Promise<number> => {
+export const calculateAgentRating = async (
+  agentId: string
+): Promise<number> => {
   const metrics = await db.query.agentMetrics.findFirst({
     where: eq(agentMetrics.agentId, agentId),
   });
 
   // Rating formula (0-10 scale)
-  const rating = (
-    metrics.suggestionApprovalRate * 0.4 +      // 40% weight
-    metrics.reportQualityScore * 0.3 +          // 30% weight
-    metrics.researchRelevanceScore * 0.2 +      // 20% weight
-    metrics.responseTimeliness * 0.1            // 10% weight
-  ) * 10;
+  const rating =
+    (metrics.suggestionApprovalRate * 0.4 + // 40% weight
+      metrics.reportQualityScore * 0.3 + // 30% weight
+      metrics.researchRelevanceScore * 0.2 + // 20% weight
+      metrics.responseTimeliness * 0.1) * // 10% weight
+    10;
 
   return Math.round(rating * 10) / 10; // Round to 1 decimal
 };
 ```
 
 2. Track agent performance metrics:
+
 ```typescript
 // server/ai-agents/metrics.ts
 export const trackAgentMetrics = async (agentId: string, event: AgentEvent) => {
   switch (event.type) {
-    case 'suggestion_made':
-      await incrementMetric(agentId, 'suggestionsCount');
+    case "suggestion_made":
+      await incrementMetric(agentId, "suggestionsCount");
       break;
 
-    case 'suggestion_approved':
-      await incrementMetric(agentId, 'approvalsCount');
+    case "suggestion_approved":
+      await incrementMetric(agentId, "approvalsCount");
       await updateApprovalRate(agentId);
       break;
 
-    case 'suggestion_rejected':
-      await incrementMetric(agentId, 'rejectionsCount');
+    case "suggestion_rejected":
+      await incrementMetric(agentId, "rejectionsCount");
       await updateApprovalRate(agentId);
       break;
 
-    case 'report_generated':
-      await incrementMetric(agentId, 'reportsCount');
+    case "report_generated":
+      await incrementMetric(agentId, "reportsCount");
       const quality = await assessReportQuality(event.reportId);
-      await updateMetric(agentId, 'reportQualityScore', quality);
+      await updateMetric(agentId, "reportQualityScore", quality);
       break;
 
-    case 'research_completed':
+    case "research_completed":
       const relevance = await assessResearchRelevance(event.researchId);
-      await updateMetric(agentId, 'researchRelevanceScore', relevance);
+      await updateMetric(agentId, "researchRelevanceScore", relevance);
       break;
   }
 
   // Recalculate rating
   const newRating = await calculateAgentRating(agentId);
-  await updateMetric(agentId, 'rating', newRating);
+  await updateMetric(agentId, "rating", newRating);
 };
 ```
 
 3. Create agent leaderboard:
+
 ```typescript
 // client/src/pages/admin/AgentLeaderboard.tsx
 export const AgentLeaderboard = () => {
@@ -6886,7 +7550,7 @@ export const AgentLeaderboard = () => {
   return (
     <div>
       <h1>AI Agent Leaderboard</h1>
-      
+
       <table>
         <thead>
           <tr>
@@ -6917,7 +7581,7 @@ export const AgentLeaderboard = () => {
               <td>{agent.approvalRate}%</td>
               <td>{agent.reportsCount}</td>
               <td>
-                <TrendIndicator 
+                <TrendIndicator
                   value={agent.ratingChange}
                   positive={agent.ratingChange > 0}
                 />
@@ -6936,6 +7600,7 @@ export const AgentLeaderboard = () => {
 6. Implement agent competition/gamification
 
 **Acceptance Criteria:**
+
 - [ ] Rating system implemented
 - [ ] Metrics tracked automatically
 - [ ] Leaderboard created
@@ -6949,12 +7614,14 @@ export const AgentLeaderboard = () => {
 ---
 
 ### Task 6.13 - Chief of Staff Dashboard
+
 **Owner:** Michael Chen (Product)  
 **Peer Review:** Sarah Chen  
 **Duration:** 10 hours  
 **Priority:** HIGH
 
 **Implementation:**
+
 ```typescript
 // client/src/pages/admin/ChiefOfStaffDashboard.tsx
 export const ChiefOfStaffDashboard = () => {
@@ -6988,19 +7655,19 @@ export const ChiefOfStaffDashboard = () => {
               </div>
 
               <div className="flex space-x-2 mt-4">
-                <button 
+                <button
                   className="btn-primary"
                   onClick={() => approveRequest(approval.id)}
                 >
                   Approve
                 </button>
-                <button 
+                <button
                   className="btn-secondary"
                   onClick={() => rejectRequest(approval.id)}
                 >
                   Reject
                 </button>
-                <button 
+                <button
                   className="btn-secondary"
                   onClick={() => requestMoreInfo(approval.id)}
                 >
@@ -7051,7 +7718,7 @@ export const ChiefOfStaffDashboard = () => {
                 </div>
               </div>
 
-              <button 
+              <button
                 className="btn-secondary w-full mt-4"
                 onClick={() => viewFullReport(report.id)}
               >
@@ -7078,6 +7745,7 @@ export const ChiefOfStaffDashboard = () => {
 ```
 
 **Acceptance Criteria:**
+
 - [ ] Dashboard created
 - [ ] Pending approvals displayed
 - [ ] Daily reports accessible
@@ -7091,12 +7759,14 @@ export const ChiefOfStaffDashboard = () => {
 ---
 
 ### Task 6.14 - Final Integration & Testing
+
 **Owner:** All Experts  
 **Peer Review:** Sarah Chen (Architecture)  
 **Duration:** 16 hours  
 **Priority:** CRITICAL
 
 **Implementation:**
+
 1. Integration testing of all 100 tasks
 2. End-to-end testing of all features
 3. Performance testing under load
@@ -7109,6 +7779,7 @@ export const ChiefOfStaffDashboard = () => {
 10. Final deployment to production
 
 **Acceptance Criteria:**
+
 - [ ] All 100 tasks verified complete
 - [ ] All E2E tests passing
 - [ ] Performance benchmarks met
@@ -7130,6 +7801,7 @@ export const ChiefOfStaffDashboard = () => {
 ### Platform Grade: A+ (3.9/4.0)
 
 **All 100 tasks complete:**
+
 - ✅ Phase 1: 16 critical fixes
 - ✅ Phase 2: 25 foundation tasks
 - ✅ Phase 3: 20 optimization tasks
@@ -7138,6 +7810,7 @@ export const ChiefOfStaffDashboard = () => {
 - ✅ Phase 6: 14 product & AI agent tasks
 
 **Production Ready:**
+
 - ✅ Security hardened
 - ✅ Performance optimized
 - ✅ Fully tested

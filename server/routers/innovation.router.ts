@@ -1,3 +1,4 @@
+import { getModelForTask } from "../utils/modelRouter";
 /**
  * Innovation Router — Real Implementation
  *
@@ -10,7 +11,13 @@ import OpenAI from "openai";
 import { protectedProcedure, router } from "../_core/trpc";
 import { createNotification } from "./notifications.router";
 import { db } from "../db";
-import { innovationIdeas, projectGenesis, projectGenesisPhases, ideaAssessments, investmentScenarios } from "../../drizzle/schema";
+import {
+  innovationIdeas,
+  projectGenesis,
+  projectGenesisPhases,
+  ideaAssessments,
+  investmentScenarios,
+} from "../../drizzle/schema";
 
 function getOpenAIClient(): OpenAI {
   const apiKey = process.env.OPENAI_API_KEY;
@@ -79,8 +86,14 @@ export const innovationRouter = router({
 
       // Fetch assessments and scenarios from DB
       const [assessmentRows, scenarioRows] = await Promise.all([
-        db.select().from(ideaAssessments).where(eq(ideaAssessments.ideaId, idea.id)),
-        db.select().from(investmentScenarios).where(eq(investmentScenarios.ideaId, idea.id)),
+        db
+          .select()
+          .from(ideaAssessments)
+          .where(eq(ideaAssessments.ideaId, idea.id)),
+        db
+          .select()
+          .from(investmentScenarios)
+          .where(eq(investmentScenarios.ideaId, idea.id)),
       ]);
 
       return {
@@ -176,7 +189,7 @@ For each idea provide:
 Format as JSON array: [{"title": "...", "description": "...", "category": "...", "priority": "..."}]`;
 
     const completion = await openai.chat.completions.create({
-      model: "gpt-4.1-mini",
+      model: getModelForTask("score"),
       messages: [{ role: "user", content: prompt }],
       max_tokens: 1000,
       temperature: 0.9,
@@ -234,10 +247,20 @@ Format as JSON array: [{"title": "...", "description": "...", "category": "...",
    * Run an AI assessment on an idea.
    */
   runAssessment: protectedProcedure
-    .input(z.object({
-      ideaId: z.number(),
-      assessmentType: z.enum(["market_analysis", "feasibility", "competitive_landscape", "financial_viability", "risk_assessment"]).optional(),
-    }))
+    .input(
+      z.object({
+        ideaId: z.number(),
+        assessmentType: z
+          .enum([
+            "market_analysis",
+            "feasibility",
+            "competitive_landscape",
+            "financial_viability",
+            "risk_assessment",
+          ])
+          .optional(),
+      })
+    )
     .mutation(async ({ input, ctx }) => {
       const rows = await db
         .select()
@@ -254,7 +277,8 @@ Format as JSON array: [{"title": "...", "description": "...", "category": "...",
       const idea = rows[0];
 
       const openai = getOpenAIClient();
-      const assessmentFocus = input.assessmentType?.replace(/_/g, " ") ?? "general viability";
+      const assessmentFocus =
+        input.assessmentType?.replace(/_/g, " ") ?? "general viability";
       const prompt = `Perform a ${assessmentFocus} assessment for this business idea:
 
 Title: ${idea.title}
@@ -277,7 +301,7 @@ Provide a JSON assessment focused on ${assessmentFocus} with:
 }`;
 
       const completion = await openai.chat.completions.create({
-        model: "gpt-4.1-mini",
+        model: getModelForTask("score"),
         messages: [{ role: "user", content: prompt }],
         max_tokens: 600,
         temperature: 0.5,
@@ -306,8 +330,12 @@ Provide a JSON assessment focused on ${assessmentFocus} with:
           stage: 2,
           assessorType: "ai",
           findings: (assessment.findings as string) ?? "Assessment complete",
-          score: (assessment.score as number) ?? (assessment.viabilityScore as number) ?? 70,
-          recommendation: (assessment.recommendation as string) ?? "investigate",
+          score:
+            (assessment.score as number) ??
+            (assessment.viabilityScore as number) ??
+            70,
+          recommendation:
+            (assessment.recommendation as string) ?? "investigate",
           metadata: assessment,
         })
         .returning();
@@ -371,7 +399,7 @@ Include:
 Keep it professional and actionable. Max 400 words.`;
 
       const completion = await openai.chat.completions.create({
-        model: "gpt-4.1-mini",
+        model: getModelForTask("score"),
         messages: [{ role: "user", content: prompt }],
         max_tokens: 600,
         temperature: 0.6,
@@ -434,7 +462,7 @@ Provide JSON with 3 scenarios (conservative, moderate, optimistic):
 }`;
 
       const completion = await openai.chat.completions.create({
-        model: "gpt-4.1-mini",
+        model: getModelForTask("score"),
         messages: [{ role: "user", content: prompt }],
         max_tokens: 700,
         temperature: 0.5,
@@ -473,7 +501,7 @@ Since I cannot access the URL directly, provide a framework for analysis:
 Return as JSON: { "title": "...", "description": "...", "category": "...", "priority": "medium" }`;
 
       const completion = await openai.chat.completions.create({
-        model: "gpt-4.1-mini",
+        model: getModelForTask("score"),
         messages: [{ role: "user", content: prompt }],
         max_tokens: 400,
         temperature: 0.7,
@@ -685,16 +713,29 @@ Return as JSON: { "title": "...", "description": "...", "category": "...", "prio
       const [idea] = await db
         .select()
         .from(innovationIdeas)
-        .where(and(eq(innovationIdeas.id, input.ideaId), eq(innovationIdeas.userId, ctx.user.id)))
+        .where(
+          and(
+            eq(innovationIdeas.id, input.ideaId),
+            eq(innovationIdeas.userId, ctx.user.id)
+          )
+        )
         .limit(1);
       if (!idea) throw new Error("Idea not found");
       const nextStage = Math.min(5, (idea.currentStage ?? 1) + 1);
       const stageLabels: Record<number, string> = {
-        1: "capture", 2: "assess", 3: "brief", 4: "fund", 5: "launch",
+        1: "capture",
+        2: "assess",
+        3: "brief",
+        4: "fund",
+        5: "launch",
       };
       await db
         .update(innovationIdeas)
-        .set({ currentStage: nextStage, status: nextStage === 5 ? "ready_to_launch" : "in_progress", updatedAt: new Date() })
+        .set({
+          currentStage: nextStage,
+          status: nextStage === 5 ? "ready_to_launch" : "in_progress",
+          updatedAt: new Date(),
+        })
         .where(eq(innovationIdeas.id, input.ideaId));
 
       // Notify on stage advancement (non-blocking)
@@ -702,14 +743,19 @@ Return as JSON: { "title": "...", "description": "...", "category": "...", "prio
         userId: ctx.user.id,
         type: "innovation",
         title: nextStage === 5 ? "Idea Ready to Launch!" : "Idea Advanced",
-        message: nextStage === 5
-          ? `"${idea.title}" has reached the Launch stage and is ready for execution.`
-          : `"${idea.title}" has advanced to the ${stageLabels[nextStage]} stage.`,
+        message:
+          nextStage === 5
+            ? `"${idea.title}" has reached the Launch stage and is ready for execution.`
+            : `"${idea.title}" has advanced to the ${stageLabels[nextStage]} stage.`,
         actionUrl: "/innovation-hub",
         actionLabel: "View Innovation Hub",
       }).catch(() => {});
 
-      return { success: true, newStage: nextStage, stageLabel: stageLabels[nextStage] };
+      return {
+        success: true,
+        newStage: nextStage,
+        stageLabel: stageLabels[nextStage],
+      };
     }),
 
   /**
@@ -726,7 +772,13 @@ Return as JSON: { "title": "...", "description": "...", "category": "...", "prio
       count: ideas.filter(i => i.currentStage === stage).length,
     }));
     const promoted = ideas.filter(i => i.status === "promoted").length;
-    const avgConfidence = ideas.length === 0 ? 0 : Math.round(ideas.reduce((s, i) => s + (i.confidenceScore ?? 0), 0) / ideas.length);
+    const avgConfidence =
+      ideas.length === 0
+        ? 0
+        : Math.round(
+            ideas.reduce((s, i) => s + (i.confidenceScore ?? 0), 0) /
+              ideas.length
+          );
     return { total: ideas.length, byStage, promoted, avgConfidence };
   }),
 });

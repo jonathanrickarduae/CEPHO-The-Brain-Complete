@@ -102,8 +102,7 @@ function loadMapScript() {
       resolve(null);
       script.remove(); // Clean up immediately
     };
-    script.onerror = () => {
-    };
+    script.onerror = () => {};
     document.head.appendChild(script);
   });
 }

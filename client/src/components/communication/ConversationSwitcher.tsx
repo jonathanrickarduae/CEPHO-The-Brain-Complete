@@ -209,13 +209,14 @@ export function useConversationHistory() {
       try {
         const parsed = JSON.parse(saved);
         setConversations(
-          parsed.map((c: Omit<Conversation, 'timestamp'> & { timestamp: string }) => ({
-            ...c,
-            timestamp: new Date(c.timestamp),
-          }))
+          parsed.map(
+            (c: Omit<Conversation, "timestamp"> & { timestamp: string }) => ({
+              ...c,
+              timestamp: new Date(c.timestamp),
+            })
+          )
         );
-      } catch {
-      }
+      } catch {}
     }
   }, []);
 

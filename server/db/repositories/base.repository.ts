@@ -82,7 +82,7 @@ export abstract class BaseRepository {
     logger.error(`${this.repositoryName}.${operation} failed`, {
       error: error.message,
       stack: error.stack,
-       ...(typeof context === 'object' && context !== null ? context : {}),
+      ...(typeof context === "object" && context !== null ? context : {}),
     });
   }
 
@@ -95,7 +95,11 @@ export abstract class BaseRepository {
    * @param {any} context - Additional context
    * @throws {Error} Rethrows the error after logging
    */
-  protected handleError(operation: string, error: Error, context?: unknown): never {
+  protected handleError(
+    operation: string,
+    error: Error,
+    context?: unknown
+  ): never {
     this.logError(operation, error, context);
     throw error;
   }

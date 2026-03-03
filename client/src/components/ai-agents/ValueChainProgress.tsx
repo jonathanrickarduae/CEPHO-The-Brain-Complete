@@ -177,7 +177,9 @@ export function ValueChainProgress({
                         </span>
                         {getStatusBadge(status)}
                       </div>
-                      <h3 className="font-semibold text-foreground">{phase.name}</h3>
+                      <h3 className="font-semibold text-foreground">
+                        {phase.name}
+                      </h3>
                       <p className="text-sm text-foreground/70 truncate">
                         {phase.description}
                       </p>

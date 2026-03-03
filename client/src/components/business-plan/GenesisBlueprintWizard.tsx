@@ -1,4 +1,4 @@
-import { useState, useEffect} from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -774,7 +774,9 @@ export function GenesisBlueprintWizard({
             <div className="bg-white/5 border border-white/10 rounded-2xl p-5">
               <div className="flex items-center gap-2 mb-4">
                 <Users className="w-5 h-5 text-fuchsia-400" />
-                <h3 className="font-semibold text-foreground">Active Experts</h3>
+                <h3 className="font-semibold text-foreground">
+                  Active Experts
+                </h3>
               </div>
 
               {activeSMEs.length > 0 ? (
@@ -853,7 +855,9 @@ export function GenesisBlueprintWizard({
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2">
                   <Brain className="w-5 h-5 text-[var(--brain-cyan)]" />
-                  <h3 className="font-semibold text-foreground">Chief of Staff</h3>
+                  <h3 className="font-semibold text-foreground">
+                    Chief of Staff
+                  </h3>
                 </div>
                 <button
                   onClick={() => setShowTwinChat(!showTwinChat)}

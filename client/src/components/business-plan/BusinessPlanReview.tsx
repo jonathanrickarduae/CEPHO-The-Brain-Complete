@@ -380,8 +380,7 @@ export function BusinessPlanReview({
   >(new Map());
   const [isReviewing, setIsReviewing] = useState(false);
   const [currentReviewIndex, setCurrentReviewIndex] = useState(0);
-  const [_setSelectedExpertInsight] =
-    useState<ExpertInsight | null>(null);
+  const [_setSelectedExpertInsight] = useState<ExpertInsight | null>(null);
 
   // File upload state
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
@@ -2293,19 +2292,21 @@ export function BusinessPlanReview({
                   Current Participants
                 </h4>
                 <div className="space-y-2">
-                  {sessionQuery.data.participants.map((p: { id: string; name: string; avatar: string; }) => (
-                    <div
-                      key={p.id}
-                      className="flex items-center justify-between text-sm"
-                    >
-                      <span className="text-muted-foreground">
-                        User #{p.userId}
-                      </span>
-                      <Badge variant="outline" className="text-xs">
-                        {p.role}
-                      </Badge>
-                    </div>
-                  ))}
+                  {sessionQuery.data.participants.map(
+                    (p: { id: string; name: string; avatar: string }) => (
+                      <div
+                        key={p.id}
+                        className="flex items-center justify-between text-sm"
+                      >
+                        <span className="text-muted-foreground">
+                          User #{p.userId}
+                        </span>
+                        <Badge variant="outline" className="text-xs">
+                          {p.role}
+                        </Badge>
+                      </div>
+                    )
+                  )}
                 </div>
               </div>
             )}

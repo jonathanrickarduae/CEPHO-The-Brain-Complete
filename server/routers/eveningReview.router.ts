@@ -1,3 +1,4 @@
+import { getModelForTask } from "../utils/modelRouter";
 /**
  * Evening Review & Morning Signal Router
  *
@@ -97,24 +98,32 @@ export const eveningReviewRouter = router({
         tasksAccepted: z.number().default(0),
         tasksDeferred: z.number().default(0),
         tasksRejected: z.number().default(0),
-        decisions: z.array(
-          z.object({
-            taskTitle: z.string(),
-            projectName: z.string().optional(),
-            decision: z.enum(["accepted", "deferred", "rejected"]),
-            priority: z.string().optional(),
-            estimatedTime: z.string().optional(),
-          })
-        ).optional(),
+        decisions: z
+          .array(
+            z.object({
+              taskTitle: z.string(),
+              projectName: z.string().optional(),
+              decision: z.enum(["accepted", "deferred", "rejected"]),
+              priority: z.string().optional(),
+              estimatedTime: z.string().optional(),
+            })
+          )
+          .optional(),
       })
     )
     .mutation(async ({ input, ctx }) => {
       // Count decisions if provided
-      const accepted = input.decisions?.filter(d => d.decision === "accepted").length ?? input.tasksAccepted;
-      const deferred = input.decisions?.filter(d => d.decision === "deferred").length ?? input.tasksDeferred;
-      const rejected = input.decisions?.filter(d => d.decision === "rejected").length ?? input.tasksRejected;
+      const accepted =
+        input.decisions?.filter(d => d.decision === "accepted").length ??
+        input.tasksAccepted;
+      const deferred =
+        input.decisions?.filter(d => d.decision === "deferred").length ??
+        input.tasksDeferred;
+      const rejected =
+        input.decisions?.filter(d => d.decision === "rejected").length ??
+        input.tasksRejected;
       const signalItems = accepted; // Each accepted task becomes a signal item
-        await db
+      await db
         .update(eveningReviewSessions)
         .set({
           completedAt: new Date(),
@@ -143,7 +152,11 @@ export const eveningReviewRouter = router({
         targetName: "Evening Review",
         description: `Completed evening review: ${accepted} accepted, ${deferred} deferred, ${rejected} rejected`,
       });
-      return { success: true, completedAt: new Date().toISOString(), signalItemsGenerated: signalItems };
+      return {
+        success: true,
+        completedAt: new Date().toISOString(),
+        signalItemsGenerated: signalItems,
+      };
     }),
 
   /**
@@ -153,7 +166,9 @@ export const eveningReviewRouter = router({
     const pendingTasks = await db
       .select()
       .from(tasks)
-      .where(and(eq(tasks.userId, ctx.user.id), eq(tasks.status, "not_started")))
+      .where(
+        and(eq(tasks.userId, ctx.user.id), eq(tasks.status, "not_started"))
+      )
       .orderBy(desc(tasks.createdAt))
       .limit(20);
 
@@ -230,7 +245,7 @@ Provide:
 Keep it concise, warm, and professional. Max 100 words.`;
 
       const completion = await openai.chat.completions.create({
-        model: "gpt-4.1-mini",
+        model: getModelForTask("analyse"),
         messages: [{ role: "user", content: prompt }],
         max_tokens: 200,
         temperature: 0.7,
@@ -261,11 +276,15 @@ export const morningSignalRouter = router({
         .limit(10);
       const briefData = {
         date: today.toLocaleDateString("en-GB", {
-          weekday: "long", year: "numeric", month: "long", day: "numeric",
+          weekday: "long",
+          year: "numeric",
+          month: "long",
+          day: "numeric",
         }),
         overviewSummary: {
           headline: "Your morning signal — priorities and focus for today",
-          energyFocus: "Review your top tasks and set your intention for the day",
+          energyFocus:
+            "Review your top tasks and set your intention for the day",
         },
         schedule: [],
         priorities: pendingTasks.slice(0, 5).map(t => ({
@@ -316,7 +335,9 @@ export const morningSignalRouter = router({
     const pendingTasks = await db
       .select()
       .from(tasks)
-      .where(and(eq(tasks.userId, ctx.user.id), eq(tasks.status, "not_started")))
+      .where(
+        and(eq(tasks.userId, ctx.user.id), eq(tasks.status, "not_started"))
+      )
       .orderBy(desc(tasks.createdAt))
       .limit(10);
 

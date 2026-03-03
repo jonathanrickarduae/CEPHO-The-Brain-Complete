@@ -149,21 +149,24 @@ export default function EveningReview() {
   const _isDelegateMode = urlParams.get("delegate") === "true";
 
   // Fetch real pending tasks from tRPC
-  const { data: pendingTasksData, isLoading: _tasksLoading } = trpc.eveningReview.getPendingTasks.useQuery();
+  const { data: pendingTasksData, isLoading: _tasksLoading } =
+    trpc.eveningReview.getPendingTasks.useQuery();
   // Use real tasks if available, otherwise fall back to mock data for demo
   const activeTasks = pendingTasksData?.tasks?.length
-    ? [{
-        projectId: "real",
-        projectName: "Your Tasks",
-        projectColor: "#6366f1",
-        tasks: pendingTasksData.tasks.map(t => ({
-          id: String(t.id),
-          text: t.title,
-          priority: (t.priority ?? "medium") as string,
-          estimatedTime: "15 min",
-          status: "pending",
-        })),
-      }]
+    ? [
+        {
+          projectId: "real",
+          projectName: "Your Tasks",
+          projectColor: "#6366f1",
+          tasks: pendingTasksData.tasks.map(t => ({
+            id: String(t.id),
+            text: t.title,
+            priority: (t.priority ?? "medium") as string,
+            estimatedTime: "15 min",
+            status: "pending",
+          })),
+        },
+      ]
     : OVERNIGHT_TASKS;
 
   const [taskDecisions, setTaskDecisions] = useState<TaskDecision[]>([]);
@@ -217,7 +220,7 @@ export default function EveningReview() {
     }, 1000);
 
     return () => clearInterval(interval);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [autoProcessingStarted, isReadyToStart]);
 
   // Auto-start prompt at 7 PM
@@ -233,7 +236,7 @@ export default function EveningReview() {
       }, 2000);
       return () => clearTimeout(timer);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [reviewState]);
 
   // Handle auto-start at 8 PM
@@ -274,8 +277,7 @@ export default function EveningReview() {
           decisions,
         });
       }
-    } catch {
-    }
+    } catch {}
 
     toast.info(
       "8 PM cutoff reached. Chief of Staff is auto-processing remaining tasks."
@@ -488,6 +490,36 @@ export default function EveningReview() {
     return <Frown className="w-5 h-5 text-red-400" />;
   };
 
+  // Loading skeleton while tasks are being fetched
+  if (_tasksLoading) {
+    return (
+      <PageShell
+        icon={Moon}
+        title="Evening Review"
+        subtitle="Loading your review..."
+      >
+        <div className="space-y-4">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <div
+              key={i}
+              className="bg-card border border-border rounded-xl p-4 flex items-center gap-4 animate-pulse"
+            >
+              <div className="h-10 w-10 rounded-full bg-muted shrink-0" />
+              <div className="flex-1 space-y-2">
+                <div className="h-4 w-1/3 bg-muted rounded" />
+                <div className="h-3 w-2/3 bg-muted rounded" />
+              </div>
+              <div className="flex gap-2">
+                <div className="h-8 w-20 bg-muted rounded" />
+                <div className="h-8 w-20 bg-muted rounded" />
+                <div className="h-8 w-20 bg-muted rounded" />
+              </div>
+            </div>
+          ))}
+        </div>
+      </PageShell>
+    );
+  }
   // Chief of Staff prompt modal
   if (
     chiefOfStaffPrompt &&
@@ -507,8 +539,8 @@ export default function EveningReview() {
               It's {formatTime()}. Ready to start your Evening Review?
             </p>
             <p className="text-sm text-muted-foreground">
-              You have {stats.total} tasks across {activeTasks.length}{" "}
-              projects to review.
+              You have {stats.total} tasks across {activeTasks.length} projects
+              to review.
             </p>
             <div className="flex flex-col gap-2 pt-4">
               <Button
@@ -605,14 +637,19 @@ export default function EveningReview() {
       subtitle={`${formatDate()} • ${stats.total} tasks`}
       actions={
         <div className="flex items-center gap-3">
-          <Badge className="bg-green-500/20 text-green-400 border-green-500/30">{stats.accepted} ✓</Badge>
-          <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30">{stats.deferred} ⏸</Badge>
-          <Badge className="bg-red-500/20 text-red-400 border-red-500/30">{stats.rejected} ✕</Badge>
+          <Badge className="bg-green-500/20 text-green-400 border-green-500/30">
+            {stats.accepted} ✓
+          </Badge>
+          <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30">
+            {stats.deferred} ⏸
+          </Badge>
+          <Badge className="bg-red-500/20 text-red-400 border-red-500/30">
+            {stats.rejected} ✕
+          </Badge>
         </div>
       }
       fillHeight
     >
-
       {/* Warning Banner for Cutoff */}
       {reviewState === "cutoff_warning" && (
         <div className="bg-amber-500/20 border-b border-amber-500/30 px-6 py-2">

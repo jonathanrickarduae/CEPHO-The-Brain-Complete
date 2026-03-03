@@ -145,7 +145,8 @@ export class GitHubService {
         body: JSON.stringify({ title, body, labels, assignees }),
       }
     );
-    if (!res.ok) throw new Error(`GitHub createIssue failed: ${res.statusText}`);
+    if (!res.ok)
+      throw new Error(`GitHub createIssue failed: ${res.statusText}`);
     const i = await res.json();
     return {
       id: i.id,
@@ -178,7 +179,10 @@ export class GitHubService {
       number: pr.number as number,
       title: pr.title as string,
       body: pr.body as string | null,
-      state: (pr.merged_at ? "merged" : pr.state) as "open" | "closed" | "merged",
+      state: (pr.merged_at ? "merged" : pr.state) as
+        | "open"
+        | "closed"
+        | "merged",
       url: pr.html_url as string,
       draft: pr.draft as boolean,
       createdAt: pr.created_at as string,
@@ -191,12 +195,17 @@ export class GitHubService {
     const res = await fetch(`${GITHUB_API_BASE}/repos/${owner}/${repo}`, {
       headers: getHeaders(this.token),
     });
-    if (!res.ok) throw new Error(`GitHub getRepoStats failed: ${res.statusText}`);
+    if (!res.ok)
+      throw new Error(`GitHub getRepoStats failed: ${res.statusText}`);
     return res.json();
   }
 
   /** Test connection */
-  async testConnection(): Promise<{ ok: boolean; login?: string; error?: string }> {
+  async testConnection(): Promise<{
+    ok: boolean;
+    login?: string;
+    error?: string;
+  }> {
     try {
       const user = await this.getCurrentUser();
       return { ok: true, login: user.login };

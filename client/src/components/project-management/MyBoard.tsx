@@ -18,8 +18,7 @@ export function MyBoard() {
     if (saved) {
       try {
         setFavorites(JSON.parse(saved));
-      } catch {
-      }
+      } catch {}
     }
   }, []);
 
@@ -163,8 +162,7 @@ export function useFavorites() {
     if (saved) {
       try {
         setFavorites(JSON.parse(saved));
-      } catch {
-      }
+      } catch {}
     }
   }, []);
 
@@ -191,5 +189,5 @@ export function useFavorites() {
     return favorites.some(f => f.id === expertId);
   };
 
-  return { favorites, removeFavorite};
+  return { favorites, removeFavorite };
 }

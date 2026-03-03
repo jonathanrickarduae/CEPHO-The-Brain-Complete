@@ -2,9 +2,9 @@
 
 **CEPHO.AI tRPC API**
 
-*Version: 1.0*
-*Status: Draft*
-*Last Updated: 2026-03-01*
+_Version: 1.0_
+_Status: Draft_
+_Last Updated: 2026-03-01_
 
 ---
 
@@ -30,11 +30,13 @@ Generates a PDF version of the latest briefing.
 
 - **Input:** `{}` (no input)
 - **Output:**
+
 ```json
 {
   "pdfUrl": "https://storage.cepho.ai/briefs/brief-001.pdf"
 }
 ```
+
 - **Errors:**
   - `UNAUTHORIZED`: If the user is not authenticated.
   - `NOT_FOUND`: If no briefing exists for the current day.
@@ -46,6 +48,7 @@ Generates an audio version of the latest briefing.
 
 - **Input:** `{}` (no input)
 - **Output:**
+
 ```json
 {
   "audioUrl": "https://storage.cepho.ai/briefs/brief-001.mp3"
@@ -63,13 +66,16 @@ Handles the Project Genesis wizard.
 Starts a new project genesis session.
 
 - **Input:**
+
 ```ts
 {
   name: string;
   description: string;
 }
 ```
+
 - **Output:**
+
 ```json
 {
   "projectId": "proj-003"
@@ -81,6 +87,7 @@ Starts a new project genesis session.
 Updates the current phase of a project genesis session.
 
 - **Input:**
+
 ```ts
 {
   projectId: string;
@@ -88,7 +95,9 @@ Updates the current phase of a project genesis session.
   data: any;
 }
 ```
+
 - **Output:**
+
 ```json
 {
   "success": true
@@ -106,12 +115,15 @@ Handles AI agent execution.
 Executes a task using the assigned AI agent.
 
 - **Input:**
+
 ```ts
 {
   taskId: string;
 }
 ```
+
 - **Output:**
+
 ```json
 {
   "status": "completed",

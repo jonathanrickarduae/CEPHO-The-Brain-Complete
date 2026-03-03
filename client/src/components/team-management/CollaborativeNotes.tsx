@@ -117,8 +117,7 @@ ${text}`,
         if (newSuggestions.length > 0) {
           setSuggestions(newSuggestions);
         }
-      } catch {
-      }
+      } catch {}
     },
     [chatMutation]
   );

@@ -44,10 +44,23 @@ interface Brand {
 }
 
 export function BrandKitManager() {
-  const { data: brandKitData, refetch: refetchBrands } = trpc.brandKit.list.useQuery();
-  const createBrandMutation = trpc.brandKit.create.useMutation({ onSuccess: () => { void refetchBrands(); } });
-  const updateBrandMutation = trpc.brandKit.update.useMutation({ onSuccess: () => { void refetchBrands(); } });
-  const deleteBrandMutation = trpc.brandKit.delete.useMutation({ onSuccess: () => { void refetchBrands(); } });
+  const { data: brandKitData, refetch: refetchBrands } =
+    trpc.brandKit.list.useQuery();
+  const createBrandMutation = trpc.brandKit.create.useMutation({
+    onSuccess: () => {
+      void refetchBrands();
+    },
+  });
+  const updateBrandMutation = trpc.brandKit.update.useMutation({
+    onSuccess: () => {
+      void refetchBrands();
+    },
+  });
+  const deleteBrandMutation = trpc.brandKit.delete.useMutation({
+    onSuccess: () => {
+      void refetchBrands();
+    },
+  });
 
   // Map DB records to local Brand shape
   const brands: Brand[] = (brandKitData ?? []).map(r => ({
@@ -60,7 +73,7 @@ export function BrandKitManager() {
       background: "#0F172A",
       text: "#F8FAFC",
     },
-    fonts: { heading: (r.fontFamily ?? "Inter"), body: "Inter" },
+    fonts: { heading: r.fontFamily ?? "Inter", body: "Inter" },
     templates: { presentation: true, document: true, video: true, email: true },
     createdAt: new Date(r.createdAt),
     isDefault: r.isDefault ?? false,

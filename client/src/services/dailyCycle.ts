@@ -82,8 +82,7 @@ export async function sendWhatsAppReminder(message: string) {
 
     if (response.ok) {
     }
-  } catch (error) {
-  }
+  } catch (error) {}
 }
 
 function checkTime() {

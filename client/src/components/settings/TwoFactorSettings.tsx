@@ -26,23 +26,23 @@ export function TwoFactorSettings() {
     trpc.twoFactor.status.useQuery();
 
   const setupMutation = trpc.twoFactor.setup.useMutation({
-    onSuccess: (data) => {
+    onSuccess: data => {
       setQrCode(data.qrCode);
       setSecret(data.secret);
       setStep("verify");
       setError("");
     },
-    onError: (err) => setError(err.message),
+    onError: err => setError(err.message),
   });
 
   const verifyMutation = trpc.twoFactor.verify.useMutation({
-    onSuccess: (data) => {
+    onSuccess: data => {
       setBackupCodes(data.backupCodes);
       setStep("backup");
       setError("");
       refetchStatus();
     },
-    onError: (err) => setError(err.message),
+    onError: err => setError(err.message),
   });
 
   const disableMutation = trpc.twoFactor.disable.useMutation({
@@ -52,7 +52,7 @@ export function TwoFactorSettings() {
       setError("");
       refetchStatus();
     },
-    onError: (err) => setError(err.message),
+    onError: err => setError(err.message),
   });
 
   const copyBackupCodes = () => {
@@ -62,9 +62,7 @@ export function TwoFactorSettings() {
   };
 
   if (!status) {
-    return (
-      <div className="animate-pulse h-24 bg-base-200 rounded-xl" />
-    );
+    return <div className="animate-pulse h-24 bg-base-200 rounded-xl" />;
   }
 
   return (
@@ -157,7 +155,7 @@ export function TwoFactorSettings() {
                 placeholder="000000"
                 className="input input-bordered input-sm w-32 text-center tracking-widest font-mono"
                 value={token}
-                onChange={(e) =>
+                onChange={e =>
                   setToken(e.target.value.replace(/\D/g, "").slice(0, 6))
                 }
               />
@@ -207,7 +205,7 @@ export function TwoFactorSettings() {
               again.
             </div>
             <div className="grid grid-cols-2 gap-1 p-3 bg-base-200 rounded-lg font-mono text-sm">
-              {backupCodes.map((code) => (
+              {backupCodes.map(code => (
                 <span key={code} className="text-center">
                   {code}
                 </span>
@@ -244,7 +242,7 @@ export function TwoFactorSettings() {
                 placeholder="000000"
                 className="input input-bordered input-sm w-32 text-center tracking-widest font-mono"
                 value={token}
-                onChange={(e) =>
+                onChange={e =>
                   setToken(e.target.value.replace(/\D/g, "").slice(0, 6))
                 }
               />

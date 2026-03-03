@@ -46,7 +46,9 @@ export function CephoLandingPage() {
                 <h1 className="text-6xl md:text-7xl font-display font-bold tracking-tight text-center text-white">
                   The Brain
                 </h1>
-                <p className="text-sm text-muted-foreground/60 mt-3 italic">English</p>
+                <p className="text-sm text-muted-foreground/60 mt-3 italic">
+                  English
+                </p>
               </motion.div>
             ) : (
               <motion.div

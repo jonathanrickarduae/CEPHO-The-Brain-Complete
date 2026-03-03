@@ -78,8 +78,7 @@ export class NordVPNSecurityService {
       if (stored) {
         this.config = JSON.parse(stored);
       }
-    } catch (e) {
-    }
+    } catch (e) {}
   }
 
   private saveConfig(): void {
@@ -89,8 +88,7 @@ export class NordVPNSecurityService {
       } else {
         localStorage.removeItem(STORAGE_KEYS.config);
       }
-    } catch (e) {
-    }
+    } catch (e) {}
   }
 
   setConfig(config: NordVPNConfig): void {
@@ -123,8 +121,7 @@ export class NordVPNSecurityService {
           timestamp: new Date(log.timestamp),
         }));
       }
-    } catch (e) {
-    }
+    } catch (e) {}
   }
 
   private saveAuditLog(): void {
@@ -132,8 +129,7 @@ export class NordVPNSecurityService {
       // Keep only last 1000 entries
       const toSave = this.auditLog.slice(-1000);
       localStorage.setItem(STORAGE_KEYS.auditLog, JSON.stringify(toSave));
-    } catch (e) {
-    }
+    } catch (e) {}
   }
 
   logSecurityEvent(

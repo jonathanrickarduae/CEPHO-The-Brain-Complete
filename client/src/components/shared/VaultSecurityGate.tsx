@@ -425,7 +425,9 @@ export function SecurityBadges({ className }: { className?: string }) {
     <div className={cn("flex items-center gap-3", className)}>
       <div className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-[var(--brain-cyan)]/10 border border-cyan-500/20">
         <Shield className="w-3 h-3 text-[var(--brain-cyan)]" />
-        <span className="text-xs text-[var(--brain-cyan)] font-medium">Encrypted</span>
+        <span className="text-xs text-[var(--brain-cyan)] font-medium">
+          Encrypted
+        </span>
       </div>
       <div className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-green-500/10 border border-green-500/20">
         <CheckCircle className="w-3 h-3 text-green-400" />

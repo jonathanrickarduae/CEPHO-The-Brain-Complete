@@ -299,8 +299,12 @@ export function EnhancedChiefOfStaff() {
               >
                 <Sparkles className="h-5 w-5 text-yellow-500 flex-shrink-0 mt-0.5" />
                 <div className="flex-1">
-                  <p className="text-foreground font-medium mb-1">{rec.title}</p>
-                  <p className="text-muted-foreground text-sm">{rec.description}</p>
+                  <p className="text-foreground font-medium mb-1">
+                    {rec.title}
+                  </p>
+                  <p className="text-muted-foreground text-sm">
+                    {rec.description}
+                  </p>
                   {rec.action && (
                     <Button
                       size="sm"

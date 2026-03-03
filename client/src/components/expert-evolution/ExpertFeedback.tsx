@@ -243,8 +243,7 @@ export function InlineExpertFeedback({
         originalOutput: responseContent.slice(0, 200),
       });
       onFeedbackSubmitted?.(rating);
-    } catch {
-    }
+    } catch {}
   };
 
   if (rated) {

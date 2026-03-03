@@ -9,7 +9,13 @@ import { protectedProcedure, router } from "../_core/trpc";
 import { db } from "../db";
 import { subscriptions } from "../../drizzle/schema";
 
-const BILLING_CYCLES = ["monthly", "quarterly", "annual", "one_time", "usage_based"] as const;
+const BILLING_CYCLES = [
+  "monthly",
+  "quarterly",
+  "annual",
+  "one_time",
+  "usage_based",
+] as const;
 const STATUSES = ["active", "trial", "cancelled", "paused"] as const;
 
 export const subscriptionTrackerRouter = router({
@@ -204,11 +210,14 @@ export const subscriptionTrackerRouter = router({
         ),
       }));
 
-    const nextRenewal = upcoming.length > 0 ? {
-      subscriptionName: upcoming[0].name,
-      daysUntilRenewal: upcoming[0].daysUntilRenewal,
-      cost: upcoming[0].cost,
-    } : null;
+    const nextRenewal =
+      upcoming.length > 0
+        ? {
+            subscriptionName: upcoming[0].name,
+            daysUntilRenewal: upcoming[0].daysUntilRenewal,
+            cost: upcoming[0].cost,
+          }
+        : null;
     return {
       upcoming,
       totalUpcomingCost: upcoming.reduce((sum, s) => sum + s.cost, 0),

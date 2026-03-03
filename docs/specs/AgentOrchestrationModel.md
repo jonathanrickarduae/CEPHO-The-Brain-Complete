@@ -1,4 +1,5 @@
 # Agent Orchestration Model
+
 Phase: 5
 Status: Draft
 
@@ -26,12 +27,12 @@ The platform includes a variety of specialized agents, each optimized for a spec
 
 ### 3.1. Agent Categories
 
-| Category | Example Agents | Function |
-|---|---|---|
-| **Research & Analysis** | `MarketAnalysisAgent`, `FinancialModelingAgent` | Gathers and synthesizes information, creates reports, and builds predictive models. |
-| **Content & Creative** | `CopywritingAgent`, `GraphicDesignAgent` | Generates written and visual content for marketing, product, and communications. |
-| **Software Development** | `CodeGenerationAgent`, `DatabaseAdminAgent` | Writes, tests, and deploys code; manages database schemas and infrastructure. |
-| **Marketing & Sales** | `SEMAgent`, `SocialMediaAgent` | Manages advertising campaigns, social media presence, and lead generation funnels. |
+| Category                 | Example Agents                                  | Function                                                                                                        |
+| ------------------------ | ----------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| **Research & Analysis**  | `MarketAnalysisAgent`, `FinancialModelingAgent` | Gathers and synthesizes information, creates reports, and builds predictive models.                             |
+| **Content & Creative**   | `CopywritingAgent`, `GraphicDesignAgent`        | Generates written and visual content for marketing, product, and communications.                                |
+| **Software Development** | `CodeGenerationAgent`, `DatabaseAdminAgent`     | Writes, tests, and deploys code; manages database schemas and infrastructure.                                   |
+| **Marketing & Sales**    | `SEMAgent`, `SocialMediaAgent`                  | Manages advertising campaigns, social media presence, and lead generation funnels.                              |
 | **External Integration** | `StripeIntegrationAgent`, `AWSIntegrationAgent` | Interacts with third-party APIs to perform real-world actions like processing payments or provisioning servers. |
 
 ## 4. Communication and Data Flow

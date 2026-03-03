@@ -16,11 +16,11 @@ CEPHO.AI is an autonomous AI Chief of Staff platform for a single executive (Vic
 
 ## Toolchain
 
-| Tool | Role |
-|---|---|
-| **Manus** | Primary builder — planning, code, execution |
-| **Snyk Code** | Security scanning in CI/CD (SNYK_TOKEN set in GitHub Secrets) |
-| **Claude Code** | Large-scale multi-file implementation sprints |
+| Tool            | Role                                                          |
+| --------------- | ------------------------------------------------------------- |
+| **Manus**       | Primary builder — planning, code, execution                   |
+| **Snyk Code**   | Security scanning in CI/CD (SNYK_TOKEN set in GitHub Secrets) |
+| **Claude Code** | Large-scale multi-file implementation sprints                 |
 
 ---
 
@@ -34,42 +34,43 @@ CEPHO.AI is an autonomous AI Chief of Staff platform for a single executive (Vic
 
 ## Environment Variables (All Set on Render)
 
-| Variable | Status |
-|---|---|
-| DATABASE_URL | Live |
-| SUPABASE_URL | Live |
-| SUPABASE_SERVICE_ROLE_KEY | Live |
-| SUPABASE_JWT_SECRET | Live |
-| VITE_SUPABASE_URL | Live |
-| VITE_SUPABASE_ANON_KEY | Live |
-| ELEVENLABS_API_KEY | Live |
-| SYNTHESIA_API_KEY | Live |
-| TODOIST_API_KEY | Live |
-| TRELLO_API_KEY | Live |
-| TRELLO_API_SECRET | Live |
-| ANTHROPIC_API_KEY | Live |
-| OPENAI_API_KEY | Live (confirm on Render) |
+| Variable                  | Status                   |
+| ------------------------- | ------------------------ |
+| DATABASE_URL              | Live                     |
+| SUPABASE_URL              | Live                     |
+| SUPABASE_SERVICE_ROLE_KEY | Live                     |
+| SUPABASE_JWT_SECRET       | Live                     |
+| VITE_SUPABASE_URL         | Live                     |
+| VITE_SUPABASE_ANON_KEY    | Live                     |
+| ELEVENLABS_API_KEY        | Live                     |
+| SYNTHESIA_API_KEY         | Live                     |
+| TODOIST_API_KEY           | Live                     |
+| TRELLO_API_KEY            | Live                     |
+| TRELLO_API_SECRET         | Live                     |
+| ANTHROPIC_API_KEY         | Live                     |
+| OPENAI_API_KEY            | Live (confirm on Render) |
 
 ---
 
 ## Phase Completion Status
 
-| Phase | Title | Status |
-|---|---|---|
-| Phase 0 | Pre-Conditions (CI/CD, Snyk, ADRs, PR template) | COMPLETE |
-| Phase 1 | Stabilise & Fix (auth, crashes, mobile, workflows) | COMPLETE |
-| Phase 2 | AI Foundations + Enterprise (stubs, settings, integrations) | COMPLETE |
-| Phase 3 | Deep Automation (cron, voice, CEPHO Score, Innovation Flywheel) | COMPLETE |
-| Phase 4 | Scale & Growth (design system, pagination, multi-workspace) | COMPLETE |
-| Phase 5 | Operational Excellence (GDPR, audit log, health checks) | COMPLETE |
-| Phase 6 | Enhancements (agent ratings, API keys, War Room) | COMPLETE |
-| Phase 7 | Full Autonomy (Persephone Board, Autonomous Execution Engine) | COMPLETE |
-| Phase 8 | Admin & Governance (Admin Dashboard, God Mode) | COMPLETE |
-| Post-Phase | CI/CD Fixes, Schema Corrections, Workflow Tables, Data Wiring | COMPLETE |
+| Phase      | Title                                                           | Status   |
+| ---------- | --------------------------------------------------------------- | -------- |
+| Phase 0    | Pre-Conditions (CI/CD, Snyk, ADRs, PR template)                 | COMPLETE |
+| Phase 1    | Stabilise & Fix (auth, crashes, mobile, workflows)              | COMPLETE |
+| Phase 2    | AI Foundations + Enterprise (stubs, settings, integrations)     | COMPLETE |
+| Phase 3    | Deep Automation (cron, voice, CEPHO Score, Innovation Flywheel) | COMPLETE |
+| Phase 4    | Scale & Growth (design system, pagination, multi-workspace)     | COMPLETE |
+| Phase 5    | Operational Excellence (GDPR, audit log, health checks)         | COMPLETE |
+| Phase 6    | Enhancements (agent ratings, API keys, War Room)                | COMPLETE |
+| Phase 7    | Full Autonomy (Persephone Board, Autonomous Execution Engine)   | COMPLETE |
+| Phase 8    | Admin & Governance (Admin Dashboard, God Mode)                  | COMPLETE |
+| Post-Phase | CI/CD Fixes, Schema Corrections, Workflow Tables, Data Wiring   | COMPLETE |
 
 ---
 
 ## CI/CD Status
+
 - **ci-cd.yml:** PASSING (pnpm v10, lockfile v9 compatible)
 - **ci.yml:** PASSING (all jobs: Lint, TypeScript, Build, Tests, Security, Deploy)
 - **db-backup.yml:** PASSING
@@ -81,6 +82,7 @@ CEPHO.AI is an autonomous AI Chief of Staff platform for a single executive (Vic
 ## Session Log (2026-03-02 — Session 3)
 
 ### CI/CD & Deployment Fixes
+
 - Fixed pnpm v8/v10 lockfile mismatch across all 3 workflows
 - Fixed Render segfault: pinned Node.js to 22.13.0 via `.node-version` + `engines` field
 - Added `healthCheckPath: /health` to `render.yaml`
@@ -88,6 +90,7 @@ CEPHO.AI is an autonomous AI Chief of Staff platform for a single executive (Vic
 - Verified production health: `{"status":"ok","uptime":137s,"environment":"production"}`
 
 ### Backend Improvements
+
 - **Synthesia video generation** fully wired in `victoriaBriefing.router.ts` + `getVideoStatus` endpoint
 - **PDF generation** wired in `victoriaBriefing.router.ts` and `eveningReview.router.ts` using `pdfService`
 - **Document email history** — new `documentEmailHistory` table + wired into `documentLibrary.router.ts`
@@ -96,6 +99,7 @@ CEPHO.AI is an autonomous AI Chief of Staff platform for a single executive (Vic
 - **Server resilience** — `process.on('unhandledRejection')` + `process.on('uncaughtException')` handlers
 
 ### Frontend Improvements
+
 - **DailyBrief** — added `pendingVideoId` state + polling via `getVideoStatus`
 - **Settings GDPR** — fixed `Export My Data` button (was calling `useQuery()` inside `onClick`)
 - **Settings VaultPanel** — replaced all hardcoded demo data with real tRPC queries:
@@ -106,6 +110,7 @@ CEPHO.AI is an autonomous AI Chief of Staff platform for a single executive (Vic
 - **VaultSecurityGate** — wired to `trpc.twoFactor.verify` for real TOTP verification (no more demo simulation)
 
 ### Schema Additions
+
 - Migration 0038: Fixed agent_ratings/api_keys/audit_logs to use camelCase columns (matching Drizzle schema)
 - Migration 0039: `cepho_workflows` and `cepho_workflow_steps` tables (for WorkflowsPage REST route)
 - Migration 0040: `document_email_history` table (for DocumentLibrary email tracking)
@@ -116,6 +121,7 @@ CEPHO.AI is an autonomous AI Chief of Staff platform for a single executive (Vic
 ## Complete File Inventory (What Was Built)
 
 ### New Routers (server/routers/)
+
 - `digitalTwin.router.ts` — AI-powered Digital Twin calibration and profile
 - `cephoScore.router.ts` — Single executive performance metric (0-100)
 - `autonomousExecution.router.ts` — One-sentence execution engine
@@ -129,17 +135,20 @@ CEPHO.AI is an autonomous AI Chief of Staff platform for a single executive (Vic
 - `victoriaBriefing.router.ts` — Victoria's daily briefing + Synthesia video generation (wired)
 
 ### New Services (server/services/)
+
 - `scheduler.ts` — Server-side cron scheduler (12 automated jobs)
 - `documentTemplating.ts` — Document templating engine
 - `synthesia.ts` — Synthesia video generation service (wired into victoriaBriefing)
 - `pdfService.ts` — PDF generation from markdown/brief data
 
 ### New Pages (client/src/pages/)
+
 - `Onboarding.tsx` — Multi-step onboarding wizard (Digital Twin calibration)
 - `WarRoom.tsx` — Crisis management dashboard
 - `AdminDashboard.tsx` — God Mode admin control panel (wired to real data)
 
 ### Key Fixes Applied
+
 - `context.ts` — MOCK_ADMIN_USER security bypass removed
 - `main.tsx` — Client-side auth redirect bypass removed
 - `DevelopmentPathway.tsx` — Filter crash fixed
@@ -155,15 +164,17 @@ CEPHO.AI is an autonomous AI Chief of Staff platform for a single executive (Vic
 - `VaultSecurityGate.tsx` — Real TOTP verification via twoFactor.verify
 - `server/_core/index.ts` — Process-level error handlers (unhandledRejection, uncaughtException)
 - `server/routes/workflows.ts` — Fixed success flag, column names (stepNumber→step), ordering
-- `server/migrations/run-migrations.ts` — Auto-discovers all drizzle/*.sql files, proper logging
+- `server/migrations/run-migrations.ts` — Auto-discovers all drizzle/\*.sql files, proper logging
 
 ### Schema Additions (drizzle/schema.ts + migrations)
+
 - Migration 0037: `agentRatings` table, `apiKeys` table
 - Migration 0038: Fixed agent_ratings/api_keys/audit_logs to use camelCase columns (matching Drizzle schema)
 - Migration 0039: `cepho_workflows` and `cepho_workflow_steps` tables (for WorkflowsPage REST route)
 - Migration 0040: `document_email_history` table (for DocumentLibrary email tracking)
 
 ### CI/CD & DevOps
+
 - `.github/workflows/ci.yml` — Upgraded with Snyk security scanning, pnpm v10, commit status optional
 - `.github/workflows/ci-cd.yml` — Fixed pnpm version (v10), removed explicit version conflict
 - `.node-version` — Pinned to 22.13.0 (fixes Render segfault on Node 22.22.0)

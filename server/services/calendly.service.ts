@@ -77,8 +77,10 @@ export class CalendlyService {
     }
   ): Promise<CalendlyEvent[]> {
     const params = new URLSearchParams({ user: userUri });
-    if (options?.minStartTime) params.set("min_start_time", options.minStartTime);
-    if (options?.maxStartTime) params.set("max_start_time", options.maxStartTime);
+    if (options?.minStartTime)
+      params.set("min_start_time", options.minStartTime);
+    if (options?.maxStartTime)
+      params.set("max_start_time", options.maxStartTime);
     if (options?.status) params.set("status", options.status);
     if (options?.count) params.set("count", String(options.count));
 
@@ -96,7 +98,11 @@ export class CalendlyService {
       startTime: e.start_time as string,
       endTime: e.end_time as string,
       location: (e.location ?? {}) as Record<string, unknown>,
-      inviteesCounter: e.invitees_counter as { total: number; active: number; limit: number },
+      inviteesCounter: e.invitees_counter as {
+        total: number;
+        active: number;
+        limit: number;
+      },
       eventType: e.event_type as string,
     }));
   }
@@ -148,7 +154,12 @@ export class CalendlyService {
   }
 
   /** Test connection */
-  async testConnection(): Promise<{ ok: boolean; name?: string; email?: string; error?: string }> {
+  async testConnection(): Promise<{
+    ok: boolean;
+    name?: string;
+    email?: string;
+    error?: string;
+  }> {
     try {
       const user = await this.getCurrentUser();
       return { ok: true, name: user.name, email: user.email };

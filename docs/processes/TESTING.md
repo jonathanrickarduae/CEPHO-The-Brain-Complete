@@ -27,10 +27,10 @@ We will follow the testing pyramid model:
 ## 4. End-to-End (E2E) Testing
 
 - **Scope:** Critical user journeys, such as:
-    - User login and authentication
-    - Creating a new project via Project Genesis
-    - Submitting an idea to the Innovation Hub
-    - Running a full autonomous execution from a one-sentence command
+  - User login and authentication
+  - Creating a new project via Project Genesis
+  - Submitting an idea to the Innovation Hub
+  - Running a full autonomous execution from a one-sentence command
 - **Framework:** Playwright
 - **Location:** A separate `/e2e` directory.
 - **Execution:** Runs nightly against the `staging` environment.

@@ -32,7 +32,10 @@ export const adminRouter = router({
       db.select({ count: count() }).from(projects),
       db.select({ count: count() }).from(innovationIdeas),
       db.select({ count: count() }).from(agentRatings),
-      db.select({ count: count() }).from(apiKeys).where(sql`is_active = true`),
+      db
+        .select({ count: count() })
+        .from(apiKeys)
+        .where(sql`is_active = true`),
       db.select({ avg: avg(moodHistory.score) }).from(moodHistory),
     ]);
 
@@ -80,7 +83,7 @@ export const adminRouter = router({
       .limit(10);
 
     return {
-      agents: ratings.map((r) => ({
+      agents: ratings.map(r => ({
         name: r.agentName,
         avgRating: Number(r.avgRating ?? 0).toFixed(1),
         totalRatings: Number(r.totalRatings),

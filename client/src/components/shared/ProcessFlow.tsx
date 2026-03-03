@@ -315,14 +315,18 @@ ${step.notes ? `\n**Notes:** ${step.notes}` : ""}
                             <span className="text-muted-foreground">
                               Owner:
                             </span>
-                            <span className="text-foreground">{step.owner}</span>
+                            <span className="text-foreground">
+                              {step.owner}
+                            </span>
                           </div>
                           <div className="flex items-center gap-2 text-sm">
                             <Clock className="w-4 h-4 text-muted-foreground" />
                             <span className="text-muted-foreground">
                               Duration:
                             </span>
-                            <span className="text-foreground">{step.duration}</span>
+                            <span className="text-foreground">
+                              {step.duration}
+                            </span>
                           </div>
                         </div>
 

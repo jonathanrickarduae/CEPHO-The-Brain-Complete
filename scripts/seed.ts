@@ -8,17 +8,17 @@
  * multiple times safely without creating duplicates.
  */
 
-import { drizzle } from 'drizzle-orm/postgres-js';
-import postgres from 'postgres';
-import * as schema from '../drizzle/schema.ts';
-import { eq } from 'drizzle-orm';
+import { drizzle } from "drizzle-orm/postgres-js";
+import postgres from "postgres";
+import * as schema from "../drizzle/schema.ts";
+import { eq } from "drizzle-orm";
 
 // ─────────────────────────────────────────────
 // Database Connection
 // ─────────────────────────────────────────────
 const connectionString = process.env.DATABASE_URL;
 if (!connectionString) {
-  console.error('❌ DATABASE_URL environment variable is not set.');
+  console.error("❌ DATABASE_URL environment variable is not set.");
   process.exit(1);
 }
 
@@ -30,10 +30,10 @@ const db = drizzle(client, { schema });
 // ─────────────────────────────────────────────
 
 async function seedAdminUser() {
-  console.log('👤 Seeding admin user...');
+  console.log("👤 Seeding admin user...");
 
-  const adminEmail = process.env.ADMIN_EMAIL || 'admin@cepho.ai';
-  const adminName = process.env.ADMIN_NAME || 'Admin';
+  const adminEmail = process.env.ADMIN_EMAIL || "admin@cepho.ai";
+  const adminName = process.env.ADMIN_NAME || "Admin";
 
   const existing = await db
     .select()
@@ -51,8 +51,8 @@ async function seedAdminUser() {
     .values({
       email: adminEmail,
       name: adminName,
-      role: 'admin',
-      subscriptionTier: 'pro',
+      role: "admin",
+      subscriptionTier: "pro",
       onboardingCompleted: true,
     })
     .returning();
@@ -62,7 +62,7 @@ async function seedAdminUser() {
 }
 
 async function seedUserSettings(userId: number) {
-  console.log('⚙️  Seeding default user settings...');
+  console.log("⚙️  Seeding default user settings...");
 
   const existing = await db
     .select()
@@ -71,26 +71,26 @@ async function seedUserSettings(userId: number) {
     .limit(1);
 
   if (existing.length > 0) {
-    console.log('   ✓ User settings already exist');
+    console.log("   ✓ User settings already exist");
     return;
   }
 
   await db.insert(schema.userSettings).values({
     userId,
-    theme: 'dark',
-    language: 'en',
-    timezone: 'UTC',
+    theme: "dark",
+    language: "en",
+    timezone: "UTC",
     notificationsEnabled: true,
     emailNotifications: true,
     aiEnabled: true,
-    defaultLlmProvider: 'openai',
+    defaultLlmProvider: "openai",
   });
 
-  console.log('   ✓ Created default user settings');
+  console.log("   ✓ Created default user settings");
 }
 
 async function seedAiProviderSettings(userId: number) {
-  console.log('🤖 Seeding AI provider settings...');
+  console.log("🤖 Seeding AI provider settings...");
 
   const existing = await db
     .select()
@@ -99,31 +99,47 @@ async function seedAiProviderSettings(userId: number) {
     .limit(1);
 
   if (existing.length > 0) {
-    console.log('   ✓ AI provider settings already exist');
+    console.log("   ✓ AI provider settings already exist");
     return;
   }
 
   await db.insert(schema.aiProviderSettings).values({
     userId,
-    provider: 'openai',
-    model: 'gpt-4o',
+    provider: "openai",
+    model: "gpt-4o",
     temperature: 0.7,
     maxTokens: 4096,
     isDefault: true,
   });
 
-  console.log('   ✓ Created default AI provider settings');
+  console.log("   ✓ Created default AI provider settings");
 }
 
 async function seedExpertPerformance(userId: number) {
-  console.log('🏆 Seeding expert performance records...');
+  console.log("🏆 Seeding expert performance records...");
 
   // Core expert IDs from AI_SME_Experts.json
   const expertIds = [
-    'victoria', 'cfo', 'cmo', 'cto', 'coo', 'cso', 'chro', 'clo',
-    'strategy', 'innovation', 'legal', 'compliance', 'data_scientist',
-    'product_manager', 'ux_designer', 'growth_hacker', 'brand_strategist',
-    'investor_relations', 'supply_chain', 'sustainability',
+    "victoria",
+    "cfo",
+    "cmo",
+    "cto",
+    "coo",
+    "cso",
+    "chro",
+    "clo",
+    "strategy",
+    "innovation",
+    "legal",
+    "compliance",
+    "data_scientist",
+    "product_manager",
+    "ux_designer",
+    "growth_hacker",
+    "brand_strategist",
+    "investor_relations",
+    "supply_chain",
+    "sustainability",
   ];
 
   for (const expertId of expertIds) {
@@ -149,7 +165,7 @@ async function seedExpertPerformance(userId: number) {
 }
 
 async function seedSubscription(userId: number) {
-  console.log('💳 Seeding default subscription...');
+  console.log("💳 Seeding default subscription...");
 
   const existing = await db
     .select()
@@ -158,23 +174,23 @@ async function seedSubscription(userId: number) {
     .limit(1);
 
   if (existing.length > 0) {
-    console.log('   ✓ Subscription already exists');
+    console.log("   ✓ Subscription already exists");
     return;
   }
 
   await db.insert(schema.subscriptions).values({
     userId,
-    tier: 'pro',
-    status: 'active',
+    tier: "pro",
+    status: "active",
     currentPeriodStart: new Date(),
     currentPeriodEnd: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000), // 1 year
   });
 
-  console.log('   ✓ Created default pro subscription');
+  console.log("   ✓ Created default pro subscription");
 }
 
 async function seedUserCredits(userId: number) {
-  console.log('💰 Seeding user credits...');
+  console.log("💰 Seeding user credits...");
 
   const existing = await db
     .select()
@@ -183,7 +199,7 @@ async function seedUserCredits(userId: number) {
     .limit(1);
 
   if (existing.length > 0) {
-    console.log('   ✓ User credits already exist');
+    console.log("   ✓ User credits already exist");
     return;
   }
 
@@ -194,11 +210,11 @@ async function seedUserCredits(userId: number) {
     lifetimeSpent: 0,
   });
 
-  console.log('   ✓ Created initial credit balance (1000 credits)');
+  console.log("   ✓ Created initial credit balance (1000 credits)");
 }
 
 async function seedStreaks(userId: number) {
-  console.log('🔥 Seeding streak records...');
+  console.log("🔥 Seeding streak records...");
 
   const existing = await db
     .select()
@@ -207,7 +223,7 @@ async function seedStreaks(userId: number) {
     .limit(1);
 
   if (existing.length > 0) {
-    console.log('   ✓ Streak records already exist');
+    console.log("   ✓ Streak records already exist");
     return;
   }
 
@@ -218,11 +234,11 @@ async function seedStreaks(userId: number) {
     lastActivityDate: new Date(),
   });
 
-  console.log('   ✓ Created streak record');
+  console.log("   ✓ Created streak record");
 }
 
 async function seedWellnessScore(userId: number) {
-  console.log('💚 Seeding wellness score...');
+  console.log("💚 Seeding wellness score...");
 
   const existing = await db
     .select()
@@ -231,7 +247,7 @@ async function seedWellnessScore(userId: number) {
     .limit(1);
 
   if (existing.length > 0) {
-    console.log('   ✓ Wellness score already exists');
+    console.log("   ✓ Wellness score already exists");
     return;
   }
 
@@ -241,17 +257,17 @@ async function seedWellnessScore(userId: number) {
     workloadScore: 75,
     focusScore: 75,
     balanceScore: 75,
-    stressLevel: 'moderate',
+    stressLevel: "moderate",
   });
 
-  console.log('   ✓ Created initial wellness score');
+  console.log("   ✓ Created initial wellness score");
 }
 
 // ─────────────────────────────────────────────
 // Main Seed Runner
 // ─────────────────────────────────────────────
 async function main() {
-  console.log('\n🌱 CEPHO.AI — Running database seed...\n');
+  console.log("\n🌱 CEPHO.AI — Running database seed...\n");
 
   try {
     // 1. Seed admin user first (all other records depend on userId)
@@ -267,9 +283,9 @@ async function main() {
     await seedStreaks(userId);
     await seedWellnessScore(userId);
 
-    console.log('\n✅ Seed completed successfully.\n');
+    console.log("\n✅ Seed completed successfully.\n");
   } catch (error) {
-    console.error('\n❌ Seed failed:', error);
+    console.error("\n❌ Seed failed:", error);
     process.exit(1);
   } finally {
     await client.end();

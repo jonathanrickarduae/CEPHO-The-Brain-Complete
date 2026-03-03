@@ -12,10 +12,7 @@
  */
 
 import { useState } from "react";
-import {
-  Card,
-  CardContent,
-} from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -233,7 +230,9 @@ export function CEPHOOrgChart({
           <div className="flex justify-center my-4">
             <div className="flex flex-col items-center">
               <ArrowDown className="h-6 w-6 text-gray-600" />
-              <span className="text-xs text-muted-foreground/70">Data & Intelligence</span>
+              <span className="text-xs text-muted-foreground/70">
+                Data & Intelligence
+              </span>
             </div>
           </div>
         </div>
@@ -258,7 +257,9 @@ export function CEPHOOrgChart({
             <div className="w-0.5 h-8 bg-gradient-to-b from-[#E91E8C] to-purple-500"></div>
             <div className="flex items-center gap-2 bg-background px-3 py-1 rounded-full border border-border">
               <Sparkles className="h-3 w-3 text-purple-400" />
-              <span className="text-xs text-muted-foreground">AI Executive Layer</span>
+              <span className="text-xs text-muted-foreground">
+                AI Executive Layer
+              </span>
             </div>
           </div>
         </div>
@@ -432,13 +433,17 @@ export function CEPHOOrgChart({
                 </p>
               </div>
               <div>
-                <p className="text-3xl font-bold text-[var(--brain-cyan)]">8+</p>
+                <p className="text-3xl font-bold text-[var(--brain-cyan)]">
+                  8+
+                </p>
                 <p className="text-sm text-muted-foreground">AI SME Experts</p>
               </div>
             </div>
             <div className="mt-6 pt-6 border-t border-border/50 text-center">
               <p className="text-sm text-muted-foreground">
-                <span className="text-foreground font-medium">The CEPHO Model:</span>{" "}
+                <span className="text-foreground font-medium">
+                  The CEPHO Model:
+                </span>{" "}
                 One human CEO amplified by AI infrastructure, with a Virtual
                 Chief of Staff handling research and coordination, Victoria
                 delivering all briefings, and an unlimited AI expert team

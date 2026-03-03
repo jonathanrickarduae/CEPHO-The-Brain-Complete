@@ -1,12 +1,5 @@
 import { useState } from "react";
-import {
-  Shield,
-  ShieldCheck,
-  Plus,
-  Trash2,
-  Check,
-  X,
-} from "lucide-react";
+import { Shield, ShieldCheck, Plus, Trash2, Check, X } from "lucide-react";
 import { Button } from "../ui/button";
 import {
   Card,

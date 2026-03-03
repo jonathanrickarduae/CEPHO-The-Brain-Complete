@@ -138,7 +138,11 @@ export class SynthesiaService {
   }
 
   /** Test connection by listing avatars */
-  async testConnection(): Promise<{ ok: boolean; avatarCount?: number; error?: string }> {
+  async testConnection(): Promise<{
+    ok: boolean;
+    avatarCount?: number;
+    error?: string;
+  }> {
     try {
       const avatars = await this.listAvatars();
       return { ok: true, avatarCount: avatars.length };

@@ -41,14 +41,15 @@ export function CalendarIntegration() {
   const [syncing, setSyncing] = useState(false);
 
   // Real tRPC queries
-  const { data: integrationStatus } = trpc.calendar.getIntegrationStatus.useQuery();
+  const { data: integrationStatus } =
+    trpc.calendar.getIntegrationStatus.useQuery();
   const { data: todaySummary } = trpc.calendar.getTodaySummary.useQuery();
   const syncMutation = trpc.calendar.sync.useMutation({
     onSuccess: () => {
       setSyncing(false);
       toast.success("Calendar synced", "Your calendar is up to date.");
     },
-    onError: (err) => {
+    onError: err => {
       setSyncing(false);
       toast.error("Sync failed", err.message);
     },
@@ -57,19 +58,29 @@ export function CalendarIntegration() {
     onSuccess: (_data, vars) => {
       const newAccount: CalendarAccount = {
         id: `${vars.provider}-${Date.now()}`,
-        email: (vars.metadata as Record<string, string> | undefined)?.email ?? `${vars.provider}@connected`,
+        email:
+          (vars.metadata as Record<string, string> | undefined)?.email ??
+          `${vars.provider}@connected`,
         provider: vars.provider === "outlook" ? "microsoft" : "google",
         connected: true,
         lastSync: new Date(),
         calendars: [
-          { id: "primary", name: "Primary Calendar", color: vars.provider === "google" ? "#4285f4" : "#0078d4", enabled: true },
+          {
+            id: "primary",
+            name: "Primary Calendar",
+            color: vars.provider === "google" ? "#4285f4" : "#0078d4",
+            enabled: true,
+          },
         ],
       };
       setAccounts(prev => [...prev, newAccount]);
       setConnecting(null);
-      toast.success("Calendar connected", `${vars.provider} calendar connected successfully.`);
+      toast.success(
+        "Calendar connected",
+        `${vars.provider} calendar connected successfully.`
+      );
     },
-    onError: (err) => {
+    onError: err => {
       setConnecting(null);
       toast.error("Connection failed", err.message);
     },
@@ -77,13 +88,19 @@ export function CalendarIntegration() {
 
   const connectGoogle = () => {
     setConnecting("google");
-    connectIntegration.mutate({ provider: "google", metadata: { email: "user@gmail.com" } });
+    connectIntegration.mutate({
+      provider: "google",
+      metadata: { email: "user@gmail.com" },
+    });
   };
   const connectMicrosoft = () => {
     setConnecting("microsoft");
-    connectIntegration.mutate({ provider: "outlook", metadata: { email: "user@outlook.com" } });
+    connectIntegration.mutate({
+      provider: "outlook",
+      metadata: { email: "user@outlook.com" },
+    });
   };
-    const disconnectAccount = (accountId: string) => {
+  const disconnectAccount = (accountId: string) => {
     setAccounts(accounts.filter(a => a.id !== accountId));
   };
 
@@ -105,7 +122,8 @@ export function CalendarIntegration() {
 
   const syncNow = () => {
     setSyncing(true);
-    const provider = accounts[0]?.provider === "microsoft" ? "outlook" : "google";
+    const provider =
+      accounts[0]?.provider === "microsoft" ? "outlook" : "google";
     syncMutation.mutate({ provider });
   };
 
@@ -321,7 +339,10 @@ export function UpcomingEvents() {
           <Clock className="w-5 h-5 text-[var(--brain-cyan)]" />
           Upcoming
         </h3>
-        <a href="#" className="text-sm text-[var(--brain-cyan)] hover:text-cyan-300">
+        <a
+          href="#"
+          className="text-sm text-[var(--brain-cyan)] hover:text-cyan-300"
+        >
           View all
         </a>
       </div>

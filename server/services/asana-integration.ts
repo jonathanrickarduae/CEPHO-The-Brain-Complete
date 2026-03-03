@@ -45,7 +45,11 @@ export class AsanaIntegrationService {
   }
 
   /** Test connection by fetching workspaces */
-  async testConnection(): Promise<{ ok: boolean; workspaceCount?: number; error?: string }> {
+  async testConnection(): Promise<{
+    ok: boolean;
+    workspaceCount?: number;
+    error?: string;
+  }> {
     try {
       const workspaces = await this.getWorkspaces();
       return { ok: true, workspaceCount: workspaces.length };
@@ -73,9 +77,12 @@ export class AsanaIntegrationService {
     } catch (error: unknown) {
       log.error(
         "[Asana] Failed to get workspaces:",
-        (error as { response?: { data?: unknown }; message?: string }).response?.data || (error as Error).message
+        (error as { response?: { data?: unknown }; message?: string }).response
+          ?.data || (error as Error).message
       );
-      throw new Error(`Failed to get Asana workspaces: ${(error as Error).message}`);
+      throw new Error(
+        `Failed to get Asana workspaces: ${(error as Error).message}`
+      );
     }
   }
 
@@ -94,9 +101,12 @@ export class AsanaIntegrationService {
     } catch (error: unknown) {
       log.error(
         "[Asana] Failed to get projects:",
-        (error as { response?: { data?: unknown }; message?: string }).response?.data || (error as Error).message
+        (error as { response?: { data?: unknown }; message?: string }).response
+          ?.data || (error as Error).message
       );
-      throw new Error(`Failed to get Asana projects: ${(error as Error).message}`);
+      throw new Error(
+        `Failed to get Asana projects: ${(error as Error).message}`
+      );
     }
   }
 
@@ -137,9 +147,12 @@ export class AsanaIntegrationService {
     } catch (error: unknown) {
       log.error(
         "[Asana] Failed to create project:",
-        (error as { response?: { data?: unknown }; message?: string }).response?.data || (error as Error).message
+        (error as { response?: { data?: unknown }; message?: string }).response
+          ?.data || (error as Error).message
       );
-      throw new Error(`Failed to create Asana project: ${(error as Error).message}`);
+      throw new Error(
+        `Failed to create Asana project: ${(error as Error).message}`
+      );
     }
   }
 
@@ -158,7 +171,8 @@ export class AsanaIntegrationService {
     } catch (error: unknown) {
       log.error(
         "[Asana] Failed to get tasks:",
-        (error as { response?: { data?: unknown }; message?: string }).response?.data || (error as Error).message
+        (error as { response?: { data?: unknown }; message?: string }).response
+          ?.data || (error as Error).message
       );
       throw new Error(`Failed to get Asana tasks: ${(error as Error).message}`);
     }
@@ -200,9 +214,12 @@ export class AsanaIntegrationService {
     } catch (error: unknown) {
       log.error(
         "[Asana] Failed to create task:",
-        (error as { response?: { data?: unknown }; message?: string }).response?.data || (error as Error).message
+        (error as { response?: { data?: unknown }; message?: string }).response
+          ?.data || (error as Error).message
       );
-      throw new Error(`Failed to create Asana task: ${(error as Error).message}`);
+      throw new Error(
+        `Failed to create Asana task: ${(error as Error).message}`
+      );
     }
   }
 
@@ -233,9 +250,12 @@ export class AsanaIntegrationService {
     } catch (error: unknown) {
       log.error(
         "[Asana] Failed to update task:",
-        (error as { response?: { data?: unknown }; message?: string }).response?.data || (error as Error).message
+        (error as { response?: { data?: unknown }; message?: string }).response
+          ?.data || (error as Error).message
       );
-      throw new Error(`Failed to update Asana task: ${(error as Error).message}`);
+      throw new Error(
+        `Failed to update Asana task: ${(error as Error).message}`
+      );
     }
   }
 

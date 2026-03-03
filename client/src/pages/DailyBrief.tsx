@@ -350,27 +350,32 @@ export default function DailyBrief() {
   const [pendingVideoId, setPendingVideoId] = useState<string | null>(null);
 
   // Live briefing data from AI
-  const { data: liveBrief, isLoading: briefLoading } = trpc.victoriaBriefing.getDailyBriefing.useQuery(undefined, {
-    staleTime: 5 * 60 * 1000, // Cache for 5 minutes
-    retry: 1,
-  });
+  const { data: liveBrief, isLoading: briefLoading } =
+    trpc.victoriaBriefing.getDailyBriefing.useQuery(undefined, {
+      staleTime: 5 * 60 * 1000, // Cache for 5 minutes
+      retry: 1,
+    });
 
   // Poll for video status when a video is being generated
   const { data: videoStatus } = trpc.victoriasBrief.getVideoStatus.useQuery(
     { videoId: pendingVideoId! },
     {
       enabled: !!pendingVideoId,
-      refetchInterval: (query) => {
+      refetchInterval: query => {
         const s = (query as any)?.state?.data?.status;
-        if (s === 'complete' || s === 'error') return false;
+        if (s === "complete" || s === "error") return false;
         return 5000;
       },
     }
   );
   // Auto-open video when Synthesia finishes rendering
-  if (videoStatus?.status === 'complete' && videoStatus?.downloadUrl && pendingVideoId) {
-    window.open(videoStatus.downloadUrl, '_blank');
-    toast.success('Your Victoria video brief is ready!');
+  if (
+    videoStatus?.status === "complete" &&
+    videoStatus?.downloadUrl &&
+    pendingVideoId
+  ) {
+    window.open(videoStatus.downloadUrl, "_blank");
+    toast.success("Your Victoria video brief is ready!");
     setPendingVideoId(null);
   }
   const generatePdfMutation = trpc.victoriasBrief.generatePdf.useMutation();
@@ -380,7 +385,9 @@ export default function DailyBrief() {
   const handleExport = async (format: "pdf" | "video" | "audio") => {
     // P1-BUG-02: Guard against null URLs before calling window.open
     const briefDate = liveBrief?.date ?? new Date().toISOString();
-    const briefText = liveBrief?.briefing ?? `Good morning! Here's your daily brief for ${new Date().toLocaleDateString()}.`;
+    const briefText =
+      liveBrief?.briefing ??
+      `Good morning! Here's your daily brief for ${new Date().toLocaleDateString()}.`;
     try {
       if (format === "pdf") {
         toast.info("Generating PDF brief...");
@@ -392,7 +399,9 @@ export default function DailyBrief() {
           window.open(result.pdfUrl, "_blank");
           toast.success("PDF generated successfully!");
         } else {
-          toast.info(result.message || "PDF generation queued. Check back shortly.");
+          toast.info(
+            result.message || "PDF generation queued. Check back shortly."
+          );
         }
       } else if (format === "video") {
         toast.info("Creating video brief with Victoria...");
@@ -402,12 +411,16 @@ export default function DailyBrief() {
         });
         if (result.status === "processing" && result.videoId) {
           setPendingVideoId(result.videoId);
-          toast.info("Video is being generated. This page will auto-open it when ready.");
+          toast.info(
+            "Video is being generated. This page will auto-open it when ready."
+          );
         } else if (result.videoUrl) {
           window.open(result.videoUrl, "_blank");
           toast.success("Video generated successfully!");
         } else {
-          toast.info(result.message || "Video generation requires Synthesia API key.");
+          toast.info(
+            result.message || "Video generation requires Synthesia API key."
+          );
         }
       } else if (format === "audio") {
         toast.info("Creating podcast version with Victoria's voice...");
@@ -419,7 +432,9 @@ export default function DailyBrief() {
           window.open(result.audioUrl, "_blank");
           toast.success("Audio generated successfully!");
         } else {
-          toast.info(result.message || "Audio generation requires ElevenLabs API key.");
+          toast.info(
+            result.message || "Audio generation requires ElevenLabs API key."
+          );
         }
       }
     } catch {
@@ -631,7 +646,12 @@ export default function DailyBrief() {
               <p className="text-muted-foreground mt-1">
                 Your daily executive briefing •{" "}
                 {liveBrief
-                  ? new Date(liveBrief.date).toLocaleDateString("en-GB", { weekday: "long", year: "numeric", month: "long", day: "numeric" })
+                  ? new Date(liveBrief.date).toLocaleDateString("en-GB", {
+                      weekday: "long",
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })
                   : BRIEF_DATA.date}
               </p>
             </div>
@@ -752,17 +772,33 @@ export default function DailyBrief() {
                           className="text-sm text-muted-foreground whitespace-pre-wrap leading-relaxed"
                           dangerouslySetInnerHTML={{
                             __html: liveBrief.briefing
-                              .replace(/\*\*(.*?)\*\*/g, '<strong class="font-medium text-foreground">$1</strong>')
+                              .replace(
+                                /\*\*(.*?)\*\*/g,
+                                '<strong class="font-medium text-foreground">$1</strong>'
+                              )
                               .replace(/\n/g, "<br/>")
-                              .replace(/---/g, '<hr class="border-border my-2" />'),
+                              .replace(
+                                /---/g,
+                                '<hr class="border-border my-2" />'
+                              ),
                           }}
                         />
                         {liveBrief.stats && (
                           <div className="flex flex-wrap gap-2 md:gap-4 mt-3 text-xs text-muted-foreground">
-                            <span className="flex items-center gap-1"><CheckCircle2 className="w-3 h-3 text-primary" /> {liveBrief.stats.activeProjects} active projects</span>
-                            <span className="flex items-center gap-1"><Clock className="w-3 h-3 text-yellow-400" /> {liveBrief.stats.pendingTasks} pending tasks</span>
+                            <span className="flex items-center gap-1">
+                              <CheckCircle2 className="w-3 h-3 text-primary" />{" "}
+                              {liveBrief.stats.activeProjects} active projects
+                            </span>
+                            <span className="flex items-center gap-1">
+                              <Clock className="w-3 h-3 text-yellow-400" />{" "}
+                              {liveBrief.stats.pendingTasks} pending tasks
+                            </span>
                             {liveBrief.stats.highPriorityTasks > 0 && (
-                              <span className="flex items-center gap-1"><AlertTriangle className="w-3 h-3 text-red-400" /> {liveBrief.stats.highPriorityTasks} high priority</span>
+                              <span className="flex items-center gap-1">
+                                <AlertTriangle className="w-3 h-3 text-red-400" />{" "}
+                                {liveBrief.stats.highPriorityTasks} high
+                                priority
+                              </span>
                             )}
                           </div>
                         )}
@@ -775,8 +811,8 @@ export default function DailyBrief() {
                           BRIEF_DATA.schedule.filter(s => s.type === "meeting")
                             .length
                         }{" "}
-                        meetings scheduled, including your investor lunch at noon.{" "}
-                        {BRIEF_DATA.overviewSummary.energyFocus}."
+                        meetings scheduled, including your investor lunch at
+                        noon. {BRIEF_DATA.overviewSummary.energyFocus}."
                       </p>
                     )}
 
@@ -945,7 +981,7 @@ export default function DailyBrief() {
                 <div className="absolute left-[76px] top-0 bottom-0 w-px bg-border"></div>
 
                 <div className="space-y-4">
-                  {BRIEF_DATA.schedule.map((item) => (
+                  {BRIEF_DATA.schedule.map(item => (
                     <div
                       key={item.id}
                       className="flex items-start gap-4 relative"

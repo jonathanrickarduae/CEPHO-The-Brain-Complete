@@ -60,7 +60,8 @@ export class NotionService {
     return (data.results ?? []).map((db: Record<string, unknown>) => ({
       id: db.id as string,
       title:
-        ((db.title as Array<{ plain_text: string }>)?.[0]?.plain_text) ?? "Untitled",
+        (db.title as Array<{ plain_text: string }>)?.[0]?.plain_text ??
+        "Untitled",
       url: db.url as string,
       createdTime: db.created_time as string,
       lastEditedTime: db.last_edited_time as string,
@@ -77,11 +78,14 @@ export class NotionService {
     if (filter) body.filter = filter;
     if (sorts) body.sorts = sorts;
 
-    const res = await fetch(`${NOTION_API_BASE}/databases/${databaseId}/query`, {
-      method: "POST",
-      headers: getHeaders(this.apiKey),
-      body: JSON.stringify(body),
-    });
+    const res = await fetch(
+      `${NOTION_API_BASE}/databases/${databaseId}/query`,
+      {
+        method: "POST",
+        headers: getHeaders(this.apiKey),
+        body: JSON.stringify(body),
+      }
+    );
     if (!res.ok) throw new Error(`Notion query failed: ${res.statusText}`);
     return res.json();
   }
@@ -137,7 +141,11 @@ export class NotionService {
   }
 
   /** Test connection */
-  async testConnection(): Promise<{ ok: boolean; user?: string; error?: string }> {
+  async testConnection(): Promise<{
+    ok: boolean;
+    user?: string;
+    error?: string;
+  }> {
     try {
       const res = await fetch(`${NOTION_API_BASE}/users/me`, {
         headers: getHeaders(this.apiKey),

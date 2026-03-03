@@ -25,7 +25,12 @@ const getTabs = (): TabItem[] => [
   { id: "cos", label: "Chief of Staff", icon: User, path: "/operations" },
   { id: "experts", label: "AI-SMEs", icon: Users, path: "/ai-experts" },
   { id: "genesis", label: "Genesis", icon: Rocket, path: "/project-genesis" },
-  { id: "innovation", label: "Innovation", icon: TrendingUp, path: "/innovation-hub" },
+  {
+    id: "innovation",
+    label: "Innovation",
+    icon: TrendingUp,
+    path: "/innovation-hub",
+  },
   { id: "evening", label: "Evening", icon: Moon, path: "/evening-review" },
   { id: "vault", label: "Vault", icon: Lock, path: "/vault" },
 ];
@@ -130,7 +135,9 @@ export function MoreMenuSheet({
               <div className="w-12 h-12 rounded-xl bg-secondary/50 flex items-center justify-center">
                 <item.icon className="w-6 h-6 text-muted-foreground" />
               </div>
-              <span className="text-xs text-muted-foreground">{item.label}</span>
+              <span className="text-xs text-muted-foreground">
+                {item.label}
+              </span>
             </button>
           ))}
         </div>

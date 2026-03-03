@@ -123,7 +123,9 @@ export function EndOfDayWashUp({ isOpen, onComplete }: EndOfDayWashUpProps) {
                         : "bg-white/5 border border-white/10"
                     )}
                   >
-                    <span className="text-foreground/80 text-sm">{task.title}</span>
+                    <span className="text-foreground/80 text-sm">
+                      {task.title}
+                    </span>
                     {task.carryForward ? (
                       <span className="text-xs text-purple-400 flex items-center gap-1">
                         Tomorrow <ArrowRight className="w-3 h-3" />

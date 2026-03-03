@@ -362,7 +362,9 @@ export function DigitalTwinAccelerator({
 
   // Quick-fire state
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [_sessionStartTime, setSessionStartTime] = useState<number | null>(null);
+  const [_sessionStartTime, setSessionStartTime] = useState<number | null>(
+    null
+  );
   const [_isSessionActive, setIsSessionActive] = useState(false);
 
   // Scenario state
@@ -824,9 +826,9 @@ export function DigitalTwinAccelerator({
             </div>
 
             <p className="text-center text-xs text-muted-foreground mt-6">
-              Press <kbd className="px-1.5 py-0.5 bg-card rounded">Y</kbd>{" "}
-              for Yes or{" "}
-              <kbd className="px-1.5 py-0.5 bg-card rounded">N</kbd> for No
+              Press <kbd className="px-1.5 py-0.5 bg-card rounded">Y</kbd> for
+              Yes or <kbd className="px-1.5 py-0.5 bg-card rounded">N</kbd> for
+              No
             </p>
           </div>
         )}

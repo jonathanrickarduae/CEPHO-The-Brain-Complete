@@ -1,3 +1,4 @@
+import { getModelForTask } from "../utils/modelRouter";
 /**
  * Project Genesis Router — Real Implementation
  *
@@ -41,9 +42,7 @@ export const projectGenesisRouter = router({
         ? await db
             .select()
             .from(projectGenesisPhases)
-            .where(
-              inArray(projectGenesisPhases.projectId, projectIds)
-            )
+            .where(inArray(projectGenesisPhases.projectId, projectIds))
         : [];
 
     return projects.map(p => {
@@ -141,17 +140,45 @@ export const projectGenesisRouter = router({
     )
     .mutation(async ({ input, ctx }) => {
       // Auto-assign an AI agent based on industry
-      const INDUSTRY_AGENTS: Record<string, { id: string; name: string; role: string }> = {
-        "Technology": { id: "tech_advisor", name: "Ethan", role: "Tech Advisor" },
-        "Finance": { id: "financial_analyst", name: "Leo", role: "Financial Analyst" },
-        "Healthcare": { id: "research_analyst", name: "Aria", role: "Research Director" },
-        "Marketing": { id: "marketing_strategist", name: "Luna", role: "Marketing Strategist" },
-        "Legal": { id: "legal_advisor", name: "Marcus", role: "Strategy Advisor" },
-        "Creative": { id: "brand_voice_guardian", name: "Sophia", role: "Innovation Lead" },
-        "Operations": { id: "project_manager", name: "Victoria", role: "Chief of Staff" },
+      const INDUSTRY_AGENTS: Record<
+        string,
+        { id: string; name: string; role: string }
+      > = {
+        Technology: { id: "tech_advisor", name: "Ethan", role: "Tech Advisor" },
+        Finance: {
+          id: "financial_analyst",
+          name: "Leo",
+          role: "Financial Analyst",
+        },
+        Healthcare: {
+          id: "research_analyst",
+          name: "Aria",
+          role: "Research Director",
+        },
+        Marketing: {
+          id: "marketing_strategist",
+          name: "Luna",
+          role: "Marketing Strategist",
+        },
+        Legal: {
+          id: "legal_advisor",
+          name: "Marcus",
+          role: "Strategy Advisor",
+        },
+        Creative: {
+          id: "brand_voice_guardian",
+          name: "Sophia",
+          role: "Innovation Lead",
+        },
+        Operations: {
+          id: "project_manager",
+          name: "Victoria",
+          role: "Chief of Staff",
+        },
       };
       const industry = input.industry ?? "Technology";
-      const assignedAgent = INDUSTRY_AGENTS[industry] ?? INDUSTRY_AGENTS["Technology"];
+      const assignedAgent =
+        INDUSTRY_AGENTS[industry] ?? INDUSTRY_AGENTS["Technology"];
       // Create the project
       const [project] = await db
         .insert(projectGenesis)
@@ -248,7 +275,9 @@ export const projectGenesisRouter = router({
 
       // Notify on phase completion (non-blocking)
       if (input.status === "completed") {
-        const phaseName = GENESIS_PHASES.find(p => p.id === input.phaseNumber)?.name ?? `Phase ${input.phaseNumber}`;
+        const phaseName =
+          GENESIS_PHASES.find(p => p.id === input.phaseNumber)?.name ??
+          `Phase ${input.phaseNumber}`;
         createNotification({
           userId: ctx.user.id,
           type: "genesis",
@@ -354,14 +383,15 @@ Return a JSON object where each key is a slide type and the value is an object w
 Return ONLY valid JSON, no markdown.`;
 
       const response = await openai.chat.completions.create({
-        model: "gpt-4.1-mini",
+        model: getModelForTask("generate"),
         messages: [{ role: "user", content: prompt }],
         response_format: { type: "json_object" },
         max_tokens: 1500,
       });
 
       const raw = response.choices[0]?.message?.content ?? "{}";
-      let slides: Record<string, { content: string; aiSuggestions: string[] }> = {};
+      let slides: Record<string, { content: string; aiSuggestions: string[] }> =
+        {};
       try {
         slides = JSON.parse(raw);
       } catch {

@@ -56,8 +56,7 @@ class ErrorTrackerService {
       setupExpressErrorHandler(app);
 
       this.initialized = true;
-    } catch (error) {
-    }
+    } catch (error) {}
   }
 
   /**

@@ -311,9 +311,7 @@ export function ExpertScheduling() {
                           <div
                             key={i}
                             className={`w-1.5 h-1.5 rounded-full ${
-                              s.type === "video"
-                                ? "bg-primary"
-                                : "bg-green-500"
+                              s.type === "video" ? "bg-primary" : "bg-green-500"
                             }`}
                           />
                         ))}

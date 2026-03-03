@@ -110,11 +110,7 @@ class ClientLogger {
     this.output(LogLevel.WARN, this.buildEntry("WARN", message, context));
   }
 
-  error(
-    message: string,
-    error?: Error | unknown,
-    context?: LogContext
-  ): void {
+  error(message: string, error?: Error | unknown, context?: LogContext): void {
     this.output(
       LogLevel.ERROR,
       this.buildEntry("ERROR", message, context, error)

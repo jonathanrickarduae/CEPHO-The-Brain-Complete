@@ -18,10 +18,16 @@
 Create `client/src/components/ErrorBoundary.tsx`:
 
 ```tsx
-import { Component, ReactNode } from 'react';
+import { Component, ReactNode } from "react";
 
-interface Props { children: ReactNode; fallback?: ReactNode; }
-interface State { hasError: boolean; error?: Error; }
+interface Props {
+  children: ReactNode;
+  fallback?: ReactNode;
+}
+interface State {
+  hasError: boolean;
+  error?: Error;
+}
 
 export class ErrorBoundary extends Component<Props, State> {
   state: State = { hasError: false };
@@ -32,21 +38,25 @@ export class ErrorBoundary extends Component<Props, State> {
 
   componentDidCatch(error: Error, info: React.ErrorInfo) {
     // Log to Sentry
-    console.error('ErrorBoundary caught:', error, info);
+    console.error("ErrorBoundary caught:", error, info);
   }
 
   render() {
     if (this.state.hasError) {
-      return this.props.fallback ?? (
-        <div className="flex flex-col items-center justify-center h-64 gap-4">
-          <p className="text-red-400 font-semibold">Something went wrong on this page.</p>
-          <button
-            className="px-4 py-2 bg-purple-600 text-white rounded"
-            onClick={() => this.setState({ hasError: false })}
-          >
-            Retry
-          </button>
-        </div>
+      return (
+        this.props.fallback ?? (
+          <div className="flex flex-col items-center justify-center h-64 gap-4">
+            <p className="text-red-400 font-semibold">
+              Something went wrong on this page.
+            </p>
+            <button
+              className="px-4 py-2 bg-purple-600 text-white rounded"
+              onClick={() => this.setState({ hasError: false })}
+            >
+              Retry
+            </button>
+          </div>
+        )
       );
     }
     return this.props.children;
@@ -73,7 +83,7 @@ Wrap every route in `App.tsx` with `<ErrorBoundary>`.
 Create `client/src/hooks/useOnlineStatus.ts`:
 
 ```ts
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 export function useOnlineStatus() {
   const [isOnline, setIsOnline] = useState(true);
@@ -81,7 +91,7 @@ export function useOnlineStatus() {
   useEffect(() => {
     const check = async () => {
       try {
-        await fetch('/api/health', { method: 'HEAD' });
+        await fetch("/api/health", { method: "HEAD" });
         setIsOnline(true);
       } catch {
         setIsOnline(false);
@@ -100,11 +110,13 @@ Add to `BrainLayout.tsx`:
 ```tsx
 const isOnline = useOnlineStatus();
 // In the JSX, above the main content:
-{!isOnline && (
-  <div className="bg-red-900 text-red-100 text-sm text-center py-2 px-4">
-    Connection lost — some features may be unavailable. Reconnecting...
-  </div>
-)}
+{
+  !isOnline && (
+    <div className="bg-red-900 text-red-100 text-sm text-center py-2 px-4">
+      Connection lost — some features may be unavailable. Reconnecting...
+    </div>
+  );
+}
 ```
 
 **Expected Outcome After Fix:** A red banner appears at the top of the page when the server is unreachable. It disappears automatically when the connection is restored.
@@ -120,6 +132,7 @@ const isOnline = useOnlineStatus();
 **Required Implementation:**
 
 Install `pino` and `pino-pretty`:
+
 ```bash
 pnpm add pino pino-pretty
 ```
@@ -127,14 +140,15 @@ pnpm add pino pino-pretty
 Create `server/_core/logger.ts`:
 
 ```ts
-import pino from 'pino';
+import pino from "pino";
 
 export const logger = pino({
-  level: process.env.LOG_LEVEL ?? 'info',
-  base: { service: 'cepho-brain' },
-  transport: process.env.NODE_ENV === 'development'
-    ? { target: 'pino-pretty' }
-    : undefined,
+  level: process.env.LOG_LEVEL ?? "info",
+  base: { service: "cepho-brain" },
+  transport:
+    process.env.NODE_ENV === "development"
+      ? { target: "pino-pretty" }
+      : undefined,
 });
 ```
 
@@ -145,7 +159,7 @@ app.use((req, res, next) => {
   const start = Date.now();
   const requestId = crypto.randomUUID();
   req.requestId = requestId;
-  res.on('finish', () => {
+  res.on("finish", () => {
     logger.info({
       requestId,
       method: req.method,
@@ -182,12 +196,15 @@ Create `/docs/decisions/` folder with an ADR template:
 **Status:** Accepted
 
 ## Context
+
 We needed an API layer between the React frontend and the Node.js backend.
 
 ## Decision
+
 We chose tRPC because it provides end-to-end type safety without requiring a separate schema definition language (like GraphQL SDL or OpenAPI YAML).
 
 ## Consequences
+
 - Positive: Full TypeScript type safety from server to client. No runtime type errors from API mismatches.
 - Negative: tRPC is not a standard REST API. Third-party clients cannot consume it directly without using the tRPC client library.
 - Mitigation: We will add `trpc-openapi` to expose a REST-compatible API for third-party integrations in Phase 4.
@@ -219,6 +236,7 @@ Create `client/src/pages/Onboarding.tsx` — a multi-step wizard:
 Add a `hasCompletedOnboarding` boolean column to the `users` table. If `false`, redirect to `/onboarding` on login.
 
 Add route in `App.tsx`:
+
 ```tsx
 <Route path="/onboarding" element={<Onboarding />} />
 ```
@@ -239,34 +257,41 @@ Use Supabase Realtime to push notifications to the client:
 
 ```ts
 // In client/src/hooks/useRealtimeNotifications.ts
-import { supabase } from '@/lib/supabase';
-import { useEffect } from 'react';
-import { useQueryClient } from '@tanstack/react-query';
+import { supabase } from "@/lib/supabase";
+import { useEffect } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 
 export function useRealtimeNotifications(userId: string) {
   const queryClient = useQueryClient();
 
   useEffect(() => {
     const channel = supabase
-      .channel('notifications')
-      .on('postgres_changes', {
-        event: 'INSERT',
-        schema: 'public',
-        table: 'notifications',
-        filter: `userId=eq.${userId}`,
-      }, (payload) => {
-        queryClient.invalidateQueries({ queryKey: ['notifications'] });
-        // Show a toast notification
-        toast(payload.new.message);
-      })
+      .channel("notifications")
+      .on(
+        "postgres_changes",
+        {
+          event: "INSERT",
+          schema: "public",
+          table: "notifications",
+          filter: `userId=eq.${userId}`,
+        },
+        payload => {
+          queryClient.invalidateQueries({ queryKey: ["notifications"] });
+          // Show a toast notification
+          toast(payload.new.message);
+        }
+      )
       .subscribe();
 
-    return () => { supabase.removeChannel(channel); };
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, [userId]);
 }
 ```
 
 Trigger notifications from server-side procedures when:
+
 - A briefing is ready (`victoriaBriefing.generate` completes)
 - An agent completes a task
 - A project phase changes
@@ -289,23 +314,29 @@ Trigger notifications from server-side procedures when:
 Add `auditLogs` table to the Drizzle schema:
 
 ```ts
-export const auditLogs = pgTable('audit_logs', {
-  id: varchar('id').primaryKey(),
-  userId: uuid('user_id').references(() => users.id),
-  action: varchar('action').notNull(), // e.g., 'project.created', 'agent.executed'
-  resourceType: varchar('resource_type'), // e.g., 'project', 'task'
-  resourceId: varchar('resource_id'),
-  metadata: jsonb('metadata'), // Additional context
-  ipAddress: varchar('ip_address'),
-  userAgent: varchar('user_agent'),
-  createdAt: timestamp('created_at').defaultNow(),
+export const auditLogs = pgTable("audit_logs", {
+  id: varchar("id").primaryKey(),
+  userId: uuid("user_id").references(() => users.id),
+  action: varchar("action").notNull(), // e.g., 'project.created', 'agent.executed'
+  resourceType: varchar("resource_type"), // e.g., 'project', 'task'
+  resourceId: varchar("resource_id"),
+  metadata: jsonb("metadata"), // Additional context
+  ipAddress: varchar("ip_address"),
+  userAgent: varchar("user_agent"),
+  createdAt: timestamp("created_at").defaultNow(),
 });
 ```
 
 Create `server/_core/audit.ts`:
 
 ```ts
-export async function logAuditEvent(ctx: Context, action: string, resourceType: string, resourceId: string, metadata?: object) {
+export async function logAuditEvent(
+  ctx: Context,
+  action: string,
+  resourceType: string,
+  resourceId: string,
+  metadata?: object
+) {
   await db.insert(auditLogs).values({
     id: `audit-${Date.now()}`,
     userId: ctx.user.id,
@@ -314,7 +345,7 @@ export async function logAuditEvent(ctx: Context, action: string, resourceType: 
     resourceId,
     metadata,
     ipAddress: ctx.req.ip,
-    userAgent: ctx.req.headers['user-agent'],
+    userAgent: ctx.req.headers["user-agent"],
   });
 }
 ```
@@ -346,10 +377,19 @@ export const dataExportRouter = router({
       db.select().from(briefings).where(eq(briefings.userId, userId)),
       db.select().from(tasks).where(eq(tasks.userId, userId)),
       db.select().from(projects).where(eq(projects.userId, userId)),
-      db.select().from(innovationIdeas).where(eq(innovationIdeas.userId, userId)),
+      db
+        .select()
+        .from(innovationIdeas)
+        .where(eq(innovationIdeas.userId, userId)),
     ]);
 
-    const exportData = { user: userRecord[0], briefings, tasks, projects, ideas };
+    const exportData = {
+      user: userRecord[0],
+      briefings,
+      tasks,
+      projects,
+      ideas,
+    };
     const json = JSON.stringify(exportData, null, 2);
     // Upload to S3 and return a signed download URL
     const url = await uploadToS3(`exports/${userId}-${Date.now()}.json`, json);
@@ -409,14 +449,14 @@ Add a "Delete My Account" button to Settings > Profile, behind a confirmation di
 Add `agentRatings` table to the schema:
 
 ```ts
-export const agentRatings = pgTable('agent_ratings', {
-  id: varchar('id').primaryKey(),
-  userId: uuid('user_id').references(() => users.id),
-  agentKey: varchar('agent_key').notNull(),
-  taskId: varchar('task_id').references(() => tasks.id),
-  rating: integer('rating').notNull(), // 1-5
-  feedback: text('feedback'),
-  createdAt: timestamp('created_at').defaultNow(),
+export const agentRatings = pgTable("agent_ratings", {
+  id: varchar("id").primaryKey(),
+  userId: uuid("user_id").references(() => users.id),
+  agentKey: varchar("agent_key").notNull(),
+  taskId: varchar("task_id").references(() => tasks.id),
+  rating: integer("rating").notNull(), // 1-5
+  feedback: text("feedback"),
+  createdAt: timestamp("created_at").defaultNow(),
 });
 ```
 
@@ -465,6 +505,7 @@ competitor_intelligence: {
 ```
 
 The agent's daily task:
+
 1. Search for news about configured competitors (set in Settings > Competitors).
 2. Check competitor websites for new product pages, pricing changes, or blog posts.
 3. Generate a "Competitor Intelligence Report" and store it in the `generatedDocuments` table.
@@ -526,6 +567,7 @@ generate: protectedProcedure
 **Required Implementation:**
 
 Install LaunchDarkly SDK:
+
 ```bash
 pnpm add @launchdarkly/node-server-sdk @launchdarkly/react-client-sdk
 ```
@@ -535,11 +577,14 @@ Add `LAUNCHDARKLY_SDK_KEY` to environment variables.
 Create `server/_core/featureFlags.ts`:
 
 ```ts
-import { init } from '@launchdarkly/node-server-sdk';
+import { init } from "@launchdarkly/node-server-sdk";
 
 const ldClient = init(process.env.LAUNCHDARKLY_SDK_KEY!);
 
-export async function isFeatureEnabled(flagKey: string, userId: string): Promise<boolean> {
+export async function isFeatureEnabled(
+  flagKey: string,
+  userId: string
+): Promise<boolean> {
   await ldClient.waitForInitialization();
   return ldClient.variation(flagKey, { key: userId }, false);
 }
@@ -560,6 +605,7 @@ Define flags for every major feature: `victoria-briefing-pdf`, `project-genesis`
 **Required Implementation:**
 
 Install `trpc-openapi`:
+
 ```bash
 pnpm add trpc-openapi
 ```
@@ -567,15 +613,16 @@ pnpm add trpc-openapi
 Add `.meta({ openapi: { method: 'GET', path: '/briefings/latest' } })` to key tRPC procedures.
 
 Generate the OpenAPI spec:
+
 ```ts
 // server/generate-openapi.ts
-import { generateOpenApiDocument } from 'trpc-openapi';
-import { appRouter } from './routers';
+import { generateOpenApiDocument } from "trpc-openapi";
+import { appRouter } from "./routers";
 
 const openApiDocument = generateOpenApiDocument(appRouter, {
-  title: 'CEPHO.AI API',
-  version: '1.0.0',
-  baseUrl: 'https://cepho-the-brain-complete.onrender.com/api',
+  title: "CEPHO.AI API",
+  version: "1.0.0",
+  baseUrl: "https://cepho-the-brain-complete.onrender.com/api",
 });
 ```
 
@@ -613,12 +660,12 @@ Create a public status page using Instatus or Atlassian Statuspage. Configure au
 
 ## Phase 6 Grade Impact Summary
 
-| Workstream | Before Phase 6 | After Phase 6 |
-| :--- | :---: | :---: |
-| Frontend Stability | B | A |
-| AI Agents & Automation | A- | A+ |
-| Business Logic Completeness | A- | A+ |
-| Compliance & Data Governance | C | A |
-| Operational Excellence | B | A+ |
-| Platform Maturity | C | A |
-| **Overall** | **A-** | **A+** |
+| Workstream                   | Before Phase 6 | After Phase 6 |
+| :--------------------------- | :------------: | :-----------: |
+| Frontend Stability           |       B        |       A       |
+| AI Agents & Automation       |       A-       |      A+       |
+| Business Logic Completeness  |       A-       |      A+       |
+| Compliance & Data Governance |       C        |       A       |
+| Operational Excellence       |       B        |      A+       |
+| Platform Maturity            |       C        |       A       |
+| **Overall**                  |     **A-**     |    **A+**     |

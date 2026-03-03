@@ -265,8 +265,11 @@ export function SubscriptionManager({
           category: (s.category as Subscription["category"]) ?? "other",
           plan: s.provider ?? s.name,
           cost: Number(s.cost ?? 0),
-          billingCycle: (s.billingCycle as Subscription["billingCycle"]) ?? "monthly",
-          renewalDate: s.renewalDate ? new Date(s.renewalDate) : new Date(Date.now() + 30 * 86400000),
+          billingCycle:
+            (s.billingCycle as Subscription["billingCycle"]) ?? "monthly",
+          renewalDate: s.renewalDate
+            ? new Date(s.renewalDate)
+            : new Date(Date.now() + 30 * 86400000),
           usagePercent: s.usagePercent ?? 0,
           featuresUsed: 0,
           featuresTotal: 0,
@@ -281,8 +284,7 @@ export function SubscriptionManager({
   const [activeTab, setActiveTab] = useState<
     "overview" | "subscriptions" | "optimize" | "vault"
   >("overview");
-  const [_setSelectedSubscription] =
-    useState<Subscription | null>(null);
+  const [_setSelectedSubscription] = useState<Subscription | null>(null);
 
   // Calculate totals
   const totalMonthly = subscriptions

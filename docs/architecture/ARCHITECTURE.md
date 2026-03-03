@@ -14,18 +14,18 @@ This document outlines the definitive architecture for the v11 release, reflecti
 
 ## 2. Technology Stack
 
-| Layer | Technology | Description |
-| :--- | :--- | :--- |
-| **Backend** | Node.js 22, TypeScript, Express.js | Core server environment. |
-| **API** | tRPC | End-to-end typesafe APIs between client and server. |
-| **Database** | Supabase (PostgreSQL) | Primary data store. |
-| **ORM** | Drizzle ORM | Typesafe SQL query builder. |
-| **Frontend** | React 18, TypeScript, Vite | Modern, fast, and scalable UI development. |
-| **Styling** | TailwindCSS, Radix UI | Utility-first CSS and accessible, unstyled components. |
-| **State Mgmt** | TanStack Query (React Query) | Server state management and caching. |
-| **Deployment** | Render | Managed hosting for web services and databases. |
-| **AI** | OpenAI GPT-4 | Foundation model for all agent capabilities. |
-| **Auth** | Supabase Auth (JWT, RLS) | Secure user authentication and row-level security. |
+| Layer          | Technology                         | Description                                            |
+| :------------- | :--------------------------------- | :----------------------------------------------------- |
+| **Backend**    | Node.js 22, TypeScript, Express.js | Core server environment.                               |
+| **API**        | tRPC                               | End-to-end typesafe APIs between client and server.    |
+| **Database**   | Supabase (PostgreSQL)              | Primary data store.                                    |
+| **ORM**        | Drizzle ORM                        | Typesafe SQL query builder.                            |
+| **Frontend**   | React 18, TypeScript, Vite         | Modern, fast, and scalable UI development.             |
+| **Styling**    | TailwindCSS, Radix UI              | Utility-first CSS and accessible, unstyled components. |
+| **State Mgmt** | TanStack Query (React Query)       | Server state management and caching.                   |
+| **Deployment** | Render                             | Managed hosting for web services and databases.        |
+| **AI**         | OpenAI GPT-4                       | Foundation model for all agent capabilities.           |
+| **Auth**       | Supabase Auth (JWT, RLS)           | Secure user authentication and row-level security.     |
 
 ## 3. Project Structure (Post-Cleanup)
 

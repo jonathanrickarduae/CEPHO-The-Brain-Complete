@@ -72,7 +72,7 @@ interface DesignTheme {
 const slideTypes: {
   type: SlideType;
   label: string;
-  icon: React.FC<{ className?: string; }>;
+  icon: React.FC<{ className?: string }>;
   description: string;
 }[] = [
   {
@@ -290,7 +290,7 @@ export function PresentationBlueprint() {
 
   // Real AI slide generation mutation
   const generateSlidesMutation = trpc.genesis.generateSlides.useMutation({
-    onSuccess: (data) => {
+    onSuccess: data => {
       const generatedSlides: SlideContent[] = selectedSlides.map(type => {
         const slideInfo = slideTypes.find(s => s.type === type)!;
         const aiData = data.slides[type];
@@ -300,7 +300,10 @@ export function PresentationBlueprint() {
           title: slideInfo?.label ?? type,
           content: aiData?.content ?? `Content for ${type}`,
           notes: "",
-          aiSuggestions: aiData?.aiSuggestions ?? ["Add relevant data", "Include visuals"],
+          aiSuggestions: aiData?.aiSuggestions ?? [
+            "Add relevant data",
+            "Include visuals",
+          ],
           status: "draft",
         };
       });
@@ -315,15 +318,24 @@ export function PresentationBlueprint() {
 
   // Map genesis projects to available projects format
   const dynamicProjects =
-    genesisProjects?.map((p: { id: number; name: string; description: string | null; type: string; counterparty: string | null; updatedAt: string | null; }) => ({
-      id: p.id.toString(),
-      name: p.name,
-      description:
-        p.description || `${p.type} - ${p.counterparty || "In progress"}`,
-      lastUpdated: p.updatedAt
-        ? new Date(p.updatedAt).toLocaleDateString("en-GB")
-        : "Recently",
-    })) || availableProjects;
+    genesisProjects?.map(
+      (p: {
+        id: number;
+        name: string;
+        description: string | null;
+        type: string;
+        counterparty: string | null;
+        updatedAt: string | null;
+      }) => ({
+        id: p.id.toString(),
+        name: p.name,
+        description:
+          p.description || `${p.type} - ${p.counterparty || "In progress"}`,
+        lastUpdated: p.updatedAt
+          ? new Date(p.updatedAt).toLocaleDateString("en-GB")
+          : "Recently",
+      })
+    ) || availableProjects;
 
   const toggleSlide = (type: SlideType) => {
     setSelectedSlides(prev =>
@@ -479,29 +491,36 @@ export function PresentationBlueprint() {
                     </span>
                   </div>
                 ) : dynamicProjects.length > 0 ? (
-                  dynamicProjects.map((project: { id: string; name: string; description: string; lastUpdated: string; }) => (
-                    <button
-                      key={project.id}
-                      onClick={() => startWithProject(project.id)}
-                      className="w-full p-3 bg-background/50 border border-white/10 rounded-lg text-left hover:border-blue-500/50 hover:bg-primary/5 transition-all group"
-                    >
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <FolderOpen className="w-4 h-4 text-primary" />
-                          <span className="font-medium text-foreground">
-                            {project.name}
-                          </span>
+                  dynamicProjects.map(
+                    (project: {
+                      id: string;
+                      name: string;
+                      description: string;
+                      lastUpdated: string;
+                    }) => (
+                      <button
+                        key={project.id}
+                        onClick={() => startWithProject(project.id)}
+                        className="w-full p-3 bg-background/50 border border-white/10 rounded-lg text-left hover:border-blue-500/50 hover:bg-primary/5 transition-all group"
+                      >
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <FolderOpen className="w-4 h-4 text-primary" />
+                            <span className="font-medium text-foreground">
+                              {project.name}
+                            </span>
+                          </div>
+                          <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
                         </div>
-                        <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
-                      </div>
-                      <p className="text-xs text-muted-foreground mt-1 ml-6">
-                        {project.description}
-                      </p>
-                      <p className="text-xs text-muted-foreground/60 mt-1 ml-6">
-                        Updated {project.lastUpdated}
-                      </p>
-                    </button>
-                  ))
+                        <p className="text-xs text-muted-foreground mt-1 ml-6">
+                          {project.description}
+                        </p>
+                        <p className="text-xs text-muted-foreground/60 mt-1 ml-6">
+                          Updated {project.lastUpdated}
+                        </p>
+                      </button>
+                    )
+                  )
                 ) : (
                   <div className="text-center p-4 text-muted-foreground text-sm">
                     No projects found. Create a project in Genesis first.

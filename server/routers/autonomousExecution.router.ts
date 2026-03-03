@@ -25,14 +25,46 @@ const anthropic = new Anthropic({
 
 // ─── SME Agent definitions ────────────────────────────────────────────────────
 const SME_AGENTS = [
-  { id: "strategy", name: "Strategy Agent", domain: "strategic planning, market analysis, competitive intelligence" },
-  { id: "finance", name: "Finance Agent", domain: "financial modelling, budgeting, ROI analysis" },
-  { id: "operations", name: "Operations Agent", domain: "process design, workflow optimisation, resource allocation" },
-  { id: "marketing", name: "Marketing Agent", domain: "brand strategy, go-to-market, customer acquisition" },
-  { id: "technology", name: "Technology Agent", domain: "technical architecture, product roadmap, build vs buy decisions" },
-  { id: "legal", name: "Legal Agent", domain: "contracts, compliance, risk assessment" },
-  { id: "hr", name: "People Agent", domain: "talent, culture, organisational design" },
-  { id: "innovation", name: "Innovation Agent", domain: "idea generation, R&D, emerging technologies" },
+  {
+    id: "strategy",
+    name: "Strategy Agent",
+    domain: "strategic planning, market analysis, competitive intelligence",
+  },
+  {
+    id: "finance",
+    name: "Finance Agent",
+    domain: "financial modelling, budgeting, ROI analysis",
+  },
+  {
+    id: "operations",
+    name: "Operations Agent",
+    domain: "process design, workflow optimisation, resource allocation",
+  },
+  {
+    id: "marketing",
+    name: "Marketing Agent",
+    domain: "brand strategy, go-to-market, customer acquisition",
+  },
+  {
+    id: "technology",
+    name: "Technology Agent",
+    domain: "technical architecture, product roadmap, build vs buy decisions",
+  },
+  {
+    id: "legal",
+    name: "Legal Agent",
+    domain: "contracts, compliance, risk assessment",
+  },
+  {
+    id: "hr",
+    name: "People Agent",
+    domain: "talent, culture, organisational design",
+  },
+  {
+    id: "innovation",
+    name: "Innovation Agent",
+    domain: "idea generation, R&D, emerging technologies",
+  },
 ];
 
 interface ExecutionPlan {
@@ -42,7 +74,12 @@ interface ExecutionPlan {
   phases: Array<{
     name: string;
     agent: string;
-    tasks: Array<{ title: string; description: string; priority: string; estimatedHours: number }>;
+    tasks: Array<{
+      title: string;
+      description: string;
+      priority: string;
+      estimatedHours: number;
+    }>;
   }>;
   risks: string[];
   successMetrics: string[];
@@ -50,7 +87,11 @@ interface ExecutionPlan {
 
 async function decomposeGoal(
   goal: string,
-  twinProfile: { measurementDriven: number | null; automationPreference: number | null; structurePreference: number | null } | null
+  twinProfile: {
+    measurementDriven: number | null;
+    automationPreference: number | null;
+    structurePreference: number | null;
+  } | null
 ): Promise<ExecutionPlan> {
   const twinContext = twinProfile
     ? `Executive profile: measurement-driven (${twinProfile.measurementDriven ?? 5}/10), automation preference (${twinProfile.automationPreference ?? 5}/10), structure preference (${twinProfile.structurePreference ?? 5}/10).`
@@ -91,7 +132,8 @@ Respond ONLY with valid JSON matching this exact structure:
   });
 
   const content = message.content[0];
-  if (content.type !== "text") throw new Error("Unexpected response type from AI");
+  if (content.type !== "text")
+    throw new Error("Unexpected response type from AI");
 
   return JSON.parse(content.text) as ExecutionPlan;
 }
@@ -220,7 +262,11 @@ export const autonomousExecutionRouter = router({
         plan,
         agentAssignments: plan.phases.map(p => ({
           phase: p.name,
-          agent: SME_AGENTS.find(a => a.id === p.agent) ?? { id: p.agent, name: p.agent, domain: "" },
+          agent: SME_AGENTS.find(a => a.id === p.agent) ?? {
+            id: p.agent,
+            name: p.agent,
+            domain: "",
+          },
           taskCount: p.tasks.length,
         })),
         totalTasks: plan.phases.reduce((sum, p) => sum + p.tasks.length, 0),
@@ -243,14 +289,20 @@ export const autonomousExecutionRouter = router({
       .limit(10);
 
     return recentProjects
-      .filter(p => (p.metadata as Record<string, unknown>)?.createdByAutonomousEngine === true)
+      .filter(
+        p =>
+          (p.metadata as Record<string, unknown>)?.createdByAutonomousEngine ===
+          true
+      )
       .map(p => ({
         id: p.id,
         name: p.name,
         description: p.description,
         status: p.status,
         progress: p.progress,
-        originalGoal: (p.metadata as Record<string, unknown>)?.originalGoal as string ?? "",
+        originalGoal:
+          ((p.metadata as Record<string, unknown>)?.originalGoal as string) ??
+          "",
         createdAt: p.createdAt.toISOString(),
       }));
   }),

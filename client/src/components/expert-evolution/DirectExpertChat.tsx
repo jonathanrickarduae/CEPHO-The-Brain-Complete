@@ -127,7 +127,7 @@ export function DirectExpertChat({ expertId, onClose }: DirectExpertChatProps) {
         setCurrentlyPlayingId(null);
       };
 
-      audio.play().catch(()=> {
+      audio.play().catch(() => {
         setCurrentlyPlayingId(null);
       });
     },

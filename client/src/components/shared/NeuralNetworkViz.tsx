@@ -1,5 +1,12 @@
 import { useState } from "react";
-import { Brain, TrendingUp, Users, BarChart3, Sparkles, Globe } from "lucide-react";
+import {
+  Brain,
+  TrendingUp,
+  Users,
+  BarChart3,
+  Sparkles,
+  Globe,
+} from "lucide-react";
 
 /**
  * Neural Network Visualization

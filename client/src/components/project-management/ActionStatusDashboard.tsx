@@ -325,7 +325,9 @@ export function ActionStatusDashboard() {
             <CardHeader>
               <div className="flex items-center justify-between">
                 <div>
-                  <CardTitle className="text-foreground">Action Items</CardTitle>
+                  <CardTitle className="text-foreground">
+                    Action Items
+                  </CardTitle>
                   <CardDescription>
                     Track progress on priority actions
                   </CardDescription>

@@ -22,8 +22,8 @@
 <!-- List the key files and what changed in each. -->
 
 | File | Change |
-|---|---|
-| | |
+| ---- | ------ |
+|      |        |
 
 ## Testing
 

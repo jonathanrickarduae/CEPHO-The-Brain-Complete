@@ -769,9 +769,7 @@ interface IntegrationWizardProps {
   initialIntegration?: string;
 }
 
-export function IntegrationWizard({
-  onComplete,
-}: IntegrationWizardProps) {
+export function IntegrationWizard({ onComplete }: IntegrationWizardProps) {
   const { mode: governanceMode } = useGovernance();
   const isGoverned = governanceMode === "governed";
 

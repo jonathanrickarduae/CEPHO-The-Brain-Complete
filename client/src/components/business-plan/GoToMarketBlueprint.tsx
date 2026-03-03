@@ -467,7 +467,9 @@ export function GoToMarketBlueprint({
                   <Icon className="w-6 h-6" />
                 </div>
                 <div>
-                  <CardTitle className="text-foreground">{phase.title}</CardTitle>
+                  <CardTitle className="text-foreground">
+                    {phase.title}
+                  </CardTitle>
                   <CardDescription>{phase.description}</CardDescription>
                 </div>
               </div>

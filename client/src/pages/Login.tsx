@@ -2,12 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import AnimatedBrainLogo from "@/components/ai-agents/AnimatedBrainLogo";
 import { toast } from "sonner";
@@ -167,7 +162,9 @@ export default function Login() {
 
     try {
       // Fetch CSRF token required by server CSRF protection
-      const csrfResp = await fetch("/api/csrf-token", { credentials: "include" });
+      const csrfResp = await fetch("/api/csrf-token", {
+        credentials: "include",
+      });
       const csrfData = await csrfResp.json();
       const csrfToken: string = csrfData.csrfToken || "";
 

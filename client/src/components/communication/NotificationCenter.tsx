@@ -272,8 +272,14 @@ export function NotificationCenter({
   isOpen,
   onClose,
 }: NotificationCenterProps) {
-  const { notifications, markAsRead, markAllAsRead, dismiss, dismissAll, isLoading } =
-    useNotifications();
+  const {
+    notifications,
+    markAsRead,
+    markAllAsRead,
+    dismiss,
+    dismissAll,
+    isLoading,
+  } = useNotifications();
 
   if (!isOpen) return null;
 

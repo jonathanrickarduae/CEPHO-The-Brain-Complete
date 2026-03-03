@@ -112,8 +112,7 @@ function useVoiceRecording() {
       timerRef.current = setInterval(() => {
         setDuration(d => d + 1);
       }, 1000);
-    } catch {
-    }
+    } catch {}
   };
 
   const stopRecording = () => {

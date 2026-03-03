@@ -18,34 +18,34 @@ Branch protection rules enforce the branch strategy defined in the Grand Master 
 
 Navigate to **Settings → Branches → Add rule** and configure the following for the `main` branch:
 
-| Setting | Value |
-| :--- | :--- |
-| Branch name pattern | `main` |
-| Require a pull request before merging | **Enabled** |
-| Required approvals | **2** |
-| Dismiss stale pull request approvals when new commits are pushed | **Enabled** |
-| Require status checks to pass before merging | **Enabled** |
-| Required status checks | `quality-checks`, `build`, `snyk-security` |
-| Require branches to be up to date before merging | **Enabled** |
-| Require conversation resolution before merging | **Enabled** |
-| Do not allow bypassing the above settings | **Enabled** |
-| Restrict who can push to matching branches | **Enabled** (admins only) |
+| Setting                                                          | Value                                      |
+| :--------------------------------------------------------------- | :----------------------------------------- |
+| Branch name pattern                                              | `main`                                     |
+| Require a pull request before merging                            | **Enabled**                                |
+| Required approvals                                               | **2**                                      |
+| Dismiss stale pull request approvals when new commits are pushed | **Enabled**                                |
+| Require status checks to pass before merging                     | **Enabled**                                |
+| Required status checks                                           | `quality-checks`, `build`, `snyk-security` |
+| Require branches to be up to date before merging                 | **Enabled**                                |
+| Require conversation resolution before merging                   | **Enabled**                                |
+| Do not allow bypassing the above settings                        | **Enabled**                                |
+| Restrict who can push to matching branches                       | **Enabled** (admins only)                  |
 
 ### 2. `develop` Branch (Staging)
 
 Navigate to **Settings → Branches → Add rule** and configure the following for the `develop` branch:
 
-| Setting | Value |
-| :--- | :--- |
-| Branch name pattern | `develop` |
-| Require a pull request before merging | **Enabled** |
-| Required approvals | **1** |
-| Dismiss stale pull request approvals when new commits are pushed | **Enabled** |
-| Require status checks to pass before merging | **Enabled** |
-| Required status checks | `quality-checks`, `build` |
-| Require branches to be up to date before merging | **Enabled** |
-| Require conversation resolution before merging | **Enabled** |
-| Do not allow bypassing the above settings | **Disabled** (admins may bypass in emergencies) |
+| Setting                                                          | Value                                           |
+| :--------------------------------------------------------------- | :---------------------------------------------- |
+| Branch name pattern                                              | `develop`                                       |
+| Require a pull request before merging                            | **Enabled**                                     |
+| Required approvals                                               | **1**                                           |
+| Dismiss stale pull request approvals when new commits are pushed | **Enabled**                                     |
+| Require status checks to pass before merging                     | **Enabled**                                     |
+| Required status checks                                           | `quality-checks`, `build`                       |
+| Require branches to be up to date before merging                 | **Enabled**                                     |
+| Require conversation resolution before merging                   | **Enabled**                                     |
+| Do not allow bypassing the above settings                        | **Disabled** (admins may bypass in emergencies) |
 
 ---
 

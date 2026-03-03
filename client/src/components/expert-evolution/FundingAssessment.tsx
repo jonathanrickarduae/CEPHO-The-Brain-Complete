@@ -128,8 +128,7 @@ export default function FundingAssessment() {
           ideaId,
           programId: program.programId,
         });
-      } catch {
-      }
+      } catch {}
     }
 
     setAssessingIdeas(prev => {
@@ -245,9 +244,7 @@ export default function FundingAssessment() {
                 size="sm"
                 onClick={() => setSelectedCountry("UAE")}
                 className={
-                  selectedCountry === "UAE"
-                    ? "bg-emerald-600"
-                    : "border-border"
+                  selectedCountry === "UAE" ? "bg-emerald-600" : "border-border"
                 }
               >
                 🇦🇪 UAE

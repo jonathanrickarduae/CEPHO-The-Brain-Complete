@@ -1329,7 +1329,6 @@
   animation: progress-fill 1s ease-out;
 }
 
-
 /* ========================================
    CEPHO v2 — PAGE SHELL & LAYOUT SYSTEM
    Added March 2026
@@ -1340,7 +1339,9 @@
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
-.scrollbar-none::-webkit-scrollbar { display: none; }
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
 
 /* Page root — fills BrainLayout main, no min-h-screen needed */
 .page-root {
@@ -1356,19 +1357,44 @@
   overflow-y: auto;
 }
 @media (min-width: 640px) {
-  .page-content { padding: 1.5rem; }
+  .page-content {
+    padding: 1.5rem;
+  }
 }
 
 /* Consistent button sizing */
-.btn-sm  { height: 2rem;    padding: 0 0.75rem;  font-size: 0.75rem; }
-.btn-md  { height: 2.25rem; padding: 0 1rem;     font-size: 0.875rem; }
-.btn-lg  { height: 2.5rem;  padding: 0 1.25rem;  font-size: 0.875rem; }
+.btn-sm {
+  height: 2rem;
+  padding: 0 0.75rem;
+  font-size: 0.75rem;
+}
+.btn-md {
+  height: 2.25rem;
+  padding: 0 1rem;
+  font-size: 0.875rem;
+}
+.btn-lg {
+  height: 2.5rem;
+  padding: 0 1.25rem;
+  font-size: 0.875rem;
+}
 
 /* Status dot variants */
-.status-dot-active   { background: #22c55e; box-shadow: 0 0 6px #22c55e80; }
-.status-dot-pending  { background: #f59e0b; box-shadow: 0 0 6px #f59e0b80; }
-.status-dot-inactive { background: #6b7280; }
-.status-dot-error    { background: #ef4444; box-shadow: 0 0 6px #ef444480; }
+.status-dot-active {
+  background: #22c55e;
+  box-shadow: 0 0 6px #22c55e80;
+}
+.status-dot-pending {
+  background: #f59e0b;
+  box-shadow: 0 0 6px #f59e0b80;
+}
+.status-dot-inactive {
+  background: #6b7280;
+}
+.status-dot-error {
+  background: #ef4444;
+  box-shadow: 0 0 6px #ef444480;
+}
 
 /* Responsive grid helpers */
 .grid-auto-fill-sm {
@@ -1389,10 +1415,18 @@
 
 /* Fade-in-up animation */
 @keyframes fade-in-up {
-  from { transform: translateY(8px); opacity: 0; }
-  to   { transform: translateY(0);   opacity: 1; }
+  from {
+    transform: translateY(8px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
-.animate-fade-in-up { animation: fade-in-up 0.25s ease-out; }
+.animate-fade-in-up {
+  animation: fade-in-up 0.25s ease-out;
+}
 
 /* Page title — consistent across all pages */
 .page-title {
@@ -1402,7 +1436,9 @@
   color: hsl(var(--foreground));
 }
 @media (min-width: 640px) {
-  .page-title { font-size: 1.25rem; }
+  .page-title {
+    font-size: 1.25rem;
+  }
 }
 
 .section-title {

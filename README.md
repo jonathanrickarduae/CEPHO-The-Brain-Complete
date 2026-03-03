@@ -27,13 +27,13 @@ The **Grand Master Plan v11** is the definitive plan for this project. It is the
 
 ### Current State (as of March 2026)
 
-| Item | Status |
-| :--- | :--- |
-| Grand Master Plan v11 | **Finalised and locked** |
-| Repository cleanup | **Complete** |
-| GitHub Pages dashboard | **Live** |
-| Phase 0 execution | **Next to begin** |
-| Code deployment | **Not yet started** |
+| Item                   | Status                   |
+| :--------------------- | :----------------------- |
+| Grand Master Plan v11  | **Finalised and locked** |
+| Repository cleanup     | **Complete**             |
+| GitHub Pages dashboard | **Live**                 |
+| Phase 0 execution      | **Next to begin**        |
+| Code deployment        | **Not yet started**      |
 
 ### What Has Been Done
 
@@ -62,16 +62,16 @@ Full detail for each task is in [`/docs/specs/phase0_preconditions.md`](./docs/s
 
 ## Quick Links
 
-| Resource | Link |
-| :--- | :--- |
-| **Grand Master Plan v11** | [`CEPHO_Grand_Master_Plan_v11_FINAL.docx`](./CEPHO_Grand_Master_Plan_v11_FINAL.docx) |
-| **Live Dashboard** | [https://jonathanrickarduae.github.io/CEPHO-The-Brain-Complete/](https://jonathanrickarduae.github.io/CEPHO-The-Brain-Complete/) |
-| **Quality Grades** | [`GRADES.md`](./GRADES.md) |
-| **Changelog** | [`CHANGELOG.md`](./CHANGELOG.md) |
-| **Security Policy** | [`SECURITY.md`](./SECURITY.md) |
-| **Phase 0 Spec** | [`/docs/specs/phase0_preconditions.md`](./docs/specs/phase0_preconditions.md) |
-| **Architecture** | [`/docs/architecture/ARCHITECTURE.md`](./docs/architecture/ARCHITECTURE.md) |
-| **Runbook** | [`/docs/processes/RUNBOOK.md`](./docs/processes/RUNBOOK.md) |
+| Resource                  | Link                                                                                                                             |
+| :------------------------ | :------------------------------------------------------------------------------------------------------------------------------- |
+| **Grand Master Plan v11** | [`CEPHO_Grand_Master_Plan_v11_FINAL.docx`](./CEPHO_Grand_Master_Plan_v11_FINAL.docx)                                             |
+| **Live Dashboard**        | [https://jonathanrickarduae.github.io/CEPHO-The-Brain-Complete/](https://jonathanrickarduae.github.io/CEPHO-The-Brain-Complete/) |
+| **Quality Grades**        | [`GRADES.md`](./GRADES.md)                                                                                                       |
+| **Changelog**             | [`CHANGELOG.md`](./CHANGELOG.md)                                                                                                 |
+| **Security Policy**       | [`SECURITY.md`](./SECURITY.md)                                                                                                   |
+| **Phase 0 Spec**          | [`/docs/specs/phase0_preconditions.md`](./docs/specs/phase0_preconditions.md)                                                    |
+| **Architecture**          | [`/docs/architecture/ARCHITECTURE.md`](./docs/architecture/ARCHITECTURE.md)                                                      |
+| **Runbook**               | [`/docs/processes/RUNBOOK.md`](./docs/processes/RUNBOOK.md)                                                                      |
 
 ---
 
@@ -79,28 +79,28 @@ Full detail for each task is in [`/docs/specs/phase0_preconditions.md`](./docs/s
 
 All project documentation lives in `/docs`:
 
-| Folder | Contents |
-| :--- | :--- |
-| [`/docs/plan/`](./docs/plan/) | Copy of the Grand Master Plan v11 |
-| [`/docs/specs/`](./docs/specs/) | All 41+ individual specification documents (PRD, Data Dictionary, API Docs, Phase specs, Gap Analysis, etc.) |
-| [`/docs/processes/`](./docs/processes/) | Runbook, Release Process, Incident Response, Governance, Developer Onboarding, Quality Review Cadence |
-| [`/docs/architecture/`](./docs/architecture/) | System Architecture, Security Configuration, Process Flow Diagrams, ADRs |
-| [`/docs/archive/`](./docs/archive/) | All historical documents from previous versions (v1–v10) |
+| Folder                                        | Contents                                                                                                     |
+| :-------------------------------------------- | :----------------------------------------------------------------------------------------------------------- |
+| [`/docs/plan/`](./docs/plan/)                 | Copy of the Grand Master Plan v11                                                                            |
+| [`/docs/specs/`](./docs/specs/)               | All 41+ individual specification documents (PRD, Data Dictionary, API Docs, Phase specs, Gap Analysis, etc.) |
+| [`/docs/processes/`](./docs/processes/)       | Runbook, Release Process, Incident Response, Governance, Developer Onboarding, Quality Review Cadence        |
+| [`/docs/architecture/`](./docs/architecture/) | System Architecture, Security Configuration, Process Flow Diagrams, ADRs                                     |
+| [`/docs/archive/`](./docs/archive/)           | All historical documents from previous versions (v1–v10)                                                     |
 
 ---
 
 ## Tech Stack
 
-| Layer | Technology |
-| :--- | :--- |
-| **Frontend** | React 18, TypeScript, Vite, TailwindCSS |
-| **Backend** | Node.js, Express, TypeScript |
-| **Database** | PostgreSQL (Supabase), Drizzle ORM |
-| **Auth** | Supabase Auth (JWT + RLS) |
-| **AI** | OpenAI GPT-4o / GPT-4o-mini, pgvector |
-| **Deployment** | Render (production + staging) |
-| **CI/CD** | GitHub Actions |
-| **Monitoring** | Sentry (planned) |
+| Layer          | Technology                              |
+| :------------- | :-------------------------------------- |
+| **Frontend**   | React 18, TypeScript, Vite, TailwindCSS |
+| **Backend**    | Node.js, Express, TypeScript            |
+| **Database**   | PostgreSQL (Supabase), Drizzle ORM      |
+| **Auth**       | Supabase Auth (JWT + RLS)               |
+| **AI**         | OpenAI GPT-4o / GPT-4o-mini, pgvector   |
+| **Deployment** | Render (production + staging)           |
+| **CI/CD**      | GitHub Actions                          |
+| **Monitoring** | Sentry (planned)                        |
 
 ---
 
@@ -123,13 +123,13 @@ pnpm dev
 
 ### Key Scripts
 
-| Command | Purpose |
-| :--- | :--- |
-| `pnpm dev` | Start development server (client + server) |
-| `pnpm build` | Build for production |
-| `pnpm test:unit` | Run unit tests |
-| `pnpm check` | TypeScript type checking |
-| `pnpm db:studio` | Open Drizzle Studio |
+| Command          | Purpose                                    |
+| :--------------- | :----------------------------------------- |
+| `pnpm dev`       | Start development server (client + server) |
+| `pnpm build`     | Build for production                       |
+| `pnpm test:unit` | Run unit tests                             |
+| `pnpm check`     | TypeScript type checking                   |
+| `pnpm db:studio` | Open Drizzle Studio                        |
 
 ---
 
@@ -144,27 +144,27 @@ pnpm dev
 
 ## Branch Strategy
 
-| Branch | Purpose |
-| :--- | :--- |
-| `main` | Production — protected, requires PR + review |
-| `develop` | Staging — integration branch |
-| `feature/*` | Feature branches — branch from `develop` |
-| `fix/*` | Bug fix branches |
-| `hotfix/*` | Emergency production fixes — branch from `main` |
+| Branch      | Purpose                                         |
+| :---------- | :---------------------------------------------- |
+| `main`      | Production — protected, requires PR + review    |
+| `develop`   | Staging — integration branch                    |
+| `feature/*` | Feature branches — branch from `develop`        |
+| `fix/*`     | Bug fix branches                                |
+| `hotfix/*`  | Emergency production fixes — branch from `main` |
 
 ---
 
 ## Project Phases Overview
 
-| Phase | Name | Status |
-| :--- | :--- | :--- |
-| **Phase 0** | Pre-Conditions & Foundation | Next to begin |
-| **Phase 1** | Security, Stability & Code Cleanup | Not started |
-| **Phase 2** | AI Agents, Memory & Digital Twin | Not started |
-| **Phase 3** | Autonomous Operations & Intelligence | Not started |
-| **Phase 4** | UX, Design System & Scale | Not started |
-| **Phase 5** | Ops Excellence & Observability | Not started |
-| **Phase 6** | Enhancements, Agents & Innovation | Not started |
-| **Phase 7** | Monetisation & Enterprise | Not started |
+| Phase       | Name                                 | Status        |
+| :---------- | :----------------------------------- | :------------ |
+| **Phase 0** | Pre-Conditions & Foundation          | Next to begin |
+| **Phase 1** | Security, Stability & Code Cleanup   | Not started   |
+| **Phase 2** | AI Agents, Memory & Digital Twin     | Not started   |
+| **Phase 3** | Autonomous Operations & Intelligence | Not started   |
+| **Phase 4** | UX, Design System & Scale            | Not started   |
+| **Phase 5** | Ops Excellence & Observability       | Not started   |
+| **Phase 6** | Enhancements, Agents & Innovation    | Not started   |
+| **Phase 7** | Monetisation & Enterprise            | Not started   |
 
 Full task breakdown for every phase is on the **[Live Dashboard](https://jonathanrickarduae.github.io/CEPHO-The-Brain-Complete/)**.

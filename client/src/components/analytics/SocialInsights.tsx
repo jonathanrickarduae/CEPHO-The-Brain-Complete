@@ -311,7 +311,11 @@ export function SocialInsights({
                   </Button>
                 )}
                 {selectedContact.socialLinks.twitter && (
-                  <Button size="sm" variant="ghost" className="text-[var(--brain-cyan)]">
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    className="text-[var(--brain-cyan)]"
+                  >
                     <Twitter className="w-4 h-4 mr-2" />
                     Twitter
                   </Button>

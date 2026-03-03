@@ -89,9 +89,7 @@ describe.skipIf(!BASE_URL)("API Contract Tests — REST Endpoints", () => {
 
 describe.skipIf(!BASE_URL)("API Contract Tests — tRPC Endpoints", () => {
   it("system.health — returns ok:true with correct shape", async () => {
-    const { status, body } = await get(
-      "/api/trpc/system.health?input=%7B%7D"
-    );
+    const { status, body } = await get("/api/trpc/system.health?input=%7B%7D");
 
     expect(status).toBe(200);
     const trpc = body as TrpcHealthResponse;
@@ -108,35 +106,32 @@ describe.skipIf(!BASE_URL)("API Contract Tests — tRPC Endpoints", () => {
   });
 });
 
-describe.skipIf(!BASE_URL)(
-  "API Contract Tests — Security Headers",
-  () => {
-    let headers: Headers;
+describe.skipIf(!BASE_URL)("API Contract Tests — Security Headers", () => {
+  let headers: Headers;
 
-    beforeAll(async () => {
-      const res = await fetch(`${BASE_URL}/health`);
-      headers = res.headers;
-    });
+  beforeAll(async () => {
+    const res = await fetch(`${BASE_URL}/health`);
+    headers = res.headers;
+  });
 
-    it("X-Content-Type-Options header is set", () => {
-      expect(headers.get("x-content-type-options")).toBe("nosniff");
-    });
+  it("X-Content-Type-Options header is set", () => {
+    expect(headers.get("x-content-type-options")).toBe("nosniff");
+  });
 
-    it("X-Frame-Options header is set", () => {
-      const xfo = headers.get("x-frame-options");
-      expect(xfo).toBeTruthy();
-      expect(["DENY", "SAMEORIGIN"]).toContain(xfo);
-    });
+  it("X-Frame-Options header is set", () => {
+    const xfo = headers.get("x-frame-options");
+    expect(xfo).toBeTruthy();
+    expect(["DENY", "SAMEORIGIN"]).toContain(xfo);
+  });
 
-    it("X-Request-Id header is present", () => {
-      const reqId = headers.get("x-request-id");
-      expect(reqId).toBeTruthy();
-      expect(typeof reqId).toBe("string");
-    });
+  it("X-Request-Id header is present", () => {
+    const reqId = headers.get("x-request-id");
+    expect(reqId).toBeTruthy();
+    expect(typeof reqId).toBe("string");
+  });
 
-    it("Content-Security-Policy header is set", () => {
-      const csp = headers.get("content-security-policy");
-      expect(csp).toBeTruthy();
-    });
-  }
-);
+  it("Content-Security-Policy header is set", () => {
+    const csp = headers.get("content-security-policy");
+    expect(csp).toBeTruthy();
+  });
+});

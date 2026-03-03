@@ -7,7 +7,10 @@
 import { router } from "./_core/trpc";
 import { systemRouter } from "./_core/systemRouter";
 import { twoFactorRouter } from "./routers/twoFactor.router";
-import { analyticsRouter, featureFlagsRouter } from "./routers/analytics.router";
+import {
+  analyticsRouter,
+  featureFlagsRouter,
+} from "./routers/analytics.router";
 import { brandKitRouter } from "./routers/brandKit.router";
 
 // ─── Real Implementations ────────────────────────────────────────────────────
@@ -49,6 +52,7 @@ import { autonomousExecutionRouter } from "./routers/autonomousExecution.router"
 import { documentTemplatingRouter } from "./routers/documentTemplating.router";
 import { gdprRouter } from "./routers/gdpr.router";
 import { agentRatingsRouter } from "./routers/agentRatings.router";
+import { agentMemoryRouter } from "./routers/agentMemory.router";
 import { apiKeysRouter } from "./routers/apiKeys.router";
 import { auditLogRouter } from "./routers/auditLog.router";
 import { adminRouter } from "./routers/admin.router";
@@ -204,6 +208,8 @@ export const appRouter = router({
   gdpr: gdprRouter,
   // ─── Agent Ratings ───────────────────────────────────────────────────────────
   agentRatings: agentRatingsRouter,
+  // ─── Agent Memory Bank ───────────────────────────────────────────────────────
+  agentMemory: agentMemoryRouter,
   // ─── Public API Keys ─────────────────────────────────────────────────────────
   apiKeys: apiKeysRouter,
   //  // ─── Audit Log ───────────────────────────────────────────────────────────

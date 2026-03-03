@@ -23,7 +23,11 @@ interface _LearningIndicatorProps {
 }
 
 const TYPE_CONFIG = {
-  pattern: { icon: TrendingUp, label: "Pattern", color: "text-[var(--brain-cyan)]" },
+  pattern: {
+    icon: TrendingUp,
+    label: "Pattern",
+    color: "text-[var(--brain-cyan)]",
+  },
   preference: { icon: Sparkles, label: "Preference", color: "text-purple-400" },
   vocabulary: {
     icon: MessageSquare,
@@ -172,7 +176,9 @@ export function LearningToast({
         className
       )}
     >
-      <div className={cn("p-2 rounded-lg bg-[var(--brain-cyan)]/20", config.color)}>
+      <div
+        className={cn("p-2 rounded-lg bg-[var(--brain-cyan)]/20", config.color)}
+      >
         <Icon className="w-5 h-5" />
       </div>
       <div className="flex-1 min-w-0">

@@ -12,9 +12,7 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  useIdealsDataroom,
-} from "@/lib/idealsDataroom";
+import { useIdealsDataroom } from "@/lib/idealsDataroom";
 import {
   Database,
   FolderOpen,
@@ -80,8 +78,7 @@ export function IdealsDataroomIntegration() {
     try {
       await uploadDocument(selectedIdealsFolder, file);
       await loadDocuments(selectedIdealsFolder);
-    } catch {
-    }
+    } catch {}
   };
 
   const handleCreateFolder = async () => {
@@ -89,8 +86,7 @@ export function IdealsDataroomIntegration() {
     try {
       await createFolder(newFolderName);
       setNewFolderName("");
-    } catch {
-    }
+    } catch {}
   };
 
   // Mock Brain folders for demo

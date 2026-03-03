@@ -13,21 +13,24 @@ import {
   BarChart3,
   RefreshCw,
 } from "lucide-react";
-import {
-  PersonalAnalytics,
-} from "@/components/analytics/PersonalAnalytics";
+import { PersonalAnalytics } from "@/components/analytics/PersonalAnalytics";
 import { CollapsibleSection } from "@/components/shared/CollapsibleSection";
 import { PageShell } from "@/components/layout/PageShell";
 
 export default function Statistics() {
-  const { data: insights, isLoading: insightsLoading } = trpc.dashboard.getInsights.useQuery();
-  const { data: agentsData } = trpc.aiAgentsMonitoring.getAllStatus.useQuery(undefined, { retry: false });
+  const { data: insights, isLoading: insightsLoading } =
+    trpc.dashboard.getInsights.useQuery();
+  const { data: agentsData } = trpc.aiAgentsMonitoring.getAllStatus.useQuery(
+    undefined,
+    { retry: false }
+  );
 
   // Merge live data into KPI cards where available
   const liveTasksCompleted = insights?.taskSummary?.completed ?? null;
   const liveTasksTotal = insights?.taskSummary?.total ?? null;
   const liveActiveProjects = insights?.projectSummary?.active ?? null;
-  const liveAiConversations = insights?.metrics?.find(m => m.id === "ai_conversations")?.value ?? null;
+  const liveAiConversations =
+    insights?.metrics?.find(m => m.id === "ai_conversations")?.value ?? null;
   const liveActiveAgents = agentsData?.activeAgents ?? null;
 
   const kpis = [
@@ -35,17 +38,28 @@ export default function Statistics() {
       id: 1,
       label: "Productivity Score",
       value: insights ? `${insights.completionRate ?? 0}%` : "—",
-      change: insights ? (insights.completionRate >= 70 ? "On Track" : "Needs Attention") : "Loading...",
-      status: insights ? (insights.completionRate >= 70 ? "green" : "amber") : "green",
+      change: insights
+        ? insights.completionRate >= 70
+          ? "On Track"
+          : "Needs Attention"
+        : "Loading...",
+      status: insights
+        ? insights.completionRate >= 70
+          ? "green"
+          : "amber"
+        : "green",
       icon: Activity,
     },
     {
       id: 2,
       label: "Task Completion",
-      value: liveTasksCompleted !== null && liveTasksTotal !== null
-        ? `${liveTasksCompleted}/${liveTasksTotal}`
-        : "—",
-      change: liveTasksTotal ? `${Math.round((liveTasksCompleted ?? 0) / liveTasksTotal * 100)}%` : "On Track",
+      value:
+        liveTasksCompleted !== null && liveTasksTotal !== null
+          ? `${liveTasksCompleted}/${liveTasksTotal}`
+          : "—",
+      change: liveTasksTotal
+        ? `${Math.round(((liveTasksCompleted ?? 0) / liveTasksTotal) * 100)}%`
+        : "On Track",
       status: "green",
       icon: CheckCircle2,
     },
@@ -53,7 +67,10 @@ export default function Statistics() {
       id: 3,
       label: "Active Projects",
       value: liveActiveProjects !== null ? String(liveActiveProjects) : "—",
-      change: liveActiveProjects !== null ? `${liveActiveProjects} running` : "Loading...",
+      change:
+        liveActiveProjects !== null
+          ? `${liveActiveProjects} running`
+          : "Loading...",
       status: "amber",
       icon: Clock,
     },
@@ -61,7 +78,10 @@ export default function Statistics() {
       id: 4,
       label: "AI Conversations (30d)",
       value: liveAiConversations !== null ? String(liveAiConversations) : "—",
-      change: liveActiveAgents !== null ? `${liveActiveAgents} agents active` : "Optimal",
+      change:
+        liveActiveAgents !== null
+          ? `${liveActiveAgents} agents active`
+          : "Optimal",
       status: "green",
       icon: Zap,
     },
@@ -93,9 +113,44 @@ export default function Statistics() {
 
   if (insightsLoading) {
     return (
-      <PageShell icon={BarChart3} iconClass="bg-green-500/15 text-green-400" title="Analytics" subtitle="Personal performance metrics and system evolution">
-        <div className="flex items-center justify-center py-16">
-          <RefreshCw className="animate-spin h-8 w-8 text-primary" />
+      <PageShell
+        icon={BarChart3}
+        iconClass="bg-green-500/15 text-green-400"
+        title="Analytics"
+        subtitle="Personal performance metrics and system evolution"
+      >
+        <div className="max-w-6xl mx-auto space-y-5">
+          {/* KPI cards skeleton */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <div
+                key={i}
+                className="p-6 rounded-xl bg-card/60 border border-white/10 space-y-3 animate-pulse"
+              >
+                <div className="h-4 w-24 bg-muted rounded" />
+                <div className="h-8 w-16 bg-muted rounded" />
+                <div className="h-5 w-20 bg-muted rounded" />
+              </div>
+            ))}
+          </div>
+          {/* Charts skeleton */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="lg:col-span-2 space-y-4">
+              <div className="bg-card/60 border border-white/10 rounded-xl p-6 space-y-3 animate-pulse">
+                <div className="h-5 w-40 bg-muted rounded" />
+                <div className="h-48 w-full bg-muted rounded" />
+              </div>
+            </div>
+            <div className="bg-card/60 border border-white/10 rounded-xl p-6 space-y-4 animate-pulse">
+              <div className="h-5 w-32 bg-muted rounded" />
+              {Array.from({ length: 3 }).map((_, i) => (
+                <div key={i} className="p-4 rounded-lg bg-muted/40 space-y-2">
+                  <div className="h-4 w-3/4 bg-muted rounded" />
+                  <div className="h-3 w-full bg-muted rounded" />
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </PageShell>
     );
@@ -109,7 +164,6 @@ export default function Statistics() {
       subtitle="Personal performance metrics and system evolution"
     >
       <div className="max-w-6xl mx-auto space-y-5">
-
         {/* Personal Analytics Section */}
         <CollapsibleSection
           title="Personal Analytics"
@@ -119,17 +173,22 @@ export default function Statistics() {
         >
           <PersonalAnalytics
             variant="full"
-            data={insights ? {
-              productivityScore: insights.completionRate ?? 0,
-              productivityTrend: (insights.completionRate ?? 0) >= 70 ? "up" : "down",
-              twinTrainingHours: 0,
-              decisionsThisWeek: liveAiConversations ?? 0,
-              tasksCompleted: liveTasksCompleted ?? 0,
-              avgResponseTime: "< 1 min",
-              topExpertUsed: "Victoria (Chief of Staff)",
-              moodAverage: 0,
-              streakDays: 0,
-            } : undefined}
+            data={
+              insights
+                ? {
+                    productivityScore: insights.completionRate ?? 0,
+                    productivityTrend:
+                      (insights.completionRate ?? 0) >= 70 ? "up" : "down",
+                    twinTrainingHours: 0,
+                    decisionsThisWeek: liveAiConversations ?? 0,
+                    tasksCompleted: liveTasksCompleted ?? 0,
+                    avgResponseTime: "< 1 min",
+                    topExpertUsed: "Victoria (Chief of Staff)",
+                    moodAverage: 0,
+                    streakDays: 0,
+                  }
+                : undefined
+            }
           />
         </CollapsibleSection>
 

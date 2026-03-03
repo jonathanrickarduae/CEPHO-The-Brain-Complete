@@ -18,7 +18,9 @@ function applyThemeToDOM(t: Theme, setIsDark: (v: boolean) => void) {
   const htmlElement = document.documentElement;
   htmlElement.style.transition = "background-color 0.3s ease, color 0.3s ease";
   if (t === "system") {
-    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const prefersDark = window.matchMedia(
+      "(prefers-color-scheme: dark)"
+    ).matches;
     if (prefersDark) {
       htmlElement.classList.add("dark");
       htmlElement.classList.remove("light");
@@ -48,7 +50,8 @@ export function useTheme() {
   const [theme, setThemeState] = useState<Theme>(() => {
     if (typeof window === "undefined") return "dark";
     const stored = localStorage.getItem(THEME_STORAGE_KEY) as Theme | null;
-    if (stored === "light" || stored === "dark" || stored === "system") return stored;
+    if (stored === "light" || stored === "dark" || stored === "system")
+      return stored;
     return "dark";
   });
 

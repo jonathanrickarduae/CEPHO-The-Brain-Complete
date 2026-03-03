@@ -1,3 +1,4 @@
+import { getModelForTask } from "../utils/modelRouter";
 /**
  * Chief of Staff Router — Real Implementation
  *
@@ -104,7 +105,14 @@ export const chiefOfStaffRouter = router({
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
 
-    const [taskList, projectList, questionnaireCount, docCount, notifCount, convCount] = await Promise.all([
+    const [
+      taskList,
+      projectList,
+      questionnaireCount,
+      docCount,
+      notifCount,
+      convCount,
+    ] = await Promise.all([
       db
         .select()
         .from(tasks)
@@ -127,12 +135,19 @@ export const chiefOfStaffRouter = router({
       db
         .select({ count: count() })
         .from(notifications)
-        .where(and(eq(notifications.userId, userId), eq(notifications.read, false))),
+        .where(
+          and(eq(notifications.userId, userId), eq(notifications.read, false))
+        ),
 
       db
         .select({ count: count() })
         .from(conversations)
-        .where(and(eq(conversations.userId, userId), gte(conversations.createdAt, sevenDaysAgo))),
+        .where(
+          and(
+            eq(conversations.userId, userId),
+            gte(conversations.createdAt, sevenDaysAgo)
+          )
+        ),
     ]);
 
     const questionnaireCompletion = Math.min(
@@ -160,17 +175,26 @@ export const chiefOfStaffRouter = router({
     // Build alerts from overdue tasks and at-risk projects
     const alerts: { title: string; message: string }[] = [];
     for (const t of overdueTasks.slice(0, 2)) {
-      alerts.push({ title: t.title, message: `Overdue since ${t.dueDate?.toLocaleDateString() ?? "unknown"}` });
+      alerts.push({
+        title: t.title,
+        message: `Overdue since ${t.dueDate?.toLocaleDateString() ?? "unknown"}`,
+      });
     }
     for (const p of atRiskProjects.slice(0, 2)) {
-      alerts.push({ title: p.name, message: "Project is at risk — review required" });
+      alerts.push({
+        title: p.name,
+        message: "Project is at risk — review required",
+      });
     }
 
     return {
       userId,
       name: ctx.user.name,
       email: ctx.user.email,
-      emails: { unread: unreadNotifs, highPriority: Math.floor(unreadNotifs * 0.25) },
+      emails: {
+        unread: unreadNotifs,
+        highPriority: Math.floor(unreadNotifs * 0.25),
+      },
       tasks: {
         dueToday: dueTodayTasks.length,
         overdue: overdueTasks.length,
@@ -251,7 +275,7 @@ Provide:
 Keep it concise and actionable. Use a professional, direct tone.`;
 
     const completion = await openai.chat.completions.create({
-      model: "gpt-4.1-mini",
+      model: getModelForTask("score"),
       messages: [{ role: "user", content: prompt }],
       max_tokens: 600,
       temperature: 0.6,
@@ -298,7 +322,7 @@ Score this task on a scale of 1-10 for quality and completeness. Respond with JS
   "approved": <true if score >= 7>
 }`;
       const completion = await openai.chat.completions.create({
-        model: "gpt-4.1-mini",
+        model: getModelForTask("score"),
         messages: [{ role: "user", content: prompt }],
         max_tokens: 150,
         temperature: 0.3,
@@ -310,7 +334,9 @@ Score this task on a scale of 1-10 for quality and completeness. Respond with JS
         approved: true,
       };
       try {
-        const parsed = JSON.parse(completion.choices[0]?.message?.content ?? "{}");
+        const parsed = JSON.parse(
+          completion.choices[0]?.message?.content ?? "{}"
+        );
         result = {
           score: Math.min(10, Math.max(1, Number(parsed.score) || 8)),
           reasoning: String(parsed.reasoning ?? "Task reviewed."),

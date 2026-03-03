@@ -51,10 +51,19 @@ export const gdprRouter = router({
       db.select().from(activityFeed).where(eq(activityFeed.userId, userId)),
       db.select().from(notifications).where(eq(notifications.userId, userId)),
       db.select().from(userSettings).where(eq(userSettings.userId, userId)),
-      db.select().from(digitalTwinProfile).where(eq(digitalTwinProfile.userId, userId)),
-      db.select().from(innovationIdeas).where(eq(innovationIdeas.userId, userId)),
+      db
+        .select()
+        .from(digitalTwinProfile)
+        .where(eq(digitalTwinProfile.userId, userId)),
+      db
+        .select()
+        .from(innovationIdeas)
+        .where(eq(innovationIdeas.userId, userId)),
       db.select().from(npsResponses).where(eq(npsResponses.userId, userId)),
-      db.select().from(feedbackHistory).where(eq(feedbackHistory.userId, userId)),
+      db
+        .select()
+        .from(feedbackHistory)
+        .where(eq(feedbackHistory.userId, userId)),
     ]);
 
     return {
@@ -98,16 +107,22 @@ export const gdprRouter = router({
 
       // Delete all user data in dependency order
       await db.delete(npsResponses).where(eq(npsResponses.userId, userId));
-      await db.delete(feedbackHistory).where(eq(feedbackHistory.userId, userId));
+      await db
+        .delete(feedbackHistory)
+        .where(eq(feedbackHistory.userId, userId));
       await db.delete(notifications).where(eq(notifications.userId, userId));
       await db.delete(activityFeed).where(eq(activityFeed.userId, userId));
       await db.delete(voiceNotes).where(eq(voiceNotes.userId, userId));
       await db.delete(moodHistory).where(eq(moodHistory.userId, userId));
-      await db.delete(innovationIdeas).where(eq(innovationIdeas.userId, userId));
+      await db
+        .delete(innovationIdeas)
+        .where(eq(innovationIdeas.userId, userId));
       await db.delete(tasks).where(eq(tasks.userId, userId));
       await db.delete(projects).where(eq(projects.userId, userId));
       await db.delete(userSettings).where(eq(userSettings.userId, userId));
-      await db.delete(digitalTwinProfile).where(eq(digitalTwinProfile.userId, userId));
+      await db
+        .delete(digitalTwinProfile)
+        .where(eq(digitalTwinProfile.userId, userId));
       await db.delete(users).where(eq(users.id, userId));
 
       return {

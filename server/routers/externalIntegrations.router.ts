@@ -396,7 +396,9 @@ export const anthropicRouter = router({
       })
     )
     .mutation(async ({ input }) => {
-      const { anthropicService } = await import("../services/anthropic.service");
+      const { anthropicService } = await import(
+        "../services/anthropic.service"
+      );
       const content = await anthropicService.ask(
         input.prompt,
         input.systemPrompt,
@@ -421,7 +423,9 @@ export const anthropicRouter = router({
       })
     )
     .mutation(async ({ input }) => {
-      const { anthropicService } = await import("../services/anthropic.service");
+      const { anthropicService } = await import(
+        "../services/anthropic.service"
+      );
       return anthropicService.complete(input.messages, {
         system: input.system,
         model: input.model,
@@ -457,7 +461,9 @@ export const synthesiaRouter = router({
   getVideo: protectedProcedure
     .input(z.object({ videoId: z.string() }))
     .query(async ({ input }) => {
-      const { synthesiaService } = await import("../services/synthesia.service");
+      const { synthesiaService } = await import(
+        "../services/synthesia.service"
+      );
       return synthesiaService.getVideo(input.videoId);
     }),
 
@@ -480,7 +486,9 @@ export const synthesiaRouter = router({
       })
     )
     .mutation(async ({ input }) => {
-      const { synthesiaService } = await import("../services/synthesia.service");
+      const { synthesiaService } = await import(
+        "../services/synthesia.service"
+      );
       return synthesiaService.createVideo(input);
     }),
 });

@@ -97,7 +97,9 @@ export function PageShell({
           </div>
           {/* Right: actions */}
           {actions && (
-            <div className="flex items-center gap-2 shrink-0 ml-4">{actions}</div>
+            <div className="flex items-center gap-2 shrink-0 ml-4">
+              {actions}
+            </div>
           )}
         </div>
 
@@ -200,10 +202,14 @@ export function PageSection({
               <h2 className="text-sm font-semibold text-foreground">{title}</h2>
             )}
             {description && (
-              <p className="text-xs text-muted-foreground mt-0.5">{description}</p>
+              <p className="text-xs text-muted-foreground mt-0.5">
+                {description}
+              </p>
             )}
           </div>
-          {actions && <div className="flex items-center gap-2 shrink-0">{actions}</div>}
+          {actions && (
+            <div className="flex items-center gap-2 shrink-0">{actions}</div>
+          )}
         </div>
       )}
       {children}

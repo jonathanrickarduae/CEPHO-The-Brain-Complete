@@ -70,7 +70,8 @@ export class TodoistService {
     const res = await fetch(`${this.baseUrl}/projects`, {
       headers: this.headers(),
     });
-    if (!res.ok) throw new Error(`Todoist getProjects failed: ${res.statusText}`);
+    if (!res.ok)
+      throw new Error(`Todoist getProjects failed: ${res.statusText}`);
     const data = await res.json();
     return data.map(this.mapProject);
   }
@@ -80,7 +81,8 @@ export class TodoistService {
     const res = await fetch(`${this.baseUrl}/projects/${projectId}`, {
       headers: this.headers(),
     });
-    if (!res.ok) throw new Error(`Todoist getProject failed: ${res.statusText}`);
+    if (!res.ok)
+      throw new Error(`Todoist getProject failed: ${res.statusText}`);
     return this.mapProject(await res.json());
   }
 
@@ -99,7 +101,8 @@ export class TodoistService {
         is_favorite: options?.isFavorite,
       }),
     });
-    if (!res.ok) throw new Error(`Todoist createProject failed: ${res.statusText}`);
+    if (!res.ok)
+      throw new Error(`Todoist createProject failed: ${res.statusText}`);
     return this.mapProject(await res.json());
   }
 
@@ -166,7 +169,8 @@ export class TodoistService {
         assignee_id: options.assigneeId,
       }),
     });
-    if (!res.ok) throw new Error(`Todoist createTask failed: ${res.statusText}`);
+    if (!res.ok)
+      throw new Error(`Todoist createTask failed: ${res.statusText}`);
     return this.mapTask(await res.json());
   }
 
@@ -198,7 +202,8 @@ export class TodoistService {
         assignee_id: updates.assigneeId,
       }),
     });
-    if (!res.ok) throw new Error(`Todoist updateTask failed: ${res.statusText}`);
+    if (!res.ok)
+      throw new Error(`Todoist updateTask failed: ${res.statusText}`);
     return this.mapTask(await res.json());
   }
 
@@ -217,7 +222,8 @@ export class TodoistService {
       method: "POST",
       headers: this.headers(),
     });
-    if (!res.ok) throw new Error(`Todoist reopenTask failed: ${res.statusText}`);
+    if (!res.ok)
+      throw new Error(`Todoist reopenTask failed: ${res.statusText}`);
   }
 
   /** Delete a task */
@@ -226,7 +232,8 @@ export class TodoistService {
       method: "DELETE",
       headers: this.headers(),
     });
-    if (!res.ok) throw new Error(`Todoist deleteTask failed: ${res.statusText}`);
+    if (!res.ok)
+      throw new Error(`Todoist deleteTask failed: ${res.statusText}`);
   }
 
   /** Get today's tasks */
@@ -235,7 +242,11 @@ export class TodoistService {
   }
 
   /** Test connection */
-  async testConnection(): Promise<{ ok: boolean; projectCount?: number; error?: string }> {
+  async testConnection(): Promise<{
+    ok: boolean;
+    projectCount?: number;
+    error?: string;
+  }> {
     try {
       const projects = await this.getProjects();
       return { ok: true, projectCount: projects.length };
@@ -274,10 +285,13 @@ export class TodoistService {
       due: t.due
         ? {
             date: (t.due as Record<string, unknown>).date as string,
-            isRecurring: (t.due as Record<string, unknown>).is_recurring as boolean,
-            datetime: ((t.due as Record<string, unknown>).datetime as string) ?? null,
+            isRecurring: (t.due as Record<string, unknown>)
+              .is_recurring as boolean,
+            datetime:
+              ((t.due as Record<string, unknown>).datetime as string) ?? null,
             string: (t.due as Record<string, unknown>).string as string,
-            timezone: ((t.due as Record<string, unknown>).timezone as string) ?? null,
+            timezone:
+              ((t.due as Record<string, unknown>).timezone as string) ?? null,
           }
         : null,
       url: t.url as string,

@@ -60,8 +60,7 @@ export function OfflineIndicator() {
       // Clear pending actions after processing
       localStorage.removeItem("brain-pending-actions");
       setPendingActions(0);
-    } catch {
-    }
+    } catch {}
   };
 
   // Don't show anything if online and no reconnected message

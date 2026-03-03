@@ -467,8 +467,7 @@ export function VoiceCommands({ onCommand, className }: VoiceCommandsProps) {
 // Floating voice button for global access
 export function FloatingVoiceButton() {
   const [isExpanded, setIsExpanded] = useState(false);
-  const { isListening, isSupported } =
-    useVoiceInput();
+  const { isListening, isSupported } = useVoiceInput();
 
   if (!isSupported) return null;
 

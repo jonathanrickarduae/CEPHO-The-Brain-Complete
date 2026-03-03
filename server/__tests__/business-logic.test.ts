@@ -19,7 +19,14 @@ function getAgentMetrics(agentId: string) {
   const tasksCompleted = 120 + (seed % 400);
   const successRate = 85 + (seed % 12);
   const avgResponseTime = 0.8 + (seed % 30) / 10;
-  const statuses = ["active", "active", "active", "active", "learning", "idle"] as const;
+  const statuses = [
+    "active",
+    "active",
+    "active",
+    "active",
+    "learning",
+    "idle",
+  ] as const;
   const status = statuses[seed % statuses.length];
   return {
     performanceRating: Math.round(baseRating * 10) / 10,
@@ -43,7 +50,12 @@ describe("Agent Metrics Computation", () => {
   });
 
   it("performanceRating is between 72 and 96", () => {
-    const agents = ["email_composer", "meeting_summariser", "market_analyst", "digital_twin"];
+    const agents = [
+      "email_composer",
+      "meeting_summariser",
+      "market_analyst",
+      "digital_twin",
+    ];
     for (const id of agents) {
       const { performanceRating } = getAgentMetrics(id);
       expect(performanceRating).toBeGreaterThanOrEqual(72);
@@ -181,7 +193,11 @@ describe("QA Task Data Shape Mapping", () => {
   });
 
   it("qaStatus defaults to pending for non-completed tasks", () => {
-    const pendingTask: MockDbTask = { ...mockTask, status: "in_progress", qaStatus: null };
+    const pendingTask: MockDbTask = {
+      ...mockTask,
+      status: "in_progress",
+      qaStatus: null,
+    };
     const mapped = mapQaTask(pendingTask);
     expect(mapped.qaStatus).toBe("pending");
   });
@@ -204,11 +220,10 @@ interface Phase {
 function computeProjectProgress(phases: Phase[]) {
   const TOTAL_PHASES = 6;
   const completedPhases = phases.filter(ph => ph.status === "completed").length;
-  const currentPhase = phases.find(ph => ph.status === "in_progress")?.phaseNumber ?? 1;
+  const currentPhase =
+    phases.find(ph => ph.status === "in_progress")?.phaseNumber ?? 1;
   const completionPercentage =
-    phases.length > 0
-      ? Math.round((completedPhases / TOTAL_PHASES) * 100)
-      : 0;
+    phases.length > 0 ? Math.round((completedPhases / TOTAL_PHASES) * 100) : 0;
   return { completedPhases, currentPhase, completionPercentage };
 }
 
@@ -222,7 +237,8 @@ describe("Project Genesis Phase Completion Logic", () => {
       { id: 5, phaseNumber: 5, status: "not_started" },
       { id: 6, phaseNumber: 6, status: "not_started" },
     ];
-    const { completionPercentage, currentPhase } = computeProjectProgress(phases);
+    const { completionPercentage, currentPhase } =
+      computeProjectProgress(phases);
     expect(completionPercentage).toBe(0);
     expect(currentPhase).toBe(1);
   });
@@ -236,7 +252,8 @@ describe("Project Genesis Phase Completion Logic", () => {
       { id: 5, phaseNumber: 5, status: "not_started" },
       { id: 6, phaseNumber: 6, status: "not_started" },
     ];
-    const { completionPercentage, currentPhase } = computeProjectProgress(phases);
+    const { completionPercentage, currentPhase } =
+      computeProjectProgress(phases);
     expect(completionPercentage).toBe(50);
     expect(currentPhase).toBe(4);
   });
@@ -411,18 +428,43 @@ interface Document {
 
 function filterDocuments(documents: Document[], searchQuery: string) {
   if (!searchQuery) return documents;
-  return documents.filter(doc =>
-    doc.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    doc.documentId.toLowerCase().includes(searchQuery.toLowerCase())
+  return documents.filter(
+    doc =>
+      doc.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      doc.documentId.toLowerCase().includes(searchQuery.toLowerCase())
   );
 }
 
 describe("Document Library Filtering Logic", () => {
   const mockDocs: Document[] = [
-    { id: 1, title: "Market Research Report", documentId: "DOC-001", type: "report", qaStatus: "approved" },
-    { id: 2, title: "Innovation Brief Q1", documentId: "DOC-002", type: "innovation_brief", qaStatus: "pending" },
-    { id: 3, title: "Project Genesis Plan", documentId: "DOC-003", type: "project_genesis", qaStatus: "approved" },
-    { id: 4, title: "Financial Projections", documentId: "DOC-004", type: "report", qaStatus: "pending" },
+    {
+      id: 1,
+      title: "Market Research Report",
+      documentId: "DOC-001",
+      type: "report",
+      qaStatus: "approved",
+    },
+    {
+      id: 2,
+      title: "Innovation Brief Q1",
+      documentId: "DOC-002",
+      type: "innovation_brief",
+      qaStatus: "pending",
+    },
+    {
+      id: 3,
+      title: "Project Genesis Plan",
+      documentId: "DOC-003",
+      type: "project_genesis",
+      qaStatus: "approved",
+    },
+    {
+      id: 4,
+      title: "Financial Projections",
+      documentId: "DOC-004",
+      type: "report",
+      qaStatus: "pending",
+    },
   ];
 
   it("returns all documents when searchQuery is empty", () => {

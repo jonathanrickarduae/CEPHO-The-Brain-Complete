@@ -2,9 +2,9 @@
 
 **CEPHO.AI Platform**
 
-*Version: 1.0*
-*Status: Draft*
-*Last Updated: 2026-03-01*
+_Version: 1.0_
+_Status: Draft_
+_Last Updated: 2026-03-01_
 
 ---
 
@@ -16,12 +16,12 @@ This document defines the process for responding to and managing security and op
 
 ## 2. Incident Severity Levels
 
-| Level | Name | Description | Response Time |
-| :--- | :--- | :--- | :--- |
-| **P1** | Critical | Site is down, data loss, security breach. | 15 minutes |
-| **P2** | High | Core feature is broken for all users. | 1 hour |
-| **P3** | Medium | Non-critical feature is broken, or a core feature is broken for a subset of users. | 8 hours |
-| **P4** | Low | Minor bug, cosmetic issue. | 24 hours |
+| Level  | Name     | Description                                                                        | Response Time |
+| :----- | :------- | :--------------------------------------------------------------------------------- | :------------ |
+| **P1** | Critical | Site is down, data loss, security breach.                                          | 15 minutes    |
+| **P2** | High     | Core feature is broken for all users.                                              | 1 hour        |
+| **P3** | Medium   | Non-critical feature is broken, or a core feature is broken for a subset of users. | 8 hours       |
+| **P4** | Low      | Minor bug, cosmetic issue.                                                         | 24 hours      |
 
 ---
 

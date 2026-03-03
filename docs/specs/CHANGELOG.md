@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Phase 0 — Pre-Conditions (In Progress)
+
 - [ ] P0-01: GitHub Actions CI/CD pipeline
 - [ ] P0-02: Branch strategy and PR template
 - [ ] P0-03: Secrets management migration
@@ -22,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [ ] P0-10: Disaster recovery testing
 
 ### Phase 1 — Stabilise & Fix (Pending)
+
 - [ ] SEC-01: Remove MOCK_ADMIN_USER auth bypass
 - [ ] SEC-02: Remove hardcoded PIN 1111
 - [ ] SEC-03: Fix CSRF token flow
@@ -43,6 +45,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1.0] — 2026-03-01
 
 ### Added
+
 - Initial platform deployment on Render
 - Victoria's Briefing page (partial implementation)
 - Evening Review page (partial implementation)
@@ -59,6 +62,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Operations dashboard
 
 ### Known Issues (to be fixed in Phase 1)
+
 - CRITICAL: All visitors have admin access (MOCK_ADMIN_USER bypass active)
 - CRITICAL: Hardcoded PIN 1111 accepts any login
 - CRITICAL: Document Library crashes with TypeError on load

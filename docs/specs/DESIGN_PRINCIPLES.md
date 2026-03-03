@@ -16,11 +16,11 @@ These principles are not suggestions; they are the law. Every new feature, compo
 
 The design philosophy of CEPHO.AI is **"The Calm Cockpit"**. The user is an executive operating at a high level, and the platform is their advanced flight deck. It must be powerful but not overwhelming; information-dense but not cluttered; sophisticated but not complex.
 
-| Principle | Description |
-| :--- | :--- |
-| **Clarity First** | The user must understand the state of the system and the available actions at a glance. No ambiguity. |
-| **Quiet Confidence** | The UI should feel calm, professional, and reliable. It is a tool for serious work, not a social media app. |
-| **Effortless Power** | Complex operations should be accessible through simple, intuitive interactions. The user should feel powerful, not burdened. |
+| Principle                  | Description                                                                                                                    |
+| :------------------------- | :----------------------------------------------------------------------------------------------------------------------------- |
+| **Clarity First**          | The user must understand the state of the system and the available actions at a glance. No ambiguity.                          |
+| **Quiet Confidence**       | The UI should feel calm, professional, and reliable. It is a tool for serious work, not a social media app.                    |
+| **Effortless Power**       | Complex operations should be accessible through simple, intuitive interactions. The user should feel powerful, not burdened.   |
 | **Intelligent Assistance** | The UI should proactively guide the user, surfacing the right information at the right time. It is a partner, not just a tool. |
 
 ## 3. Visual Design Language
@@ -31,30 +31,30 @@ The visual language is built on a dark, professional, and focused aesthetic.
 
 The palette is minimalist and uses colour strategically to convey information.
 
-| Name | Hex | RGB | Usage |
-| :--- | :--- | :--- | :--- |
-| **Background (`--bg`)** | `#0f1117` | `rgb(15, 17, 23)` | Main app background |
-| **Surface (`--surface`)** | `#1a1d27` | `rgb(26, 29, 39)` | Card and component backgrounds |
-| **Surface 2 (`--surface2`)** | `#22263a` | `rgb(34, 38, 58)` | Hover states, secondary surfaces |
-| **Border (`--border`)** | `#2e3250` | `rgb(46, 50, 80)` | All borders and dividers |
-| **Primary Text (`--text`)** | `#e2e8f0` | `rgb(226, 232, 240)` | All primary body and heading text |
-| **Muted Text (`--muted`)** | `#8892a4` | `rgb(136, 146, 164)` | Secondary text, placeholders, metadata |
-| **Accent (`--accent`)** | `#6c63ff` | `rgb(108, 99, 255)` | Primary interactive elements, links, "In Progress" status |
-| **Accent 2 (`--accent2`)** | `#00d4aa` | `rgb(0, 212, 170)` | Secondary accent, highlights |
-| **Done (`--done`)** | `#10b981` | `rgb(16, 185, 129)` | "Done" status, success states |
-| **Warning (`--warn`)** | `#f59e0b` | `rgb(245, 158, 11)` | "Gap Item" status, warnings |
-| **Danger (`--danger`)** | `#ef4444` | `rgb(239, 68, 68)` | Error states, destructive actions |
+| Name                         | Hex       | RGB                  | Usage                                                     |
+| :--------------------------- | :-------- | :------------------- | :-------------------------------------------------------- |
+| **Background (`--bg`)**      | `#0f1117` | `rgb(15, 17, 23)`    | Main app background                                       |
+| **Surface (`--surface`)**    | `#1a1d27` | `rgb(26, 29, 39)`    | Card and component backgrounds                            |
+| **Surface 2 (`--surface2`)** | `#22263a` | `rgb(34, 38, 58)`    | Hover states, secondary surfaces                          |
+| **Border (`--border`)**      | `#2e3250` | `rgb(46, 50, 80)`    | All borders and dividers                                  |
+| **Primary Text (`--text`)**  | `#e2e8f0` | `rgb(226, 232, 240)` | All primary body and heading text                         |
+| **Muted Text (`--muted`)**   | `#8892a4` | `rgb(136, 146, 164)` | Secondary text, placeholders, metadata                    |
+| **Accent (`--accent`)**      | `#6c63ff` | `rgb(108, 99, 255)`  | Primary interactive elements, links, "In Progress" status |
+| **Accent 2 (`--accent2`)**   | `#00d4aa` | `rgb(0, 212, 170)`   | Secondary accent, highlights                              |
+| **Done (`--done`)**          | `#10b981` | `rgb(16, 185, 129)`  | "Done" status, success states                             |
+| **Warning (`--warn`)**       | `#f59e0b` | `rgb(245, 158, 11)`  | "Gap Item" status, warnings                               |
+| **Danger (`--danger`)**      | `#ef4444` | `rgb(239, 68, 68)`   | Error states, destructive actions                         |
 
 ### 3.2. Typography
 
 Typography is clean, modern, and highly legible.
 
-| Element | Font Family | Font Size | Font Weight | Colour |
-| :--- | :--- | :--- | :--- | :--- |
-| **Body** | `Inter, system-ui, sans-serif` | `14px` | `400` (Regular) | `--text` |
-| **Headings (h1, h2)** | `Inter, system-ui, sans-serif` | `18px` | `600` (Semi-bold) | `--accent` |
-| **Card Titles** | `Inter, system-ui, sans-serif` | `16px` | `500` (Medium) | `--text` |
-| **Labels / Metadata** | `Inter, system-ui, sans-serif` | `12px` | `400` (Regular) | `--muted` |
+| Element               | Font Family                    | Font Size | Font Weight       | Colour     |
+| :-------------------- | :----------------------------- | :-------- | :---------------- | :--------- |
+| **Body**              | `Inter, system-ui, sans-serif` | `14px`    | `400` (Regular)   | `--text`   |
+| **Headings (h1, h2)** | `Inter, system-ui, sans-serif` | `18px`    | `600` (Semi-bold) | `--accent` |
+| **Card Titles**       | `Inter, system-ui, sans-serif` | `16px`    | `500` (Medium)    | `--text`   |
+| **Labels / Metadata** | `Inter, system-ui, sans-serif` | `12px`    | `400` (Regular)   | `--muted`  |
 
 ### 3.3. Spacing & Layout
 
@@ -68,11 +68,11 @@ Spacing is consistent and generous to promote clarity and reduce cognitive load.
 
 Border radius is used to create a soft, modern feel.
 
-| Element | Radius |
-| :--- | :--- |
-| **Cards / Blocks** | `12px` |
-| **Inputs / Buttons** | `8px` |
-| **Badges / Tags** | `9999px` (pill-shaped) |
+| Element              | Radius                 |
+| :------------------- | :--------------------- |
+| **Cards / Blocks**   | `12px`                 |
+| **Inputs / Buttons** | `8px`                  |
+| **Badges / Tags**    | `9999px` (pill-shaped) |
 
 ## 4. Component Design
 
@@ -93,12 +93,12 @@ Border radius is used to create a soft, modern feel.
 
 Status is the most important information on the dashboard. It must be instantly recognisable.
 
-| Status | Colour | Interaction |
-| :--- | :--- | :--- |
-| **Not Started** | `--muted` | Click to cycle to "In Progress" |
-| **In Progress** | `--accent` | Click to cycle to "Done" |
-| **Done** | `--done` | Click to cycle to "Not Started" |
-| **Gap Item** | `--warn` | (Static) Indicates a task added from the gap analysis |
+| Status          | Colour     | Interaction                                           |
+| :-------------- | :--------- | :---------------------------------------------------- |
+| **Not Started** | `--muted`  | Click to cycle to "In Progress"                       |
+| **In Progress** | `--accent` | Click to cycle to "Done"                              |
+| **Done**        | `--done`   | Click to cycle to "Not Started"                       |
+| **Gap Item**    | `--warn`   | (Static) Indicates a task added from the gap analysis |
 
 ## 5. Interaction & Experience Principles
 

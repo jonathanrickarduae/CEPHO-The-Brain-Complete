@@ -45,7 +45,9 @@ const DevelopmentPathway = lazy(() => import("./pages/DevelopmentPathway"));
 const COSTraining = lazy(() => import("./pages/COSTraining"));
 const AIAgentsPage = lazy(() => import("./pages/AIAgentsPage"));
 const AgentDetailPage = lazy(() => import("./pages/AgentDetailPage"));
-const AIAgentsMonitoringPage = lazy(() => import("./pages/AIAgentsMonitoringPage"));
+const AIAgentsMonitoringPage = lazy(
+  () => import("./pages/AIAgentsMonitoringPage")
+);
 const AISMEsPage = lazy(() => import("./pages/AISMEsPage"));
 const Statistics = lazy(() => import("./pages/Statistics"));
 const DocumentLibrary = lazy(() => import("./pages/DocumentLibrary"));
@@ -88,87 +90,137 @@ function Router() {
 
         {/* Root → Nexus */}
         <Route path="/" exact>
-          <WithLayout><NexusDashboard /></WithLayout>
+          <WithLayout>
+            <NexusDashboard />
+          </WithLayout>
         </Route>
         <Route path="/nexus">
-          <WithLayout><NexusDashboard /></WithLayout>
+          <WithLayout>
+            <NexusDashboard />
+          </WithLayout>
         </Route>
 
         {/* The Signal */}
         <Route path="/daily-brief">
-          <WithLayout><DailyBrief /></WithLayout>
+          <WithLayout>
+            <DailyBrief />
+          </WithLayout>
         </Route>
         <Route path="/evening-review">
-          <WithLayout><EveningReview /></WithLayout>
+          <WithLayout>
+            <EveningReview />
+          </WithLayout>
         </Route>
 
         {/* Chief of Staff */}
         <Route path="/operations">
-          <WithLayout><OperationsPage /></WithLayout>
+          <WithLayout>
+            <OperationsPage />
+          </WithLayout>
         </Route>
         <Route path="/tasks">
-          <WithLayout><ChiefOfStaff /></WithLayout>
+          <WithLayout>
+            <ChiefOfStaff />
+          </WithLayout>
         </Route>
         <Route path="/odyssey-management">
-          <WithLayout><DevelopmentPathway /></WithLayout>
+          <WithLayout>
+            <DevelopmentPathway />
+          </WithLayout>
         </Route>
         <Route path="/twin-training">
-          <WithLayout><COSTraining /></WithLayout>
+          <WithLayout>
+            <COSTraining />
+          </WithLayout>
         </Route>
         <Route path="/ai-agents">
-          <WithLayout><AIAgentsPage /></WithLayout>
+          <WithLayout>
+            <AIAgentsPage />
+          </WithLayout>
         </Route>
         <Route path="/ai-agents/:id">
-          <WithLayout><AgentDetailPage /></WithLayout>
+          <WithLayout>
+            <AgentDetailPage />
+          </WithLayout>
         </Route>
         <Route path="/ai-agents-monitoring">
-          <WithLayout><AIAgentsMonitoringPage /></WithLayout>
+          <WithLayout>
+            <AIAgentsMonitoringPage />
+          </WithLayout>
         </Route>
         <Route path="/ai-experts">
-          <WithLayout><AISMEsPage /></WithLayout>
+          <WithLayout>
+            <AISMEsPage />
+          </WithLayout>
         </Route>
         <Route path="/analytics">
-          <WithLayout><Statistics /></WithLayout>
+          <WithLayout>
+            <Statistics />
+          </WithLayout>
         </Route>
         <Route path="/documents">
-          <WithLayout><DocumentLibrary /></WithLayout>
+          <WithLayout>
+            <DocumentLibrary />
+          </WithLayout>
         </Route>
 
         {/* Odyssey Engine */}
         <Route path="/innovation-hub">
-          <WithLayout><InnovationHub /></WithLayout>
+          <WithLayout>
+            <InnovationHub />
+          </WithLayout>
         </Route>
         <Route path="/project-genesis">
-          <WithLayout><ProjectGenesisPage /></WithLayout>
+          <WithLayout>
+            <ProjectGenesisPage />
+          </WithLayout>
         </Route>
         <Route path="/workflow/project_genesis/new">
-          <WithLayout><ProjectGenesisWizard /></WithLayout>
+          <WithLayout>
+            <ProjectGenesisWizard />
+          </WithLayout>
         </Route>
         <Route path="/workflow/project_genesis/:workflowId">
-          <WithLayout><ProjectGenesisWizard /></WithLayout>
+          <WithLayout>
+            <ProjectGenesisWizard />
+          </WithLayout>
         </Route>
         <Route path="/workflows">
-          <WithLayout><WorkflowsPage /></WithLayout>
+          <WithLayout>
+            <WorkflowsPage />
+          </WithLayout>
         </Route>
         <Route path="/workflows/:id">
-          <WithLayout><WorkflowDetailPage /></WithLayout>
+          <WithLayout>
+            <WorkflowDetailPage />
+          </WithLayout>
         </Route>
         <Route path="/persephone">
-          <WithLayout><PersephoneBoard /></WithLayout>
+          <WithLayout>
+            <PersephoneBoard />
+          </WithLayout>
         </Route>
 
         {/* Standalone */}
         <Route path="/vault">
-          <WithLayout><Vault /></WithLayout>
+          <WithLayout>
+            <Vault />
+          </WithLayout>
         </Route>
         <Route path="/war-room">
-          <WithLayout><WarRoom /></WithLayout>
+          <WithLayout>
+            <WarRoom />
+          </WithLayout>
         </Route>
         <Route path="/admin">
-          <WithLayout><AdminDashboard /></WithLayout>
+          <WithLayout>
+            <AdminDashboard />
+          </WithLayout>
         </Route>
         <Route path="/settings">
-          <WithLayout><Settings /></WithLayout>
+          <WithLayout>
+            <Settings />
+          </WithLayout>
         </Route>
         <Route path="/expert-chat/:expertId">
           <ExpertChatPage />

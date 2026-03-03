@@ -1,4 +1,4 @@
-import { useState, useEffect} from "react";
+import { useState, useEffect } from "react";
 import { Flame, Calendar, Trophy, Star, Zap } from "lucide-react";
 import { useCelebration } from "@/components/shared/CelebrationAnimations";
 
@@ -236,12 +236,14 @@ export function useStreak() {
           ...parsed,
           lastActive: parsed.lastActive ? new Date(parsed.lastActive) : null,
           activities:
-           parsed.activities?.map((a: { date: string; completed: boolean }) => ({              ...a,
-              date: new Date(a.date),
-            })) || [],
+            parsed.activities?.map(
+              (a: { date: string; completed: boolean }) => ({
+                ...a,
+                date: new Date(a.date),
+              })
+            ) || [],
         });
-      } catch {
-      }
+      } catch {}
     }
   }, []);
 

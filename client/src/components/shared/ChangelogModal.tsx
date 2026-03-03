@@ -1,13 +1,5 @@
 import { useState, useEffect } from "react";
-import {
-  X,
-  Sparkles,
-  Zap,
-  Shield,
-  Bug,
-  ArrowRight,
-  Bell,
-} from "lucide-react";
+import { X, Sparkles, Zap, Shield, Bug, ArrowRight, Bell } from "lucide-react";
 
 interface ChangelogEntry {
   version: string;

@@ -1,6 +1,6 @@
 # Privacy Policy
 
-*Last Updated: 2026-03-01*
+_Last Updated: 2026-03-01_
 
 This Privacy Policy explains how CEPHO.AI ("we", "us", or "our") collects, uses, and discloses information about you. This policy applies when you use our website, services, and mobile applications (collectively, the "Services").
 
@@ -21,6 +21,7 @@ This Privacy Policy explains how CEPHO.AI ("we", "us", or "our") collects, uses,
 ## 3. How We Share Your Information
 
 We do not sell your personal information. We may share information with:
+
 - **Service Providers:** Third parties who perform services on our behalf (e.g., Supabase, OpenAI, AWS).
 - **Legal Requirements:** If required by law or to protect our rights.
 

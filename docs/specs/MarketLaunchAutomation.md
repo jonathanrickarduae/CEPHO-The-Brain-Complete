@@ -1,4 +1,5 @@
 # Market Launch Automation
+
 Phase: 5
 Status: Draft
 
@@ -12,25 +13,25 @@ Its purpose is to ensure a coordinated, error-free, and simultaneous activation 
 
 - **Trigger:** The `Market Launch` workflow is initiated when the parent `Venture` object's state is moved to `ReadyForLaunch`. This state change can only occur after the `Final Launch Approval` gate has been signed off by the user.
 - **Pre-conditions:**
-    1.  All assets (website, app, marketing materials) must be deployed to production staging environments.
-    2.  All required third-party service accounts (e.g., Stripe, social media, analytics) must be configured and their API keys stored securely in the platform's vault.
-    3.  The DNS provider integration must be active and have the necessary permissions to update records.
-    4.  The customer support channels (e.g., email, chat widget) must be configured and ready to receive inquiries.
+  1.  All assets (website, app, marketing materials) must be deployed to production staging environments.
+  2.  All required third-party service accounts (e.g., Stripe, social media, analytics) must be configured and their API keys stored securely in the platform's vault.
+  3.  The DNS provider integration must be active and have the necessary permissions to update records.
+  4.  The customer support channels (e.g., email, chat widget) must be configured and ready to receive inquiries.
 
 ## 3. The Launch Sequence
 
 The launch sequence is a strictly ordered, non-parallel series of steps. Each step must complete successfully before the next one begins. If any step fails, the workflow halts and immediately triggers an alert for human intervention.
 
-| Step | Action | Service/Agent Involved | Verification | Rollback Procedure |
-|---|---|---|---|---|
-| 1 | **Final System Health Check** | `MonitoringAgent` | Runs a full diagnostic on all production infrastructure (servers, databases, APIs) to ensure they are operational and healthy. | N/A (Halts on failure) |
-| 2 | **Activate Payment Gateway** | `StripeIntegration` | Switches the Stripe account from "test" to "live" mode. | Manually switch back to "test" mode in the Stripe dashboard. |
-| 3 | **Update DNS Records** | `DNSProviderIntegration` | Points the primary domain and subdomains from any holding pages to the live production servers. | Revert DNS records to their previous state. |
-| 4 | **Enable Public Sign-ups** | `UserManagementService` | Toggles the feature flag that allows new users to register for the service. | Disable the public sign-up feature flag. |
-| 5 | **Publish Social Media Announcements** | `SocialMediaAgent` | Pushes the pre-approved launch announcements to all connected social media accounts (Twitter, LinkedIn, etc.). | Manually delete the published posts from each platform. |
-| 6 | **Send Launch Email** | `EmailMarketingIntegration` | Sends the official launch announcement email to the pre-built mailing list. | N/A (Cannot be undone) |
-| 7 | **Activate Analytics Tracking** | `AnalyticsIntegration` | Enables live analytics tracking and event monitoring (e.g., Google Analytics, Mixpanel). | Disable tracking scripts via the integration settings. |
-| 8 | **Notify Support Team** | `InternalCommsAgent` | Sends a high-priority notification to the designated customer support channel (e.g., Slack, Teams) that the venture is live. | Send a follow-up message clarifying the status. |
+| Step | Action                                 | Service/Agent Involved      | Verification                                                                                                                   | Rollback Procedure                                           |
+| ---- | -------------------------------------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------ |
+| 1    | **Final System Health Check**          | `MonitoringAgent`           | Runs a full diagnostic on all production infrastructure (servers, databases, APIs) to ensure they are operational and healthy. | N/A (Halts on failure)                                       |
+| 2    | **Activate Payment Gateway**           | `StripeIntegration`         | Switches the Stripe account from "test" to "live" mode.                                                                        | Manually switch back to "test" mode in the Stripe dashboard. |
+| 3    | **Update DNS Records**                 | `DNSProviderIntegration`    | Points the primary domain and subdomains from any holding pages to the live production servers.                                | Revert DNS records to their previous state.                  |
+| 4    | **Enable Public Sign-ups**             | `UserManagementService`     | Toggles the feature flag that allows new users to register for the service.                                                    | Disable the public sign-up feature flag.                     |
+| 5    | **Publish Social Media Announcements** | `SocialMediaAgent`          | Pushes the pre-approved launch announcements to all connected social media accounts (Twitter, LinkedIn, etc.).                 | Manually delete the published posts from each platform.      |
+| 6    | **Send Launch Email**                  | `EmailMarketingIntegration` | Sends the official launch announcement email to the pre-built mailing list.                                                    | N/A (Cannot be undone)                                       |
+| 7    | **Activate Analytics Tracking**        | `AnalyticsIntegration`      | Enables live analytics tracking and event monitoring (e.g., Google Analytics, Mixpanel).                                       | Disable tracking scripts via the integration settings.       |
+| 8    | **Notify Support Team**                | `InternalCommsAgent`        | Sends a high-priority notification to the designated customer support channel (e.g., Slack, Teams) that the venture is live.   | Send a follow-up message clarifying the status.              |
 
 ## 4. Post-Launch Monitoring
 
@@ -75,7 +76,7 @@ This object tracks the state of the automated launch sequence.
 - **Description:** Manually triggers the market launch workflow. This endpoint is protected and can only be called by the system itself after the final approval gate is passed.
 - **Request Body:** (empty)
 - **Response:**
-    - `202 Accepted`: If the launch workflow is successfully initiated.
-    - `412 Precondition Failed`: If any of the pre-launch conditions are not met.
+  - `202 Accepted`: If the launch workflow is successfully initiated.
+  - `412 Precondition Failed`: If any of the pre-launch conditions are not met.
 
 ---

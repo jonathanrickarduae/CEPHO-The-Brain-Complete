@@ -17,39 +17,59 @@ export default function WorkflowDetailPage() {
   const { id } = useParams<{ id: string }>();
   const [, setLocation] = useLocation();
 
-  const { data: workflow, isLoading, refetch } = trpc.workflows.get.useQuery(
-    { id: id ?? "" },
-    { enabled: !!id }
-  );
+  const {
+    data: workflow,
+    isLoading,
+    refetch,
+  } = trpc.workflows.get.useQuery({ id: id ?? "" }, { enabled: !!id });
 
   // Determine the current in-progress step number
-  const currentStepNumber = workflow?.steps?.find(s => s.status === "in_progress")?.phaseNumber ?? null;
+  const currentStepNumber =
+    workflow?.steps?.find(s => s.status === "in_progress")?.phaseNumber ?? null;
 
   const { data: stepGuidance } = trpc.workflows.getStepGuidance.useQuery(
     { workflowId: id ?? "", stepNumber: currentStepNumber ?? 1 },
     { enabled: !!id && currentStepNumber !== null }
   );
 
-  const startMutation = trpc.workflows.start.useMutation({ onSuccess: () => refetch() });
-  const pauseMutation = trpc.workflows.pause.useMutation({ onSuccess: () => refetch() });
-  const resumeMutation = trpc.workflows.resume.useMutation({ onSuccess: () => refetch() });
+  const startMutation = trpc.workflows.start.useMutation({
+    onSuccess: () => refetch(),
+  });
+  const pauseMutation = trpc.workflows.pause.useMutation({
+    onSuccess: () => refetch(),
+  });
+  const resumeMutation = trpc.workflows.resume.useMutation({
+    onSuccess: () => refetch(),
+  });
 
   const handleStart = async () => {
     if (!id) return;
-    try { await startMutation.mutateAsync({ id }); toast.success("Workflow started"); }
-    catch { toast.error("Failed to start workflow"); }
+    try {
+      await startMutation.mutateAsync({ id });
+      toast.success("Workflow started");
+    } catch {
+      toast.error("Failed to start workflow");
+    }
   };
 
   const handlePause = async () => {
     if (!id) return;
-    try { await pauseMutation.mutateAsync({ id }); toast.success("Workflow paused"); }
-    catch { toast.error("Failed to pause workflow"); }
+    try {
+      await pauseMutation.mutateAsync({ id });
+      toast.success("Workflow paused");
+    } catch {
+      toast.error("Failed to pause workflow");
+    }
   };
 
   const handleResume = async () => {
     if (!id) return;
-    try { await resumeMutation.mutateAsync({ id }); toast.success("Workflow resumed"); }
-    catch { toast.error("Failed to resume workflow"); }
+    try {
+      await resumeMutation.mutateAsync({ id });
+      toast.success("Workflow resumed");
+    } catch {
+      toast.error("Failed to resume workflow");
+    }
   };
 
   const getStepStatusIcon = (status: string) => {
@@ -83,7 +103,9 @@ export default function WorkflowDetailPage() {
     <PageShell
       icon={FileText}
       title={workflow.name}
-      subtitle={workflow.status.replace(/_/g, " ").replace(/\b\w/g, l => l.toUpperCase())}
+      subtitle={workflow.status
+        .replace(/_/g, " ")
+        .replace(/\b\w/g, l => l.toUpperCase())}
       actions={
         <div className="flex items-center gap-2">
           <button
@@ -154,13 +176,17 @@ export default function WorkflowDetailPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Steps List */}
           <div className="lg:col-span-2">
-            <h2 className="text-2xl font-bold text-foreground mb-6">Workflow Phases</h2>
+            <h2 className="text-2xl font-bold text-foreground mb-6">
+              Workflow Phases
+            </h2>
             <div className="space-y-4">
               {steps.map(step => (
                 <div
                   key={step.phaseNumber}
                   className={`bg-card rounded-lg p-6 border ${
-                    step.status === "in_progress" ? "border-fuchsia-500" : "border-border"
+                    step.status === "in_progress"
+                      ? "border-fuchsia-500"
+                      : "border-border"
                   }`}
                 >
                   <div className="flex items-start gap-4">
@@ -184,7 +210,8 @@ export default function WorkflowDetailPage() {
                       </div>
                       {step.completedAt && (
                         <p className="text-sm text-muted-foreground">
-                          Completed {new Date(step.completedAt).toLocaleDateString()}
+                          Completed{" "}
+                          {new Date(step.completedAt).toLocaleDateString()}
                         </p>
                       )}
                     </div>
@@ -201,7 +228,9 @@ export default function WorkflowDetailPage() {
 
           {/* Current Step Guidance */}
           <div>
-            <h2 className="text-2xl font-bold text-foreground mb-6">Current Phase</h2>
+            <h2 className="text-2xl font-bold text-foreground mb-6">
+              Current Phase
+            </h2>
             {currentStep && stepGuidance ? (
               <div className="bg-card rounded-lg p-6 border border-border sticky top-4">
                 <h3 className="text-xl font-semibold text-foreground mb-4">
@@ -223,12 +252,17 @@ export default function WorkflowDetailPage() {
                       Recommendations
                     </h4>
                     <ul className="space-y-2">
-                      {stepGuidance.recommendations.map((rec: string, index: number) => (
-                        <li key={index} className="flex items-start gap-2 text-foreground/80">
-                          <span className="text-primary mt-1">•</span>
-                          <span>{rec}</span>
-                        </li>
-                      ))}
+                      {stepGuidance.recommendations.map(
+                        (rec: string, index: number) => (
+                          <li
+                            key={index}
+                            className="flex items-start gap-2 text-foreground/80"
+                          >
+                            <span className="text-primary mt-1">•</span>
+                            <span>{rec}</span>
+                          </li>
+                        )
+                      )}
                     </ul>
                   </div>
                 )}
@@ -239,12 +273,17 @@ export default function WorkflowDetailPage() {
                       Deliverables
                     </h4>
                     <ul className="space-y-2">
-                      {stepGuidance.deliverables.map((deliverable: string, index: number) => (
-                        <li key={index} className="flex items-center gap-2 text-foreground/80">
-                          <FileText className="w-4 h-4 text-primary" />
-                          <span>{deliverable}</span>
-                        </li>
-                      ))}
+                      {stepGuidance.deliverables.map(
+                        (deliverable: string, index: number) => (
+                          <li
+                            key={index}
+                            className="flex items-center gap-2 text-foreground/80"
+                          >
+                            <FileText className="w-4 h-4 text-primary" />
+                            <span>{deliverable}</span>
+                          </li>
+                        )
+                      )}
                     </ul>
                   </div>
                 )}

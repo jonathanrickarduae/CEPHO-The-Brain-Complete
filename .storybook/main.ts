@@ -17,7 +17,7 @@ const config: StorybookConfig = {
   docs: {
     autodocs: "tag",
   },
-  viteFinal: async (config) => {
+  viteFinal: async config => {
     // Ensure path aliases work in Storybook
     if (config.resolve) {
       config.resolve.alias = {

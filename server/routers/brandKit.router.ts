@@ -19,10 +19,10 @@ export const brandKitRouter = router({
       const [row] = await db
         .select()
         .from(brandKit)
-      .where(eq(brandKit.id, input.id));
-    if (!row || row.userId !== ctx.user.id) return null;
-    return row ?? null;
-  }),
+        .where(eq(brandKit.id, input.id));
+      if (!row || row.userId !== ctx.user.id) return null;
+      return row ?? null;
+    }),
 
   getDefault: protectedProcedure.query(async ({ ctx }) => {
     const [row] = await db
@@ -105,9 +105,7 @@ export const brandKitRouter = router({
   delete: protectedProcedure
     .input(z.object({ id: z.number() }))
     .mutation(async ({ ctx, input }) => {
-      await db
-        .delete(brandKit)
-        .where(eq(brandKit.id, input.id));
+      await db.delete(brandKit).where(eq(brandKit.id, input.id));
       return { success: true };
     }),
 });

@@ -67,15 +67,22 @@ export const voiceCommandRouter = router({
       });
 
       const responseText =
-        message.content[0].type === "text" ? message.content[0].text : "I could not process that command.";
+        message.content[0].type === "text"
+          ? message.content[0].text
+          : "I could not process that command.";
 
       // Convert the response to speech using ElevenLabs
-      const audioResult = await synthesizeSpeech({ text: responseText, voiceId: VICTORIA_VOICE_ID });
-      const isSuccess = !('error' in audioResult);
+      const audioResult = await synthesizeSpeech({
+        text: responseText,
+        voiceId: VICTORIA_VOICE_ID,
+      });
+      const isSuccess = !("error" in audioResult);
 
       return {
         responseText,
-        audioUrl: isSuccess ? (audioResult as { audioUrl: string }).audioUrl : null,
+        audioUrl: isSuccess
+          ? (audioResult as { audioUrl: string }).audioUrl
+          : null,
         audioMimeType: "audio/mpeg",
         processedAt: new Date().toISOString(),
       };
@@ -98,7 +105,9 @@ export const voiceCommandRouter = router({
       // Convert base64 to buffer
       const audioBuffer = Buffer.from(input.audioBase64, "base64");
       const audioBlob = new Blob([audioBuffer], { type: input.mimeType });
-      const audioFile = new File([audioBlob], "recording.webm", { type: input.mimeType });
+      const audioFile = new File([audioBlob], "recording.webm", {
+        type: input.mimeType,
+      });
 
       const transcription = await openai.audio.transcriptions.create({
         file: audioFile,
@@ -124,9 +133,12 @@ export const voiceCommandRouter = router({
       })
     )
     .mutation(async ({ input }) => {
-      const result = await synthesizeSpeech({ text: input.text, voiceId: input.voiceId ?? VICTORIA_VOICE_ID });
+      const result = await synthesizeSpeech({
+        text: input.text,
+        voiceId: input.voiceId ?? VICTORIA_VOICE_ID,
+      });
 
-      if ('error' in result) {
+      if ("error" in result) {
         throw new Error(result.error ?? "Text-to-speech conversion failed");
       }
 

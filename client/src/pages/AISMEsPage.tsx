@@ -318,11 +318,17 @@ export default function AISMEsPage() {
   };
 
   const selectedExpert = useMemo(
-    () => (showExpertDetail ? AI_EXPERTS.find(e => e.id === showExpertDetail) ?? null : null),
+    () =>
+      showExpertDetail
+        ? (AI_EXPERTS.find(e => e.id === showExpertDetail) ?? null)
+        : null,
     [showExpertDetail]
   );
   const compareExpertData = useMemo(
-    () => compareExperts.map(id => AI_EXPERTS.find(e => e.id === id)).filter(Boolean) as typeof AI_EXPERTS,
+    () =>
+      compareExperts
+        .map(id => AI_EXPERTS.find(e => e.id === id))
+        .filter(Boolean) as typeof AI_EXPERTS,
     [compareExperts]
   );
 
@@ -362,7 +368,6 @@ export default function AISMEsPage() {
       }
       fillHeight
     >
-
       {/* View Mode Tabs */}
       <div className="shrink-0 border-b border-white/10 bg-white/5 px-4 overflow-x-auto scrollbar-hide">
         <div className="max-w-7xl mx-auto flex gap-1">
@@ -924,50 +929,58 @@ export default function AISMEsPage() {
                     </div>
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                    {recommendations.slice(0, 5).map((rec: { expertId: string; reason?: string; score?: number }) => {
-                      const expert = AI_EXPERTS.find(
-                        e => e.id === rec.expertId
-                      );
-                      if (!expert) return null;
-                      return (
-                        <div
-                          key={rec.expertId}
-                          className="flex items-center gap-3 p-3 bg-white/5 rounded-xl hover:bg-white/10 cursor-pointer transition-colors"
-                          onClick={() =>
-                            setLocation(`/expert-chat/${expert.id}`)
-                          }
-                        >
-                          <div className="w-10 h-10 rounded-xl overflow-hidden">
-                            {expert.avatarUrl ? (
-                              <img
-                                src={expert.avatarUrl}
-                                alt={expert.name}
-                                className="w-full h-full object-cover"
-                              />
-                            ) : (
-                              <div className="w-full h-full bg-gradient-to-br from-cyan-500/30 to-blue-500/30 flex items-center justify-center text-lg">
-                                {expert.avatar}
+                    {recommendations
+                      .slice(0, 5)
+                      .map(
+                        (rec: {
+                          expertId: string;
+                          reason?: string;
+                          score?: number;
+                        }) => {
+                          const expert = AI_EXPERTS.find(
+                            e => e.id === rec.expertId
+                          );
+                          if (!expert) return null;
+                          return (
+                            <div
+                              key={rec.expertId}
+                              className="flex items-center gap-3 p-3 bg-white/5 rounded-xl hover:bg-white/10 cursor-pointer transition-colors"
+                              onClick={() =>
+                                setLocation(`/expert-chat/${expert.id}`)
+                              }
+                            >
+                              <div className="w-10 h-10 rounded-xl overflow-hidden">
+                                {expert.avatarUrl ? (
+                                  <img
+                                    src={expert.avatarUrl}
+                                    alt={expert.name}
+                                    className="w-full h-full object-cover"
+                                  />
+                                ) : (
+                                  <div className="w-full h-full bg-gradient-to-br from-cyan-500/30 to-blue-500/30 flex items-center justify-center text-lg">
+                                    {expert.avatar}
+                                  </div>
+                                )}
                               </div>
-                            )}
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <h4 className="font-medium text-sm truncate">
-                              {expert.name}
-                            </h4>
-                            <p className="text-xs text-pink-400 truncate">
-                              {rec.reason}
-                            </p>
-                          </div>
-                          <Button
-                            size="sm"
-                            variant="ghost"
-                            className="shrink-0"
-                          >
-                            <MessageSquare className="w-4 h-4" />
-                          </Button>
-                        </div>
-                      );
-                    })}
+                              <div className="flex-1 min-w-0">
+                                <h4 className="font-medium text-sm truncate">
+                                  {expert.name}
+                                </h4>
+                                <p className="text-xs text-pink-400 truncate">
+                                  {rec.reason}
+                                </p>
+                              </div>
+                              <Button
+                                size="sm"
+                                variant="ghost"
+                                className="shrink-0"
+                              >
+                                <MessageSquare className="w-4 h-4" />
+                              </Button>
+                            </div>
+                          );
+                        }
+                      )}
                   </div>
                 </div>
               )}

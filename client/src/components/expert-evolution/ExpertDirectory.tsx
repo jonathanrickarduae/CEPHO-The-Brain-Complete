@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { useState, useMemo} from "react";
+import { useState, useMemo } from "react";
 import { useLocation } from "wouter";
 import { useFavorites } from "@/components/project-management/MyBoard";
 import { DirectExpertChat } from "@/components/expert-evolution/DirectExpertChat";
@@ -40,9 +40,7 @@ interface ExpertDirectoryProps {
   onBack?: () => void;
 }
 
-export function ExpertDirectory({
-  onBack,
-}: ExpertDirectoryProps) {
+export function ExpertDirectory({ onBack }: ExpertDirectoryProps) {
   const [, setLocation] = useLocation();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);

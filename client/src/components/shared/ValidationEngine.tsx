@@ -147,7 +147,9 @@ export function ValidationHeader({ report }: { report: ValidationReport }) {
         </div>
         <div>
           <span className="text-foreground/70">Confidence:</span>
-          <p className="text-foreground font-medium">{report.overallConfidence}%</p>
+          <p className="text-foreground font-medium">
+            {report.overallConfidence}%
+          </p>
         </div>
         <div>
           <span className="text-foreground/70">Sources:</span>

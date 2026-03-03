@@ -108,8 +108,12 @@ export default function ExpertChatPage() {
     },
   });
 
-  const { audioLevel: _audioLevel, waveformData: _waveformData, startWaveform, stopWaveform } =
-    useVoiceWaveform();
+  const {
+    audioLevel: _audioLevel,
+    waveformData: _waveformData,
+    startWaveform,
+    stopWaveform,
+  } = useVoiceWaveform();
 
   // Initialize chat session
   useEffect(() => {
@@ -136,7 +140,7 @@ export default function ExpertChatPage() {
         }
       );
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [expert]);
 
   // Scroll to bottom on new messages
@@ -386,17 +390,24 @@ ${messages
       subtitle={expert?.specialty || ""}
       actions={
         <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" onClick={() => setShowExportModal(true)}>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setShowExportModal(true)}
+          >
             <Download className="w-4 h-4 mr-1" /> Export
           </Button>
-          <Button variant="ghost" size="sm" onClick={() => setLocation("/ai-experts")}>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setLocation("/ai-experts")}
+          >
             <ArrowLeft className="w-4 h-4 mr-1" /> Back
           </Button>
         </div>
       }
       fillHeight
     >
-
       {/* Expert Info Banner */}
       <div className="bg-black/20 border-b border-white/5 px-4 py-2">
         <div className="max-w-4xl mx-auto">

@@ -182,10 +182,13 @@ export function configureSecurityHeaders(app: Express) {
 
 /**
  * Apply all security middleware
+ * NOTE: securityHeaders (legacy function with unsafe-inline) is intentionally
+ * NOT called here. configureSecurityHeaders uses Helmet with nonce-based CSP.
  */
 export function applySecurityMiddleware(app: Express) {
   configureSecurityHeaders(app);
   app.use(removeServerHeaders);
   app.use(corsHeaders);
-  app.use(securityHeaders);
+  // securityHeaders() is NOT applied — it contains unsafe-inline/unsafe-eval
+  // and is superseded by the Helmet nonce-based CSP above.
 }

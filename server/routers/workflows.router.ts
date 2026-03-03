@@ -1,3 +1,4 @@
+import { getModelForTask } from "../utils/modelRouter";
 /**
  * Workflows Router — Database-Persisted Implementation
  *
@@ -145,7 +146,10 @@ export const workflowsRouter = router({
         .limit(1);
 
       if (phaseRows.length > 0) {
-        const existingMeta = (phaseRows[0].metadata ?? {}) as Record<string, unknown>;
+        const existingMeta = (phaseRows[0].metadata ?? {}) as Record<
+          string,
+          unknown
+        >;
         await db
           .update(projectGenesisPhases)
           .set({
@@ -185,7 +189,10 @@ export const workflowsRouter = router({
         .limit(1);
       if (projectRows.length === 0) return { success: false };
 
-      const existingMeta = (projectRows[0].metadata ?? {}) as Record<string, unknown>;
+      const existingMeta = (projectRows[0].metadata ?? {}) as Record<
+        string,
+        unknown
+      >;
       await db
         .update(projectGenesis)
         .set({
@@ -241,7 +248,10 @@ export const workflowsRouter = router({
         .limit(1);
 
       if (phaseRows.length > 0) {
-        const existingMeta = (phaseRows[0].metadata ?? {}) as Record<string, unknown>;
+        const existingMeta = (phaseRows[0].metadata ?? {}) as Record<
+          string,
+          unknown
+        >;
         await db
           .update(projectGenesisPhases)
           .set({
@@ -283,7 +293,7 @@ Include relevant sections, analysis, and actionable recommendations.
 Keep it concise but thorough — maximum 800 words.`;
 
       const completion = await openai.chat.completions.create({
-        model: "gpt-4.1-mini",
+        model: getModelForTask("analyse"),
         messages: [{ role: "user", content: prompt }],
         max_tokens: 1200,
         temperature: 0.7,
@@ -378,13 +388,15 @@ Provide:
 Respond in JSON: { "guidance": string, "recommendations": string[], "deliverables": string[] }`;
       try {
         const completion = await openai.chat.completions.create({
-          model: "gpt-4.1-mini",
+          model: getModelForTask("analyse"),
           messages: [{ role: "user", content: prompt }],
           max_tokens: 400,
           temperature: 0.5,
           response_format: { type: "json_object" },
         });
-        const parsed = JSON.parse(completion.choices[0]?.message?.content ?? "{}");
+        const parsed = JSON.parse(
+          completion.choices[0]?.message?.content ?? "{}"
+        );
         return {
           guidance: parsed.guidance ?? "Follow the workflow steps carefully.",
           recommendations: parsed.recommendations ?? [],
@@ -392,8 +404,13 @@ Respond in JSON: { "guidance": string, "recommendations": string[], "deliverable
         };
       } catch {
         return {
-          guidance: "Complete this step according to the workflow requirements.",
-          recommendations: ["Review requirements", "Gather necessary information", "Document your progress"],
+          guidance:
+            "Complete this step according to the workflow requirements.",
+          recommendations: [
+            "Review requirements",
+            "Gather necessary information",
+            "Document your progress",
+          ],
           deliverables: ["Completed step documentation", "Progress report"],
         };
       }

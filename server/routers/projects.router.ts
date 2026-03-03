@@ -130,7 +130,9 @@ export const projectsRouter = router({
     .mutation(async ({ input, ctx }) => {
       await db
         .delete(projects)
-        .where(and(eq(projects.id, input.id), eq(projects.userId, ctx.user.id)));
+        .where(
+          and(eq(projects.id, input.id), eq(projects.userId, ctx.user.id))
+        );
       return { success: true, id: input.id };
     }),
 });

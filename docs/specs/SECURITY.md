@@ -2,10 +2,10 @@
 
 ## Supported Versions
 
-| Version | Supported |
-| :--- | :--- |
-| Latest (main branch) | ✅ Yes |
-| Older versions | ❌ No |
+| Version              | Supported |
+| :------------------- | :-------- |
+| Latest (main branch) | ✅ Yes    |
+| Older versions       | ❌ No     |
 
 ---
 
@@ -18,6 +18,7 @@ If you discover a security vulnerability in CEPHO.AI, please report it responsib
 Instead, email: security@cepho.ai
 
 Include in your report:
+
 - Description of the vulnerability
 - Steps to reproduce
 - Potential impact

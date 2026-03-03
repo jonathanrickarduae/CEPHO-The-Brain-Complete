@@ -169,9 +169,7 @@ export function AccessibilitySettingsPanel() {
           </div>
           <div
             className={`p-4 rounded-lg border ${
-              highContrast
-                ? "bg-black border-white"
-                : "bg-card border-border"
+              highContrast ? "bg-black border-white" : "bg-card border-border"
             }`}
           >
             <p

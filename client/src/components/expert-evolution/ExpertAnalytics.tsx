@@ -41,7 +41,9 @@ export function ExpertAnalytics() {
   const { favorites: _favorites } = useFavorites();
 
   // Real expert performance data from the database
-  const { data: expertPerfList } = trpc.expertConsultation.list.useQuery({ limit: 100 });
+  const { data: expertPerfList } = trpc.expertConsultation.list.useQuery({
+    limit: 100,
+  });
 
   const interactions = useMemo<ExpertInteraction[]>(() => {
     if (!expertPerfList) return [];

@@ -58,9 +58,7 @@ import {
 } from "@/components/project-management/KeyboardShortcutsHelp";
 import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
 
-import {
-  AccessibilitySettings,
-} from "@/components/settings/AccessibilitySettings";
+import { AccessibilitySettings } from "@/components/settings/AccessibilitySettings";
 import {
   CommandPalette,
   useCommandPalette,
@@ -77,7 +75,7 @@ import { ThemeToggle } from "@/components/settings/ThemeToggle";
 
 // Core navigation - streamlined for professional use (COS-centric view)
 type MenuItem = {
-  icon: React.FC<{ className?: string; }>;
+  icon: React.FC<{ className?: string }>;
   label: string;
   path: string;
   count?: number;
@@ -117,7 +115,11 @@ const menuItems: MenuItem[] = [
         path: "/twin-training",
       },
       { icon: Bot, label: "AI Agents", path: "/ai-agents" },
-      { icon: Activity, label: "Agent Monitoring", path: "/ai-agents-monitoring" },
+      {
+        icon: Activity,
+        label: "Agent Monitoring",
+        path: "/ai-agents-monitoring",
+      },
       { icon: Users, label: "AI-SMEs", path: "/ai-experts" },
       { icon: TrendingUp, label: "Analytics", path: "/analytics" },
       { icon: Library, label: "Document Library", path: "/documents" },
@@ -155,7 +157,7 @@ export default function BrainLayout({
     const saved = localStorage.getItem(SIDEBAR_WIDTH_KEY);
     return saved ? parseInt(saved, 10) : DEFAULT_WIDTH;
   });
-  const { loading} = useSupabaseAuth();
+  const { loading } = useSupabaseAuth();
 
   useEffect(() => {
     localStorage.setItem(SIDEBAR_WIDTH_KEY, sidebarWidth.toString());

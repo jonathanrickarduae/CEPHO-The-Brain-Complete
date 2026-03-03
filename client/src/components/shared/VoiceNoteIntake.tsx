@@ -80,8 +80,7 @@ export function VoiceNoteIntake({ onComplete, onSkip }: VoiceNoteIntakeProps) {
       timerRef.current = setInterval(() => {
         setRecordingTime(prev => prev + 1);
       }, 1000);
-    } catch {
-    }
+    } catch {}
   };
 
   // Stop recording

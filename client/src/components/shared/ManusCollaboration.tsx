@@ -131,7 +131,11 @@ const SAMPLE_ACTIVITY: ActivityType[] = [
 ];
 
 // Collaborators Panel
-export function CollaboratorsPanel({ projectId: _projectId }: { projectId?: string }) {
+export function CollaboratorsPanel({
+  projectId: _projectId,
+}: {
+  projectId?: string;
+}) {
   const [showInvite, setShowInvite] = useState(false);
   const collaborators = SAMPLE_COLLABORATORS;
 
@@ -327,7 +331,11 @@ export function CommentsThread({
 }
 
 // Activity Feed
-export function ActivityFeed({ projectId: _projectId }: { projectId?: string }) {
+export function ActivityFeed({
+  projectId: _projectId,
+}: {
+  projectId?: string;
+}) {
   const activities = SAMPLE_ACTIVITY;
 
   const formatTime = (date: Date) => {
@@ -389,7 +397,11 @@ export function ActivityFeed({ projectId: _projectId }: { projectId?: string }) 
 }
 
 // Version Control Panel
-export function VersionControlPanel({ documentId: _documentId }: { documentId?: string }) {
+export function VersionControlPanel({
+  documentId: _documentId,
+}: {
+  documentId?: string;
+}) {
   const versions = [
     {
       id: "1",

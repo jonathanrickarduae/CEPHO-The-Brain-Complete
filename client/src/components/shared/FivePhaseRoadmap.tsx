@@ -1,10 +1,5 @@
 import { useState } from "react";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -486,7 +481,9 @@ export function FivePhaseRoadmap() {
         <Card className="bg-gray-900/50 border-border/50">
           <CardContent className="pt-6">
             <div className="text-center">
-              <div className="text-2xl md:text-3xl font-bold text-foreground">6</div>
+              <div className="text-2xl md:text-3xl font-bold text-foreground">
+                6
+              </div>
               <div className="text-sm text-muted-foreground">Total Phases</div>
             </div>
           </CardContent>
@@ -494,7 +491,9 @@ export function FivePhaseRoadmap() {
         <Card className="bg-gray-900/50 border-border/50">
           <CardContent className="pt-6">
             <div className="text-center">
-              <div className="text-3xl font-bold text-[var(--brain-cyan)]">1</div>
+              <div className="text-3xl font-bold text-[var(--brain-cyan)]">
+                1
+              </div>
               <div className="text-sm text-muted-foreground">Current Phase</div>
             </div>
           </CardContent>

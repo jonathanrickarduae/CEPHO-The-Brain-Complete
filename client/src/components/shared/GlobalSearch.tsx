@@ -69,7 +69,11 @@ export function GlobalSearch({
     },
     project: { icon: FolderKanban, color: "text-purple-400", label: "Project" },
     vault: { icon: Lock, color: "text-red-400", label: "Vault" },
-    expert: { icon: Users, color: "text-[var(--brain-cyan)]", label: "AI Expert" },
+    expert: {
+      icon: Users,
+      color: "text-[var(--brain-cyan)]",
+      label: "AI Expert",
+    },
     task: { icon: Hash, color: "text-orange-400", label: "Task" },
     event: { icon: Calendar, color: "text-yellow-400", label: "Event" },
   };
@@ -293,9 +297,7 @@ export function GlobalSearch({
                     key={result.id}
                     onClick={() => handleResultClick(result)}
                     className={`w-full px-4 py-3 flex items-start gap-3 transition-colors ${
-                      index === selectedIndex
-                        ? "bg-card"
-                        : "hover:bg-card/50"
+                      index === selectedIndex ? "bg-card" : "hover:bg-card/50"
                     }`}
                   >
                     <div

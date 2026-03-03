@@ -145,10 +145,7 @@ export const featureFlagsRouter = router({
    * Get all feature flags (admin only)
    */
   list: protectedProcedure.query(async () => {
-    return db
-      .select()
-      .from(featureFlags)
-      .orderBy(featureFlags.key);
+    return db.select().from(featureFlags).orderBy(featureFlags.key);
   }),
 
   /**

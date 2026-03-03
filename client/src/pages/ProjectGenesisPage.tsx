@@ -189,8 +189,7 @@ export default function ProjectGenesisPage() {
       setTimeout(() => {
         setViewMode("dashboard");
       }, 1500);
-    } catch {
-    }
+    } catch {}
   };
 
   const getStatusColor = (status: GenesisBlueprint["status"]) => {
@@ -240,13 +239,23 @@ export default function ProjectGenesisPage() {
             disabled={createProjectMutation.isLoading}
           >
             {createProjectMutation.isLoading ? (
-              <><Loader2 className="w-4 h-4 mr-1 animate-spin" />Creating...</>
+              <>
+                <Loader2 className="w-4 h-4 mr-1 animate-spin" />
+                Creating...
+              </>
             ) : (
-              <><Plus className="w-4 h-4 mr-1" />New Project</>
+              <>
+                <Plus className="w-4 h-4 mr-1" />
+                New Project
+              </>
             )}
           </Button>
         ) : (
-          <Button size="sm" variant="outline" onClick={() => setViewMode("dashboard")}>
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() => setViewMode("dashboard")}
+          >
             ← Back
           </Button>
         )
@@ -338,9 +347,26 @@ export default function ProjectGenesisPage() {
 
           {/* Loading State */}
           {projectsLoading && !loadingTimedOut && (
-            <div className="flex items-center justify-center py-6">
-              <Loader2 className="w-8 h-8 text-purple-400 animate-spin" />
-              <span className="ml-3 text-muted-foreground">Loading projects...</span>
+            <div className="grid gap-4">
+              {Array.from({ length: 3 }).map((_, i) => (
+                <div
+                  key={i}
+                  className="bg-card/50 rounded-xl border border-border/50 p-6 space-y-4 animate-pulse"
+                >
+                  <div className="flex items-start justify-between">
+                    <div className="space-y-2">
+                      <div className="h-5 w-48 bg-muted rounded" />
+                      <div className="h-4 w-64 bg-muted rounded" />
+                    </div>
+                    <div className="h-6 w-20 bg-muted rounded" />
+                  </div>
+                  <div className="h-2 w-full bg-muted rounded-full" />
+                  <div className="flex gap-2">
+                    <div className="h-8 w-24 bg-muted rounded" />
+                    <div className="h-8 w-24 bg-muted rounded" />
+                  </div>
+                </div>
+              ))}
             </div>
           )}
 
@@ -444,61 +470,69 @@ export default function ProjectGenesisPage() {
         />
       )}
 
-      {viewMode === "qms" && currentBlueprint && (() => {
-        const qmsProject = savedProjects.find(p => String(p.id) === String(currentBlueprint.id));
-        return (
-          <div className="space-y-6 max-w-7xl mx-auto">
-            {/* Back button */}
-            <Button variant="outline" onClick={() => setViewMode("dashboard")} className="mb-2">
-              ← Back to Projects
-            </Button>
-            {/* Phase Progression — wired to live updatePhase endpoint */}
-            {qmsProject && (
-              <ValueChainProgress
-                phaseProgress={qmsProject.phaseProgress}
-                currentPhaseId={qmsProject.currentPhaseId}
-                onStartPhase={(phaseId) => {
-                  updatePhaseMutation.mutate({
-                    projectId: qmsProject.id,
-                    phaseNumber: phaseId,
-                    status: "in_progress",
-                  });
+      {viewMode === "qms" &&
+        currentBlueprint &&
+        (() => {
+          const qmsProject = savedProjects.find(
+            p => String(p.id) === String(currentBlueprint.id)
+          );
+          return (
+            <div className="space-y-6 max-w-7xl mx-auto">
+              {/* Back button */}
+              <Button
+                variant="outline"
+                onClick={() => setViewMode("dashboard")}
+                className="mb-2"
+              >
+                ← Back to Projects
+              </Button>
+              {/* Phase Progression — wired to live updatePhase endpoint */}
+              {qmsProject && (
+                <ValueChainProgress
+                  phaseProgress={qmsProject.phaseProgress}
+                  currentPhaseId={qmsProject.currentPhaseId}
+                  onStartPhase={phaseId => {
+                    updatePhaseMutation.mutate({
+                      projectId: qmsProject.id,
+                      phaseNumber: phaseId,
+                      status: "in_progress",
+                    });
+                  }}
+                  onRequestReview={phaseId => {
+                    updatePhaseMutation.mutate({
+                      projectId: qmsProject.id,
+                      phaseNumber: phaseId,
+                      status: "completed",
+                    });
+                  }}
+                />
+              )}
+              <BlueprintQMS
+                genesisBlueprint={currentBlueprint as GenesisBlueprint}
+                pendingChanges={[]}
+                onApplyChanges={(_changes, _cascadeTargets) => {
+                  toast.success("Changes applied successfully!");
                 }}
-                onRequestReview={(phaseId) => {
-                  updatePhaseMutation.mutate({
-                    projectId: qmsProject.id,
-                    phaseNumber: phaseId,
-                    status: "completed",
-                  });
+                onRejectChanges={_changeIds => {
+                  toast.info("Changes rejected");
+                }}
+                onViewBlueprint={blueprintId => {
+                  if (blueprintId === "edit") {
+                    setViewMode("edit_blueprint");
+                  } else if (blueprintId === "presentation") {
+                    setViewMode("presentation");
+                  } else if (blueprintId === "social") {
+                    setViewMode("social_media");
+                  } else if (blueprintId === "financial") {
+                    setViewMode("financial");
+                  } else {
+                    toast.info(`Opening ${blueprintId} blueprint...`);
+                  }
                 }}
               />
-            )}
-            <BlueprintQMS
-              genesisBlueprint={currentBlueprint as GenesisBlueprint}
-              pendingChanges={[]}
-              onApplyChanges={(_changes, _cascadeTargets) => {
-                toast.success("Changes applied successfully!");
-              }}
-              onRejectChanges={(_changeIds) => {
-                toast.info("Changes rejected");
-              }}
-              onViewBlueprint={blueprintId => {
-                if (blueprintId === "edit") {
-                  setViewMode("edit_blueprint");
-                } else if (blueprintId === "presentation") {
-                  setViewMode("presentation");
-                } else if (blueprintId === "social") {
-                  setViewMode("social_media");
-                } else if (blueprintId === "financial") {
-                  setViewMode("financial");
-                } else {
-                  toast.info(`Opening ${blueprintId} blueprint...`);
-                }
-              }}
-            />
-          </div>
-        );
-      })()}
+            </div>
+          );
+        })()}
 
       {viewMode === "edit_blueprint" && currentBlueprint && (
         <div className="max-w-7xl mx-auto">

@@ -76,10 +76,7 @@ export const dashboardRouter = router({
         .select({ count: count() })
         .from(notifications)
         .where(
-          and(
-            eq(notifications.userId, userId),
-            eq(notifications.read, false)
-          )
+          and(eq(notifications.userId, userId), eq(notifications.read, false))
         ),
     ]);
 

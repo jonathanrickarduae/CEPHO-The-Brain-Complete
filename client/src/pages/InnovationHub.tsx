@@ -122,7 +122,7 @@ export default function InnovationHub() {
     );
 
   const captureIdeaMutation = trpc.innovation.captureIdea.useMutation({
-    onSuccess: (data) => {
+    onSuccess: data => {
       toast.success("Idea captured! Running initial assessment...");
       setShowNewIdeaDialog(false);
       setNewIdeaTitle("");
@@ -132,7 +132,10 @@ export default function InnovationHub() {
       // Auto-trigger initial assessment after capture
       if (data?.id) {
         setSelectedIdea(data.id);
-        runAssessmentMutation.mutate({ ideaId: data.id, assessmentType: "market_analysis" });
+        runAssessmentMutation.mutate({
+          ideaId: data.id,
+          assessmentType: "market_analysis",
+        });
       }
     },
     onError: error => toast.error(error.message),
@@ -185,7 +188,7 @@ export default function InnovationHub() {
 
   const promoteToGenesisMutation = trpc.innovation.promoteToGenesis.useMutation(
     {
-      onSuccess: (_data) => {
+      onSuccess: _data => {
         toast.success("Idea promoted to Project Genesis!");
         refetchIdeas();
         setSelectedIdea(null);
@@ -197,15 +200,20 @@ export default function InnovationHub() {
   );
 
   // Flywheel stats and stage advancement
-  const { data: flywheelStats, refetch: refetchFlywheelStats } = trpc.innovation.getFlywheelStats.useQuery();
-  const advanceStageMutation = trpc.innovation.advanceFlywheelStage.useMutation({
-    onSuccess: (data) => {
-      toast.success(`Idea advanced to stage ${data.newStage}: ${data.stageLabel}`);
-      refetchIdeas();
-      refetchFlywheelStats();
-    },
-    onError: error => toast.error(error.message),
-  });
+  const { data: flywheelStats, refetch: refetchFlywheelStats } =
+    trpc.innovation.getFlywheelStats.useQuery();
+  const advanceStageMutation = trpc.innovation.advanceFlywheelStage.useMutation(
+    {
+      onSuccess: data => {
+        toast.success(
+          `Idea advanced to stage ${data.newStage}: ${data.stageLabel}`
+        );
+        refetchIdeas();
+        refetchFlywheelStats();
+      },
+      onError: error => toast.error(error.message),
+    }
+  );
 
   const handleCaptureIdea = () => {
     if (!newIdeaTitle.trim()) {
@@ -232,14 +240,20 @@ export default function InnovationHub() {
   };
 
   // Stats - memoized to avoid recomputing on every render
-  const { totalIdeas, activeIdeas, validatedIdeas, promotedIdeas } = useMemo(() => ({
-    totalIdeas: ideas?.length || 0,
-    activeIdeas: ideas?.filter(
-      i => !["rejected", "archived", "promoted_to_genesis"].includes(i.status)
-    ).length || 0,
-    validatedIdeas: ideas?.filter(i => i.status === "validated").length || 0,
-    promotedIdeas: ideas?.filter(i => i.status === "promoted_to_genesis").length || 0,
-  }), [ideas]);
+  const { totalIdeas, activeIdeas, validatedIdeas, promotedIdeas } = useMemo(
+    () => ({
+      totalIdeas: ideas?.length || 0,
+      activeIdeas:
+        ideas?.filter(
+          i =>
+            !["rejected", "archived", "promoted_to_genesis"].includes(i.status)
+        ).length || 0,
+      validatedIdeas: ideas?.filter(i => i.status === "validated").length || 0,
+      promotedIdeas:
+        ideas?.filter(i => i.status === "promoted_to_genesis").length || 0,
+    }),
+    [ideas]
+  );
 
   return (
     <PageShell
@@ -247,123 +261,117 @@ export default function InnovationHub() {
       iconClass="bg-cyan-500/15 text-cyan-400"
       title="Innovation Hub"
       subtitle="Capture, assess, and refine ideas through the strategic flywheel"
-      actions={<div className="flex gap-2">
-            <Button
-              variant="outline"
-              className="gap-2"
-              onClick={() => generateDailyIdeasMutation.mutate()}
-              disabled={generateDailyIdeasMutation.isPending}
-            >
-              <Sparkles className="h-4 w-4" />
-              {generateDailyIdeasMutation.isPending
-                ? "Generating..."
-                : "Generate Daily Ideas"}
-            </Button>
-            <Dialog
-              open={showArticleDialog}
-              onOpenChange={setShowArticleDialog}
-            >
-              <DialogTrigger asChild>
-                <Button variant="outline" className="gap-2">
-                  <ExternalLink className="h-4 w-4" />
-                  Analyze Article
+      actions={
+        <div className="flex gap-2">
+          <Button
+            variant="outline"
+            className="gap-2"
+            onClick={() => generateDailyIdeasMutation.mutate()}
+            disabled={generateDailyIdeasMutation.isPending}
+          >
+            <Sparkles className="h-4 w-4" />
+            {generateDailyIdeasMutation.isPending
+              ? "Generating..."
+              : "Generate Daily Ideas"}
+          </Button>
+          <Dialog open={showArticleDialog} onOpenChange={setShowArticleDialog}>
+            <DialogTrigger asChild>
+              <Button variant="outline" className="gap-2">
+                <ExternalLink className="h-4 w-4" />
+                Analyze Article
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Analyze Article for Opportunities</DialogTitle>
+                <DialogDescription>
+                  Paste an article URL and the AI will identify potential
+                  business opportunities
+                </DialogDescription>
+              </DialogHeader>
+              <div className="space-y-4 mt-4">
+                <Input
+                  placeholder="Article URL"
+                  value={articleUrl}
+                  onChange={e => setArticleUrl(e.target.value)}
+                />
+                <Textarea
+                  placeholder="Additional context (optional)"
+                  value={articleContext}
+                  onChange={e => setArticleContext(e.target.value)}
+                  rows={3}
+                />
+                <Button
+                  onClick={handleAnalyzeArticle}
+                  className="w-full"
+                  disabled={analyzeArticleMutation.isPending}
+                >
+                  {analyzeArticleMutation.isPending
+                    ? "Analyzing..."
+                    : "Analyze for Opportunities"}
                 </Button>
-              </DialogTrigger>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>Analyze Article for Opportunities</DialogTitle>
-                  <DialogDescription>
-                    Paste an article URL and the AI will identify potential
-                    business opportunities
-                  </DialogDescription>
-                </DialogHeader>
-                <div className="space-y-4 mt-4">
-                  <Input
-                    placeholder="Article URL"
-                    value={articleUrl}
-                    onChange={e => setArticleUrl(e.target.value)}
-                  />
-                  <Textarea
-                    placeholder="Additional context (optional)"
-                    value={articleContext}
-                    onChange={e => setArticleContext(e.target.value)}
-                    rows={3}
-                  />
-                  <Button
-                    onClick={handleAnalyzeArticle}
-                    className="w-full"
-                    disabled={analyzeArticleMutation.isPending}
-                  >
-                    {analyzeArticleMutation.isPending
-                      ? "Analyzing..."
-                      : "Analyze for Opportunities"}
-                  </Button>
-                </div>
-              </DialogContent>
-            </Dialog>
+              </div>
+            </DialogContent>
+          </Dialog>
 
-            <Dialog
-              open={showNewIdeaDialog}
-              onOpenChange={setShowNewIdeaDialog}
-            >
-              <DialogTrigger asChild>
-                <Button className="gap-2 bg-primary hover:bg-primary/90 text-primary-foreground">
-                  <Plus className="h-4 w-4" />
-                  Capture Idea
+          <Dialog open={showNewIdeaDialog} onOpenChange={setShowNewIdeaDialog}>
+            <DialogTrigger asChild>
+              <Button className="gap-2 bg-primary hover:bg-primary/90 text-primary-foreground">
+                <Plus className="h-4 w-4" />
+                Capture Idea
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Capture New Idea</DialogTitle>
+                <DialogDescription>
+                  Add a new idea to the innovation flywheel for assessment
+                </DialogDescription>
+              </DialogHeader>
+              <div className="space-y-4 mt-4">
+                <Input
+                  placeholder="Idea title"
+                  value={newIdeaTitle}
+                  onChange={e => setNewIdeaTitle(e.target.value)}
+                />
+                <Textarea
+                  placeholder="Description (optional)"
+                  value={newIdeaDescription}
+                  onChange={e => setNewIdeaDescription(e.target.value)}
+                  rows={4}
+                />
+                <Select
+                  value={newIdeaCategory}
+                  onValueChange={setNewIdeaCategory}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select category" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="business">Business</SelectItem>
+                    <SelectItem value="product">Product</SelectItem>
+                    <SelectItem value="investment">Investment</SelectItem>
+                    <SelectItem value="trend">Trend</SelectItem>
+                    <SelectItem value="technology">Technology</SelectItem>
+                    <SelectItem value="market">Market Opportunity</SelectItem>
+                  </SelectContent>
+                </Select>
+                <Button
+                  onClick={handleCaptureIdea}
+                  className="w-full"
+                  disabled={captureIdeaMutation.isPending}
+                >
+                  {captureIdeaMutation.isPending
+                    ? "Capturing..."
+                    : "Capture Idea"}
                 </Button>
-              </DialogTrigger>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>Capture New Idea</DialogTitle>
-                  <DialogDescription>
-                    Add a new idea to the innovation flywheel for assessment
-                  </DialogDescription>
-                </DialogHeader>
-                <div className="space-y-4 mt-4">
-                  <Input
-                    placeholder="Idea title"
-                    value={newIdeaTitle}
-                    onChange={e => setNewIdeaTitle(e.target.value)}
-                  />
-                  <Textarea
-                    placeholder="Description (optional)"
-                    value={newIdeaDescription}
-                    onChange={e => setNewIdeaDescription(e.target.value)}
-                    rows={4}
-                  />
-                  <Select
-                    value={newIdeaCategory}
-                    onValueChange={setNewIdeaCategory}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select category" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="business">Business</SelectItem>
-                      <SelectItem value="product">Product</SelectItem>
-                      <SelectItem value="investment">Investment</SelectItem>
-                      <SelectItem value="trend">Trend</SelectItem>
-                      <SelectItem value="technology">Technology</SelectItem>
-                      <SelectItem value="market">Market Opportunity</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <Button
-                    onClick={handleCaptureIdea}
-                    className="w-full"
-                    disabled={captureIdeaMutation.isPending}
-                  >
-                    {captureIdeaMutation.isPending
-                      ? "Capturing..."
-                      : "Capture Idea"}
-                  </Button>
-                </div>
-              </DialogContent>
-            </Dialog>
-          </div>
-        }
-      >
-        <div className="space-y-5">
-
+              </div>
+            </DialogContent>
+          </Dialog>
+        </div>
+      }
+    >
+      <div className="space-y-5">
         {/* Stats Row */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <Card className="bg-card/50 border-border/50">
@@ -598,7 +606,12 @@ export default function InnovationHub() {
                               onClick={() =>
                                 runAssessmentMutation.mutate({
                                   ideaId: selectedIdea,
-                                  assessmentType: type as "market" | "financial" | "technical" | "risk" | "competitive",
+                                  assessmentType: type as
+                                    | "market"
+                                    | "financial"
+                                    | "technical"
+                                    | "risk"
+                                    | "competitive",
                                 })
                               }
                               disabled={runAssessmentMutation.isPending}
@@ -735,8 +748,11 @@ export default function InnovationHub() {
                                   <span className="text-green-400">
                                     £
                                     {(
-                      (scenario.projectedProfit as { year1?: number })
-                        ?.year1 || 0
+                                      (
+                                        scenario.projectedProfit as {
+                                          year1?: number;
+                                        }
+                                      )?.year1 || 0
                                     ).toLocaleString()}
                                   </span>
                                 </div>
@@ -845,7 +861,7 @@ export default function InnovationHub() {
             )}
           </div>
         </div>
-        </div>
+      </div>
     </PageShell>
   );
 }

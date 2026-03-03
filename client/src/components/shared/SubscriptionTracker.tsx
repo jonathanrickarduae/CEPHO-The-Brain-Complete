@@ -58,7 +58,11 @@ const CATEGORIES = [
   { value: "productivity", label: "Productivity", color: "bg-primary" },
   { value: "development", label: "Development Tools", color: "bg-emerald-500" },
   { value: "marketing", label: "Marketing", color: "bg-pink-500" },
-  { value: "communication", label: "Communication", color: "bg-[var(--brain-cyan)]" },
+  {
+    value: "communication",
+    label: "Communication",
+    color: "bg-[var(--brain-cyan)]",
+  },
   { value: "storage", label: "Storage & Cloud", color: "bg-amber-500" },
   { value: "design", label: "Design", color: "bg-red-500" },
   { value: "analytics", label: "Analytics", color: "bg-indigo-500" },
@@ -996,7 +1000,9 @@ function SubscriptionTracker() {
       >
         <DialogContent className="bg-background border-border/50">
           <DialogHeader>
-            <DialogTitle className="text-foreground">Confirm Deletion</DialogTitle>
+            <DialogTitle className="text-foreground">
+              Confirm Deletion
+            </DialogTitle>
             <DialogDescription>
               Are you sure you want to remove this subscription? This action
               cannot be undone.

@@ -14,9 +14,7 @@ import {
   Star,
   Activity,
 } from "lucide-react";
-import {
-  MATURITY_MODEL,
-} from "@/data/digital-twin-job-description.data";
+import { MATURITY_MODEL } from "@/data/digital-twin-job-description.data";
 
 interface DevelopmentMetrics {
   hoursLogged: number;

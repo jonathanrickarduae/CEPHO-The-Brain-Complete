@@ -15,7 +15,7 @@ interface MermaidDiagramProps {
 }
 
 // Mermaid diagram component that renders diagrams from Mermaid syntax
-export function MermaidDiagram({ code, title}: MermaidDiagramProps) {
+export function MermaidDiagram({ code, title }: MermaidDiagramProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [zoom, setZoom] = useState(1);
   const [copied, setCopied] = useState(false);

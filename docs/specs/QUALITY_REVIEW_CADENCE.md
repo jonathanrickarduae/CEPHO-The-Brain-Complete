@@ -2,9 +2,9 @@
 
 **CEPHO.AI Platform**
 
-*Version: 1.0*
-*Status: Draft*
-*Last Updated: 2026-03-01*
+_Version: 1.0_
+_Status: Draft_
+_Last Updated: 2026-03-01_
 
 ---
 
@@ -16,14 +16,14 @@ This document defines the schedule and process for all recurring quality assuran
 
 ## 2. Review Cadence Summary
 
-| Cadence | Review Activity | Owner |
-| :--- | :--- | :--- |
-| **Weekly** | Code Review Meeting | Engineering Lead |
-| **Monthly** | Security Audit | Security Lead |
-| **Monthly** | Dependency Audit | Engineering Lead |
-| **Quarterly** | Disaster Recovery Test | On-Call Engineer |
-| **Quarterly** | Performance & Cost Review | Engineering Lead |
-| **Annually** | External Penetration Test | Head of Engineering |
+| Cadence       | Review Activity           | Owner               |
+| :------------ | :------------------------ | :------------------ |
+| **Weekly**    | Code Review Meeting       | Engineering Lead    |
+| **Monthly**   | Security Audit            | Security Lead       |
+| **Monthly**   | Dependency Audit          | Engineering Lead    |
+| **Quarterly** | Disaster Recovery Test    | On-Call Engineer    |
+| **Quarterly** | Performance & Cost Review | Engineering Lead    |
+| **Annually**  | External Penetration Test | Head of Engineering |
 
 ---
 

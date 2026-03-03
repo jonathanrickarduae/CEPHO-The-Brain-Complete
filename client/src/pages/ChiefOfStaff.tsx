@@ -215,17 +215,24 @@ export default function ChiefOfStaff() {
   const [currentConversationId, setCurrentConversationId] = useState("conv-1");
   const { data: chatHistory } = trpc.chat.history.useQuery({ limit: 50 });
   // Build conversation list from real chat history; fall back to mock when empty
-  const conversations: Conversation[] = chatHistory && chatHistory.length > 0
-    ? [{
-        id: "current",
-        title: "Current Session",
-        project: undefined,
-        lastMessage: chatHistory[chatHistory.length - 1]?.content?.slice(0, 60) ?? "Start a new conversation",
-        timestamp: new Date(chatHistory[chatHistory.length - 1]?.timestamp ?? Date.now()),
-        unread: 0,
-        starred: true,
-      }]
-    : MOCK_CONVERSATIONS;
+  const conversations: Conversation[] =
+    chatHistory && chatHistory.length > 0
+      ? [
+          {
+            id: "current",
+            title: "Current Session",
+            project: undefined,
+            lastMessage:
+              chatHistory[chatHistory.length - 1]?.content?.slice(0, 60) ??
+              "Start a new conversation",
+            timestamp: new Date(
+              chatHistory[chatHistory.length - 1]?.timestamp ?? Date.now()
+            ),
+            unread: 0,
+            starred: true,
+          },
+        ]
+      : MOCK_CONVERSATIONS;
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [showTaskDetail, setShowTaskDetail] = useState(false);
   const [reviewScore, setReviewScore] = useState<number>(8);
@@ -316,13 +323,17 @@ export default function ChiefOfStaff() {
       dbId: t.id,
       title: t.title || "",
       description: t.description || "",
-      project: (t.metadata as Record<string, unknown>)?.category as string || "Signal Task",
+      project:
+        ((t.metadata as Record<string, unknown>)?.category as string) ||
+        "Signal Task",
       status:
         t.status === "delegated" ? "active" : (t.status as Task["status"]),
       progress: t.progress || 0,
       qaStatus: (t.qaStatus || "pending") as QAStatus,
       assignedExperts: Array.isArray(t.assignedExperts)
-        ? t.assignedExperts.map((e: { name?: string } | string) => typeof e === 'string' ? e : e.name || '')
+        ? t.assignedExperts.map((e: { name?: string } | string) =>
+            typeof e === "string" ? e : e.name || ""
+          )
         : [],
       cosScore: t.cosScore || undefined,
       secondaryAIScore: t.secondaryAiScore || undefined,
@@ -337,7 +348,9 @@ export default function ChiefOfStaff() {
     return [
       ...realTasks,
       ...signalTasks,
-      ...(hasTasks ? [] : MOCK_TASKS.map(t => ({ ...t, isFromDb: false, dbId: undefined }))),
+      ...(hasTasks
+        ? []
+        : MOCK_TASKS.map(t => ({ ...t, isFromDb: false, dbId: undefined }))),
     ];
   }, [tasksWithQA, delegatedTasks]);
 
@@ -448,14 +461,10 @@ export default function ChiefOfStaff() {
       icon={User}
       title="Tasks"
       subtitle="Manage your tasks with Chief of Staff"
-      actions={
-        <div className="flex items-center gap-3">
-          
-        </div>
-      }
+      actions={<div className="flex items-center gap-3"></div>}
       fillHeight
     >
-            {/* View Mode Tabs */}
+      {/* View Mode Tabs */}
       <div className="shrink-0 border-b border-white/10 bg-white/5 px-4">
         <div className="max-w-7xl mx-auto flex gap-1">
           {[
