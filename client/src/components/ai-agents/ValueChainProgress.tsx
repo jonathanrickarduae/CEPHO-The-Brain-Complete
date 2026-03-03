@@ -120,7 +120,7 @@ export function ValueChainProgress({
 
           {/* Phases */}
           <div className="space-y-2">
-            {valueChainPhases.map((phase, index) => {
+            {valueChainPhases.map((phase, _index) => {
               const status = getPhaseStatus(phase.id);
               const completedChecks = getPhaseCompletedChecks(phase.id);
               const isExpanded = expandedPhase === phase.id;

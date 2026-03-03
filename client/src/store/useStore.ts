@@ -101,7 +101,7 @@ const defaultUIState: UIState = {
 // Create store with persistence
 export const useStore = create<StoreState>()(
   persist(
-    (set, get) => ({
+    (set, _get) => ({
       // User preferences
       preferences: defaultPreferences,
       setPreferences: newPreferences =>

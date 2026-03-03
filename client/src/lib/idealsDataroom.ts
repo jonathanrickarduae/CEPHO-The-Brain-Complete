@@ -394,14 +394,14 @@ export class FolderMappingService {
         const data = JSON.parse(stored) as FolderMapping[];
         data.forEach(m => this.mappings.set(m.brainFolderId, m));
       }
-    } catch (e) {}
+    } catch (_e) {}
   }
 
   private saveMappings(): void {
     try {
       const data = Array.from(this.mappings.values());
       localStorage.setItem(this.storageKey, JSON.stringify(data));
-    } catch (e) {}
+    } catch (_e) {}
   }
 
   addMapping(mapping: FolderMapping): void {

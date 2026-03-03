@@ -1,6 +1,6 @@
 import { getDb } from "../db";
 import { integrationCredentials, integrationLogs } from "../../drizzle/schema";
-import { eq, and } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import crypto from "crypto";
 
 // Encryption key (should be from env var in production)

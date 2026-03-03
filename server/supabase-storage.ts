@@ -42,7 +42,7 @@ export async function storagePut(
   const fileData = typeof data === "string" ? Buffer.from(data, "utf-8") : data;
 
   // Upload to Supabase Storage
-  const { data: uploadData, error } = await supabase.storage
+  const { data: _uploadData, error } = await supabase.storage
     .from(bucket)
     .upload(key, fileData, {
       contentType,

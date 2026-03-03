@@ -10,7 +10,7 @@ import {
   QualityMetricsSnapshot,
   CosLearningMetrics,
 } from "../../../drizzle/schema";
-import { eq, and, desc, gte, lte, between } from "drizzle-orm";
+import { eq, and, desc, between } from "drizzle-orm";
 
 /**
  * Analytics Repository

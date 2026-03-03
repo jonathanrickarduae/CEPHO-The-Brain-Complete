@@ -11,8 +11,7 @@ import {
   ArrowUpRight,
   Cpu,
   BarChart3,
-  RefreshCw,
-} from "lucide-react";
+  } from "lucide-react";
 import { PersonalAnalytics } from "@/components/analytics/PersonalAnalytics";
 import { CollapsibleSection } from "@/components/shared/CollapsibleSection";
 import { PageShell } from "@/components/layout/PageShell";

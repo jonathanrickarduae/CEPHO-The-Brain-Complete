@@ -6,7 +6,7 @@
  */
 import { db } from "../../db";
 import { calendarEventsCache, integrations } from "../../../drizzle/schema";
-import { and, eq, gte, lte, lt, desc } from "drizzle-orm";
+import { and, eq, gte, lte, lt } from "drizzle-orm";
 
 export const calendarService = {
   async syncEvents(

@@ -1,7 +1,7 @@
 // Document Generator Service
 // Uses AI to generate project documents based on templates and project data
 
-import { trpc } from "@/lib/trpc";
+import {} from "@/lib/trpc";
 
 export interface ProjectContext {
   projectName: string;

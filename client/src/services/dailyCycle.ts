@@ -82,10 +82,10 @@ export async function sendWhatsAppReminder(message: string) {
 
     if (response.ok) {
     }
-  } catch (error) {}
+  } catch (_error) {}
 }
 
-function checkTime() {
+function _checkTime() {
   const current = getCurrentTime();
   const morningTime = parseTime(config.morningBriefTime);
   const endOfDayTime = parseTime(config.endOfDayTime);

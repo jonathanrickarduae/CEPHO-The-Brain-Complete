@@ -41,9 +41,9 @@ export function CalendarIntegration() {
   const [syncing, setSyncing] = useState(false);
 
   // Real tRPC queries
-  const { data: integrationStatus } =
+  const { data: _integrationStatus } =
     trpc.calendar.getIntegrationStatus.useQuery();
-  const { data: todaySummary } = trpc.calendar.getTodaySummary.useQuery();
+  const { data: _todaySummary } = trpc.calendar.getTodaySummary.useQuery();
   const syncMutation = trpc.calendar.sync.useMutation({
     onSuccess: () => {
       setSyncing(false);

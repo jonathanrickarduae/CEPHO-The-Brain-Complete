@@ -9,7 +9,7 @@
  * - Mood & energy trend (15%)
  * - Innovation pipeline activity (15%)
  */
-import { eq, desc, gte, count, and } from "drizzle-orm";
+import { eq, desc, gte, and } from "drizzle-orm";
 import { protectedProcedure, router } from "../_core/trpc";
 import { db } from "../db";
 import {

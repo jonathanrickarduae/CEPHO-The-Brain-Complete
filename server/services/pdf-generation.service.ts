@@ -59,7 +59,7 @@ export async function generateBriefPDF(briefData: BriefData): Promise<string> {
     // Convert to PDF using manus-md-to-pdf utility
     try {
       await execAsync(`manus-md-to-pdf "${tempMdPath}" "${tempPdfPath}"`);
-    } catch (error) {
+    } catch (_error) {
       throw new Error(
         "PDF generation utility failed. Ensure manus-md-to-pdf is available."
       );

@@ -285,7 +285,7 @@ export const sampleVoiceNotes = [
 ];
 
 // Demo mode state
-let isDemoMode = false;
+let isDemoMode = false; // eslint-disable-line @typescript-eslint/no-unused-vars
 
 export function enableDemoMode() {
   isDemoMode = true;

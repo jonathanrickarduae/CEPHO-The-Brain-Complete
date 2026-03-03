@@ -104,7 +104,7 @@ export const brandKitRouter = router({
 
   delete: protectedProcedure
     .input(z.object({ id: z.number() }))
-    .mutation(async ({ ctx, input }) => {
+    .mutation(async ({ ctx: _ctx, input }) => {
       await db.delete(brandKit).where(eq(brandKit.id, input.id));
       return { success: true };
     }),

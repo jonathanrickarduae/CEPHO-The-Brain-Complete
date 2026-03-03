@@ -5,7 +5,7 @@ import {
   useEffect,
   ReactNode,
 } from "react";
-import { Shield, Lock, Unlock, AlertTriangle, CheckCircle } from "lucide-react";
+import { Lock, Unlock, AlertTriangle, CheckCircle } from "lucide-react";
 
 // Governance mode types
 export type GovernanceMode = "omni" | "governed";
@@ -112,7 +112,7 @@ export function GovernanceProvider({ children }: { children: ReactNode }) {
   const [acceptedTerms, setAcceptedTerms] = useState<Set<string>>(new Set());
   const [pendingModeChange, setPendingModeChange] =
     useState<GovernanceMode | null>(null);
-  const [auditLog, setAuditLog] = useState<GovernanceAuditEntry[]>([]);
+  const [_auditLog, setAuditLog] = useState<GovernanceAuditEntry[]>([]);
 
   // Add entry to audit log
   const addAuditEntry = (
@@ -157,7 +157,7 @@ export function GovernanceProvider({ children }: { children: ReactNode }) {
             timestamp: new Date(e.timestamp),
           }))
         );
-      } catch (e) {}
+      } catch (_e) {}
     }
   }, []);
 

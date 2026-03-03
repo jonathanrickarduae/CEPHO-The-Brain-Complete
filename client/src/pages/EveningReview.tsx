@@ -182,7 +182,7 @@ export default function EveningReview() {
 
   // Time tracking
   const [currentTime, setCurrentTime] = useState(new Date());
-  const [timeUntilCutoff, setTimeUntilCutoff] = useState<string>("");
+  const [_timeUntilCutoff, setTimeUntilCutoff] = useState<string>("");
   const [reviewState, setReviewState] = useState<ReviewState>("before_window");
 
   // Update time every second
@@ -448,7 +448,7 @@ export default function EveningReview() {
     }
   };
 
-  const getReviewStateColor = () => {
+  const _getReviewStateColor = () => {
     switch (reviewState) {
       case "before_window":
         return "bg-gray-500/20 text-muted-foreground border-gray-500/30";

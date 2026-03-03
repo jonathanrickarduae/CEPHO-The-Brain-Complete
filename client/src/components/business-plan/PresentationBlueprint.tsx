@@ -181,7 +181,7 @@ const designThemes: DesignTheme[] = [
 ];
 
 // Sample inherited data from Genesis Master
-const genesisData = {
+const _genesisData = {
   companyName: "Sample Project AI",
   tagline: "The AI command center for strategic decision-making",
   problem:

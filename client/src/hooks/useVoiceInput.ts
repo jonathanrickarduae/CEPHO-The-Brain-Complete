@@ -188,7 +188,7 @@ export function useVoiceInput(options: UseVoiceInputOptions = {}) {
 
     try {
       recognition.start();
-    } catch (error) {
+    } catch (_error) {
       // Recognition might already be running
     }
   }, [state.isListening]);
@@ -199,7 +199,7 @@ export function useVoiceInput(options: UseVoiceInputOptions = {}) {
 
     try {
       recognition.stop();
-    } catch (error) {}
+    } catch (_error) {}
   }, [state.isListening]);
 
   const toggleListening = useCallback(() => {
@@ -293,7 +293,7 @@ export function useVoiceWaveform() {
       };
 
       updateWaveform();
-    } catch (error) {}
+    } catch (_error) {}
   }, []);
 
   const stopWaveform = useCallback(() => {

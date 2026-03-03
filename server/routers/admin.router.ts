@@ -1,8 +1,7 @@
 import { router, protectedProcedure } from "../_core/trpc";
 import { db } from "../db";
 import {
-  users,
-  tasks,
+    tasks,
   projects,
   moodHistory,
   activityFeed,
@@ -14,7 +13,7 @@ import { sql, count, avg, desc } from "drizzle-orm";
 
 export const adminRouter = router({
   // ─── Platform Overview Stats ─────────────────────────────────────────────
-  getPlatformStats: protectedProcedure.query(async ({ ctx }) => {
+  getPlatformStats: protectedProcedure.query(async ({ ctx: _ctx }) => {
     const [
       totalTasksResult,
       completedTasksResult,
@@ -59,7 +58,7 @@ export const adminRouter = router({
   }),
 
   // ─── Recent Activity Feed ─────────────────────────────────────────────────
-  getRecentActivity: protectedProcedure.query(async ({ ctx }) => {
+  getRecentActivity: protectedProcedure.query(async ({ ctx: _ctx }) => {
     const activities = await db
       .select()
       .from(activityFeed)
@@ -70,7 +69,7 @@ export const adminRouter = router({
   }),
 
   // ─── Agent Performance Summary ────────────────────────────────────────────
-  getAgentPerformance: protectedProcedure.query(async ({ ctx }) => {
+  getAgentPerformance: protectedProcedure.query(async ({ ctx: _ctx }) => {
     const ratings = await db
       .select({
         agentName: agentRatings.agentName,

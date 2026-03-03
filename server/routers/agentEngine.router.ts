@@ -1314,7 +1314,7 @@ Format as JSON with these exact keys:
    * Get the continuous learning feed — what agents are researching today
    */
   getLearningFeed: protectedProcedure.query(async () => {
-    const openai = getOpenAI();
+    const _openai = getOpenAI();
 
     // Pick 5 random agents to show their learning activity
     const agentIds = Object.keys(AGENT_REGISTRY);
@@ -1358,7 +1358,7 @@ Format as JSON with these exact keys:
   /**
    * Get the CoS approval queue — all pending capability enhancement requests
    */
-  getApprovalQueue: protectedProcedure.query(async ({ ctx }) => {
+  getApprovalQueue: protectedProcedure.query(async ({ ctx: _ctx }) => {
     // Get recent approval decisions from activity feed
     const recentDecisions = await db
       .select()

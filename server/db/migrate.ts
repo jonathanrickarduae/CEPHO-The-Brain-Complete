@@ -22,7 +22,7 @@ async function runMigrations() {
     await migrate(db, { migrationsFolder: "./drizzle" });
     await migrationClient.end();
     process.exit(0);
-  } catch (error) {
+  } catch (_error) {
     await migrationClient.end();
     process.exit(1);
   }

@@ -4,15 +4,11 @@ import { trpc } from "@/lib/trpc";
 import {
   Shield,
   Users,
-  Database,
-  Activity,
-  Settings,
-  AlertTriangle,
-  CheckCircle2,
+    Activity,
+      CheckCircle2,
   Clock,
   TrendingUp,
-  Key,
-  Server,
+    Server,
   Zap,
   Brain,
   BarChart3,
@@ -58,17 +54,17 @@ export default function AdminDashboard() {
     undefined,
     { retry: false }
   );
-  const { data: platformStats, isLoading: _statsLoading } =
+  const { data: _platformStats, isLoading: _statsLoading } =
     trpc.admin.getPlatformStats.useQuery(undefined, { retry: false });
-  const { data: systemHealth } = trpc.admin.getSystemHealth.useQuery(
+  const { data: _systemHealth } = trpc.admin.getSystemHealth.useQuery(
     undefined,
     { retry: false, refetchInterval: 30000 }
   );
-  const { data: agentPerformance } = trpc.admin.getAgentPerformance.useQuery(
+  const { data: _agentPerformance } = trpc.admin.getAgentPerformance.useQuery(
     undefined,
     { retry: false }
   );
-  const { data: recentActivity } = trpc.admin.getRecentActivity.useQuery(
+  const { data: _recentActivity } = trpc.admin.getRecentActivity.useQuery(
     undefined,
     { retry: false }
   );

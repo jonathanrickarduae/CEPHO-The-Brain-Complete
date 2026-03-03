@@ -200,9 +200,9 @@ export default function InnovationHub() {
   );
 
   // Flywheel stats and stage advancement
-  const { data: flywheelStats, refetch: refetchFlywheelStats } =
+  const { data: _flywheelStats, refetch: refetchFlywheelStats } =
     trpc.innovation.getFlywheelStats.useQuery();
-  const advanceStageMutation = trpc.innovation.advanceFlywheelStage.useMutation(
+  const _advanceStageMutation = trpc.innovation.advanceFlywheelStage.useMutation(
     {
       onSuccess: data => {
         toast.success(

@@ -7,7 +7,7 @@ import { Loader2, Lock, Mail } from "lucide-react";
 import { useLocation } from "wouter";
 import { toast } from "sonner";
 import LoadingScreen from "@/components/LoadingScreen";
-import { useSupabaseAuth } from "@/_core/hooks/useSupabaseAuth";
+import { useSupabaseAuth } from "@/hooks/useSupabaseAuth";
 
 export default function LandingPage() {
   const [, navigate] = useLocation();
@@ -48,17 +48,20 @@ export default function LandingPage() {
       }
 
       // Sign in with Supabase
-      const { data } = await signIn(email, password);
+      const { data, error: signInError } = await signIn(email, password);
 
-      if (error) {
-        toast.error(error.message || "Failed to sign in");
+      if (signInError) {
+        toast.error(signInError.message || "Failed to sign in");
         setIsLoading(false);
         return;
       }
 
-      if (data.user) {
+      if (data?.user) {
         toast.success("Welcome to CEPHO.AI");
         navigate("/nexus");
+      } else {
+        toast.error("Sign in failed. Please check your credentials.");
+        setIsLoading(false);
       }
     } catch {
       toast.error("An unexpected error occurred");

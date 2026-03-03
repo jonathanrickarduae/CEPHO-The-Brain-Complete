@@ -10,8 +10,7 @@ import {
   Volume2,
   VolumeX,
   Sparkles,
-  Star,
-  MessageSquare,
+    MessageSquare,
   Loader2,
   User,
   Bot,
@@ -254,7 +253,7 @@ export default function ExpertChatPage() {
   }, []);
 
   // Toggle TTS preference
-  const toggleTts = () => {
+  const _toggleTts = () => {
     const newValue = !ttsEnabled;
     setTtsEnabled(newValue);
     localStorage.setItem("expertChat_ttsEnabled", JSON.stringify(newValue));

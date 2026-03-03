@@ -29,7 +29,7 @@ import {
   moodHistory,
   npsResponses,
   users,
-  userSettings,
+  userSettings, // eslint-disable-line @typescript-eslint/no-unused-vars
 } from "../../drizzle/schema";
 import { logger } from "../utils/logger";
 
@@ -283,7 +283,7 @@ function scheduleMoodTrendAnalysis() {
     async () => {
       log.info("[Cron] Mood Trend Analysis — starting");
       try {
-        const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+        const _sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
         const allUsers = await db.select({ id: users.id }).from(users);
 
         for (const user of allUsers) {
@@ -431,7 +431,7 @@ function scheduleDatabaseCleanup() {
       try {
         // Delete activity feed entries older than 90 days
         const ninetyDaysAgo = new Date(Date.now() - 90 * 24 * 60 * 60 * 1000);
-        const deleted = await db
+        const _deleted = await db
           .delete(activityFeed)
           .where(lt(activityFeed.createdAt, ninetyDaysAgo));
         log.info("[Cron] Database Cleanup — old activity feed entries removed");
@@ -501,7 +501,7 @@ function schedulePartnershipRefresh() {
       log.info("[Cron] Partnership Pipeline Refresh — starting");
       try {
         // Notify users of partnerships with upcoming next action dates
-        const tomorrow = new Date(Date.now() + 24 * 60 * 60 * 1000);
+        const _tomorrow = new Date(Date.now() + 24 * 60 * 60 * 1000);
         log.info("[Cron] Partnership Pipeline Refresh — completed");
       } catch (err) {
         log.error("[Cron] Partnership Pipeline Refresh — error:", err);

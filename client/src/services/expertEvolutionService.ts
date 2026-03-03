@@ -155,7 +155,7 @@ export const expertEvolutionService = {
     feedback: Omit<ExpertFeedback, "id">
   ): Promise<void> => {
     const id = `feedback_${Date.now()}`;
-    const fullFeedback: ExpertFeedback = { ...feedback, id };
+    const _fullFeedback: ExpertFeedback = { ...feedback, id };
 
     // Update expert performance
     const performance = expertPerformanceData.get(feedback.expertId);

@@ -2,9 +2,7 @@ import {
   useState,
   useEffect,
   useCallback,
-  createContext,
-  useContext,
-} from "react";
+    } from "react";
 
 // Accessibility preferences context
 interface AccessibilityPreferences {
@@ -14,7 +12,7 @@ interface AccessibilityPreferences {
   screenReaderMode: boolean;
 }
 
-interface AccessibilityContextValue extends AccessibilityPreferences {
+interface _AccessibilityContextValue extends AccessibilityPreferences {
   setReducedMotion: (value: boolean) => void;
   setHighContrast: (value: boolean) => void;
   setFontSize: (value: "normal" | "large" | "larger") => void;

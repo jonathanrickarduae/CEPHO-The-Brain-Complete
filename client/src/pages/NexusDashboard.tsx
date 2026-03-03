@@ -172,7 +172,7 @@ export default function NexusDashboard() {
     continuous: false,
   });
 
-  const toggleRecording = () => {
+  const _toggleRecording = () => {
     // eslint-disable-line @typescript-eslint/no-unused-vars
     if (isListening) {
       stopListening();
@@ -192,7 +192,7 @@ export default function NexusDashboard() {
     }
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
+  const _handleKeyDown = (e: React.KeyboardEvent) => {
     // eslint-disable-line @typescript-eslint/no-unused-vars
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
@@ -200,7 +200,7 @@ export default function NexusDashboard() {
     }
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const _handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     // eslint-disable-line @typescript-eslint/no-unused-vars
     setInputValue(e.target.value);
     e.target.style.height = "auto";

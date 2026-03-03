@@ -37,7 +37,7 @@ interface ChiefOfStaffState {
 const DEFAULT_REVIEW_TIME = "19:00"; // 7 PM
 const AUTO_START_DELAY = 3600; // 1 hour after prompt (8 PM)
 const PROMPT_CHECK_INTERVAL = 60000; // Check every minute
-const CALENDAR_CONFLICT_BUFFER = 15; // Minutes buffer after meeting
+const _CALENDAR_CONFLICT_BUFFER = 15; // Minutes buffer after meeting
 
 export function useChiefOfStaffAutomation() {
   const [, setLocation] = useLocation();

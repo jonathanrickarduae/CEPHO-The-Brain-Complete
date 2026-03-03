@@ -40,7 +40,7 @@ class RedisCacheService {
         this.isConnected = true;
       });
 
-      this.client.on("error", err => {
+      this.client.on("error", _err => {
         this.isConnected = false;
       });
 
@@ -50,7 +50,7 @@ class RedisCacheService {
 
       // Test connection
       await this.client.ping();
-    } catch (error) {
+    } catch (_error) {
       this.client = null;
     }
   }
@@ -66,7 +66,7 @@ class RedisCacheService {
       if (!value) return null;
 
       return JSON.parse(value) as T;
-    } catch (error) {
+    } catch (_error) {
       return null;
     }
   }
@@ -85,7 +85,7 @@ class RedisCacheService {
       const serialized = JSON.stringify(value);
       await this.client.setex(key, ttlSeconds, serialized);
       return true;
-    } catch (error) {
+    } catch (_error) {
       return false;
     }
   }
@@ -99,7 +99,7 @@ class RedisCacheService {
     try {
       await this.client.del(key);
       return true;
-    } catch (error) {
+    } catch (_error) {
       return false;
     }
   }
@@ -116,7 +116,7 @@ class RedisCacheService {
 
       await this.client.del(...keys);
       return keys.length;
-    } catch (error) {
+    } catch (_error) {
       return 0;
     }
   }
@@ -130,7 +130,7 @@ class RedisCacheService {
     try {
       const result = await this.client.exists(key);
       return result === 1;
-    } catch (error) {
+    } catch (_error) {
       return false;
     }
   }
@@ -166,7 +166,7 @@ class RedisCacheService {
 
     try {
       return await this.client.incrby(key, amount);
-    } catch (error) {
+    } catch (_error) {
       return 0;
     }
   }
@@ -180,7 +180,7 @@ class RedisCacheService {
     try {
       await this.client.expire(key, ttlSeconds);
       return true;
-    } catch (error) {
+    } catch (_error) {
       return false;
     }
   }
@@ -216,7 +216,7 @@ class RedisCacheService {
     try {
       await this.client.flushdb();
       return true;
-    } catch (error) {
+    } catch (_error) {
       return false;
     }
   }

@@ -4,10 +4,7 @@ import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { trpc } from "@/lib/trpc";
 import {
-  ExternalLink,
-  TrendingUp,
-  TrendingDown,
-  Clock,
+        Clock,
   CheckCircle2,
   AlertCircle,
   Users,

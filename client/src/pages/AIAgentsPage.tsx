@@ -4,8 +4,7 @@ import { Link } from "wouter";
 import {
   Bot,
   RefreshCw,
-  Brain,
-  CheckCircle2,
+    CheckCircle2,
   Clock,
   Cpu,
   FileText,
@@ -13,18 +12,14 @@ import {
   Play,
   Search,
   Shield,
-  Star,
-  TrendingUp,
-  Users,
-  Zap,
-  AlertCircle,
+    TrendingUp,
+      AlertCircle,
   ThumbsUp,
   ThumbsDown,
   Activity,
   Award,
   BookOpen,
-  ChevronRight,
-} from "lucide-react";
+  } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";

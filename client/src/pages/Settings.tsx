@@ -22,10 +22,7 @@ import {
   ShieldAlert,
   RefreshCw,
   Globe,
-  Mail,
-  MessageSquare,
-  Zap,
-  FileText,
+        FileText,
   Clock,
   Code,
   Copy,
@@ -260,7 +257,7 @@ function DeveloperPanel() {
 // ─── Vault Panel (merged from /vault) ──────────────────────────────────────
 function VaultPanel() {
   // Real data from subscriptionTracker and integrations routers
-  const { data: subscriptionSummary } =
+  const { data: _subscriptionSummary } =
     trpc.subscriptionTracker.getSummary.useQuery(undefined, { retry: false });
   const { data: renewalSummary } =
     trpc.subscriptionTracker.getRenewalSummary.useQuery(undefined, {

@@ -47,7 +47,10 @@ describeIf("Auth Endpoints (integration)", () => {
   });
 
   it("GET /api/trpc/system.health returns ok: true", async () => {
-    const { status, body } = await request("/api/trpc/system.health");
+    // Pass empty JSON object as input — system.health accepts optional input
+    const { status, body } = await request(
+      "/api/trpc/system.health?input=%7B%7D"
+    );
     expect(status).toBe(200);
     const result = body as { result?: { data?: { ok?: boolean } } };
     expect(result?.result?.data?.ok).toBe(true);

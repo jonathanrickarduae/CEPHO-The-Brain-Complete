@@ -157,7 +157,7 @@ export async function handleCheckoutComplete(session: Stripe.Checkout.Session) {
 
   // For one-time payment mode
   if (session.mode === "payment" && session.payment_intent) {
-    const paymentIntentId =
+    const _paymentIntentId =
       typeof session.payment_intent === "string"
         ? session.payment_intent
         : session.payment_intent.id;
@@ -176,7 +176,7 @@ export async function handleSubscriptionUpdated(
   const db = await getDb();
   if (!db) throw new Error("Database not available");
 
-  const userId = parseInt(subscription.metadata?.userId || "0");
+  const _userId = parseInt(subscription.metadata?.userId || "0");
 
   // Find subscription by stripeSubscriptionId in metadata
   const allSubs = await db.select().from(subscriptions);

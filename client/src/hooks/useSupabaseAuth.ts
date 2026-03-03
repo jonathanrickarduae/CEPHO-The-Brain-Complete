@@ -1,27 +1,54 @@
 import { supabase } from "@/lib/supabase";
-import { User, Session } from "@supabase/supabase-js";
-import { useEffect, useState } from "react";
+import type { User, Session } from "@supabase/supabase-js";
+import { useState, useEffect } from "react";
 
 export function useSupabaseAuth() {
-  // BYPASS AUTH FOR DEVELOPMENT - Always return authenticated user
-  const mockUser = {
-    id: "dev-user",
-    email: "dev@cepho.ai",
-    aud: "authenticated",
-    role: "authenticated",
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-    app_metadata: {},
-    user_metadata: {},
-  } as User;
+  const [user, setUser] = useState<User | null>(null);
+  const [session, setSession] = useState<Session | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Get initial session
+    supabase.auth.getSession().then(({ data: { session: s } }) => {
+      setSession(s);
+      setUser(s?.user ?? null);
+      setLoading(false);
+    });
+
+    // Listen for auth state changes
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, s) => {
+      setSession(s);
+      setUser(s?.user ?? null);
+      setLoading(false);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const signIn = async (email: string, password: string) => {
+    const result = await supabase.auth.signInWithPassword({ email, password });
+    return result;
+  };
+
+  const signUp = async (email: string, password: string) => {
+    const result = await supabase.auth.signUp({ email, password });
+    return result;
+  };
+
+  const signOut = async () => {
+    const result = await supabase.auth.signOut();
+    return result;
+  };
 
   return {
-    user: mockUser,
-    session: { user: mockUser } as Session,
-    loading: false,
-    isAuthenticated: true,
-    signIn: async () => ({ data: null, error: null }),
-    signUp: async () => ({ data: null, error: null }),
-    signOut: async () => ({ error: null }),
+    user,
+    session,
+    loading,
+    isAuthenticated: !!user,
+    signIn,
+    signUp,
+    signOut,
   };
 }

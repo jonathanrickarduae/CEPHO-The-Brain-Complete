@@ -517,7 +517,7 @@ Provide your expert assessment.`;
       concerns: analysis.concerns.slice(0, 2),
       timestamp: new Date(),
     };
-  } catch (error) {
+  } catch (_error) {
     // Return a fallback analysis
     return {
       expertId: expert.id,
@@ -778,7 +778,7 @@ ${businessPlanContent || "No specific content provided. Please select a balanced
         (tc: { expertId: string }) => validExperts.includes(tc.expertId)
       ),
     };
-  } catch (error) {
+  } catch (_error) {
     // Return default balanced team
     return {
       selectedExperts: [

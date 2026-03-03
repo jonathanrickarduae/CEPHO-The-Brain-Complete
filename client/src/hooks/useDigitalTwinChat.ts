@@ -134,7 +134,7 @@ export function useDigitalTwinChat() {
       // Start streaming the response
       streamMessage(data.message, twinMessageId);
     },
-    onError: error => {
+    onError: _error => {
       setIsTyping(false);
       // Add error message
       const errorMessage: ChatMessage = {

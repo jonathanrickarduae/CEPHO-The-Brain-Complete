@@ -14,7 +14,7 @@ import {
   cosTrainingModulesPg,
   cosModuleProgressPg,
 } from "../../drizzle/schema";
-import { eq, and, sql } from "drizzle-orm";
+import { sql } from "drizzle-orm";
 
 // Default training modules (seeded on first call)
 const DEFAULT_MODULES = [
@@ -200,7 +200,7 @@ export const cosTrainingRouter = router({
    */
   startModule: protectedProcedure
     .input(z.object({ moduleId: z.string() }))
-    .mutation(async ({ ctx, input }) => {
+    .mutation(async ({ ctx: _ctx, input }) => {
       try {
         await db.execute(
           sql`INSERT INTO cos_module_progress_pg (id, user_id, module_id, status, started_at, progress_percentage)

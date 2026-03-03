@@ -6,7 +6,7 @@
  * insights using the Anthropic Claude API.
  */
 import { z } from "zod";
-import { eq, desc } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import Anthropic from "@anthropic-ai/sdk";
 import { protectedProcedure, router } from "../_core/trpc";
 import { db } from "../db";

@@ -56,7 +56,7 @@ class ErrorTrackerService {
       setupExpressErrorHandler(app);
 
       this.initialized = true;
-    } catch (error) {}
+    } catch (_error) {}
   }
 
   /**
@@ -164,7 +164,7 @@ class ErrorTrackerService {
     if (!this.initialized) return true;
     try {
       return await Sentry.flush(timeout);
-    } catch (error) {
+    } catch (_error) {
       return false;
     }
   }
@@ -176,7 +176,7 @@ class ErrorTrackerService {
     if (!this.initialized) return true;
     try {
       return await Sentry.close(timeout);
-    } catch (error) {
+    } catch (_error) {
       return false;
     }
   }

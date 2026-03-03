@@ -9,8 +9,12 @@ import { describe, it, expect } from "vitest";
 const BASE_URL = process.env.TEST_BASE_URL ?? "";
 const describeIf = BASE_URL ? describe : describe.skip;
 
-async function trpcQuery(procedure: string) {
-  const res = await fetch(`${BASE_URL}/api/trpc/${procedure}`, {
+async function trpcQuery(procedure: string, input?: Record<string, unknown>) {
+  const params =
+    input !== undefined
+      ? `?input=${encodeURIComponent(JSON.stringify(input))}`
+      : "?input=%7B%7D";
+  const res = await fetch(`${BASE_URL}/api/trpc/${procedure}${params}`, {
     headers: { "Content-Type": "application/json" },
   });
   const body = (await res.json()) as {
@@ -22,7 +26,7 @@ async function trpcQuery(procedure: string) {
 
 describeIf("tRPC Router Smoke Tests (integration)", () => {
   it("system.health returns ok: true", async () => {
-    const { status, data } = await trpcQuery("system.health");
+    const { status, data } = await trpcQuery("system.health", {});
     expect(status).toBe(200);
     expect(data).toMatchObject({ ok: true });
   });

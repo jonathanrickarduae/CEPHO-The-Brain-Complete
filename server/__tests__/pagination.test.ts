@@ -4,8 +4,7 @@ import {
   encodeCursor,
   decodeCursor,
   validatePaginationParams,
-  DEFAULT_LIMIT,
-  MAX_LIMIT,
+    MAX_LIMIT,
 } from "../utils/pagination";
 
 describe("Pagination Utilities", () => {

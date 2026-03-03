@@ -46,17 +46,17 @@ interface Brand {
 export function BrandKitManager() {
   const { data: brandKitData, refetch: refetchBrands } =
     trpc.brandKit.list.useQuery();
-  const createBrandMutation = trpc.brandKit.create.useMutation({
+  const _createBrandMutation = trpc.brandKit.create.useMutation({
     onSuccess: () => {
       void refetchBrands();
     },
   });
-  const updateBrandMutation = trpc.brandKit.update.useMutation({
+  const _updateBrandMutation = trpc.brandKit.update.useMutation({
     onSuccess: () => {
       void refetchBrands();
     },
   });
-  const deleteBrandMutation = trpc.brandKit.delete.useMutation({
+  const _deleteBrandMutation = trpc.brandKit.delete.useMutation({
     onSuccess: () => {
       void refetchBrands();
     },

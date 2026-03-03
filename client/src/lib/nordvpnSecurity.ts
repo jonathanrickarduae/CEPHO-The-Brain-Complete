@@ -78,7 +78,7 @@ export class NordVPNSecurityService {
       if (stored) {
         this.config = JSON.parse(stored);
       }
-    } catch (e) {}
+    } catch (_e) {}
   }
 
   private saveConfig(): void {
@@ -88,7 +88,7 @@ export class NordVPNSecurityService {
       } else {
         localStorage.removeItem(STORAGE_KEYS.config);
       }
-    } catch (e) {}
+    } catch (_e) {}
   }
 
   setConfig(config: NordVPNConfig): void {
@@ -121,7 +121,7 @@ export class NordVPNSecurityService {
           timestamp: new Date(log.timestamp),
         }));
       }
-    } catch (e) {}
+    } catch (_e) {}
   }
 
   private saveAuditLog(): void {
@@ -129,7 +129,7 @@ export class NordVPNSecurityService {
       // Keep only last 1000 entries
       const toSave = this.auditLog.slice(-1000);
       localStorage.setItem(STORAGE_KEYS.auditLog, JSON.stringify(toSave));
-    } catch (e) {}
+    } catch (_e) {}
   }
 
   logSecurityEvent(
@@ -205,7 +205,7 @@ export class NordVPNSecurityService {
         protocol: "NordLynx",
         uptime: 3600, // Would be actual uptime
       };
-    } catch (e) {
+    } catch (_e) {
       // If we can't check IP, assume disconnected
       this.status.isConnected = false;
     }
@@ -218,7 +218,7 @@ export class NordVPNSecurityService {
   /**
    * Check if a sensitive operation should proceed based on VPN status
    */
-  shouldAllowOperation(operationType: SecurityAuditLog["operationType"]): {
+  shouldAllowOperation(_operationType: SecurityAuditLog["operationType"]): {
     allowed: boolean;
     reason?: string;
   } {
