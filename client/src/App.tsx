@@ -69,6 +69,11 @@ const KnowledgeBasePage = lazy(() => import("./pages/KnowledgeBasePage"));
 // ── Phase 2: Integration Hub (P2-13) ───────────────────────────────────
 const IntegrationHubPage = lazy(() => import("./pages/IntegrationHubPage"));
 
+// ── Phase 3: Email Intelligence, Meeting Intelligence, Briefing Prefs ───
+const EmailIntelligencePage = lazy(() => import("./pages/EmailIntelligencePage"));
+const MeetingIntelligencePage = lazy(() => import("./pages/MeetingIntelligencePage"));
+const BriefingPreferencesPage = lazy(() => import("./pages/BriefingPreferencesPage"));
+
 // ── Standalone ───────────────────────────────────────────────────────────────
 const Vault = lazy(() => import("./pages/Vault"));
 const Settings = lazy(() => import("./pages/Settings"));
@@ -226,6 +231,25 @@ function Router() {
         <Route path="/kpis">
           <WithLayout>
             <KpiOkrPage />
+          </WithLayout>
+        </Route>
+
+        {/* Phase 3: Email Intelligence */}
+        <Route path="/email-intelligence">
+          <WithLayout>
+            <EmailIntelligencePage />
+          </WithLayout>
+        </Route>
+        {/* Phase 3: Meeting Intelligence */}
+        <Route path="/meeting-intelligence">
+          <WithLayout>
+            <MeetingIntelligencePage />
+          </WithLayout>
+        </Route>
+        {/* Phase 3: Briefing Preferences */}
+        <Route path="/briefing-preferences">
+          <WithLayout>
+            <BriefingPreferencesPage />
           </WithLayout>
         </Route>
 

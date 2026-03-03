@@ -313,4 +313,137 @@ export const autonomousExecutionRouter = router({
   getAgents: protectedProcedure.query(async () => {
     return SME_AGENTS;
   }),
+
+  /**
+   * Parallel SME Execution — run multiple specialist agents simultaneously
+   * on a single goal and aggregate their perspectives.
+   * Phase 3 (p3-15): Appendix S Parallel Agent Orchestration
+   */
+  executeParallel: protectedProcedure
+    .input(
+      z.object({
+        goal: z.string().min(5).max(500),
+        agentIds: z.array(z.string()).min(2).max(8).optional(),
+        saveResults: z.boolean().default(true),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      const OpenAI = (await import("openai")).default;
+      const openai = new OpenAI();
+
+      const selectedAgents = input.agentIds
+        ? SME_AGENTS.filter(a => input.agentIds!.includes(a.id))
+        : SME_AGENTS;
+
+      // Run all agents in parallel using Promise.all
+      const agentResults = await Promise.all(
+        selectedAgents.map(async agent => {
+          try {
+            const completion = await openai.chat.completions.create({
+              model: "gpt-4o-mini",
+              messages: [
+                {
+                  role: "system",
+                  content: `You are the ${agent.name} for CEPHO.AI, specialising in ${agent.domain}. Provide your expert perspective on the given goal. Return JSON: { "analysis": string, "recommendations": string[], "risks": string[], "quick_wins": string[], "estimated_effort": string }`,
+                },
+                {
+                  role: "user",
+                  content: `Goal: ${input.goal}\n\nProvide your specialist analysis from a ${agent.domain} perspective.`,
+                },
+              ],
+              response_format: { type: "json_object" },
+              temperature: 0.6,
+            });
+
+            const raw = JSON.parse(completion.choices[0]?.message?.content ?? "{}") as {
+              analysis?: string;
+              recommendations?: string[];
+              risks?: string[];
+              quick_wins?: string[];
+              estimated_effort?: string;
+            };
+
+            return {
+              agentId: agent.id,
+              agentName: agent.name,
+              domain: agent.domain,
+              analysis: raw.analysis ?? "",
+              recommendations: raw.recommendations ?? [],
+              risks: raw.risks ?? [],
+              quickWins: raw.quick_wins ?? [],
+              estimatedEffort: raw.estimated_effort ?? "Unknown",
+              success: true,
+            };
+          } catch {
+            return {
+              agentId: agent.id,
+              agentName: agent.name,
+              domain: agent.domain,
+              analysis: "Agent unavailable.",
+              recommendations: [],
+              risks: [],
+              quickWins: [],
+              estimatedEffort: "Unknown",
+              success: false,
+            };
+          }
+        })
+      );
+
+      // Synthesise a unified recommendation
+      const allRecs = agentResults.flatMap(r => r.recommendations).slice(0, 15);
+      const allRisks = agentResults.flatMap(r => r.risks).slice(0, 10);
+      const allQuickWins = agentResults.flatMap(r => r.quickWins).slice(0, 8);
+
+      const synthCompletion = await openai.chat.completions.create({
+        model: "gpt-4o-mini",
+        messages: [
+          {
+            role: "system",
+            content: `You are the Chief of Staff synthesising inputs from ${agentResults.length} specialist agents. Create a unified executive recommendation. Return JSON: { "executive_summary": string, "top_priorities": string[], "critical_risks": string[], "immediate_actions": string[] }`,
+          },
+          {
+            role: "user",
+            content: `Goal: ${input.goal}\n\nAgent Recommendations:\n${allRecs.map(r => `- ${r}`).join("\n")}\n\nRisks:\n${allRisks.map(r => `- ${r}`).join("\n")}\n\nQuick Wins:\n${allQuickWins.map(q => `- ${q}`).join("\n")}`,
+          },
+        ],
+        response_format: { type: "json_object" },
+        temperature: 0.4,
+      });
+
+      const synthesis = JSON.parse(synthCompletion.choices[0]?.message?.content ?? "{}") as {
+        executive_summary?: string;
+        top_priorities?: string[];
+        critical_risks?: string[];
+        immediate_actions?: string[];
+      };
+
+      if (input.saveResults) {
+        await db.insert(activityFeed).values({
+          userId: ctx.user.id,
+          actorType: "ai",
+          action: "generated",
+          targetType: "parallel_execution",
+          targetName: `Parallel Analysis: ${input.goal.slice(0, 60)}`,
+          metadata: {
+            goal: input.goal,
+            agentCount: agentResults.length,
+            successCount: agentResults.filter(r => r.success).length,
+          },
+        });
+      }
+
+      return {
+        goal: input.goal,
+        agentResults,
+        synthesis: {
+          executiveSummary: synthesis.executive_summary ?? "",
+          topPriorities: synthesis.top_priorities ?? [],
+          criticalRisks: synthesis.critical_risks ?? [],
+          immediateActions: synthesis.immediate_actions ?? [],
+        },
+        agentsConsulted: agentResults.length,
+        successfulAgents: agentResults.filter(r => r.success).length,
+      };
+    }),
 });

@@ -30,6 +30,9 @@ import {
   npsResponses,
   users,
   userSettings, // eslint-disable-line @typescript-eslint/no-unused-vars
+  agentInsights,
+  agentImprovements,
+  briefings,
 } from "../../drizzle/schema";
 import { logger } from "../utils/logger";
 import {
@@ -576,9 +579,96 @@ function schedulePartnershipRefresh() {
   );
 }
 
+// ─── Job 13: Agent Research (05:00 weekdays) ─────────────────────────────────
+/**
+ * Appendix Q / Table 30: 05:00 weekdays — all agents research their field,
+ * generate insights, queue improvement suggestions.
+ * Writes to: agentInsights, agentImprovements
+ */
+function scheduleAgentResearch() {
+  cron.schedule(
+    "0 5 * * 1-5",
+    async () => {
+      log.info("[Cron] Agent Research — starting (05:00 weekdays)");
+      try {
+        const OpenAI = (await import("openai")).default;
+        const openai = new OpenAI();
+
+        const allUsers = await db.select({ id: users.id }).from(users);
+
+        const researchAgents = [
+          { key: "chief_of_staff", domain: "executive operations and strategic priorities" },
+          { key: "financial_analyst", domain: "financial markets, cash flow, and business metrics" },
+          { key: "marketing_strategist", domain: "marketing trends, campaign performance, and brand positioning" },
+          { key: "technology_advisor", domain: "emerging technologies, AI developments, and digital transformation" },
+          { key: "legal_counsel", domain: "regulatory changes, compliance requirements, and legal risks" },
+          { key: "hr_director", domain: "talent management, workforce trends, and organisational culture" },
+          { key: "innovation_scout", domain: "startup ecosystem, innovation opportunities, and disruptive technologies" },
+          { key: "competitor_intelligence", domain: "competitor activity, market positioning, and industry movements" },
+        ];
+
+        for (const user of allUsers) {
+          for (const agent of researchAgents) {
+            try {
+              const completion = await openai.chat.completions.create({
+                model: "gpt-4o-mini",
+                messages: [
+                  {
+                    role: "system",
+                    content: `You are the ${agent.key.replace(/_/g, " ")} AI agent for CEPHO.AI. Your domain is: ${agent.domain}. Generate 2 actionable insights and 1 self-improvement suggestion for today. Return JSON: { insights: [{insight: string, source: string, confidence: number}], improvement: {suggestion: string, rationale: string} }`,
+                  },
+                  {
+                    role: "user",
+                    content: `Today is ${new Date().toISOString().split("T")[0]}. Generate your daily research insights.`,
+                  },
+                ],
+                response_format: { type: "json_object" },
+                temperature: 0.7,
+              });
+
+              const raw = JSON.parse(completion.choices[0]?.message?.content ?? "{}") as {
+                insights?: { insight: string; source: string; confidence: number }[];
+                improvement?: { suggestion: string; rationale: string };
+              };
+
+              if (raw.insights && Array.isArray(raw.insights)) {
+                for (const ins of raw.insights) {
+                  await db.insert(agentInsights).values({
+                    userId: user.id,
+                    agentKey: agent.key,
+                    insight: ins.insight,
+                    source: ins.source ?? agent.domain,
+                    confidence: Math.min(100, Math.max(0, ins.confidence ?? 70)),
+                  });
+                }
+              }
+
+              if (raw.improvement?.suggestion) {
+                await db.insert(agentImprovements).values({
+                  userId: user.id,
+                  agentKey: agent.key,
+                  suggestion: raw.improvement.suggestion,
+                  rationale: raw.improvement.rationale,
+                  status: "pending",
+                });
+              }
+            } catch (agentErr) {
+              log.warn(`[Cron] Agent Research — agent ${agent.key} failed for user ${user.id}:`, agentErr);
+            }
+          }
+        }
+        log.info(`[Cron] Agent Research — completed for ${allUsers.length} users`);
+      } catch (err) {
+        log.error("[Cron] Agent Research — error:", err);
+      }
+    },
+    { timezone: "UTC" }
+  );
+}
+
 // ─── Main Export ─────────────────────────────────────────────────────────────
 export function startScheduler() {
-  log.info("[Scheduler] Initialising all 12 cron jobs...");
+  log.info("[Scheduler] Initialising all 13 cron jobs...");
 
   scheduleMorningBriefing();
   scheduleEveningReview();
@@ -592,6 +682,7 @@ export function startScheduler() {
   scheduleDigitalTwinRecalibration();
   scheduleSubscriptionAlerts();
   schedulePartnershipRefresh();
+  scheduleAgentResearch();
 
-  log.info("[Scheduler] All 12 cron jobs are active.");
+  log.info("[Scheduler] All 13 cron jobs are active.");
 }

@@ -59,6 +59,9 @@ import { adminRouter } from "./routers/admin.router";
 import { nlCommandRouter } from "./routers/nlCommand.router";
 import { kpiOkrRouter } from "./routers/kpiOkr.router";
 import { dataIngestionRouter } from "./routers/dataIngestion.router";
+import { emailIntelligenceRouter } from "./routers/emailIntelligence.router";
+import { meetingIntelligenceRouter } from "./routers/meetingIntelligence.router";
+import { briefingPersonalisationRouter } from "./routers/briefingPersonalisation.router";
 import {
   businessPlanReviewRouter as businessPlanReviewRealRouter,
   collaborativeReviewRouter as collaborativeReviewRealRouter,
@@ -225,6 +228,12 @@ export const appRouter = router({
   kpiOkr: kpiOkrRouter,
   // ─── Data Ingestion Pipeline (P2-9/10/11) ───────────────────────────────────
   dataIngestion: dataIngestionRouter,
+  // ─── Email Intelligence (P3-6/7/8) ──────────────────────────────────────────
+  emailIntelligence: emailIntelligenceRouter,
+  // ─── Meeting Intelligence (P3-9/10/11) ──────────────────────────────────────
+  meetingIntelligence: meetingIntelligenceRouter,
+  // ─── Briefing Personalisation (P3-12/13) ────────────────────────────────────
+  briefingPersonalisation: briefingPersonalisationRouter,
 });
 
 export type AppRouter = typeof appRouter;

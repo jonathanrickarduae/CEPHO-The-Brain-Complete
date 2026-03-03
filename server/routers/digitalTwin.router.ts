@@ -460,4 +460,86 @@ Respond in JSON: { "insights": "narrative here", "recommendations": ["rec1", "re
     const injection = await assembleDTPersonalityInjection(ctx.user.id);
     return { injection };
   }),
+
+  /**
+   * DT-MOD-03: Behavioral Simulation — predict how the Digital Twin would
+   * respond to a given scenario based on the cognitive model.
+   * Phase 3 (p3-14): Appendix Q DT-MOD-03
+   */
+  simulateBehavior: protectedProcedure
+    .input(
+      z.object({
+        scenario: z.string().min(10).max(2000),
+        scenarioType: z
+          .enum(["negotiation", "conflict", "decision", "communication", "leadership", "crisis", "strategic"])
+          .default("decision"),
+        options: z.array(z.string()).optional(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      const OpenAI = (await import("openai")).default;
+      const openai = new OpenAI();
+
+      const cogSnapshot = await getCognitiveModelSnapshot(ctx.user.id);
+
+      const completion = await openai.chat.completions.create({
+        model: "gpt-4o-mini",
+        messages: [
+          {
+            role: "system",
+            content: `You are simulating how a specific executive would behave in a scenario, based on their Digital Twin cognitive model.\n\nCognitive Model:\n${cogSnapshot}\n\nReturn JSON: {\n  "predicted_response": string,\n  "emotional_state": string,\n  "decision_drivers": string[],\n  "blind_spots": string[],\n  "recommended_approach": string,\n  "confidence": number\n}`,
+          },
+          {
+            role: "user",
+            content: `Scenario Type: ${input.scenarioType}\n\nScenario: ${input.scenario}${input.options ? `\n\nOptions:\n${input.options.map((o, i) => `${i + 1}. ${o}`).join("\n")}` : ""}`,
+          },
+        ],
+        response_format: { type: "json_object" },
+        temperature: 0.5,
+      });
+
+      const result = JSON.parse(completion.choices[0]?.message?.content ?? "{}") as {
+        predicted_response?: string;
+        emotional_state?: string;
+        decision_drivers?: string[];
+        blind_spots?: string[];
+        recommended_approach?: string;
+        confidence?: number;
+      };
+
+      await db.insert(digitalTwinDecisionLog).values({
+        userId: ctx.user.id,
+        scenarioType: input.scenarioType,
+        scenarioContext: { scenario: input.scenario, options: input.options ?? [] },
+        agentProposal: result.predicted_response,
+        agentId: "dt-mod-03-simulator",
+        decision: "approved",
+        decisionRationale: `Simulation confidence: ${result.confidence ?? 0}%`,
+      });
+
+      return {
+        predictedResponse: result.predicted_response ?? "Unable to simulate.",
+        emotionalState: result.emotional_state ?? "Neutral",
+        decisionDrivers: result.decision_drivers ?? [],
+        blindSpots: result.blind_spots ?? [],
+        recommendedApproach: result.recommended_approach ?? "",
+        confidence: result.confidence ?? 50,
+      };
+    }),
+
+  /**
+   * DT-MOD-03: Get recent behavioral simulation logs.
+   */
+  getSimulations: protectedProcedure
+    .input(z.object({ limit: z.number().min(1).max(50).default(10) }))
+    .query(async ({ input, ctx }) => {
+      const { desc } = await import("drizzle-orm");
+      const rows = await db
+        .select()
+        .from(digitalTwinDecisionLog)
+        .where(eq(digitalTwinDecisionLog.userId, ctx.user.id))
+        .orderBy(desc(digitalTwinDecisionLog.createdAt))
+        .limit(input.limit);
+      return rows;
+    }),
 });

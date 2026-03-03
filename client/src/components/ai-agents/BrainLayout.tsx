@@ -49,6 +49,9 @@ import {
   Target,
   Database,
   Zap,
+  Mail,
+  Video,
+  SlidersHorizontal,
 } from "lucide-react";
 import { CSSProperties, useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
@@ -129,6 +132,9 @@ const menuItems: MenuItem[] = [
       { icon: Database, label: "Knowledge Base", path: "/knowledge-base" },
       { icon: Library, label: "Document Library", path: "/documents" },
       { icon: Zap, label: "Integration Hub", path: "/integrations" },
+      { icon: Mail, label: "Email Intelligence", path: "/email-intelligence" },
+      { icon: Video, label: "Meeting Intelligence", path: "/meeting-intelligence" },
+      { icon: SlidersHorizontal, label: "Briefing Preferences", path: "/briefing-preferences" },
     ],
   },
   {
