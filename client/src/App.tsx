@@ -74,6 +74,15 @@ const EmailIntelligencePage = lazy(() => import("./pages/EmailIntelligencePage")
 const MeetingIntelligencePage = lazy(() => import("./pages/MeetingIntelligencePage"));
 const BriefingPreferencesPage = lazy(() => import("./pages/BriefingPreferencesPage"));
 
+// ── Phase 4: New Pages ──────────────────────────────────────────────────────
+const NotificationsCentrePage = lazy(() => import("./pages/NotificationsCentrePage"));
+const VoiceNotesPage = lazy(() => import("./pages/VoiceNotesPage"));
+const SubscriptionTrackerPage = lazy(() => import("./pages/SubscriptionTrackerPage"));
+const TwoFactorSetupPage = lazy(() => import("./pages/TwoFactorSetupPage"));
+const BrandKitPage = lazy(() => import("./pages/BrandKitPage"));
+const AnalyticsDeepDivePage = lazy(() => import("./pages/AnalyticsDeepDivePage"));
+const EmailAccountsPage = lazy(() => import("./pages/EmailAccountsPage"));
+
 // ── Standalone ───────────────────────────────────────────────────────────────
 const Vault = lazy(() => import("./pages/Vault"));
 const Settings = lazy(() => import("./pages/Settings"));
@@ -274,10 +283,31 @@ function Router() {
             <Settings />
           </WithLayout>
         </Route>
-        <Route path="/expert-chat/:expertId">
+         <Route path="/expert-chat/:expertId">
           <ExpertChatPage />
         </Route>
-
+        {/* Phase 4: New Pages */}
+        <Route path="/notifications">
+          <WithLayout><NotificationsCentrePage /></WithLayout>
+        </Route>
+        <Route path="/voice-notes">
+          <WithLayout><VoiceNotesPage /></WithLayout>
+        </Route>
+        <Route path="/subscriptions">
+          <WithLayout><SubscriptionTrackerPage /></WithLayout>
+        </Route>
+        <Route path="/security/2fa">
+          <WithLayout><TwoFactorSetupPage /></WithLayout>
+        </Route>
+        <Route path="/brand-kit">
+          <WithLayout><BrandKitPage /></WithLayout>
+        </Route>
+        <Route path="/analytics/deep-dive">
+          <WithLayout><AnalyticsDeepDivePage /></WithLayout>
+        </Route>
+        <Route path="/email-accounts">
+          <WithLayout><EmailAccountsPage /></WithLayout>
+        </Route>
         {/* 404 */}
         <Route path="/404" component={NotFound} />
         <Route component={NotFound} />

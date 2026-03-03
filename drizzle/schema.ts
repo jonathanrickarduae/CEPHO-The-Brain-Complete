@@ -5061,3 +5061,33 @@ export const realWorldIntegrations = pgTable("real_world_integrations", {
 });
 export type RealWorldIntegration = typeof realWorldIntegrations.$inferSelect;
 export type InsertRealWorldIntegration = typeof realWorldIntegrations.$inferInsert;
+
+// ─── Email Accounts ────────────────────────────────────────────────────────────
+/**
+ * Connected email accounts for AI-powered email intelligence.
+ * Phase 4 deliverable — p4-15 Email Accounts page.
+ */
+export const emailAccounts = pgTable("email_accounts", {
+  id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
+  userId: integer("userId").notNull(),
+  email: varchar("email", { length: 320 }).notNull(),
+  provider: varchar("provider", { length: 50 }).notNull(),
+  status: varchar("status", { length: 20 }).default("active").notNull(),
+  accessToken: text("accessToken"),
+  refreshToken: text("refreshToken"),
+  tokenExpiresAt: timestamp("tokenExpiresAt"),
+  imapHost: varchar("imapHost", { length: 255 }),
+  imapPort: integer("imapPort"),
+  smtpHost: varchar("smtpHost", { length: 255 }),
+  smtpPort: integer("smtpPort"),
+  inboxCount: integer("inboxCount").default(0),
+  sentCount: integer("sentCount").default(0),
+  lastSyncedAt: timestamp("lastSyncedAt"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
+});
+export type EmailAccount = typeof emailAccounts.$inferSelect;
+export type InsertEmailAccount = typeof emailAccounts.$inferInsert;

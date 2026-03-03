@@ -60,6 +60,7 @@ import { nlCommandRouter } from "./routers/nlCommand.router";
 import { kpiOkrRouter } from "./routers/kpiOkr.router";
 import { dataIngestionRouter } from "./routers/dataIngestion.router";
 import { emailIntelligenceRouter } from "./routers/emailIntelligence.router";
+import { emailAccountsRouter } from "./routers/emailAccounts.router";
 import { meetingIntelligenceRouter } from "./routers/meetingIntelligence.router";
 import { briefingPersonalisationRouter } from "./routers/briefingPersonalisation.router";
 import { humanApprovalGatesRouter } from "./routers/humanApprovalGates.router";
@@ -231,6 +232,8 @@ export const appRouter = router({
   kpiOkr: kpiOkrRouter,
   // ─── Data Ingestion Pipeline (P2-9/10/11) ───────────────────────────────────
   dataIngestion: dataIngestionRouter,
+  // ─── Email Accounts (P4-15) ────────────────────────────────────────────────
+  emailAccounts: emailAccountsRouter,
   // ─── Email Intelligence (P3-6/7/8) ──────────────────────────────────────────
   emailIntelligence: emailIntelligenceRouter,
   // ─── Meeting Intelligence (P3-9/10/11) ──────────────────────────────────────
