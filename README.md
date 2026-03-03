@@ -1,6 +1,6 @@
 # CEPHO.AI — The Brain (v12)
 
-**Version**: 12.0.0 | **Status**: Active Development — Phases 0–3 Complete, Phase 4 In Progress  
+**Version**: 12.1.0 | **Status**: Active Development — Phases 0–4 Complete, Phase 5 In Progress  
 **Owner**: Jonathan Rickard  
 **Live Dashboard**: [https://jonathanrickarduae.github.io/CEPHO-The-Brain-Complete/](https://jonathanrickarduae.github.io/CEPHO-The-Brain-Complete/)
 
@@ -33,32 +33,41 @@ The **Grand Master Plan v12** is the definitive plan for this project. It is the
 | :--------------------- | :----------------------- |
 | Grand Master Plan v12  | **Finalised and locked** |
 | Phases 0, 1, 2, 3      | **Complete**             |
+| Phase 4                | **Complete**             |
 | GitHub Pages dashboard | **Live**                 |
-| Phase 4 execution      | **In Progress**          |
+| Phase 5 execution      | **In Progress**          |
 | Code deployment        | **Live on Render**       |
 
 ### What Has Been Done
 
-1. The Grand Master Plan v11 has been finalised, incorporating all spec documents, remediation plans, gap analysis, audit findings, Phase 5 autonomous execution design, and all appendices (A–AK).
+1. The Grand Master Plan v12 has been finalised, incorporating all spec documents, remediation plans, gap analysis, audit findings, and the complete page-by-page process inventory.
 2. The repository has been fully cleaned and restructured into a clear folder hierarchy.
-3. A live interactive dashboard has been deployed to GitHub Pages tracking all 133 tasks across 8 phases (including 50 gap items).
-4. All 20 gap analysis items have been integrated into the correct phases of the plan.
+3. A live interactive dashboard has been deployed to GitHub Pages tracking all tasks across all phases.
+4. Phases 0 through 4 are fully complete and verified.
+
+### Phase 4 Feature Summary
+
+Phase 4 — "UX, Design System & Scale" — is now complete. All 24 tasks have been implemented and independently audited.
+
+| Feature Category | Key Implementations |
+| :--- | :--- |
+| **Design System** | `design-system.ts` (tokens, typography, spacing), `PageShell`, `PageGrid`, `PageSection` components |
+| **New Pages (10)** | Email Accounts, Voice Notes, Subscription Tracker, Brand Kit, Analytics Deep Dive, Notifications Centre, Two-Factor Setup, Vault, AI Experts Directory, Agent Detail |
+| **Pagination** | `usePagination` hook, `PaginationBar` component, `tasks.list` returns `{ tasks, total }` with offset/limit |
+| **Caching (p4-5)** | Redis-compatible cache service integrated into `tasks.list` and `projects.list` with TTL and auto-invalidation |
+| **Multi-Workspace (p4-6)** | `workspaces` schema tables, `workspaces.router.ts` (6 procedures), `WorkspaceSwitcher` UI component |
+| **Audit Logging (p4-7)** | `writeAuditLog()` called on all sensitive mutations in tasks and settings routers |
+| **Rate Limiting (p4-8)** | tRPC-level per-user rate limiting: `aiProcedure` (30/min), `rateLimitedProcedure` (60/min) |
+| **Global Search (p4-9)** | `globalSearch.router.ts` searches 5 entity types; `GlobalSearch.tsx` with Cmd+K shortcut |
+| **Push Notifications (p4-10)** | `web-push` package, VAPID key handling, `pushNotifications.router.ts`, `pushSubscriptions` schema table |
+| **Accessibility (p4-11/12)** | Skip-to-content link, `role="main"`, `aria-current`, `aria-label`, `aria-expanded` throughout |
+| **i18n + RTL (p4-13/14)** | `i18n.ts` (EN/AR), `useI18n` hook, `LanguageSwitcher` component, `rtl.css` full RTL layout stylesheet |
 
 ### What To Do Next
 
-**Start Phase 0 — Pre-Conditions & Foundation.** Every task in Phase 0 must be completed before any Phase 1 work begins. The Phase 0 tasks are:
+**Continue Phase 5 — Ops Excellence & Observability.** Key Phase 5 tasks include Sentry integration, onboarding wizard, offline PWA support, structured logging, AI cost tracking, and performance budgets.
 
-1. CI/CD pipeline setup (GitHub Actions)
-2. Branch strategy: `main` / `develop` / `feature/*`
-3. Environment variables fully documented in `.env.example`
-4. Seed data scripts for all core tables
-5. Architectural Decision Records (ADRs) directory created
-6. Pre-commit hooks (lint + type-check)
-7. Staging environment on Render configured
-8. Testing strategy defined (unit, integration, E2E targets)
-9. Security penetration testing plan (OWASP Top 10)
-
-Full detail for each task is in [`/docs/specs/phase0_preconditions.md`](./docs/specs/phase0_preconditions.md).
+Full detail for each task is on the [Live Dashboard](https://jonathanrickarduae.github.io/CEPHO-The-Brain-Complete/).
 
 ---
 
@@ -162,13 +171,13 @@ pnpm dev
 
 | Phase       | Name                                 | Status        |
 | :---------- | :----------------------------------- | :------------ |
-| **Phase 0** | Pre-Conditions & Foundation          | Next to begin |
-| **Phase 1** | Security, Stability & Code Cleanup   | Not started   |
-| **Phase 2** | AI Agents, Memory & Digital Twin     | Not started   |
-| **Phase 3** | Autonomous Operations & Intelligence | Not started   |
-| **Phase 4** | UX, Design System & Scale            | Not started   |
-| **Phase 5** | Ops Excellence & Observability       | Not started   |
-| **Phase 6** | Enhancements, Agents & Innovation    | Not started   |
-| **Phase 7** | Monetisation & Enterprise            | Not started   |
+| **Phase 0** | Pre-Conditions & Foundation          | **Complete**       |
+| **Phase 1** | Security, Stability & Code Cleanup   | **Complete**       |
+| **Phase 2** | AI Agents, Memory & Digital Twin     | **Complete**       |
+| **Phase 3** | Autonomous Operations & Intelligence | **Complete**       |
+| **Phase 4** | UX, Design System & Scale            | **Complete**       |
+| **Phase 5** | Ops Excellence & Observability       | **In Progress**    |
+| **Phase 6** | Enhancements, Agents & Innovation    | Not started        |
+| **Phase 7** | Monetisation & Enterprise            | Not started        |
 
 Full task breakdown for every phase is on the **[Live Dashboard](https://jonathanrickarduae.github.io/CEPHO-The-Brain-Complete/)**.
