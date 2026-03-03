@@ -62,6 +62,9 @@ import { dataIngestionRouter } from "./routers/dataIngestion.router";
 import { emailIntelligenceRouter } from "./routers/emailIntelligence.router";
 import { meetingIntelligenceRouter } from "./routers/meetingIntelligence.router";
 import { briefingPersonalisationRouter } from "./routers/briefingPersonalisation.router";
+import { humanApprovalGatesRouter } from "./routers/humanApprovalGates.router";
+import { marketLaunchAutomationRouter } from "./routers/marketLaunchAutomation.router";
+import { realWorldIntegrationRouter } from "./routers/realWorldIntegration.router";
 import {
   businessPlanReviewRouter as businessPlanReviewRealRouter,
   collaborativeReviewRouter as collaborativeReviewRealRouter,
@@ -234,6 +237,12 @@ export const appRouter = router({
   meetingIntelligence: meetingIntelligenceRouter,
   // ─── Briefing Personalisation (P3-12/13) ────────────────────────────────────
   briefingPersonalisation: briefingPersonalisationRouter,
+  // ─── Human Approval Gates (P3 deliverable) ──────────────────────────────────
+  humanApprovalGates: humanApprovalGatesRouter,
+  // ─── Market Launch Automation (P3 deliverable) ──────────────────────────────
+  marketLaunchAutomation: marketLaunchAutomationRouter,
+  // ─── Real-World Integration Layer (P3 deliverable) ──────────────────────────
+  realWorldIntegration: realWorldIntegrationRouter,
 });
 
 export type AppRouter = typeof appRouter;

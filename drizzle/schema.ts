@@ -4986,3 +4986,78 @@ export const briefingFeedback = pgTable("briefing_feedback", {
 });
 export type BriefingFeedback = typeof briefingFeedback.$inferSelect;
 export type InsertBriefingFeedback = typeof briefingFeedback.$inferInsert;
+
+// ─── Human Approval Gates ──────────────────────────────────────────────────────
+/**
+ * Approval Requests — mandatory human checkpoints before irreversible autonomous actions.
+ * Phase 3 deliverable — spec: docs/specs/HumanApprovalGates.md
+ */
+export const approvalRequests = pgTable("approval_requests", {
+  id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
+  userId: integer("userId").notNull(),
+  workflowId: varchar("workflowId", { length: 200 }).notNull(),
+  gateName: varchar("gateName", { length: 200 }).notNull(),
+  requestSummary: text("requestSummary").notNull(),
+  outcomeDescription: text("outcomeDescription").notNull(),
+  contextDocs: text("contextDocs").default("[]"),
+  severity: varchar("severity", { length: 20 }).default("high").notNull(),
+  status: varchar("status", { length: 20 }).default("pending").notNull(),
+  rejectionReason: text("rejectionReason"),
+  resolvedAt: timestamp("resolvedAt"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
+});
+export type ApprovalRequest = typeof approvalRequests.$inferSelect;
+export type InsertApprovalRequest = typeof approvalRequests.$inferInsert;
+
+// ─── Market Launch Automation ─────────────────────────────────────────────────
+/**
+ * Market Launch Campaigns — automated go-to-market execution with staged launch gates.
+ * Phase 3 deliverable — spec: docs/specs/MarketLaunchAutomation.md
+ */
+export const marketLaunchCampaigns = pgTable("market_launch_campaigns", {
+  id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
+  userId: integer("userId").notNull(),
+  name: varchar("name", { length: 300 }).notNull(),
+  productName: varchar("productName", { length: 300 }).notNull(),
+  targetAudience: text("targetAudience").notNull(),
+  launchDate: timestamp("launchDate"),
+  budget: integer("budget"),
+  channels: text("channels").default("[]"),
+  goals: text("goals").default("[]"),
+  stage: varchar("stage", { length: 50 }).default("pre_launch").notNull(),
+  status: varchar("status", { length: 20 }).default("draft").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
+});
+export type MarketLaunchCampaign = typeof marketLaunchCampaigns.$inferSelect;
+export type InsertMarketLaunchCampaign = typeof marketLaunchCampaigns.$inferInsert;
+
+// ─── Real-World Integration Layer ─────────────────────────────────────────────
+/**
+ * Real-World Integrations — third-party service adapters for autonomous agent actions.
+ * Phase 3 deliverable — spec: docs/specs/Real-WorldIntegrationLayer.md
+ */
+export const realWorldIntegrations = pgTable("real_world_integrations", {
+  id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
+  userId: integer("userId").notNull(),
+  provider: varchar("provider", { length: 100 }).notNull(),
+  displayName: varchar("displayName", { length: 200 }).notNull(),
+  credentialsVaultKey: varchar("credentialsVaultKey", { length: 500 }).notNull(),
+  metadata: text("metadata").default("{}"),
+  status: varchar("status", { length: 20 }).default("active").notNull(),
+  errorMessage: text("errorMessage"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
+});
+export type RealWorldIntegration = typeof realWorldIntegrations.$inferSelect;
+export type InsertRealWorldIntegration = typeof realWorldIntegrations.$inferInsert;
