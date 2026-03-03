@@ -79,6 +79,7 @@ import AnimatedBrainLogo from "@/components/ai-agents/AnimatedBrainLogo";
 import { NotificationBell } from "@/components/communication/NotificationCenter";
 import { ThemeToggle } from "@/components/settings/ThemeToggle";
 import { LanguageSwitcher } from "@/components/settings/LanguageSwitcher";
+import { WorkspaceSwitcher } from "@/components/workspace/WorkspaceSwitcher";
 
 // Core navigation - streamlined for professional use (COS-centric view)
 type MenuItem = {
@@ -409,6 +410,10 @@ function BrainLayoutContent({
           </SidebarContent>
 
           <SidebarFooter className="p-3 border-t border-sidebar-border">
+            {/* Workspace switcher — hidden when sidebar is collapsed */}
+            <div className="group-data-[collapsible=icon]:hidden mb-1">
+              <WorkspaceSwitcher />
+            </div>
             {/* Language switcher — hidden when sidebar is collapsed */}
             <div className="group-data-[collapsible=icon]:hidden mb-2">
               <LanguageSwitcher mode="button" className="w-full justify-center" />

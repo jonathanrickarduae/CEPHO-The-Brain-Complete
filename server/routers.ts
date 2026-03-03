@@ -68,6 +68,7 @@ import { marketLaunchAutomationRouter } from "./routers/marketLaunchAutomation.r
 import { realWorldIntegrationRouter } from "./routers/realWorldIntegration.router";
 import { globalSearchRouter } from "./routers/globalSearch.router";
 import { pushNotificationsRouter } from "./routers/pushNotifications.router";
+import { workspacesRouter } from "./routers/workspaces.router";
 import {
   businessPlanReviewRouter as businessPlanReviewRealRouter,
   collaborativeReviewRouter as collaborativeReviewRealRouter,
@@ -252,6 +253,8 @@ export const appRouter = router({
   globalSearch: globalSearchRouter,
   // ─── Push Notifications (P4-10) ──────────────────────────────────────────
   pushNotifications: pushNotificationsRouter,
+  // ─── Workspaces (P4-6) ────────────────────────────────────────────────────
+  workspaces: workspacesRouter,
 });
 
 export type AppRouter = typeof appRouter;

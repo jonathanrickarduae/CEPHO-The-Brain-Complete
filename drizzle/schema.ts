@@ -5112,3 +5112,60 @@ export const pushSubscriptions = pgTable("push_subscriptions", {
 });
 export type PushSubscription = typeof pushSubscriptions.$inferSelect;
 export type InsertPushSubscription = typeof pushSubscriptions.$inferInsert;
+
+// ─── Workspaces ────────────────────────────────────────────────────────────────
+/**
+ * Workspaces — multi-tenant workspace support.
+ * Phase 4 deliverable — p4-6 Multi-workspace support.
+ * Each user can belong to multiple workspaces; one workspace is active at a time.
+ */
+export const workspaces = pgTable("workspaces", {
+  id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
+  name: varchar("name", { length: 200 }).notNull(),
+  slug: varchar("slug", { length: 100 }).notNull(),
+  description: text("description"),
+  ownerId: integer("ownerId").notNull(),
+  plan: varchar("plan", { length: 50 }).default("free").notNull(),
+  logoUrl: text("logoUrl"),
+  isPersonal: boolean("isPersonal").default(false).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
+});
+export type Workspace = typeof workspaces.$inferSelect;
+export type InsertWorkspace = typeof workspaces.$inferInsert;
+
+/**
+ * Workspace members — maps users to workspaces with a role.
+ */
+export const workspaceMembers = pgTable("workspace_members", {
+  id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
+  workspaceId: integer("workspaceId").notNull(),
+  userId: integer("userId").notNull(),
+  role: varchar("role", { length: 50 }).default("member").notNull(),
+  isActive: boolean("isActive").default(true).notNull(),
+  joinedAt: timestamp("joinedAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
+});
+export type WorkspaceMember = typeof workspaceMembers.$inferSelect;
+export type InsertWorkspaceMember = typeof workspaceMembers.$inferInsert;
+
+/**
+ * User workspace preferences — tracks which workspace is currently active per user.
+ */
+export const userWorkspacePrefs = pgTable("user_workspace_prefs", {
+  id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
+  userId: integer("userId").notNull().unique(),
+  activeWorkspaceId: integer("activeWorkspaceId"),
+  updatedAt: timestamp("updatedAt")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
+});
+export type UserWorkspacePrefs = typeof userWorkspacePrefs.$inferSelect;
+export type InsertUserWorkspacePrefs = typeof userWorkspacePrefs.$inferInsert;
