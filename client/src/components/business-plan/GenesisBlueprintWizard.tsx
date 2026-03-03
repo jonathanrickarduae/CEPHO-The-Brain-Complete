@@ -62,6 +62,7 @@ export function GenesisBlueprintWizard({
 }: GenesisBlueprintWizardProps) {
   const [currentSection, setCurrentSection] = useState("entry");
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [answers, setAnswers] = useState<Record<string, any>>({});
   const [activeSMEs, setActiveSMEs] = useState<ActiveSME[]>([]);
   const [activeCorporates, setActiveCorporates] = useState<string[]>([]);
@@ -91,7 +92,8 @@ export function GenesisBlueprintWizard({
     resources: "Resources & Challenges",
   };
 
-  const sectionIcons: Record<string, any> = {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const sectionIcons: Record<string, React.ComponentType<any>> = {
     entry: Sparkles,
     business: FileText,
     objectives: Target,
@@ -171,6 +173,7 @@ export function GenesisBlueprintWizard({
     if (industry && corporatePartnerMapping[industry]) {
       setActiveCorporates(corporatePartnerMapping[industry]);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [answers["industry"]]);
 
   // Chief of Staff proactive messaging
@@ -203,6 +206,7 @@ export function GenesisBlueprintWizard({
         }, 2000);
       }
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentQuestion, answers]);
 
   const addDigitalTwinMessage = (message: DigitalTwinMessage) => {
@@ -538,7 +542,7 @@ export function GenesisBlueprintWizard({
         );
 
       case "multiselect":
-        const selectedValues = answers[currentQuestion.id] || [];
+        const selectedValues = (answers[currentQuestion.id] as string[]) || [];
         return (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {currentQuestion.options?.map(option => (

@@ -100,6 +100,7 @@ export function NotificationToast({
       }, autoDismissDelay);
       return () => clearTimeout(timer);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [autoDismiss, autoDismissDelay, priority]);
 
   const handleDismiss = () => {

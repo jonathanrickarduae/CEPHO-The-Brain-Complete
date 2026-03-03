@@ -341,7 +341,7 @@ export function DirectExpertChat({ expertId, onClose }: DirectExpertChatProps) {
         }, 500);
       }
     },
-    onError: (_error: unknown) => {
+    onError: (_error: any) => {
       // Fallback to local response on error
       if (expert) {
         const fallbackResponse = generateExpertResponse(expert, inputValue);

@@ -287,7 +287,7 @@ export function SocialMediaBlueprint() {
         ].map(tab => (
           <button
             key={tab.id}
-            onClick={() => setActiveTab(tab.id as any)}
+            onClick={() => setActiveTab(tab.id as "content" | "analytics" | "strategy" | "platforms" | "schedule")}
             className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all ${
               activeTab === tab.id
                 ? "bg-gradient-to-r from-purple-500/20 to-pink-500/20 text-foreground border border-purple-500/30"

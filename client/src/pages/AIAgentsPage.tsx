@@ -329,7 +329,7 @@ export default function AIAgentsPage() {
                   </label>
                   <select
                     value={sortBy}
-                    onChange={e => setSortBy(e.target.value as any)}
+                    onChange={e => setSortBy(e.target.value as unknown)}
                     className="text-sm px-2 py-1.5 border border-border rounded-lg bg-background text-foreground"
                   >
                     <option value="performance">Performance</option>
@@ -894,13 +894,13 @@ export default function AIAgentsPage() {
                         ))}
                       </div>
                     )}
-                    {(reportResult.capabilityRequest as any)?.title && (
+                    {(reportResult.capabilityRequest as unknown)?.title && (
                       <div className="p-2 rounded-lg bg-amber-500/10 border border-amber-500/20">
                         <div className="text-xs font-medium text-amber-400 mb-1">
                           Capability Request (Pending CoS Approval)
                         </div>
                         <div className="text-xs text-foreground">
-                          {(reportResult.capabilityRequest as any).title}
+                          {(reportResult.capabilityRequest as unknown).title}
                         </div>
                       </div>
                     )}

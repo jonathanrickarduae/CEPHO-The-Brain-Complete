@@ -115,8 +115,8 @@ export function ChiefOfStaffKPIReport() {
       consultations:
         expert.consultationCount || Math.floor(Math.random() * 50) + 5,
       avgRating:
-        (expert as any).averageRating ||
-        (expert as any).avgRating ||
+        (expert as unknown).averageRating ||
+        (expert as unknown).avgRating ||
         3.5 + Math.random() * 1.5,
       responseTime: `${Math.floor(Math.random() * 5) + 1}s`,
       insightsGenerated: Math.floor(Math.random() * 100) + 20,

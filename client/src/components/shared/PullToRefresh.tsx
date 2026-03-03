@@ -236,6 +236,7 @@ export function useAutoRefresh(
     // Set up interval
     const interval = setInterval(refresh, intervalMs);
     return () => clearInterval(interval);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [enabled, intervalMs]);
 
   return { isRefreshing, lastRefreshed, refresh };

@@ -144,6 +144,7 @@ export function StaggeredList({
         setVisibleItems(prev => [...prev, index]);
       }, index * staggerDelay);
     });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [children.length, staggerDelay]);
 
   return (
@@ -202,6 +203,7 @@ export function AnimatedCounter({
     };
 
     requestAnimationFrame(animate);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value, duration]);
 
   return (

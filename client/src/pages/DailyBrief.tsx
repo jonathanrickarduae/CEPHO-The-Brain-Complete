@@ -362,7 +362,7 @@ export default function DailyBrief() {
     {
       enabled: !!pendingVideoId,
       refetchInterval: query => {
-        const s = (query as any)?.state?.data?.status;
+        const s = (query as unknown)?.state?.data?.status;
         if (s === "complete" || s === "error") return false;
         return 5000;
       },

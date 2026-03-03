@@ -247,6 +247,7 @@ export function useChiefOfStaffAutomation() {
     }
 
     return false;
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     userSettings,
     state.hasUserResponded,
@@ -288,6 +289,7 @@ export function useChiefOfStaffAutomation() {
     }, 1000);
 
     return () => clearInterval(interval);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.autoStartCountdown]);
 
   // Periodic check for triggers

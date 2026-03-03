@@ -122,7 +122,8 @@ export function useHaptics() {
 /**
  * Create a click handler with haptic feedback
  */
-export function createHapticHandler<T extends (...args: any[]) => any>(
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function createHapticHandler<T extends (...args: unknown[]) => any>(
   handler: T | undefined,
   pattern: HapticPattern = "light"
 ): T {

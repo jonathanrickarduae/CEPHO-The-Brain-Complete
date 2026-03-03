@@ -233,7 +233,7 @@ export function VideoCreationPipeline() {
         ].map(tab => (
           <button
             key={tab.id}
-            onClick={() => setActiveTab(tab.id as any)}
+            onClick={() => setActiveTab(tab.id as "projects" | "templates" | "create" | "assets")}
             className={`flex items-center gap-2 px-4 py-3 text-sm font-medium transition-colors ${
               activeTab === tab.id
                 ? "text-primary border-b-2 border-primary"

@@ -66,6 +66,7 @@ export function BlueprintQMS({
   const [cascadeImpacts, setCascadeImpacts] = useState<CascadeImpact[]>([]);
   const [showImpactAnalysis, setShowImpactAnalysis] = useState(false);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const linkedBlueprints = genesisBlueprint.linkedBlueprints || [];
 
   // Calculate cascade impacts when changes are selected

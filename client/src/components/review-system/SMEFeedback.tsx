@@ -124,11 +124,13 @@ export function SMEFeedbackRating({
       }, 60000);
 
       // Store reference to stop later
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (window as any).currentRecorder = mediaRecorder;
     } catch {}
   };
 
   const stopRecording = () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const recorder = (window as any).currentRecorder;
     if (recorder && recorder.state === "recording") {
       recorder.stop();

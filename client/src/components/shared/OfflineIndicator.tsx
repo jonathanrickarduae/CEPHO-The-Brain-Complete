@@ -105,7 +105,7 @@ export function OfflineIndicator() {
 }
 
 // Utility to queue actions when offline
-export function queueOfflineAction(action: { type: string; payload: any }) {
+export function queueOfflineAction(action: { type: string; payload: unknown }) {
   if (navigator.onLine) return false;
 
   const pending = localStorage.getItem("brain-pending-actions");
@@ -141,7 +141,7 @@ export function useOfflineAction() {
 
   const execute = async <T,>(
     onlineAction: () => Promise<T>,
-    offlineAction: { type: string; payload: any }
+    offlineAction: { type: string; payload: unknown }
   ): Promise<T | null> => {
     if (isOnline) {
       return onlineAction();

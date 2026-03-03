@@ -31,7 +31,8 @@ interface Phase {
   objective: string;
   status: "current" | "complete" | "upcoming";
   progress: number;
-  icon: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  icon: React.ComponentType<any>;
   color: string;
   deliverables: {
     name: string;

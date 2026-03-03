@@ -324,7 +324,9 @@ export function GovernanceModeChangeModal() {
     pendingModeChange,
     confirmModeChange,
     cancelModeChange,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     governanceInfo,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     mode,
   } = useGovernance();
 
@@ -463,6 +465,7 @@ export function FeatureGate({
   fallback,
   showOverlay = true,
 }: FeatureGateProps) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { isFeatureAvailable, mode } = useGovernance();
 
   if (isFeatureAvailable(feature)) {

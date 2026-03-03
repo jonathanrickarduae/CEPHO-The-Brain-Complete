@@ -173,7 +173,7 @@ export function CorporatePartnerChat({
         content: data.response,
       });
     },
-    onError: (_error: unknown) => {
+    onError: (_error: any) => {
       // Fallback to local response on error
       if (partner) {
         const fallbackResponse = generatePartnerResponse(partner, inputValue);

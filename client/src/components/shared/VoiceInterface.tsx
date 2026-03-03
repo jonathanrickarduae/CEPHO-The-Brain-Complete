@@ -29,7 +29,7 @@ export function VoiceInterface({
   const [isMuted, setIsMuted] = useState(false);
   const [lastResponse, setLastResponse] = useState<string | null>(null);
 
-  const recognitionRef = useRef<any>(null);
+  const recognitionRef = useRef<unknown>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   // Wire to the real tRPC voice command processor
@@ -60,8 +60,8 @@ export function VoiceInterface({
 
   useEffect(() => {
     const SpeechRecognition =
-      (window as any).SpeechRecognition ||
-      (window as any).webkitSpeechRecognition;
+      (window as unknown).SpeechRecognition ||
+      (window as unknown).webkitSpeechRecognition;
 
     if (SpeechRecognition) {
       recognitionRef.current = new SpeechRecognition();
@@ -92,6 +92,7 @@ export function VoiceInterface({
       if (recognitionRef.current) recognitionRef.current.abort();
       if (audioRef.current) audioRef.current.pause();
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleCommand = (text: string, confidence: number) => {

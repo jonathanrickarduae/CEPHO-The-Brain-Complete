@@ -327,7 +327,7 @@ interface TrainingProgress {
   corrections: number;
   avatar: string;
   voiceTone: string;
-  answers: Record<string, any>;
+  answers: Record<string, unknown>;
 }
 
 interface DigitalTwinAcceleratorProps {

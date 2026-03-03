@@ -66,7 +66,7 @@ export function PartnershipPipeline() {
     isLoading,
     refetch,
   } = trpc.partnerships.list.useQuery(
-    filterStatus ? { status: filterStatus as any } : undefined
+    filterStatus ? { status: filterStatus as unknown } : undefined
   );
 
   const createMutation = trpc.partnerships.create.useMutation({
@@ -156,7 +156,7 @@ export function PartnershipPipeline() {
                   <Select
                     value={newPartnership.type}
                     onValueChange={v =>
-                      setNewPartnership({ ...newPartnership, type: v as any })
+                      setNewPartnership({ ...newPartnership, type: v as unknown })
                     }
                   >
                     <SelectTrigger>
@@ -178,7 +178,7 @@ export function PartnershipPipeline() {
                     onValueChange={v =>
                       setNewPartnership({
                         ...newPartnership,
-                        priority: v as any,
+                        priority: v as unknown,
                       })
                     }
                   >

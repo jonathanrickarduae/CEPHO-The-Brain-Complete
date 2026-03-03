@@ -441,7 +441,7 @@ export function AsanaIntegration({ onConnect }: AsanaIntegrationProps) {
               <Filter className="w-4 h-4 text-muted-foreground" />
               <select
                 value={filterStatus}
-                onChange={e => setFilterStatus(e.target.value as any)}
+                onChange={e => setFilterStatus(e.target.value as "all" | "at_risk" | "on_track" | "off_track")}
                 className="bg-card border border-border rounded-lg px-3 py-1.5 text-sm text-foreground"
               >
                 <option value="all">All Projects</option>

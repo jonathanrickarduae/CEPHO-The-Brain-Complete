@@ -151,14 +151,17 @@ export default function NexusDashboard() {
   const { data: flywheelStats } = trpc.innovation.getFlywheelStats.useQuery();
 
   const completedTasks = (
-    Array.isArray(tasksData) ? tasksData : ((tasksData as any)?.tasks ?? [])
+    Array.isArray(tasksData) ? tasksData : // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ((tasksData as any)?.tasks ?? [])
   ).filter((t: any) => t.status === "completed").length;
   const activeProjects = (
     Array.isArray(projectsData)
       ? projectsData
-      : ((projectsData as any)?.projects ?? [])
+      : // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ((projectsData as any)?.projects ?? [])
   ).filter((p: any) => p.status === "active").length;
-  const totalIdeas = (flywheelStats as any)?.total ?? 0;
+  const totalIdeas = // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (flywheelStats as any)?.total ?? 0;
 
   // Voice input
   const {
@@ -173,7 +176,7 @@ export default function NexusDashboard() {
   });
 
   const _toggleRecording = () => {
-    // eslint-disable-line @typescript-eslint/no-unused-vars
+     
     if (isListening) {
       stopListening();
     } else {
@@ -193,7 +196,7 @@ export default function NexusDashboard() {
   };
 
   const _handleKeyDown = (e: React.KeyboardEvent) => {
-    // eslint-disable-line @typescript-eslint/no-unused-vars
+     
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       handleSubmit();
@@ -201,7 +204,7 @@ export default function NexusDashboard() {
   };
 
   const _handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    // eslint-disable-line @typescript-eslint/no-unused-vars
+     
     setInputValue(e.target.value);
     e.target.style.height = "auto";
     e.target.style.height = Math.min(e.target.scrollHeight, 100) + "px";

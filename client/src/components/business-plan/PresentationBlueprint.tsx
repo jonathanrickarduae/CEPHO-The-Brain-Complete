@@ -268,7 +268,7 @@ export function PresentationBlueprint() {
   const [selectedTheme, setSelectedTheme] = useState<string>("professional");
   const [activeSlide, setActiveSlide] = useState<number>(0);
   const [isGenerating, setIsGenerating] = useState(false);
-  const [_projectData, setProjectData] = useState<any>(null);
+  const [_projectData, setProjectData] = useState<unknown>(null);
 
   // Fetch projects list from Genesis
   const { data: genesisProjects, isLoading: loadingProjects } =
@@ -645,7 +645,7 @@ export function PresentationBlueprint() {
         {steps.map((step, index) => (
           <div key={step.id} className="flex items-center">
             <button
-              onClick={() => setCurrentStep(step.id as any)}
+              onClick={() => setCurrentStep(step.id as unknown)}
               className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${
                 currentStep === step.id
                   ? "bg-primary/20 text-primary border border-blue-500/30"

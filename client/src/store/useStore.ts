@@ -57,9 +57,9 @@ interface StoreState {
 
   // Cache for optimistic updates
   cache: {
-    [key: string]: any;
+    [key: string]: unknown;
   };
-  setCache: (key: string, value: any) => void;
+  setCache: (key: string, value: unknown) => void;
   clearCache: (key?: string) => void;
 
   // Recent activity tracking
@@ -67,9 +67,9 @@ interface StoreState {
     id: string;
     type: string;
     timestamp: number;
-    data: any;
+    data: unknown;
   }>;
-  addActivity: (activity: { type: string; data: any }) => void;
+  addActivity: (activity: { type: string; data: unknown }) => void;
   clearActivity: () => void;
 }
 

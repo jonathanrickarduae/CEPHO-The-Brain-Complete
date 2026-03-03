@@ -22,7 +22,7 @@ interface ActivityItem {
   timestamp: Date;
   status: "completed" | "pending" | "undone";
   canUndo?: boolean;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 interface ActivityLogProps {

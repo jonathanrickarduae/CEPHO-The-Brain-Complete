@@ -132,7 +132,7 @@ export function Confetti({
 interface CelebrationContextType {
   celebrate: (
     type: "confetti" | "fireworks" | "sparkles",
-    options?: any
+    options?: unknown
   ) => void;
   showAchievement: (achievement: {
     title: string;
@@ -154,7 +154,7 @@ export function CelebrationProvider({ children }: { children: ReactNode }) {
   } | null>(null);
 
   const celebrate = useCallback(
-    (type: "confetti" | "fireworks" | "sparkles", _options?: any) => {
+    (type: "confetti" | "fireworks" | "sparkles", _options?: unknown) => {
       if (type === "confetti") {
         setActiveConfetti(true);
         // Haptic feedback

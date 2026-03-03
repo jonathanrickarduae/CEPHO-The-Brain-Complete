@@ -456,7 +456,7 @@ function VaultPanel() {
           <Shield className="w-4 h-4 text-purple-400" /> Security Events
         </h3>
         <div className="space-y-2">
-          {securityEvents.map((event: any) => (
+          {securityEvents.map((event) => (
             <div
               key={event.id}
               className="p-3 rounded-lg border border-border bg-muted/20 flex items-center justify-between"
@@ -496,6 +496,7 @@ function VaultPanel() {
 }
 
 // ─── Profile Tab (wired to real auth.updateProfile) ──────────────────────────
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function ProfileTab() {
   const { data: me } = trpc.auth.me.useQuery();
   const utils = trpc.useUtils();

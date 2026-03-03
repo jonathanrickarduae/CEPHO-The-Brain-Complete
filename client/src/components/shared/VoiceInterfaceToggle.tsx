@@ -30,6 +30,7 @@ export function useVoiceInterface() {
         };
   });
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const recognitionRef = useRef<any>(null);
   const synthRef = useRef<SpeechSynthesis | null>(null);
 
@@ -49,7 +50,9 @@ export function useVoiceInterface() {
       ("SpeechRecognition" in window || "webkitSpeechRecognition" in window)
     ) {
       const SpeechRecognition =
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (window as any).SpeechRecognition ||
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (window as any).webkitSpeechRecognition;
       recognitionRef.current = new SpeechRecognition();
       recognitionRef.current.continuous = false;

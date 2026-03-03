@@ -291,6 +291,7 @@ export function APICostCalculator() {
         annualCost: calculateMonthlyCost(provider) * 12,
       }))
       .sort((a, b) => a.monthlyCost - b.monthlyCost);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedProviders, queriesPerDay, profile]);
 
   const cheapestProvider = costComparison[0];

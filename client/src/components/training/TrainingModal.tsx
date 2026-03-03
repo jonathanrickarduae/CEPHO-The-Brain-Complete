@@ -16,7 +16,7 @@ interface TrainingModule {
   level: number;
   duration: string;
   completed: boolean;
-  icon: any;
+  icon: unknown;
 }
 
 interface TrainingModalProps {

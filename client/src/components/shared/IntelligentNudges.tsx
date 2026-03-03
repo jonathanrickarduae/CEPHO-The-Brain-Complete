@@ -493,7 +493,7 @@ export function NudgePreferences() {
               onClick={() =>
                 setPreferences(prev => ({
                   ...prev,
-                  frequency: option.value as any,
+                  frequency: option.value as "all" | "balanced" | "minimal",
                 }))
               }
               className={`flex-1 p-3 rounded-xl border transition-colors ${

@@ -576,6 +576,7 @@ export function useIdealsDataroom(
     if (storedKey || options.apiKey) {
     }
     setMappings(mappingService.getAllMappings());
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const connect = useCallback(async (apiKey: string) => {

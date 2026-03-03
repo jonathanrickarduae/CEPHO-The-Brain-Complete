@@ -41,7 +41,8 @@ interface Capability {
   description: string;
   status: "available" | "in_development" | "planned" | "future";
   phase: number;
-  icon: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  icon: React.ComponentType<any>;
   features?: string[];
   aiAgentIntegration?: boolean;
 }
@@ -50,7 +51,8 @@ interface CapabilityCategory {
   id: string;
   name: string;
   description: string;
-  icon: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  icon: React.ComponentType<any>;
   color: string;
   capabilities: Capability[];
 }

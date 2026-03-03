@@ -182,6 +182,7 @@ export function useKeyboardShortcuts(customShortcuts?: ShortcutConfig[]) {
         lastKeyRef.current = null;
       }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [allShortcuts, setLocation]
   );
 

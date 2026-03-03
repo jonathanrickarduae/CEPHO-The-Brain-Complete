@@ -8,7 +8,7 @@ const STORAGE_PREFIX = "brain-session-";
 interface DraftData {
   content: string;
   timestamp: number;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 interface ScrollPosition {
@@ -21,7 +21,7 @@ interface ScrollPosition {
 export function saveDraft(
   key: string,
   content: string,
-  metadata?: Record<string, any>
+  metadata?: Record<string, unknown>
 ): void {
   const data: DraftData = {
     content,
@@ -89,7 +89,7 @@ export function getScrollPosition(route: string): ScrollPosition | null {
 }
 
 // Form State Management
-export function saveFormState<T extends Record<string, any>>(
+export function saveFormState<T extends Record<string, unknown>>(
   formId: string,
   state: T
 ): void {
@@ -100,7 +100,7 @@ export function saveFormState<T extends Record<string, any>>(
   localStorage.setItem(`${STORAGE_PREFIX}form-${formId}`, JSON.stringify(data));
 }
 
-export function getFormState<T extends Record<string, any>>(
+export function getFormState<T extends Record<string, unknown>>(
   formId: string
 ): T | null {
   const stored = localStorage.getItem(`${STORAGE_PREFIX}form-${formId}`);
@@ -124,7 +124,7 @@ export function clearFormState(formId: string): void {
 }
 
 // Tab/Window State
-export function saveTabState(key: string, value: any): void {
+export function saveTabState(key: string, value: unknown): void {
   sessionStorage.setItem(`${STORAGE_PREFIX}tab-${key}`, JSON.stringify(value));
 }
 
@@ -219,7 +219,7 @@ export function useDraft(key: string, initialValue: string = "") {
   const [hasSavedDraft, setHasSavedDraft] = useState(() => hasDraft(key));
 
   const save = useCallback(
-    (content: string, metadata?: Record<string, any>) => {
+    (content: string, metadata?: Record<string, unknown>) => {
       setValue(content);
       if (content.trim()) {
         saveDraft(key, content, metadata);
@@ -259,7 +259,7 @@ export function useScrollRestore(route: string) {
   }, [route]);
 }
 
-export function useFormPersistence<T extends Record<string, any>>(
+export function useFormPersistence<T extends Record<string, unknown>>(
   formId: string,
   initialState: T
 ) {

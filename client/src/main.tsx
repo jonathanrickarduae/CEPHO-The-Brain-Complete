@@ -1,4 +1,5 @@
 import { trpc } from "@/lib/trpc";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { UNAUTHED_ERR_MSG } from "@shared/const";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { httpBatchLink, TRPCClientError } from "@trpc/client";
@@ -16,7 +17,9 @@ checkAppVersion();
 if ("serviceWorker" in navigator && import.meta.env.PROD) {
   window.addEventListener("load", () => {
     navigator.serviceWorker.register("/sw.js").then(
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       registration => {},
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       error => {}
     );
   });
@@ -32,7 +35,7 @@ const queryClient = new QueryClient({
   },
 });
 
-const redirectToLoginIfUnauthorized = (error: unknown) => {
+const redirectToLoginIfUnauthorized = (error: any) => {
   // P1-SEC-01: Redirect to login page on UNAUTHORIZED or FORBIDDEN errors
   if (
     error instanceof TRPCClientError &&

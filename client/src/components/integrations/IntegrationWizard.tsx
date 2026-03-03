@@ -782,7 +782,7 @@ export function IntegrationWizard({ onComplete }: IntegrationWizardProps) {
   const [selectedIntegration, setSelectedIntegration] =
     useState<Integration | null>(null);
   const [currentSetupStep, setCurrentSetupStep] = useState(0);
-  const [formData, setFormData] = useState<Record<string, any>>({});
+  const [formData, setFormData] = useState<Record<string, unknown>>({});
   const [showPassword, setShowPassword] = useState<Record<string, boolean>>({});
   const [pendingApprovals, setPendingApprovals] = useState<string[]>(() => {
     const saved = localStorage.getItem("brain_pending_approvals");
@@ -885,7 +885,7 @@ export function IntegrationWizard({ onComplete }: IntegrationWizardProps) {
     setStep("complete");
   };
 
-  const handleFieldChange = (fieldId: string, value: any) => {
+  const handleFieldChange = (fieldId: string, value: unknown) => {
     setFormData(prev => ({ ...prev, [fieldId]: value }));
   };
 
@@ -980,7 +980,7 @@ export function IntegrationWizard({ onComplete }: IntegrationWizardProps) {
                   {field.type === "text" && (
                     <input
                       type="text"
-                      value={formData[field.id] || ""}
+                      value={(formData[field.id] as string) || ""}
                       onChange={e =>
                         handleFieldChange(field.id, e.target.value)
                       }
@@ -993,7 +993,7 @@ export function IntegrationWizard({ onComplete }: IntegrationWizardProps) {
                     <div className="relative">
                       <input
                         type={showPassword[field.id] ? "text" : "password"}
-                        value={formData[field.id] || ""}
+                        value={(formData[field.id] as string) || ""}
                         onChange={e =>
                           handleFieldChange(field.id, e.target.value)
                         }
@@ -1021,7 +1021,7 @@ export function IntegrationWizard({ onComplete }: IntegrationWizardProps) {
 
                   {field.type === "select" && field.options && (
                     <select
-                      value={formData[field.id] || ""}
+                      value={(formData[field.id] as string) || ""}
                       onChange={e =>
                         handleFieldChange(field.id, e.target.value)
                       }
@@ -1040,7 +1040,7 @@ export function IntegrationWizard({ onComplete }: IntegrationWizardProps) {
                     <label className="flex items-center gap-3 cursor-pointer">
                       <input
                         type="checkbox"
-                        checked={formData[field.id] || false}
+                        checked={Boolean(formData[field.id])}
                         onChange={e =>
                           handleFieldChange(field.id, e.target.checked)
                         }

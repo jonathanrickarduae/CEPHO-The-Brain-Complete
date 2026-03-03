@@ -107,3 +107,9 @@ temp/
 *.sqlite3
 .vercel
 logs/
+
+# Credentials and recovery documents - NEVER commit these
+.env.backup
+docs/CEPHO_MASTER_RECOVERY_DOCUMENT.*
+docs/ENVIRONMENT_VARIABLES_*.md
+docs/ENVIRONMENT_VARIABLES_*.docx

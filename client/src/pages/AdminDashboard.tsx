@@ -29,7 +29,7 @@ function StatCard({
   value,
   sub,
   color = "text-primary",
-}: any) {
+}: unknown) {
   return (
     <div className="bg-card border border-border rounded-xl p-5">
       <div className="flex items-center justify-between mb-3">
@@ -144,7 +144,7 @@ export default function AdminDashboard() {
                 value={
                   flywheelStats?.total ??
                   innovationSummary?.byStage?.reduce(
-                    (a: number, s: any) => a + Number(s.count),
+                    (a: number, s: unknown) => a + Number(s.count),
                     0
                   ) ??
                   "—"

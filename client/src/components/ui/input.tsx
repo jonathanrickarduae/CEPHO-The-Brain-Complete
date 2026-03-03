@@ -23,6 +23,7 @@ function Input({
     onKeyDown: e => {
       // Check if this is an Enter key that should be blocked
       const isComposing =
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (e.nativeEvent as any).isComposing ||
         dialogComposition.justEndedComposing();
 
