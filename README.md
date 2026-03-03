@@ -1,6 +1,6 @@
-# CEPHO.AI — The Brain (v11)
+# CEPHO.AI — The Brain (v12)
 
-**Version**: 11.0.0 | **Status**: Active Development — Phase 0 Execution  
+**Version**: 12.0.0 | **Status**: Active Development — Phases 0–3 Complete, Phase 4 In Progress  
 **Owner**: Jonathan Rickard  
 **Live Dashboard**: [https://jonathanrickarduae.github.io/CEPHO-The-Brain-Complete/](https://jonathanrickarduae.github.io/CEPHO-The-Brain-Complete/)
 
@@ -16,24 +16,26 @@ The platform is built around **Victoria** — a personalised AI Chief of Staff �
 
 ## CRITICAL: Read This First on Any Fresh Session
 
-> **If you are starting a new session, this is your briefing. Do not ask what to do — read this document and the Grand Master Plan v11 first.**
+> **If you are starting a new session, this is your briefing. Do not ask what to do — read this document and the Grand Master Plan v12 first.**
 
 ### The Single Source of Truth
 
-The **Grand Master Plan v11** is the definitive plan for this project. It is the only plan. Do not reference any other plan documents.
+The **Grand Master Plan v12** is the definitive plan for this project. It is the only plan. Do not reference any other plan documents. v12 adds the complete page-by-page process inventory with all processes explicitly mapped and assigned to phases.
 
-- **Plan Document**: [`CEPHO_Grand_Master_Plan_v11_FINAL.docx`](./CEPHO_Grand_Master_Plan_v11_FINAL.docx)
+- **Plan Document (v12)**: [`docs/CEPHO_Grand_Master_Plan_v12_FINAL.md`](./docs/CEPHO_Grand_Master_Plan_v12_FINAL.md)
+- **Plan Document (v11 — archive)**: [`CEPHO_Grand_Master_Plan_v11_FINAL.docx`](./CEPHO_Grand_Master_Plan_v11_FINAL.docx)
+- **Page-by-Page Process Inventory**: [`docs/PAGE_BY_PAGE_PROCESS_LIST.md`](./docs/PAGE_BY_PAGE_PROCESS_LIST.md)
 - **Live Task Tracker**: [https://jonathanrickarduae.github.io/CEPHO-The-Brain-Complete/](https://jonathanrickarduae.github.io/CEPHO-The-Brain-Complete/)
 
 ### Current State (as of March 2026)
 
 | Item                   | Status                   |
 | :--------------------- | :----------------------- |
-| Grand Master Plan v11  | **Finalised and locked** |
-| Repository cleanup     | **Complete**             |
+| Grand Master Plan v12  | **Finalised and locked** |
+| Phases 0, 1, 2, 3      | **Complete**             |
 | GitHub Pages dashboard | **Live**                 |
-| Phase 0 execution      | **Next to begin**        |
-| Code deployment        | **Not yet started**      |
+| Phase 4 execution      | **In Progress**          |
+| Code deployment        | **Live on Render**       |
 
 ### What Has Been Done
 
@@ -64,7 +66,9 @@ Full detail for each task is in [`/docs/specs/phase0_preconditions.md`](./docs/s
 
 | Resource                  | Link                                                                                                                             |
 | :------------------------ | :------------------------------------------------------------------------------------------------------------------------------- |
-| **Grand Master Plan v11** | [`CEPHO_Grand_Master_Plan_v11_FINAL.docx`](./CEPHO_Grand_Master_Plan_v11_FINAL.docx)                                             |
+| **Grand Master Plan v12** | [`docs/CEPHO_Grand_Master_Plan_v12_FINAL.md`](./docs/CEPHO_Grand_Master_Plan_v12_FINAL.md)                                         |
+| **Grand Master Plan v11** | [`CEPHO_Grand_Master_Plan_v11_FINAL.docx`](./CEPHO_Grand_Master_Plan_v11_FINAL.docx) *(archive)*                                   |
+| **Page-by-Page Processes** | [`docs/PAGE_BY_PAGE_PROCESS_LIST.md`](./docs/PAGE_BY_PAGE_PROCESS_LIST.md)                                                        |
 | **Live Dashboard**        | [https://jonathanrickarduae.github.io/CEPHO-The-Brain-Complete/](https://jonathanrickarduae.github.io/CEPHO-The-Brain-Complete/) |
 | **Quality Grades**        | [`GRADES.md`](./GRADES.md)                                                                                                       |
 | **Changelog**             | [`CHANGELOG.md`](./CHANGELOG.md)                                                                                                 |
