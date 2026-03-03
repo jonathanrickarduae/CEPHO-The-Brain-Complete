@@ -59,7 +59,7 @@ export function useVoiceInterface() {
       recognitionRef.current.interimResults = true;
       recognitionRef.current.lang = settings.language;
 
-      recognitionRef.current.onresult = (event: any) => {
+      recognitionRef.current.onresult = (event: Event & { results: SpeechRecognitionResultList; resultIndex: number }) => {
         const current = event.resultIndex;
         const result = event.results[current];
         setTranscript(result[0].transcript);
@@ -69,7 +69,7 @@ export function useVoiceInterface() {
         setIsListening(false);
       };
 
-      recognitionRef.current.onerror = (_event: any) => {
+      recognitionRef.current.onerror = (_event: Event) => {
         setIsListening(false);
       };
     }

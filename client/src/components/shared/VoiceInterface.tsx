@@ -69,7 +69,7 @@ export function VoiceInterface({
       recognitionRef.current.interimResults = true;
       recognitionRef.current.lang = "en-GB";
 
-      recognitionRef.current.onresult = (event: any) => {
+      recognitionRef.current.onresult = (event: Event & { results: SpeechRecognitionResultList }) => {
         const result = event.results[event.results.length - 1];
         const text = result[0].transcript;
         setTranscript(text);

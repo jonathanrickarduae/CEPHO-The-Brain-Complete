@@ -42,7 +42,7 @@ interface WorkflowTrackerProps {
     approved: boolean,
     feedback: string
   ) => void;
-  onViewDeliverable?: (deliverable: any) => void;
+  onViewDeliverable?: (deliverable: Record<string, unknown>) => void;
   userRole: "user" | "cos";
 }
 
