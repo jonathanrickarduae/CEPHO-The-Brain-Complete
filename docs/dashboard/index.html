@@ -308,6 +308,18 @@
         color: #a78bfa;
         border: 1px solid rgba(108, 99, 255, 0.3);
       }
+      .tag-process {
+        background: #0891b2;
+        color: white;
+      }
+      .tag-planned {
+        background: #dc2626;
+        color: white;
+      }
+      .tag-cross-cutting {
+        background: #7c3aed;
+        color: white;
+      }
       .tag-precond {
         background: rgba(16, 185, 129, 0.15);
         color: var(--done);
@@ -1648,10 +1660,344 @@
               status: "done",
             },
             {
+            {
+              id: "app-al",
+              name: "Appendix AL: Page-by-Page Process Inventory (v12 — 13 sections, 35 tables)",
+              tags: ["appendix"],
+              status: "done",
+            },
               id: "app-au",
               name: "Appendix AU: AI & Cloud Cost Management Plan (per-feature budgets, anomaly detection)",
               tags: ["appendix"],
               status: "done",
+            },
+          ],
+        },
+        {
+          id: "phpal",
+          label: "Appendix AL",
+          title: "Process Verification — Existing Pages",
+          color: "#0891b2",
+          tasks: [
+            {
+              id: "pal-1",
+              name: "Nexus Dashboard: getInsights, cephoScore.get, tasks.list, projects.list, innovation.getFlywheelStats",
+              tags: ["process", "page"],
+              status: "done",
+            },
+            {
+              id: "pal-2",
+              name: "Daily Brief: getDailyBriefing, generateAudio, generatePdf, generateVideo, getVideoStatus",
+              tags: ["process", "page"],
+              status: "done",
+            },
+            {
+              id: "pal-3",
+              name: "Evening Review: mood.create, mood.history, mood.trends",
+              tags: ["process", "page"],
+              status: "done",
+            },
+            {
+              id: "pal-4",
+              name: "Settings: auth.me, updateProfile, settings.get/update, apiKeys CRUD, gdpr.exportMyData, auditLog.getMyLogs",
+              tags: ["process", "page"],
+              status: "done",
+            },
+            {
+              id: "pal-5",
+              name: "Project Genesis: listProjects, getProject, initiate, updatePhase, deleteProject, generatePresentationSlides",
+              tags: ["process", "page"],
+              status: "done",
+            },
+            {
+              id: "pal-6",
+              name: "Genesis Wizard: workflows.get/updateStep/updateProgress/completeStep/generateDeliverable",
+              tags: ["process", "page"],
+              status: "done",
+            },
+            {
+              id: "pal-7",
+              name: "Workflows: workflows.list, get, getStepGuidance, start, pause, resume",
+              tags: ["process", "page"],
+              status: "done",
+            },
+            {
+              id: "pal-8",
+              name: "KPI & OKR Dashboard: kpiOkr.kpi CRUD + suggestFromContext, kpiOkr.okr CRUD + suggestForQuarter",
+              tags: ["process", "page"],
+              status: "done",
+            },
+            {
+              id: "pal-9",
+              name: "AI Agents: aiAgents.list, aiAgents.get",
+              tags: ["process", "page"],
+              status: "done",
+            },
+            {
+              id: "pal-10",
+              name: "Agent Monitoring: aiAgentsMonitoring.getAllStatus, getAgentLogs, getAgentMetrics",
+              tags: ["process", "page"],
+              status: "done",
+            },
+            {
+              id: "pal-11",
+              name: "AI SMEs: aiSMEs.list, aiSMEs.get",
+              tags: ["process", "page"],
+              status: "done",
+            },
+            {
+              id: "pal-12",
+              name: "Expert Chat: expertChat.startSession, sendMessage, getHistory",
+              tags: ["process", "page"],
+              status: "done",
+            },
+            {
+              id: "pal-13",
+              name: "Persephone Board: expertChat re-used + autonomousExecution.execute, getRecentExecutions",
+              tags: ["process", "page"],
+              status: "done",
+            },
+            {
+              id: "pal-14",
+              name: "Email Intelligence: emailIntelligence.list, getThread, summarize, draftReply, send",
+              tags: ["process", "page"],
+              status: "done",
+            },
+            {
+              id: "pal-15",
+              name: "Meeting Intelligence: meetingIntelligence.list, generatePreBrief, processTranscript, delete, regenerateSummary",
+              tags: ["process", "page"],
+              status: "done",
+            },
+            {
+              id: "pal-16",
+              name: "Innovation Hub: captureIdea, analyzeArticle, generateDailyIdeas, getIdeaWithAssessments, runAssessment, promoteToGenesis",
+              tags: ["process", "page"],
+              status: "done",
+            },
+            {
+              id: "pal-17",
+              name: "Integration Hub: realWorldIntegration.register, list, getById, updateStatus, remove, listProviders",
+              tags: ["process", "page"],
+              status: "done",
+            },
+            {
+              id: "pal-18",
+              name: "Document Library: documentLibrary.list, get, upload, delete, search",
+              tags: ["process", "page"],
+              status: "done",
+            },
+            {
+              id: "pal-19",
+              name: "Knowledge Base: dataIngestion.ingestDocument/ingestUrl, agentMemory.search, agentMemory.ask",
+              tags: ["process", "page"],
+              status: "done",
+            },
+            {
+              id: "pal-20",
+              name: "Operations: nps.submit/getStats, partnerships CRUD/getSummary, teamCapability.list",
+              tags: ["process", "page"],
+              status: "done",
+            },
+            {
+              id: "pal-21",
+              name: "Chief of Staff: chiefOfStaff.command, getRecommendations, getSummary",
+              tags: ["process", "page"],
+              status: "done",
+            },
+            {
+              id: "pal-22",
+              name: "War Room: autonomousExecution.execute, getRecentExecutions",
+              tags: ["process", "page"],
+              status: "done",
+            },
+            {
+              id: "pal-23",
+              name: "Statistics: dashboard.getInsights, aiAgentsMonitoring.getAllStatus",
+              tags: ["process", "page"],
+              status: "done",
+            },
+            {
+              id: "pal-24",
+              name: "COS Training: cosTraining.getModules, submitResponse, getProgress",
+              tags: ["process", "page"],
+              status: "done",
+            },
+            {
+              id: "pal-25",
+              name: "Development Pathway: expertEvolution.getRecommendations, updateProgress",
+              tags: ["process", "page"],
+              status: "done",
+            },
+            {
+              id: "pal-26",
+              name: "Briefing Preferences: briefingPersonalisation.getPreferences/updatePreferences/submitFeedback/getFeedbackHistory/getAnalytics/resetToDefaults",
+              tags: ["process", "page"],
+              status: "done",
+            },
+            {
+              id: "pal-27",
+              name: "Login: GET /api/csrf-token, POST /api/auth/login, GET /api/auth/google",
+              tags: ["process", "page"],
+              status: "done",
+            },
+            {
+              id: "pal-28",
+              name: "Onboarding: digitalTwin.recalibrate, auth.updateProfile",
+              tags: ["process", "page"],
+              status: "done",
+            },
+            {
+              id: "pal-29",
+              name: "Admin Dashboard: admin.listUsers, updateUserRole, deleteUser, getSystemStats, getAuditLogs",
+              tags: ["process", "page"],
+              status: "done",
+            },
+            {
+              id: "pal-30",
+              name: "Human Approval Gates: createRequest, approve, reject, listPending, getHistory",
+              tags: ["process", "page"],
+              status: "done",
+            },
+            {
+              id: "pal-31",
+              name: "Market Launch Automation: createCampaign, listCampaigns, getCampaign, advanceStage, updateStatus",
+              tags: ["process", "page"],
+              status: "done",
+            },
+            {
+              id: "pal-32",
+              name: "Real-World Integration Layer: register, list, getById, updateStatus, remove, listProviders",
+              tags: ["process", "page"],
+              status: "done",
+            },
+            {
+              id: "pal-33",
+              name: "Cross-cutting: CSRF protection on all state-mutating requests",
+              tags: ["process", "cross-cutting"],
+              status: "done",
+            },
+            {
+              id: "pal-34",
+              name: "Cross-cutting: Rate limiting on all API endpoints",
+              tags: ["process", "cross-cutting"],
+              status: "done",
+            },
+            {
+              id: "pal-35",
+              name: "Cross-cutting: Audit logging for all user actions",
+              tags: ["process", "cross-cutting"],
+              status: "done",
+            },
+            {
+              id: "pal-36",
+              name: "Cross-cutting: React Error Boundaries wrapping all pages",
+              tags: ["process", "cross-cutting"],
+              status: "done",
+            },
+            {
+              id: "pal-37",
+              name: "Cross-cutting: JWT authentication on all protected routes",
+              tags: ["process", "cross-cutting"],
+              status: "done",
+            },
+            {
+              id: "pal-38",
+              name: "Cross-cutting: Natural language command bar (Cmd+K)",
+              tags: ["process", "cross-cutting"],
+              status: "done",
+            },
+            {
+              id: "pal-39",
+              name: "Cross-cutting: Real-time notification bell",
+              tags: ["process", "cross-cutting"],
+              status: "done",
+            },
+            {
+              id: "pal-40",
+              name: "Cross-cutting: Offline banner when server unreachable",
+              tags: ["process", "cross-cutting"],
+              status: "not-started",
+            },
+            {
+              id: "pal-41",
+              name: "Cross-cutting: Replace all console.log with structured Pino logger",
+              tags: ["process", "cross-cutting"],
+              status: "not-started",
+            },
+            {
+              id: "pal-42",
+              name: "Cross-cutting: Sentry error monitoring integration",
+              tags: ["process", "cross-cutting"],
+              status: "not-started",
+            },
+          ],
+        },
+        {
+          id: "phpal2",
+          label: "Appendix AL — Phase 4",
+          title: "Process Verification — Planned Pages (Not Yet Built)",
+          color: "#dc2626",
+          tasks: [
+            {
+              id: "pal2-1",
+              name: "Email Accounts (/accounts): connect email accounts, OAuth sync, show sync status",
+              tags: ["process", "page", "planned"],
+              status: "not-started",
+            },
+            {
+              id: "pal2-2",
+              name: "Vault (/vault): secure document storage, encryption at rest, access control",
+              tags: ["process", "page", "planned"],
+              status: "not-started",
+            },
+            {
+              id: "pal2-3",
+              name: "AI Experts Directory (/ai-experts): full expert profiles, availability, booking",
+              tags: ["process", "page", "planned"],
+              status: "not-started",
+            },
+            {
+              id: "pal2-4",
+              name: "Agent Detail (/agents/:id): individual agent performance, logs, configuration",
+              tags: ["process", "page", "planned"],
+              status: "not-started",
+            },
+            {
+              id: "pal2-5",
+              name: "Notifications Centre (/notifications): notifications.list, markRead, markAllRead",
+              tags: ["process", "page", "planned"],
+              status: "not-started",
+            },
+            {
+              id: "pal2-6",
+              name: "Voice Notes (/voice-notes): voiceNotes.list, create, convertToTask",
+              tags: ["process", "page", "planned"],
+              status: "not-started",
+            },
+            {
+              id: "pal2-7",
+              name: "Subscription Tracker (/subscriptions): subscriptionTracker.getAll, getCostHistory",
+              tags: ["process", "page", "planned"],
+              status: "not-started",
+            },
+            {
+              id: "pal2-8",
+              name: "Two-Factor Auth Setup (/settings/2fa): twoFactor.setup, verify, disable",
+              tags: ["process", "page", "planned"],
+              status: "not-started",
+            },
+            {
+              id: "pal2-9",
+              name: "Brand Kit (/brand-kit): brandKit.get, update, generateAssets",
+              tags: ["process", "page", "planned"],
+              status: "not-started",
+            },
+            {
+              id: "pal2-10",
+              name: "Analytics Deep Dive (/analytics): analytics.getReport, getMetrics, export",
+              tags: ["process", "page", "planned"],
+              status: "not-started",
             },
           ],
         },
