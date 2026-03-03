@@ -9,6 +9,13 @@ import { protectedProcedure, router } from "../_core/trpc";
 import { db } from "../db";
 import { tasks, activityFeed } from "../../drizzle/schema";
 import { createNotification } from "./notifications.router";
+import { writeAuditLog } from "./auditLog.router";
+import { cache } from "../services/cache";
+
+/** Invalidate all task list caches for a user */
+async function invalidateTasksCache(userId: number) {
+  await cache.delPattern(`tasks:${userId}:*`).catch(() => {});
+}
 
 export const tasksRouter = router({
   /**
@@ -25,6 +32,10 @@ export const tasksRouter = router({
       })
     )
     .query(async ({ input, ctx }) => {
+      const cacheKey = `tasks:${ctx.user.id}:${input.status ?? "all"}:${input.limit}:${input.offset}`;
+      return cache.wrap(
+        cacheKey,
+        async () => {
       const conditions = [eq(tasks.userId, ctx.user.id)];
       if (input.status) {
         conditions.push(eq(tasks.status, input.status));
@@ -61,6 +72,9 @@ export const tasksRouter = router({
         limit: input.limit,
         offset: input.offset,
       };
+        },
+        30 // 30-second TTL for tasks
+      );
     }),
 
   /**
@@ -103,6 +117,19 @@ export const tasksRouter = router({
         description: `Created task: ${task.title}`,
       });
 
+      // Invalidate tasks cache
+      invalidateTasksCache(ctx.user.id);
+
+      // Audit log (non-blocking)
+      writeAuditLog({
+        userId: ctx.user.id,
+        action: "task.create",
+        resourceType: "task",
+        resourceId: String(task.id),
+        metadata: { title: task.title, priority: task.priority },
+        severity: "info",
+      }).catch(() => {});
+
       return { id: task.id, title: task.title, status: task.status };
     }),
 
@@ -136,6 +163,9 @@ export const tasksRouter = router({
       if (!updated) {
         throw new Error("Task not found or access denied");
       }
+
+      // Invalidate tasks cache
+      invalidateTasksCache(ctx.user.id);
 
       // Notify on task completion (non-blocking)
       if (input.status === "completed") {
@@ -191,6 +221,19 @@ export const tasksRouter = router({
       await db
         .delete(tasks)
         .where(and(eq(tasks.id, input.id), eq(tasks.userId, ctx.user.id)));
+
+      // Invalidate tasks cache
+      invalidateTasksCache(ctx.user.id);
+
+      // Audit log (non-blocking)
+      writeAuditLog({
+        userId: ctx.user.id,
+        action: "task.delete",
+        resourceType: "task",
+        resourceId: String(input.id),
+        severity: "warning",
+      }).catch(() => {});
+
       return { success: true, id: input.id };
     }),
 });

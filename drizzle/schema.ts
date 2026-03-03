@@ -5091,3 +5091,24 @@ export const emailAccounts = pgTable("email_accounts", {
 });
 export type EmailAccount = typeof emailAccounts.$inferSelect;
 export type InsertEmailAccount = typeof emailAccounts.$inferInsert;
+
+// ─── Push Subscriptions ────────────────────────────────────────────────────────
+/**
+ * Web Push API subscriptions for browser push notifications.
+ * Phase 4 deliverable — p4-10 Push Notifications.
+ */
+export const pushSubscriptions = pgTable("push_subscriptions", {
+  id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
+  userId: integer("userId").notNull(),
+  endpoint: text("endpoint").notNull(),
+  p256dh: text("p256dh").notNull(),
+  auth: text("auth").notNull(),
+  deviceName: varchar("deviceName", { length: 255 }),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
+});
+export type PushSubscription = typeof pushSubscriptions.$inferSelect;
+export type InsertPushSubscription = typeof pushSubscriptions.$inferInsert;

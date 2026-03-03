@@ -67,6 +67,7 @@ import { humanApprovalGatesRouter } from "./routers/humanApprovalGates.router";
 import { marketLaunchAutomationRouter } from "./routers/marketLaunchAutomation.router";
 import { realWorldIntegrationRouter } from "./routers/realWorldIntegration.router";
 import { globalSearchRouter } from "./routers/globalSearch.router";
+import { pushNotificationsRouter } from "./routers/pushNotifications.router";
 import {
   businessPlanReviewRouter as businessPlanReviewRealRouter,
   collaborativeReviewRouter as collaborativeReviewRealRouter,
@@ -247,8 +248,10 @@ export const appRouter = router({
   marketLaunchAutomation: marketLaunchAutomationRouter,
   // ─── Real-World Integration Layer (P3 deliverable) ──────────────────────────
   realWorldIntegration: realWorldIntegrationRouter,
-  // ─── Global Search (P4-9) ────────────────────────────────────────────────────
+   // ─── Global Search (P4-9) ──────────────────────────────────────────────────
   globalSearch: globalSearchRouter,
+  // ─── Push Notifications (P4-10) ──────────────────────────────────────────
+  pushNotifications: pushNotificationsRouter,
 });
 
 export type AppRouter = typeof appRouter;

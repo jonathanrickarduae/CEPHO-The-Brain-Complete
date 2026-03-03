@@ -6,6 +6,12 @@ import { desc, eq, and } from "drizzle-orm";
 import { protectedProcedure, router } from "../_core/trpc";
 import { db } from "../db";
 import { projects, activityFeed } from "../../drizzle/schema";
+import { cache } from "../services/cache";
+
+/** Invalidate all project list caches for a user */
+async function invalidateProjectsCache(userId: number) {
+  await cache.delPattern(`projects:${userId}:*`).catch(() => {});
+}
 
 export const projectsRouter = router({
   list: protectedProcedure
@@ -16,25 +22,32 @@ export const projectsRouter = router({
       })
     )
     .query(async ({ input, ctx }) => {
-      const rows = await db
-        .select()
-        .from(projects)
-        .where(eq(projects.userId, ctx.user.id))
-        .orderBy(desc(projects.createdAt))
-        .limit(input.limit);
+      const cacheKey = `projects:${ctx.user.id}:${input.status ?? "all"}:${input.limit}`;
+      return cache.wrap(
+        cacheKey,
+        async () => {
+          const rows = await db
+            .select()
+            .from(projects)
+            .where(eq(projects.userId, ctx.user.id))
+            .orderBy(desc(projects.createdAt))
+            .limit(input.limit);
 
-      return rows
-        .filter(p => !input.status || p.status === input.status)
-        .map(p => ({
-          id: p.id,
-          name: p.name,
-          description: p.description,
-          status: p.status,
-          priority: p.priority,
-          progress: p.progress,
-          dueDate: p.dueDate?.toISOString() ?? null,
-          createdAt: p.createdAt.toISOString(),
-        }));
+          return rows
+            .filter(p => !input.status || p.status === input.status)
+            .map(p => ({
+              id: p.id,
+              name: p.name,
+              description: p.description,
+              status: p.status,
+              priority: p.priority,
+              progress: p.progress,
+              dueDate: p.dueDate?.toISOString() ?? null,
+              createdAt: p.createdAt.toISOString(),
+            }));
+        },
+        60 // 60-second TTL
+      );
     }),
 
   create: protectedProcedure
@@ -72,6 +85,9 @@ export const projectsRouter = router({
         description: `Created project: ${project.name}`,
       });
 
+      // Invalidate cache
+      invalidateProjectsCache(ctx.user.id);
+
       return { id: project.id, name: project.name, status: project.status };
     }),
 
@@ -94,6 +110,10 @@ export const projectsRouter = router({
         .returning();
 
       if (!updated) throw new Error("Project not found or access denied");
+
+      // Invalidate cache
+      invalidateProjectsCache(ctx.user.id);
+
       return { id: updated.id, status: updated.status };
     }),
 
@@ -133,6 +153,10 @@ export const projectsRouter = router({
         .where(
           and(eq(projects.id, input.id), eq(projects.userId, ctx.user.id))
         );
+
+      // Invalidate cache
+      invalidateProjectsCache(ctx.user.id);
+
       return { success: true, id: input.id };
     }),
 });

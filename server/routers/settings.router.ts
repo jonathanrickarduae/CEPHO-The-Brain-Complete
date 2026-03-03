@@ -11,6 +11,7 @@ import { protectedProcedure, router } from "../_core/trpc";
 import { db } from "../db";
 import { userSettings, users } from "../../drizzle/schema";
 import { supabase as supabaseAdmin } from "../_core/supabase-auth";
+import { writeAuditLog } from "./auditLog.router";
 
 const DEFAULT_SETTINGS = {
   theme: "dark",
@@ -218,6 +219,15 @@ export const settingsRouter = router({
         })
         .where(eq(userSettings.userId, ctx.user.id));
 
+      // Audit log
+      writeAuditLog({
+        userId: ctx.user.id,
+        action: "settings.changePIN",
+        resourceType: "user",
+        resourceId: String(ctx.user.id),
+        severity: "warning",
+      }).catch(() => {});
+
       return { success: true };
     }),
 
@@ -251,6 +261,16 @@ export const settingsRouter = router({
           .update(users)
           .set({ totpEnabled: false, totpSecret: null, updatedAt: new Date() })
           .where(eq(users.id, ctx.user.id));
+        // Audit log
+        writeAuditLog({
+          userId: ctx.user.id,
+          action: "settings.toggle2FA",
+          resourceType: "user",
+          resourceId: String(ctx.user.id),
+          metadata: { enabled: input.enable },
+          severity: "warning",
+        }).catch(() => {});
+
         return { success: true, enabled: false };
       }
     }),
@@ -303,6 +323,15 @@ export const settingsRouter = router({
           message: error.message,
         });
       }
+
+      // Audit log
+      writeAuditLog({
+        userId: ctx.user.id,
+        action: "settings.inviteUser",
+        resourceType: "user",
+        metadata: { email: input.email, role: input.role },
+        severity: "info",
+      }).catch(() => {});
 
       return {
         success: true,
@@ -368,6 +397,15 @@ export const settingsRouter = router({
 
       // Delete from local users table
       await db.delete(users).where(eq(users.id, input.userId));
+
+      // Audit log
+      writeAuditLog({
+        userId: ctx.user.id,
+        action: "settings.removeUser",
+        resourceType: "user",
+        resourceId: String(input.userId),
+        severity: "critical",
+      }).catch(() => {});
 
       return { success: true, removedUserId: input.userId };
     }),
