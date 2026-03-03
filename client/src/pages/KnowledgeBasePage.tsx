@@ -92,7 +92,10 @@ export default function KnowledgeBasePage() {
 
   const ingestDocMutation = trpc.dataIngestion.ingestDocument.useMutation({
     onSuccess: result => {
-      addToast("success", `Ingested "${result.title}" — ${result.chunksStored} chunks stored`);
+      addToast(
+        "success",
+        `Ingested "${result.title}" — ${result.chunksStored} chunks stored`
+      );
       void refetchDocs();
     },
     onError: err => addToast("error", err.message),
@@ -100,7 +103,10 @@ export default function KnowledgeBasePage() {
 
   const ingestUrlMutation = trpc.dataIngestion.ingestUrl.useMutation({
     onSuccess: result => {
-      addToast("success", `Ingested "${result.title}" — ${result.chunksStored} chunks stored`);
+      addToast(
+        "success",
+        `Ingested "${result.title}" — ${result.chunksStored} chunks stored`
+      );
       setUrlInput("");
       void refetchDocs();
     },
@@ -109,7 +115,10 @@ export default function KnowledgeBasePage() {
 
   const ingestCsvMutation = trpc.dataIngestion.ingestCsv.useMutation({
     onSuccess: result => {
-      addToast("success", `Ingested "${result.title}" — ${result.chunksStored} chunks stored`);
+      addToast(
+        "success",
+        `Ingested "${result.title}" — ${result.chunksStored} chunks stored`
+      );
       setCsvContent("");
       setCsvFilename("");
       void refetchDocs();
@@ -221,7 +230,8 @@ export default function KnowledgeBasePage() {
           {[
             {
               label: "Documents",
-              value: documents.filter(d => ["pdf", "word"].includes(d.type)).length,
+              value: documents.filter(d => ["pdf", "word"].includes(d.type))
+                .length,
               icon: <FileText className="h-5 w-5 text-blue-400" />,
             },
             {
@@ -231,7 +241,9 @@ export default function KnowledgeBasePage() {
             },
             {
               label: "Data Files",
-              value: documents.filter(d => ["csv", "spreadsheet"].includes(d.type)).length,
+              value: documents.filter(d =>
+                ["csv", "spreadsheet"].includes(d.type)
+              ).length,
               icon: <FileSpreadsheet className="h-5 w-5 text-green-400" />,
             },
           ].map(stat => (
@@ -252,15 +264,25 @@ export default function KnowledgeBasePage() {
 
         {/* Ingest panel */}
         <div className="rounded-xl border border-white/10 bg-white/5 p-6">
-          <h2 className="mb-4 text-lg font-semibold text-white">Add to Knowledge Base</h2>
+          <h2 className="mb-4 text-lg font-semibold text-white">
+            Add to Knowledge Base
+          </h2>
 
           {/* Tabs */}
           <div className="mb-6 flex gap-1 rounded-lg bg-white/5 p-1">
             {(
               [
-                { id: "document", label: "Document", icon: <Upload className="h-4 w-4" /> },
+                {
+                  id: "document",
+                  label: "Document",
+                  icon: <Upload className="h-4 w-4" />,
+                },
                 { id: "url", label: "URL", icon: <Link className="h-4 w-4" /> },
-                { id: "csv", label: "CSV / Data", icon: <FileSpreadsheet className="h-4 w-4" /> },
+                {
+                  id: "csv",
+                  label: "CSV / Data",
+                  icon: <FileSpreadsheet className="h-4 w-4" />,
+                },
               ] as { id: IngestTab; label: string; icon: React.ReactNode }[]
             ).map(tab => (
               <button
@@ -299,7 +321,9 @@ export default function KnowledgeBasePage() {
                     ? "Processing document…"
                     : "Click to upload or drag and drop"}
                 </p>
-                <p className="mt-1 text-xs text-gray-600">PDF, DOCX, XLSX up to 20MB</p>
+                <p className="mt-1 text-xs text-gray-600">
+                  PDF, DOCX, XLSX up to 20MB
+                </p>
               </div>
               <input
                 ref={fileInputRef}
@@ -380,7 +404,11 @@ export default function KnowledgeBasePage() {
               )}
               <button
                 onClick={handleCsvIngest}
-                disabled={!csvContent.trim() || !csvFilename.trim() || ingestCsvMutation.isPending}
+                disabled={
+                  !csvContent.trim() ||
+                  !csvFilename.trim() ||
+                  ingestCsvMutation.isPending
+                }
                 className="flex items-center gap-2 rounded-lg bg-purple-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-purple-700 disabled:opacity-50"
               >
                 {ingestCsvMutation.isPending ? (

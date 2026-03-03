@@ -289,7 +289,16 @@ export function DataGovernanceDashboard() {
         ].map(tab => (
           <button
             key={tab.id}
-            onClick={() => setActiveTab(tab.id as "overview" | "audit" | "export" | "access" | "retention")}
+            onClick={() =>
+              setActiveTab(
+                tab.id as
+                  | "overview"
+                  | "audit"
+                  | "export"
+                  | "access"
+                  | "retention"
+              )
+            }
             className={`flex items-center gap-2 px-4 py-3 text-sm font-medium transition-colors ${
               activeTab === tab.id
                 ? "text-primary border-b-2 border-primary"

@@ -78,10 +78,7 @@ export function GlobalSearch({
   const { data, isFetching } = trpc.globalSearch.search.useQuery(
     {
       query: debouncedQuery,
-      types:
-        typeFilter === "all"
-          ? undefined
-          : [typeFilter],
+      types: typeFilter === "all" ? undefined : [typeFilter],
       limit: 20,
     },
     {

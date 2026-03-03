@@ -89,7 +89,8 @@ export const humanApprovalGatesRouter = router({
           )
         )
         .returning();
-      if (!updated) throw new Error("Approval request not found or already resolved.");
+      if (!updated)
+        throw new Error("Approval request not found or already resolved.");
       return updated;
     }),
 
@@ -119,7 +120,8 @@ export const humanApprovalGatesRouter = router({
           )
         )
         .returning();
-      if (!updated) throw new Error("Approval request not found or already resolved.");
+      if (!updated)
+        throw new Error("Approval request not found or already resolved.");
       return updated;
     }),
 

@@ -69,7 +69,9 @@ export function VoiceInterface({
       recognitionRef.current.interimResults = true;
       recognitionRef.current.lang = "en-GB";
 
-      recognitionRef.current.onresult = (event: Event & { results: SpeechRecognitionResultList }) => {
+      recognitionRef.current.onresult = (
+        event: Event & { results: SpeechRecognitionResultList }
+      ) => {
         const result = event.results[event.results.length - 1];
         const text = result[0].transcript;
         setTranscript(text);
@@ -92,7 +94,7 @@ export function VoiceInterface({
       if (recognitionRef.current) recognitionRef.current.abort();
       if (audioRef.current) audioRef.current.pause();
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleCommand = (text: string, confidence: number) => {

@@ -10,11 +10,7 @@ import { protectedProcedure, router } from "../_core/trpc";
 import { db } from "../db";
 import { tasks, projects, briefings, voiceNotes } from "../../drizzle/schema";
 
-export type SearchResultType =
-  | "task"
-  | "project"
-  | "briefing"
-  | "voice_note";
+export type SearchResultType = "task" | "project" | "briefing" | "voice_note";
 
 export interface SearchResult {
   id: string;
@@ -34,9 +30,7 @@ export const globalSearchRouter = router({
       z.object({
         query: z.string().min(1).max(200),
         types: z
-          .array(
-            z.enum(["task", "project", "briefing", "voice_note"])
-          )
+          .array(z.enum(["task", "project", "briefing", "voice_note"]))
           .optional(),
         limit: z.number().min(1).max(50).default(20),
       })
@@ -62,10 +56,7 @@ export const globalSearchRouter = router({
           .where(
             and(
               eq(tasks.userId, userId),
-              or(
-                ilike(tasks.title, q),
-                ilike(tasks.description, q)
-              )
+              or(ilike(tasks.title, q), ilike(tasks.description, q))
             )
           )
           .orderBy(desc(tasks.createdAt))
@@ -97,12 +88,7 @@ export const globalSearchRouter = router({
             createdAt: projects.createdAt,
           })
           .from(projects)
-          .where(
-            or(
-              ilike(projects.name, q),
-              ilike(projects.description, q)
-            )
-          )
+          .where(or(ilike(projects.name, q), ilike(projects.description, q)))
           .orderBy(desc(projects.createdAt))
           .limit(perType);
 
@@ -131,12 +117,7 @@ export const globalSearchRouter = router({
             createdAt: briefings.createdAt,
           })
           .from(briefings)
-          .where(
-            and(
-              eq(briefings.userId, userId),
-              ilike(briefings.title, q)
-            )
-          )
+          .where(and(eq(briefings.userId, userId), ilike(briefings.title, q)))
           .orderBy(desc(briefings.createdAt))
           .limit(perType);
 
@@ -163,10 +144,7 @@ export const globalSearchRouter = router({
           })
           .from(voiceNotes)
           .where(
-            and(
-              eq(voiceNotes.userId, userId),
-              ilike(voiceNotes.content, q)
-            )
+            and(eq(voiceNotes.userId, userId), ilike(voiceNotes.content, q))
           )
           .orderBy(desc(voiceNotes.createdAt))
           .limit(perType);
@@ -175,7 +153,8 @@ export const globalSearchRouter = router({
           results.push({
             id: `voice_note-${row.id}`,
             type: "voice_note",
-            title: row.content.slice(0, 60) + (row.content.length > 60 ? "…" : ""),
+            title:
+              row.content.slice(0, 60) + (row.content.length > 60 ? "…" : ""),
             excerpt: row.content ? row.content.slice(0, 120) : "",
             path: `/voice-notes`,
             createdAt: row.createdAt.toISOString(),

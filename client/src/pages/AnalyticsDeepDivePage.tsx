@@ -17,16 +17,29 @@ const PERIODS = [
   { label: "90 days", value: 90 },
 ];
 
-function Bar({ value, max, label }: { value: number; max: number; label: string }) {
+function Bar({
+  value,
+  max,
+  label,
+}: {
+  value: number;
+  max: number;
+  label: string;
+}) {
   const pct = max > 0 ? Math.round((value / max) * 100) : 0;
   return (
     <div className="flex items-center gap-3 group">
       <div className="flex-1 min-w-0">
         <div className="flex items-center justify-between mb-1">
-          <span className="text-xs text-muted-foreground truncate" title={label}>
+          <span
+            className="text-xs text-muted-foreground truncate"
+            title={label}
+          >
             {label}
           </span>
-          <span className="text-xs font-semibold ml-2 flex-shrink-0">{value.toLocaleString()}</span>
+          <span className="text-xs font-semibold ml-2 flex-shrink-0">
+            {value.toLocaleString()}
+          </span>
         </div>
         <div className="h-2 rounded-full bg-muted/30 overflow-hidden">
           <div
@@ -42,11 +55,19 @@ function Bar({ value, max, label }: { value: number; max: number; label: string 
 export default function AnalyticsDeepDivePage() {
   const [days, setDays] = useState(30);
 
-  const { data: summary, isLoading } = trpc.analytics.getSummary.useQuery({ days });
+  const { data: summary, isLoading } = trpc.analytics.getSummary.useQuery({
+    days,
+  });
 
-  const maxEventCount = Math.max(...(summary?.topEvents?.map(e => Number(e.count)) ?? [1]));
-  const maxPageCount = Math.max(...(summary?.topPages?.map(p => Number(p.count)) ?? [1]));
-  const maxDailyCount = Math.max(...(summary?.dailyActivity?.map(d => Number(d.count)) ?? [1]));
+  const maxEventCount = Math.max(
+    ...(summary?.topEvents?.map(e => Number(e.count)) ?? [1])
+  );
+  const maxPageCount = Math.max(
+    ...(summary?.topPages?.map(p => Number(p.count)) ?? [1])
+  );
+  const maxDailyCount = Math.max(
+    ...(summary?.dailyActivity?.map(d => Number(d.count)) ?? [1])
+  );
 
   return (
     <PageShell
@@ -70,7 +91,10 @@ export default function AnalyticsDeepDivePage() {
           </button>
         ))}
         <span className="ml-auto text-xs text-muted-foreground">
-          Since {summary?.period?.since ? new Date(summary.period.since).toLocaleDateString() : "—"}
+          Since{" "}
+          {summary?.period?.since
+            ? new Date(summary.period.since).toLocaleDateString()
+            : "—"}
         </span>
       </div>
 
@@ -115,7 +139,8 @@ export default function AnalyticsDeepDivePage() {
                 Active Days
               </div>
               <div className="text-2xl font-bold">
-                {summary?.dailyActivity?.filter(d => Number(d.count) > 0).length ?? 0}
+                {summary?.dailyActivity?.filter(d => Number(d.count) > 0)
+                  .length ?? 0}
               </div>
             </div>
           </div>
@@ -169,14 +194,20 @@ export default function AnalyticsDeepDivePage() {
               </div>
               <div className="flex items-end gap-1 h-32">
                 {summary.dailyActivity.map(d => {
-                  const pct = maxDailyCount > 0 ? (Number(d.count) / maxDailyCount) * 100 : 0;
+                  const pct =
+                    maxDailyCount > 0
+                      ? (Number(d.count) / maxDailyCount) * 100
+                      : 0;
                   return (
                     <div
                       key={d.date}
                       className="flex-1 flex flex-col items-center gap-1 group"
                       title={`${d.date}: ${d.count} events`}
                     >
-                      <div className="w-full flex items-end justify-center" style={{ height: "100px" }}>
+                      <div
+                        className="w-full flex items-end justify-center"
+                        style={{ height: "100px" }}
+                      >
                         <div
                           className="w-full rounded-t bg-accent/60 group-hover:bg-accent transition-all"
                           style={{ height: `${Math.max(pct, 2)}%` }}
@@ -188,7 +219,12 @@ export default function AnalyticsDeepDivePage() {
               </div>
               <div className="flex justify-between mt-2 text-xs text-muted-foreground">
                 <span>{summary.dailyActivity[0]?.date}</span>
-                <span>{summary.dailyActivity[summary.dailyActivity.length - 1]?.date}</span>
+                <span>
+                  {
+                    summary.dailyActivity[summary.dailyActivity.length - 1]
+                      ?.date
+                  }
+                </span>
               </div>
             </div>
           )}

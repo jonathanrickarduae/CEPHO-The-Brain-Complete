@@ -85,7 +85,10 @@ export function PageShell({
                 <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-green-500 rounded-full border-2 border-background" />
               </div>
             ) : Icon ? (
-              <div className={cn("shrink-0 p-1.5 rounded-lg", iconClass)} aria-hidden="true">
+              <div
+                className={cn("shrink-0 p-1.5 rounded-lg", iconClass)}
+                aria-hidden="true"
+              >
                 <Icon className="w-4 h-4" />
               </div>
             ) : null}
@@ -111,7 +114,7 @@ export function PageShell({
           )}
         </div>
 
-             {/* ── Tab bar (optional) ────────────────────────────── */}
+        {/* ── Tab bar (optional) ────────────────────────────── */}
         {tabs && tabs.length > 0 && (
           <div
             role="tablist"

@@ -1,6 +1,13 @@
 import React, { useState } from "react";
 import { PageShell } from "@/components/layout/PageShell";
-import { Shield, ShieldCheck, ShieldOff, Key, Copy, CheckCircle2 } from "lucide-react";
+import {
+  Shield,
+  ShieldCheck,
+  ShieldOff,
+  Key,
+  Copy,
+  CheckCircle2,
+} from "lucide-react";
 import { trpc } from "@/lib/trpc";
 import { toast } from "sonner";
 
@@ -185,9 +192,7 @@ export default function TwoFactorSetupPage() {
             />
 
             <button
-              onClick={() =>
-                verifyMutation.mutate({ token: verifyCode })
-              }
+              onClick={() => verifyMutation.mutate({ token: verifyCode })}
               disabled={verifyCode.length !== 6 || verifyMutation.isPending}
               className="w-full px-4 py-3 rounded-lg bg-accent text-white font-medium hover:bg-accent/90 disabled:opacity-40 transition-all"
             >
@@ -222,9 +227,7 @@ export default function TwoFactorSetupPage() {
             </div>
 
             <button
-              onClick={() =>
-                copyToClipboard(setupData.backupCodes!.join("\n"))
-              }
+              onClick={() => copyToClipboard(setupData.backupCodes!.join("\n"))}
               className="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-lg border border-border text-sm text-muted-foreground hover:border-accent/30 transition-all"
             >
               <Copy className="w-4 h-4" />

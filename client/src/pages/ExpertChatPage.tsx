@@ -10,7 +10,7 @@ import {
   Volume2,
   VolumeX,
   Sparkles,
-    MessageSquare,
+  MessageSquare,
   Loader2,
   User,
   Bot,

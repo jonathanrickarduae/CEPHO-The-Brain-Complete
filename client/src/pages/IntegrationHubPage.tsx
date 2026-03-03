@@ -122,7 +122,13 @@ const CATEGORY_LABELS: Record<string, string> = {
   crm: "CRM",
 };
 
-const CATEGORY_ORDER = ["productivity", "calendar", "communication", "email", "crm"];
+const CATEGORY_ORDER = [
+  "productivity",
+  "calendar",
+  "communication",
+  "email",
+  "crm",
+];
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
@@ -167,7 +173,9 @@ export default function IntegrationHubPage() {
         ...prev,
         [vars.provider]: {
           success: result.success,
-          message: result.message ?? (result.success ? "Connection verified" : "Connection failed"),
+          message:
+            result.message ??
+            (result.success ? "Connection verified" : "Connection failed"),
         },
       }));
       setTestingId(null);
@@ -203,8 +211,7 @@ export default function IntegrationHubPage() {
   function getStatus(integrationId: string) {
     if (!integrationsData) return "disconnected";
     const item = integrationsData.find(
-      (i: { provider: string; status: string }) =>
-        i.provider === integrationId
+      (i: { provider: string; status: string }) => i.provider === integrationId
     );
     return item?.status ?? "disconnected";
   }
@@ -372,12 +379,18 @@ export default function IntegrationHubPage() {
                               : "bg-gray-500/20 text-gray-400"
                         }`}
                       >
-                        {connected ? "Connected" : status === "error" ? "Error" : "Disconnected"}
+                        {connected
+                          ? "Connected"
+                          : status === "error"
+                            ? "Error"
+                            : "Disconnected"}
                       </span>
                     </div>
 
                     {/* Description */}
-                    <p className="mt-3 text-xs text-gray-400">{def.description}</p>
+                    <p className="mt-3 text-xs text-gray-400">
+                      {def.description}
+                    </p>
 
                     {/* Test result */}
                     {testResult && (

@@ -1,6 +1,15 @@
 import React, { useState } from "react";
 import { PageShell } from "@/components/layout/PageShell";
-import { Mic, MicOff, Play, Pause, FileText, Plus, Clock, Tag } from "lucide-react";
+import {
+  Mic,
+  MicOff,
+  Play,
+  Pause,
+  FileText,
+  Plus,
+  Clock,
+  Tag,
+} from "lucide-react";
 import { trpc } from "@/lib/trpc";
 import { toast } from "sonner";
 import { formatDistanceToNow } from "date-fns";
@@ -49,12 +58,9 @@ export default function VoiceNotesPage() {
         {CATEGORIES.map(cat => (
           <button
             key={cat}
-            onClick={() =>
-              setSelectedCategory(cat === "All" ? undefined : cat)
-            }
+            onClick={() => setSelectedCategory(cat === "All" ? undefined : cat)}
             className={`px-3 py-1.5 rounded-full text-sm font-medium border transition-all ${
-              (cat === "All" && !selectedCategory) ||
-              selectedCategory === cat
+              (cat === "All" && !selectedCategory) || selectedCategory === cat
                 ? "bg-accent text-white border-accent"
                 : "bg-card text-muted-foreground border-border hover:border-accent/30"
             }`}
@@ -177,7 +183,10 @@ export default function VoiceNotesPage() {
                 {!note.isProcessed && (
                   <button
                     onClick={() =>
-                      convertToTaskMutation.mutate({ noteId: note.id, taskTitle: note.content.slice(0, 100) })
+                      convertToTaskMutation.mutate({
+                        noteId: note.id,
+                        taskTitle: note.content.slice(0, 100),
+                      })
                     }
                     disabled={convertToTaskMutation.isPending}
                     className="text-xs px-2 py-1 rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 hover:bg-emerald-500/20 transition-all disabled:opacity-40"

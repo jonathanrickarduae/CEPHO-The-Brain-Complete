@@ -1,15 +1,6 @@
 import React, { useState } from "react";
 import { PageShell } from "@/components/layout/PageShell";
-import {
-  Palette,
-  Plus,
-  Star,
-  Trash2,
-  Edit2,
-  Globe,
-  Type,
-  Image,
-} from "lucide-react";
+import { Palette, Plus, Star, Trash2, Edit2, Globe, Type } from "lucide-react";
 import { trpc } from "@/lib/trpc";
 import { toast } from "sonner";
 
@@ -251,9 +242,7 @@ export default function BrandKitPage() {
           <div className="flex gap-2">
             <button
               onClick={handleSubmit}
-              disabled={
-                createMutation.isPending || updateMutation.isPending
-              }
+              disabled={createMutation.isPending || updateMutation.isPending}
               className="px-4 py-2 rounded-lg bg-accent text-white text-sm font-medium hover:bg-accent/90 disabled:opacity-40 transition-all"
             >
               {createMutation.isPending || updateMutation.isPending

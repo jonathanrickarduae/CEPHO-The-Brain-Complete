@@ -72,7 +72,7 @@ export function ThemeColorPicker() {
         applyColor(color);
       }
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

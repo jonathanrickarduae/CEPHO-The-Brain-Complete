@@ -303,7 +303,9 @@ export function useOnboardingStatus() {
     const saved = localStorage.getItem("brain_onboarding_checklist");
     if (saved) {
       const items = JSON.parse(saved);
-      const completed = items.filter((i: { completed: boolean }) => i.completed).length;
+      const completed = items.filter(
+        (i: { completed: boolean }) => i.completed
+      ).length;
       setProgress((completed / items.length) * 100);
       setIsComplete(completed === items.length);
     }

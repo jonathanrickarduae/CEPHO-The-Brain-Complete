@@ -36,7 +36,11 @@ export function PaginationBar({
   const range = new Set<number>();
   range.add(1);
   range.add(totalPages);
-  for (let i = Math.max(2, page - 1); i <= Math.min(totalPages - 1, page + 1); i++) {
+  for (
+    let i = Math.max(2, page - 1);
+    i <= Math.min(totalPages - 1, page + 1);
+    i++
+  ) {
     range.add(i);
   }
   const sorted = Array.from(range).sort((a, b) => a - b);

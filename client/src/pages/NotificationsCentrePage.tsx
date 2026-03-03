@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { PageShell } from "@/components/layout/PageShell";
-import { Bell, BellOff, CheckCheck, Trash2, Filter } from "lucide-react";
+import { Bell, BellOff, CheckCheck, Filter } from "lucide-react";
 import { trpc } from "@/lib/trpc";
 import { toast } from "sonner";
 import { formatDistanceToNow } from "date-fns";

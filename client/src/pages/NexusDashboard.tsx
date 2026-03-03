@@ -150,8 +150,12 @@ export default function NexusDashboard() {
   const { data: projectsData } = trpc.projects.list.useQuery({});
   const { data: flywheelStats } = trpc.innovation.getFlywheelStats.useQuery();
 
-  const completedTasks = (tasksData?.tasks ?? []).filter(t => t.status === "completed").length;
-  const activeProjects = (projectsData ?? []).filter(p => p.status === "active").length;
+  const completedTasks = (tasksData?.tasks ?? []).filter(
+    t => t.status === "completed"
+  ).length;
+  const activeProjects = (projectsData ?? []).filter(
+    p => p.status === "active"
+  ).length;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const totalIdeas = (flywheelStats as any)?.total ?? 0;
 
@@ -168,7 +172,6 @@ export default function NexusDashboard() {
   });
 
   const _toggleRecording = () => {
-     
     if (isListening) {
       stopListening();
     } else {
@@ -188,7 +191,6 @@ export default function NexusDashboard() {
   };
 
   const _handleKeyDown = (e: React.KeyboardEvent) => {
-     
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       handleSubmit();
@@ -196,7 +198,6 @@ export default function NexusDashboard() {
   };
 
   const _handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-     
     setInputValue(e.target.value);
     e.target.style.height = "auto";
     e.target.style.height = Math.min(e.target.scrollHeight, 100) + "px";

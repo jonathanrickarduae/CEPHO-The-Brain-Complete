@@ -135,8 +135,16 @@ const menuItems: MenuItem[] = [
       { icon: Library, label: "Document Library", path: "/documents" },
       { icon: Zap, label: "Integration Hub", path: "/integrations" },
       { icon: Mail, label: "Email Intelligence", path: "/email-intelligence" },
-      { icon: Video, label: "Meeting Intelligence", path: "/meeting-intelligence" },
-      { icon: SlidersHorizontal, label: "Briefing Preferences", path: "/briefing-preferences" },
+      {
+        icon: Video,
+        label: "Meeting Intelligence",
+        path: "/meeting-intelligence",
+      },
+      {
+        icon: SlidersHorizontal,
+        label: "Briefing Preferences",
+        path: "/briefing-preferences",
+      },
     ],
   },
   {
@@ -416,7 +424,10 @@ function BrainLayoutContent({
             </div>
             {/* Language switcher — hidden when sidebar is collapsed */}
             <div className="group-data-[collapsible=icon]:hidden mb-2">
-              <LanguageSwitcher mode="button" className="w-full justify-center" />
+              <LanguageSwitcher
+                mode="button"
+                className="w-full justify-center"
+              />
             </div>
 
             <DropdownMenu>

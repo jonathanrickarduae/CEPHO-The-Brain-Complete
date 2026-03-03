@@ -14,6 +14,7 @@ import {
   logSecurityEvent,
   getClientIp,
 } from "../services/security/security-logger";
+import { writeAuditLog } from "../routers/auditLog.router";
 
 const router = Router();
 
@@ -110,6 +111,16 @@ router.post("/login", async (req, res) => {
       path: "/api/auth/login",
     });
 
+    writeAuditLog({
+      userId: adminUser.id,
+      action: "auth.login",
+      resourceType: "session",
+      ipAddress: ip,
+      userAgent,
+      severity: "info",
+      metadata: { email: adminUser.email },
+    }).catch(() => {});
+
     return res.json({
       success: true,
       user: {
@@ -133,6 +144,14 @@ router.post("/logout", (req, res) => {
     userAgent,
     path: "/api/auth/logout",
   });
+
+  writeAuditLog({
+    action: "auth.logout",
+    resourceType: "session",
+    ipAddress: ip,
+    userAgent,
+    severity: "info",
+  }).catch(() => {});
 
   res.clearCookie("session_token");
   res.json({ success: true });

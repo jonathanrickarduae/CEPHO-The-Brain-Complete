@@ -36,7 +36,10 @@ export function ExpertScheduling() {
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
-        return parsed.map((s: { date: string; [key: string]: unknown }) => ({ ...s, date: new Date(s.date) }));
+        return parsed.map((s: { date: string; [key: string]: unknown }) => ({
+          ...s,
+          date: new Date(s.date),
+        }));
       } catch {
         return [];
       }

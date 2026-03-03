@@ -202,8 +202,8 @@ export default function InnovationHub() {
   // Flywheel stats and stage advancement
   const { data: _flywheelStats, refetch: refetchFlywheelStats } =
     trpc.innovation.getFlywheelStats.useQuery();
-  const _advanceStageMutation = trpc.innovation.advanceFlywheelStage.useMutation(
-    {
+  const _advanceStageMutation =
+    trpc.innovation.advanceFlywheelStage.useMutation({
       onSuccess: data => {
         toast.success(
           `Idea advanced to stage ${data.newStage}: ${data.stageLabel}`
@@ -212,8 +212,7 @@ export default function InnovationHub() {
         refetchFlywheelStats();
       },
       onError: error => toast.error(error.message),
-    }
-  );
+    });
 
   const handleCaptureIdea = () => {
     if (!newIdeaTitle.trim()) {

@@ -34,7 +34,16 @@ export const marketLaunchAutomationRouter = router({
         launchDate: z.string().optional(),
         budget: z.number().optional(),
         channels: z
-          .array(z.enum(["email", "social", "paid_ads", "pr", "content", "influencer"]))
+          .array(
+            z.enum([
+              "email",
+              "social",
+              "paid_ads",
+              "pr",
+              "content",
+              "influencer",
+            ])
+          )
           .default(["email", "social"]),
         goals: z.array(z.string()).default([]),
       })
@@ -112,7 +121,9 @@ export const marketLaunchAutomationRouter = router({
         );
       if (!campaign) throw new Error("Campaign not found.");
 
-      const stageIndex = LAUNCH_STAGES.indexOf(campaign.stage as typeof LAUNCH_STAGES[number]);
+      const stageIndex = LAUNCH_STAGES.indexOf(
+        campaign.stage as (typeof LAUNCH_STAGES)[number]
+      );
       if (stageIndex === LAUNCH_STAGES.length - 1) {
         throw new Error("Campaign is already at the final stage.");
       }

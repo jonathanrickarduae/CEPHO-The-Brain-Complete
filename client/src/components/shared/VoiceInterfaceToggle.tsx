@@ -59,7 +59,12 @@ export function useVoiceInterface() {
       recognitionRef.current.interimResults = true;
       recognitionRef.current.lang = settings.language;
 
-      recognitionRef.current.onresult = (event: Event & { results: SpeechRecognitionResultList; resultIndex: number }) => {
+      recognitionRef.current.onresult = (
+        event: Event & {
+          results: SpeechRecognitionResultList;
+          resultIndex: number;
+        }
+      ) => {
         const current = event.resultIndex;
         const result = event.results[current];
         setTranscript(result[0].transcript);

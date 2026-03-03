@@ -300,7 +300,7 @@ export function VoiceCommands({ onCommand, className }: VoiceCommandsProps) {
     if (transcript && isListening) {
       processCommand(transcript);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isListening, processCommand]);
 
   // Toggle listening
@@ -312,7 +312,7 @@ export function VoiceCommands({ onCommand, className }: VoiceCommandsProps) {
       startListening();
       setIsListening(true);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isListening, stopListening]);
 
   // Stop speaking

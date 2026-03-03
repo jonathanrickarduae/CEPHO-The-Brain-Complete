@@ -173,7 +173,7 @@ export function GenesisBlueprintWizard({
     if (industry && corporatePartnerMapping[industry]) {
       setActiveCorporates(corporatePartnerMapping[industry]);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [answers["industry"]]);
 
   // Chief of Staff proactive messaging
@@ -206,7 +206,7 @@ export function GenesisBlueprintWizard({
         }, 2000);
       }
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentQuestion, answers]);
 
   const addDigitalTwinMessage = (message: DigitalTwinMessage) => {

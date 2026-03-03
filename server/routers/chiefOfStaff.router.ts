@@ -9,7 +9,7 @@ import { getModelForTask } from "../utils/modelRouter";
 import { z } from "zod";
 import { desc, eq, and, gte, count } from "drizzle-orm";
 import OpenAI from "openai";
-import { protectedProcedure, router } from "../_core/trpc";
+import { aiProcedure, protectedProcedure, router } from "../_core/trpc";
 import { db } from "../db";
 import {
   tasks,
@@ -231,7 +231,7 @@ export const chiefOfStaffRouter = router({
    * Get the morning briefing — a personalised AI-generated summary
    * of priorities, tasks, and recommendations for the day.
    */
-  getMorningBriefing: protectedProcedure.query(async ({ ctx }) => {
+  getMorningBriefing: aiProcedure.query(async ({ ctx }) => {
     const userId = ctx.user.id;
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -298,7 +298,7 @@ Keep it concise and actionable. Use a professional, direct tone.`;
    * AI-powered task quality scoring.
    * Replaces the Math.random() stub in the ChiefOfStaff page.
    */
-  scoreTask: protectedProcedure
+  scoreTask: aiProcedure
     .input(
       z.object({
         taskId: z.number(),

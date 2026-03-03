@@ -156,7 +156,10 @@ export function PartnershipPipeline() {
                   <Select
                     value={newPartnership.type}
                     onValueChange={v =>
-                      setNewPartnership({ ...newPartnership, type: v as unknown })
+                      setNewPartnership({
+                        ...newPartnership,
+                        type: v as unknown,
+                      })
                     }
                   >
                     <SelectTrigger>

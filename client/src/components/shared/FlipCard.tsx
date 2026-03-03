@@ -299,7 +299,8 @@ export function FlipCard({
                   How They Think
                 </div>
                 <p className="text-xs text-foreground/80">
-                  {(corporate as unknown as Record<string, unknown>).thinkingFramework as string | undefined ||
+                  {((corporate as unknown as Record<string, unknown>)
+                    .thinkingFramework as string | undefined) ||
                     corporate.methodology}
                 </p>
               </div>
@@ -311,7 +312,8 @@ export function FlipCard({
                   Research Approach
                 </div>
                 <p className="text-xs text-foreground/80">
-                  {(corporate as unknown as Record<string, unknown>).researchApproach as string | undefined ||
+                  {((corporate as unknown as Record<string, unknown>)
+                    .researchApproach as string | undefined) ||
                     "Systematic analysis combining quantitative data with qualitative insights."}
                 </p>
               </div>
@@ -323,7 +325,11 @@ export function FlipCard({
                   Key Principles
                 </div>
                 <div className="flex flex-wrap gap-1">
-                  {((corporate as unknown as Record<string, unknown>).keyPrinciples as string[] | undefined || corporate.strengths)
+                  {(
+                    ((corporate as unknown as Record<string, unknown>)
+                      .keyPrinciples as string[] | undefined) ||
+                    corporate.strengths
+                  )
                     .slice(0, 4)
                     .map((p: string) => (
                       <Badge

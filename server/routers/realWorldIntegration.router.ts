@@ -137,11 +137,11 @@ export const realWorldIntegrationRouter = router({
    * List all supported integration providers.
    */
   listProviders: protectedProcedure.query(() => {
-    return SUPPORTED_PROVIDERS.map((p) => ({
+    return SUPPORTED_PROVIDERS.map(p => ({
       id: p,
       name: p
         .split("_")
-        .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+        .map(w => w.charAt(0).toUpperCase() + w.slice(1))
         .join(" "),
     }));
   }),

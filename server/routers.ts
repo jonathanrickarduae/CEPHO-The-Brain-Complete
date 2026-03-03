@@ -249,7 +249,7 @@ export const appRouter = router({
   marketLaunchAutomation: marketLaunchAutomationRouter,
   // ─── Real-World Integration Layer (P3 deliverable) ──────────────────────────
   realWorldIntegration: realWorldIntegrationRouter,
-   // ─── Global Search (P4-9) ──────────────────────────────────────────────────
+  // ─── Global Search (P4-9) ──────────────────────────────────────────────────
   globalSearch: globalSearchRouter,
   // ─── Push Notifications (P4-10) ──────────────────────────────────────────
   pushNotifications: pushNotificationsRouter,

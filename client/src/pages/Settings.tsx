@@ -22,7 +22,7 @@ import {
   ShieldAlert,
   RefreshCw,
   Globe,
-        FileText,
+  FileText,
   Clock,
   Code,
   Copy,
@@ -456,7 +456,7 @@ function VaultPanel() {
           <Shield className="w-4 h-4 text-purple-400" /> Security Events
         </h3>
         <div className="space-y-2">
-          {securityEvents.map((event) => (
+          {securityEvents.map(event => (
             <div
               key={event.id}
               className="p-3 rounded-lg border border-border bg-muted/20 flex items-center justify-between"

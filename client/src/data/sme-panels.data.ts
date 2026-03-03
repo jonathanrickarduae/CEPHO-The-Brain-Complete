@@ -7,7 +7,11 @@
  * 3. Red Team (Devil's Advocate) - Challenges assumptions, finds flaws
  */
 
-import { AIExpert, allExperts, getExpertsByCategory as _getExpertsByCategory } from "./ai-experts.data";
+import {
+  AIExpert,
+  allExperts,
+  getExpertsByCategory as _getExpertsByCategory,
+} from "./ai-experts.data";
 
 // Panel type definitions
 export type PanelType = "blue_team" | "left_field" | "red_team";

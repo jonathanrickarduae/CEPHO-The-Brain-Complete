@@ -10,7 +10,7 @@ import { getModelForTask } from "../utils/modelRouter";
 import { z } from "zod";
 import { desc, eq, and } from "drizzle-orm";
 import OpenAI from "openai";
-import { protectedProcedure, router } from "../_core/trpc";
+import { aiProcedure, protectedProcedure, router } from "../_core/trpc";
 import { db } from "../db";
 import { conversations } from "../../drizzle/schema";
 
@@ -45,7 +45,7 @@ export const chatRouter = router({
    * Send a message and get an AI response.
    * Persists both user message and assistant response to the database.
    */
-  send: protectedProcedure
+  send: aiProcedure
     .input(
       z.object({
         message: z.string().min(1).max(4000),

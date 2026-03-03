@@ -36,42 +36,42 @@ export const tasksRouter = router({
       return cache.wrap(
         cacheKey,
         async () => {
-      const conditions = [eq(tasks.userId, ctx.user.id)];
-      if (input.status) {
-        conditions.push(eq(tasks.status, input.status));
-      }
+          const conditions = [eq(tasks.userId, ctx.user.id)];
+          if (input.status) {
+            conditions.push(eq(tasks.status, input.status));
+          }
 
-      const [totalResult, rows] = await Promise.all([
-        db
-          .select({ total: count() })
-          .from(tasks)
-          .where(and(...conditions))
-          .then(r => r[0]?.total ?? 0),
-        db
-          .select()
-          .from(tasks)
-          .where(and(...conditions))
-          .orderBy(asc(tasks.dueDate), desc(tasks.createdAt))
-          .limit(input.limit)
-          .offset(input.offset),
-      ]);
+          const [totalResult, rows] = await Promise.all([
+            db
+              .select({ total: count() })
+              .from(tasks)
+              .where(and(...conditions))
+              .then(r => r[0]?.total ?? 0),
+            db
+              .select()
+              .from(tasks)
+              .where(and(...conditions))
+              .orderBy(asc(tasks.dueDate), desc(tasks.createdAt))
+              .limit(input.limit)
+              .offset(input.offset),
+          ]);
 
-      return {
-        tasks: rows.map(t => ({
-          id: t.id,
-          title: t.title,
-          description: t.description,
-          status: t.status,
-          priority: t.priority,
-          progress: t.progress,
-          dueDate: t.dueDate?.toISOString() ?? null,
-          assignedTo: t.assignedTo,
-          createdAt: t.createdAt.toISOString(),
-        })),
-        total: totalResult,
-        limit: input.limit,
-        offset: input.offset,
-      };
+          return {
+            tasks: rows.map(t => ({
+              id: t.id,
+              title: t.title,
+              description: t.description,
+              status: t.status,
+              priority: t.priority,
+              progress: t.progress,
+              dueDate: t.dueDate?.toISOString() ?? null,
+              assignedTo: t.assignedTo,
+              createdAt: t.createdAt.toISOString(),
+            })),
+            total: totalResult,
+            limit: input.limit,
+            offset: input.offset,
+          };
         },
         30 // 30-second TTL for tasks
       );

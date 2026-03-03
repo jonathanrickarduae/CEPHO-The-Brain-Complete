@@ -24,7 +24,7 @@ export function MermaidDiagram({ code, title }: MermaidDiagramProps) {
 
   useEffect(() => {
     renderDiagram();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [code]);
 
   const renderDiagram = async () => {

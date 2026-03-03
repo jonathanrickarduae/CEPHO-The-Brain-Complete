@@ -380,7 +380,7 @@ export function useVaultSecurity() {
 
       return () => clearInterval(checkExpiry);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lastUnlockTime, isVaultUnlocked]);
 
   const requestVaultAccess = () => {

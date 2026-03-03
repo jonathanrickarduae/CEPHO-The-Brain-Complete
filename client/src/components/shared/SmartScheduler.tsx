@@ -173,7 +173,7 @@ export function SmartScheduler({
     if (tasks.length > 0) {
       generateSchedule();
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const formatTime = (date: Date) => {

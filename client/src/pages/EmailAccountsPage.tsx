@@ -40,13 +40,12 @@ export default function EmailAccountsPage() {
       toast.error(err.message ?? "Failed to connect account"),
   });
 
-  const disconnectMutation =
-    trpc.emailAccounts.disconnectAccount.useMutation({
-      onSuccess: () => {
-        toast.success("Account disconnected");
-        refetch();
-      },
-    });
+  const disconnectMutation = trpc.emailAccounts.disconnectAccount.useMutation({
+    onSuccess: () => {
+      toast.success("Account disconnected");
+      refetch();
+    },
+  });
 
   const syncMutation = trpc.emailAccounts.syncAccount.useMutation({
     onSuccess: () => {
@@ -101,8 +100,7 @@ export default function EmailAccountsPage() {
           </div>
 
           {/* OAuth Connect */}
-          {(selectedProvider === "gmail" ||
-            selectedProvider === "outlook") && (
+          {(selectedProvider === "gmail" || selectedProvider === "outlook") && (
             <div className="p-4 rounded-lg bg-muted/20 border border-border text-sm text-muted-foreground">
               <p className="mb-3">
                 Click below to connect via OAuth. You will be redirected to{" "}
@@ -215,99 +213,105 @@ export default function EmailAccountsPage() {
         </div>
       ) : (
         <div className="space-y-3">
-          {accounts.map((account: {
-            id: number;
-            email: string;
-            provider: string;
-            status: string;
-            lastSynced?: string | null;
-            inboxCount?: number;
-            sentCount?: number;
-          }) => (
-            <div
-              key={account.id}
-              className="flex items-center gap-4 p-4 rounded-xl border border-border bg-card hover:border-accent/30 transition-all"
-            >
-              {/* Provider Icon */}
-              <div className="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center flex-shrink-0 font-bold text-accent">
-                {account.provider === "gmail"
-                  ? "G"
-                  : account.provider === "outlook"
-                    ? "O"
-                    : "✉"}
-              </div>
-
-              {/* Info */}
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <span className="font-semibold text-sm">{account.email}</span>
-                  {account.status === "active" ? (
-                    <span className="flex items-center gap-1 text-xs px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
-                      <CheckCircle2 className="w-3 h-3" />
-                      Connected
-                    </span>
-                  ) : (
-                    <span className="flex items-center gap-1 text-xs px-2 py-0.5 rounded-full bg-red-500/20 text-red-400 border border-red-500/30">
-                      <XCircle className="w-3 h-3" />
-                      Error
-                    </span>
-                  )}
+          {accounts.map(
+            (account: {
+              id: number;
+              email: string;
+              provider: string;
+              status: string;
+              lastSynced?: string | null;
+              inboxCount?: number;
+              sentCount?: number;
+            }) => (
+              <div
+                key={account.id}
+                className="flex items-center gap-4 p-4 rounded-xl border border-border bg-card hover:border-accent/30 transition-all"
+              >
+                {/* Provider Icon */}
+                <div className="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center flex-shrink-0 font-bold text-accent">
+                  {account.provider === "gmail"
+                    ? "G"
+                    : account.provider === "outlook"
+                      ? "O"
+                      : "✉"}
                 </div>
-                <div className="flex items-center gap-3 mt-1">
-                  {account.inboxCount !== undefined && (
-                    <span className="flex items-center gap-1 text-xs text-muted-foreground">
-                      <Inbox className="w-3 h-3" />
-                      {account.inboxCount} inbox
+
+                {/* Info */}
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="font-semibold text-sm">
+                      {account.email}
                     </span>
-                  )}
-                  {account.sentCount !== undefined && (
-                    <span className="flex items-center gap-1 text-xs text-muted-foreground">
-                      <Send className="w-3 h-3" />
-                      {account.sentCount} sent
-                    </span>
-                  )}
-                  {account.lastSynced && (
-                    <span className="text-xs text-muted-foreground">
-                      Last sync:{" "}
-                      {new Date(account.lastSynced).toLocaleDateString()}
-                    </span>
-                  )}
+                    {account.status === "active" ? (
+                      <span className="flex items-center gap-1 text-xs px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+                        <CheckCircle2 className="w-3 h-3" />
+                        Connected
+                      </span>
+                    ) : (
+                      <span className="flex items-center gap-1 text-xs px-2 py-0.5 rounded-full bg-red-500/20 text-red-400 border border-red-500/30">
+                        <XCircle className="w-3 h-3" />
+                        Error
+                      </span>
+                    )}
+                  </div>
+                  <div className="flex items-center gap-3 mt-1">
+                    {account.inboxCount !== undefined && (
+                      <span className="flex items-center gap-1 text-xs text-muted-foreground">
+                        <Inbox className="w-3 h-3" />
+                        {account.inboxCount} inbox
+                      </span>
+                    )}
+                    {account.sentCount !== undefined && (
+                      <span className="flex items-center gap-1 text-xs text-muted-foreground">
+                        <Send className="w-3 h-3" />
+                        {account.sentCount} sent
+                      </span>
+                    )}
+                    {account.lastSynced && (
+                      <span className="text-xs text-muted-foreground">
+                        Last sync:{" "}
+                        {new Date(account.lastSynced).toLocaleDateString()}
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                {/* Actions */}
+                <div className="flex items-center gap-2 flex-shrink-0">
+                  <button
+                    onClick={() =>
+                      syncMutation.mutate({ accountId: account.id })
+                    }
+                    disabled={syncMutation.isPending}
+                    className="p-1.5 rounded-lg hover:bg-accent/10 text-muted-foreground hover:text-accent transition-all"
+                    title="Sync now"
+                    aria-label="Sync email account"
+                  >
+                    <RefreshCw
+                      className={`w-3.5 h-3.5 ${syncMutation.isPending ? "animate-spin" : ""}`}
+                    />
+                  </button>
+                  <button
+                    className="p-1.5 rounded-lg hover:bg-accent/10 text-muted-foreground hover:text-accent transition-all"
+                    title="Settings"
+                    aria-label="Account settings"
+                  >
+                    <Settings2 className="w-3.5 h-3.5" />
+                  </button>
+                  <button
+                    onClick={() =>
+                      disconnectMutation.mutate({ accountId: account.id })
+                    }
+                    className="p-1.5 rounded-lg hover:bg-red-500/10 text-muted-foreground hover:text-red-400 transition-all"
+                    title="Disconnect"
+                    aria-label="Disconnect email account"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                  </button>
                 </div>
               </div>
-
-              {/* Actions */}
-              <div className="flex items-center gap-2 flex-shrink-0">
-                <button
-                  onClick={() => syncMutation.mutate({ accountId: account.id })}
-                  disabled={syncMutation.isPending}
-                  className="p-1.5 rounded-lg hover:bg-accent/10 text-muted-foreground hover:text-accent transition-all"
-                  title="Sync now"
-                  aria-label="Sync email account"
-                >
-                  <RefreshCw
-                    className={`w-3.5 h-3.5 ${syncMutation.isPending ? "animate-spin" : ""}`}
-                  />
-                </button>
-                <button
-                  className="p-1.5 rounded-lg hover:bg-accent/10 text-muted-foreground hover:text-accent transition-all"
-                  title="Settings"
-                  aria-label="Account settings"
-                >
-                  <Settings2 className="w-3.5 h-3.5" />
-                </button>
-                <button
-                  onClick={() =>
-                    disconnectMutation.mutate({ accountId: account.id })
-                  }
-                  className="p-1.5 rounded-lg hover:bg-red-500/10 text-muted-foreground hover:text-red-400 transition-all"
-                  title="Disconnect"
-                  aria-label="Disconnect email account"
-                >
-                  <Trash2 className="w-3.5 h-3.5" />
-                </button>
-              </div>
-            </div>
-          ))}
+            )
+          )}
         </div>
       )}
     </PageShell>

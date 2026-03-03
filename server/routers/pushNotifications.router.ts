@@ -242,7 +242,9 @@ export async function sendPushToUser(
         db.delete(pushSubscriptions).where(eq(pushSubscriptions.id, id))
       )
     );
-    log.info(`Cleaned up ${expiredEndpoints.length} expired push subscriptions`);
+    log.info(
+      `Cleaned up ${expiredEndpoints.length} expired push subscriptions`
+    );
   }
 
   return sent;

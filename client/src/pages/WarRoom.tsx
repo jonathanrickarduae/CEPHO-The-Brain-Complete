@@ -7,9 +7,9 @@ import {
   Zap,
   Target,
   Shield,
-    Users,
+  Users,
   TrendingDown,
-      Send,
+  Send,
   Brain,
 } from "lucide-react";
 

@@ -1,8 +1,4 @@
-import {
-  useState,
-  useEffect,
-  useCallback,
-    } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 // Accessibility preferences context
 interface AccessibilityPreferences {
