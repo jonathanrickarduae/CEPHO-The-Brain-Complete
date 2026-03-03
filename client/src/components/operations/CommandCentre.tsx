@@ -22,7 +22,7 @@ export function CommandCentre() {
   const { data: tasksData } = trpc.tasks.list.useQuery({ limit: 100 });
 
   const liveProjects = projectsData ?? [];
-  const liveTasks = tasksData ?? [];
+  const liveTasks = tasksData?.tasks ?? [];
 
   // Derive KPI counts from live data
   const activeProjects = liveProjects.filter(p => p.status === "active").length;

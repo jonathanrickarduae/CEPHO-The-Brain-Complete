@@ -150,18 +150,10 @@ export default function NexusDashboard() {
   const { data: projectsData } = trpc.projects.list.useQuery({});
   const { data: flywheelStats } = trpc.innovation.getFlywheelStats.useQuery();
 
-  const completedTasks = (
-    Array.isArray(tasksData) ? tasksData : // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    ((tasksData as any)?.tasks ?? [])
-  ).filter((t: any) => t.status === "completed").length;
-  const activeProjects = (
-    Array.isArray(projectsData)
-      ? projectsData
-      : // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      ((projectsData as any)?.projects ?? [])
-  ).filter((p: any) => p.status === "active").length;
-  const totalIdeas = // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (flywheelStats as any)?.total ?? 0;
+  const completedTasks = (tasksData?.tasks ?? []).filter(t => t.status === "completed").length;
+  const activeProjects = (projectsData ?? []).filter(p => p.status === "active").length;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const totalIdeas = (flywheelStats as any)?.total ?? 0;
 
   // Voice input
   const {

@@ -63,8 +63,13 @@ export function PageShell({
   contentClassName,
   fillHeight = false,
 }: PageShellProps) {
+  const headingId = `page-title-${title.toLowerCase().replace(/\s+/g, "-")}`;
   return (
-    <div className={cn("flex flex-col", fillHeight ? "h-full" : "min-h-0")}>
+    <div
+      className={cn("flex flex-col", fillHeight ? "h-full" : "min-h-0")}
+      role="region"
+      aria-labelledby={headingId}
+    >
       {/* ── Sticky header ─────────────────────────────────────────── */}
       <div className="sticky top-0 z-30 bg-background/95 backdrop-blur border-b border-border">
         <div className="flex items-center justify-between px-4 sm:px-6 h-14">
@@ -80,12 +85,15 @@ export function PageShell({
                 <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-green-500 rounded-full border-2 border-background" />
               </div>
             ) : Icon ? (
-              <div className={cn("shrink-0 p-1.5 rounded-lg", iconClass)}>
+              <div className={cn("shrink-0 p-1.5 rounded-lg", iconClass)} aria-hidden="true">
                 <Icon className="w-4 h-4" />
               </div>
             ) : null}
             <div className="min-w-0">
-              <h1 className="text-sm sm:text-base font-semibold text-foreground truncate leading-tight">
+              <h1
+                id={headingId}
+                className="text-sm sm:text-base font-semibold text-foreground truncate leading-tight"
+              >
                 {title}
               </h1>
               {subtitle && (
@@ -103,15 +111,23 @@ export function PageShell({
           )}
         </div>
 
-        {/* ── Tab bar (optional) ──────────────────────────────────── */}
+             {/* ── Tab bar (optional) ────────────────────────────── */}
         {tabs && tabs.length > 0 && (
-          <div className="flex overflow-x-auto scrollbar-none border-t border-border/50 px-4 sm:px-6">
+          <div
+            role="tablist"
+            aria-label={`${title} tabs`}
+            className="flex overflow-x-auto scrollbar-none border-t border-border/50 px-4 sm:px-6"
+          >
             {tabs.map(tab => {
               const TabIcon = tab.icon;
               const isActive = activeTab === tab.id;
               return (
                 <button
                   key={tab.id}
+                  role="tab"
+                  aria-selected={isActive}
+                  aria-controls={`tabpanel-${tab.id}`}
+                  id={`tab-${tab.id}`}
                   onClick={() => onTabChange?.(tab.id)}
                   className={cn(
                     "flex items-center gap-1.5 px-3 py-2.5 text-xs sm:text-sm font-medium whitespace-nowrap border-b-2 transition-colors",

@@ -78,6 +78,7 @@ import _NeonBrain from "@/components/ai-agents/NeonBrain";
 import AnimatedBrainLogo from "@/components/ai-agents/AnimatedBrainLogo";
 import { NotificationBell } from "@/components/communication/NotificationCenter";
 import { ThemeToggle } from "@/components/settings/ThemeToggle";
+import { LanguageSwitcher } from "@/components/settings/LanguageSwitcher";
 
 // Core navigation - streamlined for professional use (COS-centric view)
 type MenuItem = {
@@ -294,11 +295,19 @@ function BrainLayoutContent({
 
   return (
     <>
+      {/* Skip to main content — WCAG 2.4.1 */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[9999] focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-lg focus:shadow-lg focus:outline-none"
+      >
+        Skip to main content
+      </a>
       <div className="relative" ref={sidebarRef}>
         <Sidebar
           collapsible={isMobile ? "offcanvas" : "icon"}
           className="border-r border-sidebar-border bg-sidebar backdrop-blur-xl"
           disableTransition={isResizing}
+          aria-label="Main navigation"
         >
           <SidebarHeader className="h-16 justify-center border-b border-sidebar-border">
             <div className="flex items-center gap-3 px-2 transition-all w-full">
@@ -325,7 +334,7 @@ function BrainLayoutContent({
           </SidebarHeader>
 
           <SidebarContent className="gap-0 bg-transparent">
-            <SidebarMenu className="px-2 py-3">
+            <SidebarMenu className="px-2 py-3" aria-label="Navigation menu">
               {menuItems.map(item => {
                 const isActive = location === item.path;
                 const hasChildren = item.children && item.children.length > 0;
@@ -346,10 +355,14 @@ function BrainLayoutContent({
                         }
                       }}
                       tooltip={item.label}
+                      aria-current={isActive ? "page" : undefined}
+                      aria-expanded={hasChildren ? isExpanded : undefined}
+                      aria-haspopup={hasChildren ? "true" : undefined}
                       className={`h-10 transition-all font-normal rounded-lg mb-0.5 ${isActive || isChildActive ? "bg-primary/10 text-primary" : "text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent/50"}`}
                     >
                       <item.icon
                         className={`h-4 w-4 ${isActive || isChildActive ? "text-primary" : "text-sidebar-foreground/50"}`}
+                        aria-hidden="true"
                       />
                       <span className="text-sm">{item.label}</span>
                       {item.count && item.count > 0 && (
@@ -396,7 +409,10 @@ function BrainLayoutContent({
           </SidebarContent>
 
           <SidebarFooter className="p-3 border-t border-sidebar-border">
-            {/* Minimal footer - just user profile */}
+            {/* Language switcher — hidden when sidebar is collapsed */}
+            <div className="group-data-[collapsible=icon]:hidden mb-2">
+              <LanguageSwitcher mode="button" className="w-full justify-center" />
+            </div>
 
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -465,6 +481,7 @@ function BrainLayoutContent({
                 <Search className="w-4 h-4" />
                 <span className="hidden sm:inline">Search...</span>
               </button>
+              <LanguageSwitcher />
               <ThemeToggle />
               <NotificationBell />
             </div>
@@ -472,7 +489,15 @@ function BrainLayoutContent({
         )}
 
         {/* Main content with bottom padding for mobile nav */}
-        <main className={`flex-1 ${isMobile ? "pb-20" : ""}`}>{children}</main>
+        <main
+          id="main-content"
+          role="main"
+          aria-label="Main content"
+          tabIndex={-1}
+          className={`flex-1 ${isMobile ? "pb-20" : ""} focus:outline-none`}
+        >
+          {children}
+        </main>
 
         {/* Mobile bottom tab bar - horizontally scrollable */}
         {isMobile && <BottomTabBar />}

@@ -1,42 +1,48 @@
 import { useState, useEffect, useRef } from "react";
+import { useLocation } from "wouter";
 import {
   Search,
   X,
   FileText,
-  MessageSquare,
   FolderKanban,
-  Lock,
-  Users,
-  Calendar,
-  Clock,
-  ArrowRight,
-  Command,
+  Mic,
   Hash,
+  Calendar,
+  Command,
   Filter,
-  Sparkles,
+  Loader2,
 } from "lucide-react";
+import { trpc } from "@/lib/trpc";
+import { cn } from "@/lib/utils";
+
+type ResultType = "task" | "project" | "briefing" | "voice_note";
 
 interface SearchResult {
   id: string;
-  type:
-    | "document"
-    | "conversation"
-    | "project"
-    | "vault"
-    | "expert"
-    | "task"
-    | "event";
+  type: ResultType;
   title: string;
-  excerpt?: string;
-  path?: string;
-  date?: Date;
-  relevance: number;
+  excerpt: string;
+  path: string;
+  createdAt: string;
 }
 
-interface SearchFilter {
-  type: string | null;
-  dateRange: "all" | "today" | "week" | "month" | "year";
-}
+const TYPE_CONFIG: Record<
+  ResultType,
+  { icon: React.ElementType; color: string; label: string }
+> = {
+  task: { icon: Hash, color: "text-orange-400", label: "Task" },
+  project: { icon: FolderKanban, color: "text-purple-400", label: "Project" },
+  briefing: { icon: Calendar, color: "text-blue-400", label: "Briefing" },
+  voice_note: { icon: Mic, color: "text-green-400", label: "Voice Note" },
+};
+
+const FILTER_TYPES: Array<{ value: ResultType | "all"; label: string }> = [
+  { value: "all", label: "All" },
+  { value: "task", label: "Tasks" },
+  { value: "project", label: "Projects" },
+  { value: "briefing", label: "Briefings" },
+  { value: "voice_note", label: "Voice Notes" },
+];
 
 export function GlobalSearch({
   isOpen,
@@ -45,49 +51,50 @@ export function GlobalSearch({
   isOpen: boolean;
   onClose: () => void;
 }) {
+  const [, setLocation] = useLocation();
   const [query, setQuery] = useState("");
-  const [results, setResults] = useState<SearchResult[]>([]);
-  const [isSearching, setIsSearching] = useState(false);
+  const [debouncedQuery, setDebouncedQuery] = useState("");
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [filters, setFilters] = useState<SearchFilter>({
-    type: null,
-    dateRange: "all",
-  });
-  const [recentSearches, setRecentSearches] = useState<string[]>([
-    "Project A project status",
-    "Board meeting notes",
-    "Sarah contact",
-  ]);
+  const [typeFilter, setTypeFilter] = useState<ResultType | "all">("all");
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const typeConfig = {
-    document: { icon: FileText, color: "text-primary", label: "Document" },
-    conversation: {
-      icon: MessageSquare,
-      color: "text-green-400",
-      label: "Conversation",
-    },
-    project: { icon: FolderKanban, color: "text-purple-400", label: "Project" },
-    vault: { icon: Lock, color: "text-red-400", label: "Vault" },
-    expert: {
-      icon: Users,
-      color: "text-[var(--brain-cyan)]",
-      label: "AI Expert",
-    },
-    task: { icon: Hash, color: "text-orange-400", label: "Task" },
-    event: { icon: Calendar, color: "text-yellow-400", label: "Event" },
-  };
-
+  // Debounce query
   useEffect(() => {
-    if (isOpen && inputRef.current) {
-      inputRef.current.focus();
+    const timer = setTimeout(() => setDebouncedQuery(query), 300);
+    return () => clearTimeout(timer);
+  }, [query]);
+
+  // Focus input when opened
+  useEffect(() => {
+    if (isOpen) {
+      setQuery("");
+      setDebouncedQuery("");
+      setSelectedIndex(0);
+      setTimeout(() => inputRef.current?.focus(), 50);
     }
   }, [isOpen]);
 
+  // tRPC search query
+  const { data, isFetching } = trpc.globalSearch.search.useQuery(
+    {
+      query: debouncedQuery,
+      types:
+        typeFilter === "all"
+          ? undefined
+          : [typeFilter],
+      limit: 20,
+    },
+    {
+      enabled: debouncedQuery.trim().length >= 1,
+    }
+  );
+
+  const results: SearchResult[] = data?.results ?? [];
+
+  // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (!isOpen) return;
-
       if (e.key === "Escape") {
         onClose();
       } else if (e.key === "ArrowDown") {
@@ -100,142 +107,58 @@ export function GlobalSearch({
         handleResultClick(results[selectedIndex]);
       }
     };
-
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, results, selectedIndex, onClose]);
 
-  useEffect(() => {
-    if (!query.trim()) {
-      setResults([]);
-      return;
-    }
-
-    setIsSearching(true);
-    setSelectedIndex(0);
-
-    // Simulate search - in production this would query the backend
-    const timer = setTimeout(() => {
-      const mockResults: SearchResult[] = [
-        {
-          id: "1",
-          type: "project" as const,
-          title: "Project A Project",
-          excerpt: "Main development project - 67% complete",
-          relevance: 95,
-        },
-        {
-          id: "2",
-          type: "document" as const,
-          title: "Board Meeting Notes - Jan 2026",
-          excerpt: "Q4 review and 2026 planning discussion...",
-          date: new Date(Date.now() - 86400000),
-          relevance: 88,
-        },
-        {
-          id: "3",
-          type: "conversation" as const,
-          title: "Strategy discussion",
-          excerpt: "Chief of Staff training approach and timeline...",
-          date: new Date(Date.now() - 172800000),
-          relevance: 82,
-        },
-        {
-          id: "4",
-          type: "expert" as const,
-          title: "Dr. Sarah Chen - Strategy",
-          excerpt: "AI Expert specialising in business strategy",
-          relevance: 75,
-        },
-        {
-          id: "5",
-          type: "task" as const,
-          title: "Review legal documents",
-          excerpt: "Pending approval - Project A contract",
-          date: new Date(),
-          relevance: 70,
-        },
-        {
-          id: "6",
-          type: "vault" as const,
-          title: "API Credentials",
-          excerpt: "Asana, Zoom, Teams integration keys",
-          relevance: 65,
-        },
-        {
-          id: "7",
-          type: "event" as const,
-          title: "Board Meeting",
-          excerpt: "Tomorrow 10:00 - Quarterly review",
-          date: new Date(Date.now() + 86400000),
-          relevance: 60,
-        },
-      ].filter(
-        r =>
-          r.title.toLowerCase().includes(query.toLowerCase()) ||
-          r.excerpt?.toLowerCase().includes(query.toLowerCase())
-      );
-
-      // Apply type filter
-      const filtered = filters.type
-        ? mockResults.filter(r => r.type === filters.type)
-        : mockResults;
-
-      setResults(filtered.sort((a, b) => b.relevance - a.relevance));
-      setIsSearching(false);
-    }, 300);
-
-    return () => clearTimeout(timer);
-  }, [query, filters]);
-
   const handleResultClick = (result: SearchResult) => {
-    // Save to recent searches
-    setRecentSearches(prev =>
-      [query, ...prev.filter(s => s !== query)].slice(0, 5)
-    );
-
-    // Navigate based on type
-    const paths: Record<string, string> = {
-      document: "/library",
-      conversation: "/tasks",
-      project: "/workflow",
-      vault: "/vault",
-      expert: "/ai-experts",
-      task: "/review-queue",
-      event: "/daily-brief",
-    };
-
-    window.location.href = paths[result.type] || "/";
+    setLocation(result.path);
     onClose();
   };
 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center pt-[15vh]">
+    <div
+      className="fixed inset-0 z-50 flex items-start justify-center pt-[15vh]"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Global search"
+    >
       {/* Backdrop */}
       <div
         className="absolute inset-0 bg-black/60 backdrop-blur-sm"
         onClick={onClose}
+        aria-hidden="true"
       />
 
       {/* Search Modal */}
       <div className="relative w-full max-w-2xl bg-card border border-border rounded-2xl shadow-2xl overflow-hidden">
         {/* Search Input */}
         <div className="flex items-center gap-3 px-4 py-4 border-b border-border">
-          <Search className="w-5 h-5 text-muted-foreground" />
+          {isFetching ? (
+            <Loader2 className="w-5 h-5 text-muted-foreground animate-spin" />
+          ) : (
+            <Search className="w-5 h-5 text-muted-foreground" />
+          )}
           <input
             ref={inputRef}
             type="text"
+            role="searchbox"
+            aria-label="Search tasks, projects, briefings, and voice notes"
             value={query}
-            onChange={e => setQuery(e.target.value)}
+            onChange={e => {
+              setQuery(e.target.value);
+              setSelectedIndex(0);
+            }}
             placeholder="Search everything..."
             className="flex-1 bg-transparent text-foreground placeholder:text-muted-foreground focus:outline-none text-lg"
           />
           {query && (
             <button
               onClick={() => setQuery("")}
+              aria-label="Clear search"
               className="p-1 hover:bg-muted rounded transition-colors"
             >
               <X className="w-4 h-4 text-muted-foreground" />
@@ -247,169 +170,122 @@ export function GlobalSearch({
           </div>
         </div>
 
-        {/* Filters */}
-        <div className="flex items-center gap-2 px-4 py-2 border-b border-border overflow-x-auto">
+        {/* Type Filters */}
+        <div
+          className="flex items-center gap-2 px-4 py-2 border-b border-border overflow-x-auto"
+          role="group"
+          aria-label="Filter by type"
+        >
           <Filter className="w-4 h-4 text-muted-foreground flex-shrink-0" />
-          {["all", "document", "project", "conversation", "task", "vault"].map(
-            type => (
-              <button
-                key={type}
-                onClick={() =>
-                  setFilters(prev => ({
-                    ...prev,
-                    type: type === "all" ? null : type,
-                  }))
-                }
-                className={`px-2.5 py-1 rounded-full text-xs whitespace-nowrap transition-colors ${
-                  (type === "all" && !filters.type) || filters.type === type
-                    ? "bg-primary text-primary-foreground"
-                    : "bg-muted text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                {type === "all"
-                  ? "All"
-                  : typeConfig[type as keyof typeof typeConfig]?.label || type}
-              </button>
-            )
-          )}
+          {FILTER_TYPES.map(f => (
+            <button
+              key={f.value}
+              onClick={() => setTypeFilter(f.value)}
+              aria-pressed={typeFilter === f.value}
+              className={cn(
+                "px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap transition-colors",
+                typeFilter === f.value
+                  ? "bg-accent text-white"
+                  : "bg-muted text-muted-foreground hover:bg-muted/80"
+              )}
+            >
+              {f.label}
+            </button>
+          ))}
         </div>
 
         {/* Results */}
-        <div className="max-h-96 overflow-auto">
-          {isSearching ? (
-            <div className="flex items-center justify-center py-12">
-              <div className="w-6 h-6 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
-            </div>
-          ) : query && results.length === 0 ? (
-            <div className="py-12 text-center">
-              <p className="text-muted-foreground">No results found</p>
-              <p className="text-sm text-muted-foreground/70 mt-1">
-                Try different keywords
+        <div
+          className="max-h-[400px] overflow-y-auto"
+          role="listbox"
+          aria-label="Search results"
+        >
+          {debouncedQuery.trim().length === 0 ? (
+            <div className="px-4 py-8 text-center text-muted-foreground text-sm">
+              <Search className="w-8 h-8 mx-auto mb-3 opacity-30" />
+              <p>Start typing to search across all your data</p>
+              <p className="text-xs mt-1 opacity-60">
+                Tasks · Projects · Briefings · Voice Notes
               </p>
             </div>
-          ) : query ? (
-            <div className="py-2">
+          ) : results.length === 0 && !isFetching ? (
+            <div className="px-4 py-8 text-center text-muted-foreground text-sm">
+              <FileText className="w-8 h-8 mx-auto mb-3 opacity-30" />
+              <p>No results found for &ldquo;{debouncedQuery}&rdquo;</p>
+            </div>
+          ) : (
+            <ul>
               {results.map((result, index) => {
-                const config = typeConfig[result.type];
+                const config = TYPE_CONFIG[result.type];
                 const Icon = config.icon;
-
                 return (
-                  <button
+                  <li
                     key={result.id}
+                    role="option"
+                    aria-selected={index === selectedIndex}
                     onClick={() => handleResultClick(result)}
-                    className={`w-full px-4 py-3 flex items-start gap-3 transition-colors ${
-                      index === selectedIndex ? "bg-card" : "hover:bg-card/50"
-                    }`}
+                    onMouseEnter={() => setSelectedIndex(index)}
+                    className={cn(
+                      "flex items-start gap-3 px-4 py-3 cursor-pointer transition-colors",
+                      index === selectedIndex
+                        ? "bg-accent/10"
+                        : "hover:bg-muted/40"
+                    )}
                   >
                     <div
-                      className={`w-8 h-8 rounded-lg bg-muted flex items-center justify-center flex-shrink-0`}
+                      className={cn(
+                        "mt-0.5 p-1.5 rounded-lg bg-muted flex-shrink-0",
+                        config.color
+                      )}
                     >
-                      <Icon className={`w-4 h-4 ${config.color}`} />
+                      <Icon className="w-4 h-4" />
                     </div>
-                    <div className="flex-1 text-left min-w-0">
+                    <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
-                        <span className="font-medium text-foreground truncate">
+                        <span className="font-medium text-sm text-foreground truncate">
                           {result.title}
                         </span>
-                        <span className={`text-xs ${config.color}`}>
+                        <span
+                          className={cn(
+                            "text-xs px-1.5 py-0.5 rounded-full bg-muted flex-shrink-0",
+                            config.color
+                          )}
+                        >
                           {config.label}
                         </span>
                       </div>
                       {result.excerpt && (
-                        <p className="text-sm text-muted-foreground truncate">
+                        <p className="text-xs text-muted-foreground mt-0.5 truncate">
                           {result.excerpt}
                         </p>
                       )}
-                      {result.date && (
-                        <p className="text-xs text-muted-foreground/70 mt-0.5">
-                          {result.date.toLocaleDateString("en-GB")}
-                        </p>
-                      )}
                     </div>
-                    <ArrowRight className="w-4 h-4 text-muted-foreground flex-shrink-0 mt-2" />
-                  </button>
+                  </li>
                 );
               })}
-            </div>
-          ) : (
-            <div className="py-4">
-              {/* Recent Searches */}
-              {recentSearches.length > 0 && (
-                <div className="px-4 mb-4">
-                  <p className="text-xs text-muted-foreground mb-2">Recent</p>
-                  <div className="space-y-1">
-                    {recentSearches.map((search, i) => (
-                      <button
-                        key={i}
-                        onClick={() => setQuery(search)}
-                        className="w-full px-3 py-2 flex items-center gap-2 hover:bg-card rounded-lg transition-colors text-left"
-                      >
-                        <Clock className="w-4 h-4 text-muted-foreground" />
-                        <span className="text-sm text-foreground">
-                          {search}
-                        </span>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Quick Actions */}
-              <div className="px-4">
-                <p className="text-xs text-muted-foreground mb-2">
-                  Quick Actions
-                </p>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                  {[
-                    { label: "New task", icon: Hash, path: "/review-queue" },
-                    {
-                      label: "Ask Chief of Staff",
-                      icon: Sparkles,
-                      path: "/tasks",
-                    },
-                    {
-                      label: "View calendar",
-                      icon: Calendar,
-                      path: "/daily-brief",
-                    },
-                    { label: "Open vault", icon: Lock, path: "/vault" },
-                  ].map(action => (
-                    <button
-                      key={action.label}
-                      onClick={() => {
-                        window.location.href = action.path;
-                        onClose();
-                      }}
-                      className="px-3 py-2 flex items-center gap-2 bg-card/50 hover:bg-muted rounded-lg transition-colors"
-                    >
-                      <action.icon className="w-4 h-4 text-muted-foreground" />
-                      <span className="text-sm text-foreground">
-                        {action.label}
-                      </span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </div>
+            </ul>
           )}
         </div>
 
         {/* Footer */}
-        <div className="px-4 py-2 border-t border-border flex items-center justify-between text-xs text-muted-foreground">
-          <div className="flex items-center gap-4">
-            <span className="flex items-center gap-1">
-              <span className="px-1.5 py-0.5 bg-muted rounded">↑↓</span>
-              Navigate
+        <div className="flex items-center gap-4 px-4 py-2 border-t border-border text-xs text-muted-foreground">
+          <span className="flex items-center gap-1">
+            <span className="px-1.5 py-0.5 bg-muted rounded">↑↓</span>
+            Navigate
+          </span>
+          <span className="flex items-center gap-1">
+            <span className="px-1.5 py-0.5 bg-muted rounded">↵</span>
+            Open
+          </span>
+          <span className="flex items-center gap-1">
+            <span className="px-1.5 py-0.5 bg-muted rounded">esc</span>
+            Close
+          </span>
+          {data && (
+            <span className="ml-auto opacity-60">
+              {data.total} result{data.total !== 1 ? "s" : ""}
             </span>
-            <span className="flex items-center gap-1">
-              <span className="px-1.5 py-0.5 bg-muted rounded">↵</span>
-              Open
-            </span>
-            <span className="flex items-center gap-1">
-              <span className="px-1.5 py-0.5 bg-muted rounded">esc</span>
-              Close
-            </span>
-          </div>
+          )}
         </div>
       </div>
     </div>

@@ -4,7 +4,7 @@
  * Full CRUD for tasks with status management.
  */
 import { z } from "zod";
-import { desc, eq, and, asc } from "drizzle-orm";
+import { desc, eq, and, asc, count } from "drizzle-orm";
 import { protectedProcedure, router } from "../_core/trpc";
 import { db } from "../db";
 import { tasks, activityFeed } from "../../drizzle/schema";
@@ -20,7 +20,8 @@ export const tasksRouter = router({
         status: z
           .enum(["not_started", "in_progress", "completed", "blocked"])
           .optional(),
-        limit: z.number().min(1).max(100).default(50),
+        limit: z.number().min(1).max(100).default(20),
+        offset: z.number().min(0).default(0),
       })
     )
     .query(async ({ input, ctx }) => {
@@ -29,24 +30,37 @@ export const tasksRouter = router({
         conditions.push(eq(tasks.status, input.status));
       }
 
-      const rows = await db
-        .select()
-        .from(tasks)
-        .where(and(...conditions))
-        .orderBy(asc(tasks.dueDate), desc(tasks.createdAt))
-        .limit(input.limit);
+      const [totalResult, rows] = await Promise.all([
+        db
+          .select({ total: count() })
+          .from(tasks)
+          .where(and(...conditions))
+          .then(r => r[0]?.total ?? 0),
+        db
+          .select()
+          .from(tasks)
+          .where(and(...conditions))
+          .orderBy(asc(tasks.dueDate), desc(tasks.createdAt))
+          .limit(input.limit)
+          .offset(input.offset),
+      ]);
 
-      return rows.map(t => ({
-        id: t.id,
-        title: t.title,
-        description: t.description,
-        status: t.status,
-        priority: t.priority,
-        progress: t.progress,
-        dueDate: t.dueDate?.toISOString() ?? null,
-        assignedTo: t.assignedTo,
-        createdAt: t.createdAt.toISOString(),
-      }));
+      return {
+        tasks: rows.map(t => ({
+          id: t.id,
+          title: t.title,
+          description: t.description,
+          status: t.status,
+          priority: t.priority,
+          progress: t.progress,
+          dueDate: t.dueDate?.toISOString() ?? null,
+          assignedTo: t.assignedTo,
+          createdAt: t.createdAt.toISOString(),
+        })),
+        total: totalResult,
+        limit: input.limit,
+        offset: input.offset,
+      };
     }),
 
   /**

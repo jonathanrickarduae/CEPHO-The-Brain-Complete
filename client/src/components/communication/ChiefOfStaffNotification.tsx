@@ -45,7 +45,8 @@ export function ChiefOfStaffNotification({
   const { data: userSettings } = trpc.settings.get.useQuery();
 
   // Fetch tasks to count pending items
-  const { data: taskItems } = trpc.tasks.list.useQuery();
+  const { data: _tasksResult } = trpc.tasks.list.useQuery();
+  const taskItems = _tasksResult?.tasks;
 
   // Fetch projects
   const { data: projects } = trpc.projects.list.useQuery();

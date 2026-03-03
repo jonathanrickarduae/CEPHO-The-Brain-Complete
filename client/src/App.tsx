@@ -1,5 +1,6 @@
 // @ts-nocheck
 import { Switch, Route } from "wouter";
+import { useI18n } from "@/hooks/useI18n";
 // Build version: 2026-02-28-v3-cleanup
 import { lazy, Suspense } from "react";
 import { Toaster } from "@/components/ui/sonner";
@@ -317,6 +318,8 @@ function Router() {
 }
 
 function App() {
+  // Initialise language/dir on mount — applies html[lang] and html[dir]
+  useI18n();
   return (
     <PinGate>
       <ErrorBoundary>

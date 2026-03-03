@@ -5,3 +5,4 @@ export { default as ThemeColorPicker } from "./ThemeColorPicker";
 export { default as ThemeInitializer } from "./ThemeInitializer";
 export { default as ThemeSettings } from "./ThemeSettings";
 export { default as ThemeToggle } from "./ThemeToggle";
+export { LanguageSwitcher } from "./LanguageSwitcher";
