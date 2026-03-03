@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { db } from "../db";
+import { sql } from "drizzle-orm";
 import { cacheService } from "../services/cache/redis-cache.service";
 
 /**
@@ -37,7 +38,7 @@ router.get("/health/ready", async (req, res) => {
 
   // Check database
   try {
-    await db.execute("SELECT 1");
+    await db.execute(sql`SELECT 1`);
     checks.database = { status: "ok" };
   } catch (error) {
     checks.database = {
@@ -100,7 +101,7 @@ router.get("/health/detailed", async (req, res) => {
   // Check database
   try {
     const start = Date.now();
-    await db.execute("SELECT 1");
+    await db.execute(sql`SELECT 1`);
     const duration = Date.now() - start;
     checks.database = {
       status: "ok",
