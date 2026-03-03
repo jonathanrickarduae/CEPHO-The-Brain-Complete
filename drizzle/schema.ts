@@ -4669,3 +4669,76 @@ export const auditLogs = pgTable("audit_logs", {
 });
 export type AuditLog = typeof auditLogs.$inferSelect;
 export type InsertAuditLog = typeof auditLogs.$inferInsert;
+
+// ─── Phase 3: Anomaly Alerts ─────────────────────────────────────────────────
+export const anomalyAlerts = pgTable("anomaly_alerts", {
+  id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
+  userId: integer("userId").notNull(),
+  agentKey: varchar("agentKey", { length: 100 }).notNull(),
+  metricName: varchar("metricName", { length: 200 }).notNull(),
+  currentValue: text("currentValue"),
+  baselineValue: text("baselineValue"),
+  deviationPct: text("deviationPct"),
+  severity: text("severity").default("medium").notNull(),
+  description: text("description").notNull(),
+  isAcknowledged: boolean("isAcknowledged").default(false).notNull(),
+  acknowledgedAt: timestamp("acknowledgedAt"),
+  surfacedInBriefing: boolean("surfacedInBriefing").default(false).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+export type AnomalyAlert = typeof anomalyAlerts.$inferSelect;
+export type InsertAnomalyAlert = typeof anomalyAlerts.$inferInsert;
+
+// ─── Phase 3: KPIs ───────────────────────────────────────────────────────────
+export const kpis = pgTable("kpis", {
+  id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
+  userId: integer("userId").notNull(),
+  name: varchar("name", { length: 200 }).notNull(),
+  description: text("description"),
+  unit: varchar("unit", { length: 50 }),
+  targetValue: text("targetValue"),
+  currentValue: text("currentValue"),
+  previousValue: text("previousValue"),
+  trend: text("trend").default("stable"),
+  status: text("status").default("on_track"),
+  category: varchar("category", { length: 100 }),
+  suggestedByAgent: varchar("suggestedByAgent", { length: 100 }),
+  isActive: boolean("isActive").default(true).notNull(),
+  lastTrackedAt: timestamp("lastTrackedAt"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().notNull(),
+});
+export type Kpi = typeof kpis.$inferSelect;
+export type InsertKpi = typeof kpis.$inferInsert;
+
+// ─── Phase 3: OKRs ───────────────────────────────────────────────────────────
+export const okrs = pgTable("okrs", {
+  id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
+  userId: integer("userId").notNull(),
+  objective: text("objective").notNull(),
+  quarter: varchar("quarter", { length: 10 }).notNull(),
+  status: text("status").default("active"),
+  overallProgress: integer("overallProgress").default(0),
+  suggestedByAgent: varchar("suggestedByAgent", { length: 100 }),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().notNull(),
+});
+export type Okr = typeof okrs.$inferSelect;
+export type InsertOkr = typeof okrs.$inferInsert;
+
+// ─── Phase 3: OKR Key Results ────────────────────────────────────────────────
+export const okrKeyResults = pgTable("okr_key_results", {
+  id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
+  okrId: integer("okrId").notNull(),
+  userId: integer("userId").notNull(),
+  title: text("title").notNull(),
+  targetValue: text("targetValue"),
+  currentValue: text("currentValue").default("0"),
+  unit: varchar("unit", { length: 50 }),
+  progress: integer("progress").default(0),
+  status: text("status").default("active"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().notNull(),
+});
+export type OkrKeyResult = typeof okrKeyResults.$inferSelect;
+export type InsertOkrKeyResult = typeof okrKeyResults.$inferInsert;

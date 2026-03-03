@@ -56,6 +56,8 @@ import { agentMemoryRouter } from "./routers/agentMemory.router";
 import { apiKeysRouter } from "./routers/apiKeys.router";
 import { auditLogRouter } from "./routers/auditLog.router";
 import { adminRouter } from "./routers/admin.router";
+import { nlCommandRouter } from "./routers/nlCommand.router";
+import { kpiOkrRouter } from "./routers/kpiOkr.router";
 import {
   businessPlanReviewRouter as businessPlanReviewRealRouter,
   collaborativeReviewRouter as collaborativeReviewRealRouter,
@@ -216,6 +218,10 @@ export const appRouter = router({
   auditLog: auditLogRouter,
   // ─── Admin & Governance ──────────────────────────────────────────────────────
   admin: adminRouter,
+  // ─── Natural Language Command Bar (AUTO-03) ──────────────────────────────────
+  nlCommand: nlCommandRouter,
+  // ─── KPI & OKR Tracking (AUTO-05) ────────────────────────────────────────────
+  kpiOkr: kpiOkrRouter,
 });
 
 export type AppRouter = typeof appRouter;

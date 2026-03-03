@@ -32,7 +32,13 @@ import {
   userSettings, // eslint-disable-line @typescript-eslint/no-unused-vars
 } from "../../drizzle/schema";
 import { logger } from "../utils/logger";
-
+import {
+  recordMetricSnapshot,
+  detectAnomalies,
+  getPendingAnomaliesForBriefing,
+  markAnomaliesSurfaced,
+} from "./anomalyDetection";
+import { eventBus } from "./eventBus";
 const log = logger.module("Scheduler");
 
 // ─── Job 1: Morning Briefing Generation ──────────────────────────────────────
@@ -234,7 +240,7 @@ function scheduleIdeaScoring() {
   );
 }
 
-// ─── Job 5: Agent Performance Snapshot ───────────────────────────────────────
+// ─── Job 5: Agent Performance Snapshot + AUTO-02 Anomaly Detection ──────────
 function scheduleAgentPerformanceSnapshot() {
   cron.schedule(
     "5 0 * * *",
@@ -251,6 +257,58 @@ function scheduleAgentPerformanceSnapshot() {
             )
             .limit(100);
 
+          const pendingTasks = await db
+            .select()
+            .from(tasks)
+            .where(and(eq(tasks.userId, user.id), eq(tasks.status, "pending")))
+            .limit(100);
+
+          const completedCount = completedTasks.length;
+          const pendingCount = pendingTasks.length;
+          const completionRate =
+            completedCount + pendingCount > 0
+              ? (completedCount / (completedCount + pendingCount)) * 100
+              : 0;
+
+          // AUTO-02: Record metric snapshots for baseline tracking
+          await recordMetricSnapshot(
+            user.id,
+            "task-manager",
+            "completed_tasks_total",
+            completedCount
+          );
+          await recordMetricSnapshot(
+            user.id,
+            "task-manager",
+            "completion_rate_pct",
+            completionRate
+          );
+
+          // AUTO-02: Run anomaly detection against baselines
+          const anomalyResult = await detectAnomalies(user.id, [
+            {
+              agentKey: "task-manager",
+              metrics: [
+                { name: "completed_tasks_total", value: completedCount },
+                { name: "completion_rate_pct", value: completionRate },
+              ],
+            },
+          ]);
+
+          // Publish performance snapshot event
+          await eventBus.publish({
+            type: "agent.performance_snapshot",
+            userId: user.id,
+            payload: {
+              completedCount,
+              pendingCount,
+              completionRate,
+              anomaliesFound: anomalyResult.anomaliesFound,
+            },
+            timestamp: new Date(),
+            source: "scheduler",
+          });
+
           await db.insert(activityFeed).values({
             userId: user.id,
             actorType: "system",
@@ -259,11 +317,18 @@ function scheduleAgentPerformanceSnapshot() {
             action: "updated",
             targetType: "performance",
             targetName: "Agent Performance Snapshot",
-            description: `Your AI team has completed ${completedTasks.length} tasks to date. Performance data updated.`,
+            description:
+              `Your AI team has completed ${completedCount} tasks to date (${completionRate.toFixed(1)}% completion rate).` +
+              (anomalyResult.anomaliesFound > 0
+                ? ` ${anomalyResult.anomaliesFound} anomaly alert(s) detected.`
+                : ""),
             metadata: {
               automated: true,
               jobId: "agent-snapshot",
-              completedCount: completedTasks.length,
+              completedCount,
+              pendingCount,
+              completionRate,
+              anomaliesFound: anomalyResult.anomaliesFound,
             },
           });
         }

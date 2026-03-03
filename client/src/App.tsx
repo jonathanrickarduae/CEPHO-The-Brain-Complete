@@ -60,6 +60,9 @@ const WorkflowsPage = lazy(() => import("./pages/WorkflowsPage"));
 const WorkflowDetailPage = lazy(() => import("./pages/WorkflowDetailPage"));
 const PersephoneBoard = lazy(() => import("./pages/PersephoneBoard"));
 
+// ── Phase 3: KPI & OKR Dashboard ────────────────────────────────────────────
+const KpiOkrPage = lazy(() => import("./pages/KpiOkrPage"));
+
 // ── Standalone ───────────────────────────────────────────────────────────────
 const Vault = lazy(() => import("./pages/Vault"));
 const Settings = lazy(() => import("./pages/Settings"));
@@ -198,6 +201,13 @@ function Router() {
         <Route path="/persephone">
           <WithLayout>
             <PersephoneBoard />
+          </WithLayout>
+        </Route>
+
+        {/* KPI & OKR Dashboard */}
+        <Route path="/kpis">
+          <WithLayout>
+            <KpiOkrPage />
           </WithLayout>
         </Route>
 

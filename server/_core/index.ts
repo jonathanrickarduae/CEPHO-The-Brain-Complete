@@ -120,6 +120,10 @@ async function startServer() {
   const workflowsRoutes = await import("../routes/workflows");
   app.use("/api/workflows", workflowsRoutes.default);
 
+  // Inbound integration webhooks (AUTO-04)
+  const webhooksRoute = await import("../routes/webhooks");
+  app.use("/api/webhooks", webhooksRoute.default);
+
   // tRPC API (mounted at both /api/trpc and /api/v1/trpc for versioning)
   const trpcMiddleware = createExpressMiddleware({
     router: appRouter,

@@ -22,8 +22,11 @@ import {
   BarChart3,
   Lock,
   BookOpen,
+  Loader2,
+  TrendingUp,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { trpc } from "@/lib/trpc";
 
 interface CommandItem {
   id: string;
@@ -46,6 +49,38 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
   const [, setLocation] = useLocation();
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
+
+  // AUTO-03: NL command execution state
+  const [nlMode, setNlMode] = useState(false);
+  const [nlResult, setNlResult] = useState<{
+    success: boolean;
+    message: string;
+    intent?: string;
+  } | null>(null);
+
+  const executeNlCommand = trpc.nlCommand.execute.useMutation({
+    onSuccess: result => {
+      setNlResult({
+        success: result.success,
+        message: result.message,
+        intent: result.intent,
+      });
+      if (result.success && result.navigateTo) {
+        setTimeout(() => {
+          setLocation(result.navigateTo!);
+          onClose();
+        }, 1200);
+      }
+    },
+    onError: err => {
+      setNlResult({ success: false, message: err.message });
+    },
+  });
+
+  const { data: suggestionsData } = trpc.nlCommand.getSuggestions.useQuery(
+    {},
+    { enabled: isOpen && nlMode }
+  );
 
   // Define all commands
   const commands: CommandItem[] = useMemo(
@@ -129,6 +164,17 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
         },
       },
       {
+        id: "nav-kpis",
+        title: "Go to KPIs & OKRs",
+        icon: TrendingUp,
+        category: "navigation",
+        shortcut: "G K",
+        action: () => {
+          setLocation("/kpis");
+          onClose();
+        },
+      },
+      {
         id: "nav-vault",
         title: "Go to Vault",
         icon: Lock,
@@ -152,6 +198,18 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
       },
 
       // AI Actions
+      {
+        id: "ai-nl-command",
+        title: "AI Command",
+        description: "Type a natural language command — CEPHO will execute it",
+        icon: Sparkles,
+        category: "ai",
+        shortcut: "A I",
+        action: () => {
+          setNlMode(true);
+          setSearch("");
+        },
+      },
       {
         id: "ai-ask",
         title: "Ask Chief of Staff",
@@ -317,6 +375,24 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
   // Handle keyboard navigation
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
+      if (nlMode) {
+        if (e.key === "Escape") {
+          e.preventDefault();
+          if (nlResult) {
+            setNlResult(null);
+          } else {
+            setNlMode(false);
+            setSearch("");
+          }
+        }
+        if (e.key === "Enter" && search.trim() && !executeNlCommand.isPending) {
+          e.preventDefault();
+          setNlResult(null);
+          executeNlCommand.mutate({ command: search.trim() });
+        }
+        return;
+      }
+
       switch (e.key) {
         case "ArrowDown":
           e.preventDefault();
@@ -340,7 +416,15 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
           break;
       }
     },
-    [filteredCommands, selectedIndex, onClose]
+    [
+      filteredCommands,
+      selectedIndex,
+      onClose,
+      nlMode,
+      search,
+      executeNlCommand,
+      nlResult,
+    ]
   );
 
   // Reset selection when search changes
@@ -353,6 +437,8 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
     if (isOpen) {
       setSearch("");
       setSelectedIndex(0);
+      setNlMode(false);
+      setNlResult(null);
       setTimeout(() => inputRef.current?.focus(), 50);
     }
   }, [isOpen]);
@@ -391,105 +477,219 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
       >
         {/* Search Input */}
         <div className="flex items-center gap-3 px-4 py-3 border-b border-white/10">
-          <Search className="w-5 h-5 text-muted-foreground" />
+          {nlMode ? (
+            <Sparkles className="w-5 h-5 text-primary animate-pulse" />
+          ) : (
+            <Search className="w-5 h-5 text-muted-foreground" />
+          )}
           <input
             ref={inputRef}
             type="text"
             value={search}
             onChange={e => setSearch(e.target.value)}
-            placeholder="Type a command or search..."
+            placeholder={
+              nlMode
+                ? 'Type a command in plain English… (e.g. "Create a task to review Q2 report")'
+                : "Type a command or search…"
+            }
             className="flex-1 bg-transparent text-foreground placeholder:text-muted-foreground focus:outline-none text-sm"
           />
-          <kbd className="hidden sm:flex items-center gap-1 px-2 py-1 bg-secondary/50 rounded text-xs text-muted-foreground">
-            <Command className="w-3 h-3" />K
-          </kbd>
-        </div>
-
-        {/* Command List */}
-        <div ref={listRef} className="max-h-[60vh] overflow-y-auto p-2">
-          {filteredCommands.length === 0 ? (
-            <div className="py-8 text-center text-muted-foreground">
-              <Search className="w-8 h-8 mx-auto mb-2 opacity-50" />
-              <p>No commands found</p>
-            </div>
+          {nlMode ? (
+            <button
+              onClick={() => {
+                setNlMode(false);
+                setSearch("");
+                setNlResult(null);
+              }}
+              className="text-xs text-muted-foreground hover:text-foreground transition-colors px-2 py-1 rounded border border-white/10"
+            >
+              ← Back
+            </button>
           ) : (
-            Object.entries(groupedCommands).map(([category, items]) => {
-              if (items.length === 0) return null;
-              return (
-                <div key={category} className="mb-4">
-                  <div className="px-2 py-1 text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                    {categoryLabels[category]}
-                  </div>
-                  {items.map(cmd => {
-                    const currentIndex = flatIndex++;
-                    const isSelected = currentIndex === selectedIndex;
-                    const Icon = cmd.icon;
-
-                    return (
-                      <button
-                        key={cmd.id}
-                        data-index={currentIndex}
-                        onClick={cmd.action}
-                        onMouseEnter={() => setSelectedIndex(currentIndex)}
-                        className={cn(
-                          "w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left transition-colors",
-                          isSelected
-                            ? "bg-primary/20 text-foreground"
-                            : "text-muted-foreground hover:bg-secondary/50"
-                        )}
-                      >
-                        <div
-                          className={cn(
-                            "w-8 h-8 rounded-lg flex items-center justify-center",
-                            isSelected ? "bg-primary/30" : "bg-secondary/50"
-                          )}
-                        >
-                          <Icon className="w-4 h-4" />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="font-medium text-sm">{cmd.title}</div>
-                          {cmd.description && (
-                            <div className="text-xs text-muted-foreground truncate">
-                              {cmd.description}
-                            </div>
-                          )}
-                        </div>
-                        {cmd.shortcut && (
-                          <div className="flex items-center gap-1">
-                            {cmd.shortcut.split(" ").map((key, i) => (
-                              <kbd
-                                key={i}
-                                className="px-1.5 py-0.5 bg-secondary/50 rounded text-[10px] text-muted-foreground"
-                              >
-                                {key}
-                              </kbd>
-                            ))}
-                          </div>
-                        )}
-                        {isSelected && (
-                          <ArrowRight className="w-4 h-4 text-primary" />
-                        )}
-                      </button>
-                    );
-                  })}
-                </div>
-              );
-            })
+            <kbd className="hidden sm:flex items-center gap-1 px-2 py-1 bg-secondary/50 rounded text-xs text-muted-foreground">
+              <Command className="w-3 h-3" />K
+            </kbd>
           )}
         </div>
+
+        {/* NL Command Mode */}
+        {nlMode ? (
+          <div className="p-4 min-h-[200px]">
+            {executeNlCommand.isPending ? (
+              <div className="flex flex-col items-center justify-center py-8 gap-3">
+                <Loader2 className="w-8 h-8 text-primary animate-spin" />
+                <p className="text-sm text-muted-foreground">
+                  CEPHO is processing your command…
+                </p>
+              </div>
+            ) : nlResult ? (
+              <div
+                className={cn(
+                  "rounded-lg p-4 border",
+                  nlResult.success
+                    ? "bg-green-500/10 border-green-500/30 text-green-400"
+                    : "bg-red-500/10 border-red-500/30 text-red-400"
+                )}
+              >
+                <div className="flex items-start gap-3">
+                  {nlResult.success ? (
+                    <CheckCircle2 className="w-5 h-5 mt-0.5 shrink-0" />
+                  ) : (
+                    <Search className="w-5 h-5 mt-0.5 shrink-0" />
+                  )}
+                  <div>
+                    <p className="text-sm font-medium">{nlResult.message}</p>
+                    {nlResult.intent && nlResult.intent !== "unknown" && (
+                      <p className="text-xs mt-1 opacity-70">
+                        Intent: {nlResult.intent}
+                      </p>
+                    )}
+                    <p className="text-xs mt-2 opacity-60">
+                      Press Esc to try another command
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div>
+                <p className="text-xs text-muted-foreground mb-3 font-medium uppercase tracking-wider">
+                  Suggestions
+                </p>
+                <div className="space-y-1">
+                  {(
+                    suggestionsData?.suggestions ?? [
+                      "Create a task to…",
+                      "Show my overdue tasks",
+                      "Create a KPI for monthly revenue",
+                      "Navigate to evening review",
+                      "Create an OKR for Q2 2026",
+                    ]
+                  ).map((suggestion, i) => (
+                    <button
+                      key={i}
+                      onClick={() => setSearch(suggestion.replace("…", ""))}
+                      className="w-full text-left px-3 py-2 rounded-lg text-sm text-muted-foreground hover:bg-secondary/50 hover:text-foreground transition-colors"
+                    >
+                      <span className="text-primary mr-2">→</span>
+                      {suggestion}
+                    </button>
+                  ))}
+                </div>
+                <p className="text-xs text-muted-foreground mt-4 text-center">
+                  Press{" "}
+                  <kbd className="px-1 bg-secondary/50 rounded">Enter</kbd> to
+                  execute
+                </p>
+              </div>
+            )}
+          </div>
+        ) : (
+          /* Command List */
+          <div ref={listRef} className="max-h-[60vh] overflow-y-auto p-2">
+            {filteredCommands.length === 0 ? (
+              <div className="py-8 text-center text-muted-foreground">
+                <Search className="w-8 h-8 mx-auto mb-2 opacity-50" />
+                <p>No commands found</p>
+                <button
+                  onClick={() => {
+                    setNlMode(true);
+                  }}
+                  className="mt-2 text-xs text-primary hover:underline"
+                >
+                  Try AI command instead →
+                </button>
+              </div>
+            ) : (
+              Object.entries(groupedCommands).map(([category, items]) => {
+                if (items.length === 0) return null;
+                return (
+                  <div key={category} className="mb-4">
+                    <div className="px-2 py-1 text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                      {categoryLabels[category]}
+                    </div>
+                    {items.map(cmd => {
+                      const currentIndex = flatIndex++;
+                      const isSelected = currentIndex === selectedIndex;
+                      const Icon = cmd.icon;
+
+                      return (
+                        <button
+                          key={cmd.id}
+                          data-index={currentIndex}
+                          onClick={cmd.action}
+                          onMouseEnter={() => setSelectedIndex(currentIndex)}
+                          className={cn(
+                            "w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left transition-colors",
+                            isSelected
+                              ? "bg-primary/20 text-foreground"
+                              : "text-muted-foreground hover:bg-secondary/50"
+                          )}
+                        >
+                          <div
+                            className={cn(
+                              "w-8 h-8 rounded-lg flex items-center justify-center",
+                              isSelected ? "bg-primary/30" : "bg-secondary/50"
+                            )}
+                          >
+                            <Icon className="w-4 h-4" />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className="font-medium text-sm">
+                              {cmd.title}
+                            </div>
+                            {cmd.description && (
+                              <div className="text-xs text-muted-foreground truncate">
+                                {cmd.description}
+                              </div>
+                            )}
+                          </div>
+                          {cmd.shortcut && (
+                            <div className="flex items-center gap-1">
+                              {cmd.shortcut.split(" ").map((key, i) => (
+                                <kbd
+                                  key={i}
+                                  className="px-1.5 py-0.5 bg-secondary/50 rounded text-[10px] text-muted-foreground"
+                                >
+                                  {key}
+                                </kbd>
+                              ))}
+                            </div>
+                          )}
+                          {isSelected && (
+                            <ArrowRight className="w-4 h-4 text-primary" />
+                          )}
+                        </button>
+                      );
+                    })}
+                  </div>
+                );
+              })
+            )}
+          </div>
+        )}
 
         {/* Footer */}
         <div className="flex items-center justify-between px-4 py-2 border-t border-white/10 text-xs text-muted-foreground">
           <div className="flex items-center gap-4">
-            <span className="flex items-center gap-1">
-              <kbd className="px-1 bg-secondary/50 rounded">↑↓</kbd> Navigate
-            </span>
-            <span className="flex items-center gap-1">
-              <kbd className="px-1 bg-secondary/50 rounded">↵</kbd> Select
-            </span>
-            <span className="flex items-center gap-1">
-              <kbd className="px-1 bg-secondary/50 rounded">Esc</kbd> Close
-            </span>
+            {nlMode ? (
+              <span className="flex items-center gap-1">
+                <kbd className="px-1 bg-secondary/50 rounded">↵</kbd> Execute
+                command
+              </span>
+            ) : (
+              <>
+                <span className="flex items-center gap-1">
+                  <kbd className="px-1 bg-secondary/50 rounded">↑↓</kbd>{" "}
+                  Navigate
+                </span>
+                <span className="flex items-center gap-1">
+                  <kbd className="px-1 bg-secondary/50 rounded">↵</kbd> Select
+                </span>
+                <span className="flex items-center gap-1">
+                  <kbd className="px-1 bg-secondary/50 rounded">Esc</kbd> Close
+                </span>
+              </>
+            )}
           </div>
           <span className="text-primary">Powered by AI</span>
         </div>
