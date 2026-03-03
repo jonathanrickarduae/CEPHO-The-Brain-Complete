@@ -194,11 +194,10 @@ export const questionnaireRouter = router({
       .limit(1);
 
     if (existing.length === 0) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       await db.insert(digitalTwinProfile).values({
         userId,
         ...profileUpdate,
-      } as any);
+      });
     } else {
       await db
         .update(digitalTwinProfile)

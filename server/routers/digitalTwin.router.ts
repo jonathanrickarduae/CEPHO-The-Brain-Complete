@@ -362,14 +362,20 @@ Respond in JSON: { "insights": "narrative here", "recommendations": ["rec1", "re
         .limit(1);
 
       const updateData: Record<string, unknown> = { updatedAt: new Date() };
-      if (input.communicationStyle) updateData.communicationStyle = input.communicationStyle;
-      if (input.riskTolerance !== undefined) updateData.riskTolerance = input.riskTolerance.toFixed(2);
-      if (input.decisionHeuristics) updateData.decisionHeuristics = input.decisionHeuristics;
-      if (input.strategicPriorities) updateData.strategicPriorities = input.strategicPriorities;
+      if (input.communicationStyle)
+        updateData.communicationStyle = input.communicationStyle;
+      if (input.riskTolerance !== undefined)
+        updateData.riskTolerance = input.riskTolerance.toFixed(2);
+      if (input.decisionHeuristics)
+        updateData.decisionHeuristics = input.decisionHeuristics;
+      if (input.strategicPriorities)
+        updateData.strategicPriorities = input.strategicPriorities;
       if (input.values) updateData.values = input.values;
 
       if (existing.length === 0) {
-        await db.insert(digitalTwinCognitiveModel).values({ userId: ctx.user.id, ...updateData });
+        await db
+          .insert(digitalTwinCognitiveModel)
+          .values({ userId: ctx.user.id, ...updateData });
       } else {
         await db
           .update(digitalTwinCognitiveModel)
@@ -388,7 +394,14 @@ Respond in JSON: { "insights": "narrative here", "recommendations": ["rec1", "re
       .from(digitalTwinVocabulary)
       .where(eq(digitalTwinVocabulary.userId, ctx.user.id))
       .limit(1);
-    return vocab ?? { preferredTerms: {}, avoidedTerms: [], commonPhrases: [], writingSamples: [] };
+    return (
+      vocab ?? {
+        preferredTerms: {},
+        avoidedTerms: [],
+        commonPhrases: [],
+        writingSamples: [],
+      }
+    );
   }),
 
   /**
@@ -412,15 +425,21 @@ Respond in JSON: { "insights": "narrative here", "recommendations": ["rec1", "re
       if (existing.length === 0) {
         await db.insert(digitalTwinVocabulary).values({
           userId: ctx.user.id,
-          preferredTerms: (input.preferredTerms ?? {}) as Record<string, string>,
+          preferredTerms: (input.preferredTerms ?? {}) as Record<
+            string,
+            string
+          >,
           avoidedTerms: input.avoidedTerms ?? [],
           commonPhrases: input.commonPhrases ?? [],
         });
       } else {
         const setData: Record<string, unknown> = { updatedAt: new Date() };
-        if (input.preferredTerms !== undefined) setData.preferredTerms = input.preferredTerms;
-        if (input.avoidedTerms !== undefined) setData.avoidedTerms = input.avoidedTerms;
-        if (input.commonPhrases !== undefined) setData.commonPhrases = input.commonPhrases;
+        if (input.preferredTerms !== undefined)
+          setData.preferredTerms = input.preferredTerms;
+        if (input.avoidedTerms !== undefined)
+          setData.avoidedTerms = input.avoidedTerms;
+        if (input.commonPhrases !== undefined)
+          setData.commonPhrases = input.commonPhrases;
         await db
           .update(digitalTwinVocabulary)
           .set(setData)
@@ -439,7 +458,13 @@ Respond in JSON: { "insights": "narrative here", "recommendations": ["rec1", "re
         scenarioContext: z.any().optional(),
         agentProposal: z.string().optional(),
         agentId: z.string().optional(),
-        decision: z.enum(["approved", "rejected", "modified", "deferred", "delegated"]),
+        decision: z.enum([
+          "approved",
+          "rejected",
+          "modified",
+          "deferred",
+          "delegated",
+        ]),
         modifiedTo: z.string().optional(),
         decisionRationale: z.string().optional(),
       })
@@ -471,7 +496,15 @@ Respond in JSON: { "insights": "narrative here", "recommendations": ["rec1", "re
       z.object({
         scenario: z.string().min(10).max(2000),
         scenarioType: z
-          .enum(["negotiation", "conflict", "decision", "communication", "leadership", "crisis", "strategic"])
+          .enum([
+            "negotiation",
+            "conflict",
+            "decision",
+            "communication",
+            "leadership",
+            "crisis",
+            "strategic",
+          ])
           .default("decision"),
         options: z.array(z.string()).optional(),
       })
@@ -498,7 +531,9 @@ Respond in JSON: { "insights": "narrative here", "recommendations": ["rec1", "re
         temperature: 0.5,
       });
 
-      const result = JSON.parse(completion.choices[0]?.message?.content ?? "{}") as {
+      const result = JSON.parse(
+        completion.choices[0]?.message?.content ?? "{}"
+      ) as {
         predicted_response?: string;
         emotional_state?: string;
         decision_drivers?: string[];
@@ -510,7 +545,10 @@ Respond in JSON: { "insights": "narrative here", "recommendations": ["rec1", "re
       await db.insert(digitalTwinDecisionLog).values({
         userId: ctx.user.id,
         scenarioType: input.scenarioType,
-        scenarioContext: { scenario: input.scenario, options: input.options ?? [] },
+        scenarioContext: {
+          scenario: input.scenario,
+          options: input.options ?? [],
+        },
         agentProposal: result.predicted_response,
         agentId: "dt-mod-03-simulator",
         decision: "approved",

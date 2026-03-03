@@ -4,7 +4,7 @@ import {
   encodeCursor,
   decodeCursor,
   validatePaginationParams,
-    MAX_LIMIT,
+  MAX_LIMIT,
 } from "../utils/pagination";
 
 describe("Pagination Utilities", () => {
@@ -106,7 +106,7 @@ describe("Pagination Utilities", () => {
       const result = validatePaginationParams({
         page: 1,
         limit: 20,
-        order: "invalid" as any,
+        order: "invalid" as "asc" | "desc",
       });
 
       expect(result.valid).toBe(false);

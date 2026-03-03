@@ -51,7 +51,10 @@ Format in clean Markdown. Be direct and executive-level.`,
   return completion.choices[0]?.message?.content ?? "Brief unavailable.";
 }
 
-async function extractMeetingNotes(transcript: string, title: string): Promise<{
+async function extractMeetingNotes(
+  transcript: string,
+  title: string
+): Promise<{
   summary: string;
   keyDecisions: string[];
   actionItems: { task: string; owner: string; dueDate?: string }[];
@@ -154,14 +157,19 @@ export const meetingIntelligenceRouter = router({
         title: z.string().min(1).max(500),
         transcript: z.string().min(10),
         attendees: z.array(z.string()).default([]),
-        source: z.enum(["zoom", "teams", "google_meet", "manual"]).default("manual"),
+        source: z
+          .enum(["zoom", "teams", "google_meet", "manual"])
+          .default("manual"),
         meetingAt: z.string().optional(),
         durationMinutes: z.number().optional(),
         externalMeetingId: z.string().optional(),
       })
     )
     .mutation(async ({ input, ctx }) => {
-      const extracted = await extractMeetingNotes(input.transcript, input.title);
+      const extracted = await extractMeetingNotes(
+        input.transcript,
+        input.title
+      );
 
       if (input.noteId) {
         // Update existing note
@@ -217,7 +225,9 @@ export const meetingIntelligenceRouter = router({
       z.object({
         title: z.string().min(1).max(500),
         attendees: z.array(z.string()).default([]),
-        source: z.enum(["zoom", "teams", "google_meet", "manual"]).default("manual"),
+        source: z
+          .enum(["zoom", "teams", "google_meet", "manual"])
+          .default("manual"),
         meetingAt: z.string().optional(),
         durationMinutes: z.number().optional(),
         externalMeetingId: z.string().optional(),
@@ -313,10 +323,7 @@ export const meetingIntelligenceRouter = router({
         .update(meetingNotes)
         .set({ ...updates, updatedAt: new Date() })
         .where(
-          and(
-            eq(meetingNotes.id, noteId),
-            eq(meetingNotes.userId, ctx.user.id)
-          )
+          and(eq(meetingNotes.id, noteId), eq(meetingNotes.userId, ctx.user.id))
         );
 
       return { success: true };
@@ -358,7 +365,8 @@ export const meetingIntelligenceRouter = router({
         .limit(1);
 
       if (!note) throw new Error("Meeting note not found");
-      if (!note.transcript) throw new Error("No transcript available to summarise");
+      if (!note.transcript)
+        throw new Error("No transcript available to summarise");
 
       const extracted = await extractMeetingNotes(note.transcript, note.title);
 

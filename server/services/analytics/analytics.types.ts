@@ -15,7 +15,7 @@ export interface RevenueMetricsDto {
   monthlyRevenue: number;
   yearlyRevenue: number;
   revenueGrowth: number | null;
-  metadata: Record<string, any> | null;
+  metadata: Record<string, unknown> | null;
   createdAt: Date;
 }
 
@@ -30,7 +30,7 @@ export interface QualityMetricsDto {
   completenessScore: number;
   accuracyScore: number;
   timelinessScore: number;
-  metadata: Record<string, any> | null;
+  metadata: Record<string, unknown> | null;
   createdAt: Date;
 }
 
@@ -45,7 +45,7 @@ export interface CosLearningMetricsDto {
   completedModules: number;
   totalModules: number;
   timeSpent: number;
-  metadata: Record<string, any> | null;
+  metadata: Record<string, unknown> | null;
   createdAt: Date;
 }
 

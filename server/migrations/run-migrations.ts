@@ -31,10 +31,11 @@ async function runSqlFile(
   for (const statement of statements) {
     try {
       await db.execute(statement);
-    } catch (error: any) {
+    } catch (error: unknown) {
       // Silently ignore "already exists" errors — idempotent migrations
-      if (!error.message?.includes("already exists")) {
-        log.warn(`[Migrations] ${label} statement error: ${error.message}`);
+      const msg = error instanceof Error ? error.message : String(error);
+      if (!msg.includes("already exists")) {
+        log.warn(`[Migrations] ${label} statement error: ${msg}`);
       }
     }
   }
@@ -82,7 +83,8 @@ export async function runMigrations(): Promise<void> {
     }
 
     log.info("[Migrations] All migrations applied successfully");
-  } catch (error: any) {
-    log.error("[Migrations] Migration runner failed:", error.message);
+  } catch (error: unknown) {
+    const msg = error instanceof Error ? error.message : String(error);
+    log.error("[Migrations] Migration runner failed:", msg);
   }
 }

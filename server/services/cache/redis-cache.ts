@@ -94,7 +94,7 @@ export async function get<T>(key: string): Promise<T | null> {
  */
 export async function set(
   key: string,
-  value: any,
+  value: unknown,
   ttl: number = 3600
 ): Promise<void> {
   const client = initRedis();

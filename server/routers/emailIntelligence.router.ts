@@ -9,13 +9,10 @@
  * Appendix references: GAP 4 (Email Intelligence), Appendix H Table 57
  */
 import { z } from "zod";
-import { desc, eq, and, lt, isNull } from "drizzle-orm";
+import { desc, eq, and, lt } from "drizzle-orm";
 import { protectedProcedure, router } from "../_core/trpc";
 import { db } from "../db";
-import {
-  emailMessages,
-  agentInsights,
-} from "../../drizzle/schema";
+import { emailMessages } from "../../drizzle/schema";
 import OpenAI from "openai";
 
 const openai = new OpenAI();
@@ -71,8 +68,15 @@ Respond ONLY with valid JSON.`,
 
   return {
     summary: parsed.summary ?? "No summary available.",
-    priority: (parsed.priority as "urgent" | "high" | "normal" | "low") ?? "normal",
-    action: (parsed.action as "reply" | "delegate" | "archive" | "follow_up" | "none") ?? "none",
+    priority:
+      (parsed.priority as "urgent" | "high" | "normal" | "low") ?? "normal",
+    action:
+      (parsed.action as
+        | "reply"
+        | "delegate"
+        | "archive"
+        | "follow_up"
+        | "none") ?? "none",
     actionReason: parsed.actionReason ?? "",
   };
 }
@@ -82,10 +86,23 @@ async function draftEmailReply(
   originalBody: string,
   fromAddress: string,
   instruction: string,
-  communicationStyle: { formality: number; verbosity: number } = { formality: 0.7, verbosity: 0.5 }
+  communicationStyle: { formality: number; verbosity: number } = {
+    formality: 0.7,
+    verbosity: 0.5,
+  }
 ): Promise<string> {
-  const formalityDesc = communicationStyle.formality > 0.7 ? "formal and professional" : communicationStyle.formality > 0.4 ? "semi-formal" : "conversational";
-  const verbosityDesc = communicationStyle.verbosity > 0.7 ? "detailed" : communicationStyle.verbosity > 0.4 ? "concise" : "very brief";
+  const formalityDesc =
+    communicationStyle.formality > 0.7
+      ? "formal and professional"
+      : communicationStyle.formality > 0.4
+        ? "semi-formal"
+        : "conversational";
+  const verbosityDesc =
+    communicationStyle.verbosity > 0.7
+      ? "detailed"
+      : communicationStyle.verbosity > 0.4
+        ? "concise"
+        : "very brief";
 
   const completion = await openai.chat.completions.create({
     model: "gpt-4o-mini",
@@ -134,7 +151,12 @@ export const emailIntelligenceRouter = router({
       })
     )
     .mutation(async ({ input, ctx }) => {
-      const results: { externalId: string; id: number; priority: string; action: string }[] = [];
+      const results: {
+        externalId: string;
+        id: number;
+        priority: string;
+        action: string;
+      }[] = [];
 
       for (const email of input.emails) {
         // Check if already ingested
@@ -150,7 +172,12 @@ export const emailIntelligenceRouter = router({
           .limit(1);
 
         if (existing.length > 0) {
-          results.push({ externalId: email.externalId, id: existing[0].id, priority: "normal", action: "none" });
+          results.push({
+            externalId: email.externalId,
+            id: existing[0].id,
+            priority: "normal",
+            action: "none",
+          });
           continue;
         }
 
@@ -184,7 +211,9 @@ export const emailIntelligenceRouter = router({
             aiAction: triage.action,
             aiActionReason: triage.actionReason,
             followUpAt,
-            receivedAt: email.receivedAt ? new Date(email.receivedAt) : new Date(),
+            receivedAt: email.receivedAt
+              ? new Date(email.receivedAt)
+              : new Date(),
           })
           .returning({ id: emailMessages.id });
 
@@ -206,7 +235,9 @@ export const emailIntelligenceRouter = router({
   list: protectedProcedure
     .input(
       z.object({
-        priority: z.enum(["urgent", "high", "normal", "low", "all"]).default("all"),
+        priority: z
+          .enum(["urgent", "high", "normal", "low", "all"])
+          .default("all"),
         isArchived: z.boolean().default(false),
         limit: z.number().min(1).max(100).default(20),
         offset: z.number().min(0).default(0),
@@ -410,10 +441,13 @@ export const emailIntelligenceRouter = router({
     const stats = {
       total: all.length,
       unread: all.filter(e => !e.isRead && !e.isArchived).length,
-      urgent: all.filter(e => e.aiPriority === "urgent" && !e.isArchived).length,
+      urgent: all.filter(e => e.aiPriority === "urgent" && !e.isArchived)
+        .length,
       high: all.filter(e => e.aiPriority === "high" && !e.isArchived).length,
-      awaitingReply: all.filter(e => e.aiAction === "reply" && !e.isArchived).length,
-      followUps: all.filter(e => e.aiAction === "follow_up" && !e.isArchived).length,
+      awaitingReply: all.filter(e => e.aiAction === "reply" && !e.isArchived)
+        .length,
+      followUps: all.filter(e => e.aiAction === "follow_up" && !e.isArchived)
+        .length,
       drafts: all.filter(e => e.isDraft && !e.isArchived).length,
     };
 

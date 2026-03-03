@@ -195,16 +195,20 @@ export const victoriasBriefRouter = router({
               "Stay focused on high-impact priorities",
           },
           schedule: content.schedule ?? [],
-          priorities: (content.keyThings ?? []).map((k: any) => ({
-            title: k.title ?? "Priority",
-            description: k.description ?? "",
-            urgency: k.priority ?? "medium",
-            estimatedTime: "30 minutes",
-          })),
-          insights: (content.intelligence ?? []).map((i: any) => ({
-            category: i.source ?? "Intelligence",
-            message: i.summary ?? i.title ?? "",
-          })),
+          priorities: (content.keyThings ?? []).map(
+            (k: Record<string, unknown>) => ({
+              title: k.title ?? "Priority",
+              description: k.description ?? "",
+              urgency: k.priority ?? "medium",
+              estimatedTime: "30 minutes",
+            })
+          ),
+          insights: (content.intelligence ?? []).map(
+            (i: Record<string, unknown>) => ({
+              category: i.source ?? "Intelligence",
+              message: i.summary ?? i.title ?? "",
+            })
+          ),
           emails: content.emailSummary
             ? {
                 unread: content.emailSummary.unread ?? 0,

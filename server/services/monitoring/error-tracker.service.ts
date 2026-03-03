@@ -44,8 +44,9 @@ class ErrorTrackerService {
           if (event.request) {
             delete event.request.cookies;
             if (event.request.headers) {
-              delete (event.request.headers as any).authorization;
-              delete (event.request.headers as any).cookie;
+              delete (event.request.headers as Record<string, unknown>)
+                .authorization;
+              delete (event.request.headers as Record<string, unknown>).cookie;
             }
           }
           return event;
@@ -72,7 +73,7 @@ class ErrorTrackerService {
   /**
    * Capture exception manually
    */
-  captureException(error: Error, context?: Record<string, any>) {
+  captureException(error: Error, context?: Record<string, unknown>) {
     if (!this.initialized) {
       console.error("Error (Sentry not initialized):", error);
       return;
@@ -88,7 +89,7 @@ class ErrorTrackerService {
   captureMessage(
     message: string,
     level: Sentry.SeverityLevel = "info",
-    context?: Record<string, any>
+    context?: Record<string, unknown>
   ) {
     if (!this.initialized) {
       console.log(`Message (Sentry not initialized): ${message}`);
@@ -123,7 +124,11 @@ class ErrorTrackerService {
   /**
    * Add breadcrumb for debugging
    */
-  addBreadcrumb(message: string, category: string, data?: Record<string, any>) {
+  addBreadcrumb(
+    message: string,
+    category: string,
+    data?: Record<string, unknown>
+  ) {
     if (!this.initialized) return;
     Sentry.addBreadcrumb({
       message,
@@ -136,7 +141,7 @@ class ErrorTrackerService {
   /**
    * Set custom context
    */
-  setContext(key: string, context: Record<string, any>) {
+  setContext(key: string, context: Record<string, unknown>) {
     if (!this.initialized) return;
     Sentry.setContext(key, context);
   }
@@ -197,7 +202,7 @@ export function errorHandlerMiddleware(
   errorTrackerService.captureException(err, {
     url: req.url,
     method: req.method,
-    userId: (req as any).user?.id,
+    userId: (req as Request & { user?: { id: number } }).user?.id,
   });
 
   res.status(500).json({

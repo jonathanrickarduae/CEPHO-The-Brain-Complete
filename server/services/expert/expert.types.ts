@@ -19,7 +19,7 @@ export interface CreateExpertChatMessageDto {
   sessionId: number;
   role: "user" | "expert";
   content: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 /**
@@ -43,7 +43,7 @@ export interface ExpertChatMessageDto {
   sessionId: number;
   role: "user" | "expert";
   content: string;
-  metadata: Record<string, any> | null;
+  metadata: Record<string, unknown> | null;
   createdAt: Date;
 }
 
@@ -111,7 +111,7 @@ export interface ExpertConversationDto {
   conversationType: "chat" | "consultation" | "coaching" | "research";
   content: string;
   response: string | null;
-  metadata: Record<string, any> | null;
+  metadata: Record<string, unknown> | null;
   createdAt: Date;
 }
 

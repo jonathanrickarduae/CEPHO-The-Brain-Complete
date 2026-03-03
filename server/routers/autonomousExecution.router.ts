@@ -332,7 +332,7 @@ export const autonomousExecutionRouter = router({
       const openai = new OpenAI();
 
       const selectedAgents = input.agentIds
-        ? SME_AGENTS.filter(a => input.agentIds!.includes(a.id))
+        ? SME_AGENTS.filter(a => (input.agentIds ?? []).includes(a.id))
         : SME_AGENTS;
 
       // Run all agents in parallel using Promise.all
@@ -355,7 +355,9 @@ export const autonomousExecutionRouter = router({
               temperature: 0.6,
             });
 
-            const raw = JSON.parse(completion.choices[0]?.message?.content ?? "{}") as {
+            const raw = JSON.parse(
+              completion.choices[0]?.message?.content ?? "{}"
+            ) as {
               analysis?: string;
               recommendations?: string[];
               risks?: string[];
@@ -411,7 +413,9 @@ export const autonomousExecutionRouter = router({
         temperature: 0.4,
       });
 
-      const synthesis = JSON.parse(synthCompletion.choices[0]?.message?.content ?? "{}") as {
+      const synthesis = JSON.parse(
+        synthCompletion.choices[0]?.message?.content ?? "{}"
+      ) as {
         executive_summary?: string;
         top_priorities?: string[];
         critical_risks?: string[];

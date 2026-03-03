@@ -46,7 +46,11 @@ async function assembleBriefing(
     includeWeather: boolean;
     includeMarketData: boolean;
   }
-): Promise<{ title: string; content: Record<string, unknown>; markdown: string }> {
+): Promise<{
+  title: string;
+  content: Record<string, unknown>;
+  markdown: string;
+}> {
   const today = new Date();
   const todayStr = today.toLocaleDateString("en-GB", {
     weekday: "long",
@@ -71,7 +75,12 @@ async function assembleBriefing(
 
   // Step 3: Fetch overdue / high-priority tasks
   const urgentTasks = await db
-    .select({ id: tasks.id, title: tasks.title, priority: tasks.priority, status: tasks.status })
+    .select({
+      id: tasks.id,
+      title: tasks.title,
+      priority: tasks.priority,
+      status: tasks.status,
+    })
     .from(tasks)
     .where(and(eq(tasks.userId, userId), eq(tasks.status, "pending")))
     .orderBy(desc(tasks.priority))
@@ -79,7 +88,12 @@ async function assembleBriefing(
 
   // Step 5: Fetch pending email follow-ups
   const followUps = await db
-    .select({ id: emailMessages.id, subject: emailMessages.subject, fromName: emailMessages.fromName, followUpAt: emailMessages.followUpAt })
+    .select({
+      id: emailMessages.id,
+      subject: emailMessages.subject,
+      fromName: emailMessages.fromName,
+      followUpAt: emailMessages.followUpAt,
+    })
     .from(emailMessages)
     .where(
       and(
@@ -102,15 +116,15 @@ async function assembleBriefing(
     prefs.preferredLength === "brief"
       ? "Keep each section to 2-3 sentences maximum."
       : prefs.preferredLength === "detailed"
-      ? "Provide comprehensive detail in each section."
-      : "Keep each section concise but complete (4-6 sentences).";
+        ? "Provide comprehensive detail in each section."
+        : "Keep each section concise but complete (4-6 sentences).";
 
   const toneGuide =
     prefs.tone === "casual"
       ? "Use a warm, conversational tone."
       : prefs.tone === "motivational"
-      ? "Use an energising, motivational tone."
-      : "Use a professional, executive tone.";
+        ? "Use an energising, motivational tone."
+        : "Use a professional, executive tone.";
 
   // Step 9: Assemble with GPT-4o
   const completion = await openai.chat.completions.create({
@@ -140,7 +154,12 @@ Respond ONLY with valid JSON.`,
         content: `Good morning. Today is ${todayStr}.
 
 AGENT INSIGHTS (from overnight research):
-${insights.slice(0, prefs.maxInsightsPerSection).map(i => `- [${i.agentKey}] ${i.insight}`).join("\n") || "No insights available yet."}
+${
+  insights
+    .slice(0, prefs.maxInsightsPerSection)
+    .map(i => `- [${i.agentKey}] ${i.insight}`)
+    .join("\n") || "No insights available yet."
+}
 
 PRIORITY TASKS:
 ${urgentTasks.map(t => `- ${t.title} (${t.priority ?? "normal"} priority)`).join("\n") || "No urgent tasks."}
@@ -155,23 +174,35 @@ Generate the morning briefing.`,
     temperature: 0.6,
   });
 
-  const content = JSON.parse(completion.choices[0]?.message?.content ?? "{}") as Record<string, unknown>;
+  const content = JSON.parse(
+    completion.choices[0]?.message?.content ?? "{}"
+  ) as Record<string, unknown>;
 
   // Build markdown version
   const markdown = [
     `# Good Morning — ${todayStr}`,
     "",
-    content.executive_summary ? `## Executive Summary\n${content.executive_summary}` : "",
-    content.agent_insights && Array.isArray(content.agent_insights) && content.agent_insights.length > 0
+    content.executive_summary
+      ? `## Executive Summary\n${content.executive_summary}`
+      : "",
+    content.agent_insights &&
+    Array.isArray(content.agent_insights) &&
+    content.agent_insights.length > 0
       ? `## Agent Insights\n${(content.agent_insights as string[]).map(i => `- ${i}`).join("\n")}`
       : "",
-    content.priority_tasks && Array.isArray(content.priority_tasks) && content.priority_tasks.length > 0
+    content.priority_tasks &&
+    Array.isArray(content.priority_tasks) &&
+    content.priority_tasks.length > 0
       ? `## Priority Tasks\n${(content.priority_tasks as string[]).map(t => `- ${t}`).join("\n")}`
       : "",
-    content.email_follow_ups && Array.isArray(content.email_follow_ups) && content.email_follow_ups.length > 0
+    content.email_follow_ups &&
+    Array.isArray(content.email_follow_ups) &&
+    content.email_follow_ups.length > 0
       ? `## Email Follow-Ups\n${(content.email_follow_ups as string[]).map(e => `- ${e}`).join("\n")}`
       : "",
-    content.strategic_focus ? `## Strategic Focus\n${content.strategic_focus}` : "",
+    content.strategic_focus
+      ? `## Strategic Focus\n${content.strategic_focus}`
+      : "",
     content.motivational_close ? `---\n*${content.motivational_close}*` : "",
   ]
     .filter(Boolean)

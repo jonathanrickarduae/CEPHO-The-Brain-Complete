@@ -12,7 +12,7 @@
  */
 
 import { db } from "../db";
-import { anomalyAlerts, activityFeed } from "../../drizzle/schema";
+import { anomalyAlerts } from "../../drizzle/schema";
 import { eventBus } from "./eventBus";
 import { logger } from "../utils/logger";
 const log = logger.module("anomalyDetection");

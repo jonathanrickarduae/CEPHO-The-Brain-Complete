@@ -40,6 +40,7 @@ import {
 import cookieParser from "cookie-parser";
 import { setupMiddleware, setupErrorHandlers } from "../setup-middleware";
 import { startScheduler } from "../services/scheduler";
+import { initializeDatabase } from "../db";
 
 function isPortAvailable(port: number): Promise<boolean> {
   return new Promise(resolve => {
@@ -62,6 +63,22 @@ async function findAvailablePort(startPort: number = 3000): Promise<number> {
 
 async function startServer() {
   log.info("[Server] Starting Priority 1 middleware initialization...");
+
+  // RED-C1 FIX: Initialize database connection FIRST — before any router or service accesses `db`
+  // The `db` export is a Proxy that throws until initializeDatabase() is called.
+  if (process.env.DATABASE_URL) {
+    try {
+      await initializeDatabase();
+      log.info("[DB] Database connection pool initialized");
+    } catch (err) {
+      log.error("[DB] Failed to initialize database:", String(err));
+      // Non-fatal: app will start but DB-dependent routes will return errors
+    }
+  } else {
+    log.warn(
+      "[DB] DATABASE_URL not set — database features will be unavailable"
+    );
+  }
 
   // Register all services with DI container
   const { registerServices } = await import("./service-registry");

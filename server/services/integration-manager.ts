@@ -54,7 +54,7 @@ export interface IntegrationCredential {
   apiSecret?: string;
   accessToken?: string;
   refreshToken?: string;
-  metadata?: any;
+  metadata?: Record<string, unknown>;
 }
 
 export class IntegrationManager {
@@ -62,31 +62,34 @@ export class IntegrationManager {
   async storeCredentials(userId: string, credential: IntegrationCredential) {
     const id = `${userId}-${credential.service}`;
 
-    const data: any = {
+    const insertData = {
       id,
       userId,
       service: credential.service,
-      email: credential.email,
+      email: credential.email ?? null,
+      password: credential.password ? encrypt(credential.password) : null,
+      apiKey: credential.apiKey ? encrypt(credential.apiKey) : null,
+      apiSecret: credential.apiSecret ? encrypt(credential.apiSecret) : null,
+      accessToken: credential.accessToken
+        ? encrypt(credential.accessToken)
+        : null,
+      refreshToken: credential.refreshToken
+        ? encrypt(credential.refreshToken)
+        : null,
+      metadata: credential.metadata ?? null,
       updatedAt: new Date(),
     };
-
-    // Encrypt sensitive data
-    if (credential.password) data.password = encrypt(credential.password);
-    if (credential.apiKey) data.apiKey = encrypt(credential.apiKey);
-    if (credential.apiSecret) data.apiSecret = encrypt(credential.apiSecret);
-    if (credential.accessToken)
-      data.accessToken = encrypt(credential.accessToken);
-    if (credential.refreshToken)
-      data.refreshToken = encrypt(credential.refreshToken);
-    if (credential.metadata) data.metadata = credential.metadata;
 
     // Upsert
     const db = await getDb();
     if (!db) throw new Error("Database not available");
-    await db.insert(integrationCredentials).values(data).onConflictDoUpdate({
-      target: integrationCredentials.id,
-      set: data,
-    });
+    await db
+      .insert(integrationCredentials)
+      .values(insertData)
+      .onConflictDoUpdate({
+        target: integrationCredentials.id,
+        set: insertData,
+      });
 
     return { success: true };
   }
@@ -118,7 +121,7 @@ export class IntegrationManager {
       apiSecret: cred.apiSecret ? decrypt(cred.apiSecret) : undefined,
       accessToken: cred.accessToken ? decrypt(cred.accessToken) : undefined,
       refreshToken: cred.refreshToken ? decrypt(cred.refreshToken) : undefined,
-      metadata: cred.metadata as any,
+      metadata: cred.metadata as Record<string, unknown> | undefined,
     };
   }
 
@@ -148,9 +151,10 @@ export class IntegrationManager {
           // For services without API testing, assume connected if credentials exist
           return { success: true };
       }
-    } catch (error: any) {
-      await this.logConnection(userId, service, "test", false, error.message);
-      return { success: false, error: error.message };
+    } catch (error: unknown) {
+      const msg = error instanceof Error ? error.message : String(error);
+      await this.logConnection(userId, service, "test", false, msg);
+      return { success: false, error: msg };
     }
   }
 
@@ -260,7 +264,7 @@ export class IntegrationManager {
     action: string,
     success: boolean,
     errorMessage?: string,
-    metadata?: any
+    metadata?: Record<string, unknown>
   ) {
     const db = await getDb();
     if (!db) return;

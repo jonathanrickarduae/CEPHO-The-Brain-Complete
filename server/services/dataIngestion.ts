@@ -50,11 +50,7 @@ async function embed(text: string): Promise<number[]> {
 /**
  * Split text into chunks of approximately maxWords words with overlap.
  */
-function chunkText(
-  text: string,
-  maxWords = 400,
-  overlapWords = 50
-): string[] {
+function chunkText(text: string, maxWords = 400, overlapWords = 50): string[] {
   const words = text.split(/\s+/).filter(w => w.length > 0);
   const chunks: string[] = [];
   let start = 0;
@@ -92,8 +88,7 @@ async function storeChunk(
     value: chunkText,
     confidence: 1.0,
     source,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    embedding: embedding as any,
+    embedding: embedding as number[] & { toSQL: () => string },
   });
 }
 
@@ -109,8 +104,9 @@ export async function ingestPdf(
   filename: string
 ): Promise<IngestionResult> {
   // Dynamic import to avoid issues when pdf-parse is not installed
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const pdfParse = require("pdf-parse") as (buf: Buffer) => Promise<{ text: string }>;
+  const pdfParse = require("pdf-parse") as (
+    buf: Buffer
+  ) => Promise<{ text: string }>;
   const data = await pdfParse(buffer);
   const text = data.text;
   const chunks = chunkText(text);
@@ -241,7 +237,9 @@ export async function ingestUrl(
   url: string
 ): Promise<IngestionResult> {
   if (isSsrfBlocked(url)) {
-    throw new Error("URL is not allowed: internal/private addresses are blocked");
+    throw new Error(
+      "URL is not allowed: internal/private addresses are blocked"
+    );
   }
 
   const cheerio = await import("cheerio");
@@ -255,14 +253,18 @@ export async function ingestUrl(
   });
 
   if (!response.ok) {
-    throw new Error(`Failed to fetch URL: ${response.status} ${response.statusText}`);
+    throw new Error(
+      `Failed to fetch URL: ${response.status} ${response.statusText}`
+    );
   }
 
   const html = await response.text();
   const $ = cheerio.load(html);
 
   // Remove non-content elements
-  $("script, style, nav, footer, header, aside, [role=navigation], .cookie-banner, .ad, .advertisement").remove();
+  $(
+    "script, style, nav, footer, header, aside, [role=navigation], .cookie-banner, .ad, .advertisement"
+  ).remove();
 
   // Extract title
   const title =

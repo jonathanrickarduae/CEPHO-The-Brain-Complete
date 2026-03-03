@@ -126,7 +126,7 @@ export async function metricsHandler(req: Request, res: Response) {
 /**
  * Get current metrics as JSON (for debugging)
  */
-export async function getMetricsJson(): Promise<any> {
+export async function getMetricsJson(): Promise<unknown> {
   const metrics = await register.getMetricsAsJSON();
   return metrics;
 }

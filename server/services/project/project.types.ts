@@ -14,7 +14,7 @@ export interface CreateProjectDto {
   priority?: "low" | "medium" | "high" | "critical";
   dueDate?: Date;
   assignedExperts?: string[];
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 /**
@@ -29,7 +29,7 @@ export interface UpdateProjectDto {
   dueDate?: Date;
   blockerDescription?: string;
   assignedExperts?: string[];
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 /**
@@ -46,7 +46,7 @@ export interface ProjectDto {
   dueDate: Date | null;
   blockerDescription: string | null;
   assignedExperts: string[] | null;
-  metadata: Record<string, any> | null;
+  metadata: Record<string, unknown> | null;
   createdAt: Date;
   updatedAt: Date;
 }

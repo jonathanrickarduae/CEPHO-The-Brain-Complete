@@ -140,7 +140,7 @@ export const settingsRouter = router({
       const currentMeta =
         (existing[0]?.metadata as Record<string, unknown>) ?? {};
       const notifPrefs: Record<string, unknown> = {
-        ...(currentMeta.notifPrefs as Record<string, unknown> ?? {}),
+        ...((currentMeta.notifPrefs as Record<string, unknown>) ?? {}),
       };
       if (input.emailDigest !== undefined)
         notifPrefs.emailDigest = input.emailDigest;
@@ -186,7 +186,7 @@ export const settingsRouter = router({
       }
 
       // Users table stores PIN in metadata (since schema doesn't have a pin column)
-      const meta = (userRows[0] as Record<string, unknown>);
+      const meta = userRows[0] as Record<string, unknown>;
       const storedHash = (meta.pinHash as string) ?? null;
 
       if (storedHash) {
@@ -239,7 +239,12 @@ export const settingsRouter = router({
           .update(users)
           .set({ totpEnabled: true, updatedAt: new Date() })
           .where(eq(users.id, ctx.user.id));
-        return { success: true, enabled: true, message: "2FA enabled. Complete TOTP enrollment in the authenticator app." };
+        return {
+          success: true,
+          enabled: true,
+          message:
+            "2FA enabled. Complete TOTP enrollment in the authenticator app.",
+        };
       } else {
         // Disable TOTP
         await db
@@ -281,14 +286,16 @@ export const settingsRouter = router({
         });
       }
 
-      const { data, error } =
-        await supabaseAdmin.auth.admin.inviteUserByEmail(input.email, {
+      const { data, error } = await supabaseAdmin.auth.admin.inviteUserByEmail(
+        input.email,
+        {
           data: {
             role: input.role,
             invitedBy: ctx.user.id,
           },
           redirectTo: `${process.env.VITE_APP_URL ?? "https://cepho.ai"}/accept-invite`,
-        });
+        }
+      );
 
       if (error) {
         throw new TRPCError({

@@ -18,14 +18,12 @@ import { protectedProcedure, router } from "../_core/trpc";
 import { db } from "../db";
 import {
   tasks,
-  projects,
   kpis,
   okrs,
   okrKeyResults,
-  notifications,
   activityFeed,
 } from "../../drizzle/schema";
-import { eq, and, desc, or, ilike } from "drizzle-orm";
+import { eq, and, desc } from "drizzle-orm";
 import { logger } from "../utils/logger";
 const log = logger.module("nlCommand");
 import { eventBus } from "../services/eventBus";

@@ -15,7 +15,7 @@ export interface CreateDocumentDto {
   fileUrl?: string;
   fileType?: string;
   content?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 /**
@@ -29,7 +29,7 @@ export interface UpdateDocumentDto {
   fileUrl?: string;
   fileType?: string;
   content?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 /**
@@ -45,7 +45,7 @@ export interface DocumentDto {
   fileUrl: string | null;
   fileType: string | null;
   content: string | null;
-  metadata: Record<string, any> | null;
+  metadata: Record<string, unknown> | null;
   accessCount: number;
   lastAccessedAt: Date | null;
   createdAt: Date;

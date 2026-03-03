@@ -95,7 +95,8 @@ export function apmMiddleware(req: Request, res: Response, next: NextFunction) {
 
   // Override res.end to capture metrics
   const originalEnd = res.end;
-  res.end = function (...args: any[]) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (res as any).end = function (this: Response, ...args: unknown[]) {
     const duration = (Date.now() - start) / 1000; // Convert to seconds
     const route = req.route?.path || req.path;
     const method = req.method;
@@ -115,7 +116,8 @@ export function apmMiddleware(req: Request, res: Response, next: NextFunction) {
     activeConnections.dec();
 
     // Call original end
-    return originalEnd.apply(res, args as [any, BufferEncoding, () => void]);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return (originalEnd as any).apply(this, args);
   };
 
   next();

@@ -1,5 +1,6 @@
 import winston from "winston";
 import path from "path";
+import type { Request, Response, NextFunction } from "express";
 
 /**
  * Structured Logging Service using Winston
@@ -92,49 +93,49 @@ class LoggerService {
   /**
    * Log error message
    */
-  error(message: string, meta?: Record<string, any>) {
+  error(message: string, meta?: Record<string, unknown>) {
     logger.error(message, meta);
   }
 
   /**
    * Log warning message
    */
-  warn(message: string, meta?: Record<string, any>) {
+  warn(message: string, meta?: Record<string, unknown>) {
     logger.warn(message, meta);
   }
 
   /**
    * Log info message
    */
-  info(message: string, meta?: Record<string, any>) {
+  info(message: string, meta?: Record<string, unknown>) {
     logger.info(message, meta);
   }
 
   /**
    * Log HTTP request
    */
-  http(message: string, meta?: Record<string, any>) {
+  http(message: string, meta?: Record<string, unknown>) {
     logger.http(message, meta);
   }
 
   /**
    * Log debug message
    */
-  debug(message: string, meta?: Record<string, any>) {
+  debug(message: string, meta?: Record<string, unknown>) {
     logger.debug(message, meta);
   }
 
   /**
    * Log with custom level
    */
-  log(level: string, message: string, meta?: Record<string, any>) {
+  log(level: string, message: string, meta?: Record<string, unknown>) {
     logger.log(level, message, meta);
   }
 
   /**
    * Create child logger with default metadata
    */
-  child(defaultMeta: Record<string, any>) {
+  child(defaultMeta: Record<string, unknown>) {
     return logger.child(defaultMeta);
   }
 
@@ -152,7 +153,11 @@ export const loggerService = new LoggerService();
 /**
  * Express middleware for logging HTTP requests
  */
-export function httpLoggerMiddleware(req: any, res: any, next: any) {
+export function httpLoggerMiddleware(
+  req: Request & { user?: { id: number } },
+  res: Response,
+  next: NextFunction
+) {
   const start = Date.now();
 
   // Log request
@@ -185,8 +190,15 @@ export function httpLoggerMiddleware(req: any, res: any, next: any) {
 /**
  * Request ID middleware for tracking requests
  */
-export function requestIdMiddleware(req: any, res: any, next: any) {
-  const requestId = req.headers["x-request-id"] || generateRequestId();
+export function requestIdMiddleware(
+  req: Request & { requestId?: string },
+  res: Response,
+  next: NextFunction
+) {
+  const rawId = req.headers["x-request-id"];
+  const requestId = Array.isArray(rawId)
+    ? rawId[0]
+    : (rawId ?? generateRequestId());
   req.requestId = requestId;
   res.setHeader("X-Request-ID", requestId);
   next();

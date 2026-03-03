@@ -76,7 +76,7 @@ class RedisCacheService {
    */
   async set(
     key: string,
-    value: any,
+    value: unknown,
     ttlSeconds: number = 3600
   ): Promise<boolean> {
     if (!this.client || !this.isConnected) return false;

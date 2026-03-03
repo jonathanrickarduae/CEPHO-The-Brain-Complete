@@ -101,9 +101,9 @@ export async function generateBriefVideo(
       id: response.data.id,
       status: "processing",
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     throw new Error(
-      `Failed to generate video: ${error.response?.data?.message || error.message}`
+      `Failed to generate video: ${error instanceof Error ? error.message : String(error)}`
     );
   }
 }
@@ -138,8 +138,10 @@ export async function checkVideoStatus(
       videoUrl: data.status === "complete" ? data.download : undefined,
       error: data.status === "failed" ? data.error : undefined,
     };
-  } catch (error: any) {
-    throw new Error(`Failed to check video status: ${error.message}`);
+  } catch (error: unknown) {
+    throw new Error(
+      `Failed to check video status: ${error instanceof Error ? error.message : String(error)}`
+    );
   }
 }
 

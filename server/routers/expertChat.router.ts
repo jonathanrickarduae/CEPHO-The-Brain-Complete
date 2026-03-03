@@ -1137,11 +1137,14 @@ Tailor your advice, examples, and communication style to match this profile. Ref
       // DT-MOD-04: Inject Dynamic Prompt Assembler personalisation (Appendix Q)
       let dtPersonalityInjection = "";
       try {
-        dtPersonalityInjection = await assembleDTPersonalityInjection(ctx.user.id);
+        dtPersonalityInjection = await assembleDTPersonalityInjection(
+          ctx.user.id
+        );
       } catch {
         // Non-blocking — proceed without DT injection if query fails
       }
-      const systemPrompt = baseSystemPrompt + digitalTwinContext + dtPersonalityInjection;
+      const systemPrompt =
+        baseSystemPrompt + digitalTwinContext + dtPersonalityInjection;
 
       const messages: OpenAI.ChatCompletionMessageParam[] = [
         { role: "system", content: systemPrompt },

@@ -41,10 +41,7 @@ export const dataIngestionRouter = router({
 
       let result;
 
-      if (
-        mime === "application/pdf" ||
-        filename.endsWith(".pdf")
-      ) {
+      if (mime === "application/pdf" || filename.endsWith(".pdf")) {
         result = await ingestPdf(ctx.user.id, buffer, input.filename);
       } else if (
         mime ===
@@ -152,7 +149,8 @@ export const dataIngestionRouter = router({
             firstId: row.id,
           });
         }
-        docMap.get(src)!.chunkCount++;
+        const doc = docMap.get(src);
+        if (doc) doc.chunkCount++;
       }
 
       return {

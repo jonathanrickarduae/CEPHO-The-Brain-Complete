@@ -26,9 +26,10 @@ export async function handleStripeWebhook(req: Request, res: Response) {
   try {
     // Verify webhook signature
     event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
-  } catch (err: any) {
-    log.error(`[Stripe Webhook] Signature verification failed: ${err.message}`);
-    return res.status(400).send(`Webhook Error: ${err.message}`);
+  } catch (err: unknown) {
+    const errMsg = err instanceof Error ? err.message : String(err);
+    log.error(`[Stripe Webhook] Signature verification failed: ${errMsg}`);
+    return res.status(400).send(`Webhook Error: ${errMsg}`);
   }
 
   // Handle test events - CRITICAL for webhook verification
@@ -85,8 +86,9 @@ export async function handleStripeWebhook(req: Request, res: Response) {
     }
 
     res.json({ received: true });
-  } catch (error: any) {
-    log.error(`[Stripe Webhook] Error processing event: ${error.message}`);
+  } catch (error: unknown) {
+    const errMsg = error instanceof Error ? error.message : String(error);
+    log.error(`[Stripe Webhook] Error processing event: ${errMsg}`);
     res.status(500).json({ error: "Webhook handler failed" });
   }
 }

@@ -101,7 +101,7 @@ export function enhancePromptWithContext(
     company?: string;
     industry?: string;
     role?: string;
-    preferences?: Record<string, any>;
+    preferences?: Record<string, unknown>;
   }
 ): string {
   if (!userContext) {
@@ -149,7 +149,7 @@ export function buildCompletePrompt(
     company?: string;
     industry?: string;
     role?: string;
-    preferences?: Record<string, any>;
+    preferences?: Record<string, unknown>;
   }
 ): Array<{ role: "system" | "user" | "assistant"; content: string }> {
   // Get base system prompt for skill

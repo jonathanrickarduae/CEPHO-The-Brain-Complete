@@ -89,9 +89,9 @@ export async function generateBriefAudio(
     await writeFile(tempAudioPath, Buffer.from(response.data));
 
     return tempAudioPath;
-  } catch (error: any) {
+  } catch (error: unknown) {
     throw new Error(
-      `Failed to generate audio: ${error.response?.data?.detail?.message || error.message}`
+      `Failed to generate audio: ${error instanceof Error ? error.message : String(error)}`
     );
   }
 }

@@ -23,7 +23,9 @@ export const db = new Proxy({} as ReturnType<typeof drizzle>, {
         "Database not initialized. Call initializeDatabase() first."
       );
     }
-    return (dbInstance as any)[prop];
+    return (dbInstance as ReturnType<typeof drizzle>)[
+      prop as keyof ReturnType<typeof drizzle>
+    ];
   },
 });
 

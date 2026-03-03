@@ -24,7 +24,7 @@ export class CacheService {
     return redisCache.get<T>(this.getKey(key));
   }
 
-  async set(key: string, value: any, ttl?: number): Promise<void> {
+  async set(key: string, value: unknown, ttl?: number): Promise<void> {
     return redisCache.set(this.getKey(key), value, ttl);
   }
 

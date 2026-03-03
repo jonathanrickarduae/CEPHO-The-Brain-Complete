@@ -156,7 +156,7 @@ export async function logIntegrationUsage(
   action: string,
   success: boolean,
   errorMessage?: string,
-  metadata?: any
+  metadata?: Record<string, unknown>
 ): Promise<void> {
   await db.insert(integrationUsageLogs).values({
     userId,

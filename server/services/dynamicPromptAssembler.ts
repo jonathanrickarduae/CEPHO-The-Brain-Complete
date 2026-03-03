@@ -9,7 +9,10 @@
  */
 
 import { db } from "../db";
-import { digitalTwinCognitiveModel, digitalTwinVocabulary, digitalTwinProfile } from "../../drizzle/schema";
+import {
+  digitalTwinCognitiveModel,
+  digitalTwinVocabulary,
+} from "../../drizzle/schema";
 import { eq } from "drizzle-orm";
 
 export interface CognitiveModelSnapshot {
@@ -35,7 +38,9 @@ export interface CognitiveModelSnapshot {
  * Fetches the full cognitive model snapshot for a user.
  * Returns sensible defaults if no model exists yet.
  */
-export async function getCognitiveModelSnapshot(userId: number): Promise<CognitiveModelSnapshot> {
+export async function getCognitiveModelSnapshot(
+  userId: number
+): Promise<CognitiveModelSnapshot> {
   const [cogModel] = await db
     .select()
     .from(digitalTwinCognitiveModel)
@@ -49,7 +54,12 @@ export async function getCognitiveModelSnapshot(userId: number): Promise<Cogniti
     .limit(1);
 
   return {
-    communicationStyle: (cogModel?.communicationStyle as any) ?? {
+    communicationStyle: (cogModel?.communicationStyle as {
+      formality: number;
+      verbosity: number;
+      humor: number;
+      useEmoji: boolean;
+    }) ?? {
       formality: 0.7,
       verbosity: 0.5,
       humor: 0.3,
@@ -57,7 +67,11 @@ export async function getCognitiveModelSnapshot(userId: number): Promise<Cogniti
     },
     riskTolerance: parseFloat(cogModel?.riskTolerance ?? "0.5"),
     decisionHeuristics: (cogModel?.decisionHeuristics as string[]) ?? [],
-    strategicPriorities: (cogModel?.strategicPriorities as { priority: string; weight: number }[]) ?? [],
+    strategicPriorities:
+      (cogModel?.strategicPriorities as {
+        priority: string;
+        weight: number;
+      }[]) ?? [],
     values: (cogModel?.values as string[]) ?? [],
     vocabulary: {
       preferredTerms: (vocab?.preferredTerms as Record<string, string>) ?? {},
@@ -72,31 +86,51 @@ export async function getCognitiveModelSnapshot(userId: number): Promise<Cogniti
  * Assembles a Digital Twin personality injection string for LLM system prompts.
  * This is called before every LLM interaction to personalise the agent's behaviour.
  */
-export async function assembleDTPersonalityInjection(userId: number): Promise<string> {
+export async function assembleDTPersonalityInjection(
+  userId: number
+): Promise<string> {
   const model = await getCognitiveModelSnapshot(userId);
 
   const parts: string[] = [];
 
   // Communication style
   const { formality, verbosity, humor, useEmoji } = model.communicationStyle;
-  const formalityDesc = formality > 0.7 ? "formal" : formality > 0.4 ? "semi-formal" : "casual";
-  const verbosityDesc = verbosity > 0.7 ? "detailed and thorough" : verbosity > 0.4 ? "balanced" : "concise and direct";
-  const humorDesc = humor > 0.6 ? "occasionally use light humour where appropriate" : "maintain a professional tone without humour";
-  const emojiNote = useEmoji ? "You may use emojis sparingly for emphasis." : "Do not use emojis.";
+  const formalityDesc =
+    formality > 0.7 ? "formal" : formality > 0.4 ? "semi-formal" : "casual";
+  const verbosityDesc =
+    verbosity > 0.7
+      ? "detailed and thorough"
+      : verbosity > 0.4
+        ? "balanced"
+        : "concise and direct";
+  const humorDesc =
+    humor > 0.6
+      ? "occasionally use light humour where appropriate"
+      : "maintain a professional tone without humour";
+  const emojiNote = useEmoji
+    ? "You may use emojis sparingly for emphasis."
+    : "Do not use emojis.";
 
   parts.push(
     `Communication Style: Your responses must be ${formalityDesc} (formality: ${formality.toFixed(1)}) and ${verbosityDesc} (verbosity: ${verbosity.toFixed(1)}). ${humorDesc.charAt(0).toUpperCase() + humorDesc.slice(1)}. ${emojiNote}`
   );
 
   // Risk tolerance
-  const riskDesc = model.riskTolerance > 0.7 ? "high risk tolerance — willing to explore bold, unconventional approaches" :
-    model.riskTolerance > 0.4 ? "moderate risk tolerance — balance innovation with prudence" :
-    "low risk tolerance — prioritise safe, well-validated approaches";
-  parts.push(`Risk Profile: The user has ${riskDesc} (${model.riskTolerance.toFixed(2)}).`);
+  const riskDesc =
+    model.riskTolerance > 0.7
+      ? "high risk tolerance — willing to explore bold, unconventional approaches"
+      : model.riskTolerance > 0.4
+        ? "moderate risk tolerance — balance innovation with prudence"
+        : "low risk tolerance — prioritise safe, well-validated approaches";
+  parts.push(
+    `Risk Profile: The user has ${riskDesc} (${model.riskTolerance.toFixed(2)}).`
+  );
 
   // Values
   if (model.values.length > 0) {
-    parts.push(`Core Values: The user's core values are: ${model.values.join(", ")}. Frame all recommendations with these values in mind.`);
+    parts.push(
+      `Core Values: The user's core values are: ${model.values.join(", ")}. Frame all recommendations with these values in mind.`
+    );
   }
 
   // Strategic priorities
@@ -106,19 +140,25 @@ export async function assembleDTPersonalityInjection(userId: number): Promise<st
       .slice(0, 3)
       .map(p => `'${p.priority}' (weight: ${p.weight.toFixed(2)})`)
       .join(", ");
-    parts.push(`Strategic Priorities: The user's current top priorities are: ${topPriorities}. Ensure your response is aligned with these.`);
+    parts.push(
+      `Strategic Priorities: The user's current top priorities are: ${topPriorities}. Ensure your response is aligned with these.`
+    );
   }
 
   // Decision heuristics
   if (model.decisionHeuristics.length > 0) {
-    parts.push(`Decision Style: The user typically ${model.decisionHeuristics.join(", ").replace(/_/g, " ")}.`);
+    parts.push(
+      `Decision Style: The user typically ${model.decisionHeuristics.join(", ").replace(/_/g, " ")}.`
+    );
   }
 
   // Vocabulary preferences
   const { preferredTerms, avoidedTerms } = model.vocabulary;
   const termSubstitutions = Object.entries(preferredTerms);
   if (termSubstitutions.length > 0) {
-    const termList = termSubstitutions.map(([old, preferred]) => `instead of '${old}' use '${preferred}'`).join("; ");
+    const termList = termSubstitutions
+      .map(([old, preferred]) => `instead of '${old}' use '${preferred}'`)
+      .join("; ");
     parts.push(`Vocabulary: ${termList}.`);
   }
   if (avoidedTerms.length > 0) {
@@ -127,7 +167,9 @@ export async function assembleDTPersonalityInjection(userId: number): Promise<st
 
   // Calibration note
   if (model.calibrationScore < 30) {
-    parts.push(`Note: The Digital Twin model is still being calibrated (${model.calibrationScore}% complete). Apply these preferences as guidelines, not strict rules.`);
+    parts.push(
+      `Note: The Digital Twin model is still being calibrated (${model.calibrationScore}% complete). Apply these preferences as guidelines, not strict rules.`
+    );
   }
 
   if (parts.length === 0) {
@@ -170,7 +212,9 @@ export async function updateCognitiveModelFromQuestionnaire(
     .where(eq(digitalTwinCognitiveModel.userId, userId))
     .limit(1);
 
-  const currentStyle = (existing[0]?.communicationStyle as any) ?? {
+  const currentStyle = (existing[0]?.communicationStyle as
+    | { formality: number; verbosity: number; humor: number; useEmoji: boolean }
+    | undefined) ?? {
     formality: 0.7,
     verbosity: 0.5,
     humor: 0.3,
@@ -187,7 +231,7 @@ export async function updateCognitiveModelFromQuestionnaire(
     }),
   };
 
-  const updateData: any = {
+  const updateData: Record<string, unknown> = {
     communicationStyle: updatedStyle,
     updatedAt: new Date(),
   };

@@ -78,9 +78,8 @@ export async function getOrCreateCustomer(
   if (!db) throw new Error("Database not available");
 
   // Check cache first
-  if (customerCache.has(userId)) {
-    return customerCache.get(userId)!;
-  }
+  const cached = customerCache.get(userId);
+  if (cached) return cached;
 
   // Check if user exists
   const [user] = await db

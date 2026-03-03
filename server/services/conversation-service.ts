@@ -5,7 +5,7 @@ const log = logger.module("ConversationService");
 export interface ConversationMessage {
   role: "user" | "assistant" | "system";
   content: string;
-  metadata?: any;
+  metadata?: Record<string, unknown>;
 }
 
 export class ConversationService {
@@ -13,7 +13,7 @@ export class ConversationService {
     userId: number,
     role: "user" | "assistant" | "system",
     content: string,
-    metadata?: any
+    metadata?: Record<string, unknown>
   ) {
     try {
       const pool = getPool();
@@ -26,8 +26,9 @@ export class ConversationService {
 
       log.debug("[Conversation] Message saved:", { userId, role });
       return result.rows[0];
-    } catch (error: any) {
-      log.error("[Conversation] Error saving message:", error.message);
+    } catch (error: unknown) {
+      const msg = error instanceof Error ? error.message : String(error);
+      log.error("[Conversation] Error saving message:", msg);
       throw error;
     }
   }
@@ -49,19 +50,22 @@ export class ConversationService {
       );
 
       // Reverse to get chronological order (oldest first)
-      const messages = result.rows.reverse().map((row: any) => ({
-        role: row.role,
-        content: row.content,
-        metadata: row.metadata,
-      }));
+      const messages: ConversationMessage[] = result.rows
+        .reverse()
+        .map((row: { role: string; content: string; metadata: unknown }) => ({
+          role: row.role as "user" | "assistant" | "system",
+          content: String(row.content),
+          metadata: row.metadata as Record<string, unknown> | undefined,
+        }));
 
       log.debug("[Conversation] Retrieved history:", {
         userId,
         count: messages.length,
       });
       return messages;
-    } catch (error: any) {
-      log.error("[Conversation] Error retrieving history:", error.message);
+    } catch (error: unknown) {
+      const msg = error instanceof Error ? error.message : String(error);
+      log.error("[Conversation] Error retrieving history:", msg);
       return [];
     }
   }
@@ -75,8 +79,9 @@ export class ConversationService {
       ]);
 
       log.debug("[Conversation] History cleared:", { userId });
-    } catch (error: any) {
-      log.error("[Conversation] Error clearing history:", error.message);
+    } catch (error: unknown) {
+      const msg = error instanceof Error ? error.message : String(error);
+      log.error("[Conversation] Error clearing history:", msg);
       throw error;
     }
   }
@@ -100,8 +105,9 @@ export class ConversationService {
       const stats = result.rows[0] || {};
       log.debug("[Conversation] Stats retrieved:", { userId, stats });
       return stats;
-    } catch (error: any) {
-      log.error("[Conversation] Error retrieving stats:", error.message);
+    } catch (error: unknown) {
+      const msg = error instanceof Error ? error.message : String(error);
+      log.error("[Conversation] Error retrieving stats:", msg);
       return null;
     }
   }

@@ -323,7 +323,13 @@ export const integrationsRouter = router({
         )
         .limit(1);
 
-      if (!rows[0]) return { active: false, webhookUrl: null, lastEvent: null, eventsReceived: 0 };
+      if (!rows[0])
+        return {
+          active: false,
+          webhookUrl: null,
+          lastEvent: null,
+          eventsReceived: 0,
+        };
       const meta = (rows[0].metadata as Record<string, unknown>) ?? {};
       return {
         active: rows[0].status === "active",
@@ -359,7 +365,10 @@ export const integrationsRouter = router({
           case "notion": {
             if (!env.notionApiKey) break;
             const r = await fetch("https://api.notion.com/v1/users/me", {
-              headers: { Authorization: `Bearer ${env.notionApiKey}`, "Notion-Version": "2022-06-28" },
+              headers: {
+                Authorization: `Bearer ${env.notionApiKey}`,
+                "Notion-Version": "2022-06-28",
+              },
             });
             ok = r.ok;
             break;
@@ -394,9 +403,15 @@ export const integrationsRouter = router({
         }
         await db
           .update(integrations)
-          .set({ syncError: ok ? null : "Connection test failed", updatedAt: new Date() })
+          .set({
+            syncError: ok ? null : "Connection test failed",
+            updatedAt: new Date(),
+          })
           .where(eq(integrations.id, rows[0].id));
-        return { success: ok, message: ok ? "Connection successful" : "Connection test failed" };
+        return {
+          success: ok,
+          message: ok ? "Connection successful" : "Connection test failed",
+        };
       } catch (err) {
         return { success: false, message: String(err) };
       }
@@ -415,7 +430,10 @@ export const integrationsRouter = router({
     .mutation(async ({ input }) => {
       const { ENV: env } = await import("../_core/env");
       if (!env.notionApiKey) {
-        throw new TRPCError({ code: "PRECONDITION_FAILED", message: "Notion API key not configured" });
+        throw new TRPCError({
+          code: "PRECONDITION_FAILED",
+          message: "Notion API key not configured",
+        });
       }
 
       const body: Record<string, unknown> = {
@@ -430,7 +448,12 @@ export const integrationsRouter = router({
             object: "block",
             type: "paragraph",
             paragraph: {
-              rich_text: [{ type: "text", text: { content: input.content.substring(0, 2000) } }],
+              rich_text: [
+                {
+                  type: "text",
+                  text: { content: input.content.substring(0, 2000) },
+                },
+              ],
             },
           },
         ],
@@ -448,7 +471,10 @@ export const integrationsRouter = router({
 
       if (!r.ok) {
         const errText = await r.text();
-        throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: `Notion error: ${errText}` });
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: `Notion error: ${errText}`,
+        });
       }
 
       const data = (await r.json()) as { id: string; url: string };
@@ -468,7 +494,10 @@ export const integrationsRouter = router({
     .mutation(async ({ input }) => {
       const { ENV: env } = await import("../_core/env");
       if (!env.trelloApiKey || !env.trelloToken) {
-        throw new TRPCError({ code: "PRECONDITION_FAILED", message: "Trello API key/token not configured" });
+        throw new TRPCError({
+          code: "PRECONDITION_FAILED",
+          message: "Trello API key/token not configured",
+        });
       }
 
       const params = new URLSearchParams({
@@ -480,11 +509,17 @@ export const integrationsRouter = router({
         ...(input.dueDate ? { due: input.dueDate } : {}),
       });
 
-      const r = await fetch(`https://api.trello.com/1/cards?${params.toString()}`, { method: "POST" });
+      const r = await fetch(
+        `https://api.trello.com/1/cards?${params.toString()}`,
+        { method: "POST" }
+      );
 
       if (!r.ok) {
         const errText = await r.text();
-        throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: `Trello error: ${errText}` });
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: `Trello error: ${errText}`,
+        });
       }
 
       const card = (await r.json()) as { id: string; shortUrl: string };
@@ -503,7 +538,10 @@ export const integrationsRouter = router({
     .mutation(async ({ input }) => {
       const { ENV: env } = await import("../_core/env");
       if (!env.slackBotToken) {
-        throw new TRPCError({ code: "PRECONDITION_FAILED", message: "Slack bot token not configured" });
+        throw new TRPCError({
+          code: "PRECONDITION_FAILED",
+          message: "Slack bot token not configured",
+        });
       }
 
       const r = await fetch("https://slack.com/api/chat.postMessage", {
@@ -519,9 +557,16 @@ export const integrationsRouter = router({
         }),
       });
 
-      const data = (await r.json()) as { ok: boolean; ts?: string; error?: string };
+      const data = (await r.json()) as {
+        ok: boolean;
+        ts?: string;
+        error?: string;
+      };
       if (!data.ok) {
-        throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: `Slack error: ${data.error}` });
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: `Slack error: ${data.error}`,
+        });
       }
 
       return { success: true, messageTs: data.ts };

@@ -32,15 +32,9 @@ import {
   userSettings, // eslint-disable-line @typescript-eslint/no-unused-vars
   agentInsights,
   agentImprovements,
-  briefings,
 } from "../../drizzle/schema";
 import { logger } from "../utils/logger";
-import {
-  recordMetricSnapshot,
-  detectAnomalies,
-  getPendingAnomaliesForBriefing,
-  markAnomaliesSurfaced,
-} from "./anomalyDetection";
+import { recordMetricSnapshot, detectAnomalies } from "./anomalyDetection";
 import { eventBus } from "./eventBus";
 const log = logger.module("Scheduler");
 
@@ -597,14 +591,44 @@ function scheduleAgentResearch() {
         const allUsers = await db.select({ id: users.id }).from(users);
 
         const researchAgents = [
-          { key: "chief_of_staff", domain: "executive operations and strategic priorities" },
-          { key: "financial_analyst", domain: "financial markets, cash flow, and business metrics" },
-          { key: "marketing_strategist", domain: "marketing trends, campaign performance, and brand positioning" },
-          { key: "technology_advisor", domain: "emerging technologies, AI developments, and digital transformation" },
-          { key: "legal_counsel", domain: "regulatory changes, compliance requirements, and legal risks" },
-          { key: "hr_director", domain: "talent management, workforce trends, and organisational culture" },
-          { key: "innovation_scout", domain: "startup ecosystem, innovation opportunities, and disruptive technologies" },
-          { key: "competitor_intelligence", domain: "competitor activity, market positioning, and industry movements" },
+          {
+            key: "chief_of_staff",
+            domain: "executive operations and strategic priorities",
+          },
+          {
+            key: "financial_analyst",
+            domain: "financial markets, cash flow, and business metrics",
+          },
+          {
+            key: "marketing_strategist",
+            domain:
+              "marketing trends, campaign performance, and brand positioning",
+          },
+          {
+            key: "technology_advisor",
+            domain:
+              "emerging technologies, AI developments, and digital transformation",
+          },
+          {
+            key: "legal_counsel",
+            domain:
+              "regulatory changes, compliance requirements, and legal risks",
+          },
+          {
+            key: "hr_director",
+            domain:
+              "talent management, workforce trends, and organisational culture",
+          },
+          {
+            key: "innovation_scout",
+            domain:
+              "startup ecosystem, innovation opportunities, and disruptive technologies",
+          },
+          {
+            key: "competitor_intelligence",
+            domain:
+              "competitor activity, market positioning, and industry movements",
+          },
         ];
 
         for (const user of allUsers) {
@@ -626,8 +650,14 @@ function scheduleAgentResearch() {
                 temperature: 0.7,
               });
 
-              const raw = JSON.parse(completion.choices[0]?.message?.content ?? "{}") as {
-                insights?: { insight: string; source: string; confidence: number }[];
+              const raw = JSON.parse(
+                completion.choices[0]?.message?.content ?? "{}"
+              ) as {
+                insights?: {
+                  insight: string;
+                  source: string;
+                  confidence: number;
+                }[];
                 improvement?: { suggestion: string; rationale: string };
               };
 
@@ -638,7 +668,10 @@ function scheduleAgentResearch() {
                     agentKey: agent.key,
                     insight: ins.insight,
                     source: ins.source ?? agent.domain,
-                    confidence: Math.min(100, Math.max(0, ins.confidence ?? 70)),
+                    confidence: Math.min(
+                      100,
+                      Math.max(0, ins.confidence ?? 70)
+                    ),
                   });
                 }
               }
@@ -653,11 +686,16 @@ function scheduleAgentResearch() {
                 });
               }
             } catch (agentErr) {
-              log.warn(`[Cron] Agent Research — agent ${agent.key} failed for user ${user.id}:`, agentErr);
+              log.warn(
+                `[Cron] Agent Research — agent ${agent.key} failed for user ${user.id}:`,
+                agentErr
+              );
             }
           }
         }
-        log.info(`[Cron] Agent Research — completed for ${allUsers.length} users`);
+        log.info(
+          `[Cron] Agent Research — completed for ${allUsers.length} users`
+        );
       } catch (err) {
         log.error("[Cron] Agent Research — error:", err);
       }
