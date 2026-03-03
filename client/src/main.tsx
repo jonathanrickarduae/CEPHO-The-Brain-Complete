@@ -1,3 +1,5 @@
+// p5-2: Sentry client-side error tracking — must be imported before everything else
+import * as Sentry from "@sentry/react";
 import { trpc } from "@/lib/trpc";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { UNAUTHED_ERR_MSG } from "@shared/const";
@@ -9,6 +11,34 @@ import App from "./App";
 import { getLoginUrl } from "./const";
 import "./index.css";
 import { checkAppVersion } from "./utils/cacheBuster";
+
+// p5-2: Initialise Sentry client-side (production only, requires VITE_SENTRY_DSN)
+if (import.meta.env.PROD && import.meta.env.VITE_SENTRY_DSN) {
+  Sentry.init({
+    dsn: import.meta.env.VITE_SENTRY_DSN as string,
+    environment: import.meta.env.MODE,
+    // Sample 10% of transactions for performance monitoring
+    tracesSampleRate: 0.1,
+    // Capture 100% of sessions that had an error for replay
+    replaysOnErrorSampleRate: 1.0,
+    // Sample 5% of all sessions for replay
+    replaysSessionSampleRate: 0.05,
+    integrations: [
+      Sentry.browserTracingIntegration(),
+      Sentry.replayIntegration(),
+    ],
+    beforeSend(event) {
+      // Strip sensitive tokens from request URLs before sending to Sentry
+      if (event.request?.url) {
+        event.request.url = event.request.url.replace(
+          /token=[^&]+/,
+          "token=REDACTED"
+        );
+      }
+      return event;
+    },
+  });
+}
 
 // Check app version and force reload if changed
 checkAppVersion();

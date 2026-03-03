@@ -95,6 +95,7 @@ const AnalyticsDeepDivePage = lazy(
   () => import("./pages/AnalyticsDeepDivePage")
 );
 const EmailAccountsPage = lazy(() => import("./pages/EmailAccountsPage"));
+const AICostTrackerPage = lazy(() => import("./pages/AICostTrackerPage"));
 
 // ── Standalone ───────────────────────────────────────────────────────────────
 const Vault = lazy(() => import("./pages/Vault"));
@@ -333,6 +334,12 @@ function Router() {
         <Route path="/email-accounts">
           <WithLayout>
             <EmailAccountsPage />
+          </WithLayout>
+        </Route>
+        {/* p5-11: AI Cost Tracker */}
+        <Route path="/ai-cost-tracker">
+          <WithLayout>
+            <AICostTrackerPage />
           </WithLayout>
         </Route>
         {/* 404 */}

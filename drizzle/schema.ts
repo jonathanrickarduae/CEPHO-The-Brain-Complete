@@ -5169,3 +5169,27 @@ export const userWorkspacePrefs = pgTable("user_workspace_prefs", {
 });
 export type UserWorkspacePrefs = typeof userWorkspacePrefs.$inferSelect;
 export type InsertUserWorkspacePrefs = typeof userWorkspacePrefs.$inferInsert;
+
+// ─── p5-9: AI Usage / Cost Tracking ──────────────────────────────────────────
+/**
+ * Logs every LLM call with model, token counts, and estimated cost.
+ * Used by the AI Cost Tracker dashboard widget and admin cost reports.
+ */
+export const aiUsageLogs = pgTable("ai_usage_logs", {
+  id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
+  userId: integer("userId").notNull(),
+  /** tRPC procedure or feature that triggered the call, e.g. "voiceNotes.create" */
+  feature: varchar("feature", { length: 128 }).notNull(),
+  /** LLM model identifier, e.g. "gpt-4o-mini", "gpt-4.1" */
+  model: varchar("model", { length: 64 }).notNull(),
+  promptTokens: integer("promptTokens").notNull().default(0),
+  completionTokens: integer("completionTokens").notNull().default(0),
+  totalTokens: integer("totalTokens").notNull().default(0),
+  /** Estimated cost in USD (calculated at call time using known pricing) */
+  estimatedCostUsd: real("estimatedCostUsd").notNull().default(0),
+  /** HTTP status or tRPC error code if the call failed */
+  errorCode: varchar("errorCode", { length: 64 }),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+export type AiUsageLog = typeof aiUsageLogs.$inferSelect;
+export type InsertAiUsageLog = typeof aiUsageLogs.$inferInsert;

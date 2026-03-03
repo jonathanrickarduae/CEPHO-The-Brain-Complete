@@ -58,6 +58,7 @@ import { useLocation } from "wouter";
 import { DashboardLayoutSkeleton } from "@/components/project-management/DashboardLayoutSkeleton";
 import { BottomTabBar } from "@/components/ai-agents/BottomTabBar";
 import { QuickActionsBar } from "@/components/shared/QuickActionsBar";
+import { OfflineIndicator } from "@/components/shared/OfflineIndicator";
 import {
   KeyboardShortcutsHelp,
   useKeyboardShortcutsHelp,
@@ -552,6 +553,9 @@ function BrainLayoutContent({
         isOpen={showGlobalSearch}
         onClose={() => setShowGlobalSearch(false)}
       />
+
+      {/* p5-7: PWA offline / reconnected banner */}
+      <OfflineIndicator />
     </>
   );
 }

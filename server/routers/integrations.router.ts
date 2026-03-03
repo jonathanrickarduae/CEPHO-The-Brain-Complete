@@ -27,11 +27,19 @@ import { calendarService } from "../services/calendar";
 export const authRouter = router({
   me: publicProcedure.query(async ({ ctx }) => {
     if (!ctx.user) return null;
+    // p5-5: Include onboardingComplete so the client can auto-redirect new users
+    const settingsRows = await db
+      .select()
+      .from(userSettings)
+      .where(eq(userSettings.userId, ctx.user.id))
+      .limit(1);
+    const onboardingComplete = settingsRows[0]?.onboardingComplete ?? false;
     return {
       id: ctx.user.id,
       email: ctx.user.email ?? "admin@cepho.ai",
       name: ctx.user.name ?? "Admin",
       role: ctx.user.role ?? "admin",
+      onboardingComplete,
     };
   }),
 
@@ -45,6 +53,8 @@ export const authRouter = router({
       z.object({
         name: z.string().min(1).max(128).optional(),
         timezone: z.string().optional(),
+        // p5-5: Allow onboarding wizard to mark itself complete
+        onboardingComplete: z.boolean().optional(),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -55,6 +65,25 @@ export const authRouter = router({
         .set(updates)
         .where(eq(users.id, ctx.user.id))
         .returning();
+      // p5-5: Persist onboardingComplete flag to userSettings
+      if (input.onboardingComplete !== undefined) {
+        const existing = await db
+          .select()
+          .from(userSettings)
+          .where(eq(userSettings.userId, ctx.user.id))
+          .limit(1);
+        if (existing.length === 0) {
+          await db.insert(userSettings).values({
+            userId: ctx.user.id,
+            onboardingComplete: input.onboardingComplete,
+          });
+        } else {
+          await db
+            .update(userSettings)
+            .set({ onboardingComplete: input.onboardingComplete, updatedAt: new Date() })
+            .where(eq(userSettings.userId, ctx.user.id));
+        }
+      }
       return {
         id: updated.id,
         name: updated.name,

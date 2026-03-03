@@ -69,6 +69,7 @@ import { realWorldIntegrationRouter } from "./routers/realWorldIntegration.route
 import { globalSearchRouter } from "./routers/globalSearch.router";
 import { pushNotificationsRouter } from "./routers/pushNotifications.router";
 import { workspacesRouter } from "./routers/workspaces.router";
+import { aiCostTrackingRouter } from "./routers/aiCostTracking.router";
 import {
   businessPlanReviewRouter as businessPlanReviewRealRouter,
   collaborativeReviewRouter as collaborativeReviewRealRouter,
@@ -255,6 +256,8 @@ export const appRouter = router({
   pushNotifications: pushNotificationsRouter,
   // ─── Workspaces (P4-6) ────────────────────────────────────────────────────
   workspaces: workspacesRouter,
+  // ─── AI Cost Tracking (p5-9/10/11) ───────────────────────────────────────
+  aiCostTracking: aiCostTrackingRouter,
 });
 
 export type AppRouter = typeof appRouter;
