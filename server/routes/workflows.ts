@@ -6,6 +6,7 @@ import { Router } from "express";
 import { db } from "../db";
 import { sql } from "drizzle-orm";
 import OpenAI from "openai";
+import { logger } from "../utils/logger";
 
 const router = Router();
 
@@ -27,7 +28,7 @@ router.get("/", async (_req, res) => {
     `);
     res.json({ success: true, workflows: Array.from(workflows) });
   } catch (err) {
-    console.error("GET /api/workflows error:", err);
+    logger.error("GET /api/workflows error:", err);
     res.status(500).json({ error: "Failed to fetch workflows" });
   }
 });
@@ -44,7 +45,7 @@ router.get("/:id", async (req, res) => {
       return res.status(404).json({ error: "Workflow not found" });
     res.json(rows[0]);
   } catch (err) {
-    console.error("GET /api/workflows/:id error:", err);
+    logger.error("GET /api/workflows/:id error:", err);
     res.status(500).json({ error: "Failed to fetch workflow" });
   }
 });
@@ -60,7 +61,7 @@ router.get("/:id/steps", async (req, res) => {
     `);
     res.json({ steps: Array.from(result) });
   } catch (err) {
-    console.error("GET /api/workflows/:id/steps error:", err);
+    logger.error("GET /api/workflows/:id/steps error:", err);
     res.status(500).json({ error: "Failed to fetch steps" });
   }
 });
@@ -104,7 +105,7 @@ router.get("/:id/steps/:stepId/guidance", async (req, res) => {
 
     res.json({ guidance: completion.choices[0].message.content });
   } catch (err) {
-    console.error("GET /api/workflows/:id/steps/:stepId/guidance error:", err);
+    logger.error("GET /api/workflows/:id/steps/:stepId/guidance error:", err);
     res.status(500).json({ error: "Failed to generate guidance" });
   }
 });
@@ -125,7 +126,7 @@ router.post("/:id/start", async (req, res) => {
     `);
     res.json({ success: true, message: "Workflow started" });
   } catch (err) {
-    console.error("POST /api/workflows/:id/start error:", err);
+    logger.error("POST /api/workflows/:id/start error:", err);
     res.status(500).json({ error: "Failed to start workflow" });
   }
 });
@@ -140,7 +141,7 @@ router.post("/:id/pause", async (req, res) => {
     `);
     res.json({ success: true, message: "Workflow paused" });
   } catch (err) {
-    console.error("POST /api/workflows/:id/pause error:", err);
+    logger.error("POST /api/workflows/:id/pause error:", err);
     res.status(500).json({ error: "Failed to pause workflow" });
   }
 });
@@ -155,7 +156,7 @@ router.post("/:id/resume", async (req, res) => {
     `);
     res.json({ success: true, message: "Workflow resumed" });
   } catch (err) {
-    console.error("POST /api/workflows/:id/resume error:", err);
+    logger.error("POST /api/workflows/:id/resume error:", err);
     res.status(500).json({ error: "Failed to resume workflow" });
   }
 });

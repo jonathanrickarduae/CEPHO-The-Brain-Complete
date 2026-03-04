@@ -810,26 +810,6 @@ export type Notification = typeof notifications.$inferSelect;
 export type InsertNotification = typeof notifications.$inferInsert;
 
 /**
- * Audit log - comprehensive activity tracking
- */
-export const auditLog = pgTable("audit_log", {
-  id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
-  userId: integer("userId"),
-  action: varchar("action", { length: 100 }).notNull(), // "login", "create_project", "update_settings", etc.
-  resource: varchar("resource", { length: 100 }), // "project", "document", "integration", etc.
-  resourceId: varchar("resourceId", { length: 100 }),
-  details: json("details"), // Action-specific data
-  ipAddress: varchar("ipAddress", { length: 45 }),
-  userAgent: text("userAgent"),
-  success: boolean("success").default(true),
-  errorMessage: text("errorMessage"),
-  createdAt: timestamp("createdAt").defaultNow().notNull(),
-});
-
-export type AuditLog = typeof auditLog.$inferSelect;
-export type InsertAuditLog = typeof auditLog.$inferInsert;
-
-/**
  * Subscriptions - SaaS subscription tracking with enhanced cost analysis
  */
 export const subscriptions = pgTable("subscriptions", {

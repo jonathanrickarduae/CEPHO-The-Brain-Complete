@@ -207,7 +207,7 @@
     "vitest": "^4.0.18",
     "vitest-axe": "^0.1.0"
   },
-  "packageManager": "pnpm@10.4.1+sha512.c753b6c3ad7afa13af388fa6d808035a008e30ea9993f58c6663e2bc5ff21679aa834db094987129aa4d488b86df57f7b634981b2f827cdcacc698cc0cfb88af",
+  "packageManager": "pnpm@10.27.0",
   "pnpm": {
     "patchedDependencies": {
       "wouter@3.7.1": "patches/wouter@3.7.1.patch"
@@ -215,7 +215,13 @@
     "overrides": {
       "tailwindcss>nanoid": "3.3.7",
       "basic-ftp": ">=5.2.0",
-      "fast-xml-parser": ">=5.3.5"
+      "fast-xml-parser": ">=5.3.5",
+      "tar": ">=7.5.8",
+      "minimatch": ">=3.1.4",
+      "rollup": ">=4.59.0",
+      "multer": ">=2.1.0",
+      "underscore": ">=1.13.8",
+      "minimatch@>=10.0.0": ">=10.2.3"
     },
     "onlyBuiltDependencies": [
       "sharp"

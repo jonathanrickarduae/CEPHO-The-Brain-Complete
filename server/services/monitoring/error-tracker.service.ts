@@ -5,6 +5,7 @@ import {
   setupExpressErrorHandler,
 } from "@sentry/node";
 import type { Express, Request, Response, NextFunction } from "express";
+import { logger } from "../../utils/logger";
 
 /**
  * Error Tracking Service using Sentry v10
@@ -75,7 +76,7 @@ class ErrorTrackerService {
    */
   captureException(error: Error, context?: Record<string, unknown>) {
     if (!this.initialized) {
-      console.error("Error (Sentry not initialized):", error);
+      logger.error("Error (Sentry not initialized)", error);
       return;
     }
     Sentry.captureException(error, {
@@ -92,7 +93,7 @@ class ErrorTrackerService {
     context?: Record<string, unknown>
   ) {
     if (!this.initialized) {
-      console.log(`Message (Sentry not initialized): ${message}`);
+      logger.info(`Message (Sentry not initialized): ${message}`);
       return;
     }
     Sentry.captureMessage(message, {

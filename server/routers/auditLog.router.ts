@@ -8,6 +8,7 @@ import { router, protectedProcedure } from "../_core/trpc";
 import { db } from "../db";
 import { auditLogs } from "../../drizzle/schema";
 import { eq, desc, and, gte } from "drizzle-orm";
+import { logger } from "../utils/logger";
 
 export const auditLogRouter = router({
   /**
@@ -107,6 +108,6 @@ export async function writeAuditLog(entry: {
     });
   } catch (err) {
     // Audit log failures should never crash the main flow
-    console.error("[AuditLog] Failed to write audit log:", err);
+    logger.error("[AuditLog] Failed to write audit log", err);
   }
 }
