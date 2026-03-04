@@ -179,6 +179,9 @@
       .phase-badge.ph5 {
         background: #dc2626;
       }
+      .phase-badge.ph-dtcos {
+        background: #0f766e;
+      }
       .phase-badge.ph6 {
         background: #7c3aed;
       }
@@ -1242,6 +1245,116 @@
               name: "Bundle size enforcement: CI step in ci.yml — fails build if any JS chunk >600KB or total assets >8MB; reports all chunk sizes",
               tags: ["gap"],
               status: "done",
+              gap: true,
+            },
+          ],
+        },
+        {
+          id: "ph-dtcos",
+          label: "DT-COS",
+          title: "Digital Twin + Chief of Staff Unification",
+          color: "#0f766e",
+          tasks: [
+            {
+              id: "dt-cos-01",
+              name: "Unify Digital Twin + CoS into single Victoria identity (victoria.router.ts — 40+ procedures, 20 cron jobs)",
+              tags: ["spec"],
+              status: "done",
+            },
+            {
+              id: "dt-cos-02",
+              name: "Quality Control Engine: victoria_qc_checks table, QC scoring, automated QC cron (cron job 20)",
+              tags: ["spec"],
+              status: "done",
+            },
+            {
+              id: "dt-cos-03",
+              name: "Autonomous Project Review: cron job 16 — daily project health check + AI recommendations",
+              tags: ["spec"],
+              status: "done",
+            },
+            {
+              id: "dt-cos-04",
+              name: "Autonomous Document Review: cron job 17 — daily document quality scan + improvement suggestions",
+              tags: ["spec"],
+              status: "done",
+            },
+            {
+              id: "dt-cos-05",
+              name: "Autonomous Meeting Pre-Briefs: cron job 19 — 30-min pre-meeting AI briefing generation",
+              tags: ["spec"],
+              status: "done",
+            },
+            {
+              id: "dt-cos-06",
+              name: "Autonomous Task Delegation: cron job 18 — AI assigns tasks to best-fit agents based on skills",
+              tags: ["spec"],
+              status: "done",
+            },
+            {
+              id: "dt-cos-07",
+              name: "Victoria Skills Framework: victoria_skills table, learnSkill + applySkill procedures",
+              tags: ["spec"],
+              status: "done",
+            },
+            {
+              id: "dt-cos-08",
+              name: "Victoria Actions Log: victoria_actions table — full audit trail of all autonomous actions",
+              tags: ["spec"],
+              status: "done",
+            },
+            {
+              id: "dt-cos-09",
+              name: "Calendar Integration: getCalendarSummary procedure — daily schedule awareness for Victoria",
+              tags: ["spec"],
+              status: "done",
+            },
+            {
+              id: "dt-cos-10",
+              name: "Victoria Tracker Dashboard (/victoria-tracker): live action feed, QC scores, skill matrix, cron status",
+              tags: ["spec"],
+              status: "done",
+            },
+            {
+              id: "dt-cos-11",
+              name: "Gap 2 — Digital Twin Behavioral Simulation: predictUserAction + simulateActionOutcome procedures in victoria.router.ts",
+              tags: ["gap"],
+              status: "done",
+              gap: true,
+            },
+            {
+              id: "dt-cos-12",
+              name: "Gap 3 — Autonomous Ventures Orchestrator: ventures schema (6 tables, Migration 025) + ventures.router.ts (11 procedures: CRUD, workflow orchestration, approval gates, kill switch)",
+              tags: ["gap"],
+              status: "done",
+              gap: true,
+            },
+            {
+              id: "dt-cos-13",
+              name: "Gap 4 — Credentials Vault (AES-256 encryption + UI): documented as Future Sprint in README",
+              tags: ["gap"],
+              status: "not-started",
+              gap: true,
+            },
+            {
+              id: "dt-cos-14",
+              name: "Gap 5 — Market Launch Automation (full orchestration UI): documented as Future Sprint in README",
+              tags: ["gap"],
+              status: "not-started",
+              gap: true,
+            },
+            {
+              id: "dt-cos-15",
+              name: "Gap 6 — Big Red Button (Kill Switch UI): backend complete, UI documented as Future Sprint in README",
+              tags: ["gap"],
+              status: "not-started",
+              gap: true,
+            },
+            {
+              id: "dt-cos-16",
+              name: "Gap 7 — API Docs Auto-Generation (OpenAPI + Swagger): documented as Future Sprint in README",
+              tags: ["gap"],
+              status: "not-started",
               gap: true,
             },
           ],

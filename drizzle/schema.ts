@@ -5360,3 +5360,143 @@ export const subphaseTasks = pgTable("subphase_tasks", {
 });
 export type SubphaseTask = typeof subphaseTasks.$inferSelect;
 export type InsertSubphaseTask = typeof subphaseTasks.$inferInsert;
+
+// ─── Autonomous Venture Execution Framework (Migration 025) ───────────────────
+/**
+ * Ventures — top-level business ventures managed by the Autonomous Orchestrator.
+ */
+export const ventures = pgTable("ventures", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userId: integer("user_id")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  name: varchar("name", { length: 255 }).notNull(),
+  description: text("description"),
+  status: varchar("status", { length: 50 }).notNull().default("draft"),
+  stage: varchar("stage", { length: 50 }).notNull().default("ideation"),
+  industry: varchar("industry", { length: 255 }),
+  targetMarket: text("target_market"),
+  businessModel: text("business_model"),
+  metadata: jsonb("metadata").default({}),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+});
+export type Venture = typeof ventures.$inferSelect;
+export type InsertVenture = typeof ventures.$inferInsert;
+
+/**
+ * Autonomous Workflows — multi-step AI-driven workflows attached to a venture.
+ */
+export const autonomousWorkflows = pgTable("autonomous_workflows", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  ventureId: uuid("venture_id")
+    .notNull()
+    .references(() => ventures.id, { onDelete: "cascade" }),
+  userId: integer("user_id")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  name: varchar("name", { length: 255 }).notNull(),
+  type: varchar("type", { length: 100 }).notNull(),
+  status: varchar("status", { length: 50 }).notNull().default("pending"),
+  currentStep: integer("current_step").notNull().default(0),
+  totalSteps: integer("total_steps").notNull().default(0),
+  steps: jsonb("steps").notNull().default([]),
+  result: jsonb("result"),
+  error: text("error"),
+  startedAt: timestamp("started_at"),
+  completedAt: timestamp("completed_at"),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+});
+export type AutonomousWorkflow = typeof autonomousWorkflows.$inferSelect;
+export type InsertAutonomousWorkflow = typeof autonomousWorkflows.$inferInsert;
+
+/**
+ * Workflow Approval Gates — human checkpoints before irreversible autonomous actions.
+ */
+export const workflowApprovalGates = pgTable("workflow_approval_gates", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  workflowId: uuid("workflow_id")
+    .notNull()
+    .references(() => autonomousWorkflows.id, { onDelete: "cascade" }),
+  userId: integer("user_id")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  stepName: varchar("step_name", { length: 255 }).notNull(),
+  stepIndex: integer("step_index").notNull(),
+  description: text("description").notNull(),
+  proposedAction: text("proposed_action").notNull(),
+  impactLevel: varchar("impact_level", { length: 20 }).notNull().default("medium"),
+  status: varchar("status", { length: 20 }).notNull().default("pending"),
+  userDecision: varchar("user_decision", { length: 20 }),
+  userNotes: text("user_notes"),
+  decidedAt: timestamp("decided_at"),
+  expiresAt: timestamp("expires_at"),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+export type WorkflowApprovalGate = typeof workflowApprovalGates.$inferSelect;
+export type InsertWorkflowApprovalGate = typeof workflowApprovalGates.$inferInsert;
+
+/**
+ * Orchestrator Jobs — individual agent task executions within a workflow.
+ */
+export const orchestratorJobs = pgTable("orchestrator_jobs", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  workflowId: uuid("workflow_id").references(() => autonomousWorkflows.id, {
+    onDelete: "set null",
+  }),
+  userId: integer("user_id")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  agentId: varchar("agent_id", { length: 100 }).notNull(),
+  taskType: varchar("task_type", { length: 100 }).notNull(),
+  input: jsonb("input").notNull().default({}),
+  output: jsonb("output"),
+  status: varchar("status", { length: 50 }).notNull().default("queued"),
+  priority: integer("priority").notNull().default(5),
+  attempts: integer("attempts").notNull().default(0),
+  maxAttempts: integer("max_attempts").notNull().default(3),
+  error: text("error"),
+  startedAt: timestamp("started_at"),
+  completedAt: timestamp("completed_at"),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+export type OrchestratorJob = typeof orchestratorJobs.$inferSelect;
+export type InsertOrchestratorJob = typeof orchestratorJobs.$inferInsert;
+
+/**
+ * Market Launch Checklists — tracks staged go-to-market execution for a venture.
+ */
+export const marketLaunchChecklists = pgTable("market_launch_checklists", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  ventureId: uuid("venture_id")
+    .notNull()
+    .references(() => ventures.id, { onDelete: "cascade" }),
+  userId: integer("user_id")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  status: varchar("status", { length: 50 }).notNull().default("pending"),
+  steps: jsonb("steps").notNull().default([]),
+  launchedAt: timestamp("launched_at"),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+});
+export type MarketLaunchChecklist = typeof marketLaunchChecklists.$inferSelect;
+export type InsertMarketLaunchChecklist = typeof marketLaunchChecklists.$inferInsert;
+
+/**
+ * System Kill Switch — emergency halt for all autonomous actions.
+ */
+export const systemKillSwitch = pgTable("system_kill_switch", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userId: integer("user_id")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  isActive: boolean("is_active").notNull().default(false),
+  reason: text("reason"),
+  activatedAt: timestamp("activated_at"),
+  deactivatedAt: timestamp("deactivated_at"),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+export type SystemKillSwitch = typeof systemKillSwitch.$inferSelect;
+export type InsertSystemKillSwitch = typeof systemKillSwitch.$inferInsert;

@@ -71,6 +71,7 @@ import { globalSearchRouter } from "./routers/globalSearch.router";
 import { pushNotificationsRouter } from "./routers/pushNotifications.router";
 import { workspacesRouter } from "./routers/workspaces.router";
 import { aiCostTrackingRouter } from "./routers/aiCostTracking.router";
+import { venturesRouter } from "./routers/ventures.router";
 import {
   businessPlanReviewRouter as businessPlanReviewRealRouter,
   collaborativeReviewRouter as collaborativeReviewRealRouter,
@@ -261,6 +262,8 @@ export const appRouter = router({
   workspaces: workspacesRouter,
   // ─── AI Cost Tracking (p5-9/10/11) ───────────────────────────────────────
   aiCostTracking: aiCostTrackingRouter,
+  // ─── Autonomous Ventures Orchestrator (Gap 3) ────────────────────────────
+  ventures: venturesRouter,
 });
 
 export type AppRouter = typeof appRouter;

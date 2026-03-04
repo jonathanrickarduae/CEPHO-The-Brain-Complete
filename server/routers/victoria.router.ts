@@ -1471,6 +1471,220 @@ export const victoriaRouter = router({
     return { seeded };
   }),
 
+  // ─── DT-COS-GAP-2A: Digital Twin Behavioral Simulation — predictUserAction ────
+  /**
+   * Predicts the most likely action a user would take given a scenario,
+   * using their Digital Twin profile and cognitive model.
+   * Gap 2 from Appendix J: predictUserAction
+   */
+  predictUserAction: aiProcedure
+    .input(
+      z.object({
+        scenario: z.string().min(10).max(2000).describe("Describe the situation or decision point"),
+        options: z.array(z.string()).min(2).max(10).describe("List of possible actions the user could take"),
+        context: z.string().optional().describe("Additional context about the scenario"),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const userId = ctx.user.id;
+
+      // Fetch Digital Twin data
+      const [profile, cognitiveModel] = await Promise.all([
+        db
+          .select()
+          .from(digitalTwinProfile)
+          .where(eq(digitalTwinProfile.userId, userId))
+          .limit(1),
+        db
+          .select()
+          .from(digitalTwinCognitiveModel)
+          .where(eq(digitalTwinCognitiveModel.userId, userId))
+          .limit(1),
+      ]);
+
+      const dtProfile = profile[0];
+      const dtCognitive = cognitiveModel[0];
+
+      const profileSummary = dtProfile
+        ? `Risk tolerance: ${dtProfile.ambiguityTolerance ?? "unknown"}/10, Automation preference: ${dtProfile.automationPreference ?? "unknown"}/10, AI belief: ${dtProfile.aiBeliefLevel ?? "unknown"}/10, Structure preference: ${dtProfile.structurePreference ?? "unknown"}/10, Pivot comfort: ${dtProfile.pivotComfort ?? "unknown"}/10`
+        : "No Digital Twin profile available";
+
+      const cognitiveSummary = dtCognitive
+        ? `Risk tolerance: ${dtCognitive.riskTolerance}, Decision heuristics: ${(dtCognitive.decisionHeuristics ?? []).join(", ")}, Strategic priorities: ${(dtCognitive.strategicPriorities ?? []).map((p: { priority: string; weight: number }) => p.priority).join(", ")}, Values: ${(dtCognitive.values ?? []).join(", ")}`
+        : "No cognitive model available";
+
+      const openai = getOpenAI();
+      const model = getModelForTask("analyse");
+
+      const completion = await openai.chat.completions.create({
+        model,
+        messages: [
+          {
+            role: "system",
+            content: `${VICTORIA_SYSTEM_PROMPT}\n\nYou are performing a Digital Twin behavioral simulation. Based on the user's Digital Twin profile, predict which action they are most likely to take.`,
+          },
+          {
+            role: "user",
+            content: `## User Digital Twin Profile\n${profileSummary}\n\n## Cognitive Model\n${cognitiveSummary}\n\n## Scenario\n${input.scenario}\n\n## Possible Actions\n${input.options.map((o, i) => `${i + 1}. ${o}`).join("\n")}\n\n${input.context ? `## Additional Context\n${input.context}` : ""}\n\nBased on this user's Digital Twin profile, which action are they MOST LIKELY to take? Respond with JSON: { "predictedAction": "<exact option text>", "confidence": <0.0-1.0>, "reasoning": "<explanation>", "alternativeAction": "<second most likely option>", "alternativeConfidence": <0.0-1.0> }`,
+          },
+        ],
+        temperature: 0.3,
+        response_format: { type: "json_object" },
+      });
+
+      void logAiUsage(
+        userId,
+        "victoria.predictUserAction",
+        completion.model,
+        completion.usage ?? null
+      );
+
+      const result = JSON.parse(completion.choices[0].message.content ?? "{}") as {
+        predictedAction: string;
+        confidence: number;
+        reasoning: string;
+        alternativeAction: string;
+        alternativeConfidence: number;
+      };
+
+      await logVictoriaAction(
+        userId,
+        "digital_twin_prediction",
+        "Predicted user action via Digital Twin simulation",
+        `Scenario: ${input.scenario.substring(0, 100)}... → Predicted: ${result.predictedAction} (${Math.round((result.confidence ?? 0) * 100)}% confidence)`,
+        "digital_twin",
+        undefined,
+        true,
+        { scenario: input.scenario, options: input.options, result }
+      );
+
+      return {
+        predictedAction: result.predictedAction,
+        confidence: result.confidence,
+        reasoning: result.reasoning,
+        alternativeAction: result.alternativeAction,
+        alternativeConfidence: result.alternativeConfidence,
+        profileUsed: !!dtProfile,
+        cognitiveModelUsed: !!dtCognitive,
+      };
+    }),
+
+  // ─── DT-COS-GAP-2B: Digital Twin Behavioral Simulation — simulateActionOutcome ─
+  /**
+   * Simulates the likely outcome of a proposed action given the user's Digital Twin
+   * profile, current context, and strategic priorities.
+   * Gap 2 from Appendix J: simulateActionOutcome
+   */
+  simulateActionOutcome: aiProcedure
+    .input(
+      z.object({
+        action: z.string().min(5).max(1000).describe("The action to simulate"),
+        timeHorizon: z.enum(["immediate", "short_term", "medium_term", "long_term"]).default("medium_term"),
+        context: z.string().optional().describe("Additional context about the current situation"),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const userId = ctx.user.id;
+
+      // Fetch Digital Twin data and recent context
+      const [profile, cognitiveModel, recentTasks, activeProjects] = await Promise.all([
+        db
+          .select()
+          .from(digitalTwinProfile)
+          .where(eq(digitalTwinProfile.userId, userId))
+          .limit(1),
+        db
+          .select()
+          .from(digitalTwinCognitiveModel)
+          .where(eq(digitalTwinCognitiveModel.userId, userId))
+          .limit(1),
+        db
+          .select({ title: tasks.title, status: tasks.status, priority: tasks.priority })
+          .from(tasks)
+          .where(eq(tasks.userId, userId))
+          .orderBy(desc(tasks.createdAt))
+          .limit(10),
+        db
+          .select({ name: projects.name, status: projects.status })
+          .from(projects)
+          .where(eq(projects.userId, userId))
+          .orderBy(desc(projects.createdAt))
+          .limit(5),
+      ]);
+
+      const dtProfile = profile[0];
+      const dtCognitive = cognitiveModel[0];
+
+      const timeHorizonLabel = {
+        immediate: "next 24 hours",
+        short_term: "next 1-4 weeks",
+        medium_term: "next 1-6 months",
+        long_term: "next 6-24 months",
+      }[input.timeHorizon];
+
+      const openai = getOpenAI();
+      const model = getModelForTask("analyse");
+
+      const completion = await openai.chat.completions.create({
+        model,
+        messages: [
+          {
+            role: "system",
+            content: `${VICTORIA_SYSTEM_PROMPT}\n\nYou are performing a Digital Twin outcome simulation. Based on the user's profile and context, simulate the likely outcomes of a proposed action.`,
+          },
+          {
+            role: "user",
+            content: `## User Profile\nRisk tolerance: ${dtProfile?.ambiguityTolerance ?? "unknown"}/10\nAI belief: ${dtProfile?.aiBeliefLevel ?? "unknown"}/10\nStrategic priorities: ${(dtCognitive?.strategicPriorities ?? []).map((p: { priority: string; weight: number }) => p.priority).join(", ") || "not set"}\nValues: ${(dtCognitive?.values ?? []).join(", ") || "not set"}\n\n## Current Context\nActive projects: ${activeProjects.map(p => p.name).join(", ") || "none"}\nRecent tasks: ${recentTasks.slice(0, 5).map(t => t.title).join(", ") || "none"}\n${input.context ? `\nAdditional context: ${input.context}` : ""}\n\n## Proposed Action\n${input.action}\n\n## Time Horizon\n${timeHorizonLabel}\n\nSimulate the likely outcomes of this action. Respond with JSON: { "primaryOutcome": "<most likely result>", "probability": <0.0-1.0>, "positiveConsequences": ["<consequence1>", ...], "negativeConsequences": ["<risk1>", ...], "requiredResources": ["<resource1>", ...], "alignmentWithProfile": <0.0-1.0>, "recommendation": "proceed" | "proceed_with_caution" | "reconsider" | "avoid", "recommendationReason": "<why>" }`,
+          },
+        ],
+        temperature: 0.3,
+        response_format: { type: "json_object" },
+      });
+
+      void logAiUsage(
+        userId,
+        "victoria.simulateActionOutcome",
+        completion.model,
+        completion.usage ?? null
+      );
+
+      const result = JSON.parse(completion.choices[0].message.content ?? "{}") as {
+        primaryOutcome: string;
+        probability: number;
+        positiveConsequences: string[];
+        negativeConsequences: string[];
+        requiredResources: string[];
+        alignmentWithProfile: number;
+        recommendation: string;
+        recommendationReason: string;
+      };
+
+      await logVictoriaAction(
+        userId,
+        "digital_twin_simulation",
+        "Simulated action outcome via Digital Twin",
+        `Action: ${input.action.substring(0, 100)}... → ${result.recommendation} (${Math.round((result.probability ?? 0) * 100)}% probability)`,
+        "digital_twin",
+        undefined,
+        true,
+        { action: input.action, timeHorizon: input.timeHorizon, result }
+      );
+
+      return {
+        primaryOutcome: result.primaryOutcome,
+        probability: result.probability,
+        positiveConsequences: result.positiveConsequences ?? [],
+        negativeConsequences: result.negativeConsequences ?? [],
+        requiredResources: result.requiredResources ?? [],
+        alignmentWithProfile: result.alignmentWithProfile,
+        recommendation: result.recommendation,
+        recommendationReason: result.recommendationReason,
+        timeHorizon: input.timeHorizon,
+        profileUsed: !!dtProfile,
+        cognitiveModelUsed: !!dtCognitive,
+      };
+    }),
+
   // ─── DT-COS-12: Sub-Phase Task Tracker ───────────────────────────────────────
   getSubphaseTasks: protectedProcedure.query(async () => {
     return db.select().from(subphaseTasks).orderBy(subphaseTasks.taskId);

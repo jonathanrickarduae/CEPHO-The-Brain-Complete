@@ -245,7 +245,6 @@ This script will:
 
 > **Note:** The script uses the `RENDER_API_KEY` and `GITHUB_TOKEN` defined within it to authenticate. If these tokens expire, they must be updated in the script itself and in the Master Recovery Document.
 
-
 ---
 
 ## All Tasks & Sub-Phases (Live Audit Trail)
@@ -254,48 +253,116 @@ This section provides a comprehensive, live audit trail of all major tasks and s
 
 ### Key Commits
 
-| SHA | Date | Description |
-| :--- | :--- | :--- |
+| SHA       | Date       | Description                                                                                                                                       |
+| :-------- | :--------- | :------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `32194e6` | 2026-03-04 | **feat(victoria):** unified Digital Twin + CoS identity, QC engine, project/doc/task/meeting automation, 20 cron jobs, Victoria Tracker dashboard |
-| `ca121cd` | 2026-03-04 | **feat:** fully autonomous Victoria + AI agents + SME integration |
-| `bf259b1` | 2026-03-04 | **fix(ci):** format docs/dashboard/index.html to pass prettier --check . |
-| `f36095c` | 2026-03-04 | **fix(lint):** remove 2 unused vars to pass ESLint --max-warnings 0 |
-| `f0b5055` | 2026-03-04 | **fix(ci):** run prettier --write to fix format check failures |
-| `1b5aa56` | 2026-03-04 | **docs:** add Operations & Recovery section to README with restore script instructions |
-| `d6f2acf` | 2026-03-04 | **chore:** add restore_all_render.py to gitignore (contains credentials) |
-| `6091f52` | 2026-03-04 | **fix(health):** use getRawClient() in health router to avoid dbProxy race condition |
-| `2e81970` | 2026-03-04 | **docs:** update Phase 5 audit report with remediation status |
-| `7c9213f` | 2026-03-04 | **fix(p5-9):** wire logAiUsage into all 8 AI routers + fix TS errors |
-| `e1a0190` | 2026-03-03 | **docs:** add Phase 5 audit report |
-| `86c2439` | 2026-03-03 | **feat:** add migration 022 for ai_usage_logs table (p5-9) |
+| `ca121cd` | 2026-03-04 | **feat:** fully autonomous Victoria + AI agents + SME integration                                                                                 |
+| `bf259b1` | 2026-03-04 | **fix(ci):** format docs/dashboard/index.html to pass prettier --check .                                                                          |
+| `f36095c` | 2026-03-04 | **fix(lint):** remove 2 unused vars to pass ESLint --max-warnings 0                                                                               |
+| `f0b5055` | 2026-03-04 | **fix(ci):** run prettier --write to fix format check failures                                                                                    |
+| `1b5aa56` | 2026-03-04 | **docs:** add Operations & Recovery section to README with restore script instructions                                                            |
+| `d6f2acf` | 2026-03-04 | **chore:** add restore_all_render.py to gitignore (contains credentials)                                                                          |
+| `6091f52` | 2026-03-04 | **fix(health):** use getRawClient() in health router to avoid dbProxy race condition                                                              |
+| `2e81970` | 2026-03-04 | **docs:** update Phase 5 audit report with remediation status                                                                                     |
+| `7c9213f` | 2026-03-04 | **fix(p5-9):** wire logAiUsage into all 8 AI routers + fix TS errors                                                                              |
+| `e1a0190` | 2026-03-03 | **docs:** add Phase 5 audit report                                                                                                                |
+| `86c2439` | 2026-03-03 | **feat:** add migration 022 for ai_usage_logs table (p5-9)                                                                                        |
 
 ### Sub-Phases & Major Tasks
 
-| ID | Task | Status | Evidence |
-| :--- | :--- | :--- | :--- |
-| **DB-FIX** | Fix Live Site DB Connection | Complete | `DATABASE_URL` updated to use Supabase pooler, health check `ok` |
-| **P5-AUDIT** | Full Phase 5 Audit | Complete | [Phase 5 Audit Report](docs/audits/PHASE_5_AUDIT_REPORT.md) — all checks passed |
-| **AGENT-MAP** | Map All AI Agents & SMEs | Complete | Identified 3 major gaps in autonomy and integration |
-| **AUTO-INT** | Autonomous Integration Sprint | Complete | Commit `ca121cd`, 15 cron jobs, real agent learning/performance, SME triggers |
-| **DT-COS-01** | Unify Digital Twin + CoS | Complete | Commit `32194e6`, `victoria.router.ts` |
-| **DT-COS-02** | Build Quality Control Engine | Complete | Commit `32194e6`, `victoria_qc_checks` table |
-| **DT-COS-03** | Autonomous Project Review | Complete | Commit `32194e6`, cron job 16 |
-| **DT-COS-04** | Autonomous Document Review | Complete | Commit `32194e6`, cron job 17 |
-| **DT-COS-05** | Autonomous Meeting Pre-Briefs | Complete | Commit `32194e6`, cron job 19 |
-| **DT-COS-06** | Autonomous Task Delegation | Complete | Commit `32194e6`, cron job 18 |
-| **DT-COS-10** | Repeatable Skills Framework | Complete | Commit `32194e6`, `victoria_skills` table |
-| **DT-COS-11** | Calendar Integration | Complete | Commit `32194e6`, `getCalendarSummary` procedure |
-| **DT-COS-12** | Build Victoria Tracker Dashboard | Complete | Commit `32194e6`, `/victoria-tracker` page |
-| **DT-COS-13** | Full System Integration | Complete | Commit `32194e6`, 20 cron jobs, all pages wired |
+| ID            | Task                             | Status   | Evidence                                                                        |
+| :------------ | :------------------------------- | :------- | :------------------------------------------------------------------------------ |
+| **DB-FIX**    | Fix Live Site DB Connection      | Complete | `DATABASE_URL` updated to use Supabase pooler, health check `ok`                |
+| **P5-AUDIT**  | Full Phase 5 Audit               | Complete | [Phase 5 Audit Report](docs/audits/PHASE_5_AUDIT_REPORT.md) — all checks passed |
+| **AGENT-MAP** | Map All AI Agents & SMEs         | Complete | Identified 3 major gaps in autonomy and integration                             |
+| **AUTO-INT**  | Autonomous Integration Sprint    | Complete | Commit `ca121cd`, 15 cron jobs, real agent learning/performance, SME triggers   |
+| **DT-COS-01** | Unify Digital Twin + CoS         | Complete | Commit `32194e6`, `victoria.router.ts`                                          |
+| **DT-COS-02** | Build Quality Control Engine     | Complete | Commit `32194e6`, `victoria_qc_checks` table                                    |
+| **DT-COS-03** | Autonomous Project Review        | Complete | Commit `32194e6`, cron job 16                                                   |
+| **DT-COS-04** | Autonomous Document Review       | Complete | Commit `32194e6`, cron job 17                                                   |
+| **DT-COS-05** | Autonomous Meeting Pre-Briefs    | Complete | Commit `32194e6`, cron job 19                                                   |
+| **DT-COS-06** | Autonomous Task Delegation       | Complete | Commit `32194e6`, cron job 18                                                   |
+| **DT-COS-10** | Repeatable Skills Framework      | Complete | Commit `32194e6`, `victoria_skills` table                                       |
+| **DT-COS-11** | Calendar Integration             | Complete | Commit `32194e6`, `getCalendarSummary` procedure                                |
+| **DT-COS-12** | Build Victoria Tracker Dashboard | Complete | Commit `32194e6`, `/victoria-tracker` page                                      |
+| **DT-COS-13** | Full System Integration          | Complete | Commit `32194e6`, 20 cron jobs, all pages wired                                 |
 
 ### Key System Components
 
-| Component | Count | Location / Details |
-| :--- | :--- | :--- |
-| **DB Migrations** | 12 | `drizzle/migrations/` |
-| **tRPC Routers** | 56 | `server/routers/` |
-| **Scheduler Jobs** | 20 | `server/services/scheduler.ts` |
-| **Client Pages** | 41 | `client/src/pages/` |
-| **App Routes** | 42 | `client/src/App.tsx` |
-| **Documentation** | 43 | `docs/` |
+| Component          | Count | Location / Details             |
+| :----------------- | :---- | :----------------------------- |
+| **DB Migrations**  | 13    | `drizzle/migrations/`          |
+| **tRPC Routers**   | 59    | `server/routers/`              |
+| **Scheduler Jobs** | 20    | `server/services/scheduler.ts` |
+| **Client Pages**   | 41    | `client/src/pages/`            |
+| **App Routes**     | 42    | `client/src/App.tsx`           |
+| **Documentation**  | 43    | `docs/`                        |
 
+---
+
+## Future Development Roadmap
+
+The following items have been identified as strategic enhancements from Appendix J (API Documentation), Appendix Q (Phase 5 Consolidated Design), and Appendix AL (Page-by-Page Process Inventory). They are documented here as a clear, prioritised backlog for future development sprints.
+
+### Gap 4 — Credentials Vault (Full Encryption Layer)
+
+**Status:** Infrastructure Ready (table exists in DB), UI Pending
+
+The `credentials_vault` database table was created in Migration 025. The next step is to implement AES-256 encryption/decryption for stored credentials, build the Vault UI page (`/vault/credentials`), and wire it into the Real-World Integration Layer so agents can securely access third-party API keys at runtime.
+
+**Files to create:**
+
+- `server/routers/credentialsVault.router.ts` — CRUD with AES-256 encryption
+- `client/src/pages/CredentialsVaultPage.tsx` — UI for managing vault entries
+- `server/utils/encryption.ts` — AES-256 helper using `crypto.createCipheriv`
+
+---
+
+### Gap 5 — Market Launch Automation (Full Orchestration UI)
+
+**Status:** Data model exists, orchestration pending
+
+The `market_launch_checklists` table and `market_launch_campaigns` table both exist. The Autonomous Ventures Orchestrator (`ventures.router.ts`) includes a `market_launch` workflow type. The next step is to build a dedicated Market Launch page (`/ventures/:id/launch`) that walks the user through the 4-stage launch process (pre-launch → soft launch → full launch → post-launch) with real-time progress tracking and AI-generated launch assets.
+
+**Files to create:**
+
+- `client/src/pages/VentureMarketLaunchPage.tsx` — 4-stage launch wizard
+- Extend `ventures.router.ts` with `createLaunchChecklist`, `advanceLaunchStage`, `getLaunchStatus`
+
+---
+
+### Gap 6 — Big Red Button (System Kill Switch UI)
+
+**Status:** Backend complete, UI pending
+
+The `system_kill_switch` table and `ventures.setKillSwitch` / `ventures.getKillSwitchStatus` procedures are fully implemented. The next step is to surface this in the UI as a prominent "Emergency Stop" control in the Settings page or War Room, with a confirmation dialog and audit trail.
+
+**Files to update:**
+
+- `client/src/pages/WarRoomPage.tsx` — add Kill Switch panel with confirmation modal
+- `client/src/pages/SettingsPage.tsx` — add Kill Switch toggle in Advanced Settings tab
+
+---
+
+### Gap 7 — API Documentation Auto-Generation
+
+**Status:** Manual documentation exists, auto-generation pending
+
+All 57 tRPC routers are documented manually in `docs/specs/`. The next step is to implement automated API documentation generation using the tRPC router type definitions, producing an OpenAPI-compatible spec that can be served at `/api/docs` and rendered with Swagger UI or Redoc.
+
+**Files to create:**
+
+- `server/utils/generateOpenApiSpec.ts` — extract tRPC procedure definitions to OpenAPI 3.0 format
+- `docs/api/openapi.json` — generated spec (auto-updated on build)
+- Route `/api/docs` — serve Swagger UI or Redoc
+
+---
+
+### Summary Table
+
+| Gap   | Feature                                          | Priority | Effort | Status        |
+| :---- | :----------------------------------------------- | :------- | :----- | :------------ |
+| Gap 4 | Credentials Vault (AES-256 encryption + UI)      | High     | Medium | Future Sprint |
+| Gap 5 | Market Launch Automation (full orchestration UI) | High     | Large  | Future Sprint |
+| Gap 6 | Big Red Button (Kill Switch UI)                  | Medium   | Small  | Future Sprint |
+| Gap 7 | API Docs Auto-Generation (OpenAPI + Swagger)     | Medium   | Medium | Future Sprint |
