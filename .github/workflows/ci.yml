@@ -95,6 +95,33 @@ jobs:
           echo "size=$SIZE" >> $GITHUB_OUTPUT
           echo "📦 Build size: $SIZE"
 
+      # p5-14/15: Bundle size enforcement — fail CI if any single JS chunk > 600 KB
+      - name: Enforce bundle size limits
+        run: |
+          echo "🔍 Checking individual chunk sizes (limit: 600 KB each)..."
+          FAIL=0
+          for f in dist/public/assets/*.js; do
+            SIZE_KB=$(du -k "$f" | cut -f1)
+            FILENAME=$(basename "$f")
+            if [ "$SIZE_KB" -gt 600 ]; then
+              echo "❌ OVERSIZED CHUNK: $FILENAME = ${SIZE_KB} KB (limit: 600 KB)"
+              FAIL=1
+            else
+              echo "✅ $FILENAME = ${SIZE_KB} KB"
+            fi
+          done
+          TOTAL_KB=$(du -sk dist/public/assets/ | cut -f1)
+          echo "📦 Total assets size: ${TOTAL_KB} KB"
+          if [ "$TOTAL_KB" -gt 8192 ]; then
+            echo "❌ TOTAL ASSETS TOO LARGE: ${TOTAL_KB} KB (limit: 8192 KB / 8 MB)"
+            FAIL=1
+          fi
+          if [ "$FAIL" -eq 1 ]; then
+            echo "💥 Bundle size check FAILED. Split large chunks using manualChunks in vite.config.ts"
+            exit 1
+          fi
+          echo "✅ All bundle size checks passed."
+
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
