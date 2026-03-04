@@ -1,6 +1,6 @@
 # CEPHO.AI — The Brain (v12)
 
-**Version**: 12.2.0 | **Status**: Active Development — Phases 0–4 Complete, Phase 5 In Progress  
+**Version**: 12.2.0 | **Status**: Active Development — Phases 0–5 Complete  
 **Owner**: Jonathan Rickard  
 **Live Dashboard**: [https://jonathanrickarduae.github.io/CEPHO-The-Brain-Complete/](https://jonathanrickarduae.github.io/CEPHO-The-Brain-Complete/)
 
@@ -64,7 +64,7 @@ Phase 4 — "UX, Design System & Scale" — is now complete. All 24 tasks have b
 
 ### What To Do Next
 
-**Continue Phase 5 — Ops Excellence & Observability.** Key Phase 5 tasks include Sentry integration, onboarding wizard, offline PWA support, structured logging, AI cost tracking, and performance budgets.
+**Continue Phase 6 — Enhancements, Agents & Innovation.** Key Phase 6 tasks include the agent ratings system, competitor intelligence engine, and the Innovation Hub.
 
 Full detail for each task is on the [Live Dashboard](https://jonathanrickarduae.github.io/CEPHO-The-Brain-Complete/).
 
@@ -112,6 +112,23 @@ All project documentation lives in `/docs`:
 | **Deployment** | Render (production + staging)           |
 | **CI/CD**      | GitHub Actions                          |
 | **Monitoring** | Sentry (planned)                        |
+
+---
+
+## Credentials & File Locations
+
+All sensitive credentials, tokens, and environment-specific configurations are stored in `.env.local`. This file is **never** committed to Git. A template is available at `.env.example`.
+
+| Item | Location | Notes |
+| :--- | :--- | :--- |
+| **GitHub PAT** | `.env.local` | `GITHUB_PAT` — for `git push` and API access |
+| **Supabase Keys** | `.env.local` | `SUPABASE_URL`, `SUPABASE_ANON_KEY`, etc. |
+| **Database URL** | `.env.local` | `DATABASE_URL` for TiDB Cloud or Supabase Postgres |
+| **OpenAI Key** | `.env.local` | `OPENAI_API_KEY` |
+| **Sentry DSN** | `.env.local` | `SENTRY_DSN` (server) and `VITE_SENTRY_DSN` (client) |
+| **Disaster Recovery** | `docs/specs/DISASTER_RECOVERY.md` | Full runbook for backups, restores, and migrations |
+| **Live Dashboard** | `docs/dashboard/index.html` | The HTML file for the live project dashboard |
+| **Grand Master Plan** | `docs/CEPHO_Grand_Master_Plan_v12_FINAL.md` | The single source of truth for the project plan |
 
 ---
 
@@ -174,7 +191,7 @@ pnpm dev
 | **Phase 2** | AI Agents, Memory & Digital Twin     | **Complete**    |
 | **Phase 3** | Autonomous Operations & Intelligence | **Complete**    |
 | **Phase 4** | UX, Design System & Scale            | **Complete**    |
-| **Phase 5** | Ops Excellence & Observability       | **In Progress** |
+| **Phase 5** | Ops Excellence & Observability       | **Complete**    |
 | **Phase 6** | Enhancements, Agents & Innovation    | Not started     |
 | **Phase 7** | Monetisation & Enterprise            | Not started     |
 
