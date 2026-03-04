@@ -244,3 +244,58 @@ This script will:
 - Automatically trigger a new deployment on Render.
 
 > **Note:** The script uses the `RENDER_API_KEY` and `GITHUB_TOKEN` defined within it to authenticate. If these tokens expire, they must be updated in the script itself and in the Master Recovery Document.
+
+
+---
+
+## All Tasks & Sub-Phases (Live Audit Trail)
+
+This section provides a comprehensive, live audit trail of all major tasks and sub-phases completed in the CEPHO project. It serves as a single source of truth for what has been built, what decisions were made, and where to find the evidence.
+
+### Key Commits
+
+| SHA | Date | Description |
+| :--- | :--- | :--- |
+| `32194e6` | 2026-03-04 | **feat(victoria):** unified Digital Twin + CoS identity, QC engine, project/doc/task/meeting automation, 20 cron jobs, Victoria Tracker dashboard |
+| `ca121cd` | 2026-03-04 | **feat:** fully autonomous Victoria + AI agents + SME integration |
+| `bf259b1` | 2026-03-04 | **fix(ci):** format docs/dashboard/index.html to pass prettier --check . |
+| `f36095c` | 2026-03-04 | **fix(lint):** remove 2 unused vars to pass ESLint --max-warnings 0 |
+| `f0b5055` | 2026-03-04 | **fix(ci):** run prettier --write to fix format check failures |
+| `1b5aa56` | 2026-03-04 | **docs:** add Operations & Recovery section to README with restore script instructions |
+| `d6f2acf` | 2026-03-04 | **chore:** add restore_all_render.py to gitignore (contains credentials) |
+| `6091f52` | 2026-03-04 | **fix(health):** use getRawClient() in health router to avoid dbProxy race condition |
+| `2e81970` | 2026-03-04 | **docs:** update Phase 5 audit report with remediation status |
+| `7c9213f` | 2026-03-04 | **fix(p5-9):** wire logAiUsage into all 8 AI routers + fix TS errors |
+| `e1a0190` | 2026-03-03 | **docs:** add Phase 5 audit report |
+| `86c2439` | 2026-03-03 | **feat:** add migration 022 for ai_usage_logs table (p5-9) |
+
+### Sub-Phases & Major Tasks
+
+| ID | Task | Status | Evidence |
+| :--- | :--- | :--- | :--- |
+| **DB-FIX** | Fix Live Site DB Connection | Complete | `DATABASE_URL` updated to use Supabase pooler, health check `ok` |
+| **P5-AUDIT** | Full Phase 5 Audit | Complete | [Phase 5 Audit Report](docs/audits/PHASE_5_AUDIT_REPORT.md) — all checks passed |
+| **AGENT-MAP** | Map All AI Agents & SMEs | Complete | Identified 3 major gaps in autonomy and integration |
+| **AUTO-INT** | Autonomous Integration Sprint | Complete | Commit `ca121cd`, 15 cron jobs, real agent learning/performance, SME triggers |
+| **DT-COS-01** | Unify Digital Twin + CoS | Complete | Commit `32194e6`, `victoria.router.ts` |
+| **DT-COS-02** | Build Quality Control Engine | Complete | Commit `32194e6`, `victoria_qc_checks` table |
+| **DT-COS-03** | Autonomous Project Review | Complete | Commit `32194e6`, cron job 16 |
+| **DT-COS-04** | Autonomous Document Review | Complete | Commit `32194e6`, cron job 17 |
+| **DT-COS-05** | Autonomous Meeting Pre-Briefs | Complete | Commit `32194e6`, cron job 19 |
+| **DT-COS-06** | Autonomous Task Delegation | Complete | Commit `32194e6`, cron job 18 |
+| **DT-COS-10** | Repeatable Skills Framework | Complete | Commit `32194e6`, `victoria_skills` table |
+| **DT-COS-11** | Calendar Integration | Complete | Commit `32194e6`, `getCalendarSummary` procedure |
+| **DT-COS-12** | Build Victoria Tracker Dashboard | Complete | Commit `32194e6`, `/victoria-tracker` page |
+| **DT-COS-13** | Full System Integration | Complete | Commit `32194e6`, 20 cron jobs, all pages wired |
+
+### Key System Components
+
+| Component | Count | Location / Details |
+| :--- | :--- | :--- |
+| **DB Migrations** | 12 | `drizzle/migrations/` |
+| **tRPC Routers** | 56 | `server/routers/` |
+| **Scheduler Jobs** | 20 | `server/services/scheduler.ts` |
+| **Client Pages** | 41 | `client/src/pages/` |
+| **App Routes** | 42 | `client/src/App.tsx` |
+| **Documentation** | 43 | `docs/` |
+
