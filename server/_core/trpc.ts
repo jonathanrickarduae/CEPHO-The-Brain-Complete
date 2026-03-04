@@ -73,6 +73,17 @@ export const adminProcedure = t.procedure.use(
       throw new TRPCError({ code: "FORBIDDEN", message: NOT_ADMIN_ERR_MSG });
     }
 
+    // S3-05: Enforce 2FA for all admin accounts.
+    // Admin users MUST have TOTP enabled before accessing admin procedures.
+    if (!ctx.user.totpEnabled) {
+      throw new TRPCError({
+        code: "FORBIDDEN",
+        message:
+          "Admin accounts must have two-factor authentication (2FA) enabled. " +
+          "Please set up 2FA in Settings → Security before accessing admin features.",
+      });
+    }
+
     return next({
       ctx: {
         ...ctx,
