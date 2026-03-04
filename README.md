@@ -37,6 +37,8 @@ The **Grand Master Plan v12** is the definitive plan for this project. It is the
 | Phase 5 execution      | **Complete**             |
 | Phase 6 execution      | **Complete**             |
 | Code deployment        | **Live on Render**       |
+| Phase 8 Go Live plan   | **In Planning**          |
+| Expert Panel Grade     | **C+ (target: A-)**      |
 
 ### What Has Been Done
 
@@ -66,6 +68,8 @@ Phase 4 — "UX, Design System & Scale" — is now complete. All 24 tasks have b
 ### What To Do Next
 
 **Continue Phase 7 — Monetisation & Enterprise Scale.** Phase 6 is complete. Key Phase 7 tasks include Stripe subscription tiers, enterprise SSO, and multi-tenant architecture.
+
+**Phase 8 — Go Live Remediation** is now planned. An independent expert panel assessed the platform on March 4, 2026 and awarded an overall grade of **C+**. Phase 8 addresses all critical findings across 3 sprints (~80 hours) with a target grade of **A-**. See `docs/CEPHO_Grand_Master_Plan_v12_FINAL.md` Phase 8 section and the [Live Dashboard](https://jonathanrickarduae.github.io/CEPHO-The-Brain-Complete/) Phase 9 tracker for full detail.
 
 Full detail for each task is on the [Live Dashboard](https://jonathanrickarduae.github.io/CEPHO-The-Brain-Complete/).
 
