@@ -45,6 +45,9 @@ export default function AIAgentsMonitoringPage() {
 
   const { data: reportsData } =
     trpc.aiAgentsMonitoring.getDailyReports.useQuery({});
+  const { data: victoriaLog } = trpc.victoria.getActionLog.useQuery({
+    limit: 10,
+  });
   const utils = trpc.useUtils();
   const reviewRequest = trpc.aiAgentsMonitoring.reviewRequest.useMutation({
     onSuccess: () => {
@@ -518,6 +521,35 @@ export default function AIAgentsMonitoringPage() {
               )}
             </div>
           )}
+
+          {/* Victoria Action Log */}
+          {victoriaLog &&
+            victoriaLog.actions &&
+            victoriaLog.actions.length > 0 && (
+              <div className="bg-card rounded-xl p-4 border border-border">
+                <div className="flex items-center gap-2 mb-3">
+                  <Brain className="w-4 h-4 text-purple-400" />
+                  <h3 className="text-sm font-semibold">
+                    Victoria — Recent Actions
+                  </h3>
+                  <span className="text-xs text-muted-foreground ml-auto">
+                    Autonomous Chief of Staff
+                  </span>
+                </div>
+                <div className="space-y-2">
+                  {victoriaLog.actions.slice(0, 5).map((action, i) => (
+                    <div key={i} className="flex items-start gap-3 text-sm">
+                      <span className="text-xs text-muted-foreground mt-0.5 shrink-0 w-16">
+                        {formatTimestamp(action.createdAt)}
+                      </span>
+                      <span className="text-foreground/80">
+                        {action.description}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
         </div>
       )}
     </PageShell>

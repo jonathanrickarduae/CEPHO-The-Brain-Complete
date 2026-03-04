@@ -18,8 +18,15 @@ import OpenAI from "openai";
 import { z } from "zod";
 import { protectedProcedure, router } from "../_core/trpc";
 import { db } from "../db";
-import { activityFeed } from "../../drizzle/schema";
-import { desc, eq } from "drizzle-orm";
+import {
+  activityFeed,
+  agentInsights,
+  agentImprovements,
+  agentDailyReports,
+  agentPerformanceMetrics,
+  victoriaActions,
+} from "../../drizzle/schema";
+import { desc, eq, and, gte, sql } from "drizzle-orm";
 
 // ─── OpenAI Client ────────────────────────────────────────────────────────────
 function getOpenAI(): OpenAI {
@@ -1319,47 +1326,101 @@ Format as JSON with these exact keys:
     }),
 
   /**
-   * Get the continuous learning feed — what agents are researching today
+   * Get the continuous learning feed — real DB-backed agent insights
+   * Returns the most recent AI-generated insights from the agent research cron job.
    */
-  getLearningFeed: protectedProcedure.query(async () => {
-    const _openai = getOpenAI();
+  getLearningFeed: protectedProcedure.query(async ({ ctx }) => {
+    const userId = ctx.user.id;
+    const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
 
-    // Pick 5 random agents to show their learning activity
-    const agentIds = Object.keys(AGENT_REGISTRY);
-    const selectedIds = agentIds.sort(() => Math.random() - 0.5).slice(0, 5);
+    // Fetch real agent insights from DB (populated by the scheduler cron)
+    const insights = await db
+      .select()
+      .from(agentInsights)
+      .where(
+        and(
+          eq(agentInsights.userId, userId),
+          gte(agentInsights.createdAt, sevenDaysAgo)
+        )
+      )
+      .orderBy(desc(agentInsights.createdAt))
+      .limit(30);
 
-    const learningItems = await Promise.all(
-      selectedIds.map(async agentId => {
-        const agent = AGENT_REGISTRY[agentId];
-        const seed = agentId
-          .split("")
-          .reduce((acc, c) => acc + c.charCodeAt(0), 0);
+    // Fetch pending improvements
+    const improvements = await db
+      .select()
+      .from(agentImprovements)
+      .where(
+        and(
+          eq(agentImprovements.userId, userId),
+          eq(agentImprovements.status, "pending")
+        )
+      )
+      .orderBy(desc(agentImprovements.createdAt))
+      .limit(10);
 
-        // Use deterministic "research topics" based on the agent's specialization
-        const researchAreas = [
-          `Latest AI advancements in ${agent.specialization}`,
-          `Best practices for ${agent.name.toLowerCase()} in 2026`,
-          `Emerging tools for ${agent.category} automation`,
-        ];
+    // Group insights by agent
+    const byAgent = new Map<string, typeof insights>();
+    for (const ins of insights) {
+      if (!byAgent.has(ins.agentKey)) byAgent.set(ins.agentKey, []);
+      byAgent.get(ins.agentKey)!.push(ins);
+    }
 
+    const learningItems = Array.from(byAgent.entries()).map(
+      ([agentKey, agentInsightList]) => {
+        const agent = AGENT_REGISTRY[agentKey];
+        const latest = agentInsightList[0];
         return {
-          agentId,
-          agentName: agent.name,
-          category: agent.category,
-          researchTopic: researchAreas[seed % researchAreas.length],
-          status: "researching" as const,
-          startedAt: new Date(Date.now() - (seed % 3600000)).toISOString(),
-          estimatedCompletion: new Date(
-            Date.now() + (seed % 7200000)
-          ).toISOString(),
+          agentId: agentKey,
+          agentName: agent?.name ?? agentKey,
+          category: agent?.category ?? "general",
+          researchTopic:
+            latest?.insight ??
+            `Research in ${agent?.specialization ?? agentKey}`,
+          source: latest?.source ?? agent?.specialization ?? agentKey,
+          confidence: latest?.confidence ?? 70,
+          status: "completed" as const,
+          insightCount: agentInsightList.length,
+          latestAt:
+            latest?.createdAt?.toISOString() ?? new Date().toISOString(),
         };
-      })
+      }
     );
 
+    // If no real data yet, fall back to showing scheduled research topics
+    if (learningItems.length === 0) {
+      const agentIds = Object.keys(AGENT_REGISTRY).slice(0, 8);
+      return {
+        learningItems: agentIds.map(agentId => {
+          const agent = AGENT_REGISTRY[agentId];
+          return {
+            agentId,
+            agentName: agent.name,
+            category: agent.category,
+            researchTopic: `Scheduled: Latest AI advancements in ${agent.specialization}`,
+            source: agent.specialization,
+            confidence: 0,
+            status: "scheduled" as const,
+            insightCount: 0,
+            latestAt: null,
+          };
+        }),
+        pendingImprovements: improvements.length,
+        totalInsights: 0,
+        lastUpdated: new Date().toISOString(),
+        dataSource: "scheduled",
+      };
+    }
+
     return {
-      learningItems,
-      totalActiveResearch: learningItems.length,
-      lastUpdated: new Date().toISOString(),
+      learningItems: learningItems.sort(
+        (a, b) => (b.confidence ?? 0) - (a.confidence ?? 0)
+      ),
+      pendingImprovements: improvements.length,
+      totalInsights: insights.length,
+      lastUpdated:
+        insights[0]?.createdAt?.toISOString() ?? new Date().toISOString(),
+      dataSource: "live_db",
     };
   }),
 
@@ -1461,30 +1522,303 @@ Format as JSON with these exact keys:
     }),
 
   /**
-   * Get the agent performance leaderboard
+   * Get the agent performance leaderboard — real DB-backed metrics
+   * Falls back to registry-based data if no metrics exist yet.
    */
-  getLeaderboard: protectedProcedure.query(async () => {
-    const agents = Object.entries(AGENT_REGISTRY).map(([id, agent]) => {
-      const seed = id.split("").reduce((acc, c) => acc + c.charCodeAt(0), 0);
-      return {
-        id,
-        name: agent.name,
-        category: agent.category,
-        specialization: agent.specialization,
-        rating: 4.0 + (seed % 10) * 0.1,
-        tasksCompleted: 150 + (seed % 200),
-        successRate: 85 + (seed % 15),
-        improvementsThisMonth: 1 + (seed % 5),
-        status: seed % 10 === 0 ? "learning" : "active",
-      };
-    });
+  getLeaderboard: protectedProcedure.query(async ({ ctx }) => {
+    const userId = ctx.user.id;
+    const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
 
+    // Fetch real performance metrics from DB
+    const metrics = await db
+      .select()
+      .from(agentPerformanceMetrics)
+      .where(
+        and(
+          eq(agentPerformanceMetrics.userId, userId),
+          gte(agentPerformanceMetrics.date, thirtyDaysAgo)
+        )
+      )
+      .orderBy(desc(agentPerformanceMetrics.date))
+      .limit(200);
+
+    // Aggregate by agent
+    const byAgent = new Map<
+      string,
+      {
+        totalTasks: number;
+        succeeded: number;
+        totalTokens: number;
+        ratings: number[];
+        improvements: number;
+        latestScore: number;
+      }
+    >();
+    for (const m of metrics) {
+      if (!byAgent.has(m.agentId)) {
+        byAgent.set(m.agentId, {
+          totalTasks: 0,
+          succeeded: 0,
+          totalTokens: 0,
+          ratings: [],
+          improvements: 0,
+          latestScore: 0,
+        });
+      }
+      const agg = byAgent.get(m.agentId)!;
+      agg.totalTasks += m.tasksExecuted ?? 0;
+      agg.succeeded += m.tasksSucceeded ?? 0;
+      agg.totalTokens += m.totalTokensUsed ?? 0;
+      if (m.userRating != null) agg.ratings.push(m.userRating);
+      agg.improvements += m.improvementCount ?? 0;
+      if ((m.overallScore ?? 0) > agg.latestScore)
+        agg.latestScore = m.overallScore ?? 0;
+    }
+
+    // Build leaderboard from real data if available, otherwise use registry fallback
+    let leaderboard: Array<{
+      id: string;
+      name: string;
+      category: string;
+      specialization: string;
+      rating: number;
+      tasksCompleted: number;
+      successRate: number;
+      improvementsThisMonth: number;
+      status: string;
+      dataSource: string;
+    }>;
+
+    if (byAgent.size > 0) {
+      leaderboard = Array.from(byAgent.entries()).map(([agentId, agg]) => {
+        const agent = AGENT_REGISTRY[agentId];
+        const avgRating =
+          agg.ratings.length > 0
+            ? agg.ratings.reduce((a, b) => a + b, 0) / agg.ratings.length
+            : agg.latestScore / 20;
+        const successRate =
+          agg.totalTasks > 0
+            ? Math.round((agg.succeeded / agg.totalTasks) * 100)
+            : 0;
+        return {
+          id: agentId,
+          name: agent?.name ?? agentId,
+          category: agent?.category ?? "general",
+          specialization: agent?.specialization ?? agentId,
+          rating: Math.round(avgRating * 10) / 10,
+          tasksCompleted: agg.totalTasks,
+          successRate,
+          improvementsThisMonth: agg.improvements,
+          status: agg.totalTasks > 0 ? "active" : "idle",
+          dataSource: "live_db",
+        };
+      });
+    } else {
+      // Fallback: use registry with baseline scores
+      leaderboard = Object.entries(AGENT_REGISTRY).map(([id, agent]) => {
+        const seed = id.split("").reduce((acc, c) => acc + c.charCodeAt(0), 0);
+        return {
+          id,
+          name: agent.name,
+          category: agent.category,
+          specialization: agent.specialization,
+          rating: 4.0 + (seed % 10) * 0.1,
+          tasksCompleted: 0,
+          successRate: 0,
+          improvementsThisMonth: 0,
+          status: "ready",
+          dataSource: "registry_baseline",
+        };
+      });
+    }
+
+    const sorted = leaderboard.sort((a, b) => b.rating - a.rating);
     return {
-      leaderboard: agents.sort((a, b) => b.rating - a.rating),
-      topPerformer: agents.sort((a, b) => b.rating - a.rating)[0],
+      leaderboard: sorted,
+      topPerformer: sorted[0] ?? null,
       averageRating:
-        agents.reduce((sum, a) => sum + a.rating, 0) / agents.length,
-      totalTasksCompleted: agents.reduce((sum, a) => sum + a.tasksCompleted, 0),
+        sorted.length > 0
+          ? Math.round(
+              (sorted.reduce((sum, a) => sum + a.rating, 0) / sorted.length) *
+                10
+            ) / 10
+          : 0,
+      totalTasksCompleted: sorted.reduce((sum, a) => sum + a.tasksCompleted, 0),
+      dataSource: byAgent.size > 0 ? "live_db" : "registry_baseline",
     };
   }),
+
+  /**
+   * Record agent task execution metrics (called after every executeTask)
+   */
+  recordTaskMetrics: protectedProcedure
+    .input(
+      z.object({
+        agentId: z.string(),
+        success: z.boolean(),
+        responseMs: z.number().optional(),
+        tokensUsed: z.number().optional(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      const userId = ctx.user.id;
+      const agent = AGENT_REGISTRY[input.agentId];
+      if (!agent) return { success: false };
+
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      // Upsert today's metric row
+      await db
+        .insert(agentPerformanceMetrics)
+        .values({
+          userId,
+          agentId: input.agentId,
+          agentName: agent.name,
+          date: today,
+          tasksExecuted: 1,
+          tasksSucceeded: input.success ? 1 : 0,
+          tasksFailed: input.success ? 0 : 1,
+          avgResponseMs: input.responseMs ?? 0,
+          totalTokensUsed: input.tokensUsed ?? 0,
+          overallScore: input.success ? 80 : 40,
+        })
+        .onConflictDoUpdate({
+          target: [
+            agentPerformanceMetrics.userId,
+            agentPerformanceMetrics.agentId,
+            agentPerformanceMetrics.date,
+          ],
+          set: {
+            tasksExecuted: sql`agent_performance_metrics."tasksExecuted" + 1`,
+            tasksSucceeded: sql`agent_performance_metrics."tasksSucceeded" + ${input.success ? 1 : 0}`,
+            tasksFailed: sql`agent_performance_metrics."tasksFailed" + ${input.success ? 0 : 1}`,
+            totalTokensUsed: sql`agent_performance_metrics."totalTokensUsed" + ${input.tokensUsed ?? 0}`,
+            updatedAt: new Date(),
+          },
+        });
+
+      return { success: true };
+    }),
+
+  /**
+   * Generate and persist a daily report for a specific agent
+   */
+  generateAgentDailyReport: protectedProcedure
+    .input(z.object({ agentId: z.string() }))
+    .mutation(async ({ input, ctx }) => {
+      const userId = ctx.user.id;
+      const agent = AGENT_REGISTRY[input.agentId];
+      if (!agent) throw new Error(`Agent ${input.agentId} not found`);
+
+      const openai = getOpenAI();
+
+      // Get today's metrics for this agent
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const [metrics] = await db
+        .select()
+        .from(agentPerformanceMetrics)
+        .where(
+          and(
+            eq(agentPerformanceMetrics.userId, userId),
+            eq(agentPerformanceMetrics.agentId, input.agentId),
+            gte(agentPerformanceMetrics.date, today)
+          )
+        )
+        .limit(1);
+
+      // Get recent insights for this agent
+      const recentInsights = await db
+        .select()
+        .from(agentInsights)
+        .where(
+          and(
+            eq(agentInsights.userId, userId),
+            eq(agentInsights.agentKey, input.agentId)
+          )
+        )
+        .orderBy(desc(agentInsights.createdAt))
+        .limit(3);
+
+      const completion = await openai.chat.completions.create({
+        model: "gpt-4o-mini",
+        messages: [
+          { role: "system", content: agent.systemPrompt },
+          {
+            role: "user",
+            content: `Generate your daily report for the Chief of Staff (Victoria). Include:
+1. Summary of tasks completed today (${metrics?.tasksExecuted ?? 0} tasks, ${metrics?.tasksSucceeded ?? 0} successful)
+2. Key achievements
+3. Challenges encountered
+4. New learnings from your research
+5. One capability enhancement request (if any)
+
+Recent research insights: ${recentInsights.map(i => i.insight).join("; ")}
+
+Return JSON: { "achievements": string, "challenges": string, "newLearnings": [{"topic": string, "insight": string}], "suggestions": [{"title": string, "description": string}], "capabilityRequest": {"title": string, "description": string, "estimatedImpact": string} | null }`,
+          },
+        ],
+        response_format: { type: "json_object" },
+        max_tokens: 600,
+        temperature: 0.6,
+      });
+
+      void logAiUsage(
+        userId,
+        "agentEngine.generateAgentDailyReport",
+        completion.model,
+        completion.usage ?? null
+      );
+
+      let reportData: Record<string, unknown> = {};
+      try {
+        reportData = JSON.parse(
+          completion.choices[0]?.message?.content ?? "{}"
+        );
+      } catch {
+        /* fallback */
+      }
+
+      const [savedReport] = await db
+        .insert(agentDailyReports)
+        .values({
+          userId,
+          agentId: input.agentId,
+          agentName: agent.name,
+          category: agent.category,
+          tasksCompleted: [
+            {
+              count: metrics?.tasksExecuted ?? 0,
+              succeeded: metrics?.tasksSucceeded ?? 0,
+            },
+          ],
+          achievements: (reportData.achievements as string) ?? "",
+          challenges: (reportData.challenges as string) ?? "",
+          newLearnings: (reportData.newLearnings as unknown[]) ?? [],
+          suggestions: (reportData.suggestions as unknown[]) ?? [],
+          capabilityRequest:
+            (reportData.capabilityRequest as Record<string, unknown>) ?? null,
+          approvalStatus: "pending",
+        })
+        .returning();
+
+      // Log to Victoria's action log
+      await db.insert(victoriaActions).values({
+        userId,
+        actionType: "agent_report_received",
+        actionTitle: `Daily report received from ${agent.name}`,
+        description: `${agent.name} submitted their daily report. ${reportData.capabilityRequest ? "Includes a capability enhancement request." : "No capability requests."}`,
+        relatedEntityType: "agent",
+        relatedEntityId: savedReport?.id,
+        autonomous: true,
+      });
+
+      return {
+        success: true,
+        reportId: savedReport?.id,
+        agentName: agent.name,
+        hasCapabilityRequest: !!reportData.capabilityRequest,
+      };
+    }),
 });

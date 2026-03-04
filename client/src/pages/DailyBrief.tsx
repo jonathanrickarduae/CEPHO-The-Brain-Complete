@@ -378,6 +378,20 @@ export default function DailyBrief() {
     toast.success("Your Victoria video brief is ready!");
     setPendingVideoId(null);
   }
+  // Victoria autonomous stats and action log
+  const { data: victoriaStats } = trpc.victoria.getStats.useQuery();
+  const { data: victoriaActionLog } = trpc.victoria.getActionLog.useQuery({
+    limit: 5,
+  });
+  const generateMorningBriefingMutation =
+    trpc.victoria.generateMorningBriefing.useMutation({
+      onSuccess: () => {
+        toast.success("Victoria is generating your morning briefing...");
+      },
+      onError: err => {
+        toast.error(`Failed to generate briefing: ${err.message}`);
+      },
+    });
   const generatePdfMutation = trpc.victoriasBrief.generatePdf.useMutation();
   const generateVideoMutation = trpc.victoriasBrief.generateVideo.useMutation();
   const generateAudioMutation = trpc.victoriasBrief.generateAudio.useMutation();

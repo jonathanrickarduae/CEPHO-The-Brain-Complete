@@ -18,6 +18,7 @@ import { chatRouter } from "./routers/chat.router";
 import { dashboardRouter } from "./routers/dashboard.router";
 import { questionnaireRouter } from "./routers/questionnaire.router";
 import { chiefOfStaffRouter } from "./routers/chiefOfStaff.router";
+import { victoriaRouter } from "./routers/victoria.router";
 import { moodRouter } from "./routers/mood.router";
 import { tasksRouter } from "./routers/tasks.router";
 import { aiAgentsMonitoringRouter } from "./routers/aiAgentsMonitoring.router";
@@ -125,6 +126,8 @@ export const appRouter = router({
 
   // ─── Chief of Staff / Digital Twin ──────────────────────────────────────
   chiefOfStaff: chiefOfStaffRouter,
+  // ─── Victoria (Unified Chief of Staff) ──────────────────────────────────
+  victoria: victoriaRouter,
 
   // ─── Questionnaire / Digital Twin Profile ───────────────────────────────
   questionnaire: questionnaireRouter,

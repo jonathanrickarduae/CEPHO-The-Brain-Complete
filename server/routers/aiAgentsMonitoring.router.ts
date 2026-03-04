@@ -6,9 +6,10 @@
  * Includes Chief of Staff approval workflow for improvement requests.
  */
 import { z } from "zod";
+import { desc, eq, and } from "drizzle-orm";
 import { protectedProcedure, router } from "../_core/trpc";
 import { db } from "../db";
-import { activityFeed } from "../../drizzle/schema";
+import { activityFeed, agentDailyReports } from "../../drizzle/schema";
 
 const AGENTS = [
   // Communication & Correspondence (8)
@@ -528,20 +529,90 @@ export const aiAgentsMonitoringRouter = router({
     .input(
       z.object({ date: z.string().optional(), agentId: z.string().optional() })
     )
-    .query(async ({ input }) => {
+    .query(async ({ input, ctx }) => {
+      // Try real DB reports first (populated by daily scheduler at 06:30)
+      const conditions = [eq(agentDailyReports.userId, ctx.user.id)];
+      if (input.agentId)
+        conditions.push(eq(agentDailyReports.agentId, input.agentId));
+
+      const dbReports = await db
+        .select()
+        .from(agentDailyReports)
+        .where(and(...conditions))
+        .orderBy(desc(agentDailyReports.date))
+        .limit(input.agentId ? 5 : 51);
+
+      if (dbReports.length > 0) {
+        const reports = dbReports.map(r => ({
+          agentId: r.agentId,
+          agentName: r.agentName,
+          date:
+            r.date instanceof Date
+              ? r.date.toISOString().split("T")[0]
+              : String(r.date),
+          tasksCompleted: (r.tasksCompleted as string[]).length,
+          performanceRating: 4.2,
+          improvements: [],
+          newLearnings: (
+            r.newLearnings as { topic: string; insight: string }[]
+          ).map(l => l.insight ?? l.topic),
+          suggestions: (
+            r.suggestions as { title: string; description: string }[]
+          ).map(s => s.title),
+          researchTopics: (r.newLearnings as { topic: string }[]).map(
+            l => l.topic
+          ),
+          requestsForApproval:
+            r.capabilityRequest && r.approvalStatus === "pending"
+              ? [
+                  {
+                    id: `req_${r.agentId}_${r.id}`,
+                    type: "Capability Enhancement",
+                    description: String(
+                      (r.capabilityRequest as Record<string, unknown>)
+                        .description ?? "Enhancement request"
+                    ),
+                    reasoning: String(
+                      (r.capabilityRequest as Record<string, unknown>)
+                        .rationale ?? ""
+                    ),
+                    estimatedImpact: "See request for details",
+                    status: "pending" as const,
+                    requestedAt:
+                      r.createdAt instanceof Date
+                        ? r.createdAt.toISOString()
+                        : new Date().toISOString(),
+                  },
+                ]
+              : [],
+          status: "active" as const,
+          achievements: r.achievements,
+          challenges: r.challenges,
+          approvalStatus: r.approvalStatus,
+        }));
+        return {
+          reports,
+          reportDate: new Date().toISOString().split("T")[0],
+          pendingApprovals: reports.filter(
+            r => r.requestsForApproval.length > 0
+          ).length,
+          source: "live" as const,
+        };
+      }
+
+      // Fallback to generated reports (used before first scheduler run)
       const agentsToReport = input.agentId
         ? AGENTS.filter(a => a.id === input.agentId)
         : AGENTS;
-
       const reports = agentsToReport.map(agent =>
         generateDailyReport(agent.id, agent.name, agent.specialization)
       );
-
       return {
         reports,
         reportDate: new Date().toISOString().split("T")[0],
         pendingApprovals: reports.filter(r => r.requestsForApproval.length > 0)
           .length,
+        source: "generated" as const,
       };
     }),
 

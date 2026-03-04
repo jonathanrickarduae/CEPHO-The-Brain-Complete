@@ -274,8 +274,8 @@ export default function ChiefOfStaff() {
         toast.error(`Failed to submit verification: ${error.message}`);
       },
     });
-  // Real AI task scoring — replaces the Math.random() stub
-  const scoreTaskMutation = trpc.chiefOfStaff.scoreTask.useMutation({
+  // Real AI task scoring via Victoria — replaces the Math.random() stub
+  const scoreTaskMutation = trpc.victoria.scoreTask.useMutation({
     onSuccess: (result, variables) => {
       submitSecondaryReviewMutation.mutate({
         taskId: variables.taskId,

@@ -32,6 +32,10 @@ import {
   userSettings, // eslint-disable-line @typescript-eslint/no-unused-vars
   agentInsights,
   agentImprovements,
+  agentDailyReports,
+  agentPerformanceMetrics,
+  victoriaActions,
+  smeReviewTriggers,
 } from "../../drizzle/schema";
 import { logger } from "../utils/logger";
 import { recordMetricSnapshot, detectAnomalies } from "./anomalyDetection";
@@ -590,19 +594,176 @@ function scheduleAgentResearch() {
 
         const allUsers = await db.select({ id: users.id }).from(users);
 
+        // All 51 CEPHO agents — each researches their own domain daily
         const researchAgents = [
+          // Communication
+          {
+            key: "email_composer",
+            domain:
+              "professional email communication, business writing best practices, and communication effectiveness",
+          },
+          {
+            key: "meeting_summariser",
+            domain:
+              "meeting facilitation, action item tracking, and executive communication",
+          },
+          {
+            key: "stakeholder_comms",
+            domain:
+              "stakeholder management, investor relations, and board communications",
+          },
+          {
+            key: "proposal_writer",
+            domain:
+              "business proposals, RFP responses, and persuasive writing techniques",
+          },
+          {
+            key: "newsletter_editor",
+            domain:
+              "content curation, newsletter engagement, and subscriber retention",
+          },
+          {
+            key: "linkedin_manager",
+            domain:
+              "LinkedIn algorithm changes, thought leadership, and professional networking",
+          },
+          {
+            key: "press_release_writer",
+            domain:
+              "media relations, PR trends, and newsworthy business communications",
+          },
+          {
+            key: "crisis_comms",
+            domain:
+              "reputation management, crisis response strategies, and brand protection",
+          },
+          // Content
+          {
+            key: "report_writer",
+            domain:
+              "business report writing, data storytelling, and executive summaries",
+          },
+          {
+            key: "blog_writer",
+            domain:
+              "SEO trends, thought leadership content, and content marketing strategies",
+          },
+          {
+            key: "social_media_manager",
+            domain:
+              "social media algorithm updates, engagement strategies, and platform trends",
+          },
+          {
+            key: "video_script_writer",
+            domain:
+              "video content trends, script writing, and audience engagement",
+          },
+          {
+            key: "podcast_producer",
+            domain:
+              "podcast trends, audio content strategy, and listener engagement",
+          },
+          {
+            key: "case_study_writer",
+            domain:
+              "case study best practices, customer success storytelling, and B2B content",
+          },
+          // Operations
+          {
+            key: "project_manager",
+            domain:
+              "project management methodologies, agile practices, and delivery optimisation",
+          },
+          {
+            key: "process_optimiser",
+            domain:
+              "business process automation, workflow efficiency, and operational excellence",
+          },
+          {
+            key: "data_analyst",
+            domain:
+              "data analytics trends, business intelligence tools, and KPI frameworks",
+          },
+          {
+            key: "kpi_tracker",
+            domain:
+              "performance measurement, OKR frameworks, and business metrics",
+          },
+          {
+            key: "budget_controller",
+            domain: "budget management, cost control, and financial planning",
+          },
+          {
+            key: "risk_manager",
+            domain:
+              "enterprise risk management, compliance frameworks, and risk mitigation",
+          },
+          {
+            key: "compliance_officer",
+            domain:
+              "regulatory changes, compliance requirements, and governance best practices",
+          },
+          {
+            key: "supply_chain_manager",
+            domain:
+              "supply chain optimisation, vendor management, and logistics trends",
+          },
+          // Strategy
           {
             key: "chief_of_staff",
-            domain: "executive operations and strategic priorities",
+            domain:
+              "executive operations, strategic priorities, and organisational effectiveness",
+          },
+          {
+            key: "strategic_planner",
+            domain:
+              "strategic planning frameworks, competitive strategy, and business model innovation",
+          },
+          {
+            key: "market_researcher",
+            domain:
+              "market research methodologies, consumer insights, and industry analysis",
+          },
+          {
+            key: "competitor_intelligence",
+            domain:
+              "competitor activity, market positioning, and industry movements",
+          },
+          {
+            key: "business_developer",
+            domain:
+              "business development strategies, partnership opportunities, and growth tactics",
+          },
+          {
+            key: "investment_analyst",
+            domain:
+              "investment analysis, valuation methodologies, and portfolio management",
           },
           {
             key: "financial_analyst",
-            domain: "financial markets, cash flow, and business metrics",
+            domain:
+              "financial markets, cash flow optimisation, and business metrics",
           },
           {
-            key: "marketing_strategist",
+            key: "pricing_strategist",
             domain:
-              "marketing trends, campaign performance, and brand positioning",
+              "pricing models, revenue optimisation, and value-based pricing",
+          },
+          // Innovation
+          {
+            key: "innovation_scout",
+            domain:
+              "startup ecosystem, disruptive technologies, and innovation opportunities",
+          },
+          {
+            key: "product_manager",
+            domain:
+              "product strategy, feature prioritisation, and product-market fit",
+          },
+          {
+            key: "ux_designer",
+            domain:
+              "UX design trends, user research methods, and design systems",
           },
           {
             key: "technology_advisor",
@@ -610,24 +771,91 @@ function scheduleAgentResearch() {
               "emerging technologies, AI developments, and digital transformation",
           },
           {
-            key: "legal_counsel",
+            key: "ai_specialist",
             domain:
-              "regulatory changes, compliance requirements, and legal risks",
+              "AI/ML advancements, LLM capabilities, and AI implementation strategies",
           },
+          {
+            key: "blockchain_advisor",
+            domain:
+              "blockchain applications, Web3 trends, and decentralised finance",
+          },
+          {
+            key: "sustainability_advisor",
+            domain:
+              "ESG frameworks, sustainability reporting, and green business practices",
+          },
+          // People
           {
             key: "hr_director",
             domain:
               "talent management, workforce trends, and organisational culture",
           },
           {
-            key: "innovation_scout",
+            key: "recruiter",
             domain:
-              "startup ecosystem, innovation opportunities, and disruptive technologies",
+              "talent acquisition strategies, employer branding, and hiring best practices",
           },
           {
-            key: "competitor_intelligence",
+            key: "learning_development",
             domain:
-              "competitor activity, market positioning, and industry movements",
+              "L&D trends, skills development, and corporate learning strategies",
+          },
+          {
+            key: "culture_champion",
+            domain:
+              "organisational culture, employee engagement, and values alignment",
+          },
+          {
+            key: "performance_coach",
+            domain:
+              "performance management, coaching methodologies, and leadership development",
+          },
+          {
+            key: "wellbeing_advisor",
+            domain:
+              "employee wellbeing, mental health at work, and work-life balance",
+          },
+          // Finance
+          {
+            key: "cfo_advisor",
+            domain:
+              "CFO best practices, financial strategy, and capital allocation",
+          },
+          {
+            key: "tax_advisor",
+            domain:
+              "tax planning, regulatory changes, and tax optimisation strategies",
+          },
+          {
+            key: "legal_counsel",
+            domain:
+              "regulatory changes, compliance requirements, and legal risk management",
+          },
+          {
+            key: "contracts_manager",
+            domain:
+              "contract management, negotiation strategies, and legal frameworks",
+          },
+          // Sales & Marketing
+          {
+            key: "marketing_strategist",
+            domain:
+              "marketing trends, campaign performance, and brand positioning",
+          },
+          {
+            key: "sales_coach",
+            domain:
+              "sales methodologies, pipeline management, and revenue growth strategies",
+          },
+          {
+            key: "customer_success",
+            domain:
+              "customer success metrics, churn prevention, and NPS improvement",
+          },
+          {
+            key: "brand_manager",
+            domain: "brand strategy, brand equity, and visual identity trends",
           },
         ];
 
@@ -704,9 +932,271 @@ function scheduleAgentResearch() {
   );
 }
 
+// ─── Job 14: Daily Agent Reports (06:30 weekdays) ────────────────────────────
+function scheduleAgentDailyReports() {
+  cron.schedule(
+    "0 30 6 * * 1-5",
+    async () => {
+      log.info("[Cron] Agent Daily Reports — starting (06:30 weekdays)");
+      try {
+        const OpenAI = (await import("openai")).default;
+        const openai = new OpenAI();
+
+        const allUsers = await db.select({ id: users.id }).from(users);
+
+        // All 51 agents generate a daily report for Victoria
+        const agentKeys = [
+          "email_composer",
+          "meeting_summariser",
+          "stakeholder_comms",
+          "proposal_writer",
+          "newsletter_editor",
+          "linkedin_manager",
+          "press_release_writer",
+          "crisis_comms",
+          "report_writer",
+          "blog_writer",
+          "social_media_manager",
+          "video_script_writer",
+          "podcast_producer",
+          "case_study_writer",
+          "project_manager",
+          "process_optimiser",
+          "data_analyst",
+          "kpi_tracker",
+          "budget_controller",
+          "risk_manager",
+          "compliance_officer",
+          "supply_chain_manager",
+          "chief_of_staff",
+          "strategic_planner",
+          "market_researcher",
+          "competitor_intelligence",
+          "business_developer",
+          "investment_analyst",
+          "financial_analyst",
+          "pricing_strategist",
+          "innovation_scout",
+          "product_manager",
+          "ux_designer",
+          "technology_advisor",
+          "ai_specialist",
+          "blockchain_advisor",
+          "sustainability_advisor",
+          "hr_director",
+          "recruiter",
+          "learning_development",
+          "culture_champion",
+          "performance_coach",
+          "wellbeing_advisor",
+          "cfo_advisor",
+          "tax_advisor",
+          "legal_counsel",
+          "contracts_manager",
+          "marketing_strategist",
+          "sales_coach",
+          "customer_success",
+          "brand_manager",
+        ];
+
+        for (const user of allUsers) {
+          // Process agents in batches of 5 to avoid rate limits
+          for (let i = 0; i < agentKeys.length; i += 5) {
+            const batch = agentKeys.slice(i, i + 5);
+            await Promise.all(
+              batch.map(async agentKey => {
+                try {
+                  const agentName = agentKey
+                    .replace(/_/g, " ")
+                    .replace(/\b\w/g, l => l.toUpperCase());
+
+                  const completion = await openai.chat.completions.create({
+                    model: "gpt-4o-mini",
+                    messages: [
+                      {
+                        role: "system",
+                        content: `You are the ${agentName} AI agent for CEPHO.AI. Generate your daily report for Victoria (Chief of Staff). Be concise and actionable.`,
+                      },
+                      {
+                        role: "user",
+                        content: `Today is ${new Date().toISOString().split("T")[0]}. Generate your daily report. Return JSON: { "achievements": "string", "challenges": "string", "newLearnings": [{"topic": "string", "insight": "string"}], "suggestions": [{"title": "string", "description": "string"}], "capabilityRequest": null }`,
+                      },
+                    ],
+                    response_format: { type: "json_object" },
+                    temperature: 0.6,
+                    max_tokens: 400,
+                  });
+
+                  const raw = JSON.parse(
+                    completion.choices[0]?.message?.content ?? "{}"
+                  ) as {
+                    achievements?: string;
+                    challenges?: string;
+                    newLearnings?: { topic: string; insight: string }[];
+                    suggestions?: { title: string; description: string }[];
+                    capabilityRequest?: Record<string, unknown> | null;
+                  };
+
+                  await db.insert(agentDailyReports).values({
+                    userId: user.id,
+                    agentId: agentKey,
+                    agentName,
+                    category: "automated",
+                    tasksCompleted: [],
+                    achievements: raw.achievements ?? "",
+                    challenges: raw.challenges ?? "",
+                    newLearnings: raw.newLearnings ?? [],
+                    suggestions: raw.suggestions ?? [],
+                    capabilityRequest: raw.capabilityRequest ?? null,
+                    approvalStatus: raw.capabilityRequest
+                      ? "pending"
+                      : "not_required",
+                  });
+
+                  // Log to Victoria's action log
+                  await db.insert(victoriaActions).values({
+                    userId: user.id,
+                    actionType: "agent_report_received",
+                    actionTitle: `Daily report received from ${agentName}`,
+                    description: raw.capabilityRequest
+                      ? `${agentName} submitted their daily report with a capability enhancement request.`
+                      : `${agentName} submitted their daily report. No capability requests.`,
+                    relatedEntityType: "agent",
+                    autonomous: true,
+                  });
+                } catch (agentErr) {
+                  log.warn(
+                    `[Cron] Daily Reports — agent ${agentKey} failed for user ${user.id}:`,
+                    agentErr
+                  );
+                }
+              })
+            );
+            // Small delay between batches
+            await new Promise(resolve => setTimeout(resolve, 1000));
+          }
+        }
+        log.info(
+          `[Cron] Agent Daily Reports — completed for ${allUsers.length} users`
+        );
+      } catch (err) {
+        log.error("[Cron] Agent Daily Reports — error:", err);
+      }
+    },
+    { timezone: "UTC" }
+  );
+}
+
+// ─── Job 15: SME Review Processor (07:00 daily) ──────────────────────────────
+function scheduleSmeReviewProcessor() {
+  cron.schedule(
+    "0 0 7 * * *",
+    async () => {
+      log.info("[Cron] SME Review Processor — starting (07:00 daily)");
+      try {
+        const OpenAI = (await import("openai")).default;
+        const openai = new OpenAI();
+        const { gte } = await import("drizzle-orm");
+
+        // Find all pending SME review triggers from the last 24 hours
+        const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000);
+        const pendingTriggers = await db
+          .select()
+          .from(smeReviewTriggers)
+          .where(
+            and(
+              eq(smeReviewTriggers.status, "pending"),
+              gte(smeReviewTriggers.triggeredAt, yesterday)
+            )
+          )
+          .limit(20);
+
+        if (pendingTriggers.length === 0) {
+          log.info("[Cron] SME Review Processor — no pending triggers");
+          return;
+        }
+
+        for (const trigger of pendingTriggers) {
+          try {
+            const expertNames = (trigger.expertIds as string[]).map(
+              (id: string) =>
+                id
+                  .replace(/_/g, " ")
+                  .replace(/\b\w/g, (l: string) => l.toUpperCase())
+            );
+
+            // Generate SME review using OpenAI
+            const completion = await openai.chat.completions.create({
+              model: "gpt-4o-mini",
+              messages: [
+                {
+                  role: "system",
+                  content: `You are a panel of expert advisors: ${expertNames.join(", ")}. Provide a concise expert review.`,
+                },
+                {
+                  role: "user",
+                  content: `Review this ${trigger.triggerType.replace(/_/g, " ")}: "${trigger.sourceTitle}". Provide expert insights from each advisor. Return JSON: { "reviews": [{"expert": "string", "verdict": "proceed|investigate|park", "insight": "string", "confidence": 0-100}], "overallRecommendation": "string", "keyRisks": ["string"], "keyOpportunities": ["string"] }`,
+                },
+              ],
+              response_format: { type: "json_object" },
+              temperature: 0.7,
+              max_tokens: 600,
+            });
+
+            const review = JSON.parse(
+              completion.choices[0]?.message?.content ?? "{}"
+            ) as Record<string, unknown>;
+
+            // Mark trigger as completed and save review
+            await db
+              .update(smeReviewTriggers)
+              .set({
+                status: "completed",
+                completedAt: new Date(),
+                reviewResult: review,
+              })
+              .where(eq(smeReviewTriggers.id, trigger.id));
+
+            // Log to Victoria's action log
+            await db.insert(victoriaActions).values({
+              userId: trigger.userId,
+              actionType: "sme_review_completed",
+              actionTitle: `SME review completed for "${trigger.sourceTitle}"`,
+              description: `${expertNames.join(", ")} completed their review. Recommendation: ${(review.overallRecommendation as string) ?? "See review for details"}.`,
+              relatedEntityType: trigger.sourceType,
+              relatedEntityId: trigger.sourceId ?? undefined,
+              autonomous: true,
+              metadata: {
+                triggerType: trigger.triggerType,
+                experts: expertNames,
+                review,
+              },
+            });
+          } catch (triggerErr) {
+            log.warn(
+              `[Cron] SME Review Processor — trigger ${trigger.id} failed:`,
+              triggerErr
+            );
+            await db
+              .update(smeReviewTriggers)
+              .set({ status: "failed" })
+              .where(eq(smeReviewTriggers.id, trigger.id));
+          }
+        }
+        log.info(
+          `[Cron] SME Review Processor — processed ${pendingTriggers.length} triggers`
+        );
+      } catch (err) {
+        log.error("[Cron] SME Review Processor — error:", err);
+      }
+    },
+    { timezone: "UTC" }
+  );
+}
+
 // ─── Main Export ─────────────────────────────────────────────────────────────
 export function startScheduler() {
-  log.info("[Scheduler] Initialising all 13 cron jobs...");
+  log.info("[Scheduler] Initialising all 15 cron jobs...");
 
   scheduleMorningBriefing();
   scheduleEveningReview();
@@ -721,6 +1211,8 @@ export function startScheduler() {
   scheduleSubscriptionAlerts();
   schedulePartnershipRefresh();
   scheduleAgentResearch();
+  scheduleAgentDailyReports();
+  scheduleSmeReviewProcessor();
 
-  log.info("[Scheduler] All 13 cron jobs are active.");
+  log.info("[Scheduler] All 15 cron jobs are active.");
 }

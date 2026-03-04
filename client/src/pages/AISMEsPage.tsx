@@ -10,6 +10,7 @@ import {
   ChevronRight,
   Plus,
   CheckCircle2,
+  CheckCircle,
   Sparkles,
   Clock,
   BarChart3,
@@ -83,7 +84,13 @@ const SORT_OPTIONS: {
   { id: "recent", label: "Recently Used", icon: Clock },
 ];
 
-type ViewMode = "browse" | "leaderboard" | "teams" | "assemble" | "external";
+type ViewMode =
+  | "browse"
+  | "leaderboard"
+  | "teams"
+  | "assemble"
+  | "external"
+  | "reviews";
 
 interface SelectedExpert {
   id: string;
@@ -377,6 +384,7 @@ export default function AISMEsPage() {
             { id: "teams", label: "My Teams", icon: Users },
             { id: "assemble", label: "Assemble", icon: Plus },
             { id: "external", label: "External SMEs", icon: Globe },
+            { id: "reviews", label: "Auto Reviews", icon: CheckCircle },
           ].map(tab => (
             <button
               key={tab.id}
@@ -1348,6 +1356,78 @@ export default function AISMEsPage() {
         {viewMode === "external" && (
           <div className="flex-1 overflow-hidden">
             <ExternalResources />
+          </div>
+        )}
+
+        {viewMode === "reviews" && (
+          <div className="flex-1 overflow-y-auto p-4">
+            <div className="max-w-4xl mx-auto">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-green-500 to-emerald-500 flex items-center justify-center">
+                  <CheckCircle className="w-5 h-5 text-white" />
+                </div>
+                <div>
+                  <h2 className="text-lg font-semibold">
+                    Autonomous SME Reviews
+                  </h2>
+                  <p className="text-sm text-foreground/70">
+                    Expert reviews automatically triggered at key Innovation Hub
+                    and Project Genesis stages
+                  </p>
+                </div>
+              </div>
+              {!consultationHistory ||
+              consultationHistory.consultations.length === 0 ? (
+                <div className="text-center py-16 text-foreground/50">
+                  <CheckCircle className="w-12 h-12 mx-auto mb-4 opacity-30" />
+                  <p className="text-lg font-medium">
+                    No automated reviews yet
+                  </p>
+                  <p className="text-sm mt-2 max-w-md mx-auto">
+                    Reviews are triggered automatically when Innovation Hub
+                    ideas reach Assessment stage or Project Genesis reaches
+                    strategic review points. Check back after your next
+                    Innovation Hub assessment.
+                  </p>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {consultationHistory.consultations.map(c => (
+                    <div
+                      key={c.id}
+                      className="bg-white/5 border border-white/10 rounded-xl p-4"
+                    >
+                      <div className="flex items-start justify-between">
+                        <div>
+                          <p className="font-medium">{c.topic}</p>
+                          <p className="text-sm text-foreground/60 mt-1">
+                            Expert: {c.expertId}
+                          </p>
+                        </div>
+                        <span
+                          className={`text-xs px-2 py-1 rounded-full ${
+                            c.status === "completed"
+                              ? "bg-green-500/20 text-green-400"
+                              : c.status === "pending"
+                                ? "bg-yellow-500/20 text-yellow-400"
+                                : "bg-white/10 text-foreground/60"
+                          }`}
+                        >
+                          {c.status}
+                        </span>
+                      </div>
+                      <p className="text-xs text-foreground/50 mt-2">
+                        {new Date(c.createdAt).toLocaleDateString("en-GB", {
+                          day: "numeric",
+                          month: "short",
+                          year: "numeric",
+                        })}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         )}
       </div>

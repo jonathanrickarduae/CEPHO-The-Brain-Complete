@@ -18,6 +18,8 @@ import {
   projectGenesisPhases,
   ideaAssessments,
   investmentScenarios,
+  smeReviewTriggers,
+  victoriaActions,
 } from "../../drizzle/schema";
 
 function getOpenAIClient(): OpenAI {
@@ -366,6 +368,59 @@ Provide a JSON assessment focused on ${assessmentFocus} with:
         })
         .where(eq(innovationIdeas.id, input.ideaId));
 
+      // ─── AUTONOMOUS SME TRIGGER: Stage 2 Assessment ─────────────────────────────────────
+      // When an idea reaches Stage 2 (assessed), automatically trigger AI SME review
+      // Engage the 3 most relevant domain SMEs based on idea category
+      const smeMap: Record<string, string[]> = {
+        technology: [
+          "technology_advisor",
+          "innovation_scout",
+          "financial_analyst",
+        ],
+        market: [
+          "marketing_strategist",
+          "competitor_intelligence",
+          "financial_analyst",
+        ],
+        product: [
+          "innovation_scout",
+          "technology_advisor",
+          "marketing_strategist",
+        ],
+        strategy: ["chief_of_staff", "financial_analyst", "legal_counsel"],
+        investment: ["financial_analyst", "legal_counsel", "chief_of_staff"],
+        general: [
+          "innovation_scout",
+          "financial_analyst",
+          "marketing_strategist",
+        ],
+      };
+      const relevantSmes = smeMap[idea.category ?? "general"] ?? smeMap.general;
+
+      await db.insert(smeReviewTriggers).values({
+        userId: ctx.user.id,
+        triggerType: "innovation_assess",
+        sourceType: "innovation_idea",
+        sourceId: input.ideaId,
+        sourceTitle: idea.title,
+        expertType: "ai_sme",
+        expertIds: relevantSmes,
+        status: "pending",
+        triggeredAt: new Date(),
+      });
+
+      // Log Victoria action
+      await db.insert(victoriaActions).values({
+        userId: ctx.user.id,
+        actionType: "sme_triggered",
+        actionTitle: `SME review triggered for "${idea.title}"`,
+        description: `Idea reached Stage 2. Automatically engaged ${relevantSmes.join(", ")} for specialist review.`,
+        relatedEntityType: "innovation_idea",
+        relatedEntityId: input.ideaId,
+        autonomous: true,
+        metadata: { stage: 2, smes: relevantSmes, ideaCategory: idea.category },
+      });
+
       return {
         success: true,
         assessment: {
@@ -373,6 +428,8 @@ Provide a JSON assessment focused on ${assessmentFocus} with:
           ...assessment,
           assessmentType: input.assessmentType ?? "general",
         },
+        smeReviewTriggered: true,
+        smeExperts: relevantSmes,
         assessedAt: new Date().toISOString(),
       };
     }),
@@ -730,11 +787,37 @@ Return as JSON: { "title": "...", "description": "...", "category": "...", "prio
         })
         .where(eq(innovationIdeas.id, input.ideaId));
 
+      // ─── AUTONOMOUS SME TRIGGER: Genesis Promotion (Stage 4 → 5) ─────────────────
+      // Engage the Persephone Board for strategic review at Genesis promotion
+      await db.insert(smeReviewTriggers).values({
+        userId: ctx.user.id,
+        triggerType: "genesis_promotion",
+        sourceType: "project_genesis",
+        sourceId: project.id,
+        sourceTitle: project.name,
+        expertType: "persephone_board",
+        expertIds: ["altman", "huang", "amodei", "hassabis"],
+        status: "pending",
+        triggeredAt: new Date(),
+      });
+
+      await db.insert(victoriaActions).values({
+        userId: ctx.user.id,
+        actionType: "genesis_review_triggered",
+        actionTitle: `Persephone Board review triggered for "${project.name}"`,
+        description: `Idea promoted to Project Genesis. Persephone Board (Altman, Huang, Amodei, Hassabis) automatically engaged for strategic review.`,
+        relatedEntityType: "project_genesis",
+        relatedEntityId: project.id,
+        autonomous: true,
+        metadata: { ideaId: input.ideaId, projectId: project.id },
+      });
+
       return {
         success: true,
         projectId: project.id,
         projectName: project.name,
         message: "Idea promoted to Project Genesis",
+        persephoneBoardTriggered: true,
         promotedAt: new Date().toISOString(),
       };
     }),
