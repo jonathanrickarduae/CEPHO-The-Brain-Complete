@@ -1,6 +1,5 @@
 import { Router } from "express";
-import { db } from "../db";
-import { sql } from "drizzle-orm";
+import { getRawClient } from "../db";
 import { cacheService } from "../services/cache/redis-cache.service";
 
 /**
@@ -36,10 +35,21 @@ router.get("/health/ready", async (req, res) => {
 
   let allReady = true;
 
-  // Check database
+  // Check database using getRawClient() — safe even before initializeDatabase() completes
   try {
-    await db.execute(sql`SELECT 1`);
-    checks.database = { status: "ok" };
+    const client = await getRawClient();
+    if (!client) {
+      checks.database = { status: "error", error: "No database client available" };
+      allReady = false;
+    } else {
+      const result = await client`SELECT 1 as health`;
+      if (result.length > 0 && result[0].health === 1) {
+        checks.database = { status: "ok" };
+      } else {
+        checks.database = { status: "error", error: "Unexpected query result" };
+        allReady = false;
+      }
+    }
   } catch (error) {
     checks.database = {
       status: "error",
@@ -101,12 +111,17 @@ router.get("/health/detailed", async (req, res) => {
   // Check database
   try {
     const start = Date.now();
-    await db.execute(sql`SELECT 1`);
-    const duration = Date.now() - start;
-    checks.database = {
-      status: "ok",
-      responseTime: `${duration}ms`,
-    };
+    const client = await getRawClient();
+    if (!client) {
+      checks.database = { status: "error", error: "No database client available" };
+    } else {
+      await client`SELECT 1 as health`;
+      const duration = Date.now() - start;
+      checks.database = {
+        status: "ok",
+        responseTime: `${duration}ms`,
+      };
+    }
   } catch (error) {
     checks.database = {
       status: "error",
