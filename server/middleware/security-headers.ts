@@ -48,7 +48,7 @@ export function securityHeaders(
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
     "font-src 'self' https://fonts.gstatic.com data:",
     "img-src 'self' data: https: blob:",
-    "connect-src 'self' https://accounts.google.com https://www.googleapis.com",
+    "connect-src 'self' https://accounts.google.com https://www.googleapis.com https://*.ingest.sentry.io https://sentry.io",
     "frame-src 'self' https://accounts.google.com",
     "object-src 'none'",
     "base-uri 'self'",
@@ -158,6 +158,9 @@ export function configureSecurityHeaders(app: Express) {
             "https://accounts.google.com",
             "https://www.googleapis.com",
             "https://oauth.manus.im",
+            // Sentry error reporting (FIX-09 audit-09)
+            "https://*.ingest.sentry.io",
+            "https://sentry.io",
           ],
           frameSrc: ["'self'", "https://accounts.google.com"],
           objectSrc: ["'none'"],

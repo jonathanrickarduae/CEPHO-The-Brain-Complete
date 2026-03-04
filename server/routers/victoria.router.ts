@@ -1051,28 +1051,26 @@ export const victoriaRouter = router({
       r => r.riskLevel === "high" || r.riskLevel === "critical"
     ).length;
     for (const review of reviews.filter(r => r.riskLevel !== "low")) {
-      await db
-        .insert(victoriaQcChecks)
-        .values({
-          userId: ctx.user.id,
-          checkType: "project",
-          targetTitle: review.projectName,
-          score:
-            review.riskLevel === "critical"
-              ? 20
-              : review.riskLevel === "high"
-                ? 40
-                : 65,
-          grade:
-            review.riskLevel === "critical"
-              ? "F"
-              : review.riskLevel === "high"
-                ? "D"
-                : "C",
-          passed: review.riskLevel === "low" || review.riskLevel === "medium",
-          issues: [{ category: "project_risk", description: review.summary }],
-          recommendations: [review.recommended_action],
-        });
+      await db.insert(victoriaQcChecks).values({
+        userId: ctx.user.id,
+        checkType: "project",
+        targetTitle: review.projectName,
+        score:
+          review.riskLevel === "critical"
+            ? 20
+            : review.riskLevel === "high"
+              ? 40
+              : 65,
+        grade:
+          review.riskLevel === "critical"
+            ? "F"
+            : review.riskLevel === "high"
+              ? "D"
+              : "C",
+        passed: review.riskLevel === "low" || review.riskLevel === "medium",
+        issues: [{ category: "project_risk", description: review.summary }],
+        recommendations: [review.recommended_action],
+      });
     }
     await logVictoriaAction(
       ctx.user.id,
@@ -1142,28 +1140,26 @@ export const victoriaRouter = router({
     };
     const flagged = result.flagged ?? [];
     if (flagged.length > 0) {
-      await db
-        .insert(victoriaQcChecks)
-        .values({
-          userId: ctx.user.id,
-          checkType: "document",
-          targetTitle: `Document Library Review (${docs.length} docs)`,
-          score: Math.max(0, 100 - flagged.length * 10),
-          grade:
-            flagged.length === 0
-              ? "A"
-              : flagged.length < 3
-                ? "B"
-                : flagged.length < 6
-                  ? "C"
-                  : "D",
-          passed: flagged.length < 5,
-          issues: flagged.map(f => ({
-            category: f.reason,
-            description: `${f.name}: ${f.action}`,
-          })),
-          recommendations: [result.summary ?? "Review flagged documents"],
-        });
+      await db.insert(victoriaQcChecks).values({
+        userId: ctx.user.id,
+        checkType: "document",
+        targetTitle: `Document Library Review (${docs.length} docs)`,
+        score: Math.max(0, 100 - flagged.length * 10),
+        grade:
+          flagged.length === 0
+            ? "A"
+            : flagged.length < 3
+              ? "B"
+              : flagged.length < 6
+                ? "C"
+                : "D",
+        passed: flagged.length < 5,
+        issues: flagged.map(f => ({
+          category: f.reason,
+          description: `${f.name}: ${f.action}`,
+        })),
+        recommendations: [result.summary ?? "Review flagged documents"],
+      });
     }
     await logVictoriaAction(
       ctx.user.id,
@@ -1480,9 +1476,20 @@ export const victoriaRouter = router({
   predictUserAction: aiProcedure
     .input(
       z.object({
-        scenario: z.string().min(10).max(2000).describe("Describe the situation or decision point"),
-        options: z.array(z.string()).min(2).max(10).describe("List of possible actions the user could take"),
-        context: z.string().optional().describe("Additional context about the scenario"),
+        scenario: z
+          .string()
+          .min(10)
+          .max(2000)
+          .describe("Describe the situation or decision point"),
+        options: z
+          .array(z.string())
+          .min(2)
+          .max(10)
+          .describe("List of possible actions the user could take"),
+        context: z
+          .string()
+          .optional()
+          .describe("Additional context about the scenario"),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -1539,7 +1546,9 @@ export const victoriaRouter = router({
         completion.usage ?? null
       );
 
-      const result = JSON.parse(completion.choices[0].message.content ?? "{}") as {
+      const result = JSON.parse(
+        completion.choices[0].message.content ?? "{}"
+      ) as {
         predictedAction: string;
         confidence: number;
         reasoning: string;
@@ -1579,38 +1588,48 @@ export const victoriaRouter = router({
     .input(
       z.object({
         action: z.string().min(5).max(1000).describe("The action to simulate"),
-        timeHorizon: z.enum(["immediate", "short_term", "medium_term", "long_term"]).default("medium_term"),
-        context: z.string().optional().describe("Additional context about the current situation"),
+        timeHorizon: z
+          .enum(["immediate", "short_term", "medium_term", "long_term"])
+          .default("medium_term"),
+        context: z
+          .string()
+          .optional()
+          .describe("Additional context about the current situation"),
       })
     )
     .mutation(async ({ ctx, input }) => {
       const userId = ctx.user.id;
 
       // Fetch Digital Twin data and recent context
-      const [profile, cognitiveModel, recentTasks, activeProjects] = await Promise.all([
-        db
-          .select()
-          .from(digitalTwinProfile)
-          .where(eq(digitalTwinProfile.userId, userId))
-          .limit(1),
-        db
-          .select()
-          .from(digitalTwinCognitiveModel)
-          .where(eq(digitalTwinCognitiveModel.userId, userId))
-          .limit(1),
-        db
-          .select({ title: tasks.title, status: tasks.status, priority: tasks.priority })
-          .from(tasks)
-          .where(eq(tasks.userId, userId))
-          .orderBy(desc(tasks.createdAt))
-          .limit(10),
-        db
-          .select({ name: projects.name, status: projects.status })
-          .from(projects)
-          .where(eq(projects.userId, userId))
-          .orderBy(desc(projects.createdAt))
-          .limit(5),
-      ]);
+      const [profile, cognitiveModel, recentTasks, activeProjects] =
+        await Promise.all([
+          db
+            .select()
+            .from(digitalTwinProfile)
+            .where(eq(digitalTwinProfile.userId, userId))
+            .limit(1),
+          db
+            .select()
+            .from(digitalTwinCognitiveModel)
+            .where(eq(digitalTwinCognitiveModel.userId, userId))
+            .limit(1),
+          db
+            .select({
+              title: tasks.title,
+              status: tasks.status,
+              priority: tasks.priority,
+            })
+            .from(tasks)
+            .where(eq(tasks.userId, userId))
+            .orderBy(desc(tasks.createdAt))
+            .limit(10),
+          db
+            .select({ name: projects.name, status: projects.status })
+            .from(projects)
+            .where(eq(projects.userId, userId))
+            .orderBy(desc(projects.createdAt))
+            .limit(5),
+        ]);
 
       const dtProfile = profile[0];
       const dtCognitive = cognitiveModel[0];
@@ -1634,7 +1653,12 @@ export const victoriaRouter = router({
           },
           {
             role: "user",
-            content: `## User Profile\nRisk tolerance: ${dtProfile?.ambiguityTolerance ?? "unknown"}/10\nAI belief: ${dtProfile?.aiBeliefLevel ?? "unknown"}/10\nStrategic priorities: ${(dtCognitive?.strategicPriorities ?? []).map((p: { priority: string; weight: number }) => p.priority).join(", ") || "not set"}\nValues: ${(dtCognitive?.values ?? []).join(", ") || "not set"}\n\n## Current Context\nActive projects: ${activeProjects.map(p => p.name).join(", ") || "none"}\nRecent tasks: ${recentTasks.slice(0, 5).map(t => t.title).join(", ") || "none"}\n${input.context ? `\nAdditional context: ${input.context}` : ""}\n\n## Proposed Action\n${input.action}\n\n## Time Horizon\n${timeHorizonLabel}\n\nSimulate the likely outcomes of this action. Respond with JSON: { "primaryOutcome": "<most likely result>", "probability": <0.0-1.0>, "positiveConsequences": ["<consequence1>", ...], "negativeConsequences": ["<risk1>", ...], "requiredResources": ["<resource1>", ...], "alignmentWithProfile": <0.0-1.0>, "recommendation": "proceed" | "proceed_with_caution" | "reconsider" | "avoid", "recommendationReason": "<why>" }`,
+            content: `## User Profile\nRisk tolerance: ${dtProfile?.ambiguityTolerance ?? "unknown"}/10\nAI belief: ${dtProfile?.aiBeliefLevel ?? "unknown"}/10\nStrategic priorities: ${(dtCognitive?.strategicPriorities ?? []).map((p: { priority: string; weight: number }) => p.priority).join(", ") || "not set"}\nValues: ${(dtCognitive?.values ?? []).join(", ") || "not set"}\n\n## Current Context\nActive projects: ${activeProjects.map(p => p.name).join(", ") || "none"}\nRecent tasks: ${
+              recentTasks
+                .slice(0, 5)
+                .map(t => t.title)
+                .join(", ") || "none"
+            }\n${input.context ? `\nAdditional context: ${input.context}` : ""}\n\n## Proposed Action\n${input.action}\n\n## Time Horizon\n${timeHorizonLabel}\n\nSimulate the likely outcomes of this action. Respond with JSON: { "primaryOutcome": "<most likely result>", "probability": <0.0-1.0>, "positiveConsequences": ["<consequence1>", ...], "negativeConsequences": ["<risk1>", ...], "requiredResources": ["<resource1>", ...], "alignmentWithProfile": <0.0-1.0>, "recommendation": "proceed" | "proceed_with_caution" | "reconsider" | "avoid", "recommendationReason": "<why>" }`,
           },
         ],
         temperature: 0.3,
@@ -1648,7 +1672,9 @@ export const victoriaRouter = router({
         completion.usage ?? null
       );
 
-      const result = JSON.parse(completion.choices[0].message.content ?? "{}") as {
+      const result = JSON.parse(
+        completion.choices[0].message.content ?? "{}"
+      ) as {
         primaryOutcome: string;
         probability: number;
         positiveConsequences: string[];

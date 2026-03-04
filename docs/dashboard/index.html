@@ -185,6 +185,9 @@
       .phase-badge.ph6 {
         background: #7c3aed;
       }
+      .phase-badge.ph-audit {
+        background: #dc2626;
+      }
       .phase-badge.ph7 {
         background: #be185d;
       }
@@ -1462,8 +1465,79 @@
           ],
         },
         {
-          id: "ph7",
+          id: "ph-audit",
           label: "Phase 7",
+          title: "Audit Remediation — Fix All Critical Findings",
+          color: "#dc2626",
+          tasks: [
+            {
+              id: "audit-01",
+              status: "done",
+              name: "FIX-01 (P1): CI/CD pipeline — Prettier format check failing on 4 files (promptVersions.router.ts, scheduledReports.router.ts, victoria.router.ts, AIAgentsMonitoringPage.tsx)",
+              tags: ["spec"],
+              status: "not-started",
+            },
+            {
+              id: "audit-02",
+              status: "done",
+              name: "FIX-02 (P1): DB Migration 026 not applied — board_knowledge_corpus table missing from live Supabase (Persephone RAG non-functional)",
+              tags: ["spec"],
+              status: "not-started",
+            },
+            {
+              id: "audit-03",
+              status: "done",
+              name: "FIX-03 (P1): DB Migration 027 not applied — report_schedules and prompt_versions tables missing from live Supabase",
+              tags: ["spec"],
+              status: "not-started",
+            },
+            {
+              id: "audit-04",
+              status: "done",
+              name: "FIX-04 (P1): RLS disabled on ventures — any authenticated user can read/write all ventures rows",
+              tags: ["spec"],
+              status: "not-started",
+            },
+            {
+              id: "audit-05",
+              status: "done",
+              name: "FIX-05 (P1): RLS disabled on autonomous_workflows — cross-user data leakage risk",
+              tags: ["spec"],
+              status: "not-started",
+            },
+            {
+              id: "audit-06",
+              status: "done",
+              name: "FIX-06 (CRITICAL): RLS disabled on credentials_vault — sensitive credentials exposed to all authenticated users",
+              tags: ["spec"],
+              status: "not-started",
+            },
+            {
+              id: "audit-07",
+              status: "done",
+              name: "FIX-07 (CRITICAL): RLS disabled on system_kill_switch — any user could halt all autonomous operations",
+              tags: ["spec"],
+              status: "not-started",
+            },
+            {
+              id: "audit-08",
+              status: "done",
+              name: "FIX-08 (P1): RLS disabled on orchestrator_jobs and market_launch_checklists",
+              tags: ["spec"],
+              status: "not-started",
+            },
+            {
+              id: "audit-09",
+              status: "done",
+              name: "FIX-09 (P2): Sentry DSN blocked by CSP connect-src — no frontend error visibility in production",
+              tags: ["spec"],
+              status: "not-started",
+            },
+          ],
+        },
+        {
+          id: "ph7",
+          label: "Phase 8",
           title: "Monetisation & Enterprise Scale",
           color: "#be185d",
           tasks: [

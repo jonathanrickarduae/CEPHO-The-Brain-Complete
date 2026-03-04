@@ -551,10 +551,7 @@ export default function AIAgentsMonitoringPage() {
               </div>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                 {(perfMetricsData.metrics ?? []).slice(0, 8).map((m, i) => (
-                  <div
-                    key={i}
-                    className="bg-muted/40 rounded-lg p-3 space-y-1"
-                  >
+                  <div key={i} className="bg-muted/40 rounded-lg p-3 space-y-1">
                     <div className="flex items-center gap-1.5">
                       <Star className="w-3 h-3 text-yellow-400" />
                       <span className="text-xs font-medium truncate">

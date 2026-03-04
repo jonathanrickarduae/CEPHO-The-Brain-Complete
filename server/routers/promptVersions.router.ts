@@ -224,8 +224,7 @@ export const promptVersionsRouter = router({
           version: nextVersion,
           content: targetVersion.content,
           description:
-            input.description ??
-            `Rolled back to v${targetVersion.version}`,
+            input.description ?? `Rolled back to v${targetVersion.version}`,
           isActive: true,
           createdBy: ctx.user.name ?? ctx.user.email ?? "unknown",
           parentVersionId: targetVersion.id,
@@ -354,7 +353,9 @@ export const promptVersionsRouter = router({
       .select({
         promptKey: promptVersions.promptKey,
         totalVersions: sql<number>`count(*)::int`,
-        activeVersion: sql<number | null>`max(case when ${promptVersions.isActive} then ${promptVersions.version} end)`,
+        activeVersion: sql<
+          number | null
+        >`max(case when ${promptVersions.isActive} then ${promptVersions.version} end)`,
         lastModified: sql<string>`max(${promptVersions.createdAt})`,
       })
       .from(promptVersions)

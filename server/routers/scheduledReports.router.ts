@@ -138,7 +138,8 @@ export const scheduledReportsRouter = router({
       if (updates.hourUtc !== undefined) updateData.hourUtc = updates.hourUtc;
       if (updates.recipients !== undefined)
         updateData.recipients = updates.recipients;
-      if (updates.isActive !== undefined) updateData.isActive = updates.isActive;
+      if (updates.isActive !== undefined)
+        updateData.isActive = updates.isActive;
       if (updates.filters !== undefined) updateData.filters = updates.filters;
       const [updated] = await db
         .update(reportSchedules)
