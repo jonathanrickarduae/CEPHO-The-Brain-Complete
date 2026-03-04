@@ -113,3 +113,4 @@ logs/
 docs/CEPHO_MASTER_RECOVERY_DOCUMENT.*
 docs/ENVIRONMENT_VARIABLES_*.md
 docs/ENVIRONMENT_VARIABLES_*.docx
+scripts/restore_all_render.py
