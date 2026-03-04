@@ -53,3 +53,62 @@ The goal of Sprint 3 is to bring the platform to a world-class standard through 
 | S3-04 | Write Storybook stories for 20 core UI components (P3.2) | Frontend | 8h |
 | S3-05 | Enforce 2FA for admin accounts (P1.3 follow-up) | Backend | 4h |
 | **Sprint 3 Total** | | | **~44 hours** |
+
+---
+
+## Phase 10: Grade A Elevation
+
+**Objective:** Elevate three domains identified by the independent expert panel re-audit from their current grades to a target grade of **A** in each.
+
+| Domain | Current Grade | Target Grade |
+|---|---|---|
+| Observability & Reliability | C | A |
+| Database Schema Design | C | A |
+| Frontend Performance | C+ | A |
+
+**Total Estimated Effort:** ~107 hours across 3 tracks
+
+---
+
+### Track 1: Observability & Reliability (C → A)
+
+| Task ID | Task | Priority | Est. Hours |
+|---|---|---|---|
+| OR-1 | Set `SENTRY_DSN` in Render dashboard to activate production error monitoring | P0 | 0.5h |
+| OR-2 | Integrate Winston with a centralised logging service (Logtail/BetterStack) | P1 | 4h |
+| OR-3 | Build a `/admin/health` dashboard page showing all service statuses | P2 | 6h |
+| OR-4 | Implement Prometheus metrics endpoint for key application events | P2 | 8h |
+| OR-5 | Configure Sentry alerting rules for critical errors and performance regressions | P2 | 3h |
+| **Track 1 Total** | | | **~21.5 hours** |
+
+**Success Criteria:** Zero unmonitored production errors; all logs queryable in a centralised service; health dashboard visible in the app; Sentry alerts firing within 5 minutes of a critical error.
+
+---
+
+### Track 2: Database Schema Design (C → A)
+
+| Task ID | Task | Priority | Est. Hours |
+|---|---|---|---|
+| DB-1 | Enable RLS on all 90 remaining unprotected tables with appropriate policies | P0 | 12h |
+| DB-2 | Add B-tree indexes to all 18 FK columns currently missing them | P1 | 4h |
+| DB-3 | Add FK constraints for all remaining logical entity relationships | P1 | 16h |
+| DB-4 | Consolidate `user_settings` and `user_preferences` into a single `user_profile` table | P2 | 6h |
+| DB-5 | Adopt `drizzle-kit` for formal, version-controlled migration management | P2 | 8h |
+| **Track 2 Total** | | | **~46 hours** |
+
+**Success Criteria:** 100% RLS coverage; all FK columns indexed; zero orphaned records possible; single canonical table for user preferences; all schema changes tracked as migration files.
+
+---
+
+### Track 3: Frontend Performance (C+ → A)
+
+| Task ID | Task | Priority | Est. Hours |
+|---|---|---|---|
+| FE-1 | Replace Mermaid.js (1.7MB) with a lighter diagramming alternative | P1 | 12h |
+| FE-2 | Implement WebP image optimization pipeline for all static assets | P2 | 8h |
+| FE-3 | Profile and optimize main thread work during initial page load | P2 | 6h |
+| FE-4 | Code-split the `ui-vendor` chunk (496KB) into granular sub-chunks | P3 | 5h |
+| FE-5 | Implement a Workbox service worker for aggressive static asset caching | P3 | 8h |
+| **Track 3 Total** | | | **~39 hours** |
+
+**Success Criteria:** Total initial JS bundle under 2MB; Lighthouse Performance score above 85; TTFB under 1.5s; all static assets served with a service worker cache-hit on repeat visits.
