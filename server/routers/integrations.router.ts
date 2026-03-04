@@ -75,6 +75,8 @@ export const authRouter = router({
         if (existing.length === 0) {
           await db.insert(userSettings).values({
             userId: ctx.user.id,
+            theme: "dark",
+            governanceMode: "standard",
             onboardingComplete: input.onboardingComplete,
           });
         } else {
