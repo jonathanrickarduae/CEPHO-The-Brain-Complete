@@ -6,7 +6,6 @@ import {
   AlertTriangle,
   Calendar,
   DollarSign,
-  Plus,
   RefreshCw,
 } from "lucide-react";
 import { trpc } from "@/lib/trpc";

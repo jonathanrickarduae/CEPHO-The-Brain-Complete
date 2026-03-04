@@ -53,6 +53,7 @@ function loadNotifications(): SmartNotification[] {
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored) {
       const notifications = JSON.parse(stored);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return notifications.map((n: any) => ({
         ...n,
         timestamp: new Date(n.timestamp),

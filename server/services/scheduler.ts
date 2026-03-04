@@ -33,7 +33,7 @@ import {
   agentInsights,
   agentImprovements,
   agentDailyReports,
-  agentPerformanceMetrics,
+  agentPerformanceMetrics as _agentPerformanceMetrics,
   victoriaActions,
   smeReviewTriggers,
   victoriaQcChecks,

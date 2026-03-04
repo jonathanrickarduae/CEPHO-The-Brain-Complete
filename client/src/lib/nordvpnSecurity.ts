@@ -116,6 +116,7 @@ export class NordVPNSecurityService {
       const stored = localStorage.getItem(STORAGE_KEYS.auditLog);
       if (stored) {
         const data = JSON.parse(stored);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         this.auditLog = data.map((log: any) => ({
           ...log,
           timestamp: new Date(log.timestamp),

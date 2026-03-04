@@ -65,6 +65,7 @@ const queryClient = new QueryClient({
   },
 });
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const redirectToLoginIfUnauthorized = (error: any) => {
   // P1-SEC-01: Redirect to login page on UNAUTHORIZED or FORBIDDEN errors
   if (

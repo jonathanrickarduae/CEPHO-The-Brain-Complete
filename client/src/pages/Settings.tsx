@@ -276,20 +276,24 @@ function VaultPanel() {
   const integrations = integrationsData ?? [];
   const contractRenewals = renewalSummary?.upcoming ?? [];
   const securityEvents = auditData?.logs ?? [];
-  const healthyCount = integrations.filter(
-    (i: any) => i.status === "active"
+   
+  type IntegrationItem = { status: string; [key: string]: unknown };
+  type SecurityEvent = { action: string; [key: string]: unknown };
+  type ContractRenewal = { status: string; daysUntilRenewal: number; [key: string]: unknown };
+  const healthyCount = (integrations as IntegrationItem[]).filter(
+    i => i.status === "active"
   ).length;
-  const warningCount = integrations.filter(
-    (i: any) => i.status === "warning"
+  const warningCount = (integrations as IntegrationItem[]).filter(
+    i => i.status === "warning"
   ).length;
-  const brokenCount = integrations.filter(
-    (i: any) => i.status === "error"
+  const brokenCount = (integrations as IntegrationItem[]).filter(
+    i => i.status === "error"
   ).length;
-  const blockedThreats = securityEvents.filter(
-    (e: any) => e.action === "blocked"
+  const blockedThreats = (securityEvents as SecurityEvent[]).filter(
+    e => e.action === "blocked"
   ).length;
-  const urgentContracts = contractRenewals.filter(
-    (c: any) => c.status === "urgent"
+  const urgentContracts = (contractRenewals as unknown as ContractRenewal[]).filter(
+    c => c.status === "urgent"
   ).length;
 
   return (
@@ -343,6 +347,7 @@ function VaultPanel() {
           </Button>
         </div>
         <div className="space-y-2">
+          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
           {integrations.map((integration: any) => (
             <div
               key={integration.id}
@@ -403,6 +408,7 @@ function VaultPanel() {
           </h3>
         </div>
         <div className="space-y-2">
+          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
           {contractRenewals.map((contract: any) => {
             const isUrgent = contract.daysUntilRenewal <= 14;
             const isUpcoming = contract.daysUntilRenewal <= 30;

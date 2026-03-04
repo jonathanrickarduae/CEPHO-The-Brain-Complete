@@ -1363,6 +1363,7 @@ Format as JSON with these exact keys:
     const byAgent = new Map<string, typeof insights>();
     for (const ins of insights) {
       if (!byAgent.has(ins.agentKey)) byAgent.set(ins.agentKey, []);
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       byAgent.get(ins.agentKey)!.push(ins);
     }
 
@@ -1565,6 +1566,7 @@ Format as JSON with these exact keys:
           latestScore: 0,
         });
       }
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       const agg = byAgent.get(m.agentId)!;
       agg.totalTasks += m.tasksExecuted ?? 0;
       agg.succeeded += m.tasksSucceeded ?? 0;

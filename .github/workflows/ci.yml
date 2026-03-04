@@ -195,12 +195,14 @@ jobs:
           NODE_ENV: test
 
       - name: Upload coverage
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v5
         if: success()
+        continue-on-error: true
         with:
           files: ./coverage/coverage-final.json
           flags: unittests
           name: codecov-umbrella
+          fail_ci_if_error: false
 
   security:
     name: Security Scan (Snyk)
@@ -222,7 +224,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Run Snyk security scan
-        uses: snyk/actions/node@master
+        uses: snyk/actions/node@0.4.0
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:

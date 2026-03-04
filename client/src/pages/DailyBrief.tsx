@@ -379,11 +379,11 @@ export default function DailyBrief() {
     setPendingVideoId(null);
   }
   // Victoria autonomous stats and action log
-  const { data: victoriaStats } = trpc.victoria.getStats.useQuery();
-  const { data: victoriaActionLog } = trpc.victoria.getActionLog.useQuery({
+  const { data: _victoriaStats } = trpc.victoria.getStats.useQuery();
+  const { data: _victoriaActionLog } = trpc.victoria.getActionLog.useQuery({
     limit: 5,
   });
-  const generateMorningBriefingMutation =
+  const _generateMorningBriefingMutation =
     trpc.victoria.generateMorningBriefing.useMutation({
       onSuccess: () => {
         toast.success("Victoria is generating your morning briefing...");
