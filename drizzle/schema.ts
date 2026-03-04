@@ -5426,7 +5426,9 @@ export const workflowApprovalGates = pgTable("workflow_approval_gates", {
   stepIndex: integer("step_index").notNull(),
   description: text("description").notNull(),
   proposedAction: text("proposed_action").notNull(),
-  impactLevel: varchar("impact_level", { length: 20 }).notNull().default("medium"),
+  impactLevel: varchar("impact_level", { length: 20 })
+    .notNull()
+    .default("medium"),
   status: varchar("status", { length: 20 }).notNull().default("pending"),
   userDecision: varchar("user_decision", { length: 20 }),
   userNotes: text("user_notes"),
@@ -5435,7 +5437,8 @@ export const workflowApprovalGates = pgTable("workflow_approval_gates", {
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 export type WorkflowApprovalGate = typeof workflowApprovalGates.$inferSelect;
-export type InsertWorkflowApprovalGate = typeof workflowApprovalGates.$inferInsert;
+export type InsertWorkflowApprovalGate =
+  typeof workflowApprovalGates.$inferInsert;
 
 /**
  * Orchestrator Jobs — individual agent task executions within a workflow.
@@ -5482,7 +5485,8 @@ export const marketLaunchChecklists = pgTable("market_launch_checklists", {
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });
 export type MarketLaunchChecklist = typeof marketLaunchChecklists.$inferSelect;
-export type InsertMarketLaunchChecklist = typeof marketLaunchChecklists.$inferInsert;
+export type InsertMarketLaunchChecklist =
+  typeof marketLaunchChecklists.$inferInsert;
 
 /**
  * System Kill Switch — emergency halt for all autonomous actions.
@@ -5523,7 +5527,8 @@ export const boardKnowledgeCorpus = pgTable("board_knowledge_corpus", {
     .notNull(),
 });
 export type BoardKnowledgeCorpus = typeof boardKnowledgeCorpus.$inferSelect;
-export type InsertBoardKnowledgeCorpus = typeof boardKnowledgeCorpus.$inferInsert;
+export type InsertBoardKnowledgeCorpus =
+  typeof boardKnowledgeCorpus.$inferInsert;
 
 // ─── Migration 027: Report Schedules (p6-4 fix) ──────────────────────────────
 export const reportSchedules = pgTable("report_schedules", {

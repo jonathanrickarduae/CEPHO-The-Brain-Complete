@@ -438,17 +438,17 @@ components:
       tags: [Competitor Intelligence]
       summary: List all competitors
       operationId: competitorListCompetitors
-      security: [{sessionAuth: []}]
+      security: [{ sessionAuth: [] }]
       responses:
-        "200": {description: Competitors list}
-        "401": {description: Unauthorized}
+        "200": { description: Competitors list }
+        "401": { description: Unauthorized }
 
   /trpc/competitor.runIntelligenceAnalysis:
     post:
       tags: [Competitor Intelligence]
       summary: Run AI competitor intelligence analysis
       operationId: competitorRunIntelligenceAnalysis
-      security: [{sessionAuth: []}]
+      security: [{ sessionAuth: [] }]
       requestBody:
         required: true
         content:
@@ -459,27 +459,27 @@ components:
                 input:
                   type: object
                   properties:
-                    competitorId: {type: integer}
+                    competitorId: { type: integer }
       responses:
-        "200": {description: Analysis completed}
-        "401": {description: Unauthorized}
+        "200": { description: Analysis completed }
+        "401": { description: Unauthorized }
 
   /trpc/competitor.getMarketPositionReport:
     get:
       tags: [Competitor Intelligence]
       summary: Get AI market position report
       operationId: competitorGetMarketPositionReport
-      security: [{sessionAuth: []}]
+      security: [{ sessionAuth: [] }]
       responses:
-        "200": {description: Market position report}
-        "401": {description: Unauthorized}
+        "200": { description: Market position report }
+        "401": { description: Unauthorized }
 
   /trpc/persephoneRag.getRagEnhancedResponse:
     post:
       tags: [Persephone Board RAG]
       summary: Get RAG-enhanced board member response (PB-01/02/03)
       operationId: persephoneRagGetRagEnhancedResponse
-      security: [{sessionAuth: []}]
+      security: [{ sessionAuth: [] }]
       requestBody:
         required: true
         content:
@@ -491,49 +491,49 @@ components:
                   type: object
                   required: [memberId, query]
                   properties:
-                    memberId: {type: string}
-                    query: {type: string}
-                    topK: {type: integer, default: 5}
+                    memberId: { type: string }
+                    query: { type: string }
+                    topK: { type: integer, default: 5 }
       responses:
-        "200": {description: RAG-enhanced response}
-        "401": {description: Unauthorized}
+        "200": { description: RAG-enhanced response }
+        "401": { description: Unauthorized }
 
   /trpc/persephoneRag.ingestBoardKnowledge:
     post:
       tags: [Persephone Board RAG]
       summary: Ingest knowledge into board corpus
       operationId: persephoneRagIngestBoardKnowledge
-      security: [{sessionAuth: []}]
+      security: [{ sessionAuth: [] }]
       responses:
-        "200": {description: Knowledge ingested}
-        "401": {description: Unauthorized}
+        "200": { description: Knowledge ingested }
+        "401": { description: Unauthorized }
 
   /trpc/persephoneRag.searchBoardKnowledge:
     post:
       tags: [Persephone Board RAG]
       summary: Semantic search over board knowledge corpus
       operationId: persephoneRagSearchBoardKnowledge
-      security: [{sessionAuth: []}]
+      security: [{ sessionAuth: [] }]
       responses:
-        "200": {description: Search results}
-        "401": {description: Unauthorized}
+        "200": { description: Search results }
+        "401": { description: Unauthorized }
 
   /trpc/scheduledReports.listSchedules:
     get:
       tags: [Scheduled Reports]
       summary: List report schedules (DB-persisted)
       operationId: scheduledReportsListSchedules
-      security: [{sessionAuth: []}]
+      security: [{ sessionAuth: [] }]
       responses:
-        "200": {description: Report schedules}
-        "401": {description: Unauthorized}
+        "200": { description: Report schedules }
+        "401": { description: Unauthorized }
 
   /trpc/scheduledReports.createSchedule:
     post:
       tags: [Scheduled Reports]
       summary: Create a new report schedule
       operationId: scheduledReportsCreateSchedule
-      security: [{sessionAuth: []}]
+      security: [{ sessionAuth: [] }]
       requestBody:
         required: true
         content:
@@ -545,20 +545,20 @@ components:
                   type: object
                   required: [name, reportType, frequency]
                   properties:
-                    name: {type: string}
-                    reportType: {type: string}
-                    frequency: {type: string, enum: [daily, weekly, monthly]}
-                    recipients: {type: array, items: {type: string}}
+                    name: { type: string }
+                    reportType: { type: string }
+                    frequency: { type: string, enum: [daily, weekly, monthly] }
+                    recipients: { type: array, items: { type: string } }
       responses:
-        "200": {description: Schedule created}
-        "401": {description: Unauthorized}
+        "200": { description: Schedule created }
+        "401": { description: Unauthorized }
 
   /trpc/scheduledReports.generateReport:
     post:
       tags: [Scheduled Reports]
       summary: Generate an on-demand AI report
       operationId: scheduledReportsGenerateReport
-      security: [{sessionAuth: []}]
+      security: [{ sessionAuth: [] }]
       requestBody:
         required: true
         content:
@@ -572,28 +572,36 @@ components:
                   properties:
                     reportType:
                       type: string
-                      enum: [executive_summary, agent_performance, competitive_intelligence, innovation_pipeline, financial_overview, custom]
-                    periodDays: {type: integer, default: 7}
+                      enum:
+                        [
+                          executive_summary,
+                          agent_performance,
+                          competitive_intelligence,
+                          innovation_pipeline,
+                          financial_overview,
+                          custom,
+                        ]
+                    periodDays: { type: integer, default: 7 }
       responses:
-        "200": {description: Report generated}
-        "401": {description: Unauthorized}
+        "200": { description: Report generated }
+        "401": { description: Unauthorized }
 
   /trpc/promptVersions.listPromptKeys:
     get:
       tags: [Prompt Version History]
       summary: List all prompt keys (DB-persisted)
       operationId: promptVersionsListPromptKeys
-      security: [{sessionAuth: []}]
+      security: [{ sessionAuth: [] }]
       responses:
-        "200": {description: Prompt keys list}
-        "401": {description: Unauthorized}
+        "200": { description: Prompt keys list }
+        "401": { description: Unauthorized }
 
   /trpc/promptVersions.saveVersion:
     post:
       tags: [Prompt Version History]
       summary: Save a new prompt version to DB
       operationId: promptVersionsSaveVersion
-      security: [{sessionAuth: []}]
+      security: [{ sessionAuth: [] }]
       requestBody:
         required: true
         content:
@@ -605,43 +613,47 @@ components:
                   type: object
                   required: [promptKey, content]
                   properties:
-                    promptKey: {type: string, pattern: "^(agent|board|system):[a-zA-Z0-9_-]+$"}
-                    content: {type: string}
-                    description: {type: string}
-                    setActive: {type: boolean, default: true}
+                    promptKey:
+                      {
+                        type: string,
+                        pattern: "^(agent|board|system):[a-zA-Z0-9_-]+$",
+                      }
+                    content: { type: string }
+                    description: { type: string }
+                    setActive: { type: boolean, default: true }
       responses:
-        "200": {description: Version saved}
-        "401": {description: Unauthorized}
+        "200": { description: Version saved }
+        "401": { description: Unauthorized }
 
   /trpc/promptVersions.rollback:
     post:
       tags: [Prompt Version History]
       summary: Roll back to a previous prompt version
       operationId: promptVersionsRollback
-      security: [{sessionAuth: []}]
+      security: [{ sessionAuth: [] }]
       responses:
-        "200": {description: Rollback successful}
-        "401": {description: Unauthorized}
+        "200": { description: Rollback successful }
+        "401": { description: Unauthorized }
 
   /trpc/ventures.list:
     get:
       tags: [Autonomous Ventures]
       summary: List all autonomous ventures
       operationId: venturesList
-      security: [{sessionAuth: []}]
+      security: [{ sessionAuth: [] }]
       responses:
-        "200": {description: Ventures list}
-        "401": {description: Unauthorized}
+        "200": { description: Ventures list }
+        "401": { description: Unauthorized }
 
   /trpc/ventures.createVenture:
     post:
       tags: [Autonomous Ventures]
       summary: Create a new autonomous venture
       operationId: venturesCreateVenture
-      security: [{sessionAuth: []}]
+      security: [{ sessionAuth: [] }]
       responses:
-        "200": {description: Venture created}
-        "401": {description: Unauthorized}
+        "200": { description: Venture created }
+        "401": { description: Unauthorized }
 
   /trpc/ventures.setKillSwitch:
     post:
@@ -649,27 +661,27 @@ components:
       summary: Activate or deactivate the kill switch
       description: Emergency halt for all autonomous venture actions
       operationId: venturesSetKillSwitch
-      security: [{sessionAuth: []}]
+      security: [{ sessionAuth: [] }]
       responses:
-        "200": {description: Kill switch state updated}
-        "401": {description: Unauthorized}
+        "200": { description: Kill switch state updated }
+        "401": { description: Unauthorized }
 
   /trpc/aiAgentsMonitoring.getLiveActivityFeed:
     get:
       tags: [AI Agents]
       summary: Get live agent activity feed
       operationId: aiAgentsMonitoringGetLiveActivityFeed
-      security: [{sessionAuth: []}]
+      security: [{ sessionAuth: [] }]
       responses:
-        "200": {description: Live activity feed}
-        "401": {description: Unauthorized}
+        "200": { description: Live activity feed }
+        "401": { description: Unauthorized }
 
   /trpc/aiAgentsMonitoring.getPerformanceMetrics:
     get:
       tags: [AI Agents]
       summary: Get per-agent performance metrics and ratings
       operationId: aiAgentsMonitoringGetPerformanceMetrics
-      security: [{sessionAuth: []}]
+      security: [{ sessionAuth: [] }]
       responses:
-        "200": {description: Performance metrics}
-        "401": {description: Unauthorized}
+        "200": { description: Performance metrics }
+        "401": { description: Unauthorized }
