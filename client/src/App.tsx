@@ -49,6 +49,7 @@ const AgentDetailPage = lazy(() => import("./pages/AgentDetailPage"));
 const AIAgentsMonitoringPage = lazy(
   () => import("./pages/AIAgentsMonitoringPage")
 );
+const VictoriaTrackerPage = lazy(() => import("./pages/VictoriaTrackerPage"));
 const AISMEsPage = lazy(() => import("./pages/AISMEsPage"));
 const Statistics = lazy(() => import("./pages/Statistics"));
 const DocumentLibrary = lazy(() => import("./pages/DocumentLibrary"));
@@ -183,6 +184,11 @@ function Router() {
         <Route path="/ai-agents-monitoring">
           <WithLayout>
             <AIAgentsMonitoringPage />
+          </WithLayout>
+        </Route>
+        <Route path="/victoria-tracker">
+          <WithLayout>
+            <VictoriaTrackerPage />
           </WithLayout>
         </Route>
         <Route path="/ai-experts">

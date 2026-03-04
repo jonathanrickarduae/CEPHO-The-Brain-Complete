@@ -5305,3 +5305,58 @@ export const victoriaActions = pgTable("victoria_actions", {
 });
 export type VictoriaAction = typeof victoriaActions.$inferSelect;
 export type InsertVictoriaAction = typeof victoriaActions.$inferInsert;
+
+// ─── Victoria Skills Framework (Migration 024) ────────────────────────────────
+export const victoriaSkills = pgTable("victoria_skills", {
+  id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
+  userId: integer("userId").notNull(),
+  name: varchar("name", { length: 200 }).notNull(),
+  category: varchar("category", { length: 100 }).notNull(),
+  description: text("description"),
+  trigger: varchar("trigger", { length: 100 }).notNull(),
+  steps: jsonb("steps").notNull().default([]),
+  isActive: boolean("is_active").notNull().default(true),
+  lastRunAt: timestamp("last_run_at"),
+  runCount: integer("run_count").notNull().default(0),
+  createdAt: timestamp("createdAt").notNull().defaultNow(),
+  updatedAt: timestamp("updatedAt").notNull().defaultNow(),
+});
+export type VictoriaSkill = typeof victoriaSkills.$inferSelect;
+export type InsertVictoriaSkill = typeof victoriaSkills.$inferInsert;
+
+// ─── Victoria QC Checks (Migration 024) ──────────────────────────────────────
+export const victoriaQcChecks = pgTable("victoria_qc_checks", {
+  id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
+  userId: integer("userId").notNull(),
+  checkType: varchar("check_type", { length: 100 }).notNull(),
+  targetId: varchar("target_id", { length: 200 }),
+  targetTitle: varchar("target_title", { length: 300 }),
+  score: integer("score"),
+  grade: varchar("grade", { length: 2 }),
+  passed: boolean("passed").notNull().default(true),
+  issues: jsonb("issues").default([]),
+  recommendations: jsonb("recommendations").default([]),
+  autoFixed: boolean("auto_fixed").notNull().default(false),
+  fixDescription: text("fix_description"),
+  checkedAt: timestamp("checkedAt").notNull().defaultNow(),
+});
+export type VictoriaQcCheck = typeof victoriaQcChecks.$inferSelect;
+export type InsertVictoriaQcCheck = typeof victoriaQcChecks.$inferInsert;
+
+// ─── Sub-Phase Task Tracker (Migration 024) ───────────────────────────────────
+export const subphaseTasks = pgTable("subphase_tasks", {
+  id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
+  taskId: varchar("task_id", { length: 50 }).notNull().unique(),
+  domain: varchar("domain", { length: 100 }).notNull(),
+  title: text("title").notNull(),
+  description: text("description"),
+  status: varchar("status", { length: 50 }).notNull().default("not_started"),
+  commitSha: varchar("commit_sha", { length: 50 }),
+  evidence: text("evidence"),
+  startedAt: timestamp("started_at"),
+  completedAt: timestamp("completed_at"),
+  createdAt: timestamp("createdAt").notNull().defaultNow(),
+  updatedAt: timestamp("updatedAt").notNull().defaultNow(),
+});
+export type SubphaseTask = typeof subphaseTasks.$inferSelect;
+export type InsertSubphaseTask = typeof subphaseTasks.$inferInsert;

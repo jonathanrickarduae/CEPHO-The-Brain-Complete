@@ -52,6 +52,7 @@ import {
   Mail,
   Video,
   SlidersHorizontal,
+  ClipboardList,
 } from "lucide-react";
 import { CSSProperties, useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
@@ -128,6 +129,11 @@ const menuItems: MenuItem[] = [
         icon: Activity,
         label: "Agent Monitoring",
         path: "/ai-agents-monitoring",
+      },
+      {
+        icon: ClipboardList,
+        label: "Victoria Tracker",
+        path: "/victoria-tracker",
       },
       { icon: Users, label: "AI-SMEs", path: "/ai-experts" },
       { icon: TrendingUp, label: "Analytics", path: "/analytics" },

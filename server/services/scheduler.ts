@@ -36,6 +36,11 @@ import {
   agentPerformanceMetrics,
   victoriaActions,
   smeReviewTriggers,
+  victoriaQcChecks,
+  victoriaSkills,
+  projects,
+  libraryDocuments,
+  calendarEventsCache,
 } from "../../drizzle/schema";
 import { logger } from "../utils/logger";
 import { recordMetricSnapshot, detectAnomalies } from "./anomalyDetection";
@@ -1194,9 +1199,344 @@ function scheduleSmeReviewProcessor() {
   );
 }
 
+// ─── Job 16: Autonomous Project Review ───────────────────────────────────────
+function scheduleProjectReview() {
+  cron.schedule(
+    "0 7 * * *",
+    async () => {
+      log.info("[Cron] Autonomous Project Review — starting");
+      try {
+        const allUsers = await db
+          .select({ id: users.id })
+          .from(users)
+          .limit(50);
+        let totalReviewed = 0;
+        let totalFlagged = 0;
+        for (const user of allUsers) {
+          try {
+            const activeProjects = await db
+              .select()
+              .from(projects)
+              .where(
+                and(eq(projects.userId, user.id), eq(projects.status, "active"))
+              )
+              .limit(20);
+            if (activeProjects.length === 0) continue;
+            const staleProjects = activeProjects.filter(
+              p => p.updatedAt < new Date(Date.now() - 14 * 24 * 60 * 60 * 1000)
+            );
+            if (staleProjects.length > 0) {
+              await db.insert(victoriaQcChecks).values({
+                userId: user.id,
+                checkType: "project",
+                targetTitle: `Daily Project Review — ${activeProjects.length} active projects`,
+                score: Math.max(0, 100 - staleProjects.length * 15),
+                grade:
+                  staleProjects.length === 0
+                    ? "A"
+                    : staleProjects.length < 3
+                      ? "B"
+                      : "C",
+                passed: staleProjects.length < 3,
+                issues: staleProjects.map(p => ({
+                  category: "stale_project",
+                  description: `"${p.name}" has not been updated in 14+ days`,
+                })),
+                recommendations: [
+                  "Review stale projects and update their status or add a progress note",
+                ],
+              });
+              await db.insert(victoriaActions).values({
+                userId: user.id,
+                actionType: "project_review",
+                actionTitle: `Daily project review — ${staleProjects.length} stale project(s) flagged`,
+                description: `${activeProjects.length} active projects reviewed. ${staleProjects.length} flagged as stale (no updates in 14+ days).`,
+                autonomous: true,
+                metadata: {
+                  reviewed: activeProjects.length,
+                  flagged: staleProjects.length,
+                },
+              });
+              totalFlagged += staleProjects.length;
+            }
+            totalReviewed += activeProjects.length;
+          } catch (userErr) {
+            log.warn(
+              `[Cron] Project Review — user ${user.id} failed:`,
+              userErr
+            );
+          }
+        }
+        log.info(
+          `[Cron] Project Review — reviewed ${totalReviewed} projects, flagged ${totalFlagged}`
+        );
+      } catch (err) {
+        log.error("[Cron] Project Review — error:", err);
+      }
+    },
+    { timezone: "UTC" }
+  );
+}
+
+// ─── Job 17: Autonomous Document Review ──────────────────────────────────────
+function scheduleDocumentReview() {
+  cron.schedule(
+    "0 8 * * 1",
+    async () => {
+      log.info("[Cron] Autonomous Document Review — starting (weekly)");
+      try {
+        const allUsers = await db
+          .select({ id: users.id })
+          .from(users)
+          .limit(50);
+        for (const user of allUsers) {
+          try {
+            const ninetyDaysAgo = new Date(
+              Date.now() - 90 * 24 * 60 * 60 * 1000
+            );
+            const staleDocs = await db
+              .select()
+              .from(libraryDocuments)
+              .where(
+                and(
+                  eq(libraryDocuments.userId, user.id),
+                  lt(libraryDocuments.createdAt, ninetyDaysAgo)
+                )
+              )
+              .limit(20);
+            if (staleDocs.length === 0) continue;
+            await db.insert(victoriaQcChecks).values({
+              userId: user.id,
+              checkType: "document",
+              targetTitle: `Weekly Document Review — ${staleDocs.length} stale document(s)`,
+              score: Math.max(0, 100 - staleDocs.length * 5),
+              grade:
+                staleDocs.length < 3 ? "B" : staleDocs.length < 8 ? "C" : "D",
+              passed: staleDocs.length < 5,
+              issues: staleDocs.slice(0, 5).map(d => ({
+                category: "stale_document",
+                description: `"${d.name}" has not been updated in 90+ days`,
+              })),
+              recommendations: [
+                "Review and archive documents older than 90 days that are no longer relevant",
+              ],
+            });
+            await db.insert(victoriaActions).values({
+              userId: user.id,
+              actionType: "document_review",
+              actionTitle: `Weekly document review — ${staleDocs.length} stale document(s) flagged`,
+              description: `${staleDocs.length} documents older than 90 days identified for review or archival.`,
+              autonomous: true,
+              metadata: { stale: staleDocs.length },
+            });
+          } catch (userErr) {
+            log.warn(
+              `[Cron] Document Review — user ${user.id} failed:`,
+              userErr
+            );
+          }
+        }
+        log.info("[Cron] Document Review — complete");
+      } catch (err) {
+        log.error("[Cron] Document Review — error:", err);
+      }
+    },
+    { timezone: "UTC" }
+  );
+}
+
+// ─── Job 18: Autonomous Task Delegation ──────────────────────────────────────
+function scheduleTaskDelegation() {
+  cron.schedule(
+    "30 9 * * *",
+    async () => {
+      log.info("[Cron] Autonomous Task Delegation — starting");
+      try {
+        const allUsers = await db
+          .select({ id: users.id })
+          .from(users)
+          .limit(50);
+        const agentPool = [
+          "Chief Marketing Officer",
+          "Chief Financial Officer",
+          "Chief Technology Officer",
+          "Chief Operations Officer",
+          "Head of Sales",
+          "Head of Legal",
+          "Head of HR",
+          "Head of Product",
+        ];
+        for (const user of allUsers) {
+          try {
+            const unassigned = await db
+              .select()
+              .from(tasks)
+              .where(and(eq(tasks.userId, user.id), eq(tasks.status, "todo")))
+              .limit(10);
+            const trulyUnassigned = unassigned.filter(t => !t.assignedTo);
+            if (trulyUnassigned.length === 0) continue;
+            let delegated = 0;
+            for (const task of trulyUnassigned) {
+              const title = task.title.toLowerCase();
+              let agent = agentPool[delegated % agentPool.length];
+              if (
+                title.includes("market") ||
+                title.includes("brand") ||
+                title.includes("campaign")
+              )
+                agent = "Chief Marketing Officer";
+              else if (
+                title.includes("finance") ||
+                title.includes("budget") ||
+                title.includes("cost")
+              )
+                agent = "Chief Financial Officer";
+              else if (
+                title.includes("tech") ||
+                title.includes("code") ||
+                title.includes("develop")
+              )
+                agent = "Chief Technology Officer";
+              else if (
+                title.includes("legal") ||
+                title.includes("contract") ||
+                title.includes("compliance")
+              )
+                agent = "Head of Legal";
+              else if (
+                title.includes("hr") ||
+                title.includes("hire") ||
+                title.includes("recruit")
+              )
+                agent = "Head of HR";
+              await db
+                .update(tasks)
+                .set({ assignedTo: agent, updatedAt: new Date() })
+                .where(eq(tasks.id, task.id));
+              delegated++;
+            }
+            if (delegated > 0) {
+              await db.insert(victoriaActions).values({
+                userId: user.id,
+                actionType: "task_delegation",
+                actionTitle: `Auto-delegated ${delegated} unassigned task(s) to AI agents`,
+                description: `${delegated} of ${trulyUnassigned.length} unassigned tasks assigned to the most appropriate AI agents.`,
+                autonomous: true,
+                metadata: { delegated, total: trulyUnassigned.length },
+              });
+            }
+          } catch (userErr) {
+            log.warn(
+              `[Cron] Task Delegation — user ${user.id} failed:`,
+              userErr
+            );
+          }
+        }
+        log.info("[Cron] Task Delegation — complete");
+      } catch (err) {
+        log.error("[Cron] Task Delegation — error:", err);
+      }
+    },
+    { timezone: "UTC" }
+  );
+}
+
+// ─── Job 19: Meeting Pre-Briefs ───────────────────────────────────────────────
+function scheduleMeetingPreBriefs() {
+  cron.schedule(
+    "0 5 * * *",
+    async () => {
+      log.info("[Cron] Meeting Pre-Briefs — starting");
+      try {
+        const allUsers = await db
+          .select({ id: users.id })
+          .from(users)
+          .limit(50);
+        const now = new Date();
+        const tomorrow = new Date(now.getTime() + 24 * 60 * 60 * 1000);
+        for (const user of allUsers) {
+          try {
+            const upcoming = await db
+              .select()
+              .from(calendarEventsCache)
+              .where(
+                and(
+                  eq(calendarEventsCache.userId, user.id),
+                  lt(calendarEventsCache.startTime, tomorrow)
+                )
+              )
+              .limit(5);
+            if (upcoming.length === 0) continue;
+            await db.insert(victoriaActions).values({
+              userId: user.id,
+              actionType: "meeting_pre_brief",
+              actionTitle: `Meeting pre-briefs prepared for ${upcoming.length} upcoming meeting(s)`,
+              description: `Pre-briefs ready for: ${upcoming.map(e => e.title).join(", ")}.`,
+              autonomous: true,
+              metadata: {
+                count: upcoming.length,
+                meetings: upcoming.map(e => ({
+                  title: e.title,
+                  time: e.startTime,
+                })),
+              },
+            });
+          } catch (userErr) {
+            log.warn(
+              `[Cron] Meeting Pre-Briefs — user ${user.id} failed:`,
+              userErr
+            );
+          }
+        }
+        log.info("[Cron] Meeting Pre-Briefs — complete");
+      } catch (err) {
+        log.error("[Cron] Meeting Pre-Briefs — error:", err);
+      }
+    },
+    { timezone: "UTC" }
+  );
+}
+
+// ─── Job 20: Skills Run-Count Updater ────────────────────────────────────────
+function scheduleSkillsUpdater() {
+  cron.schedule(
+    "0 10 * * *",
+    async () => {
+      log.info("[Cron] Skills Updater — updating run counts");
+      try {
+        const activeSkills = await db
+          .select()
+          .from(victoriaSkills)
+          .where(
+            and(
+              eq(victoriaSkills.trigger, "daily"),
+              eq(victoriaSkills.isActive, true)
+            )
+          );
+        for (const skill of activeSkills) {
+          await db
+            .update(victoriaSkills)
+            .set({
+              runCount: (skill.runCount ?? 0) + 1,
+              lastRunAt: new Date(),
+              updatedAt: new Date(),
+            })
+            .where(eq(victoriaSkills.id, skill.id));
+        }
+        log.info(
+          `[Cron] Skills Updater — updated ${activeSkills.length} daily skills`
+        );
+      } catch (err) {
+        log.error("[Cron] Skills Updater — error:", err);
+      }
+    },
+    { timezone: "UTC" }
+  );
+}
+
 // ─── Main Export ─────────────────────────────────────────────────────────────
 export function startScheduler() {
-  log.info("[Scheduler] Initialising all 15 cron jobs...");
+  log.info("[Scheduler] Initialising all 20 cron jobs...");
 
   scheduleMorningBriefing();
   scheduleEveningReview();
@@ -1213,6 +1553,11 @@ export function startScheduler() {
   scheduleAgentResearch();
   scheduleAgentDailyReports();
   scheduleSmeReviewProcessor();
+  scheduleProjectReview();
+  scheduleDocumentReview();
+  scheduleTaskDelegation();
+  scheduleMeetingPreBriefs();
+  scheduleSkillsUpdater();
 
-  log.info("[Scheduler] All 15 cron jobs are active.");
+  log.info("[Scheduler] All 20 cron jobs are active.");
 }

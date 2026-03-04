@@ -33,6 +33,13 @@ import {
   agentInsights,
   agentImprovements,
   briefings,
+  victoriaSkills,
+  victoriaQcChecks,
+  subphaseTasks,
+  libraryDocuments,
+  calendarEventsCache,
+  digitalTwinProfile,
+  digitalTwinCognitiveModel,
 } from "../../drizzle/schema";
 import { logAiUsage } from "./aiCostTracking.router";
 import { getModelForTask } from "../utils/modelRouter";
@@ -306,15 +313,13 @@ export const victoriaRouter = router({
         dueToday: dueTodayTasks.length,
         overdue: overdueTasks.length,
         total: taskList.length,
-        list: taskList
-          .slice(0, 10)
-          .map(t => ({
-            id: t.id,
-            title: t.title,
-            status: t.status,
-            priority: t.priority,
-            dueDate: t.dueDate?.toISOString() ?? null,
-          })),
+        list: taskList.slice(0, 10).map(t => ({
+          id: t.id,
+          title: t.title,
+          status: t.status,
+          priority: t.priority,
+          dueDate: t.dueDate?.toISOString() ?? null,
+        })),
       },
       projects: {
         active: activeProjects.filter(p => p.status === "active").length,
@@ -420,12 +425,10 @@ export const victoriaRouter = router({
           role: "system",
           content: `${VICTORIA_SYSTEM_PROMPT}\n\n## Current Context\n${userContext}`,
         },
-        ...recentConversations
-          .reverse()
-          .map(c => ({
-            role: c.role as "user" | "assistant",
-            content: c.content,
-          })),
+        ...recentConversations.reverse().map(c => ({
+          role: c.role as "user" | "assistant",
+          content: c.content,
+        })),
         { role: "user", content: input.message },
       ];
 
@@ -858,4 +861,642 @@ export const victoriaRouter = router({
       smeReviewsCompletedLast30Days: completedSmeReviews[0]?.count ?? 0,
     };
   }),
+
+  // ─── DT-COS-01: Digital Twin Integration ─────────────────────────────────────
+  getDigitalTwinContext: protectedProcedure.query(async ({ ctx }) => {
+    const [profile] = await db
+      .select()
+      .from(digitalTwinProfile)
+      .where(eq(digitalTwinProfile.userId, ctx.user.id))
+      .limit(1);
+    const [cogModel] = await db
+      .select()
+      .from(digitalTwinCognitiveModel)
+      .where(eq(digitalTwinCognitiveModel.userId, ctx.user.id))
+      .limit(1);
+    return {
+      profile: profile ?? null,
+      cognitiveModel: cogModel ?? null,
+      autonomyLevel: profile
+        ? Math.round(
+            ((profile.automationPreference as number | null) ?? 5) * 10
+          )
+        : 50,
+      calibrationScore:
+        (profile?.questionnaireCompletion as number | null) ?? 0,
+    };
+  }),
+
+  // ─── DT-COS-02: Quality Control Engine ───────────────────────────────────────
+  runQualityCheck: aiProcedure
+    .input(
+      z.object({
+        checkType: z.enum([
+          "agent_output",
+          "document",
+          "project",
+          "email_draft",
+          "sme_review",
+          "task_output",
+        ]),
+        targetId: z.string().optional(),
+        targetTitle: z.string(),
+        content: z.string().min(10).max(5000),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      const openai = getOpenAI();
+      const completion = await openai.chat.completions.create({
+        model: getModelForTask("analyse"),
+        messages: [
+          {
+            role: "system",
+            content: `You are Victoria, Chief of Staff and Quality Controller for CEPHO.AI. Evaluate the quality of this ${input.checkType} and return a rigorous assessment.`,
+          },
+          {
+            role: "user",
+            content: `Quality check for: ${input.targetTitle}\n\nContent:\n${input.content}\n\nReturn JSON: { "score": number (0-100), "grade": "A"|"B"|"C"|"D"|"F", "passed": boolean, "issues": [{"category": string, "description": string}], "recommendations": [string], "auto_fix_possible": boolean, "fix_description": string|null }`,
+          },
+        ],
+        response_format: { type: "json_object" },
+        temperature: 0.2,
+      });
+      const result = JSON.parse(
+        completion.choices[0]?.message?.content ?? "{}"
+      ) as {
+        score?: number;
+        grade?: string;
+        passed?: boolean;
+        issues?: { category: string; description: string }[];
+        recommendations?: string[];
+        auto_fix_possible?: boolean;
+        fix_description?: string | null;
+      };
+      const [qcCheck] = await db
+        .insert(victoriaQcChecks)
+        .values({
+          userId: ctx.user.id,
+          checkType: input.checkType,
+          targetId: input.targetId,
+          targetTitle: input.targetTitle,
+          score: result.score ?? 0,
+          grade: result.grade ?? "F",
+          passed: result.passed ?? false,
+          issues: result.issues ?? [],
+          recommendations: result.recommendations ?? [],
+          autoFixed: false,
+          fixDescription: result.fix_description ?? null,
+        })
+        .returning();
+      await logVictoriaAction(
+        ctx.user.id,
+        "qc_check",
+        `QC check on ${input.checkType}: ${input.targetTitle} — Grade ${result.grade ?? "?"} (${result.score ?? 0}/100)`,
+        result.passed ? "approved" : "flagged",
+        undefined,
+        undefined,
+        true,
+        { checkId: qcCheck.id, score: result.score }
+      );
+      void logAiUsage(
+        ctx.user.id,
+        "victoria.runQualityCheck",
+        getModelForTask("analyse"),
+        completion.usage ?? null
+      );
+      return {
+        id: qcCheck.id,
+        score: result.score ?? 0,
+        grade: result.grade ?? "F",
+        passed: result.passed ?? false,
+        issues: result.issues ?? [],
+        recommendations: result.recommendations ?? [],
+        autoFixPossible: result.auto_fix_possible ?? false,
+        fixDescription: result.fix_description ?? null,
+      };
+    }),
+
+  getQcChecks: protectedProcedure
+    .input(
+      z.object({
+        limit: z.number().min(1).max(100).default(20),
+        checkType: z.string().optional(),
+      })
+    )
+    .query(async ({ input, ctx }) => {
+      const conditions = [eq(victoriaQcChecks.userId, ctx.user.id)];
+      if (input.checkType)
+        conditions.push(
+          eq(victoriaQcChecks.checkType, input.checkType as string)
+        );
+      return db
+        .select()
+        .from(victoriaQcChecks)
+        .where(and(...conditions))
+        .orderBy(desc(victoriaQcChecks.checkedAt))
+        .limit(input.limit);
+    }),
+
+  // ─── DT-COS-04: Autonomous Project Review ────────────────────────────────────
+  reviewProjects: aiProcedure.mutation(async ({ ctx }) => {
+    const openai = getOpenAI();
+    const activeProjects = await db
+      .select()
+      .from(projects)
+      .where(
+        and(eq(projects.userId, ctx.user.id), eq(projects.status, "active"))
+      )
+      .limit(20);
+    if (activeProjects.length === 0)
+      return {
+        reviewed: 0,
+        flagged: 0,
+        message: "No active projects to review.",
+        reviews: [],
+      };
+    const projectSummary = activeProjects
+      .map(
+        (p, i) =>
+          `${i + 1}. ${p.name} (${p.status}) — ${(p.description ?? "").slice(0, 150)}`
+      )
+      .join("\n");
+    const completion = await openai.chat.completions.create({
+      model: getModelForTask("analyse"),
+      messages: [
+        {
+          role: "system",
+          content: `You are Victoria, Chief of Staff. Review these active projects and identify risks, stalled projects, and recommended actions.`,
+        },
+        {
+          role: "user",
+          content: `Active Projects:\n${projectSummary}\n\nReturn JSON: { "reviews": [{ "projectName": string, "riskLevel": "low"|"medium"|"high"|"critical", "status": "on_track"|"at_risk"|"stalled"|"needs_attention", "summary": string, "recommended_action": string }] }`,
+        },
+      ],
+      response_format: { type: "json_object" },
+      temperature: 0.3,
+    });
+    const result = JSON.parse(
+      completion.choices[0]?.message?.content ?? "{}"
+    ) as {
+      reviews?: {
+        projectName: string;
+        riskLevel: string;
+        status: string;
+        summary: string;
+        recommended_action: string;
+      }[];
+    };
+    const reviews = result.reviews ?? [];
+    const flagged = reviews.filter(
+      r => r.riskLevel === "high" || r.riskLevel === "critical"
+    ).length;
+    for (const review of reviews.filter(r => r.riskLevel !== "low")) {
+      await db
+        .insert(victoriaQcChecks)
+        .values({
+          userId: ctx.user.id,
+          checkType: "project",
+          targetTitle: review.projectName,
+          score:
+            review.riskLevel === "critical"
+              ? 20
+              : review.riskLevel === "high"
+                ? 40
+                : 65,
+          grade:
+            review.riskLevel === "critical"
+              ? "F"
+              : review.riskLevel === "high"
+                ? "D"
+                : "C",
+          passed: review.riskLevel === "low" || review.riskLevel === "medium",
+          issues: [{ category: "project_risk", description: review.summary }],
+          recommendations: [review.recommended_action],
+        });
+    }
+    await logVictoriaAction(
+      ctx.user.id,
+      "project_review",
+      `Reviewed ${activeProjects.length} active projects — ${flagged} flagged for attention`,
+      flagged > 0 ? "flagged" : "approved",
+      undefined,
+      undefined,
+      true,
+      { reviewed: activeProjects.length, flagged, reviews }
+    );
+    void logAiUsage(
+      ctx.user.id,
+      "victoria.reviewProjects",
+      getModelForTask("analyse"),
+      completion.usage ?? null
+    );
+    return { reviewed: activeProjects.length, flagged, reviews };
+  }),
+
+  // ─── DT-COS-07: Autonomous Document Cleanup ──────────────────────────────────
+  reviewDocuments: aiProcedure.mutation(async ({ ctx }) => {
+    const openai = getOpenAI();
+    const ninetyDaysAgo = new Date(Date.now() - 90 * 24 * 60 * 60 * 1000);
+    const docs = await db
+      .select()
+      .from(libraryDocuments)
+      .where(eq(libraryDocuments.userId, ctx.user.id))
+      .orderBy(desc(libraryDocuments.createdAt))
+      .limit(30);
+    if (docs.length === 0)
+      return {
+        reviewed: 0,
+        flagged: 0,
+        message: "No documents to review.",
+        flaggedDocs: [],
+        summary: "",
+      };
+    const staleDocs = docs.filter(d => d.createdAt < ninetyDaysAgo);
+    const docSummary = docs
+      .slice(0, 15)
+      .map(
+        (d, i) =>
+          `${i + 1}. "${d.name}" (${d.type ?? "unknown"}, created ${d.createdAt.toISOString().slice(0, 10)})`
+      )
+      .join("\n");
+    const completion = await openai.chat.completions.create({
+      model: getModelForTask("analyse"),
+      messages: [
+        {
+          role: "system",
+          content: `You are Victoria, Chief of Staff. Review this document library and identify documents that should be archived, updated, or removed.`,
+        },
+        {
+          role: "user",
+          content: `Documents:\n${docSummary}\n\nReturn JSON: { "flagged": [{ "name": string, "reason": "stale"|"duplicate"|"low_quality"|"needs_update", "action": "archive"|"update"|"review" }], "summary": string }`,
+        },
+      ],
+      response_format: { type: "json_object" },
+      temperature: 0.3,
+    });
+    const result = JSON.parse(
+      completion.choices[0]?.message?.content ?? "{}"
+    ) as {
+      flagged?: { name: string; reason: string; action: string }[];
+      summary?: string;
+    };
+    const flagged = result.flagged ?? [];
+    if (flagged.length > 0) {
+      await db
+        .insert(victoriaQcChecks)
+        .values({
+          userId: ctx.user.id,
+          checkType: "document",
+          targetTitle: `Document Library Review (${docs.length} docs)`,
+          score: Math.max(0, 100 - flagged.length * 10),
+          grade:
+            flagged.length === 0
+              ? "A"
+              : flagged.length < 3
+                ? "B"
+                : flagged.length < 6
+                  ? "C"
+                  : "D",
+          passed: flagged.length < 5,
+          issues: flagged.map(f => ({
+            category: f.reason,
+            description: `${f.name}: ${f.action}`,
+          })),
+          recommendations: [result.summary ?? "Review flagged documents"],
+        });
+    }
+    await logVictoriaAction(
+      ctx.user.id,
+      "document_review",
+      `Reviewed ${docs.length} documents — ${flagged.length} flagged (${staleDocs.length} stale)`,
+      "approved",
+      undefined,
+      undefined,
+      true,
+      {
+        reviewed: docs.length,
+        flagged: flagged.length,
+        stale: staleDocs.length,
+      }
+    );
+    void logAiUsage(
+      ctx.user.id,
+      "victoria.reviewDocuments",
+      getModelForTask("analyse"),
+      completion.usage ?? null
+    );
+    return {
+      reviewed: docs.length,
+      flagged: flagged.length,
+      stale: staleDocs.length,
+      flaggedDocs: flagged,
+      summary: result.summary ?? "",
+    };
+  }),
+
+  // ─── DT-COS-08: Autonomous Task Delegation ───────────────────────────────────
+  delegateTasks: aiProcedure.mutation(async ({ ctx }) => {
+    const openai = getOpenAI();
+    const unassigned = await db
+      .select()
+      .from(tasks)
+      .where(
+        and(eq(tasks.userId, ctx.user.id), sql`${tasks.assignedTo} IS NULL`)
+      )
+      .limit(20);
+    if (unassigned.length === 0)
+      return {
+        delegated: 0,
+        message: "No unassigned tasks found.",
+        assignments: [],
+      };
+    const taskList = unassigned
+      .map(
+        (t, i) =>
+          `${i + 1}. "${t.title}" — ${(t.description ?? "").slice(0, 100)} [Priority: ${t.priority ?? "normal"}]`
+      )
+      .join("\n");
+    const completion = await openai.chat.completions.create({
+      model: getModelForTask("analyse"),
+      messages: [
+        {
+          role: "system",
+          content: `You are Victoria, Chief of Staff. Assign each unassigned task to the most appropriate AI agent from: Chief Marketing Officer, Chief Financial Officer, Chief Technology Officer, Chief Operations Officer, Head of Sales, Head of Legal, Head of HR, Head of Product, Head of Data, Head of Customer Success.`,
+        },
+        {
+          role: "user",
+          content: `Unassigned tasks:\n${taskList}\n\nReturn JSON: { "assignments": [{ "taskTitle": string, "assignedTo": string, "rationale": string }] }`,
+        },
+      ],
+      response_format: { type: "json_object" },
+      temperature: 0.3,
+    });
+    const result = JSON.parse(
+      completion.choices[0]?.message?.content ?? "{}"
+    ) as {
+      assignments?: {
+        taskTitle: string;
+        assignedTo: string;
+        rationale: string;
+      }[];
+    };
+    const assignments = result.assignments ?? [];
+    let delegated = 0;
+    for (const assignment of assignments) {
+      const task = unassigned.find(t => t.title === assignment.taskTitle);
+      if (task) {
+        await db
+          .update(tasks)
+          .set({ assignedTo: assignment.assignedTo, updatedAt: new Date() })
+          .where(eq(tasks.id, task.id));
+        delegated++;
+      }
+    }
+    await logVictoriaAction(
+      ctx.user.id,
+      "task_delegation",
+      `Delegated ${delegated} of ${unassigned.length} unassigned tasks to AI agents`,
+      "approved",
+      undefined,
+      undefined,
+      true,
+      { delegated, total: unassigned.length, assignments }
+    );
+    void logAiUsage(
+      ctx.user.id,
+      "victoria.delegateTasks",
+      getModelForTask("analyse"),
+      completion.usage ?? null
+    );
+    return { delegated, total: unassigned.length, assignments };
+  }),
+
+  // ─── DT-COS-06: Autonomous Meeting Pre-Briefs ────────────────────────────────
+  prepareMeetingBriefs: aiProcedure.mutation(async ({ ctx }) => {
+    const openai = getOpenAI();
+    const now = new Date();
+    const tomorrow = new Date(now.getTime() + 24 * 60 * 60 * 1000);
+    const upcomingEvents = await db
+      .select()
+      .from(calendarEventsCache)
+      .where(
+        and(
+          eq(calendarEventsCache.userId, ctx.user.id),
+          gte(calendarEventsCache.startTime, now),
+          lt(calendarEventsCache.startTime, tomorrow)
+        )
+      )
+      .orderBy(calendarEventsCache.startTime)
+      .limit(10);
+    if (upcomingEvents.length === 0)
+      return {
+        prepared: 0,
+        message: "No upcoming meetings in the next 24 hours.",
+        briefs: [],
+      };
+    const eventList = upcomingEvents
+      .map(
+        (e, i) =>
+          `${i + 1}. "${e.title}" at ${e.startTime.toISOString().slice(11, 16)} — ${e.location ?? "No location"}`
+      )
+      .join("\n");
+    const completion = await openai.chat.completions.create({
+      model: getModelForTask("generate"),
+      messages: [
+        {
+          role: "system",
+          content: `You are Victoria, Chief of Staff. Prepare concise pre-briefs for each upcoming meeting.`,
+        },
+        {
+          role: "user",
+          content: `Upcoming meetings:\n${eventList}\n\nReturn JSON: { "briefs": [{ "meetingTitle": string, "objectives": string, "preparation": string, "talkingPoints": [string] }] }`,
+        },
+      ],
+      response_format: { type: "json_object" },
+      temperature: 0.4,
+    });
+    const result = JSON.parse(
+      completion.choices[0]?.message?.content ?? "{}"
+    ) as {
+      briefs?: {
+        meetingTitle: string;
+        objectives: string;
+        preparation: string;
+        talkingPoints: string[];
+      }[];
+    };
+    await logVictoriaAction(
+      ctx.user.id,
+      "meeting_pre_brief",
+      `Prepared pre-briefs for ${upcomingEvents.length} upcoming meetings`,
+      "approved",
+      undefined,
+      undefined,
+      true,
+      { prepared: upcomingEvents.length, briefs: result.briefs ?? [] }
+    );
+    void logAiUsage(
+      ctx.user.id,
+      "victoria.prepareMeetingBriefs",
+      getModelForTask("generate"),
+      completion.usage ?? null
+    );
+    return { prepared: upcomingEvents.length, briefs: result.briefs ?? [] };
+  }),
+
+  // ─── DT-COS-10: Skills Framework ─────────────────────────────────────────────
+  getSkills: protectedProcedure.query(async ({ ctx }) => {
+    return db
+      .select()
+      .from(victoriaSkills)
+      .where(eq(victoriaSkills.userId, ctx.user.id))
+      .orderBy(desc(victoriaSkills.createdAt));
+  }),
+
+  createSkill: protectedProcedure
+    .input(
+      z.object({
+        name: z.string().min(1).max(200),
+        category: z.enum([
+          "project_review",
+          "email",
+          "calendar",
+          "document",
+          "delegation",
+          "qc",
+          "reporting",
+          "communication",
+        ]),
+        description: z.string().optional(),
+        trigger: z.enum(["manual", "daily", "hourly", "on_event"]),
+        steps: z.array(
+          z.object({
+            order: z.number(),
+            action: z.string(),
+            details: z.string().optional(),
+          })
+        ),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      const [skill] = await db
+        .insert(victoriaSkills)
+        .values({ userId: ctx.user.id, ...input })
+        .returning();
+      return skill;
+    }),
+
+  seedDefaultSkills: protectedProcedure.mutation(async ({ ctx }) => {
+    const defaultSkills = [
+      {
+        name: "Daily Project Review",
+        category: "project_review" as const,
+        trigger: "daily" as const,
+        description: "Review all active projects for risks and blockers",
+        steps: [
+          { order: 1, action: "Fetch active projects" },
+          { order: 2, action: "AI risk assessment" },
+          { order: 3, action: "Log QC checks" },
+          { order: 4, action: "Notify on critical risks" },
+        ],
+      },
+      {
+        name: "Email Triage",
+        category: "email" as const,
+        trigger: "hourly" as const,
+        description: "Triage incoming emails and draft responses",
+        steps: [
+          { order: 1, action: "Fetch unread emails" },
+          { order: 2, action: "Classify priority" },
+          { order: 3, action: "Draft responses" },
+          { order: 4, action: "Archive low priority" },
+        ],
+      },
+      {
+        name: "Document Quality Check",
+        category: "document" as const,
+        trigger: "daily" as const,
+        description:
+          "Review document library for stale or low-quality documents",
+        steps: [
+          { order: 1, action: "Fetch recent documents" },
+          { order: 2, action: "Flag stale documents" },
+          { order: 3, action: "AI quality assessment" },
+          { order: 4, action: "Generate cleanup report" },
+        ],
+      },
+      {
+        name: "Task Delegation",
+        category: "delegation" as const,
+        trigger: "daily" as const,
+        description: "Assign unassigned tasks to the best-suited AI agent",
+        steps: [
+          { order: 1, action: "Find unassigned tasks" },
+          { order: 2, action: "Match to agents" },
+          { order: 3, action: "Update assignments" },
+          { order: 4, action: "Log delegations" },
+        ],
+      },
+      {
+        name: "Meeting Pre-Brief",
+        category: "calendar" as const,
+        trigger: "daily" as const,
+        description: "Prepare pre-briefs for all meetings in the next 24 hours",
+        steps: [
+          { order: 1, action: "Fetch upcoming events" },
+          { order: 2, action: "Generate pre-briefs" },
+          { order: 3, action: "Deliver to briefing" },
+        ],
+      },
+    ];
+    let seeded = 0;
+    for (const skill of defaultSkills) {
+      const existing = await db
+        .select()
+        .from(victoriaSkills)
+        .where(
+          and(
+            eq(victoriaSkills.userId, ctx.user.id),
+            eq(victoriaSkills.name, skill.name)
+          )
+        )
+        .limit(1);
+      if (existing.length === 0) {
+        await db
+          .insert(victoriaSkills)
+          .values({ userId: ctx.user.id, ...skill });
+        seeded++;
+      }
+    }
+    return { seeded };
+  }),
+
+  // ─── DT-COS-12: Sub-Phase Task Tracker ───────────────────────────────────────
+  getSubphaseTasks: protectedProcedure.query(async () => {
+    return db.select().from(subphaseTasks).orderBy(subphaseTasks.taskId);
+  }),
+
+  updateSubphaseTask: protectedProcedure
+    .input(
+      z.object({
+        taskId: z.string(),
+        status: z.enum(["not_started", "in_progress", "complete", "blocked"]),
+        commitSha: z.string().optional(),
+        evidence: z.string().optional(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      await db
+        .update(subphaseTasks)
+        .set({
+          status: input.status,
+          commitSha: input.commitSha,
+          evidence: input.evidence,
+          completedAt: input.status === "complete" ? new Date() : undefined,
+          startedAt: input.status === "in_progress" ? new Date() : undefined,
+          updatedAt: new Date(),
+        })
+        .where(eq(subphaseTasks.taskId, input.taskId));
+      return { success: true };
+    }),
 });
