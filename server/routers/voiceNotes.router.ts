@@ -1,4 +1,5 @@
 import { getModelForTask } from "../utils/modelRouter";
+import { logAiUsage } from "./aiCostTracking.router";
 /**
  * Voice Notes Router — Real Implementation
  *
@@ -93,6 +94,8 @@ Return only: ["task 1", "task 2", ...]`,
           max_tokens: 200,
           temperature: 0.3,
         });
+        // p5-9: Track AI usage
+        void logAiUsage(ctx.user.id, "voiceNotes.create", completion.model, completion.usage ?? null);
         const content = completion.choices[0]?.message?.content ?? "[]";
         extractedTasks = JSON.parse(
           content.replace(/```json\n?|\n?```/g, "").trim()

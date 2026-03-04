@@ -1,4 +1,5 @@
 import { getModelForTask } from "../utils/modelRouter";
+import { logAiUsage } from "./aiCostTracking.router";
 import { generateExpertPrompt } from "../services/expertPrompts";
 import { assembleDTPersonalityInjection } from "../services/dynamicPromptAssembler";
 /**
@@ -1170,6 +1171,8 @@ Tailor your advice, examples, and communication style to match this profile. Ref
       // Score ≥ 80 = high confidence, 60–79 = medium, < 60 = low.
       let confidenceScore = 75; // default when logprobs unavailable
       try {
+        // p5-9: Track AI usage
+        void logAiUsage(ctx.user.id, "expertChat.sendMessage", completion.model, completion.usage ?? null);
         const logprobsData = completion.choices[0]?.logprobs?.content;
         if (logprobsData && logprobsData.length > 0) {
           const avgLogProb =

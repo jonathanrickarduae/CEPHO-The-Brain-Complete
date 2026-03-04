@@ -1,4 +1,5 @@
 import { getModelForTask } from "../utils/modelRouter";
+import { logAiUsage } from "./aiCostTracking.router";
 /**
  * Victoria Briefing Router
  *
@@ -82,6 +83,8 @@ Keep it concise, professional, and actionable. Format with clear sections.`;
       temperature: 0.6,
     });
 
+    // p5-9: Track AI usage
+    void logAiUsage(userId, "victoriaBriefing.getDailyBriefing", completion.model, completion.usage ?? null);
     const briefingText =
       completion.choices[0]?.message?.content ??
       `Good morning, ${ctx.user.name}. Your daily briefing is ready. You have ${pendingTasks.length} pending tasks and ${activeProjects.length} active projects.`;

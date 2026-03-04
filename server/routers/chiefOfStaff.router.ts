@@ -1,4 +1,5 @@
 import { getModelForTask } from "../utils/modelRouter";
+import { logAiUsage } from "./aiCostTracking.router";
 /**
  * Chief of Staff Router — Real Implementation
  *
@@ -281,6 +282,8 @@ Keep it concise and actionable. Use a professional, direct tone.`;
       temperature: 0.6,
     });
 
+    // p5-9: Track AI usage
+    void logAiUsage(userId, "chiefOfStaff.getMorningBriefing", completion.model, completion.usage ?? null);
     const briefingText =
       completion.choices[0]?.message?.content ??
       "Good morning. Your briefing is being prepared. Please check back shortly.";
@@ -333,6 +336,8 @@ Score this task on a scale of 1-10 for quality and completeness. Respond with JS
         reasoning: "Task completed to a satisfactory standard.",
         approved: true,
       };
+      // p5-9: Track AI usage
+      void logAiUsage(ctx.user.id, "chiefOfStaff.scoreTask", completion.model, completion.usage ?? null);
       try {
         const parsed = JSON.parse(
           completion.choices[0]?.message?.content ?? "{}"

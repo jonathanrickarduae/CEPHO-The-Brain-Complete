@@ -1,4 +1,5 @@
 import { getModelForTask } from "../utils/modelRouter";
+import { logAiUsage } from "./aiCostTracking.router";
 /**
  * Business Plan Review Router — Real Implementation
  *
@@ -120,7 +121,7 @@ export const businessPlanReviewRouter = router({
         expertIds: z.array(z.string()).optional(),
       })
     )
-    .mutation(async ({ input }) => {
+    .mutation(async ({ input, ctx }) => {
       const openai = getOpenAIClient();
       const experts = input.expertIds?.length
         ? input.expertIds.map(
@@ -163,6 +164,8 @@ Format as JSON: { "score": number, "strengths": string[], "improvements": string
             max_tokens: 600,
             temperature: 0.7,
           });
+          // p5-9: Track AI usage
+          void logAiUsage(ctx.user.id, "businessPlanReview.analyzeSectionWithAllExperts", completion.model, completion.usage ?? null);
 
           const content = completion.choices[0]?.message?.content ?? "{}";
           let analysis: Record<string, unknown> = {};
@@ -217,7 +220,7 @@ Format as JSON: { "score": number, "strengths": string[], "improvements": string
         businessContext: z.string().optional(),
       })
     )
-    .mutation(async ({ input }) => {
+    .mutation(async ({ input, ctx }) => {
       let selectedExperts: string[];
 
       if (input.mode === "chief-of-staff") {
@@ -236,6 +239,8 @@ Return only a JSON array of IDs: ["id1", "id2", ...]`,
           max_tokens: 100,
           temperature: 0.3,
         });
+        // p5-9: Track AI usage
+        void logAiUsage(ctx.user.id, "businessPlanReview.selectExpertTeam", completion.model, completion.usage ?? null);
         const content = completion.choices[0]?.message?.content ?? "[]";
         try {
           selectedExperts = JSON.parse(
@@ -329,7 +334,7 @@ Return only a JSON array of IDs: ["id1", "id2", ...]`,
         originalInsight: z.string().optional(),
       })
     )
-    .mutation(async ({ input }) => {
+    .mutation(async ({ input, ctx }) => {
       const { default: OpenAI } = await import("openai");
       const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
@@ -357,6 +362,8 @@ Provide a concise, expert response (2-3 sentences).`;
         max_tokens: 200,
         temperature: 0.7,
       });
+      // p5-9: Track AI usage
+      void logAiUsage(ctx.user.id, "businessPlanReview.askFollowUp", completion.model, completion.usage ?? null);
 
       return {
         answer:

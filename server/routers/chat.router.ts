@@ -1,4 +1,5 @@
 import { getModelForTask } from "../utils/modelRouter";
+import { logAiUsage } from "./aiCostTracking.router";
 /**
  * Chat Router — Real Implementation
  *
@@ -93,6 +94,8 @@ export const chatRouter = router({
         temperature: 0.7,
       });
 
+      // p5-9: Track AI token usage and cost
+      void logAiUsage(ctx.user.id, "chat.send", completion.model, completion.usage ?? null);
       const assistantMessage =
         completion.choices[0]?.message?.content ??
         "I apologise, I was unable to generate a response. Please try again.";

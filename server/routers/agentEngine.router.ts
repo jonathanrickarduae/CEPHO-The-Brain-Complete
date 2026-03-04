@@ -1,4 +1,5 @@
 import { getModelForTask } from "../utils/modelRouter";
+import { logAiUsage } from "./aiCostTracking.router";
 /**
  * Agent Engine Router — Real AI Integration
  *
@@ -1201,6 +1202,8 @@ export const agentEngineRouter = router({
         temperature: 0.7,
       });
 
+      // p5-9: Track AI usage
+      void logAiUsage(ctx.user.id, "agentEngine.executeTask", completion.model, completion.usage ?? null);
       const result =
         completion.choices[0]?.message?.content ?? "No response generated";
 

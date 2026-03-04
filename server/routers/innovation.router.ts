@@ -1,4 +1,5 @@
 import { getModelForTask } from "../utils/modelRouter";
+import { logAiUsage } from "./aiCostTracking.router";
 /**
  * Innovation Router — Real Implementation
  *
@@ -195,6 +196,8 @@ Format as JSON array: [{"title": "...", "description": "...", "category": "...",
       temperature: 0.9,
       response_format: { type: "json_object" },
     });
+    // p5-9: Track AI usage
+    void logAiUsage(ctx.user.id, "innovation.generateDailyIdeas", completion.model, completion.usage ?? null);
 
     let ideas: Array<{
       title: string;
@@ -307,6 +310,8 @@ Provide a JSON assessment focused on ${assessmentFocus} with:
         temperature: 0.5,
         response_format: { type: "json_object" },
       });
+      // p5-9: Track AI usage
+      void logAiUsage(ctx.user.id, "innovation.runAssessment", completion.model, completion.usage ?? null);
 
       let assessment: Record<string, unknown> = {};
       try {
@@ -404,6 +409,8 @@ Keep it professional and actionable. Max 400 words.`;
         max_tokens: 600,
         temperature: 0.6,
       });
+      // p5-9: Track AI usage
+      void logAiUsage(ctx.user.id, "innovation.generateBrief", completion.model, completion.usage ?? null);
 
       const brief =
         completion.choices[0]?.message?.content ?? "Brief generation failed";
@@ -468,6 +475,8 @@ Provide JSON with 3 scenarios (conservative, moderate, optimistic):
         temperature: 0.5,
         response_format: { type: "json_object" },
       });
+      // p5-9: Track AI usage
+      void logAiUsage(ctx.user.id, "innovation.generateScenarios", completion.model, completion.usage ?? null);
 
       let scenarios: unknown[] = [];
       try {
@@ -507,6 +516,8 @@ Return as JSON: { "title": "...", "description": "...", "category": "...", "prio
         temperature: 0.7,
         response_format: { type: "json_object" },
       });
+      // p5-9: Track AI usage
+      void logAiUsage(ctx.user.id, "innovation.analyzeArticle", completion.model, completion.usage ?? null);
 
       let extracted: {
         title?: string;
