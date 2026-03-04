@@ -2,81 +2,89 @@
  * COS Training Router
  *
  * Persists Digital Twin Training module progress to the database.
- * Wires the COSTraining page to real DB storage instead of local state.
- *
- * Note: cosModuleProgressPg.userId is uuid type but users.id is integer.
- * We store the userId as a string representation of the integer id.
+ * Migrated from deprecated _pg tables to canonical cosTrainingModules
+ * and cosTrainingProgress tables (Migration 030).
  */
 import { z } from "zod";
+import { eq } from "drizzle-orm";
 import { protectedProcedure, router } from "../_core/trpc";
 import { db } from "../db";
 import {
-  cosTrainingModulesPg,
-  cosModuleProgressPg,
+  cosTrainingModules,
+  cosTrainingProgress,
 } from "../../drizzle/schema";
-import { sql } from "drizzle-orm";
 
 // Default training modules (seeded on first call)
 const DEFAULT_MODULES = [
   {
-    moduleNumber: 1,
-    title: "CEPHO Foundation",
-    objective: "Understanding the CEPHO.Ai platform and philosophy",
-    duration: 30,
+    name: "CEPHO Foundation",
+    description: "Understanding the CEPHO.Ai platform and philosophy",
+    duration: "30 min",
+    requiredLevel: 1,
+    sortOrder: 1,
   },
   {
-    moduleNumber: 2,
-    title: "The Signal System",
-    objective: "Morning and Evening briefing protocols",
-    duration: 25,
+    name: "The Signal System",
+    description: "Morning and Evening briefing protocols",
+    duration: "25 min",
+    requiredLevel: 1,
+    sortOrder: 2,
   },
   {
-    moduleNumber: 3,
-    title: "SME Panel Management",
-    objective: "Coordinating AI Subject Matter Experts",
-    duration: 45,
+    name: "SME Panel Management",
+    description: "Coordinating AI Subject Matter Experts",
+    duration: "45 min",
+    requiredLevel: 1,
+    sortOrder: 3,
   },
   {
-    moduleNumber: 4,
-    title: "Project Genesis Workflow",
-    objective: "7-phase project lifecycle management",
-    duration: 60,
+    name: "Project Genesis Workflow",
+    description: "7-phase project lifecycle management",
+    duration: "60 min",
+    requiredLevel: 2,
+    sortOrder: 4,
   },
   {
-    moduleNumber: 5,
-    title: "Quality Gate System",
-    objective: "4-level review and approval process",
-    duration: 40,
+    name: "Quality Gate System",
+    description: "4-level review and approval process",
+    duration: "40 min",
+    requiredLevel: 2,
+    sortOrder: 5,
   },
   {
-    moduleNumber: 6,
-    title: "KPI Assessment Framework",
-    objective: "50-category scoring methodology",
-    duration: 90,
+    name: "KPI Assessment Framework",
+    description: "50-category scoring methodology",
+    duration: "90 min",
+    requiredLevel: 3,
+    sortOrder: 6,
   },
   {
-    moduleNumber: 7,
-    title: "Document Generation",
-    objective: "CEPHO design guidelines and templates",
-    duration: 45,
+    name: "Document Generation",
+    description: "CEPHO design guidelines and templates",
+    duration: "45 min",
+    requiredLevel: 2,
+    sortOrder: 7,
   },
   {
-    moduleNumber: 8,
-    title: "Innovation Hub Operations",
-    objective: "Idea scoring and pipeline management",
-    duration: 50,
+    name: "Innovation Hub Operations",
+    description: "Idea scoring and pipeline management",
+    duration: "50 min",
+    requiredLevel: 3,
+    sortOrder: 8,
   },
   {
-    moduleNumber: 9,
-    title: "Strategic Advisory Support",
-    objective: "Executive-level decision support",
-    duration: 75,
+    name: "Strategic Advisory Support",
+    description: "Executive-level decision support",
+    duration: "75 min",
+    requiredLevel: 4,
+    sortOrder: 9,
   },
   {
-    moduleNumber: 10,
-    title: "Cross-Domain Coordination",
-    objective: "Managing complex multi-team initiatives",
-    duration: 60,
+    name: "Cross-Domain Coordination",
+    description: "Managing complex multi-team initiatives",
+    duration: "60 min",
+    requiredLevel: 4,
+    sortOrder: 10,
   },
 ];
 
@@ -87,51 +95,45 @@ export const cosTrainingRouter = router({
   getProgress: protectedProcedure.query(async ({ ctx }) => {
     try {
       // Ensure modules exist in DB
-      const existingModules = await db.select().from(cosTrainingModulesPg);
-      if (existingModules.length === 0) {
-        await db.insert(cosTrainingModulesPg).values(
-          DEFAULT_MODULES.map(m => ({
-            moduleNumber: m.moduleNumber,
-            title: m.title,
-            objective: m.objective,
-            duration: m.duration,
-          }))
-        );
+      let modules = await db.select().from(cosTrainingModules);
+      if (modules.length === 0) {
+        await db.insert(cosTrainingModules).values(DEFAULT_MODULES);
+        modules = await db.select().from(cosTrainingModules);
       }
 
-      const modules =
-        existingModules.length > 0
-          ? existingModules
-          : await db.select().from(cosTrainingModulesPg);
-
-      // Get user progress — userId stored as uuid-formatted string of the integer id
-      const userIdStr = String(ctx.user.id);
-      const progress = await db
+      // Get or create user progress record
+      let [progress] = await db
         .select()
-        .from(cosModuleProgressPg)
-        .where(sql`${cosModuleProgressPg.userId}::text = ${userIdStr}`);
+        .from(cosTrainingProgress)
+        .where(eq(cosTrainingProgress.userId, ctx.user.id));
 
-      const completedModuleIds = new Set(
-        progress.filter(p => p.status === "completed").map(p => p.moduleId)
-      );
+      if (!progress) {
+        [progress] = await db
+          .insert(cosTrainingProgress)
+          .values({ userId: ctx.user.id, currentLevel: 1, trainingPercentage: 0, completedModules: [] })
+          .returning();
+      }
 
-      const completedCount = completedModuleIds.size;
+      const completedModuleIds: number[] = Array.isArray(progress.completedModules)
+        ? (progress.completedModules as number[])
+        : [];
+
+      const completedCount = completedModuleIds.length;
       const totalCount = modules.length;
-      const percentage =
-        totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
+      const percentage = progress.trainingPercentage ?? 0;
 
       return {
         percentage,
         completedModules: completedCount,
         totalModules: totalCount,
-        completedModuleIds: Array.from(completedModuleIds),
+        completedModuleIds,
         modules: modules.map(m => ({
           id: m.id,
-          moduleNumber: m.moduleNumber,
-          title: m.title,
-          objective: m.objective,
-          duration: m.duration,
-          completed: completedModuleIds.has(m.id),
+          moduleNumber: m.sortOrder,
+          title: m.name,
+          objective: m.description ?? "",
+          duration: parseInt(m.duration ?? "30", 10),
+          completed: completedModuleIds.includes(m.id),
         })),
       };
     } catch {
@@ -142,11 +144,11 @@ export const cosTrainingRouter = router({
         totalModules: 10,
         completedModuleIds: [],
         modules: DEFAULT_MODULES.map((m, i) => ({
-          id: `module-${i + 1}`,
-          moduleNumber: m.moduleNumber,
-          title: m.title,
-          objective: m.objective,
-          duration: m.duration,
+          id: i + 1,
+          moduleNumber: m.sortOrder,
+          title: m.name,
+          objective: m.description,
+          duration: parseInt(m.duration, 10),
           completed: i < 4,
         })),
       };
@@ -157,36 +159,36 @@ export const cosTrainingRouter = router({
    * Mark a training module as complete
    */
   completeModule: protectedProcedure
-    .input(z.object({ moduleId: z.string() }))
+    .input(z.object({ moduleId: z.number() }))
     .mutation(async ({ ctx, input }) => {
       try {
-        const userIdStr = String(ctx.user.id);
-        // Check if progress record exists
-        const existing = await db
+        const [progress] = await db
           .select()
-          .from(cosModuleProgressPg)
-          .where(
-            sql`${cosModuleProgressPg.userId}::text = ${userIdStr} AND ${cosModuleProgressPg.moduleId} = ${input.moduleId}::uuid`
-          );
+          .from(cosTrainingProgress)
+          .where(eq(cosTrainingProgress.userId, ctx.user.id));
 
-        if (existing.length > 0) {
-          await db
-            .update(cosModuleProgressPg)
-            .set({
-              status: "completed",
-              completedAt: new Date(),
-              progressPercentage: 100,
-            })
-            .where(
-              sql`${cosModuleProgressPg.userId}::text = ${userIdStr} AND ${cosModuleProgressPg.moduleId} = ${input.moduleId}::uuid`
-            );
-        } else {
-          // Insert with a generated UUID for userId (workaround for type mismatch)
-          await db.execute(
-            sql`INSERT INTO cos_module_progress_pg (id, user_id, module_id, status, started_at, completed_at, progress_percentage)
-                VALUES (gen_random_uuid(), gen_random_uuid(), ${input.moduleId}::uuid, 'completed', NOW(), NOW(), 100)
-                ON CONFLICT DO NOTHING`
-          );
+        const existing: number[] = Array.isArray(progress?.completedModules)
+          ? (progress.completedModules as number[])
+          : [];
+
+        if (!existing.includes(input.moduleId)) {
+          const updated = [...existing, input.moduleId];
+          const totalModules = await db.select().from(cosTrainingModules);
+          const pct = Math.round((updated.length / totalModules.length) * 100);
+
+          if (progress) {
+            await db
+              .update(cosTrainingProgress)
+              .set({ completedModules: updated, trainingPercentage: pct, lastTrainingActivity: new Date() })
+              .where(eq(cosTrainingProgress.userId, ctx.user.id));
+          } else {
+            await db.insert(cosTrainingProgress).values({
+              userId: ctx.user.id,
+              completedModules: updated,
+              trainingPercentage: pct,
+              lastTrainingActivity: new Date(),
+            });
+          }
         }
 
         return { success: true, moduleId: input.moduleId };
@@ -196,20 +198,19 @@ export const cosTrainingRouter = router({
     }),
 
   /**
-   * Start a training module (mark as in_progress)
+   * Start a training module (mark as in_progress — tracked via lastTrainingActivity)
    */
   startModule: protectedProcedure
-    .input(z.object({ moduleId: z.string() }))
-    .mutation(async ({ ctx: _ctx, input }) => {
+    .input(z.object({ moduleId: z.number() }))
+    .mutation(async ({ ctx, input: _input }) => {
       try {
-        await db.execute(
-          sql`INSERT INTO cos_module_progress_pg (id, user_id, module_id, status, started_at, progress_percentage)
-              VALUES (gen_random_uuid(), gen_random_uuid(), ${input.moduleId}::uuid, 'in_progress', NOW(), 0)
-              ON CONFLICT DO NOTHING`
-        );
-        return { success: true, moduleId: input.moduleId };
+        await db
+          .update(cosTrainingProgress)
+          .set({ lastTrainingActivity: new Date() })
+          .where(eq(cosTrainingProgress.userId, ctx.user.id));
+        return { success: true };
       } catch {
-        return { success: true, moduleId: input.moduleId };
+        return { success: true };
       }
     }),
 });

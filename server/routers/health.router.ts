@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { getRawClient } from "../db";
 import { cacheService } from "../services/cache/redis-cache.service";
+import { metricsService } from "../services/monitoring/metrics.service";
 
 /**
  * Health Check Router
@@ -162,6 +163,27 @@ router.get("/health/detailed", async (req, res) => {
     cpu: process.cpuUsage(),
     checks,
   });
+});
+
+/**
+ * Prometheus metrics endpoint
+ * GET /metrics
+ *
+ * Exposes Node.js default metrics + custom application metrics.
+ * Scrape with Prometheus, Grafana Agent, or Render Metrics.
+ * Protect with IP allowlist or basic auth in production.
+ */
+router.get("/metrics", async (_req, res) => {
+  try {
+    const metrics = await metricsService.getMetrics();
+    res.set("Content-Type", metricsService.getContentType());
+    res.status(200).send(metrics);
+  } catch (error) {
+    res.status(500).json({
+      error: "Failed to collect metrics",
+      message: error instanceof Error ? error.message : "Unknown error",
+    });
+  }
 });
 
 export default router;

@@ -22,6 +22,10 @@ class ErrorTrackerService {
     const sentryDsn = process.env.SENTRY_DSN;
 
     if (!sentryDsn) {
+      logger.warn(
+        "[Sentry] SENTRY_DSN is not set — production error monitoring is DISABLED. " +
+          "Set SENTRY_DSN in the Render dashboard environment variables to activate."
+      );
       return;
     }
 
