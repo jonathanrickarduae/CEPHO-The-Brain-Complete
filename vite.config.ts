@@ -3,8 +3,20 @@ import tailwindcss from "@tailwindcss/vite";
 import fs from "node:fs";
 import path from "path";
 import { defineConfig } from "vite";
+import { ViteImageOptimizer } from "vite-plugin-image-optimizer";
 
-const plugins = [react(), tailwindcss()];
+const plugins = [
+  react(),
+  tailwindcss(),
+  ViteImageOptimizer({
+    jpg: { quality: 80 },
+    jpeg: { quality: 80 },
+    png: { quality: 80, compressionLevel: 8 },
+    webp: { quality: 80 },
+    // Convert JPG/PNG to WebP for modern browsers
+    includePublic: true,
+  }),
+];
 
 export default defineConfig({
   plugins,
@@ -164,13 +176,18 @@ export default defineConfig({
           if (id.includes("node_modules/react-router")) {
             return "router-vendor";
           }
-          // UI libraries
-          if (
-            id.includes("lucide-react") ||
-            id.includes("recharts") ||
-            id.includes("framer-motion")
-          ) {
-            return "ui-vendor";
+          // UI libraries — split large ones for better caching
+          if (id.includes("lucide-react")) {
+            return "icons-vendor";
+          }
+          if (id.includes("recharts") || id.includes("d3-") || id.includes("victory")) {
+            return "charts-vendor";
+          }
+          if (id.includes("framer-motion")) {
+            return "animation-vendor";
+          }
+          if (id.includes("@radix-ui")) {
+            return "radix-vendor";
           }
           // Data/API libraries
           if (id.includes("@tanstack/react-query") || id.includes("@trpc")) {

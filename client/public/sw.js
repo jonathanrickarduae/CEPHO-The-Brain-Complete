@@ -1,7 +1,8 @@
 // The Brain - Service Worker
 // Update this timestamp to force cache refresh on all devices
-const CACHE_VERSION = "the-brain-v1-" + "20260224-002";
+const CACHE_VERSION = "the-brain-v2-" + "20260304-001";
 const CACHE_NAME = CACHE_VERSION;
+const AVATAR_CACHE = "cepho-avatars-v1"; // Separate long-lived cache for avatar images
 const OFFLINE_URL = "/offline.html";
 
 // Assets to cache on install
@@ -54,6 +55,37 @@ self.addEventListener("fetch", event => {
     event.request.url.includes("/api/") ||
     event.request.url.includes("/trpc/")
   ) {
+    return;
+  }
+
+  // Cache-first for avatar images (rarely change, large set)
+  if (event.request.url.includes("/avatars/")) {
+    event.respondWith(
+      caches.open(AVATAR_CACHE).then(async cache => {
+        const cached = await cache.match(event.request);
+        if (cached) return cached;
+        const response = await fetch(event.request);
+        if (response.ok) cache.put(event.request, response.clone());
+        return response;
+      })
+    );
+    return;
+  }
+
+  // Cache-first for hashed JS/CSS assets (immutable — hash changes on update)
+  if (
+    event.request.url.includes("/assets/") &&
+    (event.request.url.match(/\.[a-f0-9]{8,}\.(js|css)$/))
+  ) {
+    event.respondWith(
+      caches.open(CACHE_NAME).then(async cache => {
+        const cached = await cache.match(event.request);
+        if (cached) return cached;
+        const response = await fetch(event.request);
+        if (response.ok) cache.put(event.request, response.clone());
+        return response;
+      })
+    );
     return;
   }
 
