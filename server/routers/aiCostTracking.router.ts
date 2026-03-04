@@ -11,7 +11,7 @@
  * updated in one place when OpenAI changes its pricing.
  */
 import { z } from "zod";
-import { desc, eq, gte, sql } from "drizzle-orm";
+import { desc, eq, sql } from "drizzle-orm";
 import { protectedProcedure, router } from "../_core/trpc";
 import { db } from "../db";
 import { aiUsageLogs } from "../../drizzle/schema";

@@ -97,7 +97,6 @@ export const workspacesRouter = router({
         ctx.user.id,
         ctx.user.name ?? "User"
       );
-      const activeId = personal.id;
       return [
         {
           id: personal.id,
@@ -115,7 +114,7 @@ export const workspacesRouter = router({
     }
 
     const wsIds = members.map(m => m.workspaceId);
-    const activeId = await getActiveWorkspaceId(
+    const _activeId = await getActiveWorkspaceId(
       ctx.user.id,
       ctx.user.name ?? "User"
     );
@@ -142,7 +141,7 @@ export const workspacesRouter = router({
         plan: ws.plan,
         logoUrl: ws.logoUrl,
         isPersonal: ws.isPersonal,
-        isActive: ws.id === activeId,
+        isActive: ws.id === _activeId,
         role: members.find(m => m.workspaceId === ws.id)?.role ?? "member",
         createdAt: ws.createdAt.toISOString(),
       }));
@@ -152,14 +151,14 @@ export const workspacesRouter = router({
    * Get the currently active workspace.
    */
   getActive: protectedProcedure.query(async ({ ctx }) => {
-    const activeId = await getActiveWorkspaceId(
+    const _activeId = await getActiveWorkspaceId(
       ctx.user.id,
       ctx.user.name ?? "User"
     );
     const rows = await db
       .select()
       .from(workspaces)
-      .where(eq(workspaces.id, activeId))
+      .where(eq(workspaces.id, _activeId))
       .limit(1);
 
     if (rows.length === 0) return null;
