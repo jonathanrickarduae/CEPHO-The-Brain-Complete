@@ -15,6 +15,13 @@ services:
         value: production
       - key: NODE_VERSION
         value: "22.13.0"
+      # S1-05 FIX: Sentry error tracking — REQUIRED for production observability.
+      # Create a project at https://sentry.io and paste the DSN below.
+      # Without this, all production errors are invisible.
+      - key: SENTRY_DSN
+        sync: false  # Set manually in Render dashboard — never commit the real DSN
+      - key: VITE_SENTRY_DSN
+        sync: false  # Same DSN value — used by the frontend Sentry SDK
     # All other secrets (DATABASE_URL, JWT_SECRET, API keys, etc.)
     # are managed via Render's Environment Groups in the dashboard.
 

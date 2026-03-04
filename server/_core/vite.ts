@@ -69,8 +69,25 @@ export function serveStatic(app: Express) {
 
   app.use(express.static(distPath));
 
-  // fall through to index.html if the file doesn't exist
-  app.use("*", (_req, res) => {
-    res.sendFile(path.resolve(distPath, "index.html"));
+  // S1-01 FIX: Serve index.html with CSP nonce injected into all inline <script> tags.
+  // Previously used res.sendFile() which bypassed nonce injection, causing a blank screen
+  // in production because the service worker registration script was blocked by CSP.
+  app.use("*", (req: Request, res: Response) => {
+    const indexPath = path.resolve(distPath, "index.html");
+    fs.readFile(indexPath, "utf-8", (err, html) => {
+      if (err) {
+        res.status(500).send("Internal Server Error");
+        return;
+      }
+      const nonce = (res.locals.cspNonce as string) || "";
+      if (nonce) {
+        // Inject nonce into any <script> tag that does not already have one
+        html = html.replace(
+          /<script(?![^>]*\snonce=)([^>]*)>/g,
+          `<script nonce="${nonce}"$1>`
+        );
+      }
+      res.status(200).set({ "Content-Type": "text/html" }).end(html);
+    });
   });
 }
