@@ -176,9 +176,12 @@ export default defineConfig({
           if (id.includes("@tanstack/react-query") || id.includes("@trpc")) {
             return "data-vendor";
           }
-          // Chart libraries (large)
-          if (id.includes("cytoscape") || id.includes("mermaid")) {
-            return "chart-vendor";
+          // Chart libraries — split cytoscape and mermaid (combined was 2320 KB)
+          if (id.includes("cytoscape")) {
+            return "cytoscape-vendor";
+          }
+          if (id.includes("mermaid")) {
+            return "mermaid-vendor";
           }
           // PDF/Document libraries (large)
           if (id.includes("jspdf") || id.includes("html2canvas")) {
@@ -187,6 +190,36 @@ export default defineConfig({
           // Code editor (large)
           if (id.includes("monaco-editor")) {
             return "editor-vendor";
+          }
+          // CodeMirror language packs — each gets its own chunk (emacs-lisp was 764 KB)
+          if (id.includes("@codemirror/lang-")) {
+            const match = id.match(/@codemirror\/lang-([a-z-]+)/);
+            if (match) return `cm-lang-${match[1]}`;
+            return "cm-lang-misc";
+          }
+          // CodeMirror core
+          if (id.includes("@codemirror/") || id.includes("/codemirror/")) {
+            return "codemirror-vendor";
+          }
+          // Highlight.js (contributes to ExpertChatPage 832 KB)
+          if (id.includes("highlight.js")) {
+            return "highlight-vendor";
+          }
+          // WASM / binary assets — keep separate (wasm was 608 KB)
+          if (id.includes(".wasm")) {
+            return "wasm-vendor";
+          }
+          // Zod schema validation
+          if (id.includes("node_modules/zod")) {
+            return "zod-vendor";
+          }
+          // Date utilities
+          if (
+            id.includes("date-fns") ||
+            id.includes("dayjs") ||
+            id.includes("luxon")
+          ) {
+            return "date-vendor";
           }
         },
       },
