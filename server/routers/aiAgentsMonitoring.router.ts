@@ -9,7 +9,13 @@ import { z } from "zod";
 import { desc, eq, and } from "drizzle-orm";
 import { protectedProcedure, router } from "../_core/trpc";
 import { db } from "../db";
-import { activityFeed, agentDailyReports } from "../../drizzle/schema";
+import {
+  activityFeed,
+  agentDailyReports,
+  agentPerformanceMetrics,
+  agentRatings,
+} from "../../drizzle/schema";
+import { avg, count } from "drizzle-orm";
 
 const AGENTS = [
   // Communication & Correspondence (8)
@@ -642,6 +648,123 @@ export const aiAgentsMonitoringRouter = router({
         requestId: input.requestId,
         decision: input.decision,
         processedAt: new Date().toISOString(),
+      };
+    }),
+
+  /**
+   * p6-9: Real-time agent activity feed
+   * Returns the last N activity feed entries related to agent actions.
+   */
+  getLiveActivityFeed: protectedProcedure
+    .input(
+      z.object({
+        limit: z.number().int().min(1).max(100).default(30),
+        agentId: z.string().optional(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const conditions: Parameters<typeof and>[0][] = [
+        eq(activityFeed.userId, ctx.user.id),
+      ];
+      if (input.agentId) {
+        conditions.push(eq(activityFeed.targetName, input.agentId));
+      }
+      const items = await db
+        .select()
+        .from(activityFeed)
+        .where(and(...conditions))
+        .orderBy(desc(activityFeed.createdAt))
+        .limit(input.limit);
+
+      return {
+        items: items.map(item => ({
+          id: item.id,
+          actorType: item.actorType,
+          actorName: item.actorName,
+          action: item.action,
+          targetType: item.targetType,
+          targetName: item.targetName,
+          description: item.description,
+          createdAt: item.createdAt.toISOString(),
+        })),
+        total: items.length,
+      };
+    }),
+
+  /**
+   * p6-9: Per-agent performance metrics summary
+   * Returns aggregated performance data for all agents or a specific agent.
+   */
+  getPerformanceMetrics: protectedProcedure
+    .input(
+      z.object({
+        agentId: z.string().optional(),
+        periodDays: z.number().int().min(1).max(90).default(30),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const metricsQuery = db
+        .select({
+          agentId: agentPerformanceMetrics.agentId,
+          agentName: agentPerformanceMetrics.agentName,
+          avgOverallScore: avg(agentPerformanceMetrics.overallScore),
+          avgLearningScore: avg(agentPerformanceMetrics.learningScore),
+          totalTasks: count(agentPerformanceMetrics.id),
+        })
+        .from(agentPerformanceMetrics)
+        .where(eq(agentPerformanceMetrics.userId, ctx.user.id))
+        .groupBy(
+          agentPerformanceMetrics.agentId,
+          agentPerformanceMetrics.agentName
+        );
+
+      const ratingsQuery = db
+        .select({
+          agentId: agentRatings.agentId,
+          avgRating: avg(agentRatings.rating),
+          totalRatings: count(agentRatings.id),
+        })
+        .from(agentRatings)
+        .where(eq(agentRatings.userId, ctx.user.id))
+        .groupBy(agentRatings.agentId);
+
+      const [metrics, ratings] = await Promise.all([
+        metricsQuery,
+        ratingsQuery,
+      ]);
+
+      const ratingsMap = new Map(ratings.map(r => [r.agentId, r]));
+
+      const combined = metrics.map(m => ({
+        agentId: m.agentId,
+        agentName: m.agentName,
+        overallScore: Number(m.avgOverallScore ?? 0).toFixed(1),
+        learningScore: Number(m.avgLearningScore ?? 0).toFixed(1),
+        totalTasks: m.totalTasks,
+        avgRating: Number(ratingsMap.get(m.agentId)?.avgRating ?? 0).toFixed(1),
+        totalRatings: ratingsMap.get(m.agentId)?.totalRatings ?? 0,
+      }));
+
+      if (combined.length === 0) {
+        return {
+          metrics: AGENTS.map(a => ({
+            agentId: a.id,
+            agentName: a.name,
+            overallScore: "0.0",
+            learningScore: "0.0",
+            totalTasks: 0,
+            avgRating: "0.0",
+            totalRatings: 0,
+          })),
+          periodDays: input.periodDays,
+          generatedAt: new Date().toISOString(),
+        };
+      }
+
+      return {
+        metrics: combined,
+        periodDays: input.periodDays,
+        generatedAt: new Date().toISOString(),
       };
     }),
 });

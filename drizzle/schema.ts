@@ -5500,3 +5500,27 @@ export const systemKillSwitch = pgTable("system_kill_switch", {
 });
 export type SystemKillSwitch = typeof systemKillSwitch.$inferSelect;
 export type InsertSystemKillSwitch = typeof systemKillSwitch.$inferInsert;
+
+// ─── Phase 6: Persephone Board Knowledge Corpus (PB-01, PB-02) ───────────────
+/**
+ * Board Knowledge Corpus — RAG-indexed knowledge for each Persephone Board member.
+ * Embeddings stored as JSON arrays (portable, no pgvector extension required).
+ * Migration 026.
+ */
+export const boardKnowledgeCorpus = pgTable("board_knowledge_corpus", {
+  id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
+  memberId: varchar("member_id", { length: 100 }).notNull(),
+  memberName: varchar("member_name", { length: 200 }).notNull(),
+  chunkIndex: integer("chunk_index").default(0).notNull(),
+  content: text("content").notNull(),
+  source: varchar("source", { length: 500 }),
+  contentType: varchar("content_type", { length: 100 }).default("knowledge"),
+  embedding: json("embedding"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
+});
+export type BoardKnowledgeCorpus = typeof boardKnowledgeCorpus.$inferSelect;
+export type InsertBoardKnowledgeCorpus = typeof boardKnowledgeCorpus.$inferInsert;

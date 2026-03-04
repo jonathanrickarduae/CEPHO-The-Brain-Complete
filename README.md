@@ -34,7 +34,8 @@ The **Grand Master Plan v12** is the definitive plan for this project. It is the
 | Phases 0, 1, 2, 3      | **Complete**             |
 | Phase 4                | **Complete & Audited**   |
 | GitHub Pages dashboard | **Live and accurate**    |
-| Phase 5 execution      | **In Progress**          |
+| Phase 5 execution      | **Complete**             |
+| Phase 6 execution      | **Complete**             |
 | Code deployment        | **Live on Render**       |
 
 ### What Has Been Done
@@ -64,7 +65,7 @@ Phase 4 — "UX, Design System & Scale" — is now complete. All 24 tasks have b
 
 ### What To Do Next
 
-**Continue Phase 6 — Enhancements, Agents & Innovation.** Key Phase 6 tasks include the agent ratings system, competitor intelligence engine, and the Innovation Hub.
+**Continue Phase 7 — Monetisation & Enterprise Scale.** Phase 6 is complete. Key Phase 7 tasks include Stripe subscription tiers, enterprise SSO, and multi-tenant architecture.
 
 Full detail for each task is on the [Live Dashboard](https://jonathanrickarduae.github.io/CEPHO-The-Brain-Complete/).
 
@@ -291,8 +292,8 @@ This section provides a comprehensive, live audit trail of all major tasks and s
 
 | Component          | Count | Location / Details             |
 | :----------------- | :---- | :----------------------------- |
-| **DB Migrations**  | 13    | `drizzle/migrations/`          |
-| **tRPC Routers**   | 59    | `server/routers/`              |
+| **DB Migrations**  | 26    | `drizzle/migrations/`          |
+| **tRPC Routers**   | 63    | `server/routers/`              |
 | **Scheduler Jobs** | 20    | `server/services/scheduler.ts` |
 | **Client Pages**   | 41    | `client/src/pages/`            |
 | **App Routes**     | 42    | `client/src/App.tsx`           |

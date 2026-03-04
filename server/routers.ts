@@ -72,6 +72,10 @@ import { pushNotificationsRouter } from "./routers/pushNotifications.router";
 import { workspacesRouter } from "./routers/workspaces.router";
 import { aiCostTrackingRouter } from "./routers/aiCostTracking.router";
 import { venturesRouter } from "./routers/ventures.router";
+import { competitorRouter } from "./routers/competitor.router";
+import { persephoneRagRouter } from "./routers/persephoneRag.router";
+import { scheduledReportsRouter } from "./routers/scheduledReports.router";
+import { promptVersionsRouter } from "./routers/promptVersions.router";
 import {
   businessPlanReviewRouter as businessPlanReviewRealRouter,
   collaborativeReviewRouter as collaborativeReviewRealRouter,
@@ -264,6 +268,14 @@ export const appRouter = router({
   aiCostTracking: aiCostTrackingRouter,
   // ─── Autonomous Ventures Orchestrator (Gap 3) ────────────────────────────
   ventures: venturesRouter,
+  // ─── Competitor Intelligence Engine (p6-2) ───────────────────────────────
+  competitor: competitorRouter,
+  // ─── Persephone Board RAG (PB-01, PB-02, PB-03) (p6-3) ──────────────────
+  persephoneRag: persephoneRagRouter,
+  // ─── Scheduled Reports (p6-4) ────────────────────────────────────────────
+  scheduledReports: scheduledReportsRouter,
+  // ─── Prompt Version History & Rollback (p6-12) ───────────────────────────
+  promptVersions: promptVersionsRouter,
 });
 
 export type AppRouter = typeof appRouter;

@@ -823,8 +823,8 @@ Return as JSON: { "title": "...", "description": "...", "category": "...", "prio
     }),
 
   /**
-   * Advance an idea to the next flywheel stage (1→5).
-   * Stage 1: Capture → Stage 2: Assess → Stage 3: Brief → Stage 4: Fund → Stage 5: Launch
+   * Advance an idea to the next flywheel stage (1→6).
+   * Stage 1: Capture → Stage 2: Assess → Stage 3: Brief → Stage 4: Fund → Stage 5: Launch → Stage 6: Market Launch
    */
   advanceFlywheelStage: protectedProcedure
     .input(z.object({ ideaId: z.number() }))
@@ -840,32 +840,48 @@ Return as JSON: { "title": "...", "description": "...", "category": "...", "prio
         )
         .limit(1);
       if (!idea) throw new Error("Idea not found");
-      const nextStage = Math.min(5, (idea.currentStage ?? 1) + 1);
+      const nextStage = Math.min(6, (idea.currentStage ?? 1) + 1);
       const stageLabels: Record<number, string> = {
         1: "capture",
         2: "assess",
         3: "brief",
         4: "fund",
         5: "launch",
+        6: "market_launch",
+      };
+      const stageStatus: Record<number, string> = {
+        1: "in_progress",
+        2: "in_progress",
+        3: "in_progress",
+        4: "in_progress",
+        5: "ready_to_launch",
+        6: "launched",
       };
       await db
         .update(innovationIdeas)
         .set({
           currentStage: nextStage,
-          status: nextStage === 5 ? "ready_to_launch" : "in_progress",
+          status: stageStatus[nextStage] ?? "in_progress",
           updatedAt: new Date(),
         })
         .where(eq(innovationIdeas.id, input.ideaId));
 
       // Notify on stage advancement (non-blocking)
+      const titleMap: Record<number, string> = {
+        5: "Idea Ready to Launch!",
+        6: "Market Launch Initiated!",
+      };
+      const msgMap: Record<number, string> = {
+        5: `"${idea.title}" has reached the Launch stage and is ready for execution.`,
+        6: `"${idea.title}" has been market-launched. Autonomous Ventures Orchestrator has been notified.`,
+      };
       createNotification({
         userId: ctx.user.id,
         type: "innovation",
-        title: nextStage === 5 ? "Idea Ready to Launch!" : "Idea Advanced",
+        title: titleMap[nextStage] ?? "Idea Advanced",
         message:
-          nextStage === 5
-            ? `"${idea.title}" has reached the Launch stage and is ready for execution.`
-            : `"${idea.title}" has advanced to the ${stageLabels[nextStage]} stage.`,
+          msgMap[nextStage] ??
+          `"${idea.title}" has advanced to the ${stageLabels[nextStage]} stage.`,
         actionUrl: "/innovation-hub",
         actionLabel: "View Innovation Hub",
       }).catch(() => {});
@@ -874,23 +890,28 @@ Return as JSON: { "title": "...", "description": "...", "category": "...", "prio
         success: true,
         newStage: nextStage,
         stageLabel: stageLabels[nextStage],
+        isLaunched: nextStage === 6,
       };
     }),
 
   /**
    * Get flywheel statistics for the Innovation Hub dashboard.
+   * Now includes Stage 6: Market Launch.
    */
   getFlywheelStats: protectedProcedure.query(async ({ ctx }) => {
     const ideas = await db
       .select()
       .from(innovationIdeas)
       .where(eq(innovationIdeas.userId, ctx.user.id));
-    const byStage = [1, 2, 3, 4, 5].map(stage => ({
+    const byStage = [1, 2, 3, 4, 5, 6].map(stage => ({
       stage,
-      label: ["Capture", "Assess", "Brief", "Fund", "Launch"][stage - 1],
+      label: ["Capture", "Assess", "Brief", "Fund", "Launch", "Market Launch"][
+        stage - 1
+      ],
       count: ideas.filter(i => i.currentStage === stage).length,
     }));
     const promoted = ideas.filter(i => i.status === "promoted").length;
+    const launched = ideas.filter(i => i.status === "launched").length;
     const avgConfidence =
       ideas.length === 0
         ? 0
@@ -898,6 +919,6 @@ Return as JSON: { "title": "...", "description": "...", "category": "...", "prio
             ideas.reduce((s, i) => s + (i.confidenceScore ?? 0), 0) /
               ideas.length
           );
-    return { total: ideas.length, byStage, promoted, avgConfidence };
+    return { total: ideas.length, byStage, promoted, launched, avgConfidence };
   }),
 });
