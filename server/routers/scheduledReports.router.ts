@@ -25,8 +25,9 @@ import {
   agentDailyReports,
   agentRatings,
   activityFeed,
+  reportSchedules,
 } from "../../drizzle/schema";
-import { eq, desc, count, avg } from "drizzle-orm";
+import { eq, desc, count, avg, and } from "drizzle-orm";
 import { getModelForTask } from "../utils/modelRouter";
 import { logAiUsage } from "./aiCostTracking.router";
 
@@ -36,57 +37,28 @@ function getOpenAIClient(): OpenAI {
   return new OpenAI({ apiKey });
 }
 
-// ─── In-memory schedule store (production would use a DB table) ──────────────
-// For Phase 6, schedules are stored in-memory per user session.
-// A future migration will add a `report_schedules` table.
-const scheduleStore = new Map<
-  number,
-  Array<{
-    id: string;
-    userId: number;
-    reportType: string;
-    frequency: string;
-    recipients: string[];
-    isActive: boolean;
-    lastRunAt: string | null;
-    nextRunAt: string;
-    customPrompt: string | null;
-    createdAt: string;
-  }>
->();
-
-function getUserSchedules(userId: number) {
-  if (!scheduleStore.has(userId)) {
-    scheduleStore.set(userId, []);
-  }
-  // Safe: we just set it above if it didn't exist
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  return scheduleStore.get(userId)!;
-}
-
-function getNextRunAt(frequency: string): string {
-  const now = new Date();
+function computeNextRunAt(frequency: string, hourUtc = 7): Date {
+  const next = new Date();
   if (frequency === "daily") {
-    now.setDate(now.getDate() + 1);
-    now.setHours(7, 0, 0, 0);
+    next.setDate(next.getDate() + 1);
   } else if (frequency === "weekly") {
-    now.setDate(now.getDate() + 7);
-    now.setHours(7, 0, 0, 0);
-  } else if (frequency === "monthly") {
-    now.setMonth(now.getMonth() + 1);
-    now.setDate(1);
-    now.setHours(7, 0, 0, 0);
+    next.setDate(next.getDate() + 7);
+  } else {
+    next.setMonth(next.getMonth() + 1);
+    next.setDate(1);
   }
-  return now.toISOString();
+  next.setUTCHours(hourUtc, 0, 0, 0);
+  return next;
 }
 
 export const scheduledReportsRouter = router({
   /**
-   * Create a new report schedule
+   * Create a new report schedule — persisted to DB (Migration 027)
    */
   createSchedule: protectedProcedure
     .input(
       z.object({
+        name: z.string().min(1).max(255).default("My Report"),
         reportType: z.enum([
           "executive_summary",
           "agent_performance",
@@ -96,25 +68,29 @@ export const scheduledReportsRouter = router({
           "custom",
         ]),
         frequency: z.enum(["daily", "weekly", "monthly"]),
+        dayOfWeek: z.number().int().min(0).max(6).optional(),
+        hourUtc: z.number().int().min(0).max(23).default(7),
         recipients: z.array(z.string().email()).default([]),
-        customPrompt: z.string().optional(),
+        filters: z.record(z.string(), z.unknown()).optional(),
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const schedules = getUserSchedules(ctx.user.id);
-      const schedule = {
-        id: `sched_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
-        userId: ctx.user.id,
-        reportType: input.reportType,
-        frequency: input.frequency,
-        recipients: input.recipients,
-        isActive: true,
-        lastRunAt: null,
-        nextRunAt: getNextRunAt(input.frequency),
-        customPrompt: input.customPrompt ?? null,
-        createdAt: new Date().toISOString(),
-      };
-      schedules.push(schedule);
+      const nextRunAt = computeNextRunAt(input.frequency, input.hourUtc);
+      const [schedule] = await db
+        .insert(reportSchedules)
+        .values({
+          userId: ctx.user.id,
+          name: input.name,
+          reportType: input.reportType,
+          frequency: input.frequency,
+          dayOfWeek: input.dayOfWeek ?? null,
+          hourUtc: input.hourUtc,
+          recipients: input.recipients,
+          filters: input.filters ?? null,
+          isActive: true,
+          nextRunAt,
+        })
+        .returning();
       return { success: true, schedule };
     }),
 
@@ -122,7 +98,11 @@ export const scheduledReportsRouter = router({
    * List all report schedules for the current user
    */
   listSchedules: protectedProcedure.query(async ({ ctx }) => {
-    const schedules = getUserSchedules(ctx.user.id);
+    const schedules = await db
+      .select()
+      .from(reportSchedules)
+      .where(eq(reportSchedules.userId, ctx.user.id))
+      .orderBy(desc(reportSchedules.createdAt));
     return { schedules, total: schedules.length };
   }),
 
@@ -132,40 +112,64 @@ export const scheduledReportsRouter = router({
   updateSchedule: protectedProcedure
     .input(
       z.object({
-        id: z.string(),
+        id: z.number().int(),
+        name: z.string().min(1).max(255).optional(),
         frequency: z.enum(["daily", "weekly", "monthly"]).optional(),
+        dayOfWeek: z.number().int().min(0).max(6).optional(),
+        hourUtc: z.number().int().min(0).max(23).optional(),
         recipients: z.array(z.string().email()).optional(),
         isActive: z.boolean().optional(),
-        customPrompt: z.string().optional(),
+        filters: z.record(z.string(), z.unknown()).optional(),
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const schedules = getUserSchedules(ctx.user.id);
-      const idx = schedules.findIndex(s => s.id === input.id);
-      if (idx === -1) throw new Error("Schedule not found");
-      const schedule = schedules[idx];
-      if (input.frequency) {
-        schedule.frequency = input.frequency;
-        schedule.nextRunAt = getNextRunAt(input.frequency);
+      const { id, ...updates } = input;
+      const updateData: Record<string, unknown> = {};
+      if (updates.name !== undefined) updateData.name = updates.name;
+      if (updates.frequency !== undefined) {
+        updateData.frequency = updates.frequency;
+        updateData.nextRunAt = computeNextRunAt(
+          updates.frequency,
+          updates.hourUtc ?? 7
+        );
       }
-      if (input.recipients !== undefined)
-        schedule.recipients = input.recipients;
-      if (input.isActive !== undefined) schedule.isActive = input.isActive;
-      if (input.customPrompt !== undefined)
-        schedule.customPrompt = input.customPrompt;
-      return { success: true, schedule };
+      if (updates.dayOfWeek !== undefined)
+        updateData.dayOfWeek = updates.dayOfWeek;
+      if (updates.hourUtc !== undefined) updateData.hourUtc = updates.hourUtc;
+      if (updates.recipients !== undefined)
+        updateData.recipients = updates.recipients;
+      if (updates.isActive !== undefined) updateData.isActive = updates.isActive;
+      if (updates.filters !== undefined) updateData.filters = updates.filters;
+      const [updated] = await db
+        .update(reportSchedules)
+        .set(updateData)
+        .where(
+          and(
+            eq(reportSchedules.id, id),
+            eq(reportSchedules.userId, ctx.user.id)
+          )
+        )
+        .returning();
+      if (!updated) throw new Error("Schedule not found");
+      return { success: true, schedule: updated };
     }),
 
   /**
    * Delete a report schedule
    */
   deleteSchedule: protectedProcedure
-    .input(z.object({ id: z.string() }))
+    .input(z.object({ id: z.number().int() }))
     .mutation(async ({ ctx, input }) => {
-      const schedules = getUserSchedules(ctx.user.id);
-      const idx = schedules.findIndex(s => s.id === input.id);
-      if (idx === -1) throw new Error("Schedule not found");
-      schedules.splice(idx, 1);
+      const [deleted] = await db
+        .delete(reportSchedules)
+        .where(
+          and(
+            eq(reportSchedules.id, input.id),
+            eq(reportSchedules.userId, ctx.user.id)
+          )
+        )
+        .returning();
+      if (!deleted) throw new Error("Schedule not found");
       return { success: true };
     }),
 

@@ -54,6 +54,16 @@ tags:
     description: AI agent monitoring and management
   - name: Integrations
     description: Third-party integrations
+  - name: Competitor Intelligence
+    description: Competitor tracking, threat analysis, and AI market position reports
+  - name: Persephone Board RAG
+    description: Board knowledge corpus ingestion, semantic search, and RAG-enhanced responses (PB-01/02/03)
+  - name: Scheduled Reports
+    description: DB-persisted report schedules and on-demand AI report generation
+  - name: Prompt Version History
+    description: DB-persisted prompt versioning with rollback and comparison
+  - name: Autonomous Ventures
+    description: Autonomous venture creation, workflow orchestration, and kill switch control
 
 paths:
   /health:
@@ -420,3 +430,246 @@ components:
       in: cookie
       name: connect.sid
       description: Session-based authentication via cookies
+
+  # ─── Phase 6 Routers ─────────────────────────────────────────────────────────
+
+  /trpc/competitor.listCompetitors:
+    get:
+      tags: [Competitor Intelligence]
+      summary: List all competitors
+      operationId: competitorListCompetitors
+      security: [{sessionAuth: []}]
+      responses:
+        "200": {description: Competitors list}
+        "401": {description: Unauthorized}
+
+  /trpc/competitor.runIntelligenceAnalysis:
+    post:
+      tags: [Competitor Intelligence]
+      summary: Run AI competitor intelligence analysis
+      operationId: competitorRunIntelligenceAnalysis
+      security: [{sessionAuth: []}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                input:
+                  type: object
+                  properties:
+                    competitorId: {type: integer}
+      responses:
+        "200": {description: Analysis completed}
+        "401": {description: Unauthorized}
+
+  /trpc/competitor.getMarketPositionReport:
+    get:
+      tags: [Competitor Intelligence]
+      summary: Get AI market position report
+      operationId: competitorGetMarketPositionReport
+      security: [{sessionAuth: []}]
+      responses:
+        "200": {description: Market position report}
+        "401": {description: Unauthorized}
+
+  /trpc/persephoneRag.getRagEnhancedResponse:
+    post:
+      tags: [Persephone Board RAG]
+      summary: Get RAG-enhanced board member response (PB-01/02/03)
+      operationId: persephoneRagGetRagEnhancedResponse
+      security: [{sessionAuth: []}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                input:
+                  type: object
+                  required: [memberId, query]
+                  properties:
+                    memberId: {type: string}
+                    query: {type: string}
+                    topK: {type: integer, default: 5}
+      responses:
+        "200": {description: RAG-enhanced response}
+        "401": {description: Unauthorized}
+
+  /trpc/persephoneRag.ingestBoardKnowledge:
+    post:
+      tags: [Persephone Board RAG]
+      summary: Ingest knowledge into board corpus
+      operationId: persephoneRagIngestBoardKnowledge
+      security: [{sessionAuth: []}]
+      responses:
+        "200": {description: Knowledge ingested}
+        "401": {description: Unauthorized}
+
+  /trpc/persephoneRag.searchBoardKnowledge:
+    post:
+      tags: [Persephone Board RAG]
+      summary: Semantic search over board knowledge corpus
+      operationId: persephoneRagSearchBoardKnowledge
+      security: [{sessionAuth: []}]
+      responses:
+        "200": {description: Search results}
+        "401": {description: Unauthorized}
+
+  /trpc/scheduledReports.listSchedules:
+    get:
+      tags: [Scheduled Reports]
+      summary: List report schedules (DB-persisted)
+      operationId: scheduledReportsListSchedules
+      security: [{sessionAuth: []}]
+      responses:
+        "200": {description: Report schedules}
+        "401": {description: Unauthorized}
+
+  /trpc/scheduledReports.createSchedule:
+    post:
+      tags: [Scheduled Reports]
+      summary: Create a new report schedule
+      operationId: scheduledReportsCreateSchedule
+      security: [{sessionAuth: []}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                input:
+                  type: object
+                  required: [name, reportType, frequency]
+                  properties:
+                    name: {type: string}
+                    reportType: {type: string}
+                    frequency: {type: string, enum: [daily, weekly, monthly]}
+                    recipients: {type: array, items: {type: string}}
+      responses:
+        "200": {description: Schedule created}
+        "401": {description: Unauthorized}
+
+  /trpc/scheduledReports.generateReport:
+    post:
+      tags: [Scheduled Reports]
+      summary: Generate an on-demand AI report
+      operationId: scheduledReportsGenerateReport
+      security: [{sessionAuth: []}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                input:
+                  type: object
+                  required: [reportType]
+                  properties:
+                    reportType:
+                      type: string
+                      enum: [executive_summary, agent_performance, competitive_intelligence, innovation_pipeline, financial_overview, custom]
+                    periodDays: {type: integer, default: 7}
+      responses:
+        "200": {description: Report generated}
+        "401": {description: Unauthorized}
+
+  /trpc/promptVersions.listPromptKeys:
+    get:
+      tags: [Prompt Version History]
+      summary: List all prompt keys (DB-persisted)
+      operationId: promptVersionsListPromptKeys
+      security: [{sessionAuth: []}]
+      responses:
+        "200": {description: Prompt keys list}
+        "401": {description: Unauthorized}
+
+  /trpc/promptVersions.saveVersion:
+    post:
+      tags: [Prompt Version History]
+      summary: Save a new prompt version to DB
+      operationId: promptVersionsSaveVersion
+      security: [{sessionAuth: []}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                input:
+                  type: object
+                  required: [promptKey, content]
+                  properties:
+                    promptKey: {type: string, pattern: "^(agent|board|system):[a-zA-Z0-9_-]+$"}
+                    content: {type: string}
+                    description: {type: string}
+                    setActive: {type: boolean, default: true}
+      responses:
+        "200": {description: Version saved}
+        "401": {description: Unauthorized}
+
+  /trpc/promptVersions.rollback:
+    post:
+      tags: [Prompt Version History]
+      summary: Roll back to a previous prompt version
+      operationId: promptVersionsRollback
+      security: [{sessionAuth: []}]
+      responses:
+        "200": {description: Rollback successful}
+        "401": {description: Unauthorized}
+
+  /trpc/ventures.list:
+    get:
+      tags: [Autonomous Ventures]
+      summary: List all autonomous ventures
+      operationId: venturesList
+      security: [{sessionAuth: []}]
+      responses:
+        "200": {description: Ventures list}
+        "401": {description: Unauthorized}
+
+  /trpc/ventures.createVenture:
+    post:
+      tags: [Autonomous Ventures]
+      summary: Create a new autonomous venture
+      operationId: venturesCreateVenture
+      security: [{sessionAuth: []}]
+      responses:
+        "200": {description: Venture created}
+        "401": {description: Unauthorized}
+
+  /trpc/ventures.setKillSwitch:
+    post:
+      tags: [Autonomous Ventures]
+      summary: Activate or deactivate the kill switch
+      description: Emergency halt for all autonomous venture actions
+      operationId: venturesSetKillSwitch
+      security: [{sessionAuth: []}]
+      responses:
+        "200": {description: Kill switch state updated}
+        "401": {description: Unauthorized}
+
+  /trpc/aiAgentsMonitoring.getLiveActivityFeed:
+    get:
+      tags: [AI Agents]
+      summary: Get live agent activity feed
+      operationId: aiAgentsMonitoringGetLiveActivityFeed
+      security: [{sessionAuth: []}]
+      responses:
+        "200": {description: Live activity feed}
+        "401": {description: Unauthorized}
+
+  /trpc/aiAgentsMonitoring.getPerformanceMetrics:
+    get:
+      tags: [AI Agents]
+      summary: Get per-agent performance metrics and ratings
+      operationId: aiAgentsMonitoringGetPerformanceMetrics
+      security: [{sessionAuth: []}]
+      responses:
+        "200": {description: Performance metrics}
+        "401": {description: Unauthorized}

@@ -8,57 +8,20 @@
  * - rollback: Roll back to a previous version (creates a new version entry)
  * - compareVersions: Side-by-side diff metadata for two versions
  * - deleteVersion: Remove a specific version (cannot delete active version)
+ * - listPromptKeys: List all prompt keys that have saved versions
  *
- * Prompt keys follow the pattern: "agent:{agentId}" or "board:{memberId}"
- * or "system:{featureName}" for system-level prompts.
- *
- * Storage: In-memory per user (production would use a DB table).
- * A future migration will add a `prompt_versions` table.
+ * All versions are persisted to the `prompt_versions` table (Migration 027).
+ * Prompt keys follow the pattern: "agent:{agentId}", "board:{memberId}", or "system:{featureName}".
  */
 import { z } from "zod";
 import { router, protectedProcedure } from "../_core/trpc";
-
-interface PromptVersion {
-  id: string;
-  userId: number;
-  promptKey: string;
-  version: number;
-  content: string;
-  label: string;
-  isActive: boolean;
-  changeNote: string;
-  createdAt: string;
-  createdBy: string;
-}
-
-// In-memory store: userId → promptKey → versions[]
-const versionStore = new Map<number, Map<string, PromptVersion[]>>();
-
-function getUserStore(userId: number): Map<string, PromptVersion[]> {
-  if (!versionStore.has(userId)) {
-    versionStore.set(userId, new Map());
-  }
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  return versionStore.get(userId)!;
-}
-
-function getPromptVersions(userId: number, promptKey: string): PromptVersion[] {
-  const store = getUserStore(userId);
-  if (!store.has(promptKey)) {
-    store.set(promptKey, []);
-  }
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  return store.get(promptKey)!;
-}
-
-function getNextVersion(versions: PromptVersion[]): number {
-  if (versions.length === 0) return 1;
-  return Math.max(...versions.map(v => v.version)) + 1;
-}
+import { db } from "../db";
+import { promptVersions } from "../../drizzle/schema";
+import { eq, desc, and, max, sql } from "drizzle-orm";
 
 export const promptVersionsRouter = router({
   /**
-   * Save a new version of a prompt
+   * Save a new version of a prompt — persisted to DB (Migration 027)
    */
   saveVersion: protectedProcedure
     .input(
@@ -70,39 +33,66 @@ export const promptVersionsRouter = router({
             "promptKey must follow pattern: agent:id, board:id, or system:name"
           ),
         content: z.string().min(1).max(50000),
-        label: z.string().max(100).optional(),
-        changeNote: z.string().max(500).optional(),
+        description: z.string().max(500).optional(),
         setActive: z.boolean().default(true),
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const versions = getPromptVersions(ctx.user.id, input.promptKey);
-      const nextVersion = getNextVersion(versions);
+      // Get the current max version for this key
+      const [maxResult] = await db
+        .select({ maxVersion: max(promptVersions.version) })
+        .from(promptVersions)
+        .where(
+          and(
+            eq(promptVersions.userId, ctx.user.id),
+            eq(promptVersions.promptKey, input.promptKey)
+          )
+        );
+      const nextVersion = (maxResult?.maxVersion ?? 0) + 1;
 
       // Deactivate all existing versions if this is being set as active
       if (input.setActive) {
-        versions.forEach(v => (v.isActive = false));
+        await db
+          .update(promptVersions)
+          .set({ isActive: false })
+          .where(
+            and(
+              eq(promptVersions.userId, ctx.user.id),
+              eq(promptVersions.promptKey, input.promptKey),
+              eq(promptVersions.isActive, true)
+            )
+          );
       }
 
-      const newVersion: PromptVersion = {
-        id: `pv_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
-        userId: ctx.user.id,
-        promptKey: input.promptKey,
-        version: nextVersion,
-        content: input.content,
-        label: input.label ?? `v${nextVersion}`,
-        isActive: input.setActive,
-        changeNote: input.changeNote ?? "",
-        createdAt: new Date().toISOString(),
-        createdBy: ctx.user.name ?? ctx.user.email ?? "unknown",
-      };
+      const [newVersion] = await db
+        .insert(promptVersions)
+        .values({
+          userId: ctx.user.id,
+          promptKey: input.promptKey,
+          version: nextVersion,
+          content: input.content,
+          description: input.description ?? null,
+          isActive: input.setActive,
+          createdBy: ctx.user.name ?? ctx.user.email ?? "unknown",
+          tokenCount: Math.ceil(input.content.length / 4), // rough token estimate
+        })
+        .returning();
 
-      versions.push(newVersion);
+      // Count total versions
+      const [countResult] = await db
+        .select({ total: sql<number>`count(*)::int` })
+        .from(promptVersions)
+        .where(
+          and(
+            eq(promptVersions.userId, ctx.user.id),
+            eq(promptVersions.promptKey, input.promptKey)
+          )
+        );
 
       return {
         success: true,
         version: newVersion,
-        totalVersions: versions.length,
+        totalVersions: countResult?.total ?? 1,
       };
     }),
 
@@ -117,95 +107,131 @@ export const promptVersionsRouter = router({
       })
     )
     .query(async ({ ctx, input }) => {
-      const versions = getPromptVersions(ctx.user.id, input.promptKey);
-      const sorted = [...versions]
-        .sort((a, b) => b.version - a.version)
-        .slice(0, input.limit);
+      const versions = await db
+        .select()
+        .from(promptVersions)
+        .where(
+          and(
+            eq(promptVersions.userId, ctx.user.id),
+            eq(promptVersions.promptKey, input.promptKey)
+          )
+        )
+        .orderBy(desc(promptVersions.version))
+        .limit(input.limit);
+
+      const [countResult] = await db
+        .select({ total: sql<number>`count(*)::int` })
+        .from(promptVersions)
+        .where(
+          and(
+            eq(promptVersions.userId, ctx.user.id),
+            eq(promptVersions.promptKey, input.promptKey)
+          )
+        );
+
+      const activeVersion = versions.find(v => v.isActive)?.version ?? null;
 
       return {
-        versions: sorted.map(v => ({
+        versions: versions.map(v => ({
           id: v.id,
           version: v.version,
-          label: v.label,
+          description: v.description,
           isActive: v.isActive,
-          changeNote: v.changeNote,
           createdAt: v.createdAt,
           createdBy: v.createdBy,
+          tokenCount: v.tokenCount,
           contentLength: v.content.length,
           contentPreview: v.content.slice(0, 200),
         })),
-        total: versions.length,
-        activeVersion: versions.find(v => v.isActive)?.version ?? null,
+        total: countResult?.total ?? versions.length,
+        activeVersion,
       };
     }),
 
   /**
-   * Get a specific version by ID
+   * Get a specific version by ID (full content)
    */
   getVersion: protectedProcedure
-    .input(z.object({ id: z.string() }))
+    .input(z.object({ id: z.number().int() }))
     .query(async ({ ctx, input }) => {
-      const store = getUserStore(ctx.user.id);
-      for (const versions of Array.from(store.values())) {
-        const found = versions.find(v => v.id === input.id);
-        if (found) {
-          return { version: found };
-        }
-      }
-      throw new Error("Version not found");
+      const [version] = await db
+        .select()
+        .from(promptVersions)
+        .where(
+          and(
+            eq(promptVersions.id, input.id),
+            eq(promptVersions.userId, ctx.user.id)
+          )
+        );
+      if (!version) throw new Error("Version not found");
+      return { version };
     }),
 
   /**
    * Roll back to a previous version
-   * Creates a new version entry with the old content (preserves history)
+   * Creates a new version entry with the old content (preserves full history)
    */
   rollback: protectedProcedure
     .input(
       z.object({
-        id: z.string(),
-        changeNote: z.string().max(500).optional(),
+        id: z.number().int(),
+        description: z.string().max(500).optional(),
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const store = getUserStore(ctx.user.id);
-      let targetVersion: PromptVersion | undefined;
-      let promptKey: string | undefined;
+      // Find the target version
+      const [targetVersion] = await db
+        .select()
+        .from(promptVersions)
+        .where(
+          and(
+            eq(promptVersions.id, input.id),
+            eq(promptVersions.userId, ctx.user.id)
+          )
+        );
+      if (!targetVersion) throw new Error("Version not found");
 
-      for (const [key, versions] of Array.from(store.entries())) {
-        const found = versions.find(v => v.id === input.id);
-        if (found) {
-          targetVersion = found;
-          promptKey = key;
-          break;
-        }
-      }
+      // Get next version number
+      const [maxResult] = await db
+        .select({ maxVersion: max(promptVersions.version) })
+        .from(promptVersions)
+        .where(
+          and(
+            eq(promptVersions.userId, ctx.user.id),
+            eq(promptVersions.promptKey, targetVersion.promptKey)
+          )
+        );
+      const nextVersion = (maxResult?.maxVersion ?? 0) + 1;
 
-      if (!targetVersion || !promptKey) {
-        throw new Error("Version not found");
-      }
+      // Deactivate all existing active versions
+      await db
+        .update(promptVersions)
+        .set({ isActive: false })
+        .where(
+          and(
+            eq(promptVersions.userId, ctx.user.id),
+            eq(promptVersions.promptKey, targetVersion.promptKey),
+            eq(promptVersions.isActive, true)
+          )
+        );
 
-      const versions = getPromptVersions(ctx.user.id, promptKey);
-      const nextVersion = getNextVersion(versions);
-
-      // Deactivate all existing versions
-      versions.forEach(v => (v.isActive = false));
-
-      const rollbackVersion: PromptVersion = {
-        id: `pv_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
-        userId: ctx.user.id,
-        promptKey,
-        version: nextVersion,
-        content: targetVersion.content,
-        label: `Rollback to v${targetVersion.version}`,
-        isActive: true,
-        changeNote:
-          input.changeNote ??
-          `Rolled back to version ${targetVersion.version} (${targetVersion.label})`,
-        createdAt: new Date().toISOString(),
-        createdBy: ctx.user.name ?? ctx.user.email ?? "unknown",
-      };
-
-      versions.push(rollbackVersion);
+      // Create new rollback version
+      const [rollbackVersion] = await db
+        .insert(promptVersions)
+        .values({
+          userId: ctx.user.id,
+          promptKey: targetVersion.promptKey,
+          version: nextVersion,
+          content: targetVersion.content,
+          description:
+            input.description ??
+            `Rolled back to v${targetVersion.version}`,
+          isActive: true,
+          createdBy: ctx.user.name ?? ctx.user.email ?? "unknown",
+          parentVersionId: targetVersion.id,
+          tokenCount: targetVersion.tokenCount,
+        })
+        .returning();
 
       return {
         success: true,
@@ -221,25 +247,32 @@ export const promptVersionsRouter = router({
   compareVersions: protectedProcedure
     .input(
       z.object({
-        idA: z.string(),
-        idB: z.string(),
+        idA: z.number().int(),
+        idB: z.number().int(),
       })
     )
     .query(async ({ ctx, input }) => {
-      const store = getUserStore(ctx.user.id);
-      let versionA: PromptVersion | undefined;
-      let versionB: PromptVersion | undefined;
+      const [versionA] = await db
+        .select()
+        .from(promptVersions)
+        .where(
+          and(
+            eq(promptVersions.id, input.idA),
+            eq(promptVersions.userId, ctx.user.id)
+          )
+        );
+      const [versionB] = await db
+        .select()
+        .from(promptVersions)
+        .where(
+          and(
+            eq(promptVersions.id, input.idB),
+            eq(promptVersions.userId, ctx.user.id)
+          )
+        );
 
-      for (const versions of Array.from(store.values())) {
-        for (const v of versions) {
-          if (v.id === input.idA) versionA = v;
-          if (v.id === input.idB) versionB = v;
-        }
-      }
-
-      if (!versionA || !versionB) {
+      if (!versionA || !versionB)
         throw new Error("One or both versions not found");
-      }
 
       const wordsA = versionA.content.split(/\s+/).length;
       const wordsB = versionB.content.split(/\s+/).length;
@@ -250,7 +283,7 @@ export const promptVersionsRouter = router({
         versionA: {
           id: versionA.id,
           version: versionA.version,
-          label: versionA.label,
+          description: versionA.description,
           createdAt: versionA.createdAt,
           wordCount: wordsA,
           charCount: charsA,
@@ -259,7 +292,7 @@ export const promptVersionsRouter = router({
         versionB: {
           id: versionB.id,
           version: versionB.version,
-          label: versionB.label,
+          description: versionB.description,
           createdAt: versionB.createdAt,
           wordCount: wordsB,
           charCount: charsB,
@@ -285,44 +318,50 @@ export const promptVersionsRouter = router({
    * Delete a specific version (cannot delete the active version)
    */
   deleteVersion: protectedProcedure
-    .input(z.object({ id: z.string() }))
+    .input(z.object({ id: z.number().int() }))
     .mutation(async ({ ctx, input }) => {
-      const store = getUserStore(ctx.user.id);
-
-      for (const [key, versions] of Array.from(store.entries())) {
-        const idx = versions.findIndex(v => v.id === input.id);
-        if (idx !== -1) {
-          if (versions[idx].isActive) {
-            throw new Error(
-              "Cannot delete the active version. Activate another version first."
-            );
-          }
-          versions.splice(idx, 1);
-          store.set(key, versions);
-          return { success: true };
-        }
+      const [version] = await db
+        .select()
+        .from(promptVersions)
+        .where(
+          and(
+            eq(promptVersions.id, input.id),
+            eq(promptVersions.userId, ctx.user.id)
+          )
+        );
+      if (!version) throw new Error("Version not found");
+      if (version.isActive) {
+        throw new Error(
+          "Cannot delete the active version. Activate another version first."
+        );
       }
-
-      throw new Error("Version not found");
+      await db
+        .delete(promptVersions)
+        .where(
+          and(
+            eq(promptVersions.id, input.id),
+            eq(promptVersions.userId, ctx.user.id)
+          )
+        );
+      return { success: true };
     }),
 
   /**
    * List all prompt keys that have versions saved
    */
   listPromptKeys: protectedProcedure.query(async ({ ctx }) => {
-    const store = getUserStore(ctx.user.id);
-    const keys = Array.from(store.entries())
-      .filter(([, versions]) => versions.length > 0)
-      .map(([key, versions]) => ({
-        promptKey: key,
-        totalVersions: versions.length,
-        activeVersion: versions.find(v => v.isActive)?.version ?? null,
-        lastModified: versions
-          .map(v => v.createdAt)
-          .sort()
-          .reverse()[0],
-      }));
+    const rows = await db
+      .select({
+        promptKey: promptVersions.promptKey,
+        totalVersions: sql<number>`count(*)::int`,
+        activeVersion: sql<number | null>`max(case when ${promptVersions.isActive} then ${promptVersions.version} end)`,
+        lastModified: sql<string>`max(${promptVersions.createdAt})`,
+      })
+      .from(promptVersions)
+      .where(eq(promptVersions.userId, ctx.user.id))
+      .groupBy(promptVersions.promptKey)
+      .orderBy(sql`max(${promptVersions.createdAt}) desc`);
 
-    return { keys, total: keys.length };
+    return { keys: rows, total: rows.length };
   }),
 });

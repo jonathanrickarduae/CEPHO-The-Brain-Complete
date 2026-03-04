@@ -5524,3 +5524,43 @@ export const boardKnowledgeCorpus = pgTable("board_knowledge_corpus", {
 });
 export type BoardKnowledgeCorpus = typeof boardKnowledgeCorpus.$inferSelect;
 export type InsertBoardKnowledgeCorpus = typeof boardKnowledgeCorpus.$inferInsert;
+
+// ─── Migration 027: Report Schedules (p6-4 fix) ──────────────────────────────
+export const reportSchedules = pgTable("report_schedules", {
+  id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
+  userId: integer("user_id").notNull(),
+  name: varchar("name", { length: 255 }).notNull(),
+  reportType: varchar("report_type", { length: 100 }).notNull(),
+  frequency: varchar("frequency", { length: 50 }).notNull().default("weekly"),
+  dayOfWeek: integer("day_of_week"),
+  hourUtc: integer("hour_utc").notNull().default(8),
+  recipients: json("recipients").$type<string[]>().notNull().default([]),
+  filters: json("filters").$type<Record<string, unknown>>(),
+  isActive: boolean("is_active").notNull().default(true),
+  lastRunAt: timestamp("last_run_at"),
+  nextRunAt: timestamp("next_run_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
+});
+export type ReportSchedule = typeof reportSchedules.$inferSelect;
+export type InsertReportSchedule = typeof reportSchedules.$inferInsert;
+
+// ─── Migration 027: Prompt Versions (p6-12 fix) ──────────────────────────────
+export const promptVersions = pgTable("prompt_versions", {
+  id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
+  userId: integer("user_id").notNull(),
+  promptKey: varchar("prompt_key", { length: 255 }).notNull(),
+  version: integer("version").notNull().default(1),
+  content: text("content").notNull(),
+  description: varchar("description", { length: 500 }),
+  isActive: boolean("is_active").notNull().default(false),
+  createdBy: varchar("created_by", { length: 255 }),
+  parentVersionId: integer("parent_version_id"),
+  tokenCount: integer("token_count"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+export type PromptVersion = typeof promptVersions.$inferSelect;
+export type InsertPromptVersion = typeof promptVersions.$inferInsert;

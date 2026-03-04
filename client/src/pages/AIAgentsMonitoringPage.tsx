@@ -16,6 +16,9 @@ import {
   Users,
   Brain,
   RefreshCw,
+  Zap,
+  BarChart3,
+  Star,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PageShell } from "@/components/layout/PageShell";
@@ -48,6 +51,16 @@ export default function AIAgentsMonitoringPage() {
   const { data: victoriaLog } = trpc.victoria.getActionLog.useQuery({
     limit: 10,
   });
+  const { data: activityFeedData, refetch: refetchFeed } =
+    trpc.aiAgentsMonitoring.getLiveActivityFeed.useQuery(
+      { limit: 20 },
+      { refetchInterval: 30000 }
+    );
+  const { data: perfMetricsData } =
+    trpc.aiAgentsMonitoring.getPerformanceMetrics.useQuery(
+      { agentId: selectedAgent ?? undefined },
+      { enabled: true }
+    );
   const utils = trpc.useUtils();
   const reviewRequest = trpc.aiAgentsMonitoring.reviewRequest.useMutation({
     onSuccess: () => {
@@ -519,6 +532,81 @@ export default function AIAgentsMonitoringPage() {
                   </div>
                 </div>
               )}
+            </div>
+          )}
+
+          {/* Performance Metrics Panel */}
+          {perfMetricsData && (
+            <div className="bg-card rounded-xl p-4 border border-border">
+              <div className="flex items-center gap-2 mb-3">
+                <BarChart3 className="w-4 h-4 text-blue-400" />
+                <h3 className="text-sm font-semibold">
+                  {selectedAgent
+                    ? `${selectedAgent} — Performance Metrics`
+                    : "Overall Agent Performance Metrics"}
+                </h3>
+                <span className="text-xs text-muted-foreground ml-auto">
+                  {perfMetricsData.metrics?.length ?? 0} agents tracked
+                </span>
+              </div>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                {(perfMetricsData.metrics ?? []).slice(0, 8).map((m, i) => (
+                  <div
+                    key={i}
+                    className="bg-muted/40 rounded-lg p-3 space-y-1"
+                  >
+                    <div className="flex items-center gap-1.5">
+                      <Star className="w-3 h-3 text-yellow-400" />
+                      <span className="text-xs font-medium truncate">
+                        {m.agentName}
+                      </span>
+                    </div>
+                    <div className="text-lg font-bold text-foreground">
+                      {Number(m.avgRating ?? 0).toFixed(1)}
+                      <span className="text-xs text-muted-foreground font-normal">
+                        /5
+                      </span>
+                    </div>
+                    <div className="text-xs text-muted-foreground">
+                      {m.totalRatings} ratings &middot; {m.totalReports} reports
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Live Activity Feed */}
+          {activityFeedData && activityFeedData.activities.length > 0 && (
+            <div className="bg-card rounded-xl p-4 border border-border">
+              <div className="flex items-center gap-2 mb-3">
+                <Zap className="w-4 h-4 text-amber-400" />
+                <h3 className="text-sm font-semibold">Live Activity Feed</h3>
+                <span className="text-xs text-muted-foreground ml-auto">
+                  Auto-refreshes every 30s
+                </span>
+                <button
+                  onClick={() => refetchFeed()}
+                  className="text-xs text-muted-foreground hover:text-foreground transition-colors ml-1"
+                >
+                  <RefreshCw className="w-3 h-3" />
+                </button>
+              </div>
+              <div className="space-y-2 max-h-64 overflow-y-auto">
+                {activityFeedData.activities.map((item, i) => (
+                  <div key={i} className="flex items-start gap-3 text-sm">
+                    <span className="text-xs text-muted-foreground mt-0.5 shrink-0 w-16">
+                      {formatTimestamp(item.createdAt)}
+                    </span>
+                    <span className="shrink-0 text-xs px-1.5 py-0.5 rounded bg-muted text-muted-foreground">
+                      {item.targetType}
+                    </span>
+                    <span className="text-foreground/80 flex-1">
+                      {item.description ?? item.action}
+                    </span>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
 

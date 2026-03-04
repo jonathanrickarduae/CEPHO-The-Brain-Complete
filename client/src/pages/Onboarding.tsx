@@ -116,6 +116,31 @@ const STEPS = [
   },
   {
     id: 5,
+    title: "Set Your Priorities",
+    subtitle: "Focus your AI agents on what matters most",
+    description:
+      "Tell CEPHO.AI your top three priorities for the next 90 days. Your agents will orient their research, reporting, and recommendations around these goals.",
+    icon: Rocket,
+    priorities: [
+      {
+        key: "priority1",
+        label: "Priority 1 \u2014 Most Important",
+        placeholder: "e.g. Close Series A funding by Q3",
+      },
+      {
+        key: "priority2",
+        label: "Priority 2",
+        placeholder: "e.g. Hire VP of Engineering",
+      },
+      {
+        key: "priority3",
+        label: "Priority 3",
+        placeholder: "e.g. Launch product in MENA market",
+      },
+    ],
+  },
+  {
+    id: 6,
     title: "You're All Set",
     subtitle: "CEPHO.AI is ready",
     description:
@@ -314,7 +339,35 @@ export default function Onboarding() {
             </div>
           )}
 
-          {/* Step 5: Final — show what's ready */}
+          {/* Step 5: Priorities */}
+          {step.priorities && (
+            <div className="space-y-4 mb-8">
+              {step.priorities.map(p => (
+                <div key={p.key}>
+                  <label className="block text-sm font-medium text-foreground mb-1">
+                    {p.label}
+                  </label>
+                  <input
+                    type="text"
+                    placeholder={p.placeholder}
+                    value={formData[p.key] ?? ""}
+                    onChange={e =>
+                      setFormData(prev => ({
+                        ...prev,
+                        [p.key]: e.target.value,
+                      }))
+                    }
+                    className="w-full px-4 py-3 bg-background border border-border rounded-xl text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
+                  />
+                </div>
+              ))}
+              <p className="text-xs text-muted-foreground text-center mt-2">
+                You can update your priorities at any time in Settings.
+              </p>
+            </div>
+          )}
+
+          {/* Step 6: Final — show what's ready */}
           {currentStep === totalSteps && (
             <div className="space-y-3 mb-8">
               {[

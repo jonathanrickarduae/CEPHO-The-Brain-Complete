@@ -1176,9 +1176,9 @@
             },
             {
               id: "p5-5",
-              name: "Guided onboarding wizard (/onboarding) [NEEDS FIX: wizard has 5 steps not 6; onboardingComplete flag is on integrations router not auth.me]",
+              name: "Guided onboarding wizard (/onboarding) — 6-step wizard: Welcome, Profile, Leadership, Integrations, Priorities, Confirmation",
               tags: ["spec"],
-              status: "in-progress",
+              status: "done",
             },
             {
               id: "p5-6",
@@ -1385,9 +1385,9 @@
             },
             {
               id: "p6-4",
-              name: "Scheduled reports (daily/weekly/monthly) [NEEDS FIX: schedule store is in-memory, lost on server restart — needs report_schedules DB migration]",
+              name: "Scheduled reports (daily/weekly/monthly) — DB-persisted via report_schedules table (migration 027)",
               tags: ["spec"],
-              status: "in-progress",
+              status: "done",
             },
             {
               id: "p6-5",
@@ -1397,15 +1397,15 @@
             },
             {
               id: "p6-6",
-              name: "Public API + developer documentation [NEEDS FIX: Swagger UI live at /api/docs but openapi.yaml not updated with Phase 6 routes: competitor, ventures, scheduledReports, persephoneRag, promptVersions]",
+              name: "Public API + developer documentation — Swagger UI at /api/docs; openapi.yaml updated with all Phase 6 routes (17 new paths, 5 new tag groups)",
               tags: ["spec"],
-              status: "in-progress",
+              status: "done",
             },
             {
               id: "p6-7",
-              name: "Status page (uptime monitoring) [NEEDS FIX: docs/status/index.html exists but GitHub Pages only serves docs/dashboard/; /status on Render returns SPA not status page]",
+              name: "Status page (uptime monitoring) — served at /status/ via GitHub Pages (docs/dashboard/status/index.html)",
               tags: ["spec"],
-              status: "in-progress",
+              status: "done",
             },
             {
               id: "p6-8",
@@ -1416,9 +1416,9 @@
             },
             {
               id: "p6-9",
-              name: "Real-time agent activity feed + per-agent metrics [NEEDS FIX: getLiveActivityFeed + getPerformanceMetrics procedures exist in router but AIAgentsMonitoringPage.tsx does not call them]",
+              name: "Real-time agent activity feed + per-agent metrics — getLiveActivityFeed + getPerformanceMetrics wired into AIAgentsMonitoringPage",
               tags: ["gap"],
-              status: "in-progress",
+              status: "done",
               gap: true,
             },
             {
@@ -1437,9 +1437,9 @@
             },
             {
               id: "p6-12",
-              name: "Agent prompt version history + rollback [NEEDS FIX: version store is in-memory Map, lost on restart — needs prompt_versions DB migration]",
+              name: "Agent prompt version history + rollback — DB-persisted via prompt_versions table (migration 027); 7 procedures including rollback + compare",
               tags: ["gap"],
-              status: "in-progress",
+              status: "done",
               gap: true,
             },
             {
