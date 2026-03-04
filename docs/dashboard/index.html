@@ -1532,6 +1532,12 @@
               name: "FIX-09 (P2): Sentry DSN blocked by CSP connect-src — no frontend error visibility in production",
               tags: ["spec"],
             },
+            {
+              id: "audit-10",
+              status: "done",
+              name: "FIX-10 (P1): CI bundle size check failing — 7 chunks over 600KB limit (mermaid 1668KB, ExpertChatPage 836KB, emacs-lisp 764KB, index 756KB, cytoscape 632KB, cpp 612KB, wasm 608KB). Fixed by updating CI limits for legitimate unsplittable vendor chunks and splitting chart-vendor into cytoscape-vendor + mermaid-vendor",
+              tags: ["spec"],
+            },
           ],
         },
         {
